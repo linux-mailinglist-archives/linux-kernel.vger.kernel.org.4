@@ -2,298 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58636691D7D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D677691D81
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232289AbjBJLCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 06:02:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
+        id S232288AbjBJLCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 06:02:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232294AbjBJLCM (ORCPT
+        with ESMTP id S231429AbjBJLCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 06:02:12 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745107166E
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 03:02:04 -0800 (PST)
+        Fri, 10 Feb 2023 06:02:45 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7B710AB3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 03:02:44 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id bk16so4664368wrb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 03:02:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1676026926; x=1707562926;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=AColGikeXYisT7/QbF1eaYTs5Jlq6JncYLcXnr3PDg0=;
-  b=c/XpreASluTAqLQfmLm6skkUwLIJJid7D0/IuacOWW9AcaZcEiiTFvEv
-   d6rL9cmuhdunuYvC7U65Al/JwyiMJQMEuDiz97nuZZ1cQOee3YoJn6IPh
-   /D8AxyV/j2IXfgJvxxDfFkPz4eWaw0GqIAJwa812t7JbL5Bk50363E9jL
-   7jn8xMDXent+9lojK4jyiOBfodw0dL6Ud4Oc0bw8mWMpRjtsJe5dn2wFA
-   B4xZUoJ/NZ11NzggNKBUyprRrJU0GxwyIj5Wk/z4qHpsrOZId64bcapWi
-   nrXAir38+mzlqGX1qaEV45BTz/mFCJU1Fjixni7mqksxOMptZcjXnwBYN
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,286,1669071600"; 
-   d="scan'208";a="29002571"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 10 Feb 2023 12:02:02 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Fri, 10 Feb 2023 12:02:02 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Fri, 10 Feb 2023 12:02:02 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1676026922; x=1707562922;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=AColGikeXYisT7/QbF1eaYTs5Jlq6JncYLcXnr3PDg0=;
-  b=bUAuE7FN85KGNUvaih6kZe/opaf82Gb41NdIe2XeQsUqOFZ0snBr13Xc
-   1+O7xSzZ3lr3hdM6DT+kUxrBpuEejBK26ETgcsWiWEsFIykk6W0UpIWiZ
-   du2MFqit5hxCAgm6lpfTEhFqX4fGAcmGigSSqmPToa9X7LjisjUjMVmeJ
-   CHX8+rCwafegP6gqcnQRgOwHivJX221mIvR2SQ4DPALwaAdQei6YSoIU8
-   fqgM8tWargfv3nk1ScUia9qnmzcnLvq4ZR0wxOHnHZ1Lp9GQK1vacUfj0
-   YYmXAf+nFzc8zgAtbMUgYgHPnvZFzIveSnu8w1Xj/Kq14btV5qtihCHIz
-   g==;
-X-IronPort-AV: E=Sophos;i="5.97,286,1669071600"; 
-   d="scan'208";a="29002569"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 10 Feb 2023 12:02:02 +0100
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 4FEB2280056;
-        Fri, 10 Feb 2023 12:02:02 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     gregkh@linuxfoundation.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Michael Walle <michael@walle.cc>
-Cc:     linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH v2 12/22] nvmem: core: add an index parameter to the cell
-Date:   Fri, 10 Feb 2023 12:01:59 +0100
-Message-ID: <6214078.lOV4Wx5bFT@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20230206134356.839737-13-srinivas.kandagatla@linaro.org>
-References: <20230206134356.839737-1-srinivas.kandagatla@linaro.org> <20230206134356.839737-13-srinivas.kandagatla@linaro.org>
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+EnqTz1YFzzm355lric6PP3Xk3l60GjJs6A/Opi0T5A=;
+        b=ZXaq5KdSHlBXKfBrRY6zyvMfZ3KaFxSBYA99mbg9F/SU1qO2oVTyR8+2ueUD/DhQf0
+         lKWXiUL709Htq6HKwxPA0yHNZOqmDV6GJnFYWyIP5LvhopWfoI/t8DPfSuLg4Ys8ykWK
+         JA3MMsbWJSNJXg2zPAAl9QZ2QYGEulElXq5JXMFws1lsyFuLIXh4ShIi/qmbNtshI0AQ
+         Xowd4+00/LL86CodqQk4slCCIhvB/FSdpRLGrgy1gy1hmFYJKZ/UdeOO3u+O/ES2PVxq
+         V/tQCvkfmisOE8kIEiSLDbkc/LH1TsG6xu3EIkpmX8zjv+MZ49mOq7rsl888/MyBVTh4
+         542w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+EnqTz1YFzzm355lric6PP3Xk3l60GjJs6A/Opi0T5A=;
+        b=x9ME9KZIiOQx4xQuOJjfaax0aXPgP0f4RRMkM3pmxWIy3N/HB3SKfMxy9u5dUnefwG
+         yjkxEy/ykOF+wwvdQ2HmfjEkrVS5Wk331irkr3DjRuNQV8cDGhgzhryl9TXasF5z7Kot
+         vdtuXYY9y6W8MqwMESV5LnEcbUK1EPlBk6kTmzkbBL/LsX8jHk1LON69ir6ksAv8DhgA
+         J8n/suCw3TETpIv9woNeJ6WIpkYgvPGn0KikohuijpNv6r2TEWeVVXHIXZOaUOj0D88I
+         /3lx5XPVqlGXu8Jq4bYcOi+qCnUArrqiI1kgn6BKA0+ZIeXZVH0gQcVn63vmICrHGEZF
+         ChUw==
+X-Gm-Message-State: AO0yUKXW1YZEehWcFp5ur9vWFGSq7o5f6dEQl0RieIgBWPtmiDdU/9t8
+        fpVxX+1RZGRD4CddFIaqZ0xnsQ==
+X-Google-Smtp-Source: AK7set9xnP131W6BXBX3n7EiErBvLgvay/AsVe09DA7FZSxUa2WHmsg0LQjhBIdoU1pd90N59kMalA==
+X-Received: by 2002:adf:ee52:0:b0:2bd:e7a0:6b5e with SMTP id w18-20020adfee52000000b002bde7a06b5emr16104273wro.40.1676026963167;
+        Fri, 10 Feb 2023 03:02:43 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id w13-20020a5d608d000000b002c54b6382c8sm811552wrt.82.2023.02.10.03.02.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 03:02:42 -0800 (PST)
+Message-ID: <21af8c63-f489-8c3f-e1e3-cf976b1d20d0@linaro.org>
+Date:   Fri, 10 Feb 2023 12:02:41 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 3/3] watchdog: mt7621-wdt: avoid globals and arch
+ dependencies
+Content-Language: en-US
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-watchdog@vger.kernel.org
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
+References: <20230210065621.598120-1-sergio.paracuellos@gmail.com>
+ <20230210065621.598120-4-sergio.paracuellos@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230210065621.598120-4-sergio.paracuellos@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Am Montag, 6. Februar 2023, 14:43:46 CET schrieb Srinivas Kandagatla:
-> From: Michael Walle <michael@walle.cc>
+On 10/02/2023 07:56, Sergio Paracuellos wrote:
+> MT7621 SoC has a system controller node. Watchdog need to access to reset
+> status register. Ralink architecture and related driver are old and from
+> the beggining they ar providing some architecture dependent operations
+> for accessing this shared registers through 'asm/mach-ralink/ralink_regs.h'
+> header file. However this is not ideal from a driver perspective which can
+> just access to the system controller registers in am arch independent way
+> using regmap syscon APIs. Hence, add a new structure for driver data and
+> use it along the code. This way architecture dependencies and global vars
+> are not needed anymore. Update Kconfig accordingly to select new added
+> dependencies and allow driver to be compile tested.
 > 
-> Sometimes a cell can represend multiple values. For example, a base
-> ethernet address stored in the NVMEM can be expanded into multiple
-> discreet ones by adding an offset.
-> 
-> For this use case, introduce an index parameter which is then used to
-> distiguish between values. This parameter will then be passed to the
-> post process hook which can then use it to create different values
-> during reading.
-> 
-> At the moment, there is only support for the device tree path. You can
-> add the index to the phandle, e.g.
-> 
->   &net {
->           nvmem-cells = <&base_mac_address 2>;
->           nvmem-cell-names = "mac-address";
->   };
-> 
->   &nvmem_provider {
->           base_mac_address: base-mac-address@0 {
->                   #nvmem-cell-cells = <1>;
->                   reg = <0 6>;
->           };
->   };
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 > ---
->  drivers/nvmem/core.c           | 37 ++++++++++++++++++++++++----------
->  drivers/nvmem/imx-ocotp.c      |  4 ++--
->  include/linux/nvmem-provider.h |  4 ++--
->  3 files changed, 30 insertions(+), 15 deletions(-)
+>  drivers/watchdog/Kconfig      |   4 +-
+>  drivers/watchdog/mt7621_wdt.c | 121 ++++++++++++++++++++++------------
+>  2 files changed, 83 insertions(+), 42 deletions(-)
 > 
-> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-> index 233c6c275031..30567dd51fba 100644
-> --- a/drivers/nvmem/core.c
-> +++ b/drivers/nvmem/core.c
-> @@ -60,6 +60,7 @@ struct nvmem_cell_entry {
->  struct nvmem_cell {
->  	struct nvmem_cell_entry *entry;
->  	const char		*id;
-> +	int			index;
->  };
-> 
->  static DEFINE_MUTEX(nvmem_mutex);
-> @@ -1122,7 +1123,8 @@ struct nvmem_device *devm_nvmem_device_get(struct
-> device *dev, const char *id) }
->  EXPORT_SYMBOL_GPL(devm_nvmem_device_get);
-> 
-> -static struct nvmem_cell *nvmem_create_cell(struct nvmem_cell_entry *entry,
-> const char *id) +static struct nvmem_cell *nvmem_create_cell(struct
-> nvmem_cell_entry *entry, +					    
-const char *id, int index)
->  {
->  	struct nvmem_cell *cell;
->  	const char *name = NULL;
-> @@ -1141,6 +1143,7 @@ static struct nvmem_cell *nvmem_create_cell(struct
-> nvmem_cell_entry *entry, cons
-> 
->  	cell->id = name;
->  	cell->entry = entry;
-> +	cell->index = index;
-> 
->  	return cell;
->  }
-> @@ -1179,7 +1182,7 @@ nvmem_cell_get_from_lookup(struct device *dev, const
-> char *con_id) __nvmem_device_put(nvmem);
->  				cell = ERR_PTR(-ENOENT);
->  			} else {
-> -				cell = nvmem_create_cell(cell_entry, 
-con_id);
-> +				cell = nvmem_create_cell(cell_entry, 
-con_id, 0);
->  				if (IS_ERR(cell))
->  					__nvmem_device_put(nvmem);
->  			}
-> @@ -1227,15 +1230,27 @@ struct nvmem_cell *of_nvmem_cell_get(struct
-> device_node *np, const char *id) struct nvmem_device *nvmem;
->  	struct nvmem_cell_entry *cell_entry;
->  	struct nvmem_cell *cell;
-> +	struct of_phandle_args cell_spec;
->  	int index = 0;
-> +	int cell_index = 0;
-> +	int ret;
-> 
->  	/* if cell name exists, find index to the name */
->  	if (id)
->  		index = of_property_match_string(np, "nvmem-cell-names", 
-id);
-> 
-> -	cell_np = of_parse_phandle(np, "nvmem-cells", index);
-> -	if (!cell_np)
-> -		return ERR_PTR(-ENOENT);
-> +	ret = of_parse_phandle_with_optional_args(np, "nvmem-cells",
-> +						  "#nvmem-cell-
-cells",
-> +						  index, 
-&cell_spec);
-> +	if (ret)
-> +		return ERR_PTR(ret);
 
-This change introduce a regression (again, see [1] for that). 
-dp83867_of_init_io_impedance calls of_nvmem_cell_get() for cell 
-'io_impedance_ctrl'. If this does not exist, 'nvmem-cell-names' does not exist 
-as well,  of_property_match_string returns -22 for index. 
-__of_parse_phandle_with_args eventually returns -EINVAL for this invalid 
-index. -ENOENT was returned before.
-There was a bugfix [2] for this, but it's not in linux-next.
+
+> -
+>  static int mt7621_wdt_probe(struct platform_device *pdev)
+>  {
+> +	struct device_node *np = pdev->dev.of_node;
+>  	struct device *dev = &pdev->dev;
+> -	mt7621_wdt_base = devm_platform_ioremap_resource(pdev, 0);
+> -	if (IS_ERR(mt7621_wdt_base))
+> -		return PTR_ERR(mt7621_wdt_base);
+> +	struct watchdog_device *mt7621_wdt;
+> +	struct mt7621_wdt_data *drvdata;
+> +	int err;
+> +
+> +	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
+> +	if (!drvdata)
+> +		return -ENOMEM;
+>  
+> -	mt7621_wdt_reset = devm_reset_control_get_exclusive(dev, NULL);
+> -	if (!IS_ERR(mt7621_wdt_reset))
+> -		reset_control_deassert(mt7621_wdt_reset);
+> +	drvdata->sysc = syscon_regmap_lookup_by_phandle(np, "ralink,sysctl");
+> +	if (IS_ERR(drvdata->sysc))
+> +		return PTR_ERR(drvdata->sysc);
+
+You claim in commit title that you remove some global usage, but you add
+here several new features and refactor the code significantly. You need
+to split refactorings, improvements from completely new features. The
+entire patch is very difficult to understand in current form.
 
 Best regards,
-Alexander
-
-[1] https://lore.kernel.org/lkml/2143916.GUh0CODmnK@steina-w/
-[2] https://lore.kernel.org/lkml/20230105135931.2743351-1-michael@walle.cc/T/
-> +
-> +	if (cell_spec.args_count > 1)
-> +		return ERR_PTR(-EINVAL);
-> +
-> +	cell_np = cell_spec.np;
-> +	if (cell_spec.args_count)
-> +		cell_index = cell_spec.args[0];
-> 
->  	nvmem_np = of_get_parent(cell_np);
->  	if (!nvmem_np) {
-> @@ -1257,7 +1272,7 @@ struct nvmem_cell *of_nvmem_cell_get(struct
-> device_node *np, const char *id) return ERR_PTR(-ENOENT);
->  	}
-> 
-> -	cell = nvmem_create_cell(cell_entry, id);
-> +	cell = nvmem_create_cell(cell_entry, id, cell_index);
->  	if (IS_ERR(cell))
->  		__nvmem_device_put(nvmem);
-> 
-> @@ -1410,8 +1425,8 @@ static void nvmem_shift_read_buffer_in_place(struct
-> nvmem_cell_entry *cell, void }
-> 
->  static int __nvmem_cell_read(struct nvmem_device *nvmem,
-> -		      struct nvmem_cell_entry *cell,
-> -		      void *buf, size_t *len, const char *id)
-> +			     struct nvmem_cell_entry *cell,
-> +			     void *buf, size_t *len, const char *id, int 
-index)
->  {
->  	int rc;
-> 
-> @@ -1425,7 +1440,7 @@ static int __nvmem_cell_read(struct nvmem_device
-> *nvmem, nvmem_shift_read_buffer_in_place(cell, buf);
-> 
->  	if (nvmem->cell_post_process) {
-> -		rc = nvmem->cell_post_process(nvmem->priv, id,
-> +		rc = nvmem->cell_post_process(nvmem->priv, id, index,
->  					      cell->offset, buf, 
-cell->bytes);
->  		if (rc)
->  			return rc;
-> @@ -1460,7 +1475,7 @@ void *nvmem_cell_read(struct nvmem_cell *cell, size_t
-> *len) if (!buf)
->  		return ERR_PTR(-ENOMEM);
-> 
-> -	rc = __nvmem_cell_read(nvmem, cell->entry, buf, len, cell->id);
-> +	rc = __nvmem_cell_read(nvmem, cell->entry, buf, len, cell->id,
-> cell->index); if (rc) {
->  		kfree(buf);
->  		return ERR_PTR(rc);
-> @@ -1773,7 +1788,7 @@ ssize_t nvmem_device_cell_read(struct nvmem_device
-> *nvmem, if (rc)
->  		return rc;
-> 
-> -	rc = __nvmem_cell_read(nvmem, &cell, buf, &len, NULL);
-> +	rc = __nvmem_cell_read(nvmem, &cell, buf, &len, NULL, 0);
->  	if (rc)
->  		return rc;
-> 
-> diff --git a/drivers/nvmem/imx-ocotp.c b/drivers/nvmem/imx-ocotp.c
-> index 14284e866f26..e9b52ecb3f72 100644
-> --- a/drivers/nvmem/imx-ocotp.c
-> +++ b/drivers/nvmem/imx-ocotp.c
-> @@ -222,8 +222,8 @@ static int imx_ocotp_read(void *context, unsigned int
-> offset, return ret;
->  }
-> 
-> -static int imx_ocotp_cell_pp(void *context, const char *id, unsigned int
-> offset, -			     void *data, size_t bytes)
-> +static int imx_ocotp_cell_pp(void *context, const char *id, int index,
-> +			     unsigned int offset, void *data, size_t 
-bytes)
->  {
->  	struct ocotp_priv *priv = context;
-> 
-> diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provider.h
-> index bb15c9234e21..55181d837969 100644
-> --- a/include/linux/nvmem-provider.h
-> +++ b/include/linux/nvmem-provider.h
-> @@ -20,8 +20,8 @@ typedef int (*nvmem_reg_read_t)(void *priv, unsigned int
-> offset, typedef int (*nvmem_reg_write_t)(void *priv, unsigned int offset,
-> void *val, size_t bytes);
->  /* used for vendor specific post processing of cell data */
-> -typedef int (*nvmem_cell_post_process_t)(void *priv, const char *id,
-> unsigned int offset, -					  void 
-*buf, size_t bytes);
-> +typedef int (*nvmem_cell_post_process_t)(void *priv, const char *id, int
-> index, +					 unsigned int offset, void 
-*buf, size_t bytes);
-> 
->  enum nvmem_type {
->  	NVMEM_TYPE_UNKNOWN = 0,
-
-
-
+Krzysztof
 
