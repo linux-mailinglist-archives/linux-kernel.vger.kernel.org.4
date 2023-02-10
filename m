@@ -2,54 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BE8692526
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B076692527
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232878AbjBJSRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 13:17:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
+        id S232895AbjBJSRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 13:17:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232787AbjBJSRI (ORCPT
+        with ESMTP id S232822AbjBJSRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 13:17:08 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E2555E7D
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:17:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1676053016; bh=oHz2us9DLQA/KqfKOt5nfmI+i7BQogAbxnCbfbeMgAs=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=gbGD5YknB4XJWyv4+tct9/A3jL1q+mdSrDkPPu0ysPypV+j7XM1IXmZ+D3JgzJep1
-         ApbgJa1e2owK4h5MJT42bCvyerTaghqnFRntGFXaCSr5zZWc5dtLfzV1AW62vRh05Z
-         +CO0bmc91yJR4Z4Dy2YSsDYtM3jIePUF9irBQfyc=
-Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Fri, 10 Feb 2023 19:16:56 +0100 (CET)
-X-EA-Auth: XTggIg9IL3jabOPU+QSxv8wRN0TBE7TEalSdCPg6zWW3MrNZ4vy5o1vFgYccKngUZ/1LN318OWayxbn42CNidsmPo6SzKz3q
-Date:   Fri, 10 Feb 2023 23:46:50 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Harry Wentland <harry.wentland@amd.com>
-Cc:     Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: Re: [PATCH] drm/amd/display: Remove duplicate/repeating expression
-Message-ID: <Y+aKEmbSg5rCq87g@ubun2204.myguest.virtualbox.org>
-References: <Y+YYZ4SbMQBcpTZP@ubun2204.myguest.virtualbox.org>
- <c64bb7b8-ab50-78c3-bb56-820ce96a1e14@amd.com>
+        Fri, 10 Feb 2023 13:17:09 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98A8E56EC8;
+        Fri, 10 Feb 2023 10:17:08 -0800 (PST)
+Received: from [192.168.2.1] (77-166-152-30.fixed.kpn.net [77.166.152.30])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 9264620C8B13;
+        Fri, 10 Feb 2023 10:17:06 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9264620C8B13
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1676053027;
+        bh=GvwdlwmIou+bJX019ml5vO5ujDhFrQi/cZv8npg8uMY=;
+        h=Date:To:Cc:From:Subject:From;
+        b=owbIv1n6xc8guKcaADi9P67fgtGo3iw8pNe72wsoaHsR1JLvBgusDs0+VVrdfxVCX
+         lPli131OFQ+YMgOQMHpbRpOK0twKYKzFDdx0IFuZVCecLTZrSPacmF0aNeBIP0RPVC
+         sMwIEwZi6fWGzHQc6s68shpG9ybG3TcHuta4gKYQ=
+Message-ID: <43980946-7bbf-dcef-7e40-af904c456250@linux.microsoft.com>
+Date:   Fri, 10 Feb 2023 19:17:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c64bb7b8-ab50-78c3-bb56-820ce96a1e14@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tianyu Lan <ltykernel@gmail.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+Subject: "KVM: x86/mmu: Overhaul TDP MMU zapping and flushing" breaks SVM on
+ Hyper-V
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,42 +52,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 10:22:00AM -0500, Harry Wentland wrote:
-> On 2/10/23 05:11, Deepak R Varma wrote:
-> > Remove duplicate or repeating expressions in the if condition
-> > evaluation. Issue identified using doubletest.cocci Coccinelle semantic
-> > patch.
-> > 
-> > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> 
-> Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+Hi Paolo/Sean,
 
-Thank you Harry. There is another similar patch I submitted for a different
-file. Could you please also review that and share your feedback?
+We've noticed that changes introduced in "KVM: x86/mmu: Overhaul TDP MMU zapping and flushing"
+conflict with a nested Hyper-V enlightenment that is always enabled on AMD CPUs 
+(HV_X64_NESTED_ENLIGHTENED_TLB). The scenario that is affected is L0 Hyper-V + L1 KVM on AMD,
 
-Thank you,
-./drv
+L2 VMs fail to boot due to to stale data being seen on L1/L2 side, it looks
+like the NPT is not in sync with L0. I can reproduce this on any kernel >=5.18,
+the easiest way is by launching qemu in a loop with debug OVMF, you can observe
+various #GP faults, assert failures, or the guest just suddenly dies. You can try it
+for yourself in Azure by launching an Ubuntu 22.10 image on an AMD SKU with nested
+virtualization (Da_v5).
 
-> 
-> Harry
-> 
-> > ---
-> >  .../gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c
-> > index 61ee9ba063a7..6576b897a512 100644
-> > --- a/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c
-> > +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn314/display_rq_dlg_calc_314.c
-> > @@ -51,7 +51,7 @@ static bool CalculateBytePerPixelAnd256BBlockSizes(
-> >  		*BytePerPixelDETC = 0;
-> >  		*BytePerPixelY = 4;
-> >  		*BytePerPixelC = 0;
-> > -	} else if (SourcePixelFormat == dm_444_16 || SourcePixelFormat == dm_444_16) {
-> > +	} else if (SourcePixelFormat == dm_444_16) {
-> >  		*BytePerPixelDETY = 2;
-> >  		*BytePerPixelDETC = 0;
-> >  		*BytePerPixelY = 2;
-> 
+In investigating I found that 3 things allow L2 guests to boot again:
+* force tdp_mmu=N when loading kvm
+* recompile L1 kernel to force disable HV_X64_NESTED_ENLIGHTENED_TLB
+* revert both of these commits (found through bisecting):
+bb95dfb9e2dfbe6b3f5eb5e8a20e0259dadbe906 "KVM: x86/mmu: Defer TLB flush to caller when freeing TDP MMU shadow pages"
+efd995dae5eba57c5d28d6886a85298b390a4f07 "KVM: x86/mmu: Zap defunct roots via asynchronous worker"
 
+I'll paste our understanding of what is happening (thanks Tianyu):
+"""
+Hyper-V provides HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE
+and HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST hvcalls for l1
+hypervisor to notify Hyper-V after L1 hypervisor changes L2 GPA <-> L1 GPA address
+translation tables(Intel calls EPT and AMD calls NPT). This may help not to
+mask whole address translation tables of L1 hypervisor to be write-protected in Hyper-V
+and avoid vmexits triggered by changing address translation table in L1 hypervisor. 
 
+The following commits defers to call these two hvcalls when there are changes in the L1
+hypervisor address translation table. Hyper-V can't sync/shadow L1 address space
+table at the first time due to the delay and this may cause mismatch between shadow page table
+in the Hyper-V and L1 address translation table. IIRC, KVM side always uses write-protected
+translation table to shadow and so doesn't meet such issue with the commit.
+"""
+
+Let me know if either of you have any ideas on how to approach fixing this.
+I'm not familiar enough with TDP MMU code to be able to contribute a fix directly
+but I'm happy to help in any way I can.
+
+Jeremi
