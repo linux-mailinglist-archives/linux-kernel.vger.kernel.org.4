@@ -2,155 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048C969277D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:56:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23FD1692782
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233501AbjBJT4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 14:56:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37862 "EHLO
+        id S233051AbjBJT6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 14:58:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233051AbjBJT4D (ORCPT
+        with ESMTP id S229480AbjBJT63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 14:56:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8162F5599
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:56:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17187B825DA
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 19:56:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAD2CC4339C
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 19:55:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676058959;
-        bh=/rbtwGkm6KjNDPlncngu4DRJNGQVNjUWrQ5+Z6JNEmg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dkQHuiF8P/dgaBGd5YJx4xzu3r7trh3/L6g9QQyiESG614aE8kO0FveBLQhhbngZc
-         cGqz0YYE/tUmjT5Z7If+FDBH2GXkOmkpN5WxsYX0iyP1MK29A+AHro0b+C6MjvppY+
-         Ht7bV5kq+1S33oRfw2XZ7R0ZzWHldTquToqimapb+Bl8ynj9Bltw8tb/b39/FKpKqZ
-         b/k5TZdVIY2s71ynKKWU0tm0QWgB/GexCz4DWX753hq69rDox9qbLhyQzrEj4ey6aH
-         3DlBRy1q/1yPEMO7TN3aElallOhM3pOp+KDzw3JMdKFKavBSJnHTGY5GuNnN82OsOi
-         wwO4sQ8qOtRzQ==
-Received: by mail-ed1-f45.google.com with SMTP id da9so5645877edb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:55:59 -0800 (PST)
-X-Gm-Message-State: AO0yUKXAAIpe5kAUVHtbuoBVuoJQKKIYDoigtf+ckfy08cj5dMaVIkIw
-        Co11QLKTzOWHjSdqG6D5gFTNy+Cz1vRLLYlH2ZZYcQ==
-X-Google-Smtp-Source: AK7set8T+tp2IZwVFvcjeL5tlcMarKtooKEDf9AGe53UI8xtD8A+U4cxUUUA2tv3tXXGolmJnsFOG8/Tj0Yb/wcb2uQ=
-X-Received: by 2002:a50:ba8d:0:b0:4ab:1c64:a9ed with SMTP id
- x13-20020a50ba8d000000b004ab1c64a9edmr1535489ede.2.1676058958001; Fri, 10 Feb
- 2023 11:55:58 -0800 (PST)
+        Fri, 10 Feb 2023 14:58:29 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F3773954
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:58:28 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id o66so1769085ybc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:58:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vXCMZ6WE4tODcRGvNdx2XuDr0IcOSxL6CFkaFwIQevc=;
+        b=ZQ46cNexOgxmst8qwplIpGLZi3s5+TLLjrxjfsLv1Euw/lZxWc9rvbuME8m36XlM4/
+         ReEdeEkn1o1I4sAYe7y0JZqKaLLJUDw3BBQrA5hAslKcNN6TlTTOotRs1YQS3csQO6tL
+         juCCxWuVaVtGTLRm3XMq5FmwwC8CUqytXhjor0gW8UJ3V0/+wEfr6IxHCtqiFqbZ4Mr0
+         Y5PRkivce6SwZ313APl30PZWoYMn/4IK2waQeYACaVdMANMAJ5rzrFd0af3eDWDg+37o
+         hQsFbslCspXWzrKt1h1RP+4isED0Anj8DP6uwNQhNDm5t6O1KNa7fGq5sQqhGaFq3/0n
+         KomA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vXCMZ6WE4tODcRGvNdx2XuDr0IcOSxL6CFkaFwIQevc=;
+        b=NCPwxrvkP3KNC+O3e+uL1KOkOdygNPpp5lbUX/yd7OMvCNj2mmXASpabnHA0ISMr6y
+         TbIZCvcrvRXAtv9u3XXimlQ4EtJa2+76ifjGRUcuHcILhaFo1wOfPw7f7kwAjc1Zbvs+
+         v/PvYdBrBbt5ofbO6g9L5ACkGeQxYuXG+EH/lOkOoxn8VPusdjo0Ji1SUAfaS5VZmZ4n
+         eNymcug3b+GsT7mvD+Kmo5fthMK7E9dYRMToBAI776eNf+r2mickXZQUdYi9dAN2Y9uC
+         VHnBG2aw2gz+vZbmqheue9khSuFxHb8dYs+DuVSqDUIoSgG2hA6JT6CJZPNq0w/gxpLx
+         ofVQ==
+X-Gm-Message-State: AO0yUKVKMdOtoq5B2VYkUphnIZQfWX48xfviCKoL0D+t+daGLUayd11G
+        wlq6uXp8vy5J10RUPLBJ+f74rgyfx17iEfLjC7sX
+X-Google-Smtp-Source: AK7set9sFtmBqjvWy/xtSPdnpAgsT+2iHaHfmnAhgNvfJ7huuMcTol/DQdbfonvGO1dJekNppYaxUxDEJkdHIW5Z7yQ=
+X-Received: by 2002:a05:6902:503:b0:8bd:87c6:d7bc with SMTP id
+ x3-20020a056902050300b008bd87c6d7bcmr1127817ybs.49.1676059107373; Fri, 10 Feb
+ 2023 11:58:27 -0800 (PST)
 MIME-Version: 1.0
-References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
- <CAHk-=wj8rthcQ9gQbvkMzeFt0iymq+CuOzmidx3Pm29Lg+W0gg@mail.gmail.com>
- <20230210021603.GA2825702@dread.disaster.area> <20230210040626.GB2825702@dread.disaster.area>
- <Y+XLuYh+kC+4wTRi@casper.infradead.org> <20230210065747.GD2825702@dread.disaster.area>
- <CALCETrWjJisipSJA7tPu+h6B2gs3m+g0yPhZ4z+Atod+WOMkZg@mail.gmail.com>
- <CAHk-=wj66F6CdJUAAjqigXMBy7gHquFMzPNAwKCgkrb2mF6U7w@mail.gmail.com>
- <CALCETrU-9Wcb_zCsVWr24V=uCA0+c6x359UkJBOBgkbq+UHAMA@mail.gmail.com>
- <CAHk-=wjQZWMeQ9OgXDNepf+TLijqj0Lm0dXWwWzDcbz6o7yy_g@mail.gmail.com>
- <CALCETrWuRHWh5XFn8M8qx5z0FXAGHH=ysb+c6J+cqbYyTAHvhw@mail.gmail.com> <CAHk-=wjuXvF1cA=gJod=-6k4ypbEmOczFFDKriUpOVKy9dTJWQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wjuXvF1cA=gJod=-6k4ypbEmOczFFDKriUpOVKy9dTJWQ@mail.gmail.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Fri, 10 Feb 2023 11:55:45 -0800
-X-Gmail-Original-Message-ID: <CALCETrUXYts5BRZKb25MVaWPk2mz34fKSqCR++SM382kSYLnJw@mail.gmail.com>
-Message-ID: <CALCETrUXYts5BRZKb25MVaWPk2mz34fKSqCR++SM382kSYLnJw@mail.gmail.com>
-Subject: Re: copy on write for splice() from file to pipe?
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Stefan Metzmacher <metze@samba.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API Mailing List <linux-api@vger.kernel.org>,
-        io-uring <io-uring@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Samba Technical <samba-technical@lists.samba.org>
+References: <20230208094813.20874-1-walter.chang@mediatek.com>
+ <fdcea75c-1ddf-c4f4-5d46-f32a6619b66d@linaro.org> <CANDhNCp6esdor4kDDTDowkKRfRN9QW8Au7uJMhsxyw0eAG4i8A@mail.gmail.com>
+ <20230210085157.GA175687@linaro.org>
+In-Reply-To: <20230210085157.GA175687@linaro.org>
+From:   John Stultz <jstultz@google.com>
+Date:   Fri, 10 Feb 2023 11:58:16 -0800
+Message-ID: <CANDhNComgUF+7UhG-MDjjm97AZRQb__4-1u++45UKfirdAMp+Q@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Support timer drivers as loadable modules
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     walter.chang@mediatek.com, Thomas Gleixner <tglx@linutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        wsd_upstream@mediatek.com, stanley.chu@mediatek.com,
+        Chun-hung.Wu@mediatek.com, Freddy.Hsin@mediatek.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Todd Kjos <tkjos@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 11:18 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Fri, Feb 10, 2023 at 11:02 AM Andy Lutomirski <luto@kernel.org> wrote:
+On Fri, Feb 10, 2023 at 12:52 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+> On Thu, Feb 09, 2023 at 11:50:49AM -0800, John Stultz wrote:
+> > On Thu, Feb 9, 2023 at 7:36 AM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+> > > What for ?
 > >
-> > Second, either make splice more strict or add a new "strict splice"
-> > variant.  Strict splice only completes when it can promise that writes
-> > to the source that start after strict splice's completion won't change
-> > what gets written to the destination.
+> > In general, it's the same reason why modules exist: We want to be able
+> > to support a wide array of devices with a single kernel, but we don't
+> > want all devices to pay the memory cost of code that will never be
+> > used there. So being able to support loading device-specific bits like
+> > clocksources (along with other device specific logic) helps.
 >
-> The thing ius, I think your "strict splice" is pointless and wrong.
+> Agree, that is why modules are for.
 >
-> It's pointless, because it simply means that it won't perform well.
+> > Obviously it still has to make sense, and others have raised concerns
+> > of stability issues if the hardware support is needed before we can
+> > get to module loading, but I think if this allows drivers (such as
+> > timer-mediatek) to be loadable safely, I see it as beneficial.
 >
-> And since the whole point of splice was performance, it's wrong.
+> From a technical point of view, it is arguable.
 >
-> I really think the whole "source needs to be stable" is barking up the
-> wrong tree.
->
-> You are pointing fingers at splice().
->
-> And I think that's wrong.
->
-> We should point the fingers at either the _user_ of splice - as Jeremy
-> Allison has done a couple of times - or we should point it at the sink
-> that cannot deal with unstable sources.
->
-> Because that whole "source is unstable" is what allows for that higher
-> performance. The moment you start requiring stability, you _will_ lose
-> it. You will have to lock the page, you'll have to umap it from any
-> shared mappings, etc etc.  And even if there are no writers, or no
-> current mappers, all that effort to make sure that is the case is
-> actually fairly expensive.
+> But my main concern is the real reason of changing this to the module
+> format. I see that as a way to overcome the effort to upstream the
+> drivers. And the GKI is an alibi to justify the module conversion.
 
-...
+[Putting on my Android Antennae for a moment]
 
-> Because I really think that your "strict splice" model would just mean
-> that now the kernel would have to add not just a memcpy, but also a
-> new allocation for that new stable buffer for the memcpy, and that
-> would all just be very very pointless.
->
-> Alternatively, it would require some kind of nasty hard locking
-> together with other limitations on what can be done by non-splice
-> users.
+I can promise the GKI is no alibi - it is a real thing. Part of
+convincing vendors to ship the same kernel is that we have to be able
+to bring the security benefits of being able to update the unified
+kernel without major impact to memory. Utilizing modules (all over -
+as a lot of small cuts add up) is crucial for that.
 
-I could be wrong, but I don't think any of this is necessary.  My
-strict splice isn't intended to be any more stable than current splice
--- it's intended to complete more slowly and more informatively.  Now
-maybe I'm wrong and the impleentation would be nasty, but I think that
-the only bookkeeping needed is to arrange strict-splice to not
-complete until the kernel is done with the source's page cache.  The
-use of the source is refcounted already, and a bit of extra work might
-be needed to track which strict-splice the reference came from, but
-unless I've missed something, it's not crazy.
+Some vendors haven't historically been great about upstreaming device
+support, and I understand the concern that allowing modules might
+enable vendors to keep modules out of tree. But vendors inclined to do
+that will find a way regardless (and because at a practical level,
+because the need to keep the GKI size down the android tree will have
+to carry a similar change to the one submitted here), so I don't think
+rejecting such patches is a real disincentive.
 
-Looking at the current splice implementaiton, a splice that isn't
-"strictly completed" is sort of represented by a struct pipe_buffer (I
-think).  The actual implementation of strict-splice might consist of
-separating pipe_buffer out from a pipe and adding an io_kiocb* and a
-refcount to it.  Or maybe even just adding an io_kiocb* and making the
-existing refcouting keep also track the io_kiocb*, but that might be
-complicated.  This all boils down to tracking an actual splice all the
-way through its lifecycle and not reporting it as done until it's all
-the way done.  Anything else is icing on the cake, no?
+Instead it just creates further needless fragmentation between
+upstream and android kernels, which makes it further difficult to
+justify and motivate upstream-hesitant vendors to submit their code to
+lkml.
 
-There is absolutely no need to lock files or make page-cache pages
-immutable or anything like that.
+And again, there *has* to be upstream users, as we should not have any
+maintenance burden for out of tree code! But in this case the upstream
+timer-mediatek driver was named as a candidate module (obviously those
+patches are needed when this series is re-sent).
 
-i think this is almost exactly what Jeremy and Stefan are asking for
-re: notification when the system is done with a zero-copy send:
+Additionally, while I understand the concern and skepticism, for folks
+who are working on upstreaming (Mediatek along with folks at Collabora
+have done some great work!), having to deal with this meta-issue of
+questioning of one's purity-of-intent, when one is actually submitting
+patches I think makes the process of dealing with the community seem
+even more difficult (making some folks question why bother).
 
-> What might be helpful in addition would be some kind of
-notification that all pages are no longer used by the network
-layer, IORING_OP_SENDMSG_ZC already supports such a notification,
-maybe we can build something similar.
+The upstream kernel community is an amazing thing! And I understand
+why we want to be protective of it. But I also worry that if we get
+too wrapped up in suspicions of ill intent, we aren't going to be able
+to bring folks into the fold and grow the community.  The license
+doesn't require one to work with the community, so we should probably
+be using more carrots and fewer sticks.
+
+> Given the timers is a base brick of the core subsystems, without
+> proper support of the timer (eg. bug fixes), the platform support will
+> be wobbly.
+
+As for bug-fixes, it should be noted that with the GKI, not all
+modules are vendor modules!  There are GKI-modules, which are common
+drivers/subsystem-infrastructure used by many devices (such as NFC,
+Bluetooth, etc), and these in-tree drivers are updated with the GKI
+kernel as modules. So there is motivation to ensure bug fixes to those
+upstream drivers land upstream so they can be included when the GKI
+and GKI modules are updated.
+
+And to your point about it being a base-brick - Yes, obviously not
+everything can be loaded from a module safely, and that's fine. But in
+cases where devices can boot with a built in architected timer, then
+are able to switch to more device specific clocksources, we'd really
+like those device specific clocksources to be modules.
+
+thanks
+-john
