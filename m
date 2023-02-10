@@ -2,84 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04E8691898
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 07:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC486918A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 07:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbjBJGkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 01:40:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
+        id S230475AbjBJGnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 01:43:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbjBJGkW (ORCPT
+        with ESMTP id S230263AbjBJGnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 01:40:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512865CBC2;
-        Thu,  9 Feb 2023 22:40:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E483DB82369;
-        Fri, 10 Feb 2023 06:40:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 95787C433AA;
-        Fri, 10 Feb 2023 06:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676011218;
-        bh=XhNCP0FYObxHApyeE/lXgL5fXZlQz/LO/1pLPxNdhD8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=QKJ4Clu5u/6QJtSTpAwDS0ZX5r+H2hbdNl6xYDj8pmnI6WVkSwUEGCGyH0QC0mq8O
-         V5LQOLfoPqAxWY1Ge+8UcdUnNUQIRgV71CHnP5rtDYl5SFLJtNZe1le+vo/8GXiy9P
-         XENM4dOVc58s5Hs91aG7RPlW57+SpLCMpuTtkWQHpChx/s7ipkDN6aUSGDzBythvQk
-         qcLHK1dRrgnnwoznAnnx2M+rFYzc6kXpZJFIUnoEi7L6wfI+Lz8EJrKVcwtzguvWvl
-         feRIClGJ7HXLqV93Q/qFTKnPwnyIq/5FPcM1LBv9VnzxtNh8rWga2x5BGyzaFIV+Ly
-         zTZfYeGUHnXzA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 819DDE55EFD;
-        Fri, 10 Feb 2023 06:40:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 10 Feb 2023 01:43:01 -0500
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6921BAEB;
+        Thu,  9 Feb 2023 22:42:54 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R411e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VbJGL3p_1676011365;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VbJGL3p_1676011365)
+          by smtp.aliyun-inc.com;
+          Fri, 10 Feb 2023 14:42:52 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     mcgrof@kernel.org
+Cc:     chris@chrisdown.name, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        llvm@lists.linux.dev,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] module: Remove the unused function within
+Date:   Fri, 10 Feb 2023 14:42:43 +0800
+Message-Id: <20230210064243.116335-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: micrel: Cable Diagnostics feature for lan8841
- PHY
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167601121852.3411.18294006515177056207.git-patchwork-notify@kernel.org>
-Date:   Fri, 10 Feb 2023 06:40:18 +0000
-References: <20230208114406.1666671-1-horatiu.vultur@microchip.com>
-In-Reply-To: <20230208114406.1666671-1-horatiu.vultur@microchip.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+The function within is defined in the main.c file, but not called
+elsewhere, so remove this unused function.
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+kernel/module/main.c:3007:19: warning: unused function 'within'.
 
-On Wed, 8 Feb 2023 12:44:06 +0100 you wrote:
-> Add support for cable diagnostics in lan8841 PHY. It has the same
-> registers layout as lan8814 PHY, therefore reuse the functionality.
-> 
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> ---
->  drivers/net/phy/micrel.c | 5 +++++
->  1 file changed, 5 insertions(+)
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4035
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ kernel/module/main.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-Here is the summary with links:
-  - [net-next] net: micrel: Cable Diagnostics feature for lan8841 PHY
-    https://git.kernel.org/netdev/net-next/c/a136391ae421
-
-You are awesome, thank you!
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index c598f11e7016..062065568b40 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -3004,11 +3004,6 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
+ 	return load_module(&info, uargs, flags);
+ }
+ 
+-static inline int within(unsigned long addr, void *start, unsigned long size)
+-{
+-	return ((void *)addr >= start && (void *)addr < start + size);
+-}
+-
+ /* Keep in sync with MODULE_FLAGS_BUF_SIZE !!! */
+ char *module_flags(struct module *mod, char *buf, bool show_state)
+ {
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.20.1.7.g153144c
 
