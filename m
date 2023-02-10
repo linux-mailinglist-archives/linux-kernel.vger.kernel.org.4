@@ -2,84 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F6F692572
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF61D692577
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:37:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233112AbjBJSh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 13:37:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59892 "EHLO
+        id S233128AbjBJShw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Feb 2023 13:37:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233100AbjBJShX (ORCPT
+        with ESMTP id S232558AbjBJShu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 13:37:23 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E224522A23
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:37:21 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id hn2-20020a05600ca38200b003dc5cb96d46so6898021wmb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:37:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=45HS3XcRsfRS5VbZ2TiXDHQBLKSDRISNQErTXQPnH+g=;
-        b=fA28mHicQVXU0rc9eizNL3RpJL4UanQ9gfQOBZ57SNqi5RpYK6zoS094B9dEWMLQUJ
-         VDR5+QKCsCoY483JdS84PYO+YawCsU7ivhQXQygIuTrEgqYgXEUqNL9o00YmCoBr4cj0
-         8loINQ8lMH5qSDzADuKONPbLiCHUOVpr3CWx4=
+        Fri, 10 Feb 2023 13:37:50 -0500
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A284475F46;
+        Fri, 10 Feb 2023 10:37:47 -0800 (PST)
+Received: by mail-oo1-f53.google.com with SMTP id x15-20020a4ab90f000000b004e64a0a967fso617346ooo.2;
+        Fri, 10 Feb 2023 10:37:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=45HS3XcRsfRS5VbZ2TiXDHQBLKSDRISNQErTXQPnH+g=;
-        b=guiW8skiU35evG/TbG7lx5XhvWvG2QkhusBS0BEnbicBA7EdDYOYpigM+WJIZGYI+K
-         QepwFwYPTu3lS4pyFtqP1343c+wtuYd3yzLoZpeBhGuM/MdfBdXOvtlSA5OLaJXTDicm
-         aUfQrjBr9GIVnfUB2UyT9icTHUURmvoQdbAQyElcNZbVbh/beTnbyG9YJzhOlZnneBK2
-         sB24/83+gAsAUt2YA2xGcFSZTELRo6CIb17cnl27PxDzNAsTQhGI0i2M6sTPjvBayqJ2
-         vdLOohmzKQ9wM8O2RE8W7GO9tY9wx4KeaEOIazdjUVz2XnMtNko9Vd1cJyNixaSLHTbi
-         h3Nw==
-X-Gm-Message-State: AO0yUKX4BMkAWRP9k3PuBd3tYRrTkmYtUb4sGAbpFMx/hvfxB/I1eVzz
-        4SIPU65XpIK0jiyLtvGMzCz6YpYVtChxptWVXg0=
-X-Google-Smtp-Source: AK7set8h1JulMOva3TX0AGnXNG3NCiXyQ+8AtUFR9KcVZNUQez8Dik/Z8eFeG05w3DQPko9cUmTTbw==
-X-Received: by 2002:a05:600c:3296:b0:3dd:dd46:1274 with SMTP id t22-20020a05600c329600b003dddd461274mr13366061wmp.4.1676054240194;
-        Fri, 10 Feb 2023 10:37:20 -0800 (PST)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
-        by smtp.gmail.com with ESMTPSA id k21-20020a05600c1c9500b003e01493b136sm9398376wms.43.2023.02.10.10.37.19
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 10:37:19 -0800 (PST)
-Received: by mail-ed1-f44.google.com with SMTP id u21so5474225edv.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:37:19 -0800 (PST)
-X-Received: by 2002:a50:f61e:0:b0:4ab:168c:dbd7 with SMTP id
- c30-20020a50f61e000000b004ab168cdbd7mr1816109edn.5.1676054239147; Fri, 10 Feb
- 2023 10:37:19 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j7h/WebataPPaEa1u0vdSZ4RcwWXCSihrRS9Y13n00s=;
+        b=MCk+IEoY1bMnkVFM1ciZG+EaTzzzIkMkut8w2pQHWC8j6IzzpXbn3TSyzMfqnmGj20
+         NxIigeHvkAK54w13H02gljyg9IR12F4IMKUqFpfyxVtBp5T/VZHHaQFeKIzNsIdFz+t8
+         HLuaV5K5RuIK6YjubZCS6dLSNtRQSZHMaHFecnvea6KZHkLvnm6rP/kPdYMiDw94TyWj
+         wjSvIB/2ecigX/hmjhKONqVd2bJdT/zxHVfiTiKHPb2N8LuMJl95h9ytFWMoMuoQuh3J
+         4JuqVHMiWPYmFSpnDjwAqZQQb+CkqfC2hzSXc+o+0TgIiDAkXbXKBWxPs2MWJHPlSYdE
+         cASg==
+X-Gm-Message-State: AO0yUKUXV4KeD2pgZ2EaBU5Q1EaCTu34bC7SvFDeDb4f+7jTnLF4MNb1
+        RVOHCJa47K/9TJuKw7wFmw==
+X-Google-Smtp-Source: AK7set830zF5ycsji4Hw2LbzEHyGO0HXDM7rD8uyVm2n3BwbUfUR1WJMnLdu6EWioWTCmNi77JlAxA==
+X-Received: by 2002:a05:6820:449:b0:51a:7a15:9758 with SMTP id p9-20020a056820044900b0051a7a159758mr7198969oou.5.1676054266872;
+        Fri, 10 Feb 2023 10:37:46 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t5-20020a4adbc5000000b00511e01623bbsm2286985oou.7.2023.02.10.10.37.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 10:37:46 -0800 (PST)
+Received: (nullmailer pid 2925630 invoked by uid 1000);
+        Fri, 10 Feb 2023 18:37:45 -0000
+Date:   Fri, 10 Feb 2023 12:37:45 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Md Danish Anwar <a0501179@ti.com>
+Cc:     MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Paolo Abeni <pabeni@redhat.com>,
+        srk@ti.com, andrew@lunn.ch, Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, devicetree@vger.kernel.org,
+        ssantosh@kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        nm@ti.com, "David S. Miller" <davem@davemloft.net>,
+        Vignesh Raghavendra <vigneshr@ti.com>, netdev@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Suman Anna <s-anna@ti.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Roger Quadros <rogerq@kernel.org>
+Subject: Re: [EXTERNAL] Re: [PATCH v5 1/2] dt-bindings: net: Add ICSSG
+ Ethernet
+Message-ID: <20230210183745.GA2923614-robh@kernel.org>
+References: <20230210114957.2667963-1-danishanwar@ti.com>
+ <20230210114957.2667963-2-danishanwar@ti.com>
+ <167603709479.2486232.8105868847286398852.robh@kernel.org>
+ <69f54246-5541-7899-f4ed-76d0a600e1b0@ti.com>
 MIME-Version: 1.0
-References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
- <CAHk-=wj8rthcQ9gQbvkMzeFt0iymq+CuOzmidx3Pm29Lg+W0gg@mail.gmail.com>
- <20230210021603.GA2825702@dread.disaster.area> <20230210040626.GB2825702@dread.disaster.area>
- <Y+XLuYh+kC+4wTRi@casper.infradead.org> <20230210065747.GD2825702@dread.disaster.area>
- <CALCETrWjJisipSJA7tPu+h6B2gs3m+g0yPhZ4z+Atod+WOMkZg@mail.gmail.com>
- <CAHk-=wj66F6CdJUAAjqigXMBy7gHquFMzPNAwKCgkrb2mF6U7w@mail.gmail.com> <CALCETrU-9Wcb_zCsVWr24V=uCA0+c6x359UkJBOBgkbq+UHAMA@mail.gmail.com>
-In-Reply-To: <CALCETrU-9Wcb_zCsVWr24V=uCA0+c6x359UkJBOBgkbq+UHAMA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 10 Feb 2023 10:37:01 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjQZWMeQ9OgXDNepf+TLijqj0Lm0dXWwWzDcbz6o7yy_g@mail.gmail.com>
-Message-ID: <CAHk-=wjQZWMeQ9OgXDNepf+TLijqj0Lm0dXWwWzDcbz6o7yy_g@mail.gmail.com>
-Subject: Re: copy on write for splice() from file to pipe?
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Stefan Metzmacher <metze@samba.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API Mailing List <linux-api@vger.kernel.org>,
-        io-uring <io-uring@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Samba Technical <samba-technical@lists.samba.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <69f54246-5541-7899-f4ed-76d0a600e1b0@ti.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,53 +78,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 9:57 AM Andy Lutomirski <luto@kernel.org> wrote:
->
-> I am saying exactly what I meant.  Obviously mutable data exists.  I'm
-> saying that *putting it in a pipe* *while it's still mutable* is not
-> good.  Which implies that I don't think splice() is good.  No offense.
+On Fri, Feb 10, 2023 at 09:00:59PM +0530, Md Danish Anwar wrote:
+> 
+> 
+> On 10/02/23 19:28, Rob Herring wrote:
+> > 
+> > On Fri, 10 Feb 2023 17:19:56 +0530, MD Danish Anwar wrote:
+> >> From: Puranjay Mohan <p-mohan@ti.com>
+> >>
+> >> Add a YAML binding document for the ICSSG Programmable real time unit
+> >> based Ethernet hardware. The ICSSG driver uses the PRU and PRUSS consumer
+> >> APIs to interface the PRUs and load/run the firmware for supporting
+> >> ethernet functionality.
+> >>
+> >> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+> >> Signed-off-by: Md Danish Anwar <danishanwar@ti.com>
+> >> ---
+> >>  .../bindings/net/ti,icssg-prueth.yaml         | 184 ++++++++++++++++++
+> >>  1 file changed, 184 insertions(+)
+> >>  create mode 100644 Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
+> >>
+> > 
+> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > 
+> > yamllint warnings/errors:
+> > 
+> > dtschema/dtc warnings/errors:
+> > ./Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/remoteproc/ti,pru-consumer.yaml
+> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/ti,icssg-prueth.example.dtb: ethernet: False schema does not allow {'compatible': ['ti,am654-icssg-prueth'], 'pinctrl-names': ['default'], 'pinctrl-0': [[4294967295]], 'ti,sram': [[4294967295]], 'ti,prus': [[4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295]], 'firmware-name': ['ti-pruss/am65x-pru0-prueth-fw.elf', 'ti-pruss/am65x-rtu0-prueth-fw.elf', 'ti-pruss/am65x-txpru0-prueth-fw.elf', 'ti-pruss/am65x-pru1-prueth-fw.elf', 'ti-pruss/am65x-rtu1-prueth-fw.elf', 'ti-pruss/am65x-txpru1-prueth-fw.elf'], 'ti,pruss-gp-mux-sel': [[2, 2, 2, 2, 2, 2]], 'dmas': [[4294967295, 49920], [4294967295, 49921], [4294967295, 49922], [4294967295, 49923], [4294967295, 49924], [4294967295, 49925], [4294967295, 49926], [4294967295, 49927], [4294967295, 17152], [4294967295, 17153]], 'dma-names': ['tx0-0', 'tx0-1', 'tx0-2', 'tx0-3', 'tx1-0', 'tx1-1', 'tx1-2', 'tx1-3', 'rx0', 'rx1'], 'ti,mii-g-rt': [[429!
+> >  4967295]], 'interrupts': [[24, 0, 2], [25, 1, 3]], 'interrupt-names': ['tx_ts0', 'tx_ts1'], 'ethernet-ports': {'#address-cells': [[1]], '#size-cells': [[0]], 'port@0': {'reg': [[0]], 'phy-handle': [[4294967295]], 'phy-mode': ['rgmii-id'], 'interrupts-extended': [[4294967295, 24]], 'ti,syscon-rgmii-delay': [[4294967295, 16672]], 'local-mac-address': [[0, 0, 0, 0, 0, 0]]}, 'port@1': {'reg': [[1]], 'phy-handle': [[4294967295]], 'phy-mode': ['rgmii-id'], 'interrupts-extended': [[4294967295, 25]], 'ti,syscon-rgmii-delay': [[4294967295, 16676]], 'local-mac-address': [[0, 0, 0, 0, 0, 0]]}}, '$nodename': ['ethernet']}
+> > 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
+> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/ti,icssg-prueth.example.dtb: ethernet: Unevaluated properties are not allowed ('firmware-name', 'ti,prus', 'ti,pruss-gp-mux-sel' were unexpected)
+> > 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
+> > 
+> > doc reference errors (make refcheckdocs):
+> > 
+> > See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230210114957.2667963-2-danishanwar@ti.com
+> 
+> Hi Rob,
+> This patch depends on the patch [1] which is posted through series [2]. Patch
+> [1] is currently approved, reviewed and will soon be merged to mainline Linux.
+> Once it is merged this patch won't throw the above error.
+> 
+> In the meantime I have posted this patch to get it reviewed so that once patch
+> [1] gets merged, this will be ready to be merged.
+> 
+> [1] https://lore.kernel.org/all/20230106121046.886863-2-danishanwar@ti.com/
+> [2] https://lore.kernel.org/all/20230106121046.886863-1-danishanwar@ti.com/
 
-No offense at all. As mentioned, I have grown to detest splice over the years.
+State that in *this* patch if you don't want to get the report.
 
-That said, in defense of splice(), it really does solve a lot of
-conceptual problems.
-
-And I still think that conceptually it's absolutely lovely in *theory*.
-
-And part of it is very much the fact that pipes are useful and have
-the infrastructure for other things. So you can mix regular read/write
-calls with splice, and it actually makes sense. One of the design
-goals was for things like static http, where you don't really send out
-just file contents, there's a whole header to it as well.
-
-So it's not just a specialized "send file contents to network", it's a
-"you can do a write() call to start filling the pipe buffer with the
-http header, then a splice() to start filling the file data".
-
-And it was also designed to allow other sources, notably things like
-video capture cards etc. And very much multiple destinations (again,
-media accelerators).
-
-So it all "makes sense" conceptually as a generic pipe (sic) between
-different sources and sinks. And again, using a pipe as the mechanism
-then also makes perfect sense in a historical Unix context of
-"everything is a pipe".
-
-But.
-
-The above just tries to make sense of the design, and excuses for it.
-I want to re-iterate that I think it's all lovely and coherent
-conceptually. But in practice, it's just a huge pain.
-
-The same way "everything is a pipeline of processes" is very much
-historical Unix and very useful for shell scripting, but isn't
-actually then normally very useful for larger problems, splice()
-really never lived up to that conceptual issue, and it's just really
-really nasty in practice.
-
-But we're stuck with it.
-
-I'm not convinced your suggestion of extending io_uring with new
-primitives is any better in practice, though.
-
-          Linus
+Rob
