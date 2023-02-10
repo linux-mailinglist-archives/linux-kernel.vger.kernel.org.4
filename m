@@ -2,96 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341356915AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 01:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EDF6915DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 01:47:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbjBJAhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 19:37:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53782 "EHLO
+        id S230220AbjBJArp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 19:47:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbjBJAhM (ORCPT
+        with ESMTP id S229585AbjBJArn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 19:37:12 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E377095E
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 16:36:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675989401; x=1707525401;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GBLao6NE/SGSwkVRdGz+EqF+VC4oUdgalsbEcOSG9sM=;
-  b=RujB3omMHyN6h00KRwsuBoQwZ/FNlqadQW5gV91AO5ammcn+eHFzxUvR
-   eq+IQtnImvDiliIieT/lVIT7BsmkXpjXLam1PovGPdGgrnUzSpQiAcUmX
-   aQ7XrannDl2ocFATXpvXPWOjCaJkvnoasG4t8F5LoL1ccER18mk6M9RB4
-   LCwCt4mSLgOlAdhhgp37QyNVS0DRWYYrh8Z2jEaskqqQBWuutQSkKNcUV
-   UGpXA/MKEgdLicaCykdfBBqQkLcdNaH+AQSG0pwwK6NTDbgwMYx6iAsmX
-   hSxqM3xi2oKTmlH502Mu0eDvAPjQMpsHV/7fz0hiw9OG5kNooqx78RLd2
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="310656321"
-X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
-   d="scan'208";a="310656321"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 16:33:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="736556385"
-X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
-   d="scan'208";a="736556385"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga004.fm.intel.com with ESMTP; 09 Feb 2023 16:33:49 -0800
-Date:   Thu, 9 Feb 2023 16:43:33 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v3 04/10] sched/fair: Let low-priority cores help
- high-priority busy SMT cores
-Message-ID: <20230210004333.GA6166@ranerica-svr.sc.intel.com>
-References: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com>
- <20230207045838.11243-5-ricardo.neri-calderon@linux.intel.com>
- <CAKfTPtB_YR8e6fcx3Un0vTeJR4EJS9sOXG=wLb8rZeM5Ub4yyA@mail.gmail.com>
- <Y+TexehP3140vxBu@hirez.programming.kicks-ass.net>
+        Thu, 9 Feb 2023 19:47:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C536953C;
+        Thu,  9 Feb 2023 16:47:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6D77B82395;
+        Fri, 10 Feb 2023 00:47:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB35CC433EF;
+        Fri, 10 Feb 2023 00:47:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675990059;
+        bh=ukUcmvJZMjG33lSo3oansFJtQTNqfCcgGTUPCoG4ivk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z9tTiwjPGPiw3d48v9Vj46z/SqCJcxeV2DdkL+9AOlFffv7LRyHIhPoRzlIDJLR7O
+         L2UroC5TwDCDUgBjakCn4aSAZaUCNl0TnuI+sDUVMleXuzNBb6dQY5dK7NzJuhiphv
+         DuH84/Lmad0n+XhEiN2TAW1aTH262eJhQMtw4GMpOywF93NGWZ0EVuarOahgZuPJJ9
+         ac28nLZUg9lL8F1G6nnAeIOFC8iM5LSzA+RhK/5XuQuSrnjo7VTbjlrdj130k1tQEJ
+         DbNWrzEFvcY0lw9lV65tK42JeIj4VgAWSGAv6DB7liNzXAVU5qF9OdPC3BbGgKTQLI
+         pBuM1pUJ3mtEA==
+Date:   Thu, 9 Feb 2023 17:47:35 -0700
+From:   Keith Busch <kbusch@kernel.org>
+To:     "Patel, Nirmal" <nirmal.patel@linux.intel.com>
+Cc:     Xinghui Li <korantwork@gmail.com>,
+        Jonathan Derrick <jonathan.derrick@linux.dev>,
+        lpieralisi@kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xinghui Li <korantli@tencent.com>
+Subject: Re: [PATCH] PCI: vmd: Do not disable MSI-X remapping in VMD 28C0
+ controller
+Message-ID: <Y+WUJ/qeyVRxYUhN@kbusch-mbp.dhcp.thefacebook.com>
+References: <CAEm4hYXncuvL-Gk1aEZExrvkbx=N1aiOQNeNjFdB4443EbKNBA@mail.gmail.com>
+ <f05ee82a-4532-b12b-490f-904b946ff7b0@linux.dev>
+ <CAEm4hYXk1RuKEw41VukH2iGTo_9GmZjUfrESWK5vFtpFA_O_4A@mail.gmail.com>
+ <CAEm4hYWeZFrYxSvAcBJ8iw=t507vZMqfBwiQXFSJd2Hcyfw7fA@mail.gmail.com>
+ <9e6cfda1-4309-d1bb-a0cf-404a7fe7d3aa@linux.intel.com>
+ <Y+FG2EUpmsmCZqwh@kbusch-mbp.dhcp.thefacebook.com>
+ <CAEm4hYWjaVCDFtCCyHrq5vOie4wV5LFn-UVZ5qQbpASxVGy1TA@mail.gmail.com>
+ <c830a68e-014b-ddec-4bab-5db337fc378f@linux.intel.com>
+ <Y+V8O9kDH5ZXWdBF@kbusch-mbp.dhcp.thefacebook.com>
+ <68b40228-d2e6-c63c-751b-972bfea93f41@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y+TexehP3140vxBu@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <68b40228-d2e6-c63c-751b-972bfea93f41@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 12:53:41PM +0100, Peter Zijlstra wrote:
-> On Wed, Feb 08, 2023 at 08:56:32AM +0100, Vincent Guittot wrote:
+On Thu, Feb 09, 2023 at 04:57:59PM -0700, Patel, Nirmal wrote:
+> On 2/9/2023 4:05 PM, Keith Busch wrote:
+> > On Tue, Feb 07, 2023 at 01:32:20PM -0700, Patel, Nirmal wrote:
+> >> On 2/6/2023 8:18 PM, Xinghui Li wrote:
+> >>> Keith Busch <kbusch@kernel.org> 于2023年2月7日周二 02:28写道：
+> >>>> I suspect bypass is the better choice if "num_active_cpus() > pci_msix_vec_count(vmd->dev)".
+> >>> For this situation, My speculation is that the PCIE nodes are
+> >>> over-mounted and not just because of the CPU to Drive ratio.
+> >>> We considered designing online nodes, because we were concerned that
+> >>> the IO of different chunk sizes would adapt to different MSI-X modes.
+> >>> I privately think that it may be logically complicated if programmatic
+> >>> judgments are made.
+> >> Also newer CPUs have more MSIx (128) which means we can still have
+> >> better performance without bypass. It would be better if user have
+> >> can chose module parameter based on their requirements. Thanks.
+> > So what? More vectors just pushes the threshold to when bypass becomes
+> > relevant, which is exactly why I suggested it. There has to be an empirical
+> > answer to when bypass beats muxing. Why do you want a user tunable if there's a
+> > verifiable and automated better choice?
 > 
-> > > +                       if (env->sd->flags & SD_SHARE_CPUCAPACITY ||
-> > > +                           (!(env->sd->flags & SD_SHARE_CPUCAPACITY) && is_core_idle(i)))
-> > 
-> > This 2nd if could be merged with the upper one
-> 
-> Wasn't this exact same condition used in the previous patch as well?
-> Does it wants to be a helper perhaps?
+> Make sense about the automated choice. I am not sure what is the exact
+> tipping point. The commit message includes only two cases. one 1 drive
+> 1 CPU and second 12 drives 6 CPU. Also performance gets worse from 8
+> drives to 12 drives.
 
-Patch 3 focuses on the destination CPU: make sure that it and its SMT
-siblings are idle before attempting to do asym_packing balance.
+That configuration's storage performance overwhelms the CPU with interrupt
+context switching. That problem probably inverts when your active CPU count
+exceeds your VMD vectors because you'll be funnelling more interrupts into
+fewer CPUs, leaving other CPUs idle.
 
-This patch focuses on the busiest group: if the busiest group is an SMT
-core with more than one busy sibling, help it even if it has higher
-priority.
+> One the previous comments also mentioned something about FIO changing
+> cpus_allowed; will there be an issue when VMD driver decides to bypass
+> the remapping during the boot up, but FIO job changes the cpu_allowed?
+
+No. Bypass mode uses managed interrupts for your nvme child devices, which sets
+the best possible affinity.
