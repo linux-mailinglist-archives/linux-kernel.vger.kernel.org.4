@@ -2,183 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D546924C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B8A6924C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:46:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232929AbjBJRnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 12:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50128 "EHLO
+        id S232931AbjBJRqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 12:46:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232588AbjBJRnC (ORCPT
+        with ESMTP id S232040AbjBJRqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 12:43:02 -0500
+        Fri, 10 Feb 2023 12:46:51 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 63BB9C662
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:43:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7401E93D4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:46:48 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 78DF72F4;
-        Fri, 10 Feb 2023 09:43:43 -0800 (PST)
-Received: from [10.1.196.177] (eglon.cambridge.arm.com [10.1.196.177])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 183863F703;
-        Fri, 10 Feb 2023 09:42:58 -0800 (PST)
-Message-ID: <5813b8c5-ae3e-87fd-fccc-94c9cd08816d@arm.com>
-Date:   Fri, 10 Feb 2023 17:42:52 +0000
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B3A532F4;
+        Fri, 10 Feb 2023 09:47:30 -0800 (PST)
+Received: from [192.168.122.164] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 24D4B3F71E;
+        Fri, 10 Feb 2023 09:46:43 -0800 (PST)
+Message-ID: <f6452cdd-65ff-34b8-bab0-5c06416da5f6@arm.com>
+Date:   Fri, 10 Feb 2023 11:46:36 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2] firmware: arm_sdei: Fix sleep from invalid context BUG
-Content-Language: en-GB
-To:     Pierre Gondois <pierre.gondois@arm.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        WANG Xuerui <git@xen0n.name>, Qi Liu <liuqi115@huawei.com>,
-        Bharat Bhushan <bbhushan2@marvell.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Bibo Mao <maobibo@loongson.cn>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <20221018130456.1356081-1-pierre.gondois@arm.com>
-From:   James Morse <james.morse@arm.com>
-In-Reply-To: <20221018130456.1356081-1-pierre.gondois@arm.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Content-Language: en-US
+To:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Cc:     kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Marc Zyngier <marc.zyngier@arm.com>
+From:   Jeremy Linton <jeremy.linton@arm.com>
+Subject: Circular lockdep in kvm_reset_vcpu() ?
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pierre,
+Hi,
 
-Sorry its taken so long for me to catch up with this ...
+I saw this pop yesterday:
 
-On 18/10/2022 14:04, Pierre Gondois wrote:
-> On an Ampere Altra,
-> Running a preemp_rt kernel based on v5.19-rc3-rt5 on an
-> Ampere Altra triggers:
-> [   15.683141] BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
-> [   15.683154] in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 24, name: cpuhp/0
-> [   15.683157] preempt_count: 0, expected: 0
-> [   15.683159] RCU nest depth: 0, expected: 0
-> [   15.683163] 3 locks held by cpuhp/0/24:
-> [   15.683167]  #0: ffffda30217c70d0 (cpu_hotplug_lock){++++}-{0:0}, at: cpuhp_thread_fun+0x5c/0x248
-> [   15.683201]  #1: ffffda30217c7120 (cpuhp_state-up){+.+.}-{0:0}, at: cpuhp_thread_fun+0x5c/0x248
-> [   15.683205]  #2: ffffda3021c711f0 (sdei_list_lock){....}-{3:3}, at: sdei_cpuhp_up+0x3c/0x130
-> [   15.683224] irq event stamp: 36
-> [   15.683226] hardirqs last  enabled at (35): [<ffffda301e85b7bc>] finish_task_switch+0xb4/0x2b0
-> [   15.683236] hardirqs last disabled at (36): [<ffffda301e812fec>] cpuhp_thread_fun+0x21c/0x248
-> [   15.683238] softirqs last  enabled at (0): [<ffffda301e80b184>] copy_process+0x63c/0x1ac0
-> [   15.683245] softirqs last disabled at (0): [<0000000000000000>] 0x0
-> [   15.683258] CPU: 0 PID: 24 Comm: cpuhp/0 Not tainted 5.19.0-rc3-rt5-[...]
-> [   15.683265] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
-> [   15.683268] Call trace:
-> [   15.683271]  dump_backtrace+0x114/0x120
-> [   15.683277]  show_stack+0x20/0x70
-> [   15.683279]  dump_stack_lvl+0x9c/0xd8
-> [   15.683288]  dump_stack+0x18/0x34
-> [   15.683289]  __might_resched+0x188/0x228
-> [   15.683292]  rt_spin_lock+0x70/0x120
-> [   15.683301]  sdei_cpuhp_up+0x3c/0x130
-> [   15.683303]  cpuhp_invoke_callback+0x250/0xf08
-> [   15.683305]  cpuhp_thread_fun+0x120/0x248
-> [   15.683308]  smpboot_thread_fn+0x280/0x320
-> [   15.683315]  kthread+0x130/0x140
-> [   15.683321]  ret_from_fork+0x10/0x20
-
-> sdei_cpuhp_up() is called in the STARTING hotplug section,
-> which runs whith interrupts disabled. Move CPUHP_AP_ARM_SDEI_
-> state to the _ONLINE section to execute the cpuhp cb with
-> preemption enabled.
-
-The background to this is SDEI got its own cpuhp slot because 'perf NMI' support
-was one of the use-cases, but this got superseded by pNMI. Without an interaction with
-perf, the slot doesn't need to be that early.
-
-
-> Some SDEI calls (e.g. SDEI_1_0_FN_SDEI_PE_MASK) take actions on the
-> calling CPU. It is checked that preemption is disabled for them.
-> _ONLINE cpuhp cb are executed in the 'per CPU hotplug thread'.
-> Preemption is enabled in those threads, but their cpumask is limited
-> to 1 CPU.
-
-> Move 'WARN_ON_ONCE(preemptible())' statements so that SDEI cpuhp cb
-> don't trigger them. This means that no check will be done for some
-> cases, e.g. sdei_mask_local_cpu() invocations.
-
-(these things are documentation anyway)
-
-
-> Also add a check for the SDEI_1_0_FN_SDEI_PRIVATE_RESET SDEI call
-> which acts on the calling CPU.
-
-> diff --git a/drivers/firmware/arm_sdei.c b/drivers/firmware/arm_sdei.c
-> index 1e1a51510e83..9b03e164a37a 100644
-> --- a/drivers/firmware/arm_sdei.c
-> +++ b/drivers/firmware/arm_sdei.c
-
-> @@ -401,6 +399,8 @@ int sdei_event_enable(u32 event_num)
->  	int err = -EINVAL;
->  	struct sdei_event *event;
->  
-> +	WARN_ON_ONCE(preemptible());
-> +
->  	mutex_lock(&sdei_events_lock);
->  	event = sdei_event_find(event_num);
->  	if (!event) {
-
-This doesn't look right. How can this code take a mutex if its in a non-preemptable context?
-
-> @@ -492,6 +490,7 @@ int sdei_event_unregister(u32 event_num)
->  	struct sdei_event *event;
->  
->  	WARN_ON(in_nmi());
-> +	WARN_ON_ONCE(preemptible());
->  
->  	mutex_lock(&sdei_events_lock);
->  	event = sdei_event_find(event_num);
-
-Same again.
-
-> @@ -576,6 +573,7 @@ int sdei_event_register(u32 event_num, sdei_event_callback *cb, void *arg)
->  	struct sdei_event *event;
->  
->  	WARN_ON(in_nmi());
-> +	WARN_ON_ONCE(preemptible());
->  
->  	mutex_lock(&sdei_events_lock);
->  	if (sdei_event_find(event_num)) {
-
-Same again.
-
-I think you've copied these here because they called _local_event_unregister(), but they
-did that via on_each_cpu(), which is what made _local_event_unregister() non-preemtable.
-
-You can just remove these three, the original warnings were mostly documentation, and to
-catch myself out. (before RT moved the goal posts).
-
-With that:
-Reviewed-by: James Morse <james.morse@arm.com>
-
-(could you trim the [timestamps] out of the commit log?)
+[   78.333360] ======================================================
+[   78.339541] WARNING: possible circular locking dependency detected
+[   78.345721] 6.2.0-rc7+ #19 Not tainted
+[   78.349470] ------------------------------------------------------
+[   78.355647] qemu-system-aar/859 is trying to acquire lock:
+[   78.361130] ffff5aa69269eba0 (&host_kvm->lock){+.+.}-{3:3}, at: 
+kvm_reset_vcpu+0x34/0x274
+[   78.369344]
+[   78.369344] but task is already holding lock:
+[   78.375182] ffff5aa68768c0b8 (&vcpu->mutex){+.+.}-{3:3}, at: 
+kvm_vcpu_ioctl+0x8c/0xba0
+[   78.383133]
+[   78.383133] which lock already depends on the new lock.
+[   78.383133]
+[   78.391318]
+[   78.391318] the existing dependency chain (in reverse order) is:
+[   78.398811]
+[   78.398811] -> #1 (&vcpu->mutex){+.+.}-{3:3}:
+[   78.404682]        __lock_acquire+0x480/0x9c0
+[   78.409068]        lock_acquire.part.0+0xf0/0x240
+[   78.413806]        lock_acquire+0xa8/0x204
+[   78.417934]        __mutex_lock+0xac/0x460
+[   78.422053]        mutex_lock_nested+0x34/0x40
+[   78.426517]        kvm_vm_ioctl_create_vcpu+0x17c/0x474
+[   78.431768]        kvm_vm_ioctl+0x67c/0xb00
+[   78.435966]        __arm64_sys_ioctl+0xb4/0x100
+[   78.440516]        invoke_syscall+0x78/0xfc
+[   78.444714]        el0_svc_common.constprop.0+0x68/0x124
+[   78.450044]        do_el0_svc+0x34/0x4c
+[   78.453892]        el0_svc+0x50/0x140
+[   78.457571]        el0t_64_sync_handler+0xf4/0x120
+[   78.462381]        el0t_64_sync+0x194/0x198
+[   78.466580]
+[   78.466580] -> #0 (&host_kvm->lock){+.+.}-{3:3}:
+[   78.472714]        check_prev_add+0xa4/0x8d4
+[   78.477005]        validate_chain+0x420/0x590
+[   78.481381]        __lock_acquire+0x480/0x9c0
+[   78.485759]        lock_acquire.part.0+0xf0/0x240
+[   78.490483]        lock_acquire+0xa8/0x204
+[   78.494598]        __mutex_lock+0xac/0x460
+[   78.498711]        mutex_lock_nested+0x34/0x40
+[   78.503171]        kvm_reset_vcpu+0x34/0x274
+[   78.507461]        kvm_vcpu_set_target+0x10c/0x154
+[   78.512274]        kvm_arch_vcpu_ioctl_vcpu_init+0x20/0xf0
+[   78.517782]        kvm_arch_vcpu_ioctl+0x398/0x550
+[   78.522595]        kvm_vcpu_ioctl+0x5f8/0xba0
+[   78.526973]        __arm64_sys_ioctl+0xb4/0x100
+[   78.531522]        invoke_syscall+0x78/0xfc
+[   78.535719]        el0_svc_common.constprop.0+0x68/0x124
+[   78.541048]        do_el0_svc+0x34/0x4c
+[   78.544897]        el0_svc+0x50/0x140
+[   78.548574]        el0t_64_sync_handler+0xf4/0x120
+[   78.553384]        el0t_64_sync+0x194/0x198
+[   78.557581]
+[   78.557581] other info that might help us debug this:
+[   78.557581]
+[   78.565606]  Possible unsafe locking scenario:
+[   78.565606]
+[   78.571541]        CPU0                    CPU1
+[   78.576080]        ----                    ----
+[   78.580606]   lock(&vcpu->mutex);
+[   78.583922]                                lock(&host_kvm->lock);
+[   78.590017]                                lock(&vcpu->mutex);
+[   78.595851]   lock(&host_kvm->lock);
+[   78.599426]
+[   78.599426]  *** DEADLOCK ***
+[   78.599426]
+[   78.605344] 1 lock held by qemu-system-aar/859:
+[   78.609873]  #0: ffff5aa68768c0b8 (&vcpu->mutex){+.+.}-{3:3}, at: 
+kvm_vcpu_ioctl+0x8c/0xba0
+[   78.618245]
+[   78.618245] stack backtrace:
+[   78.622599] CPU: 1 PID: 859 Comm: qemu-system-aar Not tainted 
+6.2.0-rc7+ #19
+[   78.629650] Hardware name: Raspberry Pi Foundation Raspberry Pi 4 
+Model B/Raspberry Pi 4 Model B, BIOS EDK2-DEV 11/07/2022
+[   78.640696] Call trace:
+[   78.643137]  dump_backtrace+0xe8/0x140
+[   78.646885]  show_stack+0x20/0x30
+[   78.650197]  dump_stack_lvl+0x88/0xb4
+[   78.653858]  dump_stack+0x18/0x34
+[   78.657171]  print_circular_bug+0x1f8/0x200
+[   78.661355]  check_noncircular+0x13c/0x150
+[   78.665451]  check_prev_add+0xa4/0x8d4
+[   78.669199]  validate_chain+0x420/0x590
+[   78.673035]  __lock_acquire+0x480/0x9c0
+[   78.676871]  lock_acquire.part.0+0xf0/0x240
+[   78.681055]  lock_acquire+0xa8/0x204
+[   78.684629]  __mutex_lock+0xac/0x460
+[   78.688203]  mutex_lock_nested+0x34/0x40
+[   78.692124]  kvm_reset_vcpu+0x34/0x274
+[   78.695873]  kvm_vcpu_set_target+0x10c/0x154
+[   78.700144]  kvm_arch_vcpu_ioctl_vcpu_init+0x20/0xf0
+[   78.705110]  kvm_arch_vcpu_ioctl+0x398/0x550
+[   78.709380]  kvm_vcpu_ioctl+0x5f8/0xba0
+[   78.713217]  __arm64_sys_ioctl+0xb4/0x100
+[   78.717225]  invoke_syscall+0x78/0xfc
+[   78.720885]  el0_svc_common.constprop.0+0x68/0x124
+[   78.725674]  do_el0_svc+0x34/0x4c
+[   78.728986]  el0_svc+0x50/0x140
+[   78.732126]  el0t_64_sync_handler+0xf4/0x120
+[   78.736395]  el0t_64_sync+0x194/0x198
 
 
-> @@ -765,7 +765,7 @@ static int sdei_device_freeze(struct device *dev)
->  	int err;
->  
->  	/* unregister private events */
-> -	cpuhp_remove_state(CPUHP_AP_ARM_SDEI_STARTING);
-> +	cpuhp_remove_state(CPUHP_AP_ARM_SDEI_ONLINE);
+It appears to be triggered by the new commit 42a90008f890a ('KVM: Ensure 
+lockdep knows about kvm->lock vs. vcpu->mutex ordering rule') which is 
+detecting the vcpu lock grabbed by kvm_vcpu_ioctl() and then the kvm 
+mutext grabbed by kvm_reset_vcpu().
 
-Is there any mileage in making this CPUHP_AP_ONLINE_DYN ?
-Perf really was the only reason that this needed to happen in any particular order.
-
+This is 6.2rc7 configured for fedora-debug and qemu on the rpi4.
 
 Thanks,
-
-James
