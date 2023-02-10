@@ -2,76 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6A269161A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 02:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9B469161C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 02:15:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjBJBNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 20:13:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
+        id S231211AbjBJBPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 20:15:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjBJBNf (ORCPT
+        with ESMTP id S229483AbjBJBPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 20:13:35 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CCC5EA07
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 17:13:34 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id m2so4914052plg.4
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 17:13:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=k3av9jkUvE9A6NJ/myH2LVzHPBwDhgbAq+TXm0rIoTM=;
-        b=PHZQYT5oASeECsZsHRHQMGmmlRn/fh1qFIyHRbeqb6UKHavmxO4hmYGKVNZ3HXfHCP
-         OC+jObRKncg1lbUI1c6zLMxOulEL4CDQTfhrHtjSFhe60xMZzvHSZKHiz04WTd812P6c
-         /gmzgZGkx8I5YMNuPo9O28D4S2q+ikgRILRReal9hzuIijl6Zu4RVW6sHImTFlsiNrI3
-         YVkJmEkMBeHhPbqmrRnCQuyvV8054XIVeM+4KGPkRjrFvaIx64M0S/WFnVQwX9NNiWbF
-         hMWRMMEk9Iz3eHX6+Tp6StYtSqPySt+Z95pXifmRZBUzvX8dri+GKO8RUx9Sfcd1JPKs
-         b1Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k3av9jkUvE9A6NJ/myH2LVzHPBwDhgbAq+TXm0rIoTM=;
-        b=dndNRt7w0prAX/8qzNVcnQC6GqMb4OSPKUGFgh1erdO/5kE7Ag575NdvVSfY6znPSe
-         uOE7Et7ktmJVLzQba3G/bc+ZqDTFBraQMwSPJBID069a9yeOfv6oInfXBvJcqvjaKy7o
-         l5Po8EilfJ36pdqbZH3gnNzt7scul5OlavIdQM/rwhQWQTkPUW+qutFKSg7p/dBrgFvc
-         vdaDyXTaUHpYGxhzb8nWY+knD+prFjdP9zgcf3r6IHU8GfVSo2VV1gE8y0H0MCo92MW6
-         sPiD03K6IgXut396EbR7bVegLMvB0/T1qz2fWQlRc0V3dgMLtpopXaKCka1Zy/VXa1LY
-         XcUA==
-X-Gm-Message-State: AO0yUKXJeB9XFX31j+zOOa/Z1/xmOduwEC0i6/vrXLeAzuglI8mWO3c6
-        zF4jyFgp5+hmfkJwnm50cMfY401QHugk/tjH44g=
-X-Google-Smtp-Source: AK7set9pFw3J5w5r/xV/SoTgrT6GjoR14zs1JLwGP7oCVVKObwM+RL2W/uCJ6aaf3zqmyu8HS/ZqXg==
-X-Received: by 2002:a17:902:ed89:b0:198:af50:e4e4 with SMTP id e9-20020a170902ed8900b00198af50e4e4mr102079plj.10.1675991613691;
-        Thu, 09 Feb 2023 17:13:33 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id i25-20020aa78b59000000b0059428b51220sm2040561pfd.186.2023.02.09.17.13.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 17:13:32 -0800 (PST)
-Date:   Fri, 10 Feb 2023 01:13:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, Tom Rix <trix@redhat.com>,
-        kvm@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH 2/2] KVM: VMX: Stub out enable_evmcs static key for
- CONFIG_HYPERV=n
-Message-ID: <Y+WaN8wW1EOvPbXe@google.com>
-References: <20230208205430.1424667-1-seanjc@google.com>
- <20230208205430.1424667-3-seanjc@google.com>
- <87mt5n6kx6.fsf@redhat.com>
- <1433ea0c-5072-b9d9-a533-401bb58f9a80@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1433ea0c-5072-b9d9-a533-401bb58f9a80@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        Thu, 9 Feb 2023 20:15:31 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1481C5EA07
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 17:15:29 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4PCbQ81jJRz501Qm;
+        Fri, 10 Feb 2023 09:15:28 +0800 (CST)
+Received: from szxlzmapp01.zte.com.cn ([10.5.231.85])
+        by mse-fl1.zte.com.cn with SMTP id 31A1FLFN006412;
+        Fri, 10 Feb 2023 09:15:21 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp01[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Fri, 10 Feb 2023 09:15:22 +0800 (CST)
+Date:   Fri, 10 Feb 2023 09:15:22 +0800 (CST)
+X-Zmail-TransId: 2b0363e59aaafffffffff5e3bbcc
+X-Mailer: Zmail v1.0
+Message-ID: <202302100915227721315@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <akpm@linux-foundation.org>
+Cc:     <david@redhat.com>, <imbrenda@linux.ibm.com>,
+        <jiang.xuexin@zte.com.cn>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <ran.xiaokai@zte.com.cn>,
+        <xu.xin.sc@gmail.com>, <xu.xin16@zte.com.cn>,
+        <yang.yang29@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIHY2IDAvNl0ga3NtOiBzdXBwb3J0IHRyYWNraW5nIEtTTS1wbGFjZWQgemVyby1wYWdlcw==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 31A1FLFN006412
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63E59AB0.000/4PCbQ81jJRz501Qm
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,22 +55,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023, Paolo Bonzini wrote:
-> On 2/9/23 14:13, Vitaly Kuznetsov wrote:
-> > > +static __always_inline bool is_evmcs_enabled(void)
-> > > +{
-> > > +	return static_branch_unlikely(&enable_evmcs);
-> > > +}
-> > I have a suggestion. While 'is_evmcs_enabled' name is certainly not
-> > worse than 'enable_evmcs', it may still be confusing as it's not clear
-> > which eVMCS is meant: are we running a guest using eVMCS or using eVMCS
-> > ourselves? So what if we rename this to a very explicit 'is_kvm_on_hyperv()'
-> > and hide the implementation details (i.e. 'evmcs') inside?
-> 
-> I prefer keeping eVMCS in the name,
+From: xu xin <xu.xin16@zte.com.cn>
 
-+1, IIUC KVM can run on Hyper-V without eVMCS being enabled.
+The core idea of this patch set is to enable users to perceive the number of any
+pages merged by KSM, regardless of whether use_zero_page switch has been turned
+on, so that users can know how much free memory increase is really due to their
+madvise(MERGEABLE) actions. But the problem is, when enabling use_zero_pages,
+all empty pages will be merged with kernel zero pages instead of with each
+other as use_zero_pages is disabled, and then these zero-pages are no longer
+monitored by KSM.
 
-> but I agree a better name could be something like kvm_uses_evmcs()?
+The motivations for me to do this contains three points:
 
-kvm_is_using_evmcs()?
+1) MADV_UNMERGEABLE and other ways to trigger unsharing will *not*
+   unshare the shared zeropage as placed by KSM (which is against the 
+   MADV_UNMERGEABLE documentation at least); see the link:
+   https://lore.kernel.org/lkml/4a3daba6-18f9-d252-697c-197f65578c44@redhat.com/
+
+2) We cannot know how many pages are zero pages placed by KSM when
+   enabling use_zero_pages, which hides the critical information about
+   how much actual memory are really saved by KSM. Knowing how many
+   ksm-placed zero pages are helpful for user to use the policy of madvise
+   (MERGEABLE) better because they can see the actual profit brought by KSM.
+
+3) The zero pages placed-by KSM are different from those initial empty page
+   (filled with zeros) which are never touched by applications. The former
+   is active-merged by KSM while the later have never consume actual memory.
+
+use_zero_pages is useful, not only because of cache colouring as described
+in doc, but also because use_zero_pages can accelerate merging empty pages
+when there are plenty of empty pages (full of zeros) as the time of
+page-by-page comparisons (unstable_tree_search_insert) is saved. So we hope to
+implement the support for ksm zero page tracking without affecting the feature
+of use_zero_pages.
+
+Zero pages may be the most common merged pages in actual environment(not only VM but
+also including other application like containers). Enabling use_zero_pages in the
+environment with plenty of empty pages(full of zeros) will be very useful. Users and
+app developer can also benefit from knowing the proportion of zero pages in all
+merged pages to optimize applications.
+
+With the patch series, we can both unshare zero-pages(KSM-placed) accurately
+and count ksm zero pages with enabling use_zero_pages.
+
+v5->v6:
+1) In [PATCH 1/6], fix some coments as Divid's suggestions [1].
+2) In [PATCH 6/6], modify the patch as Divid's suggestions [2].
+[1]: https://lore.kernel.org/lkml/0e0c90a2-d12c-f965-9cce-ecd5d28c09dd@redhat.com/
+[2]: https://lore.kernel.org/lkml/3704dcf0-bd0a-8ab2-7f4f-045fc7c73171@redhat.com/
+
+v4->v5:
+---
+1) fix warning:  mm/ksm.c:3238:9: warning: no previous prototype for 'zero_pages_sharing_show'
+   [-Wmissing-prototypes].
+   In [PATCH 3/6] (ksm: count all zero pages placed by KSM), declare the function
+ssize_t zero_pages_sharing_show(struct kobject *kobj...) as 'static'.
+2) In [PATCH 6/6],fix error of "} while (end_scans < start_scans + 20);" to
+   "} while (end_scans < start_scans + 2);" in wait_two_full_scans().
+
+---
+v3->v4:
+
+1) The patch series are readjusted to adapt to these recent changes of break_ksm()
+   from David Hildenbrand's commits:
+   https://lore.kernel.org/all/20221021101141.84170-9-david@redhat.com/T/#u
+
+2) Some changes of patch itself:
+   In [patch 2/6], add a check of mm exiting in unshare_zero_pages in case of
+   unsharing the zero pages whose process is exiting; form a new function
+   clean_rmap_item_zero_flag(), and add it after stable_tree_search() to fix;
+   In [patch 3/6], all decreasing actions of zero pages count are put in
+   clean_rmap_item_zero_flag(), which is more accurate.
+
+3) Add a selftest of unsharing and counting ksm-placed zero pages.
+
+---
+v2->v3:
+
+1) Add more descriptive information in cover letter.
+
+2) In [patch 2/5], add more commit log for explaining reasons.
+
+3) In [patch 2/5], fix misuse of break_ksm() in unmerge_ksm_pages():
+   break_ksm(vma, addr, NULL) -> break_ksm(vma, addr, false);
+
+---
+v1->v2:
+
+[patch 4/5] fix build warning, mm/ksm.c:550, misleading indentation; statement 
+'rmap_item->mm->ksm_zero_pages_sharing--;' is not part of the previous 'if'.
+*** BLURB HERE ***
+
+xu xin (6):
+  ksm: abstract the function try_to_get_old_rmap_item
+  ksm: support unsharing zero pages placed by KSM
+  ksm: count all zero pages placed by KSM
+  ksm: count zero pages for each process
+  ksm: add zero_pages_sharing documentation
+  selftest: add testing unsharing and counting ksm zero page
+
+ Documentation/admin-guide/mm/ksm.rst              |   7 +
+ fs/proc/base.c                                    |   1 +
+ include/linux/mm_types.h                          |   7 +-
+ mm/ksm.c                                          | 185 +++++++++++++++++-----
+ tools/testing/selftests/vm/ksm_functional_tests.c |  96 ++++++++++-
+ 5 files changed, 255 insertions(+), 41 deletions(-)
+
+-- 
+2.15.2
