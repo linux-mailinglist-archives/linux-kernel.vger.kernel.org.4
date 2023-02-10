@@ -2,74 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 370E2691520
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 01:09:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 417CF691538
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 01:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjBJAJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 19:09:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
+        id S229862AbjBJAOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 19:14:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjBJAJa (ORCPT
+        with ESMTP id S229510AbjBJAOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 19:09:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEA45A90E
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 16:08:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675987722;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BSw5daY010qcHCZuSVoAgV58dbuNqE0exBdvxUMk52M=;
-        b=HDE0rLv7PaKa9k+BCNUOkYm1dyzK1TdKJnvBXeg33z2jS6RrcA0a33ZDkGdCA3lXVnRaly
-        fPq4IwBm2HeMhJJuPABSGAMRMQuEjbHzNF3W3/r9MLteNrmYdeaPiVq8OU34puPcgZzwDt
-        +76FQ1kQ9NAMb3pyNDm4QoZ5MdK9FLM=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-630-rvKJ2d6GMuqtZY7VablZFg-1; Thu, 09 Feb 2023 19:08:41 -0500
-X-MC-Unique: rvKJ2d6GMuqtZY7VablZFg-1
-Received: by mail-qk1-f198.google.com with SMTP id a6-20020a05620a102600b00729952b4c73so2285678qkk.6
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 16:08:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BSw5daY010qcHCZuSVoAgV58dbuNqE0exBdvxUMk52M=;
-        b=Yx4okWO5hxN9LfC22HvsQBu5HMoQpZMN78cwPQ5OAYubz9CaELYTbK6VH8D0SkJSEf
-         aZpAj8y/LMng+fo9k+ICn5suaZLHHfbEPAY2v3r2lIjmGzokDf/u9cAXFn+yVb5uUQHu
-         xvGD23XfF+fBbLNy1zul79Ywe5pEsHWs0hq8NLBfndAkI5TUXKge3i4Ubkgj/dwNtwaZ
-         Sp29FW8XDQHgN54NsKNb9HfbIbtIye89zg/amBgxrKoJKKtAXDmbDD/qD24QpUGYQFo/
-         45VsC6kKjJkSosUX0SXdbPFJbaickOI/+ebe7PjvEO0Ut9O/tOOT6NJN3OFxlLBYsLhl
-         VIUQ==
-X-Gm-Message-State: AO0yUKVFr2EjTKD5qRCJ6RJ1ODFjPdluPeBOrL1jX+O0FDN3c69GXJ1e
-        +Fjy2RO1s0Qul00vfY6KnTbSWPEtkAlhExyeYyTJIDNOFyaOHaEMXYXPUROs62Y1tkNxbo7ydSP
-        tSAFrmP2miOYD00CenB6tTnVigfoewLhAWMUgGrvR
-X-Received: by 2002:ac8:5dc6:0:b0:3ba:8c0:8f89 with SMTP id e6-20020ac85dc6000000b003ba08c08f89mr2003778qtx.89.1675987721135;
-        Thu, 09 Feb 2023 16:08:41 -0800 (PST)
-X-Google-Smtp-Source: AK7set/5wZzJKpTlmro2WCCkMZCDMF0ZKN/0KTX+DGUF/pDMJLqFMcVYxsSLUcdNimpD7Zma28DTdnHBiJyhmcXCLF8=
-X-Received: by 2002:ac8:5dc6:0:b0:3ba:8c0:8f89 with SMTP id
- e6-20020ac85dc6000000b003ba08c08f89mr2003771qtx.89.1675987720917; Thu, 09 Feb
- 2023 16:08:40 -0800 (PST)
-MIME-Version: 1.0
-References: <20230210104720.365557d8@canb.auug.org.au>
-In-Reply-To: <20230210104720.365557d8@canb.auug.org.au>
-From:   David Airlie <airlied@redhat.com>
-Date:   Fri, 10 Feb 2023 10:08:29 +1000
-Message-ID: <CAMwc25r3EQG7hHkC7SU9omHWFGqto7RuUY9uVNkC6vXUF_hVtg@mail.gmail.com>
-Subject: Re: linux-next: duplicate patch in the drm-misc-fixes tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
+        Thu, 9 Feb 2023 19:14:08 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D411F5DC0C;
+        Thu,  9 Feb 2023 16:14:05 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PCZ3G436vz4xGR;
+        Fri, 10 Feb 2023 11:14:02 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675988044;
+        bh=2yHKY9aFyNlmViZI0EwmA59DXVXoVYQUY+c8M1ZgJPk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=aKm3jykJ+++qsZNF6TFyZnaYx0BMxUw6R03LXsvNz7+UtOypPwJsJw9gW7bgrGkok
+         ZGwZYSo2M49X8/QbSYxfJqXXV0wzZfLvxcCMmZCIMq7ncFufDYXWy9zmMblb3L/2Ns
+         DIgRTxychHe3xGV0sHtSR8Ft9cijlCftWUWwn7wY1JmngOsAWu6/SwuLIpjOZSA4DW
+         7GBQBv/IHdsgWgCQ4HrZ3LUCuuqg0TgwJxnI3YAJbGZK+gULopkxWMoUUufRmbcGgi
+         f57H/qzRnFLBmRAitytIY1+9/fYEHBTr3N4/4oksaW2vm1h4AwURx0cKXl0cJERkAs
+         tLWvHdA3oo01g==
+Date:   Fri, 10 Feb 2023 11:14:01 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Cong Dang <cong.dang.xn@renesas.com>,
+        Hai Pham <hai.pham.ud@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Subject: linux-next: duplicate patch in the drivers-memory tree
+Message-ID: <20230210111401.7b22765c@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/1C_pOKEamel15TCxDy_KJsE";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,24 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 9:47 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> The following commit is also in the drm-fixes tree as a different commit
-> (but the same patch):
->
->   94d8b6572a1f ("nvidiafb: detect the hardware support before removing console.")
->
-> This is commit
->
->   04119ab1a49f ("nvidiafb: detect the hardware support before removing console.")
->
-> in the drm-fixes tree.
+--Sig_/1C_pOKEamel15TCxDy_KJsE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Just FYI misc team, I've force pushed drm-misc-fixes to drop this
-patch, please make sure any local misc fixes don't bring it back in if
-we can avoid it.
+Hi all,
 
-Dave.
+The following commit is also in the arm-soc tree as a different commit
+(but the same patch):
 
+  cb1ed99d9520 ("memory: renesas-rpc-if: Remove redundant division of dummy=
+")
+
+This is commit
+
+  637581ce6040 ("memory: renesas-rpc-if: Remove redundant division of dummy=
+")
+
+in the arm-soc tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/1C_pOKEamel15TCxDy_KJsE
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPljEkACgkQAVBC80lX
+0GycHQf/TKqL4oXG+LqaKmEr3RqZtypXOk0pN/MNOJ/kurFxN2vOr3Rdx/rbHLWb
+20/ws9giuqKuUoYN8y9YSaLv2u3/jD/S3xayEnMzqm9yzSL7Ubt0c3m977a2SnzE
+NJWs5VoFrJ5IHbkLLAdt4culn8k7lTSrpxAJFysFEXKYva0E9wo66AbLHQf7tg87
++szvbWJPk3u45faxbA0BiP0dGYb12m6CB/FhClcVvjiP7ZqUpdNvQsM2T9iUJyV6
+RQ0vgmVHojkOg43h2+0Ak5a71dI9CxsueRieN7efXZr/FxWMg7L0dBWgCpL8fdup
+cfWIYivA/SL/hXtC09/Xqah+gL+waw==
+=lzsV
+-----END PGP SIGNATURE-----
+
+--Sig_/1C_pOKEamel15TCxDy_KJsE--
