@@ -2,117 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9FCC6920F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 15:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A61076920F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 15:40:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232401AbjBJOkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 09:40:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38112 "EHLO
+        id S232251AbjBJOkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 09:40:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232421AbjBJOkD (ORCPT
+        with ESMTP id S232238AbjBJOke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 09:40:03 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411287406F
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 06:39:59 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jzi@pengutronix.de>)
-        id 1pQUZ6-0004Qk-Qt; Fri, 10 Feb 2023 15:39:52 +0100
-Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <jzi@pengutronix.de>)
-        id 1pQUZ2-0040F9-QF; Fri, 10 Feb 2023 15:39:50 +0100
-Received: from jzi by dude03.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <jzi@pengutronix.de>)
-        id 1pQUZ3-00EPFb-2Q; Fri, 10 Feb 2023 15:39:49 +0100
-From:   Johannes Zink <j.zink@pengutronix.de>
-To:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        kernel@pengutronix.de, Johannes Zink <j.zink@pengutronix.de>
-Subject: [PATCH net] net: stmmac: fix order of dwmac5 FlexPPS parametrization sequence
-Date:   Fri, 10 Feb 2023 15:39:37 +0100
-Message-Id: <20230210143937.3427483-1-j.zink@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Fri, 10 Feb 2023 09:40:34 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0D9749B6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 06:40:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=j6LbxHIBCVV5rjQrdijnVfVEmR+19SnQcdcK0RUu0rY=; b=q+6TpSdsMG2l/kD8PCkPzAkDYW
+        2/zAYJebYlCKaU5jsd0V5JqyezKDstQPiz7XqzwPq0KvX+A4JJNJ7iIzwxSHrIk7Af6SuiPKeWfRr
+        l+QP182ZCPGbqUswwmXtIXYv4g0EZ0n4O517wLGUvV2B9LNnUcBl1TuLN7qbI5iXub1bMWgzwAPIo
+        VBltuP6NUE0KWvm1r83zPBDyKc5wifoKcMrbAyD7JaB4NxWjZsCGs5kPs2b/dleznA2dmuxvjhNQf
+        Deel7KU1qIt8ngaFuxLClo7Y+/BXZ7ILdVtm3QX+ESecuNhMS99uwLmKSgt4LtWwi1YrxjCfTsmVD
+        cQ7fU7jQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pQUYM-008EBU-0o;
+        Fri, 10 Feb 2023 14:39:06 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DAC2E3001CE;
+        Fri, 10 Feb 2023 15:39:43 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8A7B2209A00B7; Fri, 10 Feb 2023 15:39:43 +0100 (CET)
+Date:   Fri, 10 Feb 2023 15:39:43 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Wei Li <liwei391@huawei.com>,
+        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yu Liao <liaoyu15@huawei.com>, Hillf Danton <hdanton@sina.com>,
+        Ingo Molnar <mingo@kernel.org>
+Subject: Re: [PATCH 4/6] timers/nohz: Add a comment about broken iowait
+ counter update race
+Message-ID: <Y+ZXLy0P0Sggbrxc@hirez.programming.kicks-ass.net>
+References: <20230210140917.279062-1-frederic@kernel.org>
+ <20230210140917.279062-5-frederic@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: jzi@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230210140917.279062-5-frederic@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So far changing the period by just setting new period values while
-running did not work.
+On Fri, Feb 10, 2023 at 03:09:15PM +0100, Frederic Weisbecker wrote:
+> The per-cpu iowait task counter is incremented locally upon sleeping.
+> But since the task can be woken to (and by) another CPU, the counter may
+> then be decremented remotely. This is the source of a race involving
+> readers VS writer of idle/iowait sleeptime.
+> 
+> The following scenario shows an example where a /proc/stat reader
+> observes a pending sleep time as IO whereas that pending sleep time
+> later eventually gets accounted as non-IO.
+> 
+>     CPU 0                       CPU  1                    CPU 2
+>     -----                       -----                     ------
+>     //io_schedule() TASK A
+>     current->in_iowait = 1
+>     rq(0)->nr_iowait++
+>     //switch to idle
+>                         // READ /proc/stat
+>                         // See nr_iowait_cpu(0) == 1
+>                         return ts->iowait_sleeptime +
+>                                ktime_sub(ktime_get(), ts->idle_entrytime)
+> 
+>                                                           //try_to_wake_up(TASK A)
+>                                                           rq(0)->nr_iowait--
+>     //idle exit
+>     // See nr_iowait_cpu(0) == 0
+>     ts->idle_sleeptime += ktime_sub(ktime_get(), ts->idle_entrytime)
+> 
+> As a result subsequent reads on /proc/stat may expose backward progress.
+> 
+> This is unfortunately hardly fixable. Just add a comment about that
+> condition.
 
-The order as indicated by the publicly available reference manual of the i.MX8MP [1]
-indicates a sequence:
-
- * initiate the programming sequence
- * set the values for PPS period and start time
- * start the pulse train generation.
-
-This is currently not used in dwmac5_flex_pps_config(), which instead does:
-
- * initiate the programming sequence and immediately start the pulse train generation
- * set the values for PPS period and start time
-
-This caused the period values written not to take effect until the FlexPPS output was
-disabled and re-enabled again.
-
-This patch fix the order and allows the period to be set immediately.
-
-[1] https://www.nxp.com/webapp/Download?colCode=IMX8MPRM
-
-Fixes: 9a8a02c9d46d ("net: stmmac: Add Flexible PPS support")
-Signed-off-by: Johannes Zink <j.zink@pengutronix.de>
----
-
-This fix is not super critical, but if you do another cycle anyway,
-feel free to take or review it.
-
-drivers/net/ethernet/stmicro/stmmac/dwmac5.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac5.c b/drivers/net/ethernet/stmicro/stmmac/dwmac5.c
-index 413f66017219..e95d35f1e5a0 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac5.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac5.c
-@@ -541,9 +541,9 @@ int dwmac5_flex_pps_config(void __iomem *ioaddr, int index,
- 		return 0;
- 	}
-
--	val |= PPSCMDx(index, 0x2);
- 	val |= TRGTMODSELx(index, 0x2);
- 	val |= PPSEN0;
-+	writel(val, ioaddr + MAC_PPS_CONTROL);
-
- 	writel(cfg->start.tv_sec, ioaddr + MAC_PPSx_TARGET_TIME_SEC(index));
-
-@@ -568,6 +568,7 @@ int dwmac5_flex_pps_config(void __iomem *ioaddr, int index,
- 	writel(period - 1, ioaddr + MAC_PPSx_WIDTH(index));
-
- 	/* Finally, activate it */
-+	val |= PPSCMDx(index, 0x2);
- 	writel(val, ioaddr + MAC_PPS_CONTROL);
- 	return 0;
- }
---
-2.30.2
-
+It is far worse than that, the whole concept of per-cpu iowait is
+absurd. Also see the comment near nr_iowait().
