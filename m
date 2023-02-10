@@ -2,115 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9309E6923CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4542B6923D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232768AbjBJQ67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 11:58:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
+        id S232820AbjBJQ7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 11:59:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbjBJQ6w (ORCPT
+        with ESMTP id S232915AbjBJQ7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 11:58:52 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5072795FB
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:58:48 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id n13so4266537wmr.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:58:48 -0800 (PST)
+        Fri, 10 Feb 2023 11:59:00 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1EA1A664
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:58:57 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id o1so2158637ioo.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:58:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bvBG9ca92jYkJz3+IO9cCEyUcRP6k+bZzqDzIUYmZjQ=;
-        b=HK+qzuC5d2RclQ8Pm2S9sVWA2HP7CRYTtKiSJN8HKHhqUeZ9KShks13w8PUjOsVisy
-         S5Pt+YtUcdwmt1K/dxY4FL0oB40ZzzHSxrRsayXxNF6BhIoEugtLe63kl6wZnf7376qS
-         +NrlEsFk0CxxRB/sk7ikVZU1Cm2QdlC5Qpz7vkvXMjHKQzG0KYbtr7W4AgbAcSO1gkVV
-         ZatsAG0RZ4ZP9QUoCoT6xk8j+4D2Spl4aV4qiQ/b7rxrG7njTd0bjXNjdXe8SgtYG2p2
-         QWCxGvVALP34ApkjiBry/37Cr2C76CNCVlttTGZqvZDcaR4BiF69i5RV9WNfSRXLJOlI
-         yIQg==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1676048337;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rrh0NDaHMY9O1FS98P5dAqfFDyWSfS3HhhQqFVWgZOE=;
+        b=DVL3MPv9sMruszS7zHhzndY8WHnB6AgksAFy5dqTvW8M30CClTuuVf7NpuIbfmxU5w
+         pN7Fts0Q/8DEk6TyOdtTCW4+EpLxQaOevBd6wEBwPAZ6TPnO9UJRRzOccQdfWsKsbpGf
+         +Uehyf0N1dlc4Blds753OkcWDZ3c/iD+XNlkfleSsbRxKHHW2C9QuU2aNlX/ONLmJw8D
+         JZrd0x3iPYjK8QVCTdAG0sD90OVMnT7o0c+goUq2LBJFyZb0zCbZObrmtPI5cxs8bWch
+         S8uWwqv20BE9dH94mf/tMTQ2rWldZ5CguUhUvlW8l5FYXszzB7P0+zRz/qOcaKsIz8AG
+         1BIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bvBG9ca92jYkJz3+IO9cCEyUcRP6k+bZzqDzIUYmZjQ=;
-        b=CpZCxRWuld50n+mtfvliqTuidcU/zfv9+SBoBtKLscJzEympnVuz0EfBAb5ssRmUyS
-         bK7f4UaVQH0DImN8YTVZA6iUqES5AVFrZQ5iUfSHP1xQc6k4UBJfM8KYHpjLAy8FZBNE
-         F6lWbPBoZyg21L9qojMtD5lIia3S04fFIYj0pJxxNu7mwLrOr2U6pv8H/GLf/D1O51OE
-         LNKKHp0S90ORcAQ96ysM8GgAorVYbFgGRx3ATnNxmcyMC4aPEPX1fVPay4Up+BDSYRVL
-         zRSCROrpClXla61+tzsQrOFxppGfo4ejWnGp8dSvnkrJZIXSeqOoHYw5OeNdq4jQeDk1
-         geKA==
-X-Gm-Message-State: AO0yUKWYFY+1RCIdauTjYHy7i07fOOMVhHWqjI1LEs+8YOPw4rgvuSU4
-        CdltBNJ3YjZZKfdfuuHHsS8OpDpevdDXOcYw8WAeBw==
-X-Google-Smtp-Source: AK7set8Gfoavx/5SCFT72EvQpyGbHidMzDJwPbirW66XrJirkHDkJTcACVpIH5e5LlQjObybnrdM2NGHuvBaDezUzvw=
-X-Received: by 2002:a05:600c:c8:b0:3df:f29c:ec3a with SMTP id
- u8-20020a05600c00c800b003dff29cec3amr969617wmm.38.1676048327368; Fri, 10 Feb
- 2023 08:58:47 -0800 (PST)
+        d=1e100.net; s=20210112; t=1676048337;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rrh0NDaHMY9O1FS98P5dAqfFDyWSfS3HhhQqFVWgZOE=;
+        b=TzrJHm9bXSQrAAMZtCqln/46Vg7uO0Ku0nUR5Yo6MOiee4uu73vU/6vWwZCohcBsGr
+         TmKmet8rvgQ2P9jf0tK1lr1hvovO/M3GyQNj1Hg2fVxkrMkSdWDLAANd82lOWbEg0uAp
+         Fw2Kikmkfh5HHpdJiDnFpADNfB1bGO2Csa4kZZWQYNIIV17fZXYMH5u156P4d9pnaKZm
+         iqJ2tmwWg0+W2jpqcRrkTdo+6VI92Bxo/onKayy/Z36G/oZ0BiyM1AZVSBGRfpjMVmHX
+         Bz3eyw6MKvTNze6arBkWlMpu8SPea6+H6XTrOOWw36Aej+zpTQzxDBRRQT3L/ApdpEbb
+         vLDg==
+X-Gm-Message-State: AO0yUKWxrpH0EOMngQgJZY0XrIzmC3Ewny+w7ykmhB0eBAakdpi9cOyS
+        Cm7khXfSQwHiVd0x9kLuvKQrWQ==
+X-Google-Smtp-Source: AK7set/CyHbofIp/G2RL2FgjvDqyudxHU+KGsBOzNuN7iKexvugyLUIJFiToFdDTBQJyRSyu93edbg==
+X-Received: by 2002:a6b:7019:0:b0:72c:f57a:a37b with SMTP id l25-20020a6b7019000000b0072cf57aa37bmr10159969ioc.2.1676048336820;
+        Fri, 10 Feb 2023 08:58:56 -0800 (PST)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id f4-20020a02a804000000b003aabed37b1bsm1499059jaj.175.2023.02.10.08.58.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 08:58:56 -0800 (PST)
+Message-ID: <6340bd43-c96e-9702-e00a-b426f05b0271@kernel.dk>
+Date:   Fri, 10 Feb 2023 09:58:55 -0700
 MIME-Version: 1.0
-References: <20230126204444.2204061-1-zalbassam@google.com> <86fsbgyutf.wl-maz@kernel.org>
-In-Reply-To: <86fsbgyutf.wl-maz@kernel.org>
-From:   Zaid Al-Bassam <zalbassam@google.com>
-Date:   Fri, 10 Feb 2023 11:58:36 -0500
-Message-ID: <CALBRaFmj4Nvr=bjti+yCrRhtX61_aJhiCRDfbMJPLDhqVW8u1A@mail.gmail.com>
-Subject: Re: [PATCH 0/8] perf: arm: Make PMUv3 driver available for aarch32
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Jesus Sanchez-Palencia <jesussanp@google.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] io_uring,audit: don't log IORING_OP_MADVISE
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Steve Grubb <sgrubb@redhat.com>,
+        Richard Guy Briggs <rgb@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
+        Eric Paris <eparis@parisplace.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Stefan Roesch <shr@fb.com>
+References: <b5dfdcd541115c86dbc774aa9dd502c964849c5f.1675282642.git.rgb@redhat.com>
+ <Y+VrSLZKZoAGikUS@madcap2.tricolour.ca>
+ <CAHC9VhTNb4gOpk9=49-ABtYs1DFKqqwXPSc-2bhJX7wcZ82o=g@mail.gmail.com>
+ <13293926.uLZWGnKmhe@x2> <6939adfb-ce2c-1911-19ee-af32f7d9a5ca@kernel.dk>
+ <CAHC9VhTGmGJ81M2CZWsTf1kNf8XNz2WsYFAP=5VAVSUfUiu1yQ@mail.gmail.com>
+ <56ef99e4-f9de-0634-ce53-3bc2f1fa6665@kernel.dk>
+ <CAHC9VhSgSREUDzJfDq9H_VAbyCZBYakhE19OiUB19QCeEM3q2A@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAHC9VhSgSREUDzJfDq9H_VAbyCZBYakhE19OiUB19QCeEM3q2A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you Marc for reviewing the change and fixing the issues, I have
-picked up your patches and sent out v2. Tested on Cortex-A32.
+On 2/10/23 9:52?AM, Paul Moore wrote:
+> On Fri, Feb 10, 2023 at 11:00 AM Jens Axboe <axboe@kernel.dk> wrote:
+>> On 2/10/23 8:39?AM, Paul Moore wrote:
+>>> On Thu, Feb 9, 2023 at 7:15 PM Jens Axboe <axboe@kernel.dk> wrote:
+>>>> On 2/9/23 3:54?PM, Steve Grubb wrote:
+>>>>> On Thursday, February 9, 2023 5:37:22 PM EST Paul Moore wrote:
+>>>>>> On Thu, Feb 9, 2023 at 4:53 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+>>>>>>> On 2023-02-01 16:18, Paul Moore wrote:
+>>>>>>>> On Wed, Feb 1, 2023 at 3:34 PM Richard Guy Briggs <rgb@redhat.com>
+>>>>> wrote:
+>>>>>>>>> fadvise and madvise both provide hints for caching or access pattern
+>>>>>>>>> for file and memory respectively.  Skip them.
+>>>>>>>>
+>>>>>>>> You forgot to update the first sentence in the commit description :/
+>>>>>>>
+>>>>>>> I didn't forget.  I updated that sentence to reflect the fact that the
+>>>>>>> two should be treated similarly rather than differently.
+>>>>>>
+>>>>>> Ooookay.  Can we at least agree that the commit description should be
+>>>>>> rephrased to make it clear that the patch only adjusts madvise?  Right
+>>>>>> now I read the commit description and it sounds like you are adjusting
+>>>>>> the behavior for both fadvise and madvise in this patch, which is not
+>>>>>> true.
+>>>>>>
+>>>>>>>> I'm still looking for some type of statement that you've done some
+>>>>>>>> homework on the IORING_OP_MADVISE case to ensure that it doesn't end
+>>>>>>>> up calling into the LSM, see my previous emails on this.  I need more
+>>>>>>>> than "Steve told me to do this".
+>>>>>>>>
+>>>>>>>> I basically just want to see that some care and thought has gone into
+>>>>>>>> this patch to verify it is correct and good.
+>>>>>>>
+>>>>>>> Steve suggested I look into a number of iouring ops.  I looked at the
+>>>>>>> description code and agreed that it wasn't necessary to audit madvise.
+>>>>>>> The rationale for fadvise was detemined to have been conflated with
+>>>>>>> fallocate and subsequently dropped.  Steve also suggested a number of
+>>>>>>> others and after investigation I decided that their current state was
+>>>>>>> correct.  *getxattr you've advised against, so it was dropped.  It
+>>>>>>> appears fewer modifications were necessary than originally suspected.
+>>>>>>
+>>>>>> My concern is that three of the four changes you initially proposed
+>>>>>> were rejected, which gives me pause about the fourth.  You mention
+>>>>>> that based on your reading of madvise's description you feel auditing
+>>>>>> isn't necessary - and you may be right - but based on our experience
+>>>>>> so far with this patchset I would like to hear that you have properly
+>>>>>> investigated all of the madvise code paths, and I would like that in
+>>>>>> the commit description.
+>>>>>
+>>>>> I think you're being unnecessarily hard on this. Yes, the commit message
+>>>>> might be touched up. But madvise is advisory in nature. It is not security
+>>>>> relevant. And a grep through the security directory doesn't turn up any
+>>>>> hooks.
+>>>>
+>>>> Agree, it's getting a bit anal... FWIW, patch looks fine to me.
+>>>
+>>> Call it whatever you want, but the details are often important at this
+>>> level of code, and when I see a patch author pushing back on verifying
+>>> that their patch is correct it makes me very skeptical.
+>>
+>> Maybe it isn't intended, but the replies have generally had a pretty
+>> condescending tone to them. That's not the best way to engage folks, and
+>> may very well be why people just kind of give up on it. Nobody likes
+>> debating one-liners forever, particularly not if it isn't inviting.
+> 
+> I appreciate that you are coming from a different space, but I stand
+> by my comments.  Of course you are welcome to your own opinion, but I
+> would encourage you to spend some time reading the audit mail archives
+> going back a few years before you make comments like the above ... or
+> not, that's your call; I recognize it is usually easier to criticize.
 
-Best Regards,
-Zaid Al-Bassam
+I'm just saying how it was received on my end, you can take that as
+constructive feedback or ignore it. I don't need to read the archives
+for that as it is not related to anything but this thread, it was not
+meant to reflect a general concern outside of this thread.
 
+> On a quasi related note to the list/archives: unfortunately there was
+> continued resistance to opening up the linux-audit list so I've setup
+> audit@vger for upstream audit kernel work moving forward.  The list
+> address in MAINTAINERS will get updated during the next merge window
+> so hopefully some of the problems you had in the beginning of this
+> discussion will be better in the future.
 
-On Wed, Feb 8, 2023 at 11:40 AM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Thu, 26 Jan 2023 20:44:36 +0000,
-> Zaid Al-Bassam <zalbassam@google.com> wrote:
-> >
-> > Currently, PMUv3 driver is only available for ARMv8 aarch64
-> > platforms, ARMv8 running in aarch32 mode dont have access to
-> > the driver. This is, especially, a problem for ARMv8 platforms
-> > that only have aarch32 support, like the Cortex-A32.
->
-> FWIW, I've pushed out my own interpretation of this series to [1],
-> including the changes I suggested. The results seems to correctly work
-> in a 32bit guest on a 64bit host, which is what I (used to) care
-> about.
->
-> Feel free to pick it up.
->
->         M.
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=arm/pmuv3
->
-> --
-> Without deviation from the norm, progress is not possible.
+OK good, I keep forgetting to delete it from the replies and get annoyed
+at the spam I get back... Thanks for fixing that going forward.
+
+>>> I really would have preferred that you held off from merging this
+>>> until this was resolved and ACK'd ... oh well.
+>>
+>> It's still top of tree. If you want to ack it, let me know and I'll add
+>> it. If you want to nak it, give me something concrete to work off of.
+> 
+> I can't in good conscience ACK it without some comment from Richard
+> that he has traced the code paths; this shouldn't be surprising at
+> this point.  I'm not going to NACK it or post a revert, I would have
+> done that already if I felt that was appropriate.  Right now this
+> patch is in a gray area for me in that I suspect it is good, but I
+> can't ACK it without some comment that it has been properly
+> researched.
+
+Richard, can you do the due diligence here? Steve did say:
+
+"But madvise is advisory in nature. It is not security relevant. And a
+grep through the security directory doesn't turn up any hooks."
+
+Seems to me if we're not currently auditing madvise outside of io_uring,
+then why would we do it here?
+
+-- 
+Jens Axboe
+
