@@ -2,112 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A6F692773
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 425C6692779
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233463AbjBJTxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 14:53:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36434 "EHLO
+        id S233493AbjBJTy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 14:54:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232495AbjBJTxh (ORCPT
+        with ESMTP id S232495AbjBJTys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 14:53:37 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFD03A90;
-        Fri, 10 Feb 2023 11:53:36 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id u27so7475499ljo.12;
-        Fri, 10 Feb 2023 11:53:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6vpHTSsq3RuT3ZTbVZIw1FmvwScMrvkNjzVV5l91taQ=;
-        b=RTYrGbtU3etE5hJdPLvvyJrgFyHgxb3oOWgcnCkfYu6txjHu0fKfpcxJwSY1njE7vq
-         IfO484zScE0QgNzcNYMRzUOL62TltnTBAhQs0+OrcEX8VFkJvW2JB7oMhdaaWbImMU1E
-         5z8HqOdL3iPc9sIZjeHdB4lK3lDaMYdDyxSS46DfQY+vohkAXHadyW74yh7IfOK6HQ2U
-         7BgP0jR7ZK4BzirqjoDZnx5tvmCsJWtUyCUgereqK17xZcIRG+e4SqKYX6gh+IBTMJq7
-         sl4x09Cvs32E36mc1GGc2JTlmNAxrWOerqYAK1DtystlFaJ9g+5Qwaj8C07MxrCtXGlB
-         ZXVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6vpHTSsq3RuT3ZTbVZIw1FmvwScMrvkNjzVV5l91taQ=;
-        b=VdZZwE23CS/uF90wjrbGAQYM1akysE5K5npiVmEVpXhVulMNhwKnbjiQKt3+mHoRiQ
-         EoDWs57SC72RvwCWE/YLuJsJvKMQHgvxkgAOi7Tj4F5a5JLhqyDSepN6cZwwWZp/Dwd7
-         pijV62aXFmfO/ChEUFQynwzijSnthRNk28/QTWdnFfFs0PBrjTdoEVvEAB1ojqUrArJ1
-         ApZvMOGVQ5lzhCby8of4aC3Phw16x7yK2q1zCIhmE1FhOOqz80fwBqdpQS0TJMHa2NFR
-         jeBu/p8c40rueRcNMJrD7+P/gxqJgH8Ub6pz+FWHVUCGlf5c95PX+YbwnqtahqlvzL4g
-         oEYg==
-X-Gm-Message-State: AO0yUKW4ye+NUI4h/Dzr0YuUzT5Gz2dUx7p/KvLU5Iz0twKtdu4bxLjb
-        j064Ug6F+2BxNiSr7XtT0wborR7g/DRka7iabuI=
-X-Google-Smtp-Source: AK7set9VxYinyOMzIxrzSekHnF65lzsk7aEnU8u6+pBnNfqPVN6bXPPXRIgcPLxBqkAhGhgebIawVIX3zk+f3YnIXU8=
-X-Received: by 2002:a2e:a0c7:0:b0:28b:795c:51f8 with SMTP id
- f7-20020a2ea0c7000000b0028b795c51f8mr2722196ljm.98.1676058814784; Fri, 10 Feb
- 2023 11:53:34 -0800 (PST)
+        Fri, 10 Feb 2023 14:54:48 -0500
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4291035B1;
+        Fri, 10 Feb 2023 11:54:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=From:Cc:To:Date:Message-ID;
+        bh=wB8iUoyhTPPw8oIGfgHrdWKWpi/z3O0LRA1cmDT3sZo=; b=kQ7wtexyyluIKMpJXEYni4zogw
+        Gl052DWbYm6IHhH7ViW6onVe8MYr6F+LQe3xtv4K6dwve6EQOuKcSTBHCzYsGaDwtOeUK5QBm87Co
+        RPyDA6DgflNAyXWUF/B1fIvBufxjdkG5ZGdUvKcOAcn0vMUVK+k+WFVljCfUSPdqkfkrxMGJ0JyJI
+        Lg1/GSCbF3gsnK4v9OTqvsWIrfiMBFX1IpuStcFZivHg7KOOlZXs92ydH68VIUIH6vlFbT+P9k+wD
+        EZACJFHjP639uSdqZb6BHTXtWiZCQ7iflJ6lmWfzhJGJGyygGrGil7X8P6u4HgtvxeB/3b9nEN8zs
+        xABsYnIJQu7OCwXHGz5dTqUQ+A3rcpgHh8rgb5aN8auUeN6/ZS1TItFwQzZPSnItiej6tkPWlctLx
+        PgIAEMzVjI0OOZKXINCMFKYM6XAIV/K+QWOsAKyD5XRvvfg7iSJO6ymfXBtXTqQ9Q1sQXmYnT3CWo
+        MwFNWVSfcA3xbZCa5ecs880Y;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1pQZTo-00D3dc-HN; Fri, 10 Feb 2023 19:54:44 +0000
+Message-ID: <e83b7763-daa7-af7f-ae4f-2886598ad9b0@samba.org>
+Date:   Fri, 10 Feb 2023 20:54:44 +0100
 MIME-Version: 1.0
-References: <20230210041030.865478-1-zyytlz.wz@163.com>
-In-Reply-To: <20230210041030.865478-1-zyytlz.wz@163.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Fri, 10 Feb 2023 11:53:23 -0800
-Message-ID: <CABBYNZL_gZ+kr_OEqjYgMmt+=91=jC88g310F-ScMC=kLh0xdw@mail.gmail.com>
-Subject: Re: [PATCH] Bluetooth: hci_core: Fix poential Use-after-Free bug in hci_remove_adv_monitor
-To:     Zheng Wang <zyytlz.wz@163.com>
-Cc:     marcel@holtmann.org, hackerzheng666@gmail.com,
-        alex000young@gmail.com, johan.hedberg@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-bluetooth@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: copy on write for splice() from file to pipe?
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jeremy Allison <jra@samba.org>
+Cc:     Andy Lutomirski <luto@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Linux API Mailing List <linux-api@vger.kernel.org>,
+        Dave Chinner <david@fromorbit.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Samba Technical <samba-technical@lists.samba.org>,
+        io-uring <io-uring@vger.kernel.org>
+References: <20230210021603.GA2825702@dread.disaster.area>
+ <20230210040626.GB2825702@dread.disaster.area>
+ <Y+XLuYh+kC+4wTRi@casper.infradead.org>
+ <20230210065747.GD2825702@dread.disaster.area>
+ <CALCETrWjJisipSJA7tPu+h6B2gs3m+g0yPhZ4z+Atod+WOMkZg@mail.gmail.com>
+ <CAHk-=wj66F6CdJUAAjqigXMBy7gHquFMzPNAwKCgkrb2mF6U7w@mail.gmail.com>
+ <CALCETrU-9Wcb_zCsVWr24V=uCA0+c6x359UkJBOBgkbq+UHAMA@mail.gmail.com>
+ <CAHk-=wjQZWMeQ9OgXDNepf+TLijqj0Lm0dXWwWzDcbz6o7yy_g@mail.gmail.com>
+ <CALCETrWuRHWh5XFn8M8qx5z0FXAGHH=ysb+c6J+cqbYyTAHvhw@mail.gmail.com>
+ <CAHk-=wjuXvF1cA=gJod=-6k4ypbEmOczFFDKriUpOVKy9dTJWQ@mail.gmail.com>
+ <Y+aat8sggTtgff+A@jeremy-acer>
+ <CAHk-=wgztjawo+nPjnJJdOe8rHcTYznD6u34TBzdstuTjpotbg@mail.gmail.com>
+From:   Stefan Metzmacher <metze@samba.org>
+In-Reply-To: <CAHk-=wgztjawo+nPjnJJdOe8rHcTYznD6u34TBzdstuTjpotbg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zheng,
+Am 10.02.23 um 20:42 schrieb Linus Torvalds:
+> On Fri, Feb 10, 2023 at 11:27 AM Jeremy Allison <jra@samba.org> wrote:
+>>
+>> 1). Client opens file with a lease. Hurrah, we think we can use splice() !
+>> 2). Client writes into file.
+>> 3). Client calls SMB_FLUSH to ensure data is on disk.
+>> 4). Client reads the data just wrtten to ensure it's good.
+>> 5). Client overwrites the previously written data.
+>>
+>> Now when client issues (4), the read request, if we
+>> zero-copy using splice() - I don't think theres a way
+>> we get notified when the data has finally left the
+>> system and the mapped splice memory in the buffer cache
+>> is safe to overwrite by the write (5).
+> 
+> Well, but we know that either:
+> 
+>   (a) the client has already gotten the read reply, and does the write
+> afterwards. So (4) has already not just left the network stack, but
+> actually made it all the way to the client.
+> 
+> OR
+> 
+>   (b) (4) and (5) clearly aren't ordered on the client side (ie your
+> "client" is not one single thread, and did an independent read and
+> overlapping write), and the client can't rely on one happening before
+> the other _anyway_.
+>
+> So if it's (b), then you might as well do the write first, because
+> there's simply no ordering between the two.  If you have a concurrent
+> read and a concurrent write to the same file, the read result is going
+> to be random anyway.
 
-On Thu, Feb 9, 2023 at 8:11 PM Zheng Wang <zyytlz.wz@163.com> wrote:
->
-> In hci_remove_adv_monitor, if it gets into HCI_ADV_MONITOR_EXT_MSFT case,
-> the function will free the monitor and print its handle after that.
->
-> Fix it by switch the order.
->
-> Fixes: 7cf5c2978f23 ("Bluetooth: hci_sync: Refactor remove Adv Monitor")
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> ---
->  net/bluetooth/hci_core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-> index b65c3aabcd53..db3352c60de6 100644
-> --- a/net/bluetooth/hci_core.c
-> +++ b/net/bluetooth/hci_core.c
-> @@ -1980,9 +1980,9 @@ static int hci_remove_adv_monitor(struct hci_dev *hdev,
->                 goto free_monitor;
->
->         case HCI_ADV_MONITOR_EXT_MSFT:
-> -               status = msft_remove_monitor(hdev, monitor);
->                 bt_dev_dbg(hdev, "%s remove monitor %d msft status %d",
->                            hdev->name, monitor->handle, status);
-> +               status = msft_remove_monitor(hdev, monitor);
+I guess that's true, most clients won't have a problem.
 
-I wonder if it is not a good idea to move the logging inside
-msft_remove_monitor?
+However in theory it's possible that client uses a feature
+called compounding, which means two requests are batched on the
+way to the server they are processed sequentially and the responses
+are batched on the way back again.
 
->                 break;
->         }
->
-> --
-> 2.25.1
->
+But we already have detection for that and the existing code also avoids
+sendfile() in that case.
 
-
--- 
-Luiz Augusto von Dentz
+metze
