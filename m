@@ -2,186 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641B76928BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 21:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A40B46928C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 21:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233898AbjBJUwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 15:52:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53976 "EHLO
+        id S233569AbjBJUzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 15:55:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233888AbjBJUv4 (ORCPT
+        with ESMTP id S233529AbjBJUyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 15:51:56 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812991BF2;
-        Fri, 10 Feb 2023 12:51:50 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31AKhe3H030061;
-        Fri, 10 Feb 2023 20:51:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Ff6yqt6p5KoOUHHXhDUwzeUoz5jQIRom3gJ638+WxMo=;
- b=BY5l0qbBLnoXcmUqoAZVQh6Ge7sN0o/bUufZLZ2klm8X3fC+QsYcrXDef/qWsTRQZ/1M
- 4DVfubbsQLp3OjtFrEDy0DmrsAyzB1YUa9nDGmvXAmrVd0ipm8L/e+HjbRZSD8ZuKz8N
- RT3uWFAmyOmJBLDdBoIqJH3q9YwnOtiTgRchIhh3Z0jhvOe7BeHeU8Q6vyMO8bG/BNFm
- /e0zVmDjqxpMkDwWtq1+goDky6F0T39qnS2/vDkIY9/N9he9sfeGCRRTuU2XShUACLCE
- 8pN7oo0PnY7/2XQ8gDeeRoGSztIgEQNsWUWYvv7flZD/xQw1PagtvEPGRSPhF/oqc+MF 1A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnw75r4gw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 20:51:40 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31AKlBIX011163;
-        Fri, 10 Feb 2023 20:51:39 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnw75r4gq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 20:51:39 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31AJM5Zf002578;
-        Fri, 10 Feb 2023 20:51:38 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
-        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3nhf088vdt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 20:51:38 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31AKpbFH31916496
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Feb 2023 20:51:37 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EA9E05805A;
-        Fri, 10 Feb 2023 20:51:36 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5AF5E58064;
-        Fri, 10 Feb 2023 20:51:35 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Feb 2023 20:51:35 +0000 (GMT)
-Message-ID: <d8d2e5de-54bc-b7c9-a2e7-44b95cd28bb7@linux.ibm.com>
-Date:   Fri, 10 Feb 2023 15:51:34 -0500
+        Fri, 10 Feb 2023 15:54:52 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03C73AB0;
+        Fri, 10 Feb 2023 12:54:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676062490; x=1707598490;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=b9t/ZkU9iTbcc8XjIPFTXdV+MGIykH0mfx78CLcHzHE=;
+  b=j77YsrNdKVVmrzQlXm+mottnTvALo0jNPfXlRKiVm3u/tByb3PPfYblG
+   AXLdHDkpJcV35wbZj1epFq5TfPVBDa4fQ/WWa1ta4z0mh/DFswBePQddt
+   byK86ysdP65dmQRNpBQfVHiXnhxsOAyVBLpaiKevE4HQuoYU/NJsEZDpr
+   5Tnlhe4IqjOTJCklvde12fjJyTXHQ1Y+pA8cYVOyIpUA/VpeJ5uy//BbR
+   haNXIT5RfPWqygiwvCT5+Ebq2DQEksMoHdFIwGExDaam9qcXWQDBQIrkF
+   yl0UrbMJjvyz3Fk1JC9eYPPMHWJ5U5YCQ++4d7BrnrF2pE8IrT71KU/d+
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="416745729"
+X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
+   d="scan'208";a="416745729"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 12:54:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="668169360"
+X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
+   d="scan'208";a="668169360"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 10 Feb 2023 12:54:47 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pQaPu-00063J-0y;
+        Fri, 10 Feb 2023 20:54:46 +0000
+Date:   Sat, 11 Feb 2023 04:54:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/5] pinctrl: at91: use devm_kasprintf() to avoid
+ potential leaks (part 2)
+Message-ID: <202302110407.TpDeAlpQ-lkp@intel.com>
+References: <20230210145656.71838-2-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v6 05/26] powerpc/secvar: Warn and error if multiple
- secvar ops are set
-Content-Language: en-US
-To:     Andrew Donnellan <ajd@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
-        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
-        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
-References: <20230210080401.345462-1-ajd@linux.ibm.com>
- <20230210080401.345462-6-ajd@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230210080401.345462-6-ajd@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: _YKx0a2GHE93Mt-hKQ0DEwanCOilhMcQ
-X-Proofpoint-ORIG-GUID: BTxle8nPE5RwwadIQInKd2o0CyebFpXY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-10_15,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- phishscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=999
- suspectscore=0 impostorscore=0 spamscore=0 bulkscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302100175
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230210145656.71838-2-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andy,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on linusw-pinctrl/devel]
+[also build test ERROR on linusw-pinctrl/for-next next-20230210]
+[cannot apply to clk/clk-next soc/for-next linus/master v6.2-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/pinctrl-at91-use-devm_kasprintf-to-avoid-potential-leaks-part-2/20230210-225817
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
+patch link:    https://lore.kernel.org/r/20230210145656.71838-2-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v1 1/5] pinctrl: at91: use devm_kasprintf() to avoid potential leaks (part 2)
+config: arm-randconfig-r046-20230210 (https://download.01.org/0day-ci/archive/20230211/202302110407.TpDeAlpQ-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0562771ccfa099db4361c2e5958ca1685f498cdf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/pinctrl-at91-use-devm_kasprintf-to-avoid-potential-leaks-part-2/20230210-225817
+        git checkout 0562771ccfa099db4361c2e5958ca1685f498cdf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302110407.TpDeAlpQ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/pinctrl/pinctrl-at91.c: In function 'at91_pinctrl_probe':
+>> drivers/pinctrl/pinctrl-at91.c:1402:22: error: 'names' undeclared (first use in this function)
+    1402 |                 if (!names)
+         |                      ^~~~~
+   drivers/pinctrl/pinctrl-at91.c:1402:22: note: each undeclared identifier is reported only once for each function it appears in
+   drivers/pinctrl/pinctrl-at91.c: In function 'at91_gpio_probe':
+   drivers/pinctrl/pinctrl-at91.c:1889:28: warning: passing argument 1 of 'strreplace' makes pointer from integer without a cast [-Wint-conversion]
+    1889 |                 strreplace('-', alias_idx + 'A');
+         |                            ^~~
+         |                            |
+         |                            int
+   In file included from include/linux/bitmap.h:11,
+                    from include/linux/cpumask.h:12,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/mutex.h:17,
+                    from include/linux/notifier.h:14,
+                    from include/linux/clk.h:14,
+                    from drivers/pinctrl/pinctrl-at91.c:8:
+   include/linux/string.h:172:24: note: expected 'char *' but argument is of type 'int'
+     172 | char *strreplace(char *s, char old, char new);
+         |                  ~~~~~~^
+>> drivers/pinctrl/pinctrl-at91.c:1889:17: error: too few arguments to function 'strreplace'
+    1889 |                 strreplace('-', alias_idx + 'A');
+         |                 ^~~~~~~~~~
+   include/linux/string.h:172:7: note: declared here
+     172 | char *strreplace(char *s, char old, char new);
+         |       ^~~~~~~~~~
 
 
-On 2/10/23 03:03, Andrew Donnellan wrote:
-> From: Russell Currey <ruscur@russell.cc>
-> 
-> The secvar code only supports one consumer at a time.
-> 
-> Multiple consumers aren't possible at this point in time, but we'd want
-> it to be obvious if it ever could happen.
-> 
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
-> Co-developed-by: Andrew Donnellan <ajd@linux.ibm.com>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
-> 
-> ---
-> 
-> v4: Return an error and don't actually try to set secvar_operations if the
->      warning is triggered (npiggin)
-> 
-> v5: Drop "extern" to fix a checkpatch check (snowpatch)
-> 
-> v6: Return -EBUSY rather than -1 (stefanb)
-> ---
->   arch/powerpc/include/asm/secvar.h            |  4 ++--
->   arch/powerpc/kernel/secvar-ops.c             | 10 ++++++++--
->   arch/powerpc/platforms/powernv/opal-secvar.c |  4 +---
->   3 files changed, 11 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/powerpc/include/asm/secvar.h b/arch/powerpc/include/asm/secvar.h
-> index 07ba36f868a7..a2b5f2203dc5 100644
-> --- a/arch/powerpc/include/asm/secvar.h
-> +++ b/arch/powerpc/include/asm/secvar.h
-> @@ -21,11 +21,11 @@ struct secvar_operations {
->   
->   #ifdef CONFIG_PPC_SECURE_BOOT
->   
-> -extern void set_secvar_ops(const struct secvar_operations *ops);
-> +int set_secvar_ops(const struct secvar_operations *ops);
->   
->   #else
->   
-> -static inline void set_secvar_ops(const struct secvar_operations *ops) { }
-> +static inline int set_secvar_ops(const struct secvar_operations *ops) { return 0; }
->   
->   #endif
->   
-> diff --git a/arch/powerpc/kernel/secvar-ops.c b/arch/powerpc/kernel/secvar-ops.c
-> index 6a29777d6a2d..19172a2804f0 100644
-> --- a/arch/powerpc/kernel/secvar-ops.c
-> +++ b/arch/powerpc/kernel/secvar-ops.c
-> @@ -8,10 +8,16 @@
->   
->   #include <linux/cache.h>
->   #include <asm/secvar.h>
-> +#include <asm/bug.h>
->   
-> -const struct secvar_operations *secvar_ops __ro_after_init;
-> +const struct secvar_operations *secvar_ops __ro_after_init = NULL;
->   
-> -void set_secvar_ops(const struct secvar_operations *ops)
-> +int set_secvar_ops(const struct secvar_operations *ops)
->   {
-> +	if (WARN_ON_ONCE(secvar_ops))
-> +		return -EBUSY;
-> +
->   	secvar_ops = ops;
-> +
-> +	return 0;
->   }
-> diff --git a/arch/powerpc/platforms/powernv/opal-secvar.c b/arch/powerpc/platforms/powernv/opal-secvar.c
-> index ef89861569e0..4c0a3b030fe0 100644
-> --- a/arch/powerpc/platforms/powernv/opal-secvar.c
-> +++ b/arch/powerpc/platforms/powernv/opal-secvar.c
-> @@ -113,9 +113,7 @@ static int opal_secvar_probe(struct platform_device *pdev)
->   		return -ENODEV;
->   	}
->   
-> -	set_secvar_ops(&opal_secvar_ops);
-> -
-> -	return 0;
-> +	return set_secvar_ops(&opal_secvar_ops);
->   }
->   
->   static const struct of_device_id opal_secvar_match[] = {
+vim +/names +1402 drivers/pinctrl/pinctrl-at91.c
 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+  1372	
+  1373	static int at91_pinctrl_probe(struct platform_device *pdev)
+  1374	{
+  1375		struct device *dev = &pdev->dev;
+  1376		struct at91_pinctrl *info;
+  1377		struct pinctrl_pin_desc *pdesc;
+  1378		int ret, i, j, k;
+  1379	
+  1380		info = devm_kzalloc(&pdev->dev, sizeof(*info), GFP_KERNEL);
+  1381		if (!info)
+  1382			return -ENOMEM;
+  1383	
+  1384		ret = at91_pinctrl_probe_dt(pdev, info);
+  1385		if (ret)
+  1386			return ret;
+  1387	
+  1388		at91_pinctrl_desc.name = dev_name(&pdev->dev);
+  1389		at91_pinctrl_desc.npins = gpio_banks * MAX_NB_GPIO_PER_BANK;
+  1390		at91_pinctrl_desc.pins = pdesc =
+  1391			devm_kcalloc(&pdev->dev,
+  1392				     at91_pinctrl_desc.npins, sizeof(*pdesc),
+  1393				     GFP_KERNEL);
+  1394	
+  1395		if (!at91_pinctrl_desc.pins)
+  1396			return -ENOMEM;
+  1397	
+  1398		for (i = 0, k = 0; i < gpio_banks; i++) {
+  1399			char **pin_names;
+  1400	
+  1401			pin_names = devm_kasprintf_strarray(dev, "pio", MAX_NB_GPIO_PER_BANK);
+> 1402			if (!names)
+  1403				return -ENOMEM;
+  1404	
+  1405			for (j = 0; j < MAX_NB_GPIO_PER_BANK; j++, k++) {
+  1406				char *pin_name = pin_names[j];
+  1407	
+  1408				strreplace(pin_name, '-', i + 'A');
+  1409	
+  1410				pdesc->number = k;
+  1411				pdesc->name = pin_name;
+  1412				pdesc++;
+  1413			}
+  1414		}
+  1415	
+  1416		platform_set_drvdata(pdev, info);
+  1417		info->pctl = devm_pinctrl_register(&pdev->dev, &at91_pinctrl_desc,
+  1418						   info);
+  1419	
+  1420		if (IS_ERR(info->pctl)) {
+  1421			dev_err(&pdev->dev, "could not register AT91 pinctrl driver\n");
+  1422			return PTR_ERR(info->pctl);
+  1423		}
+  1424	
+  1425		/* We will handle a range of GPIO pins */
+  1426		for (i = 0; i < gpio_banks; i++)
+  1427			if (gpio_chips[i])
+  1428				pinctrl_add_gpio_range(info->pctl, &gpio_chips[i]->range);
+  1429	
+  1430		dev_info(&pdev->dev, "initialized AT91 pinctrl driver\n");
+  1431	
+  1432		return 0;
+  1433	}
+  1434	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
