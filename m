@@ -2,344 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D846928DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 22:00:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 966076928DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 22:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233632AbjBJVAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 16:00:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
+        id S233915AbjBJU77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 15:59:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232764AbjBJVAC (ORCPT
+        with ESMTP id S233925AbjBJU7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 16:00:02 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CF0193C0;
-        Fri, 10 Feb 2023 12:59:59 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31AKxkFK011980;
-        Fri, 10 Feb 2023 20:59:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=TVPsqEgq/UFUKhLhIogo2fjWgGmZdW8m8Jf/Ri0ZqO8=;
- b=UgDvUmH2E6u6YWzLHceHPbauVpGO8x7NpgF4dwCAxWR++RJqGo2EIyQ5GzskPtxr42HG
- 6jktxQzuMwJhjAbKAljSJnZOKGonCySvx7NUnR8Ewy0woBekhED9CJFr6LzPVqBTETzY
- VECMnTvu47PyBgW7FhUTr9L+O5GmznLCd5dphFuC5rGj7q9xuiJyyW5T08SUeFfny83J
- FWlu2HoGtPTaoZ6cyVQf8S4RcDoadZNm0jSUga4zN68H3dkPR9PR+JZrOZekKxc4Vp6j
- vy8VJAG3hzMxDr6VAbPoNNLkC7a7tscsNiBJIaUVxneOnvZ530eOBFGMt6lwzRZBfQrp Yg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnweyg02b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 20:59:50 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31AKxnOh012293;
-        Fri, 10 Feb 2023 20:59:49 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnweyg01v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 20:59:49 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31AK8WZo006137;
-        Fri, 10 Feb 2023 20:59:48 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3nhf07gtd5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 20:59:48 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31AKxk4V8651290
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Feb 2023 20:59:46 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5B25558058;
-        Fri, 10 Feb 2023 20:59:46 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 69FEA58057;
-        Fri, 10 Feb 2023 20:59:45 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Feb 2023 20:59:45 +0000 (GMT)
-Message-ID: <07132425-72e5-60d0-765d-223f0f3e7d64@linux.ibm.com>
-Date:   Fri, 10 Feb 2023 15:59:45 -0500
+        Fri, 10 Feb 2023 15:59:55 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2042.outbound.protection.outlook.com [40.107.93.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1177C18B26;
+        Fri, 10 Feb 2023 12:59:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZdjPCzspLehDY2gocL6JRsMNU+3uu0za+0usfyObjP0HFhaCiZsAame5qD9JyTis2VuHPmGCXjdE1W/o1G46l2FigfR/Rw02jc/RjilNQeYKCAKQ7wIKzoRfk7h7AuXM8qizod6hXYS0OhSBtDtg7/2gEr8qwAy8aQqT3zI77AxI0dS/CcHqFz+hZ5wZwFi5I8+hQ5kIsJivlPjP9PiXSQ4wgb8tXQ13opnpS1t+vm6X/4vnZHPSnXYA9VpPLdRlvctHm3QVREHTDaZRYyNftQ49AD1zir0rmvbWmbhV/KH0nftEhjnOHKBCOEd8DGqkBSpIx0DKOJgZ8AfN4M6Yig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7MqBPY0NrJXvYbTnvD1h5gtXSv5x5hRb+GnOauo66ZE=;
+ b=Uug+2eE+fdse1DfnxReRFamGihG+FcaaFbRbD3/LwL12wZ2+AzzpmDl9ahWSeH6e2Kgu8Ox3qziWKDxy6BFFhWUJvtHWdQZ9fVSsHTMBj3CXefpKqSgwv3bWsQnRcRR5k3TZs4qOnIXFQ/DspeADNWwK/NaoaJ1Gs9t98nXrIjP/ZfSaXuUqgRNj/2AUOfQSCCufe5wcS18OjRPsgFoXwumt2AORmefVJUGktvJZPyVqQAZk/sJli3gUdomolBVF2lRqzUIhz8kddVErbNgL2uEb/rmXTg2hLTG7DVeUk1dc+/UN1LP+am/E5w3PKQcuhSTRjxcte11Yr38TSviHGA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7MqBPY0NrJXvYbTnvD1h5gtXSv5x5hRb+GnOauo66ZE=;
+ b=ZrQzro/vQEMWq7hisf3wIVgFGlGlcj4Pg6zluMYcvT+xD624661rNJrOvaXGBNkPQrRKACxOVSN5QVpNfDN3rPMlEGOHKgdlNwsS2Px/505fi7qmxuABjUf9Uo5J/AKVhTJFTIlJKe5+GhT1TwTuHVExAAcwcQ0HUYGJja4JB1gz5STmSJplX3k5GFI/MuGiZaWvS6VylC9FyT9L9zK/bf5S6RJa9qQpqCcYXe/VTCErz6FYQiizN60n75zhSsxa+YyZswfZpfSyT0gAngLUCHWg/kLcfGwtpJKF4p+ulDPF4WW6KfiJqnfYrLLVBvA/JR6F1YJleqFEUdEWucjAHg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by CY5PR12MB6298.namprd12.prod.outlook.com (2603:10b6:930:21::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Fri, 10 Feb
+ 2023 20:59:52 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6086.019; Fri, 10 Feb 2023
+ 20:59:52 +0000
+Date:   Fri, 10 Feb 2023 16:59:51 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH 3/6] iommufd: Add IOMMU_DEVICE_GET_INFO
+Message-ID: <Y+awR7UO6R2FzHiV@nvidia.com>
+References: <20230209041642.9346-1-yi.l.liu@intel.com>
+ <20230209041642.9346-4-yi.l.liu@intel.com>
+ <BN9PR11MB5276F92ABD5998FDD74D510A8CDE9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276F92ABD5998FDD74D510A8CDE9@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: MN2PR10CA0025.namprd10.prod.outlook.com
+ (2603:10b6:208:120::38) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v6 23/26] powerpc/pseries: Pass PLPKS password on kexec
-Content-Language: en-US
-To:     Andrew Donnellan <ajd@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
-        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
-        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
-References: <20230210080401.345462-1-ajd@linux.ibm.com>
- <20230210080401.345462-24-ajd@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230210080401.345462-24-ajd@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Kd-KQy8B1MkJNfHt8LfeMcSKzANWwwVb
-X-Proofpoint-ORIG-GUID: -nPK3iSKprJm9mxfg2V81JtnS9uBGGMA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-10_15,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
- malwarescore=0 mlxscore=0 impostorscore=0 adultscore=0 phishscore=0
- clxscore=1015 lowpriorityscore=0 priorityscore=1501 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302100175
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CY5PR12MB6298:EE_
+X-MS-Office365-Filtering-Correlation-Id: ebb2fda2-2cdb-4941-3286-08db0ba9c163
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZitHJsM8uhyvb+SePwSSRsR/5ws5o6IroqML6QarHBrw/Jhlg4sO2tSMgvCgNsobRF0bSlEOV+cns3bHLVE7Wd681BS4csCMU4rPwAbhP/Yd2l8ZFE9lPBIDoAvIIreRXtOqEKFt+ld90Bo12xz5M4ZGMSAPnPipS8ZR3mN0wnEGP2ZoGSUN1ebzvjmFT8ng5sJ7ydQliVEKXirYYT+6AwWq/yLFCNbzmetf2nIJYKIBC6fGb26esRJ4wecpteYI9BMMJmvNC9VdX2ytTN9sUDj+B5g/sRbtWNwCgWfSfrcuN5Ntj+io0ozBf6g+Mu6St5gqBir/XIujGzdw3IBShe08Pd/d6jN/pRkhUJmu8ISygoW7yPC0+PudphnxAGlXHsYOUkhKFpBxv/uiUQHrm/z28cmtbrERTCdOxOSqQqFETG7ko7Z8BRQRI+30PFKtsi9BpFxHNf+YVjIUK8zKJX8LZvAFCMQ7UffkR13oKqxSZoNEJZZCJuDlCbGoi+JtVYlhWhuEvtyo3TNsijz83IzWf8t0QT7SS3fWhd8Hsr7yXkUSC+kPEadea3e1O1D2XF09zH82go1+jicd1EOY1u37ZRLTSBjZI1/UGlXzVQqXNU9cQ2VkkrlGGjXkxQuFjoHEu8mITTs7VXh4dtteQLVXoC96tnni21xkgVXfwnyAeddN1DYS6HcNCOYmL74X
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(376002)(396003)(366004)(39860400002)(451199018)(66476007)(6512007)(36756003)(5660300002)(7416002)(2906002)(6486002)(186003)(41300700001)(6506007)(8936002)(66556008)(26005)(316002)(478600001)(86362001)(6916009)(2616005)(66946007)(54906003)(38100700002)(4326008)(8676002)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?j0+7iJGzrMrmzcOj68UmDjYvwSCvXfDZH2FJ4yvQuWh52bg8EGkOzGLDRo8a?=
+ =?us-ascii?Q?MK+OPJptT8w77a0XqN85ZXGxqzzMOVSUHR9pWNL/D9wdWWQdBGQjDAYrbNEA?=
+ =?us-ascii?Q?stBVKxhGld8/MS3kK9ukv4ZZLeLTCtpU4Tn/3jl69LOP8E5Bb6nvAOHui5Tm?=
+ =?us-ascii?Q?O9T+gOF8mPUCp+aU9PZdanDy41Yiai+xWTJ8WkCfvQWnciGRHRxmw3TZ0PMt?=
+ =?us-ascii?Q?2SuJbsRCMkgLjYF0O5SgxC0P28wsQSPCbsnf5c6aPI6HUY4xyeFIowXCX1HV?=
+ =?us-ascii?Q?Wrs7OgFfqeAt5ly5fVdmicaVK6Z3oHfwLDsaUwZRik4b5S7DpSDAIvSdFHWq?=
+ =?us-ascii?Q?BhfZqvzebH+YBHzJuUldsRmw5WWpXekTlZ16NkR6APW6JWkFP/xUl8rr1Wfh?=
+ =?us-ascii?Q?7XcltBNiZRE0uFR9sDmq6G7/rrkHpZQrvqy7QLyvXSdW08BAs2WpCfFd3vHv?=
+ =?us-ascii?Q?VPMDW9u1tFeWctsn5pgMWYaQvabbq0N7R8mQEQO9xSPB3QsFvOlrCZH31eYl?=
+ =?us-ascii?Q?mV5kkp+R/AKCCJXqeMYxzY3x+LDGYfxbAr5FEYQ1La25oNmB8RlQeLayM+Nk?=
+ =?us-ascii?Q?oUbPQG2mDbmr+zN99zUGcCxLsrFsmPijm6tXM3v4U4yW1Z+VPJW2UxdncnF3?=
+ =?us-ascii?Q?r7IChmFICCl7OeMEa4UrxqXHgSYJ8dYD9HdgDYQR7nHUhHhOPiSl/DqYvYjk?=
+ =?us-ascii?Q?Jjm88zMaFVx+b949n+URsqPDGLMZkKW2mr2YTu+K4kWZsZdBMxtuoVryPJw2?=
+ =?us-ascii?Q?r0Qz/lVsMS2L3LIt75t8v8t5s7TtL80qAKqB/THA1Wof8fcu7kMgaMWZh5Ud?=
+ =?us-ascii?Q?nWcCwXtsgvlmvOYZcDv9c70qVduSlnABLCdwAChqcThTGQqLDi6rpxdtlsPY?=
+ =?us-ascii?Q?/VzrX67jyJJm2G+hIYV7wdBvA8sbtoDds65CMjrU7IwpdC2AZglVhFv6dmD2?=
+ =?us-ascii?Q?r5OIxFLgDWMaux4XoGxwIWr4H9dk4gjG1PLjJTrm0h4wWGnSgIlyVNL/4nm5?=
+ =?us-ascii?Q?HX5rTVKMGQaFFMmOcgQOA1Ynyg99TdbfWTX8ZVy1pMIPmclXqJrPCj2AexZ1?=
+ =?us-ascii?Q?Zb2+rC2P+5tLqXawGOnrJTHWZJmKoG9vzoiwvVEaq5hSNABtp3Uodk29xHDT?=
+ =?us-ascii?Q?g03G2NKUGJX2yQRzfuThv7qQmTmB0vb7h/SzbIwjNBZzKzuvDsIQVn+jcqvG?=
+ =?us-ascii?Q?/UT7rE/KErkiIbDyA4TmMdm1E89Go/zuYOf1tuzVyrA2UEIeJH+/Uyrnw/Nn?=
+ =?us-ascii?Q?WCM3wfKJafH7bqkJ4Mp2dOsONxCbV9LRuQYsbKzzE2eZmi+zH4j0ZSMsSBbq?=
+ =?us-ascii?Q?VpWh8GyqRRyVIVadPVpyJowWuQ03A4qHY30xfGq3NFamh7yJaD8fZDG+8i/S?=
+ =?us-ascii?Q?6tlLf0t+j1QPlAHgmJY2r4yfIODWCxfSvnvRSw0BhYELfmaJxi2TItp+0O6n?=
+ =?us-ascii?Q?Edj2npJPNP2Ks7PvR3NcdgQpE3p0lGLP1q306yKi9nMd66XzsFPPdanFxl2Q?=
+ =?us-ascii?Q?WKZUOeHlJ9fiD4pAWxN6fh2eQw2NfBFvbSb/nMaHYE8Dbs6A9K4woWS+1uDJ?=
+ =?us-ascii?Q?K05crg43W1Je6yiQZRt+y/2FS3zUhtwwdKcK/yAT?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ebb2fda2-2cdb-4941-3286-08db0ba9c163
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2023 20:59:52.6658
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0i6oXhuvVt+ptNmJLlvwd+yjdh2NVeIKJG3bv6bLLEaNzWDBMRGggACNO1oxKlfu
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6298
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 10, 2023 at 07:55:42AM +0000, Tian, Kevin wrote:
+> > From: Liu, Yi L <yi.l.liu@intel.com>
+> > Sent: Thursday, February 9, 2023 12:17 PM
+> > 
+> > +int iommufd_device_get_info(struct iommufd_ucmd *ucmd)
+> > +{
+> > +	struct iommu_device_info *cmd = ucmd->cmd;
+> > +	struct iommufd_object *dev_obj;
+> > +	struct device *dev;
+> > +	const struct iommu_ops *ops;
+> > +	void *data;
+> > +	unsigned int length, data_len;
+> > +	int rc;
+> > +
+> > +	if (cmd->flags || cmd->__reserved || !cmd->data_len)
+> > +		return -EOPNOTSUPP;
+> 
+> do we want !cmd->data_len being a way to check how many bytes are
+> required in a following call to get the vendor info?
 
+There is no reason, if the userspace doesn't have a struct large
+enough then it also doesn't know what the extra bytes should even be
+used for. No reason to read the.
 
-On 2/10/23 03:03, Andrew Donnellan wrote:
-> From: Russell Currey <ruscur@russell.cc>
+> > +struct iommu_device_info {
+> > +	__u32 size;
+> > +	__u32 flags;
+> > +	__u32 dev_id;
+> > +	__u32 data_len;
+> > +	__aligned_u64 data_ptr;
 > 
-> Before interacting with the PLPKS, we ask the hypervisor to generate a
-> password for the current boot, which is then required for most further
-> PLPKS operations.
+> moving forward iommu hw cap is not the only information reported
+> via this interface, e.g. it can be also used to report pasid mode.
 > 
-> If we kexec into a new kernel, the new kernel will try and fail to
-> generate a new password, as the password has already been set.
+> from this angle it's better to rename above two fields to be iommu
+> specific, e.g.:
 > 
-> Pass the password through to the new kernel via the device tree, in
-> /chosen/ibm,plpks-pw. Check for the presence of this property before
-> trying to generate a new password - if it exists, use the existing
-> password and remove it from the device tree.
-> 
-> This only works with the kexec_file_load() syscall, not the older
-> kexec_load() syscall, however if you're using Secure Boot then you want
-> to be using kexec_file_load() anyway.
-> 
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
-> 
-> ---
-> 
-> v3: New patch
-> 
-> v4: Fix compile when CONFIG_PSERIES_PLPKS=n (snowpatch)
-> 
->      Fix error handling on fdt_path_offset() call (ruscur)
-> 
-> v5: Fix DT property name in commit message (npiggin)
-> 
->      Clear prop in FDT during init to prevent password exposure (mpe)
-> 
->      Rework to remove ifdefs from C code (npiggin)
-> 
-> v6: Rebase on top of 7294194b47e994753a86eee8cf1c61f3f36458a3 and
->      fc546faa559538fb312c77e055243ece18ab3288
-> 
->      Whitespace (stefanb)
-> 
->      Use more const (stefanb)
-> 
->      Get rid of FDT extra space allocation for node overhead, as it
->      shouldn't be necessary (ruscur)
-> 
->      Note kexec_file_load() restriction in commit message
-> ---
->   arch/powerpc/include/asm/plpks.h       | 14 ++++++
->   arch/powerpc/kernel/prom.c             |  4 ++
->   arch/powerpc/kexec/file_load_64.c      | 18 +++++---
->   arch/powerpc/platforms/pseries/plpks.c | 61 ++++++++++++++++++++++++++
->   4 files changed, 92 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/powerpc/include/asm/plpks.h b/arch/powerpc/include/asm/plpks.h
-> index 757313e00521..23b77027c916 100644
-> --- a/arch/powerpc/include/asm/plpks.h
-> +++ b/arch/powerpc/include/asm/plpks.h
-> @@ -176,6 +176,20 @@ u64 plpks_get_signedupdatealgorithms(void);
->    */
->   u16 plpks_get_passwordlen(void);
->   
-> +/**
-> + * Called in early init to retrieve and clear the PLPKS password from the DT.
-> + */
-> +void plpks_early_init_devtree(void);
-> +
-> +/**
-> + * Populates the FDT with the PLPKS password to prepare for kexec.
-> + */
-> +int plpks_populate_fdt(void *fdt);
-> +#else // CONFIG_PSERIES_PLPKS
-> +static inline bool plpks_is_available(void) { return false; }
-> +static inline u16 plpks_get_passwordlen(void) { BUILD_BUG(); }
-> +static inline void plpks_early_init_devtree(void) { }
-> +static inline int plpks_populate_fdt(void *fdt) { BUILD_BUG(); }
->   #endif // CONFIG_PSERIES_PLPKS
->   
->   #endif // _ASM_POWERPC_PLPKS_H
-> diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
-> index 4f1c920aa13e..8a13b378770f 100644
-> --- a/arch/powerpc/kernel/prom.c
-> +++ b/arch/powerpc/kernel/prom.c
-> @@ -56,6 +56,7 @@
->   #include <asm/drmem.h>
->   #include <asm/ultravisor.h>
->   #include <asm/prom.h>
-> +#include <asm/plpks.h>
->   
->   #include <mm/mmu_decl.h>
->   
-> @@ -893,6 +894,9 @@ void __init early_init_devtree(void *params)
->   		powerpc_firmware_features |= FW_FEATURE_PS3_POSSIBLE;
->   #endif
->   
-> +	/* If kexec left a PLPKS password in the DT, get it and clear it */
-> +	plpks_early_init_devtree();
-> +
->   	tm_init();
->   
->   	DBG(" <- early_init_devtree()\n");
-> diff --git a/arch/powerpc/kexec/file_load_64.c b/arch/powerpc/kexec/file_load_64.c
-> index 52085751f5f4..8a9469e1ce71 100644
-> --- a/arch/powerpc/kexec/file_load_64.c
-> +++ b/arch/powerpc/kexec/file_load_64.c
-> @@ -27,6 +27,7 @@
->   #include <asm/kexec_ranges.h>
->   #include <asm/crashdump-ppc64.h>
->   #include <asm/prom.h>
-> +#include <asm/plpks.h>
->   
->   struct umem_info {
->   	u64 *buf;		/* data buffer for usable-memory property */
-> @@ -977,12 +978,17 @@ static unsigned int cpu_node_size(void)
->    */
->   unsigned int kexec_extra_fdt_size_ppc64(struct kimage *image)
->   {
-> -	unsigned int cpu_nodes, extra_size;
-> +	unsigned int cpu_nodes, extra_size = 0;
->   	struct device_node *dn;
->   	u64 usm_entries;
->   
-> +	// Budget some space for the password blob. There's already extra space
-> +	// for the key name
-> +	if (plpks_is_available())
-> +		extra_size += (unsigned int)plpks_get_passwordlen();
-> +
->   	if (image->type != KEXEC_TYPE_CRASH)
-> -		return 0;
-> +		return extra_size;
->   
->   	/*
->   	 * For kdump kernel, account for linux,usable-memory and
-> @@ -992,9 +998,7 @@ unsigned int kexec_extra_fdt_size_ppc64(struct kimage *image)
->   	if (drmem_lmb_size()) {
->   		usm_entries = ((memory_hotplug_max() / drmem_lmb_size()) +
->   			       (2 * (resource_size(&crashk_res) / drmem_lmb_size())));
-> -		extra_size = (unsigned int)(usm_entries * sizeof(u64));
-> -	} else {
-> -		extra_size = 0;
-> +		extra_size += (unsigned int)(usm_entries * sizeof(u64));
->   	}
->   
->   	/*
-> @@ -1233,6 +1237,10 @@ int setup_new_fdt_ppc64(const struct kimage *image, void *fdt,
->   		}
->   	}
->   
-> +	// If we have PLPKS active, we need to provide the password to the new kernel
-> +	if (plpks_is_available())
-> +		ret = plpks_populate_fdt(fdt);
-> +
->   out:
->   	kfree(rmem);
->   	kfree(umem);
-> diff --git a/arch/powerpc/platforms/pseries/plpks.c b/arch/powerpc/platforms/pseries/plpks.c
-> index 671a10acaebf..cdf09e5bd741 100644
-> --- a/arch/powerpc/platforms/pseries/plpks.c
-> +++ b/arch/powerpc/platforms/pseries/plpks.c
-> @@ -16,6 +16,9 @@
->   #include <linux/slab.h>
->   #include <linux/string.h>
->   #include <linux/types.h>
-> +#include <linux/of_fdt.h>
-> +#include <linux/libfdt.h>
-> +#include <linux/memblock.h>
->   #include <asm/hvcall.h>
->   #include <asm/machdep.h>
->   #include <asm/plpks.h>
-> @@ -128,6 +131,12 @@ static int plpks_gen_password(void)
->   	u8 *password, consumer = PLPKS_OS_OWNER;
->   	int rc;
->   
-> +	// If we booted from kexec, we could be reusing an existing password already
-> +	if (ospassword) {
-> +		pr_debug("Password of length %u already in use\n", ospasswordlength);
-> +		return 0;
-> +	}
-> +
->   	// The password must not cross a page boundary, so we align to the next power of 2
->   	password = kzalloc(roundup_pow_of_two(maxpwsize), GFP_KERNEL);
->   	if (!password)
-> @@ -621,6 +630,58 @@ int plpks_read_bootloader_var(struct plpks_var *var)
->   	return plpks_read_var(PLPKS_BOOTLOADER_OWNER, var);
->   }
->   
-> +int plpks_populate_fdt(void *fdt)
-> +{
-> +	int chosen_offset = fdt_path_offset(fdt, "/chosen");
-> +
-> +	if (chosen_offset < 0) {
-> +		pr_err("Can't find chosen node: %s\n",
-> +		       fdt_strerror(chosen_offset));
-> +		return chosen_offset;
-> +	}
-> +
-> +	return fdt_setprop(fdt, chosen_offset, "ibm,plpks-pw", ospassword, ospasswordlength);
-> +}
-> +
-> +// Once a password is registered with the hypervisor it cannot be cleared without
-> +// rebooting the LPAR, so to keep using the PLPKS across kexec boots we need to
-> +// recover the previous password from the FDT.
-> +//
-> +// There are a few challenges here.  We don't want the password to be visible to
-> +// users, so we need to clear it from the FDT.  This has to be done in early boot.
-> +// Clearing it from the FDT would make the FDT's checksum invalid, so we have to
-> +// manually cause the checksum to be recalculated.
-> +void __init plpks_early_init_devtree(void)
-> +{
-> +	void *fdt = initial_boot_params;
-> +	int chosen_node = fdt_path_offset(fdt, "/chosen");
-> +	const u8 *password;
-> +	int len;
-> +
-> +	if (chosen_node < 0)
-> +		return;
-> +
-> +	password = fdt_getprop(fdt, chosen_node, "ibm,plpks-pw", &len);
-> +	if (len <= 0) {
-> +		pr_debug("Couldn't find ibm,plpks-pw node.\n");
-> +		return;
-> +	}
-> +
-> +	ospassword = memblock_alloc_raw(len, SMP_CACHE_BYTES);
-> +	if (!ospassword) {
-> +		pr_err("Error allocating memory for password.\n");
-> +		goto out;
-> +	}
-> +
-> +	memcpy(ospassword, password, len);
-> +	ospasswordlength = (u16)len;
-> +
-> +out:
-> +	fdt_nop_property(fdt, chosen_node, "ibm,plpks-pw");
-> +	// Since we've cleared the password, we must update the FDT checksum
-> +	early_init_dt_verify(fdt);
-> +}
-> +
->   static __init int pseries_plpks_init(void)
->   {
->   	int rc;
+> 	__u32 iommu_data_len;
+> 	__aligned_u64 iommu_data_ptr;
 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+maybe call it hw info
+
+Jason
