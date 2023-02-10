@@ -2,85 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BCF2691F30
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 13:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD99691F32
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 13:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbjBJMfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 07:35:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53638 "EHLO
+        id S231923AbjBJMfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 07:35:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbjBJMfP (ORCPT
+        with ESMTP id S231405AbjBJMff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 07:35:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F01834F64;
-        Fri, 10 Feb 2023 04:35:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04A4161DB1;
-        Fri, 10 Feb 2023 12:35:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 485F0C433EF;
-        Fri, 10 Feb 2023 12:35:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676032513;
-        bh=VE48/BFpY9oqV03SRPNJIzQxVKnk2kNg22dC8+ipOPk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=m3crUoVr31IK6DkF6r2xv+oUJ9j9szbJiXsY85GnpZZSagUplipp4rCZvRZAqDfD9
-         q0DJONooGPfKWdUqeXuRc58ZZE0p4ipgOurvU2N9R7Jau5JUVKSYsCgu6qlUtyUCVY
-         yseO1lXnIczQz9Nzv/bDYrfwf49NARJ6OJHTbVLV7hBLVjgRWNrdBGuRmKQj4MndYa
-         JW5QBP4mC0tBrFH3Kn7ggKwkDumY4J0RJ4PP7vtAFbcuFukekdMGqS1LyeE9gbcxZz
-         td0Ik1rZXQMDl/UljsItTQnHd7NnxqTn88nk3L5bjJJQKJNXHvt2mfROMJ9aXOOim7
-         peEq8UEVhjfkA==
-Message-ID: <d789c9bd-82a6-5a63-cd98-b9e1e68daa2d@kernel.org>
-Date:   Fri, 10 Feb 2023 13:35:02 +0100
+        Fri, 10 Feb 2023 07:35:35 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19DA635A8;
+        Fri, 10 Feb 2023 04:35:29 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id w11so8054313lfu.11;
+        Fri, 10 Feb 2023 04:35:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8TaVBd2PRqxi6IKt0HzSNZlfKLk06ERBwLCcqpM4sTs=;
+        b=nsCnqHmjAA7Uzj+ZGctkg3BQ5wuQR6BBnxCNxg6bVq4IkLRbBrlDg11tsYyODgldhD
+         /L3+0QBfbVvYCqtEN8PmeQ3B8WIYk8arvBelLyVsR2XgGXd1iH55RMtokZpkcHE2H6eA
+         9wcU+DOJSBgtmInPDfcez1nZA0U8L+gTlOm2OZyR8txrd4SfvC6hTD7AbQCsZZMaT31Z
+         S4r+SOStitGMWdEpSnmGbWZo8MQsrGuE/L44klei2BgFADhOL+KUlmsVql38/iLq2yfr
+         ThbJq92/mQF0K5g7v99fkUSpSpSTDGlW7XtcwrUWozt2W3NfpOIT0ZoKglwD0n8wKzpZ
+         kdew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8TaVBd2PRqxi6IKt0HzSNZlfKLk06ERBwLCcqpM4sTs=;
+        b=UDAv8X45Ji5ewWYDZ6DTGWIpq6mTz/nBNpWpDvRFI/MMbIMqSm/DX1o4GhV4+9wLbV
+         /VOBm6wEKWtMeU+ovcOCABjMX6qwnirGjrB7wc3//qVAToT1UacLIZRXGKTiP42L/YSP
+         RzohvNE3H38IDyWGWkfU8Iw2D18Fk211+gUxsTI0wImeU+CeSHBN7K4ggSEZJhakIM8S
+         JOShVX6qmS8v2P80KQmTRQl4+ezhDDINyL20yzgN75CdNDYyCgDVNLUXCL+wL0zLX9bX
+         iQhcr2MvGMi2cFnmZ4fe7QqH0YlbyFNi10PihvW//7cWd1GHXY80JbECqgHyYTkalxy6
+         umqg==
+X-Gm-Message-State: AO0yUKVb9Yld0VBaFGNL9Vm9wes/iMSo+ms7TvkrUqCFQiFHlAvQDi2s
+        EfcronOL+ihaJ8WHIJVy08wusMBXC/E=
+X-Google-Smtp-Source: AK7set/17ItNntmeCc5xMu0tUPhW2KL1l8Afr4/36uz5jn8CzoAKw9xKiBrT2/jYM2sQZ8qqHQgOoA==
+X-Received: by 2002:a19:ee02:0:b0:4d8:6a30:fbd7 with SMTP id g2-20020a19ee02000000b004d86a30fbd7mr4348124lfb.67.1676032528016;
+        Fri, 10 Feb 2023 04:35:28 -0800 (PST)
+Received: from mobilestation.baikal.int ([94.125.187.42])
+        by smtp.gmail.com with ESMTPSA id l29-20020ac24a9d000000b004cb23904bd9sm305545lfp.144.2023.02.10.04.35.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 04:35:27 -0800 (PST)
+Date:   Fri, 10 Feb 2023 15:35:25 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Vinod Koul <vkoul@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Frank Li <Frank.Li@nxp.com>, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] [v2] dmaengine: dw-edma: reduce stack usage after
+ debugfs rework
+Message-ID: <20230210123525.cphmtcf7pmfj67os@mobilestation.baikal.int>
+References: <20230130185101.2883245-1-arnd@kernel.org>
+ <Y+YFzDm4XOnzZTpM@matsya>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 03/11] dt-bindings: arm: mediatek: add
- 'mediatek,pn_swap' property
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?UTF-8?Q?Bj=c3=b8rn_Mork?= <bjorn@mork.no>
-References: <cover.1675779094.git.daniel@makrotopia.org>
- <a8c567cf8c3ec6fef426b64fb1ab7f6e63a0cc07.1675779094.git.daniel@makrotopia.org>
- <ad09a065-c10d-3061-adbe-c58724cdfde0@kernel.org>
- <Y+KR26aepqlfsjYG@makrotopia.org>
- <b6d782ef-b375-1e73-a384-1ff37c1548a7@kernel.org>
- <Y+Oo9HaqPeNVUANR@makrotopia.org>
- <514ec4b8-ef78-35c1-2215-22884fca87d4@kernel.org>
- <Y+QinJ9W8hIIF9Ni@makrotopia.org>
- <c29a3a22-cc23-35bf-c8e0-ebe1405a4d94@kernel.org>
- <Y+YdqbJS4bDvTxuD@shell.armlinux.org.uk>
- <Y+Y3Lt4I5LPzlK5x@shell.armlinux.org.uk>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <Y+Y3Lt4I5LPzlK5x@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+YFzDm4XOnzZTpM@matsya>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,59 +79,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/2023 13:23, Russell King (Oracle) wrote:
-> On Fri, Feb 10, 2023 at 10:34:17AM +0000, Russell King (Oracle) wrote:
->> On Thu, Feb 09, 2023 at 12:30:27PM +0100, Krzysztof Kozlowski wrote:
->>> On 08/02/2023 23:30, Daniel Golle wrote:
->>>> Hm, none of the current PCS (or PHY) drivers are represented by a
->>>> syscon node... (and maybe that's the mistake in first place?)
->>>
->>> Yes.
->>
->> Nos, it isn't.
-> 
-> To expand on this - I have no idea why you consider it a mistake that
-> apparently all PCS aren't represented by a syscon node.
-> 
-> PCS is a sub-block in an ethernet system, just the same as a MAC is a
-> sub-block. PCS can appear in several locations of an ethernet system,
-> but are generally found either side of a serial ethernet link such
-> as 1000base-X, SGMII, USXGMII, 10Gbase-R etc.
-> 
-> So, one can find PCS within an ethernet PHY - and there may be one
-> facing the MAC connection, and there will be another facing the media.
-> We generally do not need to separate these PCS from the PHY itself
-> because we view the PHY as one whole device.
-> 
-> The optional PCS on the MAC side of the link is something that we
-> need to know about, because this has to be configured to talk to the
-> PHY, or to configure and obtain negotiation results from in the case of
-> fibre links.
-> 
-> PCS on the MAC side are not a system level device, they are very much a
-> specific piece of ethernet hardware in the same way that the MAC is,
-> and we don't represent the MAC as a syscon node. There is no reason
-> to do so with PCS.
-> 
-> These PCS on the MAC side tend to be accessed via direct MMIO accesses,
-> or over a MDIO bus.
-> 
-> There's other blocks in the IEEE 802.3 ethernet layering, such as the
-> PMA/PMD module (which for the MAC side we tend to model with the
-> drivers/phy layer) - but again, these also appear in ethernet PHYs
-> in order to produce the electrical signals for e.g. twisted pair
-> ethernet.
-> 
-> So, to effectively state that you consider that PCS should always be
-> represented as a syscon node is rather naieve, and really as a DT
-> reviewer you should not be making such decisions, but soliciting
-> opinions from those who know this subject area in detail _whether_
-> they are some kind of system controller before making such a
-> decision.
+Hello Vinod
 
-Daniel switched to private emails, so unfortunately our talk is not
-visible here, nevertheless thanks for the feedback. Much appreciated!
+On Fri, Feb 10, 2023 at 02:22:28PM +0530, Vinod Koul wrote:
+> On 30-01-23, 19:50, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> > 
+> > After the dw_edma_debugfs_entry arrays are no longer compile-time
+> > constant, they take up space on the stack, which exceeds the warning
+> > limit after inlining:
+> > 
+> > drivers/dma/dw-edma/dw-edma-v0-debugfs.c:280:6: error: stack frame size (1784) exceeds limit (1400) in 'dw_edma_v0_debugfs_on' [-Werror,-Wframe-larger-than]
+> > void dw_edma_v0_debugfs_on(struct dw_edma *dw)
+> > 
+> > Work around this by preventing dw_edma_debugfs_regs_{wr,rd} from both
+> > being inlined together, which cuts the stack frame size in half and
+> > makes it fit below the warning limit.
+> > 
+> > Fixes: 5c0373eafd83 ("dmaengine: dw-edma: Move eDMA data pointer to debugfs node descriptor")
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > ---
+> > v2: rebase on top of dmaengine tree
+> 
+> I dont have 5c0373eafd83 in my tree, I guess that went thru PCI tree, so
+> I am going to defer this after merge window
 
-Best regards,
-Krzysztof
+It's in the @Bjorn tree now
+https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/commit/?h=pci/ctrl/dwc&id=5c0373eafd8334343da22338d8588ed61e8daba0
 
+If you are ok with the fix then @Bjorn could take the patch in to his
+repo. Right, @Bjorn?
+
+-Serge(y)
+
+> 
+> > ---
+> >  drivers/dma/dw-edma/dw-edma-v0-debugfs.c | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> > index 42380bf64a70..6542060bd01a 100644
+> > --- a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> > +++ b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> > @@ -136,7 +136,8 @@ static void dw_edma_debugfs_regs_ch(struct dw_edma *dw, enum dw_edma_dir dir,
+> >  	dw_edma_debugfs_create_x32(dw, debugfs_regs, nr_entries, dent);
+> >  }
+> >  
+> > -static void dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
+> > +static noinline_for_stack void
+> > +dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
+> >  {
+> >  	const struct dw_edma_debugfs_entry debugfs_regs[] = {
+> >  		/* eDMA global registers */
+> > @@ -197,7 +198,8 @@ static void dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
+> >  	}
+> >  }
+> >  
+> > -static void dw_edma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
+> > +static noinline_for_stack void
+> > +dw_edma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
+> >  {
+> >  	const struct dw_edma_debugfs_entry debugfs_regs[] = {
+> >  		/* eDMA global registers */
+> > -- 
+> > 2.39.0
+> 
+> -- 
+> ~Vinod
