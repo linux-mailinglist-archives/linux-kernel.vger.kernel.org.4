@@ -2,75 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9503F6923F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:04:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6767D6923F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232947AbjBJREX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 12:04:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
+        id S232949AbjBJRFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 12:05:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232572AbjBJREW (ORCPT
+        with ESMTP id S232860AbjBJRFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 12:04:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA52E6FEB0;
-        Fri, 10 Feb 2023 09:04:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AC7661E3E;
-        Fri, 10 Feb 2023 17:04:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8BFDC433EF;
-        Fri, 10 Feb 2023 17:04:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676048660;
-        bh=y+EPIGFUVVARFvU3KUSU5GU0uDCLVbF2YQCe4wFPOEg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PpsvrHrAuEAmKn8XkOkTeJW3XKo07eQPSatZjL/ZVTTNIaCvIl9+c8WJB1OoYjkl3
-         gxc2DnCTVbtG3+nud67KRkxhsrYE5zSt7x7cGGBYvIGQuCwZG9c68G5HQaFp6Y/Lp4
-         /8Y7Bb+14HrDxGEivZ6hRK6tmScfpTK14MlvMymNH6YvLL+kYbaZjwyL121Qg4lzR0
-         +VoFxyxBiIF72avuFafhcopNO9ifNe8ktLj7+M9S2Mrz7DOV2A0a5YuwEAD2iKPW6A
-         v6EISxj6hbH2TVNALeWDYeew9Br/+mSQ7PFc4Tba4jkDqrH1UL+7U5yeJ9OI+8XL/8
-         +NGfk4AL8drmw==
-Date:   Fri, 10 Feb 2023 22:34:16 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-phy@lists.infradead.org
-Subject: Re: [PATCH v6 0/6] sm8550: Add USB HC and PHYs support
-Message-ID: <Y+Z5EKjMtOBWjPdU@matsya>
-References: <20230208183421.2874423-1-abel.vesa@linaro.org>
+        Fri, 10 Feb 2023 12:05:41 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8D671031;
+        Fri, 10 Feb 2023 09:05:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676048740; x=1707584740;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+kVL093vuqMy/XSj3eiI+5YfoBG6X1O8lTOOxXMxMQI=;
+  b=n9QZDxcPuqQf5FwQOGXStJ5NVLSSU6uMwoXRbRbHN0y6eBbHLbXeyINf
+   Nov//lyDlVVijnw+8vDOhgC4n+SsemLuri1ueTSg4HHPwCU6beuK9huDq
+   /YK4Cg3pK56uZilLfvhsX6rW27PwBt+qg2y+nZ7Sop8Gg1cGg9qOLHDhn
+   ndUCgAs44MAnvOyclDm9HjQFAjy9zPUzYlVnzBPPpXMb7ioHtUOqzUuCo
+   aPQv7YJ6R5G9EndblP50V+gPzOuEqbrQx6e8SfN7FbyT3YqfmgNHcsJHH
+   xwcaqti7ModylVVCsNbGDHZ3BjslvK4i3l4uU7ASRAebuoZGVIP7le4sm
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="328158465"
+X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
+   d="scan'208";a="328158465"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 09:05:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="700537280"
+X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
+   d="scan'208";a="700537280"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 10 Feb 2023 09:04:59 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pQWpV-0058Qb-2k;
+        Fri, 10 Feb 2023 19:04:57 +0200
+Date:   Fri, 10 Feb 2023 19:04:57 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Werner Sembach <wse@tuxedocomputers.com>
+Cc:     mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
+        brgl@bgdev.pl, linux-gpio@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] gpiolib: acpi: Add a ignore wakeup quirk for Clevo NH5xAx
+Message-ID: <Y+Z5OSa6hepQBOyc@smile.fi.intel.com>
+References: <20230210164636.628462-1-wse@tuxedocomputers.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230208183421.2874423-1-abel.vesa@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230210164636.628462-1-wse@tuxedocomputers.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08-02-23, 20:34, Abel Vesa wrote:
-> This patchset adds support for USB for Qualcomm SM8550 platform.
+On Fri, Feb 10, 2023 at 05:46:36PM +0100, Werner Sembach wrote:
+> commit 1796f808e4bb ("HID: i2c-hid: acpi: Stop setting wakeup_capable")
+> changed the policy such that I2C touchpads may be able to wake up the
+> system by default if the system is configured as such.
 > 
-> This patchset is based on top of the following patchset:
-> [1] https://lore.kernel.org/all/20230208180020.2761766-1-abel.vesa@linaro.org/
+> However on Clevo NH5xAx/TUXEDO XA15 Gen10 there is a mistake in the ACPI
+> tables that the TP_ATTN# signal connected to GPIO 10 is configured as
+> ActiveLow and level triggered but connected to a pull up.
 
-Applied, thanks
+I'm not sure I understand the issue here. From what you say here it seems
+correct ACPI description.
 
-I got a minor conflicts on two patches please check the merged code
+> As soon as the
+> system suspends the touchpad loses power and then the system wakes up.
+> 
+> To avoid this problem, introduce a quirk for this model that will prevent
+> the wakeup capability for being set for GPIO 10.
+
+I'm not against fixing this, but wouldn't be better to actually target the root
+cause and have a different quirk? Or is it me who didn't get what is the root
+cause?
 
 -- 
-~Vinod
+With Best Regards,
+Andy Shevchenko
+
+
