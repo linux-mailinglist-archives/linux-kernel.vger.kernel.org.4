@@ -2,129 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB916922D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A080D6922D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232702AbjBJQAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 11:00:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
+        id S232500AbjBJQAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 11:00:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232026AbjBJP76 (ORCPT
+        with ESMTP id S232515AbjBJQAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 10:59:58 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17ABB79B09
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:59:41 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id by3so4201393wrb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:59:41 -0800 (PST)
+        Fri, 10 Feb 2023 11:00:38 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3511CF6F
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:00:14 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id a10so2111441iod.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:00:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IaOMp85DQqFK9FmSZWOrsKFZKbvOVr0dD/xHxXmrHrs=;
-        b=SjWmfQX6sZAmi8yrO5woKGzlHGfyeLaYU3uU2pZHqLtDuRvR3qS7Wf1AYTIBjfJzxc
-         xIPmwvUP8sNa6dtwEEa1qSe0JN4qkcni/qlbZbQlqgBxdiAYwpQwy4j2RNd8Gk0eg8uO
-         1FatZPD5mDyI3Emx2qODlEWv3KKO5b4IdaowAi0n9KM+Bry0UjbG+rU6iWVMq9SZ/4A4
-         dwelWtCi7HOGAeVfpmF/aPR/86oXn2Up0jTONEvvmToLOEJmaeyTYi1n4/ZjKkS0OWST
-         ACTAHP4UuPoMLmJIdthdxHTPkSCRwS/eruTB2xAAJXZfYlduBox4X8Xo1RclC6S68n15
-         PMVQ==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cKCnbmHogXEmRbO0onTMSj4NA86gqgz0RX9mB07CwWE=;
+        b=NRNcgzMs3xVQhy98cuw8J0uyYV74wWmalgd6Ee9nF+MMKeTdWLva7zLEBCou+6wVU2
+         x1fB8qTqds8ozhmq9P3Mpqb8tlbyfOr/pFFCEHJaR2JAdpDMpRnTEt6yO68/eCdM5CAf
+         hxfPO/Bp5QLmvWiTU6BsO/6AzfiZVHKz+ia7H5qGqiZEIV0V9YfKfymdbT56vXRUvfTo
+         7rhkT+49tiTvOxozI7mrXhKqa48uJiirq8gRInDb8WvkTUTtwILnE62fET9MAgVdLAU6
+         9rnU9Qo7xMK+A2kbt65qharnTeBB9FUmPA0tP3Iw7KaTwScOKh1jNNQnBtCKTgKRjzMe
+         EbXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IaOMp85DQqFK9FmSZWOrsKFZKbvOVr0dD/xHxXmrHrs=;
-        b=nHms7+dVLt6Or2bKiJId7pCg2HuS2ked4DBagyVfErOiTqq/Zy1SxZvE+kyOzhFBjd
-         UxXiDXxK1mW2B/txwxoQF8x+m2kCyRsxd62VASSHfyD8I79Lq914Ovc8/VvRQJZPbyw5
-         U0/291gkERlaDCcM7ThvkFdXbcQKCQD8WSgZcH3B8Pv4n1SIf5h21LmBbMvHQPJJ8DZS
-         anOwk6GwPTeZ02/Ff5Uj2L+H2MuDUgOQKRnhrx97qnRwP8zb7Pe7Bi49Iw+khzQgGgfT
-         IG+Tuc+Vz26wlrjzaiwdaZGKKXRnbIsyasmwB7e1WHyURLp590JJJSBInBdQ/1Ar84B/
-         MO2g==
-X-Gm-Message-State: AO0yUKW3To+mo4QTDR7icHjYTLKC1n4yhuyyZVklf/BKEQBd45V7Bfzw
-        SmaImXaQygc4ksuPb58Jn/hRhw==
-X-Google-Smtp-Source: AK7set9/QCxdu8rngGkirm66tKQ8nUUlKQtouI7koQ5af8wv216xyvib2YyyphADqC/g5f0L14zomQ==
-X-Received: by 2002:a5d:4287:0:b0:2c5:4784:6f0c with SMTP id k7-20020a5d4287000000b002c547846f0cmr3551624wrq.15.1676044773888;
-        Fri, 10 Feb 2023 07:59:33 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id y15-20020adfee0f000000b002c3efca57e1sm4078604wrn.110.2023.02.10.07.59.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 07:59:33 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Abel Vesa <abel.vesa@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] regulator: dt-bindings: qcom,rpmh: Correct PM8550 family supplies
-Date:   Fri, 10 Feb 2023 16:59:30 +0100
-Message-Id: <20230210155930.549082-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cKCnbmHogXEmRbO0onTMSj4NA86gqgz0RX9mB07CwWE=;
+        b=zRJT14Yvhf0jH+IvUhZZwUoGzDf+/gjzvd/dQS+T4axgURxRAbIuuir8wt2YDxgKY5
+         skMUMHM4YwWvW7F7pPuwzdheDlkZkWrL8aSXiPafFwovLuVSB/FEpzowxIoWettRpHGs
+         ZjLo3Ag+/uT3Yo5AV5al4AQqozGLywXlSkR/ofydv1RxOIzj0+dH+c+D2aThDXE759N9
+         tLpCFzsmFlfa1shlOxrOH1KkAOJozboCGxWSFK3v/QVlq9CT6L7yIzBOK2S+BTb1IP2X
+         pxJyEaNhmeRKxU5NcAFKC4Gr7+gHLFK4IMPvY6YGwqdErj4oMpAMSj1X1aAeFQWqexTX
+         iwMw==
+X-Gm-Message-State: AO0yUKUm9MXuEVS1ft6RDc54o5gJW7m/vPKYYXQslnvDjo3eUGsZVk4h
+        7r/0Iq3tp9BVo4sgqyalDtIo1g==
+X-Google-Smtp-Source: AK7set/SjFI233Hr0PsxihtGJ1Amwm5e4Y73hxHeifCQOI2JIX5bo16OqRZP/ZRIrzu2zanedDEbxQ==
+X-Received: by 2002:a5d:9492:0:b0:707:6808:45c0 with SMTP id v18-20020a5d9492000000b00707680845c0mr10394797ioj.1.1676044813908;
+        Fri, 10 Feb 2023 08:00:13 -0800 (PST)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id n10-20020a5ed90a000000b0073a312aaae5sm1392629iop.36.2023.02.10.08.00.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 08:00:13 -0800 (PST)
+Message-ID: <56ef99e4-f9de-0634-ce53-3bc2f1fa6665@kernel.dk>
+Date:   Fri, 10 Feb 2023 09:00:11 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] io_uring,audit: don't log IORING_OP_MADVISE
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Steve Grubb <sgrubb@redhat.com>,
+        Richard Guy Briggs <rgb@redhat.com>,
+        Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
+        Eric Paris <eparis@parisplace.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Stefan Roesch <shr@fb.com>
+References: <b5dfdcd541115c86dbc774aa9dd502c964849c5f.1675282642.git.rgb@redhat.com>
+ <Y+VrSLZKZoAGikUS@madcap2.tricolour.ca>
+ <CAHC9VhTNb4gOpk9=49-ABtYs1DFKqqwXPSc-2bhJX7wcZ82o=g@mail.gmail.com>
+ <13293926.uLZWGnKmhe@x2> <6939adfb-ce2c-1911-19ee-af32f7d9a5ca@kernel.dk>
+ <CAHC9VhTGmGJ81M2CZWsTf1kNf8XNz2WsYFAP=5VAVSUfUiu1yQ@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAHC9VhTGmGJ81M2CZWsTf1kNf8XNz2WsYFAP=5VAVSUfUiu1yQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PM8550 is different than PM8550VE/VS, because the latter has much
-smaller amount of supplies (l1-3 and s1-6) and regulators.  The PM8550
-has on theh other hand one pin for vdd-l1-l4-l10 supplies.  Correct the
-if:then: clause with their supplies.
+On 2/10/23 8:39?AM, Paul Moore wrote:
+> On Thu, Feb 9, 2023 at 7:15 PM Jens Axboe <axboe@kernel.dk> wrote:
+>> On 2/9/23 3:54?PM, Steve Grubb wrote:
+>>> On Thursday, February 9, 2023 5:37:22 PM EST Paul Moore wrote:
+>>>> On Thu, Feb 9, 2023 at 4:53 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+>>>>> On 2023-02-01 16:18, Paul Moore wrote:
+>>>>>> On Wed, Feb 1, 2023 at 3:34 PM Richard Guy Briggs <rgb@redhat.com>
+>>> wrote:
+>>>>>>> fadvise and madvise both provide hints for caching or access pattern
+>>>>>>> for file and memory respectively.  Skip them.
+>>>>>>
+>>>>>> You forgot to update the first sentence in the commit description :/
+>>>>>
+>>>>> I didn't forget.  I updated that sentence to reflect the fact that the
+>>>>> two should be treated similarly rather than differently.
+>>>>
+>>>> Ooookay.  Can we at least agree that the commit description should be
+>>>> rephrased to make it clear that the patch only adjusts madvise?  Right
+>>>> now I read the commit description and it sounds like you are adjusting
+>>>> the behavior for both fadvise and madvise in this patch, which is not
+>>>> true.
+>>>>
+>>>>>> I'm still looking for some type of statement that you've done some
+>>>>>> homework on the IORING_OP_MADVISE case to ensure that it doesn't end
+>>>>>> up calling into the LSM, see my previous emails on this.  I need more
+>>>>>> than "Steve told me to do this".
+>>>>>>
+>>>>>> I basically just want to see that some care and thought has gone into
+>>>>>> this patch to verify it is correct and good.
+>>>>>
+>>>>> Steve suggested I look into a number of iouring ops.  I looked at the
+>>>>> description code and agreed that it wasn't necessary to audit madvise.
+>>>>> The rationale for fadvise was detemined to have been conflated with
+>>>>> fallocate and subsequently dropped.  Steve also suggested a number of
+>>>>> others and after investigation I decided that their current state was
+>>>>> correct.  *getxattr you've advised against, so it was dropped.  It
+>>>>> appears fewer modifications were necessary than originally suspected.
+>>>>
+>>>> My concern is that three of the four changes you initially proposed
+>>>> were rejected, which gives me pause about the fourth.  You mention
+>>>> that based on your reading of madvise's description you feel auditing
+>>>> isn't necessary - and you may be right - but based on our experience
+>>>> so far with this patchset I would like to hear that you have properly
+>>>> investigated all of the madvise code paths, and I would like that in
+>>>> the commit description.
+>>>
+>>> I think you're being unnecessarily hard on this. Yes, the commit message
+>>> might be touched up. But madvise is advisory in nature. It is not security
+>>> relevant. And a grep through the security directory doesn't turn up any
+>>> hooks.
+>>
+>> Agree, it's getting a bit anal... FWIW, patch looks fine to me.
+> 
+> Call it whatever you want, but the details are often important at this
+> level of code, and when I see a patch author pushing back on verifying
+> that their patch is correct it makes me very skeptical.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/regulator/qcom,rpmh-regulator.yaml  | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+Maybe it isn't intended, but the replies have generally had a pretty
+condescending tone to them. That's not the best way to engage folks, and
+may very well be why people just kind of give up on it. Nobody likes
+debating one-liners forever, particularly not if it isn't inviting.
 
-diff --git a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
-index 297a75069f60..fb9621b4b4cd 100644
---- a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
-@@ -308,19 +308,29 @@ allOf:
-         compatible:
-           enum:
-             - qcom,pm8550-rpmh-regulators
--            - qcom,pm8550ve-rpmh-regulators
--            - qcom,pm8550vs-rpmh-regulators
-     then:
-       properties:
-+        vdd-l1-l4-l10-supply: true
-         vdd-l2-l13-l14-supply: true
-         vdd-l5-l16-supply: true
-         vdd-l6-l7-supply: true
-         vdd-l8-l9-supply: true
-       patternProperties:
--        "^vdd-l([1-4]|1[0-7])-supply$": true
-+        "^vdd-l(3|1[1-7])-supply$": true
-         "^vdd-s[1-6]-supply$": true
-         "^vdd-bob[1-2]-supply$": true
- 
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - qcom,pm8550ve-rpmh-regulators
-+            - qcom,pm8550vs-rpmh-regulators
-+    then:
-+      patternProperties:
-+        "^vdd-l[1-3]-supply$": true
-+        "^vdd-s[1-6]-supply$": true
-+
-   - if:
-       properties:
-         compatible:
+> I really would have preferred that you held off from merging this
+> until this was resolved and ACK'd ... oh well.
+
+It's still top of tree. If you want to ack it, let me know and I'll add
+it. If you want to nak it, give me something concrete to work off of.
+
 -- 
-2.34.1
+Jens Axboe
 
