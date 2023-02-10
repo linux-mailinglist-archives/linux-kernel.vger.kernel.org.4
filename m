@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF596917B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 05:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFBA86917B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 05:49:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231161AbjBJEsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 23:48:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38600 "EHLO
+        id S230522AbjBJEtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 23:49:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbjBJEss (ORCPT
+        with ESMTP id S230239AbjBJEsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 23:48:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5285B74C
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 20:48:47 -0800 (PST)
+        Thu, 9 Feb 2023 23:48:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9541A6D8E7
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 20:48:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8D7861C14
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 04:48:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5971C433A0;
-        Fri, 10 Feb 2023 04:48:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34607B823BE
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 04:48:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 786BEC433A1;
+        Fri, 10 Feb 2023 04:48:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676004526;
-        bh=3ZPhytsG6MoiFI71uMGAzjRAm4p3c/2mkgqWantxo+I=;
+        s=k20201202; t=1676004527;
+        bh=GHjXtEXAs/907P6A+4MUMIxpIxGv/uFwCu4RPtNwvv4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XdilebEYHnliIo6ccsozIn8z310XX+J4YeoCbW7rHQ02/iln2iXxE9EPvQfBjxLax
-         t3ysfYwi4WsuohmRqftPzIgku530OlwXFpf3XyzBHQjyXWftPiGot3pG6gJwcCoJK3
-         NTluwuUy5cBGGi1P7UEcU1ZMFeY8ED+DIAgqZw4WjDJqwj+DJOuSP/4PUQmO8Uz265
-         5KTyBUZzr1t7Oe9UxIM5csHGF8Q8jf6WQe7xmnzaI9a1Se2LloVN9qnQ1LJckDykx6
-         x4HSp+SsZ6xYd8rw6ZiBjPcRKEaoRozmHkbJ8dttfY+EZtSAVlxs9CZAaveKCXb81/
-         UzFACfqLtzIRg==
+        b=osoBk/p5fti365hKvBevvfZpAfFjjBuRvv90yf+hbzGZGnr44zGzfMzevZBF1G5W+
+         0cZp6p4OTOl29Rq8NHb+4yhgbo8Dduwr/YXYSUYSaJfAIuLSRgmDs6O0hUYP3PvxqA
+         lnnI3TiTC1gQpj6NnQM4FpQwlGgEiexU4MJHePwMijo+PLyb1i04CdpxtINd6AHV+t
+         iDshdB/9WNtDhnYuAiB7CBh1adRpmRDEgHAOFRS5ChWfCZGD0kOJAV2osSEbuacspk
+         /OtFQ0ujR1NeVbbBb8i0JhTrOBz2jn7zCDH/hnK7mivL/KBsapzZBsQf3lecRBPt1G
+         cR/odiYu7eU/g==
 From:   SeongJae Park <sj@kernel.org>
-To:     SeongJae Park <sj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/3] mm/damon/Kconfig: add DAMON debugfs interface deprecation notice
-Date:   Fri, 10 Feb 2023 04:48:37 +0000
-Message-Id: <20230210044838.63723-3-sj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     SeongJae Park <sj@kernel.org>, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH v2 3/3] mm/damon/dbgfs: print DAMON debugfs interface deprecation message
+Date:   Fri, 10 Feb 2023 04:48:38 +0000
+Message-Id: <20230210044838.63723-4-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230210044838.63723-1-sj@kernel.org>
 References: <20230210044838.63723-1-sj@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,41 +61,72 @@ Though the announcement was there for a while, some people might not
 noticed that so far.  Also, some users could depend on it and have
 problems at  movng to the alternative (DAMON sysfs interface).
 
-For such cases, note DAMON debugfs interface as deprecated, and contacts
-to ask helps on the Kconfig.
+For such cases, warn DAMON debugfs interface deprecation with contacts
+to ask helps when any DAMON debugfs interface file is opened.
 
 [1] https://git.kernel.org/pub/scm/docs/kernel/website.git/commit/?id=332e9121320bc7461b2d3a79665caf153e51732c
 
+Link: https://lkml.kernel.org/r/20230209192009.7885-4-sj@kernel.org
 Signed-off-by: SeongJae Park <sj@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 ---
- mm/damon/Kconfig | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ mm/damon/dbgfs.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/mm/damon/Kconfig b/mm/damon/Kconfig
-index 7821fcb3f258..436c6b4cb5ec 100644
---- a/mm/damon/Kconfig
-+++ b/mm/damon/Kconfig
-@@ -60,7 +60,7 @@ config DAMON_SYSFS
- 	  the interface for arbitrary data access monitoring.
+diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
+index b3f454a5c682..124f0f8c97b7 100644
+--- a/mm/damon/dbgfs.c
++++ b/mm/damon/dbgfs.c
+@@ -20,6 +20,14 @@ static int dbgfs_nr_ctxs;
+ static struct dentry **dbgfs_dirs;
+ static DEFINE_MUTEX(damon_dbgfs_lock);
  
- config DAMON_DBGFS
--	bool "DAMON debugfs interface"
-+	bool "DAMON debugfs interface (DEPRECATED!)"
- 	depends on DAMON_VADDR && DAMON_PADDR && DEBUG_FS
- 	help
- 	  This builds the debugfs interface for DAMON.  The user space admins
-@@ -68,8 +68,9 @@ config DAMON_DBGFS
++static void damon_dbgfs_warn_deprecation(void)
++{
++	pr_warn_once("DAMON debugfs interface is deprecated, "
++		     "so users should move to DAMON_SYSFS. If you cannot, "
++		     "please report your usecase to damon@lists.linux.dev and "
++		     "linux-mm@kvack.org.\n");
++}
++
+ /*
+  * Returns non-empty string on success, negative error code otherwise.
+  */
+@@ -711,6 +719,8 @@ static ssize_t dbgfs_kdamond_pid_read(struct file *file,
  
- 	  If unsure, say N.
+ static int damon_dbgfs_open(struct inode *inode, struct file *file)
+ {
++	damon_dbgfs_warn_deprecation();
++
+ 	file->private_data = inode->i_private;
  
--	  This will be removed after >5.15.y LTS kernel is released, so users
--	  should move to the sysfs interface (DAMON_SYSFS).
-+	  This is deprecated, so users should move to the sysfs interface
-+	  (DAMON_SYSFS).  If you depend on this and cannot move, please report
-+	  your usecase to damon@lists.linux.dev and linux-mm@kvack.org.
+ 	return nonseekable_open(inode, file);
+@@ -1039,15 +1049,24 @@ static ssize_t dbgfs_monitor_on_write(struct file *file,
+ 	return ret;
+ }
  
- config DAMON_DBGFS_KUNIT_TEST
- 	bool "Test for damon debugfs interface" if !KUNIT_ALL_TESTS
++static int damon_dbgfs_static_file_open(struct inode *inode, struct file *file)
++{
++	damon_dbgfs_warn_deprecation();
++	return nonseekable_open(inode, file);
++}
++
+ static const struct file_operations mk_contexts_fops = {
++	.open = damon_dbgfs_static_file_open,
+ 	.write = dbgfs_mk_context_write,
+ };
+ 
+ static const struct file_operations rm_contexts_fops = {
++	.open = damon_dbgfs_static_file_open,
+ 	.write = dbgfs_rm_context_write,
+ };
+ 
+ static const struct file_operations monitor_on_fops = {
++	.open = damon_dbgfs_static_file_open,
+ 	.read = dbgfs_monitor_on_read,
+ 	.write = dbgfs_monitor_on_write,
+ };
 -- 
 2.25.1
 
