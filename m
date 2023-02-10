@@ -2,148 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B017692A87
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 23:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 919F3692A8C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 23:51:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233606AbjBJWuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 17:50:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
+        id S234007AbjBJWvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 17:51:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234039AbjBJWt4 (ORCPT
+        with ESMTP id S233985AbjBJWvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 17:49:56 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDE632CFA;
-        Fri, 10 Feb 2023 14:49:52 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31AKPovC017965;
-        Fri, 10 Feb 2023 22:49:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=h/mAMXh5kCQ0g0Z52GBqF6hgV9P8cj6Rm/BSDQE6EcI=;
- b=iVT51v3MpI7xwvFkLZ7xjf/UAguX6WRR1W6VobLi8lW4kI5d6s/TIi31B32T9CYH/c1+
- hzrolbNQQxBfnOJg2QzsZzuOSMsWeRNwG6GLGatW3BC4mqO638k+nTQXvo/HIU+sYYLI
- RB7Fj7lUGiw9lrCd2MHSHErQsu+gUU6EG4vApH04Ecklk/r9hSJJ+vaXMvexr0uzObSn
- G2raS7muJ3+BOsroTZKWyn5IprOSfrNX1o45ZtYkv4ff7EUpA6UbPPCaHjELFyFPMmoy
- vZ9TlJJFG447zpyJzfpsELgFyjgQhOQhp/fPULPKzELM6PvUHfB2J0S5qsS7tGtNa3Cb BQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nndu5ac2c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 22:49:37 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31AMna0V032756
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 22:49:36 GMT
-Received: from [10.110.21.35] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 10 Feb
- 2023 14:49:35 -0800
-Message-ID: <2c062ab0-905c-f1fe-eca2-02e23cc9fa6f@quicinc.com>
-Date:   Fri, 10 Feb 2023 14:49:35 -0800
+        Fri, 10 Feb 2023 17:51:12 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE0732CDC
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 14:51:11 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id n2so4504386pfo.3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 14:51:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1676069470;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fb0hD2Is8tutzPK+FUgjJONSqvcKdsnxAi3Fd+q9FbI=;
+        b=gkumRTQSpGTg1Kqk07BCblcvpz+kIS0Whxwm0RF9IhQRDH7wkfO3l8yye1TRollGbB
+         Hq1V4lOJX3TAwP11uiv+z3P/yi3g5dTsVW/hLWuEw/+ow8uJ209kOmB3FV3oReUd9M8C
+         cb3pDM3CZEEWZezA/Zvtw8/qQ1OOCKjhBrTsRnnymRki0layjIjTH0LDcoxCi4x/J3vN
+         vMsCzYCCZ3t1/DMQtj0njviLxiZ2tU9+lUzwjgLwAhx1j1ocgIVJwU3pQF7s6er1krg6
+         +O65C1zrlQZIReQoTSKNK8fqePu7aXE5Yu/08tbpiMAvWZoPIhRK78w5shdrpwba/pnF
+         Er+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676069470;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fb0hD2Is8tutzPK+FUgjJONSqvcKdsnxAi3Fd+q9FbI=;
+        b=cSHeIYlXv+7KGH47k6YetcW0BBvYxr33hDs4eZlbcXPYuJqx3shxU7nkPA3bf/OgD4
+         O3752cQSpaQsNBzq9m6/LBdD5J1JxpN6Iz58yFDPTKg2xG5NH3AmHer+dY4boXrMipRk
+         yfE7BItVYtAKzE2Jm0LfAbEQLD5fouOuqpaUXn/HmxxRGbu6W6Afwa2NMhSZ0mgq1Xa8
+         Hbh9AD7ENauERlNkkvUhOnIa0PB1+N0kwD3z1rPqOZGa/Yc3PMPL1jOS8cATHTrjjlc7
+         YFXqqPmg54Q3Nxtd7YM7k9ady1+isbeA4QNWgqe3C/1172EtNLNVvXbFSTywvJZ9a9sR
+         Sevw==
+X-Gm-Message-State: AO0yUKUlSl5pUNjb3hSFu3qjHRlWlTsoCFZ2LA0q7Xd2uTmjvQ2BZsXF
+        C9HumYBA+SlK1NBLw1K21gvecw==
+X-Google-Smtp-Source: AK7set9QlYq/MSDUz7QhtZ618g3YDbVybvJOz+1kV8etdZ6/r0TOGrNahZypoZavFHpy28vDf9oNWA==
+X-Received: by 2002:a62:82c6:0:b0:5a8:4c4e:fc01 with SMTP id w189-20020a6282c6000000b005a84c4efc01mr8503622pfd.2.1676069470503;
+        Fri, 10 Feb 2023 14:51:10 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id e13-20020a62aa0d000000b00582388bd80csm3729845pff.83.2023.02.10.14.51.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 14:51:10 -0800 (PST)
+Message-ID: <70a61a9a-f5a3-09d6-91b6-bf2355d3919c@kernel.dk>
+Date:   Fri, 10 Feb 2023 15:51:08 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH v2 12/22] sound: usb: card: Introduce USB SND platform
- op callbacks
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: copy on write for splice() from file to pipe?
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <lgirdwood@gmail.com>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <Thinh.Nguyen@synopsys.com>,
-        <broonie@kernel.org>, <bgoswami@quicinc.com>, <tiwai@suse.com>,
-        <robh+dt@kernel.org>, <agross@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
-        <quic_plai@quicinc.com>
-References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
- <20230126031424.14582-13-quic_wcheng@quicinc.com>
- <Y9Ui82OaI54Qx8Ft@kroah.com>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <Y9Ui82OaI54Qx8Ft@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ming Lei <ming.lei@redhat.com>, Andy Lutomirski <luto@kernel.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Stefan Metzmacher <metze@samba.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API Mailing List <linux-api@vger.kernel.org>,
+        io-uring <io-uring@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Samba Technical <samba-technical@lists.samba.org>
+References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
+ <CAHk-=wjuXvF1cA=gJod=-6k4ypbEmOczFFDKriUpOVKy9dTJWQ@mail.gmail.com>
+ <CALCETrUXYts5BRZKb25MVaWPk2mz34fKSqCR++SM382kSYLnJw@mail.gmail.com>
+ <CAHk-=wgA=rB=7M_Fe3n9UkoW_7dqdUT2D=yb94=6GiGXEuAHDA@mail.gmail.com>
+ <1dd85095-c18c-ed3e-38b7-02f4d13d9bd6@kernel.dk>
+ <CAHk-=wiszt6btMPeT5UFcS=0=EVr=0injTR75KsvN8WetwQwkA@mail.gmail.com>
+ <fe8252bd-17bd-850d-dcd0-d799443681e9@kernel.dk>
+ <CAHk-=wiJ0QKKiORkVr8n345sPp=aHbrLTLu6CQ-S0XqWJ-kJ1A@mail.gmail.com>
+ <7a2e5b7f-c213-09ff-ef35-d6c2967b31a7@kernel.dk>
+ <CALCETrVx4cj7KrhaevtFN19rf=A6kauFTr7UPzQVage0MsBLrg@mail.gmail.com>
+ <b44783e6-3da2-85dd-a482-5d9aeb018e9c@kernel.dk>
+ <2bb12591-9d24-6b26-178f-05e939bf3251@kernel.dk>
+ <CAHk-=wjzqrD5wrfeaU390bXEEBY2JF-oKmFN4fREzgyXsbQRTQ@mail.gmail.com>
+ <CAHk-=wjUjtLjLbdTz=AzvGekyU1xiSL-wAAb7_j_XoT9t4o1vQ@mail.gmail.com>
+ <824fa356-7d6e-6733-8848-ab84d850c27a@kernel.dk>
+ <CAHk-=wg3gLL-f6XkQo4vw42Q+ySPrMdprNL1dxNrr3RGHzhnrw@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAHk-=wg3gLL-f6XkQo4vw42Q+ySPrMdprNL1dxNrr3RGHzhnrw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: oGpCI2pZrg6hVncDv50aU6L1diE3-Q0s
-X-Proofpoint-GUID: oGpCI2pZrg6hVncDv50aU6L1diE3-Q0s
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-10_15,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- phishscore=0 mlxlogscore=993 clxscore=1015 malwarescore=0 suspectscore=0
- impostorscore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302100195
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On 1/28/2023 5:28 AM, Greg KH wrote:
-> On Wed, Jan 25, 2023 at 07:14:14PM -0800, Wesley Cheng wrote:
->> Allow for different platforms to be notified on USB SND connect/disconnect
->> seqeunces.  This allows for platform USB SND modules to properly initialize
->> and populate internal structures with references to the USB SND chip
->> device.
+On 2/10/23 3:35?PM, Linus Torvalds wrote:
+> On Fri, Feb 10, 2023 at 2:26 PM Jens Axboe <axboe@kernel.dk> wrote:
+>>>
+>>> (I actually suspect that /dev/zero no longer works as a splice source,
+>>> since we disabled the whole "fall back to regular IO" that Christoph
+>>> did in 36e2c7421f02 "fs: don't allow splice read/write without
+>>> explicit ops").
 >>
->> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->> ---
->>   sound/usb/card.c | 28 ++++++++++++++++++++++++++++
->>   sound/usb/card.h | 20 ++++++++++++++++++++
->>   2 files changed, 48 insertions(+)
->>
->> diff --git a/sound/usb/card.c b/sound/usb/card.c
->> index 26268ffb8274..803230343c16 100644
->> --- a/sound/usb/card.c
->> +++ b/sound/usb/card.c
->> @@ -117,6 +117,24 @@ MODULE_PARM_DESC(skip_validation, "Skip unit descriptor validation (default: no)
->>   static DEFINE_MUTEX(register_mutex);
->>   static struct snd_usb_audio *usb_chip[SNDRV_CARDS];
->>   static struct usb_driver usb_audio_driver;
->> +static struct snd_usb_platform_ops *platform_ops;
+>> Yet another one... Since it has a read_iter, should be fixable with just
+>> adding the generic splice_read.
 > 
-> You can not have a single "platform_ops" pointer, this HAS to be
-> per-bus.
+> I actually very consciously did *not* want to add cases of
+> generic_splice_read() "just because we can".
 > 
-
-Agreed.
-
-> And what is a "platform operations" anyway?  Shouldn't this be a driver
-> type or something like that?  "offload_operations"?
+> I've been on a "let's minimize the reach of splice" thing for a while.
+> I really loved Christoph's patches, even if I may not have been hugely
+> vocal about it. His getting rid of set/get_fs() got rid of a *lot* of
+> splice pain.
 > 
-
-The reason for going with platform operations is because every platform 
-may implement the offloading differently.  The offload operations term 
-is more direct though in terms of explaining what the ops are going to 
-be used for, so I can see the incentive of moving to that phrase.
-
->> +
->> +int snd_usb_register_platform_ops(struct snd_usb_platform_ops *ops)
->> +{
->> +	if (platform_ops)
->> +		return -EEXIST;
->> +
->> +	platform_ops = ops;
->> +	return 0;
+> And rather than try to make everything work with splice that used to
+> work just because it fell back on read/write, I was waiting for actual
+> regression reports.
 > 
-> No locking?  not good.
+> Even when splice fails, a lot of user space then falls back on
+> read/write, and unless there is some really fundamental reason not to,
+> I think that's always the right thing to do.
 > 
-> But again, this has to be per-USB-bus, it can NOT be system wide for
-> obvious reasons.
+> So we do have a number of "add splice_write/splice_read" commits, but
+> they are hopefully all the result of people actually noticing
+> breakage.
 > 
+> You can do
+> 
+>      git log --grep=36e2c7421f02
+> 
+> to see at least some of them, and I really don't want to see them
+> without a "Reported-by" and an actual issue.
 
-Sure, will change that when moving to per USB bus.
+Oh I already did that the last few times (and there's quite a bit). And
+while I agree that getting rid of the ancient set/get_fs bits was great,
+it is still annoying to knowingly have regressions. The problem with
+this approach is that the time from when you start the "experiment" to
+when the first report comes in, it'll take a while as most don't run
+-git kernels at all. And the ones that do are generally just standard
+distro setups on their workstation/laptop.
 
-Thanks
-Wesley Cheng
+The time is my main concern, it takes many years before you're fully
+covered. Maybe if that series had been pushed to stable as well we'd
+have a better shot at weeding them out.
+
+> Exactly because I'm not all that enamoured with splice any more.
+
+I don't think anyone has been for years, I sure have not and haven't
+worked on it in decades outside of exposing some for io_uring.The
+latter was probably a mistake and we should've done something else, but
+there is something to be said for the devil you know... Outside of that,
+looks like the last real change was support for bigger pipes in 2010.
+But:
+
+1) Interesting bits do come up. Some of these, as this discussion has
+   highlighted, are probably better served somewhere else, especially if
+   they require changes/additions. Some may be valid and fine.
+
+2) Knowingly breaking things isn't very nice, and if anyone else did
+   that, they'd have you screaming at them.
+
+So while I do kind of agree with you on some points, I don't think it
+was done very well from that perspective. And when we spot things like
+zero not working with splice, we should probably add the patch to make
+it work rather than wait for someone to complain. I just recently had to
+fixup random/urandom for that because of a report, and I'd like to think
+I have better things to do than deal with known fallout.
+
+-- 
+Jens Axboe
+
