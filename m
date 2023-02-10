@@ -2,158 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326EE691799
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 05:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3107B69179C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 05:38:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbjBJEfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 23:35:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
+        id S230472AbjBJEim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 23:38:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjBJEfG (ORCPT
+        with ESMTP id S229817AbjBJEij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 23:35:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DF71F49A
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 20:35:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 9 Feb 2023 23:38:39 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58783A59C;
+        Thu,  9 Feb 2023 20:38:37 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D81361C9A
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 04:35:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E576CC433D2;
-        Fri, 10 Feb 2023 04:35:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676003703;
-        bh=oPZw6TRpEq4CV83ACbyCdBbv0Mstfa8pKo4weHQkuwE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sQtnlnBiwCE+2/SjvWUOft/HTPpEwtfRAW4YnjFW8M18xzWMHXlgEJbS+jkusr8Yb
-         hI2euD76zWGn8UOQcv8WaQZySBRmb/k1SDEyK8Md3JxOfaiQG4xB+cVAgbutAi9Iup
-         CfDAHYCxGtbvV19X0bi6Q7tFWkL21fZubJ4LFCamOel6E0tfA4OvfNtB7rjKYi2UvH
-         gXtkaoh19z3iESNXax7FkZB9uf1tqpAxS+S0liIn17niEs24jn8wDo3RJXd9sAJiYH
-         briFrDFLyWL4fVW9YHWtYHRckclfjw+RufblSXwdYdq7pUeDxZorT+rirW/xMtlBSV
-         FgquIeMXrM8ig==
-From:   SeongJae Park <sj@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     SeongJae Park <sj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] mm/damon/dbgfs: print DAMON debugfs interface deprecation message
-Date:   Fri, 10 Feb 2023 04:35:01 +0000
-Message-Id: <20230210043501.56015-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <655f44cf-1d39-c2c1-1a93-d8eec39064b4@infradead.org>
-References: 
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PCgwW65vyz4xwy;
+        Fri, 10 Feb 2023 15:38:35 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1676003916;
+        bh=ToT9uDC/VpKryulLh0oyQPGvdZ/SNUC+D4CwHsEY4PY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=hYSOmmiUbXRk4fmNe9DMu8SsaBCwJtAoCECYOITHsCcUfQ08jEWDdx+GcY8N1pu81
+         tjH08NO18COto6cW3cuLGN6X/Ew3DPW3Fo2KgRvDHTdWF9ULynsMM8crMa9cRdtR6z
+         tEojsNr1/QzcewjapnM/aILn/gBcvJtYFq9Df03toE/taLU2PU897Q4yLNOMMNBUgJ
+         5nmyMJvz1ISEWSYP6HZmTTVaQaOlOT6gvFUuRlRieIelhPmQHNBuJkm8HcKArd9KiJ
+         ct2IGcS7YYB0wTe9edYmRiv2ng4xlCCjEM+i7VprsrUKjyEtiVgXGjNTHILtFTyuXF
+         IOBkbFE1Qsn+A==
+Date:   Fri, 10 Feb 2023 15:38:34 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the pci tree
+Message-ID: <20230210153834.0452f24d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Y8CWY2NETcgZF82BgWOQxQ9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Feb 2023 20:32:21 -0800 Randy Dunlap <rdunlap@infradead.org> wrote:
+--Sig_/Y8CWY2NETcgZF82BgWOQxQ9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Hi,
-> 
-> On 2/9/23 20:24, SeongJae Park wrote:
-> > Hi Randy,
-> > 
-> > On Thu, 9 Feb 2023 19:26:43 -0800 Randy Dunlap <rdunlap@infradead.org> wrote:
-> > 
-> >> Hi,
-> >>
-> >> On 2/9/23 11:20, SeongJae Park wrote:
-> >>> DAMON debugfs interface has announced to be deprecated after >v5.15 LTS
-> >>> kernel is released.  And, v6.1.y has announced to be an LTS[1].
-> >>>
-> >>> Though the announcement was there for a while, some people might not
-> >>> noticed that so far.  Also, some users could depend on it and have
-> >>> problems at  movng to the alternative (DAMON sysfs interface).
-> >>>
-> >>> For such cases, warn DAMON debugfs interface deprecation with contacts
-> >>> to ask helps when any DAMON debugfs interface file is opened.
-> >>>
-> >>> [1] https://git.kernel.org/pub/scm/docs/kernel/website.git/commit/?id=332e9121320bc7461b2d3a79665caf153e51732c
-> >>>
-> >>> Signed-off-by: SeongJae Park <sj@kernel.org>
-> >>> ---
-> >>>  mm/damon/dbgfs.c | 16 ++++++++++++++++
-> >>>  1 file changed, 16 insertions(+)
-> >>>
-> >>> diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
-> >>> index b3f454a5c682..e551a20b35e3 100644
-> >>> --- a/mm/damon/dbgfs.c
-> >>> +++ b/mm/damon/dbgfs.c
-> >>> @@ -20,6 +20,11 @@ static int dbgfs_nr_ctxs;
-> >>>  static struct dentry **dbgfs_dirs;
-> >>>  static DEFINE_MUTEX(damon_dbgfs_lock);
-> >>>  
-> >>> +static void damon_dbgfs_warn_deprecation(void)
-> >>> +{
-> >>> +	pr_warn_once("DAMON debugfs interface is deprecated, so users should move to the sysfs interface (DAMON_SYSFS).  If you depend on this and cannot move, please report your usecase to damon@lists.linux.dev and linux-mm@kvack.org.\n");
-> >>> +}
-> >>
-> >> Line length of 234 is a bit over the limit.
-> >> I think it would be OK to split it at the end of the first sentence, like:
-> >>
-> >> 	pr_warn_once("DAMON debugfs interface is deprecated, so users should move to the sysfs interface (DAMON_SYSFS).\n");
-> >> 	pr_warn_once("If you depend on this and cannot move, please report your usecase to damon@lists.linux.dev and linux-mm@kvack.org.\n");
-> >>
-> >> or would that [2 pr_warn_once() calls] not work for some reason?
-> >>
-> >> Or even:
-> >>
-> >> 	pr_warn_once(
-> >> "DAMON debugfs interface is deprecated, so users should move to the sysfs interface (DAMON_SYSFS).\n");
-> >> 	pr_warn_once(
-> >> "If you depend on this and cannot move, please report your usecase to damon@lists.linux.dev and linux-mm@kvack.org.\n");
-> >>
-> >> although some people might gag at that one.
-> > 
-> > Thank you for your opinion.
-> > 
-> > I considered that, but I was worrying if some other messages come between those
-> > two separated messages.
-> 
-> I see.
-> 
-> > 
-> > What do you think about breaking the string like below?  I first tried to do so
-> > like memcg hierarchy[1], but ended up to this version because of checkpatch.pl
-> > outputs[2].  However, if others doesn't care, I think this is ok.
-> 
-> It's OK to ignore checkpatch sometimes. :)
-> 
-> > 
-> > 	pr_warn_once("DAMON debugfs interface is deprecated, "
-> > 		     "so users should move DAMON_SYSFS. If you depend on this "
-> > 		     "and cannot move, please report your usecase to "
-> > 		     "damon@lists.linux.dev and linux-mm@kvack.org.\n");
-> > 
-> > If breaking user-visible string is not ok, maybe we could make it as short as
-> > your above example.
-> > 
-> >  	pr_warn_once("DAMON_DBGFS is deprecated; please contact to damon@lists.linux.dev and linux-mm@kvack.org if you depend on it.\n");
-> > 
-> > May I ask your opinion?
-> 
-> I'm OK with either one of these, but I prefer your first example over the second one.
+Hi all,
 
-Thank you for quick reply.  I will send v2 with the first one.
+Commits
 
+  da006a8c9352 ("dmaengine: dw-edma: Use non-atomic io-64 methods")
+  e3042508ac7c ("dmaengine: dw-edma: Fix readq_ch() return value truncation=
+")
 
-Thanks,
-SJ
+are missing a Signed-off-by from their committer.
 
-> 
-> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/memcontrol.c?h=v6.1#n3643
-> > [2] https://docs.kernel.org/process/coding-style.html#breaking-long-lines-and-strings
-> 
-> Thanks.
-> -- 
-> ~Randy
-> 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Y8CWY2NETcgZF82BgWOQxQ9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPlykoACgkQAVBC80lX
+0GzNiQgAhs1Z2vKJqZzPk1Q7mI7Il+7MR3WwwkNReXwF/JyCK19o4P4d3HoXRe1U
+dgg4jOvHIVvGJLes8ve/m0iSi3UKQwBTVIehXmIR65tvjM7kjP6Ieca3NDulAcIF
+J9EOO3XkB2wEywqVWbanz/0b14xIZX4WSh7T6bCn3xqk3BXZjNZ4izDt4MO0AtEe
+rXk+MEYnNbb5EPK0LtzPw0PWy5VVBTKKUiK6iOHW8XQVHnrcoZ3DdDhD8l+cNBlo
+fqUqDVJHySSULToUMJL2+uuAYyJMpdJAcczlTZ3AQ6xhDKk1Jx6oCM3daL4D9CmV
+hA2LC3odEnhXWpOah2KJQX7fTUzr1g==
+=/OmD
+-----END PGP SIGNATURE-----
+
+--Sig_/Y8CWY2NETcgZF82BgWOQxQ9--
