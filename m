@@ -2,108 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6356915E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 01:49:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F656915E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 01:50:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjBJAtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 19:49:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
+        id S230280AbjBJAud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 19:50:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbjBJAtt (ORCPT
+        with ESMTP id S230207AbjBJAub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 19:49:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989215AB13;
-        Thu,  9 Feb 2023 16:49:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35F1F61BA3;
-        Fri, 10 Feb 2023 00:49:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44FB5C433EF;
-        Fri, 10 Feb 2023 00:49:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675990187;
-        bh=/9pZPjhGregYgyGBli1F509L9Us3OCm+IFyNl5iWJ8k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XF9p3BMwvlGA4JxWHDAdXH9XcB0wCIaTV0lLdQFoSVJ+f4VAbCOajaBG26j/M61mb
-         U6y2Meb48G9uqdtr7QDx0XACvBFMlWLyL0iBedHPPIGj3DQ4KN/PBo3LZqirMt+y7e
-         PS1/poZTcWKhD/d5PsKgnJKYVasnpIxg6Jwp8z3mp3OU9MLhZKHP3wrDDZ14483H8U
-         AvoD4QNfWWABXxR6L6kxowuW+QXb8yOP7hD5Ucaors6OQyTie+cWtoaRQ/QMcC8iVa
-         QnSDsHk3Vg/BfoaVpf1NaM1f8L7UW38fccv+mhO9NSeYOhWqTkrs5YEPCk1Idr2lsb
-         zp+Fx94WGJoYA==
-Date:   Fri, 10 Feb 2023 02:49:45 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Julien Gomes <julien@arista.com>
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        jgg@ziepe.ca, peterhuewe@gmx.de
-Subject: Re: [PATCH] tpm: add vendor flag to command code validation
-Message-ID: <Y+WUqcNTc8t0KIyD@kernel.org>
-References: <20230208195836.30175-1-julien@arista.com>
+        Thu, 9 Feb 2023 19:50:31 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB34D6ADC6
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 16:50:26 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id r8so4887568pls.2
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 16:50:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RtDJLw8vwdwAjsAtx/I+c5vwGL5haek+8I4l9FjaPbM=;
+        b=hCDE+HV/2hOt1IgVLF7MFI+Z7OlBIYifdE740L3dN+7Wk841ZR8dcb+mDJgQfuAKxm
+         ZyL89KQ0CZvLo9Vy0fPjcZ6XsGRSFTegm6RalA2ISYNQvvkPSpcgNq8MeLAZKR3LYmoA
+         xruHmL1ix31r2F6SkbKZ8eiT+t3LjufZKaVhGAYQ6NDn4QUbi2HzdrbtGUF9TfsbJmNF
+         Aym2Yv1LQHiMudQtt7RN2kLHaipSzgnnWJfk7n/p23yfY/k7kVm8eibMhrXANpIP8TLr
+         kdGvClaWoh/4p3nU2IxLZ8cUGayiqOn623qIrsOqj1JtIko7pKY+ikOOp8EffcI5p/5r
+         UbRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RtDJLw8vwdwAjsAtx/I+c5vwGL5haek+8I4l9FjaPbM=;
+        b=a6ckLU0uIcEMzkYQwlj6EG+YJ65sehWiu1Qaqs1rLkt/dVV+xcTKj6Ulj+dDsOtsub
+         esMsmCx9BYRuViy8d47DqB5ST0i+ysmcFDb4eelppxZwxVABcDepRRTqjc1ItBzxLaRb
+         9ttu1+ti3eLrlzrF5NV9w/tcnPARrkWiBVz8unqOa7a6miQNdTzb5L0YxljpqYmDK2ys
+         xus5KkoI/azxj7qH1Yw6CjRGURAOHfMwjqtUf2tkKgxp8nA16n17fQzuqr+g5Sl6YDay
+         zF6XCFPtNfvZ7TmQot/ZP3wMQRy+5I9J0BZM7QnCY1TvodI3WvlT1y5tDDSGljHH8T2q
+         chVQ==
+X-Gm-Message-State: AO0yUKXYAs+DFzbnjhPMz4p7wNvhmZ3YcstST0kk/TjmCr+Nf3a0eiqj
+        iYn3zCQt7BpQWOYWtHHAwr/8dw==
+X-Google-Smtp-Source: AK7set/kW+orNWUKnpWhKkeGtB7x+mkiP/yWiREM6SpbaG+BpIZ+uOp12qlNVThoWo/IYCSO/OUKGQ==
+X-Received: by 2002:a17:903:2792:b0:198:af4f:de08 with SMTP id jw18-20020a170903279200b00198af4fde08mr100831plb.8.1675990226095;
+        Thu, 09 Feb 2023 16:50:26 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id e23-20020a63db17000000b004fb26a80875sm1891297pgg.22.2023.02.09.16.50.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 16:50:25 -0800 (PST)
+Date:   Fri, 10 Feb 2023 00:50:22 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org
+Subject: Re: [PATCH V2 1/8] kvm: x86/mmu: Use KVM_MMU_ROOT_XXX for
+ kvm_mmu_invalidate_gva()
+Message-ID: <Y+WUzgsBck4f8N4F@google.com>
+References: <20230207155735.2845-1-jiangshanlai@gmail.com>
+ <20230207155735.2845-2-jiangshanlai@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230208195836.30175-1-julien@arista.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230207155735.2845-2-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 11:58:36AM -0800, Julien Gomes wrote:
-> Some TPM 2.0 devices have support for additional commands which are not
-> part of the TPM 2.0 specifications.
-> These commands are identified with bit 29 of the 32 bits command codes.
-> Contrarily to other fields of the TPMA_CC spec structure used to list
-> available commands, the Vendor flag also has to be present in the
-> command code itself (TPM_CC) when called.
-> 
-> Add this flag to tpm_find_cc() mask to prevent blocking vendor command
-> codes that can actually be supported by the underlying TPM device.
-> 
-> Signed-off-by: Julien Gomes <julien@arista.com>
-> ---
->  drivers/char/tpm/tpm2-cmd.c | 4 +++-
->  include/linux/tpm.h         | 1 +
->  2 files changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-> index 65d03867e114..93545be190a5 100644
-> --- a/drivers/char/tpm/tpm2-cmd.c
-> +++ b/drivers/char/tpm/tpm2-cmd.c
-> @@ -777,10 +777,12 @@ int tpm2_auto_startup(struct tpm_chip *chip)
+On Tue, Feb 07, 2023, Lai Jiangshan wrote:
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index c91ee2927dd7..958e8eb977ed 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -5707,10 +5707,12 @@ int noinline kvm_mmu_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa, u64 err
+>  EXPORT_SYMBOL_GPL(kvm_mmu_page_fault);
 >  
->  int tpm2_find_cc(struct tpm_chip *chip, u32 cc)
+>  void kvm_mmu_invalidate_gva(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+> -			    gva_t gva, hpa_t root_hpa)
+> +			    gva_t gva, unsigned long roots)
 >  {
-> +	u32 cc_mask;
 >  	int i;
 >  
-> +	cc_mask = 1 << TPM2_CC_ATTR_VENDOR | GENMASK(15, 0);
->  	for (i = 0; i < chip->nr_commands; i++)
-> -		if (cc == (chip->cc_attrs_tbl[i] & GENMASK(15, 0)))
-> +		if (cc == (chip->cc_attrs_tbl[i] & cc_mask))
->  			return i;
->  
->  	return -1;
-> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> index dfeb25a0362d..4dc97b9f65fb 100644
-> --- a/include/linux/tpm.h
-> +++ b/include/linux/tpm.h
-> @@ -265,6 +265,7 @@ enum tpm2_startup_types {
->  enum tpm2_cc_attrs {
->  	TPM2_CC_ATTR_CHANDLES	= 25,
->  	TPM2_CC_ATTR_RHANDLE	= 28,
-> +	TPM2_CC_ATTR_VENDOR	= 29,
->  };
->  
->  #define TPM_VID_INTEL    0x8086
-> -- 
-> 2.39.1
-> 
+> +	WARN_ON_ONCE(roots & ~KVM_MMU_ROOTS_ALL);
 
-Just checking: did you run testing/selftests/tpm2?
+This does nothing since KVM_MMU_ROOTS_ALL is ~0ul.  What I wanted is below, can
+you slot that it?  Compile tested only.
 
-BR, Jarkko
+--
+From: Sean Christopherson <seanjc@google.com>
+Date: Thu, 9 Feb 2023 16:37:43 -0800
+Subject: [PATCH 2/8] KVM: x86/mmu: Sanity check input to kvm_mmu_free_roots()
+
+Tweak KVM_MMU_ROOTS_ALL to precisely cover all current+previous root
+flags, and add a sanity in kvm_mmu_free_roots() to verify that the set
+of roots to free doesn't stray outside KVM_MMU_ROOTS_ALL.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/include/asm/kvm_host.h | 8 ++++----
+ arch/x86/kvm/mmu/mmu.c          | 2 ++
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 4d2bc08794e4..01d34f7d009d 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -422,6 +422,10 @@ struct kvm_mmu_root_info {
+ 
+ #define KVM_MMU_NUM_PREV_ROOTS 3
+ 
++#define KVM_MMU_ROOT_CURRENT		BIT(0)
++#define KVM_MMU_ROOT_PREVIOUS(i)	BIT(1+i)
++#define KVM_MMU_ROOTS_ALL		(BIT(1 + KVM_MMU_NUM_PREV_ROOTS) - 1)
++
+ #define KVM_HAVE_MMU_RWLOCK
+ 
+ struct kvm_mmu_page;
+@@ -1978,10 +1982,6 @@ static inline int __kvm_irq_line_state(unsigned long *irq_state,
+ 	return !!(*irq_state);
+ }
+ 
+-#define KVM_MMU_ROOT_CURRENT		BIT(0)
+-#define KVM_MMU_ROOT_PREVIOUS(i)	BIT(1+i)
+-#define KVM_MMU_ROOTS_ALL		(~0UL)
+-
+ int kvm_pic_set_irq(struct kvm_pic *pic, int irq, int irq_source_id, int level);
+ void kvm_pic_clear_all(struct kvm_pic *pic, int irq_source_id);
+ 
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index c91ee2927dd7..896abf9c1126 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -3513,6 +3513,8 @@ void kvm_mmu_free_roots(struct kvm *kvm, struct kvm_mmu *mmu,
+ 	LIST_HEAD(invalid_list);
+ 	bool free_active_root;
+ 
++	WARN_ON_ONCE(roots_to_free & ~KVM_MMU_ROOTS_ALL);
++
+ 	BUILD_BUG_ON(KVM_MMU_NUM_PREV_ROOTS >= BITS_PER_LONG);
+ 
+ 	/* Before acquiring the MMU lock, see if we need to do any real work. */
+-- 
+
