@@ -2,135 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D95F6918A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 07:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8FC96918AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 07:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbjBJGpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 01:45:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60650 "EHLO
+        id S231178AbjBJGs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 01:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbjBJGpC (ORCPT
+        with ESMTP id S230140AbjBJGs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 01:45:02 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0041ABEA
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 22:45:00 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id bk16so4027380wrb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 22:45:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QMd8zrjo8o2xkfWSu/tAGCytSiDkDCaLT/oxKSVCWik=;
-        b=VHi8pkvLswSSTqhgg6j25ca2gZJkWx0OMQ2WgDithqO21aSOgvkv5d/bwSb6pFNp9w
-         jJtt0JHOu36VK/XhOBV9Kll7/wC5C5Alw40AM8/zkFvZQeWLuQf3gxaxxvqZ95TF6i65
-         teRnURGdRwSsbF0srlRnmkQCXLb4xFXGRJXXYSmG1mFXJQwQUviIF/EHVAusmpfGojRe
-         ePfTTbFSwFgN1rIir0LGruU8Ho2fo8CA2voJkx8Cs0061zwrJVP6CQtpbuGRFM0imaUK
-         /5vxJdUDxc6Au2WUF4mPfbpX1EZjdh6ZTdqxBPB5u9DNhFLF15sno/T+WTktBu+AncbK
-         WnAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QMd8zrjo8o2xkfWSu/tAGCytSiDkDCaLT/oxKSVCWik=;
-        b=OJ+zmjx121TY4Ecz+lg3kRB4KuYDl6qz8KeywhiI4ZTinqnTXOFyq/aYkhgvQ/7X10
-         Rt0kwz4FMjM7ThG4Wq7HaUSo3xvpr2fv34qU1VhIzuzvDW8KNr7p2x5HIfatv8LTkG8S
-         EdOnQQ8Wb/ZSch4HpTd80rs4KrWo4cj9/0Su2k+xQnyD5STh+hw5sGZAIE2i0+so3Fm6
-         kskaXETdVbErPqaUJzH310y//NNpXFimLtqBsleO4UMrsQ3ICqKjWIkPJ1dhevJtAy+i
-         sMkNbp0YucNx2Wd9Hw2+QL4A+irf7Vz6GPP6/dExqMQN/r1mGGsoYSchyMWIjA8dijuP
-         GzfQ==
-X-Gm-Message-State: AO0yUKUkBzfMHObf7Apt0Y+12KGbnW/Nv/uljVc8kiOkwK3smytTQ/Up
-        yiieqkmJ7wyCnID7lyrmJo/Gyw==
-X-Google-Smtp-Source: AK7set/ZLHNwvWdizk6P8QdKUHDk0+Dh3idhFbBpHn4LBD1uQR3gkwqJhQJ4PJKV0hvTZbL5Tu7VIg==
-X-Received: by 2002:a5d:46c8:0:b0:2c5:4a20:120f with SMTP id g8-20020a5d46c8000000b002c54a20120fmr863924wrs.43.1676011498492;
-        Thu, 09 Feb 2023 22:44:58 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id i3-20020adffc03000000b002c53d69a8easm2326411wrr.92.2023.02.09.22.44.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Feb 2023 22:44:58 -0800 (PST)
-Message-ID: <b41930f9-89d9-1b12-b024-05fb12700769@linaro.org>
-Date:   Fri, 10 Feb 2023 07:44:56 +0100
+        Fri, 10 Feb 2023 01:48:27 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9A138EA0;
+        Thu,  9 Feb 2023 22:48:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2D5F1CE2755;
+        Fri, 10 Feb 2023 06:48:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E180C433D2;
+        Fri, 10 Feb 2023 06:48:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676011702;
+        bh=b6Oc5ZzVG7nkvmdk4QiD1WgVKwZk2maRbTIji6Y1fRs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E/mNkwkhzmWnBepo6lLnMq2Hy8LeFdqTjsvG9JKYOHiE3I/OTk2GACwE/E1kBhDwQ
+         SsexiB9LjVzuhFVNyP232bjlM6QwapGkfcBJ6shtGvQWoQIQb/oyi1re+7V5Rinbrx
+         4PZpgtZNXiGKHAaG4ZW91ELrOP7LaTvQkDp4gW0w=
+Date:   Fri, 10 Feb 2023 07:48:18 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jessica Clarke <jrtc27@jrtc27.com>
+Cc:     Evan Green <evan@rivosinc.com>, Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Vineet Gupta <vineetg@rivosinc.com>,
+        Heiko Stuebner <heiko@sntech.de>, slewis@rivosinc.com,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Bresticker <abrestic@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Atish Patra <atishp@rivosinc.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Celeste Liu <coelacanthus@outlook.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Dao Lu <daolu@rivosinc.com>, Guo Ren <guoren@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ruizhe Pan <c141028@gmail.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 2/6] RISC-V: Add a syscall for HW probing
+Message-ID: <Y+Xosn6Zbbcqn3ge@kroah.com>
+References: <20230206201455.1790329-1-evan@rivosinc.com>
+ <20230206201455.1790329-3-evan@rivosinc.com>
+ <Y+HsE397cY4HF+5K@kroah.com>
+ <C3C21677-5250-4120-9A4F-24945C1EE51B@kernel.org>
+ <CALs-HsvuX-Uj5g9c6vvUp=MaUpdcPdpwwQCsxzjoXpqS+3LEsA@mail.gmail.com>
+ <Y+UpqHstcMahbadE@kroah.com>
+ <F4C20D57-912B-489F-A262-51EAEE79F41D@jrtc27.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v14 0/6] Add LVTS Thermal Architecture
-To:     bchihi@baylibre.com, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-References: <20230209105628.50294-1-bchihi@baylibre.com>
-Content-Language: en-US
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230209105628.50294-1-bchihi@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <F4C20D57-912B-489F-A262-51EAEE79F41D@jrtc27.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/02/2023 11:56, bchihi@baylibre.com wrote:
-> From: Balsam CHIHI <bchihi@baylibre.com>
+On Thu, Feb 09, 2023 at 05:22:09PM +0000, Jessica Clarke wrote:
+> On 9 Feb 2023, at 17:13, Greg KH <gregkh@linuxfoundation.org> wrote:
+> > On Thu, Feb 09, 2023 at 09:09:16AM -0800, Evan Green wrote:
+> >> On Mon, Feb 6, 2023 at 10:32 PM Conor Dooley <conor@kernel.org> wrote:
+> >>> 
+> >>> Hey Evan, Greg,
+> >>> 
+> >>> 
+> >>> On 7 February 2023 06:13:39 GMT, Greg KH <gregkh@linuxfoundation.org> wrote:
+> >>>> On Mon, Feb 06, 2023 at 12:14:51PM -0800, Evan Green wrote:
+> >>>>> We don't have enough space for these all in ELF_HWCAP{,2} and there's no
+> >>>>> system call that quite does this, so let's just provide an arch-specific
+> >>>>> one to probe for hardware capabilities.  This currently just provides
+> >>>>> m{arch,imp,vendor}id, but with the key-value pairs we can pass more in
+> >>>>> the future.
+> >>>> 
+> >>>> Ick, this is exactly what sysfs is designed to export in a sane way.
+> >>>> Why not just use that instead?  The "key" would be the filename, and the
+> >>>> value the value read from the filename.  If the key is not present, the
+> >>>> file is not present and it's obvious what is happening, no fancy parsing
+> >>>> and ABI issues at all.
+> >>> 
+> >>> https://lore.kernel.org/linux-riscv/20221201160614.xpomlqq2fzpzfmcm@kamzik/
+> >>> 
+> >>> This is the sysfs interface that I mentioned drew
+> >>> suggested on the v1.
+> >>> I think it fits ~perfectly with what Greg is suggesting too.
+> >> 
+> >> Whoops, I'll admit I missed that comment when I reviewed the feedback
+> >> from v1. I spent some time thinking about sysfs. The problem is this
+> >> interface will be needed in places like very early program startup. If
+> >> we're trying to use this in places like the ifunc selector to decide
+> >> which memcpy to use, having to go open and read a fistful of files is
+> >> going to be complex that early, and rough on performance.
+> > 
+> > How is it going to be any different on "performance" than a syscall?  Or
+> > complex?  It should be almost identical overall as this is all in-ram
+> > and not any real I/o is happening.  You are limited only by the speed of
+> > your cpu.
+> > 
+> >> Really this is data that would go great in the aux vector, except
+> >> there's probably too much of it to justify preparing and copying into
+> >> every new process. You could point the aux vector into a vDSO data
+> >> area. This has the advantage of great performance and no syscall, but
+> >> has the disadvantages of making that data ABI, and requiring it all to
+> >> be known up front (eg the kernel can't compute any answers on the
+> >> fly).
+> >> 
+> >> After discussions with Palmer, my plan for the next version is to move
+> >> this into a vDSO function plus a syscall. Private vDSO data will be
+> >> prepped with common answers for the "all CPUs" case, avoiding the need
+> >> for a syscall in most cases and making this fast. Since the data is
+> >> hidden behind the vdso function, it's not ABI, which is a plus. Then
+> >> the vdso function can fall back to the syscall for cases with exotic
+> >> CPU masks or keys that are unknown/expensive to compute at runtime.
+> > 
+> > I still think that's wrong, as you are wanting a set of key/values here,
+> > which is exactly what sysfs is designed for.
 > 
-> The LVTS (Low Voltage Thermal Sensor) driver is capable of monitoring
-> multiple hot points. For that, it contains 7 thermal control blocks
-> dedicated to specific devices on the die. Each control block can handle
-> up to 4 sensors.
-> 
-> The thermal controller supports several interrupts. One for the cold
-> trip point, the hot trip point, the return to the normal trip point,
-> and a specific programmable trip point to monitor the temperature
-> dynamically.
-> 
-> The temperature measurement can be done in two ways, the immediate mode
-> where the temperature read is instantaneous and the filtered mode where
-> the controller uses, by configuration, an average of a set of values
-> removing the minimum and the maximum.
-> 
-> Finally, it is composed of 2 finite-state machines responsible for
-> the state of the temperature (cold, hot, hot 2 normal, hot hot),
-> the triggering of the interrupts, and the monitoring of the temperature.
-> 
-> As requested, the thermal driver has been reworked to reduce
-> the complexity of the code. At this time, the 4 little CPUs and
-> the 4 big CPUs are supported by the thermal driver.They are described
-> in a data structure and more devices can be added later.
-> The calibration routine has been simplified also.
-> 
-> The series provide the following changes:
->   - Move the Mediatek drivers inside a dedicated folder as their number
->     is increasing
->   - Add the DT bindings for the controller
->   - Add the efuse node for the mt8195
->   - The LVTS driver
->   - The thermal zones description in the DT
+> But this needs to be a RISC-V standard interface that can be programmed
+> against, not something tied to highly Linux-specific things like sysfs.
+> You’re free to implement that interface with sysfs, but exposing that
+> as *the* interface to use would be terrible for portability.
 
-Applied patch 1,2 and 4 for v6.3
+A vdso and a new kernel syscall is also a highly Linux-specific thing,
+so I do not understand the objection here at all.  You're going to have
+to wrap all of this up in some sort of common userspace library code
+anyway, and that will have to handle all of the different operating
+system implementations.
 
-Patches 5 and 6 should go through the Mediatek tree.
+Also, frankly, I don't care about non-Linux implementations, so that
+isn't a valid argument here :)
 
-Thanks!
+thanks,
 
-   -- Daniel
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+greg k-h
