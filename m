@@ -2,186 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4163469255D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A27692541
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233061AbjBJS3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 13:29:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
+        id S232934AbjBJSWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 13:22:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232505AbjBJS3i (ORCPT
+        with ESMTP id S232697AbjBJSWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 13:29:38 -0500
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1456C7C7;
-        Fri, 10 Feb 2023 10:29:37 -0800 (PST)
-Received: by mail-oi1-f180.google.com with SMTP id bd6so5168860oib.6;
-        Fri, 10 Feb 2023 10:29:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wGTEo37sO/PejdrEzawXo41Wh2Us1e4LKILpN2RdcKM=;
-        b=Axk5tU1qpwc47CWQIMIgBGDWaZNWxvUtp6LXq0DS4nIA6KVSjnLwI/2RiTAg+CIt/L
-         u/bumYgSnZHJXxkQQwKNZlHgVaT+LK/enCy2R+LmVixYuiHS+d47KFplHxySrLDTGDTs
-         /+lGGDVgWQilStS0QLTEb3D3ACOYX5WJ7l0A0OyuPe+fwY87ytEBw/2ADBWCRZRaNMwV
-         YQber8z02yz/f/WpR1lgIl8BGtJU8ZF/oNDSo8h+y8yuf55hLHcXrS9f6ooGvLo+Usis
-         YWDS19tn/HLHrGwtwvHJL/SHyEkeHEaHU05XkOA2wxRJWVZF79jzwHVlwyJzjOKxP2h0
-         8fww==
-X-Gm-Message-State: AO0yUKVhFcQYf8DkFG5GZZYaCtp9Dr9KiR/peBKww0nmUs/gFy+MG1HW
-        BmM7gtegFNz1X2dme0WHvA==
-X-Google-Smtp-Source: AK7set/47StQR2IteFFtY5K4A8e4jlFxeqFxgq613Kt0yzg/tmsRzIzQLGKF92qW8nmFbDRMVTy8Vw==
-X-Received: by 2002:a05:6808:616:b0:364:862d:29c5 with SMTP id y22-20020a056808061600b00364862d29c5mr7107671oih.26.1676053776722;
-        Fri, 10 Feb 2023 10:29:36 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q2-20020a0568080ec200b0037d6c3fc8aasm616760oiv.45.2023.02.10.10.29.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 10:29:36 -0800 (PST)
-Received: (nullmailer pid 2916782 invoked by uid 1000);
-        Fri, 10 Feb 2023 18:29:35 -0000
-Date:   Fri, 10 Feb 2023 12:29:35 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Changhuang Liang <changhuang.liang@starfivetech.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jack Zhu <jack.zhu@starfivetech.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v1 2/4] dt-bindings: phy: Add starfive,jh7110-dphy-rx
-Message-ID: <20230210182935.GA2914589-robh@kernel.org>
-References: <20230210061713.6449-1-changhuang.liang@starfivetech.com>
- <20230210061713.6449-3-changhuang.liang@starfivetech.com>
+        Fri, 10 Feb 2023 13:22:12 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B66B61D15
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:22:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676053331; x=1707589331;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JnABS4bzuUOo3oZdGDN/S3N14HFWtHaPR9HjHLG9mC4=;
+  b=RNF29cgDewxOJb5l9emiaB4BUlTbrWNfgzhWaC1JnG1k+3vbK9cHBOwk
+   t2m0cfgvFrwDFRUXAOlJgm+b/5TIqIki98Mg5dpwXEEttqHIQw0+pQqH7
+   v2VOD+WsJYwAdYMUjal+Ulmn3D0Mz/Bts2Ue7PbAumKQnn6gtjkS/z2PB
+   ekPiAsU9Fh1njZOszOJoSiPtJvWJSw4kThyVeJ/jP21jBhorQMDYGKPVL
+   I9/F16q7P6T3QgmC/mM1JNc4o6xpSO5d8CvbwS7kMdEPP9WLdwvt4H1Sn
+   dXrQFyu237eDgsmQjPP24Z2NmB8TcFc3cIobWmDOEGfQZC3jFOQrTAvUi
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="392895704"
+X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
+   d="scan'208";a="392895704"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 10:22:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="810906179"
+X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
+   d="scan'208";a="810906179"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Feb 2023 10:22:09 -0800
+Date:   Fri, 10 Feb 2023 10:31:55 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v3 06/10] sched/fair: Use the prefer_sibling flag of the
+ current sched domain
+Message-ID: <20230210183155.GA11997@ranerica-svr.sc.intel.com>
+References: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com>
+ <20230207045838.11243-7-ricardo.neri-calderon@linux.intel.com>
+ <Y+YXrk5NRuWaSOGR@hirez.programming.kicks-ass.net>
+ <xhsmhmt5lr2nz.mognet@vschneid.remote.csb>
+ <Y+Z2b/OtZDk9cT53@hirez.programming.kicks-ass.net>
+ <xhsmhk00pqwap.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230210061713.6449-3-changhuang.liang@starfivetech.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <xhsmhk00pqwap.mognet@vschneid.remote.csb>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 10:17:11PM -0800, Changhuang Liang wrote:
-> Starfive SoC like the jh7110 use a MIPI D-PHY RX controller based on
-> a M31 IP. Add a binding for it.
+On Fri, Feb 10, 2023 at 05:12:30PM +0000, Valentin Schneider wrote:
+> On 10/02/23 17:53, Peter Zijlstra wrote:
+> > On Fri, Feb 10, 2023 at 02:54:56PM +0000, Valentin Schneider wrote:
+> >
+> >> So something like have SD_PREFER_SIBLING affect the SD it's on (and not
+> >> its parent), but remove it from the lowest non-degenerated topology level?
+> >
+> > So I was rather confused about the whole moving it between levels things
+> > this morning -- conceptually, prefer siblings says you want to try
+> > sibling domains before filling up your current domain. Now, balancing
+> > between siblings happens one level up, hence looking at child->flags
+> > makes perfect sense.
+> >
+> > But looking at the current domain and still calling it prefer sibling
+> > makes absolutely no sense what so ever.
+> >
 > 
-> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
-> ---
->  .../bindings/phy/starfive,jh7110-dphy-rx.yaml | 78 +++++++++++++++++++
->  1 file changed, 78 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml
+> True :-)
 > 
-> diff --git a/Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml b/Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml
-> new file mode 100644
-> index 000000000000..1c1e5c7cbee2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml
-> @@ -0,0 +1,78 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/starfive,jh7110-dphy-rx.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Starfive SoC MIPI D-PHY Rx Controller
-> +
-> +maintainers:
-> +  - Jack Zhu <jack.zhu@starfivetech.com>
-> +  - Changhuang Liang <changhuang.liang@starfivetech.com>
-> +
-> +description: |
+> > In that confusion I think I also got the polarity wrong, I thought you
+> > wanted to kill prefer_sibling for the assymetric SMT cases, instead you
+> > want to force enable it as long as there is one SMT child around.
 
-Don't need '|'
+Exactly.
 
-> +  The Starfive SOC has a MIPI CSI D-PHY based on M31 IP use to transfer
-> +  the CSI cameras data.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: "starfive,jh7110-dphy-rx"
-
-Drop quotes.
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 3
-> +    maxItems: 3
-
-Just maxItems is enough.
-
-> +
-> +  clock-names:
-> +    items:
-> +      - const: cfg
-> +      - const: ref
-> +      - const: tx
-> +
-> +  resets:
-> +    minItems: 2
-> +    maxItems: 2
-
-Need to define what each reset is.
-
-> +
-> +  starfive,aon-syscon:
-> +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-
-Drop quotes.
-
-> +    items:
-> +      items:
-> +        - description: phandle of AON SYSCON
-> +        - description: register offset
-> +    description: The register of dphy rx driver can be configured
-> +      by AON SYSCON in this property.
-> +
-> +  "#phy-cells":
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +  - starfive,aon-syscon
-> +  - "#phy-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/starfive,jh7110-crg.h>
-> +    #include <dt-bindings/reset/starfive,jh7110-crg.h>
-> +
-> +    dphy@19820000 {
-> +      compatible = "starfive,jh7110-dphy-rx";
-> +      reg = <0x19820000 0x10000>;
-> +      clocks = <&ispcrg JH7110_ISPCLK_M31DPHY_CFGCLK_IN>,
-> +               <&ispcrg JH7110_ISPCLK_M31DPHY_REFCLK_IN>,
-> +               <&ispcrg JH7110_ISPCLK_M31DPHY_TXCLKESC_LAN0>;
-> +      clock-names = "cfg", "ref", "tx";
-> +      resets = <&ispcrg JH7110_ISPRST_M31DPHY_HW>,
-> +               <&ispcrg JH7110_ISPRST_M31DPHY_B09_ALWAYS_ON>;
-> +      starfive,aon-syscon = <&aon_syscon 0x00>;
-> +      #phy-cells = <0>;
-> +    };
-> -- 
-> 2.25.1
+> >
+> > Whichever way around it we do it, I'm thinking perhaps some renaming
+> > might be in order to clarify things.
+> >
+> > How about adding a flag SD_SPREAD_TASKS, which is the effective toggle
+> > of the behaviour, but have it be set by children with SD_PREFER_SIBLING
+> > or something.
+> >
 > 
+> Or entirely bin SD_PREFER_SIBLING and stick with SD_SPREAD_TASKS, but yeah
+> something along those lines.
+
+I sense a consesus towards SD_SPREAD_TASKS.
+
+> 
+> > OTOH, there's also
+> >
+> >   if (busiest->group_weight == 1 || sds->prefer_sibling) {
+> >
+> > which explicitly also takes the group-of-one (the !child case) into
+> > account, but that's not consistently done.
+> >
+> >       sds->prefer_sibling = !child || child->flags & SD_PREFER_SIBLING;
+
+This would need a special provision for SD_ASYM_CPUCAPACITY.
+
+> >
+> > seems an interesting option,
+> 
+> > except perhaps ASYM_CPUCAPACITY -- I
+> > forget, can CPUs of different capacity be in the same leaf domain? With
+> > big.LITTLE I think not, they had their own cache domains and so you get
+> > at least MC domains per capacity, but DynamiQ might have totally wrecked
+> > that party.
+> 
+> Yeah, newer systems can have different capacities in one MC domain, cf:
+> 
+>   b7a331615d25 ("sched/fair: Add asymmetric CPU capacity wakeup scan")
+> 
+> >
+> >> (+ add it to the first NUMA level to keep things as they are, even if TBF I
+> >> find relying on it for NUMA balancing a bit odd).
+> >
+> > Arguably it ought to perhaps be one of those node_reclaim_distance
+> > things. The thing is that NUMA-1 is often fairly quick, esp. these days
+> > where it's basically on die numa.
+
+To conserve the current behavior the NUMA level would need to have
+SD_SPREAD_TASKS. It will be cleared along with SD_BALANCE_{EXEC, FORK} and
+SD_WAKE_AFFINE if the numa distance is larger than node_reclaim_distance,
+yes?
+
+Thanks and BR,
+Ricardo
