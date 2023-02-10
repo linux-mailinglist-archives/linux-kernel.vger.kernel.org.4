@@ -2,118 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51EA6691CA2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 11:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F210691CCC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 11:34:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231764AbjBJKYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 05:24:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
+        id S232081AbjBJKei convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Feb 2023 05:34:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbjBJKYV (ORCPT
+        with ESMTP id S232080AbjBJKeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 05:24:21 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC3B6C7FC
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 02:24:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 74577CE272C
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:24:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E858C433A4;
-        Fri, 10 Feb 2023 10:24:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676024651;
-        bh=0hdsET54CaVYW45VsXim3ULKaluWSvH8kT2ZvUX73XY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=wchrfjvK/7aEo4sSshodTstbHwdO4zb/DKjL6eI9IV9ro3L6w7kgqvrPC/2prG97Q
-         PKM3Y3C4FDe5ood0nOxSEOXqQPWo84QUe84ekr0lbqGV1cyRimYfANpWi98R+EQngT
-         ySWX0o4wrDIo6n3L+LsWj0zfsT/fqMV92WjCgsPo=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH] driver core: cpu: don't hand-override the uevent bus_type callback.
-Date:   Fri, 10 Feb 2023 11:24:08 +0100
-Message-Id: <20230210102408.1083177-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.1
+        Fri, 10 Feb 2023 05:34:36 -0500
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043406D61D
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 02:34:34 -0800 (PST)
+Received: by mail-qt1-f178.google.com with SMTP id q13so5228996qtx.2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 02:34:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fZS+c56KQpRDCKl5uf42ZhDkTWWR4DPlYQhT2r1VZ60=;
+        b=L8AACcPu2JGDZekHmAeXrLV3QODHYLkAqR8IIQfsLX9kuPxkvn30X3znuO60yRM9Sz
+         5w1o8+NqLY9ijUKWmcF0j5W98bZLf3KCbLZeW8hT/36dMccwYOGNAqj02UYVJ1VTdSPc
+         X6Krbrhf5d34r9/sPx1yp1M3d8r7YfaNhMJphXkynfIVlt6cBsW+XpysOcJzSjNJ12Hf
+         t8OF4QW3Jwi9R9+stBNtndMzq533kPeUQ6qrFTewt5vzp3X2sjstSCJeGOsynktHKkm/
+         7NdcADxKlJ65pkAVoZfcqRtgxG2C7zvvmi394zeEtKr8t1rfjQiVlKRA0XD6eHLQViXg
+         0y0w==
+X-Gm-Message-State: AO0yUKVr1YXqLLnFGSi2Z2Q8zBVRUv2K1AoYg8lUK+TL8qscrmHpjgH8
+        W6sBjoZXb/WB4pmX5L21tGHsOVYaNRmhnMQE
+X-Google-Smtp-Source: AK7set/2kko2+7MhxuInYBKO7/dSbvYQtbGECoqVJOwaFSdqIn9S/7evSnnlxGvV/4NEgSBEsc6+9w==
+X-Received: by 2002:a05:622a:1716:b0:3b8:2e8b:d8af with SMTP id h22-20020a05622a171600b003b82e8bd8afmr21367017qtk.55.1676025273850;
+        Fri, 10 Feb 2023 02:34:33 -0800 (PST)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id s75-20020a37454e000000b006fa22f0494bsm3273340qka.117.2023.02.10.02.34.33
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 02:34:33 -0800 (PST)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-520dad0a7d2so62135357b3.5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 02:34:33 -0800 (PST)
+X-Received: by 2002:a0d:f444:0:b0:526:78ad:bb15 with SMTP id
+ d65-20020a0df444000000b0052678adbb15mr1562294ywf.47.1676024801737; Fri, 10
+ Feb 2023 02:26:41 -0800 (PST)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2071; i=gregkh@linuxfoundation.org; h=from:subject; bh=0hdsET54CaVYW45VsXim3ULKaluWSvH8kT2ZvUX73XY=; b=owGbwMvMwCRo6H6F97bub03G02pJDMnPpF3vOt7+bhx2ylFzgniect6rn1v3Xfz7Ot1/5WvJU7Nc fLqMOmJYGASZGGTFFFm+bOM5ur/ikKKXoe1pmDmsTCBDGLg4BWAiU3YzLLikFf5l2Wy2Sbrs/nbyDh csJb//NmCYsf7YglV8y5YJrZGflxndpLiPU+MNAA==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221103213420.1395507-1-j.neuschaefer@gmx.net>
+In-Reply-To: <20221103213420.1395507-1-j.neuschaefer@gmx.net>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 10 Feb 2023 11:26:28 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWo5vHCeE6BeSHrUy12uT7_wFhW-VbQmQ5u+4Q8c7-wYQ@mail.gmail.com>
+Message-ID: <CAMuHMdWo5vHCeE6BeSHrUy12uT7_wFhW-VbQmQ5u+4Q8c7-wYQ@mail.gmail.com>
+Subject: Re: [PATCH v6] soc: nuvoton: Add SoC info driver for WPCM450
+To:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     openbmc@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Hector Martin <marcan@marcan.st>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Sven Peter <sven@svenpeter.dev>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of having to change the uevent bus_type callback by hand at
-runtime, set it at build time based on the build configuration options,
-making this much simpler to maintain and understand (and allow to make
-the structure constant.)
+Hi Jonathan,
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/base/cpu.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+On Thu, Nov 3, 2022 at 10:37 PM Jonathan Neuschäfer
+<j.neuschaefer@gmx.net> wrote:
+> Add a SoC information driver for Nuvoton WPCM450 SoCs. It provides
+> information such as the SoC revision.
+>
+> Usage example:
+>
+>   # grep . /sys/devices/soc0/*
+>   /sys/devices/soc0/family:Nuvoton NPCM
+>   /sys/devices/soc0/revision:A3
+>   /sys/devices/soc0/soc_id:WPCM450
+>
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
+> Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> ---
+> v6:
+> - Select REGMAP
+> - Rearrange Kconfig structure a bit
 
-diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-index 8bb623039bb2..182c6122f815 100644
---- a/drivers/base/cpu.c
-+++ b/drivers/base/cpu.c
-@@ -125,17 +125,6 @@ static DEVICE_ATTR(release, S_IWUSR, NULL, cpu_release_store);
- #endif /* CONFIG_ARCH_CPU_PROBE_RELEASE */
- #endif /* CONFIG_HOTPLUG_CPU */
- 
--struct bus_type cpu_subsys = {
--	.name = "cpu",
--	.dev_name = "cpu",
--	.match = cpu_subsys_match,
--#ifdef CONFIG_HOTPLUG_CPU
--	.online = cpu_subsys_online,
--	.offline = cpu_subsys_offline,
--#endif
--};
--EXPORT_SYMBOL_GPL(cpu_subsys);
--
- #ifdef CONFIG_KEXEC
- #include <linux/kexec.h>
- 
-@@ -348,6 +337,20 @@ static int cpu_uevent(const struct device *dev, struct kobj_uevent_env *env)
- }
- #endif
- 
-+struct bus_type cpu_subsys = {
-+	.name = "cpu",
-+	.dev_name = "cpu",
-+	.match = cpu_subsys_match,
-+#ifdef CONFIG_HOTPLUG_CPU
-+	.online = cpu_subsys_online,
-+	.offline = cpu_subsys_offline,
-+#endif
-+#ifdef CONFIG_GENERIC_CPU_AUTOPROBE
-+	.uevent = cpu_uevent,
-+#endif
-+};
-+EXPORT_SYMBOL_GPL(cpu_subsys);
-+
- /*
-  * register_cpu - Setup a sysfs device for a CPU.
-  * @cpu - cpu->hotpluggable field set to 1 will generate a control file in
-@@ -368,9 +371,6 @@ int register_cpu(struct cpu *cpu, int num)
- 	cpu->dev.offline_disabled = !cpu->hotpluggable;
- 	cpu->dev.offline = !cpu_online(num);
- 	cpu->dev.of_node = of_get_cpu_node(num, NULL);
--#ifdef CONFIG_GENERIC_CPU_AUTOPROBE
--	cpu->dev.bus->uevent = cpu_uevent;
--#endif
- 	cpu->dev.groups = common_cpu_attr_groups;
- 	if (cpu->hotpluggable)
- 		cpu->dev.groups = hotplugable_cpu_attr_groups;
--- 
-2.39.1
+Thanks for your patch!
 
+Unfortunately Joel seems to have sent v5 to Arnd instead of v6?
+https://lore.kernel.org/all/20230201051717.1005938-1-joel@jms.id.au
+
+Which is now commit 7dbb4a38bff34493 ("soc:
+nuvoton: Add SoC info driver for WPCM450") in soc/for-next...
+
+> --- /dev/null
+> +++ b/drivers/soc/nuvoton/Kconfig
+> @@ -0,0 +1,17 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +menu "Nuvoton SoC drivers"
+> +       depends on ARCH_NPCM || COMPILE_TEST
+
+... and lacks the above dependency, hence appearing on my radar.
+
+> +
+> +config WPCM450_SOC
+> +       tristate "Nuvoton WPCM450 SoC driver"
+> +       default y if ARCH_WPCM450
+> +       select SOC_BUS
+> +       select REGMAP
+> +       help
+> +         Say Y here to compile the SoC information driver for Nuvoton
+> +         WPCM450 SoCs.
+> +
+> +         This driver provides information such as the SoC model and
+> +         revision.
+> +
+> +endmenu
+
+Do you plan to send a follow-up patch?
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
