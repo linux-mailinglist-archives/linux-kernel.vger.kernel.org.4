@@ -2,164 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9721E692203
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:23:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0E4692208
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232470AbjBJPXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 10:23:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52296 "EHLO
+        id S232509AbjBJPXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 10:23:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232509AbjBJPW5 (ORCPT
+        with ESMTP id S232705AbjBJPXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 10:22:57 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDE55EFA7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:22:35 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id gr7so16774759ejb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:22:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vsSadB32XB5g1hodc7vzIwLUBvE331TyvT41joUVmpk=;
-        b=w2C17nnFNg3hS/9rBUMZ6gE+YyoxqtNkjQaq6mwLHu9L19w4w/35nvSY3EUS/lRbpp
-         ftQgXEcQdx67kgrii+PPZtTdN8d/8SfIdG7KQQEtAtQYuUr9qrQ56iUIUIUa9AmrN4se
-         R/EjwSaU8J80mUMt/6GieCPQe4mi73pGHek4yvlgMYyzLzXCN4VCMfZwRavYdszxlxBS
-         tdwsigLK5cu57T2X/2sJDhOls5/e31+A24hrFof437zfN7OzwXUGP7PNp2x2N+IoVb+5
-         cJP6k5vahwHdBupNFsksSci28ZEglOn/RKQmwPwW8bT+ak7pEc3PxTyUmEEYl7OlBF+G
-         M9hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vsSadB32XB5g1hodc7vzIwLUBvE331TyvT41joUVmpk=;
-        b=ueR7Ur+JPO3NtPEgjjzsnbIrnygBiFnAdDR/kJ9IlNKyMO0fglEcvZ/MO96SsFMk7o
-         kukm6UxjtwGAP6JmGrzsIExoUzmy8hSILFo6lRxhnAoa3fqSq+lMR33r5r9WDjjInsPM
-         lJHDBOScv9wKit19vIqzeluaNLQgIYs0ZZB39sKNKf1e8qNF/F1t4ujXTzQKuoMlm8ZJ
-         YHTrZEEUqu1URVbviYL5UfHK9ebQkahoPu8OGvtCOwpdaqHkVZZwuKhCDj+aHTxDf/wh
-         MCvXp9nnO7vPz9P3X1jOC1JtBQlgeELpgTeXx6VF62YhsLocsvdelnctKArjwgT3Iagp
-         5dQA==
-X-Gm-Message-State: AO0yUKX7FmKmMIPRxfNDHyUrk278YO3wZeiuUiazHvgri4La1IRsWIEc
-        FiOLNv49WZJrIfEjJL3Z3nXyZg==
-X-Google-Smtp-Source: AK7set/cB105EZz+58wyDY43XYQBxUpYXj4M8OiburaHgzIYw/PffV/W9wJNIPdOUin/2T3XPJ8eTw==
-X-Received: by 2002:a17:906:8d0e:b0:8ae:30bb:a12c with SMTP id rv14-20020a1709068d0e00b008ae30bba12cmr9858947ejc.28.1676042554129;
-        Fri, 10 Feb 2023 07:22:34 -0800 (PST)
-Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id lr21-20020a170906fb9500b008af0a1f9596sm2478714ejb.218.2023.02.10.07.22.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 07:22:33 -0800 (PST)
-Message-ID: <e237b7d6-0a32-5d48-1e64-8216ad5a2a4c@linaro.org>
-Date:   Fri, 10 Feb 2023 16:22:31 +0100
+        Fri, 10 Feb 2023 10:23:39 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4400975F59;
+        Fri, 10 Feb 2023 07:23:14 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31AEeJDE009736;
+        Fri, 10 Feb 2023 15:23:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=qcppdkim1;
+ bh=SVsPGEtyQHE68QBQ00pydMfX0HSjV7Hx3EtuykeQ8Ok=;
+ b=nst7GPrndJtlwM8G9q/4ytnIe0mDBjcZJXFlx25b6BJNGc4yc3HYq8jIsd9Af8ZbayoW
+ GmDtfm0OqA/+L9+ViWY6syvFeP0oXG/bExOQ3Miz/o6JcimFSQPOKekzBuSUFF/rXsQZ
+ catB/6OHXf6C3tmdBsZTgIUcUvmFEz30HaqX7Fl7b4UHn/4pQ3u7DJaEIW8DFVPB2CQD
+ p5Loqa1we9IKpjX5g74FR2jbVG27hCrgUbJe2EgklvbXX28KagTFXVjX5uO/4Ey/Gxbj
+ YyHYGdAZDzWwn1nistkzQJZNKNdY62SOBIyLm0CZ6ndBHhPfAGlCT2ZNAA7tY3XMyZTM 0g== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nncxtshbu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Feb 2023 15:23:08 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31AFN771007702
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Feb 2023 15:23:07 GMT
+Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Fri, 10 Feb 2023 07:23:05 -0800
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+To:     <rostedt@goodmis.org>, <zhengyejian1@huawei.com>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>, <wanghai38@huawei.com>
+Subject: Re: [PATCH] tracing/ring-buffer: Remove integrity check at end of iter read
+Date:   Fri, 10 Feb 2023 20:52:36 +0530
+Message-ID: <1676042556-737-1-git-send-email-quic_mojha@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <20230208090814.869242-1-zhengyejian1@huawei.com>
+References: <20230208090814.869242-1-zhengyejian1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 10/11] arm64: dts: qcom: sm8550-mtp: add pmic glink
- node
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230130-topic-sm8450-upstream-pmic-glink-v2-0-71fea256474f@linaro.org>
- <20230130-topic-sm8450-upstream-pmic-glink-v2-10-71fea256474f@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v2-10-71fea256474f@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Rt8k2DVqn6vmtpmVku4xngE8WSNeX-K_
+X-Proofpoint-GUID: Rt8k2DVqn6vmtpmVku4xngE8WSNeX-K_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-10_09,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 malwarescore=0 lowpriorityscore=0 mlxlogscore=831
+ clxscore=1011 bulkscore=0 adultscore=0 mlxscore=0 spamscore=0
+ suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2302100127
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023/2/9 06:36, Steven Rostedt wrote:
+>> On Wed, 8 Feb 2023 17:08:14 +0800
+>> Zheng Yejian <zhengyejian1@huawei.com> wrote:
+>> 
+>>> Concurrently closing "trace" file and writing into ring buffer [1] can
+>>> cause WARNINGs [2]. It has been reported in
+>>> Link: https://lore.kernel.org/all/20230203035608.2336906-1-zhengyejian1@huawei.com/
+>>>
+>>> It seems a data race between ring_buffer writing and integrity check.
+>>> That is, RB_FLAG of head_page is been updating, while at same time RB_FLAG
+>>> was cleared when doing integrity check:
+>>>    rb_check_pages()            rb_handle_head_page():
+>>>    --------                    --------
+>>>    rb_head_page_deactivate()
+>>>                                rb_head_page_set_normal()
+>>>    rb_head_page_activate()
+>>>
+>> 
+>> Good catch!
+>
+>Thanks!
+>
+>> 
+>>> Integrity check at end of iter read was added since commit 659f451ff213
+>>> ("ring-buffer: Add integrity check at end of iter read"). As it's commit
+>>> message said:
+>>>    > As reading via an iterator requires disabling the ring buffer, it
+>>>    > is a perfect place to have it.
+>>> However, since commit 1039221cc278 ("ring-buffer: Do not disable recording
+>>> when there is an iterator"), ring buffer was not disabled at that place,
+>>> so that integrity check should be removed.
+>>>
+>>> 1:
+>>> ``` read_trace.sh
+>>>    while true;
+>>>    do
+>>>      # the "trace" file is closed after read
+>>>      head -1 /sys/kernel/tracing/trace > /dev/null
+>>>    done
+>>> ```
+>>> ``` repro.sh
+>>>    sysctl -w kernel.panic_on_warn=1
+>>>    # function tracer will writing enough data into ring_buffer
+>>>    echo function > /sys/kernel/tracing/current_tracer
+>>>    ./read_trace.sh &
+>>>    ./read_trace.sh &
+>>>    ./read_trace.sh &
+>>>    ./read_trace.sh &
+>>>    ./read_trace.sh &
+>>>    ./read_trace.sh &
+>>>    ./read_trace.sh &
+>>>    ./read_trace.sh &
+>>> ```
+>>>
+>> 
+>> 
+>>> Fixes: 1039221cc278 ("ring-buffer: Do not disable recording when there is an iterator")
+>>> Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+>>> ---
+>>>   kernel/trace/ring_buffer.c | 11 -----------
+>>>   1 file changed, 11 deletions(-)
+>>>
+>>> diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+>>> index c366a0a9ddba..34e955bd1e59 100644
+>>> --- a/kernel/trace/ring_buffer.c
+>>> +++ b/kernel/trace/ring_buffer.c
+>>> @@ -5203,17 +5203,6 @@ void
+>>>   ring_buffer_read_finish(struct ring_buffer_iter *iter)
+>>>   {
+>>>   	struct ring_buffer_per_cpu *cpu_buffer = iter->cpu_buffer;
+>>> -	unsigned long flags;
+>>> -
+>>> -	/*
+>>> -	 * Ring buffer is disabled from recording, here's a good place
+>>> -	 * to check the integrity of the ring buffer.
+>>> -	 * Must prevent readers from trying to read, as the check
+>>> -	 * clears the HEAD page and readers require it.
+>>> -	 */
+>>> -	raw_spin_lock_irqsave(&cpu_buffer->reader_lock, flags);
+>>> -	rb_check_pages(cpu_buffer);
+>>> -	raw_spin_unlock_irqrestore(&cpu_buffer->reader_lock, flags);
+>> 
+>> I would rather find a way to make this still work than just removing it.
+>
+>Yes, we can try to find the way.
+>
+>> 
+>> Perhaps there's no reason to clear the flags, and change rb_check_pages()
+>> to mask them out before testing. Something like:
+>> 
+>> static int rb_check_pages(struct ring_buffer_per_cpu *cpu_buffer)
+>> {
+>> 	struct list_head *head = cpu_buffer->pages;
+>> 	struct buffer_page *bpage, *tmp;
+>> 
+>> 	if (RB_WARN_ON(cpu_buffer, rb_list_head(rb_list_head(head->next)->prev) != head))
+>> 		return -1;
+>> 	if (RB_WARN_ON(cpu_buffer, rb_list_head(rb_list_head(head->prev)->next) != head))
+>> 		return -1;
+>> 
+>> 	if (rb_check_list(cpu_buffer, head))
+>
+>rb_check_list() expect to check a page with RB_FLAG being cleared,
+>but in this solution, rb_head_page_deactivate() is not called before,
+>so we may not call it directly? The same problem with below check for
+>"bpage->list".
+
+Correct.
 
 
-On 10.02.2023 16:02, Neil Armstrong wrote:
-> Add the pmic glink node linked with the DWC3 USB controller
-> switched to OTG mode and tagged with usb-role-switch.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> 		return -1;
+>> 
+>> 	list_for_each_entry_safe(bpage, tmp, head, list) {
+>
+>I'd like to know if there is a case that "head" happens to be a
+>"reader_page", and the ring buffer is not exactly being traversed?
 
-Konrad
->  arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 45 ++++++++++++++++++++++++++++++++-
->  1 file changed, 44 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-> index 5db6e789e6b8..7b880cb7e022 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-> @@ -27,6 +27,40 @@ chosen {
->  		stdout-path = "serial0:115200n8";
->  	};
->  
-> +	pmic-glink {
-> +		compatible = "qcom,sm8550-pmic-glink", "qcom,pmic-glink";
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		connector@0 {
-> +			compatible = "usb-c-connector";
-> +			reg = <0>;
-> +			power-role = "dual";
-> +			data-role = "dual";
-> +
-> +			ports {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				port@0 {
-> +					reg = <0>;
-> +
-> +					pmic_glink_hs_in: endpoint {
-> +						remote-endpoint = <&usb_1_dwc3_hs>;
-> +					};
-> +				};
-> +
-> +				port@1 {
-> +					reg = <1>;
-> +
-> +					pmic_glink_ss_in: endpoint {
-> +						remote-endpoint = <&usb_1_dwc3_ss>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +	};
-> +
->  	vph_pwr: vph-pwr-regulator {
->  		compatible = "regulator-fixed";
->  		regulator-name = "vph_pwr";
-> @@ -546,7 +580,16 @@ &usb_1 {
->  };
->  
->  &usb_1_dwc3 {
-> -	dr_mode = "peripheral";
-> +	dr_mode = "otg";
-> +	usb-role-switch;
-> +};
-> +
-> +&usb_1_dwc3_hs {
-> +	remote-endpoint = <&pmic_glink_hs_in>;
-> +};
-> +
-> +&usb_1_dwc3_ss {
-> +	remote-endpoint = <&pmic_glink_ss_in>;
->  };
->  
->  &usb_1_hsphy {
-> 
+In my issue, i see below callstack and it seem to be spinning inside rb_list_head_clear() as
+cpu_buffer->pages has duplicate entry in the list.
+
+-00 |rb_list_head_clear(inline)
+-00 |rb_head_page_deactivate(inline)
+-00 |rb_check_pages(cpu_buffer = 0xFFFFFF89E0C3B200)
+-01 |atomic_try_cmpxchg_acquire(inline)
+-01 |queued_spin_lock(inline)
+-01 |do_raw_spin_lock_flags(inline)
+-01 |__raw_spin_lock_irqsave(inline)
+-01 |_raw_spin_lock_irqsave(inline)
+-01 |ring_buffer_read_finish(iter = 0xFFFFFF8006FE3780)
+-02 |cpumask_next(inline)
+-02 |tracing_release(inode = ?, file = 0xFFFFFF8A53A63F00)
+-03 |__fput(file = 0xFFFFFF8A53A63F00)
+-04 |____fput(work = ?)
+-05 |_raw_spin_unlock_irq(inline)
+-05 |task_work_run()
+-06 |tracehook_notify_resume(inline)
+-06 |do_notify_resume(regs = 0xFFFFFFC06ADC8EB0, thread_flags = 67108868)
+-07 |prepare_exit_to_user_mode(inline)
+-07 |exit_to_user_mode(inline)
+-07 |el0_svc(regs = 0xFFFFFFC06ADC8EB0)
+-08 |el0t_64_sync_handler(regs = ?)
+-09 |el0t_64_sync(asm)
+
+...
+..
+ffffff80359eeb00 --> Duplicate entry 
+ffffff80359ee300
+ffffff80359ee180
+ffffff80359eeec0
+ffffff80359eec00
+ffffff80359ee800 -- Tail page
+ffffff80359eedc0 -- Head page
+ffffff80359ee640
+ffffff80359ee080
+ffffff80359ee700
+ffffff80359ee7c0
+ffffff80359eed80
+ffffff80359ee900
+ffffff80359ee9c0
+ffffff80359eea00
+ffffff80359eea80
+ffffff80359eec80
+ffffff80359ee240
+ffffff80359ee6c0
+ffffff80359ee0c0
+ffffff80359ee8c0
+ffffff80359ee940
+ffffff80359eee00
+ffffff80359ee000
+ffffff80359eeb00 ---> Duplicate entry 
+
+
+-Mukesh
+
+>
+>> 		if (RB_WARN_ON(cpu_buffer,
+>> 		     rb_list_head(rb_list_head(bpage->list.next)->prev) != &bpage->list))
+>> 			return -1;
+>> 		if (RB_WARN_ON(cpu_buffer,
+>> 		     rb_list_head(rb_list_head(bpage->list.prev)->next) != &bpage->list))
+>> 			return -1;
+>> 		if (rb_check_list(cpu_buffer, &bpage->list))
+>> 			return -1;
+>> 	}
+>> 
+>> 	return 0;
+>> }
+>> 
+>> I haven't tested the above.
+>> 
+>> ?
+>> 
+>> -- Steve
+>> 
+>> 
+>>>   
+>>>   	atomic_dec(&cpu_buffer->resize_disabled);
+>>>   	kfree(iter->event);
