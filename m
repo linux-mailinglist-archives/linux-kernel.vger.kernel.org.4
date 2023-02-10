@@ -2,207 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E5E69220A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:23:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D7769220D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:24:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232680AbjBJPXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 10:23:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53390 "EHLO
+        id S232430AbjBJPYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 10:24:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232663AbjBJPXu (ORCPT
+        with ESMTP id S232749AbjBJPYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 10:23:50 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5192CFC1;
-        Fri, 10 Feb 2023 07:23:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1676042611; x=1707578611;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0Pkhd7L0Rr6+g1/WEDjw/dHyNxQqeeIwIMB2XHYXKnw=;
-  b=QEHH4nNF/g5izVs+HTrPWq7mQzr46GqaZ0S7iWuJIz6sb1sGOxiNiIGm
-   nXTlLuF1oLk/wz6Nbg8MuH21RCCpqLZoDhAF/Cocuykctbv+hw9/wD86b
-   jLjqJFifV50Ame2aY0kgIvrMmQ/eJ6ECCK0ci016suxeqnV8X5EsGgtjS
-   3SfuuhGP1YtU+jneavBYcgAMQXQtVEmRYX4554MTztR6kr7g2VvKXa28t
-   M31ScJSwebedaGvvc6FiS2zRf+JwmcJrmmGBasY3w0yokM+hDYDKHDa6y
-   4GMGRINGqDIWAGrlQ6iQX27AMtYYdkoMESF4FeFX2pNI/YWa4jQeQtbPV
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,287,1669100400"; 
-   d="asc'?scan'208";a="136572823"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Feb 2023 08:23:28 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 10 Feb 2023 08:23:27 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Fri, 10 Feb 2023 08:23:23 -0700
-Date:   Fri, 10 Feb 2023 15:22:58 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Conor Dooley <conor@kernel.org>, Guo Ren <guoren@kernel.org>
-CC:     Guo Ren <guoren@kernel.org>, <arnd@arndb.de>,
-        <palmer@rivosinc.com>, <tglx@linutronix.de>,
-        <peterz@infradead.org>, <luto@kernel.org>, <heiko@sntech.de>,
-        <jszhang@kernel.org>, <lazyparser@gmail.com>, <falcon@tinylab.org>,
-        <chenhuacai@kernel.org>, <apatel@ventanamicro.com>,
-        <atishp@atishpatra.org>, <mark.rutland@arm.com>,
-        <ben@decadent.org.uk>, <bjorn@kernel.org>,
-        <miguel.ojeda.sandonis@gmail.com>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        Yipeng Zou <zouyipeng@huawei.com>
-Subject: Re: [PATCH -next V16 4/7] riscv: entry: Convert to generic entry
-Message-ID: <Y+ZhUuCKm21FiuWc@wendy>
-References: <20230204070213.753369-1-guoren@kernel.org>
- <20230204070213.753369-5-guoren@kernel.org>
- <D6D12456-3A6F-4AD2-B5D8-4DD83C8D0DE6@kernel.org>
- <CAJF2gTTFb+h-tzTiwj=SBjEqjRwbsRvCn=vpvdW26aEaqc_Z3A@mail.gmail.com>
- <A1D7112B-5738-4DF5-906B-76535647EF28@kernel.org>
+        Fri, 10 Feb 2023 10:24:03 -0500
+Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C2877B96
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:23:44 -0800 (PST)
+Received: by mail-io1-f79.google.com with SMTP id k4-20020a6b7e44000000b0071e11cafea7so3592708ioq.15
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:23:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lKskdE4VI1o0NKJ/1x+nBPcMUx/xcfwea6blsFSsvCk=;
+        b=X0t3Tr6dDcqJ3TF68PLwY6BqSeqefSqGc10JxHFGNBRSX6rCrKDwY85q/UbyAYWKXn
+         c+F+1KhkuRRqa39+LPuxIaNKPBeBUjNa1+3S0bG/LujLKBFvNaqFWQCdz6p0e3h5Enh0
+         DXOpxEpqqH8vY9Mn+gS2FPUB5QlGNtWIHnfIZkOo1BjcmvnoX+LEij9Rcqj8lNBcDzxR
+         R2Qf/2g1v3jBuceRtY+xuiehGzNnnekVoZJuFx7LHXuBze8TnZEY0XnG0xqB3T8L1tc9
+         0m5Bi7Yo6WoCJ+LsLC3YtAd3PUEHj8JZnPdg7yB2QrqJuBy7yRvuRrGKGi7epjj8GjTM
+         ZujA==
+X-Gm-Message-State: AO0yUKX/xZij0BgKjL3kjEKTCJgNWjNjciMZQsgFKAleQQ0E2sx/Nifm
+        zU9/U2zcnfBPhcaGh5DxIxg/bEX3k/qifDFexvCEFwrXHCci
+X-Google-Smtp-Source: AK7set9wbKX3S/NagXb30u6k0LpX378ojm+IEWepV76Ncx1ZGOsVvdLYwM0Be5mIfzPSaNccmLt/Qgu97V6JhunF3lYyoGuqK9Db
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="AJFLSkFu3rFIM/YT"
-Content-Disposition: inline
-In-Reply-To: <A1D7112B-5738-4DF5-906B-76535647EF28@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:23b:b0:3b6:af52:c672 with SMTP id
+ f27-20020a056638023b00b003b6af52c672mr8767315jaq.73.1676042623503; Fri, 10
+ Feb 2023 07:23:43 -0800 (PST)
+Date:   Fri, 10 Feb 2023 07:23:43 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000033d42a05f45a155e@google.com>
+Subject: [syzbot] BUG: unable to handle kernel paging request in atm_tc_destroy
+From:   syzbot <syzbot+d44d88f1d11e6ca8576b@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, jhs@mojatatu.com,
+        jiri@resnulli.us, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, xiyou.wangcong@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---AJFLSkFu3rFIM/YT
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-Hey!
+syzbot found the following issue on:
 
-On Sun, Feb 05, 2023 at 03:04:37PM +0100, Conor Dooley wrote:
-> On 5 February 2023 14:56:01 GMT+01:00, Guo Ren <guoren@kernel.org> wrote:
-> >On Sun, Feb 5, 2023 at 6:43 PM Conor Dooley <conor@kernel.org> wrote:
-> >> On 4 February 2023 08:02:10 GMT+01:00, guoren@kernel.org wrote:
-> >> >From: Guo Ren <guoren@linux.alibaba.com>
-> >> >
-> >> >This patch converts riscv to use the generic entry infrastructure from
-> >> >kernel/entry/*. The generic entry makes maintainers' work easier and
-> >> >codes more elegant. Here are the changes:
-> >> >
-> >> > - More clear entry.S with handle_exception and ret_from_exception
-> >> > - Get rid of complex custom signal implementation
-> >> > - Move syscall procedure from assembly to C, which is much more
-> >> >   readable.
-> >> > - Connect ret_from_fork & ret_from_kernel_thread to generic entry.
-> >> > - Wrap with irqentry_enter/exit and syscall_enter/exit_from_user_mode
-> >> > - Use the standard preemption code instead of custom
-> >> >
-> >> >Suggested-by: Huacai Chen <chenhuacai@kernel.org>
-> >> >Reviewed-by: Bj=F6rn T=F6pel <bjorn@rivosinc.com>
-> >> >Tested-by: Yipeng Zou <zouyipeng@huawei.com>
-> >> >Tested-by: Jisheng Zhang <jszhang@kernel.org>
-> >> >Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> >> >Signed-off-by: Guo Ren <guoren@kernel.org>
-> >> >Cc: Ben Hutchings <ben@decadent.org.uk>
-> >> >---
-> >>
-> >> Got some new errors added by this patch:
-> >> https://gist.github.com/conor-pwbot/3b300050a7a4a197bca809935584d809
-> >>
-> >> Unfortunately I'm away from a computer at FOSDEM, so I haven't done an=
-y investigation
-> >> of the warnings.
-> >> Should be reproduceable with gcc-12 allmodconfig.
-> >Thx for report, but:
-> >The spin_shadow_stack is from '7e1864332fbc ("riscv: fix race when
-> >vmap stack overflow")'. Not this patch.
-> >
-> >New errors added:
-> >--- /tmp/tmp.nyMxgc6CGx 2023-02-05 05:12:59.949595120 +0000
-> >+++ /tmp/tmp.5td5fIdaHX 2023-02-05 05:12:59.961595119 +0000
-> >@@ -10 +10 @@
-> >- 1 ../arch/riscv/kernel/traps.c:231:15: warning: symbol
-> >'spin_shadow_stack' was not declared. Should it be static?
-> >+ 1 ../arch/riscv/kernel/traps.c:335:15: warning: symbol
-> >'spin_shadow_stack' was not declared. Should it be static?
-> >@@ -9109 +9109 @@
-> >- 37 ../include/linux/fortify-string.h:522:25: warning: call to
-> >'__read_overflow2_field' declared with attribute warning: detected
-> >read beyond size of field (2nd parameter); maybe use struct_group()?
-> >[-Wattribute-warning]
-> >+ 38 ../include/linux/fortify-string.h:522:25: warning: call to
-> >'__read_overflow2_field' declared with attribute warning: detected
-> >read beyond size of field (2nd parameter); maybe use struct_group()?
-> >[-Wattribute-warning]
-> >Per-file breakdown
-> >--- /tmp/tmp.bHiHUVMzmZ 2023-02-05 05:13:00.109595117 +0000
-> >+++ /tmp/tmp.kUkOd6TrGj 2023-02-05 05:13:00.257595114 +0000
-> >@@ -1197 +1197 @@
-> >- 65 ../include/linux/fortify-string.h
-> >+ 66 ../include/linux/fortify-string.h
-> >
-> >Seems the line number change would cause your script to report old
-> >errors as new. So it would be best to improve the check script, such
-> >as ignoring the first column line number :)
->=20
-> I thought it already did!
-> I might've messed up in a refactoring of the script.
-> I'll fix it up when I get home so, sorry for the noise!
+HEAD commit:    0b34d68049b0 net: enable usercopy for skb_small_head_cache
+git tree:       net-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=14cb251f480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=bd3e305b3a7ab2b0
+dashboard link: https://syzkaller.appspot.com/bug?extid=d44d88f1d11e6ca8576b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1259c7cb480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1789967d480000
 
-So I finally got around to trying to sort this out.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e6e9cd443f49/disk-0b34d680.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1d27805ca50d/vmlinux-0b34d680.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/0a3e607b6ca7/bzImage-0b34d680.xz
 
->- 1 ../arch/riscv/kernel/traps.c:231:15: warning: symbol
->'spin_shadow_stack' was not declared. Should it be static?
->+ 1 ../arch/riscv/kernel/traps.c:335:15: warning: symbol
->'spin_shadow_stack' was not declared. Should it be static?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d44d88f1d11e6ca8576b@syzkaller.appspotmail.com
 
-As you pointed out, this one is just the movement of an existing error
-but isn't why the automation complained about the patch.
-That said, should probably be fixed by declaring it in thread-info.h
-alongside shadow_stack?
-
->- 37 ../include/linux/fortify-string.h:522:25: warning: call to
->'__read_overflow2_field' declared with attribute warning: detected
->read beyond size of field (2nd parameter); maybe use struct_group()?
->[-Wattribute-warning]
->+ 38 ../include/linux/fortify-string.h:522:25: warning: call to
->'__read_overflow2_field' declared with attribute warning: detected
->read beyond size of field (2nd parameter); maybe use struct_group()?
->[-Wattribute-warning]
-
-The 37 and 38 here is the source of the complaint though, this series
-added an extra one of these warnings, so I don't think the automation
-has done anything wrong here.
-
-The number comes from the output of:
-grep "\(warning\|error\):" $tmpfile_n | sort | uniq -c > $tmpfile_errors_now
-
-And that appears to be correctly reflected in the report:
-build_rv64_gcc_allmodconfig	fail	Errors and warnings before: 17343 this pat=
-ch: 17344
-
-However, I should probably go and do something to display the LoC that
-caused the issue, since knowing it came from fortify-string.h doesn't do
-all that much to help you know which change caused it to appear.
-
-Thanks,
-Conor.
+BUG: unable to handle page fault for address: ffffffffffffffa0
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD c48f067 P4D c48f067 PUD c491067 PMD 0 
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 5075 Comm: syz-executor134 Not tainted 6.2.0-rc6-syzkaller-01486-g0b34d68049b0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+RIP: 0010:atm_tc_destroy+0x7d/0x250 net/sched/sch_atm.c:588
+Code: 0f 84 52 01 00 00 48 bd 00 00 00 00 00 fc ff df e8 88 0e 8b f9 4c 8d 73 28 4c 89 f0 48 c1 e8 03 80 3c 28 00 0f 85 70 01 00 00 <48> 8b 7b 28 e8 ea f4 f2 ff 4c 89 f0 48 c1 e8 03 80 3c 28 00 0f 85
+RSP: 0018:ffffc90003c0f3f0 EFLAGS: 00010246
+RAX: 1ffffffffffffff4 RBX: ffffffffffffff78 RCX: 0000000000000000
+RDX: ffff88802695d7c0 RSI: ffffffff87f5ed08 RDI: ffff888022026000
+RBP: dffffc0000000000 R08: 0000000000000007 R09: fffffffffffff000
+R10: ffffffffffffffea R11: 0000000000000000 R12: ffff888022026370
+R13: ffff888022026000 R14: ffffffffffffffa0 R15: ffff888021d6c000
+FS:  0000555555aee300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffa0 CR3: 000000001c561000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ qdisc_create+0xaca/0x1150 net/sched/sch_api.c:1329
+ tc_modify_qdisc+0x948/0x19c0 net/sched/sch_api.c:1662
+ rtnetlink_rcv_msg+0x43e/0xca0 net/core/rtnetlink.c:6174
+ netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2574
+ netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+ netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
+ netlink_sendmsg+0x91b/0xe10 net/netlink/af_netlink.c:1942
+ sock_sendmsg_nosec net/socket.c:722 [inline]
+ sock_sendmsg+0xde/0x190 net/socket.c:745
+ ____sys_sendmsg+0x71c/0x900 net/socket.c:2501
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2555
+ __sys_sendmsg+0xf7/0x1c0 net/socket.c:2584
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f6162cddba9
+Code: 28 c3 e8 1a 15 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe242b7018 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f6162d4bed0 RCX: 00007f6162cddba9
+RDX: 0000000000000000 RSI: 00000000200001c0 RDI: 0000000000000003
+RBP: 00007ffe242b7028 R08: 00007f6162d4be40 R09: 00007f6162d4be40
+R10: 00007f6162d4be40 R11: 0000000000000246 R12: 00007ffe242b7030
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+CR2: ffffffffffffffa0
+---[ end trace 0000000000000000 ]---
+RIP: 0010:atm_tc_destroy+0x7d/0x250 net/sched/sch_atm.c:588
+Code: 0f 84 52 01 00 00 48 bd 00 00 00 00 00 fc ff df e8 88 0e 8b f9 4c 8d 73 28 4c 89 f0 48 c1 e8 03 80 3c 28 00 0f 85 70 01 00 00 <48> 8b 7b 28 e8 ea f4 f2 ff 4c 89 f0 48 c1 e8 03 80 3c 28 00 0f 85
+RSP: 0018:ffffc90003c0f3f0 EFLAGS: 00010246
+RAX: 1ffffffffffffff4 RBX: ffffffffffffff78 RCX: 0000000000000000
+RDX: ffff88802695d7c0 RSI: ffffffff87f5ed08 RDI: ffff888022026000
+RBP: dffffc0000000000 R08: 0000000000000007 R09: fffffffffffff000
+R10: ffffffffffffffea R11: 0000000000000000 R12: ffff888022026370
+R13: ffff888022026000 R14: ffffffffffffffa0 R15: ffff888021d6c000
+FS:  0000555555aee300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffa0 CR3: 000000001c561000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	0f 84 52 01 00 00    	je     0x158
+   6:	48 bd 00 00 00 00 00 	movabs $0xdffffc0000000000,%rbp
+   d:	fc ff df
+  10:	e8 88 0e 8b f9       	callq  0xf98b0e9d
+  15:	4c 8d 73 28          	lea    0x28(%rbx),%r14
+  19:	4c 89 f0             	mov    %r14,%rax
+  1c:	48 c1 e8 03          	shr    $0x3,%rax
+  20:	80 3c 28 00          	cmpb   $0x0,(%rax,%rbp,1)
+  24:	0f 85 70 01 00 00    	jne    0x19a
+* 2a:	48 8b 7b 28          	mov    0x28(%rbx),%rdi <-- trapping instruction
+  2e:	e8 ea f4 f2 ff       	callq  0xfff2f51d
+  33:	4c 89 f0             	mov    %r14,%rax
+  36:	48 c1 e8 03          	shr    $0x3,%rax
+  3a:	80 3c 28 00          	cmpb   $0x0,(%rax,%rbp,1)
+  3e:	0f                   	.byte 0xf
+  3f:	85                   	.byte 0x85
 
 
---AJFLSkFu3rFIM/YT
-Content-Type: application/pgp-signature; name="signature.asc"
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+ZhRAAKCRB4tDGHoIJi
-0g0JAP0b4fo/nTYSwqwmMxxca6d11n7La9RaH0WmjVkgHg44dwEA6m309zaBWEfZ
-APV1TVTzKmLZyFvvmewSEdHfcFUfVQM=
-=fAgh
------END PGP SIGNATURE-----
-
---AJFLSkFu3rFIM/YT--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
