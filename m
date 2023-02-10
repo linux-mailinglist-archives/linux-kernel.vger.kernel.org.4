@@ -2,80 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40BC969253F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B9769256E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:36:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233000AbjBJSUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 13:20:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
+        id S233056AbjBJSgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 13:36:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232967AbjBJSUJ (ORCPT
+        with ESMTP id S232558AbjBJSgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 13:20:09 -0500
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF526A730;
-        Fri, 10 Feb 2023 10:19:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-        s=42; h=Message-ID:Cc:To:From:Date;
-        bh=PtdWmRFylJvBmX2IAcm65PdjtLIX5BPy4K+OpONMbJI=; b=2AT85G2ey0JjUTr9HJI84ayqma
-        4XZmHUCPZg3Fl2G+wtQB+Icbc6Jt2jaZ3sLoRS2b5w4Zl1sGz9YxmXnMDTyq+dIUq/TjI8H/xTIVE
-        Sg6czi6ZZNv5uqjyghLWMGc5kA/3DS1lu8szeIFtPyOZTWFYJdfOH5HZ0aHQf2BSQh1L7Es9UF4rK
-        Rhu1HCt8YaBXwGz1UVGjotJicaZXgiPb+9Gv21BQcvX73U7I0xe5RGKzI/rsiPgcnVOeuqpIh3FZE
-        1XggXKiOnmf02qVQ41UJSoJqu43WulRNZbPuUt/C0U69EVz+hFDeNaOKEQx6nmjz+DAA6a9s7SE2U
-        yK7KaKXf8Ahgv5Rx0r8MR5pxHTFAMFtOE0wyQCcAlwROCAjK/Swx4nGMbJpxyOSjuBKdoQzoR/N1q
-        an6gQJbeDcUCp/lBRzvcHBW/iQCN8XxugIC3v79XOEU1OeAnQS3VgZgIVXS+4wyvvdMHGSwgFrmBD
-        +zOLdhDh4PI49Jil5d5y08HQ;
-Received: from [127.0.0.2] (localhost [127.0.0.1])
-        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
-        (Exim)
-        id 1pQXzo-00D2jz-UF; Fri, 10 Feb 2023 18:19:41 +0000
-Date:   Fri, 10 Feb 2023 10:19:36 -0800
-From:   Jeremy Allison <jra@samba.org>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Linux API Mailing List <linux-api@vger.kernel.org>,
-        Dave Chinner <david@fromorbit.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Stefan Metzmacher <metze@samba.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Samba Technical <samba-technical@lists.samba.org>,
-        io-uring <io-uring@vger.kernel.org>
-Subject: Re: copy on write for splice() from file to pipe?
-Message-ID: <Y+aKuC1PuvX4STEI@jeremy-acer>
-Reply-To: Jeremy Allison <jra@samba.org>
-References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
- <CAHk-=wj8rthcQ9gQbvkMzeFt0iymq+CuOzmidx3Pm29Lg+W0gg@mail.gmail.com>
- <20230210021603.GA2825702@dread.disaster.area>
- <20230210040626.GB2825702@dread.disaster.area>
- <Y+XLuYh+kC+4wTRi@casper.infradead.org>
- <20230210065747.GD2825702@dread.disaster.area>
- <CALCETrWjJisipSJA7tPu+h6B2gs3m+g0yPhZ4z+Atod+WOMkZg@mail.gmail.com>
- <CAHk-=wj66F6CdJUAAjqigXMBy7gHquFMzPNAwKCgkrb2mF6U7w@mail.gmail.com>
- <CALCETrU-9Wcb_zCsVWr24V=uCA0+c6x359UkJBOBgkbq+UHAMA@mail.gmail.com>
+        Fri, 10 Feb 2023 13:36:52 -0500
+X-Greylist: delayed 598 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 10 Feb 2023 10:36:48 PST
+Received: from pi.fatal.se (94-255-170-6.cust.bredband2.com [94.255.170.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B928E93EA;
+        Fri, 10 Feb 2023 10:36:48 -0800 (PST)
+Received: by pi.fatal.se (Postfix, from userid 1000)
+        id 7B4AF29095; Fri, 10 Feb 2023 19:19:46 +0100 (CET)
+Date:   Fri, 10 Feb 2023 19:19:46 +0100
+From:   Andreas Henriksson <andreas@fatal.se>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-wireless@vger.kernel.org, Neo Jou <neojou@gmail.com>,
+        Hans Ulli Kroll <linux@ulli-kroll.de>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        kernel@pengutronix.de, Alexander Hochbaum <alex@appudo.com>,
+        Da Xue <da@libre.computer>, Po-Hao Huang <phhuang@realtek.com>,
+        Viktor Petrenko <g0000ga@gmail.com>
+Subject: Re: [PATCH v2 0/3] wifi: rtw88: USB fixes
+Message-ID: <20230210181946.cqnvxiomjv77xnf2@fatal.se>
+References: <20230210111632.1985205-1-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALCETrU-9Wcb_zCsVWr24V=uCA0+c6x359UkJBOBgkbq+UHAMA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230210111632.1985205-1-s.hauer@pengutronix.de>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 09:57:20AM -0800, Andy Lutomirski via samba-technical wrote:
->
->(And if Samba needs to make sure that future writes don't change the
->outgoing data even two seconds later when the data has been sent but
->not acked, then maybe a fancy API could be added to help, or maybe
->Samba shouldn't be using zero copy IO in the first place!)
+Hello Sacha Hauer,
 
-Samba doesn't need any of this. The simplest thing to do is
-to restrict splice-based zero-copy IO to files leased by
-a single client, where exclusive access to changes is controled
-by the client redirector.
+Thanks alot for fixing this!
+
+On Fri, Feb 10, 2023 at 12:16:29PM +0100, Sascha Hauer wrote:
+> This series addresses issues for the recently added RTW88 USB support
+> reported by Andreas Henriksson and also our customer.
+> 
+> The hardware can't handle urbs that have a size of multiple of the
+> bulkout_size (usually 512 bytes). The symptom is that the hardware
+> stalls completely. The issue can be reproduced by sending a suitably
+> sized ping packet from the device:
+> 
+> ping -s 394 <somehost>
+> 
+> (It's 394 bytes here on a RTL8822CU and RTL8821CU, the actual size may
+> differ on other chips, it was 402 bytes on a RTL8723DU)
+
+I can confirm that with these patches applied that my LM842 dongle
+now works reliably on my imx6sx board. On the same board the traffic
+would previously usually stall after 80-130MB when downloading.
+
+With patches applied I succesfully completed:
+wget -O /dev/null http://speedtest.tele2.net/10GB.zip
+
+Uploading did not seem to trigger the problem before but I still
+tested and uploading a gigabyte was no problem using:
+curl -T /dev/urandom http://speedtest.tele2.net/upload.php  -O /dev/null
+
+Did not attempt the suggested ping method of reproducing on the old
+system, but on the new kernel I could do
+$ for a in $(seq 128 512); do ping -n -c 3 -s $a ping.sunet.se ; done
+without any stalls.
+
+
+Feel free to add either or both of:
+
+Reported-by: Andreas Henriksson <andreas@fatal.se>
+Tested-by: Andreas Henriksson <andreas@fatal.se>
+
+> 
+> Other than that qsel was not set correctly. The sympton here is that
+> only one of multiple bulk endpoints was used to send data.
+> 
+> Changes since v1:
+> - Use URB_ZERO_PACKET to let the USB host controller handle it automatically
+>   rather than working around the issue.
+> 
+> Sascha Hauer (3):
+>   wifi: rtw88: usb: Set qsel correctly
+>   wifi: rtw88: usb: send Zero length packets if necessary
+>   wifi: rtw88: usb: drop now unnecessary URB size check
+> 
+>  drivers/net/wireless/realtek/rtw88/usb.c | 18 +++---------------
+>  1 file changed, 3 insertions(+), 15 deletions(-)
+> 
+> -- 
+> 2.30.2
+> 
+
+Regards,
+Andreas Henriksson
