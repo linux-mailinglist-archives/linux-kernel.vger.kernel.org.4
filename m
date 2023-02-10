@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7146918DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 07:56:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 275E46918D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 07:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbjBJG43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 01:56:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
+        id S231373AbjBJG4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 01:56:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231344AbjBJG40 (ORCPT
+        with ESMTP id S231360AbjBJG43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 01:56:26 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9A320064;
-        Thu,  9 Feb 2023 22:56:26 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so5572847wmb.2;
-        Thu, 09 Feb 2023 22:56:25 -0800 (PST)
+        Fri, 10 Feb 2023 01:56:29 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AE33608D;
+        Thu,  9 Feb 2023 22:56:27 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so5585217wma.1;
+        Thu, 09 Feb 2023 22:56:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8W95yo1auDtSb8FRaJVq8qHTIzQlIIiJTRKxHWk0HJM=;
-        b=LD4fiN3r8S6ZAum7n1fqQjIJL/buQFVPxgG9wjik/3OLKLw34xr/zaNZ6xnNR7PsP6
-         0mz/pA9CWEamB9U+5N5jqRWUMVNKRBrYwhb0GpbkdwGSViwvcC2aUedSpcc1Dcp1nInD
-         nRxlXniEF3OtvUc+6oTvEH3zd8JmEnPQWNxTIR1MeD65ngb8m/09wiiOGd3iLIs3h0qO
-         blnWxSvTvT57yZCc6gjZYyjcmq+8ykHCHxMUhpsmm6YY89D/nDfnInh3P9dEJKrmP4QW
-         E49JB062CNsdgBBpbe9dBZcKAY8otUhLNIZW+dPh7HB4AXTBBJzcbHYqNGqRs+TIDTC1
-         5IWg==
+        bh=tQlG6AWGDGiaVCyhcczhUxKcndm2ZWR4D2LQqdn5yiE=;
+        b=lclAAgSw/cy1PcBGDwGXVnSI8+4AWjAghaqMC/7WihzIyAuvdljcSRO0M0btrKixl8
+         Z8kc66wQS8RuJAQbvfhgfVeZCRDDslRuLI9kaur9i2TPs8sSAMtMIIrBwsrEAfTmRkcW
+         3UQ0OnMMBMX/FDg3FT5XQ0tWFmPPd8a8gmskfiMY0vuHXyVH1FWs5XCkjZ8bXyb6Xucr
+         XtqspUZcIUJmfCnEctvpd0MeJd/OzYSEQl214iihQvuvR2FWQ1WmvYssKgT8ycmELqD8
+         zwtOhqnTkD/IfkPvL2t+saUXmwH9zTSKwKQq+MNyiJBwnmdw6nk8hk9YGxLp2QC3R++h
+         JLLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8W95yo1auDtSb8FRaJVq8qHTIzQlIIiJTRKxHWk0HJM=;
-        b=e2gS87WdDkTQTkHA3Udbzvnq64MeVY0ccTikIGAXjEk5lePSEPO+ZWmobQCHWJVJuZ
-         dOOKhVi0tuQNJUDY9S8si5UPX9ipftovqdnw8Y4V+okXpyoONMJ5JFHJTowfv4jr3Eb9
-         SNefF9cJv4P6gjI3INmNv1PuerZK3k6a4TWVrsmJjNJCY4iD8ObvWpc+78572xHBMt8B
-         vnA9dGVOMxYSVD6yqnf6HXsXfe2BThFmA4x4zUdmiFLvk38ehmX4z95qwRN8/ZGHOgLs
-         gXNLZGMHQGTbrC4mAwLZ15SyV7hPwgQrotEA0753R1dmFwe2YtQ1xI+CBtUiXyABJNiu
-         Q9fg==
-X-Gm-Message-State: AO0yUKVbQ3BPw82s2HDPy+umB9QPFPi99/hVLkKFrlCBARSPOVFEXuqc
-        N/6DaeQUByr/KUByULPsUEwU2nzjLyk=
-X-Google-Smtp-Source: AK7set9SPCvePfmmDkifOw75l2tfnd+RrGPtYmfzP0N2ukUwgB8wQFgEHT4wy1E/DEpWsUV0TiHNwg==
-X-Received: by 2002:a05:600c:4383:b0:3dc:d5b:5f73 with SMTP id e3-20020a05600c438300b003dc0d5b5f73mr11794204wmn.19.1676012184338;
-        Thu, 09 Feb 2023 22:56:24 -0800 (PST)
+        bh=tQlG6AWGDGiaVCyhcczhUxKcndm2ZWR4D2LQqdn5yiE=;
+        b=N1tOLmoJ9d6IrpQOui+rXM0R9C0T05v7P89wHvLjLw2nnfy49txIDEgIrsLfwbS9Hb
+         sIvudgO3iEmhYTnUOTJwXNEtnKESVBw6GRZi+EzZV1y50p/O0z3EOLGbvzXHO7kj/C1f
+         lM8RhoPZtUtysBDZXjBS+5OEz0QWo1DQcizqsOsu8g+F16B3xqPS4JKEZgXXNAggFvoI
+         rKPGS5SPDDNCnF8sNJHyTU4RwK/YBRCEqZWK+iOQVgLXNkSg5EOld5BT3aeBv7l5EjMn
+         5Lf8nHyow7dR60o20dzvj5RXoClkBor8ldUMUse2NMs/7w6JEorhpi0cEaRTgsMJ2TYO
+         3fGQ==
+X-Gm-Message-State: AO0yUKXksa1zsUcrcU7aw1KJ506up45xDBl6i0T0ZTA4qolGb+koNJYf
+        kNxboKN/ePl/dil27VPvXlEfROqsusM=
+X-Google-Smtp-Source: AK7set+D3eysAynCvcZNB0u35nPmszVJoApMTolc4ISxxZo+eUe8r08VuAj2ferIIgQZJKOYTI9OzA==
+X-Received: by 2002:a05:600c:3290:b0:3db:8de:6993 with SMTP id t16-20020a05600c329000b003db08de6993mr1307503wmp.4.1676012185515;
+        Thu, 09 Feb 2023 22:56:25 -0800 (PST)
 Received: from localhost.localdomain (23.red-88-10-60.dynamicip.rima-tde.net. [88.10.60.23])
-        by smtp.gmail.com with ESMTPSA id p13-20020a05600c468d00b003e001afa274sm4385612wmo.2.2023.02.09.22.56.23
+        by smtp.gmail.com with ESMTPSA id p13-20020a05600c468d00b003e001afa274sm4385612wmo.2.2023.02.09.22.56.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 22:56:23 -0800 (PST)
+        Thu, 09 Feb 2023 22:56:25 -0800 (PST)
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
 To:     linux-watchdog@vger.kernel.org
 Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
@@ -57,9 +57,9 @@ Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
         arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
         p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH 1/3] dt-bindings: watchdog: mt7621-wdt: add phandle to access system controller registers
-Date:   Fri, 10 Feb 2023 07:56:19 +0100
-Message-Id: <20230210065621.598120-2-sergio.paracuellos@gmail.com>
+Subject: [PATCH 2/3] mips: dts: ralink: mt7621: add phandle to system controller node for watchdog
+Date:   Fri, 10 Feb 2023 07:56:20 +0100
+Message-Id: <20230210065621.598120-3-sergio.paracuellos@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230210065621.598120-1-sergio.paracuellos@gmail.com>
 References: <20230210065621.598120-1-sergio.paracuellos@gmail.com>
@@ -75,48 +75,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MT7621 SoC provides a system controller node for accessing to some registers.
-Add a phandle to this node to avoid using MIPS related arch operations and
-includes in watchdog driver code.
+To allow to access system controller registers from watchdog driver code
+add a phandle in the watchdog 'wdt' node. This avoid using arch dependent
+operations in driver code.
 
 Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 ---
- .../bindings/watchdog/mediatek,mt7621-wdt.yaml       | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ arch/mips/boot/dts/ralink/mt7621.dtsi | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml b/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml
-index b2b17fdf4..3c545065f 100644
---- a/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml
-@@ -14,11 +14,18 @@ allOf:
+diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
+index 5ca40fd21..ebee23a2b 100644
+--- a/arch/mips/boot/dts/ralink/mt7621.dtsi
++++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
+@@ -71,8 +71,9 @@ sysc: syscon@0 {
+ 		};
  
- properties:
-   compatible:
--    const: mediatek,mt7621-wdt
-+    items:
-+      - const: mediatek,mt7621-wdt
-+      - const: syscon
+ 		wdt: wdt@100 {
+-			compatible = "mediatek,mt7621-wdt";
++			compatible = "mediatek,mt7621-wdt", "syscon";
+ 			reg = <0x100 0x100>;
++			ralink,sysctl = <&sysc>;
+ 		};
  
-   reg:
-     maxItems: 1
- 
-+  ralink,sysctl:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      phandle of syscon used to control system registers
-+
- required:
-   - compatible
-   - reg
-@@ -28,6 +35,7 @@ additionalProperties: false
- examples:
-   - |
-     watchdog@100 {
--      compatible = "mediatek,mt7621-wdt";
-+      compatible = "mediatek,mt7621-wdt", "syscon";
-       reg = <0x100 0x100>;
-+      ralink,sysctl = <&sysc>;
-     };
+ 		gpio: gpio@600 {
 -- 
 2.25.1
 
