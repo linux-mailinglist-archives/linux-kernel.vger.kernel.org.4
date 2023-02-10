@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6284692764
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A6F692773
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233486AbjBJTs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 14:48:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
+        id S233463AbjBJTxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 14:53:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233389AbjBJTsY (ORCPT
+        with ESMTP id S232495AbjBJTxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 14:48:24 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D7A7FEE5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:47:31 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id d21-20020a056830005500b0068bd2e0b25bso1862470otp.1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:47:31 -0800 (PST)
+        Fri, 10 Feb 2023 14:53:37 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFD03A90;
+        Fri, 10 Feb 2023 11:53:36 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id u27so7475499ljo.12;
+        Fri, 10 Feb 2023 11:53:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/PBQsQs1ghoyck5G4YKo5wjZXEL9Pve2gHHX+BptzYI=;
-        b=QMLkAAhL/XFCq5BdBspcsntMgvqCBo1wICtpxC8ZvzOFDIkXVjl1XreoPtZRKrEz2u
-         KIQOItUhWzXa95LFNV+abUI0RnpySECOej0W744Qzw/mqURianZkZ5vBqsCpHTGhlTyI
-         2F0DkqWYr3jKh/gxLDBxbh6kBqLUg/8JbAlDNKJ07+ihFXcF6wn9tu/3Gp5tBP2Hfy4v
-         FZke6i1c0gImx/WyyEQtgeHnM5YWGRhPIDyS4UUiEtn/vj0yevWOeimVWvK5AIMn6+Zi
-         7B8BGbfL3kK3Co+W7YeOsgNhVsr029SueC0iusgoh42nQzD44ewnMxZLjo/kZdFN39cs
-         OLAg==
+        bh=6vpHTSsq3RuT3ZTbVZIw1FmvwScMrvkNjzVV5l91taQ=;
+        b=RTYrGbtU3etE5hJdPLvvyJrgFyHgxb3oOWgcnCkfYu6txjHu0fKfpcxJwSY1njE7vq
+         IfO484zScE0QgNzcNYMRzUOL62TltnTBAhQs0+OrcEX8VFkJvW2JB7oMhdaaWbImMU1E
+         5z8HqOdL3iPc9sIZjeHdB4lK3lDaMYdDyxSS46DfQY+vohkAXHadyW74yh7IfOK6HQ2U
+         7BgP0jR7ZK4BzirqjoDZnx5tvmCsJWtUyCUgereqK17xZcIRG+e4SqKYX6gh+IBTMJq7
+         sl4x09Cvs32E36mc1GGc2JTlmNAxrWOerqYAK1DtystlFaJ9g+5Qwaj8C07MxrCtXGlB
+         ZXVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/PBQsQs1ghoyck5G4YKo5wjZXEL9Pve2gHHX+BptzYI=;
-        b=cKUPPExnjIJCmWZGxSdO/Xsd1OcWucL9iamEjCwSl7TTAqO3sfjr6ZX6DV/EfROYJO
-         EPsnHpSo+5ivBBBxPEOhNQTPeAFGph3tYq1YFtntRm4bIk9vfFcHceAigM1Em++V/NNk
-         9ASkZPbtBXMzGbTycBsoeVDsyNJj7W1r9uJuuTcGwAfYRuGZwSGj97coo64B+Z9rmCgv
-         hCN3Fjj7MWtE+nqBXbgJap6DN+PP+Wtb8uS0zuK/o/foMba3j8RYAbiNvMqfkDvS3UXl
-         SNNJ8ZvNQLOl6J3HTGwesEQlFXfqjDLhlacLPdsnKiG8XHvK/cRlq6neoWUbadpvAhAy
-         6vEA==
-X-Gm-Message-State: AO0yUKWni7SP0TEKnH+8mguGBkmYTvkuaW4NA5EgICKjR2rsBq4CUt6x
-        tXh8Q5g9jDuV1oJCwxRAAHN5wz54/kolD+Ai3cHd5g==
-X-Google-Smtp-Source: AK7set/2TdLhFb95nfn832Tj3Ud3QPjqZ++ec3/IpCLmB7FMRJ47GvktUIwDdZbVBQkoiIzhpNiQ7RTZAdnte3nSLr4=
-X-Received: by 2002:a05:6830:4414:b0:68b:cd2c:d16 with SMTP id
- q20-20020a056830441400b0068bcd2c0d16mr1575661otv.53.1676058386639; Fri, 10
- Feb 2023 11:46:26 -0800 (PST)
+        bh=6vpHTSsq3RuT3ZTbVZIw1FmvwScMrvkNjzVV5l91taQ=;
+        b=VdZZwE23CS/uF90wjrbGAQYM1akysE5K5npiVmEVpXhVulMNhwKnbjiQKt3+mHoRiQ
+         EoDWs57SC72RvwCWE/YLuJsJvKMQHgvxkgAOi7Tj4F5a5JLhqyDSepN6cZwwWZp/Dwd7
+         pijV62aXFmfO/ChEUFQynwzijSnthRNk28/QTWdnFfFs0PBrjTdoEVvEAB1ojqUrArJ1
+         ApZvMOGVQ5lzhCby8of4aC3Phw16x7yK2q1zCIhmE1FhOOqz80fwBqdpQS0TJMHa2NFR
+         jeBu/p8c40rueRcNMJrD7+P/gxqJgH8Ub6pz+FWHVUCGlf5c95PX+YbwnqtahqlvzL4g
+         oEYg==
+X-Gm-Message-State: AO0yUKW4ye+NUI4h/Dzr0YuUzT5Gz2dUx7p/KvLU5Iz0twKtdu4bxLjb
+        j064Ug6F+2BxNiSr7XtT0wborR7g/DRka7iabuI=
+X-Google-Smtp-Source: AK7set9VxYinyOMzIxrzSekHnF65lzsk7aEnU8u6+pBnNfqPVN6bXPPXRIgcPLxBqkAhGhgebIawVIX3zk+f3YnIXU8=
+X-Received: by 2002:a2e:a0c7:0:b0:28b:795c:51f8 with SMTP id
+ f7-20020a2ea0c7000000b0028b795c51f8mr2722196ljm.98.1676058814784; Fri, 10 Feb
+ 2023 11:53:34 -0800 (PST)
 MIME-Version: 1.0
-References: <20230131220355.1603527-1-rmoar@google.com> <20230131220355.1603527-4-rmoar@google.com>
- <CABVgOSngiZZ6HTAOTriB=TveYOPoZVChqyeNfaBsDzFCY+_A2A@mail.gmail.com>
-In-Reply-To: <CABVgOSngiZZ6HTAOTriB=TveYOPoZVChqyeNfaBsDzFCY+_A2A@mail.gmail.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Fri, 10 Feb 2023 14:46:15 -0500
-Message-ID: <CA+GJov6QmmbTOV400PEtsZtpLM7-3SVN4A67ED5Jnoca0D9LCw@mail.gmail.com>
-Subject: Re: [PATCH v1 3/3] kunit: fix bug of extra newline characters in
- debugfs logs
-To:     David Gow <davidgow@google.com>
-Cc:     brendanhiggins@google.com, dlatypov@google.com,
-        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20230210041030.865478-1-zyytlz.wz@163.com>
+In-Reply-To: <20230210041030.865478-1-zyytlz.wz@163.com>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Fri, 10 Feb 2023 11:53:23 -0800
+Message-ID: <CABBYNZL_gZ+kr_OEqjYgMmt+=91=jC88g310F-ScMC=kLh0xdw@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: hci_core: Fix poential Use-after-Free bug in hci_remove_adv_monitor
+To:     Zheng Wang <zyytlz.wz@163.com>
+Cc:     marcel@holtmann.org, hackerzheng666@gmail.com,
+        alex000young@gmail.com, johan.hedberg@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-bluetooth@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,171 +70,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 9, 2023 at 12:06 AM David Gow <davidgow@google.com> wrote:
->
-> On Wed, 1 Feb 2023 at 06:04, Rae Moar <rmoar@google.com> wrote:
-> >
-> > Fix bug of the extra newline characters in debugfs logs. When a
-> > line is added to debugfs with a newline character at the end,
-> > an extra line appears in the debugfs log. Remove these extra lines.
-> >
-> > Add kunit_log_newline_test to provide test coverage for this issue.
-> > (Also, move kunit_log_test above suite definition to remove the
-> > unnecessary declaration prior to the suite definition)
-> >
-> > Signed-off-by: Rae Moar <rmoar@google.com>
-> > ---
+Hi Zheng,
 
-Hi David!
+On Thu, Feb 9, 2023 at 8:11 PM Zheng Wang <zyytlz.wz@163.com> wrote:
+>
+> In hci_remove_adv_monitor, if it gets into HCI_ADV_MONITOR_EXT_MSFT case,
+> the function will free the monitor and print its handle after that.
+>
+> Fix it by switch the order.
+>
+> Fixes: 7cf5c2978f23 ("Bluetooth: hci_sync: Refactor remove Adv Monitor")
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> ---
+>  net/bluetooth/hci_core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+> index b65c3aabcd53..db3352c60de6 100644
+> --- a/net/bluetooth/hci_core.c
+> +++ b/net/bluetooth/hci_core.c
+> @@ -1980,9 +1980,9 @@ static int hci_remove_adv_monitor(struct hci_dev *hdev,
+>                 goto free_monitor;
+>
+>         case HCI_ADV_MONITOR_EXT_MSFT:
+> -               status = msft_remove_monitor(hdev, monitor);
+>                 bt_dev_dbg(hdev, "%s remove monitor %d msft status %d",
+>                            hdev->name, monitor->handle, status);
+> +               status = msft_remove_monitor(hdev, monitor);
 
->
-> I've got some reservations about this patch.
->
-> Firstly, could we have an example of the problem in the commit
-> message, so we know what we're fixing?
+I wonder if it is not a good idea to move the logging inside
+msft_remove_monitor?
 
-Yes, as mentioned in the second patch, I will add an individual
-"before and after" comparison to each of the patches in v2. This is
-much clearer than just the overall comparison in the cover letter.
-
+>                 break;
+>         }
 >
-> Secondly, I _really_ don't like the way this just removes newlines
-> from log lines if there are too many. It feels like a hack, rather
-> than a proper fix.
->
-> I suspect the actual issue here is in the kunit_log macro in
-> include/kunit/test.h:
-> https://elixir.bootlin.com/linux/latest/source/include/kunit/test.h#L417
->
-> kunit_log_append((test_or_suite)->log, fmt "\n", ##__VA_ARGS__); \
->
-> The "\n" concatenated here is probably the issue. The printk statement
-> doesn't add a newline, but that's because printk implicitly does if
-> KERN_CONT is not added.
->
-> So maybe the correct fix here is to use:
-> printk(KERN_CONT lvl fmt "\n", ##__VA_ARGS__)
->
-> That'd add the newline, rather than get rid of it, but at least should
-> make the behaviour more similar between printk and the debugfs log.
-> Equally, you could use KERN_CONT and get rid of the "\n" in both
-> places, requiring it in log messages.
-
-I understand how this seems a bit hacky. There were quite a few
-discussions on how to approach this prior to sending this out on this
-list. But changing the printk to be consistent between the debugfs and
-normal output is a great idea! This does cause a few tests to have
-extra lines in the output but shouldn't cause any issues with the
-parser readable output. I will definitely change this in v2.
-
->
-> Thirdly, I don't really like the way the test is skipped if debugfs
-> isn't active. Could we skip it if test->log is not valid instead or
-> using a compile-time #ifdef?
-
-Yes this makes sense. Happy to change this in v2. The kunit_log_test
-also uses this #ifdef statement. Should this be changed as well?
-
->
-> I do like the move of kunit_log_test though. That definitely cleans things up!
->
-> Cheers,
-> -- David
+> --
+> 2.25.1
 >
 
-Thanks!
 
-Rae
-
->
-> >  lib/kunit/kunit-test.c | 36 ++++++++++++++++++++++++------------
-> >  lib/kunit/test.c       |  9 ++++++++-
-> >  2 files changed, 32 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-> > index 4df0335d0d06..e9114a466f1e 100644
-> > --- a/lib/kunit/kunit-test.c
-> > +++ b/lib/kunit/kunit-test.c
-> > @@ -443,18 +443,6 @@ static struct kunit_suite kunit_resource_test_suite = {
-> >         .test_cases = kunit_resource_test_cases,
-> >  };
-> >
-> > -static void kunit_log_test(struct kunit *test);
-> > -
-> > -static struct kunit_case kunit_log_test_cases[] = {
-> > -       KUNIT_CASE(kunit_log_test),
-> > -       {}
-> > -};
-> > -
-> > -static struct kunit_suite kunit_log_test_suite = {
-> > -       .name = "kunit-log-test",
-> > -       .test_cases = kunit_log_test_cases,
-> > -};
-> > -
-> >  static void kunit_log_test(struct kunit *test)
-> >  {
-> >         struct kunit_suite suite;
-> > @@ -481,6 +469,30 @@ static void kunit_log_test(struct kunit *test)
-> >  #endif
-> >  }
-> >
-> > +static void kunit_log_newline_test(struct kunit *test)
-> > +{
-> > +#ifdef CONFIG_KUNIT_DEBUGFS
-> > +       kunit_info(test, "extra newline\n");
-> > +
-> > +       KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(test->log, "extra newline\n"),
-> > +               "Missing log line, full log:\n%s", test->log);
-> > +       KUNIT_EXPECT_NULL(test, strstr(test->log, "extra newline\n\n"));
-> > +#else
-> > +       kunit_skip(test, "only useful when debugfs is enabled");
-> > +#endif
-> > +}
-> > +
-> > +static struct kunit_case kunit_log_test_cases[] = {
-> > +       KUNIT_CASE(kunit_log_test),
-> > +       KUNIT_CASE(kunit_log_newline_test),
-> > +       {}
-> > +};
-> > +
-> > +static struct kunit_suite kunit_log_test_suite = {
-> > +       .name = "kunit-log-test",
-> > +       .test_cases = kunit_log_test_cases,
-> > +};
-> > +
-> >  static void kunit_status_set_failure_test(struct kunit *test)
-> >  {
-> >         struct kunit fake;
-> > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> > index 27763f0b420c..76d9c31943bf 100644
-> > --- a/lib/kunit/test.c
-> > +++ b/lib/kunit/test.c
-> > @@ -117,6 +117,7 @@ void kunit_log_append(char *log, const char *fmt, ...)
-> >         char line[KUNIT_LOG_SIZE];
-> >         va_list args;
-> >         int len_left;
-> > +       int line_len;
-> >
-> >         if (!log)
-> >                 return;
-> > @@ -125,10 +126,16 @@ void kunit_log_append(char *log, const char *fmt, ...)
-> >         if (len_left <= 0)
-> >                 return;
-> >
-> > +       // Evaluate the length of the line with arguments
-> >         va_start(args, fmt);
-> > -       vsnprintf(line, sizeof(line), fmt, args);
-> > +       line_len = vsnprintf(line, sizeof(line), fmt, args);
-> >         va_end(args);
-> >
-> > +       // If line has two newline characters, do not print
-> > +       // second newline character
-> > +       if (fmt[strlen(fmt) - 2] == '\n')
-> > +               line[line_len - 1] = '\0';
-> > +
-> >         strncat(log, line, len_left);
-> >  }
-> >  EXPORT_SYMBOL_GPL(kunit_log_append);
-> > --
-> > 2.39.1.456.gfc5497dd1b-goog
-> >
+-- 
+Luiz Augusto von Dentz
