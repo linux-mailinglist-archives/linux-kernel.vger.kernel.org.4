@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C67A86921AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:10:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F906921AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232430AbjBJPK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 10:10:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
+        id S232558AbjBJPKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 10:10:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232144AbjBJPKY (ORCPT
+        with ESMTP id S232251AbjBJPKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Feb 2023 10:10:24 -0500
 Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0D4B440
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:10:16 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id f47-20020a05600c492f00b003dc584a7b7eso6495232wmp.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:10:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070123EC5D
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:10:18 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so6503313wmb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:10:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=adIPNQyKxDd1RuPK4zL9OpTeZ2XD9I/+wxj+DVdGgI0=;
-        b=ps/i48xY7OTd8AHo0A09urvF94RXGDUUF2uqa3Qb3qPCVs6MBw2zl72LuGRcivC0n5
-         Zf60Yr+29BTihaSvM/AVfvJoiIYUCde8S59w7wqg4AI98ueD0otRTQoWa4AvTYvapTc8
-         MprdpV4zxU8u8k6mbwGiFH4dZpBI5KwjNZLLEb5yMCea1iIjva9QO7aFCibo5RNilHZ8
-         +V+3e2b3qXqlQvAsEzCQ6mmjZ6IBwIV+QtNY1WPKDruiuD/vGMchgDL+rtwcO19ZrY9e
-         bDI0000zOtUY9IHvZztVfw8p0HklEmgB0Dnf/kUFF5pgo/s8ap4vuqNRgdrIe3Qjy2Qe
-         Wt0Q==
+        bh=y30ATMpLL1p4sSwUhQyjHL/c3brIpR/bscArWLHO7lI=;
+        b=GGmHtQVXt/y7Gf70PAxFkbRl2K3rbN4eQbpOp9jBgJIVukppqlJ4dIqqyjbLHzcC90
+         49LbKn/X4chqRjUB5AU7itVq2yGdaBZ9EPK5ibJbrwFPBbw9b+jq2MrxKpOLX2iNU5l2
+         CzPchIYQXKdAaN0+ukZU4doAloHwNmXJPlDyXpM/itGD/uWX/v7j4ar/hCFuhjbaGvTS
+         SNRt4Mrkat2plsvjmEstWqmvO3mg1qF7NNKFBCFw9WuqpLoJEcFPgiNHA90/s2wHV/A3
+         G7X3yebzB5o87am0AOxRi9yzv1pbzQFBIIneoQNvo8HKT36bdbN6KmmkG+eRiMhwHX4L
+         1bmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=adIPNQyKxDd1RuPK4zL9OpTeZ2XD9I/+wxj+DVdGgI0=;
-        b=QkLGMFcKthmBCP+6fq7WHzyB5g1SP8d4RmdKbe1OUjW9J2JkSQUbGtZGmsOdWN/ZLZ
-         pAbIH97xaAjyJbjtWSvUaoxmBSKTKJNRlFxeQwhOSMNG2v+PNSUAOIdJwGTiD6vDf3P0
-         d2ba3EnSCRmDHtjvpzrjXJuNj0QTChck4LFK1EKc86aDbJpaZ8lqmys3VhWx0qeykg6x
-         0dE2bFd39tvNel9zL1u3lV5ujRuVdm11f4W9k3H5SFkKncriBr6Y8OnoNFhpYw60l0+L
-         XS/yGN11DDSEbaFojhqcmoShC7KmXDFj/nGFPBD2VzsXHkyMkUBiyyyB0DzAYvO1Lh7t
-         f3Cw==
-X-Gm-Message-State: AO0yUKUDpoFf2dKw3vpNw1FvgVQZv75+gyoFLrkc8xKfm6o9vFTjKSJh
-        rzd6i5ncQO8+P3e3zpEwv8bLWA==
-X-Google-Smtp-Source: AK7set9fKSGwP/RWViQy85RqPAZSLf97pmWbONz27jW18E4EKt6F9/VhTsH1UFLZlcOFQQo0nPVXRQ==
-X-Received: by 2002:a05:600c:4910:b0:3dc:1dc3:7a05 with SMTP id f16-20020a05600c491000b003dc1dc37a05mr13295789wmp.10.1676041815276;
-        Fri, 10 Feb 2023 07:10:15 -0800 (PST)
+        bh=y30ATMpLL1p4sSwUhQyjHL/c3brIpR/bscArWLHO7lI=;
+        b=gA3rYq5a6aq7uiMVZFZmGypHL/2jx2n//DSnGJe6uvONM4mqwxmbHhrF+ujs0tHKw4
+         LfyuV/I2KdGLlGXGaWCc8aL61zJ6sEJtFI0ZnaiYQPDU1b06sTpAXgpluSnzFUUJfQiB
+         ReQqUiT+JLA6eBatZD8RdAA5emEQ5x1KyzuC+J+A17rD3jbjWNPKAhjzWStnfW5FRgs8
+         A64wD5Ogr4/uPm90Jmv2oZR2X+QOKChEE8wuOFvvhUVVkHgSrBlXahp98gOTrc0txpxY
+         2un72MBFOaSJ+HXHIy8ngiU4V5p8knvRkDILSFDb1WdshbqzB8G+K1cyMZUhYpp1qR+g
+         cP7A==
+X-Gm-Message-State: AO0yUKXXt4U5VuyNyj1EaBTIT/1aMod0ynHPM0Ob9QksVIro7+kEg+RI
+        xHpWOfJsG9GvOlFtvupak7V8og==
+X-Google-Smtp-Source: AK7set8eCMDn9dJoiFXBhY9Qctg7aCPwRdmw5nKICGViJS8cWrEchk5Wh2a2gkwdmFoIs0Z/wSoYkg==
+X-Received: by 2002:a05:600c:9a2:b0:3dc:576c:ab07 with SMTP id w34-20020a05600c09a200b003dc576cab07mr13027845wmp.14.1676041816571;
+        Fri, 10 Feb 2023 07:10:16 -0800 (PST)
 Received: from linaro.org ([2a00:23c5:680a:d01:61c3:70d8:6500:e102])
-        by smtp.gmail.com with ESMTPSA id a1-20020a05600c348100b003db0ee277b2sm8587771wmq.5.2023.02.10.07.10.13
+        by smtp.gmail.com with ESMTPSA id a1-20020a05600c348100b003db0ee277b2sm8587771wmq.5.2023.02.10.07.10.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 07:10:14 -0800 (PST)
+        Fri, 10 Feb 2023 07:10:15 -0800 (PST)
 From:   Mike Leach <mike.leach@linaro.org>
 To:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
         linux-kernel@vger.kernel.org
 Cc:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
         leo.yan@linaro.org, yabinc@google.com,
         Mike Leach <mike.leach@linaro.org>
-Subject: [PATCH 2/3] coresight: tmc: Update error logging in tmc common functions
-Date:   Fri, 10 Feb 2023 15:10:07 +0000
-Message-Id: <20230210151008.4587-3-mike.leach@linaro.org>
+Subject: [PATCH 3/3] coresight: etf: etr: Update logging around flush_and_stop() errors
+Date:   Fri, 10 Feb 2023 15:10:08 +0000
+Message-Id: <20230210151008.4587-4-mike.leach@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230210151008.4587-1-mike.leach@linaro.org>
 References: <20230210151008.4587-1-mike.leach@linaro.org>
@@ -69,101 +69,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enhance the error logging in the tmc_wait_for_tmcready() and
-tmc_flush_and_stop() to print key tmc  register values on error
-conditions to improve hardware debug information.
+Insert additional context around tmc_flush_and_stop() errors.
 
 Signed-off-by: Mike Leach <mike.leach@linaro.org>
 ---
- .../hwtracing/coresight/coresight-tmc-core.c  | 37 +++++++++++++++----
- drivers/hwtracing/coresight/coresight-tmc.h   |  2 +-
- 2 files changed, 30 insertions(+), 9 deletions(-)
+ drivers/hwtracing/coresight/coresight-tmc-etf.c | 12 +++++++++---
+ drivers/hwtracing/coresight/coresight-tmc-etr.c |  8 ++++++--
+ 2 files changed, 15 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/hwtracing/coresight/coresight-tmc-core.c b/drivers/hwtracing/coresight/coresight-tmc-core.c
-index c106d142e632..f048f450843d 100644
---- a/drivers/hwtracing/coresight/coresight-tmc-core.c
-+++ b/drivers/hwtracing/coresight/coresight-tmc-core.c
-@@ -31,25 +31,36 @@ DEFINE_CORESIGHT_DEVLIST(etb_devs, "tmc_etb");
- DEFINE_CORESIGHT_DEVLIST(etf_devs, "tmc_etf");
- DEFINE_CORESIGHT_DEVLIST(etr_devs, "tmc_etr");
- 
-+#define TMC_WAIT_READY_FMT_STR "timeout while waiting for TMC to be Ready [STS=0x%04x]\n"
-+
- int tmc_wait_for_tmcready(struct tmc_drvdata *drvdata)
+diff --git a/drivers/hwtracing/coresight/coresight-tmc-etf.c b/drivers/hwtracing/coresight/coresight-tmc-etf.c
+index 0ab1f73c2d06..c8a4d4eff64f 100644
+--- a/drivers/hwtracing/coresight/coresight-tmc-etf.c
++++ b/drivers/hwtracing/coresight/coresight-tmc-etf.c
+@@ -84,7 +84,9 @@ static void __tmc_etb_disable_hw(struct tmc_drvdata *drvdata)
  {
- 	struct coresight_device *csdev = drvdata->csdev;
- 	struct csdev_access *csa = &csdev->access;
-+	u32 tmc_sts = 0;
+ 	CS_UNLOCK(drvdata->base);
  
- 	/* Ensure formatter, unformatter and hardware fifo are empty */
--	if (coresight_timeout(csa, TMC_STS, TMC_STS_TMCREADY_BIT, 1)) {
--		dev_err(&csdev->dev,
--			"timeout while waiting for TMC to be Ready\n");
-+	if (coresight_timeout_retval(csa, TMC_STS, TMC_STS_TMCREADY_BIT, 1,
-+				     &tmc_sts)) {
-+		dev_err(&csdev->dev, TMC_WAIT_READY_FMT_STR, tmc_sts);
- 		return -EBUSY;
- 	}
- 	return 0;
- }
+-	tmc_flush_and_stop(drvdata);
++	if (tmc_flush_and_stop(drvdata))
++		dev_err(&drvdata->csdev->dev,
++			"Flush and stop error disabling ETB\n");
+ 	/*
+ 	 * When operating in sysFS mode the content of the buffer needs to be
+ 	 * read before the TMC is disabled.
+@@ -146,7 +148,9 @@ static void tmc_etf_disable_hw(struct tmc_drvdata *drvdata)
  
--void tmc_flush_and_stop(struct tmc_drvdata *drvdata)
-+int tmc_flush_and_stop(struct tmc_drvdata *drvdata)
+ 	CS_UNLOCK(drvdata->base);
+ 
+-	tmc_flush_and_stop(drvdata);
++	if (tmc_flush_and_stop(drvdata))
++		dev_err(&drvdata->csdev->dev,
++			"Flush and stop error disabling ETF\n");
+ 	tmc_disable_hw(drvdata);
+ 	coresight_disclaim_device_unlocked(csdev);
+ 	CS_LOCK(drvdata->base);
+@@ -492,7 +496,9 @@ static unsigned long tmc_update_etf_buffer(struct coresight_device *csdev,
+ 
+ 	CS_UNLOCK(drvdata->base);
+ 
+-	tmc_flush_and_stop(drvdata);
++	if (tmc_flush_and_stop(drvdata))
++		dev_err(&drvdata->csdev->dev,
++			"Flush and stop error updating perf buffer\n");
+ 
+ 	read_ptr = tmc_read_rrp(drvdata);
+ 	write_ptr = tmc_read_rwp(drvdata);
+diff --git a/drivers/hwtracing/coresight/coresight-tmc-etr.c b/drivers/hwtracing/coresight/coresight-tmc-etr.c
+index 918d461fcf4a..ceae6a093612 100644
+--- a/drivers/hwtracing/coresight/coresight-tmc-etr.c
++++ b/drivers/hwtracing/coresight/coresight-tmc-etr.c
+@@ -1145,7 +1145,9 @@ static void __tmc_etr_disable_hw(struct tmc_drvdata *drvdata)
  {
- 	struct coresight_device *csdev = drvdata->csdev;
- 	struct csdev_access *csa = &csdev->access;
--	u32 ffcr;
-+	u32 ffcr, ffsr, tmc_sts;
-+	int rc = 0;
-+
-+	/* note any MemErr present when stopping TMC */
-+	tmc_sts = readl_relaxed(drvdata->base + TMC_STS);
-+	if (tmc_sts & TMC_STS_MEMERR)
+ 	CS_UNLOCK(drvdata->base);
+ 
+-	tmc_flush_and_stop(drvdata);
++	if (tmc_flush_and_stop(drvdata))
++		dev_err(&drvdata->csdev->dev,
++			"Flush and stop error disabling ETR\n");
+ 	/*
+ 	 * When operating in sysFS mode the content of the buffer needs to be
+ 	 * read before the TMC is disabled.
+@@ -1548,7 +1550,9 @@ tmc_update_etr_buffer(struct coresight_device *csdev,
+ 
+ 	CS_UNLOCK(drvdata->base);
+ 
+-	tmc_flush_and_stop(drvdata);
++	if (tmc_flush_and_stop(drvdata))
 +		dev_err(&csdev->dev,
-+			"MemErr detected before Manual Flush; STS[0x%02x]\n",
-+			tmc_sts);
++			"Flush and Stop error updating perf buffer\n");
+ 	tmc_sync_etr_buf(drvdata);
  
- 	ffcr = readl_relaxed(drvdata->base + TMC_FFCR);
- 	ffcr |= TMC_FFCR_STOP_ON_FLUSH;
-@@ -57,12 +68,22 @@ void tmc_flush_and_stop(struct tmc_drvdata *drvdata)
- 	ffcr |= BIT(TMC_FFCR_FLUSHMAN_BIT);
- 	writel_relaxed(ffcr, drvdata->base + TMC_FFCR);
- 	/* Ensure flush completes */
--	if (coresight_timeout(csa, TMC_FFCR, TMC_FFCR_FLUSHMAN_BIT, 0)) {
-+	if (coresight_timeout_retval(csa, TMC_FFCR, TMC_FFCR_FLUSHMAN_BIT, 0,
-+				     &ffcr)) {
-+		ffsr = readl_relaxed(drvdata->base + TMC_FFSR);
- 		dev_err(&csdev->dev,
--		"timeout while waiting for completion of Manual Flush\n");
-+			"timeout while waiting for completion of Manual Flush\n");
-+		dev_err(&csdev->dev,
-+			"regs: FFCR[0x%02x] FFSR[0x%02x] STS[0x%02x]\n",
-+			ffcr, ffsr, tmc_sts);
-+		rc = -EBUSY;
- 	}
- 
--	tmc_wait_for_tmcready(drvdata);
-+	if (tmc_wait_for_tmcready(drvdata)) {
-+		dev_err(&csdev->dev, "TMC ready error after Manual flush\n");
-+		rc = -EBUSY;
-+	}
-+	return rc;
- }
- 
- void tmc_enable_hw(struct tmc_drvdata *drvdata)
-diff --git a/drivers/hwtracing/coresight/coresight-tmc.h b/drivers/hwtracing/coresight/coresight-tmc.h
-index 01c0382a29c0..314f8244787f 100644
---- a/drivers/hwtracing/coresight/coresight-tmc.h
-+++ b/drivers/hwtracing/coresight/coresight-tmc.h
-@@ -256,7 +256,7 @@ struct tmc_sg_table {
- 
- /* Generic functions */
- int tmc_wait_for_tmcready(struct tmc_drvdata *drvdata);
--void tmc_flush_and_stop(struct tmc_drvdata *drvdata);
-+int tmc_flush_and_stop(struct tmc_drvdata *drvdata);
- void tmc_enable_hw(struct tmc_drvdata *drvdata);
- void tmc_disable_hw(struct tmc_drvdata *drvdata);
- u32 tmc_get_memwidth_mask(struct tmc_drvdata *drvdata);
+ 	CS_LOCK(drvdata->base);
 -- 
 2.17.1
 
