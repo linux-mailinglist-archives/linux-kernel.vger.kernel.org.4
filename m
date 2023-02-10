@@ -2,56 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FDE1692B1F
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 00:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C645692B21
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 00:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbjBJXZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 18:25:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34950 "EHLO
+        id S229725AbjBJX0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 18:26:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjBJXZD (ORCPT
+        with ESMTP id S229703AbjBJX0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 18:25:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B5E1F4A1;
-        Fri, 10 Feb 2023 15:24:57 -0800 (PST)
+        Fri, 10 Feb 2023 18:26:17 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09161B5;
+        Fri, 10 Feb 2023 15:26:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D88461ECC;
-        Fri, 10 Feb 2023 23:24:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5BB2C433EF;
-        Fri, 10 Feb 2023 23:24:56 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 59ED9CE28B9;
+        Fri, 10 Feb 2023 23:26:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B079C433D2;
+        Fri, 10 Feb 2023 23:26:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676071496;
-        bh=pY/6dp0qgOqHjnt0x5AtFF4eHqafITwwbuPlyj1PCEM=;
+        s=k20201202; t=1676071572;
+        bh=oPttgO5jXm2lZqDZTv/NVSsliVIw12bDAtzJ2u0WYDU=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=eGqnzLgGu/0OmFkFyM2Gms/HqzzYxQwEPdC9U+u4l5Ne5+M8wXBsCtrT+dgnMxFfS
-         bg8E/4pqmYKC180pXyO0KwUIpu7mukf/Y4Girt65V/t+fSY0riyd+DJQrOvE6wFLkT
-         YUrBjoxrW8O+GS077SJhqQ/VBUjSgDGLzyJMZD2FpOMK1oxsW7RsywGweslJ0ChyqX
-         CF2+20omGvZs/92WUnJlKG8LyHRN374U942yHJtD0kamqy7MED9sFS7JY2zejhC31u
-         UYdY3s+iL0O0MARCrbWzRJk61hsfg9wOQhRChr2SgIWYrZCDrc/Hi4grS0bwCdv2ky
-         CtAjKtZi2afzw==
-Message-ID: <21e4cb835f678faa911ef97d28931246.sboyd@kernel.org>
+        b=ccTLGnQyaiWPK7wgM4cpPhG7g5atjTnZ7AyC6BJz5FjxgGN/pioNGiJbVUQDymgKQ
+         HRNOS7A/3cv38IIr3LXR2EDx64Ou5zPna9ORWaZu/fabjfH+lPDoavZLNixZgWRlP7
+         qEfgbv6qvL4KD0F2MuaiH7sa8R7YOUuK1UI78sU3Appi0NKRlB9byM0UEy4kgv8Y6F
+         u65NdHyiB9XGHAkR10SnGfQpUJwS8H9JSkml1zfZzAKCQ01AG2FE4v4VMhuh7tEN12
+         sZHWnlRuRFWBsmzONqQVMhw/bIF05Eb0jg/B9hdYM7XT5rn6CJZ6JCvOFqb5Feuzs3
+         LVRA9Nv0AbDaQ==
+Message-ID: <347b0935e825770ebd7ebc52274708dc.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221210203835.9714-1-kgroeneveld@lenbrook.com>
-References: <20221210203835.9714-1-kgroeneveld@lenbrook.com>
-Subject: Re: [PATCH] clk: imx: pll14xx: fix recalc_rate for negative kdiv
+In-Reply-To: <20221215165836.2136448-1-arnd@kernel.org>
+References: <20221215165836.2136448-1-arnd@kernel.org>
+Subject: Re: [PATCH] clk: imx: fix compile testing imxrt1050
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Kevin Groeneveld <kgroeneveld@lenbrook.com>
-To:     Abel Vesa <abelvesa@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Kevin Groeneveld <kgroeneveld@lenbrook.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Jesse Taube <mr.bossman075@gmail.com>,
+        Giulio Benetti <giulio.benetti@benettiengineering.com>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Date:   Fri, 10 Feb 2023 15:24:54 -0800
+To:     Abel Vesa <abelvesa@kernel.org>, Arnd Bergmann <arnd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Date:   Fri, 10 Feb 2023 15:26:10 -0800
 User-Agent: alot/0.10
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -62,16 +65,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Kevin Groeneveld (2022-12-10 12:38:35)
-> kdiv is a signed 16 bit value in the DEV_CTL1 register. Commit
-> 53990cf9d5b4 ("clk: imx: pll14xx: consolidate rate calculation") changed
-> the kdiv variable from a short int to just int. When the value read from
-> the DIV_CTL1 register is assigned directly to an int the sign of the value
-> is lost resulting in incorrect results when the value is negative. Adding
-
-Can the field be negative?
-
-> a s16 cast to the register value fixes the issue.
+Quoting Arnd Bergmann (2022-12-15 08:58:18)
+> From: Arnd Bergmann <arnd@arndb.de>
 >=20
-> Fixes: 53990cf9d5b4 ("clk: imx: pll14xx: consolidate rate calculation")
-> Signed-off-by: Kevin Groeneveld <kgroeneveld@lenbrook.com>
+> Randconfig testing revealed multiple issues with this driver:
+>=20
+> ERROR: modpost: missing MODULE_LICENSE() in drivers/clk/imx/clk-imxrt1050=
+.o
+> ERROR: modpost: "imx_clk_hw_pllv3" [drivers/clk/imx/clk-imxrt1050.ko] und=
+efined!
+> ERROR: modpost: "imx_clk_hw_pfd" [drivers/clk/imx/clk-imxrt1050.ko] undef=
+ined!
+>=20
+> Export the necessary symbols from the core clk driver and add the
+> license and author tags. To find this type of problem more easily
+> in the future, also enable building on other platforms, as we do for
+> the other i.MX clk drivers.
+>=20
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+
+Applied to clk-next
