@@ -2,99 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72EB3691FD7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 14:37:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 777D0691FE1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 14:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232241AbjBJNh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 08:37:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
+        id S231991AbjBJNie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 08:38:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232242AbjBJNhZ (ORCPT
+        with ESMTP id S231400AbjBJNic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 08:37:25 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E1A34F6F
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 05:37:16 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso4069881wms.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 05:37:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=N7ekQ1ebVb37EvbrSMM8z2fZgMGZlkF4SAJIlmmXlIM=;
-        b=FCf0kR0Gjrjfjr3X70C69QAWt/URQpaCkheBjnMlDc70dl4LzCqdDKZ0tAGyf2FEPs
-         jI5F7nxgsGcpWMgcP2KL1Hk8Fdjak4Vu8TW1zgX+nZN6Rmm0FBgJLubzWXJ0r1J7zaVf
-         mwcTyZz4yHW9LtRcav7buitHSFWRy133YRyTOHELsVJiYUHYLRuOroxoW//jkYnbnqoi
-         NwmS2XnikbTHrOW1s95tZj6joLbawoAuRxPw5MJF3DvR04vpJfp/F6MHutBoPRwKRrd0
-         Vm0mnznVit4L96oO2PsX4Pg+016PNwIf1cfSyu/McZj3p2W0I862YPPV5Jz9TFrumF2a
-         Au3w==
+        Fri, 10 Feb 2023 08:38:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B9234F74
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 05:37:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676036261;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KVz0PICEKJnJhWjfxZa80vyYxDmjBOx8Ts16NJkVpFM=;
+        b=fd2+929qAmiRaHWTQKlwrrIMObQ9Pxw+TMPixuEgULL1ArontMBgNaxh9zedtR6qYxZWBW
+        HAuGrzwCbu3AWUaT5mCfPaJbGAAA/jkviF6wDsKRpE/6UCgLEduxEc1BEz5erXXI/RdfSS
+        3jRKZGxiOmxNFdDvzj78y9U+Nj/eNEU=
+Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com
+ [209.85.219.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-387-0uHuH39hP2ugZNGlsSzmEA-1; Fri, 10 Feb 2023 08:37:40 -0500
+X-MC-Unique: 0uHuH39hP2ugZNGlsSzmEA-1
+Received: by mail-yb1-f197.google.com with SMTP id 189-20020a2501c6000000b008b256b6643cso4885772ybb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 05:37:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N7ekQ1ebVb37EvbrSMM8z2fZgMGZlkF4SAJIlmmXlIM=;
-        b=fu4mMq8bRu7eVzW7NvKg7e1LydAfjEmT8I+ypTGiS/vknDFQqQjzMLgGApbvMni0tt
-         RcHd/5BwXct23VHycR+hhHgxLNmh9w11NgSD1bUrStC0uPTyDTw2PEv5dnwrCnRpmKF8
-         HFjrFkLBluRt6wWN5n15anDyJJUYeZ7ByZjO8tZdhLh1D5IK3Mkgmji+CYCkUPRBPB+u
-         74SWtEJBcvPgRiL/NJc0kf37KkYn1iRZBoQWOe4Vt6zYT0PXuJZlLgs1YftZnJCC5FrT
-         SmkrzStC6hkXt5GezFXHqRQ9czod9lFfe6Vt/6RzIzUx2NSXV3bxmtgEWJ6JnbhXUgST
-         43JA==
-X-Gm-Message-State: AO0yUKXQr3mnV15urmp/gc4/34x4EBclCZN/HmfOG8djWn165x/MYJKq
-        sHZJ41sFgwUPq1vg4IHQxY948w==
-X-Google-Smtp-Source: AK7set8fjEPYu9ZwvA/RHRPBjh1BbgUcbDV5WYTXQPAUasU7/Z6NTrezKJEnTnCHemufwUts1ejAxA==
-X-Received: by 2002:a05:600c:4a9a:b0:3dc:f24:f2de with SMTP id b26-20020a05600c4a9a00b003dc0f24f2demr12948965wmp.12.1676036234711;
-        Fri, 10 Feb 2023 05:37:14 -0800 (PST)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id bi5-20020a05600c3d8500b003db012d49b7sm12578383wmb.2.2023.02.10.05.37.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 05:37:14 -0800 (PST)
-Message-ID: <1d2d879c-4563-4ee0-7bf1-141d5796fe74@linaro.org>
-Date:   Fri, 10 Feb 2023 14:37:12 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KVz0PICEKJnJhWjfxZa80vyYxDmjBOx8Ts16NJkVpFM=;
+        b=68WX9A6Ys2zfgXQYn29a13JlDYVqaDe5kec3b0Tg4RUO90upp08u3Giox4s0Nbj02V
+         VHRPjJXCafcft64JBMktm5CAkW1iHJCn0VV8Tym5mR9NLRDGW9aKK2+y1c+bQshqaqm4
+         wHwh43yJVtRKChf3nH5LmhE42KJ1dOU/cIMHM/2moB1GlsgOK54+LClz4US5RxHYzmqZ
+         njnqLCOutT37yJKQhDTmPd4RpBVc/3Ad45FPl34q7ghKZpFsfTZ6r9nPndpjHpaJERuN
+         v47HDcrG4uS9ea+JG2fKH5PZjmdXX98UZmTad8Ym1+1RuBC80GHkR1mt41szH3GFd979
+         4ivw==
+X-Gm-Message-State: AO0yUKXaRE7FJHBIRVf5wWRX5lotf+tzmxEQZBVDPJ6FTi3HTIoMRkWo
+        UqBAZGLBQdsFH5yI6SBK8Lp5WQLk0TEyOWEJXZ3i1LcgeLULvYTmHw0QzE1nEKLGyP7y4wJ6cQc
+        T4l14RVHfIcz7GB4Yb4v1iEGNVdpZ4mSg3j04Rlm9QccBJg==
+X-Received: by 2002:a0d:ea10:0:b0:52e:cacd:493e with SMTP id t16-20020a0dea10000000b0052ecacd493emr247563ywe.0.1676036259733;
+        Fri, 10 Feb 2023 05:37:39 -0800 (PST)
+X-Google-Smtp-Source: AK7set+OUEmSJAeQqMYvYLshQbWJegojHEsZWSRaumbRsmQh/xQFtMrIaRRMW2XSA758xlVhssD3nMpCpGr42HDRKeE=
+X-Received: by 2002:a0d:ea10:0:b0:52e:cacd:493e with SMTP id
+ t16-20020a0dea10000000b0052ecacd493emr247560ywe.0.1676036259519; Fri, 10 Feb
+ 2023 05:37:39 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] clocksource/drivers/timer-sun4i: Add
- CLOCK_EVT_FEAT_DYNIRQ
-Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, tglx@linutronix.de, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
-References: <20230209040239.24710-1-frank.li@vivo.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230209040239.24710-1-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230210084207.4d02d107@canb.auug.org.au>
+In-Reply-To: <20230210084207.4d02d107@canb.auug.org.au>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Fri, 10 Feb 2023 14:37:28 +0100
+Message-ID: <CAO-hwJJcXj7QT-N3Nmaua9C4gw=kqt0qMz_RBTskrZxgHqF-AA@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the hid tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Walt Holman <waltholman09@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/02/2023 05:02, Yangtao Li wrote:
-> Add CLOCK_EVT_FEAT_DYNIRQ to allow the IRQ could be runtime set affinity
-> to the cores that needs wake up, otherwise saying core0 has to send
-> IPI to wakeup core1. With CLOCK_EVT_FEAT_DYNIRQ set, when broadcast
-> timer could wake up the cores, IPI is not needed.
-> 
-> After enabling this feature, especially the scene where cpuidle is
-> enabled can benefit.
-> 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
+Hi Stephen,
 
-Applied, thanks
+On Thu, Feb 9, 2023 at 10:42 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Commit
+>
+>   f1fc9fbc8394 ("HID: Add support for Logitech G923 Xbox Edition steering wheel")
+>
+> is missing a Signed-off-by from its author.
+>
+> This is just a typo - "Signed-of-by".
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Alright, force pushed an update of the whole for-6.3/logitech branch
+with both this typo fix and the missing-12-chars-for-fixes-tag that
+was in that branch too.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Also force pushed for-next, which cleans a little bit everything, with
+a check that the old for-next branch and the new one have the exact
+same content.
+
+Cheers,
+Benjamin
+
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
