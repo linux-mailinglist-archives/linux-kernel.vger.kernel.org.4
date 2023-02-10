@@ -2,140 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B71BA691D78
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:01:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6423691D7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:02:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232268AbjBJLBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 06:01:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42598 "EHLO
+        id S232273AbjBJLCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 06:02:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232323AbjBJLBj (ORCPT
+        with ESMTP id S232179AbjBJLCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 06:01:39 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27FD5ACC6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 03:01:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676026895; x=1707562895;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+Kq6GmTwq50W7xjxGNwYvGxr6JO92IjRDTIAy0kK3dI=;
-  b=GwE6DpOgt+MbhCQ8g7NyjcH/y+SMYjEo5lR5KJwy87NVqSN7utOIfS0g
-   1A2Gzv3dOIKVYcm9UZWY+i5tb0hIIzEfKlEUsm/RU3dw3kwd2iF11Gusk
-   Z2ypXAX+iJAzocFPTzFl/CSnf4hfKlavNKLjGwlD7yH4ee/YbTvlaCKhn
-   LQ4+Ae/Dqs/NbxsIaMRImMO3KTlPrN+dlwstTi+gQ+q+Q8Hzczi5jPVii
-   8dAlc0TavtCB9rofZ/+MfdG4my5iU2ne6yKWWs66he7qewJflaVqkC0/o
-   YwWsjLU/mqsUvOiMQZ3UoBgvIKfSoBZYYSCeC7p9tb9cLTWfgEt9elpEJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="329021973"
-X-IronPort-AV: E=Sophos;i="5.97,286,1669104000"; 
-   d="scan'208";a="329021973"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 03:01:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="731685897"
-X-IronPort-AV: E=Sophos;i="5.97,286,1669104000"; 
-   d="scan'208";a="731685897"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 10 Feb 2023 03:01:34 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pQR9p-0005ld-1l;
-        Fri, 10 Feb 2023 11:01:33 +0000
-Date:   Fri, 10 Feb 2023 19:01:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        WANG Xuerui <git@xen0n.name>,
-        Jianmin Lv <lvjianmin@loongson.cn>
-Subject: drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse: sparse:
- incorrect type in argument 1 (different base types)
-Message-ID: <202302101854.YYJBwUh5-lkp@intel.com>
+        Fri, 10 Feb 2023 06:02:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F404B37F0F;
+        Fri, 10 Feb 2023 03:01:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 94A5DB824CE;
+        Fri, 10 Feb 2023 11:01:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3026C433D2;
+        Fri, 10 Feb 2023 11:01:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676026912;
+        bh=0SjioCiP64GPWMqzyQ75xWspd1FmGySB99HbUwvewbU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fuWd6/7aDLHPNmEXDV+yyDNYQmxmenV6uugq1zrDc/NHIfE2NPNC+7OUX3N+7BcM6
+         NLIFl+1kDo6H4q/SsQp4//GPRBpLMCvjHI0HIf50CBMUQSv1kXXMFAO/wyzUXfsxQe
+         bS+1MAjZUrjPJKiXNvFevfKb4Agg1fZyiL3pSWyc=
+Date:   Fri, 10 Feb 2023 12:01:49 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/7] usb: typec: ucsi: add PMIC Glink UCSI driver
+Message-ID: <Y+YkHZASzN97QtUY@kroah.com>
+References: <20230130-topic-sm8450-upstream-pmic-glink-v1-0-0b0acfad301e@linaro.org>
+ <20230130-topic-sm8450-upstream-pmic-glink-v1-1-0b0acfad301e@linaro.org>
+ <Y9jcYdc30G026/fs@kroah.com>
+ <720aee1d-87e8-5291-c6a0-ef53e830a21d@linaro.org>
+ <Y+YerQrfWgmwTErM@kroah.com>
+ <06670a10-c8e9-6f87-9c16-e88a90a74469@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <06670a10-c8e9-6f87-9c16-e88a90a74469@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   38c1e0c65865426676123cc9a127526fa02bcac6
-commit: 57fc7323a8e7c2e7c1d5795ab63cb3ffea3cfdfb LoongArch: Add PCI controller support
-date:   6 months ago
-config: loongarch-randconfig-s052-20230210 (https://download.01.org/0day-ci/archive/20230210/202302101854.YYJBwUh5-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=57fc7323a8e7c2e7c1d5795ab63cb3ffea3cfdfb
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 57fc7323a8e7c2e7c1d5795ab63cb3ffea3cfdfb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/infiniband/hw/vmw_pvrdma/ net/core/
+On Fri, Feb 10, 2023 at 11:44:22AM +0100, Neil Armstrong wrote:
+> On 10/02/2023 11:38, Greg Kroah-Hartman wrote:
+> > On Fri, Feb 10, 2023 at 11:31:08AM +0100, Neil Armstrong wrote:
+> > > On 31/01/2023 10:16, Greg Kroah-Hartman wrote:
+> > > > On Mon, Jan 30, 2023 at 10:54:32AM +0100, Neil Armstrong wrote:
+> > > > > Introduce the UCSI PMIC Glink aux driver that communicates
+> > > > > with the aDSP firmware with the UCSI protocol which handles
+> > > > > the USB-C Port(s) Power Delivery.
+> > > > > 
+> > > > > The UCSI messaging is necessary on newer Qualcomm SoCs to
+> > > > > provide USB role switch and altmode notifications.
+> > > > > 
+> > > > > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> > > > > ---
+> > > > >    drivers/usb/typec/ucsi/Kconfig      |   7 +
+> > > > >    drivers/usb/typec/ucsi/Makefile     |   1 +
+> > > > >    drivers/usb/typec/ucsi/ucsi_glink.c | 321 ++++++++++++++++++++++++++++++++++++
+> > > > >    3 files changed, 329 insertions(+)
+> > > > > 
+> > > > > diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
+> > > > > index 8f9c4b9f31f7..dee6069e46a2 100644
+> > > > > --- a/drivers/usb/typec/ucsi/Kconfig
+> > > > > +++ b/drivers/usb/typec/ucsi/Kconfig
+> > > > > @@ -58,4 +58,11 @@ config UCSI_STM32G0
+> > > > >    	  To compile the driver as a module, choose M here: the module will be
+> > > > >    	  called ucsi_stm32g0.
+> > > > > +config UCSI_PMIC_GLINK
+> > > > > +	tristate "UCSI Qualcomm PMIC GLINK Interface Driver"
+> > > > > +	depends on QCOM_PMIC_GLINK
+> > > > 
+> > > > No way to test build this code without this option?
+> > > 
+> > > Nop, the QCOM_PMIC_GLINK is a build dependency, this can't be removed
+> > 
+> > Then perhaps the QCOM_PMIC_GLINK code needs to be fixed up to allow for
+> > it to be built on all platforms properly?  Otherwise you are
+> > guaranteeing you will not get much, if any, build coverage and api
+> > changes will cause this code to stagnate over time :(
+> 
+> The QCOM_PMIC_GLINK deps are:
+>         depends on RPMSG
+>         depends on TYPEC
+>         depends on DRM
+>         depends on NET
+>         depends on OF
+>         select AUXILIARY_BUS
+>         select QCOM_PDR_HELPERS
+> 
+> What would be the changes needed here ?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302101854.YYJBwUh5-lkp@intel.com/
+I do not know, try unwinding it and maybe just adding a COMPILE_TEST
+build option in a few places is all that is needed?
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma_cmd.c: note: in included file:
->> drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse:     expected unsigned int [usertype] value
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse:     got restricted __le32 [usertype]
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:306:16: sparse: sparse: cast to restricted __le32
---
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma_main.c: note: in included file:
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:306:16: sparse: sparse: cast to restricted __le32
->> drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse:     expected unsigned int [usertype] value
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse:     got restricted __le32 [usertype]
->> drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse:     expected unsigned int [usertype] value
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse:     got restricted __le32 [usertype]
->> drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse:     expected unsigned int [usertype] value
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse:     got restricted __le32 [usertype]
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:306:16: sparse: sparse: cast to restricted __le32
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:306:16: sparse: sparse: cast to restricted __le32
->> drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse:     expected unsigned int [usertype] value
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse:     got restricted __le32 [usertype]
->> drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse:     expected unsigned int [usertype] value
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse:     got restricted __le32 [usertype]
->> drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse:     expected unsigned int [usertype] value
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse:     got restricted __le32 [usertype]
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:306:16: sparse: sparse: cast to restricted __le32
->> drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] value @@     got restricted __le32 [usertype] @@
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse:     expected unsigned int [usertype] value
-   drivers/infiniband/hw/vmw_pvrdma/pvrdma.h:301:16: sparse:     got restricted __le32 [usertype]
+thanks,
 
-vim +301 drivers/infiniband/hw/vmw_pvrdma/pvrdma.h
-
-29c8d9eba550c6 Adit Ranadive 2016-10-02  298  
-29c8d9eba550c6 Adit Ranadive 2016-10-02  299  static inline void pvrdma_write_reg(struct pvrdma_dev *dev, u32 reg, u32 val)
-29c8d9eba550c6 Adit Ranadive 2016-10-02  300  {
-29c8d9eba550c6 Adit Ranadive 2016-10-02 @301  	writel(cpu_to_le32(val), dev->regs + reg);
-29c8d9eba550c6 Adit Ranadive 2016-10-02  302  }
-29c8d9eba550c6 Adit Ranadive 2016-10-02  303  
-
-:::::: The code at line 301 was first introduced by commit
-:::::: 29c8d9eba550c6d73d17cc1618a9f5f2a7345aa1 IB: Add vmw_pvrdma driver
-
-:::::: TO: Adit Ranadive <aditr@vmware.com>
-:::::: CC: Doug Ledford <dledford@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+greg k-h
