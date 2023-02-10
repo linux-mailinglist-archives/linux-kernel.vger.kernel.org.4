@@ -2,75 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3F06916C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 03:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F236916C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 03:44:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjBJCn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 21:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39762 "EHLO
+        id S230300AbjBJCoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 21:44:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjBJCn4 (ORCPT
+        with ESMTP id S230243AbjBJCoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 21:43:56 -0500
-Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD98670955
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 18:43:53 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VbICT0J_1675997026;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VbICT0J_1675997026)
-          by smtp.aliyun-inc.com;
-          Fri, 10 Feb 2023 10:43:51 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     alexander.deucher@amd.com
-Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] drm/amd/display: Remove the unused variable pre_connection_type
-Date:   Fri, 10 Feb 2023 10:43:43 +0800
-Message-Id: <20230210024343.26220-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 9 Feb 2023 21:44:38 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306DC70952
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 18:44:37 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id k4so4272903vsc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 18:44:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RxKcD5MHPeq8MW1BxCC2B2HCW247AyxiuibPeYpJLy0=;
+        b=WQkeb8HRZt6mt0Ws9HllUpsfUrgKa8s9at6qO+rVthEmiAc9amoTtOnzqJEmH1BFeZ
+         asqVFIfptZupwd2MwiZ2DDmlc/9w3dKQTrZnnsmQiigaSBMnimX0pciG3LuyWeI4fUjT
+         DCfgGNGZeXGPitNNKFNOaOJh6uI8dktnbgnGU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RxKcD5MHPeq8MW1BxCC2B2HCW247AyxiuibPeYpJLy0=;
+        b=iFa9IkCvcc+R14neAOehk9fl4WDFcB4mfzmBpTVEWfsVAythN971QGyUt+HIowMjSt
+         gLahFgBR+a666xTJ41poc6oii3kCQx1yC2hQ/MrdTyHYYvClUCxnC6mfXNGBr5v9+wFb
+         j2fijX9Sx7HY1DigsB+RR3zM6whHFGI53C3MEFZmGK+tppfhQusAoffVgPIWTEpt+eQV
+         fFZmWnfNpfQKG+6tWGAUWCDnm3YVhtHJXL/7+k0RM4+mjJ9VTXo2fTUvTNh1wp5wcGkG
+         fj6oAULIZn1rY99L5Mgn2JvUavYhPr7QHeXtNd2ecRcMZHEkvblTl+ohPFEc55iyrRnJ
+         Bdgw==
+X-Gm-Message-State: AO0yUKWVOhmxjpROAvJZrIbPt/uATA3HPh4jTQJL6l/xYLxmm82INmVW
+        9qkV6TObNkSyLI2Hs3J9TRnp8mNfrBzLSup3Jn77Vg==
+X-Google-Smtp-Source: AK7set8rmT5dBRiIMSgQxob4EVFEZikOUhOwE5/3kSmzkpF4EKHK+ockF47cKpiLEoE6PwJMZW4tFwy49H4pgkx46b8=
+X-Received: by 2002:a67:d202:0:b0:411:c830:e5b5 with SMTP id
+ y2-20020a67d202000000b00411c830e5b5mr952691vsi.65.1675997076332; Thu, 09 Feb
+ 2023 18:44:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230209160357.19307-1-matthias.bgg@kernel.org> <20230209160357.19307-4-matthias.bgg@kernel.org>
+In-Reply-To: <20230209160357.19307-4-matthias.bgg@kernel.org>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 10 Feb 2023 10:44:25 +0800
+Message-ID: <CAGXv+5FnXtR+KP6GZ2ut1cUwo0z-SBs1zTPWMSvm9dF-NNn--g@mail.gmail.com>
+Subject: Re: [PATCH v1 4/4] Revert "arm64: dts: mt8173: add mmsel clocks for
+ 4K support"
+To:     matthias.bgg@kernel.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        angelogioacchino.delregno@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable pre_connection_type is not effectively used, so delete it.
+On Fri, Feb 10, 2023 at 12:05 AM <matthias.bgg@kernel.org> wrote:
+>
+> From: Matthias Brugger <matthias.bgg@gmail.com>
+>
+> This reverts commit fc6634ac0e5380aeb1063275a2e9a583d41b2306.
+>
+> The mmsys is a clock provider but does not have any clocks connected to
+> it. Therefore assigned-clock properties should be applied to the users of mmsys.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4031
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/gpu/drm/amd/display/dc/link/link_detection.c | 2 --
- 1 file changed, 2 deletions(-)
+If there are multiple users that need this, then it should be moved to
+the clock provider node topckgen.
 
-diff --git a/drivers/gpu/drm/amd/display/dc/link/link_detection.c b/drivers/gpu/drm/amd/display/dc/link/link_detection.c
-index 63e75c392031..d224a44c4cc8 100644
---- a/drivers/gpu/drm/amd/display/dc/link/link_detection.c
-+++ b/drivers/gpu/drm/amd/display/dc/link/link_detection.c
-@@ -886,7 +886,6 @@ static bool detect_link_and_local_sink(struct dc_link *link,
- 	struct dc_sink *prev_sink = NULL;
- 	struct dpcd_caps prev_dpcd_caps;
- 	enum dc_connection_type new_connection_type = dc_connection_none;
--	enum dc_connection_type pre_connection_type = dc_connection_none;
- 	const uint32_t post_oui_delay = 30; // 30ms
- 
- 	DC_LOGGER_INIT(link->ctx->logger);
-@@ -923,7 +922,6 @@ static bool detect_link_and_local_sink(struct dc_link *link,
- 
- 	link_disconnect_sink(link);
- 	if (new_connection_type != dc_connection_none) {
--		pre_connection_type = link->type;
- 		link->type = new_connection_type;
- 		link->link_state_valid = false;
- 
--- 
-2.20.1.7.g153144c
-
+> This fixes the DT schema check:
+> mediatek/mt8173-elm.dtb: syscon@14000000: 'assigned-clock-rates', 'assigned-clocks' do not match any of the regexes: 'pinctrl-[0-9]+'
+>
+> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+> ---
+>
+>  arch/arm64/boot/dts/mediatek/mt8173.dtsi | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+> index c47d7d900f283..b753547e250fe 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+> @@ -988,8 +988,6 @@ mmsys: syscon@14000000 {
+>                         compatible = "mediatek,mt8173-mmsys", "syscon";
+>                         reg = <0 0x14000000 0 0x1000>;
+>                         power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
+> -                       assigned-clocks = <&topckgen CLK_TOP_MM_SEL>;
+> -                       assigned-clock-rates = <400000000>;
+>                         #clock-cells = <1>;
+>                         #reset-cells = <1>;
+>                         mboxes = <&gce 0 CMDQ_THR_PRIO_HIGHEST>,
+> --
+> 2.39.0
+>
+>
