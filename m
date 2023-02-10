@@ -2,123 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED39691694
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 03:16:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0650F691698
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 03:16:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjBJCQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 21:16:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
+        id S230181AbjBJCQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 21:16:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjBJCP6 (ORCPT
+        with ESMTP id S230175AbjBJCQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 21:15:58 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7154C6E88B;
-        Thu,  9 Feb 2023 18:15:57 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PCclr1rVmz4f3lK8;
-        Fri, 10 Feb 2023 10:15:52 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgDX0R_XqOVjXpooDA--.2711S3;
-        Fri, 10 Feb 2023 10:15:53 +0800 (CST)
-Subject: Re: [PATCHSET v3 block/for-next] blkcg: Improve blkg config helpers
- and make iolatency init lazy
-To:     Tejun Heo <tj@kernel.org>, axboe@kernel.dk, josef@toxicpanda.com,
-        hch@lst.de
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230110222714.552241-1-tj@kernel.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <58a4bf92-2830-1ff0-c7b1-ea9b349105df@huaweicloud.com>
-Date:   Fri, 10 Feb 2023 10:15:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 9 Feb 2023 21:16:12 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D356F8D2
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 18:16:07 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id z1so5028413plg.6
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 18:16:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bmdsJe5VjS6cGWRPCrFBEnJ1Stz+m8nOHf+xEJbc8Ro=;
+        b=J8IifK/DvnXJNvhWBvQbcKdHIoBmbbPZ9GmygmQqrNwBSb1pD/HNZOZeiWQSwCoPci
+         NP3OTrWJb/g+vFhmEllum5yKYw4HmSuTpSf7i55JPj2Otjj8Ztgyi8fAQxheouAVG5gr
+         feUmWCgQKTCr0LdxXWejJcCO5GBTd8ROY77qtZY0Fa02CnRZBNcoPEAQeGO7e2TtM9Yj
+         8HlgeD73o8w0RL3OTbBGYNgFkV2ABhQP1834I5JNDAQmI5VJyB6at/AfhIBmtmrZ5zt7
+         LFe2GAliMmn6fR9D5GkGQJU5ayikMCd3K9h34G22YIj2ial/gBGc15dVfeAuO9Woi5dM
+         NBhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bmdsJe5VjS6cGWRPCrFBEnJ1Stz+m8nOHf+xEJbc8Ro=;
+        b=uPsAG8aZkbNddxQvEHIW80ka6aRvE3Lkkscw+hvuOPgIpLhxkGqkvNvp/k3AHOlXLu
+         Czjw9mR+t7BZpnsh8x4yM5/zm4UOWZSveAjwVa0VZCWqlHQC9RZ4rNsmPH5X68NgIw92
+         7wbwV5qVDqo6TC7L/q8zazyFh/JeAokH8kXMhtWNfIOuogbZdMnn50dcT2k+oXkzwQr0
+         m5B7I4wEJw7cWTY1bIzg0qDryfm5xGUViEIRWlPXoLl828CU/0zou7g6kiivUFDVEgvF
+         W+9ZPKL96O4NUcgeXy/P8/z+bInUq1GD/YnyaC26YZQ23GkNU246DN2c1GimtCx9zAao
+         JHyA==
+X-Gm-Message-State: AO0yUKUXN/EW7YWE7i/MxMA3NzvZjxVHO71mttymcFVT6Qghld4MCuEa
+        gEhEMF8vmvq6aPPxm0vV/b5wFg==
+X-Google-Smtp-Source: AK7set/5M4194uBmFaxqcnUSG3dAq8TXSG1+LxNlv7e9evS+gIEFmcux2K3a5fEecC8rDIi5Jlct7Q==
+X-Received: by 2002:a17:902:6b81:b0:199:bcb:3dae with SMTP id p1-20020a1709026b8100b001990bcb3daemr10334823plk.56.1675995366933;
+        Thu, 09 Feb 2023 18:16:06 -0800 (PST)
+Received: from dread.disaster.area (pa49-181-4-128.pa.nsw.optusnet.com.au. [49.181.4.128])
+        by smtp.gmail.com with ESMTPSA id i5-20020a170902eb4500b00199080af237sm2197368pli.115.2023.02.09.18.16.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 18:16:06 -0800 (PST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pQIxH-00DSdE-UH; Fri, 10 Feb 2023 13:16:03 +1100
+Date:   Fri, 10 Feb 2023 13:16:03 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Stefan Metzmacher <metze@samba.org>, Jens Axboe <axboe@kernel.dk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API Mailing List <linux-api@vger.kernel.org>,
+        io-uring <io-uring@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Samba Technical <samba-technical@lists.samba.org>
+Subject: Re: copy on write for splice() from file to pipe?
+Message-ID: <20230210021603.GA2825702@dread.disaster.area>
+References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
+ <CAHk-=wj8rthcQ9gQbvkMzeFt0iymq+CuOzmidx3Pm29Lg+W0gg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20230110222714.552241-1-tj@kernel.org>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgDX0R_XqOVjXpooDA--.2711S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7AFyfWF1ftr1UZFy7ZF4UXFb_yoW8CryDpr
-        yfKF43uw18KrZFqa1fKw4fCF1rtw40vry5GrnIyr1rAryY9FyjvF4vvFWFyFW0qrZFkF40
-        qr15Jryjgw1Uu37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wj8rthcQ9gQbvkMzeFt0iymq+CuOzmidx3Pm29Lg+W0gg@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Feb 09, 2023 at 08:41:02AM -0800, Linus Torvalds wrote:
+> Adding Jens, because he's one of the main splice people. You do seem
+> to be stepping on his work ;)
+> 
+> Jens, see
+> 
+>   https://lore.kernel.org/lkml/0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org
+> 
+> On Thu, Feb 9, 2023 at 5:56 AM Stefan Metzmacher <metze@samba.org> wrote:
+> >
+> > So we have two cases:
+> >
+> > 1. network -> socket -> splice -> pipe -> splice -> file -> storage
+> >
+> > 2. storage -> file -> splice -> pipe -> splice -> socket -> network
+> >
+> > With 1. I guess everything can work reliable [..]
+> >
+> > But with 2. there's a problem, as the pages from the file,
+> > which are spliced into the pipe are still shared without
+> > copy on write with the file(system).
+> 
+> Well, honestly, that's really the whole point of splice. It was
+> designed to be a way to share the storage data without having to go
+> through a copy.
+> 
+> > I'm wondering if there's a possible way out of this, maybe triggered by a new
+> > flag passed to splice.
+> 
+> Not really.
+> 
+> So basically, you cannot do "copy on write" on a page cache page,
+> because that breaks sharing.
+> 
+> You *want* the sharing to break, but that's because you're violating
+> what splice() was for, but think about all the cases where somebody is
+> just using mmap() and expects to see the file changes.
+> 
+> You also aren't thinking of the case where the page is already mapped
+> writably, and user processes may be changing the data at any time.
+> 
+> > I looked through the code and noticed the existence of IOMAP_F_SHARED.
+> 
+> Yeah, no. That's a hacky filesystem thing. It's not even a flag in
+> anything core like 'struct page', it's just entirely internal to the
+> filesystem itself.
 
-ÔÚ 2023/01/11 6:27, Tejun Heo Ð´µÀ:
-> Hello,
-> 
-> * v2[2] fixes the build failure caused by v1[1] forgetting to update bfq.
-> 
-> * v3 drops __acuquires/__releases() changes and updates patch descriptions.
-> 
-> This patchset:
-> 
-> * Improves blkg config helpers so that they can be used consistently for all
->    the existing use cases. This also allows keeps using the same bdev open
->    instance across lazy init of rq_qos policies.
-> 
-> * Updates iolatency so that it initializes lazily when a latency target is
->    set for the first time. This avoids registering the rq_qos policy when
->    iolatency is not used which removes unnecessary calls into iolat from IO
->    hot paths.
-> 
+It's the mechanism that the filesystem uses to tell the generic
+write IO path that the filesystem needs to allocate a new COW extent
+in the backing store because it can't write to the original extent.
+i.e. it's not allowed to overwrite in place.
 
-There are some rq_qos and iocost bugfix based on this patchset, can
-anyone help to review this patchset?
+It's no different to the VM_SHARED flag in the vma so the generic
+page fault path knows if it has to allocate a new COW page to take
+place on a write fault because it can't write to the original page.
+i.e. it's not allowed to overwrite in place.
 
-Thanks,
-Kuai
+So by the same measure, VM_SHARED is a "hacky mm thing". It's not
+even a flag in anything core like 'struct page', it's just entirely
+internal to the mm subsystem itself.
 
-> and contains the following four patches:
-> 
->   0001-blkcg-Drop-unnecessary-RCU-read-un-locks-from-blkg_c.patch
->   0002-blkcg-Restructure-blkg_conf_prep-and-friends.patch
->   0003-blk-iolatency-s-blkcg_rq_qos-iolat_rq_qos.patch
->   0004-blk-iolatency-Make-initialization-lazy.patch
-> 
-> and is also available in the following git branch.
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tj/misc.git iolat-lazy-init-v2
-> 
-> diffstat follows. Thanks.
-> 
->   block/bfq-cgroup.c    |    8 ++-
->   block/blk-cgroup.c    |  122 ++++++++++++++++++++++++++++----------------------
->   block/blk-cgroup.h    |   10 ++--
->   block/blk-iocost.c    |   58 +++++++++++++----------
->   block/blk-iolatency.c |   39 +++++++++++++--
->   block/blk-rq-qos.h    |    2
->   block/blk-throttle.c  |   16 ++++--
->   block/blk.h           |    6 --
->   8 files changed, 159 insertions(+), 102 deletions(-)
-> 
-> [1] https://lkml.kernel.org/r/20230105002007.157497-1-tj@kernel.org
-> [2] https://lkml.kernel.org/r/20230105212432.289569-1-tj@kernel.org
-> 
-> --
-> tejun
-> 
-> .
-> 
+COW is COW is COW no matter which layer implements. :/
 
+> > Is there any other way we could archive something like this?
+> 
+> I suspect you simply want to copy it at splice time, rather than push
+> the page itself into the pipe as we do in copy_page_to_iter_pipe().
+> 
+> Because the whole point of zero-copy really is that zero copy. And the
+> whole point of splice() was to *not* complicate the rest of the system
+> over-much, while allowing special cases.
+> 
+> Linux is not the heap of bad ideas that is Hurd that does various
+> versioning etc, and that made copy-on-write a first-class citizen
+> because it uses the concept of "immutable mapped data" for reads and
+> writes.
+> 
+> Now, I do see a couple of possible alternatives to "just create a stable copy".
+> 
+> For example, we very much have the notion of "confirm buffer data
+> before copying". It's used for things like "I started the IO on the
+> page, but the IO failed with an error, so even though I gave you a
+> splice buffer, it turns out you can't use it".
+> 
+> And I do wonder if we could introduce a notion of "optimistic splice",
+> where the splice works exactly the way it does now (you get a page
+> reference), but the "confirm" phase could check whether something has
+> changed in that mapping (using the file versioning or whatever - I'm
+> hand-waving) and simply fail the confirm.
+> 
+> That would mean that the "splice to socket" part would fail in your
+> chain, and you'd have to re-try it. But then the onus would be on
+> *you* as a splicer, not on the rest of the system to fix up your
+> special case.
+> 
+> That idea sounds fairly far out there, and complicated and maybe not
+> usable. So I'm just throwing it out as a "let's try to think of
+> alternative solutions".
+
+Oh, that's sounds like an exact analogy to the new IOMAP_F_STALE
+flag and the validity cookie we have in the iomap write path code.
+The iomap contains cached, unserialised information, and the
+filesystem side mapping it is derived from can change asynchronously
+(e.g. by IO completion doing unwritten extent conversion). Hence the
+cached iomap can become stale, and that's a data corruption vector.
+
+The validity cookie is created when the iomap is built, and it is
+passed to a filesystem callback when a folio is locked for copy-in.
+This allows the IO path to detect that the filesystem side extent
+map has changed during the write() operations before we modify the
+contents of the folio. It is done under the locked folio so that the
+validation is atomic w.r.t. the modification to the folio contents
+we are about to perform.
+
+On detection of a cookie mismatch, the write operation then sets the
+IOMAP_F_STALE flag, backs out of the write to that page and ends the
+write to the iomap. The iomap infrastructure then remaps the file
+range from the offset of the folio at which the iomap change was
+detected.  The write the proceeds with the new, up to date iomap....
+
+We have had a similar "is the cached iomap still valid?" mechanism
+on the writeback side of the page cache for years. The details are
+slightly different, though I plan to move that code to use the same
+IOMAP_F_STALE infrastructure in the near future because it
+simplifies the writeback context wrapper shenanigans an awful lot.
+And it helps make it explicit that iomaps are cached/shadowed
+state, not the canonical source of reality.
+
+Applying the same principle it to multiply referenced cached page
+contents will be more complex. I suspect we might be able to
+leverage inode->i_version or ctime as the "data changed" cookie as
+they are both supposed to change on every explicit user data
+modification made to an inode. However, I think most of the
+complexity would be in requiring spliced pages to travel in some
+kind of container that holds the necessary verification
+information....
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
