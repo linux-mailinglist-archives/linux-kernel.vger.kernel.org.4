@@ -2,136 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9A06918E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 07:58:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0EB6918E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 08:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231392AbjBJG6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 01:58:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43438 "EHLO
+        id S231249AbjBJHAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 02:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbjBJG6N (ORCPT
+        with ESMTP id S231166AbjBJHAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 01:58:13 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F695AB35
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 22:57:51 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id v23so5572958plo.1
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 22:57:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1U8Y/0tbcD9B+rFGh6iJhmikTGHljyJ4FQw+gensxqM=;
-        b=4Z1SYdNbd8WuXmbNbPTp5CPsq+GgaHbcr8G8z8Vf2uXbpsOUdr/18311fSoj/DAvdM
-         vKD8kJ4v+dlInCvARG32DgUVW8yzfAhNkAyg4PrXHQ8xbnM6qm00vXAjizV3lv9K0Sf/
-         yhmZ9myipWzdAp3N3yBHfaKYQ0cJ0ZZ9R3JLCAc8crow8cakcI10UvY9qknPlyW1qW2Z
-         DMKFP+tHUhN2tmNEIcIcgczDV7s8cjMmG51ixCnGXX2nvFqjCTjT9YADasror/vi7CU8
-         10fPbGPPQUto5nhsZhX9kHLpIDYok04ij/5sDWe8+1g8aQUBeNpw+SaOrYegc5uSMILw
-         cGxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1U8Y/0tbcD9B+rFGh6iJhmikTGHljyJ4FQw+gensxqM=;
-        b=vPERz2EQZKlqyNRVqXJsB5UzsdaL8YMpYBf/JhS5zzIG/RKVq276RkedMEj3ieA8To
-         TJaQosoYo2c/nF7Cs0SIa1MJtxx4EgM8Chk1g/Wrbx12KZjNHwGg339oKFs8VPdM6bfl
-         YfavPEdmW+JkCVVl5qsE4FqeRBIUqP+PFei6y1tmsGzUQlGu6jLWAV1CK31umaDKKnDR
-         xnEDjv3YpNgiS6zWogBgm1Vt0ylK2z0+xkNpfRa/kUBABrlxHefvyGnqTRqTxl9aiPMS
-         mE2d6+S7LxkXMx1vQUr95b2LLbkSeGHTm6nJSNHKHr0WP0V0wj1ajGMPHRudbzCBJ81p
-         zJcg==
-X-Gm-Message-State: AO0yUKWxMl9ocMFqY8TNVH5WgHlP4zaSUUfzhCHP63G9RWkQ2Ydu2P2x
-        avgT91IIsJOecUfiJHCW+VF+Gg==
-X-Google-Smtp-Source: AK7set9t6gqJxoHDZIn5ha1EJDlZJueE1TdlQVqKbhBYcp7XjUdmkxQUWlM78CqsSipLc15u/SU+4w==
-X-Received: by 2002:a05:6a21:3613:b0:bc:30aa:8a6d with SMTP id yg19-20020a056a21361300b000bc30aa8a6dmr11239502pzb.2.1676012270527;
-        Thu, 09 Feb 2023 22:57:50 -0800 (PST)
-Received: from dread.disaster.area (pa49-181-4-128.pa.nsw.optusnet.com.au. [49.181.4.128])
-        by smtp.gmail.com with ESMTPSA id i76-20020a636d4f000000b004fb171df68fsm2298927pgc.7.2023.02.09.22.57.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 22:57:50 -0800 (PST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pQNLv-00DXUC-AP; Fri, 10 Feb 2023 17:57:47 +1100
-Date:   Fri, 10 Feb 2023 17:57:47 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Stefan Metzmacher <metze@samba.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API Mailing List <linux-api@vger.kernel.org>,
-        io-uring <io-uring@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Samba Technical <samba-technical@lists.samba.org>
-Subject: Re: copy on write for splice() from file to pipe?
-Message-ID: <20230210065747.GD2825702@dread.disaster.area>
-References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
- <CAHk-=wj8rthcQ9gQbvkMzeFt0iymq+CuOzmidx3Pm29Lg+W0gg@mail.gmail.com>
- <20230210021603.GA2825702@dread.disaster.area>
- <20230210040626.GB2825702@dread.disaster.area>
- <Y+XLuYh+kC+4wTRi@casper.infradead.org>
+        Fri, 10 Feb 2023 02:00:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736991714;
+        Thu,  9 Feb 2023 23:00:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7C8861CB7;
+        Fri, 10 Feb 2023 07:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2F8F1C4339B;
+        Fri, 10 Feb 2023 07:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676012418;
+        bh=a56rPAwwEZhssyB1VBYcvbdT2/G9c0VKg8a4rmFUU/A=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=lfZA7naA3moeHuummCRIsDwVWsvFOgDHWH/g9bBCW3TJaY4+gzPf3ZkQewfUsCSD4
+         MGI4NN3Z4lkBk6nxPr72kh2DhlvL0RkQs7ycGftw5x6fAcwq03IY6tbSPKaVvf633a
+         KQZXZKaFh40NGhb52J8bY5WlJ5vcjHImsZka/pz3fhH0lZfGOb2UOUD4Q0RXwUKbp1
+         hGnoAfFatqb+Jp4v4UbqpopxA5SRiAa4ivnZccp/srWRzI0E98UnyocjJZbua9CkKO
+         PunZjJ8KHa+T7fGyfWY5X5ezzaYCGMMgI5BAKqB0Quu6GVwqVIjbhHVDSJB6Dc6nDm
+         00+8Sm+Mw37bA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 10CD0E21EC7;
+        Fri, 10 Feb 2023 07:00:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+XLuYh+kC+4wTRi@casper.infradead.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v3] vmxnet3: move rss code block under eop descriptor
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167601241806.12809.13336166295565756361.git-patchwork-notify@kernel.org>
+Date:   Fri, 10 Feb 2023 07:00:18 +0000
+References: <20230208223900.5794-1-doshir@vmware.com>
+In-Reply-To: <20230208223900.5794-1-doshir@vmware.com>
+To:     Ronak Doshi <doshir@vmware.com>
+Cc:     netdev@vger.kernel.org, stable@vger.kernel.org,
+        pv-drivers@vmware.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, gyang@vmware.com,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 04:44:41AM +0000, Matthew Wilcox wrote:
-> On Fri, Feb 10, 2023 at 03:06:26PM +1100, Dave Chinner wrote:
-> > So while I was pondering the complexity of this and watching a great
-> > big shiny rocket create lots of heat, light and noise, it occurred
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Wed, 8 Feb 2023 14:38:59 -0800 you wrote:
+> Commit b3973bb40041 ("vmxnet3: set correct hash type based on
+> rss information") added hashType information into skb. However,
+> rssType field is populated for eop descriptor. This can lead
+> to incorrectly reporting of hashType for packets which use
+> multiple rx descriptors. Multiple rx descriptors are used
+> for Jumbo frame or LRO packets, which can hit this issue.
 > 
-> That was kind of fun
+> [...]
 
-:)
+Here is the summary with links:
+  - [net,v3] vmxnet3: move rss code block under eop descriptor
+    https://git.kernel.org/netdev/net/c/ec76d0c2da5c
 
-> > to me that we already have a mechanism for preventing page cache
-> > data from being changed while the folios are under IO:
-> > SB_I_STABLE_WRITES and folio_wait_stable().
-> 
-> I thought about bringing that up, but it's not quite right.  That works
-> great for writeback, but it only works for writeback.  We'd need to track
-> another per-folio counter ... it'd be like the page pinning kerfuffle,
-> only worse. 
-
-Hmmm - I didn't think of that. It needs the counter because the
-"stable request" is per folio reference state, not per folio state,
-right? And the single flag works for writeback because we can only
-have one writeback context in progress at a time?
-
-Yeah, not sure how to deal with that easily.
-
-> And for such a rare thing it seems like a poor use of 32
-> bits of per-page state.
-
-Maybe, but zero copy file data -> network send is a pretty common
-workload. Web servers, file servers, remote backup programs, etc.
-Having files being written whilst others are reading them is not as
-common, but that does happen in a wide variety of shared file server
-environments.
-
-Regardless, I just had a couple of ideas - it they don't work so be
-it.
-
-> Not to mention that you can effectively block
-> all writes to a file for an indefinite time by splicing pages to a pipe
-> that you then never read from.
-
-No, I wasn't suggesting that we make pages in transit stable - they
-only need to be stable while the network stack requires them to be
-stable....
-
-Cheers,
-
-Dave.
+You are awesome, thank you!
 -- 
-Dave Chinner
-david@fromorbit.com
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
