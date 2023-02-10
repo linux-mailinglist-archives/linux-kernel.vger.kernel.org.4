@@ -2,162 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8730F692287
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1B369228B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:44:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232745AbjBJPn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 10:43:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
+        id S232439AbjBJPoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 10:44:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232397AbjBJPn4 (ORCPT
+        with ESMTP id S232024AbjBJPoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 10:43:56 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7515EA37;
-        Fri, 10 Feb 2023 07:43:55 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id pj3so5583044pjb.1;
-        Fri, 10 Feb 2023 07:43:55 -0800 (PST)
+        Fri, 10 Feb 2023 10:44:34 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838D878D49
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:44:33 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id sa10so16899843ejc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:44:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=IVFNeMfOmmqZLaGBTDvOV9DdgTvmZraVnEzcOu9bPQI=;
-        b=UsXru1m9OexHt9h15jTb85lNc48MbfJInoGvlXYiSdcg0ZFdYA9MKfH8FEL2CP9Hh2
-         q5vvMEeeng6rBW4q5Hifgkh0n+C/vlfeGMQJDQAauquv1LizIpLPMK9ZEnvmb31Qf2xv
-         qwd9I8QjFWf90AFlwJSo6Olqp9evdSEzn/EBmPrNSSeU9JTVEJ2p8ulQSB7Qa7QwoN5p
-         l3SqtWBBfnxMuDOlH2qR2PUSEIn/uIcnX6PH/rxoHASQorAT464FELt4Q3nLjWDaTl00
-         sSLKsLCQcrHwiK6xvS5zOCYP/9UvQIzuoDNzLuuAqNPPKWmD8oYeOsNn4zoFhSnel97o
-         CZvA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=opBAKiJAaUbXJ8f0Fh0jXM9OPqOfnIFIHrb6jeC+I0c=;
+        b=VC2iGg+GzpJRixykUCYMZW0UfYHovv8kIa2ONla0Py2CwzwKrBta3tMIfxqZfbX1bT
+         5+zv35DUorBzkjOHUPF+ZTwx9awnL5X0zwwZR6OpGuWaHaldxvCliGQSefRgd1WRt+FH
+         wQ+LciuTNLxILi9M+af0w8uwGTY5kkjdKUZ1ARZ3rk0az0NZbb2tULwtEq+wzcWkhg0g
+         lunPMPVm7uPJZInfow9dfMMFrQiorpUmTuIi1Vi7aGxFUQBydxb4XrzKu55mSUUf/hmC
+         /z/xcQAba9SdSPr0wRxYD6e4f0o0hS5IMMUG2NrTKyGS4s25/xLqbTn8xcJCn57S4l/z
+         YHqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IVFNeMfOmmqZLaGBTDvOV9DdgTvmZraVnEzcOu9bPQI=;
-        b=KAmI9ZRAwcXS5OMr6rNGo+7nmEfm95FEDc3F2NHPHI2hmjYTPFxWA+WIqzPy7zm0th
-         rm9gyyR52VDBRCnram/WG/SKOd589THyoS3cdJaQQwhupHCCpEEze4qYReY/tVf7TT6i
-         AKLfhkOXwIhgBi1l8VhLaRBvmdNHzHnc2EkJgnWDC3jv/poPQRjaj8K8hyx6DfJJOw7h
-         CC6LGlpRYWE4kSMd4Iae4tANIfsabLEtiD2WH1TFs9k16tY4NzF/AMIha1jODLHD2b4p
-         Q2E0KTBUdtxd9B3977hqA9XMw0mk9/LbOxpAaJZz9MhAlt24T9RXihRZz43ddFGmJG7d
-         jTTQ==
-X-Gm-Message-State: AO0yUKV0GASMsWdmiN7Bqps/idtDJ7En7hL3QqIK5/rtM+rJ9PjA8PM9
-        N0KBtRloO2VEevWC8CihRZU=
-X-Google-Smtp-Source: AK7set+J4S/I4aGkeSswQLaN2/hAHfiKwDcF2uOq5gSNsP1uucdJTPO7G2kwFWZB7H9wt9YBQJJvPw==
-X-Received: by 2002:a17:902:f1d1:b0:199:53bf:a2d8 with SMTP id e17-20020a170902f1d100b0019953bfa2d8mr6407039plc.4.1676043834648;
-        Fri, 10 Feb 2023 07:43:54 -0800 (PST)
-Received: from [192.168.0.128] ([98.97.119.54])
-        by smtp.googlemail.com with ESMTPSA id 13-20020a170902c24d00b00198c41d0c86sm3569691plg.239.2023.02.10.07.43.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 07:43:54 -0800 (PST)
-Message-ID: <826cc9912f56dddd3b0bccdaf742167d5006c669.camel@gmail.com>
-Subject: Re: [PATCH net-next v7 5/9] net: phy: add
- genphy_c45_ethtool_get/set_eee() support
-From:   Alexander H Duyck <alexander.duyck@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Arun.Ramadoss@microchip.com
-Date:   Fri, 10 Feb 2023 07:43:51 -0800
-In-Reply-To: <20230209095113.364524-6-o.rempel@pengutronix.de>
-References: <20230209095113.364524-1-o.rempel@pengutronix.de>
-         <20230209095113.364524-6-o.rempel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=opBAKiJAaUbXJ8f0Fh0jXM9OPqOfnIFIHrb6jeC+I0c=;
+        b=rlLoPwhqahxX2LFt56/gnablo0OxxSZ7EkMVSvfnwqxR1uySlWOs6FJONB3Dei7+Wk
+         AnthhFmUXzVAsfjOtwm3NrOVZg2h0W+lkJjjahOcNCjs7GjBlDxogkvwIs90WudQ5YHT
+         djKlV+C+PerZrwOcNcjKC4cDdJWlHzjb6ZPJN7pRhQtzrMM3n8lX2thvOvFHcPYPvCeZ
+         yWFsj16rlgnE3F+zF6v5HewaBtLa73iBCPg0NFfM26K9GSkjpjO+HyXzTiUPuLF2pv5g
+         rMPJK4ad+4rwahqJOhumgYY0uW/THYInA+YmatgiXVnOR1rt62PjBQEYvufv95IenqhD
+         l7Sg==
+X-Gm-Message-State: AO0yUKUiUj4OVE/sSVVBGFothOxtO3VhK7xFmq6TiBd2I1Kd16Zd6gKW
+        TamEJMw5R+WmwjhuR3gghloFkQ==
+X-Google-Smtp-Source: AK7set9G2NFedcRvsqYyG2U+9/VJ93t/MwQNwlIRGUSVuLpenKc9AW+17f/c1lGphiIeWQp+GdJzdA==
+X-Received: by 2002:a17:907:6d8a:b0:88f:8a5:b4cd with SMTP id sb10-20020a1709076d8a00b0088f08a5b4cdmr21470525ejc.1.1676043872092;
+        Fri, 10 Feb 2023 07:44:32 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id a11-20020a170906684b00b008aea5e0938esm2504211ejs.183.2023.02.10.07.44.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 07:44:31 -0800 (PST)
+Message-ID: <e03d5698-65d2-41ae-3095-9ab374cb6b77@linaro.org>
+Date:   Fri, 10 Feb 2023 17:44:30 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 08/11] arm64: dts: qcom: sm8350-hdk: add pmic glink
+ node
+Content-Language: en-GB
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230130-topic-sm8450-upstream-pmic-glink-v2-0-71fea256474f@linaro.org>
+ <20230130-topic-sm8450-upstream-pmic-glink-v2-8-71fea256474f@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v2-8-71fea256474f@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-02-09 at 10:51 +0100, Oleksij Rempel wrote:
-> Add replacement for phy_ethtool_get/set_eee() functions.
->=20
-> Current phy_ethtool_get/set_eee() implementation is great and it is
-> possible to make it even better:
-> - this functionality is for devices implementing parts of IEEE 802.3
->   specification beyond Clause 22. The better place for this code is
->   phy-c45.c
-> - currently it is able to do read/write operations on PHYs with
->   different abilities to not existing registers. It is better to
->   use stored supported_eee abilities to avoid false read/write
->   operations.
-> - the eee_active detection will provide wrong results on not supported
->   link modes. It is better to validate speed/duplex properties against
->   supported EEE link modes.
-> - it is able to support only limited amount of link modes. We have more
->   EEE link modes...
->=20
-> By refactoring this code I address most of this point except of the last
-> one. Adding additional EEE link modes will need more work.
->=20
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+On 10/02/2023 17:02, Neil Armstrong wrote:
+> Add the pmic glink node linked with the DWC3 USB controller
+> switched to OTG mode and tagged with usb-role-switch.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
->  drivers/net/phy/phy-c45.c | 238 ++++++++++++++++++++++++++++++++++++++
->  include/linux/mdio.h      |  58 ++++++++++
->  include/linux/phy.h       |   7 ++
->  include/uapi/linux/mdio.h |   8 ++
->  4 files changed, 311 insertions(+)
->=20
->=20
-
-<...>
-
-> diff --git a/include/linux/mdio.h b/include/linux/mdio.h
-> index e75583f5d967..e3568e44efd0 100644
-> --- a/include/linux/mdio.h
-> +++ b/include/linux/mdio.h
-> @@ -428,6 +428,64 @@ static inline void mii_eee_cap1_mod_linkmode_t(unsig=
-ned long *adv, u32 val)
->  			 adv, val & MDIO_EEE_10GKR);
->  }
-> =20
-> +/**
-> + * mii_eee_cap1_mod_linkmode_t
-> + * @adv: the linkmode advertisement settings
-> + *
-> + * A function that translates linkmode to value for IEEE 802.3-2018 45.2=
-.7.13
-> + * "EEE advertisement 1" register (7.60)
-> + */
-> +static inline u32 linkmode_to_mii_eee_cap1_t(unsigned long *adv)
-
-So the function comments don't match the name for the function. Perhaps
-a copy/paste error? Otherwise the rest of the function description
-looks fine.
-
-> +{
-> +	u32 result =3D 0;
+>   arch/arm64/boot/dts/qcom/sm8350-hdk.dts | 77 ++++++++++++++++++++++++++++-----
+>   1 file changed, 65 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
+> index 54654eb75c28..28fc9a835c5d 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
+> @@ -31,6 +31,40 @@ hdmi_con: endpoint {
+>   		};
+>   	};
+>   
+> +	pmic-glink {
+> +		compatible = "qcom,sm8350-pmic-glink", "qcom,pmic-glink";
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
 > +
-> +	if (linkmode_test_bit(ETHTOOL_LINK_MODE_100baseT_Full_BIT, adv))
-> +		result |=3D MDIO_EEE_100TX;
-> +	if (linkmode_test_bit(ETHTOOL_LINK_MODE_1000baseT_Full_BIT, adv))
-> +		result |=3D MDIO_EEE_1000T;
-> +	if (linkmode_test_bit(ETHTOOL_LINK_MODE_10000baseT_Full_BIT, adv))
-> +		result |=3D MDIO_EEE_10GT;
-> +	if (linkmode_test_bit(ETHTOOL_LINK_MODE_1000baseKX_Full_BIT, adv))
-> +		result |=3D MDIO_EEE_1000KX;
-> +	if (linkmode_test_bit(ETHTOOL_LINK_MODE_10000baseKX4_Full_BIT, adv))
-> +		result |=3D MDIO_EEE_10GKX4;
-> +	if (linkmode_test_bit(ETHTOOL_LINK_MODE_10000baseKR_Full_BIT, adv))
-> +		result |=3D MDIO_EEE_10GKR;
+> +		connector@0 {
+> +			compatible = "usb-c-connector";
+> +			reg = <0>;
+> +			power-role = "dual";
+> +			data-role = "dual";
 > +
-> +	return result;
-> +}
+> +			ports {
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
 > +
+> +				port@0 {
+> +					reg = <0>;
+> +
+> +					pmic_glink_hs_in: endpoint {
+> +						remote-endpoint = <&usb_1_dwc3_hs>;
+> +					};
+> +				};
+> +
+> +				port@1 {
+> +					reg = <1>;
+> +
+> +					pmic_glink_ss_in: endpoint {
+> +						remote-endpoint = <&usb_1_dwc3_ss>;
+> +					};
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+>   	vph_pwr: vph-pwr-regulator {
+>   		compatible = "regulator-fixed";
+>   		regulator-name = "vph_pwr";
+> @@ -666,23 +700,42 @@ &usb_1 {
+>   };
+>   
+>   &usb_1_dwc3 {
+> -	/* TODO: Define USB-C connector properly */
+> -	dr_mode = "peripheral";
+> -};
+> +	dr_mode = "otg";
+
+I could not verify UCSI / OTG on sm8350-HDK, see the GET_PDOS issue.
+Unless it is fixed, I suggest fixing this to "host" to get DP to work.
+
+> +	usb-role-switch;
+>   
+> -&usb_1_hsphy {
+> -	status = "okay";
+> +	ports {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+>   
+> -	vdda-pll-supply = <&vreg_l5b_0p88>;
+> -	vdda18-supply = <&vreg_l1c_1p8>;
+> -	vdda33-supply = <&vreg_l2b_3p07>;
+> +		port@0 {
+> +			reg = <0>;
+> +
+> +			usb_1_dwc3_hs: endpoint {
+> +				remote-endpoint = <&pmic_glink_hs_in>;
+> +			};
+> +		};
+> +
+> +		port@1 {
+> +			reg = <1>;
+> +
+> +			usb_1_dwc3_ss: endpoint {
+> +				remote-endpoint = <&pmic_glink_ss_in>;
+> +			};
+> +		};
+> +	};
+>   };
+>   
+> -&usb_1_qmpphy {
+> -	status = "okay";
+> +&usb_1_dwc3 {
+> +	dr_mode = "otg";
+> +	usb-role-switch;
+> +};
+
+Duplicate
+
+>   
+> -	vdda-phy-supply = <&vreg_l6b_1p2>;
+> -	vdda-pll-supply = <&vreg_l1b_0p88>;
+> +&usb_1_dwc3_hs {
+> +	remote-endpoint = <&pmic_glink_hs_in>;
+> +};
+> +
+> +&usb_1_dwc3_ss {
+> +	remote-endpoint = <&pmic_glink_ss_in>;
+>   };
+>   
+>   &usb_2 {
+> 
+
+-- 
+With best wishes
+Dmitry
 
