@@ -2,88 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9ABA691692
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 03:14:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED39691694
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 03:16:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjBJCO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 21:14:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54998 "EHLO
+        id S230163AbjBJCQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 21:16:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjBJCOz (ORCPT
+        with ESMTP id S229554AbjBJCP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 21:14:55 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02DE6F23D;
-        Thu,  9 Feb 2023 18:14:47 -0800 (PST)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1675995286;
-        bh=PzdaMVxSEN1MS1ApJxFjAZ9RkslBEF+CPIjqjevsB98=;
-        h=From:Date:Subject:To:Cc:From;
-        b=g6QlAfPToQwM18srJO+qvWKrgP3Hoca0n6ZJZPqgHeu2DblLPaxYHyZfoIxRPpaTP
-         bAJaCtbx8Q8N/40J2xy99MxX0Vqb9i3BbYy8IqBqEC1HJiFl5E90ibyp/qAZTtliFZ
-         fQQ50TkHcURdEZTDIhRd8SAVGR3sMiWJTiMFT4xs=
-Date:   Fri, 10 Feb 2023 02:14:44 +0000
-Subject: [PATCH] zonefs: make kobj_type structure constant
+        Thu, 9 Feb 2023 21:15:58 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7154C6E88B;
+        Thu,  9 Feb 2023 18:15:57 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PCclr1rVmz4f3lK8;
+        Fri, 10 Feb 2023 10:15:52 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgDX0R_XqOVjXpooDA--.2711S3;
+        Fri, 10 Feb 2023 10:15:53 +0800 (CST)
+Subject: Re: [PATCHSET v3 block/for-next] blkcg: Improve blkg config helpers
+ and make iolatency init lazy
+To:     Tejun Heo <tj@kernel.org>, axboe@kernel.dk, josef@toxicpanda.com,
+        hch@lst.de
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230110222714.552241-1-tj@kernel.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <58a4bf92-2830-1ff0-c7b1-ea9b349105df@huaweicloud.com>
+Date:   Fri, 10 Feb 2023 10:15:51 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20230110222714.552241-1-tj@kernel.org>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230210-kobj_type-zonefs-v1-1-9a9c5b40e037@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAJOo5WMC/x2N0QrCMAwAf2Xk2UCb+qK/IiLtzFx0pKOZoo79u
- 8HHOzhuBeMmbHDsVmj8EpOqDnHXQT9mvTHK1RkoUAoUAz5quV+Wz8z4rcqDYY60P0QKKZUEnpV
- sjKVl7UcP9TlNLufGg7z/n9N5237JuT6pdwAAAA==
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Naohiro Aota <naohiro.aota@wdc.com>,
-        Johannes Thumshirn <jth@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1675995284; l=1028;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=PzdaMVxSEN1MS1ApJxFjAZ9RkslBEF+CPIjqjevsB98=;
- b=rR1az0+ORQFoQO0bkjkP7ciZtCZ2UX/pMF+cwVbpXltMGiUzaaEnnkSHCid7eCQFAxjW3BQYm
- zeAr28pD04zAbYG1DTzSPqdsY2Ge70/0d55u6MoM27nYeppUPqEfrUR
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: _Ch0CgDX0R_XqOVjXpooDA--.2711S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFyfWF1ftr1UZFy7ZF4UXFb_yoW8CryDpr
+        yfKF43uw18KrZFqa1fKw4fCF1rtw40vry5GrnIyr1rAryY9FyjvF4vvFWFyFW0qrZFkF40
+        qr15Jryjgw1Uu37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-the driver core allows the usage of const struct kobj_type.
+Hi,
 
-Take advantage of this to constify the structure definition to prevent
-modification at runtime.
+‘⁄ 2023/01/11 6:27, Tejun Heo –¥µ¿:
+> Hello,
+> 
+> * v2[2] fixes the build failure caused by v1[1] forgetting to update bfq.
+> 
+> * v3 drops __acuquires/__releases() changes and updates patch descriptions.
+> 
+> This patchset:
+> 
+> * Improves blkg config helpers so that they can be used consistently for all
+>    the existing use cases. This also allows keeps using the same bdev open
+>    instance across lazy init of rq_qos policies.
+> 
+> * Updates iolatency so that it initializes lazily when a latency target is
+>    set for the first time. This avoids registering the rq_qos policy when
+>    iolatency is not used which removes unnecessary calls into iolat from IO
+>    hot paths.
+> 
 
-Signed-off-by: Thomas Wei√üschuh <linux@weissschuh.net>
----
- fs/zonefs/sysfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+There are some rq_qos and iocost bugfix based on this patchset, can
+anyone help to review this patchset?
 
-diff --git a/fs/zonefs/sysfs.c b/fs/zonefs/sysfs.c
-index 9920689dc098..8ccb65c2b419 100644
---- a/fs/zonefs/sysfs.c
-+++ b/fs/zonefs/sysfs.c
-@@ -79,7 +79,7 @@ static const struct sysfs_ops zonefs_sysfs_attr_ops = {
- 	.show	= zonefs_sysfs_attr_show,
- };
- 
--static struct kobj_type zonefs_sb_ktype = {
-+static const struct kobj_type zonefs_sb_ktype = {
- 	.default_groups = zonefs_sysfs_groups,
- 	.sysfs_ops	= &zonefs_sysfs_attr_ops,
- 	.release	= zonefs_sysfs_sb_release,
+Thanks,
+Kuai
 
----
-base-commit: e544a07438522ab3688416e6e2e34bf0ee6d8755
-change-id: 20230210-kobj_type-zonefs-a124912033b3
-
-Best regards,
--- 
-Thomas Wei√üschuh <linux@weissschuh.net>
+> and contains the following four patches:
+> 
+>   0001-blkcg-Drop-unnecessary-RCU-read-un-locks-from-blkg_c.patch
+>   0002-blkcg-Restructure-blkg_conf_prep-and-friends.patch
+>   0003-blk-iolatency-s-blkcg_rq_qos-iolat_rq_qos.patch
+>   0004-blk-iolatency-Make-initialization-lazy.patch
+> 
+> and is also available in the following git branch.
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tj/misc.git iolat-lazy-init-v2
+> 
+> diffstat follows. Thanks.
+> 
+>   block/bfq-cgroup.c    |    8 ++-
+>   block/blk-cgroup.c    |  122 ++++++++++++++++++++++++++++----------------------
+>   block/blk-cgroup.h    |   10 ++--
+>   block/blk-iocost.c    |   58 +++++++++++++----------
+>   block/blk-iolatency.c |   39 +++++++++++++--
+>   block/blk-rq-qos.h    |    2
+>   block/blk-throttle.c  |   16 ++++--
+>   block/blk.h           |    6 --
+>   8 files changed, 159 insertions(+), 102 deletions(-)
+> 
+> [1] https://lkml.kernel.org/r/20230105002007.157497-1-tj@kernel.org
+> [2] https://lkml.kernel.org/r/20230105212432.289569-1-tj@kernel.org
+> 
+> --
+> tejun
+> 
+> .
+> 
 
