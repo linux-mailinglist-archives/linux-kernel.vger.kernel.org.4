@@ -2,156 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0988B69293F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 22:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B34A692945
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 22:30:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233255AbjBJV26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 16:28:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
+        id S233284AbjBJVa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 16:30:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232057AbjBJV24 (ORCPT
+        with ESMTP id S232057AbjBJVaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 16:28:56 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735C67BFF9;
-        Fri, 10 Feb 2023 13:28:55 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31ALHrYB013876;
-        Fri, 10 Feb 2023 21:28:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=i2L7Ia8mK7A5ZkFcCIDcuqRFhX3LFkYSRraV5RpB/N0=;
- b=pYVlD6QBILIm2kSaLn86Yx8Z7cytyyPO+/ivIlFqFyqemYON8IczZAqX3Hsn+jCQpoMp
- rPyWdp6kEP5iX+NRJBmfR4KTE04wtUsUpLj7nlIf1aRqFnCNdnxo8Fz/OlNNQ1ZG7RZ+
- zrpkMtcsbSUWP4LRGjIyDfeQNnSoE47RvB2SG3O5udjiooewWgvCGdw9WUa3X0WS7wmU
- /fOZwkLDJ2NVIxMVJk5zi6HhsLJmgSzpUzvLhI7I61Ri9+K4OdNfVTuEo0iS81VXixPR
- 3qb6VfzMmGjCEc26e7vPpsg0FK+zqJzOIFi+56gtNL9TzVWQD1D1+YUKv1dWugoAcKdJ Fg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnwqf86yy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 21:28:46 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31ALNX1M032059;
-        Fri, 10 Feb 2023 21:28:45 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnwqf86yq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 21:28:45 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31AJ23mu017625;
-        Fri, 10 Feb 2023 21:28:44 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3nhf0890g0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 21:28:44 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31ALShbT7602810
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Feb 2023 21:28:43 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DBE8F58054;
-        Fri, 10 Feb 2023 21:28:42 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 66E6558050;
-        Fri, 10 Feb 2023 21:28:41 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Feb 2023 21:28:41 +0000 (GMT)
-Message-ID: <a63276d5-1be4-b140-6a4a-4ad4efa60eda@linux.ibm.com>
-Date:   Fri, 10 Feb 2023 16:28:40 -0500
+        Fri, 10 Feb 2023 16:30:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46D57A7E6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 13:30:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 748CDB825C8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 21:30:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 081AFC4339B;
+        Fri, 10 Feb 2023 21:30:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676064621;
+        bh=RM5rm9wA7Rfifn+Mrc6jfNB4qyZD8rHzGfvx3pLS7yo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZcN8NnV99nOnLoFDljaTLX3uPvXOpaUnHJxXruHhtZyNXnQfEJwoo+g0dO/m3dsa3
+         x55Vb1j0H6QCXqsg3339Z9M2Dvo2Apfb7QFABa/mviCAl/LOiiI+6DmhMQIR3ncxP2
+         kf9HgrCU44DB98ycvoJcqpBLz2wsXC6nT9R4SOlVtosJ0OkD25/erNHfCVQjc7+2cF
+         NVEtCBoRHllZtO6vGw3mLj3EIEnVDLYLj/UGv6jMKVHgSvoxj1HbgTADOAXyahWa3E
+         xY2L0pC5pk8FUakkhOmIsM4QOx+l9vGasdo4hf5ZaVfum4PfGq7EduqyU0/c06wRZB
+         8q8Sct5rGReTw==
+Date:   Fri, 10 Feb 2023 13:30:19 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, hanqi@vivo.com
+Subject: Re: [PATCH] f2fs: fix to release compress file for
+ F2FS_IOC_RESERVE_COMPRESS_BLOCKS when has no space
+Message-ID: <Y+a3a0eSkhVUh/RG@google.com>
+References: <20230210102019.61193-1-frank.li@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v6 24/26] powerpc/pseries: Implement secvars for dynamic
- secure boot
-Content-Language: en-US
-From:   Stefan Berger <stefanb@linux.ibm.com>
-To:     Andrew Donnellan <ajd@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     sudhakar@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, nayna@linux.ibm.com, npiggin@gmail.com,
-        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
-        gjoyce@linux.ibm.com, ruscur@russell.cc, joel@jms.id.au,
-        bgray@linux.ibm.com, brking@linux.ibm.com, gcwilson@linux.ibm.com
-References: <20230210080401.345462-1-ajd@linux.ibm.com>
- <20230210080401.345462-25-ajd@linux.ibm.com>
- <f35e9ba1-5fdb-4cfa-5b41-cc55307dcd45@linux.ibm.com>
-In-Reply-To: <f35e9ba1-5fdb-4cfa-5b41-cc55307dcd45@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: EAs5PgRdluiiEpYwXP300TK4RVeRSB_e
-X-Proofpoint-ORIG-GUID: EUsq-Nrm3brOT4M4ZheaLuvRfA5l5fq6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-10_15,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- mlxlogscore=995 bulkscore=0 suspectscore=0 priorityscore=1501 adultscore=0
- clxscore=1015 lowpriorityscore=0 phishscore=0 impostorscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302100179
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230210102019.61193-1-frank.li@vivo.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 02/10, Yangtao Li wrote:
+> When the released file is reserving and the space is insufficient,
+> the fsck flag is set incorrectly, and lead to the file cannot be
+> reserved and released normally.
+> 
+> $ mount -t f2fs -o compress_extension=*,compress_mode=user /mnt/9p/f2fs.img
+> 	/mnt/f2fs/
+> $ dd if=/dev/zero of=/mnt/f2fs/800M bs=1M count=800
+> $ dd if=/dev/zero of=/mnt/f2fs/60M bs=1M count=60
+> $ f2fs_io compress /mnt/f2fs/60M
+> $ ./mnt/9p/my_f2fs_io release_cblocks /mnt/f2fs/60M
+> 11520
+> $ dd if=/dev/zero of=/mnt/f2fs/30M bs=1M count=30
+> $ f2fs_io reserve_cblocks /mnt/f2fs/60M
+> [   56.399712] F2FS-fs (loop0): f2fs_reserve_compress_blocks: partial blocks
+> 	were released i_ino=cf iblocks=76104, reserved=5220, compr_blocks=5655,
+> 	run fsck to fix.
+> F2FS_IOC_RESERVE_COMPRESS_BLOCKS failed: No space left on device
+> 
+> $ ./mnt/9p/my_f2fs_io reserve_cblocks /mnt/f2fs/60M
+> 0
+> $ ./mnt/9p/my_f2fs_io release_cblocks /mnt/f2fs/60M
+> F2FS_IOC_RELEASE_COMPRESS_BLOCKS failed: Invalid argument
+> 
+> $ rm /mnt/f2fs/30M
+> $ ./mnt/9p/my_f2fs_io reserve_cblocks /mnt/f2fs/60M
+> 0
+> $ ./mnt/9p/my_f2fs_io release_cblocks /mnt/f2fs/60M
+> F2FS_IOC_RELEASE_COMPRESS_BLOCKS failed: Invalid argument
+> 
+> In this case, let's release back the reserved part of the compressed file.
+> 
+> Fixes: c75488fb4d82 ("f2fs: introduce F2FS_IOC_RESERVE_COMPRESS_BLOCKS")
+> Signed-off-by: Qi Han <hanqi@vivo.com>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>  fs/f2fs/file.c | 97 ++++++++++++++++++++++++++++++++------------------
+>  1 file changed, 63 insertions(+), 34 deletions(-)
+> 
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> index 300eae8b5415..8f3f55ac153a 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -3427,11 +3427,52 @@ static int release_compress_blocks(struct dnode_of_data *dn, pgoff_t count)
+>  	return released_blocks;
+>  }
+>  
+> +static int f2fs_do_release_compress_blocks(struct inode *inode,
+> +			pgoff_t page_count, unsigned int *released_blocks)
+> +{
+> +	pgoff_t page_idx = 0;
+> +	int ret;
+> +
+> +	while (page_idx < page_count) {
+> +		struct dnode_of_data dn;
+> +		pgoff_t end_offset, count;
+> +
+> +		set_new_dnode(&dn, inode, NULL, NULL, 0);
+> +		ret = f2fs_get_dnode_of_data(&dn, page_idx, LOOKUP_NODE);
+> +		if (ret) {
+> +			if (ret == -ENOENT) {
+> +				page_idx = f2fs_get_next_page_offset(&dn,
+> +								page_idx);
+> +				ret = 0;
+> +				continue;
+> +			}
+> +			break;
+> +		}
+> +
+> +		end_offset = ADDRS_PER_PAGE(dn.node_page, inode);
+> +		count = min(end_offset - dn.ofs_in_node, page_count - page_idx);
+> +		count = round_up(count, F2FS_I(inode)->i_cluster_size);
+> +
+> +		ret = release_compress_blocks(&dn, count);
+> +
+> +		f2fs_put_dnode(&dn);
+> +
+> +		if (ret < 0)
+> +			break;
+> +
+> +		page_idx += count;
+> +		if (released_blocks)
+> +			*released_blocks += ret;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>  static int f2fs_release_compress_blocks(struct file *filp, unsigned long arg)
+>  {
+>  	struct inode *inode = file_inode(filp);
+>  	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+> -	pgoff_t page_idx = 0, last_idx;
+> +	pgoff_t last_idx;
+>  	unsigned int released_blocks = 0;
+>  	int ret;
+>  	int writecount;
+> @@ -3481,36 +3522,7 @@ static int f2fs_release_compress_blocks(struct file *filp, unsigned long arg)
+>  
+>  	last_idx = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
+>  
+> -	while (page_idx < last_idx) {
+> -		struct dnode_of_data dn;
+> -		pgoff_t end_offset, count;
+> -
+> -		set_new_dnode(&dn, inode, NULL, NULL, 0);
+> -		ret = f2fs_get_dnode_of_data(&dn, page_idx, LOOKUP_NODE);
+> -		if (ret) {
+> -			if (ret == -ENOENT) {
+> -				page_idx = f2fs_get_next_page_offset(&dn,
+> -								page_idx);
+> -				ret = 0;
+> -				continue;
+> -			}
+> -			break;
+> -		}
+> -
+> -		end_offset = ADDRS_PER_PAGE(dn.node_page, inode);
+> -		count = min(end_offset - dn.ofs_in_node, last_idx - page_idx);
+> -		count = round_up(count, F2FS_I(inode)->i_cluster_size);
+> -
+> -		ret = release_compress_blocks(&dn, count);
+> -
+> -		f2fs_put_dnode(&dn);
+> -
+> -		if (ret < 0)
+> -			break;
+> -
+> -		page_idx += count;
+> -		released_blocks += ret;
+> -	}
+> +	ret = f2fs_do_release_compress_blocks(inode, last_idx, &released_blocks);
+>  
+>  	filemap_invalidate_unlock(inode->i_mapping);
+>  	f2fs_up_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
+> @@ -3585,8 +3597,22 @@ static int reserve_compress_blocks(struct dnode_of_data *dn, pgoff_t count)
+>  		if (ret)
+>  			return ret;
+>  
+> -		if (reserved != cluster_size - compr_blocks)
+> -			return -ENOSPC;
+> +		if (reserved != cluster_size - compr_blocks) {
+> +			dec_valid_block_count(sbi, dn->inode, reserved);
 
+This looks breaking the consistency?
 
-On 2/10/23 16:23, Stefan Berger wrote:
-> 
-> 
-
->> +
->> +// PLPKS dynamic secure boot doesn't give us a format string in the same way OPAL does.
->> +// Instead, report the format using the SB_VERSION variable in the keystore.
->> +// The string is made up by us, and takes the form "ibm,plpks-sb-v<n>" (or "ibm,plpks-sb-unknown"
->> +// if the SB_VERSION variable doesn't exist). Hypervisor defines the SB_VERSION variable as a
->> +// "1 byte unsigned integer value".
->> +static ssize_t plpks_secvar_format(char *buf, size_t bufsize)
->> +{
->> +    struct plpks_var var = {0};
->> +    ssize_t ret;
->> +    u8 version;
->> +
->> +    var.component = NULL;
-> 
-> Since it's initialized with {0} this is not necessary.
-> 
->> +    // Only the signed variables have null bytes in their names, this one doesn't
->> +    var.name = "SB_VERSION";
->> +    var.namelen = strlen(var.name);
->> +    var.datalen = 1;
->> +    var.data = &version;
->> +
->> +    // Unlike the other vars, SB_VERSION is owned by firmware instead of the OS
->> +    ret = plpks_read_fw_var(&var);
->> +    if (ret) {
->> +        if (ret == -ENOENT) {
->> +            ret = snprintf(buf, bufsize, "ibm,plpks-sb-unknown");
->> +        } else {
->> +            pr_err("Error %ld reading SB_VERSION from firmware\n", ret);
->> +            ret = -EIO;
->> +        }
->> +        goto err;
->> +    }
->> +
->> +    ret = snprintf(buf, bufsize, "ibm,plpks-sb-v%hhu", version);
->> +
->> +err:
->> +    kfree(var.data);
-> 
-> remove the kfree()
-
-Actually don't remove it but it should probably be
-
-if (var.data != &version)
-     kfree(var.data);
-> 
->> +    return ret;
->> +}
->> +
+> +
+> +			for (i = cluster_size - 1; i > 0; i--) {
+> +				dn->ofs_in_node--;
+> +				blkaddr = f2fs_data_blkaddr(dn);
+> +
+> +				if (__is_valid_data_blkaddr(blkaddr)) {
+> +					dn->ofs_in_node -= i;
+> +					return -ENOSPC;
+> +				}
+> +
+> +				dn->data_blkaddr = NULL_ADDR;
+> +				f2fs_set_data_blkaddr(dn);
+> +			}
+> +		}
+>  
+>  		f2fs_i_compr_blocks_update(dn->inode, compr_blocks, true);
+>  
+> @@ -3604,6 +3630,7 @@ static int f2fs_reserve_compress_blocks(struct file *filp, unsigned long arg)
+>  	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+>  	pgoff_t page_idx = 0, last_idx;
+>  	unsigned int reserved_blocks = 0;
+> +	struct dnode_of_data dn;
+>  	int ret;
+>  
+>  	if (!f2fs_sb_has_compression(F2FS_I_SB(inode)))
+> @@ -3637,7 +3664,6 @@ static int f2fs_reserve_compress_blocks(struct file *filp, unsigned long arg)
+>  	last_idx = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
+>  
+>  	while (page_idx < last_idx) {
+> -		struct dnode_of_data dn;
+>  		pgoff_t end_offset, count;
+>  
+>  		set_new_dnode(&dn, inode, NULL, NULL, 0);
+> @@ -3667,6 +3693,9 @@ static int f2fs_reserve_compress_blocks(struct file *filp, unsigned long arg)
+>  		reserved_blocks += ret;
+>  	}
+>  
+> +	if (ret == -ENOSPC)
+> +		f2fs_do_release_compress_blocks(inode, page_idx + dn.ofs_in_node, NULL);
+> +
+>  	filemap_invalidate_unlock(inode->i_mapping);
+>  	f2fs_up_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
+>  
+> -- 
+> 2.25.1
