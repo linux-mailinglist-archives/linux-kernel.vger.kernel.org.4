@@ -2,191 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419416924EB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:57:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 194696924FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:03:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232661AbjBJR5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 12:57:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58892 "EHLO
+        id S232701AbjBJSC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 13:02:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231792AbjBJR5f (ORCPT
+        with ESMTP id S232163AbjBJSC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 12:57:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F2A521C0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:57:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4989F61D97
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 17:57:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7194C433A7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 17:57:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676051853;
-        bh=EdNikj6ihbS6tmVVKV/Gr8GqPj/IVFRIStn6g5XxS3c=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eWC0iXIEBdh8IiJfgucjHSAi41/t4CCSJLtM3N8OQXIMgm0D6a7uAgr+OPd20MJTH
-         +E7yRfL1HwGlMizxeYI4yHxetBPf/kQSz+/Dht1eVjH4fbeQ9OuvDOJVbhnFRXgEYy
-         QYy1bJy66R7Dn19bRYEhj96Et2i0xDrwZnPfW989bicZxpafG4B64re/6c1z5HRw+0
-         70yszsAyseKyHu7CdGfNjtminIlzy0mXqk4meyRPMynQFnVbAtCg804AUAQXGFr3zn
-         HQ87TQEqtdO1f2dnSw1rQuKiJaGx9TRK9Smv2mmAwq3jk7R4AnEpk01loDdz/tyjCV
-         lfUCZYnwZuoMg==
-Received: by mail-ej1-f49.google.com with SMTP id gr7so17987918ejb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:57:33 -0800 (PST)
-X-Gm-Message-State: AO0yUKWhM5SlGrP9k03RzuhPHE2AmbHBtdFOH0Rf/dJ1XsT/RYAWSMi9
-        MsfGE6hDUXbYfblU/o1coVXNd1n2UI2f1gyPVGXIpg==
-X-Google-Smtp-Source: AK7set9/ve8g5TsJRz3g6ZGdh+faiyXAgVkwQTS2SJlcgdVc+0p1pG34Vabiezx0GXNWG1AspwltN09G6XpRWPRXdvg=
-X-Received: by 2002:a17:906:ca04:b0:7c0:f45e:22ff with SMTP id
- jt4-20020a170906ca0400b007c0f45e22ffmr3820111ejb.104.1676051851830; Fri, 10
- Feb 2023 09:57:31 -0800 (PST)
+        Fri, 10 Feb 2023 13:02:56 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0BD5FE44
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:02:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676052175; x=1707588175;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ga/44LVjbV6mU/2wo9st/9uoyErb7dNgMErkJHuhkWU=;
+  b=nxjV3ceScT0hm/0NK8vM28gpYUY82pycSUhPeweudM9eR5kPniAwG1At
+   GRkAxuOT5AqKAzv95rmGR43vzJuzlZnfdBttbzRT4w8mlugoTOA6JAFdv
+   zmQhDV5FsWKYxlL/V/qgSEpsmymkaA9rYy/Ht1gX5KhyRDsRYIszjB4C/
+   u8uPaGVvf4D3moxRMyiEev6KrZIU+Um6+cyO2TF8FGmUseff4bBsYv5JB
+   FQY6AHfSgD6U+GnKvEMv0QXpEGJvOREk3S2JxplkO5kddffaOktZS0nh2
+   NVh6P2cNkcO38SLVuRmqapr9c0d8X4ucZnroOZoztsgrqZMq5F/3RDxXV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="329116699"
+X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
+   d="scan'208";a="329116699"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 10:01:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="997007731"
+X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
+   d="scan'208";a="997007731"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 10 Feb 2023 10:01:42 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pQXiP-0005xM-39;
+        Fri, 10 Feb 2023 18:01:41 +0000
+Date:   Sat, 11 Feb 2023 02:01:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Youling Tang <tangyouling@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Xi Ruoyao <xry111@xry111.site>,
+        Jinyang He <hejinyang@loongson.cn>
+Cc:     oe-kbuild-all@lists.linux.dev, Xuerui Wang <kernel@xen0n.name>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 4/5] LoongArch: Add support for kernel relocation
+Message-ID: <202302110150.tIuRIiTp-lkp@intel.com>
+References: <1676018856-26520-5-git-send-email-tangyouling@loongson.cn>
 MIME-Version: 1.0
-References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
- <CAHk-=wj8rthcQ9gQbvkMzeFt0iymq+CuOzmidx3Pm29Lg+W0gg@mail.gmail.com>
- <20230210021603.GA2825702@dread.disaster.area> <20230210040626.GB2825702@dread.disaster.area>
- <Y+XLuYh+kC+4wTRi@casper.infradead.org> <20230210065747.GD2825702@dread.disaster.area>
- <CALCETrWjJisipSJA7tPu+h6B2gs3m+g0yPhZ4z+Atod+WOMkZg@mail.gmail.com> <CAHk-=wj66F6CdJUAAjqigXMBy7gHquFMzPNAwKCgkrb2mF6U7w@mail.gmail.com>
-In-Reply-To: <CAHk-=wj66F6CdJUAAjqigXMBy7gHquFMzPNAwKCgkrb2mF6U7w@mail.gmail.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Fri, 10 Feb 2023 09:57:20 -0800
-X-Gmail-Original-Message-ID: <CALCETrU-9Wcb_zCsVWr24V=uCA0+c6x359UkJBOBgkbq+UHAMA@mail.gmail.com>
-Message-ID: <CALCETrU-9Wcb_zCsVWr24V=uCA0+c6x359UkJBOBgkbq+UHAMA@mail.gmail.com>
-Subject: Re: copy on write for splice() from file to pipe?
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Stefan Metzmacher <metze@samba.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API Mailing List <linux-api@vger.kernel.org>,
-        io-uring <io-uring@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Samba Technical <samba-technical@lists.samba.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1676018856-26520-5-git-send-email-tangyouling@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 8:34 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Fri, Feb 10, 2023 at 7:15 AM Andy Lutomirski <luto@kernel.org> wrote:
-> >
-> > Frankly, I really don't like having non-immutable data in a pipe.
->
-> That statement is completely nonsensical.
+Hi Youling,
 
-I know what splice() is.  I'm trying to make the point that it may not
-be the right API for most (all?) of its use cases, that we can maybe
-do better, and that we should maybe even consider deprecating (and
-simplifying and the cost of performance) splice in the moderately near
-future.  And I think I agree with you on most of what you're saying.
+Thank you for the patch! Perhaps something to improve:
 
-> It was literally designed to be "look, we want zero-copy networking,
-> and we could do 'sendfile()' by mmap'ing the file, but mmap - and
-> particularly munmap - is too expensive, so we map things into kernel
-> buffers instead".
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.2-rc7 next-20230210]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Indeed.  mmap() + sendfile() + munmap() is extraordinarily expensive
-and is not the right solution to zero-copy  networking.
+url:    https://github.com/intel-lab-lkp/linux/commits/Youling-Tang/LoongArch-Use-la-pcrel-instead-of-la-abs-when-it-s-trivially-possible/20230210-165022
+patch link:    https://lore.kernel.org/r/1676018856-26520-5-git-send-email-tangyouling%40loongson.cn
+patch subject: [PATCH v4 4/5] LoongArch: Add support for kernel relocation
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20230211/202302110150.tIuRIiTp-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/26dc7750408c7f232632db44fab905df7b48d83c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Youling-Tang/LoongArch-Use-la-pcrel-instead-of-la-abs-when-it-s-trivially-possible/20230210-165022
+        git checkout 26dc7750408c7f232632db44fab905df7b48d83c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash arch/loongarch/kernel/
 
->
-> So saying "I really don't like having non-immutable data in a pipe" is
-> complete nonsense. It's syntactically correct English, but it makes no
-> conceptual sense.
->
-> You can say "I don't like 'splice()'". That's fine. I used to think
-> splice was a really cool concept, but I kind of hate it these days.
-> Not liking splice() makes a ton of sense.
->
-> But given splice, saying "I don't like non-immutable data" really is
-> complete nonsense.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302110150.tIuRIiTp-lkp@intel.com/
 
-I am saying exactly what I meant.  Obviously mutable data exists.  I'm
-saying that *putting it in a pipe* *while it's still mutable* is not
-good.  Which implies that I don't think splice() is good.  No offense.
+Note: functions only called from assembly code should be annotated with the asmlinkage attribute
+All warnings (new ones prefixed by >>):
 
-I am *not* saying that the mere existence of mutable data is a problem.
-
-> That's not something specific to "splice()". It's fundamental to the
-> whole *concept* of zero-copy. If you don't want copies, and the source
-> file changes, then you see those changes.
-
-Of course!  A user program copying data from a file to a network
-fundamentally does this:
-
-Step 1: start the process.
-Step 2: data goes out to the actual wire or a buffer on the NIC or is
-otherwise in a place other than page cache, and the kernel reports
-completion.
-
-There are many ways to make this happen.  Step 1 could be starting
-read() and step 2 could be send() returning.  Step 1 could be be
-sticking something in an io_uring queue and step 2 could be reporting
-completion.  Step 1 could be splice()ing to a pipe and step 2 could be
-a splice from the pipe to a socket completing (and maybe even later
-when the data actually goes out).
-
-*Obviously* any change to the file between steps 1 and 2 may change
-the data that goes out the wire.
-
-> So the data lifetime - even just on just one side - can _easily_ be
-> "multiple seconds" even when things are normal, and if you have actual
-> network connectivity issues we are easily talking minutes.
-
-True.
-
-But splice is extra nasty: step 1 happens potentially arbitrarily long
-before step 2, and the kernel doesn't even know which socket the data
-is destined for in step 1.  So step 1 can't usefully return
--EWOULDBLOCK, for example.  And it's awkward for the kernel to report
-errors, because steps 1 and 2 are so disconnected.  And I'm not
-convinced there's any corresponding benefit.
+>> arch/loongarch/kernel/relocate.c:21:13: warning: no previous prototype for 'relocate_kernel' [-Wmissing-prototypes]
+      21 | void __init relocate_kernel(void)
+         |             ^~~~~~~~~~~~~~~
 
 
-In any case, maybe io_uring gives an opportunity to do much better.
-io_uring makes it *efficient* for largish numbers of long-running
-operations to all be pending at once.  Would an API like this work
-better (very handwavy -- I make absolutely no promises that this is
-compatible with existing users -- new opcodes might be needed):
+vim +/relocate_kernel +21 arch/loongarch/kernel/relocate.c
 
-Submit IORING_OP_SPLICE from a *file* to a socket: this tells the
-kernel to kindly send data from the file in question to the network.
-Writes to the file before submission will be reflected in the data
-sent.  Writes after submission may or may not be reflected.  (This is
-step 1 above.)
+    20	
+  > 21	void __init relocate_kernel(void)
+    22	{
+    23		reloc_offset = (unsigned long)_text - VMLINUX_LOAD_ADDRESS;
+    24	
+    25		if (reloc_offset) {
+    26			Elf64_Rela *rela, *rela_end;
+    27			rela = (Elf64_Rela *)&__rela_dyn_start;
+    28			rela_end = (Elf64_Rela *)&__rela_dyn_end;
+    29	
+    30			for ( ; rela < rela_end; rela++) {
+    31				Elf64_Addr addr = rela->r_offset;
+    32				Elf64_Addr relocated_addr = rela->r_addend;
+    33	
+    34				if (rela->r_info != R_LARCH_RELATIVE)
+    35					continue;
+    36	
+    37				if (relocated_addr >= VMLINUX_LOAD_ADDRESS)
+    38					relocated_addr =
+    39						(Elf64_Addr)RELOCATED(relocated_addr);
+    40	
+    41				*(Elf64_Addr *)RELOCATED(addr) = relocated_addr;
+    42			}
+    43		}
+    44	}
+    45	
 
-The operation completes (and is reported in the CQ) only after the
-kernel knows that the data has been snapshotted (step 2 above).  So
-completion can be reported when the data is DMAed out or when it's
-checksummed-and-copied or if the kernel decides to copy it for any
-other reason *and* the kernel knows that it won't need to read the
-data again for possible retransmission.  As you said, this could
-easily take minutes, but that seems maybe okay to me.
-
-(And if Samba needs to make sure that future writes don't change the
-outgoing data even two seconds later when the data has been sent but
-not acked, then maybe a fancy API could be added to help, or maybe
-Samba shouldn't be using zero copy IO in the first place!)
-
-If the file is truncated or some other problem happens, the operation can fail.
-
-
-I don't know how easy or hard this is to implement, but it seems like
-it would be quite pleasant to *use* from user code, it ought to be
-even faster than splice-to-pipe-then-splice-to-socket (simply because
-there is less bookkeeping), and it doesn't seem like any file change
-tracking would be needed in the kernel.
-
-
-If this works and becomes popular enough, splice-from-file-to-pipe
-could *maybe* be replaced in the kernel with a plain copy.
-
---Andy
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
