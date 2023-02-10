@@ -2,58 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 096C7691C16
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 11:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDD9691C18
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 11:00:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbjBJKAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 05:00:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
+        id S231891AbjBJKAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 05:00:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbjBJKAh (ORCPT
+        with ESMTP id S231656AbjBJKAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 05:00:37 -0500
+        Fri, 10 Feb 2023 05:00:38 -0500
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C372A9BF;
-        Fri, 10 Feb 2023 02:00:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC7A38673;
+        Fri, 10 Feb 2023 02:00:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676023235; x=1707559235;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ViWZMNZSsxLFXG6UH5/npJ+Pnp9/XOhtNAnBp28zA9c=;
-  b=giznPBby7IoOPxgRPdU2qI++/DwdMFBVGBI42EDlsRmE2qURlkdU7COD
-   2qPzEzRosS+GEn3nhXc6DjIze6b6CjA/CmPbF13OM9TT55bhJo3DJC4FJ
-   iQ0tMXzSNYv3m3mBp/DTDixkZ0qZ3EjQ/VnQd9+GFMrmmyAOOFH7jBgs4
-   vfUxsi8VWGRDRehdrnTA+Bl3eRf3T+LWmQ8EfqfPW2jSt5a5CntxcDAIg
-   lPflmKXnF2eavUI6QY0Zq9YvvF6PL7GIDXRHylo8LLqKPi4LJmWoZerfM
-   G5s4cUu0BFOyc8nKBoUm6cHTVG2OIHsuwGY4eCQRn+yTZSXaXEA3ZQZAq
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="314027983"
+  t=1676023237; x=1707559237;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=skyO+n4E72IHbnF1r9khsegze0IsfBWcm+0BlzjaYsw=;
+  b=dtWo2Pitu6c/ZKjQNq00iezoXwGx3H5tPqkVJU1Jm6/TvufKJv+Ee3og
+   ISkCauBgo338h5WAUz+MPx3Ugofbx/dZtksRNOVymVbQ8wE3LmqvE6DP4
+   KGRqfFtQvzZ1hDgZANRKbBtDEKzGGDEy4eniHXQTkg1MDkujRIQiZlIYg
+   buH9G/mPGNGUYoo6sbPkaEn9ijyMzBarHILRVnKvwuWyRxelK8ohCosEp
+   mE1hYk90vNrcVaoM77TzIKR/nyZXVz2rBDvuMCzD53EGxCqKE6UfBrFxl
+   ldrDWXyzDEO4X9Sd5m4j2XMNSO0QceZpmr9pt2OP3AaysPQKrWv8si14q
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="314027993"
 X-IronPort-AV: E=Sophos;i="5.97,286,1669104000"; 
-   d="scan'208";a="314027983"
+   d="scan'208";a="314027993"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 02:00:34 -0800
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 02:00:36 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="661355215"
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="661355216"
 X-IronPort-AV: E=Sophos;i="5.97,286,1669104000"; 
-   d="scan'208";a="661355215"
+   d="scan'208";a="661355216"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
   by orsmga007.jf.intel.com with ESMTP; 10 Feb 2023 02:00:32 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pQQCm-0005jj-0X;
+        id 1pQQCm-0005jh-0Q;
         Fri, 10 Feb 2023 10:00:32 +0000
 Date:   Fri, 10 Feb 2023 18:00:31 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>
-Subject: drivers/ata/pata_octeon_cf.c:383: warning: expecting prototype for
- Read the taskfile for 16bit non(). Prototype was for octeon_cf_tf_read16()
- instead
-Message-ID: <202302101722.5O56RClE-lkp@intel.com>
+To:     Chia-Wei Wang <chiawei_wang@aspeedtech.com>,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
+        jirislaby@kernel.org, linux-serial@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org
+Cc:     oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 2/4] soc: aspeed: Add UART DMA support
+Message-ID: <202302101749.ctd9pkv1-lkp@intel.com>
+References: <20230210072643.2772-3-chiawei_wang@aspeedtech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230210072643.2772-3-chiawei_wang@aspeedtech.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -63,186 +69,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+Hi Chia-Wei,
 
-FYI, the error/warning still remains.
+Thank you for the patch! Perhaps something to improve:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   38c1e0c65865426676123cc9a127526fa02bcac6
-commit: 52042e2db45290f6a512d525518488b7bf143531 scripts: kernel-doc: validate kernel-doc markup with the actual names
-date:   2 years, 1 month ago
-config: mips-randconfig-r022-20230210 (https://download.01.org/0day-ci/archive/20230210/202302101722.5O56RClE-lkp@intel.com/config)
-compiler: mips64el-linux-gcc (GCC) 12.1.0
+[auto build test WARNING on tty/tty-testing]
+[also build test WARNING on tty/tty-next tty/tty-linus robh/for-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus usb/usb-testing usb/usb-next usb/usb-linus linus/master v6.2-rc7 next-20230210]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Chia-Wei-Wang/dt-bindings-aspeed-Add-UART-controller/20230210-152832
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+patch link:    https://lore.kernel.org/r/20230210072643.2772-3-chiawei_wang%40aspeedtech.com
+patch subject: [PATCH 2/4] soc: aspeed: Add UART DMA support
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20230210/202302101749.ctd9pkv1-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=52042e2db45290f6a512d525518488b7bf143531
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 52042e2db45290f6a512d525518488b7bf143531
+        # https://github.com/intel-lab-lkp/linux/commit/b1e3a89584657d9b0398f3f46b09dc4229835fa3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Chia-Wei-Wang/dt-bindings-aspeed-Add-UART-controller/20230210-152832
+        git checkout b1e3a89584657d9b0398f3f46b09dc4229835fa3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/ata/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/soc/aspeed/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302101722.5O56RClE-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302101749.ctd9pkv1-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   drivers/ata/pata_octeon_cf.c:75: warning: Function parameter or member 'tim_mult' not described in 'ns_to_tim_reg'
-   drivers/ata/pata_octeon_cf.c:75: warning: Function parameter or member 'nsecs' not described in 'ns_to_tim_reg'
-   drivers/ata/pata_octeon_cf.c:75: warning: expecting prototype for Convert nanosecond based time to setting used in the(). Prototype was for ns_to_tim_reg() instead
-   drivers/ata/pata_octeon_cf.c:130: warning: expecting prototype for This(). Prototype was for octeon_cf_set_piomode() instead
-   drivers/ata/pata_octeon_cf.c:286: warning: wrong kernel-doc identifier on line:
-    * Handle an 8 bit I/O request.
-   drivers/ata/pata_octeon_cf.c:325: warning: wrong kernel-doc identifier on line:
-    * Handle a 16 bit I/O request.
-   drivers/ata/pata_octeon_cf.c:383: warning: Function parameter or member 'ap' not described in 'octeon_cf_tf_read16'
-   drivers/ata/pata_octeon_cf.c:383: warning: Function parameter or member 'tf' not described in 'octeon_cf_tf_read16'
->> drivers/ata/pata_octeon_cf.c:383: warning: expecting prototype for Read the taskfile for 16bit non(). Prototype was for octeon_cf_tf_read16() instead
-   drivers/ata/pata_octeon_cf.c:468: warning: Function parameter or member 'ap' not described in 'octeon_cf_tf_load16'
-   drivers/ata/pata_octeon_cf.c:468: warning: Function parameter or member 'tf' not described in 'octeon_cf_tf_load16'
->> drivers/ata/pata_octeon_cf.c:468: warning: expecting prototype for Load the taskfile for 16bit non(). Prototype was for octeon_cf_tf_load16() instead
-   drivers/ata/pata_octeon_cf.c:560: warning: expecting prototype for Start a DMA transfer that was already setup(). Prototype was for octeon_cf_dma_start() instead
-   drivers/ata/pata_octeon_cf.c:616: warning: Cannot understand  *
-    on line 616 - I thought it was a doc line
+   drivers/soc/aspeed/aspeed-udma.c: In function 'aspeed_udma_request_chan':
+>> drivers/soc/aspeed/aspeed-udma.c:194:13: warning: variable 'retval' set but not used [-Wunused-but-set-variable]
+     194 |         int retval = 0;
+         |             ^~~~~~
 
 
-vim +383 drivers/ata/pata_octeon_cf.c
+vim +/retval +194 drivers/soc/aspeed/aspeed-udma.c
 
-3c929c6f5aa750 David Daney 2009-01-15  378  
-3c929c6f5aa750 David Daney 2009-01-15  379  /**
-3c929c6f5aa750 David Daney 2009-01-15  380   * Read the taskfile for 16bit non-True IDE only.
-3c929c6f5aa750 David Daney 2009-01-15  381   */
-3c929c6f5aa750 David Daney 2009-01-15  382  static void octeon_cf_tf_read16(struct ata_port *ap, struct ata_taskfile *tf)
-3c929c6f5aa750 David Daney 2009-01-15 @383  {
-3c929c6f5aa750 David Daney 2009-01-15  384  	u16 blob;
-3c929c6f5aa750 David Daney 2009-01-15  385  	/* The base of the registers is at ioaddr.data_addr. */
-3c929c6f5aa750 David Daney 2009-01-15  386  	void __iomem *base = ap->ioaddr.data_addr;
-3c929c6f5aa750 David Daney 2009-01-15  387  
-3c929c6f5aa750 David Daney 2009-01-15  388  	blob = __raw_readw(base + 0xc);
-3c929c6f5aa750 David Daney 2009-01-15  389  	tf->feature = blob >> 8;
-3c929c6f5aa750 David Daney 2009-01-15  390  
-3c929c6f5aa750 David Daney 2009-01-15  391  	blob = __raw_readw(base + 2);
-3c929c6f5aa750 David Daney 2009-01-15  392  	tf->nsect = blob & 0xff;
-3c929c6f5aa750 David Daney 2009-01-15  393  	tf->lbal = blob >> 8;
-3c929c6f5aa750 David Daney 2009-01-15  394  
-3c929c6f5aa750 David Daney 2009-01-15  395  	blob = __raw_readw(base + 4);
-3c929c6f5aa750 David Daney 2009-01-15  396  	tf->lbam = blob & 0xff;
-3c929c6f5aa750 David Daney 2009-01-15  397  	tf->lbah = blob >> 8;
-3c929c6f5aa750 David Daney 2009-01-15  398  
-3c929c6f5aa750 David Daney 2009-01-15  399  	blob = __raw_readw(base + 6);
-3c929c6f5aa750 David Daney 2009-01-15  400  	tf->device = blob & 0xff;
-3c929c6f5aa750 David Daney 2009-01-15  401  	tf->command = blob >> 8;
-3c929c6f5aa750 David Daney 2009-01-15  402  
-3c929c6f5aa750 David Daney 2009-01-15  403  	if (tf->flags & ATA_TFLAG_LBA48) {
-3c929c6f5aa750 David Daney 2009-01-15  404  		if (likely(ap->ioaddr.ctl_addr)) {
-3c929c6f5aa750 David Daney 2009-01-15  405  			iowrite8(tf->ctl | ATA_HOB, ap->ioaddr.ctl_addr);
-3c929c6f5aa750 David Daney 2009-01-15  406  
-3c929c6f5aa750 David Daney 2009-01-15  407  			blob = __raw_readw(base + 0xc);
-3c929c6f5aa750 David Daney 2009-01-15  408  			tf->hob_feature = blob >> 8;
-3c929c6f5aa750 David Daney 2009-01-15  409  
-3c929c6f5aa750 David Daney 2009-01-15  410  			blob = __raw_readw(base + 2);
-3c929c6f5aa750 David Daney 2009-01-15  411  			tf->hob_nsect = blob & 0xff;
-3c929c6f5aa750 David Daney 2009-01-15  412  			tf->hob_lbal = blob >> 8;
-3c929c6f5aa750 David Daney 2009-01-15  413  
-3c929c6f5aa750 David Daney 2009-01-15  414  			blob = __raw_readw(base + 4);
-3c929c6f5aa750 David Daney 2009-01-15  415  			tf->hob_lbam = blob & 0xff;
-3c929c6f5aa750 David Daney 2009-01-15  416  			tf->hob_lbah = blob >> 8;
-3c929c6f5aa750 David Daney 2009-01-15  417  
-3c929c6f5aa750 David Daney 2009-01-15  418  			iowrite8(tf->ctl, ap->ioaddr.ctl_addr);
-3c929c6f5aa750 David Daney 2009-01-15  419  			ap->last_ctl = tf->ctl;
-3c929c6f5aa750 David Daney 2009-01-15  420  		} else {
-3c929c6f5aa750 David Daney 2009-01-15  421  			WARN_ON(1);
-3c929c6f5aa750 David Daney 2009-01-15  422  		}
-3c929c6f5aa750 David Daney 2009-01-15  423  	}
-3c929c6f5aa750 David Daney 2009-01-15  424  }
-3c929c6f5aa750 David Daney 2009-01-15  425  
-3c929c6f5aa750 David Daney 2009-01-15  426  static u8 octeon_cf_check_status16(struct ata_port *ap)
-3c929c6f5aa750 David Daney 2009-01-15  427  {
-3c929c6f5aa750 David Daney 2009-01-15  428  	u16 blob;
-3c929c6f5aa750 David Daney 2009-01-15  429  	void __iomem *base = ap->ioaddr.data_addr;
-3c929c6f5aa750 David Daney 2009-01-15  430  
-3c929c6f5aa750 David Daney 2009-01-15  431  	blob = __raw_readw(base + 6);
-3c929c6f5aa750 David Daney 2009-01-15  432  	return blob >> 8;
-3c929c6f5aa750 David Daney 2009-01-15  433  }
-3c929c6f5aa750 David Daney 2009-01-15  434  
-3c929c6f5aa750 David Daney 2009-01-15  435  static int octeon_cf_softreset16(struct ata_link *link, unsigned int *classes,
-3c929c6f5aa750 David Daney 2009-01-15  436  				 unsigned long deadline)
-3c929c6f5aa750 David Daney 2009-01-15  437  {
-3c929c6f5aa750 David Daney 2009-01-15  438  	struct ata_port *ap = link->ap;
-3c929c6f5aa750 David Daney 2009-01-15  439  	void __iomem *base = ap->ioaddr.data_addr;
-3c929c6f5aa750 David Daney 2009-01-15  440  	int rc;
-3c929c6f5aa750 David Daney 2009-01-15  441  	u8 err;
-3c929c6f5aa750 David Daney 2009-01-15  442  
-3c929c6f5aa750 David Daney 2009-01-15  443  	DPRINTK("about to softreset\n");
-3c929c6f5aa750 David Daney 2009-01-15  444  	__raw_writew(ap->ctl, base + 0xe);
-3c929c6f5aa750 David Daney 2009-01-15  445  	udelay(20);
-3c929c6f5aa750 David Daney 2009-01-15  446  	__raw_writew(ap->ctl | ATA_SRST, base + 0xe);
-3c929c6f5aa750 David Daney 2009-01-15  447  	udelay(20);
-3c929c6f5aa750 David Daney 2009-01-15  448  	__raw_writew(ap->ctl, base + 0xe);
-3c929c6f5aa750 David Daney 2009-01-15  449  
-3c929c6f5aa750 David Daney 2009-01-15  450  	rc = ata_sff_wait_after_reset(link, 1, deadline);
-3c929c6f5aa750 David Daney 2009-01-15  451  	if (rc) {
-a9a79dfec23956 Joe Perches 2011-04-15  452  		ata_link_err(link, "SRST failed (errno=%d)\n", rc);
-3c929c6f5aa750 David Daney 2009-01-15  453  		return rc;
-3c929c6f5aa750 David Daney 2009-01-15  454  	}
-3c929c6f5aa750 David Daney 2009-01-15  455  
-3c929c6f5aa750 David Daney 2009-01-15  456  	/* determine by signature whether we have ATA or ATAPI devices */
-3c929c6f5aa750 David Daney 2009-01-15  457  	classes[0] = ata_sff_dev_classify(&link->device[0], 1, &err);
-3c929c6f5aa750 David Daney 2009-01-15  458  	DPRINTK("EXIT, classes[0]=%u [1]=%u\n", classes[0], classes[1]);
-3c929c6f5aa750 David Daney 2009-01-15  459  	return 0;
-3c929c6f5aa750 David Daney 2009-01-15  460  }
-3c929c6f5aa750 David Daney 2009-01-15  461  
-3c929c6f5aa750 David Daney 2009-01-15  462  /**
-3c929c6f5aa750 David Daney 2009-01-15  463   * Load the taskfile for 16bit non-True IDE only.  The device_addr is
-3c929c6f5aa750 David Daney 2009-01-15  464   * not loaded, we do this as part of octeon_cf_exec_command16.
-3c929c6f5aa750 David Daney 2009-01-15  465   */
-3c929c6f5aa750 David Daney 2009-01-15  466  static void octeon_cf_tf_load16(struct ata_port *ap,
-3c929c6f5aa750 David Daney 2009-01-15  467  				const struct ata_taskfile *tf)
-3c929c6f5aa750 David Daney 2009-01-15 @468  {
-3c929c6f5aa750 David Daney 2009-01-15  469  	unsigned int is_addr = tf->flags & ATA_TFLAG_ISADDR;
-3c929c6f5aa750 David Daney 2009-01-15  470  	/* The base of the registers is at ioaddr.data_addr. */
-3c929c6f5aa750 David Daney 2009-01-15  471  	void __iomem *base = ap->ioaddr.data_addr;
-3c929c6f5aa750 David Daney 2009-01-15  472  
-3c929c6f5aa750 David Daney 2009-01-15  473  	if (tf->ctl != ap->last_ctl) {
-3c929c6f5aa750 David Daney 2009-01-15  474  		iowrite8(tf->ctl, ap->ioaddr.ctl_addr);
-3c929c6f5aa750 David Daney 2009-01-15  475  		ap->last_ctl = tf->ctl;
-3c929c6f5aa750 David Daney 2009-01-15  476  		ata_wait_idle(ap);
-3c929c6f5aa750 David Daney 2009-01-15  477  	}
-3c929c6f5aa750 David Daney 2009-01-15  478  	if (is_addr && (tf->flags & ATA_TFLAG_LBA48)) {
-3c929c6f5aa750 David Daney 2009-01-15  479  		__raw_writew(tf->hob_feature << 8, base + 0xc);
-3c929c6f5aa750 David Daney 2009-01-15  480  		__raw_writew(tf->hob_nsect | tf->hob_lbal << 8, base + 2);
-3c929c6f5aa750 David Daney 2009-01-15  481  		__raw_writew(tf->hob_lbam | tf->hob_lbah << 8, base + 4);
-3c929c6f5aa750 David Daney 2009-01-15  482  		VPRINTK("hob: feat 0x%X nsect 0x%X, lba 0x%X 0x%X 0x%X\n",
-3c929c6f5aa750 David Daney 2009-01-15  483  			tf->hob_feature,
-3c929c6f5aa750 David Daney 2009-01-15  484  			tf->hob_nsect,
-3c929c6f5aa750 David Daney 2009-01-15  485  			tf->hob_lbal,
-3c929c6f5aa750 David Daney 2009-01-15  486  			tf->hob_lbam,
-3c929c6f5aa750 David Daney 2009-01-15  487  			tf->hob_lbah);
-3c929c6f5aa750 David Daney 2009-01-15  488  	}
-3c929c6f5aa750 David Daney 2009-01-15  489  	if (is_addr) {
-3c929c6f5aa750 David Daney 2009-01-15  490  		__raw_writew(tf->feature << 8, base + 0xc);
-3c929c6f5aa750 David Daney 2009-01-15  491  		__raw_writew(tf->nsect | tf->lbal << 8, base + 2);
-3c929c6f5aa750 David Daney 2009-01-15  492  		__raw_writew(tf->lbam | tf->lbah << 8, base + 4);
-3c929c6f5aa750 David Daney 2009-01-15  493  		VPRINTK("feat 0x%X nsect 0x%X, lba 0x%X 0x%X 0x%X\n",
-3c929c6f5aa750 David Daney 2009-01-15  494  			tf->feature,
-3c929c6f5aa750 David Daney 2009-01-15  495  			tf->nsect,
-3c929c6f5aa750 David Daney 2009-01-15  496  			tf->lbal,
-3c929c6f5aa750 David Daney 2009-01-15  497  			tf->lbam,
-3c929c6f5aa750 David Daney 2009-01-15  498  			tf->lbah);
-3c929c6f5aa750 David Daney 2009-01-15  499  	}
-3c929c6f5aa750 David Daney 2009-01-15  500  	ata_wait_idle(ap);
-3c929c6f5aa750 David Daney 2009-01-15  501  }
-3c929c6f5aa750 David Daney 2009-01-15  502  
-
-:::::: The code at line 383 was first introduced by commit
-:::::: 3c929c6f5aa7501790586a38dd8faca8fed9a158 libata: New driver for OCTEON SOC Compact Flash interface (v7).
-
-:::::: TO: David Daney <ddaney@caviumnetworks.com>
-:::::: CC: Jeff Garzik <jgarzik@redhat.com>
+   189	
+   190	static int aspeed_udma_request_chan(u32 ch_no, dma_addr_t addr,
+   191			struct circ_buf *rb, u32 rb_sz,
+   192			aspeed_udma_cb_t cb, void *id, bool dis_tmout, bool is_tx)
+   193	{
+ > 194		int retval = 0;
+   195		int rbsz_code;
+   196	
+   197		u32 reg;
+   198		unsigned long flags;
+   199		struct aspeed_udma_chan *ch;
+   200	
+   201		if (ch_no > UDMA_MAX_CHANNEL) {
+   202			retval = -EINVAL;
+   203			goto out;
+   204		}
+   205	
+   206		if (IS_ERR_OR_NULL(rb) || IS_ERR_OR_NULL(rb->buf)) {
+   207			retval = -EINVAL;
+   208			goto out;
+   209		}
+   210	
+   211		rbsz_code = aspeed_udma_get_bufsz_code(rb_sz);
+   212		if (rbsz_code < 0) {
+   213			retval = -EINVAL;
+   214			goto out;
+   215		}
+   216	
+   217		spin_lock_irqsave(&udma->lock, flags);
+   218	
+   219		if (is_tx) {
+   220			reg = readl(udma->regs + UDMA_TX_DMA_INT_EN);
+   221			if (reg & (0x1 << ch_no)) {
+   222				retval = -EBUSY;
+   223				goto unlock_n_out;
+   224			}
+   225	
+   226			reg |= (0x1 << ch_no);
+   227			writel(reg, udma->regs + UDMA_TX_DMA_INT_EN);
+   228	
+   229			reg = readl(udma->regs + UDMA_CHX_TX_CTRL(ch_no));
+   230			reg |= (dis_tmout) ? UDMA_TX_CTRL_TMOUT_DISABLE : 0;
+   231			reg |= (rbsz_code << UDMA_TX_CTRL_BUFSZ_SHIFT) & UDMA_TX_CTRL_BUFSZ_MASK;
+   232			writel(reg, udma->regs + UDMA_CHX_TX_CTRL(ch_no));
+   233	
+   234			writel(addr, udma->regs + UDMA_CHX_TX_BUF_BASE(ch_no));
+   235		} else {
+   236			reg = readl(udma->regs + UDMA_RX_DMA_INT_EN);
+   237			if (reg & (0x1 << ch_no)) {
+   238				retval = -EBUSY;
+   239				goto unlock_n_out;
+   240			}
+   241	
+   242			reg |= (0x1 << ch_no);
+   243			writel(reg, udma->regs + UDMA_RX_DMA_INT_EN);
+   244	
+   245			reg = readl(udma->regs + UDMA_CHX_RX_CTRL(ch_no));
+   246			reg |= (dis_tmout) ? UDMA_RX_CTRL_TMOUT_DISABLE : 0;
+   247			reg |= (rbsz_code << UDMA_RX_CTRL_BUFSZ_SHIFT) & UDMA_RX_CTRL_BUFSZ_MASK;
+   248			writel(reg, udma->regs + UDMA_CHX_RX_CTRL(ch_no));
+   249	
+   250			writel(addr, udma->regs + UDMA_CHX_RX_BUF_BASE(ch_no));
+   251		}
+   252	
+   253		ch = (is_tx) ? &udma->tx_chs[ch_no] : &udma->rx_chs[ch_no];
+   254		ch->rb = rb;
+   255		ch->rb_sz = rb_sz;
+   256		ch->cb = cb;
+   257		ch->cb_arg = id;
+   258		ch->dma_addr = addr;
+   259		ch->dis_tmout = dis_tmout;
+   260	
+   261	unlock_n_out:
+   262		spin_unlock_irqrestore(&udma->lock, flags);
+   263	out:
+   264		return 0;
+   265	}
+   266	
 
 -- 
 0-DAY CI Kernel Test Service
