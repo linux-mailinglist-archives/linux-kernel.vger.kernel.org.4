@@ -2,81 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60253691608
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 02:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C49369160E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 02:08:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbjBJBGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 20:06:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
+        id S230034AbjBJBI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 20:08:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbjBJBGF (ORCPT
+        with ESMTP id S229598AbjBJBI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 20:06:05 -0500
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9ECB5EA2B
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 17:06:02 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VbHf6.e_1675991158;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VbHf6.e_1675991158)
-          by smtp.aliyun-inc.com;
-          Fri, 10 Feb 2023 09:05:59 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     alexander.deucher@amd.com
-Cc:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] drm/amd/display: clean up some inconsistent indentings
-Date:   Fri, 10 Feb 2023 09:05:58 +0800
-Message-Id: <20230210010558.10621-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 9 Feb 2023 20:08:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8632007C;
+        Thu,  9 Feb 2023 17:08:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D8254B82399;
+        Fri, 10 Feb 2023 01:08:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9524DC4339B;
+        Fri, 10 Feb 2023 01:08:22 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="AKVCFBcC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1675991300;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TGifqOoR9bZo8/vQwUBuPjj6tQBc+UX+xXtpTfNPi00=;
+        b=AKVCFBcCRxl5vn5Sv8oY4GoA7mDM8xAJUkPanrttxiBdkce2ec81CZPbBinmB+bERwwcoG
+        IeIqlJK99DbEr3v9Qd7yG1MyjbEB0TdH7pgrN+MvI8FxguOjVzrVgS1B8rlmi57NoZJQkX
+        PmG/sdP/rID4Cid29hQpYnsnATY2qn4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 9a095af6 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Fri, 10 Feb 2023 01:08:19 +0000 (UTC)
+Date:   Fri, 10 Feb 2023 02:08:17 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     regressions@lists.linux.dev, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: [PATCH RFC] tpm: disable hwrng for known-defective AMD RNGs
+Message-ID: <Y+WZAV10cp7zKo1R@zx2c4.com>
+References: <20230209153120.261904-1-Jason@zx2c4.com>
+ <Y+WVzAt/ZCBdLEkx@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y+WVzAt/ZCBdLEkx@kernel.org>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_factory.c:145 get_ddc_line() warn: inconsistent indenting
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_factory.c:201 dc_link_construct_phy() warn: inconsistent indenting
+On Fri, Feb 10, 2023 at 02:54:36AM +0200, Jarkko Sakkinen wrote:
+> On Thu, Feb 09, 2023 at 12:31:20PM -0300, Jason A. Donenfeld wrote:
+> > Do not register a hwrng for certain AMD TPMs that are running an old
+> 
+> What do you mean by "certain AMD TPMs"?
+> 
+> > known-buggy revision. Do this by probing the TPM2_PT_MANUFACTURER,
+> 
+> Which revision?
+> 
+> > TPM2_PT_FIRMWARE_VERSION_1, and TPM2_PT_FIRMWARE_VERSION_2 properties,
+> > and failing when an "AMD"-manufactured TPM2 chip is below a threshold.
+> 
+> What do you mean by "threshold"?
+> 
+> This also lacks desription of:
+> 
+> 1. What kind of changes are done.
+> 2. Why do they they are reasonable.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4026
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/gpu/drm/amd/display/dc/link/link_factory.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+YEP! And guess what? It doesn't matter at all one bit. Why? Because
+Mario, the AMD engineer working on this, is tuned into the goal here and
+he's the one who will be reworking this PoC draft into a real non-RFC
+commit. We've been discussing this over on the bugzilla Thorsten sent to
+you on Feb 2: https://bugzilla.kernel.org/show_bug.cgi?id=216989
 
-diff --git a/drivers/gpu/drm/amd/display/dc/link/link_factory.c b/drivers/gpu/drm/amd/display/dc/link/link_factory.c
-index 13a766273755..23f668d90460 100644
---- a/drivers/gpu/drm/amd/display/dc/link/link_factory.c
-+++ b/drivers/gpu/drm/amd/display/dc/link/link_factory.c
-@@ -142,7 +142,7 @@ static enum channel_id get_ddc_line(struct dc_link *link)
- 	struct ddc *ddc;
- 	enum channel_id channel;
- 
--		channel = CHANNEL_ID_UNKNOWN;
-+	channel = CHANNEL_ID_UNKNOWN;
- 
- 	ddc = get_ddc_pin(link->ddc);
- 
-@@ -196,8 +196,8 @@ static bool dc_link_construct_phy(struct dc_link *link,
- 
- 	DC_LOGGER_INIT(dc_ctx->logger);
- 
--		link->irq_source_hpd = DC_IRQ_SOURCE_INVALID;
--		link->irq_source_hpd_rx = DC_IRQ_SOURCE_INVALID;
-+	link->irq_source_hpd = DC_IRQ_SOURCE_INVALID;
-+	link->irq_source_hpd_rx = DC_IRQ_SOURCE_INVALID;
- 	link->link_status.dpcd_caps = &link->dpcd_caps;
- 
- 	link->dc = init_params->dc;
--- 
-2.20.1.7.g153144c
+> > BROKEN BROKEN BROKEN - I just made the version numbers up and haven't
+> > tested this because I don't actually have hardware for it. I'm posting
+> > this so that Mario can take over its development and submit a v2 himself
+> > once he has confirmed the versioning info from inside AMD.
+> 
+> Is this paragraph meant for commit log?
 
+Obviously not; did you read it?
+
+Jason
