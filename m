@@ -2,54 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C69692557
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD54569255A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:28:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233069AbjBJS13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 13:27:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        id S233005AbjBJS2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 13:28:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232876AbjBJS11 (ORCPT
+        with ESMTP id S232505AbjBJS2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 13:27:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50936CC59;
-        Fri, 10 Feb 2023 10:27:25 -0800 (PST)
+        Fri, 10 Feb 2023 13:28:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C786C7C7;
+        Fri, 10 Feb 2023 10:28:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B465B824BF;
-        Fri, 10 Feb 2023 18:27:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEE21C433D2;
-        Fri, 10 Feb 2023 18:27:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C20FD61D97;
+        Fri, 10 Feb 2023 18:28:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DD29C433D2;
+        Fri, 10 Feb 2023 18:28:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676053643;
-        bh=ru75vqtNeMxKc3i0lMcAyuNObS+r1MZ5Asn18pE6VEw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bExP0i1cFK40vvmYCrycuDh+WjwLa2A90peLfb3/ogMKDO9XuDfBTD23KWz18nVCD
-         4ra0gPY9RpVaWrlu/gA/nChu0wb5Nz3+RMd4FilqdWClPRewfwSF5W7gcB3P16hS2U
-         IyGquHfsILS/4gcZy1b8zOClq9qFtOjO6xuKxMJz9QVjLteyYlqJBF7JWts0+ZqVEG
-         pGIXXumGOtroOGUaoHyY3bls6d2tqwEIfjbJ7e/dCiUEvnj7ETP8DB59lMtOVj57Yl
-         lis0TvIUErSK0dqmpvsqcGQuMhXIAG+tmloT4zNwE7IEiECp0ZH+637gCX5jT9W4r9
-         888/xEl2XM2Fw==
-Date:   Fri, 10 Feb 2023 18:27:19 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 8/8] kbuild, PCI: microchip: comment out MODULE_LICENSE
- in non-modules
-Message-ID: <Y+aMh5e9bWaTphiZ@spud>
-References: <20230210164749.368998-1-nick.alcock@oracle.com>
- <20230210164749.368998-9-nick.alcock@oracle.com>
+        s=k20201202; t=1676053726;
+        bh=fbAYtfNLMbGbjUSgWi/1MAsAL/DE+XtVmcxlU54pMLs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bDwVvvVA4Qv04UEwvUWpz+KojtDDV5sIbMQovFCSuUQbJBvJqfqSyqy4Me9RNfi8Q
+         6UHIKyaIhm3bgYB3MHtPiAvNcJ/CdOPw4Z7YaEG0aFcAEUPvp868jYwKXQxw5vDncA
+         WQBUHXPcy30tqAdqxOZa/1xmKeWWaqKf9RqRhmJsKPTo1l6sJEKU20Bfr2VpMIW3vc
+         bDo7u5lnWfkO8tPlAw2tFxHCFZDtxyjaHbK+1tfhMbwv4fz2afBqF26QvkWihm19fQ
+         hFHxy5T+i26uZYHgPrrn+RafnZWwy5WrbOI64vVvrPKgu6AYwvaN3FUXwZPfkKn7EO
+         EVhuI3noRzKbg==
+From:   SeongJae Park <sj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     SeongJae Park <sj@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v2 0/3] mm/damon: deprecate DAMON debugfs interface
+Date:   Fri, 10 Feb 2023 18:28:43 +0000
+Message-Id: <20230210182843.83527-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230210044838.63723-1-sj@kernel.org>
+References: 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="UQcsHPcpF5ooaooy"
-Content-Disposition: inline
-In-Reply-To: <20230210164749.368998-9-nick.alcock@oracle.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,81 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 10 Feb 2023 04:48:35 +0000 SeongJae Park <sj@kernel.org> wrote:
 
---UQcsHPcpF5ooaooy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Changes from v1
+> (https://lore.kernel.org/damon/20230209192009.7885-1-sj@kernel.org/)
+> - Split DAMON debugfs file open warning message (Randy Dunlap)
 
-Hey Nick,
+I usually sent this kind of update for after-merged-into-mm-unstable tree
+patches individusally as fixup, but this time I sent whole patchset as a new
+version, because I was out of my mind.
 
-FYI $subject seems wrong, this is a PCI patch AFAICT.
+For someone who may prefer the usual for-fixup individual patch, attaching the
+version below.
 
-On Fri, Feb 10, 2023 at 04:47:49PM +0000, Nick Alcock wrote:
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
->=20
-> So comment out all uses of MODULE_LICENSE that are not in real modules
 
-This patch should not been needed, there's an existing patch to make
-this a module:
-https://lore.kernel.org/linux-riscv/20230111125323.1911373-4-daire.mcnamara=
-@microchip.com/
+Thanks,
+SJ
 
-> (the license declaration is left in as documentation).
+================================= 8< ==========================================
+From: SeongJae Park <sj@kernel.org>
+Date: Fri, 10 Feb 2023 04:37:19 +0000
+Subject: [PATCH mm-unstable] mm/damon/dbgfs: break too long deprecation
+ warning message
 
-I don't really get this one though, why leave it there as
-"documentation" when the file has an SPDX entry anyway?
+DAMON debugfs interface deprecation message, which is introduced by
+commit 234a68e24b12 ("mm/damon/dbgfs: print DAMON debugfs interface
+deprecation message") of mm-unstable, is too long.  Break down into
+multiple strings for better code readability.
 
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-pci@vger.kernel.org
-> Cc: linux-riscv@lists.infradead.org
+Fixes: 234a68e24b12 ("mm/damon/dbgfs: print DAMON debugfs interface deprecation message") # mm-unstable
+Suggested-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ mm/damon/dbgfs.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-One for the future:
-How about also CCing those listed in MAINTAINERS for the file you're
-changing?
+diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
+index e551a20b35e3..124f0f8c97b7 100644
+--- a/mm/damon/dbgfs.c
++++ b/mm/damon/dbgfs.c
+@@ -22,7 +22,10 @@ static DEFINE_MUTEX(damon_dbgfs_lock);
 
-Cheers,
-Conor.
+ static void damon_dbgfs_warn_deprecation(void)
+ {
+-       pr_warn_once("DAMON debugfs interface is deprecated, so users should move to the sysfs interface (DAMON_SYSFS).  If you depend on this and cannot move, please report your usecase to damon@lists.linux.dev and linux-mm@kvack.org.\n");
++       pr_warn_once("DAMON debugfs interface is deprecated, "
++                    "so users should move to DAMON_SYSFS. If you cannot, "
++                    "please report your usecase to damon@lists.linux.dev and "
++                    "linux-mm@kvack.org.\n");
+ }
 
-> ---
->  drivers/pci/controller/pcie-microchip-host.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/pci/controller/pcie-microchip-host.c b/drivers/pci/c=
-ontroller/pcie-microchip-host.c
-> index 0ebf7015e9af..08c0b778ce67 100644
-> --- a/drivers/pci/controller/pcie-microchip-host.c
-> +++ b/drivers/pci/controller/pcie-microchip-host.c
-> @@ -1135,6 +1135,6 @@ static struct platform_driver mc_pcie_driver =3D {
->  };
-> =20
->  builtin_platform_driver(mc_pcie_driver);
-> -MODULE_LICENSE("GPL");
-> +/* MODULE_LICENSE("GPL"); */
->  MODULE_DESCRIPTION("Microchip PCIe host controller driver");
->  MODULE_AUTHOR("Daire McNamara <daire.mcnamara@microchip.com>");
-> --=20
-> 2.39.1.268.g9de2f9a303
->=20
-
---UQcsHPcpF5ooaooy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+aMhwAKCRB4tDGHoIJi
-0p75AQCjE3hKHpySZYQwvXOT9WAba8RscTwFwxbmiRhPyoihiAEAl4cR0LIJEcNm
-hYM+BjoPrEpdFZ6y/x/hnI/5ADnkkgY=
-=6q4t
------END PGP SIGNATURE-----
-
---UQcsHPcpF5ooaooy--
+ /*
+--
+2.25.1
