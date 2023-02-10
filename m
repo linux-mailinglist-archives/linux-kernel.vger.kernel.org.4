@@ -2,698 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D04AC692229
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:28:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 627F269222E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232688AbjBJP23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 10:28:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58276 "EHLO
+        id S232727AbjBJP2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 10:28:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbjBJP21 (ORCPT
+        with ESMTP id S231897AbjBJP2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 10:28:27 -0500
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB14BC;
-        Fri, 10 Feb 2023 07:28:25 -0800 (PST)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-16aca2628c6so4866699fac.7;
-        Fri, 10 Feb 2023 07:28:25 -0800 (PST)
+        Fri, 10 Feb 2023 10:28:53 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012688A43
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:28:51 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso4323698wms.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:28:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9hVlPe6eJuNFcNFFfLabGm+E19dcSTToLIMGVvbXQT4=;
-        b=knlC8WzdrM/m+aS0ypSlu3cSKtJRHjQV63Bd4AUvQDADk5tAA69DFKVPfxX64FG9dr
-         OUxbAR/GHmcxaqX/NDk8dfC/xkQBhpElTCweaD88AHi1gDlQywT6wlsLnpwUH3EHWmtN
-         hZVWOYdxSQ0j3noNiOG/v99wBcLMkBEvQDihEhAYfI7K+QiM+k2TP9hMw7+QjOkIdZls
-         7riK1kAy/JtjEKfFaVpDXkIF8H9VpOMuVL1eICK0jFGCFxl+woDgir07I9A67HsdQhzn
-         wC/+YPuZBvd7kCyfuXaANBxeV5UVL01A/ceg7opO/A2Y4RES6IZLl6q3WnFMHQiRrVJc
-         5Qag==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=cy3a8kpnC+sCTHwnDRky9CsOJtj+AEHdVOXHEunigCk=;
+        b=PkiaUU4Zh8w7S5KZ7RSgZNScttYh+zu0ske93eSlt+tyBCQqvOXN+yqGYjBoX5SW/f
+         ELzb7vjcr3Q6CdAQTrDKTwoGMQ81ZCH5037ShmcW5Dqmodu9HmC+dhUh6VWoZuzfDD85
+         1KE07ON9oCiyIwMCCu0xiA1SreeKAcP5qtP4AdIj1oH6KV7/XvK/hcEIwvQrcJ2+Xz4I
+         y0GBkXYNfmx2ZFkD4ivRmy5OrM9YyqDxxvM3+FX9GsyvOTfGS4Dbzz4hXbZjpDTvbU4X
+         TaetDQLcXaRvni3gI1Od8oYy2R50UtFRodIiIB8VT3TeSoDrofelK/Hr/mPfarA6CACk
+         /mmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9hVlPe6eJuNFcNFFfLabGm+E19dcSTToLIMGVvbXQT4=;
-        b=Pq5m3PeGN33+iZnLHOTR8iazFH57HDfZZSFJRftnFzBp6gwSda57ouhbfGI7U8MaLw
-         NkFUXVxmWA6RymOu5XXpATwp7xM6Hn9jKkglcMogdDUu8M5cqVY8VAiBD9JY8QpfqtqA
-         rhxBJAEXxuGOKgWZLKquI4jcrUoUmBKDeoy/mmVJaAbACWX+u3j16q3awPE00jeTRhjs
-         v24gtE/4XlSocATj/qaQkcgtHBWWbxWVOguV4J4v0chbMYr7EO+conoRJfUa353T6kYg
-         6WlnsrW2Asv4A+XxV61dzxEoptRC4eFnFvdR8XWS+VcaR/8Y/Eetmox3D6H4vBEATQSs
-         IAoA==
-X-Gm-Message-State: AO0yUKUatkygtNREmCwbHhS4g+HdGBhK0yOsDv3kiDoaPAOQQkwUCpU3
-        ib5jtZtTHPFnQpAl1tYrFwA=
-X-Google-Smtp-Source: AK7set+LobSO3egjDr5FecVn4QDlPWobGrRvafyWYi36GTE4G99DwPOP03YbIaL2mFkuOGcxF7eqfQ==
-X-Received: by 2002:a05:6870:c148:b0:169:c54d:f069 with SMTP id g8-20020a056870c14800b00169c54df069mr8281713oad.26.1676042904162;
-        Fri, 10 Feb 2023 07:28:24 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h43-20020a056870172b00b001676a4dc22bsm1946836oae.58.2023.02.10.07.28.20
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cy3a8kpnC+sCTHwnDRky9CsOJtj+AEHdVOXHEunigCk=;
+        b=wtJzORAQA6J94Ofo7i5CmDISlCBSrYKpH5AAIJaICAMYa7ARZi6cUWjBSfaUzCbUZx
+         3Pn5bog+J/1UWgNm8r4nTznjo0820EQXsI0HhkwDenxTdWQCE6sY9GLfot8KZT2CROu3
+         N8/AZciSCDatqnAd/tfv7eECEi3Z0piFAZd32azqOSNzebwj3MNGXC3bEnDGAPWgpZMc
+         +NQPz+yN5diBrkm8g39cq+1hHuzme9f75RjILeSEpZH613GlRbBleBAh2ZOpt8lfwl46
+         jK1b3aYvz3qTB/J1O58JM7dSB5nJU8joJ1AdQQg3W4PAE1JJ7GUY61Xdv5PDZ7ka81Y4
+         8znQ==
+X-Gm-Message-State: AO0yUKUCxZLVh/Tm9lVUJIHxTsX9vlaI8NjuYl9ScjI2gllRcOQRvJrB
+        O6sMWZDwSfENY8rL9FIAHGPfUQ==
+X-Google-Smtp-Source: AK7set9dJHbLStYnrL4YnYUOr+Ln5RaS+sdzjXiz3BANjDIv1Cves2lX6rNkwGhLjjZROxNrUfajjA==
+X-Received: by 2002:a05:600c:3411:b0:3dc:545f:e9ce with SMTP id y17-20020a05600c341100b003dc545fe9cemr14324355wmp.24.1676042930507;
+        Fri, 10 Feb 2023 07:28:50 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:5a65:5553:55cf:3027? ([2a01:e0a:982:cbb0:5a65:5553:55cf:3027])
+        by smtp.gmail.com with ESMTPSA id j23-20020a05600c1c1700b003daf681d05dsm5832013wms.26.2023.02.10.07.28.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 07:28:22 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <690da4a4-b4df-f316-e948-38c857237095@roeck-us.net>
-Date:   Fri, 10 Feb 2023 07:28:20 -0800
+        Fri, 10 Feb 2023 07:28:49 -0800 (PST)
+Message-ID: <f5a26fff-2dc2-2397-a80c-2477176a5864@linaro.org>
+Date:   Fri, 10 Feb 2023 16:28:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
+ Thunderbird/102.7.1
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v3 5/5] arm64: dts: qcom: sm8450: add dp controller
 Content-Language: en-US
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Samin Guo <samin.guo@starfivetech.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221219094233.179153-1-xingyu.wu@starfivetech.com>
- <20221219094233.179153-3-xingyu.wu@starfivetech.com>
- <20230201224619.GA3194283@roeck-us.net>
- <8feda5d9-8510-acbf-1ec2-3a0e67df0adc@starfivetech.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 2/3] drivers: watchdog: Add StarFive Watchdog driver
-In-Reply-To: <8feda5d9-8510-acbf-1ec2-3a0e67df0adc@starfivetech.com>
+References: <20230206-topic-sm8450-upstream-dp-controller-v3-0-636ef9e99932@linaro.org>
+ <20230206-topic-sm8450-upstream-dp-controller-v3-5-636ef9e99932@linaro.org>
+ <347a5193-f7b1-7f8e-0c60-3d435bdf952c@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <347a5193-f7b1-7f8e-0c60-3d435bdf952c@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/23 23:01, Xingyu Wu wrote:
-> On 2023/2/2 6:46, Guenter Roeck wrote:
->> On Mon, Dec 19, 2022 at 05:42:32PM +0800, Xingyu Wu wrote:
->>> Add watchdog driver for the StarFive JH7110 SoC.
->>>
->>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+On 10/02/2023 16:24, Dmitry Baryshkov wrote:
+> On 10/02/2023 16:44, Neil Armstrong wrote:
+>> Add the Display Port controller subnode to the MDSS node.
 >>
->> This driver is almost impossible for me to review. There is a lot of code
->> which doesn't make sense to me. I'll outline some of it below, but this is
->> by far not a complete review.
-> 
-> Thanks for your review. It is enough complete and useful.
-> 
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+>>   arch/arm64/boot/dts/qcom/sm8450.dtsi | 79 ++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 79 insertions(+)
 >>
->>> [...]
->>> +
->>> +#include <linux/clk.h>
->>> +#include <linux/delay.h>
->>> +#include <linux/err.h>
->>> +#include <linux/interrupt.h>
->>> +#include <linux/io.h>
->>> +#include <linux/iopoll.h>
->>> +#include <linux/module.h>
->>> +#include <linux/moduleparam.h>
->>> +#include <linux/of.h>
->>> +#include <linux/of_device.h>
->>> +#include <linux/platform_device.h>
->>> +#include <linux/pm_runtime.h>
->>> +#include <linux/reset.h>
->>> +#include <linux/reset-controller.h>
->>> +#include <linux/slab.h>
->>> +#include <linux/timer.h>
->>> +#include <linux/types.h>
->>> +#include <linux/uaccess.h>
->>> +#include <linux/watchdog.h>
->>
->> Several of those include files are unnecessary.
-> 
-> Will drop it.
-> 
->>
->>> [...]
->>> +
->>> +static bool nowayout = WATCHDOG_NOWAYOUT;
->>> +static int tmr_margin;
->>> +static int tmr_atboot = STARFIVE_WDT_ATBOOT;
->>> +static int soft_noboot;
->>> +
->>> +module_param(tmr_margin, int, 0);
->>> +module_param(tmr_atboot, int, 0);
->>> +module_param(nowayout, bool, 0);
->>> +module_param(soft_noboot, int, 0);
->>> +
->>> +MODULE_PARM_DESC(tmr_margin, "Watchdog tmr_margin in seconds. (default="
->>> +		 __MODULE_STRING(STARFIVE_WDT_DEFAULT_TIME) ")");
->>
->> Use "timeout" or "heartbeat".
-> 
-> Will fix.
-> 
->>
->>> +MODULE_PARM_DESC(tmr_atboot,
->>> +		 "Watchdog is started at boot time if set to 1, default="
->>> +		 __MODULE_STRING(STARFIVE_WDT_ATBOOT));
->>
->> Use "early_enable"
-> 
-> Will fix.
-> 
->>
->>> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
->>> +		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
->>> +MODULE_PARM_DESC(soft_noboot,
->>> +		 "Watchdog action, set to 1 to ignore reboots, 0 to reboot (default 0)");
->>
->> I do not understand what this module parameter is supposed to be used for,
->> and what the "soft_' prefix is supposed to mean.
-> 
-> This 'soft_noboot' means watchdog reset enabled status. If 'soft_noboot' is set to 1,
-> it means reset is disabled and do not reboot.Or 'reboot_disbled' instead?
-> 
+>> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>> index 6caa2c8efb46..72d54beb7d7c 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>> @@ -2751,6 +2751,13 @@ dpu_intf2_out: endpoint {
+>>                           };
+>>                       };
+>> +                    port@2 {
+>> +                        reg = <2>;
+>> +                        dpu_intf0_out: endpoint {
+>> +                            remote-endpoint = <&mdss_dp0_in>;
+>> +                        };
+>> +                    };
+>> +
+>>                   };
+>>                   mdp_opp_table: opp-table {
+>> @@ -2783,6 +2790,78 @@ opp-500000000 {
+>>                   };
+>>               };
+>> +            mdss_dp0: displayport-controller@ae90000 {
+>> +                compatible = "qcom,sm8350-dp";
 
-That means it does nothing ? Why load the watchdog in the first place then ?
+Exact, must fix.
 
->>
->>> [...]
->>> +#ifdef CONFIG_OF
->>> +/* Register bias in JH7110 */
->>> +static const struct starfive_wdt_variant drv_data_jh7110 = {
->>> +	.control = STARFIVE_WDT_JH7110_CONTROL,
->>> +	.load = STARFIVE_WDT_JH7110_LOAD,
->>> +	.enable = STARFIVE_WDT_JH7110_CONTROL,
->>> +	.value = STARFIVE_WDT_JH7110_VALUE,
->>> +	.int_clr = STARFIVE_WDT_JH7110_INTCLR,
->>> +	.unlock = STARFIVE_WDT_JH7110_LOCK,
->>> +	.unlock_key = STARFIVE_WDT_JH7110_UNLOCK_KEY,
->>> +	.irq_is_raise = STARFIVE_WDT_JH7110_IMS,
->>> +	.enrst_shift = STARFIVE_WDT_JH7110_RESEN_SHIFT,
->>> +	.en_shift = STARFIVE_WDT_JH7110_EN_SHIFT,
->>> +};
->>> +
->>> +static const struct of_device_id starfive_wdt_match[] = {
->>> +	{ .compatible = "starfive,jh7110-wdt", .data = &drv_data_jh7110 },
->>> +	{}
->>> +};
->>> +MODULE_DEVICE_TABLE(of, starfive_wdt_match);
->>> +#endif
->>> +
->>> +static const struct platform_device_id starfive_wdt_ids[] = {
->>> +	{
->>> +		.name = "starfive-jh7110-wdt",
->>> +		.driver_data = (unsigned long)&drv_data_jh7110,
->>
->> This will fail to compile if CONFIG_OF=n.
 > 
-> Will drop '#ifdef CONFIG_OF'.
+> Missing "qcom,sm8450-dp". As I wrote in the comment to patch 1, I'd suggest having just a single entry here rather than keeping both 8350 and 8450 entries.
 > 
->>
->>> +	},
->>> +	{}
->>> +};
->>> +MODULE_DEVICE_TABLE(platform, starfive_wdt_ids);
->>> +
->>> +static int starfive_wdt_get_clock_rate(struct starfive_wdt *wdt)
->>> +{
->>> +	if (!IS_ERR(wdt->core_clk)) {
->>> +		wdt->freq = clk_get_rate(wdt->core_clk);
->>
->> wdt->freq can at least in theory be 0, which would
->> result in a zero-divide crash later on.
+>> +                reg = <0 0xae90000 0 0xfc>,
+>> +                      <0 0xae90200 0 0xc0>,
+>> +                      <0 0xae90400 0 0x770>,
+>> +                      <0 0xae91000 0 0x98>,
+>> +                      <0 0xae91400 0 0x98>;
 > 
-> Will add a check whether rate is 0 to avoid zero-divide crash.
 > 
->>
->>> +		return 0;
->>> +	}
->>> +	dev_err(wdt->dev, "get clock rate failed.\n");
->>> +
->>> +	return -ENOENT;
->>
->> The above code can not be reached.
->>
->>> +}
->>> +
->>> +static int starfive_wdt_enable_clock(struct starfive_wdt *wdt)
->>> +{
->>> +	int ret = 0;
->>> +
->>> +	wdt->apb_clk = devm_clk_get_enabled(wdt->dev, "apb");
->>> +	if (IS_ERR(wdt->apb_clk)) {
->>> +		dev_err(wdt->dev, "failed to get and enable apb clock.\n");
->>> +		ret = PTR_ERR(wdt->apb_clk);
->>> +		return ret;
->>> +	}
->>> +
->>> +	wdt->core_clk = devm_clk_get_enabled(wdt->dev, "core");
->>> +	if (IS_ERR(wdt->core_clk)) {
->>> +		dev_err(wdt->dev, "failed to get and enable core clock.\n");
->>> +		ret = PTR_ERR(wdt->core_clk);
->>> +	}
->>> +
->>> +	return ret;
->>> +}
->>> +
->>> +static int starfive_wdt_reset_init(struct starfive_wdt *wdt)
->>> +{
->>> +	int ret = 0;
->>> +
->>> +	wdt->rsts = devm_reset_control_array_get_exclusive(wdt->dev);
->>> +	if (!IS_ERR(wdt->rsts)) {
->>
->> Error handling should come first, and return immediately.
-> 
-> Will change the order and return error first.
-> 
->>
->>> +		ret = reset_control_deassert(wdt->rsts);
->>> +		if (ret)
->>> +			dev_err(wdt->dev, "failed to deassert rsts.\n");
->>> +	} else {
->>> +		dev_err(wdt->dev, "failed to get rsts error.\n");
->>> +		ret = PTR_ERR(wdt->rsts);
->>> +	}
->>> +
->>> +	return ret;
->>> +}
->>> [...]
->>> +
->>> +/* interrupt status whether has been raised from the counter */
->>> +static bool starfive_wdt_raise_irq_status(struct starfive_wdt *wdt)
->>> +{
->>> +	return !!readl(wdt->base + wdt->drv_data->irq_is_raise);
->>> +}
->>> +
->>> +static void starfive_wdt_int_clr(struct starfive_wdt *wdt)
->>> +{
->>> +	writel(STARFIVE_WDT_INTCLR, wdt->base + wdt->drv_data->int_clr);
->>> +}
->>
->> There is no explanation for this interrupt handling (or, rather,
->> non-handling since there is no interrupt handler. What is the purpose
->> of even having all this code ?
-> 
-> Because the watchdog raise an interrupt signal on the hardware when timeout,
-> although we do not use interrupt handler on the sorfware, but the watchdog
-> initialization or reload also need to clear the hardware interrupt signal.
-> 
+> While this sounds correct, usually we used the even size here (0x200, 0x400, etc.). Can we please switch to it (especially since sm8350-dp uses even sizes).
 
-That should be documented.
+I don't have access to registers layout for HDK8450 but the system freezes when using even sizes, using
+the exact register size works fine.
 
->>
->>> [...]
->>> +
->>> +static unsigned int starfive_wdt_max_timeout(struct starfive_wdt *wdt)
->>> +{
->>> +	return DIV_ROUND_UP(STARFIVE_WDT_MAXCNT, wdt->freq) - 1;
->>> +}
->>
->> For a frequency of 1 MHz, this results in a maximum timeout of 4294.
->>
->> This value is then used in starfive_wdt_set_timeout(), but as
->> (4294 * 1000000) / 2, which is then again compared against
->> STARFIVE_WDT_MAXCNT. Somewhere this calculation is wrong.
-> 
-> Modify to 'DIV_ROUND_UP(STARFIVE_WDT_MAXCNT, (wdt->freq / 2)) - 1'.
-> 
->>
->> [...]
->>> +
->>> +static int starfive_wdt_restart(struct watchdog_device *wdd, unsigned long action,
->>> +				void *data)
->>> +{
->>> +	struct starfive_wdt *wdt = watchdog_get_drvdata(wdd);
->>> +
->>> +	spin_lock(&wdt->lock);
->>> +	starfive_wdt_unlock(wdt);
->>> +	/* disable watchdog, to be safe */
->>> +	starfive_wdt_disable(wdt);
->>> +
->>> +	if (soft_noboot)
->>> +		starfive_wdt_disable_reset(wdt);
->>> +	else
->>> +		starfive_wdt_enable_reset(wdt);
->>> +
->>
->> This is a _restart_ handler. Disabling it doesn't make any sense.
-> 
-> Will drop 'starfive_wdt_disable_reset(wdt)' part.
-> 
->>
->>> +	/* put native values into count */
->>> +	starfive_wdt_set_count(wdt, wdt->count);
->>> +
->>> +	/* set the watchdog to go and reset */
->>> +	starfive_wdt_int_clr(wdt);
->>> +	starfive_wdt_enable(wdt);
->>> +
->>> +	starfive_wdt_lock(wdt);
->>> +	spin_unlock(&wdt->lock);
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int starfive_wdt_set_timeout(struct watchdog_device *wdd,
->>> +				    unsigned int timeout)
->>> +{
->>> +	struct starfive_wdt *wdt = watchdog_get_drvdata(wdd);
->>> +
->>> +	unsigned long freq = wdt->freq;
->>> +	unsigned int count;
->>> +
->>> +	spin_lock(&wdt->lock);
->>> +
->>> +	if (timeout < wdt->wdt_device.min_timeout)
->>> +		return -EINVAL;
->>
->> This is checked by the watchdog core.
-> 
-> Will drop it.
-> 
->>
->>> +
->>> +	/*
->>> +	 * This watchdog takes twice timeouts to reset.
->>> +	 * In order to reduce time to reset, should set half count value.
->>> +	 */
->>> +	count = timeout * freq / 2;
->>> +
->>> +	if (count > STARFIVE_WDT_MAXCNT) {
->>
->> count is an unsigned int, which is pretty much everywhere a 32-bit
->> value. STARFIVE_WDT_MAXCNT is 0xffffffff. How is an unsigned integer
->> ever supposed to be larger than 0xffffffff ?
->>
->>> +		dev_warn(wdt->dev, "timeout %d too big,use the MAX-timeout set.\n",
->>> +			 timeout);
->>> +		timeout = starfive_wdt_max_timeout(wdt);
->>> +		count = timeout * freq;
->>
->> This is confusing. First, the timeout range is checked by the calling code,
->> which makes sure it is never larger than max_timeout. max_timeout is
->> set to the value returned by starfive_wdt_max_timeout().
->> Thus, count = timeout * freq / 2 will _never_ be larger than
->> STARFIVE_WDT_MAXCNT. Even if it ever was, it doesn't make sense
->> to use a count value of timeout * freq in that case, ie a value which
->> could be twice as large as the supposed maximum value.
-> 
-> Change 'count' type to 'u64'. And if 'count' is larger than STARFIVE_WDT_MAXCNT,
-> 'count' is equal to STARFIVE_WDT_MAXCNT. Does that seem OK?
-> 
+Neil
 
-That would not change anything. This is not about overflows; I would
-have mentioned that. count can still never be larger than STARFIVE_WDT_MAXCNT.
-Please do the math.
-
+> 
+>> +                interrupt-parent = <&mdss>;
+>> +                interrupts = <12>;
+>> +                clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
+>> +                     <&dispcc DISP_CC_MDSS_DPTX0_AUX_CLK>,
+>> +                     <&dispcc DISP_CC_MDSS_DPTX0_LINK_CLK>,
+>> +                     <&dispcc DISP_CC_MDSS_DPTX0_LINK_INTF_CLK>,
+>> +                     <&dispcc DISP_CC_MDSS_DPTX0_PIXEL0_CLK>;
+>> +                clock-names = "core_iface",
+>> +                          "core_aux",
+>> +                          "ctrl_link",
+>> +                                  "ctrl_link_iface",
+>> +                          "stream_pixel";
+>> +
+>> +                assigned-clocks = <&dispcc DISP_CC_MDSS_DPTX0_LINK_CLK_SRC>,
+>> +                          <&dispcc DISP_CC_MDSS_DPTX0_PIXEL0_CLK_SRC>;
+>> +                assigned-clock-parents = <&usb_1_qmpphy QMP_USB43DP_DP_LINK_CLK>,
+>> +                             <&usb_1_qmpphy QMP_USB43DP_DP_VCO_DIV_CLK>;
+>> +
+>> +                phys = <&usb_1_qmpphy QMP_USB43DP_DP_PHY>;
+>> +                    phy-names = "dp";
+>> +
+>> +                    #sound-dai-cells = <0>;
+>> +
+>> +                operating-points-v2 = <&dp_opp_table>;
+>> +                power-domains = <&rpmhpd SM8450_MMCX>;
+>> +
+>> +                status = "disabled";
+>> +
+>> +                ports {
+>> +                    #address-cells = <1>;
+>> +                    #size-cells = <0>;
+>> +
+>> +                    port@0 {
+>> +                        reg = <0>;
+>> +                        mdss_dp0_in: endpoint {
+>> +                            remote-endpoint = <&dpu_intf0_out>;
+>> +                        };
+>> +                    };
+>> +                };
+>> +
+>> +                dp_opp_table: opp-table {
+>> +                    compatible = "operating-points-v2";
+>> +
+>> +                    opp-160000000 {
+>> +                        opp-hz = /bits/ 64 <160000000>;
+>> +                        required-opps = <&rpmhpd_opp_low_svs>;
+>> +                    };
+>> +
+>> +                    opp-270000000 {
+>> +                        opp-hz = /bits/ 64 <270000000>;
+>> +                        required-opps = <&rpmhpd_opp_svs>;
+>> +                    };
+>> +
+>> +                    opp-540000000 {
+>> +                        opp-hz = /bits/ 64 <540000000>;
+>> +                        required-opps = <&rpmhpd_opp_svs_l1>;
+>> +                    };
+>> +
+>> +                    opp-810000000 {
+>> +                        opp-hz = /bits/ 64 <810000000>;
+>> +                        required-opps = <&rpmhpd_opp_nom>;
+>> +                    };
+>> +                };
+>> +            };
+>> +
+>>               mdss_dsi0: dsi@ae94000 {
+>>                   compatible = "qcom,sm8450-dsi-ctrl", "qcom,mdss-dsi-ctrl";
+>>                   reg = <0 0x0ae94000 0 0x400>;
 >>
->>> +	}
->>> +
->>> +	dev_info(wdt->dev, "Heartbeat: timeout=%d, count/2=%d (%08x)\n",
->>> +		 timeout, count, count);
->>
->> No. Drop such noise. Make it a debug message if you think you need it.
-> 
-> Will modify it to 'dev_dbg'.
-> 
->>
->>> +
->>> +	starfive_wdt_unlock(wdt);
->>> +	starfive_wdt_disable(wdt);
->>> +	starfive_wdt_set_reload_count(wdt, count);
->>> +	starfive_wdt_enable(wdt);
->>> +	starfive_wdt_lock(wdt);
->>> +
->>> +	wdt->count = count;
->>> +	wdd->timeout = timeout;
->>> +
->>> +	spin_unlock(&wdt->lock);
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +#define OPTIONS (WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE)
->>> +
->>> +static const struct watchdog_info starfive_wdt_ident = {
->>> +	.options = OPTIONS,
->>> +	.firmware_version = 0,
->>
->> It is not necessary to initilize a static variable with 0.
-> 
-> Will drop '0'.
-> 
->>
->>> +	.identity = "StarFive Watchdog",
->>> +};
->>> +
->>> +static const struct watchdog_ops starfive_wdt_ops = {
->>> +	.owner = THIS_MODULE,
->>> +	.start = starfive_wdt_start,
->>> +	.stop = starfive_wdt_pm_stop,
->>> +	.ping = starfive_wdt_keepalive,
->>> +	.set_timeout = starfive_wdt_set_timeout,
->>> +	.restart = starfive_wdt_restart,
->>> +	.get_timeleft = starfive_wdt_get_timeleft,
->>> +};
->>> +
->>> +static const struct watchdog_device starfive_wdd = {
->>> +	.info = &starfive_wdt_ident,
->>> +	.ops = &starfive_wdt_ops,
->>> +	.timeout = STARFIVE_WDT_DEFAULT_TIME,
->>> +};
->>> +
->>> +static inline const struct starfive_wdt_variant *
->>> +starfive_wdt_get_drv_data(struct platform_device *pdev)
->>> +{
->>> +	const struct starfive_wdt_variant *variant;
->>> +
->>> +	variant = of_device_get_match_data(&pdev->dev);
->>> +	if (!variant) {
->>> +		/* Device matched by platform_device_id */
->>> +		variant = (struct starfive_wdt_variant *)
->>> +			   platform_get_device_id(pdev)->driver_data;
->>> +	}
->>> +
->>> +	return variant;
->>> +}
->>> +
->>> +static int starfive_wdt_probe(struct platform_device *pdev)
->>> +{
->>> +	struct device *dev = &pdev->dev;
->>> +	struct starfive_wdt *wdt;
->>> +	int started = 0;
->>
->> What is this variable supposed to be used for ? It is alway 0.
-> 
-> This variable is used to switch for debugging whether to allow the watchdog
-> to be started at boot time by driver. I think I should remove it.
-> 
->>
->>> [...]
->>> +
->>> +	if (tmr_atboot && started == 0) {
->>> +		starfive_wdt_start(&wdt->wdt_device);
->>> +	} else if (!tmr_atboot) {
->>> +		/*
->>> +		 *if we're not enabling the watchdog, then ensure it is
->>> +		 * disabled if it has been left running from the bootloader
->>> +		 * or other source.
->>> +		 */
->>> +		starfive_wdt_stop(&wdt->wdt_device);
->>
->> If it _is_ running from the boot loader, the watchdog core is not
->> informed about it. If it is started here, it is not informed either.
->> This is unusual and will need to be explained.
->> Why ?
-> 
-> Is is okay to remove the 'started'?
-> 
-Yes, though of course it would be better if the watchdog is kept running
-in that situation and the watchdog core is informed about it. Also,
-the watchdog core is still not informed that the watchdog is running
-(i.e., WDOG_HW_RUNNING is not set) when it is explicitly started.
-
->>
->>> +	}
->>> +
->>> +#ifdef CONFIG_PM
->>> +	clk_disable_unprepare(wdt->core_clk);
->>> +	clk_disable_unprepare(wdt->apb_clk);
->>> +#endif
->>
->> I do not understand the above code. Why stop the watchdog if CONFIG_PM
->> is enabled, even if it is supposed to be running ?
-> 
-> There misses a check about 'early_enable' and add 'if (!early_enable)'.
-> There means that disable clock when watchdog sleep and CONFIG_PM is enable.
-> Then enable clock when watchdog work by 'starfive_wdt_runtime_resume' function.
-> 
-
-I am quite sure that you are supposed to use pm functions for that purpose,
-such as pm_runtime_get_sync(), pm_runtime_put_sync(), and pm_runtime_enable(),
-similar to the code in omap_wdt.c.
-
->>
->>> +
->>> +	platform_set_drvdata(pdev, wdt);
->>> +
->>> +	return 0;
->>> +
->>> +err_clk_disable:
->>> +	clk_disable_unprepare(wdt->core_clk);
->>> +	clk_disable_unprepare(wdt->apb_clk);
->>> +
->>> +	return ret;
->>> +}
->>> +
->>> +static int starfive_wdt_remove(struct platform_device *dev)
->>> +{
->>> +	struct starfive_wdt *wdt = platform_get_drvdata(dev);
->>> +
->>> +	starfive_wdt_mask_and_disable_reset(wdt, true);
->>> +	watchdog_unregister_device(&wdt->wdt_device);
->>> +
->>> +	clk_disable_unprepare(wdt->core_clk);
->>> +	clk_disable_unprepare(wdt->apb_clk);
->>> +	pm_runtime_disable(wdt->dev);
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static void starfive_wdt_shutdown(struct platform_device *dev)
->>> +{
->>> +	struct starfive_wdt *wdt = platform_get_drvdata(dev);
->>> +
->>> +	starfive_wdt_mask_and_disable_reset(wdt, true);
->>> +
->>> +	starfive_wdt_pm_stop(&wdt->wdt_device);
->>> +}
->>> +
->>> +#ifdef CONFIG_PM_SLEEP
->>> +static int starfive_wdt_suspend(struct device *dev)
->>> +{
->>> +	int ret;
->>> +	struct starfive_wdt *wdt = dev_get_drvdata(dev);
->>> +
->>> +	starfive_wdt_unlock(wdt);
->>> +
->>> +	/* Save watchdog state, and turn it off. */
->>> +	wdt->reload = starfive_wdt_get_count(wdt);
->>> +
->>> +	starfive_wdt_mask_and_disable_reset(wdt, true);
->>> +
->>> +	/* Note that WTCNT doesn't need to be saved. */
->>> +	starfive_wdt_stop(&wdt->wdt_device);
->>> +	pm_runtime_force_suspend(dev);
->>> +
->>> +	starfive_wdt_lock(wdt);
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int starfive_wdt_resume(struct device *dev)
->>> +{
->>> +	int ret;
->>> +	struct starfive_wdt *wdt = dev_get_drvdata(dev);
->>> +
->>> +	starfive_wdt_unlock(wdt);
->>> +
->>> +	pm_runtime_force_resume(dev);
->>> +
->>> +	/* Restore watchdog state. */
->>> +	starfive_wdt_set_reload_count(wdt, wdt->reload);
->>> +
->>> +	starfive_wdt_restart(&wdt->wdt_device, 0, NULL);
->>
->> I do not understand this call. Per its definition it is a restart handler,
->> supposed to restart the hardware. Why would anyone want to restart the
->> system on resume ?
-> 
-> The watchdog start counting from 'count' to 0 on everytime resume like a restart.
-> So I directly use a restart.
-> 
-
-That doesn't answer my question. The "restart" callback resets the hardware.
-starfive_wdt_restart() is registered as restart handler, and thus expected
-to reset the hardware. It it doesn't reset the hardware, it should not
-register itself as restart handler. If it does restart the hardware, calling
-it on resume would automatically reset the system on each resume.
-Something is wrong here, and will have to be fixed.
-
-I _suspect_ that you think that the restart callback is supposed to reset
-the watchdog. That would be wrong. It resets (restarts) the hardware,
-not the watchdog. Please read Documentation/watchdog/watchdog-kernel-api.rst
-if there are questions about this callback.
-
-Thanks,
-Guenter
-
->>
->>> +
->>> +	starfive_wdt_mask_and_disable_reset(wdt, false);
->>> +
->>> +	starfive_wdt_lock(wdt);
->>> +
->>> +	return 0;
->>> +}
->>> +#endif /* CONFIG_PM_SLEEP */
->>> +
->>> +#ifdef CONFIG_PM
->>> +static int starfive_wdt_runtime_suspend(struct device *dev)
->>> +{
->>> +	struct starfive_wdt *wdt = dev_get_drvdata(dev);
->>> +
->>> +	clk_disable_unprepare(wdt->apb_clk);
->>> +	clk_disable_unprepare(wdt->core_clk);
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int starfive_wdt_runtime_resume(struct device *dev)
->>> +{
->>> +	struct starfive_wdt *wdt = dev_get_drvdata(dev);
->>> +	int ret;
->>> +
->>> +	ret = clk_prepare_enable(wdt->apb_clk);
->>> +	if (ret) {
->>> +		dev_err(wdt->dev, "failed to enable apb_clk.\n");
->>> +		return ret;
->>> +	}
->>> +
->>> +	ret = clk_prepare_enable(wdt->core_clk);
->>> +	if (ret)
->>> +		dev_err(wdt->dev, "failed to enable core_clk.\n");
->>> +
->>> +	return ret;
->>> +}
->>> +#endif /* CONFIG_PM */
->>> +
->>> +static const struct dev_pm_ops starfive_wdt_pm_ops = {
->>> +	SET_RUNTIME_PM_OPS(starfive_wdt_runtime_suspend, starfive_wdt_runtime_resume, NULL)
->>> +	SET_SYSTEM_SLEEP_PM_OPS(starfive_wdt_suspend, starfive_wdt_resume)
->>> +};
->>> +
->>> +static struct platform_driver starfive_wdt_driver = {
->>> +	.probe		= starfive_wdt_probe,
->>> +	.remove		= starfive_wdt_remove,
->>> +	.shutdown	= starfive_wdt_shutdown,
->>> +	.id_table	= starfive_wdt_ids,
->>> +	.driver		= {
->>> +		.name	= "starfive-wdt",
->>> +		.pm	= &starfive_wdt_pm_ops,
->>> +		.of_match_table = of_match_ptr(starfive_wdt_match),
->>> +	},
->>> +};
->>> +
->>> +module_platform_driver(starfive_wdt_driver);
->>> +
->>> +MODULE_AUTHOR("Xingyu Wu <xingyu.wu@starfivetech.com>");
->>> +MODULE_AUTHOR("Samin Guo <samin.guo@starfivetech.com>");
->>> +MODULE_DESCRIPTION("StarFive Watchdog Device Driver");
->>> +MODULE_LICENSE("GPL v2");
-> 
-> 
-> Thank for your review, I will modify this according to your suggestions.
-> 
-> Best regards,
-> Xingyu Wu
 > 
 
