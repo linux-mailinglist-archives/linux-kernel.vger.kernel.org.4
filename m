@@ -2,141 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9300E692260
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:36:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC93692264
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232609AbjBJPgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 10:36:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36602 "EHLO
+        id S232785AbjBJPjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 10:39:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232785AbjBJPgf (ORCPT
+        with ESMTP id S232719AbjBJPjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 10:36:35 -0500
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0864077BA0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:36:28 -0800 (PST)
-Received: by mail-qv1-xf35.google.com with SMTP id u16so3433035qvp.12
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:36:28 -0800 (PST)
+        Fri, 10 Feb 2023 10:39:32 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394C3552A6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:39:31 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id a5so3693797pfv.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:39:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=yns5dIgTI6JxWbAph1O5r62njQOhGCrBzKQvo54B6zU=;
-        b=qt0dTy3gVXkMeMMY1z1PZwzdNHzVX7V43gDb6L3hzCqa+olBH07sWy3wRrodzDIMG4
-         6hhWqr1Vobg7UcTDxPhcBKvvutcBaIlcdZt315xhTaQQG8r5n/M+uOuTOrVicwmwyKAU
-         064uvXHrbIh3mtaWOU4aybOMWgkXvkOzKL0b8uQUjc/v2XlzXgc0DQpTPFVMok0FMsQM
-         08vESDuFXllzb2iR8QrHNONx/wudIUxbhG5sODlHnj3/KUNblwg71nM5dxt/l0oVqdMr
-         /nlLhaPAjSj5IgprhRQcEHPcPMcz3AcuIRCJk9+PrV5mMO/ejuZ4Rbocq4ZekG0vV8P9
-         JnZQ==
+        d=paul-moore.com; s=google; t=1676043570;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pvRly2U+sCgGvEcPil/n1kT1uf7hR8ywFA21WCXqph0=;
+        b=LHr06vqTRs8P6GauQb2IAyyj2ZkCyMPCqKeym+vdQ6tmf63IhA6ozHmd7HeSE6ZKpa
+         CVeOH+ZkLeuDoJrJMnILmAGq3J4hPZJjNP/eRRNuPzsxYnnBq17U6ePONEpFTLF5NJ+I
+         XYi357yRqgnULhpXYrA+DRLitUJkBd9dDwPrTsERN9pTwCyLMW/Scp2/fgIW07vUWWsD
+         AT/B3bZtSVHvdrHq1DiNa58EkvqSK4MkOnUjGXTKfcVHja7N70dZu+fJ130zNtLfJU1W
+         fMK3WTjZUXU1Z3nZ8LEN/DHZrmrU57fToE333gE9Prfbd1kJh5dz6BR96gVLygfA2eE0
+         Rk5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yns5dIgTI6JxWbAph1O5r62njQOhGCrBzKQvo54B6zU=;
-        b=NU1WT6Rgs70dkr6525eB3pICFcbOMCLhe9D7f9BprJ0MIa2dnDwoNAP4mu0E8r9UhZ
-         CpswZTraBkq30Q0AayvUtxfcLQwWerd2zLPT3Gj3tUNTLFezMrGHs7TEjfAikndYFgg2
-         J5l5PrystgIKhaTPUWfbO+0jPZoaSx4VuWOx6oORY4N30xfVERkmPwQZFdbvIwyiF0An
-         6kg1mcy96kV5eH7xAxgDNdEYBI5VIWWKBLBjb5pwmdXYcyRVmF2vbNk1Dp1/tvzj1gw2
-         y5SGjf+FM4jEEOLEuYdvIRQE6Tw5/lmQ9353qG5rMI1y9WgsJUBEsJCnhLS7mUuwU+QZ
-         PhtQ==
-X-Gm-Message-State: AO0yUKXN3xWxpQ0mzNI4cQlp3AoZDvtoOsBxNEeYu/pIra3QGOD9xxC3
-        9F26LaZuGunlgCrSHH5g+x1F1A==
-X-Google-Smtp-Source: AK7set/9kH5iClIq96ImXMXxCRZP3o6rb/SFdyOqAvYoxsx641uTIbYLyp0hit6CJig0eeQHDNzzWg==
-X-Received: by 2002:a05:6214:1bc9:b0:537:7484:8d1c with SMTP id m9-20020a0562141bc900b0053774848d1cmr29006106qvc.30.1676043388060;
-        Fri, 10 Feb 2023 07:36:28 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
-        by smtp.gmail.com with ESMTPSA id r129-20020a37a887000000b006cec8001bf4sm3758407qke.26.2023.02.10.07.36.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 07:36:27 -0800 (PST)
-Message-ID: <e972c2ac1a7a6f0ce258c8056b82bdc87e4d8ceb.camel@ndufresne.ca>
-Subject: Re: [PATCH v2] media: mediatek: vcodec: Force capture queue format
- to MM21
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Date:   Fri, 10 Feb 2023 10:36:25 -0500
-In-Reply-To: <20230210055518.6017-1-yunfei.dong@mediatek.com>
-References: <20230210055518.6017-1-yunfei.dong@mediatek.com>
+        d=1e100.net; s=20210112; t=1676043570;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pvRly2U+sCgGvEcPil/n1kT1uf7hR8ywFA21WCXqph0=;
+        b=JWuAYhj4gVHJOlGvHltGmafyi1ULBNb4RkSRxppBwl2XBd/r41zwp/J433yXubs/Dg
+         mYQZ7sZjjHW5T7zmDul2d3iIGpV/fnCgSJuuOXHQRERXun+seHGHKEpIznx0QMiVIZqU
+         MI9MbJME7DDXEJMe+aGUhAeflDc+nFvTHyRs0PNqez4WAW5+SArW+eyPPW2Q4zeKWGkF
+         NInBKFSIVhayPWKib+u+2sGZ4r68zy/Ew5d6OHusaafACW5l+szciR3ZaydS61it7OmH
+         Nnm82uVUm7oCas3FaLHbzd4qqyS1yAWHKv7Chs3KDXxTM8jJQqGwUpV+Myk6TW9ARGs7
+         nz8A==
+X-Gm-Message-State: AO0yUKW6H6WW0GyK0NQk/EeQkK9q9TpO14MjS/+Uql5lkoJgZsdvMLUC
+        qDiQ5IxpiH9ufC+XI1fBQtN2yoyLMAWd32+t7OUP
+X-Google-Smtp-Source: AK7set+wCx2QL0mp3Ry5zhoh712ELZsFVGrSVHsRG9bb1cWzRQ28Qqq5D9cm5akwetXgY83HEmq0ABlPquIPy79JaDg=
+X-Received: by 2002:a05:6a00:dd:b0:5a8:189d:b53f with SMTP id
+ e29-20020a056a0000dd00b005a8189db53fmr2236320pfj.6.1676043570619; Fri, 10 Feb
+ 2023 07:39:30 -0800 (PST)
+MIME-Version: 1.0
+References: <b5dfdcd541115c86dbc774aa9dd502c964849c5f.1675282642.git.rgb@redhat.com>
+ <Y+VrSLZKZoAGikUS@madcap2.tricolour.ca> <CAHC9VhTNb4gOpk9=49-ABtYs1DFKqqwXPSc-2bhJX7wcZ82o=g@mail.gmail.com>
+ <13293926.uLZWGnKmhe@x2> <6939adfb-ce2c-1911-19ee-af32f7d9a5ca@kernel.dk>
+In-Reply-To: <6939adfb-ce2c-1911-19ee-af32f7d9a5ca@kernel.dk>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 10 Feb 2023 10:39:19 -0500
+Message-ID: <CAHC9VhTGmGJ81M2CZWsTf1kNf8XNz2WsYFAP=5VAVSUfUiu1yQ@mail.gmail.com>
+Subject: Re: [PATCH v2] io_uring,audit: don't log IORING_OP_MADVISE
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Steve Grubb <sgrubb@redhat.com>,
+        Richard Guy Briggs <rgb@redhat.com>,
+        Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
+        Eric Paris <eparis@parisplace.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Stefan Roesch <shr@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le vendredi 10 f=C3=A9vrier 2023 =C3=A0 13:55 +0800, Yunfei Dong a =C3=A9cr=
-it=C2=A0:
-> In order to conver the format of capture queue from mediatek MM21 to
-> standard yuv420 with Libyuv, need to force capture queue format to
-> MM21 for Libyuv can't covert mediatek MT21 format at current period.
+On Thu, Feb 9, 2023 at 7:15 PM Jens Axboe <axboe@kernel.dk> wrote:
+> On 2/9/23 3:54=E2=80=AFPM, Steve Grubb wrote:
+> > On Thursday, February 9, 2023 5:37:22 PM EST Paul Moore wrote:
+> >> On Thu, Feb 9, 2023 at 4:53 PM Richard Guy Briggs <rgb@redhat.com> wro=
+te:
+> >>> On 2023-02-01 16:18, Paul Moore wrote:
+> >>>> On Wed, Feb 1, 2023 at 3:34 PM Richard Guy Briggs <rgb@redhat.com>
+> > wrote:
+> >>>>> fadvise and madvise both provide hints for caching or access patter=
+n
+> >>>>> for file and memory respectively.  Skip them.
+> >>>>
+> >>>> You forgot to update the first sentence in the commit description :/
+> >>>
+> >>> I didn't forget.  I updated that sentence to reflect the fact that th=
+e
+> >>> two should be treated similarly rather than differently.
+> >>
+> >> Ooookay.  Can we at least agree that the commit description should be
+> >> rephrased to make it clear that the patch only adjusts madvise?  Right
+> >> now I read the commit description and it sounds like you are adjusting
+> >> the behavior for both fadvise and madvise in this patch, which is not
+> >> true.
+> >>
+> >>>> I'm still looking for some type of statement that you've done some
+> >>>> homework on the IORING_OP_MADVISE case to ensure that it doesn't end
+> >>>> up calling into the LSM, see my previous emails on this.  I need mor=
+e
+> >>>> than "Steve told me to do this".
+> >>>>
+> >>>> I basically just want to see that some care and thought has gone int=
+o
+> >>>> this patch to verify it is correct and good.
+> >>>
+> >>> Steve suggested I look into a number of iouring ops.  I looked at the
+> >>> description code and agreed that it wasn't necessary to audit madvise=
+.
+> >>> The rationale for fadvise was detemined to have been conflated with
+> >>> fallocate and subsequently dropped.  Steve also suggested a number of
+> >>> others and after investigation I decided that their current state was
+> >>> correct.  *getxattr you've advised against, so it was dropped.  It
+> >>> appears fewer modifications were necessary than originally suspected.
+> >>
+> >> My concern is that three of the four changes you initially proposed
+> >> were rejected, which gives me pause about the fourth.  You mention
+> >> that based on your reading of madvise's description you feel auditing
+> >> isn't necessary - and you may be right - but based on our experience
+> >> so far with this patchset I would like to hear that you have properly
+> >> investigated all of the madvise code paths, and I would like that in
+> >> the commit description.
+> >
+> > I think you're being unnecessarily hard on this. Yes, the commit messag=
+e
+> > might be touched up. But madvise is advisory in nature. It is not secur=
+ity
+> > relevant. And a grep through the security directory doesn't turn up any
+> > hooks.
+>
+> Agree, it's getting a bit anal... FWIW, patch looks fine to me.
 
-Please rework this text, it is hard to understand.
+Call it whatever you want, but the details are often important at this
+level of code, and when I see a patch author pushing back on verifying
+that their patch is correct it makes me very skeptical.
 
->=20
-> Fixes: 7501edef6b1f ("media: mediatek: vcodec: Different codec using diff=
-erent capture format")
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.org>
-> ---
-> changed with v1:
-> - add Fixes tag.
-> ---
->  drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/dr=
-ivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-> index 641f533c417f..4f5e9c20214f 100644
-> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-> @@ -41,7 +41,7 @@ static bool mtk_vdec_get_cap_fmt(struct mtk_vcodec_ctx =
-*ctx, int format_index)
->  	const struct mtk_video_fmt *fmt;
->  	struct mtk_q_data *q_data;
->  	int num_frame_count =3D 0, i;
-> -	bool ret =3D true;
-> +	bool ret =3D false;
-> =20
->  	for (i =3D 0; i < *dec_pdata->num_formats; i++) {
->  		if (dec_pdata->vdec_formats[i].type !=3D MTK_FMT_FRAME)
-> @@ -63,7 +63,7 @@ static bool mtk_vdec_get_cap_fmt(struct mtk_vcodec_ctx =
-*ctx, int format_index)
->  	case V4L2_PIX_FMT_H264_SLICE:
->  	case V4L2_PIX_FMT_VP9_FRAME:
->  		if (fmt->fourcc =3D=3D V4L2_PIX_FMT_MM21)
-> -			ret =3D false;
-> +			ret =3D true;
+I really would have preferred that you held off from merging this
+until this was resolved and ACK'd ... oh well.
 
-This makes the VP8 and the other cases identical, leaving anything that tou=
-ches
-MT21 as dead code. I'm not sure, cause I cannot test it, but it should in t=
-heory
-render MT8192 unusable, unless a new firmware has been submitted to linux-
-firmware with MM21 support ?
-
->  		break;
->  	default:
->  		ret =3D true;
-
+--=20
+paul-moore.com
