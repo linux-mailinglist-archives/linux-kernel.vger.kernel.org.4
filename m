@@ -2,159 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3546928B7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 21:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE066928BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 21:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233860AbjBJUvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 15:51:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52608 "EHLO
+        id S233883AbjBJUvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 15:51:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233846AbjBJUvI (ORCPT
+        with ESMTP id S233874AbjBJUvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 15:51:08 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EDF7F830
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 12:51:02 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id u9so7780047plf.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 12:51:02 -0800 (PST)
+        Fri, 10 Feb 2023 15:51:43 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748DC7F830
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 12:51:41 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id r3so5796438edq.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 12:51:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=G6ClxDPqqo9XGMX8nibdBrVqKRqBmlDx/QkEPTPhrmI=;
-        b=CQBERmQX6UW6aN9ppCfG84ilCLxw0hROZywoezlBpkLDc3CEV63muuePgbkAQ4uUTP
-         eVYf0yxkeklltYT638VQVLUGWm1IlB+L0GPDdKLiHtJ2WGGLYu5qt7LaGHGnoriCzhpY
-         R+rRH6ybKW9tvY9M0IWhT2J77tmpZgTgfGz4/AjJwGtMfQMpO3Z9MH3hGi7qiajkr+a0
-         Y2Jn4OfuyhOTmpuJkEJNnPsE2TTKLu6+AWlepChxd0I9e52F1UgvI/MMVi8hWWHW24z8
-         FPaztSxLf0zInUZVGmjknEYg8NwCn/c2YtYGTgPHz05CyujaIUcMVeTONN+TBbui6M5V
-         +u4w==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=s2Azvxdn84xto/x8V66pxCf76GAuLOkrFIRsWg8lS4s=;
+        b=CExvujm0mDZb5b8Q0YyIk4qMEt2KO+XrVyPAus7CXHhyvaiDKton8DMFVNJsqauRlU
+         nI1nneBrMPjQD5z0K9+CdqJYNcj8cP+aS9E0t7rQMDVkDPH9lCTi56TrRMFd1OP/EM6c
+         8oYMudVstq0I+TSzaRmEBx/yV05z10/f7jbHs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G6ClxDPqqo9XGMX8nibdBrVqKRqBmlDx/QkEPTPhrmI=;
-        b=D2xWLIp3BBdvugEAN6fzBA5s6LxoEmXrCV+fR1ffPlas/VGCxI0OtBaN6LTa+h/D2e
-         VoXjCl189jIted7oD+s6IOwLf1u9wjmsowe13awT6GXL7BRbLlSn6I4QfUlfCMxvwNf8
-         rCHHK4K+VjpXFHP1Qb1GteOAiqwjMA54efCn7byPAWAhxq7GD+kg5o/XMVAc3FLoxVHh
-         liHGouDhrZuTE3/vCIcHVS/lms2KuSUqAB/DWj1DjbXaqP8pvWTRuz/m6pVQHkO7cE1F
-         9uOcJmObKcF4wMwjHzQ221CCI+saT5sRMj5cicsprFnMVbu8sWWoJFqHBo6H+o2jou/y
-         zW2Q==
-X-Gm-Message-State: AO0yUKVhdhytkWtNku47HADbSCNLaGWcswUSoeSUE15jc/LtRP0L/dwe
-        rGEdR30AIwgf8LFIkYVqZ9kyvg==
-X-Google-Smtp-Source: AK7set87/K1BTbtqK1YxC0xEr79tEEU7ncmCCfkbuZto381YIZlqqRDqWHnUS/qjJKIZM1QnsMq8jQ==
-X-Received: by 2002:a17:902:7c07:b0:198:af50:e4e6 with SMTP id x7-20020a1709027c0700b00198af50e4e6mr48370pll.12.1676062261748;
-        Fri, 10 Feb 2023 12:51:01 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id p6-20020aa78606000000b005828071bf7asm3698940pfn.22.2023.02.10.12.51.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 12:51:01 -0800 (PST)
-Date:   Fri, 10 Feb 2023 20:50:57 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
- to map as encrypted
-Message-ID: <Y+auMQ88In7NEc30@google.com>
-References: <Y9FC7Dpzr5Uge/Mi@zn.tnic>
- <BYAPR21MB16883BB6178DDEEA10FD1F1CD7D69@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+JG9+zdSwZlz6FU@zn.tnic>
- <4216dea6-d899-aecb-2207-caa2ae7db0e3@intel.com>
- <BYAPR21MB16886D92828BA2CA8D47FEA4D7D99@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+aP8rHr6H3LIf/c@google.com>
- <Y+aVFxrE6a6b37XN@zn.tnic>
- <BYAPR21MB16882083E84F20B906E2C847D7DE9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+aczIbbQm/ZNunZ@zn.tnic>
- <cb80e102-4b78-1a03-9c32-6450311c0f55@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=s2Azvxdn84xto/x8V66pxCf76GAuLOkrFIRsWg8lS4s=;
+        b=IO/lO40UmXaJXigQE/YoJ5QCoHRXBZDWac5/JE0FDOBQtXGaXb4OnNWPSq745U4WIy
+         g9+h1niF1VBSNuSiRe0xyDrh5mG1RQHeReX/kPVDtmN5FGsXZ1zqb3dKj52AjRbztG0g
+         NgP4us45x8pSIrEbTGoR0KpaiTFNKptm2jGmGK0qUXMVfgyPU38AsufnDSPkytf85bPI
+         XMm7vyXvxLEk1HRCTPIBT+YalWkKAef+0AFrumWPJ+nN/LyHaXK2MjNKqs1uXb1iRLEL
+         QSlpk0CfzvuMtbrNp3ya9pOXtOgmhXzN0UJDcyaLwEmdpeaYhAkjjZPtkWI6m83RxUo/
+         CZHQ==
+X-Gm-Message-State: AO0yUKUNxrdCIafWyoDQlVbOut3Q3wRSna6vD2xmQ1CIXTlCT0VzEe0T
+        zB/xiRhwbKOSVOa3+TXT171LAjMcXpcvlhTqYcA=
+X-Google-Smtp-Source: AK7set/3uUVJXMNBZsd6mfklOaZGXHtZ3ps6GgipkKEfyX91jVNWh49U5s8VxaO8FfLR2bJfpks6wg==
+X-Received: by 2002:a50:a442:0:b0:4aa:9fc2:216 with SMTP id v2-20020a50a442000000b004aa9fc20216mr20542190edb.9.1676062299644;
+        Fri, 10 Feb 2023 12:51:39 -0800 (PST)
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com. [209.85.218.54])
+        by smtp.gmail.com with ESMTPSA id l26-20020a50c11a000000b00499e5659988sm2736325edf.68.2023.02.10.12.51.38
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 12:51:38 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id hx15so18897554ejc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 12:51:38 -0800 (PST)
+X-Received: by 2002:a17:906:d217:b0:877:747e:f076 with SMTP id
+ w23-20020a170906d21700b00877747ef076mr1548367ejz.0.1676062298057; Fri, 10 Feb
+ 2023 12:51:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cb80e102-4b78-1a03-9c32-6450311c0f55@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
+ <CAHk-=wj8rthcQ9gQbvkMzeFt0iymq+CuOzmidx3Pm29Lg+W0gg@mail.gmail.com>
+ <f6c6d42e-337a-bbab-0d36-cfcc915d26c6@samba.org> <CAHk-=widtNT9y-9uGMnAgyR0kzyo0XjTkExSMoGpbZgeU=+vng@mail.gmail.com>
+ <CAHk-=whprvcY=KRh15uqtmVqR2rL-H1yN6RaswHiWPsGHDqsSQ@mail.gmail.com> <6858a9bd-a8aa-3eaa-979d-83e1743ce85e@samba.org>
+In-Reply-To: <6858a9bd-a8aa-3eaa-979d-83e1743ce85e@samba.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 10 Feb 2023 12:51:21 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wi=JeuB3aDX4yej=9SE-J6RR9LG28eRVfntkoQCPpHNpw@mail.gmail.com>
+Message-ID: <CAHk-=wi=JeuB3aDX4yej=9SE-J6RR9LG28eRVfntkoQCPpHNpw@mail.gmail.com>
+Subject: Re: copy on write for splice() from file to pipe?
+To:     Stefan Metzmacher <metze@samba.org>
+Cc:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Linux API Mailing List <linux-api@vger.kernel.org>,
+        Samba Technical <samba-technical@lists.samba.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        io-uring <io-uring@vger.kernel.org>, linux-crypto@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023, Dave Hansen wrote:
-> On 2/10/23 11:36, Borislav Petkov wrote:
-> >> One approach is to go with the individual device attributes for now.>> If the list does grow significantly, there will probably be patterns
-> >> or groupings that we can't discern now.  We could restructure into
-> >> larger buckets at that point based on those patterns/groupings.
-> > There's a reason the word "platform" is in cc_platform_has(). Initially
-> > we wanted to distinguish attributes of the different platforms. So even
-> > if y'all don't like CC_ATTR_PARAVISOR, that is what distinguishes this
-> > platform and it *is* one platform.
-> > 
-> > So call it CC_ATTR_SEV_VTOM as it uses that technology or whatever. But
-> > call it like the platform, not to mean "I need this functionality".
-> 
-> I can live with that.  There's already a CC_ATTR_GUEST_SEV_SNP, so it
-> would at least not be too much of a break from what we already have.
+On Fri, Feb 10, 2023 at 12:45 PM Stefan Metzmacher <metze@samba.org> wrote:
+>
+> I guess it would be easy to pass a flag (maybe SPLICE_F_FORCE_COPY)
+> down to generic_file_splice_read() and let it create dedicated pages
+> and use memcpy() from the page cache to the dedicated pages.
 
-I'm fine with CC_ATTR_SEV_VTOM, assuming the proposal is to have something like:
+I really think you'd be much better off passing it off to the
+*destination*, not the source.
 
-	static inline bool is_address_range_private(resource_size_t addr)
-	{
-		if (cc_platform_has(CC_ATTR_SEV_VTOM))
-			return is_address_below_vtom(addr);
+The destination knows whether it needs to copy or not, and in the case
+of at least networking, already has the copy option.
 
-		return false;
-	}
+The destination might also already know whether it can use the data
+synchronously, so that there isn't even any issue with "data may
+change later".
 
-i.e. not have SEV_VTOM mean "I/O APIC and vTPM are private".  Though I don't see
-the point in making it SEV vTOM specific or using a flag.  Despite what any of us
-think about TDX paravisors, it's completely doable within the confines of TDX to
-have an emulated device reside in the private address space.  E.g. why not
-something like this? 
+In contrast, the source has no clue. It just knows "I'm a page cache
+page". It would have to always copy.
 
-	static inline bool is_address_range_private(resource_size_t addr)
-	{
-		return addr < cc_platform_private_end;
-	}
-
-where SEV fills in "cc_platform_private_end" when vTOM is enabled, and TDX does
-the same.  Or wrap cc_platform_private_end in a helper, etc.
+               Linus
