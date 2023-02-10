@@ -2,234 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F544692635
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:20:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45662692633
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:20:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233293AbjBJTUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 14:20:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57928 "EHLO
+        id S233284AbjBJTUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 14:20:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233216AbjBJTUS (ORCPT
+        with ESMTP id S233216AbjBJTUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 14:20:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0AC07BFFD
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:19:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676056771;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gwSrY4DltmA/yFlYQvFrP0zXeruXNly6+GpVcGdaJm4=;
-        b=OFJRyp+mo5iG8+V2PlHtSve8YNPOj7jEw4aUkdR+0LjWm20RBoZBe9sRlgCy8pb3t7gKGO
-        2cDw8xUZcRYOwhMCtfV5atokPZVx5HHyNWGY2TUAwMgrpKpqYPuuaWww1Ay503nHmRKD8M
-        DazlLL4vKR8TxjDyrU1gr2W/YQVuKyQ=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-580-b8wH1pUTOIO_KJsuFce06A-1; Fri, 10 Feb 2023 14:19:30 -0500
-X-MC-Unique: b8wH1pUTOIO_KJsuFce06A-1
-Received: by mail-ed1-f72.google.com with SMTP id g19-20020a056402115300b004a26cc7f6cbso4136580edw.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:19:30 -0800 (PST)
+        Fri, 10 Feb 2023 14:20:05 -0500
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12587D899;
+        Fri, 10 Feb 2023 11:20:03 -0800 (PST)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-15fe106c7c7so7915697fac.8;
+        Fri, 10 Feb 2023 11:20:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gwSrY4DltmA/yFlYQvFrP0zXeruXNly6+GpVcGdaJm4=;
-        b=iGraWecyQHkdCwfT4sPi48e+k8zDPT9AFHbXTQpAevNILEHrXUs+lJBcdgxpvwH9CN
-         Rad7pWqSeOGe6l9yiMF4EeY3rvnIdX7V+sCCPcsrG3iqE4G7gzv9NHyjSGTwAGg1q7mK
-         iha5ik8BjT1W2OlTTPXEu4OAZqQVX+XG727ZVbswfUyKCAgOvvVdyztpQ2/rZEXrjMCM
-         nPzdLlXlwHkZBBQdRGc43N4ARKbVVuze+O8GCVeks0Kr6YK3bzPHHHZuUcfC4nmUBbEt
-         kHCfIeI33y1PpPVCA7krgySWIBv6vbliEombmX2rtB3CkeaQDgG7OTjQ/aJoT7sOmZCO
-         d6OQ==
-X-Gm-Message-State: AO0yUKVbWmbnA84960A4DhfE4Hm34YVJWiBm10O5gI8rhXYiEwZm+0Uu
-        idBnR2unqirVtLROW8My/NLxh5fnBdBhAUHrG74cWv5+1BLuREmRwsvLOdQTzpMJnHbKES3SuP4
-        TIKuNRwg/1fHvCk+hBfwa/TS3
-X-Received: by 2002:a17:906:308e:b0:88a:da35:dd51 with SMTP id 14-20020a170906308e00b0088ada35dd51mr16539097ejv.14.1676056769345;
-        Fri, 10 Feb 2023 11:19:29 -0800 (PST)
-X-Google-Smtp-Source: AK7set/LjslSqRW4K+lvECJSA5kEr2lyEGJrPcE6CF5MmtIxPBIdllG3b8htAgAt5ndbUDTe3go1qA==
-X-Received: by 2002:a17:906:308e:b0:88a:da35:dd51 with SMTP id 14-20020a170906308e00b0088ada35dd51mr16539083ejv.14.1676056769183;
-        Fri, 10 Feb 2023 11:19:29 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id h14-20020a17090634ce00b00877e1bb54b0sm2770373ejb.53.2023.02.10.11.19.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 11:19:28 -0800 (PST)
-Message-ID: <74e3c9ae-b1f1-1e7b-4af1-56f918471b36@redhat.com>
-Date:   Fri, 10 Feb 2023 20:19:27 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O0/BgPoPhr1KWdvyyKwGYcpVH7e6nXDxaQdDCUHcTK4=;
+        b=W4Huzd90KKthrE41lgrteNnSvWTarK+kwyBiJZJMvebb8pZdOpcWwLOSF9AJfRbdEt
+         ca+D+eXUd8Z6VKiRefoT08l+UYBcGyRB3SBn7TVVZQ7jePh6mqpp1qtd1pIezswNam5o
+         0DaWKGzxcWJO7RbGqjssB1AdhmuU15ZyzTQc3ikcf65LGP4CFNjE/bw7bBI3i5ym1AR4
+         37iF84hbeen/iasQmvGfgMw2d7JHuC1YKiZTairkHWgT8xVXDilEEVBwhU0vNNhTaFVA
+         NpzdsLlqMw2Miajkqj8mQ0pVJ43cBhNZya/GvoRPYBVy442Qg8k3D+iuTV3pPy6BUwt3
+         hjog==
+X-Gm-Message-State: AO0yUKVwOtxfmEJE5pfBJRGIv5o/on6HKRF5uUjLHVQZKXFsrJpx+TU5
+        4OzztYiK7fLffPvgaA9e+g==
+X-Google-Smtp-Source: AK7set8JG94u8QaNAm6pZm73hOXlkC85NrnHVuzZmEXNlw4rAyD6NZ3YROCBaC4KXKBQbSt/GVtidw==
+X-Received: by 2002:a05:6870:f106:b0:16a:b020:d05 with SMTP id k6-20020a056870f10600b0016ab0200d05mr2055688oac.19.1676056802853;
+        Fri, 10 Feb 2023 11:20:02 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ea53-20020a056870073500b0014fb4bdc746sm2264560oab.8.2023.02.10.11.20.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 11:20:02 -0800 (PST)
+Received: (nullmailer pid 3034804 invoked by uid 1000);
+        Fri, 10 Feb 2023 19:20:01 -0000
+Date:   Fri, 10 Feb 2023 13:20:01 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     MD Danish Anwar <danishanwar@ti.com>
+Cc:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>, andrew@lunn.ch, nm@ti.com,
+        ssantosh@kernel.org, srk@ti.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 1/2] dt-bindings: net: Add ICSSG Ethernet
+Message-ID: <20230210192001.GB2923614-robh@kernel.org>
+References: <20230210114957.2667963-1-danishanwar@ti.com>
+ <20230210114957.2667963-2-danishanwar@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 1/9] apple-gmux: use cpu_to_be32 instead of manual
- reorder
-Content-Language: en-US, nl
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Orlando Chamberlain <orlandoch.dev@gmail.com>,
-        platform-driver-x86@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Mark Gross <markgross@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        YiPeng Chai <YiPeng.Chai@amd.com>,
-        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Bokun Zhang <Bokun.Zhang@amd.com>,
-        Jack Xiao <Jack.Xiao@amd.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Rander Wang <rander.wang@intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        Yong Zhi <yong.zhi@intel.com>, Evan Quan <evan.quan@amd.com>,
-        Kerem Karabay <kekrby@gmail.com>,
-        Aditya Garg <gargaditya08@live.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>
-References: <20230210044826.9834-1-orlandoch.dev@gmail.com>
- <20230210044826.9834-2-orlandoch.dev@gmail.com>
- <3af65b5e-1f52-79f6-4130-03901ce76d2f@redhat.com>
-In-Reply-To: <3af65b5e-1f52-79f6-4130-03901ce76d2f@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230210114957.2667963-2-danishanwar@ti.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 2/10/23 20:09, Hans de Goede wrote:
-> Hi,
+On Fri, Feb 10, 2023 at 05:19:56PM +0530, MD Danish Anwar wrote:
+> From: Puranjay Mohan <p-mohan@ti.com>
 > 
-> On 2/10/23 05:48, Orlando Chamberlain wrote:
->> Currently it manually flips the byte order, but we can instead use
->> cpu_to_be32(val) for this.
->>
->> Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
->> ---
->>  drivers/platform/x86/apple-gmux.c | 18 ++----------------
->>  1 file changed, 2 insertions(+), 16 deletions(-)
->>
->> diff --git a/drivers/platform/x86/apple-gmux.c b/drivers/platform/x86/apple-gmux.c
->> index 9333f82cfa8a..e8cb084cb81f 100644
->> --- a/drivers/platform/x86/apple-gmux.c
->> +++ b/drivers/platform/x86/apple-gmux.c
->> @@ -94,13 +94,7 @@ static u32 gmux_pio_read32(struct apple_gmux_data *gmux_data, int port)
->>  static void gmux_pio_write32(struct apple_gmux_data *gmux_data, int port,
->>  			     u32 val)
->>  {
->> -	int i;
->> -	u8 tmpval;
->> -
->> -	for (i = 0; i < 4; i++) {
->> -		tmpval = (val >> (i * 8)) & 0xff;
->> -		outb(tmpval, gmux_data->iostart + port + i);
->> -	}
->> +	outl(cpu_to_be32(val), gmux_data->iostart + port);
->>  }
->>  
->>  static int gmux_index_wait_ready(struct apple_gmux_data *gmux_data)
+> Add a YAML binding document for the ICSSG Programmable real time unit
+> based Ethernet hardware. The ICSSG driver uses the PRU and PRUSS consumer
+> APIs to interface the PRUs and load/run the firmware for supporting
+> ethernet functionality.
 > 
-> The ioport / indexed-ioport accessed apple_gmux-es likely are (part of?)
-> LPC bus devices . Looking at the bus level you are now changing 4 io
-> accesses with a size of 1 byte, to 1 32 bit io-access.
+> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+> Signed-off-by: Md Danish Anwar <danishanwar@ti.com>
+> ---
+>  .../bindings/net/ti,icssg-prueth.yaml         | 184 ++++++++++++++++++
+>  1 file changed, 184 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
 > 
-> Depending on the decoding hw in the chip this may work fine,
-> or this may work not at all.
+> diff --git a/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml b/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
+> new file mode 100644
+> index 000000000000..8b860f29ecc0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
+> @@ -0,0 +1,184 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/ti,icssg-prueth.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Texas Instruments ICSSG PRUSS Ethernet
+> +
+> +maintainers:
+> +  - Md Danish Anwar <danishanwar@ti.com>
+> +
+> +description:
+> +  Ethernet based on the Programmable Real-Time
+> +  Unit and Industrial Communication Subsystem.
+
+Odd line wrap length. It should be 80 chars.
+
+> +
+> +allOf:
+> +  - $ref: /schemas/remoteproc/ti,pru-consumer.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,am654-icssg-prueth  # for AM65x SoC family
+> +
+> +  ti,sram:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      phandle to MSMC SRAM node
+
+I believe we have a standard 'sram' property to point to SRAM nodes 
+assuming this is just mmio-sram or similar.
+
+> +
+> +  dmas:
+> +    maxItems: 10
+> +
+> +  dma-names:
+> +    items:
+> +      - const: tx0-0
+> +      - const: tx0-1
+> +      - const: tx0-2
+> +      - const: tx0-3
+> +      - const: tx1-0
+> +      - const: tx1-1
+> +      - const: tx1-2
+> +      - const: tx1-3
+> +      - const: rx0
+> +      - const: rx1
+> +
+> +  ti,mii-g-rt:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: |
+> +      phandle to MII_G_RT module's syscon regmap.
+> +
+> +  ti,mii-rt:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: |
+> +      phandle to MII_RT module's syscon regmap
+> +
+> +  interrupts:
+> +    maxItems: 2
+> +    description: |
+
+Don't need '|'
+
+> +      Interrupt specifiers to TX timestamp IRQ.
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: tx_ts0
+> +      - const: tx_ts1
+> +
+> +  ethernet-ports:
+> +    type: object
+> +    additionalProperties: false
+> +
+> +    properties:
+> +      '#address-cells':
+> +        const: 1
+> +      '#size-cells':
+> +        const: 0
+> +
+> +    patternProperties:
+> +      ^port@[0-1]$:
+> +        type: object
+> +        description: ICSSG PRUETH external ports
+> +        $ref: ethernet-controller.yaml#
+> +        unevaluatedProperties: false
+> +
+> +        properties:
+> +          reg:
+> +            items:
+> +              - enum: [0, 1]
+> +            description: ICSSG PRUETH port number
+> +
+> +          interrupts:
+> +            maxItems: 1
+> +
+> +          ti,syscon-rgmii-delay:
+> +            items:
+> +              - items:
+> +                  - description: phandle to system controller node
+> +                  - description: The offset to ICSSG control register
+> +            $ref: /schemas/types.yaml#/definitions/phandle-array
+> +            description:
+> +              phandle to system controller node and register offset
+> +              to ICSSG control register for RGMII transmit delay
+> +
+> +        required:
+> +          - reg
+> +    anyOf:
+> +      - required:
+> +          - port@0
+> +      - required:
+> +          - port@1
+> +
+> +required:
+> +  - compatible
+> +  - ti,sram
+> +  - dmas
+> +  - dma-names
+> +  - ethernet-ports
+> +  - ti,mii-g-rt
+> +  - interrupts
+> +  - interrupt-names
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    /* Example k3-am654 base board SR2.0, dual-emac */
+> +    pruss2_eth: ethernet {
+> +        compatible = "ti,am654-icssg-prueth";
+> +        pinctrl-names = "default";
+> +        pinctrl-0 = <&icssg2_rgmii_pins_default>;
+> +        ti,sram = <&msmc_ram>;
+> +
+> +        ti,prus = <&pru2_0>, <&rtu2_0>, <&tx_pru2_0>,
+> +                  <&pru2_1>, <&rtu2_1>, <&tx_pru2_1>;
+> +        firmware-name = "ti-pruss/am65x-pru0-prueth-fw.elf",
+> +                        "ti-pruss/am65x-rtu0-prueth-fw.elf",
+> +                        "ti-pruss/am65x-txpru0-prueth-fw.elf",
+> +                        "ti-pruss/am65x-pru1-prueth-fw.elf",
+> +                        "ti-pruss/am65x-rtu1-prueth-fw.elf",
+> +                        "ti-pruss/am65x-txpru1-prueth-fw.elf";
+> +        ti,pruss-gp-mux-sel = <2>,      /* MII mode */
+> +                              <2>,
+> +                              <2>,
+> +                              <2>,      /* MII mode */
+> +                              <2>,
+> +                              <2>;
+> +        dmas = <&main_udmap 0xc300>, /* egress slice 0 */
+> +               <&main_udmap 0xc301>, /* egress slice 0 */
+> +               <&main_udmap 0xc302>, /* egress slice 0 */
+> +               <&main_udmap 0xc303>, /* egress slice 0 */
+> +               <&main_udmap 0xc304>, /* egress slice 1 */
+> +               <&main_udmap 0xc305>, /* egress slice 1 */
+> +               <&main_udmap 0xc306>, /* egress slice 1 */
+> +               <&main_udmap 0xc307>, /* egress slice 1 */
+> +               <&main_udmap 0x4300>, /* ingress slice 0 */
+> +               <&main_udmap 0x4301>; /* ingress slice 1 */
+> +        dma-names = "tx0-0", "tx0-1", "tx0-2", "tx0-3",
+> +                    "tx1-0", "tx1-1", "tx1-2", "tx1-3",
+> +                    "rx0", "rx1";
+> +        ti,mii-g-rt = <&icssg2_mii_g_rt>;
+> +        interrupt-parent = <&icssg2_intc>;
+> +        interrupts = <24 0 2>, <25 1 3>;
+> +        interrupt-names = "tx_ts0", "tx_ts1";
+> +        ethernet-ports {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +            pruss2_emac0: port@0 {
+> +                reg = <0>;
+> +                phy-handle = <&pruss2_eth0_phy>;
+> +                phy-mode = "rgmii-id";
+> +                interrupts-extended = <&icssg2_intc 24>;
+> +                ti,syscon-rgmii-delay = <&scm_conf 0x4120>;
+> +                /* Filled in by bootloader */
+> +                local-mac-address = [00 00 00 00 00 00];
+> +            };
+> +
+> +            pruss2_emac1: port@1 {
+> +                reg = <1>;
+> +                phy-handle = <&pruss2_eth1_phy>;
+> +                phy-mode = "rgmii-id";
+> +                interrupts-extended = <&icssg2_intc 25>;
+> +                ti,syscon-rgmii-delay = <&scm_conf 0x4124>;
+> +                /* Filled in by bootloader */
+> +                local-mac-address = [00 00 00 00 00 00];
+> +            };
+> +        };
+> +    };
+> -- 
+> 2.25.1
 > 
-> I realized that you have asked for more testing, but most surviving
-> macbooks from the older apple-gmux era appear to be models without
-> a discrete GPU (which are often the first thing to break) and thus
-> without a gmux.
-> 
-> Unless we get a bunch of testers to show up, which I doubt. I would
-> prefer slightly bigger / less pretty code and not change the functional
-> behavior of the driver on these older models.
-
-A quick follow up on this, I just noticed that only the pio_write32
-is doing the one byte at a time thing:
-
-static u32 gmux_pio_read32(struct apple_gmux_data *gmux_data, int port)
-{
-        return inl(gmux_data->iostart + port);
-}
-
-static void gmux_pio_write32(struct apple_gmux_data *gmux_data, int port,
-                             u32 val)
-{
-        int i;
-        u8 tmpval;
-
-        for (i = 0; i < 4; i++) {
-                tmpval = (val >> (i * 8)) & 0xff;
-                outb(tmpval, gmux_data->iostart + port + i);
-        }
-}
-
-And if you look closely gmux_pio_write32() is not swapping
-the order to be32 at all, it is just taking the bytes
-in little-endian memory order, starting with the first
-(index 0) byte which is the least significant byte of
-the value.
-
-On x86 the original code is no different then doing:
-
-static void gmux_pio_write32(struct apple_gmux_data *gmux_data, int port,
-                             u32 val)
-{
-        u8 *data = (u8 *)&val;
-        int i;
-
-        for (i = 0; i < 4; i++)
-                outb(data[i], gmux_data->iostart + port + i);
-}
-
-So yeah this patch is definitely wrong, it actually swaps
-the byte order compared to the original code. Which becomes
-clear when you look the weird difference between the read32 and
-write32 functions after this patch.
-
-Presumably there is a specific reason why gmux_pio_write32()
-is not already doing a single outl(..., val) and byte-ordering
-is not the reason.
-
-Regards,
-
-Hans
-
-
-
->> @@ -177,16 +171,8 @@ static u32 gmux_index_read32(struct apple_gmux_data *gmux_data, int port)
->>  static void gmux_index_write32(struct apple_gmux_data *gmux_data, int port,
->>  			       u32 val)
->>  {
->> -	int i;
->> -	u8 tmpval;
->> -
->>  	mutex_lock(&gmux_data->index_lock);
->> -
->> -	for (i = 0; i < 4; i++) {
->> -		tmpval = (val >> (i * 8)) & 0xff;
->> -		outb(tmpval, gmux_data->iostart + GMUX_PORT_VALUE + i);
->> -	}
->> -
->> +	outl(cpu_to_be32(val), gmux_data->iostart + GMUX_PORT_VALUE);
->>  	gmux_index_wait_ready(gmux_data);
->>  	outb(port & 0xff, gmux_data->iostart + GMUX_PORT_WRITE);
->>  	gmux_index_wait_complete(gmux_data);
-> 
-
