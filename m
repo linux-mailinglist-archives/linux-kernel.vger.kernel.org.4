@@ -2,240 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 471A6692BAA
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 00:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76667692BAB
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 00:55:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjBJXzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 18:55:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33318 "EHLO
+        id S229648AbjBJXzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 18:55:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjBJXzD (ORCPT
+        with ESMTP id S229997AbjBJXzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 18:55:03 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33CB65DC12;
-        Fri, 10 Feb 2023 15:55:02 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id r17so4574704pff.9;
-        Fri, 10 Feb 2023 15:55:02 -0800 (PST)
+        Fri, 10 Feb 2023 18:55:23 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D297E02F
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 15:55:18 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id j17so10794838lfr.3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 15:55:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sac/fX0wt9v0DHBtkfOe72qxgSq2ZxL7sJ1RWk0mQzQ=;
-        b=Oh6mXmII+Z7iHd6314WW1IkZYatL53ousxgQOW7+m/EyoqbBUNzdiADjeTgbLBh4MM
-         r6WJWYin1EetsFpHoW2v/rrFOwVTFqYi97k7uzhc4gSRvCjsxPbOKxKPpNQkuplwxMYj
-         iJwCrNrYgb7Q4kVc9EykNh6RO4shGUuPYn7oB59kkng+UMxT94IJ2E+7NoB6UI0oVts0
-         FCPkDXToksMdz/CKXYy7M2Daa6U4j7HT90WhTUHMbghRVOdfyqFpkjfMKOor2poztRAF
-         qszAjfqrMzBPVc4sCRbSolXncQ4LD4B3G2ruzxF0kEglUfAL/afRdWpGGqLPYj16bMnc
-         NvDw==
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hub9eRpb+vroZn2JIwZrXOy9Vh1ghxk4CimJGPNm0Ac=;
+        b=wWTQ7RF97aVudont8TU+6FhsCigfrMmOIjnS/02DpAK68VqQXI7/Yp4T+culJTNknr
+         b4pOM3v1l5mTQNVk589OcKjhA0wcm7Z+f+g5zOxsHrKaTLg6Ed+5lxt1h5c2mz+EqLuh
+         Fn41MlFyF56lNYD6aLSGbeiR3vcwqU4K3TpYU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sac/fX0wt9v0DHBtkfOe72qxgSq2ZxL7sJ1RWk0mQzQ=;
-        b=hf0V/+bthMXjsazuVXy4t9paz2CIWyqDowrlVQCIWA8IKsuMbOTi0MU9oE+XH/bE48
-         kBVB0DTVm8AdPsIOvCYs80WN43x+L05F6dwLvkujz9KY/9b1T87/CS2I0SSs341gYHNd
-         9Hw5NwMGGNNY2FjYGPfR8NtNJHlMULVzJk7LRuTmahsv3oIiTnz9btObXqrCxN6jmfrB
-         WF3J5jypLodVGvo9Ljqyzm8meRWZfWcFqGRxap0mQa0a0KUACsAqsPMuV2DWkSkCbuS2
-         IF2P3n3CZbvlNrEuyBWLes9ki8yHkgHwPEDYbKQywfqz6MDv7AjAiPDng7/aom9gVa2G
-         r4hQ==
-X-Gm-Message-State: AO0yUKUAs4JG6Mf4OkC8MTi8wlSm1JjQCngUdmBXE2tzdw6KAUF5V9Kh
-        /lNRjZkNvvEy/rQdpuZ/64o=
-X-Google-Smtp-Source: AK7set9nPEtV76VsB+ysNcWvcdA/XjTiAQwDc+XnZPZ2oGeO6JBsSezTX4grz36H63ofrjyYlHusKg==
-X-Received: by 2002:a62:1b8a:0:b0:592:fc9f:8ae5 with SMTP id b132-20020a621b8a000000b00592fc9f8ae5mr14453938pfb.23.1676073301644;
-        Fri, 10 Feb 2023 15:55:01 -0800 (PST)
-Received: from redecorated-mbp ([202.53.32.211])
-        by smtp.gmail.com with ESMTPSA id g8-20020aa78188000000b0056be1581126sm3888031pfi.143.2023.02.10.15.54.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 15:55:01 -0800 (PST)
-Date:   Sat, 11 Feb 2023 10:54:47 +1100
-From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        platform-driver-x86@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        Rander Wang <rander.wang@intel.com>,
-        YiPeng Chai <YiPeng.Chai@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Evan Quan <evan.quan@amd.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Yong Zhi <yong.zhi@intel.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>,
-        Bokun Zhang <Bokun.Zhang@amd.com>,
-        Mark Gross <markgross@kernel.org>,
-        Kerem Karabay <kekrby@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jack Xiao <Jack.Xiao@amd.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Aditya Garg <gargaditya08@live.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Amadeusz =?UTF-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>
-Subject: Re: [RFC PATCH 9/9] drm/amdgpu: register a vga_switcheroo client
- for all GPUs that are not thunderbolt attached
-Message-ID: <20230211105447.0d8dda6b@redecorated-mbp>
-In-Reply-To: <CADnq5_PXa=d8ie8jj7sGxvxfn+ZNwed-eSyNg89PfWCvpo8LCw@mail.gmail.com>
-References: <20230210044826.9834-1-orlandoch.dev@gmail.com>
-        <20230210044826.9834-10-orlandoch.dev@gmail.com>
-        <CADnq5_PVsrk4+K45kVgU=r98B9GgC2CxbC8AvGUXRtv2sZAHPg@mail.gmail.com>
-        <b3a2d525-b30c-164c-705c-97fcb0016540@redhat.com>
-        <CADnq5_PXa=d8ie8jj7sGxvxfn+ZNwed-eSyNg89PfWCvpo8LCw@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.35; x86_64-pc-linux-gnu)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Hub9eRpb+vroZn2JIwZrXOy9Vh1ghxk4CimJGPNm0Ac=;
+        b=ein20TZRnDidOhZxRFRE61q56E9creEdVuzEFkgEqpqwSV+0JelXLeuo6sc0R8/o9g
+         gRQMDD1JoZMsvYZBV8btOTH/kSR5GRIiwHZ65twyR1aEO9CmSbF2lItDpiHA/x4PU8y/
+         g4l/pp8QIFlwz80//8NiKBRE1eLvY1SCuAEdZCeuMJsMUyoMzIsz5+AEyQR0Hx4nV3Gn
+         NKVcMrX26QzgNMkCV1xZ6zrBPc2kBnE+RAiDlNFP4iEkUW5L2OHHliBq0vz8946qESgs
+         PZOxs07FzXAbrJL0YB7TKVM6NPv6wwxVgP59NYcksfMt3NfpuGxo4tFKtIC0L4JO3zC0
+         oGxw==
+X-Gm-Message-State: AO0yUKWy+1G5SUdGke+prcwLAUBCiyoiw1C8weXvZCmohGBJa2M3Z3pj
+        9yUMgbYwzbiBTlhYjmAjLapXD9JlO2n7516VtoRFFA==
+X-Google-Smtp-Source: AK7set/QhEfDVyZculK9TptRG98c56WuSq04L/SFwsKvGb+6EFvfVl29B2nHU/ZB9573vyR8m4zBepXjbJXDr1LvgSY=
+X-Received: by 2002:ac2:4a66:0:b0:4db:dd7:dee2 with SMTP id
+ q6-20020ac24a66000000b004db0dd7dee2mr2494355lfp.16.1676073316327; Fri, 10 Feb
+ 2023 15:55:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230204022051.2737724-1-joel@joelfernandes.org>
+ <PH0PR11MB58800C6FD1C0DDF8EC67DB5DDADA9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <CAEXW_YRwe781s1faLQcRBvL5pBWv9WmRuhcP=PmqHUJcm9Rphg@mail.gmail.com>
+ <CAEXW_YSY5nYL4LUoAX1Z8kUXtE-GW3Zor__cDWsdPL3OqEe4bA@mail.gmail.com> <PH0PR11MB5880E2B1C4A0A4DFA46C3B7FDADB9@PH0PR11MB5880.namprd11.prod.outlook.com>
+In-Reply-To: <PH0PR11MB5880E2B1C4A0A4DFA46C3B7FDADB9@PH0PR11MB5880.namprd11.prod.outlook.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Fri, 10 Feb 2023 18:55:04 -0500
+Message-ID: <CAEXW_YQyqPCPZf8wLHaVqVWO43jND0kmsYbS=t_EFrXrBmzRvw@mail.gmail.com>
+Subject: Re: [PATCH] rcu/tree: Improve comments in rcu_report_qs_rdp()
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Feb 2023 11:37:08 -0500
-Alex Deucher <alexdeucher@gmail.com> wrote:
-
-> On Fri, Feb 10, 2023 at 11:07 AM Hans de Goede <hdegoede@redhat.com>
-> wrote:
+On Mon, Feb 6, 2023 at 8:15 PM Zhang, Qiang1 <qiang1.zhang@intel.com> wrote:
+>
+> On Mon, Feb 6, 2023 at 12:19 PM Joel Fernandes <joel@joelfernandes.org> wrote:
 > >
-> > Hi,
-> >
-> > On 2/10/23 16:53, Alex Deucher wrote:  
-> > > On Fri, Feb 10, 2023 at 3:04 AM Orlando Chamberlain
-> > > <orlandoch.dev@gmail.com> wrote:  
-> > >>
-> > >> From: Kerem Karabay <kekrby@gmail.com>
-> > >>
-> > >> Commit 3840c5bcc245 ("drm/amdgpu: disentangle runtime pm and
-> > >> vga_switcheroo") made amdgpu only register a vga_switcheroo
-> > >> client for GPU's with PX, however AMD GPUs in dual gpu Apple
-> > >> Macbooks do need to register, but don't have PX. Instead of
-> > >> AMD's PX, they use apple-gmux.  
+> > On Sun, Feb 5, 2023 at 10:09 PM Zhang, Qiang1 <qiang1.zhang@intel.com> wrote:
 > > >
-> > > Is there a way to detect apple-gmux instead?  Otherwise, we
-> > > register vga_switcheroo on any system with multiple GPUs which is
-> > > not what we want.  
+> > >
+> > > >Recent discussion triggered due to a patch linked below, from Qiang,
+> > > >shed light on the need to accelerate from QS reporting paths.
+> > > >
+> > > >Update the comments to capture this piece of knowledge.
+> > > >
+> > > >Link: https://lore.kernel.org/all/20230118073014.2020743-1-qiang1.zhang@intel.com/
+> > > >Cc: Qiang Zhang <Qiang1.zhang@intel.com>
+> > > >Cc: Frederic Weisbecker <frederic@kernel.org>
+> > > >Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > >
+> > > >---
+> > > > kernel/rcu/tree.c | 13 ++++++++++++-
+> > > > 1 file changed, 12 insertions(+), 1 deletion(-)
+> > > >
+> > > >diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > >index 93eb03f8ed99..713eb6ca6902 100644
+> > > >--- a/kernel/rcu/tree.c
+> > > >+++ b/kernel/rcu/tree.c
+> > > >@@ -1983,7 +1983,12 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+> > > >       } else {
+> > > >               /*
+> > > >                * This GP can't end until cpu checks in, so all of our
+> > > >-               * callbacks can be processed during the next GP.
+> > > >+               * callbacks can be processed during the next GP. Do
+> > > >+               * the acceleration from here otherwise there may be extra
+> > > >+               * grace period delays, as any accelerations from rcu_core()
+> > >
+> > >
+> > > Does the extra grace period delays means that if not accelerate callback,
+> > > the grace period will take more time to end ? or refers to a delay in the
+> > > start time of a new grace period?
 > >
-> > Yes since 6.1.y (either stable series or just take 6.2.0) the
-> > apple-gmux detect code has been factored out into a stand-alone
-> > apple_gmux_detect() helper inside:
+> > Yes, so IMO it is like this if we don't accelerate:
+> > 1. Start GP 1
+> > 2. CPU1 queues callback C1 (not accelerated yet)
+> > 3. CPU1 reports QS for GP1 (not accelerating anything).
+> > 4. GP1 ends
+> > 5. CPU1's note_gp_changes() is called, accelerate happens, now the CB
+> > will execute after GP3 (or alternately, rcu_core() on CPU1 does
+> > accelerate).
+> > 6. GP2 ends.
+> > 7. GP3 starts.
+> > 8. GP3 ends.
+> > 9. CB is invoked
 > >
-> > include/linux/apple-gmux.h
+> > Instead, what we will get the following thanks to the acceleration here is:
+> > 1. Start GP 1
+> > 2. CPU1 queues callback C1 (not accelerated yet)
+> > 3. CPU1 reports QS for GP1 and acceleration happens as done by the
+> > code this patch adds comments for.
+> > 4. GP1 ends
+> > 5. CPU1's note_gp_changes() is called
+> > 6. GP2 ends.
+> > 7. CB is invoked
 > >
-> > For usage outside of the actual apple-gmux driver you can simply
-> > pass NULL for both arguments.
+> >Sorry I missed some steps, here is the update:
+> >1. Start GP 1
+> >2. CPU1 queues callback C1 (not accelerated yet)
+> >3. CPU1 reports QS for GP1 (not accelerating anything).
+> >4. GP1 ends
+> >5. GP2 starts for some other reason from some other CPU.
+> >6. CPU1's note_gp_changes() is called, acceleration happens, now the CB
+> >will execute after GP3.
+> >7. GP2 ends.
+> >8. GP3 starts.
+> >9. GP3 ends.
+> >10. CB is invoked
 > >
-> > This was necessary to reliably check if the apple-gmux should be
-> > used for backlight control.
+> >Instead, what we will get the following thanks to the acceleration here is:
+> >1. Start GP 1
+> >2. CPU1 queues callback C1 (not accelerated yet)
+> >3. CPU1 reports QS for GP1 and acceleration happens as done by the
+> >code this patch adds comments for.
+> >4. GP1 ends
+> >5. GP2 starts
+> >6. GP2 ends.
+> >7. CB is invoked
 > >
-> > Note there also is the older apple_gmux_present() helper, which is
-> > already used in some drm code. That function is not reliable though
-> > it detects if the ACPI tables contain an ACPI device describing
-> > the presence of a gmux, but it turns out even Apple has buggy ACPI
-> > tables and the mere presence of that ACPI device is not a reliable
-> > indicator the gmux is actually there.
-> >
-> > I have not changed over any of the existing apple_gmux_present()
-> > users for fear of unwanted side effects...  
-> 
-> Looks like we could maybe use the PWRD ACPI check like patch 8 does
-> as well.
+> >Does that make sense or is there a subtlety I missed?
+>
+>
+>
+> Thanks for detailed description, that is to say, the grace period delays means that
+> if there is no acceleration,  the invocation of callback may be delayed by one or
+> more grace periods.
+>
+> Can you re-describe the meaning of  "grace period delays "in the comments?
 
-I wasn't using apple_gmux_detect as I mistakenly thought
-pnp_get_resource would fail if apple-gmux had bound to the resource but
-it looks like I was wrong about that so we can use that to determine if
-the system has a gmux. I think I'll do that in v2.
+Yes, good point. I should change it to "one or more delays". Thank you
+for the suggestion!
 
-As far as I know there's only one internal (non
-thunderbolt) amd gpu inside all Macbooks with gmux so we probably
-wouldn't need to check for PWRD to ensure it's  the right gpu.
+Sorry for my late reply as I was OOO this week.
 
-With PWRD, I don't know if its present on all Dual GPU Macbooks, I've
-only found the acpi tables for Macbookpro14,x to Macbookpro16,x, so I
-don't know if it will work on older Macs (I'm also not sure if those
-macs are using radeon or amdgpu).
+ - Joel
 
-> Alex
-> 
-> >
-> > Regards,
-> >
-> > Hans
-> >
-> >
-> >
-> >  
-> > >> Revert to the old logic of registering for all non-thunderbolt
-> > >> gpus, like radeon and nouveau.
-> > >>
-> > >> Fixes: 3840c5bcc245 ("drm/amdgpu: disentangle runtime pm and
-> > >> vga_switcheroo") Signed-off-by: Kerem Karabay <kekrby@gmail.com>
-> > >> [Orlando Chamberlain <orlandoch.dev@gmail.com>: add commit
-> > >> description] Signed-off-by: Orlando Chamberlain
-> > >> <orlandoch.dev@gmail.com> ---
-> > >>  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 18
-> > >> +++++++++++------- 1 file changed, 11 insertions(+), 7
-> > >> deletions(-)
-> > >>
-> > >> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> > >> b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c index
-> > >> 2f28a8c02f64..0bb553a61552 100644 ---
-> > >> a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c +++
-> > >> b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c @@ -3919,12
-> > >> +3919,13 @@ int amdgpu_device_init(struct amdgpu_device *adev,
-> > >> if ((adev->pdev->class >> 8) == PCI_CLASS_DISPLAY_VGA)
-> > >> vga_client_register(adev->pdev, amdgpu_device_vga_set_decode);
-> > >>
-> > >> -       if (amdgpu_device_supports_px(ddev)) {
-> > >> -               px = true;
-> > >> -               vga_switcheroo_register_client(adev->pdev,
-> > >> -
-> > >> &amdgpu_switcheroo_ops, px);
-> > >> +       px = amdgpu_device_supports_px(ddev);
-> > >> +
-> > >> +       if (!pci_is_thunderbolt_attached(adev->pdev))
-> > >> +               vga_switcheroo_register_client(adev->pdev,
-> > >> &amdgpu_switcheroo_ops, px); +
-> > >> +       if (px)
-> > >>                 vga_switcheroo_init_domain_pm_ops(adev->dev,
-> > >> &adev->vga_pm_domain);
-> > >> -       }
-> > >>
-> > >>         if (adev->gmc.xgmi.pending_reset)
-> > >>                 queue_delayed_work(system_wq,
-> > >> &mgpu_info.delayed_reset_work, @@ -4048,10 +4049,13 @@ void
-> > >> amdgpu_device_fini_sw(struct amdgpu_device *adev)
-> > >>
-> > >>         kfree(adev->bios);
-> > >>         adev->bios = NULL;
-> > >> -       if (amdgpu_device_supports_px(adev_to_drm(adev))) {
-> > >> +
-> > >> +       if (!pci_is_thunderbolt_attached(adev->pdev))
-> > >>                 vga_switcheroo_unregister_client(adev->pdev);
-> > >> +
-> > >> +       if (amdgpu_device_supports_px(adev_to_drm(adev)))
-> > >>                 vga_switcheroo_fini_domain_pm_ops(adev->dev);
-> > >> -       }
-> > >> +
-> > >>         if ((adev->pdev->class >> 8) == PCI_CLASS_DISPLAY_VGA)
-> > >>                 vga_client_unregister(adev->pdev);
-> > >>
-> > >> --
-> > >> 2.39.1
-> > >>  
-> > >  
-> >  
 
+>
+> Thanks
+> Zqiang
+>
+>
+>
+> >
+> >Thanks,
+> >
+> > - Joel
