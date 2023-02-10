@@ -2,89 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 680416910E6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:03:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA33691023
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjBITDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 14:03:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35846 "EHLO
+        id S229705AbjBISON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 13:14:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbjBITDC (ORCPT
+        with ESMTP id S229551AbjBISOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 14:03:02 -0500
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674C05D1EB;
-        Thu,  9 Feb 2023 11:03:00 -0800 (PST)
-Received: by mail-ot1-f46.google.com with SMTP id 14-20020a9d010e000000b0068bdddfa263so846289otu.2;
-        Thu, 09 Feb 2023 11:03:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CIG7XVUrEvHxHM2W2SVN/mGj6ui8gtTwgh3+jRqlHdg=;
-        b=8IM8V3G5OWrZr6iwAs3K9hQ84jkviqvHg97FpWrp1TpU21hLJbd9tFO8JCTr9FnwAX
-         z4KrAD9bxULAShLqed467hhp5xIvf6e1lZXxFfGSMFEXxY543ebpXMxpdp/ls2ZlfCFU
-         IMpRjOysLaNQgNX4cNHzfh/JXluEz52OpDXiAQ/S3z2IlYyiNPdL/6MBqI45EI2yLWJC
-         xnF6Y8ysQUuH58p8rL8ozxnZi0ZGYKJXm7mSWYLZpKpw7HhQGIZVH5IOATwqMXaI6oz4
-         +aVwru8iiuKArdYJCyyglYzYYtONj0DCt9l7x3hYbuqB0dFhTjDtWeSo6xPuR3t5m5V6
-         R1Fg==
-X-Gm-Message-State: AO0yUKUNZHdniVSPmU8FjhVQm0cWtaKMtlRLMqA9qAYMxxttiEKAMGnD
-        Xq3EyLF6feTOf9yt5zNb8mMFehRTvg==
-X-Google-Smtp-Source: AK7set890dZ1sGgTNR93HC0ONDrNKfdkvrQ0cgzhuVqPSxNlKEotCQrIOOY1TJCe6wzGYabR5mBGyw==
-X-Received: by 2002:a9d:12cc:0:b0:68b:c490:5372 with SMTP id g70-20020a9d12cc000000b0068bc4905372mr7565476otg.22.1675969379619;
-        Thu, 09 Feb 2023 11:02:59 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u4-20020a9d4d84000000b0068d752f1870sm1065872otk.5.2023.02.09.11.02.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 11:02:59 -0800 (PST)
-Received: (nullmailer pid 639835 invoked by uid 1000);
-        Thu, 09 Feb 2023 19:02:58 -0000
-Date:   Thu, 9 Feb 2023 13:02:58 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Tinghan Shen <tinghan.shen@mediatek.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 01/12] dt-bindings: remoteproc: mediatek: Improve the
- rpmsg subnode definition
-Message-ID: <167596937758.639777.17645426181511229001.robh@kernel.org>
-References: <20230209074021.13936-1-tinghan.shen@mediatek.com>
- <20230209074021.13936-2-tinghan.shen@mediatek.com>
+        Thu, 9 Feb 2023 13:14:12 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1472910F7;
+        Thu,  9 Feb 2023 10:14:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675966452; x=1707502452;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SdJR8+NQgWVSPauMXOdNTSeAcDupQOFiX/ggW5ukF60=;
+  b=YJ/u66IxLDPGyVPF+JVk53HqUJu2uPrx4x/FQhvs7iKc/lE5yvd7fQUJ
+   xM3g8aCuh2ONqQdny/tX3RuvP8Eq6GE0GbtTNmSSlMTv0Ib61df2F9weZ
+   ENQl9vMByasIR9aGWxMy9rOif5vt0bPRDQmaevRWf9tQkhpeAwkqBV9qz
+   i1KbtKCYoxq1Ev6CnL3uToctop3A7n1+0dr2IW5NPZa7IWGnD/J/ZJ7J5
+   w85ZB+FfTH4OnNuUkfYA+XMvHImDqhL/K+23owFkjiOKxBGD/610slNr+
+   Ol1hCGn6Gly3W5QVfcIZ39xDP9zrU2FLOVB+d1Qr0rik62mMMzeWxiiHI
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="318212592"
+X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
+   d="scan'208";a="318212592"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 10:14:11 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="791693614"
+X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
+   d="scan'208";a="791693614"
+Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 10:14:08 -0800
+From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+To:     irenic.rajneesh@gmail.com, david.e.box@intel.com,
+        hdegoede@redhat.com, markgross@kernel.org
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rajat.khandelwal@intel.com,
+        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Subject: [PATCH v5] platform/x86/intel/pmc: core: Add support to show LTR-ignored components
+Date:   Fri, 10 Feb 2023 23:46:14 +0530
+Message-Id: <20230210181614.192578-1-rajat.khandelwal@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230209074021.13936-2-tinghan.shen@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_24_48,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Currently, 'ltr_ignore' sysfs attribute, when read, returns nothing, even
+if there are components whose LTR values have been ignored.
 
-On Thu, 09 Feb 2023 15:40:10 +0800, Tinghan Shen wrote:
-> Improve the definition of the rpmsg subnode by
-> assigning a distinct node name and adding the
-> definition source of node properties.
-> 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> ---
->  .../bindings/remoteproc/mtk,scp.yaml          | 31 +++++++++----------
->  1 file changed, 15 insertions(+), 16 deletions(-)
-> 
+This patch adds the feature to print out such components, if they exist.
+Further, if user tries to set an already ignored component, he will
+encounter the error code of EEXIST.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+---
+
+v5:
+1. Ignore the LTR of the respective component after unlocking the mutex lock
+2. Adding error code details to the commit message
+
+v4: Mutex unlock during error conditions
+
+v3: Incorporated a mutex lock for accessing 'ltr_ignore_list'
+
+v2: kmalloc -> devm_kmalloc
+
+ drivers/platform/x86/intel/pmc/core.c | 64 ++++++++++++++++++++++-----
+ drivers/platform/x86/intel/pmc/core.h |  2 +-
+ 2 files changed, 53 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
+index 3a15d32d7644..16cf6c634db8 100644
+--- a/drivers/platform/x86/intel/pmc/core.c
++++ b/drivers/platform/x86/intel/pmc/core.c
+@@ -53,6 +53,17 @@ const struct pmc_bit_map msr_map[] = {
+ 	{}
+ };
+ 
++/* Mutual exclusion to access the list of LTR-ignored components */
++static DEFINE_MUTEX(ltr_entry_mutex);
++
++struct ltr_entry {
++	u32 comp_index;
++	const char *comp_name;
++	struct list_head node;
++};
++
++static LIST_HEAD(ltr_ignore_list);
++
+ static inline u32 pmc_core_reg_read(struct pmc_dev *pmcdev, int reg_offset)
+ {
+ 	return readl(pmcdev->regbase + reg_offset);
+@@ -435,27 +446,18 @@ static int pmc_core_pll_show(struct seq_file *s, void *unused)
+ }
+ DEFINE_SHOW_ATTRIBUTE(pmc_core_pll);
+ 
+-int pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value)
++void pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value)
+ {
+ 	const struct pmc_reg_map *map = pmcdev->map;
+ 	u32 reg;
+-	int err = 0;
+ 
+ 	mutex_lock(&pmcdev->lock);
+ 
+-	if (value > map->ltr_ignore_max) {
+-		err = -EINVAL;
+-		goto out_unlock;
+-	}
+-
+ 	reg = pmc_core_reg_read(pmcdev, map->ltr_ignore_offset);
+ 	reg |= BIT(value);
+ 	pmc_core_reg_write(pmcdev, map->ltr_ignore_offset, reg);
+ 
+-out_unlock:
+ 	mutex_unlock(&pmcdev->lock);
+-
+-	return err;
+ }
+ 
+ static ssize_t pmc_core_ltr_ignore_write(struct file *file,
+@@ -464,6 +466,8 @@ static ssize_t pmc_core_ltr_ignore_write(struct file *file,
+ {
+ 	struct seq_file *s = file->private_data;
+ 	struct pmc_dev *pmcdev = s->private;
++	const struct pmc_reg_map *map = pmcdev->map;
++	struct ltr_entry *entry;
+ 	u32 buf_size, value;
+ 	int err;
+ 
+@@ -473,13 +477,49 @@ static ssize_t pmc_core_ltr_ignore_write(struct file *file,
+ 	if (err)
+ 		return err;
+ 
+-	err = pmc_core_send_ltr_ignore(pmcdev, value);
++	if (value > map->ltr_ignore_max)
++		return -EINVAL;
++
++	mutex_lock(&ltr_entry_mutex);
++
++	list_for_each_entry(entry, &ltr_ignore_list, node) {
++		if (entry->comp_index == value) {
++			err = -EEXIST;
++			goto out_unlock;
++		}
++	}
++
++	entry = devm_kmalloc(&pmcdev->pdev->dev, sizeof(*entry), GFP_KERNEL);
++	if (!entry) {
++		err = -ENOMEM;
++		goto out_unlock;
++	}
++
++	entry->comp_name = map->ltr_show_sts[value].name;
++	entry->comp_index = value;
++	list_add_tail(&entry->node, &ltr_ignore_list);
++
++out_unlock:
++	mutex_unlock(&ltr_entry_mutex);
++
++	if (err)
++		return err;
++
++	pmc_core_send_ltr_ignore(pmcdev, value);
+ 
+-	return err == 0 ? count : err;
++	return count;
+ }
+ 
+ static int pmc_core_ltr_ignore_show(struct seq_file *s, void *unused)
+ {
++	struct ltr_entry *entry;
++
++	mutex_lock(&ltr_entry_mutex);
++	list_for_each_entry(entry, &ltr_ignore_list, node) {
++		seq_printf(s, "%s\n", entry->comp_name);
++	}
++	mutex_unlock(&ltr_entry_mutex);
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
+index 810204d758ab..da35b0fcbe6e 100644
+--- a/drivers/platform/x86/intel/pmc/core.h
++++ b/drivers/platform/x86/intel/pmc/core.h
+@@ -396,7 +396,7 @@ extern const struct pmc_reg_map adl_reg_map;
+ extern const struct pmc_reg_map mtl_reg_map;
+ 
+ extern void pmc_core_get_tgl_lpm_reqs(struct platform_device *pdev);
+-extern int pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value);
++extern void pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value);
+ 
+ void spt_core_init(struct pmc_dev *pmcdev);
+ void cnp_core_init(struct pmc_dev *pmcdev);
+-- 
+2.34.1
 
