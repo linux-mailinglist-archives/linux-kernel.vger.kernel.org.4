@@ -2,105 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63AB2691E7D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:39:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0BDA691E80
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232177AbjBJLi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 06:38:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50028 "EHLO
+        id S232253AbjBJLjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 06:39:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231889AbjBJLi5 (ORCPT
+        with ESMTP id S232260AbjBJLjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 06:38:57 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3832A6C7;
-        Fri, 10 Feb 2023 03:38:51 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id bh15so4185039oib.4;
-        Fri, 10 Feb 2023 03:38:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=94HhLZErt6tptJHKl864lXCVSB3thrXy6dwt+pBa51c=;
-        b=R5upjjTKnzH4g9QpGIHa0f5qmZDvx3e8nLzmqvj5DijyduOJU6Vck18dxSboy8ycN6
-         bkVhdxyy3VBBZ1YGrK7WojTrZbcg+PAxPxp6dNV/VXkoQANyPGzvcjILBSQ2G3f6STdH
-         k0uaI18Ewb8hECiIWvyRz7twZfww8peCLMTghfsq08xiByLJSjFxGedSiue6lUkb9FYv
-         jBPPvKpBr2uA3lYU6apI9t2qHggiTOmOew2k7n9I2SfxWeSZ7JnZYKqbb1SiMKYhiF6J
-         xMqbCyDgqZFpLLnOOHjSDzM8UH5ei5sKuEhwsMOpk6nC/oat3oIrLFACCOZbMElr7a3b
-         /6cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=94HhLZErt6tptJHKl864lXCVSB3thrXy6dwt+pBa51c=;
-        b=E7vC4TJSIv4WwIsTptSGteO2DoMyrh9q4QcUTc6zOd6WVRG/YgDNxma+i0JNOJFAft
-         Rv6TW298wPD8hUd1PQ8l1un3V6TTlEhQVBnnccZrnZIFaDJY3huYC9UNerg9PG96hO96
-         u+Hh6vPNvTtjSBiNhSVzfdSWWF1qhrdTQt/KLdYiPYLO/OOO8JMNrYGlmCGwS6VMld19
-         kuKRXTJ25EYBcpVMs4qPZgEiFUiMvhReOl3NksKWjkJzmRqt1ZLCIUoxe0g2VJCyfhu0
-         qVrj7xvNCbH/m/hFpnlNOdTYv8e0rCb9InaPro3blFbYFDrZQttHGx6SoAjmVC8pdK6U
-         vWVw==
-X-Gm-Message-State: AO0yUKXfdCc2QcNpHFMmKUTAmLF25uM4Nkv2tJtIJSMVtv2qfRkINnCt
-        PoPTE7V2xi4+D2p61OQVk7VMxEVQuaACiGbGB10=
-X-Google-Smtp-Source: AK7set/ubUws40cQ2vkTOkYAzkszvk+IasHiO0DtUU+SZZxvFdGRf2CzvH0oEnwNqH3p605m6DTiVTzMH5A9ZHT8MRU=
-X-Received: by 2002:aca:d909:0:b0:37a:d1e1:65aa with SMTP id
- q9-20020acad909000000b0037ad1e165aamr1140240oig.83.1676029130415; Fri, 10 Feb
- 2023 03:38:50 -0800 (PST)
-MIME-Version: 1.0
-References: <20230210065621.598120-1-sergio.paracuellos@gmail.com>
- <20230210065621.598120-2-sergio.paracuellos@gmail.com> <a0a141ef-b5ab-f84a-9a77-7b6d1f54ccc9@linaro.org>
- <CAMhs-H-w3O_Yjo7CcGdXyw0bSeqefR32Oj4hhQWsVVWoThNLyA@mail.gmail.com> <a592580a-df1f-1ebd-5752-8c2dd1b770fb@linaro.org>
-In-Reply-To: <a592580a-df1f-1ebd-5752-8c2dd1b770fb@linaro.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Fri, 10 Feb 2023 12:38:38 +0100
-Message-ID: <CAMhs-H_NBtZV4kJtyMwkPqd1gZ1nQLRH1fbf7gqeJa13tOB5PQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: watchdog: mt7621-wdt: add phandle to
- access system controller registers
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 10 Feb 2023 06:39:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D352A6D4;
+        Fri, 10 Feb 2023 03:39:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4FFA7B824B5;
+        Fri, 10 Feb 2023 11:39:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F27A3C4339B;
+        Fri, 10 Feb 2023 11:39:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676029141;
+        bh=bXLxhCbm8PLSlv2BYgc9umLlpmECPGjRF/I+Yq6eOPU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gn8X1Mzt7l1dAv8XPucI5wpV2cSe+bBDTOedgeHXmuiVrmfXNjYqdixSpJ3jxJERT
+         L/zK4N01Z5U/P+GDlKlxMcc18jk3HWI5VqDuqI9hc/gfwBxSZUJLR0ZSW/YE/dqCCq
+         LssiToak5aDLMCfIc9+6YMCL7UbDi2MX+DsvU8dpbpg1RydjRwLfyOTpXPVwKNsX+8
+         I5x4RggA4MzINOvLpbckFSjmMpDTcyNtT+ANQ/CnZavkYFG81GQ69e0j6memkBhhA2
+         XuzfOYKC5Yd2EksaGGxcL8LfemWHGRefToaMIJqmX2xVlWCBvXrObHQGLULRnyfbUP
+         G79bCxf02kZBA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pQRk2-009G8P-JZ;
+        Fri, 10 Feb 2023 11:38:58 +0000
+Date:   Fri, 10 Feb 2023 11:38:58 +0000
+Message-ID: <86bkm1zr59.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Subject: Re: [PATCH v5 19/19] irqdomain: Switch to per-domain locking
+In-Reply-To: <Y+YUs6lzalneLyz7@hovoldconsulting.com>
+References: <20230209132323.4599-1-johan+linaro@kernel.org>
+        <20230209132323.4599-20-johan+linaro@kernel.org>
+        <86cz6izv48.wl-maz@kernel.org>
+        <Y+YUs6lzalneLyz7@hovoldconsulting.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: johan@kernel.org, johan+linaro@kernel.org, tglx@linutronix.de, x86@kernel.org, platform-driver-x86@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, hsinyi@chromium.org, mark-pk.tsai@mediatek.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 12:27 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 10/02/2023 12:22, Sergio Paracuellos wrote:
-> > Hi Krzysztof,
-> >
-> > On Fri, Feb 10, 2023 at 11:59 AM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 10/02/2023 07:56, Sergio Paracuellos wrote:
-> >>> MT7621 SoC provides a system controller node for accessing to some registers.
-> >>> Add a phandle to this node to avoid using MIPS related arch operations and
-> >>
-> >> I don't understand this part. You claim you add a phandle to this node,
-> >> but your binding suggest you add here a phandle to other node.
-> >
-> > Probably my English is not the best here :-). Yes, you are right, I
-> > just want to add a phandle to the 'sysc' node in the current node.
->
-> Then why do you need syscon compatible here?
+On Fri, 10 Feb 2023 09:56:03 +0000,
+Johan Hovold <johan@kernel.org> wrote:
+> 
+> On Thu, Feb 09, 2023 at 04:00:55PM +0000, Marc Zyngier wrote:
+> > On Thu, 09 Feb 2023 13:23:23 +0000,
+> > Johan Hovold <johan+linaro@kernel.org> wrote:
+> > > 
+> > > The IRQ domain structures are currently protected by the global
+> > > irq_domain_mutex. Switch to using more fine-grained per-domain locking,
+> > > which can speed up parallel probing by reducing lock contention.
+> > > 
+> > > On a recent arm64 laptop, the total time spent waiting for the locks
+> > > during boot drops from 160 to 40 ms on average, while the maximum
+> > > aggregate wait time drops from 550 to 90 ms over ten runs for example.
+> > > 
+> > > Note that the domain lock of the root domain (innermost domain) must be
+> > > used for hierarchical domains. For non-hierarchical domains (as for root
+> > > domains), the new root pointer is set to the domain itself so that
+> > > domain->root->mutex can be used in shared code paths.
+> > > 
+> > > Also note that hierarchical domains should be constructed using
+> > > irq_domain_create_hierarchy() (or irq_domain_add_hierarchy()) to avoid
+> > > poking at irqdomain internals. As a safeguard, the lockdep assertion in
+> > > irq_domain_set_mapping() will catch any offenders that fail to set the
+> > > root domain pointer.
+> > > 
+> > > Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> > > Tested-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > > ---
+> > >  include/linux/irqdomain.h |  4 +++
+> > >  kernel/irq/irqdomain.c    | 61 +++++++++++++++++++++++++--------------
+> > >  2 files changed, 44 insertions(+), 21 deletions(-)
+> > > 
+> > > diff --git a/include/linux/irqdomain.h b/include/linux/irqdomain.h
+> > > index 16399de00b48..cad47737a052 100644
+> > > --- a/include/linux/irqdomain.h
+> > > +++ b/include/linux/irqdomain.h
+> > > @@ -125,6 +125,8 @@ struct irq_domain_chip_generic;
+> > >   *		core code.
+> > >   * @flags:	Per irq_domain flags
+> > >   * @mapcount:	The number of mapped interrupts
+> > > + * @mutex:	Domain lock, hierarhical domains use root domain's lock
+> > 
+> > nit: hierarchical
+> > 
+> > > + * @root:	Pointer to root domain, or containing structure if non-hierarchical
+> 
+> > > @@ -226,6 +226,17 @@ struct irq_domain *__irq_domain_add(struct fwnode_handle *fwnode, unsigned int s
+> > >  
+> > >  	domain->revmap_size = size;
+> > >  
+> > > +	/*
+> > > +	 * Hierarchical domains use the domain lock of the root domain
+> > > +	 * (innermost domain).
+> > > +	 *
+> > > +	 * For non-hierarchical domains (as for root domains), the root
+> > > +	 * pointer is set to the domain itself so that domain->root->mutex
+> > > +	 * can be used in shared code paths.
+> > > +	 */
+> > > +	mutex_init(&domain->mutex);
+> > > +	domain->root = domain;
+> > > +
+> > >  	irq_domain_check_hierarchy(domain);
+> > >  
+> > >  	mutex_lock(&irq_domain_mutex);
+> 
+> > > @@ -518,7 +529,11 @@ static void irq_domain_set_mapping(struct irq_domain *domain,
+> > >  				   irq_hw_number_t hwirq,
+> > >  				   struct irq_data *irq_data)
+> > >  {
+> > > -	lockdep_assert_held(&irq_domain_mutex);
+> > > +	/*
+> > > +	 * This also makes sure that all domains point to the same root when
+> > > +	 * called from irq_domain_insert_irq() for each domain in a hierarchy.
+> > > +	 */
+> > > +	lockdep_assert_held(&domain->root->mutex);
+> > >  
+> > >  	if (irq_domain_is_nomap(domain))
+> > >  		return;
+> > > @@ -540,7 +555,7 @@ static void irq_domain_disassociate(struct irq_domain *domain, unsigned int irq)
+> > >  
+> > >  	hwirq = irq_data->hwirq;
+> > >  
+> > > -	mutex_lock(&irq_domain_mutex);
+> > > +	mutex_lock(&domain->mutex);
+> > 
+> > So you made that point about being able to uniformly using root>mutex,
+> > which I think is a good invariant. Yet you hardly make use of it. Why?
+> 
+> I went back and forth over that a bit, but decided to only use
+> domain->root->mutex in paths that can be called for hierarchical
+> domains (i.e. the "shared code paths" mentioned above).
+> 
+> Using it in paths that are clearly only called for non-hierarchical
+> domains where domain->root == domain felt a bit lazy.
 
-Clear now. Will drop that in v2.
+My concern here is that as this code gets further refactored, it may
+become much harder to reason about what is the correct level of
+locking.
 
->
-> Best regards,
-> Krzysztof
->
+> The counter argument is of course that using domain->root->lock allows
+> people to think less about the code they are changing, but that's not
+> necessarily always a good thing.
+
+Eventually, non-hierarchical domains should simply die and be replaced
+with a single level hierarchy. Having a unified locking in place will
+definitely make the required work clearer.
+
+> Also note that the lockdep asserts in the revmap helpers would catch
+> anyone using domain->mutex where they should not (i.e. using
+> domain->mutex for an hierarchical domain).
+
+Lockdep is great, but lockdep is a runtime thing. It doesn't help
+reasoning about what gets locked when changing this code.
+
+> > > @@ -1132,6 +1147,7 @@ struct irq_domain *irq_domain_create_hierarchy(struct irq_domain *parent,
+> > >  	else
+> > >  		domain = irq_domain_create_tree(fwnode, ops, host_data);
+> > >  	if (domain) {
+> > > +		domain->root = parent->root;
+> > >  		domain->parent = parent;
+> > >  		domain->flags |= flags;
+> > 
+> > So we still have a bug here, as we have published a domain that we
+> > keep updating. A parallel probing could find it in the interval and do
+> > something completely wrong.
+> 
+> Indeed we do, even if device links should make this harder to hit these
+> days.
+> 
+> > Splitting the work would help, as per the following patch.
+> 
+> Looks good to me. Do you want to submit that as a patch that I'll rebase
+> on or should I submit it as part of a v6?
+
+Just take it directly.
 
 Thanks,
-    Sergio Paracuellos
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
