@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26ACB692924
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 22:19:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B98A692926
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 22:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233589AbjBJVTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 16:19:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41496 "EHLO
+        id S233588AbjBJVTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 16:19:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233567AbjBJVTR (ORCPT
+        with ESMTP id S233511AbjBJVTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 16:19:17 -0500
-Received: from out-33.mta1.migadu.com (out-33.mta1.migadu.com [95.215.58.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FCCC0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 13:18:47 -0800 (PST)
+        Fri, 10 Feb 2023 16:19:18 -0500
+Received: from out-134.mta1.migadu.com (out-134.mta1.migadu.com [95.215.58.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DB316319
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 13:18:48 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1676063898;
+        t=1676063899;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AbtsRD1ly4MmHuz3K8pgOTgQ9ciqaNAhgw745M5z3qM=;
-        b=B+1V8biNfQMjX3nsdY1+m73D5TjVw+j0Vl7kRfCdc1w7xSYfbVEyBvrta2xNYa6Fed0hwK
-        4gpQsZv/7kDWYCx2cQrmYjS6QJKG+FhPekhF/wXcEw25xcCoYQRoQenFhU+NvRpIKzhCdw
-        RIpjR+KRI2zLVti6o9s0FEnI3s7YTh0=
+        bh=UVeF/wdyK+2zAJh1QGD4/79VjlNXyPEki9KG1Xr/HS8=;
+        b=mZ77UXQw8ph3QwwxXcMEUBuXupMLlxGBtFsT/tvE3yPr1CWb80YBs30hTsFcDo2cxvMjfU
+        fh5338Sdmtuz7SNFr7A8idY55ISDszradFlit9kl2SJREmvICU9yKZEh/SEEnh1I4YWVCb
+        jOA+wNYeS/EARv0AleT+tvRG6/ySbBA=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>
@@ -35,9 +35,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH v2 14/18] lib/stackdepot: rename next_pool_inited to next_pool_required
-Date:   Fri, 10 Feb 2023 22:16:02 +0100
-Message-Id: <484fd2695dff7a9bdc437a32f8a6ee228535aa02.1676063693.git.andreyknvl@google.com>
+Subject: [PATCH v2 15/18] lib/stacktrace, kasan, kmsan: rework extra_bits interface
+Date:   Fri, 10 Feb 2023 22:16:03 +0100
+Message-Id: <317123b5c05e2f82854fc55d8b285e0869d3cb77.1676063693.git.andreyknvl@google.com>
 In-Reply-To: <cover.1676063693.git.andreyknvl@google.com>
 References: <cover.1676063693.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -54,103 +54,198 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Stack depot uses next_pool_inited to mark that either the next pool is
-initialized or the limit on the number of pools is reached. However,
-the flag name only reflects the former part of its purpose, which is
-confusing.
+The current implementation of the extra_bits interface is confusing:
+passing extra_bits to __stack_depot_save makes it seem that the extra
+bits are somehow stored in stack depot. In reality, they are only
+embedded into a stack depot handle and are not used within stack depot.
 
-Rename next_pool_inited to next_pool_required and invert its value.
+Drop the extra_bits argument from __stack_depot_save and instead provide
+a new stack_depot_set_extra_bits function (similar to the exsiting
+stack_depot_get_extra_bits) that saves extra bits into a stack depot
+handle.
 
-Also annotate usages of next_pool_required with comments.
+Update the callers of __stack_depot_save to use the new interace.
+
+This change also fixes a minor issue in the old code: __stack_depot_save
+does not return NULL if saving stack trace fails and extra_bits is used.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- lib/stackdepot.c | 30 +++++++++++++++++++++---------
- 1 file changed, 21 insertions(+), 9 deletions(-)
 
+Changes v1->v2:
+- Mark stack_depot_set_extra_bits as __must_check.
+- Only assign extra bits in stack_depot_set_extra_bits for non-empty
+  handles.
+---
+ include/linux/stackdepot.h |  4 +++-
+ lib/stackdepot.c           | 42 ++++++++++++++++++++++++++++++--------
+ mm/kasan/common.c          |  2 +-
+ mm/kmsan/core.c            | 10 ++++++---
+ 4 files changed, 44 insertions(+), 14 deletions(-)
+
+diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
+index c4e3abc16b16..267f4b2634ee 100644
+--- a/include/linux/stackdepot.h
++++ b/include/linux/stackdepot.h
+@@ -57,7 +57,6 @@ static inline int stack_depot_early_init(void)	{ return 0; }
+ 
+ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+ 					unsigned int nr_entries,
+-					unsigned int extra_bits,
+ 					gfp_t gfp_flags, bool can_alloc);
+ 
+ depot_stack_handle_t stack_depot_save(unsigned long *entries,
+@@ -71,6 +70,9 @@ void stack_depot_print(depot_stack_handle_t stack);
+ int stack_depot_snprint(depot_stack_handle_t handle, char *buf, size_t size,
+ 		       int spaces);
+ 
++depot_stack_handle_t __must_check stack_depot_set_extra_bits(
++			depot_stack_handle_t handle, unsigned int extra_bits);
++
+ unsigned int stack_depot_get_extra_bits(depot_stack_handle_t handle);
+ 
+ #endif
 diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-index c4bc198c3d93..4df162a84bfe 100644
+index 4df162a84bfe..8c6e4e9cb535 100644
 --- a/lib/stackdepot.c
 +++ b/lib/stackdepot.c
-@@ -96,8 +96,14 @@ static int pool_index;
- static size_t pool_offset;
- /* Lock that protects the variables above. */
- static DEFINE_RAW_SPINLOCK(pool_lock);
--/* Whether the next pool is initialized. */
--static int next_pool_inited;
-+/*
-+ * Stack depot tries to keep an extra pool allocated even before it runs out
-+ * of space in the currently used pool.
-+ * This flag marks that this next extra pool needs to be allocated and
-+ * initialized. It has the value 0 when either the next pool is not yet
-+ * initialized or the limit on the number of pools is reached.
+@@ -357,7 +357,6 @@ static inline struct stack_record *find_stack(struct stack_record *bucket,
+  *
+  * @entries:		Pointer to storage array
+  * @nr_entries:		Size of the storage array
+- * @extra_bits:		Flags to store in unused bits of depot_stack_handle_t
+  * @alloc_flags:	Allocation gfp flags
+  * @can_alloc:		Allocate stack pools (increased chance of failure if false)
+  *
+@@ -369,10 +368,6 @@ static inline struct stack_record *find_stack(struct stack_record *bucket,
+  * If the stack trace in @entries is from an interrupt, only the portion up to
+  * interrupt entry is saved.
+  *
+- * Additional opaque flags can be passed in @extra_bits, stored in the unused
+- * bits of the stack handle, and retrieved using stack_depot_get_extra_bits()
+- * without calling stack_depot_fetch().
+- *
+  * Context: Any context, but setting @can_alloc to %false is required if
+  *          alloc_pages() cannot be used from the current context. Currently
+  *          this is the case from contexts where neither %GFP_ATOMIC nor
+@@ -382,7 +377,6 @@ static inline struct stack_record *find_stack(struct stack_record *bucket,
+  */
+ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+ 					unsigned int nr_entries,
+-					unsigned int extra_bits,
+ 					gfp_t alloc_flags, bool can_alloc)
+ {
+ 	struct stack_record *found = NULL, **bucket;
+@@ -471,8 +465,6 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+ 	if (found)
+ 		retval.handle = found->handle.handle;
+ fast_exit:
+-	retval.extra = extra_bits;
+-
+ 	return retval.handle;
+ }
+ EXPORT_SYMBOL_GPL(__stack_depot_save);
+@@ -493,7 +485,7 @@ depot_stack_handle_t stack_depot_save(unsigned long *entries,
+ 				      unsigned int nr_entries,
+ 				      gfp_t alloc_flags)
+ {
+-	return __stack_depot_save(entries, nr_entries, 0, alloc_flags, true);
++	return __stack_depot_save(entries, nr_entries, alloc_flags, true);
+ }
+ EXPORT_SYMBOL_GPL(stack_depot_save);
+ 
+@@ -576,6 +568,38 @@ int stack_depot_snprint(depot_stack_handle_t handle, char *buf, size_t size,
+ }
+ EXPORT_SYMBOL_GPL(stack_depot_snprint);
+ 
++/**
++ * stack_depot_set_extra_bits - Set extra bits in a stack depot handle
++ *
++ * @handle:	Stack depot handle returned from stack_depot_save()
++ * @extra_bits:	Value to set the extra bits
++ *
++ * Return: Stack depot handle with extra bits set
++ *
++ * Stack depot handles have a few unused bits, which can be used for storing
++ * user-specific information. These bits are transparent to the stack depot.
 + */
-+static int next_pool_required = 1;
- 
- static int __init disable_stack_depot(char *str)
++depot_stack_handle_t __must_check stack_depot_set_extra_bits(
++			depot_stack_handle_t handle, unsigned int extra_bits)
++{
++	union handle_parts parts = { .handle = handle };
++
++	/* Don't set extra bits on empty handles. */
++	if (!handle)
++		return 0;
++
++	parts.extra = extra_bits;
++	return parts.handle;
++}
++EXPORT_SYMBOL(stack_depot_set_extra_bits);
++
++/**
++ * stack_depot_get_extra_bits - Retrieve extra bits from a stack depot handle
++ *
++ * @handle:	Stack depot handle with extra bits saved
++ *
++ * Return: Extra bits retrieved from the stack depot handle
++ */
+ unsigned int stack_depot_get_extra_bits(depot_stack_handle_t handle)
  {
-@@ -222,10 +228,12 @@ EXPORT_SYMBOL_GPL(stack_depot_init);
- static void depot_init_pool(void **prealloc)
- {
- 	/*
-+	 * If the next pool is already initialized or the maximum number of
-+	 * pools is reached, do not use the preallocated memory.
- 	 * smp_load_acquire() here pairs with smp_store_release() below and
- 	 * in depot_alloc_stack().
- 	 */
--	if (smp_load_acquire(&next_pool_inited))
-+	if (!smp_load_acquire(&next_pool_required))
- 		return;
+ 	union handle_parts parts = { .handle = handle };
+diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+index 833bf2cfd2a3..50f4338b477f 100644
+--- a/mm/kasan/common.c
++++ b/mm/kasan/common.c
+@@ -43,7 +43,7 @@ depot_stack_handle_t kasan_save_stack(gfp_t flags, bool can_alloc)
+ 	unsigned int nr_entries;
  
- 	/* Check if the current pool is not yet allocated. */
-@@ -243,10 +251,13 @@ static void depot_init_pool(void **prealloc)
- 			*prealloc = NULL;
- 		}
- 		/*
-+		 * At this point, either the next pool is initialized or the
-+		 * maximum number of pools is reached. In either case, take
-+		 * note that initializing another pool is not required.
- 		 * This smp_store_release pairs with smp_load_acquire() above
- 		 * and in stack_depot_save().
- 		 */
--		smp_store_release(&next_pool_inited, 1);
-+		smp_store_release(&next_pool_required, 0);
- 	}
+ 	nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
+-	return __stack_depot_save(entries, nr_entries, 0, flags, can_alloc);
++	return __stack_depot_save(entries, nr_entries, flags, can_alloc);
  }
  
-@@ -271,11 +282,13 @@ depot_alloc_stack(unsigned long *entries, int size, u32 hash, void **prealloc)
- 		pool_index++;
- 		pool_offset = 0;
- 		/*
-+		 * If the maximum number of pools is not reached, take note
-+		 * that the next pool needs to initialized.
- 		 * smp_store_release() here pairs with smp_load_acquire() in
- 		 * stack_depot_save() and depot_init_pool().
- 		 */
- 		if (pool_index + 1 < DEPOT_MAX_POOLS)
--			smp_store_release(&next_pool_inited, 0);
-+			smp_store_release(&next_pool_required, 1);
- 	}
+ void kasan_set_track(struct kasan_track *track, gfp_t flags)
+diff --git a/mm/kmsan/core.c b/mm/kmsan/core.c
+index 112dce135c7f..f710257d6867 100644
+--- a/mm/kmsan/core.c
++++ b/mm/kmsan/core.c
+@@ -69,13 +69,15 @@ depot_stack_handle_t kmsan_save_stack_with_flags(gfp_t flags,
+ {
+ 	unsigned long entries[KMSAN_STACK_DEPTH];
+ 	unsigned int nr_entries;
++	depot_stack_handle_t handle;
  
- 	/* Assign the preallocated memory to a pool if required. */
-@@ -406,14 +419,13 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
- 		goto exit;
+ 	nr_entries = stack_trace_save(entries, KMSAN_STACK_DEPTH, 0);
  
- 	/*
--	 * Check if the current or the next stack pool need to be initialized.
--	 * If so, allocate the memory - we won't be able to do that under the
--	 * lock.
-+	 * Check if another stack pool needs to be initialized. If so, allocate
-+	 * the memory now - we won't be able to do that under the lock.
- 	 *
- 	 * The smp_load_acquire() here pairs with smp_store_release() to
- 	 * |next_pool_inited| in depot_alloc_stack() and depot_init_pool().
+ 	/* Don't sleep (see might_sleep_if() in __alloc_pages_nodemask()). */
+ 	flags &= ~__GFP_DIRECT_RECLAIM;
+ 
+-	return __stack_depot_save(entries, nr_entries, extra, flags, true);
++	handle = __stack_depot_save(entries, nr_entries, flags, true);
++	return stack_depot_set_extra_bits(handle, extra);
+ }
+ 
+ /* Copy the metadata following the memmove() behavior. */
+@@ -215,6 +217,7 @@ depot_stack_handle_t kmsan_internal_chain_origin(depot_stack_handle_t id)
+ 	u32 extra_bits;
+ 	int depth;
+ 	bool uaf;
++	depot_stack_handle_t handle;
+ 
+ 	if (!id)
+ 		return id;
+@@ -250,8 +253,9 @@ depot_stack_handle_t kmsan_internal_chain_origin(depot_stack_handle_t id)
+ 	 * positives when __stack_depot_save() passes it to instrumented code.
  	 */
--	if (unlikely(can_alloc && !smp_load_acquire(&next_pool_inited))) {
-+	if (unlikely(can_alloc && smp_load_acquire(&next_pool_required))) {
- 		/*
- 		 * Zero out zone modifiers, as we don't have specific zone
- 		 * requirements. Keep the flags related to allocation in atomic
+ 	kmsan_internal_unpoison_memory(entries, sizeof(entries), false);
+-	return __stack_depot_save(entries, ARRAY_SIZE(entries), extra_bits,
+-				  GFP_ATOMIC, true);
++	handle = __stack_depot_save(entries, ARRAY_SIZE(entries), GFP_ATOMIC,
++				    true);
++	return stack_depot_set_extra_bits(handle, extra_bits);
+ }
+ 
+ void kmsan_internal_set_shadow_origin(void *addr, size_t size, int b,
 -- 
 2.25.1
 
