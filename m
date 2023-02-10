@@ -2,92 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E85D6919CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 09:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8F96919D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 09:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbjBJILr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 03:11:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55156 "EHLO
+        id S231490AbjBJIM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 03:12:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbjBJILo (ORCPT
+        with ESMTP id S231338AbjBJIMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 03:11:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3720B80750;
-        Fri, 10 Feb 2023 00:11:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9CB05B823FD;
-        Fri, 10 Feb 2023 08:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 323A8C4339C;
-        Fri, 10 Feb 2023 08:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676016618;
-        bh=TkK1d0F2Jd7iBMn6kS+nEHwJOYnzkMhrZkysSC79Rx4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=jefNzz7QYMfnRDFRbeWPrPrmpV0eqU6WL0Y6AMTZYlWonyu+kyeR5m8JLvdwfIzQj
-         S+l+vPnrcu0HKOaPVqQvC7+GSlvAmtAqsTYaxvbHTuOs85344L6OCygZ7TsXTGvZUj
-         NJR0AF8aJVU1CMCvkmi+5nDyVSYjGEhCxsx70VzLQKjNb4Bx+Tn1iagQt9xiLhymgb
-         zpHwtmuqXzPY3ARrpnu64P+r1OSbKxETfn8b57xHbHEofjW7YDlJ7IjuDxV2FXtx56
-         vdHNmFugS+Uj/bqbsN+I7RXAOFxe08ydFegV8gzTR1JurYwlC3jmx1oW5HqE2/kpMA
-         HNaPAAEnk5iKw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1CF1DC41677;
-        Fri, 10 Feb 2023 08:10:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 10 Feb 2023 03:12:55 -0500
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [IPv6:2001:41d0:203:375::b6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B46A35242
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 00:12:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/4] rxrpc: Miscellaneous changes
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167601661811.12999.10073267572686998349.git-patchwork-notify@kernel.org>
-Date:   Fri, 10 Feb 2023 08:10:18 +0000
-References: <20230208102750.18107-1-dhowells@redhat.com>
-In-Reply-To: <20230208102750.18107-1-dhowells@redhat.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, marc.dionne@auristor.com,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1676016747;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0iIN3s9vceowifsKNRpYFbtpERy3OAkbKuMLhL+6OCs=;
+        b=xm7MF3M1UrxQOTkLJJxrLvzbdGX2ezmqbvS9gW3dvv2NWG2URyMWdtqyRk/zFHJsfCtjUO
+        2lC9s78TQMa8MDMu6eHYFstTI746vThdY0/yyHI0maG0q3FCDMlE2umsoqdagokbQQycxE
+        a0qVc7I+P/SVKz4iniAWyfwPsPU4QJ8=
+Date:   Fri, 10 Feb 2023 08:12:23 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   "Yajun Deng" <yajun.deng@linux.dev>
+Message-ID: <58d940aba3433bc6928e91c2272a8410@linux.dev>
+Subject: Re: [PATCH v2] mm/page_alloc: optimize find_suitable_fallback()
+ and fallbacks array
+To:     "Vlastimil Babka" <vbabka@suse.cz>, akpm@linux-foundation.org
+Cc:     mgorman@techsingularity.net, david@redhat.com, rppt@linux.ibm.com,
+        osalvador@suse.de, rppt@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ziy@nvidia.com
+In-Reply-To: <c68af237-11b1-aafa-3a0b-132690f825d6@suse.cz>
+References: <c68af237-11b1-aafa-3a0b-132690f825d6@suse.cz>
+ <626a5f4c4996f57631a8e1877c7646e5@linux.dev>
+ <494D9F5D-33A4-48B4-911B-9A75CFC9BC67@nvidia.com>
+ <4C196D76-49A9-4B06-A51F-D8A13109DF3B@nvidia.com>
+ <20230209101144.496144-1-yajun.deng@linux.dev>
+ <ddc2d9001ef9d44651b62869ff9575b6@linux.dev>
+ <fa878915627b52d2e6fdf838b96a2f2f@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by David Howells <dhowells@redhat.com>:
-
-On Wed,  8 Feb 2023 10:27:46 +0000 you wrote:
-> Here are some miscellaneous changes for rxrpc:
-> 
->  (1) Use consume_skb() rather than kfree_skb_reason().
-> 
->  (2) Fix unnecessary waking when poking and already-poked call.
-> 
->  (3) Add ack.rwind to the rxrpc_tx_ack tracepoint as this indicates how
->      many incoming DATA packets we're telling the peer that we are
->      currently willing to accept on this call.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,1/4] rxrpc: Use consume_skb() rather than kfree_skb_reason()
-    https://git.kernel.org/netdev/net-next/c/16d5677ef104
-  - [net-next,2/4] rxrpc: Fix overwaking on call poking
-    https://git.kernel.org/netdev/net-next/c/a33395ab85b9
-  - [net-next,3/4] rxrpc: Trace ack.rwind
-    https://git.kernel.org/netdev/net-next/c/f789bff2deb3
-  - [net-next,4/4] rxrpc: Reduce unnecessary ack transmission
-    https://git.kernel.org/netdev/net-next/c/5a2c5a5b0829
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+February 10, 2023 3:58 PM, "Vlastimil Babka" <vbabka@suse.cz> wrote:=0A=
+=0A> On 2/10/23 03:51, Yajun Deng wrote:=0A> =0A>> February 10, 2023 10:3=
+3 AM, "Yajun Deng" <yajun.deng@linux.dev> wrote:=0A>> =0A>>> February 10,=
+ 2023 10:14 AM, "Zi Yan" <ziy@nvidia.com> wrote:=0A>> =0A>> On 9 Feb 2023=
+, at 20:57, Yajun Deng wrote:=0A>> =0A>> February 9, 2023 11:50 PM, "Zi Y=
+an" <ziy@nvidia.com> wrote:=0A>> =0A>> On 9 Feb 2023, at 5:11, Yajun Deng=
+ wrote:=0A>> There is no need to execute the next loop if it not return i=
+n the first=0A>> loop. So add a break at the end of the loop.=0A>> =0A>> =
+Can you explain why? If it is the case, MIGRATE_UNMOVABLE cannot fall bac=
+k=0A>> to MIGRATE_MOVABLE? And MIGRATE_MOVABLE cannot fall back to MIGRAT=
+E_UNMOVABLE?=0A>> And MIGRATE_RECLAIMABLE cannot fall back to MIGRATE_MOV=
+ABLE?=0A>> The return in the loop is only related to 'order', 'migratetyp=
+e' and 'only_stealable'=0A>> variables. Even if it execute the next loop,=
+ it can't change the result. So the loop=0A>> can be broken if the first =
+loop can't return.=0A>> =0A>> OK. Got it. Would the code below look bette=
+r?=0A>> =0A>> for (i =3D 0; i < MIGRATE_PCPTYPES - 1 ; i++) {=0A>> fallba=
+ck_mt =3D fallbacks[migratetype][i];=0A>> if (free_area_empty(area, fallb=
+ack_mt))=0A>> continue;=0A>> }=0A>> =0A>> if (can_steal_fallback(order, m=
+igratetype))=0A>> *can_steal =3D true;=0A>> =0A>> if (!only_stealable || =
+*can_steal)=0A>> return fallback_mt;=0A>> =0A>> return -1;=0A>>> Yes, I'l=
+l submit a v3 patch.=0A>>> Thanks.=0A>> =0A>> I found a logical error in =
+your code. It should be like this:=0A>> =0A>> for (i =3D 0; i < MIGRATE_P=
+CPTYPES - 1 ; i++) {=0A>> fallback_mt =3D fallbacks[migratetype][i];=0A>>=
+ if (!free_area_empty(area, fallback_mt))=0A>> break;=0A>> }=0A>> =0A>> i=
+f (can_steal_fallback(order, migratetype))=0A>> *can_steal =3D true;=0A>>=
+ =0A>> if (!only_stealable || *can_steal)=0A>> return fallback_mt;=0A>> =
+=0A>> return -1;=0A>> =0A>> This code will modify the logic to the opposi=
+te.=0A> =0A> It's still wrong, IMHO. If all fallbacks have free_area_empt=
+y(), it will=0A> return the last one and not -1. Also will set *can_steal=
+ in such case.=0A> =0A=0AYes, you are right.=0A=0A>> So can anyone tell m=
+e if I should use this code or the v2 patch?=0A> =0A> Once that bugs are =
+fixed, the result will probably not look much better than=0A> v2, so I do=
+n't mind keeping v2.=0A=0AI agree with that.
