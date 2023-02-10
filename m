@@ -2,130 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40895692392
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D79B692396
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:46:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232647AbjBJQpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 11:45:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
+        id S232690AbjBJQqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 11:46:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232631AbjBJQo7 (ORCPT
+        with ESMTP id S231680AbjBJQqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 11:44:59 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A287F2387B
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:44:58 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id y11so2037784pjc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:44:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NJHZLI3U8xm4BvE76qEZmYthnYLuvPmE/9R6s6JH2WE=;
-        b=PGoM0On23xN1z29b+slMgbz1TJZwnHKNRVJbC7LasGyUh0C3QyF0n0O8XXt+cqNbLc
-         hJ3dGJWA4ApfbIMG8xBX7DW8YIUESz9H2waScJMhWCHXciylEmamqDndyd0hSbz6hTdU
-         kMm+VcXDMiaQTm+JMifWtE5MXsPj5Ri27EdJ62borjbB/5riiRhUb4EHUx3nd08uv0c5
-         GS9S9lEin1mSvQot9SnmuiXPZRyKXxwSE/Xj19CEvgqn7JU0MTQsmjNldmMy7QvC9pnD
-         dNMa4zBYDMdlNaobbmicUzL/3IY2ZE+oOCpQGMg4adbatyHii9R9L7J5XyvREuLaIizs
-         vmhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NJHZLI3U8xm4BvE76qEZmYthnYLuvPmE/9R6s6JH2WE=;
-        b=Gv0HXhQmbFwKKe2Wjf0154cSSVRZKBRfU6rQVQK2NND5vidPC8VaEY4HTYbDHcjqJR
-         G5sedkr4QPuPNWeuiEvoZN2Q0cge85QEKhwvsdO6rVgz/P9D7ZZyauklK7+7Wy94TH/7
-         mJQ6cbwVAcy3VM7qPGquJOIfZidGDNIX72r8+diOaRUkCYD3ZUPwQy5B4gbL7dSwMo76
-         695ya1/dloNAVnSaX0GRJnbkXL2H3i9mLy7Xt9+P0zI7cweZfnjdOKsVnc2UbhdT11XS
-         NXwTikFDgM22tNU7CG+6TeZe2IhxWT7V940/79uNL7jwQNkBbB9GGI1hhx4NI47jPKAB
-         jIjg==
-X-Gm-Message-State: AO0yUKV8bABVe/Tn5aouJGmGuKmwl4VYqHc8OXiFYw8SFOYyyAgNT9yI
-        uP2xQPbNZNrAKoFhstBQ0k3YLw==
-X-Google-Smtp-Source: AK7set8EuUMVEwEQRgYZK/t2nvIEb1AnNNve/LFQPz8u9HOOPOjZgVuNG4+d/sNDJYJaKvLnXUtKGw==
-X-Received: by 2002:a17:902:e551:b0:19a:6cd2:a658 with SMTP id n17-20020a170902e55100b0019a6cd2a658mr200687plf.7.1676047497966;
-        Fri, 10 Feb 2023 08:44:57 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id i21-20020aa78d95000000b0058119caa82csm3489689pfr.205.2023.02.10.08.44.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 08:44:57 -0800 (PST)
-Date:   Fri, 10 Feb 2023 16:44:53 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Santosh Shukla <santosh.shukla@amd.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        Sandipan Das <sandipan.das@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
-        Jing Liu <jing2.liu@intel.com>,
-        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v2 10/11] KVM: SVM: implement support for vNMI
-Message-ID: <Y+Z0hUGLkwADyTNu@google.com>
-References: <20221129193717.513824-1-mlevitsk@redhat.com>
- <20221129193717.513824-11-mlevitsk@redhat.com>
- <Y9mwz/G6+G8NSX3+@google.com>
- <439a8cfc-fe2d-436d-2ea2-b795eb983b9a@amd.com>
+        Fri, 10 Feb 2023 11:46:45 -0500
+Received: from srv6.fidu.org (srv6.fidu.org [159.69.62.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5481A212A9;
+        Fri, 10 Feb 2023 08:46:43 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by srv6.fidu.org (Postfix) with ESMTP id D4885C800A2;
+        Fri, 10 Feb 2023 17:46:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        tuxedocomputers.com; h=content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:date:subject:subject:from:from; s=
+        default; t=1676047600; x=1677862001; bh=lj97MTYeLUXW3JItQJS6lNK9
+        mm2JV8JsthYXirBOGx8=; b=JuM4kqBvklfLXluBBfWLjKv1niL1TfQWHYfbihPU
+        UJz3nZfg6xwJE8ow7Fz2sDabohr6Cnyyn4kkEEzVeUIrd08Kms7rgt/Hgcgv+nnp
+        oCAstjE93qjfoXMGpf8S0PBe2F9c0qODJws5uxzuqGalkWkP21EEXWmL4hTkHhGv
+        ZFw=
+X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
+Received: from srv6.fidu.org ([127.0.0.1])
+        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10026)
+        with LMTP id 7xQoZMhkBKNk; Fri, 10 Feb 2023 17:46:40 +0100 (CET)
+Received: from wsembach-tuxedo.fritz.box (host-88-217-226-44.customer.m-online.net [88.217.226.44])
+        (Authenticated sender: wse@tuxedocomputers.com)
+        by srv6.fidu.org (Postfix) with ESMTPA id 18BC0C8009D;
+        Fri, 10 Feb 2023 17:46:40 +0100 (CET)
+From:   Werner Sembach <wse@tuxedocomputers.com>
+To:     mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        linus.walleij@linaro.org, brgl@bgdev.pl,
+        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] gpiolib: acpi: Add a ignore wakeup quirk for Clevo NH5xAx
+Date:   Fri, 10 Feb 2023 17:46:36 +0100
+Message-Id: <20230210164636.628462-1-wse@tuxedocomputers.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <439a8cfc-fe2d-436d-2ea2-b795eb983b9a@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023, Santosh Shukla wrote:
-> On 2/1/2023 5:52 AM, Sean Christopherson wrote:
-> So you mean.. In vNMI mode, KVM should never need to request NMI window and eventually
-> it reaches to NMI window then WARN_ON and cont.. to single step... so modified code change
-> may look something like below:
-> 
-> static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
-> {
->         struct vcpu_svm *svm = to_svm(vcpu);
-> 
->         /*
->          * With vNMI we should never need an NMI window.
->          * and if we reach here then better WARN and continue to single step.
->          */
->         WARN_ON_ONCE(is_vnmi_enabled(svm));
-> 
->         if (svm_get_nmi_mask(vcpu) && !svm->awaiting_iret_completion)
->                 return; /* IRET will cause a vm exit */
-> 
->         if (!gif_set(svm)) {
->                 if (vgif)
->                         svm_set_intercept(svm, INTERCEPT_STGI);
->                 return; /* STGI will cause a vm exit */
->         }
-> 
->         /*
->          * Something prevents NMI from been injected. Single step over possible
->          * problem (IRET or exception injection or interrupt shadow)
->          */
-> 
->         svm->nmi_singlestep_guest_rflags = svm_get_rflags(vcpu);
->         svm->vmcb->save.rflags |= (X86_EFLAGS_TF | X86_EFLAGS_RF);
->         svm->nmi_singlestep = true;
-> }
-> 
-> Does that make sense?
+commit 1796f808e4bb ("HID: i2c-hid: acpi: Stop setting wakeup_capable")
+changed the policy such that I2C touchpads may be able to wake up the
+system by default if the system is configured as such.
 
-Yep.  Though please avoid "we" and other pronouns in changelogs and comments,
-and wrap as close to the boundary as possible.
+However on Clevo NH5xAx/TUXEDO XA15 Gen10 there is a mistake in the ACPI
+tables that the TP_ATTN# signal connected to GPIO 10 is configured as
+ActiveLow and level triggered but connected to a pull up. As soon as the
+system suspends the touchpad loses power and then the system wakes up.
+
+To avoid this problem, introduce a quirk for this model that will prevent
+the wakeup capability for being set for GPIO 10.
+
+Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+Cc: stable@vger.kernel.org # v6.1+
+---
+ drivers/gpio/gpiolib-acpi.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+index e2ab4d5253bea..82e8e43582eba 100644
+--- a/drivers/gpio/gpiolib-acpi.c
++++ b/drivers/gpio/gpiolib-acpi.c
+@@ -1612,6 +1612,18 @@ static const struct dmi_system_id gpiolib_acpi_quirks[] __initconst = {
+ 			.ignore_wake = "ELAN0415:00@9",
+ 		},
+ 	},
++	{
++		/*
++		 * Spurious wakeups from TP_ATTN# pin
++		 * Found in BIOS 1.7.7
++		 */
++		.matches = {
++			DMI_MATCH(DMI_BOARD_NAME, "NH5xAx"),
++		},
++		.driver_data = &(struct acpi_gpiolib_dmi_quirk) {
++			.ignore_wake = "SYNA1202:00@16",
++		},
++	},
+ 	{} /* Terminating entry */
+ };
+ 
+-- 
+2.34.1
+
