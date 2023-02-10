@@ -2,163 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DAE46924C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DED6924C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:47:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233014AbjBJRrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 12:47:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
+        id S232990AbjBJRrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 12:47:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232929AbjBJRqz (ORCPT
+        with ESMTP id S232965AbjBJRrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 12:46:55 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A15F61CAE3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:46:53 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B23BDC14;
-        Fri, 10 Feb 2023 09:47:35 -0800 (PST)
-Received: from [192.168.122.164] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ED80D3F71E;
-        Fri, 10 Feb 2023 09:46:48 -0800 (PST)
-Message-ID: <f6452cdd-65ff-34b8-bab0-5c06416da5f6@arm.com>
-Date:   Fri, 10 Feb 2023 11:46:36 -0600
+        Fri, 10 Feb 2023 12:47:13 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662161CAE3;
+        Fri, 10 Feb 2023 09:47:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1676051205; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=UQ3aLwYRNiudVAC8MzpRBVjQwZMc9SlQabizeZewOVzjZ3WnmCWnquR6zOh+u+LRXdw7QdTVQNxfOos7pO368pgVF3GHRZYM5Sn615H1Gkqh2yJiP4sDpQfeBfHofnASvOeoa93bH1Zpjr2L7viNQx91Tpdnny5RnTGQxKo/78w=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1676051205; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=iJbOjnXEW4dyp/XUoILzsS4muhY8sjkr0h1zI2/NyAE=; 
+        b=C8bX1R6KC/+eMgf8rdL41qdiRRA4jFo7ppraM2S6ZpddmNWvTZn6oI3BY2P0Al7tgl20iD5FpvagEmfNAnIZ6ozBMH/fxIG7ziLHulPEjS/Rkyw/bDvh5u3/DM9rd1cHXaAKltlOmwcuvpSBf3oGpaxk+FlYAcKa5wNViIvl/Ls=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1676051205;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=iJbOjnXEW4dyp/XUoILzsS4muhY8sjkr0h1zI2/NyAE=;
+        b=JtmY47SxtBqshYc9GF1qQcVRCvOr4Yc29InmE8vE+IPa2L+0kdGNPAssT91Ort73
+        S2/7xQbabuih3JP9Ya2rLl3D4RA7AQf2G5a/0Q+KwHcfxPZQ7k0ro0VBLM92yqA0FVG
+        bfuYVDwWZm6YUFL1hSnAxnCFnRYjwBaF5+YUbwIw=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1676051202563779.3472396397366; Fri, 10 Feb 2023 09:46:42 -0800 (PST)
+Message-ID: <3ca26ba2-80f5-32a2-0357-d91c87efd1c0@arinc9.com>
+Date:   Fri, 10 Feb 2023 20:46:38 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 2/4] mips: dts: ralink: mt7621: add phandle to system
+ controller node for watchdog
 Content-Language: en-US
-To:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Cc:     kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Marc Zyngier <marc.zyngier@arm.com>
-From:   Jeremy Linton <jeremy.linton@arm.com>
-Subject: Circular lockdep in kvm_reset_vcpu() ?
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-watchdog@vger.kernel.org
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        tsbogend@alpha.franken.de, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <20230210173841.705783-1-sergio.paracuellos@gmail.com>
+ <20230210173841.705783-3-sergio.paracuellos@gmail.com>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20230210173841.705783-3-sergio.paracuellos@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Could you also change the node name to watchdog@100? make dtbs_check 
+points it out:
 
-I saw this pop yesterday:
+wdt@100: $nodename:0: 'wdt@100' does not match '^watchdog(@.*|-[0-9a-f])?$'
 
-[   78.333360] ======================================================
-[   78.339541] WARNING: possible circular locking dependency detected
-[   78.345721] 6.2.0-rc7+ #19 Not tainted
-[   78.349470] ------------------------------------------------------
-[   78.355647] qemu-system-aar/859 is trying to acquire lock:
-[   78.361130] ffff5aa69269eba0 (&host_kvm->lock){+.+.}-{3:3}, at: 
-kvm_reset_vcpu+0x34/0x274
-[   78.369344]
-[   78.369344] but task is already holding lock:
-[   78.375182] ffff5aa68768c0b8 (&vcpu->mutex){+.+.}-{3:3}, at: 
-kvm_vcpu_ioctl+0x8c/0xba0
-[   78.383133]
-[   78.383133] which lock already depends on the new lock.
-[   78.383133]
-[   78.391318]
-[   78.391318] the existing dependency chain (in reverse order) is:
-[   78.398811]
-[   78.398811] -> #1 (&vcpu->mutex){+.+.}-{3:3}:
-[   78.404682]        __lock_acquire+0x480/0x9c0
-[   78.409068]        lock_acquire.part.0+0xf0/0x240
-[   78.413806]        lock_acquire+0xa8/0x204
-[   78.417934]        __mutex_lock+0xac/0x460
-[   78.422053]        mutex_lock_nested+0x34/0x40
-[   78.426517]        kvm_vm_ioctl_create_vcpu+0x17c/0x474
-[   78.431768]        kvm_vm_ioctl+0x67c/0xb00
-[   78.435966]        __arm64_sys_ioctl+0xb4/0x100
-[   78.440516]        invoke_syscall+0x78/0xfc
-[   78.444714]        el0_svc_common.constprop.0+0x68/0x124
-[   78.450044]        do_el0_svc+0x34/0x4c
-[   78.453892]        el0_svc+0x50/0x140
-[   78.457571]        el0t_64_sync_handler+0xf4/0x120
-[   78.462381]        el0t_64_sync+0x194/0x198
-[   78.466580]
-[   78.466580] -> #0 (&host_kvm->lock){+.+.}-{3:3}:
-[   78.472714]        check_prev_add+0xa4/0x8d4
-[   78.477005]        validate_chain+0x420/0x590
-[   78.481381]        __lock_acquire+0x480/0x9c0
-[   78.485759]        lock_acquire.part.0+0xf0/0x240
-[   78.490483]        lock_acquire+0xa8/0x204
-[   78.494598]        __mutex_lock+0xac/0x460
-[   78.498711]        mutex_lock_nested+0x34/0x40
-[   78.503171]        kvm_reset_vcpu+0x34/0x274
-[   78.507461]        kvm_vcpu_set_target+0x10c/0x154
-[   78.512274]        kvm_arch_vcpu_ioctl_vcpu_init+0x20/0xf0
-[   78.517782]        kvm_arch_vcpu_ioctl+0x398/0x550
-[   78.522595]        kvm_vcpu_ioctl+0x5f8/0xba0
-[   78.526973]        __arm64_sys_ioctl+0xb4/0x100
-[   78.531522]        invoke_syscall+0x78/0xfc
-[   78.535719]        el0_svc_common.constprop.0+0x68/0x124
-[   78.541048]        do_el0_svc+0x34/0x4c
-[   78.544897]        el0_svc+0x50/0x140
-[   78.548574]        el0t_64_sync_handler+0xf4/0x120
-[   78.553384]        el0t_64_sync+0x194/0x198
-[   78.557581]
-[   78.557581] other info that might help us debug this:
-[   78.557581]
-[   78.565606]  Possible unsafe locking scenario:
-[   78.565606]
-[   78.571541]        CPU0                    CPU1
-[   78.576080]        ----                    ----
-[   78.580606]   lock(&vcpu->mutex);
-[   78.583922]                                lock(&host_kvm->lock);
-[   78.590017]                                lock(&vcpu->mutex);
-[   78.595851]   lock(&host_kvm->lock);
-[   78.599426]
-[   78.599426]  *** DEADLOCK ***
-[   78.599426]
-[   78.605344] 1 lock held by qemu-system-aar/859:
-[   78.609873]  #0: ffff5aa68768c0b8 (&vcpu->mutex){+.+.}-{3:3}, at: 
-kvm_vcpu_ioctl+0x8c/0xba0
-[   78.618245]
-[   78.618245] stack backtrace:
-[   78.622599] CPU: 1 PID: 859 Comm: qemu-system-aar Not tainted 
-6.2.0-rc7+ #19
-[   78.629650] Hardware name: Raspberry Pi Foundation Raspberry Pi 4 
-Model B/Raspberry Pi 4 Model B, BIOS EDK2-DEV 11/07/2022
-[   78.640696] Call trace:
-[   78.643137]  dump_backtrace+0xe8/0x140
-[   78.646885]  show_stack+0x20/0x30
-[   78.650197]  dump_stack_lvl+0x88/0xb4
-[   78.653858]  dump_stack+0x18/0x34
-[   78.657171]  print_circular_bug+0x1f8/0x200
-[   78.661355]  check_noncircular+0x13c/0x150
-[   78.665451]  check_prev_add+0xa4/0x8d4
-[   78.669199]  validate_chain+0x420/0x590
-[   78.673035]  __lock_acquire+0x480/0x9c0
-[   78.676871]  lock_acquire.part.0+0xf0/0x240
-[   78.681055]  lock_acquire+0xa8/0x204
-[   78.684629]  __mutex_lock+0xac/0x460
-[   78.688203]  mutex_lock_nested+0x34/0x40
-[   78.692124]  kvm_reset_vcpu+0x34/0x274
-[   78.695873]  kvm_vcpu_set_target+0x10c/0x154
-[   78.700144]  kvm_arch_vcpu_ioctl_vcpu_init+0x20/0xf0
-[   78.705110]  kvm_arch_vcpu_ioctl+0x398/0x550
-[   78.709380]  kvm_vcpu_ioctl+0x5f8/0xba0
-[   78.713217]  __arm64_sys_ioctl+0xb4/0x100
-[   78.717225]  invoke_syscall+0x78/0xfc
-[   78.720885]  el0_svc_common.constprop.0+0x68/0x124
-[   78.725674]  do_el0_svc+0x34/0x4c
-[   78.728986]  el0_svc+0x50/0x140
-[   78.732126]  el0t_64_sync_handler+0xf4/0x120
-[   78.736395]  el0t_64_sync+0x194/0x198
+Thanks.
+Arınç
 
-
-It appears to be triggered by the new commit 42a90008f890a ('KVM: Ensure 
-lockdep knows about kvm->lock vs. vcpu->mutex ordering rule') which is 
-detecting the vcpu lock grabbed by kvm_vcpu_ioctl() and then the kvm 
-mutext grabbed by kvm_reset_vcpu().
-
-This is 6.2rc7 configured for fedora-debug and qemu on the rpi4.
-
-Thanks,
+On 10.02.2023 20:38, Sergio Paracuellos wrote:
+> To allow to access system controller registers from watchdog driver code
+> add a phandle in the watchdog 'wdt' node. This avoid using arch dependent
+> operations in driver code.
+> 
+> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> ---
+>   arch/mips/boot/dts/ralink/mt7621.dtsi | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
+> index 5ca40fd21..764916eaf 100644
+> --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
+> +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
+> @@ -73,6 +73,7 @@ sysc: syscon@0 {
+>   		wdt: wdt@100 {
+>   			compatible = "mediatek,mt7621-wdt";
+>   			reg = <0x100 0x100>;
+> +			mediatek,sysctl = <&sysc>;
+>   		};
+>   
+>   		gpio: gpio@600 {
