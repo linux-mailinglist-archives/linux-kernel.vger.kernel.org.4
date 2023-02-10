@@ -2,75 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE520692580
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F367E692585
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:42:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233125AbjBJSlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 13:41:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33714 "EHLO
+        id S233130AbjBJSmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 13:42:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbjBJSlW (ORCPT
+        with ESMTP id S233134AbjBJSmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 13:41:22 -0500
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0146211E8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:41:21 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-52ee632329dso5660267b3.6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:41:21 -0800 (PST)
+        Fri, 10 Feb 2023 13:42:01 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5437823665
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:41:58 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id o8so5009195pls.11
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:41:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HoyBTwj66Ay0J3w/gr1HIoKq5C1qctdqphazc4onVf8=;
-        b=iRmtp991KmxEx0dOBrpH1g6b6EdUK4j8Wp9fZ66mBCVPfNmsYORt0SSta+4mrRDGwR
-         tyB1WFfPyIw6QQeUc0r96dotmtbpBGf7ipwUfhTmn7LHt88IvVJ0hXO7mF2OFso63GDd
-         3zV2AJUxXqTafq6Ds0LCAGNAoSvLrmVDOW+o7iE6hWarrNNV6fvjH8E/YrAca/Ko9gL5
-         VXB6BQ+oRY++j+4pIN1G4dRIZVDxMM/3SOeYfc09VSkTqBg8nzPOPkNm+FPzUZnKa8RJ
-         zCds5uIodyz/JBOXF0CTYV6GpGYhAupwNJXt0H3KaZNhClmVxCqM9JsMdv1MgDmN29EG
-         HVIQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ok45EUB5a0lrC1G1VBEVIJghKeOSx8dIT5YrcpXaZ2U=;
+        b=GgjbQSZy1IdPTox+nR5ZLWTTXO7nzY/UMimwyDKci+qHnDHiXVnPsr/YKUeoxdwuCF
+         zRyXiMSJLLFbPedh2Ek6TS5A4Tp5q9b4CKjWwJ8AWSfUOkzWDDf0i4Wsuvxw7WcBNMwX
+         yBPsHXrxMECfexaRc6rBcBK8ib7PFOK5jxBmM3Bj/mLNrFrkHfQPotqyXTQ83lRqcGpH
+         Wgb8FDbkydZZgOKI95IsGhjydWszVFbReaoR+JgIwemL3x7hLv25HLQ9iA3PxJqAsswF
+         7gMIiQi7gtC8Zf/qPhn88buWnIrBU+9LuQqHhogX1qcG2uorcOYPD9koLiIuNrvumYBx
+         wNAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HoyBTwj66Ay0J3w/gr1HIoKq5C1qctdqphazc4onVf8=;
-        b=vZhqN2AbFBCUEf9zJ1+ChPoGi7Kf7Bh8kU9r7puUyeKQ9HGfUAyZfcWEtLwpgOMpmV
-         dpMwO02bNbZX5IA7e04T8sfKdpVG0yuEnwSZnHyqdEW6ifDDQJn5Qzx5clcbDbrcz81r
-         N37IIM9dHC6X2Gd4orz1SFzJqMFEEpSajhLbB1js6VFPJWvCe4Jhn3JDuoMYKZFIN+6I
-         BMSdNLH36c4OqLj9g/2ZIqncWRYR/UCx3f+1kkcVm4IkHBvzwVpnlD5QGCKgaeRpPmWZ
-         pXGYaIKqcMM+b0/3DdzeMLLQtIX+9oHK20zG6PRqJ7Ekh4lbc7zElJK03MN8F7shEtE5
-         isNQ==
-X-Gm-Message-State: AO0yUKX6TTjFmeeED8zqe0B9qVHAddd7fa7hG9c89M3LJ/ASeMzsuLrT
-        ukGswTzv/UVoMJFEQaiy0QMOHvJG5idjLaDy8+MeLA==
-X-Google-Smtp-Source: AK7set+XALIOg+YZHD0C3umzElPccXtvGEpiGklhX9RSc5MDbads2a2nFgpHbx+mkz4Yp5WFFV1zzFXykk/lm9/IKYI=
-X-Received: by 2002:a81:7406:0:b0:52e:e6ed:30ae with SMTP id
- p6-20020a817406000000b0052ee6ed30aemr17351ywc.558.1676054480876; Fri, 10 Feb
- 2023 10:41:20 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ok45EUB5a0lrC1G1VBEVIJghKeOSx8dIT5YrcpXaZ2U=;
+        b=m8oDX57s9MkgiwKQ3fRv05WctA4cv/hFhefH34VTHKPl0UuJk69+1nOdqiFYaIpXyk
+         jA76M+YICcmLr4gfHG9Rd4Uy9XdisEwMbdvqBuf1JiFB/3l0tFN38qmbYxyQWTj5+oMk
+         1HTYi8y/DPZC2ZN9Lc1Q0g2Jo3IYGkSaa71Xwy5A1uWFhHa8LL+/QaQO7FSyVIuMUkco
+         MHazvXu/k7SaFf5F7FZ8YuHFpY1tbXjaUCRbWbXw5wRDSA5Htek9WhG69Nrmq7Da35sh
+         HT7UX6T1JAFisS+TBNr+ADzhRbHcP1luksrYGy/a0vFke0meljOmxjAZGnHNhqhjA+4Y
+         nuJQ==
+X-Gm-Message-State: AO0yUKVRorJx8fr31KatxejG6YpmDKd9B4eBMm/iMLCTHqmlO+Hjhvjx
+        V9ZS4OR+zQ6f7B0sHX/ZkYq1HQ==
+X-Google-Smtp-Source: AK7set93DJYG63ys9SOctBQRI7ddeFJlbzAb9UdgGVNbO8ool9VJU4UwhLQF6yN0q5ReGJyClZ0xtg==
+X-Received: by 2002:a17:902:e551:b0:19a:6cd2:a658 with SMTP id n17-20020a170902e55100b0019a6cd2a658mr234114plf.7.1676054518244;
+        Fri, 10 Feb 2023 10:41:58 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id a21-20020a170902ee9500b00199190b00efsm3701641pld.97.2023.02.10.10.41.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 10:41:57 -0800 (PST)
+Date:   Fri, 10 Feb 2023 18:41:54 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
+ to map as encrypted
+Message-ID: <Y+aP8rHr6H3LIf/c@google.com>
+References: <1673559753-94403-1-git-send-email-mikelley@microsoft.com>
+ <1673559753-94403-7-git-send-email-mikelley@microsoft.com>
+ <Y8r2TjW/R3jymmqT@zn.tnic>
+ <BYAPR21MB168897DBA98E91B72B4087E1D7CA9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y9FC7Dpzr5Uge/Mi@zn.tnic>
+ <BYAPR21MB16883BB6178DDEEA10FD1F1CD7D69@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y+JG9+zdSwZlz6FU@zn.tnic>
+ <4216dea6-d899-aecb-2207-caa2ae7db0e3@intel.com>
+ <BYAPR21MB16886D92828BA2CA8D47FEA4D7D99@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-References: <20230208184203.2260394-1-elver@google.com> <CA+fCnZeU=pRcyiBpj3nyri0ow+ZYp=ewU3dtSVm_6mh73y1NTA@mail.gmail.com>
- <CANpmjNP_Ka6RTqHNRD7xx93ebZhY+iz69GHBusT=A8X1KvViVA@mail.gmail.com> <CA+fCnZcNF5kNxNuphwj41P45tQEhQ9wX00ZA4g=KTX4sbUirQg@mail.gmail.com>
-In-Reply-To: <CA+fCnZcNF5kNxNuphwj41P45tQEhQ9wX00ZA4g=KTX4sbUirQg@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 10 Feb 2023 19:40:44 +0100
-Message-ID: <CANpmjNNH-O+38U6zRWJUCU-eJTfMhUosy==GWEOn1vcu=J2dcw@mail.gmail.com>
-Subject: Re: [PATCH -tip] kasan: Emit different calls for instrumentable memintrinsics
-To:     Andrey Konovalov <andreyknvl@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-kbuild@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-toolchains@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR21MB16886D92828BA2CA8D47FEA4D7D99@BYAPR21MB1688.namprd21.prod.outlook.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -82,38 +118,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Feb 2023 at 17:13, Andrey Konovalov <andreyknvl@gmail.com> wrote:
-[...]
-> > Probably the same should be done for SW_TAGS, because arm64 will be
-> > GENERIC_ENTRY at one point or another as well.
->
-> Yes, makes sense. I'll file a bug for this once I fully understand the
-> consequences of these changes.
->
-> > KASAN + GCC on x86 will have no mem*() instrumentation after
-> > 69d4c0d32186, which is sad, so somebody ought to teach it the same
-> > param as above.
->
-> Hm, with that patch we would have no KASAN checking within normal mem*
-> functions (not the ones embedded by the compiler) on GENERIC_ENTRY
-> arches even with Clang, right?
+Wearing my KVM hat and not my Google hat...
 
-Yes, that's the point - normal mem*() functions cannot be instrumented
-with GENERIC_ENTRY within noinstr functions, because the compiler
-sometimes decides to transform normal assignments into
-memcpy()/memset(). And if mem*() were instrumented (as it was before
-69d4c0d32186), that'd break things for these architectures.
+On Thu, Feb 09, 2023, Michael Kelley (LINUX) wrote:
+> From: Dave Hansen <dave.hansen@intel.com> Sent: Wednesday, February 8, 2023 9:24 AM
+> > 
+> > On 2/7/23 04:41, Borislav Petkov wrote:
+> > > Or are there no similar TDX solutions planned where the guest runs
+> > > unmodified and under a paravisor?
+> > 
+> > I actually don't think paravisors make *ANY* sense for Linux.
 
-But since most code is normally instrumented, with the right compiler
-support (which the patch here enables), we just turn mem*() in
-instrumented functions into __asan_mem*(), and get the instrumentation
-as before. 69d4c0d32186 already added those __asan functions. The fact
-that KASAN used to override mem*() is just the wrong choice in a world
-where compilers decide to inline or outline these. From an
-instrumentation point of view at the compiler level, we need to treat
-them like any other instrumentable instruction (loads, stores,
-atomics, etc.): transform each instrumentable instruction into
-something that does the right checks. Only then can we be sure that we
-don't accidentally instrument something that shouldn't be (noinstr
-functions), because instead of relying on the compiler, we forced
-instrumentation on every mem*().
+I 100% agree, but Intel made what I think almost entirely irrelevant by refusing
+to allow third party code to run in SEAM.
+
+> > If you have to modify the guest, then just modify it to talk to the
+> > hypervisor directly.  This code is... modifying the guest.  What does
+> > putting a paravisor in the middle do for you?
+> 
+> One of the original goals of the paravisor was to make fewer
+> modifications to the guest, especially in areas that aren't directly related
+> to the hypervisor.  It's arguable as to whether that goal played out in
+> reality.
+> 
+> But another significant goal is to be able to move some device emulation
+> from the hypervisor/VMM to the guest context.  In a CoCo VM, this move
+> is from outside the TCB to inside the TCB.  A great example is a virtual
+> TPM.  Per the CoCo VM threat model, a guest can't rely on a vTPM
+> provided by the host.
+
+I vehemently disagree with this assertion.  It's kinda sorta true, but only
+because Intel and AMD have gone down the road of not providing the mechanisms and
+ability for the hypervisor to run and attest to the integrity, functionality, etc.
+of (a subset of) the hypervisor's own code.
+
+Taking SEAM/TDX as an example, if the code running in SEAM were an extension of
+KVM instead of a hypervisor-agnostic nanny, then there would be no need for a
+"paravisor" to provide a vTPM.  It would be very feasible to teach the SEAM-protected
+bits of KVM to forward vTPM accesses to a host-provided, signed, attested, and open
+source software running in a helper TD.
+
+I fully realize you meant "untrusted host", but statements like "the host can't
+be trusted" subconciously reinforce the, IMO, flawed model of hardware vendors
+and _only_ hardware vendors providing the trusted bits.
+
+The idea that firmware/software written by hardware vendors is somehow more
+trustworthy than fully open source software is simultaneously laughable and
+infuriating.  
+
+Anyways, tying things back to the actual code being discussed, I vote against
+CC_ATTR_PARAVISOR.  Being able to trust device emulation is not unique to a
+paravisor.  A single flag also makes too many assumptions about what is trusted
+and thus should be accessed encrypted.
