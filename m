@@ -2,144 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F906921AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:10:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 681416922B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:55:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232558AbjBJPKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 10:10:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
+        id S232705AbjBJPzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 10:55:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232251AbjBJPKY (ORCPT
+        with ESMTP id S232026AbjBJPzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 10:10:24 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070123EC5D
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:10:18 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so6503313wmb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:10:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=y30ATMpLL1p4sSwUhQyjHL/c3brIpR/bscArWLHO7lI=;
-        b=GGmHtQVXt/y7Gf70PAxFkbRl2K3rbN4eQbpOp9jBgJIVukppqlJ4dIqqyjbLHzcC90
-         49LbKn/X4chqRjUB5AU7itVq2yGdaBZ9EPK5ibJbrwFPBbw9b+jq2MrxKpOLX2iNU5l2
-         CzPchIYQXKdAaN0+ukZU4doAloHwNmXJPlDyXpM/itGD/uWX/v7j4ar/hCFuhjbaGvTS
-         SNRt4Mrkat2plsvjmEstWqmvO3mg1qF7NNKFBCFw9WuqpLoJEcFPgiNHA90/s2wHV/A3
-         G7X3yebzB5o87am0AOxRi9yzv1pbzQFBIIneoQNvo8HKT36bdbN6KmmkG+eRiMhwHX4L
-         1bmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y30ATMpLL1p4sSwUhQyjHL/c3brIpR/bscArWLHO7lI=;
-        b=gA3rYq5a6aq7uiMVZFZmGypHL/2jx2n//DSnGJe6uvONM4mqwxmbHhrF+ujs0tHKw4
-         LfyuV/I2KdGLlGXGaWCc8aL61zJ6sEJtFI0ZnaiYQPDU1b06sTpAXgpluSnzFUUJfQiB
-         ReQqUiT+JLA6eBatZD8RdAA5emEQ5x1KyzuC+J+A17rD3jbjWNPKAhjzWStnfW5FRgs8
-         A64wD5Ogr4/uPm90Jmv2oZR2X+QOKChEE8wuOFvvhUVVkHgSrBlXahp98gOTrc0txpxY
-         2un72MBFOaSJ+HXHIy8ngiU4V5p8knvRkDILSFDb1WdshbqzB8G+K1cyMZUhYpp1qR+g
-         cP7A==
-X-Gm-Message-State: AO0yUKXXt4U5VuyNyj1EaBTIT/1aMod0ynHPM0Ob9QksVIro7+kEg+RI
-        xHpWOfJsG9GvOlFtvupak7V8og==
-X-Google-Smtp-Source: AK7set8eCMDn9dJoiFXBhY9Qctg7aCPwRdmw5nKICGViJS8cWrEchk5Wh2a2gkwdmFoIs0Z/wSoYkg==
-X-Received: by 2002:a05:600c:9a2:b0:3dc:576c:ab07 with SMTP id w34-20020a05600c09a200b003dc576cab07mr13027845wmp.14.1676041816571;
-        Fri, 10 Feb 2023 07:10:16 -0800 (PST)
-Received: from linaro.org ([2a00:23c5:680a:d01:61c3:70d8:6500:e102])
-        by smtp.gmail.com with ESMTPSA id a1-20020a05600c348100b003db0ee277b2sm8587771wmq.5.2023.02.10.07.10.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 07:10:15 -0800 (PST)
-From:   Mike Leach <mike.leach@linaro.org>
-To:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        linux-kernel@vger.kernel.org
-Cc:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
-        leo.yan@linaro.org, yabinc@google.com,
-        Mike Leach <mike.leach@linaro.org>
-Subject: [PATCH 3/3] coresight: etf: etr: Update logging around flush_and_stop() errors
-Date:   Fri, 10 Feb 2023 15:10:08 +0000
-Message-Id: <20230210151008.4587-4-mike.leach@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230210151008.4587-1-mike.leach@linaro.org>
-References: <20230210151008.4587-1-mike.leach@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 10 Feb 2023 10:55:49 -0500
+X-Greylist: delayed 1201 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 10 Feb 2023 07:55:49 PST
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9E34B749;
+        Fri, 10 Feb 2023 07:55:49 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id DEAF7581F63;
+        Fri, 10 Feb 2023 10:10:36 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 10 Feb 2023 10:10:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1676041836; x=1676049036; bh=mnmCFBnaIP
+        +vBLu9FDqlvqV872F6Sk8/lQSQWnrc9vM=; b=D9Szpp77tFpcX+nFzNso9fAK0G
+        RKEY2e2MPcUw+e0HRg7S8ntVkkidfPRiVKiD9NnN/v5CGK69+T3Jead5T43+elxp
+        vdEvp0H3wpqmSvLp/EsSqJCUQp8vrbFlGhuwOBExHvxH/ijlvcebCIxq0GFKALZn
+        /KTXa55Xl1Nu1lYEE3YUdxKlBRHd9g6snyVPVw7lBXBFuN6X5R9KweBbGyws612U
+        HSSwAquhkWClD1qjztFmKSXMeUBJTYaykthTjsQv9cEQMLG0X1HQBvbnyPaoEUzh
+        c2j/S3bzXdpbQJtLfGhIn6moBc6uAsb7y1NxF05WugoRrHamBqi8vnM8+LIA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1676041836; x=1676049036; bh=mnmCFBnaIP+vBLu9FDqlvqV872F6
+        Sk8/lQSQWnrc9vM=; b=RHZtaJBO44uX2MARKJxLjffrlpmpVpqRWXHbD0f++4hp
+        qcrXlaKY1EA4C+ei9VBulYS+Pr1PaCMRoCiXza+fjmuBbIl7iAHJIIs/u5u04ZwR
+        un7ChSUzuQGzTl3Hzcn3+ASNHPbKVMq2pMRwmYsQFsty5c0tZWbMgH4X111G4rXx
+        xrYr3PGq6SNbkC1K18wAFFhEzQ4/Mu6MdjeZ0isXHr9XDxecB4/Wj99dyzjdUByn
+        eT3ZTxOyQt5xhBlFYcZRRNcG22TQLymxVnFTJ3lR0b/zX8cKrE9YnBJWzellYQHC
+        EsEl6lMz3XBzK0jy4OMsMTgRDCrxfrIC1I9MkjiqHw==
+X-ME-Sender: <xms:a17mY3P--ZnY9B0YNPVJei5M1XSljO-TrXiC-otvZu9e2Ux-mUMuYw>
+    <xme:a17mYx_FBr6stanlZSHdjEh_Yiizs7DAQDRo8eLwZjm4itklqm-Us_lyX4UcEEqKV
+    lc2GJafFQdTJPXBJdE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudehhedgjedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:a17mY2Qg8I9CgxEscmfW_KVeyAfpnzZW3vSqA_Kax6WR9loxG21lZw>
+    <xmx:a17mY7sOa99lDqlxfSrIsA34dub4d_dg1GrUC46fm4OCcg0OSUjgZQ>
+    <xmx:a17mY_cLeUpfTHmXPpf5NVLlLOlkwFqtmEf2CkzJAFgsXIq3rY2cJw>
+    <xmx:bF7mYzlxhpbpL2dPNp2_IA_FqJ-2rZBBDGc_SPVtMY4KfbLAmmmu4A>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 2C9A9B60086; Fri, 10 Feb 2023 10:10:35 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+Mime-Version: 1.0
+Message-Id: <7493f543-bf02-4bfe-90bd-a01d3c52cb52@app.fastmail.com>
+In-Reply-To: <2344ac16-781e-8bfa-ec75-e71df0f3ed28@redhat.com>
+References: <1446579994-9937-1-git-send-email-palmer@dabbelt.com>
+ <1447119071-19392-1-git-send-email-palmer@dabbelt.com>
+ <1447119071-19392-4-git-send-email-palmer@dabbelt.com>
+ <2344ac16-781e-8bfa-ec75-e71df0f3ed28@redhat.com>
+Date:   Fri, 10 Feb 2023 16:10:16 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Thomas Huth" <thuth@redhat.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>
+Cc:     "Alexander Viro" <viro@zeniv.linux.org.uk>,
+        aishchuk@linux.vnet.ibm.com, aarcange@redhat.com,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+        "Baoquan He" <bhe@redhat.com>, 3chas3@gmail.com, chris@zankel.net,
+        dave@sr71.net, dyoung@redhat.com, drysdale@google.com,
+        "Eric W. Biederman" <ebiederm@xmission.com>, geoff@infradead.org,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, "Ingo Molnar" <mingo@kernel.org>,
+        iulia.manda21@gmail.com, plagnioj@jcrosoft.com, jikos@kernel.org,
+        "Josh Triplett" <josh@joshtriplett.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, mathieu.desnoyers@efficios.com,
+        "Max Filippov" <jcmvbkbc@gmail.com>, paulmck@linux.vnet.ibm.com,
+        a.p.zijlstra@chello.nl, "Thomas Gleixner" <tglx@linutronix.de>,
+        vgoyal@redhat.com, x86@kernel.org,
+        "David Howells" <dhowells@redhat.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        Netdev <netdev@vger.kernel.org>
+Subject: Re: [PATCH 03/14] Move COMPAT_ATM_ADDPARTY to net/atm/svc.c
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Insert additional context around tmc_flush_and_stop() errors.
+On Fri, Feb 10, 2023, at 15:55, Thomas Huth wrote:
+> On 10/11/2015 02.31, Palmer Dabbelt wrote:
+>> This used to be behind an #ifdef COMPAT_COMPAT, so most of userspace
+>> wouldn't have seen the definition before.  Unfortunately this header
+>> file became visible to userspace, so the definition has instead been
+>> moved to net/atm/svc.c (the only user).
+>> 
+>> Signed-off-by: Palmer Dabbelt <palmer@dabbelt.com>
+>> Reviewed-by: Andrew Waterman <waterman@eecs.berkeley.edu>
+>> Reviewed-by: Albert Ou <aou@eecs.berkeley.edu>
 
-Signed-off-by: Mike Leach <mike.leach@linaro.org>
----
- drivers/hwtracing/coresight/coresight-tmc-etf.c | 12 +++++++++---
- drivers/hwtracing/coresight/coresight-tmc-etr.c |  8 ++++++--
- 2 files changed, 15 insertions(+), 5 deletions(-)
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-diff --git a/drivers/hwtracing/coresight/coresight-tmc-etf.c b/drivers/hwtracing/coresight/coresight-tmc-etf.c
-index 0ab1f73c2d06..c8a4d4eff64f 100644
---- a/drivers/hwtracing/coresight/coresight-tmc-etf.c
-+++ b/drivers/hwtracing/coresight/coresight-tmc-etf.c
-@@ -84,7 +84,9 @@ static void __tmc_etb_disable_hw(struct tmc_drvdata *drvdata)
- {
- 	CS_UNLOCK(drvdata->base);
- 
--	tmc_flush_and_stop(drvdata);
-+	if (tmc_flush_and_stop(drvdata))
-+		dev_err(&drvdata->csdev->dev,
-+			"Flush and stop error disabling ETB\n");
- 	/*
- 	 * When operating in sysFS mode the content of the buffer needs to be
- 	 * read before the TMC is disabled.
-@@ -146,7 +148,9 @@ static void tmc_etf_disable_hw(struct tmc_drvdata *drvdata)
- 
- 	CS_UNLOCK(drvdata->base);
- 
--	tmc_flush_and_stop(drvdata);
-+	if (tmc_flush_and_stop(drvdata))
-+		dev_err(&drvdata->csdev->dev,
-+			"Flush and stop error disabling ETF\n");
- 	tmc_disable_hw(drvdata);
- 	coresight_disclaim_device_unlocked(csdev);
- 	CS_LOCK(drvdata->base);
-@@ -492,7 +496,9 @@ static unsigned long tmc_update_etf_buffer(struct coresight_device *csdev,
- 
- 	CS_UNLOCK(drvdata->base);
- 
--	tmc_flush_and_stop(drvdata);
-+	if (tmc_flush_and_stop(drvdata))
-+		dev_err(&drvdata->csdev->dev,
-+			"Flush and stop error updating perf buffer\n");
- 
- 	read_ptr = tmc_read_rrp(drvdata);
- 	write_ptr = tmc_read_rwp(drvdata);
-diff --git a/drivers/hwtracing/coresight/coresight-tmc-etr.c b/drivers/hwtracing/coresight/coresight-tmc-etr.c
-index 918d461fcf4a..ceae6a093612 100644
---- a/drivers/hwtracing/coresight/coresight-tmc-etr.c
-+++ b/drivers/hwtracing/coresight/coresight-tmc-etr.c
-@@ -1145,7 +1145,9 @@ static void __tmc_etr_disable_hw(struct tmc_drvdata *drvdata)
- {
- 	CS_UNLOCK(drvdata->base);
- 
--	tmc_flush_and_stop(drvdata);
-+	if (tmc_flush_and_stop(drvdata))
-+		dev_err(&drvdata->csdev->dev,
-+			"Flush and stop error disabling ETR\n");
- 	/*
- 	 * When operating in sysFS mode the content of the buffer needs to be
- 	 * read before the TMC is disabled.
-@@ -1548,7 +1550,9 @@ tmc_update_etr_buffer(struct coresight_device *csdev,
- 
- 	CS_UNLOCK(drvdata->base);
- 
--	tmc_flush_and_stop(drvdata);
-+	if (tmc_flush_and_stop(drvdata))
-+		dev_err(&csdev->dev,
-+			"Flush and Stop error updating perf buffer\n");
- 	tmc_sync_etr_buf(drvdata);
- 
- 	CS_LOCK(drvdata->base);
--- 
-2.17.1
+It took me a bit to figure out why there is a separate command
+code but no special handler for the compat structure, aside from
+being in the wrong file it does look correct.
 
+>> +#ifdef CONFIG_COMPAT
+>> +/* It actually takes struct sockaddr_atmsvc, not struct atm_iobuf */
+>> +#define COMPAT_ATM_ADDPARTY _IOW('a', ATMIOC_SPECIAL+4, struct compat_atm_iobuf)
+>> +#endif
+
+We could actually drop the #ifdef here as well, or moving into
+the existing #ifdef.
+
+>> +
+>>   static int svc_create(struct net *net, struct socket *sock, int protocol,
+>>   		      int kern);
+>
+> The CONFIG_* switch is still there in the atmdev.h uapi header ... could 
+> somebody please pick this patch up to fix it?
+
+It should get merged through the netdev tree, as Chas does not have
+a separate git tree for drivers/atm.
+
+I don't know what happened to the rest of the series, but if there are
+additional patches that got lost, merging them all through either the
+asm-generic or the mm tree would work as well.
+
+Any chance you or Palmer could rebase the series to 6.2-rc and
+see what remains?
+
+    Arnd
