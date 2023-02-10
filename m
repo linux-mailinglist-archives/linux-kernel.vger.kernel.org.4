@@ -2,181 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD9AA6922DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:01:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3C86922E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232868AbjBJQBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 11:01:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
+        id S232875AbjBJQCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 11:02:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231985AbjBJQBr (ORCPT
+        with ESMTP id S232829AbjBJQCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 11:01:47 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C686E894;
-        Fri, 10 Feb 2023 08:01:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=naNDkToztiCnoM9Pbw5Ic6EFdRUS13ckF9svYg2+XVA=; b=ngYzpxrjZpUVgamxuOoOWEurXr
-        MmD9YFx31Cq+GhrbmVBMT0oy5+zSiaOu899eeNWDxiAU/XtviHQXoFLlPi22DETSR3I8/nbqmLupu
-        I9bIKQ/UgLmKm4aw4VzLqI+mvZX4p3N8NQ/kVXFvyAbjFaXLRnfJ9F+4gNkUWE1qYZ6WrbVy5Caff
-        ILPiPAkR3wYOSwInj6hy8O3oCmM7RW7yyn0VJE5pM0mfvqJtSYLGIsyZmz5N0EDSMBxdAgsawAS8b
-        6iqE6ZJbxbq1UDYw81Y8cqHw9IAxKaHfXdtMhPTN2Zj4tSuYhLuIlx47ESRH/cYfVzDosfyV4qHeL
-        W5WDUHVw==;
-Received: from [187.10.60.16] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1pQVqD-00FBW6-Tv; Fri, 10 Feb 2023 17:01:38 +0100
-Message-ID: <9efcde8e-c87e-43ff-4d66-5f448d111940@igalia.com>
-Date:   Fri, 10 Feb 2023 13:01:32 -0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V3 08/11] EDAC/altera: Skip the panic notifier if kdump is
- loaded
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>, pmladek@suse.com
-Cc:     linux-edac@vger.kernel.org, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, Dinh Nguyen <dinguyen@kernel.org>,
-        Rabara Niravkumar L <niravkumar.l.rabara@intel.com>,
-        Tony Luck <tony.luck@intel.com>
-References: <20220819221731.480795-1-gpiccoli@igalia.com>
- <20220819221731.480795-9-gpiccoli@igalia.com>
- <742d2a7e-efee-e212-178e-ba642ec94e2a@igalia.com>
- <eaba1a1a-31cd-932f-277c-267699d7be30@igalia.com> <Y3zlghMzlc1kzVJx@zn.tnic>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <Y3zlghMzlc1kzVJx@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 10 Feb 2023 11:02:49 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874D37DB3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:02:48 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so5895409pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:02:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:to:from:cc:subject:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PaqwXRPrI5sbbJVNLmvBI0AeZg1+M73dtQ44DcOiCqc=;
+        b=NMgbXVBNwme30CwDvGpeFtT+IZ4it29HuIxNc1pA0xqt0WNs2b2T73wC1gQPue2rdK
+         5K0hFwCjXnaRIxqUaZN7NmmxIbSxExvljFCwmeLmBYffiyOE4OpCdjx2kAq4htd/8GrL
+         x3HKCiazNefW3PzpmYQsOiaDF6a7mFRgFQT2sNBTIuQTuKy/Y7vA2l5r0Qa6eZoiMClT
+         +OvNCEb5j/2M0yMd4YQJwSxaLcQQkplc4sg5j4Zgr5YCr3IRzL4ZNoIPHd2/GojMW815
+         slIEwbXD0AHMYBH3uJ7ia5iH+CD5rImrjp/jz+UT4m0kGB5FujJ369R7EY1BZEuWkmXz
+         3j0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:to:from:cc:subject:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PaqwXRPrI5sbbJVNLmvBI0AeZg1+M73dtQ44DcOiCqc=;
+        b=0CcZCysynC2e8tM2M+B9nAd8l/9DvXnR0MKxZPwldMGz56LIDEH7AJ42jNsu6TosFs
+         uggNd8S2Fs3YcESISThZs/IPs+R5VQTe4jbV2s1aFNj2ZlDWDZPcu/0BhlpZTniUcFhC
+         7UJKfzcRhaU2CWjXqxngy97fHwB9w4/VKMPha4JmdyHIR8oJV45c8N1ICa9kjJUDXDwi
+         MrgbVZDv6r+VjEr7JgfQjmmOQ7lUmFn+YXUhc9RWxmS8yQYXv2wmGZqsAwART409vwQY
+         0wbWds+Tk7Lv7XxVcN7Hsv91nNCgMIrASIyBB1KjOTHWcUUuDGY5uecUX68aUF5wIKiH
+         8vew==
+X-Gm-Message-State: AO0yUKUCxfUjyQrfGhGpn0wVpDP6xfHaK0mWahAryw4+W9fIgJmF11JV
+        g5IM9P14r3Jbkc2Y2bxGc9Q/aw==
+X-Google-Smtp-Source: AK7set9DTBJu0iGl1ax1QOru1P3DEdmdcW52K66jaMAbjtlN2tKkBngFnFNYStGBb26Vn177DLsqpQ==
+X-Received: by 2002:a17:903:120b:b0:194:58c7:ab79 with SMTP id l11-20020a170903120b00b0019458c7ab79mr19241650plh.63.1676044967850;
+        Fri, 10 Feb 2023 08:02:47 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id ji11-20020a170903324b00b0019682e27995sm2902975plb.223.2023.02.10.08.02.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 08:02:47 -0800 (PST)
+Date:   Fri, 10 Feb 2023 08:02:47 -0800 (PST)
+X-Google-Original-Date: Fri, 10 Feb 2023 08:02:04 PST (-0800)
+Subject: [GIT PULL] RISC-V Fixes for 6.2-rc8
+CC:         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Message-ID: <mhng-6912c0cd-33ec-4209-8a38-3da4be55fd88@palmer-ri-x1c9a>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Boris and Petr, first of all thanks for your great analysis and
-really sorry for the huge delay in my response.
+The following changes since commit 2f394c0e7d1129a35156e492bc8f445fb20f43ac:
 
-Below I'm pasting the 2 relevant responses from both Petr and Boris.
+  riscv: disable generation of unwind tables (2023-02-01 20:51:57 -0800)
 
+are available in the Git repository at:
 
-On 22/11/2022 12:06, Borislav Petkov wrote:
-> On Tue, Nov 22, 2022 at 10:33:12AM -0300, Guilherme G. Piccoli wrote:
-> 
-> Leaving in the whole thing for newly added people.
-> 
->> On 18/09/2022 11:10, Guilherme G. Piccoli wrote:
->>> On 19/08/2022 19:17, Guilherme G. Piccoli wrote:
->>>> The altera_edac panic notifier performs some data collection with
->>>> regards errors detected; such code relies in the regmap layer to
->>>> perform reads/writes, so the code is abstracted and there is some
->>>> risk level to execute that, since the panic path runs in atomic
->>>> context, with interrupts/preemption and secondary CPUs disabled.
->>>>
->>>> Users want the information collected in this panic notifier though,
->>>> so in order to balance the risk/benefit, let's skip the altera panic
->>>> notifier if kdump is loaded. While at it, remove a useless header
->>>> and encompass a macro inside the sole ifdef block it is used.
->>>>
->>>> Cc: Borislav Petkov <bp@alien8.de>
->>>> Cc: Petr Mladek <pmladek@suse.com>
->>>> Cc: Tony Luck <tony.luck@intel.com>
->>>> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
->>>> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
->>>>
->>>> ---
->>>>
->>>> V3:
->>>> - added the ack tag from Dinh - thanks!
->>>> - had a good discussion with Boris about that in V2 [0],
->>>> hopefully we can continue and reach a consensus in this V3.
->>>> [0] https://lore.kernel.org/lkml/46137c67-25b4-6657-33b7-cffdc7afc0d7@igalia.com/
->>>>
->>>> V2:
->>>> - new patch, based on the discussion in [1].
->>>> [1] https://lore.kernel.org/lkml/62a63fc2-346f-f375-043a-fa21385279df@igalia.com/
->>>>
->>>> [...]
->>>
->>> Hi Dinh, Tony, Boris - sorry for the ping.
->>>
->>> Appreciate reviews on this one - Dinh already ACKed the patch but Boris
->>> raised some points in the past version [0], so any opinions or
->>> discussions are welcome!
->>
->>
->> Hi folks, monthly ping heheh
->> Apologies for the re-pings, please let me know if there is anything
->> required to move on this patch.
-> 
-> Looking at this again, I really don't like the sprinkling of
-> 
-> 	if (kexec_crash_loaded())
-> 
-> in unrelated code. And I still think that the real fix here is to kill
-> this
-> 
-> 	edac->panic_notifier
-> 
-> thing. And replace it with simply logging the error from the double bit
-> error interrupt handle. That DBERR IRQ thing altr_edac_a10_irq_handler().
-> Because this is what this panic notifier does - dump double-bit errors.
-> 
-> Now, if Dinh doesn't move, I guess we can ask Tony and/or Rabara (he has
-> sent a patch for this driver recently and Altera belongs to Intel now)
-> to find someone who can test such a change and we (you could give it a
-> try first :)) can do that change.
-> 
-> Thx.
-> 
+  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-6.2-rc8
 
-On 09/12/2022 13:03, Petr Mladek wrote:> [...]>
-> I have read the discussion about v2 [1] and this looks like a bad
-> approach from my POV.
->
-> My understanding is that the information provided by this notifier
-> could not be found in the crashdump. It means that people really
-> want to run this before crashdump in principle.
->
-> Of course, there is the question how much safe this code is. I mean
-> if the panic() code path might get blocked here.
->
-> I see two possibilities.
->
-> The best solution would be if we know that this is "always" safe or if
-> it can be done a safe way. Then we could keep it as it is or implement
-> the safe way.
->
-> Alternative solution would be to create a kernel parameter that
-> would enable/disable this particular report when kdump is enabled.
-> The question would be the default. It would depend on how risky
-> the code is and how useful the information is.
->
-> [1] https://lore.kernel.org/r/20220719195325.402745-11-gpiccoli@igalia.com
->
+for you to fetch changes up to 950b879b7f0251317d26bae0687e72592d607532:
 
+  riscv: Fixup race condition on PG_dcache_clean in flush_icache_pte (2023-02-09 11:40:32 -0800)
 
-So, for me Petr approach is the more straightforward, though we could
-rethink the idea of this notifier being...a notifier, as suggest Boris heh
+----------------------------------------------------------------
+RISC-V Fixes for 6.2-rc8
 
-Anyway, what I plan to do is: I'll re-submit a simple clean-up for this
-code (header / ifdef stuff), not functional-changing the code path.
+* A fix to avoid partial TLB fences for huge pages, which are disallowed
+  by the ISA.
+* A fix to to avoid missing a frame when dumping stacks.
+* A fix to avoid misaligned accesses (and possibly overflows) in
+  kprobes.
+* A fix for a race condition in tracking page dirtiness.
 
-After that, when re-submitting the V2 or the notifiers refactor (which
-I'm pending for some good months =O ), I'll deal with this code
-properly, factoring the ideas and proposing a meaningful change.
+----------------------------------------------------------------
+This is a little bigger that I'd hope for this late in the cycle, but they're
+all pretty concrete fixes and the only one that's bigger than a few lines is
+pmdp_collapse_flush() (which is almost all boilerplate/comment).  It's also all
+bug fixes for issues that have been around for a while.
 
-So, let's discard this patch for now.
-Thanks again,
+So I think it's not all that scary, just bad timing.
 
+----------------------------------------------------------------
+Guo Ren (2):
+      riscv: kprobe: Fixup misaligned load text
+      riscv: Fixup race condition on PG_dcache_clean in flush_icache_pte
 
-Guilherme
+Liu Shixin (1):
+      riscv: stacktrace: Fix missing the first frame
+
+Mayuresh Chitale (1):
+      riscv: mm: Implement pmdp_collapse_flush for THP
+
+ arch/riscv/include/asm/pgtable.h   |  4 ++++
+ arch/riscv/kernel/probes/kprobes.c |  8 +++++---
+ arch/riscv/kernel/stacktrace.c     |  3 ++-
+ arch/riscv/mm/cacheflush.c         |  4 +++-
+ arch/riscv/mm/pgtable.c            | 20 ++++++++++++++++++++
+ 5 files changed, 34 insertions(+), 5 deletions(-)
