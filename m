@@ -2,131 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5213A6919D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 09:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1BF06919DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 09:16:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbjBJINy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 03:13:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
+        id S231377AbjBJIQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 03:16:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231187AbjBJINw (ORCPT
+        with ESMTP id S230359AbjBJIQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 03:13:52 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3559CAD34;
-        Fri, 10 Feb 2023 00:13:48 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id qb15so11615536ejc.1;
-        Fri, 10 Feb 2023 00:13:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=RfxTuaXPFuuhKw07EKGJnJD31rzl8qOc8YDdNEsacKs=;
-        b=RdcGv9oMi1uOe9HVvrUmX7JiCVTJVCJkgRvPkmB3cRA9PHZP6ohj5J7JRL8Ut1ZfNB
-         zuTs9nl8pXxWPMkCSlDb1uEwDJwTjCIQexPTaZZdwpbxT4aZ3hq+S1h0scWw6EwBStES
-         9C04sC0qokj1S9Iir7ew+S4MH+JfS8Xgia75GUncszm+DqVLi7BZ2afS/REVbewKysov
-         h91V0BG2RoE+5cfr0Pq7vFN7GXaQEI1Rwsh/fRN9q6KNZ4ZlvILf7Po+vLv4S80pvgsW
-         6O8KfT8jwPg2ZPb3sEinQaPbsqxuHvp6eDQWLjHPQ6qzFQErw87TMv9770H6Lqqf/bO9
-         zCFA==
+        Fri, 10 Feb 2023 03:16:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8094146A8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 00:15:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676016936;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=07/UuXVhjtmRlzDzNTQKRQ64YwDg0Nyzk7VgYVAu5TU=;
+        b=XfQbb4ShlGJ6nIZ84qrIzqihuVUNAgXstMCl3PWMXEbNo0Jw+3YRHNLtdI/ptjNf3QtBmJ
+        EtVEkeEGxrvXVzMltR9wl4v1ETYs5fArv0Vkf215NsZlxw9+DH7tpB4rUrWGuf2TZ+PTEt
+        2Dr+a+kVXcKOwRcPBejqVxkbsfgyoI0=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-488-a2fSsXLCN-OuUGfRuRr48A-1; Fri, 10 Feb 2023 03:15:35 -0500
+X-MC-Unique: a2fSsXLCN-OuUGfRuRr48A-1
+Received: by mail-wr1-f71.google.com with SMTP id o9-20020adfa109000000b002bfc062eaa8so1038472wro.20
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 00:15:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RfxTuaXPFuuhKw07EKGJnJD31rzl8qOc8YDdNEsacKs=;
-        b=iRI3O64p+KjECDfgzRzlVPcV6upujH0bmDXl/NWrNiIw9DO629Eb8SJAMwsrxV6FuO
-         vwMDsHf8iTwpIWrsHWItOXG3txoceCvzneBd3yUAQjIKRzJVIoO4wsje4F1ll64bqSAk
-         FrbctrGuNyu0qJf08T65dwHfdAlBht7mNpMnZ2zM7htDb9CY5M7Lo8SXpItz6VQg9msl
-         GHomoYkF5MA3c27yo4bIkSemwPWD/m4CT3Q/AkAmDphOSP9184PrlbgeIosiq48EcKt1
-         344uSr5O11+mo5bQrm3TCUJfCgLM7dfdM92w9wpLd61Okg90RzIHjuy9jIB0mth4rI2g
-         E+DQ==
-X-Gm-Message-State: AO0yUKUmOOOj7lHan91+hfpQYgw9MUl1FnHGUvPTKTnv/6oUgf71fOrP
-        a2yUE70lFL5XDrX5mMPzMQ4av2NgvXE=
-X-Google-Smtp-Source: AK7set8mqXrZb6jqki+1zDCnnlahbJj2YaPV0blCenw8kJwEKAEiaUrR1gBqwF0fVukNmx9UbgrkZw==
-X-Received: by 2002:a17:906:d0c9:b0:8aa:dffa:badd with SMTP id bq9-20020a170906d0c900b008aadffabaddmr8951399ejb.1.1676016826535;
-        Fri, 10 Feb 2023 00:13:46 -0800 (PST)
-Received: from sakura.myxoz.lan (81-230-97-204-no2390.tbcn.telia.com. [81.230.97.204])
-        by smtp.gmail.com with ESMTPSA id a18-20020a170906469200b007c0f217aadbsm2036701ejr.24.2023.02.10.00.13.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 00:13:46 -0800 (PST)
-Message-ID: <2f74aab82a40e4c11c91ccba40f5b620f6cb209c.camel@gmail.com>
-Subject: [PATCH] net/usb: kalmia: Don't pass act_len in usb_bulk_msg error
- path
-From:   Miko Larsson <mikoxyzzz@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jiri Pirko <jiri@resnulli.us>, Paolo Abeni <pabeni@redhat.com>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
-Date:   Fri, 10 Feb 2023 09:13:44 +0100
-In-Reply-To: <f0b62f38c042d2dcb8b8e83c827d76db2ac5d7ad.camel@gmail.com>
-References: <7266fe67c835f90e5c257129014a63e79e849ef9.camel@gmail.com>
-         <f0b62f38c042d2dcb8b8e83c827d76db2ac5d7ad.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.module_f37+15877+cf3308f9) 
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=07/UuXVhjtmRlzDzNTQKRQ64YwDg0Nyzk7VgYVAu5TU=;
+        b=Z/oA7orP4nyoUm4RQNas8lIncyUh5ZjrNB0ZD5uHcPH+dJ0ryyHfFUVTmaf4esbvJA
+         6C5lNfyLrwKeMAL30kaKAmCuDzBUzdnOuuaiTEheVsy9hYU+EnjfXyZdPNvDiW7pzSBu
+         rDkowcOkXtO8ObtgY02KqWE7lM33BItF2uy6K48mVwWLtYEMIy//kGBFnUE/1At5iiDY
+         7bqACtCNMppqrm8HyHtOohYVGO3q/yTIl/UplsruU536HYOzJKp65DQMyXPDau1Hs7f/
+         DABjs73DOl+6s2I1e/vq4IR/RffwC7vdiMEfrttIccLbRE4T+0Alp5ZpDflimv6YsMoJ
+         GPDQ==
+X-Gm-Message-State: AO0yUKX8ak/S0X9ScNkc59I5vq+28fhwfC1M63t7Oh45kz8VhcklU2gD
+        9VGPIRYBx/IRnvRpo4zHIh+HAUnek/Xi8HIiyHM3wIDyZvVv0JuKWZUEQsaPYO73p6899dLESfN
+        lwb6+Y+T5tElj3Zcsvz9eRDVU
+X-Received: by 2002:a05:600c:340a:b0:3dc:45a7:2b8a with SMTP id y10-20020a05600c340a00b003dc45a72b8amr12254732wmp.10.1676016932014;
+        Fri, 10 Feb 2023 00:15:32 -0800 (PST)
+X-Google-Smtp-Source: AK7set+rpGU7GsN9Xt3N9dd/K8uaoujZVZo9bVkwSwtBS5q7w0RxF4d8lQv1lpQmqMvSeDKOcqVxRg==
+X-Received: by 2002:a05:600c:340a:b0:3dc:45a7:2b8a with SMTP id y10-20020a05600c340a00b003dc45a72b8amr12254706wmp.10.1676016931842;
+        Fri, 10 Feb 2023 00:15:31 -0800 (PST)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id q14-20020a05600c46ce00b003db12112fcfsm4673655wmo.4.2023.02.10.00.15.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 00:15:31 -0800 (PST)
+Message-ID: <70c01751-1dd7-c4bd-a96e-94dea437aa40@redhat.com>
+Date:   Fri, 10 Feb 2023 09:15:29 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] Revert "venus: firmware: Correct non-pix start and end
+ addresses"
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Vikash Garodia <vgarodia@qti.qualcomm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mka@chromium.org" <mka@chromium.org>
+Cc:     Albert Esteve <aesteve@redhat.com>,
+        "stanimir.varbanov@linaro.org" <stanimir.varbanov@linaro.org>,
+        Enric Balletbo i Serra <eballetb@redhat.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        "Vikash Garodia (QUIC)" <quic_vgarodia@quicinc.com>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        Fritz Koenig <frkoenig@google.com>,
+        "Dikshita Agarwal (QUIC)" <quic_dikshita@quicinc.com>,
+        "Rajeshwar Kurapaty (QUIC)" <quic_rkurapat@quicinc.com>
+References: <20230207102254.1446461-1-javierm@redhat.com>
+ <DM8PR02MB8169809493BF2822E6C29EECF3DB9@DM8PR02MB8169.namprd02.prod.outlook.com>
+ <ef09bc9f-d570-be11-238b-bd34063917fc@redhat.com>
+Content-Language: en-US
+In-Reply-To: <ef09bc9f-d570-be11-238b-bd34063917fc@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot reported that act_len in kalmia_send_init_packet() is
-uninitialized when passing it to the first usb_bulk_msg error path. Jiri
-Pirko noted that it's pointless to pass it in the error path, and that
-the value that would be printed in the second error path would be the
-value of act_len from the first call to usb_bulk_msg.[1]
+On 2/8/23 10:06, Javier Martinez Canillas wrote:
+> Hello Vikash,
+> 
+> On 2/7/23 17:40, Vikash Garodia wrote:
+>> Hi Javier and Matthias,
+>> Can we try the attached patch if that fixes the suspend issue for sc7180 and sc7280 ?
+>>
+> 
+> I tested your attached patch on an SC7180 machine (HP X2 Chromebook) and as Matthias
+> mentioned, it still causes the driver's probe to fail:
+> 
+> [ 2119.063779] qcom-venus aa00000.video-codec: non legacy binding
+> [ 2119.085695] platform video-firmware.0: Adding to iommu group 11
+> [ 2119.156302] arm-smmu 15000000.iommu: Unhandled context fault: fsr=0x402, iova=0x000000b0, fsynr=0x61, cbfrsynra=0xc40, cb=7
+> [ 2119.259382] qcom-venus aa00000.video-codec: failed to reset venus core
+> [ 2119.267782] platform video-firmware.0: Removing from iommu group 11
+> [ 2119.275052] qcom-venus: probe of aa00000.video-codec failed with error -110
+> 
 
-With this in mind, let's just not pass act_len to the usb_bulk_msg error
-paths.
+So what should we do about this folks? Since not allowing the driver to probe
+on at least SC7180 is a quite serious regression, can we revert for now until
+a proper fix is figured out?
 
-1: https://lore.kernel.org/lkml/Y9pY61y1nwTuzMOa@nanopsycho/
+-- 
+Best regards,
 
-Fixes: d40261236e8e ("net/usb: Add Samsung Kalmia driver for Samsung GT-B37=
-30")
-Reported-and-tested-by: syzbot+cd80c5ef5121bfe85b55@syzkaller.appspotmail.c=
-om
-Signed-off-by: Miko Larsson <mikoxyzzz@gmail.com>
----
- drivers/net/usb/kalmia.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/usb/kalmia.c b/drivers/net/usb/kalmia.c
-index 9f2b70ef39aa..613fc6910f14 100644
---- a/drivers/net/usb/kalmia.c
-+++ b/drivers/net/usb/kalmia.c
-@@ -65,8 +65,8 @@ kalmia_send_init_packet(struct usbnet *dev, u8 *init_msg,=
- u8 init_msg_len,
- 		init_msg, init_msg_len, &act_len, KALMIA_USB_TIMEOUT);
- 	if (status !=3D 0) {
- 		netdev_err(dev->net,
--			"Error sending init packet. Status %i, length %i\n",
--			status, act_len);
-+			"Error sending init packet. Status %i\n",
-+			status);
- 		return status;
- 	}
- 	else if (act_len !=3D init_msg_len) {
-@@ -83,8 +83,8 @@ kalmia_send_init_packet(struct usbnet *dev, u8 *init_msg,=
- u8 init_msg_len,
-=20
- 	if (status !=3D 0)
- 		netdev_err(dev->net,
--			"Error receiving init result. Status %i, length %i\n",
--			status, act_len);
-+			"Error receiving init result. Status %i\n",
-+			status);
- 	else if (act_len !=3D expected_len)
- 		netdev_err(dev->net, "Unexpected init result length: %i\n",
- 			act_len);
---=20
-2.39.1
-
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
