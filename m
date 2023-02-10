@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B465691578
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 01:32:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5CA469157A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 01:32:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbjBJAcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 19:32:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52254 "EHLO
+        id S230208AbjBJAcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 19:32:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbjBJAcA (ORCPT
+        with ESMTP id S230174AbjBJAcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 19:32:00 -0500
+        Thu, 9 Feb 2023 19:32:16 -0500
 Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FED0305C0
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 16:31:58 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id s24-20020a17090aa11800b00230ffd3f340so1587126pjp.9
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 16:31:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A26F4E52D
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 16:32:00 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id l22-20020a17090aaa9600b00230aa3c1350so1596225pjq.2
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 16:32:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=juCqi+Albnji1zaiiKR3HcTnH91vZKT8inm+htmoAik=;
-        b=gs3d0bZuGZxqvCPJzEIFBUXnJOQBkCgsQ+dAE8fItXubGO+6zcIpRcPIRaTxdkO1t1
-         0RuquvOafdUZee3vW3OEskw2pHBNQowP01ylnsVqjzEnkJlRMSQAxabRvdHb7s/lIYnU
-         FlEAaSO1WzAZTGyuafkbyXoXBfhBxOL9R+qp0Ggua8jW15QDBCroK3sziWNm6PxVS2hg
-         uXYKEUjUdhRpGEPu/7wpD3t0qU4+zwp2D03LuRqyiScvn1hLVXEh6JXrqdAlteUOI2vk
-         LVQdfIU2uZU0UruQ0vcDvSpklMtLvv/4BSwNCSYfjmfX/om5DxnVbCTtjNPPDZOvr8Wa
-         Fmzg==
+        bh=00HAzMjPVYVZpNNjib7OPhFskVadeKfZTgeX842t58U=;
+        b=aBtzaPE8mYEmKnAgTm5Kax34YIZeL7JG4RKNgQ8x0KfDYjrvnvQ33kpzNnCl3AZjFx
+         q0YvA0dhIK66QCU2byQQpwLdRR2uvjOsa1tMsA0sdVAGPUxLfrLlfF5LDa3auEb01hKT
+         lZJJqZrfdgikkQzecg4RtA2RbUg3AP2vbP6d5pSW1Oy0oFdX2ZSj7jPuGBOmpAaC72BA
+         H3hPZkLs9AnDnvU7c9BO0Tg+B7NscWiAXdFyL800DZcdLES2IuiEUiScFXp0CEnwejaI
+         nMb/yCangz2qqeh+CQdL6qbm8lQC0stog6QULX5eBG4GEdzcuUFMcJ1B44nbvA24hpHy
+         MY7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=juCqi+Albnji1zaiiKR3HcTnH91vZKT8inm+htmoAik=;
-        b=iUG+JeC7HDT5bUz51kIzDEmDL6VwHjJ1gFbSwG0EeHacx/n3cTZZZ6TlkS4EdzCbeY
-         8ImSQZbHqT5qcCI9R58Mz7cUY3bu9pP7HXFTV7xCCfrEo1uK+twCqJ0jPv80FaRlby74
-         oNb1A48NeSMpDNU5cxprikXccuXELJVj5/o1uWvw/SvB7YKe8GeVpGG22Sfoaam3IzBD
-         m6++6kWAaDB8pqeS86hdEmpAJqLfnDAKS+Ch0XVor+AUU6SN0mwh0pIytaikjppQpdTe
-         oieFRjP3KMr/YT59F/7vWsllNfXn2VJRn+8SSc7XUaFFdGlBiI+Vlrp++EJq+7e66md4
-         Ub2A==
-X-Gm-Message-State: AO0yUKXi+hRzRKGvqWWvXtQwyYIoNeNBmneHUY8pHGL4Xk/yNEputT6H
-        avoa/fkhwvjkYHYQVNhwZxR9GhzmjP0=
-X-Google-Smtp-Source: AK7set+yUu/rsqEsNvliQu/mdB4NbjnoXem0Bw8neo24a82OX/TbaC2E5ce3hyRXQAuuqep3vQVMfvdOMB4=
+        bh=00HAzMjPVYVZpNNjib7OPhFskVadeKfZTgeX842t58U=;
+        b=wdpfv3fYHeENaTnvV76RFN1o6DghiitH1fHZlE1icNCGjcu8PSUj2Byp7MUrO8hc1c
+         74fQHEH6qVpPyIxvWAhAF88qXGI2RTjBb5Ez3Gk7/WaHCpDvq35BoSbswdNJB0uVeJaD
+         SrGVeYqxC+nTGjU0gXRDQqXXbB8u5AhnPo/QameUmrJxyKtpi7DvbXpwoFina26Pb389
+         pqsvoU3bt8myqUxcWIULVh8cSqaATBKrgPgq3FnTpt9IL+d/7KgQ4t40BjAoS1vht28T
+         HmIpcju3+SJUOoT+MyFsuIHpEFVMybxkaE5EJr7hy4UMUYSExjmjtbgXKupzvFKdGbMa
+         /7bA==
+X-Gm-Message-State: AO0yUKWk7f+vFNtf5Q58DLmrpIOpm/iYepDF3bMCS3Cw05Js+TqdcOnu
+        cNpJYsFNQ0ytQVnVSRiHOqJ99DTCmO0=
+X-Google-Smtp-Source: AK7set/fP6s6kqVz5JdiGeG9ShoDDqitcXHoPray/u3IDKfyLGtoerXLUi/MQHZZGCleoBxxpRC1HTzSXmQ=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:b191:b0:194:7c22:1885 with SMTP id
- s17-20020a170902b19100b001947c221885mr3057336plr.26.1675989118117; Thu, 09
- Feb 2023 16:31:58 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a62:3181:0:b0:58d:8d29:399c with SMTP id
+ x123-20020a623181000000b0058d8d29399cmr2696005pfx.44.1675989119771; Thu, 09
+ Feb 2023 16:31:59 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 10 Feb 2023 00:31:31 +0000
+Date:   Fri, 10 Feb 2023 00:31:32 +0000
 In-Reply-To: <20230210003148.2646712-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230210003148.2646712-1-seanjc@google.com>
 X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
-Message-ID: <20230210003148.2646712-5-seanjc@google.com>
-Subject: [PATCH v2 04/21] KVM: x86: Generate set of VMX feature MSRs using
- first/last definitions
+Message-ID: <20230210003148.2646712-6-seanjc@google.com>
+Subject: [PATCH v2 05/21] KVM: x86: Disallow writes to immutable feature MSRs
+ after KVM_RUN
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -65,7 +65,7 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,108 +73,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add VMX MSRs to the runtime list of feature MSRs by iterating over the
-range of emulated MSRs instead of manually defining each MSR in the "all"
-list.  Using the range definition reduces the cost of emulating a new VMX
-MSR, e.g. prevents forgetting to add an MSR to the list.
+Disallow writes to feature MSRs after KVM_RUN to prevent userspace from
+changing the vCPU model after running the vCPU.  Similar to guest CPUID,
+KVM uses feature MSRs to configure intercepts, determine what operations
+are/aren't allowed, etc.  Changing the capabilities while the vCPU is
+active will at best yield unpredictable guest behavior, and at worst
+could be dangerous to KVM.
 
-Extracting the VMX MSRs from the "all" list, which is a compile-time
-constant, also shrinks the list to the point where the compiler can
-heavily optimize code that iterates over the list.
+Allow writing the current value, e.g. so that userspace can blindly set
+all MSRs when emulating RESET, and unconditionally allow writes to
+MSR_IA32_UCODE_REV so that userspace can emulate patch loads.
 
-No functional change intended.
+Special case the VMX MSRs to keep the generic list small, i.e. so that
+KVM can do a linear walk of the generic list without incurring meaningful
+overhead.
 
+Cc: Like Xu <like.xu.linux@gmail.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/x86.c | 53 +++++++++++++++++++---------------------------
- 1 file changed, 22 insertions(+), 31 deletions(-)
+ arch/x86/kvm/x86.c | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
 diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 7b91f73a837d..7b73a0b45041 100644
+index 7b73a0b45041..186cb6a81643 100644
 --- a/arch/x86/kvm/x86.c
 +++ b/arch/x86/kvm/x86.c
-@@ -1539,36 +1539,19 @@ static u32 emulated_msrs[ARRAY_SIZE(emulated_msrs_all)];
- static unsigned num_emulated_msrs;
- 
- /*
-- * List of msr numbers which are used to expose MSR-based features that
-- * can be used by a hypervisor to validate requested CPU features.
-+ * List of MSRs that control the existence of MSR-based features, i.e. MSRs
-+ * that are effectively CPUID leafs.  VMX MSRs are also included in the set of
-+ * feature MSRs, but are handled separately to allow expedited lookups.
-  */
--static const u32 msr_based_features_all[] = {
--	MSR_IA32_VMX_BASIC,
--	MSR_IA32_VMX_TRUE_PINBASED_CTLS,
--	MSR_IA32_VMX_PINBASED_CTLS,
--	MSR_IA32_VMX_TRUE_PROCBASED_CTLS,
--	MSR_IA32_VMX_PROCBASED_CTLS,
--	MSR_IA32_VMX_TRUE_EXIT_CTLS,
--	MSR_IA32_VMX_EXIT_CTLS,
--	MSR_IA32_VMX_TRUE_ENTRY_CTLS,
--	MSR_IA32_VMX_ENTRY_CTLS,
--	MSR_IA32_VMX_MISC,
--	MSR_IA32_VMX_CR0_FIXED0,
--	MSR_IA32_VMX_CR0_FIXED1,
--	MSR_IA32_VMX_CR4_FIXED0,
--	MSR_IA32_VMX_CR4_FIXED1,
--	MSR_IA32_VMX_VMCS_ENUM,
--	MSR_IA32_VMX_PROCBASED_CTLS2,
--	MSR_IA32_VMX_EPT_VPID_CAP,
--	MSR_IA32_VMX_VMFUNC,
--
-+static const u32 msr_based_features_all_except_vmx[] = {
- 	MSR_AMD64_DE_CFG,
- 	MSR_IA32_UCODE_REV,
- 	MSR_IA32_ARCH_CAPABILITIES,
- 	MSR_IA32_PERF_CAPABILITIES,
- };
- 
--static u32 msr_based_features[ARRAY_SIZE(msr_based_features_all)];
-+static u32 msr_based_features[ARRAY_SIZE(msr_based_features_all_except_vmx) +
-+			      (KVM_LAST_EMULATED_VMX_MSR - KVM_FIRST_EMULATED_VMX_MSR + 1)];
+@@ -1554,6 +1554,25 @@ static u32 msr_based_features[ARRAY_SIZE(msr_based_features_all_except_vmx) +
+ 			      (KVM_LAST_EMULATED_VMX_MSR - KVM_FIRST_EMULATED_VMX_MSR + 1)];
  static unsigned int num_msr_based_features;
  
- /*
-@@ -6996,6 +6979,18 @@ long kvm_arch_vm_ioctl(struct file *filp,
- 	return r;
- }
- 
-+static void kvm_probe_feature_msr(u32 msr_index)
++/*
++ * All feature MSRs except uCode revID, which tracks the currently loaded uCode
++ * patch, are immutable once the vCPU model is defined.
++ */
++static bool kvm_is_immutable_feature_msr(u32 msr)
 +{
-+	struct kvm_msr_entry msr = {
-+		.index = msr_index,
-+	};
++	int i;
 +
-+	if (kvm_get_msr_feature(&msr))
-+		return;
++	if (msr >= KVM_FIRST_EMULATED_VMX_MSR && msr <= KVM_LAST_EMULATED_VMX_MSR)
++		return true;
 +
-+	msr_based_features[num_msr_based_features++] = msr_index;
++	for (i = 0; i < ARRAY_SIZE(msr_based_features_all_except_vmx); i++) {
++		if (msr == msr_based_features_all_except_vmx[i])
++			return msr != MSR_IA32_UCODE_REV;
++	}
++
++	return false;
 +}
 +
- static void kvm_probe_msr_to_save(u32 msr_index)
+ /*
+  * Some IA32_ARCH_CAPABILITIES bits have dependencies on MSRs that KVM
+  * does not yet virtualize. These include:
+@@ -2168,6 +2187,23 @@ static int do_get_msr(struct kvm_vcpu *vcpu, unsigned index, u64 *data)
+ 
+ static int do_set_msr(struct kvm_vcpu *vcpu, unsigned index, u64 *data)
  {
- 	u32 dummy[2];
-@@ -7097,15 +7092,11 @@ static void kvm_init_msr_lists(void)
- 		emulated_msrs[num_emulated_msrs++] = emulated_msrs_all[i];
- 	}
- 
--	for (i = 0; i < ARRAY_SIZE(msr_based_features_all); i++) {
--		struct kvm_msr_entry msr;
-+	for (i = KVM_FIRST_EMULATED_VMX_MSR; i <= KVM_LAST_EMULATED_VMX_MSR; i++)
-+		kvm_probe_feature_msr(i);
- 
--		msr.index = msr_based_features_all[i];
--		if (kvm_get_msr_feature(&msr))
--			continue;
--
--		msr_based_features[num_msr_based_features++] = msr_based_features_all[i];
--	}
-+	for (i = 0; i < ARRAY_SIZE(msr_based_features_all_except_vmx); i++)
-+		kvm_probe_feature_msr(msr_based_features_all_except_vmx[i]);
++	u64 val;
++
++	/*
++	 * Disallow writes to immutable feature MSRs after KVM_RUN.  KVM does
++	 * not support modifying the guest vCPU model on the fly, e.g. changing
++	 * the nVMX capabilities while L2 is running is nonsensical.  Ignore
++	 * writes of the same value, e.g. to allow userspace to blindly stuff
++	 * all MSRs when emulating RESET.
++	 */
++	if (vcpu->arch.last_vmentry_cpu != -1 &&
++	    kvm_is_immutable_feature_msr(index)) {
++		if (do_get_msr(vcpu, index, &val) || *data != val)
++			return -EINVAL;
++
++		return 0;
++	}
++
+ 	return kvm_set_msr_ignored_check(vcpu, index, *data, true);
  }
  
- static int vcpu_mmio_write(struct kvm_vcpu *vcpu, gpa_t addr, int len,
 -- 
 2.39.1.581.gbfd45094c4-goog
 
