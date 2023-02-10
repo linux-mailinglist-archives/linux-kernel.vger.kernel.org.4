@@ -2,87 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7113A692B98
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 00:46:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A1F692B9A
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 00:46:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjBJXqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 18:46:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
+        id S230035AbjBJXqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 18:46:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjBJXqU (ORCPT
+        with ESMTP id S229944AbjBJXqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 18:46:20 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0948516330
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 15:45:53 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 456D91EC0758;
-        Sat, 11 Feb 2023 00:45:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1676072748;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:in-reply-to:
-         references; bh=PJ0MCIKmicATxfrO7Q7VcthrEobh2IANYeLpCnb2HiE=;
-        b=HzZbrocOhAKhfcka5Zv+XFRFjIC35p0EyEw+Y2T2pBGIvQrUpdIC1A28BSZyWQxvKCB8qf
-        XP0ltu6K3NRJ+D3rvZWImFBSKC9QXCTxRFauNQcQ6b9LRCr5XckK8zqqyKcFBroLR5Bq9Z
-        SdEJSP+cD1n7CLO6c2bonbt8JySXwnk=
-From:   Borislav Petkov <bp@alien8.de>
-To:     X86 ML <x86@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] x86/cacheinfo: Remove unused trace variable
-Date:   Sat, 11 Feb 2023 00:45:41 +0100
-Message-Id: <20230210234541.9694-1-bp@alien8.de>
-X-Mailer: git-send-email 2.35.1
+        Fri, 10 Feb 2023 18:46:44 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60FD55286
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 15:46:34 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id o5so8133442ljj.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 15:46:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4q6XW5XbdQX/MPpKXpGqH3BO1A2MTER/s1wXEr/gwrU=;
+        b=O+skqT1FzCFvFvqtXF5FW8Wm6vMHiJaJE58WSPOfKaty1uoyPCBG+joTQ4/URDQgCK
+         V1DFxMBm1IE6qQvB8zpklFEaKZ8VdaQf3diPhkH8eAAQzTBeG36eRHJgQJi8dGqez1ce
+         4B/fCD+PzYQke5aaQ8pvHf0xQjmUx3oYgV/kE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4q6XW5XbdQX/MPpKXpGqH3BO1A2MTER/s1wXEr/gwrU=;
+        b=vq5mS76tJQbeSLohSX+KqmE2vTugluh616CayuA841PDqubPmq8fL/12my5ET6tGc3
+         AJom2SE0loc3gq1AyGO+z86CaDsrmS2/6GcEscSA7VAr1WX8OqrRZ7j0zX+5m4fhMGwX
+         7awVmLkMTP5m56thS6946DhzVUA3WL0jV7aMAMc283Uq3htJ6lK16zpdcjLNNsmuxomG
+         DHfiK/h4WaH+SZiXwP/HgAjqoYLPR/YwbLnLHJg8iScGZtYx/Xqj9SUwDU48fqWneN3H
+         tTe5+Xed3M+Z2iE9Mu13ZTkzCL0njQLpKjhrDtboKaXH8SYrD6gtVlPA7xQqpEAat9um
+         cHjw==
+X-Gm-Message-State: AO0yUKUh/MIlCc+qNkKRgxkS8OpJt0cgRMl5p40EDPa37ARW7dELy32R
+        GuQatI5PbBx8UxDb7MsWtU4ika95iYSaFcRWkNECRQ==
+X-Google-Smtp-Source: AK7set/8bE/xi8HD3yYAegHcZ75Mj/TqtrRvLJOEGnRdFGXQXoi2tM6qHFUWQN2FBLJ+/NVfmoe/K6Y8bEJ4Wxqe5Wc=
+X-Received: by 2002:a2e:b4b8:0:b0:290:65bb:6b24 with SMTP id
+ q24-20020a2eb4b8000000b0029065bb6b24mr2679443ljm.87.1676072793176; Fri, 10
+ Feb 2023 15:46:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230204022051.2737724-1-joel@joelfernandes.org> <Y+JQ8GX82Gn+7ZWe@lothringen>
+In-Reply-To: <Y+JQ8GX82Gn+7ZWe@lothringen>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Fri, 10 Feb 2023 18:46:21 -0500
+Message-ID: <CAEXW_YTCZO-8pT2ixnDmbVaLw31J4JRXieEGvFPdo4P=1GJPLA@mail.gmail.com>
+Subject: Re: [PATCH] rcu/tree: Improve comments in rcu_report_qs_rdp()
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Qiang Zhang <Qiang1.zhang@intel.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Borislav Petkov (AMD)" <bp@alien8.de>
+On Tue, Feb 7, 2023 at 8:24 AM Frederic Weisbecker <frederic@kernel.org> wrote:
+>
+> On Sat, Feb 04, 2023 at 02:20:50AM +0000, Joel Fernandes (Google) wrote:
+> > Recent discussion triggered due to a patch linked below, from Qiang,
+> > shed light on the need to accelerate from QS reporting paths.
+> >
+> > Update the comments to capture this piece of knowledge.
+> >
+> > Link: https://lore.kernel.org/all/20230118073014.2020743-1-qiang1.zhang@intel.com/
+> > Cc: Qiang Zhang <Qiang1.zhang@intel.com>
+> > Cc: Frederic Weisbecker <frederic@kernel.org>
+> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> >
+> > ---
+> >  kernel/rcu/tree.c | 13 ++++++++++++-
+> >  1 file changed, 12 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > index 93eb03f8ed99..713eb6ca6902 100644
+> > --- a/kernel/rcu/tree.c
+> > +++ b/kernel/rcu/tree.c
+> > @@ -1983,7 +1983,12 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+> >       } else {
+> >               /*
+> >                * This GP can't end until cpu checks in, so all of our
+> > -              * callbacks can be processed during the next GP.
+> > +              * callbacks can be processed during the next GP. Do
+> > +              * the acceleration from here otherwise there may be extra
+> > +              * grace period delays, as any accelerations from rcu_core()
+> > +              * or note_gp_changes() may happen only after the GP after the
+> > +              * current one has already started. Further, rcu_core()
+> > +              * only accelerates if RCU is idle (no GP in progress).
+>
+> Actually note_gp_changes() should take care of that.
 
-15cd8812ab2c ("x86: Remove the CPU cache size printk's") removed the
-last use of the trace local var. Remove it too and the useless trace
-cache case.
+You are referring to  rcu_core() -> rcu_check_quiescent_state() ->
+note_gp_changes() doing the acceleration prior to the  rcu_core() ->
+rcu_report_qs_rdp() call, correct?
 
-No functional changes.
+Ah, but note_gp_changes() has an early return which triggers if either:
+1. The rnp spinlock trylock failed.
+2. The start of a new grace period was already detected before, so
+rdp->gp_seq == rnp->gp_seq.
 
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
----
- arch/x86/kernel/cpu/cacheinfo.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+So I think it is possible that we are in the middle of a GP, and
+rcu_core() is called because QS reporting is required for the CPU, and
+say the current GP started we are in the middle off occurs from the
+same CPU so rdp->gp_seq == rnp->gp_seq.
 
-diff --git a/arch/x86/kernel/cpu/cacheinfo.c b/arch/x86/kernel/cpu/cacheinfo.c
-index f4e5aa27eec6..4063e8991211 100644
---- a/arch/x86/kernel/cpu/cacheinfo.c
-+++ b/arch/x86/kernel/cpu/cacheinfo.c
-@@ -734,7 +734,7 @@ void init_hygon_cacheinfo(struct cpuinfo_x86 *c)
- void init_intel_cacheinfo(struct cpuinfo_x86 *c)
- {
- 	/* Cache sizes */
--	unsigned int trace = 0, l1i = 0, l1d = 0, l2 = 0, l3 = 0;
-+	unsigned int l1i = 0, l1d = 0, l2 = 0, l3 = 0;
- 	unsigned int new_l1d = 0, new_l1i = 0; /* Cache sizes from cpuid(4) */
- 	unsigned int new_l2 = 0, new_l3 = 0, i; /* Cache sizes from cpuid(4) */
- 	unsigned int l2_id = 0, l3_id = 0, num_threads_sharing, index_msb;
-@@ -835,9 +835,6 @@ void init_intel_cacheinfo(struct cpuinfo_x86 *c)
- 						case LVL_3:
- 							l3 += cache_table[k].size;
- 							break;
--						case LVL_TRACE:
--							trace += cache_table[k].size;
--							break;
- 						}
- 
- 						break;
--- 
-2.35.1
+Now, rcu_core()'s call to note_gp_changes() should return early but
+its later call to report_qs_rdp() will not accelerate the callback
+without the code we are commenting here.
 
+> My gut feeling is that the
+> acceleration in rcu_report_qs_rdp() only stands for:
+>
+> * callbacks that may be enqueued from an IRQ firing during the small window
+>   between the RNP unlock in note_gp_changes() and the RNP lock in
+>   rcu_report_qs_rdp()
+
+Sure, this also seems like a valid reason.
+
+> * __note_gp_changes() got called even before from the GP kthread, and callbacks
+>   got enqueued between that and rcu_core().
+
+Agreed. In this case we will take the early return in
+note_gp_changes() when called from the rcu_core(). So yeah, that was
+kind of my point as well but slightly different reasoning.
+
+Let me know if you disagree with anything I mentioned, though.
+
+ - Joel
