@@ -2,176 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90D2D69219F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:08:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F05B66921A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232488AbjBJPH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 10:07:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35284 "EHLO
+        id S232540AbjBJPIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 10:08:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232110AbjBJPH5 (ORCPT
+        with ESMTP id S232516AbjBJPIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 10:07:57 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0CB1C598
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:07:55 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id y1so5378271wru.2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:07:55 -0800 (PST)
+        Fri, 10 Feb 2023 10:08:40 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603056CC6D
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:08:28 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id g18so6015434qtb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:08:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qlNC/kKbUsPlOCKxymEIios8n2ASOqnWF3/GBA5cjF8=;
-        b=lUiODl6bVd/fiZW4XlYgkYvOyJLav2vvyyiWeUXwQEPV09CChytAMwjjvRT0y6b2gx
-         3tGbsprUTD5PgTf821cAG8WnuE71fRwT7VI07pUdubcRoTjoscHc6fOnt8jUeo6blWaf
-         3C3aY8Wxj5ut8lRP6XRG918amBW2lPMn2hZgDTcJ/Fu8u01vC8CoMWe5LsO5qvG4XOku
-         p0X1zCcFem9m7EENqaeQQUm9aRx7DMErky8UyerVpVYP5JFH9npBkyA/AYrPGwelLvAh
-         2tYbYNRlWECWCWVqp6BvTzPlJYqx6gFOva9Yr6HDm7sdM+Xz5myPKiWX5kRb74BBwCbm
-         vMDQ==
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NeXajktN08gdTqt/pb1PeyZwlRPXP0HIHSrcxP/wobQ=;
+        b=4tz0G1FmuViqvkhIudhqhbw7o48RF15bvCVJ8whu4nFj5BzkWYRhwDP0DBuBbHvyOV
+         2TCufrhYIxparXIirM90ae67HytZTXY/OMR8LIdwRNjy47yvWYpCcRUNfgOxK1Ndv9F+
+         Wamp2/MbQ3FQO/OZ85pKweJ9/iJI15npFgEqKYhdrgM7mpuh1nEUKAMQmw23Jw3GZrvg
+         Axdqe4O7ahSdl0QU8+5JfRxdubpUHIxL9jskCp5CSGAdWY8daWMIExB6afUNwedX2jWu
+         YYJqYpVKt0h0BPR7B7jcN+2hen/rwlidcyifr/DFVHQ05EO1URsMHg0w/DaEApuGGlG6
+         RASQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qlNC/kKbUsPlOCKxymEIios8n2ASOqnWF3/GBA5cjF8=;
-        b=D70HNd3XhV8lgzn4u5rRzOuS3UhWkKhs67tOE5Q/g+4JTJG99grsiOAIrkEsinU1Bq
-         rRAYmjon0FGgCPrBA9KC57Tzw8lLRB3XM7H/a3SCio3C2nO8IZRVMMBfyq15q87ln11w
-         9h+tR0rIhV6QD4wW2WIPkHHpgtbbp6ha6Hf5kg1kgAoAQZQpVhrtZ+Ww+HVt3/COvDSm
-         4NqLBMR+/77DR525noQALqaC9PS9m31GwbT5RMt5nk5Z+Ga4NCT95DW9Y3bmdSfH1tX6
-         3zTRfWXfNw7HJNoOBLFQjwQrH8YU0rqvQnkRFOK3CiABUazLFnejFB+dDWiNUEw4qv49
-         Y7GQ==
-X-Gm-Message-State: AO0yUKUi26Me0tHonsoFjArvCLYFAtGJU/Ryz/02nBQ+UK/TFCOIieEt
-        k2DiMiGJow8uwhsmZ3f/ASkfIyz9LUSzTFWrH0FR4w==
-X-Google-Smtp-Source: AK7set9TQ9KQwoqhGEVIEcXvcv/U/mBHAlTVV6SnxMr8fK8HsjlFlHF/wol0CSMUXWf24slV/I76/nqHc2iMbAXrygg=
-X-Received: by 2002:a5d:6583:0:b0:2c4:936:f423 with SMTP id
- q3-20020a5d6583000000b002c40936f423mr475464wru.113.1676041673935; Fri, 10 Feb
- 2023 07:07:53 -0800 (PST)
-MIME-Version: 1.0
-References: <20230207135440.1482856-1-vladimir.oltean@nxp.com> <20230207135440.1482856-11-vladimir.oltean@nxp.com>
-In-Reply-To: <20230207135440.1482856-11-vladimir.oltean@nxp.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 10 Feb 2023 16:07:42 +0100
-Message-ID: <CANn89iL=Z8TOymdaBJ8WUBh8pXOgp_tKM3KVsQZ05uT3orOj4w@mail.gmail.com>
-Subject: Re: [PATCH v2 net-next 10/15] net/sched: make stab available before
- ops->init() call
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NeXajktN08gdTqt/pb1PeyZwlRPXP0HIHSrcxP/wobQ=;
+        b=JovWpIKhOE490Qp8+H5t6WKGLYihJpjmdbPgLegQ8RaTxMc9hXiTrwL25kG939Yden
+         lqWSenAa97F/XN69I+3AUCaBVSzN/9JMkuhkfEd1O7DIYJfp84bZ4UQp8INaKngUJRG2
+         5t7hC93ydBmLx6hZymhkyAJ8z6hzslWvpcEZ4NpPko+S/33nJ/XwnAYXl/PIvIOmw7hT
+         WerzV63r/NymwxpqKrGb7Hxsz2B9TpJ9SD+6SR9u1geYtK02kpcWOf2S4fip82baIRUJ
+         Y6hcXr60KS3/lWhCyWw3kTC4qQxN5LXTMobeqo0nD1q3Fx9GKYoYxYsUju9bbmMMMcO+
+         SqYg==
+X-Gm-Message-State: AO0yUKW7aQUFgcgQ5AJLUbbScbAK6/iwdDjhq3gwMzDa7PIjcjHG5gKZ
+        Hsq3ru17vNn4xVqTJ7osm1D25Q==
+X-Google-Smtp-Source: AK7set+gB8I7SsaibW3tqxP2qGOehyGAfE7YysBkVatv5LZKtMsvyz4C6ypUP2jUhOysRHv/ioF2JQ==
+X-Received: by 2002:a05:622a:11c3:b0:3ab:d932:6c4e with SMTP id n3-20020a05622a11c300b003abd9326c4emr28225693qtk.18.1676041707499;
+        Fri, 10 Feb 2023 07:08:27 -0800 (PST)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
+        by smtp.gmail.com with ESMTPSA id d10-20020ac800ca000000b003b0b903720esm3579310qtg.13.2023.02.10.07.08.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 07:08:26 -0800 (PST)
+Message-ID: <e60e4abcc9a4ae149844982afd65135d6e1c87b6.camel@ndufresne.ca>
+Subject: Re: [EXT] Re: [PATCH 01/10] media: Add P012 and P012M video format
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Ming Qian <ming.qian@nxp.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "Mirela Rabulea (OSS)" <mirela.rabulea@oss.nxp.com>
+Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "X.H. Bao" <xiahong.bao@nxp.com>, dl-linux-imx <linux-imx@nxp.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Fri, 10 Feb 2023 10:08:25 -0500
+In-Reply-To: <AM6PR04MB63418538B02868455752C74DE7D39@AM6PR04MB6341.eurprd04.prod.outlook.com>
+References: <cover.1671071730.git.ming.qian@nxp.com>
+         <dfaef3c8eb29108b1837a1959d598c8b0db63422.1671071730.git.ming.qian@nxp.com>
+         <05bfc909-1ebb-b74f-dcdd-adc70dd97f3e@xs4all.nl>
+         <AM6PR04MB63418538B02868455752C74DE7D39@AM6PR04MB6341.eurprd04.prod.outlook.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 2:55 PM Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
->
-> Some qdiscs like taprio turn out to be actually pretty reliant on a well
-> configured stab, to not underestimate the skb transmission time (by
-> properly accounting for L1 overhead).
->
-> In a future change, taprio will need the stab, if configured by the
-> user, to be available at ops->init() time. It will become even more
-> important in upcoming work, when the overhead will be used for the
-> queueMaxSDU calculation that is passed to an offloading driver.
->
-> However, rcu_assign_pointer(sch->stab, stab) is called right after
-> ops->init(), making it unavailable, and I don't really see a good reason
-> for that.
->
-> Move it earlier, which nicely seems to simplify the error handling path
-> as well.
+Le lundi 30 janvier 2023 =C3=A0 08:15 +0000, Ming Qian a =C3=A9crit=C2=A0:
+> > > diff --git a/include/uapi/linux/videodev2.h
+> > > b/include/uapi/linux/videodev2.h index 1befd181a4cc..5448aa3b7858
+> > > 100644
+> > > --- a/include/uapi/linux/videodev2.h
+> > > +++ b/include/uapi/linux/videodev2.h
+> > > @@ -626,12 +626,14 @@ struct v4l2_pix_format {
+> > > =C2=A0 #define V4L2_PIX_FMT_NV24=C2=A0=C2=A0=C2=A0 v4l2_fourcc('N', '=
+V', '2', '4') /* 24=C2=A0
+> > > Y/CbCr
+> > 4:4:4=C2=A0 */
+> > > =C2=A0 #define V4L2_PIX_FMT_NV42=C2=A0=C2=A0=C2=A0 v4l2_fourcc('N', '=
+V', '4', '2') /* 24=C2=A0
+> > > Y/CrCb
+> > 4:4:4=C2=A0 */
+> > > =C2=A0 #define V4L2_PIX_FMT_P010=C2=A0=C2=A0=C2=A0 v4l2_fourcc('P', '=
+0', '1', '0') /* 24=C2=A0
+> > > Y/CbCr
+> > 4:2:0 10-bit per component */
+> > > +#define V4L2_PIX_FMT_P012=C2=A0=C2=A0=C2=A0 v4l2_fourcc('P', '0', '1=
+', '2') /* 24=C2=A0
+> > > Y/CbCr
+> > 4:2:0 12-bit per component */
+> > >=20
+> > > =C2=A0 /* two non contiguous planes - one Y, one Cr + Cb interleaved=
+=C2=A0 */
+> > > =C2=A0 #define V4L2_PIX_FMT_NV12M=C2=A0=C2=A0 v4l2_fourcc('N', 'M', '=
+1', '2') /* 12=C2=A0
+> > > Y/CbCr
+> > 4:2:0=C2=A0 */
+> > > =C2=A0 #define V4L2_PIX_FMT_NV21M=C2=A0=C2=A0 v4l2_fourcc('N', 'M', '=
+2', '1') /* 21=C2=A0
+> > > Y/CrCb
+> > 4:2:0=C2=A0 */
+> > > =C2=A0 #define V4L2_PIX_FMT_NV16M=C2=A0=C2=A0 v4l2_fourcc('N', 'M', '=
+1', '6') /* 16=C2=A0
+> > > Y/CbCr
+> > 4:2:2=C2=A0 */
+> > > =C2=A0 #define V4L2_PIX_FMT_NV61M=C2=A0=C2=A0 v4l2_fourcc('N', 'M', '=
+6', '1') /* 16=C2=A0
+> > > Y/CrCb
+> > 4:2:2=C2=A0 */
+> > > +#define V4L2_PIX_FMT_P012M=C2=A0=C2=A0 v4l2_fourcc('P', 'M', '1', '2=
+') /* 24=C2=A0
+> > > Y/CbCr
+> > 4:2:0 12-bit per component */
+> >=20
+> > The name of the V4L2_PIX_FMT_ defines in this series are hard to decode=
+.
+> >=20
+> > In this case is it derived from V4L2_PIX_FMT_P010, which really should =
+have
+> > been named differently, but it's too late now :-(
+> >=20
+> > So I guess we'll stick with this naming, but it's not obvious what 'P01=
+2'
+> > means
+> > without referring to documentation.
+> >=20
+> > Oh well.
+> >=20
+> > Regards,
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Hans
+>=20
+> Hi Hans,
+> =C2=A0=C2=A0=C2=A0 I'll update the format name, as you know,=C2=A0 the P0=
+12 is following the P010,
+> as they are almost the same, and the Y212 comes from gstreamer
+> (GST_VIDEO_FORMAT_Y212_LE), then I did some naming like that.
+> =C2=A0=C2=A0=C2=A0 I'll correct them in v2 patch.
 
-Well... if you say so :)
+I agree these naming are not obvious. In GStreamer, appart from the _LE par=
+t,
+we've had this historical tendency to just stick with Microsoft names when =
+they
+exist. Though Microsoft only define 10 and 16bits (P010/P016, Y210 and Y216=
+). In
+this case, the 12 has is derived from it.
 
->
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> Reviewed-by: Kurt Kanzenbach <kurt@linutronix.de>
->
+https://learn.microsoft.com/en-us/windows/win32/medfound/10-bit-and-16-bit-=
+yuv-video-formats
 
-If TCA_STAB attribute is malformed, we end up calling ->destroy() on a
-not yet initialized qdisc :/
+While P010 is very commonly seen, I don't know if Y210/Y212/Y216 is a great
+idea. It is a 16bit component width version of YUYV, which as we know exist=
+ in
+all sort of swizzling. So the Microsoft name will be hard to extend to othe=
+r
+component order. My argument of keeping it this way though is that it match=
+es
+the other copy of pixel formats definition that exist in Linux, which is
+drm_fourcc.h.
 
-I am going to send the following fix, unless someone disagrees.
-
-(Moving qdisc_put_stab() _after_ ops->destroy(sch) is not strictly
-needed for a fix,
-but undo should be done in reverse steps for clarity.
-
-diff --git a/net/sched/sch_api.c b/net/sched/sch_api.c
-index e9780631b5b58202068e20c42ccf1197eac2194c..aba789c30a2eb50d339b8a888495b794825e1775
-100644
---- a/net/sched/sch_api.c
-+++ b/net/sched/sch_api.c
-@@ -1286,7 +1286,7 @@ static struct Qdisc *qdisc_create(struct net_device *dev,
-                stab = qdisc_get_stab(tca[TCA_STAB], extack);
-                if (IS_ERR(stab)) {
-                        err = PTR_ERR(stab);
--                       goto err_out4;
-+                       goto err_out3;
-                }
-                rcu_assign_pointer(sch->stab, stab);
-        }
-@@ -1294,14 +1294,14 @@ static struct Qdisc *qdisc_create(struct
-net_device *dev,
-        if (ops->init) {
-                err = ops->init(sch, tca[TCA_OPTIONS], extack);
-                if (err != 0)
--                       goto err_out5;
-+                       goto err_out4;
-        }
-
-        if (tca[TCA_RATE]) {
-                err = -EOPNOTSUPP;
-                if (sch->flags & TCQ_F_MQROOT) {
-                        NL_SET_ERR_MSG(extack, "Cannot attach rate
-estimator to a multi-queue root qdisc");
--                       goto err_out5;
-+                       goto err_out4;
-                }
-
-                err = gen_new_estimator(&sch->bstats,
-@@ -1312,7 +1312,7 @@ static struct Qdisc *qdisc_create(struct net_device *dev,
-                                        tca[TCA_RATE]);
-                if (err) {
-                        NL_SET_ERR_MSG(extack, "Failed to generate new
-estimator");
--                       goto err_out5;
-+                       goto err_out4;
-                }
-        }
-
-@@ -1321,12 +1321,13 @@ static struct Qdisc *qdisc_create(struct
-net_device *dev,
-
-        return sch;
-
--err_out5:
--       qdisc_put_stab(rtnl_dereference(sch->stab));
- err_out4:
--       /* ops->init() failed, we call ->destroy() like qdisc_create_dflt() */
-+       /* Even if ops->init() failed, we call ops->destroy()
-+        * like qdisc_create_dflt().
-+        */
-        if (ops->destroy)
-                ops->destroy(sch);
-+       qdisc_put_stab(rtnl_dereference(sch->stab));
- err_out3:
-        netdev_put(dev, &sch->dev_tracker);
-        qdisc_free(sch);
+Nicolas
