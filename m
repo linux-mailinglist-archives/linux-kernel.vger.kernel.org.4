@@ -2,165 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 236096916B7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 03:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16AF56916B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 03:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbjBJCfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 21:35:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
+        id S230220AbjBJCd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 21:33:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjBJCfm (ORCPT
+        with ESMTP id S229695AbjBJCd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 21:35:42 -0500
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2109.outbound.protection.outlook.com [40.107.215.109])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD1A21A22
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 18:35:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TGVvx9gYG87xo1bxpoPx4UzGPTMK6wgpZZLS5uo66T/H/X+ZK+K4Pk13W+sYvoiqqn4DQP1X32bBsGfl2pj/kBtTiR7LXORnIxYCk0CHZNnbl53pj2dJ2sZRIJcMF1iQcdKADupQu6TYW6MjHLzl7ve2unbjPFJZq11pFxVzewjWwsbMSHndu0PTpZcbKvOskDKMjep8m7YDdwr7LE25KeBKoqHpJEI4s7KOQ+I7L3zzXia6UCqYrVHNpiqhQzqZ/mN/EDEZP++PqQnXrk8fC01oiEYC53vvbeutcaW1aRVPSK28TauK/ScP9ZfmMtH2F5X/3YS9W5hMEwESjxtMjA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b0yKomsjRaumVznH1jBW7gj+dR6xWuoQ6qn0ryUfhNo=;
- b=F+j+7GijukDc34JHY3thdZU7xwpdzO3yMMmhjvMuup5b2ZgPmPGetmIQ2+vl4WKAr/nxLyvRU7u+3xu42SEUKYo6XeyeEBFSftt+zFQnvDQf5JCak49KMeS0wuAb/NE0GNKAmVIaJZNSy4O/jKhlI0+ot1XD+eZ6eJ0gVyQz2AtZao5h48EmucNYj3nWZzJUlgKgtTYtCW6o2/ZiDmBGwDl+GMrD8WU2boFNMkbEWA+OiLOBQrfIGq9+jMoDcnokEFwbSYt2hFPgLnwwNcHLyx7d8hFeNZZWVkOcdUE/qMVZ98VbL1BO0+zWwGuKng9Tu7b/VEd5h2YJ40okd24bLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 103.192.253.182) smtp.rcpttodomain=gmail.com smtp.mailfrom=zeku.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=zeku.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zeku.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b0yKomsjRaumVznH1jBW7gj+dR6xWuoQ6qn0ryUfhNo=;
- b=VXUDygMdjavkSjgsvUhhMhoUPLUh5MeE/9ueUh/lChWSBUNPoq6x0lUt/30WlcQVm9RWgR+E6ntSVzxXqPfm+yp0PyT7gDm+rEXClpt5Mzi1XvV9Iy4jiARs8ocOmys5gPtl6+mqQqUNkulF+DuloaamOTKrnLQlpMEfpYfbPk8gykjKlY4CkGCawHL44icxREiF4kPOCVZdpLC0B36prsuhdgbfNoQPyaBP+svv+CB++1Q7tyKRkl1O6pZ3o6Prpj2POW3JHar5yCVmXpHDKyfoOgUxVBlX3EcPH67PnodKHCKhxdg1jkwkUYDWUgqaALR2t0pgm8/z0z+X1ge0yQ==
-Received: from PS2PR01CA0048.apcprd01.prod.exchangelabs.com
- (2603:1096:300:58::36) by TYZPR02MB6161.apcprd02.prod.outlook.com
- (2603:1096:400:28a::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.18; Fri, 10 Feb
- 2023 02:35:36 +0000
-Received: from PSAAPC01FT049.eop-APC01.prod.protection.outlook.com
- (2603:1096:300:58:cafe::d3) by PS2PR01CA0048.outlook.office365.com
- (2603:1096:300:58::36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19 via Frontend
- Transport; Fri, 10 Feb 2023 02:35:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 103.192.253.182)
- smtp.mailfrom=zeku.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=zeku.com;
-Received-SPF: Pass (protection.outlook.com: domain of zeku.com designates
- 103.192.253.182 as permitted sender) receiver=protection.outlook.com;
- client-ip=103.192.253.182; helo=sh-exhtc2.internal.zeku.com; pr=C
-Received: from sh-exhtc2.internal.zeku.com (103.192.253.182) by
- PSAAPC01FT049.mail.protection.outlook.com (10.13.39.177) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6086.19 via Frontend Transport; Fri, 10 Feb 2023 02:35:36 +0000
-Received: from sh-exhtc5.internal.zeku.com (10.123.154.252) by
- sh-exhtc2.internal.zeku.com (10.123.21.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.12; Fri, 10 Feb 2023 10:32:30 +0800
-Received: from sh-exhtc4.internal.zeku.com (10.123.154.251) by
- sh-exhtc5.internal.zeku.com (10.123.154.252) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5;
- Fri, 10 Feb 2023 10:32:29 +0800
-Received: from sh-exhtc4.internal.zeku.com ([fe80::b447:eb25:37fd:3fd8]) by
- sh-exhtc4.internal.zeku.com ([fe80::b447:eb25:37fd:3fd8%3]) with mapi id
- 15.02.0986.005; Fri, 10 Feb 2023 10:32:29 +0800
-From:   =?utf-8?B?6KKB5biFKFNodWFpIFl1YW4p?= <yuanshuai@zeku.com>
-To:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-CC:     =?utf-8?B?5qyn6Ziz54Kc6ZKKKFdlaXpoYW8gT3V5YW5nKQ==?= 
-        <ouyangweizhao@zeku.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Weizhao Ouyang <o451686892@gmail.com>,
-        =?utf-8?B?5Lu756uL6bmPKFBlbmcgUmVuKQ==?= <renlipeng@zeku.com>
-Subject: RE: [PATCH v2] kasan: fix deadlock in start_report()
-Thread-Topic: [PATCH v2] kasan: fix deadlock in start_report()
-Thread-Index: AQHZPDZzScKWhyj5L0eV70o/eMb/rq7FygeAgACH4+D//5aGAIAAy+8AgAC6aDA=
-Date:   Fri, 10 Feb 2023 02:32:29 +0000
-Message-ID: <b058a424e46d4f94a1f2fdc61292606b@zeku.com>
-References: <20230209031159.2337445-1-ouyangweizhao@zeku.com>
- <CACT4Y+Zrz4KOU82jjEperYOM0sEp6TCmgse4XVMPkwAkS+dXrA@mail.gmail.com>
- <93b94f59016145adbb1e01311a1103f8@zeku.com>
- <CACT4Y+a=BaMNUf=_suQ5or9=ZksX2ht9gX8=XBSDEgHogyy3mg@mail.gmail.com>
- <CA+fCnZf3k-rsaOeti0Q7rqkmvsqDb2XxgxOq6V5Gqp6FGLH7Yg@mail.gmail.com>
-In-Reply-To: <CA+fCnZf3k-rsaOeti0Q7rqkmvsqDb2XxgxOq6V5Gqp6FGLH7Yg@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.122.89.15]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 9 Feb 2023 21:33:56 -0500
+X-Greylist: delayed 58910 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 09 Feb 2023 18:33:53 PST
+Received: from out-95.mta1.migadu.com (out-95.mta1.migadu.com [IPv6:2001:41d0:203:375::5f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9308E21A22
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 18:33:53 -0800 (PST)
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PSAAPC01FT049:EE_|TYZPR02MB6161:EE_
-X-MS-Office365-Filtering-Correlation-Id: aff9e88e-5d38-48f6-f4f9-08db0b0f7d9d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: y6LRCeDAcY71pXlxfgRGa74xJa9NWLWxXYi+6K5tCUzNo3XXIpSBcbVqT3ksJGnHlCBu/GnN9+4AEqCUy++d0f9Jkh2rnpignpKDsZza8DHJIFwl64JwFBmPpXORKRrYtmcT530FiZyPoTGCwBlsa9U1nvq5rDNczlJQgtds9JhFF62rh2hTYOosIslJ1yEkwXTphFVrSi9N6Ke91TGM8PBfgQi5W7X8gNFQHFaqdF3RUmG2LY6FVHu10snRxQms4KfLUUGMJTch0FtleJgoT/RChYEF1PklD16+3rJK8syfZCm/NY9ra1g1V8Al8Izz7nXMxz09PasPBXCnqq+A3tKbQVRGd//xN1dIcnCP9hjIXQ1lBpHhMm/t6Zt1YwaID/rPC8BTsSezsWoroLFI3lk4OvjljyPaeBOove0X6IU0Sa2OPSKsLgVdd+FNkzZyiC2Gfb/iqF8G7ZyCQ+dsE5xLm988kLAP5BAyCBuhhi6d/0pemkGr+ewYyAXYAIxIqwxBq+ivmV1Kl+MtoncoLLbvWhVYPNi/nktPDt05G1aXJIFuBH4ke2QjV2+sSKeoxcNyfeopA8GnUEQ2X/C49jVOFbN4op3yke1FKDUCNfHi8dPD7RCZBjUAW3zN8yYYOxmdgg+9MP33KROcauJvvsbEwqo5rvXYSn5hS8lZ/shjpWKSgy4Kjl+sK0dtSz3QHbAu2nBe7LgjeOnYZVqp6aamnKPY5r+Zt5ZZvKIFT/o=
-X-Forefront-Antispam-Report: CIP:103.192.253.182;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:sh-exhtc2.internal.zeku.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(396003)(39850400004)(136003)(451199018)(36840700001)(46966006)(2906002)(186003)(7416002)(86362001)(426003)(47076005)(108616005)(2616005)(8936002)(81166007)(336012)(5660300002)(26005)(82310400005)(36756003)(966005)(7696005)(478600001)(53546011)(24736004)(85182001)(107886003)(83380400001)(316002)(41300700001)(4326008)(40480700001)(8676002)(70586007)(82740400003)(54906003)(356005)(36860700001)(70206006)(110136005)(36900700001);DIR:OUT;SFP:1102;
-X-OriginatorOrg: zeku.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2023 02:35:36.1101
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: aff9e88e-5d38-48f6-f4f9-08db0b0f7d9d
-X-MS-Exchange-CrossTenant-Id: 171aedba-f024-43df-bc82-290d40e185ac
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=171aedba-f024-43df-bc82-290d40e185ac;Ip=[103.192.253.182];Helo=[sh-exhtc2.internal.zeku.com]
-X-MS-Exchange-CrossTenant-AuthSource: PSAAPC01FT049.eop-APC01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR02MB6161
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1675996430;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2qZgslIhozh5iAyrVtnK6cx6++WSjKW0MyBqEgbTn14=;
+        b=pFJPpcEqqYnLoGy1XK3P7gElVhRRf5laAM5WgIBwP9hwmO9oaf/DpunQ6FgZo4APAGYgxJ
+        Yprz1LxbLC/6DdJondvR92Hg1x2Lx1Fsaj3O9nSe84uT2aPdzCQv5cH72yfasWZaoZXxGx
+        g39X2JLL6lCgBG1gdUzC3tX6hvtecXc=
+Date:   Fri, 10 Feb 2023 02:33:47 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   "Yajun Deng" <yajun.deng@linux.dev>
+Message-ID: <626a5f4c4996f57631a8e1877c7646e5@linux.dev>
+Subject: Re: [PATCH v2] mm/page_alloc: optimize find_suitable_fallback()
+ and fallbacks array
+To:     "Zi Yan" <ziy@nvidia.com>
+Cc:     akpm@linux-foundation.org, mgorman@techsingularity.net,
+        david@redhat.com, vbabka@suse.cz, rppt@linux.ibm.com,
+        osalvador@suse.de, rppt@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <494D9F5D-33A4-48B4-911B-9A75CFC9BC67@nvidia.com>
+References: <494D9F5D-33A4-48B4-911B-9A75CFC9BC67@nvidia.com>
+ <4C196D76-49A9-4B06-A51F-D8A13109DF3B@nvidia.com>
+ <20230209101144.496144-1-yajun.deng@linux.dev>
+ <ddc2d9001ef9d44651b62869ff9575b6@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpZGF5LCBGZWJydWFyeSAxMCwgMjAyMyBhdCA2OjU0IEFNIEFuZHJleSBLb25vdmFsb3Yg
-PGFuZHJleWtudmxAZ21haWwuY29tPg0Kd3JvdGU6DQo+IE9uIFRodSwgRmViIDksIDIwMjMgYXQg
-MTE6NDQgQU0gRG1pdHJ5IFZ5dWtvdiA8ZHZ5dWtvdkBnb29nbGUuY29tPg0KPiB3cm90ZToNCj4g
-Pg0KPiA+ICBPbiBUaHUsIDkgRmViIDIwMjMgYXQgMTA6MTksIOiigeW4hShTaHVhaSBZdWFuKSA8
-eXVhbnNodWFpQHpla3UuY29tPg0KPiB3cm90ZToNCj4gPiA+DQo+ID4gPiBIaSBEbWl0cnkgVnl1
-a292DQo+ID4gPg0KPiA+ID4gVGhhbmtzLCBJIHNlZSB0aGF0IHlvdXIgbWVhbnMuDQo+ID4gPg0K
-PiA+ID4gQ3VycmVudGx5LCByZXBvcnRfc3VwcHJlc3NlZCgpIHNlZW0gbm90IHdvcmsgaW4gS2Fz
-YW4tSFcgbW9kZSwgaXQNCj4gYWx3YXlzIHJldHVybiBmYWxzZS4NCj4gPiA+IERvIHlvdSB0aGlu
-ayBzaG91bGQgY2hhbmdlIHRoZSByZXBvcnRfc3VwcHJlc3NlZCBmdW5jdGlvbj8NCj4gPiA+IEkg
-ZG9uJ3Qga25vdyB3aHkgQ09ORklHX0tBU0FOX0hXX1RBR1Mgd2FzIGJsb2NrZWQgc2VwYXJhdGVs
-eQ0KPiBiZWZvcmUuDQo+ID4NCj4gPiBUaGF0IGxvZ2ljIHdhcyBhZGRlZCBieSBBbmRyZXkgaW46
-DQo+ID4gaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvdG9y
-dmFsZHMvbGludXguZ2l0L2NvbQ0KPiA+IG1pdC8/aWQ9YzA2ODY2NGM5N2M3Y2YNCj4gPg0KPiA+
-IEFuZHJleSwgY2FuIHdlIG1ha2UgcmVwb3J0X2VuYWJsZWQoKSBjaGVjayBjdXJyZW50LT5rYXNh
-bl9kZXB0aCBhbmQNCj4gPiByZW1vdmUgcmVwb3J0X3N1cHByZXNzZWQoKT8NCj4NCj4gSSBkZWNp
-ZGVkIHRvIG5vdCB1c2Uga2FzYW5fZGVwdGggZm9yIEhXX1RBR1MsIGFzIHdlIGNhbiBhbHdheXMg
-dXNlIGENCj4gbWF0Y2gtYWxsIHRhZyB0byBtYWtlICJpbnZhbGlkIiBtZW1vcnkgYWNjZXNzZXMu
-DQo+DQo+IEkgdGhpbmsgd2UgY2FuIGZpeCB0aGUgcmVwb3J0aW5nIGNvZGUgdG8gZG8gZXhhY3Rs
-eSB0aGF0IHNvIHRoYXQgaXQgZG9lc24ndA0KPiBjYXVzZSBNVEUgZmF1bHRzLg0KPg0KPiBTaHVh
-aSwgY291bGQgeW91IGNsYXJpZnksIGF0IHdoaWNoIHBvaW50IGR1ZSBrYXNhbl9yZXBvcnRfaW52
-YWxpZF9mcmVlIGFuDQo+IE1URSBleGNlcHRpb24gaXMgcmFpc2VkIGluIHlvdXIgdGVzdHM/DQoN
-ClllcywgSSBuZWVkIHNvbWUgdGltZSB0byBjbGFyaWZ5IHRoaXMgcHJvYmxlbSB3aXRoIGEgY2xl
-YXIgbG9nIGJ5IHRlc3QuDQoNCj4gPiBUaGVuIHdlIGNhbiBhbHNvIHJlbW92ZSB0aGUgY29tbWVu
-dCBpbiBrYXNhbl9yZXBvcnRfaW52YWxpZF9mcmVlKCkuDQo+ID4NCj4gPiBJdCBsb29rcyBsaWtl
-IGthc2FuX2Rpc2FibGVfY3VycmVudCgpIGluIGttZW1sZWFrIG5lZWRzIHRvIGFmZmVjdA0KPiA+
-IEhXX1RBR1MgbW9kZSBhcyB3ZWxsOg0KPiA+IGh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xp
-bnV4L3Y2LjItcmM3L3NvdXJjZS9tbS9rbWVtbGVhay5jI0wzMDENCj4NCj4gSXQgdXNlcyBrYXNh
-bl9yZXNldF90YWcsIHNvIGl0IHNob3VsZCB3b3JrIHByb3Blcmx5IHdpdGggSFdfVEFHUy4NClpF
-S1UNCuS/oeaBr+WuieWFqOWjsOaYju+8muacrOmCruS7tuWMheWQq+S/oeaBr+W9kuWPkeS7tuS6
-uuaJgOWcqOe7hOe7h1pFS1XmiYDmnInjgIIg56aB5q2i5Lu75L2V5Lq65Zyo5pyq57uP5o6I5p2D
-55qE5oOF5Ya15LiL5Lul5Lu75L2V5b2i5byP77yI5YyF5ous5L2G5LiN6ZmQ5LqO5YWo6YOo5oiW
-6YOo5YiG5oqr6Zyy44CB5aSN5Yi25oiW5Lyg5pKt77yJ5L2/55So5YyF5ZCr55qE5L+h5oGv44CC
-6Iul5oKo6ZSZ5pS25LqG5pys6YKu5Lu277yM6K+356uL5Y2z55S16K+d5oiW6YKu5Lu26YCa55+l
-5Y+R5Lu25Lq677yM5bm25Yig6Zmk5pys6YKu5Lu25Y+K6ZmE5Lu244CCDQpJbmZvcm1hdGlvbiBT
-ZWN1cml0eSBOb3RpY2U6IFRoZSBpbmZvcm1hdGlvbiBjb250YWluZWQgaW4gdGhpcyBtYWlsIGlz
-IHNvbGVseSBwcm9wZXJ0eSBvZiB0aGUgc2VuZGVyJ3Mgb3JnYW5pemF0aW9uIFpFS1UuIEFueSB1
-c2Ugb2YgdGhlIGluZm9ybWF0aW9uIGNvbnRhaW5lZCBoZXJlaW4gaW4gYW55IHdheSAoaW5jbHVk
-aW5nLCBidXQgbm90IGxpbWl0ZWQgdG8sIHRvdGFsIG9yIHBhcnRpYWwgZGlzY2xvc3VyZSwgcmVw
-cm9kdWN0aW9uLCBvciBkaXNzZW1pbmF0aW9uKSBieSBwZXJzb25zIG90aGVyIHRoYW4gdGhlIGlu
-dGVuZGVkIHJlY2lwaWVudChzKSBpcyBwcm9oaWJpdGVkLiBJZiB5b3UgcmVjZWl2ZSB0aGlzIGVt
-YWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgYnkgcGhvbmUgb3IgZW1haWwg
-aW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSBpdC4NCg==
+February 10, 2023 10:14 AM, "Zi Yan" <ziy@nvidia.com> wrote:=0A=0A> On 9 =
+Feb 2023, at 20:57, Yajun Deng wrote:=0A> =0A>> February 9, 2023 11:50 PM=
+, "Zi Yan" <ziy@nvidia.com> wrote:=0A>> =0A>>> On 9 Feb 2023, at 5:11, Ya=
+jun Deng wrote:=0A>> =0A>> There is no need to execute the next loop if i=
+t not return in the first=0A>> loop. So add a break at the end of the loo=
+p.=0A>>> Can you explain why? If it is the case, MIGRATE_UNMOVABLE cannot=
+ fall back=0A>>> to MIGRATE_MOVABLE? And MIGRATE_MOVABLE cannot fall back=
+ to MIGRATE_UNMOVABLE?=0A>>> And MIGRATE_RECLAIMABLE cannot fall back to =
+MIGRATE_MOVABLE?=0A>> =0A>> The return in the loop is only related to 'or=
+der', 'migratetype' and 'only_stealable'=0A>> variables. Even if it execu=
+te the next loop, it can't change the result. So the loop=0A>> can be bro=
+ken if the first loop can't return.=0A> =0A> OK. Got it. Would the code b=
+elow look better?=0A> =0A> for (i =3D 0; i < MIGRATE_PCPTYPES - 1 ; i++) =
+{=0A> fallback_mt =3D fallbacks[migratetype][i];=0A> if (free_area_empty(=
+area, fallback_mt))=0A> continue;=0A> }=0A> =0A> if (can_steal_fallback(o=
+rder, migratetype))=0A> *can_steal =3D true;=0A> =0A> if (!only_stealable=
+ || *can_steal)=0A> return fallback_mt;=0A> =0A> return -1;=0A> =0A=0AYes=
+, I'll submit a v3 patch. =0AThanks.=0A=0A>> At the same time, add !migra=
+tetype_is_mergeable() before the loop and=0A>> reduce the first index siz=
+e from MIGRATE_TYPES to MIGRATE_PCPTYPES in=0A>> fallbacks array.=0A>>> Y=
+ou sent a patch: https://lore.kernel.org/all/20230203100132.1627787-1-yaj=
+un.deng@linux.dev/T/#u,=0A>>> why not squash this one into that? Why do=
+=0A>>> we need two separate small patches working on the same code?=0A>> =
+=0A>> Yes, this is better, but I overlooked this one when I sent the firs=
+t patch. It is already merged.=0A>> =0A>> As Vlastimil Babka said, reduce=
+ the first index from MIGRATE_TYPES to MIGRATE_PCPTYPES may be=0A>> cause=
+ out of bounds access of the shrinked fallbacks array If we don't judge t=
+he range of=0A>> migratetype. But this doesn't happen with the second ind=
+ex.=0A>> =0A>>> Thanks.=0A>> =0A>> Signed-off-by: Yajun Deng <yajun.deng@=
+linux.dev>=0A>> Acked-by: Vlastimil Babka <vbabka@suse.cz>=0A>> ---=0A>> =
+include/linux/mmzone.h | 2 +-=0A>> mm/page_alloc.c | 11 +++++------=0A>> =
+2 files changed, 6 insertions(+), 7 deletions(-)=0A>> =0A>> diff --git a/=
+include/linux/mmzone.h b/include/linux/mmzone.h=0A>> index ab94985ee7d9..=
+0a817b8c7fb2 100644=0A>> --- a/include/linux/mmzone.h=0A>> +++ b/include/=
+linux/mmzone.h=0A>> @@ -85,7 +85,7 @@ static inline bool is_migrate_movab=
+le(int mt)=0A>> * Check whether a migratetype can be merged with another =
+migratetype.=0A>> *=0A>> * It is only mergeable when it can fall back to =
+other migratetypes for=0A>> - * allocation. See fallbacks[MIGRATE_TYPES][=
+3] in page_alloc.c.=0A>> + * allocation. See fallbacks[][] array in page_=
+alloc.c.=0A>> */=0A>> static inline bool migratetype_is_mergeable(int mt)=
+=0A>> {=0A>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c=0A>> index 11=
+13483fa6c5..536e8d838fb5 100644=0A>> --- a/mm/page_alloc.c=0A>> +++ b/mm/=
+page_alloc.c=0A>> @@ -2603,7 +2603,7 @@ struct page *__rmqueue_smallest(s=
+truct zone *zone, unsigned int order,=0A>> *=0A>> * The other migratetype=
+s do not have fallbacks.=0A>> */=0A>> -static int fallbacks[MIGRATE_TYPES=
+][MIGRATE_PCPTYPES - 1] =3D {=0A>> +static int fallbacks[MIGRATE_PCPTYPES=
+][MIGRATE_PCPTYPES - 1] =3D {=0A>> [MIGRATE_UNMOVABLE] =3D { MIGRATE_RECL=
+AIMABLE, MIGRATE_MOVABLE },=0A>> [MIGRATE_MOVABLE] =3D { MIGRATE_RECLAIMA=
+BLE, MIGRATE_UNMOVABLE },=0A>> [MIGRATE_RECLAIMABLE] =3D { MIGRATE_UNMOVA=
+BLE, MIGRATE_MOVABLE },=0A>> @@ -2861,7 +2861,7 @@ int find_suitable_fall=
+back(struct free_area *area, unsigned int order,=0A>> int i;=0A>> int fal=
+lback_mt;=0A>> =0A>> - if (area->nr_free =3D=3D 0)=0A>> + if (area->nr_fr=
+ee =3D=3D 0 || !migratetype_is_mergeable(migratetype))=0A>> return -1;=0A=
+>> =0A>> *can_steal =3D false;=0A>> @@ -2873,11 +2873,10 @@ int find_suit=
+able_fallback(struct free_area *area, unsigned int order,=0A>> if (can_st=
+eal_fallback(order, migratetype))=0A>> *can_steal =3D true;=0A>> =0A>> - =
+if (!only_stealable)=0A>> - return fallback_mt;=0A>> -=0A>> - if (*can_st=
+eal)=0A>> + if (!only_stealable || *can_steal)=0A>> return fallback_mt;=
+=0A>> + else=0A>> + break;=0A>> }=0A>> =0A>> return -1;=0A>> --=0A>> 2.25=
+.1=0A>>> --=0A>>> Best Regards,=0A>>> Yan, Zi=0A> =0A> --=0A> Best Regard=
+s,=0A> Yan, Zi
