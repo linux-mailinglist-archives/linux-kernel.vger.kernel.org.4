@@ -2,97 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E19D069186A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 07:17:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FACA691875
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 07:20:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbjBJGR1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Feb 2023 01:17:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
+        id S231177AbjBJGUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 01:20:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231286AbjBJGRY (ORCPT
+        with ESMTP id S231146AbjBJGT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 01:17:24 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD405BA7E;
-        Thu,  9 Feb 2023 22:17:23 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id C712424E2C5;
-        Fri, 10 Feb 2023 14:17:19 +0800 (CST)
-Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Feb
- 2023 14:17:19 +0800
-Received: from ubuntu.localdomain (183.27.96.33) by EXMBX162.cuchost.com
- (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Feb
- 2023 14:17:18 +0800
-From:   Changhuang Liang <changhuang.liang@starfivetech.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Jack Zhu <jack.zhu@starfivetech.com>,
-        Changhuang Liang <changhuang.liang@starfivetech.com>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: [PATCH v1 4/4] riscv: dts: starfive: Add dphy rx node
-Date:   Thu, 9 Feb 2023 22:17:13 -0800
-Message-ID: <20230210061713.6449-5-changhuang.liang@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230210061713.6449-1-changhuang.liang@starfivetech.com>
-References: <20230210061713.6449-1-changhuang.liang@starfivetech.com>
+        Fri, 10 Feb 2023 01:19:57 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A1C74328
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 22:19:56 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id w5so5463410plg.8
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 22:19:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kga8PlcRDisciyRqHoCQoNBu+s/kJvfPl5WAaMR4SBc=;
+        b=pmIdiQ7OrMv8cFCxYuTQKeyIxI8j04SEobb6FD43K6NQcqsXoS4EPLc/dH8GBnq/rM
+         4sHI2wTBOUpXKSVAcl38Q0sFhG/exhHIP9L97XbgXI6Moql6YdzlTP/vRrYGt929wIbF
+         VCTCqOKkhhuXVtEohIeZgqQbca+MgX+OLU6E0Zp/0/JinGuksZxYuyzniJPPt9BB2dSA
+         LuXPXn6DW1VfEIQr8Wx9K1/rZNtN8I3HpdwRpNEi/JDiS0HDdwDpx2CritrttnASR7XO
+         cX2PvY4tEPec68rIE+ba6y381Qjj3e2o4OB59Czi8Dm/l62rKq9uIhFC3VheZAsNRNla
+         gByw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kga8PlcRDisciyRqHoCQoNBu+s/kJvfPl5WAaMR4SBc=;
+        b=XZ6KOGL0iJUcniM9xrKyFqv4Ke/Q54PoHfnQrjDKvt3deIkCRaVL4u4HcNyud3xcH6
+         Ebn6dB4RpViyo87UvTgNiRRwdOa8cZD06oEJWybpwhM6KdIDMzuPx6HNUm1FGD52YBaT
+         vQ+AwuKN/GTGEVW12a8s4eYRvTKn4cc8/fpV6VllDaEUNxhzqEQZHcza0UCEh9nvDzwo
+         kL5/DDwYz20ZUCC2pUROKdQbaIW6TXi4xZ7B/AhrbZHalz5lWjtVW597hjm5i78eN0pe
+         i0B2l0xZikVDtajCLYNOcmZSouu5D95Q5UuWYTVtL2XlgvpOuu30ExMJ7ROh9K+WG0iU
+         bc6Q==
+X-Gm-Message-State: AO0yUKXkrkmmas8OXDri/87pOm9hry0J4J3lJXokM5/D1+uepjEr2fAB
+        b+DFsxcrab4cnHNlW7pT9rx16tHUN2WZWVi/
+X-Google-Smtp-Source: AK7set/1qKPP7YSjZyU4HyGUtRuQ9CA6VnTp9bvbI4frWqqD/KfHtUjrKdIX8t5GdJIgU6K6mSmHSA==
+X-Received: by 2002:a05:6a20:4403:b0:bf:e16:f3f with SMTP id ce3-20020a056a20440300b000bf0e160f3fmr19178860pzb.33.1676009996396;
+        Thu, 09 Feb 2023 22:19:56 -0800 (PST)
+Received: from dread.disaster.area (pa49-181-4-128.pa.nsw.optusnet.com.au. [49.181.4.128])
+        by smtp.gmail.com with ESMTPSA id e8-20020a63ae48000000b004da425922c6sm2228960pgp.74.2023.02.09.22.19.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 22:19:56 -0800 (PST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pQMlF-00DWjV-Gi; Fri, 10 Feb 2023 17:19:53 +1100
+Date:   Fri, 10 Feb 2023 17:19:53 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Stefan Metzmacher <metze@samba.org>, Jens Axboe <axboe@kernel.dk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API Mailing List <linux-api@vger.kernel.org>,
+        io-uring <io-uring@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Samba Technical <samba-technical@lists.samba.org>
+Subject: Re: copy on write for splice() from file to pipe?
+Message-ID: <20230210061953.GC2825702@dread.disaster.area>
+References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
+ <CAHk-=wj8rthcQ9gQbvkMzeFt0iymq+CuOzmidx3Pm29Lg+W0gg@mail.gmail.com>
+ <20230210021603.GA2825702@dread.disaster.area>
+ <20230210040626.GB2825702@dread.disaster.area>
+ <CAHk-=wip9xx367bfCV8xaF9Oaw4DZ6edF9Ojv10XoxJ-iUBwhA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [183.27.96.33]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX162.cuchost.com
- (172.16.6.72)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wip9xx367bfCV8xaF9Oaw4DZ6edF9Ojv10XoxJ-iUBwhA@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add dphy rx node for the Starfive JH7110 SoC. It use to transfer the CSI
-cameras data.
+On Thu, Feb 09, 2023 at 08:47:07PM -0800, Linus Torvalds wrote:
+> On Thu, Feb 9, 2023 at 8:06 PM Dave Chinner <david@fromorbit.com> wrote:
+> >>
+> > So while I was pondering the complexity of this and watching a great
+> > big shiny rocket create lots of heat, light and noise, it occurred
+> > to me that we already have a mechanism for preventing page cache
+> > data from being changed while the folios are under IO:
+> > SB_I_STABLE_WRITES and folio_wait_stable().
+> 
+> No, Dave. Not at all.
+> 
+> Stop and think.
 
-Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
----
- arch/riscv/boot/dts/starfive/jh7110.dtsi | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+I have.
 
-diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-index bce3e407ab60..bdd7b672fd94 100644
---- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-@@ -488,5 +488,18 @@ voutcrg: clock-controller@295C0000 {
- 			#reset-cells = <1>;
- 			power-domains = <&pwrc JH7110_PD_VOUT>;
- 		};
-+
-+		csi_phy: dphy@19820000 {
-+			compatible = "starfive,jh7110-dphy-rx";
-+			reg = <0x0 0x19820000 0x0 0x10000>;
-+			clocks = <&ispcrg JH7110_ISPCLK_M31DPHY_CFGCLK_IN>,
-+				 <&ispcrg JH7110_ISPCLK_M31DPHY_REFCLK_IN>,
-+				 <&ispcrg JH7110_ISPCLK_M31DPHY_TXCLKESC_LAN0>;
-+			clock-names = "cfg", "ref", "tx";
-+			resets = <&ispcrg JH7110_ISPRST_M31DPHY_HW>,
-+				 <&ispcrg JH7110_ISPRST_M31DPHY_B09_ALWAYS_ON>;
-+			starfive,aon-syscon = <&aon_syscon 0x00>;
-+			#phy-cells = <0>;
-+		};
- 	};
- };
+> splice() is not some "while under IO" thing. It's *UNBOUNDED*.
+
+Splice has two sides - a source where we splice to the transport
+pipe, then a destination where we splice pages from the transport
+pipe. For better or worse, time in the transport pipe is unbounded,
+but that does not mean the srouce or destination have unbound
+processing times.
+
+However, transport times being unbound are largely irrelevant, and
+miss the fact that the application does not require pages in transit
+to be stable.
+
+The application we are talking about here is file -> pipe -> network
+stack for zero copy sending of static file data and the problem is
+that the file pages are not stable whilst they are under IO in the
+network stack.
+
+IOWs, the application does not care if the data changes whilst they
+are in transport attached to the pipe - it only cares that the
+contents are stable once they have been delivered and are now wholly
+owned by the network stack IO path so that the OTW encodings
+(checksum, encryption, whatever) done within the network IO path
+don't get compromised.
+
+i.e. the file pages only need to be stable whilst the network stack
+IO path checksums and DMAs the data to the network hardware.
+
+That's exactly the same IO context that the block device stack
+requires the page contents  to be stable - across parity/checksum
+calculations and the subsequent DMA transfers to the storage
+hardware.
+
+I'm suggesting that the page should only need to be held stable
+whilst it is under IO, whether that IO is in the network stack via
+skbs or in the block device stack via bios.  Both network and block
+IO are bounded by fixed time limits, both IO paths typically only
+need pages held stable for a few milliseconds at a time, and both
+have worst case IO times in error situations are typically bound at
+a few minutes.
+
+IOWs, splice is a complete misdirection here - it doesn't need to
+know a thing about stable data requirements at all. It's the
+destination processing that requires stable data, not the transport
+mechanism.
+
+Hence if we have a generic mechanism that the network stack can use
+to detect a file backed page and mark it needing to be stable whilst
+the network stack is doing IO on it, everything on the filesystem
+side should just work like it does for pages under IO in the block
+device stack...
+
+Indeed, I suspect that a filesystem -> pipe -> filesystem zero copy
+path via splice probably also needs stable source pages for some
+filesystems, in which case we need exactly the same mechanism as
+we need for stable pages in the network stack zero copy splice
+destiantion path....
+
+Cheers,
+
+Dave.
 -- 
-2.25.1
-
+Dave Chinner
+david@fromorbit.com
