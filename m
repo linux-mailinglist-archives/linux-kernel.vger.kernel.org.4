@@ -2,75 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03AC6692979
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 22:46:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69996692980
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 22:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233889AbjBJVqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 16:46:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60028 "EHLO
+        id S233898AbjBJVuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 16:50:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233051AbjBJVqA (ORCPT
+        with ESMTP id S233764AbjBJVt6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 16:46:00 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCA446738;
-        Fri, 10 Feb 2023 13:45:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=BjQumwk3nvQwR3Qjq3TUIc1Lnm3M+8mBL9xrBUbWiCU=; b=jME+vNuT0Oy/ihAHzQ1M6x8txM
-        S4MR7MKYXvMiJMf3QlkAmkhOGKXFs3rR2HTlJUp733H2zv2FFSN5jY6cSQe1UwTuAnOa9vJfG/yiu
-        ZbFJBvJDKdgkuNp5Ta/qDuFBH6v10Q1+nl++nRdBw++SNTwlPGH7lYy/S1eEOpBJJIIHXt6yW8/tW
-        5U/mDZMCA6XbJcbs/DRZaYdFOxeVpebG6dICNFdeM0Yjh44k84jhidJ+eZKGSh0FtIWxPo7TTwhlO
-        km4dWpSINKq2vedPR6k6d31FXJa0dbsWHeUiUZv6WVb+e2lSnrJqDX+xplYlypnK9nR6JYsMPQNsb
-        z4Xaqx+g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:55920)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pQbDR-0000i3-5A; Fri, 10 Feb 2023 21:45:57 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pQbDP-0000VH-Rn; Fri, 10 Feb 2023 21:45:55 +0000
-Date:   Fri, 10 Feb 2023 21:45:55 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Subject: Re: [PATCH v3 10/12] net: pcs: add driver for MediaTek SGMII PCS
-Message-ID: <Y+a7E5n6QrD/Igdg@shell.armlinux.org.uk>
-References: <cover.1675984550.git.daniel@makrotopia.org>
- <70f9c17b694173cdef5f74901e5d0bc037c1eded.1675984550.git.daniel@makrotopia.org>
+        Fri, 10 Feb 2023 16:49:58 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEB33D09C
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 13:49:57 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5F11C1EC06C0;
+        Fri, 10 Feb 2023 22:49:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1676065795;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=aoz7bS9et9aIGm0OcKdmUFu0AmMnaNrDzjbYJ5AYcWE=;
+        b=YUuOccxbhcbE9xhuxZJq+fn0Y5GAqFEE0OTgoBRpbpvvRjm2tfrzYizxHLKeGfTfdh3UPM
+        CKYHy0i15MmW9z8ukyT8IJzlGOuX60IDZ98bL9feDRSn5neZOv96FynQGJ8FsGfNM0jo/+
+        8+rxQfq2aJNdBbzzZslcrsiHIcO5QJI=
+Date:   Fri, 10 Feb 2023 22:49:51 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Philip Li <philip.li@intel.com>
+Cc:     kernel test robot <lkp@intel.com>, Babu Moger <babu.moger@amd.com>,
+        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [tip:x86/cache 9/13]
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c:1456:6: warning: variable 'h' set but
+ not used
+Message-ID: <Y+a7/2uOc2/maFX7@zn.tnic>
+References: <202301242015.kbzkVteJ-lkp@intel.com>
+ <Y8/XoT23HVXHSY73@zn.tnic>
+ <Y+RjOpXP1Bbv268n@rli9-mobl>
+ <Y+TCq4k+0AhfjZkL@zn.tnic>
+ <Y+W2tFIfGJ1c8uml@rli9-mobl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <70f9c17b694173cdef5f74901e5d0bc037c1eded.1675984550.git.daniel@makrotopia.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <Y+W2tFIfGJ1c8uml@rli9-mobl>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,22 +58,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 11:34:47PM +0000, Daniel Golle wrote:
-> The SGMII core found in several MediaTek SoCs is identical to what can
-> also be found in MediaTek's MT7531 Ethernet switch IC.
-> As this has not always been clear, both drivers developed different
-> implementations to deal with the PCS.
-> 
-> Add a dedicated driver, mostly by copying the code now found in the
-> Ethernet driver. The now redundant code will be removed by a follow-up
-> commit.
-> 
-> Tested-by: Bjørn Mork <bjorn@mork.no>
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+On Fri, Feb 10, 2023 at 11:15:00AM +0800, Philip Li wrote:
+> Sorry for confusion, we do full make for the kernel to gather all issues.
+> And we try to provide a quicker way for developer to reproduce the issue,
+> thus the step in reproduce part shows the subdirectories that could reproduce
+> the reported issue.
 
-Comments on v2 also apply to this version.
+Aah, ok.
 
-(this is mainly for net-next tracking review purposes.)
+I guess those reproduction instructions should then say:
+
+"... the fastest way to reproduce is ..."
+
+Or so.
+
+> Got it. Internally, we use the merge strategy to combine as many branches
+> as we can to run build testing, and bisect the issues if found. We need
+> further think of how to let high priority issues to be reported out earlier.
+
+Hmm, I wouldn't do that.
+
+If you test a whole bunch of patchsets, then you're not really testing
+each of them but you're testing the common thing which you've created by
+merging.
+
+I think it makes most sense to test single patchsets, single tree
+branches which should hopefully contain commits which belong to a single
+topic - this is how we aim to do them in the tip tree, at least, but
+others do different things, and so on.
+
+And then test linux-next. But I think you do that.
+
+> Thanks, so far, we recommend to use --base option in our report mail, like
+> 
+> 	[If your patch is applied to the wrong git tree, kindly drop us a note.
+> 	And when submitting patch, we suggest to use '--base' as documented in
+> 	https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> And we do need a place to put such information, so people can refer to. Without
+> a public available site for us, we will update https://github.com/intel/lkp-tests/wiki
+> firstly to host enough information.
+
+Right, make that URL part of every report so that people can go and read
+about it and know what are best practices. I'll try to remember myself
+to use --base too.
+
+> Thanks for the hint, this is doable, and we definitely need do this. I will
+> plan it to have initial version ready by Q1.
+
+You have a wiki page above already. Add a status subpage and dump into
+it periodically what current trees are being tested. And this way you
+have *something* to go with. You can always improve it later on.
+
+> Thanks a lot Boris, these suggestions are very helpful to further improve the
+> 0-day ci service.
+
+You're welcome - I'm glad that can be of help.
+
+Thx.
+
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
