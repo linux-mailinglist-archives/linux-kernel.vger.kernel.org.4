@@ -2,103 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CCCC691607
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 02:05:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60253691608
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 02:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbjBJBFx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Feb 2023 20:05:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
+        id S231182AbjBJBGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 20:06:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbjBJBFt (ORCPT
+        with ESMTP id S230034AbjBJBGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 20:05:49 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813AD5CBF0;
-        Thu,  9 Feb 2023 17:05:47 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id DA45C24E214;
-        Fri, 10 Feb 2023 09:05:37 +0800 (CST)
-Received: from EXMBX065.cuchost.com (172.16.6.65) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Feb
- 2023 09:05:35 +0800
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX065.cuchost.com
- (172.16.6.65) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Feb
- 2023 09:05:35 +0800
-Received: from EXMBX168.cuchost.com ([fe80::3c2d:dee5:4938:3fc4]) by
- EXMBX168.cuchost.com ([fe80::3c2d:dee5:4938:3fc4%16]) with mapi id
- 15.00.1497.044; Fri, 10 Feb 2023 09:05:35 +0800
-From:   JiaJie Ho <jiajie.ho@starfivetech.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: RE: [PATCH v2 4/4] crypto: starfive - Add hash and HMAC support
-Thread-Topic: [PATCH v2 4/4] crypto: starfive - Add hash and HMAC support
-Thread-Index: AQHZNMIM/vLXVq3JgUiER7vBRC/T367F3jsAgACIQGD//3/YAIABh3JA
-Date:   Fri, 10 Feb 2023 01:05:35 +0000
-Message-ID: <40ea0c9789b840e6a51ea799fa8da9e6@EXMBX168.cuchost.com>
-References: <20230130154242.112613-1-jiajie.ho@starfivetech.com>
- <20230130154242.112613-5-jiajie.ho@starfivetech.com>
- <Y+S5fBjZQZli9nBg@gondor.apana.org.au>
- <88a62a7a11814d629e2198583a0349b6@EXMBX168.cuchost.com>
- <Y+TARjfzt2FMG6oJ@gondor.apana.org.au>
-In-Reply-To: <Y+TARjfzt2FMG6oJ@gondor.apana.org.au>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [202.190.105.77]
-x-yovoleruleagent: yovoleflag
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 9 Feb 2023 20:06:05 -0500
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9ECB5EA2B
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 17:06:02 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VbHf6.e_1675991158;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VbHf6.e_1675991158)
+          by smtp.aliyun-inc.com;
+          Fri, 10 Feb 2023 09:05:59 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     alexander.deucher@amd.com
+Cc:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] drm/amd/display: clean up some inconsistent indentings
+Date:   Fri, 10 Feb 2023 09:05:58 +0800
+Message-Id: <20230210010558.10621-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_factory.c:145 get_ddc_line() warn: inconsistent indenting
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_factory.c:201 dc_link_construct_phy() warn: inconsistent indenting
 
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4026
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/gpu/drm/amd/display/dc/link/link_factory.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> -----Original Message-----
-> From: Herbert Xu <herbert@gondor.apana.org.au>
-> Sent: 9 February, 2023 5:44 PM
-> To: JiaJie Ho <jiajie.ho@starfivetech.com>
-> Cc: David S . Miller <davem@davemloft.net>; Rob Herring
-> <robh+dt@kernel.org>; Krzysztof Kozlowski
-> <krzysztof.kozlowski+dt@linaro.org>; Emil Renner Berthing
-> <kernel@esmil.dk>; Conor Dooley <conor.dooley@microchip.com>; linux-
-> crypto@vger.kernel.org; devicetree@vger.kernel.org; linux-
-> kernel@vger.kernel.org; linux-riscv@lists.infradead.org
-> Subject: Re: [PATCH v2 4/4] crypto: starfive - Add hash and HMAC support
-> 
-> On Thu, Feb 09, 2023 at 09:33:06AM +0000, JiaJie Ho wrote:
-> >
-> > The DMA can only support 32-bit addressing.
-> > So, I am copying everything in case kernel allocated memory region >32-bit
-> for a user app.
-> 
-> Does your hardware support scatter-and-gather? If so you should at least
-> allocate individual pages rather than one contiguous buffer.
-> 
-> Then you can allocate them on-demand rather than before-hand.
-> 
-> It would also be nice to not do the copy if the input you were given was in
-> low memory (and contiguous if your hardware doesn't do SG).
-> 
+diff --git a/drivers/gpu/drm/amd/display/dc/link/link_factory.c b/drivers/gpu/drm/amd/display/dc/link/link_factory.c
+index 13a766273755..23f668d90460 100644
+--- a/drivers/gpu/drm/amd/display/dc/link/link_factory.c
++++ b/drivers/gpu/drm/amd/display/dc/link/link_factory.c
+@@ -142,7 +142,7 @@ static enum channel_id get_ddc_line(struct dc_link *link)
+ 	struct ddc *ddc;
+ 	enum channel_id channel;
+ 
+-		channel = CHANNEL_ID_UNKNOWN;
++	channel = CHANNEL_ID_UNKNOWN;
+ 
+ 	ddc = get_ddc_pin(link->ddc);
+ 
+@@ -196,8 +196,8 @@ static bool dc_link_construct_phy(struct dc_link *link,
+ 
+ 	DC_LOGGER_INIT(dc_ctx->logger);
+ 
+-		link->irq_source_hpd = DC_IRQ_SOURCE_INVALID;
+-		link->irq_source_hpd_rx = DC_IRQ_SOURCE_INVALID;
++	link->irq_source_hpd = DC_IRQ_SOURCE_INVALID;
++	link->irq_source_hpd_rx = DC_IRQ_SOURCE_INVALID;
+ 	link->link_status.dpcd_caps = &link->dpcd_caps;
+ 
+ 	link->dc = init_params->dc;
+-- 
+2.20.1.7.g153144c
 
-I'll try this then.
-
-Thanks,
-Jia Jie
