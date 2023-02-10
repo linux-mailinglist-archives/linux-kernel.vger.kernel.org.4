@@ -2,270 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7C2691AA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 10:00:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B62691A82
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 09:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231630AbjBJJAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 04:00:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
+        id S231405AbjBJI7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 03:59:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231745AbjBJI7x (ORCPT
+        with ESMTP id S231667AbjBJI7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 03:59:53 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2EE5AB21;
-        Fri, 10 Feb 2023 00:59:44 -0800 (PST)
-X-UUID: 3db18310a92111ed945fc101203acc17-20230210
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=atQWRcSek6PWJlT7aE+2JjkFkwP8wvCtOypkshFnQlU=;
-        b=XMfXwWwxopOZXxBO3S1/K1WDriu9rWs0LQFVfYAGrA/1YTqpjv+e/1CSOFhjIgw72eVD5myxs456s4i5KfTDWRoYipca7+kfwsJlhvPwhRe/3257wUbcBOEyA3ackfXQWchbHPqNcnSr+N5th9TuFkTtlaoqMvOSaIDYacVP23M=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.19,REQID:f9706bfb-5b3a-43aa-9c54-0e4ca894a52b,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:885ddb2,CLOUDID:46f8e556-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-UUID: 3db18310a92111ed945fc101203acc17-20230210
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 605451654; Fri, 10 Feb 2023 16:59:35 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 10 Feb 2023 16:59:33 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Fri, 10 Feb 2023 16:59:33 +0800
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Fri, 10 Feb 2023 03:59:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2114A1D2;
+        Fri, 10 Feb 2023 00:59:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 672CB61CDC;
+        Fri, 10 Feb 2023 08:59:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37DC0C433EF;
+        Fri, 10 Feb 2023 08:59:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676019567;
+        bh=2Q1YlvwNymVHCAJA7z8rYoDTg4mMIzYexR8YRdQiSOw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tVum6c+/+iO5J2TRKtYVj0dS32KT9pKUFl5ksEpo+9zzQ5YRroj/Mo6QN5X5lzeyj
+         5QsWaDoJp30AoY6qSWsmYJ/3TkEYulL9W2XMJMN1lh76mEIvkT80BmJPOP4s2mS9p5
+         QPALwYLrsv/WJ14bXL/o9ZF1DM5h0DaitLtAd6xc/3pln/7EkiribfanG8E1MbUw9T
+         1Ynl18jNwUPYPP0Ygyqj+cwAFrOmsN4SeFp7riRe1VbmROALJCaz3pECQa+vqKJE8N
+         nnkd2H/bCwkt/3nn/lIKzem1At+7LbXed3HtJRuRyb9Uw2m6rDbfPe099pOGaQkwP9
+         mxpb0Zir7Ibmg==
+Date:   Fri, 10 Feb 2023 14:29:23 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Walker Chen <walker.chen@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>
-CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v5 03/12] dt-bindings: remoteproc: mediatek: Support MT8195 dual-core SCP
-Date:   Fri, 10 Feb 2023 16:59:22 +0800
-Message-ID: <20230210085931.8941-4-tinghan.shen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230210085931.8941-1-tinghan.shen@mediatek.com>
-References: <20230210085931.8941-1-tinghan.shen@mediatek.com>
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/3] dma: dw-axi-dmac: Add support for StarFive DMA
+Message-ID: <Y+YHa7jVpTs9Qg73@matsya>
+References: <20230206113811.23133-1-walker.chen@starfivetech.com>
+ <20230206113811.23133-3-walker.chen@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230206113811.23133-3-walker.chen@starfivetech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend the SCP binding to describe the MT8195 dual-core SCP.
+On 06-02-23, 19:38, Walker Chen wrote:
+> Adding DMA reset operation in device probe, and using different
+> registers according to the hardware handshake number.
 
-Under different applications, the MT8195 SCP can be used as single-core
-or dual-core. This change keeps the single-core definition and
-adds new definitions for dual-core use case.
+subsystem tag is dmaengine: xxx
 
-Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- .../bindings/remoteproc/mtk,scp.yaml          | 145 +++++++++++++++++-
- 1 file changed, 141 insertions(+), 4 deletions(-)
+> 
+> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
+> ---
+>  .../dma/dw-axi-dmac/dw-axi-dmac-platform.c    | 25 ++++++++++++++++---
+>  drivers/dma/dw-axi-dmac/dw-axi-dmac.h         |  3 +++
+>  2 files changed, 24 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+> index a183d93bd7e2..3581810033d2 100644
+> --- a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+> +++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+> @@ -25,6 +25,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/property.h>
+> +#include <linux/reset.h>
+>  #include <linux/slab.h>
+>  #include <linux/types.h>
+>  
+> @@ -86,7 +87,8 @@ static inline void axi_chan_config_write(struct axi_dma_chan *chan,
+>  
+>  	cfg_lo = (config->dst_multblk_type << CH_CFG_L_DST_MULTBLK_TYPE_POS |
+>  		  config->src_multblk_type << CH_CFG_L_SRC_MULTBLK_TYPE_POS);
+> -	if (chan->chip->dw->hdata->reg_map_8_channels) {
+> +	if (chan->chip->dw->hdata->reg_map_8_channels &&
+> +	    !chan->chip->dw->hdata->use_cfg2) {
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml b/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
-index 271081df0e46..09102dda4942 100644
---- a/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
-+++ b/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
-@@ -21,6 +21,7 @@ properties:
-       - mediatek,mt8188-scp
-       - mediatek,mt8192-scp
-       - mediatek,mt8195-scp
-+      - mediatek,mt8195-scp-dual
- 
-   reg:
-     description:
-@@ -31,10 +32,7 @@ properties:
- 
-   reg-names:
-     minItems: 2
--    items:
--      - const: sram
--      - const: cfg
--      - const: l1tcm
-+    maxItems: 3
- 
-   clocks:
-     description:
-@@ -70,6 +68,81 @@ properties:
- 
-     unevaluatedProperties: false
- 
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 1
-+
-+  ranges:
-+    description:
-+      Standard ranges definition providing address translations for
-+      local SCP SRAM address spaces to bus addresses.
-+
-+patternProperties:
-+  "^scp@[a-f0-9]+$":
-+    type: object
-+    description:
-+      The MediaTek SCP integrated to SoC might be a multi-core version.
-+      The other cores are represented as child nodes of the boot core.
-+      There are some integration differences for the IP like the usage of
-+      address translator for translating SoC bus addresses into address space
-+      for the processor.
-+
-+      Each SCP core has own cache memory. The SRAM and L1TCM are shared by
-+      cores. The power of cache, SRAM and L1TCM power should be enabled
-+      before booting SCP cores. The size of cache, SRAM, and L1TCM are varied
-+      on differnt SoCs.
-+
-+      The SCP cores do not use an MMU, but has a set of registers to
-+      control the translations between 32-bit CPU addresses into system bus
-+      addresses. Cache and memory access settings are provided through a
-+      Memory Protection Unit (MPU), programmable only from the SCP.
-+
-+    properties:
-+      compatible:
-+        enum:
-+          - mediatek,scp-core
-+
-+      reg:
-+        description: The base address and size of SRAM.
-+        maxItems: 1
-+
-+      reg-names:
-+        const: sram
-+
-+      interrupts:
-+        maxItems: 1
-+
-+      firmware-name:
-+        $ref: /schemas/types.yaml#/definitions/string
-+        description:
-+          If present, name (or relative path) of the file within the
-+          firmware search path containing the firmware image used when
-+          initializing sub cores of multi-core SCP.
-+
-+      memory-region:
-+        maxItems: 1
-+
-+      cros-ec-rpmsg:
-+        $ref: /schemas/mfd/google,cros-ec.yaml
-+        description:
-+          This subnode represents the rpmsg device. The properties
-+          of this node are defined by the individual bindings for
-+          the rpmsg devices.
-+
-+        required:
-+          - mediatek,rpmsg-name
-+
-+        unevaluatedProperties: false
-+
-+    required:
-+      - compatible
-+      - reg
-+      - reg-names
-+
-+    additionalProperties: false
-+
- required:
-   - compatible
-   - reg
-@@ -99,7 +172,37 @@ allOf:
-         reg:
-           maxItems: 2
-         reg-names:
-+          items:
-+            - const: sram
-+            - const: cfg
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - mediatek,mt8192-scp
-+            - mediatek,mt8195-scp
-+    then:
-+      properties:
-+        reg:
-+          maxItems: 3
-+        reg-names:
-+          items:
-+            - const: sram
-+            - const: cfg
-+            - const: l1tcm
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - mediatek,mt8195-scp-dual
-+    then:
-+      properties:
-+        reg:
-           maxItems: 2
-+        reg-names:
-+          items:
-+            - const: cfg
-+            - const: l1tcm
- 
- additionalProperties: false
- 
-@@ -121,3 +224,37 @@ examples:
-             mediatek,rpmsg-name = "cros-ec-rpmsg";
-         };
-     };
-+
-+  - |
-+    scp@10500000 {
-+        compatible = "mediatek,mt8195-scp-dual";
-+        reg = <0x10720000 0xe0000>,
-+              <0x10700000 0x8000>;
-+        reg-names = "cfg", "l1tcm";
-+
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+        ranges = <0 0x10500000 0x100000>;
-+
-+        scp@0 {
-+            compatible = "mediatek,scp-core";
-+            reg = <0x0 0xa0000>;
-+            reg-names = "sram";
-+
-+            cros-ec-rpmsg {
-+                compatible = "google,cros-ec-rpmsg";
-+                mediatek,rpmsg-name = "cros-ec-rpmsg";
-+            };
-+        };
-+
-+        scp@a0000 {
-+            compatible = "mediatek,scp-core";
-+            reg = <0xa0000 0x20000>;
-+            reg-names = "sram";
-+
-+            cros-ec-rpmsg {
-+                compatible = "google,cros-ec-rpmsg";
-+                mediatek,rpmsg-name = "cros-ec-rpmsg";
-+            };
-+        };
-+    };
+what about older/other platforms that dont have use_cfg2?
+
+>  		cfg_hi = config->tt_fc << CH_CFG_H_TT_FC_POS |
+>  			 config->hs_sel_src << CH_CFG_H_HS_SEL_SRC_POS |
+>  			 config->hs_sel_dst << CH_CFG_H_HS_SEL_DST_POS |
+> @@ -541,8 +543,6 @@ static void dw_axi_dma_set_hw_channel(struct axi_dma_chan *chan, bool set)
+>  			(chan->id * DMA_APB_HS_SEL_BIT_SIZE));
+>  	reg_value |= (val << (chan->id * DMA_APB_HS_SEL_BIT_SIZE));
+>  	lo_hi_writeq(reg_value, chip->apb_regs + DMAC_APB_HW_HS_SEL_0);
+> -
+> -	return;
+>  }
+>  
+>  /*
+> @@ -1136,7 +1136,7 @@ static int dma_chan_terminate_all(struct dma_chan *dchan)
+>  	axi_chan_disable(chan);
+>  
+>  	ret = readl_poll_timeout_atomic(chan->chip->regs + DMAC_CHEN, val,
+> -					!(val & chan_active), 1000, 10000);
+> +					!(val & chan_active), 1000, DMAC_TIMEOUT_US);
+>  	if (ret == -ETIMEDOUT)
+>  		dev_warn(dchan2dev(dchan),
+>  			 "%s failed to stop\n", axi_chan_name(chan));
+> @@ -1323,6 +1323,12 @@ static int parse_device_properties(struct axi_dma_chip *chip)
+>  
+>  	chip->dw->hdata->m_data_width = tmp;
+>  
+> +	ret = device_property_read_u32(dev, "snps,num-hs-if", &tmp);
+> +	if (!ret) {
+> +		if (tmp > 16)
+> +			chip->dw->hdata->use_cfg2 = true;
+> +	}
+> +
+>  	ret = device_property_read_u32_array(dev, "snps,block-size", carr,
+>  					     chip->dw->hdata->nr_channels);
+>  	if (ret)
+> @@ -1410,6 +1416,16 @@ static int dw_probe(struct platform_device *pdev)
+>  	if (IS_ERR(chip->cfgr_clk))
+>  		return PTR_ERR(chip->cfgr_clk);
+>  
+> +	if (of_device_is_compatible(node, "starfive,axi-dma")) {
+> +		chip->resets = devm_reset_control_array_get_exclusive(&pdev->dev);
+> +		if (IS_ERR(chip->resets))
+> +			return PTR_ERR(chip->resets);
+> +
+> +		ret = reset_control_deassert(chip->resets);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>  	ret = parse_device_properties(chip);
+>  	if (ret)
+>  		return ret;
+> @@ -1554,6 +1570,7 @@ static const struct dev_pm_ops dw_axi_dma_pm_ops = {
+>  static const struct of_device_id dw_dma_of_id_table[] = {
+>  	{ .compatible = "snps,axi-dma-1.01a" },
+>  	{ .compatible = "intel,kmb-axi-dma" },
+> +	{ .compatible = "starfive,axi-dma" },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, dw_dma_of_id_table);
+> diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac.h b/drivers/dma/dw-axi-dmac/dw-axi-dmac.h
+> index e9d5eb0fd594..761d95691c02 100644
+> --- a/drivers/dma/dw-axi-dmac/dw-axi-dmac.h
+> +++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac.h
+> @@ -21,6 +21,7 @@
+>  #define DMAC_MAX_CHANNELS	16
+>  #define DMAC_MAX_MASTERS	2
+>  #define DMAC_MAX_BLK_SIZE	0x200000
+> +#define DMAC_TIMEOUT_US		200000
+>  
+>  struct dw_axi_dma_hcfg {
+>  	u32	nr_channels;
+> @@ -33,6 +34,7 @@ struct dw_axi_dma_hcfg {
+>  	/* Register map for DMAX_NUM_CHANNELS <= 8 */
+>  	bool	reg_map_8_channels;
+>  	bool	restrict_axi_burst_len;
+> +	bool	use_cfg2;
+>  };
+>  
+>  struct axi_dma_chan {
+> @@ -70,6 +72,7 @@ struct axi_dma_chip {
+>  	struct clk		*core_clk;
+>  	struct clk		*cfgr_clk;
+>  	struct dw_axi_dma	*dw;
+> +	struct reset_control	*resets;
+>  };
+>  
+>  /* LLI == Linked List Item */
+> -- 
+> 2.17.1
+
 -- 
-2.18.0
-
+~Vinod
