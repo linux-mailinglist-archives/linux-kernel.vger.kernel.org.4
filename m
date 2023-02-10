@@ -2,251 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB00869213B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 15:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAFF6692147
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 15:59:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbjBJO4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 09:56:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
+        id S232083AbjBJO7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 09:59:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232532AbjBJO40 (ORCPT
+        with ESMTP id S231668AbjBJO7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 09:56:26 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056D971027;
-        Fri, 10 Feb 2023 06:56:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676040985; x=1707576985;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=zd5Esd2sOCM8trmFSB0vVSIXyOZ3q8JrPvYqADwoYnE=;
-  b=eaam5r0dr4vmyq285mPD0eLnYvRcL9KKHCgNSvKG8Mv98YyULEVPeGNe
-   EsfBIC8ibzPjhJHjBs5R3cpT3wuMaV5Gen/pxQItRdNxQG0K2bmU9SnbI
-   ej2JCO0zoyhWunPOKMstuabDDWs/CXV6h/WOGGQjl868NZG6XTRm2vxdW
-   X6ttcWKDsHINexrtdtt/xSjAwRT8/Ykh8eCQ4t52JWlkqFvkm7tDr5gAp
-   9uuX7iKtahZcu8qzZ8qcTNrI/G9l6OCxDddj0wpUD/Gdn+i6OZvO35oQX
-   CZ2ZGarvdF5Wm4iZ1ketWHl1DsSitKhI4xETncEBiQ6Ssu+rVFJUfRE0p
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="357836334"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="357836334"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 06:56:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="668079990"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="668079990"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 10 Feb 2023 06:56:22 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 210C0252; Fri, 10 Feb 2023 16:56:58 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 5/5] pinctrl: at91: Utilise temporary variable for struct device
-Date:   Fri, 10 Feb 2023 16:56:56 +0200
-Message-Id: <20230210145656.71838-6-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230210145656.71838-1-andriy.shevchenko@linux.intel.com>
-References: <20230210145656.71838-1-andriy.shevchenko@linux.intel.com>
+        Fri, 10 Feb 2023 09:59:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DAA75A9F2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 06:58:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676041111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TtIoamazjUK95m2+XF2UIf7KFJy6XAxCOBciAcuNvB4=;
+        b=Pl27mp9SoKoGzeN0ypm7V97/kxjSnkpElQcIdx/4qEA0rhWGFJ8vL9rVZZzoQDqVGF82vQ
+        x6ErhSYlaXkWDlf4J3AjRRmaat9LmmqoVTYfC5l/YBGk9b0Si2Uel/IRBTywT19afjvGyq
+        i+/hLFT8XjdqWd1Qw4B3z9xc7/DcBog=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-554-yTlxKmzuMeiRrDx5AiM0cg-1; Fri, 10 Feb 2023 09:58:28 -0500
+X-MC-Unique: yTlxKmzuMeiRrDx5AiM0cg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D30CD886464;
+        Fri, 10 Feb 2023 14:58:27 +0000 (UTC)
+Received: from mail.corp.redhat.com (ovpn-195-1.brq.redhat.com [10.40.195.1])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EF7E6404CD8F;
+        Fri, 10 Feb 2023 14:58:14 +0000 (UTC)
+Date:   Fri, 10 Feb 2023 15:58:12 +0100
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Pietro Borrello <borrello@diag.uniroma1.it>
+Cc:     Jiri Kosina <jikos@kernel.org>, Hanno Zulla <kontakt@hanno.de>,
+        Carlo Caione <carlo@endlessm.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        Jiri Kosina <jkosina@suse.cz>,
+        Roderick Colenbrander <roderick@gaikai.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] HID: asus: use spinlock to safely schedule workers
+Message-ID: <20230210145812.gbsxqp2mimgcuahr@mail.corp.redhat.com>
+References: <20230125-hid-unregister-leds-v3-0-0a52ac225e00@diag.uniroma1.it>
+ <20230125-hid-unregister-leds-v3-2-0a52ac225e00@diag.uniroma1.it>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230125-hid-unregister-leds-v3-2-0a52ac225e00@diag.uniroma1.it>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have a temporary variable to keep pointer to struct device.
-Utilise it inside the ->probe() implementation.
+On Feb 09 2023, Pietro Borrello wrote:
+> Use spinlocks to deal with workers introducing a wrapper
+> asus_schedule_work(), and several spinlock checks.
+> Otherwise, asus_kbd_backlight_set() may schedule led->work after the
+> structure has been freed, causing a use-after-free.
+> 
+> Fixes: af22a610bc38 ("HID: asus: support backlight on USB keyboards")
+> Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
+> ---
+>  drivers/hid/hid-asus.c | 24 +++++++++++++++++++++---
+>  1 file changed, 21 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hid/hid-asus.c b/drivers/hid/hid-asus.c
+> index f99752b998f3..30e194803bd7 100644
+> --- a/drivers/hid/hid-asus.c
+> +++ b/drivers/hid/hid-asus.c
+> @@ -98,6 +98,7 @@ struct asus_kbd_leds {
+>  	struct hid_device *hdev;
+>  	struct work_struct work;
+>  	unsigned int brightness;
+> +	spinlock_t lock;
+>  	bool removed;
+>  };
+>  
+> @@ -490,13 +491,23 @@ static int rog_nkey_led_init(struct hid_device *hdev)
+>  	return ret;
+>  }
+>  
+> +static void asus_schedule_work(struct asus_kbd_leds *led)
+> +{
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&led->lock, flags);
+> +	if (!led->removed)
+> +		schedule_work(&led->work);
+> +	spin_unlock_irqrestore(&led->lock, flags);
+> +}
+> +
+>  static void asus_kbd_backlight_set(struct led_classdev *led_cdev,
+>  				   enum led_brightness brightness)
+>  {
+>  	struct asus_kbd_leds *led = container_of(led_cdev, struct asus_kbd_leds,
+>  						 cdev);
+>  	led->brightness = brightness;
+> -	schedule_work(&led->work);
+> +	asus_schedule_work(led);
+>  }
+>  
+>  static enum led_brightness asus_kbd_backlight_get(struct led_classdev *led_cdev)
+> @@ -512,15 +523,17 @@ static void asus_kbd_backlight_work(struct work_struct *work)
+>  	struct asus_kbd_leds *led = container_of(work, struct asus_kbd_leds, work);
+>  	u8 buf[] = { FEATURE_KBD_REPORT_ID, 0xba, 0xc5, 0xc4, 0x00 };
+>  	int ret;
+> +	unsigned long flags;
+>  
+> -	if (led->removed)
+> -		return;
+> +	spin_lock_irqsave(&led->lock, flags);
+>  
+>  	buf[4] = led->brightness;
+>  
+>  	ret = asus_kbd_set_report(led->hdev, buf, sizeof(buf));
+>  	if (ret < 0)
+>  		hid_err(led->hdev, "Asus failed to set keyboard backlight: %d\n", ret);
+> +
+> +	spin_unlock_irqrestore(&led->lock, flags);
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/pinctrl/pinctrl-at91.c | 63 +++++++++++++++-------------------
- 1 file changed, 27 insertions(+), 36 deletions(-)
+Same as in 1/2, please only keep "buf[4] = led->brightness;" under
+spinlock.
 
-diff --git a/drivers/pinctrl/pinctrl-at91.c b/drivers/pinctrl/pinctrl-at91.c
-index 797382a237e8..f57781c2786a 100644
---- a/drivers/pinctrl/pinctrl-at91.c
-+++ b/drivers/pinctrl/pinctrl-at91.c
-@@ -1304,7 +1304,7 @@ static int at91_pinctrl_probe_dt(struct platform_device *pdev,
- 	if (!np)
- 		return -ENODEV;
- 
--	info->dev = &pdev->dev;
-+	info->dev = dev;
- 	info->ops = of_device_get_match_data(dev);
- 	at91_pinctrl_child_count(info, np);
- 
-@@ -1324,35 +1324,30 @@ static int at91_pinctrl_probe_dt(struct platform_device *pdev,
- 	if (ret)
- 		return ret;
- 
--	dev_dbg(&pdev->dev, "nmux = %d\n", info->nmux);
-+	dev_dbg(dev, "nmux = %d\n", info->nmux);
- 
--	dev_dbg(&pdev->dev, "mux-mask\n");
-+	dev_dbg(dev, "mux-mask\n");
- 	tmp = info->mux_mask;
- 	for (i = 0; i < gpio_banks; i++) {
--		for (j = 0; j < info->nmux; j++, tmp++) {
--			dev_dbg(&pdev->dev, "%d:%d\t0x%x\n", i, j, tmp[0]);
--		}
-+		for (j = 0; j < info->nmux; j++, tmp++)
-+			dev_dbg(dev, "%d:%d\t0x%x\n", i, j, tmp[0]);
- 	}
- 
--	dev_dbg(&pdev->dev, "nfunctions = %d\n", info->nfunctions);
--	dev_dbg(&pdev->dev, "ngroups = %d\n", info->ngroups);
--	info->functions = devm_kcalloc(&pdev->dev,
--					info->nfunctions,
--					sizeof(struct at91_pmx_func),
--					GFP_KERNEL);
-+	dev_dbg(dev, "nfunctions = %d\n", info->nfunctions);
-+	dev_dbg(dev, "ngroups = %d\n", info->ngroups);
-+	info->functions = devm_kcalloc(dev, info->nfunctions, sizeof(*info->functions),
-+				       GFP_KERNEL);
- 	if (!info->functions)
- 		return -ENOMEM;
- 
--	info->groups = devm_kcalloc(&pdev->dev,
--					info->ngroups,
--					sizeof(struct at91_pin_group),
--					GFP_KERNEL);
-+	info->groups = devm_kcalloc(dev, info->ngroups, sizeof(*info->groups),
-+				    GFP_KERNEL);
- 	if (!info->groups)
- 		return -ENOMEM;
- 
--	dev_dbg(&pdev->dev, "nbanks = %d\n", gpio_banks);
--	dev_dbg(&pdev->dev, "nfunctions = %d\n", info->nfunctions);
--	dev_dbg(&pdev->dev, "ngroups = %d\n", info->ngroups);
-+	dev_dbg(dev, "nbanks = %d\n", gpio_banks);
-+	dev_dbg(dev, "nfunctions = %d\n", info->nfunctions);
-+	dev_dbg(dev, "ngroups = %d\n", info->ngroups);
- 
- 	i = 0;
- 
-@@ -1376,7 +1371,7 @@ static int at91_pinctrl_probe(struct platform_device *pdev)
- 	struct pinctrl_pin_desc *pdesc;
- 	int ret, i, j, k;
- 
--	info = devm_kzalloc(&pdev->dev, sizeof(*info), GFP_KERNEL);
-+	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
- 	if (!info)
- 		return -ENOMEM;
- 
-@@ -1384,13 +1379,10 @@ static int at91_pinctrl_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	at91_pinctrl_desc.name = dev_name(&pdev->dev);
-+	at91_pinctrl_desc.name = dev_name(dev);
- 	at91_pinctrl_desc.npins = gpio_banks * MAX_NB_GPIO_PER_BANK;
- 	at91_pinctrl_desc.pins = pdesc =
--		devm_kcalloc(&pdev->dev,
--			     at91_pinctrl_desc.npins, sizeof(*pdesc),
--			     GFP_KERNEL);
--
-+		devm_kcalloc(dev, at91_pinctrl_desc.npins, sizeof(*pdesc), GFP_KERNEL);
- 	if (!at91_pinctrl_desc.pins)
- 		return -ENOMEM;
- 
-@@ -1413,8 +1405,7 @@ static int at91_pinctrl_probe(struct platform_device *pdev)
- 	}
- 
- 	platform_set_drvdata(pdev, info);
--	info->pctl = devm_pinctrl_register(&pdev->dev, &at91_pinctrl_desc,
--					   info);
-+	info->pctl = devm_pinctrl_register(dev, &at91_pinctrl_desc, info);
- 	if (IS_ERR(info->pctl))
- 		return dev_err_probe(dev, PTR_ERR(info->pctl), "could not register AT91 pinctrl driver\n");
- 
-@@ -1423,7 +1414,7 @@ static int at91_pinctrl_probe(struct platform_device *pdev)
- 		if (gpio_chips[i])
- 			pinctrl_add_gpio_range(info->pctl, &gpio_chips[i]->range);
- 
--	dev_info(&pdev->dev, "initialized AT91 pinctrl driver\n");
-+	dev_info(dev, "initialized AT91 pinctrl driver\n");
- 
- 	return 0;
- }
-@@ -1714,6 +1705,7 @@ static void gpio_irq_handler(struct irq_desc *desc)
- static int at91_gpio_of_irq_setup(struct platform_device *pdev,
- 				  struct at91_gpio_chip *at91_gpio)
- {
-+	struct device		*dev = &pdev->dev;
- 	struct gpio_chip	*gpiochip_prev = NULL;
- 	struct at91_gpio_chip   *prev = NULL;
- 	struct irq_data		*d = irq_get_irq_data(at91_gpio->pioc_virq);
-@@ -1721,8 +1713,7 @@ static int at91_gpio_of_irq_setup(struct platform_device *pdev,
- 	struct gpio_irq_chip	*girq;
- 	int i;
- 
--	gpio_irqchip = devm_kzalloc(&pdev->dev, sizeof(*gpio_irqchip),
--				    GFP_KERNEL);
-+	gpio_irqchip = devm_kzalloc(dev, sizeof(*gpio_irqchip), GFP_KERNEL);
- 	if (!gpio_irqchip)
- 		return -ENOMEM;
- 
-@@ -1758,7 +1749,7 @@ static int at91_gpio_of_irq_setup(struct platform_device *pdev,
- 	if (!gpiochip_prev) {
- 		girq->parent_handler = gpio_irq_handler;
- 		girq->num_parents = 1;
--		girq->parents = devm_kcalloc(&pdev->dev, 1,
-+		girq->parents = devm_kcalloc(dev, girq->num_parents,
- 					     sizeof(*girq->parents),
- 					     GFP_KERNEL);
- 		if (!girq->parents)
-@@ -1824,7 +1815,7 @@ static int at91_gpio_probe(struct platform_device *pdev)
- 	if (irq < 0)
- 		return irq;
- 
--	at91_chip = devm_kzalloc(&pdev->dev, sizeof(*at91_chip), GFP_KERNEL);
-+	at91_chip = devm_kzalloc(dev, sizeof(*at91_chip), GFP_KERNEL);
- 	if (!at91_chip)
- 		return -ENOMEM;
- 
-@@ -1836,7 +1827,7 @@ static int at91_gpio_probe(struct platform_device *pdev)
- 	at91_chip->pioc_virq = irq;
- 	at91_chip->pioc_idx = alias_idx;
- 
--	at91_chip->clock = devm_clk_get_enabled(&pdev->dev, NULL);
-+	at91_chip->clock = devm_clk_get_enabled(dev, NULL);
- 	if (IS_ERR(at91_chip->clock))
- 		return dev_err_probe(dev, PTR_ERR(at91_chip->clock), "failed to get clock, ignoring.\n");
- 
-@@ -1844,8 +1835,8 @@ static int at91_gpio_probe(struct platform_device *pdev)
- 	at91_chip->id = alias_idx;
- 
- 	chip = &at91_chip->chip;
--	chip->label = dev_name(&pdev->dev);
--	chip->parent = &pdev->dev;
-+	chip->label = dev_name(dev);
-+	chip->parent = dev;
- 	chip->owner = THIS_MODULE;
- 	chip->base = alias_idx * MAX_NB_GPIO_PER_BANK;
- 
-@@ -1886,7 +1877,7 @@ static int at91_gpio_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, at91_chip);
- 	gpio_banks = max(gpio_banks, alias_idx + 1);
- 
--	dev_info(&pdev->dev, "at address %p\n", at91_chip->regbase);
-+	dev_info(dev, "at address %p\n", at91_chip->regbase);
- 
- 	return 0;
- }
--- 
-2.39.1
+Which also raises the question on why the other accesses of
+led->brightness are not protected by the spinlock :)
+
+Note that we could use an atomic to not use the spinlock, but we need
+the spinlock anyway...
+
+Cheers,
+Benjamin
+
+>  }
+>  
+>  /* WMI-based keyboard backlight LED control (via asus-wmi driver) takes
+> @@ -584,6 +597,7 @@ static int asus_kbd_register_leds(struct hid_device *hdev)
+>  	drvdata->kbd_backlight->cdev.brightness_set = asus_kbd_backlight_set;
+>  	drvdata->kbd_backlight->cdev.brightness_get = asus_kbd_backlight_get;
+>  	INIT_WORK(&drvdata->kbd_backlight->work, asus_kbd_backlight_work);
+> +	spin_lock_init(&drvdata->kbd_backlight->lock);
+>  
+>  	ret = devm_led_classdev_register(&hdev->dev, &drvdata->kbd_backlight->cdev);
+>  	if (ret < 0) {
+> @@ -1119,9 +1133,13 @@ static int asus_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>  static void asus_remove(struct hid_device *hdev)
+>  {
+>  	struct asus_drvdata *drvdata = hid_get_drvdata(hdev);
+> +	unsigned long flags;
+>  
+>  	if (drvdata->kbd_backlight) {
+> +		spin_lock_irqsave(&drvdata->kbd_backlight->lock, flags);
+>  		drvdata->kbd_backlight->removed = true;
+> +		spin_unlock_irqrestore(&drvdata->kbd_backlight->lock, flags);
+> +
+>  		cancel_work_sync(&drvdata->kbd_backlight->work);
+>  	}
+>  
+> 
+> -- 
+> 2.25.1
+> 
 
