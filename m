@@ -2,133 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0161D692A12
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 23:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9EC692A15
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 23:27:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233809AbjBJW0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 17:26:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54956 "EHLO
+        id S233827AbjBJW13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 17:27:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233379AbjBJW0A (ORCPT
+        with ESMTP id S233348AbjBJW11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 17:26:00 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6C27534E
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 14:25:59 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id m2-20020a17090a414200b00231173c006fso10743828pjg.5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 14:25:59 -0800 (PST)
+        Fri, 10 Feb 2023 17:27:27 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294C07F83D;
+        Fri, 10 Feb 2023 14:27:26 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id fj20so6144000edb.1;
+        Fri, 10 Feb 2023 14:27:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1676067959;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VXBM3BZPJurQG+9S0/yF7Jxgoc2wkik3nPAHNKQyPdo=;
-        b=2dnOYsDrWpY6Q9SO7Yz27hs41FZUdKTa840dThiS0JCvA81scgVYZGfZ588HEWjYJx
-         h50yZMB+2DNsfYenYGLA1BoQrIq3iKsZFh31wBsZ5F2/3MME40Gcts0oruqC2rGXzkrp
-         rjIESvq4+M6VD3SUkw4Kcm6JnGB/UAL1beCa+y3qZwfPER8cMI9xkiCda3pgOrnpp6AT
-         GjxH6mrdBt4uQwqLmfBOLLXUPmednsBvlBZ5vVeai/L8z37NFSypqnq5UuxeGBUIVUeO
-         vqvR7J4CvAIjb7n0WoVWir2d7Ykj3YMne8ASZm70XCVCRz2i4AtmhU3qoGpYDdp68KgI
-         PC/Q==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dI3q7FYVCWjLDBVXxhDsYu3nYOANeG7+NTZx60qVe0o=;
+        b=AWK1VR2Ulc1Zz9Y1ZjaVoZ8Ng3GfMjc7oz+4MS8bSMv2TWpy8BOWMc0jc4nfb2d9nE
+         MGBzxIyL27cvb72c8dmGClwJpltabtuKsKwtSP1KdzdgoB4Hrn7CJl9XcKw2u/gBnXZB
+         1rG9OzSwD/C93qAiug4uj0FMGRq8Nz/DC/f2tZ1nuTwJ7XuxXQRPB7RrTAVCmzRmANWR
+         XsJPgMiJjdURpzRflMctATgY35idz4XOVYY8QPF23NzE8CryTKvKD8yod08i2E+pX7fh
+         coJZN4UFJ/QYUsWwJP2YcN2EGCYbDYUix2qG87rswku9IefxCNLeJM88R/1PgbTvUBhI
+         UqVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676067959;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VXBM3BZPJurQG+9S0/yF7Jxgoc2wkik3nPAHNKQyPdo=;
-        b=IttHylVNGIYD1Db8lobjon1Dr2pNGO6VoDHf4EijVLSmXq5R/HBz/SFOELqoi6ZUeR
-         TkLXRa/FPJXKE6jUM2jOXROHSgzhR1+rI468shrepFpBjnxxpdD6RmUiRR/jvohBBJS/
-         IbR45vuqxaMN6biNCmC+kuyzJfgHHtF55wcJmijy9LX16v6hXU4XBsmJI954eRyZUAk/
-         HAg2Sdtk/J4ksewkOfd6jQ2dS1D+Eud92pVKwzb/M6WY4WUjrALRB4nWGdQMiRf79Sse
-         UrwM9XDJJTLvd1AOeuM9bcQvddKyZW+uBZoU3kG8xeDtl7kJztzBzhYSrZx5YyBLy3E5
-         s/xA==
-X-Gm-Message-State: AO0yUKVTdrXlk3D702rcsus2rlsXv4ei4JiI/RoBEwRjJbff4n1wApag
-        6OcYIvsMZaF8httV518q3Jzlyw==
-X-Google-Smtp-Source: AK7set+GrkUIVowp8cBbgQHdtPTA9kJYbebkONcykH0FZvMiCq2V47NSvr+b8gJtPFWlvvKx7UygHQ==
-X-Received: by 2002:a17:903:182:b0:199:1292:53cd with SMTP id z2-20020a170903018200b00199129253cdmr17899305plg.1.1676067958914;
-        Fri, 10 Feb 2023 14:25:58 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id jb1-20020a170903258100b001990c6c16ebsm3856968plb.37.2023.02.10.14.25.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 14:25:58 -0800 (PST)
-Message-ID: <824fa356-7d6e-6733-8848-ab84d850c27a@kernel.dk>
-Date:   Fri, 10 Feb 2023 15:25:56 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: copy on write for splice() from file to pipe?
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ming Lei <ming.lei@redhat.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Stefan Metzmacher <metze@samba.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API Mailing List <linux-api@vger.kernel.org>,
-        io-uring <io-uring@vger.kernel.org>,
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dI3q7FYVCWjLDBVXxhDsYu3nYOANeG7+NTZx60qVe0o=;
+        b=S4pJyR+M/AEhkmM6pvjXip3rcBP8fmkTNvaE5GS0qqqXBRcqhM+rItuoToP4F1Fxtt
+         p44BqRMaf8mdfmRkc2uSsMOzR9/R8QBfKDvHtBlSFNLNQJ4nf/ZpPiVYl6EDUkLWWnw5
+         2JfpfN1NpOPjc1mnWvQ1sv48lZI8430W6afW1tknnv722qFXSFJeKhClHQl9PXnuQIYb
+         Ka3F196frNtfowVZU5BVgUuMmB4736g4kASZlMvu9YwdzIHGNME51eTrxsOyQlW8cjIn
+         tAk6fxU6sAYtBeyDsv3vCwNnusdETS+r7bwWit4Vu7je3zDd5p7BiVMUAhvCQkAMoDaP
+         6htg==
+X-Gm-Message-State: AO0yUKVzruF8J9lqmnrMydV2BNiEKmdQlIBBhLHim2jrbVbJgUXxcK4Q
+        zCV3CpB5VBnA4AtKF3qg7Og=
+X-Google-Smtp-Source: AK7set9HbCzSw0JmXpCiMALdNFeTBR42aGnutinBjZFU+0Uy2/jr9VXUSpHmGTXr4a1dGyt3kzBDbg==
+X-Received: by 2002:a50:d548:0:b0:4a2:223d:4514 with SMTP id f8-20020a50d548000000b004a2223d4514mr17918752edj.8.1676068044714;
+        Fri, 10 Feb 2023 14:27:24 -0800 (PST)
+Received: from skbuf ([188.26.185.183])
+        by smtp.gmail.com with ESMTPSA id w9-20020a50d789000000b004aacee2728dsm2847008edi.19.2023.02.10.14.27.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 14:27:24 -0800 (PST)
+Date:   Sat, 11 Feb 2023 00:27:21 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Richard van Schagen <richard@routerhints.com>
+Cc:     "arinc9.unal@gmail.com" <arinc9.unal@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Samba Technical <samba-technical@lists.samba.org>
-References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
- <CAHk-=wjQZWMeQ9OgXDNepf+TLijqj0Lm0dXWwWzDcbz6o7yy_g@mail.gmail.com>
- <CALCETrWuRHWh5XFn8M8qx5z0FXAGHH=ysb+c6J+cqbYyTAHvhw@mail.gmail.com>
- <CAHk-=wjuXvF1cA=gJod=-6k4ypbEmOczFFDKriUpOVKy9dTJWQ@mail.gmail.com>
- <CALCETrUXYts5BRZKb25MVaWPk2mz34fKSqCR++SM382kSYLnJw@mail.gmail.com>
- <CAHk-=wgA=rB=7M_Fe3n9UkoW_7dqdUT2D=yb94=6GiGXEuAHDA@mail.gmail.com>
- <1dd85095-c18c-ed3e-38b7-02f4d13d9bd6@kernel.dk>
- <CAHk-=wiszt6btMPeT5UFcS=0=EVr=0injTR75KsvN8WetwQwkA@mail.gmail.com>
- <fe8252bd-17bd-850d-dcd0-d799443681e9@kernel.dk>
- <CAHk-=wiJ0QKKiORkVr8n345sPp=aHbrLTLu6CQ-S0XqWJ-kJ1A@mail.gmail.com>
- <7a2e5b7f-c213-09ff-ef35-d6c2967b31a7@kernel.dk>
- <CALCETrVx4cj7KrhaevtFN19rf=A6kauFTr7UPzQVage0MsBLrg@mail.gmail.com>
- <b44783e6-3da2-85dd-a482-5d9aeb018e9c@kernel.dk>
- <2bb12591-9d24-6b26-178f-05e939bf3251@kernel.dk>
- <CAHk-=wjzqrD5wrfeaU390bXEEBY2JF-oKmFN4fREzgyXsbQRTQ@mail.gmail.com>
- <CAHk-=wjUjtLjLbdTz=AzvGekyU1xiSL-wAAb7_j_XoT9t4o1vQ@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAHk-=wjUjtLjLbdTz=AzvGekyU1xiSL-wAAb7_j_XoT9t4o1vQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "erkin.bozoglu@xeront.com" <erkin.bozoglu@xeront.com>
+Subject: Re: [PATCH net-next] net: dsa: mt7530: add support for changing DSA
+ master
+Message-ID: <20230210222721.3rbszzzjnrctjrnz@skbuf>
+References: <20230210172942.13290-1-richard@routerhints.com>
+ <20230210172942.13290-1-richard@routerhints.com>
+ <20230210185629.gfbaibewnc5u3tgs@skbuf>
+ <42C4F87B-520A-4F43-924D-9CDA577B04C7@routerhints.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <42C4F87B-520A-4F43-924D-9CDA577B04C7@routerhints.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/10/23 3:17?PM, Linus Torvalds wrote:
-> On Fri, Feb 10, 2023 at 2:08 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
->>
->>  (a) the first one is to protect from endless loops
+On Fri, Feb 10, 2023 at 09:41:06PM +0000, Richard van Schagen wrote:
+> > I believe you need to reject LAG DSA masters.
 > 
-> Just to clarify: they're not "endless loops" per se, but we have
-> splice sources and destinations that always succeed, like /dev/zero
-> and /dev/null.
-> 
-> So things like "sendfile()" that are happy to just repeat until done
-> do need to have some kind of signal handling even for the case when
-> we're not actually waiting for data. That's what that whole
-> 
->         /*
->          * Check for signal early to make process killable when there are
->          * always buffers available
->          */
-> 
-> this is all about. See commit c725bfce7968 ("vfs: Make sendfile(2)
-> killable even better") for a less obvious example than that
-> "zero->null" kind of thing.
-> 
-> (I actually suspect that /dev/zero no longer works as a splice source,
-> since we disabled the whole "fall back to regular IO" that Christoph
-> did in 36e2c7421f02 "fs: don't allow splice read/write without
-> explicit ops").
+> Not sure what you mean: how is this different from the change_master in the Felix driver when using 8021q tags?
+> But. Can add a check if you prefer. It might be a good idea anyway to be future proof. The MT7531 has support for LAG in hw.
 
-Yet another one... Since it has a read_iter, should be fixable with just
-adding the generic splice_read.
+I mean, like Documentation/networking/dsa/configuration.rst says, that the user can attempt
+to put the DSA masters in a LAG and create a larger DSA master which is that bonding device.
 
--- 
-Jens Axboe
+The difference from the Felix driver is that Felix supports LAG DSA masters and this driver doesn't.
 
+I don't believe there is any other restriction in the code which would prevent a driver which
+implements port_change_master() from accepting that as a valid configuration, so it's going to
+be the mt7530 driver who acts as the final frontier in this case.
+
+An "if (netif_is_lag_master(master)) return -EOPNOTSUPP" will do. But it would always be good
+to check if it's really needed :)
