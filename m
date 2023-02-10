@@ -2,95 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BC46691D3A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 11:50:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 227DE691D3B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 11:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbjBJKub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 05:50:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34062 "EHLO
+        id S232213AbjBJKuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 05:50:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbjBJKu2 (ORCPT
+        with ESMTP id S232207AbjBJKul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 05:50:28 -0500
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D6C25961;
-        Fri, 10 Feb 2023 02:50:27 -0800 (PST)
-Received: by mail-qt1-f181.google.com with SMTP id g18so5221062qtb.6;
-        Fri, 10 Feb 2023 02:50:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5O+2tRhhMEhJk0xerV5ZsGPUconQ4LMJbYywKMwuYMY=;
-        b=dawCNqvwwyZyvnxRIWC3V/l28N0Kpwmfg3WZNRaou3Mw5keMkY+NyP8A7fjlXGy9qj
-         CX2ElihkvDvRIpdlg6vi26iJtnotTVxLU35fmr1WJm2owqurXpqmigr8tuv8BRhwj0db
-         uV72r84OT264M/T6sD1/UHKwlJSY1B/GBFAfir9ctu/RXrKIucGV/qkUvK/CGpIE38rl
-         XEdwh6KzqlNC03Xe35YxafZHhWwOYMT4hAREU8RQ465CD+JpsubJRp00W9QwbM/wZcnp
-         FxF+RE7WK6ul83JNzGCu6uC2691dNtiyJigu0iLVydYOlJV4s4r5gceEiADe8zsH3f6L
-         hXPQ==
-X-Gm-Message-State: AO0yUKVGMKNFisvB74FOchpGP/m2nZXRmI30q2RBNNdx3AtpJi+e1DC1
-        yykce2qpK5lemer0bzh0rPxktA0Jsy3kbVM+
-X-Google-Smtp-Source: AK7set9DlPqPatmhNSus+QWhlhW2YXO+sFMWNwTM/VbJmRLpOUkbQvF1zV4ryvILvqzBgYlK2o/r5g==
-X-Received: by 2002:a05:622a:146:b0:3b8:2033:78e3 with SMTP id v6-20020a05622a014600b003b8203378e3mr25474178qtw.55.1676026226377;
-        Fri, 10 Feb 2023 02:50:26 -0800 (PST)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id l26-20020ac8459a000000b0039cc0fbdb61sm3135458qtn.53.2023.02.10.02.50.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 02:50:26 -0800 (PST)
-Received: by mail-yb1-f178.google.com with SMTP id t1so5885153ybd.4;
-        Fri, 10 Feb 2023 02:50:25 -0800 (PST)
-X-Received: by 2002:a25:eb04:0:b0:7b4:6a33:d89f with SMTP id
- d4-20020a25eb04000000b007b46a33d89fmr1159076ybs.543.1676026225771; Fri, 10
- Feb 2023 02:50:25 -0800 (PST)
+        Fri, 10 Feb 2023 05:50:41 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50436FE83;
+        Fri, 10 Feb 2023 02:50:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Z1JvU2F5mmSgJkdjazjKaoYsiFRpf2xh0spIxIuuqDU=; b=DCim+ODrqaJj7syeAN7iDH8mia
+        f1qyyYxCydLfnBS+ekKoNcCcuinpc/tQ+DXXs3gUXu1NKQtajfYV9ikEMUgsdk1ERja5Q0gTI57GP
+        b6p7smOwRS/uOAJ+1mlc/1ycgDprZE/5KfUrVo6Hg5wrLfKgGH3nfOlSw5HrMEwNaux7QqYQrgHmP
+        2mLXLa5SckienhHEPW9WbhQWIIge7WBaKa8nWITIBPZ/2YkRfhu+W1kXvaipJQH/+oQoQThQ3mdCb
+        OehSdCtjo9u2P21pzSBy54+yzJZb8NFxu8TgkeklepL5Z0vnwHRPJksCZxbUqbG0V9+w3P5Iy1468
+        HSnCkvGg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36508)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pQQzD-0001KG-BU; Fri, 10 Feb 2023 10:50:35 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pQQz9-0005Vr-MD; Fri, 10 Feb 2023 10:50:31 +0000
+Date:   Fri, 10 Feb 2023 10:50:31 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Subject: Re: [PATCH v2 09/11] net: pcs: add driver for MediaTek SGMII PCS
+Message-ID: <Y+Yhd2Hou/kZkU1o@shell.armlinux.org.uk>
+References: <cover.1675779094.git.daniel@makrotopia.org>
+ <20bcf972bc1b27ad14977a235292ef47443a7043.1675779094.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-References: <20230206001133.28776-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20230206001133.28776-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 10 Feb 2023 11:50:12 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWaBvx05Oio6i3j4ZG=HCryWOrCAsL76SAftFkv5Y1MRw@mail.gmail.com>
-Message-ID: <CAMuHMdWaBvx05Oio6i3j4ZG=HCryWOrCAsL76SAftFkv5Y1MRw@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: dts: renesas: r9a07g043u: Add Cortex-A55 PMU node
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20bcf972bc1b27ad14977a235292ef47443a7043.1675779094.git.daniel@makrotopia.org>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 1:14 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Enable the performance monitor unit for the Cortex-A55 core on the
-> RZ/G2UL (r9a07g043u) SoC.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> v1 -> v2
-> * Fixed interrupt type
+On Tue, Feb 07, 2023 at 02:23:08PM +0000, Daniel Golle wrote:
+> +config PCS_MTK_LYNXI
+> +	tristate
+> +	select PHYLINK
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.4.
+Does this need to select PHYLINK? If the user of this doesn't already
+select phylink, then phylink_create() won't be called and thus trying
+to use PCS_MTK_LYNXI becomes impossible. I know PCS_XPCS does, none of
+the others do though.
 
-Gr{oetje,eeting}s,
+> +	select REGMAP
+> +	help
+> +	  This module provides helpers to phylink for managing the LynxI PCS
+> +	  which is part of MediaTek's SoC and Ethernet switch ICs.
+> +
+>  config PCS_RZN1_MIIC
+>  	tristate "Renesas RZ/N1 MII converter"
+>  	depends on OF && (ARCH_RZN1 || COMPILE_TEST)
+> diff --git a/drivers/net/pcs/Makefile b/drivers/net/pcs/Makefile
+> index 4c780d8f2e98..9b9afd6b1c22 100644
+> --- a/drivers/net/pcs/Makefile
+> +++ b/drivers/net/pcs/Makefile
+> @@ -5,5 +5,6 @@ pcs_xpcs-$(CONFIG_PCS_XPCS)	:= pcs-xpcs.o pcs-xpcs-nxp.o
+>  
+>  obj-$(CONFIG_PCS_XPCS)		+= pcs_xpcs.o
+>  obj-$(CONFIG_PCS_LYNX)		+= pcs-lynx.o
+> +obj-$(CONFIG_PCS_MTK_LYNXI)	+= pcs-mtk-lynxi.o
+>  obj-$(CONFIG_PCS_RZN1_MIIC)	+= pcs-rzn1-miic.o
+>  obj-$(CONFIG_PCS_ALTERA_TSE)	+= pcs-altera-tse.o
+> diff --git a/drivers/net/pcs/pcs-mtk-lynxi.c b/drivers/net/pcs/pcs-mtk-lynxi.c
+> new file mode 100644
+> index 000000000000..0100def53d45
+> --- /dev/null
+> +++ b/drivers/net/pcs/pcs-mtk-lynxi.c
+> @@ -0,0 +1,315 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +// Copyright (c) 2018-2019 MediaTek Inc.
+> +/* A library for MediaTek SGMII circuit
+> + *
+> + * Author: Sean Wang <sean.wang@mediatek.com>
+> + * Author: Daniel Golle <daniel@makrotopia.org>
+> + *
+> + */
+> +#include <linux/mdio.h>
+> +#include <linux/phylink.h>
+> +#include <linux/pcs/pcs-mtk-lynxi.h>
+> +#include <linux/of.h>
+> +#include <linux/phylink.h>
+> +#include <linux/regmap.h>
+> +
+> +/* SGMII subsystem config registers */
+> +/* BMCR (low 16) BMSR (high 16) */
+> +#define SGMSYS_PCS_CONTROL_1		0x0
+> +#define SGMII_BMCR			GENMASK(15, 0)
+> +#define SGMII_BMSR			GENMASK(31, 16)
+> +#define SGMII_AN_RESTART		BIT(9)
+> +#define SGMII_ISOLATE			BIT(10)
+> +#define SGMII_AN_ENABLE			BIT(12)
 
-                        Geert
+Not really a review comment but a question: would it be sensible to
+define these as:
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+#define SGMII_AN_RESTART		BMCR_ANRESTART
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+etc, since they follow the IEEE802.3 clause 22 register layout?
+
+> +#define SGMII_LINK_STATYS		BIT(18)
+> +#define SGMII_AN_ABILITY		BIT(19)
+> +#define SGMII_AN_COMPLETE		BIT(21)
+
+These also correspond to BMSR bits (<<16).
+
+> +#define SGMII_PCS_FAULT			BIT(23)
+> +#define SGMII_AN_EXPANSION_CLR		BIT(30)
+
+This define doesn't seem to be used.
+
+> +
+> +#define SGMSYS_PCS_DEVICE_ID		0x4
+> +#define SGMII_LYNXI_DEV_ID		0x4d544950
+> +
+> +#define SGMSYS_PCS_ADVERTISE		0x8
+> +#define SGMII_ADVERTISE			GENMASK(15, 0)
+> +#define SGMII_LPA			GENMASK(31, 16)
+> +
+> +#define SGMSYS_PCS_SCRATCH		0x14
+> +#define SGMII_DEV_VERSION		GENMASK(31, 16)
+> +
+> +/* Register to programmable link timer, the unit in 2 * 8ns */
+> +#define SGMSYS_PCS_LINK_TIMER		0x18
+> +#define SGMII_LINK_TIMER_MASK		GENMASK(19, 0)
+> +#define SGMII_LINK_TIMER_DEFAULT	(0x186a0 & SGMII_LINK_TIMER_MASK)
+
+We no longer make use of SGMII_LINK_TIMER_DEFAULT, so this can be
+removed.
+
+> +
+> +/* Register to control remote fault */
+> +#define SGMSYS_SGMII_MODE		0x20
+> +#define SGMII_IF_MODE_SGMII		BIT(0)
+> +#define SGMII_SPEED_DUPLEX_AN		BIT(1)
+> +#define SGMII_SPEED_MASK		GENMASK(3, 2)
+> +#define SGMII_SPEED_10			FIELD_PREP(SGMII_SPEED_MASK, 0)
+> +#define SGMII_SPEED_100			FIELD_PREP(SGMII_SPEED_MASK, 1)
+> +#define SGMII_SPEED_1000		FIELD_PREP(SGMII_SPEED_MASK, 2)
+> +#define SGMII_DUPLEX_HALF		BIT(4)
+> +#define SGMII_REMOTE_FAULT_DIS		BIT(8)
+
+> +#define SGMII_CODE_SYNC_SET_VAL		BIT(9)
+> +#define SGMII_CODE_SYNC_SET_EN		BIT(10)
+> +#define SGMII_SEND_AN_ERROR_EN		BIT(11)
+
+These three don't appear to be used.
+
+> +
+> +/* Register to reset SGMII design */
+> +#define SGMII_RESERVED_0		0x34
+> +#define SGMII_SW_RESET			BIT(0)
+> +
+> +/* Register to set SGMII speed, ANA RG_ Control Signals III */
+> +#define SGMSYS_ANA_RG_CS3		0x2028
+
+SGMSYS_ANA_RG_CS3 isn't used here, although its register bits below
+are.
+
+> +#define RG_PHY_SPEED_MASK		(BIT(2) | BIT(3))
+> +#define RG_PHY_SPEED_1_25G		0x0
+> +#define RG_PHY_SPEED_3_125G		BIT(2)
+> +
+
+...
+
+> +struct mtk_pcs_lynxi {
+> +	struct regmap		*regmap;
+> +	struct device		*dev;
+
+I can only find one place that this is written to in this patch, it
+seems its otherwise never used. Do we need it?
+
+Other than that, I don't see anything else to comment on that hasn't
+been mentioned in previous patches. Thanks!
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
