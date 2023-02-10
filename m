@@ -2,135 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64947691808
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 06:43:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2B769180D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 06:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbjBJFnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 00:43:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59370 "EHLO
+        id S231167AbjBJFnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 00:43:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbjBJFnT (ORCPT
+        with ESMTP id S230490AbjBJFnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 00:43:19 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8AB2643ED
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 21:43:16 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id pj3so4219083pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 21:43:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SOE16gpo14kJ2EwIrQmS9P4CD4KSR3yX19I9pXw0xUw=;
-        b=mnbG3Inx9g2cxrN6CsW3YFXBcbi6wMmtdtMcCb07RbVziOaeGdHHWQD+1nh1RgMmYO
-         0a3K9TQBovQAyK3QV6TuzwyAr5KH4HnQU0pqz2e4sCjK2dUV2jW3V6ZPclrIpxY6hXoL
-         A4YG6ij1lr9PhrpIJM+anjeg+z616nrJiLtFU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SOE16gpo14kJ2EwIrQmS9P4CD4KSR3yX19I9pXw0xUw=;
-        b=Hr9zLS2wrufjVsIiWoqJci4CYoVbx8YOIV9A9d8MSR89RvDO9OhAMlvy9HLbjJM1PK
-         LFv3vXNZbGNaZyLEjhrInIgoJOAOiGz7O27DkKHDSVKopdWWDy6Qk/onLF6BggYCXlhW
-         TL6dae6GrJYMi2NYVyFyzUymhiy8JTHawmRG0yMY2Di/mvThdR4YiR4ROmzgPrK/LqKP
-         fgIHoSn6+lFf1uWf1fa40fMrMjfeX+Q3lk1ubTSAShKffYnkuF9U1mMyg/L7q+b6X45z
-         dhxT8+cxECatbeyJK+hAFwp0SQ9t1IkgF1aaKwqECYGsMhwrITppLCOITIfxvk546Piw
-         sCPw==
-X-Gm-Message-State: AO0yUKWb9mEQRb5ZHfEC54sML7HdVVPeuYIOvkaUxacdnBaMjCoVOmhe
-        6GzQNU+p1wqcGC86QAkhXp90Eg==
-X-Google-Smtp-Source: AK7set+1n5AGJexcYbatfSHJZ2Nw0rtc/AT+n0aM3Z+adx6Q/lu2rO9E0f/rQJGPlffIl4QbJSX5wA==
-X-Received: by 2002:a17:902:f549:b0:199:3f82:ef49 with SMTP id h9-20020a170902f54900b001993f82ef49mr12206318plf.49.1676007796046;
-        Thu, 09 Feb 2023 21:43:16 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id v8-20020a17090331c800b00199023c688esm2481518ple.26.2023.02.09.21.43.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 21:43:15 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] wifi: ath: Silence memcpy run-time false positive warning
-Date:   Thu,  9 Feb 2023 21:43:13 -0800
-Message-Id: <20230210054310.never.554-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 10 Feb 2023 00:43:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A28566F8D;
+        Thu,  9 Feb 2023 21:43:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1550B82364;
+        Fri, 10 Feb 2023 05:43:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C73FC433D2;
+        Fri, 10 Feb 2023 05:43:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676007811;
+        bh=We6VTPEaf2ZWk5YAWUJDnW7K4x0IxSj2NkmnMga+bJ0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=isNSxfyD3Vj1xR9AUxSGdSoqc8bif+ySfxe8nJXhymhyMC8ykzibbe2o3Q0AcPWhs
+         p0m4Z+zquHwWfjx5Thl0SeQsLjrHhjTJYa/hXFx36oPO+rFnGihHfAoR2AEKovSlNe
+         Cp2dG7xfiNIgLNutbW1Cvpxe+7x9osPw/XIThbHZzc6MqtunlCbpwIdWckQ36PChZJ
+         eMg87T/rAXOdDHxiwbY8n6BptVjhL+vAEL4mSQ1T/Zx9OjQ83jHWq+6q18lb0AeXD3
+         bY5LA3OVQYZEazs8i3CTubH/JTiEtUOBFM/j6JdDgap2RPyU9ecFZg09JYnqoD++6k
+         ogd98nDU5/oEg==
+Date:   Fri, 10 Feb 2023 11:13:26 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     neil.armstrong@linaro.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: dma: qcom,bam-dma: add optional memory
+ interconnect properties
+Message-ID: <Y+XZflMj82Ot/UzW@matsya>
+References: <20230207-topic-sm8550-upstream-bam-dma-bindings-fix-v1-1-57dba71e8727@linaro.org>
+ <a188a52e-6327-f0ea-a54e-a23b88bca82f@linaro.org>
+ <a8112f61-f8d3-c1e0-9549-a9036a7e7894@linaro.org>
+ <88c31e71-55b6-a20d-1fcf-07804eace54b@linaro.org>
+ <eda179e1-4cd1-0d1b-4e27-2fe92e959cf2@linaro.org>
+ <0f16d63f-3bb0-54aa-bcb4-4c666d4b2846@linaro.org>
+ <32153a4b-9974-a42a-ef30-c0bd8cbc732b@linaro.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2274; h=from:subject:message-id; bh=HpKo9sTr/HDvjHRUnQNbbmtTY7h1S1HI2SjgTQu+PF0=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj5dlx5/oUi2b864PAZJA2tYIlXO8n8wbWjG+PlQly 9C7XAsyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY+XZcQAKCRCJcvTf3G3AJlZzD/ 9+QfS5oxR9/4Qs0yKAwtDcjvnug1MfW4BnEtT2afvu7iPZkrCDin60lTjPGTN4vglnrMWT6afqpXnB XHgLTZj2ahcVuOQLBAF9mPTqGZYFEWYMLcqakJ2hKGbtM2MpzjEYSfnGbfk08ATNfrrC9vmHuk1Hce xcVxtBS1ehTzBqZBnCBzV386ODKpzGPsVezLVFr0b0hB86eQNAC0pW7cC6stmrpk5U8cyCTv20dZuZ PJkFEBjLOQZuuzP0V8BCZ867TU/el8Bx3w1/F8Ce3bkO/Km4WQBLJ5+rBMPwsLYWsTdrhDqdu3euTe Bhp89FnehAlsKcXvPnLHys4JZWQ5s1/wupi0YapBpwtlTaGioAeuKXEJzZebafhBWdv7XtQN6PogwP lvSu5npSmpiQj8iytbaqxBptNCQCmZYnhv2z9UFLBkvj1L3dZ9feb5jEU+nVwbL3jJa/D1DaP8U3Kc 2ZzjO/UrTknTbD0H4ctE/3jt/Ya1qsDBg2/JLVYrRne8C65le2FKflS229RM8Yb/IaMUarTPoHX6Pq 8Go0XC4epyRU13nhw/0ZnydH+ugnE9KAroC++PaLXm7AYp1ste2SnMkQyKGQZJ3jgv33xMXlxEaveo PE1rh9N3Ycjh+pdBdVCzJrUR4MAtEoCFKpudfDhRQge812Fsl2prEPkk5bCA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <32153a4b-9974-a42a-ef30-c0bd8cbc732b@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The memcpy() in ath_key_config() was attempting to write across
-neighboring struct members in struct ath_keyval. Introduce a wrapping
-struct_group, kv_values, to be the addressable target of the memcpy
-without overflowing an individual member. Silences the false positive
-run-time warning:
+On 09-02-23, 13:55, Bhupesh Sharma wrote:
+> On 2/8/23 2:38 PM, neil.armstrong@linaro.org wrote:
+> > On 08/02/2023 10:03, Krzysztof Kozlowski wrote:
 
-  memcpy: detected field-spanning write (size 32) of single field "hk.kv_val" at drivers/net/wireless/ath/key.c:506 (size 16)
+> > > What I don't really get is that crypto driver sets bandwidth for
+> > > interconnects, not the BAM. Why BAM needs interconnect? Usually you do
+> > > not need to initialize some middle paths. Getting the final interconnect
+> > > path (e.g. crypto-memory) is enough, because it includes everything in
+> > > between.
+> > 
+> > Indeed the interconnect on BAM may be redundant since QCE sets the BW,
+> > I'll investigate to understand if it's also necessary on BAM.
+> 
+> Since we are already doing this via QCE driver (since crypto block on qcom
+> SoCs employs BAM DMA services) via [1], this change is not needed for
+> sm8150, sm8250, sm8350 and subsequent qcom SoCs (available presently), so
+> this patch can be dropped.
 
-Link: https://bbs.archlinux.org/viewtopic.php?id=282254
-Cc: Kalle Valo <kvalo@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: linux-wireless@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/net/wireless/ath/ath.h | 12 +++++++-----
- drivers/net/wireless/ath/key.c |  2 +-
- 2 files changed, 8 insertions(+), 6 deletions(-)
+Is that the right approach, should the dma consumers request the
+bandwidth or the dma driver. I am kind of leaning on the former
 
-diff --git a/drivers/net/wireless/ath/ath.h b/drivers/net/wireless/ath/ath.h
-index f083fb9038c3..f02a308a9ffc 100644
---- a/drivers/net/wireless/ath/ath.h
-+++ b/drivers/net/wireless/ath/ath.h
-@@ -96,11 +96,13 @@ struct ath_keyval {
- 	u8 kv_type;
- 	u8 kv_pad;
- 	u16 kv_len;
--	u8 kv_val[16]; /* TK */
--	u8 kv_mic[8]; /* Michael MIC key */
--	u8 kv_txmic[8]; /* Michael MIC TX key (used only if the hardware
--			 * supports both MIC keys in the same key cache entry;
--			 * in that case, kv_mic is the RX key) */
-+	struct_group(kv_values,
-+		u8 kv_val[16]; /* TK */
-+		u8 kv_mic[8]; /* Michael MIC key */
-+		u8 kv_txmic[8]; /* Michael MIC TX key (used only if the hardware
-+				 * supports both MIC keys in the same key cache entry;
-+				 * in that case, kv_mic is the RX key) */
-+	);
- };
- 
- enum ath_cipher {
-diff --git a/drivers/net/wireless/ath/key.c b/drivers/net/wireless/ath/key.c
-index 61b59a804e30..b7b61d4f02ba 100644
---- a/drivers/net/wireless/ath/key.c
-+++ b/drivers/net/wireless/ath/key.c
-@@ -503,7 +503,7 @@ int ath_key_config(struct ath_common *common,
- 
- 	hk.kv_len = key->keylen;
- 	if (key->keylen)
--		memcpy(hk.kv_val, key->key, key->keylen);
-+		memcpy(&hk.kv_values, key->key, key->keylen);
- 
- 	if (!(key->flags & IEEE80211_KEY_FLAG_PAIRWISE)) {
- 		switch (vif->type) {
 -- 
-2.34.1
-
+~Vinod
