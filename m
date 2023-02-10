@@ -2,91 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1259691CF6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 11:37:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 765A4691D01
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 11:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbjBJKhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 05:37:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52602 "EHLO
+        id S232012AbjBJKiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 05:38:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232139AbjBJKgr (ORCPT
+        with ESMTP id S232009AbjBJKis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 05:36:47 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DA26D63A
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 02:36:37 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id d14-20020a05660225ce00b00734acc87739so3227412iop.9
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 02:36:37 -0800 (PST)
+        Fri, 10 Feb 2023 05:38:48 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9BD30C4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 02:38:47 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id v3so3196957pfn.6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 02:38:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ufispace-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nq1A52HyPQ5ZJyvE3xyTJAITHc2QB2emFWUPFKG5KFI=;
+        b=x98gOVnwRN1wtMLo1EqRtcRx6sR52zIeCiZR9RiVjTGlwUjK1suW/T//IdwqyaPuyG
+         N0TvrmBv6ohghhZtULX1QdppYVCL8+nxq8EU1r4tIHz4kdSTaidlUTl2X8ZW5rQY8Jbw
+         Uenng2M3rWKGxnNH6yfDiqOtu+MxRPOgrvaQ6+xQg9gRdZu/dd2TeJhiIViDYg3kJn/e
+         sTWCxPsd2VbXIdHArvsvvqhAfoS4M0+SbWuJ7ldJw3qZv8FBPyj7mk9IZ0B2X+Jgndon
+         Yo3quP6cZJ05Rvjylb657HdNFZa6Cr3x/PFtKO7j2oEWuRnPpIpqJ8oGN6oxCSBu+S1K
+         lrkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l1+xVltypcnxAkvWPCQxFM0n2XimN1lwperOL1Mtxsc=;
-        b=ISbBMAjSaLFnQN+xah3Fv7kuuvkrbhOKSH1bQfLgtIaob4kWdblTxkN4urhqf1HMmp
-         e0yA2OZurPyRdi7iBD83V7zhH7z12n2UzLel6cdPQQbrBtpgxKaN3x5zAcrK9JmKZNTb
-         5EZjqCS6SrI/1xI2ldQkR42rxfLoX7UZoAASc7HPv8GdLd91zAkg9b/GX+Ls9w0pIqjI
-         PGVhq9Dk1y8iMfcMQUWagqST/kWu/47yaWLXKKeDopVEb+Wi52AXJ6Vv3Rg6cpkN6loc
-         BAdCcGXf7sYtRtuCXyr/EqirSUfmeDhXQrvdsyx3dw9hT5lDLvSJLDeac9VMTyh3dah+
-         23EA==
-X-Gm-Message-State: AO0yUKV14ecsZ1mKKRPEXnqlX5w+jesELA3ZSFG+mNAsDc9rL2CHnx+e
-        ER8klUSL8qZxmMrhELVfPQnh5AA6iIPWR81hUjdWyrFLx9Tw
-X-Google-Smtp-Source: AK7set8RPGGTXi5zLTnyjKswbEgN7LWwYzgzA5VGCB+OqcXXhMpBY6wGX14MoheR8H5OO5X6bCqt5kKFvh74/+6PMpEY5/Lis7ba
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nq1A52HyPQ5ZJyvE3xyTJAITHc2QB2emFWUPFKG5KFI=;
+        b=g1AhFgJFDVIDzNUP02DnV9/+EkHwXh8VTRDU7htJ3QMnkmDNw3HGL/m1OiY6wJY7Ga
+         xrrzUbenf7qdapFAxqP2Kaz4kBI0hwBxjz5Rv/CpX67WqRTsJ+HCc9sEPtctSObuSksb
+         9u2ZgVWi4hXy8DPI1HXAYvsFadRL551sz/kA5HB3JYcLuO2QHmzdhvlZFBVNWKT9sVpE
+         U9cGcK8Di5S0oPFY9yf6viJ1Bc3L+eXt2JvcDl/qFLEmYSWReKHGG+5oyntgReQ3Bx9i
+         w5Ud3JMNS9stC9rBvrvngP4cK/ZHY0ElVKYCiIrfuoVEOQOslSNCNbSOQPTyYhLuglbd
+         AINg==
+X-Gm-Message-State: AO0yUKUuVIgVpeFSWMYzqumWNwMgje2jbKOPylH2dKvTZQX8b1Xqf8ip
+        izA3fRDidgdME5m/VZsXBb8fvA==
+X-Google-Smtp-Source: AK7set8zKiuI5dv/fykGPWJu0ufw/4kTODffMuzEHuFxyU4aQQNrPNULPBEq2EJ8Ts0U7t9+sW1Biw==
+X-Received: by 2002:aa7:8685:0:b0:5a8:4de9:b797 with SMTP id d5-20020aa78685000000b005a84de9b797mr5337934pfo.14.1676025527036;
+        Fri, 10 Feb 2023 02:38:47 -0800 (PST)
+Received: from openbmc500G.LAB.ufispace (CH210-63-217-225.static.apol.com.tw. [210.63.217.225])
+        by smtp.gmail.com with ESMTPSA id v25-20020a62a519000000b005809d382016sm2973950pfm.74.2023.02.10.02.38.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 02:38:46 -0800 (PST)
+From:   Jordan Chang <jordan.chang@ufispace.com>
+To:     linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        joel@jms.id.au, andrew@aj.id.au, robh+dt@kernel.org
+Cc:     jay.tc.lin@ufispace.com, eason.ys.huang@ufispace.com
+Subject: [PATCH v4 0/1] Add Ufispace NCPLite platform device tree
+Date:   Fri, 10 Feb 2023 18:38:28 +0800
+Message-Id: <20230210103829.74470-1-jordan.chang@ufispace.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-X-Received: by 2002:a6b:cf12:0:b0:713:f12d:40ba with SMTP id
- o18-20020a6bcf12000000b00713f12d40bamr7429931ioa.72.1676025396365; Fri, 10
- Feb 2023 02:36:36 -0800 (PST)
-Date:   Fri, 10 Feb 2023 02:36:36 -0800
-In-Reply-To: <00000000000015ac7905e97ebaed@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000062913f05f45612ae@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in rdma_close
-From:   syzbot <syzbot+67d13108d855f451cafc@syzkaller.appspotmail.com>
-To:     asmadeus@codewreck.org, dan.carpenter@oracle.com,
-        davem@davemloft.net, edumazet@google.com, ericvh@gmail.com,
-        kuba@kernel.org, leon@kernel.org, linux-kernel@vger.kernel.org,
-        linux_oss@crudebyte.com, lucho@ionkov.net, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
-        v9fs-developer@lists.sourceforge.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This bug is marked as fixed by commit:
-9p: client_create/destroy: only call trans_mod->close after create
+Add Ufispace NCPLite platform device tree, and add the compatible
+string in dt-bindings files.
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
+Changes for v4:
+- revise the tags
 
-#syz fix: exact-commit-title
+Changes for v3:
+- add "Acked-by: Krzysztof Kozlowski"
 
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
+Changes for v2:
+- modify node name to generic one and check with dtbs_check
+- send-email without confidential mode
 
-Kernel: Linux
-Dashboard link: https://syzkaller.appspot.com/bug?extid=67d13108d855f451cafc
+Jordan Chang (1):
+  ARM: dts: aspeed: Add device tree for Ufispace NCPLite BMC
 
----
-[1] I expect the commit to be present in:
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../boot/dts/aspeed-bmc-ufispace-ncplite.dts  | 359 ++++++++++++++++++
+ 2 files changed, 360 insertions(+)
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-ufispace-ncplite.dts
 
-1. for-kernelci branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+-- 
+2.39.0
 
-2. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-
-3. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-4. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
-
-The full list of 10 trees can be found at
-https://syzkaller.appspot.com/upstream/repos
