@@ -2,113 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C505B6921BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:14:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3FF6921C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232608AbjBJPOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 10:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
+        id S232504AbjBJPPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 10:15:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232545AbjBJPOm (ORCPT
+        with ESMTP id S232558AbjBJPPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 10:14:42 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FA456EFC
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:14:41 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id j23so5432036wra.0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:14:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZuYyqtTfQoaB/YinZiK/H1Kg2PxBItRwrhxGc1ifTPY=;
-        b=QDUWpLtpzE+XalO0fqwhj1CLkdX2Ddht71y5GiHaN93Qp19hkDkz1jxukzpufMfNfT
-         1hmEh6rPxwvY5xJtNp6xwhU5cxsRLwA+lCM60nZdl8yUk5onQAwlWLDZClgCNYPR3saD
-         A2vkFUtARs4jLNcb4Olg9a+Dca45YYZSBtce/dme+XvGI4Cf4fKq9FsdTdcO175U3v9b
-         g5eKWUgFggkkv4tGy7hkFGUaG63TYLyuSlT8j+0EnSGxNm+vaXp4QyEoGTHSWLgy7wbI
-         A4firhDZXW1opDS5uPOvDCFl7jnx+o5xH6GXGnjXcrdWGeDzbRrk//6yTqSMl7x/0LgE
-         5YxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZuYyqtTfQoaB/YinZiK/H1Kg2PxBItRwrhxGc1ifTPY=;
-        b=tbCp+2NZbmd7l4uUzqRJjmVqAcDrWltp7AwBtM2oVApMQs7X67r5u5hH1ju+r5DyB2
-         v3yBUCA1PS5dZlooIxtdNRcBgTdKnogl/vcz6A7FVSqlrmPLN4VJRVuCQlaZ7NZ+NGKd
-         nHxG8nrCyphQ6QYdhMsv9W3NPBfUx2LRhHm7hSlzhzArdOJBIOEBzaec/0cfbV75Vo+E
-         RZOZtRrf0eC8i9Snfy6gJoz4GQJ13VwleHRdPm6F//aWqiho/rf2rykpj7pR+Msa1WCb
-         i/cILXcdVDlh0ruN08tjvduREBu015w3JujqlmYkTPvAk5r7Vh3VRDgvd1l9bpoPe31Z
-         VEOg==
-X-Gm-Message-State: AO0yUKVCz3rXUtdKyJw7RpBqOjc86JYNdU8I9Nx2Z63kf8JSgRnS/POR
-        +36sM5Tgp0VFxazhmsZz1h8m7g==
-X-Google-Smtp-Source: AK7set+nlaHpmo6Bs3gY2OVBvVY1h55OP7NP0XAGbd/Fjf9fgUN2YGOeCg4yPACuTKPR8BEkKlNEqA==
-X-Received: by 2002:a5d:60c6:0:b0:2bf:f735:1310 with SMTP id x6-20020a5d60c6000000b002bff7351310mr14873983wrt.2.1676042079709;
-        Fri, 10 Feb 2023 07:14:39 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:5a65:5553:55cf:3027? ([2a01:e0a:982:cbb0:5a65:5553:55cf:3027])
-        by smtp.gmail.com with ESMTPSA id a1-20020adff7c1000000b002c54a2037d1sm1688188wrq.75.2023.02.10.07.14.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 07:14:38 -0800 (PST)
-Message-ID: <304e5e96-5387-4e72-b1ba-6dc28afea9cc@linaro.org>
-Date:   Fri, 10 Feb 2023 16:14:38 +0100
+        Fri, 10 Feb 2023 10:15:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3590356EFC
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:15:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A4A6B82554
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 15:15:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 073BAC433A0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 15:15:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676042109;
+        bh=ASNHadyozyLIGhBVrhVI7EFdVirhfiV1fq9KsBAOwjw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VklJnD6zWz6k/285Nxbc426a8iy7awLNZLUt+bx8D+9w6gNcPVLOiEhxm/uutYb6T
+         YFn2xmFO+yjYuMk0nxEffW7Zk+b59KUWni6zGRjK9aB1l6a9Py1mSyUpb/neh5oPxN
+         623Y959fjqcir7jqWT1aRloHl4mtlCiPQ/Yw2j8DR9WFu3jhtSxl+EJ4rmHLRwbOJe
+         ivZRy64wvfG5MBAFyYN9Mi+u2tVlAkVONNKuGieU/lcoHdWKwr5U4PrrZcVRNTkHx3
+         bETO+lCNqOSpMkYwsUbVSzP583C1XO7lOT0m6FD4TrzWTf9rEVzls/Sm2xBtOWYy1m
+         clddAnHBbI8pQ==
+Received: by mail-ej1-f53.google.com with SMTP id qb15so14647471ejc.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:15:08 -0800 (PST)
+X-Gm-Message-State: AO0yUKVP2XPWv/rrttizkYZBr+g5FPC64fzMTZfrSh6JsUqJeW0Kzowr
+        GU4X0OgwGk0L4PqgDd0ww6FQOnMa+toJ4rj2ePDUrw==
+X-Google-Smtp-Source: AK7set82uoXvXPMdWdCjmW9Ka6p9XO/hezpTDJigjecBYGrCBbgbcLwnXqm27c9nTy16gEHPF4kIoq/7kIfYYzOcQ9Y=
+X-Received: by 2002:a17:907:1de6:b0:8ae:cb48:3c80 with SMTP id
+ og38-20020a1709071de600b008aecb483c80mr1248578ejc.7.1676042107124; Fri, 10
+ Feb 2023 07:15:07 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 2/3] arm64: dts: meson: gxbb-kii-pro: complete the
- bluetooth node
-Content-Language: en-US
-To:     Christian Hewitt <christianshewitt@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Ferass El Hafidi <vitali64pmemail@protonmail.com>
-References: <20230210122817.1027765-1-christianshewitt@gmail.com>
- <20230210122817.1027765-3-christianshewitt@gmail.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20230210122817.1027765-3-christianshewitt@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
+ <CAHk-=wj8rthcQ9gQbvkMzeFt0iymq+CuOzmidx3Pm29Lg+W0gg@mail.gmail.com>
+ <20230210021603.GA2825702@dread.disaster.area> <20230210040626.GB2825702@dread.disaster.area>
+ <Y+XLuYh+kC+4wTRi@casper.infradead.org> <20230210065747.GD2825702@dread.disaster.area>
+In-Reply-To: <20230210065747.GD2825702@dread.disaster.area>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Fri, 10 Feb 2023 07:14:55 -0800
+X-Gmail-Original-Message-ID: <CALCETrWjJisipSJA7tPu+h6B2gs3m+g0yPhZ4z+Atod+WOMkZg@mail.gmail.com>
+Message-ID: <CALCETrWjJisipSJA7tPu+h6B2gs3m+g0yPhZ4z+Atod+WOMkZg@mail.gmail.com>
+Subject: Re: copy on write for splice() from file to pipe?
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Stefan Metzmacher <metze@samba.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API Mailing List <linux-api@vger.kernel.org>,
+        io-uring <io-uring@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Samba Technical <samba-technical@lists.samba.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/2023 13:28, Christian Hewitt wrote:
-> Add missing content to the bluetooth node to align it with the content
-> used in (all) other GXBB dts files.
-> 
-> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-> Tested-by: Ferass El Hafidi <vitali64pmemail@protonmail.com>
-> ---
->   arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dts | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dts b/arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dts
-> index 9bfdb54d912a..435ae2aa404e 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dts
-> +++ b/arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dts
-> @@ -72,5 +72,10 @@ &uart_A {
->   
->   	bluetooth {
->   		compatible = "brcm,bcm4335a0";
-> +		shutdown-gpios = <&gpio GPIOX_20 GPIO_ACTIVE_HIGH>;
-> +		host-wakeup-gpios = <&gpio GPIOX_21 GPIO_ACTIVE_HIGH>;
-> +		max-speed = <2000000>;
-> +		clocks = <&wifi32k>;
-> +		clock-names = "lpo";
->   	};
->   };
+On Thu, Feb 9, 2023 at 10:58 PM Dave Chinner <david@fromorbit.com> wrote:
+>
+> On Fri, Feb 10, 2023 at 04:44:41AM +0000, Matthew Wilcox wrote:
+> > On Fri, Feb 10, 2023 at 03:06:26PM +1100, Dave Chinner wrote:
+> > > So while I was pondering the complexity of this and watching a great
+> > > big shiny rocket create lots of heat, light and noise, it occurred
+> >
+> > That was kind of fun
+>
+> :)
+>
+> > > to me that we already have a mechanism for preventing page cache
+> > > data from being changed while the folios are under IO:
+> > > SB_I_STABLE_WRITES and folio_wait_stable().
+> >
+> > I thought about bringing that up, but it's not quite right.  That works
+> > great for writeback, but it only works for writeback.  We'd need to track
+> > another per-folio counter ... it'd be like the page pinning kerfuffle,
+> > only worse.
+>
+> Hmmm - I didn't think of that. It needs the counter because the
+> "stable request" is per folio reference state, not per folio state,
+> right? And the single flag works for writeback because we can only
+> have one writeback context in progress at a time?
+>
+> Yeah, not sure how to deal with that easily.
+>
+> > And for such a rare thing it seems like a poor use of 32
+> > bits of per-page state.
+>
+> Maybe, but zero copy file data -> network send is a pretty common
+> workload. Web servers, file servers, remote backup programs, etc.
+> Having files being written whilst others are reading them is not as
+> common, but that does happen in a wide variety of shared file server
+> environments.
+>
+> Regardless, I just had a couple of ideas - it they don't work so be
+> it.
+>
+> > Not to mention that you can effectively block
+> > all writes to a file for an indefinite time by splicing pages to a pipe
+> > that you then never read from.
+>
+> No, I wasn't suggesting that we make pages in transit stable - they
+> only need to be stable while the network stack requires them to be
+> stable....
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+This is exactly where the existing splice API is problematic.  You
+can't splice from a file to a network socket right now.  First you
+splice to a pipe, and now that pipe contains some magical stuff.  And
+it stays there potentially forever.  Then you splice it again to a
+socket.
+
+Would this be better if user code could splice straight to a socket?
+At least in principle, there could be a _limited_ amount of time
+during which anything needs to wait, and it's fundamentally entirely
+reasonable if a concurrent write to a file affects data being
+zero-copied to a socket _during the time after the zero-copy send is
+requested and before it reports completion_.
+
+Frankly, I really don't like having non-immutable data in a pipe.  A
+pipe is supposed to be a thing into which bytes are written and out
+from which the *same* bytes emerge, at least to the extent that anyone
+can observe it.  Do we really want:
+
+$ some_program | tee file21 > file2
+
+to potentially write different data to file1 and file2?
+
+--Andy
