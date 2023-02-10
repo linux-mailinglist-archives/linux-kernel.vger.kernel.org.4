@@ -2,190 +2,561 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 983CD69223A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE3E692234
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232763AbjBJPb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 10:31:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60632 "EHLO
+        id S232739AbjBJPbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 10:31:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232755AbjBJPby (ORCPT
+        with ESMTP id S231897AbjBJPbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 10:31:54 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5035596;
-        Fri, 10 Feb 2023 07:31:48 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31AFV6Pr040918;
-        Fri, 10 Feb 2023 09:31:06 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1676043066;
-        bh=Fjzk5JVx8ctbdtCLPvudP63oV7cXI9Tq/NfyxDy4p7U=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=QU3toFf8xybywgYfzBShVZqqMl8TdwU0b3me6WZQcKMZtcMP6MD/79CR6wcjN5rEK
-         y8YQP7pNiQCecghMxGdWQI/7U/ApoT/gVa0ypal2cMyN5wFrS7LocrUvjHVcjo5yyQ
-         QvxQkkRBVPxTMI9dhKKfmXc4hge9X6Mm+dugq09A=
-Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31AFV6YF009143
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 10 Feb 2023 09:31:06 -0600
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 10
- Feb 2023 09:31:05 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 10 Feb 2023 09:31:05 -0600
-Received: from [10.24.69.114] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 31AFUxRW127820;
-        Fri, 10 Feb 2023 09:31:00 -0600
-Message-ID: <69f54246-5541-7899-f4ed-76d0a600e1b0@ti.com>
-Date:   Fri, 10 Feb 2023 21:00:59 +0530
+        Fri, 10 Feb 2023 10:31:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E080B44C
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:31:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ECAA1B82551
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 15:31:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22CD3C433EF;
+        Fri, 10 Feb 2023 15:31:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676043074;
+        bh=gQssdqI3T5mqshvv1GaZsDNaSL2UpcWwZN4/3BejWnw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iAB2MNTKx2iNsAv+hWseRGGOTtRYwx5PbEk08egdi+hWWBDpylgZoFHSLXkFtNdRI
+         i3TJ2UZLLYkab280H/emTo/nLVgoIYI+6rVstLsknR0EIQ2JF/V24Qnatc61Fyqpce
+         VbshLh+atOeKYUU6PWQXdoMVG+nd3NfwxBRqmNs3XYQiGZBRdOTgjTwCUrR7b9i3QV
+         42cw+naCttW4A2+cAarji1qNb8WHhokHt0yqPmWhTBMI3uX1x1FAZV67Bpv4exG1aD
+         p8jnB6KBNj2WVAMSZGLQUfGXK9OCNnRNQv9GPrT1jjAOYa4wk4kXrpg6p4QFp/HLBo
+         wAvbNIZAhCdbg==
+Date:   Fri, 10 Feb 2023 21:01:09 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Eddie Hung <eddie.hung@mediatek.com>
+Subject: Re: [PATCH v8] phy: mediatek: tphy: add debugfs files
+Message-ID: <Y+ZjPYDEbC9iblsj@matsya>
+References: <20230210085827.7970-1-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [EXTERNAL] Re: [PATCH v5 1/2] dt-bindings: net: Add ICSSG
- Ethernet
-To:     Rob Herring <robh@kernel.org>, MD Danish Anwar <danishanwar@ti.com>
-CC:     "Andrew F. Davis" <afd@ti.com>, Paolo Abeni <pabeni@redhat.com>,
-        <srk@ti.com>, <andrew@lunn.ch>, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <nm@ti.com>, "David S. Miller" <davem@davemloft.net>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <netdev@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, Suman Anna <s-anna@ti.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Roger Quadros <rogerq@kernel.org>
-References: <20230210114957.2667963-1-danishanwar@ti.com>
- <20230210114957.2667963-2-danishanwar@ti.com>
- <167603709479.2486232.8105868847286398852.robh@kernel.org>
-Content-Language: en-US
-From:   Md Danish Anwar <a0501179@ti.com>
-Organization: Texas Instruments
-In-Reply-To: <167603709479.2486232.8105868847286398852.robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230210085827.7970-1-chunfeng.yun@mediatek.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10-02-23, 16:58, Chunfeng Yun wrote:
+> These debugfs files are mainly used to make eye diagram test easier,
+> especially helpful to do HQA test for a new IC without efuse enabled.
+> 
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+> v8: abandon patch to create phy debug root file
+>     /sys/kernel/debug/phy/ suggested by Vinod
 
+Sorry that was not my suggestion
 
-On 10/02/23 19:28, Rob Herring wrote:
->=20
-> On Fri, 10 Feb 2023 17:19:56 +0530, MD Danish Anwar wrote:
->> From: Puranjay Mohan <p-mohan@ti.com>
->>
->> Add a YAML binding document for the ICSSG Programmable real time unit
->> based Ethernet hardware. The ICSSG driver uses the PRU and PRUSS consu=
-mer
->> APIs to interface the PRUs and load/run the firmware for supporting
->> ethernet functionality.
->>
->> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
->> Signed-off-by: Md Danish Anwar <danishanwar@ti.com>
->> ---
->>  .../bindings/net/ti,icssg-prueth.yaml         | 184 +++++++++++++++++=
-+
->>  1 file changed, 184 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/net/ti,icssg-pru=
-eth.yaml
->>
->=20
-> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_chec=
-k'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->=20
-> yamllint warnings/errors:
->=20
-> dtschema/dtc warnings/errors:
-> ./Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml: Unable to=
- find schema file matching $id: http://devicetree.org/schemas/remoteproc/=
-ti,pru-consumer.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings=
-/net/ti,icssg-prueth.example.dtb: ethernet: False schema does not allow {=
-'compatible': ['ti,am654-icssg-prueth'], 'pinctrl-names': ['default'], 'p=
-inctrl-0': [[4294967295]], 'ti,sram': [[4294967295]], 'ti,prus': [[429496=
-7295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295]], 'firm=
-ware-name': ['ti-pruss/am65x-pru0-prueth-fw.elf', 'ti-pruss/am65x-rtu0-pr=
-ueth-fw.elf', 'ti-pruss/am65x-txpru0-prueth-fw.elf', 'ti-pruss/am65x-pru1=
--prueth-fw.elf', 'ti-pruss/am65x-rtu1-prueth-fw.elf', 'ti-pruss/am65x-txp=
-ru1-prueth-fw.elf'], 'ti,pruss-gp-mux-sel': [[2, 2, 2, 2, 2, 2]], 'dmas':=
- [[4294967295, 49920], [4294967295, 49921], [4294967295, 49922], [4294967=
-295, 49923], [4294967295, 49924], [4294967295, 49925], [4294967295, 49926=
-], [4294967295, 49927], [4294967295, 17152], [4294967295, 17153]], 'dma-n=
-ames': ['tx0-0', 'tx0-1', 'tx0-2', 'tx0-3', 'tx1-0', 'tx1-1', 'tx1-2', 't=
-x1-3', 'rx0', 'rx1'], 'ti,mii-g-rt': [[429!
->  4967295]], 'interrupts': [[24, 0, 2], [25, 1, 3]], 'interrupt-names': =
-['tx_ts0', 'tx_ts1'], 'ethernet-ports': {'#address-cells': [[1]], '#size-=
-cells': [[0]], 'port@0': {'reg': [[0]], 'phy-handle': [[4294967295]], 'ph=
-y-mode': ['rgmii-id'], 'interrupts-extended': [[4294967295, 24]], 'ti,sys=
-con-rgmii-delay': [[4294967295, 16672]], 'local-mac-address': [[0, 0, 0, =
-0, 0, 0]]}, 'port@1': {'reg': [[1]], 'phy-handle': [[4294967295]], 'phy-m=
-ode': ['rgmii-id'], 'interrupts-extended': [[4294967295, 25]], 'ti,syscon=
--rgmii-delay': [[4294967295, 16676]], 'local-mac-address': [[0, 0, 0, 0, =
-0, 0]]}}, '$nodename': ['ethernet']}
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devic=
-etree/bindings/net/ti,icssg-prueth.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings=
-/net/ti,icssg-prueth.example.dtb: ethernet: Unevaluated properties are no=
-t allowed ('firmware-name', 'ti,prus', 'ti,pruss-gp-mux-sel' were unexpec=
-ted)
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devic=
-etree/bindings/net/ti,icssg-prueth.yaml
->=20
-> doc reference errors (make refcheckdocs):
->=20
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/2023=
-0210114957.2667963-2-danishanwar@ti.com
+> 
+> v6~v7: no changes
+> 
+> v5: using common debugfs config CONFIG_DEBUG_FS
+> 
+> v4: fix build warning of sometimes uninitialized variable
+> 
+> v3: fix typo of "debugfs" suggested by AngeloGioacchino
+> 
+> v2: add CONFIG_PHY_MTK_TPHY_DEBUGFS suggested by AngeloGioacchino
+> ---
+>  drivers/phy/mediatek/phy-mtk-tphy.c | 405 +++++++++++++++++++++++++++-
+>  1 file changed, 404 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/phy/mediatek/phy-mtk-tphy.c b/drivers/phy/mediatek/phy-mtk-tphy.c
+> index e906a82791bd..65a95c3726bf 100644
+> --- a/drivers/phy/mediatek/phy-mtk-tphy.c
+> +++ b/drivers/phy/mediatek/phy-mtk-tphy.c
+> @@ -7,6 +7,7 @@
+>  
+>  #include <dt-bindings/phy/phy.h>
+>  #include <linux/clk.h>
+> +#include <linux/debugfs.h>
+>  #include <linux/delay.h>
+>  #include <linux/iopoll.h>
+>  #include <linux/mfd/syscon.h>
+> @@ -264,6 +265,8 @@
+>  
+>  #define TPHY_CLKS_CNT	2
+>  
+> +#define USER_BUF_LEN(count) min_t(size_t, 8, (count))
+> +
+>  enum mtk_phy_version {
+>  	MTK_PHY_V1 = 1,
+>  	MTK_PHY_V2,
+> @@ -310,6 +313,7 @@ struct mtk_phy_instance {
+>  	struct clk_bulk_data clks[TPHY_CLKS_CNT];
+>  	u32 index;
+>  	u32 type;
+> +	struct dentry *dbgfs;
+>  	struct regmap *type_sw;
+>  	u32 type_sw_reg;
+>  	u32 type_sw_index;
+> @@ -332,10 +336,391 @@ struct mtk_tphy {
+>  	const struct mtk_phy_pdata *pdata;
+>  	struct mtk_phy_instance **phys;
+>  	int nphys;
+> +	struct dentry *dbgfs_root;
+>  	int src_ref_clk; /* MHZ, reference clock for slew rate calibrate */
+>  	int src_coef; /* coefficient for slew rate calibrate */
+>  };
 
-Hi Rob,
-This patch depends on the patch [1] which is posted through series [2]. P=
-atch
-[1] is currently approved, reviewed and will soon be merged to mainline L=
-inux.
-Once it is merged this patch won't throw the above error.
+I asked the struct dentry *debugfs be part of struct phy. Debugfs would
+be created by core but rather than exported, it should be populated in
+phy and you can use it here in the driver
 
-In the meantime I have posted this patch to get it reviewed so that once =
-patch
-[1] gets merged, this will be ready to be merged.
+>  
+> +#if IS_ENABLED(CONFIG_DEBUG_FS)
+> +
+> +enum u2_phy_params {
+> +	U2P_EYE_VRT = 0,
+> +	U2P_EYE_TERM,
+> +	U2P_EFUSE_EN,
+> +	U2P_EFUSE_INTR,
+> +	U2P_DISCTH,
+> +	U2P_PRE_EMPHASIS,
+> +};
+> +
+> +enum u3_phy_params {
+> +	U3P_EFUSE_EN = 0,
+> +	U3P_EFUSE_INTR,
+> +	U3P_EFUSE_TX_IMP,
+> +	U3P_EFUSE_RX_IMP,
+> +};
+> +
+> +static const char *const u2_phy_files[] = {
+> +	[U2P_EYE_VRT] = "vrt",
+> +	[U2P_EYE_TERM] = "term",
+> +	[U2P_EFUSE_EN] = "efuse",
+> +	[U2P_EFUSE_INTR] = "intr",
+> +	[U2P_DISCTH] = "discth",
+> +	[U2P_PRE_EMPHASIS] = "preemph",
+> +};
+> +
+> +static const char *const u3_phy_files[] = {
+> +	[U3P_EFUSE_EN] = "efuse",
+> +	[U3P_EFUSE_INTR] = "intr",
+> +	[U3P_EFUSE_TX_IMP] = "tx-imp",
+> +	[U3P_EFUSE_RX_IMP] = "rx-imp",
+> +};
+> +
+> +static int u2_phy_params_show(struct seq_file *sf, void *unused)
+> +{
+> +	struct mtk_phy_instance *inst = sf->private;
+> +	const char *fname = file_dentry(sf->file)->d_iname;
+> +	struct u2phy_banks *u2_banks = &inst->u2_banks;
+> +	void __iomem *com = u2_banks->com;
+> +	u32 max = 0;
+> +	u32 tmp = 0;
+> +	u32 val = 0;
+> +	int ret;
+> +
+> +	ret = match_string(u2_phy_files, ARRAY_SIZE(u2_phy_files), fname);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	switch (ret) {
+> +	case U2P_EYE_VRT:
+> +		tmp = readl(com + U3P_USBPHYACR1);
+> +		val = FIELD_GET(PA1_RG_VRT_SEL, tmp);
+> +		max = FIELD_MAX(PA1_RG_VRT_SEL);
+> +		break;
+> +
+> +	case U2P_EYE_TERM:
+> +		tmp = readl(com + U3P_USBPHYACR1);
+> +		val = FIELD_GET(PA1_RG_TERM_SEL, tmp);
+> +		max = FIELD_MAX(PA1_RG_TERM_SEL);
+> +		break;
+> +
+> +	case U2P_EFUSE_EN:
+> +		if (u2_banks->misc) {
+> +			tmp = readl(u2_banks->misc + U3P_MISC_REG1);
+> +			max = 1;
+> +		}
+> +
+> +		val = !!(tmp & MR1_EFUSE_AUTO_LOAD_DIS);
+> +		break;
+> +
+> +	case U2P_EFUSE_INTR:
+> +		tmp = readl(com + U3P_USBPHYACR1);
+> +		val = FIELD_GET(PA1_RG_INTR_CAL, tmp);
+> +		max = FIELD_MAX(PA1_RG_INTR_CAL);
+> +		break;
+> +
+> +	case U2P_DISCTH:
+> +		tmp = readl(com + U3P_USBPHYACR6);
+> +		val = FIELD_GET(PA6_RG_U2_DISCTH, tmp);
+> +		max = FIELD_MAX(PA6_RG_U2_DISCTH);
+> +		break;
+> +
+> +	case U2P_PRE_EMPHASIS:
+> +		tmp = readl(com + U3P_USBPHYACR6);
+> +		val = FIELD_GET(PA6_RG_U2_PRE_EMP, tmp);
+> +		max = FIELD_MAX(PA6_RG_U2_PRE_EMP);
+> +		break;
+> +
+> +	default:
+> +		seq_printf(sf, "invalid, %d\n", ret);
+> +		break;
+> +	}
+> +
+> +	seq_printf(sf, "%s : %d [0, %d]\n", fname, val, max);
+> +
+> +	return 0;
+> +}
+> +
+> +static int u2_phy_params_open(struct inode *inode, struct file *file)
+> +{
+> +	return single_open(file, u2_phy_params_show, inode->i_private);
+> +}
+> +
+> +static ssize_t u2_phy_params_write(struct file *file, const char __user *ubuf,
+> +				   size_t count, loff_t *ppos)
+> +{
+> +	const char *fname = file_dentry(file)->d_iname;
+> +	struct seq_file *sf = file->private_data;
+> +	struct mtk_phy_instance *inst = sf->private;
+> +	struct u2phy_banks *u2_banks = &inst->u2_banks;
+> +	void __iomem *com = u2_banks->com;
+> +	ssize_t rc;
+> +	u32 val;
+> +	int ret;
+> +
+> +	rc = kstrtouint_from_user(ubuf, USER_BUF_LEN(count), 0, &val);
+> +	if (rc)
+> +		return rc;
+> +
+> +	ret = match_string(u2_phy_files, ARRAY_SIZE(u2_phy_files), fname);
+> +	if (ret < 0)
+> +		return (ssize_t)ret;
+> +
+> +	switch (ret) {
+> +	case U2P_EYE_VRT:
+> +		mtk_phy_update_field(com + U3P_USBPHYACR1, PA1_RG_VRT_SEL, val);
+> +		break;
+> +
+> +	case U2P_EYE_TERM:
+> +		mtk_phy_update_field(com + U3P_USBPHYACR1, PA1_RG_TERM_SEL, val);
+> +		break;
+> +
+> +	case U2P_EFUSE_EN:
+> +		if (u2_banks->misc)
+> +			mtk_phy_update_field(u2_banks->misc + U3P_MISC_REG1,
+> +					     MR1_EFUSE_AUTO_LOAD_DIS, !!val);
+> +		break;
+> +
+> +	case U2P_EFUSE_INTR:
+> +		mtk_phy_update_field(com + U3P_USBPHYACR1, PA1_RG_INTR_CAL, val);
+> +		break;
+> +
+> +	case U2P_DISCTH:
+> +		mtk_phy_update_field(com + U3P_USBPHYACR6, PA6_RG_U2_DISCTH, val);
+> +		break;
+> +
+> +	case U2P_PRE_EMPHASIS:
+> +		mtk_phy_update_field(com + U3P_USBPHYACR6, PA6_RG_U2_PRE_EMP, val);
+> +		break;
+> +
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return count;
+> +}
+> +
+> +static const struct file_operations u2_phy_fops = {
+> +	.open = u2_phy_params_open,
+> +	.write = u2_phy_params_write,
+> +	.read = seq_read,
+> +	.llseek = seq_lseek,
+> +	.release = single_release,
+> +};
+> +
+> +static void u2_phy_dbgfs_files_create(struct mtk_phy_instance *inst)
+> +{
+> +	u32 count = ARRAY_SIZE(u2_phy_files);
+> +	int i;
+> +
+> +	for (i = 0; i < count; i++)
+> +		debugfs_create_file(u2_phy_files[i], 0644, inst->dbgfs, inst, &u2_phy_fops);
+> +}
+> +
+> +static int u3_phy_params_show(struct seq_file *sf, void *unused)
+> +{
+> +	struct mtk_phy_instance *inst = sf->private;
+> +	const char *fname = file_dentry(sf->file)->d_iname;
+> +	struct u3phy_banks *u3_banks = &inst->u3_banks;
+> +	u32 val = 0;
+> +	u32 max = 0;
+> +	u32 tmp;
+> +	int ret;
+> +
+> +	ret = match_string(u3_phy_files, ARRAY_SIZE(u3_phy_files), fname);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	switch (ret) {
+> +	case U3P_EFUSE_EN:
+> +		tmp = readl(u3_banks->phyd + U3P_U3_PHYD_RSV);
+> +		val = !!(tmp & P3D_RG_EFUSE_AUTO_LOAD_DIS);
+> +		max = 1;
+> +		break;
+> +
+> +	case U3P_EFUSE_INTR:
+> +		tmp = readl(u3_banks->phya + U3P_U3_PHYA_REG0);
+> +		val = FIELD_GET(P3A_RG_IEXT_INTR, tmp);
+> +		max = FIELD_MAX(P3A_RG_IEXT_INTR);
+> +		break;
+> +
+> +	case U3P_EFUSE_TX_IMP:
+> +		tmp = readl(u3_banks->phyd + U3P_U3_PHYD_IMPCAL0);
+> +		val = FIELD_GET(P3D_RG_TX_IMPEL, tmp);
+> +		max = FIELD_MAX(P3D_RG_TX_IMPEL);
+> +		break;
+> +
+> +	case U3P_EFUSE_RX_IMP:
+> +		tmp = readl(u3_banks->phyd + U3P_U3_PHYD_IMPCAL1);
+> +		val = FIELD_GET(P3D_RG_RX_IMPEL, tmp);
+> +		max = FIELD_MAX(P3D_RG_RX_IMPEL);
+> +		break;
+> +
+> +	default:
+> +		seq_printf(sf, "invalid, %d\n", ret);
+> +		break;
+> +	}
+> +
+> +	seq_printf(sf, "%s : %d [0, %d]\n", fname, val, max);
+> +
+> +	return 0;
+> +}
+> +
+> +static int u3_phy_params_open(struct inode *inode, struct file *file)
+> +{
+> +	return single_open(file, u3_phy_params_show, inode->i_private);
+> +}
+> +
+> +static ssize_t u3_phy_params_write(struct file *file, const char __user *ubuf,
+> +				   size_t count, loff_t *ppos)
+> +{
+> +	const char *fname = file_dentry(file)->d_iname;
+> +	struct seq_file *sf = file->private_data;
+> +	struct mtk_phy_instance *inst = sf->private;
+> +	struct u3phy_banks *u3_banks = &inst->u3_banks;
+> +	void __iomem *phyd = u3_banks->phyd;
+> +	ssize_t rc;
+> +	u32 val;
+> +	int ret;
+> +
+> +	rc = kstrtouint_from_user(ubuf, USER_BUF_LEN(count), 0, &val);
+> +	if (rc)
+> +		return rc;
+> +
+> +	ret = match_string(u3_phy_files, ARRAY_SIZE(u3_phy_files), fname);
+> +	if (ret < 0)
+> +		return (ssize_t)ret;
+> +
+> +	switch (ret) {
+> +	case U3P_EFUSE_EN:
+> +		mtk_phy_update_field(phyd + U3P_U3_PHYD_RSV,
+> +				     P3D_RG_EFUSE_AUTO_LOAD_DIS, !!val);
+> +		break;
+> +
+> +	case U3P_EFUSE_INTR:
+> +		mtk_phy_update_field(u3_banks->phya + U3P_U3_PHYA_REG0, P3A_RG_IEXT_INTR, val);
+> +		break;
+> +
+> +	case U3P_EFUSE_TX_IMP:
+> +		mtk_phy_update_field(phyd + U3P_U3_PHYD_IMPCAL0, P3D_RG_TX_IMPEL, val);
+> +		mtk_phy_set_bits(phyd + U3P_U3_PHYD_IMPCAL0, P3D_RG_FORCE_TX_IMPEL);
+> +		break;
+> +
+> +	case U3P_EFUSE_RX_IMP:
+> +		mtk_phy_update_field(phyd + U3P_U3_PHYD_IMPCAL1, P3D_RG_RX_IMPEL, val);
+> +		mtk_phy_set_bits(phyd + U3P_U3_PHYD_IMPCAL1, P3D_RG_FORCE_RX_IMPEL);
+> +		break;
+> +
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return count;
+> +}
+> +
+> +static const struct file_operations u3_phy_fops = {
+> +	.open = u3_phy_params_open,
+> +	.write = u3_phy_params_write,
+> +	.read = seq_read,
+> +	.llseek = seq_lseek,
+> +	.release = single_release,
+> +};
+> +
+> +static void u3_phy_dbgfs_files_create(struct mtk_phy_instance *inst)
+> +{
+> +	u32 count = ARRAY_SIZE(u3_phy_files);
+> +	int i;
+> +
+> +	for (i = 0; i < count; i++)
+> +		debugfs_create_file(u3_phy_files[i], 0644, inst->dbgfs, inst, &u3_phy_fops);
+> +}
+> +
+> +static int tphy_type_show(struct seq_file *sf, void *unused)
+> +{
+> +	struct mtk_phy_instance *inst = sf->private;
+> +	const char *type;
+> +
+> +	switch (inst->type) {
+> +	case PHY_TYPE_USB2:
+> +		type = "USB2";
+> +		break;
+> +	case PHY_TYPE_USB3:
+> +		type = "USB3";
+> +		break;
+> +	case PHY_TYPE_PCIE:
+> +		type = "PCIe";
+> +		break;
+> +	case PHY_TYPE_SGMII:
+> +		type = "SGMII";
+> +		break;
+> +	case PHY_TYPE_SATA:
+> +		type = "SATA";
+> +		break;
+> +	default:
+> +		type = "";
+> +	}
+> +
+> +	seq_printf(sf, "%s\n", type);
+> +
+> +	return 0;
+> +}
+> +
+> +DEFINE_SHOW_ATTRIBUTE(tphy_type);
+> +
+> +static void tphy_debugfs_init(struct mtk_tphy *tphy, struct mtk_phy_instance *inst)
+> +{
+> +	char name[16];
+> +
+> +	snprintf(name, sizeof(name) - 1, "phy.%d", inst->index);
+> +	inst->dbgfs = debugfs_create_dir(name, tphy->dbgfs_root);
+> +
+> +	debugfs_create_file("type", 0444, inst->dbgfs, inst, &tphy_type_fops);
+> +
+> +	switch (inst->type) {
+> +	case PHY_TYPE_USB2:
+> +		u2_phy_dbgfs_files_create(inst);
+> +		break;
+> +	case PHY_TYPE_USB3:
+> +	case PHY_TYPE_PCIE:
+> +		u3_phy_dbgfs_files_create(inst);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +}
+> +
+> +static void tphy_debugfs_exit(struct mtk_phy_instance *inst)
+> +{
+> +	debugfs_remove_recursive(inst->dbgfs);
+> +	inst->dbgfs = NULL;
+> +}
+> +
+> +static void tphy_debugfs_root_create(struct mtk_tphy *tphy)
+> +{
+> +	tphy->dbgfs_root = debugfs_create_dir(dev_name(tphy->dev), NULL);
+> +}
+> +
+> +static void tphy_debugfs_root_remove(struct mtk_tphy *tphy)
+> +{
+> +	debugfs_remove_recursive(tphy->dbgfs_root);
+> +	tphy->dbgfs_root = NULL;
+> +}
+> +
+> +#else
+> +
+> +static void tphy_debugfs_init(struct mtk_tphy *tphy, struct mtk_phy_instance *inst)
+> +{}
+> +
+> +static void tphy_debugfs_exit(struct mtk_phy_instance *inst)
+> +{}
+> +
+> +static void tphy_debugfs_root_create(struct mtk_tphy *tphy)
+> +{}
+> +
+> +static void tphy_debugfs_root_remove(struct mtk_tphy *tphy)
+> +{}
+> +
+> +#endif
+> +
+>  static void hs_slew_rate_calibrate(struct mtk_tphy *tphy,
+>  	struct mtk_phy_instance *instance)
+>  {
+> @@ -1032,6 +1417,8 @@ static int mtk_phy_init(struct phy *phy)
+>  		return -EINVAL;
+>  	}
+>  
+> +	tphy_debugfs_init(tphy, instance);
+> +
+>  	return 0;
+>  }
+>  
+> @@ -1068,6 +1455,8 @@ static int mtk_phy_exit(struct phy *phy)
+>  	struct mtk_phy_instance *instance = phy_get_drvdata(phy);
+>  	struct mtk_tphy *tphy = dev_get_drvdata(phy->dev.parent);
+>  
+> +	tphy_debugfs_exit(instance);
+> +
+>  	if (instance->type == PHY_TYPE_USB2)
+>  		u2_phy_instance_exit(tphy, instance);
+>  
+> @@ -1295,15 +1684,29 @@ static int mtk_tphy_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	provider = devm_of_phy_provider_register(dev, mtk_phy_xlate);
+> +	if (IS_ERR(provider))
+> +		return dev_err_probe(dev, PTR_ERR(provider), "probe failed\n");
+> +
+> +	tphy_debugfs_root_create(tphy);
+> +	return 0;
+>  
+> -	return PTR_ERR_OR_ZERO(provider);
+>  put_child:
+>  	of_node_put(child_np);
+>  	return retval;
+>  }
+>  
+> +static int mtk_tphy_remove(struct platform_device *pdev)
+> +{
+> +	struct mtk_tphy *tphy;
+> +
+> +	tphy = platform_get_drvdata(pdev);
+> +	tphy_debugfs_root_remove(tphy);
+> +	return 0;
+> +}
+> +
+>  static struct platform_driver mtk_tphy_driver = {
+>  	.probe		= mtk_tphy_probe,
+> +	.remove		= mtk_tphy_remove,
+>  	.driver		= {
+>  		.name	= "mtk-tphy",
+>  		.of_match_table = mtk_tphy_id_table,
+> -- 
+> 2.18.0
 
-[1] https://lore.kernel.org/all/20230106121046.886863-2-danishanwar@ti.co=
-m/
-[2] https://lore.kernel.org/all/20230106121046.886863-1-danishanwar@ti.co=
-m/
-
->=20
-> The base for the series is generally the latest rc1. A different depend=
-ency
-> should be noted in *this* patch.
->=20
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to=
-
-> date:
->=20
-> pip3 install dtschema --upgrade
->=20
-> Please check and re-submit after running the above command yourself. No=
-te
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checkin=
-g
-> your schema. However, it must be unset to test all examples with your s=
-chema.
->=20
-
---=20
-Thanks and Regards,
-Danish.
+-- 
+~Vinod
