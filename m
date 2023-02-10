@@ -2,111 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6473692650
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:28:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDBD692653
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:29:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232505AbjBJT2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 14:28:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34162 "EHLO
+        id S233159AbjBJT3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 14:29:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233316AbjBJT2C (ORCPT
+        with ESMTP id S232598AbjBJT26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 14:28:02 -0500
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FB17E012;
-        Fri, 10 Feb 2023 11:27:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-        s=42; h=Message-ID:Cc:To:From:Date;
-        bh=mJvEE36AdMeH3sIvvfWubmnVmU4slCx5aMtae9s80iE=; b=LJ8QZ6feDCvHew+AkUbWfDtlfl
-        8RJc5UUKLvvifcHrKLNJbFZat0vqwYMk0bCk7Nwo6Cy43H+crmjQEw8Ape5Jq8863KK8RgysL4ESx
-        muytWsRWCZj8CxUOlJTe/7xgt606cvWzuwZdDleIwAdgyflErcUJbYwIxjNNkQbRjbV+6H+6ehU+q
-        LJh1BSLmMphQ90H9RTgiS3GDcdFqGoWczJKRTnQl0iQ5r2KJ+dLoD+d5e7QiTpQxG5K64GMzc9jn7
-        tbIdHKP7WDLKnArjHAUdbmX4nDUasTDhtDI4GjwwQwP8CePGbLMoNIAQ2se2Dfqj24squHpcIUj9G
-        IXkLS4Cd3oufwE3FRrpTSczWBdq4DfD8rj0rUU5lVqXMV/d/BdlKO4jV8qtnglT9K4opAKFtxQsdu
-        kRr9aNZ2QgQMRCydDY2SO5AiWCB5suKDBd2kNlHbb0H8FSG4jecDa2mS1OHFRggws53Hro/BdBCdn
-        aMjb7mbgBYd6ypqeubyWIgkz;
-Received: from [127.0.0.2] (localhost [127.0.0.1])
-        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
-        (Exim)
-        id 1pQZ3r-00D3HT-6F; Fri, 10 Feb 2023 19:27:55 +0000
-Date:   Fri, 10 Feb 2023 11:27:51 -0800
-From:   Jeremy Allison <jra@samba.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Lutomirski <luto@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Linux API Mailing List <linux-api@vger.kernel.org>,
-        Dave Chinner <david@fromorbit.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Stefan Metzmacher <metze@samba.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Samba Technical <samba-technical@lists.samba.org>,
-        io-uring <io-uring@vger.kernel.org>
-Subject: Re: copy on write for splice() from file to pipe?
-Message-ID: <Y+aat8sggTtgff+A@jeremy-acer>
-Reply-To: Jeremy Allison <jra@samba.org>
-References: <20230210021603.GA2825702@dread.disaster.area>
- <20230210040626.GB2825702@dread.disaster.area>
- <Y+XLuYh+kC+4wTRi@casper.infradead.org>
- <20230210065747.GD2825702@dread.disaster.area>
- <CALCETrWjJisipSJA7tPu+h6B2gs3m+g0yPhZ4z+Atod+WOMkZg@mail.gmail.com>
- <CAHk-=wj66F6CdJUAAjqigXMBy7gHquFMzPNAwKCgkrb2mF6U7w@mail.gmail.com>
- <CALCETrU-9Wcb_zCsVWr24V=uCA0+c6x359UkJBOBgkbq+UHAMA@mail.gmail.com>
- <CAHk-=wjQZWMeQ9OgXDNepf+TLijqj0Lm0dXWwWzDcbz6o7yy_g@mail.gmail.com>
- <CALCETrWuRHWh5XFn8M8qx5z0FXAGHH=ysb+c6J+cqbYyTAHvhw@mail.gmail.com>
- <CAHk-=wjuXvF1cA=gJod=-6k4ypbEmOczFFDKriUpOVKy9dTJWQ@mail.gmail.com>
+        Fri, 10 Feb 2023 14:28:58 -0500
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEA066FA7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:28:57 -0800 (PST)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-15ff0a1f735so7993008fac.5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:28:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8QnFhEMcPPEP0O0xLg8j6PWrQGKllGaFswnof6Ao8II=;
+        b=obbP9CUsIN+o+GcuEdB6W00oWDZV3vrht/AeGKmWlLbavWt2/jmBX7clglJDbLVUbB
+         vDm0DtYpPFEJy1zIpI+RljlFwn4wPA+BKj5pf+UZmOFV1c+kRRz5or0COegws6Op8wrk
+         vN8thBQ4so/H9LAguljqEOuoV4RgCiBAY4Sc4zoALDE1ety5W8YiIjNw3QhSqTXxYL1s
+         W+OJmW7jC4+fYMpehgxuIexQNb14L3XhiQ66oeqqp2Gykpn8QC7+2HPZ6vIhUSxThHlz
+         0FaIw2u4CfdNCJ/Nfr8wKQTJSi4jTFrzL9+t3r+2BQEe+Lh6DrUYER5oD3HaW9DELj5y
+         DBXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8QnFhEMcPPEP0O0xLg8j6PWrQGKllGaFswnof6Ao8II=;
+        b=R19EOsQGG4nmCIdiXRB+nx88ILYHUkLonSHD3UnHdQ6JgYggR4n/IUjhUBmAZC3WT9
+         KQ8zyRUoWOCAFnjaCwu4OrcWZdH27cXLLs8FYHsMp93U58pieBhTw29pdogxw4ZcuDze
+         yKUxySNsRZzd8ePZy55kvnPWAgIE0tDFbvq6LEnaxyeqGyzbsOMjsyFjBtkFLNKJ17DZ
+         G8h6TjTjPlIVfq9TseHfIokO590TaxOqmA3FvQ1X+hHQiKhxts+l+FAa1r+f/lOKaSmH
+         5wwLeMRYCJOGQoXFGEX01aj7ac+ZlLH3Bzw+79speTezbxNaqk3+ON4UuAQVfvtphIk+
+         9rNQ==
+X-Gm-Message-State: AO0yUKX41IaTp8f8ibn1f6ARlOksBZrhmeDB4zyxudbhOjJNOseacNy5
+        P41Mb4ZwKCwsmbrPEaZW09e7L5iq+s/4vClFnLM1yg==
+X-Google-Smtp-Source: AK7set9FhO6ODVeYpYuU7r3c1yFt4Ew4aZNMdHvKpMd8vVZ0g1n+1IPAOnp6pnOZxCZL6/VFGuMGQBZTcOb+kL8UJSU=
+X-Received: by 2002:a05:6870:c211:b0:169:e996:9cb0 with SMTP id
+ z17-20020a056870c21100b00169e9969cb0mr2176030oae.122.1676057336378; Fri, 10
+ Feb 2023 11:28:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjuXvF1cA=gJod=-6k4ypbEmOczFFDKriUpOVKy9dTJWQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230131220355.1603527-1-rmoar@google.com> <20230131220355.1603527-3-rmoar@google.com>
+ <CABVgOSk_jWzywAKASy1U2mQOC=SM_TDt753VyF1hUtwWzoszPw@mail.gmail.com>
+In-Reply-To: <CABVgOSk_jWzywAKASy1U2mQOC=SM_TDt753VyF1hUtwWzoszPw@mail.gmail.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Fri, 10 Feb 2023 14:28:44 -0500
+Message-ID: <CA+GJov5OCM4VNZ4QsEEcH-V+S+sPoUN8B9b_stFD-r00RYF2hw@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] kunit: fix bug in the order of lines in debugfs logs
+To:     David Gow <davidgow@google.com>
+Cc:     brendanhiggins@google.com, dlatypov@google.com,
+        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 11:18:05AM -0800, Linus Torvalds via samba-technical wrote:
+On Thu, Feb 9, 2023 at 12:06 AM David Gow <davidgow@google.com> wrote:
 >
->We should point the fingers at either the _user_ of splice - as Jeremy
->Allison has done a couple of times - or we should point it at the sink
->that cannot deal with unstable sources.
-> ....
-> - it sounds like the particular user in question (samba) already very
->much has a reasonable model for "I have exclusive access to this" that
->just wasn't used
+> On Wed, 1 Feb 2023 at 06:04, Rae Moar <rmoar@google.com> wrote:
+> >
+> > Fix bug in debugfs logs that causes an incorrect order of lines in the
+> > debugfs log.
+> >
+> > Currently, any suite diagnostic lines, including the test counts lines
+> > that show the number of tests passed, failed, and skipped,
+> > appear prior to the individual results, which is a bug.
+> >
+> > Ensure the order of printing for the debugfs log is correct.
+> >
+> > Signed-off-by: Rae Moar <rmoar@google.com>
+> > ---
+>
+> I think this is overall an improvement, but there are a few remaining
+> issues (some new, some old).
 
-Having said that, I just had a phone discussion with Ralph Boehme
-on the Samba Team, who has been following along with this in
-read-only mode, and he did point out one case I had missed.
+Hi David!
 
-1). Client opens file with a lease. Hurrah, we think we can use splice() !
-2). Client writes into file.
-3). Client calls SMB_FLUSH to ensure data is on disk.
-4). Client reads the data just wrtten to ensure it's good.
-5). Client overwrites the previously written data.
+Thanks for your comments.
 
-Now when client issues (4), the read request, if we
-zero-copy using splice() - I don't think theres a way
-we get notified when the data has finally left the
-system and the mapped splice memory in the buffer cache
-is safe to overwrite by the write (5).
+>
+> First, as with the previous patches, could we have a before/after
+> comparison in the commit description?
 
-So the read in (4) could potentially return the data
-written in (5), if the buffer cache mapped memory has
-not yet been sent out over the network.
+Yes, this sounds like a great idea. I originally thought the before
+and after comparison in the cover letter would be sufficient but an
+individual comparison for each patch is clearer. I will add this in
+v2.
 
-That is certainly unexpected behavior for the client,
-even if the client leased the file.
+>
+> Secondly, I think it'd be nice to either add an extra KTAP header to
+> the start, so that each debugfs results file is a valid KTAP document
+> by itself, or at least document that you'll need to prepend one for
+> this to work.
+> I'm personally leaning towards the latter, even if it loses us the
+> ability to just concatenate result files together, because of the
+> third issue below.
+>
+> Finally, with this patch, the final result line's suite number is
+> recorded from its initial run, rather than always being '1'. This
+> means that if multiple suites are run (e.g. list-test.ko), then the
+> result file could contain a single suite, with "ok 2 ..." or similar
+> as a result line. This might help a bit if we were concatenating
+> result files, but otherwise leaves us with a parse error due to the
+> mismatched number.
+>
+> Personally, I'd prefer we change those to always use suite number 1,
+> and to add the KTAP header to the start. Adding the header should be
+> easy, the suite number perhaps less so...
 
-If that's the case, then splice() is unusable for
-Samba even in the leased file case.
+My intention was to match the logs with the exact KTAP output of the
+test to be consistent. But I see the value in ensuring the logs are
+easily parsable. In v2, I will add the KTAP header and change the test
+number to be 1 to allow the logs to be parsed without error.
 
->   Maybe this thread raised some awareness of it for some people, but
->more realistically - maybe we can really document this whole issue
->somewhere much more clearly
+-Rae
 
-Complete comprehensive documentation on this would
-be extremely helpful (to say the least :-).
+>
+> Cheers,
+> -- David
+>
+> >  lib/kunit/debugfs.c | 13 ++++++++-----
+> >  lib/kunit/test.c    | 24 ++++++++++++------------
+> >  2 files changed, 20 insertions(+), 17 deletions(-)
+> >
+> > diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
+> > index de0ee2e03ed6..fbc645590701 100644
+> > --- a/lib/kunit/debugfs.c
+> > +++ b/lib/kunit/debugfs.c
+> > @@ -52,19 +52,22 @@ static void debugfs_print_result(struct seq_file *seq,
+> >  static int debugfs_print_results(struct seq_file *seq, void *v)
+> >  {
+> >         struct kunit_suite *suite = (struct kunit_suite *)seq->private;
+> > -       enum kunit_status success = kunit_suite_has_succeeded(suite);
+> >         struct kunit_case *test_case;
+> >
+> > -       if (!suite || !suite->log)
+> > +       if (!suite)
+> >                 return 0;
+> >
+> > -       seq_printf(seq, "%s", suite->log);
+> > +       /* Print suite header because it is not stored in the test logs. */
+> > +       seq_puts(seq, KUNIT_SUBTEST_INDENT "KTAP version 1\n");
+>
+> We probably want to print this twice, once without the indent, to
+> start the whole document, once with it.
+>
+> > +       seq_printf(seq, KUNIT_SUBTEST_INDENT "# Subtest: %s\n", suite->name);
+> > +       seq_printf(seq, KUNIT_SUBTEST_INDENT "1..%zd\n", kunit_suite_num_test_cases(suite));
+> >
+> >         kunit_suite_for_each_test_case(suite, test_case)
+> >                 debugfs_print_result(seq, suite, test_case);
+> >
+> > -       seq_printf(seq, "%s %d %s\n",
+> > -                  kunit_status_to_ok_not_ok(success), 1, suite->name);
+>
+> We probably still want to output the suite number as '1'...
+>
+> > +       if (suite->log)
+> > +               seq_printf(seq, "%s", suite->log);
+> > +
+> >         return 0;
+> >  }
+> >
+> > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> > index 66ba93b8222c..27763f0b420c 100644
+> > --- a/lib/kunit/test.c
+> > +++ b/lib/kunit/test.c
+> > @@ -147,10 +147,18 @@ EXPORT_SYMBOL_GPL(kunit_suite_num_test_cases);
+> >
+> >  static void kunit_print_suite_start(struct kunit_suite *suite)
+> >  {
+> > -       kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "KTAP version 1\n");
+> > -       kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "# Subtest: %s",
+> > +       /*
+> > +        * We do not log the test suite header as doing so would
+> > +        * mean debugfs display would consist of the test suite
+> > +        * header prior to individual test results.
+> > +        * Hence directly printk the suite status, and we will
+> > +        * separately seq_printf() the suite header for the debugfs
+> > +        * representation.
+> > +        */
+> > +       pr_info(KUNIT_SUBTEST_INDENT "KTAP version 1\n");
+> > +       pr_info(KUNIT_SUBTEST_INDENT "# Subtest: %s",
+> >                   suite->name);
+> > -       kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "1..%zd",
+> > +       pr_info(KUNIT_SUBTEST_INDENT "1..%zd",
+> >                   kunit_suite_num_test_cases(suite));
+> >  }
+> >
+> > @@ -165,16 +173,8 @@ static void kunit_print_ok_not_ok(void *test_or_suite,
+> >         struct kunit *test = is_test ? test_or_suite : NULL;
+> >         const char *directive_header = (status == KUNIT_SKIPPED) ? " # SKIP " : "";
+> >
+> > -       /*
+> > -        * We do not log the test suite results as doing so would
+> > -        * mean debugfs display would consist of the test suite
+> > -        * description and status prior to individual test results.
+> > -        * Hence directly printk the suite status, and we will
+> > -        * separately seq_printf() the suite status for the debugfs
+> > -        * representation.
+> > -        */
+> >         if (suite)
+> > -               pr_info("%s %zd %s%s%s\n",
+> > +               kunit_log(KERN_INFO, suite, "%s %zd %s%s%s\n",
+>
+> Changing this breaks the code to ensure the suite number is always '1'...
+>
+>
+> >                         kunit_status_to_ok_not_ok(status),
+> >                         test_number, description, directive_header,
+> >                         (status == KUNIT_SKIPPED) ? directive : "");
+> > --
+> > 2.39.1.456.gfc5497dd1b-goog
+> >
