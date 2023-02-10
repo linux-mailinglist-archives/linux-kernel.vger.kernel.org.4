@@ -2,128 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB70692688
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF52692767
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233203AbjBJThR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 14:37:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43626 "EHLO
+        id S233504AbjBJTsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 14:48:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232876AbjBJThL (ORCPT
+        with ESMTP id S233429AbjBJTsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 14:37:11 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2044.outbound.protection.outlook.com [40.107.95.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FFF5C4B5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:37:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BS4zUoVh02A3392qZKiocPeX6wRsocq3E3gS3Hvk82MmUEM24lQ0wKiU9TlwfugUR7WTeqxIzD8+LzdCfCf+7JmW7IRyMfhAGJOG1NQXhkTvy73/AZ2tR1/YfTnpmv/rnhL0jzDGOW/QW2bEvYEJvrRA5QcUVr6JQrgponz8aHkWfVBRy8vojMZA5x0dDFykB1TeMQW7u1vmF8EhP9pNdktaBbovfqYLb+g1kz1mu1PsmWzO1bhWzGV5PQVm/dyYQt4Ewwi+KMxZ/Lwbo4fiYfI18PKRxGMqSzZqdrO6YNWjpqvi9n/+6bKxsscjV8neswuc2dJok7WnDqyYzvsVdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0cnVrRSW3rGsG32a7JWOiWWsAlct/31s8DgvaGvI1rk=;
- b=l545VmsbuZquYOfphaTOpGYYvzD1ld1o7q76pPIdEF+M30Je5Tj61kJnufzc2hiEwm3YOMFWoXiuQsSE/c1USge3gkdP/OAA+57kRiBZVvlg5utImiRNQYR447IRmuKWLefMHp/yL9u9PHHoNzPzSs4Q/f1me7Aianill2fyyPPzciVhaSqbwVBppg2zMiDnaMZfTHO18oOLkjaEd9peBXaWF7+zalTXuUWZyxcbC/hSxqtzAEnUbO/3bMX/Qqb1hj9TFzM2rEzAXUTgNvMdMfbtJWFWHhMeIjgSG1bZdzyo0qDbeHd2OM0HXAuNaZf0oRkBo+DOsvooR5QkzkpowA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0cnVrRSW3rGsG32a7JWOiWWsAlct/31s8DgvaGvI1rk=;
- b=YXp/4R77GgzoGy3oCmcbjHnvQXZ8LkMv2BLpMDNdeRfo61yr7EQoUD24sEXtTQsmhIVhuAs5IkPnYMOZIfTkz/i19C9jGQwQ6yDqw94cw9RRVB5sajQcJitWqxjAZQBrR4gXcaFwTgLMkM+aLYIDDtaXvsHW9/J2gl8QC/2awFs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by SJ0PR12MB6711.namprd12.prod.outlook.com (2603:10b6:a03:44d::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.21; Fri, 10 Feb
- 2023 19:37:00 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::aa28:9378:593:868a]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::aa28:9378:593:868a%8]) with mapi id 15.20.6086.021; Fri, 10 Feb 2023
- 19:37:00 +0000
-Message-ID: <49a3244a-1416-12c4-9dfa-661cf5b5d569@amd.com>
-Date:   Fri, 10 Feb 2023 14:36:56 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] drm/amd/display: Remove duplicate/repeating expressions
-Content-Language: en-US
-To:     Deepak R Varma <drv@mailo.com>, Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-References: <Y+YVy7RaxnXokJ3l@ubun2204.myguest.virtualbox.org>
-From:   Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <Y+YVy7RaxnXokJ3l@ubun2204.myguest.virtualbox.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT4PR01CA0309.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:10e::27) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|SJ0PR12MB6711:EE_
-X-MS-Office365-Filtering-Correlation-Id: fe8e3f35-3bd8-4f59-557c-08db0b9e2daf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ihX/UOdpAEEfYcNkOhGrrWDb/stmLGWlXjhc7DuBcc0eK9WYUTrlebkU1WtyXb0dEU3IoNPVgSxdjygytBDBB+ZEAR3dqxtf7Y15qh1JmMxXBplCN02S4Y3djBsshvmhYaEOjxVSKkNisQUqXcml5+e+IuclK6rmUzKRdiPs+S8gHnK/6rj6g+TtLrq8LwIg/YraNcEvrPPVRgJcMcY5uQfRSZVjAMjNHLcw5QxTu4YP8iiubPOKbY0leYjnlndsv+diPy3hOwUykJ9IO9uDjcCw5NJ2VhejsWudAQK9rWrYabHK2LxKIgMHKLI1H8UpWkPAssbZbCgSpD1qGMLezTVv7DuR5WLqacc8BeEq1bhSbXrV/gibWDOKyBl92GRJT7Gc/0z3vVPIuJ9IdrQzx/KxkNVc/QzvDZXZKPjxATU/0bqsl+EfMm/QV8QuJKMVQ2ET2PVbrLaU+l13LARYG58T/P5G9M4ClIpCFeY9gBOCpyte98Da2XZQpFhFvH9OW/3dbxTfJ6Ozx2lgzZXLluL2jJINL9udbB4cyhb6tkIzQRoy6XQCwfZEqYJrj50F0C4jkcfX0mkQdmw+VnBlkj0x3uXwbXs7YtTY+PLTDRDviC4zitkh/jpEb3Yv5ve3XreRJ/oRvWQdzWCh6husX7k8BMpF1gqFbZfbq7G0s2TfqK7o2VomB2YSkN+j/MsuDY3CwK/YPyoGX49256LNljYynNP3zqEAArXoB33mKw8aEKhL/GOTunPx9y2O5QJ9
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(366004)(136003)(396003)(346002)(451199018)(31686004)(316002)(2906002)(110136005)(54906003)(44832011)(5660300002)(8676002)(66556008)(66476007)(66946007)(8936002)(36756003)(4326008)(41300700001)(6666004)(6506007)(83380400001)(53546011)(6486002)(2616005)(478600001)(31696002)(86362001)(186003)(26005)(38100700002)(921005)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QU10enpwOG5CY0RNUnQxOUtjYlE2TjNyRXJYeE1IUXhPWXdxV3VMaHh0ZDFl?=
- =?utf-8?B?SmJRbzVHakxjVkEyN05Rc2xxWURHUGR2MHJDbUE2QldtaWV0WHBQaWhnSDhy?=
- =?utf-8?B?QUpzdlhXTGV4Mmp3a2xKckozc1pFTGROaWUvdWNSdjlLWm52bGNMZnFiOU1y?=
- =?utf-8?B?T3RTZ25xb1hKNzBiOENtdGJINXRWWnQ5QTZYOGhQQ0tFb2hMNGVQc1d0QVpJ?=
- =?utf-8?B?bEdKb21YZS93ZGh3RTU2Z2VoQkJYbFp5dkhpQWpjcDJTVDZJV21RQ1Qwb2ZK?=
- =?utf-8?B?bWVWRnlFVUhpWER5TXVpRnBNaXg0SjN4eGw5TUNiUGtiUG9oeE9oYXdGaE92?=
- =?utf-8?B?cmk0dnJvTjAycFE1MW4zNmhLVURDOVUxbWN0OWdFN29kdDdNai9tNExwY05u?=
- =?utf-8?B?S2xnbkRKMG5LQmprZS9qUzFGb0c3YnBHWVl4WXlrV25lN2gzWERRK1dZakRj?=
- =?utf-8?B?WkNBTGlCMnNIbTh0aU5KQXltaXVROUdQSlJ4OXdDWldUODVscGEzOVFMUEFD?=
- =?utf-8?B?SlZRRSttVjFTVXhWSnl1NERuVE03WXh6Y0lZT2RNczVNeE9rTmFtVlRQdWFR?=
- =?utf-8?B?TlptRVRiNmZ3eDVKb2RZZ1A2Y0J0MnZzL28wSmc4QXdNRnZFT0RWOFlIaS8w?=
- =?utf-8?B?YTVlU2pFOWczc0J5a0ZaTmw5aks2MkxqVEJHelh0YlJXaDBkNUluVEtkNnFL?=
- =?utf-8?B?UTQ4Myt3RFQ1YXcyVGdRRk11Y3daTFkxWTVMeG5lZXU4SHE4MC9WOHNZd1BJ?=
- =?utf-8?B?UHhnZThGZ3J2QUhvenFnQUZvb1dXM1VCWWRpb1NiaUw0ZlVrNXVlQ0wvQU5y?=
- =?utf-8?B?Sm1YcHVkSDBCV2FRS3RBZnF4MTRMODNXd2x1cGVoTW50cmJNQVRsalg1TU1B?=
- =?utf-8?B?U1kvWkxiOFh1MUxKcnFSbnNIMlF3aXUzbnk3czFFOGRXcExqc2thM1gwLzNR?=
- =?utf-8?B?YVZvTTErcnNlbFVXVTAyd0dic2I2WG4zUGJlRERPKy9UQlFFNFNESEd4c2lo?=
- =?utf-8?B?bEUrSTVSRmhiaGcyQTB3Z3dkVExYWk10Q2dVMTZKMUFJVWwzcWlMNlVvbnhT?=
- =?utf-8?B?Y1B0Q1JTbWVDV3lLWXR5OGhQdUNtR2E4Skl4MHhhT3FTcVFhT0lSSHJrUDRJ?=
- =?utf-8?B?TGQvZ2JhYjVad0JYQVhVdXhNZWdUOUtEOWdPQ1hqdTRnTEM1cTZENmJMQnlD?=
- =?utf-8?B?K2hoOUpwaVFuKzRWVFM5UE85ZjNHZkRiY1JhYWZvL3hVaVBlc1h3ZExNS09Q?=
- =?utf-8?B?U1Y0MzJvQTMzalU5VUdOdmFTSDZCQkY0QWtBaHJqbmNiZXlGNXpNclpiTzdi?=
- =?utf-8?B?NVpyTWY1Rk0wNXNrejRRdUplK0VtNDgyeGJ6RHR1VlBzRko0NWQxdmxWa2VY?=
- =?utf-8?B?d0hlWHBYZTFqWSs2Tit1NllUZ2FhQ0hNRkZFaW9YYUpOdXFycHVyYkYzZGx0?=
- =?utf-8?B?S0FPTk1oYWZkMDVUN1Q1M2NuRWRQcURLMzhQNFFjYU9Cd1MrRit2ZitCL0M3?=
- =?utf-8?B?WkFMTEhBQ1JONUFWTzY2c0ltS1ZtUW1PeTdKc2dzbU5RY0RXODJMRHpZM2tT?=
- =?utf-8?B?Yzk0dnYyU2thUklVYmp6azRPaWswSElDdnU0eTlFeEtlYld4MjIxTHZ6ZUZ4?=
- =?utf-8?B?Nm1INWhpbEo3ZzlvamdRYlovV1RBME0yQTh6RkVROTFDQXc5SHdncEczSXhn?=
- =?utf-8?B?RFZkZGN3OWFXOFZ1bDhiNFEySTRJaXJGc1R5TVdRM1ZpTzUyWVoxZHhFYTh5?=
- =?utf-8?B?b1JuUlgybWl1MzdTdUxaRzZ6WXEzYlRkKzVqV1pFSXRtZ2JlbFdKZEZ2TnpW?=
- =?utf-8?B?Snp4UUJIbDFTMjhOVGpyR09rZ3BwWHhDZDhGdDVwUjlUTjh2U25nRlAzcE5G?=
- =?utf-8?B?WGtJQTVmckJITm9LWGQ5b0JCeVl4N29BeHdPQVo2dlVvdFhzUFJGTVhZby9T?=
- =?utf-8?B?b0dLK1RDeFRxWFlBTjZtSmhWQWUyOUdJZCs3Nlk2K3Y2WWsybU9zS2JKTWFO?=
- =?utf-8?B?UlliaUptZTV2dWt3WU84dE4zQjk5RWY2anFXUVlsT3FHZTlhWm05WGNSdEU2?=
- =?utf-8?B?ZVJtZDBVd29EMUZxUSs4VW0vMHBjM0gxU2N4RENaaXRRYzZIamkrZDVILzht?=
- =?utf-8?Q?iOPFwT7D9NDCF9EY74DTUWvz0?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe8e3f35-3bd8-4f59-557c-08db0b9e2daf
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2023 19:37:00.6322
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2/1o44RoFqMhoaFWFuqrCx48bS+aMnCQYh8BrR9rWp/zTStjEILy5jYw4q9zq2yAxqHWqMXMpDGnXo7rtgWeHg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6711
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        Fri, 10 Feb 2023 14:48:45 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E8E6E83;
+        Fri, 10 Feb 2023 11:47:54 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id D172B5C00E1;
+        Fri, 10 Feb 2023 14:37:55 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 10 Feb 2023 14:37:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1676057875; x=1676144275; bh=Ydx8Dguf65
+        l39MqCMPUJ81N1jZJppemIQIkyMXa3wXY=; b=HaIJzFysHzEFZKQXI+1gSTcDEp
+        mrD37uL26BFl8vHmFjApm9rJj/2tJTIh3UoBysO8zaDx+K4fmncJlHITzceSuI5b
+        O1QLnAJOxxUrhd6KIfP3PV8O6bsZxC+O0UThmzd8l3XlhV2eQffqIBj5zOngLyNi
+        c+WulbQkzFt67X/gadTzaY01qubxRU5N0nE2FA18KyyA3E2c+wnHr1WuauWRbfcc
+        tZnu81INMiBW8KgJVzpnVj1J/lso+7JEDYlfXPXFybM5z+WhmZziDq4B4FXU8RoH
+        o7GJpCAnr6UEkNYrbL5Es0dxsQkihQmn9A7Mi93HiHRwJamahcH/0sbcOrvQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1676057875; x=1676144275; bh=Ydx8Dguf65l39MqCMPUJ81N1jZJp
+        pemIQIkyMXa3wXY=; b=kGqJv2xDymeuL8EHXPZ58xuLJq+eILH+Z+UlMkPv0GCP
+        6/n8QIHYR3SzkNZXaY3FAlQtrlm+6rajqkRnzR259ubxi2fjMHZu0lpa9cJR6X0S
+        5APRVDq0Lh4Q2YVVlR898naLU95xXul9uSYzibnkTerICGCwx7XLCXa7S66zLNb8
+        KUVIElndFB1R0dq+YvokOm+qqc/THMbwrMJmiJi951C1YwhY55rg/8b5xLLx3EAc
+        GcEuAOrhB5i6Nqs3JauAxA5IuGEvNfj8ZkHjNsLhXOdRmF/Nbw3J0wgF95Zie39z
+        l03N50ePCFzElvra7sWQsjgMnjEqPx0O1U/3LPmMLw==
+X-ME-Sender: <xms:E53mY0HxjrhhDxOAS5HJPkGBzduyE0dAk6v7xD8ahh3VCDyIUXmRtg>
+    <xme:E53mY9U6fw9_-YFNb-T_kLVt86Wd-M-yuGRw82QyjoBdCahY8F5j1jDgqwi3P3dMw
+    MDkd_FD-OUmpBPX6YE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudehhedguddvhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepgedvueffledvhfduvdeghefggfehvedutdeigeejtedtieeigfdtvdfgveef
+    iedtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:E53mY-LCw9Gfjg2uqH0KH8Y2Bk6RixX6B5wjgaM-xsAF0uqm_7HUCw>
+    <xmx:E53mY2FyrBrnumc80ZkjYTVrgs98Hh0QgicSzJH5yAXgRHFHC_5ofg>
+    <xmx:E53mY6Wd3xU6pV5Ge2VvNsZrj9LHJFfbF7jO4--QgEruQ9QqkVI2EA>
+    <xmx:E53mY9cIoW21XYZLHnUT6cUwAtdFgmE661hCi_JfXK9cEG_pemkfog>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 6915EB60086; Fri, 10 Feb 2023 14:37:55 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+Mime-Version: 1.0
+Message-Id: <aa40847d-1814-4a20-821e-650c8f1f7cad@app.fastmail.com>
+In-Reply-To: <639b020c-7419-cbda-64c4-caffd8683131@ghiti.fr>
+References: <20221211061358.28035-1-palmer@rivosinc.com>
+ <639b020c-7419-cbda-64c4-caffd8683131@ghiti.fr>
+Date:   Fri, 10 Feb 2023 20:37:37 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Alexandre Ghiti" <alex@ghiti.fr>,
+        "Palmer Dabbelt" <palmer@rivosinc.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/24] Remove COMMAND_LINE_SIZE from uapi
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -131,41 +85,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/10/23 05:00, Deepak R Varma wrote:
-> Remove duplicate or repeating expressions in the if condition
-> evaluation. Issue identified using doubletest.cocci Coccinelle semantic
-> patch.
-> 
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
+On Fri, Feb 10, 2023, at 18:10, Alexandre Ghiti wrote:
+> On 12/11/22 07:13, Palmer Dabbelt wrote:
+>> This all came up in the context of increasing COMMAND_LINE_SIZE in the
+>> RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
+>> maximum length of /proc/cmdline and userspace could staticly rely on
+>> that to be correct.
+>>
+>> Usually I wouldn't mess around with changing this sort of thing, but
+>> PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
+>> to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
+>> increasing, but they're from before the UAPI split so I'm not quite sure
+>> what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
+>> asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
+>> boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
+>> and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
+>> asm-generic/setup.h.").
+>>
+>> It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
+>> part of the uapi to begin with, and userspace should be able to handle
+>> /proc/cmdline of whatever length it turns out to be.  I don't see any
+>> references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
+>> search, but that's not really enough to consider it unused on my end.
+>>
+>> The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE really
+>> shouldn't be part of uapi, so this now touches all the ports.  I've
+>> tried to split this all out and leave it bisectable, but I haven't
+>> tested it all that aggressively.
+>>
+>> Changes since v1 <https://lore.kernel.org/all/20210423025545.313965-1-palmer@dabbelt.com/>:
+>> * Touches every arch.
+>>
+>>
+>
+> The command line size is still an issue on riscv, any comment on this so 
+> we can make progress?
 
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+I think this makes sense overall, but I see there were a couple
+of architecture specific regressions introduced in v2 that should
+be resolved, see
 
-Harry
+https://lore.kernel.org/all/20221211061358.28035-1-palmer@rivosinc.com/
 
-> ---
->  .../gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c    | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c
-> index 4b8f5fa0f0ad..ae89760d887d 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn32/display_mode_vba_32.c
-> @@ -2335,8 +2335,7 @@ void dml32_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
->  
->  			if (mode_lib->vba.DSCEnable[k] && mode_lib->vba.ForcedOutputLinkBPP[k] != 0)
->  				mode_lib->vba.DSCOnlyIfNecessaryWithBPP = true;
-> -			if ((mode_lib->vba.DSCEnable[k] || mode_lib->vba.DSCEnable[k])
-> -					&& mode_lib->vba.OutputFormat[k] == dm_n422
-> +			if (mode_lib->vba.DSCEnable[k] && mode_lib->vba.OutputFormat[k] == dm_n422
->  					&& !mode_lib->vba.DSC422NativeSupport)
->  				mode_lib->vba.DSC422NativeNotSupported = true;
->  
-> @@ -3639,7 +3638,6 @@ void dml32_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
->  			if (mode_lib->vba.SourcePixelFormat[k] != dm_444_64
->  					&& mode_lib->vba.SourcePixelFormat[k] != dm_444_32
->  					&& mode_lib->vba.SourcePixelFormat[k] != dm_444_16
-> -					&& mode_lib->vba.SourcePixelFormat[k] != dm_444_16
->  					&& mode_lib->vba.SourcePixelFormat[k] != dm_444_8
->  					&& mode_lib->vba.SourcePixelFormat[k] != dm_rgbe) {
->  				if (mode_lib->vba.ViewportWidthChroma[k] > mode_lib->vba.SurfaceWidthC[k]
+for the archive of this thread.
 
+     Arnd
