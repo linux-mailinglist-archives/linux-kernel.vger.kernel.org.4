@@ -2,77 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4A4691AFD
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 10:13:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70AF4691AF6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 10:12:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbjBJJNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 04:13:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47622 "EHLO
+        id S231544AbjBJJMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 04:12:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbjBJJNR (ORCPT
+        with ESMTP id S231139AbjBJJMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 04:13:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B451A3772A
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 01:12:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676020354;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QcP66+mGB/CMJ6FBAYQszDN0y7xiLuPs6RLt7XSk6h4=;
-        b=PZPt+4/0BNXOIX5MbPdgi5bzpWKT8fQARIdv5S2IJKcWvaGFNavQQcb5f6iI1xh/WcMux0
-        oVj9uR/0JlG7KSLfxUL5y+Bh80ZhMZYfoLNnzfijCJBifyylCWcvKoQjsHLjEq8ODs0TBz
-        o5o+4xTi+9el2LZvyZ+/XSoYLbf8TLw=
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
- [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-492-X3zCCd7RM2qanp7mZg0fFg-1; Fri, 10 Feb 2023 04:12:33 -0500
-X-MC-Unique: X3zCCd7RM2qanp7mZg0fFg-1
-Received: by mail-oi1-f199.google.com with SMTP id u9-20020a544389000000b00363be5d9f42so1287858oiv.15
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 01:12:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QcP66+mGB/CMJ6FBAYQszDN0y7xiLuPs6RLt7XSk6h4=;
-        b=KUtF8ncXOqUA4aVU8eyJwUiz2Wvw1jHJzeVeuEym3OR4Oee+seRSW4HuwmVQ0S7msa
-         x4Ac7LLi9LjGfXbWwY3Tl3ewaVw4abBeKUeyij0NesaM0Mtxx7CN6ZQTVw2v/6zWdjr1
-         0zupbETOUQzrwDzhIc/ufWz4w8sk8gW/sH0urwXRzsrWl2hRob1zlXSbYVbGzLldY5DW
-         jXFdCI3WrgioBAQe2DDuSkjMJGdYVPQudK2DFYpj+bsBnHZhRrzHjpuDrs42Jt46HbiN
-         uill+nV+tBqVWgOMKUeUmxKjeQE7PqOVIS77y9L/GA3bXnZy5safQG1MUeBWTcGrEEq5
-         pqBQ==
-X-Gm-Message-State: AO0yUKXjoSbrYb/8oRyeNvyr2J7tOGusrk/Z4u7mT+QQmWoVqskJFste
-        07LZ3YbU0sa7GDbE5AIz7Z4l1CeqRmFAe/TOdXFGSbEZ8c34Hef4hbW18eUQZaJWzj/3OXpBa+r
-        h19lb31QHyZ93YDEdi/vUkwO4uZEDGl9OI7R594pE
-X-Received: by 2002:a05:6870:430a:b0:163:707c:124b with SMTP id w10-20020a056870430a00b00163707c124bmr1433046oah.10.1676020352822;
-        Fri, 10 Feb 2023 01:12:32 -0800 (PST)
-X-Google-Smtp-Source: AK7set/EJegEsENM7V+m6+Jtg5jDiE8FG91FQzXNEck4ZneudY944xVQOFHoTIleaV0uNM8rOEg5Qfg0KDD0d1rTVyw=
-X-Received: by 2002:a05:6870:430a:b0:163:707c:124b with SMTP id
- w10-20020a056870430a00b00163707c124bmr1433042oah.10.1676020352597; Fri, 10
- Feb 2023 01:12:32 -0800 (PST)
+        Fri, 10 Feb 2023 04:12:35 -0500
+Received: from mr85p00im-ztdg06021101.me.com (mr85p00im-ztdg06021101.me.com [17.58.23.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A73737707
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 01:12:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+        t=1676020353; bh=ILKYIIRd6kMS4UnYulq9JOaUkpq0+0KEk+MTEwNILxs=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=Mi7CnmPz4rSN/7Vqyzsw/sfB06lbDNCPNrRa5O0R1zgwLa3xqCQivZUjBUmM1p8t8
+         +Y2pRd/s0KoSW+udC8jAT0gXAbvHDZ66rKN6yiCU823KaWgy1gJlCRZ9alyEjJVJG8
+         KMudh7LgiwTHtENBUeKjmnS19dSvx5r3oEeEWynv/M6i3Uy7SycvKttiy/Y5CTZDbz
+         svZSYbB0eE86gWv3tW0MFC7RLo+P7DfdxJ1fmUjVZEdryStOANihbuslwIKf3XZifm
+         zgzu5jkIMSVzNSuVpjTa3nEeyuwuN4EMs7++yKvj/HeCuf4p9cCqn9dKiapx2DfNRm
+         X9TEgLlX6hBWw==
+Received: from imac101 (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
+        by mr85p00im-ztdg06021101.me.com (Postfix) with ESMTPSA id B454D80B94;
+        Fri, 10 Feb 2023 09:12:28 +0000 (UTC)
+Date:   Fri, 10 Feb 2023 10:12:25 +0100
+From:   Alain Volmat <avolmat@me.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH 00/11] ARM: removal of STiH415/STiH416 remainings bits
+Message-ID: <Y+YKeVoq91/mtlo2@imac101>
+Mail-Followup-To: Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20230209091659.1409-1-avolmat@me.com>
+ <20230210090420.GB175687@linaro.org>
 MIME-Version: 1.0
-References: <20230208113424.864881-1-mgamal@redhat.com> <SA1PR21MB1335F1074908B3E00DFA21BDBFD89@SA1PR21MB1335.namprd21.prod.outlook.com>
- <CAG-HVq8GYwCYBgiBnjO8ca5M27j6-MPK3e9H_c+EPmyotmOHxw@mail.gmail.com>
- <CAG-HVq9KWPRhy3X1E8vs_0y7xeJFBA-hZ5u6Vxh7H9Tu=gV9WA@mail.gmail.com> <SA1PR21MB13352C415EE6A3E9D3072991BFDE9@SA1PR21MB1335.namprd21.prod.outlook.com>
-In-Reply-To: <SA1PR21MB13352C415EE6A3E9D3072991BFDE9@SA1PR21MB1335.namprd21.prod.outlook.com>
-From:   Mohammed Gamal <mgamal@redhat.com>
-Date:   Fri, 10 Feb 2023 11:12:21 +0200
-Message-ID: <CAG-HVq9bYLv_whkNekuuNQsA0htBxM-jvS=NvDH9NB7bGfnw3A@mail.gmail.com>
-Subject: Re: [PATCH] Drivers: vmbus: Check for channel allocation before
- looking up relids
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        parri.andrea@gmail.com, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        wei.liu@kernel.org, Xiaoqiang Xiong <xxiong@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230210090420.GB175687@linaro.org>
+X-Proofpoint-ORIG-GUID: JHGVi_UVrX6scGCC87yDBtTbmYZETUZI
+X-Proofpoint-GUID: JHGVi_UVrX6scGCC87yDBtTbmYZETUZI
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.11.62.513.0000000_definitions?=
+ =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2021-12-02?=
+ =?UTF-8?Q?=5F01_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 spamscore=0
+ mlxlogscore=716 adultscore=0 bulkscore=0 phishscore=0 suspectscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2302100080
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,45 +106,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(Re-CC'ing people from the old thread)
+On Fri, Feb 10, 2023 at 10:04:20AM +0100, Daniel Lezcano wrote:
+> On Thu, Feb 09, 2023 at 10:16:48AM +0100, Alain Volmat wrote:
+> > Most of code in order to support STiH415 and STiH416 have already
+> > been removed from the kernel in 2016, however few bits are still
+> > remainings.
+> > This serie removes the last pieces of support for STiH415, STiH416
+> > and STiD127.
+> 
+> How would like to have the patches applied ?
+> 
+> Ack from the different maintainers or each maintainer apply the relevant patches ?
 
-On Fri, Feb 10, 2023 at 4:57 AM Dexuan Cui <decui@microsoft.com> wrote:
->
-> > From: Mohammed Gamal <mgamal@redhat.com>
-> > Sent: Thursday, February 9, 2023 1:48 AM
-> >  ...
-> > > We saw this when triggering a crash with kdump enabled with
-> > > echo 'c' > /proc/sysrq-trigger
-> > >
-> > > When the new kernel boots, we see this stack trace:
->
-> Thanks for the details. Kdump is special in that the 'old' VMBus
-> channels might still be active (from the host's perspective),
-> when the new kernel starts to run.
->
-> Upon crash, Linux sends a CHANNELMSG_UNLOAD messge to the host,
-> and the host is supposed to quiesce/reset the VMBus devices, so
-> normally we should not see a crash in relid2channel().
+Having seen situations like that for some other series I was guessing
+that each maintainer would apply the relevant patches on his side.
+Those two platforms being no more used, there is no specific patch
+ordering to keep.
 
-Does this not happen in the case of kdump? Shouldn't a CHANNELMSG_UNLOAD
-message be sent to the host in that case as well?
+I've actually been wondering at the beginning how should I post those
+patches.  If another way is preferrable I can post again differently
+if that helps.
 
->
-> > > [   21.906679] Hardware name: Microsoft Corporation Virtual
-> > > Machine/Virtual Machine, BIOS 090007  05/18/2018
->
-> I guess you see the crash because you're running an old Hyper-V,
-> probably Windows Server 2016 or 2019, which may be unable to
-> reliably handle the guest's CHANNELMSG_UNLOAD messge.
+Thanks
+Alain
 
-We've actually seen this on Windows Server 2016, 2019, and 2022.
-
->
-> Can you please mention kdump in the commit message?
->
-
-Will do.
-
-> BTW, regarding "before vmbus_connect() is called ", IMO it
-> should be "before vmbus_connect() is called or before it finishes".
-
+> 
+> Thanks
+>   -- Daniel
+> 
+> -- 
+> 
+>  <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+> 
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
