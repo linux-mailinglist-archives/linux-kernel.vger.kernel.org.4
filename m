@@ -2,115 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F367E692585
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F67169258F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233130AbjBJSmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 13:42:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34790 "EHLO
+        id S233162AbjBJSne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 13:43:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233134AbjBJSmB (ORCPT
+        with ESMTP id S233136AbjBJSnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 13:42:01 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5437823665
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:41:58 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id o8so5009195pls.11
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:41:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ok45EUB5a0lrC1G1VBEVIJghKeOSx8dIT5YrcpXaZ2U=;
-        b=GgjbQSZy1IdPTox+nR5ZLWTTXO7nzY/UMimwyDKci+qHnDHiXVnPsr/YKUeoxdwuCF
-         zRyXiMSJLLFbPedh2Ek6TS5A4Tp5q9b4CKjWwJ8AWSfUOkzWDDf0i4Wsuvxw7WcBNMwX
-         yBPsHXrxMECfexaRc6rBcBK8ib7PFOK5jxBmM3Bj/mLNrFrkHfQPotqyXTQ83lRqcGpH
-         Wgb8FDbkydZZgOKI95IsGhjydWszVFbReaoR+JgIwemL3x7hLv25HLQ9iA3PxJqAsswF
-         7gMIiQi7gtC8Zf/qPhn88buWnIrBU+9LuQqHhogX1qcG2uorcOYPD9koLiIuNrvumYBx
-         wNAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ok45EUB5a0lrC1G1VBEVIJghKeOSx8dIT5YrcpXaZ2U=;
-        b=m8oDX57s9MkgiwKQ3fRv05WctA4cv/hFhefH34VTHKPl0UuJk69+1nOdqiFYaIpXyk
-         jA76M+YICcmLr4gfHG9Rd4Uy9XdisEwMbdvqBuf1JiFB/3l0tFN38qmbYxyQWTj5+oMk
-         1HTYi8y/DPZC2ZN9Lc1Q0g2Jo3IYGkSaa71Xwy5A1uWFhHa8LL+/QaQO7FSyVIuMUkco
-         MHazvXu/k7SaFf5F7FZ8YuHFpY1tbXjaUCRbWbXw5wRDSA5Htek9WhG69Nrmq7Da35sh
-         HT7UX6T1JAFisS+TBNr+ADzhRbHcP1luksrYGy/a0vFke0meljOmxjAZGnHNhqhjA+4Y
-         nuJQ==
-X-Gm-Message-State: AO0yUKVRorJx8fr31KatxejG6YpmDKd9B4eBMm/iMLCTHqmlO+Hjhvjx
-        V9ZS4OR+zQ6f7B0sHX/ZkYq1HQ==
-X-Google-Smtp-Source: AK7set93DJYG63ys9SOctBQRI7ddeFJlbzAb9UdgGVNbO8ool9VJU4UwhLQF6yN0q5ReGJyClZ0xtg==
-X-Received: by 2002:a17:902:e551:b0:19a:6cd2:a658 with SMTP id n17-20020a170902e55100b0019a6cd2a658mr234114plf.7.1676054518244;
-        Fri, 10 Feb 2023 10:41:58 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id a21-20020a170902ee9500b00199190b00efsm3701641pld.97.2023.02.10.10.41.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 10:41:57 -0800 (PST)
-Date:   Fri, 10 Feb 2023 18:41:54 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
- to map as encrypted
-Message-ID: <Y+aP8rHr6H3LIf/c@google.com>
-References: <1673559753-94403-1-git-send-email-mikelley@microsoft.com>
- <1673559753-94403-7-git-send-email-mikelley@microsoft.com>
- <Y8r2TjW/R3jymmqT@zn.tnic>
- <BYAPR21MB168897DBA98E91B72B4087E1D7CA9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y9FC7Dpzr5Uge/Mi@zn.tnic>
- <BYAPR21MB16883BB6178DDEEA10FD1F1CD7D69@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+JG9+zdSwZlz6FU@zn.tnic>
- <4216dea6-d899-aecb-2207-caa2ae7db0e3@intel.com>
- <BYAPR21MB16886D92828BA2CA8D47FEA4D7D99@BYAPR21MB1688.namprd21.prod.outlook.com>
+        Fri, 10 Feb 2023 13:43:31 -0500
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A671434333;
+        Fri, 10 Feb 2023 10:43:30 -0800 (PST)
+Received: from pps.filterd (m0134425.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31AGgOYI020724;
+        Fri, 10 Feb 2023 18:43:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pps0720;
+ bh=Bz3z3ISKM+2oA16AVmogsbzTonDoO83OvdEUQxDQniw=;
+ b=m0QWOAKhLluxu3TPq2/1QbKMVT/chrdj7HxGL9kJVGYUD4glHyW7IbSBwz8K8N9CVJda
+ n/SStk9WCffQhw24bT/Rrg7l9SqnJQGG8rOMAEJ9PxWri4AA/WoMkVRl0+EeY0ZUNlcv
+ 9PsboEVoYpfWIobl6Ym/b7FXgzy32YCQBru/xBmVk0hx4IhwSCFMxDGgTdq4g7z+KxaZ
+ BKrF4bsmj4Nnlq9xGojqbniDggborwEO/UyrqK8dYt4m80taGC7H+gK0uXPew+RQve6K
+ tflnNzG73mCREwfdgs4jhPNcSQTqxBhezcOLzmfUVGaEjA1hXPu0FIGSjief1IRGbbDY gA== 
+Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3nnsp38xp3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Feb 2023 18:43:13 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 82C4E805E59;
+        Fri, 10 Feb 2023 18:43:12 +0000 (UTC)
+Received: from anatevka.americas.hpqcorp.net (unknown [16.231.227.36])
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 898B5800258;
+        Fri, 10 Feb 2023 18:43:11 +0000 (UTC)
+From:   Jerry Hoemann <jerry.hoemann@hpe.com>
+To:     linux@roeck-us.net, corbet@lwn.net
+Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jerry Hoemann <jerry.hoemann@hpe.com>
+Subject: [PATCH 0/2] Documentation/Watchdog/hpwdt
+Date:   Fri, 10 Feb 2023 11:42:45 -0700
+Message-Id: <20230210184247.221134-1-jerry.hoemann@hpe.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB16886D92828BA2CA8D47FEA4D7D99@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: yDET46Ld5TCvkT0ZShr4oSuCJOBJcrqq
+X-Proofpoint-GUID: yDET46Ld5TCvkT0ZShr4oSuCJOBJcrqq
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-10_13,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ priorityscore=1501 suspectscore=0 spamscore=0 mlxscore=0 phishscore=0
+ adultscore=0 impostorscore=0 lowpriorityscore=0 mlxlogscore=714
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302100157
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,55 +71,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wearing my KVM hat and not my Google hat...
+Two small documentation fixes.
 
-On Thu, Feb 09, 2023, Michael Kelley (LINUX) wrote:
-> From: Dave Hansen <dave.hansen@intel.com> Sent: Wednesday, February 8, 2023 9:24 AM
-> > 
-> > On 2/7/23 04:41, Borislav Petkov wrote:
-> > > Or are there no similar TDX solutions planned where the guest runs
-> > > unmodified and under a paravisor?
-> > 
-> > I actually don't think paravisors make *ANY* sense for Linux.
+First: Fix reference to documentation that moved.
+Second: Update List formatting.
 
-I 100% agree, but Intel made what I think almost entirely irrelevant by refusing
-to allow third party code to run in SEAM.
 
-> > If you have to modify the guest, then just modify it to talk to the
-> > hypervisor directly.  This code is... modifying the guest.  What does
-> > putting a paravisor in the middle do for you?
-> 
-> One of the original goals of the paravisor was to make fewer
-> modifications to the guest, especially in areas that aren't directly related
-> to the hypervisor.  It's arguable as to whether that goal played out in
-> reality.
-> 
-> But another significant goal is to be able to move some device emulation
-> from the hypervisor/VMM to the guest context.  In a CoCo VM, this move
-> is from outside the TCB to inside the TCB.  A great example is a virtual
-> TPM.  Per the CoCo VM threat model, a guest can't rely on a vTPM
-> provided by the host.
 
-I vehemently disagree with this assertion.  It's kinda sorta true, but only
-because Intel and AMD have gone down the road of not providing the mechanisms and
-ability for the hypervisor to run and attest to the integrity, functionality, etc.
-of (a subset of) the hypervisor's own code.
+Jerry Hoemann (2):
+  Documentation/watchdog/hpwdt: Fix Reference
+  Documentation/watchdog/hpwdt: Fix Format
 
-Taking SEAM/TDX as an example, if the code running in SEAM were an extension of
-KVM instead of a hypervisor-agnostic nanny, then there would be no need for a
-"paravisor" to provide a vTPM.  It would be very feasible to teach the SEAM-protected
-bits of KVM to forward vTPM accesses to a host-provided, signed, attested, and open
-source software running in a helper TD.
+ Documentation/watchdog/hpwdt.rst | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-I fully realize you meant "untrusted host", but statements like "the host can't
-be trusted" subconciously reinforce the, IMO, flawed model of hardware vendors
-and _only_ hardware vendors providing the trusted bits.
+-- 
+2.39.1
 
-The idea that firmware/software written by hardware vendors is somehow more
-trustworthy than fully open source software is simultaneously laughable and
-infuriating.  
-
-Anyways, tying things back to the actual code being discussed, I vote against
-CC_ATTR_PARAVISOR.  Being able to trust device emulation is not unique to a
-paravisor.  A single flag also makes too many assumptions about what is trusted
-and thus should be accessed encrypted.
