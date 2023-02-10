@@ -2,195 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A48869275E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6284692764
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:48:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233397AbjBJTrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 14:47:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
+        id S233486AbjBJTs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 14:48:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233175AbjBJTrD (ORCPT
+        with ESMTP id S233389AbjBJTsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 14:47:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F657812A1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:45:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676058242;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LqEMVOprqbRcgnb26iJyeC9PYlAfqxHL1qiXDXu+U9A=;
-        b=Yi8jga6vVTeH8KDmFU3fYyjh38a0kQ16NQnJiNLT6u6UkYkge8x1VqfWzI4sALclmqNuEF
-        DhEVy/EQSnfTFedqfEp/vQBO5n397RwGSD+xepMSCXCcNeJ4btI/RCex3dsgIJd5N2Q2BW
-        poUfP99khFTPQ9hrwme6+uRzbvq2JEk=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-628-qmreCKTPNVe9Hy2xnzDt_g-1; Fri, 10 Feb 2023 14:44:00 -0500
-X-MC-Unique: qmreCKTPNVe9Hy2xnzDt_g-1
-Received: by mail-ed1-f69.google.com with SMTP id g19-20020a056402115300b004a26cc7f6cbso4172525edw.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:44:00 -0800 (PST)
+        Fri, 10 Feb 2023 14:48:24 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D7A7FEE5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:47:31 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id d21-20020a056830005500b0068bd2e0b25bso1862470otp.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:47:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/PBQsQs1ghoyck5G4YKo5wjZXEL9Pve2gHHX+BptzYI=;
+        b=QMLkAAhL/XFCq5BdBspcsntMgvqCBo1wICtpxC8ZvzOFDIkXVjl1XreoPtZRKrEz2u
+         KIQOItUhWzXa95LFNV+abUI0RnpySECOej0W744Qzw/mqURianZkZ5vBqsCpHTGhlTyI
+         2F0DkqWYr3jKh/gxLDBxbh6kBqLUg/8JbAlDNKJ07+ihFXcF6wn9tu/3Gp5tBP2Hfy4v
+         FZke6i1c0gImx/WyyEQtgeHnM5YWGRhPIDyS4UUiEtn/vj0yevWOeimVWvK5AIMn6+Zi
+         7B8BGbfL3kK3Co+W7YeOsgNhVsr029SueC0iusgoh42nQzD44ewnMxZLjo/kZdFN39cs
+         OLAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LqEMVOprqbRcgnb26iJyeC9PYlAfqxHL1qiXDXu+U9A=;
-        b=YF/cyzgC2EYaLmBABGSxDedZ1wWe1AM9RLk+fsGz2H2EjLR6hD7ze1VSBXQH00+Wyl
-         H6m1U9FRRe+adrqOYrNTjRpaOwF6OCZrieDvQ9EkJ6So5Ytvv2G3U3G1omd/pfMQ9ol2
-         TrljE/Zn669rz/EITe2qaqCDQZyL7ueHfigMWLfXCaV7Y7A+cijQXEldilPQd5WdHkd7
-         oV5Qz32Vt7dQv47mcTu85R8M2btN8E7m4WxDxOVzNzibz/270d1PVEnf33DZTiCn92oo
-         OaWM4ZOEGr4jydi+2J3a88nAEF/CTPs7UX+nAW4oc2UnHZU8wsmu0JTKTWBIUWxsqPTF
-         j8Iw==
-X-Gm-Message-State: AO0yUKXwK7J9jCA2GPKXS88zEK2J2Pr9Oudppr841rOtXLLPxf0omlFH
-        EecZwgMp5CAHMIiQiPEYBOn+8JaUldpSGo6SNyADfWyl48jGe3pOPt/KFeWz9JVXdPdDrpLrrMo
-        +BZeN6bvnKmwK92MYqM3iNR30
-X-Received: by 2002:a17:906:a1d3:b0:878:7cf3:a9e7 with SMTP id bx19-20020a170906a1d300b008787cf3a9e7mr14861836ejb.65.1676058239627;
-        Fri, 10 Feb 2023 11:43:59 -0800 (PST)
-X-Google-Smtp-Source: AK7set9tc5ya+xq3T9ohLhPWkzaq1RTuRLg/Wi00GiP7Oc96aPjNzatgLBaKs4/WUVNxcjQaldtHxA==
-X-Received: by 2002:a17:906:a1d3:b0:878:7cf3:a9e7 with SMTP id bx19-20020a170906a1d300b008787cf3a9e7mr14861809ejb.65.1676058239467;
-        Fri, 10 Feb 2023 11:43:59 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id f20-20020a170906c09400b00872c0bccab2sm2786828ejz.35.2023.02.10.11.43.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 11:43:58 -0800 (PST)
-Message-ID: <ee952253-9ee4-aa81-fefa-609cbf6e1e2b@redhat.com>
-Date:   Fri, 10 Feb 2023 20:43:58 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/PBQsQs1ghoyck5G4YKo5wjZXEL9Pve2gHHX+BptzYI=;
+        b=cKUPPExnjIJCmWZGxSdO/Xsd1OcWucL9iamEjCwSl7TTAqO3sfjr6ZX6DV/EfROYJO
+         EPsnHpSo+5ivBBBxPEOhNQTPeAFGph3tYq1YFtntRm4bIk9vfFcHceAigM1Em++V/NNk
+         9ASkZPbtBXMzGbTycBsoeVDsyNJj7W1r9uJuuTcGwAfYRuGZwSGj97coo64B+Z9rmCgv
+         hCN3Fjj7MWtE+nqBXbgJap6DN+PP+Wtb8uS0zuK/o/foMba3j8RYAbiNvMqfkDvS3UXl
+         SNNJ8ZvNQLOl6J3HTGwesEQlFXfqjDLhlacLPdsnKiG8XHvK/cRlq6neoWUbadpvAhAy
+         6vEA==
+X-Gm-Message-State: AO0yUKWni7SP0TEKnH+8mguGBkmYTvkuaW4NA5EgICKjR2rsBq4CUt6x
+        tXh8Q5g9jDuV1oJCwxRAAHN5wz54/kolD+Ai3cHd5g==
+X-Google-Smtp-Source: AK7set/2TdLhFb95nfn832Tj3Ud3QPjqZ++ec3/IpCLmB7FMRJ47GvktUIwDdZbVBQkoiIzhpNiQ7RTZAdnte3nSLr4=
+X-Received: by 2002:a05:6830:4414:b0:68b:cd2c:d16 with SMTP id
+ q20-20020a056830441400b0068bcd2c0d16mr1575661otv.53.1676058386639; Fri, 10
+ Feb 2023 11:46:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 5/9] apple-gmux: Use GMSP acpi method for interrupt
- clear
-Content-Language: en-US, nl
-To:     Orlando Chamberlain <orlandoch.dev@gmail.com>,
-        platform-driver-x86@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Mark Gross <markgross@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        YiPeng Chai <YiPeng.Chai@amd.com>,
-        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Bokun Zhang <Bokun.Zhang@amd.com>,
-        Jack Xiao <Jack.Xiao@amd.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Rander Wang <rander.wang@intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        Yong Zhi <yong.zhi@intel.com>, Evan Quan <evan.quan@amd.com>,
-        Kerem Karabay <kekrby@gmail.com>,
-        Aditya Garg <gargaditya08@live.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>
-References: <20230210044826.9834-1-orlandoch.dev@gmail.com>
- <20230210044826.9834-6-orlandoch.dev@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230210044826.9834-6-orlandoch.dev@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230131220355.1603527-1-rmoar@google.com> <20230131220355.1603527-4-rmoar@google.com>
+ <CABVgOSngiZZ6HTAOTriB=TveYOPoZVChqyeNfaBsDzFCY+_A2A@mail.gmail.com>
+In-Reply-To: <CABVgOSngiZZ6HTAOTriB=TveYOPoZVChqyeNfaBsDzFCY+_A2A@mail.gmail.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Fri, 10 Feb 2023 14:46:15 -0500
+Message-ID: <CA+GJov6QmmbTOV400PEtsZtpLM7-3SVN4A67ED5Jnoca0D9LCw@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] kunit: fix bug of extra newline characters in
+ debugfs logs
+To:     David Gow <davidgow@google.com>
+Cc:     brendanhiggins@google.com, dlatypov@google.com,
+        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Feb 9, 2023 at 12:06 AM David Gow <davidgow@google.com> wrote:
+>
+> On Wed, 1 Feb 2023 at 06:04, Rae Moar <rmoar@google.com> wrote:
+> >
+> > Fix bug of the extra newline characters in debugfs logs. When a
+> > line is added to debugfs with a newline character at the end,
+> > an extra line appears in the debugfs log. Remove these extra lines.
+> >
+> > Add kunit_log_newline_test to provide test coverage for this issue.
+> > (Also, move kunit_log_test above suite definition to remove the
+> > unnecessary declaration prior to the suite definition)
+> >
+> > Signed-off-by: Rae Moar <rmoar@google.com>
+> > ---
 
-On 2/10/23 05:48, Orlando Chamberlain wrote:
-> This is needed for interrupts to be cleared correctly on MMIO based
-> gmux's. It is untested if this helps/hinders other gmux types, but I
-> have seen the GMSP method in the acpi tables of a MacBook with an
-> indexed gmux.
-> 
-> If this turns out to break support for older gmux's, this can instead
-> be only done on MMIO gmux's.
-> 
-> There is also a "GMLV" acpi method, and the "GMSP" method can be called
-> with 1 as its argument, but the purposes of these aren't known and they
-> don't seem to be needed.
-> 
-> Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
-> ---
->  drivers/platform/x86/apple-gmux.c | 26 +++++++++++++++++++++++++-
->  1 file changed, 25 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/platform/x86/apple-gmux.c b/drivers/platform/x86/apple-gmux.c
-> index 760434a527c1..c605f036ea0b 100644
-> --- a/drivers/platform/x86/apple-gmux.c
-> +++ b/drivers/platform/x86/apple-gmux.c
-> @@ -494,8 +494,29 @@ static const struct apple_gmux_config apple_gmux_index = {
->   * MCP79, on all following generations it's GPIO pin 6 of the Intel PCH.
->   * The GPE merely signals that an interrupt occurred, the actual type of event
->   * is identified by reading a gmux register.
-> + *
-> + * On MMIO gmux's, we also need to call the acpi method GMSP to properly clear
-> + * interrupts. TODO: Do other types need this? Does this break other types?
->   */
->  
-> +static int gmux_call_acpi_gmsp(struct apple_gmux_data *gmux_data, int arg)
-> +{
-> +	acpi_status status = AE_OK;
-> +	union acpi_object arg0 = { ACPI_TYPE_INTEGER };
-> +	struct acpi_object_list arg_list = { 1, &arg0 };
-> +
-> +	arg0.integer.value = arg;
-> +
-> +	status = acpi_evaluate_object(gmux_data->dhandle, "GMSP", &arg_list, NULL);
-> +	if (ACPI_FAILURE(status)) {
-> +		pr_err("GMSP call failed: %s\n",
-> +		       acpi_format_exception(status));
-> +		return -ENODEV;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static inline void gmux_disable_interrupts(struct apple_gmux_data *gmux_data)
->  {
->  	gmux_write8(gmux_data, GMUX_PORT_INTERRUPT_ENABLE,
-> @@ -519,7 +540,10 @@ static void gmux_clear_interrupts(struct apple_gmux_data *gmux_data)
->  
->  	/* to clear interrupts write back current status */
->  	status = gmux_interrupt_get_status(gmux_data);
-> -	gmux_write8(gmux_data, GMUX_PORT_INTERRUPT_STATUS, status);
-> +	if (status) {
-> +		gmux_write8(gmux_data, GMUX_PORT_INTERRUPT_STATUS, status);
-> +		gmux_call_acpi_gmsp(gmux_data, 0);
+Hi David!
 
-Ugh no, please don't go around calling random ACPI methods from untested
-firmware revisions / device models.
+>
+> I've got some reservations about this patch.
+>
+> Firstly, could we have an example of the problem in the commit
+> message, so we know what we're fixing?
 
-ACPI code (even Apple's I have learned) tends to be full of bugs. If we
-did not need to call GMSP before then please lets keep not calling it
-on the older models. Just because it is there does not mean that calling
-it is useful, it might even be harmful.
+Yes, as mentioned in the second patch, I will add an individual
+"before and after" comparison to each of the patches in v2. This is
+much clearer than just the overall comparison in the cover letter.
 
-Regards,
+>
+> Secondly, I _really_ don't like the way this just removes newlines
+> from log lines if there are too many. It feels like a hack, rather
+> than a proper fix.
+>
+> I suspect the actual issue here is in the kunit_log macro in
+> include/kunit/test.h:
+> https://elixir.bootlin.com/linux/latest/source/include/kunit/test.h#L417
+>
+> kunit_log_append((test_or_suite)->log, fmt "\n", ##__VA_ARGS__); \
+>
+> The "\n" concatenated here is probably the issue. The printk statement
+> doesn't add a newline, but that's because printk implicitly does if
+> KERN_CONT is not added.
+>
+> So maybe the correct fix here is to use:
+> printk(KERN_CONT lvl fmt "\n", ##__VA_ARGS__)
+>
+> That'd add the newline, rather than get rid of it, but at least should
+> make the behaviour more similar between printk and the debugfs log.
+> Equally, you could use KERN_CONT and get rid of the "\n" in both
+> places, requiring it in log messages.
 
-Hans
+I understand how this seems a bit hacky. There were quite a few
+discussions on how to approach this prior to sending this out on this
+list. But changing the printk to be consistent between the debugfs and
+normal output is a great idea! This does cause a few tests to have
+extra lines in the output but shouldn't cause any issues with the
+parser readable output. I will definitely change this in v2.
 
+>
+> Thirdly, I don't really like the way the test is skipped if debugfs
+> isn't active. Could we skip it if test->log is not valid instead or
+> using a compile-time #ifdef?
 
+Yes this makes sense. Happy to change this in v2. The kunit_log_test
+also uses this #ifdef statement. Should this be changed as well?
 
+>
+> I do like the move of kunit_log_test though. That definitely cleans things up!
+>
+> Cheers,
+> -- David
+>
 
+Thanks!
 
+Rae
 
-> +	}
->  }
->  
->  static void gmux_notify_handler(acpi_handle device, u32 value, void *context)
-
+>
+> >  lib/kunit/kunit-test.c | 36 ++++++++++++++++++++++++------------
+> >  lib/kunit/test.c       |  9 ++++++++-
+> >  2 files changed, 32 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+> > index 4df0335d0d06..e9114a466f1e 100644
+> > --- a/lib/kunit/kunit-test.c
+> > +++ b/lib/kunit/kunit-test.c
+> > @@ -443,18 +443,6 @@ static struct kunit_suite kunit_resource_test_suite = {
+> >         .test_cases = kunit_resource_test_cases,
+> >  };
+> >
+> > -static void kunit_log_test(struct kunit *test);
+> > -
+> > -static struct kunit_case kunit_log_test_cases[] = {
+> > -       KUNIT_CASE(kunit_log_test),
+> > -       {}
+> > -};
+> > -
+> > -static struct kunit_suite kunit_log_test_suite = {
+> > -       .name = "kunit-log-test",
+> > -       .test_cases = kunit_log_test_cases,
+> > -};
+> > -
+> >  static void kunit_log_test(struct kunit *test)
+> >  {
+> >         struct kunit_suite suite;
+> > @@ -481,6 +469,30 @@ static void kunit_log_test(struct kunit *test)
+> >  #endif
+> >  }
+> >
+> > +static void kunit_log_newline_test(struct kunit *test)
+> > +{
+> > +#ifdef CONFIG_KUNIT_DEBUGFS
+> > +       kunit_info(test, "extra newline\n");
+> > +
+> > +       KUNIT_ASSERT_NOT_NULL_MSG(test, strstr(test->log, "extra newline\n"),
+> > +               "Missing log line, full log:\n%s", test->log);
+> > +       KUNIT_EXPECT_NULL(test, strstr(test->log, "extra newline\n\n"));
+> > +#else
+> > +       kunit_skip(test, "only useful when debugfs is enabled");
+> > +#endif
+> > +}
+> > +
+> > +static struct kunit_case kunit_log_test_cases[] = {
+> > +       KUNIT_CASE(kunit_log_test),
+> > +       KUNIT_CASE(kunit_log_newline_test),
+> > +       {}
+> > +};
+> > +
+> > +static struct kunit_suite kunit_log_test_suite = {
+> > +       .name = "kunit-log-test",
+> > +       .test_cases = kunit_log_test_cases,
+> > +};
+> > +
+> >  static void kunit_status_set_failure_test(struct kunit *test)
+> >  {
+> >         struct kunit fake;
+> > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> > index 27763f0b420c..76d9c31943bf 100644
+> > --- a/lib/kunit/test.c
+> > +++ b/lib/kunit/test.c
+> > @@ -117,6 +117,7 @@ void kunit_log_append(char *log, const char *fmt, ...)
+> >         char line[KUNIT_LOG_SIZE];
+> >         va_list args;
+> >         int len_left;
+> > +       int line_len;
+> >
+> >         if (!log)
+> >                 return;
+> > @@ -125,10 +126,16 @@ void kunit_log_append(char *log, const char *fmt, ...)
+> >         if (len_left <= 0)
+> >                 return;
+> >
+> > +       // Evaluate the length of the line with arguments
+> >         va_start(args, fmt);
+> > -       vsnprintf(line, sizeof(line), fmt, args);
+> > +       line_len = vsnprintf(line, sizeof(line), fmt, args);
+> >         va_end(args);
+> >
+> > +       // If line has two newline characters, do not print
+> > +       // second newline character
+> > +       if (fmt[strlen(fmt) - 2] == '\n')
+> > +               line[line_len - 1] = '\0';
+> > +
+> >         strncat(log, line, len_left);
+> >  }
+> >  EXPORT_SYMBOL_GPL(kunit_log_append);
+> > --
+> > 2.39.1.456.gfc5497dd1b-goog
+> >
