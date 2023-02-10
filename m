@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C18F691FD4
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 14:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36225691FD6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 14:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbjBJNg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 08:36:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53764 "EHLO
+        id S232244AbjBJNhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 08:37:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232083AbjBJNgx (ORCPT
+        with ESMTP id S231991AbjBJNhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 08:36:53 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404841CF77
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 05:36:52 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id u10so3835721wmj.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 05:36:52 -0800 (PST)
+        Fri, 10 Feb 2023 08:37:18 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C407166E
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 05:37:11 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id o18so5106668wrj.3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 05:37:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=iQNZ76NgQoOX3VginCo9ln2LWcn9mGFbOfHzpQwFJLU=;
-        b=K7zknJ38FU5C1kWRJ5xeFXCWONMYjiffBpp9Ex2oUH6g2/J2qu3+VOWtz/GMMFCCFS
-         vLqR2GlcSkAQTXZmw1rmg71ngZ8q6chS8N9ZFLojubrdH54H9EW/4Adyr6rg1JMRIvF2
-         XnPTgxD+1dj/mPefVrw+ju10FR3swfY/D7/KAkIjhkHtJqGCZ4/DcWf+n3bfn3kqCxW3
-         6c3PYVwkI3RrJQHzUAWIETGIW84uvOFZQ0gOYBJsSrv9A/NBhEzCb98VQU3P6rlt6v5k
-         PZ9vF8PUfc4pDyRAksICuposHEZshTa1EegsXw5jfBC5VK5kdF4xruBxOFR4Mu2Q92Vj
-         5hig==
+        bh=A4lgkW2CnF6CZihRmbuWa+py+Rr0tskHoMJqwV14Ito=;
+        b=GzAdyi9w4Wvy2ADrB2tsYNrN1L9DTuu9SgUHN35TgalbiAmnu2PdBR/pdJV3CfPccK
+         8jse8fXp72rjdmb5VSSFRAxbpGkGbZqE5FO8zCGlxrFVkniokBtMVOtWFYvHTw+C5Rra
+         fYCtk+qW6Z42WCsqXioZmKxaOf9+1AKA9/drBAOLNEeJgR51DKK9Tpw+IhVDbNYX0mAv
+         DcKN4BkLBEgdV/kZoljoLG6hrVxy2WfJsxClVi9j6gzNm9xaJZw/z+FVNPt50hhiTbe8
+         iIu3QpH9jXRacpdaHmzm/Lg26UN7nRNQ/aEzz9s9vDsgZk/IM+4WHWzWgDnOGR+aphcA
+         PQGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iQNZ76NgQoOX3VginCo9ln2LWcn9mGFbOfHzpQwFJLU=;
-        b=QEh26Xuoxwd3+fG8OPRXvpNJoKl+qPEH6FUqk8VqEkpy77Efa2Ks/1swoq6nwF4OUC
-         DE7S4z79KQynuQMxk2z5t7PV47rBfumQRIyovcPLyD7k24VZiTHbuTc0NpL3RJmS9CbI
-         i2OKXj2dbsAq9JOBjajQp0DmQOpX1lIQEgAArjdjINYStpYg6y39UY3m+bJiIqQXJeUq
-         RKE5UD+3Wv1jHqk0BxPkaFyD61mIcCBTNmajW9deNlzA3wlg+rqAN4OscLtaDxS7i38z
-         BFQ+qhkTrZ2g0FGLd59GaiJ99LEb0WirFXFrU3AnRJPyWfYIRQ4INqiaCrmR/q6kBVZX
-         6NUQ==
-X-Gm-Message-State: AO0yUKVeXANxltzDp9Uil6BqAZHtN7k+/X2C4jFHBaCmHgZUxbjgRGwb
-        HMAARVZDHy3J8IEjl+usXQyicg==
-X-Google-Smtp-Source: AK7set//bgmUZWRlv+by+TRDhSoseBN27Gk7Iz8ww3tsA+BXoWkLMHdTDAWpz9ts6p8TyduFd7vpNw==
-X-Received: by 2002:a05:600c:4383:b0:3dc:4cb5:41c with SMTP id e3-20020a05600c438300b003dc4cb5041cmr13062087wmn.0.1676036210806;
-        Fri, 10 Feb 2023 05:36:50 -0800 (PST)
+        bh=A4lgkW2CnF6CZihRmbuWa+py+Rr0tskHoMJqwV14Ito=;
+        b=t7oSXgJpIffq2QFAQvEGuM1xgQ8Br8yb6NptUnkqrCRkZWb7D3Q76ogcCDAPmBV4fm
+         BNVUH/m2otImLWgPKbPBlsDWT1nTP+Gbj1dppQUX8GQfj4QHMpckPrkNjPt3CYVA6aBK
+         s24G8rkHiXZGQLMlrWEOn7mozbeyTQZVz1VO7e6kmusLerau5ktZeh77q0Cx2eBTeLtr
+         El7FxagbtNX74wIzJQvpN2VDj7JyI3GQR5HwCDJMMM9wQorUxipLhKuYxi7zrHdLtReV
+         63v+Yyza+SFSyYcOayuRIMVL/KGqetdejfE4++pi1F/zQkeYpjVTFBbxcDQ7JwlBKP32
+         0Iyw==
+X-Gm-Message-State: AO0yUKXZ0op8vwTvLy3rKLPDh7Uez/WP/p0b+8hJRo/7QWio2pVkpPwf
+        gr8iLAFishUFmYuToIWYhOWFSg==
+X-Google-Smtp-Source: AK7set/f0Wj5Sm4pfa6qK9Dbu/WBYtHqXOTxRnvim+9gPIMatTrNxway0TzA9AfmSOR/g2kKFpHghA==
+X-Received: by 2002:adf:f851:0:b0:2bf:c364:47b3 with SMTP id d17-20020adff851000000b002bfc36447b3mr13848001wrq.26.1676036229361;
+        Fri, 10 Feb 2023 05:37:09 -0800 (PST)
 Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id q14-20020a05600c46ce00b003db12112fcfsm5689710wmo.4.2023.02.10.05.36.49
+        by smtp.googlemail.com with ESMTPSA id d16-20020a5d5390000000b002c4008f0daasm3585752wrv.107.2023.02.10.05.37.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 05:36:50 -0800 (PST)
-Message-ID: <0313a4bb-1971-a4df-6e1e-3a5e551d0bef@linaro.org>
-Date:   Fri, 10 Feb 2023 14:36:41 +0100
+        Fri, 10 Feb 2023 05:37:09 -0800 (PST)
+Message-ID: <25e36532-3d98-dfa7-ac45-656999f3f0d2@linaro.org>
+Date:   Fri, 10 Feb 2023 14:37:07 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH] clocksource: em_sti: Mark driver as non-removable
+Subject: Re: [PATCH] clocksource: sh_tmu: Mark driver as non-removable
 Content-Language: en-US
 To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
         Thomas Gleixner <tglx@linutronix.de>
 Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
-References: <20230207193010.469495-1-u.kleine-koenig@pengutronix.de>
+References: <20230207193614.472060-1-u.kleine-koenig@pengutronix.de>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230207193010.469495-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230207193614.472060-1-u.kleine-koenig@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,12 +75,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/02/2023 20:30, Uwe Kleine-König wrote:
+On 07/02/2023 20:36, Uwe Kleine-König wrote:
 > The comment in the remove callback suggests that the driver is not
 > supposed to be unbound. However returning an error code in the remove
 > callback doesn't accomplish that. Instead set the suppress_bind_attrs
 > property (which makes it impossible to unbind the driver via sysfs).
-> The only remaining way to unbind a em_sti device would be module
+> The only remaining way to unbind a sh_tmu device would be module
 > unloading, but that doesn't apply here, as the driver cannot be built as
 > a module.
 > 
