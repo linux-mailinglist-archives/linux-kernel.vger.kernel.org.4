@@ -2,61 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09EDF6915DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 01:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6356915E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 01:49:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjBJArp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 19:47:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39566 "EHLO
+        id S229985AbjBJAtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 19:49:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjBJArn (ORCPT
+        with ESMTP id S230280AbjBJAtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 19:47:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C536953C;
-        Thu,  9 Feb 2023 16:47:42 -0800 (PST)
+        Thu, 9 Feb 2023 19:49:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989215AB13;
+        Thu,  9 Feb 2023 16:49:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E6D77B82395;
-        Fri, 10 Feb 2023 00:47:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB35CC433EF;
-        Fri, 10 Feb 2023 00:47:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35F1F61BA3;
+        Fri, 10 Feb 2023 00:49:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44FB5C433EF;
+        Fri, 10 Feb 2023 00:49:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675990059;
-        bh=ukUcmvJZMjG33lSo3oansFJtQTNqfCcgGTUPCoG4ivk=;
+        s=k20201202; t=1675990187;
+        bh=/9pZPjhGregYgyGBli1F509L9Us3OCm+IFyNl5iWJ8k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z9tTiwjPGPiw3d48v9Vj46z/SqCJcxeV2DdkL+9AOlFffv7LRyHIhPoRzlIDJLR7O
-         L2UroC5TwDCDUgBjakCn4aSAZaUCNl0TnuI+sDUVMleXuzNBb6dQY5dK7NzJuhiphv
-         DuH84/Lmad0n+XhEiN2TAW1aTH262eJhQMtw4GMpOywF93NGWZ0EVuarOahgZuPJJ9
-         ac28nLZUg9lL8F1G6nnAeIOFC8iM5LSzA+RhK/5XuQuSrnjo7VTbjlrdj130k1tQEJ
-         DbNWrzEFvcY0lw9lV65tK42JeIj4VgAWSGAv6DB7liNzXAVU5qF9OdPC3BbGgKTQLI
-         pBuM1pUJ3mtEA==
-Date:   Thu, 9 Feb 2023 17:47:35 -0700
-From:   Keith Busch <kbusch@kernel.org>
-To:     "Patel, Nirmal" <nirmal.patel@linux.intel.com>
-Cc:     Xinghui Li <korantwork@gmail.com>,
-        Jonathan Derrick <jonathan.derrick@linux.dev>,
-        lpieralisi@kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xinghui Li <korantli@tencent.com>
-Subject: Re: [PATCH] PCI: vmd: Do not disable MSI-X remapping in VMD 28C0
- controller
-Message-ID: <Y+WUJ/qeyVRxYUhN@kbusch-mbp.dhcp.thefacebook.com>
-References: <CAEm4hYXncuvL-Gk1aEZExrvkbx=N1aiOQNeNjFdB4443EbKNBA@mail.gmail.com>
- <f05ee82a-4532-b12b-490f-904b946ff7b0@linux.dev>
- <CAEm4hYXk1RuKEw41VukH2iGTo_9GmZjUfrESWK5vFtpFA_O_4A@mail.gmail.com>
- <CAEm4hYWeZFrYxSvAcBJ8iw=t507vZMqfBwiQXFSJd2Hcyfw7fA@mail.gmail.com>
- <9e6cfda1-4309-d1bb-a0cf-404a7fe7d3aa@linux.intel.com>
- <Y+FG2EUpmsmCZqwh@kbusch-mbp.dhcp.thefacebook.com>
- <CAEm4hYWjaVCDFtCCyHrq5vOie4wV5LFn-UVZ5qQbpASxVGy1TA@mail.gmail.com>
- <c830a68e-014b-ddec-4bab-5db337fc378f@linux.intel.com>
- <Y+V8O9kDH5ZXWdBF@kbusch-mbp.dhcp.thefacebook.com>
- <68b40228-d2e6-c63c-751b-972bfea93f41@linux.intel.com>
+        b=XF9p3BMwvlGA4JxWHDAdXH9XcB0wCIaTV0lLdQFoSVJ+f4VAbCOajaBG26j/M61mb
+         U6y2Meb48G9uqdtr7QDx0XACvBFMlWLyL0iBedHPPIGj3DQ4KN/PBo3LZqirMt+y7e
+         PS1/poZTcWKhD/d5PsKgnJKYVasnpIxg6Jwp8z3mp3OU9MLhZKHP3wrDDZ14483H8U
+         AvoD4QNfWWABXxR6L6kxowuW+QXb8yOP7hD5Ucaors6OQyTie+cWtoaRQ/QMcC8iVa
+         QnSDsHk3Vg/BfoaVpf1NaM1f8L7UW38fccv+mhO9NSeYOhWqTkrs5YEPCk1Idr2lsb
+         zp+Fx94WGJoYA==
+Date:   Fri, 10 Feb 2023 02:49:45 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Julien Gomes <julien@arista.com>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        jgg@ziepe.ca, peterhuewe@gmx.de
+Subject: Re: [PATCH] tpm: add vendor flag to command code validation
+Message-ID: <Y+WUqcNTc8t0KIyD@kernel.org>
+References: <20230208195836.30175-1-julien@arista.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <68b40228-d2e6-c63c-751b-972bfea93f41@linux.intel.com>
+In-Reply-To: <20230208195836.30175-1-julien@arista.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,39 +53,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 04:57:59PM -0700, Patel, Nirmal wrote:
-> On 2/9/2023 4:05 PM, Keith Busch wrote:
-> > On Tue, Feb 07, 2023 at 01:32:20PM -0700, Patel, Nirmal wrote:
-> >> On 2/6/2023 8:18 PM, Xinghui Li wrote:
-> >>> Keith Busch <kbusch@kernel.org> 于2023年2月7日周二 02:28写道：
-> >>>> I suspect bypass is the better choice if "num_active_cpus() > pci_msix_vec_count(vmd->dev)".
-> >>> For this situation, My speculation is that the PCIE nodes are
-> >>> over-mounted and not just because of the CPU to Drive ratio.
-> >>> We considered designing online nodes, because we were concerned that
-> >>> the IO of different chunk sizes would adapt to different MSI-X modes.
-> >>> I privately think that it may be logically complicated if programmatic
-> >>> judgments are made.
-> >> Also newer CPUs have more MSIx (128) which means we can still have
-> >> better performance without bypass. It would be better if user have
-> >> can chose module parameter based on their requirements. Thanks.
-> > So what? More vectors just pushes the threshold to when bypass becomes
-> > relevant, which is exactly why I suggested it. There has to be an empirical
-> > answer to when bypass beats muxing. Why do you want a user tunable if there's a
-> > verifiable and automated better choice?
+On Wed, Feb 08, 2023 at 11:58:36AM -0800, Julien Gomes wrote:
+> Some TPM 2.0 devices have support for additional commands which are not
+> part of the TPM 2.0 specifications.
+> These commands are identified with bit 29 of the 32 bits command codes.
+> Contrarily to other fields of the TPMA_CC spec structure used to list
+> available commands, the Vendor flag also has to be present in the
+> command code itself (TPM_CC) when called.
 > 
-> Make sense about the automated choice. I am not sure what is the exact
-> tipping point. The commit message includes only two cases. one 1 drive
-> 1 CPU and second 12 drives 6 CPU. Also performance gets worse from 8
-> drives to 12 drives.
+> Add this flag to tpm_find_cc() mask to prevent blocking vendor command
+> codes that can actually be supported by the underlying TPM device.
+> 
+> Signed-off-by: Julien Gomes <julien@arista.com>
+> ---
+>  drivers/char/tpm/tpm2-cmd.c | 4 +++-
+>  include/linux/tpm.h         | 1 +
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+> index 65d03867e114..93545be190a5 100644
+> --- a/drivers/char/tpm/tpm2-cmd.c
+> +++ b/drivers/char/tpm/tpm2-cmd.c
+> @@ -777,10 +777,12 @@ int tpm2_auto_startup(struct tpm_chip *chip)
+>  
+>  int tpm2_find_cc(struct tpm_chip *chip, u32 cc)
+>  {
+> +	u32 cc_mask;
+>  	int i;
+>  
+> +	cc_mask = 1 << TPM2_CC_ATTR_VENDOR | GENMASK(15, 0);
+>  	for (i = 0; i < chip->nr_commands; i++)
+> -		if (cc == (chip->cc_attrs_tbl[i] & GENMASK(15, 0)))
+> +		if (cc == (chip->cc_attrs_tbl[i] & cc_mask))
+>  			return i;
+>  
+>  	return -1;
+> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> index dfeb25a0362d..4dc97b9f65fb 100644
+> --- a/include/linux/tpm.h
+> +++ b/include/linux/tpm.h
+> @@ -265,6 +265,7 @@ enum tpm2_startup_types {
+>  enum tpm2_cc_attrs {
+>  	TPM2_CC_ATTR_CHANDLES	= 25,
+>  	TPM2_CC_ATTR_RHANDLE	= 28,
+> +	TPM2_CC_ATTR_VENDOR	= 29,
+>  };
+>  
+>  #define TPM_VID_INTEL    0x8086
+> -- 
+> 2.39.1
+> 
 
-That configuration's storage performance overwhelms the CPU with interrupt
-context switching. That problem probably inverts when your active CPU count
-exceeds your VMD vectors because you'll be funnelling more interrupts into
-fewer CPUs, leaving other CPUs idle.
+Just checking: did you run testing/selftests/tpm2?
 
-> One the previous comments also mentioned something about FIO changing
-> cpus_allowed; will there be an issue when VMD driver decides to bypass
-> the remapping during the boot up, but FIO job changes the cpu_allowed?
-
-No. Bypass mode uses managed interrupts for your nvme child devices, which sets
-the best possible affinity.
+BR, Jarkko
