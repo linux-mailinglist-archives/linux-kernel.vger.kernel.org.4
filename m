@@ -2,120 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB648691708
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 04:11:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C91BF69170C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 04:14:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbjBJDLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 22:11:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53408 "EHLO
+        id S230203AbjBJDOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 22:14:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbjBJDLc (ORCPT
+        with ESMTP id S229587AbjBJDOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 22:11:32 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018C125BA1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 19:11:31 -0800 (PST)
-Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PCdxC1mYkzRrww;
-        Fri, 10 Feb 2023 11:09:03 +0800 (CST)
-Received: from [10.67.109.54] (10.67.109.54) by kwepemm600005.china.huawei.com
- (7.193.23.191) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 10 Feb
- 2023 11:11:28 +0800
-From:   Hui Tang <tanghui20@huawei.com>
-Subject: [bug-report] WARNING in sched_tick_remote
-To:     <tanghui20@huawei.com>
-CC:     Christian Brauner <brauner@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        <linux-kernel@vger.kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Message-ID: <f2f93cf1-dee1-7752-2e15-37fe051b4636@huawei.com>
-Date:   Fri, 10 Feb 2023 11:11:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Thu, 9 Feb 2023 22:14:18 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C001658EE;
+        Thu,  9 Feb 2023 19:14:13 -0800 (PST)
+X-UUID: fa5a5faea8f011eda06fc9ecc4dadd91-20230210
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=e/esUzcar84LHIMU9mBAOMspAX9dxk9LWm7hHmIrJC8=;
+        b=Xq3fxDkbf4Mb2MTbQi7aCzQ/E0WUywEoLjJ5S4A+BX8tiQgheFAGi1qbRbU9U1yO5EZkJjQKijUKMQ0m95vvLhPteNCqj+7PjTIutqDHeF67qukghGiwHcGmhOWkdUYTZTK38AVeb8MxIYhaukDYWSDDRDh77eV7i6vzC3TTTCM=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.19,REQID:2e5da433-aed7-4dc8-bc48-75436d585a75,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.19,REQID:2e5da433-aed7-4dc8-bc48-75436d585a75,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:885ddb2,CLOUDID:f054db56-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:230210111408UIZKUZNV,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-UUID: fa5a5faea8f011eda06fc9ecc4dadd91-20230210
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1129734278; Fri, 10 Feb 2023 11:14:06 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 10 Feb 2023 11:14:05 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 10 Feb 2023 11:14:05 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>
+Subject: [PATCH v1] remoteproc: mediatek: Check the SCP image format
+Date:   Fri, 10 Feb 2023 11:13:54 +0800
+Message-ID: <20230210031354.1335-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.109.54]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600005.china.huawei.com (7.193.23.191)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Do a sanity check on the SCP image before loading it to avoid
+driver crashes.
 
-An warning happen in sched_tick_remote when we do syzkaller test.
-The syzkaller test run in a qemu with 4 cpus, and nohz_full=3.
+Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+---
+ drivers/remoteproc/mtk_scp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-The warn triggered by WARN_ON_ONCE(delta > (u64)NSEC_PER_SEC * 3).
-
-	static void sched_tick_remote(struct work_struct *work)
-	{
-	[...]
-			if (!is_idle_task(curr)) {
-					/*
-					 * Make sure the next tick runs within a reasonable
-					 * amount of time.
-					 */
-					delta = rq_clock_task(rq) - curr->se.exec_start;
-					WARN_ON_ONCE(delta > (u64)NSEC_PER_SEC * 3);
-			}
-	[...]
-	}
-
-I debug it and find that a syzkaller thread keep in kernel mode
-more than 3s. And all unbound kworkers run on the same cpu as the
-syzkaller thread. The kworker thread doing sched_tick_remote
-is scheduled more than 3s since last run.
-
-Does anyone have a good suggestion for this problem?
-
-WARN log as follows:
-
-WARNING: CPU: 2 PID: 23866 at kernel/sched/core.c:4142 queued_spin_lock arch/arm64/include/asm/paravirt.h:51 [inline]
-WARNING: CPU: 2 PID: 23866 at kernel/sched/core.c:4142 do_raw_spin_lock include/linux/spinlock.h:183 [inline]
-WARNING: CPU: 2 PID: 23866 at kernel/sched/core.c:4142 __raw_spin_lock_irq include/linux/spinlock_api_smp.h:129 [inline]
-WARNING: CPU: 2 PID: 23866 at kernel/sched/core.c:4142 rq_lock_irq kernel/sched/sched.h:1373 [inline]
-WARNING: CPU: 2 PID: 23866 at kernel/sched/core.c:4142 sched_tick_remote+0x384/0x400 kernel/sched/core.c:4129
-Modules linked in:
-CPU: 2 PID: 23866 Comm: kworker/u8:3 Not tainted 5.10.0-02029-gf83322d59c08-dirty #1
-Hardware name: linux,dummy-virt (DT)
-Workqueue: events_unbound sched_tick_remote
-pstate: 20400085 (nzCv daIf +PAN -UAO -TCO BTYPE=--)
-pc : sched_tick_remote+0x384/0x400 kernel/sched/core.c:4142
-lr : sched_tick_remote+0x1e4/0x400 kernel/sched/core.c:4141
-sp : ffffa00019347ba0
-x29: ffffa00019347ba0 x28: ffff0000e2a8c110
-x27: 0000000000000000 x26: ffffa00014af6e88
-x25: ffff000224cbc4f8 x24: ffffa00014b45840
-x23: 000000013afb24ae x22: 1ffff40003268f80
-x21: ffff000224cbfa28 x20: ffff0000c0e53e80
-x19: ffff000224cbbb40 x18: 0000000000000000
-x17: 0000000000000000 x16: 0000000000000000
-x15: 0000000000000000 x14: 0000000000000000
-x13: 0000000000000002 x12: ffff940003268f85
-x11: 1ffff40003268f84 x10: ffff940003268f84
-x9 : ffffa000101bece8 x8 : 0000000000000003
-x7 : 0000000000000001 x6 : ffff940003268f84
-x5 : ffff0000d63229c0 x4 : dfffa00000000000
-x3 : ffffa000101c33f4 x2 : 0000000000000007
-x1 : 0000026d1ef2161e x0 : 00000000b2d05e00
-Call trace:
-   queued_spin_lock arch/arm64/include/asm/paravirt.h:51 [inline]
-   do_raw_spin_lock include/linux/spinlock.h:183 [inline]
-   __raw_spin_lock_irq include/linux/spinlock_api_smp.h:129 [inline]
-   rq_lock_irq kernel/sched/sched.h:1373 [inline]
-   sched_tick_remote+0x384/0x400 kernel/sched/core.c:4129
-   process_one_work+0x474/0xb20 kernel/workqueue.c:2280
-   worker_thread+0x120/0x92c kernel/workqueue.c:2426
-   kthread+0x20c/0x25c kernel/kthread.c:313
-   ret_from_fork+0x10/0x18 arch/arm64/kernel/entry.S:1034
-
+diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
+index d421a2ccaa1e..0861b76f185f 100644
+--- a/drivers/remoteproc/mtk_scp.c
++++ b/drivers/remoteproc/mtk_scp.c
+@@ -649,6 +649,7 @@ static const struct rproc_ops scp_ops = {
+ 	.load		= scp_load,
+ 	.da_to_va	= scp_da_to_va,
+ 	.parse_fw	= scp_parse_fw,
++	.sanity_check	= rproc_elf_sanity_check,
+ };
+ 
+ /**
+-- 
+2.18.0
 
