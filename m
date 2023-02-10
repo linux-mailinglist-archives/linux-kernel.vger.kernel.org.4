@@ -2,152 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CE29691F05
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 13:22:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7967691F07
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 13:23:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbjBJMV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 07:21:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43608 "EHLO
+        id S231794AbjBJMXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 07:23:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbjBJMVv (ORCPT
+        with ESMTP id S231439AbjBJMXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 07:21:51 -0500
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB7E1025F
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 04:21:49 -0800 (PST)
-Received: by mail-io1-f80.google.com with SMTP id u6-20020a6be406000000b00716ceebf132so3322827iog.1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 04:21:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rJnVo6GiiOg0ZPf0WIkzNgdFDfP24rpT6M3MYyDpW9A=;
-        b=yTs+i6rMHXra79ajFZfy4vP7l6sJNBitex0E9UsBNCOdaZFLML6HreLn+C2lYjbII/
-         5CQD66SSfjFHPupupxAAi0sI+ay3DIOBqVwqDcCgmCQIm5lTOKrieKOiW4ewow3baIoP
-         97UyLcHQ+kRIbqbnN/Jb7De5MIPGW2x4OUUAqbBNnszQPl6Gmm3EnqAP9qTs0pHXglkO
-         NFl3jEKVzwlS1GOrNgv6eT39alH1gmvPEGb+5XA05RsAqkO/OXdUPOVTSbTh6Zw4VoUE
-         kZrw+cIymN+Un7x64UoDhkQXMP1K75iBeJugupg7nXvGL71FZci1p0TnNKzNXk1p5Duf
-         Q8Kw==
-X-Gm-Message-State: AO0yUKWlcU2TX9ewt0Npp40g/e1Gd2yXJp3DRanJ3qKVP96mNOlCSRWU
-        otepTdmnlw0v1yv3U0Tjn5F28cz2dJlU9/ZmUL3Cyn8lbBP2
-X-Google-Smtp-Source: AK7set98R9Z2TDA/xUQK9168H/KNu7WugByGiaNfuN2YtMIUGD9dryMohEYLAsP4lTbXaDWJiCyWFN7HoAmkx0P85xtC0/xJ4txu
+        Fri, 10 Feb 2023 07:23:24 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C5F70CF2;
+        Fri, 10 Feb 2023 04:23:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=e9bOFTyg/R9p1/+tBwBFvmuDWAa2yaqkR6u3E/N1A/E=; b=v/jnMKqEH+8MxMTg1LSOuZlT5r
+        8p8lDTs3uBC3X/8daquwcHTpKTKlethqhl7FnLhTLWZb0EMmnWFVX8JNrb64F/KfIDLBPLhi7t0zG
+        XCPfpa3WZXwuDRjIz7rSRPyWrqDUakuVBDBhkzHOC9du6lPypRcIk1Zi7KKdPrq94SC00AadW/l1G
+        qNyhltA1js2JwQeRgdZ4kcGGBCzUmQn8yLpsy8p1bwONA/iqfpIkD+KzGeGQUTUAWwLcsZ9IShafK
+        F4IvdFjPQN05neJsSIsVpfhIIRR4u7TdQV3MrXVoV9bHidk1lZz/psQnzNgJLRV3JRe/gr4POeh7j
+        LVDpicUw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36520)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pQSQu-0001Vw-FZ; Fri, 10 Feb 2023 12:23:16 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pQSQo-0005Zp-ED; Fri, 10 Feb 2023 12:23:10 +0000
+Date:   Fri, 10 Feb 2023 12:23:10 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Subject: Re: [PATCH v2 03/11] dt-bindings: arm: mediatek: add
+ 'mediatek,pn_swap' property
+Message-ID: <Y+Y3Lt4I5LPzlK5x@shell.armlinux.org.uk>
+References: <cover.1675779094.git.daniel@makrotopia.org>
+ <a8c567cf8c3ec6fef426b64fb1ab7f6e63a0cc07.1675779094.git.daniel@makrotopia.org>
+ <ad09a065-c10d-3061-adbe-c58724cdfde0@kernel.org>
+ <Y+KR26aepqlfsjYG@makrotopia.org>
+ <b6d782ef-b375-1e73-a384-1ff37c1548a7@kernel.org>
+ <Y+Oo9HaqPeNVUANR@makrotopia.org>
+ <514ec4b8-ef78-35c1-2215-22884fca87d4@kernel.org>
+ <Y+QinJ9W8hIIF9Ni@makrotopia.org>
+ <c29a3a22-cc23-35bf-c8e0-ebe1405a4d94@kernel.org>
+ <Y+YdqbJS4bDvTxuD@shell.armlinux.org.uk>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:c2b:b0:30e:eb5d:d15d with SMTP id
- q11-20020a056e020c2b00b0030eeb5dd15dmr8935092ilg.88.1676031709046; Fri, 10
- Feb 2023 04:21:49 -0800 (PST)
-Date:   Fri, 10 Feb 2023 04:21:49 -0800
-In-Reply-To: <0000000000005ad04005ee48897f@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a66c7705f4578aaa@google.com>
-Subject: Re: [syzbot] [hfs?] KMSAN: uninit-value in hfs_revalidate_dentry
-From:   syzbot <syzbot+3ae6be33a50b5aae4dab@syzkaller.appspotmail.com>
-To:     glider@google.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+YdqbJS4bDvTxuD@shell.armlinux.org.uk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Fri, Feb 10, 2023 at 10:34:17AM +0000, Russell King (Oracle) wrote:
+> On Thu, Feb 09, 2023 at 12:30:27PM +0100, Krzysztof Kozlowski wrote:
+> > On 08/02/2023 23:30, Daniel Golle wrote:
+> > > Hm, none of the current PCS (or PHY) drivers are represented by a
+> > > syscon node... (and maybe that's the mistake in first place?)
+> > 
+> > Yes.
+> 
+> Nos, it isn't.
 
-HEAD commit:    8c89ecf5c13b kmsan: silence -Wmissing-prototypes warnings
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=10b53fff480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=91d3152219aa6b45
-dashboard link: https://syzkaller.appspot.com/bug?extid=3ae6be33a50b5aae4dab
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1409f0b3480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15c76993480000
+To expand on this - I have no idea why you consider it a mistake that
+apparently all PCS aren't represented by a syscon node.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/fa537cffb53c/disk-8c89ecf5.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/5b9d03c04a3e/vmlinux-8c89ecf5.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/55c166dec3af/bzImage-8c89ecf5.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/b234e4e5c704/mount_0.gz
+PCS is a sub-block in an ethernet system, just the same as a MAC is a
+sub-block. PCS can appear in several locations of an ethernet system,
+but are generally found either side of a serial ethernet link such
+as 1000base-X, SGMII, USXGMII, 10Gbase-R etc.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3ae6be33a50b5aae4dab@syzkaller.appspotmail.com
+So, one can find PCS within an ethernet PHY - and there may be one
+facing the MAC connection, and there will be another facing the media.
+We generally do not need to separate these PCS from the PHY itself
+because we view the PHY as one whole device.
 
-=======================================================
-WARNING: The mand mount option has been deprecated and
-         and is ignored by this kernel. Remove the mand
-         option from the mount to silence this warning.
-=======================================================
-=====================================================
-BUG: KMSAN: uninit-value in hfs_ext_read_extent fs/hfs/extent.c:196 [inline]
-BUG: KMSAN: uninit-value in hfs_get_block+0x92d/0x1620 fs/hfs/extent.c:366
- hfs_ext_read_extent fs/hfs/extent.c:196 [inline]
- hfs_get_block+0x92d/0x1620 fs/hfs/extent.c:366
- block_read_full_folio+0x4ff/0x11b0 fs/buffer.c:2271
- hfs_read_folio+0x55/0x60 fs/hfs/inode.c:39
- filemap_read_folio+0x148/0x4f0 mm/filemap.c:2426
- do_read_cache_folio+0x7c8/0xd90 mm/filemap.c:3553
- do_read_cache_page mm/filemap.c:3595 [inline]
- read_cache_page+0xfb/0x2f0 mm/filemap.c:3604
- read_mapping_page include/linux/pagemap.h:755 [inline]
- hfs_btree_open+0x928/0x1ae0 fs/hfs/btree.c:78
- hfs_mdb_get+0x260c/0x3000 fs/hfs/mdb.c:204
- hfs_fill_super+0x1fb1/0x2790 fs/hfs/super.c:406
- mount_bdev+0x628/0x920 fs/super.c:1359
- hfs_mount+0xcd/0xe0 fs/hfs/super.c:456
- legacy_get_tree+0x167/0x2e0 fs/fs_context.c:610
- vfs_get_tree+0xdc/0x5d0 fs/super.c:1489
- do_new_mount+0x7a9/0x16f0 fs/namespace.c:3145
- path_mount+0xf98/0x26a0 fs/namespace.c:3475
- do_mount fs/namespace.c:3488 [inline]
- __do_sys_mount fs/namespace.c:3697 [inline]
- __se_sys_mount+0x919/0x9e0 fs/namespace.c:3674
- __ia32_sys_mount+0x15b/0x1b0 fs/namespace.c:3674
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x37/0x80 arch/x86/entry/common.c:203
- do_SYSENTER_32+0x1f/0x30 arch/x86/entry/common.c:246
- entry_SYSENTER_compat_after_hwframe+0x70/0x82
+The optional PCS on the MAC side of the link is something that we
+need to know about, because this has to be configured to talk to the
+PHY, or to configure and obtain negotiation results from in the case of
+fibre links.
 
-Uninit was created at:
- __alloc_pages+0x926/0x10a0 mm/page_alloc.c:5572
- alloc_pages+0xb4b/0xec0
- alloc_slab_page mm/slub.c:1851 [inline]
- allocate_slab mm/slub.c:1998 [inline]
- new_slab+0x5c5/0x19b0 mm/slub.c:2051
- ___slab_alloc+0x132b/0x3790 mm/slub.c:3193
- __slab_alloc mm/slub.c:3292 [inline]
- __slab_alloc_node mm/slub.c:3345 [inline]
- slab_alloc_node mm/slub.c:3442 [inline]
- slab_alloc mm/slub.c:3460 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
- kmem_cache_alloc_lru+0x72f/0xb80 mm/slub.c:3483
- alloc_inode_sb include/linux/fs.h:3119 [inline]
- hfs_alloc_inode+0x80/0xf0 fs/hfs/super.c:165
- alloc_inode+0xad/0x4b0 fs/inode.c:259
- iget_locked+0x340/0xf80 fs/inode.c:1286
- hfs_btree_open+0x20d/0x1ae0 fs/hfs/btree.c:38
- hfs_mdb_get+0x2519/0x3000 fs/hfs/mdb.c:199
- hfs_fill_super+0x1fb1/0x2790 fs/hfs/super.c:406
- mount_bdev+0x628/0x920 fs/super.c:1359
- hfs_mount+0xcd/0xe0 fs/hfs/super.c:456
- legacy_get_tree+0x167/0x2e0 fs/fs_context.c:610
- vfs_get_tree+0xdc/0x5d0 fs/super.c:1489
- do_new_mount+0x7a9/0x16f0 fs/namespace.c:3145
- path_mount+0xf98/0x26a0 fs/namespace.c:3475
- do_mount fs/namespace.c:3488 [inline]
- __do_sys_mount fs/namespace.c:3697 [inline]
- __se_sys_mount+0x919/0x9e0 fs/namespace.c:3674
- __ia32_sys_mount+0x15b/0x1b0 fs/namespace.c:3674
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x37/0x80 arch/x86/entry/common.c:203
- do_SYSENTER_32+0x1f/0x30 arch/x86/entry/common.c:246
- entry_SYSENTER_compat_after_hwframe+0x70/0x82
+PCS on the MAC side are not a system level device, they are very much a
+specific piece of ethernet hardware in the same way that the MAC is,
+and we don't represent the MAC as a syscon node. There is no reason
+to do so with PCS.
 
-CPU: 1 PID: 5015 Comm: syz-executor119 Not tainted 6.2.0-rc7-syzkaller-80760-g8c89ecf5c13b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-=====================================================
+These PCS on the MAC side tend to be accessed via direct MMIO accesses,
+or over a MDIO bus.
 
+There's other blocks in the IEEE 802.3 ethernet layering, such as the
+PMA/PMD module (which for the MAC side we tend to model with the
+drivers/phy layer) - but again, these also appear in ethernet PHYs
+in order to produce the electrical signals for e.g. twisted pair
+ethernet.
+
+So, to effectively state that you consider that PCS should always be
+represented as a syscon node is rather naieve, and really as a DT
+reviewer you should not be making such decisions, but soliciting
+opinions from those who know this subject area in detail _whether_
+they are some kind of system controller before making such a
+decision.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
