@@ -2,138 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BFBF692480
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB7069248B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233008AbjBJRc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 12:32:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
+        id S232564AbjBJRgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 12:36:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232834AbjBJRcw (ORCPT
+        with ESMTP id S231740AbjBJRga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 12:32:52 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6AA77BBC
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:32:50 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id x31so4187235pgl.6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:32:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1676050370;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VGMTFKoCBVoIuyA3qlOD8xOm7koGj1xemOk912C4V+A=;
-        b=Vn7d2rD7KGb7soIfLuYz1nXiJpWVaDMVEjgXteyCUSzsxr9Ncgw5UXzFLSbVKN4S/A
-         0cNjJaodxEQj/fEADyE0WZIGlfJzE3cvA6yuJWvmOcY8Qn0ZRFbwDDaHDLXQOmXjKGKc
-         +6YnLJWmQb25ktasgn3xtGPPz8uMe2oJdmnz0VyDW+gRGgo9/ZpuRjeshqHyQhrqC9BJ
-         coRxqszDAsqrCbcMcC9a5OSEMQXOoHhTWVUeu6/bqCxv30bjtf20ysQVu/JwpLN9Oirv
-         XqIFUU9DzANMzAhpTEARzChmzDzUQDJ7HPGzBvtmHrwHJ2Wj+5jzViU7/t0T8CXtQG3O
-         UubQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676050370;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VGMTFKoCBVoIuyA3qlOD8xOm7koGj1xemOk912C4V+A=;
-        b=MuAq1LZpPY9QveQG+4b7rsCgJUPOo1ZW+UJVnXzXnHkofZn81uG6+LyFAHotysftiv
-         v5NsaUPaYDs92fmsj4jiB8uz6D4g6zjttQPn3yLv2rrcgieNaYjL2LMq5PJjZlIVmDOs
-         ei3a6Kpjya5v6U64HW8hsAxqO0JUr8K+oBXGMSuii1ljrqUQuaW5TYSj9+iVzS22s97R
-         8s55an/AHdz2sCE+h2vNl/rEKSFbBDuhufR4cbLEK62qPms2V9rTCNZLDICiZe5J7ed1
-         7aaDFLkdb8PvXA+iDVc5bOoWh8M/0W+vgjec0mnFPDJRV/Eyyaa0sQGcmNVoX8ZGBubB
-         +RCg==
-X-Gm-Message-State: AO0yUKUcitJUhQc0EAsq4YqJSBwLwLQwkAgWA5exKoOkG0qfnmcmGsGb
-        /2vQlYc5f/J6SYVwzZNuJBPcqfC8l5e/GbeSE8GU
-X-Google-Smtp-Source: AK7set+OFwR+/j/4Th5qsCUEm60XL68IDyvuTHzlxIKdhE8fa2HwbFZ2wXzS/HuuMttpavQk/9qh74WXRb4WZw948c8=
-X-Received: by 2002:a62:5f02:0:b0:5a8:5247:2589 with SMTP id
- t2-20020a625f02000000b005a852472589mr1477860pfb.7.1676050369837; Fri, 10 Feb
- 2023 09:32:49 -0800 (PST)
+        Fri, 10 Feb 2023 12:36:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E2B75376;
+        Fri, 10 Feb 2023 09:36:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9961561E73;
+        Fri, 10 Feb 2023 17:36:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05CBFC433EF;
+        Fri, 10 Feb 2023 17:36:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676050589;
+        bh=LuSVARJO5JDWmYzFcghoLV4qvNNmOQxMCNhodHNQqVM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=BmNkMKUkXqMjUq+3/ZjDTga9k3o+n14YEIcMQTsLrQeE2Jor8Ep8/WTo8AExenzds
+         oG7D88PFyvndWeYE8gstPrWzF1hsZV15SsjWqOum8s6TZKT/iVcb7Dcc19NYvN+3ce
+         XaCGiZeF35qgeQh8BN5/KhPQeD42jm+aGZctBfRdwWlycsHhWFUwfnhOJ5yKT8kvpk
+         Kfnfq4NqGKdImqEobICSVwhtp+b99+hwSURf94Yh53D7tsTF2sK3DmbMBTxfBSOF9c
+         iXePUTX82dtRzazSk/35ksoUSmRcQp63LQmFFdjSR0tG2Ms8GHuriLhN4YhwXj+IZj
+         jwNa7Pl5KNeoQ==
+Received: by mail-vs1-f41.google.com with SMTP id g8so6430653vso.3;
+        Fri, 10 Feb 2023 09:36:28 -0800 (PST)
+X-Gm-Message-State: AO0yUKVZmqbnowLhdVVoK83HVlOTzmQHxP1g20yvF48dEEyKdwElx60m
+        nK4LuvCEnZx94CGAV4uadYnjgSHxlPtzAX9r6Q==
+X-Google-Smtp-Source: AK7set8uacGPb7N1FmWDujX3YT7Vp5g3fZDW03GtDeKnYuC9LpflaTY3XDZXrfsRPCUPMTfyptdOjfL0lqUyjcY3Zsc=
+X-Received: by 2002:a67:6e82:0:b0:411:6418:72f6 with SMTP id
+ j124-20020a676e82000000b00411641872f6mr2915833vsc.48.1676050587916; Fri, 10
+ Feb 2023 09:36:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20221227142740.2807136-1-roberto.sassu@huaweicloud.com>
- <20221227142740.2807136-3-roberto.sassu@huaweicloud.com> <Y64XB0yi24yjeBDw@sol.localdomain>
- <d2a54ddec403cad12c003132542070bf781d5e26.camel@huaweicloud.com>
- <857eedc5ad18eddae7686dca63cf8c613a051be4.camel@huaweicloud.com>
- <Y+VBMQEwPTPGBIpP@gmail.com> <CAHC9VhTYeqCB8roaNvWUYJeKPwT35ixJ8MMXBe0v0+a9o8CXWw@mail.gmail.com>
- <Y+XAbz6YmazGNFQr@kernel.org>
-In-Reply-To: <Y+XAbz6YmazGNFQr@kernel.org>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 10 Feb 2023 12:32:38 -0500
-Message-ID: <CAHC9VhQ8e96LbCSBMXoQwETJBmWvazjzSDE2X4cr3ezhaC_5uA@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] KEYS: asymmetric: Copy sig and digest in public_key_verify_signature()
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>,
-        Eric Biggers <ebiggers@kernel.org>
+References: <20230210164749.368998-1-nick.alcock@oracle.com> <20230210164749.368998-2-nick.alcock@oracle.com>
+In-Reply-To: <20230210164749.368998-2-nick.alcock@oracle.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 10 Feb 2023 11:36:16 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJ_VhesDZO336tw=KAp88jCLdW9C6y6QDkTF7WpLkr3+w@mail.gmail.com>
+Message-ID: <CAL_JsqJ_VhesDZO336tw=KAp88jCLdW9C6y6QDkTF7WpLkr3+w@mail.gmail.com>
+Subject: Re: [PATCH 1/8] kbuild, PCI: generic,versatile: comment out
+ MODULE_LICENSE in non-modules
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 9, 2023 at 10:56 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> On Thu, Feb 09, 2023 at 05:46:32PM -0500, Paul Moore wrote:
-> > On Thu, Feb 9, 2023 at 1:53 PM Eric Biggers <ebiggers@kernel.org> wrote:
-> > > On Thu, Feb 09, 2023 at 11:49:19AM +0100, Roberto Sassu wrote:
-> > > > On Fri, 2023-01-27 at 09:27 +0100, Roberto Sassu wrote:
-> > > > > On Thu, 2022-12-29 at 14:39 -0800, Eric Biggers wrote:
-> > > > > > On Tue, Dec 27, 2022 at 03:27:40PM +0100, Roberto Sassu wrote:
-> > > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > >
-> > > > > > > Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-> > > > > > > mapping") checks that both the signature and the digest reside in the
-> > > > > > > linear mapping area.
-> > > > > > >
-> > > > > > > However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-> > > > > > > stack support") made it possible to move the stack in the vmalloc area,
-> > > > > > > which is not contiguous, and thus not suitable for sg_set_buf() which needs
-> > > > > > > adjacent pages.
-> > > > > > >
-> > > > > > > Always make a copy of the signature and digest in the same buffer used to
-> > > > > > > store the key and its parameters, and pass them to sg_init_one(). Prefer it
-> > > > > > > to conditionally doing the copy if necessary, to keep the code simple. The
-> > > > > > > buffer allocated with kmalloc() is in the linear mapping area.
-> > > > > > >
-> > > > > > > Cc: stable@vger.kernel.org # 4.9.x
-> > > > > > > Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
-> > > > > > > Link: https://lore.kernel.org/linux-integrity/Y4pIpxbjBdajymBJ@sol.localdomain/
-> > > > > > > Suggested-by: Eric Biggers <ebiggers@kernel.org>
-> > > > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > > ---
-> > > > > > >  crypto/asymmetric_keys/public_key.c | 38 ++++++++++++++++-------------
-> > > > > > >  1 file changed, 21 insertions(+), 17 deletions(-)
-> > > > > >
-> > > > > > Reviewed-by: Eric Biggers <ebiggers@google.com>
-> > > > >
-> > > > > Hi David
-> > > > >
-> > > > > could you please take this patch in your repo, if it is ok?
-> > > >
-> > > > Kindly ask your support here. Has this patch been queued somewhere?
-> > > > Wasn't able to find it, also it is not in linux-next.
-> > > >
-> > >
-> > > The maintainer of asymmetric_keys (David Howells) is ignoring this patch, so
-> > > you'll need to find someone else to apply it.  Herbert Xu, the maintainer of the
-> > > crypto subsystem, might be willing to apply it.  Or maybe Jarkko Sakkinen, who
-> > > is a co-maintainer of the keyrings subsystem (but not asymmetric_keys, for some
-> > > reason; should that change?).
-> >
-> > It is problematic that David isn't replying to this.  I have no idea
-> > if it will work, but I just reached out to him to see if I can draw
-> > his attention back to this ...
+On Fri, Feb 10, 2023 at 11:05 AM Nick Alcock <nick.alcock@oracle.com> wrote:
 >
-> See my response to Eric.
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
 
-Thanks Jarkko.
+How is there an issue when any given module could be built-in instead?
 
--- 
-paul-moore.com
+The general trend is to make all PCI host drivers modules, the primary
+reason this one, IIRC, is not a module is because it is missing
+remove() hook to de-init the PCI bus. Not too hard to add, but I
+wanted to do a common devm hook to do that instead of an explicit
+.remove() hook in each driver. I suppose we could just ignore that and
+allow building as a module. Unloading is optional anyways.
+
+> So comment out all uses of MODULE_LICENSE that are not in real modules
+
+That's a comment for the series more than just this patch.
+
+> (the license declaration is left in as documentation).
+>
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: linux-pci@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> ---
+>  drivers/pci/controller/pci-versatile.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
