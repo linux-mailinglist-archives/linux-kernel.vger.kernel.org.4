@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B74D2691816
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 06:47:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4FE4691819
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 06:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbjBJFrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 00:47:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33550 "EHLO
+        id S230286AbjBJFxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 00:53:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjBJFrq (ORCPT
+        with ESMTP id S229600AbjBJFxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 00:47:46 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39485FE48
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 21:47:45 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id e10-20020a17090a630a00b0022bedd66e6dso8713482pjj.1
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 21:47:45 -0800 (PST)
+        Fri, 10 Feb 2023 00:53:08 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF146566A
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 21:53:00 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id z1so5424085plg.6
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 21:53:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8AOWh5FIT9l+ytkQEtsn/0BsGE5ItnlbSB8SdkHKfew=;
-        b=HEZLiVHM21ej+uZAeh9u3n6lcfIjjxfzBaiacOvUbXd9poXIv4rOXhyGQ7ckucUDPD
-         2oUYgMQrBQgL8IUOgWiGIi5iFQLndPomzhyCop7/cGcAmX85i65EAQN/gzcoU35YLmm6
-         rJz4q11QfO9fsac2EROUUtVRaWtKht8BnCByM=
+        bh=r8a69HEYkh1oQvGxe695mWtJAwhwUUM7wLLsEJAlx1U=;
+        b=KqlyxfWjqGDVE/MXDWllO7DsPw2/IY8BO/Ij3Rws+Rrz/ZHtbS2fMRNelKoJ7lfZkg
+         VRxI9OauzRrZShnlI9dHI1QOd7+lXwYrKMUS5zqbzRDz315mr0x7jA2yEF56XLpa4vyg
+         H7qLD+hgx5kRmwPZtjeMuPDUCXASeGeLbrUwE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8AOWh5FIT9l+ytkQEtsn/0BsGE5ItnlbSB8SdkHKfew=;
-        b=H9tZP+TlkQlrjqE5Ftnlt2IY/0Ql3M7aS4JRx08wW2/OIFNy2vnUw66UHsucnehJqY
-         TEzN4Ivx/ULA996d/UqgZ4M3kD9yEB7cN8pVjpO+Ompwg0DmWdLwYIBQvPNGABo9RrNP
-         kZpp4Jb3MgI+9jhXqAOja777u+teSkM1JMfbbs8BnxSMg7ax0DjCMFr9Ed3vUBBA+1wf
-         lCvujv401LMJ3TATmbM0ZDqA2J5ThLpfjKhPKfZlCjwhHzAcqQczIbLz5quaNG6xdWeo
-         ZokiWDDuD4RQsHkIGwQbhNM9S2ve952u/AuVxsNvqyU4gwTBoPlQU8pUkrXYRb2nrI6o
-         iO2w==
-X-Gm-Message-State: AO0yUKV0RF4LYTDXdgz8piEhnFAcqITODzDCJ9RKOfO7bjXYNsvvale2
-        gYeTmZotk/BL1KrEEDyhPDiRwg==
-X-Google-Smtp-Source: AK7set/QW7HoJeqcF6Mo9eFz7CrxaMTf6JVRoJWLEPu0Mf1tAc7uZYnwwdWflmo7mKLAmuAgpXL5Fw==
-X-Received: by 2002:a17:902:dac9:b0:199:4934:9d31 with SMTP id q9-20020a170902dac900b0019949349d31mr9658586plx.20.1676008065432;
-        Thu, 09 Feb 2023 21:47:45 -0800 (PST)
+        bh=r8a69HEYkh1oQvGxe695mWtJAwhwUUM7wLLsEJAlx1U=;
+        b=DmIXoq218xQ/zwY90hyNsCZMBmIYDud9o6pAQSve7HOCtfvGLfBDZeaKdjqQnVUcPw
+         vL1nwMQSGqbPXjFp6EMB+fQULlzxUl8ipPiKJwJ49Bo6AdbzcQDFu+dXAMb7s5nAKS2O
+         8m1jb9HqK+srr/WGyjmBDgQGC3x4U8mHKh3c/SgRR4cvaZOkFwgUe+GjZ6N96SA19xh7
+         cmzhtfxS6k6wJo1qsHQv9w13Co3zlGrdPpuj0MEEhuL+1ED3ExdrbeO28Z8dqRzCITvD
+         wkNHfmXzcKwlgRMH9OqgvQ2ehaivfAxxMjtF1iz/0jfziuiP89EHMw93FXLa834JzHNr
+         qmQQ==
+X-Gm-Message-State: AO0yUKVgEekxOCO/aZ7rLAvcxGfR2fr+mLYBkcHrSKzKQRLU3x1xWR09
+        9X4oj+2AsqVp/V2UUYRRzuG6VQ==
+X-Google-Smtp-Source: AK7set/Nnbh0tPoL9KSBfOCad7/dCn2+vZN4cSn5tXxNkRawo3thm8lpj1DJfijTa2b+CcSzOxvatQ==
+X-Received: by 2002:a05:6a20:3ca0:b0:c1:344c:668f with SMTP id b32-20020a056a203ca000b000c1344c668fmr16020692pzj.12.1676008379916;
+        Thu, 09 Feb 2023 21:52:59 -0800 (PST)
 Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id v8-20020a17090331c800b00199023c688esm2491029ple.26.2023.02.09.21.47.43
+        by smtp.gmail.com with ESMTPSA id g8-20020aa78188000000b0056be1581126sm2474167pfi.143.2023.02.09.21.52.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 21:47:44 -0800 (PST)
-Date:   Fri, 10 Feb 2023 14:47:41 +0900
+        Thu, 09 Feb 2023 21:52:59 -0800 (PST)
+Date:   Fri, 10 Feb 2023 14:52:55 +0900
 From:   Sergey Senozhatsky <senozhatsky@chromium.org>
 To:     Yosry Ahmed <yosryahmed@google.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
@@ -55,7 +55,7 @@ Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Subject: Re: [PATCH 2/2] zsmalloc: fine-grained inuse ratio based fullness
  grouping
-Message-ID: <Y+XaffiIOVNZu7w8@google.com>
+Message-ID: <Y+Xbt4uJ/214xnR5@google.com>
 References: <20230206092559.2722946-1-senozhatsky@chromium.org>
  <20230206092559.2722946-3-senozhatsky@chromium.org>
  <CAJD7tka_DFfFu2Ji-HAdw066J2MkmxzrYVQp6pHUAAQhz6Y7EA@mail.gmail.com>
@@ -78,12 +78,6 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On (23/02/09 21:15), Yosry Ahmed wrote:
-> > > > I can get rid of static const arrays and pass "begin / end" group IDs to
-> > > > functions that iterate fullness lists and pick the first head page, but
-> > > > I think that enum values will stay.
-> > >
-> > > Do they have to stay for a technical reason or just to make reviews simpler?
-> >
 > > We need to be able to do zs_stat_get(class, CLASS_USAGE_70) or
 > > zs_stat_get(class, CLASS_USAGE_10) in zs_stats_size_show() to
 > > show class's fullness stats.
@@ -95,5 +89,5 @@ On (23/02/09 21:15), Yosry Ahmed wrote:
 > taking in a fullness value (0 to FULLNESS_GROUPS-1), and the latter an
 > enum. WDYT?
 
-You don't like them enums ;) Yeah, this probably can work. I'll take a
-look for v2.
+Wouldn't this be more code to review, maintain though? I mean,
+what do we gain with this - fewer values in enum?
