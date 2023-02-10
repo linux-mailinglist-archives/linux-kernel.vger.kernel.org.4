@@ -2,102 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89000691E28
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C9D691E2C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:26:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232282AbjBJL0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 06:26:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
+        id S232102AbjBJL0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 06:26:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjBJL0N (ORCPT
+        with ESMTP id S231781AbjBJL0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 06:26:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE2D6C7E7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 03:26:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85AA461D94
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:26:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76DFDC4339E;
-        Fri, 10 Feb 2023 11:26:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676028369;
-        bh=AQlWuKp6toHoLgza03+Gx7b3g0pV0/0mKTYxTl8YFhM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b+mP8HkhbtmhF5s08T2hM30orJorut8sLG55i29/duuhac3y/PqtUDgRC9Ywfu5sD
-         R+jYqoLyGTY02GmuTgUQqx1H0QUaugGMclQGyHEgEYJhbBz1EEo6EZW5oPEq1FSz8m
-         Ru0DRW/6FjdmRtjAO9ZfTDv017mN4kuIACrhqLgk=
-Date:   Fri, 10 Feb 2023 12:26:06 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Anton Gusev <aagusev@ispras.ru>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH] staging/wlan-ng: Check hfa384x_dowmem result in
- hfa384x_drvr_flashdl_write
-Message-ID: <Y+YpzpZ7SXOp2Neu@kroah.com>
-References: <20230209161836.29991-1-aagusev@ispras.ru>
+        Fri, 10 Feb 2023 06:26:52 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BC9E046;
+        Fri, 10 Feb 2023 03:26:50 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31ABG5Pi026504;
+        Fri, 10 Feb 2023 11:26:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=PDlk0D7jtHg5XdCCmFXYh2WXyS9oePq9MJwop7nyH8E=;
+ b=Dw+0IO2Wj3WebNM2P3EybMOhwgqEqxww5npD6gI9tWSt+2SY4vXuXr8FJ6/+LsTys6NY
+ 6IoMOZ1g+wdzZnjP29hY4Agcr/8+Q1ADiUJuyNPrHq0Vg7R4g96ZcELlhU+CgaLNonbu
+ IMawj03koPPHSL+4SCUkvpBtLzDnFd9H9k2jsITbflKOrMFj/rlmxWztt/w3poc10dVF
+ Vdur3Z6UPDbbKY1gyOkt7rIW1mg9jaEJHqxPjy7zO68b2Okn9j8+lLFA0Bz47dEPIaS5
+ BII4/Fc580tZU15egAl4qCadjpW0Fi1YZO+lr+uch72avaMQP/zrUbJ9m3p8CSqobGvN Bw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnmw707vk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Feb 2023 11:26:40 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31ABKe6b011502;
+        Fri, 10 Feb 2023 11:26:40 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnmw707us-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Feb 2023 11:26:40 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31A6KK1E021016;
+        Fri, 10 Feb 2023 11:26:38 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3nhemfqe0p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Feb 2023 11:26:38 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31ABQZZe46006614
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Feb 2023 11:26:35 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CAC1720040;
+        Fri, 10 Feb 2023 11:26:35 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 728752004B;
+        Fri, 10 Feb 2023 11:26:33 +0000 (GMT)
+Received: from [9.109.198.193] (unknown [9.109.198.193])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 10 Feb 2023 11:26:33 +0000 (GMT)
+Message-ID: <c6349040-17ad-6066-0f8a-8adeb9c7b48d@linux.ibm.com>
+Date:   Fri, 10 Feb 2023 16:56:31 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH AUTOSEL 6.1 18/38] powerpc/kvm: Fix unannotated
+ intra-function call warning
+Content-Language: en-US
+To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>, pbonzini@redhat.com,
+        seanjc@google.com, npiggin@gmail.com,
+        linuxppc-dev@lists.ozlabs.org,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+References: <20230209111459.1891941-1-sashal@kernel.org>
+ <20230209111459.1891941-18-sashal@kernel.org>
+From:   Sathvika Vasireddy <sv@linux.ibm.com>
+In-Reply-To: <20230209111459.1891941-18-sashal@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: e7Fi0IJtnkUsmDtiZRfCjIT8jVXwAPrS
+X-Proofpoint-GUID: Nf9ZfHZLoL5hRe2ZmwEMvkHZ4HvWhx8g
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230209161836.29991-1-aagusev@ispras.ru>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-10_06,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ phishscore=0 mlxlogscore=999 suspectscore=0 priorityscore=1501 bulkscore=0
+ spamscore=0 lowpriorityscore=0 clxscore=1031 impostorscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302100093
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 07:18:36PM +0300, Anton Gusev wrote:
-> In hfa384x_drvr_flashdl_write, hfa384x_dowmem is called in a cycle
-> without checking the result. Ignoring an error there may lead to an
-> incorrect flash download buffer value during the consequent write.
+Hi Sasha,
 
-Did you reproduce this on a running system?
-
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-
-How was this tested?  If not tested you HAVE TO SAY SO!  Especially when
-dealing with random tools that we know nothing about.
-
-> 
-> Signed-off-by: Anton Gusev <aagusev@ispras.ru>
+On 09/02/23 16:44, Sasha Levin wrote:
+> From: Sathvika Vasireddy <sv@linux.ibm.com>
+>
+> [ Upstream commit fe6de81b610e5d0b9d2231acff2de74a35482e7d ]
+>
+> objtool throws the following warning:
+>    arch/powerpc/kvm/booke.o: warning: objtool: kvmppc_fill_pt_regs+0x30:
+>    unannotated intra-function call
+>
+> Fix the warning by setting the value of 'nip' using the _THIS_IP_ macro,
+> without using an assembly bl/mflr sequence to save the instruction
+> pointer.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Suggested-by: Michael Ellerman <mpe@ellerman.id.au>
+> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
+> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> Link: https://lore.kernel.org/r/20230128124158.1066251-1-sv@linux.ibm.com
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
->  drivers/staging/wlan-ng/hfa384x_usb.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/staging/wlan-ng/hfa384x_usb.c b/drivers/staging/wlan-ng/hfa384x_usb.c
-> index c7cd54171d99..baac5c02f904 100644
-> --- a/drivers/staging/wlan-ng/hfa384x_usb.c
-> +++ b/drivers/staging/wlan-ng/hfa384x_usb.c
-> @@ -1880,6 +1880,12 @@ int hfa384x_drvr_flashdl_write(struct hfa384x *hw, u32 daddr,
->  						writepage,
->  						writeoffset,
->  						writebuf, writelen);
-> +			if (result) {
-> +				netdev_err(hw->wlandev->netdev,
-> +					   "dowmem(page=%x,offset=%x,data=%p,len=%d) failed, result=%d. Aborting d/l\n",
-> +					   writepage, writeoffset, writebuf, writelen, result);
-> +				return result;
-> +			}
->  		}
->  
->  		/* set the download 'write flash' mode */
-> -- 
-> 2.39.1
-> 
-> 
+>   arch/powerpc/kvm/booke.c | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/powerpc/kvm/booke.c b/arch/powerpc/kvm/booke.c
+> index 7b4920e9fd263..3852209989f04 100644
+> --- a/arch/powerpc/kvm/booke.c
+> +++ b/arch/powerpc/kvm/booke.c
+> @@ -912,16 +912,15 @@ static int kvmppc_handle_debug(struct kvm_vcpu *vcpu)
+>   
+>   static void kvmppc_fill_pt_regs(struct pt_regs *regs)
+>   {
+> -	ulong r1, ip, msr, lr;
+> +	ulong r1, msr, lr;
+>   
+>   	asm("mr %0, 1" : "=r"(r1));
+>   	asm("mflr %0" : "=r"(lr));
+>   	asm("mfmsr %0" : "=r"(msr));
+> -	asm("bl 1f; 1: mflr %0" : "=r"(ip));
+>   
+>   	memset(regs, 0, sizeof(*regs));
+>   	regs->gpr[1] = r1;
+> -	regs->nip = ip;
+> +	regs->nip = _THIS_IP_;
+>   	regs->msr = msr;
+>   	regs->link = lr;
+>   }
 
-Please fix up your tool, this patch does not follow the pattern of the
-rest of the "exit on error" paths in this function so of course I'm not
-going to accept this.
+Please drop this patch because objtool enablement patches for powerpc 
+are not a part of kernel v6.1
 
-At this point, it really really feels like something needs to change
-with your submissions, they are not working well :(
 
-{sigh}
+Thanks,
+Sathvika
 
-greg k-h
