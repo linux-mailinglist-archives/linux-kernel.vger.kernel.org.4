@@ -2,89 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C47692503
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:07:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7603692505
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232724AbjBJSHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 13:07:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34944 "EHLO
+        id S232740AbjBJSHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 13:07:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232716AbjBJSG6 (ORCPT
+        with ESMTP id S232716AbjBJSHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 13:06:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0F05B776
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:06:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67ED3B824DD
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 18:06:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B895C4339B;
-        Fri, 10 Feb 2023 18:06:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676052414;
-        bh=QbXIEweKeedyn7oh9MOgX9ZMqy1sYkxDXvcpRLSGvK4=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=VUOtbKR5ROuzUsdv007adndiFf9GZRMUj1/W4To1P6Z72afLPDibrbE/HaCuU8Kxg
-         BK07be9d01kE05csE5GiauqflM/13KJE0rZhIg7QgLvpTXWu6pIAo0EFNGkuFIsj6N
-         BXvVNHwIskm7XrMuIOztpA/r9Hbhl/h2l3sSug2BqIpt+ya1cpD+7BlzWILppembBA
-         LlyWAUrLW+OwtEzPpeaCfQt/O4IUlsj2NnYfWE/cuNDDpE89LxTCqeRrM7UauVja0G
-         zmQ/c75vh0FTVvjVSpAWX8nnl5BxMjDwi6dE4etKwOmsnlps1sO41XKqZrrM2xYB5C
-         kzh3ohQatOo+A==
-From:   Mark Brown <broonie@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Naresh Solanki <Naresh.Solanki@9elements.com>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230210163225.1208035-1-Naresh.Solanki@9elements.com>
-References: <20230210163225.1208035-1-Naresh.Solanki@9elements.com>
-Subject: Re: [PATCH] regulator: max597x: Remove unused variable
-Message-Id: <167605241295.676115.12744943779625897241.b4-ty@kernel.org>
-Date:   Fri, 10 Feb 2023 18:06:52 +0000
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+        Fri, 10 Feb 2023 13:07:05 -0500
+Received: from mail-pj1-x1064.google.com (mail-pj1-x1064.google.com [IPv6:2607:f8b0:4864:20::1064])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A677CC82
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:07:04 -0800 (PST)
+Received: by mail-pj1-x1064.google.com with SMTP id d2so5951663pjd.5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:07:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:date:message-id:dkim-signature
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jwk0i+taCoZmO5hqTQwks2ZG+Yy0hvRchzSakw9yBgY=;
+        b=jV0brZTdzvDmrhUbEtoY59/sWYvBuBeyJs3Lsi+9aLyVeAa0WEM6cN3nl0D98LWSex
+         3ugMS9k0j5p3MVzXKPZyn2Dwduu/5xg9fZqlgTtMwuDyLQcbiFUgg+x/rBnTFaIlu6Eu
+         ZwKWPXHw7f4R/vTbjk1csjVXms+f1PFzK8vgQksfKan3ChKf4m+rZlVk02p9Wiv+mQvv
+         e7yjQIpSFXIxjkL0mluPYqNUBj47Hi9Jkpc59W1gqR4sJk/NQm78iQeH52vqLs+00l0G
+         PjmUPjx1lipQG+Xw62OYbOVu3tLLxzczbs8mFLXpOHgmNiTBiMr6YkcjqTyPrywej9gY
+         Rrsg==
+X-Gm-Message-State: AO0yUKWQtIm+CDsZ7YfuGlJHmjBzGSrTUCJA8wxWrJWrWVzeoFlotSgT
+        T7NVMWn2Zlz0AZBMhWAyjE5phBWKgNjlfzBMNRVkVZqIeyNF
+X-Google-Smtp-Source: AK7set8cose0trt9MNoZfoMLGULHwP5M+SwqmhBXnbjaCwSsuEajTvX9YAOH1Ehxxbh1O3YTnSFlDJru5y2f
+X-Received: by 2002:a17:903:2291:b0:199:1458:6c68 with SMTP id b17-20020a170903229100b0019914586c68mr17817382plh.57.1676052423456;
+        Fri, 10 Feb 2023 10:07:03 -0800 (PST)
+Received: from smtp.aristanetworks.com ([74.123.28.25])
+        by smtp-relay.gmail.com with ESMTPS id a3-20020a170902ecc300b0018930cd8f91sm268584plh.144.2023.02.10.10.07.03
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 10 Feb 2023 10:07:03 -0800 (PST)
+X-Relaying-Domain: arista.com
+Received: from [10.95.72.106] (unknown [10.95.72.106])
+        by smtp.aristanetworks.com (Postfix) with ESMTP id 89E7D416E40;
+        Fri, 10 Feb 2023 10:07:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arista.com;
+        s=Arista-A; t=1676052422;
+        bh=Jwk0i+taCoZmO5hqTQwks2ZG+Yy0hvRchzSakw9yBgY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GcRY66c7HyZXSFGqGuaiXexyp2Spvq7gWF5Pdg3lknPD2or1tcjy4ziHkQNh523DV
+         8LcRJWN0sjj1iYLOA/+hpbXJsVOGGhNkWT9SOeKinvdVkzVpf7bgiEOFJuMbAdq1vj
+         ApOQ4G04xI2a3AFTAlDzfaulOUsmN+Ou/4qz/+qxkRXTiqZhzKgke+HUN+wmxLjX/Z
+         19FoZb46yqPOxICIoOFBa8yXOfQBpAouiRr4J0y3FDmeuPnkVIeGcXTOGD3XvUKCoQ
+         Y7nEKLhN1MIJJpumw7n3Rox/sH5IwsG2PE4fohfLF80l7gd8KXTAKgnuucZmPv4KMT
+         A6X1feWq8Zq3w==
+Message-ID: <865dfe9e-ee3d-1067-625e-2d93bf96da4b@arista.com>
+Date:   Fri, 10 Feb 2023 10:07:02 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] tpm: add vendor flag to command code validation
+Content-Language: en-CA
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        jgg@ziepe.ca, peterhuewe@gmx.de
+References: <20230208195836.30175-1-julien@arista.com>
+ <Y+WUqcNTc8t0KIyD@kernel.org>
+From:   Julien Gomes <julien@arista.com>
+In-Reply-To: <Y+WUqcNTc8t0KIyD@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Feb 2023 17:32:25 +0100, Naresh Solanki wrote:
-> max597x_regmap_config isn't used & hence remove the same.
+On 2023-02-09 4:49 p.m., Jarkko Sakkinen wrote:
+> On Wed, Feb 08, 2023 at 11:58:36AM -0800, Julien Gomes wrote:
+>> Some TPM 2.0 devices have support for additional commands which are not
+>> part of the TPM 2.0 specifications.
+>> These commands are identified with bit 29 of the 32 bits command codes.
+>> Contrarily to other fields of the TPMA_CC spec structure used to list
+>> available commands, the Vendor flag also has to be present in the
+>> command code itself (TPM_CC) when called.
+>>
+>> Add this flag to tpm_find_cc() mask to prevent blocking vendor command
+>> codes that can actually be supported by the underlying TPM device.
+>>
+>> Signed-off-by: Julien Gomes <julien@arista.com>
+>> ---
+>>   drivers/char/tpm/tpm2-cmd.c | 4 +++-
+>>   include/linux/tpm.h         | 1 +
+>>   2 files changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+>> index 65d03867e114..93545be190a5 100644
+>> --- a/drivers/char/tpm/tpm2-cmd.c
+>> +++ b/drivers/char/tpm/tpm2-cmd.c
+>> @@ -777,10 +777,12 @@ int tpm2_auto_startup(struct tpm_chip *chip)
+>>   
+>>   int tpm2_find_cc(struct tpm_chip *chip, u32 cc)
+>>   {
+>> +	u32 cc_mask;
+>>   	int i;
+>>   
+>> +	cc_mask = 1 << TPM2_CC_ATTR_VENDOR | GENMASK(15, 0);
+>>   	for (i = 0; i < chip->nr_commands; i++)
+>> -		if (cc == (chip->cc_attrs_tbl[i] & GENMASK(15, 0)))
+>> +		if (cc == (chip->cc_attrs_tbl[i] & cc_mask))
+>>   			return i;
+>>   
+>>   	return -1;
+>> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+>> index dfeb25a0362d..4dc97b9f65fb 100644
+>> --- a/include/linux/tpm.h
+>> +++ b/include/linux/tpm.h
+>> @@ -265,6 +265,7 @@ enum tpm2_startup_types {
+>>   enum tpm2_cc_attrs {
+>>   	TPM2_CC_ATTR_CHANDLES	= 25,
+>>   	TPM2_CC_ATTR_RHANDLE	= 28,
+>> +	TPM2_CC_ATTR_VENDOR	= 29,
+>>   };
+>>   
+>>   #define TPM_VID_INTEL    0x8086
+>> -- 
+>> 2.39.1
+>>
 > 
+> Just checking: did you run testing/selftests/tpm2?
 > 
+> BR, Jarkko
 
-Applied to
+I didn't know about these, good call.
+Just ran the three test suites on a vm with a swtpm, as I don't have a
+physical box with TPM 2.0 able to run latest kernels handy, all passed.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
-
-Thanks!
-
-[1/1] regulator: max597x: Remove unused variable
-      commit: 6caacd82f09c183a91951776cd8d326e46ef84b4
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+Julien Gomes
 
