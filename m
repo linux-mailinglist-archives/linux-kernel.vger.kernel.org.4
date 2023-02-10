@@ -2,192 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53668691EC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 13:01:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D6EC691EC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 13:01:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbjBJMBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 07:01:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
+        id S232043AbjBJMB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 07:01:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231905AbjBJMB1 (ORCPT
+        with ESMTP id S231673AbjBJMB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Feb 2023 07:01:27 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DA134C2C
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 04:01:25 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id r18so3641527wmq.5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 04:01:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QmYEIB8KrKW3cTGNucQLIpq5xEhcRy52ps+CHHF2rNU=;
-        b=mS7c+3f585HLLEal9khepFx94ipTA4PXqk1U7OFFknmgbTjOMXuIRX4fDGlifyRmmK
-         vtdaw1MuQV5pUUimF5LlQ+uguZjxILxV+ICSWprHYqZAYrpeM3Lz+C1t/Nv8b+1r9inY
-         9jtVvWfRS0KgvGyEgmOV9cai4kwJGO1PRk16PPdfOObGiVIcTIH6PgShE0yuUAJpecLQ
-         qSip6oBXx/2G1+YRtZAvjP8VMkPrSR3SvxENacoHMqfJDxwCeAmwkZ80WYbieRvG/ifs
-         iD5niK3IxeDeMb+5eq18lRCBy459BF+NjnBhtnmugYgaNAHcup+EuoZWz9AL6wfwge47
-         6vzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QmYEIB8KrKW3cTGNucQLIpq5xEhcRy52ps+CHHF2rNU=;
-        b=SY24lBN70lMjPaV4B0GLPK8G3Dj1EOBvwiYytRNbhDl2GuMuaEcB2JTWCP1biT8OSh
-         waomYxH7g875foQr5okcFbH0n20oSyCZab9UgXH0xMDsfwFmWzf7sWTr1behxb/r2Imu
-         PBzbKnBH83Locv5VoGsc1XmauALbAz59CyfHQwfwTF3HkX76Ue1L99186OsuHlag5jq2
-         A8pP48EDPamNvs7D/k7FVHjKEvuxuU63Lbj0GGGsD580fbkQqNZ57bPHZ/APcc0p1b1a
-         C6zAiRlG4jTQPenjAqZccW0hOQ/9zXNszG7ORvLIEFfzLbTS6l39bhMH+EACycl7cah0
-         RpUQ==
-X-Gm-Message-State: AO0yUKUq9fm5LdesPCalaXkdndJSXliWe8CEofxy/O0HDgPv3MboY5SV
-        mcQ5pD/up7ixvnE9fUXT2YXQxw==
-X-Google-Smtp-Source: AK7set/ez76U2EuZthXspsPO3fkp0PVI0WuDaCS5K7oSHsbZtQRPUPIvrpCDrvIZU8lJYfhGbFSs3g==
-X-Received: by 2002:a05:600c:4a8a:b0:3de:d9f:3025 with SMTP id b10-20020a05600c4a8a00b003de0d9f3025mr12984366wmp.0.1676030484050;
-        Fri, 10 Feb 2023 04:01:24 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id r18-20020a05600c459200b003db03725e86sm5538429wmo.8.2023.02.10.04.01.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 04:01:23 -0800 (PST)
-Message-ID: <f894aa27-0f14-5bc9-2eae-114fae7ef3b0@linaro.org>
-Date:   Fri, 10 Feb 2023 13:01:01 +0100
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 771FF34035
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 04:01:26 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DB29166020D7;
+        Fri, 10 Feb 2023 12:01:24 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676030485;
+        bh=pZ9qevw7fCReyRLFCyksKqNzLLJU+iQDcQl8RJbAtYk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=IhcKxm3xRqksDbWYIraRfKY7UuJ6eeQ8a7ayIZqbiTGlEo/d2TpZeljFwOmGMasE3
+         1lhEZo++OrjdEMcLcPxZL3rLCTwhJKoonmP+yLhRKaMe9go7+RRZw0lKOmq/IJ2CSV
+         hOGsBsktArV6O80GQmmtqQnrjA6qAApJfnooYh/5jgWweKwI06u/e3pwgx7pxZwZNf
+         H8kONoNgyjm9oRiueSGwPrkew8dgI4jUcKsr+O4IO/SjgaQglyF3yorrmoUHOoRB1f
+         WtTdJVMKylfHK8QLn9b0kBVJ6bV0NwFGEEGFOHR9ANyxdsssy1AvrqMvtX0pHda5N3
+         berTf+B7Bik3g==
+Message-ID: <12ff7576-76d3-8cb6-4c8f-6c9417ac28c2@collabora.com>
+Date:   Fri, 10 Feb 2023 13:01:22 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH net-next v3 4/6] dt-bindings: net: renesas,rzn1-gmac:
- Document RZ/N1 GMAC support
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] soc: mediatek: mtk-svs: delete node name check
 Content-Language: en-US
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Wong Vee Khee <veekhee@apple.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Revanth Kumar Uppala <ruppala@nvidia.com>,
-        Tan Tee Min <tee.min.tan@linux.intel.com>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?Q?Miqu=c3=a8l_Raynal?= <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
-        Jon Hunter <jonathanh@nvidia.com>, netdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-References: <20230209151632.275883-1-clement.leger@bootlin.com>
- <20230209151632.275883-5-clement.leger@bootlin.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230209151632.275883-5-clement.leger@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+To:     matthias.bgg@kernel.org, matthias.bgg@gmail.com,
+        roger.lu@mediatek.com
+Cc:     nfraprado@collabora.com, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230209162403.21113-1-matthias.bgg@kernel.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230209162403.21113-1-matthias.bgg@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/02/2023 16:16, Clément Léger wrote:
-> Add "renesas,rzn1-gmac" binding documentation which is compatible with
-> "snps,dwmac" compatible driver but uses a custom PCS to communicate
-> with the phy.
+Il 09/02/23 17:24, matthias.bgg@kernel.org ha scritto:
+> From: Matthias Brugger <matthias.bgg@gmail.com>
 > 
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-> ---
->  .../bindings/net/renesas,rzn1-gmac.yaml       | 67 +++++++++++++++++++
->  1 file changed, 67 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/renesas,rzn1-gmac.yaml
+> The function  svs_add_device_link is called only internally from the SoC
+> specific probe functions. We don't need to check if the node_name is
+> null because that would mean that we have a buggy SoC probe function in
+> the first place.
 > 
-> diff --git a/Documentation/devicetree/bindings/net/renesas,rzn1-gmac.yaml b/Documentation/devicetree/bindings/net/renesas,rzn1-gmac.yaml
-> new file mode 100644
-> index 000000000000..029ce758a29c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/renesas,rzn1-gmac.yaml
-> @@ -0,0 +1,67 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/renesas,rzn1-gmac.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas GMAC
-> +
-> +maintainers:
-> +  - Clément Léger <clement.leger@bootlin.com>
-> +
-> +select:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        enum:
-> +          - renesas,r9a06g032-gmac
-> +          - renesas,rzn1-gmac
-> +  required:
-> +    - compatible
-> +
-> +allOf:
-> +  - $ref: snps,dwmac.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - renesas,r9a06g032-gmac
-> +      - const: renesas,rzn1-gmac
-> +      - const: snps,dwmac
+> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
 
-Thanks, looks good now.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-> +
-> +  pcs-handle:
-> +    description:
-> +      phandle pointing to a PCS sub-node compatible with
-> +      renesas,rzn1-miic.yaml#
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-
-you do not need ref here - it is coming from ethernet-controller.yaml
-via snps,dwmac.yaml. You actually could drop entire property, but it can
-also stay for the description.
-
-> +
-> +required:
-> +  - compatible
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/r9a06g032-sysctrl.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    ethernet@44000000 {
-> +      compatible = "renesas,r9a06g032-gmac", "renesas,rzn1-gmac", "snps,dwmac";
-> +      reg = <0x44000000 0x2000>;
-> +      interrupt-parent = <&gic>;
-> +      interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>,
-> +             <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>,
-
-Please align with previous <
-
-
-Best regards,
-Krzysztof
 
