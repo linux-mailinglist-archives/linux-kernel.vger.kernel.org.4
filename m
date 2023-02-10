@@ -2,60 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6507069238F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40895692392
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232600AbjBJQoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 11:44:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
+        id S232647AbjBJQpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 11:45:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232192AbjBJQoR (ORCPT
+        with ESMTP id S232631AbjBJQo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 11:44:17 -0500
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754AE212A9;
-        Fri, 10 Feb 2023 08:44:16 -0800 (PST)
-Received: by mail-ot1-f45.google.com with SMTP id p24-20020a056830131800b0068d4b30536aso1687563otq.9;
-        Fri, 10 Feb 2023 08:44:16 -0800 (PST)
+        Fri, 10 Feb 2023 11:44:59 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A287F2387B
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:44:58 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id y11so2037784pjc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:44:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NJHZLI3U8xm4BvE76qEZmYthnYLuvPmE/9R6s6JH2WE=;
+        b=PGoM0On23xN1z29b+slMgbz1TJZwnHKNRVJbC7LasGyUh0C3QyF0n0O8XXt+cqNbLc
+         hJ3dGJWA4ApfbIMG8xBX7DW8YIUESz9H2waScJMhWCHXciylEmamqDndyd0hSbz6hTdU
+         kMm+VcXDMiaQTm+JMifWtE5MXsPj5Ri27EdJ62borjbB/5riiRhUb4EHUx3nd08uv0c5
+         GS9S9lEin1mSvQot9SnmuiXPZRyKXxwSE/Xj19CEvgqn7JU0MTQsmjNldmMy7QvC9pnD
+         dNMa4zBYDMdlNaobbmicUzL/3IY2ZE+oOCpQGMg4adbatyHii9R9L7J5XyvREuLaIizs
+         vmhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H1p0XOr+4ghGyvYRD6ntCMDoZebCtt1fvqKIgO3rBgI=;
-        b=o1YwOMP3FYQ317ssGGMJ0vf2/7+FMyh61bushlhROaGckuJW/TZWjHYbU5DDVoiL7s
-         kODrsRli1XiPXpj/YAykJg5PP1f1m+LvyV/ESV25UQrAPHCQpfhqzwVflEkQyzCoZc4u
-         UNsTQ0H2VKKlEPTp0AXFmDTLoETvo89IVbNZ7xgbHL9ubtWEceuQf5xnvfsZ89/dnA0y
-         cS0V6A0+R0aY4FzWDkkx0/ZYleQ82XLjGp2WqDy7YoJNeEqFlNkygkbIhh2Io6s4aSI/
-         +mTVJ/jYKTKGYs1ieSquLsQH3tllYdCwenGOW6gy3MIBl80AkqQmM1IpoW0faPZ+HpRF
-         E1Tw==
-X-Gm-Message-State: AO0yUKXuc1h2hEEw7NlwUEIifg7UdHGUV/milKOjpCJFzKTlih4GVaI+
-        K7ikH80+knWrLPtPZ6nLrH/p12nWkw==
-X-Google-Smtp-Source: AK7set98Wh8wdxKdVz1l88+RQI6D7E1VmuZjsSixf+tLzOvSHhqFNtg3Fdxf1XyxQL2sfRtUMEq51g==
-X-Received: by 2002:a9d:2c5:0:b0:685:e5d3:63c5 with SMTP id 63-20020a9d02c5000000b00685e5d363c5mr9458814otl.12.1676047455679;
-        Fri, 10 Feb 2023 08:44:15 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n14-20020a9d64ce000000b0066b9a6bf3bcsm2156896otl.12.2023.02.10.08.44.15
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NJHZLI3U8xm4BvE76qEZmYthnYLuvPmE/9R6s6JH2WE=;
+        b=Gv0HXhQmbFwKKe2Wjf0154cSSVRZKBRfU6rQVQK2NND5vidPC8VaEY4HTYbDHcjqJR
+         G5sedkr4QPuPNWeuiEvoZN2Q0cge85QEKhwvsdO6rVgz/P9D7ZZyauklK7+7Wy94TH/7
+         mJQ6cbwVAcy3VM7qPGquJOIfZidGDNIX72r8+diOaRUkCYD3ZUPwQy5B4gbL7dSwMo76
+         695ya1/dloNAVnSaX0GRJnbkXL2H3i9mLy7Xt9+P0zI7cweZfnjdOKsVnc2UbhdT11XS
+         NXwTikFDgM22tNU7CG+6TeZe2IhxWT7V940/79uNL7jwQNkBbB9GGI1hhx4NI47jPKAB
+         jIjg==
+X-Gm-Message-State: AO0yUKV8bABVe/Tn5aouJGmGuKmwl4VYqHc8OXiFYw8SFOYyyAgNT9yI
+        uP2xQPbNZNrAKoFhstBQ0k3YLw==
+X-Google-Smtp-Source: AK7set8EuUMVEwEQRgYZK/t2nvIEb1AnNNve/LFQPz8u9HOOPOjZgVuNG4+d/sNDJYJaKvLnXUtKGw==
+X-Received: by 2002:a17:902:e551:b0:19a:6cd2:a658 with SMTP id n17-20020a170902e55100b0019a6cd2a658mr200687plf.7.1676047497966;
+        Fri, 10 Feb 2023 08:44:57 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id i21-20020aa78d95000000b0058119caa82csm3489689pfr.205.2023.02.10.08.44.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 08:44:15 -0800 (PST)
-Received: (nullmailer pid 2687907 invoked by uid 1000);
-        Fri, 10 Feb 2023 16:44:14 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Liu Peibao <liupeibao@loongson.cn>,
-        Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] PCI: Honor firmware's device disabled status
-Date:   Fri, 10 Feb 2023 10:43:51 -0600
-Message-Id: <20230210164351.2687475-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.1
+        Fri, 10 Feb 2023 08:44:57 -0800 (PST)
+Date:   Fri, 10 Feb 2023 16:44:53 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Santosh Shukla <santosh.shukla@amd.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        Sandipan Das <sandipan.das@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
+        Jing Liu <jing2.liu@intel.com>,
+        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v2 10/11] KVM: SVM: implement support for vNMI
+Message-ID: <Y+Z0hUGLkwADyTNu@google.com>
+References: <20221129193717.513824-1-mlevitsk@redhat.com>
+ <20221129193717.513824-11-mlevitsk@redhat.com>
+ <Y9mwz/G6+G8NSX3+@google.com>
+ <439a8cfc-fe2d-436d-2ea2-b795eb983b9a@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <439a8cfc-fe2d-436d-2ea2-b795eb983b9a@amd.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,36 +90,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a device has a firmware node (DT/ACPI), and the device is marked
-disabled, that is currently ignored. Add a check for this condition
-and bail out creating the pci_dev.
+On Fri, Feb 10, 2023, Santosh Shukla wrote:
+> On 2/1/2023 5:52 AM, Sean Christopherson wrote:
+> So you mean.. In vNMI mode, KVM should never need to request NMI window and eventually
+> it reaches to NMI window then WARN_ON and cont.. to single step... so modified code change
+> may look something like below:
+> 
+> static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
+> {
+>         struct vcpu_svm *svm = to_svm(vcpu);
+> 
+>         /*
+>          * With vNMI we should never need an NMI window.
+>          * and if we reach here then better WARN and continue to single step.
+>          */
+>         WARN_ON_ONCE(is_vnmi_enabled(svm));
+> 
+>         if (svm_get_nmi_mask(vcpu) && !svm->awaiting_iret_completion)
+>                 return; /* IRET will cause a vm exit */
+> 
+>         if (!gif_set(svm)) {
+>                 if (vgif)
+>                         svm_set_intercept(svm, INTERCEPT_STGI);
+>                 return; /* STGI will cause a vm exit */
+>         }
+> 
+>         /*
+>          * Something prevents NMI from been injected. Single step over possible
+>          * problem (IRET or exception injection or interrupt shadow)
+>          */
+> 
+>         svm->nmi_singlestep_guest_rflags = svm_get_rflags(vcpu);
+>         svm->vmcb->save.rflags |= (X86_EFLAGS_TF | X86_EFLAGS_RF);
+>         svm->nmi_singlestep = true;
+> }
+> 
+> Does that make sense?
 
-This assumes the config space for the device can still be accessed
-because they already have by this point in order to identify the device.
-
-Cc: Liu Peibao <liupeibao@loongson.cn>
-Cc: Binbin Zhou <zhoubinbin@loongson.cn>
-Cc: Huacai Chen <chenhuacai@loongson.cn>
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-Please test if this works for Loongson.
----
- drivers/pci/probe.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index 1779582fb500..b1d80c1d7a69 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -1841,6 +1841,8 @@ int pci_setup_device(struct pci_dev *dev)
- 
- 	pci_set_of_node(dev);
- 	pci_set_acpi_fwnode(dev);
-+	if (dev->dev.fwnode && !fwnode_device_is_available(dev->dev.fwnode))
-+		return -ENODEV;
- 
- 	pci_dev_assign_slot(dev);
- 
--- 
-2.39.1
-
+Yep.  Though please avoid "we" and other pronouns in changelogs and comments,
+and wrap as close to the boundary as possible.
