@@ -2,112 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8C3691DDF
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:13:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4B7691DD1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:13:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbjBJLNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 06:13:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
+        id S231660AbjBJLNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 06:13:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232043AbjBJLN1 (ORCPT
+        with ESMTP id S231500AbjBJLNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 06:13:27 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD20C72DEE;
-        Fri, 10 Feb 2023 03:12:56 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id g18so5265886qtb.6;
-        Fri, 10 Feb 2023 03:12:56 -0800 (PST)
+        Fri, 10 Feb 2023 06:13:06 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218E672DCA
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 03:12:26 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id l37-20020a05600c1d2500b003dfe46a9801so3837023wms.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 03:12:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hyp8ZmbrcaG2ABsoThk0gEpJR9SiIpSS9II2WcwajGc=;
-        b=f8QxVlEI4ckz8hH+Kkatx5E3WtW9JYGgmYgFj1GWpc1YkcBkPHER7me0S/MTAYqSFM
-         ixsYKKg7nX4YBuQF9yDfrwZ6gEgxyu3y4vKYfwBGWBioawJqhfaS4bkyoMt7bN0rKF0A
-         rxL4KAIRvRLe8iWu2HiJJt1TohtwJu8uM3BUoNuY2LYRpisj+iRH8sVS+3XzB94Tv2D+
-         mIhIvCt2Lc1nbE1IYmZeFLGt446ZIDhNPUMojoSWYFMQBNAr0MQ15j6htFehCOn89fFy
-         TNhl7H2QhkBA0G2ibkYjsBL2KN+cJPgPpJj84/Caa0VFD91yDwcMnClRHT5aEv4BluC4
-         NdtQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lLMV0ncNMrg+f3xjJTtqNXJ3S4bBrDbONW259RzPBmM=;
+        b=Vjl8AteQYrT0PDERakIkSf0gc3kzBhuX2I8XN/z+mrcuAIbJ6zRLHwvfAZUCRrXvBH
+         B6gLztzfSuqg7VtfH0UHOeDNcKrVF0isBpXVuBwatsHz8E7BXF/vXPPKpcY4uVJmrccn
+         jkubfOlYq+vrVatrsO+QsObw+KKKP9YirrjATORvNihyAeQOqwdoTcvWFsfPas0ODU8+
+         VMdyWazMlLVm9Ow23YjgYaOJxAAiQHyYNRm2vVjCQu8MPZ9nagnz6tuIvRGJGOwe1F51
+         7fp/mLYvgtk362jA8d68S+nn7NsrKGi1H5MAyR7G7N/6QnoHqCR7gPQ96fvUuEWV2eed
+         zrPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hyp8ZmbrcaG2ABsoThk0gEpJR9SiIpSS9II2WcwajGc=;
-        b=RQr6eJ/2TBi9lP+Fu5h4euW8GwttFC3KvxD7pAZtDZ1pi99NucFNWTLY4V2tIBTau0
-         jEKAF5UkEjUh+Wd6eFUm9hsmoiGAnqy37AHeHLu93kNSL+pdXUyEqQS6nvJjhAdv+KO6
-         /wWv3h4u5UHQ3ujVukC99YYTXTslxUg5lhgUXeVU1VHnpWgtF1o9awSk5KtmvPYlPFOq
-         XoQ+vwE1nTmW0YSbjANUrtAlY4HWBQehhMpcXxj7UJmAZg7rHDOcv/aMj+4qpmwsozQR
-         peqjdK2LN7e7ylKud8aMICHRthsj2n/KQIKJgIn2W51XasTJSrZm4iPPwM8oGkJ9wIHR
-         HmsQ==
-X-Gm-Message-State: AO0yUKWV/u4RuAQABmjLk3lugqoiW4YrpgHBOGOBDBGj45AJOuRO7/dv
-        AAvyix16HWe27NMrt5KRLGkr5cHOdW1Kd4WZQH8=
-X-Google-Smtp-Source: AK7set/P6I/oQ7XCsnc8nl7vtWaYchdN/on5pNFGQ+JfZpvZcD5o+v20X+ZhePgHGyOUBRrrQpJpsE/fYjKyo8Y0XqQ=
-X-Received: by 2002:a05:622a:1456:b0:3b9:a4ee:be1c with SMTP id
- v22-20020a05622a145600b003b9a4eebe1cmr2236798qtx.391.1676027562850; Fri, 10
- Feb 2023 03:12:42 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lLMV0ncNMrg+f3xjJTtqNXJ3S4bBrDbONW259RzPBmM=;
+        b=xBBqZKOM5NcYwsiyYh5HIEjuoFBnBQP3W97Y11TsR7Xez63+G4mW6+NZh8oLAMcsuA
+         aBtmxZl0Q3ElLrGTvgy8d55YvonfFU4we8dbn2fpXY1qsNWssFle0oSNLFEYFWMQEfjo
+         /er1uU4ujaO+nI1MS7O6CAaSWn0onYYC1HyRvJXMHU2US5vJWCfBMjxvSuABYZD6N9GD
+         z6DOc/LI+vt33HWGjwKawEhGd78E/HfSPU4OLjYtG/gzx81Q1maupL/7oW4NxR8/lUbm
+         h5BZJMcEDOxXvfgZ9dIFgAsvxd64dL8PUy8JIXpnhwRRerg8GDL7/lzbW+7X+7bZJZWZ
+         yqrw==
+X-Gm-Message-State: AO0yUKXXFaWxCi8vJ6/xQ4Tk1tB1qLkSBvWBBxEQE9SfeG8TOjLN2dri
+        GqeIo3am5OyBUAVfZFBYSwSZuA==
+X-Google-Smtp-Source: AK7set+dZbv/MVOBEnEyByUWoFxBo0mZdtkh1BPQhH0fmQdg3RNpSeSLHcaf2uo8PzHzQC9CQsoEOA==
+X-Received: by 2002:a05:600c:a292:b0:3df:ee44:e45a with SMTP id hu18-20020a05600ca29200b003dfee44e45amr12801996wmb.15.1676027539910;
+        Fri, 10 Feb 2023 03:12:19 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id g9-20020a05600c308900b003dc3f195abesm4544610wmn.39.2023.02.10.03.12.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 03:12:19 -0800 (PST)
+Message-ID: <de4b7af2-8918-6c3a-5fb5-cad6c8980d45@linaro.org>
+Date:   Fri, 10 Feb 2023 12:12:17 +0100
 MIME-Version: 1.0
-References: <E5D8BEBA-3C5B-460F-BD2C-39470A793CC3@live.com>
- <CAHp75VcPPDTmpx9jpu3ZoaVH_xBgtaEbDQcJJdqcaXi1J+_q0A@mail.gmail.com>
- <57D52CFB-228D-4071-94CB-D32883BF872A@live.com> <20230210214737.2ef942c6@redecorated-mbp>
-In-Reply-To: <20230210214737.2ef942c6@redecorated-mbp>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 10 Feb 2023 13:12:06 +0200
-Message-ID: <CAHp75VcccQZb+HadJunXmtCR0j--rnkbe-_FW3DHeU+H5F92mg@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Touch Bar and Keyboard backlight driver for Intel Macs
-To:     Orlando Chamberlain <orlandoch.dev@gmail.com>
-Cc:     Aditya Garg <gargaditya08@live.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        "jkosina@suse.cz" <jkosina@suse.cz>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        Andy Shevchenko <andy@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "ronald@innovation.ch" <ronald@innovation.ch>,
-        "kekrby@gmail.com" <kekrby@gmail.com>,
-        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v5 3/8] arm64: dts: qcom: sc7280: Add LPASS PIL node
+Content-Language: en-US
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
+        broonie@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_rohkumar@quicinc.com, srinivas.kandagatla@linaro.org,
+        dianders@chromium.org, swboyd@chromium.org, judyhsiao@chromium.org,
+        alsa-devel@alsa-project.org, quic_rjendra@quicinc.com,
+        konrad.dybcio@somainline.org, mka@chromium.org,
+        quic_mohs@quicinc.com
+References: <1675700201-12890-1-git-send-email-quic_srivasam@quicinc.com>
+ <1675700201-12890-4-git-send-email-quic_srivasam@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1675700201-12890-4-git-send-email-quic_srivasam@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 12:47 PM Orlando Chamberlain
-<orlandoch.dev@gmail.com> wrote:
-> On Fri, 10 Feb 2023 10:41:07 +0000
-> Aditya Garg <gargaditya08@live.com> wrote:
+On 06/02/2023 17:16, Srinivasa Rao Mandadapu wrote:
+> Add LPASS PIL node for sc7280 based audioreach platforms.
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+> ---
+>  .../qcom/sc7280-herobrine-audioreach-wcd9385.dtsi  |  4 +
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi               | 93 ++++++++++++++++++++++
+>  2 files changed, 97 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
+> index 1810a36..5e99f49 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
+> @@ -107,3 +107,7 @@
+>  		};
+>  	};
+>  };
+> +
+> +&remoteproc_adsp {
 
-...
+Are you sure this is ordered by name?
 
-> > > Quick observation. Do you miss the Co-developed-by: tags in the
-> > > patches?
-> >
-> > Most of the changes are minor in the 1st and 2nd patch, we haven't
-> > changed most of the code. The changes were written as per the
-> > documentation given in
-> > https://www.kernel.org/doc/html/latest/maintainer/modifying-patches.html
-> >
-> > Do you think a Co-developed-by is still required?
-> >
-> > The third patch was actually written by 2 people, so there is a
-> > Co-developed-by there.
-> >
->
-> To add onto this, for patches 1 and 2, as we haven't been able to
-> contact the original author (Ronald), I think the only ways we are
-> allowed to make changes are either doing them in separate patches, or
-> with the [name <email>: changes] tags. For the latter I thought you had
-> to do a Signed-off-by after it, but given the changes aren't just to
-> make the patch apply on a newer version, do you think the
-> Co-developed-by tag is also needed?
+> +	status = "okay";
+> +};
 
-I'm not insisting, just asking :-) So, if you think it's not needed, fine to me!
+There is lpasscc@3000000 so aren't you now enabling two nodes for the
+same address?
 
--- 
-With Best Regards,
-Andy Shevchenko
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index 6908bca..27ab992 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -8,6 +8,7 @@
+>  #include <dt-bindings/clock/qcom,dispcc-sc7280.h>
+>  #include <dt-bindings/clock/qcom,gcc-sc7280.h>
+>  #include <dt-bindings/clock/qcom,gpucc-sc7280.h>
+> +#include <dt-bindings/clock/qcom,lpass-sc7280.h>
+>  #include <dt-bindings/clock/qcom,lpassaudiocc-sc7280.h>
+>  #include <dt-bindings/clock/qcom,lpasscorecc-sc7280.h>
+>  #include <dt-bindings/clock/qcom,rpmh.h>
+> @@ -21,6 +22,7 @@
+>  #include <dt-bindings/power/qcom-rpmpd.h>
+>  #include <dt-bindings/reset/qcom,sdm845-aoss.h>
+>  #include <dt-bindings/reset/qcom,sdm845-pdc.h>
+> +#include <dt-bindings/soc/qcom,gpr.h>
+>  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
+>  #include <dt-bindings/sound/qcom,lpass.h>
+>  #include <dt-bindings/thermal/thermal.h>
+> @@ -3439,6 +3441,97 @@
+>  			status = "disabled";
+>  		};
+>  
+> +		remoteproc_adsp: remoteproc@3000000 {
+> +			compatible = "qcom,sc7280-adsp-pil";
+> +			reg = <0 0x03000000 0 0x5000>, <0 0x0355b000 0 0x10>;
+> +			reg-names = "qdsp6ss_base", "lpass_efuse";
+
+Does not look like you tested the DTS against bindings. Please run `make
+dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
+for instructions).
+
+You can test against specific schema with DT_SCHEMA_FILES
+
+> +
+> +			interrupts-extended = <&pdc 6 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&adsp_smp2p_in 0 IRQ_TYPE_NONE>,
+> +					      <&adsp_smp2p_in 1 IRQ_TYPE_NONE>,
+> +					      <&adsp_smp2p_in 2 IRQ_TYPE_NONE>,
+> +					      <&adsp_smp2p_in 3 IRQ_TYPE_NONE>,
+> +					      <&adsp_smp2p_in 7 IRQ_TYPE_NONE>;
+> +
+> +			interrupt-names = "wdog", "fatal", "ready",
+> +					  "handover", "stop-ack",
+> +					  "shutdown-ack";
+> +
+> +			qcom,qmp = <&aoss_qmp>;
+> +
+> +			clocks = <&rpmhcc RPMH_CXO_CLK>,
+> +				 <&gcc GCC_CFG_NOC_LPASS_CLK>;
+> +
+> +			clock-names = "xo", "gcc_cfg_noc_lpass";
+> +
+> +			iommus = <&apps_smmu 0x1800 0x0>;
+> +
+> +			power-domains =	<&rpmhpd SC7280_CX>;
+> +			power-domain-names = "cx";
+
+Here as well. Binding says it is LCX domain.
+
+> +
+> +			required-opps = <&rpmhpd_opp_nom>;
+
+This should also fail... please send code for review only if there are
+no warnings.
+
+> +
+> +			resets = <&pdc_reset PDC_AUDIO_SYNC_RESET>,
+> +				 <&aoss_reset AOSS_CC_LPASS_RESTART>;
+> +
+> +			reset-names =  "pdc_sync", "cc_lpass";
+> +			qcom,halt-regs = <&tcsr_1 0x3000 0x5000 0x8000 0x13000>;
+> +
+> +			memory-region = <&adsp_mem>;
+> +
+> +			qcom,smem-states = <&adsp_smp2p_out 0>;
+> +			qcom,smem-state-names = "stop";
+> +
+> +			status = "disabled";
+> +
+> +			glink-edge {
+> +				interrupts-extended = <&ipcc IPCC_CLIENT_LPASS
+> +						       IPCC_MPROC_SIGNAL_GLINK_QMP
+> +						       IRQ_TYPE_EDGE_RISING>;
+> +
+> +				mboxes = <&ipcc IPCC_CLIENT_LPASS
+> +					 IPCC_MPROC_SIGNAL_GLINK_QMP>;
+> +
+> +				label = "lpass";
+> +				qcom,remote-pid = <2>;
+> +
+> +				gpr {
+> +					compatible = "qcom,gpr";
+> +					qcom,glink-channels = "adsp_apps";
+> +					qcom,domain = <GPR_DOMAIN_ID_ADSP>;
+> +					qcom,intents = <512 20>;
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +
+> +					q6apm: service@1 {
+> +						compatible = "qcom,q6apm";
+> +						reg = <GPR_APM_MODULE_IID>;
+> +						#sound-dai-cells = <0>;
+
+That's also wrong and test would point the issue.
+
+
+Best regards,
+Krzysztof
+
