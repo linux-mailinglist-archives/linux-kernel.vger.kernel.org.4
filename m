@@ -2,124 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96533692787
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:58:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BE569278A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:59:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233442AbjBJT6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 14:58:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39498 "EHLO
+        id S233059AbjBJT7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 14:59:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233293AbjBJT6j (ORCPT
+        with ESMTP id S233395AbjBJT7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 14:58:39 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD007D3F3;
-        Fri, 10 Feb 2023 11:58:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676059115; x=1707595115;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=RaSai31/ZxzznTIHdzlNKBGywMqWTjXsH8thm9cfa1I=;
-  b=Koy6RfJ65u+Z4TQbhH6OSf36O7vjbV+f7dJvOerV8yIcVF1seNxB90iB
-   b3k0YlV+P0Ku2zaxPIs+2LY3sUjpxB02jDD3E8pvDw4katoOIAtrgGJmL
-   B/zobczEq+FyUbiaZxwtOVLW+g+JMNLOJ8DE4gNBePE+ZSGcn76UbmS6F
-   g8v5+xmm2BYzdnUIUFHKyAkOCxeYUiMVhwjiZ1H44JVCMekHFec4M62RE
-   wA2gEUz3ZqKBOtcfieQ9OMvwxUYRzjIUwkLpCFuWdA/4ZGQbF/mWCzAv/
-   FJ2p3IBGcCoAdWIURKLoRXNeyxpXkQtD+UtA+voBp5HQuSX8MSZ/xOD2L
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="318532371"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="318532371"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 11:58:34 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="913659098"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="913659098"
-Received: from hyekyung-mobl1.amr.corp.intel.com (HELO [10.209.82.221]) ([10.209.82.221])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 11:58:32 -0800
-Message-ID: <cb80e102-4b78-1a03-9c32-6450311c0f55@intel.com>
-Date:   Fri, 10 Feb 2023 11:58:32 -0800
+        Fri, 10 Feb 2023 14:59:44 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BA27D3F6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:59:35 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id l1so2617788qkg.11
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:59:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=d+cXK0yN4PVvPYRxqzxPGR9rSHlqnym3PwTLPn4N4Qo=;
+        b=FPtXkgzKXuyODmOIzMBgoJqoSB8HG7+xWroxNgcZK10MT1vuDHcFilGYRNjVjmJF+G
+         6N3vQ3CJftv2PU+evl/ND/GQc6nQLwQ2cdlQlktnWlbcs6eaov9sjP81nyO8tC+9bOnY
+         yz35ewz2YDN7ViNCSigM4DMTNQsXO1TSxxwNL1RVGTpJxtczAvz8fS8vwMhwXNhzmUrq
+         z1Txu3KbeTtHQ7P1tsNLTuFKKqyykkgCQYAWwNFohn4Rf0an2kJpH8tDE7zoraq+LFmo
+         4H/7zwoXsXKtBSJMBSd22omEbjlLgaxkDjRv6YO97dhDjz+1PfnQR0v7xdPboMgv7kT7
+         l4cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d+cXK0yN4PVvPYRxqzxPGR9rSHlqnym3PwTLPn4N4Qo=;
+        b=LAAjVhHu7npSAX+b9bEreGO8PKHxhViLYfSx4nNKPipkly10ffJee5Mcv460PAugO3
+         M3VknUOTyjXRc4m0+/xsbEOcQLT6M8Hhytxvn1I5flnSsDrmAX6Cr071VIF0cWwHi20T
+         jmIOxHk9rHunc0YGWavcaneQhjAzTZw/09VboF5AG5mVaiaqJTBXuE4nUFHnpc2/VAZb
+         9xnc1l/+q+1/yrBF0/oonuy6GUK2gxt9yvZdWSSL8VVOkMDiVZh8qGJRlxkTmz9AtSqi
+         RNoS582zNX63tx/zkkSSjslgS2r/G4MHXUmdksjoi9hFigoyEArzCVYOKAFYmCCIPDa3
+         48Dw==
+X-Gm-Message-State: AO0yUKVg4tpTqFsQLhN7t3KsKjMQn+sf1L3LO8lbab1kIB+mqh+Fhyap
+        JoGpNCQhuvNDs7eIc77NGhC+iSDNn1k8w0DOa90nkw==
+X-Google-Smtp-Source: AK7set+lUXzv8lrHvcVBMrFCyzd7pF/BI691QOOFHgkZ8TV89SfokjQ+AyFxR7q2uzAIlzMSCQ2N1kGlVuG4qC6M3c4=
+X-Received: by 2002:a37:2f85:0:b0:71b:ae71:8eed with SMTP id
+ v127-20020a372f85000000b0071bae718eedmr1348116qkh.204.1676059174528; Fri, 10
+ Feb 2023 11:59:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
- to map as encrypted
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-References: <Y8r2TjW/R3jymmqT@zn.tnic>
- <BYAPR21MB168897DBA98E91B72B4087E1D7CA9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y9FC7Dpzr5Uge/Mi@zn.tnic>
- <BYAPR21MB16883BB6178DDEEA10FD1F1CD7D69@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+JG9+zdSwZlz6FU@zn.tnic> <4216dea6-d899-aecb-2207-caa2ae7db0e3@intel.com>
- <BYAPR21MB16886D92828BA2CA8D47FEA4D7D99@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+aP8rHr6H3LIf/c@google.com> <Y+aVFxrE6a6b37XN@zn.tnic>
- <BYAPR21MB16882083E84F20B906E2C847D7DE9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+aczIbbQm/ZNunZ@zn.tnic>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <Y+aczIbbQm/ZNunZ@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221205232341.4131240-1-vannapurve@google.com>
+ <Y8dG3WDxY2OCGPby@google.com> <CAGtprH_hsLPDzFREbSehsxQRj7piVC75xPXD7OsKLUULWiS1fw@mail.gmail.com>
+In-Reply-To: <CAGtprH_hsLPDzFREbSehsxQRj7piVC75xPXD7OsKLUULWiS1fw@mail.gmail.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Fri, 10 Feb 2023 11:59:23 -0800
+Message-ID: <CAGtprH9jAkCgsNHHK7um7drsLWsUTej+djLrdzv9rzcd5VdNTg@mail.gmail.com>
+Subject: Re: [V2 PATCH 0/6] KVM: selftests: selftests for fd-based private memory
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
+        aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
+        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
+        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
+        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
+        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
+        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
+        diviness@google.com, maz@kernel.org, dmatlack@google.com,
+        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
+        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/10/23 11:36, Borislav Petkov wrote:
->> One approach is to go with the individual device attributes for now.>> If the list does grow significantly, there will probably be patterns
->> or groupings that we can't discern now.  We could restructure into
->> larger buckets at that point based on those patterns/groupings.
-> There's a reason the word "platform" is in cc_platform_has(). Initially
-> we wanted to distinguish attributes of the different platforms. So even
-> if y'all don't like CC_ATTR_PARAVISOR, that is what distinguishes this
-> platform and it *is* one platform.
-> 
-> So call it CC_ATTR_SEV_VTOM as it uses that technology or whatever. But
-> call it like the platform, not to mean "I need this functionality".
+On Tue, Jan 17, 2023 at 7:11 PM Vishal Annapurve <vannapurve@google.com> wrote:
+>
+> ...
 
-I can live with that.  There's already a CC_ATTR_GUEST_SEV_SNP, so it
-would at least not be too much of a break from what we already have.
+> > Last question, do you have a list of testcases that you consider "required" for
+> > UPM?  My off-the-cuff list of selftests I want to have before merging UPM is pretty
+> > short at this point:
+> >
+> >   - Negative testing of the memslot changes, e.g. bad alignment, bad fd,
+> >     illegal memslot updates, etc.
+> >   - Negative testing of restrictedmem, e.g. various combinations of overlapping
+> >     bindings of a single restrictedmem instance.
+> >   - Access vs. conversion stress, e.g. accessing a region in the guest while it's
+> >     concurrently converted by the host, maybe with fancy guest code to try and
+> >     detect TLB or ordering bugs?
+>
+> List of testcases that I was tracking (covered by the current
+> selftests) as required:
+> 1) Ensure private memory contents are not accessible to host userspace
+> using the HVA
+> 2) Ensure shared memory contents are visible/accessible from both host
+> userspace and the guest
+> 3) Ensure 1 and 2 holds across explicit memory conversions
+> 4) Exercise memory conversions with mixed shared/private memory pages
+> in a huge page to catch issues like [2]
+> 5) Ensure that explicit memory conversions don't affect nearby GPA ranges
+>
+> Test Cases that will be covered by TDX/SNP selftests (in addition to
+> above scenarios):
+> 6) Ensure 1 and 2 holds across implicit memory conversions
+> 7) Ensure that implicit memory conversions don't affect nearby GPA ranges
+>
+> Additional testcases possible:
+> 8) Running conversion tests for non-overlapping GPA ranges of
+> same/different memslots from multiple vcpus
+>
+> [1] - https://github.com/sean-jc/linux/commit/7e536bf3c45c623425bc84e8a96634efc3a619ed
+> [2] - https://lore.kernel.org/linux-mm/CAGtprH82H_fjtRbL0KUxOkgOk4pgbaEbAydDYfZ0qxz41JCnAQ@mail.gmail.com/
+
+List of additional testcases that could help increase basic coverage
+(including what sean mentioned earlier):
+1) restrictedmem functionality testing
+    - read/write/mmap should not work
+    - fstat/fallocate should work as expected
+2) restrictedmem registration/modification testing with:
+    - bad alignment, bad fd, modifying properties of existing memslot
+    - Installing multiple memslots with ranges within the same
+restricted mem files
+    - deleting memslots with restricted memfd while guests are being executed
+3) Runtime restricted mem testing:
+    - Access vs conversion testing from multiple vcpus
+    - conversion and access to non-overlapping ranges from multiple vcpus
+
+Regards,
+Vishal
