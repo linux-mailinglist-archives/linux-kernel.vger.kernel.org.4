@@ -2,515 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BBA3692B89
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 00:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A93FE692B81
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 00:41:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjBJXmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 18:42:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51362 "EHLO
+        id S229909AbjBJXl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 18:41:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjBJXmc (ORCPT
+        with ESMTP id S229787AbjBJXlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 18:42:32 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3657C5A922;
-        Fri, 10 Feb 2023 15:42:03 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pQd1i-0004FV-2K;
-        Sat, 11 Feb 2023 00:41:58 +0100
-Date:   Fri, 10 Feb 2023 23:40:22 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Subject: [PATCH v4 11/12] net: ethernet: mtk_eth_soc: switch to external PCS
- driver
-Message-ID: <7886ca664ba6ca712aac127b20380d3d2a1a4d1f.1676071508.git.daniel@makrotopia.org>
-References: <cover.1676071507.git.daniel@makrotopia.org>
+        Fri, 10 Feb 2023 18:41:25 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F302884517;
+        Fri, 10 Feb 2023 15:40:53 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id a8-20020a17090a6d8800b002336b48f653so5723507pjk.3;
+        Fri, 10 Feb 2023 15:40:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9KMeQbkxBbzvMD3Sl9ck9O0fqetDFlWitYcAkilER14=;
+        b=j3g6xSgVBMl0RZce22/nXAuvomW+22He2oG4WlKF/IoWovVhjhoh6RVxB/uq5zvv1S
+         NPll0tfzJQ8pKVI65peoO8wkgDNUOeTm6AeD3bPG34tiFpzuezzkO12kXYPrx/Lp6bpH
+         eGgIuvlrTGePFLSrn6VSg/tVhHF8iMC1RqdI4MpZK51kTQaEeBuG7Zf1RyYGUI3/tOtE
+         Oqzz86pqPUd5qPVL+c3xyibkH6mku6T07VH6ftJMGs8sZyabRd1vswbr6v/YNg97EnmA
+         guqxfIWivO0wuZX+VsIsU+NxsIr3wFBkgOVtYW2dCTI+1K+cexblV9WhhXg3MQ5vj2an
+         9CKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9KMeQbkxBbzvMD3Sl9ck9O0fqetDFlWitYcAkilER14=;
+        b=bjdcDfffUBG23p/IhfuXJmtmgWX534entqn+kP5PGwlVOELygAK06jW1LRPCx4Gu0A
+         sBgyL2Ua0qRSQVq8eOJo+n0MqguMLINlpU36UnBkcde36CxIjx+zkukIN3dYtU4AM42r
+         skWN8ccYf/FC8HGnWDPZrA6Q9vuFhp5uXQo1R/nwIlEjFPM3cwYq3EYVXmSLKlFCnXfp
+         iaMcsL2o18uEoajcyqZuKbQvHfl5hLCAyyedz7GVemdSUa+R0A5f0c4DDvrjpchqfIOY
+         dNKW/mNNNb7F/i2LiL1BkMJPlrGAQJEEohXTq4l/kNAPadhsl5R6uVQTkAxMb2e0W3Ls
+         fbxw==
+X-Gm-Message-State: AO0yUKWlN/GqJD1GohWKWz82mC3G3LXQnZtg6QInCSIOKqELw8G1ZfgY
+        v+YhfbySrL5u4FzSJu8PwFk=
+X-Google-Smtp-Source: AK7set+XBtj9eG/9r0dI6pCHyKxazkKCt2l/VJcnsuyMP5CelIxVLs3Lz67wacQ3226zSyl2840Xzw==
+X-Received: by 2002:a17:90b:4d8a:b0:22c:4bc:2126 with SMTP id oj10-20020a17090b4d8a00b0022c04bc2126mr17815825pjb.45.1676072450148;
+        Fri, 10 Feb 2023 15:40:50 -0800 (PST)
+Received: from redecorated-mbp ([202.53.32.211])
+        by smtp.gmail.com with ESMTPSA id k6-20020a17090a4c8600b002339195a47bsm2070583pjh.53.2023.02.10.15.40.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 15:40:49 -0800 (PST)
+Date:   Sat, 11 Feb 2023 10:40:34 +1100
+From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     platform-driver-x86@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>,
+        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        Jack Xiao <Jack.Xiao@amd.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Rander Wang <rander.wang@intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Amadeusz =?UTF-8?B?U8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Yong Zhi <yong.zhi@intel.com>, Evan Quan <evan.quan@amd.com>,
+        Kerem Karabay <kekrby@gmail.com>,
+        Aditya Garg <gargaditya08@live.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>
+Subject: Re: [RFC PATCH 5/9] apple-gmux: Use GMSP acpi method for interrupt
+ clear
+Message-ID: <20230211104034.53e6f8ac@redecorated-mbp>
+In-Reply-To: <ee952253-9ee4-aa81-fefa-609cbf6e1e2b@redhat.com>
+References: <20230210044826.9834-1-orlandoch.dev@gmail.com>
+        <20230210044826.9834-6-orlandoch.dev@gmail.com>
+        <ee952253-9ee4-aa81-fefa-609cbf6e1e2b@redhat.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.35; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1676071507.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that we got a PCS driver, use it and remove the now redundant
-PCS code and it's header macros from the Ethernet driver.
+On Fri, 10 Feb 2023 20:43:58 +0100
+Hans de Goede <hdegoede@redhat.com> wrote:
 
-Tested-by: Bjørn Mork <bjorn@mork.no>
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- drivers/net/ethernet/mediatek/Kconfig       |   2 +
- drivers/net/ethernet/mediatek/mtk_eth_soc.c |  13 +-
- drivers/net/ethernet/mediatek/mtk_eth_soc.h |  80 +-------
- drivers/net/ethernet/mediatek/mtk_sgmii.c   | 200 +++-----------------
- drivers/net/pcs/pcs-mtk-lynxi.c             |  10 +-
- 5 files changed, 42 insertions(+), 263 deletions(-)
+> Hi,
+> 
+> On 2/10/23 05:48, Orlando Chamberlain wrote:
+> > This is needed for interrupts to be cleared correctly on MMIO based
+> > gmux's. It is untested if this helps/hinders other gmux types, but I
+> > have seen the GMSP method in the acpi tables of a MacBook with an
+> > indexed gmux.
+> > 
+> > If this turns out to break support for older gmux's, this can
+> > instead be only done on MMIO gmux's.
+> > 
+> > There is also a "GMLV" acpi method, and the "GMSP" method can be
+> > called with 1 as its argument, but the purposes of these aren't
+> > known and they don't seem to be needed.
+> > 
+> > Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
+> > ---
+> >  drivers/platform/x86/apple-gmux.c | 26 +++++++++++++++++++++++++-
+> >  1 file changed, 25 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/platform/x86/apple-gmux.c
+> > b/drivers/platform/x86/apple-gmux.c index
+> > 760434a527c1..c605f036ea0b 100644 ---
+> > a/drivers/platform/x86/apple-gmux.c +++
+> > b/drivers/platform/x86/apple-gmux.c @@ -494,8 +494,29 @@ static
+> > const struct apple_gmux_config apple_gmux_index = {
+> >   * MCP79, on all following generations it's GPIO pin 6 of the
+> > Intel PCH.
+> >   * The GPE merely signals that an interrupt occurred, the actual
+> > type of event
+> >   * is identified by reading a gmux register.
+> > + *
+> > + * On MMIO gmux's, we also need to call the acpi method GMSP to
+> > properly clear
+> > + * interrupts. TODO: Do other types need this? Does this break
+> > other types? */
+> >  
+> > +static int gmux_call_acpi_gmsp(struct apple_gmux_data *gmux_data,
+> > int arg) +{
+> > +	acpi_status status = AE_OK;
+> > +	union acpi_object arg0 = { ACPI_TYPE_INTEGER };
+> > +	struct acpi_object_list arg_list = { 1, &arg0 };
+> > +
+> > +	arg0.integer.value = arg;
+> > +
+> > +	status = acpi_evaluate_object(gmux_data->dhandle, "GMSP",
+> > &arg_list, NULL);
+> > +	if (ACPI_FAILURE(status)) {
+> > +		pr_err("GMSP call failed: %s\n",
+> > +		       acpi_format_exception(status));
+> > +		return -ENODEV;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static inline void gmux_disable_interrupts(struct apple_gmux_data
+> > *gmux_data) {
+> >  	gmux_write8(gmux_data, GMUX_PORT_INTERRUPT_ENABLE,
+> > @@ -519,7 +540,10 @@ static void gmux_clear_interrupts(struct
+> > apple_gmux_data *gmux_data) 
+> >  	/* to clear interrupts write back current status */
+> >  	status = gmux_interrupt_get_status(gmux_data);
+> > -	gmux_write8(gmux_data, GMUX_PORT_INTERRUPT_STATUS, status);
+> > +	if (status) {
+> > +		gmux_write8(gmux_data, GMUX_PORT_INTERRUPT_STATUS,
+> > status);
+> > +		gmux_call_acpi_gmsp(gmux_data, 0);  
+> 
+> Ugh no, please don't go around calling random ACPI methods from
+> untested firmware revisions / device models.
+> 
+> ACPI code (even Apple's I have learned) tends to be full of bugs. If
+> we did not need to call GMSP before then please lets keep not calling
+> it on the older models. Just because it is there does not mean that
+> calling it is useful, it might even be harmful.
 
-diff --git a/drivers/net/ethernet/mediatek/Kconfig b/drivers/net/ethernet/mediatek/Kconfig
-index 97374fb3ee79..da0db417ab69 100644
---- a/drivers/net/ethernet/mediatek/Kconfig
-+++ b/drivers/net/ethernet/mediatek/Kconfig
-@@ -19,6 +19,8 @@ config NET_MEDIATEK_SOC
- 	select DIMLIB
- 	select PAGE_POOL
- 	select PAGE_POOL_STATS
-+	select PCS_MTK_LYNXI
-+	select REGMAP_MMIO
- 	help
- 	  This driver supports the gigabit ethernet MACs in the
- 	  MediaTek SoC family.
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index 2c4414449af6..556cd4e5cb7f 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -4079,6 +4079,7 @@ static int mtk_unreg_dev(struct mtk_eth *eth)
- 
- static int mtk_cleanup(struct mtk_eth *eth)
- {
-+	mtk_sgmii_destroy(eth->sgmii);
- 	mtk_unreg_dev(eth);
- 	mtk_free_dev(eth);
- 	cancel_work_sync(&eth->pending_work);
-@@ -4582,6 +4583,7 @@ static int mtk_probe(struct platform_device *pdev)
- 		if (!eth->sgmii)
- 			return -ENOMEM;
- 
-+		eth->sgmii->dev = eth->dev;
- 		err = mtk_sgmii_init(eth->sgmii, pdev->dev.of_node,
- 				     eth->soc->ana_rgc3);
- 
-@@ -4594,14 +4596,17 @@ static int mtk_probe(struct platform_device *pdev)
- 							    "mediatek,pctl");
- 		if (IS_ERR(eth->pctl)) {
- 			dev_err(&pdev->dev, "no pctl regmap found\n");
--			return PTR_ERR(eth->pctl);
-+			err = PTR_ERR(eth->pctl);
-+			goto err_destroy_sgmii;
- 		}
- 	}
- 
- 	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
- 		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--		if (!res)
--			return -EINVAL;
-+		if (!res) {
-+			err = -EINVAL;
-+			goto err_destroy_sgmii;
-+		}
- 	}
- 
- 	if (eth->soc->offload_version) {
-@@ -4751,6 +4756,8 @@ static int mtk_probe(struct platform_device *pdev)
- 
- 	return 0;
- 
-+err_destroy_sgmii:
-+	mtk_sgmii_destroy(eth->sgmii);
- err_deinit_ppe:
- 	mtk_ppe_deinit(eth);
- 	mtk_mdio_cleanup(eth);
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-index c2e0fd773cc2..a72748d80bba 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-@@ -510,65 +510,6 @@
- #define ETHSYS_DMA_AG_MAP_QDMA	BIT(1)
- #define ETHSYS_DMA_AG_MAP_PPE	BIT(2)
- 
--/* SGMII subsystem config registers */
--/* BMCR (low 16) BMSR (high 16) */
--#define SGMSYS_PCS_CONTROL_1	0x0
--#define SGMII_BMCR		GENMASK(15, 0)
--#define SGMII_BMSR		GENMASK(31, 16)
--#define SGMII_AN_RESTART	BIT(9)
--#define SGMII_ISOLATE		BIT(10)
--#define SGMII_AN_ENABLE		BIT(12)
--#define SGMII_LINK_STATYS	BIT(18)
--#define SGMII_AN_ABILITY	BIT(19)
--#define SGMII_AN_COMPLETE	BIT(21)
--#define SGMII_PCS_FAULT		BIT(23)
--#define SGMII_AN_EXPANSION_CLR	BIT(30)
--
--#define SGMSYS_PCS_ADVERTISE	0x8
--#define SGMII_ADVERTISE		GENMASK(15, 0)
--#define SGMII_LPA		GENMASK(31, 16)
--
--/* Register to programmable link timer, the unit in 2 * 8ns */
--#define SGMSYS_PCS_LINK_TIMER	0x18
--#define SGMII_LINK_TIMER_MASK	GENMASK(19, 0)
--#define SGMII_LINK_TIMER_DEFAULT	(0x186a0 & SGMII_LINK_TIMER_MASK)
--
--/* Register to control remote fault */
--#define SGMSYS_SGMII_MODE		0x20
--#define SGMII_IF_MODE_SGMII		BIT(0)
--#define SGMII_SPEED_DUPLEX_AN		BIT(1)
--#define SGMII_SPEED_MASK		GENMASK(3, 2)
--#define SGMII_SPEED_10			FIELD_PREP(SGMII_SPEED_MASK, 0)
--#define SGMII_SPEED_100			FIELD_PREP(SGMII_SPEED_MASK, 1)
--#define SGMII_SPEED_1000		FIELD_PREP(SGMII_SPEED_MASK, 2)
--#define SGMII_DUPLEX_HALF		BIT(4)
--#define SGMII_IF_MODE_BIT5		BIT(5)
--#define SGMII_REMOTE_FAULT_DIS		BIT(8)
--#define SGMII_CODE_SYNC_SET_VAL		BIT(9)
--#define SGMII_CODE_SYNC_SET_EN		BIT(10)
--#define SGMII_SEND_AN_ERROR_EN		BIT(11)
--#define SGMII_IF_MODE_MASK		GENMASK(5, 1)
--
--/* Register to reset SGMII design */
--#define SGMII_RESERVED_0	0x34
--#define SGMII_SW_RESET		BIT(0)
--
--/* Register to set SGMII speed, ANA RG_ Control Signals III*/
--#define SGMSYS_ANA_RG_CS3	0x2028
--#define RG_PHY_SPEED_MASK	(BIT(2) | BIT(3))
--#define RG_PHY_SPEED_1_25G	0x0
--#define RG_PHY_SPEED_3_125G	BIT(2)
--
--/* Register to power up QPHY */
--#define SGMSYS_QPHY_PWR_STATE_CTRL 0xe8
--#define	SGMII_PHYA_PWD		BIT(4)
--
--/* Register to QPHY wrapper control */
--#define SGMSYS_QPHY_WRAP_CTRL	0xec
--#define SGMII_PN_SWAP_MASK	GENMASK(1, 0)
--#define SGMII_PN_SWAP_TX_RX	(BIT(0) | BIT(1))
--#define MTK_SGMII_FLAG_PN_SWAP	BIT(0)
--
- /* Infrasys subsystem config registers */
- #define INFRA_MISC2            0x70c
- #define CO_QPHY_SEL            BIT(0)
-@@ -1103,29 +1044,13 @@ struct mtk_soc_data {
- /* currently no SoC has more than 2 macs */
- #define MTK_MAX_DEVS			2
- 
--/* struct mtk_pcs -    This structure holds each sgmii regmap and associated
-- *                     data
-- * @regmap:            The register map pointing at the range used to setup
-- *                     SGMII modes
-- * @ana_rgc3:          The offset refers to register ANA_RGC3 related to regmap
-- * @interface:         Currently configured interface mode
-- * @pcs:               Phylink PCS structure
-- * @flags:             Flags indicating hardware properties
-- */
--struct mtk_pcs {
--	struct regmap	*regmap;
--	u32             ana_rgc3;
--	phy_interface_t	interface;
--	struct phylink_pcs pcs;
--	u32		flags;
--};
--
- /* struct mtk_sgmii -  This is the structure holding sgmii regmap and its
-  *                     characteristics
-  * @pcs                Array of individual PCS structures
-  */
- struct mtk_sgmii {
--	struct mtk_pcs	pcs[MTK_MAX_DEVS];
-+	struct phylink_pcs *pcs[MTK_MAX_DEVS];
-+	struct device *dev;
- };
- 
- /* struct mtk_eth -	This is the main datasructure for holding the state
-@@ -1353,6 +1278,7 @@ u32 mtk_r32(struct mtk_eth *eth, unsigned reg);
- struct phylink_pcs *mtk_sgmii_select_pcs(struct mtk_sgmii *ss, int id);
- int mtk_sgmii_init(struct mtk_sgmii *ss, struct device_node *np,
- 		   u32 ana_rgc3);
-+void mtk_sgmii_destroy(struct mtk_sgmii *ss);
- 
- int mtk_gmac_sgmii_path_setup(struct mtk_eth *eth, int mac_id);
- int mtk_gmac_gephy_path_setup(struct mtk_eth *eth, int mac_id);
-diff --git a/drivers/net/ethernet/mediatek/mtk_sgmii.c b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-index 61bd9986466a..1137458cba41 100644
---- a/drivers/net/ethernet/mediatek/mtk_sgmii.c
-+++ b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-@@ -10,178 +10,16 @@
- #include <linux/mfd/syscon.h>
- #include <linux/of.h>
- #include <linux/phylink.h>
-+#include <linux/pcs/pcs-mtk-lynxi.h>
- #include <linux/regmap.h>
- 
- #include "mtk_eth_soc.h"
- 
--static struct mtk_pcs *pcs_to_mtk_pcs(struct phylink_pcs *pcs)
--{
--	return container_of(pcs, struct mtk_pcs, pcs);
--}
--
--static void mtk_pcs_get_state(struct phylink_pcs *pcs,
--			      struct phylink_link_state *state)
--{
--	struct mtk_pcs *mpcs = pcs_to_mtk_pcs(pcs);
--	unsigned int bm, adv;
--
--	/* Read the BMSR and LPA */
--	regmap_read(mpcs->regmap, SGMSYS_PCS_CONTROL_1, &bm);
--	regmap_read(mpcs->regmap, SGMSYS_PCS_ADVERTISE, &adv);
--
--	phylink_mii_c22_pcs_decode_state(state, FIELD_GET(SGMII_BMSR, bm),
--					 FIELD_GET(SGMII_LPA, adv));
--}
--
--static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
--			  phy_interface_t interface,
--			  const unsigned long *advertising,
--			  bool permit_pause_to_mac)
--{
--	bool mode_changed = false, changed, use_an;
--	struct mtk_pcs *mpcs = pcs_to_mtk_pcs(pcs);
--	unsigned int rgc3, sgm_mode, bmcr;
--	int advertise, link_timer;
--
--	advertise = phylink_mii_c22_pcs_encode_advertisement(interface,
--							     advertising);
--	if (advertise < 0)
--		return advertise;
--
--	/* Clearing IF_MODE_BIT0 switches the PCS to BASE-X mode, and
--	 * we assume that fixes it's speed at bitrate = line rate (in
--	 * other words, 1000Mbps or 2500Mbps).
--	 */
--	if (interface == PHY_INTERFACE_MODE_SGMII) {
--		sgm_mode = SGMII_IF_MODE_SGMII;
--		if (phylink_autoneg_inband(mode)) {
--			sgm_mode |= SGMII_REMOTE_FAULT_DIS |
--				    SGMII_SPEED_DUPLEX_AN;
--			use_an = true;
--		} else {
--			use_an = false;
--		}
--	} else if (phylink_autoneg_inband(mode)) {
--		/* 1000base-X or 2500base-X autoneg */
--		sgm_mode = SGMII_REMOTE_FAULT_DIS;
--		use_an = linkmode_test_bit(ETHTOOL_LINK_MODE_Autoneg_BIT,
--					   advertising);
--	} else {
--		/* 1000base-X or 2500base-X without autoneg */
--		sgm_mode = 0;
--		use_an = false;
--	}
--
--	if (use_an) {
--		bmcr = SGMII_AN_ENABLE;
--	} else {
--		bmcr = 0;
--	}
--
--	if (mpcs->interface != interface) {
--		link_timer = phylink_get_link_timer_ns(interface);
--		if (link_timer < 0)
--			return link_timer;
--
--		/* PHYA power down */
--		regmap_update_bits(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL,
--				   SGMII_PHYA_PWD, SGMII_PHYA_PWD);
--
--		/* Reset SGMII PCS state */
--		regmap_update_bits(mpcs->regmap, SGMII_RESERVED_0,
--				   SGMII_SW_RESET, SGMII_SW_RESET);
--
--		if (mpcs->flags & MTK_SGMII_FLAG_PN_SWAP)
--			regmap_update_bits(mpcs->regmap, SGMSYS_QPHY_WRAP_CTRL,
--					   SGMII_PN_SWAP_MASK,
--					   SGMII_PN_SWAP_TX_RX);
--
--		if (interface == PHY_INTERFACE_MODE_2500BASEX)
--			rgc3 = RG_PHY_SPEED_3_125G;
--		else
--			rgc3 = 0;
--
--		/* Configure the underlying interface speed */
--		regmap_update_bits(mpcs->regmap, mpcs->ana_rgc3,
--				   RG_PHY_SPEED_3_125G, rgc3);
--
--		/* Setup the link timer */
--		regmap_write(mpcs->regmap, SGMSYS_PCS_LINK_TIMER, link_timer / 2 / 8);
--
--		mpcs->interface = interface;
--		mode_changed = true;
--	}
--
--	/* Update the advertisement, noting whether it has changed */
--	regmap_update_bits_check(mpcs->regmap, SGMSYS_PCS_ADVERTISE,
--				 SGMII_ADVERTISE, advertise, &changed);
--
--	/* Update the sgmsys mode register */
--	regmap_update_bits(mpcs->regmap, SGMSYS_SGMII_MODE,
--			   SGMII_REMOTE_FAULT_DIS | SGMII_SPEED_DUPLEX_AN |
--			   SGMII_IF_MODE_SGMII, sgm_mode);
--
--	/* Update the BMCR */
--	regmap_update_bits(mpcs->regmap, SGMSYS_PCS_CONTROL_1,
--			   SGMII_AN_ENABLE, bmcr);
--
--	/* Release PHYA power down state
--	 * Only removing bit SGMII_PHYA_PWD isn't enough.
--	 * There are cases when the SGMII_PHYA_PWD register contains 0x9 which
--	 * prevents SGMII from working. The SGMII still shows link but no traffic
--	 * can flow. Writing 0x0 to the PHYA_PWD register fix the issue. 0x0 was
--	 * taken from a good working state of the SGMII interface.
--	 * Unknown how much the QPHY needs but it is racy without a sleep.
--	 * Tested on mt7622 & mt7986.
--	 */
--	usleep_range(50, 100);
--	regmap_write(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL, 0);
--
--	return changed || mode_changed;
--}
--
--static void mtk_pcs_restart_an(struct phylink_pcs *pcs)
--{
--	struct mtk_pcs *mpcs = pcs_to_mtk_pcs(pcs);
--
--	regmap_update_bits(mpcs->regmap, SGMSYS_PCS_CONTROL_1,
--			   SGMII_AN_RESTART, SGMII_AN_RESTART);
--}
--
--static void mtk_pcs_link_up(struct phylink_pcs *pcs, unsigned int mode,
--			    phy_interface_t interface, int speed, int duplex)
--{
--	struct mtk_pcs *mpcs = pcs_to_mtk_pcs(pcs);
--	unsigned int sgm_mode;
--
--	if (!phylink_autoneg_inband(mode)) {
--		/* Force the speed and duplex setting */
--		if (speed == SPEED_10)
--			sgm_mode = SGMII_SPEED_10;
--		else if (speed == SPEED_100)
--			sgm_mode = SGMII_SPEED_100;
--		else
--			sgm_mode = SGMII_SPEED_1000;
--
--		if (duplex != DUPLEX_FULL)
--			sgm_mode |= SGMII_DUPLEX_HALF;
--
--		regmap_update_bits(mpcs->regmap, SGMSYS_SGMII_MODE,
--				   SGMII_DUPLEX_HALF | SGMII_SPEED_MASK,
--				   sgm_mode);
--	}
--}
--
--static const struct phylink_pcs_ops mtk_pcs_ops = {
--	.pcs_get_state = mtk_pcs_get_state,
--	.pcs_config = mtk_pcs_config,
--	.pcs_an_restart = mtk_pcs_restart_an,
--	.pcs_link_up = mtk_pcs_link_up,
--};
--
- int mtk_sgmii_init(struct mtk_sgmii *ss, struct device_node *r, u32 ana_rgc3)
- {
- 	struct device_node *np;
-+	struct regmap *regmap;
-+	u32 flags;
- 	int i;
- 
- 	for (i = 0; i < MTK_MAX_DEVS; i++) {
-@@ -189,20 +27,18 @@ int mtk_sgmii_init(struct mtk_sgmii *ss, struct device_node *r, u32 ana_rgc3)
- 		if (!np)
- 			break;
- 
--		ss->pcs[i].ana_rgc3 = ana_rgc3;
--		ss->pcs[i].regmap = syscon_node_to_regmap(np);
--
--		ss->pcs[i].flags = 0;
-+		regmap = syscon_node_to_regmap(np);
-+		flags = 0;
- 		if (of_property_read_bool(np, "mediatek,pnswap"))
--			ss->pcs[i].flags |= MTK_SGMII_FLAG_PN_SWAP;
-+			flags |= MTK_SGMII_FLAG_PN_SWAP;
- 
- 		of_node_put(np);
--		if (IS_ERR(ss->pcs[i].regmap))
--			return PTR_ERR(ss->pcs[i].regmap);
- 
--		ss->pcs[i].pcs.ops = &mtk_pcs_ops;
--		ss->pcs[i].pcs.poll = true;
--		ss->pcs[i].interface = PHY_INTERFACE_MODE_NA;
-+		if (IS_ERR(regmap))
-+			return PTR_ERR(regmap);
-+
-+		ss->pcs[i] = mtk_pcs_lynxi_create(ss->dev, regmap, ana_rgc3,
-+						  flags);
- 	}
- 
- 	return 0;
-@@ -210,8 +46,16 @@ int mtk_sgmii_init(struct mtk_sgmii *ss, struct device_node *r, u32 ana_rgc3)
- 
- struct phylink_pcs *mtk_sgmii_select_pcs(struct mtk_sgmii *ss, int id)
- {
--	if (!ss->pcs[id].regmap)
--		return NULL;
-+	return ss->pcs[id];
-+}
-+
-+void mtk_sgmii_destroy(struct mtk_sgmii *ss)
-+{
-+	int i;
-+
-+	if (!ss)
-+		return;
- 
--	return &ss->pcs[id].pcs;
-+	for (i = 0; i < MTK_MAX_DEVS; i++)
-+		mtk_pcs_lynxi_destroy(ss->pcs[i]);
- }
-diff --git a/drivers/net/pcs/pcs-mtk-lynxi.c b/drivers/net/pcs/pcs-mtk-lynxi.c
-index 67965a6b57a4..f10621fc5baa 100644
---- a/drivers/net/pcs/pcs-mtk-lynxi.c
-+++ b/drivers/net/pcs/pcs-mtk-lynxi.c
-@@ -146,6 +146,10 @@ static int mtk_pcs_lynxi_config(struct phylink_pcs *pcs, unsigned int mode,
- 		bmcr = 0;
- 
- 	if (mpcs->interface != interface) {
-+		link_timer = phylink_get_link_timer_ns(interface);
-+		if (link_timer < 0)
-+			return link_timer;
-+
- 		/* PHYA power down */
- 		regmap_update_bits(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL,
- 				   SGMII_PHYA_PWD, SGMII_PHYA_PWD);
-@@ -168,11 +172,7 @@ static int mtk_pcs_lynxi_config(struct phylink_pcs *pcs, unsigned int mode,
- 		regmap_update_bits(mpcs->regmap, mpcs->ana_rgc3,
- 				   RG_PHY_SPEED_MASK, rgc3);
- 
--		/* Setup the link timer and QPHY power up inside SGMIISYS */
--		link_timer = phylink_get_link_timer_ns(interface);
--		if (link_timer < 0)
--			return link_timer;
--
-+		/* Setup the link timer */
- 		regmap_write(mpcs->regmap, SGMSYS_PCS_LINK_TIMER, link_timer / 2 / 8);
- 
- 		mpcs->interface = interface;
--- 
-2.39.1
+I'll make it only use this ACPI method on MMIO gmux's in v2 then.
+
+> 
+> Regards,
+> 
+> Hans
+> 
+> 
+> 
+> 
+> 
+> 
+> > +	}
+> >  }
+> >  
+> >  static void gmux_notify_handler(acpi_handle device, u32 value,
+> > void *context)  
+> 
 
