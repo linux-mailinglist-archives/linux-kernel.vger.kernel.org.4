@@ -2,122 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE2169176E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 04:56:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D4DE69176F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 04:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbjBJD4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 22:56:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
+        id S230468AbjBJD71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 22:59:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbjBJD4f (ORCPT
+        with ESMTP id S229992AbjBJD7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 22:56:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD27B6F224;
-        Thu,  9 Feb 2023 19:56:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78B6C61488;
-        Fri, 10 Feb 2023 03:56:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B036C4339B;
-        Fri, 10 Feb 2023 03:56:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676001393;
-        bh=NZY1/v8Sk6GLpz/11I4nuyXPEbK3cemp/lGf/ubXeZ8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AZuZJLFrbFS2b9ruw9wyTmroDDqdugku3LVd3lAzxtIxZYxFTAOgLYS4IAPPh260M
-         +nRJULnBe//Su9Rhde6oHCb+n6ys2cUpoz3gnfW1+ZEF24W3FmnjysBF5ZqsQzWkgP
-         SXzDJT/JWxIDLzR+o7n335pQFpU3sdP+vaYhRtMDbukcbfcuAMWbHbkIpp2YEEjN3D
-         NK6IXAJMFd6w/YHCQdRQa5yrEfaSnZD7c+hAapVuvm+806OKBCB536iK+mU34gOioE
-         ffmdnDtM4rzSoaWJRTXLia5OVXQuxzY9KgMNw37oSVvg0SwD/c5bgGcosmA9P4qtPT
-         K+Uxn+6+fIdng==
-Date:   Fri, 10 Feb 2023 05:56:31 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>,
-        Eric Biggers <ebiggers@kernel.org>
-Subject: Re: [PATCH v5 2/2] KEYS: asymmetric: Copy sig and digest in
- public_key_verify_signature()
-Message-ID: <Y+XAbz6YmazGNFQr@kernel.org>
-References: <20221227142740.2807136-1-roberto.sassu@huaweicloud.com>
- <20221227142740.2807136-3-roberto.sassu@huaweicloud.com>
- <Y64XB0yi24yjeBDw@sol.localdomain>
- <d2a54ddec403cad12c003132542070bf781d5e26.camel@huaweicloud.com>
- <857eedc5ad18eddae7686dca63cf8c613a051be4.camel@huaweicloud.com>
- <Y+VBMQEwPTPGBIpP@gmail.com>
- <CAHC9VhTYeqCB8roaNvWUYJeKPwT35ixJ8MMXBe0v0+a9o8CXWw@mail.gmail.com>
+        Thu, 9 Feb 2023 22:59:25 -0500
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2CF56F224
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 19:59:23 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R851e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VbIVgC-_1676001560;
+Received: from 30.97.49.39(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VbIVgC-_1676001560)
+          by smtp.aliyun-inc.com;
+          Fri, 10 Feb 2023 11:59:21 +0800
+Message-ID: <a2133204-98c8-4733-1062-e26abead28e7@linux.alibaba.com>
+Date:   Fri, 10 Feb 2023 11:59:19 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHC9VhTYeqCB8roaNvWUYJeKPwT35ixJ8MMXBe0v0+a9o8CXWw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: arch/alpha/include/asm/xchg.h:234:32: sparse: sparse: cast
+ truncates bits from constant value (ffffffffe0f510cc becomes cc)
+To:     kernel test robot <lkp@intel.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Yue Hu <huyue2@coolpad.com>, Chao Yu <yuchao0@huawei.com>,
+        Chao Yu <chao@kernel.org>
+References: <202302101104.mgetTzwR-lkp@intel.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <202302101104.mgetTzwR-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 05:46:32PM -0500, Paul Moore wrote:
-> On Thu, Feb 9, 2023 at 1:53 PM Eric Biggers <ebiggers@kernel.org> wrote:
-> > On Thu, Feb 09, 2023 at 11:49:19AM +0100, Roberto Sassu wrote:
-> > > On Fri, 2023-01-27 at 09:27 +0100, Roberto Sassu wrote:
-> > > > On Thu, 2022-12-29 at 14:39 -0800, Eric Biggers wrote:
-> > > > > On Tue, Dec 27, 2022 at 03:27:40PM +0100, Roberto Sassu wrote:
-> > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > >
-> > > > > > Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-> > > > > > mapping") checks that both the signature and the digest reside in the
-> > > > > > linear mapping area.
-> > > > > >
-> > > > > > However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-> > > > > > stack support") made it possible to move the stack in the vmalloc area,
-> > > > > > which is not contiguous, and thus not suitable for sg_set_buf() which needs
-> > > > > > adjacent pages.
-> > > > > >
-> > > > > > Always make a copy of the signature and digest in the same buffer used to
-> > > > > > store the key and its parameters, and pass them to sg_init_one(). Prefer it
-> > > > > > to conditionally doing the copy if necessary, to keep the code simple. The
-> > > > > > buffer allocated with kmalloc() is in the linear mapping area.
-> > > > > >
-> > > > > > Cc: stable@vger.kernel.org # 4.9.x
-> > > > > > Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
-> > > > > > Link: https://lore.kernel.org/linux-integrity/Y4pIpxbjBdajymBJ@sol.localdomain/
-> > > > > > Suggested-by: Eric Biggers <ebiggers@kernel.org>
-> > > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > ---
-> > > > > >  crypto/asymmetric_keys/public_key.c | 38 ++++++++++++++++-------------
-> > > > > >  1 file changed, 21 insertions(+), 17 deletions(-)
-> > > > >
-> > > > > Reviewed-by: Eric Biggers <ebiggers@google.com>
-> > > >
-> > > > Hi David
-> > > >
-> > > > could you please take this patch in your repo, if it is ok?
-> > >
-> > > Kindly ask your support here. Has this patch been queued somewhere?
-> > > Wasn't able to find it, also it is not in linux-next.
-> > >
-> >
-> > The maintainer of asymmetric_keys (David Howells) is ignoring this patch, so
-> > you'll need to find someone else to apply it.  Herbert Xu, the maintainer of the
-> > crypto subsystem, might be willing to apply it.  Or maybe Jarkko Sakkinen, who
-> > is a co-maintainer of the keyrings subsystem (but not asymmetric_keys, for some
-> > reason; should that change?).
+Hi,
+
+On 2023/2/10 11:52, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   38c1e0c65865426676123cc9a127526fa02bcac6
+> commit: 2f44013e39984c127c6efedf70e6b5f4e9dcf315 erofs: fix pcluster use-after-free on UP platforms
+> date:   5 months ago
+> config: alpha-randconfig-s042-20230210 (https://download.01.org/0day-ci/archive/20230210/202302101104.mgetTzwR-lkp@intel.com/config)
+> compiler: alpha-linux-gcc (GCC) 12.1.0
+> reproduce:
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # apt-get install sparse
+>          # sparse version: v0.6.4-39-gce1a6720-dirty
+>          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2f44013e39984c127c6efedf70e6b5f4e9dcf315
+>          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>          git fetch --no-tags linus master
+>          git checkout 2f44013e39984c127c6efedf70e6b5f4e9dcf315
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha olddefconfig
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash fs/erofs/
 > 
-> It is problematic that David isn't replying to this.  I have no idea
-> if it will work, but I just reached out to him to see if I can draw
-> his attention back to this ...
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202302101104.mgetTzwR-lkp@intel.com/
+> 
+> sparse warnings: (new ones prefixed by >>)
+>     fs/erofs/utils.c: note: in included file (through arch/alpha/include/asm/cmpxchg.h, arch/alpha/include/asm/atomic.h, include/linux/atomic.h, ...):
+>>> arch/alpha/include/asm/xchg.h:234:32: sparse: sparse: cast truncates bits from constant value (ffffffffe0f510cc becomes cc)
+>>> arch/alpha/include/asm/xchg.h:236:32: sparse: sparse: cast truncates bits from constant value (ffffffffe0f510cc becomes 10cc)
+> --
+>     fs/erofs/zdata.c: note: in included file (through arch/alpha/include/asm/cmpxchg.h, arch/alpha/include/asm/atomic.h, include/linux/atomic.h, ...):
+>>> arch/alpha/include/asm/xchg.h:234:32: sparse: sparse: cast truncates bits from constant value (ffffffffe0f510cc becomes cc)
+>>> arch/alpha/include/asm/xchg.h:236:32: sparse: sparse: cast truncates bits from constant value (ffffffffe0f510cc becomes 10cc)
+>     arch/alpha/include/asm/xchg.h:234:32: sparse: sparse: cast truncates bits from constant value (5f0ecafe becomes fe)
+>     arch/alpha/include/asm/xchg.h:236:32: sparse: sparse: cast truncates bits from constant value (5f0ecafe becomes cafe)
+>     arch/alpha/include/asm/xchg.h:234:32: sparse: sparse: cast truncates bits from constant value (5f0ecafe becomes fe)
+>     arch/alpha/include/asm/xchg.h:234:32: sparse: sparse: cast truncates bits from constant value (5f0edead becomes ad)
+>     arch/alpha/include/asm/xchg.h:236:32: sparse: sparse: cast truncates bits from constant value (5f0ecafe becomes cafe)
+>     arch/alpha/include/asm/xchg.h:236:32: sparse: sparse: cast truncates bits from constant value (5f0edead becomes dead)
 
-See my response to Eric.
+As I reported in
+https://lore.kernel.org/r/b8dfa8cd-f3f9-d10c-fbd0-eac8067ee39c@intel.com
 
-BR, Jarkko
+I'm not sure how we could do something for these reports in EROFS.
+
+Thanks,
+Gao Xiang
+
+> 
+> vim +234 arch/alpha/include/asm/xchg.h
+> 
+> a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  227
+> a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  228  static __always_inline unsigned long
+> a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  229  ____cmpxchg(, volatile void *ptr, unsigned long old, unsigned long new,
+> a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  230  	      int size)
+> a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  231  {
+> a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  232  	switch (size) {
+> a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  233  		case 1:
+> a6209d6d71f2ab Ivan Kokshaysky 2009-03-31 @234  			return ____cmpxchg(_u8, ptr, old, new);
+> a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  235  		case 2:
+> a6209d6d71f2ab Ivan Kokshaysky 2009-03-31 @236  			return ____cmpxchg(_u16, ptr, old, new);
+> a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  237  		case 4:
+> a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  238  			return ____cmpxchg(_u32, ptr, old, new);
+> a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  239  		case 8:
+> a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  240  			return ____cmpxchg(_u64, ptr, old, new);
+> a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  241  	}
+> a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  242  	__cmpxchg_called_with_bad_pointer();
+> a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  243  	return old;
+> a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  244  }
+> a6209d6d71f2ab Ivan Kokshaysky 2009-03-31  245
+> 
+> :::::: The code at line 234 was first introduced by commit
+> :::::: a6209d6d71f2ab8c63cc1587ef65490d83022baf alpha: xchg/cmpxchg cleanup and fixes
+> 
+> :::::: TO: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+> :::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+> 
