@@ -2,78 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 209C769233B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 884F569233D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:27:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232793AbjBJQ0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 11:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
+        id S232530AbjBJQ1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 11:27:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbjBJQ0L (ORCPT
+        with ESMTP id S232174AbjBJQ1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 11:26:11 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7673F6A7D
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:26:06 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2DC8C5C0238;
-        Fri, 10 Feb 2023 11:26:03 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 10 Feb 2023 11:26:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1676046363; x=1676132763; bh=t01H0ZxMiLNGoPZFy2PSmF/8v+B8Ck0mxHf
-        dS0i6frE=; b=GdHejhB2I82AGMNvYSArVx66SkXqfu4lqXDZIAgNzOy4d+SSFzj
-        aMMBjInGWeMlQvD3mSbqJKKWH86q837fJ7/vWL0AyQPKFiLE42Kv+thrZoFzmmnn
-        caUjD/5eT/FnZU7m2Bu8sdQXCNhXUCc7WAs9kfLeiRdzuT+s9pbBD0UPOAuzj0g5
-        4GmA5Z2WzXVRtJC1ll1YTI6vvgK1JepgPMm0I4SpDhnIIVl2UMiTEv97yKeoQ8b8
-        ntru4BFkRl+8ZKgEBC04fpDIhrHZjQq2a3XqVgIUfIowM+NSZNL9+VgqELExic21
-        n8V7tKh73Ek/MpUETflsatnxS57F3RqVOIw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:message-id:mime-version
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1676046363; x=
-        1676132763; bh=t01H0ZxMiLNGoPZFy2PSmF/8v+B8Ck0mxHfdS0i6frE=; b=B
-        0geuZAoeItSagcqnBrbl9aKRfIPlSM+6CvcvOOCBeKp/chYljF0ZgzMITlrCVeD0
-        Uhbpuc308tcPSPyfIeICeHOqMHrtZX9FMeNpcRdvQoDESHX/02nDR17bBg5hgjgE
-        DZ4eurn+kB6SB6S+G9ttKbH1m4uiWbFkyC14iJlQ34KCvX6Fxxn/bwmI50vhS5x9
-        xcZw50ZO7TIG3y9L8qB9Fu37nAXVKz7gsIuM2LpjzL09Mi45JjoOL4iYkMM6tBy0
-        vZBdt77hJ6bnY6ZJjWgByYM75C81y9V33kbfGXhcM0DGEIaa6OLikQGS1njZXfJ0
-        RrxRYGbCdEaBc600f/StQ==
-X-ME-Sender: <xms:GnDmY0Z6SVqQ0Ti1L2Y4pkWyA1eGMiR0VWyIpcn2Y2irm3ihZgcNSA>
-    <xme:GnDmY_YPoinw9y0K_AuVTHkVKnhXxeApvz2-xhNl4PYY5UMBqCUl4B65MzOl2pcii
-    kvNVabMR2qRTEv8b8k>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudehhedgkeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepfeefuefhkeejvedtvddtleeltddttdejgedvhfdtuddvhfeukeduiefhjeetgfei
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:GnDmY-8ngFbyg6B_34m8u6X5OLrJCY8J9Xq_dIERKdwzA6TnrI3gzA>
-    <xmx:GnDmY-omqU_tHpV3lXT_KaahQRa9HTyg8DGkAF1sFJnL1paDO_CHKg>
-    <xmx:GnDmY_qR9-uQhq7TRmTFAJcAw8M9XCpLAlBQ1CfE2sBzLkmxSlu-4Q>
-    <xmx:G3DmY4BlImXSziEyNZulBOrsucJTZSXZUEvuzl1O-8HimW7vjp4-RA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D7A24B60086; Fri, 10 Feb 2023 11:26:02 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
-Mime-Version: 1.0
-Message-Id: <d3a3546d-cf8b-407b-bf8d-d8666e2b9c98@app.fastmail.com>
-Date:   Fri, 10 Feb 2023 17:25:44 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] ARM: SoC fixes for 6.2, part 4
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        Fri, 10 Feb 2023 11:27:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2648638B41
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:26:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676046380;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XMyWSiBRS0vHXlOWzGHad9uq2iQmgPdEGhe+CLq72Oo=;
+        b=Eke+XbAdPirjTQ4sztQkV3Rqz8Hu43adG+lP6ccIyFn7505YPSEnPqqZPdNijrLJ6WkMRL
+        y48p78cWC8nQLwAxbB8k2y0jbxzjdaLV/GG8pTE4GtHhgzHDVHhQiG7ZCcxNwZICFYPGxa
+        RSi5vghz5PiJp8g5aODXQED4oyo+Xwg=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-329-eU-uzUzgM3a8NnNfk5MSxw-1; Fri, 10 Feb 2023 11:26:19 -0500
+X-MC-Unique: eU-uzUzgM3a8NnNfk5MSxw-1
+Received: by mail-ej1-f71.google.com with SMTP id lf9-20020a170907174900b0087861282038so3863596ejc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:26:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XMyWSiBRS0vHXlOWzGHad9uq2iQmgPdEGhe+CLq72Oo=;
+        b=mldvoIP0U2ZL9Aw7kLxIVMGHysJr5n3UUeXb8DllFI2EYI/zswN1UlO+Don9Y4OfdE
+         55Ku2wfM2/Hi2fFtU/+Svf98dacpEFKmvU5Mtmvz8neMUtA37jiZ1Pg/UIV81+l7pXXX
+         JylJXf/vIPxzHuKT5qqQp6vSVgEGApsO1aNIQaFXyXy98VLeTIcpgMcBFXvo45CM5SUs
+         iGtJ/25T0ZkHZqJYXjbFQ3tS/BRMLBrcwE2BtC9C9j+V4JUb0s5hmkRIBpI0bKT6xu4S
+         64l3xizDCxUJYx9vdl++TASYJAi3cKMrXbxj5N+sFYFUroTe7zsNQvnoQq48XQf9YAIw
+         1tdA==
+X-Gm-Message-State: AO0yUKWPAUAS3rO4lRXB/errGFalIz8EuiJoClfUkA3yQzLXnQajeeIF
+        e0aOu2E70pcY2T2dVAPa+oxXuV6MgufQPJrBDr/xpsF5CmktkmEHYciqt5a3HHVGg9vQRUipndb
+        u3O9BPjfODm0TrkjiOV4cpHEQ
+X-Received: by 2002:a17:907:6e90:b0:8af:91a6:de6b with SMTP id sh16-20020a1709076e9000b008af91a6de6bmr1407107ejc.50.1676046378241;
+        Fri, 10 Feb 2023 08:26:18 -0800 (PST)
+X-Google-Smtp-Source: AK7set9ilo535lQiADsLvDdkpzMsP0IMScu0e/tEllxGX4Ta/jL9ITP1JT7l9tVc1IlMqybnr41UJg==
+X-Received: by 2002:a17:907:6e90:b0:8af:91a6:de6b with SMTP id sh16-20020a1709076e9000b008af91a6de6bmr1407095ejc.50.1676046378049;
+        Fri, 10 Feb 2023 08:26:18 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id f26-20020a170906825a00b0084c4b87aa18sm2573294ejx.37.2023.02.10.08.26.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 08:26:17 -0800 (PST)
+Message-ID: <d5851a70-dcbb-8455-b022-49fad58be7ff@redhat.com>
+Date:   Fri, 10 Feb 2023 17:26:16 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH RFC] MAINTAINERS: dell-wmi-sysman: drop Divya Bharathi
+Content-Language: en-US, nl
+To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
+        Prasanth Ksr <prasanth.ksr@dell.com>,
+        Divya Bharathi <divya.bharathi@dell.com>
+Cc:     Dell.Client.Kernel@dell.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230207-maintainers-dell-wmi-sysman-v1-1-6594fea12f6c@weissschuh.net>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230207-maintainers-dell-wmi-sysman-v1-1-6594fea12f6c@weissschuh.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,95 +83,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 6d796c50f84ca79f1722bb131799e5a5710c4700:
+Hi,
 
-  Linux 6.2-rc6 (2023-01-29 13:59:43 -0800)
+On 2/7/23 17:51, Thomas Weißschuh wrote:
+> According to the bounce sent by Dell's mailserver this user does not
+> exist (anymore).
+> 
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 
-are available in the Git repository at:
+I just got the same bounce, so lets move ahead with this:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.2-4
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-for you to fetch changes up to bc6772bbab9af6034f918624a40ac5c962df2bac:
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
 
-  Merge tag 'amlogic-fixes-v6.2-rc-take2' of https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux into arm/fixes (2023-02-10 11:31:25 +0100)
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
 
-----------------------------------------------------------------
-ARM: SoC fixes for 6.2, part 4
+Regards,
 
-All the changes this time are minor devicetree corrections, the majority
-being for 64-bit Rockchip SoC support. These are a couple of corrections
-for properties that are in violation of the binding, some that put the
-machine into safer operating points for the eMMC and thermal settings,
-and missing properties that prevented rk356x PCIe and ethernet from
-working correctly.
+Hans
 
-The changes for amlogic and mediatek address incorrect properties that
-were preventing the display support on MT8195 and the MMC support
-on various Meson SoCs from working correctly.
 
-The stihxxx-b2120 change fixes the GPIO polarity for the DVB tuner
-to allow this to be used correctly after a futre driver change,
-though it has no effect on older kernels.
 
-----------------------------------------------------------------
-Andy Yan (1):
-      arm64: dts: rockchip: add io domain setting to rk3566-box-demo
+> ---
+>  MAINTAINERS | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index fb1471cb5ed3..396bb00d98a1 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -5930,7 +5930,6 @@ F:	Documentation/ABI/testing/sysfs-platform-dell-wmi-ddv
+>  F:	drivers/platform/x86/dell/dell-wmi-ddv.c
+>  
+>  DELL WMI SYSMAN DRIVER
+> -M:	Divya Bharathi <divya.bharathi@dell.com>
+>  M:	Prasanth Ksr <prasanth.ksr@dell.com>
+>  L:	Dell.Client.Kernel@dell.com
+>  L:	platform-driver-x86@vger.kernel.org
+> 
+> ---
+> base-commit: d2d11f342b179f1894a901f143ec7c008caba43e
+> change-id: 20230207-maintainers-dell-wmi-sysman-40d6cd1ceddf
+> 
+> Best regards,
 
-Arnaud Ferraris (1):
-      arm64: dts: rockchip: fix input enable pinconf on rk3399
-
-Arnd Bergmann (3):
-      Merge tag 'v6.2-rockchip-dtsfixes1' of git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip into arm/fixes
-      Merge tag 'sti-dt-for-6.3-round1' of git://git.kernel.org/pub/scm/linux/kernel/git/pchotard/sti into arm/fixes
-      Merge tag 'amlogic-fixes-v6.2-rc-take2' of https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux into arm/fixes
-
-Chen-Yu Tsai (1):
-      arm64: dts: mediatek: mt8195: Fix vdosys* compatible strings
-
-Chukun Pan (1):
-      arm64: dts: rockchip: remove unsupported property from sdmmc2 for rock-3a
-
-Corentin Labbe (1):
-      arm64: dts: rockchip: use correct reset names for rk3399 crypto nodes
-
-Dan Johansen (1):
-      arm64: dts: rockchip: set sdmmc0 speed to sd-uhs-sdr50 on rock-3a
-
-Dmitry Torokhov (1):
-      ARM: dts: stihxxx-b2120: fix polarity of reset line of tsin0 port
-
-Heiner Kallweit (3):
-      arm64: dts: meson-axg: Make mmc host controller interrupts level-sensitive
-      arm64: dts: meson-g12-common: Make mmc host controller interrupts level-sensitive
-      arm64: dts: meson-gx: Make mmc host controller interrupts level-sensitive
-
-Jarrah Gosbell (1):
-      arm64: dts: rockchip: reduce thermal limits on rk3399-pinephone-pro
-
-Jensen Huang (1):
-      arm64: dts: rockchip: add missing #interrupt-cells to rk356x pcie2x1
-
-Johan Jonker (1):
-      ARM: dts: rockchip: add power-domains property to dp node on rk3288
-
-Jonas Karlman (1):
-      arm64: dts: rockchip: fix probe of analog sound card on rock-3a
-
-Krzysztof Kozlowski (2):
-      arm64: dts: rockchip: drop unused LED mode property from rk3328-roc-cc
-      arm64: dts: rockchip: align rk3399 DMC OPP table with bindings
-
- arch/arm/boot/dts/rk3288.dtsi                         |  1 +
- arch/arm/boot/dts/stihxxx-b2120.dtsi                  |  2 +-
- arch/arm64/boot/dts/amlogic/meson-axg.dtsi            |  4 ++--
- arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi     |  6 +++---
- arch/arm64/boot/dts/amlogic/meson-gx.dtsi             |  6 +++---
- arch/arm64/boot/dts/mediatek/mt8195.dtsi              |  4 ++--
- arch/arm64/boot/dts/rockchip/rk3328-roc-cc.dts        |  2 --
- arch/arm64/boot/dts/rockchip/rk3399-op1-opp.dtsi      |  2 +-
- arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts |  7 +++++++
- arch/arm64/boot/dts/rockchip/rk3399.dtsi              |  6 ++----
- arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts      | 11 +++++++++++
- arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts       |  5 +++--
- arch/arm64/boot/dts/rockchip/rk356x.dtsi              |  1 +
- 13 files changed, 37 insertions(+), 20 deletions(-)
