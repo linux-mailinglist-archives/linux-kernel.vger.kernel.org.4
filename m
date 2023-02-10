@@ -2,146 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4578691702
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 04:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A00691719
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 04:20:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbjBJDGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 22:06:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51970 "EHLO
+        id S230443AbjBJDUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 22:20:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbjBJDGt (ORCPT
+        with ESMTP id S229745AbjBJDUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 22:06:49 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCE95B83
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 19:06:46 -0800 (PST)
+        Thu, 9 Feb 2023 22:20:19 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22706E8B3
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 19:20:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675998407; x=1707534407;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=CJkMTgzIddNgRRg5mVzE1/GqVRRbH37QlNxA7GWPhDM=;
-  b=Qt+TlrpPsUR1o5Bp6CDv9153TcOsui1iAy4fPTzeSXTRsYCa92pmwvtR
-   RMB4jaoKI0bKz6Yq/xEoFzXuztisrnwGOETnZO1GlxJ3h41HZ0TAgAdb6
-   RFHDwnCor9+v9/DifcQ37tP0ON/uRLy6ev7FNVzSaAAIKK5q2LCUyscZz
-   yYOfhiTRNsczxWAElS66/Z7qBNRmJnB5SOESj3iJRl/enXl1Xw+QYx3p1
-   AcgER8e7n8kBryctadoNTG2gDcGkeZZibme/+VZ+9uWjQBgs8J8QQee1L
-   4RuJ55sZkmQVyqlUfghosmpGTkDq1ymABxqTRlatLKoKykKiM6lfv0Nw4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="310687392"
+  t=1675999218; x=1707535218;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5UqUC5gHtjgrSygfUA2d/Naj6vrVi2xBIELbS7tNovY=;
+  b=izAAXdRWEtLkK2+SjRgv3AAd/O56NYfSPRwkpdaWSpcg9fMaJHcrVSuF
+   C2634rCZyY+XA2a4IBvnDpyxEIOOnbSJM6B0FMO1rAlzXjSj+3xLXx9xJ
+   0krw9JgKAEfXf5dhmxEdJi9q0rFalqLZQKgyU7+91A89MMckbQ0BfyM1n
+   TjG/cdVNnf99EwKs3ne1ewKdch1Jpirs8C6nUa+Yh+TqfqEL2+RdgRT33
+   PX431SXmOOmZUk5b5iGiDMeKkY3sJZWTbXEPNwtHnuc4DZumGubJMUYYZ
+   vBaNYhsp6Hv/ycRczW6osMYUyVPzAWZMMDLdgY6XwREqIkXroF8TZmPoC
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="309954434"
 X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
-   d="scan'208";a="310687392"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 19:06:46 -0800
+   d="scan'208";a="309954434"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 19:20:18 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="736587573"
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="645497204"
 X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
-   d="scan'208";a="736587573"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga004.fm.intel.com with ESMTP; 09 Feb 2023 19:06:45 -0800
-Date:   Thu, 9 Feb 2023 19:16:29 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Tim Chen <tim.c.chen@linux.intel.com>
-Cc:     "Chen, Tim C" <tim.c.chen@intel.com>,
-        "Chen, Yu C" <yu.c.chen@intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Neri, Ricardo" <ricardo.neri@intel.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "Brown, Len" <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 06/10] sched/fair: Use the prefer_sibling flag of the
- current sched domain
-Message-ID: <20230210031629.GC6166@ranerica-svr.sc.intel.com>
-References: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com>
- <20230207045838.11243-7-ricardo.neri-calderon@linux.intel.com>
- <Y+TyUZg86LYhtWeJ@chenyu5-mobl1>
- <DM6PR11MB4107F95164772B40B92F66A6DCD99@DM6PR11MB4107.namprd11.prod.outlook.com>
- <fb63369b2fc686730adefb6800eae4877e62e3b6.camel@linux.intel.com>
+   d="scan'208";a="645497204"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 09 Feb 2023 19:20:16 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pQJxQ-0005UU-0U;
+        Fri, 10 Feb 2023 03:20:16 +0000
+Date:   Fri, 10 Feb 2023 11:20:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Suman Anna <s-anna@ti.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: drivers/remoteproc/ti_k3_dsp_remoteproc.c:432:17: sparse: sparse:
+ cast removes address space '__iomem' of expression
+Message-ID: <202302101148.6G7bpFTn-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fb63369b2fc686730adefb6800eae4877e62e3b6.camel@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 03:05:03PM -0800, Tim Chen wrote:
-> On Thu, 2023-02-09 at 20:00 +0000, Chen, Tim C wrote:
-> > > >  static inline void update_sd_lb_stats(struct lb_env *env, struct
-> > > > sd_lb_stats *sds)  {
-> > > > -       struct sched_domain *child = env->sd->child;
-> > > >         struct sched_group *sg = env->sd->groups;
-> > > >         struct sg_lb_stats *local = &sds->local_stat;
-> > > >         struct sg_lb_stats tmp_sgs;
-> > > > @@ -10045,9 +10044,11 @@ static inline void
-> > > > update_sd_lb_stats(struct
-> > > lb_env *env, struct sd_lb_stats *sd
-> > > >                 sg = sg->next;
-> > > >         } while (sg != env->sd->groups);
-> > > > 
-> > > > -       /* Tag domain that child domain prefers tasks go to
-> > > > siblings first */
-> > > > -       sds->prefer_sibling = child && child->flags &
-> > > > SD_PREFER_SIBLING;
-> > > > -
-> > > > +       /*
-> > > > +        * Tag domain that @env::sd prefers to spread excess
-> > > > tasks among
-> > > > +        * sibling sched groups.
-> > > > +        */
-> > > > +       sds->prefer_sibling = env->sd->flags & SD_PREFER_SIBLING;
-> > > > 
-> > > This does help fix the issue that non-SMT core fails to pull task
-> > > from busy SMT-
-> > > cores.
-> > > And it also semantically changes the definination of prefer
-> > > sibling. Do we also
-> > > need to change this:
-> > >        if ((sd->flags & SD_ASYM_CPUCAPACITY) && sd->child)
-> > >                sd->child->flags &= ~SD_PREFER_SIBLING; might be:
-> > >        if ((sd->flags & SD_ASYM_CPUCAPACITY))
-> > >                sd->flags &= ~SD_PREFER_SIBLING;
-> > > 
-> > 
-> > Yu,
-> > 
-> > I think you are talking about the code in sd_init() 
-> > where SD_PREFER_SIBLING is first set
-> > to "ON" and updated depending on SD_ASYM_CPUCAPACITY.  The intention
-> > of the code
-> > is if there are cpus in the scheduler domain that have differing cpu
-> > capacities,
-> > we do not want to do spreading among the child groups in the sched
-> > domain.
-> > So the flag is turned off in the child group level and not the parent
-> > level. But with your above
-> > change, the parent's flag is turned off, leaving the child level flag
-> > on. 
-> > This moves the level where spreading happens (SD_PREFER_SIBLING on) 
-> > up one level which is undesired (see table below).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   38c1e0c65865426676123cc9a127526fa02bcac6
+commit: b8431920391d36c273f63a29eab0dfc7e884dd17 remoteproc: k3-dsp: Add support for IPC-only mode for all K3 DSPs
+date:   11 months ago
+config: arm64-randconfig-s043-20230208 (https://download.01.org/0day-ci/archive/20230210/202302101148.6G7bpFTn-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b8431920391d36c273f63a29eab0dfc7e884dd17
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b8431920391d36c273f63a29eab0dfc7e884dd17
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/infiniband/hw/hns/ drivers/remoteproc/
 
-But my patch moves the level at which we act on prefer_sibling: it now
-checks the SD_PREFER_SIBLING flag at the current level, not its child.
-Thus, removing SD_PREFER_SIBLING from a level with SD_ASYM_CPUCAPACITY
-prevents spreading among CPUs of different CPU capacity, no?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302101148.6G7bpFTn-lkp@intel.com/
 
-Thanks and BR,
-Ricardo
+sparse warnings: (new ones prefixed by >>)
+>> drivers/remoteproc/ti_k3_dsp_remoteproc.c:432:17: sparse: sparse: cast removes address space '__iomem' of expression
+
+vim +/__iomem +432 drivers/remoteproc/ti_k3_dsp_remoteproc.c
+
+   402	
+   403	/*
+   404	 * This function implements the .get_loaded_rsc_table() callback and is used
+   405	 * to provide the resource table for a booted DSP in IPC-only mode. The K3 DSP
+   406	 * firmwares follow a design-by-contract approach and are expected to have the
+   407	 * resource table at the base of the DDR region reserved for firmware usage.
+   408	 * This provides flexibility for the remote processor to be booted by different
+   409	 * bootloaders that may or may not have the ability to publish the resource table
+   410	 * address and size through a DT property. This callback is invoked only in
+   411	 * IPC-only mode.
+   412	 */
+   413	static struct resource_table *k3_dsp_get_loaded_rsc_table(struct rproc *rproc,
+   414								  size_t *rsc_table_sz)
+   415	{
+   416		struct k3_dsp_rproc *kproc = rproc->priv;
+   417		struct device *dev = kproc->dev;
+   418	
+   419		if (!kproc->rmem[0].cpu_addr) {
+   420			dev_err(dev, "memory-region #1 does not exist, loaded rsc table can't be found");
+   421			return ERR_PTR(-ENOMEM);
+   422		}
+   423	
+   424		/*
+   425		 * NOTE: The resource table size is currently hard-coded to a maximum
+   426		 * of 256 bytes. The most common resource table usage for K3 firmwares
+   427		 * is to only have the vdev resource entry and an optional trace entry.
+   428		 * The exact size could be computed based on resource table address, but
+   429		 * the hard-coded value suffices to support the IPC-only mode.
+   430		 */
+   431		*rsc_table_sz = 256;
+ > 432		return (struct resource_table *)kproc->rmem[0].cpu_addr;
+   433	}
+   434	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
