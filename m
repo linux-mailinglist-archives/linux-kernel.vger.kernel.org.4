@@ -2,69 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41161691EFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 13:17:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A392A691F00
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 13:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232340AbjBJMRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 07:17:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
+        id S231679AbjBJMUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 07:20:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231893AbjBJMRq (ORCPT
+        with ESMTP id S230510AbjBJMUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 07:17:46 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41CD7289B;
-        Fri, 10 Feb 2023 04:17:44 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso3916277wms.4;
-        Fri, 10 Feb 2023 04:17:44 -0800 (PST)
+        Fri, 10 Feb 2023 07:20:53 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8F62595D;
+        Fri, 10 Feb 2023 04:20:52 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so9644103pjq.0;
+        Fri, 10 Feb 2023 04:20:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=85Jcqp/n5GNk4Jt2RN2nNjpswbRqJZ3Mt7tqEL5Vzsk=;
-        b=KU4zhpdKF64gnPrZSYtRctPRLhs18rAmuzm73jQWx1HnMfCJmhcCsD+puNvmFx+wTM
-         5hXWGs2wYVB6tzARbIFZfdIZJs2E5L1ikjnoRMy/8mlq52h69ra1WH7cB/ScK+hyUtns
-         UmIHo3Qx996o1d4Y4+ExP0Kemq34n0F8Z9U9krPtWLpi6+z04spnIPlebMOe5m//ZtZB
-         OUJSgL44cDCq8MsKd+lYeFqcBXrVCtuT1K4BIGziyzMr57rcHLMsaMe98/WF+XvDjYCY
-         KksOnWAtCKu8o1xCcdAVGHl/BgRAbAbGGII6aFreadXRE9xpjdGPVyggPsFjDeYV/oeo
-         sJSQ==
+        bh=nCTvu0a6wjUcbYhCc56Bv6cmIy8USHw9Y3nQMvihJyA=;
+        b=loZIz7P9g19yyWNOaOqhhert3n89gsLEw7u9lgkxEbOlKNA3uEL5OmWIIKM/eQNLxN
+         HhfnOnuwzqAKtmYjYym1eF+kJGKRAZnTlvOQEswjTwxq0/Dzqe9i5ae4ChFSOJ6n3Ha0
+         +xci1JfNQsnVW5DFGZWQeAec5N1dEjbdD5G/uWeEqPksK8Fb3prv8Prp6qLJb6iwNjwt
+         QzommCgDcCxE2w1m2NBpbH0Q6lmNsXukWWY0Gwa3KYdr9IHTuW4wSmWWtqciA19JmXO9
+         B0LlaYdfXTahkklclYDlJl1n/bb85TEE4vtHZx8V+QImwSIhVAuZcwi/vkf4Ym9KumLJ
+         XMRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=85Jcqp/n5GNk4Jt2RN2nNjpswbRqJZ3Mt7tqEL5Vzsk=;
-        b=5VQuAvjQOE/9Fvx6qKrDiTDSzzKEmoVw/9lXxpkG5oA0YVFpubtl0IoUpJg7U83Yym
-         3ouwE1cXR+EFWPgg9eawFNeyKOZj0ZBsisVxQWCXh6W0WusKPcjctlwW+43N6aj7AD89
-         gcOsG43DJDXFQ1oZqnq8o+6rQxJ3zR3SUa+il9qzOVUcNm3+Z1wGYHCifV9WW1felrjA
-         AeGS9tkQ3WEkhL7YQFDEb3/tIxtK8kc5FUD+8gI8PkTt/4q77fWjiIPhMBOd41z6cTJI
-         y/3dchTFPxpZdZUNhdt4w+M0AcLAaYOKDHeJR+AWJ6juIu8P6uZsaQNshR/i97gBjXWk
-         mzRQ==
-X-Gm-Message-State: AO0yUKV4zDZwVX9D/keOjchd7eGw5R7SQmSjDsw1+9F8j8fhs/x7UjX1
-        EtcTtZKCy64VTE9cVTlgBUqyLhkHULw=
-X-Google-Smtp-Source: AK7set+qS6x4BJ+LtKe95F/2SO4xZ8r/N6WDScelOSSAg3g2uSEJKjzn5Lnq9yVuJJ9xzfPxkUroEw==
-X-Received: by 2002:a05:600c:1887:b0:3dc:4318:d00d with SMTP id x7-20020a05600c188700b003dc4318d00dmr12224825wmp.11.1676031462935;
-        Fri, 10 Feb 2023 04:17:42 -0800 (PST)
-Received: from localhost.localdomain (23.red-88-10-60.dynamicip.rima-tde.net. [88.10.60.23])
-        by smtp.gmail.com with ESMTPSA id p13-20020a05600c468d00b003e001afa274sm5359820wmo.2.2023.02.10.04.17.41
+        bh=nCTvu0a6wjUcbYhCc56Bv6cmIy8USHw9Y3nQMvihJyA=;
+        b=TQiSqWzEe8qWAPMGtYuZkRhTAn+B3If/dgBQiQH8kgpaBSvVoMiwWzfnUjfW57btoJ
+         d363VgCKZi0U/nGdt1XDy2bX4RYTR15wNfIM8Sa0yHM6JXLRHKyho+a2JFBJh1RTQYYw
+         EnOZAOocQ6PYkK1+3mewfKJdDR5wmU/E8rPZU0UkMIWcpQcgusU9iblat6p3EUtj3wEX
+         YeHILaiAqylQWdMc8+KhIYF+ShzjGmPZWdI1SX1OxZKs9BheZlDDbH2uNPJbo4sgvsaf
+         rxctIPaZ61Ml+Bh2gy58Jr7e3R9F5Cy4ksF/WFjHoRF/D+VMRRJdoFqjEwq8Npg02guG
+         Q9Pw==
+X-Gm-Message-State: AO0yUKXh9qEPk2AwK/T0eQPqYf0FaCqbdxvdwG7fcpznRUjtOMWW9vpd
+        xUwnSvSpbN3m3o9NeLkenLs=
+X-Google-Smtp-Source: AK7set/oizdOeWlu58ZoA4nucT77ymE1cQ9Egy5hUKlJt6b046LD4vcGa3qe0pLjYjcyMJKxERr0UA==
+X-Received: by 2002:a17:902:ec90:b0:199:12d5:5b9b with SMTP id x16-20020a170902ec9000b0019912d55b9bmr17001775plg.25.1676031652119;
+        Fri, 10 Feb 2023 04:20:52 -0800 (PST)
+Received: from redecorated-mbp ([202.53.32.211])
+        by smtp.gmail.com with ESMTPSA id 20-20020a170902ee5400b0019a688446edsm2118176plo.78.2023.02.10.04.20.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 04:17:42 -0800 (PST)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     linux-watchdog@vger.kernel.org
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH v2 4/4] watchdog: mt7621-wdt: avoid ralink architecture dependent code
-Date:   Fri, 10 Feb 2023 13:17:35 +0100
-Message-Id: <20230210121735.639089-5-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230210121735.639089-1-sergio.paracuellos@gmail.com>
-References: <20230210121735.639089-1-sergio.paracuellos@gmail.com>
+        Fri, 10 Feb 2023 04:20:51 -0800 (PST)
+Date:   Fri, 10 Feb 2023 23:20:43 +1100
+From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
+To:     Aditya Garg <gargaditya08@live.com>
+Cc:     Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <thomas@t-8ch.de>,
+        Jiri Kosina <jikos@kernel.org>,
+        "jkosina@suse.cz" <jkosina@suse.cz>,
+        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+        Andy Shevchenko <andy@infradead.org>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "ronald@innovation.ch" <ronald@innovation.ch>,
+        "kekrby@gmail.com" <kekrby@gmail.com>
+Subject: Re: [PATCH 1/3] HID: apple-ibridge: Add Apple iBridge HID driver
+ for T1 chip.
+Message-ID: <20230210232043.18483401@redecorated-mbp>
+In-Reply-To: <B9E319F8-6047-40E5-BD9F-D90D6504AA9E@live.com>
+References: <E5D8BEBA-3C5B-460F-BD2C-39470A793CC3@live.com>
+        <40274C3D-4F4F-479C-944C-EEBDC78F959C@live.com>
+        <20230210045624.cjxroikmmvm3liij@t-8ch.de>
+        <B9E319F8-6047-40E5-BD9F-D90D6504AA9E@live.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.35; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -75,100 +85,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MT7621 SoC has a system controller node. Watchdog need to access to reset
-status register. Ralink architecture and related driver are old and from
-the beggining they are using some architecture dependent operations for
-accessing this shared registers through 'asm/mach-ralink/ralink_regs.h'
-header file. However this is not ideal from a driver perspective which can
-just access to the system controller registers in an arch independent way
-using regmap syscon APIs. Update Kconfig accordingly to select new added
-dependencies and allow driver to be compile tested.
+On Fri, 10 Feb 2023 12:05:13 +0000
+Aditya Garg <gargaditya08@live.com> wrote:
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- drivers/watchdog/Kconfig      |  2 ++
- drivers/watchdog/mt7621_wdt.c | 19 ++++++++++++++-----
- 2 files changed, 16 insertions(+), 5 deletions(-)
+> > On 10-Feb-2023, at 10:26 AM, Thomas Wei=C3=9Fschuh <thomas@t-8ch.de>
+> > wrote:
+> >=20
+> > Hi,
+> >=20
+> > some comments inline.
+> >=20
+> > On Fri, Feb 10, 2023 at 03:43:24AM +0000, Aditya Garg wrote:
+> >  =20
+> >> +
+> >> +static struct {
+> >> + unsigned int usage;
+> >> + struct hid_device_id *dev_id;
+> >> +} appleib_usage_map[] =3D {
+> >> + /* Default iBridge configuration, key inputs and mode settings */
+> >> + { 0x00010006, &appleib_sub_hid_ids[0] },
+> >> + /* OS X iBridge configuration, digitizer inputs */
+> >> + { 0x000D0005, &appleib_sub_hid_ids[0] },
+> >> + /* All iBridge configurations, display/DFR settings */
+> >> + { 0xFF120001, &appleib_sub_hid_ids[0] },
+> >> + /* All iBridge configurations, ALS */
+> >> + { 0x00200041, &appleib_sub_hid_ids[1] },
+> >> +}; =20
+> >=20
+> > const
+> >  =20
+>=20
+> Constantifying this results in compiler giving warnings
+>=20
+> drivers/hid/apple-ibridge.c:78:23: warning: initialization discards
+> 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+> 78 |         { 0x00200041, &appleib_sub_hid_ids[1] }, |
+>         ^ drivers/hid/apple-ibridge.c: In function
+> 'appleib_add_sub_dev': drivers/hid/apple-ibridge.c:363:29: warning:
+> assignment discards 'const' qualifier from pointer target type
+> [-Wdiscarded-qualifiers] 363 |         sub_hdev->ll_driver =3D
+> &appleib_ll_driver; |                             ^
+> drivers/hid/apple-ibridge.c: In function 'appleib_hid_probe':
+> drivers/hid/apple-ibridge.c:436:12: error: expected '(' before
+> 'hid_is_usb' 436 |         if hid_is_usb(hdev) |            ^~~~~~~~~~
+>       |            (
+> In file included from drivers/hid/apple-ibridge.c:48:
+> drivers/hid/apple-ibridge.c: In function 'appleib_probe':
+> drivers/hid/apple-ibridge.c:544:35: warning: passing argument 1 of
+> '__hid_register_driver' discards 'const' qualifier from pointer
+> target type [-Wdiscarded-qualifiers] 544 |         ret =3D
+> hid_register_driver(&appleib_hid_driver); |
+>         ^~~~~~~~~~~~~~~~~~~ ./include/linux/hid.h:898:31: note: in
+> definition of macro 'hid_register_driver' 898 |
+> __hid_register_driver(driver, THIS_MODULE, KBUILD_MODNAME) |
+>                      ^~~~~~ ./include/linux/hid.h:893:47: note:
+> expected 'struct hid_driver *' but argument is of type 'const struct
+> hid_driver *' 893 | extern int __must_check
+> __hid_register_driver(struct hid_driver *, |
+>                      ^~~~~~~~~~~~~~~~~~~ drivers/hid/apple-ibridge.c:
+> In function 'appleib_remove': drivers/hid/apple-ibridge.c:558:31:
+> warning: passing argument 1 of 'hid_unregister_driver' discards
+> 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+> 558 |         hid_unregister_driver(&appleib_hid_driver); |
+>                     ^~~~~~~~~~~~~~~~~~~ ./include/linux/hid.h:900:35:
+> note: expected 'struct hid_driver *' but argument is of type 'const
+> struct hid_driver *' 900 | extern void hid_unregister_driver(struct
+> hid_driver *); |
+> ^~~~~~~~~~~~~~~~~~~ make[6]: *** [scripts/Makefile.build:250:
+> drivers/hid/apple-ibridge.o] Error 1 make[5]: ***
+> [scripts/Makefile.build:500: drivers/hid] Error 2 make[5]: ***
+> Waiting for unfinished jobs=E2=80=A6.
+>=20
+> Some warnings are also due to a typo in if and constantifying `static
+> struct hid_driver`, although they probably can be fixed.
+>=20
+> In short, Thomas, do you really want me to constantify the structure
+> I am talking about in this email, as well `static struct hid_driver`?
+>=20
 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index b64bc49c7..0759de670 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -1865,6 +1865,8 @@ config GXP_WATCHDOG
- config MT7621_WDT
- 	tristate "Mediatek SoC watchdog"
- 	select WATCHDOG_CORE
-+	select REGMAP_MMIO
-+	select MFD_SYSCON
- 	depends on SOC_MT7620 || SOC_MT7621
- 	help
- 	  Hardware driver for the Mediatek/Ralink MT7621/8 SoC Watchdog Timer.
-diff --git a/drivers/watchdog/mt7621_wdt.c b/drivers/watchdog/mt7621_wdt.c
-index f1c702971..a7480fd2b 100644
---- a/drivers/watchdog/mt7621_wdt.c
-+++ b/drivers/watchdog/mt7621_wdt.c
-@@ -15,8 +15,8 @@
- #include <linux/moduleparam.h>
- #include <linux/platform_device.h>
- #include <linux/mod_devicetable.h>
--
--#include <asm/mach-ralink/ralink_regs.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/regmap.h>
- 
- #define SYSC_RSTSTAT			0x38
- #define WDT_RST_CAUSE			BIT(1)
-@@ -34,6 +34,7 @@
- struct mt7621_wdt_data {
- 	void __iomem *base;
- 	struct reset_control *rst;
-+	struct regmap *sysc;
- 	struct watchdog_device wdt;
- };
- 
-@@ -104,9 +105,12 @@ static int mt7621_wdt_stop(struct watchdog_device *w)
- 	return 0;
- }
- 
--static int mt7621_wdt_bootcause(void)
-+static int mt7621_wdt_bootcause(struct mt7621_wdt_data *d)
- {
--	if (rt_sysc_r32(SYSC_RSTSTAT) & WDT_RST_CAUSE)
-+	u32 val;
-+
-+	regmap_read(d->sysc, SYSC_RSTSTAT, &val);
-+	if (val & WDT_RST_CAUSE)
- 		return WDIOF_CARDRESET;
- 
- 	return 0;
-@@ -134,6 +138,7 @@ static const struct watchdog_ops mt7621_wdt_ops = {
- 
- static int mt7621_wdt_probe(struct platform_device *pdev)
- {
-+	struct device_node *np = pdev->dev.of_node;
- 	struct device *dev = &pdev->dev;
- 	struct watchdog_device *mt7621_wdt;
- 	struct mt7621_wdt_data *drvdata;
-@@ -143,6 +148,10 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
- 	if (!drvdata)
- 		return -ENOMEM;
- 
-+	drvdata->sysc = syscon_regmap_lookup_by_phandle(np, "ralink,sysctl");
-+	if (IS_ERR(drvdata->sysc))
-+		return PTR_ERR(drvdata->sysc);
-+
- 	drvdata->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(drvdata->base))
- 		return PTR_ERR(drvdata->base);
-@@ -158,7 +167,7 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
- 	mt7621_wdt->max_timeout = 0xfffful / 1000;
- 	mt7621_wdt->parent = dev;
- 
--	mt7621_wdt->bootstatus = mt7621_wdt_bootcause();
-+	mt7621_wdt->bootstatus = mt7621_wdt_bootcause(drvdata);
- 
- 	watchdog_init_timeout(mt7621_wdt, mt7621_wdt->max_timeout, dev);
- 	watchdog_set_nowayout(mt7621_wdt, nowayout);
--- 
-2.25.1
-
+Were the changes needed for these structs to be const in the
+linux-input tree for 6.3? If so then if you're applying the patches
+onto linus' tree that might be why there are errors about consts.
