@@ -2,90 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2F469229C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:48:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D006922C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:59:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232840AbjBJPr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 10:47:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45036 "EHLO
+        id S232853AbjBJP7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 10:59:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232818AbjBJPry (ORCPT
+        with ESMTP id S232083AbjBJP7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 10:47:54 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0389F70952
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:47:53 -0800 (PST)
-Received: (qmail 816769 invoked by uid 1000); 10 Feb 2023 10:47:53 -0500
-Date:   Fri, 10 Feb 2023 10:47:53 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Prashanth K <quic_prashk@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: u_serial: Add null pointer check in
- gserial_resume
-Message-ID: <Y+ZnKaeJx41xswpT@rowland.harvard.edu>
-References: <Y+SaZrDmaqB0U2QA@kroah.com>
- <f32398bb-62f3-12fd-4b81-7ce7bdf4706a@quicinc.com>
- <e7dde0aa-c1e2-dd6c-94a1-1e9049f0a5fb@quicinc.com>
- <Y+UMkA9iaJTWVQ5u@rowland.harvard.edu>
- <5ad875be-079c-7f91-ede9-68f954cc7f34@quicinc.com>
- <Y+UZQvuh8KR4gE4P@rowland.harvard.edu>
- <71f624df-5302-8276-2a2a-96223d4ba3c7@quicinc.com>
- <Y+VgHdJjrd0ZvY33@rowland.harvard.edu>
- <53d48954-3f7e-fd02-5e8e-2912c16565b3@quicinc.com>
- <bf3296be-10f7-5a43-5ae8-dfc5b6d41240@quicinc.com>
+        Fri, 10 Feb 2023 10:59:03 -0500
+X-Greylist: delayed 555 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 10 Feb 2023 07:59:00 PST
+Received: from uho.ysoft.cz (uho.ysoft.cz [81.19.3.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65FD1CF6F;
+        Fri, 10 Feb 2023 07:59:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ysoft.com;
+        s=20160406-ysoft-com; t=1676044183;
+        bh=8WNurBHNpjnkYbdUk17Xl/AJxXjEbpmjjB0j/bt9OA0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OjauiQtO6yJo1SUJF+ITlJd0zaUepjYvSYKYUuMxKEOGEyiI+tFUo6FnXAdOK1UMS
+         FmmipDoEoa2op6AYZ7/h1x53AHhC2nL8hnbE0+d41Y7/2lus1JN7U4FvYMxcEOGHyn
+         Jy6up9BMwNcKK4gI1m540vvSoSbmsZ2mJr0Y4Rts=
+Received: from vokac-Latitude-7410.ysoft.local (unknown [10.1.8.111])
+        by uho.ysoft.cz (Postfix) with ESMTP id 90F47A0081;
+        Fri, 10 Feb 2023 16:49:43 +0100 (CET)
+From:   =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
+To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
+Subject: [PATCH 0/6] Add support for new boards in the imx6dl-yapp4 family
+Date:   Fri, 10 Feb 2023 16:48:49 +0100
+Message-Id: <20230210154855.3086900-1-michal.vokac@ysoft.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <bf3296be-10f7-5a43-5ae8-dfc5b6d41240@quicinc.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 12:26:52PM +0530, Prashanth K wrote:
-> 
-> 
-> > And this seems like a viable option to me, what do you suggest?
-> > 
-> > gserial_disconnect {
-> >  ††††spin_lock(static)
-> >  ††††spin_lock(port)
-> >  ††††...
-> >  ††††gser->ioport = NULL;
-> >  ††††...
-> >  ††††spin_lock(port)
-> >  ††††spin_unlock(static)
-> > 
-> > }
-> > 
-> > gserial_resume {
-> >  ††††struct gs_port *port = gser->ioport;
-> > 
-> >  ††††spin_lock(static)
-> >  ††††if (!port)
-> 	   spin_unlock(static)
-> >  ††††††† return
-> >  ††††spin_lock(port)
+Hi,
 
-If you want, you could move the spin_unlock(static) up to here.  It 
-probably doesn't matter.
+Patches 1,2,3 fixes minor issues for the already supported boards.
+Patches 4 and 5 adds support for some new redesigned boards based
+on i.MX6 SoC.
+The last patch 6 adds record to the MAINTAINERS file stating that
+we do care about all these boards.
 
-> > 
-> >  ††††...
-> >  ††††spin_unlock(port)
-> >  ††††spin_unlock(static)
-> > }
+Michal Vok√°ƒç (6):
+  dt-bindings: arm: fsl: Fix copy-paste error in comment
+  ARM: dts: imx6dl-yapp4: Change LED channel names according to
+    dt-binding
+  ARM: dts: imx6dl-yapp4: Use reset-gpios property name
+  dt-bindings: arm: fsl: Add Y Soft IOTA¬†Phoenix, Lynx, Pegasus and
+    Pegasus+
+  ARM: dts: imx6dl-yapp43: Add support for new HW revision of the
+    IOTA¬†board
+  MAINTAINERS: Add Michal Vok√°ƒç as yapp4 boards maintainer
 
-I agree, that should work fine.
+ .../devicetree/bindings/arm/fsl.yaml          |   6 +-
+ MAINTAINERS                                   |   6 +
+ arch/arm/boot/dts/Makefile                    |   4 +
+ arch/arm/boot/dts/imx6dl-yapp4-common.dtsi    |   8 +-
+ arch/arm/boot/dts/imx6dl-yapp4-lynx.dts       |  58 ++
+ arch/arm/boot/dts/imx6dl-yapp4-phoenix.dts    |  42 ++
+ arch/arm/boot/dts/imx6dl-yapp43-common.dtsi   | 619 ++++++++++++++++++
+ arch/arm/boot/dts/imx6q-yapp4-pegasus.dts     |  58 ++
+ .../boot/dts/imx6qp-yapp4-pegasus-plus.dts    |  58 ++
+ 9 files changed, 854 insertions(+), 5 deletions(-)
+ create mode 100644 arch/arm/boot/dts/imx6dl-yapp4-lynx.dts
+ create mode 100644 arch/arm/boot/dts/imx6dl-yapp4-phoenix.dts
+ create mode 100644 arch/arm/boot/dts/imx6dl-yapp43-common.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6q-yapp4-pegasus.dts
+ create mode 100644 arch/arm/boot/dts/imx6qp-yapp4-pegasus-plus.dts
 
-Alan Stern
+-- 
+2.25.1
+
