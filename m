@@ -2,108 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC4A692932
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 22:25:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD51692937
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 22:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233654AbjBJVZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 16:25:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46032 "EHLO
+        id S233372AbjBJV1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 16:27:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233662AbjBJVZl (ORCPT
+        with ESMTP id S233349AbjBJV1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 16:25:41 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB877717B
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 13:25:40 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pQatm-00051h-EQ; Fri, 10 Feb 2023 22:25:38 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pQatk-0044kf-9R; Fri, 10 Feb 2023 22:25:37 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pQatk-002Wu8-NF; Fri, 10 Feb 2023 22:25:36 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH] power: supply: max77650: Make max77650_charger_disable() return void
-Date:   Fri, 10 Feb 2023 22:25:28 +0100
-Message-Id: <20230210212528.179627-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.0
+        Fri, 10 Feb 2023 16:27:21 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC0F7A7E6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 13:27:19 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id r17so4328805pff.9
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 13:27:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1676064439;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PBW6+3BQ/f+nsUlDuKE5AQQGY+PWXH1rqAOD3RD4RFA=;
+        b=3uaHXo5NzcgY2T+otxjjzT/mkXLlAOa4UrJUiRk0n1vLxkhgLBmJjukZlLeGzikY3B
+         +JgZbQ0b9wB7pduqP79RlWxzDxJlWO59v2YEFH+HtITYfsX9WGvibc82odOBB1ZLsBNr
+         XEYaPuSIrlDzpHRugEyOVq5ZCVluBGDL0n1foSDfhe8qQbEsAdsbVqAEnwsiZFCfppZF
+         d50XBtR9+bxATrCoQIPB6AdCPpro2dsW/CO654ROQEwgyHSQdJWupGEzGUXRxtx84/He
+         CNHW6MVw45VBOHCHkkMy7ebAKVWvqn8lEP4VciPLxFwPO7kYwX7s/I2POui8tmdVcO4Z
+         jYzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676064439;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PBW6+3BQ/f+nsUlDuKE5AQQGY+PWXH1rqAOD3RD4RFA=;
+        b=pjC+tftmYs7kCat5Q094FiaOBGT8Yjd1agpO50EegFytIRPNbGwfqJ6WIVOFMJuqG8
+         lCGbTqos0TXkoPy6ecTB2hxdQ0CY58+p+K+LbCf+rUbcNlriYrUOzHECuWlWYfcdLqh2
+         6mRUujYVllE6FDD0nws7S+nNXoaM/Zq5Keh+l1c+znzhKupotYss1jqPO2I4f7WwT8I9
+         w/7tk7kj9NquMR/dscgONtBJNAjPBuKGTgbY1yiZ81eTsr65Emqy/Aox/gtJDNnbdyXs
+         v1AK7HLgSNOsUgjtPYob35Pzgcj50JAx0c5bfKZXOEfbJiKACZBrh5ucnjYiKtTVExSk
+         4uSw==
+X-Gm-Message-State: AO0yUKXj/1gRmfJ/JTp8WwBMWBRsHrQjeQCrCtGFAh+vfj/0rgzZrTd0
+        0mg+uIF2ufl8QPU0HCCDAoGXTw==
+X-Google-Smtp-Source: AK7set8aoN4uPH6MOx7f9uzB1J+9B/VBYAh0QEuemPjOOa9BeH6t4xfLZiv6Ez5P3yzaBXos7hfusQ==
+X-Received: by 2002:a62:d410:0:b0:58d:995c:9c25 with SMTP id a16-20020a62d410000000b0058d995c9c25mr14965774pfh.3.1676064438943;
+        Fri, 10 Feb 2023 13:27:18 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id y8-20020a62b508000000b00592de256f2csm3783435pfe.145.2023.02.10.13.27.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 13:27:18 -0800 (PST)
+Message-ID: <b44783e6-3da2-85dd-a482-5d9aeb018e9c@kernel.dk>
+Date:   Fri, 10 Feb 2023 14:27:17 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: copy on write for splice() from file to pipe?
+Content-Language: en-US
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Stefan Metzmacher <metze@samba.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API Mailing List <linux-api@vger.kernel.org>,
+        io-uring <io-uring@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Samba Technical <samba-technical@lists.samba.org>
+References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
+ <CALCETrWjJisipSJA7tPu+h6B2gs3m+g0yPhZ4z+Atod+WOMkZg@mail.gmail.com>
+ <CAHk-=wj66F6CdJUAAjqigXMBy7gHquFMzPNAwKCgkrb2mF6U7w@mail.gmail.com>
+ <CALCETrU-9Wcb_zCsVWr24V=uCA0+c6x359UkJBOBgkbq+UHAMA@mail.gmail.com>
+ <CAHk-=wjQZWMeQ9OgXDNepf+TLijqj0Lm0dXWwWzDcbz6o7yy_g@mail.gmail.com>
+ <CALCETrWuRHWh5XFn8M8qx5z0FXAGHH=ysb+c6J+cqbYyTAHvhw@mail.gmail.com>
+ <CAHk-=wjuXvF1cA=gJod=-6k4ypbEmOczFFDKriUpOVKy9dTJWQ@mail.gmail.com>
+ <CALCETrUXYts5BRZKb25MVaWPk2mz34fKSqCR++SM382kSYLnJw@mail.gmail.com>
+ <CAHk-=wgA=rB=7M_Fe3n9UkoW_7dqdUT2D=yb94=6GiGXEuAHDA@mail.gmail.com>
+ <1dd85095-c18c-ed3e-38b7-02f4d13d9bd6@kernel.dk>
+ <CAHk-=wiszt6btMPeT5UFcS=0=EVr=0injTR75KsvN8WetwQwkA@mail.gmail.com>
+ <fe8252bd-17bd-850d-dcd0-d799443681e9@kernel.dk>
+ <CAHk-=wiJ0QKKiORkVr8n345sPp=aHbrLTLu6CQ-S0XqWJ-kJ1A@mail.gmail.com>
+ <7a2e5b7f-c213-09ff-ef35-d6c2967b31a7@kernel.dk>
+ <CALCETrVx4cj7KrhaevtFN19rf=A6kauFTr7UPzQVage0MsBLrg@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CALCETrVx4cj7KrhaevtFN19rf=A6kauFTr7UPzQVage0MsBLrg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1855; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=9HU0mBVgWFq+rDTBjOFEA+YWiBjHNDyR6odYSBx4LSg=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBj5rZE9Ao5hJmCZpIKQalsouTWFAF1UY8SPQLoigyk pg3Hp7SJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY+a2RAAKCRDB/BR4rcrsCbQnB/ 9QH4egcBSji0n5A9yEYjpHSQlKKTFbMmmMsRTHKAvKLqTvanprOUoM+SxnSNnUvlrOcGQbDhzmkY92 vDG+/HGX1WRyqYwhh5UngKMHvkNlUchngg9S8CaMcuHNmfn99fpQUHIHfCnJX2/Dr0+RseTqkh+K8Z pO87vRACeQNc2rrBHyXrIEwnUWMTTX63BwmY+a9FXzwM8Qn+fgMDrVRxrappZY3H6J2soASxz/Rmk3 aOC+/rmw2DYsqUBgDdOj7A1qtdhSljwuKrpqHhMrfdSYziw203pizLWW10ddYSezf4RUPYPLlclGnm 6iaXed1veYv4O2HDalN/mqYHh6KHX8
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of max77650_charger_disable() is ignored by all but one
-caller. That one caller propagates the error code in the platform driver's
-remove function. The only effect of that is that the driver core emits
-a generic error message (but still removes the device). As
-max77650_charger_disable() already emits an error message, this can better
-be changed to return zero.
+On 2/10/23 2:14?PM, Andy Lutomirski wrote:
+> On Fri, Feb 10, 2023 at 12:50 PM Jens Axboe <axboe@kernel.dk> wrote:
+>>
+>> On 2/10/23 1:44?PM, Linus Torvalds wrote:
+>>> On Fri, Feb 10, 2023 at 12:39 PM Jens Axboe <axboe@kernel.dk> wrote:
+>>>>
+>>>> Right, I'm referencing doing zerocopy data sends with io_uring, using
+>>>> IORING_OP_SEND_ZC. This isn't from a file, it's from a memory location,
+>>>> but the important bit here is the split notifications and how you
+>>>> could wire up a OP_SENDFILE similarly to what Andy described.
+>>>
+>>> Sure, I think it's much more reasonable with io_uring than with splice itself.
+>>>
+>>> So I was mainly just reacting to the "strict-splice" thing where Andy
+>>> was talking about tracking the page refcounts. I don't think anything
+>>> like that can be done at a splice() level, but higher levels that
+>>> actually know about the whole IO might be able to do something like
+>>> that.
+>>>
+>>> Maybe we're just talking past each other.
+>>
+>> Maybe slightly, as I was not really intending to comment on the strict
+>> splice thing. But yeah I agree on splice, it would not be trivial to do
+>> there. At least with io_uring we have the communication channel we need.
+>> And tracking page refcounts seems iffy and fraught with potential
+>> issues.
+>>
+> 
+> Hmm.
+> 
+> Are there any real-world use cases for zero-copy splice() that
+> actually depend on splicing from a file to a pipe and then later from
+> the pipe to a socket (or file or whatever)?  Or would everything
+> important be covered by a potential new io_uring operation that copies
+> from one fd directly to another fd?
 
-This is a preparation for making struct platform_driver::remove return
-void, too.
+I think it makes sense. As Linus has referenced, the sex appeal of
+splice is the fact that it is dealing with pipes, and you can access
+these internal buffers through other means. But that is probably largely
+just something that is sexy design wise, nothing that _really_ matters
+in practice. And the pipes do get in the way, for example I had to add
+pipe resizing fcntl helpers to bump the size. If you're doing a plain
+sendfile, the pipes just kind of get in the way too imho.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/power/supply/max77650-charger.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Another upside (from the io_uring) perspective is that splice isn't very
+efficient through io_uring, as it requires offload to io-wq. This could
+obviously be solved by some refactoring in terms of non-blocking, but it
+hasn't really been that relevant (and nobody has complained about it). A
+new sendfile op would nicely get around that too as it could be designed
+with async in nature, rather than the classic sync syscall model that
+splice follows.
 
-diff --git a/drivers/power/supply/max77650-charger.c b/drivers/power/supply/max77650-charger.c
-index d913428bedc0..e8c25da40ab2 100644
---- a/drivers/power/supply/max77650-charger.c
-+++ b/drivers/power/supply/max77650-charger.c
-@@ -141,7 +141,7 @@ static int max77650_charger_enable(struct max77650_charger_data *chg)
- 	return rv;
- }
- 
--static int max77650_charger_disable(struct max77650_charger_data *chg)
-+static void max77650_charger_disable(struct max77650_charger_data *chg)
- {
- 	int rv;
- 
-@@ -151,8 +151,6 @@ static int max77650_charger_disable(struct max77650_charger_data *chg)
- 				MAX77650_CHARGER_DISABLED);
- 	if (rv)
- 		dev_err(chg->dev, "unable to disable the charger: %d\n", rv);
--
--	return rv;
- }
- 
- static irqreturn_t max77650_charger_check_status(int irq, void *data)
-@@ -351,7 +349,9 @@ static int max77650_charger_remove(struct platform_device *pdev)
- {
- 	struct max77650_charger_data *chg = platform_get_drvdata(pdev);
- 
--	return max77650_charger_disable(chg);
-+	max77650_charger_disable(chg);
-+
-+	return 0;
- }
- 
- static const struct of_device_id max77650_charger_of_match[] = {
-
-base-commit: 4f72a263e162938de26866b862ed6015f5725946
 -- 
-2.39.0
+Jens Axboe
 
