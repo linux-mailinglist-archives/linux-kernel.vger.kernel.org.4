@@ -2,159 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63D1692B7E
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 00:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B173692B77
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 00:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjBJXkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 18:40:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
+        id S229735AbjBJXjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 18:39:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbjBJXkt (ORCPT
+        with ESMTP id S229545AbjBJXjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 18:40:49 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF26C3C7A2;
-        Fri, 10 Feb 2023 15:40:15 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pQd00-0004DK-2t;
-        Sat, 11 Feb 2023 00:40:13 +0100
-Date:   Fri, 10 Feb 2023 23:38:36 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Subject: [PATCH v4 07/12] net: ethernet: mtk_eth_soc: only write values if
- needed
-Message-ID: <ca95a266578bc52df44b432dfb2de7410d5202d9.1676071508.git.daniel@makrotopia.org>
-References: <cover.1676071507.git.daniel@makrotopia.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1676071507.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 10 Feb 2023 18:39:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95438A253;
+        Fri, 10 Feb 2023 15:39:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C46BA61EDA;
+        Fri, 10 Feb 2023 23:38:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 35868C433D2;
+        Fri, 10 Feb 2023 23:38:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676072328;
+        bh=tWF3stMTI3D2fjeGMM2sCw7H6XS4vtyDCXpcCtpVuXQ=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=oqlaz3HROov+GzG8Y2iaJs1u77pmLnvP925eDVkyhD5SonjcqS8+/718Ez8Ta9HUo
+         2ufrLSLulkeQ2/Y8QRRpE9Cvu14NtePY7nrv28ZSQokp9Svm8BjCu/2/9BitAx0ryc
+         ig/3NJje7daKbRgSysQZ5CK7kiPktb1hiMiYQHu0QGgITXXzsZnYDZRSTY/lff3a0g
+         jU/ElLetxIoYWZwdks8EAanPfVjrQykxzvCOPPpMZ5PyvqJdzrQO9XHfjOGXMcofCp
+         bni8VCG/KPJTqGqV3WP4tJ/whUmguQz3XXepStPBPaaIJSsEA1QrRL6zvFPZqYGJqo
+         ktQMMT7R6ZSqQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 22738E55F00;
+        Fri, 10 Feb 2023 23:38:48 +0000 (UTC)
+Subject: Re: [GIT PULL] pin control fixes for the v6.2 series
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CACRpkdax4qmftH974q+269YD65oMfLNFe-FrRSLyAZ_HY1OF0Q@mail.gmail.com>
+References: <CACRpkdax4qmftH974q+269YD65oMfLNFe-FrRSLyAZ_HY1OF0Q@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-gpio.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CACRpkdax4qmftH974q+269YD65oMfLNFe-FrRSLyAZ_HY1OF0Q@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git tags/pinctrl-v6.2-3
+X-PR-Tracked-Commit-Id: a8520be3ffef3d25b53bf171a7ebe17ee0154175
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 545c80ab3428df0d693f6b99b57f3c6ada34494d
+Message-Id: <167607232812.6240.942893665514908197.pr-tracker-bot@kernel.org>
+Date:   Fri, 10 Feb 2023 23:38:48 +0000
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Only restart auto-negotiation and write link timer if actually
-necessary.
+The pull request you sent on Fri, 10 Feb 2023 23:41:57 +0100:
 
-Tested-by: Bjørn Mork <bjorn@mork.no>
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- drivers/net/ethernet/mediatek/mtk_sgmii.c | 24 +++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+> git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git tags/pinctrl-v6.2-3
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_sgmii.c b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-index d7e7352041a4..61bd9986466a 100644
---- a/drivers/net/ethernet/mediatek/mtk_sgmii.c
-+++ b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-@@ -38,20 +38,16 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
- 			  const unsigned long *advertising,
- 			  bool permit_pause_to_mac)
- {
-+	bool mode_changed = false, changed, use_an;
- 	struct mtk_pcs *mpcs = pcs_to_mtk_pcs(pcs);
- 	unsigned int rgc3, sgm_mode, bmcr;
- 	int advertise, link_timer;
--	bool changed, use_an;
- 
- 	advertise = phylink_mii_c22_pcs_encode_advertisement(interface,
- 							     advertising);
- 	if (advertise < 0)
- 		return advertise;
- 
--	link_timer = phylink_get_link_timer_ns(interface);
--	if (link_timer < 0)
--		return link_timer;
--
- 	/* Clearing IF_MODE_BIT0 switches the PCS to BASE-X mode, and
- 	 * we assume that fixes it's speed at bitrate = line rate (in
- 	 * other words, 1000Mbps or 2500Mbps).
-@@ -77,13 +73,16 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
- 	}
- 
- 	if (use_an) {
--		/* FIXME: Do we need to set AN_RESTART here? */
--		bmcr = SGMII_AN_RESTART | SGMII_AN_ENABLE;
-+		bmcr = SGMII_AN_ENABLE;
- 	} else {
- 		bmcr = 0;
- 	}
- 
- 	if (mpcs->interface != interface) {
-+		link_timer = phylink_get_link_timer_ns(interface);
-+		if (link_timer < 0)
-+			return link_timer;
-+
- 		/* PHYA power down */
- 		regmap_update_bits(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL,
- 				   SGMII_PHYA_PWD, SGMII_PHYA_PWD);
-@@ -106,16 +105,17 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
- 		regmap_update_bits(mpcs->regmap, mpcs->ana_rgc3,
- 				   RG_PHY_SPEED_3_125G, rgc3);
- 
-+		/* Setup the link timer */
-+		regmap_write(mpcs->regmap, SGMSYS_PCS_LINK_TIMER, link_timer / 2 / 8);
-+
- 		mpcs->interface = interface;
-+		mode_changed = true;
- 	}
- 
- 	/* Update the advertisement, noting whether it has changed */
- 	regmap_update_bits_check(mpcs->regmap, SGMSYS_PCS_ADVERTISE,
- 				 SGMII_ADVERTISE, advertise, &changed);
- 
--	/* Setup the link timer and QPHY power up inside SGMIISYS */
--	regmap_write(mpcs->regmap, SGMSYS_PCS_LINK_TIMER, link_timer / 2 / 8);
--
- 	/* Update the sgmsys mode register */
- 	regmap_update_bits(mpcs->regmap, SGMSYS_SGMII_MODE,
- 			   SGMII_REMOTE_FAULT_DIS | SGMII_SPEED_DUPLEX_AN |
-@@ -123,7 +123,7 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
- 
- 	/* Update the BMCR */
- 	regmap_update_bits(mpcs->regmap, SGMSYS_PCS_CONTROL_1,
--			   SGMII_AN_RESTART | SGMII_AN_ENABLE, bmcr);
-+			   SGMII_AN_ENABLE, bmcr);
- 
- 	/* Release PHYA power down state
- 	 * Only removing bit SGMII_PHYA_PWD isn't enough.
-@@ -137,7 +137,7 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
- 	usleep_range(50, 100);
- 	regmap_write(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL, 0);
- 
--	return changed;
-+	return changed || mode_changed;
- }
- 
- static void mtk_pcs_restart_an(struct phylink_pcs *pcs)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/545c80ab3428df0d693f6b99b57f3c6ada34494d
+
+Thank you!
+
 -- 
-2.39.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
