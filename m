@@ -2,126 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F96691843
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 07:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D235691845
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 07:05:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbjBJGEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 01:04:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
+        id S231248AbjBJGFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 01:05:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231192AbjBJGEe (ORCPT
+        with ESMTP id S230443AbjBJGFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 01:04:34 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903BE765D7;
-        Thu,  9 Feb 2023 22:04:33 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31A4V17U025590;
-        Fri, 10 Feb 2023 06:04:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=UeMlyh4FfsbRIupeQJiM1UXlmc2sh69KJ1r1HQ/EkDs=;
- b=ZM3r5qfMTamqbytvP8ZSgX58fjyecQfXrTTGP7ysMDVvoqsecM/jeJ1pqyovb6vg+Nzi
- rN4ysydGfw258jBETc8go71hodsGoTor9VHGvG5UeIqdVOJwutfyociI3+Oam8hgXcua
- EMS5b2Sk1Pwiq5wykM7f3tdRWZZpmf5LwQ7tTnbxy1hgH6DLIfWLYSYRh1r1byZiUKf3
- w9qmMRjKRVE6uGnmsUCnFCOzYuKameC8Oztpk2FKlXdDN5p0SuFJo8yHZa04d3jArxvu
- nReMTwDX9Hp17mb5skQHWtXwcQL0XU4+xu9MPk1LUm+HqXJUXzOEL9G/GwPjNxZQo+xv 0Q== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nmg9embds-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 06:04:30 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31A64Twv017580
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 06:04:29 GMT
-Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Thu, 9 Feb 2023 22:04:24 -0800
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <quic_varada@quicinc.com>, <quic_srichara@quicinc.com>,
-        Kathiravan T <quic_kathirav@quicinc.com>
-Subject: [PATCH V2 2/2] arm64: dts: qcom: ipq5332: add SMEM support
-Date:   Fri, 10 Feb 2023 11:34:01 +0530
-Message-ID: <20230210060401.24383-3-quic_kathirav@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230210060401.24383-1-quic_kathirav@quicinc.com>
-References: <20230210060401.24383-1-quic_kathirav@quicinc.com>
+        Fri, 10 Feb 2023 01:05:21 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB987432C
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 22:05:01 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id hx15so12989860ejc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 22:05:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cyCw7uGS0lODDxQUej9sN3LcUc0Kv+YA1s/fVgdFQf8=;
+        b=TppZacDmVjKVMWV/vD8YkcVqNiaV7HzEMkP7UDXDdvUhGWQlLkys0mCqHqresMC2CT
+         qxFvG7R5LNjmQllm7R91eT2P5WMNBLrUpfwsdL/Zk5U0T5zrGPYEkRPZ2JqF41dMZb+E
+         7GWGDZNgdJDhfYD41mHZpKwqpOvRSDcbzvUTqMH+Ru30tCrcDXcfn+Cm4UmT4Gh1Y8uz
+         H4QJlFk2gZenlW4gyMtW5tgnp2UkPC/7+LtZodjrSnj5Nxzp9N5eWPZOryhXP+fN0oAM
+         mMuRLCfhwuYHy3g1awRfBb1+3kWZ/t6BEZl64eCQis2niB+ha6JuTsrbsfP4Ahk/jM0V
+         Xovw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cyCw7uGS0lODDxQUej9sN3LcUc0Kv+YA1s/fVgdFQf8=;
+        b=TL06Q7n31B4FCG5/X8eQQJzSgxDI82pLnHoXsm7r9CRdDZXFHehd91awmDXEcGZPhZ
+         NMLPEXLkjnwRTMbCN0DCFRA+83y04WCwpxtY21SEWGflMfk1MrcR2oZUdUYaErgMwt92
+         TbfVHzfkwOoK+Tr6ZOigyBiwHgINMxMHl9c/c5dG8G90QYiERXd+/W5mPtN0VNRLWxZJ
+         0oU2B3PperuJwl88JsJeTlFWvoFh1MNoi/UrIouRIxWJGr7sqniBA61tpzLpjThDaGQr
+         EOIIkCZ4QmycYoCKRjeNJHq4IEsevCRkA16fGpf/rRy7o/uiJXdrzYrTZB9OZqUlB3qK
+         RZZg==
+X-Gm-Message-State: AO0yUKXz9vO5WXdCGI1/SroFFnQdp8kPCTkSB7YnTu5pyIDfw/Ipw1r9
+        BjrZHdV0dnT1ZYeqJlC1cDuyKIgj91wVXasst6/urQ==
+X-Google-Smtp-Source: AK7set/KLIAuxzZ+iPqGSHKHgnZWT2zlp8hBwI1EZmGk82kj4+nvJtI58SDulBnhhn5DVxhopTqXWx5I1CP0H9rR1to=
+X-Received: by 2002:a17:906:2a4c:b0:87a:3b3f:b9da with SMTP id
+ k12-20020a1709062a4c00b0087a3b3fb9damr1057585eje.10.1676009100038; Thu, 09
+ Feb 2023 22:05:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 90-SmIpmi1JeKMU2VQaOtj7H_W9k35GN
-X-Proofpoint-ORIG-GUID: 90-SmIpmi1JeKMU2VQaOtj7H_W9k35GN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-10_01,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- malwarescore=0 impostorscore=0 bulkscore=0 phishscore=0 mlxlogscore=657
- priorityscore=1501 clxscore=1015 lowpriorityscore=0 adultscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302100052
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230206092559.2722946-1-senozhatsky@chromium.org>
+ <20230206092559.2722946-3-senozhatsky@chromium.org> <CAJD7tka_DFfFu2Ji-HAdw066J2MkmxzrYVQp6pHUAAQhz6Y7EA@mail.gmail.com>
+ <Y+GtsM6vJge90LHe@google.com> <Y+XG4mWPi4X9/hHZ@google.com>
+ <CAJD7tka3s84v9-ZA-OZkBkina6MByCSFnKXwv+hq8o8nZSZoyg@mail.gmail.com>
+ <Y+XIR64RyVv0EfTx@google.com> <CAJD7tkaLtuNL_=WtcMsZ_orSwRMhN3K7vF8PWcxLRXKc6Z8uGQ@mail.gmail.com>
+ <Y+Xbt4uJ/214xnR5@google.com>
+In-Reply-To: <Y+Xbt4uJ/214xnR5@google.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 9 Feb 2023 22:04:23 -0800
+Message-ID: <CAJD7tka73PT8ka78rJBnd0JMtfjLY7SAr953MKNbZy5+icHD8g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] zsmalloc: fine-grained inuse ratio based fullness grouping
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add SMEM support by adding required nodes.
+On Thu, Feb 9, 2023 at 9:53 PM Sergey Senozhatsky
+<senozhatsky@chromium.org> wrote:
+>
+> On (23/02/09 21:15), Yosry Ahmed wrote:
+> > > We need to be able to do zs_stat_get(class, CLASS_USAGE_70) or
+> > > zs_stat_get(class, CLASS_USAGE_10) in zs_stats_size_show() to
+> > > show class's fullness stats.
+> >
+> > If we use #define FULLNESS_GROUPS 10 for example, we can break down
+> > struct zs_size_stat from a single array to two arrays, one of the for
+> > fullness groups and the other one for the rest of the stats (e.g.
+> > OBJ_USED). We can have different helpers to update each, the former
+> > taking in a fullness value (0 to FULLNESS_GROUPS-1), and the latter an
+> > enum. WDYT?
+>
+> Wouldn't this be more code to review, maintain though? I mean,
+> what do we gain with this - fewer values in enum?
 
-Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
----
-Changes in V2:
-	- Rebased on V4 series of baseport patches
-	  https://lore.kernel.org/linux-arm-msm/20230208155232.11500-1-quic_kathirav@quicinc.com/
-
- arch/arm64/boot/dts/qcom/ipq5332.dtsi | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-index ad6481dd57ba..0eaf6a5a3da6 100644
---- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-@@ -99,6 +99,14 @@
- 			reg = <0x0 0x4a600000 0x0 0x200000>;
- 			no-map;
- 		};
-+
-+		smem@4a800000 {
-+			compatible = "qcom,smem";
-+			reg = <0x0 0x4a800000 0x0 0x00100000>;
-+			no-map;
-+
-+			hwlocks = <&tcsr_mutex 0>;
-+		};
- 	};
- 
- 	soc@0 {
-@@ -143,6 +151,12 @@
- 				 <0>;
- 		};
- 
-+		tcsr_mutex: hwlock@1905000 {
-+			compatible = "qcom,tcsr-mutex";
-+			reg = <0x01905000 0x20000>;
-+			#hwlock-cells = <1>;
-+		};
-+
- 		tcsr: syscon@1937000 {
- 			compatible = "qcom,tcsr-ipq5332", "syscon";
- 			reg = <0x01937000 0x21000>;
--- 
-2.17.1
-
+I don't feel very strongly, but the patch above has a lot of hardcoded
+values, multiple enums & static arrays. If we want to change the
+number of fullness groups to 5 or 20, we modify all of them. Just
+trying to make the code cleaner. If you think it will add a lot more
+code to review/maintain, then maybe it's not worth it. I didn't really
+give it a lot of thought.
