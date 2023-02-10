@@ -2,126 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A360691A3D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 09:46:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F942691A44
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 09:47:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231551AbjBJIp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 03:45:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
+        id S231551AbjBJIro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 03:47:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbjBJIpz (ORCPT
+        with ESMTP id S231342AbjBJIrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 03:45:55 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425721CF5E
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 00:45:54 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id z13so3269495wmp.2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 00:45:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qA3qvbnssW7q8kXQFDPaNXVdxo8ZJzAN4ti+xF1gQ5M=;
-        b=jgpNqU5WlUekv99IWQquuXrNQLE/1uSEKexafpZM3OI/DHNAPIDTQuOv/cMKnEaO3s
-         jWyJ4G94/heiFfv6ZPvieOdG0mnBTRijfe21S6sKCHLqc4fDLY2GwnJ07Oy5fNPvI5uz
-         2zRaM8D20COYy7LTiWC6LkZC3hOaaCadiVE1CfJjTnCAgIsiI6PDOvcxfA2BkYHmHdoo
-         ZevvEya0tneI+VNJQBWOmrpSU5WRObiF/pHuHISmHet5qNl1bCvPucYR1EjepIovc/fo
-         HlI/mLpjQq5OpzLN5S2WKr7mN2ePcbN6SY5hDLHJpgxTGU9uH44pbt/9iMthDC3PPUVS
-         aSjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qA3qvbnssW7q8kXQFDPaNXVdxo8ZJzAN4ti+xF1gQ5M=;
-        b=INYdTXPzMRwZtcDpFMN3qPLe5jyaA5k1Qbete0xDb/SX3K54JdDDOdD/XdeVwvSUo1
-         /MhDuP6IOuf3cKVC1t9/NCO4XCi1CO4h4ZR75aqTw6VUgBqO1t6vWN/UNdSwJwY6+vxz
-         KVoSNLyGshaOZZ8f7dwJ2r3sa2RseNBcXHAgd+rxuk/enMgMx6//pgDMKV5RxKtZls7X
-         1uPd8bqtVSdACtfd84OpAI9cylr/3XBCq6SCGLJzXdMTBONq4c9Lg3jcLGLU4kmonLAM
-         lcN2WJ9UXif/N6n2x7fVgc9VNItav1Cp9sQQJT2o86vRsUdkWBbZ94xTrYJlIomR/JtD
-         w3vQ==
-X-Gm-Message-State: AO0yUKUb5M5GfhgAKvFynpbFonmzCauhUeedaxJif4WbGL3+9vs27yx+
-        I1gnCTAGr/rE/4fVQb9a18FUEg==
-X-Google-Smtp-Source: AK7set9x6sBH4Hw//pRNQ8QpNO2VKH3YQMChRW1yO4t8kC4SPlcv4uzYZTfstMMz6m3zHCQMBt8S8A==
-X-Received: by 2002:a05:600c:35cd:b0:3df:eda1:439c with SMTP id r13-20020a05600c35cd00b003dfeda1439cmr8977658wmq.11.1676018752808;
-        Fri, 10 Feb 2023 00:45:52 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id n13-20020a05600c3b8d00b003dc434900e1sm4753511wms.34.2023.02.10.00.45.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 00:45:52 -0800 (PST)
-Message-ID: <9570b0fb-1fe2-00fe-e224-229752f26a9a@linaro.org>
-Date:   Fri, 10 Feb 2023 09:45:50 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/2] arm64: tegra: Audio codec support on Jetson AGX Orin
-Content-Language: en-US
-To:     Sameer Pujar <spujar@nvidia.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, oder_chiou@realtek.com, broonie@kernel.org
-Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
-        kuninori.morimoto.gx@renesas.com, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org
-References: <1675953417-8686-1-git-send-email-spujar@nvidia.com>
- <1675953417-8686-3-git-send-email-spujar@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1675953417-8686-3-git-send-email-spujar@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 10 Feb 2023 03:47:41 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4E277B176
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 00:47:39 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8CxYvCqBOZjUcAQAA--.33663S3;
+        Fri, 10 Feb 2023 16:47:38 +0800 (CST)
+Received: from bogon.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxX+SpBOZjLUYwAA--.56353S2;
+        Fri, 10 Feb 2023 16:47:37 +0800 (CST)
+From:   Youling Tang <tangyouling@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Xi Ruoyao <xry111@xry111.site>,
+        Jinyang He <hejinyang@loongson.cn>
+Cc:     Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/5] LoongArch: Add kernel relocation and KASLR support
+Date:   Fri, 10 Feb 2023 16:47:31 +0800
+Message-Id: <1676018856-26520-1-git-send-email-tangyouling@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8AxX+SpBOZjLUYwAA--.56353S2
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxZryUGrWUXF1fCFWfWFWktFb_yoW5Xrykpa
+        4Yyr98JF48Gr1fXwsxt3y5ur15t3Z7Kr1agFsFyryFkr1agF1UZr10vwnrXFyUtw4rXrWI
+        gFn5KF13K3W7AaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b7AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2
+        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+        6r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IY
+        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr
+        0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8j-e5UUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/02/2023 15:36, Sameer Pujar wrote:
-> Jetson AGX Orin has onboard RT5640 audio codec. This patch adds the
-> codec device node and the bindings to I2S1 interface.
-> 
-> Signed-off-by: Sameer Pujar <spujar@nvidia.com>
-> ---
->  .../dts/nvidia/tegra234-p3737-0000+p3701-0000.dts  | 47 +++++++++++++++++++++-
->  1 file changed, 46 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
-> index 8a97478..5881fbf 100644
-> --- a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
-> +++ b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
-> @@ -3,6 +3,7 @@
->  
->  #include <dt-bindings/input/linux-event-codes.h>
->  #include <dt-bindings/input/gpio-keys.h>
-> +#include <dt-bindings/sound/rt5640.h>
->  
->  #include "tegra234-p3701-0000.dtsi"
->  #include "tegra234-p3737-0000.dtsi"
-> @@ -49,7 +50,7 @@
->  
->  							i2s1_dap: endpoint {
->  								dai-format = "i2s";
-> -								/* placeholder for external codec */
-> +								remote-endpoint = <&rt5640_ep>;
->  							};
->  						};
->  					};
-> @@ -2017,6 +2018,32 @@
->  			status = "okay";
->  		};
->  
-> +		i2c@31e0000 {
-> +			status = "okay";
-> +
-> +			audio-codec@1c {
-> +				status = "okay";
+This patch series to support kernel relocation and KASLR (only 64bit).
 
-Are you sure you need this?
+Tested the kernel images built with new toolchain (Binutils-2.40 + patched
+GCC-12.2) and old toolchain (kernel.org cross toolchain [1]) on a
+3A5000-7A2000-EVB.
 
-Best regards,
-Krzysztof
+With CONFIG_RANDOMIZE_BASE=y, the results are:
+
+1. first boot, new toolchain:
+
+$ sudo cat /proc/iomem | grep Kernel
+  01080000-0189ffff : Kernel code
+  018a0000-01deb5ff : Kernel data
+  01deb600-01ef6e9f : Kernel bss
+
+2. second boot, new toolchain:
+
+$ sudo cat /proc/iomem | grep Kernel
+  012f0000-01b0ffff : Kernel code
+  01b10000-0205b5ff : Kernel data
+  0205b600-02166e9f : Kernel bss
+
+3. first boot, old toolchain:
+  010e0000-018fffff : Kernel code
+  01900000-01e591ff : Kernel data
+  01e59200-01f56dcf : Kernel bss
+
+4. second boot, old toolchain:
+  010b0000-018cffff : Kernel code
+  018d0000-01e291ff : Kernel data
+  01e29200-01f26dcf : Kernel bss
+
+Changes from v3:
+
+- JUMP_LINK_ADDR renamed to JUMP_VIRT_ADDR, and use the way of parameter
+  passing.
+
+- Reimplement kernel relocation, when the link address and load address
+  are different, realize the effect of adaptive relocation (one of the
+  usage scenarios is kdump operation).
+
+- Reimplement KASLR.
+
+Changes from v2:
+
+- Correctly fixup pcaddi12i/ori/lu32i.d/lu52i.d sequence generated by
+  GNU as <= 2.39 for la.pcrel.
+
+Changes from v1 to v2:
+
+- Relocate the handlers instead of using a trampoline, to avoid
+  performance issue on NUMA systems.
+- Fix compiler warnings.
+
+Xi Ruoyao (2):
+  LoongArch: Use la.pcrel instead of la.abs when it's trivially possible
+  LoongArch: Use la.pcrel instead of la.abs for exception handlers
+
+Youling Tang (3):
+  LoongArch: Add JUMP_VIRT_ADDR macro implementation to avoid using
+    la.abs
+  LoongArch: Add support for kernel relocation
+  LoongArch: Add support for kernel address space layout randomization
+    (KASLR)
+
+ arch/loongarch/Kconfig                  |  38 +++++
+ arch/loongarch/Makefile                 |   5 +
+ arch/loongarch/include/asm/inst.h       |   1 +
+ arch/loongarch/include/asm/setup.h      |   6 +-
+ arch/loongarch/include/asm/stackframe.h |  14 +-
+ arch/loongarch/include/asm/uaccess.h    |   1 -
+ arch/loongarch/kernel/Makefile          |   2 +
+ arch/loongarch/kernel/entry.S           |   2 +-
+ arch/loongarch/kernel/genex.S           |  40 ++++-
+ arch/loongarch/kernel/head.S            |  31 +++-
+ arch/loongarch/kernel/relocate.c        | 215 ++++++++++++++++++++++++
+ arch/loongarch/kernel/traps.c           | 158 ++++++++++++++---
+ arch/loongarch/kernel/vmlinux.lds.S     |  11 +-
+ arch/loongarch/mm/tlb.c                 |  23 +--
+ arch/loongarch/mm/tlbex.S               |  72 +++++++-
+ arch/loongarch/power/suspend_asm.S      |   5 +-
+ 16 files changed, 560 insertions(+), 64 deletions(-)
+ create mode 100644 arch/loongarch/kernel/relocate.c
+
+-- 
+2.37.3
 
