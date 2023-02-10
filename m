@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B29E69150B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 01:02:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 370E2691520
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 01:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbjBJACG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 19:02:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
+        id S230304AbjBJAJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 19:09:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbjBJACC (ORCPT
+        with ESMTP id S229775AbjBJAJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 19:02:02 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D893711658
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 16:01:59 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id o15so225906wrc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 16:01:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=r6L/XB8P8oVvWkbHdCIAnUfdPJAkV2ylf7wRLS26dMw=;
-        b=lDFibBy5RuKO75ZS8Maam7O79apzaGbz5xYVvAbOLHtXEdLDCNOSBtrfiBIRC5xnFs
-         Mf8CTmwGMJ89LiU4cmF2M4uZK3YHRkbMAW6aWJfN7KZbYTvBhL6K+rmxpj1ct9SbimPw
-         dKyroB30uJ2qBjC+66pkevKfcysT4999F38dpewan/60V3nSOeX69QYio1ht1GLrTAh4
-         QYm26dIrumwtFeSbDFYIYcVItEhb8nohNNnyYA6NbJj3cI+WyNXulNB8pX2GMXiPHqrl
-         kZ5WxJ5BH7ApyhYHtXrNF7KAYUlDuz4L0xJFuigF2Z9B6J0BXQE0gsjjfXXVf0esgEnM
-         +/bw==
+        Thu, 9 Feb 2023 19:09:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEA45A90E
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 16:08:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675987722;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BSw5daY010qcHCZuSVoAgV58dbuNqE0exBdvxUMk52M=;
+        b=HDE0rLv7PaKa9k+BCNUOkYm1dyzK1TdKJnvBXeg33z2jS6RrcA0a33ZDkGdCA3lXVnRaly
+        fPq4IwBm2HeMhJJuPABSGAMRMQuEjbHzNF3W3/r9MLteNrmYdeaPiVq8OU34puPcgZzwDt
+        +76FQ1kQ9NAMb3pyNDm4QoZ5MdK9FLM=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-630-rvKJ2d6GMuqtZY7VablZFg-1; Thu, 09 Feb 2023 19:08:41 -0500
+X-MC-Unique: rvKJ2d6GMuqtZY7VablZFg-1
+Received: by mail-qk1-f198.google.com with SMTP id a6-20020a05620a102600b00729952b4c73so2285678qkk.6
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 16:08:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r6L/XB8P8oVvWkbHdCIAnUfdPJAkV2ylf7wRLS26dMw=;
-        b=4E4oCczCcmudJichppilPWfF+Y7FqmU3QCEqE4ODQr5d0Kof9ioVAZcwPsZPVupWS4
-         xS2URYZPhucUzyfcG2Ua+1Uuqk/3JU5TQ7yadhUHFA77FS+w6xuKvJ3IgKzL75viNp9n
-         uddc1HEYAaIerLzWmvP1WpeXrNPXKJ8e1zwqVxoGE9AuHL9IBXbFFShb5lgjYJwdkTBu
-         5hqXe3PkA0w0JFfreWNrglVPCfE02bFOayJrDem3bbREx8p+Qo63n/cf/JMgQfq9/LWv
-         gsdCUIQuPE/iz0IY3wgfvaen64qEw3vGTWvvyZSsb9qiJI06oSd/j6tMfMr7plIVg1c4
-         dBWA==
-X-Gm-Message-State: AO0yUKVAy6UCyz03edwaL/lfZUuHASICfbeKd79qwKAJeweetXNlA6QX
-        4rfFfyt7RMmdbsyOfG1ip6rdHBVcNhVm/2hR
-X-Google-Smtp-Source: AK7set88rbTO/HLoV2uD0zXHZ8hjk6h0hjwwjKvJWFt8gikwiaJ9PR1DUPl4BD2PcFGarUvr7+vtjg==
-X-Received: by 2002:adf:df07:0:b0:2c4:b150:9279 with SMTP id y7-20020adfdf07000000b002c4b1509279mr4045997wrl.40.1675987318154;
-        Thu, 09 Feb 2023 16:01:58 -0800 (PST)
-Received: from [192.168.86.94] ([77.137.71.15])
-        by smtp.gmail.com with ESMTPSA id k10-20020a056000004a00b002c3d814cc63sm2258658wrx.76.2023.02.09.16.01.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Feb 2023 16:01:57 -0800 (PST)
-Message-ID: <b79052ee-07d2-a6b9-03cb-b33f61985fe2@gmail.com>
-Date:   Fri, 10 Feb 2023 02:01:54 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BSw5daY010qcHCZuSVoAgV58dbuNqE0exBdvxUMk52M=;
+        b=Yx4okWO5hxN9LfC22HvsQBu5HMoQpZMN78cwPQ5OAYubz9CaELYTbK6VH8D0SkJSEf
+         aZpAj8y/LMng+fo9k+ICn5suaZLHHfbEPAY2v3r2lIjmGzokDf/u9cAXFn+yVb5uUQHu
+         xvGD23XfF+fBbLNy1zul79Ywe5pEsHWs0hq8NLBfndAkI5TUXKge3i4Ubkgj/dwNtwaZ
+         Sp29FW8XDQHgN54NsKNb9HfbIbtIye89zg/amBgxrKoJKKtAXDmbDD/qD24QpUGYQFo/
+         45VsC6kKjJkSosUX0SXdbPFJbaickOI/+ebe7PjvEO0Ut9O/tOOT6NJN3OFxlLBYsLhl
+         VIUQ==
+X-Gm-Message-State: AO0yUKVFr2EjTKD5qRCJ6RJ1ODFjPdluPeBOrL1jX+O0FDN3c69GXJ1e
+        +Fjy2RO1s0Qul00vfY6KnTbSWPEtkAlhExyeYyTJIDNOFyaOHaEMXYXPUROs62Y1tkNxbo7ydSP
+        tSAFrmP2miOYD00CenB6tTnVigfoewLhAWMUgGrvR
+X-Received: by 2002:ac8:5dc6:0:b0:3ba:8c0:8f89 with SMTP id e6-20020ac85dc6000000b003ba08c08f89mr2003778qtx.89.1675987721135;
+        Thu, 09 Feb 2023 16:08:41 -0800 (PST)
+X-Google-Smtp-Source: AK7set/5wZzJKpTlmro2WCCkMZCDMF0ZKN/0KTX+DGUF/pDMJLqFMcVYxsSLUcdNimpD7Zma28DTdnHBiJyhmcXCLF8=
+X-Received: by 2002:ac8:5dc6:0:b0:3ba:8c0:8f89 with SMTP id
+ e6-20020ac85dc6000000b003ba08c08f89mr2003771qtx.89.1675987720917; Thu, 09 Feb
+ 2023 16:08:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.0
-Subject: Re: [PATCH -tip] kprobes/x86: Remove unneeded casting from immediate
- value
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, x86@kernel.org
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org
-References: <167595699689.1303232.13460109151246012198.stgit@mhiramat.roam.corp.google.com>
-Content-Language: en-US
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <167595699689.1303232.13460109151246012198.stgit@mhiramat.roam.corp.google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230210104720.365557d8@canb.auug.org.au>
+In-Reply-To: <20230210104720.365557d8@canb.auug.org.au>
+From:   David Airlie <airlied@redhat.com>
+Date:   Fri, 10 Feb 2023 10:08:29 +1000
+Message-ID: <CAMwc25r3EQG7hHkC7SU9omHWFGqto7RuUY9uVNkC6vXUF_hVtg@mail.gmail.com>
+Subject: Re: linux-next: duplicate patch in the drm-misc-fixes tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,39 +77,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 10, 2023 at 9:47 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> The following commit is also in the drm-fixes tree as a different commit
+> (but the same patch):
+>
+>   94d8b6572a1f ("nvidiafb: detect the hardware support before removing console.")
+>
+> This is commit
+>
+>   04119ab1a49f ("nvidiafb: detect the hardware support before removing console.")
+>
+> in the drm-fixes tree.
 
-On 2/9/23 5:36 PM, Masami Hiramatsu (Google) wrote:
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
->
-> Remove unneeded casting from immediate value assignments for relative
-> jump offset. Since the immediate values in the 'insn' data structure are
-> assigned from immediate bytes as a signed value to insn.immediate.value
-> by insn_field_set(). Thus, if we need to access that value as a signed
-> value (in this kprobe's case), we don't need to cast it.
-> This is a kind of clean up (should not change behavior) follows Nadav's
-> bugfix.
->
-> Link: https://lore.kernel.org/all/20230208071708.4048-1-namit@vmware.com/
->
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> ---
->   arch/x86/kernel/kprobes/core.c |   16 ++++++++--------
->   1 file changed, 8 insertions(+), 8 deletions(-)
->
-> diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-> index 695873c0f50b..2440e736d0e4 100644
-> --- a/arch/x86/kernel/kprobes/core.c
-> +++ b/arch/x86/kernel/kprobes/core.c
-> @@ -607,19 +607,19 @@ static int prepare_emulation(struct kprobe *p, struct insn *insn)
->   	case 0xe8:	/* near call relative */
->   		p->ainsn.emulate_op = kprobe_emulate_call;
->   		if (insn->immediate.nbytes == 2)
-> -			p->ainsn.rel32 = *(s16 *)&insn->immediate.value;
-> +			p->ainsn.rel32 = insn->immediate.value;
->   		else
-> -			p->ainsn.rel32 = *(s32 *)&insn->immediate.value;
-> +			p->ainsn.rel32 = insn->immediate.value;
+Just FYI misc team, I've force pushed drm-misc-fixes to drop this
+patch, please make sure any local misc fixes don't bring it back in if
+we can avoid it.
 
-Hmm.. I don't get it. What the purpose of keeping the duplicated code 
-(after your change)?
+Dave.
 
