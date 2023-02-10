@@ -2,90 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC2A6692A7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 23:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C860C692A82
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 23:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233985AbjBJWs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 17:48:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
+        id S233994AbjBJWtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 17:49:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232968AbjBJWsY (ORCPT
+        with ESMTP id S233606AbjBJWtW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 17:48:24 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA15B32E55
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 14:48:22 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id g2so8091912ybk.8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 14:48:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9V+zsV1TA739jM/Ghxhj4I8BxArH5h7QM0M5+yu8NH4=;
-        b=yeomO+TAo5S0V0qCgEkJQZexh/5y3obB++mgbBjFuN1Roau5COEg3FzAhbWRgqVObO
-         XOUBcq5guD+84TzV3IZ+h4s7XrKjhdOlFtyC05BUoTQEd8qM1C8jJB/VkmrD16mqg3fc
-         Kr5yLc0xWU80OyOEgfkOYKb8zXnTNkMroIVOvm1JOyrYe9HpVhArkFZA0zETDJ38eGiy
-         BgexlpLRjnwAnLLp0KnBegqTJ1AGBXu8OaMEs2+VpLDaziwN8qr1QQ/Pjxy0UQbCso/5
-         kJWctJWoEaW5CV5hiiOgMAhzsxiiJISKHhf/w47+kQMXcjE20HI+p8EotyhXmrR/az27
-         Qa7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9V+zsV1TA739jM/Ghxhj4I8BxArH5h7QM0M5+yu8NH4=;
-        b=5KwCTvlK7FibhePJlNH6RRQ0Oqz2YebnWE/s0rgUqYmVGTNnE4NxSz0t308znyCxUi
-         gPh/0p0iIoB5xg+zX9gZlAzEm39wBOD5kjw7UrQW0U28k4mKpIiHsYF1OHIl4Ov4LXLs
-         2BdcuMXunEYpUltGO7Jl6awq7eJH3pkRE/PcIzCfe07EEWcdfbyriFPRxg5/HDIIXgBy
-         KiXXx8A+wIbImCPappDQVMBwq4v/p24wId7QeD1GB2FmZpqGfKHYgPPbfrhwWg55+Z1Z
-         BZ9IlfllCw1UG7Ey9zg4V9r0gdlg9lvEMikMrrgGilH4UyG7aEqnnrsV0vW6DTHRaMjK
-         +lcA==
-X-Gm-Message-State: AO0yUKUo8KoKR8TXRM19VA0StReUrq1VLNc4h/XUu/SYMw9/YkrP7+4z
-        yBV5eNNwLzJ2Jao05RTy2cxuWCd3q/gZsWPL9zGUpQ==
-X-Google-Smtp-Source: AK7set+pQfNJNY9S+wbdMQA1kVlICKHwx56mwcDxq/G7Zcm528p2mKL2GXy3CFy4/gF6gNAT8oJmA/Qx3lUFLVa61u0=
-X-Received: by 2002:a25:8c04:0:b0:883:cf5:1553 with SMTP id
- k4-20020a258c04000000b008830cf51553mr1881980ybl.28.1676069301949; Fri, 10 Feb
- 2023 14:48:21 -0800 (PST)
+        Fri, 10 Feb 2023 17:49:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3DA32CDE;
+        Fri, 10 Feb 2023 14:49:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1192BB825E3;
+        Fri, 10 Feb 2023 22:49:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E317C433D2;
+        Fri, 10 Feb 2023 22:49:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676069358;
+        bh=SaVWEZqi6FK5RZrvwlP3inTyWF9/jTYSLZIuA+RQlOY=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=Fjsc41PSUvuYhRh/p0FRD7O8YG83EbFsky6WgGPSPQj4me6aOpo/Fu5UKT0XpT5OH
+         BsJp9v8VLp64Nm6UIcXN+q8KNJNkwLpz6ikFjQqEQoT7fKL2d7aPBB9plkgu4PhYhg
+         EjW/bDmSSV5ALnQMklISKwzbg/PtN6IBGHXD+v9xkjCKkqfoI+R43SMw4qAonK55gT
+         eilyYyzi/i10qxnuwqrRzTACU0gZuVzCxpd6XFxPGTAAmY8E55PFcV5bFXrMpkLuxl
+         3O+lMjm8g83o0N9gcRJfHmiTOmtkaTUCFmN8vb1+MTNm8RPpB/obE2Shu9z7dRN8mV
+         wmwjutvgTLw7w==
+Message-ID: <83a3c8d0abf217369f045df0217b1f64.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230209074510.4153294-1-abel.vesa@linaro.org>
-In-Reply-To: <20230209074510.4153294-1-abel.vesa@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 10 Feb 2023 23:48:10 +0100
-Message-ID: <CACRpkdaqqbJ_2PjdXqkoe5Y4V4UFDc+XnnNE2csv3xqLyZFENg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] pinctrl: qcom: Add support for i2c specific pull feature
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh@kernel.org>,
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAOf5uwkMRSc7q1xUv4D=hc4w0HL=+x1_J60yyru_hGSuf5m0bA@mail.gmail.com>
+References: <20230101175740.1010258-1-dario.binacchi@amarulasolutions.com> <1fc8686b0b66c3b3ff80c044ecf1add6.sboyd@kernel.org> <CAOf5uwkMRSc7q1xUv4D=hc4w0HL=+x1_J60yyru_hGSuf5m0bA@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 00/11] clk: imx8mn: setup clocks from the device tree
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        linux-kernel@vger.kernel.org, angelo@amarulasolutions.com,
+        tommaso.merciai@amarulasolutions.com,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        linux-amarula@amarulasolutions.com, anthony@amarulasolutions.com,
+        jagan@amarulasolutions.com, Abel Vesa <abelvesa@kernel.org>,
+        Adam Ford <aford173@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-gpio@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Li Jun <jun.li@nxp.com>, Lucas Stach <l.stach@pengutronix.de>,
+        Marek Vasut <marex@denx.de>,
+        Markus Niebel <Markus.Niebel@ew.tq-group.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
+To:     Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date:   Fri, 10 Feb 2023 14:49:16 -0800
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 9, 2023 at 8:45 AM Abel Vesa <abel.vesa@linaro.org> wrote:
+Quoting Michael Nazzareno Trimarchi (2023-01-26 02:49:54)
+> Hi
+>=20
+> On Wed, Jan 25, 2023 at 10:11 PM Stephen Boyd <sboyd@kernel.org> wrote:
+> >
+> > Quoting Dario Binacchi (2023-01-01 09:57:29)
+> > > The idea for this series was born back from Dublin (ELCE 2022) after
+> > > having attended the talk entitled "Updating and Modernizing Clock
+> > > Drivers" held by Chen-Yu Tsai and the availability of a board with
+> > > imx8mn SOC.
+> >
+> > Interesting. I didn't see any mention of putting clks into DT in that
+> > presentation.
+> >
+> > >
+> > > This series aims to setup all imx8mn's clocks from the device tree and
+> > > remove the legacy setup code with hardwired parameters.
+> >
+> > Please, no! We don't want one node per clk style of bindings.
+>=20
+> I think the idea behind is:
+> - create a way from silicon vendor to export their clock mapping with
+> automatic exportation
 
-> Add support for the new i2c_pull property introduced for SM8550 setting
-> a I2C specific pull mode on I2C able pins. Add the bit to the SM8550
-> specific driver while at it.
->
-> Co-developed-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+I suspect silicon vendors automatically generate their clk drivers
+today.
 
-Applied to the pin control tree for v6.3, I expect that Bjorn will apply
-patch 2/2 to the qcom tree!
+> - reduce the copy and paste code across the drivers
+> - avoid code duplication
 
-Yours,
-Linus Walleij
+Code duplication should be avoided. Surely the clk_ops is shared? Data
+duplication is the real problem here. The status quo has been to have
+data descriptions of clks in drivers so that drivers can turn them on.
+If we're trying to avoid bloat then we only enable the drivers that we
+care about, or make them modular so they don't waste kernel memory.
+
+If you have ideas on how to avoid duplication there then by all means
+implement them. Don't move the data duplication problem to devicetree
+though.
+
+I've been wondering if we can tag drivers that are compiled into the
+kernel as freeable if they aren't ever going to probe because they're
+for some SoC that isn't present. That would allow us to shed various
+builtin clk drivers on systems instead of forcing us to make everything
+a module.
+
+>=20
+> Is the binding a way to solve this problem?
+
+Don't think so.
+
+> If you don't want one node
+> per clk style bindings, did you still think that the way
+> to go is totally wrong?
+
+Yes.
