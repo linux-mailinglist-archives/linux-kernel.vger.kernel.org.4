@@ -2,126 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09DA369172F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 04:38:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1A8691735
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 04:39:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjBJDig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 22:38:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
+        id S230516AbjBJDjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 22:39:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbjBJDif (ORCPT
+        with ESMTP id S229825AbjBJDjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 22:38:35 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7704E5CBFF;
-        Thu,  9 Feb 2023 19:38:33 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 9 Feb 2023 22:39:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01ECD50A;
+        Thu,  9 Feb 2023 19:39:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PCfbC1gt9z4xNH;
-        Fri, 10 Feb 2023 14:38:31 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676000311;
-        bh=+0AIMDf9647rvs8+Q7dwAwQ6K6344eJt+hok2qkYWRk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=g+gp30X+1eVZAf3ALMnwy+5TwI9VVpx1/qHMMQLyIrven4LKyhkhUXfHsVIsVYlyX
-         mBw8zXLRp67XgvYWApIg5/DcKyo1go5ZR7Mq80q4a6m3ZUcPA8pQppFJd8g3kKIz2x
-         LgnOFzl6JCR0WMhB0uSJ9wH7c85LpIWKBEeqcV8S2U0fqotvW4f0k7SBT9mujXbDac
-         8CZmo6qfYt9Vk9BoclSjwbccmegFYhySwnpZpRiVNtqGKfEafCp6+O67jd5/uSCmRF
-         3L3ILk+bBrBV8nbs6MVXdOJwVHII1Fc7V0vOCDXyH3joXeCaKpM6Sf6ZUYfpVdnuJW
-         3cNyigMoNQ+TQ==
-Date:   Fri, 10 Feb 2023 14:38:29 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the powerpc tree
-Message-ID: <20230210143829.4ab676bd@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55A70B819FF;
+        Fri, 10 Feb 2023 03:39:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE552C433A0;
+        Fri, 10 Feb 2023 03:39:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676000372;
+        bh=xj47ybbF7LI1Wrz6w6+Q/zE1oBtiQ7WkVJ8gYj3Z8yc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ulPIXuoGBO891EXyVOKqbaLIDplW7SI8JhbdWl6lbINdlqR24Xa0JieSlZfQULpJl
+         LaBTjJ/fp1nDH0k33nEp8grRay2z1Q3mSd6P1HYxGCvHPW5+LVt9Qwm5iRV2X/lcVj
+         c+KnyPAF3wP5PL0aBu83IsuVS04KxANBqJXS8VGed++cBqTu1odY0P7Ss1GrPAFtD1
+         7LYUMbjh/J6wthNqNLHGTmszJMNh9dNCTTCPcB1OSvZ3H45M9+nosuDKiQ3U/J0WyI
+         +4tF5Zyd2jwVV24KR14KttgXAkhLr1qZr9E0EdBkftiChbzjwyTSBASCk0Jgm18V/w
+         wQ6O9gOyKpqWg==
+Date:   Fri, 10 Feb 2023 05:39:29 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, pvorel@suse.cz, tadeusz.struk@intel.com,
+        kanth.ghatraju@oracle.com, konrad.wilk@oracle.com,
+        erpalmer@linux.vnet.ibm.com, coxu@redhat.com,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v4 1/6] KEYS: Create static version of
+ public_key_verify_signature
+Message-ID: <Y+W8VQnCw2RlwFnH@kernel.org>
+References: <20230207025958.974056-1-eric.snowberg@oracle.com>
+ <20230207025958.974056-2-eric.snowberg@oracle.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3jYrWzezKBrYae+EmJWEE1Q";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230207025958.974056-2-eric.snowberg@oracle.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/3jYrWzezKBrYae+EmJWEE1Q
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Feb 06, 2023 at 09:59:53PM -0500, Eric Snowberg wrote:
+> The kernel test robot reports undefined reference to
+> public_key_verify_signature when CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE is
+> not defined. Create a static version in this case and return -EINVAL.
+> 
+> Fixes: db6c43bd2132 ("crypto: KEYS: convert public key and digsig asym to the akcipher api")
+> Reported-by: kernel test robot <lkp@intel.com>
 
-Hi all,
+What is this reported-by is good for?
 
-After merging the powerpc tree, today's linux-next build (powerpc64
-allnoconfig) failed like this:
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> Reviewed-by: Petr Vorel <pvorel@suse.cz>
+> ---
+>  include/crypto/public_key.h | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/include/crypto/public_key.h b/include/crypto/public_key.h
+> index 68f7aa2a7e55..6d61695e1cde 100644
+> --- a/include/crypto/public_key.h
+> +++ b/include/crypto/public_key.h
+> @@ -80,7 +80,16 @@ extern int create_signature(struct kernel_pkey_params *, const void *, void *);
+>  extern int verify_signature(const struct key *,
+>  			    const struct public_key_signature *);
+>  
+> +#if IS_REACHABLE(CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE)
+>  int public_key_verify_signature(const struct public_key *pkey,
+>  				const struct public_key_signature *sig);
+> +#else
+> +static inline
+> +int public_key_verify_signature(const struct public_key *pkey,
+> +				const struct public_key_signature *sig)
+> +{
+> +	return -EINVAL;
+> +}
+> +#endif
+>  
+>  #endif /* _LINUX_PUBLIC_KEY_H */
+> -- 
+> 2.27.0
+> 
 
-arch/powerpc/kernel/setup_64.c: In function 'early_setup':
-arch/powerpc/kernel/setup_64.c:400:34: error: 'struct thread_info' has no m=
-ember named 'cpu'
-  400 |         task_thread_info(current)->cpu =3D boot_cpuid; // fix task_=
-cpu(current)
-      |                                  ^~
-
-Caused by commit
-
-  0ecf51ca51e5 ("powerpc/64: Fix task_cpu in early boot when booting non-ze=
-ro cpuid")
-
-# CONFIG_SMP is not set
-
-I applied the following fix up for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 10 Feb 2023 14:21:33 +1100
-Subject: [PATCH] fixup for "powerpc/64: Fix task_cpu in early boot when boo=
-ting non-zero cpuid"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- arch/powerpc/kernel/setup_64.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/powerpc/kernel/setup_64.c b/arch/powerpc/kernel/setup_64.c
-index 78d8a105764b..b2e0d3ce4261 100644
---- a/arch/powerpc/kernel/setup_64.c
-+++ b/arch/powerpc/kernel/setup_64.c
-@@ -397,7 +397,9 @@ void __init early_setup(unsigned long dt_ptr)
- 	setup_paca(paca_ptrs[boot_cpuid]); /* install the paca into registers */
- 	// smp_processor_id() now reports boot_cpuid
-=20
-+#ifdef CONFIG_SMP
- 	task_thread_info(current)->cpu =3D boot_cpuid; // fix task_cpu(current)
-+#endif
-=20
- 	/*
- 	 * Configure exception handlers. This include setting up trampolines
---=20
-2.39.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/3jYrWzezKBrYae+EmJWEE1Q
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPlvDUACgkQAVBC80lX
-0Gx5dQf9H1dUoqhzZt/F/WloAtElvaCyEa2JzUllu9ogsjUNxxIpJz6Org/LHfjK
-RhDsoNYPHIt5umUxmmZ0ZcfFI+ZK6QrvPoGeZsDGWY0Y1zj3BVqfxpKri90Waxae
-AHJDPHJBJcyyNcymykYRJ7/eoqit1d4yFTYyERifTwuY6pKPxdH2Dm5YUsw4LRhN
-6kJqbNZb/QzfkGgsO2rsvWhGmhdS7nDIkLfIUpx9lMqwj3On7M8iOzYLI6Ey5acy
-avQ0YoK2YZyhzejsqRzRo3NjuRn1+ocl5+1O67fJPEeFwuXb81KdL2fliPiaEIaX
-aUC1RTm4t06F8+RuIKH8OeyJQtDdZA==
-=idtf
------END PGP SIGNATURE-----
-
---Sig_/3jYrWzezKBrYae+EmJWEE1Q--
+BR, Jarkko
