@@ -2,100 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 374C56922C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:58:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB916922D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbjBJP63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 10:58:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
+        id S232702AbjBJQAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 11:00:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232083AbjBJP61 (ORCPT
+        with ESMTP id S232026AbjBJP76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 10:58:27 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0EA18B23
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:58:22 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id m12so6230811qth.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:58:22 -0800 (PST)
+        Fri, 10 Feb 2023 10:59:58 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17ABB79B09
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:59:41 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id by3so4201393wrb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:59:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8aTFVnOsWYVkAC4sToVkHybmRjgNOkZh2qFCAaG8DlI=;
-        b=Mi1RyD77ugTxCb1ulPTtMBZeqpqGF5Q0mYp6MhS712A084x2kpLFCTpdLya3m1NBUB
-         mvqzm2bWVkLTwhJjn1bLcYzYN72L+p0o9VwQzSEKpmQZ29vbd1X2RN+wKsRq8g8QrUmC
-         /U4nv2mCzDf2SP4GQsoclIJ3AoMg3hpRBUPTDATzHhem9yI+A+SEf7iPp5A6Y7KmgTYt
-         6S28lx6psVQCjX+FNSbb3BlyN3FwZeg4lZuIzPwRdsjRu2WqnmeomMMEqtGF37c6PQk5
-         BCSN9vOA7ovMSr14qKKU6xB/I3KwmWB4D6y4N21aro/kEktfQZXbu2ZERpT2DAO6ql7V
-         B7rg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IaOMp85DQqFK9FmSZWOrsKFZKbvOVr0dD/xHxXmrHrs=;
+        b=SjWmfQX6sZAmi8yrO5woKGzlHGfyeLaYU3uU2pZHqLtDuRvR3qS7Wf1AYTIBjfJzxc
+         xIPmwvUP8sNa6dtwEEa1qSe0JN4qkcni/qlbZbQlqgBxdiAYwpQwy4j2RNd8Gk0eg8uO
+         1FatZPD5mDyI3Emx2qODlEWv3KKO5b4IdaowAi0n9KM+Bry0UjbG+rU6iWVMq9SZ/4A4
+         dwelWtCi7HOGAeVfpmF/aPR/86oXn2Up0jTONEvvmToLOEJmaeyTYi1n4/ZjKkS0OWST
+         ACTAHP4UuPoMLmJIdthdxHTPkSCRwS/eruTB2xAAJXZfYlduBox4X8Xo1RclC6S68n15
+         PMVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8aTFVnOsWYVkAC4sToVkHybmRjgNOkZh2qFCAaG8DlI=;
-        b=Ffw8owSZOa6xjckH/3R0K80ZXHsM196/2JwaBRydTv11WabU7jAFzPWOISBmWdxNgI
-         QzvXkeOXn1FzLQn0yrE45K32QtlvGVB+n8xnFmmwx8Ur0LcxCXYEfcCGQHJuBqUmqcXx
-         3Sq5Wmdvo+KUCxzMtF9V6mhutlivdHuOFHPNODKBrt/edcWNoRbd6LAFtOIctL3uDHnB
-         s6o0dgtHVGv0J1iyntEUvVTkTG1rBuklaoQkuIKfQWNXiNS8eLYGGZAUrrATStBW2uEw
-         6EkUXfP/KI+twh40lDBr2o3tGJT+7ta7m1RksB5DXJCo6XhoYmJdtaMKEf0KbQ2t8AdC
-         TPJA==
-X-Gm-Message-State: AO0yUKXWzf8TOTuJL2og4ijeAFKuPwTgVpH+5rWdNtnEjYvbiOJo0x1M
-        pQnn5hhPpqJykA71cRq/ZEl4H7kaad0pgLGcbl4=
-X-Google-Smtp-Source: AK7set8CcS3ZeuXDp8HKmLAtd+GYM9oJG6VhEc2IjxJIdB3epTN0zATVW2t3jUy1ugW8dZS1ccszPhq+V6c+iTLYmWg=
-X-Received: by 2002:a05:622a:1001:b0:3b9:a589:e7e7 with SMTP id
- d1-20020a05622a100100b003b9a589e7e7mr3116880qte.228.1676044701339; Fri, 10
- Feb 2023 07:58:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20230209115403.521868-1-jiucheng.xu@amlogic.com> <20230209115403.521868-3-jiucheng.xu@amlogic.com>
-In-Reply-To: <20230209115403.521868-3-jiucheng.xu@amlogic.com>
-From:   Chris Healy <cphealy@gmail.com>
-Date:   Fri, 10 Feb 2023 07:58:10 -0800
-Message-ID: <CAFXsbZos7GCF2fp73MrWxjMthFFKj8XAc2OJkNvOMEGUw51Jjg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] arm64: defconfig: Add Meson DDR PMU as build-in
-To:     Jiucheng Xu <jiucheng.xu@amlogic.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        Chris Healy <healych@amazon.com>,
+        bh=IaOMp85DQqFK9FmSZWOrsKFZKbvOVr0dD/xHxXmrHrs=;
+        b=nHms7+dVLt6Or2bKiJId7pCg2HuS2ked4DBagyVfErOiTqq/Zy1SxZvE+kyOzhFBjd
+         UxXiDXxK1mW2B/txwxoQF8x+m2kCyRsxd62VASSHfyD8I79Lq914Ovc8/VvRQJZPbyw5
+         U0/291gkERlaDCcM7ThvkFdXbcQKCQD8WSgZcH3B8Pv4n1SIf5h21LmBbMvHQPJJ8DZS
+         anOwk6GwPTeZ02/Ff5Uj2L+H2MuDUgOQKRnhrx97qnRwP8zb7Pe7Bi49Iw+khzQgGgfT
+         IG+Tuc+Vz26wlrjzaiwdaZGKKXRnbIsyasmwB7e1WHyURLp590JJJSBInBdQ/1Ar84B/
+         MO2g==
+X-Gm-Message-State: AO0yUKW3To+mo4QTDR7icHjYTLKC1n4yhuyyZVklf/BKEQBd45V7Bfzw
+        SmaImXaQygc4ksuPb58Jn/hRhw==
+X-Google-Smtp-Source: AK7set9/QCxdu8rngGkirm66tKQ8nUUlKQtouI7koQ5af8wv216xyvib2YyyphADqC/g5f0L14zomQ==
+X-Received: by 2002:a5d:4287:0:b0:2c5:4784:6f0c with SMTP id k7-20020a5d4287000000b002c547846f0cmr3551624wrq.15.1676044773888;
+        Fri, 10 Feb 2023 07:59:33 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id y15-20020adfee0f000000b002c3efca57e1sm4078604wrn.110.2023.02.10.07.59.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 07:59:33 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Abel Vesa <abel.vesa@linaro.org>,
         Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] regulator: dt-bindings: qcom,rpmh: Correct PM8550 family supplies
+Date:   Fri, 10 Feb 2023 16:59:30 +0100
+Message-Id: <20230210155930.549082-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Chris Healy <healych@amazon.com>
+PM8550 is different than PM8550VE/VS, because the latter has much
+smaller amount of supplies (l1-3 and s1-6) and regulators.  The PM8550
+has on theh other hand one pin for vdd-l1-l4-l10 supplies.  Correct the
+if:then: clause with their supplies.
 
-On Thu, Feb 9, 2023 at 3:54 AM Jiucheng Xu <jiucheng.xu@amlogic.com> wrote:
->
-> Add Meson DDR PMU to defconfig so that build errors are caught.
->
-> Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
-> ---
->  arch/arm64/configs/defconfig | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 851e8f9be06d..9fefe659ade7 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -1296,6 +1296,7 @@ CONFIG_ARM_DMC620_PMU=m
->  CONFIG_QCOM_L2_PMU=y
->  CONFIG_QCOM_L3_PMU=y
->  CONFIG_HISI_PMU=y
-> +CONFIG_MESON_DDR_PMU=y
->  CONFIG_NVMEM_IMX_OCOTP=y
->  CONFIG_NVMEM_IMX_OCOTP_SCU=y
->  CONFIG_NVMEM_MTK_EFUSE=y
-> --
-> 2.25.1
->
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../bindings/regulator/qcom,rpmh-regulator.yaml  | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+index 297a75069f60..fb9621b4b4cd 100644
+--- a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+@@ -308,19 +308,29 @@ allOf:
+         compatible:
+           enum:
+             - qcom,pm8550-rpmh-regulators
+-            - qcom,pm8550ve-rpmh-regulators
+-            - qcom,pm8550vs-rpmh-regulators
+     then:
+       properties:
++        vdd-l1-l4-l10-supply: true
+         vdd-l2-l13-l14-supply: true
+         vdd-l5-l16-supply: true
+         vdd-l6-l7-supply: true
+         vdd-l8-l9-supply: true
+       patternProperties:
+-        "^vdd-l([1-4]|1[0-7])-supply$": true
++        "^vdd-l(3|1[1-7])-supply$": true
+         "^vdd-s[1-6]-supply$": true
+         "^vdd-bob[1-2]-supply$": true
+ 
++  - if:
++      properties:
++        compatible:
++          enum:
++            - qcom,pm8550ve-rpmh-regulators
++            - qcom,pm8550vs-rpmh-regulators
++    then:
++      patternProperties:
++        "^vdd-l[1-3]-supply$": true
++        "^vdd-s[1-6]-supply$": true
++
+   - if:
+       properties:
+         compatible:
+-- 
+2.34.1
+
