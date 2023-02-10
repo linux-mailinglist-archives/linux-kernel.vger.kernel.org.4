@@ -2,157 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5571E6915AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 01:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 341356915AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 01:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbjBJAhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 19:37:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
+        id S231248AbjBJAhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 19:37:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbjBJAhM (ORCPT
+        with ESMTP id S231221AbjBJAhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Feb 2023 19:37:12 -0500
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABF47097D;
-        Thu,  9 Feb 2023 16:36:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E377095E
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 16:36:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675989402; x=1707525402;
-  h=from:to:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=V6yU29gSDEGi5q1SY/wET4K3sAFj4aMnzCN84rmhjZE=;
-  b=m5kT4mrtzFKJUz9GE8SSs0j4aytU5Ak/sHHt8PUln7WJpUeU1BNsD+Vo
-   pbTZKfllwncrjSc8K6nXG9in1IXXVcMIvSt2gbuJlDjFmpmHNhwUgOSJR
-   FNG8ZTfU840iVIV7NQpSo1lu2NcsXs3kCWRPoUrOJvXdd/N8W9YgnZ+4m
-   tqRS7HkyheEXxoSKC2/Y/mS1x4hSr7s3KrLk8jhHEWzT9JX6gUhgn8z+l
-   kOlKqwXhIBrrfFDJT55xq+BiOxRJWlfWPZ5lbry5eTTDI2aQ0WCOiANsu
-   OshkfJqHHTN47I5hpEOWBlWzBguiZawQ5mvEkB2aMqQ/jCf1R8SUcZNRm
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="310656471"
+  t=1675989401; x=1707525401;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GBLao6NE/SGSwkVRdGz+EqF+VC4oUdgalsbEcOSG9sM=;
+  b=RujB3omMHyN6h00KRwsuBoQwZ/FNlqadQW5gV91AO5ammcn+eHFzxUvR
+   eq+IQtnImvDiliIieT/lVIT7BsmkXpjXLam1PovGPdGgrnUzSpQiAcUmX
+   aQ7XrannDl2ocFATXpvXPWOjCaJkvnoasG4t8F5LoL1ccER18mk6M9RB4
+   LCwCt4mSLgOlAdhhgp37QyNVS0DRWYYrh8Z2jEaskqqQBWuutQSkKNcUV
+   UGpXA/MKEgdLicaCykdfBBqQkLcdNaH+AQSG0pwwK6NTDbgwMYx6iAsmX
+   hSxqM3xi2oKTmlH502Mu0eDvAPjQMpsHV/7fz0hiw9OG5kNooqx78RLd2
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="310656321"
 X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
-   d="scan'208";a="310656471"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 16:34:38 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="756605659"
+   d="scan'208";a="310656321"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 16:33:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="736556385"
 X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
-   d="scan'208";a="756605659"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 16:34:35 -0800
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        paulmck@kernel.org, frederic@kernel.org, joel@joelfernandes.org,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] sched/isolation: Fix illegal CPU value by housekeeping_any_cpu() return
-Date:   Fri, 10 Feb 2023 08:39:37 +0800
-Message-Id: <20230210003937.1030753-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+   d="scan'208";a="736556385"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga004.fm.intel.com with ESMTP; 09 Feb 2023 16:33:49 -0800
+Date:   Thu, 9 Feb 2023 16:43:33 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v3 04/10] sched/fair: Let low-priority cores help
+ high-priority busy SMT cores
+Message-ID: <20230210004333.GA6166@ranerica-svr.sc.intel.com>
+References: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com>
+ <20230207045838.11243-5-ricardo.neri-calderon@linux.intel.com>
+ <CAKfTPtB_YR8e6fcx3Un0vTeJR4EJS9sOXG=wLb8rZeM5Ub4yyA@mail.gmail.com>
+ <Y+TexehP3140vxBu@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+TexehP3140vxBu@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For kernels built with CONFIG_NO_HZ_FULL=y, running the following tests:
+On Thu, Feb 09, 2023 at 12:53:41PM +0100, Peter Zijlstra wrote:
+> On Wed, Feb 08, 2023 at 08:56:32AM +0100, Vincent Guittot wrote:
+> 
+> > > +                       if (env->sd->flags & SD_SHARE_CPUCAPACITY ||
+> > > +                           (!(env->sd->flags & SD_SHARE_CPUCAPACITY) && is_core_idle(i)))
+> > 
+> > This 2nd if could be merged with the upper one
+> 
+> Wasn't this exact same condition used in the previous patch as well?
+> Does it wants to be a helper perhaps?
 
-runqemu kvm slirp nographic qemuparams="-m 1024 -smp 4" bootparams=
-"console=ttyS0 nohz_full=0,1 rcu_nocbs=0,1 sched_verbose" -d
+Patch 3 focuses on the destination CPU: make sure that it and its SMT
+siblings are idle before attempting to do asym_packing balance.
 
-root@qemux86-64:~# echo 0 > /sys/devices/system/cpu/cpu2/online
-root@qemux86-64:~# echo 0 > /sys/devices/system/cpu/cpu3/online
-
-[   22.838290] BUG: unable to handle page fault for address: ffffffff84cd48c0
-[   22.839409] #PF: supervisor read access in kernel mode
-[   22.840215] #PF: error_code(0x0000) - not-present page
-[   22.841028] PGD 3e19067 P4D 3e19067 PUD 3e1a063 PMD 800ffffffb3ff062
-[   22.841889] Oops: 0000 [#1] PREEMPT SMP DEBUG_PAGEALLOC KASAN PTI
-[   22.842175] CPU: 0 PID: 16 Comm: rcu_preempt Not tainted 6.2.0-rc1-yocto-standard+ #658
-[   22.842534] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
-               BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.o4
-[   22.843036] RIP: 0010:do_raw_spin_trylock+0x70/0x120
-[   22.843267] Code: 81 c7 00 f1 f1 f1 f1 c7 40 04 04 f3 f3 f3 65
-               48 8b 04 25 28 00 00 00 48 89 45 e0 31 c0 e8 b8 0
-[   22.844187] RSP: 0018:ffff8880072b7b30 EFLAGS: 00010046
-[   22.844429] RAX: 0000000000000000 RBX: ffffffff84cd48c0 RCX: dffffc0000000000
-[   22.844751] RDX: 0000000000000003 RSI: 0000000000000004 RDI: ffffffff84cd48c0
-[   22.845074] RBP: ffff8880072b7ba8 R08: ffffffff811daa20 R09: fffffbfff099a919
-[   22.845400] R10: ffffffff84cd48c3 R11: fffffbfff099a918 R12: 1ffff11000e56f66
-[   22.845719] R13: ffffffff84cd48d8 R14: ffffffff84cd48c0 R15: ffff8880072b7cd8
-[   22.846040] FS:  0000000000000000(0000) GS:ffff888035200000(0000) knlGS:0000000000000000
-[   22.846403] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   22.846667] CR2: ffffffff84cd48c0 CR3: 000000001036c000 CR4: 00000000001506f0
-[   22.846988] Call Trace:
-[   22.847105]  <TASK>
-[   22.847208]  ? __pfx_do_raw_spin_trylock+0x10/0x10
-[   22.847430]  ? rcu_read_unlock+0x26/0x80
-[   22.847612]  ? trace_preempt_off+0x2a/0x130
-[   22.847812]  _raw_spin_lock+0x41/0x80
-[   22.847984]  ? schedule_timeout+0x242/0x580
-[   22.848178]  schedule_timeout+0x242/0x580
-[   22.848366]  ? __pfx_schedule_timeout+0x10/0x10
-[   22.848575]  ? __pfx_do_raw_spin_trylock+0x10/0x10
-[   22.848796]  ? __pfx_process_timeout+0x10/0x10
-[   22.849005]  ? _raw_spin_unlock_irqrestore+0x46/0x80
-[   22.849232]  ? prepare_to_swait_event+0xb8/0x210
-[   22.849450]  rcu_gp_fqs_loop+0x66e/0xe70
-[   22.849633]  ? rcu_gp_init+0x87c/0x1130
-[   22.849813]  ? __pfx_rcu_gp_fqs_loop+0x10/0x10
-[   22.850022]  ? _raw_spin_unlock_irqrestore+0x46/0x80
-[   22.850251]  ? finish_swait+0xce/0x100
-[   22.850429]  rcu_gp_kthread+0x2ea/0x6b0
-[   22.850608]  ? __pfx_do_raw_spin_trylock+0x10/0x10
-[   22.850829]  ? __pfx_rcu_gp_kthread+0x10/0x10
-[   22.851039]  ? __kasan_check_read+0x11/0x20
-[   22.851233]  ? __kthread_parkme+0xe8/0x110
-[   22.851424]  ? __pfx_rcu_gp_kthread+0x10/0x10
-[   22.851627]  kthread+0x172/0x1a0
-[   22.851781]  ? __pfx_kthread+0x10/0x10
-[   22.851956]  ret_from_fork+0x2c/0x50
-[   22.852129]  </TASK>
-
-schedule_timeout()
-->__mod_timer()
- ->get_target_base(base, timer->flags)
-   ->get_timer_cpu_base(tflags, get_nohz_timer_target());
-     ->cpu = get_nohz_timer_target()
-             ->housekeeping_any_cpu(HK_TYPE_TIMER)
-                     /*housekeeping.cpumasks[type] is 2-3*/
-		     /*cpu_online_mask is 0-1*/
-               ->cpu = cpumask_any_and(housekeeping.cpumasks[type],
-			cpu_online_mask);
-             /*cpu value is 4*/
-     ->new_base = per_cpu_ptr(&timer_bases[BASE_DEF], cpu);
-   /*new_base is illegal address*/
- ->if (base != new_base)
-   ->raw_spin_lock(&new_base->lock); ==> trigger Oops
-
-This commit therefore add checks for cpumask_any_and() return values
-in housekeeping_any_cpu(), if cpumask_any_and() returns an illegal CPU
-value, the housekeeping_any_cpu() will return current CPU number.
-
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/sched/isolation.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
-index 373d42c707bc..edfba557a2e1 100644
---- a/kernel/sched/isolation.c
-+++ b/kernel/sched/isolation.c
-@@ -46,7 +46,8 @@ int housekeeping_any_cpu(enum hk_type type)
- 			if (cpu < nr_cpu_ids)
- 				return cpu;
- 
--			return cpumask_any_and(housekeeping.cpumasks[type], cpu_online_mask);
-+			cpu = cpumask_any_and(housekeeping.cpumasks[type], cpu_online_mask);
-+			return (cpu >= nr_cpu_ids) ? smp_processor_id() : cpu;
- 		}
- 	}
- 	return smp_processor_id();
--- 
-2.25.1
-
+This patch focuses on the busiest group: if the busiest group is an SMT
+core with more than one busy sibling, help it even if it has higher
+priority.
