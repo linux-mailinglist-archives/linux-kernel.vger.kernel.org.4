@@ -2,213 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627F269222E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89A3D692233
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:30:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232727AbjBJP2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 10:28:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
+        id S232761AbjBJPaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 10:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbjBJP2x (ORCPT
+        with ESMTP id S232745AbjBJPaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 10:28:53 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012688A43
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:28:51 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso4323698wms.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:28:51 -0800 (PST)
+        Fri, 10 Feb 2023 10:30:08 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968EC75F5E
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:30:05 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id by3so4116689wrb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:30:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=cy3a8kpnC+sCTHwnDRky9CsOJtj+AEHdVOXHEunigCk=;
-        b=PkiaUU4Zh8w7S5KZ7RSgZNScttYh+zu0ske93eSlt+tyBCQqvOXN+yqGYjBoX5SW/f
-         ELzb7vjcr3Q6CdAQTrDKTwoGMQ81ZCH5037ShmcW5Dqmodu9HmC+dhUh6VWoZuzfDD85
-         1KE07ON9oCiyIwMCCu0xiA1SreeKAcP5qtP4AdIj1oH6KV7/XvK/hcEIwvQrcJ2+Xz4I
-         y0GBkXYNfmx2ZFkD4ivRmy5OrM9YyqDxxvM3+FX9GsyvOTfGS4Dbzz4hXbZjpDTvbU4X
-         TaetDQLcXaRvni3gI1Od8oYy2R50UtFRodIiIB8VT3TeSoDrofelK/Hr/mPfarA6CACk
-         /mmQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ARNnrLec9gQ/6nw5VQ+vr45Rs0TpDIMj6FlzqfpjTb4=;
+        b=lon3i3BGFCmZldZ29QWjJmkqfnYGbkJSQoYENbOj/sfLXenfa+CMoo+K/+E6pBH5yi
+         YhofsPmgfdU0t3NKOnfA8WM8yb+nnNSEm3B0rMhKbhy/EcIpcQcEuZ3EB8ORfoY7I0nU
+         8esIp6SudqDTrEouV2nRCdBMENzEZDuT8E4m3kxBIOahIt3AR5V+L9wbKd6JEvA/4BzC
+         7pWbnpIiaX6EldavHxezQTw2d+v/69j/yqGdcwvf++FaUE/OtxpnZeszNOgHTtN+t+e2
+         Oiov7zpHwghgqexT/n550pTAzxRmsiplMjz5n4a/ITNiTvKY7frUQ+fq4VscCS33TJ6x
+         UV4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cy3a8kpnC+sCTHwnDRky9CsOJtj+AEHdVOXHEunigCk=;
-        b=wtJzORAQA6J94Ofo7i5CmDISlCBSrYKpH5AAIJaICAMYa7ARZi6cUWjBSfaUzCbUZx
-         3Pn5bog+J/1UWgNm8r4nTznjo0820EQXsI0HhkwDenxTdWQCE6sY9GLfot8KZT2CROu3
-         N8/AZciSCDatqnAd/tfv7eECEi3Z0piFAZd32azqOSNzebwj3MNGXC3bEnDGAPWgpZMc
-         +NQPz+yN5diBrkm8g39cq+1hHuzme9f75RjILeSEpZH613GlRbBleBAh2ZOpt8lfwl46
-         jK1b3aYvz3qTB/J1O58JM7dSB5nJU8joJ1AdQQg3W4PAE1JJ7GUY61Xdv5PDZ7ka81Y4
-         8znQ==
-X-Gm-Message-State: AO0yUKUCxZLVh/Tm9lVUJIHxTsX9vlaI8NjuYl9ScjI2gllRcOQRvJrB
-        O6sMWZDwSfENY8rL9FIAHGPfUQ==
-X-Google-Smtp-Source: AK7set9dJHbLStYnrL4YnYUOr+Ln5RaS+sdzjXiz3BANjDIv1Cves2lX6rNkwGhLjjZROxNrUfajjA==
-X-Received: by 2002:a05:600c:3411:b0:3dc:545f:e9ce with SMTP id y17-20020a05600c341100b003dc545fe9cemr14324355wmp.24.1676042930507;
-        Fri, 10 Feb 2023 07:28:50 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:5a65:5553:55cf:3027? ([2a01:e0a:982:cbb0:5a65:5553:55cf:3027])
-        by smtp.gmail.com with ESMTPSA id j23-20020a05600c1c1700b003daf681d05dsm5832013wms.26.2023.02.10.07.28.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 07:28:49 -0800 (PST)
-Message-ID: <f5a26fff-2dc2-2397-a80c-2477176a5864@linaro.org>
-Date:   Fri, 10 Feb 2023 16:28:48 +0100
+        bh=ARNnrLec9gQ/6nw5VQ+vr45Rs0TpDIMj6FlzqfpjTb4=;
+        b=kycHZ6m3cXCLzum9luygHUSgAYfHEi3TvQAtCSPFDtklx3U6MGdmRf2x4fQQoY3mcb
+         teAhpbAA18j674ec9tdW1VdZ1E3Xv3zXAdjgNJ5sN9T30cSE9gvVOJY4XBI2dEvqf4Bi
+         bEflLqX7sLeDNJL9wNSBL/LeUPv7No3UKToqZd498SFxRkGobkd9jH3QwlaIufQyEEhV
+         DYG7xLyGmI72GV7taadpWvFZA/Z4ZXvBqXfsJ1PAcEK3cLAN8lwD0P70frcgjGsjB4se
+         SQDDSvve3g5nEoZjkg3WvqgIjFNcDmsCheqLze0OUD/QVP42GYTfL/Z6RCRiu+jMcIHb
+         X06Q==
+X-Gm-Message-State: AO0yUKUxvx4rxL1GjO4pEsgBkrpTEGE3ikqM4WhpYj5xc9uQchzTXnqG
+        Pw+CRjCU2SSthubhYHTLlccoO3UGXZbkOut+oJwABmiVIP6Sk5i99XI=
+X-Google-Smtp-Source: AK7set8sUvE0udcQE5mLbvERtWOGOeK4/mw7rCePKHejo2TnJl82JfTdz3VeZKy3Ul8k0oKn9sgijLdl2USXXb5aE+s=
+X-Received: by 2002:a5d:6583:0:b0:2c4:936:f423 with SMTP id
+ q3-20020a5d6583000000b002c40936f423mr480775wru.113.1676043003982; Fri, 10 Feb
+ 2023 07:30:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v3 5/5] arm64: dts: qcom: sm8450: add dp controller
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230206-topic-sm8450-upstream-dp-controller-v3-0-636ef9e99932@linaro.org>
- <20230206-topic-sm8450-upstream-dp-controller-v3-5-636ef9e99932@linaro.org>
- <347a5193-f7b1-7f8e-0c60-3d435bdf952c@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <347a5193-f7b1-7f8e-0c60-3d435bdf952c@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <00000000000033d42a05f45a155e@google.com>
+In-Reply-To: <00000000000033d42a05f45a155e@google.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 10 Feb 2023 16:29:52 +0100
+Message-ID: <CANn89iL5SxbxDiff9DpxgAJxk6iQ1AfL6wR8FkHN=g=HDtKQgw@mail.gmail.com>
+Subject: Re: [syzbot] BUG: unable to handle kernel paging request in atm_tc_destroy
+To:     syzbot <syzbot+d44d88f1d11e6ca8576b@syzkaller.appspotmail.com>
+Cc:     davem@davemloft.net, jhs@mojatatu.com, jiri@resnulli.us,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, xiyou.wangcong@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/2023 16:24, Dmitry Baryshkov wrote:
-> On 10/02/2023 16:44, Neil Armstrong wrote:
->> Add the Display Port controller subnode to the MDSS node.
->>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>   arch/arm64/boot/dts/qcom/sm8450.dtsi | 79 ++++++++++++++++++++++++++++++++++++
->>   1 file changed, 79 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> index 6caa2c8efb46..72d54beb7d7c 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> @@ -2751,6 +2751,13 @@ dpu_intf2_out: endpoint {
->>                           };
->>                       };
->> +                    port@2 {
->> +                        reg = <2>;
->> +                        dpu_intf0_out: endpoint {
->> +                            remote-endpoint = <&mdss_dp0_in>;
->> +                        };
->> +                    };
->> +
->>                   };
->>                   mdp_opp_table: opp-table {
->> @@ -2783,6 +2790,78 @@ opp-500000000 {
->>                   };
->>               };
->> +            mdss_dp0: displayport-controller@ae90000 {
->> +                compatible = "qcom,sm8350-dp";
+On Fri, Feb 10, 2023 at 4:23 PM syzbot
+<syzbot+d44d88f1d11e6ca8576b@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    0b34d68049b0 net: enable usercopy for skb_small_head_cache
+> git tree:       net-next
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=14cb251f480000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=bd3e305b3a7ab2b0
+> dashboard link: https://syzkaller.appspot.com/bug?extid=d44d88f1d11e6ca8576b
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1259c7cb480000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1789967d480000
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/e6e9cd443f49/disk-0b34d680.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/1d27805ca50d/vmlinux-0b34d680.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/0a3e607b6ca7/bzImage-0b34d680.xz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+d44d88f1d11e6ca8576b@syzkaller.appspotmail.com
+>
+> BUG: unable to handle page fault for address: ffffffffffffffa0
+> #PF: supervisor read access in kernel mode
+> #PF: error_code(0x0000) - not-present page
+> PGD c48f067 P4D c48f067 PUD c491067 PMD 0
+> Oops: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 1 PID: 5075 Comm: syz-executor134 Not tainted 6.2.0-rc6-syzkaller-01486-g0b34d68049b0 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+> RIP: 0010:atm_tc_destroy+0x7d/0x250 net/sched/sch_atm.c:588
+> Code: 0f 84 52 01 00 00 48 bd 00 00 00 00 00 fc ff df e8 88 0e 8b f9 4c 8d 73 28 4c 89 f0 48 c1 e8 03 80 3c 28 00 0f 85 70 01 00 00 <48> 8b 7b 28 e8 ea f4 f2 ff 4c 89 f0 48 c1 e8 03 80 3c 28 00 0f 85
+> RSP: 0018:ffffc90003c0f3f0 EFLAGS: 00010246
+> RAX: 1ffffffffffffff4 RBX: ffffffffffffff78 RCX: 0000000000000000
+> RDX: ffff88802695d7c0 RSI: ffffffff87f5ed08 RDI: ffff888022026000
+> RBP: dffffc0000000000 R08: 0000000000000007 R09: fffffffffffff000
+> R10: ffffffffffffffea R11: 0000000000000000 R12: ffff888022026370
+> R13: ffff888022026000 R14: ffffffffffffffa0 R15: ffff888021d6c000
+> FS:  0000555555aee300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffffffffffffa0 CR3: 000000001c561000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  qdisc_create+0xaca/0x1150 net/sched/sch_api.c:1329
+>  tc_modify_qdisc+0x948/0x19c0 net/sched/sch_api.c:1662
+>  rtnetlink_rcv_msg+0x43e/0xca0 net/core/rtnetlink.c:6174
+>  netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2574
+>  netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+>  netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
+>  netlink_sendmsg+0x91b/0xe10 net/netlink/af_netlink.c:1942
+>  sock_sendmsg_nosec net/socket.c:722 [inline]
+>  sock_sendmsg+0xde/0x190 net/socket.c:745
+>  ____sys_sendmsg+0x71c/0x900 net/socket.c:2501
+>  ___sys_sendmsg+0x110/0x1b0 net/socket.c:2555
+>  __sys_sendmsg+0xf7/0x1c0 net/socket.c:2584
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7f6162cddba9
+> Code: 28 c3 e8 1a 15 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007ffe242b7018 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+> RAX: ffffffffffffffda RBX: 00007f6162d4bed0 RCX: 00007f6162cddba9
+> RDX: 0000000000000000 RSI: 00000000200001c0 RDI: 0000000000000003
+> RBP: 00007ffe242b7028 R08: 00007f6162d4be40 R09: 00007f6162d4be40
+> R10: 00007f6162d4be40 R11: 0000000000000246 R12: 00007ffe242b7030
+> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+>  </TASK>
+> Modules linked in:
+> CR2: ffffffffffffffa0
+> ---[ end trace 0000000000000000 ]---
+> RIP: 0010:atm_tc_destroy+0x7d/0x250 net/sched/sch_atm.c:588
+> Code: 0f 84 52 01 00 00 48 bd 00 00 00 00 00 fc ff df e8 88 0e 8b f9 4c 8d 73 28 4c 89 f0 48 c1 e8 03 80 3c 28 00 0f 85 70 01 00 00 <48> 8b 7b 28 e8 ea f4 f2 ff 4c 89 f0 48 c1 e8 03 80 3c 28 00 0f 85
+> RSP: 0018:ffffc90003c0f3f0 EFLAGS: 00010246
+> RAX: 1ffffffffffffff4 RBX: ffffffffffffff78 RCX: 0000000000000000
+> RDX: ffff88802695d7c0 RSI: ffffffff87f5ed08 RDI: ffff888022026000
+> RBP: dffffc0000000000 R08: 0000000000000007 R09: fffffffffffff000
+> R10: ffffffffffffffea R11: 0000000000000000 R12: ffff888022026370
+> R13: ffff888022026000 R14: ffffffffffffffa0 R15: ffff888021d6c000
+> FS:  0000555555aee300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffffffffffffa0 CR3: 000000001c561000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> ----------------
+> Code disassembly (best guess):
+>    0:   0f 84 52 01 00 00       je     0x158
+>    6:   48 bd 00 00 00 00 00    movabs $0xdffffc0000000000,%rbp
+>    d:   fc ff df
+>   10:   e8 88 0e 8b f9          callq  0xf98b0e9d
+>   15:   4c 8d 73 28             lea    0x28(%rbx),%r14
+>   19:   4c 89 f0                mov    %r14,%rax
+>   1c:   48 c1 e8 03             shr    $0x3,%rax
+>   20:   80 3c 28 00             cmpb   $0x0,(%rax,%rbp,1)
+>   24:   0f 85 70 01 00 00       jne    0x19a
+> * 2a:   48 8b 7b 28             mov    0x28(%rbx),%rdi <-- trapping instruction
+>   2e:   e8 ea f4 f2 ff          callq  0xfff2f51d
+>   33:   4c 89 f0                mov    %r14,%rax
+>   36:   48 c1 e8 03             shr    $0x3,%rax
+>   3a:   80 3c 28 00             cmpb   $0x0,(%rax,%rbp,1)
+>   3e:   0f                      .byte 0xf
+>   3f:   85                      .byte 0x85
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
 
-Exact, must fix.
+Fix would be :
 
-> 
-> Missing "qcom,sm8450-dp". As I wrote in the comment to patch 1, I'd suggest having just a single entry here rather than keeping both 8350 and 8450 entries.
-> 
->> +                reg = <0 0xae90000 0 0xfc>,
->> +                      <0 0xae90200 0 0xc0>,
->> +                      <0 0xae90400 0 0x770>,
->> +                      <0 0xae91000 0 0x98>,
->> +                      <0 0xae91400 0 0x98>;
-> 
-> 
-> While this sounds correct, usually we used the even size here (0x200, 0x400, etc.). Can we please switch to it (especially since sm8350-dp uses even sizes).
-
-I don't have access to registers layout for HDK8450 but the system freezes when using even sizes, using
-the exact register size works fine.
-
-Neil
-
-> 
->> +                interrupt-parent = <&mdss>;
->> +                interrupts = <12>;
->> +                clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
->> +                     <&dispcc DISP_CC_MDSS_DPTX0_AUX_CLK>,
->> +                     <&dispcc DISP_CC_MDSS_DPTX0_LINK_CLK>,
->> +                     <&dispcc DISP_CC_MDSS_DPTX0_LINK_INTF_CLK>,
->> +                     <&dispcc DISP_CC_MDSS_DPTX0_PIXEL0_CLK>;
->> +                clock-names = "core_iface",
->> +                          "core_aux",
->> +                          "ctrl_link",
->> +                                  "ctrl_link_iface",
->> +                          "stream_pixel";
->> +
->> +                assigned-clocks = <&dispcc DISP_CC_MDSS_DPTX0_LINK_CLK_SRC>,
->> +                          <&dispcc DISP_CC_MDSS_DPTX0_PIXEL0_CLK_SRC>;
->> +                assigned-clock-parents = <&usb_1_qmpphy QMP_USB43DP_DP_LINK_CLK>,
->> +                             <&usb_1_qmpphy QMP_USB43DP_DP_VCO_DIV_CLK>;
->> +
->> +                phys = <&usb_1_qmpphy QMP_USB43DP_DP_PHY>;
->> +                    phy-names = "dp";
->> +
->> +                    #sound-dai-cells = <0>;
->> +
->> +                operating-points-v2 = <&dp_opp_table>;
->> +                power-domains = <&rpmhpd SM8450_MMCX>;
->> +
->> +                status = "disabled";
->> +
->> +                ports {
->> +                    #address-cells = <1>;
->> +                    #size-cells = <0>;
->> +
->> +                    port@0 {
->> +                        reg = <0>;
->> +                        mdss_dp0_in: endpoint {
->> +                            remote-endpoint = <&dpu_intf0_out>;
->> +                        };
->> +                    };
->> +                };
->> +
->> +                dp_opp_table: opp-table {
->> +                    compatible = "operating-points-v2";
->> +
->> +                    opp-160000000 {
->> +                        opp-hz = /bits/ 64 <160000000>;
->> +                        required-opps = <&rpmhpd_opp_low_svs>;
->> +                    };
->> +
->> +                    opp-270000000 {
->> +                        opp-hz = /bits/ 64 <270000000>;
->> +                        required-opps = <&rpmhpd_opp_svs>;
->> +                    };
->> +
->> +                    opp-540000000 {
->> +                        opp-hz = /bits/ 64 <540000000>;
->> +                        required-opps = <&rpmhpd_opp_svs_l1>;
->> +                    };
->> +
->> +                    opp-810000000 {
->> +                        opp-hz = /bits/ 64 <810000000>;
->> +                        required-opps = <&rpmhpd_opp_nom>;
->> +                    };
->> +                };
->> +            };
->> +
->>               mdss_dsi0: dsi@ae94000 {
->>                   compatible = "qcom,sm8450-dsi-ctrl", "qcom,mdss-dsi-ctrl";
->>                   reg = <0 0x0ae94000 0 0x400>;
->>
-> 
-
+https://patchwork.kernel.org/project/netdevbpf/patch/20230210152605.1852743-1-edumazet@google.com/
