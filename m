@@ -2,132 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4A1691E1F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:23:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 311B5691E22
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:23:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232160AbjBJLXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 06:23:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36286 "EHLO
+        id S232272AbjBJLXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 06:23:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbjBJLXA (ORCPT
+        with ESMTP id S231796AbjBJLXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 06:23:00 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C6A6C7E5;
-        Fri, 10 Feb 2023 03:22:58 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id bi19so4172236oib.2;
-        Fri, 10 Feb 2023 03:22:58 -0800 (PST)
+        Fri, 10 Feb 2023 06:23:21 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262776C7E5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 03:23:20 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id hn2-20020a05600ca38200b003dc5cb96d46so6031979wmb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 03:23:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ounKjkeQatmirQO+fk8XQX135Rzi9nX3toceUVHS3b4=;
-        b=WjaytSD8m+QiS0dpp4i8nbbPgKfHeAfk6+gGP6DcVOpHAq6JAw/wMeHOaPSwoGqpzF
-         e3G8U+dwH6eEBKm086xDFrUsbdWTAlz0jjKswOuDth2dDPluC4miYWkGhxbEGtKT/ehk
-         IxAW7MKMCpIyLUgFJUaGolxIgD5/XPvy+bPaOYZehYRF8GJYKo5xe9iL39Kn1rINX2Fy
-         qgOCyL9CwF0QsgFCjJ8KwyB8KtA+HzoRLEhNH3MKHLykB7ldYb834thCxOe0FekLvcgL
-         b+z2IClAXy1uk3CMruGipLR51CiTZGEWnh9i6BlHM1xU4tcjhm3xY4VaMj7uJscBV1cT
-         nrCA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xI9gYztVh8CUauySkPThsaIJ2I1/Wnh8PrWXbxjNzZ0=;
+        b=NRHJCgKQ2tlzZWl8sU4Ssukk4rUijhHHujOK7KFzcVRGnkKk/4V/UhLudq5HHKstUS
+         219eo6DzkvmGzmoQuv4mjeip6BcEcBe8Y97VSeJ+/OHpofacv4dXl6scozKw3Xag6IXG
+         sKF4y1hbrbQlG2V+P9uVn0Q2DWddNC94dwi70kmO6LGp87Fvysh/RWzZQMFe1TD+203C
+         0jHwbB4fgeMueG/VLFiur5ERomy/zCIUoHQbjcMVfcBD4ljzcO5yXE8MMl7Eo7NyuPRQ
+         jFUwF2GlprRII38nIlnalovb4+dKRzBQaOOoh8mbbipqcpkghTb87HG+jPq6E16dZQWQ
+         EXLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ounKjkeQatmirQO+fk8XQX135Rzi9nX3toceUVHS3b4=;
-        b=eZ6hqMX2g6eAPeTt1da5nH78HJeNGrnK5i/Tb1J2NNBtWUP0FrEfFxNjBuzdscRzl/
-         E6uAyfiVLiz1DRF77FCLk2t07No/1/k8SYSsotuyPfDcG7BdZJVT/Ywlu2oi7YVGCR6R
-         EoyvzGAk6R05d+ZkL+JcIkpZmSeQIHhJWM0Kcy0d3mq8z25Zn/TgusLDEeNSMO/i4UWX
-         qi7BSaYIquZZhVn1hqDXQyJgbmmE76Qkc8I9wGfLND6U+YB+ykO0go/mlcSwCkOtUywG
-         qB/f2QRIiYxCl+7hhFZSsEtE0dpyohxXrtPR0i0fPFZpfGVlueDJq72ypvugtCt+0YBy
-         R7Pw==
-X-Gm-Message-State: AO0yUKVsuJSyLLRz9wHdKsV8icij/57VFDjHHisdi+xZI1FU/vg4fO6x
-        0n2121g3NQPf6r9hL0jR4xoqexsIsulNtQs5V7mTnc4PX0k=
-X-Google-Smtp-Source: AK7set/CWf5NHvdoqJVvEbZn94gGxaIBiabGDZNIKyZ7lj4U8WmOfabH4qIktQPEYHZjH7cxd6xi2DIb+7CpSG5bkK8=
-X-Received: by 2002:a05:6808:60d:b0:37b:7c36:4df8 with SMTP id
- y13-20020a056808060d00b0037b7c364df8mr932486oih.144.1676028177884; Fri, 10
- Feb 2023 03:22:57 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xI9gYztVh8CUauySkPThsaIJ2I1/Wnh8PrWXbxjNzZ0=;
+        b=2fMa/I+IZHvmzE8i0vq6Q6oOjRjxf3K+bm3/b/haHbj+bDR1KHP4I2+Z9GsPjmauHz
+         kEPfd20/2Lee52TOW+3kGoO29AAzp+z3iCr2gp3nFU4fNbMnLvN7B8cTPeFgNQikkat9
+         F1qhigWINTQ76ytoZBA5956HgJ2rJVkyQZsFcQHe6MAfvKUAocwshlf8jfhwPpQMj4fU
+         TrccMZr6MMJu328n0sNIWXVvmlKORrjhUehlzMBbWuQzt+PRu9m8/XYB2VPqDeff/aeP
+         tvltp/R5/XOpmzu+8T7xQSBdtfv3rG56MtDs/D1ydxpvYBfTMpwlSToFNmGHgmAfUMD8
+         dymA==
+X-Gm-Message-State: AO0yUKWb7rZMt8ujGvgCJTSjjwiMSyHuSQTJp8v/XfHpo3HchHdgq9By
+        q30A3DQGnFUlQGUIg6eU96w+IA==
+X-Google-Smtp-Source: AK7set+legodxv6KBlkbkD44DJSD+6EChFSzBsO0IZtYTmpH0QN9n6LRbkTpKJ8iSAhd7hSblH2b8A==
+X-Received: by 2002:a05:600c:4393:b0:3de:1d31:1043 with SMTP id e19-20020a05600c439300b003de1d311043mr12023706wmn.21.1676028198740;
+        Fri, 10 Feb 2023 03:23:18 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o5-20020a1c7505000000b003dc48a2f997sm7816142wmc.17.2023.02.10.03.23.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 03:23:18 -0800 (PST)
+Message-ID: <f8727f1c-c0e3-f14a-8d4d-8d0f294e480a@linaro.org>
+Date:   Fri, 10 Feb 2023 12:23:15 +0100
 MIME-Version: 1.0
-References: <20230210065621.598120-1-sergio.paracuellos@gmail.com>
- <20230210065621.598120-2-sergio.paracuellos@gmail.com> <a0a141ef-b5ab-f84a-9a77-7b6d1f54ccc9@linaro.org>
-In-Reply-To: <a0a141ef-b5ab-f84a-9a77-7b6d1f54ccc9@linaro.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Fri, 10 Feb 2023 12:22:46 +0100
-Message-ID: <CAMhs-H-w3O_Yjo7CcGdXyw0bSeqefR32Oj4hhQWsVVWoThNLyA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: watchdog: mt7621-wdt: add phandle to
- access system controller registers
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v5 8/8] dt-bindings: remoteproc: qcom: sc7280-adsp-pil:
+ Add missing properties
+Content-Language: en-US
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
+        broonie@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_rohkumar@quicinc.com, srinivas.kandagatla@linaro.org,
+        dianders@chromium.org, swboyd@chromium.org, judyhsiao@chromium.org,
+        alsa-devel@alsa-project.org, quic_rjendra@quicinc.com,
+        konrad.dybcio@somainline.org, mka@chromium.org,
+        quic_mohs@quicinc.com
+References: <1675700201-12890-1-git-send-email-quic_srivasam@quicinc.com>
+ <1675700201-12890-9-git-send-email-quic_srivasam@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1675700201-12890-9-git-send-email-quic_srivasam@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On 06/02/2023 17:16, Srinivasa Rao Mandadapu wrote:
+> Add reg-names and power-domain-names for remoteproc ADSP pheripheral
 
-On Fri, Feb 10, 2023 at 11:59 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 10/02/2023 07:56, Sergio Paracuellos wrote:
-> > MT7621 SoC provides a system controller node for accessing to some registers.
-> > Add a phandle to this node to avoid using MIPS related arch operations and
->
-> I don't understand this part. You claim you add a phandle to this node,
-> but your binding suggest you add here a phandle to other node.
+typo: peripheral
 
-Probably my English is not the best here :-). Yes, you are right, I
-just want to add a phandle to the 'sysc' node in the current node.
+> loader. Add firmware-name property to distinguish and load different
+> firmware binaries of various vendors.
+> Change qcom,halt-regs property phandle to tcsr_1 from tcsr_mutex.
+> Also add required-opps property and change power domain from LCX to CX,
+> which is actual PD to be controlled, for setting appropriate
+> performance state.
+> This is to make compatible with remoteproc ADSP PIL driver and
+> latest device tree changes.
+> 
+> Fixes: 8490a99586ab ("dt-bindings: remoteproc: qcom: Add SC7280 ADSP support")
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/remoteproc/qcom,sc7280-adsp-pil.yaml  | 30 +++++++++++++++++++---
+>  1 file changed, 26 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
+> index 94ca7a0..7addc7d 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
+> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
+> @@ -23,6 +23,11 @@ properties:
+>        - description: qdsp6ss register
+>        - description: efuse q6ss register
+>  
+> +  reg-names:
+> +    items:
+> +      - const: qdsp6ss_base
+> +      - const: lpass_efuse
 
->
-> > includes in watchdog driver code.
-> >
-> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > ---
-> >  .../bindings/watchdog/mediatek,mt7621-wdt.yaml       | 12 ++++++++++--
-> >  1 file changed, 10 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml b/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml
-> > index b2b17fdf4..3c545065f 100644
-> > --- a/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml
-> > +++ b/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml
-> > @@ -14,11 +14,18 @@ allOf:
-> >
-> >  properties:
-> >    compatible:
-> > -    const: mediatek,mt7621-wdt
-> > +    items:
-> > +      - const: mediatek,mt7621-wdt
-> > +      - const: syscon
-> >
-> >    reg:
-> >      maxItems: 1
-> >
-> > +  ralink,sysctl:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > +    description:
-> > +      phandle of syscon used to control system registers
->
-> This needs to be more specific - which syscon? It also does not fit your
-> commit msg.
+So your commit adding the bindings:
+https://lore.kernel.org/all/1664368073-13659-2-git-send-email-quic_srivasam@quicinc.com/
 
-Sure. How about "phandle to system controller 'sysc' syscon node which
-controls system registers".
+was already incomplete because the same patchset added undocumented
+properties.
 
->
->
-> Best regards,
-> Krzysztof
->
+I have no clue what is happening with AudioReach sound/ADSP code - it's
+like random set of changes here and there, without coordination. Drivers
+come without bindings, DTS comes before bindings...
 
-Thanks,
-    Sergio Paracuellos
+Is your DTS in this patches matching this binding? If so, usage cannot
+be before the binding is introduced.
+
+Best regards,
+Krzysztof
+
