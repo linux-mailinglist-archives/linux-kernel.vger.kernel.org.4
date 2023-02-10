@@ -2,94 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C67692794
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 21:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1615B692798
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 21:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233435AbjBJUDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 15:03:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42704 "EHLO
+        id S233252AbjBJUEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 15:04:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232466AbjBJUDk (ORCPT
+        with ESMTP id S233187AbjBJUEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 15:03:40 -0500
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9307715E
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 12:03:39 -0800 (PST)
-Received: by mail-vk1-xa31.google.com with SMTP id bs10so3219990vkb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 12:03:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UE3ll5JZwjVLRnVM34rbSidyuGAYqN9NN6QDtGBKWgM=;
-        b=5FE7spKl/uH6LtHUdRAT8qESaaYluENmDQi9fiHlsjuhrz5429ACChfN5SjL24VUH9
-         39L5kpNKk/okISA1NBuynohJEOve0Ywk++x8QBAYflc6jYP/9Edv/7px65Gob6EXp/8u
-         ftCJqS9t/0QSrHMB2qX7b4tcyod004T9Nr0i+NDjPqgR5m7crttnrBC6UAuss/+7NKIb
-         bFXKjU779489tjyAxoYCCgmNhQWLKwmzyBMPUgtHc1JS38RF3VeuOdul0UtX0lVU2zc/
-         NaXGB0w9A/79MZcVrGgxcbOUCXZz57gOaqLykzcmp/LvfV2fAte6idPOtpcNJcWz2Hzb
-         du2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UE3ll5JZwjVLRnVM34rbSidyuGAYqN9NN6QDtGBKWgM=;
-        b=EhuNYaMJRWadfZfp1I8s38P5++nRcQu1NaFlGIBqwjvGh2gbwxaK3k1xmi8dWzylu8
-         9exDV9uiBitoDBAxWGstflb7jV6S+WrXH/f5f/4r901EzEgrPMLnJF2CuptY24uUd8Fb
-         +weeRqLGoHYPXUl3PlWkCDRE6rVTZ4uEmbHOy4gmbslrk0psU79DWKwgJsN/WRy6kxTT
-         TKD3yAoStWE4ZwevlcrLqOEzBfHoTjtuGGsCtN+Sm4zRZRdu5ArmYHURbP/wRHiohT6L
-         EuBHCg/GhMNosjNahlSk/WDsotS57ZnIowo0xjTfVZVG5quQVoedP4WY+fjKUYxS3OQk
-         50VQ==
-X-Gm-Message-State: AO0yUKVTWl3MBn9iQz70vNcd+umWcNTR6OugKHHx7khFrIDVdg0PJ9eh
-        O8PZHrNBz1S0f5gPi9UsNz3Ud7o/aLw6AEXjxuXx2A==
-X-Google-Smtp-Source: AK7set8iKVPpIW80jN5qXfYELUdIvwOQnS83LQN/njN0oFcDPgxfXeBcMbMBVB/yxw9jdkbOuS0Gq8f0uA/FjvEPcm4=
-X-Received: by 2002:a1f:9493:0:b0:3ea:7394:e9ef with SMTP id
- w141-20020a1f9493000000b003ea7394e9efmr2973055vkd.11.1676059418517; Fri, 10
- Feb 2023 12:03:38 -0800 (PST)
+        Fri, 10 Feb 2023 15:04:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8AE17CED;
+        Fri, 10 Feb 2023 12:04:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 626DB61E77;
+        Fri, 10 Feb 2023 20:04:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9022CC433D2;
+        Fri, 10 Feb 2023 20:04:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676059461;
+        bh=9WmhS+AFzxhdlQZRvRCBT4MfcWL+Y2Jom7fpas4JOgc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Ec302W45QuG/EuSGN6UmNSOfRiZhIlWJafp6zqBbVA2oNbH8jESPcrwarBuikZeI9
+         uxwHM5wUCZseGzbBte3PBvDCSCiUVXTWVUNqdFyW8xi/L81VfUMLctRmqEkQDRbeoV
+         potZEheCBcay6U6EP8jcWDVDqitT8D4/fFGP43Vc/hT0Kd9ByTD3ZWFOrrH8T0WwhR
+         zE6b4twEDpnplXv8bT38jmCOo2WwN7QmsiSm8QDYhceBmHVDKad/08Z0HpkvA4jBi4
+         HpL2WT54s6csNuZ/aEX2pPoIPyvi1dRXKhXlnI2fJjOATmZj0aSbGE4f9AKjRwI4T6
+         a0YE6gw9ZnThg==
+Date:   Fri, 10 Feb 2023 14:04:19 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     ALOK TIWARI <alok.a.tiwari@oracle.com>
+Cc:     Frank Li <Frank.Li@nxp.com>, bhelgaas@google.com,
+        imx@lists.linux.dev, kw@linux.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        lpieralisi@kernel.org, minghuan.lian@nxp.com, mingkai.hu@nxp.com,
+        robh@kernel.org, roy.zang@nxp.com
+Subject: Re: [External] : [PATCH v3 1/1] PCI: layerscape: Add EP mode support
+ for ls1028a
+Message-ID: <20230210200419.GA2694677@bhelgaas>
 MIME-Version: 1.0
-References: <03627216-54b5-5d9b-f91d-adcd637819e3@gmail.com> <CACRpkdbmXri1vtRShm7a3N0sRA7Qg_ni5FpAtiEv+72a6g9Wng@mail.gmail.com>
-In-Reply-To: <CACRpkdbmXri1vtRShm7a3N0sRA7Qg_ni5FpAtiEv+72a6g9Wng@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 10 Feb 2023 21:03:27 +0100
-Message-ID: <CAMRc=MeKdb=xmidwXQiNxtJpb1xii1D-43m1z6cNtF1VxFwogg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/8] dt-bindings: gpio: rockchip,gpio-bank: add
- compatible string per SoC
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     Johan Jonker <jbx6244@gmail.com>, robh+dt@kernel.org,
-        heiko@sntech.de, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kever.yang@rock-chips.com, sjg@chromium.org,
-        philipp.tomsich@vrull.eu, john@metanate.com,
-        quentin.schulz@theobroma-systems.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7ab8bdac-3264-2718-e5c9-53bcaa5db010@oracle.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 8, 2023 at 12:08 PM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Sat, Jan 21, 2023 at 12:06 PM Johan Jonker <jbx6244@gmail.com> wrote:
->
-> > Currently all Rockchip gpio nodes have the same compatible.
-> > Compatible strings should be SoC related.
-> >
-> > Signed-off-by: Johan Jonker <jbx6244@gmail.com>
->
-> Bartosz can you merge this one patch and keep the rest back
-> so we get a more defined DT binding baseline?
->
-> Yours,
-> Linus Walleij
+On Fri, Feb 10, 2023 at 11:51:46PM +0530, ALOK TIWARI wrote:
+> LGTM,
 
-Krzysztof, you left your ack but seem to also have pointed out an
-issue - do you want me to fix it up somehow before applying? Drop the
-oneOf and turn it back into an enum?
+Thanks a lot for looking at this!
 
-Bart
+In the Linux world, "LGTM" is not something a maintainer can really
+act on.  If you respond with a "Reviewed-by" tag as described here:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst?id=v6.1#n495
+
+maintainers (or tooling like b4) can add it to the patch when merging
+it.  Here are some examples of how it can be used:
+
+  https://lore.kernel.org/linux-pci/BN9PR11MB527699243353309A1DDFEFBE8CDE9@BN9PR11MB5276.namprd11.prod.outlook.com/
+  https://lore.kernel.org/linux-pci/Y9AEzVrTB4Sobufr@memverge.com/
+  https://lore.kernel.org/linux-pci/a20028e6-3318-26ca-117a-26c87c292139@linaro.org/
+
+Bjorn
+
+> On 2/9/2023 8:40 PM, Frank Li wrote:
+> > From: Xiaowei Bao <xiaowei.bao@nxp.com>
+> > 
+> > Add PCIe EP mode support for ls1028a.
+> > 
+> > Signed-off-by: Xiaowei Bao <xiaowei.bao@nxp.com>
+> > Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+> > Signed-off-by: Frank Li <Frank.Li@nxp>
+> > Acked-by:  Roy Zang <Roy.Zang@nxp.com>
