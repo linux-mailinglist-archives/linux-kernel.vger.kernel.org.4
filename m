@@ -2,169 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F86691F98
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 14:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC69691F9F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 14:14:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232125AbjBJNLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 08:11:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42902 "EHLO
+        id S232125AbjBJNO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 08:14:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231833AbjBJNLd (ORCPT
+        with ESMTP id S231540AbjBJNOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 08:11:33 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D260A49402;
-        Fri, 10 Feb 2023 05:11:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676034692; x=1707570692;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Ors6grSxgwuBhPM/3ThJCElFazXKgPN4WnWqYGXUpkI=;
-  b=oDKxlhDtdn3snceHMwHrFmQhMjZV43wW8cQoTYgbMZPiPuhCJ7xiepDC
-   aVSBNeNnhK9QuqPecpcKAMG+4rSqn5r9rFYxcnHcKreiR/FCUAQKH3jWG
-   yGtSJhnPr6m/1daRra/czP/vJhI1RLR87SF+QrWFOMPv252WotKlnyGi0
-   wL7cyy0qIoxRkxDcEoT8XPYDEhfngR/tNn/QweF1PRAoFfsKtpR21n0kn
-   tW+RQvL4+rdjlD8ZqKgD3PCJwhteT0SfLd13yCBFAa1rjpkpQomYRppWQ
-   0lEsCOc2wJJQ9jnjW4eGCgGV4T3RiFQu3fYf/QZ/3uQualhGYvL+KoJuS
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="329047475"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="329047475"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 05:11:04 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="661409495"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="661409495"
-Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.16.144]) ([10.99.16.144])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 05:10:59 -0800
-Message-ID: <54d4ffb1-1488-1a4f-58b2-8b3471389729@linux.intel.com>
-Date:   Fri, 10 Feb 2023 14:10:56 +0100
+        Fri, 10 Feb 2023 08:14:25 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401AADBD0;
+        Fri, 10 Feb 2023 05:14:23 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id bh15so4380499oib.4;
+        Fri, 10 Feb 2023 05:14:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WURipjti3ACK/6v57Rr/FeTpbbBRqu0TgbTLSq4UKsA=;
+        b=c1upJ4Wdy7J0j4yVU45u+W5xbJCOK0vQ/6OXshpOXH5szcU0eoNVtY78TBqVjC5/C/
+         sMBhPZdwnNfWo9yh3haUjYAKvie2KBtry5woXijKPzCddFtui1WwaPKPcf9yi1kTPXdD
+         TMEknUsibuhXCpGGCh2KiN4qkwiIcNtFLuS2dbIYe4POcASPiQ2HGDJNGSTc16UEL5Hr
+         dEiLI5gFwTgLDdHeQgXM2tKahtV6tuE+IjCtkiHqrfWcVhuQ61AetY4Wnrc4raRVOqVX
+         vlK4usTvvjreg0kiC3H0MOZGgBaNJxQ7HsWfSNwcWDWAgCo+KJ8j/8d4DAk/Qp25r9Fj
+         zO8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WURipjti3ACK/6v57Rr/FeTpbbBRqu0TgbTLSq4UKsA=;
+        b=gHXAqOocwfLcDIrGNoIX7tgV7+MNzlrGswlfp9WykgTkr1v2/2NwksdA3NV/f6qsPF
+         6WgHzoj9hqpLCrB/rbXLljSbCKekh//X5282BU3DIXYRC//QeUzpLHe2N0cHji7tZRjg
+         MMg04D7tH+FcpQQpeuiDC+M87AXTxgjmFyo8TucXxzR/GMgyphH3IQWdjZN5k2rk5G+E
+         Aexpvc9g9d4Pou14P27OXrbmjcG9Yw09SjXChicdYgcZkZ6mUO1lNncx2iraKbTCz4QV
+         guGwRGPXD7PclB4sigKCQPvYaLy5JoU8becGbZ4B9eAhVJI6vmOn5aKawC+q89yPshUp
+         JLbw==
+X-Gm-Message-State: AO0yUKWTFqSGAxUB85LKdtHiKDbzSkbemFB3UuktlW+2ehxsvVAT57An
+        SNoA2PfDl3O6l1iSvXrM8ie0Khm8OWLM5rISzUU=
+X-Google-Smtp-Source: AK7set8MYcT/BYf8aP57qlVZfhT1B66jpnr2aPMsltJCS9xjdZkBRXOaMEnFW56y2tbBpq+qP5xUsIlmpCFKVIaCP0o=
+X-Received: by 2002:aca:d909:0:b0:37a:d1e1:65aa with SMTP id
+ q9-20020acad909000000b0037ad1e165aamr1159856oig.83.1676034862530; Fri, 10 Feb
+ 2023 05:14:22 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] ASoC: Intel: Skylake: Replace 1-element array with
- flex-array
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        Cezary Rojewski <cezary.rojewski@intel.com>
-Cc:     Sasa Ostrouska <casaxa@gmail.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20230210051447.never.204-kees@kernel.org>
-From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-In-Reply-To: <20230210051447.never.204-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230210121735.639089-1-sergio.paracuellos@gmail.com>
+ <20230210121735.639089-2-sergio.paracuellos@gmail.com> <b59d426d-8a5e-9eff-57f2-e36ebfdc5466@linaro.org>
+In-Reply-To: <b59d426d-8a5e-9eff-57f2-e36ebfdc5466@linaro.org>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Fri, 10 Feb 2023 14:14:11 +0100
+Message-ID: <CAMhs-H_6-2P7aaqSvFDypdfbf_YzhPW0r-GCP_xfO5TgyU6Bnw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: watchdog: mt7621-wdt: add phandle to
+ access system controller registers
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/10/2023 6:14 AM, Kees Cook wrote:
-> The kernel is globally removing the ambiguous 0-length and 1-element
-> arrays in favor of flexible arrays, so that we can gain both compile-time
-> and run-time array bounds checking[1]. In this instance, struct
-> skl_cpr_cfg contains struct skl_cpr_gtw_cfg, which defined "config_data"
-> as a 1-element array.
-> 
-> Normally when switching from a 1-element array to a flex-array, any
-> related size calculations must be adjusted too. However, it seems the
-> original code was over-allocating space, since 1 extra u32 would be
-> included by the sizeof():
-> 
->                  param_size = sizeof(struct skl_cpr_cfg);
->                  param_size += mconfig->formats_config[SKL_PARAM_INIT].caps_size;
-> 
-> But the copy uses caps_size bytes, and cap_size / 4 (i.e. sizeof(u32))
-> for the length tracking:
-> 
->          memcpy(cpr_mconfig->gtw_cfg.config_data,
->                          mconfig->formats_config[SKL_PARAM_INIT].caps,
->                          mconfig->formats_config[SKL_PARAM_INIT].caps_size);
-> 
->          cpr_mconfig->gtw_cfg.config_length =
->                          (mconfig->formats_config[SKL_PARAM_INIT].caps_size) / 4;
-> 
-> Therefore, no size calculations need adjusting. Change the struct
-> skl_cpr_gtw_cfg config_data member to be a true flexible array, which
-> also fixes the over-allocation, and silences this memcpy run-time false
-> positive:
-> 
->    memcpy: detected field-spanning write (size 100) of single field "cpr_mconfig->gtw_cfg.config_data" at sound/soc/intel/skylake/skl-messages.c:554 (size 4)
-> 
-> [1] For lots of details, see both:
->      https://docs.kernel.org/process/deprecated.html#zero-length-and-one-element-arrays
->      https://people.kernel.org/kees/bounded-flexible-arrays-in-c
-> 
-> Reported-by: Sasa Ostrouska <casaxa@gmail.com>
-> Link: https://lore.kernel.org/all/CALFERdwvq5day_sbDfiUsMSZCQu9HG8-SBpOZDNPeMdZGog6XA@mail.gmail.com/
-> Cc: Cezary Rojewski <cezary.rojewski@intel.com>
-> Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> Cc: Liam Girdwood <liam.r.girdwood@linux.intel.com>
-> Cc: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-> Cc: Bard Liao <yung-chuan.liao@linux.intel.com>
-> Cc: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-> Cc: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Jaroslav Kysela <perex@perex.cz>
-> Cc: Takashi Iwai <tiwai@suse.com>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: "Amadeusz Sławiński" <amadeuszx.slawinski@linux.intel.com>
-> Cc: alsa-devel@alsa-project.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->   sound/soc/intel/skylake/skl-topology.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/sound/soc/intel/skylake/skl-topology.h b/sound/soc/intel/skylake/skl-topology.h
-> index 6db0fd7bad49..ad94f8020c27 100644
-> --- a/sound/soc/intel/skylake/skl-topology.h
-> +++ b/sound/soc/intel/skylake/skl-topology.h
-> @@ -115,7 +115,7 @@ struct skl_cpr_gtw_cfg {
->   	u32 dma_buffer_size;
->   	u32 config_length;
->   	/* not mandatory; required only for DMIC/I2S */
-> -	u32 config_data[1];
-> +	u32 config_data[];
->   } __packed;
->   
->   struct skl_dma_control {
+On Fri, Feb 10, 2023 at 2:03 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 10/02/2023 13:17, Sergio Paracuellos wrote:
+> > MT7621 SoC provides a system controller node for accessing to some registers.
+> > Add a phandle in this node to avoid using MIPS related arch operations and
+> > includes in watchdog driver code.
+> >
+> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > ---
+> >  .../devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml  | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml b/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml
+> > index b2b17fdf4..cc701e920 100644
+> > --- a/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml
+> > +++ b/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml
+> > @@ -19,6 +19,12 @@ properties:
+> >    reg:
+> >      maxItems: 1
+> >
+> > +  ralink,sysctl:
+>
+> Thanks for the changes. I did not notice it before - isn't Ralink part
+> of Mediatek now? Also compatible is mediatek, not "ralink"?
 
-This fails in our validation. Maybe we can use the union workaround, to 
-leave the size as is?
+Yes, it is. I was using the same prefix as for the memory controller
+syscon phandler inside the 'sysc' node [0].
 
-Following seems to work in manual test:
-diff --git a/sound/soc/intel/skylake/skl-topology.h 
-b/sound/soc/intel/skylake/skl-topology.h
-index 6db0fd7bad49..ffbd2e60fede 100644
---- a/sound/soc/intel/skylake/skl-topology.h
-+++ b/sound/soc/intel/skylake/skl-topology.h
-@@ -115,7 +115,10 @@ struct skl_cpr_gtw_cfg {
-         u32 dma_buffer_size;
-         u32 config_length;
-         /* not mandatory; required only for DMIC/I2S */
--       u32 config_data[1];
-+       union {
-+               u32 x;
-+               u32 config_data[0];
-+       };
-  } __packed;
+I have no problems at all in changing this to 'mediatek' if preferred.
 
-  struct skl_dma_control {
+Thanks,
+    Sergio Paracuellos
 
-I can also run it through validation to make sure if it is acceptable.
-
+[0]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/mips/boot/dts/ralink/mt7621.dtsi#n67
+>
+>
+>
+> Best regards,
+> Krzysztof
+>
