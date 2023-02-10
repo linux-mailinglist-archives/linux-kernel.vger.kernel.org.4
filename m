@@ -2,153 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469B6692053
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 14:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B58EA69205A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 14:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232356AbjBJN50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 08:57:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41666 "EHLO
+        id S232351AbjBJN6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 08:58:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232361AbjBJN5L (ORCPT
+        with ESMTP id S231896AbjBJN6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 08:57:11 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87475AB07;
-        Fri, 10 Feb 2023 05:57:09 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 17A0E1EC0745;
-        Fri, 10 Feb 2023 14:57:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1676037428;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=6j9AGvbK6QZWswMMubEra1MMawrAyneStMphrQrJwmw=;
-        b=O4uH+MLv7Ria1BC4GVqbfWA4aby5n4GH2XEDD5iM4lZ7HO0vP4Q3rJEaUQl8i3CUuiSh+8
-        6SCz9zFm3WgmTyaPZc1ZXwfHK/2vVZaklhrkdPJzRWJi6uaMFjrZs0psEHPsFX+e5vjN3m
-        /KqBzgzV3KubqqXyj0vPv7Q8Y05f240=
-Date:   Fri, 10 Feb 2023 14:57:03 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v5 11/39] x86/mm: Update pte_modify for _PAGE_COW
-Message-ID: <Y+ZNL4o57lCrmwpb@zn.tnic>
-References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
- <20230119212317.8324-12-rick.p.edgecombe@intel.com>
- <Y+T+ZxydCZS1Yjmz@zn.tnic>
- <49d20fcd197e85e8475f5170db78780f06396cc0.camel@intel.com>
+        Fri, 10 Feb 2023 08:58:36 -0500
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DB85A9F3;
+        Fri, 10 Feb 2023 05:58:34 -0800 (PST)
+Received: by mail-oi1-f171.google.com with SMTP id dt8so4529697oib.0;
+        Fri, 10 Feb 2023 05:58:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=V67vbxDGURX5KGGQ/Srk/dGD7P3nYDL3amFEdBy6F/A=;
+        b=xjNf2DJd8kLb1jrcMDhte7+XpkRe6w9A4NeXJXwpO8tmJAW1lL0K4iaFMy9S8NDQZL
+         YVvqeKWp1MyGEWEOVJo0qNENS4Lt2Uc3IGoVMhfE9f8UWwMK6yApglORiAXtROYeUhfr
+         YgL07kYKBi5H56WbmHWMVC+TDjmIZOQ/tmo18hsFQ06vyzAf5O9zDl3W3/xG6zVZo5vI
+         d4cDDtglkGC/4l2aEawNp6FuF1PhtVhoczzsgLx+6oOg3oZkb8Q8FZ0fP2QSL6URMZa+
+         dVsDHCqnANlcltqKLTND9t5xs0Ia2dRstjRYI8eIDwmyMU76gBZeiQ3ALAGQrYHF1jKF
+         f6aw==
+X-Gm-Message-State: AO0yUKWvXxge/flIaa6vaehQoVbSzpc7mempacaRlj3ZNZOXlZFjkrex
+        av8es/bSFXpJCtuhki09DZ/TFKUO0w==
+X-Google-Smtp-Source: AK7set9kP+KFFdagPIoY6xzg8MXMWQcujLvsOIf8+nHijEYW9EWe/cQ/e8tvAQEVWkwPsBVvTlNhJA==
+X-Received: by 2002:a54:4492:0:b0:36b:d923:abe8 with SMTP id v18-20020a544492000000b0036bd923abe8mr6380904oiv.54.1676037512765;
+        Fri, 10 Feb 2023 05:58:32 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id n12-20020a9d740c000000b0068bc476d777sm1973488otk.13.2023.02.10.05.58.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 05:58:32 -0800 (PST)
+Received: (nullmailer pid 2493632 invoked by uid 1000);
+        Fri, 10 Feb 2023 13:58:31 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <49d20fcd197e85e8475f5170db78780f06396cc0.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Changhuang Liang <changhuang.liang@starfivetech.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>, devicetree@vger.kernel.org,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-kernel@vger.kernel.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-riscv@lists.infradead.org,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Jack Zhu <jack.zhu@starfivetech.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-phy@lists.infradead.org
+In-Reply-To: <20230210061713.6449-3-changhuang.liang@starfivetech.com>
+References: <20230210061713.6449-1-changhuang.liang@starfivetech.com>
+ <20230210061713.6449-3-changhuang.liang@starfivetech.com>
+Message-Id: <167603709304.2486157.3430490619494105631.robh@kernel.org>
+Subject: Re: [PATCH v1 2/4] dt-bindings: phy: Add starfive,jh7110-dphy-rx
+Date:   Fri, 10 Feb 2023 07:58:31 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 05:09:15PM +0000, Edgecombe, Rick P wrote:
-> What do you think, can we leave it or give it a new name? Maybe
-> pte_set_dirty() to be more like the x86-only pte_set_flags() family of
-> functions?
 
-I'd do this (ontop of yours, not built, not tested, etc). It is short
-and sweet:
+On Thu, 09 Feb 2023 22:17:11 -0800, Changhuang Liang wrote:
+> Starfive SoC like the jh7110 use a MIPI D-PHY RX controller based on
+> a M31 IP. Add a binding for it.
+> 
+> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+> ---
+>  .../bindings/phy/starfive,jh7110-dphy-rx.yaml | 78 +++++++++++++++++++
+>  1 file changed, 78 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml
+> 
 
-pte_mkdirty() set both dirty flags
-pte_modifl() sets only _PAGE_DIRTY
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-No special helpers to lookup what they do, no nothing. Plain and simple.
+yamllint warnings/errors:
 
----
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 7942eff2af50..8ba37380966c 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -392,19 +392,10 @@ static inline pte_t pte_mkexec(pte_t pte)
- 	return pte_clear_flags(pte, _PAGE_NX);
- }
- 
--static inline pte_t __pte_mkdirty(pte_t pte, bool soft)
--{
--	pteval_t dirty = _PAGE_DIRTY;
--
--	if (soft)
--		dirty |= _PAGE_SOFT_DIRTY;
--
--	return pte_set_flags(pte, dirty);
--}
--
-+/* Set _PAGE_SOFT_DIRTY for shadow stack pages. */
- static inline pte_t pte_mkdirty(pte_t pte)
- {
--	return __pte_mkdirty(pte, true);
-+	return pte_set_flags(pte, _PAGE_DIRTY | _PAGE_SOFT_DIRTY);
- }
- 
- static inline pte_t pte_mkyoung(pte_t pte)
-@@ -749,14 +740,8 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
- 
- 	pte_result = __pte(val);
- 
--	/*
--	 * Dirty bit is not preserved above so it can be done
--	 * in a special way for the shadow stack case, where it
--	 * may need to set _PAGE_COW. __pte_mkdirty() will do this in
--	 * the case of shadow stack.
--	 */
- 	if (pte_dirty(pte))
--		pte_result = __pte_mkdirty(pte_result, false);
-+		pte_result = pte_set_flags(pte_result, _PAGE_DIRTY);
- 
- 	return pte_result;
- }
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.example.dts:18:18: fatal error: dt-bindings/clock/starfive,jh7110-crg.h: No such file or directory
+   18 |         #include <dt-bindings/clock/starfive,jh7110-crg.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:434: Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1508: dt_binding_check] Error 2
 
+doc reference errors (make refcheckdocs):
 
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230210061713.6449-3-changhuang.liang@starfivetech.com
 
--- 
-Regards/Gruss,
-    Boris.
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
