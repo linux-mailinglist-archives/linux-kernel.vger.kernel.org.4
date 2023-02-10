@@ -2,634 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D736918F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 08:05:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D02836918F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 08:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbjBJHFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 02:05:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
+        id S230471AbjBJHH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 02:07:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbjBJHFm (ORCPT
+        with ESMTP id S230285AbjBJHHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 02:05:42 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AA633467;
-        Thu,  9 Feb 2023 23:05:35 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 7591C24E291;
-        Fri, 10 Feb 2023 15:05:32 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Feb
- 2023 15:05:32 +0800
-Received: from [192.168.125.128] (183.27.96.33) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Feb
- 2023 15:05:31 +0800
-Message-ID: <8feda5d9-8510-acbf-1ec2-3a0e67df0adc@starfivetech.com>
-Date:   Fri, 10 Feb 2023 15:01:13 +0800
+        Fri, 10 Feb 2023 02:07:55 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8243E5ACDC;
+        Thu,  9 Feb 2023 23:07:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676012874; x=1707548874;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=LDlWIKKarkY7YP+D3Vaa9zbQoIUnA6u6nY8W46pEhU8=;
+  b=ji8x1gUwIS/4ya4cQHpZAOEiK/zNIV29Ck58E/WVIPbesbQa4gpSDkfV
+   8MVTpmMhlUnghX+YbpvfHw/wBNZze4ATAbQUy+pf5gywcBjaDNRHz3sbY
+   jnQElf+jq7+3x2b3efHgvm4LR1foQ1MvFsaz4O9WVXO8CAWCUK1qh9U7X
+   ElKNmxrOmIVh9en4dzwa1V3ZWwU/2GQXcGlYw+7nAIqxF05yT2AOOf3tn
+   YE6p7ZhUAtL8zyazg3gcXudGbZ+hSUdwIGMUgcIxXscvoINaYDtcuRBCT
+   8SQqKGRAvD3DdrRbyPfmI+9IX0uX60CvRTws4NiuI4X9txeljTwF48QMm
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="392755821"
+X-IronPort-AV: E=Sophos;i="5.97,286,1669104000"; 
+   d="scan'208";a="392755821"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 23:07:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="669904776"
+X-IronPort-AV: E=Sophos;i="5.97,286,1669104000"; 
+   d="scan'208";a="669904776"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga007.fm.intel.com with ESMTP; 09 Feb 2023 23:07:43 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 9 Feb 2023 23:07:42 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 9 Feb 2023 23:07:42 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 9 Feb 2023 23:07:42 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 9 Feb 2023 23:07:41 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dF8O0ixBIW9E1fUAYVlvc/xOZWor5X7t8ZyrdylCOLNVbOFFOJQG0al+En6QpZBeuldb1DXELxb2V9Dxz1S1mEoYvs4dVPny8dvaTg3P9dPMyqBw8dxXeQmWAUsyb4eoSHgJRivw3C174kwocVbIy+Qp0O//b7Th46sIZoerzPKZdUdbLKPTnIpAm3SIYlwIB+i44cVx0qy0KYe+rT65pgK+3+L5Za7yIA+3L0nYDMzHVSLuGYa68Mw8iDoPDRnSjizuYz6qVHW1Sc29JsKY6jqEm+PEvC3Zt/3ShWcXT8WzssSMVriPDL/RJIHt32Qz101gCSSt4A4gwsx8iZImvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OXesrd7mbquBq0uM9rxc5RtqY1qO9Rfc6QpEHY8hibA=;
+ b=MkX02X1p1nzAIqTzcPEbI42ysFpn1K80yHTTB4fgn5lwmQOqHo7tFKyo/sixaho/GFuBQwEKAqsQF9Ij9DnZ5o9PbO0zUCQX1qdv6Iuud//JQ2Mo6P8lFg+aBzTsV54cnF61MG6Cv9yEW2Wa8OsqClkl0Skb/nnLtKHDwif+C1qBOv7YLaQ0xUiEIHREmiANSaKfGvhMv8v5sazdUnD4bjIlu45paXAM3JD6oKIxtRwVQDr0ocwynt1bbd1NiML4y9abO96r4yJzeNbDFE71kipLxLYOmqI15Xv2jG+F+x8JTdnTGj6Ee3chW/QXQWj70xO5f/JlVo/I4T5IJQFrTg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
+ by MN0PR11MB6134.namprd11.prod.outlook.com (2603:10b6:208:3ca::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.21; Fri, 10 Feb
+ 2023 07:07:40 +0000
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::6851:3db2:1166:dda6]) by SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::6851:3db2:1166:dda6%9]) with mapi id 15.20.6086.019; Fri, 10 Feb 2023
+ 07:07:40 +0000
+Date:   Thu, 9 Feb 2023 23:07:36 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Ira Weiny <ira.weiny@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Ben Widawsky" <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>
+CC:     <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Dave Jiang <dave.jiang@intel.com>
+Subject: Re: [PATCH 0/2] cxl: Enhance trace point information
+Message-ID: <63e5ed38d77d9_138fbc2947a@iweiny-mobl.notmuch>
+References: <20230208-cxl-event-names-v1-0-73f0ff3a3870@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230208-cxl-event-names-v1-0-73f0ff3a3870@intel.com>
+X-ClientProxiedBy: BY3PR05CA0017.namprd05.prod.outlook.com
+ (2603:10b6:a03:254::22) To SA1PR11MB6733.namprd11.prod.outlook.com
+ (2603:10b6:806:25c::17)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 2/3] drivers: watchdog: Add StarFive Watchdog driver
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221219094233.179153-1-xingyu.wu@starfivetech.com>
- <20221219094233.179153-3-xingyu.wu@starfivetech.com>
- <20230201224619.GA3194283@roeck-us.net>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <20230201224619.GA3194283@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.96.33]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|MN0PR11MB6134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 11c9160d-4d34-43df-1148-08db0b357f00
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sOIw92M1KOLZnS9uWG80eXaBP3aX5Wt5N+lE5pw2Kb+Zc38z4NHNlu8rOSV/WZYlcC5BFz2cJ482KYiy+ecwixzdIyJDx7zf98XlGm57RtxKuhiehVBIs+zheQdYal3DtVmraZrqnjuqqV6+ejoq9yNEU5NCBuZROOlunXoh9SVpHXH4Tloi+0/AtnZDgLV6Qq6tMoDTu1J8D7k3WLMA1VQE0lATizQrcteb57u5lSAoXQVG1atli6KOEC+0ag9grGA5zmGJD1wMEjIbWbOXsgwq1ZESmbuiZS8coyLJnfyzkkJHWKUfGExKwK6fa7Le6u+jttXKtqGQ/nZWKyfavSZnzif1RhNkmyM+hb3VUZUQBgdb5vXniBpvbhJqSiUKlctDT7geCwGNIeV4QQ2mo0PRony8kD4tc8AVP3l0PCI6v0H589WvO5Jw2em/Aa15m2DyextOjdCzeuXtshZj1q8hQKkb9upbnA3gZIelhpzLnmtwmC1IUp2itmpJvhyqghiFLoFveSHMyAQdtCWpONIWTrmwot9GWoBj3ml+1Go4gN2hyrkW5VFb5aln2B6nBMwOh28HQ50oY1fX9DlX+G9V3keVNc5CDaaM0S9QX+BKsy1mvJ+hvesvL3WijJKkGrCkPZ2kR9gSG3ydFovQ9Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(366004)(136003)(39860400002)(396003)(346002)(451199018)(86362001)(82960400001)(54906003)(6636002)(316002)(8676002)(4326008)(66476007)(66556008)(66946007)(110136005)(478600001)(6486002)(2906002)(8936002)(41300700001)(44832011)(4744005)(5660300002)(83380400001)(38100700002)(6512007)(186003)(26005)(9686003)(6666004)(107886003)(6506007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wfsUpyM16ijg7SH2xIb6kXgmaC4oFMWGgr1cCF/axOhQPBPaTrP0HWaN/HFt?=
+ =?us-ascii?Q?EWO741NJ6h1xNIN9PWIhXFUpveZz5rl70nvJXeONzV5bcxl8uhXLVVFu9PUh?=
+ =?us-ascii?Q?PxlUoa+cgCei2DhbODsPv+v78P25bsL/dZGaQD3gwsIJeaWXRd4pXCVy/foo?=
+ =?us-ascii?Q?ArL/EDn7EV66qLE8RC0AqHd81wNRcwL//BaHzET1iWEi9+F014WHUOBfHZs+?=
+ =?us-ascii?Q?Ylpac1XFTOB2SEKqSLuHW3wwHRe9ILujK6ALeFx02AJ4fnpeLwgjE6FF1tWP?=
+ =?us-ascii?Q?pPHvrdhdZDE9OOU1R07XxLA30RTLz450k+x983SZRnq/e2iuBmtVvygxD4EW?=
+ =?us-ascii?Q?n7+RzNnNlZmGPz0qpYwLgCFbDqnvDPrLN40Wi404j+v9xf8HO05Xz8EiD7Oo?=
+ =?us-ascii?Q?VOvNElWjBVTO0BRs+GSvRtxaH7GjmEFRw6U8qGGekB35AQgj2N8DzJdvmYjR?=
+ =?us-ascii?Q?QbHJwVx2H1roWQ6nrYNhF0JPugGQjjg4vl8kBH/HAKkRlUKxB1Da8O9IVgs+?=
+ =?us-ascii?Q?f4adJgIZtJAXvb5Sz+R7ZYlFI/xDTF0ERE7Z7xoXdixDt2OTdHX2RxixkdnP?=
+ =?us-ascii?Q?a91dcfE/m18H0pOJMR10ZzKAlvcLvx7Q50243zidq8SxfpNWAEhsZx4Fo52Z?=
+ =?us-ascii?Q?EiVm4Rc3s/DLmmbSzhccG+7XqFnCU8xac7AXC55y47h/8MFwmbI/J36QkK7B?=
+ =?us-ascii?Q?88ogYa4YOjofVNikOowapAVBs4tSmN2qKa8drx0E8+56EzKJEltv5z/uWCg8?=
+ =?us-ascii?Q?KxfDyB/taUPz1rseaW7kzAzayMe4xx5Rkuh9eTv0g0lqAcmlly+ZkzpM2RCy?=
+ =?us-ascii?Q?uVnSuCfN8vzbWmxzp4L1pZPYkuv4voG2TnU9CXJlqaNkkkNntKWqA3bekKkD?=
+ =?us-ascii?Q?5sAMJz3fH1v89csyd7NAPu+Jqpo+xFlptGAMX8Alq+pNSy87EIXvDTdWbUSP?=
+ =?us-ascii?Q?5WOjPmjt2sWrN3roR+IojN8rgnocEDjoTFwGAi0c3fbtVp7T4udmTTaswliH?=
+ =?us-ascii?Q?mY9znhnc+KvkLkxw1dqaBp4bgz4Gx8mRonMIxnPQ3rYXbcHSSqSsjLSbcjBA?=
+ =?us-ascii?Q?d6NA91NVOlq6Wavh5AdAIvPI/JIi+jOyf1FPvpqgkS5Dqv6WYHGvCXRdcJ45?=
+ =?us-ascii?Q?1DxiHrGpH1tZTPXK0elxM1cowbs4Ow0hgwFlJ4pskV9uwqz0aZYOyhCvyOu8?=
+ =?us-ascii?Q?cKFlRHlHEcsMMOD3EkQHNtgEOGeuO+yPMAowY6drxgRf5ToPm22wWAhv8nu8?=
+ =?us-ascii?Q?ihLVCXF3fYf8pGVO6KL3QBTxh6+e6TqUnblNSUMLb99jYjxYdyt8ok7UsCbh?=
+ =?us-ascii?Q?MLziH647C2csPLTDiDMwfYYUrvhH5l5SVZShBqQDwexWwmyLCAyfI/nEVMQh?=
+ =?us-ascii?Q?Zz96OvlvflzqWFDJoMen7JeB2SmlQh+xFZLSYn50A3H8pWUWE99MXFYlsZse?=
+ =?us-ascii?Q?P9gv3UsQM1cOz8sSnzAc20KgbErWePJKtt1Avfet4w4NiZ6AcJ+UUDz3PYYF?=
+ =?us-ascii?Q?LrACokGHqwrtBjR51Vk3Z2eqAT6elU458MBAYzQh22kH1Y3rpgwOL0VUHN34?=
+ =?us-ascii?Q?D+sanNOONTw45oRDe5ifsgn+JykQT9Rj4wQxLt7J?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 11c9160d-4d34-43df-1148-08db0b357f00
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2023 07:07:39.8220
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FoxH2UaiY1zgJTpjDgXnvWcXvnkJD815BcxVmO3xfWzDZPocZOAw56uk54hf+ekj7hYvOJj6x1/0448eaJD7SQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB6134
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/2 6:46, Guenter Roeck wrote:
-> On Mon, Dec 19, 2022 at 05:42:32PM +0800, Xingyu Wu wrote:
->> Add watchdog driver for the StarFive JH7110 SoC.
->> 
->> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
-> 
-> This driver is almost impossible for me to review. There is a lot of code
-> which doesn't make sense to me. I'll outline some of it below, but this is
-> by far not a complete review.
+Ira Weiny wrote:
+> Trace point definitions are reporting different linux devices for
+> the same CXL hardware device.  Clean this up and add parent device
+> information to all the trace points.
 
-Thanks for your review. It is enough complete and useful.
+I've found a couple of small changes that I wanted to make but got side
+tracked and forgot when I sent this.
 
-> 
->>[...]
->> +
->> +#include <linux/clk.h>
->> +#include <linux/delay.h>
->> +#include <linux/err.h>
->> +#include <linux/interrupt.h>
->> +#include <linux/io.h>
->> +#include <linux/iopoll.h>
->> +#include <linux/module.h>
->> +#include <linux/moduleparam.h>
->> +#include <linux/of.h>
->> +#include <linux/of_device.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/pm_runtime.h>
->> +#include <linux/reset.h>
->> +#include <linux/reset-controller.h>
->> +#include <linux/slab.h>
->> +#include <linux/timer.h>
->> +#include <linux/types.h>
->> +#include <linux/uaccess.h>
->> +#include <linux/watchdog.h>
-> 
-> Several of those include files are unnecessary.
+Also Dan reminded me we would like to see the device serial number in
+these traces as well.
 
-Will drop it.
+v2 coming shortly.
+
+Ira
 
 > 
->> [...]
->> +
->> +static bool nowayout = WATCHDOG_NOWAYOUT;
->> +static int tmr_margin;
->> +static int tmr_atboot = STARFIVE_WDT_ATBOOT;
->> +static int soft_noboot;
->> +
->> +module_param(tmr_margin, int, 0);
->> +module_param(tmr_atboot, int, 0);
->> +module_param(nowayout, bool, 0);
->> +module_param(soft_noboot, int, 0);
->> +
->> +MODULE_PARM_DESC(tmr_margin, "Watchdog tmr_margin in seconds. (default="
->> +		 __MODULE_STRING(STARFIVE_WDT_DEFAULT_TIME) ")");
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> ---
+> Ira Weiny (2):
+>       cxl/trace: Standardize device information output
+>       cxl/trace: Add host output to trace points
 > 
-> Use "timeout" or "heartbeat".
+>  drivers/cxl/core/mbox.c  | 14 ++++----
+>  drivers/cxl/core/pci.c   |  8 ++---
+>  drivers/cxl/core/trace.h | 85 +++++++++++++++++++++++++++---------------------
+>  3 files changed, 57 insertions(+), 50 deletions(-)
+> ---
+> base-commit: dbe9f7d1e155b97a42f7da81e22acc98fe0a9072
+> change-id: 20230208-cxl-event-names-9372fb72a607
+> 
+> Best regards,
+> -- 
+> Ira Weiny <ira.weiny@intel.com>
+> 
 
-Will fix.
-
-> 
->> +MODULE_PARM_DESC(tmr_atboot,
->> +		 "Watchdog is started at boot time if set to 1, default="
->> +		 __MODULE_STRING(STARFIVE_WDT_ATBOOT));
-> 
-> Use "early_enable"
-
-Will fix.
-
-> 
->> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
->> +		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
->> +MODULE_PARM_DESC(soft_noboot,
->> +		 "Watchdog action, set to 1 to ignore reboots, 0 to reboot (default 0)");
-> 
-> I do not understand what this module parameter is supposed to be used for,
-> and what the "soft_' prefix is supposed to mean.
-
-This 'soft_noboot' means watchdog reset enabled status. If 'soft_noboot' is set to 1,
-it means reset is disabled and do not reboot.Or 'reboot_disbled' instead? 
-
-> 
->> [...]
->> +#ifdef CONFIG_OF
->> +/* Register bias in JH7110 */
->> +static const struct starfive_wdt_variant drv_data_jh7110 = {
->> +	.control = STARFIVE_WDT_JH7110_CONTROL,
->> +	.load = STARFIVE_WDT_JH7110_LOAD,
->> +	.enable = STARFIVE_WDT_JH7110_CONTROL,
->> +	.value = STARFIVE_WDT_JH7110_VALUE,
->> +	.int_clr = STARFIVE_WDT_JH7110_INTCLR,
->> +	.unlock = STARFIVE_WDT_JH7110_LOCK,
->> +	.unlock_key = STARFIVE_WDT_JH7110_UNLOCK_KEY,
->> +	.irq_is_raise = STARFIVE_WDT_JH7110_IMS,
->> +	.enrst_shift = STARFIVE_WDT_JH7110_RESEN_SHIFT,
->> +	.en_shift = STARFIVE_WDT_JH7110_EN_SHIFT,
->> +};
->> +
->> +static const struct of_device_id starfive_wdt_match[] = {
->> +	{ .compatible = "starfive,jh7110-wdt", .data = &drv_data_jh7110 },
->> +	{}
->> +};
->> +MODULE_DEVICE_TABLE(of, starfive_wdt_match);
->> +#endif
->> +
->> +static const struct platform_device_id starfive_wdt_ids[] = {
->> +	{
->> +		.name = "starfive-jh7110-wdt",
->> +		.driver_data = (unsigned long)&drv_data_jh7110,
-> 
-> This will fail to compile if CONFIG_OF=n.
-
-Will drop '#ifdef CONFIG_OF'.
-
-> 
->> +	},
->> +	{}
->> +};
->> +MODULE_DEVICE_TABLE(platform, starfive_wdt_ids);
->> +
->> +static int starfive_wdt_get_clock_rate(struct starfive_wdt *wdt)
->> +{
->> +	if (!IS_ERR(wdt->core_clk)) {
->> +		wdt->freq = clk_get_rate(wdt->core_clk);
-> 
-> wdt->freq can at least in theory be 0, which would
-> result in a zero-divide crash later on.
-
-Will add a check whether rate is 0 to avoid zero-divide crash.
-
-> 
->> +		return 0;
->> +	}
->> +	dev_err(wdt->dev, "get clock rate failed.\n");
->> +
->> +	return -ENOENT;
-> 
-> The above code can not be reached.
-> 
->> +}
->> +
->> +static int starfive_wdt_enable_clock(struct starfive_wdt *wdt)
->> +{
->> +	int ret = 0;
->> +
->> +	wdt->apb_clk = devm_clk_get_enabled(wdt->dev, "apb");
->> +	if (IS_ERR(wdt->apb_clk)) {
->> +		dev_err(wdt->dev, "failed to get and enable apb clock.\n");
->> +		ret = PTR_ERR(wdt->apb_clk);
->> +		return ret;
->> +	}
->> +
->> +	wdt->core_clk = devm_clk_get_enabled(wdt->dev, "core");
->> +	if (IS_ERR(wdt->core_clk)) {
->> +		dev_err(wdt->dev, "failed to get and enable core clock.\n");
->> +		ret = PTR_ERR(wdt->core_clk);
->> +	}
->> +
->> +	return ret;
->> +}
->> +
->> +static int starfive_wdt_reset_init(struct starfive_wdt *wdt)
->> +{
->> +	int ret = 0;
->> +
->> +	wdt->rsts = devm_reset_control_array_get_exclusive(wdt->dev);
->> +	if (!IS_ERR(wdt->rsts)) {
-> 
-> Error handling should come first, and return immediately.
-
-Will change the order and return error first.
-
-> 
->> +		ret = reset_control_deassert(wdt->rsts);
->> +		if (ret)
->> +			dev_err(wdt->dev, "failed to deassert rsts.\n");
->> +	} else {
->> +		dev_err(wdt->dev, "failed to get rsts error.\n");
->> +		ret = PTR_ERR(wdt->rsts);
->> +	}
->> +
->> +	return ret;
->> +}
->> [...]
->> +
->> +/* interrupt status whether has been raised from the counter */
->> +static bool starfive_wdt_raise_irq_status(struct starfive_wdt *wdt)
->> +{
->> +	return !!readl(wdt->base + wdt->drv_data->irq_is_raise);
->> +}
->> +
->> +static void starfive_wdt_int_clr(struct starfive_wdt *wdt)
->> +{
->> +	writel(STARFIVE_WDT_INTCLR, wdt->base + wdt->drv_data->int_clr);
->> +}
-> 
-> There is no explanation for this interrupt handling (or, rather,
-> non-handling since there is no interrupt handler. What is the purpose
-> of even having all this code ?
-
-Because the watchdog raise an interrupt signal on the hardware when timeout,
-although we do not use interrupt handler on the sorfware, but the watchdog
-initialization or reload also need to clear the hardware interrupt signal.
-
-> 
->> [...]
->> +
->> +static unsigned int starfive_wdt_max_timeout(struct starfive_wdt *wdt)
->> +{
->> +	return DIV_ROUND_UP(STARFIVE_WDT_MAXCNT, wdt->freq) - 1;
->> +}
-> 
-> For a frequency of 1 MHz, this results in a maximum timeout of 4294.
-> 
-> This value is then used in starfive_wdt_set_timeout(), but as
-> (4294 * 1000000) / 2, which is then again compared against
-> STARFIVE_WDT_MAXCNT. Somewhere this calculation is wrong.
-
-Modify to 'DIV_ROUND_UP(STARFIVE_WDT_MAXCNT, (wdt->freq / 2)) - 1'.
-
-> 
-> [...]
->> +
->> +static int starfive_wdt_restart(struct watchdog_device *wdd, unsigned long action,
->> +				void *data)
->> +{
->> +	struct starfive_wdt *wdt = watchdog_get_drvdata(wdd);
->> +
->> +	spin_lock(&wdt->lock);
->> +	starfive_wdt_unlock(wdt);
->> +	/* disable watchdog, to be safe */
->> +	starfive_wdt_disable(wdt);
->> +
->> +	if (soft_noboot)
->> +		starfive_wdt_disable_reset(wdt);
->> +	else
->> +		starfive_wdt_enable_reset(wdt);
->> +
-> 
-> This is a _restart_ handler. Disabling it doesn't make any sense.
-
-Will drop 'starfive_wdt_disable_reset(wdt)' part.
-
-> 
->> +	/* put native values into count */
->> +	starfive_wdt_set_count(wdt, wdt->count);
->> +
->> +	/* set the watchdog to go and reset */
->> +	starfive_wdt_int_clr(wdt);
->> +	starfive_wdt_enable(wdt);
->> +
->> +	starfive_wdt_lock(wdt);
->> +	spin_unlock(&wdt->lock);
->> +
->> +	return 0;
->> +}
->> +
->> +static int starfive_wdt_set_timeout(struct watchdog_device *wdd,
->> +				    unsigned int timeout)
->> +{
->> +	struct starfive_wdt *wdt = watchdog_get_drvdata(wdd);
->> +
->> +	unsigned long freq = wdt->freq;
->> +	unsigned int count;
->> +
->> +	spin_lock(&wdt->lock);
->> +
->> +	if (timeout < wdt->wdt_device.min_timeout)
->> +		return -EINVAL;
-> 
-> This is checked by the watchdog core.
-
-Will drop it.
-
-> 
->> +
->> +	/*
->> +	 * This watchdog takes twice timeouts to reset.
->> +	 * In order to reduce time to reset, should set half count value.
->> +	 */
->> +	count = timeout * freq / 2;
->> +
->> +	if (count > STARFIVE_WDT_MAXCNT) {
-> 
-> count is an unsigned int, which is pretty much everywhere a 32-bit
-> value. STARFIVE_WDT_MAXCNT is 0xffffffff. How is an unsigned integer
-> ever supposed to be larger than 0xffffffff ?
-> 
->> +		dev_warn(wdt->dev, "timeout %d too big,use the MAX-timeout set.\n",
->> +			 timeout);
->> +		timeout = starfive_wdt_max_timeout(wdt);
->> +		count = timeout * freq;
-> 
-> This is confusing. First, the timeout range is checked by the calling code,
-> which makes sure it is never larger than max_timeout. max_timeout is
-> set to the value returned by starfive_wdt_max_timeout().
-> Thus, count = timeout * freq / 2 will _never_ be larger than
-> STARFIVE_WDT_MAXCNT. Even if it ever was, it doesn't make sense
-> to use a count value of timeout * freq in that case, ie a value which
-> could be twice as large as the supposed maximum value.
-
-Change 'count' type to 'u64'. And if 'count' is larger than STARFIVE_WDT_MAXCNT,
-'count' is equal to STARFIVE_WDT_MAXCNT. Does that seem OK?
-
-> 
->> +	}
->> +
->> +	dev_info(wdt->dev, "Heartbeat: timeout=%d, count/2=%d (%08x)\n",
->> +		 timeout, count, count);
-> 
-> No. Drop such noise. Make it a debug message if you think you need it.
-
-Will modify it to 'dev_dbg'.
-
-> 
->> +
->> +	starfive_wdt_unlock(wdt);
->> +	starfive_wdt_disable(wdt);
->> +	starfive_wdt_set_reload_count(wdt, count);
->> +	starfive_wdt_enable(wdt);
->> +	starfive_wdt_lock(wdt);
->> +
->> +	wdt->count = count;
->> +	wdd->timeout = timeout;
->> +
->> +	spin_unlock(&wdt->lock);
->> +
->> +	return 0;
->> +}
->> +
->> +#define OPTIONS (WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE)
->> +
->> +static const struct watchdog_info starfive_wdt_ident = {
->> +	.options = OPTIONS,
->> +	.firmware_version = 0,
-> 
-> It is not necessary to initilize a static variable with 0.
-
-Will drop '0'.
-
-> 
->> +	.identity = "StarFive Watchdog",
->> +};
->> +
->> +static const struct watchdog_ops starfive_wdt_ops = {
->> +	.owner = THIS_MODULE,
->> +	.start = starfive_wdt_start,
->> +	.stop = starfive_wdt_pm_stop,
->> +	.ping = starfive_wdt_keepalive,
->> +	.set_timeout = starfive_wdt_set_timeout,
->> +	.restart = starfive_wdt_restart,
->> +	.get_timeleft = starfive_wdt_get_timeleft,
->> +};
->> +
->> +static const struct watchdog_device starfive_wdd = {
->> +	.info = &starfive_wdt_ident,
->> +	.ops = &starfive_wdt_ops,
->> +	.timeout = STARFIVE_WDT_DEFAULT_TIME,
->> +};
->> +
->> +static inline const struct starfive_wdt_variant *
->> +starfive_wdt_get_drv_data(struct platform_device *pdev)
->> +{
->> +	const struct starfive_wdt_variant *variant;
->> +
->> +	variant = of_device_get_match_data(&pdev->dev);
->> +	if (!variant) {
->> +		/* Device matched by platform_device_id */
->> +		variant = (struct starfive_wdt_variant *)
->> +			   platform_get_device_id(pdev)->driver_data;
->> +	}
->> +
->> +	return variant;
->> +}
->> +
->> +static int starfive_wdt_probe(struct platform_device *pdev)
->> +{
->> +	struct device *dev = &pdev->dev;
->> +	struct starfive_wdt *wdt;
->> +	int started = 0;
-> 
-> What is this variable supposed to be used for ? It is alway 0.
-
-This variable is used to switch for debugging whether to allow the watchdog
-to be started at boot time by driver. I think I should remove it.
-
-> 
->> [...]
->> +
->> +	if (tmr_atboot && started == 0) {
->> +		starfive_wdt_start(&wdt->wdt_device);
->> +	} else if (!tmr_atboot) {
->> +		/*
->> +		 *if we're not enabling the watchdog, then ensure it is
->> +		 * disabled if it has been left running from the bootloader
->> +		 * or other source.
->> +		 */
->> +		starfive_wdt_stop(&wdt->wdt_device);
-> 
-> If it _is_ running from the boot loader, the watchdog core is not
-> informed about it. If it is started here, it is not informed either.
-> This is unusual and will need to be explained.
-> Why ?
-
-Is is okay to remove the 'started'?
-
-> 
->> +	}
->> +
->> +#ifdef CONFIG_PM
->> +	clk_disable_unprepare(wdt->core_clk);
->> +	clk_disable_unprepare(wdt->apb_clk);
->> +#endif
-> 
-> I do not understand the above code. Why stop the watchdog if CONFIG_PM
-> is enabled, even if it is supposed to be running ?
-
-There misses a check about 'early_enable' and add 'if (!early_enable)'.
-There means that disable clock when watchdog sleep and CONFIG_PM is enable.
-Then enable clock when watchdog work by 'starfive_wdt_runtime_resume' function.
-
-> 
->> +
->> +	platform_set_drvdata(pdev, wdt);
->> +
->> +	return 0;
->> +
->> +err_clk_disable:
->> +	clk_disable_unprepare(wdt->core_clk);
->> +	clk_disable_unprepare(wdt->apb_clk);
->> +
->> +	return ret;
->> +}
->> +
->> +static int starfive_wdt_remove(struct platform_device *dev)
->> +{
->> +	struct starfive_wdt *wdt = platform_get_drvdata(dev);
->> +
->> +	starfive_wdt_mask_and_disable_reset(wdt, true);
->> +	watchdog_unregister_device(&wdt->wdt_device);
->> +
->> +	clk_disable_unprepare(wdt->core_clk);
->> +	clk_disable_unprepare(wdt->apb_clk);
->> +	pm_runtime_disable(wdt->dev);
->> +
->> +	return 0;
->> +}
->> +
->> +static void starfive_wdt_shutdown(struct platform_device *dev)
->> +{
->> +	struct starfive_wdt *wdt = platform_get_drvdata(dev);
->> +
->> +	starfive_wdt_mask_and_disable_reset(wdt, true);
->> +
->> +	starfive_wdt_pm_stop(&wdt->wdt_device);
->> +}
->> +
->> +#ifdef CONFIG_PM_SLEEP
->> +static int starfive_wdt_suspend(struct device *dev)
->> +{
->> +	int ret;
->> +	struct starfive_wdt *wdt = dev_get_drvdata(dev);
->> +
->> +	starfive_wdt_unlock(wdt);
->> +
->> +	/* Save watchdog state, and turn it off. */
->> +	wdt->reload = starfive_wdt_get_count(wdt);
->> +
->> +	starfive_wdt_mask_and_disable_reset(wdt, true);
->> +
->> +	/* Note that WTCNT doesn't need to be saved. */
->> +	starfive_wdt_stop(&wdt->wdt_device);
->> +	pm_runtime_force_suspend(dev);
->> +
->> +	starfive_wdt_lock(wdt);
->> +
->> +	return 0;
->> +}
->> +
->> +static int starfive_wdt_resume(struct device *dev)
->> +{
->> +	int ret;
->> +	struct starfive_wdt *wdt = dev_get_drvdata(dev);
->> +
->> +	starfive_wdt_unlock(wdt);
->> +
->> +	pm_runtime_force_resume(dev);
->> +
->> +	/* Restore watchdog state. */
->> +	starfive_wdt_set_reload_count(wdt, wdt->reload);
->> +
->> +	starfive_wdt_restart(&wdt->wdt_device, 0, NULL);
-> 
-> I do not understand this call. Per its definition it is a restart handler,
-> supposed to restart the hardware. Why would anyone want to restart the
-> system on resume ?
-
-The watchdog start counting from 'count' to 0 on everytime resume like a restart.
-So I directly use a restart.
-
-> 
->> +
->> +	starfive_wdt_mask_and_disable_reset(wdt, false);
->> +
->> +	starfive_wdt_lock(wdt);
->> +
->> +	return 0;
->> +}
->> +#endif /* CONFIG_PM_SLEEP */
->> +
->> +#ifdef CONFIG_PM
->> +static int starfive_wdt_runtime_suspend(struct device *dev)
->> +{
->> +	struct starfive_wdt *wdt = dev_get_drvdata(dev);
->> +
->> +	clk_disable_unprepare(wdt->apb_clk);
->> +	clk_disable_unprepare(wdt->core_clk);
->> +
->> +	return 0;
->> +}
->> +
->> +static int starfive_wdt_runtime_resume(struct device *dev)
->> +{
->> +	struct starfive_wdt *wdt = dev_get_drvdata(dev);
->> +	int ret;
->> +
->> +	ret = clk_prepare_enable(wdt->apb_clk);
->> +	if (ret) {
->> +		dev_err(wdt->dev, "failed to enable apb_clk.\n");
->> +		return ret;
->> +	}
->> +
->> +	ret = clk_prepare_enable(wdt->core_clk);
->> +	if (ret)
->> +		dev_err(wdt->dev, "failed to enable core_clk.\n");
->> +
->> +	return ret;
->> +}
->> +#endif /* CONFIG_PM */
->> +
->> +static const struct dev_pm_ops starfive_wdt_pm_ops = {
->> +	SET_RUNTIME_PM_OPS(starfive_wdt_runtime_suspend, starfive_wdt_runtime_resume, NULL)
->> +	SET_SYSTEM_SLEEP_PM_OPS(starfive_wdt_suspend, starfive_wdt_resume)
->> +};
->> +
->> +static struct platform_driver starfive_wdt_driver = {
->> +	.probe		= starfive_wdt_probe,
->> +	.remove		= starfive_wdt_remove,
->> +	.shutdown	= starfive_wdt_shutdown,
->> +	.id_table	= starfive_wdt_ids,
->> +	.driver		= {
->> +		.name	= "starfive-wdt",
->> +		.pm	= &starfive_wdt_pm_ops,
->> +		.of_match_table = of_match_ptr(starfive_wdt_match),
->> +	},
->> +};
->> +
->> +module_platform_driver(starfive_wdt_driver);
->> +
->> +MODULE_AUTHOR("Xingyu Wu <xingyu.wu@starfivetech.com>");
->> +MODULE_AUTHOR("Samin Guo <samin.guo@starfivetech.com>");
->> +MODULE_DESCRIPTION("StarFive Watchdog Device Driver");
->> +MODULE_LICENSE("GPL v2");
-
-
-Thank for your review, I will modify this according to your suggestions.
-
-Best regards,
-Xingyu Wu
 
