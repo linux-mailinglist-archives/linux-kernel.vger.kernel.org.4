@@ -2,64 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EF97692A58
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 23:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B66692A5A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 23:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233716AbjBJWl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 17:41:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
+        id S233924AbjBJWmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 17:42:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjBJWly (ORCPT
+        with ESMTP id S233869AbjBJWmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 17:41:54 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE95117174
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 14:41:51 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-318-uEi7rd_bNiCq5v_5lLrP5A-1; Fri, 10 Feb 2023 22:41:48 +0000
-X-MC-Unique: uEi7rd_bNiCq5v_5lLrP5A-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Fri, 10 Feb
- 2023 22:41:46 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.045; Fri, 10 Feb 2023 22:41:46 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
-        Dave Chinner <david@fromorbit.com>
-CC:     Stefan Metzmacher <metze@samba.org>, Jens Axboe <axboe@kernel.dk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API Mailing List <linux-api@vger.kernel.org>,
-        io-uring <io-uring@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Samba Technical <samba-technical@lists.samba.org>
-Subject: RE: copy on write for splice() from file to pipe?
-Thread-Topic: copy on write for splice() from file to pipe?
-Thread-Index: AQHZPXSEPyXic8n4vkmqtvVlaYw2Fq7Ivx9Q
-Date:   Fri, 10 Feb 2023 22:41:46 +0000
-Message-ID: <304d5286b6364da48a2bb1125155b7e5@AcuMS.aculab.com>
-References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
- <CAHk-=wj8rthcQ9gQbvkMzeFt0iymq+CuOzmidx3Pm29Lg+W0gg@mail.gmail.com>
- <20230210021603.GA2825702@dread.disaster.area>
- <20230210040626.GB2825702@dread.disaster.area>
- <CAHk-=wip9xx367bfCV8xaF9Oaw4DZ6edF9Ojv10XoxJ-iUBwhA@mail.gmail.com>
- <20230210061953.GC2825702@dread.disaster.area>
- <CAHk-=wj6jd0JWtxO0JvjYUgKfnGEj4BzPVOfY+4_=-0iiGh0tw@mail.gmail.com>
-In-Reply-To: <CAHk-=wj6jd0JWtxO0JvjYUgKfnGEj4BzPVOfY+4_=-0iiGh0tw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 10 Feb 2023 17:42:13 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC20975352
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 14:42:08 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id x8so8049716ybt.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 14:42:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=26hWLD5KLKkw4IobX1dhlza6o28KL+X+gg+uQ008c9Y=;
+        b=kjAO4ixdBXxoURlwsMOwtpUwFlGiYNdLuN+PdolZDbrpvWlk1x6X4zAlKz8WNaTQBz
+         7nxqo9eLHG7aDD/cviRWVaML4u2//Bdf3C2v5YU6EwzT+Zeh9xcIt9GSSxKfs1qaNejm
+         wBY8eoEC5iCJhjNNbM3wPx8v8o61YCERxgNQi5qAFGbWSsUFZzZZZoCNmLz9mBW0bEHk
+         L5twlyJKw66LKKLT6irS77UPRzqt1YTTFopcv0Kh/XVOIfDcpPMkxXQ0acxnzsfdguh1
+         3fp/jKKj66UnNShJoYf9OBOja34rmCbYnWojNa3x4m3zfgDJTRd04VIpo5rYiZwgw7Uq
+         oyQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=26hWLD5KLKkw4IobX1dhlza6o28KL+X+gg+uQ008c9Y=;
+        b=XQzn6VvCT4PobZR5If8Q3JzDpCErmeFZXCdUc7XI51GJPYsXeZznoAFMepf1rZ4OTz
+         NE1En6y0NzCXzmfX2/5t5tLFJ3yQ+xXKyOtE9g+dl4knIJINMLVciIEFCWlyoQgaRrXX
+         VS19xL5ZCsUVCubJkn8qYXgtQRYL3SYd7aj1JVMQaYn+XFGr0jwqtst3G8+VaZQZMi3X
+         YwmOfITcXMHHwrq+V/ygf3NP7PyZsN86GkqJhA1wAXWE60v7ZJqY35AlMtkh2ACBotS9
+         tq2x4eANZrwQOUPMk0WYj86nknvfmo8D8aA/plvox2ahcEY1Qlw9IDv9Yo96WDhMeiKW
+         p/4Q==
+X-Gm-Message-State: AO0yUKVswMOWa6nTf0/6BJiALGfHVHc5cqgjtk/OmyFR2Tj+ePQLk5bd
+        04Ts6VtxYtsAKhVFoRtPWQHjoFAYG2TojPioQu+x7Q==
+X-Google-Smtp-Source: AK7set++pi9cbqMLRO+KWKmt0V41DP+0fzmqkXucHMaDCx6QdoaC9+K1xNYqQJVZhD+aS/RZcDSOx/+85fWo8oFz6PY=
+X-Received: by 2002:a25:f30e:0:b0:86f:8ba9:9474 with SMTP id
+ c14-20020a25f30e000000b0086f8ba99474mr1835840ybs.302.1676068928035; Fri, 10
+ Feb 2023 14:42:08 -0800 (PST)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 10 Feb 2023 23:41:57 +0100
+Message-ID: <CACRpkdax4qmftH974q+269YD65oMfLNFe-FrRSLyAZ_HY1OF0Q@mail.gmail.com>
+Subject: [GIT PULL] pin control fixes for the v6.2 series
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,40 +64,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMTAgRmVicnVhcnkgMjAyMyAxNzoyNA0KLi4u
-DQo+IEFuZCB3aGVuIGl0IGNvbWVzIHRvIG5ldHdvcmtpbmcsIGluIGdlbmVyYWwgdGhpbmdzIGxp
-a2UgVENQIGNoZWNrc3Vtcw0KPiBldGMgc2hvdWxkIGJlIG9rIGV2ZW4gd2l0aCBkYXRhIHRoYXQg
-aXNuJ3Qgc3RhYmxlLiAgV2hlbiBkb2luZyB0aGluZ3MNCj4gYnkgaGFuZCwgbmV0d29ya2luZyBz
-aG91bGQgYWx3YXlzIHVzZSB0aGUgImNvcHktYW5kLWNoZWNrc3VtIg0KPiBmdW5jdGlvbnMgdGhh
-dCBkbyB0aGUgY2hlY2tzdW0gd2hpbGUgY29weWluZyAoc28gZXZlbiBpZiB0aGUgc291cmNlDQo+
-IGRhdGEgY2hhbmdlcywgdGhlIGNoZWNrc3VtIGlzIGdvaW5nIHRvIGJlIHRoZSBjaGVja3N1bSBm
-b3IgdGhlIGRhdGENCj4gdGhhdCB3YXMgY29waWVkKS4NCj4gDQo+IEFuZCBpbiBtYW55IChtb3N0
-Pykgc21hcnRlciBuZXR3b3JrIGNhcmRzLCB0aGUgY2FyZCBpdHNlbGYgZG9lcyB0aGUNCj4gY2hl
-Y2tzdW0sIGFnYWluIG9uIHRoZSBkYXRhIGFzIGl0IGlzIHRyYW5zZmVycmVkIGZyb20gbWVtb3J5
-Lg0KPiANCj4gU28gaXQncyBub3QgbGlrZSAibmV0d29ya2luZyBuZWVkcyBhIHN0YWJsZSBzb3Vy
-Y2UiIGlzIHNvbWUgcmVhbGx5DQo+IF9mdW5kYW1lbnRhbF8gcmVxdWlyZW1lbnQgZm9yIHRoaW5n
-cyBsaWtlIHRoYXQgdG8gd29yay4NCg0KSXQgaXMgYWxzbyB3b3J0aCByZW1lbWJlcmluZyB0aGF0
-IFRDUCBuZWVkcyB0byBiZSBhYmxlDQp0byByZXRyYW5zbWl0IHRoZSBkYXRhIGFuZCBhIG11Y2gg
-bGF0ZXIgdGltZS4NClNvIHRoZSBhcHBsaWNhdGlvbiBtdXN0IG5vdCBjaGFuZ2UgdGhlIGRhdGEg
-dW50aWwgaXQgaGFzDQpiZWVuIGFja2VkIGJ5IHRoZSByZW1vdGUgc3lzdGVtLg0KDQpPcGVyYXRp
-bmcgc3lzdGVtcyB0aGF0IGRvIGFzeW5jaHJvbm91cyBJTyBkaXJlY3RseSBmcm9tDQphcHBsaWNh
-dGlvbiBidWZmZXJzIGhhdmUgY2FsbGJhY2tzL2V2ZW50cyB0byB0ZWxsIHRoZQ0KYXBwbGljYXRp
-b24gd2hlbiBpdCBpcyBhbGxvd2VkIHRvIG1vZGlmeSB0aGUgYnVmZmVycy4NCkZvciBUQ1AgdGhp
-cyB3b24ndCBiZSBpbmRpY2F0ZWQgdW50aWwgYWZ0ZXIgdGhlIEFDSw0KaXMgcmVjZWl2ZWQuDQpJ
-IGRvbid0IHRoaW5rIGlvX3VyaW5nIGhhcyBhbnkgd2F5IHRvIGluZGljYXRlIGFueXRoaW5nDQpv
-dGhlciB0aGFuICd0aGUgZGF0YSBoYXMgYmVlbiBhY2NlcHRlZCBieSB0aGUgc29ja2V0Jy4NCg0K
-SWYgeW91IGhhdmUgJ2tlcm5lbCBwYWdlcyBjb250YWluaW5nIGRhdGEnIChlZyBmcm9tIHdyaXRl
-cw0KaW50byBhIHBpcGUsIG9yIGRhdGEgcmVjZWl2ZWQgZnJvbSBhIG5ldHdvcmspIHRoZW4gdGhl
-eSBoYXZlDQphIHNpbmdsZSAnb3duZXInIGFuZCBjYW4gYmUgcGFzc2VkIGFib3V0Lg0KQnV0IHVz
-ZXItcGFnZXMgKGluY2x1ZGluZyBtbWFwcGVkIGZpbGVzKSBoYXZlIG11bHRpcGxlIG93bmVycw0K
-c28geW91IGFyZSBuZXZlciBnb2luZyB0byBiZSBhYmxlIHRvIHBhc3MgdGhlbSBhcyAnaW1tdXRh
-YmxlDQpkYXRhJy4NCklmIHlvdSBtbWFwIGEgdmVyeSBsYXJnZSAoYW5kIG1heWJlIHNwYXJzZSkg
-ZmlsZSBhbmQgdGhlbg0KdHJ5IHRvIGRvIGEgdmVyeSBsYXJnZSAobXVsdGktR0IpIHNlbmQoKSAo
-d2l0aCBvciB3aXRob3V0DQphbnkga2luZCBvZiBwYWdlIGxvYW5pbmcpIHRoZXJlIGlzIGFsd2F5
-cyB0aGUgcG9zc2liaWxpdHkNCnRoYXQgdGhlIGRhdGEgdGhhdCBpcyBhY3R1YWxseSBzZW50IHdh
-cyB3cml0dGVuIHdoaWxlIHRoZQ0Kc2VuZCgpIGNhbGwgd2FzIGluIHByb2dyZXNzLg0KQW55IGtp
-bmQgb2YgYXN5bmNocm9ub3VzIHNlbmQoKSBqdXN0IG1ha2VzIGl0IG1vcmUgb2J2aW91cy4NCg0K
-CURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBN
-b3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAx
-Mzk3Mzg2IChXYWxlcykNCg==
+Hi Linus,
 
+some assorted pin control fixes, the most interesting will be
+the Intel patch fixing a classic problem: laptop touchpad IRQs...
+
+Details in the signed tag, please pull it in!
+
+Yours,
+Linus Walleij
+
+
+The following changes since commit 2241ab53cbb5cdb08a6b2d4688feb13971058f65:
+
+  Linux 6.2-rc5 (2023-01-21 16:27:01 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git
+tags/pinctrl-v6.2-3
+
+for you to fetch changes up to a8520be3ffef3d25b53bf171a7ebe17ee0154175:
+
+  pinctrl: intel: Restore the pins that used to be in Direct IRQ mode
+(2023-02-07 10:13:51 +0100)
+
+----------------------------------------------------------------
+Pin control fixes for the v6.2 series:
+
+- Some pin drive register fixes in the Mediatek driver.
+
+- Return proper error code in the Aspeed driver, and revert
+  and ill-advised force-disablement patch that needs to be
+  reworked.
+
+- Fix AMD driver debug output.
+
+- Fix potential NULL dereference in the Single driver.
+
+- Fix a group definition error in the Qualcomm SM8450 LPASS
+  driver.
+
+- Restore pins used in direct IRQ mode in the Intel driver.
+  (This fixes some laptop touchpads!)
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      pinctrl: intel: Restore the pins that used to be in Direct IRQ mode
+
+Guodong Liu (1):
+      pinctrl: mediatek: Fix the drive register definition of some Pins
+
+Joel Stanley (2):
+      pinctrl: aspeed: Fix confusing types in return value
+      pinctrl: aspeed: Revert "Force to disable the function's signal"
+
+Krzysztof Kozlowski (1):
+      pinctrl: qcom: sm8450-lpass-lpi: correct swr_rx_data group
+
+Mario Limonciello (1):
+      pinctrl: amd: Fix debug output for debounce time
+
+Maxim Korotkov (1):
+      pinctrl: single: fix potential NULL dereference
+
+ drivers/pinctrl/aspeed/pinctrl-aspeed.c         | 13 +++++++++++--
+ drivers/pinctrl/intel/pinctrl-intel.c           | 16 +++++++++++++---
+ drivers/pinctrl/mediatek/pinctrl-mt8195.c       |  4 ++--
+ drivers/pinctrl/pinctrl-amd.c                   |  1 +
+ drivers/pinctrl/pinctrl-single.c                |  2 ++
+ drivers/pinctrl/qcom/pinctrl-sm8450-lpass-lpi.c |  2 +-
+ 6 files changed, 30 insertions(+), 8 deletions(-)
