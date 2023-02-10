@@ -2,131 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2D269212E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 15:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BD62692140
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 15:56:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232424AbjBJOzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 09:55:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47976 "EHLO
+        id S232552AbjBJO4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 09:56:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231882AbjBJOzs (ORCPT
+        with ESMTP id S232560AbjBJO4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 09:55:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3B26C7C1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 06:55:03 -0800 (PST)
+        Fri, 10 Feb 2023 09:56:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D2B7100D
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 06:55:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676040902;
+        s=mimecast20190719; t=1676040954;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8Ckzaa96MQzkpgEFh6wXwi8nzrk686ctY0YwJBmPzA4=;
-        b=efUn5mKkSuaG3sgdaajQ7MjQR9+ltdxlqsuJrs8CcA+YOx9949/4nEdH62k6PUrEzdx8Sn
-        bQBaz7Ov+3NPIn8DbdTUofXVobWaxNFjB+jHjbNtIBHC1WMXUZhPbha9JT5oJUAANxZY2M
-        EndlYjRbLYmW1/RcnVc9d8q8UizM+hI=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=J+rg85xYSll7eP3Sf5GHRKpU1GokGp9XDi0j91yLtiE=;
+        b=Jh7L7FRt0YJAHhb2drPnf3UkyDvo/EmxtuQoxEdMc+85aJS8g5IocuBzJnb++qupoDOsAY
+        QvIzhJYuNozGLKx7Dt7Mgk159jUCeuKZhPELU0eNO//gZ5B3v+plaHdM6dm0fbHSnf9NvF
+        vx+gfv1G8o44Xn2id8/8F1Z9S1yE9b0=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-460-usrfqotgPuK7k7CAxxhteg-1; Fri, 10 Feb 2023 09:55:00 -0500
-X-MC-Unique: usrfqotgPuK7k7CAxxhteg-1
-Received: by mail-qv1-f69.google.com with SMTP id ib5-20020a0562141c8500b0053c23b938a0so3246341qvb.17
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 06:55:00 -0800 (PST)
+ us-mta-365-wSirSs2BPlmvgzjSgA93TQ-1; Fri, 10 Feb 2023 09:55:53 -0500
+X-MC-Unique: wSirSs2BPlmvgzjSgA93TQ-1
+Received: by mail-qk1-f199.google.com with SMTP id a6-20020a05620a102600b00729952b4c73so3379004qkk.6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 06:55:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Ckzaa96MQzkpgEFh6wXwi8nzrk686ctY0YwJBmPzA4=;
-        b=fypqwPWjhxfo3Ewln44HH0eG5K9yr5/oInnA7UaTam0JYNtqnrgDX+g3JUJhGjJvyq
-         vvUtqG9L0WuqUqip5zQZD3OEUjTIFLfJfPnTgPh18V8ZEVkLvZzhmzoFEaSl0rWQnbor
-         OXWr3Xs0ZlXqlHpuQ5yM+VQkqJHM5JVC+2GpB/x+ryvT8Bm35zs8pFj0MkEE7NXiPuya
-         RxfXoABTB11zZFCOk/bVjl6HWbpYKgk4iCxFpYueRMUsWNy9IyxYO6ad4CmrF7F7sBoh
-         JWaalGN+iFcmLG6vQ11fRzms2IVxXoGV+APN4Gr4MCN9tYGD+Q9UWqw4KRiIlv0lhNol
-         dZnw==
-X-Gm-Message-State: AO0yUKVBfPUekgB+c7UYhRp5PsEFX0V5xJLRJk3qZbsx9ddUX0mHfteZ
-        id57CmJ74e8g4Yp8L2UA3hb5zLs5MgxjhbLyTy/dYPqn3r54bPTjd/Olt9W5cwKfhTEreM5iHkh
-        w7i89wNUGZf+bUXiFyudorj8W
-X-Received: by 2002:a05:622a:146:b0:3b9:b43e:5733 with SMTP id v6-20020a05622a014600b003b9b43e5733mr26222596qtw.61.1676040900184;
-        Fri, 10 Feb 2023 06:55:00 -0800 (PST)
-X-Google-Smtp-Source: AK7set9kjy0cA8dQn5RLtBgGL/jLZtONQgPcJhBhstbwfh2fA3ZsfqffcBvZc4QRFyIQwQ9LV9FQRQ==
-X-Received: by 2002:a05:622a:146:b0:3b9:b43e:5733 with SMTP id v6-20020a05622a014600b003b9b43e5733mr26222570qtw.61.1676040899952;
-        Fri, 10 Feb 2023 06:54:59 -0800 (PST)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id u63-20020a379242000000b00731c30ac2e8sm3673397qkd.74.2023.02.10.06.54.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 06:54:59 -0800 (PST)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v3 06/10] sched/fair: Use the prefer_sibling flag of the
- current sched domain
-In-Reply-To: <Y+YXrk5NRuWaSOGR@hirez.programming.kicks-ass.net>
-References: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com>
- <20230207045838.11243-7-ricardo.neri-calderon@linux.intel.com>
- <Y+YXrk5NRuWaSOGR@hirez.programming.kicks-ass.net>
-Date:   Fri, 10 Feb 2023 14:54:56 +0000
-Message-ID: <xhsmhmt5lr2nz.mognet@vschneid.remote.csb>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J+rg85xYSll7eP3Sf5GHRKpU1GokGp9XDi0j91yLtiE=;
+        b=0MQG438+QOwqtgv9r7HRsPDdr2XLm3ROiWyKWYwh9S74R2Yp5D2pqKrGrFTBKWMveX
+         K5Dq1d3UKZKjEqVzsKzLQOZ6/MBVB2iDJUlGu3Z3tj1oHaBjtYFIdrZbwaqhvPqK9KvH
+         SJ3Z8PX+iiQXcQzO0fzLggxMmE9SJxfSVt3YhOMbptdOxJj6cWS6I2VhTQ6JCcMo7sBQ
+         q+NO4z//fQnFNmlKTUIuVQ8oLkEYVRdIOmvt4e6LN9daxc5W7V1Z73OR4gKXI4H17EZF
+         foJ/X+KFL5lY1xvp5gCjYKcElJhJyh/MqqoG9XTwfco9s1S1GMFzMwTdXC7RnR9IKg1k
+         wkjQ==
+X-Gm-Message-State: AO0yUKW1rU+DcbKRGdJC+j/6eYrbv4d0aHPiJQg1LumjMeQrQ96IgCLO
+        Fh4Bgoutm/1D7mEs+xWwvlWlrABhMGECsXpjFBGN8IOg6XIe+aEoE/9H+U8i7rkplGd+2ELge3s
+        j426w42yjt3/eB89TCTBR5HWX
+X-Received: by 2002:ac8:5955:0:b0:3b3:7d5:a752 with SMTP id 21-20020ac85955000000b003b307d5a752mr26834064qtz.50.1676040952522;
+        Fri, 10 Feb 2023 06:55:52 -0800 (PST)
+X-Google-Smtp-Source: AK7set/IAOXvCvxAJe1QVvAocUsN8WugW1iNym2GUKlBrMHZnHFLP+SYPzzktfBcL8E2KyHQV7ULTw==
+X-Received: by 2002:ac8:5955:0:b0:3b3:7d5:a752 with SMTP id 21-20020ac85955000000b003b307d5a752mr26834042qtz.50.1676040952267;
+        Fri, 10 Feb 2023 06:55:52 -0800 (PST)
+Received: from [192.168.0.2] (ip-109-43-178-85.web.vodafone.de. [109.43.178.85])
+        by smtp.gmail.com with ESMTPSA id z12-20020ac87cac000000b003b9bc00c2f1sm3370579qtv.94.2023.02.10.06.55.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 06:55:51 -0800 (PST)
+Message-ID: <2344ac16-781e-8bfa-ec75-e71df0f3ed28@redhat.com>
+Date:   Fri, 10 Feb 2023 15:55:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 03/14] Move COMPAT_ATM_ADDPARTY to net/atm/svc.c
+Content-Language: en-US
+To:     Palmer Dabbelt <palmer@dabbelt.com>, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     viro@zeniv.linux.org.uk, aishchuk@linux.vnet.ibm.com,
+        aarcange@redhat.com, akpm@linux-foundation.org, luto@kernel.org,
+        acme@kernel.org, bhe@redhat.com, 3chas3@gmail.com,
+        chris@zankel.net, dave@sr71.net, dyoung@redhat.com,
+        drysdale@google.com, ebiederm@xmission.com, geoff@infradead.org,
+        gregkh@linuxfoundation.org, hpa@zytor.com, mingo@kernel.org,
+        iulia.manda21@gmail.com, plagnioj@jcrosoft.com, jikos@kernel.org,
+        josh@joshtriplett.org, linux-arch@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, mathieu.desnoyers@efficios.com,
+        jcmvbkbc@gmail.com, paulmck@linux.vnet.ibm.com,
+        a.p.zijlstra@chello.nl, tglx@linutronix.de, vgoyal@redhat.com,
+        x86@kernel.org, arnd@arndb.de, dhowells@redhat.com,
+        peterz@infradead.org, netdev@vger.kernel.org
+References: <1446579994-9937-1-git-send-email-palmer@dabbelt.com>
+ <1447119071-19392-1-git-send-email-palmer@dabbelt.com>
+ <1447119071-19392-4-git-send-email-palmer@dabbelt.com>
+From:   Thomas Huth <thuth@redhat.com>
+In-Reply-To: <1447119071-19392-4-git-send-email-palmer@dabbelt.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/23 11:08, Peter Zijlstra wrote:
-> On Mon, Feb 06, 2023 at 08:58:34PM -0800, Ricardo Neri wrote:
->> SD_PREFER_SIBLING is set from the SMT scheduling domain up to the first
->> non-NUMA domain (the exception is systems with SD_ASYM_CPUCAPACITY).
->>
->> Above the SMT sched domain, all domains have a child. The SD_PREFER_
->> SIBLING is honored always regardless of the scheduling domain at which the
->> load balance takes place.
->>
->> There are cases, however, in which the busiest CPU's sched domain has
->> child but the destination CPU's does not. Consider, for instance a non-SMT
->> core (or an SMT core with only one online sibling) doing load balance with
->> an SMT core at the MC level. SD_PREFER_SIBLING will not be honored. We are
->> left with a fully busy SMT core and an idle non-SMT core.
->>
->> Avoid inconsistent behavior. Use the prefer_sibling behavior at the current
->> scheduling domain, not its child.
->>
->> The NUMA sched domain does not have the SD_PREFER_SIBLING flag. Thus, we
->> will not spread load among NUMA sched groups, as desired.
->>
->
-> Like many of the others; I don't much like this.
->
-> Why not simply detect this asymmetric having of SMT and kill the
-> PREFER_SIBLING flag on the SMT leafs in that case?
->
-> Specifically, I'm thinking something in the degenerate area where it
-> looks if a given domain has equal depth children or so.
->
-> Note that this should not be tied to having special hardware, you can
-> create the very same weirdness by just offlining a few SMT siblings and
-> leaving a few on.
+On 10/11/2015 02.31, Palmer Dabbelt wrote:
+> This used to be behind an #ifdef COMPAT_COMPAT, so most of userspace
+> wouldn't have seen the definition before.  Unfortunately this header
+> file became visible to userspace, so the definition has instead been
+> moved to net/atm/svc.c (the only user).
+> 
+> Signed-off-by: Palmer Dabbelt <palmer@dabbelt.com>
+> Reviewed-by: Andrew Waterman <waterman@eecs.berkeley.edu>
+> Reviewed-by: Albert Ou <aou@eecs.berkeley.edu>
+> ---
+>   include/uapi/linux/atmdev.h | 4 ----
+>   net/atm/svc.c               | 5 +++++
+>   2 files changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/uapi/linux/atmdev.h b/include/uapi/linux/atmdev.h
+> index 93e0ec0..3dcec70 100644
+> --- a/include/uapi/linux/atmdev.h
+> +++ b/include/uapi/linux/atmdev.h
+> @@ -100,10 +100,6 @@ struct atm_dev_stats {
+>   					/* use backend to make new if */
+>   #define ATM_ADDPARTY  	_IOW('a', ATMIOC_SPECIAL+4,struct atm_iobuf)
+>    					/* add party to p2mp call */
+> -#ifdef CONFIG_COMPAT
+> -/* It actually takes struct sockaddr_atmsvc, not struct atm_iobuf */
+> -#define COMPAT_ATM_ADDPARTY  	_IOW('a', ATMIOC_SPECIAL+4,struct compat_atm_iobuf)
+> -#endif
+>   #define ATM_DROPPARTY 	_IOW('a', ATMIOC_SPECIAL+5,int)
+>   					/* drop party from p2mp call */
+>   
+> diff --git a/net/atm/svc.c b/net/atm/svc.c
+> index 3fa0a9e..9e2e6ef 100644
+> --- a/net/atm/svc.c
+> +++ b/net/atm/svc.c
+> @@ -27,6 +27,11 @@
+>   #include "signaling.h"
+>   #include "addr.h"
+>   
+> +#ifdef CONFIG_COMPAT
+> +/* It actually takes struct sockaddr_atmsvc, not struct atm_iobuf */
+> +#define COMPAT_ATM_ADDPARTY _IOW('a', ATMIOC_SPECIAL+4, struct compat_atm_iobuf)
+> +#endif
+> +
+>   static int svc_create(struct net *net, struct socket *sock, int protocol,
+>   		      int kern);
+>   
 
-So something like have SD_PREFER_SIBLING affect the SD it's on (and not
-its parent), but remove it from the lowest non-degenerated topology level?
-(+ add it to the first NUMA level to keep things as they are, even if TBF I
-find relying on it for NUMA balancing a bit odd).
+  Hi!
+
+The CONFIG_* switch is still there in the atmdev.h uapi header ... could 
+somebody please pick this patch up to fix it?
+
+  Thanks,
+   Thomas
 
