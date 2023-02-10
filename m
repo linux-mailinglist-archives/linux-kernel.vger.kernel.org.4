@@ -2,186 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF978692611
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:06:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6004E692616
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:11:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233236AbjBJTGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 14:06:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52470 "EHLO
+        id S233035AbjBJTLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 14:11:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbjBJTGn (ORCPT
+        with ESMTP id S229495AbjBJTK7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 14:06:43 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4B97D3E4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:06:41 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id b1so4105740pft.1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:06:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0X3/n7/A3PNJZ8jZ8dVcNSR9WNlUKR8kt+0R8RsIS+I=;
-        b=j39WWB84ZEJ6nBQwen5FJIoUqsORXqEcNFES8EWG0YtMpZrjHM96f7RjBAPQ+JDsJG
-         3u7EWAxijHOfV0E4/AyEt5PIKduwsIm6TL3Zy9dOcsf49sUQaIQSgDmoufdde8n67DOR
-         0h2eY3ciTD1yALLQqjrT9sbHgfjkc04QOWVTg=
+        Fri, 10 Feb 2023 14:10:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41F95B95
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:10:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676056210;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Wlj+JXAcWLxYE86Ug6fMhTbOB35cUlXqEJcONrx83sg=;
+        b=QpmNEeznljTQDa2Rs2hlc8xIDx/dVWOMfJwXq+RdiZbRTFL+oRn9atR4fTgUbG8XOCGi7v
+        53m+nSLksgSPWJlz47fd19uG3EsppYErklaQNMYUIGKQz8x0PvXL609X1lc01cznDUIDIj
+        L5aeWxRB4lr4deJKmZvmApXxYN4FcQg=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-504-37YFCks5OSivINMJjor_bw-1; Fri, 10 Feb 2023 14:10:02 -0500
+X-MC-Unique: 37YFCks5OSivINMJjor_bw-1
+Received: by mail-ej1-f69.google.com with SMTP id fy3-20020a1709069f0300b008a69400909fso4099820ejc.7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:10:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0X3/n7/A3PNJZ8jZ8dVcNSR9WNlUKR8kt+0R8RsIS+I=;
-        b=bcwngPkijkaYgklDsPJdQz/VktdwQbAMwCg4rySg2RKn8pfVbYXSURS0W+8Ckxbq2V
-         +622mtIv/gQ3M6Og8DOJox3PF9bfRGsqHvrvRkRC51LWEISQ7X6kVfDrMS4rgKLCKJ7R
-         KgymmnkHtpBZZIYnuzoln4DQjU4tOnBR4oLWzwkCLhuAIiyDmv7eTS9jx2pi+nfGkCBs
-         pv63S38aTJRMbaDhdw7VZmyHK/CzTYIj5wOIXR2WV0C6VUARV5vq8/rA0L3IV50qudmg
-         SR5PcqWRrs7UPMLoNR9V1SWpJhUjg3VvvCYVGMmPNJRiFPBIlwxOoj+XNXftNCZi/XWV
-         JNMg==
-X-Gm-Message-State: AO0yUKUz271uN1+0YkvViKOcHeMIMDk3bCk8pRJZwupafbnBZVra2rov
-        VZsxxEuzCy2VsmkKUGvhYqpJvQ==
-X-Google-Smtp-Source: AK7set/PmQSV8PsNJ5/Q5QKIBZDr28wVDC62O7GllUpJ4GDZE0hTRfK4cvrK8Bht08Iw93IjrZK9Kg==
-X-Received: by 2002:a62:1b4d:0:b0:593:ea06:7fd with SMTP id b74-20020a621b4d000000b00593ea0607fdmr14083024pfb.13.1676056001372;
-        Fri, 10 Feb 2023 11:06:41 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id l22-20020a62be16000000b005943bd7c72bsm3595216pff.190.2023.02.10.11.06.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 11:06:40 -0800 (PST)
-Message-ID: <63e695c0.620a0220.f69b1.6eec@mx.google.com>
-X-Google-Original-Message-ID: <202302101104.@keescook>
-Date:   Fri, 10 Feb 2023 11:06:40 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Sasa Ostrouska <casaxa@gmail.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] ASoC: Intel: Skylake: Replace 1-element array with
- flex-array
-References: <20230210051447.never.204-kees@kernel.org>
- <54d4ffb1-1488-1a4f-58b2-8b3471389729@linux.intel.com>
+        bh=Wlj+JXAcWLxYE86Ug6fMhTbOB35cUlXqEJcONrx83sg=;
+        b=33tQQwxj9ej0+1/pTywodsmxfp0kR49x0afD7B4NF/YHyPRcqP9c6vM6pG+AqDiVJt
+         yro3YACKrLVTaoKoBVttUAIuiT9gA49bNedqKpSneCb7EgauJqOWQbz4TwQCbT4i6SCL
+         0pUbB7+b8z3BD+lDbbRCCBuh46diftQLWLN/aqHzdupWVpkrwQ2e+4kO0StKhYY/zJWq
+         pTW7ExBlJoNvRPG2CINB52zHfaN/8x0cL2sBO1m8WQ4L1HsycDEUmhZsMu45+7YP8rC0
+         s+8DMSkiK+w3kXk3dihq4PuOwwRb4KfpB3ap8dqZr9fhBADyfshtpVT3P1bSgNFmzUpV
+         rpww==
+X-Gm-Message-State: AO0yUKXvW9XB+5m8e9uAmvcm0cy5BEQobZr4oSLkjSmbDeLDqFjaDtrU
+        NCDIJhAihVlVhq17+0TSnOXTRaSQKVC6Df48V7zvMvpIcu3grP3oBNpbQSojK5kPhwaaK5g1Lvp
+        UxMpYa55IOur4Acua4qSrdEmM
+X-Received: by 2002:a17:906:308c:b0:889:14ec:21ae with SMTP id 12-20020a170906308c00b0088914ec21aemr16104695ejv.32.1676056200869;
+        Fri, 10 Feb 2023 11:10:00 -0800 (PST)
+X-Google-Smtp-Source: AK7set/bQ30pqtJ+DR8BHDulCT6yJnSnGVJYAXD4vakdG0Yio03S4TdacumZBH+AU7G5YgQxaLn3ig==
+X-Received: by 2002:a17:906:308c:b0:889:14ec:21ae with SMTP id 12-20020a170906308c00b0088914ec21aemr16104674ejv.32.1676056200632;
+        Fri, 10 Feb 2023 11:10:00 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id a23-20020a1709063a5700b0087bcda2b07bsm2697548ejf.202.2023.02.10.11.09.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 11:10:00 -0800 (PST)
+Message-ID: <3af65b5e-1f52-79f6-4130-03901ce76d2f@redhat.com>
+Date:   Fri, 10 Feb 2023 20:09:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <54d4ffb1-1488-1a4f-58b2-8b3471389729@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 1/9] apple-gmux: use cpu_to_be32 instead of manual
+ reorder
+Content-Language: en-US, nl
+To:     Orlando Chamberlain <orlandoch.dev@gmail.com>,
+        platform-driver-x86@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>,
+        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        Jack Xiao <Jack.Xiao@amd.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Rander Wang <rander.wang@intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Yong Zhi <yong.zhi@intel.com>, Evan Quan <evan.quan@amd.com>,
+        Kerem Karabay <kekrby@gmail.com>,
+        Aditya Garg <gargaditya08@live.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>
+References: <20230210044826.9834-1-orlandoch.dev@gmail.com>
+ <20230210044826.9834-2-orlandoch.dev@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230210044826.9834-2-orlandoch.dev@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 02:10:56PM +0100, Amadeusz Sławiński wrote:
-> On 2/10/2023 6:14 AM, Kees Cook wrote:
-> > The kernel is globally removing the ambiguous 0-length and 1-element
-> > arrays in favor of flexible arrays, so that we can gain both compile-time
-> > and run-time array bounds checking[1]. In this instance, struct
-> > skl_cpr_cfg contains struct skl_cpr_gtw_cfg, which defined "config_data"
-> > as a 1-element array.
-> > 
-> > Normally when switching from a 1-element array to a flex-array, any
-> > related size calculations must be adjusted too. However, it seems the
-> > original code was over-allocating space, since 1 extra u32 would be
-> > included by the sizeof():
-> > 
-> >                  param_size = sizeof(struct skl_cpr_cfg);
-> >                  param_size += mconfig->formats_config[SKL_PARAM_INIT].caps_size;
-> > 
-> > But the copy uses caps_size bytes, and cap_size / 4 (i.e. sizeof(u32))
-> > for the length tracking:
-> > 
-> >          memcpy(cpr_mconfig->gtw_cfg.config_data,
-> >                          mconfig->formats_config[SKL_PARAM_INIT].caps,
-> >                          mconfig->formats_config[SKL_PARAM_INIT].caps_size);
-> > 
-> >          cpr_mconfig->gtw_cfg.config_length =
-> >                          (mconfig->formats_config[SKL_PARAM_INIT].caps_size) / 4;
-> > 
-> > Therefore, no size calculations need adjusting. Change the struct
-> > skl_cpr_gtw_cfg config_data member to be a true flexible array, which
-> > also fixes the over-allocation, and silences this memcpy run-time false
-> > positive:
-> > 
-> >    memcpy: detected field-spanning write (size 100) of single field "cpr_mconfig->gtw_cfg.config_data" at sound/soc/intel/skylake/skl-messages.c:554 (size 4)
-> > 
-> > [1] For lots of details, see both:
-> >      https://docs.kernel.org/process/deprecated.html#zero-length-and-one-element-arrays
-> >      https://people.kernel.org/kees/bounded-flexible-arrays-in-c
-> > 
-> > Reported-by: Sasa Ostrouska <casaxa@gmail.com>
-> > Link: https://lore.kernel.org/all/CALFERdwvq5day_sbDfiUsMSZCQu9HG8-SBpOZDNPeMdZGog6XA@mail.gmail.com/
-> > Cc: Cezary Rojewski <cezary.rojewski@intel.com>
-> > Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> > Cc: Liam Girdwood <liam.r.girdwood@linux.intel.com>
-> > Cc: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-> > Cc: Bard Liao <yung-chuan.liao@linux.intel.com>
-> > Cc: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-> > Cc: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-> > Cc: Mark Brown <broonie@kernel.org>
-> > Cc: Jaroslav Kysela <perex@perex.cz>
-> > Cc: Takashi Iwai <tiwai@suse.com>
-> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> > Cc: "Amadeusz Sławiński" <amadeuszx.slawinski@linux.intel.com>
-> > Cc: alsa-devel@alsa-project.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> >   sound/soc/intel/skylake/skl-topology.h | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/sound/soc/intel/skylake/skl-topology.h b/sound/soc/intel/skylake/skl-topology.h
-> > index 6db0fd7bad49..ad94f8020c27 100644
-> > --- a/sound/soc/intel/skylake/skl-topology.h
-> > +++ b/sound/soc/intel/skylake/skl-topology.h
-> > @@ -115,7 +115,7 @@ struct skl_cpr_gtw_cfg {
-> >   	u32 dma_buffer_size;
-> >   	u32 config_length;
-> >   	/* not mandatory; required only for DMIC/I2S */
-> > -	u32 config_data[1];
-> > +	u32 config_data[];
-> >   } __packed;
-> >   struct skl_dma_control {
+Hi,
+
+On 2/10/23 05:48, Orlando Chamberlain wrote:
+> Currently it manually flips the byte order, but we can instead use
+> cpu_to_be32(val) for this.
 > 
-> This fails in our validation.
-
-Ah, okay. Thanks for checking!
-
-> Maybe we can use the union workaround, to
-> leave the size as is?
+> Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
+> ---
+>  drivers/platform/x86/apple-gmux.c | 18 ++----------------
+>  1 file changed, 2 insertions(+), 16 deletions(-)
 > 
-> Following seems to work in manual test:
-> diff --git a/sound/soc/intel/skylake/skl-topology.h
-> b/sound/soc/intel/skylake/skl-topology.h
-> index 6db0fd7bad49..ffbd2e60fede 100644
-> --- a/sound/soc/intel/skylake/skl-topology.h
-> +++ b/sound/soc/intel/skylake/skl-topology.h
-> @@ -115,7 +115,10 @@ struct skl_cpr_gtw_cfg {
->         u32 dma_buffer_size;
->         u32 config_length;
->         /* not mandatory; required only for DMIC/I2S */
-> -       u32 config_data[1];
-> +       union {
-> +               u32 x;
-> +               u32 config_data[0];
-> +       };
+> diff --git a/drivers/platform/x86/apple-gmux.c b/drivers/platform/x86/apple-gmux.c
+> index 9333f82cfa8a..e8cb084cb81f 100644
+> --- a/drivers/platform/x86/apple-gmux.c
+> +++ b/drivers/platform/x86/apple-gmux.c
+> @@ -94,13 +94,7 @@ static u32 gmux_pio_read32(struct apple_gmux_data *gmux_data, int port)
+>  static void gmux_pio_write32(struct apple_gmux_data *gmux_data, int port,
+>  			     u32 val)
+>  {
+> -	int i;
+> -	u8 tmpval;
+> -
+> -	for (i = 0; i < 4; i++) {
+> -		tmpval = (val >> (i * 8)) & 0xff;
+> -		outb(tmpval, gmux_data->iostart + port + i);
+> -	}
+> +	outl(cpu_to_be32(val), gmux_data->iostart + port);
+>  }
+>  
+>  static int gmux_index_wait_ready(struct apple_gmux_data *gmux_data)
 
-Yeah, that could work, though the last member would be:
-	DECLARE_FLEX_ARRAY(u32, config_data);
-otherwise the array is 0 length (rather than a proper flex array).
+The ioport / indexed-ioport accessed apple_gmux-es likely are (part of?)
+LPC bus devices . Looking at the bus level you are now changing 4 io
+accesses with a size of 1 byte, to 1 32 bit io-access.
 
-But before that, let me see if I can track down where the size is being
-used, in case we can avoid adding the padding.
+Depending on the decoding hw in the chip this may work fine,
+or this may work not at all.
 
--- 
-Kees Cook
+I realized that you have asked for more testing, but most surviving
+macbooks from the older apple-gmux era appear to be models without
+a discrete GPU (which are often the first thing to break) and thus
+without a gmux.
+
+Unless we get a bunch of testers to show up, which I doubt. I would
+prefer slightly bigger / less pretty code and not change the functional
+behavior of the driver on these older models.
+
+Regards,
+
+Hans
+
+
+
+> @@ -177,16 +171,8 @@ static u32 gmux_index_read32(struct apple_gmux_data *gmux_data, int port)
+>  static void gmux_index_write32(struct apple_gmux_data *gmux_data, int port,
+>  			       u32 val)
+>  {
+> -	int i;
+> -	u8 tmpval;
+> -
+>  	mutex_lock(&gmux_data->index_lock);
+> -
+> -	for (i = 0; i < 4; i++) {
+> -		tmpval = (val >> (i * 8)) & 0xff;
+> -		outb(tmpval, gmux_data->iostart + GMUX_PORT_VALUE + i);
+> -	}
+> -
+> +	outl(cpu_to_be32(val), gmux_data->iostart + GMUX_PORT_VALUE);
+>  	gmux_index_wait_ready(gmux_data);
+>  	outb(port & 0xff, gmux_data->iostart + GMUX_PORT_WRITE);
+>  	gmux_index_wait_complete(gmux_data);
+
