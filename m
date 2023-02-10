@@ -2,74 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7603692505
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D14BA69250E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232740AbjBJSHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 13:07:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35102 "EHLO
+        id S232802AbjBJSKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 13:10:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232716AbjBJSHF (ORCPT
+        with ESMTP id S232768AbjBJSKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 13:07:05 -0500
-Received: from mail-pj1-x1064.google.com (mail-pj1-x1064.google.com [IPv6:2607:f8b0:4864:20::1064])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A677CC82
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:07:04 -0800 (PST)
-Received: by mail-pj1-x1064.google.com with SMTP id d2so5951663pjd.5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:07:04 -0800 (PST)
+        Fri, 10 Feb 2023 13:10:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6866812C
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:09:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676052564;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bktzj9pUtDvfzFEYNHOpgZ9otzlEtCU+sjtmZV2ehpA=;
+        b=fuQhaDQAAbuD57HfdENuF6qfKxB5tdi/XPRnrHpe26RJW70YkBqgYizGqN11ceDzYzHus8
+        HUEUh1u31t4kaR+rIfCYHMC9HV6SoccKWWG+poSxLEFsuHUNq96YbUwmDV/uRXi2KJgEx5
+        p3+bgsiSIKWImO/YO8Fa38Y9a6RV6zM=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-550-KgR82WFFPyOX5ErnvLT2OA-1; Fri, 10 Feb 2023 13:09:16 -0500
+X-MC-Unique: KgR82WFFPyOX5ErnvLT2OA-1
+Received: by mail-ed1-f71.google.com with SMTP id q6-20020a056402518600b004ab0e2d02e5so3998252edd.3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:09:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:date:message-id:dkim-signature
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jwk0i+taCoZmO5hqTQwks2ZG+Yy0hvRchzSakw9yBgY=;
-        b=jV0brZTdzvDmrhUbEtoY59/sWYvBuBeyJs3Lsi+9aLyVeAa0WEM6cN3nl0D98LWSex
-         3ugMS9k0j5p3MVzXKPZyn2Dwduu/5xg9fZqlgTtMwuDyLQcbiFUgg+x/rBnTFaIlu6Eu
-         ZwKWPXHw7f4R/vTbjk1csjVXms+f1PFzK8vgQksfKan3ChKf4m+rZlVk02p9Wiv+mQvv
-         e7yjQIpSFXIxjkL0mluPYqNUBj47Hi9Jkpc59W1gqR4sJk/NQm78iQeH52vqLs+00l0G
-         PjmUPjx1lipQG+Xw62OYbOVu3tLLxzczbs8mFLXpOHgmNiTBiMr6YkcjqTyPrywej9gY
-         Rrsg==
-X-Gm-Message-State: AO0yUKWQtIm+CDsZ7YfuGlJHmjBzGSrTUCJA8wxWrJWrWVzeoFlotSgT
-        T7NVMWn2Zlz0AZBMhWAyjE5phBWKgNjlfzBMNRVkVZqIeyNF
-X-Google-Smtp-Source: AK7set8cose0trt9MNoZfoMLGULHwP5M+SwqmhBXnbjaCwSsuEajTvX9YAOH1Ehxxbh1O3YTnSFlDJru5y2f
-X-Received: by 2002:a17:903:2291:b0:199:1458:6c68 with SMTP id b17-20020a170903229100b0019914586c68mr17817382plh.57.1676052423456;
-        Fri, 10 Feb 2023 10:07:03 -0800 (PST)
-Received: from smtp.aristanetworks.com ([74.123.28.25])
-        by smtp-relay.gmail.com with ESMTPS id a3-20020a170902ecc300b0018930cd8f91sm268584plh.144.2023.02.10.10.07.03
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 10 Feb 2023 10:07:03 -0800 (PST)
-X-Relaying-Domain: arista.com
-Received: from [10.95.72.106] (unknown [10.95.72.106])
-        by smtp.aristanetworks.com (Postfix) with ESMTP id 89E7D416E40;
-        Fri, 10 Feb 2023 10:07:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arista.com;
-        s=Arista-A; t=1676052422;
-        bh=Jwk0i+taCoZmO5hqTQwks2ZG+Yy0hvRchzSakw9yBgY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GcRY66c7HyZXSFGqGuaiXexyp2Spvq7gWF5Pdg3lknPD2or1tcjy4ziHkQNh523DV
-         8LcRJWN0sjj1iYLOA/+hpbXJsVOGGhNkWT9SOeKinvdVkzVpf7bgiEOFJuMbAdq1vj
-         ApOQ4G04xI2a3AFTAlDzfaulOUsmN+Ou/4qz/+qxkRXTiqZhzKgke+HUN+wmxLjX/Z
-         19FoZb46yqPOxICIoOFBa8yXOfQBpAouiRr4J0y3FDmeuPnkVIeGcXTOGD3XvUKCoQ
-         Y7nEKLhN1MIJJpumw7n3Rox/sH5IwsG2PE4fohfLF80l7gd8KXTAKgnuucZmPv4KMT
-         A6X1feWq8Zq3w==
-Message-ID: <865dfe9e-ee3d-1067-625e-2d93bf96da4b@arista.com>
-Date:   Fri, 10 Feb 2023 10:07:02 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH] tpm: add vendor flag to command code validation
-Content-Language: en-CA
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        jgg@ziepe.ca, peterhuewe@gmx.de
-References: <20230208195836.30175-1-julien@arista.com>
- <Y+WUqcNTc8t0KIyD@kernel.org>
-From:   Julien Gomes <julien@arista.com>
-In-Reply-To: <Y+WUqcNTc8t0KIyD@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bktzj9pUtDvfzFEYNHOpgZ9otzlEtCU+sjtmZV2ehpA=;
+        b=Gw6umqAB7l2K1Av7+ScxQ4lAvB+2wOzJjmKeyET14P6Q/2KOWL3B48oQ7v0dDPWngx
+         hV+V8FEAZWLKJ1rhkk+9ZIpmInMCWVr2nCheUah9y7NASwE2HxJBbmzB1+U2uPD5DtUV
+         yW59EQazrXHX5u3+0vhcj/JLWAhSbn/5De6whXS1vyqCejTgeBnbAH9wfhwTILMF+jsM
+         /cFrSro8r4TFdctvSvR8OlaC7gl7w4UaJ1mQIF9DKPtiE3x0SSoqmdCrPsdfcZ2rar7K
+         i24z7ESJU/G2g/U+Icltp3BklqE+YhOkXCaxE83ANtKaSqtWGko97t7OomdMd/y8vUOH
+         6qfA==
+X-Gm-Message-State: AO0yUKVfSDFQflstW5MsaQqRx2T/so2ArT15MlmNvOQ2iYmHPgpz+zWE
+        0d9PPKu6ie9+lPz3N/dOhHxOsnOrskNljkbpir/l3K4XOF3h06apEz5q2M0t5s4YR9EeSMycn48
+        2mqG/AzMLIZrYGKpXFdHX49w1
+X-Received: by 2002:a17:906:1ec8:b0:88d:5fd1:3197 with SMTP id m8-20020a1709061ec800b0088d5fd13197mr15634097ejj.50.1676052554995;
+        Fri, 10 Feb 2023 10:09:14 -0800 (PST)
+X-Google-Smtp-Source: AK7set9IcNHTm+2uFIQaJFbvxf0GV4vcbWMrGctJyoagu2VVIovhZ9nGDJhJoXQ7kr1gNOVf0B3XXw==
+X-Received: by 2002:a17:906:1ec8:b0:88d:5fd1:3197 with SMTP id m8-20020a1709061ec800b0088d5fd13197mr15634064ejj.50.1676052554472;
+        Fri, 10 Feb 2023 10:09:14 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id kg12-20020a17090776ec00b008710789d85fsm2672300ejc.156.2023.02.10.10.09.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 10:09:14 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id CDA9C973E85; Fri, 10 Feb 2023 19:09:12 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 0/6] ice: post-mbuf fixes
+In-Reply-To: <20230210170618.1973430-1-alexandr.lobakin@intel.com>
+References: <20230210170618.1973430-1-alexandr.lobakin@intel.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Fri, 10 Feb 2023 19:09:12 +0100
+Message-ID: <87fsbd75pz.fsf@toke.dk>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,66 +87,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-09 4:49 p.m., Jarkko Sakkinen wrote:
-> On Wed, Feb 08, 2023 at 11:58:36AM -0800, Julien Gomes wrote:
->> Some TPM 2.0 devices have support for additional commands which are not
->> part of the TPM 2.0 specifications.
->> These commands are identified with bit 29 of the 32 bits command codes.
->> Contrarily to other fields of the TPMA_CC spec structure used to list
->> available commands, the Vendor flag also has to be present in the
->> command code itself (TPM_CC) when called.
->>
->> Add this flag to tpm_find_cc() mask to prevent blocking vendor command
->> codes that can actually be supported by the underlying TPM device.
->>
->> Signed-off-by: Julien Gomes <julien@arista.com>
->> ---
->>   drivers/char/tpm/tpm2-cmd.c | 4 +++-
->>   include/linux/tpm.h         | 1 +
->>   2 files changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
->> index 65d03867e114..93545be190a5 100644
->> --- a/drivers/char/tpm/tpm2-cmd.c
->> +++ b/drivers/char/tpm/tpm2-cmd.c
->> @@ -777,10 +777,12 @@ int tpm2_auto_startup(struct tpm_chip *chip)
->>   
->>   int tpm2_find_cc(struct tpm_chip *chip, u32 cc)
->>   {
->> +	u32 cc_mask;
->>   	int i;
->>   
->> +	cc_mask = 1 << TPM2_CC_ATTR_VENDOR | GENMASK(15, 0);
->>   	for (i = 0; i < chip->nr_commands; i++)
->> -		if (cc == (chip->cc_attrs_tbl[i] & GENMASK(15, 0)))
->> +		if (cc == (chip->cc_attrs_tbl[i] & cc_mask))
->>   			return i;
->>   
->>   	return -1;
->> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
->> index dfeb25a0362d..4dc97b9f65fb 100644
->> --- a/include/linux/tpm.h
->> +++ b/include/linux/tpm.h
->> @@ -265,6 +265,7 @@ enum tpm2_startup_types {
->>   enum tpm2_cc_attrs {
->>   	TPM2_CC_ATTR_CHANDLES	= 25,
->>   	TPM2_CC_ATTR_RHANDLE	= 28,
->> +	TPM2_CC_ATTR_VENDOR	= 29,
->>   };
->>   
->>   #define TPM_VID_INTEL    0x8086
->> -- 
->> 2.39.1
->>
-> 
-> Just checking: did you run testing/selftests/tpm2?
-> 
-> BR, Jarkko
+Alexander Lobakin <alexandr.lobakin@intel.com> writes:
 
-I didn't know about these, good call.
-Just ran the three test suites on a vm with a swtpm, as I don't have a
-physical box with TPM 2.0 able to run latest kernels handy, all passed.
+> The set grew from the poor performance of %BPF_F_TEST_XDP_LIVE_FRAMES
+> when the ice-backed device is a sender. Initially there were around
+> 3.3 Mpps / thread, while I have 5.5 on skb-based pktgen...
+>
+> After fixing 0005 (0004 is a prereq for it) first (strange thing nobody
+> noticed that earlier), I started catching random OOMs. This is how 0002
+> (and partially 0001) appeared.
+> 0003 is a suggestion from Maciej to not waste time on refactoring dead
+> lines. 0006 is a "cherry on top" to get away with the final 6.7 Mpps.
+> 4.5 of 6 are fixes, but only the first three are tagged, since it then
+> starts being tricky. I may backport them manually later on.
+>
+> TL;DR for the series is that shortcuts are good, but only as long as
+> they don't make the driver miss important things. %XDP_TX is purely
+> driver-local, however .ndo_xdp_xmit() is not, and sometimes assumptions
+> can be unsafe there.
+>
+> With that series and also one core code patch[0], "live frames" and
+> xdp-trafficgen are now safe'n'fast on ice (probably more to come).
 
--- 
-Julien Gomes
+Nice speedup! And cool to see that you're playing around with
+xdp-trafficgen :)
+
+-Toke
 
