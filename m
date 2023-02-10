@@ -2,119 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 866B7692008
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 14:46:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AFCF69200C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 14:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbjBJNqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 08:46:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
+        id S232237AbjBJNrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 08:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231400AbjBJNqA (ORCPT
+        with ESMTP id S232040AbjBJNq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 08:46:00 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C38973954;
-        Fri, 10 Feb 2023 05:45:59 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id 139so4940915ybe.3;
-        Fri, 10 Feb 2023 05:45:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hB+mOJqD5Y0H3JYjXP2CcVgplj5XVV1e0fTBRG32UaQ=;
-        b=WX5QCkNjdJQ8c0rOOlxK/JExQefxLbENbWB8LclIHqEilDbLyE+wQEKp/7P2huRAUr
-         8i+AG2rbESwOr/sThtxE8/PEe4Gj+CMPqMMAody/v8RAr3/cx1mXKaHO9K/DUkRicQll
-         7oMnIsjR5qJTMCC9OXk/jMLLWWZo03yHiIw7tkIiyRkx4rrkKyHw78e2ohOKjN3zn4f9
-         /K0MU2yvOjVXBlIOyXllKDLm5yHdFJu9kYuddAoHxTQ1oblKI94r+hwths2m0P4boBzN
-         rvrrZ8tcssXiFw6Q8azKfFkttRYJX8vsZnYac+VgR02320HCNxAEUutYslA4JTpTmBrn
-         BDIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hB+mOJqD5Y0H3JYjXP2CcVgplj5XVV1e0fTBRG32UaQ=;
-        b=k9E6p9uFAFgUwQabbJlNFHXAAAW553IQZBsUuPVz6INdwGIqyPUy5KdJB6GnFlIrMH
-         vq2IGxVXn11TEtvs9AbOayAXZDqsw41bmAO7fLHqTMQ0u5M2aipzS7Ityp9nGEAtHjzo
-         y/URiBFbi2EeX70ePPtOjoTzo06F2xgLi7Vc/mQ0ch2zrnMA5YpQPRTpxctIxPeO09RW
-         oIkbFeQbkb7XNrXvO4+gSOxpMHd2NHBsG09uCK8mFC4MA86apNtSQd8RXn4ZLytz7/xB
-         PkW3BSMXd8MbPD3tA7fA0+CvMZyKej3p+KHDMYQOHsJGqQBXrJLUD2cWJpIJm2UagIld
-         w3eQ==
-X-Gm-Message-State: AO0yUKWKNx0XJ5BbMYoVZVq9DPkKTIoo6IsOxN9v+tDvgSGHqGCJrTBe
-        iBAw8yqA0hZyP3cNXgXldhICgXvlb6HVUzJnbrU=
-X-Google-Smtp-Source: AK7set9p/mFPR8AIII7jz3WOMjkRUH0Ch3Js3xuR613P1LexlUXemUWuB53vPhLb9B1ej5nch2AYNjVrD/5+KoHTKps=
-X-Received: by 2002:a5b:d09:0:b0:8a0:96fa:f8f1 with SMTP id
- y9-20020a5b0d09000000b008a096faf8f1mr1722831ybp.535.1676036758352; Fri, 10
- Feb 2023 05:45:58 -0800 (PST)
-MIME-Version: 1.0
-References: <20230206002136.29401-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdUXXrYPcNiD3M_ONjX2Jn16KKXdY=4JMqJbm9F=9GMBvA@mail.gmail.com>
-In-Reply-To: <CAMuHMdUXXrYPcNiD3M_ONjX2Jn16KKXdY=4JMqJbm9F=9GMBvA@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Fri, 10 Feb 2023 13:45:32 +0000
-Message-ID: <CA+V-a8uWyCrziE2+LNy7jK0hU-5bKUC2i++oQqEt8qoqwjm07Q@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: renesas: Drop specifying the
- GIC_CPU_MASK_SIMPLE() for GICv3 systems
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        Fri, 10 Feb 2023 08:46:58 -0500
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639F82330E
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 05:46:53 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:f87f:d177:a3aa:c73f])
+        by laurent.telenet-ops.be with bizsmtp
+        id KRmq290051S85DW01Rmqol; Fri, 10 Feb 2023 14:46:50 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pQTjU-008Z7y-4P;
+        Fri, 10 Feb 2023 14:46:50 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pQTjm-0084LC-6e;
+        Fri, 10 Feb 2023 14:46:50 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v3] PCI: Fix dropping valid root bus resources with .end = zero
+Date:   Fri, 10 Feb 2023 14:46:39 +0100
+Message-Id: <da0fcd5e86c74239be79c7cb03651c0fce31b515.1676036673.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On r8a7791/koelsch:
 
-Thank you for the review.
+    kmemleak: 1 new suspected memory leaks (see /sys/kernel/debug/kmemleak)
+    # cat /sys/kernel/debug/kmemleak
+    unreferenced object 0xc3a34e00 (size 64):
+      comm "swapper/0", pid 1, jiffies 4294937460 (age 199.080s)
+      hex dump (first 32 bytes):
+	b4 5d 81 f0 b4 5d 81 f0 c0 b0 a2 c3 00 00 00 00  .]...]..........
+	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+      backtrace:
+	[<fe3aa979>] __kmalloc+0xf0/0x140
+	[<34bd6bc0>] resource_list_create_entry+0x18/0x38
+	[<767046bc>] pci_add_resource_offset+0x20/0x68
+	[<b3f3edf2>] devm_of_pci_get_host_bridge_resources.constprop.0+0xb0/0x390
 
-On Fri, Feb 10, 2023 at 11:10 AM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar,
->
-> On Mon, Feb 6, 2023 at 1:28 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > The GICv3 interrupts binding does not have a cpumask. The CPU mask only
-> > applies to pre-GICv3. So just drop using them from GICv3 systems.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Thanks for your patch!
->
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> i.e. will queue in renesas-devel for v6.4...
->
-> > ---
-> > Note, this patch applies on top of [0]
-> >
-> > [0] https://patchwork.kernel.org/project/linux-renesas-soc/cover/20230131223529.11905-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
->
-> As this patch is a fix, I think it makes sense to drop that dependency.
->
-Agreed.
+When coalescing two resources for a contiguous aperture, the second
+resource is enlarged to cover the full contiguous range, while the
+first resource is marked invalid.  This invalidation is done by
+clearing the flags, start, and end members.
 
-> So I'll do
->
->     git show -- arch/arm64/boot/dts/renesas/r9a07g044.dtsi | sed -e
-> 's/044/054/g' | patch -p1 && git commit -a --amend
->
-Hmm that's something new for me to learn!
+When adding the initial resources to the bus later, invalid resources
+are skipped.  Unfortunately, the check for an invalid resource considers
+only the end member, causing false positives.
 
-> while applying.
->
-Thanks.
+E.g. on r8a7791/koelsch, root bus resource 0 ("bus 00") is skipped, and
+no longer registered with pci_bus_insert_busn_res() (causing the memory
+leak), nor printed:
 
-Cheers,
-Prabhakar
+     pci-rcar-gen2 ee090000.pci: host bridge /soc/pci@ee090000 ranges:
+     pci-rcar-gen2 ee090000.pci:      MEM 0x00ee080000..0x00ee08ffff -> 0x00ee080000
+     pci-rcar-gen2 ee090000.pci: PCI: revision 11
+     pci-rcar-gen2 ee090000.pci: PCI host bridge to bus 0000:00
+    -pci_bus 0000:00: root bus resource [bus 00]
+     pci_bus 0000:00: root bus resource [mem 0xee080000-0xee08ffff]
+
+Fix this by only skipping resources where all of the flags, start, and
+end members are zero.
+
+Fixes: 7c3855c423b17f6c ("PCI: Coalesce host bridge contiguous apertures")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Tested-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Acked-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+Is there any side effect of not registering the root bus resource with
+pci_bus_insert_busn_res()?  This is the resource created by
+of_pci_parse_bus_range(), and thus affects any DT platforms using
+"bus-range = <0 0>".
+
+Perhaps checking for "!res->flags" would be sufficient?
+
+I wonder if this still causes memory leaks on systems where resources
+are coalesced, as the first resource of a contiguous aperture is no
+longer referenced? Perhaps instead of clearing the resource, it should
+be removed from the list (and freed? is it actually safe to do that?)?
+  - Bjorn thinks these would normally be freed via
+    __acpi_pci_root_release_info() (if the host bridge were
+    hot-removed), so probably not a leak since the invalidated resource
+    is still in the info->resources list and should be freed even though
+    it's been invalidated.
+  - Furthermore, Bjorn suspects it could probably be removed from the
+    list and freed here, and maybe even in the first loop when we
+    coalesce it, so we wouldn't have to check in the second loop.
+
+However, let's fix one bug at a time? This has been dragging on for
+about half a year....
+
+Apparently Johannes had identified the bug before, but didn't realize
+the full impact...
+https://lore.kernel.org/r/5331e942ff28bb191d62bb403b03ceb7d750856c.camel@sipsolutions.net/
+
+v3:
+  - Actually the second resource is enlarged, and the first one is
+    invalidated,
+
+v2:
+  - Add Tested-by, Acked-by.
+---
+ drivers/pci/probe.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+index 1779582fb5007cd1..5988584825482e9f 100644
+--- a/drivers/pci/probe.c
++++ b/drivers/pci/probe.c
+@@ -996,7 +996,7 @@ static int pci_register_host_bridge(struct pci_host_bridge *bridge)
+ 	resource_list_for_each_entry_safe(window, n, &resources) {
+ 		offset = window->offset;
+ 		res = window->res;
+-		if (!res->end)
++		if (!res->flags && !res->start && !res->end)
+ 			continue;
+ 
+ 		list_move_tail(&window->node, &bridge->windows);
+-- 
+2.34.1
+
