@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A090E692B24
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 00:28:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 231BA692B28
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 00:29:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjBJX2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 18:28:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36582 "EHLO
+        id S229742AbjBJX3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 18:29:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjBJX2H (ORCPT
+        with ESMTP id S229551AbjBJX3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 18:28:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425A36F22C;
-        Fri, 10 Feb 2023 15:28:07 -0800 (PST)
+        Fri, 10 Feb 2023 18:29:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521EE1B564;
+        Fri, 10 Feb 2023 15:29:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D231661EAD;
-        Fri, 10 Feb 2023 23:28:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D9DFC433D2;
-        Fri, 10 Feb 2023 23:28:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFB6561ECC;
+        Fri, 10 Feb 2023 23:29:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 090DFC433EF;
+        Fri, 10 Feb 2023 23:29:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676071686;
-        bh=z/fjSHEKkeZH0xl3gSAlWJUi78rSlqVpPRun+dizBq0=;
+        s=k20201202; t=1676071782;
+        bh=Q/hcON/J2f4ngMfFy+pzVpSf8Ze+WMGxgIYkbCcKRRk=;
         h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Pw5OnvbI1SKNF56oxP1v1X7jyCtaiLalEYMdS1yb483R7PqMqLw7oEFUhiTSD5XQs
-         DZnECnb58Tg2RY0Ei/iUsfNPc/aBDn3WLuGqOV8O9KBWetZf55graWvyHJJUjr8yaR
-         YEMOYNnCNBzwozKNlhUYABWTqaT3clDhvsEFfzoGDHGGM0z23Zn+xQ51YUjRUKae4F
-         erz7gkdyFqKHrxRbfRCKUHUv9G02rLTJIdIZDYkpr0kSrCltPr4zvZgEuF0j9lRVnL
-         AqOCr9N3lclySASNGzM/IdVeQ0/XJTMnQyWSNm442+WPw/1R38pmgVHVnj0XV42P+J
-         hE8En9X0Npjxw==
-Date:   Fri, 10 Feb 2023 17:28:04 -0600
+        b=TUh7nptV4CkpbBl5Gwk+eTVNDGkwWWHg9wDZbbF21XP5OXksKcsoF55cAv8OS7+/u
+         8D+YGwwhrzAkJ9I5os7vFlHsKZmDDUKnKf0vl66D8rue6Tf4iJOYRi09TslBdB9yu2
+         Wy/y8K4DiySh8l5odhxw7Ys/i2I3MzGRBCmj3ARrBmK25u+ImwCndZa/1mVBVVGmU+
+         trO3iuh245mHInyXPzargzk9P5nWyqrQ1T0nIo6U1bp3VmEv/BAYQWcwShWQ0c9A9Z
+         7sLuPbu6cipxEplQD9+XLySFKKlTx2G4H4//WTRmC4wd5Rqy8fP26Il1eGMz+XMJN8
+         EtHj8gCkFxznQ==
+Date:   Fri, 10 Feb 2023 17:29:40 -0600
 From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Vinod Koul <vkoul@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
         Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the pci tree
-Message-ID: <20230210232804.GA2712855@bhelgaas>
+        Frank Li <Frank.Li@nxp.com>, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] [v2] dmaengine: dw-edma: reduce stack usage after
+ debugfs rework
+Message-ID: <20230210232940.GA2712698@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230210153834.0452f24d@canb.auug.org.au>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230210123525.cphmtcf7pmfj67os@mobilestation.baikal.int>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,19 +60,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 03:38:34PM +1100, Stephen Rothwell wrote:
-> Hi all,
+On Fri, Feb 10, 2023 at 03:35:25PM +0300, Serge Semin wrote:
+> On Fri, Feb 10, 2023 at 02:22:28PM +0530, Vinod Koul wrote:
+> > On 30-01-23, 19:50, Arnd Bergmann wrote:
+> > > From: Arnd Bergmann <arnd@arndb.de>
+> > > 
+> > > After the dw_edma_debugfs_entry arrays are no longer compile-time
+> > > constant, they take up space on the stack, which exceeds the warning
+> > > limit after inlining:
+> > > 
+> > > drivers/dma/dw-edma/dw-edma-v0-debugfs.c:280:6: error: stack frame size (1784) exceeds limit (1400) in 'dw_edma_v0_debugfs_on' [-Werror,-Wframe-larger-than]
+> > > void dw_edma_v0_debugfs_on(struct dw_edma *dw)
+> > > 
+> > > Work around this by preventing dw_edma_debugfs_regs_{wr,rd} from both
+> > > being inlined together, which cuts the stack frame size in half and
+> > > makes it fit below the warning limit.
+> > > 
+> > > Fixes: 5c0373eafd83 ("dmaengine: dw-edma: Move eDMA data pointer to debugfs node descriptor")
+> > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > > ---
+> > > v2: rebase on top of dmaengine tree
+> > 
+> > I dont have 5c0373eafd83 in my tree, I guess that went thru PCI tree, so
+> > I am going to defer this after merge window
 > 
-> Commits
+> It's in the @Bjorn tree now
+> https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/commit/?h=pci/ctrl/dwc&id=5c0373eafd8334343da22338d8588ed61e8daba0
 > 
->   da006a8c9352 ("dmaengine: dw-edma: Use non-atomic io-64 methods")
->   e3042508ac7c ("dmaengine: dw-edma: Fix readq_ch() return value truncation")
-> 
-> are missing a Signed-off-by from their committer.
+> If you are ok with the fix then @Bjorn could take the patch in to his
+> repo. Right, @Bjorn?
 
-Thanks, should be fixed now.
+Yes, I squashed this into the original patch and tweaked the
+whitespace per Manivannan's comment.
 
-BTW, Stephen, can you add Krzysztof Wilczyński <kw@linux.com> to your
-list of "people to notify about PCI tree issues"?
+Note that we've moved to a shared PCI git tree, so the helgaas/pci.git
+tree is obsolete and will bit rot until we remove it completely.
 
-Thank you!
+The new one is:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/
+
+Bjorn
