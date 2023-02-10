@@ -2,121 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97111692A91
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 23:51:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 842F5692A95
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 23:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjBJWvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 17:51:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
+        id S229538AbjBJWwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 17:52:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjBJWvx (ORCPT
+        with ESMTP id S229455AbjBJWwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 17:51:53 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87AEA11EA4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 14:51:51 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id gj9-20020a17090b108900b0023114156d36so11187449pjb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 14:51:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=R4N26B9VGGTnqC3xqOaxRLSDi0f2Dt0eKjIQvb/X62o=;
-        b=u5HRO63gAcA4nfusNIOQSq65f86ZTJ3MqNvxRzAX5W+R22e0AtrfGMumqSuVrq1lF9
-         NsFXM7VxYdTkvyXmirDO3xIUpW+ewcW65e2UkdwGOQJ9YYAwpFCJYyHSbkZWApVHEZGE
-         trnv6AWqvv6dHFaEgCi4hVQIt+kM56QLFx8gqLW0NWJFYOuOwB8G583A//zD1Sai/c7C
-         Yv8iBj0gA1lfIgrL3ID5Im4XMbfR6eu3isQI3hqYm8g51dYY/9UgnTVjXvGyKAjaFsRq
-         qoIJ6191tOa8qIoM1uzUoaYGc2WROgSeZ+8ShxrfdZMyZQIyFSeReusVE5uiSq1tUukg
-         zUbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R4N26B9VGGTnqC3xqOaxRLSDi0f2Dt0eKjIQvb/X62o=;
-        b=0laM5xQmCteOMZyQsFLnHLqPLz0DlHIIMkZAoSF8GNNZqWO5Ndc+MBE/tShW6sS4rJ
-         9c+hwgRS1xIG0sCpc1Xf0KrFfPVom8JWJqXb1PisLLrWzaORbm3g1q1iWA1033WdOAeL
-         ATws4CxFzsbB6fUZ++b91lv/Co04xJ4Fp+Wig3cjJsA69DVAjSJY7eGbOZKEVGQHu9HG
-         +0QRjrfKfpZWEVF7V7ftkG0gkCzIZoMYQnFbm0/mN3yYxa8ufvCC2tWZPf2OVeGj2Wjh
-         IbJO68k0MCPkaRmBK6EMoil4m1PL4g0ETcJE4DcWaqAZn8M3sb2BmQUpuzYjx08sY7p5
-         X58g==
-X-Gm-Message-State: AO0yUKVTqFtRmKmsUkgQ+HuJjQ3UFkO8/9Chf2pLFjSyPSboo+UIDdQ8
-        EZS41egZt+knOdL+JCse68IgTg==
-X-Google-Smtp-Source: AK7set/0HEQG/FQ9H218VpRyJjXTjhHzpcw6zsWsYqjqsJHruBzZv/lO8Nfnn1XVxrZ0jfTCujLcLQ==
-X-Received: by 2002:a05:6a20:7f8e:b0:be:cd93:66cd with SMTP id d14-20020a056a207f8e00b000becd9366cdmr18769759pzj.2.1676069510837;
-        Fri, 10 Feb 2023 14:51:50 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id z29-20020a63b91d000000b0047899d0d62csm3439655pge.52.2023.02.10.14.51.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 14:51:50 -0800 (PST)
-Message-ID: <c395bf68-108e-1674-1a1c-4cb26178d87c@kernel.dk>
-Date:   Fri, 10 Feb 2023 15:51:49 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: copy on write for splice() from file to pipe?
-Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Linus Torvalds' <torvalds@linux-foundation.org>,
-        Dave Chinner <david@fromorbit.com>
-Cc:     Stefan Metzmacher <metze@samba.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API Mailing List <linux-api@vger.kernel.org>,
-        io-uring <io-uring@vger.kernel.org>,
+        Fri, 10 Feb 2023 17:52:49 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB91265B4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 14:52:47 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-322-_dDriQfgMmGpxT3zQV6kYQ-1; Fri, 10 Feb 2023 22:52:43 +0000
+X-MC-Unique: _dDriQfgMmGpxT3zQV6kYQ-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Fri, 10 Feb
+ 2023 22:52:41 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.045; Fri, 10 Feb 2023 22:52:41 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Hans de Goede' <hdegoede@redhat.com>,
+        Orlando Chamberlain <orlandoch.dev@gmail.com>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Samba Technical <samba-technical@lists.samba.org>
-References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
- <CAHk-=wj8rthcQ9gQbvkMzeFt0iymq+CuOzmidx3Pm29Lg+W0gg@mail.gmail.com>
- <20230210021603.GA2825702@dread.disaster.area>
- <20230210040626.GB2825702@dread.disaster.area>
- <CAHk-=wip9xx367bfCV8xaF9Oaw4DZ6edF9Ojv10XoxJ-iUBwhA@mail.gmail.com>
- <20230210061953.GC2825702@dread.disaster.area>
- <CAHk-=wj6jd0JWtxO0JvjYUgKfnGEj4BzPVOfY+4_=-0iiGh0tw@mail.gmail.com>
- <304d5286b6364da48a2bb1125155b7e5@AcuMS.aculab.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <304d5286b6364da48a2bb1125155b7e5@AcuMS.aculab.com>
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
+CC:     Alex Deucher <alexander.deucher@amd.com>,
+        =?utf-8?B?Q2hyaXN0aWFuIEvDtm5pZw==?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        "Lijo Lazar" <lijo.lazar@amd.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>,
+        "Somalapuram Amaranath" <Amaranath.Somalapuram@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        Jack Xiao <Jack.Xiao@amd.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Rander Wang <rander.wang@intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        =?utf-8?B?QW1hZGV1c3ogU8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Yong Zhi <yong.zhi@intel.com>, "Evan Quan" <evan.quan@amd.com>,
+        Kerem Karabay <kekrby@gmail.com>,
+        Aditya Garg <gargaditya08@live.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>
+Subject: RE: [RFC PATCH 1/9] apple-gmux: use cpu_to_be32 instead of manual
+ reorder
+Thread-Topic: [RFC PATCH 1/9] apple-gmux: use cpu_to_be32 instead of manual
+ reorder
+Thread-Index: AQHZPYayA1ivfjGBOEq1WtvynnRGNq7IyMig
+Date:   Fri, 10 Feb 2023 22:52:41 +0000
+Message-ID: <6d733fa367e24462bf679b59e790ba4b@AcuMS.aculab.com>
+References: <20230210044826.9834-1-orlandoch.dev@gmail.com>
+ <20230210044826.9834-2-orlandoch.dev@gmail.com>
+ <3af65b5e-1f52-79f6-4130-03901ce76d2f@redhat.com>
+ <990b254c-b55f-539d-d6b5-fa4499078527@redhat.com>
+In-Reply-To: <990b254c-b55f-539d-d6b5-fa4499078527@redhat.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/10/23 3:41?PM, David Laight wrote:
-> From: Linus Torvalds
->> Sent: 10 February 2023 17:24
-> ...
->> And when it comes to networking, in general things like TCP checksums
->> etc should be ok even with data that isn't stable.  When doing things
->> by hand, networking should always use the "copy-and-checksum"
->> functions that do the checksum while copying (so even if the source
->> data changes, the checksum is going to be the checksum for the data
->> that was copied).
->>
->> And in many (most?) smarter network cards, the card itself does the
->> checksum, again on the data as it is transferred from memory.
->>
->> So it's not like "networking needs a stable source" is some really
->> _fundamental_ requirement for things like that to work.
-> 
-> It is also worth remembering that TCP needs to be able
-> to retransmit the data and a much later time.
-> So the application must not change the data until it has
-> been acked by the remote system.
-
-This has been covered, and:
-
-> I don't think io_uring has any way to indicate anything
-> other than 'the data has been accepted by the socket'.
-
-This is wrong and has also been covered.
-
--- 
-Jens Axboe
+RnJvbTogSGFucyBkZSBHb2VkZQ0KPiBTZW50OiAxMCBGZWJydWFyeSAyMDIzIDE5OjMzDQo+IA0K
+PiBIaSwNCj4gDQo+IE9uIDIvMTAvMjMgMjA6MDksIEhhbnMgZGUgR29lZGUgd3JvdGU6DQo+ID4g
+SGksDQo+ID4NCj4gPiBPbiAyLzEwLzIzIDA1OjQ4LCBPcmxhbmRvIENoYW1iZXJsYWluIHdyb3Rl
+Og0KPiA+PiBDdXJyZW50bHkgaXQgbWFudWFsbHkgZmxpcHMgdGhlIGJ5dGUgb3JkZXIsIGJ1dCB3
+ZSBjYW4gaW5zdGVhZCB1c2UNCj4gPj4gY3B1X3RvX2JlMzIodmFsKSBmb3IgdGhpcy4NCj4gPj4N
+Cj4gPj4gU2lnbmVkLW9mZi1ieTogT3JsYW5kbyBDaGFtYmVybGFpbiA8b3JsYW5kb2NoLmRldkBn
+bWFpbC5jb20+DQo+ID4+IC0tLQ0KPiA+PiAgZHJpdmVycy9wbGF0Zm9ybS94ODYvYXBwbGUtZ211
+eC5jIHwgMTggKystLS0tLS0tLS0tLS0tLS0tDQo+ID4+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNl
+cnRpb25zKCspLCAxNiBkZWxldGlvbnMoLSkNCj4gPj4NCj4gPj4gZGlmZiAtLWdpdCBhL2RyaXZl
+cnMvcGxhdGZvcm0veDg2L2FwcGxlLWdtdXguYyBiL2RyaXZlcnMvcGxhdGZvcm0veDg2L2FwcGxl
+LWdtdXguYw0KPiA+PiBpbmRleCA5MzMzZjgyY2ZhOGEuLmU4Y2IwODRjYjgxZiAxMDA2NDQNCj4g
+Pj4gLS0tIGEvZHJpdmVycy9wbGF0Zm9ybS94ODYvYXBwbGUtZ211eC5jDQo+ID4+ICsrKyBiL2Ry
+aXZlcnMvcGxhdGZvcm0veDg2L2FwcGxlLWdtdXguYw0KPiA+PiBAQCAtOTQsMTMgKzk0LDcgQEAg
+c3RhdGljIHUzMiBnbXV4X3Bpb19yZWFkMzIoc3RydWN0IGFwcGxlX2dtdXhfZGF0YSAqZ211eF9k
+YXRhLCBpbnQgcG9ydCkNCj4gPj4gIHN0YXRpYyB2b2lkIGdtdXhfcGlvX3dyaXRlMzIoc3RydWN0
+IGFwcGxlX2dtdXhfZGF0YSAqZ211eF9kYXRhLCBpbnQgcG9ydCwNCj4gPj4gIAkJCSAgICAgdTMy
+IHZhbCkNCj4gPj4gIHsNCj4gPj4gLQlpbnQgaTsNCj4gPj4gLQl1OCB0bXB2YWw7DQo+ID4+IC0N
+Cj4gPj4gLQlmb3IgKGkgPSAwOyBpIDwgNDsgaSsrKSB7DQo+ID4+IC0JCXRtcHZhbCA9ICh2YWwg
+Pj4gKGkgKiA4KSkgJiAweGZmOw0KPiA+PiAtCQlvdXRiKHRtcHZhbCwgZ211eF9kYXRhLT5pb3N0
+YXJ0ICsgcG9ydCArIGkpOw0KPiA+PiAtCX0NCj4gPj4gKwlvdXRsKGNwdV90b19iZTMyKHZhbCks
+IGdtdXhfZGF0YS0+aW9zdGFydCArIHBvcnQpOw0KPiA+PiAgfQ0KPiA+Pg0KPiA+PiAgc3RhdGlj
+IGludCBnbXV4X2luZGV4X3dhaXRfcmVhZHkoc3RydWN0IGFwcGxlX2dtdXhfZGF0YSAqZ211eF9k
+YXRhKQ0KPiA+DQo+ID4gVGhlIGlvcG9ydCAvIGluZGV4ZWQtaW9wb3J0IGFjY2Vzc2VkIGFwcGxl
+X2dtdXgtZXMgbGlrZWx5IGFyZSAocGFydCBvZj8pDQo+ID4gTFBDIGJ1cyBkZXZpY2VzIC4gTG9v
+a2luZyBhdCB0aGUgYnVzIGxldmVsIHlvdSBhcmUgbm93IGNoYW5naW5nIDQgaW8NCj4gPiBhY2Nl
+c3NlcyB3aXRoIGEgc2l6ZSBvZiAxIGJ5dGUsIHRvIDEgMzIgYml0IGlvLWFjY2Vzcy4NCj4gDQo+
+IENvcnJlY3Rpb24gdG8gbXlzZWxmLCByZS1yZWFkaW5nIHRoZSBMUEMgc3BlY2lmaWNhdGlvbiwg
+dGhlbg0KPiBpZiBJJ20gcmlnaHQgYW5kIHRoaXMgaXMgYSBMUEMgZGV2aWNlIHRoZW4gYWxsIElP
+IGluL291dCBhY2Nlc3Nlcw0KPiBhcmUgYWx3YXlzIDEgYnl0ZSBhY2Nlc3Nlcy4gU2luY2UgdGhl
+IExQQyBidXMgb25seSBzdXBwb3J0cyAxNiAvIDMyDQo+IGJpdCBhY2Nlc3NlcyBmb3IgRE1BIGN5
+Y2xlcy4NCj4gDQo+IFNvIHByZXN1bWFibHkgdGhlIG91dGwoKSB3b3VsZCBnZXQgc3BsaXQgaW50
+byA0IHNlcGFyYXRlIDggYml0DQo+IChwb3J0KSBJTyBhY2Nlc3Nlcy4NCg0KSSB3b25kZXIgaWYg
+dGhlcmUgaXMgc29tZXRoaW5nIG9ic2N1cmUgYW5kIHRoZSBvcmRlciBvZiB0aGUNCjQgYnl0ZXMg
+d3JpdGVzIG1hdHRlcnM/DQoNCkluIGFueSBjYXNlIHdyaXRpbmcgYXM6DQoJeHh4eCBpb3N0YXJ0
+ID0gZ211eF9kYXRhLT5pb3N0YXJ0ICsgcG9ydDsNCg0KCW91dGIodmFsLCBpb3N0YXJ0KTsNCglv
+dXRiKHZhbCA+PiA4LCBpb3N0YXJ0ICsgMSk7DQoJb3V0Yih2YWwgPj4gMTYsIGlvc3RhcnQgKyAy
+KTsNCglvdXRiKHZhbCA+PiAyNCwgaW9jdGFydCArIDMpOw0KYWxtb3N0IGNlcnRhaW5seSBnZW5l
+cmF0ZXMgYmV0dGVyIGNvZGUuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFr
+ZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwg
+VUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
