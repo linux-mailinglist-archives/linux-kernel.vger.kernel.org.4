@@ -2,65 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55BE76925EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:00:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3006D6925FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233187AbjBJTAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 14:00:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47368 "EHLO
+        id S233195AbjBJTCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 14:02:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232981AbjBJTAM (ORCPT
+        with ESMTP id S232755AbjBJTCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 14:00:12 -0500
-Received: from smtp-out-04.comm2000.it (smtp-out-04.comm2000.it [212.97.32.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CB47B381;
-        Fri, 10 Feb 2023 11:00:10 -0800 (PST)
-Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: francesco@dolcini.it)
-        by smtp-out-04.comm2000.it (Postfix) with ESMTPSA id EBF28BC6EB6;
-        Fri, 10 Feb 2023 20:00:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
-        s=mailsrv; t=1676055609;
-        bh=he/hI8oYQXLIhVCw08HW5MwQb36nena14e9fq5cTr50=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=gIbpxh81kUZvl27dGs+OzlMyymyJdmT5H0/7hHzcBHtgh76LT8UtJKsVbo/y0ZaSN
-         a5F1rioggdwF4zRQqxsjidMYxQYY8aMJaDlJxjIub/VB5F1OI+TtDAEYJxx8yNeAgo
-         ycCAsgz+ApTe5TlptlLXaFZGxZrtwoseHht90EPss5ppo0AXRmR8xTiBiy+ptP9xwx
-         HPir4/IvEpBROmIpf18JB36iNpXCu++CLes1fsL+fVzhXMZGN/f3fnr3lkpVrwgZz8
-         7V9ElXnUfDa2w0JjKMk8EAmFxYmXDxREzV7bft2dtd+ZzLWN3tfYrmUW6uJu+pKFa2
-         SkkxKMaGAcBbQ==
-Date:   Fri, 10 Feb 2023 20:00:03 +0100
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Francesco Dolcini <francesco@dolcini.it>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org,
-        Marcel Holtmann <marcel@holtmann.org>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev,
-        Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: Re: [PATCH v1 3/4] Bluetooth: hci_mrvl: Add serdev support for
- 88W8997
-Message-ID: <Y+aUM/gIDD+byG9k@francesco-nb.int.toradex.com>
-References: <20230118122817.42466-4-francesco@dolcini.it>
- <202301241423.sEVD92vC-lkp@intel.com>
- <CABBYNZLeccgTS81JksTngmbQ5Hk+ThSKDLW8V2qujT3O315u+w@mail.gmail.com>
+        Fri, 10 Feb 2023 14:02:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE857BFC2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:01:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676055703;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=42FsmB/zk/iiIT08iOzo74RdZ2Sg/lGPW1I2w5/TG2c=;
+        b=boJkZ10gY/uZHstiOJq6zaOv9TK7ns57XQyzB8I+4uCVJEeTdUD4S5npZCxsg4rY1wqHfi
+        MW48KfvfIHutH+yTaHhuud9L/6mJdFKg5rw7m8IOFy6CM53Ieel+XnmwyKlqgo6bBJ4Dww
+        NiJnsOjsUV8O/NDUYObGzSSPJBIcWgo=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-428-PZT0Ir9TOB-6I6pXjX7ORQ-1; Fri, 10 Feb 2023 14:01:42 -0500
+X-MC-Unique: PZT0Ir9TOB-6I6pXjX7ORQ-1
+Received: by mail-lj1-f199.google.com with SMTP id s2-20020a2e1502000000b002917ff038daso1791923ljd.7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:01:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=42FsmB/zk/iiIT08iOzo74RdZ2Sg/lGPW1I2w5/TG2c=;
+        b=vOki8HJ/CozwllnCAyRjQQs7MQcs4jWlUQMDZkED6wdKqKsum9bRXqIP6cNJjHQHvE
+         5rdAYULK7Oy+BC7dkfI/ULnpWX3kqBCSy+m4GFJBPXWJ5buDMIVhPXcqDigWrZpo/C9g
+         mAoM4SNSpUH70iizLN3R7T3CLDKDts6wnSSkrE+Pf8ngeFnOyyBW1yFCOYhd6zQvRHx/
+         g0XBnLgCZ7FH7rWtg457i3xb6MgmEep2aC68/mWBmu1f1cj3YjUrIxhhiwbF205bZ/3z
+         JrI615fKGshRWPqVgP6glapfAE2zlOhgmi61zOjJMndGDU6SmXFCm3KbQrubaEZfHbnK
+         /6qQ==
+X-Gm-Message-State: AO0yUKUSJgYDOCuWM07P8yhGL2w7BF6IksfPG6cnhzETXksxZuiEKAyh
+        0Unmo3v9RScAF2SCz85cN9CLFccAAZA+rPffP4x/syhkh5GYMTx6ikzMFhL0fv29QERQq+oWWtE
+        Q21b1r8cFeM7TGc7E87QbSnxtHhiTsGwnJfm1OHzwEM/9HA==
+X-Received: by 2002:ac2:4c2f:0:b0:4db:2d63:21b with SMTP id u15-20020ac24c2f000000b004db2d63021bmr36112lfq.277.1676055699723;
+        Fri, 10 Feb 2023 11:01:39 -0800 (PST)
+X-Google-Smtp-Source: AK7set+6aNE70CMGu4cWS2L8CdpcSP6Yqof+aVBTxLJbIeOnua5SAMa1n7DpSUbxwAoaDvMLB+U1uOOc6DMrjqEVgmo=
+X-Received: by 2002:ac2:4c2f:0:b0:4db:2d63:21b with SMTP id
+ u15-20020ac24c2f000000b004db2d63021bmr36103lfq.277.1676055699498; Fri, 10 Feb
+ 2023 11:01:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABBYNZLeccgTS81JksTngmbQ5Hk+ThSKDLW8V2qujT3O315u+w@mail.gmail.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
+ <fcec3c78-b5d9-eb48-0fc0-d1f27de87f23@leemhuis.info> <b21fa1f6-a71d-5657-8596-ee0be73185ea@leemhuis.info>
+ <3ab28896-70e9-6f90-5b97-e5397b06e715@googlemail.com> <a163dd7b-c5d1-a07b-a816-7a2dfd3edfd4@leemhuis.info>
+ <ab1b0f73-6b4e-8602-2999-b7bec25d92db@googlemail.com> <CACAvsv4sOtPjCVnEcKd2RCUqYWxSn5XKyksbS-Bds2qCqyusVw@mail.gmail.com>
+ <1cdb84ac-f7a8-66ba-98fc-3db302b49a5a@googlemail.com> <dab6eb81-db3f-8fa1-84ad-9b40e209514b@googlemail.com>
+ <CACAvsv5iYdF3P8AbyrbYo3zGmYRYhxDWn7WbAR5V9qHpbgBXRA@mail.gmail.com>
+ <1632a9ef-2954-c8f0-cdc9-03157c9d8547@googlemail.com> <5abbee70-cc84-1528-c3d8-9befd9edd611@googlemail.com>
+ <5cf46df8-0fa2-e9f5-aa8e-7f7f703d96dd@googlemail.com> <f72fe15b-db1d-56dd-aaf6-3cba68a8bf0a@leemhuis.info>
+In-Reply-To: <f72fe15b-db1d-56dd-aaf6-3cba68a8bf0a@leemhuis.info>
+From:   Karol Herbst <kherbst@redhat.com>
+Date:   Fri, 10 Feb 2023 20:01:27 +0100
+Message-ID: <CACO55tvR4ydDOXt=9nbR3n2aFLKrj8zeuGRR_xpezVQBBLrjqg@mail.gmail.com>
+Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Chris Clayton <chris2553@googlemail.com>,
+        Ben Skeggs <skeggsb@gmail.com>, bskeggs@redhat.com,
+        Lyude Paul <lyude@redhat.com>,
+        ML nouveau <nouveau@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        ML dri-devel <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,103 +84,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 10:48:08AM -0800, Luiz Augusto von Dentz wrote:
-> Hi Francesco,
-> 
-> On Mon, Jan 23, 2023 at 10:38 PM kernel test robot <lkp@intel.com> wrote:
+On Fri, Feb 10, 2023 at 7:35 PM Linux regression tracking (Thorsten
+Leemhuis) <regressions@leemhuis.info> wrote:
+>
+> On 08.02.23 09:48, Chris Clayton wrote:
 > >
-> > Hi Francesco,
-> >
-> > Thank you for the patch! Perhaps something to improve:
-> >
-> > [auto build test WARNING on robh/for-next]
-> > [also build test WARNING on bluetooth-next/master bluetooth/master horms-ipvs/master net/master net-next/master linus/master v6.2-rc5 next-20230123]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Francesco-Dolcini/dt-bindings-bluetooth-marvell-add-88W8997-DT-binding/20230118-210919
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-> > patch link:    https://lore.kernel.org/r/20230118122817.42466-4-francesco%40dolcini.it
-> > patch subject: [PATCH v1 3/4] Bluetooth: hci_mrvl: Add serdev support for 88W8997
-> > config: hexagon-randconfig-r021-20230123 (https://download.01.org/0day-ci/archive/20230124/202301241423.sEVD92vC-lkp@intel.com/config)
-> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://github.com/intel-lab-lkp/linux/commit/2ae116c8ad209e0bf11559519915e511c44c28be
-> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> >         git fetch --no-tags linux-review Francesco-Dolcini/dt-bindings-bluetooth-marvell-add-88W8997-DT-binding/20230118-210919
-> >         git checkout 2ae116c8ad209e0bf11559519915e511c44c28be
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/bluetooth/ lib/
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> >    In file included from drivers/bluetooth/hci_mrvl.c:12:
-> >    In file included from include/linux/skbuff.h:17:
-> >    In file included from include/linux/bvec.h:10:
-> >    In file included from include/linux/highmem.h:12:
-> >    In file included from include/linux/hardirq.h:11:
-> >    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-> >    In file included from include/asm-generic/hardirq.h:17:
-> >    In file included from include/linux/irq.h:20:
-> >    In file included from include/linux/io.h:13:
-> >    In file included from arch/hexagon/include/asm/io.h:334:
-> >    include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> >            val = __raw_readb(PCI_IOBASE + addr);
-> >                              ~~~~~~~~~~ ^
-> >    include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> >            val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-> >                                                            ~~~~~~~~~~ ^
-> >    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-> >    #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-> >                                                      ^
-> >    In file included from drivers/bluetooth/hci_mrvl.c:12:
-> >    In file included from include/linux/skbuff.h:17:
-> >    In file included from include/linux/bvec.h:10:
-> >    In file included from include/linux/highmem.h:12:
-> >    In file included from include/linux/hardirq.h:11:
-> >    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-> >    In file included from include/asm-generic/hardirq.h:17:
-> >    In file included from include/linux/irq.h:20:
-> >    In file included from include/linux/io.h:13:
-> >    In file included from arch/hexagon/include/asm/io.h:334:
-> >    include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> >            val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-> >                                                            ~~~~~~~~~~ ^
-> >    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-> >    #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-> >                                                      ^
-> >    In file included from drivers/bluetooth/hci_mrvl.c:12:
-> >    In file included from include/linux/skbuff.h:17:
-> >    In file included from include/linux/bvec.h:10:
-> >    In file included from include/linux/highmem.h:12:
-> >    In file included from include/linux/hardirq.h:11:
-> >    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-> >    In file included from include/asm-generic/hardirq.h:17:
-> >    In file included from include/linux/irq.h:20:
-> >    In file included from include/linux/io.h:13:
-> >    In file included from arch/hexagon/include/asm/io.h:334:
-> >    include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> >            __raw_writeb(value, PCI_IOBASE + addr);
-> >                                ~~~~~~~~~~ ^
-> >    include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> >            __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-> >                                                          ~~~~~~~~~~ ^
-> >    include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-> >            __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-> >                                                          ~~~~~~~~~~ ^
-> > >> drivers/bluetooth/hci_mrvl.c:450:36: warning: unused variable 'mrvl_proto_8997' [-Wunused-const-variable]
-> >    static const struct hci_uart_proto mrvl_proto_8997 = {
-> 
-> This last error seems to be caused by your changes, please fix it.
+> > I'm assuming  that we are not going to see a fix for this regression before 6.2 is released.
+>
+> Yeah, looks like it. That's unfortunate, but happens. But there is still
+> time to fix it and there is one thing I wonder:
+>
+> Did any of the nouveau developers look at the netconsole captures Chris
+> posted more than a week ago to check if they somehow help to track down
+> the root of this problem?
+>
 
+I did now and I can't spot anything. I think at this point it would
+make sense to dump the active tasks/threads via sqsrq keys to see if
+any is in a weird state preventing the machine from shutting down.
 
-this is supposed to be fixed in v2.
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> If I did something stupid, please tell me, as explained on that page.
+>
+> > Consequently, I've
+> > implemented a (very simple) workaround. All that happens is that in the (sysv) init script that starts and stops SDDM,
+> > the nouveau module is removed once SDDM is stopped. With that in place, my system no longer freezes on reboot or poweroff.
+> >
+> > Let me know if I can provide any additional diagnostics although, with the problem seemingly occurring so late in the
+> > shutdown process, I may need help on how to go about capturing.
+> >
+> > Chris
+> >
+> > On 02/02/2023 20:45, Chris Clayton wrote:
+> >>
+> >>
+> >> On 01/02/2023 13:51, Chris Clayton wrote:
+> >>>
+> >>>
+> >>> On 30/01/2023 23:27, Ben Skeggs wrote:
+> >>>> On Tue, 31 Jan 2023 at 09:09, Chris Clayton <chris2553@googlemail.com> wrote:
+> >>>>>
+> >>>>> Hi again.
+> >>>>>
+> >>>>> On 30/01/2023 20:19, Chris Clayton wrote:
+> >>>>>> Thanks, Ben.
+> >>>>>
+> >>>>> <snip>
+> >>>>>
+> >>>>>>> Hey,
+> >>>>>>>
+> >>>>>>> This is a complete shot-in-the-dark, as I don't see this behaviour on
+> >>>>>>> *any* of my boards.  Could you try the attached patch please?
+> >>>>>>
+> >>>>>> Unfortunately, the patch made no difference.
+> >>>>>>
+> >>>>>> I've been looking at how the graphics on my laptop is set up, and have a bit of a worry about whether the firmware might
+> >>>>>> be playing a part in this problem. In order to offload video decoding to the NVidia TU117 GPU, it seems the scrubber
+> >>>>>> firmware must be available, but as far as I know,that has not been released by NVidia. To get it to work, I followed
+> >>>>>> what ubuntu have done and the scrubber in /lib/firmware/nvidia/tu117/nvdec/ is a symlink to
+> >>>>>> ../../tu116/nvdev/scrubber.bin. That, of course, means that some of the firmware loaded is for a different card is being
+> >>>>>> loaded. I note that processing related to firmware is being changed in the patch. Might my set up be at the root of my
+> >>>>>> problem?
+> >>>>>>
+> >>>>>> I'll have a fiddle an see what I can work out.
+> >>>>>>
+> >>>>>> Chris
+> >>>>>>
+> >>>>>>>
+> >>>>>>> Thanks,
+> >>>>>>> Ben.
+> >>>>>>>
+> >>>>>>>>
+> >>>>>
+> >>>>> Well, my fiddling has got my system rebooting and shutting down successfully again. I found that if I delete the symlink
+> >>>>> to the scrubber firmware, reboot and shutdown work again. There are however, a number of other files in the tu117
+> >>>>> firmware directory tree that that are symlinks to actual files in its tu116 counterpart. So I deleted all of those too.
+> >>>>> Unfortunately, the absence of one or more of those symlinks causes Xorg to fail to start. I've reinstated all the links
+> >>>>> except scrubber and I now have a system that works as it did until I tried to run a kernel that includes the bad commit
+> >>>>> I identified in my bisection. That includes offloading video decoding to the NVidia card, so what ever I read that said
+> >>>>> the scrubber firmware was needed seems to have been wrong. I get a new message that (nouveau 0000:01:00.0: fb: VPR
+> >>>>> locked, but no scrubber binary!), but, hey, we can't have everything.
+> >>>>>
+> >>>>> If you still want to get to the bottom of this, let me know what you need me to provide and I'll do my best. I suspect
+> >>>>> you might want to because there will a n awful lot of Ubuntu-based systems out there with that scrubber.bin symlink in
+> >>>>> place. On the other hand,m it could but quite a while before ubuntu are deploying 6.2 or later kernels.
+> >>>> The symlinks are correct - whole groups of GPUs share the same FW, and
+> >>>> we use symlinks in linux-firmware to represent this.
+> >>>>
+> >>>> I don't really have any ideas how/why this patch causes issues with
+> >>>> shutdown - it's a path that only gets executed during initialisation.
+> >>>> Can you try and capture the kernel log during shutdown ("dmesg -w"
+> >>>> over ssh? netconsole?), and see if there's any relevant messages
+> >>>> providing a hint at what's going on?  Alternatively, you could try
+> >>>> unloading the module (you will have to stop X/wayland/gdm/etc/etc
+> >>>> first) and seeing if that hangs too.
+> >>>>
+> >>>> Ben.
+> >>>
+> >>> Sorry for the delay - I've been learning about netconsole and netcat. However, I had no success with ssh and netconsole
+> >>> produced a log with nothing unusual in it.
+> >>>
+> >>> Simply stopping Xorg and removing the nouveau module succeeds.
+> >>>
+> >>> So, I rebuilt rc6+ after a pull from linus' tree this morning and set the nouveau debug level to 7. I then booted to a
+> >>> console before doing a reboot (with Ctl+Alt+Del). As expected the machine locked up just before it would ordinarily
+> >>> restart. The last few lines on the console might be helpful:
+> >>>
+> >>> ...
+> >>> nouveau 0000:01:00:0  fifo: preinit running...
+> >>> nouveau 0000:01:00:0  fifo: preinit completed in 4us
+> >>> nouveau 0000:01:00:0  gr: preinit running...
+> >>> nouveau 0000:01:00:0  gr: preinit completed in 0us
+> >>> nouveau 0000:01:00:0  nvdec0: preinit running...
+> >>> nouveau 0000:01:00:0  nvdec0: preinit completed in 0us
+> >>> nouveau 0000:01:00:0  nvdec0: preinit running...
+> >>> nouveau 0000:01:00:0  nvdec0: preinit completed in 0us
+> >>> nouveau 0000:01:00:0  sec2: preinit running...
+> >>> nouveau 0000:01:00:0  sec2: preinit completed in 0us
+> >>> nouveau 0000:01:00:0  fb:.VPR locked, running scrubber binary
+> >>>
+> >>> These messages appear after the "sd 4:0:0:0 [sda] Stopping disk" I reported in my initial email.
+> >>>
+> >>> After the "running scrubber" line appears the machine is locked and I have to hold down the power button to recover. I
+> >>> get the same outcome from running "halt -dip", "poweroff -di" and "shutdown -h -P now". I guess it's no surprise that
+> >>> all three result in the same outcome because invocations halt, poweroff and reboot (without the -f argument)from a
+> >>> runlevel other than 0 resukt in shutdown being run. switching to runlevel 0 with "telenit 0" results in the same
+> >>> messages from nouveau followed by the lockup.
+> >>>
+> >>> Let me know if you need any additional diagnostics.
+> >>>
+> >>> Chris
+> >>>
+> >>
+> >> I've done some more investigation and found that I hadn't done sufficient amemdment the scripts run at shutdown to
+> >> prevent the network being shutdown. I've now got netconsole captures for 6.2.0-rc6+
+> >> (9f266ccaa2f5228bfe67ad58a94ca4e0109b954a) and, for comparison, 6.1.9. These two logs are attached.
+> >>
+> >> Chris
+> >>
+> >>>>
+> >>>>>
+> >>>>> Thanks,
+> >>>>>
+> >>>>> Chris
+> >>>>>
+> >>>>> <snip>
+> >
+> >
+>
 
