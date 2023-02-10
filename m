@@ -2,90 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D356921B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:13:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CF06921BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:14:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232057AbjBJPNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 10:13:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
+        id S232007AbjBJPOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 10:14:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232462AbjBJPNg (ORCPT
+        with ESMTP id S232372AbjBJPO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 10:13:36 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1174F60B89
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:13:35 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id bu23so5367866wrb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:13:34 -0800 (PST)
+        Fri, 10 Feb 2023 10:14:27 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD8B47EFA
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:14:24 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id k8-20020a05600c1c8800b003dc57ea0dfeso6538793wms.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:14:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WIBKwdpMrpMvAU3dHz5Us90PL8NGmQBL8Vt76hdqTzo=;
-        b=XqfCRC0HuDy1nUS+Y8/8F2UBcId7Pw2oC8kP8R8DAi6nszdnjk/5WWgAXGtbDcAIR0
-         BXxkL7mMT72zgwaJT0dn2uhqgKzi3fPeDJIiJIPjxWKwbUGvm6j7eRkxjN4bDEU6PyMI
-         XhMuCi2J9y/hWMS1GLGa8MHtOpnnnjmZCmB+Kqst7BLtjcR+bry9mKzHJXtDId7i3Jw8
-         W/bpaGwjbHEkqjdrdhc2pz9XyjLSuGtKGshXv3Ez0dhyE+U43YRBywQlLafUbNv/v3hY
-         c10Cz17gFH8ciLZmqEZwvAR2U4v+0jUL03N9+l5d7SQMOe0z+68mYmUs5uxpW9AlAwKQ
-         wRAQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z9lQ8uRKJ4zCzCOi0nvl4MdqLTZxWppuqi+n32H1GYQ=;
+        b=hj+QMza7DNox+OyZeLzPOOElr4SfHk8jgodB8hWRJ6+a8D8Eh6Xvi77s88yqWbBi3W
+         n7WdDWWT9O+csAALJl9qRSBRtxZ8IaNIiFnKHrZXgp9aN4K2DQ+nfe1s+SGQFy+duAKg
+         YspdHEwrU+C0OGIFrnwqSoLvsuAp7iwJ6wL/w3X97iH+zN13FzijZ6R6AWsQKIdVuPTQ
+         KCepheNg2tciPuxLQOoTBPul0SCSlvNFCGA2/nxm5Zh0vYhOidGQpOWLhzMKPt2XX0p9
+         tB8FVhSgfrmWDvRPk9eQ3VAD9dVnfxAupV/e3ChK6k9L0F98lR6862aeCr6ffrFshILP
+         A3zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WIBKwdpMrpMvAU3dHz5Us90PL8NGmQBL8Vt76hdqTzo=;
-        b=sZcgKFHNJTo7MgPIRj/yVph0MrgAAbML6Dk1ScP4ehEQa13Pdu4Cw63i3KiKgdMyEe
-         AHiJjWD8WasNyICprnxnrPcJ3KYkXca9h5KJtlS5S0GBNoOpU0DYbimKCqpAHFfsonYR
-         u4frKbo3jQuhE2COCAX3NL5Z5lz557lhhupGn1ni4ZQfwYtOpVZ31TzpYpL8E9B3OWUx
-         0SQuEH+3KDYSSLOLCMfV9d7dwwheTIhR5KaBTF0oclxgjKrnSgdxnHOSdEMP+eCpL+Ta
-         dAxTKZlqbEjk1+C96ogoFNpS+E5OrZpA0CsADcPjJ6eV+SHmcz1F+2Smx7TzEZLxJ+lP
-         5qMw==
-X-Gm-Message-State: AO0yUKXYVLTC2LZF3hYeMbt3mo75YDBcUz9hl7v1ZKxv+an+N/lEAFpM
-        cIDNFtpSv3xiE99CkR88N9kbvjHXbIAPd06XtNTYw73uGEt6PsrP
-X-Google-Smtp-Source: AK7set9SDzPWVVe4cj9dUHsYRe1cEQ8jSGR1CMOIh7XUqYoqZbfWISR41pkYw7cDbGn17A0nO4wT4xh8ALFpK8YCQyI=
-X-Received: by 2002:adf:dcc3:0:b0:2c3:ea92:3491 with SMTP id
- x3-20020adfdcc3000000b002c3ea923491mr473436wrm.477.1676042013418; Fri, 10 Feb
- 2023 07:13:33 -0800 (PST)
+        bh=Z9lQ8uRKJ4zCzCOi0nvl4MdqLTZxWppuqi+n32H1GYQ=;
+        b=3aWRakct6fnUQDbly5orLgaOR2sNhI9aRBJgWJ4uCjTX/Io8beQ7yW2QlNSEO0pNL+
+         PgcVu9KYPalyNfhbsrqpSu3Zc6xYbStDAayGOx1pV5++Tsh0MPzVeYZfhyZhUlMobbMv
+         zSCdrhH975swZWehCylXDRae6ceBgU/69fG3G/U/lfB7bg9K9x8+UOMURZRf1b+E7y9e
+         tinJPtukee3udy+jYzpLYuosIA6w1qUH59m+/yRHr1/ZGxhXRuGcK6VgaCasA3ct99wP
+         5dBDz5Gmsi6V4aBVkasj9+kbkVhRmPbtJ5QUg6edr2B69791srC/pGpIAMPp/+4YjcyU
+         e0tQ==
+X-Gm-Message-State: AO0yUKVXuuOMP/OH3Lne2EXWfrWQeZrodDN5pmww6CrEJVUSxELBwvGi
+        lS5pRzqObjfEOoj8thodsAJtFw==
+X-Google-Smtp-Source: AK7set8V+rKzNRUCEWjmI4sIj9cMaVcPbkVCCfL/z2U9yBJmXJS4axHG6YC1utnnaC8o5nwW8NpjJg==
+X-Received: by 2002:a05:600c:18a6:b0:3e0:e77:3056 with SMTP id x38-20020a05600c18a600b003e00e773056mr13187148wmp.30.1676042062768;
+        Fri, 10 Feb 2023 07:14:22 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:5a65:5553:55cf:3027? ([2a01:e0a:982:cbb0:5a65:5553:55cf:3027])
+        by smtp.gmail.com with ESMTPSA id j37-20020a05600c1c2500b003daf6e3bc2fsm13887109wms.1.2023.02.10.07.14.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 07:14:21 -0800 (PST)
+Message-ID: <3184693a-93c2-6c86-d960-a578e8486e89@linaro.org>
+Date:   Fri, 10 Feb 2023 16:14:21 +0100
 MIME-Version: 1.0
-References: <20230210123644.489-1-svc.sw.rte.linux@sma.de>
-In-Reply-To: <20230210123644.489-1-svc.sw.rte.linux@sma.de>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 10 Feb 2023 16:13:21 +0100
-Message-ID: <CANn89i+v06zKLoMEP-cVzhZsm8mEs+q2eWeSDMCgQ9Q=OSznDQ@mail.gmail.com>
-Subject: Re: [PATCH] net: Fix unwanted sign extension in netdev_stats_to_stats64()
-To:     Felix Riemann <felix.riemann@sma.de>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 1/3] arm64: dts: meson: gxbb-kii-pro: sort and tidy the
+ dts
+Content-Language: en-US
+To:     Christian Hewitt <christianshewitt@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Ferass El Hafidi <vitali64pmemail@protonmail.com>
+References: <20230210122817.1027765-1-christianshewitt@gmail.com>
+ <20230210122817.1027765-2-christianshewitt@gmail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20230210122817.1027765-2-christianshewitt@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 1:37 PM Felix Riemann <svc.sw.rte.linux@sma.de> wrote:
->
-> From: Felix Riemann <felix.riemann@sma.de>
->
-> When converting net_device_stats to rtnl_link_stats64 sign extension
-> is triggered on ILP32 machines as 6c1c509778 changed the previous
-> "ulong -> u64" conversion to "long -> u64" by accessing the
-> net_device_stats fields through a (signed) atomic_long_t.
->
-> This causes for example the received bytes counter to jump to 16EiB after
-> having received 2^31 bytes. Casting the atomic value to "unsigned long"
-> beforehand converting it into u64 avoids this.
->
-> Fixes: 6c1c5097781f ("net: add atomic_long_t to net_device_stats fields")
-> Signed-off-by: Felix Riemann <felix.riemann@sma.de>
+On 10/02/2023 13:28, Christian Hewitt wrote:
+> Alpha-sort the nodes, move the default line in the LED node to where it's
+> normally found, and remove excess spacing. No functional changes.
+> 
+> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+> Tested-by: Ferass El Hafidi <vitali64pmemail@protonmail.com>
 > ---
+>   .../boot/dts/amlogic/meson-gxbb-kii-pro.dts   | 32 ++++++++-----------
+>   1 file changed, 14 insertions(+), 18 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dts b/arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dts
+> index 6d8cc00fedc7..9bfdb54d912a 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dts
+> @@ -6,21 +6,22 @@
+>   /dts-v1/;
+>   
+>   #include "meson-gxbb-p20x.dtsi"
+> -
+>   #include <dt-bindings/gpio/gpio.h>
+>   #include <dt-bindings/input/input.h>
+>   #include <dt-bindings/leds/common.h>
+> +
+>   / {
+>   	compatible = "videostrong,kii-pro", "amlogic,meson-gxbb";
+>   	model = "Videostrong KII Pro";
+>   
+>   	leds {
+>   		compatible = "gpio-leds";
+> +
+>   		status {
+>   			gpios = <&gpio_ao GPIOAO_13 GPIO_ACTIVE_LOW>;
+> -			default-state = "off";
+>   			color = <LED_COLOR_ID_RED>;
+>   			function = LED_FUNCTION_STATUS;
+> +			default-state = "off";
+>   		};
+>   	};
+>   
+> @@ -34,24 +35,8 @@ button-reset {
+>   			gpios = <&gpio_ao GPIOAO_3 GPIO_ACTIVE_HIGH>;
+>   		};
+>   	};
+> -
+> -};
+> -
+> -
+> -
+> -&uart_A {
+> -	status = "okay";
+> -	pinctrl-0 = <&uart_a_pins>, <&uart_a_cts_rts_pins>;
+> -	pinctrl-names = "default";
+> -	uart-has-rtscts;
+> -
+> -	bluetooth {
+> -		compatible = "brcm,bcm4335a0";
+> -	};
+>   };
+>   
+> -
+> -
+>   &ethmac {
+>   	status = "okay";
+>   	pinctrl-0 = <&eth_rmii_pins>;
+> @@ -78,3 +63,14 @@ eth_phy0: ethernet-phy@0 {
+>   &ir {
+>   	linux,rc-map-name = "rc-videostrong-kii-pro";
+>   };
+> +
+> +&uart_A {
+> +	status = "okay";
+> +	pinctrl-0 = <&uart_a_pins>, <&uart_a_cts_rts_pins>;
+> +	pinctrl-names = "default";
+> +	uart-has-rtscts;
+> +
+> +	bluetooth {
+> +		compatible = "brcm,bcm4335a0";
+> +	};
+> +};
 
-Thanks for the fix.
-
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
