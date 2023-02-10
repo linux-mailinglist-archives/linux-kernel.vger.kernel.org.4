@@ -2,130 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E08691602
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 02:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCCC691607
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 02:05:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjBJBAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 20:00:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
+        id S230294AbjBJBFx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Feb 2023 20:05:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbjBJBAc (ORCPT
+        with ESMTP id S230124AbjBJBFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 20:00:32 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8BA16AC6;
-        Thu,  9 Feb 2023 17:00:29 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PCb4l2mRzz4xwt;
-        Fri, 10 Feb 2023 12:00:22 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675990823;
-        bh=apcxmBNwKmYRtLpVjAX9XJoi1QUIpCrqIm6SUAMyNz4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=grIyxIjVp+hPtT/GIcFS7AmVbUImlghiinEh0vBjfnw8Asu/NYdcAhJKvEmoj1BWd
-         07NwPXgj1i+6qVEvcCc7BmA44bo/7nNu3bShST+uO04JkOfJ/Z4Ksrvv4nRyIOe0P6
-         n4K0lAfVVMCVIpjB3ZYd0Ifsd0ysybyUBtLit69g5SzMz24eu1lLmFZP98bh8OVwv/
-         1cCIherCRJS+a61lqmNATunsR4g0xprrjEscWDed1iNlQZ1MOREaTadxKpmoI3vH6O
-         L4rWNWgn7VWAXKzd9TdgEAC5/I/6HuXoyYECwBQ33kGzFMZOhsPacM8V83eB+qcknC
-         HiH92Kc3dn4SQ==
-Date:   Fri, 10 Feb 2023 12:00:21 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the tip tree with the s390 tree
-Message-ID: <20230210120021.4a507539@canb.auug.org.au>
+        Thu, 9 Feb 2023 20:05:49 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813AD5CBF0;
+        Thu,  9 Feb 2023 17:05:47 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id DA45C24E214;
+        Fri, 10 Feb 2023 09:05:37 +0800 (CST)
+Received: from EXMBX065.cuchost.com (172.16.6.65) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Feb
+ 2023 09:05:35 +0800
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX065.cuchost.com
+ (172.16.6.65) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 10 Feb
+ 2023 09:05:35 +0800
+Received: from EXMBX168.cuchost.com ([fe80::3c2d:dee5:4938:3fc4]) by
+ EXMBX168.cuchost.com ([fe80::3c2d:dee5:4938:3fc4%16]) with mapi id
+ 15.00.1497.044; Fri, 10 Feb 2023 09:05:35 +0800
+From:   JiaJie Ho <jiajie.ho@starfivetech.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+Subject: RE: [PATCH v2 4/4] crypto: starfive - Add hash and HMAC support
+Thread-Topic: [PATCH v2 4/4] crypto: starfive - Add hash and HMAC support
+Thread-Index: AQHZNMIM/vLXVq3JgUiER7vBRC/T367F3jsAgACIQGD//3/YAIABh3JA
+Date:   Fri, 10 Feb 2023 01:05:35 +0000
+Message-ID: <40ea0c9789b840e6a51ea799fa8da9e6@EXMBX168.cuchost.com>
+References: <20230130154242.112613-1-jiajie.ho@starfivetech.com>
+ <20230130154242.112613-5-jiajie.ho@starfivetech.com>
+ <Y+S5fBjZQZli9nBg@gondor.apana.org.au>
+ <88a62a7a11814d629e2198583a0349b6@EXMBX168.cuchost.com>
+ <Y+TARjfzt2FMG6oJ@gondor.apana.org.au>
+In-Reply-To: <Y+TARjfzt2FMG6oJ@gondor.apana.org.au>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [202.190.105.77]
+x-yovoleruleagent: yovoleflag
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/tRkWBryw165Mp+T9ZJ=IBr4";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/tRkWBryw165Mp+T9ZJ=IBr4
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the tip tree got a conflict in:
+> -----Original Message-----
+> From: Herbert Xu <herbert@gondor.apana.org.au>
+> Sent: 9 February, 2023 5:44 PM
+> To: JiaJie Ho <jiajie.ho@starfivetech.com>
+> Cc: David S . Miller <davem@davemloft.net>; Rob Herring
+> <robh+dt@kernel.org>; Krzysztof Kozlowski
+> <krzysztof.kozlowski+dt@linaro.org>; Emil Renner Berthing
+> <kernel@esmil.dk>; Conor Dooley <conor.dooley@microchip.com>; linux-
+> crypto@vger.kernel.org; devicetree@vger.kernel.org; linux-
+> kernel@vger.kernel.org; linux-riscv@lists.infradead.org
+> Subject: Re: [PATCH v2 4/4] crypto: starfive - Add hash and HMAC support
+> 
+> On Thu, Feb 09, 2023 at 09:33:06AM +0000, JiaJie Ho wrote:
+> >
+> > The DMA can only support 32-bit addressing.
+> > So, I am copying everything in case kernel allocated memory region >32-bit
+> for a user app.
+> 
+> Does your hardware support scatter-and-gather? If so you should at least
+> allocate individual pages rather than one contiguous buffer.
+> 
+> Then you can allocate them on-demand rather than before-hand.
+> 
+> It would also be nice to not do the copy if the input you were given was in
+> low memory (and contiguous if your hardware doesn't do SG).
+> 
 
-  arch/s390/kernel/idle.c
+I'll try this then.
 
-between commit:
-
-  c01016299dc7 ("s390/idle: move idle time accounting to account_idle_time_=
-irq()")
-
-from the s390 tree and commit:
-
-  89b3098703bd ("arch/idle: Change arch_cpu_idle() behavior: always exit wi=
-th IRQs disabled")
-
-from the tip tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/s390/kernel/idle.c
-index dd8351e76539,b04fb418307c..000000000000
---- a/arch/s390/kernel/idle.c
-+++ b/arch/s390/kernel/idle.c
-@@@ -61,7 -57,15 +61,6 @@@ void noinstr arch_cpu_idle(void
- =20
-  	/* psw_idle() returns with interrupts disabled. */
-  	psw_idle(idle, psw_mask);
-- 	raw_local_irq_enable();
- -
- -	/* Account time spent with enabled wait psw loaded as idle time. */
- -	raw_write_seqcount_begin(&idle->seqcount);
- -	idle_time =3D idle->clock_idle_exit - idle->clock_idle_enter;
- -	idle->clock_idle_enter =3D idle->clock_idle_exit =3D 0ULL;
- -	idle->idle_time +=3D idle_time;
- -	idle->idle_count++;
- -	account_idle_time(cputime_to_nsecs(idle_time));
- -	raw_write_seqcount_end(&idle->seqcount);
-  }
- =20
-  static ssize_t show_idle_count(struct device *dev,
-
---Sig_/tRkWBryw165Mp+T9ZJ=IBr4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPllyYACgkQAVBC80lX
-0GwccAgAjaVfw+h1ycQnThb43tEHMB2OGSMUNxs0NqexI3HslDaXxx/u1Hgp2fVq
-usdIRBW5AS8u1flYl/e/xA3JaNq3Q0gVgS/uzFCJ80KomUXGm2/H+gBcANNmlA0s
-ND3GL72ANEytUgTu6BitN4BHA7c93cvovWvv1ezkrFkFCNUnQv7svO2vsTY2B0U9
-iD/YpVmxKTtOneU2rY0PSVcoUal15fzfNOv9qPoH/jpnOeg8QNpTMzqZPO/U251O
-K9pLpHhv2+koOVSswqck+JTHi87gJkdx9MQZeVjOACtzdIL9r74iOdFI0vskIV2X
-EAv4+tEuMpyV18itd6TTlJIb10JGHw==
-=sGRN
------END PGP SIGNATURE-----
-
---Sig_/tRkWBryw165Mp+T9ZJ=IBr4--
+Thanks,
+Jia Jie
