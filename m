@@ -2,112 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5055169286F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 21:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 464FC692872
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 21:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233624AbjBJUhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 15:37:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39688 "EHLO
+        id S233670AbjBJUhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 15:37:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232810AbjBJUhV (ORCPT
+        with ESMTP id S232810AbjBJUhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 15:37:21 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281605A9DA
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 12:37:19 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id m8so5785891edd.10
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 12:37:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=V5hbvtyrVhBU5KLvd4luM4pmIGBHWSgPPjkAzLVdXdc=;
-        b=XJVb1xKfBvelCl8Xuh4Bkq319Cx2dxwUHidMnSfKqGDU/b9SmTwk9u5Vp4ORhPDBNt
-         uLp+1raScNofpejxVBGtMzdmvBtnEGPM6qvYjZcLw/dIFGbo6cMI3yaedOJppVXrhg5I
-         8ihrf6+ZhqT/79pvdvMQsBrrZs8E6lxb26z2c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=V5hbvtyrVhBU5KLvd4luM4pmIGBHWSgPPjkAzLVdXdc=;
-        b=2DiAboz8k2ukquEkP8Rq8LKpVpx+fJ0PBqIfCTNbYktql5o7T/Ot09RmBSH9X+Iete
-         AybpFD9UPIivIfzHvSAi6AfJQL5AnjKigZu9RFEc5NB5mzT7SkHS+nQJTIFin7KMYVH/
-         jyvEwgQF/mjFbZbMH/NMAewqOi+BJ4oStqa75vUEB3zZZtDxt5BlrjorYaBA8qxnBK7P
-         kwTzk37BRs0lnZWPWo5GpyD7EFZrmE5cM/trGlqKMLbuP/GTLpMk68yeEuSldQH0uXuV
-         nwUyhBDm4zCnwyUnph5k8z2aLFoiQBsnmS39uIwxdyouEUf9muCm8DyR2GyYYSuIGdF9
-         /DCw==
-X-Gm-Message-State: AO0yUKXmb3kV/MsTL6qOQKCVtfOIRBLsmeqaX4NTpUpT/2NdugfDq1DG
-        ay+hLtyGk3iZKLJILOOEGIX7acvCjixkXuioVRk=
-X-Google-Smtp-Source: AK7set8pvN+TceajZzPXIvmQCmL4orI/QOdaTMtJTM5lcFTKGr9Ov4smMDXxQjABvEhkFHOoTYdekQ==
-X-Received: by 2002:a50:c04d:0:b0:4ab:100e:1653 with SMTP id u13-20020a50c04d000000b004ab100e1653mr11087099edd.15.1676061437223;
-        Fri, 10 Feb 2023 12:37:17 -0800 (PST)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
-        by smtp.gmail.com with ESMTPSA id v15-20020a50954f000000b0049e9e9204basm2767656eda.21.2023.02.10.12.37.16
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 12:37:16 -0800 (PST)
-Received: by mail-ej1-f53.google.com with SMTP id qb15so16810834ejc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 12:37:16 -0800 (PST)
-X-Received: by 2002:a17:906:f749:b0:8af:2ad9:9a1d with SMTP id
- jp9-20020a170906f74900b008af2ad99a1dmr1552969ejb.0.1676061435878; Fri, 10 Feb
- 2023 12:37:15 -0800 (PST)
+        Fri, 10 Feb 2023 15:37:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D405A90E;
+        Fri, 10 Feb 2023 12:37:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E9BC61E9C;
+        Fri, 10 Feb 2023 20:37:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 275F4C433EF;
+        Fri, 10 Feb 2023 20:37:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676061459;
+        bh=kQcgBSgO4Pqd5pDJgSZbOuSbBKNIGIndQLymWgAO8R8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qHjTKPxAdg1gmrYBi4vhRVNACilMQYwGyPPMLgVNF9QeXdfp4VOIUZaZZrXsqkh5q
+         YKzI3XvYrdiWDuCB49ASSxVcvcenNUDPwACZ5fjgsiAI3qUXc2LTvmbUszU7b/5nf9
+         /I72vAB2w5WOrvOWEddhvDlBydvYelP4/KeOS+HmfEC0xb9UXdb7EUrLmGSgV1Xelw
+         LjGIxuJQDUZkmNGoaTj56V8Mv2B0dYaNTUYiEwNSb96XKoUojzwgQky60l8aiIUFYP
+         WMhYtzdgF+6Q21nLPxlDE8YsL2Xeu7TgbEEiF63wPtPaR3qIpCgrjuCKHZg+wQd2qP
+         3jqVLhF34VIhA==
+Date:   Fri, 10 Feb 2023 20:37:34 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Trevor Woerner <twoerner@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v3 2/2] riscv: dts: nezha-d1: add gpio-line-names
+Message-ID: <Y+arDr+XTp85CDRc@spud>
+References: <20230210025132.36605-1-twoerner@gmail.com>
+ <20230210025132.36605-2-twoerner@gmail.com>
 MIME-Version: 1.0
-References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
- <CAHk-=wj8rthcQ9gQbvkMzeFt0iymq+CuOzmidx3Pm29Lg+W0gg@mail.gmail.com>
- <20230210021603.GA2825702@dread.disaster.area> <20230210040626.GB2825702@dread.disaster.area>
- <Y+XLuYh+kC+4wTRi@casper.infradead.org> <20230210065747.GD2825702@dread.disaster.area>
- <CALCETrWjJisipSJA7tPu+h6B2gs3m+g0yPhZ4z+Atod+WOMkZg@mail.gmail.com>
- <CAHk-=wj66F6CdJUAAjqigXMBy7gHquFMzPNAwKCgkrb2mF6U7w@mail.gmail.com>
- <CALCETrU-9Wcb_zCsVWr24V=uCA0+c6x359UkJBOBgkbq+UHAMA@mail.gmail.com>
- <CAHk-=wjQZWMeQ9OgXDNepf+TLijqj0Lm0dXWwWzDcbz6o7yy_g@mail.gmail.com>
- <CALCETrWuRHWh5XFn8M8qx5z0FXAGHH=ysb+c6J+cqbYyTAHvhw@mail.gmail.com>
- <CAHk-=wjuXvF1cA=gJod=-6k4ypbEmOczFFDKriUpOVKy9dTJWQ@mail.gmail.com>
- <CALCETrUXYts5BRZKb25MVaWPk2mz34fKSqCR++SM382kSYLnJw@mail.gmail.com>
- <CAHk-=wgA=rB=7M_Fe3n9UkoW_7dqdUT2D=yb94=6GiGXEuAHDA@mail.gmail.com> <1dd85095-c18c-ed3e-38b7-02f4d13d9bd6@kernel.dk>
-In-Reply-To: <1dd85095-c18c-ed3e-38b7-02f4d13d9bd6@kernel.dk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 10 Feb 2023 12:36:58 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiszt6btMPeT5UFcS=0=EVr=0injTR75KsvN8WetwQwkA@mail.gmail.com>
-Message-ID: <CAHk-=wiszt6btMPeT5UFcS=0=EVr=0injTR75KsvN8WetwQwkA@mail.gmail.com>
-Subject: Re: copy on write for splice() from file to pipe?
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Stefan Metzmacher <metze@samba.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API Mailing List <linux-api@vger.kernel.org>,
-        io-uring <io-uring@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Samba Technical <samba-technical@lists.samba.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="hZ8ik5mZsnIy+h/o"
+Content-Disposition: inline
+In-Reply-To: <20230210025132.36605-2-twoerner@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 12:32 PM Jens Axboe <axboe@kernel.dk> wrote:
->
-> No, we very much do have that for io_uring zerocopy sends, which was in
-> the bit below you snipped from the reply. It'll tell you when data has
-> been sent out, and when the data has been acked.
 
-Hmm. splice() itself definitely doesn't have that data - there's no
-"io context" for it.
+--hZ8ik5mZsnIy+h/o
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-There is only the pipe buffers, and they are released when the data
-has been accepted - which is not the same as used (eg the networking
-layer just takes another ref to the page and says "I'm done").
+Hey Trevor,
 
-Maybe adding some io context to the pipe buffer would be possible, but
-it's certainly not obvious how, without changing splice() semantics
-completely.
+Just one thing about process sorta stuff, ordinarily a new version is
+not posted as a reply to the last one.
+If you look on lore, you'll see it looks a bit odd:
+https://lore.kernel.org/all/20230210025132.36605-2-twoerner@gmail.com/
+(scroll to "thread overview")
 
-             Linus
+Tooling may/may not do the right thing w.r.t. testing/application of
+the patches as a result.
+
+On Thu, Feb 09, 2023 at 09:51:32PM -0500, Trevor Woerner wrote:
+> Add descriptive names so users can associate specific lines with their
+> respective pins on the 40-pin header according to the schematics.
+>=20
+> Signed-off-by: Trevor Woerner <twoerner@gmail.com>
+
+Comment looks nice & there are no more warnings from dtbs_check :)
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
+> Link: http://dl.linux-sunxi.org/D1/D1_Nezha_development_board_schematic_d=
+iagram_20210224.pdf
+> ---
+> changes since v2:
+> - (no changes, skip to a v3 to align with the other patch in this group)
+>=20
+> changes since v1:
+> - this patch needs to be placed in order, and come second, after a patch =
+to
+>   update the schema for the nxp,pcf8575, put this patch in a group where =
+it
+>   wasn't previously
+> - use a Link: to point to the schematic
+> - add a comment section describing the rational behind the naming that was
+>   used
+> - make the spacing of each line name uniform, don't try to "line them up"
+>   vertically
+> ---
+>  .../boot/dts/allwinner/sun20i-d1-nezha.dts    | 72 +++++++++++++++++++
+>  1 file changed, 72 insertions(+)
+>=20
+> diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts b/arch/ris=
+cv/boot/dts/allwinner/sun20i-d1-nezha.dts
+> index a0769185be97..4ed33c1e7c9c 100644
+> --- a/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
+> +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
+> @@ -1,6 +1,25 @@
+>  // SPDX-License-Identifier: (GPL-2.0+ or MIT)
+>  // Copyright (C) 2021-2022 Samuel Holland <samuel@sholland.org>
+> =20
+> +/*
+> + * gpio line names
+> + *
+> + * The Nezha-D1 has a 40-pin IO header. Some of these pins are routed
+> + * directly to pads on the SoC, others come from an 8-bit pcf857x IO
+> + * expander. Therefore, these line names are specified in two places:
+> + * one set for the pcf857x, and one set for the pio controller.
+> + *
+> + * Lines which are routed to the 40-pin header are named as follows:
+> + *	<pin#> [<pin name>]
+> + * where:
+> + *	<pin#>		is the actual pin number of the 40-pin header
+> + *	<pin name>	is the name of the pin by function/gpio#
+> + *
+> + * For details regarding pin numbers and names see the schematics (under
+> + * "IO EXPAND"):
+> + * http://dl.linux-sunxi.org/D1/D1_Nezha_development_board_schematic_dia=
+gram_20210224.pdf
+> + */
+> +
+>  #include <dt-bindings/gpio/gpio.h>
+>  #include <dt-bindings/input/input.h>
+> =20
+> @@ -90,6 +109,15 @@ pcf8574a: gpio@38 {
+>  		gpio-controller;
+>  		#gpio-cells =3D <2>;
+>  		#interrupt-cells =3D <2>;
+> +		gpio-line-names =3D
+> +			"pin13 [gpio8]",
+> +			"pin16 [gpio10]",
+> +			"pin18 [gpio11]",
+> +			"pin26 [gpio17]",
+> +			"pin22 [gpio14]",
+> +			"pin28 [gpio19]",
+> +			"pin37 [gpio23]",
+> +			"pin11 [gpio6]";
+>  	};
+>  };
+> =20
+> @@ -164,3 +192,47 @@ &usbphy {
+>  	usb1_vbus-supply =3D <&reg_vcc>;
+>  	status =3D "okay";
+>  };
+> +
+> +&pio {
+> +	gpio-line-names =3D
+> +		/* Port A */
+> +		"", "", "", "", "", "", "", "",
+> +		"", "", "", "", "", "", "", "",
+> +		"", "", "", "", "", "", "", "",
+> +		"", "", "", "", "", "", "", "",
+> +		/* Port B */
+> +		"pin5 [gpio2/twi2-sck]",
+> +		"pin3 [gpio1/twi2-sda]",
+> +		"",
+> +		"pin38 [gpio24/i2s2-din]",
+> +		"pin40 [gpio25/i2s2-dout]",
+> +		"pin12 [gpio7/i2s-clk]",
+> +		"pin35 [gpio22/i2s2-lrck]",
+> +		"",
+> +		"pin8 [gpio4/uart0-txd]",
+> +		"pin10 [gpio5/uart0-rxd]",
+> +		"",
+> +		"",
+> +		"pin15 [gpio9]",
+> +		"", "", "", "",
+> +		"", "", "", "", "", "", "", "",
+> +		"", "", "", "", "", "", "", "",
+> +		/* Port C */
+> +		"",
+> +		"pin31 [gpio21]",
+> +		"", "", "", "", "", "",
+> +		"", "", "", "", "", "", "", "",
+> +		"", "", "", "", "", "", "", "",
+> +		"", "", "", "", "", "", "", "",
+> +		/* Port D */
+> +		"", "", "", "", "", "", "", "",
+> +		"", "",
+> +		"pin24 [gpio16/spi1-ce0]",
+> +		"pin23 [gpio15/spi1-clk]",
+> +		"pin19 [gpio12/spi1-mosi]",
+> +		"pin21 [gpio13/spi1-miso]",
+> +		"pin27 [gpio18/spi1-hold]",
+> +		"pin29 [gpio20/spi1-wp]",
+> +		"", "", "", "", "", "",
+> +		"pin7 [gpio3/pwm]";
+> +};
+> --=20
+> 2.36.0.rc2.17.g4027e30c53
+>=20
+
+--hZ8ik5mZsnIy+h/o
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+arDgAKCRB4tDGHoIJi
+0vNzAP9wY996zdS8j0ZJ6vVTM/3fQQST8EkENXy1piEExyrn9gD+KQrB1AMu5qII
+DUtpxzPnxhq5rv8Iib6vl7gDq1pkLwc=
+=PAXW
+-----END PGP SIGNATURE-----
+
+--hZ8ik5mZsnIy+h/o--
