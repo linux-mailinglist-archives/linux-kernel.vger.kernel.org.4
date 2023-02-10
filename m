@@ -2,621 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4B4691B16
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 10:18:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6D8691B54
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 10:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbjBJJSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 04:18:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
+        id S231432AbjBJJ3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 04:29:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230488AbjBJJSL (ORCPT
+        with ESMTP id S230286AbjBJJ31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 04:18:11 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 987E85774A
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 01:18:08 -0800 (PST)
-Received: from loongson.cn (unknown [192.168.200.1])
-        by gateway (Coremail) with SMTP id _____8Cxe+rPC+ZjAcMQAA--.32972S3;
-        Fri, 10 Feb 2023 17:18:07 +0800 (CST)
-Received: from [0.0.0.0] (unknown [192.168.200.1])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxPuTOC+ZjlEowAA--.55972S3;
-        Fri, 10 Feb 2023 17:18:06 +0800 (CST)
-Subject: Re: [PATCH v4 2/5] LoongArch: Use la.pcrel instead of la.abs for
- exception handlers
-To:     Huacai Chen <chenhuacai@kernel.org>
-References: <1676018856-26520-1-git-send-email-tangyouling@loongson.cn>
- <1676018856-26520-3-git-send-email-tangyouling@loongson.cn>
- <CAAhV-H4Bs5n_ek3mq6zwxAgVw0nvER1XUA+WUA8M12eKcYVPDQ@mail.gmail.com>
-Cc:     Xi Ruoyao <xry111@xry111.site>, Jinyang He <hejinyang@loongson.cn>,
-        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-From:   Youling Tang <tangyouling@loongson.cn>
-Message-ID: <05ef2d91-ab87-b8d9-85fa-6a90a92f8f39@loongson.cn>
-Date:   Fri, 10 Feb 2023 17:18:06 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Fri, 10 Feb 2023 04:29:27 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6879F25BA1;
+        Fri, 10 Feb 2023 01:29:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676021366; x=1707557366;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TlX5ohImcUq/V1yM0W5Ao/RbgOkneevy/s3/F14ciSk=;
+  b=MYgFUnaCvNOoYF68WJzp+QZK1JOQVvWgJCyc8qw4mkBDIZHKa7D6I/+H
+   GNkBSaMZZ7DI08q60EKtfaPMuHYiCFJQtZyag875bbbtibgP29p83HLoK
+   WDnQCVboe6woQex+ldVVr9ZD4a656vpxbSzNTkBeM/BC2Vs0uNhYV/lbL
+   oX5R3DSZzDNakiPwZnr2QxaQqt5DgYDv6E+4g075fg4xkO45cCRzhHaQC
+   AAgplIttQeXNv2tCwvoOs68izwlEps0FlP6G3mwg8rJ2Oxv+X0csSffvc
+   oDgy4tDrQlzrsg8BHZTH0vPUkc8HZU2zNgngUJmhfEP3FLVpsZjhbdMiK
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="416604185"
+X-IronPort-AV: E=Sophos;i="5.97,286,1669104000"; 
+   d="scan'208";a="416604185"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 01:29:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="776855490"
+X-IronPort-AV: E=Sophos;i="5.97,286,1669104000"; 
+   d="scan'208";a="776855490"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga002.fm.intel.com with ESMTP; 10 Feb 2023 01:29:22 -0800
+Date:   Fri, 10 Feb 2023 17:18:35 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Nava kishore Manne <nava.kishore.manne@amd.com>
+Cc:     michal.simek@xilinx.com, mdf@kernel.org, hao.wu@intel.com,
+        trix@redhat.com, ronak.jain@xilinx.com, gregkh@linuxfoundation.org,
+        tanmay.shah@xilinx.com, ben.levinsky@amd.com,
+        rajan.vaja@xilinx.com, harsha.harsha@xilinx.com,
+        mathieu.poirier@linaro.org,
+        lakshmi.sai.krishna.potthuri@xilinx.com, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] fpga: zynqmp-fpga: Adds status interface
+Message-ID: <Y+YL62nQOYOjRMrq@yilunxu-OptiPlex-7050>
+References: <20230131094810.1945541-1-nava.kishore.manne@amd.com>
+ <20230131094810.1945541-3-nava.kishore.manne@amd.com>
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H4Bs5n_ek3mq6zwxAgVw0nvER1XUA+WUA8M12eKcYVPDQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8CxPuTOC+ZjlEowAA--.55972S3
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvAXoW3KryxAr4kCr48Gr45uF15Arb_yoW8CFW3Zo
-        WayrsFqF1xJw47J343JasxJa18AFnIg3ykA3yvkw1fWF1qkayUWw4UtF1qqayI93Z8Jryx
-        Zay7Ja1UuF1xXrn8n29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
-        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
-        UUgm1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64
-        kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY
-        1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6x
-        kF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020E
-        x4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx26rWlOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
-        64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-        8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWU
-        twCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x
-        0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-        Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7xRE
-        6wZ7UUUUU==
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230131094810.1945541-3-nava.kishore.manne@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023-01-31 at 15:18:10 +0530, Nava kishore Manne wrote:
+> Adds status interface for zynqmp-fpga, It's a read only interface
+> which allows the user to get the Programmable Logic(PL) configuration
+> status.
+> 
+> Usage:
+> To read the Programmable Logic(PL) configuration status
+>         cat /sys/class/fpga_manager/<fpga>/device/status
 
+Please don't use the 'class' path, this is not a class interface. And
+people still have no idea how to reach the zynqmp-fpga status interface
+with this example path.
 
-On 02/10/2023 05:09 PM, Huacai Chen wrote:
-> Hi, Youling and Ruoyao,
->
-> Thank you very much for implementing the per-node exceptions. But I
-> want to know if the per-node solution is really worthy for a PIE
-> kernel. So, could you please test the performance? Maybe we can reduce
-> the complexity if we give up the per-node solution.
+I suggest:
+	cat /sys/bus/platform/drivers/...
 
-I will test performance on NUMA machines based on v2 and v3 patch sets.
+> 
+> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+> ---
+> Changes for v2:
+>               - Updated status messages handling logic as suggested by Xu Yilun.
+> 
+> Changes for v3:
+>               - Updated status interface handling logic (Restrict the status
+>                 interface to the device-specific instead of handled by the core)
+>                 as suggested by Xu Yilun.
+> 
+> Changes for v4:
+>               - Limit the error strings to one word for each as suggested by
+>                 Xu Yilun
+> 
+> Changes for v5:
+>               - Added new sysfs-driver-zynqmp-fpga file.
+> 
+>  .../ABI/testing/sysfs-driver-zynqmp-fpga      | 18 ++++
+>  drivers/fpga/zynqmp-fpga.c                    | 87 +++++++++++++++++++
+>  2 files changed, 105 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-driver-zynqmp-fpga
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-driver-zynqmp-fpga b/Documentation/ABI/testing/sysfs-driver-zynqmp-fpga
+> new file mode 100644
+> index 000000000000..66c98bb8dfba
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-driver-zynqmp-fpga
+> @@ -0,0 +1,18 @@
+> +What:		/sys/class/fpga_manager/<fpga>/device/status
 
-Youling.
->
-> Huacai
->
-> On Fri, Feb 10, 2023 at 4:47 PM Youling Tang <tangyouling@loongson.cn> wrote:
->>
->> From: Xi Ruoyao <xry111@xry111.site>
->>
->> It's needed to build the kernel as a PIE, or the linker will complain.
->>
->> For the consideration about performance, we copy the exception handlers
->> to a dedicated 64 KB area for each CPU.  So, the PC-relative offset
->> calculated at link time will be incorrect and we need to relocate the
->> exception handlers after copying them.
->>
->> For the simplicity, we don't use the ELF R_LARCH_* relocations, but code
->> an relocation entry as simply (offset_in_the_handler, symbol_addr).  For
->> each exception handler, we also code the number of relocation entries.
->> Then we can use the relocation information to fix up the handlers after
->> copying them.
->>
->> Signed-off-by: Xi Ruoyao <xry111@xry111.site>
->> ---
->>  arch/loongarch/include/asm/inst.h       |   1 +
->>  arch/loongarch/include/asm/setup.h      |   6 +-
->>  arch/loongarch/include/asm/stackframe.h |   3 +-
->>  arch/loongarch/kernel/genex.S           |  40 +++++-
->>  arch/loongarch/kernel/traps.c           | 158 ++++++++++++++++++++----
->>  arch/loongarch/mm/tlb.c                 |  23 ++--
->>  arch/loongarch/mm/tlbex.S               |  69 +++++++++--
->>  7 files changed, 255 insertions(+), 45 deletions(-)
->>
->> diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
->> index 7eedd83fd0d7..426054518a3d 100644
->> --- a/arch/loongarch/include/asm/inst.h
->> +++ b/arch/loongarch/include/asm/inst.h
->> @@ -32,6 +32,7 @@ enum reg1i20_op {
->>         lu12iw_op       = 0x0a,
->>         lu32id_op       = 0x0b,
->>         pcaddi_op       = 0x0c,
->> +       pcalau12i_op    = 0x0d,
->>         pcaddu12i_op    = 0x0e,
->>         pcaddu18i_op    = 0x0f,
->>  };
->> diff --git a/arch/loongarch/include/asm/setup.h b/arch/loongarch/include/asm/setup.h
->> index 72ead58039f3..f0a2b34365f1 100644
->> --- a/arch/loongarch/include/asm/setup.h
->> +++ b/arch/loongarch/include/asm/setup.h
->> @@ -11,6 +11,9 @@
->>
->>  #define VECSIZE 0x200
->>
->> +struct handler_reloc;
->> +
->> +extern struct handler_reloc *eentry_reloc[];
->>  extern unsigned long eentry;
->>  extern unsigned long tlbrentry;
->>  extern char init_command_line[COMMAND_LINE_SIZE];
->> @@ -18,7 +21,8 @@ extern void tlb_init(int cpu);
->>  extern void cpu_cache_init(void);
->>  extern void cache_error_setup(void);
->>  extern void per_cpu_trap_init(int cpu);
->> -extern void set_handler(unsigned long offset, void *addr, unsigned long len);
->> +extern void set_handler(unsigned long exccode, void *addr);
->>  extern void set_merr_handler(unsigned long offset, void *addr, unsigned long len);
->> +extern void reloc_handler(unsigned long handler, struct handler_reloc *rel);
->>
->>  #endif /* __SETUP_H */
->> diff --git a/arch/loongarch/include/asm/stackframe.h b/arch/loongarch/include/asm/stackframe.h
->> index 7deb043ce387..bbec1e56b61b 100644
->> --- a/arch/loongarch/include/asm/stackframe.h
->> +++ b/arch/loongarch/include/asm/stackframe.h
->> @@ -77,7 +77,8 @@
->>   * new value in sp.
->>   */
->>         .macro  get_saved_sp docfi=0
->> -       la.abs    t1, kernelsp
->> +       /* The label is used for generating reloc tables for handlers */
->> +514:   la.pcrel  t1, t0, kernelsp
->>  #ifdef CONFIG_SMP
->>         csrrd     t0, PERCPU_BASE_KS
->>         LONG_ADD  t1, t1, t0
->> diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
->> index 7e5c293ed89f..005a10fe5a50 100644
->> --- a/arch/loongarch/kernel/genex.S
->> +++ b/arch/loongarch/kernel/genex.S
->> @@ -34,7 +34,7 @@ SYM_FUNC_END(__arch_cpu_idle)
->>  SYM_FUNC_START(handle_vint)
->>         BACKUP_T0T1
->>         SAVE_ALL
->> -       la.abs  t1, __arch_cpu_idle
->> +0:     la.pcrel t1, t2, __arch_cpu_idle
->>         LONG_L  t0, sp, PT_ERA
->>         /* 32 byte rollback region */
->>         ori     t0, t0, 0x1f
->> @@ -43,11 +43,25 @@ SYM_FUNC_START(handle_vint)
->>         LONG_S  t0, sp, PT_ERA
->>  1:     move    a0, sp
->>         move    a1, sp
->> -       la.abs  t0, do_vint
->> +2:     la.pcrel t0, t2, do_vint
->>         jirl    ra, t0, 0
->>         RESTORE_ALL_AND_RET
->>  SYM_FUNC_END(handle_vint)
->>
->> +SYM_DATA_START(rel_handle_vint)
->> +LONG   3
->> +
->> +LONG   514b - handle_vint
->> +LONG   kernelsp
->> +
->> +LONG   0b - handle_vint
->> +LONG   __arch_cpu_idle
->> +
->> +LONG   2b - handle_vint
->> +LONG   do_vint
->> +
->> +SYM_DATA_END(rel_handle_vint)
->> +
->>  SYM_FUNC_START(except_vec_cex)
->>         b       cache_parity_error
->>  SYM_FUNC_END(except_vec_cex)
->> @@ -72,12 +86,24 @@ SYM_FUNC_END(except_vec_cex)
->>         SAVE_ALL
->>         build_prep_\prep
->>         move    a0, sp
->> -       la.abs  t0, do_\handler
->> +       667:
->> +       la.pcrel t0, t1, do_\handler
->>         jirl    ra, t0, 0
->>         668:
->>         RESTORE_ALL_AND_RET
->>         SYM_FUNC_END(handle_\exception)
->>         SYM_DATA(unwind_hint_\exception, .word 668b - 666b)
->> +
->> +       SYM_DATA_START(rel_handle_\exception)
->> +       LONG    2
->> +
->> +       LONG    514b - 666b
->> +       LONG    kernelsp
->> +
->> +       LONG    667b - 666b
->> +       LONG    do_\handler
->> +
->> +       SYM_DATA_END(rel_handle_\exception)
->>         .endm
->>
->>         BUILD_HANDLER ade ade badv
->> @@ -93,6 +119,12 @@ SYM_FUNC_END(except_vec_cex)
->>         BUILD_HANDLER reserved reserved none    /* others */
->>
->>  SYM_FUNC_START(handle_sys)
->> -       la.abs  t0, handle_syscall
->> +       la.pcrel t0, t1, handle_syscall
->>         jr      t0
->>  SYM_FUNC_END(handle_sys)
->> +
->> +SYM_DATA_START(rel_handle_sys)
->> +LONG   1
->> +LONG   0
->> +LONG   handle_syscall
->> +SYM_DATA_END(rel_handle_sys)
->> diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
->> index c38a146a973b..7e073854f493 100644
->> --- a/arch/loongarch/kernel/traps.c
->> +++ b/arch/loongarch/kernel/traps.c
->> @@ -62,6 +62,127 @@ extern asmlinkage void handle_reserved(void);
->>  extern asmlinkage void handle_watch(void);
->>  extern asmlinkage void handle_vint(void);
->>
->> +struct handler_reloc_entry {
->> +       unsigned long offset;
->> +       unsigned long sym;
->> +};
->> +
->> +struct handler_reloc {
->> +       unsigned long cnt;
->> +       struct handler_reloc_entry entries[];
->> +};
->> +
->> +extern struct handler_reloc rel_handle_tlb_load;
->> +extern struct handler_reloc rel_handle_tlb_store;
->> +extern struct handler_reloc rel_handle_tlb_modify;
->> +extern struct handler_reloc rel_handle_tlb_protect;
->> +extern struct handler_reloc rel_handle_ade;
->> +extern struct handler_reloc rel_handle_ale;
->> +extern struct handler_reloc rel_handle_sys;
->> +extern struct handler_reloc rel_handle_bp;
->> +extern struct handler_reloc rel_handle_ri;
->> +extern struct handler_reloc rel_handle_fpu;
->> +extern struct handler_reloc rel_handle_lsx;
->> +extern struct handler_reloc rel_handle_lasx;
->> +extern struct handler_reloc rel_handle_fpe;
->> +extern struct handler_reloc rel_handle_lbt;
->> +extern struct handler_reloc rel_handle_watch;
->> +extern struct handler_reloc rel_handle_reserved;
->> +extern struct handler_reloc rel_handle_vint;
->> +
->> +struct handler_reloc *eentry_reloc[128] = {
->> +       [0] = NULL, /* merr handler */
->> +       [EXCCODE_TLBL] = &rel_handle_tlb_load,
->> +       [EXCCODE_TLBS] = &rel_handle_tlb_store,
->> +       [EXCCODE_TLBI] = &rel_handle_tlb_load,
->> +       [EXCCODE_TLBM] = &rel_handle_tlb_modify,
->> +       [EXCCODE_TLBNR] = &rel_handle_tlb_protect,
->> +       [EXCCODE_TLBNX] = &rel_handle_tlb_protect,
->> +       [EXCCODE_TLBPE] = &rel_handle_tlb_protect,
->> +       [EXCCODE_ADE] = &rel_handle_ade,
->> +       [EXCCODE_ALE] = &rel_handle_ale,
->> +       [EXCCODE_SYS] = &rel_handle_sys,
->> +       [EXCCODE_BP] = &rel_handle_bp,
->> +       [EXCCODE_INE] = &rel_handle_ri,
->> +       [EXCCODE_IPE] = &rel_handle_ri,
->> +       [EXCCODE_FPDIS] = &rel_handle_fpu,
->> +       [EXCCODE_LSXDIS] = &rel_handle_lsx,
->> +       [EXCCODE_LASXDIS] = &rel_handle_lasx,
->> +       [EXCCODE_FPE] = &rel_handle_fpe,
->> +       [EXCCODE_BTDIS] = &rel_handle_lbt,
->> +       [EXCCODE_WATCH] = &rel_handle_watch,
->> +       [(EXCCODE_WATCH + 1) ... (EXCCODE_INT_START - 1)] = &rel_handle_reserved,
->> +       [EXCCODE_INT_START ... (EXCCODE_INT_END - 1)] = &rel_handle_vint,
->> +};
->> +
->> +void reloc_handler(unsigned long handler, struct handler_reloc *rel)
->> +{
->> +       if (!rel)
->> +               return;
->> +
->> +       for (unsigned long i = 0; i < rel->cnt; i++) {
->> +               unsigned long pc = handler + rel->entries[i].offset;
->> +               union loongarch_instruction *insn =
->> +                       (union loongarch_instruction *)pc;
->> +               u32 imm[4];
->> +               unsigned long v = rel->entries[i].sym;
->> +
->> +               /* GNU as >= 2.40 uses pcalau12i for la.pcrel, but GNU ld <= 2.39
->> +                * uses pcaddu12i.
->> +                */
->> +               if (insn->reg1i20_format.opcode == pcalau12i_op) {
->> +                       /* Use s32 deliberately for sign extension. */
->> +                       s32 offset_hi20 = ((v + 0x800) & ~0xfff) -
->> +                                         (pc & ~0xfff);
->> +                       unsigned long anchor = (pc & ~0xfff) + offset_hi20;
->> +                       unsigned long offset_rem = v - anchor;
->> +
->> +                       imm[0] = (offset_hi20 >> 12) & 0xfffff;
->> +                       imm[1] = v & 0xfff;
->> +                       imm[2] = (offset_rem >> 32) & 0xfffff;
->> +                       imm[3] = offset_rem >> 52;
->> +               } else if (insn->reg1i20_format.opcode == pcaddu12i_op) {
->> +                       /* Use s32 deliberately for sign extension. */
->> +                       s32 offset_lo = v - pc;
->> +                       unsigned long offset_hi = v - pc - offset_lo;
->> +
->> +                       imm[0] = (offset_lo >> 12) & 0xfffff;
->> +                       imm[1] = offset_lo & 0xfff;
->> +                       imm[2] = (offset_hi >> 32) & 0xfffff;
->> +                       imm[3] = offset_hi >> 52;
->> +               } else
->> +                       panic("Cannot fixup la.pcrel for exception handler at %lu: unexpected instruction %d!",
->> +                             pc, insn->word);
->> +
->> +               insn[0].reg1i20_format.immediate = imm[0];
->> +               insn[1].reg2i12_format.immediate = imm[1];
->> +               insn[2].reg1i20_format.immediate = imm[2];
->> +               insn[3].reg2i12_format.immediate = imm[3];
->> +       }
->> +}
->> +
->> +/* Install CPU exception handler */
->> +static void do_set_handler(unsigned long exccode, void *addr,
->> +                          struct handler_reloc *rel)
->> +{
->> +       unsigned long dest_addr = eentry + exccode * VECSIZE;
->> +
->> +       memcpy((void *)dest_addr, addr, VECSIZE);
->> +       reloc_handler(dest_addr, rel);
->> +       local_flush_icache_range(dest_addr, dest_addr + VECSIZE);
->> +}
->> +
->> +/* Install CPU exception handler, with the reloc table from eentry_reloc */
->> +void set_handler(unsigned long exccode, void *addr)
->> +{
->> +       do_set_handler(exccode, addr, eentry_reloc[exccode]);
->> +}
->> +
->> +static void set_handler_reserved(unsigned long exccode)
->> +{
->> +       do_set_handler(exccode, handle_reserved, &rel_handle_reserved);
->> +}
->> +
->>  static void show_backtrace(struct task_struct *task, const struct pt_regs *regs,
->>                            const char *loglvl, bool user)
->>  {
->> @@ -704,19 +825,12 @@ void per_cpu_trap_init(int cpu)
->>         /* Initialise exception handlers */
->>         if (cpu == 0)
->>                 for (i = 0; i < 64; i++)
->> -                       set_handler(i * VECSIZE, handle_reserved, VECSIZE);
->> +                       set_handler_reserved(i);
->>
->>         tlb_init(cpu);
->>         cpu_cache_init();
->>  }
->>
->> -/* Install CPU exception handler */
->> -void set_handler(unsigned long offset, void *addr, unsigned long size)
->> -{
->> -       memcpy((void *)(eentry + offset), addr, size);
->> -       local_flush_icache_range(eentry + offset, eentry + offset + size);
->> -}
->> -
->>  static const char panic_null_cerr[] =
->>         "Trying to set NULL cache error exception handler\n";
->>
->> @@ -741,20 +855,20 @@ void __init trap_init(void)
->>
->>         /* Set interrupt vector handler */
->>         for (i = EXCCODE_INT_START; i < EXCCODE_INT_END; i++)
->> -               set_handler(i * VECSIZE, handle_vint, VECSIZE);
->> -
->> -       set_handler(EXCCODE_ADE * VECSIZE, handle_ade, VECSIZE);
->> -       set_handler(EXCCODE_ALE * VECSIZE, handle_ale, VECSIZE);
->> -       set_handler(EXCCODE_SYS * VECSIZE, handle_sys, VECSIZE);
->> -       set_handler(EXCCODE_BP * VECSIZE, handle_bp, VECSIZE);
->> -       set_handler(EXCCODE_INE * VECSIZE, handle_ri, VECSIZE);
->> -       set_handler(EXCCODE_IPE * VECSIZE, handle_ri, VECSIZE);
->> -       set_handler(EXCCODE_FPDIS * VECSIZE, handle_fpu, VECSIZE);
->> -       set_handler(EXCCODE_LSXDIS * VECSIZE, handle_lsx, VECSIZE);
->> -       set_handler(EXCCODE_LASXDIS * VECSIZE, handle_lasx, VECSIZE);
->> -       set_handler(EXCCODE_FPE * VECSIZE, handle_fpe, VECSIZE);
->> -       set_handler(EXCCODE_BTDIS * VECSIZE, handle_lbt, VECSIZE);
->> -       set_handler(EXCCODE_WATCH * VECSIZE, handle_watch, VECSIZE);
->> +               set_handler(i, handle_vint);
->> +
->> +       set_handler(EXCCODE_ADE, handle_ade);
->> +       set_handler(EXCCODE_ALE, handle_ale);
->> +       set_handler(EXCCODE_SYS, handle_sys);
->> +       set_handler(EXCCODE_BP, handle_bp);
->> +       set_handler(EXCCODE_INE, handle_ri);
->> +       set_handler(EXCCODE_IPE, handle_ri);
->> +       set_handler(EXCCODE_FPDIS, handle_fpu);
->> +       set_handler(EXCCODE_LSXDIS, handle_lsx);
->> +       set_handler(EXCCODE_LASXDIS, handle_lasx);
->> +       set_handler(EXCCODE_FPE, handle_fpe);
->> +       set_handler(EXCCODE_BTDIS, handle_lbt);
->> +       set_handler(EXCCODE_WATCH, handle_watch);
->>
->>         cache_error_setup();
->>
->> diff --git a/arch/loongarch/mm/tlb.c b/arch/loongarch/mm/tlb.c
->> index 8bad6b0cff59..6f70aab7202a 100644
->> --- a/arch/loongarch/mm/tlb.c
->> +++ b/arch/loongarch/mm/tlb.c
->> @@ -253,7 +253,6 @@ static void output_pgtable_bits_defines(void)
->>  #ifdef CONFIG_NUMA
->>  unsigned long pcpu_handlers[NR_CPUS];
->>  #endif
->> -extern long exception_handlers[VECSIZE * 128 / sizeof(long)];
->>
->>  void setup_tlb_handler(int cpu)
->>  {
->> @@ -264,19 +263,20 @@ void setup_tlb_handler(int cpu)
->>         if (cpu == 0) {
->>                 memcpy((void *)tlbrentry, handle_tlb_refill, 0x80);
->>                 local_flush_icache_range(tlbrentry, tlbrentry + 0x80);
->> -               set_handler(EXCCODE_TLBI * VECSIZE, handle_tlb_load, VECSIZE);
->> -               set_handler(EXCCODE_TLBL * VECSIZE, handle_tlb_load, VECSIZE);
->> -               set_handler(EXCCODE_TLBS * VECSIZE, handle_tlb_store, VECSIZE);
->> -               set_handler(EXCCODE_TLBM * VECSIZE, handle_tlb_modify, VECSIZE);
->> -               set_handler(EXCCODE_TLBNR * VECSIZE, handle_tlb_protect, VECSIZE);
->> -               set_handler(EXCCODE_TLBNX * VECSIZE, handle_tlb_protect, VECSIZE);
->> -               set_handler(EXCCODE_TLBPE * VECSIZE, handle_tlb_protect, VECSIZE);
->> +               set_handler(EXCCODE_TLBI, handle_tlb_load);
->> +               set_handler(EXCCODE_TLBL, handle_tlb_load);
->> +               set_handler(EXCCODE_TLBS, handle_tlb_store);
->> +               set_handler(EXCCODE_TLBM, handle_tlb_modify);
->> +               set_handler(EXCCODE_TLBNR, handle_tlb_protect);
->> +               set_handler(EXCCODE_TLBNX, handle_tlb_protect);
->> +               set_handler(EXCCODE_TLBPE, handle_tlb_protect);
->>         }
->>  #ifdef CONFIG_NUMA
->>         else {
->>                 void *addr;
->> +               unsigned long addr_ul;
->>                 struct page *page;
->> -               const int vec_sz = sizeof(exception_handlers);
->> +               const int vec_sz = VECSIZE * 128;
->>
->>                 if (pcpu_handlers[cpu])
->>                         return;
->> @@ -286,8 +286,11 @@ void setup_tlb_handler(int cpu)
->>                         return;
->>
->>                 addr = page_address(page);
->> +               addr_ul = (unsigned long)addr;
->>                 pcpu_handlers[cpu] = (unsigned long)addr;
->> -               memcpy((void *)addr, (void *)eentry, vec_sz);
->> +               memcpy(addr, (void *)eentry, vec_sz);
->> +               for (unsigned long i = 0; i < 128; i++)
->> +                       reloc_handler(addr_ul + i * VECSIZE, eentry_reloc[i]);
->>                 local_flush_icache_range((unsigned long)addr, (unsigned long)addr + vec_sz);
->>                 csr_write64(pcpu_handlers[cpu], LOONGARCH_CSR_EENTRY);
->>                 csr_write64(pcpu_handlers[cpu], LOONGARCH_CSR_MERRENTRY);
->> diff --git a/arch/loongarch/mm/tlbex.S b/arch/loongarch/mm/tlbex.S
->> index 3dd2a9615cd9..044c2190771a 100644
->> --- a/arch/loongarch/mm/tlbex.S
->> +++ b/arch/loongarch/mm/tlbex.S
->> @@ -39,11 +39,21 @@ SYM_FUNC_START(handle_tlb_protect)
->>         move            a1, zero
->>         csrrd           a2, LOONGARCH_CSR_BADV
->>         REG_S           a2, sp, PT_BVADDR
->> -       la.abs          t0, do_page_fault
->> +1:     la.pcrel        t0, t1, do_page_fault
->>         jirl            ra, t0, 0
->>         RESTORE_ALL_AND_RET
->>  SYM_FUNC_END(handle_tlb_protect)
->>
->> +SYM_DATA_START(rel_handle_tlb_protect)
->> +       LONG    2
->> +
->> +       LONG    514b - handle_tlb_protect
->> +       LONG    kernelsp
->> +
->> +       LONG    1b - handle_tlb_protect
->> +       LONG    do_page_fault
->> +SYM_DATA_END(rel_handle_tlb_protect)
->> +
->>  SYM_FUNC_START(handle_tlb_load)
->>         csrwr           t0, EXCEPTION_KS0
->>         csrwr           t1, EXCEPTION_KS1
->> @@ -115,7 +125,8 @@ smp_pgtable_change_load:
->>
->>  #ifdef CONFIG_64BIT
->>  vmalloc_load:
->> -       la.abs          t1, swapper_pg_dir
->> +       /* The first insn of vmalloc_done_load overwrites ra */
->> +1:     la.pcrel        t1, ra, swapper_pg_dir
->>         b               vmalloc_done_load
->>  #endif
->>
->> @@ -186,10 +197,24 @@ tlb_huge_update_load:
->>  nopage_tlb_load:
->>         dbar            0
->>         csrrd           ra, EXCEPTION_KS2
->> -       la.abs          t0, tlb_do_page_fault_0
->> +2:     la.pcrel        t0, t1, tlb_do_page_fault_0
->>         jr              t0
->>  SYM_FUNC_END(handle_tlb_load)
->>
->> +SYM_DATA_START(rel_handle_tlb_load)
->> +#ifdef CONFIG_64BIT
->> +       LONG    2
->> +
->> +       LONG    1b - handle_tlb_load
->> +       LONG    swapper_pg_dir
->> +#else
->> +       LONG    1
->> +#endif
->> +
->> +       LONG    2b - handle_tlb_load
->> +       LONG    tlb_do_page_fault_0
->> +SYM_DATA_END(rel_handle_tlb_load)
->> +
->>  SYM_FUNC_START(handle_tlb_store)
->>         csrwr           t0, EXCEPTION_KS0
->>         csrwr           t1, EXCEPTION_KS1
->> @@ -262,7 +287,8 @@ smp_pgtable_change_store:
->>
->>  #ifdef CONFIG_64BIT
->>  vmalloc_store:
->> -       la.abs          t1, swapper_pg_dir
->> +       /* The first insn of vmalloc_done_store overwrites ra */
->> +1:     la.pcrel        t1, ra, swapper_pg_dir
->>         b               vmalloc_done_store
->>  #endif
->>
->> @@ -335,10 +361,24 @@ tlb_huge_update_store:
->>  nopage_tlb_store:
->>         dbar            0
->>         csrrd           ra, EXCEPTION_KS2
->> -       la.abs          t0, tlb_do_page_fault_1
->> +2:     la.pcrel        t0, t1, tlb_do_page_fault_1
->>         jr              t0
->>  SYM_FUNC_END(handle_tlb_store)
->>
->> +SYM_DATA_START(rel_handle_tlb_store)
->> +#ifdef CONFIG_64BIT
->> +       LONG    2
->> +
->> +       LONG    1b - handle_tlb_store
->> +       LONG    swapper_pg_dir
->> +#else
->> +       LONG    1
->> +#endif
->> +
->> +       LONG    2b - handle_tlb_store
->> +       LONG    tlb_do_page_fault_1
->> +SYM_DATA_END(rel_handle_tlb_store)
->> +
->>  SYM_FUNC_START(handle_tlb_modify)
->>         csrwr           t0, EXCEPTION_KS0
->>         csrwr           t1, EXCEPTION_KS1
->> @@ -410,7 +450,8 @@ smp_pgtable_change_modify:
->>
->>  #ifdef CONFIG_64BIT
->>  vmalloc_modify:
->> -       la.abs          t1, swapper_pg_dir
->> +       /* The first insn of vmalloc_done_modify overwrites ra */
->> +1:     la.pcrel        t1, ra, swapper_pg_dir
->>         b               vmalloc_done_modify
->>  #endif
->>
->> @@ -482,10 +523,24 @@ tlb_huge_update_modify:
->>  nopage_tlb_modify:
->>         dbar            0
->>         csrrd           ra, EXCEPTION_KS2
->> -       la.abs          t0, tlb_do_page_fault_1
->> +2:     la.pcrel        t0, t1, tlb_do_page_fault_1
->>         jr              t0
->>  SYM_FUNC_END(handle_tlb_modify)
->>
->> +SYM_DATA_START(rel_handle_tlb_modify)
->> +#ifdef CONFIG_64BIT
->> +       LONG    2
->> +
->> +       LONG    1b - handle_tlb_modify
->> +       LONG    swapper_pg_dir
->> +#else
->> +       LONG    1
->> +#endif
->> +
->> +       LONG    2b - handle_tlb_modify
->> +       LONG    tlb_do_page_fault_1
->> +SYM_DATA_END(rel_handle_tlb_modify)
->> +
->>  SYM_FUNC_START(handle_tlb_refill)
->>         csrwr           t0, LOONGARCH_CSR_TLBRSAVE
->>         csrrd           t0, LOONGARCH_CSR_PGD
->> --
->> 2.37.3
->>
+Same concern
 
+> +Date:		Jan 2023
+> +KernelVersion:	6.2
+> +Contact:	Nava kishore Manne <nava.kishore.manne@amd.com>
+> +Description:	Read fpga status as a string.
+> +		If FPGA programming operation fails, it could be caused by crc
+> +		error or incompatible bitstream image. The intent of this
+> +		interface is to provide more detailed information for FPGA
+> +		programming errors to userspace. This is a list of strings for
+> +		the supported status.
+> +
+> +		* CRC-Error		- CRC error detected by hardware.
+> +		* Security-Error	- Security error detected by hardware.
+> +		* Initialization-Error	- Device Initialization error.
+> +		* Internal-Signal-Error	- Device internal signal error.
+> +		* I/Os-High-Z-state	- All I/Os are placed in High-Z state.
+> +		* Sequence-Error	- Device start-up sequence error.
+> +		* Firmware-Error	- Firmware error.
+> diff --git a/drivers/fpga/zynqmp-fpga.c b/drivers/fpga/zynqmp-fpga.c
+> index c60f20949c47..81d3e18527ee 100644
+> --- a/drivers/fpga/zynqmp-fpga.c
+> +++ b/drivers/fpga/zynqmp-fpga.c
+> @@ -15,6 +15,37 @@
+>  /* Constant Definitions */
+>  #define IXR_FPGA_DONE_MASK	BIT(3)
+>  
+> +/* Error Register */
+> +#define IXR_FPGA_ERR_CRC_ERR		BIT(0)
+> +#define IXR_FPGA_ERR_SECURITY_ERR	BIT(16)
+> +
+> +/* Signal Status Register */
+> +#define IXR_FPGA_END_OF_STARTUP		BIT(4)
+> +#define IXR_FPGA_GST_CFG_B		BIT(5)
+> +#define IXR_FPGA_INIT_B_INTERNAL	BIT(11)
+> +#define IXR_FPGA_DONE_INTERNAL_SIGNAL	BIT(13)
+> +
+> +/* FPGA error status. */
+> +enum {
+> +	ZYNQMP_FPGA_STATUS_CRC_ERR,
+> +	ZYNQMP_FPGA_STATUS_SECURITY_ERR,
+> +	ZYNQMP_FPGA_STATUS_DEVICE_INIT_ERR,
+> +	ZYNQMP_FPGA_STATUS_SIGNAL_ERR,
+> +	ZYNQMP_FPGA_STATUS_HIGH_Z_STATE_ERR,
+> +	ZYNQMP_FPGA_STATUS_EOS_ERR,
+> +	ZYNQMP_FPGA_MGR_STATUS_FIRMWARE_REQ_ERR,
+> +};
+> +
+> +static const char * const zynqmp_fpga_error_statuses[] = {
+> +	[ZYNQMP_FPGA_STATUS_CRC_ERR] = "CRC-Error",
+> +	[ZYNQMP_FPGA_STATUS_SECURITY_ERR] = "Security-Error",
+> +	[ZYNQMP_FPGA_STATUS_DEVICE_INIT_ERR] = "Initialization-Error",
+> +	[ZYNQMP_FPGA_STATUS_SIGNAL_ERR] = "Internal-Signal-Error",
+> +	[ZYNQMP_FPGA_STATUS_HIGH_Z_STATE_ERR] = "I/Os-High-Z-state",
+> +	[ZYNQMP_FPGA_STATUS_EOS_ERR] = "Sequence-Error",
+> +	[ZYNQMP_FPGA_MGR_STATUS_FIRMWARE_REQ_ERR] = "Firmware-Error",
+> +};
+> +
+>  /**
+>   * struct zynqmp_fpga_priv - Private data structure
+>   * @dev:	Device data structure
+> @@ -77,6 +108,54 @@ static enum fpga_mgr_states zynqmp_fpga_ops_state(struct fpga_manager *mgr)
+>  	return FPGA_MGR_STATE_UNKNOWN;
+>  }
+>  
+> +static ssize_t status_show(struct device *dev,
+> +			   struct device_attribute *attr, char *buf)
+> +{
+> +	unsigned long status = 0;
+> +	ssize_t len = 0;
+> +	u32 reg_val;
+> +	int ret;
+> +	u8 i;
+> +
+> +	ret = zynqmp_pm_fpga_get_config_status(&reg_val);
+
+Just curious if there will be more than one zynq fpga devices in a
+system? if yes, how to distinguish their status?
+
+> +	if (!ret) {
+> +		if (reg_val & IXR_FPGA_ERR_CRC_ERR)
+> +			status |= ZYNQMP_FPGA_STATUS_CRC_ERR;
+> +		if (reg_val & IXR_FPGA_ERR_SECURITY_ERR)
+> +			status |= ZYNQMP_FPGA_STATUS_SECURITY_ERR;
+> +		if (!(reg_val & IXR_FPGA_INIT_B_INTERNAL))
+> +			status |= ZYNQMP_FPGA_STATUS_DEVICE_INIT_ERR;
+> +		if (!(reg_val & IXR_FPGA_DONE_INTERNAL_SIGNAL))
+> +			status |= ZYNQMP_FPGA_STATUS_SIGNAL_ERR;
+> +		if (!(reg_val & IXR_FPGA_GST_CFG_B))
+> +			status |= ZYNQMP_FPGA_STATUS_HIGH_Z_STATE_ERR;
+> +		if (!(reg_val & IXR_FPGA_END_OF_STARTUP))
+> +			status |= ZYNQMP_FPGA_STATUS_EOS_ERR;
+> +	} else {
+> +		status = ZYNQMP_FPGA_MGR_STATUS_FIRMWARE_REQ_ERR;
+> +	}
+> +
+> +	for_each_set_bit(i, &status, ARRAY_SIZE(zynqmp_fpga_error_statuses))
+> +		len += sysfs_emit_at(buf, len, "%s ",
+> +				     zynqmp_fpga_error_statuses[i]);
+> +
+> +	if (len)
+> +		buf[len - 1] = '\n';
+> +
+> +	return len;
+> +}
+> +
+> +static DEVICE_ATTR_RO(status);
+> +
+> +static struct attribute *zynqmp_fpga_device_attrs[] = {
+> +	&dev_attr_status.attr,
+> +	NULL,
+> +};
+> +
+> +static const struct attribute_group zynqmp_fpga_attr_group = {
+> +	.attrs = zynqmp_fpga_device_attrs,
+> +};
+> +
+>  static const struct fpga_manager_ops zynqmp_fpga_ops = {
+>  	.state = zynqmp_fpga_ops_state,
+>  	.write_init = zynqmp_fpga_ops_write_init,
+> @@ -88,6 +167,7 @@ static int zynqmp_fpga_probe(struct platform_device *pdev)
+>  	struct device *dev = &pdev->dev;
+>  	struct zynqmp_fpga_priv *priv;
+>  	struct fpga_manager *mgr;
+> +	int ret;
+>  
+>  	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+>  	if (!priv)
+> @@ -95,6 +175,13 @@ static int zynqmp_fpga_probe(struct platform_device *pdev)
+>  
+>  	priv->dev = dev;
+>  
+> +	/* Add the device attributes */
+> +	ret = sysfs_create_group(&dev->kobj, &zynqmp_fpga_attr_group);
+
+Again, please do fix this as mentioned by Greg:
+
+https://lore.kernel.org/all/Y0fYjyXrMEo6M76k@kroah.com/
+
+Check how other platform drivers are doing.
+
+And this may also be useful:
+http://kroah.com/log/blog/2013/06/26/how-to-create-a-sysfs-file-correctly/
+
+Thanks,
+Yilun
+
+> +	if (ret) {
+> +		dev_err(dev, "Error creating sysfs files\n");
+> +		return ret;
+> +	}
+> +
+>  	mgr = devm_fpga_mgr_register(dev, "Xilinx ZynqMP FPGA Manager",
+>  				     &zynqmp_fpga_ops, priv);
+>  	return PTR_ERR_OR_ZERO(mgr);
+> -- 
+> 2.25.1
+> 
