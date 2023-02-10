@@ -2,163 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F57269262B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F544692635
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:20:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233277AbjBJTSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 14:18:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57030 "EHLO
+        id S233293AbjBJTUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 14:20:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233263AbjBJTS2 (ORCPT
+        with ESMTP id S233216AbjBJTUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 14:18:28 -0500
-Received: from BN6PR00CU002-vft-obe.outbound.protection.outlook.com (mail-eastus2azon11021023.outbound.protection.outlook.com [52.101.57.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CE57D8A4;
-        Fri, 10 Feb 2023 11:18:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YTfIhbao0oaYaeBfRCPcJnWO56Q08mcq6CdoCh6s1/IKKpqT9R+5peBf3BL/MDCkG+wpx2k5tufQAdgss3G+SI0l+l9YveSZaqOd4B9NJvQOAnuSbOTlb4DBDY7pCQSqFNZGersJnXLrLTUvesgCyaUlE03MB2BvQ+Zqa2Ba7fPscGOF/ksnABaCuv2rN+tKfbwjm/oSrVZ3ocQuy8ZkOblH7zfuj8TAk/CWYiA9wWiz0Ejza5+0xWfBUbGB78mLCz7EZxge2Uz6FCT2a2s7GkZ2NZfmujq1EnZyzFIrbJ4oosUPnceUD6CLUfWu6zp6C9N+7yxRZFyMWfPvwNg5ag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nmijB3f2UJmPc4XnQFLXm1JyAyse8Hf0eA125HnOdlQ=;
- b=KtBL1fNSJo6GLJ2oYunr4CFHmre1kzYpwm+wDm4jEzP9C0BAB8A2Eb75EVTd608RZCa0HAAwsiG5/KLW86haWZRzeqUTIl1SnEteClbaZGp8sZlppozxTwWKMcQl/H07gTGmBfl0GYYW1OvpbzFLqncI0e23ejXuwWQlST1zk8sSAqFobE3eid/WzkCO5ltULOz1TBuUUSxeDCUhksMuGip8BFYQjJg+1liXrmOVNNfNKoOdGnZTFJ2CaK0BTVludemCCVDfI+ctxj7vuEltf7ki8xatMy9h16vXoKqueOoB/DA30ENBjQhHNFg/xoWI4yi+2YcLC5CMt8chUKUFUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nmijB3f2UJmPc4XnQFLXm1JyAyse8Hf0eA125HnOdlQ=;
- b=ei1KhOBls/ShbORICK6GTf9DEdO2Zy3yXaMx9vnqgtmXU4OP1aaiJmtwjhu157vMKP3rF1WHoB7nUz07MdSs8CdrUTf4YOo6mUjJffhbNmfUi6T/1iX3h/+ltR/cbzSeeLp11feei1U6WUys97KT6qv1Vr6s5ojxMrmGhn3ebBQ=
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
- by PH0PR21MB2047.namprd21.prod.outlook.com (2603:10b6:510:ab::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.7; Fri, 10 Feb
- 2023 19:18:24 +0000
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::1811:5122:f6d2:35b9]) by SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::1811:5122:f6d2:35b9%2]) with mapi id 15.20.6111.007; Fri, 10 Feb 2023
- 19:18:24 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     Mohammed Gamal <mgamal@redhat.com>
-CC:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Xiaoqiang Xiong <xxiong@redhat.com>
-Subject: RE: [PATCH] Drivers: vmbus: Check for channel allocation before
- looking up relids
-Thread-Topic: [PATCH] Drivers: vmbus: Check for channel allocation before
- looking up relids
-Thread-Index: AQHZO7FcvtVZ42Ia+EWsc9sfieb8y67FZwQggAD41GWAARZlwIAAcfCAgACnDMA=
-Date:   Fri, 10 Feb 2023 19:18:24 +0000
-Message-ID: <SA1PR21MB13350F1693DE51A69AE27AA6BFDE9@SA1PR21MB1335.namprd21.prod.outlook.com>
-References: <20230208113424.864881-1-mgamal@redhat.com>
- <SA1PR21MB1335F1074908B3E00DFA21BDBFD89@SA1PR21MB1335.namprd21.prod.outlook.com>
- <CAG-HVq8GYwCYBgiBnjO8ca5M27j6-MPK3e9H_c+EPmyotmOHxw@mail.gmail.com>
- <CAG-HVq9KWPRhy3X1E8vs_0y7xeJFBA-hZ5u6Vxh7H9Tu=gV9WA@mail.gmail.com>
- <SA1PR21MB13352C415EE6A3E9D3072991BFDE9@SA1PR21MB1335.namprd21.prod.outlook.com>
- <CAG-HVq9bYLv_whkNekuuNQsA0htBxM-jvS=NvDH9NB7bGfnw3A@mail.gmail.com>
-In-Reply-To: <CAG-HVq9bYLv_whkNekuuNQsA0htBxM-jvS=NvDH9NB7bGfnw3A@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=28c6ab3b-7e82-46d4-b5f1-60fb30468f51;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-02-10T19:10:14Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|PH0PR21MB2047:EE_
-x-ms-office365-filtering-correlation-id: bef36e9e-ee9c-4353-a526-08db0b9b94d8
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +zihKBIiKEgoDgb1ymnvMNixrJqfW8djmKss7RisL1hIHoWbakCRH2J32Xv5XXncBsIZwf3OUi9HgIR01tNAnl/K2SrmZEqHcYhm5cLgFe2HQQHJ18BRszPC2Xnm0dT8oFBLXyUZJGMosiRpsC4hva3AgrRz7fhLx6tp/ND1OE/WPFLYiwSornZ4JXbED2uQDanthhAIRhSqMTqX3Fkx8V6fLV2HxKUI7c8QHjVHOIDKslYf7Oyel/EbZR7zgW63RyrFPPk2yNv///bi3WhyoAITjuOoT/odwNzAbUCWKiT3ucWEtf9PDvGb2oIdFzVJim2gzNBj2yFin+ZE1XfYC70lIm/0WaliLucjprawXn/gtqcwiYwPZhxJGI/uU51Xzry4pzY9MnoFhOOFCpPK0kexi7MVzUExZdpRNETguhv71kPOra3n8txd4FIdKjAi6egznW1qLpYRhJ3gJ+/rY+xD3b58ELDOsc9fS1PfILB4hVgzE7WRWWsV8BQ0w0UeIyZFXV862FxtPhV3mDDoyXGpeccn09kgPjxOcmIC9ImBN0fn5ta86pU8R/jLc7jzFtpuLWVBeWk9L7XnFR18HFq47rnODJ9duyGYApTYLFw1MlKP75vO8rCuN35uPQFR4mc+XP5bjRltCKCGGDf6BADm9NJRtUaSnLLSmoyV4wFxqWAKeWWE38dmuTD414Ih0A1/dPcWQFaZfFASpBhvgRu4TBVuacIEUp1u7JZIEILZkFPRXR+MU2i+hkVWsD14
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(346002)(366004)(396003)(376002)(451199018)(38100700002)(82950400001)(82960400001)(8990500004)(38070700005)(316002)(122000001)(52536014)(6916009)(8936002)(4326008)(76116006)(41300700001)(64756008)(66946007)(66446008)(66556008)(8676002)(66476007)(2906002)(5660300002)(6506007)(478600001)(186003)(26005)(9686003)(86362001)(33656002)(83380400001)(54906003)(7696005)(10290500003)(71200400001)(55016003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RkFIRzRhVWkvM09FTU04VzFGaHUyUUFuUHZKSkt0SDRYVllzN2F4RHRXcU4y?=
- =?utf-8?B?ZW1TZlpiZHFrVyt4REV3Z3JobzkxSzVsVG9QTndYVXk5a2Vud2NHUjdUR0o5?=
- =?utf-8?B?SXJ6elYvaXduR0tHUUlLYjBlT21UeDNUemRDaWdZMlNkY2hoTm9VTEpLOG9j?=
- =?utf-8?B?T3cza2hET0JudmtUK2hlQ05mMzYxS2psakxYR05abUtUQmpWRUQra25OMk50?=
- =?utf-8?B?NndibzA0dlkyYXlLWHdKZkU3QnBWNjlQcGRvd3Nqd05NYmg3QmFOS2FqRDNx?=
- =?utf-8?B?ZWowaXE1Nkkxc2J3Q3pqeU91NDVKc1luMDRTVzNhRTZTSG9hMDVuSE1jMnJ2?=
- =?utf-8?B?NXVpRUNIU1FkbEZpQ2JoRmY5eW8wY2RrcnVodmRETk1NUTBlUlB5RUtPOVpu?=
- =?utf-8?B?Z1lNaWlhOFpqYmxSTlhiRitQMlhWcHYxd3FNRXhORWsxdnFhWlpoRm5LbVBR?=
- =?utf-8?B?YnVhOWxSMlZOTFdYQUxjN09TTnExNFJ1WVVJOFR5aGJ3cUhmNE1vSmdOenkr?=
- =?utf-8?B?QnMwcXlsaFdGSXoweXJXMjZCaWZxMnpJRGNEdENWWjI0bGlQazIvRk5rZEVI?=
- =?utf-8?B?dHZxc2dlNGY1eDRMdWg4dVFBVWlCNGZ1by95LzBKYnVmN2JzbUhSUEVFSnB4?=
- =?utf-8?B?UW9ZcEVYU1NMa2RLaHhuQmVNdUtBbjVNVTZ0R0JXSTFKdGptRmkyNWo5Wk5F?=
- =?utf-8?B?QkpraVhTNjhWMWhwWW9xcG93R0I5MGxJRjlKeUV4dEVkWTNzWUs1ZFdEYkw1?=
- =?utf-8?B?eUFvZnkrMkVlN2tDc3BFZjhUcjFjN1FMdVo0MkFDbEMxNzZId0I1dUJTZUJu?=
- =?utf-8?B?TTRXbTIrek9HVjIrWWRiU2pRWmY3RWt3Rkd5TXY3NUVjaklBVk1GeStRNzhQ?=
- =?utf-8?B?bWpnSDN4VXdTOEhzeUd6N0cxcEFWYjZhSjR2OTYvQTVCWTNaYk9VK08yQ1pI?=
- =?utf-8?B?N0NEcDBpTDcwNDE5RzArVGZqRE1xaW16cXlwMFF6OHQ4bDI0VmIxVjI2ZFBo?=
- =?utf-8?B?aUcvK1hSZ3lRNm5yamhZS3NhQ2ZJNElGT3FyZHRuR2w5c0FTWGhCcXJCUEdZ?=
- =?utf-8?B?Rjd5THJQZlVvSURaT3FVUTJqTk9VamlqRkZxanMzY1Q3TXh0cFowdFk0bFFJ?=
- =?utf-8?B?VnJnR2ZFZEZsMW1CTDhVc21uMjdVUGZOUDVZanZCOVBtdzQrWnF2Mk11Zm1V?=
- =?utf-8?B?cEpCNzdqNmovRW1EU1hVZDJtbExJZ2IwbThLSEp6MzJzU2g3RVNpYURUNG96?=
- =?utf-8?B?MlMzUzNqalgyUis2UHRlS1ZyNkhyVHFaY1NPSjZnL01DOEZqd0VNektLaDlh?=
- =?utf-8?B?cXdGYlZVRExCajZaSm1qUDZIUUY5ekdRZ0NWT1M1Q05FMXRGWTdFSS92dkFX?=
- =?utf-8?B?MUJ3WnFHUytZczIyeUJmZEQrQVhkNjYwNWhJZXRuM0xPczhwdmFlbjRNU1Vy?=
- =?utf-8?B?TURHekNEN3dmelpsbSt2NnljVkdTNzRVRCtzM2dHR0ttcHdwVzVGSXJkQ0dp?=
- =?utf-8?B?dDFXUUtKcWhNSFJkalpCNlgyR3VZOXhhYmtBVEFNMFN6ZkFGOEk5NDluNVV4?=
- =?utf-8?B?dW52TzZkZW9ZUUNiZEFMR3VIVGxoSkpRaytQd2NzTUV1QVdqSUY0eXJSZlpm?=
- =?utf-8?B?a3pnY3VDUkRqaTE3V3RmaFlBMzE2dWgzb3hZMEN6bXNjZmF4Y29OWXE3NlRQ?=
- =?utf-8?B?MjZsSW53UlNLdlB1ZTJ2MWl5K2g1WWZiMU1zNEZXQ21CSldWb3dRbTFVMWtQ?=
- =?utf-8?B?L25vajlMc1ExWHl5WTdmaEJoeE5vSGM1R1hjazN2WFZDa081eGxtMSsyWTRO?=
- =?utf-8?B?MklTajFoTWxaUjgvREMzYkFzMW0vWkxMSk56TDVENytIZzgzd252OE5BSUxh?=
- =?utf-8?B?OFZNaTBRUHB0d0RuYmpDSis0aTV4K2JMNTVrTTJGdUgxandBM1I2NGp1bmVY?=
- =?utf-8?B?ODc2d3F1WkVGL0pTTUxKVDVOKzFoTUVVZFVSWWI1bWpPLzI3ZXBVWXRpc0E1?=
- =?utf-8?B?Um0rNy9vYS82UmNCdDRXUEdyWTUvRjB0a093eGNBSnNtN29RRTQ3SE9paWts?=
- =?utf-8?B?aTEvYU1EcWJSSjhPM213UVhvUk1VYTBGa2srZDRoTldtMnZtQjVhdy85NC9Q?=
- =?utf-8?Q?pEsZcoYWFQILcpWtT4ardzE8H?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 10 Feb 2023 14:20:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0AC07BFFD
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:19:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676056771;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gwSrY4DltmA/yFlYQvFrP0zXeruXNly6+GpVcGdaJm4=;
+        b=OFJRyp+mo5iG8+V2PlHtSve8YNPOj7jEw4aUkdR+0LjWm20RBoZBe9sRlgCy8pb3t7gKGO
+        2cDw8xUZcRYOwhMCtfV5atokPZVx5HHyNWGY2TUAwMgrpKpqYPuuaWww1Ay503nHmRKD8M
+        DazlLL4vKR8TxjDyrU1gr2W/YQVuKyQ=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-580-b8wH1pUTOIO_KJsuFce06A-1; Fri, 10 Feb 2023 14:19:30 -0500
+X-MC-Unique: b8wH1pUTOIO_KJsuFce06A-1
+Received: by mail-ed1-f72.google.com with SMTP id g19-20020a056402115300b004a26cc7f6cbso4136580edw.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:19:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gwSrY4DltmA/yFlYQvFrP0zXeruXNly6+GpVcGdaJm4=;
+        b=iGraWecyQHkdCwfT4sPi48e+k8zDPT9AFHbXTQpAevNILEHrXUs+lJBcdgxpvwH9CN
+         Rad7pWqSeOGe6l9yiMF4EeY3rvnIdX7V+sCCPcsrG3iqE4G7gzv9NHyjSGTwAGg1q7mK
+         iha5ik8BjT1W2OlTTPXEu4OAZqQVX+XG727ZVbswfUyKCAgOvvVdyztpQ2/rZEXrjMCM
+         nPzdLlXlwHkZBBQdRGc43N4ARKbVVuze+O8GCVeks0Kr6YK3bzPHHHZuUcfC4nmUBbEt
+         kHCfIeI33y1PpPVCA7krgySWIBv6vbliEombmX2rtB3CkeaQDgG7OTjQ/aJoT7sOmZCO
+         d6OQ==
+X-Gm-Message-State: AO0yUKVbWmbnA84960A4DhfE4Hm34YVJWiBm10O5gI8rhXYiEwZm+0Uu
+        idBnR2unqirVtLROW8My/NLxh5fnBdBhAUHrG74cWv5+1BLuREmRwsvLOdQTzpMJnHbKES3SuP4
+        TIKuNRwg/1fHvCk+hBfwa/TS3
+X-Received: by 2002:a17:906:308e:b0:88a:da35:dd51 with SMTP id 14-20020a170906308e00b0088ada35dd51mr16539097ejv.14.1676056769345;
+        Fri, 10 Feb 2023 11:19:29 -0800 (PST)
+X-Google-Smtp-Source: AK7set/LjslSqRW4K+lvECJSA5kEr2lyEGJrPcE6CF5MmtIxPBIdllG3b8htAgAt5ndbUDTe3go1qA==
+X-Received: by 2002:a17:906:308e:b0:88a:da35:dd51 with SMTP id 14-20020a170906308e00b0088ada35dd51mr16539083ejv.14.1676056769183;
+        Fri, 10 Feb 2023 11:19:29 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id h14-20020a17090634ce00b00877e1bb54b0sm2770373ejb.53.2023.02.10.11.19.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 11:19:28 -0800 (PST)
+Message-ID: <74e3c9ae-b1f1-1e7b-4af1-56f918471b36@redhat.com>
+Date:   Fri, 10 Feb 2023 20:19:27 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bef36e9e-ee9c-4353-a526-08db0b9b94d8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Feb 2023 19:18:24.7650
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: oK6bDxhfFSRZifOdJKwqUVXbwfTCbb59wrmo+kY/DBGTAdB0ESwezRWeZzZljNKbCXJPuEdQz513qlWjDV4S+A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR21MB2047
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 1/9] apple-gmux: use cpu_to_be32 instead of manual
+ reorder
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Orlando Chamberlain <orlandoch.dev@gmail.com>,
+        platform-driver-x86@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>,
+        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        Jack Xiao <Jack.Xiao@amd.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Rander Wang <rander.wang@intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Yong Zhi <yong.zhi@intel.com>, Evan Quan <evan.quan@amd.com>,
+        Kerem Karabay <kekrby@gmail.com>,
+        Aditya Garg <gargaditya08@live.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>
+References: <20230210044826.9834-1-orlandoch.dev@gmail.com>
+ <20230210044826.9834-2-orlandoch.dev@gmail.com>
+ <3af65b5e-1f52-79f6-4130-03901ce76d2f@redhat.com>
+In-Reply-To: <3af65b5e-1f52-79f6-4130-03901ce76d2f@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBNb2hhbW1lZCBHYW1hbCA8bWdhbWFsQHJlZGhhdC5jb20+DQo+IFNlbnQ6IEZyaWRh
-eSwgRmVicnVhcnkgMTAsIDIwMjMgMToxMiBBTQ0KPiA+IC4uLg0KPiA+IFVwb24gY3Jhc2gsIExp
-bnV4IHNlbmRzIGEgQ0hBTk5FTE1TR19VTkxPQUQgbWVzc2dlIHRvIHRoZSBob3N0LA0KPiA+IGFu
-ZCB0aGUgaG9zdCBpcyBzdXBwb3NlZCB0byBxdWllc2NlL3Jlc2V0IHRoZSBWTUJ1cyBkZXZpY2Vz
-LCBzbw0KPiA+IG5vcm1hbGx5IHdlIHNob3VsZCBub3Qgc2VlIGEgY3Jhc2ggaW4gcmVsaWQyY2hh
-bm5lbCgpLg0KPiANCj4gRG9lcyB0aGlzIG5vdCBoYXBwZW4gaW4gdGhlIGNhc2Ugb2Yga2R1bXA/
-IFNob3VsZG4ndCBhDQo+IENIQU5ORUxNU0dfVU5MT0FEDQo+IG1lc3NhZ2UgYmUgc2VudCB0byB0
-aGUgaG9zdCBpbiB0aGF0IGNhc2UgYXMgd2VsbD8NCg0KVGhlIG1lc3NhZ2UgaXMgc2VudCB0byB0
-aGUgaG9zdCBpbiB0aGUgY2FzZSBvZiBrZHVtcC4NCiANCj4gPiA+ID4gWyAgIDIxLjkwNjY3OV0g
-SGFyZHdhcmUgbmFtZTogTWljcm9zb2Z0IENvcnBvcmF0aW9uIFZpcnR1YWwNCj4gPiA+ID4gTWFj
-aGluZS9WaXJ0dWFsIE1hY2hpbmUsIEJJT1MgMDkwMDA3ICAwNS8xOC8yMDE4DQo+ID4NCj4gPiBJ
-IGd1ZXNzIHlvdSBzZWUgdGhlIGNyYXNoIGJlY2F1c2UgeW91J3JlIHJ1bm5pbmcgYW4gb2xkIEh5
-cGVyLVYsDQo+ID4gcHJvYmFibHkgV2luZG93cyBTZXJ2ZXIgMjAxNiBvciAyMDE5LCB3aGljaCBt
-YXkgYmUgdW5hYmxlIHRvDQo+ID4gcmVsaWFibHkgaGFuZGxlIHRoZSBndWVzdCdzIENIQU5ORUxN
-U0dfVU5MT0FEIG1lc3NnZS4NCj4gDQo+IFdlJ3ZlIGFjdHVhbGx5IHNlZW4gdGhpcyBvbiBXaW5k
-b3dzIFNlcnZlciAyMDE2LCAyMDE5LCBhbmQgMjAyMi4NCg0KSSBkaWRuJ3QgZXhwZWN0IHRoaXMg
-dG8gaGFwcGVuIHRvIFdTIDIwMjIuIEl0IGxvb2tzIGxpa2Ugc29tZSBvZiB0aGUNClZNQnVzIGRl
-dmljZXMgYXJlIG5vdCByZXNldCBieSB0aGUgaG9zdCB1cG9uIHRoZSBtZXNzYWdlDQpDSEFOTkVM
-TVNHX1VOTE9BRC4gSWYgeW91IGNhbiBjaGVjayBhbGwgdGhlICdyZWxpZHMnIGluIHRoZSBmaXJz
-dA0Ka2VybmVsIGJlZm9yZWhhbmQsIGFuZCBwcmludCB0aGUgJ3JlbGlkJyBpbiByZWxpZDJjaGFu
-bmVsLCB3ZSdsbCBiZQ0KYWJsZSB0byB0ZWxsIHdoaWNoIGRldmljZSBpcyBub3QgcmVzZXQuIE1h
-eWJlIGl0J3MgYSBnb29kIGlkZWEgdG8gcHJpbnQNCnRoZSAncmVsaWQnIGluIHRoZSBuZXdseS1h
-ZGRlZCB3YXJuaW5nIGZvciBkZWJ1ZyBwdXJwb3Nlcy4NCg==
+Hi,
+
+On 2/10/23 20:09, Hans de Goede wrote:
+> Hi,
+> 
+> On 2/10/23 05:48, Orlando Chamberlain wrote:
+>> Currently it manually flips the byte order, but we can instead use
+>> cpu_to_be32(val) for this.
+>>
+>> Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
+>> ---
+>>  drivers/platform/x86/apple-gmux.c | 18 ++----------------
+>>  1 file changed, 2 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/drivers/platform/x86/apple-gmux.c b/drivers/platform/x86/apple-gmux.c
+>> index 9333f82cfa8a..e8cb084cb81f 100644
+>> --- a/drivers/platform/x86/apple-gmux.c
+>> +++ b/drivers/platform/x86/apple-gmux.c
+>> @@ -94,13 +94,7 @@ static u32 gmux_pio_read32(struct apple_gmux_data *gmux_data, int port)
+>>  static void gmux_pio_write32(struct apple_gmux_data *gmux_data, int port,
+>>  			     u32 val)
+>>  {
+>> -	int i;
+>> -	u8 tmpval;
+>> -
+>> -	for (i = 0; i < 4; i++) {
+>> -		tmpval = (val >> (i * 8)) & 0xff;
+>> -		outb(tmpval, gmux_data->iostart + port + i);
+>> -	}
+>> +	outl(cpu_to_be32(val), gmux_data->iostart + port);
+>>  }
+>>  
+>>  static int gmux_index_wait_ready(struct apple_gmux_data *gmux_data)
+> 
+> The ioport / indexed-ioport accessed apple_gmux-es likely are (part of?)
+> LPC bus devices . Looking at the bus level you are now changing 4 io
+> accesses with a size of 1 byte, to 1 32 bit io-access.
+> 
+> Depending on the decoding hw in the chip this may work fine,
+> or this may work not at all.
+> 
+> I realized that you have asked for more testing, but most surviving
+> macbooks from the older apple-gmux era appear to be models without
+> a discrete GPU (which are often the first thing to break) and thus
+> without a gmux.
+> 
+> Unless we get a bunch of testers to show up, which I doubt. I would
+> prefer slightly bigger / less pretty code and not change the functional
+> behavior of the driver on these older models.
+
+A quick follow up on this, I just noticed that only the pio_write32
+is doing the one byte at a time thing:
+
+static u32 gmux_pio_read32(struct apple_gmux_data *gmux_data, int port)
+{
+        return inl(gmux_data->iostart + port);
+}
+
+static void gmux_pio_write32(struct apple_gmux_data *gmux_data, int port,
+                             u32 val)
+{
+        int i;
+        u8 tmpval;
+
+        for (i = 0; i < 4; i++) {
+                tmpval = (val >> (i * 8)) & 0xff;
+                outb(tmpval, gmux_data->iostart + port + i);
+        }
+}
+
+And if you look closely gmux_pio_write32() is not swapping
+the order to be32 at all, it is just taking the bytes
+in little-endian memory order, starting with the first
+(index 0) byte which is the least significant byte of
+the value.
+
+On x86 the original code is no different then doing:
+
+static void gmux_pio_write32(struct apple_gmux_data *gmux_data, int port,
+                             u32 val)
+{
+        u8 *data = (u8 *)&val;
+        int i;
+
+        for (i = 0; i < 4; i++)
+                outb(data[i], gmux_data->iostart + port + i);
+}
+
+So yeah this patch is definitely wrong, it actually swaps
+the byte order compared to the original code. Which becomes
+clear when you look the weird difference between the read32 and
+write32 functions after this patch.
+
+Presumably there is a specific reason why gmux_pio_write32()
+is not already doing a single outl(..., val) and byte-ordering
+is not the reason.
+
+Regards,
+
+Hans
+
+
+
+>> @@ -177,16 +171,8 @@ static u32 gmux_index_read32(struct apple_gmux_data *gmux_data, int port)
+>>  static void gmux_index_write32(struct apple_gmux_data *gmux_data, int port,
+>>  			       u32 val)
+>>  {
+>> -	int i;
+>> -	u8 tmpval;
+>> -
+>>  	mutex_lock(&gmux_data->index_lock);
+>> -
+>> -	for (i = 0; i < 4; i++) {
+>> -		tmpval = (val >> (i * 8)) & 0xff;
+>> -		outb(tmpval, gmux_data->iostart + GMUX_PORT_VALUE + i);
+>> -	}
+>> -
+>> +	outl(cpu_to_be32(val), gmux_data->iostart + GMUX_PORT_VALUE);
+>>  	gmux_index_wait_ready(gmux_data);
+>>  	outb(port & 0xff, gmux_data->iostart + GMUX_PORT_WRITE);
+>>  	gmux_index_wait_complete(gmux_data);
+> 
+
