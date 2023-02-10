@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 657BD6917B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 05:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF596917B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 05:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbjBJEs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 23:48:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38606 "EHLO
+        id S231161AbjBJEsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 23:48:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbjBJEst (ORCPT
+        with ESMTP id S230286AbjBJEss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 23:48:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F06A5B74E;
-        Thu,  9 Feb 2023 20:48:48 -0800 (PST)
+        Thu, 9 Feb 2023 23:48:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5285B74C
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 20:48:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5B00B82396;
-        Fri, 10 Feb 2023 04:48:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20213C433EF;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8D7861C14
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 04:48:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5971C433A0;
         Fri, 10 Feb 2023 04:48:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676004525;
-        bh=x39PRc/T046lvvssIPKrbvAhJnKd48hEXRslXo6G51Q=;
+        s=k20201202; t=1676004526;
+        bh=3ZPhytsG6MoiFI71uMGAzjRAm4p3c/2mkgqWantxo+I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FMLebj8IqIs5vo3DVpcyJ7/HYGRcBna7bSZLxkCSGshx/DP4CdpuHOVAaOReZtRS+
-         mvg6Lcq2EvaItJZPKIFui4VtCK8HVABM7HJGyxpj5ZGGmKpXW0kQyBXfY2fUYKtXOc
-         b5aOsOV2S2N6G4fwtA249ibOtNcjB+m3qgzqcTtlLBnImql24nHqtawmTX0sBceEtc
-         OB2CmTl4Auf+1ifxMouvM7y9Es+WBzZOujAgRbNQ1TSfqoSz/PizZds/CK1iJm0L85
-         Hw3gZtC98Ki9w3YCcHiUvF58EOttEltnfi8IHvB2yQjDSobfBf1fgqIaLvbwZDEOQl
-         tZieONTUe/zXA==
+        b=XdilebEYHnliIo6ccsozIn8z310XX+J4YeoCbW7rHQ02/iln2iXxE9EPvQfBjxLax
+         t3ysfYwi4WsuohmRqftPzIgku530OlwXFpf3XyzBHQjyXWftPiGot3pG6gJwcCoJK3
+         NTluwuUy5cBGGi1P7UEcU1ZMFeY8ED+DIAgqZw4WjDJqwj+DJOuSP/4PUQmO8Uz265
+         5KTyBUZzr1t7Oe9UxIM5csHGF8Q8jf6WQe7xmnzaI9a1Se2LloVN9qnQ1LJckDykx6
+         x4HSp+SsZ6xYd8rw6ZiBjPcRKEaoRozmHkbJ8dttfY+EZtSAVlxs9CZAaveKCXb81/
+         UzFACfqLtzIRg==
 From:   SeongJae Park <sj@kernel.org>
 To:     SeongJae Park <sj@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-doc@vger.kernel.org,
+Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/3] Docs/admin-guide/mm/damon/usage: add DAMON debugfs interface deprecation notice
-Date:   Fri, 10 Feb 2023 04:48:36 +0000
-Message-Id: <20230210044838.63723-2-sj@kernel.org>
+Subject: [PATCH v2 2/3] mm/damon/Kconfig: add DAMON debugfs interface deprecation notice
+Date:   Fri, 10 Feb 2023 04:48:37 +0000
+Message-Id: <20230210044838.63723-3-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230210044838.63723-1-sj@kernel.org>
 References: <20230210044838.63723-1-sj@kernel.org>
@@ -63,57 +62,40 @@ noticed that so far.  Also, some users could depend on it and have
 problems at  movng to the alternative (DAMON sysfs interface).
 
 For such cases, note DAMON debugfs interface as deprecated, and contacts
-to ask helps on the document.
+to ask helps on the Kconfig.
 
 [1] https://git.kernel.org/pub/scm/docs/kernel/website.git/commit/?id=332e9121320bc7461b2d3a79665caf153e51732c
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- Documentation/admin-guide/mm/damon/usage.rst | 20 +++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
+ mm/damon/Kconfig | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/admin-guide/mm/damon/usage.rst b/Documentation/admin-guide/mm/damon/usage.rst
-index 9237d6a25897..9b823fec974d 100644
---- a/Documentation/admin-guide/mm/damon/usage.rst
-+++ b/Documentation/admin-guide/mm/damon/usage.rst
-@@ -25,10 +25,12 @@ DAMON provides below interfaces for different users.
-   interface provides only simple :ref:`statistics <damos_stats>` for the
-   monitoring results.  For detailed monitoring results, DAMON provides a
-   :ref:`tracepoint <tracepoint>`.
--- *debugfs interface.*
-+- *debugfs interface. (DEPRECATED!)*
-   :ref:`This <debugfs_interface>` is almost identical to :ref:`sysfs interface
--  <sysfs_interface>`.  This will be removed after next LTS kernel is released,
--  so users should move to the :ref:`sysfs interface <sysfs_interface>`.
-+  <sysfs_interface>`.  This is deprecated, so users should move to the
-+  :ref:`sysfs interface <sysfs_interface>`.  If you depend on this and cannot
-+  move, please report your usecase to damon@lists.linux.dev and
-+  linux-mm@kvack.org.
- - *Kernel Space Programming Interface.*
-   :doc:`This </mm/damon/api>` is for kernel space programmers.  Using this,
-   users can utilize every feature of DAMON most flexibly and efficiently by
-@@ -487,13 +489,17 @@ the files as above.  Above is only for an example.
+diff --git a/mm/damon/Kconfig b/mm/damon/Kconfig
+index 7821fcb3f258..436c6b4cb5ec 100644
+--- a/mm/damon/Kconfig
++++ b/mm/damon/Kconfig
+@@ -60,7 +60,7 @@ config DAMON_SYSFS
+ 	  the interface for arbitrary data access monitoring.
  
- .. _debugfs_interface:
+ config DAMON_DBGFS
+-	bool "DAMON debugfs interface"
++	bool "DAMON debugfs interface (DEPRECATED!)"
+ 	depends on DAMON_VADDR && DAMON_PADDR && DEBUG_FS
+ 	help
+ 	  This builds the debugfs interface for DAMON.  The user space admins
+@@ -68,8 +68,9 @@ config DAMON_DBGFS
  
--debugfs Interface
--=================
-+debugfs Interface (DEPRECATED!)
-+===============================
+ 	  If unsure, say N.
  
- .. note::
+-	  This will be removed after >5.15.y LTS kernel is released, so users
+-	  should move to the sysfs interface (DAMON_SYSFS).
++	  This is deprecated, so users should move to the sysfs interface
++	  (DAMON_SYSFS).  If you depend on this and cannot move, please report
++	  your usecase to damon@lists.linux.dev and linux-mm@kvack.org.
  
--  DAMON debugfs interface will be removed after next LTS kernel is released, so
--  users should move to the :ref:`sysfs interface <sysfs_interface>`.
-+  THIS IS DEPRECATED!
-+
-+  DAMON debugfs interface is deprecated, so users should move to the
-+  :ref:`sysfs interface <sysfs_interface>`.  If you depend on this and cannot
-+  move, please report your usecase to damon@lists.linux.dev and
-+  linux-mm@kvack.org.
- 
- DAMON exports eight files, ``attrs``, ``target_ids``, ``init_regions``,
- ``schemes``, ``monitor_on``, ``kdamond_pid``, ``mk_contexts`` and
+ config DAMON_DBGFS_KUNIT_TEST
+ 	bool "Test for damon debugfs interface" if !KUNIT_ALL_TESTS
 -- 
 2.25.1
 
