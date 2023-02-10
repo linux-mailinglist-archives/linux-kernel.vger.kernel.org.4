@@ -2,305 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9520692150
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0FB692154
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:01:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232316AbjBJPAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 10:00:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
+        id S232290AbjBJPBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 10:01:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbjBJPAc (ORCPT
+        with ESMTP id S232225AbjBJPA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 10:00:32 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0B6E387;
-        Fri, 10 Feb 2023 07:00:29 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id j6-20020a9d7686000000b0068d4ba9d141so1600501otl.6;
-        Fri, 10 Feb 2023 07:00:29 -0800 (PST)
+        Fri, 10 Feb 2023 10:00:58 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D305A900
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:00:50 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id by3so4029921wrb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:00:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=hkG5F6FfqxiRmGZr9MvPZGc5PmNjg+sydBTMNlTr+Vw=;
-        b=qZEViGiIoH1AZMleIoZPddyCigeTGEYT/sASKMQDKw7mjofX1idoJ36SGxXaSqtE79
-         aq212pu39Ukzv5wvC46dW1EEO6VnTf1wmieWGD3Betm6A8R9TlK5pBq2YGQcwYFB2CyB
-         Xk9T9o1ptLV1sJPgLITUvD/CIWzT6f3PVkx6kftj23wZQVWIdlxA8LEzMrR04XU/1ndB
-         JvOj8rN5DTi7XtmMzCOBdTLyudJd136p1lew+aUfIQyYYWY0F7OCMQmIDTGsWirLYDTn
-         12aRw4z91yI9whFCSts37b5oLYlsTnp3+cqy2KQTaKR1EHSbECICH7WjvWVIBhKWVVId
-         Jhcw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=K3+P+KUFXvw1apoaL31HXOu2YL3RmY3Kb2P1uEHJDNc=;
+        b=alUpfBodLxY9kFtV/M3kwZoV13ak/JNqddq/STESMZYMiaKWURdGqY90Iewy/098VT
+         p5QEet9/3knhYcsJ2/CjIQ2xq1UTXLtPTcbviPDN/WF7qeXsU5R8F+tbz/5DcE21CgpV
+         Mx9AFyn5YrEQbE17Th5ZYjo7dK94E63vnYRYxPGnQjV2K+Cb+MllAC2+Q6G8aCqE1L8A
+         AGEzqQDxQt0jybY/Lx9ScPEMPILzAz4ch/bMtPAzwHVUC+WCau2kjVz0ygU1f19/gWSj
+         i7wYIovR4u9cQJJ6JJnuCFWEuPqNsQdxKWSD5JyxnPp4uXavTZQE6Tb5Uk+XicxXr6xw
+         pqhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hkG5F6FfqxiRmGZr9MvPZGc5PmNjg+sydBTMNlTr+Vw=;
-        b=EHcPeuCbfariA0Axrc8fymum49sc0h8q9Lb/ImnoBHMtwM6yEu9QvtxpfCN6Wto9wW
-         bxtkbRwUMhDlotz7kZH3E4UNjg+Gn5hIxjHE2D//d4tk8t6y9cfVQPpJlkKiCGx7hKhG
-         kQXHwhNeO3cZzpbu99cArPvSGQKlPCYeiLEbYkyjEUqs4/nC5KUuvCExXNaDqrYMWBNF
-         8EJS0/j90GqNKMN4Chrz2qJskKA1Uc+Y/HCDXowEniuPpMWe9bmRYbFwPvazoPhUIDOq
-         E3CcPBK0SU+OBEtyXfv2qtnTKe0GxKnx//bD2EGmye/+wF1TF4C4qL5pX5V2X1AEs6Y2
-         EOpg==
-X-Gm-Message-State: AO0yUKXKzLfPHgnHzcrWX6XxgNZLaSLYmIdWfNE/jQUqETBtSKmfPV4k
-        mY4svyDmz4yTfu4nXdl3eyM=
-X-Google-Smtp-Source: AK7set8Xs782gGs134tanS6YvV3pniIpDNmAbo+uSqtkciGHSP8kHgBgR2UJhKybt7xOj2eNZps7nw==
-X-Received: by 2002:a05:6830:3890:b0:684:e29a:ac5 with SMTP id bq16-20020a056830389000b00684e29a0ac5mr9462636otb.36.1676041228992;
-        Fri, 10 Feb 2023 07:00:28 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h18-20020a9d6a52000000b00688449397d3sm2079593otn.15.2023.02.10.07.00.26
+        bh=K3+P+KUFXvw1apoaL31HXOu2YL3RmY3Kb2P1uEHJDNc=;
+        b=Sya6vQptknVXehmwtvj/S8D8b483mBiMIm9QtnRnBjZP+CcbfBuXK5iDRkfgRHcDnf
+         LgVchys9xM/cbM7bYdW15RxTWj7Kr+PKCsUdNmB/kIVSy2W3i+JaIpecSyQmVZsLXVBU
+         eP/Ia/YSzQz46r5l8UY+n3IsNDD0c0SO5bpY7NSbCcUlmd7Iour0aIXD7JApeI6/9QTq
+         CaHLV97nOna/LIa0pgAI3KEKOJgVmP2qs+O0MwxM4Fbujs7ViWu8rR81h66JdVN7DlGL
+         W2r4Ghk7dDrjYP0vmQUBJyZGiYYY8OP7ZPM0uBeyInwy+BG9vY1yaLPpHv7RFoaAXXPt
+         J0xg==
+X-Gm-Message-State: AO0yUKWeyKcMwmfYuGGki4jZDdTKE6I6uX4dLfwgeqPNWd5kY3tg/gmy
+        zBL/d22CtVjaf1OC58cwXQdxuw==
+X-Google-Smtp-Source: AK7set+zJKGiSqj5eqPg+UEcnSf7H71aMVHQPkkvM154artPj3Ez+65Mh8QBqfERGqYAgN/a5FUqog==
+X-Received: by 2002:adf:f5c8:0:b0:2c3:ed14:8319 with SMTP id k8-20020adff5c8000000b002c3ed148319mr15222290wrp.14.1676041248911;
+        Fri, 10 Feb 2023 07:00:48 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:5a65:5553:55cf:3027? ([2a01:e0a:982:cbb0:5a65:5553:55cf:3027])
+        by smtp.gmail.com with ESMTPSA id e29-20020a5d595d000000b002c53cc7504csm3603457wri.78.2023.02.10.07.00.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 07:00:28 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b586fd0f-f5b3-6fd1-3cce-2809e5476bf5@roeck-us.net>
-Date:   Fri, 10 Feb 2023 07:00:25 -0800
+        Fri, 10 Feb 2023 07:00:48 -0800 (PST)
+Message-ID: <62ede719-e7f8-4d7e-883e-a4b8eb47f987@linaro.org>
+Date:   Fri, 10 Feb 2023 16:00:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 3/4] watchdog: mt7621-wdt: avoid static global
- declarations
+ Thunderbird/102.7.1
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 1/7] usb: typec: ucsi: add PMIC Glink UCSI driver
 Content-Language: en-US
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-watchdog@vger.kernel.org
-Cc:     wim@linux-watchdog.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-References: <20230210121735.639089-1-sergio.paracuellos@gmail.com>
- <20230210121735.639089-4-sergio.paracuellos@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230210121735.639089-4-sergio.paracuellos@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230130-topic-sm8450-upstream-pmic-glink-v1-0-0b0acfad301e@linaro.org>
+ <20230130-topic-sm8450-upstream-pmic-glink-v1-1-0b0acfad301e@linaro.org>
+ <Y9jcYdc30G026/fs@kroah.com>
+ <720aee1d-87e8-5291-c6a0-ef53e830a21d@linaro.org>
+ <Y+YerQrfWgmwTErM@kroah.com>
+ <06670a10-c8e9-6f87-9c16-e88a90a74469@linaro.org>
+ <Y+YkHZASzN97QtUY@kroah.com>
+Organization: Linaro Developer Services
+In-Reply-To: <Y+YkHZASzN97QtUY@kroah.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/10/23 04:17, Sergio Paracuellos wrote:
-> Instead of using static global definitions in driver code, refactor code
-> introducing a new watchdog driver data structure and use it along the
-> code.
+On 10/02/2023 12:01, Greg Kroah-Hartman wrote:
+> On Fri, Feb 10, 2023 at 11:44:22AM +0100, Neil Armstrong wrote:
+>> On 10/02/2023 11:38, Greg Kroah-Hartman wrote:
+>>> On Fri, Feb 10, 2023 at 11:31:08AM +0100, Neil Armstrong wrote:
+>>>> On 31/01/2023 10:16, Greg Kroah-Hartman wrote:
+>>>>> On Mon, Jan 30, 2023 at 10:54:32AM +0100, Neil Armstrong wrote:
+>>>>>> Introduce the UCSI PMIC Glink aux driver that communicates
+>>>>>> with the aDSP firmware with the UCSI protocol which handles
+>>>>>> the USB-C Port(s) Power Delivery.
+>>>>>>
+>>>>>> The UCSI messaging is necessary on newer Qualcomm SoCs to
+>>>>>> provide USB role switch and altmode notifications.
+>>>>>>
+>>>>>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>>>>>> ---
+>>>>>>     drivers/usb/typec/ucsi/Kconfig      |   7 +
+>>>>>>     drivers/usb/typec/ucsi/Makefile     |   1 +
+>>>>>>     drivers/usb/typec/ucsi/ucsi_glink.c | 321 ++++++++++++++++++++++++++++++++++++
+>>>>>>     3 files changed, 329 insertions(+)
+>>>>>>
+>>>>>> diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
+>>>>>> index 8f9c4b9f31f7..dee6069e46a2 100644
+>>>>>> --- a/drivers/usb/typec/ucsi/Kconfig
+>>>>>> +++ b/drivers/usb/typec/ucsi/Kconfig
+>>>>>> @@ -58,4 +58,11 @@ config UCSI_STM32G0
+>>>>>>     	  To compile the driver as a module, choose M here: the module will be
+>>>>>>     	  called ucsi_stm32g0.
+>>>>>> +config UCSI_PMIC_GLINK
+>>>>>> +	tristate "UCSI Qualcomm PMIC GLINK Interface Driver"
+>>>>>> +	depends on QCOM_PMIC_GLINK
+>>>>>
+>>>>> No way to test build this code without this option?
+>>>>
+>>>> Nop, the QCOM_PMIC_GLINK is a build dependency, this can't be removed
+>>>
+>>> Then perhaps the QCOM_PMIC_GLINK code needs to be fixed up to allow for
+>>> it to be built on all platforms properly?  Otherwise you are
+>>> guaranteeing you will not get much, if any, build coverage and api
+>>> changes will cause this code to stagnate over time :(
+>>
+>> The QCOM_PMIC_GLINK deps are:
+>>          depends on RPMSG
+>>          depends on TYPEC
+>>          depends on DRM
+>>          depends on NET
+>>          depends on OF
+>>          select AUXILIARY_BUS
+>>          select QCOM_PDR_HELPERS
+>>
+>> What would be the changes needed here ?
 > 
-> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> ---
->   drivers/watchdog/mt7621_wdt.c | 104 ++++++++++++++++++++++------------
->   1 file changed, 67 insertions(+), 37 deletions(-)
+> I do not know, try unwinding it and maybe just adding a COMPILE_TEST
+> build option in a few places is all that is needed?
+
+Sure, I'll investigate and send a separate patch for that.
+
+Thanks,
+Neil
+
 > 
-> diff --git a/drivers/watchdog/mt7621_wdt.c b/drivers/watchdog/mt7621_wdt.c
-> index a8aa3522c..f1c702971 100644
-> --- a/drivers/watchdog/mt7621_wdt.c
-> +++ b/drivers/watchdog/mt7621_wdt.c
-> @@ -31,8 +31,11 @@
->   #define TMR1CTL_RESTART			BIT(9)
->   #define TMR1CTL_PRESCALE_SHIFT		16
->   
-> -static void __iomem *mt7621_wdt_base;
-> -static struct reset_control *mt7621_wdt_reset;
-> +struct mt7621_wdt_data {
-> +	void __iomem *base;
-> +	struct reset_control *rst;
-> +	struct watchdog_device wdt;
-> +};
->   
->   static bool nowayout = WATCHDOG_NOWAYOUT;
->   module_param(nowayout, bool, 0);
-> @@ -40,27 +43,31 @@ MODULE_PARM_DESC(nowayout,
->   		 "Watchdog cannot be stopped once started (default="
->   		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
->   
-> -static inline void rt_wdt_w32(unsigned reg, u32 val)
-> +static inline void rt_wdt_w32(void __iomem *base, unsigned reg, u32 val)
->   {
-> -	iowrite32(val, mt7621_wdt_base + reg);
-> +	iowrite32(val, base + reg);
->   }
->   
-> -static inline u32 rt_wdt_r32(unsigned reg)
-> +static inline u32 rt_wdt_r32(void __iomem *base, unsigned reg)
->   {
-> -	return ioread32(mt7621_wdt_base + reg);
-> +	return ioread32(base + reg);
->   }
->   
->   static int mt7621_wdt_ping(struct watchdog_device *w)
->   {
-> -	rt_wdt_w32(TIMER_REG_TMRSTAT, TMR1CTL_RESTART);
-> +	struct mt7621_wdt_data *drvdata = watchdog_get_drvdata(w);
-> +
-> +	rt_wdt_w32(drvdata->base, TIMER_REG_TMRSTAT, TMR1CTL_RESTART);
->   
->   	return 0;
->   }
->   
->   static int mt7621_wdt_set_timeout(struct watchdog_device *w, unsigned int t)
->   {
-> +	struct mt7621_wdt_data *drvdata = watchdog_get_drvdata(w);
-> +
->   	w->timeout = t;
-> -	rt_wdt_w32(TIMER_REG_TMR1LOAD, t * 1000);
-> +	rt_wdt_w32(drvdata->base, TIMER_REG_TMR1LOAD, t * 1000);
->   	mt7621_wdt_ping(w);
->   
->   	return 0;
-> @@ -68,29 +75,31 @@ static int mt7621_wdt_set_timeout(struct watchdog_device *w, unsigned int t)
->   
->   static int mt7621_wdt_start(struct watchdog_device *w)
->   {
-> +	struct mt7621_wdt_data *drvdata = watchdog_get_drvdata(w);
->   	u32 t;
->   
->   	/* set the prescaler to 1ms == 1000us */
-> -	rt_wdt_w32(TIMER_REG_TMR1CTL, 1000 << TMR1CTL_PRESCALE_SHIFT);
-> +	rt_wdt_w32(drvdata->base, TIMER_REG_TMR1CTL, 1000 << TMR1CTL_PRESCALE_SHIFT);
->   
->   	mt7621_wdt_set_timeout(w, w->timeout);
->   
-> -	t = rt_wdt_r32(TIMER_REG_TMR1CTL);
-> +	t = rt_wdt_r32(drvdata->base, TIMER_REG_TMR1CTL);
->   	t |= TMR1CTL_ENABLE;
-> -	rt_wdt_w32(TIMER_REG_TMR1CTL, t);
-> +	rt_wdt_w32(drvdata->base, TIMER_REG_TMR1CTL, t);
->   
->   	return 0;
->   }
->   
->   static int mt7621_wdt_stop(struct watchdog_device *w)
->   {
-> +	struct mt7621_wdt_data *drvdata = watchdog_get_drvdata(w);
->   	u32 t;
->   
->   	mt7621_wdt_ping(w);
->   
-> -	t = rt_wdt_r32(TIMER_REG_TMR1CTL);
-> +	t = rt_wdt_r32(drvdata->base, TIMER_REG_TMR1CTL);
->   	t &= ~TMR1CTL_ENABLE;
-> -	rt_wdt_w32(TIMER_REG_TMR1CTL, t);
-> +	rt_wdt_w32(drvdata->base, TIMER_REG_TMR1CTL, t);
->   
->   	return 0;
->   }
-> @@ -105,7 +114,9 @@ static int mt7621_wdt_bootcause(void)
->   
->   static int mt7621_wdt_is_running(struct watchdog_device *w)
->   {
-> -	return !!(rt_wdt_r32(TIMER_REG_TMR1CTL) & TMR1CTL_ENABLE);
-> +	struct mt7621_wdt_data *drvdata = watchdog_get_drvdata(w);
-> +
-> +	return !!(rt_wdt_r32(drvdata->base, TIMER_REG_TMR1CTL) & TMR1CTL_ENABLE);
->   }
->   
->   static const struct watchdog_info mt7621_wdt_info = {
-> @@ -121,30 +132,39 @@ static const struct watchdog_ops mt7621_wdt_ops = {
->   	.set_timeout = mt7621_wdt_set_timeout,
->   };
->   
-> -static struct watchdog_device mt7621_wdt_dev = {
-> -	.info = &mt7621_wdt_info,
-> -	.ops = &mt7621_wdt_ops,
-> -	.min_timeout = 1,
-> -	.max_timeout = 0xfffful / 1000,
-> -};
-> -
->   static int mt7621_wdt_probe(struct platform_device *pdev)
->   {
->   	struct device *dev = &pdev->dev;
-> -	mt7621_wdt_base = devm_platform_ioremap_resource(pdev, 0);
-> -	if (IS_ERR(mt7621_wdt_base))
-> -		return PTR_ERR(mt7621_wdt_base);
-> +	struct watchdog_device *mt7621_wdt;
-> +	struct mt7621_wdt_data *drvdata;
-> +	int err;
-> +
-> +	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
-> +	if (!drvdata)
-> +		return -ENOMEM;
-> +
-> +	drvdata->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(drvdata->base))
-> +		return PTR_ERR(drvdata->base);
->   
-> -	mt7621_wdt_reset = devm_reset_control_get_exclusive(dev, NULL);
-> -	if (!IS_ERR(mt7621_wdt_reset))
-> -		reset_control_deassert(mt7621_wdt_reset);
-> +	drvdata->rst = devm_reset_control_get_exclusive(dev, NULL);
-> +	if (!IS_ERR(drvdata->rst))
-> +		reset_control_deassert(drvdata->rst);
->   
-> -	mt7621_wdt_dev.bootstatus = mt7621_wdt_bootcause();
-> +	mt7621_wdt = &drvdata->wdt;
-> +	mt7621_wdt->info = &mt7621_wdt_info;
-> +	mt7621_wdt->ops = &mt7621_wdt_ops;
-> +	mt7621_wdt->min_timeout = 1;
-> +	mt7621_wdt->max_timeout = 0xfffful / 1000;
-> +	mt7621_wdt->parent = dev;
->   
-> -	watchdog_init_timeout(&mt7621_wdt_dev, mt7621_wdt_dev.max_timeout,
-> -			      dev);
-> -	watchdog_set_nowayout(&mt7621_wdt_dev, nowayout);
-> -	if (mt7621_wdt_is_running(&mt7621_wdt_dev)) {
-> +	mt7621_wdt->bootstatus = mt7621_wdt_bootcause();
-> +
-> +	watchdog_init_timeout(mt7621_wdt, mt7621_wdt->max_timeout, dev);
-
-FWIW, setting ->timeout would have been sufficient. watchdog_init_timeout()
-is only really valuable if there is a module parameter, or if the timeout
-is set from devicetree. That won't work here, though, because the passed
-value takes precedence. Changing that would change functionality and thus would
-have to be done in a separate patch, I just wanted to mention it.
-
-> +	watchdog_set_nowayout(mt7621_wdt, nowayout);
-> +	watchdog_set_drvdata(mt7621_wdt, drvdata);
-> +
-> +	if (mt7621_wdt_is_running(mt7621_wdt)) {
->   		/*
->   		 * Make sure to apply timeout from watchdog core, taking
->   		 * the prescaler of this driver here into account (the
-> @@ -154,17 +174,27 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
->   		 * we first disable the watchdog, set the new prescaler
->   		 * and timeout, and then re-enable the watchdog.
->   		 */
-> -		mt7621_wdt_stop(&mt7621_wdt_dev);
-> -		mt7621_wdt_start(&mt7621_wdt_dev);
-> -		set_bit(WDOG_HW_RUNNING, &mt7621_wdt_dev.status);
-> +		mt7621_wdt_stop(mt7621_wdt);
-> +		mt7621_wdt_start(mt7621_wdt);
-> +		set_bit(WDOG_HW_RUNNING, &mt7621_wdt->status);
-> +	}
-> +
-> +	err = devm_watchdog_register_device(dev, &drvdata->wdt);
-> +	if (err) {
-> +		dev_err(dev, "Error registering watchdog device\n");
-> +		return err;
->   	}
-
-This is a functional change. If you want to add an error message,
-do it in a separate patch and provide a rationale for it.
-
->   
-> -	return devm_watchdog_register_device(dev, &mt7621_wdt_dev);
-> +	platform_set_drvdata(pdev, drvdata);
-> +
-> +	return 0;
->   }
->   
->   static void mt7621_wdt_shutdown(struct platform_device *pdev)
->   {
-> -	mt7621_wdt_stop(&mt7621_wdt_dev);
-> +	struct mt7621_wdt_data *drvdata = platform_get_drvdata(pdev);
-> +
-> +	mt7621_wdt_stop(&drvdata->wdt);
->   }
-
-Also FWIW, we have watchdog_stop_on_reboot() for that purpose.
-Changing that would be a separate patch, though.
-
->   static const struct of_device_id mt7621_wdt_match[] = {
+> thanks,
+> 
+> greg k-h
 
