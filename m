@@ -2,98 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD20F692A25
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 23:31:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA8E692A30
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 23:32:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233550AbjBJWbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 17:31:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56890 "EHLO
+        id S233810AbjBJWcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 17:32:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233348AbjBJWbW (ORCPT
+        with ESMTP id S233604AbjBJWc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 17:31:22 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E667FEE6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 14:31:21 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id 78so4710480pgb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 14:31:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1676068281;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aakxc4GOV3A+tpqp5NT+fjFwCBvuUL/gF53A5SHyoUM=;
-        b=HBH4bzAOC+oGh0kd3NDtdX8oHQ3DvT4RC4HcqvIizHcpV3n2xpZ/i1ygDv66g0a0sz
-         fFmff/ydUHcr/+X2vhiNoX77AcEuuGESI7j171BtOjbkWmpMD2QfCuA7NdgR/VhtVKwT
-         959h2p2pCsk5upGFRWYhsUCl1xERt5f2ImVJMAbxm8vJkVPoFxvHGobgGpIC1ybTOr1B
-         i+fSVnx3B+YtsCrjnAxxvCy+a0eCqMxootp6C/nLWjjOkhIUlwlQEX+GZMBKjdJp4LW/
-         7mbD5YtOeKlIGfXKM9Lsh+r8K+Gycd3zKi2QOVLeyS/3775+KxgyKXzpAs/0kWCOQLdJ
-         Ce/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676068281;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aakxc4GOV3A+tpqp5NT+fjFwCBvuUL/gF53A5SHyoUM=;
-        b=G4gbYKNuzS2egueruoeYkOPsBVpd3p+twy0DlWsYW9P+MPzQlU5IlZFicdhrtQUSch
-         18uQnGXcr5HtnitQ5rEpO2vpvf8+wid+yyR7CchtVz7BpfjIZ2lfbytFZyycclI9AGCO
-         CrfJxXb23Tenp5yfGSZuu86Rf/gRKdV04kcWymZXHinsw1DzqLY3rZps2CSWXUEEWvfy
-         LqIR7s27sFxVp2vFl+wtsoQTTluCnW4b9EMk6ZQnp81XizhyjLkP2QIvFUCCwcTF3WwV
-         zvzNLvIlL/p/ygpZEtLilsJQd9gsrLcn+EkG26vBhU2AWmXYBCH1wNwdPwoc4WhDPcWX
-         XB+g==
-X-Gm-Message-State: AO0yUKVwXkOtN12Y//UzfraKpp8wE6saM2PKHWlahDQQ2vsWn7khxnpq
-        2++PUOZ7diHZj9+RBZt45UlYLg==
-X-Google-Smtp-Source: AK7set9JzFtLT/BkCdAXDmaqIpgx7y6Q9b2lrPWOatxAvPOrDATXsIJKYQICCZAwhqj/4NCuYVdPag==
-X-Received: by 2002:a62:d115:0:b0:5a8:1637:1f03 with SMTP id z21-20020a62d115000000b005a816371f03mr11992803pfg.1.1676068281172;
-        Fri, 10 Feb 2023 14:31:21 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id d15-20020aa7814f000000b00593ce7ebbaasm3710342pfn.184.2023.02.10.14.31.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 14:31:20 -0800 (PST)
-Message-ID: <bee8b687-df78-baf8-495c-099d44f39275@kernel.dk>
-Date:   Fri, 10 Feb 2023 15:31:19 -0700
+        Fri, 10 Feb 2023 17:32:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16284B746;
+        Fri, 10 Feb 2023 14:32:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 731DBB82607;
+        Fri, 10 Feb 2023 22:32:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 383E8C433EF;
+        Fri, 10 Feb 2023 22:32:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676068338;
+        bh=2NQDPgACS8xj+77ibaZP4zKWlf6IXR9HA3KiWyN/oTg=;
+        h=In-Reply-To:References:Subject:From:To:Date:From;
+        b=lMS8aROoD3ffESkMofzGNmAthSTy++eZx24c9pCK/JVHbO3UWpZHKbKxgFVBDONOP
+         8nahBhN0obUkvQr83CgdQqeG6rUpruk6gMHexwuMguo6wsG1V1KmxVZBALUsXsvKLD
+         0XWmuS5U+tPmNZJDoRhfBzAMvcK7lg5kWeOaIR7cbO4etlNZTDu7e0tDIulAny6oz+
+         RtpTYP7VoFpfuy3OYY944CEU94K3fLDoTbZPVO41NWpCj7ZSScc0OO4G0zXQCiI7s6
+         CUAPRpCjRzzFy6+riLxkXBkEsvRUo15X3G1NE4vdigte0zggGBGsGpv42fS6HL1cJG
+         l55AEeCq+J4rw==
+Message-ID: <350b296b62a982f83e273f0f385f2b6f.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v13 00/12] iov_iter: Improve page extraction (pin or just
- list)
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20230209102954.528942-1-dhowells@redhat.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230209102954.528942-1-dhowells@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <bced492e-08f3-90d9-4ca0-41ab0e4cca9d@linaro.org>
+References: <20230123094925.54824-1-krzysztof.kozlowski@linaro.org> <20230123094925.54824-2-krzysztof.kozlowski@linaro.org> <7ddf5c74de84c5dc291996423cb1eb46.sboyd@kernel.org> <febd59ed-ff7b-ffc4-5568-d856703c9123@linaro.org> <9367139a425dc7e4811c757b62f33a4e.sboyd@kernel.org> <bced492e-08f3-90d9-4ca0-41ab0e4cca9d@linaro.org>
+Subject: Re: [PATCH 2/2] clk: qcom: restrict drivers per ARM/ARM64
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 10 Feb 2023 14:32:14 -0800
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/23 3:29?AM, David Howells wrote:
-> Hi Jens, Al, Christoph,
-> 
-> Here are patches to provide support for extracting pages from an iov_iter
-> and to use this in the extraction functions in the block layer bio code.
+Quoting Krzysztof Kozlowski (2023-01-31 23:12:53)
+> On 31/01/2023 00:30, Stephen Boyd wrote:
+> > Quoting Krzysztof Kozlowski (2023-01-26 01:31:55)
+> >> On 25/01/2023 21:44, Stephen Boyd wrote:
+> >>> Quoting Krzysztof Kozlowski (2023-01-23 01:49:25)
+> >>>> There is no point to allow selecting pin-controller drivers for Qual=
+comm
+> >>>
+> >>> pin controllers?
+> >>
+> >> Copy-paste, I'll fix it.
+> >>
+> >>>
+> >>>> ARMv7 SoCs when building ARM64 kernel, and vice versa.  This makes
+> >>>> kernel configuration more difficult as many do not remember the Qual=
+comm
+> >>>> SoCs model names/numbers.  There won't be a single image for ARMv7 a=
+nd
+> >>>> ARMv8/9 SoCs, so no features/options are lost.
+> >>>
+> >>> Are the drivers used in arm32 emulation mode on these SoCs? I recall
+> >>> there are some SoCs they run with the arm architecture.
+> >>
+> >> I did not add it to the few SoCs which have upstream DTS in ARM and
+> >> ARM64. I added only to the ones which are in one specific folder. Also
+> >> my patch does not affect defconfigs (qcom_defconfig and arm64/defconfi=
+g).
+> >=20
+> > Cool, thanks for checking. Is it possible to take a dtb from arm64 dts
+> > directory and boot it on an armv8 CPU running in 32-bit mode? Just
+> > wondering if even having the dts file exist in the arm64 architecture
+> > really matters here.
+>=20
+> If DTSI (and/or board DTS) is in arm64, you still need DTS or a link in
+> arm directory. If such one is added, then the restrictions here can be
+> removed. Have in mind that I did the same already for pinctrl.
+>=20
 
-[snip]
+I'm saying that you put the dts file in arch/arm64/boot/dts/, compile
+the dts to a dtb and stick it on a board that boots the kernel in arm32
+mode. If it is possible to boot the dtb on a CPU running in arm32 mode
+then this restriction should be loosened to=20
 
-I updated the branch to v13, just as a heads-up. Still in
-for-6.3/iov-extract as before.
-
--- 
-Jens Axboe
-
+	depends on ARM || ARM64 || COMPILE_TEST
