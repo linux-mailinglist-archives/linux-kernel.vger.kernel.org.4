@@ -2,59 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791116927A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 21:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAF06927AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 21:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233172AbjBJUI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 15:08:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
+        id S232953AbjBJUKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 15:10:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233569AbjBJUIZ (ORCPT
+        with ESMTP id S232919AbjBJUKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 15:08:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2947715E;
-        Fri, 10 Feb 2023 12:08:21 -0800 (PST)
+        Fri, 10 Feb 2023 15:10:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EE8749AD;
+        Fri, 10 Feb 2023 12:10:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76A5261E9D;
-        Fri, 10 Feb 2023 20:08:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBD69C4339B;
-        Fri, 10 Feb 2023 20:08:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 594A461E98;
+        Fri, 10 Feb 2023 20:10:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F635C433EF;
+        Fri, 10 Feb 2023 20:10:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676059700;
-        bh=Y0PuxjUxapJRByHXF+8ePe8IGau3NfsWMr+cn1W8RZI=;
+        s=k20201202; t=1676059847;
+        bh=/PnsRdKZG9z1C31QNUYbUwY5HvpH894HR8JQeW84zbM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OsbGvG5PcA/BJXZ/7gqJlAi2/pJFjmCEhIo6pCL5EEW5zSZSKM7zEZq4X1974RDhn
-         nWxX6AFx1KCTybcn7oJzztQVvP/nkd/Q/9o0abB+7F9TxKrKHolfq4Usmas33GaatE
-         geQSZJdjrhmRsWg0EvK3mZymmpKSR2hF+yOVehlga7iGCgi1luso+LNuplWGxTP4kO
-         dS/wPGw0jF93rfbL2KzChXl84z7ucTEqUP+rzoaZAl+PtCjleNAPEsH0+VfRsPJ/RG
-         rdKIbFMFGcgwHcDMBl4Evhj5tV+AFkdijqW3uznX6/QMnYZFcsEu/ovSO5/5e/nEZm
-         f90Ovy25x5X/w==
-Date:   Fri, 10 Feb 2023 12:10:29 -0800
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 04/11] soc: qcom: pmic_glink: register ucsi aux device
-Message-ID: <20230210201029.wwle2j66cn7sv3v3@ripper>
-References: <20230130-topic-sm8450-upstream-pmic-glink-v2-0-71fea256474f@linaro.org>
- <20230130-topic-sm8450-upstream-pmic-glink-v2-4-71fea256474f@linaro.org>
+        b=i9nqpb0t5S6HkGqJoB5RnNgTfS0iO8BW7c/VxDDEtvavrIJxJGhCjxVjRMNPT92sK
+         iam77oJIFeD0akFXYwJBCQUsXhl6G/nsnWwQaoN0hnM/o+yByNpZTSRSH7c+hd4ggV
+         Y+gWg2JBrXxbgH/BEDQs/UDKq1IMLlk5ju0IzbA971quhy7iM1B2cE8UXOCAHuWRPP
+         TvVFRgtGSuSMKc1rJRHAvRHS0M9l46gSq0g5N5uT1w9XrX4/gTrAGi0TTdfTkfhRc4
+         Ar/iCEGpKiOhvh6gkJr+x4R7+KdyFYSwlHKutw9YogQA0r0m6LBufb0+gYxf9zFUKe
+         yYtgRhdoBJkqw==
+Date:   Fri, 10 Feb 2023 20:10:43 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 8/8] kbuild, PCI: microchip: comment out MODULE_LICENSE
+ in non-modules
+Message-ID: <Y+akw9VBjg9oZ7QV@spud>
+References: <20230210164749.368998-1-nick.alcock@oracle.com>
+ <20230210164749.368998-9-nick.alcock@oracle.com>
+ <Y+aMh5e9bWaTphiZ@spud>
+ <871qmx1fv5.fsf@esperi.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="z/HHnJsPkKXU4oK+"
 Content-Disposition: inline
-In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v2-4-71fea256474f@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <871qmx1fv5.fsf@esperi.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,154 +59,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 04:02:07PM +0100, Neil Armstrong wrote:
-> Only register UCSI on know working devices, like on the SM8450
-> or Sm8550 which requires UCSI to get USB mode switch events.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  drivers/soc/qcom/pmic_glink.c | 67 ++++++++++++++++++++++++++++++++++++-------
->  1 file changed, 57 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
-> index bb3fb57abcc6..c7f091f4a8c1 100644
-> --- a/drivers/soc/qcom/pmic_glink.c
-> +++ b/drivers/soc/qcom/pmic_glink.c
-> @@ -4,6 +4,7 @@
->   * Copyright (c) 2022, Linaro Ltd
->   */
->  #include <linux/auxiliary_bus.h>
-> +#include <linux/of_device.h>
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->  #include <linux/rpmsg.h>
-> @@ -11,12 +12,23 @@
->  #include <linux/soc/qcom/pdr.h>
->  #include <linux/soc/qcom/pmic_glink.h>
->  
-> +enum {
-> +	PMIC_GLINK_CLIENT_BATT = 0,
-> +	PMIC_GLINK_CLIENT_ALTMODE,
-> +	PMIC_GLINK_CLIENT_UCSI,
-> +};
-> +
-> +#define PMIC_GLINK_CLIENT_DEFAULT	(BIT(PMIC_GLINK_CLIENT_BATT) |	\
-> +					 BIT(PMIC_GLINK_CLIENT_ALTMODE))
-> +
->  struct pmic_glink {
->  	struct device *dev;
->  	struct pdr_handle *pdr;
->  
->  	struct rpmsg_endpoint *ept;
->  
-> +	unsigned int client_mask;
-> +
->  	struct auxiliary_device altmode_aux;
->  	struct auxiliary_device ps_aux;
->  	struct auxiliary_device ucsi_aux;
-> @@ -231,8 +243,19 @@ static struct rpmsg_driver pmic_glink_rpmsg_driver = {
->  	},
->  };
->  
-> +/* Do not handle altmode for now on those platforms */
-> +static const unsigned int pmic_glink_sm8450_client_mask = BIT(PMIC_GLINK_CLIENT_BATT) |
-> +							  BIT(PMIC_GLINK_CLIENT_UCSI);
-> +
-> +static const struct of_device_id pmic_glink_of_client_mask[] = {
-> +	{ .compatible = "qcom,sm8450-pmic-glink", .data = &pmic_glink_sm8450_client_mask },
-> +	{ .compatible = "qcom,sm8550-pmic-glink", .data = &pmic_glink_sm8450_client_mask },
-> +	{}
-> +};
-> +
->  static int pmic_glink_probe(struct platform_device *pdev)
->  {
-> +	const struct of_device_id *match;
->  	struct pdr_service *service;
->  	struct pmic_glink *pg;
->  	int ret;
-> @@ -249,12 +272,27 @@ static int pmic_glink_probe(struct platform_device *pdev)
->  	mutex_init(&pg->client_lock);
->  	mutex_init(&pg->state_lock);
->  
-> -	ret = pmic_glink_add_aux_device(pg, &pg->altmode_aux, "altmode");
-> -	if (ret)
-> -		return ret;
-> -	ret = pmic_glink_add_aux_device(pg, &pg->ps_aux, "power-supply");
-> -	if (ret)
-> -		goto out_release_altmode_aux;
-> +	match = of_match_device(pmic_glink_of_client_mask, &pdev->dev);
-> +	if (match)
-> +		pg->client_mask = *(const unsigned int *)match->data;
 
-Make pmic_glink_sm8450_client_mask unsigned long instead, then it will
-have the same size as void * and you don't need to dereference it
-here...
+--z/HHnJsPkKXU4oK+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +	else
-> +		pg->client_mask = PMIC_GLINK_CLIENT_DEFAULT;
+On Fri, Feb 10, 2023 at 07:26:38PM +0000, Nick Alcock wrote:
+> On 10 Feb 2023, Conor Dooley said:
+> > FYI $subject seems wrong, this is a PCI patch AFAICT.
+>=20
+> I'm deriving the prefixes automatically because there are so many of
+> them, picking that prefix which is most commonly used across all files I
+> touch in a given subsystem and which is present in all of them. So
+> the PCI: microchip part seems right to me.
 
-Let's move these bits to pmic_glink_of_match[] to avoid having two
-different of_device_id to keep in sync.
+Ye, not disagreeing with that part.
 
-And hopefully we could have "qcom,pmic_glink" represent the case of
-having all 3 bits set soon, and special case what you have as
-"default" here...
+> kbuild is present in every patch in the series because this is a
+> kbuild-driven change (the thing it disturbs is part of the build system,
+> the construction of modules.builtin*). This seems to be common practice
+> for kbuild-related treewide changes.
 
-Regards,
-Bjorn
+Okay, I'll take your word for it. It just looked/looks odd to me!
 
-> +
-> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_UCSI)) {
-> +		ret = pmic_glink_add_aux_device(pg, &pg->ucsi_aux, "ucsi");
-> +		if (ret)
-> +			return ret;
-> +	}
-> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_ALTMODE)) {
-> +		ret = pmic_glink_add_aux_device(pg, &pg->altmode_aux, "altmode");
-> +		if (ret)
-> +			goto out_release_ucsi_aux;
-> +	}
-> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_BATT)) {
-> +		ret = pmic_glink_add_aux_device(pg, &pg->ps_aux, "power-supply");
-> +		if (ret)
-> +			goto out_release_altmode_aux;
-> +	}
->  
->  	pg->pdr = pdr_handle_alloc(pmic_glink_pdr_callback, pg);
->  	if (IS_ERR(pg->pdr)) {
-> @@ -278,9 +316,14 @@ static int pmic_glink_probe(struct platform_device *pdev)
->  out_release_pdr_handle:
->  	pdr_handle_release(pg->pdr);
->  out_release_aux_devices:
-> -	pmic_glink_del_aux_device(pg, &pg->ps_aux);
-> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_BATT))
-> +		pmic_glink_del_aux_device(pg, &pg->ps_aux);
->  out_release_altmode_aux:
-> -	pmic_glink_del_aux_device(pg, &pg->altmode_aux);
-> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_ALTMODE))
-> +		pmic_glink_del_aux_device(pg, &pg->altmode_aux);
-> +out_release_ucsi_aux:
-> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_UCSI))
-> +		pmic_glink_del_aux_device(pg, &pg->ucsi_aux);
->  
->  	return ret;
->  }
-> @@ -291,8 +334,12 @@ static int pmic_glink_remove(struct platform_device *pdev)
->  
->  	pdr_handle_release(pg->pdr);
->  
-> -	pmic_glink_del_aux_device(pg, &pg->ps_aux);
-> -	pmic_glink_del_aux_device(pg, &pg->altmode_aux);
-> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_BATT))
-> +		pmic_glink_del_aux_device(pg, &pg->ps_aux);
-> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_ALTMODE))
-> +		pmic_glink_del_aux_device(pg, &pg->altmode_aux);
-> +	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_UCSI))
-> +		pmic_glink_del_aux_device(pg, &pg->ucsi_aux);
->  
->  	mutex_lock(&__pmic_glink_lock);
->  	__pmic_glink = NULL;
-> 
-> -- 
-> 2.34.1
-> 
+> > On Fri, Feb 10, 2023 at 04:47:49PM +0000, Nick Alcock wrote:
+> >> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> >> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> >> are used to identify modules. As a consequence, uses of the macro
+> >> in non-modules will cause modprobe to misidentify their containing
+> >> object file as a module when it is not (false positives), and modprobe
+> >> might succeed rather than failing with a suitable error message.
+> >>=20
+> >> So comment out all uses of MODULE_LICENSE that are not in real modules
+> >
+> > This patch should not been needed, there's an existing patch to make
+> > this a module:
+> > https://lore.kernel.org/linux-riscv/20230111125323.1911373-4-daire.mcna=
+mara@microchip.com/
+>=20
+> Excellent: if that's likely to go in I can take this one out.
+
+Hopefully! It's the removable modules that are seemingly a no-go for
+PCI.
+I'll prod Daire on Monday about responding to the comments and perhaps
+the start of the series could get picked up. I'm not too sure if that's
+something that the PCI folk do though.
+
+> >> (the license declaration is left in as documentation).
+> >
+> > I don't really get this one though, why leave it there as
+> > "documentation" when the file has an SPDX entry anyway?
+>=20
+> I was asked to. (The first version of this series just deleted it, but
+> people were unhappy about the outright deletion of what looked like
+> license info and the loss of MODULE_LICENSE while other MODULE_* was
+> retained.)
+
+I saw Luis' name on the suggestion which is why I asked rather than
+dismiss it offhand. I think that's kinda silly, but I guess license
+stuff invites paranoia.
+I'd been kinda keeping an eye on the series as I know I've got a
+non-module clk driver that has MODULE_CRAP() in it & been debating
+whether I should just go & delete it all.
+Still undecided.
+
+> >> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> >> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> >> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> >> Cc: linux-modules@vger.kernel.org
+> >> Cc: linux-kernel@vger.kernel.org
+> >> Cc: linux-pci@vger.kernel.org
+> >> Cc: linux-riscv@lists.infradead.org
+> >
+> > One for the future:
+> > How about also CCing those listed in MAINTAINERS for the file you're
+> > changing?
+>=20
+> That... was supposed to happen. I'm invoking
+>=20
+> scripts/get_maintainer.pl --email --m --n --l --subsystem -f $files
+>=20
+> and then parsing the result for maintainer:, open list: and moderated
+> list: lines. I thought that would catch everything, but now I see
+> this is more complex.  You are there as an M: line, so I thought you'd
+> be reported as a maintainer:, but nooo:
+>=20
+> Conor Dooley <conor.dooley@microchip.com> (supporter:RISC-V MICROCHIP FPG=
+A SUPPORT)
+>=20
+> I didn't realise that 'supporter' was a thing and thought
+> get_maintainer.pl always reported maintainers as maintainer:. I'll
+> resplit the series with supporters Cc:ed just like maintainers are.
+> Looks like those are the only two I need to pick up.
+
+Supporter is a weird one I suppose, without reading the header* it's a
+little confusing. There was a thread recently with an attempt to
+disambiguate in the submitting patches docs, and I /think/ one of what
+they wanted to do was make get_maintainer return maintainer for both
+maintainer and supporter to align better with the docs.
+
+*Because who reads the intro/header explanation of the file, right? Just
+run the script and/or jump straight to the relevant section
+
+> Sorry about that.
+
+Dw about it, sorry if I came across a little brisk.
+
+>
+> (This sort of systemic scripting bug is why I did a small tranche first.
+> So thank you very much!)
+
+--z/HHnJsPkKXU4oK+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+akwwAKCRB4tDGHoIJi
+0m5oAP45+z9WbSWOZT2hY9iJ63R/NG9MYcoNpTa78o9XnYcS9gEA29oPccSYwDKh
+ErMJgFGLb17K7AfhokcGeJVVAlC1KgI=
+=Bo37
+-----END PGP SIGNATURE-----
+
+--z/HHnJsPkKXU4oK+--
