@@ -2,79 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 401F9691D90
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F330C691D96
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:06:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232306AbjBJLF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 06:05:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45632 "EHLO
+        id S232314AbjBJLGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 06:06:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232242AbjBJLFZ (ORCPT
+        with ESMTP id S232242AbjBJLG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 06:05:25 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631CA126E6;
-        Fri, 10 Feb 2023 03:05:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=roQL55HfASwJ/D7RYoexw2Ppn195nynj40tTiHKJ6uk=; b=kwvfhE2IfDmZE6PGWhVajbCN5g
-        KhTu0qTEMEkVeKS5r2HAV3/hVD89ctPS44ZBL1FVlooGeSJ1QsLSV2rFcZX6Op0L3eZbCRviL6nci
-        5CY9V3HHGjSixxSItVQadKs5INI3Hx8fUAZNgCZhx/6jbGg+4xxSCA4Icwv95+qSVCsN+nJC/WOlA
-        a4hucLG4KomEDkhQoT3oDR+SSWqnW5DNI3UU8ec+bCGKzYr6K5esVEFNW+BP1hESWcY0AquTP+4EY
-        6LvYK5ZJ+8qFOjMmDKton9oSsm6hm1zI9b1dsU7KE6P2yx7RqQrRaoEYFieLWTo1YteQINDOZi9hX
-        1/IdE7EA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36514)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pQRDU-0001NA-Hv; Fri, 10 Feb 2023 11:05:20 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pQRDT-0005WK-Ga; Fri, 10 Feb 2023 11:05:19 +0000
-Date:   Fri, 10 Feb 2023 11:05:19 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] net: pcs: rzn1-miic: remove unused struct
- members and use miic variable
-Message-ID: <Y+Yk7+Yqd3z3aXQE@shell.armlinux.org.uk>
-References: <20230208161249.329631-1-clement.leger@bootlin.com>
+        Fri, 10 Feb 2023 06:06:28 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8C817168
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 03:06:27 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id gr7so14860541ejb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 03:06:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tH6uHPrahlXBtLrMhQxPy8ErppcAnDGeUuUs4pDFeFw=;
+        b=fvQqTnHY3ncLjfr1NMtxHpJj36h0R8NeRDyocRtixV+DDcESeScPWnMNp2CtcUzjHP
+         CY029SxeNQwRnqv58F3PS/Mgb8V02XTgrpfKIObIeS1Jjese7qmodLNQzD+3e2YUtI9G
+         iydCC5yjrqQMuAEBdSBERF/iXX6scbTQqhsbHHBqXXwMVQoKaImVBPMRuMVF8J+rxNpv
+         cTmg9MSMxl9j/wCpAsxh9apvrlfXfF/5ejpDLA5Qm9SwkzyHEXvz1F3yvYq7hWLj2Xp5
+         5r0XqXN9bZMLCyTPQfv5Hpw+216f9gHKvxgtDudf8zahf+ILdDwSJOLohUZm6v9F+Qyu
+         fV4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tH6uHPrahlXBtLrMhQxPy8ErppcAnDGeUuUs4pDFeFw=;
+        b=dLsCeoTbtqVuLGBM9YM4fXePLhNM/OI0JO9rTY+fkpDnObtuIK3GX4/LQP9D1khBsU
+         YJmM7g9a+Vmtsk+FrSHmQil9qg+u+PZnN8V6NqBJJ2h5NRGeQoCS6cDXP50A2HMJHZDG
+         bLihyzDLuAlqqeSjTE3mTF4ojFiwEnFIe7EaiAgkjDLj82WqBshpZ2eS1xZn+TUMLQmv
+         l70pf5VjWzeUNHbi+Naj5zfOJJnXZIjr+VOnv0yUfw01lI0hYTtIWDXTVmeDyfqQ34Y+
+         aowm20Scj8LAXGHb2BoaW3hLwCyv3u/LcKtAFOVpvzsqsjwYvUpS4+44cCXj6rAmHrqo
+         icOQ==
+X-Gm-Message-State: AO0yUKULQ5wqBjt0qdUOVimy0vcq30CKCHI5Kgojbw8O8JJ2W1HvqEh/
+        71wuVnPUd2n99NjKZVrf1IO7Iw==
+X-Google-Smtp-Source: AK7set8fDQ6xW20fEQRKoaxBZ3mvVV7Prw/07OHfucce/6tJfp8Z6DzzQ6QdnubiXQG6R8do6hnMXg==
+X-Received: by 2002:a17:906:3582:b0:888:1f21:4429 with SMTP id o2-20020a170906358200b008881f214429mr12351428ejb.19.1676027185961;
+        Fri, 10 Feb 2023 03:06:25 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id a9-20020a17090640c900b008720c458bd4sm2236948ejk.3.2023.02.10.03.06.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 03:06:25 -0800 (PST)
+Message-ID: <2b6b5983-355e-0fde-d6c8-989e06f567e4@linaro.org>
+Date:   Fri, 10 Feb 2023 13:06:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230208161249.329631-1-clement.leger@bootlin.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 2/5] arm64: dts: qcom: sm8350: switch to combo usb3/dp
+ phy
+Content-Language: en-GB
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230206-topic-sm8450-upstream-dp-controller-v2-0-529da2203659@linaro.org>
+ <20230206-topic-sm8450-upstream-dp-controller-v2-2-529da2203659@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230206-topic-sm8450-upstream-dp-controller-v2-2-529da2203659@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 05:12:49PM +0100, Clément Léger wrote:
-> Remove unused bulk clocks struct from the miic state and use an already
-> existing miic variable in miic_config().
+On 10/02/2023 12:34, Neil Armstrong wrote:
+> The first QMP PHY is an USB3/DP combo phy, switch to the newly
+> documented bindings and register the clocks to the GCC
+> and DISPCC controllers.
 > 
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+With the following few nits fixed:
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Thanks.
+> ---
+>   arch/arm64/boot/dts/qcom/sm8350.dtsi | 40 ++++++++++++------------------------
+>   1 file changed, 13 insertions(+), 27 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> index 04bb838189a6..d490ce84a022 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> @@ -652,7 +652,7 @@ gcc: clock-controller@100000 {
+>   				 <&ufs_mem_phy_lanes 0>,
+>   				 <&ufs_mem_phy_lanes 1>,
+>   				 <&ufs_mem_phy_lanes 2>,
+> -				 <0>,
+> +				 <&usb_1_qmpphy 0>,
+
+
+<&usb_1_qmpphy QMP_USB43DP_USB3_PIPE_CLK> ?
+
+
+>   				 <0>;
+>   		};
+>   
+> @@ -2601,37 +2601,24 @@ usb_2_hsphy: phy@88e4000 {
+>   			resets = <&gcc GCC_QUSB2PHY_SEC_BCR>;
+>   		};
+>   
+> -		usb_1_qmpphy: phy-wrapper@88e9000 {
+> -			compatible = "qcom,sm8350-qmp-usb3-phy";
+> -			reg = <0 0x088e9000 0 0x200>,
+> -			      <0 0x088e8000 0 0x20>;
+> -			status = "disabled";
+> -			#address-cells = <2>;
+> -			#size-cells = <2>;
+> -			ranges;
+> +		usb_1_qmpphy: phy@88e9000 {
+> +			compatible = "qcom,sm8350-qmp-usb3-dp-phy";
+> +			reg = <0 0x088e8000 0 0x3000>;
+>   
+>   			clocks = <&gcc GCC_USB3_PRIM_PHY_AUX_CLK>,
+>   				 <&rpmhcc RPMH_CXO_CLK>,
+> -				 <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>;
+> -			clock-names = "aux", "ref_clk_src", "com_aux";
+> +				 <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>,
+> +				 <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
+> +			clock-names = "aux", "ref", "com_aux", "usb3_pipe";
+>   
+>   			resets = <&gcc GCC_USB3_DP_PHY_PRIM_BCR>,
+>   				 <&gcc GCC_USB3_PHY_PRIM_BCR>;
+>   			reset-names = "phy", "common";
+>   
+> -			usb_1_ssphy: phy@88e9200 {
+> -				reg = <0 0x088e9200 0 0x200>,
+> -				      <0 0x088e9400 0 0x200>,
+> -				      <0 0x088e9c00 0 0x400>,
+> -				      <0 0x088e9600 0 0x200>,
+> -				      <0 0x088e9800 0 0x200>,
+> -				      <0 0x088e9a00 0 0x100>;
+> -				#phy-cells = <0>;
+> -				#clock-cells = <0>;
+> -				clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
+> -				clock-names = "pipe0";
+> -				clock-output-names = "usb3_phy_pipe_clk_src";
+> -			};
+> +			#clock-cells = <1>;
+> +			#phy-cells = <1>;
+> +
+> +			status = "disabled";
+>   		};
+>   
+>   		usb_2_qmpphy: phy-wrapper@88eb000 {
+> @@ -2727,7 +2714,7 @@ usb_1_dwc3: usb@a600000 {
+>   				iommus = <&apps_smmu 0x0 0x0>;
+>   				snps,dis_u2_susphy_quirk;
+>   				snps,dis_enblslpm_quirk;
+> -				phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
+> +				phys = <&usb_1_hsphy>, <&usb_1_qmpphy 0>;
+
+
+<&usb_1_qmpphy QMP_USB43DP_USB3_PHY> ?
+
+
+>   				phy-names = "usb2-phy", "usb3-phy";
+>   			};
+>   		};
+> @@ -3092,8 +3079,7 @@ dispcc: clock-controller@af00000 {
+>   			clocks = <&rpmhcc RPMH_CXO_CLK>,
+>   				 <&mdss_dsi0_phy 0>, <&mdss_dsi0_phy 1>,
+>   				 <&mdss_dsi1_phy 0>, <&mdss_dsi1_phy 1>,
+> -				 <0>,
+> -				 <0>;
+> +				 <&usb_1_qmpphy 1>, <&usb_1_qmpphy 2>;
+
+<&usb_1_qmpphy QMP_USB43DP_DP_LINK_CLK>, <&usb_1_qmpphy 
+QMP_USB43DP_DP_VCO_DIV_CLK>
+
+>   			clock-names = "bi_tcxo",
+>   				      "dsi0_phy_pll_out_byteclk",
+>   				      "dsi0_phy_pll_out_dsiclk",
+> 
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+With best wishes
+Dmitry
+
