@@ -2,197 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 300B4691B6B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 10:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B813D691B82
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 10:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231733AbjBJJeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 04:34:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33596 "EHLO
+        id S231950AbjBJJeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 04:34:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231781AbjBJJeI (ORCPT
+        with ESMTP id S231851AbjBJJeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 04:34:08 -0500
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61AB059E6C;
-        Fri, 10 Feb 2023 01:34:05 -0800 (PST)
-X-QQ-mid: bizesmtp87t1676021563tehi0iwo
-Received: from pek-vx-bsp2.wrs.com ( [60.247.85.88])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 10 Feb 2023 17:32:26 +0800 (CST)
-X-QQ-SSF: 01200000000000C0D000000A0000000
-X-QQ-FEAT: C46Rb8GPIEdQkAjuNEvzzL3Rs0nKkvh/PcSoaaqidTxeCkENSHSVqCDnM9GB/
-        XAuUnNnX4kQV3OC0mUVFEpblsXhHzLEmK3en5iTOceN0yf7sbHWJ6w6xugHFjWIDMc7R2r3
-        AjCdrD12AYijXVStARs9gE2mfuIrn4RfXlDpWudrH8dSp1b9a+oMcBTtOpH6RVO+KDD2h3H
-        wwkU1T4J27HPy1R5+re0qwyEyVByxzDNwPSU0tgyvWU4QseHWHezWCnhK3QJVtxL2cboTeA
-        B6XobgH1FIh1gVU2SK6auor/aNNvOwIj5E6CG7wmGDDtg4Tf98pJCjpfe9A0HGq3jOox+lv
-        ZmgAJi1bfAW++rLB5zXV0IAZ9gSBV33mVMwextL5L4cCXHXmSM=
-X-QQ-GoodBg: 0
-From:   Bin Meng <bmeng@tinylab.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>, Andy Gross <agross@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Robert Elliott <elliott@hpe.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Hansson <newbie13xd@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>, Zi Yan <ziy@nvidia.com>,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH] arm: Drop CONFIG_MTD_M25P80 in various defconfig files
-Date:   Fri, 10 Feb 2023 17:32:24 +0800
-Message-Id: <20230210093224.689990-1-bmeng@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvr:qybglogicsvr3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 10 Feb 2023 04:34:13 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A185F6E9AB;
+        Fri, 10 Feb 2023 01:34:11 -0800 (PST)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id D826D20C8B01;
+        Fri, 10 Feb 2023 01:34:10 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D826D20C8B01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1676021650;
+        bh=q4TutN4EfLOgEY2yzLVWA4JuUxxmC/QhFlypjJsNTPc=;
+        h=From:To:Subject:Date:From;
+        b=Z3KEXMSgtT5NE+H6YRL05MSjppB0VRIOeVKFKZZ9iXajCXJQ6oF4Qrcm5lq3KWqI5
+         YqoCCpeGWAPu1OM0sO3VY48OI412rNhyveomdsMQLL95ddmcl0HNLkgN82aECN1TG+
+         KvM12OxmladTiV5wHuHZF+F15VIN7+z0WCuXUJvw=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, daniel.lezcano@linaro.org, tglx@linutronix.de,
+        virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+        ssengar@linux.microsoft.com, dphadke@linux.microsoft.com,
+        lenb@kernel.org, rafael@kernel.org, linux-acpi@vger.kernel.org
+Subject: [PATCH v6 0/5] Device tree support for Hyper-V VMBus driver
+Date:   Fri, 10 Feb 2023 01:34:01 -0800
+Message-Id: <1676021646-2619-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop CONFIG_MTD_M25P80 that was removed in
-commit b35b9a10362d ("mtd: spi-nor: Move m25p80 code in spi-nor.c")
+This set of patches expands the VMBus driver to include device tree
+support. This feature allows for a kernel boot without the use of ACPI
+tables, resulting in a smaller memory footprint and potentially faster
+boot times. This is tested by enabling CONFIG_FLAT and OF_EARLY_FLATTREE
+for x86.
 
-Signed-off-by: Bin Meng <bmeng@tinylab.org>
+The first two patches enable compilation of Hyper-V APIs in a non-ACPI
+build.
 
----
+The third patch converts the VMBus driver from acpi to more generic
+platform driver.
 
- arch/arm/configs/axm55xx_defconfig     | 2 +-
- arch/arm/configs/davinci_all_defconfig | 1 -
- arch/arm/configs/dove_defconfig        | 1 -
- arch/arm/configs/keystone_defconfig    | 1 -
- arch/arm/configs/mvebu_v5_defconfig    | 1 -
- arch/arm/configs/mxs_defconfig         | 1 -
- arch/arm/configs/pxa_defconfig         | 1 -
- arch/arm/configs/qcom_defconfig        | 1 -
- arch/arm/configs/socfpga_defconfig     | 1 -
- 9 files changed, 1 insertion(+), 9 deletions(-)
+Further to add device tree documentation for VMBus, it needs to club with
+other virtualization driver's documentation. For this rename the virtio
+folder to more generic hypervisor, so that all the hypervisor based
+devices can co-exist in a single place in device tree documentation. The
+fourth patch does this renaming.
 
-diff --git a/arch/arm/configs/axm55xx_defconfig b/arch/arm/configs/axm55xx_defconfig
-index bfbaa2df3be5..936aecbdc129 100644
---- a/arch/arm/configs/axm55xx_defconfig
-+++ b/arch/arm/configs/axm55xx_defconfig
-@@ -85,7 +85,7 @@ CONFIG_MTD_CFI_AMDSTD=y
- CONFIG_MTD_CFI_STAA=y
- CONFIG_MTD_PHYSMAP=y
- CONFIG_MTD_PHYSMAP_OF=y
--CONFIG_MTD_M25P80=y
-+CONFIG_MTD_SPI_NOR=y
- CONFIG_PROC_DEVICETREE=y
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_RAM=y
-diff --git a/arch/arm/configs/davinci_all_defconfig b/arch/arm/configs/davinci_all_defconfig
-index 821d966c95a5..cb7a03bce291 100644
---- a/arch/arm/configs/davinci_all_defconfig
-+++ b/arch/arm/configs/davinci_all_defconfig
-@@ -63,7 +63,6 @@ CONFIG_MTD_CFI=m
- CONFIG_MTD_CFI_INTELEXT=m
- CONFIG_MTD_CFI_AMDSTD=m
- CONFIG_MTD_PHYSMAP=m
--CONFIG_MTD_M25P80=m
- CONFIG_MTD_RAW_NAND=m
- CONFIG_MTD_NAND_DAVINCI=m
- CONFIG_MTD_SPI_NOR=m
-diff --git a/arch/arm/configs/dove_defconfig b/arch/arm/configs/dove_defconfig
-index ff37f46c82fb..3f90b4b241a9 100644
---- a/arch/arm/configs/dove_defconfig
-+++ b/arch/arm/configs/dove_defconfig
-@@ -43,7 +43,6 @@ CONFIG_MTD_CFI_GEOMETRY=y
- CONFIG_MTD_CFI_INTELEXT=y
- CONFIG_MTD_CFI_STAA=y
- CONFIG_MTD_PHYSMAP=y
--CONFIG_MTD_M25P80=y
- CONFIG_MTD_SPI_NOR=y
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_RAM=y
-diff --git a/arch/arm/configs/keystone_defconfig b/arch/arm/configs/keystone_defconfig
-index 4a5b9adbf2a1..36692143dd3d 100644
---- a/arch/arm/configs/keystone_defconfig
-+++ b/arch/arm/configs/keystone_defconfig
-@@ -118,7 +118,6 @@ CONFIG_MTD=y
- CONFIG_MTD_CMDLINE_PARTS=y
- CONFIG_MTD_BLOCK=y
- CONFIG_MTD_PLATRAM=y
--CONFIG_MTD_M25P80=y
- CONFIG_MTD_RAW_NAND=y
- CONFIG_MTD_NAND_DAVINCI=y
- CONFIG_MTD_SPI_NOR=y
-diff --git a/arch/arm/configs/mvebu_v5_defconfig b/arch/arm/configs/mvebu_v5_defconfig
-index 2467afd32146..26c5724c409d 100644
---- a/arch/arm/configs/mvebu_v5_defconfig
-+++ b/arch/arm/configs/mvebu_v5_defconfig
-@@ -63,7 +63,6 @@ CONFIG_MTD_CFI_GEOMETRY=y
- CONFIG_MTD_CFI_INTELEXT=y
- CONFIG_MTD_CFI_STAA=y
- CONFIG_MTD_PHYSMAP=y
--CONFIG_MTD_M25P80=y
- CONFIG_MTD_RAW_NAND=y
- CONFIG_MTD_NAND_ORION=y
- CONFIG_MTD_SPI_NOR=y
-diff --git a/arch/arm/configs/mxs_defconfig b/arch/arm/configs/mxs_defconfig
-index feb38a94c1a7..0eeef6402952 100644
---- a/arch/arm/configs/mxs_defconfig
-+++ b/arch/arm/configs/mxs_defconfig
-@@ -45,7 +45,6 @@ CONFIG_MTD=y
- CONFIG_MTD_CMDLINE_PARTS=y
- CONFIG_MTD_BLOCK=y
- CONFIG_MTD_DATAFLASH=y
--CONFIG_MTD_M25P80=y
- CONFIG_MTD_SST25L=y
- CONFIG_MTD_RAW_NAND=y
- CONFIG_MTD_NAND_GPMI_NAND=y
-diff --git a/arch/arm/configs/pxa_defconfig b/arch/arm/configs/pxa_defconfig
-index 0a0f12df40b5..851a817b52c0 100644
---- a/arch/arm/configs/pxa_defconfig
-+++ b/arch/arm/configs/pxa_defconfig
-@@ -130,7 +130,6 @@ CONFIG_MTD_ROM=m
- CONFIG_MTD_COMPLEX_MAPPINGS=y
- CONFIG_MTD_PHYSMAP=y
- CONFIG_MTD_PXA2XX=m
--CONFIG_MTD_M25P80=m
- CONFIG_MTD_BLOCK2MTD=y
- CONFIG_MTD_DOCG3=m
- CONFIG_MTD_ONENAND=m
-diff --git a/arch/arm/configs/qcom_defconfig b/arch/arm/configs/qcom_defconfig
-index b41716c1ec64..fd5581edc310 100644
---- a/arch/arm/configs/qcom_defconfig
-+++ b/arch/arm/configs/qcom_defconfig
-@@ -63,7 +63,6 @@ CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_MTD=y
- CONFIG_MTD_QCOMSMEM_PARTS=y
- CONFIG_MTD_BLOCK=y
--CONFIG_MTD_M25P80=y
- CONFIG_MTD_RAW_NAND=y
- CONFIG_MTD_NAND_QCOM=y
- CONFIG_MTD_SPI_NOR=y
-diff --git a/arch/arm/configs/socfpga_defconfig b/arch/arm/configs/socfpga_defconfig
-index 70739e09d0f4..9591af0441dd 100644
---- a/arch/arm/configs/socfpga_defconfig
-+++ b/arch/arm/configs/socfpga_defconfig
-@@ -41,7 +41,6 @@ CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_MTD=y
- CONFIG_MTD_BLOCK=y
--CONFIG_MTD_M25P80=y
- CONFIG_MTD_RAW_NAND=y
- CONFIG_MTD_NAND_DENALI_DT=y
- CONFIG_MTD_SPI_NOR=y
+The fifth patch introduces the device tree documentation for VMBus.
+
+The sixth patch adds device tree support to the VMBus driver. Currently
+this is tested only for x86 and it may not work for other archs.
+
+[V6]
+- define acpi_sleep_state_supported in acpi header for !ACPI,
+  dropped the changes done in hv_common.c under #ifdef CONFIG_ACPI
+- "Devicetree" instead of "device tree"
+- Remove initialize of ret
+- set "np = pdev->dev.of_node;" on declarartion
+- remove one error print
+- use bus_addr instead of pci_addr
+
+
+[V5]
+- Removed #else for device tree parsing code. This should help better
+  test coverage.
+- Fix macro '__maybe_unused' warning
+- Added below options in Kconfig to enable device tree options for HYPERV
+	select OF if !ACPI
+	select OF_EARLY_FLATTREE if !ACPI
+- moved dt documantation to bus folder
+- update the dt node to have 'bus' as parent node instead of 'soc'. Also
+  added compatible and ranges property for parent node.
+- Made sure dt_binding_check have no error/varnings for microsoft,vmbus.yaml file
+- Fix commit messages and add Reviwed-by from Michael for first 3 patches
+
+[V4]
+- rebased which fixed return type of 'vmbus_mmio_remove' from int to void
+- used __maybe_unused for 'vmbus_of_match' and safeguard vmbus_acpi_device_ids
+  under #ifdef
+
+[V3]
+- Changed the logic to use generic api (for_each_of_range) for parsing "ranges".
+- Remove dependency of ACPI for HYPERV in case of x86.
+- Removed "device tree bindings" from title and patch subject.
+- Removed duplicate vendor prefix, used microsoft instead of msft.
+- Use 'soc' in example of device tree documantation for parent node.
+- Fixed compatible schemas error generated in other modules referring to
+
+Saurabh Sengar (5):
+  drivers/clocksource/hyper-v: non ACPI support in hyperv clock
+  ACPI: bus: Add stub acpi_sleep_state_supported() in non-ACPI cases
+  Drivers: hv: vmbus: Convert acpi_device to more generic
+    platform_device
+  dt-bindings: hypervisor: VMBus
+  Driver: VMBus: Add Devicetree support
+
+ .../bindings/bus/microsoft,vmbus.yaml         |  50 ++++++++
+ MAINTAINERS                                   |   1 +
+ drivers/clocksource/hyperv_timer.c            |  15 ++-
+ drivers/hv/Kconfig                            |   6 +-
+ drivers/hv/vmbus_drv.c                        | 115 ++++++++++++++----
+ include/linux/acpi.h                          |   5 +
+ 6 files changed, 163 insertions(+), 29 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml
+
 -- 
-2.25.1
+2.34.1
 
