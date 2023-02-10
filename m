@@ -2,166 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14AC6928B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 21:50:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3546928B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 21:51:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233837AbjBJUuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 15:50:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
+        id S233860AbjBJUvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 15:51:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbjBJUui (ORCPT
+        with ESMTP id S233846AbjBJUvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 15:50:38 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2045.outbound.protection.outlook.com [40.107.94.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B797F809;
-        Fri, 10 Feb 2023 12:50:33 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KW6iNBYWvh4b0IHTIST/5GnQQF53zxgYdtaDmCxiVw8Hv4zm2plp5i+rNnfLbiQA16pch7GasY9QuvdCDMram2nPSQiGRLCEFY8EHz++wV8PQD9nm6diA5tF5JPKkpE1c0p0gBg+sdtxfsMvBl2FBUMJE/YHF2S/MFenxeLKIrYZa9uOaDtbnHddVuqVk1VcY2bMIAl/tQw89otRpW5szZDPuH/xKGAifS8IufI1aFGMZYnan5eg2+vZnfeNA8ZHwpbrzHbzPPX8kwyjt3ekppUB/ciz61etRnOKOpUrdvZCl4a/Dd0dxo63NTb9jesFpW3uTJA5gt92yL/V12HeJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VBn3JN/GtnVoWq9EToCCmHG9tbRgb8Kd6B+VZbmFLuk=;
- b=Gxs7xYp1KGk2BZ65OnuVtwVxAEADzxlaSmQ4G8E/jglEeIdoenmy1bYbzpB0p9qjPzYVpqyEEGZGui95m7/zp43FmtehfrLecHYtB/tEUz++XbMnSH0fjhbbkVm8UFLZb4DauEJO4nC+n6CRWhXFmpjliHqdBAl2Lpvwu0Peb0ZKeahBytVQwj1liFPQdz177+SRCQRjZWW7VMFwwqOjSCX0n9HOsakykRkFWFZ5yW/1zhyaaNNnhmpcHKuwVb1O6DgfNdus3D9ugIhnTGcNEUCc0uEZzFLMtPkOR7wOB1netLUdMQDFVmXv3hzeaFBGgrp8Q4TbbY+WL0dfe9nWvw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VBn3JN/GtnVoWq9EToCCmHG9tbRgb8Kd6B+VZbmFLuk=;
- b=itHXrJc8fkOUz1aTYWZDDniejUBgkyW+1QAAmJaDF3OmzAmQPo1lESOw2PPDcplYxlJ6qZVql0ClDBPEGw4+ff70AZ68zUCusT9VUs+11XWOG18ZIuajIlzXUsjSvHGWhdaHebyEuvGT+6qdecMVyvHT43mWVa6TNODYoV1UKb4F4Skf9pruQXpGYx1A0CLly0RjQoarEH85d7UN7x1/DN/ar8UkQ890CHNfJtMWnp6etukoaovpGpmWM9kvmkXnXRcBAgnzt+ioESalxy9bUxCxrHNhzqM6/wqkr1HppLKe8+6fRjvS8Fr35ePklh4GXz5XlyjRwYVcc2HStuatkA==
-Received: from DM6PR03CA0095.namprd03.prod.outlook.com (2603:10b6:5:333::28)
- by CY5PR12MB6227.namprd12.prod.outlook.com (2603:10b6:930:21::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19; Fri, 10 Feb
- 2023 20:50:31 +0000
-Received: from DM6NAM11FT110.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:333:cafe::df) by DM6PR03CA0095.outlook.office365.com
- (2603:10b6:5:333::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.21 via Frontend
- Transport; Fri, 10 Feb 2023 20:50:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DM6NAM11FT110.mail.protection.outlook.com (10.13.173.205) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6086.21 via Frontend Transport; Fri, 10 Feb 2023 20:50:30 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 10 Feb
- 2023 12:50:17 -0800
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 10 Feb
- 2023 12:50:17 -0800
-Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com (10.129.68.10)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Fri, 10 Feb 2023 12:50:16 -0800
-Date:   Fri, 10 Feb 2023 12:50:14 -0800
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
+        Fri, 10 Feb 2023 15:51:08 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EDF7F830
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 12:51:02 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id u9so7780047plf.3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 12:51:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=G6ClxDPqqo9XGMX8nibdBrVqKRqBmlDx/QkEPTPhrmI=;
+        b=CQBERmQX6UW6aN9ppCfG84ilCLxw0hROZywoezlBpkLDc3CEV63muuePgbkAQ4uUTP
+         eVYf0yxkeklltYT638VQVLUGWm1IlB+L0GPDdKLiHtJ2WGGLYu5qt7LaGHGnoriCzhpY
+         R+rRH6ybKW9tvY9M0IWhT2J77tmpZgTgfGz4/AjJwGtMfQMpO3Z9MH3hGi7qiajkr+a0
+         Y2Jn4OfuyhOTmpuJkEJNnPsE2TTKLu6+AWlepChxd0I9e52F1UgvI/MMVi8hWWHW24z8
+         FPaztSxLf0zInUZVGmjknEYg8NwCn/c2YtYGTgPHz05CyujaIUcMVeTONN+TBbui6M5V
+         +u4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G6ClxDPqqo9XGMX8nibdBrVqKRqBmlDx/QkEPTPhrmI=;
+        b=D2xWLIp3BBdvugEAN6fzBA5s6LxoEmXrCV+fR1ffPlas/VGCxI0OtBaN6LTa+h/D2e
+         VoXjCl189jIted7oD+s6IOwLf1u9wjmsowe13awT6GXL7BRbLlSn6I4QfUlfCMxvwNf8
+         rCHHK4K+VjpXFHP1Qb1GteOAiqwjMA54efCn7byPAWAhxq7GD+kg5o/XMVAc3FLoxVHh
+         liHGouDhrZuTE3/vCIcHVS/lms2KuSUqAB/DWj1DjbXaqP8pvWTRuz/m6pVQHkO7cE1F
+         9uOcJmObKcF4wMwjHzQ221CCI+saT5sRMj5cicsprFnMVbu8sWWoJFqHBo6H+o2jou/y
+         zW2Q==
+X-Gm-Message-State: AO0yUKVhdhytkWtNku47HADbSCNLaGWcswUSoeSUE15jc/LtRP0L/dwe
+        rGEdR30AIwgf8LFIkYVqZ9kyvg==
+X-Google-Smtp-Source: AK7set87/K1BTbtqK1YxC0xEr79tEEU7ncmCCfkbuZto381YIZlqqRDqWHnUS/qjJKIZM1QnsMq8jQ==
+X-Received: by 2002:a17:902:7c07:b0:198:af50:e4e6 with SMTP id x7-20020a1709027c0700b00198af50e4e6mr48370pll.12.1676062261748;
+        Fri, 10 Feb 2023 12:51:01 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id p6-20020aa78606000000b005828071bf7asm3698940pfn.22.2023.02.10.12.51.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 12:51:01 -0800 (PST)
+Date:   Fri, 10 Feb 2023 20:50:57 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
         "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH v2 08/10] iommufd/device: Use iommu_group_replace_domain()
-Message-ID: <Y+auBiug3gIXcZgZ@Asurada-Nvidia>
-References: <cover.1675802050.git.nicolinc@nvidia.com>
- <4653f009c3dacae8ebf3a4865aaa944aa9c7cc7e.1675802050.git.nicolinc@nvidia.com>
- <BN9PR11MB5276C1807B710CAD3E5820D78CD99@BN9PR11MB5276.namprd11.prod.outlook.com>
- <Y+Vh479cDD7LX2x/@Asurada-Nvidia>
- <Y+WJPH3pbYLIs2iv@nvidia.com>
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
+ to map as encrypted
+Message-ID: <Y+auMQ88In7NEc30@google.com>
+References: <Y9FC7Dpzr5Uge/Mi@zn.tnic>
+ <BYAPR21MB16883BB6178DDEEA10FD1F1CD7D69@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y+JG9+zdSwZlz6FU@zn.tnic>
+ <4216dea6-d899-aecb-2207-caa2ae7db0e3@intel.com>
+ <BYAPR21MB16886D92828BA2CA8D47FEA4D7D99@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y+aP8rHr6H3LIf/c@google.com>
+ <Y+aVFxrE6a6b37XN@zn.tnic>
+ <BYAPR21MB16882083E84F20B906E2C847D7DE9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y+aczIbbQm/ZNunZ@zn.tnic>
+ <cb80e102-4b78-1a03-9c32-6450311c0f55@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y+WJPH3pbYLIs2iv@nvidia.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT110:EE_|CY5PR12MB6227:EE_
-X-MS-Office365-Filtering-Correlation-Id: 39df0005-1c60-4360-9d8d-08db0ba872c5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kk74UvTg0abQXMCxCCyZe/QbWrUYoLGn7es7V5uoAPyn4S0+IlzQ8H2p7pQFnXBjcYTBl8KkTDmiJEc+uqScK+jb7rvvKICqLna+NQzzUA/XWv33kvcFzvx39TlNkwX5ivpy+uYn1YvUxLZrCeStwApf2vZcgUDY/BENga0sDEFyIyx4AFeCgNTOx2l/iT8fVoxT/eszV86ze+wzfx/IEW7EyxBsVknAxir5SWDC3DF4GRHRWB2itkS9xcECX6pAuV4MJlQ8cC4/ThNxLvEPKQLMIwEB1nS2XDV8hfTKvxSET/BQbLtFUj0TZOCD6oVjCIc/Aivj5w9fcXrERJaI+Knubj225IfylNjhwF2nSlXqBrCmTQoOwyEJWtMvpqacaHh8/0/2SYgGjCpDk33wnTyNNxqDNyi70DlQBKMNlt7/yc173n7+nYvUQE/e+T6A3tXTLdxzsyU5RFeLiqZE7CLBRxaIVao/8YKYW/cQhO0lFF06nH/+U3XG7lLw4ESu3wixGrXvxr3zZiLZzsou6j9hC86bh+sGejgQNMJGNX4WV748IWOS3VhVvZMhWPKxCx/FLiCS+fVoIEs1c46SjHugTc1yFCQtS9LUszIEDKiuWarpIDJ+w+dHxdmbbGUHAlpRZmAd2hcdx42oF6yBmyXgQiZ26fi6d/D9N8j7ltnAagERddIxTR6yGWd4qUbznpn/iBGUQHtuC5hTbHuGO9lICdV+/EOKinbUPf/VDJ8=
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(376002)(346002)(39860400002)(451199018)(36840700001)(40470700004)(46966006)(2906002)(82310400005)(55016003)(54906003)(26005)(40480700001)(478600001)(6636002)(186003)(9686003)(336012)(83380400001)(41300700001)(47076005)(4326008)(426003)(70206006)(40460700003)(70586007)(8676002)(7416002)(5660300002)(6862004)(8936002)(7636003)(36860700001)(82740400003)(356005)(316002)(86362001)(33716001)(67856001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2023 20:50:30.9459
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 39df0005-1c60-4360-9d8d-08db0ba872c5
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT110.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6227
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <cb80e102-4b78-1a03-9c32-6450311c0f55@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 08:01:00PM -0400, Jason Gunthorpe wrote:
-> On Thu, Feb 09, 2023 at 01:13:07PM -0800, Nicolin Chen wrote:
-> > On Thu, Feb 09, 2023 at 04:00:52AM +0000, Tian, Kevin wrote:
-> >  
-> > > > From: Nicolin Chen <nicolinc@nvidia.com>
-> > > > Sent: Wednesday, February 8, 2023 5:18 AM
-> > > >
-> > > > iommu_group_replace_domain() is introduced to support use cases where
-> > > > an
-> > > > iommu_group can be attached to a new domain without getting detached
-> > > > from
-> > > > the old one. This replacement feature will be useful, for cases such as:
-> > > > 1) vPASID mode, when a guest wants to replace a single pasid (PASID=0)
-> > > >    table with a larger table (PASID=N)
-> > > > 2) Nesting mode, when switching the attaching device from an S2 domain
-> > > >    to an S1 domain, or when switching between relevant S1 domains.
-> > > > as it allows these cases to switch seamlessly without a DMA disruption.
-> > > >
-> > > > So, call iommu_group_replace_domain() in the iommufd_device_do_attach().
-> > > > And add a __iommmufd_device_detach helper to allow the replace routine
-> > > > to
-> > > > do a partial detach on the current hwpt that's being replaced. Though the
-> > > > updated locking logic is overcomplicated, it will be eased, once those
-> > > > iopt_table_add/remove_ioas and list_add/del calls are moved to hwpt's
-> > > > allocation/destroy() functions in the coming nesting series, as that'll
-> > > > depend on a new ->domain_alloc_user op in the iommu core.
-> > > 
-> > > then why not moving those changes into this series to make it simple?
+On Fri, Feb 10, 2023, Dave Hansen wrote:
+> On 2/10/23 11:36, Borislav Petkov wrote:
+> >> One approach is to go with the individual device attributes for now.>> If the list does grow significantly, there will probably be patterns
+> >> or groupings that we can't discern now.  We could restructure into
+> >> larger buckets at that point based on those patterns/groupings.
+> > There's a reason the word "platform" is in cc_platform_has(). Initially
+> > we wanted to distinguish attributes of the different platforms. So even
+> > if y'all don't like CC_ATTR_PARAVISOR, that is what distinguishes this
+> > platform and it *is* one platform.
 > > 
-> > The simplification depends on the new ->domain_alloc_user op and
-> > its implementation in SMMU driver, which would be introduced by
-> > the nesting series of VT-d and SMMU respectively.
+> > So call it CC_ATTR_SEV_VTOM as it uses that technology or whatever. But
+> > call it like the platform, not to mean "I need this functionality".
 > 
-> Since we are not fixing all the drivers at this point, this argument
-> doesn't hold water.
-> 
-> It is as I said in the other email, there should be no changes to the
-> normal attach/replace path when adding manual HWPT creation - once
-> those are removed there should be minimal connection between these two
-> series.
+> I can live with that.  There's already a CC_ATTR_GUEST_SEV_SNP, so it
+> would at least not be too much of a break from what we already have.
 
-Yes. I replied here earlier than the discussion with you in
-that thread. I think I should just drop this line of commit
-messages.
+I'm fine with CC_ATTR_SEV_VTOM, assuming the proposal is to have something like:
 
-Thanks
-Nic
+	static inline bool is_address_range_private(resource_size_t addr)
+	{
+		if (cc_platform_has(CC_ATTR_SEV_VTOM))
+			return is_address_below_vtom(addr);
+
+		return false;
+	}
+
+i.e. not have SEV_VTOM mean "I/O APIC and vTPM are private".  Though I don't see
+the point in making it SEV vTOM specific or using a flag.  Despite what any of us
+think about TDX paravisors, it's completely doable within the confines of TDX to
+have an emulated device reside in the private address space.  E.g. why not
+something like this? 
+
+	static inline bool is_address_range_private(resource_size_t addr)
+	{
+		return addr < cc_platform_private_end;
+	}
+
+where SEV fills in "cc_platform_private_end" when vTOM is enabled, and TDX does
+the same.  Or wrap cc_platform_private_end in a helper, etc.
