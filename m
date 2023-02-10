@@ -2,217 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FF4691D9F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:09:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC87691DB0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:10:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232318AbjBJLJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 06:09:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48320 "EHLO
+        id S232324AbjBJLKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 06:10:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231929AbjBJLJD (ORCPT
+        with ESMTP id S232329AbjBJLKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 06:09:03 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399DE71002
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 03:09:01 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id c1so651739edt.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 03:09:01 -0800 (PST)
+        Fri, 10 Feb 2023 06:10:14 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4431B71018;
+        Fri, 10 Feb 2023 03:10:12 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so5167573pjb.5;
+        Fri, 10 Feb 2023 03:10:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gAtpgUZ+OxRTCx1yBUOCNZy2P/UDmhE7zGbAYq1w6w0=;
-        b=MBFcnAygFr6t0Hh6c11ay3jvY9Cbt1fRbLM27Mxn4kxaTz5w+Z7c1vqV2oIXScbtMr
-         hzqf7Q67e74dNeKCQUXH4iAumgHuJj/zFlg3Th6ODo7cpX0dEq+Q2dG+uAQKRZw7ShO1
-         fDlTB1TdvecJgjSPyxDtEd9tHUmMxHqP9L37c2xH4fxqzNlMq/U0mbNfWtsQBMl0QJEh
-         24h+gKI6Exy/659Uoh5QXDtpjWssVrG7nglgUVsI9JDj0ueQTutUBilDNNhoJqfI33v6
-         41mXrbNOSkH/AdQRyJ9P4aPBHn9PlTEzjxByxoxqXxvSk2k/KTqE5IiKP/NPNJ27SIkt
-         XqYw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mg+Lezo/UluuzY/CQgV39sLNfOJ9ZHhdDTuSYUasXFg=;
+        b=qOMjJN0yAoYucwzDuzlOK+CeG72O+1lswmk/pKjljUvpEcu4fyNh/+0n32iS98ijYP
+         +ICIrd5uAwpJO8/RJxYJ8Y5Qy4pddCSlFdVtoBHERpQd63Paxz4+azDij7IYfGWZRUPr
+         RSNuR+4MdT/IzZ3vsnyEKc+Vbo3O23WKzj//iCPMgCfOCibC2LWUYj83iWWujwNMkOiK
+         afmO+fRbVk7mvEk/XH0q5lxNGqRntjXWVL/9A43lXGTOCLezAkAzVXPFvleETA5sJZXs
+         8WS2NU2DJosR9IewVDJIPyAaPVoQJ2WGJJc5f4c1Z1g/M7+SsbGrwLGNz4W5u1brYbD+
+         cz5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gAtpgUZ+OxRTCx1yBUOCNZy2P/UDmhE7zGbAYq1w6w0=;
-        b=Ut0WhOLnJbbX8pmb4vQqfBdRNsbe/JBsFaEbtSN/Gg73V+W13Xi4lWj34coEsGdkqg
-         43UMYgu+cvbGMPUYySAqbmh9HYKkVB5GGjNPIuA7lzplJ7+k7ct5p+ld1bnYvk9fMH9a
-         Ky4eREU5feI74wBaDHB0bqFdBSPX4gimCGUKWeGkF/O5X8ZbvhZ2FDWr+yYmi1d2Blos
-         HB+bt+QBvG5Oxc33i9UrhOLY7vhu7T/fKwtiw9zQtqQ6RrtDdn8vez5hq1bkfwX0xewc
-         DLGJ89B4D+mdCTMoFaFyqdW6oZTrZqQTLMvMsAoirDk3FHYa3zu/kLi9RwZh4dRrpRzw
-         KmXg==
-X-Gm-Message-State: AO0yUKWlNUGxGA3XwfKezvCm7YmEKNPLnGQTI8/6OhgRgpYs5TDRUY13
-        hN0rqVRXmUKCRznC+MDgDOIACQ==
-X-Google-Smtp-Source: AK7set/RrYSghKU2TCi2d2pe/JkyXdET21wmcAMOmZQ1oerGmZdwtJ0Oy8pGgRxiHArAR2x2GqvlIQ==
-X-Received: by 2002:a50:d55e:0:b0:4ac:1ba2:2041 with SMTP id f30-20020a50d55e000000b004ac1ba22041mr361992edj.15.1676027339831;
-        Fri, 10 Feb 2023 03:08:59 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id k2-20020a508ac2000000b00499b6b50419sm2024753edk.11.2023.02.10.03.08.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 03:08:59 -0800 (PST)
-Message-ID: <df068428-c086-4f6a-3cda-9ef6ce665f13@linaro.org>
-Date:   Fri, 10 Feb 2023 13:08:57 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 3/5] arm64: dts: qcom: sm8350: add dp controller
-Content-Language: en-GB
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Mg+Lezo/UluuzY/CQgV39sLNfOJ9ZHhdDTuSYUasXFg=;
+        b=6nB9p2CQZqzy1CftuBNHeBMsOZNUCcYWM6oLIbqG076M9+7JBM6xwgGO6JDUvJUmMK
+         vfE/2FLaxWk7Pxx45G07pOSpIZirHj1roDqFpWooVzCknOp8TB1otYw249muecEi2NMV
+         SzPlrvgeMrqbiww53Uu6wRPXWi43qFhq5vcSvVQjeqJBSJqI+xh9jh6wP1glUYaUgxtR
+         Fh/OIhyhNdoxiVWt3vmL8lRVtUwT3nozfCGLq1IXFZKbRlBzfLNUzZf03KnnE3+cR4/k
+         zi8rED/LNibIjW5bIrfkGkqm+nzgwZZBda88LaJQ+MARA+GCPRxhw0F13VgTKSsUEuKb
+         iong==
+X-Gm-Message-State: AO0yUKUYtyPxRJaLV79SLYlY0LR9guifCFH4S55ba+IzWUKPN/Uxe12I
+        djWN6AHuHrmfSyB6B6R057HNC2aszCUAbg==
+X-Google-Smtp-Source: AK7set9eP40cF5oQ2gyuZ9lgHH7wj2QLFyKLxnKtg6E4Z8Er1idp0R8Rz36dM/eA3Y3z8LKKr2ufhg==
+X-Received: by 2002:a17:902:e30a:b0:19a:6acc:1de2 with SMTP id q10-20020a170902e30a00b0019a6acc1de2mr2856106plc.35.1676027411453;
+        Fri, 10 Feb 2023 03:10:11 -0800 (PST)
+Received: from kelvin-ThinkPad-L14-Gen-1.. (ec2-18-163-35-77.ap-east-1.compute.amazonaws.com. [18.163.35.77])
+        by smtp.gmail.com with ESMTPSA id ix12-20020a170902f80c00b00198df32b41csm3152267plb.29.2023.02.10.03.10.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 03:10:10 -0800 (PST)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-mips@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230206-topic-sm8450-upstream-dp-controller-v2-0-529da2203659@linaro.org>
- <20230206-topic-sm8450-upstream-dp-controller-v2-3-529da2203659@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230206-topic-sm8450-upstream-dp-controller-v2-3-529da2203659@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: [PATCH] MIPS: loongson32: Drop obsolete cpufreq platform device
+Date:   Fri, 10 Feb 2023 19:09:34 +0800
+Message-Id: <20230210110934.1379482-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/2023 12:34, Neil Armstrong wrote:
-> Add the Display Port controller subnode to the MDSS node.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->   arch/arm64/boot/dts/qcom/sm8350.dtsi | 82 +++++++++++++++++++++++++++++++++++-
->   1 file changed, 80 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> index d490ce84a022..eb636b7dffa7 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> @@ -2862,13 +2862,20 @@ ports {
->   
->   					port@0 {
->   						reg = <0>;
-> -						dpu_intf1_out: endpoint {
-> -							remote-endpoint = <&mdss_dsi0_in>;
-> +						dpu_intf0_out: endpoint {
-> +							remote-endpoint = <&mdss_dp_in>;
+The obsolete cpufreq driver was removed, drop the platform device
+and data accordingly.
 
-No need to reorder these ports. Please add DP to the end.
+Link: https://lore.kernel.org/all/20230112135342.3927338-1-keguang.zhang@gmail.com
+Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+---
+ .../mips/include/asm/mach-loongson32/cpufreq.h | 18 ------------------
+ .../include/asm/mach-loongson32/platform.h     |  1 -
+ arch/mips/loongson32/common/platform.c         | 16 ----------------
+ arch/mips/loongson32/ls1b/board.c              |  1 -
+ 4 files changed, 36 deletions(-)
+ delete mode 100644 arch/mips/include/asm/mach-loongson32/cpufreq.h
 
->   						};
->   					};
->   
->   					port@1 {
->   						reg = <1>;
-> +						dpu_intf1_out: endpoint {
-> +							remote-endpoint = <&mdss_dsi0_in>;
-> +						};
-> +					};
-> +
-> +					port@2 {
-> +						reg = <2>;
->   						dpu_intf2_out: endpoint {
->   							remote-endpoint = <&mdss_dsi1_in>;
->   						};
-> @@ -2876,6 +2883,77 @@ dpu_intf2_out: endpoint {
->   				};
->   			};
->   
-> +			mdss_dp: displayport-controller@ae90000 {
-> +				compatible = "qcom,sm8350-dp";
-> +				reg = <0 0xae90000 0 0x200>,
-> +				      <0 0xae90200 0 0x200>,
-> +				      <0 0xae90400 0 0x600>,
-> +				      <0 0xae91000 0 0x400>;
+diff --git a/arch/mips/include/asm/mach-loongson32/cpufreq.h b/arch/mips/include/asm/mach-loongson32/cpufreq.h
+deleted file mode 100644
+index e422a32883ae..000000000000
+--- a/arch/mips/include/asm/mach-loongson32/cpufreq.h
++++ /dev/null
+@@ -1,18 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Copyright (c) 2014 Zhang, Keguang <keguang.zhang@gmail.com>
+- *
+- * Loongson 1 CPUFreq platform support.
+- */
+-
+-#ifndef __ASM_MACH_LOONGSON32_CPUFREQ_H
+-#define __ASM_MACH_LOONGSON32_CPUFREQ_H
+-
+-struct plat_ls1x_cpufreq {
+-	const char	*clk_name;	/* CPU clk */
+-	const char	*osc_clk_name;	/* OSC clk */
+-	unsigned int	max_freq;	/* in kHz */
+-	unsigned int	min_freq;	/* in kHz */
+-};
+-
+-#endif /* __ASM_MACH_LOONGSON32_CPUFREQ_H */
+diff --git a/arch/mips/include/asm/mach-loongson32/platform.h b/arch/mips/include/asm/mach-loongson32/platform.h
+index e3fe93ba1bdb..2cdcfb5f6012 100644
+--- a/arch/mips/include/asm/mach-loongson32/platform.h
++++ b/arch/mips/include/asm/mach-loongson32/platform.h
+@@ -12,7 +12,6 @@
+ #include <nand.h>
+ 
+ extern struct platform_device ls1x_uart_pdev;
+-extern struct platform_device ls1x_cpufreq_pdev;
+ extern struct platform_device ls1x_eth0_pdev;
+ extern struct platform_device ls1x_eth1_pdev;
+ extern struct platform_device ls1x_ehci_pdev;
+diff --git a/arch/mips/loongson32/common/platform.c b/arch/mips/loongson32/common/platform.c
+index 311dc1580bbd..64d7979394e6 100644
+--- a/arch/mips/loongson32/common/platform.c
++++ b/arch/mips/loongson32/common/platform.c
+@@ -15,7 +15,6 @@
+ 
+ #include <platform.h>
+ #include <loongson1.h>
+-#include <cpufreq.h>
+ #include <dma.h>
+ #include <nand.h>
+ 
+@@ -62,21 +61,6 @@ void __init ls1x_serial_set_uartclk(struct platform_device *pdev)
+ 		p->uartclk = clk_get_rate(clk);
+ }
+ 
+-/* CPUFreq */
+-static struct plat_ls1x_cpufreq ls1x_cpufreq_pdata = {
+-	.clk_name	= "cpu_clk",
+-	.osc_clk_name	= "osc_clk",
+-	.max_freq	= 266 * 1000,
+-	.min_freq	= 33 * 1000,
+-};
+-
+-struct platform_device ls1x_cpufreq_pdev = {
+-	.name		= "ls1x-cpufreq",
+-	.dev		= {
+-		.platform_data = &ls1x_cpufreq_pdata,
+-	},
+-};
+-
+ /* Synopsys Ethernet GMAC */
+ static struct stmmac_mdio_bus_data ls1x_mdio_bus_data = {
+ 	.phy_mask	= 0,
+diff --git a/arch/mips/loongson32/ls1b/board.c b/arch/mips/loongson32/ls1b/board.c
+index 727e06718dab..fed8d432ef20 100644
+--- a/arch/mips/loongson32/ls1b/board.c
++++ b/arch/mips/loongson32/ls1b/board.c
+@@ -35,7 +35,6 @@ static const struct gpio_led_platform_data ls1x_led_pdata __initconst = {
+ 
+ static struct platform_device *ls1b_platform_devices[] __initdata = {
+ 	&ls1x_uart_pdev,
+-	&ls1x_cpufreq_pdev,
+ 	&ls1x_eth0_pdev,
+ 	&ls1x_eth1_pdev,
+ 	&ls1x_ehci_pdev,
 
-This will not validate against the schema. Please add p1 region at the 
-end (I assume it is <0 0x0ae91400 0 0x400>).
-
-> +				interrupt-parent = <&mdss>;
-> +				interrupts = <12>;
-> +				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_DP_AUX_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_DP_LINK_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_DP_LINK_INTF_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_DP_PIXEL_CLK>;
-> +				clock-names = "core_iface",
-> +					      "core_aux",
-> +					      "ctrl_link",
-> +			                      "ctrl_link_iface",
-> +					      "stream_pixel";
-> +
-> +				assigned-clocks = <&dispcc DISP_CC_MDSS_DP_LINK_CLK_SRC>,
-> +						  <&dispcc DISP_CC_MDSS_DP_PIXEL_CLK_SRC>;
-> +				assigned-clock-parents = <&usb_1_qmpphy 1>,
-> +							 <&usb_1_qmpphy 2>;
-
-Please use defined names here and in the phys below
-
-> +
-> +				phys = <&usb_1_qmpphy 1>;
-> +			        phy-names = "dp";
-> +
-> +			        #sound-dai-cells = <0>;
-> +
-> +				operating-points-v2 = <&dp_opp_table>;
-> +				power-domains = <&rpmhpd SM8350_MMCX>;
-> +
-> +				status = "disabled";
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					port@0 {
-> +						reg = <0>;
-> +						mdss_dp_in: endpoint {
-> +							remote-endpoint = <&dpu_intf0_out>;
-> +						};
-> +					};
-> +				};
-> +
-> +				dp_opp_table: opp-table {
-> +					compatible = "operating-points-v2";
-> +
-> +					opp-160000000 {
-> +						opp-hz = /bits/ 64 <160000000>;
-> +						required-opps = <&rpmhpd_opp_low_svs>;
-> +					};
-> +
-> +					opp-270000000 {
-> +						opp-hz = /bits/ 64 <270000000>;
-> +						required-opps = <&rpmhpd_opp_svs>;
-> +					};
-> +
-> +					opp-540000000 {
-> +						opp-hz = /bits/ 64 <540000000>;
-> +						required-opps = <&rpmhpd_opp_svs_l1>;
-> +					};
-> +
-> +					opp-810000000 {
-> +						opp-hz = /bits/ 64 <810000000>;
-> +						required-opps = <&rpmhpd_opp_nom>;
-> +					};
-> +				};
-> +			};
-> +
->   			mdss_dsi0: dsi@ae94000 {
->   				compatible = "qcom,sm8350-dsi-ctrl", "qcom,mdss-dsi-ctrl";
->   				reg = <0 0x0ae94000 0 0x400>;
-> 
-
+base-commit: 159c610af8cdf2b3c915e59162fc867b557cbe7e
+prerequisite-patch-id: a73e24e76a88f519d85fdeb7230e93d53c61434a
 -- 
-With best wishes
-Dmitry
+2.34.1
 
