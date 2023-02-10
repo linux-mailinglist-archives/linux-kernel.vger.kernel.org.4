@@ -2,140 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A1166915FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 02:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E08691602
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 02:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbjBJBAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 20:00:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
+        id S230381AbjBJBAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 20:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbjBJBAB (ORCPT
+        with ESMTP id S230124AbjBJBAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 20:00:01 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD6B3644F;
-        Thu,  9 Feb 2023 16:59:56 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id v17so5862761lfd.7;
-        Thu, 09 Feb 2023 16:59:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TbRsX+QftKVwDhfh4wqvBv6T4LndEVTeDJlOctN0KIg=;
-        b=OPpVr4rpEWUjKSHG/REcA7uXu5qPf+I84pFkz10UqUk22SmU1hpBH6vh+O8j6WI8ys
-         e3xe10TOnaN+metw26ovZ992s/hqUka2tOBTCuXjUC8HdDBRR4nUWLxgZ53p/alq1TFG
-         HavlE/JAoYjDvAw07zpLXsiGvxXa8zylrgywgeGmJmtOH4sxLfSr2LO4aUaidRcUv35A
-         TdVxqKIkKqxJf0C4HB8TmXyDu5PCcKhEEQYMfH7MRfLWpKaubJwwrRxufX9sHN2YhWbx
-         P4+5IBoc0s8hsbvYIKSRba9V5qaAwMXQKWdgzniCrDXM6ySPhIaX+QU1x2tVF7FWw9ky
-         VwfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TbRsX+QftKVwDhfh4wqvBv6T4LndEVTeDJlOctN0KIg=;
-        b=wyxoCwowXj/J1m7MTX5bI1EYkIwqtzpzec9/VZgIlh3y78njL26hf/wYtYzYjqIHzF
-         751J3JyOTe8eKjNestsDjZnjlExCIvScq67OJO9qQc1Bo8wp0kBgjrgnez8u8oDBUr9L
-         UqVLBeRe0ezrD06L2YVY19klMPmNotl4qgxLcH6q9IurqhT8LMrIo+VMC3J2dLN0CL+K
-         jpfIHRHnm0Q5JRC5pr3BfKSo3v19pPMnU7QyrI+uywh/OHf8BoRRIRYLOXut8nh8jR+C
-         tiYCKHagf242DxQGQUX6sfE7nLpBT17GE9U1xgZDI9Kkuul/24nLGABAuMC2QpULU6Za
-         WCiw==
-X-Gm-Message-State: AO0yUKUeBRnIhyShxoTLY9paAaGuAAKibH86wL8t4iqy/YJzMoD0kbKy
-        ojdSuzMzuojrIsP3+yNYnEvF3hZheM8=
-X-Google-Smtp-Source: AK7set+cT82jAeItu1v0FJg2+pIjln1yv4Kd6F/wIUhkPQsbaMGKVBgo1WZIuPU9MhtZQd8mBei4sg==
-X-Received: by 2002:ac2:530d:0:b0:4da:f64b:cca0 with SMTP id c13-20020ac2530d000000b004daf64bcca0mr2479665lfh.8.1675990794504;
-        Thu, 09 Feb 2023 16:59:54 -0800 (PST)
-Received: from mobilestation ([91.193.176.251])
-        by smtp.gmail.com with ESMTPSA id u10-20020ac24c2a000000b004cc8207741fsm165406lfq.93.2023.02.09.16.59.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 16:59:54 -0800 (PST)
-Date:   Fri, 10 Feb 2023 03:59:51 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
-        caihuoqing <caihuoqing@baidu.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org
-Subject: Re: [PATCH 0/3] dmaengine: dw-edma: Add support for native HDMA
-Message-ID: <20230210005951.3l67twgbdxoiwnr6@mobilestation>
-References: <20220921064859.10328-1-cai.huoqing@linux.dev>
+        Thu, 9 Feb 2023 20:00:32 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8BA16AC6;
+        Thu,  9 Feb 2023 17:00:29 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PCb4l2mRzz4xwt;
+        Fri, 10 Feb 2023 12:00:22 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675990823;
+        bh=apcxmBNwKmYRtLpVjAX9XJoi1QUIpCrqIm6SUAMyNz4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=grIyxIjVp+hPtT/GIcFS7AmVbUImlghiinEh0vBjfnw8Asu/NYdcAhJKvEmoj1BWd
+         07NwPXgj1i+6qVEvcCc7BmA44bo/7nNu3bShST+uO04JkOfJ/Z4Ksrvv4nRyIOe0P6
+         n4K0lAfVVMCVIpjB3ZYd0Ifsd0ysybyUBtLit69g5SzMz24eu1lLmFZP98bh8OVwv/
+         1cCIherCRJS+a61lqmNATunsR4g0xprrjEscWDed1iNlQZ1MOREaTadxKpmoI3vH6O
+         L4rWNWgn7VWAXKzd9TdgEAC5/I/6HuXoyYECwBQ33kGzFMZOhsPacM8V83eB+qcknC
+         HiH92Kc3dn4SQ==
+Date:   Fri, 10 Feb 2023 12:00:21 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the tip tree with the s390 tree
+Message-ID: <20230210120021.4a507539@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220921064859.10328-1-cai.huoqing@linux.dev>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/tRkWBryw165Mp+T9ZJ=IBr4";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vinod
+--Sig_/tRkWBryw165Mp+T9ZJ=IBr4
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 21, 2022 at 02:48:49PM +0800, Cai Huoqing wrote:
-> From: caihuoqing <caihuoqing@baidu.com>
-> 
-> Add support for HDMA NATIVE, as long the IP design has set
-> the compatible register map parameter-HDMA_NATIVE,
-> which allows compatibility for native HDMA register configuration.
-> 
-> The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
-> And the native HDMA registers are different from eDMA,
-> so this patch add support for HDMA NATIVE mode.
-> 
-> HDMA write and read channels operate independently to maximize
-> the performance of the HDMA read and write data transfer over
-> the link When you configure the HDMA with multiple read channels,
-> then it uses a round robin (RR) arbitration scheme to select
-> the next read channel to be serviced.
-> The same applies when you have multiple write channels.
-> 
-> The native HDMA driver also supports a maximum of 16 independent
-> channels (8 write + 8 read), which can run simultaneously.
-> Both SAR (Source Address Register) and DAR (Destination Address Register)
-> are alignmented to byte.dmaengine: dw-edma: Add support for native HDMA
-> 
-> These series based on the series
-> https://lore.kernel.org/dmaengine/20220822185332.26149-1-Sergey.Semin@baikalelectronics.ru/
+Hi all,
 
-Please note this patchset is a refactored version of the patch
-submitted by Cai a while ago
-https://lore.kernel.org/dmaengine/20220824140146.29140-1-cai.huoqing@linux.dev/
-The main design aspects implemented here were discussed in the
-framework of that thread.
+Today's linux-next merge of the tip tree got a conflict in:
 
--Serge(y)
+  arch/s390/kernel/idle.c
 
-> 
-> Cai Huoqing (3):
->   dmaengine: dw-edma: Rename dw_edma_core_ops structure to
->     dw_edma_plat_ops
->   dmaengine: dw-edma: Create a new dw_edma_core_ops structure to
->     abstract controller operation
->   dmaengine: dw-edma: Add support for native HDMA
-> 
->  drivers/dma/dw-edma/Makefile             |   6 +-
->  drivers/dma/dw-edma/dw-edma-core.c       |  65 ++---
->  drivers/dma/dw-edma/dw-edma-core.h       |  19 ++
->  drivers/dma/dw-edma/dw-edma-pcie.c       |   4 +-
->  drivers/dma/dw-edma/dw-edma-v0-core.c    |  90 ++++++-
->  drivers/dma/dw-edma/dw-edma-v0-core.h    |  14 +-
->  drivers/dma/dw-edma/dw-hdma-v0-core.c    | 304 +++++++++++++++++++++++
->  drivers/dma/dw-edma/dw-hdma-v0-core.h    |  17 ++
->  drivers/dma/dw-edma/dw-hdma-v0-debugfs.c | 150 +++++++++++
->  drivers/dma/dw-edma/dw-hdma-v0-debugfs.h |  22 ++
->  drivers/dma/dw-edma/dw-hdma-v0-regs.h    |  98 ++++++++
->  include/linux/dma/edma.h                 |   7 +-
->  12 files changed, 725 insertions(+), 71 deletions(-)
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
-> 
-> -- 
-> 2.25.1
-> 
+between commit:
+
+  c01016299dc7 ("s390/idle: move idle time accounting to account_idle_time_=
+irq()")
+
+from the s390 tree and commit:
+
+  89b3098703bd ("arch/idle: Change arch_cpu_idle() behavior: always exit wi=
+th IRQs disabled")
+
+from the tip tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/s390/kernel/idle.c
+index dd8351e76539,b04fb418307c..000000000000
+--- a/arch/s390/kernel/idle.c
++++ b/arch/s390/kernel/idle.c
+@@@ -61,7 -57,15 +61,6 @@@ void noinstr arch_cpu_idle(void
+ =20
+  	/* psw_idle() returns with interrupts disabled. */
+  	psw_idle(idle, psw_mask);
+- 	raw_local_irq_enable();
+ -
+ -	/* Account time spent with enabled wait psw loaded as idle time. */
+ -	raw_write_seqcount_begin(&idle->seqcount);
+ -	idle_time =3D idle->clock_idle_exit - idle->clock_idle_enter;
+ -	idle->clock_idle_enter =3D idle->clock_idle_exit =3D 0ULL;
+ -	idle->idle_time +=3D idle_time;
+ -	idle->idle_count++;
+ -	account_idle_time(cputime_to_nsecs(idle_time));
+ -	raw_write_seqcount_end(&idle->seqcount);
+  }
+ =20
+  static ssize_t show_idle_count(struct device *dev,
+
+--Sig_/tRkWBryw165Mp+T9ZJ=IBr4
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPllyYACgkQAVBC80lX
+0GwccAgAjaVfw+h1ycQnThb43tEHMB2OGSMUNxs0NqexI3HslDaXxx/u1Hgp2fVq
+usdIRBW5AS8u1flYl/e/xA3JaNq3Q0gVgS/uzFCJ80KomUXGm2/H+gBcANNmlA0s
+ND3GL72ANEytUgTu6BitN4BHA7c93cvovWvv1ezkrFkFCNUnQv7svO2vsTY2B0U9
+iD/YpVmxKTtOneU2rY0PSVcoUal15fzfNOv9qPoH/jpnOeg8QNpTMzqZPO/U251O
+K9pLpHhv2+koOVSswqck+JTHi87gJkdx9MQZeVjOACtzdIL9r74iOdFI0vskIV2X
+EAv4+tEuMpyV18itd6TTlJIb10JGHw==
+=sGRN
+-----END PGP SIGNATURE-----
+
+--Sig_/tRkWBryw165Mp+T9ZJ=IBr4--
