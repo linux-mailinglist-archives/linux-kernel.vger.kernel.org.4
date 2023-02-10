@@ -2,279 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 418A86920E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 15:37:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11A566920EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 15:38:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232349AbjBJOhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 09:37:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
+        id S232239AbjBJOiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 09:38:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232248AbjBJOhE (ORCPT
+        with ESMTP id S231733AbjBJOh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 09:37:04 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291DF6D63C
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 06:37:03 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id f47-20020a05600c492f00b003dc584a7b7eso6423216wmp.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 06:37:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zgDnnay/7/hZu69iuCwtmAHN8teouEyN6y/9rDAhOc4=;
-        b=gV5GjV5Ji6seMM71UMvNBv9Tu67tp99sAn0VEx55h0YBtK+Xmky+fj4N3kTzAxWHWH
-         OOzfSENv3dClm4WBzZ27PFVtWOfGspmhnn8EnWIllyI+ZrgN1rkBmVOAX9gBxefWOr5E
-         3CHpZeHFLEOJFMh62qKWOJyVi9oC5a06yfMojug7eESwXAvpq9nKSbmyp+Y0MCtBj6LN
-         Jhlm4ab+agFwm0Un+sUV11W3BEdQHEougEBQlix+kY7F0HV1J7yuueS0nisvv379xSCJ
-         5SDXtcDI7Xpm2zCURgIuX646Zr4X8tCeVcHeKDQsROlK19Zlp2LtalTeJsiL9nedcRcK
-         iI7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zgDnnay/7/hZu69iuCwtmAHN8teouEyN6y/9rDAhOc4=;
-        b=6glWQXq8IAR+WVoDa1AjSIKOrZvU2BmY8+SQ/xBzkrjcfhupHIc8XH5kDdwL20dNLB
-         sI4wlhMBsN97sKz6R874r0IBoXxCpvUWJ6g+l35K+AqOoGv+186B8/kIdELOr74RiRXX
-         5bebgnRvP4w3m580drWjGwmVwmSlzJTtDTS55Y0o8slq60JK7puMbBDvjbQ2pZGF1I/q
-         3QUQdyOkl/8Wg0oOaNpoIY5LDQ8DCk+pzbfNcikRk+EDmlFgDoUYgRhbpylpu97KWSG1
-         RCG8cOSy2TndmSSVuhB150G8q12v/BZNPTnZm/9JUV4mqqycsglHLHp5ro5SGggXKb+F
-         FPPg==
-X-Gm-Message-State: AO0yUKU4pm49e/cfInTpIKkn7UgEIvNtKncGjbxRgqvnAAdU/gm6BHz0
-        tZ2wdxv0g8MzcZhfE9btw8L+Fw==
-X-Google-Smtp-Source: AK7set/KD2hbi+kZvfMCDyvqNEElWuMR7WnvCp8IBXEybr5gi7HRgPd+DpwizQ67bXcuLJXS84VhfA==
-X-Received: by 2002:a05:600c:4a9a:b0:3dc:f24:f2de with SMTP id b26-20020a05600c4a9a00b003dc0f24f2demr13099897wmp.12.1676039821561;
-        Fri, 10 Feb 2023 06:37:01 -0800 (PST)
-Received: from [172.17.49.168] (wifi-eduroam-trans.univ-tlse3.fr. [195.220.58.237])
-        by smtp.googlemail.com with ESMTPSA id a1-20020adff7c1000000b002c54a2037d1sm1615338wrq.75.2023.02.10.06.36.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 06:37:00 -0800 (PST)
-Message-ID: <365c469b-22f6-fb26-1872-5e9a5079af5d@linaro.org>
-Date:   Fri, 10 Feb 2023 15:36:59 +0100
+        Fri, 10 Feb 2023 09:37:57 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9A46D63A;
+        Fri, 10 Feb 2023 06:37:55 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CFE2D33E95;
+        Fri, 10 Feb 2023 14:37:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1676039873; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=J9IxGzrWR5KtzShNEpT9W3weNyZVsLsdhzbqLC1nYNA=;
+        b=Te/RVHf9aZoqXOtfEgUhIKdBWYB2YL309JAcOxqOziGs/gpRD8kF/MKifj3shCjTqtxR3h
+        slsQJJfMqg7+QqDuVRMPz/NFd88AVHOidBE+K1KeTXVeNfQ8MV6MjKvIQaSVPUGGp9UJCw
+        NOz6oNSubeE4/S/NrBWIYufQhlARC0c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1676039873;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=J9IxGzrWR5KtzShNEpT9W3weNyZVsLsdhzbqLC1nYNA=;
+        b=8z/bGzA+rwn9D/ov23LTqsYx6MHq+jtY21Oia40m57zN+D0+83mjVaNoUlTNnW+pp3KfYr
+        BDTRxtNiCty6XUDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BB0EE13206;
+        Fri, 10 Feb 2023 14:37:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rHs4LcFW5mPYTQAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 10 Feb 2023 14:37:53 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 3D94FA06D8; Fri, 10 Feb 2023 15:37:53 +0100 (CET)
+Date:   Fri, 10 Feb 2023 15:37:53 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org,
+        Theodore Ts'o <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rookxu <brookxu.cn@gmail.com>,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Subject: Re: [PATCH v3 7/8] ext4: Use rbtrees to manage PAs instead of inode
+ i_prealloc_list
+Message-ID: <20230210143753.ofh6wouk7vi7ygcl@quack3>
+References: <20230116080216.249195-8-ojaswin@linux.ibm.com>
+ <20230116122334.k2hlom22o2hlek3m@quack3>
+ <Y8Z413XTPMr//bln@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+ <20230117110335.7dtlq4catefgjrm3@quack3>
+ <Y8jizbGg6l2WxJPF@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+ <20230127144312.3m3hmcufcvxxp6f4@quack3>
+ <Y9zHkMx7w4Io0TTv@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+ <Y+OGkVvzPN0RMv0O@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+ <20230209105418.ucowiqnnptbpwone@quack3>
+ <Y+UzQJRIJEiAr4Z4@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: thermal/drivers/tegra: Getting rid of the get_thermal_instance()
- usage
-Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Wei Ni <wni@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Johan Hovold <johan@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-References: <fa2bd92a-f2ae-a671-b537-87c0f3c03dbd@linaro.org>
- <Y9J4WAFyXyV/nqlG@orome> <20230210131703.GF175687@linaro.org>
- <Y+ZQC85TM+O8p8gQ@orome>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <Y+ZQC85TM+O8p8gQ@orome>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+UzQJRIJEiAr4Z4@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/2023 15:09, Thierry Reding wrote:
-> On Fri, Feb 10, 2023 at 02:17:03PM +0100, Daniel Lezcano wrote:
->> Hi Thierry,
->>
->> On Thu, Jan 26, 2023 at 01:55:52PM +0100, Thierry Reding wrote:
->>> On Tue, Jan 24, 2023 at 08:57:23PM +0100, Daniel Lezcano wrote:
->>>>
->>>> Hi,
->>>>
->>>> does anyone know what is the purpose of the get_thermal_instance() usage in
->>>> this code:
->>>>
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/drivers/thermal/tegra/soctherm.c?h=thermal/linux-next#n623
->>>>
->>>> The driver is using a function which is reserved for the thermal core. It
->>>> should not.
->>>>
->>>> Is the following change ok ?
->>>>
->>>> diff --git a/drivers/thermal/tegra/soctherm.c
->>>> b/drivers/thermal/tegra/soctherm.c
->>>> index 220873298d77..5f552402d987 100644
->>>> --- a/drivers/thermal/tegra/soctherm.c
->>>> +++ b/drivers/thermal/tegra/soctherm.c
->>>> @@ -620,9 +620,8 @@ static int tegra_thermctl_set_trip_temp(struct
->>>> thermal_zone_device *tz, int trip
->>>>   				continue;
->>>>
->>>>   			cdev = ts->throt_cfgs[i].cdev;
->>>> -			if (get_thermal_instance(tz, cdev, trip_id))
->>>> -				stc = find_throttle_cfg_by_name(ts, cdev->type);
->>>> -			else
->>>> +			stc = find_throttle_cfg_by_name(ts, cdev->type);
->>>> +			if (!stc)
->>>>   				continue;
->>>>
->>>>   			return throttrip_program(dev, sg, stc, temp);
->>>> @@ -768,9 +767,9 @@ static int tegra_soctherm_set_hwtrips(struct device
->>>> *dev,
->>>>   			continue;
->>>>
->>>>   		cdev = ts->throt_cfgs[i].cdev;
->>>> -		if (get_thermal_instance(tz, cdev, trip))
->>>> -			stc = find_throttle_cfg_by_name(ts, cdev->type);
->>>> -		else
->>>> +
->>>> +		stc = find_throttle_cfg_by_name(ts, cdev->type);
->>>> +		if (!stc)
->>>>   			continue;
->>>>
->>>>   		ret = throttrip_program(dev, sg, stc, temperature);
->>>
->>> There's a small difference in behavior after applying this patch. Prior
->>> to this I get (on Tegra210):
->>>
->>> 	[   12.354091] tegra_soctherm 700e2000.thermal-sensor: missing thermtrips, will use critical trips as shut down temp
->>> 	[   12.379009] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when cpu reaches 102500 mC
->>> 	[   12.388882] tegra_soctherm 700e2000.thermal-sensor: programming throttle for cpu to 102500
->>> 	[   12.401007] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when cpu reaches 102500 mC
->>> 	[   12.471041] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when gpu reaches 103000 mC
->>> 	[   12.482852] tegra_soctherm 700e2000.thermal-sensor: programming throttle for gpu to 103000
->>> 	[   12.482860] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when gpu reaches 103000 mC
->>> 	[   12.485357] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when pll reaches 103000 mC
->>> 	[   12.501774] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when mem reaches 103000 mC
->>>
->>> and after these changes, it turns into:
->>>
->>> 	[   12.447113] tegra_soctherm 700e2000.thermal-sensor: missing thermtrips, will use critical trips as shut down temp
->>> 	[   12.472300] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when cpu reaches 102500 mC
->>> 	[   12.481789] tegra_soctherm 700e2000.thermal-sensor: programming throttle for cpu to 102500
->>> 	[   12.495447] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when cpu reaches 102500 mC
->>> 	[   12.496514] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when gpu reaches 103000 mC
->>> 	[   12.510353] tegra_soctherm 700e2000.thermal-sensor: programming throttle for gpu to 103000
->>> 	[   12.526856] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when gpu reaches 103000 mC
->>> 	[   12.528774] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when pll reaches 103000 mC
->>> 	[   12.569352] tegra_soctherm 700e2000.thermal-sensor: programming throttle for pll to 103000
->>> 	[   12.577635] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when pll reaches 103000 mC
->>> 	[   12.590952] tegra_soctherm 700e2000.thermal-sensor: thermtrip: will shut down when mem reaches 103000 mC
->>> 	[   12.600783] tegra_soctherm 700e2000.thermal-sensor: programming throttle for mem to 103000
->>> 	[   12.609204] tegra_soctherm 700e2000.thermal-sensor: throttrip: will throttle when mem reaches 103000 mC
->>>
->>> The "programming throttle ..." messages are something I've added locally
->>> to trace what gets called. So it looks like for "pll" and "mem" thermal
->>> zones, we now program trip points whereas we previously didn't.
->>
->> The DT descriptioni (tegra210.dtsi) says one thing and the implementation says
->> something else.
->>
->> If we refer to the PLL description, there is one 'hot' trip point and
->> one 'critical' trip point. No polling delay at all, so we need the
->> interrupts.
->>
->> Logically, we should set the 'hot' trip point first, when the trip
->> point is crossed, we setup the next trip point, which is the critical.
->>
->> With these two trip points, the first one will send a notification to
->> the userspace and the second one will force a shutdown of the
->> system. For both, no cooling device is expected.
+On Thu 09-02-23 23:24:31, Ojaswin Mujoo wrote:
+> On Thu, Feb 09, 2023 at 11:54:18AM +0100, Jan Kara wrote:
+> > On Wed 08-02-23 16:55:05, Ojaswin Mujoo wrote:
+> > > On Fri, Feb 03, 2023 at 02:06:56PM +0530, Ojaswin Mujoo wrote:
+> > > > On Fri, Jan 27, 2023 at 03:43:12PM +0100, Jan Kara wrote:
+> > > > > 
+> > > > > Well, I think cond_resched() + goto retry would be OK here. We could also
+> > > > > cycle the corresponding group lock which would wait for
+> > > > > ext4_mb_discard_group_preallocations() to finish but that is going to burn
+> > > > > the CPU even more than the cond_resched() + retry as we'll be just spinning
+> > > > > on the spinlock. Sleeping is IMHO not warranted as the whole
+> > > > > ext4_mb_discard_group_preallocations() is running under a spinlock anyway
+> > > > > so it should better be a very short sleep.
+> > > > > 
+> > > > > Or actually I have one more possible solution: What the adjusting function
+> > > > > is doing that it looks up PA before and after ac->ac_o_ex.fe_logical and
+> > > > > trims start & end to not overlap these PAs. So we could just lookup these
+> > > > > two PAs (ignoring the deleted state) and then just iterate from these with
+> > > > > rb_prev() & rb_next() until we find not-deleted ones. What do you think? 
+> > > > 
+> > > > Hey Jan, 
+> > > > 
+> > > > Just thought I'd update you, I'm trying this solution out, and it looks
+> > > > good but I'm hitting a few bugs in the implementation. Will update here
+> > > > once I have it working correctly.
+> > > 
+> > > Alright, so after spending some time on these bugs I'm hitting I'm
+> > > seeing some strange behavior. Basically, it seems like in scenarios
+> > > where we are not able to allocate as many block as the normalized goal
+> > > request, we can sometimes end up adding a PA that overlaps with existing
+> > > PAs in the inode PA list/tree. This behavior exists even before this
+> > > particular patchset. Due to presence of such overlapping PAs, the above
+> > > logic was failing in some cases.
+> > > 
+> > > From my understanding of the code, this seems to be a BUG. We should not
+> > > be adding overlapping PA ranges as that causes us to preallocate
+> > > multiple blocks for the same logical offset in a file, however I would
+> > > also like to know if my understanding is incorrect and if this is an
+> > > intended behavior.
+> > > 
+> > > ----- Analysis of the issue ------
+> > > 
+> > > Here's my analysis of the behavior, which I did by adding some BUG_ONs
+> > > and running generic/269 (4k bs). It happens pretty often, like once
+> > > every 5-10 runs. Testing was done without applying this patch series on
+> > > the Ted's dev branch.
+> > > 
+> > > 1. So taking an example of a real scenario I hit. After we find the best
+> > > len possible, we enter the ext4_mb_new_inode_pa() function with the
+> > > following values for start and end of the extents:
+> > > 
+> > > ## format: <start>/<end>(<len>)
+> > > orig_ex:503/510(7) goal_ex:0/512(512) best_ex:0/394(394)
+> > > 
+> > > 2. Since (best_ex len < goal_ex len) we enter the PA window adjustment
+> > > if condition here:
+> > > 
+> > > 	if (ac->ac_b_ex.fe_len < ac->ac_g_ex.fe_len)
+> > > 		...
+> > > 	}
+> > > 
+> > > 3. Here, we calc wins, winl and off and adjust logical start and end of
+> > > the best found extent. The idea is to make sure that the best extent
+> > > atleast covers the original request. In this example, the values are:
+> > > 
+> > > winl:503 wins:387 off:109
+> > > 
+> > > and win = min(winl, wins, off) = 109
+> > > 
+> > > 4. We then adjust the logical start of the best ex as:
+> > > 
+> > > 		ac->ac_b_ex.fe_logical = ac->ac_o_ex.fe_logical - EXT4_NUM_B2C(sbi, win);
+> > > 
+> > > which makes the new best extent as:
+> > > 
+> > > best_ex: 394/788(394)
+> > > 
+> > > As we can see, the best extent overflows outside the goal range, and
+> > > hence we don't have any guarentee anymore that it will not overlap with
+> > > another PA since we only check overlaps with the goal start and end.
+> > > We then initialze the new PA with the logical start and end of the best
+> > > extent and finaly add it to the inode PA list.
+> > > 
+> > > In my testing I was able to actually see overlapping PAs being added to
+> > > the inode list.
+> > > 
+> > > ----------- END ---------------
+> > > 
+> > > Again, I would like to know if this is a BUG or intended. If its a BUG,
+> > > is it okay for us to make sure the adjusted best extent length doesn't 
+> > > extend the goal length? 
+> > 
+> > Good spotting. So I guess your understanding of mballoc is better than mine
+> > by now :) but at least in my mental model I would also expect the resulting
+> > preallocation to stay withing the goal extent. What is causing here the
+> > issue is this code in ext4_mb_new_inode_pa():
+> > 
+> >                 offs = ac->ac_o_ex.fe_logical %
+> >                         EXT4_C2B(sbi, ac->ac_b_ex.fe_len);
+> >                 if (offs && offs < win)
+> >                         win = offs;
+> > 
+> > so we apparently try to align the logical offset of the allocation to a
+> > multiple of the allocated size but that just does not make much sense when
 > 
-> I think the intention here is to use the soctherm's built-in throttling
-> mechanism as a last resort measure to try and cool the system down. I
-> suppose that could count as "passive" cooling, so specifying it as the
-> cooling device for the "passive" trip point may be more appropriate.
+> Yep, it is indeed the offset calculation that is cauing issues in this
+> particular example. Any idea why this was originally added?
+
+So I belive mballoc tries to align everything (offsets & lengths) to powers
+of two to reduce fragmentation and simplify the work for the buddy allocator.
+If ac->ac_b_ex.fe_len is a power-of-two, the alignment makes sense. But
+once we had to resort to higher allocator passes and just got some
+random-length extent, the alignment stops making sense.
+
+> > we found some random leftover extent with shorter-than-goal size. So what
+> > I'd do in the shorter-than-goal preallocation case is:
+> > 
+> > 1) If we can place the allocation at the end of goal window and still cover
+> > the original allocation request, do that.
+> > 
+> > 2) Otherwise if we can place the allocation at the start of the goal
+> > window and still cover the original allocation request, do that.
+> > 
+> > 3) Otherwise place the allocation at the start of the original allocation
+> > request.
+> > 
+> > This would seem to reasonably reduce fragmentation of preallocated space
+> > and still keep things simple.
+> This looks like a good approach to me and it will take care of the issue
+> caused due to offset calculation.
 > 
-> The throttling that happens here is quite severe, so we don't want it to
-> happen too early. I would expect that our "passive" trip point shouldn't
-> be a lot less than the "hot" temperature. I suspect that's the reason
-> why the "hot" trip point was reused for this.
+> However, after commenting out the offset calculation bit in PA window
+> adjustment logic, I noticed that there is one more way that such an
+> overflow can happen, which would need to be addressed before we can
+> implement the above approach. Basically, this happens when we end up
+> with a goal len greater than the original len.
+
+You probably mean goal end block smaller than original end block here... At
+least that's what you speak about below.
+
+> See my comments at the end for more info.
 > 
-> I'm also beginning to think that we should just not expose the soctherm
-> throttling as a cooling device and instead keep it internal to the
-> soctherm driver entirely.
+> > 
+> > > Also, another thing I noticed is that after ext4_mb_normalize_request(),
+> > > sometimes the original range can also exceed the normalized goal range,
+> > > which is again was a bit surprising to me since my understanding was
+> > > that normalized range would always encompass the orignal range.
+> > 
+> > Well, isn't that because (part of) the requested original range is already
+> > preallocated? Or what causes the goal range to be shortened?
+> > 
+> Yes I think that pre existing PAs could be one of the cases.
+> 
+> Other than that, I'm also seeing some cases of sparse writes which can cause
+> ext4_mb_normalize_request() to result in having an original range that
+> overflows out of the goal range. For example, I observed these values just
+> after the if else if else conditions in the function, before we check if range
+> overlaps pre existing PAs:
+> 
+> orig_ex:2045/2055(len:10) normalized_range:0/2048, orig_isize:8417280
+> 
+> Basically, since isize is large and we are doing a sparse write, we end
+> up in the following if condition:
+> 
+> 	} else if (NRL_CHECK_SIZE(ac->ac_o_ex.fe_len,
+> 								(8<<20)>>bsbits, max, 8 * 1024)) {
+> 		start_off = ((loff_t)ac->ac_o_ex.fe_logical >> (23 - bsbits)) << 23;
+> 		size = 8 * 1024 * 1024;
+>  }
+> 
+> Resulting in normalized range less than original range.
 
-Yes, and perhaps separate it from the sensor driver.
+I see.
 
-There is a similar hardware limiter for the qcom platform [1]. The 
-description in the device tree is separated from the sensor and the 
-binding has temperatures to begin the mitigation [2].
+> Now, in any case, once we get such an overflow, if we try to enter the PA
+> adjustment window in ext4_mb_new_inode_pa() function, we will again end
+> up with a best extent overflowing out of goal extent since we would try
+> to cover the original extent. 
+> 
+> So yeah, seems like there are 2 cases where we could result in
+> overlapping PAs:
+> 
+> 1. Due to off calculation in PA adjustment window, as we discussed.  2.
+> Due to original extent overflowing out of goal extent.
+> 
+> I think the 3 step solution you proposed works well to counter 1 but not
+> 2, so we probably need some more logic on top of your solution to take
+> care of that.  I'll think some more on how to fix this but I think this
+> will be as a separate patch.
 
-There is no trip point associated as those are related to the in-kernel 
-mitigation.
+Well, my algorithm will still result in preallocation being within the goal
+range AFAICS. In the example above we had:
 
-If this mitigation is a heavy mitigation, above what the kernel is able 
-to do with a passive cooling device. It would make sense to just have 
-configured outside of the thermal zone.
+Orig 2045/2055 Goal 0/2048
 
-So the configuration would be something like:
+Suppose we found 200 blocks. So we try placing preallocation like:
 
-myperformance_limite {
-	@ = <0x...>
-	temperature_limit = 95000;
-};
+1848/2048, it covers the original starting block 2045 so we are fine and
+create preallocation 1848/2048. Nothing has overflown the goal window...
 
-thermal_zone {
-
-	cpu : {
-		trips {
-			alert {
-			temperature = 90000;
-			hysteresis = 2000;
-			type = passive;
-			};
-
-			hot {
-			temperature = 97000;
-			type = hot;
-			};
-
-			critical {
-			temperature = 100000;
-			hysteresis = 2000;
-			type = critical;
-			};
-
-			cooling-maps = <&cpu NO_LIMIT NO_LIMIT>;
-		};
-	}
-};
-
-The behavior will be a passive mitigation, if it fails the hardware 
-limiter will take over, if that fails then hot sends a notification to 
-the userspace (giving the opportunity to hotplug a cpu or kill a task or 
-suspend), if that fails then shutdown.
-
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/drivers/thermal/qcom/lmh.c?h=thermal/bleeding-edge
-
-[2] 
-https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/arch/arm64/boot/dts/qcom/sdm845.dtsi?h=thermal/bleeding-edge#n3922
-
-[ ... ]
-
-> On the DT side, I think most of the cooling maps can be cleaned up. We
-> can remove the entries for "critical" and "hot" trip points if the
-> driver unconditionally programs the automated throttling. 
-
-You may want to keep the critical trip points at least. Even if the 
-hardware limiter is certainly very effective, having the critical point 
-is another fail safe allowing to gracefully shutdown the system before a 
-wild hardware reset.
-
-> For EMC we
-> want to reverse the "passive" and "active" trip points and possibly drop
-> the dram-passive cooling map as well, since you mentioned the core would
-> take care of disabling the cooling device automatically.
-
-
-
+								Honza
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
