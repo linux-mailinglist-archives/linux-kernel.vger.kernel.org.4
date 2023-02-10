@@ -2,101 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 111CC6924E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 419416924EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:57:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232616AbjBJRzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 12:55:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57370 "EHLO
+        id S232661AbjBJR5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 12:57:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231792AbjBJRzr (ORCPT
+        with ESMTP id S231792AbjBJR5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 12:55:47 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A8474041;
-        Fri, 10 Feb 2023 09:55:47 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31AHsATR013475;
-        Fri, 10 Feb 2023 17:55:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2022-7-12; bh=jdsxoJu/le3WzUyGsQ3i3KKDyAP1na77DcnDUC/E/QM=;
- b=tf6enj/DlSrXiBrbOaAtyv2ekPjDgbAOma8Hb8HAXfpVm1RdyOn72RMBSxzMrKf+v+bF
- AlbyVi/0J1HWchffonKQyVEY400Yvuvi2M+9dPyHkFSD29zy7qYmlZzBEBU+NKkggn7N
- OI+gDqzmCLR4e8weE0hm6NEeFFbh2m5gSl1QRIR+nl1KQ7k/Pnq0X7e32cq71CyrdZ7n
- mQWH2n95WNMUk1SEMnwHfUYb35nQTVTepM02+OwvaXrsAZUI1xS+fgzK+PQeSbYyPP9a
- /dQa56Q+LDkqKfOnuyrD1/FG4PBm4Wq/e+tzxyCpmaTQUCY3Uu8bkJHxzvAlU3yKp839 WA== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nhdy1e06m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Feb 2023 17:55:46 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31AGUH2r013754;
-        Fri, 10 Feb 2023 17:55:45 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3nhdtajccv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Feb 2023 17:55:45 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31AHti0P015195;
-        Fri, 10 Feb 2023 17:55:45 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3nhdtajcc6-1;
-        Fri, 10 Feb 2023 17:55:44 +0000
-From:   Alok Tiwari <alok.a.tiwari@oracle.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     alok.a.tiwari@oracle.com, darren.kenny@oracle.com,
-        michael.christie@oracle.com, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, martin.petersen@oracle.com,
-        d.bogdanov@yadro.com, r.bolshakov@yadro.com,
-        target-devel@vger.kernel.org
-Subject: [PATCH] scsi: target: core: Added a blank line after target_remove_from_tmr_list()
-Date:   Fri, 10 Feb 2023 09:55:22 -0800
-Message-Id: <20230210175521.1469826-1-alok.a.tiwari@oracle.com>
-X-Mailer: git-send-email 2.39.1
+        Fri, 10 Feb 2023 12:57:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F2A521C0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:57:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4989F61D97
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 17:57:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7194C433A7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 17:57:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676051853;
+        bh=EdNikj6ihbS6tmVVKV/Gr8GqPj/IVFRIStn6g5XxS3c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=eWC0iXIEBdh8IiJfgucjHSAi41/t4CCSJLtM3N8OQXIMgm0D6a7uAgr+OPd20MJTH
+         +E7yRfL1HwGlMizxeYI4yHxetBPf/kQSz+/Dht1eVjH4fbeQ9OuvDOJVbhnFRXgEYy
+         QYy1bJy66R7Dn19bRYEhj96Et2i0xDrwZnPfW989bicZxpafG4B64re/6c1z5HRw+0
+         70yszsAyseKyHu7CdGfNjtminIlzy0mXqk4meyRPMynQFnVbAtCg804AUAQXGFr3zn
+         HQ87TQEqtdO1f2dnSw1rQuKiJaGx9TRK9Smv2mmAwq3jk7R4AnEpk01loDdz/tyjCV
+         lfUCZYnwZuoMg==
+Received: by mail-ej1-f49.google.com with SMTP id gr7so17987918ejb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:57:33 -0800 (PST)
+X-Gm-Message-State: AO0yUKWhM5SlGrP9k03RzuhPHE2AmbHBtdFOH0Rf/dJ1XsT/RYAWSMi9
+        MsfGE6hDUXbYfblU/o1coVXNd1n2UI2f1gyPVGXIpg==
+X-Google-Smtp-Source: AK7set9/ve8g5TsJRz3g6ZGdh+faiyXAgVkwQTS2SJlcgdVc+0p1pG34Vabiezx0GXNWG1AspwltN09G6XpRWPRXdvg=
+X-Received: by 2002:a17:906:ca04:b0:7c0:f45e:22ff with SMTP id
+ jt4-20020a170906ca0400b007c0f45e22ffmr3820111ejb.104.1676051851830; Fri, 10
+ Feb 2023 09:57:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-10_13,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0
- malwarescore=0 mlxscore=0 mlxlogscore=999 adultscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302100149
-X-Proofpoint-GUID: 9fl-1ScwRFIasn_SnS6nUQg5ANWyj-8b
-X-Proofpoint-ORIG-GUID: 9fl-1ScwRFIasn_SnS6nUQg5ANWyj-8b
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
+ <CAHk-=wj8rthcQ9gQbvkMzeFt0iymq+CuOzmidx3Pm29Lg+W0gg@mail.gmail.com>
+ <20230210021603.GA2825702@dread.disaster.area> <20230210040626.GB2825702@dread.disaster.area>
+ <Y+XLuYh+kC+4wTRi@casper.infradead.org> <20230210065747.GD2825702@dread.disaster.area>
+ <CALCETrWjJisipSJA7tPu+h6B2gs3m+g0yPhZ4z+Atod+WOMkZg@mail.gmail.com> <CAHk-=wj66F6CdJUAAjqigXMBy7gHquFMzPNAwKCgkrb2mF6U7w@mail.gmail.com>
+In-Reply-To: <CAHk-=wj66F6CdJUAAjqigXMBy7gHquFMzPNAwKCgkrb2mF6U7w@mail.gmail.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Fri, 10 Feb 2023 09:57:20 -0800
+X-Gmail-Original-Message-ID: <CALCETrU-9Wcb_zCsVWr24V=uCA0+c6x359UkJBOBgkbq+UHAMA@mail.gmail.com>
+Message-ID: <CALCETrU-9Wcb_zCsVWr24V=uCA0+c6x359UkJBOBgkbq+UHAMA@mail.gmail.com>
+Subject: Re: copy on write for splice() from file to pipe?
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Stefan Metzmacher <metze@samba.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API Mailing List <linux-api@vger.kernel.org>,
+        io-uring <io-uring@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Samba Technical <samba-technical@lists.samba.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no separate blank line between target_remove_from_tmr_list() and
-transport_cmd_check_stop_to_fabric
-As per coding-style, it is require to separate functions with one blank line.
+On Fri, Feb 10, 2023 at 8:34 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Fri, Feb 10, 2023 at 7:15 AM Andy Lutomirski <luto@kernel.org> wrote:
+> >
+> > Frankly, I really don't like having non-immutable data in a pipe.
+>
+> That statement is completely nonsensical.
 
-Fixes: 12b6fcd0ea7f ("scsi: target: core: Remove from tmr_list during LUN unlink")
-Signed-off-by: Alok Tiwari <alok.a.tiwari@oracle.com>
----
- drivers/target/target_core_transport.c | 1 +
- 1 file changed, 1 insertion(+)
+I know what splice() is.  I'm trying to make the point that it may not
+be the right API for most (all?) of its use cases, that we can maybe
+do better, and that we should maybe even consider deprecating (and
+simplifying and the cost of performance) splice in the moderately near
+future.  And I think I agree with you on most of what you're saying.
 
-diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
-index 5926316252eb..f1cdf78fc5ef 100644
---- a/drivers/target/target_core_transport.c
-+++ b/drivers/target/target_core_transport.c
-@@ -691,6 +691,7 @@ static void target_remove_from_tmr_list(struct se_cmd *cmd)
- 		spin_unlock_irqrestore(&dev->se_tmr_lock, flags);
- 	}
- }
-+
- /*
-  * This function is called by the target core after the target core has
-  * finished processing a SCSI command or SCSI TMF. Both the regular command
--- 
-2.39.1
+> It was literally designed to be "look, we want zero-copy networking,
+> and we could do 'sendfile()' by mmap'ing the file, but mmap - and
+> particularly munmap - is too expensive, so we map things into kernel
+> buffers instead".
 
+Indeed.  mmap() + sendfile() + munmap() is extraordinarily expensive
+and is not the right solution to zero-copy  networking.
+
+>
+> So saying "I really don't like having non-immutable data in a pipe" is
+> complete nonsense. It's syntactically correct English, but it makes no
+> conceptual sense.
+>
+> You can say "I don't like 'splice()'". That's fine. I used to think
+> splice was a really cool concept, but I kind of hate it these days.
+> Not liking splice() makes a ton of sense.
+>
+> But given splice, saying "I don't like non-immutable data" really is
+> complete nonsense.
+
+I am saying exactly what I meant.  Obviously mutable data exists.  I'm
+saying that *putting it in a pipe* *while it's still mutable* is not
+good.  Which implies that I don't think splice() is good.  No offense.
+
+I am *not* saying that the mere existence of mutable data is a problem.
+
+> That's not something specific to "splice()". It's fundamental to the
+> whole *concept* of zero-copy. If you don't want copies, and the source
+> file changes, then you see those changes.
+
+Of course!  A user program copying data from a file to a network
+fundamentally does this:
+
+Step 1: start the process.
+Step 2: data goes out to the actual wire or a buffer on the NIC or is
+otherwise in a place other than page cache, and the kernel reports
+completion.
+
+There are many ways to make this happen.  Step 1 could be starting
+read() and step 2 could be send() returning.  Step 1 could be be
+sticking something in an io_uring queue and step 2 could be reporting
+completion.  Step 1 could be splice()ing to a pipe and step 2 could be
+a splice from the pipe to a socket completing (and maybe even later
+when the data actually goes out).
+
+*Obviously* any change to the file between steps 1 and 2 may change
+the data that goes out the wire.
+
+> So the data lifetime - even just on just one side - can _easily_ be
+> "multiple seconds" even when things are normal, and if you have actual
+> network connectivity issues we are easily talking minutes.
+
+True.
+
+But splice is extra nasty: step 1 happens potentially arbitrarily long
+before step 2, and the kernel doesn't even know which socket the data
+is destined for in step 1.  So step 1 can't usefully return
+-EWOULDBLOCK, for example.  And it's awkward for the kernel to report
+errors, because steps 1 and 2 are so disconnected.  And I'm not
+convinced there's any corresponding benefit.
+
+
+In any case, maybe io_uring gives an opportunity to do much better.
+io_uring makes it *efficient* for largish numbers of long-running
+operations to all be pending at once.  Would an API like this work
+better (very handwavy -- I make absolutely no promises that this is
+compatible with existing users -- new opcodes might be needed):
+
+Submit IORING_OP_SPLICE from a *file* to a socket: this tells the
+kernel to kindly send data from the file in question to the network.
+Writes to the file before submission will be reflected in the data
+sent.  Writes after submission may or may not be reflected.  (This is
+step 1 above.)
+
+The operation completes (and is reported in the CQ) only after the
+kernel knows that the data has been snapshotted (step 2 above).  So
+completion can be reported when the data is DMAed out or when it's
+checksummed-and-copied or if the kernel decides to copy it for any
+other reason *and* the kernel knows that it won't need to read the
+data again for possible retransmission.  As you said, this could
+easily take minutes, but that seems maybe okay to me.
+
+(And if Samba needs to make sure that future writes don't change the
+outgoing data even two seconds later when the data has been sent but
+not acked, then maybe a fancy API could be added to help, or maybe
+Samba shouldn't be using zero copy IO in the first place!)
+
+If the file is truncated or some other problem happens, the operation can fail.
+
+
+I don't know how easy or hard this is to implement, but it seems like
+it would be quite pleasant to *use* from user code, it ought to be
+even faster than splice-to-pipe-then-splice-to-socket (simply because
+there is less bookkeeping), and it doesn't seem like any file change
+tracking would be needed in the kernel.
+
+
+If this works and becomes popular enough, splice-from-file-to-pipe
+could *maybe* be replaced in the kernel with a plain copy.
+
+--Andy
