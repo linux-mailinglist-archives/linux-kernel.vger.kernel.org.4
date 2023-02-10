@@ -2,106 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57F236916C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 03:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 938756916D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 03:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbjBJCoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 21:44:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
+        id S230320AbjBJCui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 21:50:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbjBJCoi (ORCPT
+        with ESMTP id S229991AbjBJCuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 21:44:38 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306DC70952
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 18:44:37 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id k4so4272903vsc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 18:44:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RxKcD5MHPeq8MW1BxCC2B2HCW247AyxiuibPeYpJLy0=;
-        b=WQkeb8HRZt6mt0Ws9HllUpsfUrgKa8s9at6qO+rVthEmiAc9amoTtOnzqJEmH1BFeZ
-         asqVFIfptZupwd2MwiZ2DDmlc/9w3dKQTrZnnsmQiigaSBMnimX0pciG3LuyWeI4fUjT
-         DCfgGNGZeXGPitNNKFNOaOJh6uI8dktnbgnGU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RxKcD5MHPeq8MW1BxCC2B2HCW247AyxiuibPeYpJLy0=;
-        b=iFa9IkCvcc+R14neAOehk9fl4WDFcB4mfzmBpTVEWfsVAythN971QGyUt+HIowMjSt
-         gLahFgBR+a666xTJ41poc6oii3kCQx1yC2hQ/MrdTyHYYvClUCxnC6mfXNGBr5v9+wFb
-         j2fijX9Sx7HY1DigsB+RR3zM6whHFGI53C3MEFZmGK+tppfhQusAoffVgPIWTEpt+eQV
-         fFZmWnfNpfQKG+6tWGAUWCDnm3YVhtHJXL/7+k0RM4+mjJ9VTXo2fTUvTNh1wp5wcGkG
-         fj6oAULIZn1rY99L5Mgn2JvUavYhPr7QHeXtNd2ecRcMZHEkvblTl+ohPFEc55iyrRnJ
-         Bdgw==
-X-Gm-Message-State: AO0yUKWVOhmxjpROAvJZrIbPt/uATA3HPh4jTQJL6l/xYLxmm82INmVW
-        9qkV6TObNkSyLI2Hs3J9TRnp8mNfrBzLSup3Jn77Vg==
-X-Google-Smtp-Source: AK7set8rmT5dBRiIMSgQxob4EVFEZikOUhOwE5/3kSmzkpF4EKHK+ockF47cKpiLEoE6PwJMZW4tFwy49H4pgkx46b8=
-X-Received: by 2002:a67:d202:0:b0:411:c830:e5b5 with SMTP id
- y2-20020a67d202000000b00411c830e5b5mr952691vsi.65.1675997076332; Thu, 09 Feb
- 2023 18:44:36 -0800 (PST)
+        Thu, 9 Feb 2023 21:50:37 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCE76F23D;
+        Thu,  9 Feb 2023 18:50:35 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sendonly@marcansoft.com)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 7E5A341EF0;
+        Fri, 10 Feb 2023 02:50:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1675997431; bh=dJYvSnjg1TsvS4N14R3W3MLMAAB3oGY+43m95CrJNq0=;
+        h=From:To:Cc:Subject:Date;
+        b=B/q6tembF5Kee89myywnTK0eLjTJnXo8cJo5nBCB33oCHCmyFHLxFRudDLeqIvyz7
+         ze+XjEslAuMVtTEgs3gF8VQifJ4SEboEPBDwaI5aoXHgCKhGb+CiIiMULbkxzRhNdx
+         FhfMBWhiFHekBfFYiPScIvcpkE64jD4nOLHI4rCXtnwxlLSd9GzwbNok8kQnOCwCky
+         Uy3SRktjEUkOP9pASVbyFYBv2VS4z5gQ2IEL/EZ4S40+pM6azmR+5Qcoqk8sHzbvLy
+         8qQ1UqgtBWO0k11qJM5a2zBed2Dd57a1F7Jl3G5tbxw2mZztmBlGvUF2sMi1EH5Ct6
+         NzTtPf32CSflg==
+From:   Hector Martin <marcan@marcan.st>
+To:     Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Alexander Prutskov <alep@cypress.com>,
+        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
+        Wright Feng <wright.feng@cypress.com>,
+        Ian Lin <ian.lin@infineon.com>,
+        Soontak Lee <soontak.lee@cypress.com>,
+        Joseph chuang <jiac@cypress.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Aditya Garg <gargaditya08@live.com>,
+        Jonas Gorski <jonas.gorski@gmail.com>, asahi@lists.linux.dev,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [PATCH v3 0/4] BCM4355/4364/4377 support & identification fixes
+Date:   Fri, 10 Feb 2023 11:50:05 +0900
+Message-Id: <20230210025009.21873-1-marcan@marcan.st>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20230209160357.19307-1-matthias.bgg@kernel.org> <20230209160357.19307-4-matthias.bgg@kernel.org>
-In-Reply-To: <20230209160357.19307-4-matthias.bgg@kernel.org>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 10 Feb 2023 10:44:25 +0800
-Message-ID: <CAGXv+5FnXtR+KP6GZ2ut1cUwo0z-SBs1zTPWMSvm9dF-NNn--g@mail.gmail.com>
-Subject: Re: [PATCH v1 4/4] Revert "arm64: dts: mt8173: add mmsel clocks for
- 4K support"
-To:     matthias.bgg@kernel.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        angelogioacchino.delregno@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 12:05 AM <matthias.bgg@kernel.org> wrote:
->
-> From: Matthias Brugger <matthias.bgg@gmail.com>
->
-> This reverts commit fc6634ac0e5380aeb1063275a2e9a583d41b2306.
->
-> The mmsys is a clock provider but does not have any clocks connected to
-> it. Therefore assigned-clock properties should be applied to the users of mmsys.
+Hi all,
 
-If there are multiple users that need this, then it should be moved to
-the clock provider node topckgen.
+This series adds support for the BCM4355, BCM4364, and BCM4377 variants
+found on Intel Apple Macs of the T2 era (and a few pre-T2 ones).
 
-> This fixes the DT schema check:
-> mediatek/mt8173-elm.dtb: syscon@14000000: 'assigned-clock-rates', 'assigned-clocks' do not match any of the regexes: 'pinctrl-[0-9]+'
->
-> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
-> ---
->
->  arch/arm64/boot/dts/mediatek/mt8173.dtsi | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-> index c47d7d900f283..b753547e250fe 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-> @@ -988,8 +988,6 @@ mmsys: syscon@14000000 {
->                         compatible = "mediatek,mt8173-mmsys", "syscon";
->                         reg = <0 0x14000000 0 0x1000>;
->                         power-domains = <&spm MT8173_POWER_DOMAIN_MM>;
-> -                       assigned-clocks = <&topckgen CLK_TOP_MM_SEL>;
-> -                       assigned-clock-rates = <400000000>;
->                         #clock-cells = <1>;
->                         #reset-cells = <1>;
->                         mboxes = <&gce 0 CMDQ_THR_PRIO_HIGHEST>,
-> --
-> 2.39.0
->
->
+The first patch fixes a bunch of confusion introduced when adding
+support for the Cypress 89459 chip, which is, as far as I can tell,
+just a BCM4355. This also drops the RAW device ID (just for this one
+chip), as there's no reason to add it unless we find actual hardware
+in the wild that uses it, and besides the raw device ID is already
+there twice (with a subvendor match), which was added by 2fef681a4cf7
+("brcmfmac: add CYW89342 mini-PCIe device").
+
+The subsequent patches add the firmware names and remaining missing
+device IDs, including splitting the BCM4364 firmware name by revision
+(since it was previously added without giving thought to the existence
+of more than one revision in the wild with different firmwares,
+resulting in different users manually copying different incompatible
+firmwares as the same firmware name).
+
+None of these devices have firmware in linux-firmware, so we should
+still be able to tweak firmware filenames without breaking anyone that
+matters. Apple T2 users these days are mostly using downstream trees
+with the Asahi Linux WLAN patches merged anyway, so they already know
+about this.
+
+Note that these devices aren't fully usable as far as firmware
+selection on these platforms without some extra patches to add support
+for fetching the required info from ACPI, but I want to get the device
+ID stuff out of the way first to move forward.
+
+v2: Added a commit in front to drop all the RAW device IDs as discussed,
+    and also fixed the 4364 firmware interface from BCA to WCC, as
+    pointed out in the v1 thread.
+
+v3: Dropped the raw cleanup commit because apparently some platforms
+    rely on those. Still removing the redundant raw ID for CYW89459,
+    though. It seems highly unlikely that will break anything, as it'd
+    have to be a device with no proper ID programmed *and* a custom
+    subvendor programmed.
+
+Hector Martin (4):
+  wifi: brcmfmac: Rename Cypress 89459 to BCM4355
+  brcmfmac: pcie: Add IDs/properties for BCM4355
+  brcmfmac: pcie: Add IDs/properties for BCM4377
+  brcmfmac: pcie: Perform correct BCM4364 firmware selection
+
+ .../broadcom/brcm80211/brcmfmac/chip.c        |  6 ++--
+ .../broadcom/brcm80211/brcmfmac/pcie.c        | 33 +++++++++++++++----
+ .../broadcom/brcm80211/include/brcm_hw_ids.h  |  8 +++--
+ 3 files changed, 34 insertions(+), 13 deletions(-)
+
+-- 
+2.35.1
+
