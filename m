@@ -2,110 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739D36917CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 05:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA456917CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 05:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbjBJE5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 23:57:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45504 "EHLO
+        id S230459AbjBJE4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 23:56:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbjBJE5C (ORCPT
+        with ESMTP id S229600AbjBJE4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 23:57:02 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16BB1B556
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 20:56:55 -0800 (PST)
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230210045652epoutp01181caa4ff5b3e8b94c3b3f578f2871c6~CXa3mDdMy0220902209epoutp01Q
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 04:56:52 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230210045652epoutp01181caa4ff5b3e8b94c3b3f578f2871c6~CXa3mDdMy0220902209epoutp01Q
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1676005012;
-        bh=Cn1KuYc/mahYf9SbC/oia3n2YKJAJcamRSiHkL5dW2o=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=rf5/KHfiG7a3Facxj47GgvCyAjeBLzM8ZzRfwROq2nGX+jNBV7W8tHB1KZ5s+qoo5
-         5DH2UeBD38ATwvdQ7EhbD7AwyTuUlwNz/ks9LK5gC0KUgDi2G3vxK650zxQcx3ZLOd
-         YXPaJd1rULeKjtA4YNACCpslPkhnWhWVQyY8ZxJw=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230210045651epcas1p2469593e100856b8a770911ba862b96e7~CXa21NQ2A1103911039epcas1p28;
-        Fri, 10 Feb 2023 04:56:51 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.36.223]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4PChKb6Nkhz4x9Pr; Fri, 10 Feb
-        2023 04:56:51 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        36.19.52037.39EC5E36; Fri, 10 Feb 2023 13:56:51 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230210045651epcas1p1392354722c8ad6d4ffad6f934ba78742~CXa2FbIoo1938319383epcas1p1v;
-        Fri, 10 Feb 2023 04:56:51 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230210045651epsmtrp29de923bce4b2a647162de8d9bf11ebfd~CXa2EgFaT3117131171epsmtrp2Q;
-        Fri, 10 Feb 2023 04:56:51 +0000 (GMT)
-X-AuditID: b6c32a37-55fff7000001cb45-65-63e5ce93fbca
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        72.83.17995.39EC5E36; Fri, 10 Feb 2023 13:56:51 +0900 (KST)
-Received: from jaewon-linux.10.32.193.11 (unknown [10.253.104.99]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230210045651epsmtip2437b3564d0f4a1195cc19c0e35980726~CXa17OKrr2907929079epsmtip2H;
-        Fri, 10 Feb 2023 04:56:51 +0000 (GMT)
-From:   Jaewon Kim <jaewon31.kim@samsung.com>
-To:     john.stultz@linaro.org, tjmercier@google.com,
-        sumit.semwal@linaro.org, daniel.vetter@ffwll.ch,
-        akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@kernel.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        jaewon31.kim@gmail.com, Jaewon Kim <jaewon31.kim@samsung.com>
-Subject: [PATCH v2] dma-buf: system_heap: avoid reclaim for order 4
-Date:   Fri, 10 Feb 2023 13:56:08 +0900
-Message-Id: <20230210045608.23274-1-jaewon31.kim@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrJKsWRmVeSWpSXmKPExsWy7bCmvu7kc0+TDQ40GVnMWb+GzWLhw7vM
-        Fqs3+Vp0b57JaNH7/hWTxZnfuhaXd81hs7i35j+rxetvy5gtTt39zG7xbv0XNgduj8Nv3jN7
-        7P22gMVj56y77B4LNpV6bFrVyeax6dMkdo871/aweZyY8ZvFo2/LKkaPz5vkAriism0yUhNT
-        UosUUvOS81My89JtlbyD453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJzgA5WUihLzCkFCgUk
-        Fhcr6dvZFOWXlqQqZOQXl9gqpRak5BSYFegVJ+YWl+al6+WlllgZGhgYmQIVJmRnPLh4gaXg
-        vWjFnJaLzA2MDwW6GDk5JARMJHY/m8YGYgsJ7GCU+N4Y18XIBWR/YpSY8/EbK4TzmVGi+9Qk
-        ZpiO3k3vmSESuxglDrfOg3K+M0pcnfGSHaSKTUBb4v2CSWDtIgLLGSU+Pl0I1s4sUCrx9s0J
-        MFtYwFniy70vYMtZBFQlJjc/YwWxeQVsJY4c+MUCsU5eYvWGA2AbJAS+skvcXnOFFSLhIjF7
-        yT42CFtY4tXxLewQtpTE53d7oeLlEo2Xp0HdXSHRu+UQVK+xRG/PBaA4B9BBmhLrd+lDhBUl
-        dv6eywhxJ5/Eu689rCAlEgK8Eh1tQhAlahItz75CTZGR+PvvGVSJh8Ss55mQYIyVmH/mAdsE
-        RtlZCPMXMDKuYhRLLSjOTU8tNiwwhkdScn7uJkZwGtQy38E47e0HvUOMTByMhxglOJiVRHi/
-        T3ycLMSbklhZlVqUH19UmpNafIjRFBhcE5mlRJPzgYk4ryTe0MTSwMTMyMTC2NLYTEmcV9z2
-        ZLKQQHpiSWp2ampBahFMHxMHp1QDk6vM5TNHux9a9NbGcu95VXBp2u6e741szjb3bkg9Ypq3
-        qE20JXnblIt/exj/Lnj7+v4/g9SJPFIB6kenn+wSmrr+zsJjt2+KHn0+ebrgO57fNs0zW6ML
-        JVavnmUdMrNYrV1Y5Gt2Q47bYZXcRNX5sSLThOSyNjM6GWwIuP1CSidmrVTU4rzZHGx5ExSt
-        IrikPc+rb3aL6XM80NQcpO/746M7U+nrQEGL5xarSxddaJmxyt2V4fbUp0oif5de0RNXmaP5
-        R2brzkkPjRjfHguf83XOs27FTO5zFRHbX+SfsU+ymFquoLPpIu/tzqK6BRuWB168m76Bzaqq
-        wHbSrBm/e1azaS8tO633xe1pZdzuICWW4oxEQy3mouJEAC/hl6QMBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJLMWRmVeSWpSXmKPExsWy7bCSvO7kc0+TDT59Y7WYs34Nm8XCh3eZ
-        LVZv8rXo3jyT0aL3/SsmizO/dS0u75rDZnFvzX9Wi9ffljFbnLr7md3i3fovbA7cHoffvGf2
-        2PttAYvHzll32T0WbCr12LSqk81j06dJ7B53ru1h8zgx4zeLR9+WVYwenzfJBXBFcdmkpOZk
-        lqUW6dslcGU8uHiBpeC9aMWclovMDYwPBboYOTkkBEwkeje9Z+5i5OIQEtjBKHFnz2kmiISM
-        xJvzT1m6GDmAbGGJw4eLIWq+Mkp0HrnGAlLDJqAt8X7BJFaQhIjAekaJvvfbwBLMApUS/27f
-        YgWxhQWcJb7c+8IGYrMIqEpMbn4GFucVsJU4cuAXC8QyeYnVGw4wT2DkWcDIsIpRMrWgODc9
-        t9iwwCgvtVyvODG3uDQvXS85P3cTIzg0tbR2MO5Z9UHvECMTB+MhRgkOZiUR3u8THycL8aYk
-        VlalFuXHF5XmpBYfYpTmYFES573QdTJeSCA9sSQ1OzW1ILUIJsvEwSnVwCRnUeBrFi0ktKrp
-        b9rzuMtp5ae/e9qasNsn2V5ZMvNnUYTNomU1tS2rY3bMviXwfEXyNP9Gn6jyn5YbHi746zeB
-        d+bvbR8fvvxR9Er4k9ZsIbbjVqmTC4/f+b7454TQ20YsXud4HPit4lcfDWCffPHc2+R9Ulde
-        cJ7pm7byz54N+/75nuhjkfv82ipGdm/jbBnX8FDj6jPBlhpnGp39a0/5zA67NafobNVm1U33
-        etpSrol+3m1TsWMa200dluO3fx3gPK6VUMrVtjDn+y61xfkTDp5ma5MTZu978ZDDXEbaQJph
-        j9Udo6NzBPRcVLSnqbwPvLe4aNVa++9KF57tjMx5+9nw0WzlnyVvRC5qPzZRYinOSDTUYi4q
-        TgQAHrcN+7wCAAA=
-X-CMS-MailID: 20230210045651epcas1p1392354722c8ad6d4ffad6f934ba78742
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230210045651epcas1p1392354722c8ad6d4ffad6f934ba78742
-References: <CGME20230210045651epcas1p1392354722c8ad6d4ffad6f934ba78742@epcas1p1.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        Thu, 9 Feb 2023 23:56:32 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF0F4227;
+        Thu,  9 Feb 2023 20:56:29 -0800 (PST)
+Date:   Fri, 10 Feb 2023 04:56:24 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=t-8ch.de; s=mail;
+        t=1676004987; bh=eVkl7gBVqaElgN4a/dZU4oc4NR9Gk402jVBzbjiXEJg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X57hBhk6dtdZiENwcvRGExnU1A56WS7qEUkRFny3OGbc+Pr91f3zs3UzsrzJr17cT
+         bNY+IGn7JMrs7UUIG5FzQSgRb5+0rqr4up6lcrwbJmpp9ay68dEW6NuNP9HGCl99Y3
+         LsfFnBP2DOSpWl6DLR73epAWgAy8WfF15T0NhPeE=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Aditya Garg <gargaditya08@live.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        "jkosina@suse.cz" <jkosina@suse.cz>,
+        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+        Andy Shevchenko <andy@infradead.org>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "ronald@innovation.ch" <ronald@innovation.ch>,
+        "kekrby@gmail.com" <kekrby@gmail.com>,
+        Orlando Chamberlain <orlandoch.dev@gmail.com>
+Subject: Re: [PATCH 1/3] HID: apple-ibridge: Add Apple iBridge HID driver for
+ T1 chip.
+Message-ID: <20230210045624.cjxroikmmvm3liij@t-8ch.de>
+References: <E5D8BEBA-3C5B-460F-BD2C-39470A793CC3@live.com>
+ <40274C3D-4F4F-479C-944C-EEBDC78F959C@live.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <40274C3D-4F4F-479C-944C-EEBDC78F959C@live.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,86 +53,776 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using order 4 pages would be helpful for IOMMUs mapping, but trying to
-get order 4 pages could spend quite much time in the page allocation.
-From the perspective of responsiveness, the deterministic memory
-allocation speed, I think, is quite important.
+Hi,
 
-The order 4 allocation with __GFP_RECLAIM may spend much time in
-reclaim and compation logic. __GFP_NORETRY also may affect. These cause
-unpredictable delay.
+some comments inline.
 
-To get reasonable allocation speed from dma-buf system heap, use
-HIGH_ORDER_GFP for order 4 to avoid reclaim. And let me remove
-meaningless __GFP_COMP for order 0.
+On Fri, Feb 10, 2023 at 03:43:24AM +0000, Aditya Garg wrote:
+> From: Ronald Tschalär <ronald@innovation.ch>
+> 
+> The iBridge device provides access to several devices, including:
+> - the Touch Bar
+> - the iSight webcam
+> - the light sensor
+> - the fingerprint sensor
+> 
+> This driver provides the core support for managing the iBridge device
+> and the access to the underlying devices. In particular, the
+> functionality for the touch bar and light sensor is exposed via USB HID
+> interfaces, and on devices with the T1 chip one of the HID devices is
+> used for both functions. So this driver creates virtual HID devices, one
+> per top-level report collection on each HID device (for a total of 3
+> virtual HID devices). The sub-drivers then bind to these virtual HID
+> devices.
+> 
+> This way the Touch Bar and ALS drivers can be kept in their own modules,
+> while at the same time making them look very much like as if they were
+> connected to the real HID devices. And those drivers then work (mostly)
+> without further changes on MacBooks with the T2 chip that don't need
+> this driver.
+> 
+> Signed-off-by: Ronald Tschalär <ronald@innovation.ch>
+> [Kerem Karabay: convert to a platform driver]
+> [Kerem Karabay: fix appleib_forward_int_op]
+> [Kerem Karabay: rely on HID core's parsing in appleib_add_device]
+> Signed-off-by: Kerem Karabay <kekrby@gmail.com>
+> Signed-off-by: Aditya Garg <gargaditya08@live.com>
+> ---
+>  drivers/hid/Kconfig         |  15 +
+>  drivers/hid/Makefile        |   1 +
+>  drivers/hid/apple-ibridge.c | 610 ++++++++++++++++++++++++++++++++++++
+>  drivers/hid/apple-ibridge.h |  15 +
+>  drivers/hid/hid-ids.h       |   1 +
+>  drivers/hid/hid-quirks.c    |   3 +
+>  6 files changed, 645 insertions(+)
+>  create mode 100644 drivers/hid/apple-ibridge.c
+>  create mode 100644 drivers/hid/apple-ibridge.h
+> 
+> diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+> index e2a5d30c8..e69afa5f4 100644
+> --- a/drivers/hid/Kconfig
+> +++ b/drivers/hid/Kconfig
+> @@ -130,6 +130,21 @@ config HID_APPLE
+>  	Say Y here if you want support for keyboards of	Apple iBooks, PowerBooks,
+>  	MacBooks, MacBook Pros and Apple Aluminum.
+>  
+> +config HID_APPLE_IBRIDGE
+> +	tristate "Apple iBridge"
+> +	depends on USB_HID
+> +	depends on (X86 && ACPI) || COMPILE_TEST
+> +	imply HID_SENSOR_HUB
+> +	imply HID_SENSOR_ALS
+> +	help
+> +	This module provides the core support for the Apple T1 chip found
+> +	on 2016 and 2017 MacBookPro's, also known as the iBridge. The drivers
+> +	for the Touch Bar (apple-touchbar) and light sensor (hid-sensor-hub
+> +	and hid-sensor-als) need to be enabled separately.
+> +
+> +	To compile this driver as a module, choose M here: the
+> +	module will be called apple-ibridge.
+> +
+>  config HID_APPLEIR
+>  	tristate "Apple infrared receiver"
+>  	depends on (USB_HID)
+> diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
+> index e8014c1a2..b61373cd8 100644
+> --- a/drivers/hid/Makefile
+> +++ b/drivers/hid/Makefile
+> @@ -26,6 +26,7 @@ obj-$(CONFIG_HID_ACCUTOUCH)	+= hid-accutouch.o
+>  obj-$(CONFIG_HID_ALPS)		+= hid-alps.o
+>  obj-$(CONFIG_HID_ACRUX)		+= hid-axff.o
+>  obj-$(CONFIG_HID_APPLE)		+= hid-apple.o
+> +obj-$(CONFIG_HID_APPLE_IBRIDGE)	+= apple-ibridge.o
+>  obj-$(CONFIG_HID_APPLEIR)	+= hid-appleir.o
+>  obj-$(CONFIG_HID_CREATIVE_SB0540)	+= hid-creative-sb0540.o
+>  obj-$(CONFIG_HID_ASUS)		+= hid-asus.o
+> diff --git a/drivers/hid/apple-ibridge.c b/drivers/hid/apple-ibridge.c
+> new file mode 100644
+> index 000000000..4d26f8d66
+> --- /dev/null
+> +++ b/drivers/hid/apple-ibridge.c
+> @@ -0,0 +1,610 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Apple iBridge Driver
+> + *
+> + * Copyright (c) 2018 Ronald Tschalär
+> + */
+> +
+> +/**
+> + * DOC: Overview
+> + *
+> + * 2016 and 2017 MacBookPro models with a Touch Bar (MacBookPro13,[23] and
+> + * MacBookPro14,[23]) have an Apple iBridge chip (also known as T1 chip) which
+> + * exposes the touch bar, built-in webcam (iSight), ambient light sensor, and
+> + * Secure Enclave Processor (SEP) for TouchID. It shows up in the system as a
+> + * USB device with 3 configurations: 'Default iBridge Interfaces', 'Default
+> + * iBridge Interfaces(OS X)', and 'Default iBridge Interfaces(Recovery)'.
+> + *
+> + * In the first (default after boot) configuration, 4 usb interfaces are
+> + * exposed: 2 related to the webcam, and 2 USB HID interfaces representing
+> + * the touch bar and the ambient light sensor. The webcam interfaces are
+> + * already handled by the uvcvideo driver. However, there is a problem with
+> + * the other two interfaces: one of them contains functionality (HID reports)
+> + * used by both the touch bar and the ALS, which is an issue because the kernel
+> + * allows only one driver to be attached to a given device. This driver exists
+> + * to solve this issue.
+> + *
+> + * This driver is implemented as a HID driver that attaches to both HID
+> + * interfaces and in turn creates several virtual child HID devices, one for
+> + * each top-level collection found in each interfaces report descriptor. The
+> + * touch bar and ALS drivers then attach to these virtual HID devices, and this
+> + * driver forwards the operations between the real and virtual devices.
+> + *
+> + * One important aspect of this approach is that resulting (virtual) HID
+> + * devices look much like the HID devices found on the later MacBookPro models
+> + * which have a T2 chip, where there are separate USB interfaces for the touch
+> + * bar and ALS functionality, which means that the touch bar and ALS drivers
+> + * work (mostly) the same on both types of models.
+> + *
+> + * Lastly, this driver also takes care of the power-management for the
+> + * iBridge when suspending and resuming.
+> + */
 
-According to my tests, order 4 with MID_ORDER_GFP could get more number
-of order 4 pages but the elapsed times could be very slow.
+Maybe add a pr_fmt definition here?
 
-         time	order 8	order 4	order 0
-     584 usec	0	160	0
-  28,428 usec	0	160	0
- 100,701 usec	0	160	0
-  76,645 usec	0	160	0
-  25,522 usec	0	160	0
-  38,798 usec	0	160	0
-  89,012 usec	0	160	0
-  23,015 usec	0	160	0
-  73,360 usec	0	160	0
-  76,953 usec	0	160	0
-  31,492 usec	0	160	0
-  75,889 usec	0	160	0
-  84,551 usec	0	160	0
-  84,352 usec	0	160	0
-  57,103 usec	0	160	0
-  93,452 usec	0	160	0
+> +
+> +#include <linux/platform_device.h>
+> +#include <linux/acpi.h>
+> +#include <linux/device.h>
+> +#include <linux/hid.h>
+> +#include <linux/list.h>
+> +#include <linux/module.h>
+> +#include <linux/slab.h>
+> +#include <linux/usb.h>
+> +
+> +#include "hid-ids.h"
+> +#include "../hid/usbhid/usbhid.h"
+> +#include "apple-ibridge.h"
+> +
+> +#define APPLEIB_BASIC_CONFIG	1
+> +
+> +static struct hid_device_id appleib_sub_hid_ids[] = {
+> +	{ HID_USB_DEVICE(USB_VENDOR_ID_LINUX_FOUNDATION,
+> +			 USB_DEVICE_ID_IBRIDGE_TB) },
+> +	{ HID_USB_DEVICE(USB_VENDOR_ID_LINUX_FOUNDATION,
+> +			 USB_DEVICE_ID_IBRIDGE_ALS) },
+> +};
 
-If HIGH_ORDER_GFP is used for order 4, the number of order 4 could be
-decreased but the elapsed time results were quite stable and fast
-enough.
+Structs like this should be "const".
 
-         time	order 8	order 4	order 0
-   1,356 usec	0	155	80
-   1,901 usec	0	11	2384
-   1,912 usec	0	0	2560
-   1,911 usec	0	0	2560
-   1,884 usec	0	0	2560
-   1,577 usec	0	0	2560
-   1,366 usec	0	0	2560
-   1,711 usec	0	0	2560
-   1,635 usec	0	28	2112
-     544 usec	10	0	0
-     633 usec	2	128	0
-     848 usec	0	160	0
-     729 usec	0	160	0
-   1,000 usec	0	160	0
-   1,358 usec	0	160	0
-   2,638 usec	0	31	2064
+> +
+> +static struct {
+> +	unsigned int usage;
+> +	struct hid_device_id *dev_id;
+> +} appleib_usage_map[] = {
+> +	/* Default iBridge configuration, key inputs and mode settings */
+> +	{ 0x00010006, &appleib_sub_hid_ids[0] },
+> +	/* OS X iBridge configuration, digitizer inputs */
+> +	{ 0x000D0005, &appleib_sub_hid_ids[0] },
+> +	/* All iBridge configurations, display/DFR settings */
+> +	{ 0xFF120001, &appleib_sub_hid_ids[0] },
+> +	/* All iBridge configurations, ALS */
+> +	{ 0x00200041, &appleib_sub_hid_ids[1] },
+> +};
 
-Signed-off-by: Jaewon Kim <jaewon31.kim@samsung.com>
----
- drivers/dma-buf/heaps/system_heap.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+const
 
-diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/system_heap.c
-index e8bd10e60998..920db302a273 100644
---- a/drivers/dma-buf/heaps/system_heap.c
-+++ b/drivers/dma-buf/heaps/system_heap.c
-@@ -41,12 +41,11 @@ struct dma_heap_attachment {
- 	bool mapped;
- };
- 
--#define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO | __GFP_COMP)
--#define MID_ORDER_GFP (LOW_ORDER_GFP | __GFP_NOWARN)
-+#define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO)
- #define HIGH_ORDER_GFP  (((GFP_HIGHUSER | __GFP_ZERO | __GFP_NOWARN \
- 				| __GFP_NORETRY) & ~__GFP_RECLAIM) \
- 				| __GFP_COMP)
--static gfp_t order_flags[] = {HIGH_ORDER_GFP, MID_ORDER_GFP, LOW_ORDER_GFP};
-+static gfp_t order_flags[] = {HIGH_ORDER_GFP, HIGH_ORDER_GFP, LOW_ORDER_GFP};
- /*
-  * The selection of the orders used for allocation (1MB, 64K, 4K) is designed
-  * to match with the sizes often found in IOMMUs. Using order 4 pages instead
--- 
-2.17.1
+> +
+> +struct appleib_device {
+> +	acpi_handle asoc_socw;
+> +};
+> +
+> +struct appleib_hid_dev_info {
+> +	struct hid_device	*hdev;
+> +	struct hid_device	*sub_hdevs[ARRAY_SIZE(appleib_sub_hid_ids)];
+> +	bool			sub_open[ARRAY_SIZE(appleib_sub_hid_ids)];
+> +};
+> +
+> +static int appleib_hid_raw_event(struct hid_device *hdev,
+> +				 struct hid_report *report, u8 *data, int size)
+> +{
+> +	struct appleib_hid_dev_info *hdev_info = hid_get_drvdata(hdev);
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(hdev_info->sub_hdevs); i++) {
+> +		if (READ_ONCE(hdev_info->sub_open[i]))
+> +			hid_input_report(hdev_info->sub_hdevs[i], report->type,
+> +					 data, size, 0);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static __u8 *appleib_report_fixup(struct hid_device *hdev, __u8 *rdesc,
+> +				  unsigned int *rsize)
+> +{
+> +	/* Some fields have a size of 64 bits, which according to HID 1.11
+> +	 * Section 8.4 is not valid ("An item field cannot span more than 4
+> +	 * bytes in a report"). Furthermore, hid_field_extract() complains
+> +	 * when encountering such a field. So turn them into two 32-bit fields
+> +	 * instead.
+> +	 */
+> +
+> +	if (*rsize == 634 &&
+> +	    /* Usage Page 0xff12 (vendor defined) */
+> +	    rdesc[212] == 0x06 && rdesc[213] == 0x12 && rdesc[214] == 0xff &&
+> +	    /* Usage 0x51 */
+> +	    rdesc[416] == 0x09 && rdesc[417] == 0x51 &&
+> +	    /* report size 64 */
+> +	    rdesc[432] == 0x75 && rdesc[433] == 64 &&
+> +	    /* report count 1 */
+> +	    rdesc[434] == 0x95 && rdesc[435] == 1) {
+> +		rdesc[433] = 32;
+> +		rdesc[435] = 2;
+> +		hid_dbg(hdev, "Fixed up first 64-bit field\n");
+> +	}
+> +
+> +	if (*rsize == 634 &&
+> +	    /* Usage Page 0xff12 (vendor defined) */
+> +	    rdesc[212] == 0x06 && rdesc[213] == 0x12 && rdesc[214] == 0xff &&
+> +	    /* Usage 0x51 */
+> +	    rdesc[611] == 0x09 && rdesc[612] == 0x51 &&
+> +	    /* report size 64 */
+> +	    rdesc[627] == 0x75 && rdesc[628] == 64 &&
+> +	    /* report count 1 */
+> +	    rdesc[629] == 0x95 && rdesc[630] == 1) {
+> +		rdesc[628] = 32;
+> +		rdesc[630] = 2;
+> +		hid_dbg(hdev, "Fixed up second 64-bit field\n");
+> +	}
+> +
+> +	return rdesc;
+> +}
+> +
+> +#ifdef CONFIG_PM
+> +/**
+> + * appleib_forward_int_op() - Forward a hid-driver callback to all drivers on
+> + * all virtual HID devices attached to the given real HID device.
+> + * @hdev the real hid-device
+> + * @forward a function that calls the callback on the given driver
+> + * @args arguments for the forward function
+> + *
+> + * This is for callbacks that return a status as an int.
+> + *
+> + * Returns: 0 on success, or the first error returned by the @forward function.
+> + */
+> +static int appleib_forward_int_op(struct hid_device *hdev,
+> +				  int (*forward)(struct hid_driver *,
+> +						 struct hid_device *, void *),
+> +				  void *args)
+> +{
+> +	struct appleib_hid_dev_info *hdev_info = hid_get_drvdata(hdev);
+> +	struct hid_device *sub_hdev;
+> +	int rc;
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(hdev_info->sub_hdevs); i++) {
+> +		sub_hdev = hdev_info->sub_hdevs[i];
+> +		if (sub_hdev->driver) {
+> +			rc = forward(sub_hdev->driver, sub_hdev, args);
+> +			if (rc)
+> +				return rc;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int appleib_hid_suspend_fwd(struct hid_driver *drv,
+> +				   struct hid_device *hdev, void *args)
+> +{
+> +	int rc = 0;
+> +
+> +	if (drv->suspend)
+> +		rc = drv->suspend(hdev, *(pm_message_t *)args);
+> +
+> +	return rc;
+> +}
+> +
+> +static int appleib_hid_suspend(struct hid_device *hdev, pm_message_t message)
+> +{
+> +	return appleib_forward_int_op(hdev, appleib_hid_suspend_fwd, &message);
+> +}
+> +
+> +static int appleib_hid_resume_fwd(struct hid_driver *drv,
+> +				  struct hid_device *hdev, void *args)
+> +{
+> +	int rc = 0;
+> +
+> +	if (drv->resume)
+> +		rc = drv->resume(hdev);
+> +
+> +	return rc;
+> +}
+> +
+> +static int appleib_hid_resume(struct hid_device *hdev)
+> +{
+> +	return appleib_forward_int_op(hdev, appleib_hid_resume_fwd, NULL);
+> +}
+> +
+> +static int appleib_hid_reset_resume_fwd(struct hid_driver *drv,
+> +					struct hid_device *hdev, void *args)
+> +{
+> +	int rc = 0;
+> +
+> +	if (drv->reset_resume)
+> +		rc = drv->reset_resume(hdev);
+> +
+> +	return rc;
+> +}
+> +
+> +static int appleib_hid_reset_resume(struct hid_device *hdev)
+> +{
+> +	return appleib_forward_int_op(hdev, appleib_hid_reset_resume_fwd, NULL);
+> +}
+> +#endif /* CONFIG_PM */
+> +
+> +static int appleib_ll_start(struct hid_device *hdev)
+> +{
+> +	return 0;
+> +}
+> +
+> +static void appleib_ll_stop(struct hid_device *hdev)
+> +{
+> +}
+> +
+> +static int appleib_set_open(struct hid_device *hdev, bool open)
+> +{
+> +	struct appleib_hid_dev_info *hdev_info = hdev->driver_data;
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(hdev_info->sub_hdevs); i++) {
+> +		/*
+> +		 * hid_hw_open(), and hence appleib_ll_open(), is called
+> +		 * from the driver's probe function, which in turn is called
+> +		 * while adding the sub-hdev; but at this point we haven't yet
+> +		 * added the sub-hdev to our list. So if we don't find the
+> +		 * sub-hdev in our list assume it's in the process of being
+> +		 * added and set the flag on the first unset sub-hdev.
+> +		 */
+> +		if (hdev_info->sub_hdevs[i] == hdev ||
+> +		    !hdev_info->sub_hdevs[i]) {
+> +			WRITE_ONCE(hdev_info->sub_open[i], open);
+> +			return 0;
+> +		}
+> +	}
+> +
+> +	return -ENODEV;
+> +}
+> +
+> +static int appleib_ll_open(struct hid_device *hdev)
+> +{
+> +	return appleib_set_open(hdev, true);
+> +}
+> +
+> +static void appleib_ll_close(struct hid_device *hdev)
+> +{
+> +	appleib_set_open(hdev, false);
+> +}
+> +
+> +static int appleib_ll_power(struct hid_device *hdev, int level)
+> +{
+> +	struct appleib_hid_dev_info *hdev_info = hdev->driver_data;
+> +
+> +	return hid_hw_power(hdev_info->hdev, level);
+> +}
+> +
+> +static int appleib_ll_parse(struct hid_device *hdev)
+> +{
+> +	/* we've already called hid_parse_report() */
+> +	return 0;
+> +}
+> +
+> +static void appleib_ll_request(struct hid_device *hdev,
+> +			       struct hid_report *report, int reqtype)
+> +{
+> +	struct appleib_hid_dev_info *hdev_info = hdev->driver_data;
+> +
+> +	hid_hw_request(hdev_info->hdev, report, reqtype);
+> +}
+> +
+> +static int appleib_ll_wait(struct hid_device *hdev)
+> +{
+> +	struct appleib_hid_dev_info *hdev_info = hdev->driver_data;
+> +
+> +	hid_hw_wait(hdev_info->hdev);
+> +	return 0;
+> +}
+> +
+> +static int appleib_ll_raw_request(struct hid_device *hdev,
+> +				  unsigned char reportnum, __u8 *buf,
+> +				  size_t len, unsigned char rtype, int reqtype)
+> +{
+> +	struct appleib_hid_dev_info *hdev_info = hdev->driver_data;
+> +
+> +	return hid_hw_raw_request(hdev_info->hdev, reportnum, buf, len, rtype,
+> +				  reqtype);
+> +}
+> +
+> +static int appleib_ll_output_report(struct hid_device *hdev, __u8 *buf,
+> +				    size_t len)
+> +{
+> +	struct appleib_hid_dev_info *hdev_info = hdev->driver_data;
+> +
+> +	return hid_hw_output_report(hdev_info->hdev, buf, len);
+> +}
+> +
+> +static struct hid_ll_driver appleib_ll_driver = {
+> +	.start = appleib_ll_start,
+> +	.stop = appleib_ll_stop,
+> +	.open = appleib_ll_open,
+> +	.close = appleib_ll_close,
+> +	.power = appleib_ll_power,
+> +	.parse = appleib_ll_parse,
+> +	.request = appleib_ll_request,
+> +	.wait = appleib_ll_wait,
+> +	.raw_request = appleib_ll_raw_request,
+> +	.output_report = appleib_ll_output_report,
+> +};
 
+const
+
+> +
+> +static struct hid_device_id *appleib_find_dev_id_for_usage(unsigned int usage)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(appleib_usage_map); i++) {
+> +		if (appleib_usage_map[i].usage == usage)
+> +			return appleib_usage_map[i].dev_id;
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +static struct hid_device *
+> +appleib_add_sub_dev(struct appleib_hid_dev_info *hdev_info,
+> +		    struct hid_device_id *dev_id)
+> +{
+> +	struct hid_device *sub_hdev;
+> +	int rc;
+> +
+> +	sub_hdev = hid_allocate_device();
+> +	if (IS_ERR(sub_hdev))
+> +		return sub_hdev;
+> +
+> +	sub_hdev->dev.parent = &hdev_info->hdev->dev;
+> +
+> +	sub_hdev->bus = dev_id->bus;
+> +	sub_hdev->group = dev_id->group;
+> +	sub_hdev->vendor = dev_id->vendor;
+> +	sub_hdev->product = dev_id->product;
+> +
+> +	sub_hdev->ll_driver = &appleib_ll_driver;
+> +
+> +	snprintf(sub_hdev->name, sizeof(sub_hdev->name),
+> +		 "iBridge Virtual HID %s/%04x:%04x",
+> +		 dev_name(sub_hdev->dev.parent), sub_hdev->vendor,
+> +		 sub_hdev->product);
+> +
+> +	sub_hdev->driver_data = hdev_info;
+> +
+> +	rc = hid_add_device(sub_hdev);
+> +	if (rc) {
+> +		hid_destroy_device(sub_hdev);
+> +		return ERR_PTR(rc);
+> +	}
+> +
+> +	return sub_hdev;
+> +}
+> +
+> +static struct appleib_hid_dev_info *appleib_add_device(struct hid_device *hdev)
+> +{
+> +	struct appleib_hid_dev_info *hdev_info;
+> +	struct hid_device_id *dev_id;
+> +	unsigned int usage;
+> +	int i;
+> +
+> +	hdev_info = devm_kzalloc(&hdev->dev, sizeof(*hdev_info), GFP_KERNEL);
+> +	if (!hdev_info)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	hdev_info->hdev = hdev;
+> +
+> +	for (i = 0; i < hdev->maxcollection; i++) {
+> +		usage = hdev->collection[i].usage;
+> +		dev_id = appleib_find_dev_id_for_usage(usage);
+> +
+> +		if (!dev_id) {
+> +			hid_warn(hdev, "Unknown collection encountered with usage %x\n",
+> +				 usage);
+> +		} else {
+> +			hdev_info->sub_hdevs[i] = appleib_add_sub_dev(hdev_info, dev_id);
+> +
+> +			if (IS_ERR(hdev_info->sub_hdevs[i])) {
+> +				while (i-- > 0)
+> +					hid_destroy_device(hdev_info->sub_hdevs[i]);
+> +				return (void *)hdev_info->sub_hdevs[i];
+> +			}
+> +		}
+> +	}
+> +
+> +	return hdev_info;
+> +}
+> +
+> +static void appleib_remove_device(struct hid_device *hdev)
+> +{
+> +	struct appleib_hid_dev_info *hdev_info = hid_get_drvdata(hdev);
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(hdev_info->sub_hdevs); i++) {
+> +		if (hdev_info->sub_hdevs[i])
+> +			hid_destroy_device(hdev_info->sub_hdevs[i]);
+> +	}
+> +
+> +	hid_set_drvdata(hdev, NULL);
+> +}
+> +
+> +static int appleib_hid_probe(struct hid_device *hdev,
+> +			     const struct hid_device_id *id)
+> +{
+> +	struct appleib_hid_dev_info *hdev_info;
+> +	struct usb_device *udev;
+> +	int rc;
+> +
+> +	/* check and set usb config first */
+> +	udev = hid_to_usb_dev(hdev);
+
+I don't think hid_to_usb_dev() does any check that hdev is connected via
+USB and will produce undefined behavior when used on a non-USB device.
+
+Use hid_is_usb() first.
+
+> +
+> +	if (udev->actconfig->desc.bConfigurationValue != APPLEIB_BASIC_CONFIG) {
+> +		rc = usb_driver_set_configuration(udev, APPLEIB_BASIC_CONFIG);
+> +		return rc ? rc : -ENODEV;
+> +	}
+> +
+> +	rc = hid_parse(hdev);
+> +	if (rc) {
+> +		hid_err(hdev, "ib: hid parse failed (%d)\n", rc);
+> +		goto error;
+> +	}
+> +
+> +	rc = hid_hw_start(hdev, HID_CONNECT_DRIVER);
+> +	if (rc) {
+> +		hid_err(hdev, "ib: hw start failed (%d)\n", rc);
+> +		goto error;
+> +	}
+> +
+> +	hdev_info = appleib_add_device(hdev);
+> +	if (IS_ERR(hdev_info)) {
+> +		rc = PTR_ERR(hdev_info);
+> +		goto stop_hw;
+> +	}
+> +
+> +	hid_set_drvdata(hdev, hdev_info);
+> +
+> +	rc = hid_hw_open(hdev);
+> +	if (rc) {
+> +		hid_err(hdev, "ib: failed to open hid: %d\n", rc);
+> +		goto remove_dev;
+> +	}
+> +
+> +	return 0;
+> +
+> +remove_dev:
+> +	appleib_remove_device(hdev);
+> +stop_hw:
+> +	hid_hw_stop(hdev);
+> +error:
+> +	return rc;
+> +}
+> +
+> +static void appleib_hid_remove(struct hid_device *hdev)
+> +{
+> +	hid_hw_close(hdev);
+> +	appleib_remove_device(hdev);
+> +	hid_hw_stop(hdev);
+> +}
+> +
+> +static const struct hid_device_id appleib_hid_ids[] = {
+> +	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IBRIDGE) },
+> +	{ },
+> +};
+> +
+> +static struct hid_driver appleib_hid_driver = {
+> +	.name = "apple-ibridge-hid",
+> +	.id_table = appleib_hid_ids,
+> +	.probe = appleib_hid_probe,
+> +	.remove = appleib_hid_remove,
+> +	.raw_event = appleib_hid_raw_event,
+> +	.report_fixup = appleib_report_fixup,
+> +#ifdef CONFIG_PM
+> +	.suspend = appleib_hid_suspend,
+> +	.resume = appleib_hid_resume,
+> +	.reset_resume = appleib_hid_reset_resume,
+> +#endif
+> +};
+
+const
+
+> +
+> +static struct appleib_device *appleib_alloc_device(struct platform_device *pdev)
+> +{
+> +	struct appleib_device *ib_dev;
+> +	acpi_status sts;
+> +
+> +	ib_dev = devm_kzalloc(&pdev->dev, sizeof(*ib_dev), GFP_KERNEL);
+> +	if (!ib_dev)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	/* get iBridge acpi power control method for suspend/resume */
+> +	sts = acpi_get_handle(ACPI_HANDLE(&pdev->dev), "SOCW", &ib_dev->asoc_socw);
+> +	if (ACPI_FAILURE(sts)) {
+> +		dev_err(&pdev->dev,
+> +			"Error getting handle for ASOC.SOCW method: %s\n",
+> +			acpi_format_exception(sts));
+> +		return ERR_PTR(-ENXIO);
+> +	}
+> +
+> +	/* ensure iBridge is powered on */
+> +	sts = acpi_execute_simple_method(ib_dev->asoc_socw, NULL, 1);
+> +	if (ACPI_FAILURE(sts))
+> +		dev_warn(&pdev->dev, "SOCW(1) failed: %s\n",
+> +			 acpi_format_exception(sts));
+> +
+> +	return ib_dev;
+> +}
+> +
+> +static int appleib_probe(struct platform_device *pdev)
+> +{
+> +	struct appleib_device *ib_dev;
+> +	int ret;
+> +
+> +	ib_dev = appleib_alloc_device(pdev);
+> +	if (IS_ERR(ib_dev))
+> +		return PTR_ERR(ib_dev);
+> +
+> +	ret = hid_register_driver(&appleib_hid_driver);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Error registering hid driver: %d\n",
+> +			ret);
+> +		return ret;
+> +	}
+> +
+> +	platform_set_drvdata(pdev, ib_dev);
+> +
+> +	return 0;
+> +}
+> +
+> +static int appleib_remove(struct platform_device *pdev)
+> +{
+> +	hid_unregister_driver(&appleib_hid_driver);
+> +
+> +	return 0;
+> +}
+> +
+> +static int appleib_suspend(struct platform_device *pdev, pm_message_t message)
+> +{
+> +	struct appleib_device *ib_dev;
+> +	int rc;
+> +
+> +	ib_dev = platform_get_drvdata(pdev);
+> +
+> +	rc = acpi_execute_simple_method(ib_dev->asoc_socw, NULL, 0);
+> +	if (ACPI_FAILURE(rc))
+> +		dev_warn(&pdev->dev, "SOCW(0) failed: %s\n",
+> +			 acpi_format_exception(rc));
+> +
+> +	return 0;
+> +}
+> +
+> +static int appleib_resume(struct platform_device *pdev)
+> +{
+> +	struct appleib_device *ib_dev;
+> +	int rc;
+> +
+> +	ib_dev = platform_get_drvdata(pdev);
+> +
+> +	rc = acpi_execute_simple_method(ib_dev->asoc_socw, NULL, 1);
+> +	if (ACPI_FAILURE(rc))
+> +		dev_warn(&pdev->dev, "SOCW(1) failed: %s\n",
+> +			 acpi_format_exception(rc));
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct acpi_device_id appleib_acpi_match[] = {
+> +	{ "APP7777", 0 },
+> +	{ },
+
+No trailing comma after end-of-array marker.
+
+> +};
+> +
+> +MODULE_DEVICE_TABLE(acpi, appleib_acpi_match);
+> +
+> +static struct platform_driver appleib_driver = {
+> +	.probe		= appleib_probe,
+> +	.remove		= appleib_remove,
+> +	.suspend	= appleib_suspend,
+> +	.resume		= appleib_resume,
+> +	.driver		= {
+> +		.name		  = "apple-ibridge",
+> +		.acpi_match_table = appleib_acpi_match,
+> +	},
+> +};
+> +
+> +module_platform_driver(appleib_driver);
+> +
+> +MODULE_AUTHOR("Ronald Tschalär");
+> +MODULE_DESCRIPTION("Apple iBridge driver");
+> +MODULE_LICENSE("GPL");
+> diff --git a/drivers/hid/apple-ibridge.h b/drivers/hid/apple-ibridge.h
+> new file mode 100644
+> index 000000000..8aefcf615
+> --- /dev/null
+> +++ b/drivers/hid/apple-ibridge.h
+> @@ -0,0 +1,15 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Apple iBridge Driver
+> + *
+> + * Copyright (c) 2018 Ronald Tschalär
+> + */
+> +
+> +#ifndef __LINUX_APPLE_IBRDIGE_H
+> +#define __LINUX_APPLE_IBRDIGE_H
+> +
+> +#define USB_VENDOR_ID_LINUX_FOUNDATION	0x1d6b
+> +#define USB_DEVICE_ID_IBRIDGE_TB	0x0301
+> +#define USB_DEVICE_ID_IBRIDGE_ALS	0x0302
+> +
+> +#endif
+> diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+> index 0f8c11842..0c62e6280 100644
+> --- a/drivers/hid/hid-ids.h
+> +++ b/drivers/hid/hid-ids.h
+> @@ -187,6 +187,7 @@
+>  #define USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_NUMPAD_2021   0x029f
+>  #define USB_DEVICE_ID_APPLE_TOUCHBAR_BACKLIGHT 0x8102
+>  #define USB_DEVICE_ID_APPLE_TOUCHBAR_DISPLAY 0x8302
+> +#define USB_DEVICE_ID_APPLE_IBRIDGE	0x8600
+>  
+>  #define USB_VENDOR_ID_ASUS		0x0486
+>  #define USB_DEVICE_ID_ASUS_T91MT	0x0185
+> diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
+> index be3ad0257..c03535c4b 100644
+> --- a/drivers/hid/hid-quirks.c
+> +++ b/drivers/hid/hid-quirks.c
+> @@ -319,6 +319,9 @@ static const struct hid_device_id hid_have_special_driver[] = {
+>  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_TOUCHBAR_BACKLIGHT) },
+>  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_TOUCHBAR_DISPLAY) },
+>  #endif
+> +#if IS_ENABLED(CONFIG_HID_APPLE_IBRIDGE)
+> +	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IBRIDGE) },
+> +#endif
+>  #if IS_ENABLED(CONFIG_HID_APPLEIR)
+>  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IRCONTROL) },
+>  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IRCONTROL2) },
+> -- 
+> 2.37.2
+> 
