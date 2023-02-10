@@ -2,244 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BAA46923A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 449526923AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:51:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232763AbjBJQvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 11:51:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
+        id S232820AbjBJQvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 11:51:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232229AbjBJQvb (ORCPT
+        with ESMTP id S232229AbjBJQvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 11:51:31 -0500
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2077.outbound.protection.outlook.com [40.107.247.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A741EB72;
-        Fri, 10 Feb 2023 08:51:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Rjy4mcPXP8vt5mWXGqpoYHpyJBstqkvv/BuDH6meLOw=;
- b=Lowsx0n2HVo+VHgKpg7xPe2y+Lt2PrUpVqn49kC8M+cIgGhwz0sdkqCerqlwoykDrSkqs+JF5BQK3bCOTtZ+7WgaHzd7U0m4hSsF1xBAWBrLmFA8XOi1FzMw3/sL4RqLvrPFThcCg1a5zZUPGPthX7tSxP/d7ywu4bGmXe9nlnA=
-Received: from DB6PR1001CA0005.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:4:b7::15)
- by AS8PR08MB9932.eurprd08.prod.outlook.com (2603:10a6:20b:562::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Fri, 10 Feb
- 2023 16:51:26 +0000
-Received: from DBAEUR03FT039.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:4:b7:cafe::d8) by DB6PR1001CA0005.outlook.office365.com
- (2603:10a6:4:b7::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.21 via Frontend
- Transport; Fri, 10 Feb 2023 16:51:25 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- DBAEUR03FT039.mail.protection.outlook.com (100.127.142.225) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6086.21 via Frontend Transport; Fri, 10 Feb 2023 16:51:25 +0000
-Received: ("Tessian outbound baf1b7a96f25:v132"); Fri, 10 Feb 2023 16:51:25 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: fe34fbb3a1dc5c89
-X-CR-MTA-TID: 64aa7808
-Received: from ccf8bd0d0d28.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id F7305835-A85D-4BC1-B9CF-2A06F9CA64A3.1;
-        Fri, 10 Feb 2023 16:51:17 +0000
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id ccf8bd0d0d28.1
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Fri, 10 Feb 2023 16:51:17 +0000
+        Fri, 10 Feb 2023 11:51:52 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D631A11E8D
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:51:50 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31AFMZCU001264;
+        Fri, 10 Feb 2023 16:51:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=rEk+2FPdZtF6pA7NDFhdMwUDeMezCOAutxhyLHjYvwY=;
+ b=BA0OwuWnd7Fqv+21PcNqwgVbVmLWhfxc88JFzN/Wm1hSBuQ6Wb48o2AZ/etC00Pcr0Zh
+ UCyIpLG7Vr44tvLaJgwgtqRWzourQfDFWFZa9kfb5BpDINan4CEYYRZAo9FHxcVq4M/s
+ U2vUqIn9WpeSKDQRaut0fzxiq1ObYrMAKemmZoLm8qeFk7vZESKtwQruvEB7mP72pdbZ
+ CcsCnXcgqOh5Z+bVBjrFsWcvII+IZLly/5QM47MUPW/QhXNtd05hMhTgOC4L9a32GbcR
+ ZtI5W8PQFt9bZ9jYMz6fnncnoPuGImRkY3su+qhQhp+vOpzdLmFzKl2az0PPPIt9iAkH Qw== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nhdy1duah-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Feb 2023 16:51:24 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31AFjTZE002663;
+        Fri, 10 Feb 2023 16:51:23 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2040.outbound.protection.outlook.com [104.47.66.40])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3nhdth1u09-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Feb 2023 16:51:23 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n3DXaaSbXBjYVFdQxA6icVBnt/sRMLJBQtu0Xslz4mNpY6f79zsic26JHUhMm3sqMSvfkWwkAgv+YrWebrzDFsgPsP/UDt4+G6krKvK6EPu7Y2MJpjiXrtd4z2FYPX1b/g3v78N/APfI/moopTMrikCeTDfGirVJ2Quq8QAQndiKzb2VHEMJA79NcEKvDond4J4GJ/QMk2Uz9HwOtV1IiMT+s7FHXMoip+G6QV7ERVgKAIhlWrb/HYrN7Dv4l3SqABRSpSJfM/Nd+8ag/dC0l0ScLjEFwuN1biXhpB+nA31S59aEcVncDKrtcm/QSL97xsAJEcfVfp1hmccvkAu+eA==
+ b=EilkI8xneqkrsmFltrEgJq9+S+/fXNtBshaYi4MC9yUt81DmbRu0SxjNjHhATvzCgYNs2FHXxgHIMIS7wjEDfGFVmlP4EDqJBFunRpHUmjV5hYk4rJfQoMg5TIVdut2QPko13Zg3nQo0JIPrAnyE3NzHhKjIlqM7OP21oHa1kWXzKtRk6nvAxt1CJPqlrN7T/MV48fbqcBOYDgoS0uLhhwe5IvaE3TRy/G4dDBEC0mmGfCorv+zz3AlBAAdSQVNHKW5YHHr5/izQOpsBahfff1QnAAhOis9G11iTOghkI7qij/azggwW7Lx0BVj02EPO/efumvgwqJUGpI5GrCAOEQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Rjy4mcPXP8vt5mWXGqpoYHpyJBstqkvv/BuDH6meLOw=;
- b=br2mPp8bnrilkxVR+oGy1AnnxnBGlkQkTnoeV5356vANMAEWp4ElpTg9txkn+gnOc/zJL480OWkALn2d+lj7roScA4VjHtyY8R173EsbOg6Zwz8mLs01S4+HU60s+oBcY2TKjxrnv5xzWCC8iu7WdIRW2E/PRpvLwjGmOBOGTNbwS//BLaCI0L9y5R2Vq5neqGgex8FCaHv+XRaaPHzZtvvJYCkBp1lPxnfa3TdpuflJbk4AgFqNVzx8vNsd6dDcTNAuYABhfLPEOXaC+RcdH8woJKkFcoBQegSwGvj57njPsyIilxGs0hkq0ULpWXNO+dcfwxuiyxAhBKxVLfEX2Q==
+ bh=rEk+2FPdZtF6pA7NDFhdMwUDeMezCOAutxhyLHjYvwY=;
+ b=hLh6/47mWSfn5lUxxoU5ri+0QPIKG6WuS9WBoxt1lYHQNaZNIjjbCSqV/EkoPK0FwaS10+XgKkSvIVRZX+6Az6xOMbXnQK8B9s5ceRq0bbltX3qgHj6VXDCaNYCHM/ydNjqd9lJ8yYdNwsGJMOe5CPrGxdCUGDDTJzSuF722lj4G9lM/HKnQBgRdOfuj+PMWpGh8EEaY9kcZsgwpNSNYlHEqbDnUOn0cBfZXH7sJtv4A1oTGFHjQl8TEGgWs6vYzYObRetkSjuTXHg5x4p+G22GixGF44JpZD5AWrKG3LY4ZE/ADQEyHdrsPZ8xLhVazVv4nEoIgoNoyFRW75VWBWw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Rjy4mcPXP8vt5mWXGqpoYHpyJBstqkvv/BuDH6meLOw=;
- b=Lowsx0n2HVo+VHgKpg7xPe2y+Lt2PrUpVqn49kC8M+cIgGhwz0sdkqCerqlwoykDrSkqs+JF5BQK3bCOTtZ+7WgaHzd7U0m4hSsF1xBAWBrLmFA8XOi1FzMw3/sL4RqLvrPFThcCg1a5zZUPGPthX7tSxP/d7ywu4bGmXe9nlnA=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from AS8PR08MB6995.eurprd08.prod.outlook.com (2603:10a6:20b:34d::13)
- by AM7PR08MB5432.eurprd08.prod.outlook.com (2603:10a6:20b:10b::23) with
+ bh=rEk+2FPdZtF6pA7NDFhdMwUDeMezCOAutxhyLHjYvwY=;
+ b=oaVDPVaU6xZ8Fp5F/HqNcXilBG8EL1F72Q8XxiinQ6NtbwnGGcMVxHvsdLnwZhnVYoYaRoIkAlCL6fKQs4XXjldrCp4h4wSdaguYFHsOF2SAp1MSUp0Oa7/ftuWAMwCmu2bI/+O5eCYiuo8Lu0GFlunCY6aZcIxLBZxaIXZ7gW0=
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
+ by SN7PR10MB7101.namprd10.prod.outlook.com (2603:10b6:806:34a::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.21; Fri, 10 Feb
- 2023 16:51:11 +0000
-Received: from AS8PR08MB6995.eurprd08.prod.outlook.com
- ([fe80::ba48:cc43:1ad9:34a9]) by AS8PR08MB6995.eurprd08.prod.outlook.com
- ([fe80::ba48:cc43:1ad9:34a9%5]) with mapi id 15.20.6086.019; Fri, 10 Feb 2023
- 16:51:10 +0000
-Message-ID: <cfb0292c-e84d-0a7c-be74-ae5508779502@arm.com>
-Date:   Fri, 10 Feb 2023 16:51:07 +0000
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [RFC] Support for Arm CCA VMs on Linux
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Alexandru Elisei <alexandru.elisei@arm.com>,
-        Andrew Jones <andrew.jones@linux.dev>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Christoffer Dall <christoffer.dall@arm.com>,
-        Fuad Tabba <tabba@google.com>,
-        James Morse <james.morse@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Joey Gouly <Joey.Gouly@arm.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Quentin Perret <qperret@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Steven Price <steven.price@arm.com>,
-        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.cs.columbia.edu
-References: <20230127112248.136810-1-suzuki.poulose@arm.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.7; Fri, 10 Feb
+ 2023 16:51:20 +0000
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::2101:3ed8:9765:370f]) by CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::2101:3ed8:9765:370f%5]) with mapi id 15.20.6111.007; Fri, 10 Feb 2023
+ 16:51:20 +0000
+Message-ID: <99bb0514-61a2-db5f-5cc8-bac5e4283d19@oracle.com>
+Date:   Fri, 10 Feb 2023 10:51:14 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v18 3/7] crash: add generic infrastructure for crash
+ hotplug support
 Content-Language: en-US
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <20230127112248.136810-1-suzuki.poulose@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0587.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:295::15) To AS8PR08MB6995.eurprd08.prod.outlook.com
- (2603:10a6:20b:34d::13)
+To:     Sourabh Jain <sourabhjain@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+References: <20230131224236.122805-1-eric.devolder@oracle.com>
+ <20230131224236.122805-4-eric.devolder@oracle.com>
+ <dee53091-3aff-29f5-c7da-510d315ddcf2@linux.ibm.com>
+From:   Eric DeVolder <eric.devolder@oracle.com>
+In-Reply-To: <dee53091-3aff-29f5-c7da-510d315ddcf2@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: DS7PR03CA0240.namprd03.prod.outlook.com
+ (2603:10b6:5:3ba::35) To CO1PR10MB4531.namprd10.prod.outlook.com
+ (2603:10b6:303:6c::22)
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: AS8PR08MB6995:EE_|AM7PR08MB5432:EE_|DBAEUR03FT039:EE_|AS8PR08MB9932:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1de4eec3-1b8d-4348-d73f-08db0b870c64
-x-checkrecipientrouted: true
-NoDisclaimer: true
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR10MB4531:EE_|SN7PR10MB7101:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7658b96b-70f3-45bf-55ab-08db0b87092e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: HAvuP95q3GcDuLa6wjVSukftxDcCZ8ys9ibvna1NJllCyDxQwa9D/TZCmTT8TxuTJF0ZS9kMoFzSbQN58rH+JGgt7h13O7yuIUEI82Y3Vn4WHc/0D/uI6o9+h6/BAeGA6iK5bwhBBBb/QvtJQ5wyHwHcQoyRwhuqjVTtfxwEj8d2bBT/z4cRZuWmzou6Ej/c1UMTC7Kzv8wvopA9AxdORRUy5vwBg6k41IIfKnwsna23Lykm7GOTCel9xNTaObHbQvAYPuV6RSWKwfKTZ756OvpKXWxLITKi51b2vh+THLTZd5THrO8vVoh5ITi8l6UZJo/hTwkPUjtlzKyPmldBQTfygjuDWswnsMJBO9WesuyZVmsw1yE8e0wh4+Eck7hhetzNBtbX+IKyI7ys5ltfFzzJU3ik2sTm7Wa7f//iLTALxH7NZPf3DoTfrIRCqS5TRmyM94/8gCCwn/UgbXriIHgP/+QNy4h4Q9yxfLTgjUtK+eO5stu9ac/qYuP7lnT25UVq8klM3Kv4wJRq3nd0Bu/mXWtimcx4JjYBmrn0L15LkN1FTUfO14I0V8uhF0cc95fH9FFZRlbCXWg3hjFFYWsHrbSa+CD7VlRN17HtY6JWKf39SmhWLKutTBIIl7jI0vyYfX2ORMqI4/3fYav9+nJ1H7MTdjDK7vshY+0DnxAVmMY9LP+3SOsPiRtB5+IThd7SG2sAdbV9NHbFy3xRYqXCYoqO5y4RfKkibKLd+NO0XSEg7nNJEnqwYGHp4AzTyK8ytj+vkunU+LY1e42E9tnSSPrxY2etntiaWA1U7g3pw+t965eennrzP22TKQY+
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR08MB6995.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(346002)(366004)(39860400002)(376002)(451199018)(478600001)(8676002)(966005)(31686004)(6486002)(6666004)(2906002)(26005)(53546011)(6506007)(6512007)(41300700001)(83380400001)(86362001)(66946007)(66556008)(66476007)(2616005)(186003)(36756003)(31696002)(44832011)(4326008)(54906003)(8936002)(5660300002)(7416002)(316002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR08MB5432
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT039.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 80097707-efca-4b68-b017-08db0b8702e9
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jg8BzAWZOTqva02OZEZnBRd0lfwviGIbm24hVCd6n+blLfJ/rjJ3K2b1qUYwXQvS0KMiXSy1n81wEeG/O3XwCukCvgGiYp+vl0i4w3V84yct2z9gQfnxQFb9rnS/2Veo5WKSSEZFoIqV8bQsGAXJ7wJakPvi4DtsFxgp7KAXYwgyg4Xzs1B07fEDcLQSiiJg3eZ420FmOfeMZLAyBjZ/eS3/SDi6cVzPmMUpUKd7FEQtH4iub5Gyb+PdH3HvTOUn8tMO8F+UskXbW78SUVixUeDXLAcySDARlk4erfwvKht6geEnREDaKsEobLx6mg2Vv4WoIpZrYChHuDGMEAo4DQfQlaxraqUS7HwUGK7RkG42TSGeIAb+U9HEZ8eXzi/klWN6MHGt8NGEB56FSZof6m4kc+re/Lee0Vh7cKJ2h84eOjqOsgGgD7n9Pd/WcUX8lMYcy8RFl48h/oPmumpYWcuTqog/FW47y1r7ZjgTmhclbVJdF3bnpqCwGRlZDxHU1+xrA2+gF0UnqqkAooIYq5Qh5dQSp+2hpHZFNyHU/nv08E1iWsjaUTbATyOaX4byM2pCLPy4CNTKs7hKWzFPrA390FkrDwmB9WYVH1u4VbyCSJEgvy+3nZa2/+Jf6M6tztynzF6+y7GnBX0Q1NZBtQfQlkFfBEXGRuuHVhICJKWYn6i8e224WnhMp1tjJ7QWUZbPcn5O4cWKy4i2sHlLT+NWwd/T9K/zQR94W0BnkFdVeW7Jf+6WknFby+2/bAoj/zMNpIvKMMgabRFaR755aiIAE+mXgwcIceGsqhecwAAkS3eFbxz8q+JdOq/VCzmb
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(346002)(136003)(376002)(451199018)(46966006)(36840700001)(40470700004)(36860700001)(44832011)(86362001)(6512007)(26005)(478600001)(54906003)(966005)(41300700001)(6486002)(31696002)(356005)(70206006)(8676002)(82740400003)(450100002)(81166007)(40460700003)(186003)(8936002)(6506007)(6666004)(5660300002)(36756003)(4326008)(40480700001)(70586007)(316002)(336012)(83380400001)(53546011)(31686004)(47076005)(107886003)(82310400005)(2616005)(2906002)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2023 16:51:25.9326
+X-Microsoft-Antispam-Message-Info: /jmZxW/uQ44IBMtDG+wzPB8rfEhBLbXnZN1JQrwf8+6lVZr4mJH8IyqSqw6XJ+mUl2tToTk5gFNf0nroav3f3BYNpwq3hYD8gsdp0JLOpjW4iOzTKqsyoZ34bDWV85hCveE2Mv3EAkYlri7UES9rEKFHB2QBSaNA+XCNAn9WQc/00vyRnpqc84FeCpcRRvOyaqPTpBCu7oNXWhkwkn+SyyG0aaZmBF+SjPYXdPE+Blp4EcS2VUk2bQ8BSXokBBpKLdR4jdHguvPhDSauZlcpfWO5tB91ePF9+1RWYVUFBHF2A/7ixKO/tbUCcbsUG1ZRPtUflr3QjQmFNzuff0Prt7G8iOykWh7CXW9/rnsV6YfxezrwbBU/ydAgCc/p+Fue2xBdPowiTSDd5AkzBvOeNAqa8XjT4/HxTZq68m0rwFn1n8z63rjRHg+G4B3GjFgQTRS40DcGDLaFaCiup/6I3CG/A50u/C0+aemOz3L+6w1VJkn5tsxdD5WAc+f5TUSbqARVN1t0pMtv+n0Ckmn9F1C4vMK9cGtynuSKge6sTZLDAEMP7j4WXxpxk9p4fVPjRXCBMzqA6bldXsBpvdI7jMtuMPPJvEP9bPFY+bTVJNjhKjk3ShoGuXthJ0+0qTtpLI3nSMZ+woD9DbDTGcRprZtETtAO7yRWpQVNgB20TJGgK77Q7nfiwvfT5V3FBdJDVe39KZGhtktPo9Xlb+tquubjPjeqjVE3fWdIcPszr9gVkik8kSOKYovyY7UoQnuU
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(396003)(366004)(136003)(376002)(346002)(451199018)(478600001)(6486002)(316002)(2906002)(4326008)(66476007)(66556008)(8676002)(107886003)(66946007)(41300700001)(6666004)(31686004)(6506007)(8936002)(7416002)(5660300002)(186003)(53546011)(6512007)(38100700002)(2616005)(36756003)(83380400001)(31696002)(86362001)(41533002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZS9vZ0VZM0MvOW44SmwyK09JTTRPand5VERUV0pkUURtSlc4TGlJeVMyNGVB?=
+ =?utf-8?B?QU9VTXFKemVQUzRGR3Zvb0h5czYwTmFQcTBvOGFydUVOTUNxQk1GVzZUM0VZ?=
+ =?utf-8?B?Nk5JcGgwOWxZcVRkdms4RmI3WTZZbzl2aXNGWCsvTDlHL0ZWZ2x6UjV2YS9J?=
+ =?utf-8?B?ZjVPZkUrMmtvdXl3RU8xd0xteERYVGNFbWc4NTZqV2E4Y1EwMWF2ZWhxZi8r?=
+ =?utf-8?B?WFlxK0l5eFRhM3BlRDNDaDk0MEJYeE1lMUpsT0F1K3k4QXNUTHhVN2E5dzRz?=
+ =?utf-8?B?dVBMOUZHYUR5WHBxYWYreXdDc0pMS1hHZ1FOMDE0YjZxTGp1NXlya0Ztdi9H?=
+ =?utf-8?B?RjlKaG5xcUMzWll2VmI0T2tmRFZ0TVZ0eWZVNlhIRDJUZVpTY25wa0F2VGtV?=
+ =?utf-8?B?Mk5NbE0vUDFOWXFoTmNJemEwSU5jdzIyZnBET0plaWJQWk5FUlY0dVJ2Mncv?=
+ =?utf-8?B?U3VFNTVTeFZPRmtFRDZFd0ZXSGtyVjNxc0M1Z3g4elZ3cjJXeFdFVTlZTitK?=
+ =?utf-8?B?bTRjcWZDVTlzanBGMDNwajFRY2x3SUJ1YVIyS3JPZzI0NjdrTi9ORmlubHE2?=
+ =?utf-8?B?djZnR1MyNnF5SXljWHMvRzN2ZEhGc1ZXQkFlR3FCLzRlNlpvSS8rMjFEelY2?=
+ =?utf-8?B?azlvbVlwZFlqRUZDa1ZSRGJ1K2F1WFNESGwrazBSRmc0Z1BlSDRtMTM1Qzlr?=
+ =?utf-8?B?b2doZUNFREJMNGd1SEtVSFJnK2M4UVdkOVVJTHczRWZpT0I0NXBCRTNPNVEy?=
+ =?utf-8?B?RlQ1RldrSUEzZ2pJeWNpemNjQzFYT1FMMzQ1MTFLdjlBUjg2ajVZeDEvcXpl?=
+ =?utf-8?B?clVFdkhuRXAvQkQ1Z0NMY2I1QXhCOHJOeWhaakpIR3BHQWRPb0ZLR0RXZnBa?=
+ =?utf-8?B?bTFkQVV2dnFjWUNzNjRRNEg0bXV3TkcvSmtRQ3FMR0VxRnIwY0IvRnNRL21q?=
+ =?utf-8?B?d1F5V3hHWHhqdG9BUWFOUTVxVzZzRUl0RFBaY3U4cWZhY3BCN2xrSjBEVDNU?=
+ =?utf-8?B?c01EOTFkejlyZUQ3Z2UrUkVnY1BsWHF6cFdWODBPSGJMRTZudVVjaXFQOE5Y?=
+ =?utf-8?B?UjQveHNvbHpONDhleDZvR3pGY1ZUYVd5YWY4YXFvVVo1TERjU2xpSGIyZDRj?=
+ =?utf-8?B?WkU4Y1VDNWRWUVUwVERjdTVUa2QxdEY5RDhoT0pTNkRsbWJqY2ErWlNuSVFQ?=
+ =?utf-8?B?L0dHQkVUWjVwR2M0dWF0ak9WcVk4UXRCenBkclhnNUw2ZkVNekZSVEpidytP?=
+ =?utf-8?B?WUtYTWJ3WGpjQXd4UTJaWUVhQ0VNRnZrRHo5ZTRyYUk5UUc2Y21vc2hPdFpL?=
+ =?utf-8?B?N1B1cXRpYTlzYnppbG5TM3BXK0hJcmR6NGFjQW1HVGV1M0hKN2tZaTVZVlVP?=
+ =?utf-8?B?eFd0cDNPbXJpODE5Vm9IeWhNRmdIUldlVDk1WmRBbzJFRjJBNHZOTzRaY0xQ?=
+ =?utf-8?B?Wll0emlnK2ZhM2l6cEZ3VE90TnpzL0ZPZ01wbjdMeVVVVGtnQ01CeFFTYW5i?=
+ =?utf-8?B?c0hKVU5lMUdTd3dQRUYxQjFudDZUWXJkc0trTTJVdkQ3b2J2NEsrTklhVGtq?=
+ =?utf-8?B?d2dWNXdOYlloWHhZK1M1YTVJQXlNMHM0WU8wTlJUUkJPSzJwc1FSSVJHdzFI?=
+ =?utf-8?B?R1FGWGhaZFRFSXZaeGxOMjE2TkxNQTIycFBDY3lpOTRWWG5EL2VhY0pUaUlK?=
+ =?utf-8?B?WHMvTWpmeDdSR1VrR3VFazF3ZkFYQ05iQkphd2U5N2dPckMyNVRGVjVZakNo?=
+ =?utf-8?B?Z2NqYTNYeTBQaVBoeTZCTFFENHJQRlc0djRCaVZhZHdCckZFd0JhajMvQXhy?=
+ =?utf-8?B?R25aQnhoOGJwVi9KeUZZNk5TZHdMRElLZkwyaHVJTzliME1UUEhwU1hHMGwx?=
+ =?utf-8?B?Q2V1WGpRY2w3dGlzNEtQQ3lva2xIeTZPV0VYMTlORTBVWWk4Y2thdjhKSSs1?=
+ =?utf-8?B?N3BuWnVVb3RNTFJKeUU4Nm9qZG1VMloxMmZpUWFnM3hVZFV3d3FiRkxzVjBQ?=
+ =?utf-8?B?RFJYSnJSVjE0SnBFd01qUlh5SGJlZmdSNXhzVDdtZTMwc3JINnF3QVIwUDVn?=
+ =?utf-8?B?NDFRRTJYak56WEV4K1NOOFhPRVp2N3RlRFN4ZnpBQ2tKMGRicjZaUnYzemNO?=
+ =?utf-8?B?UHdwL0dUWFZLVXdpMFlraWVxZSt6K01jaFhQeFlIeGNHL3lIM1FFcllFcits?=
+ =?utf-8?Q?EaFSoS7tk5PQNNGpDBvkYCI=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?S1J5YUp3enZueFZBMzR1S0dZQXkvTVVacHA5WEZ1TGIvamVvRFdVSW9HODUy?=
+ =?utf-8?B?Y0VsT003Q29aTjNjYVlubXhpblNLK3ozNEZ2WnpTRkN2b245RmxKUHdRRDU2?=
+ =?utf-8?B?Szh6N3ZENkR2YVR4L0tzZ2EvQy9NcG92T0NqV2RXUGJnVjdHYTFVVThCcm1W?=
+ =?utf-8?B?YlVuY3drbVFiMzVWUit2V04rMHRwQ0lTNE90ekxiNGlHVHExQ3JOOHlWRk5P?=
+ =?utf-8?B?eUVCTjhtaG1oQlgyM2wwUGJyQnpLL29XVWhGSU9QYjdzMWxxZUVURmMxSW1F?=
+ =?utf-8?B?b3NmUDJUZExSWm9VQWxGYkp5TTM2NEQwZ0MxbFJOSW9abmdqWTFZbkk3WTY2?=
+ =?utf-8?B?TlVTN3NCOTl2cEdCRm5aUWxCVDBaclVoNGYvV3BHUUZFZm91YlhqS2N0QmRm?=
+ =?utf-8?B?N3kwWEhZL3VGOFhRNXJxY0VjL0VlVDk3L0ZxcGJBMGZvZmp1VDZ0cjFoQkV2?=
+ =?utf-8?B?S3I2U08xeElBcDYzMmF5Z3hPUENKbHBsT2dvQjZTdFNHTWJDd3dVVHM1cmNP?=
+ =?utf-8?B?RUFZN0F2ZTR5UVFuNXVTTXlxa3dabFQ4aGlTYWw3RFlDUEhWdzExUEh6azFR?=
+ =?utf-8?B?bThnMFpjbkpTclJhOFZPa3NSSnlvRkhEVXAxbmtEKyt0K0lkTXk2aURoNTJt?=
+ =?utf-8?B?NHdpaXVULzRxYVliRWkvanBHMzYyajFwU2crYzlCK2s2aUljL01waWIzU2JL?=
+ =?utf-8?B?YmFxaStzam1lSW5Tb0N3b09uQVEzRnpVWFFvN01YSG03ZzVuY1NJN3JMeThn?=
+ =?utf-8?B?U1d6Um1IRXQrdnBaVlZ6WVpyZTFaVkxCZCtPTkQ1c1NBakZHczQyandyTEFk?=
+ =?utf-8?B?ZGU3dEhja09GT1FSRmVIRVRwOWhrSHEzdm8zbmNCVW8xcW1XTnNYVXlFMEow?=
+ =?utf-8?B?N0dRbEZmczk0M29jeXBTTmxud1NYdjJFWUY2dm8va1RFbVRQNkJqZ3pta2hM?=
+ =?utf-8?B?QWZxNHNxYndFaWhmY1Y3aUhhbFQ5Zk42VStuVithN3JPMElEcGpGaHlqMyt2?=
+ =?utf-8?B?YzdJZ1lCSlc4SHgrcnp0Q2lPeFJMTHlYb2s5U3VObTBnMTR0VWV3dHpzUTdi?=
+ =?utf-8?B?aDFlNFRxTGJmYmNQNUdicmxRelFZUW5LVkVjeTl4bU5RNlNkVTdTbUpjYU9t?=
+ =?utf-8?B?bk9tSEY3SlYvTTJrUzdnMWs1cmR2eGxRbDhqUi9mbG9tTE9jelJicG9pTWJC?=
+ =?utf-8?B?Wk4ybTFyM2tSNi90aUFnYlNSbk5vUVV6M2oydjgxeXBxaHh0NzJiMHNyQ2xk?=
+ =?utf-8?B?UTJNOUZFMW5EWEZtRHl2aGdwbEp5bi9PZEd4b3I5dms5ZW44RkN3d2hvYmhT?=
+ =?utf-8?B?R0RGalZRM2N3a2Z3SFpaUFZmS3BBdkdaSEhWMVpBbm9FRFgzOGFOOThVejRD?=
+ =?utf-8?B?WTdBU1c4OUdWdmFuSi84SUNtdGpENmlESWcvSE01bkNsWXZrUzRaZGpnSzM5?=
+ =?utf-8?B?VFhkb0lTUjZPaTRnSTEvN3hPK09TMzBKMmhHUWoxNjlSejBzc0ZYUnRodXZl?=
+ =?utf-8?B?Ym84OW5rRzg5Smx6bHZCQVB1aVVKNG9pSjRHSlJxcDVpZU5TaVBIekFtcFIr?=
+ =?utf-8?Q?NoO3+mWorRfLAaTcpjoXJ01tE=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7658b96b-70f3-45bf-55ab-08db0b87092e
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2023 16:51:20.7610
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1de4eec3-1b8d-4348-d73f-08db0b870c64
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT039.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB9932
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /9vdyTexiIu6QXCkihVX9OHgJLhuHBt2bkUctXDxb6alarmr8apMtD+hpQ8Qt8SbbEoxo1xffkon9xVRdOhlAgd+n0XJo2IpJFqocAl1W8A=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR10MB7101
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-10_11,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999 mlxscore=0
+ adultscore=0 phishscore=0 suspectscore=0 malwarescore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302100140
+X-Proofpoint-GUID: 7aTshYmT22sddP9izzA-NBsz3LV_gKDw
+X-Proofpoint-ORIG-GUID: 7aTshYmT22sddP9izzA-NBsz3LV_gKDw
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2023 11:22, Suzuki K Poulose wrote:
-> [...]
 
-> Running the stack
-> ====================
+
+On 2/9/23 13:10, Sourabh Jain wrote:
+> Hello Eric,
 > 
-> To run/test the stack, you would need the following components :
+> On 01/02/23 04:12, Eric DeVolder wrote:
+>> To support crash hotplug, a mechanism is needed to update the crash
+>> elfcorehdr upon CPU or memory changes (eg. hot un/plug or off/
+>> onlining).
+>>
+>> To track CPU changes, callbacks are registered with the cpuhp
+>> mechanism via cpuhp_setup_state_nocalls(CPUHP_BP_PREPARE_DYN). The
+>> crash hotplug elfcorehdr update has no explicit ordering requirement
+>> (relative to other cpuhp states), so meets the criteria for
+>> utilizing CPUHP_BP_PREPARE_DYN. CPUHP_BP_PREPARE_DYN is a dynamic
+>> state and avoids the need to introduce a new state for crash
+>> hotplug. Also, this is the last state in the PREPARE group, just
+>> prior to the STARTING group, which is very close to the CPU
+>> starting up in an plug/online situation, or stopping in a unplug/
+>> offline situation. This minimizes the window of time during an
+>> actual plug/online or unplug/offline situation in which the
+>> elfcorehdr would be inaccurate.
+>>
+>> Note, that when a CPU is being unplugged/offlined, the CPU is still
+>> in the foreach_present_cpu() during the regeneration of the
+>> elfcorehdr. Thus there is a need to explicitly check and exclude
+>> the soon-to-be offlined CPU. See patch 'kexec: exclude hot remove
+>> cpu from elfcorehdr notes'.
+>>
+>> To track memory changes, a notifier is registered to capture the
+>> memblock MEM_ONLINE and MEM_OFFLINE events via register_memory_notifier().
+>>
+>> The cpu callbacks and memory notifiers invoke handle_hotplug_event()
+>> which performs needed tasks and then dispatches the event to the
+>> architecture specific arch_crash_handle_hotplug_event() to update the
+>> elfcorehdr with the current state of CPUs and memory. During the
+>> process, the kexec_lock is held.
+>>
+>> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+>> Acked-by: Baoquan He <bhe@redhat.com>
+>> ---
+>>   include/linux/crash_core.h |   9 +++
+>>   include/linux/kexec.h      |  12 ++++
+>>   kernel/crash_core.c        | 139 +++++++++++++++++++++++++++++++++++++
+>>   3 files changed, 160 insertions(+)
+>>
+>> diff --git a/include/linux/crash_core.h b/include/linux/crash_core.h
+>> index de62a722431e..ed868d237c07 100644
+>> --- a/include/linux/crash_core.h
+>> +++ b/include/linux/crash_core.h
+>> @@ -84,4 +84,13 @@ int parse_crashkernel_high(char *cmdline, unsigned long long system_ram,
+>>   int parse_crashkernel_low(char *cmdline, unsigned long long system_ram,
+>>           unsigned long long *crash_size, unsigned long long *crash_base);
+>> +#define KEXEC_CRASH_HP_NONE            0
+>> +#define KEXEC_CRASH_HP_REMOVE_CPU        1
+>> +#define KEXEC_CRASH_HP_ADD_CPU            2
+>> +#define KEXEC_CRASH_HP_REMOVE_MEMORY        3
+>> +#define KEXEC_CRASH_HP_ADD_MEMORY        4
+>> +#define KEXEC_CRASH_HP_INVALID_CPU        -1U
+>> +
+>> +struct kimage;
+>> +
+>>   #endif /* LINUX_CRASH_CORE_H */
+>> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+>> index 27ef420c7a45..a52624ae4452 100644
+>> --- a/include/linux/kexec.h
+>> +++ b/include/linux/kexec.h
+>> @@ -33,6 +33,7 @@ extern note_buf_t __percpu *crash_notes;
+>>   #include <linux/compat.h>
+>>   #include <linux/ioport.h>
+>>   #include <linux/module.h>
+>> +#include <linux/highmem.h>
+>>   #include <asm/kexec.h>
+>>   /* Verify architecture specific macros are defined */
+>> @@ -371,6 +372,13 @@ struct kimage {
+>>       struct purgatory_info purgatory_info;
+>>   #endif
+>> +#ifdef CONFIG_CRASH_HOTPLUG
+>> +    int hp_action;
+>> +    unsigned int offlinecpu;
+>> +    bool elfcorehdr_index_valid;
+>> +    int elfcorehdr_index;
 > 
-> 1) FVP Base AEM RevC model with FEAT_RME support [4]
-> 2) TF-A firmware for EL3 [5]
-> 3) TF-A RMM for R-EL2 [3]
-> 4) Linux Kernel [6]
-> 5) kvmtool [7]
-> 6) kvm-unit-tests [8]
+> May be I am reiterating myself but I think we can manage without elfcorehdr_index_valid.
 > 
-> Instructions for building the firmware components and running the model are
-> available here [9]. Once, the host kernel is booted, a Realm can be launched by
-> invoking the `lkvm` commad as follows:
+> Here is how:
+> Initialize the elfcorehdr_index with a negative value in do_kimage_alloc_init
+> function (it is called for both kexec_load and kexec_file_load).
 > 
->  $ lkvm run --realm 				 \
-> 	 --measurement-algo=["sha256", "sha512"] \
-> 	 --disable-sve				 \
-> 	 <normal-vm-options>
+> Now when the control reaches to handle_hotplug_event function and if elfcorehdr_index
+> has negative value find the correct index and re-initialize the elfcorehdr_index.
 > 
-> Where:
->  * --measurement-algo (Optional) specifies the algorithm selected for creating the
->    initial measurements by the RMM for this Realm (defaults to sha256).
->  * GICv3 is mandatory for the Realms.
->  * SVE is not yet supported in the TF-RMM, and thus must be disabled using
->    --disable-sve
+> Thoughts?
 > 
-> You may also run the kvm-unit-tests inside the Realm world, using the similar
-> options as above.
-
-Building all of these components and configuring the FVP correctly can be quite
-tricky, so I thought I would plug a tool we have called Shrinkwrap, which can
-simplify all of this.
-
-The tool accepts a yaml input configuration that describes how a set of
-components should be built and packaged, and how the FVP should be configured
-and booted. And by default, it uses a Docker container on its backend, which
-contains all the required tools, including the FVP. You can optionally use
-Podman or have it run on your native system if you prefer. It supports both
-x86_64 and aarch64. And you can even run it in --dry-run mode to see the set of
-shell commands that would have been executed.
-
-It comes with two CCA configs out-of-the-box; cca-3world.yaml builds TF-A, RMM,
-Linux (for both host and guest), kvmtool and kvm-unit-tests. cca-4world.yaml
-adds Hafnium and some demo SPs for the secure world (although since Hafnium
-requires x86_64 to build, cca-4world.yaml doesn't currently work on an aarch64
-build host).
-
-See the documentation [1] and repository [2] for more info.
-
-Brief instructions to get you up and running:
-
-  # Install shrinkwrap. (I assume you have Docker installed):
-  sudo pip3 install pyyaml termcolor tuxmake
-  git clone https://git.gitlab.arm.com/tooling/shrinkwrap.git
-  export PATH=$PWD/shrinkwrap/shrinkwrap:$PATH
-
-  # If running Python < 3.9:
-  sudo pip3 install graphlib-backport
-
-  # Build all the CCA components:
-  shrinkwrap build cca-3world.yaml [--dry-run]
-
-  # Run the stack in the FVP:
-  shrinkwrap run cca-3world.yaml -r ROOTFS=<my_rootfs.ext4> [--dry-run]
-
-By default, building is done at ~/.shrinkwrap/build/cca-3world and the package
-is created at ~/.shrinkwrap/package/cca-3world (this can be changed with
-envvars).
-
-The 'run' command will boot TF-A, RMM and host Linux kernel in the FVP, and
-mount the provided rootfs. You will likely want to have copied the userspace
-pieces into the rootfs before running, so you can create realms:
-
-- ~/.shrinkwrap/package/cca-3world/Image (kernel with RMI and RSI support)
-- ~/.shrinkwrap/package/cca-3world/lkvm (kvmtool able to launch realms)
-- ~/.shrinkwrap/package/cca-3world/kvm-unit-tests.tgz (built kvm-unit-tests)
-
-Once the FVP is booted to a shell, you can do something like this to launch a
-Linux guest in a realm:
-
-  lkvm run --realm --disable-sve -c 1 -m 256 -k Image
-
-[1] https://shrinkwrap.docs.arm.com
-[2] https://gitlab.arm.com/tooling/shrinkwrap
-
+> Thanks,
+> Sourabh Jain
+> 
+ok, I'll eliminate elfcorehdr_index_valid.
+eric
