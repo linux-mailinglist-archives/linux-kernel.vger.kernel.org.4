@@ -2,145 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DF796924E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 111CC6924E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:55:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232513AbjBJRzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 12:55:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56612 "EHLO
+        id S232616AbjBJRzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 12:55:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232340AbjBJRzD (ORCPT
+        with ESMTP id S231792AbjBJRzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 12:55:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F1F7CCB4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:53:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676051638;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ByLTaBrR33/58eblN5M5BJ+SAtE6mecuJJ1gYpLRkfw=;
-        b=She6fYYoehTQ8TI6+0KU3zi7xoGK7f+G2gNe0LOyl665dj6K1eu+v4yZWAB2GkpN2x47AB
-        7whgCupznLYC0YDFqSHcYoJqawarhk+K0/dLbTUBwx/lNotC1Gfw4/qQDADR6naLY82OcQ
-        qSMH5C5HTgSYI0TXSqiWBbVuTq6h6iM=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-605-yH6LalkKNiWbhizmbcNJnQ-1; Fri, 10 Feb 2023 12:53:57 -0500
-X-MC-Unique: yH6LalkKNiWbhizmbcNJnQ-1
-Received: by mail-ej1-f72.google.com with SMTP id qa17-20020a170907869100b0088ea39742c8so4016245ejc.13
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:53:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ByLTaBrR33/58eblN5M5BJ+SAtE6mecuJJ1gYpLRkfw=;
-        b=Ae+hdPccQGbDewOp6IJo7M8oAiC0/TJIGJj+4wfFBOBYsupn6BLbqYx4kfZHYNl9pZ
-         R/Uj2gnAkLoN7fGrMT7tWHpJMqdEo3s5mUQJNyPVwzb92f9qRC/pqB2MXgqs/ggOsKy6
-         DQDEPM9NRsn2OkT6/swEItQ+kOz+H+NQcVjgl5Id01WWKwK7oy640dQqpvOyl12pHMGU
-         vJ779WM7T4vjkR4Le0H/7fW0jsAbA4TLv4OpE8H9asE2JpxEXFezFcpXoR+oBcZL9yen
-         SCpGOWJDIKkUPZMzT+6s4E1eJtHTMbI7aTcXpschJ9DNF77l+eoUh2yvh8dn9g5qKudO
-         bUkQ==
-X-Gm-Message-State: AO0yUKV8vtK5BonPa1kRUhsqpxPY9vEVvJje5WoNWUj4UOmhq13Yz5KV
-        wLAmqsMyj3Ho3M9XPxqcxBNYnLH6Kz/GbcHkedMLqwVAc7saLKgNZtrcCEnwMAD3KHnh4usuZEE
-        KnNeJwmY8cb8h9FlrY05l8Sy7
-X-Received: by 2002:a17:906:70c7:b0:885:6a2e:f941 with SMTP id g7-20020a17090670c700b008856a2ef941mr14790109ejk.54.1676051635932;
-        Fri, 10 Feb 2023 09:53:55 -0800 (PST)
-X-Google-Smtp-Source: AK7set+DNv4GVF0SPagUZnh8wWR3eAig9uI70x2zyVfDjEpeHUGM61viPpw9njwVFtd2k8xIDYbnhg==
-X-Received: by 2002:a17:906:70c7:b0:885:6a2e:f941 with SMTP id g7-20020a17090670c700b008856a2ef941mr14790102ejk.54.1676051635725;
-        Fri, 10 Feb 2023 09:53:55 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id dt19-20020a170906b79300b0088ed7de4821sm2656892ejb.158.2023.02.10.09.53.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 09:53:55 -0800 (PST)
-Message-ID: <fd4150cf-1800-51c4-e4f8-4b6aff5ddc5d@redhat.com>
-Date:   Fri, 10 Feb 2023 18:53:54 +0100
+        Fri, 10 Feb 2023 12:55:47 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A8474041;
+        Fri, 10 Feb 2023 09:55:47 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31AHsATR013475;
+        Fri, 10 Feb 2023 17:55:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=jdsxoJu/le3WzUyGsQ3i3KKDyAP1na77DcnDUC/E/QM=;
+ b=tf6enj/DlSrXiBrbOaAtyv2ekPjDgbAOma8Hb8HAXfpVm1RdyOn72RMBSxzMrKf+v+bF
+ AlbyVi/0J1HWchffonKQyVEY400Yvuvi2M+9dPyHkFSD29zy7qYmlZzBEBU+NKkggn7N
+ OI+gDqzmCLR4e8weE0hm6NEeFFbh2m5gSl1QRIR+nl1KQ7k/Pnq0X7e32cq71CyrdZ7n
+ mQWH2n95WNMUk1SEMnwHfUYb35nQTVTepM02+OwvaXrsAZUI1xS+fgzK+PQeSbYyPP9a
+ /dQa56Q+LDkqKfOnuyrD1/FG4PBm4Wq/e+tzxyCpmaTQUCY3Uu8bkJHxzvAlU3yKp839 WA== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nhdy1e06m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Feb 2023 17:55:46 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31AGUH2r013754;
+        Fri, 10 Feb 2023 17:55:45 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3nhdtajccv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Feb 2023 17:55:45 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31AHti0P015195;
+        Fri, 10 Feb 2023 17:55:45 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3nhdtajcc6-1;
+        Fri, 10 Feb 2023 17:55:44 +0000
+From:   Alok Tiwari <alok.a.tiwari@oracle.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     alok.a.tiwari@oracle.com, darren.kenny@oracle.com,
+        michael.christie@oracle.com, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, martin.petersen@oracle.com,
+        d.bogdanov@yadro.com, r.bolshakov@yadro.com,
+        target-devel@vger.kernel.org
+Subject: [PATCH] scsi: target: core: Added a blank line after target_remove_from_tmr_list()
+Date:   Fri, 10 Feb 2023 09:55:22 -0800
+Message-Id: <20230210175521.1469826-1-alok.a.tiwari@oracle.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 0/2] platform/x86: dell-ddv: Various driver updates
-Content-Language: en-US, nl
-To:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net,
-        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230209211503.2739-1-W_Armin@gmx.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230209211503.2739-1-W_Armin@gmx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-10_13,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0
+ malwarescore=0 mlxscore=0 mlxlogscore=999 adultscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302100149
+X-Proofpoint-GUID: 9fl-1ScwRFIasn_SnS6nUQg5ANWyj-8b
+X-Proofpoint-ORIG-GUID: 9fl-1ScwRFIasn_SnS6nUQg5ANWyj-8b
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Armin,
+There is no separate blank line between target_remove_from_tmr_list() and
+transport_cmd_check_stop_to_fabric
+As per coding-style, it is require to separate functions with one blank line.
 
-On 2/9/23 22:15, Armin Wolf wrote:
-> Thanks to bugreport 216655 on bugzilla, the contents of the
-> fan/thermal sensor buffers could be almost completely decoded.
-> 
-> The first patch adds support for exposing the sensor values
-> over a standard hwmon interface, and the second patch enables
-> asynchronous probing for the driver since the sensor interface
-> can be quiet slow.
-> 
-> The patch series was tested on a Dell Inspiron 3505, with the hwmon
-> patch being tested by multiple people over bugzilla and email. Those
-> who tested the final version of the hwmon patch are credited with
-> Tested-by tags.
+Fixes: 12b6fcd0ea7f ("scsi: target: core: Remove from tmr_list during LUN unlink")
+Signed-off-by: Alok Tiwari <alok.a.tiwari@oracle.com>
+---
+ drivers/target/target_core_transport.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks this looks nice and clean, much appreciate
-the attention to detail.
-
-I've applied the series to my review-hans branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-
-
-
-
-> ---
-> Changes in v3:
-> - remove empty lines before break/return
-> - invalidate buffer cache on resume
-> Changes in v2:
-> - remove already merged patches
-> - add patch enabling asynchronous probing
-> - cache sensor buffers
-> - fix compilation on 32 bit
-> - add missing break statements
-> - remove C++ style comments
-> - rework battery hook and hwmon probing
-> - rework Kconfig dependencies
-> 
-> Armin Wolf (2):
->   platform/x86: dell-ddv: Add hwmon support
->   platform/x86: dell-ddv: Prefer asynchronous probing
-> 
->  drivers/platform/x86/dell/Kconfig        |   8 +-
->  drivers/platform/x86/dell/dell-wmi-ddv.c | 492 ++++++++++++++++++++++-
->  2 files changed, 495 insertions(+), 5 deletions(-)
-> 
-> --
-> 2.30.2
-> 
+diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
+index 5926316252eb..f1cdf78fc5ef 100644
+--- a/drivers/target/target_core_transport.c
++++ b/drivers/target/target_core_transport.c
+@@ -691,6 +691,7 @@ static void target_remove_from_tmr_list(struct se_cmd *cmd)
+ 		spin_unlock_irqrestore(&dev->se_tmr_lock, flags);
+ 	}
+ }
++
+ /*
+  * This function is called by the target core after the target core has
+  * finished processing a SCSI command or SCSI TMF. Both the regular command
+-- 
+2.39.1
 
