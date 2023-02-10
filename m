@@ -2,154 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D846920CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 15:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2116920D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 15:27:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232266AbjBJO0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 09:26:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
+        id S232505AbjBJO1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 09:27:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232095AbjBJO0r (ORCPT
+        with ESMTP id S232331AbjBJO1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 09:26:47 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E8E71F1B;
-        Fri, 10 Feb 2023 06:26:45 -0800 (PST)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31AAndqB002126;
-        Fri, 10 Feb 2023 14:26:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=ELhKPgT2OZwhPBqHMWKHrFm5nPKNY2hJHH1bzNCkIy0=;
- b=I+RfOe+U4+4YlPYG9dFF0rnccCDBMjuFrs+b8dosnRmgx4Ydmagd+caTZi6b+HU8aqYQ
- 7XsFQ2/X2Uv73EeQR1PAA9aB65RzZSOdzV3XXCZzMrLLsRn0mSnjzPS/av+SwbTiVyin
- c/gff8++B/9hJcMA7a4nrRTd+3mbq8YOpYlw/lR4JW3L7Z/waafr9+22XTcGvX5Wmwc6
- cU7PHSjZlUOfYbujOkEJKWzzYp8evdytVS7i1IcfSLmzU0N8lN0p7FIsuwYWK4JGy/c0
- 0oGDqFAtKhdd5UvdcGkUnDPj+Jorp8Q4odNkMVXyAOQS27PsB16xQdVCKioPdkiQIAEa dA== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nhfwudadc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Feb 2023 14:26:39 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31AECBVM002644;
-        Fri, 10 Feb 2023 14:26:38 GMT
-Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2176.outbound.protection.outlook.com [104.47.73.176])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3nhdtgvh7q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Feb 2023 14:26:38 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d5OJjXzGtY5CjMWSufZK+YzQUQovjR89rV8L2qeLVCQEHq5TdfXfHJrty0oSCX73O5NfBTlIYZHPXnXEzr8smXujBSNvYF/mHzBi9fPEPMkjpSsX1YoGacaWGBxX6/Ftnz0h8rzNimZxRonXjafVEP7RcgggK/Ty2d+YMjtwaL1sLhUFSkO/O5GZtQ3dfRoVc7sGExA8IdyBrebdMLy+kToVdhJaEV/b/8ZyVpi4rwWqTLvw8d7apOCLqtbviGl1FCGQReMECmsmfD1bo1IhA3rMI7GI22zQS8sN0cDKVrtPzFE0S2sYj/NgaTncd/BDaF38s0imbEaGyyUazFmiAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ELhKPgT2OZwhPBqHMWKHrFm5nPKNY2hJHH1bzNCkIy0=;
- b=JKJbqNUCzKJ0dCf8CxunjJIpbMs9DodzJh0rKxSKVTJf3NsPcekhQ4jWnmRWGjhTZUpkLrqkYAK7FBlel+jNeo0CBeba74dAaxMRsQTchsIWVKYeCNZbUeyLkXTz0ZzPExevacZ2FoUUfEeYrP5CXWd9eQbq/m1bm8QzsYWNdejl9zIDpQd8VtfhHak91U05SELcV4hnIwAr950+2RUptUkIhyMjSPKiKiOWJbY6bEsy7+8aAaK2NUvZ3wCOa9FnBjssIJ+8yUttuFSI6ND5muW947KjUDvcuxPS6GFjjA27LB/pfGs9RfiTNJdZL6ZseRDSlRVYMjGbvPZNHrL9eQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ELhKPgT2OZwhPBqHMWKHrFm5nPKNY2hJHH1bzNCkIy0=;
- b=okuZFan42JiyZXo7SkA+7u7r3TYbCmMTVqGGwu/9Kd50RaZQRn3bd5wcHy/6Xz7nktg+nN6ZYj1BVxlO1OOx71CSRxVeRQ5ntWYs9ckXAbTe/3qSZ1DxDaJ2wAaRB8qImxet9hYp8f/HRJ78T5mokCesBL3Ai+HI84TUd+FJXe0=
-Received: from PH0PR10MB5706.namprd10.prod.outlook.com (2603:10b6:510:148::10)
- by MW4PR10MB6581.namprd10.prod.outlook.com (2603:10b6:303:22a::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19; Fri, 10 Feb
- 2023 14:26:36 +0000
-Received: from PH0PR10MB5706.namprd10.prod.outlook.com
- ([fe80::560e:9c52:a6bd:4036]) by PH0PR10MB5706.namprd10.prod.outlook.com
- ([fe80::560e:9c52:a6bd:4036%9]) with mapi id 15.20.6086.011; Fri, 10 Feb 2023
- 14:26:35 +0000
-Message-ID: <eabf8312-c576-1aed-8c2c-6e30197bbd9a@oracle.com>
-Date:   Fri, 10 Feb 2023 22:26:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH] btrfs: make kobj_type structures constant
-To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>
-Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230210-kobj_type-btrfs-v1-1-16d3f33c17be@weissschuh.net>
-From:   Anand Jain <anand.jain@oracle.com>
-In-Reply-To: <20230210-kobj_type-btrfs-v1-1-16d3f33c17be@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR06CA0186.apcprd06.prod.outlook.com (2603:1096:4:1::18)
- To PH0PR10MB5706.namprd10.prod.outlook.com (2603:10b6:510:148::10)
+        Fri, 10 Feb 2023 09:27:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9007D19685
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 06:26:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676039209;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gwSuRObxa9mbaORD/+4MDVXikhy2F5XiABD2IkJjms8=;
+        b=cV0WGO69SA8e0xjhuvpu77/zQ16g1/3soZJnuwjVhVBSxAMiQH2N31yuSAmRDbtnCR/MFr
+        stxjxbTEclIxa9dRIZDY/eG8p/SuNbrAmkCq8YYOBvG0onWQuQQx9vInN5UfCq9tJZzsdG
+        1Ch7cPjlKYvXBMLpmOx3lz6ftTiMFxc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-319-rN9uQs1eM9y1jIDD2gouhw-1; Fri, 10 Feb 2023 09:26:45 -0500
+X-MC-Unique: rN9uQs1eM9y1jIDD2gouhw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C24A81C05AF6;
+        Fri, 10 Feb 2023 14:26:44 +0000 (UTC)
+Received: from mail.corp.redhat.com (ovpn-195-1.brq.redhat.com [10.40.195.1])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 81DBD2166B29;
+        Fri, 10 Feb 2023 14:26:38 +0000 (UTC)
+Date:   Fri, 10 Feb 2023 15:26:34 +0100
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Pietro Borrello <borrello@diag.uniroma1.it>
+Cc:     Jiri Kosina <jikos@kernel.org>, Hanno Zulla <kontakt@hanno.de>,
+        Carlo Caione <carlo@endlessm.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Roderick Colenbrander <roderick@gaikai.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] HID: bigben: use spinlock to safely schedule
+ workers
+Message-ID: <20230210142634.2exh6mvbvysy3hqo@mail.corp.redhat.com>
+References: <20230125-hid-unregister-leds-v3-0-0a52ac225e00@diag.uniroma1.it>
+ <20230125-hid-unregister-leds-v3-1-0a52ac225e00@diag.uniroma1.it>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB5706:EE_|MW4PR10MB6581:EE_
-X-MS-Office365-Filtering-Correlation-Id: 74e0c77f-82c2-4e61-150d-08db0b72d07e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bI0Pm63l/Dt9+g4+yIH9OST3j3uD90O6VraClcFa9R9mUUj+o6GbwLeh1y5j1PPO73jZDoXoOi1IWKDF2Ehssi9ogCbW1Vr3PtjzMhHuaSOKy/VzqCutSfravtfGCYT7aSOZy1fpCKT85lz2Io9UxDwh7iId/ftLralNyx1frlLIQjwoSuCGxZwsKyDgvxZMHwpKPYtpqDTl+MldJjaft0bSz3alTEaEHvNv2bPQHRjsISzhrvAFegpKGVeyV2ea/rw9eNEfSjnK6ReLXShrrhdreyMma86UeW87T7WJ1/6CY5A/gc2cJaWU0covpmdSl137UxulqVekaGU85c/tUEcgvuAcUsbXqOEhkKKzq/JMBuz+hv6KBsdS2I0btj9PUkSIAa6LklD5H2tTqMMcXRUM+QuqHuuxovWujWDk1WSCaOrK0dvrBB3s3AX/yY0YNxMZNcf8XA4CY90+v8Mh3eRkrWQJBjzmlrS61B5RLlmaoJV5EJd9JrBYg2m4VP2mKjxJlukB2y2mwPcDP2sVq+CHdgwaIVeeczqr6yRcDTmi+Y/f7t6QkC4y/4hUvi/LBwp2KP0wJ4OqvTjK+JcyqOC5g1pd8yk9lW6uUue3Ct2M0s1SOQ4RB2Xy7kw5rZ7O44TyI9Pw/DaAKRyVRuoMfDu2F3/IdUXCaigT9f0wYgiZsS1eLdvw7Ym5fof42j+YmXJQ77eIKse0qqZJqiurkTP0AiWdmIGVjH6ZK71TNPw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5706.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(376002)(136003)(366004)(346002)(396003)(451199018)(186003)(26005)(6506007)(110136005)(4270600006)(478600001)(6486002)(2616005)(6666004)(6512007)(31686004)(8936002)(2906002)(19618925003)(86362001)(38100700002)(31696002)(316002)(66556008)(4326008)(66946007)(36756003)(66476007)(8676002)(41300700001)(44832011)(558084003)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N09lUU5xdVI4eHJGbEtWQlNQZVRCaWNOMU83QXY2TzVwZnliYXZBNkVjWXlq?=
- =?utf-8?B?bUpSdVovbGRhKytYMmZhM3UwMG1GbUYwamhya2x4eGdXUC9kS1lCUXVPZXdQ?=
- =?utf-8?B?eW9JQmtBd01CUGtSMEcvbWZXMVRxQi9wS1AwdWtlOXYvS2JEcnFiS2xpSmZy?=
- =?utf-8?B?eTdEZXkzZEFKSEdnZjJJaEZEeEllajBzRGo4eWpVOU5UNi9kRnRWaHRVSGdw?=
- =?utf-8?B?L0ZWQ3dOcWVkOXdHaWpzeHRYVnUrck5yYUxlRzBNNHVocWVZTDlVNGlFK2RU?=
- =?utf-8?B?N0F1TERwOTNUY2ZuOVUzTXl3OXVHTlozRGR5Ym5UMDVqVy9nU3lHaWwxd0FF?=
- =?utf-8?B?bjRQSXhyaVhKQmIvTEVHekNRbDQrNGRZOTBjaVl6L3JqdHFCaEV1Z01sN0hv?=
- =?utf-8?B?QiswNlNpWWIxNDIrUjJoSk8ydjVaQnNMRGVvSDloaXFrWkhvb0NCMURKdnpD?=
- =?utf-8?B?azFtR3U1RXR5NmhZRXNsa3kzTGtYeFhRUmFFbFNlcnRLRUNwNTh5ZWlsMjhK?=
- =?utf-8?B?enJxU1U0KzMzR3R2RllxM1Q3RTdNaFc0Nkh5SmlKQXQvVDJRWFN0UW02MGYx?=
- =?utf-8?B?bVJHTVNFQVFzS1MxdEFUM2N1dEw0ODZ2Zis2ZVd1WHVCUENMaXllL3FhMlQz?=
- =?utf-8?B?ck1LNHlVSDFsR0ZUbXJoWEE2cTBPdmE2U25TLzZPb3BqdUg0M1ZSL05ZN1VJ?=
- =?utf-8?B?a2FuZjVTRXpBaWVrZDVDdE5IeHRhcWxkNUtNU084Q1RNQXdYVEdVNllMVjBU?=
- =?utf-8?B?ZlFDV0IxMXNaQ3ltTE5tSUJYVkNOQnA0SnAwK3h5VXlQdXJtR01LYnZ1T0V1?=
- =?utf-8?B?YW1QZ1dVUkNWL0NHUHVkNXEwaG40VzlkRnBnUFhwdXYrVUFNV2FySElVTUdr?=
- =?utf-8?B?bkw4TmJPQ2g2YzQwN1dTSTZqY2o2SExkdm53Tm9OZ2RMOG5UTFhscTF0MGJH?=
- =?utf-8?B?VDVNSzh1dXR0MWRqeWJxSGVEb21PM2paL3oxbTB6akhjTlR1YXplUitnQ0Fp?=
- =?utf-8?B?STJtS1NWMzkyY250cU9MalVqWkFLMEt0MlRmbnBIdHlFRW5HeGx0WXhuWVgr?=
- =?utf-8?B?bk9LdEU1NWxqOGc4VG9QdUpyRVVkbmJoamVUZDcxN1ZRK1VVUFpZRUsvYzFy?=
- =?utf-8?B?VFVqd1FNSStyR3QrSHJMMTd0OHp5N2o5d0cwQUM3NW5vWEg5TVBnRXBRQS9z?=
- =?utf-8?B?VTdvRi9jclY4Qm9CVXNXYmFrV2oyTWg2UWRQcGZOWUFJRDVYUzY4akxCSitK?=
- =?utf-8?B?YjVjYWdqUmhGMGtzOGhLVWhQenFlWGhTS3RFdW13NFlkZ2RqRFBOelhldjFm?=
- =?utf-8?B?S0VRVDlWYWMzK1NNVFBqQjR3R1pKNkNFWGliSWhFNHAxcjc0ZCtoblNxTDdH?=
- =?utf-8?B?QlVYc0dUNHpMdUZZSEJteDZhcDZqYXZqU2k1TUVNM0Q0bGN3cGhMWVN4M0cv?=
- =?utf-8?B?ajB0cXF1VElueUVzZUQ3MEJMUkdTZ3IrM2dvMG1VdmZZSjROVStVblE4eWQ3?=
- =?utf-8?B?VWthbXVzc1BtM29QUi9qZDFOZXJ1MVNZWmxpQzNqbmdjSUVFWnlEQ1lLRXhu?=
- =?utf-8?B?cWh6cnBYOCtNb2d6UFlVQW5wRkw2MWx5OFE1QlF1WlY2QTdjVDFVN0VXekNB?=
- =?utf-8?B?bTljMnRNQXFobEJ6d0N6Y2R6SW05aE1BWm8yOVhXYS9kdnRnOW8wYkxLQnhq?=
- =?utf-8?B?djc0aDB0cWdJZXN6WlJRMHR0VEN4VlBLQllDdWlsQkpZbkNPL1lUSUZXMk16?=
- =?utf-8?B?M3JYc1AzcWlVMjgwWUNZYm5SN3I4QkVJMC9pTWFTSzJDMkpoaWg5N3VyYVAx?=
- =?utf-8?B?Z3l0N1AzVVBKeGsvemVua1BiY2RYbEJRUVRaQWVFVXpRc2d1MDVvSEZFSEtq?=
- =?utf-8?B?c3hobEJqMmNzWW5CUEhyZjdNUkxnVjJ4bStyVmw0WDZUZFFPWURoQ0NyWDNs?=
- =?utf-8?B?TzlmSVVSL3g2bXFzS1VaYS91VllKcDVQTDFQNmtRSzQxWm4xV3M1cmxFc3hy?=
- =?utf-8?B?d055OGNzR1AxTEFhVWhzc0RPL0hadk9ic3hXd2Y3SUVuUXFvdVc1UkFRSjEy?=
- =?utf-8?B?VUZqNlpqRkRyRy9JYUtic2t4K2QvNjZrUjJGMC8yM1dvTjlZQlN1VGxCT0Q3?=
- =?utf-8?B?enVJazhCS3BmMlUvSGoyR1g0eTREa0VzNnJSUGRzQ1NHYi81RjhReElMTUNB?=
- =?utf-8?B?Mnc9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 8OzpAIH0KNDd2MRRobIRbr5YEgjoeQoMCI+v4+iyonNZkz7z6nvue4S2CYzIMNZywJIcB9ZsC9PR15U/7fDLxE3JOudmjCBrTSNRbqFABtIhq7/C2P3BqTBck/XV9MQFeu4ZtbvkApnkoIYXkemc/2UMsetUv5NV39S+JxPADgI5k8R6R/RkkomiR8Nb3Au+VHOBtyyH4Q7XH8faTUqOBNm9RgvgLqnE5LcvzphHkGXEYtl3aBVhPqSd9znB0RyaqflVtka7pEEtxs1mayoIa4lAys/yn5rAa8bJou8osIUTtpMzwlsmxDPnj3Ll9NDwAo+hoCH1OEGMf/ou33aoL44EMHWruHVHdsJ5poa31Wdg9K5ZIzbtPS0eUsYSPsgLhnppRfCWBA8A2/fmNvKF0FKTL8MZVvKUHmZ2epuo7kUud82Vr+7r+pqZBuaFyPHZQ9H1ptTpwgEswJPnzT599T4DEnvM2BibZCMtUHxL/tK+39CgTfXuGfrn8xsH3Xl0PoCFthrUAgNsr1xtdhp8ihYsWmMYMtBlDQ6/MOKB1FRzu5wSFDpZHjkwxOz+tl/9hwnJkNxS4rCE15zA0G4Maq3je6TWtPm35WaVL70zvVLbIzb/cMZaCEG1ZJF+14wBqm2wcNd5HIE6yi3RogsFWw/19VpJvHXtSdhDW14g7hQFaWNny5gbpLaRxWrn5WQbq8ild92QbvaWGGOpNEUVYKdpUVZgFPprBE0jRoDjD7Pl6Yn9OFjGH8alEFV0QRqxwiT5s/1D++ftHs7LtgaFzpPOnDtynwTBF7qQb2lRTeyft0CoImbGYeJkWeVYDTA7JcBtEB3jbZD1b6vSJfdLc2J7M3zl1/bcPi2A8Sy3KKAjTMY2PFOnEzHwiMDtRhW4
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 74e0c77f-82c2-4e61-150d-08db0b72d07e
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5706.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2023 14:26:35.9230
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Er0+mj9P/NFeXFz8vE4rAHI45z4qB+oQHy14zr8W8rAsi48W4+t/O975PzPnp8Jh64JV/O7dX6FBoc91YgszkQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6581
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-10_09,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=927 mlxscore=0
- adultscore=0 phishscore=0 suspectscore=0 malwarescore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302100118
-X-Proofpoint-GUID: KP2mh9TnjFbvNn0naOFKZmOFlyWeXDJC
-X-Proofpoint-ORIG-GUID: KP2mh9TnjFbvNn0naOFKZmOFlyWeXDJC
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230125-hid-unregister-leds-v3-1-0a52ac225e00@diag.uniroma1.it>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -157,7 +67,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Feb 09 2023, Pietro Borrello wrote:
+> Use spinlocks to deal with workers introducing a wrapper
+> bigben_schedule_work(), and several spinlock checks.
+> Otherwise, bigben_set_led() may schedule bigben->worker after the
+> structure has been freed, causing a use-after-free.
+> 
+> Fixes: 4eb1b01de5b9 ("HID: hid-bigbenff: fix race condition for scheduled work during removal")
+> Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
+> ---
+>  drivers/hid/hid-bigbenff.c | 34 +++++++++++++++++++++++++++++-----
+>  1 file changed, 29 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/hid/hid-bigbenff.c b/drivers/hid/hid-bigbenff.c
+> index e8b16665860d..28769aa7fed6 100644
+> --- a/drivers/hid/hid-bigbenff.c
+> +++ b/drivers/hid/hid-bigbenff.c
+> @@ -174,6 +174,7 @@ static __u8 pid0902_rdesc_fixed[] = {
+>  struct bigben_device {
+>  	struct hid_device *hid;
+>  	struct hid_report *report;
+> +	spinlock_t lock;
+>  	bool removed;
+>  	u8 led_state;         /* LED1 = 1 .. LED4 = 8 */
+>  	u8 right_motor_on;    /* right motor off/on 0/1 */
+> @@ -184,15 +185,24 @@ struct bigben_device {
+>  	struct work_struct worker;
+>  };
+>  
+> +static inline void bigben_schedule_work(struct bigben_device *bigben)
+> +{
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&bigben->lock, flags);
+> +	if (!bigben->removed)
+> +		schedule_work(&bigben->worker);
+> +	spin_unlock_irqrestore(&bigben->lock, flags);
+> +}
+>  
+>  static void bigben_worker(struct work_struct *work)
+>  {
+>  	struct bigben_device *bigben = container_of(work,
+>  		struct bigben_device, worker);
+>  	struct hid_field *report_field = bigben->report->field[0];
+> +	unsigned long flags;
+>  
+> -	if (bigben->removed || !report_field)
 
-LGTM.
+You are removing an important test here: if (!report_field), please keep
+it.
 
-Reviewed-by: Anand Jain <anand.jain@oracle.com>
+> -		return;
+> +	spin_lock_irqsave(&bigben->lock, flags);
+>  
+>  	if (bigben->work_led) {
+>  		bigben->work_led = false;
+> @@ -219,6 +229,8 @@ static void bigben_worker(struct work_struct *work)
+>  		report_field->value[7] = 0x00; /* padding */
+>  		hid_hw_request(bigben->hid, bigben->report, HID_REQ_SET_REPORT);
+>  	}
+> +
+> +	spin_unlock_irqrestore(&bigben->lock, flags);
+
+Ouch, having hid_hw_request() called whithin a spinlock is definitely not
+something that should be done.
+
+However, the spinlock should be protecting 2 kinds of things:
+- any access to any value of struct bigben_device, but in an atomic way
+  (i.e. copy everything you need locally in a spinlock, then release it
+  and never read that struct again in that function).
+- the access to bigben->removed, which should be checked only in
+  bigben_schedule_work() and in the .remove() function.
+
+Please note that this is what the playstation driver does: it prepares
+the report under the spinlock (which is really fast) before sending the
+report to the device which can be slow and be interrupted.
+
+With that being said, it is clear that we need 2 patches for this one:
+- the first one introduces the spinlock and protects the concurrent
+  accesses to struct bigben_device (which is roughly everything below
+  with the changes I just said)
+- the second one introduces bigben_schedule_work() and piggy backs on
+  top of that new lock.
+
+Cheers,
+Benjamin
+
+>  }
+>  
+>  static int hid_bigben_play_effect(struct input_dev *dev, void *data,
+> @@ -228,6 +240,7 @@ static int hid_bigben_play_effect(struct input_dev *dev, void *data,
+>  	struct bigben_device *bigben = hid_get_drvdata(hid);
+>  	u8 right_motor_on;
+>  	u8 left_motor_force;
+> +	unsigned long flags;
+>  
+>  	if (!bigben) {
+>  		hid_err(hid, "no device data\n");
+> @@ -242,10 +255,13 @@ static int hid_bigben_play_effect(struct input_dev *dev, void *data,
+>  
+>  	if (right_motor_on != bigben->right_motor_on ||
+>  			left_motor_force != bigben->left_motor_force) {
+> +		spin_lock_irqsave(&bigben->lock, flags);
+>  		bigben->right_motor_on   = right_motor_on;
+>  		bigben->left_motor_force = left_motor_force;
+>  		bigben->work_ff = true;
+> -		schedule_work(&bigben->worker);
+> +		spin_unlock_irqrestore(&bigben->lock, flags);
+> +
+> +		bigben_schedule_work(bigben);
+>  	}
+>  
+>  	return 0;
+> @@ -259,6 +275,7 @@ static void bigben_set_led(struct led_classdev *led,
+>  	struct bigben_device *bigben = hid_get_drvdata(hid);
+>  	int n;
+>  	bool work;
+> +	unsigned long flags;
+>  
+>  	if (!bigben) {
+>  		hid_err(hid, "no device data\n");
+> @@ -267,6 +284,7 @@ static void bigben_set_led(struct led_classdev *led,
+>  
+>  	for (n = 0; n < NUM_LEDS; n++) {
+>  		if (led == bigben->leds[n]) {
+> +			spin_lock_irqsave(&bigben->lock, flags);
+>  			if (value == LED_OFF) {
+>  				work = (bigben->led_state & BIT(n));
+>  				bigben->led_state &= ~BIT(n);
+> @@ -274,10 +292,11 @@ static void bigben_set_led(struct led_classdev *led,
+>  				work = !(bigben->led_state & BIT(n));
+>  				bigben->led_state |= BIT(n);
+>  			}
+> +			spin_unlock_irqrestore(&bigben->lock, flags);
+>  
+>  			if (work) {
+>  				bigben->work_led = true;
+> -				schedule_work(&bigben->worker);
+> +				bigben_schedule_work(bigben);
+>  			}
+>  			return;
+>  		}
+> @@ -307,8 +326,12 @@ static enum led_brightness bigben_get_led(struct led_classdev *led)
+>  static void bigben_remove(struct hid_device *hid)
+>  {
+>  	struct bigben_device *bigben = hid_get_drvdata(hid);
+> +	unsigned long flags;
+>  
+> +	spin_lock_irqsave(&bigben->lock, flags);
+>  	bigben->removed = true;
+> +	spin_unlock_irqrestore(&bigben->lock, flags);
+> +
+>  	cancel_work_sync(&bigben->worker);
+>  	hid_hw_stop(hid);
+>  }
+> @@ -362,6 +385,7 @@ static int bigben_probe(struct hid_device *hid,
+>  	set_bit(FF_RUMBLE, hidinput->input->ffbit);
+>  
+>  	INIT_WORK(&bigben->worker, bigben_worker);
+> +	spin_lock_init(&bigben->lock);
+>  
+>  	error = input_ff_create_memless(hidinput->input, NULL,
+>  		hid_bigben_play_effect);
+> @@ -402,7 +426,7 @@ static int bigben_probe(struct hid_device *hid,
+>  	bigben->left_motor_force = 0;
+>  	bigben->work_led = true;
+>  	bigben->work_ff = true;
+> -	schedule_work(&bigben->worker);
+> +	bigben_schedule_work(bigben);
+>  
+>  	hid_info(hid, "LED and force feedback support for BigBen gamepad\n");
+>  
+> 
+> -- 
+> 2.25.1
+> 
+
