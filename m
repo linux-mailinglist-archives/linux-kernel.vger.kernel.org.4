@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64EC96924A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:39:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DD06924A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232040AbjBJRi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 12:38:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
+        id S232990AbjBJRjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 12:39:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232792AbjBJRiv (ORCPT
+        with ESMTP id S232866AbjBJRiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 12:38:51 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A977879B31;
-        Fri, 10 Feb 2023 09:38:50 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id ba1so5789725wrb.5;
-        Fri, 10 Feb 2023 09:38:50 -0800 (PST)
+        Fri, 10 Feb 2023 12:38:55 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FB56CC7C;
+        Fri, 10 Feb 2023 09:38:52 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id by3so4478898wrb.10;
+        Fri, 10 Feb 2023 09:38:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WWIrI7GlbPy0iZefry4elWWnc1hRjMVBj4i9Rxqr8Yc=;
-        b=AewavYUNMs+O3DcWuqDhUscBXSXxCghisTHyTVN53BMLafVtiGKXHfHi1L8MIa8bXq
-         DDImyJM+j2tqjg4FX+f/89iJxjFJWxGQYqmRN4ADO950PRiKZsqkM5n05nwka1EYAEgd
-         cvbHBq7AsOJG5n4xR0nDR6TuBWxwgDEPwpTejTBEVGTNuyB+d0aOtnd1e64hQ2DT/HxX
-         10Rwv17fxBJN6lEwTn3/4fI+/9IAO7tM3kFOLV/6y+JWqHhzf4cVLM3atoC3SV+4aGvp
-         H2jErORbQLO0/hXfvxlWwtMgXrdLoiBOjmtSr+xye6+1/HgGRCeD27wTogUzFJUB60C5
-         LNDQ==
+        bh=EWd5PzeWNJMCpvyMunjpALsUnq2zPXRaUZZq05baKwY=;
+        b=OCt10IItTlBPL52YaXJVQyFuuSqvf8GSvtpHogwe/mjnVed2ZuRy3ozf7u+jeylpHK
+         qjTTEDwC/pLbHSYh+VlfRLE9qhutrlxb/4nisQHiru/blo1l9vnY7Y0Iw4AcOLtUeObg
+         C+AZBZ5iyV8swUU+qNWy43OiRj2ofjwubjkCyOxm4usIkDCYA7Q34fjeX0AWtVr+kyEs
+         RWwu5+C1Z2sKMkeemeb6uu+KxINddMhzPgdb5JcTq5m0rhc9QtyUXJTu/w6+g21F1Sbe
+         IdWYsDHrKh6BU7vWOryCInhbd+bUokoUHlPZKY0AY59A9mYNYC5q6GRA4bdizRU8+Qkw
+         E2SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WWIrI7GlbPy0iZefry4elWWnc1hRjMVBj4i9Rxqr8Yc=;
-        b=ZQu3bptvQDBnYC9rJLIf9VSk660glDktIiK+AOfQG54df7jLceBmUsxwawuI/eWhVU
-         WahtnLfs1bz1MqvBcKIVPiXXMlEEw+JXNewPXmVpia7hTUiQczb6MkNXn1U0bDvbSKza
-         AgruEPDwvsg4I1C1dUXym6rdSj1LFf9knUXI73+ocQLljQBus5mIG0vEXPJeV2zO5CHO
-         0VAWKu/iFRilzbXDHOayymU5wmJ84O14OyYnP+pKKoSeClQ3nuNyT96ZTdEBNruRmu3w
-         ePMSX9A2YYd0PqvBcJNbZHtS82LXb5xSTA7cXRsx5OLSQqokrAFbaBme9deCacntLZvx
-         ktlw==
-X-Gm-Message-State: AO0yUKX+PfgffCxL66FaJqd3USCnAiRJFsoq62viuX+ePYbABeuHDlOC
-        JVpSf15Z2syTViaYKjx+X7A5lcsFdac=
-X-Google-Smtp-Source: AK7set+OcbVazuOGm8Yxky0/ZTVijKOujMqhTBQqhKOMxc58yu3KG8iTNEs9FgudWZjwd8Y14eQK6Q==
-X-Received: by 2002:a5d:42cf:0:b0:2c3:efe7:607c with SMTP id t15-20020a5d42cf000000b002c3efe7607cmr13823006wrr.6.1676050728829;
-        Fri, 10 Feb 2023 09:38:48 -0800 (PST)
+        bh=EWd5PzeWNJMCpvyMunjpALsUnq2zPXRaUZZq05baKwY=;
+        b=qYlIoMHMQLJR/rci9K4QKmWacOFdEloZV2Hq5Sezx+7JCG6+UuwpVAqc9U1hdJBu04
+         qlnFUBv/L9YYH2fLLwKgGWgmb7zuabtm1zTJSKX4jHCIxRg5M7eAglnnAz5NQwMEvUDH
+         VWEcaHi2lhG1gOWwnZN+lwATKS++TQleQ6EBF2oKN6DRlR6ZW9cmkJOuLGjQSkMvyyou
+         bfN8xh7quuGFI+CSp7+46xVzsDw0up+HmUB4PsXS0dUdN14LvreyElsWz4ql+k3eJSXC
+         gZDHAu6R5/0kt9oEQXouGskQpEZvS5OxPlQ4v20WwOJ3eBG0657CpwHFdzuUaDezU/i3
+         DHyA==
+X-Gm-Message-State: AO0yUKVibAtgxg9DyhdOy1Qmj83dx6vcvVYlau0Hbss2dZtiNnLawJT0
+        BeXjsImV1MqV/MTZHlJDwZk7t26KudE=
+X-Google-Smtp-Source: AK7set9aXFRknJm+ksQPwDww2f3SImtswgswX3GGKnt0A8acqYqBjOrOlPBcjcIrlyzz85WF2IYLlg==
+X-Received: by 2002:a5d:5487:0:b0:2bf:be35:2303 with SMTP id h7-20020a5d5487000000b002bfbe352303mr13868526wrv.34.1676050730162;
+        Fri, 10 Feb 2023 09:38:50 -0800 (PST)
 Received: from localhost.localdomain (23.red-88-10-60.dynamicip.rima-tde.net. [88.10.60.23])
-        by smtp.gmail.com with ESMTPSA id t2-20020a0560001a4200b002c3ef7e74bdsm4024184wry.73.2023.02.10.09.38.47
+        by smtp.gmail.com with ESMTPSA id t2-20020a0560001a4200b002c3ef7e74bdsm4024184wry.73.2023.02.10.09.38.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 09:38:48 -0800 (PST)
+        Fri, 10 Feb 2023 09:38:49 -0800 (PST)
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
 To:     linux-watchdog@vger.kernel.org
 Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
@@ -57,9 +57,9 @@ Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
         arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
         p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH v3 3/4] watchdog: mt7621-wdt: avoid static global declarations
-Date:   Fri, 10 Feb 2023 18:38:40 +0100
-Message-Id: <20230210173841.705783-4-sergio.paracuellos@gmail.com>
+Subject: [PATCH v3 4/4] watchdog: mt7621-wdt: avoid ralink architecture dependent code
+Date:   Fri, 10 Feb 2023 18:38:41 +0100
+Message-Id: <20230210173841.705783-5-sergio.paracuellos@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230210173841.705783-1-sergio.paracuellos@gmail.com>
 References: <20230210173841.705783-1-sergio.paracuellos@gmail.com>
@@ -75,208 +75,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of using static global definitions in driver code, refactor code
-introducing a new watchdog driver data structure and use it along the
-code.
+MT7621 SoC has a system controller node. Watchdog need to access to reset
+status register. Ralink architecture and related driver are old and from
+the beggining they are using some architecture dependent operations for
+accessing this shared registers through 'asm/mach-ralink/ralink_regs.h'
+header file. However this is not ideal from a driver perspective which can
+just access to the system controller registers in an arch independent way
+using regmap syscon APIs. Update Kconfig accordingly to select new added
+dependencies and allow driver to be compile tested.
 
 Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 ---
- drivers/watchdog/mt7621_wdt.c | 102 ++++++++++++++++++++++------------
- 1 file changed, 65 insertions(+), 37 deletions(-)
+ drivers/watchdog/Kconfig      |  2 ++
+ drivers/watchdog/mt7621_wdt.c | 19 ++++++++++++++-----
+ 2 files changed, 16 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index b64bc49c7..0759de670 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -1865,6 +1865,8 @@ config GXP_WATCHDOG
+ config MT7621_WDT
+ 	tristate "Mediatek SoC watchdog"
+ 	select WATCHDOG_CORE
++	select REGMAP_MMIO
++	select MFD_SYSCON
+ 	depends on SOC_MT7620 || SOC_MT7621
+ 	help
+ 	  Hardware driver for the Mediatek/Ralink MT7621/8 SoC Watchdog Timer.
 diff --git a/drivers/watchdog/mt7621_wdt.c b/drivers/watchdog/mt7621_wdt.c
-index a8aa3522c..40fb2c9ba 100644
+index 40fb2c9ba..9ed07c187 100644
 --- a/drivers/watchdog/mt7621_wdt.c
 +++ b/drivers/watchdog/mt7621_wdt.c
-@@ -31,8 +31,11 @@
- #define TMR1CTL_RESTART			BIT(9)
- #define TMR1CTL_PRESCALE_SHIFT		16
+@@ -15,8 +15,8 @@
+ #include <linux/moduleparam.h>
+ #include <linux/platform_device.h>
+ #include <linux/mod_devicetable.h>
+-
+-#include <asm/mach-ralink/ralink_regs.h>
++#include <linux/mfd/syscon.h>
++#include <linux/regmap.h>
  
--static void __iomem *mt7621_wdt_base;
--static struct reset_control *mt7621_wdt_reset;
-+struct mt7621_wdt_data {
-+	void __iomem *base;
-+	struct reset_control *rst;
-+	struct watchdog_device wdt;
-+};
- 
- static bool nowayout = WATCHDOG_NOWAYOUT;
- module_param(nowayout, bool, 0);
-@@ -40,27 +43,31 @@ MODULE_PARM_DESC(nowayout,
- 		 "Watchdog cannot be stopped once started (default="
- 		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
- 
--static inline void rt_wdt_w32(unsigned reg, u32 val)
-+static inline void rt_wdt_w32(void __iomem *base, unsigned reg, u32 val)
- {
--	iowrite32(val, mt7621_wdt_base + reg);
-+	iowrite32(val, base + reg);
- }
- 
--static inline u32 rt_wdt_r32(unsigned reg)
-+static inline u32 rt_wdt_r32(void __iomem *base, unsigned reg)
- {
--	return ioread32(mt7621_wdt_base + reg);
-+	return ioread32(base + reg);
- }
- 
- static int mt7621_wdt_ping(struct watchdog_device *w)
- {
--	rt_wdt_w32(TIMER_REG_TMRSTAT, TMR1CTL_RESTART);
-+	struct mt7621_wdt_data *drvdata = watchdog_get_drvdata(w);
-+
-+	rt_wdt_w32(drvdata->base, TIMER_REG_TMRSTAT, TMR1CTL_RESTART);
- 
- 	return 0;
- }
- 
- static int mt7621_wdt_set_timeout(struct watchdog_device *w, unsigned int t)
- {
-+	struct mt7621_wdt_data *drvdata = watchdog_get_drvdata(w);
-+
- 	w->timeout = t;
--	rt_wdt_w32(TIMER_REG_TMR1LOAD, t * 1000);
-+	rt_wdt_w32(drvdata->base, TIMER_REG_TMR1LOAD, t * 1000);
- 	mt7621_wdt_ping(w);
- 
- 	return 0;
-@@ -68,29 +75,31 @@ static int mt7621_wdt_set_timeout(struct watchdog_device *w, unsigned int t)
- 
- static int mt7621_wdt_start(struct watchdog_device *w)
- {
-+	struct mt7621_wdt_data *drvdata = watchdog_get_drvdata(w);
- 	u32 t;
- 
- 	/* set the prescaler to 1ms == 1000us */
--	rt_wdt_w32(TIMER_REG_TMR1CTL, 1000 << TMR1CTL_PRESCALE_SHIFT);
-+	rt_wdt_w32(drvdata->base, TIMER_REG_TMR1CTL, 1000 << TMR1CTL_PRESCALE_SHIFT);
- 
- 	mt7621_wdt_set_timeout(w, w->timeout);
- 
--	t = rt_wdt_r32(TIMER_REG_TMR1CTL);
-+	t = rt_wdt_r32(drvdata->base, TIMER_REG_TMR1CTL);
- 	t |= TMR1CTL_ENABLE;
--	rt_wdt_w32(TIMER_REG_TMR1CTL, t);
-+	rt_wdt_w32(drvdata->base, TIMER_REG_TMR1CTL, t);
- 
- 	return 0;
- }
- 
- static int mt7621_wdt_stop(struct watchdog_device *w)
- {
-+	struct mt7621_wdt_data *drvdata = watchdog_get_drvdata(w);
- 	u32 t;
- 
- 	mt7621_wdt_ping(w);
- 
--	t = rt_wdt_r32(TIMER_REG_TMR1CTL);
-+	t = rt_wdt_r32(drvdata->base, TIMER_REG_TMR1CTL);
- 	t &= ~TMR1CTL_ENABLE;
--	rt_wdt_w32(TIMER_REG_TMR1CTL, t);
-+	rt_wdt_w32(drvdata->base, TIMER_REG_TMR1CTL, t);
- 
- 	return 0;
- }
-@@ -105,7 +114,9 @@ static int mt7621_wdt_bootcause(void)
- 
- static int mt7621_wdt_is_running(struct watchdog_device *w)
- {
--	return !!(rt_wdt_r32(TIMER_REG_TMR1CTL) & TMR1CTL_ENABLE);
-+	struct mt7621_wdt_data *drvdata = watchdog_get_drvdata(w);
-+
-+	return !!(rt_wdt_r32(drvdata->base, TIMER_REG_TMR1CTL) & TMR1CTL_ENABLE);
- }
- 
- static const struct watchdog_info mt7621_wdt_info = {
-@@ -121,30 +132,39 @@ static const struct watchdog_ops mt7621_wdt_ops = {
- 	.set_timeout = mt7621_wdt_set_timeout,
+ #define SYSC_RSTSTAT			0x38
+ #define WDT_RST_CAUSE			BIT(1)
+@@ -34,6 +34,7 @@
+ struct mt7621_wdt_data {
+ 	void __iomem *base;
+ 	struct reset_control *rst;
++	struct regmap *sysc;
+ 	struct watchdog_device wdt;
  };
  
--static struct watchdog_device mt7621_wdt_dev = {
--	.info = &mt7621_wdt_info,
--	.ops = &mt7621_wdt_ops,
--	.min_timeout = 1,
--	.max_timeout = 0xfffful / 1000,
--};
--
+@@ -104,9 +105,12 @@ static int mt7621_wdt_stop(struct watchdog_device *w)
+ 	return 0;
+ }
+ 
+-static int mt7621_wdt_bootcause(void)
++static int mt7621_wdt_bootcause(struct mt7621_wdt_data *d)
+ {
+-	if (rt_sysc_r32(SYSC_RSTSTAT) & WDT_RST_CAUSE)
++	u32 val;
++
++	regmap_read(d->sysc, SYSC_RSTSTAT, &val);
++	if (val & WDT_RST_CAUSE)
+ 		return WDIOF_CARDRESET;
+ 
+ 	return 0;
+@@ -134,6 +138,7 @@ static const struct watchdog_ops mt7621_wdt_ops = {
+ 
  static int mt7621_wdt_probe(struct platform_device *pdev)
  {
++	struct device_node *np = pdev->dev.of_node;
  	struct device *dev = &pdev->dev;
--	mt7621_wdt_base = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(mt7621_wdt_base))
--		return PTR_ERR(mt7621_wdt_base);
-+	struct watchdog_device *mt7621_wdt;
-+	struct mt7621_wdt_data *drvdata;
-+	int err;
-+
-+	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
-+	if (!drvdata)
-+		return -ENOMEM;
+ 	struct watchdog_device *mt7621_wdt;
+ 	struct mt7621_wdt_data *drvdata;
+@@ -143,6 +148,10 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
+ 	if (!drvdata)
+ 		return -ENOMEM;
  
--	mt7621_wdt_reset = devm_reset_control_get_exclusive(dev, NULL);
--	if (!IS_ERR(mt7621_wdt_reset))
--		reset_control_deassert(mt7621_wdt_reset);
-+	drvdata->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(drvdata->base))
-+		return PTR_ERR(drvdata->base);
++	drvdata->sysc = syscon_regmap_lookup_by_phandle(np, "mediatek,sysctl");
++	if (IS_ERR(drvdata->sysc))
++		return PTR_ERR(drvdata->sysc);
++
+ 	drvdata->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(drvdata->base))
+ 		return PTR_ERR(drvdata->base);
+@@ -158,7 +167,7 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
+ 	mt7621_wdt->max_timeout = 0xfffful / 1000;
+ 	mt7621_wdt->parent = dev;
  
--	mt7621_wdt_dev.bootstatus = mt7621_wdt_bootcause();
-+	drvdata->rst = devm_reset_control_get_exclusive(dev, NULL);
-+	if (!IS_ERR(drvdata->rst))
-+		reset_control_deassert(drvdata->rst);
+-	mt7621_wdt->bootstatus = mt7621_wdt_bootcause();
++	mt7621_wdt->bootstatus = mt7621_wdt_bootcause(drvdata);
  
--	watchdog_init_timeout(&mt7621_wdt_dev, mt7621_wdt_dev.max_timeout,
--			      dev);
--	watchdog_set_nowayout(&mt7621_wdt_dev, nowayout);
--	if (mt7621_wdt_is_running(&mt7621_wdt_dev)) {
-+	mt7621_wdt = &drvdata->wdt;
-+	mt7621_wdt->info = &mt7621_wdt_info;
-+	mt7621_wdt->ops = &mt7621_wdt_ops;
-+	mt7621_wdt->min_timeout = 1;
-+	mt7621_wdt->max_timeout = 0xfffful / 1000;
-+	mt7621_wdt->parent = dev;
-+
-+	mt7621_wdt->bootstatus = mt7621_wdt_bootcause();
-+
-+	watchdog_init_timeout(mt7621_wdt, mt7621_wdt->max_timeout, dev);
-+	watchdog_set_nowayout(mt7621_wdt, nowayout);
-+	watchdog_set_drvdata(mt7621_wdt, drvdata);
-+
-+	if (mt7621_wdt_is_running(mt7621_wdt)) {
- 		/*
- 		 * Make sure to apply timeout from watchdog core, taking
- 		 * the prescaler of this driver here into account (the
-@@ -154,17 +174,25 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
- 		 * we first disable the watchdog, set the new prescaler
- 		 * and timeout, and then re-enable the watchdog.
- 		 */
--		mt7621_wdt_stop(&mt7621_wdt_dev);
--		mt7621_wdt_start(&mt7621_wdt_dev);
--		set_bit(WDOG_HW_RUNNING, &mt7621_wdt_dev.status);
-+		mt7621_wdt_stop(mt7621_wdt);
-+		mt7621_wdt_start(mt7621_wdt);
-+		set_bit(WDOG_HW_RUNNING, &mt7621_wdt->status);
- 	}
- 
--	return devm_watchdog_register_device(dev, &mt7621_wdt_dev);
-+	err = devm_watchdog_register_device(dev, &drvdata->wdt);
-+	if (err)
-+		return err;
-+
-+	platform_set_drvdata(pdev, drvdata);
-+
-+	return 0;
- }
- 
- static void mt7621_wdt_shutdown(struct platform_device *pdev)
- {
--	mt7621_wdt_stop(&mt7621_wdt_dev);
-+	struct mt7621_wdt_data *drvdata = platform_get_drvdata(pdev);
-+
-+	mt7621_wdt_stop(&drvdata->wdt);
- }
- 
- static const struct of_device_id mt7621_wdt_match[] = {
+ 	watchdog_init_timeout(mt7621_wdt, mt7621_wdt->max_timeout, dev);
+ 	watchdog_set_nowayout(mt7621_wdt, nowayout);
 -- 
 2.25.1
 
