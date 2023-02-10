@@ -2,79 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14409691540
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 01:16:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F75691543
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 01:17:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbjBJAQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 19:16:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44990 "EHLO
+        id S229894AbjBJARS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 19:17:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjBJAP5 (ORCPT
+        with ESMTP id S229606AbjBJARQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 19:15:57 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E12E5D3EE
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 16:15:56 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id bx22so3637314pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 16:15:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1675988155;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tNPbNYoCct7d8eWLCTkz69o5QdTPIXkMuLL30IOxMRg=;
-        b=f/XkvHql8tA6g9Cwp0u4jf8f7Qc7FIeFETTNtvSG78+1PpDL1dUGRltWrU0WGseC2f
-         mDxL9UuS7jf0nQ5VXmX2WYUeMJX2fbUos36ISufxoZKygSb6hJZzBjnoRRV7OxXVyxyS
-         M7zeWiG1IjpRvcHqDAm4O6OD4wpBHUKty7+4YHhYQ9TeLCBGbO00pUEPxKPHnPLEq5Tj
-         5yGd2jb/pIPponyzOm4vV8cOYitmD2Fb4fV30wo+wSI1bm5PFh6GSuqtZx8L2cGpMFxk
-         qZ3MZJjgdq+ZhZsCQ5d34PmZeyi/8LfyVoIiJWWmJP2zmz8z6rvUXdqqhXhq/AGNhx/v
-         nqgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1675988155;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tNPbNYoCct7d8eWLCTkz69o5QdTPIXkMuLL30IOxMRg=;
-        b=nnPzs9IyysYGDMNmb4wjWu+D7+i3VYzwFFhgQ6sO+/w/hTAofJ7ozUQyXxNUkfv4Wd
-         9bcnkXx5Vj2uIetdMLB2XulV7zVefu/98UPEsqAx6kZtaXrpA9jpqsURRLBBz8GsAOdr
-         6bPhZO2xvAwRjsa1SCJ0ghc2XI3wg1V3dLQ/z1liWpPvKaB8lg7SDK5KDI1XKQbc4tQF
-         8szPX8UFp5aSWlNoduWc7H/p5s8RjnrxWQOsOEp4/sjgfHaXMwEbJDUpjKIea3yjq+8/
-         tHEjlCDzziiB6PsjPsGUYBuR3zrtWBzWaUmsZKZ9iP+td8xExecCzG9Lzv2XORXcwwlU
-         pPfw==
-X-Gm-Message-State: AO0yUKWIslVKR4sO764kMmMZk/jmjRZ+BwlWyqjTCs6hnyH5Eny7LPis
-        nTZZ9bKCysRmN4ERhZJ9Ifb1kg==
-X-Google-Smtp-Source: AK7set9i4GZy425eJQ60VEHt8ZyiMscBINILO96QjW9OdkxX3UWegtHHMx/XPbkaa3kfxkBKfne7wA==
-X-Received: by 2002:a17:903:32c3:b0:199:4362:93f6 with SMTP id i3-20020a17090332c300b00199436293f6mr9399565plr.4.1675988155556;
-        Thu, 09 Feb 2023 16:15:55 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id jj5-20020a170903048500b00198d5c7cafasm2109067plb.156.2023.02.09.16.15.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Feb 2023 16:15:55 -0800 (PST)
-Message-ID: <6939adfb-ce2c-1911-19ee-af32f7d9a5ca@kernel.dk>
-Date:   Thu, 9 Feb 2023 17:15:53 -0700
+        Thu, 9 Feb 2023 19:17:16 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EB843927
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 16:17:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675988234; x=1707524234;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MBV1CCcvByHKYWDJ6Pn77FleOe6JE3tmZtdekYxNjbE=;
+  b=gboyEV1SElHZqP7bkLzYMIYaXJzIV8bZ+v1iyQRbu40Rk0IW24ExXowe
+   3HKfLFiYL7DnnA5Etwukzj3kzEo+TC+rabh/tXdifvn6/hzOu+43Isedb
+   +aOZBZl3cxzPjpNYB9K5MqK6tw6//0a4k03F2nR7bjE8UZfU/aldMKhGb
+   AIVSDLbVkRu9pSa9wb3awiLmR8hnY54gJH/Oe/PmziFWON61I+agJDTW1
+   73ZNSLvyyKXSL3cSEMznAfEC3zOCnjOZIEE40OC4SfN0jaWeu6rHGiSzu
+   6DQmfVV/kekoH4WEkSoyOAd9fgWDCGABObx4njISUJ1nBUsbwlHPhRTkM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="318305273"
+X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
+   d="scan'208";a="318305273"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 16:17:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="791789122"
+X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
+   d="scan'208";a="791789122"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 09 Feb 2023 16:17:12 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pQH6G-0005Oa-0C;
+        Fri, 10 Feb 2023 00:17:12 +0000
+Date:   Fri, 10 Feb 2023 08:16:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Suman Anna <s-anna@ti.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: drivers/remoteproc/ti_k3_r5_remoteproc.c:711:17: sparse: sparse:
+ cast removes address space '__iomem' of expression
+Message-ID: <202302100833.iRTqJ94Y-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] io_uring,audit: don't log IORING_OP_MADVISE
-Content-Language: en-US
-To:     Steve Grubb <sgrubb@redhat.com>,
-        Richard Guy Briggs <rgb@redhat.com>,
-        Paul Moore <paul@paul-moore.com>
-Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
-        Eric Paris <eparis@parisplace.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Stefan Roesch <shr@fb.com>
-References: <b5dfdcd541115c86dbc774aa9dd502c964849c5f.1675282642.git.rgb@redhat.com>
- <Y+VrSLZKZoAGikUS@madcap2.tricolour.ca>
- <CAHC9VhTNb4gOpk9=49-ABtYs1DFKqqwXPSc-2bhJX7wcZ82o=g@mail.gmail.com>
- <13293926.uLZWGnKmhe@x2>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <13293926.uLZWGnKmhe@x2>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,58 +63,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/23 3:54 PM, Steve Grubb wrote:
-> On Thursday, February 9, 2023 5:37:22 PM EST Paul Moore wrote:
->> On Thu, Feb 9, 2023 at 4:53 PM Richard Guy Briggs <rgb@redhat.com> wrote:
->>> On 2023-02-01 16:18, Paul Moore wrote:
->>>> On Wed, Feb 1, 2023 at 3:34 PM Richard Guy Briggs <rgb@redhat.com> 
-> wrote:
->>>>> fadvise and madvise both provide hints for caching or access pattern
->>>>> for file and memory respectively.  Skip them.
->>>>
->>>> You forgot to update the first sentence in the commit description :/
->>>
->>> I didn't forget.  I updated that sentence to reflect the fact that the
->>> two should be treated similarly rather than differently.
->>
->> Ooookay.  Can we at least agree that the commit description should be
->> rephrased to make it clear that the patch only adjusts madvise?  Right
->> now I read the commit description and it sounds like you are adjusting
->> the behavior for both fadvise and madvise in this patch, which is not
->> true.
->>
->>>> I'm still looking for some type of statement that you've done some
->>>> homework on the IORING_OP_MADVISE case to ensure that it doesn't end
->>>> up calling into the LSM, see my previous emails on this.  I need more
->>>> than "Steve told me to do this".
->>>>
->>>> I basically just want to see that some care and thought has gone into
->>>> this patch to verify it is correct and good.
->>>
->>> Steve suggested I look into a number of iouring ops.  I looked at the
->>> description code and agreed that it wasn't necessary to audit madvise.
->>> The rationale for fadvise was detemined to have been conflated with
->>> fallocate and subsequently dropped.  Steve also suggested a number of
->>> others and after investigation I decided that their current state was
->>> correct.  *getxattr you've advised against, so it was dropped.  It
->>> appears fewer modifications were necessary than originally suspected.
->>
->> My concern is that three of the four changes you initially proposed
->> were rejected, which gives me pause about the fourth.  You mention
->> that based on your reading of madvise's description you feel auditing
->> isn't necessary - and you may be right - but based on our experience
->> so far with this patchset I would like to hear that you have properly
->> investigated all of the madvise code paths, and I would like that in
->> the commit description.
-> 
-> I think you're being unnecessarily hard on this. Yes, the commit message 
-> might be touched up. But madvise is advisory in nature. It is not security 
-> relevant. And a grep through the security directory doesn't turn up any 
-> hooks.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e544a07438522ab3688416e6e2e34bf0ee6d8755
+commit: 1168af40b1ad8cb2e78f4a70869fa4a076320e4f remoteproc: k3-r5: Add support for IPC-only mode for all R5Fs
+date:   11 months ago
+config: arm64-randconfig-s043-20230208 (https://download.01.org/0day-ci/archive/20230210/202302100833.iRTqJ94Y-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1168af40b1ad8cb2e78f4a70869fa4a076320e4f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 1168af40b1ad8cb2e78f4a70869fa4a076320e4f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/infiniband/hw/hns/ drivers/remoteproc/
 
-Agree, it's getting a bit anal... FWIW, patch looks fine to me.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302100833.iRTqJ94Y-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+   drivers/remoteproc/ti_k3_r5_remoteproc.c:476:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *cpu_addr @@
+   drivers/remoteproc/ti_k3_r5_remoteproc.c:476:28: sparse:     expected void *
+   drivers/remoteproc/ti_k3_r5_remoteproc.c:476:28: sparse:     got void [noderef] __iomem *cpu_addr
+   drivers/remoteproc/ti_k3_r5_remoteproc.c:479:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *cpu_addr @@
+   drivers/remoteproc/ti_k3_r5_remoteproc.c:479:28: sparse:     expected void *
+   drivers/remoteproc/ti_k3_r5_remoteproc.c:479:28: sparse:     got void [noderef] __iomem *cpu_addr
+>> drivers/remoteproc/ti_k3_r5_remoteproc.c:711:17: sparse: sparse: cast removes address space '__iomem' of expression
+
+vim +/__iomem +711 drivers/remoteproc/ti_k3_r5_remoteproc.c
+
+   681	
+   682	/*
+   683	 * This function implements the .get_loaded_rsc_table() callback and is used
+   684	 * to provide the resource table for the booted R5F in IPC-only mode. The K3 R5F
+   685	 * firmwares follow a design-by-contract approach and are expected to have the
+   686	 * resource table at the base of the DDR region reserved for firmware usage.
+   687	 * This provides flexibility for the remote processor to be booted by different
+   688	 * bootloaders that may or may not have the ability to publish the resource table
+   689	 * address and size through a DT property. This callback is invoked only in
+   690	 * IPC-only mode.
+   691	 */
+   692	static struct resource_table *k3_r5_get_loaded_rsc_table(struct rproc *rproc,
+   693								 size_t *rsc_table_sz)
+   694	{
+   695		struct k3_r5_rproc *kproc = rproc->priv;
+   696		struct device *dev = kproc->dev;
+   697	
+   698		if (!kproc->rmem[0].cpu_addr) {
+   699			dev_err(dev, "memory-region #1 does not exist, loaded rsc table can't be found");
+   700			return ERR_PTR(-ENOMEM);
+   701		}
+   702	
+   703		/*
+   704		 * NOTE: The resource table size is currently hard-coded to a maximum
+   705		 * of 256 bytes. The most common resource table usage for K3 firmwares
+   706		 * is to only have the vdev resource entry and an optional trace entry.
+   707		 * The exact size could be computed based on resource table address, but
+   708		 * the hard-coded value suffices to support the IPC-only mode.
+   709		 */
+   710		*rsc_table_sz = 256;
+ > 711		return (struct resource_table *)kproc->rmem[0].cpu_addr;
+   712	}
+   713	
 
 -- 
-Jens Axboe
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
