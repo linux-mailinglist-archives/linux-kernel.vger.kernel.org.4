@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3441691C10
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 10:58:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0BA691C11
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 10:58:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231954AbjBJJ6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 04:58:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
+        id S231946AbjBJJ6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 04:58:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231919AbjBJJ6e (ORCPT
+        with ESMTP id S231925AbjBJJ6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Feb 2023 04:58:34 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA2D76D2E
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 01:58:32 -0800 (PST)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PCq1H3C2HzdbBV;
-        Fri, 10 Feb 2023 17:58:11 +0800 (CST)
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E44576D36
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 01:58:33 -0800 (PST)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PCpwJ3mRszJr2Z;
+        Fri, 10 Feb 2023 17:53:52 +0800 (CST)
 Received: from localhost.localdomain (10.175.112.125) by
  kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -27,9 +27,9 @@ To:     <gregkh@linuxfoundation.org>
 CC:     <chenwandun@huawei.com>, <linux-kernel@vger.kernel.org>,
         <rafael@kernel.org>, <sunnanyong@huawei.com>,
         <wangkefeng.wang@huawei.com>, <xialonglong1@huawei.com>
-Subject: [PATCH -next v2 2/3] devtmpfs: add debug info to handle()
-Date:   Fri, 10 Feb 2023 09:54:43 +0000
-Message-ID: <20230210095444.4067307-3-xialonglong1@huawei.com>
+Subject: [PATCH -next v2 3/3] devtmpfs: remove return value of devtmpfs_delete_node()
+Date:   Fri, 10 Feb 2023 09:54:44 +0000
+Message-ID: <20230210095444.4067307-4-xialonglong1@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230210095444.4067307-1-xialonglong1@huawei.com>
 References: <20230210095444.4067307-1-xialonglong1@huawei.com>
@@ -48,39 +48,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because handle() is the core function for processing devtmpfs requests,
-Let's add some debug info in handle() to help users know why failed.
+The only caller of device_del() does not check the return value. And
+there's nothing we can do when cleaning things up on a remove path.
+Let's make it a void function.
 
 Signed-off-by: Longlong Xia <xialonglong1@huawei.com>
 ---
- drivers/base/devtmpfs.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/base/base.h     | 4 ++--
+ drivers/base/devtmpfs.c | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
+diff --git a/drivers/base/base.h b/drivers/base/base.h
+index 0e806f641079..f7996bf8d28b 100644
+--- a/drivers/base/base.h
++++ b/drivers/base/base.h
+@@ -201,10 +201,10 @@ void device_pm_move_to_tail(struct device *dev);
+ 
+ #ifdef CONFIG_DEVTMPFS
+ int devtmpfs_create_node(struct device *dev);
+-int devtmpfs_delete_node(struct device *dev);
++void devtmpfs_delete_node(struct device *dev);
+ #else
+ static inline int devtmpfs_create_node(struct device *dev) { return 0; }
+-static inline int devtmpfs_delete_node(struct device *dev) { return 0; }
++static inline void devtmpfs_delete_node(struct device *dev) { return 0; }
+ #endif
+ 
+ void software_node_notify(struct device *dev);
 diff --git a/drivers/base/devtmpfs.c b/drivers/base/devtmpfs.c
-index ae72d4ba8547..7789b7be4ee5 100644
+index 7789b7be4ee5..e5c4d3e98ec9 100644
 --- a/drivers/base/devtmpfs.c
 +++ b/drivers/base/devtmpfs.c
-@@ -389,10 +389,18 @@ static __initdata DECLARE_COMPLETION(setup_done);
- static int handle(const char *name, umode_t mode, kuid_t uid, kgid_t gid,
- 		  struct device *dev)
- {
-+	int ret;
-+
- 	if (mode)
--		return handle_create(name, mode, uid, gid, dev);
-+		ret = handle_create(name, mode, uid, gid, dev);
- 	else
--		return handle_remove(name, dev);
-+		ret = handle_remove(name, dev);
-+
-+	if (ret)
-+		dev_err(dev, "failed to %s %s, ret = %d\n",
-+			mode ? "create" : "remove", name, ret);
-+
-+	return ret;
+@@ -147,22 +147,22 @@ int devtmpfs_create_node(struct device *dev)
+ 	return devtmpfs_submit_req(&req, tmp);
  }
  
- static void __noreturn devtmpfs_work_loop(void)
+-int devtmpfs_delete_node(struct device *dev)
++void devtmpfs_delete_node(struct device *dev)
+ {
+ 	const char *tmp = NULL;
+ 	struct req req;
+ 
+ 	if (!thread)
+-		return 0;
++		return;
+ 
+ 	req.name = device_get_devnode(dev, NULL, NULL, NULL, &tmp);
+ 	if (!req.name)
+-		return -ENOMEM;
++		return;
+ 
+ 	req.mode = 0;
+ 	req.dev = dev;
+ 
+-	return devtmpfs_submit_req(&req, tmp);
++	devtmpfs_submit_req(&req, tmp);
+ }
+ 
+ static int dev_mkdir(const char *name, umode_t mode)
 -- 
 2.25.1
 
