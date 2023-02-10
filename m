@@ -2,316 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00BAC691A4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 09:48:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 302D4691A4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 09:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbjBJIsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 03:48:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48878 "EHLO
+        id S231536AbjBJIuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 03:50:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231626AbjBJIsN (ORCPT
+        with ESMTP id S231395AbjBJIuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 03:48:13 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 865387B16D
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 00:48:02 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxV+nBBOZjuMAQAA--.28223S3;
-        Fri, 10 Feb 2023 16:48:01 +0800 (CST)
-Received: from bogon.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxX+SpBOZjLUYwAA--.56353S7;
-        Fri, 10 Feb 2023 16:48:00 +0800 (CST)
-From:   Youling Tang <tangyouling@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Xi Ruoyao <xry111@xry111.site>,
-        Jinyang He <hejinyang@loongson.cn>
-Cc:     Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        Fri, 10 Feb 2023 03:50:01 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2139.outbound.protection.outlook.com [40.107.94.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6BC7B166;
+        Fri, 10 Feb 2023 00:50:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TK6yLLGPugko6viAPZ4cW3fX4PqK3Q2wPzmUanr565j3gwtSSA7kgkh1+eWsuZ0jnt++51sCtBCp0H1WosjQ5WgfLlIz2AwRCGAflzVZ9OwbiVUBQDP+KJ2DacL/FF2O5zGJA63Iz5siqnBHmT6jNlcKk7r0Ex8uBQsic5vtnzuQ13Rm5dJQGlD2f7vFBg7LDfeoWGxpicEgAoesQCjC97XWdttkIGbDXZZO+7mTsuc2HcHARYep/PPhZzzj1HdbG7shsHgEBrbHXFVUMWQDTDdsEK9PZRNEDYklDC80hxLkSSK5kR++OljZI46z7KpfyfMePKk5wzE/s6gKGQOl5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ItYVBywEKFN98saQfOqUWIAjym4f0unFb96iy+O66WI=;
+ b=c0WWX/6kImXq/BVUQbIBxlk0JspnIvtxqVHrnEKuR08uGmmYI9cpRf2jhntZabaLhrI9Rnynlk4N1TGexU8SGlNVYRrrLVP5g6m2+sdp289KIgtT2bT1HVuybOwUQar6EhAJsvEAGU24h0DBLXOFgrd26FqukO8BvEwTRa3RQFJCHIJBzVUrlXDp2CQZixpNTsji275dubw9dbBuj2mfbO6FdvVt/lUiNZHqD2uHfSReyPy5hptAlsZR34KG4u7I1AtL8F67z4BJ9ZTeCowRtqgcbQILWDvhCn8MBiQB54cccHB90j8cchMzK4AOvMJx/XRBFQOJqbU1fNRPhKmW2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ItYVBywEKFN98saQfOqUWIAjym4f0unFb96iy+O66WI=;
+ b=EULhAyWJ4xljeaC9Bg/GKhAaYJYqInaFgEUsTigdWb+FubJhIrPD1+uOrzMzIOiM4ud0Ph9BJfSiDarXdEitj6WolRb8bnCq50GIQo18tpbClxowwBhxAqysbmnFVvE0/R1h75J1mqjJWwV0zU3pFRFBG/fcmL35JP5937eLp2Q=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SN4PR13MB5776.namprd13.prod.outlook.com (2603:10b6:806:218::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19; Fri, 10 Feb
+ 2023 08:49:56 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb5c:910f:3730:fd65]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb5c:910f:3730:fd65%9]) with mapi id 15.20.6086.021; Fri, 10 Feb 2023
+ 08:49:56 +0000
+Date:   Fri, 10 Feb 2023 09:49:49 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Eelco Chaudron <echaudro@redhat.com>
+Cc:     Hangyu Hua <hbh25y@gmail.com>, pshelar@ovn.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, xiangxia.m.yue@gmail.com,
+        netdev@vger.kernel.org, dev@openvswitch.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 5/5] LoongArch: Add support for kernel address space layout randomization (KASLR)
-Date:   Fri, 10 Feb 2023 16:47:36 +0800
-Message-Id: <1676018856-26520-6-git-send-email-tangyouling@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1676018856-26520-1-git-send-email-tangyouling@loongson.cn>
-References: <1676018856-26520-1-git-send-email-tangyouling@loongson.cn>
-X-CM-TRANSID: AQAAf8AxX+SpBOZjLUYwAA--.56353S7
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3XFyxJr1kJryrKw1xZFy7Jrb_yoWxKw48pr
-        W3C3y5tr4xGF17GrsFq3s5ury5Aws7W343WFsrKryrZ3W2qF1rXaykur97XFy8JrWkXr4a
-        qF98Kaya9w4UAaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b28YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07josjUUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3] net: openvswitch: fix possible memory leak in
+ ovs_meter_cmd_set()
+Message-ID: <Y+YFLccEN8Gr0nZE@corigine.com>
+References: <20230210020551.6682-1-hbh25y@gmail.com>
+ <6582F9D7-D74B-4A4A-A498-1B3002B9840E@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6582F9D7-D74B-4A4A-A498-1B3002B9840E@redhat.com>
+X-ClientProxiedBy: AS4P189CA0045.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5dd::17) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SN4PR13MB5776:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0d10a951-9244-413f-4304-08db0b43c8e8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: s3Ih5u+VmOBb5eiQnR2S7DInpBjzO1NWpi1TIqtEj+ivSq9l+/uRtGD4myEaoIesX8AHie2bP5x8dJ/XTJFd8AfHOybpSE55bXGSaUA87LBk7Z5wKXmr78jstTHb7+tZeGFcZi+KRbk3nLCw+h+HwDvedSSTdx6N3KKBvyi48JL93WwLodlsi8Rwkmw7/KAlUqPjgGbfnpHl0aTPcGK/Y26vaV4cAlrpDwrdMvuK+YFmKif+nDeZMhombQdTfn6DjwGtB5Y5OeQGcUQxwL6pOLY7HB6rphTgqD0ZBcS1xWLZ7XWu4cBqsQinydSxnzqzHK+mWRUIez/Ba5z4hlUwwVec0i1Myof55KxKCY51rlGZD+/MQpQovRvYNxyfbqAFmUEwUsMxa1QnREAO5I0mamVnT73G3bqaa9CEaFCsGUW4agAlAUU7zEGfVndwE7sOqYup8pwChTWGz22aCGUvymCNYqTa+2XO2pV5l3ECEStMW08rNqIe95p81Mig8y2LXBeEKIkFiQtfSHyKFGWECW/iXi1vo3ys3OHmSgIjJfHzc16NhHrFvPSPbYeG11CSj5K3B8aVScPuKLwcYh1+cecOFcPjki4XOh7L+CCHSihvzgzXp3yI5/NbqjRDyCZ6dd6vF4KdgDMYSnRwbbV9IRNjR5JDoI2Vh/iOIPrZquA5AwY+MqyMqRhJysMmrA6l
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(366004)(346002)(39840400004)(376002)(136003)(451199018)(2616005)(478600001)(6486002)(53546011)(6512007)(6666004)(6506007)(186003)(86362001)(36756003)(38100700002)(66556008)(8676002)(4326008)(6916009)(66946007)(44832011)(41300700001)(5660300002)(7416002)(316002)(8936002)(66476007)(4744005)(2906002)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ncupHhesRhfOkRlQhpwT0JZYfyFKWxoD+MGKjmzbLLPeeYajwC9Z7xeqNEo/?=
+ =?us-ascii?Q?nZmqcrgiBRnaqVT0BXw21hzlfP5JHjsTegPAYSy9K5Vr37UZnUCYEK2y2gWs?=
+ =?us-ascii?Q?DJWVFxUpzF5z9rvvicc0Vmk2RrZnPQNGgnNamCFDBgsnUDE2kodQLoWMfzpl?=
+ =?us-ascii?Q?QweenIkHKMq893FOKotSbh0Y92EpCe4rEw63zvfrZ87DR/5ddfKbSjOgUYOp?=
+ =?us-ascii?Q?uM2T/hnnSwHy7mwWAIc5z/mxm290LXQKRaOv98HidpXQ4imF+qJV06P/4JXl?=
+ =?us-ascii?Q?2VCg35EY/KlJ3F/uiKJ84tA+wwg1f22sonTYOlv8+3s3BZ4ge+5YkJaZFaUV?=
+ =?us-ascii?Q?/cdYNauvTQ0bIDlqcJbh14vo0IyA80JIc4nBsaOXmp6uOtKd+ZpzePrLnKqM?=
+ =?us-ascii?Q?QNjtOf/Km4Tjpq8HMcMEvpbqjxqMkzOFKRVU0J3SkA8a91gO/SAPLaTh2Vc6?=
+ =?us-ascii?Q?iv5EdGnr2k1I4VfBKGZJAu4tjbxE9UCqUGTzerWZXDoIFBXzOGxDYCjE7Fuk?=
+ =?us-ascii?Q?pVLpKvnX39J3TR3Bm1KDt48uk93mZtYRozQriPUag5Cc6kkEyPF+67G9DfPN?=
+ =?us-ascii?Q?6tO5xDSNPgetEj0iAhf29kkgip3xJnm5xbn9hA8FgSunmSUwe+nYRyqoP+OA?=
+ =?us-ascii?Q?1b/PC41/IumQJb4XoK6NhvvQACvCwZMXQD04j7kzw43Aq6hgnF0k4G0vk8le?=
+ =?us-ascii?Q?72tp+rrTeNxnPk/jLfqCZaQLrNDxKIYzcAsNlKiENMncEy2SVCSBZHsj91tK?=
+ =?us-ascii?Q?BMkOLAnv04WJKvoDJ1IfdHJvxd+xjOXT4BQLdx0trdSw6LULechKj60P3eJn?=
+ =?us-ascii?Q?z5Qqjk3WUkTHcHIsalxPIVd13d6LaAxqX4FdIT9C9GSJDUNW2My/Rf5zEfs8?=
+ =?us-ascii?Q?ayRu0pMmhtf3zG73ajQBypZ89OjwfmyJGcb1JE0Aere4Lqb8rZUs+wMaFT1b?=
+ =?us-ascii?Q?X+N5hYfFw7h4hIgXRQBelHam05tapu7OOVp/6IenUPl0eng93vPwjNH1P/Z2?=
+ =?us-ascii?Q?sdwXYfWphVd8i3BPhP2+IkIXUGDDTFzex6ZybBVtILwYvBBeUiKfbQE3wGK7?=
+ =?us-ascii?Q?FnbONiwRLtOhFO7RopoV/nkAhFqmR9jqIyHPtyHgVbA3kHk3xSaf38lFQmmo?=
+ =?us-ascii?Q?YNIwoOmRAgXn3/gPnLlHhgGnx5K3nahkX/Ziou6aGSxC8UeDMHeU1+uMuFMK?=
+ =?us-ascii?Q?pUI4AWQOQZgiwlzqFbl9ZqzA4rBOGmvb9kJGMmlyGrOiblTRdlU4XSaTNf4A?=
+ =?us-ascii?Q?EPOvbZaidagJXolcTWM3+n5+panTF/0JWtw80j5K54IyzEIM9Bf/LfF9YTXD?=
+ =?us-ascii?Q?iflXC8forqsmusAGo+2Gy0j93UtdSSXko0TLtHMfo4AIJnjThgA4kUBc7XqY?=
+ =?us-ascii?Q?hOcd7ZTKlhqGFJOChCs1l6wny9OLf/AN02ZkqGmpV2Ncr52qTXWkA23giSVF?=
+ =?us-ascii?Q?KZv0jBb4hjHd0bI3koof8xU44uc1wseL9GClbVrCuIxESZBjOVT0YpHxCTgi?=
+ =?us-ascii?Q?5zfJdvtsw6PYj0Lgt+6F0PRKCQSJc2H0kiraOTJokUxCOSvfucjo3OK6aReE?=
+ =?us-ascii?Q?nyqv9ec2+PvyGUq8o258goR5Mti+GPWAQPl+D7FJvLL2HAXs/scVffFbU5gW?=
+ =?us-ascii?Q?yF7Osa38LD4V8w8ipKA47vEhZM8eUldeIaksW/vX3afQR8Yiqo3kTznSDZ0X?=
+ =?us-ascii?Q?2NjJDQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d10a951-9244-413f-4304-08db0b43c8e8
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2023 08:49:56.6154
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jEh3PXgCtYJk+Or5wS8UfLJmHRKo6C3bZen26kJtzKM7pVZERolRNr1cB5JBjdr8ut88EzMW8nWka3BXgEZZB2Gb7Xpuc542qiBFHlTa5+0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR13MB5776
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for relocating the kernel to a random address.
+On Fri, Feb 10, 2023 at 08:35:50AM +0100, Eelco Chaudron wrote:
+> 
+> 
+> On 10 Feb 2023, at 3:05, Hangyu Hua wrote:
+> 
+> > old_meter needs to be free after it is detached regardless of whether
+> > the new meter is successfully attached.
+> >
+> > Fixes: c7c4c44c9a95 ("net: openvswitch: expand the meters supported number")
+> > Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> 
+> Thanks for doing a v3. The change looks good to me!
+> 
+> Acked-by: Eelco Chaudron <echaudro@redhat.com>
 
-Entropy is derived from the banner, which will change every build and
-random_get_entropy() which should provide additional runtime entropy.
-
-The kernel is relocated by up to RANDOMIZE_BASE_MAX_OFFSET bytes from
-its link address. Because relocation happens so early in the kernel boot,
-the amount of physical memory has not yet been determined. This means
-the only way to limit relocation within the available memory is via
-Kconfig. Limit the maximum value of RANDOMIZE_BASE_MAX_OFFSET to
-256M(0x10000000) because our memory layout has many holes.
-
-Signed-off-by: Youling Tang <tangyouling@loongson.cn>
-Signed-off-by: Xi Ruoyao <xry111@xry111.site> # Fix compiler warnings
----
- arch/loongarch/Kconfig           |  23 +++++
- arch/loongarch/kernel/head.S     |  14 ++-
- arch/loongarch/kernel/relocate.c | 143 ++++++++++++++++++++++++++++++-
- 3 files changed, 176 insertions(+), 4 deletions(-)
-
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 089a4695b1b3..f0a070bd7254 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -489,6 +489,29 @@ config RELOCATABLE
- 	  kernel binary at runtime to a different virtual address than the
- 	  address it was linked at.
- 
-+config RANDOMIZE_BASE
-+	bool "Randomize the address of the kernel image (KASLR)"
-+	depends on RELOCATABLE
-+	help
-+	   Randomizes the physical and virtual address at which the
-+	   kernel image is loaded, as a security feature that
-+	   deters exploit attempts relying on knowledge of the location
-+	   of kernel internals.
-+
-+	   The kernel will be offset by up to RANDOMIZE_BASE_MAX_OFFSET.
-+
-+	   If unsure, say N.
-+
-+config RANDOMIZE_BASE_MAX_OFFSET
-+	hex "Maximum KASLR offset" if EXPERT
-+	depends on RANDOMIZE_BASE
-+	range 0x0 0x10000000 if 64BIT
-+	default "0x01000000"
-+	help
-+	  When KASLR is active, this provides the maximum offset that will
-+	  be applied to the kernel image.
-+
-+
- config SECCOMP
- 	bool "Enable seccomp to safely compute untrusted bytecode"
- 	depends on PROC_FS
-diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
-index 499edc80d8ab..b12f459ad73a 100644
---- a/arch/loongarch/kernel/head.S
-+++ b/arch/loongarch/kernel/head.S
-@@ -87,10 +87,22 @@ SYM_CODE_START(kernel_entry)			# kernel entry point
- 	set_saved_sp	sp, t0, t1
- 
- #ifdef CONFIG_RELOCATABLE
-+#ifdef CONFIG_RANDOMIZE_BASE
-+	bl		do_kaslr
-+
-+	/* Repoint the sp into the new kernel image */
-+	PTR_LI		sp, (_THREAD_SIZE - PT_SIZE)
-+	PTR_ADD		sp, sp, tp
-+	set_saved_sp	sp, t0, t1
-+
-+	/* do_kaslr returns the new kernel image entry point */
-+	jr		a0
-+	ASM_BUG()
-+#else
- 	/* Apply the relocations */
- 	bl		relocate_kernel
- #endif
--
-+#endif
- 	bl		start_kernel
- 	ASM_BUG()
- 
-diff --git a/arch/loongarch/kernel/relocate.c b/arch/loongarch/kernel/relocate.c
-index 91ce92433bab..5266f23a3006 100644
---- a/arch/loongarch/kernel/relocate.c
-+++ b/arch/loongarch/kernel/relocate.c
-@@ -9,19 +9,21 @@
- #include <linux/kernel.h>
- #include <linux/printk.h>
- #include <linux/panic_notifier.h>
-+#include <linux/start_kernel.h>
-+#include <asm/bootinfo.h>
-+#include <asm/early_ioremap.h>
- #include <asm/sections.h>
- 
- #define RELOCATED(x) ((void *)((long)x + reloc_offset))
-+#define RELOCATED_KASLR(x) ((void *)((long)x + offset))
- 
- extern long __rela_dyn_start;
- extern long __rela_dyn_end;
- 
- static unsigned long reloc_offset;
- 
--void __init relocate_kernel(void)
-+static inline __init void relocate_relative(void)
- {
--	reloc_offset = (unsigned long)_text - VMLINUX_LOAD_ADDRESS;
--
- 	if (reloc_offset) {
- 		Elf64_Rela *rela, *rela_end;
- 		rela = (Elf64_Rela *)&__rela_dyn_start;
-@@ -43,6 +45,141 @@ void __init relocate_kernel(void)
- 	}
- }
- 
-+#ifdef CONFIG_RANDOMIZE_BASE
-+static inline __init unsigned long rotate_xor(unsigned long hash,
-+					      const void *area, size_t size)
-+{
-+	size_t i;
-+	unsigned long *ptr = (unsigned long *)area;
-+
-+	for (i = 0; i < size / sizeof(hash); i++) {
-+		/* Rotate by odd number of bits and XOR. */
-+		hash = (hash << ((sizeof(hash) * 8) - 7)) | (hash >> 7);
-+		hash ^= ptr[i];
-+	}
-+
-+	return hash;
-+}
-+
-+static inline __init unsigned long get_random_boot(void)
-+{
-+	unsigned long entropy = random_get_entropy();
-+	unsigned long hash = 0;
-+
-+	/* Attempt to create a simple but unpredictable starting entropy. */
-+	hash = rotate_xor(hash, linux_banner, strlen(linux_banner));
-+
-+	/* Add in any runtime entropy we can get */
-+	hash = rotate_xor(hash, &entropy, sizeof(entropy));
-+
-+	return hash;
-+}
-+
-+static inline __init bool kaslr_disabled(void)
-+{
-+	char *str;
-+
-+	str = strstr(boot_command_line, "nokaslr");
-+	if (str == boot_command_line || (str > boot_command_line && *(str - 1) == ' '))
-+		return true;
-+
-+	return false;
-+}
-+
-+/* Choose a new address for the kernel */
-+static inline void __init *determine_relocation_address(void)
-+{
-+	unsigned long kernel_length;
-+	void *dest = _text;
-+	unsigned long offset;
-+
-+	if (kaslr_disabled())
-+		return dest;
-+
-+	kernel_length = (long)_end - (long)_text;
-+
-+	offset = get_random_boot() << 16;
-+	offset &= (CONFIG_RANDOMIZE_BASE_MAX_OFFSET - 1);
-+	if (offset < kernel_length)
-+		offset += ALIGN(kernel_length, 0xffff);
-+
-+	return RELOCATED_KASLR(dest);
-+}
-+
-+static inline int __init relocation_addr_valid(void *loc_new)
-+{
-+	if ((unsigned long)loc_new & 0x00000ffff) {
-+		/* Inappropriately aligned new location */
-+		return 0;
-+	}
-+	if ((unsigned long)loc_new < (unsigned long)_end) {
-+		/* New location overlaps original kernel */
-+		return 0;
-+	}
-+	return 1;
-+}
-+
-+static inline void __init update_reloc_offset(unsigned long *addr, long offset)
-+{
-+	unsigned long *new_addr = (unsigned long *)RELOCATED_KASLR(addr);
-+
-+	*new_addr = (unsigned long)offset;
-+}
-+
-+void *__init do_kaslr(void)
-+{
-+	void *loc_new;
-+	unsigned long kernel_length;
-+	long offset = 0;
-+	/* Default to original kernel entry point */
-+	void *kernel_entry = start_kernel;
-+	char *cmdline = early_ioremap(fw_arg1, COMMAND_LINE_SIZE);
-+
-+	/* Boot command line was passed in fw_arg1 */
-+	strscpy(boot_command_line, cmdline, COMMAND_LINE_SIZE);
-+
-+	kernel_length = (long)(_end) - (long)(_text);
-+
-+	loc_new = determine_relocation_address();
-+
-+	/* Sanity check relocation address */
-+	if (relocation_addr_valid(loc_new))
-+		offset = (unsigned long)loc_new - (unsigned long)(_text);
-+
-+	if (offset) {
-+		/* Copy the kernel to it's new location */
-+		memcpy(loc_new, _text, kernel_length);
-+
-+		/* Sync the caches ready for execution of new kernel */
-+		__asm__ __volatile__ (
-+			"ibar 0 \t\n"
-+			"dbar 0 \t\n");
-+
-+		reloc_offset = (unsigned long)_text - VMLINUX_LOAD_ADDRESS;
-+		reloc_offset += offset;
-+
-+		relocate_relative();
-+
-+		/* The current thread is now within the relocated image */
-+		__current_thread_info = RELOCATED_KASLR(__current_thread_info);
-+
-+		/* Return the new kernel's entry point */
-+		kernel_entry = RELOCATED_KASLR(start_kernel);
-+
-+		update_reloc_offset(&reloc_offset, offset);
-+	}
-+
-+	return kernel_entry;
-+}
-+#endif
-+
-+void __init relocate_kernel(void)
-+{
-+	reloc_offset = (unsigned long)_text - VMLINUX_LOAD_ADDRESS;
-+
-+	relocate_relative();
-+}
-+
- /*
-  * Show relocation information on panic.
-  */
--- 
-2.37.3
-
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
