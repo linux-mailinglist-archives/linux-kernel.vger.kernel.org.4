@@ -2,145 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0CE691EB6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C5A691EB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:56:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231769AbjBJL4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 06:56:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
+        id S231646AbjBJL4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 06:56:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231646AbjBJL4b (ORCPT
+        with ESMTP id S231789AbjBJL4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 06:56:31 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4EFD523
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 03:56:29 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1pQS0w-00017t-M4; Fri, 10 Feb 2023 12:56:26 +0100
-Received: from pza by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1pQS0v-0003Fu-41; Fri, 10 Feb 2023 12:56:25 +0100
-Date:   Fri, 10 Feb 2023 12:56:25 +0100
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mux: mmio: select REGMAP as the code has that dependency
-Message-ID: <20230210115625.GA30942@pengutronix.de>
-References: <64cf625b-2495-2382-0331-519d1cab0adf@infradead.org>
- <d1a3d8dd-213b-3772-17a7-c08e06cab837@axentia.se>
- <89199aca-5b57-e8df-03ca-b2658ee9d8b3@axentia.se>
+        Fri, 10 Feb 2023 06:56:33 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263832111;
+        Fri, 10 Feb 2023 03:56:30 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B79405CC83;
+        Fri, 10 Feb 2023 11:56:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1676030188; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Bjk55WMF4J92NpXSALr4vzW6P2C4weO2hpPlyhOs+OY=;
+        b=BsvYw35kjpC2lCtiP3BkdEEOu3bhsaVVoj/cOiE6USQZSKCfgoa/jP4RJbjsv+tZI0DTeb
+        +EQrPSqLcAabyBqlllIEm1oonilKExfpDo8p8n9LELukkQxXPy2HZUqdcERlp4ZPRp899K
+        SyhpnOtfwnY4dkhmpfu2PmaZhL/DoNA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1676030188;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Bjk55WMF4J92NpXSALr4vzW6P2C4weO2hpPlyhOs+OY=;
+        b=uErB3ty08v3HhVgl8uCOWkplw/dO+iFg6nN+LBBTA6BGMX/nWn9fa/nAjugSR72S/SADwT
+        Tcer0p+nAIRIQfBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A8CC013206;
+        Fri, 10 Feb 2023 11:56:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gXwsKeww5mP7eAAAMHmgww
+        (envelope-from <jack@suse.cz>); Fri, 10 Feb 2023 11:56:28 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 3058AA06D8; Fri, 10 Feb 2023 12:56:28 +0100 (CET)
+Date:   Fri, 10 Feb 2023 12:56:28 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, Ye Bin <yebin10@huawei.com>
+Subject: Re: [PATCH v2 0/6] fix error flag covered by journal recovery
+Message-ID: <20230210115628.l6b4zukudqcp5hot@quack3>
+References: <20230210032044.146115-1-yebin@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <89199aca-5b57-e8df-03ca-b2658ee9d8b3@axentia.se>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: pza@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230210032044.146115-1-yebin@huaweicloud.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 11:46:42AM +0100, Peter Rosin wrote:
-> If CONFIG_REGMAP is not active, the build errors out like this:
+Hello!
 
-The driver used to have an indirect dependency on CONFIG_REGMAP via
-CONFIG_MFD_SYSCON -> CONFIG_REGMAP_MMIO -> CONFIG_REGMAP until
-commit 8ecfaca7926f ("mux: mmio: add generic regmap bitfield-based
-multiplexer").
-
-> ../drivers/mux/mmio.c: In function ‘mux_mmio_probe’:
-> ../drivers/mux/mmio.c:76:34: error: storage size of ‘field’ isn’t known
->    76 |                 struct reg_field field;
->       |                                  ^~~~~
-> In file included from ../include/linux/bits.h:21,
->                  from ../include/linux/bitops.h:6,
->                  from ../drivers/mux/mmio.c:8:
-> ../include/linux/bits.h:23:28: error: first argument to ‘__builtin_choose_expr’ not a constant
->    23 |         (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
->       |                            ^~~~~~~~~~~~~~~~~~~~~
-> ../include/linux/build_bug.h:16:62: note: in definition of macro ‘BUILD_BUG_ON_ZERO’
->    16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
->       |                                                              ^
-> ../include/linux/bits.h:37:10: note: in expansion of macro ‘GENMASK_INPUT_CHECK’
->    37 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
->       |          ^~~~~~~~~~~~~~~~~~~
-> ../drivers/mux/mmio.c:96:29: note: in expansion of macro ‘GENMASK’
->    96 |                 if (mask != GENMASK(field.msb, field.lsb)) {
->       |                             ^~~~~~~
-> ../include/linux/build_bug.h:16:51: error: bit-field ‘<anonymous>’ width not an integer constant
->    16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
->       |                                                   ^
-> ../include/linux/bits.h:23:10: note: in expansion of macro ‘BUILD_BUG_ON_ZERO’
->    23 |         (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
->       |          ^~~~~~~~~~~~~~~~~
-> ../include/linux/bits.h:37:10: note: in expansion of macro ‘GENMASK_INPUT_CHECK’
->    37 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
->       |          ^~~~~~~~~~~~~~~~~~~
-> ../drivers/mux/mmio.c:96:29: note: in expansion of macro ‘GENMASK’
->    96 |                 if (mask != GENMASK(field.msb, field.lsb)) {
->       |                             ^~~~~~~
-> ../drivers/mux/mmio.c:102:29: error: implicit declaration of function ‘devm_regmap_field_alloc’ [-Werror=implicit-function-declaration]
->   102 |                 fields[i] = devm_regmap_field_alloc(dev, regmap, field);
->       |                             ^~~~~~~~~~~~~~~~~~~~~~~
-> ../drivers/mux/mmio.c:76:34: warning: unused variable ‘field’ [-Wunused-variable]
->    76 |                 struct reg_field field;
->       |                                  ^~~~~
+On Fri 10-02-23 11:20:38, Ye Bin wrote:
+> From: Ye Bin <yebin10@huawei.com>
 > 
-
-Fixes: 8ecfaca7926f ("mux: mmio: add generic regmap bitfield-based multiplexer")
-
-> Reported by: Randy Dunlap <rdunlap@infradead.org>
-> Link: https://lore.kernel.org/lkml/64cf625b-2495-2382-0331-519d1cab0adf@infradead.org/
-> Signed-off-by: Peter Rosin <peda@axentia.se>
-> ---
->  drivers/mux/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+> Diff v2 vs v1:
+> Move call 'j_replay_prepare_callback' and 'j_replay_end_callback' from
+> ext4_load_journal() to jbd2_journal_recover().
 > 
-> Note, there is a patch in linux-next that removes "|| COMPILE_TEST" from depends.
+> When do fault injection test, got issue as follows:
+> EXT4-fs (dm-5): warning: mounting fs with errors, running e2fsck is recommended
+> EXT4-fs (dm-5): Errors on filesystem, clearing orphan list.
+> EXT4-fs (dm-5): recovery complete
+> EXT4-fs (dm-5): mounted filesystem with ordered data mode. Opts: data_err=abort,errors=remount-ro
 > 
-> Cheers,
-> Peter
+> EXT4-fs (dm-5): recovery complete
+> EXT4-fs (dm-5): mounted filesystem with ordered data mode. Opts: data_err=abort,errors=remount-ro
 > 
-> diff --git a/drivers/mux/Kconfig b/drivers/mux/Kconfig
-> index 80f015cf6e54..9234f8c400ca 100644
-> --- a/drivers/mux/Kconfig
-> +++ b/drivers/mux/Kconfig
-> @@ -48,6 +48,7 @@ config MUX_GPIO
->  config MUX_MMIO
->  	tristate "MMIO/Regmap register bitfield-controlled Multiplexer"
->  	depends on OF
-> +	select REGMAP
+> Without do file system check, file system is clean when do second mount.
+> Theoretically, the kernel will not clear fs error flag. In errors=remount-ro
+> mode the last super block is commit directly. So super block in journal is
+> not uptodate. When do jounral recovery, the uptodate super block will be
+> covered by jounral data. If super block submit all failed after recover
+> journal, then file system error flag is lost. When do "fsck -a" couldn't
+> repair file system deeply.
+> To solve above issue we need to do extra handle when do super block journal
+> recovery.
 
-I get a dependency loop with this:
+Thanks for the patches. Looking through the patches, I think this is a bit
+of an overengineering for the problem at hand. The only thing that is
+really worth preserving so that it is not lost after journal replay is the
+error information. So in ext4_load_journal() I would just save that if
+EXT4_ERROR_FS is set in es->s_state before journal replay and restore it
+after journal replay. Sure if the superblock write during journal replay
+succeeds but the write restoring the error information fails, we will loose
+the error information but that is so unlikely in practice that I don't
+think it is really worth complicating the code for it. Also the only
+downside is we will loose the information there is some error in the
+filesystem - we'll soon find that out again anyway :).
 
-drivers/net/ethernet/arc/Kconfig:19:error: recursive dependency detected!
-drivers/net/ethernet/arc/Kconfig:19:symbol ARC_EMAC_CORE is selected by ARC_EMAC
-drivers/net/ethernet/arc/Kconfig:26:symbol ARC_EMAC depends on OF_IRQ
-drivers/of/Kconfig:69:symbol OF_IRQ depends on IRQ_DOMAIN
-kernel/irq/Kconfig:60:symbol IRQ_DOMAIN is selected by REGMAP
-drivers/base/regmap/Kconfig:6:symbol REGMAP is selected by MUX_MMIO
-drivers/mux/Kconfig:48:symbol MUX_MMIO depends on MULTIPLEXER
-drivers	/mux/Kconfig:6:symbol MULTIPLEXER is selected by MDIO_BUS_MUX_MULTIPLEXER
-drivers/net/mdio/Kconfig:261:symbol MDIO_BUS_MUX_MULTIPLEXER depends on MDIO_DEVICE
-drivers/net/mdio/Kconfig:6:symbol MDIO_DEVICE is selected by PHYLIB
-drivers/net/phy/Kconfig:16:symbol PHYLIB is selected by ARC_EMAC_CORE
+								Honza
 
-(on next-20230210).
-
-regards
-Philipp
+> 
+> Ye Bin (6):
+>   jbd2: introduce callback for recovery journal
+>   ext4: introudce helper for jounral recover handle
+>   jbd2: do extra handle when do journal recovery
+>   ext4: remove backup for super block when recovery journal
+>   ext4: fix super block checksum error
+>   ext4: make sure fs error flag setted before clear journal error
+> 
+>  fs/ext4/ext4_jbd2.c  | 66 ++++++++++++++++++++++++++++++++++++++++++++
+>  fs/ext4/ext4_jbd2.h  |  2 ++
+>  fs/ext4/super.c      | 18 ++++--------
+>  fs/jbd2/recovery.c   | 27 ++++++++++++++++++
+>  include/linux/jbd2.h | 11 ++++++++
+>  5 files changed, 112 insertions(+), 12 deletions(-)
+> 
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
