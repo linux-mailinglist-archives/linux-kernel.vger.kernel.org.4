@@ -2,119 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0215B691F1F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 13:28:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 044A4691F11
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 13:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232101AbjBJM2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 07:28:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
+        id S231794AbjBJM1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 07:27:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232040AbjBJM2e (ORCPT
+        with ESMTP id S229506AbjBJM1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 07:28:34 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90A176D0E
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 04:28:32 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id p26so15350732ejx.13
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 04:28:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MISpw0Ywy9/GGrDCiIfVSWiguaYD6aHQRvEnwMDid1U=;
-        b=xfypag1TvZ7OKj0C7m+I+7D/cOsS4DNQkRvD0uvkuPzIyRI7ygDVr278S4oGZo/VVN
-         GoiBpHDQfJ28j3FBfbkQBLoqzWfX8B/rxmnssWTgEq0L71r6Fgjj7mUfjMEUhwG45Ed9
-         U7v+umcfDPQum0jUD1YjSS6E90VWG+BM8sEESlJE5wGUG9VlNGQsWvOWv9rPGikpjLM/
-         SstyKiJpRMZUEeLUbZcvb4TuTFXAnPAyxPgNb9xNDIDPUycLcpeXGolSNiExLhxMEPG/
-         +QxNQT5kYF8HV9OAOe+xK7d3ldfExDUi5JCYMfZ7bNE2W/1lzP/TAXB4bnkn3zWXYY1w
-         Kmig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MISpw0Ywy9/GGrDCiIfVSWiguaYD6aHQRvEnwMDid1U=;
-        b=G64FALkel1LGiIZ09q03is+otqLJWs5slZM+ykSrb1TfENLrJYLZMmZ2By1cZhNF8U
-         0mgz62OlhY05dec/LPVTP1X7bek42LmCMwD08AMM2SKmWJbPy4YeD8l2DK3FMIoJMWnD
-         6BaaMVDCsIEQpQFzh+CdEqi0j3EMjeQ9Ej+KatP6VwgH5iqukBR1zdJIvbPpETBOWM73
-         OasRI8MpFRrdPbjxakgMslBISeVR/cqZNWdl4eYLK2YiBd47pj0a7QzIfq+FcU+JhO4X
-         nwimS9Xc0a3ELVBp6C2KGlAXYxU1RIgEpjDNEtR778wqZiTOk+5ya/+sZq7JS0djQHM8
-         5vnQ==
-X-Gm-Message-State: AO0yUKU5FoHgQduQAuYQ2T1wEsmWoi9uXa0ZKaw5aNS5n9jxyyPZuV1t
-        E+rYgYnf4TmvcDI03JmTF2LV/w==
-X-Google-Smtp-Source: AK7set/y1xP26UOmnMgJCW2UgOFzL6HRx3ZySveIZ24qoL6xMia2A8c/BGmvU8hytR9U08dkrEp1rg==
-X-Received: by 2002:a17:907:86a3:b0:8ae:d191:aa2b with SMTP id qa35-20020a17090786a300b008aed191aa2bmr10860216ejc.6.1676032111249;
-        Fri, 10 Feb 2023 04:28:31 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id r13-20020a1709064d0d00b0080345493023sm2283583eju.167.2023.02.10.04.28.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 04:28:30 -0800 (PST)
-Message-ID: <23846ff0-e410-b7ab-3cc9-b45fdbf4a7d6@linaro.org>
-Date:   Fri, 10 Feb 2023 14:28:29 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 4/5] arm64: dst: qcom: sm8450: switch to usb3/dp combo
- phy
-Content-Language: en-GB
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
+        Fri, 10 Feb 2023 07:27:06 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB26020077;
+        Fri, 10 Feb 2023 04:27:04 -0800 (PST)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B9FD6C0005;
+        Fri, 10 Feb 2023 12:26:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1676032023;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=onC4uvSvom/UzAuHfG54ufV5S11DPr9PwQEDZQSvD/8=;
+        b=D17I3QpQS2PBGfHhv5YdbROETUA+7fAsoT6dg4Br3BNDYs78m2tMntxVZ4/F4ORHBm3MsM
+        PIxxe/dJ5MIrm7A7GSeYLl86oQ1yY8FGQNrFQwYK/8psH5xalF7vexhDY3Ng4kw5Ytg/m7
+        HHEFHly7quw+bfnMAu9Mt9duRki+Zl3+gbq7slWurMCNlLQIWNOgcGP1uV13SmIf4YY+ks
+        WDZtzKrqM1zSksFoZFCSRkukqAPo0gNjir4+3putED9OScnNes0Qh2HFOHI4yocR6HATB6
+        udOEiLkIiwedm2twRteLedmCkJerZ3qruz6KSSwKAgrhAeWvN3vWwMFVtYLYtg==
+Date:   Fri, 10 Feb 2023 13:29:21 +0100
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230206-topic-sm8450-upstream-dp-controller-v2-0-529da2203659@linaro.org>
- <20230206-topic-sm8450-upstream-dp-controller-v2-4-529da2203659@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230206-topic-sm8450-upstream-dp-controller-v2-4-529da2203659@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Wong Vee Khee <veekhee@apple.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Revanth Kumar Uppala <ruppala@nvidia.com>,
+        Tan Tee Min <tee.min.tan@linux.intel.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
+        Jon Hunter <jonathanh@nvidia.com>, netdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH net-next v3 4/6] dt-bindings: net: renesas,rzn1-gmac:
+ Document RZ/N1 GMAC support
+Message-ID: <20230210132921.2d6ab6a0@fixe.home>
+In-Reply-To: <f894aa27-0f14-5bc9-2eae-114fae7ef3b0@linaro.org>
+References: <20230209151632.275883-1-clement.leger@bootlin.com>
+        <20230209151632.275883-5-clement.leger@bootlin.com>
+        <f894aa27-0f14-5bc9-2eae-114fae7ef3b0@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/2023 12:34, Neil Armstrong wrote:
-> The QMP PHY is a USB3/DP combo phy, switch to the newly
-> documented bindings and register the clocks to the GCC
-> and DISPCC controllers.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->   arch/arm64/boot/dts/qcom/sm8450.dtsi | 41 ++++++++++++------------------------
->   1 file changed, 14 insertions(+), 27 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index d66dcd8fe61f..6248adc546f2 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -748,7 +748,7 @@ gcc: clock-controller@100000 {
->   				 <&ufs_mem_phy_lanes 0>,
->   				 <&ufs_mem_phy_lanes 1>,
->   				 <&ufs_mem_phy_lanes 2>,
-> -				 <0>;
-> +				 <&usb_1_qmpphy 0>;
->   			clock-names = "bi_tcxo",
->   				      "sleep_clk",
->   				      "pcie_0_pipe_clk",
+Le Fri, 10 Feb 2023 13:01:01 +0100,
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> a =C3=A9crit :
 
-Same comments as for patch 2, please use new defines for the QMP PHY 
-clocks and PHY enumeration
+> On 09/02/2023 16:16, Cl=C3=A9ment L=C3=A9ger wrote:
+> > Add "renesas,rzn1-gmac" binding documentation which is compatible with
+> > "snps,dwmac" compatible driver but uses a custom PCS to communicate
+> > with the phy.
+> >=20
+> > Signed-off-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
+> > ---
+> >  .../bindings/net/renesas,rzn1-gmac.yaml       | 67 +++++++++++++++++++
+> >  1 file changed, 67 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/net/renesas,rzn1-=
+gmac.yaml
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/net/renesas,rzn1-gmac.ya=
+ml b/Documentation/devicetree/bindings/net/renesas,rzn1-gmac.yaml
+> > new file mode 100644
+> > index 000000000000..029ce758a29c
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/net/renesas,rzn1-gmac.yaml
+> > @@ -0,0 +1,67 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/net/renesas,rzn1-gmac.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Renesas GMAC
+> > +
+> > +maintainers:
+> > +  - Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
+> > +
+> > +select:
+> > +  properties:
+> > +    compatible:
+> > +      contains:
+> > +        enum:
+> > +          - renesas,r9a06g032-gmac
+> > +          - renesas,rzn1-gmac
+> > +  required:
+> > +    - compatible
+> > +
+> > +allOf:
+> > +  - $ref: snps,dwmac.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+> > +      - enum:
+> > +          - renesas,r9a06g032-gmac
+> > +      - const: renesas,rzn1-gmac
+> > +      - const: snps,dwmac =20
+>=20
+> Thanks, looks good now.
+>=20
+> > +
+> > +  pcs-handle:
+> > +    description:
+> > +      phandle pointing to a PCS sub-node compatible with
+> > +      renesas,rzn1-miic.yaml#
+> > +    $ref: /schemas/types.yaml#/definitions/phandle =20
+>=20
+> you do not need ref here - it is coming from ethernet-controller.yaml
+> via snps,dwmac.yaml. You actually could drop entire property, but it can
+> also stay for the description.
 
--- 
-With best wishes
-Dmitry
+Ok thanks for the tip. I will drop it since there will be a v4.
 
+>=20
+> > +
+> > +required:
+> > +  - compatible
+> > +
+> > +unevaluatedProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/clock/r9a06g032-sysctrl.h>
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +
+> > +    ethernet@44000000 {
+> > +      compatible =3D "renesas,r9a06g032-gmac", "renesas,rzn1-gmac", "s=
+nps,dwmac";
+> > +      reg =3D <0x44000000 0x2000>;
+> > +      interrupt-parent =3D <&gic>;
+> > +      interrupts =3D <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>,
+> > +             <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>, =20
+>=20
+> Please align with previous <
+>=20
+>=20
+> Best regards,
+> Krzysztof
+>=20
+
+
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com
