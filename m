@@ -2,93 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F64691A6E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 09:56:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA096691A74
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 09:57:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231533AbjBJI4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 03:56:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55800 "EHLO
+        id S231462AbjBJI5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 03:57:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbjBJI4d (ORCPT
+        with ESMTP id S231672AbjBJI5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 03:56:33 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF1922DD5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 00:56:32 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id n13so3266487wmr.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 00:56:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kZ+f3iNC4UgNVPziXFfD8EZktQn5DJOz0Zpd0I2PkVM=;
-        b=VH99WeYMF5yNKSPDbejJR2fnGBGHu7owHpzE83+tg1SQCsUAPGia+aPCjhlnzuICBJ
-         7LXDjJ5ubhKDKAfU7IkOCcuLjo4S/TIaN8ljH4S8kH1Cv0m8QujlNoyPxgFflCqb88Bn
-         EZgDZhZShm7956siFhfcOzONw/5HKMor98dQRvOZbZBlHIagrMDqpBdcpJNNdyIyLCqh
-         F7+9DP8SWzi7ZkTXGHSMKneKMv2BubXlI7GKaPG9EUvPmG8JTUKGOYl6U1pckU364J/J
-         wmoMe2Q9KYhuYZWO7My+UlzsPggI9X5PFL2lDZyLzkIWPFcfyuaKjie9dlXq0iVjMJQe
-         DMgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kZ+f3iNC4UgNVPziXFfD8EZktQn5DJOz0Zpd0I2PkVM=;
-        b=DZVJ9WTqMUN0303xVShcZ2Tkr8SwzeldSWMj2SD2aSJ1pf8+zA0Ct4Upu9sNeO1oiC
-         kg6PQLiNNO5KsUUkALxF4qo5hDcH5tzyGobHBvX2/Edx3BQ436XxZLi1Fn/9jPQQ5fbP
-         Xpnq2yKrQ6W/kfKu8bzWRgdyQeOJeAj4cf7mJ/ItDavjgzgMMcg12sOppl+mg1f+rDXK
-         1D1oCqYqYtZ4GxpgYz2nblCPZnrAWikDkWU68+CNzgN7krZI3z32jGCZQUDvHuV/wSxE
-         +bhO3R0PH6d/6S5u2Rq1e+kZL2DwCC2cLHak1/t149+eCAQEIE9ap6mWrCfCxn86rIeD
-         BthQ==
-X-Gm-Message-State: AO0yUKUoDo0bmQ/wEYO3AQfx4kf+PfzyzUwqJ1eSgaWEEo8GMhdOaKLL
-        WmcWHWEEdhIRAlLdx9Q8XdhFqg==
-X-Google-Smtp-Source: AK7set/WowO5q/KnieW1zymc9H4EETfqzpWgHbPuDdPwkHpc6T3r4xFw+0Tyid295hdXskt7OZiEfQ==
-X-Received: by 2002:a05:600c:2ac8:b0:3dd:638d:bc31 with SMTP id t8-20020a05600c2ac800b003dd638dbc31mr15440661wme.26.1676019391138;
-        Fri, 10 Feb 2023 00:56:31 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id s11-20020adfeccb000000b002bfcc9d9607sm3028821wro.68.2023.02.10.00.56.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 00:56:30 -0800 (PST)
-Message-ID: <4b735136-d9c0-cf01-e453-c8da31754a93@linaro.org>
-Date:   Fri, 10 Feb 2023 09:56:29 +0100
+        Fri, 10 Feb 2023 03:57:10 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E06121285;
+        Fri, 10 Feb 2023 00:57:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676019428; x=1707555428;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tc+hIX0ul8Y+LFWF/oVDFRS5E1dOUD0QDPlgBJRGPck=;
+  b=PIRW9oRJhsl6L1shzAm1uZgJwnFTlJ+hqhf8N7M2zA3cBD18Q9NklE0F
+   uCuag7zUBe+Nxt+lZO9F+3CNmy1zwh74YEJa4QDIQvy5obPL9ijYvBlX1
+   eosH0ip5FkWvbdtczOHZ9leJuI1L90A68CAJZl6Jt6XmPmMSebgBGZwzM
+   6wtof4c5ctQaNVZl98g8FWCUdGoyzi/h9WeEkqvCcWD14s9INFmUZnGJL
+   5hTP1jhlUIit+UgU1BoHgNbijxpoKlrqPGJ9dsjIJIGPqKRh7KhtYzJh+
+   tKcISoeQ3pq6rz5GjHCWTVHWuKWfn3/FAkE5VQ12Abmz0+YI6Vvu/KNNR
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="314017159"
+X-IronPort-AV: E=Sophos;i="5.97,286,1669104000"; 
+   d="scan'208";a="314017159"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 00:57:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="810750098"
+X-IronPort-AV: E=Sophos;i="5.97,286,1669104000"; 
+   d="scan'208";a="810750098"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 10 Feb 2023 00:56:57 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 10 Feb 2023 10:56:56 +0200
+Date:   Fri, 10 Feb 2023 10:56:56 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, stable@vger.kernel.org,
+        Diana Zigterman <dzigterman@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guillaume Ranquet <granquet@baylibre.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        Pablo Sun <pablo.sun@mediatek.com>
+Subject: Re: [PATCH] usb: typec: altmodes/displayport: Fix probe pin assign
+ check
+Message-ID: <Y+YG2DIHy/vg0vxY@kuha.fi.intel.com>
+References: <20230208205318.131385-1-pmalani@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 3/3] ARM: dts: aspeed: Add device tree for Ufispace
- NCPLite BMC
-Content-Language: en-US
-To:     Jordan Chang <jordan.chang@ufispace.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        joel@jms.id.au, andrew@aj.id.au, robh+dt@kernel.org
-Cc:     jay.tc.lin@ufispace.com, eason.ys.huang@ufispace.com
-References: <20230210055451.72153-1-jordan.chang@ufispace.com>
- <20230210055451.72153-4-jordan.chang@ufispace.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230210055451.72153-4-jordan.chang@ufispace.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230208205318.131385-1-pmalani@chromium.org>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/2023 06:54, Jordan Chang wrote:
-> Add initial version of device tree for Ufispace NCPLite platform
-> which is equipped with AST2600-based BMC.
+On Wed, Feb 08, 2023 at 08:53:19PM +0000, Prashant Malani wrote:
+> While checking Pin Assignments of the port and partner during probe, we
+> don't take into account whether the peripheral is a plug or receptacle.
 > 
-> Signed-off-by: Jordan Chang <jordan.chang@ufispace.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> This manifests itself in a mode entry failure on certain docks and
+> dongles with captive cables. For instance, the Startech.com Type-C to DP
+> dongle (Model #CDP2DP) advertises its DP VDO as 0x405. This would fail
+> the Pin Assignment compatibility check, despite it supporting
+> Pin Assignment C as a UFP.
+> 
+> Update the check to use the correct DP Pin Assign macros that
+> take the peripheral's receptacle bit into account.
+> 
+> Fixes: c1e5c2f0cb8a ("usb: typec: altmodes/displayport: correct pin assignment for UFP receptacles")
+> Cc: stable@vger.kernel.org
+> Reported-by: Diana Zigterman <dzigterman@chromium.org>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-From where did you get my Ack? I don't recall it.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Best regards,
-Krzysztof
+> ---
+> 
+> I realize this is a bit late in the release cycle, but figured since it
+> is a fix it might still be considered. Please let me know if it's too
+> late and I can re-send this after the 6.3-rc1 is released. Thanks!
+> 
+>  drivers/usb/typec/altmodes/displayport.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+> index 20db51471c98..662cd043b50e 100644
+> --- a/drivers/usb/typec/altmodes/displayport.c
+> +++ b/drivers/usb/typec/altmodes/displayport.c
+> @@ -547,10 +547,10 @@ int dp_altmode_probe(struct typec_altmode *alt)
+>  	/* FIXME: Port can only be DFP_U. */
+>  
+>  	/* Make sure we have compatiple pin configurations */
+> -	if (!(DP_CAP_DFP_D_PIN_ASSIGN(port->vdo) &
+> -	      DP_CAP_UFP_D_PIN_ASSIGN(alt->vdo)) &&
+> -	    !(DP_CAP_UFP_D_PIN_ASSIGN(port->vdo) &
+> -	      DP_CAP_DFP_D_PIN_ASSIGN(alt->vdo)))
+> +	if (!(DP_CAP_PIN_ASSIGN_DFP_D(port->vdo) &
+> +	      DP_CAP_PIN_ASSIGN_UFP_D(alt->vdo)) &&
+> +	    !(DP_CAP_PIN_ASSIGN_UFP_D(port->vdo) &
+> +	      DP_CAP_PIN_ASSIGN_DFP_D(alt->vdo)))
+>  		return -ENODEV;
+>  
+>  	ret = sysfs_create_group(&alt->dev.kobj, &dp_altmode_group);
+> -- 
+> 2.39.1.519.gcb327c4b5f-goog
 
+thanks,
+
+-- 
+heikki
