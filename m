@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E1D69254E
+	by mail.lfdr.de (Postfix) with ESMTP id 82E5B69254F
 	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:25:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233061AbjBJSZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 13:25:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50270 "EHLO
+        id S233077AbjBJSZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 13:25:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233014AbjBJSZW (ORCPT
+        with ESMTP id S233050AbjBJSZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 13:25:22 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7160261D24;
-        Fri, 10 Feb 2023 10:25:21 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id lu11so18214170ejb.3;
-        Fri, 10 Feb 2023 10:25:21 -0800 (PST)
+        Fri, 10 Feb 2023 13:25:24 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2AA6359E;
+        Fri, 10 Feb 2023 10:25:22 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id dr8so18101333ejc.12;
+        Fri, 10 Feb 2023 10:25:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=916XgVZ9fASoqPZFrOcZBdhhHsdFw2GVlGXOTRIHOcg=;
-        b=HPVGsf5AoDNAGcwvHWXoIKJGcZehK5culQMeKU7O+QqHKQXZnw0SKmRZWWVghdeHlD
-         iPohuCwptOedN1FwGCKUrBDgsyzxyJ51x/+rRlKU9XwxSuguE+a4RSErtzi2H1gYPK8P
-         YdlLlQkTonP9ChuNfXIvc1DE1YKXKP3Nlb5W/XZ5jFXzSoTw4Mm9uYGzduspkFcWHaMd
-         I2JwhjfnJY3bWtUzrUN/mxpybEYvkzMYBzmrBoIB/2FBqfvMRtGGtySyicAQ256K/RL6
-         tTD9YT8E+wq5HNADUtR8Lc6r1Bv/9mAkpn5yd+bmvoWGHIzYIok+iPih8DnqT/DdKO/7
-         Q9jQ==
+        bh=zQ2TcNqdLFOAVmLP5M0cy768AQ+LH1yHfkoCaBZyfHc=;
+        b=P4Cyqdnd70mhdxO3RK9uEwrJUnV0pnLT7dy056n4u+u/+L9yzEAAUgn3U9LGa31Z4m
+         D6nzdWRQNvoCNfApP/7ozpYabM/ETKwH0qZbVwdGWtwfNyreTUHv1SCG+cGOazHic+ma
+         iSDRVWwnY9fe4OEWZ+psBH4mT2PsvuU1+7My8yv2DG6tlJizuhvWwxRFVoq9CPqUfrWV
+         D/WqtDAAEZXnrBvoJ4HXZEqBdnlVo5ABTW19fIqyN/vC/SGP6wmmIf1P6EDyPRTb9ZIM
+         V6bcmgegiX97MXVWNL/tjGXtGLVAWZH8OW2BjWA2eyt+kqB8sU6e0u6wLtlN1Vvq2tW6
+         bWUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=916XgVZ9fASoqPZFrOcZBdhhHsdFw2GVlGXOTRIHOcg=;
-        b=z/3P+YCy4Y2fC3Enylxat96w3IdUAfwO3Vnpygpge3wPBOFCdQknKC83OZHgbAMZPB
-         iDyqPV1glVwP49EURTryM66gZ3ZR6LnBy40I1fGuFnmvJ3oKBy9F4xRTw4SlJwGIE7Ec
-         FhXaiIwFi23evOWV+YJKN+95wkRZIhaTFdXdoq6oJ6pP2kqSiMwNT1XUXC3cs1rq6uIV
-         HHUbtVQTRQpjDu3VZ4IDT9giXSagwpAirIAtCzEmHJ86A3SBJ/XK429impALAf0dGYOY
-         mwMNVxaxJRIoRohFtpPrug8mmMSK6sY5lrqAIMK1uQspB0ALX0wUXLYbkjhARHxbstzf
-         oQFw==
-X-Gm-Message-State: AO0yUKUPLry6QUrbBjmsm1ImwbbJh6uWYtocmJ0vkRJGwfPBnfGm5Ikz
-        jJ8uuigL/OpXSnYg2j9DoF4=
-X-Google-Smtp-Source: AK7set/QOnGx6F5MPHmVFkQdlYm4poP8qmAhex/C7DuEuZcrrTjeoJoC8VePE7xv4RouyakS0boaGw==
-X-Received: by 2002:a17:906:3892:b0:88a:f42f:579c with SMTP id q18-20020a170906389200b0088af42f579cmr14485145ejd.77.1676053519888;
-        Fri, 10 Feb 2023 10:25:19 -0800 (PST)
+        bh=zQ2TcNqdLFOAVmLP5M0cy768AQ+LH1yHfkoCaBZyfHc=;
+        b=HxOgv9wqzinQwgnS/Mdz8DbdHtSWkatxGMfPpBNvBn2yHWzjWiSEnaPrhV7CWt7LxU
+         qZIHCxa68GVilGdnBa9F6P2yzRPQu4MPLeevYOqbdaaH77kRpgCOKiCuANgzrZ7EHqAW
+         SgWBhJiy3nK5DLjoocb/r+HUA59QH9QT1TQMW0MXamXx9fdfCqnmgXzxeod0Qkg/xlGS
+         BHNSVM0vj+YRyhq9wbqoaHTUHubfRgSNQ+jG1h2I2X+/Vul9XdzN8KpVJORTHa5CSeGN
+         Xms6DQOfLdPwIF5SSHJbKS85b8VdXXb2YAt6ZFk31jOY4A5oRLRKV81CRK6Kq3U//VeY
+         mgFQ==
+X-Gm-Message-State: AO0yUKWv8hqFJJrPkuVjpVSP51E7W4efFJFYDPWwsR1P2t8NZ2/SBZVW
+        rwNA/QGSe53yt5MU+cFwgDI=
+X-Google-Smtp-Source: AK7set/jOf8U2uDeIMXN7sLu64zG4Q6TvF/CNq5kPekt86MNECu2qEg+gRlcIb9Fap72KoCeg3+edw==
+X-Received: by 2002:a17:906:29cb:b0:87f:5d0a:c610 with SMTP id y11-20020a17090629cb00b0087f5d0ac610mr16518249eje.32.1676053521286;
+        Fri, 10 Feb 2023 10:25:21 -0800 (PST)
 Received: from arinc9-PC.lan ([37.120.152.236])
-        by smtp.gmail.com with ESMTPSA id 4-20020a170906024400b008aef19f678asm2708966ejl.165.2023.02.10.10.25.18
+        by smtp.gmail.com with ESMTPSA id 4-20020a170906024400b008aef19f678asm2708966ejl.165.2023.02.10.10.25.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 10:25:19 -0800 (PST)
+        Fri, 10 Feb 2023 10:25:21 -0800 (PST)
 From:   arinc9.unal@gmail.com
 X-Google-Original-From: arinc.unal@arinc9.com
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -63,9 +63,9 @@ Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
         linux-mediatek@lists.infradead.org,
         Frank Wunderlich <frank-w@public-files.de>,
         erkin.bozoglu@xeront.com
-Subject: [PATCH v3 2/5] arm: dts: mt7623: add mt7530 switch to mt7623a.dtsi
-Date:   Fri, 10 Feb 2023 21:25:02 +0300
-Message-Id: <20230210182505.24597-3-arinc.unal@arinc9.com>
+Subject: [PATCH v3 3/5] arm: dts: mt7623: change mt7530 switch address
+Date:   Fri, 10 Feb 2023 21:25:03 +0300
+Message-Id: <20230210182505.24597-4-arinc.unal@arinc9.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230210182505.24597-1-arinc.unal@arinc9.com>
 References: <20230210182505.24597-1-arinc.unal@arinc9.com>
@@ -84,305 +84,68 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-The MT7530 switch is included as a part of the multi-chip module on the
-MT7623AI SoC. Add it to mt7623a.dtsi and adjust DTs that call mt7623a.dtsi.
+In the case of muxing phy0 of the MT7530 switch, the switch and the phy
+will have the same address on the mdio bus, 0. This causes the ethernet
+driver to fail since devices on the mdio bus cannot share an address.
+
+Any address can be used for the switch, therefore, change the switch
+address to 0x1f.
 
 Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 ---
- arch/arm/boot/dts/mt7623a-rfb-emmc.dts | 87 +++++++-------------------
- arch/arm/boot/dts/mt7623a-rfb-nand.dts | 87 +++++++-------------------
- arch/arm/boot/dts/mt7623a.dtsi         | 74 ++++++++++++++++++++++
- 3 files changed, 118 insertions(+), 130 deletions(-)
+ arch/arm/boot/dts/mt7623a.dtsi                | 4 ++--
+ arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dts | 4 ++--
+ arch/arm/boot/dts/mt7623n-rfb-emmc.dts        | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm/boot/dts/mt7623a-rfb-emmc.dts b/arch/arm/boot/dts/mt7623a-rfb-emmc.dts
-index a64d68b6e165..5654284bab01 100644
---- a/arch/arm/boot/dts/mt7623a-rfb-emmc.dts
-+++ b/arch/arm/boot/dts/mt7623a-rfb-emmc.dts
-@@ -112,74 +112,31 @@ &crypto {
- 	status = "okay";
- };
- 
--&gmac0 {
--	status = "okay";
--	phy-mode = "trgmii";
-+&switch0 {
-+	ports {
-+		port@0 {
-+			status = "okay";
-+			label = "lan0";
-+		};
- 
--	fixed-link {
--		speed = <1000>;
--		full-duplex;
--		pause;
--	};
--};
-+		port@1 {
-+			status = "okay";
-+			label = "lan1";
-+		};
- 
--&eth {
--	status = "okay";
-+		port@2 {
-+			status = "okay";
-+			label = "lan2";
-+		};
-+
-+		port@3 {
-+			status = "okay";
-+			label = "lan3";
-+		};
- 
--	mdio-bus {
--		#address-cells = <1>;
--		#size-cells = <0>;
--
--		switch@0 {
--			compatible = "mediatek,mt7530";
--			reg = <0>;
--			mediatek,mcm;
--			resets = <&ethsys MT2701_ETHSYS_MCM_RST>;
--			reset-names = "mcm";
--			core-supply = <&mt6323_vpa_reg>;
--			io-supply = <&mt6323_vemc3v3_reg>;
--
--			ports {
--				#address-cells = <1>;
--				#size-cells = <0>;
--
--				port@0 {
--					reg = <0>;
--					label = "lan0";
--				};
--
--				port@1 {
--					reg = <1>;
--					label = "lan1";
--				};
--
--				port@2 {
--					reg = <2>;
--					label = "lan2";
--				};
--
--				port@3 {
--					reg = <3>;
--					label = "lan3";
--				};
--
--				port@4 {
--					reg = <4>;
--					label = "wan";
--				};
--
--				port@6 {
--					reg = <6>;
--					label = "cpu";
--					ethernet = <&gmac0>;
--					phy-mode = "trgmii";
--
--					fixed-link {
--						speed = <1000>;
--						full-duplex;
--					};
--				};
--			};
-+		port@4 {
-+			status = "okay";
-+			label = "wan";
- 		};
- 	};
- };
-diff --git a/arch/arm/boot/dts/mt7623a-rfb-nand.dts b/arch/arm/boot/dts/mt7623a-rfb-nand.dts
-index fac3ca0322c8..afd177b3b516 100644
---- a/arch/arm/boot/dts/mt7623a-rfb-nand.dts
-+++ b/arch/arm/boot/dts/mt7623a-rfb-nand.dts
-@@ -116,74 +116,31 @@ &crypto {
- 	status = "okay";
- };
- 
--&gmac0 {
--	status = "okay";
--	phy-mode = "trgmii";
-+&switch0 {
-+	ports {
-+		port@0 {
-+			status = "okay";
-+			label = "lan0";
-+		};
- 
--	fixed-link {
--		speed = <1000>;
--		full-duplex;
--		pause;
--	};
--};
-+		port@1 {
-+			status = "okay";
-+			label = "lan1";
-+		};
- 
--&eth {
--	status = "okay";
-+		port@2 {
-+			status = "okay";
-+			label = "lan2";
-+		};
- 
--	mdio-bus {
--		#address-cells = <1>;
--		#size-cells = <0>;
--
--		switch@0 {
--			compatible = "mediatek,mt7530";
--			reg = <0>;
--			mediatek,mcm;
--			resets = <&ethsys MT2701_ETHSYS_MCM_RST>;
--			reset-names = "mcm";
--			core-supply = <&mt6323_vpa_reg>;
--			io-supply = <&mt6323_vemc3v3_reg>;
--
--			ports {
--				#address-cells = <1>;
--				#size-cells = <0>;
--
--				port@0 {
--					reg = <0>;
--					label = "lan0";
--				};
--
--				port@1 {
--					reg = <1>;
--					label = "lan1";
--				};
--
--				port@2 {
--					reg = <2>;
--					label = "lan2";
--				};
--
--				port@3 {
--					reg = <3>;
--					label = "lan3";
--				};
--
--				port@4 {
--					reg = <4>;
--					label = "wan";
--				};
--
--				port@6 {
--					reg = <6>;
--					label = "cpu";
--					ethernet = <&gmac0>;
--					phy-mode = "trgmii";
--
--					fixed-link {
--						speed = <1000>;
--						full-duplex;
--					};
--				};
--			};
-+		port@3 {
-+			status = "okay";
-+			label = "lan3";
-+		};
-+
-+		port@4 {
-+			status = "okay";
-+			label = "wan";
- 		};
- 	};
- };
 diff --git a/arch/arm/boot/dts/mt7623a.dtsi b/arch/arm/boot/dts/mt7623a.dtsi
-index d304b62d24b5..fbb5731a3a53 100644
+index fbb5731a3a53..dd522e508eb3 100644
 --- a/arch/arm/boot/dts/mt7623a.dtsi
 +++ b/arch/arm/boot/dts/mt7623a.dtsi
-@@ -17,8 +17,82 @@ &crypto {
- 	power-domains = <&scpsys MT7623A_POWER_DOMAIN_ETH>;
- };
+@@ -36,9 +36,9 @@ mdio: mdio-bus {
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
  
-+&gmac0 {
-+	status = "okay";
-+	phy-mode = "trgmii";
-+
-+	fixed-link {
-+		speed = <1000>;
-+		full-duplex;
-+		pause;
-+	};
-+};
-+
- &eth {
-+	status = "okay";
- 	power-domains = <&scpsys MT7623A_POWER_DOMAIN_ETH>;
-+
-+	mdio: mdio-bus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		switch0: switch@0 {
-+			compatible = "mediatek,mt7530";
-+			reg = <0>;
-+			mediatek,mcm;
-+			resets = <&ethsys MT2701_ETHSYS_MCM_RST>;
-+			reset-names = "mcm";
-+			core-supply = <&mt6323_vpa_reg>;
-+			io-supply = <&mt6323_vemc3v3_reg>;
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					status = "disabled";
-+					reg = <0>;
-+					label = "swp0";
-+				};
-+
-+				port@1 {
-+					status = "disabled";
-+					reg = <1>;
-+					label = "swp1";
-+				};
-+
-+				port@2 {
-+					status = "disabled";
-+					reg = <2>;
-+					label = "swp2";
-+				};
-+
-+				port@3 {
-+					status = "disabled";
-+					reg = <3>;
-+					label = "swp3";
-+				};
-+
-+				port@4 {
-+					status = "disabled";
-+					reg = <4>;
-+					label = "swp4";
-+				};
-+
-+				port@6 {
-+					reg = <6>;
-+					label = "cpu";
-+					ethernet = <&gmac0>;
-+					phy-mode = "trgmii";
-+
-+					fixed-link {
-+						speed = <1000>;
-+						full-duplex;
-+					};
-+				};
-+			};
-+		};
-+	};
- };
+-		switch0: switch@0 {
++		switch0: switch@1f {
+ 			compatible = "mediatek,mt7530";
+-			reg = <0>;
++			reg = <0x1f>;
+ 			mediatek,mcm;
+ 			resets = <&ethsys MT2701_ETHSYS_MCM_RST>;
+ 			reset-names = "mcm";
+diff --git a/arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dts b/arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dts
+index 1e03a3de654f..dc9b4f99eb8b 100644
+--- a/arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dts
++++ b/arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dts
+@@ -189,9 +189,9 @@ mdio-bus {
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
  
- &nandc {
+-		switch@0 {
++		switch@1f {
+ 			compatible = "mediatek,mt7530";
+-			reg = <0>;
++			reg = <0x1f>;
+ 			reset-gpios = <&pio 33 0>;
+ 			core-supply = <&mt6323_vpa_reg>;
+ 			io-supply = <&mt6323_vemc3v3_reg>;
+diff --git a/arch/arm/boot/dts/mt7623n-rfb-emmc.dts b/arch/arm/boot/dts/mt7623n-rfb-emmc.dts
+index 5e328c2a6a6e..6b0c3d1006ab 100644
+--- a/arch/arm/boot/dts/mt7623n-rfb-emmc.dts
++++ b/arch/arm/boot/dts/mt7623n-rfb-emmc.dts
+@@ -185,9 +185,9 @@ phy5: ethernet-phy@5 {
+ 			phy-mode = "rgmii-rxid";
+ 		};
+ 
+-		switch@0 {
++		switch@1f {
+ 			compatible = "mediatek,mt7530";
+-			reg = <0>;
++			reg = <0x1f>;
+ 			reset-gpios = <&pio 33 0>;
+ 			core-supply = <&mt6323_vpa_reg>;
+ 			io-supply = <&mt6323_vemc3v3_reg>;
 -- 
 2.37.2
 
