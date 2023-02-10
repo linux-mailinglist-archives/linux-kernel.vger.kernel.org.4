@@ -2,101 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44716691D5D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 11:57:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E74C691D60
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 11:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232241AbjBJK5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 05:57:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39642 "EHLO
+        id S231167AbjBJK5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 05:57:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231400AbjBJK5E (ORCPT
+        with ESMTP id S232245AbjBJK5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 05:57:04 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E944608E;
-        Fri, 10 Feb 2023 02:57:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=mOxzUNdxDyu4EvIpxaCXo+zY4fgrjFKuSLiD4nmJaak=; b=O6QeR6Hkb3aVPLJ+4SGJ/kpzu/
-        Z2llFq3PjIg/6n7I3i/wi3ItbsXTzbeWTIxMtTDqB+wdugrF4MWgusqw6Gxeb9Ggu/bitzcTrZQae
-        s+yHhS4kviyVQf6NahJO1s2EPWsK+CK1i7FrY7Nv5yJt75+E0Y9QL+yp+aITrR15o3JKE5hsE/+Rx
-        o3L3/V6w0olRgW99SzFwHHycn3jf05SMNnnKcUc9H9rbR8QeYHI16ZY8hHL9X3xAKDL4SUaZUwBC1
-        GIEGzoQcExvml7rmeZS47lHWItqvop+PrDffitw3n4NUen5qKEfSyu70cTe11jPS2N/9S4tThrODz
-        ik/YdM+A==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36510)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pQR5P-0001LQ-Pc; Fri, 10 Feb 2023 10:56:59 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pQR5N-0005W1-2a; Fri, 10 Feb 2023 10:56:57 +0000
-Date:   Fri, 10 Feb 2023 10:56:57 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Subject: Re: [PATCH v2 11/11] net: dsa: mt7530: use external PCS driver
-Message-ID: <Y+Yi+ajKHaLo4Vvq@shell.armlinux.org.uk>
-References: <cover.1675779094.git.daniel@makrotopia.org>
- <dcda0a3a1bf89e27e600822df63009b2b10e136a.1675779094.git.daniel@makrotopia.org>
+        Fri, 10 Feb 2023 05:57:08 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DF55ACC6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 02:57:06 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id az4-20020a05600c600400b003dff767a1f1so3773238wmb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 02:57:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gxFJW5wMWFSgwofHY83IGRmWRME/u231OOEuiB6E6rw=;
+        b=aojESYChzWo8ja2Kpou77qQnRGwHD/xM1FLKoOgU2+BUcxjCuMdr/DOSA8Czp96JMv
+         oOXOKEnkyR2GZR+rTnQ/Kfviro+4IzQsUjV+1MmrRHZtQmqZEUzWHad2LRH7+ChV75RZ
+         uNgaqTMUEf7u2mZOEwK+t8/OpqmRjkb79BHAqwcG/XbqPmZIfm3bzRCn7Ka7mCar5N/k
+         8Znz0mrYBjzQIPj3w+xm5jD0g/EbXotm8FyD/F7Qn2dQ9mNa1tGMcK9UDlALy7UKcTe0
+         X0eCejYgMDP0HO5so1SnMVqUdb1VIa2PQLIOOLK4+ADT95E8jgMUH5Enzgu6i3W6AfjE
+         +v1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gxFJW5wMWFSgwofHY83IGRmWRME/u231OOEuiB6E6rw=;
+        b=PxPFXS1twG45mLxsAK0Ccluf6ReC70BelLu8LfrnynwKmAThiS/Irh1RVqaaI1Q/55
+         WK08wb9eV6sf/cc6w6oWNVMIsT3SADKbnkjNOnSv4fxpRdo2ypKGFT3hNS6X/nVddTFt
+         OuOItlcHu9/DHdu/EbrKSGNWAT6vzCztHncDPyN50G9wkiBD9pdfd2AOuGixyw9/3MNq
+         F2S6gfPhPJGr5KqSoeAIxybXWwChQLKJaW4ee+fWYUIMGs7mH5fpAKHe6Ox/STVwy3NJ
+         QuDylwvHni9WoKMycGf1R1U5Is4QSnIj9F380KGpbU1Tw+D2Xo7Md2yqyCGjyPfDfPS3
+         axgQ==
+X-Gm-Message-State: AO0yUKWEMW7cau8mDHe8cBee/pH0J/RKhETgU2Vt0JKO/KxbQrk5887P
+        CjHTwWsffamufYcDljBkP0Zasg==
+X-Google-Smtp-Source: AK7set+prGY1H0ukKTktyiVy+Uhot76X1GyOTcxgbUK9hltwD8dL7jvL/W4wECXhkHKsN6qrlPghnQ==
+X-Received: by 2002:a05:600c:993:b0:3e1:577:80f5 with SMTP id w19-20020a05600c099300b003e1057780f5mr10446539wmp.31.1676026625087;
+        Fri, 10 Feb 2023 02:57:05 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id w19-20020a05600c475300b003e11f280b8bsm1961050wmo.44.2023.02.10.02.57.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 02:57:04 -0800 (PST)
+Message-ID: <039b8306-04a8-ead3-7a5f-3593c01496a5@linaro.org>
+Date:   Fri, 10 Feb 2023 11:57:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dcda0a3a1bf89e27e600822df63009b2b10e136a.1675779094.git.daniel@makrotopia.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 1/5] dt-bindings: display: msm: dp-controller: document
+ SM8450 compatible
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230206-topic-sm8450-upstream-dp-controller-v2-0-529da2203659@linaro.org>
+ <20230206-topic-sm8450-upstream-dp-controller-v2-1-529da2203659@linaro.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230206-topic-sm8450-upstream-dp-controller-v2-1-529da2203659@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 02:24:17PM +0000, Daniel Golle wrote:
-> @@ -2728,11 +2612,11 @@ mt753x_phylink_mac_select_pcs(struct dsa_switch *ds, int port,
->  
->  	switch (interface) {
->  	case PHY_INTERFACE_MODE_TRGMII:
-> +		return &priv->pcs[port].pcs;
->  	case PHY_INTERFACE_MODE_SGMII:
->  	case PHY_INTERFACE_MODE_1000BASEX:
->  	case PHY_INTERFACE_MODE_2500BASEX:
-> -		return &priv->pcs[port].pcs;
-> -
-> +		return priv->ports[port].sgmii_pcs;
+On 10/02/2023 11:34, Neil Armstrong wrote:
+> The SM8450 & SM350 shares the same DT TX IP version, use the
+> SM8350 compatible as fallback for SM8450.
 
-My only concern here is that we also use the PCS when in TRGMII mode in
-this driver, but the mtk pcs code from mtk_eth_soc doesn't handle
-TRGMII (and getting the link timer will fail for this mode, causing
-the pcs_config() method to fail.)
 
-Thus, this driver will stop working in TRGMII mode.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Best regards,
+Krzysztof
+
