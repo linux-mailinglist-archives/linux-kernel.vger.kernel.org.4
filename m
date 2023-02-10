@@ -2,156 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6F36917FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 06:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64947691808
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 06:43:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbjBJFcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 00:32:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55798 "EHLO
+        id S231126AbjBJFnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 00:43:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjBJFcg (ORCPT
+        with ESMTP id S230490AbjBJFnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 00:32:36 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4154860E7D
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 21:32:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676007155; x=1707543155;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=0dFcyVD1oH3bjnCx3SnrQoe2jS+/49+/6tdl/6g+w/A=;
-  b=kXQULOy2hj2DK7TCBEFWEJ52nZMrUO8cdG8JDkaPQV/sn3+7PRSS9i9C
-   N0W+QvFOQiJ8x0/GtbsOB3YaFcxUBCN64cKWusn5fkXA/MrjzIq9OpMjc
-   hMNoXT3Nqi2xO6pbzdQV5gt4hn1jSH4iiKBe1DhZRFnmmEI/fYknT3+Eg
-   sB5Z3Xm/Qn149S6Tb/qYJsZrCUE+ruiZzi6CsoL0aJ/dxNtJ1UgVaWdge
-   hQtjq7mgqhqK6k3eZwaCRj7Bb5qt/btJuz4sblNFW8A3ooxOOWJ+YIfs1
-   DGBSyFJl/Jk7X1xc5f7mdX45g+FTgv5TYCyIFfNxZp9H8tEmzoIvRdoRy
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="331645082"
-X-IronPort-AV: E=Sophos;i="5.97,286,1669104000"; 
-   d="scan'208";a="331645082"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 21:32:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="667934711"
-X-IronPort-AV: E=Sophos;i="5.97,286,1669104000"; 
-   d="scan'208";a="667934711"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 09 Feb 2023 21:32:24 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pQM1I-0005Zw-0q;
-        Fri, 10 Feb 2023 05:32:24 +0000
-Date:   Fri, 10 Feb 2023 13:32:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:usama.2023.02.09a] BUILD REGRESSION
- d0fd6cf85f2b25e89444a52b75edbf3e96f99cdb
-Message-ID: <63e5d6db.iFZNCjHyv/bGg62H%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 10 Feb 2023 00:43:19 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8AB2643ED
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 21:43:16 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id pj3so4219083pjb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 21:43:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SOE16gpo14kJ2EwIrQmS9P4CD4KSR3yX19I9pXw0xUw=;
+        b=mnbG3Inx9g2cxrN6CsW3YFXBcbi6wMmtdtMcCb07RbVziOaeGdHHWQD+1nh1RgMmYO
+         0a3K9TQBovQAyK3QV6TuzwyAr5KH4HnQU0pqz2e4sCjK2dUV2jW3V6ZPclrIpxY6hXoL
+         A4YG6ij1lr9PhrpIJM+anjeg+z616nrJiLtFU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SOE16gpo14kJ2EwIrQmS9P4CD4KSR3yX19I9pXw0xUw=;
+        b=Hr9zLS2wrufjVsIiWoqJci4CYoVbx8YOIV9A9d8MSR89RvDO9OhAMlvy9HLbjJM1PK
+         LFv3vXNZbGNaZyLEjhrInIgoJOAOiGz7O27DkKHDSVKopdWWDy6Qk/onLF6BggYCXlhW
+         TL6dae6GrJYMi2NYVyFyzUymhiy8JTHawmRG0yMY2Di/mvThdR4YiR4ROmzgPrK/LqKP
+         fgIHoSn6+lFf1uWf1fa40fMrMjfeX+Q3lk1ubTSAShKffYnkuF9U1mMyg/L7q+b6X45z
+         dhxT8+cxECatbeyJK+hAFwp0SQ9t1IkgF1aaKwqECYGsMhwrITppLCOITIfxvk546Piw
+         sCPw==
+X-Gm-Message-State: AO0yUKWb9mEQRb5ZHfEC54sML7HdVVPeuYIOvkaUxacdnBaMjCoVOmhe
+        6GzQNU+p1wqcGC86QAkhXp90Eg==
+X-Google-Smtp-Source: AK7set+1n5AGJexcYbatfSHJZ2Nw0rtc/AT+n0aM3Z+adx6Q/lu2rO9E0f/rQJGPlffIl4QbJSX5wA==
+X-Received: by 2002:a17:902:f549:b0:199:3f82:ef49 with SMTP id h9-20020a170902f54900b001993f82ef49mr12206318plf.49.1676007796046;
+        Thu, 09 Feb 2023 21:43:16 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id v8-20020a17090331c800b00199023c688esm2481518ple.26.2023.02.09.21.43.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 21:43:15 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] wifi: ath: Silence memcpy run-time false positive warning
+Date:   Thu,  9 Feb 2023 21:43:13 -0800
+Message-Id: <20230210054310.never.554-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2274; h=from:subject:message-id; bh=HpKo9sTr/HDvjHRUnQNbbmtTY7h1S1HI2SjgTQu+PF0=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj5dlx5/oUi2b864PAZJA2tYIlXO8n8wbWjG+PlQly 9C7XAsyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY+XZcQAKCRCJcvTf3G3AJlZzD/ 9+QfS5oxR9/4Qs0yKAwtDcjvnug1MfW4BnEtT2afvu7iPZkrCDin60lTjPGTN4vglnrMWT6afqpXnB XHgLTZj2ahcVuOQLBAF9mPTqGZYFEWYMLcqakJ2hKGbtM2MpzjEYSfnGbfk08ATNfrrC9vmHuk1Hce xcVxtBS1ehTzBqZBnCBzV386ODKpzGPsVezLVFr0b0hB86eQNAC0pW7cC6stmrpk5U8cyCTv20dZuZ PJkFEBjLOQZuuzP0V8BCZ867TU/el8Bx3w1/F8Ce3bkO/Km4WQBLJ5+rBMPwsLYWsTdrhDqdu3euTe Bhp89FnehAlsKcXvPnLHys4JZWQ5s1/wupi0YapBpwtlTaGioAeuKXEJzZebafhBWdv7XtQN6PogwP lvSu5npSmpiQj8iytbaqxBptNCQCmZYnhv2z9UFLBkvj1L3dZ9feb5jEU+nVwbL3jJa/D1DaP8U3Kc 2ZzjO/UrTknTbD0H4ctE/3jt/Ya1qsDBg2/JLVYrRne8C65le2FKflS229RM8Yb/IaMUarTPoHX6Pq 8Go0XC4epyRU13nhw/0ZnydH+ugnE9KAroC++PaLXm7AYp1ste2SnMkQyKGQZJ3jgv33xMXlxEaveo PE1rh9N3Ycjh+pdBdVCzJrUR4MAtEoCFKpudfDhRQge812Fsl2prEPkk5bCA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git usama.2023.02.09a
-branch HEAD: d0fd6cf85f2b25e89444a52b75edbf3e96f99cdb  x86/smpboot: Serialize topology updates for secondary bringup
+The memcpy() in ath_key_config() was attempting to write across
+neighboring struct members in struct ath_keyval. Introduce a wrapping
+struct_group, kv_values, to be the addressable target of the memcpy
+without overflowing an individual member. Silences the false positive
+run-time warning:
 
-Error/Warning reports:
+  memcpy: detected field-spanning write (size 32) of single field "hk.kv_val" at drivers/net/wireless/ath/key.c:506 (size 16)
 
-https://lore.kernel.org/oe-kbuild-all/202302100556.sUYjKgbk-lkp@intel.com
+Link: https://bbs.archlinux.org/viewtopic.php?id=282254
+Cc: Kalle Valo <kvalo@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: linux-wireless@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/net/wireless/ath/ath.h | 12 +++++++-----
+ drivers/net/wireless/ath/key.c |  2 +-
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-Error/Warning: (recently discovered and may have been fixed)
-
-arch/powerpc/kernel/smp.c:1768:1: error: function declared 'noreturn' should not return [-Werror,-Winvalid-noreturn]
-
-Error/Warning ids grouped by kconfigs:
-
-clang_recent_errors
-`-- powerpc-buildonly-randconfig-r003-20230209
-    `-- arch-powerpc-kernel-smp.c:error:function-declared-noreturn-should-not-return-Werror-Winvalid-noreturn
-
-elapsed time: 727m
-
-configs tested: 62
-configs skipped: 2
-
-gcc tested configs:
-x86_64                            allnoconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-arc                                 defconfig
-alpha                               defconfig
-powerpc                           allnoconfig
-arc                  randconfig-r043-20230209
-arm                  randconfig-r046-20230209
-sh                               allmodconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-s390                                defconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-s390                             allmodconfig
-i386                          randconfig-a005
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-x86_64                           rhel-8.3-bpf
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-s390                             allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                          randconfig-a014
-i386                                defconfig
-i386                          randconfig-a012
-i386                          randconfig-a016
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-ia64                             allmodconfig
-i386                             allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-alpha                            allyesconfig
-arc                              allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-
-clang tested configs:
-hexagon              randconfig-r041-20230209
-hexagon              randconfig-r045-20230209
-riscv                randconfig-r042-20230209
-s390                 randconfig-r044-20230209
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a013
-x86_64                        randconfig-a005
-i386                          randconfig-a011
-i386                          randconfig-a015
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                          rhel-8.3-rust
-
+diff --git a/drivers/net/wireless/ath/ath.h b/drivers/net/wireless/ath/ath.h
+index f083fb9038c3..f02a308a9ffc 100644
+--- a/drivers/net/wireless/ath/ath.h
++++ b/drivers/net/wireless/ath/ath.h
+@@ -96,11 +96,13 @@ struct ath_keyval {
+ 	u8 kv_type;
+ 	u8 kv_pad;
+ 	u16 kv_len;
+-	u8 kv_val[16]; /* TK */
+-	u8 kv_mic[8]; /* Michael MIC key */
+-	u8 kv_txmic[8]; /* Michael MIC TX key (used only if the hardware
+-			 * supports both MIC keys in the same key cache entry;
+-			 * in that case, kv_mic is the RX key) */
++	struct_group(kv_values,
++		u8 kv_val[16]; /* TK */
++		u8 kv_mic[8]; /* Michael MIC key */
++		u8 kv_txmic[8]; /* Michael MIC TX key (used only if the hardware
++				 * supports both MIC keys in the same key cache entry;
++				 * in that case, kv_mic is the RX key) */
++	);
+ };
+ 
+ enum ath_cipher {
+diff --git a/drivers/net/wireless/ath/key.c b/drivers/net/wireless/ath/key.c
+index 61b59a804e30..b7b61d4f02ba 100644
+--- a/drivers/net/wireless/ath/key.c
++++ b/drivers/net/wireless/ath/key.c
+@@ -503,7 +503,7 @@ int ath_key_config(struct ath_common *common,
+ 
+ 	hk.kv_len = key->keylen;
+ 	if (key->keylen)
+-		memcpy(hk.kv_val, key->key, key->keylen);
++		memcpy(&hk.kv_values, key->key, key->keylen);
+ 
+ 	if (!(key->flags & IEEE80211_KEY_FLAG_PAIRWISE)) {
+ 		switch (vif->type) {
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.34.1
+
