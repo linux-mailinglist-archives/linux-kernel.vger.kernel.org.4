@@ -2,181 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8DA691C00
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 10:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD82691C06
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 10:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbjBJJzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 04:55:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47228 "EHLO
+        id S231869AbjBJJ4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 04:56:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbjBJJzA (ORCPT
+        with ESMTP id S231795AbjBJJ4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 04:55:00 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B642871677;
-        Fri, 10 Feb 2023 01:54:59 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E39ED673AF;
-        Fri, 10 Feb 2023 09:54:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1676022897; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Fri, 10 Feb 2023 04:56:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDEB728BD
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 01:55:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676022924;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=7ZPgtDl4rWfqVY+o/iEeMatcKTIBdgyPN1m50QOyxTM=;
-        b=wi0c4ijDC3dIzVxvJiSj++qEUKvlVyMCVEda89rKEOZl/rSN3JcAUZfg9IExiqaX83w47U
-        pA/8TGtjhwXw2RqwvK2aG78Qdd9h/IkVRDe+S9nISukRGs7ji1uVXbw9h9HwroBml6r3DT
-        QKEiAPSOKT/bWlLtCM2ykny0QNvwYGk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1676022897;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7ZPgtDl4rWfqVY+o/iEeMatcKTIBdgyPN1m50QOyxTM=;
-        b=5oLeJW4GK+nz8TDN/D/qJCqMMgyml5HcLsh79/f/J/tr70OMqNXTrPe3Ic/ids+VnQamaM
-        fAKMF/pksUCJ91Dg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C244B13206;
-        Fri, 10 Feb 2023 09:54:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Xix3LnEU5mNFOAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 10 Feb 2023 09:54:57 +0000
-Message-ID: <2188f4df-6d32-cff6-e8a1-9a5c7d0f04e3@suse.de>
-Date:   Fri, 10 Feb 2023 10:54:56 +0100
+        bh=XlYTQ4KlxOnSSgOz5EYIJQVx78dcnp/7ObBZhHdZOfo=;
+        b=MMnTD7P72+d70wWHQO4HHyVB/+03AUbMAetgdCMA8FkSqijwgy6u/Fmfvs3r76LFDYjTnX
+        Dd+1rXj8WWAdVIFY7EPQR7Cbmr9riu6JUDV2auBKxtkDdUBER/MMciAQ1tOpKiqvVLn3QR
+        gEGGVC4TMHUjX2QQO2hiX9OPL8Zuack=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-128-HS8_LSPpNDmYARx6j44laQ-1; Fri, 10 Feb 2023 04:55:22 -0500
+X-MC-Unique: HS8_LSPpNDmYARx6j44laQ-1
+Received: by mail-ej1-f70.google.com with SMTP id l18-20020a1709067d5200b008af415fdd80so2683168ejp.21
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 01:55:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XlYTQ4KlxOnSSgOz5EYIJQVx78dcnp/7ObBZhHdZOfo=;
+        b=ie5R1uyF8pO8/xCW3b43fScwgIGeShpUfshW1ntVkB+NFv0jZ/HKHaoKlOkA4YPdLo
+         Y0T0ZFAIvoeqJj34jVXOTN1jj7zfvk3iMArwDjRLFXkcdi6glnNXc+p7Qg2nqbap04Eq
+         zAaSEwVVc+76BLXdGKR+nyvmQCjGRqeL0ISKu4IW2MGCG3hiUNRdhy/KEgxj7LsCAFHH
+         jt5xhoP7HoXL4jp946wqcMyGes2JOSZqLc1UwsWQ3y6pmzbTAXGBRV2dJLQVTPE1sFEc
+         zi2bMAlVygP5HgNxHBeYOdtvSzIwHVK/oU6qruDUpBDq38uYDStRoAUaTEjsYMnIDG8O
+         PZOg==
+X-Gm-Message-State: AO0yUKVijABXbl7OPX5vmNJ6YjKzuCPjhkTQyVX+/bpRftdmjRJfrINV
+        QVuqqOZOshM/Y0cKubTc1kBGbCph1oo4dWm9dxJd3gojnxmsA9D5wvl1kn6gpws51ySNGGtSzA/
+        SrsB9b71b3UdJU4N/Emq4NDIp
+X-Received: by 2002:a17:907:8e86:b0:8aa:33c4:87d5 with SMTP id tx6-20020a1709078e8600b008aa33c487d5mr14015959ejc.10.1676022920963;
+        Fri, 10 Feb 2023 01:55:20 -0800 (PST)
+X-Google-Smtp-Source: AK7set8l6KUkKlyqNem1AZE2/KhW2JD0JqV9K6hSx1e0fgBDbFsSiIPL5QzIdySg4c0oOxOTyn5rmw==
+X-Received: by 2002:a17:907:8e86:b0:8aa:33c4:87d5 with SMTP id tx6-20020a1709078e8600b008aa33c487d5mr14015949ejc.10.1676022920808;
+        Fri, 10 Feb 2023 01:55:20 -0800 (PST)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id a18-20020a170906469200b007c0f217aadbsm2140397ejr.24.2023.02.10.01.55.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 01:55:20 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH 2/2] KVM: VMX: Stub out enable_evmcs static key for
+ CONFIG_HYPERV=n
+In-Reply-To: <Y+WaN8wW1EOvPbXe@google.com>
+References: <20230208205430.1424667-1-seanjc@google.com>
+ <20230208205430.1424667-3-seanjc@google.com> <87mt5n6kx6.fsf@redhat.com>
+ <1433ea0c-5072-b9d9-a533-401bb58f9a80@redhat.com>
+ <Y+WaN8wW1EOvPbXe@google.com>
+Date:   Fri, 10 Feb 2023 10:55:19 +0100
+Message-ID: <875yc97sl4.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2] fbdev: Fix invalid page access after closing deferred
- I/O devices
-Content-Language: en-US
-To:     Takashi Iwai <tiwai@suse.de>, Helge Deller <deller@gmx.de>
-Cc:     linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Patrik Jakobsson <pjakobsson@suse.de>
-References: <20230129082856.22113-1-tiwai@suse.de>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230129082856.22113-1-tiwai@suse.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------Ibt237fH7FEJUuqMn0tvt1hJ"
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------Ibt237fH7FEJUuqMn0tvt1hJ
-Content-Type: multipart/mixed; boundary="------------WqUytrHUwZMLfJCUyXA0Dnmr";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Takashi Iwai <tiwai@suse.de>, Helge Deller <deller@gmx.de>
-Cc: linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, Patrik Jakobsson <pjakobsson@suse.de>
-Message-ID: <2188f4df-6d32-cff6-e8a1-9a5c7d0f04e3@suse.de>
-Subject: Re: [PATCH v2] fbdev: Fix invalid page access after closing deferred
- I/O devices
-References: <20230129082856.22113-1-tiwai@suse.de>
-In-Reply-To: <20230129082856.22113-1-tiwai@suse.de>
+Sean Christopherson <seanjc@google.com> writes:
 
---------------WqUytrHUwZMLfJCUyXA0Dnmr
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> On Thu, Feb 09, 2023, Paolo Bonzini wrote:
+>> On 2/9/23 14:13, Vitaly Kuznetsov wrote:
+>> > > +static __always_inline bool is_evmcs_enabled(void)
+>> > > +{
+>> > > +	return static_branch_unlikely(&enable_evmcs);
+>> > > +}
+>> > I have a suggestion. While 'is_evmcs_enabled' name is certainly not
+>> > worse than 'enable_evmcs', it may still be confusing as it's not clear
+>> > which eVMCS is meant: are we running a guest using eVMCS or using eVMCS
+>> > ourselves? So what if we rename this to a very explicit 'is_kvm_on_hyperv()'
+>> > and hide the implementation details (i.e. 'evmcs') inside?
+>> 
+>> I prefer keeping eVMCS in the name,
+>
+> +1, IIUC KVM can run on Hyper-V without eVMCS being enabled.
+>
+>> but I agree a better name could be something like kvm_uses_evmcs()?
+>
+> kvm_is_using_evmcs()?
+>
 
-DQoNCkFtIDI5LjAxLjIzIHVtIDA5OjI4IHNjaHJpZWIgVGFrYXNoaSBJd2FpOg0KPiBXaGVu
-IGEgZmJkZXYgd2l0aCBkZWZlcnJlZCBJL08gaXMgb25jZSBvcGVuZWQgYW5kIGNsb3NlZCwg
-dGhlIGRpcnR5DQo+IHBhZ2VzIHN0aWxsIHJlbWFpbiBxdWV1ZWQgaW4gdGhlIHBhZ2VyZWYg
-bGlzdCwgYW5kIGV2ZW50dWFsbHkgbGF0ZXINCj4gdGhvc2UgbWF5IGJlIHByb2Nlc3NlZCBp
-biB0aGUgZGVsYXllZCB3b3JrLiAgVGhpcyBtYXkgbGVhZCB0byBhDQo+IGNvcnJ1cHRpb24g
-b2YgcGFnZXMsIGhpdHRpbmcgYW4gT29wcy4NCj4gDQo+IFRoaXMgcGF0Y2ggbWFrZXMgc3Vy
-ZSB0byBjYW5jZWwgdGhlIGRlbGF5ZWQgd29yayBhbmQgY2xlYW4gdXAgdGhlDQo+IHBhZ2Vy
-ZWYgbGlzdCBhdCBjbG9zaW5nIHRoZSBkZXZpY2UgZm9yIGFkZHJlc3NpbmcgdGhlIGJ1Zy4g
-IEEgcGFydCBvZg0KPiB0aGUgY2xlYW51cCBjb2RlIGlzIGZhY3RvcmVkIG91dCBhcyBhIG5l
-dyBoZWxwZXIgZnVuY3Rpb24gdGhhdCBpcw0KPiBjYWxsZWQgZnJvbSB0aGUgY29tbW9uIGZi
-X3JlbGVhc2UoKS4NCj4gDQo+IFJldmlld2VkLWJ5OiBQYXRyaWsgSmFrb2Jzc29uIDxwYXRy
-aWsuci5qYWtvYnNzb25AZ21haWwuY29tPg0KPiBDYzogPHN0YWJsZUB2Z2VyLmtlcm5lbC5v
-cmc+DQo+IFNpZ25lZC1vZmYtYnk6IFRha2FzaGkgSXdhaSA8dGl3YWlAc3VzZS5kZT4NCg0K
-UmV2aWV3ZWQtYnk6IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0K
-DQo+IC0tLQ0KPiB2MS0+djI6IEZpeCBidWlsZCBlcnJvciB3aXRob3V0IENPTkZJR19GQl9E
-RUZFUlJFRF9JTw0KPiANCj4gICBkcml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvZmJfZGVmaW8u
-YyB8IDEwICsrKysrKysrKy0NCj4gICBkcml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvZmJtZW0u
-YyAgICB8ICA0ICsrKysNCj4gICBpbmNsdWRlL2xpbnV4L2ZiLmggICAgICAgICAgICAgICAg
-ICB8ICAxICsNCj4gICAzIGZpbGVzIGNoYW5nZWQsIDE0IGluc2VydGlvbnMoKyksIDEgZGVs
-ZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUv
-ZmJfZGVmaW8uYyBiL2RyaXZlcnMvdmlkZW8vZmJkZXYvY29yZS9mYl9kZWZpby5jDQo+IGlu
-ZGV4IGM3MzAyNTNhYjg1Yy4uNTgzY2JjZjA5NDQ2IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJz
-L3ZpZGVvL2ZiZGV2L2NvcmUvZmJfZGVmaW8uYw0KPiArKysgYi9kcml2ZXJzL3ZpZGVvL2Zi
-ZGV2L2NvcmUvZmJfZGVmaW8uYw0KPiBAQCAtMzEzLDcgKzMxMyw3IEBAIHZvaWQgZmJfZGVm
-ZXJyZWRfaW9fb3BlbihzdHJ1Y3QgZmJfaW5mbyAqaW5mbywNCj4gICB9DQo+ICAgRVhQT1JU
-X1NZTUJPTF9HUEwoZmJfZGVmZXJyZWRfaW9fb3Blbik7DQo+ICAgDQo+IC12b2lkIGZiX2Rl
-ZmVycmVkX2lvX2NsZWFudXAoc3RydWN0IGZiX2luZm8gKmluZm8pDQo+ICt2b2lkIGZiX2Rl
-ZmVycmVkX2lvX3JlbGVhc2Uoc3RydWN0IGZiX2luZm8gKmluZm8pDQo+ICAgew0KPiAgIAlz
-dHJ1Y3QgZmJfZGVmZXJyZWRfaW8gKmZiZGVmaW8gPSBpbmZvLT5mYmRlZmlvOw0KPiAgIAlz
-dHJ1Y3QgcGFnZSAqcGFnZTsNCj4gQEAgLTMyNyw2ICszMjcsMTQgQEAgdm9pZCBmYl9kZWZl
-cnJlZF9pb19jbGVhbnVwKHN0cnVjdCBmYl9pbmZvICppbmZvKQ0KPiAgIAkJcGFnZSA9IGZi
-X2RlZmVycmVkX2lvX3BhZ2UoaW5mbywgaSk7DQo+ICAgCQlwYWdlLT5tYXBwaW5nID0gTlVM
-TDsNCj4gICAJfQ0KPiArfQ0KPiArRVhQT1JUX1NZTUJPTF9HUEwoZmJfZGVmZXJyZWRfaW9f
-cmVsZWFzZSk7DQo+ICsNCj4gK3ZvaWQgZmJfZGVmZXJyZWRfaW9fY2xlYW51cChzdHJ1Y3Qg
-ZmJfaW5mbyAqaW5mbykNCj4gK3sNCj4gKwlzdHJ1Y3QgZmJfZGVmZXJyZWRfaW8gKmZiZGVm
-aW8gPSBpbmZvLT5mYmRlZmlvOw0KPiArDQo+ICsJZmJfZGVmZXJyZWRfaW9fcmVsZWFzZShp
-bmZvKTsNCj4gICANCj4gICAJa3ZmcmVlKGluZm8tPnBhZ2VyZWZzKTsNCj4gICAJbXV0ZXhf
-ZGVzdHJveSgmZmJkZWZpby0+bG9jayk7DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3ZpZGVv
-L2ZiZGV2L2NvcmUvZmJtZW0uYyBiL2RyaXZlcnMvdmlkZW8vZmJkZXYvY29yZS9mYm1lbS5j
-DQo+IGluZGV4IDNhNmM4NDU4ZWI4ZC4uYWIzNTQ1YTAwYWJjIDEwMDY0NA0KPiAtLS0gYS9k
-cml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvZmJtZW0uYw0KPiArKysgYi9kcml2ZXJzL3ZpZGVv
-L2ZiZGV2L2NvcmUvZmJtZW0uYw0KPiBAQCAtMTQ1NCw2ICsxNDU0LDEwIEBAIF9fcmVsZWFz
-ZXMoJmluZm8tPmxvY2spDQo+ICAgCXN0cnVjdCBmYl9pbmZvICogY29uc3QgaW5mbyA9IGZp
-bGUtPnByaXZhdGVfZGF0YTsNCj4gICANCj4gICAJbG9ja19mYl9pbmZvKGluZm8pOw0KPiAr
-I2lmIElTX0VOQUJMRUQoQ09ORklHX0ZCX0RFRkVSUkVEX0lPKQ0KPiArCWlmIChpbmZvLT5m
-YmRlZmlvKQ0KPiArCQlmYl9kZWZlcnJlZF9pb19yZWxlYXNlKGluZm8pOw0KPiArI2VuZGlm
-DQo+ICAgCWlmIChpbmZvLT5mYm9wcy0+ZmJfcmVsZWFzZSkNCj4gICAJCWluZm8tPmZib3Bz
-LT5mYl9yZWxlYXNlKGluZm8sMSk7DQo+ICAgCW1vZHVsZV9wdXQoaW5mby0+ZmJvcHMtPm93
-bmVyKTsNCj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvZmIuaCBiL2luY2x1ZGUvbGlu
-dXgvZmIuaA0KPiBpbmRleCA5NmI5NjMyM2U5Y2IuLjczZWIxZjg1ZWE4ZSAxMDA2NDQNCj4g
-LS0tIGEvaW5jbHVkZS9saW51eC9mYi5oDQo+ICsrKyBiL2luY2x1ZGUvbGludXgvZmIuaA0K
-PiBAQCAtNjYyLDYgKzY2Miw3IEBAIGV4dGVybiBpbnQgIGZiX2RlZmVycmVkX2lvX2luaXQo
-c3RydWN0IGZiX2luZm8gKmluZm8pOw0KPiAgIGV4dGVybiB2b2lkIGZiX2RlZmVycmVkX2lv
-X29wZW4oc3RydWN0IGZiX2luZm8gKmluZm8sDQo+ICAgCQkJCXN0cnVjdCBpbm9kZSAqaW5v
-ZGUsDQo+ICAgCQkJCXN0cnVjdCBmaWxlICpmaWxlKTsNCj4gK2V4dGVybiB2b2lkIGZiX2Rl
-ZmVycmVkX2lvX3JlbGVhc2Uoc3RydWN0IGZiX2luZm8gKmluZm8pOw0KPiAgIGV4dGVybiB2
-b2lkIGZiX2RlZmVycmVkX2lvX2NsZWFudXAoc3RydWN0IGZiX2luZm8gKmluZm8pOw0KPiAg
-IGV4dGVybiBpbnQgZmJfZGVmZXJyZWRfaW9fZnN5bmMoc3RydWN0IGZpbGUgKmZpbGUsIGxv
-ZmZfdCBzdGFydCwNCj4gICAJCQkJbG9mZl90IGVuZCwgaW50IGRhdGFzeW5jKTsNCg0KLS0g
-DQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBT
-b2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBO
-w7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6Rm
-dHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+Sounds good to me!
 
---------------WqUytrHUwZMLfJCUyXA0Dnmr--
+-- 
+Vitaly
 
---------------Ibt237fH7FEJUuqMn0tvt1hJ
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPmFHAFAwAAAAAACgkQlh/E3EQov+Aa
-FBAAw6hTnDg+BgaP+Srg60xEAu+Zo0bS6F/Hrbnk4djTQG6pSC88aMRfX9G/MTM3S1JG5bmFL+A2
-DK0MEctvIbNnklAf+3bg35Nw6zfuwlshoRDp0Vw9uPHdaItyAJGpn0sCVb4eeWncTXvTTrVlIK40
-pdDXJl9baHwzz/2wAzI1v9ulQNvb+zezFu2kIQkggxW9zNJWPkSFBs2f0WG5h7i5KAllPzQTj+px
-QnXTMaBvxyZusgh2A2g2YbW1GnpFgUECyA9WhGOf1omtc8/D1sNWrFcm5mZ+x0h6rZjxRieChVz0
-NFlv96rwRBPSMSENC/BL6vPfw1fC2tRH+KAWd7gm/RQM/5Oq1SpXXEk1ip6/QIq7TZoEeqE9pBzY
-BhxGl7xMKEOkadElQ5kXbsCI7+bn3XU2cH1dfkZQmDJZlR8f1V3B1Us0KO3FRRK6gUk7ShUTOA2o
-O3U4Ock/07AzlJ9CIFlE1GmPjQw3nGouLxiSJT871bkTd/ARa2gp1a5K+nA6FmCdQ8Z8XF5vh3nj
-aece1bpCF/g5YWqZlHHo2usXobsC5CWWq9CbhC8b6VtoQgrT+qsi0DzhhHSwWoWPG3ZOwvCr3Vhe
-Ytvf1IoU5pRPA38xFQWBYjhWbDE0FZw+SErXZsiGAn/qWlNtaGigjT6/MTZCaCC2KbiB0bFM5Ypk
-Y2Y=
-=kYos
------END PGP SIGNATURE-----
-
---------------Ibt237fH7FEJUuqMn0tvt1hJ--
