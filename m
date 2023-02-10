@@ -2,70 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF503691790
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 05:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ADAC691791
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 05:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbjBJEYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 23:24:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
+        id S231143AbjBJEYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 23:24:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjBJEYI (ORCPT
+        with ESMTP id S230510AbjBJEYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 23:24:08 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22F7658D6
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 20:24:07 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id r18so2929078pgr.12
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 20:24:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ROzvlU3xKIlsDrIvQBCFILPBUqpYkd1d+ibfENwn1RM=;
-        b=jAsN1BhIAS2GZVQlEo4rba9kRWM6lUnYMsR0FGTj+nJufqqKQc5oEGXbiuTRZSbZ4p
-         PmsoS57Fjw1PXy7jJvgdxEr3qzFm+gsioE6aj0PWqh40DTVkiMMiuOKR/Z0mPsJCeLop
-         qgZ8PbKIe/xISKDP3YIf594PH18WaLsuEf7pA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ROzvlU3xKIlsDrIvQBCFILPBUqpYkd1d+ibfENwn1RM=;
-        b=iUDvGsYxXbbUg21E7h/NUWvRv81IY5r3Vhew9o2Vsetg/OIgNZKFmw8vMgm5Ox/lNY
-         c1r1FeMHOmhKAANr87wf3gBH6VPPTEe3la+YH9pWzmH9Xj9+ZJW57YzZNHbdxgiZKDi2
-         j7c38TFMMBrI7RAJX5Y/N7OYeHEpJ5rQG2E73kfz2zWIoPiymnTXOLKSyikqsbLBf5h6
-         uUsATktOwZAt+wjKdKSYiHz5QukTf4X+ijQ4R8qpO4qV+3cgy0o/GjfVaCNhfu4WHRkq
-         zg6LIQpR7maak5he81nsLayp5+amdXEOsxJcUY7x+QdnRR9DjN3mRtE09UvOoCI/A9Fo
-         PQAQ==
-X-Gm-Message-State: AO0yUKV7ROnfr/cAmzHv9CHT9HrF0rXVpf9whY8ruw7J8LMkg+VpvZYH
-        LynIml+rtSVQIE5Mk6hqSQSY1ZKfHpr/woh2
-X-Google-Smtp-Source: AK7set+mfzWx3mxCfqbVfdwwFUpePlSYefplh4FXnZ5ATccmMriRtYim0RuXuYksfloxNhK80PKjfQ==
-X-Received: by 2002:a05:6a00:1d0a:b0:5a8:473e:2fdc with SMTP id a10-20020a056a001d0a00b005a8473e2fdcmr5579704pfx.12.1676003047015;
-        Thu, 09 Feb 2023 20:24:07 -0800 (PST)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id h11-20020aa786cb000000b005941bb94491sm2250946pfo.4.2023.02.09.20.24.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 20:24:06 -0800 (PST)
-Date:   Fri, 10 Feb 2023 13:24:02 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Minchan Kim <minchan@kernel.org>,
+        Thu, 9 Feb 2023 23:24:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD5D65EF6
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 20:24:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31E2461C9C
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 04:24:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D543C433D2;
+        Fri, 10 Feb 2023 04:24:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676003070;
+        bh=Q5Xp2O+5KYdWZ+voh/i9lBg3FJpd9FO9qvnfklGAX88=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=trmk8kLhEhUXQaQJXTL8scTpoBaC4E65qqOaiVT7Oh96Ecgs4hDO+KDGboNRIpbeG
+         e4IE+Ju/2kmhEAUy5nhFXp19hrRLjap73WBXCmG03itDOnUM4nj6jBukAH3C0IBPZW
+         WphWtnopyfqEQKCMGLOWneKZH4PSZFGgwAYJtNrZO6kfPisKAyun2MPexJXdr6Mg/e
+         ptVncQjM34byojaOZgqUGIawktuikHLhHrfAYl7P7sAvCfMaYR9l4VJ2FNgO/eC5VP
+         fYs/Pg4LQLb/nZPslkSonJ95eOkgCUEITAYtJ7U1k1jYDctSHN4nxlz+UPZyuH6Jev
+         TefpMnU4VTH9g==
+From:   SeongJae Park <sj@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     SeongJae Park <sj@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: [PATCH 2/2] zsmalloc: fine-grained inuse ratio based fullness
- grouping
-Message-ID: <Y+XG4mWPi4X9/hHZ@google.com>
-References: <20230206092559.2722946-1-senozhatsky@chromium.org>
- <20230206092559.2722946-3-senozhatsky@chromium.org>
- <CAJD7tka_DFfFu2Ji-HAdw066J2MkmxzrYVQp6pHUAAQhz6Y7EA@mail.gmail.com>
- <Y+GtsM6vJge90LHe@google.com>
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] mm/damon/dbgfs: print DAMON debugfs interface deprecation message
+Date:   Fri, 10 Feb 2023 04:24:28 +0000
+Message-Id: <20230210042428.55864-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <fe4103e4-5a2f-1659-8b4a-23dae807dad5@infradead.org>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+GtsM6vJge90LHe@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,41 +55,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/02/07 10:47), Sergey Senozhatsky wrote:
-> > >  enum fullness_group {
-> > > -       ZS_EMPTY,
-> > > -       ZS_ALMOST_EMPTY,
-> > > -       ZS_ALMOST_FULL,
-> > > -       ZS_FULL,
-> > > +       ZS_USAGE_0,
-> > > +       ZS_USAGE_10,
-> > > +       ZS_USAGE_20,
-> > > +       ZS_USAGE_30,
-> > > +       ZS_USAGE_40,
-> > > +       ZS_USAGE_50,
-> > > +       ZS_USAGE_60,
-> > > +       ZS_USAGE_70,
-> > > +       ZS_USAGE_80,
-> > > +       ZS_USAGE_90,
-> > > +       ZS_USAGE_99,
-> > > +       ZS_USAGE_100,
-> > >         NR_ZS_FULLNESS,
-> > >  };
-> > >
-> > 
-> > Is there a reason why this can't be done with something like #define
-> > FULLNESS_GROUPS 10? We can make sure during build that (100 %
-> > FULLNESS_GROUPS == 0) to make our lives easier. I feel like the code
-> > will be much more concise and easier to navigate, instead of multiple
-> > enums and static arrays.
+Hi Randy,
+
+On Thu, 9 Feb 2023 19:26:43 -0800 Randy Dunlap <rdunlap@infradead.org> wrote:
+
+> Hi,
 > 
-> I wanted to keep things the way they are to make reviews simpler.
-> We probably can do something more "disruptive" in a separate patch.
+> On 2/9/23 11:20, SeongJae Park wrote:
+> > DAMON debugfs interface has announced to be deprecated after >v5.15 LTS
+> > kernel is released.  And, v6.1.y has announced to be an LTS[1].
+> > 
+> > Though the announcement was there for a while, some people might not
+> > noticed that so far.  Also, some users could depend on it and have
+> > problems at  movng to the alternative (DAMON sysfs interface).
+> > 
+> > For such cases, warn DAMON debugfs interface deprecation with contacts
+> > to ask helps when any DAMON debugfs interface file is opened.
+> > 
+> > [1] https://git.kernel.org/pub/scm/docs/kernel/website.git/commit/?id=332e9121320bc7461b2d3a79665caf153e51732c
+> > 
+> > Signed-off-by: SeongJae Park <sj@kernel.org>
+> > ---
+> >  mm/damon/dbgfs.c | 16 ++++++++++++++++
+> >  1 file changed, 16 insertions(+)
+> > 
+> > diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
+> > index b3f454a5c682..e551a20b35e3 100644
+> > --- a/mm/damon/dbgfs.c
+> > +++ b/mm/damon/dbgfs.c
+> > @@ -20,6 +20,11 @@ static int dbgfs_nr_ctxs;
+> >  static struct dentry **dbgfs_dirs;
+> >  static DEFINE_MUTEX(damon_dbgfs_lock);
+> >  
+> > +static void damon_dbgfs_warn_deprecation(void)
+> > +{
+> > +	pr_warn_once("DAMON debugfs interface is deprecated, so users should move to the sysfs interface (DAMON_SYSFS).  If you depend on this and cannot move, please report your usecase to damon@lists.linux.dev and linux-mm@kvack.org.\n");
+> > +}
+> 
+> Line length of 234 is a bit over the limit.
+> I think it would be OK to split it at the end of the first sentence, like:
+> 
+> 	pr_warn_once("DAMON debugfs interface is deprecated, so users should move to the sysfs interface (DAMON_SYSFS).\n");
+> 	pr_warn_once("If you depend on this and cannot move, please report your usecase to damon@lists.linux.dev and linux-mm@kvack.org.\n");
+> 
+> or would that [2 pr_warn_once() calls] not work for some reason?
+> 
+> Or even:
+> 
+> 	pr_warn_once(
+> "DAMON debugfs interface is deprecated, so users should move to the sysfs interface (DAMON_SYSFS).\n");
+> 	pr_warn_once(
+> "If you depend on this and cannot move, please report your usecase to damon@lists.linux.dev and linux-mm@kvack.org.\n");
+> 
+> although some people might gag at that one.
 
-Forgot to mention, I was also thinking about extending zsmalloc stats
-file and providing values for each fullness group per class, as opposed
-to current ALMOST_EMPTY and ALMOST_FULL stats, which don't tell much.
+Thank you for your opinion.
 
-I can get rid of static const arrays and pass "begin / end" group IDs to
-functions that iterate fullness lists and pick the first head page, but
-I think that enum values will stay.
+I considered that, but I was worrying if some other messages come between those
+two separated messages.
+
+What do you think about breaking the string like below?  I first tried to do so
+like memcg hierarchy[1], but ended up to this version because of checkpatch.pl
+outputs[2].  However, if others doesn't care, I think this is ok.
+
+	pr_warn_once("DAMON debugfs interface is deprecated, "
+		     "so users should move DAMON_SYSFS. If you depend on this "
+		     "and cannot move, please report your usecase to "
+		     "damon@lists.linux.dev and linux-mm@kvack.org.\n");
+
+If breaking user-visible string is not ok, maybe we could make it as short as
+your above example.
+
+ 	pr_warn_once("DAMON_DBGFS is deprecated; please contact to damon@lists.linux.dev and linux-mm@kvack.org if you depend on it.\n");
+
+May I ask your opinion?
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/memcontrol.c?h=v6.1#n3643
+[2] https://docs.kernel.org/process/coding-style.html#breaking-long-lines-and-strings
+
+
+Thanks,
+SJ
+
+> 
+> 
+> -- 
+> ~Randy
