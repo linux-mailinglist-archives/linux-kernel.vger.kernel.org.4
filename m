@@ -2,54 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E66691624
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 02:20:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6365691626
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 02:20:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjBJBUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 20:20:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
+        id S231220AbjBJBUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 20:20:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjBJBUG (ORCPT
+        with ESMTP id S229827AbjBJBUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 20:20:06 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314CC643F9
+        Thu, 9 Feb 2023 20:20:07 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A1B656A0
         for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 17:20:05 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4PCbWR6Qvjz8R042;
-        Fri, 10 Feb 2023 09:20:03 +0800 (CST)
-Received: from szxlzmapp02.zte.com.cn ([10.5.231.79])
-        by mse-fl2.zte.com.cn with SMTP id 31A1JmBv024052;
-        Fri, 10 Feb 2023 09:19:48 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp01[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Fri, 10 Feb 2023 09:19:49 +0800 (CST)
-Date:   Fri, 10 Feb 2023 09:19:49 +0800 (CST)
-X-Zmail-TransId: 2b0363e59bb508349ce2
-X-Mailer: Zmail v1.0
-Message-ID: <202302100919492571517@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <akpm@linux-foundation.org>
-Cc:     <david@redhat.com>, <imbrenda@linux.ibm.com>,
-        <jiang.xuexin@zte.com.cn>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <ran.xiaokai@zte.com.cn>,
-        <xu.xin.sc@gmail.com>, <xu.xin16@zte.com.cn>,
-        <yang.yang29@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIHY2IDQvNl0ga3NtOiBjb3VudCB6ZXJvIHBhZ2VzIGZvciBlYWNoIHByb2Nlc3M=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 31A1JmBv024052
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63E59BC3.000 by FangMail milter!
-X-FangMail-Envelope: 1675992003/4PCbWR6Qvjz8R042/63E59BC3.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63E59BC3.000/4PCbWR6Qvjz8R042
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
+Received: by mail-ej1-x631.google.com with SMTP id m2so11932865ejb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 17:20:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9qpUczvHafIDDbeuX/cDIdc5ySzgXvl+sHg7LXNm+eI=;
+        b=L3OUfq6HJbS1CO7FsX8PQQBUEZhWIguD8Pt2VekeHsx6+pLcvcEFGKQoNNMkAqOTYl
+         EB7DYDirFLVogNZF+TO/Zs1Z+FLR9AJSwsp6KV+aR3mJnR4A2zswb7Joa0eaUkwidxCk
+         j+jj9TyOgn3WIrCS5+MBeb42X8uQDogyIAFxLMLwHvDG3+6GCcN5ssy1KiDbZr3t2BjJ
+         0AQs0k6kokl2ByO6mO+BD5yAI7U3aHzCJuIQ95XKyaTff7gjty2u7fGsTR8g9roK/mp0
+         1vy1CH2heEN23Iv1yvbL93FByTLu1eZMFLF2dKFh0z4NQmtjPF49vXTPAKm8C0D0eE7d
+         Rslg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9qpUczvHafIDDbeuX/cDIdc5ySzgXvl+sHg7LXNm+eI=;
+        b=L+jLuWcDvpNbzMfch7Ek2elJ3Y7lII+Y77CKwAHycMy9Scrl0m0+VpFKEyrfeHPqmv
+         DRj1vt7aqYbuQG/Z8Mc6DGSllQLePVocwOqLVv6gc/Jqb2BLsLvnLTYyk5zIkhfrdmaW
+         WU7gFVHfS5Rtp4NvylZSHKKjcUZHg3Xr1f6SZySprV015CxJdyCNc8/cigu96NT6LFpE
+         V6RyfHWCB7swGp4iVUAjLwpFw/Gclj7LbTiYUeu2ZKzfBel1rloifyPQ8siLC8X2wgeh
+         bcQZUq/RhsGlGVkh/LnxJFekuGGVWIc/eSJg+olJWnEDYPRLP0uQEhV9I65wTh4HFbS3
+         tN3Q==
+X-Gm-Message-State: AO0yUKVhFIbe2nwnbVbO6oGProItHml4sDE7B6SrSBvGgYP+1Ee6NOu/
+        lKUY49FJuWwSYy+XW7K3tVC5qqZsENn8bI3Fcu1QpwCFhGM=
+X-Google-Smtp-Source: AK7set9hhFvAcbjrRms72UV/d+Estsz7Gx1R0QCpLZdJReULlwSJJaQ9XPvGJ6F27nMN/TSk5f6JxoDEGKJQIOgQRpY=
+X-Received: by 2002:a17:906:13ca:b0:8af:28b5:f80c with SMTP id
+ g10-20020a17090613ca00b008af28b5f80cmr1228523ejc.304.1675992003816; Thu, 09
+ Feb 2023 17:20:03 -0800 (PST)
+MIME-Version: 1.0
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 10 Feb 2023 11:19:51 +1000
+Message-ID: <CAPM=9tyEJyxto-DDoerhGFxZWG8-M3xOsAfDhKfgAy8yARhvOA@mail.gmail.com>
+Subject: [git pull] drm fixes for 6.2-rc8
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,89 +67,187 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+Hi Linus,
 
-As the number of ksm zero pages is not included in ksm_merging_pages per
-process when enabling use_zero_pages, it's unclear of how many actual
-pages are merged by KSM. To let users accurately estimate their memory
-demands when unsharing KSM zero-pages, it's necessary to show KSM zero-
-pages per process.
+Weekly fixes, the amdgpu had a few small fixes to display flicker on
+certain configurations, however it was found the the flicker was
+lessened but there were other unintended consequences, so for now
+they've been reverted and replaced with an option for users to test
+with so future fixes can be developed. Otherwise apart from the usual
+bunch of i915 and amdgpu, there's a client, virtio-gpu and an nvidiafb
+fix that reorders its loading to avoid failure.
 
-since unsharing zero pages placed by KSM accurately is achieved, then
-tracking empty pages merging and unmerging is not a difficult thing any
-longer.
+Dave.
 
-Since we already have /proc/<pid>/ksm_stat, just add the information of
-zero_pages_sharing in it.
+drm-fixes-2023-02-10:
+drm fixes for 6.2-rc8
 
-Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
-Cc: Xiaokai Ran <ran.xiaokai@zte.com.cn>
-Cc: Yang Yang <yang.yang29@zte.com.cn>
-Signed-off-by: xu xin <xu.xin16@zte.com.cn>
----
- fs/proc/base.c           | 1 +
- include/linux/mm_types.h | 7 ++++++-
- mm/ksm.c                 | 2 ++
- 3 files changed, 9 insertions(+), 1 deletion(-)
+client:
+- refcount fix
 
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 9e479d7d202b..ac9ebe972be0 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -3207,6 +3207,7 @@ static int proc_pid_ksm_stat(struct seq_file *m, struct pid_namespace *ns,
- 	mm = get_task_mm(task);
- 	if (mm) {
- 		seq_printf(m, "ksm_rmap_items %lu\n", mm->ksm_rmap_items);
-+		seq_printf(m, "zero_pages_sharing %lu\n", mm->ksm_zero_pages_sharing);
- 		mmput(mm);
- 	}
+amdgpu:
+- a bunch of attempted flicker fixes that regressed turned into a user
+  workaround option for now
+- Properly fix S/G display with AGP aperture enabled
+- Fix cursor offset with 180 rotation
+- SMU13 fixes
+- Use TGID for GPUVM traces
+- Fix oops on in fence error path
+- Don't run IB tests on hw rings when sw rings are in use
+- memory leak fix
 
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 4e1031626403..5c734ebc1890 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -776,7 +776,7 @@ struct mm_struct {
- #ifdef CONFIG_KSM
- 		/*
- 		 * Represent how many pages of this process are involved in KSM
--		 * merging.
-+		 * merging (not including ksm_zero_pages_sharing).
- 		 */
- 		unsigned long ksm_merging_pages;
- 		/*
-@@ -784,6 +784,11 @@ struct mm_struct {
- 		 * including merged and not merged.
- 		 */
- 		unsigned long ksm_rmap_items;
-+		/*
-+		 * Represent how many empty pages are merged with kernel zero
-+		 * pages when enabling KSM use_zero_pages.
-+		 */
-+		unsigned long ksm_zero_pages_sharing;
- #endif
- #ifdef CONFIG_LRU_GEN
- 		struct {
-diff --git a/mm/ksm.c b/mm/ksm.c
-index 1fa668e1fe82..42dbcc3ec90d 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -794,6 +794,7 @@ static inline void clean_rmap_item_zero_flag(struct ksm_rmap_item *rmap_item)
- {
- 	if (rmap_item->address & ZERO_PAGE_FLAG) {
- 		ksm_zero_pages_sharing--;
-+		rmap_item->mm->ksm_zero_pages_sharing--;
- 		rmap_item->address &= PAGE_MASK;
- 	}
- }
-@@ -2117,6 +2118,7 @@ static int try_to_merge_with_kernel_zero_page(struct ksm_rmap_item *rmap_item,
- 			if (!err) {
- 				rmap_item->address |= ZERO_PAGE_FLAG;
- 				ksm_zero_pages_sharing++;
-+				rmap_item->mm->ksm_zero_pages_sharing++;
- 			}
- 		} else {
- 			/* If the vma is out of date, we do not need to continue. */
--- 
-2.15.2
+i915:
+- Display watermark fix
+- fbdev fix for PSR, FBC, DRRS
+- Move fd_install after last use of fence
+- Initialize the obj flags for shmem objects
+- Fix VBT DSI DVO port handling
+
+virtio-gpu:
+- fence fix
+
+nvidiafb:
+- regression fix for driver load when no hw supported
+The following changes since commit 4ec5183ec48656cec489c49f989c508b68b518e3=
+:
+
+  Linux 6.2-rc7 (2023-02-05 13:13:28 -0800)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2023-02-10
+
+for you to fetch changes up to 777c1e01cb7e1947765fb0c3b9b71dab18e53e46:
+
+  Merge tag 'amd-drm-fixes-6.2-2023-02-09' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes (2023-02-10
+09:49:13 +1000)
+
+----------------------------------------------------------------
+drm fixes for 6.2-rc8
+
+client:
+- refcount fix
+
+amdgpu:
+- a bunch of attempted flicker fixes that regressed turned into a user
+  workaround option for now
+- Properly fix S/G display with AGP aperture enabled
+- Fix cursor offset with 180 rotation
+- SMU13 fixes
+- Use TGID for GPUVM traces
+- Fix oops on in fence error path
+- Don't run IB tests on hw rings when sw rings are in use
+- memory leak fix
+
+i915:
+- Display watermark fix
+- fbdev fix for PSR, FBC, DRRS
+- Move fd_install after last use of fence
+- Initialize the obj flags for shmem objects
+- Fix VBT DSI DVO port handling
+
+virtio-gpu:
+- fence fix
+
+nvidiafb:
+- regression fix for driver load when no hw supported
+
+----------------------------------------------------------------
+Alex Deucher (8):
+      drm/amd/display: disable S/G display on DCN 2.1.0
+      drm/amd/display: disable S/G display on DCN 3.1.2/3
+      drm/amd/display: properly handling AGP aperture in vm setup
+      Revert "drm/amd/display: disable S/G display on DCN 3.1.4"
+      drm/amdgpu: add S/G display parameter
+      Revert "drm/amd/display: disable S/G display on DCN 3.1.2/3"
+      Revert "drm/amd/display: disable S/G display on DCN 2.1.0"
+      Revert "drm/amd/display: disable S/G display on DCN 3.1.5"
+
+Aravind Iddamsetty (1):
+      drm/i915: Initialize the obj flags for shmem objects
+
+Bert Karwatzki (1):
+      drm/amdgpu: fix memory leak in amdgpu_cs_sync_rings
+
+Christian K=C3=B6nig (1):
+      drm/client: fix circular reference counting issue
+
+Dave Airlie (5):
+      nvidiafb: detect the hardware support before removing console.
+      Merge tag 'amd-drm-fixes-6.2-2023-02-08' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
+      Merge tag 'drm-misc-fixes-2023-02-09' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
+      Merge tag 'drm-intel-fixes-2023-02-09' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
+      Merge tag 'amd-drm-fixes-6.2-2023-02-09' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
+
+Evan Quan (3):
+      drm/amd/pm: add SMU 13.0.7 missing GetPptLimit message mapping
+      drm/amd/pm: bump SMU 13.0.0 driver_if header version
+      drm/amd/pm: bump SMU 13.0.7 driver_if header version
+
+Friedrich Vock (1):
+      drm/amdgpu: Use the TGID for trace_amdgpu_vm_update_ptes
+
+Guilherme G. Piccoli (1):
+      drm/amdgpu/fence: Fix oops due to non-matching drm_sched init/fini
+
+Jane Jian (1):
+      drm/amdgpu/smu: skip pptable init under sriov
+
+JesseZhang (1):
+      amd/amdgpu: remove test ib on hw ring
+
+Jouni H=C3=B6gander (1):
+      drm/i915/fbdev: Implement fb_dirty for intel custom fb helper
+
+Kenneth Feng (1):
+      drm/amd/amdgpu: enable athub cg 11.0.3
+
+Kent Russell (1):
+      drm/amdgpu: Add unique_id support for GC 11.0.1/2
+
+Melissa Wen (1):
+      drm/amd/display: fix cursor offset on rotation 180
+
+Rob Clark (1):
+      drm/i915: Move fd_install after last use of fence
+
+Ryan Neph (1):
+      drm/virtio: exbuf->fence_fd unmodified on interrupted wait
+
+Ville Syrj=C3=A4l=C3=A4 (2):
+      drm/i915: Don't do the WM0->WM1 copy w/a if WM1 is already enabled
+      drm/i915: Fix VBT DSI DVO port handling
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu.h                |  1 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c             |  5 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            | 11 +++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c          |  8 ++-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ring.h           |  2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c          |  2 +-
+ drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c              |  1 -
+ drivers/gpu/drm/amd/amdgpu/soc21.c                 |  4 +-
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  | 47 +++++++++----
+ .../drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c  |  2 +-
+ drivers/gpu/drm/amd/pm/amdgpu_pm.c                 |  2 +
+ .../pm/swsmu/inc/pmfw_if/smu13_driver_if_v13_0_0.h |  5 +-
+ .../pm/swsmu/inc/pmfw_if/smu13_driver_if_v13_0_7.h | 29 ++++----
+ drivers/gpu/drm/amd/pm/swsmu/inc/smu_v13_0.h       |  4 +-
+ .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c   |  6 ++
+ .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c   |  1 +
+ drivers/gpu/drm/drm_client.c                       | 33 +++++----
+ drivers/gpu/drm/i915/display/intel_bios.c          | 33 ++++++---
+ drivers/gpu/drm/i915/display/intel_fbdev.c         | 12 ++++
+ drivers/gpu/drm/i915/display/skl_watermark.c       |  3 +-
+ drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c     | 14 ++--
+ drivers/gpu/drm/i915/gem/i915_gem_shmem.c          |  2 +-
+ drivers/gpu/drm/virtio/virtgpu_ioctl.c             |  5 +-
+ drivers/video/fbdev/nvidia/nvidia.c                | 81 +++++++++++-------=
+----
+ include/drm/drm_client.h                           |  5 --
+ include/uapi/drm/virtgpu_drm.h                     |  1 +
+ 26 files changed, 200 insertions(+), 119 deletions(-)
