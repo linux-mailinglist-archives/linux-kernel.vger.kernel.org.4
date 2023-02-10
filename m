@@ -2,104 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA2D69232B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A06CD69232D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232554AbjBJQUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 11:20:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41506 "EHLO
+        id S232749AbjBJQVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 11:21:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231882AbjBJQUs (ORCPT
+        with ESMTP id S231882AbjBJQVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 11:20:48 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4C97284;
-        Fri, 10 Feb 2023 08:20:47 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id t17so3818220pfj.0;
-        Fri, 10 Feb 2023 08:20:47 -0800 (PST)
+        Fri, 10 Feb 2023 11:21:23 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45EA7284;
+        Fri, 10 Feb 2023 08:21:22 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id az4-20020a05600c600400b003dff767a1f1so4456808wmb.2;
+        Fri, 10 Feb 2023 08:21:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T+s3+R4BwN91gBepBEWrEY8Vvh5YNXMDaNjOtbjtONA=;
-        b=PUD2yf2TNOz8iOQztqPJfdJ9ELRnWxBC9OXLVvc0IMpv2hMRfQrlK0ITtiAdKBU+hf
-         vxUuKzjUsfHAY0amGyhDBmbYFLp9jyu+2l1wbj0hM2w1m4vZaEtz/nkmxs6lVQLolEi9
-         H6TpF62UjRYsKAjxBWJFu0xALWrrCFLrdjELIMPIHZuuyQmv8eOw9r/khi+IPv5UC5Tw
-         rVWB2YIsKZGJHrLiEZqJdsvwqFWegdKM7enGODXCgR/bQqsBw5TEeoEoLBtYDz44hYd1
-         4Ee9OBaXLQXdoS4ianvnXhjRuGc6E6k7hOS4SKR1ulB57R9R4a8XTclSEFIQ007wNoUP
-         nPBg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nt8Gh4/OONJu6PpXJeU0AbL49OiKDt7nnRYsckchfN0=;
+        b=QrGz91cJj7opg88MsdPrKWB+iQxzHrgJYIUn/ZbG0qWZxAWA5PGDmdJToQl5HTBXsv
+         OWKQptZ8fffhwxl1oPrIOx1VL1ZXhuBGDYHku9eUXO/j0EOAZd5hH9NkxK+d8BLSNudc
+         GGQy2OfqAFF/Iw/oihCudX2U/pzfDroW00EbKAEjNjQ8jrf9EXmsSgUeE08sd67dltEl
+         PEwqCsZJ5s0v5bx0MQFLw4l1UR59s3zwcyEWaiG35Pie0LGDiM3a4OVJxb2O2astx+vp
+         uwZIUsGXDqGbDTyzEe10r4xDmJG9B80nZsVz2nynrl/6+hqvHKlhGkbIIgOImkuY9tY/
+         RBCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T+s3+R4BwN91gBepBEWrEY8Vvh5YNXMDaNjOtbjtONA=;
-        b=0fV1m7pFdxa2LSjYNLxwt1e0JGBA5aDMAnV4DZ/zefwYf9M+krkQWt3IcxdPTQahJ7
-         SuTBhRWObY+MnVvIo4QRlpwOdiwODqa0eKMuVB5577KWKtbfiT23B/1+bf+7fVM+RH7B
-         1kfjRJT0u9ahohgCck+cr1kCPapKQp6G0IV0acCbY9cv7Jea7j4x4eRP471iHV0fBSg+
-         myybA21Ra5Lq2QPA1fWYuqGmq4GUZLWRFPDDVVDPoTg5zk4iWNdkpjbRqMdpcVmjoMjP
-         N2swQd2kUGldJRLLnX4TIXoBKnNj8ADa626soWwZIy+8ajYUcnEU+8q2NCgcEtte7xme
-         DcaQ==
-X-Gm-Message-State: AO0yUKWbzZInZBzUYb3sycLc3bc/WCGLNGECDoJT+aoQpKk6yZm7AZVA
-        /YoRMCvm8dEr3aSg2XrQbvs=
-X-Google-Smtp-Source: AK7set99SI3pKlRjrZCRkEnyIZEEUot5w8CzY221yQ6oODsw8IKivq7tbJBLTxpHBLVzJB9Y5m+i2g==
-X-Received: by 2002:a62:1d91:0:b0:5a8:718c:5ee9 with SMTP id d139-20020a621d91000000b005a8718c5ee9mr1786799pfd.25.1676046046923;
-        Fri, 10 Feb 2023 08:20:46 -0800 (PST)
-Received: from localhost ([124.248.219.206])
-        by smtp.gmail.com with ESMTPSA id i1-20020aa78d81000000b0058ba2ebee1bsm3433711pfr.213.2023.02.10.08.20.46
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 10 Feb 2023 08:20:46 -0800 (PST)
-Date:   Fri, 10 Feb 2023 08:20:33 -0800
-From:   Dan Li <ashimida.1990@gmail.com>
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     gcc-patches@gcc.gnu.org,
-        Richard Sandiford <richard.sandiford@arm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Marco Elver <elver@google.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Song Liu <song@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Juergen Gross <jgross@suse.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Yuntao Wang <ytcoode@gmail.com>,
-        Changbin Du <changbin.du@intel.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: Re: [RFC/RFT 0/3] Add compiler support for Control Flow Integrity
-Message-ID: <20230210162033.tb5b6cd3j3vxr6vv@ubuntu>
-References: <20221219055431.22596-1-ashimida.1990@gmail.com>
- <CAMn1gO6hwaSDCqigwoH981ffVbU8OvgJhrGh997kGseCSbpAJA@mail.gmail.com>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nt8Gh4/OONJu6PpXJeU0AbL49OiKDt7nnRYsckchfN0=;
+        b=v1EfK8fr2MNFKZpdZzXgAmgH/VFzUHgHdjvaoPtZNAQ1ruBwDayKUCcIWGYVgH+V2C
+         OsfD77iNnNeVbaFNgBqa68cTSiJvmY+98T1Cd1aqAU08T26ilEwxJ05Jaf/75SE5EVPp
+         XQiFIZQOF0UTigwK8x9i5ltrLl5Jmsf8VO24SRFEFxvEx9nVbafpLmoRMlyKobtKX4D4
+         LxjEwyBzrOuLnE4HDGcAcKoLuFl7JERgnv+g9fAqyE6xrFGDHOI7lOJnphHzq3N7LD+q
+         TilN2+Fgn3RfSGSdMPQWVpmppCyo4pz/rmE6OmX1S9e5oM4AyEflLFl3wZPDSJgPEKWt
+         KJ1A==
+X-Gm-Message-State: AO0yUKXUVpvEag9AnbbgTElck2FNSUdPfJLqgdn3gvHCXQqV5Dk5psGc
+        nSNUsiv33avTR0u8M40MzhETKBLyp8U=
+X-Google-Smtp-Source: AK7set9vKeb8b8PsM2fowagD0M4M9mIigwCOtgIQrevOWk1YhsweGHC52Ic/fCxHdlwBxJYCvhH6ZA==
+X-Received: by 2002:a05:600c:1656:b0:3e0:fda8:7e26 with SMTP id o22-20020a05600c165600b003e0fda87e26mr9654204wmn.33.1676046081464;
+        Fri, 10 Feb 2023 08:21:21 -0800 (PST)
+Received: from zambezi.local (ip-94-112-104-28.bb.vodafone.cz. [94.112.104.28])
+        by smtp.gmail.com with ESMTPSA id l4-20020a7bc444000000b003d9fba3c7a4sm7995040wmi.16.2023.02.10.08.21.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 08:21:20 -0800 (PST)
+From:   Ilya Dryomov <idryomov@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Ceph fix for 6.2-rc8
+Date:   Fri, 10 Feb 2023 17:21:12 +0100
+Message-Id: <20230210162112.534456-1-idryomov@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMn1gO6hwaSDCqigwoH981ffVbU8OvgJhrGh997kGseCSbpAJA@mail.gmail.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,29 +68,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/08, Peter Collingbourne wrote:
-> On Sun, Dec 18, 2022 at 10:06 PM Dan Li <ashimida.1990@gmail.com> wrote:
-> >
-> > This series of patches is mainly used to support the control flow
-> > integrity protection of the linux kernel [1], which is similar to
-> > -fsanitize=kcfi in clang 16.0 [2,3].
-> >
-> > I hope that this feature will also support user-mode CFI in the
-> > future (at least for developers who can recompile the runtime),
-> > so I use -fsanitize=cfi as a compilation option here.
-> 
-> Please don't. The various CFI-related build flags are confusing enough
-> without also having this inconsistency between Clang and GCC.
+Hi Linus,
 
-Hi Peter,
+The following changes since commit 4ec5183ec48656cec489c49f989c508b68b518e3:
 
-Got it, as discussed before[1], in the next version I will use the same
-compile option.
+  Linux 6.2-rc7 (2023-02-05 13:13:28 -0800)
 
-[1]. https://patchwork.kernel.org/project/linux-arm-kernel/patch/20221219061758.23321-1-ashimida.1990@gmail.com/
+are available in the Git repository at:
 
-Thanks,
-Dan.
+  https://github.com/ceph/ceph-client.git tags/ceph-for-6.2-rc8
 
-> 
-> Peter
+for you to fetch changes up to e7d84c6a1296d059389f7342d9b4b7defb518d3a:
+
+  ceph: flush cap releases when the session is flushed (2023-02-07 16:55:14 +0100)
+
+----------------------------------------------------------------
+A fix for a pretty embarrassing omission in the session flush handler
+from Xiubo, marked for stable.
+
+----------------------------------------------------------------
+Xiubo Li (1):
+      ceph: flush cap releases when the session is flushed
+
+ fs/ceph/mds_client.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
