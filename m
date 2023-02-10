@@ -2,223 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0650F691698
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 03:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25324691699
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 03:16:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbjBJCQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 21:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55684 "EHLO
+        id S230203AbjBJCQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 21:16:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjBJCQM (ORCPT
+        with ESMTP id S229800AbjBJCQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 21:16:12 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D356F8D2
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 18:16:07 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id z1so5028413plg.6
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 18:16:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bmdsJe5VjS6cGWRPCrFBEnJ1Stz+m8nOHf+xEJbc8Ro=;
-        b=J8IifK/DvnXJNvhWBvQbcKdHIoBmbbPZ9GmygmQqrNwBSb1pD/HNZOZeiWQSwCoPci
-         NP3OTrWJb/g+vFhmEllum5yKYw4HmSuTpSf7i55JPj2Otjj8Ztgyi8fAQxheouAVG5gr
-         feUmWCgQKTCr0LdxXWejJcCO5GBTd8ROY77qtZY0Fa02CnRZBNcoPEAQeGO7e2TtM9Yj
-         8HlgeD73o8w0RL3OTbBGYNgFkV2ABhQP1834I5JNDAQmI5VJyB6at/AfhIBmtmrZ5zt7
-         LFe2GAliMmn6fR9D5GkGQJU5ayikMCd3K9h34G22YIj2ial/gBGc15dVfeAuO9Woi5dM
-         NBhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bmdsJe5VjS6cGWRPCrFBEnJ1Stz+m8nOHf+xEJbc8Ro=;
-        b=uPsAG8aZkbNddxQvEHIW80ka6aRvE3Lkkscw+hvuOPgIpLhxkGqkvNvp/k3AHOlXLu
-         Czjw9mR+t7BZpnsh8x4yM5/zm4UOWZSveAjwVa0VZCWqlHQC9RZ4rNsmPH5X68NgIw92
-         7wbwV5qVDqo6TC7L/q8zazyFh/JeAokH8kXMhtWNfIOuogbZdMnn50dcT2k+oXkzwQr0
-         m5B7I4wEJw7cWTY1bIzg0qDryfm5xGUViEIRWlPXoLl828CU/0zou7g6kiivUFDVEgvF
-         W+9ZPKL96O4NUcgeXy/P8/z+bInUq1GD/YnyaC26YZQ23GkNU246DN2c1GimtCx9zAao
-         JHyA==
-X-Gm-Message-State: AO0yUKUXN/EW7YWE7i/MxMA3NzvZjxVHO71mttymcFVT6Qghld4MCuEa
-        gEhEMF8vmvq6aPPxm0vV/b5wFg==
-X-Google-Smtp-Source: AK7set/5M4194uBmFaxqcnUSG3dAq8TXSG1+LxNlv7e9evS+gIEFmcux2K3a5fEecC8rDIi5Jlct7Q==
-X-Received: by 2002:a17:902:6b81:b0:199:bcb:3dae with SMTP id p1-20020a1709026b8100b001990bcb3daemr10334823plk.56.1675995366933;
-        Thu, 09 Feb 2023 18:16:06 -0800 (PST)
-Received: from dread.disaster.area (pa49-181-4-128.pa.nsw.optusnet.com.au. [49.181.4.128])
-        by smtp.gmail.com with ESMTPSA id i5-20020a170902eb4500b00199080af237sm2197368pli.115.2023.02.09.18.16.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 18:16:06 -0800 (PST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pQIxH-00DSdE-UH; Fri, 10 Feb 2023 13:16:03 +1100
-Date:   Fri, 10 Feb 2023 13:16:03 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Stefan Metzmacher <metze@samba.org>, Jens Axboe <axboe@kernel.dk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API Mailing List <linux-api@vger.kernel.org>,
-        io-uring <io-uring@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Samba Technical <samba-technical@lists.samba.org>
-Subject: Re: copy on write for splice() from file to pipe?
-Message-ID: <20230210021603.GA2825702@dread.disaster.area>
-References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
- <CAHk-=wj8rthcQ9gQbvkMzeFt0iymq+CuOzmidx3Pm29Lg+W0gg@mail.gmail.com>
+        Thu, 9 Feb 2023 21:16:27 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485D170969
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 18:16:18 -0800 (PST)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1675995376;
+        bh=IcKXUOph5Uq/d7rKrb0onbZjg5XcHRfrd3jO9HnwOtc=;
+        h=From:Date:Subject:To:Cc:From;
+        b=C1Zl+D0kHHP6WRG/IcJ9m+o7ZDWLuR52OXL9kQ0PXvscuX9Gqhw45LIPxRb4aQyWm
+         pofvytHVdbTTdwl4rO/xHeZIJk30zckiwUV0lWrj1WHmK/lU6jl1tAzeQ65GsF8mei
+         pEIYkjjMG4jJWWc5lIpXhiPISPA2eGHeVR4+2pJI=
+Date:   Fri, 10 Feb 2023 02:16:13 +0000
+Subject: [PATCH] ubifs: make kobj_type structures constant
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wj8rthcQ9gQbvkMzeFt0iymq+CuOzmidx3Pm29Lg+W0gg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230210-kobj_type-ubifs-v1-1-052419f90fae@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAOyo5WMC/x2N0QqDMAwAf0XyvECtm6K/MkRajRqVKo2ODfHfF
+ 3y8g+NOEIpMAlVyQqQPC69BIX0k0I4uDITcKYM1NjM2NTivfmr230Z4eO4FX0VpXNY9cyoL0Mo
+ 7IfTRhXbULhzLonKL1PP33rzr6/oDPO1kK3YAAAA=
+To:     Richard Weinberger <richard@nod.at>
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1675995374; l=1131;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=IcKXUOph5Uq/d7rKrb0onbZjg5XcHRfrd3jO9HnwOtc=;
+ b=h0oBl2kNVAVRAwQ2FkTKyDUx9MVHRilJY04iy94HQb8x1TyJyARqGBUi9S71Y+mutyUYJTxf/
+ i01Zdk1h9O4CnFX8UnzZijYlgogTGypPDMf+V2UrLIEFFhYGzHc5aH3
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 08:41:02AM -0800, Linus Torvalds wrote:
-> Adding Jens, because he's one of the main splice people. You do seem
-> to be stepping on his work ;)
-> 
-> Jens, see
-> 
->   https://lore.kernel.org/lkml/0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org
-> 
-> On Thu, Feb 9, 2023 at 5:56 AM Stefan Metzmacher <metze@samba.org> wrote:
-> >
-> > So we have two cases:
-> >
-> > 1. network -> socket -> splice -> pipe -> splice -> file -> storage
-> >
-> > 2. storage -> file -> splice -> pipe -> splice -> socket -> network
-> >
-> > With 1. I guess everything can work reliable [..]
-> >
-> > But with 2. there's a problem, as the pages from the file,
-> > which are spliced into the pipe are still shared without
-> > copy on write with the file(system).
-> 
-> Well, honestly, that's really the whole point of splice. It was
-> designed to be a way to share the storage data without having to go
-> through a copy.
-> 
-> > I'm wondering if there's a possible way out of this, maybe triggered by a new
-> > flag passed to splice.
-> 
-> Not really.
-> 
-> So basically, you cannot do "copy on write" on a page cache page,
-> because that breaks sharing.
-> 
-> You *want* the sharing to break, but that's because you're violating
-> what splice() was for, but think about all the cases where somebody is
-> just using mmap() and expects to see the file changes.
-> 
-> You also aren't thinking of the case where the page is already mapped
-> writably, and user processes may be changing the data at any time.
-> 
-> > I looked through the code and noticed the existence of IOMAP_F_SHARED.
-> 
-> Yeah, no. That's a hacky filesystem thing. It's not even a flag in
-> anything core like 'struct page', it's just entirely internal to the
-> filesystem itself.
+Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+the driver core allows the usage of const struct kobj_type.
 
-It's the mechanism that the filesystem uses to tell the generic
-write IO path that the filesystem needs to allocate a new COW extent
-in the backing store because it can't write to the original extent.
-i.e. it's not allowed to overwrite in place.
+Take advantage of this to constify the structure definitions to prevent
+modification at runtime.
 
-It's no different to the VM_SHARED flag in the vma so the generic
-page fault path knows if it has to allocate a new COW page to take
-place on a write fault because it can't write to the original page.
-i.e. it's not allowed to overwrite in place.
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ fs/ubifs/sysfs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-So by the same measure, VM_SHARED is a "hacky mm thing". It's not
-even a flag in anything core like 'struct page', it's just entirely
-internal to the mm subsystem itself.
+diff --git a/fs/ubifs/sysfs.c b/fs/ubifs/sysfs.c
+index 06ad8fa1fcfb..4404ca4f2ce9 100644
+--- a/fs/ubifs/sysfs.c
++++ b/fs/ubifs/sysfs.c
+@@ -74,13 +74,13 @@ static const struct sysfs_ops ubifs_attr_ops = {
+ 	.show	= ubifs_attr_show,
+ };
+ 
+-static struct kobj_type ubifs_sb_ktype = {
++static const struct kobj_type ubifs_sb_ktype = {
+ 	.default_groups	= ubifs_groups,
+ 	.sysfs_ops	= &ubifs_attr_ops,
+ 	.release	= ubifs_sb_release,
+ };
+ 
+-static struct kobj_type ubifs_ktype = {
++static const struct kobj_type ubifs_ktype = {
+ 	.sysfs_ops	= &ubifs_attr_ops,
+ };
+ 
 
-COW is COW is COW no matter which layer implements. :/
+---
+base-commit: e544a07438522ab3688416e6e2e34bf0ee6d8755
+change-id: 20230210-kobj_type-ubifs-5790a3d46e97
 
-> > Is there any other way we could archive something like this?
-> 
-> I suspect you simply want to copy it at splice time, rather than push
-> the page itself into the pipe as we do in copy_page_to_iter_pipe().
-> 
-> Because the whole point of zero-copy really is that zero copy. And the
-> whole point of splice() was to *not* complicate the rest of the system
-> over-much, while allowing special cases.
-> 
-> Linux is not the heap of bad ideas that is Hurd that does various
-> versioning etc, and that made copy-on-write a first-class citizen
-> because it uses the concept of "immutable mapped data" for reads and
-> writes.
-> 
-> Now, I do see a couple of possible alternatives to "just create a stable copy".
-> 
-> For example, we very much have the notion of "confirm buffer data
-> before copying". It's used for things like "I started the IO on the
-> page, but the IO failed with an error, so even though I gave you a
-> splice buffer, it turns out you can't use it".
-> 
-> And I do wonder if we could introduce a notion of "optimistic splice",
-> where the splice works exactly the way it does now (you get a page
-> reference), but the "confirm" phase could check whether something has
-> changed in that mapping (using the file versioning or whatever - I'm
-> hand-waving) and simply fail the confirm.
-> 
-> That would mean that the "splice to socket" part would fail in your
-> chain, and you'd have to re-try it. But then the onus would be on
-> *you* as a splicer, not on the rest of the system to fix up your
-> special case.
-> 
-> That idea sounds fairly far out there, and complicated and maybe not
-> usable. So I'm just throwing it out as a "let's try to think of
-> alternative solutions".
-
-Oh, that's sounds like an exact analogy to the new IOMAP_F_STALE
-flag and the validity cookie we have in the iomap write path code.
-The iomap contains cached, unserialised information, and the
-filesystem side mapping it is derived from can change asynchronously
-(e.g. by IO completion doing unwritten extent conversion). Hence the
-cached iomap can become stale, and that's a data corruption vector.
-
-The validity cookie is created when the iomap is built, and it is
-passed to a filesystem callback when a folio is locked for copy-in.
-This allows the IO path to detect that the filesystem side extent
-map has changed during the write() operations before we modify the
-contents of the folio. It is done under the locked folio so that the
-validation is atomic w.r.t. the modification to the folio contents
-we are about to perform.
-
-On detection of a cookie mismatch, the write operation then sets the
-IOMAP_F_STALE flag, backs out of the write to that page and ends the
-write to the iomap. The iomap infrastructure then remaps the file
-range from the offset of the folio at which the iomap change was
-detected.  The write the proceeds with the new, up to date iomap....
-
-We have had a similar "is the cached iomap still valid?" mechanism
-on the writeback side of the page cache for years. The details are
-slightly different, though I plan to move that code to use the same
-IOMAP_F_STALE infrastructure in the near future because it
-simplifies the writeback context wrapper shenanigans an awful lot.
-And it helps make it explicit that iomaps are cached/shadowed
-state, not the canonical source of reality.
-
-Applying the same principle it to multiply referenced cached page
-contents will be more complex. I suspect we might be able to
-leverage inode->i_version or ctime as the "data changed" cookie as
-they are both supposed to change on every explicit user data
-modification made to an inode. However, I think most of the
-complexity would be in requiring spliced pages to travel in some
-kind of container that holds the necessary verification
-information....
-
-Cheers,
-
-Dave.
+Best regards,
 -- 
-Dave Chinner
-david@fromorbit.com
+Thomas Weißschuh <linux@weissschuh.net>
+
