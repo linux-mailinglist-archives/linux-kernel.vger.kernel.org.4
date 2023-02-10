@@ -2,175 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69EFB692791
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 21:02:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A2F692790
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 21:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233400AbjBJUCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 15:02:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
+        id S233375AbjBJUCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 15:02:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbjBJUCq (ORCPT
+        with ESMTP id S233051AbjBJUCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 15:02:46 -0500
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118437715E
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 12:02:45 -0800 (PST)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-16aa71c1600so8052511fac.11
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 12:02:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dn8jJUxmhSJCRQ2KeeXopMGGe8mROJR+FfacxxhkMFU=;
-        b=Z8n30FA5uUBtnkZJ7Z0lfxpwqmPAmBwoI63JhBNKnPQ58VTj0Mz/WS5sGb2XeOsSK8
-         axBbJJNTiYvwQtE91QFlz+a2cAcrifJiCdOhSMW0PvWiHmyQiTsqYxGck3b3lSdWsCI/
-         Vg9vmtBPodcU0+4PMi8CfJXftsyU+ZUaD0SHcy+lXf4oIkK5riR+FzGh+zFxhKxscMQU
-         OV8+rRq7RfrPD37O6pK2d6Q5nYKOcq0dtkggTZxD57s6ISLyHH6UqLQpHgJp6BhZhbGB
-         EbpYgrEUsBPgyzwAb/w5Nu1CUucw9IrISe3tRpYc40ZyGPhSoHjMmO0gwUYiNYLUX3ny
-         6oKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dn8jJUxmhSJCRQ2KeeXopMGGe8mROJR+FfacxxhkMFU=;
-        b=12/2QoQnh3HoIqkoszWp8VhoPjFmohua2jrpY2PbNTt13Kmwhj9Re1O0/WswGzSolT
-         1z7OGiuY1HzT6qJiRtJJZhkY9E9/vR22Ne7w3YSp3u2PsfSXDrF6uCIzE3qwIWJcIOH3
-         GttWD+fcvcJvpWkvrvGWsv9NhYsVPP+eWtefhmf4t8z66x7R8HKDybuKHa1mYMnhJ0aE
-         9xM+FQ32ppN/FZkn1Ixne+vDL0hfs5+WAy/rSQNwpi1Em6MMuE4ngj4B/kvIn/zjhEC7
-         K5LwIiksY2c82ga1ZwYyaSglO7jUoSCeMeJ44BsOPxi6MpXkW/ZcFG3IXxLfsAhEoH1N
-         zOyQ==
-X-Gm-Message-State: AO0yUKX1OzR9DEGG84KzSwDYGU9oafQ+BP+lm+uWVdgXy/QMXzLGkgzg
-        y4AAKoo152jvW/hAOcX1VegAiU7DU1TBGImi4mdYmA==
-X-Google-Smtp-Source: AK7set8VFB1oFgobXiEA8CwUJAHpFvhiVJut+0W/YtZUWF6VJL4Bv4kKXlyXkN8tNOaJ8XquuXlP5RSZa+U6UpBCWCQ=
-X-Received: by 2002:a05:6870:c211:b0:169:e996:9cb0 with SMTP id
- z17-20020a056870c21100b00169e9969cb0mr2202181oae.122.1676059360188; Fri, 10
- Feb 2023 12:02:40 -0800 (PST)
+        Fri, 10 Feb 2023 15:02:45 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5718917CED;
+        Fri, 10 Feb 2023 12:02:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=bhGEaGw9cMMoPachO1bHvi1y2oRU34HBj0zIs129VZM=; b=Mbs8yi8QYZSZ2kwXboDl8eigdl
+        FMPN+HWFVe2bPPROA0msZsNEaQrP12yAutq4eMM9IP0IYIGlhe2SfEdl1OfDhs5qG3sQx5LfiQNyV
+        iHqCwnx9n6ZpDfshwz1JlYkuDxcS/8FHhp1yojovs4coRgVyrXT2adDjt/qsRZJ+cxQY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pQZbT-004dP8-6R; Fri, 10 Feb 2023 21:02:39 +0100
+Date:   Fri, 10 Feb 2023 21:02:39 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Ioana Ciornei <ioana.ciornei@nxp.com>
+Subject: Re: [PATCH net-next] net: pcs: tse: port to pcs-lynx
+Message-ID: <Y+ai3zHMUCDcxqxP@lunn.ch>
+References: <20230210190949.1115836-1-maxime.chevallier@bootlin.com>
+ <20230210190949.1115836-1-maxime.chevallier@bootlin.com>
+ <20230210193159.qmbtvwtx6kqagvxy@skbuf>
 MIME-Version: 1.0
-References: <20230131220355.1603527-1-rmoar@google.com> <20230131220355.1603527-2-rmoar@google.com>
- <CABVgOSmYmP+yO1BQ2m8nA+czTjQZrYeOWkn1b47UUiFKG3NUZA@mail.gmail.com>
-In-Reply-To: <CABVgOSmYmP+yO1BQ2m8nA+czTjQZrYeOWkn1b47UUiFKG3NUZA@mail.gmail.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Fri, 10 Feb 2023 15:02:29 -0500
-Message-ID: <CA+GJov4kXQBgsxj8_4Z7bn=J16J5BJJcRL+YV=Vpe=TcgXzvoA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] kunit: fix bug in debugfs logs of parameterized tests
-To:     David Gow <davidgow@google.com>
-Cc:     brendanhiggins@google.com, dlatypov@google.com,
-        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230210193159.qmbtvwtx6kqagvxy@skbuf>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 9, 2023 at 12:06 AM David Gow <davidgow@google.com> wrote:
->
-> On Wed, 1 Feb 2023 at 06:04, Rae Moar <rmoar@google.com> wrote:
-> >
-> > Fix bug in debugfs logs that causes parameterized results to not appear
-> > in the log because the log is reintialized (cleared) when each parameter is
->
-
-Hi David!
-
-> Nit: s/reintialized/reinitialized
->
-
-Oops. Thanks for pointing this out. Will fix in v2.
-
-> > run.
-> >
-> > Ensure these results appear in the debugfs logs and increase log size to
-> > allow for the size of parameterized results.
-> >
-> > Signed-off-by: Rae Moar <rmoar@google.com>
+On Fri, Feb 10, 2023 at 09:31:59PM +0200, Vladimir Oltean wrote:
+> On Fri, Feb 10, 2023 at 08:09:49PM +0100, Maxime Chevallier wrote:
+> > When submitting the initial driver for the Altera TSE PCS, Russell King
+> > noted that the register layout for the TSE PCS is very similar to the
+> > Lynx PCS. The main difference being that TSE PCS's register space is
+> > memory-mapped, whereas Lynx's is exposed over MDIO.
+> > 
+> > Convert the TSE PCS to reuse the whole logic from Lynx, by allowing
+> > the creation of a dummy MDIO bus, and a dummy MDIO device located at
+> > address 0 on that bus. The MAC driver that uses this PCS must provide
+> > callbacks to read/write the MMIO.
+> > 
+> > Also convert the Altera TSE MAC driver to this new way of using the TSE
+> > PCS.
+> > 
+> > Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 > > ---
->
-> This looks pretty good to me, but we may need to restrict the size of
-> a single log line separately from that of the whole log.
->
-> (It'd also be nice to include a before/after in the commit description.)
+> >  drivers/net/ethernet/altera/altera_tse.h      |   2 +-
+> >  drivers/net/ethernet/altera/altera_tse_main.c |  50 ++++-
+> >  drivers/net/pcs/Kconfig                       |   4 +
+> >  drivers/net/pcs/pcs-altera-tse.c              | 194 +++++++-----------
+> >  include/linux/pcs-altera-tse.h                |  22 +-
+> >  5 files changed, 142 insertions(+), 130 deletions(-)
+> 
+> The glue layer is larger than the duplicated PCS code? :(
 
-Yes, as mentioned in the other patches, I will add an individual
-"before and after" comparison to each of the patches in v2. This is
-much clearer than just the overall comparison in the cover letter.
+I was wondering if the glue could actually be made generic. The kernel
+has a number of reasonably generic MMIO device drivers, which are just
+given an address range and assume a logical mapping.
 
->
-> With the stack size issue fixed, though, this looks good to me:
-> Reviewed-by: David Gow <davidgow@google.com>
->
-> Cheers,
-> -- David
->
-> >  include/kunit/test.h | 2 +-
-> >  lib/kunit/test.c     | 3 ++-
-> >  2 files changed, 3 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> > index 87ea90576b50..0a077a4c067c 100644
-> > --- a/include/kunit/test.h
-> > +++ b/include/kunit/test.h
-> > @@ -34,7 +34,7 @@ DECLARE_STATIC_KEY_FALSE(kunit_running);
-> >  struct kunit;
-> >
-> >  /* Size of log associated with test. */
-> > -#define KUNIT_LOG_SIZE 512
-> > +#define KUNIT_LOG_SIZE 1500
->
-> This is used both as the overall log size, and the size of a single
-> line in kunit_log_append.
->
-> As the latter involves a local 'line' array, it can bloat out stack usage.
->
-> Could we either restrict the maximum line length separately, or rework
-> kunit_log_append() to not use a local variable?
-> (I imagine we could just vsnprintf() directly into the log buffer. We
-> could make two sprintf calls to calculate the length required to
-> maintain some atomicity as well (this could open us up to
-> time-of-check/time-of-use vulnerabilities, but I think the
-> vulnerability ship has sailed if you're passing untrusted pointers
-> into the kunit_log macro anyway))
->
+Could this be made into a generic MDIO MMIO bus driver, which just
+gets configured with a base address, and maybe a stride between
+registers?
 
-Thanks for your help here. I will play around with these two options.
-Although, I think I am leaning toward restricting the maximum line
-length separately.
-
-Thanks!
-
--Rae
-
-> >
-> >  /* Maximum size of parameter description string. */
-> >  #define KUNIT_PARAM_DESC_SIZE 128
-> > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> > index 51cae59d8aae..66ba93b8222c 100644
-> > --- a/lib/kunit/test.c
-> > +++ b/lib/kunit/test.c
-> > @@ -437,7 +437,6 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
-> >         struct kunit_try_catch_context context;
-> >         struct kunit_try_catch *try_catch;
-> >
-> > -       kunit_init_test(test, test_case->name, test_case->log);
-> >         try_catch = &test->try_catch;
-> >
-> >         kunit_try_catch_init(try_catch,
-> > @@ -533,6 +532,8 @@ int kunit_run_tests(struct kunit_suite *suite)
-> >                 struct kunit_result_stats param_stats = { 0 };
-> >                 test_case->status = KUNIT_SKIPPED;
-> >
-> > +               kunit_init_test(&test, test_case->name, test_case->log);
-> > +
-> >                 if (!test_case->generate_params) {
-> >                         /* Non-parameterised test. */
-> >                         kunit_run_case_catch_errors(suite, test_case, &test);
-> > --
-> > 2.39.1.456.gfc5497dd1b-goog
-> >
+	Andrew
