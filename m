@@ -2,151 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0DD4691E2A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:26:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71742691E27
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:26:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232300AbjBJL0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 06:26:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37764 "EHLO
+        id S231846AbjBJL0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 06:26:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbjBJL0X (ORCPT
+        with ESMTP id S229584AbjBJL0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 06:26:23 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716EB6C7EF;
-        Fri, 10 Feb 2023 03:26:21 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31ABFPcq013092;
-        Fri, 10 Feb 2023 11:26:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=cD/X9nIeMMmFjHYm4VPov7vFFV03gYaj32qdcgmLvJE=;
- b=FdvYCAjyH0yNGCW0O6sA94ph/wPLjudsHzWwgK/J4m7mHi5KFSbIW1t8l0C7trg6V0jb
- Ml8+/ruk5On2x38DBugRq69wh/Tzz2NZzO++E40PqcQ06pklQZJuqWtZjsQQv+llwEdg
- C8hUISmJdaSxtnz923gAoQpep+1PedMqp94b0Bh8Eeo855gQLXuSOlqHChxG9fZKMcO2
- 1p2wjfzAX41N4Y+x+2DN73KhkUNV6RD9/KPhsHPp4wuFKjMzFAc+NY5PyQADiWwgBTbF
- R66r8fusXp/BCWR0spcJNhXV/Njl8704pYk2JWODP0d257Rq/xl7lOQ3dB4bFpn+jsdl yg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnmw0g8jx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 11:26:04 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31ABPDui022485;
-        Fri, 10 Feb 2023 11:26:03 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnmw0g8jg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 11:26:03 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 319NbWJs026034;
-        Fri, 10 Feb 2023 11:26:01 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3nhf06wa04-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Feb 2023 11:26:01 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31ABPxlf25166532
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Feb 2023 11:25:59 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 424C920040;
-        Fri, 10 Feb 2023 11:25:59 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 039F620049;
-        Fri, 10 Feb 2023 11:25:57 +0000 (GMT)
-Received: from [9.109.198.193] (unknown [9.109.198.193])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Feb 2023 11:25:56 +0000 (GMT)
-Message-ID: <288e133f-f740-6818-8125-8079217ab822@linux.ibm.com>
-Date:   Fri, 10 Feb 2023 16:55:54 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH AUTOSEL 6.1 17/38] powerpc/85xx: Fix unannotated
- intra-function call warning
-Content-Language: en-US
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        christophe.leroy@csgroup.eu, npiggin@gmail.com,
-        naveen.n.rao@linux.vnet.ibm.com, linuxppc-dev@lists.ozlabs.org,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-References: <20230209111459.1891941-1-sashal@kernel.org>
- <20230209111459.1891941-17-sashal@kernel.org>
-From:   Sathvika Vasireddy <sv@linux.ibm.com>
-In-Reply-To: <20230209111459.1891941-17-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: kp2fJvuJzSqkN5r85yXu86qrvSGQXP-s
-X-Proofpoint-ORIG-GUID: CYuRFdlv5KJPoQaw9Kri-fW_bNc2VOrc
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 10 Feb 2023 06:26:06 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7036C7E6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 03:26:05 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id h16so4718469wrz.12
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 03:26:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WRHSFsNOEYBISqhGh46fkzy2/I3EFBvJZ7Wz7NvqRXQ=;
+        b=NeJo0PnwsECgbdy5WyE4eGvbwndSnXKWfe+n61S1v7tprEwDEGrNOgmeZnYwEgFJFF
+         Zj3Yh+xupgf4Vm+5obFefSe52BnG6FRtcCVDHJoyLqizDKgSFSUrpvEGEMJxa+t3gSmp
+         nTLAxBDQOYv+76exd4E/CozZsvxdShWJGBZRaZLS+Va1f6erT1CGTC+/OBjvKv089Tb5
+         R5eMQO/Yjg3jtUA8kJcNJg3mByR0R6yI6hCVDo/9vuTZ+hHtJf+exbhmok3XJtzXb8ic
+         IblGclnoEru1Oq20FmcYMBp4uXg2C6hwYjwjQ40QXMLE4WfaQApzE14/nX7wWBJP//V6
+         VqZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WRHSFsNOEYBISqhGh46fkzy2/I3EFBvJZ7Wz7NvqRXQ=;
+        b=wck4jpP/VhPYzBB7nPwCScazyBMhJNOSvQbNavAZScF1QM9sgrfAUm7IkjIgwvsQAm
+         Aq3XYF9NDJ19VivbtaPLUyYqr2EoUmwduwcleKJJYbK2bCQXCsitBmLbLr0Ea6QA3Aw1
+         UlgvlIegRM6jGkMzGxmg5vZJiClnRjZ6yWlvxW+NL2pw+2nFGl6GBtYFSrMtdZy3NtkJ
+         Jn7mxGevB637ydlQlZtdjj2DZgTymyQipJuKUK9Sa1XJdetBKOBvNz1LmKE+neVgL9xM
+         s2dc4t+cwi1bs8Qphme5llohEI4OCEqVZjcNcWAHE+MbUS0guIFxz5abRxY/PbPf74Mr
+         DvUA==
+X-Gm-Message-State: AO0yUKWguh3sPKQxMi4SwNMGpw8POZgbuesYQ5La9EVnP0pg5bxa0TeE
+        Op1R+xmJQ3FhnlKSwign4yK5ag==
+X-Google-Smtp-Source: AK7set8j79x7B9ONqDBzqjQdMb3p8qwjDAXiyqF80JMwAjyuLznTOPi4CX/fXoOm/BNc8+pxppwfPA==
+X-Received: by 2002:adf:eb41:0:b0:2c3:ff6c:82e with SMTP id u1-20020adfeb41000000b002c3ff6c082emr8658873wrn.22.1676028364005;
+        Fri, 10 Feb 2023 03:26:04 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id g12-20020a5d540c000000b002bff1de8d4bsm3429258wrv.49.2023.02.10.03.26.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 03:26:03 -0800 (PST)
+Message-ID: <8c7584b2-60e0-27c8-a7c3-845cf5640d77@linaro.org>
+Date:   Fri, 10 Feb 2023 12:26:01 +0100
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-10_06,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- phishscore=0 adultscore=0 spamscore=0 lowpriorityscore=0 mlxlogscore=970
- bulkscore=0 malwarescore=0 priorityscore=1501 clxscore=1031 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302100088
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v5 3/8] arm64: dts: qcom: sc7280: Add LPASS PIL node
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        agross@kernel.org, alsa-devel@alsa-project.org,
+        andersson@kernel.org, broonie@kernel.org,
+        devicetree@vger.kernel.org, dianders@chromium.org,
+        judyhsiao@chromium.org, konrad.dybcio@somainline.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        quic_mohs@quicinc.com, quic_rjendra@quicinc.com,
+        quic_rohkumar@quicinc.com, robh+dt@kernel.org,
+        srinivas.kandagatla@linaro.org, vkoul@kernel.org
+References: <1675700201-12890-1-git-send-email-quic_srivasam@quicinc.com>
+ <1675700201-12890-4-git-send-email-quic_srivasam@quicinc.com>
+ <CAE-0n53uReg41RrHrBDaNt+BgaPem_JO-2Wwq8e_g0NeNCvgXg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAE-0n53uReg41RrHrBDaNt+BgaPem_JO-2Wwq8e_g0NeNCvgXg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sasha,
+On 09/02/2023 23:55, Stephen Boyd wrote:
+>> +
+>> +                       glink-edge {
+>> +                               interrupts-extended = <&ipcc IPCC_CLIENT_LPASS
+>> +                                                      IPCC_MPROC_SIGNAL_GLINK_QMP
+>> +                                                      IRQ_TYPE_EDGE_RISING>;
+>> +
+>> +                               mboxes = <&ipcc IPCC_CLIENT_LPASS
+>> +                                        IPCC_MPROC_SIGNAL_GLINK_QMP>;
+>> +
+>> +                               label = "lpass";
+>> +                               qcom,remote-pid = <2>;
+>> +
+>> +                               gpr {
+> 
+> This node name should be apr per the qcom,glink-edge.yaml binding?
 
-On 09/02/23 16:44, Sasha Levin wrote:
-> From: Sathvika Vasireddy <sv@linux.ibm.com>
->
-> [ Upstream commit 8afffce6aa3bddc940ac1909627ff1e772b6cbf1 ]
->
-> objtool throws the following warning:
->    arch/powerpc/kernel/head_85xx.o: warning: objtool: .head.text+0x1a6c:
->    unannotated intra-function call
->
-> Fix the warning by annotating KernelSPE symbol with SYM_FUNC_START_LOCAL
-> and SYM_FUNC_END macros.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
-> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-> Link: https://lore.kernel.org/r/20230128124138.1066176-1-sv@linux.ibm.com
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->   arch/powerpc/kernel/head_85xx.S | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/powerpc/kernel/head_85xx.S b/arch/powerpc/kernel/head_85xx.S
-> index 52c0ab416326a..d3939849f4550 100644
-> --- a/arch/powerpc/kernel/head_85xx.S
-> +++ b/arch/powerpc/kernel/head_85xx.S
-> @@ -862,7 +862,7 @@ _GLOBAL(load_up_spe)
->    * SPE unavailable trap from kernel - print a message, but let
->    * the task use SPE in the kernel until it returns to user mode.
->    */
-> -KernelSPE:
-> +SYM_FUNC_START_LOCAL(KernelSPE)
->   	lwz	r3,_MSR(r1)
->   	oris	r3,r3,MSR_SPE@h
->   	stw	r3,_MSR(r1)	/* enable use of SPE after return */
-> @@ -879,6 +879,7 @@ KernelSPE:
->   #endif
->   	.align	4,0
->   
-> +SYM_FUNC_END(KernelSPE)
->   #endif /* CONFIG_SPE */
->   
->   /*
+No, this is correct. I fixed the glink-edge binding last year.
 
-Please drop this patch because objtool enablement patches for powerpc 
-are not a part of kernel v6.1.
+> 
+>> +                                       compatible = "qcom,gpr";
+>> +                                       qcom,glink-channels = "adsp_apps";
+>> +                                       qcom,domain = <GPR_DOMAIN_ID_ADSP>;
+>> +                                       qcom,intents = <512 20>;
+>> +                                       #address-cells = <1>;
+>> +                                       #size-cells = <0>;
+>> +
+>> +                                       q6apm: service@1 {
+>> +                                               compatible = "qcom,q6apm";
+>> +                                               reg = <GPR_APM_MODULE_IID>;
+>> +                                               #sound-dai-cells = <0>;
+>> +
+>> +                                               q6apmdai: dais {
+>> +                                                       compatible = "qcom,q6apm-dais";
+>> +                                                       iommus = <&apps_smmu 0x1801 0x0>;
+>> +                                               };
+>> +
+>> +                                               q6apmbedai: bedais {
+>> +                                                       compatible = "qcom,q6apm-lpass-dais";
+>> +                                                       #sound-dai-cells = <1>;
+>> +                                               };
+>> +                                       };
+>> +
+>> +                                       q6prm: service@2 {
+>> +                                               compatible = "qcom,q6prm";
+>> +                                               reg = <GPR_PRM_MODULE_IID>;
+>> +
+>> +                                               q6prmcc: clock-controller {
+>> +                                                       compatible = "qcom,q6prm-lpass-clocks";
+> 
+> This is clk binding but not a clk driver? I'll look away now.
 
-Thanks,
-Sathvika
+It is a clock driver which was not put into clk. Maybe because it is
+tightly tied to entire QDSP platform.
+
+Best regards,
+Krzysztof
+
