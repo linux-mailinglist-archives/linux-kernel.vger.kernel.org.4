@@ -2,76 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F92691F5A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 13:54:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C35CD691F5D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 13:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232024AbjBJMyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 07:54:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33954 "EHLO
+        id S232001AbjBJM4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 07:56:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231976AbjBJMyp (ORCPT
+        with ESMTP id S231727AbjBJM4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 07:54:45 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFBC6BD17
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 04:54:45 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id z14-20020a17090abd8e00b00233bb9d6bdcso245021pjr.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 04:54:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kHvqhKfwkSYWgIBUppKUElAVHImwDcI/W0up7OF2SsA=;
-        b=jK+1yZ1ceJ7MA7R96Vv2sbNU6Z7Jcje1AnWDbCXC/KTBOf6vzobvz1pU20Vg4RlHRj
-         wYCBgw5Cc06nysymE0D7Tf6Zv+pzxjXeiL+t5rdkJsprN1cXAVOjHdgkCtR7rMJkFYU/
-         FnvWxbEPIaVSlMTE82Zhb0i4dbBmn9XyeVZD3zE2l6FD+zdmDN322PwGsnpLYY12N9wk
-         Y+YAmxhfzIzFPGftklhYpqAEvWmKV7gG4wYHfIS0OvblZ1na4ZcVIBmS239dvpTKipYQ
-         RtS2w0kS2WBOeVX0tk3esxnn+SbvtDSoi4NxFfdzJDR3G/iiQALPmh6DbxG2VqdpnwnC
-         vcGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kHvqhKfwkSYWgIBUppKUElAVHImwDcI/W0up7OF2SsA=;
-        b=aYyIB6JtzeqNWIDhug47oiVDvbN35slXxz0sjrm9tsEUrHd6TTgESNipt8/Ynxp3/w
-         BsrlVpwe0z+6jy8JVQILUJQamQV+DN7mqOAhCoChILxUFupmnRPaKCjbsXI+L5e6GK//
-         KVLC44AMpmVn5wAzQKJpAXF34JooIe1JM2/fZTYBFGjvVRgUkTBmMcGCiBrJ4ZshAyaA
-         3FVNfU/s2xuiQVvkyhr6x6e2rVNMNW8cWXsU/pabXk+efq/bA6V/7cooc0x9YapmD6BF
-         fzUnsBeAVnN6vziM0Ubagl6pA2gxbqPnonN/jJQYmUddH+L21geoPXPEImoaGOOELJ5a
-         4R5g==
-X-Gm-Message-State: AO0yUKWS1MptAlYCwcOLhE5X7arKjNh9QNZ4Jv5CP1iv3Ar2Ed6Jm+0P
-        ZPZ5PTNxsDhZz75nqVdgSKJnlAM7MslmvixuCPg=
-X-Google-Smtp-Source: AK7set8egNfccSYTnCF4LaILqJQ/DtfmALlLYTEGxY+TEygfbhBc2dGhdEtWLmkkxfW7UyZG7Or0kYlR5gLU7lM8zn0=
-X-Received: by 2002:a17:903:32ce:b0:198:b624:f4c2 with SMTP id
- i14-20020a17090332ce00b00198b624f4c2mr3767712plr.6.1676033684648; Fri, 10 Feb
- 2023 04:54:44 -0800 (PST)
+        Fri, 10 Feb 2023 07:56:48 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6BF71F1C;
+        Fri, 10 Feb 2023 04:56:45 -0800 (PST)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PCtt63fxsz6J7RD;
+        Fri, 10 Feb 2023 20:52:14 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Fri, 10 Feb
+ 2023 12:56:42 +0000
+Date:   Fri, 10 Feb 2023 12:56:41 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     <alison.schofield@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 4/6] cxl/region: Provide region info to the
+ cxl_poison trace event
+Message-ID: <20230210125641.00004744@Huawei.com>
+In-Reply-To: <7862ef793a3b4fce49b0c8074b014b53b389ce12.1675983077.git.alison.schofield@intel.com>
+References: <cover.1675983077.git.alison.schofield@intel.com>
+        <7862ef793a3b4fce49b0c8074b014b53b389ce12.1675983077.git.alison.schofield@intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:ea16:b0:40a:a618:d387 with HTTP; Fri, 10 Feb 2023
- 04:54:44 -0800 (PST)
-Reply-To: peterwhite202101@gmail.com
-From:   Peter White <richardwilson19867@gmail.com>
-Date:   Fri, 10 Feb 2023 12:54:44 +0000
-Message-ID: <CAJdDmFVsAAByjC1UrW8oy4uw+=BuehFgrpxAW9e2FQEKu27g4Q@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings from here.
+On Thu,  9 Feb 2023 15:32:57 -0800
+alison.schofield@intel.com wrote:
 
-I want to know if this email address is still valid to write to you.
-There is something important I would like to discuss with you.
+> From: Alison Schofield <alison.schofield@intel.com>
+> 
+> User space may need to know which region, if any, maps the poison
+> address(es) logged in a cxl_poison trace event. Since the mapping
+> of DPAs (device physical addresses) to a region can change, the
+> kernel must provide this information at the time the poison list
+> is read. The event informs user space that at event <timestamp>
+> this <region> mapped to this <DPA>, which is poisoned.
+> 
+> The cxl_poison trace event is already wired up to log the region
+> name and uuid if it receives param 'struct cxl_region'.
+> 
+> In order to provide that cxl_region, add another method for gathering
+> poison - by committed endpoint decoder mappings. This method is only
+> available with CONFIG_CXL_REGION and is only used if a region actually
+> maps the memdev where poison is being read. The default method remains:
+> read the poison by memdev resource.
 
-Thank you
+Mention here that you also cover memory that isn't mapped.
 
-Mr. Peter White
+A few minor comments inline.
+
+Thanks,
+
+Jonathan
+
+
+> 
+> Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> ---
+>  drivers/cxl/core/core.h   |  5 +++
+>  drivers/cxl/core/memdev.c | 14 ++++++-
+>  drivers/cxl/core/region.c | 82 +++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 100 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cxl/core/core.h b/drivers/cxl/core/core.h
+> index 8c04672dca56..2f9bd8651eb1 100644
+> --- a/drivers/cxl/core/core.h
+> +++ b/drivers/cxl/core/core.h
+> @@ -22,7 +22,12 @@ void cxl_decoder_kill_region(struct cxl_endpoint_decoder *cxled);
+>  #define CXL_PMEM_REGION_TYPE(x) (&cxl_pmem_region_type)
+>  int cxl_region_init(void);
+>  void cxl_region_exit(void);
+> +int cxl_get_poison_by_endpoint(struct device *dev, void *data);
+>  #else
+> +static inline int cxl_get_poison_by_endpoint(struct device *dev, void *data)
+> +{
+> +	return 0;
+> +}
+>  static inline void cxl_decoder_kill_region(struct cxl_endpoint_decoder *cxled)
+>  {
+>  }
+> diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
+> index 19b833c9cf35..8696d7b508b6 100644
+> --- a/drivers/cxl/core/memdev.c
+> +++ b/drivers/cxl/core/memdev.c
+> @@ -139,14 +139,26 @@ static ssize_t trigger_poison_list_store(struct device *dev,
+>  					 const char *buf, size_t len)
+>  {
+>  	struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
+> +	struct cxl_port *port;
+>  	bool trigger;
+>  	int rc;
+>  
+>  	if (kstrtobool(buf, &trigger) || !trigger)
+>  		return -EINVAL;
+>  
+> +	port = dev_get_drvdata(&cxlmd->dev);
+> +	if (!port || !is_cxl_endpoint(port))
+> +		return -EINVAL;
+> +
+>  	down_read(&cxl_dpa_rwsem);
+> -	rc = cxl_get_poison_by_memdev(cxlmd);
+> +	if (port->commit_end == -1)
+> +		/* No regions mapped to this memdev */
+> +		rc = cxl_get_poison_by_memdev(cxlmd);
+> +	else
+> +		/* Regions mapped, collect poison by endpoint */
+> +		rc = device_for_each_child(&port->dev, port,
+> +					   cxl_get_poison_by_endpoint);
+> +
+>  	up_read(&cxl_dpa_rwsem);
+>  
+>  	return rc ? rc : len;
+> diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
+> index 67e83d961670..0ac08e9106af 100644
+> --- a/drivers/cxl/core/region.c
+> +++ b/drivers/cxl/core/region.c
+> @@ -1826,6 +1826,88 @@ struct cxl_pmem_region *to_cxl_pmem_region(struct device *dev)
+>  }
+>  EXPORT_SYMBOL_NS_GPL(to_cxl_pmem_region, CXL);
+>  
+> +int cxl_get_poison_by_endpoint(struct device *dev, void *data)
+> +{
+> +	struct cxl_endpoint_decoder *cxled;
+> +	struct cxl_port *port = data;
+> +	struct cxl_dev_state *cxlds;
+> +	struct cxl_memdev *cxlmd;
+> +	u64 offset, length;
+> +	int rc = 0;
+> +
+> +	down_read(&cxl_dpa_rwsem);
+> +
+> +	if (!is_endpoint_decoder(dev))
+> +		goto out;
+> +
+> +	cxled = to_cxl_endpoint_decoder(dev);
+> +	if (!cxled->dpa_res || !resource_size(cxled->dpa_res))
+> +		goto out;
+> +
+> +	/*
+> +	 * Get the poison by decoder for mapped resources. This
+> +	 * separates pmem and ram poison list reads, as the spec
+> +	 * requires, and provides the region for the trace event.
+> +	 */
+
+Does the spec actually require separate decoders for PMEM and MEM?
+Sure, Linux only sets it up like that, but a BIOS might have set
+them up as a single decoder I think - even if we don't handle
+that form of crazy yet. If the spec requires it, then a reference
+would be great.
+
+> +	cxlmd = cxled_to_memdev(cxled);
+> +	length = cxled->dpa_res->end - cxled->dpa_res->start + 1;
+> +	rc = cxl_mem_get_poison(cxlmd, cxled->dpa_res->start, length,
+> +				cxled->cxld.region);
+> +	if (rc == -EFAULT && cxled->mode == CXL_DECODER_RAM)
+> +		rc = 0;
+> +	if (rc)
+> +		goto out;
+> +
+> +	/* Get poison in a skip range */
+
+Seems odd to do it in this order. I'd do the skip first as then
+the records will appear in address order (subject to whatever
+random order the device is tracking them and the resulting ordering
+in each request)
+
+> +	if (cxled->skip) {
+> +		rc = cxl_mem_get_poison(cxlmd, 0, cxled->skip, NULL);
+> +		if (rc == -EFAULT && cxled->mode == CXL_DECODER_RAM)
+> +			rc = 0;
+> +		if (rc)
+> +			goto out;
+> +	}
+> +
+> +	/* Iterate until commit_end is reached */
+> +	if (cxled->cxld.id < port->commit_end)
+> +		goto out;
+> +
+> +	/*
+> +	 * Reach here with the last committed decoder only.
+> +	 * Knowing that PMEM must always follow RAM, get poison
+> +	 * for unmapped ranges based on the last decoder's mode:
+> +	 *	ram: scan remains of ram range, then scan for pmem
+> +	 *	pmem: scan remains of pmem range
+> +	 */
+> +	cxlds = cxlmd->cxlds;
+> +
+> +	if (cxled->mode == CXL_DECODER_RAM) {
+> +		offset = cxled->dpa_res->end + 1;
+> +		length = resource_size(&cxlds->ram_res) - offset;
+> +		rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
+> +		if (rc == -EFAULT)
+> +			rc = 0;
+> +		if (rc)
+> +			goto out;
+> +	}
+> +	if (cxled->mode == CXL_DECODER_PMEM) {
+> +		offset = cxled->dpa_res->end + 1;
+> +		length = resource_size(&cxlds->pmem_res) - offset;
+> +	} else if (resource_size(&cxlds->pmem_res)) {
+> +		offset = cxlds->pmem_res.start;
+> +		length = resource_size(&cxlds->pmem_res);
+> +	} else {
+> +		rc = 1;
+> +		goto out;
+> +	}
+> +	/* Final get poison call. Return rc or 1 to stop iteration. */
+> +	rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
+> +	if (!rc)
+> +		rc = 1;
+> +out:
+> +	up_read(&cxl_dpa_rwsem);
+> +	return rc;
+> +}
+> +
+>  static struct lock_class_key cxl_pmem_region_key;
+>  
+>  static struct cxl_pmem_region *cxl_pmem_region_alloc(struct cxl_region *cxlr)
+
