@@ -2,207 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 685A669234C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:30:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C16D692353
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232520AbjBJQaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 11:30:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47510 "EHLO
+        id S232661AbjBJQbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 11:31:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbjBJQaM (ORCPT
+        with ESMTP id S232666AbjBJQa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 11:30:12 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25ECD70723
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:30:11 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id w3so6339158qts.7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:30:11 -0800 (PST)
+        Fri, 10 Feb 2023 11:30:58 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACBE728A4;
+        Fri, 10 Feb 2023 08:30:55 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id bv2-20020a0568300d8200b0068dc615ee44so1669311otb.10;
+        Fri, 10 Feb 2023 08:30:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=JDBS6d/Lda34jyocIqJwGH9bwG6KCV2tTN3mIxJDJKA=;
-        b=fphBx+ZJPy4yJfySDl/CrDn0mgzZORtzvFApv24FyvHqJLtyyN87YTL7CUCfloqPmt
-         ri+JOQ3PdMzmCvoroOJ/HTrKSeiTSDPkEcXGQrMHHLmsZbA4nJZQHIeeM8fWztpwFNku
-         PH/4YDkVEO7heB9ghtjwNvxwMIewUmAKiYT5tNhYQ4kj2+bdbexDzo0jpEbeWJ2Mtk1g
-         EIJsPL59TcYoJ1UNdzjacE57YzDDn1POerQDPxH/QjNuNwBPvyQnbSY5d5nr+YcAChiS
-         kAiYWC3XAlIZkf0mm9y/DZ+N3jIj6g7Io8fGRLuWcsye/8KiTqw+8ELRE5lt15tD0GFq
-         BxCw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1xKJgqTES4Y1ubN8XM2HsQqVacGZvGadNY3UmBuYxPI=;
+        b=N7MueVuzk4rFLlVoqheOJtlOEaKS4el0qRQF8Kt6tiaU7d1m2fmbz73mjwqlNou2PX
+         NsESlEYoZV1aHGYBrqAnmItwLcmM4SPI5P3+cAUVTJ4cUx3DovW3kR+QZ6JixZWF1h5Y
+         3tqVjZP67sIS3bTwI3Mm/PsTU43HathH3gQC6YoPs65ANwshepMsSj+tnonxqGd0h1Wn
+         3Zoh7O/s6s/vQaCrM0uJ1mVrhPEeJ+9CEg76SQGVCg098vgpDBYOYBlNwXpdWTnOBlZy
+         D8uXwbFkNWVJ4qgu32qjnNNr3OJPGzbLkfEdeEgo50WGHrRk8wGY101RFJTqWBbGxO9b
+         mzGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JDBS6d/Lda34jyocIqJwGH9bwG6KCV2tTN3mIxJDJKA=;
-        b=5o/NhlE+68X1TPR2MvVQ4yuvJ/7mSI0Gg6kpfLjTBHyUkHWBJ+M1unyMT0mbBpn+Ti
-         2mV6AfjH3Vs7hU4NJW3I6Qwq9i75UDe6unJEHJQzSFIZ/m82bv1TuTJ6OrsCGg3LKp3G
-         7g/5unhGv39G2oPp46pLawmeRt+DDn38T18uJxnD7Qrdqmkzkk1dUPvVJ5dNXpxc0SIF
-         3vuLG6RqIZDCk8p6JXElQ+9p4A9Byr719eLaghYLMFjZastBtHgnI7gKKUm/oqfUEpEr
-         szFR/F27JJHtE6bAhseOdpGMyNLcDt1dx+0vYk7fwzh5eGmQ3VVMh0S+MtrKUQpBO6Vr
-         d6OA==
-X-Gm-Message-State: AO0yUKXThW5Pc6cTm6QoxIj4B96LXFaNuDNPfZ+9nztP+GTKR00HpOfy
-        /v32yY4z5u44Hhuu3AZDU1AyQA==
-X-Google-Smtp-Source: AK7set+yZ3GsVnetj/5WXI/D1fmnG8DYfT0tkn2Spe2TNzEukmng+pk+eG71qpLKqsQIMRxYeDF/FQ==
-X-Received: by 2002:a05:622a:15d1:b0:3b8:6868:2ab4 with SMTP id d17-20020a05622a15d100b003b868682ab4mr26545138qty.49.1676046610260;
-        Fri, 10 Feb 2023 08:30:10 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
-        by smtp.gmail.com with ESMTPSA id p6-20020ac84086000000b003b9a573aec6sm3622098qtl.70.2023.02.10.08.30.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 08:30:09 -0800 (PST)
-Message-ID: <36a613ab96fc0145025788a333c30f92bb9c7519.camel@ndufresne.ca>
-Subject: Re: [PATCH v2 05/10] media: Add BGR24_12 video format
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
-        mirela.rabulea@oss.nxp.com, hverkuil-cisco@xs4all.nl
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, xiahong.bao@nxp.com, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Date:   Fri, 10 Feb 2023 11:30:08 -0500
-In-Reply-To: <8c74b48e728ecb075a4a65b9771610c9cbe27294.1675230665.git.ming.qian@nxp.com>
-References: <cover.1675230665.git.ming.qian@nxp.com>
-         <8c74b48e728ecb075a4a65b9771610c9cbe27294.1675230665.git.ming.qian@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1xKJgqTES4Y1ubN8XM2HsQqVacGZvGadNY3UmBuYxPI=;
+        b=8I7SujM91NLsn1Yu/MsKDprjKMia3P0CROhXkrKQq/OLPRsrC2Y6KPSEl9rtnzxnkz
+         zP7SjAv3/QF7W0xosKv3I/Lv0HcMUSJvns7NBgQ1aWpW6v5IvKjL4k9Vdyr44BK2aKRM
+         YcRTgQojtM/kSh727UiwfgSo/W8yIupcDWd4QPEPLwxck8B/xuO5QcIPLHTY8fTX0128
+         O/n76/HvKRwuJ7F5+0QLK6Y3+VxUNUnI7Iki6xZY6acWocymbAVVzuSOQsZpDUPOt9Tu
+         o6jlhRd0daLhqnLrWJlg6W1Gv5apmO9AVLE2s/WIQQLnh2J55sLN8r5/xCOeG9G68Gxy
+         nNvg==
+X-Gm-Message-State: AO0yUKX6SwjD/38oZHxf0JMpZtU9A4CA4HRRw4h5/2TzlhKQA1Gjr4Cc
+        FzuaqehgHZiEIHAOWewUohCvARl4ajMu+5tJJfY=
+X-Google-Smtp-Source: AK7set97QTJ9hS1PDImhYsFB6nhTFb+J1wBuLYTOuOx3+Li3oqFhAlOgOrvhW6466NNQ3h1jIhydK/eY9ajBbegLszU=
+X-Received: by 2002:a9d:6f13:0:b0:68d:b51a:5cde with SMTP id
+ n19-20020a9d6f13000000b0068db51a5cdemr1044182otq.62.1676046649983; Fri, 10
+ Feb 2023 08:30:49 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230210044826.9834-1-orlandoch.dev@gmail.com>
+In-Reply-To: <20230210044826.9834-1-orlandoch.dev@gmail.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Fri, 10 Feb 2023 11:30:38 -0500
+Message-ID: <CADnq5_PK7=64SW8O+Hed1h7UWfxVZSpNOwx-paUSJhpCdK7i5A@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/9] apple-gmux: support MMIO gmux type on T2 Macs
+To:     Orlando Chamberlain <orlandoch.dev@gmail.com>
+Cc:     platform-driver-x86@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        Rander Wang <rander.wang@intel.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Evan Quan <evan.quan@amd.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Yong Zhi <yong.zhi@intel.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Kerem Karabay <kekrby@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jack Xiao <Jack.Xiao@amd.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Aditya Garg <gargaditya08@live.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?B?QW1hZGV1c3ogU8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mercredi 01 f=C3=A9vrier 2023 =C3=A0 14:02 +0800, Ming Qian a =C3=A9crit=
-=C2=A0:
-> BGR24_12 is a reversed RGB format with 12 bits per component like BGR24,
-> expanded to 16bits.
-> Data in the 12 high bits, zeros in the 4 low bits,
-> arranged in little endian order.
+On Fri, Feb 10, 2023 at 3:04 AM Orlando Chamberlain
+<orlandoch.dev@gmail.com> wrote:
+>
+> Hi All,
+>
+> This patch series adds support for the MMIO based gmux present on these
+> Dual GPU Apple T2 Macs: MacBookPro15,1, MacBookPro15,3, MacBookPro16,1,
+> MacBookPro16,4 (although amdgpu isn't working on MacBookPro16,4 [1]).
+>
+> It's only been tested by people on T2 Macs with MMIO based gmux's using
+> t2linux [2] kernels, but some changes may impact older port io and indexed
+> gmux's so testing, especially on those older Macbooks, would be
+> appreciated.
+>
+> # 1-2:
+>
+> refactor code to make it easier to add the 3rd gmux type.
+>
+> # 3:
+>
+> has a slight change in how the switch state is read, I don't
+> expect this to cause issues for older models (but still, please test if
+> you have one!)
+>
+> # 4:
+>
+> implements a system to support more than 2 gmux types
+>
+> # 5:
+>
+> start using the gmux's GMSP acpi method when handling interrupts. This
+> is needed for the MMIO gmux's, and its present in the acpi tables of some
+> indexed gmux's I could find so hopefully enabling this for all models
+> will be fine, but if not it can be only used on MMIO gmux's.
+>
+> # 6:
+>
+> Adds support for the MMIO based gmux on T2 macs.
+>
+> # 7:
+>
+> Add a sysfs interface to apple-gmux so data from ports can be read
+> from userspace, and written to if the user enables an unsafe kernel
+> parameter.
+>
+> This can be used for more easily researching what unknown ports do,
+> and switching gpus when vga_switcheroo isn't ready (e.g. when one gpu
+> is bound to vfio-pci and in use by a Windows VM, I can use this to
+> switch my internal display between Linux and Windows easily).
+>
+> # 8-9:
+>
+> These patches make amdgpu and snd_hda_intel register with vga_switcheroo
+> on Macbooks. I would like advice from the AMD folks on how they want
+> this to work, so that both PX and apple-gmux laptops work properly.
+>
+> For radeon and nouveau we just register for every non-thunderbolt
+> device, but this was changed for AMD cards in commit 3840c5bcc245
+> ("drm/amdgpu: disentangle runtime pm and vga_switcheroo") and commit
+> 586bc4aab878 ("ALSA: hda/hdmi - fix vgaswitcheroo detection for AMD").
+>
+> This meant that only gpu's with PX register. Commit #8 makes amdgpu
+> register for all non-thinderbolt cards, and commit #9 makes snd_hda_intel
+> register for all amd cards with the PWRD (mentioned below) acpi method.
+> An alternative would be using apple-gmux-detect(), but that won't work
+> after apple-gmux has probed and claimed its memory resources.
+>
+> # Issues:
+>
+> 1. Switching gpus at runtime has the same issue as indexed gmux's: the
+> inactive gpu can't probe the DDC lines for eDP [3]
+>
+> 2. Powering on the amdgpu with vga_switcheroo doesn't work well. I'm
+> told on the MacBookPro15,1 it works sometimes, and adding delays helps,
+> but on my MacBookPro16,1 I haven't been able to get it to work at all:
+>
+> snd_hda_intel 0000:03:00.1: Disabling via vga_switcheroo
+> snd_hda_intel 0000:03:00.1: Cannot lock devices!
+> amdgpu: switched off
+> amdgpu: switched on
+> amdgpu 0000:03:00.0:
+>         Unable to change power state from D3hot to D0, device inaccessible
+> amdgpu 0000:03:00.0:
+>         Unable to change power state from D3cold to D0, device inaccessible
+> [drm] PCIE GART of 512M enabled (table at 0x00000080FEE00000).
+> [drm] PSP is resuming...
+> [drm:psp_hw_start [amdgpu]] *ERROR* PSP create ring failed!
+> [drm:psp_resume [amdgpu]] *ERROR* PSP resume failed
+> [drm:amdgpu_device_fw_loading [amdgpu]]
+>         *ERROR* resume of IP block <psp> failed -62
+> amdgpu 0000:03:00.0: amdgpu: amdgpu_device_ip_resume failed (-62).
+> snd_hda_intel 0000:03:00.1: Enabling via vga_switcheroo
+> snd_hda_intel 0000:03:00.1:
+>         Unable to change power state from D3cold to D0, device inaccessible
+> snd_hda_intel 0000:03:00.1: CORB reset timeout#2, CORBRP = 65535
+> snd_hda_codec_hdmi hdaudioC0D0: Unable to sync register 0x2f0d00. -5
+>
+> There are some acpi methods (PWRD, PWG1 [4, 5]) that macOS calls when
+> changing the amdgpu's power state, but we don't use them and that could be
+> a cause. Additionally unlike previous generation Macbooks which work
 
-I would like to suggest BGR48_12
+That is likely the cause.  On non-Mac platforms, the power is
+controlled via the PX ACPI interface (for old platforms) or standard
+ACPI power resources on more recent platforms.  This is handled by the
+ACPI core on these platforms (i.e., D3cold).
 
-Nicolas
+> better, on MacBookPro16,1 the gpu is located behind 2 pci bridges:
+>
+> 01:00.0 PCI bridge: Advanced Micro Devices, Inc. [AMD/ATI]
+>         Navi 10 XL Upstream Port of PCI Express Switch (rev 43)
+> 02:00.0 PCI bridge: Advanced Micro Devices, Inc. [AMD/ATI]
+>         Navi 10 XL Downstream Port of PCI Express Switch
+> 03:00.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI]
+>         Navi 14 [Radeon RX 5500/5500M / Pro 5500M] (rev 43)
+> 03:00.1 Audio device: Advanced Micro Devices, Inc. [AMD/ATI]
+>         Navi 10 HDMI Audio
+>
+> Upon attempting to power on the gpu with vga_switcheroo, all these
+> devices except 01:00.0 have their config space in `lspci -x` filled with
+> 0xff. `echo 1 > /sys/bus/pci/rescan` fixes that and the dmesg errors about
+> changing power state, but "PSP create ring failed" still happens, and
+> the gpu doesn't resume properly.
 
->=20
-> Signed-off-by: Ming Qian <ming.qian@nxp.com>
-> ---
->  .../userspace-api/media/v4l/pixfmt-rgb.rst    | 35 +++++++++++++++++++
->  drivers/media/v4l2-core/v4l2-common.c         |  1 +
->  drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
->  include/uapi/linux/videodev2.h                |  3 ++
->  4 files changed, 40 insertions(+)
->=20
-> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst b/Docum=
-entation/userspace-api/media/v4l/pixfmt-rgb.rst
-> index 30f51cd33f99..da29ba69c2d9 100644
-> --- a/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
-> +++ b/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
-> @@ -763,6 +763,41 @@ nomenclature that instead use the order of component=
-s as seen in a 24- or
->      \normalsize
-> =20
-> =20
-> +More Than 8 Bits Per Component
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
-> +
-> +These formats store an RGB triplet in six or eighth bytes, with more tha=
-n 8 bits per component.
-> +expand the bits per component to 16 bits, data in the high bits, zeros i=
-n the low bits,
-> +arranged in little endian order.
-> +
-> +.. raw:: latex
-> +
-> +    \small
-> +
-> +.. flat-table:: RGB Formats With More Than 8 Bits Per Component
-> +    :header-rows:  1
-> +    :stub-columns: 0
-> +
-> +    * - Identifier
-> +      - Code
-> +      - Byte 1-0
-> +      - Byte 3-2
-> +      - Byte 5-4
-> +      - Byte 7-6
-> +    * .. _V4L2-PIX-FMT-BGR24-12:
-> +
-> +      - ``V4L2_PIX_FMT_BGR24_12``
-> +      - 'B312'
-> +
-> +      - B\ :sub:`15-4`
-> +      - G\ :sub:`15-4`
-> +      - R\ :sub:`15-4`
-> +      -
-> +
-> +.. raw:: latex
-> +
-> +    \normalsize
-> +
->  Deprecated RGB Formats
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =20
-> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-c=
-ore/v4l2-common.c
-> index b3ad02f8cf11..024190f82cf1 100644
-> --- a/drivers/media/v4l2-core/v4l2-common.c
-> +++ b/drivers/media/v4l2-core/v4l2-common.c
-> @@ -252,6 +252,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 f=
-ormat)
->  		{ .format =3D V4L2_PIX_FMT_RGB565,  .pixel_enc =3D V4L2_PIXEL_ENC_RGB,=
- .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D { 2, 0, 0, 0 }, .hdiv =3D =
-1, .vdiv =3D 1 },
->  		{ .format =3D V4L2_PIX_FMT_RGB555,  .pixel_enc =3D V4L2_PIXEL_ENC_RGB,=
- .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D { 2, 0, 0, 0 }, .hdiv =3D =
-1, .vdiv =3D 1 },
->  		{ .format =3D V4L2_PIX_FMT_BGR666,  .pixel_enc =3D V4L2_PIXEL_ENC_RGB,=
- .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D { 4, 0, 0, 0 }, .hdiv =3D =
-1, .vdiv =3D 1 },
-> +		{ .format =3D V4L2_PIX_FMT_BGR24_12, .pixel_enc =3D V4L2_PIXEL_ENC_RGB=
-, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D { 6, 0, 0, 0 }, .hdiv =3D=
- 1, .vdiv =3D 1 },
-> =20
->  		/* YUV packed formats */
->  		{ .format =3D V4L2_PIX_FMT_YUYV,    .pixel_enc =3D V4L2_PIXEL_ENC_YUV,=
- .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D { 2, 0, 0, 0 }, .hdiv =3D =
-2, .vdiv =3D 1 },
-> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-co=
-re/v4l2-ioctl.c
-> index 711d1b0a8184..329515786abb 100644
-> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> @@ -1298,6 +1298,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *f=
-mt)
->  	case V4L2_PIX_FMT_BGRX32:	descr =3D "32-bit XBGR 8-8-8-8"; break;
->  	case V4L2_PIX_FMT_RGBA32:	descr =3D "32-bit RGBA 8-8-8-8"; break;
->  	case V4L2_PIX_FMT_RGBX32:	descr =3D "32-bit RGBX 8-8-8-8"; break;
-> +	case V4L2_PIX_FMT_BGR24_12:	descr =3D "12-bit Depth BGR"; break;
->  	case V4L2_PIX_FMT_GREY:		descr =3D "8-bit Greyscale"; break;
->  	case V4L2_PIX_FMT_Y4:		descr =3D "4-bit Greyscale"; break;
->  	case V4L2_PIX_FMT_Y6:		descr =3D "6-bit Greyscale"; break;
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev=
-2.h
-> index 3eb188581b83..ab52a605e6c0 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -577,6 +577,9 @@ struct v4l2_pix_format {
->  #define V4L2_PIX_FMT_ARGB32  v4l2_fourcc('B', 'A', '2', '4') /* 32  ARGB=
--8-8-8-8  */
->  #define V4L2_PIX_FMT_XRGB32  v4l2_fourcc('B', 'X', '2', '4') /* 32  XRGB=
--8-8-8-8  */
-> =20
-> +/* RGB formats (6 or 8 bytes per pixel) */
-> +#define V4L2_PIX_FMT_BGR24_12    v4l2_fourcc('B', '3', '1', '2') /* 48  =
-BGR 12-bit per component */
-> +
->  /* Grey formats */
->  #define V4L2_PIX_FMT_GREY    v4l2_fourcc('G', 'R', 'E', 'Y') /*  8  Grey=
-scale     */
->  #define V4L2_PIX_FMT_Y4      v4l2_fourcc('Y', '0', '4', ' ') /*  4  Grey=
-scale     */
+All of those devices are part of the dGPU itself.  When the power is
+cut to the dGPU, all of those devices will lose power.  If you are
+reading all 1's from the PCI config space for any of those devices,
+that is a good sign that the power is off to the GPU.
 
+Alex
+
+>
+> [1]: https://lore.kernel.org/all/3AFB9142-2BD0-46F9-AEA9-C9C5D13E68E6@live.com/
+> [2]: https://t2linux.org
+> [3]: https://lore.kernel.org/all/9eed8ede6f15a254ad578e783b050e1c585d5a15.1439288957.git.lukas@wunner.de/
+> [4]: https://gist.github.com/Redecorating/6c7136b7a4ac7ce3b77d8e41740dd87b
+> [5]: https://lore.kernel.org/all/20120710160555.GA31562@srcf.ucam.org/
+>
+> Kerem Karabay (1):
+>   drm/amdgpu: register a vga_switcheroo client for all GPUs that are not
+>     thunderbolt attached
+>
+> Orlando Chamberlain (8):
+>   apple-gmux: use cpu_to_be32 instead of manual reorder
+>   apple-gmux: consolidate version reading
+>   apple-gmux: use first bit to check switch state
+>   apple-gmux: refactor gmux types
+>   apple-gmux: Use GMSP acpi method for interrupt clear
+>   apple-gmux: support MMIO gmux on T2 Macs
+>   apple-gmux: add sysfs interface
+>   hda/hdmi: Register with vga_switcheroo on Dual GPU Macbooks
+>
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  18 +-
+>  drivers/platform/x86/apple-gmux.c          | 416 +++++++++++++++++----
+>  include/linux/apple-gmux.h                 |  50 ++-
+>  sound/pci/hda/hda_intel.c                  |  19 +-
+>  4 files changed, 409 insertions(+), 94 deletions(-)
+>
+> --
+> 2.39.1
+>
