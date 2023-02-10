@@ -2,74 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5866B691611
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 02:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2EA7691614
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 02:11:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230525AbjBJBKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 20:10:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
+        id S231187AbjBJBLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 20:11:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbjBJBKV (ORCPT
+        with ESMTP id S230191AbjBJBLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 20:10:21 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED8B4B1AF
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 17:10:19 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id s9so479831ilt.1
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 17:10:19 -0800 (PST)
+        Thu, 9 Feb 2023 20:11:08 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD464DBCE
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 17:11:02 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id k13so4963639plg.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 17:11:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v/rk3szIYpKAIRaNgREy62PBz6/2LxRSXh1DsRADJYU=;
-        b=glWpLY4dwbYR6L+EuXgrM7xpnBQwcy4cG8tTl4Iu6S5oeAe9XEeTtFQedpEob1PVsf
-         XDhBc6dcvKP5ITbMhU84oC9wLHu4u61U/5Mm5CDuiBGjg1ff+u7y+a6Wx+VivD/VPKcs
-         9aWC7QzL9MdRG8WZGfGt+erauZpDeGAPE4C04=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=X7w7vI7qAx/6V5DcqybApwiP29xntyFWx8X21g/Jk34=;
+        b=sfLeB184LFnKyNxEJNqrfR3Mdhk6RJENi2RNROz6WOYJw1p8jprGHKOmSj3uMfj9gD
+         SDxk0RG959l3TvFug0YgjlXtJQaqXPfScMt6GhJz4XWFXjtc2Yc/97/WRXdV24W+u30j
+         ot068Qc/PJd82iDYdnDSG6TBJMi0TsBCcG+v+zGOl2jqdpjAIG5i1tXjNtUvHo973lCj
+         ANIQpynkOFkuPHbCmFM646xXGXO5UvuFqY5Us9I7ru3Mapth9M5RbiJbIDbrLN6pe3UQ
+         5ZhrqOW5g05pQ1VTlZUrkp5AUhGrW1NRfK1ZOw6MwL5OwvD0tO7Lo2cpqEFhxhdj22iE
+         SXHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v/rk3szIYpKAIRaNgREy62PBz6/2LxRSXh1DsRADJYU=;
-        b=lswxmjWMoyALTUy6ojiBxCzZ5nX0d5Q4VKSUJ3ndSfu8pYeumBYhteMxR8AcgNDWm7
-         tfFTjJKtEL9XrkLA4uLKtQnT+gYHGY5v3j0AcC5bvdcbGva0hNvAnWLNBZcXQPVfHyW3
-         4j9YJWeI2uKxEzXpdtAawbOCrc1oAWri+/x8LMSfhVM4GQdXCvA9krppNG9AilAv/tNQ
-         miBQmeRXoXyZDZUQo0QmIWbfJqxUVSAItk/i50+m2XGXQ6wm89I9zkU6cICQKpArT5Zo
-         DZgxEU3xTMd7dEU3JsbLcWAWt15bXNR/MMbv5YQF3SuCQLNG8ymeAzxGekyxrPDr+SYq
-         6F6Q==
-X-Gm-Message-State: AO0yUKUhPEqBkVbiJKYO3iRvt991o44gMecBa2ckiaiIN7jAYFj3mzFw
-        uPL3eoaXl1LKs6wBUaclkSbL3A==
-X-Google-Smtp-Source: AK7set/lwVwMrh2gIxWEj3tHiccsh9dwYjh13O3kYY/qcLOTXN81uOX17NqMOY+FJluKLmXrlqXPYA==
-X-Received: by 2002:a05:6e02:1d95:b0:314:1579:be2c with SMTP id h21-20020a056e021d9500b003141579be2cmr872204ila.0.1675991419088;
-        Thu, 09 Feb 2023 17:10:19 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id o3-20020a02c6a3000000b0038a56594026sm887540jan.66.2023.02.09.17.10.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Feb 2023 17:10:18 -0800 (PST)
-Message-ID: <ee7976ca-ea15-e13f-3ea0-1b89eb29e39e@linuxfoundation.org>
-Date:   Thu, 9 Feb 2023 18:10:17 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X7w7vI7qAx/6V5DcqybApwiP29xntyFWx8X21g/Jk34=;
+        b=LHd82s5A/Ff7x1FRXtaYAExlU2T2sFWYGUqz2fSaFEquKa9fyLP5UjLEosY6WHZWF4
+         hyuRqWBKK3ZrQ8pG6cMSf/FeBiQnrlc3S9/CU39dZ6wWKKwualN3CtZ42eM51a4bU3OG
+         OD6aLjQGLttPcR9PwPZV/q/XWWgfT8dE9fd/q8FVUW5Zb8OfuNYnUjRcy6hztOMsISiP
+         SubE5kjBUFVGSf23Vuy7/CZ0u8hLhQGSYELfHHD1MnEjL3jzAX0JfaUWC7NnEYx/GXaG
+         W61NLksTBE2MlOCs+9ADpzsISdwJWK1wAAxuwZRRBYt0VJRD8ZE2WxwV6IfrgAzZ9m1q
+         Dr4Q==
+X-Gm-Message-State: AO0yUKWPq6KT7Cx4BuW11oPNEJLKVXE2YAN59rejlSPfyT2FH8/WIpJp
+        MyMEskUwFNYUzJjWYYy6oqRbaA==
+X-Google-Smtp-Source: AK7set/P6j0ZULv7m7YeCfbR4xqE8ySttSE1jcDDYTFhVXBf+GQyrK97XmxBylb26k5OkPoBx2g05A==
+X-Received: by 2002:a17:902:b194:b0:198:af50:e4ec with SMTP id s20-20020a170902b19400b00198af50e4ecmr94343plr.18.1675991461511;
+        Thu, 09 Feb 2023 17:11:01 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id s22-20020a170902b19600b001994554099esm2111583plr.173.2023.02.09.17.11.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 17:11:00 -0800 (PST)
+Date:   Fri, 10 Feb 2023 01:10:57 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org
+Subject: Re: [PATCH V2 6/8] kvm: x86/mmu: Remove FNAME(invlpg)
+Message-ID: <Y+WZoXYvacqx/+Yu@google.com>
+References: <20230207155735.2845-1-jiangshanlai@gmail.com>
+ <20230207155735.2845-7-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3] selftests: use printf instead of echo -ne
-Content-Language: en-US
-To:     Guenter Roeck <groeck@google.com>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Gautam <gautammenghani201@gmail.com>,
-        David Laight <David.Laight@aculab.com>, kernel@collabora.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernelci@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
-References: <20230209085536.1076662-1-guillaume.tucker@collabora.com>
- <CABXOdTdnntA=oU4==suO-DP-8S9zb0AhqtwekCRCbpOpku7MQg@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CABXOdTdnntA=oU4==suO-DP-8S9zb0AhqtwekCRCbpOpku7MQg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230207155735.2845-7-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,26 +77,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/23 09:19, Guenter Roeck wrote:
-> On Thu, Feb 9, 2023 at 12:55 AM Guillaume Tucker
-> <guillaume.tucker@collabora.com> wrote:
->>
->> Rather than trying to guess which implementation of "echo" to run with
->> support for "-ne" options, use "printf" instead of "echo -ne".  It
->> handles escape characters as a standard feature and it is widespread
->> among modern shells.
->>
->> Reported-by: "kernelci.org bot" <bot@kernelci.org>
->> Suggested-by: David Laight <David.Laight@ACULAB.COM>
->> Fixes: 3297a4df805d ("kselftests: Enable the echo command to print newlines in Makefile")
->> Fixes: 79c16b1120fe ("selftests: find echo binary to use -ne options")
->> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
-> 
-> Reviewed-by: Guenter Roeck <groeck@chromium.org>
-> 
+On Tue, Feb 07, 2023, Lai Jiangshan wrote:
+> Use FNAME(sync_spte) to share the code which has a slight semantics
+> changed: clean vTLB entry is kept.
 
-Thank you. Applied to linux-kselftest next for Linux 6.3-rc1.
+...
 
-thanks,
--- Shuah
+> +static void __kvm_mmu_invalidate_gva(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+> +				     gva_t gva, hpa_t root_hpa)
+> +{
+> +	struct kvm_shadow_walk_iterator iterator;
+> +
+> +	vcpu_clear_mmio_info(vcpu, gva);
+> +
+> +	write_lock(&vcpu->kvm->mmu_lock);
+> +	for_each_shadow_entry_using_root(vcpu, root_hpa, gva, iterator) {
+> +		struct kvm_mmu_page *sp = sptep_to_sp(iterator.sptep);
+> +
+> +		if (sp->unsync && *iterator.sptep) {
 
+Please make the !0 change in a separate patch.  It took me a while to connect the
+dots, and to also understand what I suspect is a major motivation: sync_spte()
+already has this check, i.e. the change is happening regardless, so might as well
+avoid the indirect branch.
+
+> +			gfn_t gfn = kvm_mmu_page_get_gfn(sp, iterator.index);
+> +			int ret = mmu->sync_spte(vcpu, sp, iterator.index);
+> +
+> +			if (ret < 0)
+> +				mmu_page_zap_pte(vcpu->kvm, sp, iterator.sptep, NULL);
+> +			if (ret)
+> +				kvm_flush_remote_tlbs_with_address(vcpu->kvm, gfn, 1);
+
+Why open code kvm_flush_remote_tlbs_sptep()?  Does it actually shave enough
+cycles to be visible?
+
+If open coding is really justified, can you rebase on one of the two branches?
+And then change this to kvm_flush_remote_tlbs_gfn().
+
+  https://github.com/kvm-x86/linux/tree/next
+  https://github.com/kvm-x86/linux/tree/mmu
