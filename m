@@ -2,222 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EDEA692450
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67108692459
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232832AbjBJRUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 12:20:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
+        id S232800AbjBJRWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 12:22:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232812AbjBJRU3 (ORCPT
+        with ESMTP id S232613AbjBJRWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 12:20:29 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC06F70CD2;
-        Fri, 10 Feb 2023 09:20:27 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id m2so7157792plg.4;
-        Fri, 10 Feb 2023 09:20:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wMbKVouMASLzJM91iOKsN1uPCY/b7K76uQnJa1gTFMw=;
-        b=pFDCtIF1XgirwuX0oWehxHYtaQbsuvr1QwuxAo9k0F+3ptyVb1ST3SzENpLVfZVyWK
-         KouQE1XmiRHq5ABrKjlx7a8Ddwdh5A5hhu900oPBnoqyz46bHHODNu3ifc07gRXVNBwC
-         biamt+rATAqc8xARw9IU5FhCpOQ6onbbR0uoovVh4qQ1pCChm0qSKaRn4WgkXGuLd+WR
-         YcfQorSWIcumYh3wu9nJyzrjEpiQbUfF/DfX+PAXBodlE9EVh4eoql2N/xgIJS7ovFKb
-         cz2EV5Uk2kEQ3kqvAIxF7s0ZKRK0vgeOb5kSuQcNYjJNLTJBIeFvJsxHm8lWw9N8b0id
-         jQKg==
+        Fri, 10 Feb 2023 12:22:09 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37BC36696
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:22:08 -0800 (PST)
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 7F1F43F0C3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 17:22:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1676049725;
+        bh=S/oztqFWeJmzmDr/U8nZfNkMKK2hxPAiujJO+Umo16I=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=qvyPWeT34QkKF1H90NqcC7RCf83vXhwFnQhk/wrRuX5Aj1g5g7vpqiTmwCiveUY+5
+         GJpnPDgXs3N+jMEd3F+8OvKLzE16LZkNR8LxRqT1+iKbJ4eNs6r00t6J28sCzTuszk
+         T2S/vCt+ckG6nnjKo8ilJBFkxAVGuPYaX4HV/hBE3L3oDJMcIPQafV+ozpsZxsNCLh
+         e2O3zHef9VITfFTI6UOD1EChWAuvwOGzsfV7rlPfEe1yQ4YGCGPc29KGC4FDVbU53g
+         MGLt9aZILvjU5kphfwZPeneeZAhVB4T1TG7V5W7SUaAFUcJkGZxjaMvag+X//qgoIX
+         UhXTyXfVeJtXQ==
+Received: by mail-ej1-f70.google.com with SMTP id qa17-20020a170907869100b0088ea39742c8so3974986ejc.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:22:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wMbKVouMASLzJM91iOKsN1uPCY/b7K76uQnJa1gTFMw=;
-        b=VDAfVqGl0d54O47q6ZFt7ObMBdfWXf+xSdXwoBiURzdgJdy0pQa/wuRq8T3YtT8cmH
-         LQmY5I54b6IkroaC496tRS0k73E1qGYjtwIqTUQuqTA+WOW3EIvO9gi9uqsnUGmmMkTa
-         oRK+hM3QHaG4MfCTP/UlwJfuhVw2lHJxpIW0ZFGAGotrsICcx39ofltBCLexvzVJ+4hu
-         SiqJY73rihk4SsjWH9cZBY1XjjEJMmKFIqYXjAN4SXY2RSMor0Xo4eHxeyjDmjGqQ1Jh
-         EIXAadWCipXqcrwGAfFOWS1bmUVZi7//63oqb/d5cQMkMH4IXQt7RvkspTALc8nNaCNv
-         f4Sw==
-X-Gm-Message-State: AO0yUKWqxo27fwgyaxFRtdoRXSYDQeWd0iW1kWubU0IjefoFG54OANl5
-        I+yNRURE7H5HHNbIQjh1FM8=
-X-Google-Smtp-Source: AK7set/22jYwlRoq3JJRkdhMuoVUH4dOoOiTm+bHbi6ug2EgKCKELtcfBHYA5wjVSaUoSMsnv5Z8Gg==
-X-Received: by 2002:a17:902:dad0:b0:199:1f42:8bed with SMTP id q16-20020a170902dad000b001991f428bedmr5843680plx.12.1676049627175;
-        Fri, 10 Feb 2023 09:20:27 -0800 (PST)
-Received: from strix-laptop ([123.110.9.95])
-        by smtp.gmail.com with ESMTPSA id y4-20020a170902ed4400b00188c9c11559sm1645994plb.1.2023.02.10.09.20.13
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S/oztqFWeJmzmDr/U8nZfNkMKK2hxPAiujJO+Umo16I=;
+        b=hXZYHoM7gs+vhX2u/zQK5Ds6gB+gLKs+zpsg8lsqe+JHrASw08tPv1BbKfUJ85voxs
+         vQyQzxgDoM9ix10JIHivKGPklo41SJ0gh2jIv7/blDpPlJRlPATEHBh4F0qh6f/T8+2W
+         9EBF0vrPMRyC+x+NQ3Uhs0rM0SA5iuh+n8/hKG4ATQ4iEH6Z6L/FI/3qq+D14ONMvVTZ
+         f8b+pncFbExoFWo9Fg5PgPfQHRZALODmVEbiSTrxGBFozSqnek3YBQiY3rNaJPzJf6Ur
+         0HE5prvVzUFI5MzJC3SSU8T6TKGro1NE6ahlxGNEt1rvKRV+kSAhU4hujdZVjCkl6d0b
+         EOcw==
+X-Gm-Message-State: AO0yUKVJCa7l4I8BeU0YBoPBinjdP3BI5xPmEu6m2Zb3OWKiWw6akUVE
+        6SGOumDkrg3OaVLwxvO6r65w6Ml8ajQUD1yp/hXJEa2Bv8K0NgMw+cdQSaPcICFuKWSoGJy1qrl
+        4x452yEmKNh+s5Kuay9rwbntqSrEH3iatZjpYrSVbrA==
+X-Received: by 2002:a17:906:1614:b0:87b:dba1:1bf3 with SMTP id m20-20020a170906161400b0087bdba11bf3mr16347227ejd.30.1676049725208;
+        Fri, 10 Feb 2023 09:22:05 -0800 (PST)
+X-Google-Smtp-Source: AK7set/YIySZYVz31YG5CrgtiBo3ntekvjcI08pZJN9QSahhumZtZTxLAgUnewRtPJBbaHEL0+GH+g==
+X-Received: by 2002:a17:906:1614:b0:87b:dba1:1bf3 with SMTP id m20-20020a170906161400b0087bdba11bf3mr16347206ejd.30.1676049725036;
+        Fri, 10 Feb 2023 09:22:05 -0800 (PST)
+Received: from righiandr-XPS-13-7390.homenet.telecomitalia.it (host-87-7-128-191.retail.telecomitalia.it. [87.7.128.191])
+        by smtp.gmail.com with ESMTPSA id i12-20020a170906250c00b008adc971f5acsm2655543ejb.178.2023.02.10.09.22.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 09:20:26 -0800 (PST)
-Date:   Sat, 11 Feb 2023 01:20:10 +0800
-From:   Chih-En Lin <shiyn.lin@gmail.com>
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Nadav Amit <namit@vmware.com>, Barry Song <baohua@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Yang Shi <shy828301@gmail.com>, Peter Xu <peterx@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Hugh Dickins <hughd@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Yu Zhao <yuzhao@google.com>, Juergen Gross <jgross@suse.com>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Li kunyu <kunyu@nfschina.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Gautam Menghani <gautammenghani201@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Barret Rhoden <brho@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Dinglan Peng <peng301@purdue.edu>,
-        Pedro Fonseca <pfonseca@purdue.edu>,
-        Jim Huang <jserv@ccns.ncku.edu.tw>,
-        Huichun Feng <foxhoundsk.tw@gmail.com>
-Subject: Re: [PATCH v4 00/14] Introduce Copy-On-Write to Page Table
-Message-ID: <Y+Z8ymNYc+vJMBx8@strix-laptop>
-References: <20230207035139.272707-1-shiyn.lin@gmail.com>
- <CA+CK2bBt0Gujv9BdhghVkbFRirAxCYXbpH-nquccPsKGnGwOBQ@mail.gmail.com>
- <CANOhDtU3J8SUCzKtKvPPPrUHyo+LV5npNObHtYP_AK4W3LomDw@mail.gmail.com>
- <CA+CK2bAWnzqKDTjBbxXOvURwr7nWmf8q-mzD1x-ztwbWVQBQKA@mail.gmail.com>
+        Fri, 10 Feb 2023 09:22:04 -0800 (PST)
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        bjorn3_gh@protonmail.com, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] rust: allow to use INIT_STACK_ALL_ZERO
+Date:   Fri, 10 Feb 2023 18:22:03 +0100
+Message-Id: <20230210172203.101331-1-andrea.righi@canonical.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+CK2bAWnzqKDTjBbxXOvURwr7nWmf8q-mzD1x-ztwbWVQBQKA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 11:21:16AM -0500, Pasha Tatashin wrote:
-> > > > Currently, copy-on-write is only used for the mapped memory; the child
-> > > > process still needs to copy the entire page table from the parent
-> > > > process during forking. The parent process might take a lot of time and
-> > > > memory to copy the page table when the parent has a big page table
-> > > > allocated. For example, the memory usage of a process after forking with
-> > > > 1 GB mapped memory is as follows:
-> > >
-> > > For some reason, I was not able to reproduce performance improvements
-> > > with a simple fork() performance measurement program. The results that
-> > > I saw are the following:
-> > >
-> > > Base:
-> > > Fork latency per gigabyte: 0.004416 seconds
-> > > Fork latency per gigabyte: 0.004382 seconds
-> > > Fork latency per gigabyte: 0.004442 seconds
-> > > COW kernel:
-> > > Fork latency per gigabyte: 0.004524 seconds
-> > > Fork latency per gigabyte: 0.004764 seconds
-> > > Fork latency per gigabyte: 0.004547 seconds
-> > >
-> > > AMD EPYC 7B12 64-Core Processor
-> > > Base:
-> > > Fork latency per gigabyte: 0.003923 seconds
-> > > Fork latency per gigabyte: 0.003909 seconds
-> > > Fork latency per gigabyte: 0.003955 seconds
-> > > COW kernel:
-> > > Fork latency per gigabyte: 0.004221 seconds
-> > > Fork latency per gigabyte: 0.003882 seconds
-> > > Fork latency per gigabyte: 0.003854 seconds
-> > >
-> > > Given, that page table for child is not copied, I was expecting the
-> > > performance to be better with COW kernel, and also not to depend on
-> > > the size of the parent.
-> >
-> > Yes, the child won't duplicate the page table, but fork will still
-> > traverse all the page table entries to do the accounting.
-> > And, since this patch expends the COW to the PTE table level, it's not
-> > the mapped page (page table entry) grained anymore, so we have to
-> > guarantee that all the mapped page is available to do COW mapping in
-> > the such page table.
-> > This kind of checking also costs some time.
-> > As a result, since the accounting and the checking, the COW PTE fork
-> > still depends on the size of the parent so the improvement might not
-> > be significant.
-> 
-> The current version of the series does not provide any performance
-> improvements for fork(). I would recommend removing claims from the
-> cover letter about better fork() performance, as this may be
-> misleading for those looking for a way to speed up forking. In my
+With CONFIG_INIT_STACK_ALL_ZERO enabled, bindgen is passing
+-ftrivial-auto-var-init=zero to clang, that triggers the following:
 
-From v3 to v4, I changed the implementation of the COW fork() part to do
-the accounting and checking. At the time, I also removed most of the
-descriptions about the better fork() performance. Maybe it's not enough
-and still has some misleading. I will fix this in the next version.
-Thanks.
+  error: '-ftrivial-auto-var-init=zero' hasn't been enabled; enable it at your own peril for benchmarking purpose only with '-enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang'
 
-> case, I was looking to speed up Redis OSS, which relies on fork() to
-> create consistent snapshots for driving replicates/backups. The O(N)
-> per-page operation causes fork() to be slow, so I was hoping that this
-> series, which does not duplicate the VA during fork(), would make the
-> operation much quicker.
+This flag should be dropped in clang-17, but at the moment it seems more
+reasonable to add it to the bindgen CFLAGS to prevent the error above.
 
-Indeed, at first, I tried to avoid the O(N) per-page operation by
-deferring the accounting and the swap stuff to the page fault. But,
-as I mentioned, it's not suitable for the mainline.
+In this way we can enable CONFIG_INIT_STACK_ALL_ZERO with CONFIG_RUST
+without triggering any build error.
 
-Honestly, for improving the fork(), I have an idea to skip the per-page
-operation without breaking the logic. However, this will introduce the
-complicated mechanism and may has the overhead for other features. It
-might not be worth it. It's hard to strike a balance between the
-over-complicated mechanism with (probably) better performance and data
-consistency with the page status. So, I would focus on the safety and
-stable approach at first.
+Link: https://reviews.llvm.org/D125142
+Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+---
+ rust/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> > Actually, at the RFC v1 and v2, we proposed the version of skipping
-> > those works, and we got a significant improvement. You can see the
-> > number from RFC v2 cover letter [1]:
-> > "In short, with 512 MB mapped memory, COW PTE decreases latency by 93%
-> > for normal fork"
-> 
-> I suspect the 93% improvement (when the mapcount was not updated) was
-> only for VAs with 4K pages. With 2M mappings this series did not
-> provide any benefit is this correct?
+diff --git a/rust/Makefile b/rust/Makefile
+index ff70c4c916f8..5e26db07a1dc 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -267,7 +267,8 @@ BINDGEN_TARGET		:= $(BINDGEN_TARGET_$(SRCARCH))
+ # All warnings are inhibited since GCC builds are very experimental,
+ # many GCC warnings are not supported by Clang, they may only appear in
+ # some configurations, with new GCC versions, etc.
+-bindgen_extra_c_flags = -w --target=$(BINDGEN_TARGET)
++bindgen_extra_c_flags = -w --target=$(BINDGEN_TARGET) \
++			-enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
+ 
+ bindgen_c_flags = $(filter-out $(bindgen_skip_c_flags), $(c_flags)) \
+ 	$(bindgen_extra_c_flags)
+-- 
+2.37.2
 
-Yes. In this case, the COW PTE performance is similar to the normal
-fork().
-
-> >
-> > However, it might break the existing logic of the refcount/mapcount of
-> > the page and destabilize the system.
-> 
-> This makes sense.
-
-;)
-
-Thanks,
-Chih-En Lin
