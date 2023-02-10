@@ -2,111 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD82691C06
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 10:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEC09691C04
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 10:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231869AbjBJJ4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 04:56:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
+        id S231787AbjBJJza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 04:55:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231795AbjBJJ4G (ORCPT
+        with ESMTP id S231795AbjBJJzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 04:56:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDEB728BD
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 01:55:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676022924;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XlYTQ4KlxOnSSgOz5EYIJQVx78dcnp/7ObBZhHdZOfo=;
-        b=MMnTD7P72+d70wWHQO4HHyVB/+03AUbMAetgdCMA8FkSqijwgy6u/Fmfvs3r76LFDYjTnX
-        Dd+1rXj8WWAdVIFY7EPQR7Cbmr9riu6JUDV2auBKxtkDdUBER/MMciAQ1tOpKiqvVLn3QR
-        gEGGVC4TMHUjX2QQO2hiX9OPL8Zuack=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-128-HS8_LSPpNDmYARx6j44laQ-1; Fri, 10 Feb 2023 04:55:22 -0500
-X-MC-Unique: HS8_LSPpNDmYARx6j44laQ-1
-Received: by mail-ej1-f70.google.com with SMTP id l18-20020a1709067d5200b008af415fdd80so2683168ejp.21
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 01:55:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XlYTQ4KlxOnSSgOz5EYIJQVx78dcnp/7ObBZhHdZOfo=;
-        b=ie5R1uyF8pO8/xCW3b43fScwgIGeShpUfshW1ntVkB+NFv0jZ/HKHaoKlOkA4YPdLo
-         Y0T0ZFAIvoeqJj34jVXOTN1jj7zfvk3iMArwDjRLFXkcdi6glnNXc+p7Qg2nqbap04Eq
-         zAaSEwVVc+76BLXdGKR+nyvmQCjGRqeL0ISKu4IW2MGCG3hiUNRdhy/KEgxj7LsCAFHH
-         jt5xhoP7HoXL4jp946wqcMyGes2JOSZqLc1UwsWQ3y6pmzbTAXGBRV2dJLQVTPE1sFEc
-         zi2bMAlVygP5HgNxHBeYOdtvSzIwHVK/oU6qruDUpBDq38uYDStRoAUaTEjsYMnIDG8O
-         PZOg==
-X-Gm-Message-State: AO0yUKVijABXbl7OPX5vmNJ6YjKzuCPjhkTQyVX+/bpRftdmjRJfrINV
-        QVuqqOZOshM/Y0cKubTc1kBGbCph1oo4dWm9dxJd3gojnxmsA9D5wvl1kn6gpws51ySNGGtSzA/
-        SrsB9b71b3UdJU4N/Emq4NDIp
-X-Received: by 2002:a17:907:8e86:b0:8aa:33c4:87d5 with SMTP id tx6-20020a1709078e8600b008aa33c487d5mr14015959ejc.10.1676022920963;
-        Fri, 10 Feb 2023 01:55:20 -0800 (PST)
-X-Google-Smtp-Source: AK7set8l6KUkKlyqNem1AZE2/KhW2JD0JqV9K6hSx1e0fgBDbFsSiIPL5QzIdySg4c0oOxOTyn5rmw==
-X-Received: by 2002:a17:907:8e86:b0:8aa:33c4:87d5 with SMTP id tx6-20020a1709078e8600b008aa33c487d5mr14015949ejc.10.1676022920808;
-        Fri, 10 Feb 2023 01:55:20 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id a18-20020a170906469200b007c0f217aadbsm2140397ejr.24.2023.02.10.01.55.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 01:55:20 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH 2/2] KVM: VMX: Stub out enable_evmcs static key for
- CONFIG_HYPERV=n
-In-Reply-To: <Y+WaN8wW1EOvPbXe@google.com>
-References: <20230208205430.1424667-1-seanjc@google.com>
- <20230208205430.1424667-3-seanjc@google.com> <87mt5n6kx6.fsf@redhat.com>
- <1433ea0c-5072-b9d9-a533-401bb58f9a80@redhat.com>
- <Y+WaN8wW1EOvPbXe@google.com>
-Date:   Fri, 10 Feb 2023 10:55:19 +0100
-Message-ID: <875yc97sl4.fsf@redhat.com>
+        Fri, 10 Feb 2023 04:55:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB75F728A4;
+        Fri, 10 Feb 2023 01:55:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3682D61D46;
+        Fri, 10 Feb 2023 09:55:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 306F4C433EF;
+        Fri, 10 Feb 2023 09:55:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676022922;
+        bh=1i9ZElDatR0OqMwUgiiOwJCcLUFMDfJa3A7e3mF2FQM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aGpZ07KDLLN52qEj1kKD0UP+JpHfcTFAWYCaQVHt/K03wZUO/TrWZe9hl9q7qOJ6e
+         Z4oKct+9pdyGEnO+rlFY6gXwRALYsP4K8pA+47OjETFcpCkLUZDANUqKgpyKvjgFUE
+         oSPaHGvH+MDEwVieN50WWPZaqLcyLfkhBkaQPFIlUZQnpdG3t5zVuzthBIJvuS0QJL
+         nlW0n8294SAFr61SPmMWTM+HMY9qRLYgdj8rfd+zAGuI+dcE3vWoFlIm1pSh8cLvAx
+         3fmCGqFpuvn/gROkZq8R2UZjf97aSjlcj6qVh7Y0rBH2UeLNLgNlJgSb/qC0WYJd9q
+         ZinxqipP6thvw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pQQ8R-0005X7-Nb; Fri, 10 Feb 2023 10:56:03 +0100
+Date:   Fri, 10 Feb 2023 10:56:03 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Subject: Re: [PATCH v5 19/19] irqdomain: Switch to per-domain locking
+Message-ID: <Y+YUs6lzalneLyz7@hovoldconsulting.com>
+References: <20230209132323.4599-1-johan+linaro@kernel.org>
+ <20230209132323.4599-20-johan+linaro@kernel.org>
+ <86cz6izv48.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86cz6izv48.wl-maz@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+On Thu, Feb 09, 2023 at 04:00:55PM +0000, Marc Zyngier wrote:
+> On Thu, 09 Feb 2023 13:23:23 +0000,
+> Johan Hovold <johan+linaro@kernel.org> wrote:
+> > 
+> > The IRQ domain structures are currently protected by the global
+> > irq_domain_mutex. Switch to using more fine-grained per-domain locking,
+> > which can speed up parallel probing by reducing lock contention.
+> > 
+> > On a recent arm64 laptop, the total time spent waiting for the locks
+> > during boot drops from 160 to 40 ms on average, while the maximum
+> > aggregate wait time drops from 550 to 90 ms over ten runs for example.
+> > 
+> > Note that the domain lock of the root domain (innermost domain) must be
+> > used for hierarchical domains. For non-hierarchical domains (as for root
+> > domains), the new root pointer is set to the domain itself so that
+> > domain->root->mutex can be used in shared code paths.
+> > 
+> > Also note that hierarchical domains should be constructed using
+> > irq_domain_create_hierarchy() (or irq_domain_add_hierarchy()) to avoid
+> > poking at irqdomain internals. As a safeguard, the lockdep assertion in
+> > irq_domain_set_mapping() will catch any offenders that fail to set the
+> > root domain pointer.
+> > 
+> > Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> > Tested-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > ---
+> >  include/linux/irqdomain.h |  4 +++
+> >  kernel/irq/irqdomain.c    | 61 +++++++++++++++++++++++++--------------
+> >  2 files changed, 44 insertions(+), 21 deletions(-)
+> > 
+> > diff --git a/include/linux/irqdomain.h b/include/linux/irqdomain.h
+> > index 16399de00b48..cad47737a052 100644
+> > --- a/include/linux/irqdomain.h
+> > +++ b/include/linux/irqdomain.h
+> > @@ -125,6 +125,8 @@ struct irq_domain_chip_generic;
+> >   *		core code.
+> >   * @flags:	Per irq_domain flags
+> >   * @mapcount:	The number of mapped interrupts
+> > + * @mutex:	Domain lock, hierarhical domains use root domain's lock
+> 
+> nit: hierarchical
+> 
+> > + * @root:	Pointer to root domain, or containing structure if non-hierarchical
 
-> On Thu, Feb 09, 2023, Paolo Bonzini wrote:
->> On 2/9/23 14:13, Vitaly Kuznetsov wrote:
->> > > +static __always_inline bool is_evmcs_enabled(void)
->> > > +{
->> > > +	return static_branch_unlikely(&enable_evmcs);
->> > > +}
->> > I have a suggestion. While 'is_evmcs_enabled' name is certainly not
->> > worse than 'enable_evmcs', it may still be confusing as it's not clear
->> > which eVMCS is meant: are we running a guest using eVMCS or using eVMCS
->> > ourselves? So what if we rename this to a very explicit 'is_kvm_on_hyperv()'
->> > and hide the implementation details (i.e. 'evmcs') inside?
->> 
->> I prefer keeping eVMCS in the name,
->
-> +1, IIUC KVM can run on Hyper-V without eVMCS being enabled.
->
->> but I agree a better name could be something like kvm_uses_evmcs()?
->
-> kvm_is_using_evmcs()?
->
+> > @@ -226,6 +226,17 @@ struct irq_domain *__irq_domain_add(struct fwnode_handle *fwnode, unsigned int s
+> >  
+> >  	domain->revmap_size = size;
+> >  
+> > +	/*
+> > +	 * Hierarchical domains use the domain lock of the root domain
+> > +	 * (innermost domain).
+> > +	 *
+> > +	 * For non-hierarchical domains (as for root domains), the root
+> > +	 * pointer is set to the domain itself so that domain->root->mutex
+> > +	 * can be used in shared code paths.
+> > +	 */
+> > +	mutex_init(&domain->mutex);
+> > +	domain->root = domain;
+> > +
+> >  	irq_domain_check_hierarchy(domain);
+> >  
+> >  	mutex_lock(&irq_domain_mutex);
 
-Sounds good to me!
+> > @@ -518,7 +529,11 @@ static void irq_domain_set_mapping(struct irq_domain *domain,
+> >  				   irq_hw_number_t hwirq,
+> >  				   struct irq_data *irq_data)
+> >  {
+> > -	lockdep_assert_held(&irq_domain_mutex);
+> > +	/*
+> > +	 * This also makes sure that all domains point to the same root when
+> > +	 * called from irq_domain_insert_irq() for each domain in a hierarchy.
+> > +	 */
+> > +	lockdep_assert_held(&domain->root->mutex);
+> >  
+> >  	if (irq_domain_is_nomap(domain))
+> >  		return;
+> > @@ -540,7 +555,7 @@ static void irq_domain_disassociate(struct irq_domain *domain, unsigned int irq)
+> >  
+> >  	hwirq = irq_data->hwirq;
+> >  
+> > -	mutex_lock(&irq_domain_mutex);
+> > +	mutex_lock(&domain->mutex);
+> 
+> So you made that point about being able to uniformly using root>mutex,
+> which I think is a good invariant. Yet you hardly make use of it. Why?
 
--- 
-Vitaly
+I went back and forth over that a bit, but decided to only use
+domain->root->mutex in paths that can be called for hierarchical
+domains (i.e. the "shared code paths" mentioned above).
 
+Using it in paths that are clearly only called for non-hierarchical
+domains where domain->root == domain felt a bit lazy.
+
+The counter argument is of course that using domain->root->lock allows
+people to think less about the code they are changing, but that's not
+necessarily always a good thing.
+
+Also note that the lockdep asserts in the revmap helpers would catch
+anyone using domain->mutex where they should not (i.e. using
+domain->mutex for an hierarchical domain).
+
+> >  	irq_set_status_flags(irq, IRQ_NOREQUEST);
+> >  
+> > @@ -562,7 +577,7 @@ static void irq_domain_disassociate(struct irq_domain *domain, unsigned int irq)
+> >  	/* Clear reverse map for this hwirq */
+> >  	irq_domain_clear_mapping(domain, hwirq);
+> >  
+> > -	mutex_unlock(&irq_domain_mutex);
+> > +	mutex_unlock(&domain->mutex);
+> >  }
+> >  
+> >  static int irq_domain_associate_locked(struct irq_domain *domain, unsigned int virq,
+> > @@ -612,9 +627,9 @@ int irq_domain_associate(struct irq_domain *domain, unsigned int virq,
+> >  {
+> >  	int ret;
+> >  
+> > -	mutex_lock(&irq_domain_mutex);
+> > +	mutex_lock(&domain->mutex);
+> >  	ret = irq_domain_associate_locked(domain, virq, hwirq);
+> > -	mutex_unlock(&irq_domain_mutex);
+> > +	mutex_unlock(&domain->mutex);
+> >  
+> >  	return ret;
+> >  }
+> > @@ -731,7 +746,7 @@ unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
+> >  		return 0;
+> >  	}
+> >  
+> > -	mutex_lock(&irq_domain_mutex);
+> > +	mutex_lock(&domain->mutex);
+> >  
+> >  	/* Check if mapping already exists */
+> >  	virq = irq_find_mapping(domain, hwirq);
+> > @@ -742,7 +757,7 @@ unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
+> >  
+> >  	virq = irq_create_mapping_affinity_locked(domain, hwirq, affinity);
+> >  out:
+> > -	mutex_unlock(&irq_domain_mutex);
+> > +	mutex_unlock(&domain->mutex);
+> >  
+> >  	return virq;
+> >  }
+> > @@ -811,7 +826,7 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
+> >  	if (WARN_ON(type & ~IRQ_TYPE_SENSE_MASK))
+> >  		type &= IRQ_TYPE_SENSE_MASK;
+> >  
+> > -	mutex_lock(&irq_domain_mutex);
+> > +	mutex_lock(&domain->root->mutex);
+> >  
+> >  	/*
+> >  	 * If we've already configured this interrupt,
+> > @@ -864,11 +879,11 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
+> >  	/* Store trigger type */
+> >  	irqd_set_trigger_type(irq_data, type);
+> >  out:
+> > -	mutex_unlock(&irq_domain_mutex);
+> > +	mutex_unlock(&domain->root->mutex);
+> >  
+> >  	return virq;
+> >  err:
+> > -	mutex_unlock(&irq_domain_mutex);
+> > +	mutex_unlock(&domain->root->mutex);
+> >  
+> >  	return 0;
+> >  }
+> > @@ -1132,6 +1147,7 @@ struct irq_domain *irq_domain_create_hierarchy(struct irq_domain *parent,
+> >  	else
+> >  		domain = irq_domain_create_tree(fwnode, ops, host_data);
+> >  	if (domain) {
+> > +		domain->root = parent->root;
+> >  		domain->parent = parent;
+> >  		domain->flags |= flags;
+> 
+> So we still have a bug here, as we have published a domain that we
+> keep updating. A parallel probing could find it in the interval and do
+> something completely wrong.
+
+Indeed we do, even if device links should make this harder to hit these
+days.
+
+> Splitting the work would help, as per the following patch.
+
+Looks good to me. Do you want to submit that as a patch that I'll rebase
+on or should I submit it as part of a v6?
+
+Johan
