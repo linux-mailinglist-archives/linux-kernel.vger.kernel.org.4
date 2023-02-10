@@ -2,136 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1098692B5C
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 00:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 989AD692B46
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 00:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbjBJXfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 18:35:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
+        id S229873AbjBJXeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 18:34:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbjBJXel (ORCPT
+        with ESMTP id S229468AbjBJXeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 18:34:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0EC7E020
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 15:32:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676071959;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aLmvd4pDzTYQinLjtfbwp5ScV5jm5Tl15qoPAkwo1Wg=;
-        b=axb5sUMTFwqnNTI0sYeiDXXsyzK2aa5xInecpoqb01aJs6YmJJ5orK1opMpb5lfxOYhO8C
-        BOimzoCBMn2h/fG2/v/iHHjh4qrXZxcdmOhSC6SPBzQhZA6ZrzlJDyV82z4pW7IfMWYCsP
-        PiBqFOkstucO+h6RsoKVdW/rupLQojw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-588-wILtai1rOhmKtgpOFoLSzg-1; Fri, 10 Feb 2023 18:32:36 -0500
-X-MC-Unique: wILtai1rOhmKtgpOFoLSzg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 10 Feb 2023 18:34:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4975C831F7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 15:32:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 08152101A521;
-        Fri, 10 Feb 2023 23:32:36 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 56FF0492B00;
-        Fri, 10 Feb 2023 23:32:34 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     Steve French <smfrench@gmail.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Tom Talpey <tom@talpey.com>,
-        Stefan Metzmacher <metze@samba.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Long Li <longli@microsoft.com>,
-        Namjae Jeon <linkinjeon@kernel.org>
-Subject: [PATCH 11/11] cifs: Fix problem with encrypted RDMA data read
-Date:   Fri, 10 Feb 2023 23:32:05 +0000
-Message-Id: <20230210233205.1517459-12-dhowells@redhat.com>
-In-Reply-To: <20230210233205.1517459-1-dhowells@redhat.com>
-References: <20230210233205.1517459-1-dhowells@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04172B8261A
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 23:32:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADB79C433D2;
+        Fri, 10 Feb 2023 23:32:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676071975;
+        bh=viXOvaeCoLP52MV8gaJBodxikjoeBS1XcEbdT3P79ZA=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=IFc1Yh/BULyN7rXPWP8Bc15yRXRRsuJqwPyXLCCJU14Bz3DP6/QdM9qVC1NUNyTTu
+         SzO4cZyepM86ffMRAFoUYAYM/Mu/qpBxBAbYgiLMHeP0PmnZGaVfcbBQnoagQLNY/t
+         qNNd2vBvlXcAi32p6mA5QdttayEyN529liiP98+Uf1Xr9TQOuNScQRVCtMy0tYhdZH
+         OVz+Hl4MtOO33J/Vq2Ni4cxuKJ+qhFFXEjhRx8q7Ic3PqoiXdm/glRznb964kpaY+J
+         pDMdKndLnbTzlID8rIKsqz047ALFqqdNJgXEjPtMLP82xzXXFw+yDKU6tRWT0cQa9/
+         hxx/IH1E7j/xA==
+Date:   Fri, 10 Feb 2023 15:32:53 -0800 (PST)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
+cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Subject: Re: [PATCH] xen/grant-dma-iommu: Implement a dummy probe_device()
+ callback
+In-Reply-To: <20230208153649.3604857-1-olekstysh@gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2302101532460.4661@ubuntu-linux-20-04-desktop>
+References: <20230208153649.3604857-1-olekstysh@gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the cifs client is talking to the ksmbd server by RDMA and the ksmbd
-server has "smb3 encryption = yes" in its config file, the normal PDU
-stream is encrypted, but the directly-delivered data isn't in the stream
-(and isn't encrypted), but is rather delivered by DDP/RDMA packets (at
-least with IWarp).
+On Wed, 8 Feb 2023, Oleksandr Tyshchenko wrote:
+> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+> 
+> Update stub IOMMU driver (which main purpose is to reuse generic
+> IOMMU device-tree bindings by Xen grant DMA-mapping layer on Arm)
+> according to the recent changes done in the following
+> commit 57365a04c921 ("iommu: Move bus setup to IOMMU device registration").
+> 
+> With probe_device() callback being called during IOMMU device registration,
+> the uninitialized callback just leads to the "kernel NULL pointer
+> dereference" issue during boot. Fix that by adding a dummy callback.
+> 
+> Looks like the release_device() callback is not mandatory to be
+> implemented as IOMMU framework makes sure that callback is initialized
+> before dereferencing.
+> 
+> Reported-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 
-Currently, the direct delivery fails with:
+Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
 
-   buf can not contain only a part of read data
-   WARNING: CPU: 0 PID: 4619 at fs/cifs/smb2ops.c:4731 handle_read_data+0x393/0x405
-   ...
-   RIP: 0010:handle_read_data+0x393/0x405
-   ...
-    smb3_handle_read_data+0x30/0x37
-    receive_encrypted_standard+0x141/0x224
-    cifs_demultiplex_thread+0x21a/0x63b
-    kthread+0xe7/0xef
-    ret_from_fork+0x22/0x30
 
-The problem apparently stemming from the fact that it's trying to manage
-the decryption, but the data isn't in the smallbuf, the bigbuf or the page
-array).
-
-This can be fixed simply by inserting an extra case into handle_read_data()
-that checks to see if use_rdma_mr is true, and if it is, just setting
-rdata->got_bytes to the length of data delivered and allowing normal
-continuation.
-
-This can be seen in an IWarp packet trace.  With the upstream code, it does
-a DDP/RDMA packet, which produces the warning above and then retries,
-retrieving the data inline, spread across several SMBDirect messages that
-get glued together into a single PDU.  With the patch applied, only the
-DDP/RDMA packet is seen.
-
-Note that this doesn't happen if the server isn't told to encrypt stuff and
-it does also happen with softRoCE.
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Steve French <smfrench@gmail.com>
-cc: Tom Talpey <tom@talpey.com>
-cc: Long Li <longli@microsoft.com>
-cc: Namjae Jeon <linkinjeon@kernel.org>
-cc: Stefan Metzmacher <metze@samba.org>
-cc: linux-cifs@vger.kernel.org
-
-Link: https://lore.kernel.org/r/166855224228.1998592.2212551359609792175.stgit@warthog.procyon.org.uk/ # v1
----
- fs/cifs/smb2ops.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-index 744cd7374a43..636175850ca7 100644
---- a/fs/cifs/smb2ops.c
-+++ b/fs/cifs/smb2ops.c
-@@ -4734,6 +4734,9 @@ handle_read_data(struct TCP_Server_Info *server, struct mid_q_entry *mid,
- 		if (length < 0)
- 			return length;
- 		rdata->got_bytes = data_len;
-+	} else if (use_rdma_mr) {
-+		/* The data was delivered directly by RDMA. */
-+		rdata->got_bytes = data_len;
- 	} else {
- 		/* read response payload cannot be in both buf and pages */
- 		WARN_ONCE(1, "buf can not contain only a part of read data");
-
+> ---
+>  drivers/xen/grant-dma-iommu.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/xen/grant-dma-iommu.c b/drivers/xen/grant-dma-iommu.c
+> index 16b8bc0c0b33..6a9fe02c6bfc 100644
+> --- a/drivers/xen/grant-dma-iommu.c
+> +++ b/drivers/xen/grant-dma-iommu.c
+> @@ -16,8 +16,15 @@ struct grant_dma_iommu_device {
+>  	struct iommu_device iommu;
+>  };
+>  
+> -/* Nothing is really needed here */
+> -static const struct iommu_ops grant_dma_iommu_ops;
+> +static struct iommu_device *grant_dma_iommu_probe_device(struct device *dev)
+> +{
+> +	return ERR_PTR(-ENODEV);
+> +}
+> +
+> +/* Nothing is really needed here except a dummy probe_device callback */
+> +static const struct iommu_ops grant_dma_iommu_ops = {
+> +	.probe_device = grant_dma_iommu_probe_device,
+> +};
+>  
+>  static const struct of_device_id grant_dma_iommu_of_match[] = {
+>  	{ .compatible = "xen,grant-dma" },
+> -- 
+> 2.34.1
+> 
