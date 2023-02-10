@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A64692349
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 685A669234C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:30:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232057AbjBJQ3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 11:29:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47264 "EHLO
+        id S232520AbjBJQaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 11:30:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231905AbjBJQ3l (ORCPT
+        with ESMTP id S231881AbjBJQaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 11:29:41 -0500
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BC970710
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:29:40 -0800 (PST)
-Received: by mail-qv1-xf33.google.com with SMTP id i12so3870989qvs.2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:29:40 -0800 (PST)
+        Fri, 10 Feb 2023 11:30:12 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25ECD70723
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:30:11 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id w3so6339158qts.7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:30:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=Kr+7H1kMtqWJVAjF9H+CoGofxzA/22d8j6RRg4Ci+4c=;
-        b=KpEymg2ismFlVRCee6nW4aGxbZCGiG8F4D6g5P42lj4WqiP5vmWRtiTSOsPkTKqZQ2
-         ahE5VoU1/VHkkSuGLP4Y8AexG9ueiq9XVb77QnQJwyeS9djX/N8QZdAYO+F80y0Zvz04
-         mZD54UmIlcbw6kqcC4CNC3qX7MxOsmOQsWVvtk/CYxJGXjlT/ehVhKeWckgNMaYtZlnh
-         WjXuJk1DR2SI1fTR5HKHQaHJVqdaINMhxkUqj6JOh/MaFbQl8PWrGZ3RtgYtdJ8PxiFS
-         aTmvgcP5x5oLjEzKsBBlruQhMNeCUZOQ77qdBjPgg48/REAU3S5x/No2FK49vLMfwnYw
-         38Iw==
+        bh=JDBS6d/Lda34jyocIqJwGH9bwG6KCV2tTN3mIxJDJKA=;
+        b=fphBx+ZJPy4yJfySDl/CrDn0mgzZORtzvFApv24FyvHqJLtyyN87YTL7CUCfloqPmt
+         ri+JOQ3PdMzmCvoroOJ/HTrKSeiTSDPkEcXGQrMHHLmsZbA4nJZQHIeeM8fWztpwFNku
+         PH/4YDkVEO7heB9ghtjwNvxwMIewUmAKiYT5tNhYQ4kj2+bdbexDzo0jpEbeWJ2Mtk1g
+         EIJsPL59TcYoJ1UNdzjacE57YzDDn1POerQDPxH/QjNuNwBPvyQnbSY5d5nr+YcAChiS
+         kAiYWC3XAlIZkf0mm9y/DZ+N3jIj6g7Io8fGRLuWcsye/8KiTqw+8ELRE5lt15tD0GFq
+         BxCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Kr+7H1kMtqWJVAjF9H+CoGofxzA/22d8j6RRg4Ci+4c=;
-        b=KLozQB9r4O06y9pqfYjUrESPCxNBNyv/zV0IOu48l1xFbSOHTaYXrLcw2fD1beIVG7
-         r8zGCpyjFEt3i0NuaLI3jIXCB89EXknBlIMOiADMbN4Yd+qsZLSQO5hxCP7SQmgxmPAh
-         Vz/amCymlZtoNZjK6+UTQKfrbOTJ0KA+vRxm+wZ0ydUuopj4yKiPz1pTXvOjaCGMC6Bz
-         uys0+UNAdPhSfk2hjsYy7Gfh0vlFB4FO6hVddE1JT/Z6/MCxGVvvO2FBYcPvX943XTft
-         +dl8J5JgY6CHg06gn3pZ7VpXcci5/JMWC9CZLwYEwEbwl4XWENagNEwcr13I8BQwV7Wh
-         lQ+w==
-X-Gm-Message-State: AO0yUKVnl+P7toYTRhSIy6tEDJ0EDgsKHs5OFw9MTHOKmyCu2bSf3+lJ
-        JZTt+pG/3s2sIj+4oBUxiC9BsQ==
-X-Google-Smtp-Source: AK7set9W8SaBI3HAtSJLxSL4QqZCt1iMvA5gc8NwLBrm88i8NlzuzBKqH5sJOTcTpop/QzK+w22UsA==
-X-Received: by 2002:a05:6214:29e4:b0:56e:9551:197f with SMTP id jv4-20020a05621429e400b0056e9551197fmr2937375qvb.2.1676046579520;
-        Fri, 10 Feb 2023 08:29:39 -0800 (PST)
+        bh=JDBS6d/Lda34jyocIqJwGH9bwG6KCV2tTN3mIxJDJKA=;
+        b=5o/NhlE+68X1TPR2MvVQ4yuvJ/7mSI0Gg6kpfLjTBHyUkHWBJ+M1unyMT0mbBpn+Ti
+         2mV6AfjH3Vs7hU4NJW3I6Qwq9i75UDe6unJEHJQzSFIZ/m82bv1TuTJ6OrsCGg3LKp3G
+         7g/5unhGv39G2oPp46pLawmeRt+DDn38T18uJxnD7Qrdqmkzkk1dUPvVJ5dNXpxc0SIF
+         3vuLG6RqIZDCk8p6JXElQ+9p4A9Byr719eLaghYLMFjZastBtHgnI7gKKUm/oqfUEpEr
+         szFR/F27JJHtE6bAhseOdpGMyNLcDt1dx+0vYk7fwzh5eGmQ3VVMh0S+MtrKUQpBO6Vr
+         d6OA==
+X-Gm-Message-State: AO0yUKXThW5Pc6cTm6QoxIj4B96LXFaNuDNPfZ+9nztP+GTKR00HpOfy
+        /v32yY4z5u44Hhuu3AZDU1AyQA==
+X-Google-Smtp-Source: AK7set+yZ3GsVnetj/5WXI/D1fmnG8DYfT0tkn2Spe2TNzEukmng+pk+eG71qpLKqsQIMRxYeDF/FQ==
+X-Received: by 2002:a05:622a:15d1:b0:3b8:6868:2ab4 with SMTP id d17-20020a05622a15d100b003b868682ab4mr26545138qty.49.1676046610260;
+        Fri, 10 Feb 2023 08:30:10 -0800 (PST)
 Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
-        by smtp.gmail.com with ESMTPSA id f63-20020a37d242000000b0073917fae4f8sm157267qkj.25.2023.02.10.08.29.38
+        by smtp.gmail.com with ESMTPSA id p6-20020ac84086000000b003b9a573aec6sm3622098qtl.70.2023.02.10.08.30.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 08:29:39 -0800 (PST)
-Message-ID: <5dfdca25d2a3367f17feec5872925f418279ef39.camel@ndufresne.ca>
-Subject: Re: [PATCH v2 04/10] media: Add YUV24_12 video format
+        Fri, 10 Feb 2023 08:30:09 -0800 (PST)
+Message-ID: <36a613ab96fc0145025788a333c30f92bb9c7519.camel@ndufresne.ca>
+Subject: Re: [PATCH v2 05/10] media: Add BGR24_12 video format
 From:   Nicolas Dufresne <nicolas@ndufresne.ca>
 To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
         mirela.rabulea@oss.nxp.com, hverkuil-cisco@xs4all.nl
@@ -59,17 +59,17 @@ Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
         festevam@gmail.com, xiahong.bao@nxp.com, linux-imx@nxp.com,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Date:   Fri, 10 Feb 2023 11:29:37 -0500
-In-Reply-To: <70b55bc46cd3cce59637d384013785c9efe444db.1675230665.git.ming.qian@nxp.com>
+Date:   Fri, 10 Feb 2023 11:30:08 -0500
+In-Reply-To: <8c74b48e728ecb075a4a65b9771610c9cbe27294.1675230665.git.ming.qian@nxp.com>
 References: <cover.1675230665.git.ming.qian@nxp.com>
-         <70b55bc46cd3cce59637d384013785c9efe444db.1675230665.git.ming.qian@nxp.com>
+         <8c74b48e728ecb075a4a65b9771610c9cbe27294.1675230665.git.ming.qian@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,42 +78,50 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Le mercredi 01 f=C3=A9vrier 2023 =C3=A0 14:02 +0800, Ming Qian a =C3=A9crit=
 =C2=A0:
-> YUV24_12 is a YUV format with 12-bits per component like YUV24,
+> BGR24_12 is a reversed RGB format with 12 bits per component like BGR24,
 > expanded to 16bits.
 > Data in the 12 high bits, zeros in the 4 low bits,
 > arranged in little endian order.
 
-To be accurate, this should be named YUV48_12, since the word has 48bit, no=
-t 24.
+I would like to suggest BGR48_12
+
+Nicolas
 
 >=20
 > Signed-off-by: Ming Qian <ming.qian@nxp.com>
 > ---
->  .../media/v4l/pixfmt-packed-yuv.rst           | 28 +++++++++++++++++++
+>  .../userspace-api/media/v4l/pixfmt-rgb.rst    | 35 +++++++++++++++++++
 >  drivers/media/v4l2-core/v4l2-common.c         |  1 +
 >  drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
->  include/uapi/linux/videodev2.h                |  1 +
->  4 files changed, 31 insertions(+)
+>  include/uapi/linux/videodev2.h                |  3 ++
+>  4 files changed, 40 insertions(+)
 >=20
-> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst =
-b/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst
-> index bb7169b2cc8d..a098c5e8e609 100644
-> --- a/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst
-> +++ b/Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst
-> @@ -257,6 +257,34 @@ the second byte and Y'\ :sub:`7-0` in the third byte=
-.
->      - The padding bits contain undefined values that must be ignored by =
-all
->        applications and drivers.
+> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst b/Docum=
+entation/userspace-api/media/v4l/pixfmt-rgb.rst
+> index 30f51cd33f99..da29ba69c2d9 100644
+> --- a/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
+> +++ b/Documentation/userspace-api/media/v4l/pixfmt-rgb.rst
+> @@ -763,6 +763,41 @@ nomenclature that instead use the order of component=
+s as seen in a 24- or
+>      \normalsize
 > =20
-> +The next lists the packed YUV 4:4:4 formats with more than 8 bits per co=
-mponent.
+> =20
+> +More Than 8 Bits Per Component
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+> +
+> +These formats store an RGB triplet in six or eighth bytes, with more tha=
+n 8 bits per component.
 > +expand the bits per component to 16 bits, data in the high bits, zeros i=
 n the low bits,
-> +arranged in little endian order. storing 1 pixels in 6 bytes.
+> +arranged in little endian order.
 > +
-> +.. flat-table:: Packed YUV 4:4:4 Image Formats (more than 8bpc)
-> +    :header-rows: 1
+> +.. raw:: latex
+> +
+> +    \small
+> +
+> +.. flat-table:: RGB Formats With More Than 8 Bits Per Component
+> +    :header-rows:  1
 > +    :stub-columns: 0
 > +
 > +    * - Identifier
@@ -122,77 +130,79 @@ n the low bits,
 > +      - Byte 3-2
 > +      - Byte 5-4
 > +      - Byte 7-6
-> +      - Byte 9-8
-> +      - Byte 11-10
+> +    * .. _V4L2-PIX-FMT-BGR24-12:
 > +
-> +    * .. _V4L2-PIX-FMT-YUV24-12:
+> +      - ``V4L2_PIX_FMT_BGR24_12``
+> +      - 'B312'
 > +
-> +      - ``V4L2_PIX_FMT_YUV24_12``
-> +      - 'Y312'
+> +      - B\ :sub:`15-4`
+> +      - G\ :sub:`15-4`
+> +      - R\ :sub:`15-4`
+> +      -
 > +
-> +      - Y'\ :sub:`0`
-> +      - Cb\ :sub:`0`
-> +      - Cr\ :sub:`0`
-> +      - Y'\ :sub:`1`
-> +      - Cb\ :sub:`1`
-> +      - Cr\ :sub:`1`
+> +.. raw:: latex
+> +
+> +    \normalsize
+> +
+>  Deprecated RGB Formats
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > =20
->  4:2:2 Subsampling
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-c=
 ore/v4l2-common.c
-> index 3a882fb71227..b3ad02f8cf11 100644
+> index b3ad02f8cf11..024190f82cf1 100644
 > --- a/drivers/media/v4l2-core/v4l2-common.c
 > +++ b/drivers/media/v4l2-core/v4l2-common.c
-> @@ -259,6 +259,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 f=
+> @@ -252,6 +252,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 f=
 ormat)
->  		{ .format =3D V4L2_PIX_FMT_UYVY,    .pixel_enc =3D V4L2_PIXEL_ENC_YUV,=
+>  		{ .format =3D V4L2_PIX_FMT_RGB565,  .pixel_enc =3D V4L2_PIXEL_ENC_RGB,=
  .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D { 2, 0, 0, 0 }, .hdiv =3D =
-2, .vdiv =3D 1 },
->  		{ .format =3D V4L2_PIX_FMT_VYUY,    .pixel_enc =3D V4L2_PIXEL_ENC_YUV,=
+1, .vdiv =3D 1 },
+>  		{ .format =3D V4L2_PIX_FMT_RGB555,  .pixel_enc =3D V4L2_PIXEL_ENC_RGB,=
  .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D { 2, 0, 0, 0 }, .hdiv =3D =
-2, .vdiv =3D 1 },
->  		{ .format =3D V4L2_PIX_FMT_YUYV_12, .pixel_enc =3D V4L2_PIXEL_ENC_YUV,=
+1, .vdiv =3D 1 },
+>  		{ .format =3D V4L2_PIX_FMT_BGR666,  .pixel_enc =3D V4L2_PIXEL_ENC_RGB,=
  .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D { 4, 0, 0, 0 }, .hdiv =3D =
-2, .vdiv =3D 1 },
-> +		{ .format =3D V4L2_PIX_FMT_YUV24_12, .pixel_enc =3D V4L2_PIXEL_ENC_YUV=
+1, .vdiv =3D 1 },
+> +		{ .format =3D V4L2_PIX_FMT_BGR24_12, .pixel_enc =3D V4L2_PIXEL_ENC_RGB=
 , .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D { 6, 0, 0, 0 }, .hdiv =3D=
  1, .vdiv =3D 1 },
 > =20
->  		/* YUV planar formats */
->  		{ .format =3D V4L2_PIX_FMT_NV12,    .pixel_enc =3D V4L2_PIXEL_ENC_YUV,=
- .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 1, 2, 0, 0 }, .hdiv =3D =
-2, .vdiv =3D 2 },
+>  		/* YUV packed formats */
+>  		{ .format =3D V4L2_PIX_FMT_YUYV,    .pixel_enc =3D V4L2_PIXEL_ENC_YUV,=
+ .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D { 2, 0, 0, 0 }, .hdiv =3D =
+2, .vdiv =3D 1 },
 > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-co=
 re/v4l2-ioctl.c
-> index 928acb9d13ec..711d1b0a8184 100644
+> index 711d1b0a8184..329515786abb 100644
 > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
 > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> @@ -1343,6 +1343,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *f=
+> @@ -1298,6 +1298,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *f=
 mt)
->  	case V4L2_PIX_FMT_HI240:	descr =3D "8-bit Dithered RGB (BTTV)"; break;
->  	case V4L2_PIX_FMT_M420:		descr =3D "YUV 4:2:0 (M420)"; break;
->  	case V4L2_PIX_FMT_YUYV_12:	descr =3D "12-bit Depth YUYV 4:2:2"; break;
-> +	case V4L2_PIX_FMT_YUV24_12:	descr =3D "12-bit Depth YUV 4:4:4"; break;
->  	case V4L2_PIX_FMT_NV12:		descr =3D "Y/UV 4:2:0"; break;
->  	case V4L2_PIX_FMT_NV21:		descr =3D "Y/VU 4:2:0"; break;
->  	case V4L2_PIX_FMT_NV16:		descr =3D "Y/UV 4:2:2"; break;
+>  	case V4L2_PIX_FMT_BGRX32:	descr =3D "32-bit XBGR 8-8-8-8"; break;
+>  	case V4L2_PIX_FMT_RGBA32:	descr =3D "32-bit RGBA 8-8-8-8"; break;
+>  	case V4L2_PIX_FMT_RGBX32:	descr =3D "32-bit RGBX 8-8-8-8"; break;
+> +	case V4L2_PIX_FMT_BGR24_12:	descr =3D "12-bit Depth BGR"; break;
+>  	case V4L2_PIX_FMT_GREY:		descr =3D "8-bit Greyscale"; break;
+>  	case V4L2_PIX_FMT_Y4:		descr =3D "4-bit Greyscale"; break;
+>  	case V4L2_PIX_FMT_Y6:		descr =3D "6-bit Greyscale"; break;
 > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev=
 2.h
-> index 01fd233ff681..3eb188581b83 100644
+> index 3eb188581b83..ab52a605e6c0 100644
 > --- a/include/uapi/linux/videodev2.h
 > +++ b/include/uapi/linux/videodev2.h
-> @@ -619,6 +619,7 @@ struct v4l2_pix_format {
->  #define V4L2_PIX_FMT_YUVX32  v4l2_fourcc('Y', 'U', 'V', 'X') /* 32  YUVX=
+> @@ -577,6 +577,9 @@ struct v4l2_pix_format {
+>  #define V4L2_PIX_FMT_ARGB32  v4l2_fourcc('B', 'A', '2', '4') /* 32  ARGB=
 -8-8-8-8  */
->  #define V4L2_PIX_FMT_M420    v4l2_fourcc('M', '4', '2', '0') /* 12  YUV =
-4:2:0 2 lines y, 1 line uv interleaved */
->  #define V4L2_PIX_FMT_YUYV_12     v4l2_fourcc('Y', '2', '1', '2') /* 32  =
-YUYV 12-bit per component */
-> +#define V4L2_PIX_FMT_YUV24_12    v4l2_fourcc('Y', '3', '1', '2') /* 48  =
-YUV 4:4:4 12-bit per component */
+>  #define V4L2_PIX_FMT_XRGB32  v4l2_fourcc('B', 'X', '2', '4') /* 32  XRGB=
+-8-8-8-8  */
 > =20
->  /* two planes -- one Y, one Cr + Cb interleaved  */
->  #define V4L2_PIX_FMT_NV12    v4l2_fourcc('N', 'V', '1', '2') /* 12  Y/Cb=
-Cr 4:2:0  */
+> +/* RGB formats (6 or 8 bytes per pixel) */
+> +#define V4L2_PIX_FMT_BGR24_12    v4l2_fourcc('B', '3', '1', '2') /* 48  =
+BGR 12-bit per component */
+> +
+>  /* Grey formats */
+>  #define V4L2_PIX_FMT_GREY    v4l2_fourcc('G', 'R', 'E', 'Y') /*  8  Grey=
+scale     */
+>  #define V4L2_PIX_FMT_Y4      v4l2_fourcc('Y', '0', '4', ' ') /*  4  Grey=
+scale     */
 
