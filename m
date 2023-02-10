@@ -2,136 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B66692A5A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 23:42:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D70D692A5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 23:42:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233924AbjBJWmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 17:42:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
+        id S233950AbjBJWmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 17:42:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233869AbjBJWmN (ORCPT
+        with ESMTP id S233929AbjBJWmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 17:42:13 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC20975352
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 14:42:08 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id x8so8049716ybt.13
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 14:42:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=26hWLD5KLKkw4IobX1dhlza6o28KL+X+gg+uQ008c9Y=;
-        b=kjAO4ixdBXxoURlwsMOwtpUwFlGiYNdLuN+PdolZDbrpvWlk1x6X4zAlKz8WNaTQBz
-         7nxqo9eLHG7aDD/cviRWVaML4u2//Bdf3C2v5YU6EwzT+Zeh9xcIt9GSSxKfs1qaNejm
-         wBY8eoEC5iCJhjNNbM3wPx8v8o61YCERxgNQi5qAFGbWSsUFZzZZZoCNmLz9mBW0bEHk
-         L5twlyJKw66LKKLT6irS77UPRzqt1YTTFopcv0Kh/XVOIfDcpPMkxXQ0acxnzsfdguh1
-         3fp/jKKj66UnNShJoYf9OBOja34rmCbYnWojNa3x4m3zfgDJTRd04VIpo5rYiZwgw7Uq
-         oyQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=26hWLD5KLKkw4IobX1dhlza6o28KL+X+gg+uQ008c9Y=;
-        b=XQzn6VvCT4PobZR5If8Q3JzDpCErmeFZXCdUc7XI51GJPYsXeZznoAFMepf1rZ4OTz
-         NE1En6y0NzCXzmfX2/5t5tLFJ3yQ+xXKyOtE9g+dl4knIJINMLVciIEFCWlyoQgaRrXX
-         VS19xL5ZCsUVCubJkn8qYXgtQRYL3SYd7aj1JVMQaYn+XFGr0jwqtst3G8+VaZQZMi3X
-         YwmOfITcXMHHwrq+V/ygf3NP7PyZsN86GkqJhA1wAXWE60v7ZJqY35AlMtkh2ACBotS9
-         tq2x4eANZrwQOUPMk0WYj86nknvfmo8D8aA/plvox2ahcEY1Qlw9IDv9Yo96WDhMeiKW
-         p/4Q==
-X-Gm-Message-State: AO0yUKVswMOWa6nTf0/6BJiALGfHVHc5cqgjtk/OmyFR2Tj+ePQLk5bd
-        04Ts6VtxYtsAKhVFoRtPWQHjoFAYG2TojPioQu+x7Q==
-X-Google-Smtp-Source: AK7set++pi9cbqMLRO+KWKmt0V41DP+0fzmqkXucHMaDCx6QdoaC9+K1xNYqQJVZhD+aS/RZcDSOx/+85fWo8oFz6PY=
-X-Received: by 2002:a25:f30e:0:b0:86f:8ba9:9474 with SMTP id
- c14-20020a25f30e000000b0086f8ba99474mr1835840ybs.302.1676068928035; Fri, 10
- Feb 2023 14:42:08 -0800 (PST)
+        Fri, 10 Feb 2023 17:42:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8989372885
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 14:42:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 241AEB8260F
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 22:42:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89679C433EF;
+        Fri, 10 Feb 2023 22:42:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676068930;
+        bh=lean2QP7sM/VxWfpzVyF1SwVdvPL+L0ykV3X0Mivkhc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WwJm2H7vK4Fc7JspfZsTwrY2E4UU+fclg2VDoT2DYwASVoHvAmc6ZQ+ooRVoaMfdo
+         QvzCpJcgQIWQzwHU87cmgLfS6ShUB9A2x/BacR4ViURx+gsNFTIBN1v/QWAZf/0bG2
+         xJk/3DyS00bKY5cjt2KhPK3pwH1nhPdgjWG34ey4ItHLXsWkqgitutY10o+KW4uLLF
+         /pUJk9Fncio/lCR26HiXaPa8jGwnFKcCqd/7W/TiJrm3aS9IF5BD/131aEmVdmpfB8
+         qBLYpZwKh/PQI+/cSLqPKa67jOe88z/uS6w6av+FSi4pO3Ah6Z50dOwcDwpvjt2Ku2
+         KUmCT1VMhji8g==
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [PATCH 0/2] x86/unwind/orc: Fix unwinding from kprobe on PUSH/POP instruction
+Date:   Fri, 10 Feb 2023 14:42:00 -0800
+Message-Id: <cover.1676068346.git.jpoimboe@kernel.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 10 Feb 2023 23:41:57 +0100
-Message-ID: <CACRpkdax4qmftH974q+269YD65oMfLNFe-FrRSLyAZ_HY1OF0Q@mail.gmail.com>
-Subject: [GIT PULL] pin control fixes for the v6.2 series
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Josh Poimboeuf (2):
+  x86/unwind/orc: Add 'signal' field to ORC metadata
+  x86/entry: Fix unwinding from kprobe on PUSH/POP instruction
 
-some assorted pin control fixes, the most interesting will be
-the Intel patch fixing a classic problem: laptop touchpad IRQs...
+ arch/x86/entry/entry_64.S              |  9 ++++++++-
+ arch/x86/include/asm/orc_types.h       |  4 +++-
+ arch/x86/include/asm/unwind_hints.h    | 10 +++++-----
+ arch/x86/kernel/unwind_orc.c           |  5 ++---
+ include/linux/objtool.h                | 11 +++++++----
+ tools/arch/x86/include/asm/orc_types.h |  4 +++-
+ tools/include/linux/objtool.h          | 11 +++++++----
+ tools/objtool/orc_dump.c               |  4 ++--
+ 8 files changed, 37 insertions(+), 21 deletions(-)
 
-Details in the signed tag, please pull it in!
+-- 
+2.39.1
 
-Yours,
-Linus Walleij
-
-
-The following changes since commit 2241ab53cbb5cdb08a6b2d4688feb13971058f65:
-
-  Linux 6.2-rc5 (2023-01-21 16:27:01 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git
-tags/pinctrl-v6.2-3
-
-for you to fetch changes up to a8520be3ffef3d25b53bf171a7ebe17ee0154175:
-
-  pinctrl: intel: Restore the pins that used to be in Direct IRQ mode
-(2023-02-07 10:13:51 +0100)
-
-----------------------------------------------------------------
-Pin control fixes for the v6.2 series:
-
-- Some pin drive register fixes in the Mediatek driver.
-
-- Return proper error code in the Aspeed driver, and revert
-  and ill-advised force-disablement patch that needs to be
-  reworked.
-
-- Fix AMD driver debug output.
-
-- Fix potential NULL dereference in the Single driver.
-
-- Fix a group definition error in the Qualcomm SM8450 LPASS
-  driver.
-
-- Restore pins used in direct IRQ mode in the Intel driver.
-  (This fixes some laptop touchpads!)
-
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      pinctrl: intel: Restore the pins that used to be in Direct IRQ mode
-
-Guodong Liu (1):
-      pinctrl: mediatek: Fix the drive register definition of some Pins
-
-Joel Stanley (2):
-      pinctrl: aspeed: Fix confusing types in return value
-      pinctrl: aspeed: Revert "Force to disable the function's signal"
-
-Krzysztof Kozlowski (1):
-      pinctrl: qcom: sm8450-lpass-lpi: correct swr_rx_data group
-
-Mario Limonciello (1):
-      pinctrl: amd: Fix debug output for debounce time
-
-Maxim Korotkov (1):
-      pinctrl: single: fix potential NULL dereference
-
- drivers/pinctrl/aspeed/pinctrl-aspeed.c         | 13 +++++++++++--
- drivers/pinctrl/intel/pinctrl-intel.c           | 16 +++++++++++++---
- drivers/pinctrl/mediatek/pinctrl-mt8195.c       |  4 ++--
- drivers/pinctrl/pinctrl-amd.c                   |  1 +
- drivers/pinctrl/pinctrl-single.c                |  2 ++
- drivers/pinctrl/qcom/pinctrl-sm8450-lpass-lpi.c |  2 +-
- 6 files changed, 30 insertions(+), 8 deletions(-)
