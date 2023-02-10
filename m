@@ -2,104 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC6969260D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:05:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF978692611
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:06:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232972AbjBJTFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 14:05:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
+        id S233236AbjBJTGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 14:06:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232530AbjBJTFA (ORCPT
+        with ESMTP id S232476AbjBJTGn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 14:05:00 -0500
-Received: from smtp-out-07.comm2000.it (smtp-out-07.comm2000.it [212.97.32.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B83D7D885;
-        Fri, 10 Feb 2023 11:04:39 -0800 (PST)
-Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: francesco@dolcini.it)
-        by smtp-out-07.comm2000.it (Postfix) with ESMTPSA id E6A623C90D9;
-        Fri, 10 Feb 2023 20:04:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
-        s=mailsrv; t=1676055877;
-        bh=1MDK5XVzuRboLUULPNbkMtdO3ShFDxOiAcQb2GE0aO0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=r0+Q0enEMtciMFlKwAsHSJz0C9ASbEnj2iQ1jNT0w5pHY4nAFIFzaarQsbj2PZo8j
-         3lMbt4Dyh0NQBDmm3tDZbsfO5CJZoM0iF21ZIDw7Og8MIp5v+ZmYvexrzH/AuNTUPa
-         krHbMjF7Dcc3EVupy+3ewC8ntMZjG6S5zg+parP3OiHKfN6liYCFGZCjNhcgWJJBCy
-         jp5nD0d8f0VnCAsUXeP+KlT/R9PPtvwnnZBE+npJv4I9Lq+9gS8m8WTcwpp66ruMII
-         S6NWm/7Wi3LHcGfnsqv4Ljj4RzYnGFTBLEl3VUAXyOAunFMuLoCKYuEomtL5SHW/jg
-         yWzK6R2p2ZtNQ==
-Date:   Fri, 10 Feb 2023 20:04:35 +0100
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     Francesco Dolcini <francesco@dolcini.it>,
-        linux-bluetooth@vger.kernel.org,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Subject: Re: [PATCH v2 0/5] Bluetooth: hci_mrvl: Add serdev support for
- 88W8997
-Message-ID: <Y+aVQ38sJvuUd4HM@francesco-nb.int.toradex.com>
-References: <20230126074356.431306-1-francesco@dolcini.it>
- <Y+YC3Pka42SmtyvI@francesco-nb.int.toradex.com>
- <CABBYNZLNFFUeZ1cb9xABhaymWnSiZjazwVT9N12qHyc7e0L6QQ@mail.gmail.com>
+        Fri, 10 Feb 2023 14:06:43 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4B97D3E4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:06:41 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id b1so4105740pft.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:06:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:subject:cc:to:from:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=0X3/n7/A3PNJZ8jZ8dVcNSR9WNlUKR8kt+0R8RsIS+I=;
+        b=j39WWB84ZEJ6nBQwen5FJIoUqsORXqEcNFES8EWG0YtMpZrjHM96f7RjBAPQ+JDsJG
+         3u7EWAxijHOfV0E4/AyEt5PIKduwsIm6TL3Zy9dOcsf49sUQaIQSgDmoufdde8n67DOR
+         0h2eY3ciTD1yALLQqjrT9sbHgfjkc04QOWVTg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:subject:cc:to:from:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0X3/n7/A3PNJZ8jZ8dVcNSR9WNlUKR8kt+0R8RsIS+I=;
+        b=bcwngPkijkaYgklDsPJdQz/VktdwQbAMwCg4rySg2RKn8pfVbYXSURS0W+8Ckxbq2V
+         +622mtIv/gQ3M6Og8DOJox3PF9bfRGsqHvrvRkRC51LWEISQ7X6kVfDrMS4rgKLCKJ7R
+         KgymmnkHtpBZZIYnuzoln4DQjU4tOnBR4oLWzwkCLhuAIiyDmv7eTS9jx2pi+nfGkCBs
+         pv63S38aTJRMbaDhdw7VZmyHK/CzTYIj5wOIXR2WV0C6VUARV5vq8/rA0L3IV50qudmg
+         SR5PcqWRrs7UPMLoNR9V1SWpJhUjg3VvvCYVGMmPNJRiFPBIlwxOoj+XNXftNCZi/XWV
+         JNMg==
+X-Gm-Message-State: AO0yUKUz271uN1+0YkvViKOcHeMIMDk3bCk8pRJZwupafbnBZVra2rov
+        VZsxxEuzCy2VsmkKUGvhYqpJvQ==
+X-Google-Smtp-Source: AK7set/PmQSV8PsNJ5/Q5QKIBZDr28wVDC62O7GllUpJ4GDZE0hTRfK4cvrK8Bht08Iw93IjrZK9Kg==
+X-Received: by 2002:a62:1b4d:0:b0:593:ea06:7fd with SMTP id b74-20020a621b4d000000b00593ea0607fdmr14083024pfb.13.1676056001372;
+        Fri, 10 Feb 2023 11:06:41 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id l22-20020a62be16000000b005943bd7c72bsm3595216pff.190.2023.02.10.11.06.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 11:06:40 -0800 (PST)
+Message-ID: <63e695c0.620a0220.f69b1.6eec@mx.google.com>
+X-Google-Original-Message-ID: <202302101104.@keescook>
+Date:   Fri, 10 Feb 2023 11:06:40 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
+        Sasa Ostrouska <casaxa@gmail.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] ASoC: Intel: Skylake: Replace 1-element array with
+ flex-array
+References: <20230210051447.never.204-kees@kernel.org>
+ <54d4ffb1-1488-1a4f-58b2-8b3471389729@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CABBYNZLNFFUeZ1cb9xABhaymWnSiZjazwVT9N12qHyc7e0L6QQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <54d4ffb1-1488-1a4f-58b2-8b3471389729@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 10:52:43AM -0800, Luiz Augusto von Dentz wrote:
-> Hi Francesco,
+On Fri, Feb 10, 2023 at 02:10:56PM +0100, Amadeusz Sławiński wrote:
+> On 2/10/2023 6:14 AM, Kees Cook wrote:
+> > The kernel is globally removing the ambiguous 0-length and 1-element
+> > arrays in favor of flexible arrays, so that we can gain both compile-time
+> > and run-time array bounds checking[1]. In this instance, struct
+> > skl_cpr_cfg contains struct skl_cpr_gtw_cfg, which defined "config_data"
+> > as a 1-element array.
+> > 
+> > Normally when switching from a 1-element array to a flex-array, any
+> > related size calculations must be adjusted too. However, it seems the
+> > original code was over-allocating space, since 1 extra u32 would be
+> > included by the sizeof():
+> > 
+> >                  param_size = sizeof(struct skl_cpr_cfg);
+> >                  param_size += mconfig->formats_config[SKL_PARAM_INIT].caps_size;
+> > 
+> > But the copy uses caps_size bytes, and cap_size / 4 (i.e. sizeof(u32))
+> > for the length tracking:
+> > 
+> >          memcpy(cpr_mconfig->gtw_cfg.config_data,
+> >                          mconfig->formats_config[SKL_PARAM_INIT].caps,
+> >                          mconfig->formats_config[SKL_PARAM_INIT].caps_size);
+> > 
+> >          cpr_mconfig->gtw_cfg.config_length =
+> >                          (mconfig->formats_config[SKL_PARAM_INIT].caps_size) / 4;
+> > 
+> > Therefore, no size calculations need adjusting. Change the struct
+> > skl_cpr_gtw_cfg config_data member to be a true flexible array, which
+> > also fixes the over-allocation, and silences this memcpy run-time false
+> > positive:
+> > 
+> >    memcpy: detected field-spanning write (size 100) of single field "cpr_mconfig->gtw_cfg.config_data" at sound/soc/intel/skylake/skl-messages.c:554 (size 4)
+> > 
+> > [1] For lots of details, see both:
+> >      https://docs.kernel.org/process/deprecated.html#zero-length-and-one-element-arrays
+> >      https://people.kernel.org/kees/bounded-flexible-arrays-in-c
+> > 
+> > Reported-by: Sasa Ostrouska <casaxa@gmail.com>
+> > Link: https://lore.kernel.org/all/CALFERdwvq5day_sbDfiUsMSZCQu9HG8-SBpOZDNPeMdZGog6XA@mail.gmail.com/
+> > Cc: Cezary Rojewski <cezary.rojewski@intel.com>
+> > Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> > Cc: Liam Girdwood <liam.r.girdwood@linux.intel.com>
+> > Cc: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+> > Cc: Bard Liao <yung-chuan.liao@linux.intel.com>
+> > Cc: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+> > Cc: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+> > Cc: Mark Brown <broonie@kernel.org>
+> > Cc: Jaroslav Kysela <perex@perex.cz>
+> > Cc: Takashi Iwai <tiwai@suse.com>
+> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> > Cc: "Amadeusz Sławiński" <amadeuszx.slawinski@linux.intel.com>
+> > Cc: alsa-devel@alsa-project.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> >   sound/soc/intel/skylake/skl-topology.h | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/sound/soc/intel/skylake/skl-topology.h b/sound/soc/intel/skylake/skl-topology.h
+> > index 6db0fd7bad49..ad94f8020c27 100644
+> > --- a/sound/soc/intel/skylake/skl-topology.h
+> > +++ b/sound/soc/intel/skylake/skl-topology.h
+> > @@ -115,7 +115,7 @@ struct skl_cpr_gtw_cfg {
+> >   	u32 dma_buffer_size;
+> >   	u32 config_length;
+> >   	/* not mandatory; required only for DMIC/I2S */
+> > -	u32 config_data[1];
+> > +	u32 config_data[];
+> >   } __packed;
+> >   struct skl_dma_control {
 > 
-> On Fri, Feb 10, 2023 at 12:40 AM Francesco Dolcini <francesco@dolcini.it> wrote:
-> >
-> > Hello all,
-> >
-> > On Thu, Jan 26, 2023 at 08:43:51AM +0100, Francesco Dolcini wrote:
-> > > From: Francesco Dolcini <francesco.dolcini@toradex.com>
-> > >
-> > > Add serdev support for the 88W8997 from NXP (previously Marvell). It includes
-> > > support for changing the baud rate. The command to change the baud rate is
-> > > taken from the user manual UM11483 Rev. 9 in section 7 (Bring-up of Bluetooth
-> > > interfaces) from NXP.
-> >
-> > Just a gently ping on this series, patches 1,2 with DT binding changes
-> > are reviewed/acked, patch 5 with the DTS change should just be on hold
-> > till patches 1-4 are merged.
-> >
-> > No feedback on patches 4 (and 3), with the BT serdev driver code
-> > changes, any plan on those?
+> This fails in our validation.
+
+Ah, okay. Thanks for checking!
+
+> Maybe we can use the union workaround, to
+> leave the size as is?
 > 
-> bots have detected errors on these changes
+> Following seems to work in manual test:
+> diff --git a/sound/soc/intel/skylake/skl-topology.h
+> b/sound/soc/intel/skylake/skl-topology.h
+> index 6db0fd7bad49..ffbd2e60fede 100644
+> --- a/sound/soc/intel/skylake/skl-topology.h
+> +++ b/sound/soc/intel/skylake/skl-topology.h
+> @@ -115,7 +115,10 @@ struct skl_cpr_gtw_cfg {
+>         u32 dma_buffer_size;
+>         u32 config_length;
+>         /* not mandatory; required only for DMIC/I2S */
+> -       u32 config_data[1];
+> +       union {
+> +               u32 x;
+> +               u32 config_data[0];
+> +       };
 
-From what I can understand from this point of view v2 is fine, the error
-was in v1, if I'm wrong just let me know.
+Yeah, that could work, though the last member would be:
+	DECLARE_FLEX_ARRAY(u32, config_data);
+otherwise the array is 0 length (rather than a proper flex array).
 
-Said that I'll do the change you asked regarding __hci_cmd_sync_status
-and send a v3.
+But before that, let me see if I can track down where the size is being
+used, in case we can avoid adding the padding.
 
-Thanks,
-Francesco
-
+-- 
+Kees Cook
