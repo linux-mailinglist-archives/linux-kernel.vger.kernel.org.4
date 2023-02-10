@@ -2,245 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF6569162C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 02:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C1769163C
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 02:30:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjBJBWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 20:22:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60490 "EHLO
+        id S230365AbjBJBar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 20:30:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbjBJBWF (ORCPT
+        with ESMTP id S229725AbjBJBao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 20:22:05 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609DB5D3D5
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 17:22:04 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4PCbYk6QnNz501Qf;
-        Fri, 10 Feb 2023 09:22:02 +0800 (CST)
-Received: from szxlzmapp05.zte.com.cn ([10.5.230.85])
-        by mse-fl2.zte.com.cn with SMTP id 31A1LuBR026416;
-        Fri, 10 Feb 2023 09:21:56 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp01[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Fri, 10 Feb 2023 09:21:57 +0800 (CST)
-Date:   Fri, 10 Feb 2023 09:21:57 +0800 (CST)
-X-Zmail-TransId: 2b0363e59c35ffffffffa055065e
-X-Mailer: Zmail v1.0
-Message-ID: <202302100921574141612@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <akpm@linux-foundation.org>
-Cc:     <david@redhat.com>, <imbrenda@linux.ibm.com>,
-        <jiang.xuexin@zte.com.cn>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <ran.xiaokai@zte.com.cn>,
-        <xu.xin.sc@gmail.com>, <xu.xin16@zte.com.cn>,
-        <yang.yang29@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIHY2IDYvNl0gc2VsZnRlc3Q6IGFkZCB0ZXN0aW5nIHVuc2hhcmluZyBhbmQgY291bnRpbmcga3NtIHplcm8KIHBhZ2U=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 31A1LuBR026416
-X-Fangmail-Gw-Spam-Type: 0
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63E59C3A.001/4PCbYk6QnNz501Qf
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+        Thu, 9 Feb 2023 20:30:44 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099855DC0C;
+        Thu,  9 Feb 2023 17:30:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675992641; x=1707528641;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=S6QUHihsPdVAlyxuY7m8FeZC91TjCAjbx71lERsS2ug=;
+  b=OX+tnmX5UQiZNegYxvbiQpUBZ5JajxR8KFZW08Z9xXImjyLcSvGCdJ9b
+   2bFei8ghsPD3tOWAPeoiR+AM2zUcA244MvjCYadNTtcazLKzKnvcz81dW
+   NDDvyGkbU2u2jup0c0g+oM2zVzCfj7iZnCNNvyqoCxERp+z0BIjt5rPgO
+   bFGADYoa9etDzOxEy1Ns6k1q9SHulJqYXZIu8+XjCrnDslB1TEj5sQD7j
+   kl5SZUgXuVTOR6eDUm/lAMMRZfkXay5ksyAyFKy1GiPHhJmkwIckF0KZi
+   XpDzHFiCxivm3xRGgiguip7+r/qMMcHB5JSTLrct2kM+nEHTvk8bYIPAl
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="330313689"
+X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
+   d="scan'208";a="330313689"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 17:30:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="661228841"
+X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
+   d="scan'208";a="661228841"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga007.jf.intel.com with ESMTP; 09 Feb 2023 17:30:37 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 9 Feb 2023 17:30:37 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 9 Feb 2023 17:30:37 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.103)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 9 Feb 2023 17:30:36 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JG1iniTNFp1nB/TjQr1fBCUS6+aikOt+kT9yTTA2cnCWbocu1jHODCzcHpHnGS7F1UW8bbKaVUoOLvGnSrgmmwdzRurHRMW9sBw64QKzSk65oPNQl1IiwMlHGSqy/IEtnb84szi0M/fZxcUvKSqgDr3iBPhdj4E5v8XNZQyNEdG3q3K62vLaJkGSsOz0foDAjs5AWhRXWexFaNH4mfa1IHNW9ulUVeLlMRPr6vLnbHpCF8kW5gEvPxE1taIB807V3jaK8WaLYaRadijqqzSfFtwXh10OiJx2x9bAr0G7GCCHuJRVdrJw4gooV0uGdFV1ix2PCmyGxitCuj5JMZyIyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Lz/RsdV07YgD8jV+vp2rBhRWYymjePrdHoYstNLDkEc=;
+ b=a1C8El3NUur9GTpjqEYXOIXNDQ7YN5Jn+XHeL5dH8vq6VBuWMJB1lq73l9tDoR/OukmS2F2sExAXdSlzEgClkr1QnWC09YEX4ueHnIA2DA+On0tqfA+fiyGwxUum7+81fLnWDT/SsyD3VPo8rwoHGtvfWIyXkR98agxAn8FMXINPJPcupnPM9RpVH2u1r2xh52CGrnlHh/kaZsf3FkyCXdJdxsIuTLMR3Fgxh1kKu1mIFxTSi+sLuHpUa5vPE4fzGxD9M6CXHZbuObxQIjbHPhh0rnwbneZ68McJKcxtvmef7obotjR81FNbTDRyEnm52yOPX78jsSnILy/K9c5ULQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by BL1PR11MB5462.namprd11.prod.outlook.com (2603:10b6:208:31e::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19; Fri, 10 Feb
+ 2023 01:30:35 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d%9]) with mapi id 15.20.6086.019; Fri, 10 Feb 2023
+ 01:30:35 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>
+CC:     Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>,
+        "David Woodhouse" <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "Ghorai, Sukumar" <sukumar.ghorai@intel.com>
+Subject: RE: [PATCH v4] iommu/vt-d: Fix PASID directory pointer coherency
+Thread-Topic: [PATCH v4] iommu/vt-d: Fix PASID directory pointer coherency
+Thread-Index: AQHZPM0BbN/jZBC9yUC28xpWD6oiIa7HZNWA
+Date:   Fri, 10 Feb 2023 01:30:35 +0000
+Message-ID: <BN9PR11MB52766B2EBACFEC8DE3CE4A9C8CDE9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230209212843.1788125-1-jacob.jun.pan@linux.intel.com>
+In-Reply-To: <20230209212843.1788125-1-jacob.jun.pan@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|BL1PR11MB5462:EE_
+x-ms-office365-filtering-correlation-id: 95e60462-b360-4c71-35df-08db0b066860
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: dpDWvRhDKH0DhoDJjWpQnGcz3vb6fuh75bSRMRrna68StNbJ83VxJzVWBxMFyqcbsJcmuke7uZS/2b2F2EoPUxLi0JCZQpYmQG3grfK9ecnYS+UR92ncUwvX5CJvw8iV2GXrXw8NalObWw+sMC34cGg7e0WNdoJAyRN3oo5wYFmnwTjIHReMqaMLWNPemfq5NZm2erM2A74W8sTz8IbqWebyHmJvk7NxVYoTySBPxcVi0cWhYvbiOBW9rltGUUASCh8Vkwgu0HRDa0M+nG+OqRHbPn1cew9gmyx0H9w+31kL+q0VEnyYpqb9Iqyg/AITuJyPamDra7laU2N0vtKpnwlur44NEtXTiSrVbi36OIONr1LsfCKARlNHGJOLlQ5W/8axRCbJYJRSJTcx19HYt3lXnmy+H5cFjimOK+dq18qQ+PD63ijkyQSIl/Psv8T4TGdPJqBkUOO1pKmhp9LjpSO4Xez6YJHUUERkJgkwp26ylFi3WfRGTGvBA6vTkEwhEgSwTr1G2Tz6JddhniSpO1fsyCDjH5w12sEpxKVsPcKpfsTHdwSPHH+HdUd00hJi5WBjit2CDYRch/PUAKaIUzVQhA5WybliS9qThH1IG3IY+3EGeoeXl6/SqPSbFXSvG7CEv5Ot+Ozr4OZg9V4jfH8e4uH/jQLDcCFzwu7G2fE+GhAHIQQ9TZdu9uibpsI+
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(39860400002)(396003)(346002)(366004)(376002)(451199018)(83380400001)(8936002)(66476007)(8676002)(76116006)(66946007)(66556008)(316002)(64756008)(54906003)(66446008)(52536014)(5660300002)(41300700001)(110136005)(4326008)(478600001)(186003)(9686003)(26005)(6506007)(33656002)(55016003)(38070700005)(86362001)(2906002)(38100700002)(82960400001)(122000001)(71200400001)(7696005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?JK9B0o1+hkGnzxzmSmN7byO1z8/Myit8h6ilgH1GIQ7MgaCCWJCw7ES3iP1P?=
+ =?us-ascii?Q?Ra8Ag95Uh5VlGYJx7/HtNNDm0PxsA4TwML/HaySXZ/uIg4vg5A1hMLZqOJX7?=
+ =?us-ascii?Q?zM89knLR8COSeU9yDaC+zXDKkVMQOEsHxakDwcbSjTW153DG70NIE9/GmJIT?=
+ =?us-ascii?Q?xZtF8gSSddcHCOToJnP7DtqWDMlo35b0yi75ahSqD2ElCRuatkAp5vvKwrIg?=
+ =?us-ascii?Q?KRHB+7yMb5JPWAlJ8v+Mc+4xWo7B9NH+aAEjVxiN4S8zfBuBGG2TMY8IV8OY?=
+ =?us-ascii?Q?0IfXntTMHo3SlZy//4O3MBQpw5SkPpSQ6dDGQ+fFAp4BWlUScOM1O4zYnXl7?=
+ =?us-ascii?Q?ZsSqjUrOqynxS7Dhs4U4uTJPKIu/D8lXluQr7cwT4rR8JWeV/0il1zW1Jg9b?=
+ =?us-ascii?Q?XcV4BNuDrNSLeVKCr6LeLcOfuK85qPAYky/3oi2IAiJhfGjrw3mMvJPN2M1w?=
+ =?us-ascii?Q?gszb93elM30V4jMAxYjHTGlUORCZMHeM3+US6G60UyLlgAPfIM1mxA7OpW74?=
+ =?us-ascii?Q?niidqhslQD0FTQrtQAHurPpEsaMk8ZzNlKv7Ru0WvUPJeuw+aNOBbzIc6Ocd?=
+ =?us-ascii?Q?Y474UqbOXBXhZMY3dYBThyxH96lTXvIKViXUIBSHukymlEANOqgX9NMgNP0w?=
+ =?us-ascii?Q?rENN7OJhGw4OjTkBknfhQw23391OS/Jz6kYO/6/oWi0TEfbkxjKo0jOn4Eju?=
+ =?us-ascii?Q?5R9bgU9Q+gDg+hI2yF4O4icXMt+BQhQmi9PuMHTcX/FDtDUvz0ldbf/b9z+d?=
+ =?us-ascii?Q?lOtMj6Ief2df11hK8g7W4XuleGvoggIHFEuN8JANseMdGjb0NVaAcKB9fD9C?=
+ =?us-ascii?Q?2lFhTTyw+lvLU6IvZiFJH4FU9Z+ka0GTJxu7EHE8LPd6qaWx9YuPPs4M1QdL?=
+ =?us-ascii?Q?OIspCf7UEYEMjnz7Q02l3u0zRxzRUasYw4tnIM3QvJH4wFDyMF/tYgKe4J2j?=
+ =?us-ascii?Q?hl6bkDjj46czjv+nSzlwkj72yR5UjeMd6RQYm4mmpNry5uIBDvGnq8uqmFlc?=
+ =?us-ascii?Q?AOByF+t4zIKreMApEu02BlhB71qXfOr+v+mMb7DEr1ufo5fgdZ3Fn9G875Co?=
+ =?us-ascii?Q?0k5myx5CJPxmu3Lt9JeVhIKBuINjmPWbcY1HWbR+zElVDW4SAM0846nnoZ5+?=
+ =?us-ascii?Q?JvwVSAeqfIZ5rrDUdLolSahfuJo+bKHs9/osymIOJW1DX6W+lSGOnguURBx8?=
+ =?us-ascii?Q?fmf9pIxTfjBMoj12P2/TldL+Esi/4o0SdYRyA9X7KJ1Y4rEDmvJknK36MbpK?=
+ =?us-ascii?Q?KSrxc3tr7Df5WrC9AWBSjcrcG1yw1NB9+cpfnxWsPfW1T3bhQXWLXpF5TmLC?=
+ =?us-ascii?Q?AUrCDlb7ghaTnt0b2xsOheD0fGuezRDz7h5wFwwNxQTtFmp5Jc6oHJQLezs4?=
+ =?us-ascii?Q?X2sMFLG6Rf4oQIi8Wh2gSuK4+3pUHckmzFxPoaSkZ75GvhDL2L9shhzuWXpj?=
+ =?us-ascii?Q?gQzS57sOV0DyR+60Th5ix92XZXpOcXbbo1rFiup3aQKkr7EkqgPXR+GDXZb9?=
+ =?us-ascii?Q?Qg2UHuBNjvL5G5fBj3fla1S3g41ALBKkCp8I2rZgdQrGYwtPglw2WwmRkFMb?=
+ =?us-ascii?Q?ABSdlf0aNXm8nGTOvqYd0Ov6i/SLFRl58FSoWTuU?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 95e60462-b360-4c71-35df-08db0b066860
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Feb 2023 01:30:35.1745
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: T/7Hx1BiJRBJ2MuxAoNtADtgZJAG9oRwHqC2bofI7/VBWisajengfNWfOXKBh89VgZfLL8N8zYTDJRaBnCXgiQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5462
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> Sent: Friday, February 10, 2023 5:29 AM
+>=20
+> On platforms that do not support IOMMU Extended capability bit 0
+> Page-walk Coherency, CPU caches are not snooped when IOMMU is
+> accessing
+> any translation structures. IOMMU access goes only directly to
+> memory. Intel IOMMU code was missing a flush for the PASID table
+> directory that resulted in the unrecoverable fault as shown below.
+>=20
+> This patch adds clflush calls whenever allocating and updating
+> a PASID table directory to ensure cache coherency.
+>=20
+> On the reverse direction, there's no need to clflush the PASID directory
+> pointer when we deactivate a context entry in that IOMMU hardware will
+> not see the old PASID directory pointer after we clear the context entry.
+> PASID directory entries are also never freed once allocated.
+>=20
+> [    0.555386] DMAR: DRHD: handling fault status reg 3
+> [    0.555805] DMAR: [DMA Read NO_PASID] Request device [00:0d.2] fault
+> addr 0x1026a4000 [fault reason 0x51] SM: Present bit in Directory Entry i=
+s
+> clear
+> [    0.556348] DMAR: Dump dmar1 table entries for IOVA 0x1026a4000
+> [    0.556348] DMAR: scalable mode root entry: hi 0x0000000102448001, low
+> 0x0000000101b3e001
+> [    0.556348] DMAR: context entry: hi 0x0000000000000000, low
+> 0x0000000101b4d401
+> [    0.556348] DMAR: pasid dir entry: 0x0000000101b4e001
+> [    0.556348] DMAR: pasid table entry[0]: 0x0000000000000109
+> [    0.556348] DMAR: pasid table entry[1]: 0x0000000000000001
+> [    0.556348] DMAR: pasid table entry[2]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[3]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[4]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[5]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[6]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[7]: 0x0000000000000000
+> [    0.556348] DMAR: PTE not present at level 4
+>=20
+> Cc: <stable@vger.kernel.org>
+> Fixes: 0bbeb01a4faf ("iommu/vt-d: Manage scalalble mode PASID tables")
+> Reported-by: Sukumar Ghorai <sukumar.ghorai@intel.com>
+> Signed-off-by: Ashok Raj <ashok.raj@intel.com>
+> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
 
-Add a function test_unmerge_zero_page() to test the functionality on
-unsharing and counting ksm-placed zero pages and counting of this patch
-series.
-
-test_unmerge_zero_page() actually contains three subjct test objects:
-	1) whether the count of ksm zero page can react correctly to cow
-	   (copy on write);
-	2) whether the count of ksm zero page can react correctly to unmerge;
-	3) whether ksm zero pages are really unmerged.
-
-Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
-Reviewed-by: Xiaokai Ran <ran.xiaokai@zte.com.cn>
-Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
-
-v5->v6:
-According to David's suggestions, the following changes are made:
-1) Rename check_ksm_zero_pages_count() -> ksm_get_zero_pages(), and do the
-   comparison outside.
-2) Open all global fd from main() rather than the test case.
-3) Remove COW-related test codes and focus on explicit unmerging here.
-4) Add some coments to explain why wait_two_full_scans is required.
-5) Clean up some unneed changes.
-
-v4->v5:
-fix error of "} while (end_scans < start_scans + 20);" to
-"} while (end_scans < start_scans + 2);" in wait_two_full_scans().
----
- tools/testing/selftests/vm/ksm_functional_tests.c | 96 ++++++++++++++++++++++-
- 1 file changed, 92 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/vm/ksm_functional_tests.c b/tools/testing/selftests/vm/ksm_functional_tests.c
-index b11b7e5115dc..3033cd6ed3b4 100644
---- a/tools/testing/selftests/vm/ksm_functional_tests.c
-+++ b/tools/testing/selftests/vm/ksm_functional_tests.c
-@@ -24,9 +24,12 @@
-
- #define KiB 1024u
- #define MiB (1024 * KiB)
-+#define PageSize (4 * KiB)
-
- static int ksm_fd;
- static int ksm_full_scans_fd;
-+static int ksm_zero_pages_fd;
-+static int ksm_use_zero_pages_fd;
- static int pagemap_fd;
- static size_t pagesize;
-
-@@ -57,6 +60,21 @@ static bool range_maps_duplicates(char *addr, unsigned long size)
- 	return false;
- }
-
-+static long ksm_get_zero_pages(void)
-+{
-+	char buf[20];
-+	ssize_t read_size;
-+	unsigned long ksm_zero_pages;
-+
-+	read_size = pread(ksm_zero_pages_fd, buf, sizeof(buf) - 1, 0);
-+	if (read_size < 0)
-+		return -errno;
-+	buf[read_size] = 0;
-+	ksm_zero_pages = strtol(buf, NULL, 10);
-+
-+	return ksm_zero_pages;
-+}
-+
- static long ksm_get_full_scans(void)
- {
- 	char buf[10];
-@@ -70,15 +88,12 @@ static long ksm_get_full_scans(void)
- 	return strtol(buf, NULL, 10);
- }
-
--static int ksm_merge(void)
-+static int wait_two_full_scans(void)
- {
- 	long start_scans, end_scans;
-
--	/* Wait for two full scans such that any possible merging happened. */
- 	start_scans = ksm_get_full_scans();
- 	if (start_scans < 0)
--		return start_scans;
--	if (write(ksm_fd, "1", 1) != 1)
- 		return -errno;
- 	do {
- 		end_scans = ksm_get_full_scans();
-@@ -89,6 +104,34 @@ static int ksm_merge(void)
- 	return 0;
- }
-
-+static inline int ksm_merge(void)
-+{
-+	/* Wait for two full scans such that any possible merging happened. */
-+	if (write(ksm_fd, "1", 1) != 1)
-+		return -errno;
-+
-+	return wait_two_full_scans();
-+}
-+
-+static int unmerge_zero_page(char *start, unsigned long size)
-+{
-+	int ret;
-+
-+	ret = madvise(start, size, MADV_UNMERGEABLE);
-+	if (ret) {
-+		ksft_test_result_fail("MADV_UNMERGEABLE failed\n");
-+		return ret;
-+	}
-+
-+	/*
-+	 * Wait for two full scans such that any possible unmerging of zero
-+	 * pages happened. Why? Because the unmerge action of zero pages is not
-+	 * done in the context of madvise(), but in the context of
-+	 * unshare_zero_pages() of the ksmd thread.
-+	 */
-+	return wait_two_full_scans();
-+}
-+
- static char *mmap_and_merge_range(char val, unsigned long size)
- {
- 	char *map;
-@@ -146,6 +189,48 @@ static void test_unmerge(void)
- 	munmap(map, size);
- }
-
-+static void test_unmerge_zero_pages(void)
-+{
-+	const unsigned int size = 2 * MiB;
-+	char *map;
-+	unsigned long pages_expected;
-+
-+	ksft_print_msg("[RUN] %s\n", __func__);
-+
-+	/* Confirm the interfaces*/
-+	if (ksm_zero_pages_fd < 0) {
-+		ksft_test_result_skip("open(\"/sys/kernel/mm/ksm/zero_pages_sharing\") failed\n");
-+		return;
-+	}
-+	if (ksm_use_zero_pages_fd < 0) {
-+		ksft_test_result_skip("open \"/sys/kernel/mm/ksm/use_zero_pages\" failed\n");
-+		return;
-+	}
-+	if (write(ksm_use_zero_pages_fd, "1", 1) != 1) {
-+		ksft_test_result_skip("write \"/sys/kernel/mm/ksm/use_zero_pages\" failed\n");
-+		return;
-+	}
-+
-+	/* Mmap zero pages*/
-+	map = mmap_and_merge_range(0x00, size);
-+	if (map == MAP_FAILED)
-+		return;
-+
-+	if (unmerge_zero_page(map + size / 2, size / 2))
-+		goto unmap;
-+
-+	/* Check if zero_pages_sharing can be update correctly when unmerge */
-+	pages_expected = (size / 2) / PageSize;
-+	ksft_test_result(pages_expected == ksm_get_zero_pages(),
-+						"zero page count react to unmerge\n");
-+
-+	/* Check if ksm zero pages are really unmerged */
-+	ksft_test_result(!range_maps_duplicates(map + size / 2, size / 2),
-+						"KSM zero pages were unmerged\n");
-+unmap:
-+	munmap(map, size);
-+}
-+
- static void test_unmerge_discarded(void)
- {
- 	const unsigned int size = 2 * MiB;
-@@ -264,8 +349,11 @@ int main(int argc, char **argv)
- 	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
- 	if (pagemap_fd < 0)
- 		ksft_exit_skip("open(\"/proc/self/pagemap\") failed\n");
-+	ksm_zero_pages_fd = open("/sys/kernel/mm/ksm/zero_pages_sharing", O_RDONLY);
-+	ksm_use_zero_pages_fd = open("/sys/kernel/mm/ksm/use_zero_pages", O_RDWR);
-
- 	test_unmerge();
-+	test_unmerge_zero_pages();
- 	test_unmerge_discarded();
- #ifdef __NR_userfaultfd
- 	test_unmerge_uffd_wp();
--- 
-2.15.2
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
