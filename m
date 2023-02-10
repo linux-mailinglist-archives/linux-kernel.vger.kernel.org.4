@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6566916C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 03:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C3F06916C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 03:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbjBJCmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 21:42:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38974 "EHLO
+        id S230045AbjBJCn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 21:43:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbjBJCms (ORCPT
+        with ESMTP id S229940AbjBJCn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 21:42:48 -0500
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0EB70956
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 18:42:44 -0800 (PST)
-Received: by mail-vk1-xa32.google.com with SMTP id v5so1989407vkc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 18:42:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=52xSp5wmYAd5hFLJ9WZGw8pChWVD+OAjWtck6oN5dzs=;
-        b=U1fCU9dL7zEQQUng1tf5EwsK3VWDYVsNNyBj39FW19d1Mr7MMWDk3X92i8GTR2E/v0
-         47ufcXPTM+wllgKMkSh+S1EEpjBhwtLcJgqOur9mlxYBGhCpe05yzGcH6VqrQwTPoLAV
-         Rt9ONCKI6fv1m3JL4fhZrhRxitGMBVxaGnuHE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=52xSp5wmYAd5hFLJ9WZGw8pChWVD+OAjWtck6oN5dzs=;
-        b=vSnlupdQ+VrsOjgeucaYAAOwNdRSUbSWXVRUU/w+pG4ivFEvd1DXYcUoKINQ4D4qMa
-         IBzy/Tyrtso/tcPjqXAdfSKmtKsj68lKQIWWS3dDiWnVH9tHJPInao3NdkPhpnIr14Px
-         Aga6WbB+LJHXcoFSTwfDYTdIJh6VmhS4H/HvjnLrfz3W/H4uG8KpFv8/vpBqu4XD15wJ
-         uJve81ZeiSRGRBHSrYnnMsWFWFVZzvrLOKFJzQD6wPT4F9I7LZ/ZDPLeISy1bT1SUcSw
-         +/YeNa5FQtJYdhhNZhN4QW/ILPx9TgPxbsRaqpmYZCsJ3srFQ7rlmN6WB2WNwJVFcC4T
-         5lxw==
-X-Gm-Message-State: AO0yUKUSge89PptS13QfclxKUDaev3Z8zLLnQwUdJzr7OVs+7NPVDpfe
-        yiYQ1TiVmmC/oMHwIz5Toict6TZ1X2Q01+CZIVBXSAmrdrNisxK2
-X-Google-Smtp-Source: AK7set/pFESZTcCKGsksw48p4w49A2qXmUP7rMlB1Od7HUbkX1rQ/0T8voev8FHMMturLnSAI+My622kXRWl2w49i/E=
-X-Received: by 2002:a1f:f242:0:b0:400:db86:64de with SMTP id
- q63-20020a1ff242000000b00400db8664demr2812373vkh.22.1675996964119; Thu, 09
- Feb 2023 18:42:44 -0800 (PST)
+        Thu, 9 Feb 2023 21:43:56 -0500
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD98670955
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 18:43:53 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VbICT0J_1675997026;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VbICT0J_1675997026)
+          by smtp.aliyun-inc.com;
+          Fri, 10 Feb 2023 10:43:51 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     alexander.deucher@amd.com
+Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] drm/amd/display: Remove the unused variable pre_connection_type
+Date:   Fri, 10 Feb 2023 10:43:43 +0800
+Message-Id: <20230210024343.26220-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-References: <20230209160357.19307-1-matthias.bgg@kernel.org> <20230209160357.19307-3-matthias.bgg@kernel.org>
-In-Reply-To: <20230209160357.19307-3-matthias.bgg@kernel.org>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 10 Feb 2023 10:42:32 +0800
-Message-ID: <CAGXv+5HjnP6DC9RV9MUSatyuD0S64K+=kafifFJqYgOhSWu02Q@mail.gmail.com>
-Subject: Re: [PATCH v1 3/4] arm64: dts: mt8195: Align vppsys node to dtschema
-To:     matthias.bgg@kernel.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        angelogioacchino.delregno@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 12:04 AM <matthias.bgg@kernel.org> wrote:
->
-> From: Matthias Brugger <matthias.bgg@gmail.com>
->
-> As the node is a syscon, this has to be reflected in the compatible and
-> the node name.
->
-> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+Variable pre_connection_type is not effectively used, so delete it.
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4031
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/gpu/drm/amd/display/dc/link/link_detection.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/display/dc/link/link_detection.c b/drivers/gpu/drm/amd/display/dc/link/link_detection.c
+index 63e75c392031..d224a44c4cc8 100644
+--- a/drivers/gpu/drm/amd/display/dc/link/link_detection.c
++++ b/drivers/gpu/drm/amd/display/dc/link/link_detection.c
+@@ -886,7 +886,6 @@ static bool detect_link_and_local_sink(struct dc_link *link,
+ 	struct dc_sink *prev_sink = NULL;
+ 	struct dpcd_caps prev_dpcd_caps;
+ 	enum dc_connection_type new_connection_type = dc_connection_none;
+-	enum dc_connection_type pre_connection_type = dc_connection_none;
+ 	const uint32_t post_oui_delay = 30; // 30ms
+ 
+ 	DC_LOGGER_INIT(link->ctx->logger);
+@@ -923,7 +922,6 @@ static bool detect_link_and_local_sink(struct dc_link *link,
+ 
+ 	link_disconnect_sink(link);
+ 	if (new_connection_type != dc_connection_none) {
+-		pre_connection_type = link->type;
+ 		link->type = new_connection_type;
+ 		link->link_state_valid = false;
+ 
+-- 
+2.20.1.7.g153144c
+
