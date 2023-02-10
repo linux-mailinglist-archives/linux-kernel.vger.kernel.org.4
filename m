@@ -2,295 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C64B0691F7E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 14:05:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FB1691F84
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 14:06:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231839AbjBJNE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 08:04:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
+        id S232125AbjBJNG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 08:06:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232157AbjBJNEq (ORCPT
+        with ESMTP id S231685AbjBJNG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 08:04:46 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E3A77173
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 05:04:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676034278; x=1707570278;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2YW80PS3Bh3uAHNbUoOReqzNUxBDFcUI/sm0Pj2KQPE=;
-  b=g9Bmw0MM3UpIwZEzGbtL2OT1O+TGymfJI+rHQvty8ORfDzyUu7tV8LkV
-   65nr2KYUUyyr13hL3lYfwrTdLJXIqdZmG0J6HaaOC04GXcB7cHKWxTyAD
-   seYwhbi0Bmlia3pwDYje5jLUbsxYX425qVCtgiFGQLW/66tAI81yHx2eT
-   gIoxyh/uPDpmXqjN7dkKTgFqz2G9WCRVtZRVs1j8NYQ9v37qMFO5Mly/J
-   ugNW/PNrsiFjNkpEU4KrSx5pbF1m8gsUHdYRvP7HJV9nHjiY/8hNodfLO
-   Nodg/V416E8GZ0NmwCGehQw7cu6GqThHrYBZq9DjZKZ7auwNxJuLiHpBz
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="416641514"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="416641514"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 05:04:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="736733818"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="736733818"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 10 Feb 2023 05:04:36 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pQT4t-0005oH-17;
-        Fri, 10 Feb 2023 13:04:35 +0000
-Date:   Fri, 10 Feb 2023 21:03:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>
-Subject: drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse: sparse:
- incorrect type in argument 1 (different address spaces)
-Message-ID: <202302102118.tECqZv4B-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 10 Feb 2023 08:06:27 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223E47AE11;
+        Fri, 10 Feb 2023 05:06:11 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31ACtYDD018947;
+        Fri, 10 Feb 2023 13:05:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=RMH9PfxrEZmXBs5HlCWUIj1nqHeW1n/Z8WQHJeUWOqg=;
+ b=nMt2jStB/RyQux4u1Jx1XzrM4NLw3uCBkSDZCIp2aNgoNfJ4pGeT1Y/kk078Byp90BnV
+ yUgF7S/5cMzap2aA0R9smC6uVk2S1F1jAjDTJxbDGTOK7GCOJvg2MeCm96kEFBsLtR5y
+ t4y3BnORfZzeRx+t/1fqPI0ntbAF8ngd9nRPCAy3rbfIqbRAozNJZzP7YaCX+53QAb7D
+ owd8RK9BPnecBwXbYsrmQdYh4qjvPyEU5dRyTu88TVP1z0N7gUlU+k597c43icFZdViX
+ fY0ZvR26BmwTpvxds9r8vlapHfeIQp5EoyTfcxPV+q2fm0djdc7zOAdAhEPuzHKxadpU vA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnpc0ga0v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Feb 2023 13:05:28 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31ACu6NA020617;
+        Fri, 10 Feb 2023 13:05:27 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnpc0g9xx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Feb 2023 13:05:27 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31ACCrSX001971;
+        Fri, 10 Feb 2023 13:05:25 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3nhf07xsp3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Feb 2023 13:05:25 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31AD5Ouf56754632
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Feb 2023 13:05:24 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3D1F95803F;
+        Fri, 10 Feb 2023 13:05:24 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BAA9D58060;
+        Fri, 10 Feb 2023 13:05:22 +0000 (GMT)
+Received: from sig-9-77-142-160.ibm.com (unknown [9.77.142.160])
+        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 10 Feb 2023 13:05:22 +0000 (GMT)
+Message-ID: <4bda209dfc891ac9044ce847785c383e89f14f97.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 6/6] integrity: machine keyring CA configuration
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>, jarkko@kernel.org,
+        dhowells@redhat.com, dwmw2@infradead.org
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, pvorel@suse.cz, tadeusz.struk@intel.com,
+        kanth.ghatraju@oracle.com, konrad.wilk@oracle.com,
+        erpalmer@linux.vnet.ibm.com, coxu@redhat.com,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Fri, 10 Feb 2023 08:05:22 -0500
+In-Reply-To: <20230207025958.974056-7-eric.snowberg@oracle.com>
+References: <20230207025958.974056-1-eric.snowberg@oracle.com>
+         <20230207025958.974056-7-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: iRVp5qk64i13A31hNdiBJVZrE8vj_KXY
+X-Proofpoint-GUID: x5mR7gi2FFWd4BNQqSF3zFvhIVEUIIbL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-10_07,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=999 spamscore=0 clxscore=1015 phishscore=0
+ mlxscore=0 impostorscore=0 adultscore=0 malwarescore=0 priorityscore=1501
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302100108
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   38c1e0c65865426676123cc9a127526fa02bcac6
-commit: b3ed524f84f573ece1aa2f26e9db3c34a593e0d1 drm/msm: allow compile_test on !ARM
-date:   1 year, 4 months ago
-config: mips-randconfig-s043-20221204 (https://download.01.org/0day-ci/archive/20230210/202302102118.tECqZv4B-lkp@intel.com/config)
-compiler: mips64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b3ed524f84f573ece1aa2f26e9db3c34a593e0d1
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b3ed524f84f573ece1aa2f26e9db3c34a593e0d1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/drm/msm/
+Hi Eric,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302102118.tECqZv4B-lkp@intel.com/
+On Mon, 2023-02-06 at 21:59 -0500, Eric Snowberg wrote:
+> Add a machine keyring CA restriction menu option to control the type of
+> keys that may be added to it. The options include none, min and max
+> restrictions.
+> 
+> When no restrictions are selected, all Machine Owner Keys (MOK) are added
+> to the machine keyring.  When CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MIN is
+> selected, the CA bit must be true.  Also the key usage must contain
+> keyCertSign, any other usage field may be set as well.
+> 
+> When CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MAX is selected, the CA bit must
+> be true. Also the key usage must contain keyCertSign and the
+> digitialSignature usage may not be set.
+> 
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse:     got void *
->> drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_hfi.c: note: in included file:
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.h:98:44: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.h:98:44: sparse:     expected void [noderef] __iomem *addr
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.h:98:44: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.h:98:34: sparse: sparse: dereference of noderef expression
-   drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse: sparse: dereference of noderef expression
-   drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse: sparse: dereference of noderef expression
-   drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse: sparse: dereference of noderef expression
-   drivers/gpu/drm/msm/adreno/a6xx_hfi.c:104:15: sparse: sparse: dereference of noderef expression
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.h:98:44: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.h:98:44: sparse:     expected void [noderef] __iomem *addr
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.h:98:44: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.h:98:34: sparse: sparse: dereference of noderef expression
---
->> drivers/gpu/drm/msm/adreno/a6xx_gmu.c:224:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:224:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:224:15: sparse:     got void *
->> drivers/gpu/drm/msm/adreno/a6xx_gmu.c:224:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:224:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:224:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:240:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:240:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:240:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:240:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:240:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:240:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:320:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:320:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:320:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:320:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:320:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:320:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:362:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:362:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:362:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:362:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:362:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:362:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:387:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:387:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:387:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:387:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:387:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:387:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:460:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:460:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:460:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:460:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:460:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:460:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:467:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:467:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:467:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:467:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:467:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:467:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:493:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:493:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:493:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:493:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:493:15: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:493:15: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1412:31: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1412:31: sparse:     expected void [noderef] __iomem *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1412:31: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1418:31: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1418:31: sparse:     expected void [noderef] __iomem *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1418:31: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:858:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:858:9: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:858:9: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:858:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:858:9: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:858:9: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:860:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:860:9: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:860:9: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:860:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:860:9: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:860:9: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:862:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:862:9: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:862:9: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:862:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:862:9: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:862:9: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:864:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:864:9: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:864:9: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:864:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:864:9: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:864:9: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1066:23: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1066:23: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1066:23: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1066:23: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *mem @@     got void * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1066:23: sparse:     expected void const volatile [noderef] __iomem *mem
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1066:23: sparse:     got void *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1458:20: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void *[noderef] mmio @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1458:20: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1458:20: sparse:     got void *[noderef] mmio
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1460:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void *[noderef] rscc @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1460:28: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1460:28: sparse:     got void *[noderef] rscc
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1560:19: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *[noderef] mmio @@     got void [noderef] __iomem * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1560:19: sparse:     expected void *[noderef] mmio
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1560:19: sparse:     got void [noderef] __iomem *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1567:27: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *[noderef] rscc @@     got void [noderef] __iomem * @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1567:27: sparse:     expected void *[noderef] rscc
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1567:27: sparse:     got void [noderef] __iomem *
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1598:20: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void *[noderef] mmio @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1598:20: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1598:20: sparse:     got void *[noderef] mmio
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1600:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void *[noderef] rscc @@
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1600:28: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c:1600:28: sparse:     got void *[noderef] rscc
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.c: note: in included file (through drivers/gpu/drm/msm/adreno/a6xx_gpu.h):
-   drivers/gpu/drm/msm/adreno/a6xx_gmu.h:93:36: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const [noderef] __iomem *addr @@     got void * @@
+Missing from the patch description is the motivation for this change.  
+The choices none, min, max implies a progression, which is good, and
+the technical differences between the choices, but not the reason.
 
-vim +104 drivers/gpu/drm/msm/adreno/a6xx_hfi.c
+The motivation, at least from my perspective, is separation of
+certificate signing from code signing keys, where "none" is no
+separation and "max" being total separation of keys based on usage.
 
-4b565ca5a2cbbb Jordan Crouse  2018-08-06   95  
-df0dff13290597 Jordan Crouse  2018-09-20   96  static int a6xx_hfi_wait_for_ack(struct a6xx_gmu *gmu, u32 id, u32 seqnum,
-df0dff13290597 Jordan Crouse  2018-09-20   97  		u32 *payload, u32 payload_size)
-df0dff13290597 Jordan Crouse  2018-09-20   98  {
-df0dff13290597 Jordan Crouse  2018-09-20   99  	struct a6xx_hfi_queue *queue = &gmu->queues[HFI_RESPONSE_QUEUE];
-df0dff13290597 Jordan Crouse  2018-09-20  100  	u32 val;
-df0dff13290597 Jordan Crouse  2018-09-20  101  	int ret;
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  102  
-df0dff13290597 Jordan Crouse  2018-09-20  103  	/* Wait for a response */
-df0dff13290597 Jordan Crouse  2018-09-20 @104  	ret = gmu_poll_timeout(gmu, REG_A6XX_GMU_GMU2HOST_INTR_INFO, val,
-df0dff13290597 Jordan Crouse  2018-09-20  105  		val & A6XX_GMU_GMU2HOST_INTR_INFO_MSGQ, 100, 5000);
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  106  
-df0dff13290597 Jordan Crouse  2018-09-20  107  	if (ret) {
-6a41da17e87dee Mamta Shukla   2018-10-20  108  		DRM_DEV_ERROR(gmu->dev,
-df0dff13290597 Jordan Crouse  2018-09-20  109  			"Message %s id %d timed out waiting for response\n",
-df0dff13290597 Jordan Crouse  2018-09-20  110  			a6xx_hfi_msg_id[id], seqnum);
-df0dff13290597 Jordan Crouse  2018-09-20  111  		return -ETIMEDOUT;
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  112  	}
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  113  
-df0dff13290597 Jordan Crouse  2018-09-20  114  	/* Clear the interrupt */
-df0dff13290597 Jordan Crouse  2018-09-20  115  	gmu_write(gmu, REG_A6XX_GMU_GMU2HOST_INTR_CLR,
-df0dff13290597 Jordan Crouse  2018-09-20  116  		A6XX_GMU_GMU2HOST_INTR_INFO_MSGQ);
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  117  
-df0dff13290597 Jordan Crouse  2018-09-20  118  	for (;;) {
-df0dff13290597 Jordan Crouse  2018-09-20  119  		struct a6xx_hfi_msg_response resp;
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  120  
-df0dff13290597 Jordan Crouse  2018-09-20  121  		/* Get the next packet */
-8167e6fa76c8f7 Jonathan Marek 2020-04-23  122  		ret = a6xx_hfi_queue_read(gmu, queue, (u32 *) &resp,
-df0dff13290597 Jordan Crouse  2018-09-20  123  			sizeof(resp) >> 2);
-df0dff13290597 Jordan Crouse  2018-09-20  124  
-df0dff13290597 Jordan Crouse  2018-09-20  125  		/* If the queue is empty our response never made it */
-df0dff13290597 Jordan Crouse  2018-09-20  126  		if (!ret) {
-6a41da17e87dee Mamta Shukla   2018-10-20  127  			DRM_DEV_ERROR(gmu->dev,
-df0dff13290597 Jordan Crouse  2018-09-20  128  				"The HFI response queue is unexpectedly empty\n");
-df0dff13290597 Jordan Crouse  2018-09-20  129  
-df0dff13290597 Jordan Crouse  2018-09-20  130  			return -ENOENT;
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  131  		}
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  132  
-df0dff13290597 Jordan Crouse  2018-09-20  133  		if (HFI_HEADER_ID(resp.header) == HFI_F2H_MSG_ERROR) {
-df0dff13290597 Jordan Crouse  2018-09-20  134  			struct a6xx_hfi_msg_error *error =
-df0dff13290597 Jordan Crouse  2018-09-20  135  				(struct a6xx_hfi_msg_error *) &resp;
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  136  
-6a41da17e87dee Mamta Shukla   2018-10-20  137  			DRM_DEV_ERROR(gmu->dev, "GMU firmware error %d\n",
-df0dff13290597 Jordan Crouse  2018-09-20  138  				error->code);
-df0dff13290597 Jordan Crouse  2018-09-20  139  			continue;
-df0dff13290597 Jordan Crouse  2018-09-20  140  		}
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  141  
-df0dff13290597 Jordan Crouse  2018-09-20  142  		if (seqnum != HFI_HEADER_SEQNUM(resp.ret_header)) {
-6a41da17e87dee Mamta Shukla   2018-10-20  143  			DRM_DEV_ERROR(gmu->dev,
-df0dff13290597 Jordan Crouse  2018-09-20  144  				"Unexpected message id %d on the response queue\n",
-df0dff13290597 Jordan Crouse  2018-09-20  145  				HFI_HEADER_SEQNUM(resp.ret_header));
-df0dff13290597 Jordan Crouse  2018-09-20  146  			continue;
-df0dff13290597 Jordan Crouse  2018-09-20  147  		}
-df0dff13290597 Jordan Crouse  2018-09-20  148  
-df0dff13290597 Jordan Crouse  2018-09-20  149  		if (resp.error) {
-6a41da17e87dee Mamta Shukla   2018-10-20  150  			DRM_DEV_ERROR(gmu->dev,
-df0dff13290597 Jordan Crouse  2018-09-20  151  				"Message %s id %d returned error %d\n",
-df0dff13290597 Jordan Crouse  2018-09-20  152  				a6xx_hfi_msg_id[id], seqnum, resp.error);
-df0dff13290597 Jordan Crouse  2018-09-20  153  			return -EINVAL;
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  154  		}
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  155  
-df0dff13290597 Jordan Crouse  2018-09-20  156  		/* All is well, copy over the buffer */
-df0dff13290597 Jordan Crouse  2018-09-20  157  		if (payload && payload_size)
-df0dff13290597 Jordan Crouse  2018-09-20  158  			memcpy(payload, resp.payload,
-df0dff13290597 Jordan Crouse  2018-09-20  159  				min_t(u32, payload_size, sizeof(resp.payload)));
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  160  
-df0dff13290597 Jordan Crouse  2018-09-20  161  		return 0;
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  162  	}
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  163  }
-4b565ca5a2cbbb Jordan Crouse  2018-08-06  164  
+Subsequent work, as discussed in the cover letter thread, will limit
+certificates being loaded onto the IMA keyring to code signing keys
+used for signature verification.
 
-:::::: The code at line 104 was first introduced by commit
-:::::: df0dff132905974697e2a19aa8bcc0ecc447c00e drm/msm/a6xx: Poll for HFI responses
+thanks,
 
-:::::: TO: Jordan Crouse <jcrouse@codeaurora.org>
-:::::: CC: Rob Clark <robdclark@gmail.com>
+Mimi
+> ---
+>  crypto/asymmetric_keys/restrict.c |  2 ++
+>  security/integrity/Kconfig        | 39 ++++++++++++++++++++++++++++++-
+>  security/integrity/digsig.c       |  8 +++++--
+>  3 files changed, 46 insertions(+), 3 deletions(-)
+> 
+> diff --git a/crypto/asymmetric_keys/restrict.c b/crypto/asymmetric_keys/restrict.c
+> index 48457c6f33f9..633021ea7901 100644
+> --- a/crypto/asymmetric_keys/restrict.c
+> +++ b/crypto/asymmetric_keys/restrict.c
+> @@ -140,6 +140,8 @@ int restrict_link_by_ca(struct key *dest_keyring,
+>  		return -ENOKEY;
+>  	if (!test_bit(KEY_EFLAG_KEYCERTSIGN, &pkey->key_eflags))
+>  		return -ENOKEY;
+> +	if (IS_ENABLED(CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MIN))
+> +		return 0;
+>  	if (test_bit(KEY_EFLAG_DIGITALSIG, &pkey->key_eflags))
+>  		return -ENOKEY;
+>  
+> diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
+> index 599429f99f99..eba6fd59fd16 100644
+> --- a/security/integrity/Kconfig
+> +++ b/security/integrity/Kconfig
+> @@ -68,13 +68,50 @@ config INTEGRITY_MACHINE_KEYRING
+>  	depends on INTEGRITY_ASYMMETRIC_KEYS
+>  	depends on SYSTEM_BLACKLIST_KEYRING
+>  	depends on LOAD_UEFI_KEYS
+> -	depends on !IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
+>  	help
+>  	 If set, provide a keyring to which Machine Owner Keys (MOK) may
+>  	 be added. This keyring shall contain just MOK keys.  Unlike keys
+>  	 in the platform keyring, keys contained in the .machine keyring will
+>  	 be trusted within the kernel.
+>  
+> +choice
+> +	prompt "Enforce Machine Keyring CA Restrictions"
+> +	default INTEGRITY_CA_MACHINE_KEYRING_NONE
+> +	depends on INTEGRITY_MACHINE_KEYRING
+> +	help
+> +	  The .machine keyring can be configured to enforce CA restriction
+> +	  on any key added to it. The options include none, min and max
+> +	  restrictions. By default no restrictions are in place and all
+> +	  Machine Owner Keys (MOK) are added to the machine keyring.
+> +
+> +config INTEGRITY_CA_MACHINE_KEYRING_NONE
+> +	bool "No restrictions"
+> +	help
+> +	  When no restrictions are selected, all Machine Owner Keys (MOK)
+> +	  are added to the machine keyring. MOK keys do not require the
+> +	  CA bit to be set. The key usage field is ignored. This is the
+> +	  default setting.
+> +
+> +config INTEGRITY_CA_MACHINE_KEYRING_MIN
+> +	bool "Only CA keys (with or without DigitialSignature usage set)"
+> +	help
+> +	  When min is selected, only load CA keys into the machine keyring.
+> +	  The CA bit must be set along with the keyCertSign Usage field.
+> +	  Keys containing the digitialSignature Usage field will also be
+> +	  loaded. The remaining MOK keys are loaded into the .platform
+> +	  keyring.
+> +
+> +config INTEGRITY_CA_MACHINE_KEYRING_MAX
+> +	bool "Only CA keys"
+> +	help
+> +	  When max is selected, only load CA keys into the machine keyring.
+> +	  The CA bit must be set along with the keyCertSign Usage field.
+> +	  Keys containing the digitialSignature Usage field will not be
+> +	  loaded. The remaining MOK keys are loaded into the .platform
+> +	  keyring.
+> +
+> +endchoice
+> +
+>  config LOAD_UEFI_KEYS
+>         depends on INTEGRITY_PLATFORM_KEYRING
+>         depends on EFI
+> diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
+> index f2193c531f4a..3385f534f1da 100644
+> --- a/security/integrity/digsig.c
+> +++ b/security/integrity/digsig.c
+> @@ -132,7 +132,8 @@ int __init integrity_init_keyring(const unsigned int id)
+>  		| KEY_USR_READ | KEY_USR_SEARCH;
+>  
+>  	if (id == INTEGRITY_KEYRING_PLATFORM ||
+> -	    id == INTEGRITY_KEYRING_MACHINE) {
+> +	    (id == INTEGRITY_KEYRING_MACHINE &&
+> +	    IS_ENABLED(CONFIG_INTEGRITY_CA_MACHINE_KEYRING_NONE))) {
+>  		restriction = NULL;
+>  		goto out;
+>  	}
+> @@ -144,7 +145,10 @@ int __init integrity_init_keyring(const unsigned int id)
+>  	if (!restriction)
+>  		return -ENOMEM;
+>  
+> -	restriction->check = restrict_link_to_ima;
+> +	if (id == INTEGRITY_KEYRING_MACHINE)
+> +		restriction->check = restrict_link_by_ca;
+> +	else
+> +		restriction->check = restrict_link_to_ima;
+>  
+>  	/*
+>  	 * MOK keys can only be added through a read-only runtime services
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+
