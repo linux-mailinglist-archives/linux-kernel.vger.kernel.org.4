@@ -2,145 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC93692264
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:39:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA3F69226E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:40:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232785AbjBJPjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 10:39:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
+        id S232827AbjBJPj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 10:39:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232719AbjBJPjc (ORCPT
+        with ESMTP id S232413AbjBJPj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 10:39:32 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394C3552A6
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:39:31 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id a5so3693797pfv.10
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:39:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1676043570;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pvRly2U+sCgGvEcPil/n1kT1uf7hR8ywFA21WCXqph0=;
-        b=LHr06vqTRs8P6GauQb2IAyyj2ZkCyMPCqKeym+vdQ6tmf63IhA6ozHmd7HeSE6ZKpa
-         CVeOH+ZkLeuDoJrJMnILmAGq3J4hPZJjNP/eRRNuPzsxYnnBq17U6ePONEpFTLF5NJ+I
-         XYi357yRqgnULhpXYrA+DRLitUJkBd9dDwPrTsERN9pTwCyLMW/Scp2/fgIW07vUWWsD
-         AT/B3bZtSVHvdrHq1DiNa58EkvqSK4MkOnUjGXTKfcVHja7N70dZu+fJ130zNtLfJU1W
-         fMK3WTjZUXU1Z3nZ8LEN/DHZrmrU57fToE333gE9Prfbd1kJh5dz6BR96gVLygfA2eE0
-         Rk5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676043570;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pvRly2U+sCgGvEcPil/n1kT1uf7hR8ywFA21WCXqph0=;
-        b=JWuAYhj4gVHJOlGvHltGmafyi1ULBNb4RkSRxppBwl2XBd/r41zwp/J433yXubs/Dg
-         mYQZ7sZjjHW5T7zmDul2d3iIGpV/fnCgSJuuOXHQRERXun+seHGHKEpIznx0QMiVIZqU
-         MI9MbJME7DDXEJMe+aGUhAeflDc+nFvTHyRs0PNqez4WAW5+SArW+eyPPW2Q4zeKWGkF
-         NInBKFSIVhayPWKib+u+2sGZ4r68zy/Ew5d6OHusaafACW5l+szciR3ZaydS61it7OmH
-         Nnm82uVUm7oCas3FaLHbzd4qqyS1yAWHKv7Chs3KDXxTM8jJQqGwUpV+Myk6TW9ARGs7
-         nz8A==
-X-Gm-Message-State: AO0yUKW6H6WW0GyK0NQk/EeQkK9q9TpO14MjS/+Uql5lkoJgZsdvMLUC
-        qDiQ5IxpiH9ufC+XI1fBQtN2yoyLMAWd32+t7OUP
-X-Google-Smtp-Source: AK7set+wCx2QL0mp3Ry5zhoh712ELZsFVGrSVHsRG9bb1cWzRQ28Qqq5D9cm5akwetXgY83HEmq0ABlPquIPy79JaDg=
-X-Received: by 2002:a05:6a00:dd:b0:5a8:189d:b53f with SMTP id
- e29-20020a056a0000dd00b005a8189db53fmr2236320pfj.6.1676043570619; Fri, 10 Feb
- 2023 07:39:30 -0800 (PST)
+        Fri, 10 Feb 2023 10:39:56 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2085.outbound.protection.outlook.com [40.107.101.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8F155E7D;
+        Fri, 10 Feb 2023 07:39:51 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NhdWGb/GMPuyxEd4qa8L4OmBPwbqBjCsWuGgBtPX3ZT4u8om7dgq/MPKNEvbl3ZW7Af48JDi8CeAtDhDsRF0e2Mi4sxPlnlxVt9QPiPKGARiXjvHqjDZ9DunaPlixGBu6OhMQEUaduZewuKSKtaRJIDwMEBBgKKo4W6JNab3hdZ30AjHKFi386oG58xnh9KSonTp4IDA/v6j/1hfBXR6w7Tb+2MrMlrhqcdqu3ieLG1OEY311E09BUXbojreL93oj9dCFKveEIDgtdIyPm1EbpMxv4ZQVk1M3cs44wXZmdCB0DsdPsGnlur2kxJrVmfxmoD+Y6ay1HkCiKmoZkntvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3DVFrzdlyWoHDzlyLn5beb9p2OpQlD5M1eD1VKnFWrU=;
+ b=Pa7fEQeHMwTUXktERIlCv6zdczXWRQDUwX6Dyf7z3hhZ8SU1fFhAqBBqUoJqDqqdLB6cdMwjhK4dYIp4bO3+P4WXPvOQlObK9URu9kEcopNkdzGSQbUCJWXaBKABVU2o6XHB54AuiPvkKXT2clfwKBHI8cLR7Qr2rMbnOopNEoA7U7UK6cdI3uHVhy7bBzBZzS4gforE3KA3HjvFAvXxxmQ8n/Oj4sULGC7hoTc8uFVrQFAz/Ga5ZYAIS19LAm6DpfBLgN6SW1+ImP5JUHJKJXAfZepC3bYRJbHc8n29VCtY6txriPr5bMHJWJbcYv7AwmhUx8J6ZUyAFfhQpAfqQQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3DVFrzdlyWoHDzlyLn5beb9p2OpQlD5M1eD1VKnFWrU=;
+ b=nPonsyrwL6HTuI22W0SQLzzEP3CK8ATCDnmN2XYCI2u6DG6coKYs0bc0f+C01gc1uLHB2gDvvXSiKsNEBRAHOvRY5b7edRxrzBMLOKPCMKpe36V5CaxbaZH5IB8+BvWx2bduF6dq4/H/jOY5175gIX/PN8/gNlk+qBdeQzOWp2PoM9UGyqEeKRoGpivMis8GHn324pGGWFxxco6qQ3t9Xnki/ukoxzv8fisiOKVhfdnsP95Ml9rWDWT2Ds8fMC0TX6VhFZrg7dxKOm0MgO94Z5HZlWrXnxCS4LwNrRYIXdO9x1UAxs65rPGWoC0aA+h6poanaAHgxzCaz8TbHj/PjQ==
+Received: from BN8PR15CA0067.namprd15.prod.outlook.com (2603:10b6:408:80::44)
+ by SN7PR12MB7451.namprd12.prod.outlook.com (2603:10b6:806:29b::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.21; Fri, 10 Feb
+ 2023 15:39:49 +0000
+Received: from BN8NAM11FT050.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:80:cafe::61) by BN8PR15CA0067.outlook.office365.com
+ (2603:10b6:408:80::44) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.21 via Frontend
+ Transport; Fri, 10 Feb 2023 15:39:49 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ BN8NAM11FT050.mail.protection.outlook.com (10.13.177.5) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6086.21 via Frontend Transport; Fri, 10 Feb 2023 15:39:49 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 10 Feb
+ 2023 07:39:46 -0800
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Fri, 10 Feb 2023 07:39:45 -0800
+Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server id 15.2.986.36 via Frontend
+ Transport; Fri, 10 Feb 2023 07:39:45 -0800
+From:   Asmaa Mnebhi <asmaa@nvidia.com>
+To:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>
+CC:     Asmaa Mnebhi <asmaa@nvidia.com>
+Subject: [PATCH v3 0/2] Add NVIDIA BlueField-3 GPIO driver and pin controller
+Date:   Fri, 10 Feb 2023 10:39:39 -0500
+Message-ID: <cover.1676042188.git.asmaa@nvidia.com>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-References: <b5dfdcd541115c86dbc774aa9dd502c964849c5f.1675282642.git.rgb@redhat.com>
- <Y+VrSLZKZoAGikUS@madcap2.tricolour.ca> <CAHC9VhTNb4gOpk9=49-ABtYs1DFKqqwXPSc-2bhJX7wcZ82o=g@mail.gmail.com>
- <13293926.uLZWGnKmhe@x2> <6939adfb-ce2c-1911-19ee-af32f7d9a5ca@kernel.dk>
-In-Reply-To: <6939adfb-ce2c-1911-19ee-af32f7d9a5ca@kernel.dk>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 10 Feb 2023 10:39:19 -0500
-Message-ID: <CAHC9VhTGmGJ81M2CZWsTf1kNf8XNz2WsYFAP=5VAVSUfUiu1yQ@mail.gmail.com>
-Subject: Re: [PATCH v2] io_uring,audit: don't log IORING_OP_MADVISE
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Steve Grubb <sgrubb@redhat.com>,
-        Richard Guy Briggs <rgb@redhat.com>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
-        Eric Paris <eparis@parisplace.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Stefan Roesch <shr@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT050:EE_|SN7PR12MB7451:EE_
+X-MS-Office365-Filtering-Correlation-Id: 78ec9ae7-ebd1-4e94-4c04-08db0b7d0b92
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UJvpXEpW4dUvkBtiERIcSX8vWOvTLMUttwJEJJ2/t7YMt+7rS0iLorLP50kRahapFQv976ScOvGSFoqixi3D0IHmZsDLjsNb6LPLbToTtvJuiudOoxN323QHKFFqD1Igv8Ym18eeewFrRO9o9DYwv6v/8pZpRKyO5kx5K4Vr/2G7W4lWExT9sH+PXwzogcWgZEcYNKJ2tnVEn/dDUoMSvJEt9l191k9QUtg/9WexXfURqv0Ahrc7q2frQyUXLzA2xcY4f5jQXrnM//cZYJAMVBrcsf46wYHgmeAqkXWykTUkCgs6zrng98IYa0tNDCC4ontGQsQsqkZWDfAqEKg+9Jo7LqH8ZEc1sRopImVQ+tC9T5WqqQ44PZCiop0OQr2PENoTq+EBeRCANmZjRKhw0orhfkIahnfwbBOj20yi0bwGWps7C4SsfmaPZf23CdIU12Wqjmy7L5NX/T/BRFd2Ui4h0NKNNiYSL7WAT7QKoj3o1nixGfGmIjdboh8kixOZtFecgEdHkY1Fm3nJDjbpYvU0hjGWucox1QBkZXcef1L2wEH24b6kQbGmHdf1mSwdAwW5mTRNzZEQLr3x4GdMwF0MwZ0MdFR/0/m/i0v+Pi6EglrFWlbBSF2/odecQjdKLA/cSygDC1aD8ZqFNyefHWvg055iLEPQCBYzs2jHTxK9CaM9HLzYwAQULX4A7b0I/W1yRIVovE2OQFrxOIKe+Q==
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(39860400002)(396003)(136003)(451199018)(40470700004)(36840700001)(46966006)(82310400005)(8676002)(450100002)(186003)(8936002)(70586007)(70206006)(4326008)(36756003)(86362001)(82740400003)(7636003)(356005)(2616005)(426003)(47076005)(336012)(40460700003)(2906002)(107886003)(316002)(7696005)(41300700001)(5660300002)(6666004)(26005)(40480700001)(478600001)(36860700001)(83380400001)(110136005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2023 15:39:49.4136
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 78ec9ae7-ebd1-4e94-4c04-08db0b7d0b92
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT050.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7451
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 9, 2023 at 7:15 PM Jens Axboe <axboe@kernel.dk> wrote:
-> On 2/9/23 3:54=E2=80=AFPM, Steve Grubb wrote:
-> > On Thursday, February 9, 2023 5:37:22 PM EST Paul Moore wrote:
-> >> On Thu, Feb 9, 2023 at 4:53 PM Richard Guy Briggs <rgb@redhat.com> wro=
-te:
-> >>> On 2023-02-01 16:18, Paul Moore wrote:
-> >>>> On Wed, Feb 1, 2023 at 3:34 PM Richard Guy Briggs <rgb@redhat.com>
-> > wrote:
-> >>>>> fadvise and madvise both provide hints for caching or access patter=
-n
-> >>>>> for file and memory respectively.  Skip them.
-> >>>>
-> >>>> You forgot to update the first sentence in the commit description :/
-> >>>
-> >>> I didn't forget.  I updated that sentence to reflect the fact that th=
-e
-> >>> two should be treated similarly rather than differently.
-> >>
-> >> Ooookay.  Can we at least agree that the commit description should be
-> >> rephrased to make it clear that the patch only adjusts madvise?  Right
-> >> now I read the commit description and it sounds like you are adjusting
-> >> the behavior for both fadvise and madvise in this patch, which is not
-> >> true.
-> >>
-> >>>> I'm still looking for some type of statement that you've done some
-> >>>> homework on the IORING_OP_MADVISE case to ensure that it doesn't end
-> >>>> up calling into the LSM, see my previous emails on this.  I need mor=
-e
-> >>>> than "Steve told me to do this".
-> >>>>
-> >>>> I basically just want to see that some care and thought has gone int=
-o
-> >>>> this patch to verify it is correct and good.
-> >>>
-> >>> Steve suggested I look into a number of iouring ops.  I looked at the
-> >>> description code and agreed that it wasn't necessary to audit madvise=
-.
-> >>> The rationale for fadvise was detemined to have been conflated with
-> >>> fallocate and subsequently dropped.  Steve also suggested a number of
-> >>> others and after investigation I decided that their current state was
-> >>> correct.  *getxattr you've advised against, so it was dropped.  It
-> >>> appears fewer modifications were necessary than originally suspected.
-> >>
-> >> My concern is that three of the four changes you initially proposed
-> >> were rejected, which gives me pause about the fourth.  You mention
-> >> that based on your reading of madvise's description you feel auditing
-> >> isn't necessary - and you may be right - but based on our experience
-> >> so far with this patchset I would like to hear that you have properly
-> >> investigated all of the madvise code paths, and I would like that in
-> >> the commit description.
-> >
-> > I think you're being unnecessarily hard on this. Yes, the commit messag=
-e
-> > might be touched up. But madvise is advisory in nature. It is not secur=
-ity
-> > relevant. And a grep through the security directory doesn't turn up any
-> > hooks.
->
-> Agree, it's getting a bit anal... FWIW, patch looks fine to me.
+This series of patches creates a pin controller driver and GPIO
+driver for NVIDIA BlueField-3 SoC.
+The first patch creates a GPIO driver for handling interrupts and
+allowing the change of direction and value of a GPIO if needed.
+The second patch creates a pin controller driver for allowing a
+select number of GPIO pins to be manipulated from userspace or
+the kernel.
 
-Call it whatever you want, but the details are often important at this
-level of code, and when I see a patch author pushing back on verifying
-that their patch is correct it makes me very skeptical.
+The BlueField-3 SoC gpio-mlxbf3.c driver handles different hardware registers
+and logic that from gpio-mlxbf.c and gpio-mlxbf2.c.
+For that reason, we have separate drivers for each generation.
 
-I really would have preferred that you held off from merging this
-until this was resolved and ACK'd ... oh well.
+Changes from v2->v3:
+Addressed the following comments from maintainers:
+- bgpio_init can handle direction_input and direction_output
+- Update pinctrl Kconfig to select GPIO_MLXBF3
+- remove unnecessary #includes from gpio-mlxbf3.c and pinctrl-mlxbf.c
 
---=20
-paul-moore.com
+Asmaa Mnebhi (2):
+  Support NVIDIA BlueField-3 GPIO controller
+  Support NVIDIA BlueField-3 pinctrl driver
+
+ drivers/gpio/Kconfig            |   7 +
+ drivers/gpio/Makefile           |   1 +
+ drivers/gpio/gpio-mlxbf3.c      | 262 ++++++++++++++++++++++++
+ drivers/pinctrl/Kconfig         |  10 +
+ drivers/pinctrl/Makefile        |   1 +
+ drivers/pinctrl/pinctrl-mlxbf.c | 341 ++++++++++++++++++++++++++++++++
+ 6 files changed, 622 insertions(+)
+ create mode 100644 drivers/gpio/gpio-mlxbf3.c
+ create mode 100644 drivers/pinctrl/pinctrl-mlxbf.c
+
+-- 
+2.30.1
+
