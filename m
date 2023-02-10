@@ -2,94 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A2F692790
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 21:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C67692794
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 21:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233375AbjBJUCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 15:02:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
+        id S233435AbjBJUDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 15:03:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233051AbjBJUCp (ORCPT
+        with ESMTP id S232466AbjBJUDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 15:02:45 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5718917CED;
-        Fri, 10 Feb 2023 12:02:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=bhGEaGw9cMMoPachO1bHvi1y2oRU34HBj0zIs129VZM=; b=Mbs8yi8QYZSZ2kwXboDl8eigdl
-        FMPN+HWFVe2bPPROA0msZsNEaQrP12yAutq4eMM9IP0IYIGlhe2SfEdl1OfDhs5qG3sQx5LfiQNyV
-        iHqCwnx9n6ZpDfshwz1JlYkuDxcS/8FHhp1yojovs4coRgVyrXT2adDjt/qsRZJ+cxQY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pQZbT-004dP8-6R; Fri, 10 Feb 2023 21:02:39 +0100
-Date:   Fri, 10 Feb 2023 21:02:39 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Ioana Ciornei <ioana.ciornei@nxp.com>
-Subject: Re: [PATCH net-next] net: pcs: tse: port to pcs-lynx
-Message-ID: <Y+ai3zHMUCDcxqxP@lunn.ch>
-References: <20230210190949.1115836-1-maxime.chevallier@bootlin.com>
- <20230210190949.1115836-1-maxime.chevallier@bootlin.com>
- <20230210193159.qmbtvwtx6kqagvxy@skbuf>
+        Fri, 10 Feb 2023 15:03:40 -0500
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9307715E
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 12:03:39 -0800 (PST)
+Received: by mail-vk1-xa31.google.com with SMTP id bs10so3219990vkb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 12:03:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UE3ll5JZwjVLRnVM34rbSidyuGAYqN9NN6QDtGBKWgM=;
+        b=5FE7spKl/uH6LtHUdRAT8qESaaYluENmDQi9fiHlsjuhrz5429ACChfN5SjL24VUH9
+         39L5kpNKk/okISA1NBuynohJEOve0Ywk++x8QBAYflc6jYP/9Edv/7px65Gob6EXp/8u
+         ftCJqS9t/0QSrHMB2qX7b4tcyod004T9Nr0i+NDjPqgR5m7crttnrBC6UAuss/+7NKIb
+         bFXKjU779489tjyAxoYCCgmNhQWLKwmzyBMPUgtHc1JS38RF3VeuOdul0UtX0lVU2zc/
+         NaXGB0w9A/79MZcVrGgxcbOUCXZz57gOaqLykzcmp/LvfV2fAte6idPOtpcNJcWz2Hzb
+         du2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UE3ll5JZwjVLRnVM34rbSidyuGAYqN9NN6QDtGBKWgM=;
+        b=EhuNYaMJRWadfZfp1I8s38P5++nRcQu1NaFlGIBqwjvGh2gbwxaK3k1xmi8dWzylu8
+         9exDV9uiBitoDBAxWGstflb7jV6S+WrXH/f5f/4r901EzEgrPMLnJF2CuptY24uUd8Fb
+         +weeRqLGoHYPXUl3PlWkCDRE6rVTZ4uEmbHOy4gmbslrk0psU79DWKwgJsN/WRy6kxTT
+         TKD3yAoStWE4ZwevlcrLqOEzBfHoTjtuGGsCtN+Sm4zRZRdu5ArmYHURbP/wRHiohT6L
+         EuBHCg/GhMNosjNahlSk/WDsotS57ZnIowo0xjTfVZVG5quQVoedP4WY+fjKUYxS3OQk
+         50VQ==
+X-Gm-Message-State: AO0yUKVTWl3MBn9iQz70vNcd+umWcNTR6OugKHHx7khFrIDVdg0PJ9eh
+        O8PZHrNBz1S0f5gPi9UsNz3Ud7o/aLw6AEXjxuXx2A==
+X-Google-Smtp-Source: AK7set8iKVPpIW80jN5qXfYELUdIvwOQnS83LQN/njN0oFcDPgxfXeBcMbMBVB/yxw9jdkbOuS0Gq8f0uA/FjvEPcm4=
+X-Received: by 2002:a1f:9493:0:b0:3ea:7394:e9ef with SMTP id
+ w141-20020a1f9493000000b003ea7394e9efmr2973055vkd.11.1676059418517; Fri, 10
+ Feb 2023 12:03:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230210193159.qmbtvwtx6kqagvxy@skbuf>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <03627216-54b5-5d9b-f91d-adcd637819e3@gmail.com> <CACRpkdbmXri1vtRShm7a3N0sRA7Qg_ni5FpAtiEv+72a6g9Wng@mail.gmail.com>
+In-Reply-To: <CACRpkdbmXri1vtRShm7a3N0sRA7Qg_ni5FpAtiEv+72a6g9Wng@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 10 Feb 2023 21:03:27 +0100
+Message-ID: <CAMRc=MeKdb=xmidwXQiNxtJpb1xii1D-43m1z6cNtF1VxFwogg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/8] dt-bindings: gpio: rockchip,gpio-bank: add
+ compatible string per SoC
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     Johan Jonker <jbx6244@gmail.com>, robh+dt@kernel.org,
+        heiko@sntech.de, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kever.yang@rock-chips.com, sjg@chromium.org,
+        philipp.tomsich@vrull.eu, john@metanate.com,
+        quentin.schulz@theobroma-systems.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 09:31:59PM +0200, Vladimir Oltean wrote:
-> On Fri, Feb 10, 2023 at 08:09:49PM +0100, Maxime Chevallier wrote:
-> > When submitting the initial driver for the Altera TSE PCS, Russell King
-> > noted that the register layout for the TSE PCS is very similar to the
-> > Lynx PCS. The main difference being that TSE PCS's register space is
-> > memory-mapped, whereas Lynx's is exposed over MDIO.
-> > 
-> > Convert the TSE PCS to reuse the whole logic from Lynx, by allowing
-> > the creation of a dummy MDIO bus, and a dummy MDIO device located at
-> > address 0 on that bus. The MAC driver that uses this PCS must provide
-> > callbacks to read/write the MMIO.
-> > 
-> > Also convert the Altera TSE MAC driver to this new way of using the TSE
-> > PCS.
-> > 
-> > Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-> > ---
-> >  drivers/net/ethernet/altera/altera_tse.h      |   2 +-
-> >  drivers/net/ethernet/altera/altera_tse_main.c |  50 ++++-
-> >  drivers/net/pcs/Kconfig                       |   4 +
-> >  drivers/net/pcs/pcs-altera-tse.c              | 194 +++++++-----------
-> >  include/linux/pcs-altera-tse.h                |  22 +-
-> >  5 files changed, 142 insertions(+), 130 deletions(-)
-> 
-> The glue layer is larger than the duplicated PCS code? :(
+On Wed, Feb 8, 2023 at 12:08 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Sat, Jan 21, 2023 at 12:06 PM Johan Jonker <jbx6244@gmail.com> wrote:
+>
+> > Currently all Rockchip gpio nodes have the same compatible.
+> > Compatible strings should be SoC related.
+> >
+> > Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+>
+> Bartosz can you merge this one patch and keep the rest back
+> so we get a more defined DT binding baseline?
+>
+> Yours,
+> Linus Walleij
 
-I was wondering if the glue could actually be made generic. The kernel
-has a number of reasonably generic MMIO device drivers, which are just
-given an address range and assume a logical mapping.
+Krzysztof, you left your ack but seem to also have pointed out an
+issue - do you want me to fix it up somehow before applying? Drop the
+oneOf and turn it back into an enum?
 
-Could this be made into a generic MDIO MMIO bus driver, which just
-gets configured with a base address, and maybe a stride between
-registers?
-
-	Andrew
+Bart
