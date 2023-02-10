@@ -2,187 +2,344 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3320F6928D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 21:58:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D846928DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 22:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233860AbjBJU6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 15:58:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
+        id S233632AbjBJVAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 16:00:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233321AbjBJU6m (ORCPT
+        with ESMTP id S232764AbjBJVAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 15:58:42 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2073.outbound.protection.outlook.com [40.107.244.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF16118B1C;
-        Fri, 10 Feb 2023 12:58:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L++W6t4hhQbd0xpGZMRJKK+XIWfUqbu1uU/2ajaz/3KXYTLapQgPZrE8R1kQAkxjYePna9CmQIXPW8aHwzM6fTWI/X62lRfxy+QbzW4VECFn+WYmbE/tg5b9ODpfm9jieMfNhj5VRrYWI5m+dkNKceM29zTgvWvaHv7JStl2tLj1sRLlVAOOuYQFyay5aaZMI8+zycomOtPxNwgsmz8V0L0ROkTvBozC20GpQ8/PsGhBDjHeETJ66PMq79kPTGDq1k9hC3AgSOxwqUtyOkHrhZuWnkPxhH9wDYOzH/Bm3MXX7dGL9ERrK5I6OVpROk65+QgyHtYQnM+Z7xuD0Ea4Ag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FMFNtB8gQBp8yQQpcJSM/0JNe3w52R8z75q4cGKOAPQ=;
- b=D0OEIwbzaoc55qbtK7lyENkywvwDZRNr4KA6uII4JaPZKzJwlUvAWQPc2+59tBtQs9btAQJMtqwJlGEhM33tlAKLnK7LdykCyMbP4SZWswMPWnep1DQkQjP9jV5gOSRBhJSsGFI9vqzj2n9+mcT274Nj0Kcqm2q6sVJs2SUSJkBX3O3eEPfND4PbdMNNzSaB0YPYxz7h3uN3OXS7STSdhC3JIKl7RJVFsAxEXuEYdxFTjj/hO7yXcLznR4tGd2BWP3MFpcN2mrQPg0XcFLfzc9iOcRP9O8s3ypuLw1YXvZcGAssnfU97tReXx1xau95wspFMgccUnBH36ReQYMvtdQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FMFNtB8gQBp8yQQpcJSM/0JNe3w52R8z75q4cGKOAPQ=;
- b=i8rKL7ozzc/+m6OzrtPpBcVXjzEnY5Y0ExXl0PsSWoNxwF7EFLpO97v4RVmEjYc1vRUxlP0mR+i55vkvatP4sL1g/Lb7Rnb+qWdv7MZf8JHOju95oWCj3R3G3ByMoydgL/vikHzPjPK6KkgGMm/kSD91nt+nHG+S8gAqn+CjV2iCoWghaA2KErJuuOAwYL5UdXDftTBIfNwiUVkB0E2x5S9rA9c673vTFIKwfM96/vaIhe+sYtbAyjd0EHICMOOZjdIdYV9OHm84Au97hzPhSeSl59+r2+RQyJPLTQ05yrhqTOw9anpfw2O/uW4tEgD7aiVeHYSqXK/QQXB3OWjq9w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by BL1PR12MB5379.namprd12.prod.outlook.com (2603:10b6:208:317::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.21; Fri, 10 Feb
- 2023 20:58:39 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6086.019; Fri, 10 Feb 2023
- 20:58:39 +0000
-Date:   Fri, 10 Feb 2023 16:58:38 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Joao Martins <joao.m.martins@oracle.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH 3/6] iommufd: Add IOMMU_DEVICE_GET_INFO
-Message-ID: <Y+av/j4TgmPEZPy2@nvidia.com>
-References: <20230209041642.9346-1-yi.l.liu@intel.com>
- <20230209041642.9346-4-yi.l.liu@intel.com>
- <BN9PR11MB5276F92ABD5998FDD74D510A8CDE9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <09349db9-8847-614e-4c8c-1b0a15119244@oracle.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <09349db9-8847-614e-4c8c-1b0a15119244@oracle.com>
-X-ClientProxiedBy: MN2PR22CA0003.namprd22.prod.outlook.com
- (2603:10b6:208:238::8) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Fri, 10 Feb 2023 16:00:02 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CF0193C0;
+        Fri, 10 Feb 2023 12:59:59 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31AKxkFK011980;
+        Fri, 10 Feb 2023 20:59:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=TVPsqEgq/UFUKhLhIogo2fjWgGmZdW8m8Jf/Ri0ZqO8=;
+ b=UgDvUmH2E6u6YWzLHceHPbauVpGO8x7NpgF4dwCAxWR++RJqGo2EIyQ5GzskPtxr42HG
+ 6jktxQzuMwJhjAbKAljSJnZOKGonCySvx7NUnR8Ewy0woBekhED9CJFr6LzPVqBTETzY
+ VECMnTvu47PyBgW7FhUTr9L+O5GmznLCd5dphFuC5rGj7q9xuiJyyW5T08SUeFfny83J
+ FWlu2HoGtPTaoZ6cyVQf8S4RcDoadZNm0jSUga4zN68H3dkPR9PR+JZrOZekKxc4Vp6j
+ vy8VJAG3hzMxDr6VAbPoNNLkC7a7tscsNiBJIaUVxneOnvZ530eOBFGMt6lwzRZBfQrp Yg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnweyg02b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Feb 2023 20:59:50 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31AKxnOh012293;
+        Fri, 10 Feb 2023 20:59:49 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nnweyg01v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Feb 2023 20:59:49 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31AK8WZo006137;
+        Fri, 10 Feb 2023 20:59:48 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
+        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3nhf07gtd5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Feb 2023 20:59:48 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31AKxk4V8651290
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Feb 2023 20:59:46 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5B25558058;
+        Fri, 10 Feb 2023 20:59:46 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 69FEA58057;
+        Fri, 10 Feb 2023 20:59:45 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 10 Feb 2023 20:59:45 +0000 (GMT)
+Message-ID: <07132425-72e5-60d0-765d-223f0f3e7d64@linux.ibm.com>
+Date:   Fri, 10 Feb 2023 15:59:45 -0500
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL1PR12MB5379:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8d3e9977-903b-4419-148e-08db0ba995ba
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: t/82OdqXVe7pH0IHwyX3gQZoZG8INU04MrgofvYKnXMH7NF2hlZb8UhkHzQADPtVE/B9vwiUT2U5my9WPlGy9t2ULgHRunq/m60xzEQ5G7a1DCiEwQ7hP1jTOUBo2lxHEaFVpL1ZL7IgEiRpxtx7LHsxuRmMzASZmQgCqovsnJBZCqxbeJDGpLE68LfVdo2wpgbI+CryjuIBUVcijz6H9uvzsmNnzUcSWPJKY5x97Sat2neEt+FF46bqTuenitU9nlhxAkCfFRsOSxWVjuWsPuCNtXL7hxWiTqqYWdGszy3Akt/8+Wc26glr1bm2TkaNDLsG0+bq6VqavoWCmVsb++Gw2f49Q+BkPXYnd6Rir/6to87MxRkelO2KZKtdmjSJKjWWdVBkJkzarjQP2/57T0PbYx/+LH7mMG57VUvx5/8kzoL8GbDpvo1Yx03OiHovgyEr27t+HnMr1QC8ItE3VdDEln/pFo3Kg7VTVqm13gwhtYgUVry/LUgw9HIraHdE8cwC2Dyjr0SnexwGWY8T5PF18VRYBrYSCAaqTmv0aeHfwSHORQelnLmi0WjgJZT7ViiAbnjrur3lBSKvMOBX3/IV+0dIQ/DcR1vXfUAL7nacpX5eZJg94wmSius2yygIw4i6wY1FoWXTLRVv0uxhRw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(396003)(136003)(366004)(39860400002)(451199018)(66556008)(66476007)(66946007)(316002)(54906003)(8676002)(5660300002)(8936002)(7416002)(41300700001)(4326008)(6916009)(478600001)(6512007)(6506007)(186003)(26005)(53546011)(2616005)(6486002)(36756003)(86362001)(2906002)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?m/uQdyx8AS48GZTyUh9svX6fJjWLfyO8poVlfreU1Gx57Grq4MtWTxwHoulI?=
- =?us-ascii?Q?NFdznf3TF4yqGlYLHfEWjK8k4Z7wvmN9JlV7K0wxrEWlsuaEh5k2S5c5i7/p?=
- =?us-ascii?Q?fsTR4g9evMuPccDjoARfegsqh1M0OyUYkDEWRqnVBsnRuKyv754LcWe4AnE+?=
- =?us-ascii?Q?L5cW/6UTTdNBguI6dfiUFAmK5VhzVBoEMgkwQO7jc98OLBi23BOipnL7nTWH?=
- =?us-ascii?Q?I8U7zwJVnO/RyjmStinGv7R3jHWOxB4ox8j7XWAC5DtsWYV5zgp1R9egcFNv?=
- =?us-ascii?Q?dok5lN2GLrfWjk1v+rGd2M8+MEQ1hpIuPk6rIqzAfBzOEN4AXy6f6dJXMFss?=
- =?us-ascii?Q?sFqwOQFF1f1TZPvKc8CCId1AV0eSkEX+p0Pt5Rq0tDahLx9Mn6eyXq9tErUc?=
- =?us-ascii?Q?zKhuK8gl5ugAacizNrmcHGiB0DMuJz4TWTx64AU59craQ8UO5oRoS7shtwQQ?=
- =?us-ascii?Q?SIUsip3KS6NQ3eTOCaXvy7jCHKybcHfVy64yA6Dr8v2cORIp2E7si7ti6HHQ?=
- =?us-ascii?Q?hpznZ6KEY2mx9725ILumkoSJ8K3hYrnSQ6h8E1q4RBytTOOgAdWhlZMatFWS?=
- =?us-ascii?Q?fhYSbQ7mKSaXq/XDhIaajK8bEOvFlM/d3qoO2/LYpU6/VrvxJIk4o7G0bI5u?=
- =?us-ascii?Q?EgtNiUgQyEqp36SbTIKkm9xwRFCqrQ2o8PRi75FwB09rzKooPP35VjOVK5HT?=
- =?us-ascii?Q?WXi4Qzywui5zENGBGhT6L2WwzqkGhhD2XjjI0cu0y9Z0np3WLsL5tJ0noHQr?=
- =?us-ascii?Q?V/zbeoL9xYx5kHYZ/aKvMwFP/RSNxUlPJji8je1ktLqj2D7uNEN5xkRDs0jq?=
- =?us-ascii?Q?zFVQp6AZubpJzBdTDKtBLUi2Nvjj6J8X/tudH/b+o3wNiu5qa+9z3FNxApEg?=
- =?us-ascii?Q?mJQUJKZ9mNdGzs5tT0sCIsKV2EJ76UBFFlfBBrqHCLEgKbW3v947fk6JPe3v?=
- =?us-ascii?Q?uPxJIkO+n40ndaWXaCSjpfHVOv5URSf+72i2utKLb86AEZ1Lh7DSzpST8BH/?=
- =?us-ascii?Q?rlMiPCeiTQ+86AZGKmB87NkKO5BkILoTEQRcK8rQI353xNft640vhWHCOe14?=
- =?us-ascii?Q?YPzXVGXDU6deyqjgQ+mBSll8W4HYM2e0IP38g1FpuyhP4MLhgppq7psSVcO0?=
- =?us-ascii?Q?1XPGKF32GiwWbEx3A+JBtDLKtd5Y1x5c4Ux4QYTDowhN929cYqCxXI2nnzzh?=
- =?us-ascii?Q?bOFUhI2JyBsbWI3rdE68HXBXXL/E/8gfIH+PKzWoGP9kgLSbl5QMQm8TPEQx?=
- =?us-ascii?Q?8dTLdBOP/ev+wtwQwe9lBPZRuKP+f1LFSvOT4XEuEs6gIXojTaH75DzXnz4m?=
- =?us-ascii?Q?Qba83XyU6xm+i5eqCMW7+YFBG0KnsUNsf+JhV8L/eKcxDqoFpx7A5gu0TBE5?=
- =?us-ascii?Q?2ODn2sSf7NzcCV2rKTg90dJI95yj1xfauRywJ21n/aRQfUS6FzE08RgLcAZs?=
- =?us-ascii?Q?ZvBsrtmcdJ1E9QeGAyzT8LTCd/6qXLfxvJ7mjlyRmHiJmsnZQfKmR/rVfe3H?=
- =?us-ascii?Q?MzRN2ZpF5qg7LNbSnzX9ay+5t6yqlXEAi5Iq0Oxr60+joAYpvq5AjOfMS5iT?=
- =?us-ascii?Q?L1X+J/b/Gm8WE1zDejc9dmqMoHJI/buS0KyphyZf?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d3e9977-903b-4419-148e-08db0ba995ba
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2023 20:58:39.4622
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: exc2u20kU0EqWTCUVgXx0cGvcccWhELKjfRCS5/mmfGDN2nIIj56iDroiGrjuogz
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5379
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v6 23/26] powerpc/pseries: Pass PLPKS password on kexec
+Content-Language: en-US
+To:     Andrew Donnellan <ajd@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
+        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
+        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
+References: <20230210080401.345462-1-ajd@linux.ibm.com>
+ <20230210080401.345462-24-ajd@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230210080401.345462-24-ajd@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Kd-KQy8B1MkJNfHt8LfeMcSKzANWwwVb
+X-Proofpoint-ORIG-GUID: -nPK3iSKprJm9mxfg2V81JtnS9uBGGMA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-10_15,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ malwarescore=0 mlxscore=0 impostorscore=0 adultscore=0 phishscore=0
+ clxscore=1015 lowpriorityscore=0 priorityscore=1501 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302100175
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 11:10:34AM +0000, Joao Martins wrote:
-> On 10/02/2023 07:55, Tian, Kevin wrote:
-> >> From: Liu, Yi L <yi.l.liu@intel.com>
-> >> Sent: Thursday, February 9, 2023 12:17 PM
-> >> + * zeroed if the user buffer is larger than the data kernel has.
-> >> + *
-> >> + * The type specific data would be used to sync capability between the
-> >> + * vIOMMU and the hardware IOMMU, also for the availabillity checking of
-> >> + * iommu hardware features like dirty page tracking in I/O page table.
-> > 
-> > It's fine to report format information related to stage-1 page table
-> > which userspace manages.
-> > 
-> > but IMHO this should not be an interface to report which capability is
-> > supported by iommufd. Having hardware supporting dirty bit 
-> > doesn't mean the underlying iommu driver provides necessary support
-> > to iommufd dirty tracking.
-> > 
-> 
-> +1
-> 
-> In fact this shouldn't really be a way to check any capability as we are dumping
-> straight away the IOMMU hardware registers. By dumping raw IOMMU hardware data,
-> forces the application to understand IOMMU hardware specific formats.  Maybe
-> that's OK for hw nesting as there's a lot of info you need to know for the
-> vIOMMU pgtables, pasid and etc so both are tightly coupled. But it is a bit
-> disconnected from what really the software (IOMMUFD) and driver can use, without
-> getting onto assumptions.
-> 
-> [Calling it IOMMU_DEVICE_GET_HW_INFO would be bit more obvious if you're not
-> asking IOMMUFD support]
-> 
-> For capability checking, I think this really should be returning capabilities
-> that both IOMMU driver supports ... and that IOMMUFD understands and marshalled
-> on a format of its own defined by IOMMUFD. Maybe using IOMMU_CAP or some other
-> thing within the kernel (now that's per-device), or even simpler. That's at
-> least had written initially for the dirty tracking series.
 
-Yes, the design of IOMMU_DEVICE_GET_INFO is already split. The HW
-specific structure should only contain things related to operating the
-HW specific paths (ie other HW specific structures in other APIs)
 
-The enclosing struct should have general information about operating
-the device through the abstract API - like dirty tracking.
+On 2/10/23 03:03, Andrew Donnellan wrote:
+> From: Russell Currey <ruscur@russell.cc>
+> 
+> Before interacting with the PLPKS, we ask the hypervisor to generate a
+> password for the current boot, which is then required for most further
+> PLPKS operations.
+> 
+> If we kexec into a new kernel, the new kernel will try and fail to
+> generate a new password, as the password has already been set.
+> 
+> Pass the password through to the new kernel via the device tree, in
+> /chosen/ibm,plpks-pw. Check for the presence of this property before
+> trying to generate a new password - if it exists, use the existing
+> password and remove it from the device tree.
+> 
+> This only works with the kexec_file_load() syscall, not the older
+> kexec_load() syscall, however if you're using Secure Boot then you want
+> to be using kexec_file_load() anyway.
+> 
+> Signed-off-by: Russell Currey <ruscur@russell.cc>
+> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+> 
+> ---
+> 
+> v3: New patch
+> 
+> v4: Fix compile when CONFIG_PSERIES_PLPKS=n (snowpatch)
+> 
+>      Fix error handling on fdt_path_offset() call (ruscur)
+> 
+> v5: Fix DT property name in commit message (npiggin)
+> 
+>      Clear prop in FDT during init to prevent password exposure (mpe)
+> 
+>      Rework to remove ifdefs from C code (npiggin)
+> 
+> v6: Rebase on top of 7294194b47e994753a86eee8cf1c61f3f36458a3 and
+>      fc546faa559538fb312c77e055243ece18ab3288
+> 
+>      Whitespace (stefanb)
+> 
+>      Use more const (stefanb)
+> 
+>      Get rid of FDT extra space allocation for node overhead, as it
+>      shouldn't be necessary (ruscur)
+> 
+>      Note kexec_file_load() restriction in commit message
+> ---
+>   arch/powerpc/include/asm/plpks.h       | 14 ++++++
+>   arch/powerpc/kernel/prom.c             |  4 ++
+>   arch/powerpc/kexec/file_load_64.c      | 18 +++++---
+>   arch/powerpc/platforms/pseries/plpks.c | 61 ++++++++++++++++++++++++++
+>   4 files changed, 92 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/powerpc/include/asm/plpks.h b/arch/powerpc/include/asm/plpks.h
+> index 757313e00521..23b77027c916 100644
+> --- a/arch/powerpc/include/asm/plpks.h
+> +++ b/arch/powerpc/include/asm/plpks.h
+> @@ -176,6 +176,20 @@ u64 plpks_get_signedupdatealgorithms(void);
+>    */
+>   u16 plpks_get_passwordlen(void);
+>   
+> +/**
+> + * Called in early init to retrieve and clear the PLPKS password from the DT.
+> + */
+> +void plpks_early_init_devtree(void);
+> +
+> +/**
+> + * Populates the FDT with the PLPKS password to prepare for kexec.
+> + */
+> +int plpks_populate_fdt(void *fdt);
+> +#else // CONFIG_PSERIES_PLPKS
+> +static inline bool plpks_is_available(void) { return false; }
+> +static inline u16 plpks_get_passwordlen(void) { BUILD_BUG(); }
+> +static inline void plpks_early_init_devtree(void) { }
+> +static inline int plpks_populate_fdt(void *fdt) { BUILD_BUG(); }
+>   #endif // CONFIG_PSERIES_PLPKS
+>   
+>   #endif // _ASM_POWERPC_PLPKS_H
+> diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
+> index 4f1c920aa13e..8a13b378770f 100644
+> --- a/arch/powerpc/kernel/prom.c
+> +++ b/arch/powerpc/kernel/prom.c
+> @@ -56,6 +56,7 @@
+>   #include <asm/drmem.h>
+>   #include <asm/ultravisor.h>
+>   #include <asm/prom.h>
+> +#include <asm/plpks.h>
+>   
+>   #include <mm/mmu_decl.h>
+>   
+> @@ -893,6 +894,9 @@ void __init early_init_devtree(void *params)
+>   		powerpc_firmware_features |= FW_FEATURE_PS3_POSSIBLE;
+>   #endif
+>   
+> +	/* If kexec left a PLPKS password in the DT, get it and clear it */
+> +	plpks_early_init_devtree();
+> +
+>   	tm_init();
+>   
+>   	DBG(" <- early_init_devtree()\n");
+> diff --git a/arch/powerpc/kexec/file_load_64.c b/arch/powerpc/kexec/file_load_64.c
+> index 52085751f5f4..8a9469e1ce71 100644
+> --- a/arch/powerpc/kexec/file_load_64.c
+> +++ b/arch/powerpc/kexec/file_load_64.c
+> @@ -27,6 +27,7 @@
+>   #include <asm/kexec_ranges.h>
+>   #include <asm/crashdump-ppc64.h>
+>   #include <asm/prom.h>
+> +#include <asm/plpks.h>
+>   
+>   struct umem_info {
+>   	u64 *buf;		/* data buffer for usable-memory property */
+> @@ -977,12 +978,17 @@ static unsigned int cpu_node_size(void)
+>    */
+>   unsigned int kexec_extra_fdt_size_ppc64(struct kimage *image)
+>   {
+> -	unsigned int cpu_nodes, extra_size;
+> +	unsigned int cpu_nodes, extra_size = 0;
+>   	struct device_node *dn;
+>   	u64 usm_entries;
+>   
+> +	// Budget some space for the password blob. There's already extra space
+> +	// for the key name
+> +	if (plpks_is_available())
+> +		extra_size += (unsigned int)plpks_get_passwordlen();
+> +
+>   	if (image->type != KEXEC_TYPE_CRASH)
+> -		return 0;
+> +		return extra_size;
+>   
+>   	/*
+>   	 * For kdump kernel, account for linux,usable-memory and
+> @@ -992,9 +998,7 @@ unsigned int kexec_extra_fdt_size_ppc64(struct kimage *image)
+>   	if (drmem_lmb_size()) {
+>   		usm_entries = ((memory_hotplug_max() / drmem_lmb_size()) +
+>   			       (2 * (resource_size(&crashk_res) / drmem_lmb_size())));
+> -		extra_size = (unsigned int)(usm_entries * sizeof(u64));
+> -	} else {
+> -		extra_size = 0;
+> +		extra_size += (unsigned int)(usm_entries * sizeof(u64));
+>   	}
+>   
+>   	/*
+> @@ -1233,6 +1237,10 @@ int setup_new_fdt_ppc64(const struct kimage *image, void *fdt,
+>   		}
+>   	}
+>   
+> +	// If we have PLPKS active, we need to provide the password to the new kernel
+> +	if (plpks_is_available())
+> +		ret = plpks_populate_fdt(fdt);
+> +
+>   out:
+>   	kfree(rmem);
+>   	kfree(umem);
+> diff --git a/arch/powerpc/platforms/pseries/plpks.c b/arch/powerpc/platforms/pseries/plpks.c
+> index 671a10acaebf..cdf09e5bd741 100644
+> --- a/arch/powerpc/platforms/pseries/plpks.c
+> +++ b/arch/powerpc/platforms/pseries/plpks.c
+> @@ -16,6 +16,9 @@
+>   #include <linux/slab.h>
+>   #include <linux/string.h>
+>   #include <linux/types.h>
+> +#include <linux/of_fdt.h>
+> +#include <linux/libfdt.h>
+> +#include <linux/memblock.h>
+>   #include <asm/hvcall.h>
+>   #include <asm/machdep.h>
+>   #include <asm/plpks.h>
+> @@ -128,6 +131,12 @@ static int plpks_gen_password(void)
+>   	u8 *password, consumer = PLPKS_OS_OWNER;
+>   	int rc;
+>   
+> +	// If we booted from kexec, we could be reusing an existing password already
+> +	if (ospassword) {
+> +		pr_debug("Password of length %u already in use\n", ospasswordlength);
+> +		return 0;
+> +	}
+> +
+>   	// The password must not cross a page boundary, so we align to the next power of 2
+>   	password = kzalloc(roundup_pow_of_two(maxpwsize), GFP_KERNEL);
+>   	if (!password)
+> @@ -621,6 +630,58 @@ int plpks_read_bootloader_var(struct plpks_var *var)
+>   	return plpks_read_var(PLPKS_BOOTLOADER_OWNER, var);
+>   }
+>   
+> +int plpks_populate_fdt(void *fdt)
+> +{
+> +	int chosen_offset = fdt_path_offset(fdt, "/chosen");
+> +
+> +	if (chosen_offset < 0) {
+> +		pr_err("Can't find chosen node: %s\n",
+> +		       fdt_strerror(chosen_offset));
+> +		return chosen_offset;
+> +	}
+> +
+> +	return fdt_setprop(fdt, chosen_offset, "ibm,plpks-pw", ospassword, ospasswordlength);
+> +}
+> +
+> +// Once a password is registered with the hypervisor it cannot be cleared without
+> +// rebooting the LPAR, so to keep using the PLPKS across kexec boots we need to
+> +// recover the previous password from the FDT.
+> +//
+> +// There are a few challenges here.  We don't want the password to be visible to
+> +// users, so we need to clear it from the FDT.  This has to be done in early boot.
+> +// Clearing it from the FDT would make the FDT's checksum invalid, so we have to
+> +// manually cause the checksum to be recalculated.
+> +void __init plpks_early_init_devtree(void)
+> +{
+> +	void *fdt = initial_boot_params;
+> +	int chosen_node = fdt_path_offset(fdt, "/chosen");
+> +	const u8 *password;
+> +	int len;
+> +
+> +	if (chosen_node < 0)
+> +		return;
+> +
+> +	password = fdt_getprop(fdt, chosen_node, "ibm,plpks-pw", &len);
+> +	if (len <= 0) {
+> +		pr_debug("Couldn't find ibm,plpks-pw node.\n");
+> +		return;
+> +	}
+> +
+> +	ospassword = memblock_alloc_raw(len, SMP_CACHE_BYTES);
+> +	if (!ospassword) {
+> +		pr_err("Error allocating memory for password.\n");
+> +		goto out;
+> +	}
+> +
+> +	memcpy(ospassword, password, len);
+> +	ospasswordlength = (u16)len;
+> +
+> +out:
+> +	fdt_nop_property(fdt, chosen_node, "ibm,plpks-pw");
+> +	// Since we've cleared the password, we must update the FDT checksum
+> +	early_init_dt_verify(fdt);
+> +}
+> +
+>   static __init int pseries_plpks_init(void)
+>   {
+>   	int rc;
 
-But it may be that HW will individually report dirty tracking
-capabilties related to special page table types - ie can the S2 page
-table do dirty tracking
-
-Jason
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
