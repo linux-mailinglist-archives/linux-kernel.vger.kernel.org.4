@@ -2,118 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 852E8691792
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 05:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 938DA691795
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 05:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbjBJE02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 23:26:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
+        id S231168AbjBJE3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 23:29:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230258AbjBJE00 (ORCPT
+        with ESMTP id S230258AbjBJE3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 23:26:26 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89B7658D6
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 20:26:24 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id m8so3768699edd.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 20:26:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pt8I2gDFGkJc89VFttBAWrczFbW6HxF9sU3Iiy4h4oU=;
-        b=g+HDZLcbqkc9l7r/SLkHf3MTXGwy+3wwTPT71E8FfYc4mybXqO31ghDAQDsbZu2uHl
-         FzPJVeyM/Dtz86hUSokx0iYG6ISvjb47q/T7V2C701u1Hm2gVdr206fksdEI16y0koOt
-         VQ7t0ehgPcNQ5dLAx57Yx1V8VyT9QSMa9UI7ezuM6ISnrWVqPrpkRtoeZg7oXWVI+GzA
-         CwR4o8SjPLqhBeBO6QXPgxcJDLwzgh/gSRnXu9VskUolt2xM1le5UQbOwd/0aXCstTKi
-         ASCeUFtRHSqANPkim7ChOKtQa9+TLYf3/GN2G3TnMQbjwx/yDBHThSPlmwcLIOngov6m
-         6Yng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pt8I2gDFGkJc89VFttBAWrczFbW6HxF9sU3Iiy4h4oU=;
-        b=ZlNb0w29EOu+VoLIUe1IOWsVrvfkdECv/w9KIrZ+gUOEt/nhsGtX6MLf3PkXRLEfYc
-         t8vV6riBEstWU0cE6FNqv98JZo5GanvJzxS2hAYNK5eimvU+0FpwNVoQ/GhFtwZCkMic
-         nsnarbsp3CNJ/EmfgjpuXnQ1Af/B5PAj8bIH4Huh1gBPN3o5cstnai3OdlJV2TI5l4Zt
-         BjYEQk34ENRlU3qqsMo9pS71o6DoIoCUPBCuOFXK1b9elYqcSxZ1K5TtB+LQCnkIh7B+
-         7UcSiPQizLiFditzd1UM4R/vEzFdpXc6pmuGtCZ4l8sH94HGMjKJDlKdijVY/9sRrsVl
-         lVeA==
-X-Gm-Message-State: AO0yUKVvrgxkwRr8rObfSSyoik2fnQ8ivIwEouljanGL4RtJEZ1cfKPL
-        KyvcbRsR6QskrESWg2/CWrfz5fRyAgTojYhysbGjzQ==
-X-Google-Smtp-Source: AK7set+5s1St957AtsOtZg/2SckKqwY/chLNneXVWybGFKOK6P3inMJFiq1XrtosXZruQD2pn4FVdVbIyB5/AHPCIzk=
-X-Received: by 2002:a50:d542:0:b0:4ab:4d4d:73fc with SMTP id
- f2-20020a50d542000000b004ab4d4d73fcmr9449edj.5.1676003182975; Thu, 09 Feb
- 2023 20:26:22 -0800 (PST)
+        Thu, 9 Feb 2023 23:29:14 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2077.outbound.protection.outlook.com [40.107.244.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9B06B371
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 20:29:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=d3+FDn4Q21idHSdo7GPj6fG8Ohnw1vK2OKL0b9D+zzt9IDnum+tEmwN15t87hA1tt6TGha2TsUqmTFDFWZt4CRZFNvdVy3gKjmZboqsCii5lGZ8McfmpW4PQATszhEJiS/7LpLzGspX3wCwp6G09dn296jS008kt7ovVlANMnLwwZgDYZJFsGfE6uLeCXFRNUkcU2+4kAX6QvdVU4UOhTlFQfKUcqZyQcff7ClnXyzLB0Zv7w4ZRbocwKt3WoQX6S1XztIMkFSKe1shLrjTFbkRJ+3C7WMRjo3HvH9M/ug6m8yZHsXvp5b8ZaCmQU+IXVAZmsXyFMrsC3kzfpkarbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LhEAriU3tZgU79/oxsD6M6VZbQQ2WN8lzM0cT1xmL5w=;
+ b=Jup3n0VC6V5hvh7ACGD+hT653cd8wUhZ7ayYjnb+Sj+2FTOa+e9TQmbthT81nY1pQ8a4S2KK85mcG0b9bg73+tUVPfXEQJMFzJ1rJtsJSHnyn/ncCaLRB7YXTyGJDzhip3TFRTB879w0kJ3GuIGJfgwBo8uYGWAXPiKgV0z6drvWrqQWg7+7XmsJh8hfMHFL/CovBIcKGRtKg+IwulELeaFpYPgPjv6zhNxARE/Co7Wy04m62nn+SojutEUpTuvE6d7ytjvH6UQ5rjSk3kHI8XoTCKT3xkxxdr5hbLfvHrak+aM6z5t6pMtb7sECQqTPqkLPa+thZL+p102KChx7KQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LhEAriU3tZgU79/oxsD6M6VZbQQ2WN8lzM0cT1xmL5w=;
+ b=YyQaV96pCrLdh7xNeNSbz4GZPPfnOx57jhe3EEQIM5ebd8KsVUpMwhAHfFAGF5d4H4jJqI9uI9v2BMU6qt/Nrb2DlG8Fn2CpAqJFJJWDEZgBgmaau8RHRqCDoW+ad7+Z5ii1qPU2sK/33nazbRA3XICnhDzB2RcByjRtQQwezvM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from IA1PR12MB6434.namprd12.prod.outlook.com (2603:10b6:208:3ae::10)
+ by SJ2PR12MB7797.namprd12.prod.outlook.com (2603:10b6:a03:4c5::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Fri, 10 Feb
+ 2023 04:29:10 +0000
+Received: from IA1PR12MB6434.namprd12.prod.outlook.com
+ ([fe80::422f:19e8:faa4:eb05]) by IA1PR12MB6434.namprd12.prod.outlook.com
+ ([fe80::422f:19e8:faa4:eb05%9]) with mapi id 15.20.6086.021; Fri, 10 Feb 2023
+ 04:29:10 +0000
+Message-ID: <e0a8ff65-b0f9-1f63-a3a0-2986eb79846f@amd.com>
+Date:   Fri, 10 Feb 2023 09:58:55 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH 0/5] Memory access profiler(IBS) driven NUMA balancing
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, mgorman@suse.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, akpm@linux-foundation.org, luto@kernel.org,
+        tglx@linutronix.de, yue.li@memverge.com,
+        Ravikumar.Bangoria@amd.com, ying.huang@intel.com
+References: <20230208073533.715-1-bharata@amd.com>
+ <Y+Pj+9bbBbHpf6xM@hirez.programming.kicks-ass.net>
+ <4808d3fa-bb68-d4c8-681f-0b2770d78041@intel.com>
+ <369bef08-92cc-9b55-823f-1fe780532967@amd.com>
+ <9848226e-2574-b8e0-4fb4-316957f57fb5@intel.com>
+From:   Bharata B Rao <bharata@amd.com>
+In-Reply-To: <9848226e-2574-b8e0-4fb4-316957f57fb5@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0138.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:bf::10) To IA1PR12MB6434.namprd12.prod.outlook.com
+ (2603:10b6:208:3ae::10)
 MIME-Version: 1.0
-References: <20230206092559.2722946-1-senozhatsky@chromium.org>
- <20230206092559.2722946-3-senozhatsky@chromium.org> <CAJD7tka_DFfFu2Ji-HAdw066J2MkmxzrYVQp6pHUAAQhz6Y7EA@mail.gmail.com>
- <Y+GtsM6vJge90LHe@google.com> <Y+XG4mWPi4X9/hHZ@google.com>
-In-Reply-To: <Y+XG4mWPi4X9/hHZ@google.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Thu, 9 Feb 2023 20:25:46 -0800
-Message-ID: <CAJD7tka3s84v9-ZA-OZkBkina6MByCSFnKXwv+hq8o8nZSZoyg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] zsmalloc: fine-grained inuse ratio based fullness grouping
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR12MB6434:EE_|SJ2PR12MB7797:EE_
+X-MS-Office365-Filtering-Correlation-Id: 71cb9491-7e52-4bf8-4fcd-08db0b1f5a8e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: H279/G98hFVzHpvVTrjGf0ihpbDMb+MGndPjEvES86QNGR6jnSYPbU0gCZISR+opD9uxRtJVZn8fSKXDYaMVJt7/cYy8s73OdBSW805XA2wLv2BQt5EePhwY2GMl8yTGy3VlsX3TIuLys0LbeSKCAo7EtD4MuPDnVuTCKNR1bxbRzXHJMdcD8VFigMcZX2phe5WhxJH0VkygT9N0B4IEx2tPZ9VbykdNWze0zZINY2k1LmHoj+XAC2YoPrz8+J+N2iUZWbrrZ7jGKZ0TF1bZ3+1Yh4HAEpHEHNU121Kl2S6kjHaLK6/zbQtdyjzn9X1dgiorMue0yZAC5x5nZ2GeGPrIRdgqsCOLz9KeF2dH4SqyJ+0FQ2/32FEr73nTWpBAmyu5cbl2hEzPWjVfrK28+O1yIClP1e4cxZW9H0fDiKNLWM4kYiN4bqo8F320rTbXi2KJkPlzqT8JqnhQEddD58TjFpeuSvb0JyXNTrxUxrl9lXgqP/VQZbVXyGNi5UegsW1Y5G+3zusQCTv77lFyaxc7zb0NPg9oB6xv5bBHoE0aA1MPBM4MkShe5aVzEV1h750Hrzyb+3q46oZ4Ee/bhdEEtW0eoWBbkJirTfobTaRJkxLIbl2DAidhzgwTlDUM3SCT0ksm6NlEANZMNQhlzkBAP98o0LHN8cFamvGVws/m96+Wz9LNVIbHrSjkvisX6HsGH5WPuaO6NZIujAGDXMKC+kLNtUfI3NdpxM3VZwU1wSubZHTt37Wo0svz0xxPXDdlgHbJAtw0UMXrPPiUfA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6434.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(366004)(39860400002)(346002)(376002)(451199018)(31686004)(36756003)(86362001)(2906002)(7416002)(8936002)(5660300002)(4744005)(4326008)(31696002)(66946007)(66476007)(8676002)(66556008)(41300700001)(110136005)(316002)(6666004)(6486002)(2616005)(6506007)(26005)(53546011)(38100700002)(6512007)(186003)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZnZzdkQyeENLejRLWUwrelJyRm5hb0t5cnExYTlGdVI0WmszZWh1ejFJWXZQ?=
+ =?utf-8?B?Lzh3dmRlMTdwcG1VOVJabm9JZExhTThKZDF1YmcweXF1ekxxNmROcFJQaFVy?=
+ =?utf-8?B?Um5KaDJ6WG1ORGUvcVdiUGRjczBrQVk2V0tnS2p6OFd6bmVuaTJPczJZWjFI?=
+ =?utf-8?B?WStObHFRcVlQRUUzUnhXRlRMSUhOdjVJbnovWkp6bzFjZ1prZjZwaDFQQVJh?=
+ =?utf-8?B?UUFoU0Q2VjViQS9nT28vYmRJTXg5S2lNbWdEdEVtZEp5TkRVZU0yTWNaWnBD?=
+ =?utf-8?B?OVhiM0xURTRIRmJkR0ZObVFGWHVIVU9LL1VHaW5YRHpJbjNlYlk2Nk0zMzh2?=
+ =?utf-8?B?Y1hrWWZKdjNpdVFYNU1ycDNRRnROL3B5OUM2UVg2a0ZPN1lRN1N3UnBlN1dT?=
+ =?utf-8?B?ekliSVhobVhXR2RZQ3lTRXlCenkrNEtxeEtZNk5XRVZmTXhzR0lVb1JjL0RP?=
+ =?utf-8?B?V0pmQzFEY1g2QUM0ekpaclBUc1c2WVRQTmJJUXlhRm40blR0V3NjYWFRV3RK?=
+ =?utf-8?B?WnppbkE1QkNIM3RINHg2NHg5Z3VzZVZabGZPeVpiOTlWTk42bXZ5VUlQU0dm?=
+ =?utf-8?B?UEp6V2tNOFE1d1NJamh6ZHRyMVNmK0FLclRlUEhzMkZzTm9Dam8wblhIMDhu?=
+ =?utf-8?B?NS9IRWpVb09lQTRRdm1wNHlOQVpuNGs2Y3JQbi9hT2pEQ0pWc2kvbVI4OExT?=
+ =?utf-8?B?RGtYVTBqYnFtMWdKNzBkSGhqcFFxdjNYSSsrNGtqRW90VmhWSFhCZDI5Q0tH?=
+ =?utf-8?B?Qm1EWHEzc0pJTUdGVUdHMjNvQ1F2YklWWEUzWnBrM3JUNHJTdFFQdTV4UnhE?=
+ =?utf-8?B?eDN6dXVDNXZXczJmOW12aTRkcWp1aGU2cVpJeC9STkcwUE5nbTdHbU5wTXFS?=
+ =?utf-8?B?aWJpZ1BESHllU3kza2JZVktaRkI3SWd0RVcrcU1OR0hGSWlGQnRQbUhlRXFp?=
+ =?utf-8?B?OW1aNVI3RTFhRG14RVIySlhQVjFJaHIzZWQyYVk5VndXL1Q5UWFSNTZpZkZE?=
+ =?utf-8?B?UDVHODA3WHB2dExPbURjWHJ0d0hzZWZtampUQ1Z2L2RmcllHUVpNeFJmQjMv?=
+ =?utf-8?B?TkJsbXpNemd0NGw1TnBRS0Jubm1yTWEzZGNGTllmTyt2RGpFSk9zeENsanFD?=
+ =?utf-8?B?UVhZYmlxSVcwYk8weFlTNnp1bkZ3NlJiemdlTkgxWG54VCsyQmJtcW5rNzJE?=
+ =?utf-8?B?L05EUStmL2ppMHE1VGduSWUxNlgzSGQzaUdoZ1FzR2RycUxqU2ZXWG9NUEFG?=
+ =?utf-8?B?dVlIY01wRXc1MnpLOEY2R0tETHVCMlJLWGhpVUNreXZjaDcweEo0SjFJUEVq?=
+ =?utf-8?B?ZU4wemo2KzYyWFk0bmpoS1k4SUVpaWo1Qi9EMGxhUVhhZ0RoR05zK3BRdTJ1?=
+ =?utf-8?B?L1IraWNBc0ZEVWFjcWxVR3N4aGdZL0dqTFYwem0yK2ZmTXRMejRtZjJFalVN?=
+ =?utf-8?B?ODZUSXE3VHlrRnNMM09zbXhUcWVLT3QwZ3lDMFcwSHRvOUt1Q1MzT3pFdXZ1?=
+ =?utf-8?B?RWhsdHhQMG03MUhER29GRkdZVnVGaFkvSVc5U2owQTVzNDBadVVzbm90cUlx?=
+ =?utf-8?B?QWZjdklka21qMmxBaUZwOFc3N25SWFRnNWhSSUk0TkswbEdwbjVmQTdIeENz?=
+ =?utf-8?B?OWFYZ0pFQ3YrQ3l1aThTcmtjdUJsMlBaQkg0SXdHRTlsdzlaYnFpWmowTjBS?=
+ =?utf-8?B?aDNjNlhXWllzdWtRbjF3YzUrWDA4V21TL3M5c0g0d3dRcVhVMHd3Yzc4S3V0?=
+ =?utf-8?B?K2w4YzYwa09sUHdXMEZiWFBJZmx4TEc1NTRPaHNKUk9KQWFBeVdlaWNHOEEr?=
+ =?utf-8?B?bE1BcVM1Sy9JckxBSVJwWlplRkZyQTF4U2QyWmFJUklDdFppQkRvSWFaejlT?=
+ =?utf-8?B?R1VmRWF6ekZYcVF5Q2VLNW9aUFJMaDBZcHZxazFiYnlac0lJU2RzMjc2QkU3?=
+ =?utf-8?B?T2t3blN6aHNDNHZqZ3dwd2JSU3QwcnJVeU5zdTRYd056UnczVUFLaDVtWEVr?=
+ =?utf-8?B?R3NWWDlFRE96ZWtTZk1PQXBHL0xTenRZbGNSWHc3bjAzNkVwMXZPUS93Uk10?=
+ =?utf-8?B?cnRvNTNNeTBYZVh2NDBpbjBEKzR0M0w2d1hZa1pMWTZvVE5RVnhvZ205Uzd6?=
+ =?utf-8?Q?MTM+i+cfFbjSIOrJ+qkh9Yc2P?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 71cb9491-7e52-4bf8-4fcd-08db0b1f5a8e
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6434.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2023 04:29:09.7505
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: i47mjXHS39ZagPsZrbgHePqH+ZRz3JpiDlSR1qj95/9okEv/f6U/WvJc8Zcj8ZdTvxyZQKdXblMBwjpT709VOQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7797
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 9, 2023 at 8:24 PM Sergey Senozhatsky
-<senozhatsky@chromium.org> wrote:
->
-> On (23/02/07 10:47), Sergey Senozhatsky wrote:
-> > > >  enum fullness_group {
-> > > > -       ZS_EMPTY,
-> > > > -       ZS_ALMOST_EMPTY,
-> > > > -       ZS_ALMOST_FULL,
-> > > > -       ZS_FULL,
-> > > > +       ZS_USAGE_0,
-> > > > +       ZS_USAGE_10,
-> > > > +       ZS_USAGE_20,
-> > > > +       ZS_USAGE_30,
-> > > > +       ZS_USAGE_40,
-> > > > +       ZS_USAGE_50,
-> > > > +       ZS_USAGE_60,
-> > > > +       ZS_USAGE_70,
-> > > > +       ZS_USAGE_80,
-> > > > +       ZS_USAGE_90,
-> > > > +       ZS_USAGE_99,
-> > > > +       ZS_USAGE_100,
-> > > >         NR_ZS_FULLNESS,
-> > > >  };
-> > > >
-> > >
-> > > Is there a reason why this can't be done with something like #define
-> > > FULLNESS_GROUPS 10? We can make sure during build that (100 %
-> > > FULLNESS_GROUPS == 0) to make our lives easier. I feel like the code
-> > > will be much more concise and easier to navigate, instead of multiple
-> > > enums and static arrays.
-> >
-> > I wanted to keep things the way they are to make reviews simpler.
-> > We probably can do something more "disruptive" in a separate patch.
->
-> Forgot to mention, I was also thinking about extending zsmalloc stats
-> file and providing values for each fullness group per class, as opposed
-> to current ALMOST_EMPTY and ALMOST_FULL stats, which don't tell much.
+On 2/9/2023 7:58 PM, Dave Hansen wrote:
+> On 2/8/23 22:04, Bharata B Rao wrote:
+>>> First, IIRC, Intel PEBS at the time only gave guest virtual addresses in
+>>> the PEBS records.  They had to be translated back to host addresses to
+>>> be usable.  That was extra expensive.
+>> Just to be clear, I am using IBS in host only and it can give both virtual
+>> and physical address.
+> 
+> Could you talk a little bit about how IBS might get used for NUMA
+> balancing guest memory?
 
-Makes sense.
+IBS can work for guest, but will not provide physical address. Also
+the support for virtualized IBS isn't upstream yet.
 
->
-> I can get rid of static const arrays and pass "begin / end" group IDs to
-> functions that iterate fullness lists and pick the first head page, but
-> I think that enum values will stay.
+However I am not sure how effective or useful NUMA balancing within a guest
+is, as the actual physical addresses are transparent to the guest.
 
-Do they have to stay for a technical reason or just to make reviews simpler?
+Additionally when using IBS in host, it is possible to prevent collection
+of samples from secure guests by using the PreventHostIBS feature.
+(https://lore.kernel.org/linux-perf-users/20230206060545.628502-1-manali.shukla@amd.com/T/#)
+
+Regards,
+Bharata.
