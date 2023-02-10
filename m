@@ -2,101 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5414E692320
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCFB6692325
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:19:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbjBJQSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 11:18:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40112 "EHLO
+        id S232608AbjBJQTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 11:19:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbjBJQSk (ORCPT
+        with ESMTP id S232047AbjBJQTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 11:18:40 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D00B6A7D;
-        Fri, 10 Feb 2023 08:18:39 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id r9-20020a17090a2e8900b00233ba727724so680512pjd.1;
-        Fri, 10 Feb 2023 08:18:39 -0800 (PST)
+        Fri, 10 Feb 2023 11:19:36 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B32E6A7D;
+        Fri, 10 Feb 2023 08:19:35 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id o8so4605184pls.11;
+        Fri, 10 Feb 2023 08:19:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WxXdZQxEy9ORSki1sFbClnXS6XD9R5tAV6m7018Aoxg=;
-        b=RLLvPVwEe37bC3gIxP2Bv5EbvbxNVa3e9DSJanGQhPNO0KGbiSFyKCQ7dU+E9Ud6dW
-         lIs4g+WD8OhzR0WDnPRqrT540emzHx41b2q3WvX/nfsB/EHmW7PhLz4ywQhN4EfAYRuV
-         f42OEecWXAMLbOCvgXanc9orcfCRZTm91zG/sGRAIiVbXozInbRILnOr1fnnYLVwW/ES
-         rzWtdnF78Chord9FKMSKBmRKsatVzaLls5eh/0nKU1maiIzrpV8MpYD0FD15T5HuReDV
-         dGuM3kcGExCcdKn+JWv33YQA+SFbhAioyZUitqsq2h/DiWcj8Y78JDbHXx7Al2bLNfW8
-         MpHA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZNaBmfoTQLz7ZNBG3JB0nk6HTNfGIUhugluN7LKHX0s=;
+        b=DLLnIBtuljVisyTCGaZTIzjn+WmCfhgit/hpuV7WbyJi1rRiLIkfzovDE1EWmzrgfz
+         Y5QPVYECtBBgnA+XrGeAnAJXIp8Ru0pUaRkxe4AP9Wifdfk59O1amKjRVkePy7ciFLP0
+         INZc+4p2KGsuTkYwK0p3hrUcTEz09ZIGoiN3JsufbPpi+vUnGbzTIqd18uOXsHijLi3h
+         cnbmYXUhQm/p5OyvJGcUfWr6WpZbLLblDrrFwnw9r8L6Jw2pLgJuKeGq9sB577Y3nQ8L
+         GVvyqQw4h0hLvJwjvQijb4WkJGMmGt34FefyPMiQFU1rosYE2dYLgWqxhlmLT79xVmUO
+         dCtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WxXdZQxEy9ORSki1sFbClnXS6XD9R5tAV6m7018Aoxg=;
-        b=4GBloVG1XGcY2vWK8dIj9OJXy/mymhLKYDVt4pBxc/NQFoEv1xOH7duYYtyqlQmfuO
-         GaARoAZ7zs037tWJ3Z4BOflUNRAIAQZhIT6bmTbhE7lBQFxBmWj37lOZ2Bm8bh0wkSVE
-         CsbCCt0BL3K6hdOwohRo/ZFlPZ4gvBxfYEwwYZfuVh0vEWhtDjV57el6ZcE43MaDz9dQ
-         RFoKxqP6o3iea7In+p39YkvytLxcCmRABfPHR2ljjKaA45R2lvendVlISACEOHmu8Ofj
-         MHnbWVMqzlIvKdY4KzX1TIqsvWN9xsxygi3dsZP03yAhmSWwE+g4LpMU5h3C5ziJDN8w
-         mRqw==
-X-Gm-Message-State: AO0yUKVwxsF2Evy9Ufuvm4BdNF7TInL8Lj2yfpYgo/NDBXirk4FXVG7C
-        NY/wqIOYh/EcXBbQhDh8xt0=
-X-Google-Smtp-Source: AK7set8aF8P+ZlNIMzRzl1T1H/DSMSa4lsmTbGM6NWsjEMzuyTqi2Jrn0/eW0THES6OU8oRuG4QGGQ==
-X-Received: by 2002:a17:903:2303:b0:195:f06f:84fc with SMTP id d3-20020a170903230300b00195f06f84fcmr17146571plh.40.1676045918601;
-        Fri, 10 Feb 2023 08:18:38 -0800 (PST)
-Received: from localhost ([124.248.219.206])
-        by smtp.gmail.com with ESMTPSA id n3-20020a170902dc8300b00198fe021f93sm2335425pld.77.2023.02.10.08.18.37
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 10 Feb 2023 08:18:38 -0800 (PST)
-Date:   Fri, 10 Feb 2023 08:18:27 -0800
-From:   Dan Li <ashimida.1990@gmail.com>
-To:     Hongtao Liu <crazylht@gmail.com>
-Cc:     gcc-patches@gcc.gnu.org,
-        Richard Sandiford <richard.sandiford@arm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Marco Elver <elver@google.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Song Liu <song@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Juergen Gross <jgross@suse.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Yuntao Wang <ytcoode@gmail.com>,
-        Changbin Du <changbin.du@intel.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: Re: [RFC/RFT 0/3] Add compiler support for Control Flow Integrity
-Message-ID: <20230210161827.ze2dtrfugydlbw2p@ubuntu>
-References: <20221219055431.22596-1-ashimida.1990@gmail.com>
- <CAMZc-bzmACcpSePKxuuA=ug2+yik+Zo3-mfqr2OyZ-n_nT=OnQ@mail.gmail.com>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZNaBmfoTQLz7ZNBG3JB0nk6HTNfGIUhugluN7LKHX0s=;
+        b=5vWVA62T+YjFAd8y8mFeznHRwo78HR2XuACuZU2zCLaODUIUE2V4Wq+pQmAZbNCieh
+         OYXDOPLPBsBCmWL+0+Jt2XbeuJObHSK12B4XNCb7ssuPrYXNor3nBrw40VUXKyAVHIX9
+         qjIizvZlVktDnCjHoy++V7cN8JkZRPtbGHXxKoCYpa6KYL9LVNWQ3iNbqlCxEBs/KtL9
+         mSS3Cm1DVALf2O7h3ZRV+83kY7tgoUII/vFyVXyprfRzuZf6Ewn8s3lNzTSX8KrP3Cqx
+         WZaQCNZrzg+wslHQdX/gi8Atkzu3jzwaRpeoeBsP5MUYgs1HaXfpsuD7Y/ARZ1ioVpkZ
+         XYgw==
+X-Gm-Message-State: AO0yUKUW4D1zW+sCNMwYh1a+NpBmteuJgC+9/9/9yjjYdvDWXswE266K
+        aYobNP31zJ4+w+a2fN8buXUJor+SelQ=
+X-Google-Smtp-Source: AK7set9qN+dgeUakpHaxIOaPDx6OKlk/K+d3hQAC4St+5FG1av7zKEJsQ7wnQLgC+iINiEWalko7Rg==
+X-Received: by 2002:a17:902:ec89:b0:194:5c63:364c with SMTP id x9-20020a170902ec8900b001945c63364cmr16945581plg.62.1676045974892;
+        Fri, 10 Feb 2023 08:19:34 -0800 (PST)
+Received: from localhost.localdomain (n220246252084.netvigator.com. [220.246.252.84])
+        by smtp.gmail.com with ESMTPSA id q9-20020a170902bd8900b0018099c9618esm3564425pls.231.2023.02.10.08.19.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 08:19:34 -0800 (PST)
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Jianhua Lu <lujianhua000@gmail.com>
+Subject: [PATCH 1/2] dt-bindings: display: panel: Add Novatek NT36523 bindings
+Date:   Sat, 11 Feb 2023 00:19:24 +0800
+Message-Id: <20230210161925.32343-1-lujianhua000@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMZc-bzmACcpSePKxuuA=ug2+yik+Zo3-mfqr2OyZ-n_nT=OnQ@mail.gmail.com>
-User-Agent: NeoMutt/20171215
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -107,29 +76,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/09, Hongtao Liu wrote:
-> On Mon, Dec 19, 2022 at 3:59 PM Dan Li via Gcc-patches
-> <gcc-patches@gcc.gnu.org> wrote:
-> >
-> > This series of patches is mainly used to support the control flow
-> > integrity protection of the linux kernel [1], which is similar to
-> > -fsanitize=kcfi in clang 16.0 [2,3].
-> >
-> > I hope that this feature will also support user-mode CFI in the
-> > future (at least for developers who can recompile the runtime),
-> > so I use -fsanitize=cfi as a compilation option here.
-> >
-> > Any suggestion please let me know :).
-> Do you have this series as a branch somewhere that we could also try for x86?
+Novatek NT36523 is a display driver IC that can drive DSI panel. It
+is also present in the csot and boe video mode panels. It is found
+in Xiaomi Mi Pad 5 series.
 
-Hi Hongtao,
+Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+---
+ .../display/panel/novatek,nt36523.yaml        | 101 ++++++++++++++++++
+ 1 file changed, 101 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml
 
-I haven't tried this feature on the x86 platform, if possible, I will try it in
-the next version.
+diff --git a/Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml b/Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml
+new file mode 100644
+index 000000000000..a7098d0ce7e1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml
+@@ -0,0 +1,101 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/display/panel/novatek,nt36523.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Novatek NT36523 based DSI display Panels
++
++maintainers:
++  - Jianhua Lu <lujianhua000@gmail.com>
++
++description: |
++  The nt36523 IC from Novatek is a generic DSI Panel IC used to drive dsi
++  panels.
++  Right now, only support cost and boe LCD display panels with the
++  resolution of 1600x2560. It is a video mode DSI panel.
++
++allOf:
++  - $ref: panel-common.yaml#
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - xiaomi,elish-csot-nt36523
++          - xiaomi,elish-boe-nt36523
++      - const: novatek,nt36523
++    description: This indicates the panel manufacturer of the panel that is
++      in turn using the NT36523 panel driver. This compatible string
++      determines how the NT36523 panel driver is configured for the indicated
++      panel. The novatek,nt36523 compatible shall always be provided as a fallback.
++
++  reset-gpios:
++    maxItems: 1
++    description: phandle of gpio for reset line - This should be 8mA, gpio
++      can be configured using mux, pinctrl, pinctrl-names (active high)
++
++  vddio-supply:
++    description: regulator that supplies the I/O voltage
++
++  vddpos-supply:
++    description: positive boost supply regulator
++
++  vddneg-supply:
++    description: negative boost supply regulator
++
++  reg: true
++  ports: true
++  backlight: true
++
++required:
++  - compatible
++  - reg
++  - vddio-supply
++  - vddpos-supply
++  - vddneg-supply
++  - reset-gpios
++  - ports
++
++unevaluatedProperties: false
++
++examples:
++  - |+
++    #include <dt-bindings/gpio/gpio.h>
++
++    dsi0 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        panel@0 {
++            compatible = "xiaomi,elish-csot-nt36523", "novatek,nt36523";
++            reg = <0>;
++            vddio-supply = <&vreg_l14a_1p88>;
++            vddpos-supply = <&lcd_vddpos_5p5>;
++            vddneg-supply = <&lcd_vddneg_5p5>;
++
++            backlight = <&backlight>;
++            reset-gpios = <&tlmm 75 GPIO_ACTIVE_LOW>;
++
++            ports {
++              #address-cells = <1>;
++              #size-cells = <0>;
++
++              port@0 {
++                reg = <0>;
++                panel_in_0: endpoint {
++                  remote-endpoint = <&dsi0_out>;
++                };
++              };
++
++              port@1{
++                reg = <1>;
++                panel_in_1: endpoint {
++                  remote-endpoint = <&dsi1_out>;
++                };
++              };
++            };
++        };
++    };
++
++...
+-- 
+2.39.1
 
-Thanks,
-Dan.
-
-> --
-> BR,
-> Hongtao
