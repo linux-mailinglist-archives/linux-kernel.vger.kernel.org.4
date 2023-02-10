@@ -2,117 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67108692459
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:22:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DD0692461
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:24:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232800AbjBJRWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 12:22:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36904 "EHLO
+        id S232902AbjBJRYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 12:24:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232613AbjBJRWJ (ORCPT
+        with ESMTP id S232613AbjBJRYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 12:22:09 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37BC36696
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:22:08 -0800 (PST)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 7F1F43F0C3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 17:22:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1676049725;
-        bh=S/oztqFWeJmzmDr/U8nZfNkMKK2hxPAiujJO+Umo16I=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=qvyPWeT34QkKF1H90NqcC7RCf83vXhwFnQhk/wrRuX5Aj1g5g7vpqiTmwCiveUY+5
-         GJpnPDgXs3N+jMEd3F+8OvKLzE16LZkNR8LxRqT1+iKbJ4eNs6r00t6J28sCzTuszk
-         T2S/vCt+ckG6nnjKo8ilJBFkxAVGuPYaX4HV/hBE3L3oDJMcIPQafV+ozpsZxsNCLh
-         e2O3zHef9VITfFTI6UOD1EChWAuvwOGzsfV7rlPfEe1yQ4YGCGPc29KGC4FDVbU53g
-         MGLt9aZILvjU5kphfwZPeneeZAhVB4T1TG7V5W7SUaAFUcJkGZxjaMvag+X//qgoIX
-         UhXTyXfVeJtXQ==
-Received: by mail-ej1-f70.google.com with SMTP id qa17-20020a170907869100b0088ea39742c8so3974986ejc.13
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:22:05 -0800 (PST)
+        Fri, 10 Feb 2023 12:24:17 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9A736696
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:24:14 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id n13so4323979wmr.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:24:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jK4GcD8hacKVWz6zl8bBrz233whrxcoTUY/2ygZZfmc=;
+        b=M2jDhbmblGLdfowPWsAysOenXMHJGfjKF4XBxa3qOAJbzKq8BVW5Bi70WAjt5O9fGN
+         qp+ANsnVyXQKsU16qsl+FTAEnXVOzh8BC6x36hX/4beu9BTYwt7CqPuJFw/mHj4k+UR8
+         H8YDYi8jHuZgdrghm16rzRYLYR86rDIbo1cgI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=S/oztqFWeJmzmDr/U8nZfNkMKK2hxPAiujJO+Umo16I=;
-        b=hXZYHoM7gs+vhX2u/zQK5Ds6gB+gLKs+zpsg8lsqe+JHrASw08tPv1BbKfUJ85voxs
-         vQyQzxgDoM9ix10JIHivKGPklo41SJ0gh2jIv7/blDpPlJRlPATEHBh4F0qh6f/T8+2W
-         9EBF0vrPMRyC+x+NQ3Uhs0rM0SA5iuh+n8/hKG4ATQ4iEH6Z6L/FI/3qq+D14ONMvVTZ
-         f8b+pncFbExoFWo9Fg5PgPfQHRZALODmVEbiSTrxGBFozSqnek3YBQiY3rNaJPzJf6Ur
-         0HE5prvVzUFI5MzJC3SSU8T6TKGro1NE6ahlxGNEt1rvKRV+kSAhU4hujdZVjCkl6d0b
-         EOcw==
-X-Gm-Message-State: AO0yUKVJCa7l4I8BeU0YBoPBinjdP3BI5xPmEu6m2Zb3OWKiWw6akUVE
-        6SGOumDkrg3OaVLwxvO6r65w6Ml8ajQUD1yp/hXJEa2Bv8K0NgMw+cdQSaPcICFuKWSoGJy1qrl
-        4x452yEmKNh+s5Kuay9rwbntqSrEH3iatZjpYrSVbrA==
-X-Received: by 2002:a17:906:1614:b0:87b:dba1:1bf3 with SMTP id m20-20020a170906161400b0087bdba11bf3mr16347227ejd.30.1676049725208;
-        Fri, 10 Feb 2023 09:22:05 -0800 (PST)
-X-Google-Smtp-Source: AK7set/YIySZYVz31YG5CrgtiBo3ntekvjcI08pZJN9QSahhumZtZTxLAgUnewRtPJBbaHEL0+GH+g==
-X-Received: by 2002:a17:906:1614:b0:87b:dba1:1bf3 with SMTP id m20-20020a170906161400b0087bdba11bf3mr16347206ejd.30.1676049725036;
-        Fri, 10 Feb 2023 09:22:05 -0800 (PST)
-Received: from righiandr-XPS-13-7390.homenet.telecomitalia.it (host-87-7-128-191.retail.telecomitalia.it. [87.7.128.191])
-        by smtp.gmail.com with ESMTPSA id i12-20020a170906250c00b008adc971f5acsm2655543ejb.178.2023.02.10.09.22.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 09:22:04 -0800 (PST)
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        bjorn3_gh@protonmail.com, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] rust: allow to use INIT_STACK_ALL_ZERO
-Date:   Fri, 10 Feb 2023 18:22:03 +0100
-Message-Id: <20230210172203.101331-1-andrea.righi@canonical.com>
-X-Mailer: git-send-email 2.37.2
+        bh=jK4GcD8hacKVWz6zl8bBrz233whrxcoTUY/2ygZZfmc=;
+        b=yaWmGYCZ7ITecoHrneel/y+DpKSiI/eosMkGZIIU7DStIFWCKDJI7gqcydDdOIQ97X
+         VMuM3+UszZ8si49mtzlhChnjZB93TtWP9wYVAqKRjXH+qI7DN1FEU6bYi9w+MKcIeWTv
+         n++uEPGF+L7OCAWlP32vn58q6X5MkFhZMQG4elTFuyQNfdMw5lm2wBUSfjXSpijvQDhg
+         RcdghLffy2zA24YnEk+RzEIRMOkTAQjO4n42p2Z4j1yTkOnAjtP5k225UST9kHlbJ1jx
+         An9LtVp4zipegyxLp+VhbuTJqMzlazzueQKmFLsDScSeShoedl+TzxTDCxGlCkxCWDwW
+         NrIQ==
+X-Gm-Message-State: AO0yUKXxxUrr161SIRZ8IhvUQZkUseQ7n5HgwzxGt8S8vK4Jq9NkucVe
+        XRNClnAmKqhV4T8m0llL9qAhiovgqeztHDr3pPI=
+X-Google-Smtp-Source: AK7set99jH25zhi+9fV0kZPh0KFerphOOQ2vkTU90q6l+NP/vza0e0v5o4cIOzSl4NNbRQi3VAvpYQ==
+X-Received: by 2002:a05:600c:45cf:b0:3df:9858:c03c with SMTP id s15-20020a05600c45cf00b003df9858c03cmr10696634wmo.17.1676049852990;
+        Fri, 10 Feb 2023 09:24:12 -0800 (PST)
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com. [209.85.218.41])
+        by smtp.gmail.com with ESMTPSA id q11-20020a7bce8b000000b003dd9232f036sm8496260wmj.23.2023.02.10.09.24.12
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 09:24:12 -0800 (PST)
+Received: by mail-ej1-f41.google.com with SMTP id gr7so17742188ejb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:24:12 -0800 (PST)
+X-Received: by 2002:a17:906:4e46:b0:87a:7098:ca09 with SMTP id
+ g6-20020a1709064e4600b0087a7098ca09mr3050972ejw.78.1676049852037; Fri, 10 Feb
+ 2023 09:24:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
+ <CAHk-=wj8rthcQ9gQbvkMzeFt0iymq+CuOzmidx3Pm29Lg+W0gg@mail.gmail.com>
+ <20230210021603.GA2825702@dread.disaster.area> <20230210040626.GB2825702@dread.disaster.area>
+ <CAHk-=wip9xx367bfCV8xaF9Oaw4DZ6edF9Ojv10XoxJ-iUBwhA@mail.gmail.com> <20230210061953.GC2825702@dread.disaster.area>
+In-Reply-To: <20230210061953.GC2825702@dread.disaster.area>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 10 Feb 2023 09:23:55 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wj6jd0JWtxO0JvjYUgKfnGEj4BzPVOfY+4_=-0iiGh0tw@mail.gmail.com>
+Message-ID: <CAHk-=wj6jd0JWtxO0JvjYUgKfnGEj4BzPVOfY+4_=-0iiGh0tw@mail.gmail.com>
+Subject: Re: copy on write for splice() from file to pipe?
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Stefan Metzmacher <metze@samba.org>, Jens Axboe <axboe@kernel.dk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API Mailing List <linux-api@vger.kernel.org>,
+        io-uring <io-uring@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Samba Technical <samba-technical@lists.samba.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With CONFIG_INIT_STACK_ALL_ZERO enabled, bindgen is passing
--ftrivial-auto-var-init=zero to clang, that triggers the following:
+On Thu, Feb 9, 2023 at 10:19 PM Dave Chinner <david@fromorbit.com> wrote:
+>
+> Splice has two sides - a source where we splice to the transport
+> pipe, then a destination where we splice pages from the transport
+> pipe. For better or worse, time in the transport pipe is unbounded,
+> but that does not mean the srouce or destination have unbound
+> processing times.
 
-  error: '-ftrivial-auto-var-init=zero' hasn't been enabled; enable it at your own peril for benchmarking purpose only with '-enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang'
+Well, they are possibly fairly unbounded too - think things like
+network packet re-send timeouts etc.
 
-This flag should be dropped in clang-17, but at the moment it seems more
-reasonable to add it to the bindgen CFLAGS to prevent the error above.
+So the data lifetime - even just on just one side - can _easily_ be
+"multiple seconds" even when things are normal, and if you have actual
+network connectivity issues we are easily talking minutes.
 
-In this way we can enable CONFIG_INIT_STACK_ALL_ZERO with CONFIG_RUST
-without triggering any build error.
+So I don't think a scheme based on locking works even for just the
+"one side" operations - at least in the general case.
 
-Link: https://reviews.llvm.org/D125142
-Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
----
- rust/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+That said, I wasn't really serious about my "retry" model either.
+Maybe it could be made to work, but it sounds messy.
 
-diff --git a/rust/Makefile b/rust/Makefile
-index ff70c4c916f8..5e26db07a1dc 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -267,7 +267,8 @@ BINDGEN_TARGET		:= $(BINDGEN_TARGET_$(SRCARCH))
- # All warnings are inhibited since GCC builds are very experimental,
- # many GCC warnings are not supported by Clang, they may only appear in
- # some configurations, with new GCC versions, etc.
--bindgen_extra_c_flags = -w --target=$(BINDGEN_TARGET)
-+bindgen_extra_c_flags = -w --target=$(BINDGEN_TARGET) \
-+			-enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
- 
- bindgen_c_flags = $(filter-out $(bindgen_skip_c_flags), $(c_flags)) \
- 	$(bindgen_extra_c_flags)
--- 
-2.37.2
+And when it comes to networking, in general things like TCP checksums
+etc should be ok even with data that isn't stable.  When doing things
+by hand, networking should always use the "copy-and-checksum"
+functions that do the checksum while copying (so even if the source
+data changes, the checksum is going to be the checksum for the data
+that was copied).
 
+And in many (most?) smarter network cards, the card itself does the
+checksum, again on the data as it is transferred from memory.
+
+So it's not like "networking needs a stable source" is some really
+_fundamental_ requirement for things like that to work.
+
+But it may well be that we have situations where some network driver
+does the checksumming separately from then copying the data.
+
+               Linus
