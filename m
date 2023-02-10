@@ -2,827 +2,675 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA456917CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 05:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C136917D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 06:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjBJE4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 23:56:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44758 "EHLO
+        id S231158AbjBJFAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 00:00:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjBJE4c (ORCPT
+        with ESMTP id S229455AbjBJFAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 23:56:32 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF0F4227;
-        Thu,  9 Feb 2023 20:56:29 -0800 (PST)
-Date:   Fri, 10 Feb 2023 04:56:24 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=t-8ch.de; s=mail;
-        t=1676004987; bh=eVkl7gBVqaElgN4a/dZU4oc4NR9Gk402jVBzbjiXEJg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X57hBhk6dtdZiENwcvRGExnU1A56WS7qEUkRFny3OGbc+Pr91f3zs3UzsrzJr17cT
-         bNY+IGn7JMrs7UUIG5FzQSgRb5+0rqr4up6lcrwbJmpp9ay68dEW6NuNP9HGCl99Y3
-         LsfFnBP2DOSpWl6DLR73epAWgAy8WfF15T0NhPeE=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Aditya Garg <gargaditya08@live.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        "jkosina@suse.cz" <jkosina@suse.cz>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        Andy Shevchenko <andy@infradead.org>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "ronald@innovation.ch" <ronald@innovation.ch>,
-        "kekrby@gmail.com" <kekrby@gmail.com>,
-        Orlando Chamberlain <orlandoch.dev@gmail.com>
-Subject: Re: [PATCH 1/3] HID: apple-ibridge: Add Apple iBridge HID driver for
- T1 chip.
-Message-ID: <20230210045624.cjxroikmmvm3liij@t-8ch.de>
-References: <E5D8BEBA-3C5B-460F-BD2C-39470A793CC3@live.com>
- <40274C3D-4F4F-479C-944C-EEBDC78F959C@live.com>
+        Fri, 10 Feb 2023 00:00:51 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AEC45F64;
+        Thu,  9 Feb 2023 21:00:48 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id dt8so3626727oib.0;
+        Thu, 09 Feb 2023 21:00:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S+M+Gtjp+ZGltrlXzqyMRQoRVGM0tfwAT1ZfVHi1wyQ=;
+        b=nvKPj5Cca2omzt6FZpYHCTq/q4s6MbdVRKwKTsceUhtnZAZF8T4AzjmL3Jzm/bR2TX
+         keUnVQAGjQ3jP4fqPwI50WdvmdOXwUx0gBvaGLHV8z1f5o+mvC1RwwC3+nigoHzQE9Wo
+         jNU5SLXd41c9lKSUDM1WVxDcf024l9M7BXTWCe+9GWkIEIdMACRKQfzlSm+aR7FONOP4
+         JWqVjEbNAUAZwhY+rFDmhVzYNoV5L9Xofeu+Ap7zysecMqKwp9MVnETmky9zQ3dHKV+r
+         eK9IZWDsNNqxH9vvdGTDOvivHkMMSOsHRHE8CZbSmlb4TL9zDWUF8sq4GlF54GE/XSbU
+         DmXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S+M+Gtjp+ZGltrlXzqyMRQoRVGM0tfwAT1ZfVHi1wyQ=;
+        b=1kJDrbYcGSTVa482pTCfTA4Cauc5FphyteRdF1HrZiWgJeF9+fgsXtaP5Bmn/TGD28
+         vuj/ZCgtz7Jo+rq/IkbFLxYLsWbdg0yFHcB+UZEjN7bEFfdU2DbFgEr6qTJgZ0+NBvO5
+         2G8SHIutUdVRYSbr72POFJi3lww+OZxFYnPlWPHeHSMz77s29INSu/dcAnOjHULKqxZK
+         95/GODXCqsLpjwDpsYmAAi6WNgg+8pOcU6AgPAUKODEHrLGLFRHJWePFpinpqUnQ8nTl
+         Um+d28BcuKSWJ7ztnhD80tjvIRHuOsBtVeSicVjHdkDPY5SREC/p5XNpGE85jmt6eJUu
+         ajEw==
+X-Gm-Message-State: AO0yUKXnIXdz0RLgFfEVMrJ34h9iJZzq23kP6sW8BhxPdWJPbmgmHWjU
+        agnR7nf0NT9EIj/4wsCVlS8=
+X-Google-Smtp-Source: AK7set+N+JYqobUv2g12VGoGYVGe3bfA+UCG7OH1dZsI4BlhPFnulGxZuSGI8RNoDDjfgAK+v1Y/lg==
+X-Received: by 2002:a05:6808:8d1:b0:378:57fc:c60a with SMTP id k17-20020a05680808d100b0037857fcc60amr6221932oij.38.1676005246941;
+        Thu, 09 Feb 2023 21:00:46 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n66-20020acaef45000000b0035c073aa0d8sm1785522oih.18.2023.02.09.21.00.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 21:00:46 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 9 Feb 2023 21:00:44 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     hdegoede@redhat.com, markgross@kernel.org, jdelvare@suse.com,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] platform/x86: dell-ddv: Add hwmon support
+Message-ID: <20230210050044.GA696255@roeck-us.net>
+References: <20230209211503.2739-1-W_Armin@gmx.de>
+ <20230209211503.2739-2-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <40274C3D-4F4F-479C-944C-EEBDC78F959C@live.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230209211503.2739-2-W_Armin@gmx.de>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Feb 09, 2023 at 10:15:02PM +0100, Armin Wolf wrote:
+> Thanks to bugreport 216655 on bugzilla triggered by the
+> dell-smm-hwmon driver, the contents of the sensor buffers
+> could be almost completely decoded.
+> Add an hwmon interface for exposing the fan and thermal
+> sensor values. Since the WMI interface can be quite slow
+> on some machines, the sensor buffers are cached for 1 second
+> to lessen the performance impact.
+> The debugfs interface remains in place to aid in reverse-engineering
+> of unknown sensor types and the thermal buffer.
+> 
+> Tested-by: Anton�n Skala <skala.antonin@gmail.com>
+> Tested-by: Gustavo Walbon <gustavowalbon@gmail.com>
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-some comments inline.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-On Fri, Feb 10, 2023 at 03:43:24AM +0000, Aditya Garg wrote:
-> From: Ronald Tschalär <ronald@innovation.ch>
-> 
-> The iBridge device provides access to several devices, including:
-> - the Touch Bar
-> - the iSight webcam
-> - the light sensor
-> - the fingerprint sensor
-> 
-> This driver provides the core support for managing the iBridge device
-> and the access to the underlying devices. In particular, the
-> functionality for the touch bar and light sensor is exposed via USB HID
-> interfaces, and on devices with the T1 chip one of the HID devices is
-> used for both functions. So this driver creates virtual HID devices, one
-> per top-level report collection on each HID device (for a total of 3
-> virtual HID devices). The sub-drivers then bind to these virtual HID
-> devices.
-> 
-> This way the Touch Bar and ALS drivers can be kept in their own modules,
-> while at the same time making them look very much like as if they were
-> connected to the real HID devices. And those drivers then work (mostly)
-> without further changes on MacBooks with the T2 chip that don't need
-> this driver.
-> 
-> Signed-off-by: Ronald Tschalär <ronald@innovation.ch>
-> [Kerem Karabay: convert to a platform driver]
-> [Kerem Karabay: fix appleib_forward_int_op]
-> [Kerem Karabay: rely on HID core's parsing in appleib_add_device]
-> Signed-off-by: Kerem Karabay <kekrby@gmail.com>
-> Signed-off-by: Aditya Garg <gargaditya08@live.com>
 > ---
->  drivers/hid/Kconfig         |  15 +
->  drivers/hid/Makefile        |   1 +
->  drivers/hid/apple-ibridge.c | 610 ++++++++++++++++++++++++++++++++++++
->  drivers/hid/apple-ibridge.h |  15 +
->  drivers/hid/hid-ids.h       |   1 +
->  drivers/hid/hid-quirks.c    |   3 +
->  6 files changed, 645 insertions(+)
->  create mode 100644 drivers/hid/apple-ibridge.c
->  create mode 100644 drivers/hid/apple-ibridge.h
+>  drivers/platform/x86/dell/Kconfig        |   8 +-
+>  drivers/platform/x86/dell/dell-wmi-ddv.c | 490 ++++++++++++++++++++++-
+>  2 files changed, 493 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-> index e2a5d30c8..e69afa5f4 100644
-> --- a/drivers/hid/Kconfig
-> +++ b/drivers/hid/Kconfig
-> @@ -130,6 +130,21 @@ config HID_APPLE
->  	Say Y here if you want support for keyboards of	Apple iBooks, PowerBooks,
->  	MacBooks, MacBook Pros and Apple Aluminum.
->  
-> +config HID_APPLE_IBRIDGE
-> +	tristate "Apple iBridge"
-> +	depends on USB_HID
-> +	depends on (X86 && ACPI) || COMPILE_TEST
-> +	imply HID_SENSOR_HUB
-> +	imply HID_SENSOR_ALS
-> +	help
-> +	This module provides the core support for the Apple T1 chip found
-> +	on 2016 and 2017 MacBookPro's, also known as the iBridge. The drivers
-> +	for the Touch Bar (apple-touchbar) and light sensor (hid-sensor-hub
-> +	and hid-sensor-als) need to be enabled separately.
+> diff --git a/drivers/platform/x86/dell/Kconfig b/drivers/platform/x86/dell/Kconfig
+> index d319de8f2132..bdd78076b1d7 100644
+> --- a/drivers/platform/x86/dell/Kconfig
+> +++ b/drivers/platform/x86/dell/Kconfig
+> @@ -192,12 +192,12 @@ config DELL_WMI_DESCRIPTOR
+>  config DELL_WMI_DDV
+>  	tristate "Dell WMI sensors Support"
+>  	default m
+> -	depends on ACPI_BATTERY
+>  	depends on ACPI_WMI
+> +	depends on ACPI_BATTERY || HWMON
+>  	help
+> -	  This option adds support for WMI-based sensors like
+> -	  battery temperature sensors found on some Dell notebooks.
+> -	  It also supports reading of the battery ePPID.
+> +	  This option adds support for WMI-based fan and thermal sensors
+> +	  found on some Dell notebooks. It also supports various WMI-based battery
+> +	  extras like reading of the battery temperature and ePPID.
+> 
+>  	  To compile this drivers as a module, choose M here: the module will
+>  	  be called dell-wmi-ddv.
+> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> index 9695bf493ea6..d81dc4dd93e3 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> @@ -12,19 +12,27 @@
+>  #include <linux/device.h>
+>  #include <linux/dev_printk.h>
+>  #include <linux/errno.h>
+> +#include <linux/kconfig.h>
+>  #include <linux/kernel.h>
+> +#include <linux/hwmon.h>
+>  #include <linux/kstrtox.h>
+>  #include <linux/math.h>
+> +#include <linux/math64.h>
+>  #include <linux/module.h>
+> +#include <linux/mutex.h>
+>  #include <linux/limits.h>
+> +#include <linux/pm.h>
+>  #include <linux/power_supply.h>
+>  #include <linux/printk.h>
+>  #include <linux/seq_file.h>
+>  #include <linux/sysfs.h>
+> +#include <linux/types.h>
+>  #include <linux/wmi.h>
+> 
+>  #include <acpi/battery.h>
+> 
+> +#include <asm/unaligned.h>
 > +
-> +	To compile this driver as a module, choose M here: the
-> +	module will be called apple-ibridge.
+>  #define DRIVER_NAME	"dell-wmi-ddv"
+> 
+>  #define DELL_DDV_SUPPORTED_VERSION_MIN	2
+> @@ -63,13 +71,63 @@ enum dell_ddv_method {
+>  	DELL_DDV_THERMAL_SENSOR_INFORMATION	= 0x22,
+>  };
+> 
+> +struct fan_sensor_entry {
+> +	u8 type;
+> +	__le16 rpm;
+> +} __packed;
 > +
->  config HID_APPLEIR
->  	tristate "Apple infrared receiver"
->  	depends on (USB_HID)
-> diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-> index e8014c1a2..b61373cd8 100644
-> --- a/drivers/hid/Makefile
-> +++ b/drivers/hid/Makefile
-> @@ -26,6 +26,7 @@ obj-$(CONFIG_HID_ACCUTOUCH)	+= hid-accutouch.o
->  obj-$(CONFIG_HID_ALPS)		+= hid-alps.o
->  obj-$(CONFIG_HID_ACRUX)		+= hid-axff.o
->  obj-$(CONFIG_HID_APPLE)		+= hid-apple.o
-> +obj-$(CONFIG_HID_APPLE_IBRIDGE)	+= apple-ibridge.o
->  obj-$(CONFIG_HID_APPLEIR)	+= hid-appleir.o
->  obj-$(CONFIG_HID_CREATIVE_SB0540)	+= hid-creative-sb0540.o
->  obj-$(CONFIG_HID_ASUS)		+= hid-asus.o
-> diff --git a/drivers/hid/apple-ibridge.c b/drivers/hid/apple-ibridge.c
-> new file mode 100644
-> index 000000000..4d26f8d66
-> --- /dev/null
-> +++ b/drivers/hid/apple-ibridge.c
-> @@ -0,0 +1,610 @@
-> +// SPDX-License-Identifier: GPL-2.0
+> +struct thermal_sensor_entry {
+> +	u8 type;
+> +	s8 now;
+> +	s8 min;
+> +	s8 max;
+> +	u8 unknown;
+> +} __packed;
+> +
+> +struct combined_channel_info {
+> +	struct hwmon_channel_info info;
+> +	u32 config[];
+> +};
+> +
+> +struct combined_chip_info {
+> +	struct hwmon_chip_info chip;
+> +	const struct hwmon_channel_info *info[];
+> +};
+> +
+> +struct dell_wmi_ddv_sensors {
+> +	struct mutex lock;	/* protect caching */
+> +	unsigned long timestamp;
+> +	union acpi_object *obj;
+> +	u64 entries;
+> +};
+> +
+>  struct dell_wmi_ddv_data {
+>  	struct acpi_battery_hook hook;
+>  	struct device_attribute temp_attr;
+>  	struct device_attribute eppid_attr;
+> +	struct dell_wmi_ddv_sensors fans;
+> +	struct dell_wmi_ddv_sensors temps;
+>  	struct wmi_device *wdev;
+>  };
+> 
+> +static const char * const fan_labels[] = {
+> +	"CPU Fan",
+> +	"Chassis Motherboard Fan",
+> +	"Video Fan",
+> +	"Power Supply Fan",
+> +	"Chipset Fan",
+> +	"Memory Fan",
+> +	"PCI Fan",
+> +	"HDD Fan",
+> +};
+> +
+> +static const char * const fan_dock_labels[] = {
+> +	"Docking Chassis/Motherboard Fan",
+> +	"Docking Video Fan",
+> +	"Docking Power Supply Fan",
+> +	"Docking Chipset Fan",
+> +};
+> +
+>  static int dell_wmi_ddv_query_type(struct wmi_device *wdev, enum dell_ddv_method method, u32 arg,
+>  				   union acpi_object **result, acpi_object_type type)
+>  {
+> @@ -171,6 +229,410 @@ static int dell_wmi_ddv_query_string(struct wmi_device *wdev, enum dell_ddv_meth
+>  	return dell_wmi_ddv_query_type(wdev, method, arg, result, ACPI_TYPE_STRING);
+>  }
+> 
 > +/*
-> + * Apple iBridge Driver
-> + *
-> + * Copyright (c) 2018 Ronald Tschalär
+> + * Needs to be called with lock held, except during initialization.
 > + */
-> +
-> +/**
-> + * DOC: Overview
-> + *
-> + * 2016 and 2017 MacBookPro models with a Touch Bar (MacBookPro13,[23] and
-> + * MacBookPro14,[23]) have an Apple iBridge chip (also known as T1 chip) which
-> + * exposes the touch bar, built-in webcam (iSight), ambient light sensor, and
-> + * Secure Enclave Processor (SEP) for TouchID. It shows up in the system as a
-> + * USB device with 3 configurations: 'Default iBridge Interfaces', 'Default
-> + * iBridge Interfaces(OS X)', and 'Default iBridge Interfaces(Recovery)'.
-> + *
-> + * In the first (default after boot) configuration, 4 usb interfaces are
-> + * exposed: 2 related to the webcam, and 2 USB HID interfaces representing
-> + * the touch bar and the ambient light sensor. The webcam interfaces are
-> + * already handled by the uvcvideo driver. However, there is a problem with
-> + * the other two interfaces: one of them contains functionality (HID reports)
-> + * used by both the touch bar and the ALS, which is an issue because the kernel
-> + * allows only one driver to be attached to a given device. This driver exists
-> + * to solve this issue.
-> + *
-> + * This driver is implemented as a HID driver that attaches to both HID
-> + * interfaces and in turn creates several virtual child HID devices, one for
-> + * each top-level collection found in each interfaces report descriptor. The
-> + * touch bar and ALS drivers then attach to these virtual HID devices, and this
-> + * driver forwards the operations between the real and virtual devices.
-> + *
-> + * One important aspect of this approach is that resulting (virtual) HID
-> + * devices look much like the HID devices found on the later MacBookPro models
-> + * which have a T2 chip, where there are separate USB interfaces for the touch
-> + * bar and ALS functionality, which means that the touch bar and ALS drivers
-> + * work (mostly) the same on both types of models.
-> + *
-> + * Lastly, this driver also takes care of the power-management for the
-> + * iBridge when suspending and resuming.
-> + */
-
-Maybe add a pr_fmt definition here?
-
-> +
-> +#include <linux/platform_device.h>
-> +#include <linux/acpi.h>
-> +#include <linux/device.h>
-> +#include <linux/hid.h>
-> +#include <linux/list.h>
-> +#include <linux/module.h>
-> +#include <linux/slab.h>
-> +#include <linux/usb.h>
-> +
-> +#include "hid-ids.h"
-> +#include "../hid/usbhid/usbhid.h"
-> +#include "apple-ibridge.h"
-> +
-> +#define APPLEIB_BASIC_CONFIG	1
-> +
-> +static struct hid_device_id appleib_sub_hid_ids[] = {
-> +	{ HID_USB_DEVICE(USB_VENDOR_ID_LINUX_FOUNDATION,
-> +			 USB_DEVICE_ID_IBRIDGE_TB) },
-> +	{ HID_USB_DEVICE(USB_VENDOR_ID_LINUX_FOUNDATION,
-> +			 USB_DEVICE_ID_IBRIDGE_ALS) },
-> +};
-
-Structs like this should be "const".
-
-> +
-> +static struct {
-> +	unsigned int usage;
-> +	struct hid_device_id *dev_id;
-> +} appleib_usage_map[] = {
-> +	/* Default iBridge configuration, key inputs and mode settings */
-> +	{ 0x00010006, &appleib_sub_hid_ids[0] },
-> +	/* OS X iBridge configuration, digitizer inputs */
-> +	{ 0x000D0005, &appleib_sub_hid_ids[0] },
-> +	/* All iBridge configurations, display/DFR settings */
-> +	{ 0xFF120001, &appleib_sub_hid_ids[0] },
-> +	/* All iBridge configurations, ALS */
-> +	{ 0x00200041, &appleib_sub_hid_ids[1] },
-> +};
-
-const
-
-> +
-> +struct appleib_device {
-> +	acpi_handle asoc_socw;
-> +};
-> +
-> +struct appleib_hid_dev_info {
-> +	struct hid_device	*hdev;
-> +	struct hid_device	*sub_hdevs[ARRAY_SIZE(appleib_sub_hid_ids)];
-> +	bool			sub_open[ARRAY_SIZE(appleib_sub_hid_ids)];
-> +};
-> +
-> +static int appleib_hid_raw_event(struct hid_device *hdev,
-> +				 struct hid_report *report, u8 *data, int size)
+> +static int dell_wmi_ddv_update_sensors(struct wmi_device *wdev, enum dell_ddv_method method,
+> +				       struct dell_wmi_ddv_sensors *sensors, size_t entry_size)
 > +{
-> +	struct appleib_hid_dev_info *hdev_info = hid_get_drvdata(hdev);
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(hdev_info->sub_hdevs); i++) {
-> +		if (READ_ONCE(hdev_info->sub_open[i]))
-> +			hid_input_report(hdev_info->sub_hdevs[i], report->type,
-> +					 data, size, 0);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static __u8 *appleib_report_fixup(struct hid_device *hdev, __u8 *rdesc,
-> +				  unsigned int *rsize)
-> +{
-> +	/* Some fields have a size of 64 bits, which according to HID 1.11
-> +	 * Section 8.4 is not valid ("An item field cannot span more than 4
-> +	 * bytes in a report"). Furthermore, hid_field_extract() complains
-> +	 * when encountering such a field. So turn them into two 32-bit fields
-> +	 * instead.
-> +	 */
-> +
-> +	if (*rsize == 634 &&
-> +	    /* Usage Page 0xff12 (vendor defined) */
-> +	    rdesc[212] == 0x06 && rdesc[213] == 0x12 && rdesc[214] == 0xff &&
-> +	    /* Usage 0x51 */
-> +	    rdesc[416] == 0x09 && rdesc[417] == 0x51 &&
-> +	    /* report size 64 */
-> +	    rdesc[432] == 0x75 && rdesc[433] == 64 &&
-> +	    /* report count 1 */
-> +	    rdesc[434] == 0x95 && rdesc[435] == 1) {
-> +		rdesc[433] = 32;
-> +		rdesc[435] = 2;
-> +		hid_dbg(hdev, "Fixed up first 64-bit field\n");
-> +	}
-> +
-> +	if (*rsize == 634 &&
-> +	    /* Usage Page 0xff12 (vendor defined) */
-> +	    rdesc[212] == 0x06 && rdesc[213] == 0x12 && rdesc[214] == 0xff &&
-> +	    /* Usage 0x51 */
-> +	    rdesc[611] == 0x09 && rdesc[612] == 0x51 &&
-> +	    /* report size 64 */
-> +	    rdesc[627] == 0x75 && rdesc[628] == 64 &&
-> +	    /* report count 1 */
-> +	    rdesc[629] == 0x95 && rdesc[630] == 1) {
-> +		rdesc[628] = 32;
-> +		rdesc[630] = 2;
-> +		hid_dbg(hdev, "Fixed up second 64-bit field\n");
-> +	}
-> +
-> +	return rdesc;
-> +}
-> +
-> +#ifdef CONFIG_PM
-> +/**
-> + * appleib_forward_int_op() - Forward a hid-driver callback to all drivers on
-> + * all virtual HID devices attached to the given real HID device.
-> + * @hdev the real hid-device
-> + * @forward a function that calls the callback on the given driver
-> + * @args arguments for the forward function
-> + *
-> + * This is for callbacks that return a status as an int.
-> + *
-> + * Returns: 0 on success, or the first error returned by the @forward function.
-> + */
-> +static int appleib_forward_int_op(struct hid_device *hdev,
-> +				  int (*forward)(struct hid_driver *,
-> +						 struct hid_device *, void *),
-> +				  void *args)
-> +{
-> +	struct appleib_hid_dev_info *hdev_info = hid_get_drvdata(hdev);
-> +	struct hid_device *sub_hdev;
-> +	int rc;
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(hdev_info->sub_hdevs); i++) {
-> +		sub_hdev = hdev_info->sub_hdevs[i];
-> +		if (sub_hdev->driver) {
-> +			rc = forward(sub_hdev->driver, sub_hdev, args);
-> +			if (rc)
-> +				return rc;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int appleib_hid_suspend_fwd(struct hid_driver *drv,
-> +				   struct hid_device *hdev, void *args)
-> +{
-> +	int rc = 0;
-> +
-> +	if (drv->suspend)
-> +		rc = drv->suspend(hdev, *(pm_message_t *)args);
-> +
-> +	return rc;
-> +}
-> +
-> +static int appleib_hid_suspend(struct hid_device *hdev, pm_message_t message)
-> +{
-> +	return appleib_forward_int_op(hdev, appleib_hid_suspend_fwd, &message);
-> +}
-> +
-> +static int appleib_hid_resume_fwd(struct hid_driver *drv,
-> +				  struct hid_device *hdev, void *args)
-> +{
-> +	int rc = 0;
-> +
-> +	if (drv->resume)
-> +		rc = drv->resume(hdev);
-> +
-> +	return rc;
-> +}
-> +
-> +static int appleib_hid_resume(struct hid_device *hdev)
-> +{
-> +	return appleib_forward_int_op(hdev, appleib_hid_resume_fwd, NULL);
-> +}
-> +
-> +static int appleib_hid_reset_resume_fwd(struct hid_driver *drv,
-> +					struct hid_device *hdev, void *args)
-> +{
-> +	int rc = 0;
-> +
-> +	if (drv->reset_resume)
-> +		rc = drv->reset_resume(hdev);
-> +
-> +	return rc;
-> +}
-> +
-> +static int appleib_hid_reset_resume(struct hid_device *hdev)
-> +{
-> +	return appleib_forward_int_op(hdev, appleib_hid_reset_resume_fwd, NULL);
-> +}
-> +#endif /* CONFIG_PM */
-> +
-> +static int appleib_ll_start(struct hid_device *hdev)
-> +{
-> +	return 0;
-> +}
-> +
-> +static void appleib_ll_stop(struct hid_device *hdev)
-> +{
-> +}
-> +
-> +static int appleib_set_open(struct hid_device *hdev, bool open)
-> +{
-> +	struct appleib_hid_dev_info *hdev_info = hdev->driver_data;
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(hdev_info->sub_hdevs); i++) {
-> +		/*
-> +		 * hid_hw_open(), and hence appleib_ll_open(), is called
-> +		 * from the driver's probe function, which in turn is called
-> +		 * while adding the sub-hdev; but at this point we haven't yet
-> +		 * added the sub-hdev to our list. So if we don't find the
-> +		 * sub-hdev in our list assume it's in the process of being
-> +		 * added and set the flag on the first unset sub-hdev.
-> +		 */
-> +		if (hdev_info->sub_hdevs[i] == hdev ||
-> +		    !hdev_info->sub_hdevs[i]) {
-> +			WRITE_ONCE(hdev_info->sub_open[i], open);
-> +			return 0;
-> +		}
-> +	}
-> +
-> +	return -ENODEV;
-> +}
-> +
-> +static int appleib_ll_open(struct hid_device *hdev)
-> +{
-> +	return appleib_set_open(hdev, true);
-> +}
-> +
-> +static void appleib_ll_close(struct hid_device *hdev)
-> +{
-> +	appleib_set_open(hdev, false);
-> +}
-> +
-> +static int appleib_ll_power(struct hid_device *hdev, int level)
-> +{
-> +	struct appleib_hid_dev_info *hdev_info = hdev->driver_data;
-> +
-> +	return hid_hw_power(hdev_info->hdev, level);
-> +}
-> +
-> +static int appleib_ll_parse(struct hid_device *hdev)
-> +{
-> +	/* we've already called hid_parse_report() */
-> +	return 0;
-> +}
-> +
-> +static void appleib_ll_request(struct hid_device *hdev,
-> +			       struct hid_report *report, int reqtype)
-> +{
-> +	struct appleib_hid_dev_info *hdev_info = hdev->driver_data;
-> +
-> +	hid_hw_request(hdev_info->hdev, report, reqtype);
-> +}
-> +
-> +static int appleib_ll_wait(struct hid_device *hdev)
-> +{
-> +	struct appleib_hid_dev_info *hdev_info = hdev->driver_data;
-> +
-> +	hid_hw_wait(hdev_info->hdev);
-> +	return 0;
-> +}
-> +
-> +static int appleib_ll_raw_request(struct hid_device *hdev,
-> +				  unsigned char reportnum, __u8 *buf,
-> +				  size_t len, unsigned char rtype, int reqtype)
-> +{
-> +	struct appleib_hid_dev_info *hdev_info = hdev->driver_data;
-> +
-> +	return hid_hw_raw_request(hdev_info->hdev, reportnum, buf, len, rtype,
-> +				  reqtype);
-> +}
-> +
-> +static int appleib_ll_output_report(struct hid_device *hdev, __u8 *buf,
-> +				    size_t len)
-> +{
-> +	struct appleib_hid_dev_info *hdev_info = hdev->driver_data;
-> +
-> +	return hid_hw_output_report(hdev_info->hdev, buf, len);
-> +}
-> +
-> +static struct hid_ll_driver appleib_ll_driver = {
-> +	.start = appleib_ll_start,
-> +	.stop = appleib_ll_stop,
-> +	.open = appleib_ll_open,
-> +	.close = appleib_ll_close,
-> +	.power = appleib_ll_power,
-> +	.parse = appleib_ll_parse,
-> +	.request = appleib_ll_request,
-> +	.wait = appleib_ll_wait,
-> +	.raw_request = appleib_ll_raw_request,
-> +	.output_report = appleib_ll_output_report,
-> +};
-
-const
-
-> +
-> +static struct hid_device_id *appleib_find_dev_id_for_usage(unsigned int usage)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(appleib_usage_map); i++) {
-> +		if (appleib_usage_map[i].usage == usage)
-> +			return appleib_usage_map[i].dev_id;
-> +	}
-> +
-> +	return NULL;
-> +}
-> +
-> +static struct hid_device *
-> +appleib_add_sub_dev(struct appleib_hid_dev_info *hdev_info,
-> +		    struct hid_device_id *dev_id)
-> +{
-> +	struct hid_device *sub_hdev;
-> +	int rc;
-> +
-> +	sub_hdev = hid_allocate_device();
-> +	if (IS_ERR(sub_hdev))
-> +		return sub_hdev;
-> +
-> +	sub_hdev->dev.parent = &hdev_info->hdev->dev;
-> +
-> +	sub_hdev->bus = dev_id->bus;
-> +	sub_hdev->group = dev_id->group;
-> +	sub_hdev->vendor = dev_id->vendor;
-> +	sub_hdev->product = dev_id->product;
-> +
-> +	sub_hdev->ll_driver = &appleib_ll_driver;
-> +
-> +	snprintf(sub_hdev->name, sizeof(sub_hdev->name),
-> +		 "iBridge Virtual HID %s/%04x:%04x",
-> +		 dev_name(sub_hdev->dev.parent), sub_hdev->vendor,
-> +		 sub_hdev->product);
-> +
-> +	sub_hdev->driver_data = hdev_info;
-> +
-> +	rc = hid_add_device(sub_hdev);
-> +	if (rc) {
-> +		hid_destroy_device(sub_hdev);
-> +		return ERR_PTR(rc);
-> +	}
-> +
-> +	return sub_hdev;
-> +}
-> +
-> +static struct appleib_hid_dev_info *appleib_add_device(struct hid_device *hdev)
-> +{
-> +	struct appleib_hid_dev_info *hdev_info;
-> +	struct hid_device_id *dev_id;
-> +	unsigned int usage;
-> +	int i;
-> +
-> +	hdev_info = devm_kzalloc(&hdev->dev, sizeof(*hdev_info), GFP_KERNEL);
-> +	if (!hdev_info)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	hdev_info->hdev = hdev;
-> +
-> +	for (i = 0; i < hdev->maxcollection; i++) {
-> +		usage = hdev->collection[i].usage;
-> +		dev_id = appleib_find_dev_id_for_usage(usage);
-> +
-> +		if (!dev_id) {
-> +			hid_warn(hdev, "Unknown collection encountered with usage %x\n",
-> +				 usage);
-> +		} else {
-> +			hdev_info->sub_hdevs[i] = appleib_add_sub_dev(hdev_info, dev_id);
-> +
-> +			if (IS_ERR(hdev_info->sub_hdevs[i])) {
-> +				while (i-- > 0)
-> +					hid_destroy_device(hdev_info->sub_hdevs[i]);
-> +				return (void *)hdev_info->sub_hdevs[i];
-> +			}
-> +		}
-> +	}
-> +
-> +	return hdev_info;
-> +}
-> +
-> +static void appleib_remove_device(struct hid_device *hdev)
-> +{
-> +	struct appleib_hid_dev_info *hdev_info = hid_get_drvdata(hdev);
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(hdev_info->sub_hdevs); i++) {
-> +		if (hdev_info->sub_hdevs[i])
-> +			hid_destroy_device(hdev_info->sub_hdevs[i]);
-> +	}
-> +
-> +	hid_set_drvdata(hdev, NULL);
-> +}
-> +
-> +static int appleib_hid_probe(struct hid_device *hdev,
-> +			     const struct hid_device_id *id)
-> +{
-> +	struct appleib_hid_dev_info *hdev_info;
-> +	struct usb_device *udev;
-> +	int rc;
-> +
-> +	/* check and set usb config first */
-> +	udev = hid_to_usb_dev(hdev);
-
-I don't think hid_to_usb_dev() does any check that hdev is connected via
-USB and will produce undefined behavior when used on a non-USB device.
-
-Use hid_is_usb() first.
-
-> +
-> +	if (udev->actconfig->desc.bConfigurationValue != APPLEIB_BASIC_CONFIG) {
-> +		rc = usb_driver_set_configuration(udev, APPLEIB_BASIC_CONFIG);
-> +		return rc ? rc : -ENODEV;
-> +	}
-> +
-> +	rc = hid_parse(hdev);
-> +	if (rc) {
-> +		hid_err(hdev, "ib: hid parse failed (%d)\n", rc);
-> +		goto error;
-> +	}
-> +
-> +	rc = hid_hw_start(hdev, HID_CONNECT_DRIVER);
-> +	if (rc) {
-> +		hid_err(hdev, "ib: hw start failed (%d)\n", rc);
-> +		goto error;
-> +	}
-> +
-> +	hdev_info = appleib_add_device(hdev);
-> +	if (IS_ERR(hdev_info)) {
-> +		rc = PTR_ERR(hdev_info);
-> +		goto stop_hw;
-> +	}
-> +
-> +	hid_set_drvdata(hdev, hdev_info);
-> +
-> +	rc = hid_hw_open(hdev);
-> +	if (rc) {
-> +		hid_err(hdev, "ib: failed to open hid: %d\n", rc);
-> +		goto remove_dev;
-> +	}
-> +
-> +	return 0;
-> +
-> +remove_dev:
-> +	appleib_remove_device(hdev);
-> +stop_hw:
-> +	hid_hw_stop(hdev);
-> +error:
-> +	return rc;
-> +}
-> +
-> +static void appleib_hid_remove(struct hid_device *hdev)
-> +{
-> +	hid_hw_close(hdev);
-> +	appleib_remove_device(hdev);
-> +	hid_hw_stop(hdev);
-> +}
-> +
-> +static const struct hid_device_id appleib_hid_ids[] = {
-> +	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IBRIDGE) },
-> +	{ },
-> +};
-> +
-> +static struct hid_driver appleib_hid_driver = {
-> +	.name = "apple-ibridge-hid",
-> +	.id_table = appleib_hid_ids,
-> +	.probe = appleib_hid_probe,
-> +	.remove = appleib_hid_remove,
-> +	.raw_event = appleib_hid_raw_event,
-> +	.report_fixup = appleib_report_fixup,
-> +#ifdef CONFIG_PM
-> +	.suspend = appleib_hid_suspend,
-> +	.resume = appleib_hid_resume,
-> +	.reset_resume = appleib_hid_reset_resume,
-> +#endif
-> +};
-
-const
-
-> +
-> +static struct appleib_device *appleib_alloc_device(struct platform_device *pdev)
-> +{
-> +	struct appleib_device *ib_dev;
-> +	acpi_status sts;
-> +
-> +	ib_dev = devm_kzalloc(&pdev->dev, sizeof(*ib_dev), GFP_KERNEL);
-> +	if (!ib_dev)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	/* get iBridge acpi power control method for suspend/resume */
-> +	sts = acpi_get_handle(ACPI_HANDLE(&pdev->dev), "SOCW", &ib_dev->asoc_socw);
-> +	if (ACPI_FAILURE(sts)) {
-> +		dev_err(&pdev->dev,
-> +			"Error getting handle for ASOC.SOCW method: %s\n",
-> +			acpi_format_exception(sts));
-> +		return ERR_PTR(-ENXIO);
-> +	}
-> +
-> +	/* ensure iBridge is powered on */
-> +	sts = acpi_execute_simple_method(ib_dev->asoc_socw, NULL, 1);
-> +	if (ACPI_FAILURE(sts))
-> +		dev_warn(&pdev->dev, "SOCW(1) failed: %s\n",
-> +			 acpi_format_exception(sts));
-> +
-> +	return ib_dev;
-> +}
-> +
-> +static int appleib_probe(struct platform_device *pdev)
-> +{
-> +	struct appleib_device *ib_dev;
+> +	u64 buffer_size, rem, entries;
+> +	union acpi_object *obj;
+> +	u8 *buffer;
 > +	int ret;
 > +
-> +	ib_dev = appleib_alloc_device(pdev);
-> +	if (IS_ERR(ib_dev))
-> +		return PTR_ERR(ib_dev);
+> +	if (sensors->obj) {
+> +		if (time_before(jiffies, sensors->timestamp + HZ))
+> +			return 0;
 > +
-> +	ret = hid_register_driver(&appleib_hid_driver);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "Error registering hid driver: %d\n",
-> +			ret);
-> +		return ret;
+> +		kfree(sensors->obj);
+> +		sensors->obj = NULL;
 > +	}
 > +
-> +	platform_set_drvdata(pdev, ib_dev);
+> +	ret = dell_wmi_ddv_query_buffer(wdev, method, 0, &obj);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* buffer format sanity check */
+> +	buffer_size = obj->package.elements[0].integer.value;
+> +	buffer = obj->package.elements[1].buffer.pointer;
+> +	entries = div64_u64_rem(buffer_size, entry_size, &rem);
+> +	if (rem != 1 || buffer[buffer_size - 1] != 0xff) {
+> +		ret = -ENOMSG;
+> +		goto err_free;
+> +	}
+> +
+> +	if (!entries) {
+> +		ret = -ENODATA;
+> +		goto err_free;
+> +	}
+> +
+> +	sensors->obj = obj;
+> +	sensors->entries = entries;
+> +	sensors->timestamp = jiffies;
 > +
 > +	return 0;
+> +
+> +err_free:
+> +	kfree(obj);
+> +
+> +	return ret;
 > +}
 > +
-> +static int appleib_remove(struct platform_device *pdev)
+> +static umode_t dell_wmi_ddv_is_visible(const void *drvdata, enum hwmon_sensor_types type, u32 attr,
+> +				       int channel)
 > +{
-> +	hid_unregister_driver(&appleib_hid_driver);
-> +
-> +	return 0;
+> +	return 0444;
 > +}
 > +
-> +static int appleib_suspend(struct platform_device *pdev, pm_message_t message)
+> +static int dell_wmi_ddv_fan_read_channel(struct dell_wmi_ddv_data *data, u32 attr, int channel,
+> +					 long *val)
 > +{
-> +	struct appleib_device *ib_dev;
-> +	int rc;
+> +	struct fan_sensor_entry *entry;
+> +	int ret;
 > +
-> +	ib_dev = platform_get_drvdata(pdev);
+> +	ret = dell_wmi_ddv_update_sensors(data->wdev, DELL_DDV_FAN_SENSOR_INFORMATION,
+> +					  &data->fans, sizeof(*entry));
+> +	if (ret < 0)
+> +		return ret;
 > +
-> +	rc = acpi_execute_simple_method(ib_dev->asoc_socw, NULL, 0);
-> +	if (ACPI_FAILURE(rc))
-> +		dev_warn(&pdev->dev, "SOCW(0) failed: %s\n",
-> +			 acpi_format_exception(rc));
+> +	if (channel >= data->fans.entries)
+> +		return -ENXIO;
 > +
-> +	return 0;
+> +	entry = (struct fan_sensor_entry *)data->fans.obj->package.elements[1].buffer.pointer;
+> +	switch (attr) {
+> +	case hwmon_fan_input:
+> +		*val = get_unaligned_le16(&entry[channel].rpm);
+> +		return 0;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
 > +}
 > +
-> +static int appleib_resume(struct platform_device *pdev)
+> +static int dell_wmi_ddv_temp_read_channel(struct dell_wmi_ddv_data *data, u32 attr, int channel,
+> +					  long *val)
 > +{
-> +	struct appleib_device *ib_dev;
-> +	int rc;
+> +	struct thermal_sensor_entry *entry;
+> +	int ret;
 > +
-> +	ib_dev = platform_get_drvdata(pdev);
+> +	ret = dell_wmi_ddv_update_sensors(data->wdev, DELL_DDV_THERMAL_SENSOR_INFORMATION,
+> +					  &data->temps, sizeof(*entry));
+> +	if (ret < 0)
+> +		return ret;
 > +
-> +	rc = acpi_execute_simple_method(ib_dev->asoc_socw, NULL, 1);
-> +	if (ACPI_FAILURE(rc))
-> +		dev_warn(&pdev->dev, "SOCW(1) failed: %s\n",
-> +			 acpi_format_exception(rc));
+> +	if (channel >= data->temps.entries)
+> +		return -ENXIO;
+> +
+> +	entry = (struct thermal_sensor_entry *)data->temps.obj->package.elements[1].buffer.pointer;
+> +	switch (attr) {
+> +	case hwmon_temp_input:
+> +		*val = entry[channel].now * 1000;
+> +		return 0;
+> +	case hwmon_temp_min:
+> +		*val = entry[channel].min * 1000;
+> +		return 0;
+> +	case hwmon_temp_max:
+> +		*val = entry[channel].max * 1000;
+> +		return 0;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static int dell_wmi_ddv_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+> +			     int channel, long *val)
+> +{
+> +	struct dell_wmi_ddv_data *data = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		mutex_lock(&data->fans.lock);
+> +		ret = dell_wmi_ddv_fan_read_channel(data, attr, channel, val);
+> +		mutex_unlock(&data->fans.lock);
+> +		return ret;
+> +	case hwmon_temp:
+> +		mutex_lock(&data->temps.lock);
+> +		ret = dell_wmi_ddv_temp_read_channel(data, attr, channel, val);
+> +		mutex_unlock(&data->temps.lock);
+> +		return ret;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static int dell_wmi_ddv_fan_read_string(struct dell_wmi_ddv_data *data, int channel,
+> +					const char **str)
+> +{
+> +	struct fan_sensor_entry *entry;
+> +	int ret;
+> +	u8 type;
+> +
+> +	ret = dell_wmi_ddv_update_sensors(data->wdev, DELL_DDV_FAN_SENSOR_INFORMATION,
+> +					  &data->fans, sizeof(*entry));
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (channel >= data->fans.entries)
+> +		return -ENXIO;
+> +
+> +	entry = (struct fan_sensor_entry *)data->fans.obj->package.elements[1].buffer.pointer;
+> +	type = entry[channel].type;
+> +	switch (type) {
+> +	case 0x00 ... 0x07:
+> +		*str = fan_labels[type];
+> +		break;
+> +	case 0x11 ... 0x14:
+> +		*str = fan_dock_labels[type - 0x11];
+> +		break;
+> +	default:
+> +		*str = "Unknown Fan";
+> +		break;
+> +	}
 > +
 > +	return 0;
 > +}
 > +
-> +static const struct acpi_device_id appleib_acpi_match[] = {
-> +	{ "APP7777", 0 },
-> +	{ },
-
-No trailing comma after end-of-array marker.
-
+> +static int dell_wmi_ddv_temp_read_string(struct dell_wmi_ddv_data *data, int channel,
+> +					 const char **str)
+> +{
+> +	struct thermal_sensor_entry *entry;
+> +	int ret;
+> +
+> +	ret = dell_wmi_ddv_update_sensors(data->wdev, DELL_DDV_THERMAL_SENSOR_INFORMATION,
+> +					  &data->temps, sizeof(*entry));
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (channel >= data->temps.entries)
+> +		return -ENXIO;
+> +
+> +	entry = (struct thermal_sensor_entry *)data->temps.obj->package.elements[1].buffer.pointer;
+> +	switch (entry[channel].type) {
+> +	case 0x00:
+> +		*str = "CPU";
+> +		break;
+> +	case 0x11:
+> +		*str = "Video";
+> +		break;
+> +	case 0x22:
+> +		*str = "Memory"; /* sometimes called DIMM */
+> +		break;
+> +	case 0x33:
+> +		*str = "Other";
+> +		break;
+> +	case 0x44:
+> +		*str = "Ambient"; /* sometimes called SKIN */
+> +		break;
+> +	case 0x52:
+> +		*str = "SODIMM";
+> +		break;
+> +	case 0x55:
+> +		*str = "HDD";
+> +		break;
+> +	case 0x62:
+> +		*str = "SODIMM 2";
+> +		break;
+> +	case 0x73:
+> +		*str = "NB";
+> +		break;
+> +	case 0x83:
+> +		*str = "Charger";
+> +		break;
+> +	case 0xbb:
+> +		*str = "Memory 3";
+> +		break;
+> +	default:
+> +		*str = "Unknown";
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int dell_wmi_ddv_read_string(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+> +				    int channel, const char **str)
+> +{
+> +	struct dell_wmi_ddv_data *data = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		switch (attr) {
+> +		case hwmon_fan_label:
+> +			mutex_lock(&data->fans.lock);
+> +			ret = dell_wmi_ddv_fan_read_string(data, channel, str);
+> +			mutex_unlock(&data->fans.lock);
+> +			return ret;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+> +	case hwmon_temp:
+> +		switch (attr) {
+> +		case hwmon_temp_label:
+> +			mutex_lock(&data->temps.lock);
+> +			ret = dell_wmi_ddv_temp_read_string(data, channel, str);
+> +			mutex_unlock(&data->temps.lock);
+> +			return ret;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static const struct hwmon_ops dell_wmi_ddv_ops = {
+> +	.is_visible = dell_wmi_ddv_is_visible,
+> +	.read = dell_wmi_ddv_read,
+> +	.read_string = dell_wmi_ddv_read_string,
 > +};
 > +
-> +MODULE_DEVICE_TABLE(acpi, appleib_acpi_match);
+> +static struct hwmon_channel_info *dell_wmi_ddv_channel_create(struct device *dev, u64 count,
+> +							      enum hwmon_sensor_types type,
+> +							      u32 config)
+> +{
+> +	struct combined_channel_info *cinfo;
+> +	int i;
 > +
-> +static struct platform_driver appleib_driver = {
-> +	.probe		= appleib_probe,
-> +	.remove		= appleib_remove,
-> +	.suspend	= appleib_suspend,
-> +	.resume		= appleib_resume,
-> +	.driver		= {
-> +		.name		  = "apple-ibridge",
-> +		.acpi_match_table = appleib_acpi_match,
-> +	},
-> +};
+> +	cinfo = devm_kzalloc(dev, struct_size(cinfo, config, count + 1), GFP_KERNEL);
+> +	if (!cinfo)
+> +		return ERR_PTR(-ENOMEM);
 > +
-> +module_platform_driver(appleib_driver);
+> +	cinfo->info.type = type;
+> +	cinfo->info.config = cinfo->config;
 > +
-> +MODULE_AUTHOR("Ronald Tschalär");
-> +MODULE_DESCRIPTION("Apple iBridge driver");
-> +MODULE_LICENSE("GPL");
-> diff --git a/drivers/hid/apple-ibridge.h b/drivers/hid/apple-ibridge.h
-> new file mode 100644
-> index 000000000..8aefcf615
-> --- /dev/null
-> +++ b/drivers/hid/apple-ibridge.h
-> @@ -0,0 +1,15 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Apple iBridge Driver
-> + *
-> + * Copyright (c) 2018 Ronald Tschalär
-> + */
+> +	for (i = 0; i < count; i++)
+> +		cinfo->config[i] = config;
 > +
-> +#ifndef __LINUX_APPLE_IBRDIGE_H
-> +#define __LINUX_APPLE_IBRDIGE_H
+> +	return &cinfo->info;
+> +}
 > +
-> +#define USB_VENDOR_ID_LINUX_FOUNDATION	0x1d6b
-> +#define USB_DEVICE_ID_IBRIDGE_TB	0x0301
-> +#define USB_DEVICE_ID_IBRIDGE_ALS	0x0302
+> +static void dell_wmi_ddv_hwmon_cache_invalidate(struct dell_wmi_ddv_sensors *sensors)
+> +{
+> +	mutex_lock(&sensors->lock);
+> +	kfree(sensors->obj);
+> +	sensors->obj = NULL;
+> +	mutex_unlock(&sensors->lock);
+> +}
 > +
-> +#endif
-> diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-> index 0f8c11842..0c62e6280 100644
-> --- a/drivers/hid/hid-ids.h
-> +++ b/drivers/hid/hid-ids.h
-> @@ -187,6 +187,7 @@
->  #define USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_NUMPAD_2021   0x029f
->  #define USB_DEVICE_ID_APPLE_TOUCHBAR_BACKLIGHT 0x8102
->  #define USB_DEVICE_ID_APPLE_TOUCHBAR_DISPLAY 0x8302
-> +#define USB_DEVICE_ID_APPLE_IBRIDGE	0x8600
->  
->  #define USB_VENDOR_ID_ASUS		0x0486
->  #define USB_DEVICE_ID_ASUS_T91MT	0x0185
-> diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
-> index be3ad0257..c03535c4b 100644
-> --- a/drivers/hid/hid-quirks.c
-> +++ b/drivers/hid/hid-quirks.c
-> @@ -319,6 +319,9 @@ static const struct hid_device_id hid_have_special_driver[] = {
->  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_TOUCHBAR_BACKLIGHT) },
->  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_TOUCHBAR_DISPLAY) },
->  #endif
-> +#if IS_ENABLED(CONFIG_HID_APPLE_IBRIDGE)
-> +	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IBRIDGE) },
-> +#endif
->  #if IS_ENABLED(CONFIG_HID_APPLEIR)
->  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IRCONTROL) },
->  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IRCONTROL2) },
-> -- 
-> 2.37.2
+> +static void dell_wmi_ddv_hwmon_cache_destroy(void *data)
+> +{
+> +	struct dell_wmi_ddv_sensors *sensors = data;
+> +
+> +	mutex_destroy(&sensors->lock);
+> +	kfree(sensors->obj);
+> +}
+> +
+> +static struct hwmon_channel_info *dell_wmi_ddv_channel_init(struct wmi_device *wdev,
+> +							    enum dell_ddv_method method,
+> +							    struct dell_wmi_ddv_sensors *sensors,
+> +							    size_t entry_size,
+> +							    enum hwmon_sensor_types type,
+> +							    u32 config)
+> +{
+> +	struct hwmon_channel_info *info;
+> +	int ret;
+> +
+> +	ret = dell_wmi_ddv_update_sensors(wdev, method, sensors, entry_size);
+> +	if (ret < 0)
+> +		return ERR_PTR(ret);
+> +
+> +	mutex_init(&sensors->lock);
+> +
+> +	ret = devm_add_action_or_reset(&wdev->dev, dell_wmi_ddv_hwmon_cache_destroy, sensors);
+> +	if (ret < 0)
+> +		return ERR_PTR(ret);
+> +
+> +	info = dell_wmi_ddv_channel_create(&wdev->dev, sensors->entries, type, config);
+> +	if (IS_ERR(info))
+> +		devm_release_action(&wdev->dev, dell_wmi_ddv_hwmon_cache_destroy, sensors);
+> +
+> +	return info;
+> +}
+> +
+> +static int dell_wmi_ddv_hwmon_add(struct dell_wmi_ddv_data *data)
+> +{
+> +	struct wmi_device *wdev = data->wdev;
+> +	struct combined_chip_info *cinfo;
+> +	struct hwmon_channel_info *info;
+> +	struct device *hdev;
+> +	int index = 0;
+> +	int ret;
+> +
+> +	if (!devres_open_group(&wdev->dev, dell_wmi_ddv_hwmon_add, GFP_KERNEL))
+> +		return -ENOMEM;
+> +
+> +	cinfo = devm_kzalloc(&wdev->dev, struct_size(cinfo, info, 4), GFP_KERNEL);
+> +	if (!cinfo) {
+> +		ret = -ENOMEM;
+> +
+> +		goto err_release;
+> +	}
+> +
+> +	cinfo->chip.ops = &dell_wmi_ddv_ops;
+> +	cinfo->chip.info = cinfo->info;
+> +
+> +	info = dell_wmi_ddv_channel_create(&wdev->dev, 1, hwmon_chip, HWMON_C_REGISTER_TZ);
+> +	if (IS_ERR(info)) {
+> +		ret = PTR_ERR(info);
+> +
+> +		goto err_release;
+> +	}
+> +
+> +	cinfo->info[index] = info;
+> +	index++;
+> +
+> +	info = dell_wmi_ddv_channel_init(wdev, DELL_DDV_FAN_SENSOR_INFORMATION, &data->fans,
+> +					 sizeof(struct fan_sensor_entry), hwmon_fan,
+> +					 (HWMON_F_INPUT | HWMON_F_LABEL));
+> +	if (!IS_ERR(info)) {
+> +		cinfo->info[index] = info;
+> +		index++;
+> +	}
+> +
+> +	info = dell_wmi_ddv_channel_init(wdev, DELL_DDV_THERMAL_SENSOR_INFORMATION, &data->temps,
+> +					 sizeof(struct thermal_sensor_entry), hwmon_temp,
+> +					 (HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
+> +					 HWMON_T_LABEL));
+> +	if (!IS_ERR(info)) {
+> +		cinfo->info[index] = info;
+> +		index++;
+> +	}
+> +
+> +	if (index < 2) {
+> +		ret = -ENODEV;
+> +
+> +		goto err_release;
+> +	}
+> +
+> +	hdev = devm_hwmon_device_register_with_info(&wdev->dev, "dell_ddv", data, &cinfo->chip,
+> +						    NULL);
+> +	if (IS_ERR(hdev)) {
+> +		ret = PTR_ERR(hdev);
+> +
+> +		goto err_release;
+> +	}
+> +
+> +	devres_close_group(&wdev->dev, dell_wmi_ddv_hwmon_add);
+> +
+> +	return 0;
+> +
+> +err_release:
+> +	devres_release_group(&wdev->dev, dell_wmi_ddv_hwmon_add);
+> +
+> +	return ret;
+> +}
+> +
+>  static int dell_wmi_ddv_battery_index(struct acpi_device *acpi_dev, u32 *index)
+>  {
+>  	const char *uid_str;
+> @@ -370,9 +832,34 @@ static int dell_wmi_ddv_probe(struct wmi_device *wdev, const void *context)
+> 
+>  	dell_wmi_ddv_debugfs_init(wdev);
+> 
+> -	return dell_wmi_ddv_battery_add(data);
+> +	if (IS_REACHABLE(CONFIG_ACPI_BATTERY)) {
+> +		ret = dell_wmi_ddv_battery_add(data);
+> +		if (ret < 0 && ret != -ENODEV)
+> +			dev_warn(&wdev->dev, "Unable to register ACPI battery hook: %d\n", ret);
+> +	}
+> +
+> +	if (IS_REACHABLE(CONFIG_HWMON)) {
+> +		ret = dell_wmi_ddv_hwmon_add(data);
+> +		if (ret < 0 && ret != -ENODEV)
+> +			dev_warn(&wdev->dev, "Unable to register hwmon interface: %d\n", ret);
+> +	}
+> +
+> +	return 0;
+>  }
+> 
+> +static int dell_wmi_ddv_resume(struct device *dev)
+> +{
+> +	struct dell_wmi_ddv_data *data = dev_get_drvdata(dev);
+> +
+> +	/* Force re-reading of all sensors */
+> +	dell_wmi_ddv_hwmon_cache_invalidate(&data->fans);
+> +	dell_wmi_ddv_hwmon_cache_invalidate(&data->temps);
+> +
+> +	return 0;
+> +}
+> +
+> +static DEFINE_SIMPLE_DEV_PM_OPS(dell_wmi_ddv_dev_pm_ops, NULL, dell_wmi_ddv_resume);
+> +
+>  static const struct wmi_device_id dell_wmi_ddv_id_table[] = {
+>  	{ DELL_DDV_GUID, NULL },
+>  	{ }
+> @@ -382,6 +869,7 @@ MODULE_DEVICE_TABLE(wmi, dell_wmi_ddv_id_table);
+>  static struct wmi_driver dell_wmi_ddv_driver = {
+>  	.driver = {
+>  		.name = DRIVER_NAME,
+> +		.pm = pm_sleep_ptr(&dell_wmi_ddv_dev_pm_ops),
+>  	},
+>  	.id_table = dell_wmi_ddv_id_table,
+>  	.probe = dell_wmi_ddv_probe,
+> --
+> 2.30.2
 > 
