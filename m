@@ -2,119 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34214692565
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FA1B692567
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:35:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233089AbjBJSeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 13:34:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57178 "EHLO
+        id S233100AbjBJSfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 13:35:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233077AbjBJSeJ (ORCPT
+        with ESMTP id S232520AbjBJSfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 13:34:09 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D995569536
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:34:06 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id j25so5934301wrc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:34:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=itUHF+gJAOR68gNrNXTOhv2YTwp1LN4BGzGEfAiI2PA=;
-        b=OaHJvANNeMAGzvf2uYI2xzLCi6qVzIoIMRJNUMUHlzvdQB4946tyfjwuc64G0AuREt
-         YuNu/sR7FoiaVytT1wVaU5lS9eCpEu+2qZzqFTXe8g0PKYQ8cn7vuhmv1w2DLp6+rjPA
-         VwOA/5nkkyxSNWkLJwLwBdi4zTMzi2yWNOmuPS3e0bp1oXuv0KGwifRBRdkJDANIcHba
-         R3SJAVIxCBohLDCUmxIZjPJ21/NShmd2frAAkS2VIIGuJGHBcjEwfjIq9x3inxKTiZ9g
-         VG+SmLQxhW1N+uckd3zByXCY+rK10AxGZ+y40dNt15bf8dXcveDzkzi962Xg7HQX+XtT
-         EisA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=itUHF+gJAOR68gNrNXTOhv2YTwp1LN4BGzGEfAiI2PA=;
-        b=IS3EpMIcz9y/3QF9nCg32CKTjKvud2QEBwO/rHK4DymfJxI2gRm6TkU0dNgiKZljC8
-         GxId1h3HtxDHvBO8uZXQONSmIMaq97Rf7sTtHqZy2WuxopvRbgFjiCoTZ9t4pwZeMm/E
-         QS0P1EYmZ9/V+aFZ46wgAg8dikz6sgXfCAqPL2qry0mmurnjT4p/Iy3rSKNLhZBB4mD1
-         CCwTGnUWf5+h7kYfhz9yenSDPQffYqddOF9O+EUB9uZPPoimz0sW4OW4VX0n66DQMF0q
-         ayS+vxWnkpEKfBrtGC47kETFGacTIltU6jkdrBcKsqCoySv5rmI47Ey9Y/ZOBp298f1q
-         3a6g==
-X-Gm-Message-State: AO0yUKUaw5WDAqBgN/npzH/uvnVYUMpYciqVFBr3hMwwCr3wPjzkdqTF
-        oBhEErvH1b/g+H5jyXt0TCfzYw==
-X-Google-Smtp-Source: AK7set+sfAI5v+pm+Ta+c+I585wZnYR7ZKSMkHtr+epDPjtPngGn8hHOvj4Pt1bfuGTly/qfkXFNSg==
-X-Received: by 2002:adf:f80c:0:b0:2c3:cdcd:f0b3 with SMTP id s12-20020adff80c000000b002c3cdcdf0b3mr13276955wrp.9.1676054045329;
-        Fri, 10 Feb 2023 10:34:05 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id i12-20020a5d438c000000b002c512f56859sm4135084wrq.70.2023.02.10.10.34.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 10:34:04 -0800 (PST)
-Message-ID: <8f557084-e185-6bf5-ab2b-4e1ebf4fc516@linaro.org>
-Date:   Fri, 10 Feb 2023 19:34:02 +0100
+        Fri, 10 Feb 2023 13:35:21 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411786358B
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:35:20 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pQYEv-0006bj-4F; Fri, 10 Feb 2023 19:35:17 +0100
+Message-ID: <f72fe15b-db1d-56dd-aaf6-3cba68a8bf0a@leemhuis.info>
+Date:   Fri, 10 Feb 2023 19:35:16 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 06/11] thermal/drivers/st: remove syscfg based driver
-Content-Language: en-US
-To:     Alain Volmat <avolmat@me.com>, Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20230209091659.1409-1-avolmat@me.com>
- <20230209091659.1409-7-avolmat@me.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230209091659.1409-7-avolmat@me.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
+Content-Language: en-US, de-DE
+To:     Chris Clayton <chris2553@googlemail.com>,
+        Ben Skeggs <skeggsb@gmail.com>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        bskeggs@redhat.com, Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        ML nouveau <nouveau@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        ML dri-devel <dri-devel@lists.freedesktop.org>
+References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
+ <fcec3c78-b5d9-eb48-0fc0-d1f27de87f23@leemhuis.info>
+ <b21fa1f6-a71d-5657-8596-ee0be73185ea@leemhuis.info>
+ <3ab28896-70e9-6f90-5b97-e5397b06e715@googlemail.com>
+ <a163dd7b-c5d1-a07b-a816-7a2dfd3edfd4@leemhuis.info>
+ <ab1b0f73-6b4e-8602-2999-b7bec25d92db@googlemail.com>
+ <CACAvsv4sOtPjCVnEcKd2RCUqYWxSn5XKyksbS-Bds2qCqyusVw@mail.gmail.com>
+ <1cdb84ac-f7a8-66ba-98fc-3db302b49a5a@googlemail.com>
+ <dab6eb81-db3f-8fa1-84ad-9b40e209514b@googlemail.com>
+ <CACAvsv5iYdF3P8AbyrbYo3zGmYRYhxDWn7WbAR5V9qHpbgBXRA@mail.gmail.com>
+ <1632a9ef-2954-c8f0-cdc9-03157c9d8547@googlemail.com>
+ <5abbee70-cc84-1528-c3d8-9befd9edd611@googlemail.com>
+ <5cf46df8-0fa2-e9f5-aa8e-7f7f703d96dd@googlemail.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <5cf46df8-0fa2-e9f5-aa8e-7f7f703d96dd@googlemail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676054120;13732cd9;
+X-HE-SMSGID: 1pQYEv-0006bj-4F
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/02/2023 10:16, Alain Volmat wrote:
-> The syscfg based thermal driver is only supporting STiH415
-> STiH416 and STiD127 platforms which are all no more supported.
-> We can thus safely remove this driver since the remaining STi
-> platform STiH407/STiH410 and STiH418 are all using the memmap
-> based thermal driver.
+On 08.02.23 09:48, Chris Clayton wrote:
 > 
-> Signed-off-by: Alain Volmat <avolmat@me.com>
-> ---
+> I'm assuming  that we are not going to see a fix for this regression before 6.2 is released.
 
-Applied, thanks
+Yeah, looks like it. That's unfortunate, but happens. But there is still
+time to fix it and there is one thing I wonder:
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Did any of the nouveau developers look at the netconsole captures Chris
+posted more than a week ago to check if they somehow help to track down
+the root of this problem?
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
 
+> Consequently, I've
+> implemented a (very simple) workaround. All that happens is that in the (sysv) init script that starts and stops SDDM,
+> the nouveau module is removed once SDDM is stopped. With that in place, my system no longer freezes on reboot or poweroff.
+> 
+> Let me know if I can provide any additional diagnostics although, with the problem seemingly occurring so late in the
+> shutdown process, I may need help on how to go about capturing.
+> 
+> Chris
+> 
+> On 02/02/2023 20:45, Chris Clayton wrote:
+>>
+>>
+>> On 01/02/2023 13:51, Chris Clayton wrote:
+>>>
+>>>
+>>> On 30/01/2023 23:27, Ben Skeggs wrote:
+>>>> On Tue, 31 Jan 2023 at 09:09, Chris Clayton <chris2553@googlemail.com> wrote:
+>>>>>
+>>>>> Hi again.
+>>>>>
+>>>>> On 30/01/2023 20:19, Chris Clayton wrote:
+>>>>>> Thanks, Ben.
+>>>>>
+>>>>> <snip>
+>>>>>
+>>>>>>> Hey,
+>>>>>>>
+>>>>>>> This is a complete shot-in-the-dark, as I don't see this behaviour on
+>>>>>>> *any* of my boards.  Could you try the attached patch please?
+>>>>>>
+>>>>>> Unfortunately, the patch made no difference.
+>>>>>>
+>>>>>> I've been looking at how the graphics on my laptop is set up, and have a bit of a worry about whether the firmware might
+>>>>>> be playing a part in this problem. In order to offload video decoding to the NVidia TU117 GPU, it seems the scrubber
+>>>>>> firmware must be available, but as far as I know,that has not been released by NVidia. To get it to work, I followed
+>>>>>> what ubuntu have done and the scrubber in /lib/firmware/nvidia/tu117/nvdec/ is a symlink to
+>>>>>> ../../tu116/nvdev/scrubber.bin. That, of course, means that some of the firmware loaded is for a different card is being
+>>>>>> loaded. I note that processing related to firmware is being changed in the patch. Might my set up be at the root of my
+>>>>>> problem?
+>>>>>>
+>>>>>> I'll have a fiddle an see what I can work out.
+>>>>>>
+>>>>>> Chris
+>>>>>>
+>>>>>>>
+>>>>>>> Thanks,
+>>>>>>> Ben.
+>>>>>>>
+>>>>>>>>
+>>>>>
+>>>>> Well, my fiddling has got my system rebooting and shutting down successfully again. I found that if I delete the symlink
+>>>>> to the scrubber firmware, reboot and shutdown work again. There are however, a number of other files in the tu117
+>>>>> firmware directory tree that that are symlinks to actual files in its tu116 counterpart. So I deleted all of those too.
+>>>>> Unfortunately, the absence of one or more of those symlinks causes Xorg to fail to start. I've reinstated all the links
+>>>>> except scrubber and I now have a system that works as it did until I tried to run a kernel that includes the bad commit
+>>>>> I identified in my bisection. That includes offloading video decoding to the NVidia card, so what ever I read that said
+>>>>> the scrubber firmware was needed seems to have been wrong. I get a new message that (nouveau 0000:01:00.0: fb: VPR
+>>>>> locked, but no scrubber binary!), but, hey, we can't have everything.
+>>>>>
+>>>>> If you still want to get to the bottom of this, let me know what you need me to provide and I'll do my best. I suspect
+>>>>> you might want to because there will a n awful lot of Ubuntu-based systems out there with that scrubber.bin symlink in
+>>>>> place. On the other hand,m it could but quite a while before ubuntu are deploying 6.2 or later kernels.
+>>>> The symlinks are correct - whole groups of GPUs share the same FW, and
+>>>> we use symlinks in linux-firmware to represent this.
+>>>>
+>>>> I don't really have any ideas how/why this patch causes issues with
+>>>> shutdown - it's a path that only gets executed during initialisation.
+>>>> Can you try and capture the kernel log during shutdown ("dmesg -w"
+>>>> over ssh? netconsole?), and see if there's any relevant messages
+>>>> providing a hint at what's going on?  Alternatively, you could try
+>>>> unloading the module (you will have to stop X/wayland/gdm/etc/etc
+>>>> first) and seeing if that hangs too.
+>>>>
+>>>> Ben.
+>>>
+>>> Sorry for the delay - I've been learning about netconsole and netcat. However, I had no success with ssh and netconsole
+>>> produced a log with nothing unusual in it.
+>>>
+>>> Simply stopping Xorg and removing the nouveau module succeeds.
+>>>
+>>> So, I rebuilt rc6+ after a pull from linus' tree this morning and set the nouveau debug level to 7. I then booted to a
+>>> console before doing a reboot (with Ctl+Alt+Del). As expected the machine locked up just before it would ordinarily
+>>> restart. The last few lines on the console might be helpful:
+>>>
+>>> ...
+>>> nouveau 0000:01:00:0  fifo: preinit running...
+>>> nouveau 0000:01:00:0  fifo: preinit completed in 4us
+>>> nouveau 0000:01:00:0  gr: preinit running...
+>>> nouveau 0000:01:00:0  gr: preinit completed in 0us
+>>> nouveau 0000:01:00:0  nvdec0: preinit running...
+>>> nouveau 0000:01:00:0  nvdec0: preinit completed in 0us
+>>> nouveau 0000:01:00:0  nvdec0: preinit running...
+>>> nouveau 0000:01:00:0  nvdec0: preinit completed in 0us
+>>> nouveau 0000:01:00:0  sec2: preinit running...
+>>> nouveau 0000:01:00:0  sec2: preinit completed in 0us
+>>> nouveau 0000:01:00:0  fb:.VPR locked, running scrubber binary
+>>>
+>>> These messages appear after the "sd 4:0:0:0 [sda] Stopping disk" I reported in my initial email.
+>>>
+>>> After the "running scrubber" line appears the machine is locked and I have to hold down the power button to recover. I
+>>> get the same outcome from running "halt -dip", "poweroff -di" and "shutdown -h -P now". I guess it's no surprise that
+>>> all three result in the same outcome because invocations halt, poweroff and reboot (without the -f argument)from a
+>>> runlevel other than 0 resukt in shutdown being run. switching to runlevel 0 with "telenit 0" results in the same
+>>> messages from nouveau followed by the lockup.
+>>>
+>>> Let me know if you need any additional diagnostics.
+>>>
+>>> Chris
+>>>
+>>
+>> I've done some more investigation and found that I hadn't done sufficient amemdment the scripts run at shutdown to
+>> prevent the network being shutdown. I've now got netconsole captures for 6.2.0-rc6+
+>> (9f266ccaa2f5228bfe67ad58a94ca4e0109b954a) and, for comparison, 6.1.9. These two logs are attached.
+>>
+>> Chris
+>>
+>>>>
+>>>>>
+>>>>> Thanks,
+>>>>>
+>>>>> Chris
+>>>>>
+>>>>> <snip>
+> 
+> 
