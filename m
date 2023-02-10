@@ -2,264 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6E1691683
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 03:09:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EE0469168A
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 03:11:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjBJCJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 21:09:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52066 "EHLO
+        id S229991AbjBJCL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 21:11:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjBJCJa (ORCPT
+        with ESMTP id S229695AbjBJCL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 21:09:30 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17E36E982
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 18:09:28 -0800 (PST)
+        Thu, 9 Feb 2023 21:11:27 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10C26E8BB;
+        Thu,  9 Feb 2023 18:11:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675994968; x=1707530968;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bWFzfDAISIx3fxIH8EKpwWNMZo7shJjkAHQ9+dmCRbk=;
-  b=bWC1i6U35+B73SU5JK77QyAW1U/iluiXugsdRbocag9HZm0SkYC96EUM
-   ZnxxrGi5vB7Iv7oT0IKtz70HpMUf8wtoqpEA/iuZjMmqHg9u8h2aSMDEI
-   XxfjvjMWDY7cVG3aj82asKWpyTQK58F/ImzcSFX1vMZPJE5DkIaC2iQSS
-   +rNbU4qlE7t3SfIuS9jR2b/gU5Zrh6i8nrqb8m1OGWhcT62za4Oahiw2L
-   EMEwTYUKusJlbd6ciy+XXYI4oldt4iJaeiw9Fj2S6Bsc8RqwW+CUeGHzZ
-   0+xvrOxeRw0DZ/4TVv7E0PxVsjGLBrZxa4RnmhejhRYMDMEDmhezSaexv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="318328900"
+  t=1675995086; x=1707531086;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=o2mxY/5NTnlkidB+sbwAngQWS0rttclnF8pGZV3WHYo=;
+  b=mrfTSwDIaWTMEd1PlKLjxPrR0cA5ZSLeClEIpUxqryEU6w31xownWlU2
+   2BNsoO87ZcSWfpQCP2O9wwBSTQQbG4+8NavzCx54+zds3ljziFlQkPxt1
+   CgOFEn0Jp6vwNQgLHwkTCjSInc8p5Sxd1g4USJBLbL3IXinapAGQMo1ky
+   7enumcD6HOKsX6ZGfAZwV0j2ahblPwpj8v9cUab6QcUFThqeDWVCUE96B
+   hhIIwzZuC6n051eT8E3kcqPBYxGS8kSELcuV1E2PbmzFWusDbol9YbzQJ
+   /0PS2E+kk7MnPZEjJNTKHeY93r2vJCDRFo+6N9L3rMQAgJPF9QyD6TwXD
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="392711853"
 X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
-   d="scan'208";a="318328900"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 18:09:16 -0800
+   d="scan'208";a="392711853"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 18:11:26 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="661246622"
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="996790310"
 X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
-   d="scan'208";a="661246622"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 09 Feb 2023 18:09:15 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pQIqg-0005SC-1E;
-        Fri, 10 Feb 2023 02:09:14 +0000
-Date:   Fri, 10 Feb 2023 10:08:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Deepak Kumar Singh <quic_deesin@quicinc.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: drivers/soc/qcom/smem.c:1056:16: sparse: sparse: incorrect type in
- argument 1 (different address spaces)
-Message-ID: <202302101036.8ET56Cry-lkp@intel.com>
+   d="scan'208";a="996790310"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga005.fm.intel.com with ESMTP; 09 Feb 2023 18:11:25 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 9 Feb 2023 18:11:25 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 9 Feb 2023 18:11:25 -0800
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.43) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 9 Feb 2023 18:11:25 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cBLKsqEymhzssYQKgvC2JNF33zom+t+nnvMkI9Qg6NRMKt7qrA35qH1dqzLFiuyVf1CllSWyjizWNAOOfQAFxUOhHJwDfaklEGTaVTGfO2DRy/9LWWA8gPDdyY+y+U0iefnDAIsZcm4rjPDSFH0ZHROabWDfc7KPLKfctzDLu2Y47zcDc5FmTtweVCTmGU+jFpTFblRNUmGVOYB7bjXArDa4tXrz6fa/S6zY84fFiHPWFBUkCQHjyd1Ff3I7whn9TEjpH2hLaxgVGKHqggYd18Lstsu2+hJD8QnyNTLeFT2HQikHsNjDajIefvDVSxHc8IXu+aPQpBMnFF1uJMx+4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oUKDNKpKwlPBZUxeqNc27rW0KHFVbTOYYbNHjJLFsPc=;
+ b=PScGqAFTXyJj7Nif5al12Ea5fN2Ms+hKTyGjgqpBG8VYNoDqLwugXL1lnqf9MaMQ+DtcP1/LVBr3wUIboePfY6WJQayvGpdcJ9SSYqj2m7y67HDs0COL6wGu0v9sOI1y5gmnNvu0Dj1oDAqwLd183fKxhmvq3aMgi21FfrBoAviEtT/z1yUmMgE+2OK2fumWF/knl8mpjwtwUcd5aXgOr/cCCkpz7Ix/2AJ4OqSw72EPNX8+tetJtU2jopJknbsJBvyYvyHjEJIazZ40+MZwOaA1LRlB+z30NMuz3bsSutFFi80D2t0LpLBT5ZCWieY18Oobg3lsE6w1gQ/7BVwrzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by DM4PR11MB7183.namprd11.prod.outlook.com (2603:10b6:8:111::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Fri, 10 Feb
+ 2023 02:11:23 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d%9]) with mapi id 15.20.6086.019; Fri, 10 Feb 2023
+ 02:11:23 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>
+CC:     "jgg@nvidia.com" <jgg@nvidia.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+Subject: RE: [PATCH v2 08/10] iommufd/device: Use iommu_group_replace_domain()
+Thread-Topic: [PATCH v2 08/10] iommufd/device: Use
+ iommu_group_replace_domain()
+Thread-Index: AQHZOzoV+UAbwLQwnEuO17sJd5b+0K7F+NzggAEnS4CAAE2/cA==
+Date:   Fri, 10 Feb 2023 02:11:23 +0000
+Message-ID: <BN9PR11MB5276268D3ED0360913A05C368CDE9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <cover.1675802050.git.nicolinc@nvidia.com>
+ <4653f009c3dacae8ebf3a4865aaa944aa9c7cc7e.1675802050.git.nicolinc@nvidia.com>
+ <BN9PR11MB5276C1807B710CAD3E5820D78CD99@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <Y+Vh479cDD7LX2x/@Asurada-Nvidia>
+In-Reply-To: <Y+Vh479cDD7LX2x/@Asurada-Nvidia>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|DM4PR11MB7183:EE_
+x-ms-office365-filtering-correlation-id: 35745af9-602b-4349-4f88-08db0b0c1b79
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: oVvOxB4L+9gjiNMxKWpOM8l+4XIlosHQd6E8PwxAIY4I3R1IJ5rPn46YQTLD65te7eRmbH1dWWoF0Kg6Ona2Ns7gSB+08BhVpw2ovPjftTeSqrsVA6e+7Xfk1wddi2RPuNQ1L4pe8Hm9rvEhbmdtgRiHLjhZVZXWokFD05tiWj5P60tPUwseaVm71+J56+R0oJH8LHLUCzIcAmthv56FWQMKpqk6N02VR0GQsF/tEYR6q3zGHLTYIwEkDhuLSoR3N9b8CaPl2xZmhByG0TEzTs4GXu/Fv79vMLY2/OJE3gllLCzYRe0NOeS0z/J7GimKdZJBGYgWCSGSQnpo646lf357k2Jr01PCATw2chPt7LifXRcJXuDzu17pLNWn88WJnNV4s9fQQ4iiuinWqF5u2I/viNpcCV4Yf1gf932QuGS1ECyj+4I4vs5Pmn6CmFMXMiVoS9teqTVMLr9glF+cOYfE7OSQFEqk2lL9aL4rgGw2A0Bw0gVkb8t7bgpQ+w9iVoqFt88KCajIGx8PEDEHXUtA25ELJclMLRPxB2NNkly0xDTfbxe0eY8P7OzTG9/Ie61v5YDiqRT8uLQW0xl9iV5Wwpzro4yJOzbta+sq+F2/5OFUzhAiPcXVJYuVW4xRyyLX038uA9Sza7cQBbGDcLdbEpdXH+fqemwjowxIeTyCkXHcxXucfB1zG4IHnp7wEpqV7Q0aPvOtYZ2qHDAF2g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(396003)(39860400002)(136003)(346002)(376002)(451199018)(86362001)(33656002)(122000001)(82960400001)(38070700005)(38100700002)(8936002)(54906003)(66446008)(316002)(4326008)(41300700001)(76116006)(66946007)(64756008)(52536014)(8676002)(66556008)(66476007)(6916009)(5660300002)(55016003)(2906002)(83380400001)(7416002)(71200400001)(478600001)(9686003)(26005)(7696005)(186003)(6506007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8urzy1hyN1wYeYuA2NjY5gwcOQO2D+YMGQ2sQjDuZusSzkMOsPN+YeiHKTXV?=
+ =?us-ascii?Q?4VkJmE5halb47v5ZdojNyWMRK+opXPAVslWkdbws3nic36Qiptg8RktB3vrc?=
+ =?us-ascii?Q?15C9hInxTgIF0RjRsyg2t/L4m2Jw9Fe1U5XYJQPqeUVuyft21lFgypQU2ahL?=
+ =?us-ascii?Q?HKhHhG691lHmS1R0yvOkXua5COwJZAt964WnO7TVFJk3nDhktmIqT3MCSyLa?=
+ =?us-ascii?Q?SxAaRtAJkyPxWLuG6rouvwgcoTnXqBIKrldgoaPjc6vZcwizLeYM5eC01PCd?=
+ =?us-ascii?Q?aQKQaPP9vsWWbqnAoDzWOswa+y7EmPcVe/Gf8qsw67+2wHUiFH7o1vkbxIOE?=
+ =?us-ascii?Q?OB9K6PAURdXbFnIOs/oRTC8dJZmXWz0XAeEAXeupl7oXYptlL6XsI05S8T7p?=
+ =?us-ascii?Q?laMYRsAgq4TSjdNDZUHsTg7GNHGe74PROxdZfzfUJhuepIZCYac64/hBMi+L?=
+ =?us-ascii?Q?1Yn6b90BPdWjjTbFI2hBCNHs7NWt7IH7Ou5cL3IMRloMfUaByssUxCIGruf7?=
+ =?us-ascii?Q?ApBkPifL3LW92ZaUPNG3/v95l6pTR6xjzlJOGJ4CKqF2f45G5yc5OXSU8qo1?=
+ =?us-ascii?Q?Uo9ue56tDQ/fFX/isHjVpsEbrY8Sh0QrNn9amYag05ZL9ZB8QBonR83Ewpps?=
+ =?us-ascii?Q?OR+OHnvG7aotVM4er6eNxGkCMfryONVXDwc2EyDx0iHZ+YIaehDNNx1jl4ER?=
+ =?us-ascii?Q?By65KjkTE82A5Cq8XPqesMY2znhl5EfZdmT8pt2ke0SGAugEYuKsXm3Zemx/?=
+ =?us-ascii?Q?mvEw/ylLC39XCvcbr4mB6gPlIzBGm8v9oFfS5oKndWtZgvRgDOVNFg+dVMxy?=
+ =?us-ascii?Q?2pDcxW64hq05x0A0SHVnsrtTpAi8LJxOzNq6yWH3gazxdOcJ7GHaoWilERXB?=
+ =?us-ascii?Q?m/S9obbWAkKT3odM4vdA4tekOfau/0tNmA0Wp1lakpUcY82BE1U9vapjIs9n?=
+ =?us-ascii?Q?sit2m/1b6lwKLxJWSDrVLZPsyqq2mEgn3mvXfjlF/UkXn3b/dJUgObuz++tf?=
+ =?us-ascii?Q?apEWE+H97AOyDP8GfouoFBncHlXxeSfQbOl7zySIgBNDjoyqbRN4QEHjdIdL?=
+ =?us-ascii?Q?hjk+wH8FAJzjOD7lMZbFZgFtLgqqec72zKr7BJxF8ftTFWsW/K/eDyokLLBi?=
+ =?us-ascii?Q?nc06+P5y1fa2jbw9LuI+J98HLSdmTNfNfdn3QALR8/myVcjV3X7sPqajM9go?=
+ =?us-ascii?Q?OYfwBrW3/sCeGqFw9NeajnyPk7fpoovtvS1N4s+bZUJBIqeRtH+C/yOor2vy?=
+ =?us-ascii?Q?MFZEj13fGKLmhADdG9w32m6/Ow1GG3CHOpp7iQFSqMR2iLKLIh8e3VHDEY/K?=
+ =?us-ascii?Q?B7M15F4Ni7YavyGr/Q4MuRowtL4BiS+gvd7I6v3tspNprt4ZNy+OhaUV2P09?=
+ =?us-ascii?Q?+D3J37xjQnrYXt1usxwuEjrzWGOfiX/DvN49hG4xfbqv11hEOP7nFaH706uJ?=
+ =?us-ascii?Q?+rBPWYPUOJum+aLK2HU9pxCxTn61IngMJDQKIe0+f7r7JVbGtrxAO3mecRjb?=
+ =?us-ascii?Q?lXCjslxJGylMG9LujIC+FuShPzaPfKdkZO86Nm553rsXNkht4FshSFPxm8KD?=
+ =?us-ascii?Q?OQep4DwaxfFeyRtvpduaDmIJtXqtLZsuxOGRtSTl?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35745af9-602b-4349-4f88-08db0b0c1b79
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Feb 2023 02:11:23.1349
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: G91B+jct4/NgjzsBWkM5k/BonhGtdmob0d7c37rY6XqbcAqLE1wmYvUPpu243h5pG33nuyjOTs9HjcVgouHCbQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB7183
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e544a07438522ab3688416e6e2e34bf0ee6d8755
-commit: 20bb6c9de1b7e13f11d2ffe73686f4449c426807 soc: qcom: smem: map only partitions used by local HOST
-date:   10 months ago
-config: sh-randconfig-s032-20230209 (https://download.01.org/0day-ci/archive/20230210/202302101036.8ET56Cry-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=20bb6c9de1b7e13f11d2ffe73686f4449c426807
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 20bb6c9de1b7e13f11d2ffe73686f4449c426807
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sh olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sh SHELL=/bin/bash
+> From: Nicolin Chen <nicolinc@nvidia.com>
+> Sent: Friday, February 10, 2023 5:13 AM
+>=20
+> > > +     if (!iommufd_hw_pagetable_has_group(hwpt, idev->group)) {
+> > > +             if (list_empty(&hwpt->devices)) {
+> > > +                     iopt_table_remove_domain(&hwpt->ioas->iopt,
+> > > +                                              hwpt->domain);
+> > > +                     list_del(&hwpt->hwpt_item);
+> > > +             }
+> >
+> > I'm not sure how this can be fully shared between detach and replace.
+> > Here some work e.g. above needs to be done before calling
+> > iommu_group_replace_domain() while others can be done afterwards.
+>=20
+> This iopt_table_remove_domain/list_del is supposed to be done in
+> the hwpt's destroy() actually. We couldn't move it because it'd
+> need the new domain_alloc_user op and its implementation in ARM
+> driver. Overall, I think it should be safe to put it behind the
+> iommu_group_replace_domain().
+>=20
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302101036.8ET56Cry-lkp@intel.com/
+My confusion is that we have different flows between detach/attach
+and replace.
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/soc/qcom/smem.c:422:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_header *header @@     got void [noderef] __iomem *virt_base @@
-   drivers/soc/qcom/smem.c:422:16: sparse:     expected struct smem_header *header
-   drivers/soc/qcom/smem.c:422:16: sparse:     got void [noderef] __iomem *virt_base
-   drivers/soc/qcom/smem.c:507:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_header *header @@     got void [noderef] __iomem *virt_base @@
-   drivers/soc/qcom/smem.c:507:16: sparse:     expected struct smem_header *header
-   drivers/soc/qcom/smem.c:507:16: sparse:     got void [noderef] __iomem *virt_base
-   drivers/soc/qcom/smem.c:520:50: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void * @@     got void [noderef] __iomem * @@
-   drivers/soc/qcom/smem.c:520:50: sparse:     expected void *
-   drivers/soc/qcom/smem.c:520:50: sparse:     got void [noderef] __iomem *
-   drivers/soc/qcom/smem.c:648:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_partition_header *phdr @@     got void [noderef] __iomem *virt_base @@
-   drivers/soc/qcom/smem.c:648:22: sparse:     expected struct smem_partition_header *phdr
-   drivers/soc/qcom/smem.c:648:22: sparse:     got void [noderef] __iomem *virt_base
-   drivers/soc/qcom/smem.c:653:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_partition_header *phdr @@     got void [noderef] __iomem *virt_base @@
-   drivers/soc/qcom/smem.c:653:22: sparse:     expected struct smem_partition_header *phdr
-   drivers/soc/qcom/smem.c:653:22: sparse:     got void [noderef] __iomem *virt_base
-   drivers/soc/qcom/smem.c:657:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_header *header @@     got void [noderef] __iomem *virt_base @@
-   drivers/soc/qcom/smem.c:657:24: sparse:     expected struct smem_header *header
-   drivers/soc/qcom/smem.c:657:24: sparse:     got void [noderef] __iomem *virt_base
-   drivers/soc/qcom/smem.c:667:30: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/soc/qcom/smem.c:667:30: sparse:    void *
-   drivers/soc/qcom/smem.c:667:30: sparse:    void [noderef] __iomem *
-   drivers/soc/qcom/smem.c:688:36: sparse: sparse: subtraction of different types can't work (different address spaces)
-   drivers/soc/qcom/smem.c:697:28: sparse: sparse: subtraction of different types can't work (different address spaces)
-   drivers/soc/qcom/smem.c:706:36: sparse: sparse: subtraction of different types can't work (different address spaces)
-   drivers/soc/qcom/smem.c:721:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_header *header @@     got void [noderef] __iomem *virt_base @@
-   drivers/soc/qcom/smem.c:721:16: sparse:     expected struct smem_header *header
-   drivers/soc/qcom/smem.c:721:16: sparse:     got void [noderef] __iomem *virt_base
-   drivers/soc/qcom/smem.c:754:57: sparse: sparse: restricted __le32 degrades to integer
-   drivers/soc/qcom/smem.c:775:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_partition_header *header @@     got void [noderef] __iomem * @@
-   drivers/soc/qcom/smem.c:775:16: sparse:     expected struct smem_partition_header *header
-   drivers/soc/qcom/smem.c:775:16: sparse:     got void [noderef] __iomem *
-   drivers/soc/qcom/smem.c:926:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_ptable *ptable @@     got void [noderef] __iomem * @@
-   drivers/soc/qcom/smem.c:926:22: sparse:     expected struct smem_ptable *ptable
-   drivers/soc/qcom/smem.c:926:22: sparse:     got void [noderef] __iomem *
-   drivers/soc/qcom/smem.c:1035:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct smem_header *header @@     got void [noderef] __iomem *virt_base @@
-   drivers/soc/qcom/smem.c:1035:16: sparse:     expected struct smem_header *header
-   drivers/soc/qcom/smem.c:1035:16: sparse:     got void [noderef] __iomem *virt_base
->> drivers/soc/qcom/smem.c:1056:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *ptr @@     got restricted __le32 * @@
-   drivers/soc/qcom/smem.c:1056:16: sparse:     expected void const volatile [noderef] __iomem *ptr
-   drivers/soc/qcom/smem.c:1056:16: sparse:     got restricted __le32 *
-   drivers/soc/qcom/smem.c:1056:52: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *ptr @@     got restricted __le32 * @@
-   drivers/soc/qcom/smem.c:1056:52: sparse:     expected void const volatile [noderef] __iomem *ptr
-   drivers/soc/qcom/smem.c:1056:52: sparse:     got restricted __le32 *
+today with separate detach+attach we have following flow:
 
-vim +1056 drivers/soc/qcom/smem.c
+	Remove device from current hwpt;
+	if (last_device in hwpt) {
+		Remove hwpt domain from current iopt;
+		if (last_device in group)
+			detach group from hwpt domain;
+	}
 
-   973	
-   974	static int qcom_smem_probe(struct platform_device *pdev)
-   975	{
-   976		struct smem_header *header;
-   977		struct reserved_mem *rmem;
-   978		struct qcom_smem *smem;
-   979		unsigned long flags;
-   980		size_t array_size;
-   981		int num_regions;
-   982		int hwlock_id;
-   983		u32 version;
-   984		u32 size;
-   985		int ret;
-   986		int i;
-   987	
-   988		num_regions = 1;
-   989		if (of_find_property(pdev->dev.of_node, "qcom,rpm-msg-ram", NULL))
-   990			num_regions++;
-   991	
-   992		array_size = num_regions * sizeof(struct smem_region);
-   993		smem = devm_kzalloc(&pdev->dev, sizeof(*smem) + array_size, GFP_KERNEL);
-   994		if (!smem)
-   995			return -ENOMEM;
-   996	
-   997		smem->dev = &pdev->dev;
-   998		smem->num_regions = num_regions;
-   999	
-  1000		rmem = of_reserved_mem_lookup(pdev->dev.of_node);
-  1001		if (rmem) {
-  1002			smem->regions[0].aux_base = rmem->base;
-  1003			smem->regions[0].size = rmem->size;
-  1004		} else {
-  1005			/*
-  1006			 * Fall back to the memory-region reference, if we're not a
-  1007			 * reserved-memory node.
-  1008			 */
-  1009			ret = qcom_smem_resolve_mem(smem, "memory-region", &smem->regions[0]);
-  1010			if (ret)
-  1011				return ret;
-  1012		}
-  1013	
-  1014		if (num_regions > 1) {
-  1015			ret = qcom_smem_resolve_mem(smem, "qcom,rpm-msg-ram", &smem->regions[1]);
-  1016			if (ret)
-  1017				return ret;
-  1018		}
-  1019	
-  1020	
-  1021		ret = qcom_smem_map_toc(smem, &smem->regions[0]);
-  1022		if (ret)
-  1023			return ret;
-  1024	
-  1025		for (i = 1; i < num_regions; i++) {
-  1026			smem->regions[i].virt_base = devm_ioremap_wc(&pdev->dev,
-  1027								     smem->regions[i].aux_base,
-  1028								     smem->regions[i].size);
-  1029			if (!smem->regions[i].virt_base) {
-  1030				dev_err(&pdev->dev, "failed to remap %pa\n", &smem->regions[i].aux_base);
-  1031				return -ENOMEM;
-  1032			}
-  1033		}
-  1034	
-  1035		header = smem->regions[0].virt_base;
-  1036		if (le32_to_cpu(header->initialized) != 1 ||
-  1037		    le32_to_cpu(header->reserved)) {
-  1038			dev_err(&pdev->dev, "SMEM is not initialized by SBL\n");
-  1039			return -EINVAL;
-  1040		}
-  1041	
-  1042		hwlock_id = of_hwspin_lock_get_id(pdev->dev.of_node, 0);
-  1043		if (hwlock_id < 0) {
-  1044			if (hwlock_id != -EPROBE_DEFER)
-  1045				dev_err(&pdev->dev, "failed to retrieve hwlock\n");
-  1046			return hwlock_id;
-  1047		}
-  1048	
-  1049		smem->hwlock = hwspin_lock_request_specific(hwlock_id);
-  1050		if (!smem->hwlock)
-  1051			return -ENXIO;
-  1052	
-  1053		ret = hwspin_lock_timeout_irqsave(smem->hwlock, HWSPINLOCK_TIMEOUT, &flags);
-  1054		if (ret)
-  1055			return ret;
-> 1056		size = readl_relaxed(&header->available) + readl_relaxed(&header->free_offset);
-  1057		hwspin_unlock_irqrestore(smem->hwlock, &flags);
-  1058	
-  1059		version = qcom_smem_get_sbl_version(smem);
-  1060		/*
-  1061		 * smem header mapping is required only in heap version scheme, so unmap
-  1062		 * it here. It will be remapped in qcom_smem_map_global() when whole
-  1063		 * partition is mapped again.
-  1064		 */
-  1065		devm_iounmap(smem->dev, smem->regions[0].virt_base);
-  1066		switch (version >> 16) {
-  1067		case SMEM_GLOBAL_PART_VERSION:
-  1068			ret = qcom_smem_set_global_partition(smem);
-  1069			if (ret < 0)
-  1070				return ret;
-  1071			smem->item_count = qcom_smem_get_item_count(smem);
-  1072			break;
-  1073		case SMEM_GLOBAL_HEAP_VERSION:
-  1074			qcom_smem_map_global(smem, size);
-  1075			smem->item_count = SMEM_ITEM_COUNT;
-  1076			break;
-  1077		default:
-  1078			dev_err(&pdev->dev, "Unsupported SMEM version 0x%x\n", version);
-  1079			return -EINVAL;
-  1080		}
-  1081	
-  1082		BUILD_BUG_ON(SMEM_HOST_APPS >= SMEM_HOST_COUNT);
-  1083		ret = qcom_smem_enumerate_partitions(smem, SMEM_HOST_APPS);
-  1084		if (ret < 0 && ret != -ENOENT)
-  1085			return ret;
-  1086	
-  1087		__smem = smem;
-  1088	
-  1089		smem->socinfo = platform_device_register_data(&pdev->dev, "qcom-socinfo",
-  1090							      PLATFORM_DEVID_NONE, NULL,
-  1091							      0);
-  1092		if (IS_ERR(smem->socinfo))
-  1093			dev_dbg(&pdev->dev, "failed to register socinfo device\n");
-  1094	
-  1095		return 0;
-  1096	}
-  1097	
+	if (first device in group) {
+		attach group to new hwpt domain;
+		if (first_device in hwpt)
+			Add hwpt domain to new iopt;
+	Add device to new hwpt;
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+but replace flow is different on the detach part:
+
+	if (first device in group) {
+		replace group's domain from current hwpt to new hwpt;
+		if (first_device in hwpt)
+			Add hwpt domain to new iopt;
+	}
+
+	Remove device from old hwpt;
+	if (last_device in old hwpt)
+		Remove hwpt domain from old iopt;
+
+	Add device to new hwpt;
+
+I'm yet to figure out whether we have sufficient lock protection to
+prevent other paths from using old iopt/hwpt to find the device
+which is already attached to a different domain.
