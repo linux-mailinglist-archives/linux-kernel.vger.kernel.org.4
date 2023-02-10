@@ -2,193 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD29692866
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 21:35:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5055169286F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 21:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233818AbjBJUfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 15:35:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38486 "EHLO
+        id S233624AbjBJUhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 15:37:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232868AbjBJUfi (ORCPT
+        with ESMTP id S232810AbjBJUhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 15:35:38 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947DB23C60;
-        Fri, 10 Feb 2023 12:35:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=d6OFz+pkMmvKeLrRrxwfrFR4lZ2gbax6K6PnOag8/Y0=; b=gNwpBt6ixo/c6ORlp0sXEGfu/0
-        Bn9Z+herGukEmnsxWrrkPL0bFJyYXL8RQMUk5Tm+HmtDlhYFfTytu5uyjaMy7gVpnRS7eNIQyTxEE
-        mfUC7LbVWlsXeGXo8VAfAGMjT57i5mqA5HcH2Hjbmiz1aLwziY1VJ4Nq6fmvfFjiAOqSLxqUJEh+A
-        d8AJySAdfS24xKSjXAUdnqhz7mXxTZPfKVxIZtsHnFN3Xc4lL2EsgO9AeAkcub+mVxPtITapFjlbj
-        BhE89vGQM4i0B+akm5FM5B4am4sfUqGLbBsCugSmfc2oCLNiilAXZnIrRUkA6HVjYuR9/Pzq+Mvf7
-        mSfHLYZw==;
-Received: from [187.10.60.16] (helo=localhost)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1pQa7D-00FNVd-9Q; Fri, 10 Feb 2023 21:35:27 +0100
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-To:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com
-Cc:     linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        dyoung@redhat.com, d.hatayama@jp.fujitsu.com, feng.tang@intel.com,
-        hidehiro.kawai.ez@hitachi.com, keescook@chromium.org,
-        mikelley@microsoft.com, vgoyal@redhat.com, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        stable@vger.kernel.org
-Subject: [PATCH v4] panic: Fixes the panic_print NMI backtrace setting
-Date:   Fri, 10 Feb 2023 17:35:10 -0300
-Message-Id: <20230210203510.1734835-1-gpiccoli@igalia.com>
-X-Mailer: git-send-email 2.39.1
+        Fri, 10 Feb 2023 15:37:21 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281605A9DA
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 12:37:19 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id m8so5785891edd.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 12:37:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=V5hbvtyrVhBU5KLvd4luM4pmIGBHWSgPPjkAzLVdXdc=;
+        b=XJVb1xKfBvelCl8Xuh4Bkq319Cx2dxwUHidMnSfKqGDU/b9SmTwk9u5Vp4ORhPDBNt
+         uLp+1raScNofpejxVBGtMzdmvBtnEGPM6qvYjZcLw/dIFGbo6cMI3yaedOJppVXrhg5I
+         8ihrf6+ZhqT/79pvdvMQsBrrZs8E6lxb26z2c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V5hbvtyrVhBU5KLvd4luM4pmIGBHWSgPPjkAzLVdXdc=;
+        b=2DiAboz8k2ukquEkP8Rq8LKpVpx+fJ0PBqIfCTNbYktql5o7T/Ot09RmBSH9X+Iete
+         AybpFD9UPIivIfzHvSAi6AfJQL5AnjKigZu9RFEc5NB5mzT7SkHS+nQJTIFin7KMYVH/
+         jyvEwgQF/mjFbZbMH/NMAewqOi+BJ4oStqa75vUEB3zZZtDxt5BlrjorYaBA8qxnBK7P
+         kwTzk37BRs0lnZWPWo5GpyD7EFZrmE5cM/trGlqKMLbuP/GTLpMk68yeEuSldQH0uXuV
+         nwUyhBDm4zCnwyUnph5k8z2aLFoiQBsnmS39uIwxdyouEUf9muCm8DyR2GyYYSuIGdF9
+         /DCw==
+X-Gm-Message-State: AO0yUKXmb3kV/MsTL6qOQKCVtfOIRBLsmeqaX4NTpUpT/2NdugfDq1DG
+        ay+hLtyGk3iZKLJILOOEGIX7acvCjixkXuioVRk=
+X-Google-Smtp-Source: AK7set8pvN+TceajZzPXIvmQCmL4orI/QOdaTMtJTM5lcFTKGr9Ov4smMDXxQjABvEhkFHOoTYdekQ==
+X-Received: by 2002:a50:c04d:0:b0:4ab:100e:1653 with SMTP id u13-20020a50c04d000000b004ab100e1653mr11087099edd.15.1676061437223;
+        Fri, 10 Feb 2023 12:37:17 -0800 (PST)
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
+        by smtp.gmail.com with ESMTPSA id v15-20020a50954f000000b0049e9e9204basm2767656eda.21.2023.02.10.12.37.16
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 12:37:16 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id qb15so16810834ejc.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 12:37:16 -0800 (PST)
+X-Received: by 2002:a17:906:f749:b0:8af:2ad9:9a1d with SMTP id
+ jp9-20020a170906f74900b008af2ad99a1dmr1552969ejb.0.1676061435878; Fri, 10 Feb
+ 2023 12:37:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
+ <CAHk-=wj8rthcQ9gQbvkMzeFt0iymq+CuOzmidx3Pm29Lg+W0gg@mail.gmail.com>
+ <20230210021603.GA2825702@dread.disaster.area> <20230210040626.GB2825702@dread.disaster.area>
+ <Y+XLuYh+kC+4wTRi@casper.infradead.org> <20230210065747.GD2825702@dread.disaster.area>
+ <CALCETrWjJisipSJA7tPu+h6B2gs3m+g0yPhZ4z+Atod+WOMkZg@mail.gmail.com>
+ <CAHk-=wj66F6CdJUAAjqigXMBy7gHquFMzPNAwKCgkrb2mF6U7w@mail.gmail.com>
+ <CALCETrU-9Wcb_zCsVWr24V=uCA0+c6x359UkJBOBgkbq+UHAMA@mail.gmail.com>
+ <CAHk-=wjQZWMeQ9OgXDNepf+TLijqj0Lm0dXWwWzDcbz6o7yy_g@mail.gmail.com>
+ <CALCETrWuRHWh5XFn8M8qx5z0FXAGHH=ysb+c6J+cqbYyTAHvhw@mail.gmail.com>
+ <CAHk-=wjuXvF1cA=gJod=-6k4ypbEmOczFFDKriUpOVKy9dTJWQ@mail.gmail.com>
+ <CALCETrUXYts5BRZKb25MVaWPk2mz34fKSqCR++SM382kSYLnJw@mail.gmail.com>
+ <CAHk-=wgA=rB=7M_Fe3n9UkoW_7dqdUT2D=yb94=6GiGXEuAHDA@mail.gmail.com> <1dd85095-c18c-ed3e-38b7-02f4d13d9bd6@kernel.dk>
+In-Reply-To: <1dd85095-c18c-ed3e-38b7-02f4d13d9bd6@kernel.dk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 10 Feb 2023 12:36:58 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiszt6btMPeT5UFcS=0=EVr=0injTR75KsvN8WetwQwkA@mail.gmail.com>
+Message-ID: <CAHk-=wiszt6btMPeT5UFcS=0=EVr=0injTR75KsvN8WetwQwkA@mail.gmail.com>
+Subject: Re: copy on write for splice() from file to pipe?
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Stefan Metzmacher <metze@samba.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API Mailing List <linux-api@vger.kernel.org>,
+        io-uring <io-uring@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Samba Technical <samba-technical@lists.samba.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 8d470a45d1a6 ("panic: add option to dump all CPUs backtraces in panic_print")
-introduced a setting for the "panic_print" kernel parameter to allow
-users to request a NMI backtrace on panic. Problem is that the panic_print
-handling happens after the secondary CPUs are already disabled, hence
-this option ended-up being kind of a no-op - kernel skips the NMI trace
-in idling CPUs, which is the case of offline CPUs.
+On Fri, Feb 10, 2023 at 12:32 PM Jens Axboe <axboe@kernel.dk> wrote:
+>
+> No, we very much do have that for io_uring zerocopy sends, which was in
+> the bit below you snipped from the reply. It'll tell you when data has
+> been sent out, and when the data has been acked.
 
-Fix it by checking the NMI backtrace bit in the panic_print prior to
-the CPU disabling function.
+Hmm. splice() itself definitely doesn't have that data - there's no
+"io context" for it.
 
-Fixes: 8d470a45d1a6 ("panic: add option to dump all CPUs backtraces in panic_print")
-Cc: stable@vger.kernel.org
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+There is only the pipe buffers, and they are released when the data
+has been accepted - which is not the same as used (eg the networking
+layer just takes another ref to the page and says "I'm done").
 
----
+Maybe adding some io context to the pipe buffer would be possible, but
+it's certainly not obvious how, without changing splice() semantics
+completely.
 
-V4:
-- Sent as standalone patch, rebased against v6.2-rc7.
-
-V2 / V3:
-- New patch, there was no V1 of this one.
-Link for V3: https://lore.kernel.org/lkml/20220819221731.480795-12-gpiccoli@igalia.com/
-
-
-Hi folks, thanks in advance for reviews/comments.
-
-Notice that while at it, I got rid of the "crash_kexec_post_notifiers"
-local copy in panic(). This was introduced by commit b26e27ddfd2a
-("kexec: use core_param for crash_kexec_post_notifiers boot option"),
-but it is not clear from comments or commit message why this local copy
-is required.
-
-My understanding is that it's a mechanism to prevent some concurrency,
-in case some other CPU modify this variable while panic() is running.
-I find it very unlikely, hence I removed it - but if people consider
-this copy needed, I can respin this patch and keep it, even providing a
-comment about that, in order to be explict about its need.
-
-Let me know your thoughts!
-Cheers,
-
-Guilherme
-
-
- kernel/panic.c | 47 +++++++++++++++++++++++++++--------------------
- 1 file changed, 27 insertions(+), 20 deletions(-)
-
-diff --git a/kernel/panic.c b/kernel/panic.c
-index 463c9295bc28..f45ee88be8a2 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -211,9 +211,6 @@ static void panic_print_sys_info(bool console_flush)
- 		return;
- 	}
- 
--	if (panic_print & PANIC_PRINT_ALL_CPU_BT)
--		trigger_all_cpu_backtrace();
--
- 	if (panic_print & PANIC_PRINT_TASK_INFO)
- 		show_state();
- 
-@@ -243,6 +240,30 @@ void check_panic_on_warn(const char *origin)
- 		      origin, limit);
- }
- 
-+/*
-+ * Helper that triggers the NMI backtrace (if set in panic_print)
-+ * and then performs the secondary CPUs shutdown - we cannot have
-+ * the NMI backtrace after the CPUs are off!
-+ */
-+static void panic_other_cpus_shutdown(void)
-+{
-+	if (panic_print & PANIC_PRINT_ALL_CPU_BT)
-+		trigger_all_cpu_backtrace();
-+
-+	/*
-+	 * Note that smp_send_stop() is the usual SMP shutdown function,
-+	 * which unfortunately may not be hardened to work in a panic
-+	 * situation. If we want to do crash dump after notifier calls
-+	 * and kmsg_dump, we will need architecture dependent extra
-+	 * bits in addition to stopping other CPUs, hence we rely on
-+	 * crash_smp_send_stop() for that.
-+	 */
-+	if (!crash_kexec_post_notifiers)
-+		smp_send_stop();
-+	else
-+		crash_smp_send_stop();
-+}
-+
- /**
-  *	panic - halt the system
-  *	@fmt: The text string to print
-@@ -258,7 +279,6 @@ void panic(const char *fmt, ...)
- 	long i, i_next = 0, len;
- 	int state = 0;
- 	int old_cpu, this_cpu;
--	bool _crash_kexec_post_notifiers = crash_kexec_post_notifiers;
- 
- 	if (panic_on_warn) {
- 		/*
-@@ -333,23 +353,10 @@ void panic(const char *fmt, ...)
- 	 *
- 	 * Bypass the panic_cpu check and call __crash_kexec directly.
- 	 */
--	if (!_crash_kexec_post_notifiers) {
-+	if (!crash_kexec_post_notifiers)
- 		__crash_kexec(NULL);
- 
--		/*
--		 * Note smp_send_stop is the usual smp shutdown function, which
--		 * unfortunately means it may not be hardened to work in a
--		 * panic situation.
--		 */
--		smp_send_stop();
--	} else {
--		/*
--		 * If we want to do crash dump after notifier calls and
--		 * kmsg_dump, we will need architecture dependent extra
--		 * works in addition to stopping other CPUs.
--		 */
--		crash_smp_send_stop();
--	}
-+	panic_other_cpus_shutdown();
- 
- 	/*
- 	 * Run any panic handlers, including those that might need to
-@@ -370,7 +377,7 @@ void panic(const char *fmt, ...)
- 	 *
- 	 * Bypass the panic_cpu check and call __crash_kexec directly.
- 	 */
--	if (_crash_kexec_post_notifiers)
-+	if (crash_kexec_post_notifiers)
- 		__crash_kexec(NULL);
- 
- 	console_unblank();
--- 
-2.39.1
-
+             Linus
