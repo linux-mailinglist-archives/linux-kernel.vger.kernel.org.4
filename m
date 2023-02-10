@@ -2,98 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2727B6917D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 06:03:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F126917E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 06:08:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbjBJFDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 00:03:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
+        id S231230AbjBJFIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 00:08:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjBJFDk (ORCPT
+        with ESMTP id S229455AbjBJFIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 00:03:40 -0500
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0369F55E43
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 21:03:37 -0800 (PST)
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230210050334epoutp0366a8a7f852765bf9258cbdaaf19e55fa~CXgt96GO-0695706957epoutp039
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 05:03:34 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230210050334epoutp0366a8a7f852765bf9258cbdaaf19e55fa~CXgt96GO-0695706957epoutp039
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1676005414;
-        bh=PzSTVr50vR+unyyHU8ecPzVzBA20pYL5vCXBlpK8cbo=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=IAkHjZT3ufugOzfPoy2g+l6N5sXMep+AcfVzm04LVpAwDNS5jang5ht8dxw+HEGCw
-         hQWSshorqEEQzhkQICZ+iwcyoNPlHbm81Xlq9dpWVwYqi+82vot01m1eyfpkuefAlH
-         JctS6JMeC4j6B68vZUG/a5Wz5kT9vnnXW+kicbeE=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230210050334epcas1p232485b64a5599e0ced0e901a15aec190~CXgtZ9sil2937529375epcas1p2B;
-        Fri, 10 Feb 2023 05:03:34 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.36.224]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4PChTL0bHlz4x9Px; Fri, 10 Feb
-        2023 05:03:34 +0000 (GMT)
-X-AuditID: b6c32a35-00ffd7000000d8eb-fb-63e5d02520ad
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        7A.A9.55531.520D5E36; Fri, 10 Feb 2023 14:03:33 +0900 (KST)
-Mime-Version: 1.0
-Subject: Re: [PATCH v2] dma-buf: system_heap: avoid reclaim for order 4
-Reply-To: jaewon31.kim@samsung.com
-Sender: Jaewon Kim <jaewon31.kim@samsung.com>
-From:   Jaewon Kim <jaewon31.kim@samsung.com>
-To:     Jaewon Kim <jaewon31.kim@samsung.com>,
-        "jstultz@google.com" <jstultz@google.com>,
-        "tjmercier@google.com" <tjmercier@google.com>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "mhocko@kernel.org" <mhocko@kernel.org>
-CC:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20230210045608.23274-1-jaewon31.kim@samsung.com>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230210050333epcms1p7c0bd93b385828aeed9689d1d17ff6789@epcms1p7>
-Date:   Fri, 10 Feb 2023 14:03:33 +0900
-X-CMS-MailID: 20230210050333epcms1p7c0bd93b385828aeed9689d1d17ff6789
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrIJsWRmVeSWpSXmKPExsWy7bCmga7ahafJBitNLOasX8NmsfDhXWaL
-        1Zt8Lbo3z2S06H3/isniz4mNbBaXd81hs7i35j+rxetvy5gtTt39zG7xbv0XNgduj8Nv3jN7
-        7P22gMVj56y77B4LNpV6bFrVyeax6dMkdo871/aweZyY8ZvFo2/LKkaPz5vkAriism0yUhNT
-        UosUUvOS81My89JtlbyD453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJzgA5WUihLzCkFCgUk
-        Fhcr6dvZFOWXlqQqZOQXl9gqpRak5BSYFegVJ+YWl+al6+WlllgZGhgYmQIVJmRn3Hj2mqng
-        nljF848z2RsYLwh2MXJySAiYSMyd9pOli5GLQ0hgB6PE+e7FQA4HB6+AoMTfHcIgNcIC7hI7
-        py9mB7GFBJQkzv64wg4R15Vo6l7NAmKzCWhLvF8wiRVkjohAC7PE7AuTwIYyCyxmlGhbeZQJ
-        YhuvxIz2pywQtrTE9uVbGUFsTgE7iR1z3rJDxEUlbq5GsN8fm88IYYtItN47ywxhC0o8+Lmb
-        EWbOn+PP2SDscqA5+6HsConf/cug5uhLXOmfyQTxmK/EtG57kDCLgKrEztdfoUpcJFb9gTiH
-        WUBeYvvbOcwg5cwCmhLrd+lDlChK7Pw9F6qET+Ld1x5WmK92zHsC9aGaRMuzr1BxGYm//56x
-        goyREPCQmPU8ExLMrYwSZx5NYJnAqDALEdKzkCyehbB4ASPzKkax1ILi3PTUYsMCQ3jkJufn
-        bmIEp10t0x2ME99+0DvEyMTBeIhRgoNZSYT3+8THyUK8KYmVValF+fFFpTmpxYcYTYFensgs
-        JZqcD0z8eSXxhiaWBiZmRiYWxpbGZkrivOK2J5OFBNITS1KzU1MLUotg+pg4OKUamHTesont
-        bf2mw+ew486ebYt4Ba9Gyht7/Sv/ucbw+q3F02V7z4W7SX74+SrgmqHw9otJKnGrBUv9EhKO
-        XPy4foewwb5Ln6fsDJwg5dAharDl4GwZscLNN5zKV3s9mdEgvG6vw62SWFc+hW8y77rnLcrx
-        rgtWiVtfdcbm2Q6hpC9Fn6Rq5sdP6bD0C7ibzfIyTbA+oOyTi2W9jMNFTc6M1apZhe7iot/O
-        6e/ySLp49kfYpqfRntqPlkgUOtiqnE75d/T8nFWrf7WKV2TWHQhesHmHX3ay1uUtk7kOyy1Z
-        bXXbL/FWE29lQdmpp3/Or+aKm51i3/r/N8M2vT2Xagv7+leE1VssSFkl7s1z5aPzHiWW4oxE
-        Qy3mouJEAFI7DFlEBAAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230210045651epcas1p1392354722c8ad6d4ffad6f934ba78742
-References: <20230210045608.23274-1-jaewon31.kim@samsung.com>
-        <CGME20230210045651epcas1p1392354722c8ad6d4ffad6f934ba78742@epcms1p7>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        Fri, 10 Feb 2023 00:08:20 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7035C4BC;
+        Thu,  9 Feb 2023 21:08:17 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PChZj6hzVz4xwy;
+        Fri, 10 Feb 2023 16:08:13 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1676005696;
+        bh=gjOEhpmQ4QzYiJxNRSCplO6mzBIo8CgdHMudas4f4m4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=VzBHDakF5oapgbqSwyCXW4NlOxuhWIXgHT5bnjksmwxnwzB2j77QlwtNy9auFKO5k
+         R5zuzvTLv5v6JR0g4zAQSDALbGO0+HtyCcaxIv+XCmtUOUNdsZXpr/60HJ8m0se9Ac
+         HCqPfRmHl1K9cRm2zGL0JLt1dLbvDoohuA4JmvWcFN0J1XTPyIZXfr0n3q8zPBgbwM
+         2KTETWI8PkOX6ZP5se3LmuOaFIoUbfwmRFq7s/gffXRM+ntl6Tsz8s7uIuoBncovYH
+         169scsrJUZSYlGwI60JQl2lk38JbvV/eRPo8tLjsBgWQeltv5kZiHwGm5Gqurl9z/4
+         hTaeq+aYRbc4A==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Nadav Amit <namit@vmware.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        David Hildenbrand <david@redhat.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH mm-unstable v1 17/26] powerpc/mm: support
+ __HAVE_ARCH_PTE_SWP_EXCLUSIVE on 32bit book3s
+In-Reply-To: <20230113171026.582290-18-david@redhat.com>
+References: <20230113171026.582290-1-david@redhat.com>
+ <20230113171026.582290-18-david@redhat.com>
+Date:   Fri, 10 Feb 2023 16:08:07 +1100
+Message-ID: <87cz6iw1jc.fsf@mpe.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,80 +74,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->Using order 4 pages would be helpful for IOMMUs mapping, but trying to get order 4 pages could spend quite much time in the page allocation.
->From the perspective of responsiveness, the deterministic memory allocation speed, I think, is quite important.
+David Hildenbrand <david@redhat.com> writes:
+> We already implemented support for 64bit book3s in commit bff9beaa2e80
+> ("powerpc/pgtable: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE for book3s")
 >
->The order 4 allocation with __GFP_RECLAIM may spend much time in reclaim and compation logic. __GFP_NORETRY also may affect. These cause unpredictable delay.
+> Let's support __HAVE_ARCH_PTE_SWP_EXCLUSIVE also in 32bit by reusing yet
+> unused LSB 2 / MSB 29. There seems to be no real reason why that bit cannot
+> be used, and reusing it avoids having to steal one bit from the swap
+> offset.
 >
->To get reasonable allocation speed from dma-buf system heap, use HIGH_ORDER_GFP for order 4 to avoid reclaim. And let me remove meaningless __GFP_COMP for order 0.
+> While at it, mask the type in __swp_entry().
 >
->According to my tests, order 4 with MID_ORDER_GFP could get more number of order 4 pages but the elapsed times could be very slow.
->
->         time	order 8	order 4	order 0
->     584 usec	0	160	0
->  28,428 usec	0	160	0
-> 100,701 usec	0	160	0
->  76,645 usec	0	160	0
->  25,522 usec	0	160	0
->  38,798 usec	0	160	0
->  89,012 usec	0	160	0
->  23,015 usec	0	160	0
->  73,360 usec	0	160	0
->  76,953 usec	0	160	0
->  31,492 usec	0	160	0
->  75,889 usec	0	160	0
->  84,551 usec	0	160	0
->  84,352 usec	0	160	0
->  57,103 usec	0	160	0
->  93,452 usec	0	160	0
->
->If HIGH_ORDER_GFP is used for order 4, the number of order 4 could be decreased but the elapsed time results were quite stable and fast enough.
->
->         time	order 8	order 4	order 0
->   1,356 usec	0	155	80
->   1,901 usec	0	11	2384
->   1,912 usec	0	0	2560
->   1,911 usec	0	0	2560
->   1,884 usec	0	0	2560
->   1,577 usec	0	0	2560
->   1,366 usec	0	0	2560
->   1,711 usec	0	0	2560
->   1,635 usec	0	28	2112
->     544 usec	10	0	0
->     633 usec	2	128	0
->     848 usec	0	160	0
->     729 usec	0	160	0
->   1,000 usec	0	160	0
->   1,358 usec	0	160	0
->   2,638 usec	0	31	2064
->
->Signed-off-by: Jaewon Kim <jaewon31.kim@samsung.com>
->---
-> drivers/dma-buf/heaps/system_heap.c | 5 ++---
-> 1 file changed, 2 insertions(+), 3 deletions(-)
->
->diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heaps/system_heap.c
->index e8bd10e60998..920db302a273 100644
->--- a/drivers/dma-buf/heaps/system_heap.c
->+++ b/drivers/dma-buf/heaps/system_heap.c
->@@ -41,12 +41,11 @@ struct dma_heap_attachment {
-> 	bool mapped;
-> };
-> 
->-#define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO | __GFP_COMP) -#define MID_ORDER_GFP (LOW_ORDER_GFP | __GFP_NOWARN)
->+#define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO)
-> #define HIGH_ORDER_GFP  (((GFP_HIGHUSER | __GFP_ZERO | __GFP_NOWARN \
-> 				| __GFP_NORETRY) & ~__GFP_RECLAIM) \
-> 				| __GFP_COMP)
->-static gfp_t order_flags[] = {HIGH_ORDER_GFP, MID_ORDER_GFP, LOW_ORDER_GFP};
->+static gfp_t order_flags[] = {HIGH_ORDER_GFP, HIGH_ORDER_GFP, 
->+LOW_ORDER_GFP};
-> /*
->  * The selection of the orders used for allocation (1MB, 64K, 4K) is designed
->  * to match with the sizes often found in IOMMUs. Using order 4 pages instead
->--
->2.17.1
->
->
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Nicholas Piggin <npiggin@gmail.com>
+> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
+>  arch/powerpc/include/asm/book3s/32/pgtable.h | 38 +++++++++++++++++---
+>  1 file changed, 33 insertions(+), 5 deletions(-)
 
-added John Stultz <jstultz@google.com>
+I gave this a quick test on a ppc32 machine, everything seems fine.
+
+Your test_swp_exclusive.c passes, and an LTP run looks normal.
+
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+
+cheers
+
+> diff --git a/arch/powerpc/include/asm/book3s/32/pgtable.h b/arch/powerpc/include/asm/book3s/32/pgtable.h
+> index 75823f39e042..0ecb3a58f23f 100644
+> --- a/arch/powerpc/include/asm/book3s/32/pgtable.h
+> +++ b/arch/powerpc/include/asm/book3s/32/pgtable.h
+> @@ -42,6 +42,9 @@
+>  #define _PMD_PRESENT_MASK (PAGE_MASK)
+>  #define _PMD_BAD	(~PAGE_MASK)
+>  
+> +/* We borrow the _PAGE_USER bit to store the exclusive marker in swap PTEs. */
+> +#define _PAGE_SWP_EXCLUSIVE	_PAGE_USER
+> +
+>  /* And here we include common definitions */
+>  
+>  #define _PAGE_KERNEL_RO		0
+> @@ -363,17 +366,42 @@ static inline void __ptep_set_access_flags(struct vm_area_struct *vma,
+>  #define pmd_page(pmd)		pfn_to_page(pmd_pfn(pmd))
+>  
+>  /*
+> - * Encode and decode a swap entry.
+> - * Note that the bits we use in a PTE for representing a swap entry
+> - * must not include the _PAGE_PRESENT bit or the _PAGE_HASHPTE bit (if used).
+> - *   -- paulus
+> + * Encode/decode swap entries and swap PTEs. Swap PTEs are all PTEs that
+> + * are !pte_none() && !pte_present().
+> + *
+> + * Format of swap PTEs (32bit PTEs):
+> + *
+> + *                         1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+> + *   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+> + *   <----------------- offset --------------------> < type -> E H P
+> + *
+> + *   E is the exclusive marker that is not stored in swap entries.
+> + *   _PAGE_PRESENT (P) and __PAGE_HASHPTE (H) must be 0.
+> + *
+> + * For 64bit PTEs, the offset is extended by 32bit.
+>   */
+>  #define __swp_type(entry)		((entry).val & 0x1f)
+>  #define __swp_offset(entry)		((entry).val >> 5)
+> -#define __swp_entry(type, offset)	((swp_entry_t) { (type) | ((offset) << 5) })
+> +#define __swp_entry(type, offset)	((swp_entry_t) { ((type) & 0x1f) | ((offset) << 5) })
+>  #define __pte_to_swp_entry(pte)		((swp_entry_t) { pte_val(pte) >> 3 })
+>  #define __swp_entry_to_pte(x)		((pte_t) { (x).val << 3 })
+>  
+> +#define __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+> +static inline int pte_swp_exclusive(pte_t pte)
+> +{
+> +	return pte_val(pte) & _PAGE_SWP_EXCLUSIVE;
+> +}
+> +
+> +static inline pte_t pte_swp_mkexclusive(pte_t pte)
+> +{
+> +	return __pte(pte_val(pte) | _PAGE_SWP_EXCLUSIVE);
+> +}
+> +
+> +static inline pte_t pte_swp_clear_exclusive(pte_t pte)
+> +{
+> +	return __pte(pte_val(pte) & ~_PAGE_SWP_EXCLUSIVE);
+> +}
+> +
+>  /* Generic accessors to PTE bits */
+>  static inline int pte_write(pte_t pte)		{ return !!(pte_val(pte) & _PAGE_RW);}
+>  static inline int pte_read(pte_t pte)		{ return 1; }
+> -- 
+> 2.39.0
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
