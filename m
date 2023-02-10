@@ -2,90 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C26691BEA
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 10:51:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67D4B691BEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 10:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbjBJJvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 04:51:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
+        id S231881AbjBJJve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 04:51:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231810AbjBJJvO (ORCPT
+        with ESMTP id S231724AbjBJJva (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 04:51:14 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508EA7167A;
-        Fri, 10 Feb 2023 01:51:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=oV4xKsk7lXX7CjGVzoMYBOAyKJn4TjkfME7gpeXO2mQ=; b=a6iqzx6S4qFym6qzT4XsncLZpo
-        sPikSyK3HbA55SGymHak2HTZOikjlhfWF5CLZgYt+PxXSspxYKnr2liwgCg+jX+e72x7oA+7eKTkB
-        vnrRHJij3Qsc4SxJ0XztvdXrSeIOrh2b7V2DvRh/vwjHeS9gd1m0lYumxS9Ux8yxb1WhCLRxzyehr
-        5vjqJJxpDuSqA8ZAkTrECI3vYl7i+lU6+hSDp1nG7sFB4Q2YVJUefsW2dOOXEVRaHTWkLmkAxQiBu
-        nXkVvDaWTFkl44jSfSU0rYp7B92qLAOrrVrjUzE69fJcs4R9pWJ8I8v+owsm96LB2msCcELBv6exA
-        OmaYGmBg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pQQ3a-00304B-Ct; Fri, 10 Feb 2023 09:51:02 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Fri, 10 Feb 2023 04:51:30 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D671CACA;
+        Fri, 10 Feb 2023 01:51:26 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5B27730012F;
-        Fri, 10 Feb 2023 10:51:00 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B47C420A1CFBA; Fri, 10 Feb 2023 10:51:00 +0100 (CET)
-Date:   Fri, 10 Feb 2023 10:51:00 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH] tracing/selftests: Ignore __pfx_ symbols in kprobe test
-Message-ID: <Y+YThNzVa1ECIuYM@hirez.programming.kicks-ass.net>
-References: <20230207135147.5ce618d6@gandalf.local.home>
- <20230207135402.38f73bb6@gandalf.local.home>
- <Y+PkVD1+myADYns+@hirez.programming.kicks-ass.net>
- <20230209232305.672dd0249e0db41552b28763@kernel.org>
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8D31938A2D;
+        Fri, 10 Feb 2023 09:51:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1676022685; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MzClX1LqUgcIUn8rHHvOJCIZ0L0Wdur9DXXgkw7uUsA=;
+        b=fL60jvAC1cVEv0bAhDGsGKRvAAynElizd7bc3K4TgScRqcMFZRacGDqiHNq8EE8RC878MO
+        flehMyqjUK3TnF+8wBGZ0ivfQhytbLLRRUvWPqta9MwsnFMpz7ry4Uwb+jpWetNZMv6yv7
+        iK43+8qWVmoAf95YLJXecIXDZR3tzWY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1676022685;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MzClX1LqUgcIUn8rHHvOJCIZ0L0Wdur9DXXgkw7uUsA=;
+        b=ezSmVnYooKsxsvhowVGBBbz0WwF/yd9xryuUBGs6HxsiDDpPMruLZ6DyPf7csGM6IPuxY9
+        402Lp3WJmPvZliCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 666EB13206;
+        Fri, 10 Feb 2023 09:51:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rbn3F50T5mNPNgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 10 Feb 2023 09:51:25 +0000
+Message-ID: <65b46616-0835-58b3-401f-7b0951301d4d@suse.de>
+Date:   Fri, 10 Feb 2023 10:51:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230209232305.672dd0249e0db41552b28763@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: linux-next: duplicate patch in the drm-misc-fixes tree
+To:     David Airlie <airlied@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230210104720.365557d8@canb.auug.org.au>
+ <CAMwc25r3EQG7hHkC7SU9omHWFGqto7RuUY9uVNkC6vXUF_hVtg@mail.gmail.com>
+Content-Language: en-US
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CAMwc25r3EQG7hHkC7SU9omHWFGqto7RuUY9uVNkC6vXUF_hVtg@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------d5vzyCREJoc30zDucs6ESHJI"
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 11:23:05PM +0900, Masami Hiramatsu wrote:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------d5vzyCREJoc30zDucs6ESHJI
+Content-Type: multipart/mixed; boundary="------------cfIYwXnpicWKSVmpMRYRGymz";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: David Airlie <airlied@redhat.com>, Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>,
+ Intel Graphics <intel-gfx@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ DRI <dri-devel@lists.freedesktop.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Message-ID: <65b46616-0835-58b3-401f-7b0951301d4d@suse.de>
+Subject: Re: linux-next: duplicate patch in the drm-misc-fixes tree
+References: <20230210104720.365557d8@canb.auug.org.au>
+ <CAMwc25r3EQG7hHkC7SU9omHWFGqto7RuUY9uVNkC6vXUF_hVtg@mail.gmail.com>
+In-Reply-To: <CAMwc25r3EQG7hHkC7SU9omHWFGqto7RuUY9uVNkC6vXUF_hVtg@mail.gmail.com>
 
-> BTW, currently kprobe event rejects this __pfx_ symbols because it is notrace
-> symbols, thus we can trace it if CONFIG_KPROBE_EVENTS_ON_NOTRACE=y.
-> But I guess it should not probe that place always because it should never
-> executed right?
+--------------cfIYwXnpicWKSVmpMRYRGymz
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Execution can take place in those ranges when X86_FEATURE_CALL_DEPTH is
-enabled or when CONFIG_KCFI && X86_FEATURE_IBT.
+SGkNCg0KQW0gMTAuMDIuMjMgdW0gMDE6MDggc2NocmllYiBEYXZpZCBBaXJsaWU6DQo+IE9u
+IEZyaSwgRmViIDEwLCAyMDIzIGF0IDk6NDcgQU0gU3RlcGhlbiBSb3Rod2VsbCA8c2ZyQGNh
+bmIuYXV1Zy5vcmcuYXU+IHdyb3RlOg0KPj4NCj4+IEhpIGFsbCwNCj4+DQo+PiBUaGUgZm9s
+bG93aW5nIGNvbW1pdCBpcyBhbHNvIGluIHRoZSBkcm0tZml4ZXMgdHJlZSBhcyBhIGRpZmZl
+cmVudCBjb21taXQNCj4+IChidXQgdGhlIHNhbWUgcGF0Y2gpOg0KPj4NCj4+ICAgIDk0ZDhi
+NjU3MmExZiAoIm52aWRpYWZiOiBkZXRlY3QgdGhlIGhhcmR3YXJlIHN1cHBvcnQgYmVmb3Jl
+IHJlbW92aW5nIGNvbnNvbGUuIikNCj4+DQo+PiBUaGlzIGlzIGNvbW1pdA0KPj4NCj4+ICAg
+IDA0MTE5YWIxYTQ5ZiAoIm52aWRpYWZiOiBkZXRlY3QgdGhlIGhhcmR3YXJlIHN1cHBvcnQg
+YmVmb3JlIHJlbW92aW5nIGNvbnNvbGUuIikNCj4+DQo+PiBpbiB0aGUgZHJtLWZpeGVzIHRy
+ZWUuDQo+IA0KPiBKdXN0IEZZSSBtaXNjIHRlYW0sIEkndmUgZm9yY2UgcHVzaGVkIGRybS1t
+aXNjLWZpeGVzIHRvIGRyb3AgdGhpcw0KPiBwYXRjaCwgcGxlYXNlIG1ha2Ugc3VyZSBhbnkg
+bG9jYWwgbWlzYyBmaXhlcyBkb24ndCBicmluZyBpdCBiYWNrIGluIGlmDQo+IHdlIGNhbiBh
+dm9pZCBpdC4NCg0KU29ycnkgYWJvdXQgdGhhdC4gSSBkaWRuJ3QgcmVhbGl6ZSB0aGF0IHlv
+dSBhbHJlYWR5IGFkZGVkIHRoZSBmaXggDQpkaXJlY3RseSB0byBkcm0tZml4ZXMuDQoNCkJl
+c3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IERhdmUuDQo+IA0KDQotLSANClRob21hcyBa
+aW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNv
+bHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywg
+R2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6
+IEl2byBUb3Rldg0K
 
-In the first of those cases the prefix bytes are filled with call
-accounting instructions and every direct call to $sym is patched to
-point to __pfx_$sym+6 (aka $sym-10).
+--------------cfIYwXnpicWKSVmpMRYRGymz--
 
-  https://lore.kernel.org/all/20220915111039.092790446@infradead.org/
+--------------d5vzyCREJoc30zDucs6ESHJI
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-In the second case (FineIBT) it is probably easiest if you look at the
-comment in arch/x86/kernel/alternative.c near CONFIG_FINEIBT.
+-----BEGIN PGP SIGNATURE-----
 
-  https://lore.kernel.org/all/20221027092812.185993858@infradead.org/
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPmE5wFAwAAAAAACgkQlh/E3EQov+B+
+2hAAuznu9wHfzf0Eed0nuuEnqbBbJsyen3WYa8VEUGbVluNKMU04BOJJbkIQMjaWQM+UsmVKbRKP
+gIz3TJgYOdjTJ7luuXHCVhVo1y+xJY/QL3SFJjBYYNvs8oCEweQJlIS1hzQQ5NaqP02cYGRG++4M
+iY5/NiqQWiimQM6kC4QIN1fQkxKOyN433Bq3hYOsB8r+rPHMAkTJo8W0ZTolNkAzak8LanGYjW5Y
+NVjBjilpcTYP/47IQCA75GTGJQV/2TKQDaYBSvJvFv+GolMpqhuhZmcSFJrC9WQIH1cxr3CLlx+3
+mQyXmjf10Z9gBkTZPHIsoDSxcwW8bg/yEG/V6dtKnF1x44Qt9u/QwFE99E0jsUWpaUQgVesHvoGX
+Dq0WFgcnbbYSpM4CTAenWHHsbbu2vz3+AUusGxeVs1CP4tZYQymUpZPnhd/EAiXV/PeU73IP//dv
+WYUkyPV1qM0hBCW0uVNttRVcGgBP42WviGS8779MveK9sj5y3ENksPXGfO8uTmiWb2A8cgOkJjoX
+TClITIFblDNMmT5H8YRxxDk9F/mgW8hag9gTGPusaW6tnbJ+T0pabTacFctWXN/D9pD8iMqlrB1A
+JZrCte1M7BmHv4GxYfE6CqqY9gRqYvapP1/nER/3kR5sAGzDBPb63XZUm0+fzwRixWb9SmOkbDub
+etk=
+=lkcR
+-----END PGP SIGNATURE-----
 
-The __pfx_ and __cfi_ symbols are the same (in fact, when
-CONFIG_CFI_CLANG=y the compiler generates them and objtool no longer
-emits the __pfx_ symbols).
-
-  https://lore.kernel.org/all/20221028194453.592512209@infradead.org/
+--------------d5vzyCREJoc30zDucs6ESHJI--
