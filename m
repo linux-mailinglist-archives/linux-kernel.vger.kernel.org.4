@@ -2,98 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A64596923FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:07:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4292692400
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232926AbjBJRHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 12:07:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
+        id S232990AbjBJRHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 12:07:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232572AbjBJRHW (ORCPT
+        with ESMTP id S232985AbjBJRHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 12:07:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A9870CFE;
-        Fri, 10 Feb 2023 09:07:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F058161E5A;
-        Fri, 10 Feb 2023 17:07:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 739A5C433EF;
-        Fri, 10 Feb 2023 17:07:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676048840;
-        bh=8xnEbUe384hDQfmy0gkujDdHwEJmlYJhWIVvttyg4zQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ouvjvsjfj6FEcd9NqZXZ8enkDcwx7PSljl8SoNYZ3XdcejU2Ioq59FBZk72pqEde5
-         1XTXzIZQu1jXtC0GOrtJrAz/PDEtzcgwiCzXqnNJtu24eMSn2Ka51C94Q9+mgsBSgi
-         aW2CsNuMiDqio4/OPNh7kL1Gu/9NgYfenf+xycqfo614duwKZak+U8NJrKkfD3O5tp
-         VA1FhFw+z2CKlRgLZNt7E4CvmDA84ZH7aZfcTiWWaciYGDYIgyucYLIetUpkA3ptys
-         bFD/bIWp1VQOZozNk7ahP68U197WBLrXTFcd3fachMu5SAb8w+XC4GQpvoT//MouvD
-         +hd/0ivyVbzeg==
-Date:   Fri, 10 Feb 2023 22:37:16 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Fri, 10 Feb 2023 12:07:30 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF96475F61;
+        Fri, 10 Feb 2023 09:07:27 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so4553381wms.1;
+        Fri, 10 Feb 2023 09:07:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xN769MyAqG+UwI1gs9zsgn//wHYrKGP6dIPoLYX1lbg=;
+        b=ezlIwstR938P/WBu6L9tWuOgIKYTF++xSj7WmJEq7Cr2Ax6nPTtamhDVttKjR2UR57
+         ZmYV7hdCM5Psuvu2kL/DFo7wl4JDTGY4i6ViW8CIbXZaTjqzKkKkUfa9Mh/TYn46eruN
+         INrTvEKhK2Qzr9WsS3bEl1dFiuopDnF61lk7kFV3thvWxJ+v/P0poyPc9zfckpc/HnCB
+         waQE2BeYrhnI10QZaNE2vqBBp2VFRLEg4IhMauIyLWTbdI3v3C1RngkNsHsXN5QBniej
+         TpYxZXOB4SrUIVjYU1UYLwIMDOO4SirSOblmtBaN1dVfk4a3i+4r47wDBtb0hAK4Zajg
+         o1UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xN769MyAqG+UwI1gs9zsgn//wHYrKGP6dIPoLYX1lbg=;
+        b=Rum8CTERTUoYumFv7r6NKuH5YARt6adlXlLihroRo5Ncw3RMGCdjqb/EWeEIXK02KM
+         Xgra/Y8KKLh0fetXZv6l9nvfDPME1LsiCCJEaD5fCw5DRyWrquC8+Jpo4jTO2rojO2XG
+         jzQrAYNceyj8Y+o0TWuOMbpkMCPBWDqoJIPRCKBv9KXiXK7gBnmvgCZix49JgeMXRnd0
+         GkiWz5o6lR27/eWSur9VlFuG6m60iajDeLCgb3iOVpMgBArZ4VVRhAqSDWbFk0evux+G
+         IshSyx8R+95JT64A91tEdb85vhnhL+Ixa2QcDAJ1172Wekh34mb4CMlyuj2HN9rnVSX+
+         ZUrg==
+X-Gm-Message-State: AO0yUKWduIl0jTvbnZEIQFs+yEuj3v8dHEx36nrnzv/4JBd8ryN5sFdE
+        35l4LOk6RUcwofxDBGaSesw=
+X-Google-Smtp-Source: AK7set/nC7TK4tPu/NvrJILGJR+kXrudhwCL+65OWuVeFN63PFM2TOZJGa9uWcdc++5EFRn76GQzLQ==
+X-Received: by 2002:a05:600c:43c4:b0:3dc:5302:ad9 with SMTP id f4-20020a05600c43c400b003dc53020ad9mr17283356wmn.27.1676048846445;
+        Fri, 10 Feb 2023 09:07:26 -0800 (PST)
+Received: from toolbox.. ([87.200.95.144])
+        by smtp.gmail.com with ESMTPSA id x7-20020a05600c188700b003cffd3c3d6csm5351531wmp.12.2023.02.10.09.07.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 09:07:25 -0800 (PST)
+From:   Christian Hewitt <christianshewitt@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Rob Herring <robh@kernel.org>, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: phy: amlogic,g12a-usb3-pcie-phy: add
- missing optional phy-supply property
-Message-ID: <Y+Z5xOlAeqO6JyIj@matsya>
-References: <20230207-b4-amlogic-amlogic-g12a-usb3-pcie-phy-fix-v1-1-3e437b759549@linaro.org>
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Christian Hewitt <christianshewitt@gmail.com>
+Subject: [PATCH v2 0/3] arm64: dts: meson: gxbb-kii-pro: device-tree updates
+Date:   Fri, 10 Feb 2023 17:07:18 +0000
+Message-Id: <20230210170721.1285914-1-christianshewitt@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230207-b4-amlogic-amlogic-g12a-usb3-pcie-phy-fix-v1-1-3e437b759549@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07-02-23, 16:03, Neil Armstrong wrote:
-> Add missing optional phy-supply property used to power up PHY regulators.
-> 
-> Fixes: 87a55485f2fc ("dt-bindings: phy: meson-g12a-usb3-pcie-phy: convert to yaml")
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../devicetree/bindings/phy/amlogic,g12a-usb3-pcie-phy.yaml          | 5 +++++
+First we sort nodes in the current dts and remove some blank lines. Then we
+add the remaining bits needed for Bluetooth to work. And finally we add the
+AIU audio card to have HDMI and S/PDIF audio output.
 
-I dont have this file in my tree, what was this based on?
+Changes since v1:
 
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/amlogic,g12a-usb3-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/amlogic,g12a-usb3-pcie-phy.yaml
-> index 129d26e99776..3314711292d6 100644
-> --- a/Documentation/devicetree/bindings/phy/amlogic,g12a-usb3-pcie-phy.yaml
-> +++ b/Documentation/devicetree/bindings/phy/amlogic,g12a-usb3-pcie-phy.yaml
-> @@ -35,6 +35,11 @@ properties:
->    "#phy-cells":
->      const: 1
->  
-> +  phy-supply:
-> +    description:
-> +      Phandle to a regulator that provides power to the PHY. This
-> +      regulator will be managed during the PHY power on/off sequence.
-> +
->  required:
->    - compatible
->    - reg
-> 
-> ---
-> base-commit: 49a8133221c71b935f36a7c340c0271c2a9ee2db
-> change-id: 20230207-b4-amlogic-amlogic-g12a-usb3-pcie-phy-fix-b5daf54fb7d6
-> 
-> Best regards,
-> -- 
-> Neil Armstrong <neil.armstrong@linaro.org>
+- Add reviews from Neil
+- Drop unneded 'okay' from audio patch
+
+Christian Hewitt (3):
+  arm64: dts: meson: gxbb-kii-pro: sort and tidy the dts
+  arm64: dts: meson: gxbb-kii-pro: complete the bluetooth node
+  arm64: dts: meson: gxbb-kii-pro: add initial audio support
+
+ .../boot/dts/amlogic/meson-gxbb-kii-pro.dts   | 83 ++++++++++++++++---
+ 1 file changed, 72 insertions(+), 11 deletions(-)
 
 -- 
-~Vinod
+2.34.1
+
