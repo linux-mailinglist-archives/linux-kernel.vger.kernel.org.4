@@ -2,55 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 999DA692931
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 22:25:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC4A692932
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 22:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233599AbjBJVZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 16:25:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
+        id S233654AbjBJVZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 16:25:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233560AbjBJVZc (ORCPT
+        with ESMTP id S233662AbjBJVZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 16:25:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F5F7405C;
-        Fri, 10 Feb 2023 13:25:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 871B4B825E2;
-        Fri, 10 Feb 2023 21:25:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9296CC433EF;
-        Fri, 10 Feb 2023 21:25:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676064327;
-        bh=0GgmoGAZKpLW7B7W6lKfVq4DiosmgzF9N5P+6S5Nc1U=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=BxCy2SSt9z8PM4ippQspBbzxBQ0+dd3mPTA2fbq9kC8tFBVPsEx7jCxLsit4k/JyN
-         XsyjFIul1R96zS31Pw/20dgnoJICEVJsteE4K+9vyqmpVDiDQrMaIP71XQs8a3rczy
-         DzXgCCV/EfhkqxNe6W12PRg0ON4uSshKSdudF1Yxs5Ai3CqxkX7c81nRCgwwf6Ydfp
-         ws/BQIX8h0BEr/SQcqAnjRAb5gi6A/qnzSv6w38W+WjqB8lkKsPYaNylDsaPX4F9Q/
-         wM3K0ehohGKTU+YWHmBSHQ9QJ5ZD1osFvwIvmn+MQMp9cvziyKnM2cDvK6fe6q0IVi
-         ydi3/BE9+hbrg==
-Message-ID: <0b7ed4c71145e508ca58938108ec14018563b7fd.camel@kernel.org>
-Subject: Re: [PATCH 0/6 v2] tracing/histograms: Pass stacktrace from
- synthetic start event to end event
-From:   Tom Zanussi <zanussi@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ross Zwisler <zwisler@google.com>,
-        Ching-lin Yu <chinglinyu@google.com>
-Date:   Fri, 10 Feb 2023 15:25:24 -0600
-In-Reply-To: <20230117152125.268986282@goodmis.org>
-References: <20230117152125.268986282@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Fri, 10 Feb 2023 16:25:41 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB877717B
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 13:25:40 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pQatm-00051h-EQ; Fri, 10 Feb 2023 22:25:38 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pQatk-0044kf-9R; Fri, 10 Feb 2023 22:25:37 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pQatk-002Wu8-NF; Fri, 10 Feb 2023 22:25:36 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH] power: supply: max77650: Make max77650_charger_disable() return void
+Date:   Fri, 10 Feb 2023 22:25:28 +0100
+Message-Id: <20230210212528.179627-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1855; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=9HU0mBVgWFq+rDTBjOFEA+YWiBjHNDyR6odYSBx4LSg=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBj5rZE9Ao5hJmCZpIKQalsouTWFAF1UY8SPQLoigyk pg3Hp7SJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY+a2RAAKCRDB/BR4rcrsCbQnB/ 9QH4egcBSji0n5A9yEYjpHSQlKKTFbMmmMsRTHKAvKLqTvanprOUoM+SxnSNnUvlrOcGQbDhzmkY92 vDG+/HGX1WRyqYwhh5UngKMHvkNlUchngg9S8CaMcuHNmfn99fpQUHIHfCnJX2/Dr0+RseTqkh+K8Z pO87vRACeQNc2rrBHyXrIEwnUWMTTX63BwmY+a9FXzwM8Qn+fgMDrVRxrappZY3H6J2soASxz/Rmk3 aOC+/rmw2DYsqUBgDdOj7A1qtdhSljwuKrpqHhMrfdSYziw203pizLWW10ddYSezf4RUPYPLlclGnm 6iaXed1veYv4O2HDalN/mqYHh6KHX8
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,129 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgU3RldmUsCgpPbiBUdWUsIDIwMjMtMDEtMTcgYXQgMTA6MjEgLTA1MDAsIFN0ZXZlbiBSb3N0
-ZWR0IHdyb3RlOgo+IEkgZmluYWxseSBnb3QgYXJvdW5kIHRvIGltcGxlbWVudGluZyB3aGF0IEkn
-dmUgYmVlbiB3YW50aW5nIHRvIGRvIGZvcgo+IGEgbG9uZwo+IHRpbWUhIFRoYXQgaXMgdG8gcGFz
-cyBzdGFja3RyYWNlcyBmcm9tIHRoZSBzdGFydCB0byB0aGUgZW5kIGV2ZW50IG9mCj4gYQo+IHN5
-bnRoZXRpYyBldmVudC4gU3BlY2lmaWNhbGx5LCBJIG5lZWQgdG8gZ2V0IHRoZSBzdGFja3RyYWNl
-IG9mIGEgdGFzawoKSGV5LCB0aGlzIGlzIHJlYWxseSBncmVhdCEgIFRoYW5rcyBmb3IgZG9pbmcg
-dGhpcywgYW5kIHNvcnJ5IEkgaGF2ZW4ndApnb3R0ZW4gYXJvdW5kIHRvIGxvb2tpbmcgYXQgaXQg
-dW50aWwgbm93LgoKQW55d2F5LCB3aGlsZSBwbGF5aW5nIHdpdGggaXQgSSBmb3VuZCBhIGZldyB0
-aGluZ3MgdGhhdCBkaWRuJ3Qgd29yayBhcwpleHBlY3RlZCwgYW5kIHdpbGwgc2VuZCBhIGZldyBw
-YXRjaGVzIHdpdGggc29tZSBmaXhlcyBzaG9ydGx5LgoKVGhhbmtzIGFnYWluLCB0aGlzIGlzIHJl
-YWxseSB1c2VmdWwhCgpUb20KCgoKCgo+IGFzIGl0Cj4gc2NoZWR1bGVzIG91dCwgYnV0IEkgZG9u
-J3Qgd2FudCB0byBzZWUgaXQgdW50aWwgaXQgc2NoZWR1bGVzIGJhY2sgaW4KPiBhbmQgSQo+IGNo
-ZWNrIHRoZSB0aW1pbmdzIHRvIHNob3cgdGhhdCBpdCBpcyBsb25nZXIgdGhhbiBub3JtYWwuIFRo
-YXQgaXMgbm93Cj4gZG9uZQo+IHdpdGg6Cj4gCj4gwqAjIGVjaG8gJ3M6YmxvY2tfbGF0IHBpZF90
-IHBpZDsgdTY0IGRlbHRhOyB1bnNpZ25lZCBsb25nW10gc3RhY2s7JyA+Cj4gZHluYW1pY19ldmVu
-dHMKPiDCoCMgZWNobyAnaGlzdDprZXlzPW5leHRfcGlkOnRzPWNvbW1vbl90aW1lc3RhbXAudXNl
-Y3Msc3Q9c3RhY2t0cmFjZcKgCj4gaWYgcHJldl9zdGF0ZSA9PSAyJyA+PiBldmVudHMvc2NoZWQv
-c2NoZWRfc3dpdGNoL3RyaWdnZXIKPiDCoCMgZWNobyAnaGlzdDprZXlzPXByZXZfcGlkOmRlbHRh
-PWNvbW1vbl90aW1lc3RhbXAudXNlY3MtCj4gJHRzLHM9JHN0Om9ubWF4KCRkZWx0YSkudHJhY2Uo
-YmxvY2tfbGF0LHByZXZfcGlkLCRkZWx0YSwkcyknID4+Cj4gZXZlbnRzL3NjaGVkL3NjaGVkX3N3
-aXRjaC90cmlnZ2VyCj4gCj4gVGhlIGFib3ZlIGNyZWF0ZXMgYSBzeW50aGV0aWMgZXZlbnQgdGhh
-dCB3aWxsIHRyaWdnZXIgb24gdGhlIG1heAo+IGRlbHRhIG9mIGEKPiB0YXNrIGJsb2NrZWQgaW4g
-YW4gdW5pbnRlcnJ1cHRpYmxlIHN0YXRlLiBJdCB3aWxsIHNob3cgeW91IHRoZSBzdGFjawo+IHRy
-YWNlCj4gb2Ygd2hlcmUgdGhhdCBvY2N1cnJlZCEKPiAKPiDCoCMgZWNobyAxID4gZXZlbnRzL3N5
-bnRoZXRpYy9ibG9ja19sYXQvZW5hYmxlCj4gwqAjIGxzIC1sUiA+IC9kZXYvbnVsbAo+IMKgIyBj
-YXQgdHJhY2UKPiAKPiAjIHRyYWNlcjogbm9wCj4gIwo+ICMgZW50cmllcy1pbi1idWZmZXIvZW50
-cmllcy13cml0dGVuOiAyLzLCoMKgICNQOjgKPiAjCj4gI8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIF8tLS0tLT0+IGlycXMtb2Zm
-L0JILWRpc2FibGVkCj4gI8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCAvIF8tLS0tPT4gbmVlZC1yZXNjaGVkCj4gI8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAvIF8tLS09
-PiBoYXJkaXJxL3NvZnRpcnEKPiAjwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8fCAvIF8tLT0+IHByZWVtcHQtZGVwdGgKPiAjwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8fHwg
-LyBfLT0+IG1pZ3JhdGUtZGlzYWJsZQo+ICPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHx8fHwgL8KgwqDCoMKgIGRlbGF5Cj4gI8KgwqDC
-oMKgwqDCoMKgwqDCoMKgIFRBU0stUElEwqDCoMKgwqAgQ1BVI8KgIHx8fHx8wqAgVElNRVNUQU1Q
-wqAgRlVOQ1RJT04KPiAjwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCB8wqDCoMKgwqDCoMKg
-wqDCoCB8wqDCoCB8fHx8fMKgwqDCoMKgIHzCoMKgwqDCoMKgwqDCoMKgIHwKPiDCoMKgwqDCoMKg
-wqDCoMKgwqAgPGlkbGU+LTDCoMKgwqDCoMKgwqAgWzAwNV0gZC4uNC7CoMKgIDUyMS4xNjQ5MjI6
-IGJsb2NrX2xhdDogcGlkPTAKPiBkZWx0YT04MzIyIHN0YWNrPVNUQUNLOgo+ID0+IF9fc2NoZWR1
-bGUrMHg0NDgvMHg3YjAKPiA9PiBzY2hlZHVsZSsweDVhLzB4YjAKPiA9PiBpb19zY2hlZHVsZSsw
-eDQyLzB4NzAKPiA9PiBiaXRfd2FpdF9pbysweGQvMHg2MAo+ID0+IF9fd2FpdF9vbl9iaXQrMHg0
-Yi8weDE0MAo+ID0+IG91dF9vZl9saW5lX3dhaXRfb25fYml0KzB4OTEvMHhiMAo+ID0+IGpiZDJf
-am91cm5hbF9jb21taXRfdHJhbnNhY3Rpb24rMHgxNjc5LzB4MWE3MAo+ID0+IGtqb3VybmFsZDIr
-MHhhOS8weDI4MAo+ID0+IGt0aHJlYWQrMHhlOS8weDExMAo+ID0+IHJldF9mcm9tX2ZvcmsrMHgy
-Yy8weDUwwqAgCj4gCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqAgPC4uLj4tMsKgwqDCoMKgwqDCoCBb
-MDA0XSBkLi40LsKgwqAgNTI1LjE4NDI1NzogYmxvY2tfbGF0OiBwaWQ9Mgo+IGRlbHRhPTc2IHN0
-YWNrPVNUQUNLOgo+ID0+IF9fc2NoZWR1bGUrMHg0NDgvMHg3YjAKPiA9PiBzY2hlZHVsZSsweDVh
-LzB4YjAKPiA9PiBzY2hlZHVsZV90aW1lb3V0KzB4MTFhLzB4MTUwCj4gPT4gd2FpdF9mb3JfY29t
-cGxldGlvbl9raWxsYWJsZSsweDE0NC8weDFmMAo+ID0+IF9fa3RocmVhZF9jcmVhdGVfb25fbm9k
-ZSsweGU3LzB4MWUwCj4gPT4ga3RocmVhZF9jcmVhdGVfb25fbm9kZSsweDUxLzB4NzAKPiA9PiBj
-cmVhdGVfd29ya2VyKzB4Y2MvMHgxYTAKPiA9PiB3b3JrZXJfdGhyZWFkKzB4MmFkLzB4MzgwCj4g
-PT4ga3RocmVhZCsweGU5LzB4MTEwCj4gPT4gcmV0X2Zyb21fZm9yaysweDJjLzB4NTAKPiAKPiBD
-aGFuZ2VzIHNpbmNlIHYxOgo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LXRyYWNlLWtl
-cm5lbC8yMDIzMDExNzA0NDAxMC44Mzg2ODUyMzBAZ29vZG1pcy5vcmcvCj4gCj4gLSBGaXhlZCBh
-biBpc3N1ZSB3aXRoIHBhc3NpbmcgYSBzdGFja3RyYWNlIHZhcmlhYmxlIHRvIGFub3RoZXIKPiB2
-YXJpYWJsZS4KPiAKPiAtIENhbiBub3cgdXNlIHRoZSBzdGFja3RyYWNlIGluIHRoZSBoaXN0b2dy
-YW0gYXMgd2VsbDoKPiAKPiDCoCAjIGVjaG8gJ2hpc3Q6ZGVsdGEuYnVja2V0cz0xMDAsc3RhY2su
-c3RhY2t0cmFjZTpzb3J0PWRlbHRhJyA+Cj4gZXZlbnRzL3N5bnRoZXRpYy9ibG9ja19sYXQvdHJp
-Z2dlcgo+IMKgICMgY2F0IGV2ZW50cy9zeW50aGV0aWMvYmxvY2tfbGF0L2hpc3QKPiDCoCAKPiDC
-oCAjIGV2ZW50IGhpc3RvZ3JhbQo+IMKgICMgCj4gwqAgIyB0cmlnZ2VyIGluZm86Cj4gaGlzdDpr
-ZXlzPWRlbHRhLmJ1Y2tldHM9MTAwLHN0YWNrdHJhY2U6dmFscz1oaXRjb3VudDpzb3J0PWRlbHRh
-LmJ1Y2tlCj4gdHM9MTAwOnNpemU9MjA0OCBbYWN0aXZlXQo+IMKgICMgCj4gwqDCoMKgIAo+IMKg
-IHsgZGVsdGE6IH4gMC05OSwgc3RhY2t0cmFjZTrCoMKgwqDCoMKgIAo+IMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIGV2ZW50X2hpc3RfdHJpZ2dlcisweDQ2NC8weDQ4MAo+IMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIGV2ZW50X3RyaWdnZXJzX2NhbGwrMHg1Mi8weGUwCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-dHJhY2VfZXZlbnRfYnVmZmVyX2NvbW1pdCsweDE5My8weDI1MAo+IMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIHRyYWNlX2V2ZW50X3Jhd19ldmVudF9zY2hlZF9zd2l0Y2grMHhmYy8weDE1MAo+IMKgwqDC
-oMKgwqDCoMKgwqDCoMKgIF9fdHJhY2VpdGVyX3NjaGVkX3N3aXRjaCsweDQxLzB4NjAgCj4gwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgX19zY2hlZHVsZSsweDQ0OC8weDdiMAo+IMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIHNjaGVkdWxlX2lkbGUrMHgyNi8weDQwCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqAgY3B1
-X3N0YXJ0dXBfZW50cnkrMHgxOS8weDIwCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RhcnRfc2Vj
-b25kYXJ5KzB4ZWQvMHhmMAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlY29uZGFyeV9zdGFydHVw
-XzY0X25vX3ZlcmlmeSsweGUwLzB4ZWIKPiDCoCB9IGhpdGNvdW50OsKgwqDCoMKgwqDCoMKgwqDC
-oCA2Cj4gwqAgeyBkZWx0YTogfiAwLTk5LCBzdGFja3RyYWNlOgo+IMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIGV2ZW50X2hpc3RfdHJpZ2dlcisweDQ2NC8weDQ4MAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
-IGV2ZW50X3RyaWdnZXJzX2NhbGwrMHg1Mi8weGUwCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqAgdHJh
-Y2VfZXZlbnRfYnVmZmVyX2NvbW1pdCsweDE5My8weDI1MAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
-IHRyYWNlX2V2ZW50X3Jhd19ldmVudF9zY2hlZF9zd2l0Y2grMHhmYy8weDE1MAo+IMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIF9fdHJhY2VpdGVyX3NjaGVkX3N3aXRjaCsweDQxLzB4NjAKPiDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCBfX3NjaGVkdWxlKzB4NDQ4LzB4N2IwCj4gwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgc2NoZWR1bGVfaWRsZSsweDI2LzB4NDAKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjcHVfc3Rh
-cnR1cF9lbnRyeSsweDE5LzB4MjAKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoCBfX3BmeF9rZXJuZWxf
-aW5pdCsweDAvMHgxMAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgIGFyY2hfY2FsbF9yZXN0X2luaXQr
-MHhhLzB4MjQKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdGFydF9rZXJuZWwrMHg5NjQvMHg5OGQK
-PiDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzZWNvbmRhcnlfc3RhcnR1cF82NF9ub192ZXJpZnkrMHhl
-MC8weGViCj4gwqAgfSBoaXRjb3VudDrCoMKgwqDCoMKgwqDCoMKgwqAgMwo+IFsuLl0KPiDCoCB7
-IGRlbHRhOiB+IDg1MDAtODU5OSwgc3RhY2t0cmFjZToKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoCBl
-dmVudF9oaXN0X3RyaWdnZXIrMHg0NjQvMHg0ODAKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoCBldmVu
-dF90cmlnZ2Vyc19jYWxsKzB4NTIvMHhlMAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgIHRyYWNlX2V2
-ZW50X2J1ZmZlcl9jb21taXQrMHgxOTMvMHgyNTAKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoCB0cmFj
-ZV9ldmVudF9yYXdfZXZlbnRfc2NoZWRfc3dpdGNoKzB4ZmMvMHgxNTAKPiDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCBfX3RyYWNlaXRlcl9zY2hlZF9zd2l0Y2grMHg0MS8weDYwCj4gwqDCoMKgwqDCoMKg
-wqDCoMKgwqAgX19zY2hlZHVsZSsweDQ0OC8weDdiMAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNj
-aGVkdWxlX2lkbGUrMHgyNi8weDQwCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqAgY3B1X3N0YXJ0dXBf
-ZW50cnkrMHgxOS8weDIwCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RhcnRfc2Vjb25kYXJ5KzB4
-ZWQvMHhmMAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNlY29uZGFyeV9zdGFydHVwXzY0X25vX3Zl
-cmlmeSsweGUwLzB4ZWIKPiDCoCB9IGhpdGNvdW50OsKgwqDCoMKgwqDCoMKgwqDCoCAxCj4gCj4g
-wqAgVG90YWxzOgo+IMKgwqDCoMKgwqAgSGl0czogODkgCj4gwqDCoMKgwqDCoCBFbnRyaWVzOiAx
-MQo+IMKgwqDCoMKgwqAgRHJvcHBlZDogMAo+IAo+IAo+IAo+IFN0ZXZlbiBSb3N0ZWR0IChHb29n
-bGUpICg2KToKPiDCoMKgwqDCoMKgIHRyYWNpbmc6IFNpbXBsaWZ5IGNhbGN1bGF0aW5nIGVudHJ5
-IHNpemUgdXNpbmcgc3RydWN0X3NpemUoKQo+IMKgwqDCoMKgwqAgdHJhY2luZzogQWxsb3cgc3Rh
-Y2t0cmFjZXMgdG8gYmUgc2F2ZWQgYXMgaGlzdG9ncmFtIHZhcmlhYmxlcwo+IMKgwqDCoMKgwqAg
-dHJhY2luZzogQWxsb3cgc3ludGhldGljIGV2ZW50cyB0byBwYXNzIGFyb3VuZCBzdGFja3RyYWNl
-cwo+IMKgwqDCoMKgwqAgdHJhY2luZy9oaXN0b2dyYW06IEFkZCBzdGFja3RyYWNlIHR5cGUKPiDC
-oMKgwqDCoMKgIHRyYWNpbmcvaGlzdG9ncmFtOiBEb2N1bWVudCB2YXJpYWJsZSBzdGFja3RyYWNl
-Cj4gwqDCoMKgwqDCoCB0cmFjaW5nL2hpc3RvZ3JhbTogQWRkIHNpbXBsZSB0ZXN0cyBmb3Igc3Rh
-Y2t0cmFjZSB1c2FnZSBvZgo+IHN5bnRoZXRpYyBldmVudHMKPiAKPiAtLS0tCj4gwqBEb2N1bWVu
-dGF0aW9uL3RyYWNlL2hpc3RvZ3JhbS5yc3TCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIHwgMTI5Cj4gKysrKysrKysrKysrKysrKysrKysrCj4gwqBrZXJuZWwvdHJhY2UvdHJhY2Uu
-Y8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCB8wqDCoCAyICstCj4gwqBrZXJuZWwvdHJhY2UvdHJhY2UuaMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqDCoCA0ICsKPiDC
-oGtlcm5lbC90cmFjZS90cmFjZV9ldmVudHNfaGlzdC5jwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIHzCoCA2MyArKysrKysrLS0tCj4gwqBrZXJuZWwvdHJhY2UvdHJhY2VfZXZl
-bnRzX3N5bnRoLmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCA4Mwo+ICsr
-KysrKysrKysrKy0KPiDCoGtlcm5lbC90cmFjZS90cmFjZV9zeW50aC5owqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoMKgIDEgKwo+IMKgLi4uL2ludGVy
-LWV2ZW50L3RyaWdnZXItc3ludGhldGljLWV2ZW50LXN0YWNrLnRjwqDCoCB8wqAgMjQgKysrKwo+
-IMKgLi4uL2ludGVyLWV2ZW50L3RyaWdnZXItc3ludGhldGljLWV2ZW50LXN5bnRheC50Y8KgIHzC
-oMKgIDYgKwo+IMKgOCBmaWxlcyBjaGFuZ2VkLCAyOTQgaW5zZXJ0aW9ucygrKSwgMTggZGVsZXRp
-b25zKC0pCj4gwqBjcmVhdGUgbW9kZSAxMDA2NDQKPiB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9m
-dHJhY2UvdGVzdC5kL3RyaWdnZXIvaW50ZXItZXZlbnQvdHJpZ2dlci0KPiBzeW50aGV0aWMtZXZl
-bnQtc3RhY2sudGMKCg==
+The return value of max77650_charger_disable() is ignored by all but one
+caller. That one caller propagates the error code in the platform driver's
+remove function. The only effect of that is that the driver core emits
+a generic error message (but still removes the device). As
+max77650_charger_disable() already emits an error message, this can better
+be changed to return zero.
+
+This is a preparation for making struct platform_driver::remove return
+void, too.
+
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/power/supply/max77650-charger.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/power/supply/max77650-charger.c b/drivers/power/supply/max77650-charger.c
+index d913428bedc0..e8c25da40ab2 100644
+--- a/drivers/power/supply/max77650-charger.c
++++ b/drivers/power/supply/max77650-charger.c
+@@ -141,7 +141,7 @@ static int max77650_charger_enable(struct max77650_charger_data *chg)
+ 	return rv;
+ }
+ 
+-static int max77650_charger_disable(struct max77650_charger_data *chg)
++static void max77650_charger_disable(struct max77650_charger_data *chg)
+ {
+ 	int rv;
+ 
+@@ -151,8 +151,6 @@ static int max77650_charger_disable(struct max77650_charger_data *chg)
+ 				MAX77650_CHARGER_DISABLED);
+ 	if (rv)
+ 		dev_err(chg->dev, "unable to disable the charger: %d\n", rv);
+-
+-	return rv;
+ }
+ 
+ static irqreturn_t max77650_charger_check_status(int irq, void *data)
+@@ -351,7 +349,9 @@ static int max77650_charger_remove(struct platform_device *pdev)
+ {
+ 	struct max77650_charger_data *chg = platform_get_drvdata(pdev);
+ 
+-	return max77650_charger_disable(chg);
++	max77650_charger_disable(chg);
++
++	return 0;
+ }
+ 
+ static const struct of_device_id max77650_charger_of_match[] = {
+
+base-commit: 4f72a263e162938de26866b862ed6015f5725946
+-- 
+2.39.0
 
