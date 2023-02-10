@@ -2,58 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C49369160E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 02:08:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5866B691611
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 02:10:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbjBJBI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 20:08:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54056 "EHLO
+        id S230525AbjBJBKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 20:10:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjBJBI1 (ORCPT
+        with ESMTP id S230191AbjBJBKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 20:08:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8632007C;
-        Thu,  9 Feb 2023 17:08:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8254B82399;
-        Fri, 10 Feb 2023 01:08:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9524DC4339B;
-        Fri, 10 Feb 2023 01:08:22 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="AKVCFBcC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1675991300;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TGifqOoR9bZo8/vQwUBuPjj6tQBc+UX+xXtpTfNPi00=;
-        b=AKVCFBcCRxl5vn5Sv8oY4GoA7mDM8xAJUkPanrttxiBdkce2ec81CZPbBinmB+bERwwcoG
-        IeIqlJK99DbEr3v9Qd7yG1MyjbEB0TdH7pgrN+MvI8FxguOjVzrVgS1B8rlmi57NoZJQkX
-        PmG/sdP/rID4Cid29hQpYnsnATY2qn4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 9a095af6 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Fri, 10 Feb 2023 01:08:19 +0000 (UTC)
-Date:   Fri, 10 Feb 2023 02:08:17 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     regressions@lists.linux.dev, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Subject: Re: [PATCH RFC] tpm: disable hwrng for known-defective AMD RNGs
-Message-ID: <Y+WZAV10cp7zKo1R@zx2c4.com>
-References: <20230209153120.261904-1-Jason@zx2c4.com>
- <Y+WVzAt/ZCBdLEkx@kernel.org>
+        Thu, 9 Feb 2023 20:10:21 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED8B4B1AF
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 17:10:19 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id s9so479831ilt.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 17:10:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=v/rk3szIYpKAIRaNgREy62PBz6/2LxRSXh1DsRADJYU=;
+        b=glWpLY4dwbYR6L+EuXgrM7xpnBQwcy4cG8tTl4Iu6S5oeAe9XEeTtFQedpEob1PVsf
+         XDhBc6dcvKP5ITbMhU84oC9wLHu4u61U/5Mm5CDuiBGjg1ff+u7y+a6Wx+VivD/VPKcs
+         9aWC7QzL9MdRG8WZGfGt+erauZpDeGAPE4C04=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v/rk3szIYpKAIRaNgREy62PBz6/2LxRSXh1DsRADJYU=;
+        b=lswxmjWMoyALTUy6ojiBxCzZ5nX0d5Q4VKSUJ3ndSfu8pYeumBYhteMxR8AcgNDWm7
+         tfFTjJKtEL9XrkLA4uLKtQnT+gYHGY5v3j0AcC5bvdcbGva0hNvAnWLNBZcXQPVfHyW3
+         4j9YJWeI2uKxEzXpdtAawbOCrc1oAWri+/x8LMSfhVM4GQdXCvA9krppNG9AilAv/tNQ
+         miBQmeRXoXyZDZUQo0QmIWbfJqxUVSAItk/i50+m2XGXQ6wm89I9zkU6cICQKpArT5Zo
+         DZgxEU3xTMd7dEU3JsbLcWAWt15bXNR/MMbv5YQF3SuCQLNG8ymeAzxGekyxrPDr+SYq
+         6F6Q==
+X-Gm-Message-State: AO0yUKUhPEqBkVbiJKYO3iRvt991o44gMecBa2ckiaiIN7jAYFj3mzFw
+        uPL3eoaXl1LKs6wBUaclkSbL3A==
+X-Google-Smtp-Source: AK7set/lwVwMrh2gIxWEj3tHiccsh9dwYjh13O3kYY/qcLOTXN81uOX17NqMOY+FJluKLmXrlqXPYA==
+X-Received: by 2002:a05:6e02:1d95:b0:314:1579:be2c with SMTP id h21-20020a056e021d9500b003141579be2cmr872204ila.0.1675991419088;
+        Thu, 09 Feb 2023 17:10:19 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id o3-20020a02c6a3000000b0038a56594026sm887540jan.66.2023.02.09.17.10.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Feb 2023 17:10:18 -0800 (PST)
+Message-ID: <ee7976ca-ea15-e13f-3ea0-1b89eb29e39e@linuxfoundation.org>
+Date:   Thu, 9 Feb 2023 18:10:17 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y+WVzAt/ZCBdLEkx@kernel.org>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3] selftests: use printf instead of echo -ne
+Content-Language: en-US
+To:     Guenter Roeck <groeck@google.com>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Gautam <gautammenghani201@gmail.com>,
+        David Laight <David.Laight@aculab.com>, kernel@collabora.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernelci@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
+References: <20230209085536.1076662-1-guillaume.tucker@collabora.com>
+ <CABXOdTdnntA=oU4==suO-DP-8S9zb0AhqtwekCRCbpOpku7MQg@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <CABXOdTdnntA=oU4==suO-DP-8S9zb0AhqtwekCRCbpOpku7MQg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,39 +77,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 02:54:36AM +0200, Jarkko Sakkinen wrote:
-> On Thu, Feb 09, 2023 at 12:31:20PM -0300, Jason A. Donenfeld wrote:
-> > Do not register a hwrng for certain AMD TPMs that are running an old
+On 2/9/23 09:19, Guenter Roeck wrote:
+> On Thu, Feb 9, 2023 at 12:55 AM Guillaume Tucker
+> <guillaume.tucker@collabora.com> wrote:
+>>
+>> Rather than trying to guess which implementation of "echo" to run with
+>> support for "-ne" options, use "printf" instead of "echo -ne".  It
+>> handles escape characters as a standard feature and it is widespread
+>> among modern shells.
+>>
+>> Reported-by: "kernelci.org bot" <bot@kernelci.org>
+>> Suggested-by: David Laight <David.Laight@ACULAB.COM>
+>> Fixes: 3297a4df805d ("kselftests: Enable the echo command to print newlines in Makefile")
+>> Fixes: 79c16b1120fe ("selftests: find echo binary to use -ne options")
+>> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
 > 
-> What do you mean by "certain AMD TPMs"?
+> Reviewed-by: Guenter Roeck <groeck@chromium.org>
 > 
-> > known-buggy revision. Do this by probing the TPM2_PT_MANUFACTURER,
-> 
-> Which revision?
-> 
-> > TPM2_PT_FIRMWARE_VERSION_1, and TPM2_PT_FIRMWARE_VERSION_2 properties,
-> > and failing when an "AMD"-manufactured TPM2 chip is below a threshold.
-> 
-> What do you mean by "threshold"?
-> 
-> This also lacks desription of:
-> 
-> 1. What kind of changes are done.
-> 2. Why do they they are reasonable.
 
-YEP! And guess what? It doesn't matter at all one bit. Why? Because
-Mario, the AMD engineer working on this, is tuned into the goal here and
-he's the one who will be reworking this PoC draft into a real non-RFC
-commit. We've been discussing this over on the bugzilla Thorsten sent to
-you on Feb 2: https://bugzilla.kernel.org/show_bug.cgi?id=216989
+Thank you. Applied to linux-kselftest next for Linux 6.3-rc1.
 
-> > BROKEN BROKEN BROKEN - I just made the version numbers up and haven't
-> > tested this because I don't actually have hardware for it. I'm posting
-> > this so that Mario can take over its development and submit a v2 himself
-> > once he has confirmed the versioning info from inside AMD.
-> 
-> Is this paragraph meant for commit log?
+thanks,
+-- Shuah
 
-Obviously not; did you read it?
-
-Jason
