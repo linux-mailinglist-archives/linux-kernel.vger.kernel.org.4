@@ -2,175 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 379FB691F20
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 13:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0215B691F1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 13:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232201AbjBJM2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 07:28:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47140 "EHLO
+        id S232101AbjBJM2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 07:28:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232024AbjBJM2f (ORCPT
+        with ESMTP id S232040AbjBJM2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 07:28:35 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A527359C;
-        Fri, 10 Feb 2023 04:28:33 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id ba1so4911292wrb.5;
-        Fri, 10 Feb 2023 04:28:33 -0800 (PST)
+        Fri, 10 Feb 2023 07:28:34 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90A176D0E
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 04:28:32 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id p26so15350732ejx.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 04:28:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aW+Xc6jE1tZtkbSgroI6jR5Bd20w7LEpIgHknzDS1U8=;
-        b=nWAYKV6nPw+ZVJ5IpixaLlHAfGLDGphE6F1LQ3m9IFP3j+y+uWtoutMtVXS33MQ0ss
-         8F1M+67S6rl+ysrnS472YxWaKk5cjH/I7A2unp2HbrdNdV42D0rb1y5Dd9MucYtQmIeR
-         73+jlFoMcp2/eeF+vXvktxkbOyZAj2RfOdNM9qfmuU3nCJjTBueK6GLqdXD7YUtk02Kq
-         ztEPDa5hmAoW0EG3n4hpfxgDkKCAErU+aVXQwXH1Kdt0sRN4TRJpfIHqqDcFkQffkjFw
-         bLDl/XA1Vn3Y9oiDRrLQwIYD52/RoG55WkS3d5HZqzHdL48lAyM/cmqfpf/PSNFISeMD
-         XtOw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MISpw0Ywy9/GGrDCiIfVSWiguaYD6aHQRvEnwMDid1U=;
+        b=xfypag1TvZ7OKj0C7m+I+7D/cOsS4DNQkRvD0uvkuPzIyRI7ygDVr278S4oGZo/VVN
+         GoiBpHDQfJ28j3FBfbkQBLoqzWfX8B/rxmnssWTgEq0L71r6Fgjj7mUfjMEUhwG45Ed9
+         U7v+umcfDPQum0jUD1YjSS6E90VWG+BM8sEESlJE5wGUG9VlNGQsWvOWv9rPGikpjLM/
+         SstyKiJpRMZUEeLUbZcvb4TuTFXAnPAyxPgNb9xNDIDPUycLcpeXGolSNiExLhxMEPG/
+         +QxNQT5kYF8HV9OAOe+xK7d3ldfExDUi5JCYMfZ7bNE2W/1lzP/TAXB4bnkn3zWXYY1w
+         Kmig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aW+Xc6jE1tZtkbSgroI6jR5Bd20w7LEpIgHknzDS1U8=;
-        b=3LcoYs+1JmPL7tLkzgg3LF1E1jsvrDfYsA5asYjyA9XVdgo8Q6wQDzH9RIc3jzhIQE
-         IUHuiaxlzp4CG1F/SFOzgPK0Z/ZIZWGB7f//Oo0ZY3Fn+dB1a5tEvwtcAqULvzANnmSm
-         Wcjndtme8ca3aTKA5qkitMoqAyM+ty4Dl/50Q6T4wa3Lqmu9jg6ThQJzUO2G0SatMomK
-         3hTZon2RzMHJJ0r0BE9AdR/Ph9qbT6TSreTYkm3O1V3PIuFqlrXXKXOi0wpkx4d7y2Ib
-         sHadqS4uCckkIyiDu3RFnkExXvJC5XRRijqThmBbyOHDIWGuhYZQHsySeUOuuD3fxl9o
-         zmMg==
-X-Gm-Message-State: AO0yUKXAi9PgFh63JW2Wg8sW4t6zJlt3h4O7pn3y8O0RZDfjL5BVU92Q
-        51ATW2hQL4h7szWfHY/RAUQ=
-X-Google-Smtp-Source: AK7set+PSi1B1Ua/z60ldCA3JTes+hrolioO/IoKIlJPVXaE3QlJnMPN2LC35dlx3CQ9jKmN23Wn3w==
-X-Received: by 2002:adf:ef84:0:b0:2bf:bac7:30d4 with SMTP id d4-20020adfef84000000b002bfbac730d4mr14227649wro.53.1676032112223;
-        Fri, 10 Feb 2023 04:28:32 -0800 (PST)
-Received: from toolbox.. ([87.200.95.144])
-        by smtp.gmail.com with ESMTPSA id i8-20020a5d4388000000b002c5493a17efsm1540989wrq.25.2023.02.10.04.28.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MISpw0Ywy9/GGrDCiIfVSWiguaYD6aHQRvEnwMDid1U=;
+        b=G64FALkel1LGiIZ09q03is+otqLJWs5slZM+ykSrb1TfENLrJYLZMmZ2By1cZhNF8U
+         0mgz62OlhY05dec/LPVTP1X7bek42LmCMwD08AMM2SKmWJbPy4YeD8l2DK3FMIoJMWnD
+         6BaaMVDCsIEQpQFzh+CdEqi0j3EMjeQ9Ej+KatP6VwgH5iqukBR1zdJIvbPpETBOWM73
+         OasRI8MpFRrdPbjxakgMslBISeVR/cqZNWdl4eYLK2YiBd47pj0a7QzIfq+FcU+JhO4X
+         nwimS9Xc0a3ELVBp6C2KGlAXYxU1RIgEpjDNEtR778wqZiTOk+5ya/+sZq7JS0djQHM8
+         5vnQ==
+X-Gm-Message-State: AO0yUKU5FoHgQduQAuYQ2T1wEsmWoi9uXa0ZKaw5aNS5n9jxyyPZuV1t
+        E+rYgYnf4TmvcDI03JmTF2LV/w==
+X-Google-Smtp-Source: AK7set/y1xP26UOmnMgJCW2UgOFzL6HRx3ZySveIZ24qoL6xMia2A8c/BGmvU8hytR9U08dkrEp1rg==
+X-Received: by 2002:a17:907:86a3:b0:8ae:d191:aa2b with SMTP id qa35-20020a17090786a300b008aed191aa2bmr10860216ejc.6.1676032111249;
         Fri, 10 Feb 2023 04:28:31 -0800 (PST)
-From:   Christian Hewitt <christianshewitt@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Christian Hewitt <christianshewitt@gmail.com>,
-        Ferass El Hafidi <vitali64pmemail@protonmail.com>
-Subject: [PATCH 3/3] arm64: dts: meson: gxbb-kii-pro: add initial audio support
-Date:   Fri, 10 Feb 2023 12:28:17 +0000
-Message-Id: <20230210122817.1027765-4-christianshewitt@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230210122817.1027765-1-christianshewitt@gmail.com>
-References: <20230210122817.1027765-1-christianshewitt@gmail.com>
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id r13-20020a1709064d0d00b0080345493023sm2283583eju.167.2023.02.10.04.28.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 04:28:30 -0800 (PST)
+Message-ID: <23846ff0-e410-b7ab-3cc9-b45fdbf4a7d6@linaro.org>
+Date:   Fri, 10 Feb 2023 14:28:29 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 4/5] arm64: dst: qcom: sm8450: switch to usb3/dp combo
+ phy
+Content-Language: en-GB
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230206-topic-sm8450-upstream-dp-controller-v2-0-529da2203659@linaro.org>
+ <20230206-topic-sm8450-upstream-dp-controller-v2-4-529da2203659@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230206-topic-sm8450-upstream-dp-controller-v2-4-529da2203659@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add initial support for HDMI and S/PDIF audio output.
+On 10/02/2023 12:34, Neil Armstrong wrote:
+> The QMP PHY is a USB3/DP combo phy, switch to the newly
+> documented bindings and register the clocks to the GCC
+> and DISPCC controllers.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>   arch/arm64/boot/dts/qcom/sm8450.dtsi | 41 ++++++++++++------------------------
+>   1 file changed, 14 insertions(+), 27 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> index d66dcd8fe61f..6248adc546f2 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> @@ -748,7 +748,7 @@ gcc: clock-controller@100000 {
+>   				 <&ufs_mem_phy_lanes 0>,
+>   				 <&ufs_mem_phy_lanes 1>,
+>   				 <&ufs_mem_phy_lanes 2>,
+> -				 <0>;
+> +				 <&usb_1_qmpphy 0>;
+>   			clock-names = "bi_tcxo",
+>   				      "sleep_clk",
+>   				      "pcie_0_pipe_clk",
 
-Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-Tested-by: Ferass El Hafidi <vitali64pmemail@protonmail.com>
----
- .../boot/dts/amlogic/meson-gxbb-kii-pro.dts   | 61 +++++++++++++++++++
- 1 file changed, 61 insertions(+)
+Same comments as for patch 2, please use new defines for the QMP PHY 
+clocks and PHY enumeration
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dts b/arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dts
-index 435ae2aa404e..b6ee76011d82 100644
---- a/arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dts
-+++ b/arch/arm64/boot/dts/amlogic/meson-gxbb-kii-pro.dts
-@@ -9,11 +9,19 @@
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/input/input.h>
- #include <dt-bindings/leds/common.h>
-+#include <dt-bindings/sound/meson-aiu.h>
- 
- / {
- 	compatible = "videostrong,kii-pro", "amlogic,meson-gxbb";
- 	model = "Videostrong KII Pro";
- 
-+	spdif_dit: audio-codec-0 {
-+		#sound-dai-cells = <0>;
-+		compatible = "linux,spdif-dit";
-+		status = "okay";
-+		sound-name-prefix = "DIT";
-+	};
-+
- 	leds {
- 		compatible = "gpio-leds";
- 
-@@ -35,6 +43,59 @@ button-reset {
- 			gpios = <&gpio_ao GPIOAO_3 GPIO_ACTIVE_HIGH>;
- 		};
- 	};
-+
-+	sound {
-+		compatible = "amlogic,gx-sound-card";
-+		model = "KII-PRO";
-+		assigned-clocks = <&clkc CLKID_MPLL0>,
-+				  <&clkc CLKID_MPLL1>,
-+				  <&clkc CLKID_MPLL2>;
-+		assigned-clock-parents = <0>, <0>, <0>;
-+		assigned-clock-rates = <294912000>,
-+				       <270950400>,
-+				       <393216000>;
-+		status = "okay";
-+
-+		dai-link-0 {
-+			sound-dai = <&aiu AIU_CPU CPU_I2S_FIFO>;
-+		};
-+
-+		dai-link-1 {
-+			sound-dai = <&aiu AIU_CPU CPU_SPDIF_FIFO>;
-+		};
-+
-+		dai-link-2 {
-+			sound-dai = <&aiu AIU_CPU CPU_I2S_ENCODER>;
-+			dai-format = "i2s";
-+			mclk-fs = <256>;
-+
-+			codec-0 {
-+				sound-dai = <&aiu AIU_HDMI CTRL_I2S>;
-+			};
-+		};
-+
-+		dai-link-3 {
-+			sound-dai = <&aiu AIU_CPU CPU_SPDIF_ENCODER>;
-+
-+			codec-0 {
-+				sound-dai = <&spdif_dit>;
-+			};
-+		};
-+
-+		dai-link-4 {
-+			sound-dai = <&aiu AIU_HDMI CTRL_OUT>;
-+
-+			codec-0 {
-+				sound-dai = <&hdmi_tx>;
-+			};
-+		};
-+	};
-+};
-+
-+&aiu {
-+	status = "okay";
-+	pinctrl-0 = <&spdif_out_y_pins>;
-+	pinctrl-names = "default";
- };
- 
- &ethmac {
 -- 
-2.34.1
+With best wishes
+Dmitry
 
