@@ -2,79 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C3E692062
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 15:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB916692064
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 15:02:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232371AbjBJOBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 09:01:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44134 "EHLO
+        id S232378AbjBJOCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 09:02:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbjBJOBL (ORCPT
+        with ESMTP id S232369AbjBJOCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 09:01:11 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E637498B;
-        Fri, 10 Feb 2023 06:01:07 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 10 Feb 2023 09:02:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BF66A707
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 06:01:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676037688;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MzeORwJPvkQ2Gq2J93A9ERHfB47SEtRCtLFDmd4aEM4=;
+        b=BgIlPfRiGob6Vh1biw5THOzVeE7F9zh/Y5UBolfhQoKghQZo6Bn1i3mQGFD6ZJb+xGCyr0
+        uYSC3/CiKpI/Ju/z1ngX1cURnpySyAcW1HD4wUUnaLhAI91E3ViGx3r+UlOVCYPK9NL+3q
+        nnlcr+pyuhZQI14d9lLK8hv5w3x1bcg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-64-dEpdtMfCOUiKAs-ik_IDbQ-1; Fri, 10 Feb 2023 09:01:25 -0500
+X-MC-Unique: dEpdtMfCOUiKAs-ik_IDbQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BA70466020EA;
-        Fri, 10 Feb 2023 14:01:05 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676037666;
-        bh=1nACN3toSy0bL2coCaCf797kOjg0fbtFmGw0pIIjUec=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=XwIoN4XWr/LgYYvHELLcVicMRL6rH8ofiB8rPR7eIYxCvOrPnNzn0fc8GHQyEEwyP
-         75+9/rJn+tAKcrzp35XgjSrOFrpWZL1WYpT7uVPXrAxdoxdUdd4EDAP0GjqqRZZg08
-         wzfj2uRj9xTzG0WE5o7xLGXQaNFASLbbXDGYJTPFycTphEp19K66Lwx4ZBYzQoBVZk
-         oiCrpHILMLA1I0Ngn6B4BgHzHCEooJMXfrFAWbTRjWStUHF4PpjhTkEWYftN075E0T
-         ZTNLRyQMmeHOxvE/slcsIeQ/ZQhP1YqEZihnWC0IULBNyBHuPbdw67rPkC+bxHMYGd
-         iM7ym8W8sp3sw==
-Message-ID: <2318282b-c61d-3f86-2053-ee20c7f13e7f@collabora.com>
-Date:   Fri, 10 Feb 2023 15:01:02 +0100
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B3FCF88B776;
+        Fri, 10 Feb 2023 14:01:24 +0000 (UTC)
+Received: from mail.corp.redhat.com (ovpn-195-1.brq.redhat.com [10.40.195.1])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 88AEE40CF8F0;
+        Fri, 10 Feb 2023 14:01:20 +0000 (UTC)
+Date:   Fri, 10 Feb 2023 15:01:16 +0100
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Aditya Garg <gargaditya08@live.com>
+Cc:     Orlando Chamberlain <orlandoch.dev@gmail.com>,
+        Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
+        Jiri Kosina <jikos@kernel.org>,
+        "jkosina@suse.cz" <jkosina@suse.cz>,
+        Andy Shevchenko <andy@infradead.org>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "ronald@innovation.ch" <ronald@innovation.ch>,
+        "kekrby@gmail.com" <kekrby@gmail.com>
+Subject: Re: [PATCH 1/3] HID: apple-ibridge: Add Apple iBridge HID driver for
+ T1 chip.
+Message-ID: <20230210140100.z3of7kzj6lpnugu7@mail.corp.redhat.com>
+References: <E5D8BEBA-3C5B-460F-BD2C-39470A793CC3@live.com>
+ <40274C3D-4F4F-479C-944C-EEBDC78F959C@live.com>
+ <20230210045624.cjxroikmmvm3liij@t-8ch.de>
+ <B9E319F8-6047-40E5-BD9F-D90D6504AA9E@live.com>
+ <20230210232043.18483401@redecorated-mbp>
+ <BM1PR01MB0931E8F14D84CFB59EABEBA4B8DE9@BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v5 10/12] remoteproc: mediatek: Handle MT8195 SCP core 1
- watchdog timeout
-Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230210085931.8941-1-tinghan.shen@mediatek.com>
- <20230210085931.8941-11-tinghan.shen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230210085931.8941-11-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <BM1PR01MB0931E8F14D84CFB59EABEBA4B8DE9@BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/02/23 09:59, Tinghan Shen ha scritto:
-> The MT8195 SCP core 1 watchdog timeout needs to be handled in the
-> SCP core 0 IRQ handler because the MT8195 SCP core 1 watchdog timeout
-> IRQ is wired on the same IRQ entry for core 0 watchdog timeout.
-> MT8195 SCP has a watchdog status register to identify the watchdog
-> timeout source when IRQ triggered.
+On Feb 10 2023, Aditya Garg wrote:
 > 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> > Were the changes needed for these structs to be const in the
+> > linux-input tree for 6.3? If so then if you're applying the patches
+> > onto linus' tree that might be why there are errors about consts.
+> 
+> I’d want the maintainers comment on this. Imo, these 2 structures needn’t be constantified.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+The struct hid_ll_driver has to be constified, because otherwise it will
+introduce an error/warning when this patch is merged in the hid tree.
 
+For the struct hid_driver, as mentioned previously I don't think we have
+the hid-core changes for that, and so you can't really constify them.
+
+Cheers,
+Benjamin
+
+> 
+> Also, it would be nice if we could get a review on the other 2 patches, so that a v2 can be prepared.
 
