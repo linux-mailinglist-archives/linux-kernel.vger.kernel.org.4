@@ -2,144 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AE5C692311
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:14:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E082692314
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 17:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232697AbjBJQOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 11:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
+        id S232474AbjBJQQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 11:16:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232592AbjBJQOm (ORCPT
+        with ESMTP id S229769AbjBJQQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 11:14:42 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAC9749B8;
-        Fri, 10 Feb 2023 08:14:29 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id w5so6937292plg.8;
-        Fri, 10 Feb 2023 08:14:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XLSb4oI7+G/vrSC0uBHgAIzrNQ2OQDigOg7jJ9N0vsg=;
-        b=PCPKWUiaCusJdtCnECjumkp3J1QvA96YuTv4FJeFmqch8ud9Ii1ettciB81E6lmxzM
-         ojwbJHWAygEfNd6w0P6ZsUJAubVYEOs26iO6TxuOgvL32qs0t9jkmKfoMSza9drYHX8x
-         UFPZ7dTgd7iPZey2976DHnac0YGp0YxcroCQDglPkZ4yQh2SkjDr5AgfRs5mLjxHVhD8
-         uv/PbxLh9NRocXRsPcut3fJ1I3akWLndIeS392QoS5f7noQpMgleq/gOAgHuMLND/72J
-         M8bjq7qDCYjFiqx6zRhz7mJPr5lXINJVZ1N+uIvDonwqgR4TaXio8FAhxjmKH23KLHvu
-         LWPw==
+        Fri, 10 Feb 2023 11:16:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B05265B8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:15:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676045756;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eKne9KVuVdje+JYeGh16BUK5PUdXLIJtZx0OA4yquDU=;
+        b=hwAxvQdPmvu96ArqrGx5gA2lXEybKo40XfFwJS8064rCANIhTiLIw0fuZRceS8JfxqkqBi
+        uIolk/zufaQGyInMouFnE9nuPBXDLeU8o1U7DYJv4Hhai1BSTEZv2ydvamIUOW9l6gPJhM
+        x75NcGpZslza3jTraBmpoXaeM2v93mw=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-347-rWu-tmPAN5aZpiRby3vSSQ-1; Fri, 10 Feb 2023 11:15:55 -0500
+X-MC-Unique: rWu-tmPAN5aZpiRby3vSSQ-1
+Received: by mail-ej1-f71.google.com with SMTP id xh12-20020a170906da8c00b007413144e87fso3859831ejb.14
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 08:15:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XLSb4oI7+G/vrSC0uBHgAIzrNQ2OQDigOg7jJ9N0vsg=;
-        b=vbCwR5EUfs6y3oxiHor41umpFAyLGFR3R9WMNIRlwwB30G7URUdMs9Bfj5nDVOv0Zp
-         /TGnJTRvYRu1W6eWa04MzUzmoB5EW3XEa/1YfpnCcYsrMt4AwhjPzO8daEvSFyb1hFep
-         B0ZQlirlf0qQF0g9Tzk3PNeI273dl9ZljM3ugYbBmO5GjTxzxb3m7yRPtVxCwH8wq1dK
-         +u8BVFxa+GzWvpqPDENRfDqn/hTSayXOOTg6wNlwO9ixK1ut2NCH0xDKixdNbISI8VYu
-         0tTfYKeFW8IaL2+4tvXjutC2XvwzLd2+LfJs4D8lVGG54TT5qcIqrIImmj2ETvHhqFk9
-         tN2Q==
-X-Gm-Message-State: AO0yUKVjm7AEXl6e9fnIwUg5FNhSXIQZbvAnAsx7eVDgTprl0aCJqbY/
-        GpCXVlUiIBNH04F5bYicXVY=
-X-Google-Smtp-Source: AK7set9p9yRN0uGRPX49Nz2FWepxAbly3CMmVUioeLM705OspCHjKCSUUpUpjuwRsqWhbSyuJdCL8w==
-X-Received: by 2002:a17:902:d2d0:b0:198:a338:b9c5 with SMTP id n16-20020a170902d2d000b00198a338b9c5mr19125012plc.2.1676045668657;
-        Fri, 10 Feb 2023 08:14:28 -0800 (PST)
-Received: from localhost ([124.248.219.206])
-        by smtp.gmail.com with ESMTPSA id w14-20020a170902a70e00b0018997f6fc88sm3590399plq.34.2023.02.10.08.14.27
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 10 Feb 2023 08:14:28 -0800 (PST)
-Date:   Fri, 10 Feb 2023 08:14:15 -0800
-From:   Dan Li <ashimida.1990@gmail.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     concord@gentoo.org, linux-hardening@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Qing Zhao <qing.zhao@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Marco Elver <elver@google.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Song Liu <song@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Juergen Gross <jgross@suse.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Yuntao Wang <ytcoode@gmail.com>,
-        Changbin Du <changbin.du@intel.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC/RFT] CFI: Add support for gcc CFI in aarch64
-Message-ID: <20230210161415.mktok5dt5fiqmqss@ubuntu>
-References: <20221219061758.23321-1-ashimida.1990@gmail.com>
- <Y6A/k7/KrCCDuux6@hirez.programming.kicks-ass.net>
- <20221219132731.6ng4sz2nv6ujvu7i@ubuntu>
- <202301061929.6881F6CD40@keescook>
- <20230107154213.ocyghxd2k66gbvv6@ubuntu>
- <63e3f989.170a0220.60c91.c5ce@mx.google.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eKne9KVuVdje+JYeGh16BUK5PUdXLIJtZx0OA4yquDU=;
+        b=Bmi5EWOu0Cdcftexxn+WpL8/Nyu4nJKBpTXajuTnaIbbWyVZUfaRK42n+s8qsFkXX1
+         8X56qMxsOQxiBN1obfvoamjQSuZKYhIKL+qAgRdW1WqKP2shO0aSq+2l9VP0Iu3Wczar
+         txnvpDL0D7jGikCFVWwcWUFZwm4qFfRCPXQBM5End3BUaTMNiMNgym/Tp8zkzJBOqtyG
+         varuOO2nrMOXvo6DfDlhot5aTwrhSgxl30ceUSFALdLqo8roqpDp0RV+cuw2JsENwicu
+         4N+Ls5nOsVukVk9yVB6Y2J+lo/kyTtitJX/nTvsh0039dOAfz4/7DzIxJboSzFZeZvZY
+         BWTA==
+X-Gm-Message-State: AO0yUKUpRvTmg9LvTO8reSjqLMk61CtRTxpwLoKYYtDHqsWoh+YJzIz7
+        t3ut750h1HImV9wQ4LIm5J8O7OOvPNvG3UfhhN9tlAP0zFJOsrEuYf5mngYwVvrwSQqEmxYYR6E
+        YaeBNLZFRpT2KjdTLDAbRTTRB0VNnRQ==
+X-Received: by 2002:a50:d78f:0:b0:4aa:c77d:fa0a with SMTP id w15-20020a50d78f000000b004aac77dfa0amr16755404edi.22.1676045753540;
+        Fri, 10 Feb 2023 08:15:53 -0800 (PST)
+X-Google-Smtp-Source: AK7set9nSFQLGra3eu64GQ4Kkjwj62X9ldWiXdK+DbO+h+sjbItyTGn3UGxBQFM11FncNyve1qPFaA==
+X-Received: by 2002:a50:d78f:0:b0:4aa:c77d:fa0a with SMTP id w15-20020a50d78f000000b004aac77dfa0amr16755393edi.22.1676045753385;
+        Fri, 10 Feb 2023 08:15:53 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id f8-20020a50d548000000b004ab33d52d03sm1421293edj.22.2023.02.10.08.15.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 08:15:52 -0800 (PST)
+Message-ID: <7d1749ec-bd8a-1fb4-49c1-0bb680ad530f@redhat.com>
+Date:   Fri, 10 Feb 2023 17:15:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <63e3f989.170a0220.60c91.c5ce@mx.google.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1 1/1] platform/x86: Fix header inclusion in
+ linux/platform_data/x86/soc.h
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     platform-driver-x86@vger.kernel.org
+References: <20230206145238.19460-1-andriy.shevchenko@linux.intel.com>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230206145238.19460-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/08, Kees Cook wrote:
-> On Sat, Jan 07, 2023 at 07:42:13AM -0800, Dan Li wrote:
-> > Hi Kees,
-> > 
-> > In the next version I'll make the gcc implementation consistent with clang.
+Hi,
+
+On 2/6/23 15:52, Andy Shevchenko wrote:
+> First of all, we don't use intel-family.h directly. On the other hand
+> we actively use boolean type, that is defined in the types.h (we take
+> top-level header for that) and x86_cpu_id, that is provided in the
+> mod_devicetable.h.
 > 
-> Hi!
+> Secondly, we don't need to spread SOC_INTEL_IS_CPU() macro to the users.
+> Hence, undefine it when it's appropriate.
 > 
-> Just checking in on this, since there are a lot of interested folks. :)
-> What's the status on the next version (and has anyone been found to
-> tackle the x86 backend part)? Is there anything we can help with?
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
+
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
+
+> ---
+>  include/linux/platform_data/x86/soc.h | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
+> diff --git a/include/linux/platform_data/x86/soc.h b/include/linux/platform_data/x86/soc.h
+> index da05f425587a..a5705189e2ac 100644
+> --- a/include/linux/platform_data/x86/soc.h
+> +++ b/include/linux/platform_data/x86/soc.h
+> @@ -8,10 +8,13 @@
+>  #ifndef __PLATFORM_DATA_X86_SOC_H
+>  #define __PLATFORM_DATA_X86_SOC_H
+>  
+> +#include <linux/types.h>
+> +
+>  #if IS_ENABLED(CONFIG_X86)
+>  
+> +#include <linux/mod_devicetable.h>
+> +
+>  #include <asm/cpu_device_id.h>
+> -#include <asm/intel-family.h>
+>  
+>  #define SOC_INTEL_IS_CPU(soc, type)				\
+>  static inline bool soc_intel_is_##soc(void)			\
+> @@ -34,6 +37,8 @@ SOC_INTEL_IS_CPU(apl, ATOM_GOLDMONT);
+>  SOC_INTEL_IS_CPU(glk, ATOM_GOLDMONT_PLUS);
+>  SOC_INTEL_IS_CPU(cml, KABYLAKE_L);
+>  
+> +#undef SOC_INTEL_IS_CPU
+> +
+>  #else /* IS_ENABLED(CONFIG_X86) */
+>  
+>  static inline bool soc_intel_is_byt(void)
 
-Hi Kees,
-
-Sorry for the long delay. It's been hard for me to find time to finish this
-until the end of February due to job changes (even weekends are busy :( ).
-
-As much as I'd love to get it done as soon as possible, I'm sorry I probably
-won't be able to submit the next version until March (maybe mid).
-
-If anyone could help improve this, I'd be very grateful, otherwise I'll have
-the next version done by the end of March (as a promise), and also try it in
-x86 platform.
-
-Sincerely apologize!
-
-Dan.
-
-> Thanks!
-> 
-> -Kees
-> 
-> -- 
-> Kees Cook
