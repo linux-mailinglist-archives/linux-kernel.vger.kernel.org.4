@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E66E691762
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 04:54:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AF7691766
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 04:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbjBJDyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 22:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45556 "EHLO
+        id S230181AbjBJDzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 22:55:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjBJDyT (ORCPT
+        with ESMTP id S229917AbjBJDzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 22:54:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9326E9A7;
-        Thu,  9 Feb 2023 19:54:18 -0800 (PST)
+        Thu, 9 Feb 2023 22:55:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BECF6F21D;
+        Thu,  9 Feb 2023 19:55:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7C9AB82318;
-        Fri, 10 Feb 2023 03:54:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5BDEC433EF;
-        Fri, 10 Feb 2023 03:54:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA1EC61C52;
+        Fri, 10 Feb 2023 03:55:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2096C433D2;
+        Fri, 10 Feb 2023 03:55:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676001255;
+        s=k20201202; t=1676001304;
         bh=hTbI/uHdUcdMjp23oy6AQJPVhQQNne0zOy2ZW7ePXC8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pX3C3wFr+jOY0BBYQGlrqnFp6/IpoNQwniwWedKM/no6/Mp2ZPVEKd9vQU1m1L5tM
-         ycy2vKP53jUhV9VSdtNQjo+iaBCAIrjPuF6uJ5nwEoAGV3Jclu2FO3axtDmshFMzVr
-         7oHByO8K3cSbrGgR3g4IbgPt1wk54/oxexSexs8CUmp9YY4zJcmQiGakEu9wWd/Nqh
-         TdVWB/Pzwwo1etfdY2fewNZZvH30zfTnEOh0cxLjoN9uudfIkbWeHX381T+0OrxHnO
-         czzYY1KojObZ5P/BHFW670vXJJGbtzDcXHvM1/5QojRfu/H/9OmDZ6FE+8ZtRiCkk0
-         1Wu19Fq6hZy9w==
-Date:   Fri, 10 Feb 2023 05:54:12 +0200
+        b=Agvr9H4m49pgl8YBrcMH6JTmlLGPM1q6eIzkVzHIi9Zl5bDjnXoYbCXv5ACgxSrXA
+         Q1dhGT6jhe0LnMMCg4/A4KUvBX7lSkLFi+f3W1V6d5YrV77PLRqhuHV1hEsvg9m3wS
+         AlIEZGtYtIzQWPBQ4RVPBRLI5T4JySNqA0xB2WpERxyY41D7D/R/ejCrRmBLb1huo2
+         2l0aZiP7tSChFa9uNQphsh5EbeuoRl15JtFo+FqyJ+L793qWZUBubaGaqdBkQdc6+K
+         HPr8akQGAcXRdS2p2qBL5+31FQQH9vxtLhe1vDYajnzZjJPVUjWuAgi5/fd7v0b0/N
+         cTh6jpc5heu3A==
+Date:   Fri, 10 Feb 2023 05:55:01 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Randy Dunlap <rdunlap@infradead.org>
 Cc:     linux-kernel@vger.kernel.org, David Howells <dhowells@redhat.com>,
@@ -42,7 +42,7 @@ Cc:     linux-kernel@vger.kernel.org, David Howells <dhowells@redhat.com>,
         linux-security-module@vger.kernel.org,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
 Subject: Re: [PATCH 17/24] Documentation: security: correct spelling
-Message-ID: <Y+W/5OCP8eb7HdqZ@kernel.org>
+Message-ID: <Y+XAFZzp8zY8fLzT@kernel.org>
 References: <20230209071400.31476-1-rdunlap@infradead.org>
  <20230209071400.31476-18-rdunlap@infradead.org>
 MIME-Version: 1.0
