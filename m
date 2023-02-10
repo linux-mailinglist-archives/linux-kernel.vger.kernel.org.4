@@ -2,206 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA1B692567
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E10EE69256B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 19:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233100AbjBJSfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 13:35:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
+        id S232930AbjBJSgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 13:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232520AbjBJSfV (ORCPT
+        with ESMTP id S232558AbjBJSgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 13:35:21 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411786358B
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 10:35:20 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pQYEv-0006bj-4F; Fri, 10 Feb 2023 19:35:17 +0100
-Message-ID: <f72fe15b-db1d-56dd-aaf6-3cba68a8bf0a@leemhuis.info>
-Date:   Fri, 10 Feb 2023 19:35:16 +0100
+        Fri, 10 Feb 2023 13:36:12 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3908F69536;
+        Fri, 10 Feb 2023 10:36:11 -0800 (PST)
+Date:   Fri, 10 Feb 2023 11:36:02 -0700 (GMT-07:00)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=t-8ch.de; s=mail;
+        t=1676054168; bh=60guHEUGd/XmV+MPQukXhjwcgeGRDbEWPL4ThJ77WqQ=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=l4I/A25g4qNffJqCgIVPIivBY69t5u4DnQt5RoP0+hhg/25Lw4Lkm3T4NaBn+g4ke
+         XdOEuR9mxkD6gNf4v3uHGwbZf3WCNnxug72wkEwnDHWFl5V76osLh0FfeSMcdZ9X9H
+         Ev7Fv8nOzW2lWJToGRhCxX6YfibbEKzEzLr3XnVI=
+From:   =?UTF-8?Q?Thomas_Wei=C3=9Fschuh_?= <thomas@t-8ch.de>
+To:     Aditya Garg <gargaditya08@live.com>
+Cc:     Jiri Kosina <jikos@kernel.org>, jkosina@suse.cz,
+        benjamin.tissoires@redhat.com,
+        Andy Shevchenko <andy@infradead.org>,
+        andy.shevchenko@gmail.com, LKML <linux-kernel@vger.kernel.org>,
+        linux-input@vger.kernel.org, ronald@innovation.ch,
+        kekrby@gmail.com, Orlando Chamberlain <orlandoch.dev@gmail.com>
+Message-ID: <cb640534-ed9f-4b69-8070-6eb3efd72604@t-8ch.de>
+In-Reply-To: <BM1PR01MB09315DC70770D236DD29D007B8DE9@BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM>
+References: <E5D8BEBA-3C5B-460F-BD2C-39470A793CC3@live.com> <40274C3D-4F4F-479C-944C-EEBDC78F959C@live.com> <20230210045624.cjxroikmmvm3liij@t-8ch.de> <B9E319F8-6047-40E5-BD9F-D90D6504AA9E@live.com> <20230210153356.zdj7gw7ztbgz2qx7@t-8ch.de> <BM1PR01MB09315DC70770D236DD29D007B8DE9@BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM>
+Subject: Re: [PATCH 1/3] HID: apple-ibridge: Add Apple iBridge HID driver
+ for T1 chip.
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
-Content-Language: en-US, de-DE
-To:     Chris Clayton <chris2553@googlemail.com>,
-        Ben Skeggs <skeggsb@gmail.com>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        bskeggs@redhat.com, Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        ML nouveau <nouveau@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>
-References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
- <fcec3c78-b5d9-eb48-0fc0-d1f27de87f23@leemhuis.info>
- <b21fa1f6-a71d-5657-8596-ee0be73185ea@leemhuis.info>
- <3ab28896-70e9-6f90-5b97-e5397b06e715@googlemail.com>
- <a163dd7b-c5d1-a07b-a816-7a2dfd3edfd4@leemhuis.info>
- <ab1b0f73-6b4e-8602-2999-b7bec25d92db@googlemail.com>
- <CACAvsv4sOtPjCVnEcKd2RCUqYWxSn5XKyksbS-Bds2qCqyusVw@mail.gmail.com>
- <1cdb84ac-f7a8-66ba-98fc-3db302b49a5a@googlemail.com>
- <dab6eb81-db3f-8fa1-84ad-9b40e209514b@googlemail.com>
- <CACAvsv5iYdF3P8AbyrbYo3zGmYRYhxDWn7WbAR5V9qHpbgBXRA@mail.gmail.com>
- <1632a9ef-2954-c8f0-cdc9-03157c9d8547@googlemail.com>
- <5abbee70-cc84-1528-c3d8-9befd9edd611@googlemail.com>
- <5cf46df8-0fa2-e9f5-aa8e-7f7f703d96dd@googlemail.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <5cf46df8-0fa2-e9f5-aa8e-7f7f703d96dd@googlemail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676054120;13732cd9;
-X-HE-SMSGID: 1pQYEv-0006bj-4F
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Correlation-ID: <cb640534-ed9f-4b69-8070-6eb3efd72604@t-8ch.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.02.23 09:48, Chris Clayton wrote:
-> 
-> I'm assuming  that we are not going to see a fix for this regression before 6.2 is released.
 
-Yeah, looks like it. That's unfortunate, but happens. But there is still
-time to fix it and there is one thing I wonder:
+Feb 10, 2023 08:50:12 Aditya Garg <gargaditya08@live.com>:
 
-Did any of the nouveau developers look at the netconsole captures Chris
-posted more than a week ago to check if they somehow help to track down
-the root of this problem?
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
-> Consequently, I've
-> implemented a (very simple) workaround. All that happens is that in the (sysv) init script that starts and stops SDDM,
-> the nouveau module is removed once SDDM is stopped. With that in place, my system no longer freezes on reboot or poweroff.
-> 
-> Let me know if I can provide any additional diagnostics although, with the problem seemingly occurring so late in the
-> shutdown process, I may need help on how to go about capturing.
-> 
-> Chris
-> 
-> On 02/02/2023 20:45, Chris Clayton wrote:
+>
+>
+>> On 10-Feb-2023, at 9:04 PM, Thomas Wei=C3=9Fschuh <thomas@t-8ch.de> wrot=
+e:
 >>
+>> =EF=BB=BFResponses inline
 >>
->> On 01/02/2023 13:51, Chris Clayton wrote:
->>>
->>>
->>> On 30/01/2023 23:27, Ben Skeggs wrote:
->>>> On Tue, 31 Jan 2023 at 09:09, Chris Clayton <chris2553@googlemail.com> wrote:
->>>>>
->>>>> Hi again.
->>>>>
->>>>> On 30/01/2023 20:19, Chris Clayton wrote:
->>>>>> Thanks, Ben.
->>>>>
->>>>> <snip>
->>>>>
->>>>>>> Hey,
->>>>>>>
->>>>>>> This is a complete shot-in-the-dark, as I don't see this behaviour on
->>>>>>> *any* of my boards.  Could you try the attached patch please?
->>>>>>
->>>>>> Unfortunately, the patch made no difference.
->>>>>>
->>>>>> I've been looking at how the graphics on my laptop is set up, and have a bit of a worry about whether the firmware might
->>>>>> be playing a part in this problem. In order to offload video decoding to the NVidia TU117 GPU, it seems the scrubber
->>>>>> firmware must be available, but as far as I know,that has not been released by NVidia. To get it to work, I followed
->>>>>> what ubuntu have done and the scrubber in /lib/firmware/nvidia/tu117/nvdec/ is a symlink to
->>>>>> ../../tu116/nvdev/scrubber.bin. That, of course, means that some of the firmware loaded is for a different card is being
->>>>>> loaded. I note that processing related to firmware is being changed in the patch. Might my set up be at the root of my
->>>>>> problem?
->>>>>>
->>>>>> I'll have a fiddle an see what I can work out.
->>>>>>
->>>>>> Chris
->>>>>>
->>>>>>>
->>>>>>> Thanks,
->>>>>>> Ben.
->>>>>>>
->>>>>>>>
->>>>>
->>>>> Well, my fiddling has got my system rebooting and shutting down successfully again. I found that if I delete the symlink
->>>>> to the scrubber firmware, reboot and shutdown work again. There are however, a number of other files in the tu117
->>>>> firmware directory tree that that are symlinks to actual files in its tu116 counterpart. So I deleted all of those too.
->>>>> Unfortunately, the absence of one or more of those symlinks causes Xorg to fail to start. I've reinstated all the links
->>>>> except scrubber and I now have a system that works as it did until I tried to run a kernel that includes the bad commit
->>>>> I identified in my bisection. That includes offloading video decoding to the NVidia card, so what ever I read that said
->>>>> the scrubber firmware was needed seems to have been wrong. I get a new message that (nouveau 0000:01:00.0: fb: VPR
->>>>> locked, but no scrubber binary!), but, hey, we can't have everything.
->>>>>
->>>>> If you still want to get to the bottom of this, let me know what you need me to provide and I'll do my best. I suspect
->>>>> you might want to because there will a n awful lot of Ubuntu-based systems out there with that scrubber.bin symlink in
->>>>> place. On the other hand,m it could but quite a while before ubuntu are deploying 6.2 or later kernels.
->>>> The symlinks are correct - whole groups of GPUs share the same FW, and
->>>> we use symlinks in linux-firmware to represent this.
+>> On Fri, Feb 10, 2023 at 12:05:13PM +0000, Aditya Garg wrote:
+>>>>> On 10-Feb-2023, at 10:26 AM, Thomas Wei=C3=9Fschuh <thomas@t-8ch.de> =
+wrote:
 >>>>
->>>> I don't really have any ideas how/why this patch causes issues with
->>>> shutdown - it's a path that only gets executed during initialisation.
->>>> Can you try and capture the kernel log during shutdown ("dmesg -w"
->>>> over ssh? netconsole?), and see if there's any relevant messages
->>>> providing a hint at what's going on?  Alternatively, you could try
->>>> unloading the module (you will have to stop X/wayland/gdm/etc/etc
->>>> first) and seeing if that hangs too.
+>>>> Hi,
 >>>>
->>>> Ben.
->>>
->>> Sorry for the delay - I've been learning about netconsole and netcat. However, I had no success with ssh and netconsole
->>> produced a log with nothing unusual in it.
->>>
->>> Simply stopping Xorg and removing the nouveau module succeeds.
->>>
->>> So, I rebuilt rc6+ after a pull from linus' tree this morning and set the nouveau debug level to 7. I then booted to a
->>> console before doing a reboot (with Ctl+Alt+Del). As expected the machine locked up just before it would ordinarily
->>> restart. The last few lines on the console might be helpful:
->>>
->>> ...
->>> nouveau 0000:01:00:0  fifo: preinit running...
->>> nouveau 0000:01:00:0  fifo: preinit completed in 4us
->>> nouveau 0000:01:00:0  gr: preinit running...
->>> nouveau 0000:01:00:0  gr: preinit completed in 0us
->>> nouveau 0000:01:00:0  nvdec0: preinit running...
->>> nouveau 0000:01:00:0  nvdec0: preinit completed in 0us
->>> nouveau 0000:01:00:0  nvdec0: preinit running...
->>> nouveau 0000:01:00:0  nvdec0: preinit completed in 0us
->>> nouveau 0000:01:00:0  sec2: preinit running...
->>> nouveau 0000:01:00:0  sec2: preinit completed in 0us
->>> nouveau 0000:01:00:0  fb:.VPR locked, running scrubber binary
->>>
->>> These messages appear after the "sd 4:0:0:0 [sda] Stopping disk" I reported in my initial email.
->>>
->>> After the "running scrubber" line appears the machine is locked and I have to hold down the power button to recover. I
->>> get the same outcome from running "halt -dip", "poweroff -di" and "shutdown -h -P now". I guess it's no surprise that
->>> all three result in the same outcome because invocations halt, poweroff and reboot (without the -f argument)from a
->>> runlevel other than 0 resukt in shutdown being run. switching to runlevel 0 with "telenit 0" results in the same
->>> messages from nouveau followed by the lockup.
->>>
->>> Let me know if you need any additional diagnostics.
->>>
->>> Chris
->>>
->>
->> I've done some more investigation and found that I hadn't done sufficient amemdment the scripts run at shutdown to
->> prevent the network being shutdown. I've now got netconsole captures for 6.2.0-rc6+
->> (9f266ccaa2f5228bfe67ad58a94ca4e0109b954a) and, for comparison, 6.1.9. These two logs are attached.
->>
->> Chris
->>
+>>>> some comments inline.
 >>>>
->>>>>
->>>>> Thanks,
->>>>>
->>>>> Chris
->>>>>
->>>>> <snip>
-> 
-> 
+>>>>> On Fri, Feb 10, 2023 at 03:43:24AM +0000, Aditya Garg wrote:
+>>>>
+>>>>> +
+>>>>> +static struct {
+>>>>> + unsigned int usage;
+>>>>> + struct hid_device_id *dev_id;
+>>>>> +} appleib_usage_map[] =3D {
+>>>>> + /* Default iBridge configuration, key inputs and mode settings */
+>>>>> + { 0x00010006, &appleib_sub_hid_ids[0] },
+>>>>> + /* OS X iBridge configuration, digitizer inputs */
+>>>>> + { 0x000D0005, &appleib_sub_hid_ids[0] },
+>>>>> + /* All iBridge configurations, display/DFR settings */
+>>>>> + { 0xFF120001, &appleib_sub_hid_ids[0] },
+>>>>> + /* All iBridge configurations, ALS */
+>>>>> + { 0x00200041, &appleib_sub_hid_ids[1] },
+>>>>> +};
+>>>>
+>>>> const
+>>>>
+>>>
+>>> Constantifying this results in compiler giving warnings
+>>>
+>>> drivers/hid/apple-ibridge.c:78:23: warning: initialization discards 'co=
+nst' qualifier from pointer target type [-Wdiscarded-qualifiers]
+>>> =C2=A0 78 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 { 0x0020004=
+1, &appleib_sub_hid_ids[1] },
+>>
+>> For this you also have to constify the hid_device_id *dev_id in
+>> appleib_usage_map. And then propagate this change to some functions and
+>> variables.
+>>
+>>> =C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 ^
+>>> drivers/hid/apple-ibridge.c: In function 'appleib_add_sub_dev':
+>>> drivers/hid/apple-ibridge.c:363:29: warning: assignment discards 'const=
+' qualifier from pointer target type [-Wdiscarded-qualifiers]
+>>> 363 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sub_hdev->ll_driv=
+er =3D &appleib_ll_driver;
+>>
+>> As Benjamin said this is because your changes are based on Linus' tree
+>> but they will break as soon as they will be merged into the HID tree.
+>> You should base your changes off of the HID tree:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git/log/?h=3Dfor=
+-6.3/hid-core
+>>
+>> This issue is essentially unlucky timing.
+>>
+>>> =C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^
+>>> drivers/hid/apple-ibridge.c: In function 'appleib_hid_probe':
+>>> drivers/hid/apple-ibridge.c:436:12: error: expected '(' before 'hid_is_=
+usb'
+>>> 436 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if hid_is_usb(hde=
+v)
+>>> =C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~~
+>>> =C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 (
+>>
+>> As the error message indicates, this is invalid syntax and missing a
+>> '('.
+>> What you want to do is to check for
+>>
+>> if (!hid_is_usb(hdev))
+>> =C2=A0=C2=A0 return -ENODEV;
+>
+> It was a typo on my part
+>
+> +=C2=A0=C2=A0 /* check and set usb config first */
+> +=C2=A0=C2=A0 if (hid_is_usb(hdev))
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 udev =3D hid_to_usb_dev(hdev);
+> +=C2=A0=C2=A0 else
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EINVAL;
+
+I would prefer
+
+if (!hid_is_usb(hdev))
+=C2=A0=C2=A0=C2=A0 return -EINVAL;
+
+udev =3D hid_to_usb_dev(hdev);
+
+>
+> This is what I have in my patch set now.
+>
+> If there is something wrong with this, then do tell me
+>
+> Thanks
+>>
+>> *before* calling hid_to_usb_dev(hdev);
+>>
+>>> In file included from drivers/hid/apple-ibridge.c:48:
+>>> drivers/hid/apple-ibridge.c: In function 'appleib_probe':
+>>> drivers/hid/apple-ibridge.c:544:35: warning: passing argument 1 of '__h=
+id_register_driver' discards 'const' qualifier from pointer target type [-W=
+discarded-qualifiers]
+>>> 544 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D hid_regis=
+ter_driver(&appleib_hid_driver);
+>>> =C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 ^~~~~~~~~~~~~~~~~~~
+>>> ./include/linux/hid.h:898:31: note: in definition of macro 'hid_registe=
+r_driver'
+>>> 898 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __hid_register_dr=
+iver(driver, THIS_MODULE, KBUILD_MODNAME)
+>>> =C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~
+>>> ./include/linux/hid.h:893:47: note: expected 'struct hid_driver *' but =
+argument is of type 'const struct hid_driver *'
+>>> 893 | extern int __must_check __hid_register_driver(struct hid_driver *=
+,
+>>> =C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 ^~~~~~~~~~~~~~~~~~~
+>>> drivers/hid/apple-ibridge.c: In function 'appleib_remove':
+>>> drivers/hid/apple-ibridge.c:558:31: warning: passing argument 1 of 'hid=
+_unregister_driver' discards 'const' qualifier from pointer target type [-W=
+discarded-qualifiers]
+>>> 558 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 hid_unregister_dr=
+iver(&appleib_hid_driver);
+>>> =C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~~~~~~=
+~~~~~
+>>> ./include/linux/hid.h:900:35: note: expected 'struct hid_driver *' but =
+argument is of type 'const struct hid_driver *'
+>>> 900 | extern void hid_unregister_driver(struct hid_driver *);
+>>> =C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 ^~~~~~~~~~~~~~~~~~~
+>>
+>> These are all because applib_hid_driver can not be const.
+>> Sorry for the wrong advice.
+>>
+>> Benjamin:
+>> HID drivers can not be const because they embed a 'struct driver' that
+>> is needed by the driver core to be mutable.
+>> Fixing this is probably a larger enterprise.
+>>
+>>> make[6]: *** [scripts/Makefile.build:250: drivers/hid/apple-ibridge.o] =
+Error 1
+>>> make[5]: *** [scripts/Makefile.build:500: drivers/hid] Error 2
+>>> make[5]: *** Waiting for unfinished jobs=E2=80=A6.
+>>>
+>>> Some warnings are also due to a typo in if and constantifying `static s=
+truct hid_driver`, although they probably can
+>>> be fixed.
+>>>
+>>> In short, Thomas, do you really want me to constantify the structure I
+>>> am talking about in this email, as well `static struct hid_driver`?
+>>
+>> struct hid_driver: Don't constify
+>> all others: Do constify
+>>
+>> Thomas
+
