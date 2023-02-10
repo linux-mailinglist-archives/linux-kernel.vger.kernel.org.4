@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8876069294A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 22:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 398E8692951
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 22:33:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233534AbjBJVc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 16:32:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50624 "EHLO
+        id S233560AbjBJVdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 16:33:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233131AbjBJVc4 (ORCPT
+        with ESMTP id S233655AbjBJVdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 16:32:56 -0500
+        Fri, 10 Feb 2023 16:33:15 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814E181CD9
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 13:32:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303D081CE2;
+        Fri, 10 Feb 2023 13:33:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1069B61EAF
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 21:32:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54472C433D2;
-        Fri, 10 Feb 2023 21:32:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF8A661EB0;
+        Fri, 10 Feb 2023 21:33:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 892C3C433EF;
+        Fri, 10 Feb 2023 21:33:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676064774;
-        bh=J3Gyaseg7yhQVMzzAFVCsvKsCGLb9pPjdnQxlIuqQSM=;
+        s=k20201202; t=1676064793;
+        bh=ZmTI6CJ1QpyHL95uGX/6YQ6vtkLg0UV2JSOubbRz/Qg=;
         h=From:To:Cc:Subject:Date:From;
-        b=UlHZ7Wr9nKKcfNOZ+RrvVsHagvQ1NcpyDMwY0EEiuLVJIv/32rh11KQzSYSt6eNBm
-         0WoXa3ggxLx7SE11k1rpBpLPbjN+cjSA/qHiDN44gOtzMQCpQ12FsU2ynCUxsDrX32
-         EzGfEGwGjsnkGsc7sIDzTLJ/Eek7fkEsLH24TdmAEZPbKe87+wWEu5j+JfQwUqxgbR
-         Z9024rKOqhd7Pbqvd48GC2SHHXefCfURVsiyVTKIi32EsT5+VKhtcAIJSGohaDU2pL
-         LBFEYUvjpEZ4JWYKCNTdACxDwasYtaeI6/G7j1B0DU7NUGl2y7wgTMpPFbyJ87mydl
-         IcWBcCuWaD4PQ==
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH] f2fs: fix wrong segment count
-Date:   Fri, 10 Feb 2023 13:32:50 -0800
-Message-Id: <20230210213250.3471246-1-jaegeuk@kernel.org>
-X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
+        b=Dgitt2PqkbvssqVkEq2JgV4ZqgYBTuosSIS7Uq6bzvKtuKmLKaimHVucW5eJnhnip
+         AIh3MEZuiL/5Ow4gBDB7S15gGy+OpFW8wjhpo2Qtf82XGnqoY8oXtOPDAqENeMHn4x
+         hETK2ZVV04hbXm4J8eFHJ3kGLIQ4pvJ0PG/J/4YSnel8Z0aiTr34JM0aCyCucHG/RR
+         /VkE16FVTWswznFfrPNfE7SZQ3E+ghnwHyOYR9rCkgm90Fhjwsd1DVd8L8DZ1NWdQU
+         lFSneDlqxtpWJ7+nnW5oMsU4QslO+do1n1iZFqjkno6qkF6nJ7m1kCiv2BmpL0taBG
+         XenMoG0yQIOXQ==
+From:   Tom Zanussi <zanussi@kernel.org>
+To:     rostedt@goodmis.org
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        zwisler@google.com, chinglinyu@google.com
+Subject: [PATCH 0/4] tracing/histogram: Some fixes for new stacktrace variables
+Date:   Fri, 10 Feb 2023 15:33:02 -0600
+Message-Id: <cover.1676063532.git.zanussi@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -51,35 +52,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MAIN_SEGS is for data area, while TOTAL_SEGS includes data and metadata.
+Hi Steve,
 
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
- fs/f2fs/segment.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Here are a few fixes for some problems I saw when playing around
+with the new stacktrace variable/synthetic event patches.
 
-diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
-index 8ee5e5db9287..6003fbaf4b7d 100644
---- a/fs/f2fs/segment.h
-+++ b/fs/f2fs/segment.h
-@@ -720,7 +720,7 @@ static inline unsigned char curseg_alloc_type(struct f2fs_sb_info *sbi,
- 
- static inline void check_seg_range(struct f2fs_sb_info *sbi, unsigned int segno)
- {
--	f2fs_bug_on(sbi, segno > TOTAL_SEGS(sbi) - 1);
-+	f2fs_bug_on(sbi, segno > MAIN_SEGS(sbi) - 1);
- }
- 
- static inline void verify_fio_blkaddr(struct f2fs_io_info *fio)
-@@ -775,7 +775,7 @@ static inline int check_block_count(struct f2fs_sb_info *sbi,
- 
- 	/* check segment usage, and check boundary of a given segment number */
- 	if (unlikely(GET_SIT_VBLOCKS(raw_sit) > usable_blks_per_seg
--					|| segno > TOTAL_SEGS(sbi) - 1)) {
-+					|| segno > MAIN_SEGS(sbi) - 1)) {
- 		f2fs_err(sbi, "Wrong valid blocks %d or segno %u",
- 			 GET_SIT_VBLOCKS(raw_sit), segno);
- 		set_sbi_flag(sbi, SBI_NEED_FSCK);
+Thanks,
+
+Tom
+
+Tom Zanussi (4):
+  tracing/histogram: Don't use strlen to find length of stacktrace
+    variables
+  tracing/histogram: Fix a few problems with stacktrace variable
+    printing
+  tracing/histogram: Fix stacktrace key
+  tracing/histogram: Fix stacktrace histogram Documententation
+
+ Documentation/trace/histogram.rst | 156 +++++++++++++++++-------------
+ kernel/trace/trace_events_hist.c  |  72 +++++++++++---
+ kernel/trace/trace_events_synth.c |   7 +-
+ 3 files changed, 153 insertions(+), 82 deletions(-)
+
 -- 
-2.39.1.581.gbfd45094c4-goog
+2.34.1
 
