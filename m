@@ -2,133 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4374869153C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 01:14:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14409691540
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 01:16:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjBJAOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 19:14:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44252 "EHLO
+        id S229944AbjBJAQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 19:16:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbjBJAOn (ORCPT
+        with ESMTP id S229921AbjBJAP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 19:14:43 -0500
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4845EBC6
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 16:14:42 -0800 (PST)
-Received: from hatter.bewilderbeest.net (97-113-250-99.tukw.qwest.net [97.113.250.99])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id B72BB531;
-        Thu,  9 Feb 2023 16:14:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1675988082;
-        bh=8xr4JKGBtjyVH8iE2NnTKRsloX6eBPwF8GAnW6Ulnpc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xr0NVsslTOaBHj0kdFLggaRt57QQfNKAc5tjhyVgF3e39jzTUBPNB+vIgT1/QBjac
-         A2TDVhnuXkMdkMLDmDF3y9b2TpPzP3HiUTvIQtMHhOZ6jbf+VRL5rfo1uNuD8noVUl
-         RWATlaxOzuch2oZ7GTZjxlADwlteGtzDDhYlQeBk=
-Date:   Thu, 9 Feb 2023 16:14:40 -0800
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Iwona Winiarska <iwona.winiarska@intel.com>,
-        openbmc@lists.ozlabs.org, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
-Subject: Re: [RFC PATCH] hwmon: (peci/cputemp) Number cores as seen by host
- system
-Message-ID: <Y+WMcCukyTvPcN2F@hatter.bewilderbeest.net>
-References: <20230209011632.32668-1-zev@bewilderbeest.net>
- <20230209175001.GA667937@roeck-us.net>
+        Thu, 9 Feb 2023 19:15:57 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E12E5D3EE
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 16:15:56 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id bx22so3637314pjb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 16:15:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1675988155;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tNPbNYoCct7d8eWLCTkz69o5QdTPIXkMuLL30IOxMRg=;
+        b=f/XkvHql8tA6g9Cwp0u4jf8f7Qc7FIeFETTNtvSG78+1PpDL1dUGRltWrU0WGseC2f
+         mDxL9UuS7jf0nQ5VXmX2WYUeMJX2fbUos36ISufxoZKygSb6hJZzBjnoRRV7OxXVyxyS
+         M7zeWiG1IjpRvcHqDAm4O6OD4wpBHUKty7+4YHhYQ9TeLCBGbO00pUEPxKPHnPLEq5Tj
+         5yGd2jb/pIPponyzOm4vV8cOYitmD2Fb4fV30wo+wSI1bm5PFh6GSuqtZx8L2cGpMFxk
+         qZ3MZJjgdq+ZhZsCQ5d34PmZeyi/8LfyVoIiJWWmJP2zmz8z6rvUXdqqhXhq/AGNhx/v
+         nqgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1675988155;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tNPbNYoCct7d8eWLCTkz69o5QdTPIXkMuLL30IOxMRg=;
+        b=nnPzs9IyysYGDMNmb4wjWu+D7+i3VYzwFFhgQ6sO+/w/hTAofJ7ozUQyXxNUkfv4Wd
+         9bcnkXx5Vj2uIetdMLB2XulV7zVefu/98UPEsqAx6kZtaXrpA9jpqsURRLBBz8GsAOdr
+         6bPhZO2xvAwRjsa1SCJ0ghc2XI3wg1V3dLQ/z1liWpPvKaB8lg7SDK5KDI1XKQbc4tQF
+         8szPX8UFp5aSWlNoduWc7H/p5s8RjnrxWQOsOEp4/sjgfHaXMwEbJDUpjKIea3yjq+8/
+         tHEjlCDzziiB6PsjPsGUYBuR3zrtWBzWaUmsZKZ9iP+td8xExecCzG9Lzv2XORXcwwlU
+         pPfw==
+X-Gm-Message-State: AO0yUKWIslVKR4sO764kMmMZk/jmjRZ+BwlWyqjTCs6hnyH5Eny7LPis
+        nTZZ9bKCysRmN4ERhZJ9Ifb1kg==
+X-Google-Smtp-Source: AK7set9i4GZy425eJQ60VEHt8ZyiMscBINILO96QjW9OdkxX3UWegtHHMx/XPbkaa3kfxkBKfne7wA==
+X-Received: by 2002:a17:903:32c3:b0:199:4362:93f6 with SMTP id i3-20020a17090332c300b00199436293f6mr9399565plr.4.1675988155556;
+        Thu, 09 Feb 2023 16:15:55 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id jj5-20020a170903048500b00198d5c7cafasm2109067plb.156.2023.02.09.16.15.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Feb 2023 16:15:55 -0800 (PST)
+Message-ID: <6939adfb-ce2c-1911-19ee-af32f7d9a5ca@kernel.dk>
+Date:   Thu, 9 Feb 2023 17:15:53 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230209175001.GA667937@roeck-us.net>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        SUBJ_AS_SEEN autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] io_uring,audit: don't log IORING_OP_MADVISE
+Content-Language: en-US
+To:     Steve Grubb <sgrubb@redhat.com>,
+        Richard Guy Briggs <rgb@redhat.com>,
+        Paul Moore <paul@paul-moore.com>
+Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
+        Eric Paris <eparis@parisplace.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Stefan Roesch <shr@fb.com>
+References: <b5dfdcd541115c86dbc774aa9dd502c964849c5f.1675282642.git.rgb@redhat.com>
+ <Y+VrSLZKZoAGikUS@madcap2.tricolour.ca>
+ <CAHC9VhTNb4gOpk9=49-ABtYs1DFKqqwXPSc-2bhJX7wcZ82o=g@mail.gmail.com>
+ <13293926.uLZWGnKmhe@x2>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <13293926.uLZWGnKmhe@x2>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 09:50:01AM PST, Guenter Roeck wrote:
->On Wed, Feb 08, 2023 at 05:16:32PM -0800, Zev Weiss wrote:
->> While porting OpenBMC to a new platform with a Xeon Gold 6314U CPU
->> (Ice Lake, 32 cores), I discovered that the core numbering used by the
->> PECI interface appears to correspond to the cores that are present in
->> the physical silicon, rather than those that are actually enabled and
->> usable by the host OS (i.e. it includes cores that the chip was
->> manufactured with but later had fused off).
+On 2/9/23 3:54 PM, Steve Grubb wrote:
+> On Thursday, February 9, 2023 5:37:22 PM EST Paul Moore wrote:
+>> On Thu, Feb 9, 2023 at 4:53 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+>>> On 2023-02-01 16:18, Paul Moore wrote:
+>>>> On Wed, Feb 1, 2023 at 3:34 PM Richard Guy Briggs <rgb@redhat.com> 
+> wrote:
+>>>>> fadvise and madvise both provide hints for caching or access pattern
+>>>>> for file and memory respectively.  Skip them.
+>>>>
+>>>> You forgot to update the first sentence in the commit description :/
+>>>
+>>> I didn't forget.  I updated that sentence to reflect the fact that the
+>>> two should be treated similarly rather than differently.
 >>
->> Thus far the cputemp driver has transparently exposed that numbering
->> to userspace in its 'tempX_label' sysfs files, making the core numbers
->> it reported not align with the core numbering used by the host system,
->> which seems like an unfortunate source of confusion.
+>> Ooookay.  Can we at least agree that the commit description should be
+>> rephrased to make it clear that the patch only adjusts madvise?  Right
+>> now I read the commit description and it sounds like you are adjusting
+>> the behavior for both fadvise and madvise in this patch, which is not
+>> true.
 >>
->> We can instead use a separate counter to label the cores in a
->> contiguous fashion (0 through numcores-1) so that the core numbering
->> reported by the PECI cputemp driver matches the numbering seen by the
->> host.
+>>>> I'm still looking for some type of statement that you've done some
+>>>> homework on the IORING_OP_MADVISE case to ensure that it doesn't end
+>>>> up calling into the LSM, see my previous emails on this.  I need more
+>>>> than "Steve told me to do this".
+>>>>
+>>>> I basically just want to see that some care and thought has gone into
+>>>> this patch to verify it is correct and good.
+>>>
+>>> Steve suggested I look into a number of iouring ops.  I looked at the
+>>> description code and agreed that it wasn't necessary to audit madvise.
+>>> The rationale for fadvise was detemined to have been conflated with
+>>> fallocate and subsequently dropped.  Steve also suggested a number of
+>>> others and after investigation I decided that their current state was
+>>> correct.  *getxattr you've advised against, so it was dropped.  It
+>>> appears fewer modifications were necessary than originally suspected.
 >>
->
->I don't really have an opinion if this change is desirable or not.
->I suspect one could argue either way. I'l definitely want to see
->feedback from others. Any comments or thoughts, anyone ?
->
+>> My concern is that three of the four changes you initially proposed
+>> were rejected, which gives me pause about the fourth.  You mention
+>> that based on your reading of madvise's description you feel auditing
+>> isn't necessary - and you may be right - but based on our experience
+>> so far with this patchset I would like to hear that you have properly
+>> investigated all of the madvise code paths, and I would like that in
+>> the commit description.
+> 
+> I think you're being unnecessarily hard on this. Yes, the commit message 
+> might be touched up. But madvise is advisory in nature. It is not security 
+> relevant. And a grep through the security directory doesn't turn up any 
+> hooks.
 
-Agreed, I'd definitely like to get some input from Intel folks on this.
+Agree, it's getting a bit anal... FWIW, patch looks fine to me.
 
-Though since I realize my initial email didn't quite explain this 
-explicitly, I should probably clarify with an example how weird the 
-numbering can get with the existing code -- on the 32-core CPU I'm 
-working with at the moment, the tempX_label files produce the following 
-core numbers:
+-- 
+Jens Axboe
 
-     Core 0
-     Core 1
-     Core 2
-     Core 3
-     Core 4
-     Core 5
-     Core 6
-     Core 7
-     Core 8
-     Core 9
-     Core 11
-     Core 12
-     Core 13
-     Core 14
-     Core 15
-     Core 18
-     Core 20
-     Core 22
-     Core 23
-     Core 24
-     Core 26
-     Core 27
-     Core 28
-     Core 29
-     Core 30
-     Core 31
-     Core 33
-     Core 34
-     Core 35
-     Core 36
-     Core 38
-     Core 39
-
-i.e. it's not just a different permutation of the expected core numbers, 
-we end up with gaps (e.g. the nonexistence of core 10), and core numbers 
-well in excess of the number of cores the processor really "has" (e.g.  
-number 39) -- all of which seems like a rather confusing thing to see in 
-your BMC's sensor readings.
-
-
-Thanks,
-Zev
 
