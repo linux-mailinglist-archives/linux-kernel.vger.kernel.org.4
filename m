@@ -2,301 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E48691E79
+	by mail.lfdr.de (Postfix) with ESMTP id 49254691E78
 	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 12:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232096AbjBJLiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 06:38:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbjBJLiR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232223AbjBJLiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 10 Feb 2023 06:38:17 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3146472DC2;
-        Fri, 10 Feb 2023 03:38:15 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pQRjE-0005l1-Q8; Fri, 10 Feb 2023 12:38:08 +0100
-Message-ID: <66fc12cd-65b6-0831-89a8-57636453883b@leemhuis.info>
-Date:   Fri, 10 Feb 2023 12:38:07 +0100
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232096AbjBJLiP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 10 Feb 2023 06:38:15 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A373E72DED
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 03:38:13 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso6070725wms.5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 03:38:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=I3AfScb5eZBvuleQTKe5gvMdffqFNjAeOX6lI523hQE=;
+        b=asmkAOnSBKcu3XreoHNmILuUKNc/O5vXcAx16D9bRMvAcqlhx5cTBBNm0tKvQ3rgex
+         f0Bq51Uwmmx0s2dB9RyO9NLeHrxNYWJEK76BNaNLyDrKXfcj4Ynfyrh3Ub0+64672wtg
+         c6s1fETV3nNjhgs/ccwSbzsIRS2caC4jhGyMb+VDouBbN6h+WBm991X8M95leA0HmRmr
+         Omwu2BxnUDZhaXzWKfIh5jIODy5gV1lacSU9icmnYnaq0KryF4K0Npk9zx7F4QCMME25
+         Mu5itB1MRcVrMLpHB448z1asKPcl6ZIdJ5ZtaZZ00JLN/ldWkhxpEUMBefWWL5lHbXtO
+         r0qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I3AfScb5eZBvuleQTKe5gvMdffqFNjAeOX6lI523hQE=;
+        b=gbCL1n2nlWq+8J0oa2dVIdPQzMH6D4vD1GXxyINgpnpHxRFD+mPjTIFddGFEmJhh5q
+         D+z0srDD2bRqmETIP0vzQl6bxEt3hM/Yx3EElOXOOxrR4GRGqYJ3o/oi4ElwFfikp0k6
+         3YdwQwKLYT08UG0zWjG58VzQJt0xH2dJe+u8nncfkftzk+0mnO4CjwyDALIV+zMUneB1
+         F0+/gYJhXkUr1YQez+iqklpLEkEyfDoCN8sv5KfguE1qLjT3GsyFYeZba8VGKc/hVz3t
+         dH82ryJTcwFCh94TMJkDLv9qt9IgSdnTKCXFoHkykLt5XO7lE2yjCwuBksPLDmeiKjQw
+         Q9Mw==
+X-Gm-Message-State: AO0yUKU6RxUWeB4xrIBRSk5Yi4yWJ8KLK/IPmMmvhPenxIZ8WubloqWK
+        b5uMcSTLDVS23DfdmLeRWegC1w==
+X-Google-Smtp-Source: AK7set+uEknYw9udTW1kl3Txp9GCn0dwLcAHml7YyNdx8cs9cBLJqKM2WD3mlV1dCTNf8dW4llZy/A==
+X-Received: by 2002:a05:600c:ccd:b0:3df:e1d8:cd8f with SMTP id fk13-20020a05600c0ccd00b003dfe1d8cd8fmr9580566wmb.6.1676029092269;
+        Fri, 10 Feb 2023 03:38:12 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id j6-20020a05600c42c600b003df245cd853sm4408871wme.44.2023.02.10.03.38.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 03:38:11 -0800 (PST)
+Message-ID: <c06f5b63-2667-2a01-fa1f-7efe4c6f3867@linaro.org>
+Date:   Fri, 10 Feb 2023 12:38:09 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v1] docs: describe how to quickly build Linux
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        regressions@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-References: <fabdb45fa44db2531f0dbe5e88545c49dfb87040.1675252073.git.linux@leemhuis.info>
- <1f217c94-b90f-359a-2142-0d3ae5d84fc6@leemhuis.info>
-In-Reply-To: <1f217c94-b90f-359a-2142-0d3ae5d84fc6@leemhuis.info>
+Subject: Re: [PATCH V2 1/3] dt-bindings: clock: Add Loongson-1 clock
+Content-Language: en-US
+To:     Keguang Zhang <keguang.zhang@gmail.com>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20230209132614.1079198-1-keguang.zhang@gmail.com>
+ <20230209132614.1079198-2-keguang.zhang@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230209132614.1079198-2-keguang.zhang@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1676029095;3d0088ce;
-X-HE-SMSGID: 1pQRjE-0005l1-Q8
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quick update, in case anyone wants an early look at the reworked
-sections that likely will soon be posted as part of a v2:
-
-On 02.02.23 12:15, Linux kernel regression tracking (Thorsten Leemhuis)
-wrote:
-> [adding Konstantin and Greg to the list of recipients]
+On 09/02/2023 14:26, Keguang Zhang wrote:
+> Add devicetree binding document and related header file
+> for the Loongson-1 clock.
 > 
-> On 01.02.23 12:52, Thorsten Leemhuis wrote:
->> Add a text explaining how to quickly build a kernel, as that's something
->> users will often have to do when they want to report an issue or test
->> proposed fixes. This is a huge and frightening task for quite a few
->> users these days, as many rely on pre-compiled kernels and have never
->> built their own. They find help on quite a few websites explaining the
->> process in various ways, but those howtos often omit important details
->> or make things too hard for the 'quickly build just for testing' case
->> that 'localmodconfig' is really useful for. Hence give users something
->> at hand to guide them, as that makes it easier for them to help with
->> testing, debugging, and fixing the kernel.
-> 
-> Side note: after feedback on social media I'll likely switch to a title
-> like "how to quickly configure & build a trimmed-down Linux kernel", as
-> some people from the current title assumed this would be about things
-> like ccache.
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> ---
+> V1 -> V2: Change to one clock controller
+>           Add clock-related dt-binding header file
+>           Fix the warning of dt_binding_check
+> ---
 
-I for now settled for "How to quickly build a trimmed Linux kernel". I
-wonder if "adapt" or "attuned" might be better than "trimmed". I'd
-appreciate any input from native speakers here.
+Thank you for your patch. There is something to discuss/improve.
 
-> I'll also likely will switch to using a localversion file
-> in the buildroot instead of modifying the EXTRAVERSION in the top-level
-> makefile (but I haven't actually tried it yet).
+> diff --git a/include/dt-bindings/clock/loongson,ls1x-clk.h b/include/dt-bindings/clock/loongson,ls1x-clk.h
+> new file mode 100644
+> index 000000000000..579552c5f14b
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/loongson,ls1x-clk.h
+> @@ -0,0 +1,19 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later */
 
-The section in the step by step guide now reads:
+Same license as binding please.
 
-```
- * If you patched your kernel or already have a kernel of the same
-version installed, better tag the one you are about to build by
-extending its release name::
+> +/*
+> + * Loongson-1 clock tree IDs
+> + *
+> + * Copyright (C) 2023 Keguang Zhang <keguang.zhang@gmail.com>
+> + */
 
-     echo "-proposed_fix" > ~/linux/build/localversion
+Best regards,
+Krzysztof
 
-   If you build Linux 6.2-rc4 and later execute ``uname -r`` while
-running that kernel, it will print '6.2-rc4-proposed_fix'.
-```
-
->> [...]
->>
->> The text currently describes two approaches to retrieve Linux' sources
->> using git: the regular clone with linux-stable as a remote and a shallow
->> clone with just one branch from linux-stable. [...]
->
-> [...]>
-> That's why I now strongly consider using the shallow clone method by
-> default in v2 of this text.
-
-TWIMC, I went down that route and took a bit of back and forth to figure
-out a good approach.
-
-The segment in the step-by-step guide now looks like this:
-
-```
- * Retrieve the sources of the Linux version you intend to build; then
-change into the directory holding them, as all further commands in this
-guide are meant to be executed from there.
-
-   *[Note, the following paragraphs describe how to retrieve the sources
-by partially cloning the Linux stable repository. The reference section
-explains two alternatives to such a 'shallow clone': packaged archives
-and a full clone. Use the latter, if downloading a lot of data does not
-bother you, as that will avoid some quirks of shallow clones the
-reference section explains.]*
-
-   Execute the following command to retrieve a fresh mainline codebase::
-
-     git clone --no-checkput --depth 1 -b master \
-       https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git\
-       ~/linux/sources/
-     cd ~/linux/sources/
-
-   If you want to access recent mainline releases and pre-releases,
-deepen you clone's history to the oldest version you are interested in::
-
-     git fetch --shallow-exclude=v6.1
-
-   In case you want to access a stable/longterm release (say v6.1.5),
-simply add the branch holding that series; afterwards fetch the history
-up to the mainline version that started the series (v6.1) or is older::
-
-     git remote set-branches --add origin linux-6.1.y
-     git fetch --shallow-exclude=v6.1
-
-   Now check out the code you are interested in. If you just performed
-the initial clone, you will be able to check out a fresh mainline
-codebase ('origin/master') -- it is ideal for checking whether
-developers already addressed an issue you face::
-
-      git checkout --detach origin/master
-
-   If you deepened your clone, you instead of 'origin/master' can
-specify the version you deepened to; any later releases like 'v6.2' or
-pre-release like 'v6.3-rc1' will work, too. Stable or longterm versions
-like 'v6.1.5' work just the same, if you added the appropriate
-stable/longterm branches as described.
-
-```
-
-
-The corresponding segment in the reference section got somewhat long and
-now looks like this:
-
-
-```
-Download the sources
---------------------
-
-  *Retrieve the sources of the Linux version you intend to build.*
-  [:ref:`...<sources_sbs>`]
-
-The step-by-step guide outlines how to retrieve Linux' sources using a
-shallow git clone. There is more to tell about this method and two
-alternate ways worth describing: packaged archives and a full git clone.
-And the aspects 'wouldn't it be wiser to use a proper pre-release than
-the latest mainline code' and 'how to get an even fresher mainline
-codebase' need elaboration, too.
-
-Unexpected aspects of shallow clones
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The step-by-step guide uses a shallow clone, as it's the best solution
-for most of this document's target audience. There are a few quirks of
-this approach worth mentioning:
-
- * This document in most places uses 'git fetch' with
-'--shallow-exclude=' to specify the tag of the earliest version you care
-about. You alternatively can use the parameter '--shallow-since=' to
-specify an absolute (say '2023-07-15') or relative ('12 months') date to
-define the depth of the history you want to download.
-
- * When running 'git fetch', remember to always specify the oldest
-version or time you care about as shown in the step-by-step guide.
-Otherwise you'll risk downloading nearly the entire git history, which
-will consume quite a bit of time and bandwidth while also stressing the
-servers.
-
-   Note, you don't have to use the same version/date all the time, but
-when you start using a different one git will deepen or flatten the
-history to the specified point. That allows you to retrieve versions you
-initially thought you did not need -- or it will discard the sources of
-older versions, when you want to free up some disk space. The latter
-will happen automatically when using '--shallow-since=' with a relative
-date.
-
- * Be warned, when deepening the history you might encounter an error
-like 'fatal: error in object: unshallow
-1234567890abcdef1234567890abcdef12345678'. In that case run ``git repack
--d`` and try again.
-
- * In case you want to revert changes from a certain version (say Linux
-6.3) or perform a bisection ending on it (v6.2..v6.3), better tell 'git
-fetch' to retrieve objects up to three versions earlier (e.g. 6.0):
-``git describe`` will then be able to describe most commits just like it
-would in a full tree.
-
-Downloading the sources using a packages archive
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-People new to compiling Linux often assume downloading an archive via
-the front-page of https://kernel.org is the best approach to retrieve
-Linux' sources. It actually can be, if you are certain to build just one
-particular kernel version without changing any code. Thing is: you might
-be sure this will be the case, but in practice it then often will turn
-out to be a wrong assumption.
-
-That's because when reporting or debugging an issue developers will
-often ask to give an earlier or later version a try. They also might
-suggest temporarily undoing a commit with 'git revert …' or provide
-various patches to try. Sometimes reporters will also be asked to use
-'git bisect' to find the change causing a problem. These things rely on
-git or are a lot easier and quicker to handle with it.
-
-Additionally, a shallow clone also doesn't add much overhead: when git
-is creating one for just the latest mainline codebase it retrieves only
-a little more data than downloading a packaged archive would.
-
-A shallow clone therefore is often the better choice. If you
-nevertheless want to use a packaged source archive, download one via
-kernel.org; afterwards extract its content to '~/linux/' and change to
-the directory created during extraction. The rest of the step-by-step
-guide will work just fine, apart from things that rely on git -- but
-this mainly concerns the section on successive builds of other versions.
-
-Downloading the sources using a full git clone
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If downloading and storing a lot of data (~4,4 Gigabyte as of early
-2023) is nothing that bothers you, instead of a shallow clone perform a
-full git clone instead. They are a little easier to handle and will have
-the complete development history at hand at any time::
-
-	curl -L
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/clone.bundle
--o ~/linux/linux-stable.git.bundle
-	git clone clone.bundle ~/linux/sources/
-	rm ~/linux/linux-stable.git.bundle
-	cd ~/linux/sources/
-	git remote set-url origin
-	https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-	git fetch --all
-	git checkout --detach origin/master
-
-
-Proper pre-releases (RCs) vs. latest mainline
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-When cloning the sources using git and checking out origin/master, you
-often will retrieve a codebase that is somewhere between the latest and
-the next release or pre-release. This almost always is the code you want
-when giving mainline a shot: pre-releases like v6.1-rc5 are in no way
-special, as they don't get any significant extra testing before being
-published.
-
-There is one exception: you might want to stick to the latest mainline
-release (say v6.1) before its successor's first pre-release (v6.2-rc1)
-is out. That's because compiler errors and other problems are more
-likely to occur during this time, as mainline then is in its 'merge
-window': a usually two week long phase, in which the bulk of the changes
-for the next release is merged.
-
-Avoiding the mainline lag
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The explanations for both the shallow clone and the full clone both
-retrieve the code from the Linux stable git repository. That makes
-things simpler for this document's audience, as it allows easy access to
-both mainline and stable/longterm releases. This approach has just one
-downside:
-
-Changes merged into the mainline repository are only synced to the
-master branch of the Linux stable repository  every few hours. This lag
-most of the time is not something to worry about; but in case you really
-need the latest code, just add the mainline repo as additional remote
-and checkout the code from there::
-
-	git remote add mainline
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-	git fetch --all
-	git checkout --detach mainline/master
-```
-
-Ciao, Thorsten
