@@ -2,119 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2599691B0B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 10:14:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA94691B0F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 10:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231876AbjBJJN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 04:13:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49216 "EHLO
+        id S231804AbjBJJOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 04:14:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231765AbjBJJNr (ORCPT
+        with ESMTP id S231898AbjBJJO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 04:13:47 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40196CC47
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 01:13:35 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id o36so3323884wms.1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 01:13:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HlncjyUCwyJrK1zxs8hOgkWlTAUHyGxnew5NJR5HoOk=;
-        b=ioeihDRpWkLc0NiYcHmP2VjAXuXfJgTno0+GGHtc2ApSbnwf8ZttX4ToE2X1LGl9e3
-         rn0sey7JRnTQvxRc9a3hCc/7r45zXLqRIBZVMQhygpAOE4Kh4evGQl/j2/5F58fj7KSV
-         mkiLmdMz6lwrqwc3wgONkzWFfGxTEUllHMuDNYzHvkFyWPr5YSoA0usILw4IbULG6f7I
-         oXf5tkS+Il5qR0PLlz/SUDOY1KL66rp4mRNBPhrD6skoJVFrascRyehbrjc6xoYBILoc
-         MguYi5u3ynlBMdb34LDZjITpHuQ8jG00Y1tLH4kmK9EWK5Mr4E+koLbcI0+gzvwtr1br
-         Yj0w==
+        Fri, 10 Feb 2023 04:14:29 -0500
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8E87166E;
+        Fri, 10 Feb 2023 01:14:06 -0800 (PST)
+Received: by mail-qt1-f170.google.com with SMTP id w3so5045515qts.7;
+        Fri, 10 Feb 2023 01:14:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HlncjyUCwyJrK1zxs8hOgkWlTAUHyGxnew5NJR5HoOk=;
-        b=tEVzCLITWV6O/GSvn5k4yQgwnMPrwNd45jJCSiA+9ouCyf2ZSc+RqDDVUp4BFWBuRg
-         Q1uKRDq6dawmhRhwCzVkoLSi5Yowox91H8o6uCOxt6b+JlvIioWjQKWvCtPdE3atK/xa
-         l5Bv9uSCho11xYuFvM6Z9npIq4SblfnVe81/EpA4tCDULiPgs6fg93FXmItVrSn/3ozB
-         NKN9ZG7iO+8BUT25j8ZBr8Zxpgir0JM4M2Cox043pQ+JVDxr8AUNEyVfXHte9R0xSWQA
-         y209HNcm6cM6Frqx0JV9Dh4ns4l8rFUpcKDbmjWbcvo+iQDNoSz9npHve3lNv9nVJc4z
-         XbaQ==
-X-Gm-Message-State: AO0yUKXXHIr0+3bfDc07EgyVESDX/huVNFkiT4946eIaMe4tZEZz63MM
-        v/Cfj29L44sRPYZKB25lY4v05g==
-X-Google-Smtp-Source: AK7set9hTzR19H75OZ+KCGwk0xY4ukdRB5fD+F5y3OEC4AKzPLXqs450JrI5RSl1Ypsyl9gIdXzqNA==
-X-Received: by 2002:a05:600c:990:b0:3da:fc07:5e80 with SMTP id w16-20020a05600c099000b003dafc075e80mr1549310wmp.12.1676020414014;
-        Fri, 10 Feb 2023 01:13:34 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l19-20020a05600c2cd300b003dfefe115b9sm4965219wmc.0.2023.02.10.01.13.32
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w8GFHwVww8oer0oGvyL00kwNGTL9qnx5RyHX6+suopg=;
+        b=eBWiksFzU8hB30K2NyTxzd1xb55VNwR2DD1MMrvW5ZtYxGLjc24Q3FMEgizl13pYQf
+         LFac23YueM1648hnlIXMxAoBynjnnDLxmorgz5ZhPHQQfnsLqQsaYxN6ddGA2R3EWe2c
+         r+buVvZRHR8T2KAI85jUA97q+vg6Wo5g83pGF3TJbC4w1848TmzPEZ/a6YQMkdKOGOkf
+         TmZHUvmgNaNJlWSKpJ/WlYtGkkcSeB928WgpjC70KmlDujyBoh9eLt+wkdgIAzn0MwlE
+         QXSQpFjTJTVLiUcS5JFPceSUm+Ldtgkfw14q1kaQ9uhpqmimJ/UBt5iYVgWKTZQuZfO2
+         bFEQ==
+X-Gm-Message-State: AO0yUKVbq5ygx3BepsuDVjTrRovANeyof11dDLk9SeaFULYIJ88YtmRH
+        kPQf+DCVT+DatT1v+WL1xALamjsJ6EsA4TO2
+X-Google-Smtp-Source: AK7set/8dSmexyQ4I8SYauMPhySFpnz2b2LwP8vM/6C/ptYdMfruxjM9fszR1dgvbgpvUKVSTJsmNg==
+X-Received: by 2002:a05:622a:11d6:b0:3b8:4729:8239 with SMTP id n22-20020a05622a11d600b003b847298239mr10642600qtk.12.1676020445065;
+        Fri, 10 Feb 2023 01:14:05 -0800 (PST)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id fp41-20020a05622a50a900b003b9a73cd120sm3021682qtb.17.2023.02.10.01.14.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 01:13:33 -0800 (PST)
-Message-ID: <c1e096fa-5941-cdd8-2cdc-ecf04661a389@linaro.org>
-Date:   Fri, 10 Feb 2023 10:13:31 +0100
+        Fri, 10 Feb 2023 01:14:04 -0800 (PST)
+Received: by mail-yb1-f173.google.com with SMTP id a1so5574748ybj.9;
+        Fri, 10 Feb 2023 01:14:04 -0800 (PST)
+X-Received: by 2002:a5b:24c:0:b0:87a:68fd:181a with SMTP id
+ g12-20020a5b024c000000b0087a68fd181amr1770542ybp.36.1676020444431; Fri, 10
+ Feb 2023 01:14:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/4] soc: aspeed: Add UART DMA support
-Content-Language: en-US
-To:     Chia-Wei Wang <chiawei_wang@aspeedtech.com>,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        jirislaby@kernel.org, linux-serial@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org
-References: <20230210072643.2772-1-chiawei_wang@aspeedtech.com>
- <20230210072643.2772-3-chiawei_wang@aspeedtech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230210072643.2772-3-chiawei_wang@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230202092332.2504-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20230202092332.2504-1-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 10 Feb 2023 10:13:50 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWGd3=vZER4bArO34zyJ2pjhXrViNp8x+8wVfNpKCZqaA@mail.gmail.com>
+Message-ID: <CAMuHMdWGd3=vZER4bArO34zyJ2pjhXrViNp8x+8wVfNpKCZqaA@mail.gmail.com>
+Subject: Re: [PATCH] clk: renesas: rcar-gen3: disable R-Car H3 ES1.*
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/2023 08:26, Chia-Wei Wang wrote:
-> This driver provides DMA support for AST26xx UART and VUART
-> devices. It is useful to offload CPU overhead while using
-> UART/VUART for binary file transfer.
-> 
-> Signed-off-by: Chia-Wei Wang <chiawei_wang@aspeedtech.com>
-> ---
->  drivers/soc/aspeed/Kconfig             |   9 +
->  drivers/soc/aspeed/Makefile            |   1 +
->  drivers/soc/aspeed/aspeed-udma.c       | 447 +++++++++++++++++++++++++
->  include/linux/soc/aspeed/aspeed-udma.h |  34 ++
+Hi Wolfram,
 
-NAK.
+On Thu, Feb 2, 2023 at 10:23 AM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> R-Car H3 ES1.* was only available to an internal development group and
+> needed a lot of quirks and workarounds. These become a maintenance
+> burden now, so our development group decided to remove upstream support
+> for this SoC. Public users only have ES2 onwards.
+>
+> In addition to the ES1 specific removals, a check for it was added
+> preventing the machine to boot further. It may otherwise inherit wrong
+> clock settings from ES2 which could damage the hardware.
+>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-DMA drivers do not go to soc, but to dma subsystem.
+Thank you, queuing in renesas-clk-for-v6.3, as this serves as the
+main gatekeeper for preventing booting on R-Car H3 ES1.x.  Hence
+it should go upstream before any of the other R-Car H3 ES1.x quirk
+handling is removed (in v6.4).
 
->  4 files changed, 491 insertions(+)
->  create mode 100644 drivers/soc/aspeed/aspeed-udma.c
->  create mode 100644 include/linux/soc/aspeed/aspeed-udma.h
-> 
+Gr{oetje,eeting}s,
 
-(...)
+                        Geert
 
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id aspeed_udma_match[] = {
-> +	{ .compatible = "aspeed,ast2600-udma" },
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Undocumented compatible.
-
-Please run scripts/checkpatch.pl and fix reported warnings.
-
-
-
-Best regards,
-Krzysztof
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
