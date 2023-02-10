@@ -2,153 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37105691C93
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 11:18:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC1F691C98
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 11:19:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231904AbjBJKSV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Feb 2023 05:18:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39412 "EHLO
+        id S231976AbjBJKT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 05:19:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbjBJKST (ORCPT
+        with ESMTP id S231795AbjBJKTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 05:18:19 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1561F6CC63;
-        Fri, 10 Feb 2023 02:18:18 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 48C4A4B3;
-        Fri, 10 Feb 2023 02:19:00 -0800 (PST)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 487C03F8C6;
-        Fri, 10 Feb 2023 02:18:16 -0800 (PST)
-Date:   Fri, 10 Feb 2023 10:18:14 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Andreas Feldner <andreas@feldner-bv.de>,
-        Andreas Feldner <pelzi@flying-snail.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: allwinner: minimize irq debounce filter per
- default
-Message-ID: <20230210101814.2d36ae57@donnerap.cambridge.arm.com>
-In-Reply-To: <20230210100620.z6j7rvkiwyu7paij@houat>
-References: <Y+FaVorMl37F5Dve@debian-qemu.internal.flying-snail.de>
-        <20230207011608.2ce24d17@slackpad.lan>
-        <d0534762-3785-ec2d-8d1e-aba0e39f701b@feldner-bv.de>
-        <20230209202952.673d5a60@slackpad.lan>
-        <20230210082936.qefzz4fsp3jpalvp@houat>
-        <20230210094425.474cfba5@donnerap.cambridge.arm.com>
-        <20230210100620.z6j7rvkiwyu7paij@houat>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        Fri, 10 Feb 2023 05:19:25 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044066D8E6;
+        Fri, 10 Feb 2023 02:19:24 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id h24so5250006qtr.0;
+        Fri, 10 Feb 2023 02:19:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yCZqd00XLcn3H5BBn1Pzxmkx7XJk9fwg6p5ZnvuseLk=;
+        b=kCi2bTLuVJnUSE0d2dpQiJWGvGnc+OIZu/v4tYQBHP9T3ZKA/693e8JfBItJa+hWvj
+         D9FfO9lZL2M9HejH/zh5knsSvAOqefM/MN8amCdoHowC8M+9C1+IefITJyfIHo2awLQR
+         dUdtjCUbEoQ0Mox83L9OM1M2xXlNdQC4oIBYz2KnoCO8tydSUHonXgZIEz0U/BaZHsBF
+         fMkr+lk+9laZwIR/kMwZw+C8dgux5BwwnlH8Tjz8ksDmWIJDFE7NvoWBEEr7vfovGIfu
+         YbDOIj7sAqJ4HrDS3FwyEPMxkGJ9A/rkmxR5iyQuTtAJFNxlnqv68MA1ZAIembc94Cv4
+         4JnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yCZqd00XLcn3H5BBn1Pzxmkx7XJk9fwg6p5ZnvuseLk=;
+        b=ra/DrnAABPx44VBYUeyS0nNgmuwmmklV9493b1yY7UpEUUdz38RUVB8HlXrlyDR05S
+         qxv3e0ZEzXezZX0wKwqZMshvnItI7SGMfyJ7lw4x32ewVWmgyPRByaOSRMvJkUXhq+YY
+         wiELYrwO80HyMsV1Y0SfZj7dsiDelSORWBuqXgAv4+mJfPR4KT+cD0NO59nUAdvWhTkF
+         UjU5a9o8l6ILar5xYoiuUY5yF5BlT2z5367FCCmfnfKURSpbMIl1287QiY2mlqSrTx0J
+         Sc3mZaK1YLKB/AITQj/YgO7FzoOk/2UcAM9CIAZfxssWcaJkTfqZ2sDwFXfXLArwZ0JU
+         f/Og==
+X-Gm-Message-State: AO0yUKVH/sivWE9+ol5yw8+4wHtgP5P2sW/KVJ+IDGHn8u211TrqQXpk
+        g5glEhgMkkgWzwJDSeRc8UnKLyI8wRiT8i3JToY=
+X-Google-Smtp-Source: AK7set8bR0KQF+vsQVgkUBdqSNVcDf1IYvUkD7ceRkYWWdLBF1IJ25xJLfofrYsjGbTVN8paTJOWLl2PV1rzkrFnJ9s=
+X-Received: by 2002:ac8:5dce:0:b0:3b8:6cef:4345 with SMTP id
+ e14-20020ac85dce000000b003b86cef4345mr3028572qtx.106.1676024363085; Fri, 10
+ Feb 2023 02:19:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <E5D8BEBA-3C5B-460F-BD2C-39470A793CC3@live.com>
+In-Reply-To: <E5D8BEBA-3C5B-460F-BD2C-39470A793CC3@live.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 10 Feb 2023 12:18:47 +0200
+Message-ID: <CAHp75VcPPDTmpx9jpu3ZoaVH_xBgtaEbDQcJJdqcaXi1J+_q0A@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Touch Bar and Keyboard backlight driver for Intel Macs
+To:     Aditya Garg <gargaditya08@live.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        "jkosina@suse.cz" <jkosina@suse.cz>,
+        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+        Andy Shevchenko <andy@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "ronald@innovation.ch" <ronald@innovation.ch>,
+        "kekrby@gmail.com" <kekrby@gmail.com>,
+        Orlando Chamberlain <orlandoch.dev@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Feb 2023 11:06:20 +0100
-Maxime Ripard <maxime@cerno.tech> wrote:
+On Fri, Feb 10, 2023 at 5:41 AM Aditya Garg <gargaditya08@live.com> wrote:
+>
+> Greetings from t2linux!
+>
+> 2 years ago an attempt was made to send the driver for the Touch Bar on
+> MacBook Pros by Ronald Tschal=C3=A4r [1].
+>
+> Due to some issues pointed out by the maintainers upstream, unfortunately
+> it didn't make it upstream. Now we at t2linux [2] have addressed those
+> issues in this patchset and also improved the touchbar driver for the T2
+> Macs. We also have added a new driver for keyboard backlight support on
+> T2 MacBooks with Magic Keyboard.
+>
+> The first 2 patches of this patchset are the ones sent by Ronald before,
+> with the issues addressed as pointed out in [1].
+>
+> The third patch introduces a new driver, apple-magic-backlight, which add=
+s
+> support for keyboard backlight on T2 MacBooks with the Magic Keyboard.
+>
+> Note: Apart from these drivers, for the T2 Macs, an additional driver
+> shall be required to communicate with the T2 Security Chip, as the Touch
+> Bar, the internal keyboard, trackpad, camera, ambient light sensor,
+> headphone controls, and NCM Ethernet are accessed through a USB VHCI
+> created with DMA channels to the "T2 Bridge Controller" 106b:1801 PCI
+> device. A work in progress linux driver called apple-bce [3], or USB
+> device passthrough to a Linux VM guest on a Windows host with Apple
+> Bootcamp drivers can be used to get Linux these USB devices working and
+> test these patches.
+>
+> [1] https://lore.kernel.org/lkml/20210228012643.69944-1-ronald@innovation=
+.ch/
+> [2] https://t2linux.org/
+> [3] https://github.com/t2linux/apple-bce-drv
 
-> On Fri, Feb 10, 2023 at 09:44:25AM +0000, Andre Przywara wrote:
-> > On Fri, 10 Feb 2023 09:29:36 +0100
-> > Maxime Ripard <maxime@cerno.tech> wrote:
-> > 
-> > Hi Maxime,
-> > 
-> > thanks for the reply!
-> >   
-> > > On Thu, Feb 09, 2023 at 08:29:52PM +0000, Andre Przywara wrote:  
-> > > > > >>   &pio {
-> > > > > >> +	/* 1ï¿½s debounce filter on both IRQ banks */    
-> > > > > > Is that supposed to be <micro> in UTF-8? It seems to have got lost in
-> > > > > > translation, or is that just me?    
-> > > > > O yes, the Greek character slipped into the comment.    
-> > > > > >> +	input-debounce = <1 1>;    
-> > > > > > As mentioned above, I am not so sure this is generic enough to put it
-> > > > > > here for PA. And what is the significance of "1 us", in particular? Is
-> > > > > > that just the smallest value?      
-> > > > > 
-> > > > > Yes indeed it's a bit more complicated than I feel it needs to be. The
-> > > > > configuration is taken as microseconds and translated into the best
-> > > > > matching clock and divider by the driver. However, 0 is not translated
-> > > > > to the lowest divider of the high speed clock as would be logical if
-> > > > > you ask for zero microseconds, but to "leave at default". The default
-> > > > > of the board is 0 in the register, translating to lowest divider on the
-> > > > > _low_ speed clock.    
-> > > > 
-> > > > I'd say the "if (!debounce) continue;" code is just to defend against
-> > > > the division by zero, which would be the next statement to execute.
-> > > > 
-> > > > We might want to change that to interpret 0 as "lowest possible", which
-> > > > would be 24MHz/1. Please feel free to send a patch in this regard, and
-> > > > CC: Maxime, to get some input on that idea.    
-> > > 
-> > > I never had any complaint on that part either, so the default looks sane
-> > > to me.
-> > > 
-> > > If some board needs a higher debouncing rate, then we should obviously
-> > > set it up in the device tree of that board, but changing it for every
-> > > user also introduces the risk of breaking other boards that actually
-> > > require a lower debouncing frequency.  
-> > 
-> > Yeah, we definitely should keep the default at 32KHz/1, as this is also
-> > the hardware reset value.
-> > 
-> > Not sure if you were actually arguing this, but the change I sketched
-> > above (interpreting 0 as 24MHz/1) is separate though, as the current
-> > default is "no DT property", and not 0. There is no input-debounce
-> > property user in the kernel tree at the moment, so we wouldn't break
-> > anyone. The only thing that would change is if a downstream user was
-> > relying on "0" being interpreted as "skip the setup", which isn't
-> > really documented and could be argued to be an implementation detail.
-> > 
-> > So I'd suggest to implement 0 as "lowest possible", and documenting that
-> > and the 32KHz/1 default if no property is given.  
-> 
-> Ah, my bad.
-> 
-> There's another thing to consider: there's already a generic per-pin
-> input-debounce property in pinctrl.
-> 
-> Since we can't control it per pin but per bank, we moved it to the
-> controller back then, but there's always been this (implicit)
-> expectation that it was behaving the same way.
-> 
-> And the generic, per-pin, input-debounce documentation says:
-> 
-> > Takes the debounce time in usec as argument or 0 to disable debouncing  
-> 
-> I agree that silently ignoring it is not great, but interpreting 0 as
-> the lowest possible is breaking that behaviour which, I believe, is a
-> worse outcome.
+Quick observation. Do you miss the Co-developed-by: tags in the patches?
 
-Is it really? If I understand the hardware manuals correctly, we cannot
-really turn that feature off, so isn't the lowest possible time period (24
-MHz/1 at the moment) the closest we can get to "turn it off"? So
-implementing this would bring us actually closer to the documented
-behaviour? Or did I get the meaning of this time period wrong?
-At least that's my understanding of how it fixed Andreas' problem: 1µs
-is still not "off", but much better than the 31µs of the default. The new
-0 would then be 0.041µs.
-
-Cheers,
-Andre
-
-> So I'm not sure what's the best course of action here. Rejecting the
-> configuration entirely would prevent the entire pinctrl driver from
-> probing which sounds really bad. Maybe we could just print an error that
-> we rejected it to make it more obvious?
-> 
-> Maxime
-
+--=20
+With Best Regards,
+Andy Shevchenko
