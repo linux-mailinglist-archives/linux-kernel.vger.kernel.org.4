@@ -2,68 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1842C6916DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 03:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 670586916DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 03:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjBJCve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 21:51:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
+        id S230413AbjBJCwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 21:52:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjBJCvc (ORCPT
+        with ESMTP id S229745AbjBJCv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 21:51:32 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819827431E;
-        Thu,  9 Feb 2023 18:51:03 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sendonly@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 866D541EF0;
-        Fri, 10 Feb 2023 02:50:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1675997461; bh=oD5HXirQeIT2xQaWWuTkE6auxXaVpayxwb02Xu0ejvk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=phtFB7EMV0dIgZRy6d78jqpkAKFrcJvZYPNkaq/BBPM7eJL4vUkz0H84W/0FBqV5L
-         tU4eNzOAiUujSEX/dtAfzxu12UO087CEkFrXQWq7iWoTi/3uHCPslYnaSih2rLyqpt
-         NwxxFZpw8EwXXhpW/lCM8PYubVCm+4Jvr/hVXB5YeJt+YL3DPWpd1uVw2oY9qlNTjY
-         y9FnYsHIt2+ia0IGNGsMd7zel4iXNdRVEm6BbtPgpxKbFlvmT+RPzLHiV67+inwATj
-         /DdHGtKlAWbp9SwdeUpKZJKfFYIQdbGzRW+ec42tVWTSNgtLcC/IxZSegy2MsmET5E
-         UJL4G3RrEyCMg==
-From:   Hector Martin <marcan@marcan.st>
-To:     Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Alexander Prutskov <alep@cypress.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
-        Wright Feng <wright.feng@cypress.com>,
-        Ian Lin <ian.lin@infineon.com>,
-        Soontak Lee <soontak.lee@cypress.com>,
-        Joseph chuang <jiac@cypress.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Aditya Garg <gargaditya08@live.com>,
-        Jonas Gorski <jonas.gorski@gmail.com>, asahi@lists.linux.dev,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arend van Spriel <arend.vanspriel@broadcom.com>
-Subject: [PATCH v3 4/4] brcmfmac: pcie: Perform correct BCM4364 firmware selection
-Date:   Fri, 10 Feb 2023 11:50:09 +0900
-Message-Id: <20230210025009.21873-5-marcan@marcan.st>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230210025009.21873-1-marcan@marcan.st>
-References: <20230210025009.21873-1-marcan@marcan.st>
+        Thu, 9 Feb 2023 21:51:59 -0500
+Received: from out-141.mta1.migadu.com (out-141.mta1.migadu.com [IPv6:2001:41d0:203:375::8d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB71721C9
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 18:51:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1675997471;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AHgREwhLRCk8vMbrhrQBJ0zTZ03LfJvnd0UiicWdo8k=;
+        b=xGCaTyzoq+vrRO4mVJgaqDdS6ow/C0VQ47t2zQq1pEtSpJUvo/XmDodD48RAUgFCuAMtOy
+        glIYrIdjnithUBJvBFDxW/e0fTlIdPRX0rB1ZN4CfQJzwOWYlViT31gYVx/fu32IUkOCMQ
+        f28ocdjcP59woRKDdMntU1Yw7qR7Tv0=
+Date:   Fri, 10 Feb 2023 02:51:06 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   "Yajun Deng" <yajun.deng@linux.dev>
+Message-ID: <fa878915627b52d2e6fdf838b96a2f2f@linux.dev>
+Subject: Re: [PATCH v2] mm/page_alloc: optimize find_suitable_fallback()
+ and fallbacks array
+To:     "Zi Yan" <ziy@nvidia.com>
+Cc:     akpm@linux-foundation.org, mgorman@techsingularity.net,
+        david@redhat.com, vbabka@suse.cz, rppt@linux.ibm.com,
+        osalvador@suse.de, rppt@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <626a5f4c4996f57631a8e1877c7646e5@linux.dev>
+References: <626a5f4c4996f57631a8e1877c7646e5@linux.dev>
+ <494D9F5D-33A4-48B4-911B-9A75CFC9BC67@nvidia.com>
+ <4C196D76-49A9-4B06-A51F-D8A13109DF3B@nvidia.com>
+ <20230209101144.496144-1-yajun.deng@linux.dev>
+ <ddc2d9001ef9d44651b62869ff9575b6@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -73,87 +55,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This chip exists in two revisions (B2=r3 and B3=r4) on different
-platforms, and was added without regard to doing proper firmware
-selection or differentiating between them. Fix this to have proper
-per-revision firmwares and support Apple NVRAM selection.
-
-Revision B2 is present on at least these Apple T2 Macs:
-
-kauai:    MacBook Pro 15" (Touch/2018-2019)
-maui:     MacBook Pro 13" (Touch/2018-2019)
-lanai:    Mac mini (Late 2018)
-ekans:    iMac Pro 27" (5K, Late 2017)
-
-And these non-T2 Macs:
-
-nihau:    iMac 27" (5K, 2019)
-
-Revision B3 is present on at least these Apple T2 Macs:
-
-bali:     MacBook Pro 16" (2019)
-trinidad: MacBook Pro 13" (2020, 4 TB3)
-borneo:   MacBook Pro 16" (2019, 5600M)
-kahana:   Mac Pro (2019)
-kahana:   Mac Pro (2019, Rack)
-hanauma:  iMac 27" (5K, 2020)
-kure:     iMac 27" (5K, 2020, 5700/XT)
-
-v2: Also fix the firmware interface for 4364, from BCA to WCC.
-
-Fixes: 24f0bd136264 ("brcmfmac: add the BRCM 4364 found in MacBook Pro 15,2")
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
-Signed-off-by: Hector Martin <marcan@marcan.st>
----
- .../net/wireless/broadcom/brcm80211/brcmfmac/pcie.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-index d54394885af7..f320b6ce8bff 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-@@ -57,7 +57,8 @@ BRCMF_FW_CLM_DEF(4356, "brcmfmac4356-pcie");
- BRCMF_FW_CLM_DEF(43570, "brcmfmac43570-pcie");
- BRCMF_FW_DEF(4358, "brcmfmac4358-pcie");
- BRCMF_FW_DEF(4359, "brcmfmac4359-pcie");
--BRCMF_FW_DEF(4364, "brcmfmac4364-pcie");
-+BRCMF_FW_CLM_DEF(4364B2, "brcmfmac4364b2-pcie");
-+BRCMF_FW_CLM_DEF(4364B3, "brcmfmac4364b3-pcie");
- BRCMF_FW_DEF(4365B, "brcmfmac4365b-pcie");
- BRCMF_FW_DEF(4365C, "brcmfmac4365c-pcie");
- BRCMF_FW_DEF(4366B, "brcmfmac4366b-pcie");
-@@ -88,7 +89,8 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
- 	BRCMF_FW_ENTRY(BRCM_CC_43570_CHIP_ID, 0xFFFFFFFF, 43570),
- 	BRCMF_FW_ENTRY(BRCM_CC_4358_CHIP_ID, 0xFFFFFFFF, 4358),
- 	BRCMF_FW_ENTRY(BRCM_CC_4359_CHIP_ID, 0xFFFFFFFF, 4359),
--	BRCMF_FW_ENTRY(BRCM_CC_4364_CHIP_ID, 0xFFFFFFFF, 4364),
-+	BRCMF_FW_ENTRY(BRCM_CC_4364_CHIP_ID, 0x0000000F, 4364B2), /* 3 */
-+	BRCMF_FW_ENTRY(BRCM_CC_4364_CHIP_ID, 0xFFFFFFF0, 4364B3), /* 4 */
- 	BRCMF_FW_ENTRY(BRCM_CC_4365_CHIP_ID, 0x0000000F, 4365B),
- 	BRCMF_FW_ENTRY(BRCM_CC_4365_CHIP_ID, 0xFFFFFFF0, 4365C),
- 	BRCMF_FW_ENTRY(BRCM_CC_4366_CHIP_ID, 0x0000000F, 4366B),
-@@ -2003,6 +2005,11 @@ static int brcmf_pcie_read_otp(struct brcmf_pciedev_info *devinfo)
- 		base = 0x8c0;
- 		words = 0xb2;
- 		break;
-+	case BRCM_CC_4364_CHIP_ID:
-+		coreid = BCMA_CORE_CHIPCOMMON;
-+		base = 0x8c0;
-+		words = 0x1a0;
-+		break;
- 	case BRCM_CC_4377_CHIP_ID:
- 	case BRCM_CC_4378_CHIP_ID:
- 		coreid = BCMA_CORE_GCI;
-@@ -2611,7 +2618,7 @@ static const struct pci_device_id brcmf_pcie_devid_table[] = {
- 	BRCMF_PCIE_DEVICE(BRCM_PCIE_43602_2G_DEVICE_ID, WCC),
- 	BRCMF_PCIE_DEVICE(BRCM_PCIE_43602_5G_DEVICE_ID, WCC),
- 	BRCMF_PCIE_DEVICE(BRCM_PCIE_43602_RAW_DEVICE_ID, WCC),
--	BRCMF_PCIE_DEVICE(BRCM_PCIE_4364_DEVICE_ID, BCA),
-+	BRCMF_PCIE_DEVICE(BRCM_PCIE_4364_DEVICE_ID, WCC),
- 	BRCMF_PCIE_DEVICE(BRCM_PCIE_4365_DEVICE_ID, BCA),
- 	BRCMF_PCIE_DEVICE(BRCM_PCIE_4365_2G_DEVICE_ID, BCA),
- 	BRCMF_PCIE_DEVICE(BRCM_PCIE_4365_5G_DEVICE_ID, BCA),
--- 
-2.35.1
-
+February 10, 2023 10:33 AM, "Yajun Deng" <yajun.deng@linux.dev> wrote:=0A=
+=0A> February 10, 2023 10:14 AM, "Zi Yan" <ziy@nvidia.com> wrote:=0A> =0A=
+>> On 9 Feb 2023, at 20:57, Yajun Deng wrote:=0A>> =0A>>> February 9, 202=
+3 11:50 PM, "Zi Yan" <ziy@nvidia.com> wrote:=0A>> =0A>> On 9 Feb 2023, at=
+ 5:11, Yajun Deng wrote:=0A>>> There is no need to execute the next loop =
+if it not return in the first=0A>>> loop. So add a break at the end of th=
+e loop.=0A>> =0A>> Can you explain why? If it is the case, MIGRATE_UNMOVA=
+BLE cannot fall back=0A>> to MIGRATE_MOVABLE? And MIGRATE_MOVABLE cannot =
+fall back to MIGRATE_UNMOVABLE?=0A>> And MIGRATE_RECLAIMABLE cannot fall =
+back to MIGRATE_MOVABLE?=0A>>> The return in the loop is only related to =
+'order', 'migratetype' and 'only_stealable'=0A>>> variables. Even if it e=
+xecute the next loop, it can't change the result. So the loop=0A>>> can b=
+e broken if the first loop can't return.=0A>> =0A>> OK. Got it. Would the=
+ code below look better?=0A>> =0A>> for (i =3D 0; i < MIGRATE_PCPTYPES - =
+1 ; i++) {=0A>> fallback_mt =3D fallbacks[migratetype][i];=0A>> if (free_=
+area_empty(area, fallback_mt))=0A>> continue;=0A>> }=0A>> =0A>> if (can_s=
+teal_fallback(order, migratetype))=0A>> *can_steal =3D true;=0A>> =0A>> i=
+f (!only_stealable || *can_steal)=0A>> return fallback_mt;=0A>> =0A>> ret=
+urn -1;=0A> =0A> Yes, I'll submit a v3 patch.=0A> Thanks.=0A> =0A=0AI fou=
+nd a logical error in your code. It should be like this:=0A=0A        for=
+ (i =3D 0; i < MIGRATE_PCPTYPES - 1 ; i++) {=0A                fallback_m=
+t =3D fallbacks[migratetype][i];=0A                if (!free_area_empty(a=
+rea, fallback_mt))=0A                        break;=0A        }=0A=0A    =
+    if (can_steal_fallback(order, migratetype))=0A                *can_st=
+eal =3D true;=0A=0A        if (!only_stealable || *can_steal)=0A         =
+       return fallback_mt;=0A=0A        return -1;=0A=0AThis code will mo=
+dify the logic to the opposite.=0ASo can anyone tell me if I should use t=
+his code or the v2 patch?=0A=0A=0A>>> At the same time, add !migratetype_=
+is_mergeable() before the loop and=0A>>> reduce the first index size from=
+ MIGRATE_TYPES to MIGRATE_PCPTYPES in=0A>>> fallbacks array.=0A>> =0A>> Y=
+ou sent a patch: https://lore.kernel.org/all/20230203100132.1627787-1-yaj=
+un.deng@linux.dev/T/#u,=0A>> why not squash this one into that? Why do=0A=
+>> we need two separate small patches working on the same code?=0A>>> Yes=
+, this is better, but I overlooked this one when I sent the first patch. =
+It is already merged.=0A>>> =0A>>> As Vlastimil Babka said, reduce the fi=
+rst index from MIGRATE_TYPES to MIGRATE_PCPTYPES may be=0A>>> cause out o=
+f bounds access of the shrinked fallbacks array If we don't judge the ran=
+ge of=0A>>> migratetype. But this doesn't happen with the second index.=
+=0A>> =0A>> Thanks.=0A>>> Signed-off-by: Yajun Deng <yajun.deng@linux.dev=
+>=0A>>> Acked-by: Vlastimil Babka <vbabka@suse.cz>=0A>>> ---=0A>>> includ=
+e/linux/mmzone.h | 2 +-=0A>>> mm/page_alloc.c | 11 +++++------=0A>>> 2 fi=
+les changed, 6 insertions(+), 7 deletions(-)=0A>>> =0A>>> diff --git a/in=
+clude/linux/mmzone.h b/include/linux/mmzone.h=0A>>> index ab94985ee7d9..0=
+a817b8c7fb2 100644=0A>>> --- a/include/linux/mmzone.h=0A>>> +++ b/include=
+/linux/mmzone.h=0A>>> @@ -85,7 +85,7 @@ static inline bool is_migrate_mov=
+able(int mt)=0A>>> * Check whether a migratetype can be merged with anoth=
+er migratetype.=0A>>> *=0A>>> * It is only mergeable when it can fall bac=
+k to other migratetypes for=0A>>> - * allocation. See fallbacks[MIGRATE_T=
+YPES][3] in page_alloc.c.=0A>>> + * allocation. See fallbacks[][] array i=
+n page_alloc.c.=0A>>> */=0A>>> static inline bool migratetype_is_mergeabl=
+e(int mt)=0A>>> {=0A>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c=0A=
+>>> index 1113483fa6c5..536e8d838fb5 100644=0A>>> --- a/mm/page_alloc.c=
+=0A>>> +++ b/mm/page_alloc.c=0A>>> @@ -2603,7 +2603,7 @@ struct page *__r=
+mqueue_smallest(struct zone *zone, unsigned int order,=0A>>> *=0A>>> * Th=
+e other migratetypes do not have fallbacks.=0A>>> */=0A>>> -static int fa=
+llbacks[MIGRATE_TYPES][MIGRATE_PCPTYPES - 1] =3D {=0A>>> +static int fall=
+backs[MIGRATE_PCPTYPES][MIGRATE_PCPTYPES - 1] =3D {=0A>>> [MIGRATE_UNMOVA=
+BLE] =3D { MIGRATE_RECLAIMABLE, MIGRATE_MOVABLE },=0A>>> [MIGRATE_MOVABLE=
+] =3D { MIGRATE_RECLAIMABLE, MIGRATE_UNMOVABLE },=0A>>> [MIGRATE_RECLAIMA=
+BLE] =3D { MIGRATE_UNMOVABLE, MIGRATE_MOVABLE },=0A>>> @@ -2861,7 +2861,7=
+ @@ int find_suitable_fallback(struct free_area *area, unsigned int order=
+,=0A>>> int i;=0A>>> int fallback_mt;=0A>>> =0A>>> - if (area->nr_free =
+=3D=3D 0)=0A>>> + if (area->nr_free =3D=3D 0 || !migratetype_is_mergeable=
+(migratetype))=0A>>> return -1;=0A>>> =0A>>> *can_steal =3D false;=0A>>> =
+@@ -2873,11 +2873,10 @@ int find_suitable_fallback(struct free_area *area=
+, unsigned int order,=0A>>> if (can_steal_fallback(order, migratetype))=
+=0A>>> *can_steal =3D true;=0A>>> =0A>>> - if (!only_stealable)=0A>>> - r=
+eturn fallback_mt;=0A>>> -=0A>>> - if (*can_steal)=0A>>> + if (!only_stea=
+lable || *can_steal)=0A>>> return fallback_mt;=0A>>> + else=0A>>> + break=
+;=0A>>> }=0A>>> =0A>>> return -1;=0A>>> --=0A>>> 2.25.1=0A>> =0A>> --=0A>=
+> Best Regards,=0A>> Yan, Zi=0A>> =0A>> --=0A>> Best Regards,=0A>> Yan, Z=
+i
