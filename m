@@ -2,167 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 475D56922AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E08616922B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 16:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232738AbjBJPxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 10:53:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47622 "EHLO
+        id S232749AbjBJPyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 10:54:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231954AbjBJPxn (ORCPT
+        with ESMTP id S232026AbjBJPyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 10:53:43 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFC94B749;
-        Fri, 10 Feb 2023 07:53:42 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-142b72a728fso7156004fac.9;
-        Fri, 10 Feb 2023 07:53:42 -0800 (PST)
+        Fri, 10 Feb 2023 10:54:16 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815F05FB44
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:54:15 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id eq11so5076283edb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 07:54:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zSFRNBGbg5RyVjgWiI+7ths83CFO6oNClYx+2xqQNtI=;
-        b=OcT4ZGtq/U5q/qWwcF2XlCd9Zdq0FB1Dxiqi/hbC43HgQS0TKqov6/Kfc2E0Qwo8WM
-         flozifGrCLGtQcoEWhlje3bH5qUg9ARuzchUATFH3nA8ou0cYru3xPm1jaQPT5iuE/Xg
-         MDk5QrF5f4c6NCttHF6q6bikO9CC+tg69Nx0sitFZVjMzKhYEzLjTUgYAOmuoNqwvh20
-         Mofgm+6ZPOjHRS9S/gFOvPUYoyWlMBetMJakeypEOSV6qAprF87U58HhpLM8zH1+ThjD
-         RDBWaAjaui98pVRdTFldn/yJK2PtZTreBfgG+DBeoAEA+MuQ4q+gjw/WiluXvgdG7SO4
-         wm0g==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RFOHltJDX4HqYupfofGUo17e9ZNMA+v0JnnvnsIGwB8=;
+        b=D47BwzV6CERtXj0Y2bEgghOqAC1KeNaqCp1FEqrMtuG5ePSCPK0yWzJdajxE47Xyml
+         2SBvHRTJ7EZfSSaBo1+tHARKTT/Esv68g6mDz0wGxnM0i8rf7+seOdLNKJD60nrq+SB9
+         W0ujkM+7Y47DIGu0spGqVhBcI57Zl7AbRNpdRuMy/35Q/7JBZXH8CRZGloRv2WFc75JF
+         BUYRE4vrZuiyY3NThL1lFD2WNN/z/fYPG0qi7+Op61CT4B4qlgo1z2b8ZkL5xbvCt/q7
+         k4FBFHCN6rZ2sr8xMmPBNSDwakvyc7MBjqN+VZDidDbVOab3Cfbv9GFnkYgptGuQKHps
+         jY3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zSFRNBGbg5RyVjgWiI+7ths83CFO6oNClYx+2xqQNtI=;
-        b=IKTRShxl0dC49MBSxbhm91FZAQJZlJYVihbbNayYowxCqTBFAB/1hTPWO5sOHzzOxk
-         VPoD16Ss9MuuMeRDtTXs/UP3/kmqDFh/kb/dLZ5avgUcxypLta4FEa/a9BIBXJKxImBz
-         SXBygNuX+T+uJzBGFdOrs0YH9O9ugGz+QgV1CulJpcNyEHWoSYsKYQLzRk59VTMTMRTV
-         JzcFMXRpDh+gh4HP1yi5rs95LOlp9nq+/bQAduZDJPGvTDxI97CLEneZArz52jZbVsgo
-         KZW0bqKPTW6b0wtWXUxHGHDQQy+YgW8faCf4qtsWZcuukYJMlw6mRed74p13MRQ1c61T
-         9WoQ==
-X-Gm-Message-State: AO0yUKX6wFtXm4mwpA82EeYP3JfjbWwgaylzek/s3vbeJWmf42YyyGde
-        uchy51g9NMiiQ4LsD3OEw1VvYxK3ndwPB3GT1lw=
-X-Google-Smtp-Source: AK7set+qcoWEy9BYLGru9/034H+UQQd/562uEsdB2l51urNRCUIVKIl8Rlv7cIg64dgBI4M0+lgIJ0rB927Y0qI3KvQ=
-X-Received: by 2002:a05:6870:13d1:b0:163:a303:fe2f with SMTP id
- 17-20020a05687013d100b00163a303fe2fmr1456936oat.96.1676044421471; Fri, 10 Feb
- 2023 07:53:41 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RFOHltJDX4HqYupfofGUo17e9ZNMA+v0JnnvnsIGwB8=;
+        b=AuAwOVvKJY4DvIQyD9I94FYDb+UhP+paj4YBChrSdAZSWX1AnDw73zhux13Th8s9Fb
+         C8NANwlvF9HBDw+5KXcsm4ZWcZYZmJ4yTPUGVFd2U7m9kIfe9SQ2RCwHTr3JM3wj+bfE
+         s+QbHrNLMcpyXFTn0z9mHx4xctVsXUZeGomxIwIMnRNuw0aXpJqdt5zLym9Dv7lOU9Vr
+         IvmzPsz+rHhi9SzTqIa3LDsFC0kW5FmQ4J6eulJalpA92ZVYfErLhDnlcCYKC+vhiCRs
+         qI2Af7Qwq7Q/yX9LTgdSMO9ZDzIw/U+lRYB6XOsRjzp6Uyqc/HodEJINKIpCOLRxLiMU
+         WgHQ==
+X-Gm-Message-State: AO0yUKXEGTaSYFXaMPYrV9tqZJfqB2GGzyyia9VbC32Qy5hEjPSaTeUX
+        6bjlT/s/2B9ZXb7or+RDBNCDeg==
+X-Google-Smtp-Source: AK7set/TVcHbOGmvCIoayuAWCd9zPG2uIyMdoJSsxD8eiwCLiVSmf8ACzfIGl8PdaKvwB0WigJlacw==
+X-Received: by 2002:a50:9b18:0:b0:4ac:b31c:83d3 with SMTP id o24-20020a509b18000000b004acb31c83d3mr726693edi.14.1676044454141;
+        Fri, 10 Feb 2023 07:54:14 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id m2-20020a509302000000b004aad8d2158dsm2368436eda.66.2023.02.10.07.54.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 07:54:13 -0800 (PST)
+Message-ID: <880e691a-0512-6325-f27c-9be59abdd647@linaro.org>
+Date:   Fri, 10 Feb 2023 17:54:12 +0200
 MIME-Version: 1.0
-References: <20230210044826.9834-1-orlandoch.dev@gmail.com> <20230210044826.9834-10-orlandoch.dev@gmail.com>
-In-Reply-To: <20230210044826.9834-10-orlandoch.dev@gmail.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 10 Feb 2023 10:53:28 -0500
-Message-ID: <CADnq5_PVsrk4+K45kVgU=r98B9GgC2CxbC8AvGUXRtv2sZAHPg@mail.gmail.com>
-Subject: Re: [RFC PATCH 9/9] drm/amdgpu: register a vga_switcheroo client for
- all GPUs that are not thunderbolt attached
-To:     Orlando Chamberlain <orlandoch.dev@gmail.com>
-Cc:     platform-driver-x86@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        Rander Wang <rander.wang@intel.com>,
-        YiPeng Chai <YiPeng.Chai@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Evan Quan <evan.quan@amd.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Yong Zhi <yong.zhi@intel.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Bokun Zhang <Bokun.Zhang@amd.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Kerem Karabay <kekrby@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jack Xiao <Jack.Xiao@amd.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Aditya Garg <gargaditya08@live.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 5/5] arm64: dts: qcom: sm8450: add dp controller
+Content-Language: en-GB
+To:     neil.armstrong@linaro.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?B?QW1hZGV1c3ogU8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230206-topic-sm8450-upstream-dp-controller-v3-0-636ef9e99932@linaro.org>
+ <20230206-topic-sm8450-upstream-dp-controller-v3-5-636ef9e99932@linaro.org>
+ <347a5193-f7b1-7f8e-0c60-3d435bdf952c@linaro.org>
+ <f5a26fff-2dc2-2397-a80c-2477176a5864@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <f5a26fff-2dc2-2397-a80c-2477176a5864@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 3:04 AM Orlando Chamberlain
-<orlandoch.dev@gmail.com> wrote:
->
-> From: Kerem Karabay <kekrby@gmail.com>
->
-> Commit 3840c5bcc245 ("drm/amdgpu: disentangle runtime pm and
-> vga_switcheroo") made amdgpu only register a vga_switcheroo client for
-> GPU's with PX, however AMD GPUs in dual gpu Apple Macbooks do need to
-> register, but don't have PX. Instead of AMD's PX, they use apple-gmux.
+On 10/02/2023 17:28, Neil Armstrong wrote:
+> On 10/02/2023 16:24, Dmitry Baryshkov wrote:
+>> On 10/02/2023 16:44, Neil Armstrong wrote:
+>>> Add the Display Port controller subnode to the MDSS node.
+>>>
+>>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>>> ---
+>>>   arch/arm64/boot/dts/qcom/sm8450.dtsi | 79 
+>>> ++++++++++++++++++++++++++++++++++++
+>>>   1 file changed, 79 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi 
+>>> b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>>> index 6caa2c8efb46..72d54beb7d7c 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>>> @@ -2751,6 +2751,13 @@ dpu_intf2_out: endpoint {
+>>>                           };
+>>>                       };
+>>> +                    port@2 {
+>>> +                        reg = <2>;
+>>> +                        dpu_intf0_out: endpoint {
+>>> +                            remote-endpoint = <&mdss_dp0_in>;
+>>> +                        };
+>>> +                    };
+>>> +
+>>>                   };
+>>>                   mdp_opp_table: opp-table {
+>>> @@ -2783,6 +2790,78 @@ opp-500000000 {
+>>>                   };
+>>>               };
+>>> +            mdss_dp0: displayport-controller@ae90000 {
+>>> +                compatible = "qcom,sm8350-dp";
+> 
+> Exact, must fix.
+> 
+>>
+>> Missing "qcom,sm8450-dp". As I wrote in the comment to patch 1, I'd 
+>> suggest having just a single entry here rather than keeping both 8350 
+>> and 8450 entries.
+>>
+>>> +                reg = <0 0xae90000 0 0xfc>,
+>>> +                      <0 0xae90200 0 0xc0>,
+>>> +                      <0 0xae90400 0 0x770>,
+>>> +                      <0 0xae91000 0 0x98>,
+>>> +                      <0 0xae91400 0 0x98>;
+>>
+>>
+>> While this sounds correct, usually we used the even size here (0x200, 
+>> 0x400, etc.). Can we please switch to it (especially since sm8350-dp 
+>> uses even sizes).
+> 
+> I don't have access to registers layout for HDK8450 but the system 
+> freezes when using even sizes, using
+> the exact register size works fine.
 
-Is there a way to detect apple-gmux instead?  Otherwise, we register
-vga_switcheroo on any system with multiple GPUs which is not what we
-want.
+Interesting. Could you please trace, what exactly makes it fail, since 
+specifying bigger region size should not cause such issues.
 
-Alex
+-- 
+With best wishes
+Dmitry
 
->
-> Revert to the old logic of registering for all non-thunderbolt gpus,
-> like radeon and nouveau.
->
-> Fixes: 3840c5bcc245 ("drm/amdgpu: disentangle runtime pm and vga_switcheroo")
-> Signed-off-by: Kerem Karabay <kekrby@gmail.com>
-> [Orlando Chamberlain <orlandoch.dev@gmail.com>: add commit description]
-> Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 18 +++++++++++-------
->  1 file changed, 11 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> index 2f28a8c02f64..0bb553a61552 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> @@ -3919,12 +3919,13 @@ int amdgpu_device_init(struct amdgpu_device *adev,
->         if ((adev->pdev->class >> 8) == PCI_CLASS_DISPLAY_VGA)
->                 vga_client_register(adev->pdev, amdgpu_device_vga_set_decode);
->
-> -       if (amdgpu_device_supports_px(ddev)) {
-> -               px = true;
-> -               vga_switcheroo_register_client(adev->pdev,
-> -                                              &amdgpu_switcheroo_ops, px);
-> +       px = amdgpu_device_supports_px(ddev);
-> +
-> +       if (!pci_is_thunderbolt_attached(adev->pdev))
-> +               vga_switcheroo_register_client(adev->pdev, &amdgpu_switcheroo_ops, px);
-> +
-> +       if (px)
->                 vga_switcheroo_init_domain_pm_ops(adev->dev, &adev->vga_pm_domain);
-> -       }
->
->         if (adev->gmc.xgmi.pending_reset)
->                 queue_delayed_work(system_wq, &mgpu_info.delayed_reset_work,
-> @@ -4048,10 +4049,13 @@ void amdgpu_device_fini_sw(struct amdgpu_device *adev)
->
->         kfree(adev->bios);
->         adev->bios = NULL;
-> -       if (amdgpu_device_supports_px(adev_to_drm(adev))) {
-> +
-> +       if (!pci_is_thunderbolt_attached(adev->pdev))
->                 vga_switcheroo_unregister_client(adev->pdev);
-> +
-> +       if (amdgpu_device_supports_px(adev_to_drm(adev)))
->                 vga_switcheroo_fini_domain_pm_ops(adev->dev);
-> -       }
-> +
->         if ((adev->pdev->class >> 8) == PCI_CLASS_DISPLAY_VGA)
->                 vga_client_unregister(adev->pdev);
->
-> --
-> 2.39.1
->
