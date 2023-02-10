@@ -2,262 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FDFD692768
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A48869275E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 20:47:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233563AbjBJTs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 14:48:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
+        id S233397AbjBJTrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 14:47:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233518AbjBJTsr (ORCPT
+        with ESMTP id S233175AbjBJTrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 14:48:47 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13C3241DA;
-        Fri, 10 Feb 2023 11:47:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676058477; x=1707594477;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i+KB61FTKNIuFq1GlPUNiKJj7lmRriDdUCRgpzPS5y8=;
-  b=d20Avkp94nNhNTPHhBGGD8BrokCE7J8GtM7oI3Tb88XbZcG8I32X61jP
-   NbvhcD0uu60u5q54rsTBUpwflbkePc8Wm2NNVV6gUCXZk3r1Bg+b0g9Jg
-   YRITZalxUJRriTrPJgHeJi4BKtlZkdyUtuR7ZezQtd5uvCc6GkzR2Duvo
-   6/RlZca78r1Lva1t6iu+mnYzPzWcqQsnKgfRra7huYJ1rRC0VNwWfeyzJ
-   0l4pLIa+c8z+guw4Dfn6BzoCFpH75+80fyzLfwtatZep4KsV56N57hrVZ
-   Aza5fngd1eh3gMCtot8eSoiq2yp5Sj0bnxK/Dz/RSSKmhPeuLCzjS0asd
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="331814922"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="331814922"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 11:43:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="661502477"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="661502477"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 10 Feb 2023 11:43:45 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pQZJA-00060z-2E;
-        Fri, 10 Feb 2023 19:43:44 +0000
-Date:   Sat, 11 Feb 2023 03:43:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/5] pinctrl: at91: use devm_kasprintf() to avoid
- potential leaks (part 2)
-Message-ID: <202302110336.1P7vM7AU-lkp@intel.com>
-References: <20230210145656.71838-2-andriy.shevchenko@linux.intel.com>
+        Fri, 10 Feb 2023 14:47:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F657812A1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:45:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676058242;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LqEMVOprqbRcgnb26iJyeC9PYlAfqxHL1qiXDXu+U9A=;
+        b=Yi8jga6vVTeH8KDmFU3fYyjh38a0kQ16NQnJiNLT6u6UkYkge8x1VqfWzI4sALclmqNuEF
+        DhEVy/EQSnfTFedqfEp/vQBO5n397RwGSD+xepMSCXCcNeJ4btI/RCex3dsgIJd5N2Q2BW
+        poUfP99khFTPQ9hrwme6+uRzbvq2JEk=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-628-qmreCKTPNVe9Hy2xnzDt_g-1; Fri, 10 Feb 2023 14:44:00 -0500
+X-MC-Unique: qmreCKTPNVe9Hy2xnzDt_g-1
+Received: by mail-ed1-f69.google.com with SMTP id g19-20020a056402115300b004a26cc7f6cbso4172525edw.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 11:44:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LqEMVOprqbRcgnb26iJyeC9PYlAfqxHL1qiXDXu+U9A=;
+        b=YF/cyzgC2EYaLmBABGSxDedZ1wWe1AM9RLk+fsGz2H2EjLR6hD7ze1VSBXQH00+Wyl
+         H6m1U9FRRe+adrqOYrNTjRpaOwF6OCZrieDvQ9EkJ6So5Ytvv2G3U3G1omd/pfMQ9ol2
+         TrljE/Zn669rz/EITe2qaqCDQZyL7ueHfigMWLfXCaV7Y7A+cijQXEldilPQd5WdHkd7
+         oV5Qz32Vt7dQv47mcTu85R8M2btN8E7m4WxDxOVzNzibz/270d1PVEnf33DZTiCn92oo
+         OaWM4ZOEGr4jydi+2J3a88nAEF/CTPs7UX+nAW4oc2UnHZU8wsmu0JTKTWBIUWxsqPTF
+         j8Iw==
+X-Gm-Message-State: AO0yUKXwK7J9jCA2GPKXS88zEK2J2Pr9Oudppr841rOtXLLPxf0omlFH
+        EecZwgMp5CAHMIiQiPEYBOn+8JaUldpSGo6SNyADfWyl48jGe3pOPt/KFeWz9JVXdPdDrpLrrMo
+        +BZeN6bvnKmwK92MYqM3iNR30
+X-Received: by 2002:a17:906:a1d3:b0:878:7cf3:a9e7 with SMTP id bx19-20020a170906a1d300b008787cf3a9e7mr14861836ejb.65.1676058239627;
+        Fri, 10 Feb 2023 11:43:59 -0800 (PST)
+X-Google-Smtp-Source: AK7set9tc5ya+xq3T9ohLhPWkzaq1RTuRLg/Wi00GiP7Oc96aPjNzatgLBaKs4/WUVNxcjQaldtHxA==
+X-Received: by 2002:a17:906:a1d3:b0:878:7cf3:a9e7 with SMTP id bx19-20020a170906a1d300b008787cf3a9e7mr14861809ejb.65.1676058239467;
+        Fri, 10 Feb 2023 11:43:59 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id f20-20020a170906c09400b00872c0bccab2sm2786828ejz.35.2023.02.10.11.43.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 11:43:58 -0800 (PST)
+Message-ID: <ee952253-9ee4-aa81-fefa-609cbf6e1e2b@redhat.com>
+Date:   Fri, 10 Feb 2023 20:43:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230210145656.71838-2-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 5/9] apple-gmux: Use GMSP acpi method for interrupt
+ clear
+Content-Language: en-US, nl
+To:     Orlando Chamberlain <orlandoch.dev@gmail.com>,
+        platform-driver-x86@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>,
+        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        Jack Xiao <Jack.Xiao@amd.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Rander Wang <rander.wang@intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Yong Zhi <yong.zhi@intel.com>, Evan Quan <evan.quan@amd.com>,
+        Kerem Karabay <kekrby@gmail.com>,
+        Aditya Garg <gargaditya08@live.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>
+References: <20230210044826.9834-1-orlandoch.dev@gmail.com>
+ <20230210044826.9834-6-orlandoch.dev@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230210044826.9834-6-orlandoch.dev@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+Hi,
 
-I love your patch! Perhaps something to improve:
+On 2/10/23 05:48, Orlando Chamberlain wrote:
+> This is needed for interrupts to be cleared correctly on MMIO based
+> gmux's. It is untested if this helps/hinders other gmux types, but I
+> have seen the GMSP method in the acpi tables of a MacBook with an
+> indexed gmux.
+> 
+> If this turns out to break support for older gmux's, this can instead
+> be only done on MMIO gmux's.
+> 
+> There is also a "GMLV" acpi method, and the "GMSP" method can be called
+> with 1 as its argument, but the purposes of these aren't known and they
+> don't seem to be needed.
+> 
+> Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
+> ---
+>  drivers/platform/x86/apple-gmux.c | 26 +++++++++++++++++++++++++-
+>  1 file changed, 25 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/apple-gmux.c b/drivers/platform/x86/apple-gmux.c
+> index 760434a527c1..c605f036ea0b 100644
+> --- a/drivers/platform/x86/apple-gmux.c
+> +++ b/drivers/platform/x86/apple-gmux.c
+> @@ -494,8 +494,29 @@ static const struct apple_gmux_config apple_gmux_index = {
+>   * MCP79, on all following generations it's GPIO pin 6 of the Intel PCH.
+>   * The GPE merely signals that an interrupt occurred, the actual type of event
+>   * is identified by reading a gmux register.
+> + *
+> + * On MMIO gmux's, we also need to call the acpi method GMSP to properly clear
+> + * interrupts. TODO: Do other types need this? Does this break other types?
+>   */
+>  
+> +static int gmux_call_acpi_gmsp(struct apple_gmux_data *gmux_data, int arg)
+> +{
+> +	acpi_status status = AE_OK;
+> +	union acpi_object arg0 = { ACPI_TYPE_INTEGER };
+> +	struct acpi_object_list arg_list = { 1, &arg0 };
+> +
+> +	arg0.integer.value = arg;
+> +
+> +	status = acpi_evaluate_object(gmux_data->dhandle, "GMSP", &arg_list, NULL);
+> +	if (ACPI_FAILURE(status)) {
+> +		pr_err("GMSP call failed: %s\n",
+> +		       acpi_format_exception(status));
+> +		return -ENODEV;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static inline void gmux_disable_interrupts(struct apple_gmux_data *gmux_data)
+>  {
+>  	gmux_write8(gmux_data, GMUX_PORT_INTERRUPT_ENABLE,
+> @@ -519,7 +540,10 @@ static void gmux_clear_interrupts(struct apple_gmux_data *gmux_data)
+>  
+>  	/* to clear interrupts write back current status */
+>  	status = gmux_interrupt_get_status(gmux_data);
+> -	gmux_write8(gmux_data, GMUX_PORT_INTERRUPT_STATUS, status);
+> +	if (status) {
+> +		gmux_write8(gmux_data, GMUX_PORT_INTERRUPT_STATUS, status);
+> +		gmux_call_acpi_gmsp(gmux_data, 0);
 
-[auto build test WARNING on linusw-pinctrl/devel]
-[also build test WARNING on linusw-pinctrl/for-next next-20230210]
-[cannot apply to clk/clk-next soc/for-next linus/master v6.2-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Ugh no, please don't go around calling random ACPI methods from untested
+firmware revisions / device models.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/pinctrl-at91-use-devm_kasprintf-to-avoid-potential-leaks-part-2/20230210-225817
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
-patch link:    https://lore.kernel.org/r/20230210145656.71838-2-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v1 1/5] pinctrl: at91: use devm_kasprintf() to avoid potential leaks (part 2)
-config: arm-randconfig-r046-20230210 (https://download.01.org/0day-ci/archive/20230211/202302110336.1P7vM7AU-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0562771ccfa099db4361c2e5958ca1685f498cdf
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/pinctrl-at91-use-devm_kasprintf-to-avoid-potential-leaks-part-2/20230210-225817
-        git checkout 0562771ccfa099db4361c2e5958ca1685f498cdf
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/pinctrl/
+ACPI code (even Apple's I have learned) tends to be full of bugs. If we
+did not need to call GMSP before then please lets keep not calling it
+on the older models. Just because it is there does not mean that calling
+it is useful, it might even be harmful.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302110336.1P7vM7AU-lkp@intel.com/
+Regards,
 
-All warnings (new ones prefixed by >>):
-
-   drivers/pinctrl/pinctrl-at91.c: In function 'at91_pinctrl_probe':
-   drivers/pinctrl/pinctrl-at91.c:1402:22: error: 'names' undeclared (first use in this function)
-    1402 |                 if (!names)
-         |                      ^~~~~
-   drivers/pinctrl/pinctrl-at91.c:1402:22: note: each undeclared identifier is reported only once for each function it appears in
-   drivers/pinctrl/pinctrl-at91.c: In function 'at91_gpio_probe':
->> drivers/pinctrl/pinctrl-at91.c:1889:28: warning: passing argument 1 of 'strreplace' makes pointer from integer without a cast [-Wint-conversion]
-    1889 |                 strreplace('-', alias_idx + 'A');
-         |                            ^~~
-         |                            |
-         |                            int
-   In file included from include/linux/bitmap.h:11,
-                    from include/linux/cpumask.h:12,
-                    from include/linux/smp.h:13,
-                    from include/linux/lockdep.h:14,
-                    from include/linux/mutex.h:17,
-                    from include/linux/notifier.h:14,
-                    from include/linux/clk.h:14,
-                    from drivers/pinctrl/pinctrl-at91.c:8:
-   include/linux/string.h:172:24: note: expected 'char *' but argument is of type 'int'
-     172 | char *strreplace(char *s, char old, char new);
-         |                  ~~~~~~^
-   drivers/pinctrl/pinctrl-at91.c:1889:17: error: too few arguments to function 'strreplace'
-    1889 |                 strreplace('-', alias_idx + 'A');
-         |                 ^~~~~~~~~~
-   include/linux/string.h:172:7: note: declared here
-     172 | char *strreplace(char *s, char old, char new);
-         |       ^~~~~~~~~~
+Hans
 
 
-vim +/strreplace +1889 drivers/pinctrl/pinctrl-at91.c
 
-  1809	
-  1810	static int at91_gpio_probe(struct platform_device *pdev)
-  1811	{
-  1812		struct device *dev = &pdev->dev;
-  1813		struct device_node *np = dev->of_node;
-  1814		struct at91_gpio_chip *at91_chip = NULL;
-  1815		struct gpio_chip *chip;
-  1816		struct pinctrl_gpio_range *range;
-  1817		int ret = 0;
-  1818		int irq, i;
-  1819		int alias_idx = of_alias_get_id(np, "gpio");
-  1820		uint32_t ngpio;
-  1821		char **names;
-  1822	
-  1823		BUG_ON(alias_idx >= ARRAY_SIZE(gpio_chips));
-  1824		if (gpio_chips[alias_idx]) {
-  1825			ret = -EBUSY;
-  1826			goto err;
-  1827		}
-  1828	
-  1829		irq = platform_get_irq(pdev, 0);
-  1830		if (irq < 0) {
-  1831			ret = irq;
-  1832			goto err;
-  1833		}
-  1834	
-  1835		at91_chip = devm_kzalloc(&pdev->dev, sizeof(*at91_chip), GFP_KERNEL);
-  1836		if (!at91_chip) {
-  1837			ret = -ENOMEM;
-  1838			goto err;
-  1839		}
-  1840	
-  1841		at91_chip->regbase = devm_platform_ioremap_resource(pdev, 0);
-  1842		if (IS_ERR(at91_chip->regbase)) {
-  1843			ret = PTR_ERR(at91_chip->regbase);
-  1844			goto err;
-  1845		}
-  1846	
-  1847		at91_chip->ops = (const struct at91_pinctrl_mux_ops *)
-  1848			of_match_device(at91_gpio_of_match, &pdev->dev)->data;
-  1849		at91_chip->pioc_virq = irq;
-  1850		at91_chip->pioc_idx = alias_idx;
-  1851	
-  1852		at91_chip->clock = devm_clk_get(&pdev->dev, NULL);
-  1853		if (IS_ERR(at91_chip->clock)) {
-  1854			dev_err(&pdev->dev, "failed to get clock, ignoring.\n");
-  1855			ret = PTR_ERR(at91_chip->clock);
-  1856			goto err;
-  1857		}
-  1858	
-  1859		ret = clk_prepare_enable(at91_chip->clock);
-  1860		if (ret) {
-  1861			dev_err(&pdev->dev, "failed to prepare and enable clock, ignoring.\n");
-  1862			goto clk_enable_err;
-  1863		}
-  1864	
-  1865		at91_chip->chip = at91_gpio_template;
-  1866		at91_chip->id = alias_idx;
-  1867	
-  1868		chip = &at91_chip->chip;
-  1869		chip->label = dev_name(&pdev->dev);
-  1870		chip->parent = &pdev->dev;
-  1871		chip->owner = THIS_MODULE;
-  1872		chip->base = alias_idx * MAX_NB_GPIO_PER_BANK;
-  1873	
-  1874		if (!of_property_read_u32(np, "#gpio-lines", &ngpio)) {
-  1875			if (ngpio >= MAX_NB_GPIO_PER_BANK)
-  1876				pr_err("at91_gpio.%d, gpio-nb >= %d failback to %d\n",
-  1877				       alias_idx, MAX_NB_GPIO_PER_BANK, MAX_NB_GPIO_PER_BANK);
-  1878			else
-  1879				chip->ngpio = ngpio;
-  1880		}
-  1881	
-  1882		names = devm_kasprintf_strarray(dev, "pio", chip->ngpio);
-  1883		if (!names) {
-  1884			ret = -ENOMEM;
-  1885			goto clk_enable_err;
-  1886		}
-  1887	
-  1888		for (i = 0; i < chip->ngpio; i++)
-> 1889			strreplace('-', alias_idx + 'A');
-  1890	
-  1891		chip->names = (const char *const *)names;
-  1892	
-  1893		range = &at91_chip->range;
-  1894		range->name = chip->label;
-  1895		range->id = alias_idx;
-  1896		range->pin_base = range->base = range->id * MAX_NB_GPIO_PER_BANK;
-  1897	
-  1898		range->npins = chip->ngpio;
-  1899		range->gc = chip;
-  1900	
-  1901		ret = at91_gpio_of_irq_setup(pdev, at91_chip);
-  1902		if (ret)
-  1903			goto gpiochip_add_err;
-  1904	
-  1905		ret = gpiochip_add_data(chip, at91_chip);
-  1906		if (ret)
-  1907			goto gpiochip_add_err;
-  1908	
-  1909		gpio_chips[alias_idx] = at91_chip;
-  1910		platform_set_drvdata(pdev, at91_chip);
-  1911		gpio_banks = max(gpio_banks, alias_idx + 1);
-  1912	
-  1913		dev_info(&pdev->dev, "at address %p\n", at91_chip->regbase);
-  1914	
-  1915		return 0;
-  1916	
-  1917	gpiochip_add_err:
-  1918	clk_enable_err:
-  1919		clk_disable_unprepare(at91_chip->clock);
-  1920	err:
-  1921		dev_err(&pdev->dev, "Failure %i for GPIO %i\n", ret, alias_idx);
-  1922	
-  1923		return ret;
-  1924	}
-  1925	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+
+
+> +	}
+>  }
+>  
+>  static void gmux_notify_handler(acpi_handle device, u32 value, void *context)
+
