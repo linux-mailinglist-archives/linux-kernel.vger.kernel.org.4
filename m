@@ -2,231 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B127692A63
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 23:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2FF692A5B
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 23:42:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233959AbjBJWnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 17:43:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
+        id S233970AbjBJWmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 17:42:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234020AbjBJWmv (ORCPT
+        with ESMTP id S233954AbjBJWmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 17:42:51 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E593EFFE;
-        Fri, 10 Feb 2023 14:42:30 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31AI0JI0023196;
-        Fri, 10 Feb 2023 22:42:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=htWeOv2g+vYlHqWgddtPTagB2MRnz1unP6v0CBZfQ6o=;
- b=SZsvmriD2lgJ3tfq3sNfGN2mWTj2ylzqFOzqfoVcRYPgeFNuqcH8Gn1p9mfbhjdGb2cj
- D+g0T/ieSUGngxrJtZhOAJyj0F7gNXA62/hsw4f2pzj6TQG4LB7qKXnBOEKDDuZsOhv1
- Zjp+tE1caROcx7YQdkDTCjBA6JDBreYJ5BeiW0BlUCtvfkQjJtvMY8xA3Ry/v5h3xBoW
- iGPtZEA72KUnx2V5I0DIJhwJ7aRa5mSqzqhWsw8wgUkHOGyX0uVXmOH6I9bq4SmpkVPQ
- IX7i5HapPHPDXVOLJp8tZthyilltem9RbnDmtMDqiVtVj9koL98NrUe/m6pz0CGxy4ZP WA== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nhf8aedv2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Feb 2023 22:42:06 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31ALavHG002993;
-        Fri, 10 Feb 2023 22:42:05 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3nhdtbbutg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Feb 2023 22:42:05 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MO/5nHiUuPUBWraJjqI0h0qYQJE2CUoOFUcwA6y3R190fQSBP11xeRcVs0SXc8UD2rHAb4zs1Qbr9r71+9KL7pWu16aT9M/RyANUf4Ty+Z9MHDWg2Ykkr9fIecqHx0lc1JOQgeEl9sejtnAIv/kqTE+s+jWgs+T2sIZJyPpplB11U/TUaCieVD73EnUERKd/05gbl9hXUMcEh/FS9RumeEfXfIeu1gMA60BESgsY7vlmROkz4XMRlTb2V/WJwvuqzAdSnOhggH4fyTfJSU4vAw2qXtfmc8jJkYx9Nc0DMEw46zB6TFYHE7MD71fEAnfp2H4/xgbveXH5alh0Z8ACbA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=htWeOv2g+vYlHqWgddtPTagB2MRnz1unP6v0CBZfQ6o=;
- b=TGes/LTqZBO9lgNgy/EAn8VzMzXvnmF0d0G8WhVUqsfXy5yF6374kFAG3LC4NhhCTrkYmsBFuF5B0ZVhlc7ly1X1vKjuRycvFgsJmSt/5OioYx8VHhbSxG3rnLi+vd9PtNhyaDzWLN1XkjzcfGIBbvA0xQX5dk16bqZqcdIZxU5zFTlBa+wF4afMxzdPjIYbYY134Rn8aroDmyn3tr3OO4HURNTwUqTnTM+r/065uZsizcsE95vht4CI9/H6VAXTfTx3yk2F7Q0wTlDe/WxC7jxaxxchrkyZ7uNaKZ6dGERqIYz9BOUL3sFeQmNNP4EVM/GjR5dPB2f4URzI5x1Sog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=htWeOv2g+vYlHqWgddtPTagB2MRnz1unP6v0CBZfQ6o=;
- b=FCi07MZRIXdyGHvogB50h0p+3jkI+IVocOjL00ByoEi8LqY0doXAuJjUL3dIYf6fnzZKT9aqXrP734ies0BAKjAVuSqHhO+RvDOYj9wrwzMAwpdqLDQ0VNdVb5aattr0EsvC1bLJa6ikSknzv7JoPGHqV7L6/3YurGcYa/wCJsU=
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com (2603:10b6:610:ac::13)
- by DS0PR10MB7151.namprd10.prod.outlook.com (2603:10b6:8:dd::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.6; Fri, 10 Feb
- 2023 22:42:03 +0000
-Received: from CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::a326:1794:402f:1adb]) by CH2PR10MB4150.namprd10.prod.outlook.com
- ([fe80::a326:1794:402f:1adb%3]) with mapi id 15.20.6111.006; Fri, 10 Feb 2023
- 22:42:03 +0000
-From:   Eric Snowberg <eric.snowberg@oracle.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-CC:     Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "pvorel@suse.cz" <pvorel@suse.cz>,
-        "tadeusz.struk@intel.com" <tadeusz.struk@intel.com>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>,
-        "erpalmer@linux.vnet.ibm.com" <erpalmer@linux.vnet.ibm.com>,
-        "coxu@redhat.com" <coxu@redhat.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v4 6/6] integrity: machine keyring CA configuration
-Thread-Topic: [PATCH v4 6/6] integrity: machine keyring CA configuration
-Thread-Index: AQHZOqBI+C56J107yEO2w74T/LxRwq7IK2kAgAChHwA=
-Date:   Fri, 10 Feb 2023 22:42:02 +0000
-Message-ID: <6E99904E-3725-4235-990F-BD89E59492A1@oracle.com>
-References: <20230207025958.974056-1-eric.snowberg@oracle.com>
- <20230207025958.974056-7-eric.snowberg@oracle.com>
- <4bda209dfc891ac9044ce847785c383e89f14f97.camel@linux.ibm.com>
-In-Reply-To: <4bda209dfc891ac9044ce847785c383e89f14f97.camel@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.120.41.1.1)
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR10MB4150:EE_|DS0PR10MB7151:EE_
-x-ms-office365-filtering-correlation-id: d6a8e4aa-dcdf-429a-0e5d-08db0bb8076e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: whmj4+Nu/Iag54ehhoHWE1KAOaPHTg4qvK5r8TZVkD1skDSDa1oe48mV9Orva2OwFrPzTP5R/k+sAP8CSu4pWWdXuLh9DB1USGmfquuJs29jWj+EuS1hvzCvta4vYJWzCYRK7tuKPT/yLuypA3Qt90/R7BeObzEy6pp92SxHtzFtJ8fPSPT1KGPDQzSeh7xPeD/H1lczavSF76oAu/GZo99HDp9J+I0m4hdYNc5dx7LzeXpaPajAJsa9r83rskS2ByZFO3t36sRr/lgilKyoHzwNYh47/ZV1pgR8J2wAqpySucrV3ediVsDXYWzKIv/mDsnWFlxIzF8xRcC7xhhrySkQK3+rX4JlDs7ObOsJ3PaCtpYRdHwCP27NtcFxSCidfqcK1wujZIrt/KckC8u4LbRmpnUcOTXwq9eyN3j7Twb91dmg/gRUh+vlQU0QeuyQYzIBj5AzohjcYDHhJj1lU14KQXNkuprTzzVXLpZGFNyJXPJfcL+5hPF3y+qWDrbjmhr30ehFqn5tq2lktvUdnHTJikUcPd9VUTzIGcNF7KF6s2/cLQhwCVSUpZWGY4x6L536IlujqPwidBqYKNOs0o18VlzLu/CLwsge6RcSbfw25oI90gJ8QCDLnu9ckw+vQVOUVHP7BZBCs/FJrJlktozJycvbX8qeqp0Sja8tjLQPTprIV635dXY8Y06ECn2KUCmBdYYgCrq810bdj2rWMV/00KvWzbnqvZCyUqkOGOY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4150.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(39860400002)(366004)(396003)(136003)(376002)(451199018)(83380400001)(53546011)(6512007)(186003)(26005)(6506007)(2616005)(36756003)(122000001)(38100700002)(86362001)(33656002)(38070700005)(316002)(54906003)(6916009)(66556008)(64756008)(66446008)(4326008)(66476007)(66946007)(8676002)(6486002)(76116006)(478600001)(71200400001)(2906002)(41300700001)(8936002)(44832011)(7416002)(5660300002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?A4SVaMnKFVsiVa4uTKjHCsSgmO6DsTyK0f++Ms7JxW6LLp82C1gMksapQwYB?=
- =?us-ascii?Q?bNeTmWusTkxQYjNidyf6YzUNUXfbxvnn3xI+iCEJJ4LwQghEVy3Dy2gwFA2/?=
- =?us-ascii?Q?TfI/N/p3g8D12yyQw0eUjmmVDPcHPSE2h+K5fgSb0X6niiu1/HE22oFDe7iv?=
- =?us-ascii?Q?Vdhr8uYWZc1FxwHO5HDSsW0Q13VnBKWEUoh5uF8urHWDpgnaGJtofqRYV1tg?=
- =?us-ascii?Q?ckzycXTz3e5PgTbJk8VVDgQpolQ1wC61YsoJ6VQKKaRuZHpVoysdD7Vedi4F?=
- =?us-ascii?Q?k677Ms23+4z4wVaS087aqSs1GlUJj2oFqvirfy7cpDdNKWZvSHbHYSEQbPXP?=
- =?us-ascii?Q?VaHTsHms37dXK3Gxl9j0ygRE5rJZlsy63Hdx9vr/1kW55Ymsxln/4UQhii3z?=
- =?us-ascii?Q?GdoiaLBTmQZxtKsHsSZknfGibO42jiYPdnL6FP31Jy0I0FgsaepucEK3Cto8?=
- =?us-ascii?Q?QU7EKAZEXsLJrg3QrVV+G+hwYZKBoY6z5p7g2LJfzdw/K3wNv2DAYg2wlc9I?=
- =?us-ascii?Q?F/SX1WvdsGd+FT0N3Je3PhrYnU9qQq9apVrYNf+hL2LcaZajPhIm7reHVkU1?=
- =?us-ascii?Q?kCcqOnNYjyrrgycSk2qEliDGjoy0oGRcQWu8A9Aj220wUoliAIBRmvJpIKS3?=
- =?us-ascii?Q?SnA2DSFyAYyGTaRHcuptSmz4ErkS2paB2A9qQniDjcrZL5fXZWx5f4ShyEmn?=
- =?us-ascii?Q?dqKgjCeEBGb865u3cVofxOo5SvkkVp3xEmq/sayENrcaCJHm748P3yasjv4I?=
- =?us-ascii?Q?gaIyUM77NWTjt3HdqD+OB8ZBdfFbMmPUfEaLkBVRT+l9cYFK9N+HrgcDqjze?=
- =?us-ascii?Q?aLM6PvWCV6r/UaehhMEJWGGzd0lwZxTeKipR60Tc3b5Tc4062WkQE1vB/7C/?=
- =?us-ascii?Q?BKSNWlLpwDp+q+/i5BP07Crgzwx0YDS16VH2eXwvxLdJ4LoDz4TF+Cn7MzDK?=
- =?us-ascii?Q?cAs+gnu7XA0AHka5/gKPOc/9fwrDc+g/weMX+A3FiYvnVfrBMMdJ75dPFSKD?=
- =?us-ascii?Q?qDsyeq4n4qOttiP7MIg/5XVoaCG5zr6HSgqmSDU2ClEXGC20nUf/O3W/2yjK?=
- =?us-ascii?Q?etcVdDBUCz/iXHDxWc1tTOLF14Hka7M4MARtMgT92BFxK9zyDztxtBVnZZOT?=
- =?us-ascii?Q?cPQ3w3zPkE/EIKyh9SQCd66ox9gCekOejIq+VnBsxFBoE6rhv/kUnW1DXkHU?=
- =?us-ascii?Q?TZxl/jnh/i2gNvO/eTjDkmJ0qzDyNySTh36EQjWwYf7diM3+rnJ0F5npx+PJ?=
- =?us-ascii?Q?WqudxEKDmurR508BVmojA4tfpOht7G2TpzpqkN681TX2693jM0tBObZYN+au?=
- =?us-ascii?Q?wNs5D1fkXyNAWU/8jZRpkGzV+dm2vAJrCYsBoodg4qDjaA6OEl8QfOcbAgVk?=
- =?us-ascii?Q?Eskw6NP7K9un6Sjch3dJ6klpkGJ1nXo/XX37iKaLmVTxpiN9kNwJwIhEq8AN?=
- =?us-ascii?Q?5AcVXTFDHUHCPvXsKmKOwQlQx9YlYwcUtrr64qWGx8DTCLbKqujeVAecGeM+?=
- =?us-ascii?Q?sl+mPwhwc4PTEy8XayXhdkA7vTtK+OB+nXmmCUpNDYvPdsJXwuObQIl3N9IC?=
- =?us-ascii?Q?+iSvlPdEK5FgL+BGPJ0rQpv2EcNW4ZOarPfMy5IlrANgI5i3DmSMRZjrj5yf?=
- =?us-ascii?Q?Sg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <4A2B97A7D5ADA64E86B87F686BBCEF7A@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Fri, 10 Feb 2023 17:42:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBCF55E72
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 14:42:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 360D7B82616
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 22:42:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90465C433A8;
+        Fri, 10 Feb 2023 22:42:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676068931;
+        bh=LXh7cCWgskiu1lOCHbKoWebvfAUhqVsfAvFuxIYpy5k=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=FteLrbx76zQKCC/KPwhIke7oMow6ISwTy6SILIJCVjLWipk90bh3gczA4nnV6Y4vQ
+         216+36ARPC6NR/y0K9b9zoKJkjY0i2P4jbJVI9X0r0zK9EeT4jr6+7CcgKpgfkZWsy
+         lFGbT1FgR12esskj57a+fCtomcG21FDzi70/neyUJ7dGk+ahSqSeQLgfwucmS9xmTo
+         TsjJspy9Z7vf1HH/Fl9iC1BnRZ6bKMQhDG0ASF4q1rijWVOKl/wFzRwIePRTPFc52G
+         05a0Kjnsoq/97ko3FlHmi3B9kjYYOvqU32ViPEhUc8CytwUVpnNEHogOu3Im+O9WHU
+         efJjvaauzJ/sw==
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [PATCH 2/2] x86/entry: Fix unwinding from kprobe on PUSH/POP instruction
+Date:   Fri, 10 Feb 2023 14:42:02 -0800
+Message-Id: <baafcd3cc1abb14cb757fe081fa696012a5265ee.1676068346.git.jpoimboe@kernel.org>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <cover.1676068346.git.jpoimboe@kernel.org>
+References: <cover.1676068346.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?fVkxG5aHJJ5vfjLvJTo/PcCJ3P0ZZh+0dl7yPZ622DiWVoxBF+f93P+MAH1i?=
- =?us-ascii?Q?3A0PrYy+Nt1FWs/6tq6AtPKzLIjSHPtScJH1o8Q/il9dhu9SU5M/PAcVgcnw?=
- =?us-ascii?Q?GmxJN3U0wULS9O7FUQ0zXRFc7A8feYpPXpUwWLDZvCrmIEtS1O1Dxs6u0H5V?=
- =?us-ascii?Q?xdZbS2U/C7gSA8XaUdxNFlwyFaPLK5IJfZebB6USbHaD0WHAUV6FXAr1oz+L?=
- =?us-ascii?Q?hmDbqC/N1L5pwLz3u2R0CejJF0l8y33h/JY+PSHwUuZRTLUiHGq4qDMSAV55?=
- =?us-ascii?Q?5njSeTWtrm6F+VNFicBgURqMfegP4hRCoWWPasW0AJxk/qfyxnicF+3KsRrv?=
- =?us-ascii?Q?xczwKcgbXOWtYqvyQK9g3sLbRmxlcxc1m5c4bnwvAVSfvqYWlxRAHcYe6YMp?=
- =?us-ascii?Q?aV0dWXzzaD1y36UH0VfxYaXzOEGAYsa/UmthA25lTU/qbm8rBZeodEH1XowL?=
- =?us-ascii?Q?foGNT+s3VZpucRQ77+Yh13SJU503EQ9cWU5lrtLhdz4IiTYNtwQpI7Dg33CR?=
- =?us-ascii?Q?C2V6DGtC+dSVoKOGZzh56vOru9TBVUFRs7xAGPDCaz5fjaiNnqwhIU2UEiDB?=
- =?us-ascii?Q?0x6Xwsne4fT5z5yIuNI+HHTrYoPWGFj1fLz49b9gdowTGmgsI3kdsDyc24IL?=
- =?us-ascii?Q?2MyRkQg00tgZzEvyotDtgqx3fgA8MGVUJd/PE3NK/92DJShIwfs8Q64r+FUw?=
- =?us-ascii?Q?4g+svk5PHs11DhbSqo0D04u+5Q2Hhl96TXd0EjZCcXA0VMoptq8Z4kpcSSaS?=
- =?us-ascii?Q?q1hyrryZKMhflifMdwLz23oD4uwQ3kC2WByQOe8NpMfGODBz2cHd7EzD3of+?=
- =?us-ascii?Q?Lg5UYSEzjzkYIcHwK8BVtHE4Ao/VA+NBlFm8SmLzY9oPLbqAquD2UoQLNpSz?=
- =?us-ascii?Q?Dzqo0sjI3nvxk4mtJHvcMwCalHFEAWHvU+Nx6fgwjZZOgtpSNCOCJ6bPx7oL?=
- =?us-ascii?Q?aEczIc5TJMZJGOv/ECBsWb7bq6JpnD8RJykzl4eU1U3ZJ9OJ0fGzpLvx0OUz?=
- =?us-ascii?Q?1gEMMRoRsTNOakfeGxn1J5B1tNQR0whZsiKn8C7hqXDWx63siuLCa0OSEi8J?=
- =?us-ascii?Q?XzpUKS3a77j7ggER8HRfBk53RpDljNF2ESi4nGpSp+bkUXgO7WP5QUiexzyR?=
- =?us-ascii?Q?bVUz6k7G7IoyQp0KtJNfeeUD4AIS11aVIPRjcSiHCoXcZIFjE70KqFMs2Z2K?=
- =?us-ascii?Q?TaHIhKiKRaiLLHVzOi8YJUX2mYJfHUbROICEjg=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4150.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d6a8e4aa-dcdf-429a-0e5d-08db0bb8076e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Feb 2023 22:42:02.8973
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1wlGu8/CZgfyCDEnzKjKTSDBdi5SsQDxCxyvaqfRVQRJNudyhoijoaoGhlm228Fxfze4zcY6vPfN/mwjsjKxn8OON39lqs6VOBGwXhw3zBU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB7151
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-10_15,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0
- mlxlogscore=999 adultscore=0 phishscore=0 mlxscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302100194
-X-Proofpoint-ORIG-GUID: k0VDHPRTcd0C6-V_RbxvGQQYnQ4lz1Z8
-X-Proofpoint-GUID: k0VDHPRTcd0C6-V_RbxvGQQYnQ4lz1Z8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+If a kprobe (INT3) is set on a stack-modifying single-byte instruction,
+like a single-byte PUSH/POP or a LEAVE, ORC fails to unwind past it:
 
+  Call Trace:
+   <TASK>
+   dump_stack_lvl+0x57/0x90
+   handler_pre+0x33/0x40 [kprobe_example]
+   aggr_pre_handler+0x49/0x90
+   kprobe_int3_handler+0xe3/0x180
+   do_int3+0x3a/0x80
+   exc_int3+0x7d/0xc0
+   asm_exc_int3+0x35/0x40
+  RIP: 0010:kernel_clone+0xe/0x3a0
+  Code: cc e8 16 b2 bf 00 66 0f 1f 44 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 0f 1f 44 00 00 41 57 41 56 41 55 41 54 cc <53> 48 89 fb 48 83 ec 68 4c 8b 27 65 48 8b 04 25 28 00 00 00 48 89
+  RSP: 0018:ffffc9000074fda0 EFLAGS: 00000206
+  RAX: 0000000000808100 RBX: ffff888109de9d80 RCX: 0000000000000000
+  RDX: 0000000000000011 RSI: ffff888109de9d80 RDI: ffffc9000074fdc8
+  RBP: ffff8881019543c0 R08: ffffffff81127e30 R09: 00000000e71742a5
+  R10: ffff888104764a18 R11: 0000000071742a5e R12: ffff888100078800
+  R13: ffff888100126000 R14: 0000000000000000 R15: ffff888100126005
+   ? __pfx_call_usermodehelper_exec_async+0x10/0x10
+   ? kernel_clone+0xe/0x3a0
+   ? user_mode_thread+0x5b/0x80
+   ? __pfx_call_usermodehelper_exec_async+0x10/0x10
+   ? call_usermodehelper_exec_work+0x77/0xb0
+   ? process_one_work+0x299/0x5f0
+   ? worker_thread+0x4f/0x3a0
+   ? __pfx_worker_thread+0x10/0x10
+   ? kthread+0xf2/0x120
+   ? __pfx_kthread+0x10/0x10
+   ? ret_from_fork+0x29/0x50
+   </TASK>
 
-> On Feb 10, 2023, at 6:05 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
->=20
-> Hi Eric,
->=20
-> On Mon, 2023-02-06 at 21:59 -0500, Eric Snowberg wrote:
->> Add a machine keyring CA restriction menu option to control the type of
->> keys that may be added to it. The options include none, min and max
->> restrictions.
->>=20
->> When no restrictions are selected, all Machine Owner Keys (MOK) are adde=
-d
->> to the machine keyring.  When CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MIN is
->> selected, the CA bit must be true.  Also the key usage must contain
->> keyCertSign, any other usage field may be set as well.
->>=20
->> When CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MAX is selected, the CA bit mus=
-t
->> be true. Also the key usage must contain keyCertSign and the
->> digitialSignature usage may not be set.
->>=20
->> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
->=20
-> Missing from the patch description is the motivation for this change. =20
-> The choices none, min, max implies a progression, which is good, and
-> the technical differences between the choices, but not the reason.
->=20
-> The motivation, at least from my perspective, is separation of
-> certificate signing from code signing keys, where "none" is no
-> separation and "max" being total separation of keys based on usage.
->=20
-> Subsequent work, as discussed in the cover letter thread, will limit
-> certificates being loaded onto the IMA keyring to code signing keys
-> used for signature verification.
+The problem is that #BP saves the pointer to the instruction immediately
+*after* the INT3, rather than to the INT3 itself.  The instruction
+replaced by the INT3 hasn't actually run, but ORC assumes otherwise and
+expects the wrong stack layout.
 
-I will include this in the next round too, thanks.
+Fix it by annotating the #BP exception as a non-signal stack frame,
+which tells the ORC unwinder to decrement the instruction pointer before
+looking up the corresponding ORC entry.
+
+Reported-by: Chen Zhongjin <chenzhongjin@huawei.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+ arch/x86/entry/entry_64.S | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+index 15739a2c0983..8d21881adf86 100644
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -385,7 +385,14 @@ SYM_CODE_END(xen_error_entry)
+  */
+ .macro idtentry vector asmsym cfunc has_error_code:req
+ SYM_CODE_START(\asmsym)
+-	UNWIND_HINT_IRET_REGS offset=\has_error_code*8
++
++	.if \vector == X86_TRAP_BP
++		/* #BP advances %rip to the next instruction */
++		UNWIND_HINT_IRET_REGS offset=\has_error_code*8 signal=0
++	.else
++		UNWIND_HINT_IRET_REGS offset=\has_error_code*8
++	.endif
++
+ 	ENDBR
+ 	ASM_CLAC
+ 	cld
+-- 
+2.39.1
 
