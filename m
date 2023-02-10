@@ -2,107 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A4569243F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BFC69244D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 18:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232679AbjBJRPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 12:15:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59140 "EHLO
+        id S232744AbjBJRUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 12:20:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232475AbjBJRPg (ORCPT
+        with ESMTP id S232982AbjBJRT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 12:15:36 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3F5222FE
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:15:32 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pQWzd-0005Kj-2N; Fri, 10 Feb 2023 18:15:25 +0100
-Message-ID: <82db210b-c23d-1e59-e3c8-73e1b27cb945@leemhuis.info>
-Date:   Fri, 10 Feb 2023 18:15:22 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v10 2/5] sched: Use user_cpus_ptr for saving user provided
- cpumask in sched_setaffinity()
-Content-Language: en-US, de-DE
-From:   "Linux kernel regression tracking (#update)" 
-        <regressions@leemhuis.info>
-To:     Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
+        Fri, 10 Feb 2023 12:19:59 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A612F6D61A
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 09:19:57 -0800 (PST)
+Date:   Fri, 10 Feb 2023 18:19:54 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1676049596;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aFfgSzkT6aQl211xQgCHvFiqA9QBifMZwcZhrp11M5k=;
+        b=w6kAWnVYdJznEF0v6wiUTedvISGHdJEo2Qr4L2FLBcp/v4pm7XzWp5Qnsx9feSKJ+sA1Rn
+        bU83XXALDwgAzaTcaH81V2gG8zKfye6xd97q1LIDDcCVqyfAJjhTxt9mgVVnhVygkdNryN
+        XJRZn2fxAgNBOH6SyR57dyCnfJNo7WTrfb8EX/vhAGcbWtuBx7Vaq2I3CjoRLF1crmDaUE
+        yy7I8spn7d4Pzn8D74G4Uq/UQ1UxkDeijQMBiixxd72t7zP8LHWxX1ovusuaK6Z/K/YHb1
+        kbCm/zA1r+qX/cPAqyToqrYAlMc5jBJsBbinYbBtd3OIZfEeUZ939Oq6Mc/FVQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1676049596;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aFfgSzkT6aQl211xQgCHvFiqA9QBifMZwcZhrp11M5k=;
+        b=GWkL0j2MwygdvVLJ9rcU29gwlWGrGywo9l8B0qgZXJw4GesLu6JvRCDzRLdl/Vg6wuvxow
+        vRJdag2l9KlMpGDw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Wander Lairson Costa <wander@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Hu Chunyu <chuhu@redhat.com>, Oleg Nesterov <oleg@redhat.com>,
         Valentin Schneider <vschneid@redhat.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>, qperret@google.com
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
-          Linux regressions mailing list 
-          <regressions@lists.linux.dev>
-References: <20220922180041.1768141-1-longman@redhat.com>
- <20220922180041.1768141-3-longman@redhat.com>
- <20230117160825.GA17756@willie-the-truck>
- <cc637c44-3217-21f4-8843-66e99249b38c@leemhuis.info>
-In-Reply-To: <cc637c44-3217-21f4-8843-66e99249b38c@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676049332;2e9cbe57;
-X-HE-SMSGID: 1pQWzd-0005Kj-2N
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Paul McKenney <paulmck@kernel.org>
+Subject: Re: [PATCH v5] kernel/fork: beware of __put_task_struct calling
+ context
+Message-ID: <Y+Z8uqzJQOMahKWH@linutronix.de>
+References: <20230210161323.37400-1-wander@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230210161323.37400-1-wander@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: This mail in primarily relevant for Linux kernel regression
-tracking. There afaics is a fix for the regression discussed in this
-thread, but it did not use a Link: tag to point to the report, as Linus
-and the documentation call for. Things happen, no worries -- but it
-forces me to write this mail to make the regression tracking bot aware
-of the fix. See link in footer if these mails annoy you.]
-
-On 26.01.23 13:52, Linux kernel regression tracking (#adding) wrote:
-> On 17.01.23 17:08, Will Deacon wrote:
->>
->> On Thu, Sep 22, 2022 at 02:00:38PM -0400, Waiman Long wrote:
->>> The user_cpus_ptr field is added by commit b90ca8badbd1 ("sched:
->>> Introduce task_struct::user_cpus_ptr to track requested affinity"). It
->>> is currently used only by arm64 arch due to possible asymmetric CPU
->>> setup. This patch extends its usage to save user provided cpumask
->>> when sched_setaffinity() is called for all arches. With this patch
->>> applied, user_cpus_ptr, once allocated after a successful call to
->>> sched_setaffinity(), will only be freed when the task exits.
->> [...]
->> We've tracked this down as the cause of an arm64 regression in Android and I've
->> reproduced the issue with mainline.
->>
->> Basically, if an arm64 system is booted with "allow_mismatched_32bit_el0" on
->> the command-line, then the arch code will (amongst other things) call
->> force_compatible_cpus_allowed_ptr() and relax_compatible_cpus_allowed_ptr()
->> when exec()'ing a 32-bit or a 64-bit task respectively.
->> [...]
+On 2023-02-10 13:13:21 [-0300], Wander Lairson Costa wrote:
+> Under PREEMPT_RT, __put_task_struct() indirectly acquires sleeping
+> locks. Therefore, it can't be called from an non-preemptible context.
 > 
-> Thanks for the report. To be sure the issue doesn't fall through the
-> cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
-> tracking bot:
+> One practical example is splat inside inactive_task_timer(), which is
+> called in a interrupt context:
 > 
-> #regzbot ^introduced 8f9ea86fdf99
+> CPU: 1 PID: 2848 Comm: life Kdump: loaded Tainted: G W ---------
+>  Hardware name: HP ProLiant DL388p Gen8, BIOS P70 07/15/2012
+>  Call Trace:
+>  dump_stack_lvl+0x57/0x7d
+>  mark_lock_irq.cold+0x33/0xba
+>  ? stack_trace_save+0x4b/0x70
+>  ? save_trace+0x55/0x150
+>  mark_lock+0x1e7/0x400
+>  mark_usage+0x11d/0x140
+>  __lock_acquire+0x30d/0x930
+>  lock_acquire.part.0+0x9c/0x210
+>  ? refill_obj_stock+0x3d/0x3a0
+>  ? rcu_read_lock_sched_held+0x3f/0x70
+>  ? trace_lock_acquire+0x38/0x140
+>  ? lock_acquire+0x30/0x80
+>  ? refill_obj_stock+0x3d/0x3a0
+>  rt_spin_lock+0x27/0xe0
+>  ? refill_obj_stock+0x3d/0x3a0
+>  refill_obj_stock+0x3d/0x3a0
+>  ? inactive_task_timer+0x1ad/0x340
+>  kmem_cache_free+0x357/0x560
+>  inactive_task_timer+0x1ad/0x340
+>  ? switched_from_dl+0x2d0/0x2d0
+>  __run_hrtimer+0x8a/0x1a0
+>  __hrtimer_run_queues+0x91/0x130
+>  hrtimer_interrupt+0x10f/0x220
+>  __sysvec_apic_timer_interrupt+0x7b/0xd0
+>  sysvec_apic_timer_interrupt+0x4f/0xd0
+>  ? asm_sysvec_apic_timer_interrupt+0xa/0x20
+>  asm_sysvec_apic_timer_interrupt+0x12/0x20
+>  RIP: 0033:0x7fff196bf6f5
 
-#regzbot fix: 3fb906e7fabbb5b76c3c
-#regzbot ignore-activity
+Now that I looked around: There are other put_task_struct() while the rq
+lock is held. I didn't look outside o dl.c.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+> Instead of calling __put_task_struct() directly, we defer it using
+> call_rcu(). A more natural approach would use a workqueue, but since
+> in PREEMPT_RT, we can't allocate dynamic memory from atomic context,
+> the code would become more complex because we would need to put the
+> work_struct instance in the task_struct and initialize it when we
+> allocate a new task_struct.
+> 
+> Changelog
+> =========
+> 
+> v1:
+> * Initial implementation fixing the splat.
+> 
+> v2:
+> * Isolate the logic in its own function.
+> * Fix two more cases caught in review.
+> 
+> v3:
+> * Change __put_task_struct() to handle the issue internally.
+> 
+> v4:
+> * Explain why call_rcu() is safe to call from interrupt context.
+> 
+> v5:
+> * Explain why __put_task_struct() doesn't conflict with
+>   put_task_sruct_rcu_user.
+> 
+> Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+> Reported-by: Hu Chunyu <chuhu@redhat.com>
+> Suggested-by: Oleg Nesterov <oleg@redhat.com>
+> Suggested-by: Valentin Schneider <vschneid@redhat.com>
+> Cc: Paul McKenney <paulmck@kernel.org>
+> ---
+>  kernel/fork.c | 33 ++++++++++++++++++++++++++++++++-
+>  1 file changed, 32 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index 9f7fe3541897..9bf30c725ed8 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -840,7 +840,7 @@ static inline void put_signal_struct(struct signal_struct *sig)
+>  		free_signal_struct(sig);
+>  }
+>  
+> -void __put_task_struct(struct task_struct *tsk)
+> +static void ___put_task_struct(struct task_struct *tsk)
+>  {
+>  	WARN_ON(!tsk->exit_state);
+>  	WARN_ON(refcount_read(&tsk->usage));
+> @@ -857,6 +857,37 @@ void __put_task_struct(struct task_struct *tsk)
+>  	sched_core_free(tsk);
+>  	free_task(tsk);
+>  }
+> +
+> +static void __put_task_struct_rcu(struct rcu_head *rhp)
+> +{
+> +	struct task_struct *task = container_of(rhp, struct task_struct, rcu);
+> +
+> +	___put_task_struct(task);
+> +}
+> +
+> +void __put_task_struct(struct task_struct *tsk)
+> +{
+> +	if (IS_ENABLED(CONFIG_PREEMPT_RT) && (!preemptible() || !in_task()))
+
+No. If you do this on non-RT kernel with CONFIG_PROVE_RAW_LOCK_NESTING
+then it will complain. And why do we have in_task() here?
+
+If Oleg does not want the unconditional RCU then I would prefer an
+explicit put task which delays it to RCU for the few users that need it.
+
+A lockdep annotation _before_ ___put_task_struct() should spot users
+which are not obviously visible from audit.
+
+> +		/*
+> +		 * under PREEMPT_RT, we can't call put_task_struct
+> +		 * in atomic context because it will indirectly
+> +		 * acquire sleeping locks.
+> +		 *
+> +		 * call_rcu() will schedule delayed_put_task_struct_rcu()
+> +		 * to be called in process context.
+> +		 *
+> +		 * __put_task_struct() is called called when
+> +		 * refcount_dec_and_test(&t->usage) succeeds.
+> +		 *
+> +		 * This means that it can't "conflict" with
+> +		 * put_task_struct_rcu_user() which abuses ->rcu the same
+> +		 * way; rcu_users has a reference so task->usage can't be
+> +		 * zero after rcu_users 1 -> 0 transition.
+> +		 */
+> +		call_rcu(&tsk->rcu, __put_task_struct_rcu);
+> +	else
+> +		___put_task_struct(tsk);
+> +}
+>  EXPORT_SYMBOL_GPL(__put_task_struct);
+>  
+>  void __init __weak arch_task_cache_init(void) { }
+> -- 
+> 2.39.1
+> 
