@@ -2,120 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65EF692FC2
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 10:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF13692FC1
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 10:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjBKJUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 04:20:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57040 "EHLO
+        id S229568AbjBKJUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 04:20:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjBKJUJ (ORCPT
+        with ESMTP id S229447AbjBKJUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 04:20:09 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F6530192;
-        Sat, 11 Feb 2023 01:20:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676107207; x=1707643207;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sthyvzdqWUebeh9Ku/k4oVBc3bHU/xq8WbNuQ5sinR0=;
-  b=ip+CFwqWSaWasIu52JczKfSI4o0QBcbsBIHXscNm20gVcO4BeBQxB0Fi
-   dMfgz4JTWD9c4VgD7SwB0cnKxRAS6K9Z5sbcaJIvlHqyL+iSules/vmSw
-   2Ieawnhr68qjRe1iY74byXDqr1PHV3ybWQ8piwNX7K4PndiNEMg8Mi6bC
-   0EGzVYGxJ40+eC2n6JGE4AeKkEYAyUGQjRWDRFWHiuxIj6bGJlQGRNNEn
-   MpWzKpySmr1Opdhfm8Mx9JefzldcWVu+NY761D2JV5XFWIS6a1sPynGdc
-   WhgZn26KO+sF97O1xX6mwl/1Rajfv1PFDSM6bRx/dIMJGjh2U/BzVoaVq
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="393000129"
-X-IronPort-AV: E=Sophos;i="5.97,289,1669104000"; 
-   d="scan'208";a="393000129"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2023 01:20:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="668305744"
-X-IronPort-AV: E=Sophos;i="5.97,289,1669104000"; 
-   d="scan'208";a="668305744"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 11 Feb 2023 01:20:03 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pQm39-0006Ns-03;
-        Sat, 11 Feb 2023 09:20:03 +0000
-Date:   Sat, 11 Feb 2023 17:19:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>
-Subject: Re: [PATCH 2/2] media: i2c: ov5670: Support single-lane operation
-Message-ID: <202302111713.VF9P2Gae-lkp@intel.com>
-References: <20230210-ov5670-single-lane-v1-2-71835d39c1ce@z3ntu.xyz>
+        Sat, 11 Feb 2023 04:20:07 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D802E815
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 01:20:04 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id p26so21238254ejx.13
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 01:20:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Ay7GopDhxpUWXvFU/Desi3ncPwaICJKEa+mMLgmlAI=;
+        b=O7wHkho8aDQgo94UfFVY9X+XG/U+2SPSmWJ435T0PJxK0wOCnONbmuwo8viMsiCcuO
+         buC/rLfDgF+j3xQ2VEwC1njKqtZTtDbzXNbVE3KUkhlgYxpdXWNLq62thnYyW0bTgI3V
+         KJRwLI6WpGbUbgf2gxyHIO5uEXXwlSuiYb23U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6Ay7GopDhxpUWXvFU/Desi3ncPwaICJKEa+mMLgmlAI=;
+        b=pnuaVpFZkqSUU8jP44LL8XMT6N6QKdrC1kQDIYDV1sdZhlxiBJazk0sC2/55C/bw1n
+         AZjTQFtgf1X+RSU0KOMYjubp6s4iBwqVuVNYZk0isxaDAKArIaxp4PbgufNfW9oA1PQW
+         JMd3e37bPbZ6xq6sURqe6NMKG862i/0In4U9LyvE/U8xmIy0IsaF7OqmjiKA9vm4kTvo
+         IoCZuXZx/F09CAo1LboeAyG465v+dLC0RDro6wNqSTNzvdtSulBxBg9XVERl3UE77H1B
+         Sz0SGtoTlnsKHeSaR1ZGHSr3e6/q7JJOZof9ZQFNHeVCinenA/OCvsk9htWhzUtvCFnf
+         7EkQ==
+X-Gm-Message-State: AO0yUKXHhaeELR3BBa5WY9/36RUMlY29nTyrd7Yz1OVLG+CCEDhVWrR4
+        CeqdyMIocClR6DNub6OWebSReibQgn23TnCA2XCr7w==
+X-Google-Smtp-Source: AK7set+jZ705IMIDjL87PKlafwfn4leLVjN6W0uPB/ZG04XFihgIOINn7gMrXMHNl3mnPgeREDPQ8Or/gVMTa8GMDfY=
+X-Received: by 2002:a17:906:69d1:b0:886:4fe9:1d51 with SMTP id
+ g17-20020a17090669d100b008864fe91d51mr2131922ejs.12.1676107203273; Sat, 11
+ Feb 2023 01:20:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230210-ov5670-single-lane-v1-2-71835d39c1ce@z3ntu.xyz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230101175740.1010258-1-dario.binacchi@amarulasolutions.com>
+ <1fc8686b0b66c3b3ff80c044ecf1add6.sboyd@kernel.org> <CAOf5uwkMRSc7q1xUv4D=hc4w0HL=+x1_J60yyru_hGSuf5m0bA@mail.gmail.com>
+ <83a3c8d0abf217369f045df0217b1f64.sboyd@kernel.org>
+In-Reply-To: <83a3c8d0abf217369f045df0217b1f64.sboyd@kernel.org>
+From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date:   Sat, 11 Feb 2023 10:19:52 +0100
+Message-ID: <CAOf5uwk_ZtmuzUv9GNxOo0zmMnYVskBKfzm+9n3XO2U7j7C0Sw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 00/11] clk: imx8mn: setup clocks from the device tree
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        linux-kernel@vger.kernel.org, angelo@amarulasolutions.com,
+        tommaso.merciai@amarulasolutions.com,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        linux-amarula@amarulasolutions.com, anthony@amarulasolutions.com,
+        jagan@amarulasolutions.com, Abel Vesa <abelvesa@kernel.org>,
+        Adam Ford <aford173@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Li Jun <jun.li@nxp.com>, Lucas Stach <l.stach@pengutronix.de>,
+        Marek Vasut <marex@denx.de>,
+        Markus Niebel <Markus.Niebel@ew.tq-group.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luca,
+Hi
 
-Thank you for the patch! Yet something to improve:
+On Fri, Feb 10, 2023 at 11:49 PM Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting Michael Nazzareno Trimarchi (2023-01-26 02:49:54)
+> > Hi
+> >
+> > On Wed, Jan 25, 2023 at 10:11 PM Stephen Boyd <sboyd@kernel.org> wrote:
+> > >
+> > > Quoting Dario Binacchi (2023-01-01 09:57:29)
+> > > > The idea for this series was born back from Dublin (ELCE 2022) after
+> > > > having attended the talk entitled "Updating and Modernizing Clock
+> > > > Drivers" held by Chen-Yu Tsai and the availability of a board with
+> > > > imx8mn SOC.
+> > >
+> > > Interesting. I didn't see any mention of putting clks into DT in that
+> > > presentation.
+> > >
+> > > >
+> > > > This series aims to setup all imx8mn's clocks from the device tree and
+> > > > remove the legacy setup code with hardwired parameters.
+> > >
+> > > Please, no! We don't want one node per clk style of bindings.
+> >
+> > I think the idea behind is:
+> > - create a way from silicon vendor to export their clock mapping with
+> > automatic exportation
+>
+> I suspect silicon vendors automatically generate their clk drivers
+> today.
+>
 
-[auto build test ERROR on 6ba8a227fd19d19779005fb66ad7562608e1df83]
+Was easy to think that creating tools for dts generation was easy to
+have because
+they don't depend on the internal linux kernel and they are formally
+described. Export
+clk drivers considering kernel internal change I don't think that can work.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Luca-Weiss/media-i2c-ov5670-Use-dev_err_probe-in-probe-function/20230211-043546
-base:   6ba8a227fd19d19779005fb66ad7562608e1df83
-patch link:    https://lore.kernel.org/r/20230210-ov5670-single-lane-v1-2-71835d39c1ce%40z3ntu.xyz
-patch subject: [PATCH 2/2] media: i2c: ov5670: Support single-lane operation
-config: openrisc-randconfig-r003-20230210 (https://download.01.org/0day-ci/archive/20230211/202302111713.VF9P2Gae-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6cd856e5e8f62b0926959199d5a998de321c78e2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Luca-Weiss/media-i2c-ov5670-Use-dev_err_probe-in-probe-function/20230211-043546
-        git checkout 6cd856e5e8f62b0926959199d5a998de321c78e2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=openrisc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=openrisc SHELL=/bin/bash
+> > - reduce the copy and paste code across the drivers
+> > - avoid code duplication
+>
+> Code duplication should be avoided. Surely the clk_ops is shared? Data
+> duplication is the real problem here. The status quo has been to have
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302111713.VF9P2Gae-lkp@intel.com/
+The idea to have in dts was to have much less code by the end to handle
+different SoC vendors but as you pointed me seems that you are more
+concerned about data duplication.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+> data descriptions of clks in drivers so that drivers can turn them on.
+> If we're trying to avoid bloat then we only enable the drivers that we
+> care about, or make them modular so they don't waste kernel memory.
+>
 
-WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_ext_maps (section: .data) -> qed_mfw_ext_1g (section: .init.rodata)
-WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_ext_maps (section: .data) -> qed_mfw_ext_10g (section: .init.rodata)
-WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_ext_maps (section: .data) -> qed_mfw_ext_25g (section: .init.rodata)
-WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_ext_maps (section: .data) -> qed_mfw_ext_40g (section: .init.rodata)
-WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_ext_maps (section: .data) -> qed_mfw_ext_50g_base_r (section: .init.rodata)
-WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_ext_maps (section: .data) -> qed_mfw_ext_50g_base_r2 (section: .init.rodata)
-WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_ext_maps (section: .data) -> qed_mfw_ext_100g_base_r2 (section: .init.rodata)
-WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_ext_maps (section: .data) -> qed_mfw_ext_100g_base_r4 (section: .init.rodata)
-WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_legacy_maps (section: .data) -> qed_mfw_legacy_1g (section: .init.rodata)
-WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_legacy_maps (section: .data) -> qed_mfw_legacy_10g (section: .init.rodata)
-WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_legacy_maps (section: .data) -> qed_mfw_legacy_20g (section: .init.rodata)
-WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_legacy_maps (section: .data) -> qed_mfw_legacy_25g (section: .init.rodata)
-WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_legacy_maps (section: .data) -> qed_mfw_legacy_40g (section: .init.rodata)
-WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_legacy_maps (section: .data) -> qed_mfw_legacy_50g (section: .init.rodata)
-WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_legacy_maps (section: .data) -> qed_mfw_legacy_bb_100g (section: .init.rodata)
->> ERROR: modpost: "__udivdi3" [drivers/media/i2c/ov5670.ko] undefined!
->> ERROR: modpost: "__divdi3" [drivers/media/i2c/ov5670.ko] undefined!
+I'm not an expert of the dtc compiler but, is that possible that some
+optimization
+can happen there in the feature?
+
+> If you have ideas on how to avoid duplication there then by all means
+> implement them. Don't move the data duplication problem to devicetree
+> though.
+>
+
+We will sit together again ;) after your comments here
+
+> I've been wondering if we can tag drivers that are compiled into the
+> kernel as freeable if they aren't ever going to probe because they're
+> for some SoC that isn't present. That would allow us to shed various
+> builtin clk drivers on systems instead of forcing us to make everything
+> a module.
+
+This is general on the driver level but sounds like a good idea.
+
+Michael
+
+>
+> >
+> > Is the binding a way to solve this problem?
+>
+> Don't think so.
+>
+> > If you don't want one node
+> > per clk style bindings, did you still think that the way
+> > to go is totally wrong?
+>
+> Yes.
+
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Michael Nazzareno Trimarchi
+Co-Founder & Chief Executive Officer
+M. +39 347 913 2170
+michael@amarulasolutions.com
+__________________________________
+
+Amarula Solutions BV
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+T. +31 (0)85 111 9172
+info@amarulasolutions.com
+www.amarulasolutions.com
