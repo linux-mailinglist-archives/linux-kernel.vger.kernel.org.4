@@ -2,115 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD368692E9C
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 07:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CED1C692E9E
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 07:25:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbjBKGZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 01:25:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36524 "EHLO
+        id S229552AbjBKGZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 01:25:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBKGZ0 (ORCPT
+        with ESMTP id S229563AbjBKGZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 01:25:26 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2252A9B2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 22:25:25 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id cq19so4045879edb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 22:25:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wclVxROs/KOhkdBKAZ2AIDmogjpBrtC4H68/fmp9w94=;
-        b=FDFmipJ/ZB8iumNTYCSHE6RNkf3DV2sJ+bD4uCOWaWzFwTuTLL25JpuadL0ZaPdCbB
-         aPxHdSxkpLRjoQXjz7AicTxS/0hOu/fiPzuerF+sbIUDMVQGraGjsLFELxyfzPkFQec4
-         KHiPImrfOTECE/AJsAICcrAZUYdomHLlCRHvo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wclVxROs/KOhkdBKAZ2AIDmogjpBrtC4H68/fmp9w94=;
-        b=cS8C7q+cfUl9hgw3aaDzcLaIPlmNhMkArSSxaqVRAoJgBQLd/1/3pkgZR1Hd4RYZvS
-         SgwlEJiMYIfWhR2TW3XsQcRGfcpW4mrxoDK+/PQqtYYYOQzcUe0MjIXv5RLECsUk8HIa
-         zoNiztlC676zL3YlUmev8n759eAepAQmFRzLjqsEyoG8yo2XqA2U72bycPDnh3eTkbMN
-         Ct4fEthkGOLo/p7DtIZcIHNsTQyEhBTNvBIcZKFL/jYIm32zJr904G4TKyz+vmKhRv2L
-         RTQ1N6baLbJXo+aYJ2fErD4vIBNZQgRTAgDrAIes2UcdihBbSUqeH6RdkX8cH7R53Uh7
-         zZ4g==
-X-Gm-Message-State: AO0yUKWy1ff02z+oFXDvkthT1Oq9EYcQ+y2zNstoKGS54Bfpn5Vpwh/p
-        CNqyoTCI5cHfJblp4tvuREGCQhAFJ+3K/mJoGK+QUA==
-X-Google-Smtp-Source: AK7set9VtlKVpbrUtjbbdAIwBqvaa2fLQ1yaa3qkiprEdOKclYW5ywBLl1KfZiA7WbPK1VEfQmf0mt8ioWRrwZp49To=
-X-Received: by 2002:a50:9f65:0:b0:4ac:b38f:51a1 with SMTP id
- b92-20020a509f65000000b004acb38f51a1mr798148edf.6.1676096724220; Fri, 10 Feb
- 2023 22:25:24 -0800 (PST)
+        Sat, 11 Feb 2023 01:25:47 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B2473582;
+        Fri, 10 Feb 2023 22:25:42 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31B6NCi1019906;
+        Sat, 11 Feb 2023 06:25:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Y0jE660Am99SVgRB8t9rWtNSlDh4pgj0ryPn4R8VU/g=;
+ b=PWMx5nb9SSOJ87aAQ1Pg7RFNfHYDZiUsiA4T0T73rFvI3XeXjWkn6p+B0C7/Doepcd/E
+ /k93bRz2IYaUBlrTfClQYtCYAuL/7B6y1aZvCO7gob8HvdSOGR9po8ONK9DuaIjNwxOe
+ DI6kwH5NmeiaLSalPzgp4451pv3Tycf/Xi2xOgd+y1MFu+PR+WaWPHb3lTJeWccYCBSe
+ vhkjivNMGfEZeHPepkNJEw2KYjlnS1haDV0zbtADWglTfTdl8J4jKtxTpBYZsefxzKKn
+ em8qHCowoSU8iG4Q3dzjZGJQYVPIASQx8KTJ/nzkBJPp6BX6A1tVairZUnr/fENQZVkG Kg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np2bt8anf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 11 Feb 2023 06:25:34 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31B6PXSI032423
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 11 Feb 2023 06:25:33 GMT
+Received: from [10.216.25.124] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 10 Feb
+ 2023 22:25:29 -0800
+Message-ID: <7fd475ad-bcf3-e5d8-a846-944ece2d1277@quicinc.com>
+Date:   Sat, 11 Feb 2023 11:55:25 +0530
 MIME-Version: 1.0
-References: <S1728511AbfHaSEm/20190831180442Z+580@vger.kernel.org>
- <08fbdf25-faa1-aa13-4f13-d30acbf27dda@mipisi.de> <20190902074917.GA21922@piout.net>
- <alpine.DEB.2.21.1909021247250.3955@nanos.tec.linutronix.de>
- <4fc3a016-ec2f-a15e-5fd1-6794a001e2d9@mipisi.de> <alpine.DEB.2.21.1909040047210.1902@nanos.tec.linutronix.de>
- <Y+O+VBSNywC7LKhn@panicking> <87edr02fsc.ffs@tglx> <CAOf5uwn1SKBR+pREZy9f-wnQf6Lw3epyHxiX_hjf_pOaiiSDWA@mail.gmail.com>
- <87zg9m26f2.ffs@tglx> <CANDhNCopf___L_3cARqK8WDHSJWFYYikxvANHh2CRMjDRag9yw@mail.gmail.com>
- <CANDhNCqaawcr6hxxKsk1Vd8e4kvwd8-qgVv--uLtWnB1AoJdig@mail.gmail.com>
-In-Reply-To: <CANDhNCqaawcr6hxxKsk1Vd8e4kvwd8-qgVv--uLtWnB1AoJdig@mail.gmail.com>
-From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date:   Sat, 11 Feb 2023 07:25:13 +0100
-Message-ID: <CAOf5uwnnJKTd2sQvN2Ooi+zVy+yvPY78BLkYJvAvkjSGft9iwg@mail.gmail.com>
-Subject: Re: Problem when function alarmtimer_suspend returns 0 if time delta
- is zero
-To:     John Stultz <jstultz@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Michael <michael@mipisi.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] usb: gadget: u_serial: Add null pointer check in
+ gserial_resume
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <Y+SaZrDmaqB0U2QA@kroah.com>
+ <f32398bb-62f3-12fd-4b81-7ce7bdf4706a@quicinc.com>
+ <e7dde0aa-c1e2-dd6c-94a1-1e9049f0a5fb@quicinc.com>
+ <Y+UMkA9iaJTWVQ5u@rowland.harvard.edu>
+ <5ad875be-079c-7f91-ede9-68f954cc7f34@quicinc.com>
+ <Y+UZQvuh8KR4gE4P@rowland.harvard.edu>
+ <71f624df-5302-8276-2a2a-96223d4ba3c7@quicinc.com>
+ <Y+VgHdJjrd0ZvY33@rowland.harvard.edu>
+ <53d48954-3f7e-fd02-5e8e-2912c16565b3@quicinc.com>
+ <bf3296be-10f7-5a43-5ae8-dfc5b6d41240@quicinc.com>
+ <Y+ZnKaeJx41xswpT@rowland.harvard.edu>
+From:   Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <Y+ZnKaeJx41xswpT@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: FNsZLuV3IAcV0XD6GuP8HxNw85-xglld
+X-Proofpoint-ORIG-GUID: FNsZLuV3IAcV0XD6GuP8HxNw85-xglld
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-11_02,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 mlxlogscore=317
+ adultscore=0 phishscore=0 malwarescore=0 impostorscore=0 clxscore=1015
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302110057
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi John
 
-On Sat, Feb 11, 2023 at 2:18 AM John Stultz <jstultz@google.com> wrote:
->
-> On Fri, Feb 10, 2023 at 5:04 PM John Stultz <jstultz@google.com> wrote:
-> > Thomas' patch fixes the erronious 0-as-invalid initialization issue
-> > using KTIME_MAX but also simplifies the logic getting rid of the
-> > freezer handling.
-> >
-> > I don't have as much familiarity with the freezer handling change, so
-> > while it looks sane, I can't say I would likely catch an issue doing a
-> > visual review.
->
-> Actually, because of this, I'm going to split Thomas' change in two.
->
-> The first to just use KTIME_MAX as the invalid initialization value,
-> and the second to cleanup the freezer logic.
->
-> That way if the freezer change is problematic we can revert it and not
-> lose the fix here.
->
-> thanks
-> -john
 
-I'm not that Michael but it's ok I think to add both as a reporter. I can try to
-test on my side too and then send a tested-by
-
-Michael
-
--- 
-Michael Nazzareno Trimarchi
-Co-Founder & Chief Executive Officer
-M. +39 347 913 2170
-michael@amarulasolutions.com
-__________________________________
-
-Amarula Solutions BV
-Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-T. +31 (0)85 111 9172
-info@amarulasolutions.com
-www.amarulasolutions.com
+On 10-02-23 09:17 pm, Alan Stern wrote:
+> 
+> I agree, that should work fine.
+> 
+> Alan Stern
+Thanks Alan for the help! will create v2 patch.
