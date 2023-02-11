@@ -2,58 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E16A693052
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 12:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2F6693054
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 12:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjBKL3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 06:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
+        id S229977AbjBKLbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 06:31:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBKL3d (ORCPT
+        with ESMTP id S229581AbjBKLbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 06:29:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E6640CC
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 03:29:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97BD460BFB
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 11:29:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2827C4339E
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 11:29:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676114972;
-        bh=C3bjROftDAPM+bZdQkNNgbRlbm6TOtzl9Ub93ftiVEo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LwMv/50uD4n72UOgutSUODC3C2KbqcgXa/4JPQi6yFjIPD+hFvA/c/iY+hBfU2M2w
-         4UCxgjW71QCIMUJLIIIyPAMGY2yXS8R0seUgpeeiC/z6ZVZxxKLYLhFcBXsBscdDtV
-         rkwa3um1nrH8kfRZw0a9lhBBZ3auZAWOyAqPEwFbmO1ZIy3U8o9JPp+Ci6XwNcABIJ
-         ikPHNQhPxQeRRI/AmmPMhUfza2saZOZ/dpe2be+SSw7O3LA8lrkS/+dinpa3c7TuiU
-         MVi/RPcK7opUrX/A/yFyqLKIdQ2Q66jhKbJqjAW6o39LdkM7gZp4JP/4AH1t2ybZ2c
-         lgZ7DGFfaCG1g==
-Received: by mail-ed1-f43.google.com with SMTP id d40so6028717eda.8
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 03:29:31 -0800 (PST)
-X-Gm-Message-State: AO0yUKV2P9QikAY+h19Z5nM7OmpPju8HQpRRXNQn34GmsetaT14xc6Za
-        9owJkuaWfz+w9OLzsW7M10OYw+VzOiRTkI47fZE=
-X-Google-Smtp-Source: AK7set+mmZzUyxF0iFAFzDbCYZQofszUN0H6Ke2DyAdDADTjdww9OENwHEgM992BZmbHnkRY8IK7Zr2NepClMRtDeik=
-X-Received: by 2002:a50:cd8e:0:b0:49d:ec5e:1e9a with SMTP id
- p14-20020a50cd8e000000b0049dec5e1e9amr4443908edi.7.1676114970137; Sat, 11 Feb
- 2023 03:29:30 -0800 (PST)
+        Sat, 11 Feb 2023 06:31:12 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34FD303DC
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 03:31:09 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id bg5-20020a05600c3c8500b003e00c739ce4so5821158wmb.5
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 03:31:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uSR8IXziBIMVhSmEufg1SN4JgfbW84fvRPnBN9WPavc=;
+        b=llZ1PmrXT6iaZ/VVXG773oV6lIt2qBbjISC1I5Hqo4JFLve1LrZd5wmE9fF9k2U8Ia
+         ChNmhncH9r6Sj76ZORUKPHTgWg8cc2EbFPUXXLfIGzH9LPp7hG7cyXIFj+Sq5O6pCte+
+         9qRFvftZQTJP6o3LU/NV93/SzEFMuFBs5h1cxuv3j8oL2IfLPEtjpEm8APB1JCYeqKdD
+         cD7jhTLBIAA5gASzXSm4uyl7kaegJaTvXACCS7J/0so1T63Gnap5P7nx3+nK3PRL0FNM
+         +md7PWH5FIhsKrTFdLENc+NzzvmqKOXhr5IvbuGP43VMnbx3dwJev7AORn1Vmsy68BCR
+         Jr1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uSR8IXziBIMVhSmEufg1SN4JgfbW84fvRPnBN9WPavc=;
+        b=ykjPyQy1RhDblbWEm7xe+69GT3nzYcVmz74/uqRdemVZ8H1WHTvwYrhTRP/Yg4YcvG
+         IGxuL/sYBBumcNhElG3bwGSibj+Cdw6tQS+w/iJon89vINV2jN7BCwn2/ukVqklSxlwv
+         FjHNTmTwls0G9lTB6tvLgF+z/upoSxULiieW6yUPYy7rqX/+KDVtFzR31fqOmpjIiJP+
+         prkzAYRBSJckuibkVb2L0v/3QsSoNRNCrP5Qx0HrBn9IpenEOgXrFA1ggpa/30px7ToU
+         1QhDFU0EKBNNqwNYTL/kTZ5aUT2u0xQfnP//e+1knhzAIaBh9TduPl1KOyXN8xFUKBrR
+         8VIA==
+X-Gm-Message-State: AO0yUKWhGtvUMtU3rJ6WW3jC2r0BvzwG+GSiqwRof8pPXbqKUolgzkqP
+        /5mPQtfJCMI1DMFibXNdTIRlRw==
+X-Google-Smtp-Source: AK7set/rJMtqF6GRUHR9/M1BvLLThNbbHt3y3RnWKuDtmYwLPRB6rtW0jKn4dtbyQJWbDbQnqPvl3Q==
+X-Received: by 2002:a05:600c:2b46:b0:3df:12ac:7cc9 with SMTP id e6-20020a05600c2b4600b003df12ac7cc9mr15122532wmf.15.1676115068397;
+        Sat, 11 Feb 2023 03:31:08 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id l40-20020a05600c1d2800b003dd1b00bd9asm9033559wms.32.2023.02.11.03.31.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Feb 2023 03:31:08 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] ARM: dts: samsung: Late DTS for v6.3
+Date:   Sat, 11 Feb 2023 12:31:03 +0100
+Message-Id: <20230211113103.58894-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <1676114191-13386-1-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1676114191-13386-1-git-send-email-yangtiezhu@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sat, 11 Feb 2023 19:29:17 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H76gvrBFoFcFyqfr1rBew_cLmXEEh+4qWt+A-h_adAjBw@mail.gmail.com>
-Message-ID: <CAAhV-H76gvrBFoFcFyqfr1rBew_cLmXEEh+4qWt+A-h_adAjBw@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Only call get_timer_irq() once in constant_clockevent_init()
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,97 +72,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Tiezhu,
+Hi,
 
-On Sat, Feb 11, 2023 at 7:16 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->
-> Under CONFIG_DEBUG_ATOMIC_SLEEP=y and CONFIG_DEBUG_PREEMPT=y, we can see
-> the following messages on LoongArch, this is because using might_sleep()
-> in preemption disable context.
->
-> [    0.001127] smp: Bringing up secondary CPUs ...
-> [    0.001222] Booting CPU#1...
-> [    0.001244] 64-bit Loongson Processor probed (LA464 Core)
-> [    0.001247] CPU1 revision is: 0014c012 (Loongson-64bit)
-> [    0.001250] FPU1 revision is: 00000000
-> [    0.001252] BUG: sleeping function called from invalid context at kernel/locking/mutex.c:283
-> [    0.001255] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 0, name: swapper/1
-> [    0.001257] preempt_count: 1, expected: 0
-> [    0.001258] RCU nest depth: 0, expected: 0
-> [    0.001259] Preemption disabled at:
-> [    0.001261] [<9000000000223800>] arch_dup_task_struct+0x20/0x110
-> [    0.001272] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.2.0-rc7+ #43
-> [    0.001275] Hardware name: Loongson Loongson-3A5000-7A1000-1w-A2101/Loongson-LS3A5000-7A1000-1w-A2101, BIOS vUDK2018-LoongArch-V4.0.05132-beta10 12/13/202
-> [    0.001277] Stack : 0072617764726148 0000000000000000 9000000000222f1c 90000001001e0000
-> [    0.001286]         90000001001e3be0 90000001001e3be8 0000000000000000 0000000000000000
-> [    0.001292]         90000001001e3be8 0000000000000040 90000001001e3cb8 90000001001e3a50
-> [    0.001297]         9000000001642000 90000001001e3be8 be694d10ce4139dd 9000000100174500
-> [    0.001303]         0000000000000001 0000000000000001 00000000ffffe0a2 0000000000000020
-> [    0.001309]         000000000000002f 9000000001354116 00000000056b0000 ffffffffffffffff
-> [    0.001314]         0000000000000000 0000000000000000 90000000014f6e90 9000000001642000
-> [    0.001320]         900000000022b69c 0000000000000001 0000000000000000 9000000001736a90
-> [    0.001325]         9000000100038000 0000000000000000 9000000000222f34 0000000000000000
-> [    0.001331]         00000000000000b0 0000000000000004 0000000000000000 0000000000070000
-> [    0.001337]         ...
-> [    0.001339] Call Trace:
-> [    0.001342] [<9000000000222f34>] show_stack+0x5c/0x180
-> [    0.001346] [<90000000010bdd80>] dump_stack_lvl+0x60/0x88
-> [    0.001352] [<9000000000266418>] __might_resched+0x180/0x1cc
-> [    0.001356] [<90000000010c742c>] mutex_lock+0x20/0x64
-> [    0.001359] [<90000000002a8ccc>] irq_find_matching_fwspec+0x48/0x124
-> [    0.001364] [<90000000002259c4>] constant_clockevent_init+0x68/0x204
-> [    0.001368] [<900000000022acf4>] start_secondary+0x40/0xa8
-> [    0.001371] [<90000000010c0124>] smpboot_entry+0x60/0x64
->
-> Here are the complete call chains:
->
-> smpboot_entry()
->   start_secondary()
->     constant_clockevent_init()
->       get_timer_irq()
->         irq_find_matching_fwnode()
->           irq_find_matching_fwspec()
->             mutex_lock()
->               might_sleep()
->                 __might_sleep()
->                   __might_resched()
->
-> In order to avoid the above issue, we should break the call chains,
-> using timer_irq_installed variable as check condition to only call
-> get_timer_irq() once in constant_clockevent_init() is a simple and
-> proper way.
->
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  arch/loongarch/kernel/time.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/loongarch/kernel/time.c b/arch/loongarch/kernel/time.c
-> index a6576de..6263b5a 100644
-> --- a/arch/loongarch/kernel/time.c
-> +++ b/arch/loongarch/kernel/time.c
-> @@ -140,14 +140,15 @@ static int get_timer_irq(void)
->
->  int constant_clockevent_init(void)
->  {
-> -       int irq;
-> +       static int irq;
->         unsigned int cpu = smp_processor_id();
->         unsigned long min_delta = 0x600;
->         unsigned long max_delta = (1UL << 48) - 1;
->         struct clock_event_device *cd;
->         static int timer_irq_installed = 0;
->
-> -       irq = get_timer_irq();
-> +       if (timer_irq_installed == 0)
-> +               irq = get_timer_irq();
->         if (irq < 0)
->                 pr_err("Failed to map irq %d (timer)\n", irq);
-This should also be in the if condition, but you don't need to send a
-new version. :)
+Late pull with DTS cleanups and minor fixes for Exynos ARM boards.  I know it
+is late in the cycle but:
+1. I am really pushing recently towards full DTS compliance with `dtbs_check`
+   and I am almost there,
+2. All these should be low-risk cleanups or fixes, so I don't expect anything
+   broken (previous round of my cleanups affected devfreq/exynos-bus on
+   Exynos4412, but this is some weird driver problem which I am still
+   investigating).
 
-Huacai
->
-> --
-> 2.1.0
->
+Best regards,
+Krzysztof
+
+
+The following changes since commit 27be20e3b9d125f2c1b066d1d238c67bf5b89dc3:
+
+  ARM: dts: exynos: add unit address to DWC3 node wrapper in Exynos54xx (2023-01-29 11:34:12 +0100)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-6.3-2
+
+for you to fetch changes up to 301d3dd05525e3a046f6cfa6ee4dea6a3b7111ee:
+
+  ARM: dts: exynos: correct max98090 DAI argument in Snow (2023-02-09 12:58:30 +0100)
+
+----------------------------------------------------------------
+Samsung DTS ARM changes for v6.3, part two
+
+Several cleanups pointed out by `make dtbs_check`:
+1. Align LED status node name with bindings.
+2. Drop redundant properties.
+3. Move i2c-gpio node out of soc to top-level, as soc node is expected
+   to have only MMIO nodes.
+4. Correct SPI NOR flash compatible in SMDK5250 and SMDKv310.
+5. Align GPIO property names in WM1811-family codec nodes with bindings.
+6. Correct MAX98090 codec DAI cells in Snow.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (10):
+      ARM: dts: exynos: align status led name with bindings on Origen4210
+      ARM: dts: exynos: drop default status from I2C10 on Arndale
+      ARM: dts: exynos: drop redundant address/size cells from I2C10 on Arndale
+      ARM: dts: exynos: move I2C10 out of soc node on Arndale
+      ARM: dts: exynos: correct SPI nor compatible in SMDKv310
+      ARM: dts: exynos: correct SPI nor compatible in SMDK5250
+      ARM: dts: exynos: add "gpios" suffix to wlf,ldo1ena on Midas
+      ARM: dts: exynos: add "gpios" suffix to wlf,ldo1ena on Arndale
+      ARM: dts: s5pv210: add "gpios" suffix to wlf,ldo1ena on Aries
+      ARM: dts: exynos: correct max98090 DAI argument in Snow
+
+ arch/arm/boot/dts/exynos4210-origen.dts    |  2 +-
+ arch/arm/boot/dts/exynos4210-smdkv310.dts  |  2 +-
+ arch/arm/boot/dts/exynos4412-midas.dtsi    |  4 ++--
+ arch/arm/boot/dts/exynos5250-arndale.dts   | 35 +++++++++++++-----------------
+ arch/arm/boot/dts/exynos5250-smdk5250.dts  |  2 +-
+ arch/arm/boot/dts/exynos5250-snow-rev5.dts |  4 ++--
+ arch/arm/boot/dts/s5pv210-aries.dtsi       |  4 ++--
+ 7 files changed, 24 insertions(+), 29 deletions(-)
