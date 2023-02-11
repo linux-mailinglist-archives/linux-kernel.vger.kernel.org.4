@@ -2,214 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94489693117
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 13:50:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A2669311C
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 13:51:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbjBKMuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 07:50:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
+        id S229668AbjBKMv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 07:51:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBKMuC (ORCPT
+        with ESMTP id S229520AbjBKMv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 07:50:02 -0500
-Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2094.outbound.protection.outlook.com [40.92.103.94])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BAD2105;
-        Sat, 11 Feb 2023 04:50:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FlMhlMjofERQ9p9oEaC62yZ9GWfPbT/Uus2M/kH5OljatxqY5lTw9zeM00pKB3UbLWVwe1sXwEoGFB/1iPRH3coscvi2fS2okeAqXV3WIHiTJ432+6vICC2haqHF3O7YhUkPNDTxZnRu5cuUPgWOq+befR3G8y+MbEu2Ub8Uc6cCfKopaQsNeDqBXe2VHAlQ1u94nb4f0zEh3GU6puJfjNVRBJqmh5vnUSHcKGgmS5NFtE00QumcvtvGgt7tX2UpnnvPkOeEBb+IZnjVodXS7azFaW3/YGjpBKU6t8EED9ur/GDU6Tn3Wc/TAlorPTvZFfmJWNbtK9Yua94Gqg33bA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qu829ga8ez1SY95FoXSyx9ce2xwmA49k++ecf46twqU=;
- b=R8x/AGj/PnARQt0Z3cVVeHs6x1fhyU6bOhUIXnulXxac74RcPSKdKfZLY34sfT9/t6a7HjD32mUYG1/NDlNiCVj4XKRC1FDqhovkoyW1F4HsWB5TLR8Bk67xVWfFN2E8nd87N9SHTWNDjBdnqyuWC73A/kWJxicm11PxvvWNt6bct8P7dhc9cXHppGB8h1llmct6F9HVjSXNZDSIfavrNJzyyjmjN1qROjGv8zIOwXe1VwlggS9f7yALmtEnRdupJhGhPjVglhJKRRzDMkfM6mOaIhMlLVZOYT9P1E8yzmjIsEOh67wJwtKX53MgQGp1EC0LGxnJhOb/ORjCEX5LxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qu829ga8ez1SY95FoXSyx9ce2xwmA49k++ecf46twqU=;
- b=u/YfpzoIoAPfy7zFJPINqRbg5dPLdSXqxs29cmv3NdP6i72oVchV2d91vk2XOL7hDSecCK2WA/Hg697dnwglpOTGA+sFhH5zzyYZFmR0LCo5Il5MFjHDK0f8jRXHtphQnVsi6gJf9p3wJenNBpRLdbcd82EmQSN1GH0FEMqundnNtzfD+ucg0/UJ9szC5qa/pxzD53W+JkkeQMFzoRYiNMkn/TjBW6hRQ+SAFd1O7xZgQxRVdakD5P4PfNILDcpImIsGhOzBBtNu2PyLTwtA+SkhYV2sWKEfovDP1gY4+rs66EGttPTFn+9AafEdCOIx9FZTWEcKZk0sZCFIoNq5eQ==
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
- PNZPR01MB8377.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:3b::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6111.8; Sat, 11 Feb 2023 12:49:50 +0000
-Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::9dc7:9298:c988:474d]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::9dc7:9298:c988:474d%11]) with mapi id 15.20.6111.005; Sat, 11 Feb
- 2023 12:49:50 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     Hector Martin <marcan@marcan.st>
-CC:     Arend Van Spriel <arend.vanspriel@broadcom.com>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Prutskov <alep@cypress.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
-        Wright Feng <wright.feng@cypress.com>,
-        Ian Lin <ian.lin@infineon.com>,
-        Soontak Lee <soontak.lee@cypress.com>,
-        Joseph chuang <jiac@cypress.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        "asahi@lists.linux.dev" <asahi@lists.linux.dev>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/4] wifi: brcmfmac: Rename Cypress 89459 to BCM4355
-Thread-Topic: [PATCH v3 1/4] wifi: brcmfmac: Rename Cypress 89459 to BCM4355
-Thread-Index: AQHZPPp8Rkxr3ZdfVkWP0oVivQ3Nb67HiYGAgAH+NgCAABTegIAAFxaAgAABCCg=
-Date:   Sat, 11 Feb 2023 12:49:50 +0000
-Message-ID: <BM1PR01MB0931D1A15E7945A0D48B828EB8DF9@BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM>
-References: <20230210025009.21873-1-marcan@marcan.st>
- <20230210025009.21873-2-marcan@marcan.st>
- <0cd45af5812345878faf0dc8fa6b0963@realtek.com>
- <624c0a20-f4e6-14a5-02a2-eaf7b36e9331@marcan.st>
- <18640374b38.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
- <e9dbfa3d-6599-94b9-0176-e25bb074b2c7@marcan.st>
-In-Reply-To: <e9dbfa3d-6599-94b9-0176-e25bb074b2c7@marcan.st>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [fJ+e+K4uKj/YFWElcKBJK+3S2EhQqAS8LeDEc2e0imLH5HxBZoXqm0K2VgGiR9rS]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|PNZPR01MB8377:EE_
-x-ms-office365-filtering-correlation-id: 3b54f22f-19dc-4cc5-534a-08db0c2e76f0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: E7P2R+AKwZ3eEyi2puWyBhBzLCeZVG6uDshJCpMakxTsN3fXWu5dJilICCuUsZzOd4cyesfY1jK+bdmm0km6lACfvCn+b2p7VD7xgzdBxh7X4qZwvt2lHnCDaOd3tlyOADGK052fy8lZFVCIrjXXGdR8PA7BSvNduWNoj9n7CBasnDC6w29tfA69Pn+SJ23ATZ5SGYaFsJeyf9jXvZ8CNnp9UbUXKYYb4ehBNGDNY5x52qxUEAwFHMNZlwizPig+ZGEXp+CwKJ1vHgWj1gn3Y0I7nOaXuSDr3vdVzYJ8MrtPTNhckz4Rrj0kgNIu7hU4rMh1KitxFyPK/tUxl//bH9OsyR3hqVvp2BDI0cdhYPKR9ESRHvCX4RHSNSGkd0G56tAqAk8QRoKvIe1dMjqd67xp9njVWZkSBkia2lj/PM0Cer5T4E06SxjDG1SdMvdHLPn/tarBV1UzHw6VSY/HoKu/W1kA9cldfNPpUEJUdyZjWswOe+O0xxh9Ppfjq/YmpMnuRO3KbQRU3pr4umeEO/llPiZjBmW1ZIS+UUhTPpV++4nK+lDWHZJ9wjA7oR+3lFpE9+9rWhdGy1eT0bFAXifZKp/cBPne6FTwdiJJfXppiC5mcGAqrPbaI/lK65ePcDMimREwYTJjfMCur4U4yA==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UmRnUitwTk9tb0dXUERRcGEyV1BnblowTFI4UUJrMCtOY1Q3Y0YyYkxsOUZl?=
- =?utf-8?B?TjdDUEluK1V4MGNYQUNXb2NlTk9UL2ZMdnFjZXNCUU12WUlGcmVVZ21hc0M3?=
- =?utf-8?B?YW5hVHBjYXR5c0JyTXNNQTdjOEVUR0JNMWVQRkJZdFUxUjRnOGp0RGRURkRZ?=
- =?utf-8?B?WjhXKzk3Ulk0MzNvMUlhZmdTY1FQekR0ZzlRKzdkdDBUMHl6Q3lQU0ZBdGU0?=
- =?utf-8?B?RU9wYWZzSGZLQWJzc2cvMS9YYnptTmRFSGwyby85d2RoYnRpOVZiNXJ3UTJa?=
- =?utf-8?B?dTBLM2c4QmhXNEEvS3NUb0dXN3J5V0ppME5JalBoUHFiVFJKU0RDdzRPVjBv?=
- =?utf-8?B?OHdqb1k4SkdpemFTdzdMWThIZlpkOFU2VmZDWGc1QUdtbHNzTG03SHh4K2tm?=
- =?utf-8?B?cVZ2YzdabzloMWpsVG5lNWNNdlczbjNKYkh1Nk8yYUpWeUxYOXc3Q0J2aTZ4?=
- =?utf-8?B?bjVab3pMUmpEUVhhRW0xeHNEOG9ISWpUbmxDWmE4MHAwaWViQnFqbE1zdWtK?=
- =?utf-8?B?MUVyaGZ0c2xYT1phblFvUmp2ZXRSa0Z4N1crZzB2clpnSHZXV0pQb1BCcXJT?=
- =?utf-8?B?U2U2M29sRmNFQnhSdXluSjM1di9MM2l6dmROVVc4a2lPblVCbTVsbnhRTTJm?=
- =?utf-8?B?ZllvWjJpTGNCdElnV3cxcmhNWU54UUo1RHo1ZkhqTkYvY09pL3hMVDU3U2FU?=
- =?utf-8?B?QWpVVmpNbnNIY3o2c0JVV2g5bVBVM3JKdjdOeFRaL2NwTUE5dFM3bjR5bCtN?=
- =?utf-8?B?VVBGWHFzanA0TWZ0dFJaeWJUZE9RQmlSN1R1TnRkc3JFM0svaUFhc1cxR2Z0?=
- =?utf-8?B?NHpzUVpSZXQ3c1BNSHNWbjJGaWp3OWVhZ3JrdkVZVjlkNHk3aEg4cTNMRUFW?=
- =?utf-8?B?LzdrL3E2VVFUYyt6b2NKSk9JTFBvY2JKRytMQjVRYTJFdytxQXJwdzk5U0NL?=
- =?utf-8?B?aFd4alZIdkxpSmFOSmVUWkZMek1wTVR3NHRwdDJSaEdvSkVEZnZ5YnpJZmlI?=
- =?utf-8?B?aW4wMmM2VTQ3d1BkSVhjMnI4VVNsekJiUW0zZ25NNnd0WWlINXVhalpudnlq?=
- =?utf-8?B?UmFNaDQ2RnU4Y2xjWHFZY1Bac3JtUStEU25tWitCNThiaFU5eFA2cmt5VUhO?=
- =?utf-8?B?dVc5R0puYWpuME4zb3B1bzcwZEhOWDBkQ2xiZDhVVzhSNW9wRVZPMkJySzl6?=
- =?utf-8?B?RkM0QWdKWWRyU3JHT2NZdS9FL2d5ZjJ4VHZFV29saTM1QW1tRDRPdnNmTytq?=
- =?utf-8?B?VThUZ0JDd2VENS82RFRhNDNIV0J0NDFFRi9TNG9KV05SM2p3NVlZQVBuWitH?=
- =?utf-8?B?UzE2Mk82WFJRTkJWYTFOZGpZSnY2UVJHTnhGUUpIQ1hiOE8rWUlqaWg3UzMr?=
- =?utf-8?B?TDdCWDdvQkZ3Tk5hL0FaTldXUWpoZmVYano3aytpeXEyS1dqVUxyWFUzM1dO?=
- =?utf-8?B?bi80S2RsOUl1NHVpUldTNlZvck1MakVXMHZ6RTNtYWJiZDBuL3pOZ0N2NXMy?=
- =?utf-8?B?bVVaL09oWGRiRFhFRHhtOTkrVkg0TUZQeXlMaGwwK0pQblNHV1ZaUndhVGR1?=
- =?utf-8?B?Ynd5RFBmYlZsVTVzSEE4bmNIZnY3bmNtSXl4YXB4V0Y1NlJUbmJXREJ1eWF3?=
- =?utf-8?B?dTlkaHNFYklCU2EwempVVFgxcFM1VDMyeGJhYm1TbnFlMHpiczMzWnpTQkVq?=
- =?utf-8?B?N3dJOUZWWHR5QnRaajVOTnI5VDNDTW4wSkdIcjdHNXhGTWExNHpDc1dXaUhC?=
- =?utf-8?B?N3lGTnd3d2g1blk3ak15Q0xaRTJIVy9hUEowUndabFNnNHozM3pYYldCb1hU?=
- =?utf-8?B?ZHg2NExhQVBUZCtYV1Fjdz09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Sat, 11 Feb 2023 07:51:28 -0500
+Received: from mx.flying-snail.de (mx.flying-snail.de [IPv6:2a06:1c40:3::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276EC4232;
+        Sat, 11 Feb 2023 04:51:24 -0800 (PST)
+Received: from [2a02:908:1b0:8800:2ff:ffff:fe11:2236] (helo=mondbasis.internal.flying-snail.de)
+        by mx.flying-snail.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <pelzi@flying-snail.de>)
+        id 1pQpLF-002hh1-Am; Sat, 11 Feb 2023 13:50:57 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=feldner-bv.de; s=s1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=d9+iGEgIwRxflVdlATRLt0hCy8G+dB+4w5pm+7iqI14=; b=PI/Q80g4tetscIgyvihMyUpGh4
+        nnz/oFO9lfOvUvBmHx6ol16tXHqmEtPREVxnK64egg8NBbUoVRq4w7jWclL/v6yJmQ8FKcUI/6kAe
+        Tluxm2ghldkUGi25fB//AJj7256gClRKKfq++VK+FveHCiLOcwMXxjpnHMwrjqa/OEWxTB4nybMQx
+        g6Am0BU6vsrE7GwPICQIk9l25oHglOgzPNfzhU5MFHFz/qYIy0VLfkcnXFGwRuNu5TFkKUXHHJKyV
+        ScYTpaM0ifzPej26OTfLMh2InAhJGOm1HpCvW8OmTLsbDxO4mGXCEESF6Pol+tL0sY8dKPVmsMTpw
+        X4883lPg==;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=flying-snail.de; s=s1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To
+        :From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=d9+iGEgIwRxflVdlATRLt0hCy8G+dB+4w5pm+7iqI14=; b=fJgY/eWzvmTTCcO7ad/pIzRmpZ
+        Gp+xQX7tyZnZk4va0rRX26ficlzosr7VBrv4ZWLskyTQkhSpX8DQaVkAeZbm1J5MzKyx/AdFaxAPH
+        1o0SAnFsLzvfEZ5wp+vOi+ub7VPpy8q4NQPxatyRhhlG+W1Pb3NFQlFsUOTCIxlrn8JiUioSt3ESd
+        EC0+saalsfrqNkIItLn8kxRH0G6bBHj/R0vBx7lq0fSr7Gph28lDfIC6K2qF7Rr+SgMB0CnRW6s85
+        HhIERDokogpKV6zMMKhkp7KQug16pUV5EtA+38+f73pIayL+59gBH6zALtuePrKhEpCsna64/mk0d
+        4NqvmPbQ==;
+Received: from [2a02:908:1b0:8800:b4d0:2d46:3866:fddf]
+        by mondbasis.internal.flying-snail.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <pelzi@flying-snail.de>)
+        id 1pQpLC-000diM-25; Sat, 11 Feb 2023 13:50:56 +0100
+Message-ID: <ba463d40-3d39-a621-b198-191fdbe239a1@feldner-bv.de>
+Date:   Sat, 11 Feb 2023 13:50:54 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b54f22f-19dc-4cc5-534a-08db0c2e76f0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Feb 2023 12:49:50.6235
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PNZPR01MB8377
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH] ARM: dts: allwinner: minimize irq debounce filter per
+ default
+To:     Andre Przywara <andre.przywara@arm.com>,
+        Maxime Ripard <maxime@cerno.tech>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <Y+FaVorMl37F5Dve@debian-qemu.internal.flying-snail.de>
+ <20230207011608.2ce24d17@slackpad.lan>
+ <d0534762-3785-ec2d-8d1e-aba0e39f701b@feldner-bv.de>
+ <20230209202952.673d5a60@slackpad.lan>
+ <20230210082936.qefzz4fsp3jpalvp@houat>
+ <20230210094425.474cfba5@donnerap.cambridge.arm.com>
+ <20230210100620.z6j7rvkiwyu7paij@houat>
+ <20230210101814.2d36ae57@donnerap.cambridge.arm.com>
+From:   pelzi@flying-snail.de
+In-Reply-To: <20230210101814.2d36ae57@donnerap.cambridge.arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gT24gMTEtRmViLTIwMjMsIGF0IDY6MTYgUE0sIEhlY3RvciBNYXJ0aW4gPG1hcmNhbkBt
-YXJjYW4uc3Q+IHdyb3RlOg0KPiANCj4g77u/T24gMTEvMDIvMjAyMyAyMC4yMywgQXJlbmQgVmFu
-IFNwcmllbCB3cm90ZToNCj4+PiBPbiBGZWJydWFyeSAxMSwgMjAyMyAxMTowOTowMiBBTSBIZWN0
-b3IgTWFydGluIDxtYXJjYW5AbWFyY2FuLnN0PiB3cm90ZToNCj4+PiANCj4+PiBPbiAxMC8wMi8y
-MDIzIDEyLjQyLCBQaW5nLUtlIFNoaWggd3JvdGU6DQo+Pj4+IA0KPj4+PiANCj4+Pj4+IC0tLS0t
-T3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+Pj4+PiBGcm9tOiBIZWN0b3IgTWFydGluIDxtYXJjYW5A
-bWFyY2FuLnN0Pg0KPj4+Pj4gU2VudDogRnJpZGF5LCBGZWJydWFyeSAxMCwgMjAyMyAxMDo1MCBB
-TQ0KPj4+Pj4gVG86IEFyZW5kIHZhbiBTcHJpZWwgPGFzcHJpZWxAZ21haWwuY29tPjsgRnJhbmt5
-IExpbiANCj4+Pj4+IDxmcmFua3kubGluQGJyb2FkY29tLmNvbT47IEhhbnRlIE1ldWxlbWFuDQo+
-Pj4+PiA8aGFudGUubWV1bGVtYW5AYnJvYWRjb20uY29tPjsgS2FsbGUgVmFsbyA8a3ZhbG9Aa2Vy
-bmVsLm9yZz47IERhdmlkIFMuIA0KPj4+Pj4gTWlsbGVyIDxkYXZlbUBkYXZlbWxvZnQubmV0Pjsg
-RXJpYw0KPj4+Pj4gRHVtYXpldCA8ZWR1bWF6ZXRAZ29vZ2xlLmNvbT47IEpha3ViIEtpY2luc2tp
-IDxrdWJhQGtlcm5lbC5vcmc+OyBQYW9sbyANCj4+Pj4+IEFiZW5pIDxwYWJlbmlAcmVkaGF0LmNv
-bT4NCj4+Pj4+IENjOiBBbGV4YW5kZXIgUHJ1dHNrb3YgPGFsZXBAY3lwcmVzcy5jb20+OyBDaGkt
-SHNpZW4gTGluIA0KPj4+Pj4gPGNoaS1oc2llbi5saW5AY3lwcmVzcy5jb20+OyBXcmlnaHQgRmVu
-Zw0KPj4+Pj4gPHdyaWdodC5mZW5nQGN5cHJlc3MuY29tPjsgSWFuIExpbiA8aWFuLmxpbkBpbmZp
-bmVvbi5jb20+OyBTb29udGFrIExlZSANCj4+Pj4+IDxzb29udGFrLmxlZUBjeXByZXNzLmNvbT47
-IEpvc2VwaA0KPj4+Pj4gY2h1YW5nIDxqaWFjQGN5cHJlc3MuY29tPjsgU3ZlbiBQZXRlciA8c3Zl
-bkBzdmVucGV0ZXIuZGV2PjsgQWx5c3NhIA0KPj4+Pj4gUm9zZW56d2VpZyA8YWx5c3NhQHJvc2Vu
-endlaWcuaW8+Ow0KPj4+Pj4gQWRpdHlhIEdhcmcgPGdhcmdhZGl0eWEwOEBsaXZlLmNvbT47IEpv
-bmFzIEdvcnNraSA8am9uYXMuZ29yc2tpQGdtYWlsLmNvbT47IA0KPj4+Pj4gYXNhaGlAbGlzdHMu
-bGludXguZGV2Ow0KPj4+Pj4gbGludXgtd2lyZWxlc3NAdmdlci5rZXJuZWwub3JnOyBicmNtODAy
-MTEtZGV2LWxpc3QucGRsQGJyb2FkY29tLmNvbTsgDQo+Pj4+PiBTSEEtY3lmbWFjLWRldi1saXN0
-QGluZmluZW9uLmNvbTsNCj4+Pj4+IG5ldGRldkB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5l
-bEB2Z2VyLmtlcm5lbC5vcmc7IEhlY3RvciBNYXJ0aW4gDQo+Pj4+PiA8bWFyY2FuQG1hcmNhbi5z
-dD47IEFyZW5kIHZhbiBTcHJpZWwNCj4+Pj4+IDxhcmVuZC52YW5zcHJpZWxAYnJvYWRjb20uY29t
-Pg0KPj4+Pj4gU3ViamVjdDogW1BBVENIIHYzIDEvNF0gd2lmaTogYnJjbWZtYWM6IFJlbmFtZSBD
-eXByZXNzIDg5NDU5IHRvIEJDTTQzNTUNCj4+Pj4+IA0KPj4+Pj4gVGhlIGNvbW1pdCB0aGF0IGlu
-dHJvZHVjZWQgc3VwcG9ydCBmb3IgdGhpcyBjaGlwIGluY29ycmVjdGx5IGNsYWltZWQgaXQNCj4+
-Pj4+IGlzIGEgQ3lwcmVzcy1zcGVjaWZpYyBwYXJ0LCB3aGlsZSBpbiBhY3R1YWxpdHkgaXQgaXMg
-anVzdCBhIHZhcmlhbnQgb2YNCj4+Pj4+IEJDTTQzNTUgc2lsaWNvbiAoYXMgZXZpZGVuY2VkIGJ5
-IHRoZSBjaGlwIElEKS4NCj4+Pj4+IA0KPj4+Pj4gVGhlIHJlbGF0aW9uc2hpcCBiZXR3ZWVuIEN5
-cHJlc3MgcHJvZHVjdHMgYW5kIEJyb2FkY29tIHByb2R1Y3RzIGlzbid0DQo+Pj4+PiBlbnRpcmVs
-eSBjbGVhciBidXQgZ2l2ZW4gd2hhdCBsaXR0bGUgaW5mb3JtYXRpb24gaXMgYXZhaWxhYmxlIGFu
-ZCBwcmlvcg0KPj4+Pj4gYXJ0IGluIHRoZSBkcml2ZXIsIGl0IHNlZW1zIHRoZSBjb252ZW50aW9u
-IHNob3VsZCBiZSB0aGF0IG9yaWdpbmFsbHkNCj4+Pj4+IEJyb2FkY29tIHBhcnRzIHNob3VsZCBy
-ZXRhaW4gdGhlIEJyb2FkY29tIG5hbWUuDQo+Pj4+PiANCj4+Pj4+IFRodXMsIHJlbmFtZSB0aGUg
-cmVsZXZhbnQgY29uc3RhbnRzIGFuZCBmaXJtd2FyZSBmaWxlLiBBbHNvIHJlbmFtZSB0aGUNCj4+
-Pj4+IHNwZWNpZmljIDg5NDU5IFBDSWUgSUQgdG8gQkNNNDM1OTYsIHdoaWNoIHNlZW1zIHRvIGJl
-IHRoZSBvcmlnaW5hbA0KPj4+Pj4gc3VidmFyaWFudCBuYW1lIGZvciB0aGlzIFBDSSBJRCAoYXMg
-ZGVmaW5lZCBpbiB0aGUgb3V0LW9mLXRyZWUgYmNtZGhkDQo+Pj4+PiBkcml2ZXIpLg0KPj4+Pj4g
-DQo+Pj4+PiB2MjogU2luY2UgQ3lwcmVzcyBhZGRlZCB0aGlzIHBhcnQgYW5kIHdpbGwgcHJlc3Vt
-YWJseSBiZSBwcm92aWRpbmcNCj4+Pj4+IGl0cyBzdXBwb3J0ZWQgZmlybXdhcmUsIHdlIGtlZXAg
-dGhlIENZVyBkZXNpZ25hdGlvbiBmb3IgdGhpcyBkZXZpY2UuDQo+Pj4+PiANCj4+Pj4+IHYzOiBE
-cm9wIHRoZSBSQVcgZGV2aWNlIElEIGluIHRoaXMgY29tbWl0LiBXZSBkb24ndCBkbyB0aGlzIGZv
-ciB0aGUNCj4+Pj4+IG90aGVyIGNoaXBzIHNpbmNlIGFwcGFyZW50bHkgc29tZSBkZXZpY2VzIHdp
-dGggdGhlbSBleGlzdCBpbiB0aGUgd2lsZCwNCj4+Pj4+IGJ1dCB0aGVyZSBpcyBhbHJlYWR5IGEg
-NDM1NSBlbnRyeSB3aXRoIHRoZSBCcm9hZGNvbSBzdWJ2ZW5kb3IgYW5kIFdDQw0KPj4+Pj4gZmly
-bXdhcmUgdmVuZG9yLCBzbyBhZGRpbmcgYSBnZW5lcmljIGZhbGxiYWNrIHRvIEN5cHJlc3Mgc2Vl
-bXMNCj4+Pj4+IHJlZHVuZGFudCAobm8gcmVhc29uIHdoeSBhIGRldmljZSB3b3VsZCBoYXZlIHRo
-ZSByYXcgZGV2aWNlIElEICphbmQqIGFuDQo+Pj4+PiBleHBsaWNpdGx5IHByb2dyYW1tZWQgc3Vi
-dmVuZG9yKS4NCj4+Pj4gDQo+Pj4+IERvIHlvdSByZWFsbHkgd2FudCB0byBhZGQgY2hhbmdlcyBv
-ZiB2MiBhbmQgdjMgdG8gY29tbWl0IG1lc3NhZ2U/IE9yLA0KPj4+PiBqdXN0IHdhbnQgdG8gbGV0
-IHJldmlld2VycyBrbm93IHRoYXQ/IElmIGxhdHRlciBvbmUgaXMgd2hhdCB5b3Ugd2FudCwNCj4+
-Pj4gbW92ZSB0aGVtIGFmdGVyIHMtby1iIHdpdGggZGVsaW1pdGVyIC0tLQ0KPj4+IA0KPj4+IEJv
-dGg7IEkgdGhvdWdodCB0aG9zZSB0aGluZ3Mgd2VyZSB3b3J0aCBtZW50aW9uaW5nIGluIHRoZSBj
-b21taXQgbWVzc2FnZQ0KPj4+IGFzIGl0IHN0YW5kcyBvbiBpdHMgb3duLCBhbmQgbGVmdCB0aGUg
-dmVyc2lvbiB0YWdzIGluIHNvIHJldmlld2VycyBrbm93DQo+Pj4gd2hlbiB0aGV5IHdlcmUgaW50
-cm9kdWNlZC4NCj4+IA0KPj4gVGhlIGNvbW1pdCBtZXNzYWdlIGlzIGRvY3VtZW50aW5nIHdoYXQg
-d2UgZW5kIHVwIHdpdGggcG9zdCByZXZpZXdpbmcgc28gDQo+PiBwYXRjaCB2ZXJzaW9ucyBhcmUg
-bWVhbmluZ2xlc3MgdGhlcmUuIE9mIGNvdXJzZSB1c2VmdWwgaW5mb3JtYXRpb24gdGhhdCANCj4+
-IGNhbWUgdXAgaW4gcmV2aWV3IGN5Y2xlcyBzaG91bGQgZW5kIHVwIGluIHRoZSBjb21taXQgbWVz
-c2FnZS4NCj4+IA0KPiANCj4gRG8geW91IHJlYWxseSB3YW50IG1lIHRvIHJlc3BpbiB0aGlzIGFn
-YWluIGp1c3QgdG8gcmVtb3ZlIDggY2hhcmFjdGVycw0KPiBmcm9tIHRoZSBjb21taXQgbWVzc2Fn
-ZT8gSSBrbm93IGl0IGRvZXNuJ3QgaGF2ZSBtdWNoIG1lYW5pbmcgcG9zdCByZXZpZXcNCj4gYnV0
-IGl0J3Mgbm90IHVuaGVhcmQgb2YgZWl0aGVyLCBncmVwIGdpdCBsb2dzIGFuZCB5b3UnbGwgZmlu
-ZCBwbGVudHkgb2YNCj4gZXhhbXBsZXMuDQo+IA0KPiAtIEhlY3Rvcg0KDQpBZGRpbmcgdG8gdGhh
-dCwgSSBndWVzcyB0aGUgbWFpbnRhaW5lcnMgY2FuIGRvIGEgYml0IG9uIHRoZWlyIHBhcnQuIElt
-YW8gaXTigJlzDQpyZWFsbHkgZnJ1c3RyYXRpbmcgcHJlcGFyaW5nIHRoZSBzYW1lIHBhdGNoIGFn
-YWluIGFuZCBhZ2FpbiwgZXNwZWNpYWxseSBmb3INCmJpdHMgbGlrZSB0aGVzZS4=
+Am 10.02.23 um 11:18 schrieb Andre Przywara:
+> On Fri, 10 Feb 2023 11:06:20 +0100
+> Maxime Ripard <maxime@cerno.tech> wrote:
+>
+>> On Fri, Feb 10, 2023 at 09:44:25AM +0000, Andre Przywara wrote:
+>>> On Fri, 10 Feb 2023 09:29:36 +0100
+>>> Maxime Ripard <maxime@cerno.tech> wrote:
+>>>
+>>> Hi Maxime,
+>>>
+>>> thanks for the reply!
+>>>    
+>>>> On Thu, Feb 09, 2023 at 08:29:52PM +0000, Andre Przywara wrote:
+>>>>>>>>    &pio {
+>>>>>>>> +	/* 1ï¿½s debounce filter on both IRQ banks */
+>>>>>>> Is that supposed to be <micro> in UTF-8? It seems to have got lost in
+>>>>>>> translation, or is that just me?
+>>>>>> O yes, the Greek character slipped into the comment.
+>>>>>>>> +	input-debounce = <1 1>;
+>>>>>>> As mentioned above, I am not so sure this is generic enough to put it
+>>>>>>> here for PA. And what is the significance of "1 us", in particular? Is
+>>>>>>> that just the smallest value?
+>>>>>> Yes indeed it's a bit more complicated than I feel it needs to be. The
+>>>>>> configuration is taken as microseconds and translated into the best
+>>>>>> matching clock and divider by the driver. However, 0 is not translated
+>>>>>> to the lowest divider of the high speed clock as would be logical if
+>>>>>> you ask for zero microseconds, but to "leave at default". The default
+>>>>>> of the board is 0 in the register, translating to lowest divider on the
+>>>>>> _low_ speed clock.
+>>>>> I'd say the "if (!debounce) continue;" code is just to defend against
+>>>>> the division by zero, which would be the next statement to execute.
+>>>>>
+>>>>> We might want to change that to interpret 0 as "lowest possible", which
+>>>>> would be 24MHz/1. Please feel free to send a patch in this regard, and
+>>>>> CC: Maxime, to get some input on that idea.
+>>>> I never had any complaint on that part either, so the default looks sane
+>>>> to me.
+>>>>
+>>>> If some board needs a higher debouncing rate, then we should obviously
+>>>> set it up in the device tree of that board, but changing it for every
+>>>> user also introduces the risk of breaking other boards that actually
+>>>> require a lower debouncing frequency.
+>>> Yeah, we definitely should keep the default at 32KHz/1, as this is also
+>>> the hardware reset value.
+>>>
+>>> Not sure if you were actually arguing this, but the change I sketched
+>>> above (interpreting 0 as 24MHz/1) is separate though, as the current
+>>> default is "no DT property", and not 0. There is no input-debounce
+>>> property user in the kernel tree at the moment, so we wouldn't break
+>>> anyone. The only thing that would change is if a downstream user was
+>>> relying on "0" being interpreted as "skip the setup", which isn't
+>>> really documented and could be argued to be an implementation detail.
+>>>
+>>> So I'd suggest to implement 0 as "lowest possible", and documenting that
+>>> and the 32KHz/1 default if no property is given.
+>> Ah, my bad.
+>>
+>> There's another thing to consider: there's already a generic per-pin
+>> input-debounce property in pinctrl.
+>>
+>> Since we can't control it per pin but per bank, we moved it to the
+>> controller back then, but there's always been this (implicit)
+>> expectation that it was behaving the same way.
+>>
+>> And the generic, per-pin, input-debounce documentation says:
+>>
+>>> Takes the debounce time in usec as argument or 0 to disable debouncing
+>> I agree that silently ignoring it is not great, but interpreting 0 as
+>> the lowest possible is breaking that behaviour which, I believe, is a
+>> worse outcome.
+> Is it really? If I understand the hardware manuals correctly, we cannot
+> really turn that feature off, so isn't the lowest possible time period (24
+> MHz/1 at the moment) the closest we can get to "turn it off"? So
+> implementing this would bring us actually closer to the documented
+> behaviour? Or did I get the meaning of this time period wrong?
+> At least that's my understanding of how it fixed Andreas' problem: 1µs
+> is still not "off", but much better than the 31µs of the default. The new
+> 0 would then be 0.041µs.
+I would fully agree. There seems to be no way to turn off the debouncing
+filter, and in terms of that filter, the lowest possible time is closest 
+to "off".
+The SoC default is equivalent to 31 us, far, far away from "off", the 
+currently
+configurable minimum is 1us.
+
+I did a patch that enables to set "0" in the device tree configuration 
+and it
+takes care not to do a #div0, but to determine the lowest possible time. As
+the patch is done in the driver for a device that cannot switch off 
+debouncing,
+I'd say, the driver patched in that way does its best to come as close 
+to the
+intended outcome as is possible.
+
+I tested this setting on the Banana M2 Zero board, and it is working (does
+the right thing setting the relevant registers to value 0x0001, and the 
+board
+works in general, w/o producing smoke. (I have no idea how to test if
+the debouncing filter is actually faster with setting "0" than with 
+setting "1",
+I can only confirm it is not significantly slower).
+
+If we can agree on a concrete way to go I'm happy to try to produce a new
+patch version. My suggestion from the discussion:
+
+- Change drivers/pinctrl/sunxi/pinctrl-sunxi.c to set the minimum
+    possible filter time when input-debounce is configured to "0"
+    (corresponding to 1 on the affected hardware register).
+    What I don't like is the huge gap between configuration 1 and 0, but
+    I have no idea what to do about it without breaking all compatibility.
+
+- in arch/arm/boot/dts/sunxi-h3-h5.dtsi, set input-debounce <31 31>
+    corresponding to the default "0" in both affected hardware registers.
+    Note that the clocks hosc and losc that make this 31 map to 0 are
+    configured exactly here.
+
+- in arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts, set
+    input-debounce <31 0> as this board has electronic devices
+    attached to bank G and only exposes bank A to its users.
+    I'd like to advertise on that one: this board does not require
+    debouncing on bank G. Plus it feels the board got more stable
+    by this setting: my BananaPi is connected via WiFi (only) and in the
+    past it went apparently dead every other day or so. Nothing like
+    this happened after switching off input debounce. Anectdotal
+    evidence, I know...
+
+- (in my devicetree overlay, I set input-debounce <0 0> to make IRQ
+    based drivers like drivers/iio/humidity/dht11.c work on bank A) -
+    not part of the patch.
+
+Would that appear right?
+
+Best regards,
+
+Andreas.
+
+PS: Perhaps someone can point me to further reading regarding
+drivers for electronic devices attached to GPIO. Assuming I want
+to attach a device to a GPIO that is not accidentally covered by
+hardware support of the pinctrl subsystem, what options do I
+have _apart_ from registering edge IRQs to react on a digital
+signal from that device? Isn't it called bit-banging and the
+usual technique?
+
