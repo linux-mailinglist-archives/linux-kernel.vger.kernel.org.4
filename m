@@ -2,49 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 524F1692DF0
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 04:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF5E692DF6
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 04:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjBKDee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 22:34:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
+        id S229611AbjBKDiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 22:38:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBKDe0 (ORCPT
+        with ESMTP id S229450AbjBKDiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 22:34:26 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F705D1CE
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 19:34:00 -0800 (PST)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1676086438;
-        bh=hJUIVjIWcroVtvu4OXuhx/MmU7Sz2UPG988Be7bAuc8=;
-        h=From:Date:Subject:To:Cc:From;
-        b=Nlkhb7/w3HVQhOPusCBshsTE2RxwP3UhboUuSlVe4kmfAXzewm6FRxuBAPonAjtDu
-         GuXKqyfoCfmWQ8zV44Uc/GBSAy3M9vMrGgentEpTfObRWH8Hj8RL2oa+XyIoqy+1Fg
-         ZHCHXJvxdNr68pYPqgZi+/rhGbhQ8pljY2KA7wZg=
-Date:   Sat, 11 Feb 2023 03:33:53 +0000
-Subject: [PATCH] ALSA: hda: make kobj_type structure constant
+        Fri, 10 Feb 2023 22:38:12 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54ADA33452;
+        Fri, 10 Feb 2023 19:38:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676086691; x=1707622691;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fjfJYgr9l7FY6AeaHSqoSGiUSdbIvnX9HseUvyVfHkU=;
+  b=FPyNJJMHgUe6XDbYFCq1eu0DOaQHWw8tAUfHEgruGJNZKCHfGwqYArA6
+   KjuakIBY38BMbFfmAnzTm7ozcAMc+os3duwv+a+YMuyZHRyoZldPI6ULF
+   T8J3vGERpc2fqMwS8ysekynLX3JZueXYK6Kd//QRh07nyf7YS0D1wFQZc
+   QRqjm2G0YMapwXwo02QDrEst1+vlikvPr+XA9FhY6JG9SERqHEklH366+
+   F8qGN8DnR/RqvzklrOIanCDnnLOFH+DjIl0mLRgiZ+mxv9mrTmP7pgEQy
+   PhPzt3kRnJ6YCFCk+NGyK87pM7v5rDnt+TOIvYzzSBK7luzMRjBDCG+i8
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="318597343"
+X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
+   d="scan'208";a="318597343"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 19:38:10 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="618087971"
+X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
+   d="scan'208";a="618087971"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.249.168.175]) ([10.249.168.175])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 19:38:05 -0800
+Message-ID: <b50ca15b-81fb-d8e6-90fd-210ab0916d31@linux.intel.com>
+Date:   Sat, 11 Feb 2023 11:38:03 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230211-kobj_type-sound-v1-1-17107ceb25b7@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAKAM52MC/x2N0QrCMAwAf2Xk2ULTPemviEizRhcd6WicOMb+f
- cHHOzhuA+MmbHDpNmj8FZOqDnjqYBizPjlIcYYUUx8TYnhXet0/68zB6qIlxB4LIjOdmcArysa
- BWtZh9E6XaXI5N37I77+53vb9ALFIMzl2AAAA
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1676086434; l=970;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=hJUIVjIWcroVtvu4OXuhx/MmU7Sz2UPG988Be7bAuc8=;
- b=hfQTL2SZmLdiFSwlG3dnRfYwVUsBxpeQYwTuSWZgxp/oi3Uw/HmSgB6yKiqlWzlQ+YOah2NzE
- 59vxI90qCtBAQh4xuDlNWs8bIvhLqNfs7jGQPDwKIZhMB4zIu1HgMBK
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Cc:     baolu.lu@linux.intel.com, "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 1/6] iommu: Add new iommu op to get iommu hardware
+ information
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>
+References: <20230209041642.9346-1-yi.l.liu@intel.com>
+ <20230209041642.9346-2-yi.l.liu@intel.com>
+ <BN9PR11MB5276CB88298F97177A7AAF448CDE9@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <BN9PR11MB5276CB88298F97177A7AAF448CDE9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,36 +85,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-the driver core allows the usage of const struct kobj_type.
+On 2023/2/10 15:28, Tian, Kevin wrote:
+>> From: Liu, Yi L <yi.l.liu@intel.com>
+>> Sent: Thursday, February 9, 2023 12:17 PM
+>> @@ -223,6 +224,11 @@ struct iommu_iotlb_gather {
+>>   /**
+>>    * struct iommu_ops - iommu ops and capabilities
+>>    * @capable: check capability
+>> + * @hw_info: IOMMU hardware capabilities. The type of the returned data
+>> is
+> 
+> is it 'info' or 'capability'?
+> 
+>> + *           defined in include/uapi/linux/iommufd.h. The data buffer is
+>> + *           allocated in the IOMMU driver and the caller should free it
+>> + *           after use. Return the data buffer if success, or ERR_PTR on
+>> + *	      failure.
+>>    * @domain_alloc: allocate iommu domain
+>>    * @probe_device: Add device to iommu driver handling
+>>    * @release_device: Remove device from iommu driver handling
+>> @@ -252,6 +258,7 @@ struct iommu_iotlb_gather {
+>>    */
+>>   struct iommu_ops {
+>>   	bool (*capable)(struct device *dev, enum iommu_cap);
+>> +	void *(*hw_info)(struct device *dev, u32 *length);
+>>
+>>   	/* Domain allocation and freeing by the iommu driver */
+>>   	struct iommu_domain *(*domain_alloc)(unsigned
+>> iommu_domain_type);
+>> @@ -280,6 +287,7 @@ struct iommu_ops {
+>>   	void (*remove_dev_pasid)(struct device *dev, ioasid_t pasid);
+>>
+>>   	const struct iommu_domain_ops *default_domain_ops;
+>> +	enum iommu_device_data_type driver_type;
+> 
+> the enum is called 'device_data_type' while the field is called 'driver_type'.
 
-Take advantage of this to constify the structure definition to prevent
-modification at runtime.
+The enum is named from uAPI's p-o-v and driver_type is from IOMMU's.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- sound/hda/hdac_sysfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> btw this new field is not documented above.
 
-diff --git a/sound/hda/hdac_sysfs.c b/sound/hda/hdac_sysfs.c
-index 62a9615dcf52..60b0a70428d5 100644
---- a/sound/hda/hdac_sysfs.c
-+++ b/sound/hda/hdac_sysfs.c
-@@ -148,7 +148,7 @@ static void widget_release(struct kobject *kobj)
- 	kfree(kobj);
- }
- 
--static struct kobj_type widget_ktype = {
-+static const struct kobj_type widget_ktype = {
- 	.release	= widget_release,
- 	.sysfs_ops	= &widget_sysfs_ops,
- };
-
----
-base-commit: 420b2d431d18a2572c8e86579e78105cb5ed45b0
-change-id: 20230211-kobj_type-sound-031d11eeb9eb
+Yes. Will do that.
 
 Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
-
+baolu
