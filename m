@@ -2,82 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A68692FB6
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 10:12:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D40F8692FB9
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 10:13:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjBKJMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 04:12:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
+        id S229798AbjBKJNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 04:13:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbjBKJMs (ORCPT
+        with ESMTP id S229560AbjBKJNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 04:12:48 -0500
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974C01A965;
-        Sat, 11 Feb 2023 01:12:42 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1676106742; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=jk65BL09iN2GERWdHs65LJxMPXaD6suwK5ozfbQ+5Mh14WSNIBUvuvNwJ4AlUDg1P07uJDSSpivmuKODyWvjiaw0fWgeSLzdQgvfeXXHL+PzQuUyrpvM8XjF0uIuD4bfQEwTLhK7t+3dECeDP+aXcq7fgB1ZKSDKLuIAypea6Ek=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1676106742; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=MkQdwA/QXaiKt+bHFwNe8YCFs401QF7zQKhmxVVcQFI=; 
-        b=eLApP6LEYUfim8eTURf50CeZbAiBapY7BLILBiAjEK/mFi+yqCFrmrJEnxJkHaNgLFtumEkNQj1L+vbZbntJ92cDsl2bUvB1Yne178KX6a1pWQvt6DVoqBbe8Qf7k8kHJUVj3mvflJfNvWFdqeRcwX4MVKwssDF/Z2ORu5gpp/s=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1676106742;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=MkQdwA/QXaiKt+bHFwNe8YCFs401QF7zQKhmxVVcQFI=;
-        b=OzjlQTbiQFNNl2ttvUlIv+kDDXEg7aF1OVRLCLb6FErUnURy2PAUTiQe/vgY5wzK
-        IQ/EkVOoyNXXnv7h8qFixFCw5JdjRDTqyy1TcpL2+4seub6teCoCQrogPqfthDTKTkd
-        zz2ET9ioblirlExYj4xlDx9SskCRqBiHfONcRPu4=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1676106739991550.5857652221796; Sat, 11 Feb 2023 01:12:19 -0800 (PST)
-Message-ID: <96fb94a0-4910-d7b9-9ae6-e97a058b0fe0@arinc9.com>
-Date:   Sat, 11 Feb 2023 12:12:16 +0300
+        Sat, 11 Feb 2023 04:13:20 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062316FEB2
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 01:12:55 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id k13so9083733plg.0
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 01:12:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OoCdS2UBlXQ9GSP13nvz6NqjJ97/4rzSEuJAd9NhpE4=;
+        b=1qEplTAnlipg6EdrqIrNeLHMNuXussWAZPig++YBkNAoSw8ILqUQJIdui1GKnx6jog
+         YsRMktubv1RZpayKWDyVxHvH3WFaD0THcwNlN9JnFf37d4cjhgn2FaroOyAUVChcViyz
+         C8gbxeqP0BYB8jRkTcH14wg+R9hf2BdziqV8OGAzftxPZPe1bLwy6uwCl4Gy7nv/jPM0
+         8Oo9L6aKHiPIV76LHQiDVSTbcK4p3tbn+WpvZ76Q54zMJBRlK/lMhgJ9JzgdDT0DBXxk
+         8xB/Q5NqY0eJDL1Rv/s/56HGYWGpL/LrnVzAwj7GT0OFJtUI6GeUHoTEllbqfcR/ZESq
+         gKfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OoCdS2UBlXQ9GSP13nvz6NqjJ97/4rzSEuJAd9NhpE4=;
+        b=MonZv66IP31poya+O5xP2yzpsst6xn04spLMRFRWEgndELrYo4vN7MlFpb9+LzJTDK
+         pIra4Bo4KIunDHDKFKHmHgUa3jbBaTCuEZ8fOWwkBq1uvecinkRpYIR4Jp4Ku/aaw0xC
+         +jC2TCRo8drkf71NgR+t/x4qCh3ospzCWVUihr2N1iS3fmaVZ7rxyLOJcqy9tFq+EivV
+         8EzxjyYw/KBSrREp8PB8PXRIbcKgH5HES7lRAQp9yJ5ULPCJBCEOvZv95JPE37DTGSw/
+         RUOHl6MiCrs6BtfbYj5xhNESCg7VwvS+YPUmO3inALCCjv1faVHjRXqDMUcCiF4bMG8a
+         Jmkg==
+X-Gm-Message-State: AO0yUKVkkcEljdyAzB8se9o0PKiOXvUs00El/NUNaLgA1sCxKSXoXdzZ
+        Y5H+cpNckF8JTu0MluuCx6PcPA==
+X-Google-Smtp-Source: AK7set8ixUwlWq4LvtWNB73ypMSQRg6Q6YCS3qwxsLIBt0wyZtL5vo9HXaqynGXJ+6JPd5bxEU8q5Q==
+X-Received: by 2002:a17:90a:3f17:b0:230:dc97:9da2 with SMTP id l23-20020a17090a3f1700b00230dc979da2mr15347291pjc.1.1676106774447;
+        Sat, 11 Feb 2023 01:12:54 -0800 (PST)
+Received: from [10.200.9.4] ([139.177.225.240])
+        by smtp.gmail.com with ESMTPSA id t7-20020a17090a2f8700b002309bbc61afsm6260623pjd.18.2023.02.11.01.12.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Feb 2023 01:12:53 -0800 (PST)
+Message-ID: <88526cb7-b81d-6780-ff49-fb01d66a55ce@bytedance.com>
+Date:   Sat, 11 Feb 2023 17:12:46 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 3/5] mips: dts: ralink: mt7621: rename watchdog node
- from 'wdt' into 'watchdog'
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH 0/3] some minor fixes of error checking about
+ debugfs_rename()
 Content-Language: en-US
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-watchdog@vger.kernel.org
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        tsbogend@alpha.franken.de, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <20230211073357.755893-1-sergio.paracuellos@gmail.com>
- <20230211073357.755893-4-sergio.paracuellos@gmail.com>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20230211073357.755893-4-sergio.paracuellos@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     patchwork-bot+netdevbpf@kernel.org, rafael@kernel.org,
+        j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
+References: <20230202093256.32458-1-zhengqi.arch@bytedance.com>
+ <167548141786.31101.12461204128706467220.git-patchwork-notify@kernel.org>
+ <aeae8fb8-b052-0d4a-5d3e-8de81e1b5092@bytedance.com>
+ <20230207103124.052b5ce1@kernel.org> <Y+ONeIN0p25fwjEu@kroah.com>
+ <420f2b78-2292-be4a-2e3f-cf0ed28f40d5@bytedance.com>
+ <Y+dal7QKULCa+mb4@kroah.com>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <Y+dal7QKULCa+mb4@kroah.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.02.2023 10:33, Sergio Paracuellos wrote:
-> Watchdog nodes must use 'watchdog' for node name. When a 'make dtbs_check'
-> is performed the following warning appears:
-> 
-> wdt@100: $nodename:0: 'wdt@100' does not match '^watchdog(@.*|-[0-9a-f])?$'
-> 
-> Fix this warning up properly renaming the node into 'watchdog'.
-> 
-> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 
-Reviewed-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-Thanks.
-Arınç
+On 2023/2/11 17:06, Greg Kroah-Hartman wrote:
+> On Wed, Feb 08, 2023 at 08:05:44PM +0800, Qi Zheng wrote:
+>>
+>>
+>> On 2023/2/8 19:54, Greg Kroah-Hartman wrote:
+>>> On Tue, Feb 07, 2023 at 10:31:24AM -0800, Jakub Kicinski wrote:
+>>>> On Tue, 7 Feb 2023 18:30:40 +0800 Qi Zheng wrote:
+>>>>>> Here is the summary with links:
+>>>>>>      - [1/3] debugfs: update comment of debugfs_rename()
+>>>>>>        (no matching commit)
+>>>>>>      - [2/3] bonding: fix error checking in bond_debug_reregister()
+>>>>>>        https://git.kernel.org/netdev/net/c/cbe83191d40d
+>>>>>>      - [3/3] PM/OPP: fix error checking in opp_migrate_dentry()
+>>>>>>        (no matching commit)
+>>>>>
+>>>>> Does "no matching commit" means that these two patches have not been
+>>>>> applied? And I did not see them in the linux-next branch.
+>>>>
+>>>> Correct, we took the networking patch to the networking tree.
+>>>> You'd be better off not grouping patches from different subsystems
+>>>> if there are no dependencies. Maintainers may get confused about
+>>>> who's supposed to apply them, err on the side of caution and
+>>>> not apply anything.
+>>>>
+>>>>> If so, hi Greg, Can you help to review and apply these two patches
+>>>>> ([1/3] and [3/3])?
+>>>
+>>> If someone sends me patch 1, I can and will review it then.  Otherwise,
+>>> digging it out of a random patch series is pretty impossible with my
+>>> patch load, sorry.
+>>
+>> Hi Greg,
+>>
+>> Sorry about this. My bad. And I have sent the [1/3] separately, please
+>> review it if you have time. :)
+> 
+> Ick, somehow all of these got marked as spam by my filters.  I'll look
+> at them next week, sorry for the delay.
+No worries. And the patch link that has been resent is
+https://lore.kernel.org/lkml/20230208035634.58095-1-zhengqi.arch@bytedance.com/. 
+:)
+
+Thank you very much,
+Qi
+
+> 
+> greg k-h
