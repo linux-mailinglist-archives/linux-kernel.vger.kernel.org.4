@@ -2,105 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99479693313
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 19:48:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE08969331B
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 19:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbjBKSr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 13:47:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38672 "EHLO
+        id S229647AbjBKSyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 13:54:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjBKSrz (ORCPT
+        with ESMTP id S229488AbjBKSyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 13:47:55 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF76E12581
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 10:47:53 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id az4-20020a05600c600400b003dff767a1f1so6243913wmb.2
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 10:47:53 -0800 (PST)
+        Sat, 11 Feb 2023 13:54:09 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E04193EE;
+        Sat, 11 Feb 2023 10:54:08 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id cq19so5423448edb.5;
+        Sat, 11 Feb 2023 10:54:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xJiQZwtrdvFqzP9AQNrrS98B8QLfVWaIK9De0rMt+NE=;
-        b=HPUMHiaHxlrcKkprkzSsbhY84HYu7ZgJI5Txyh3C7JOn3gNS5PIbcHY9cJIqo8lYO8
-         dXTCyOZKYU8jnAduCfFUtSOEHOJMcLRh5zMvYKcbGJ11Xhmy3kER2iAsLAvYYtpyx0aF
-         OB7BWrwWVlFk3gnx7PXqv+8jvkwIFVJk8HiUGuxLHYe6NHEw3UfMcL69C626OXpb1L2T
-         EKRQt9lOGwAGrUfHJNPy8YfLtmiGXVO8KyQz87mbfJ7IZNWwkvIRKmGY+gFF+RBshqDy
-         7xQVi8GNDLiPAAIjrPqSGu269qsE1o1yGwaw8CnFW5XUUgbR/aNOSuOpYlZL5lC6vHDj
-         p/kA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qQilzVYvGI9FErjP5374cx23YQpTQrZLFOEiYvclZpg=;
+        b=EW8Ig6xfjGwrXgjurd+dwrxjBE8obvY6P/pLIzwDJfCBhZCKEaHPHYdPl0g/Lrikl4
+         1XwdixE/Zjb7BHJp5tehvK6Tx2GiMjmHn5ltazzbVU3wfVOt2cgfh2tUzTYLknMwhZvz
+         r23lUPe7HcY3CY8kZYUnEbUzlX50givr6h20zOiTLszJtUnabrFtOjC3k1CfIg0cen6Z
+         h9MFrUHgtTYlmQktMZ88H5qfllHST9QzsYnL2g+ZGZN07TXDjYwI8gVoUZuH33gQQWi+
+         7BFYwCvOAbaj83bYotI6EssvCUTb4V5CX3POLt0sZLIdQNgMUxeMRSieWLce40dwKxGB
+         lDFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xJiQZwtrdvFqzP9AQNrrS98B8QLfVWaIK9De0rMt+NE=;
-        b=4Uv8P+NPBiDtFy5Lft4bQc+xfhEzLzah9P0GXOIMkvE9bbGpFF3ypIZDlJlpnTCWlu
-         gPQWvzagiatwHSW/mfMWKbJkNrpMiDNUGPApWhrZlz0c14/ItGq7co7oE9CWMYT8P0Ht
-         O2zWbaplg77XFjHrJ8JfIJZ8AGya2pfZIDWjc1xi8d7M8j+0uof7MqyKzmw4fmoV+hx1
-         R5iwHoV+KZYzDmzZMm9vBt80eSEa4drRrtgzRAtxiifdK6eQH5Ac1Qg41SMXwzE1Kg20
-         tLY6ZdY8hjBqV0iIqBjt+10sIzsUEXZG/HssQZSms41/7Uzo6eJsDj1pG+5lWV+vdzGP
-         0YNw==
-X-Gm-Message-State: AO0yUKUYDdCkZbQuN2h7FBmmLX5LHqgM0xhPQ0gh1sJ1oSo09PgJDXHg
-        XRbdtNBFa7tIyUq2jo+zTSIMWA==
-X-Google-Smtp-Source: AK7set+x+KuGBZ1IXNDFnZScIb/BItTOtkRliMrR+Ru3OGXKFnIP9o5bSTmC1tTMMqAoOiqg+YSMoQ==
-X-Received: by 2002:a05:600c:44d3:b0:3dc:4c4f:6dc5 with SMTP id f19-20020a05600c44d300b003dc4c4f6dc5mr15491671wmo.9.1676141272174;
-        Sat, 11 Feb 2023 10:47:52 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id b18-20020a05600c4e1200b003e00c453447sm12289096wmq.48.2023.02.11.10.47.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Feb 2023 10:47:51 -0800 (PST)
-Date:   Sat, 11 Feb 2023 20:47:50 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: add QRD8550
-Message-ID: <Y+fi1iJRMrjFVQze@linaro.org>
-References: <20230210163844.765074-1-krzysztof.kozlowski@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:cc:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qQilzVYvGI9FErjP5374cx23YQpTQrZLFOEiYvclZpg=;
+        b=v6smk3hP9LvclqeMR41gzuT8j89XEMNH0pV+F8+Pjs4pmZjQ0bCUmOhl27MwXS2mIZ
+         3p0Bc2AcSjZxe97m8xvOq4IjawnjV+pQ3HGOL6225MFeCt14RQCcOmb1brBoBn5rst+u
+         AbVsyXt1gv/xwFKOSMY4dGDiHYtMs3X603zoEtpMFsLOJ6gfDjWUUCtsGyeYvqtcCVjP
+         ZxBxrT0/v0lygGyqXeWuYeBtK1EoSunNqGMf410kdWiS6vjrTRE5rY+5HDy6Z+3sMt/l
+         F+mUn02h7OoCL/JN/M8WdOmQhspvTdJNTfi3oty2cC4adVOD9mP5oqfPlTcV13BT9ehU
+         0xIQ==
+X-Gm-Message-State: AO0yUKWOuLf+wVbXxLQ+EsffUiixTdWek8k1Z4pG2brxp+bitV/leSnu
+        VWG+e4H2Vwvz4ImDLbmDQqI=
+X-Google-Smtp-Source: AK7set94rpGvGlXmQuz0W6b4tXTpKCBBYMNLk5z2yIdqtfLeBWaBMud6rjJFCtzg2tAegUrAAlDSwA==
+X-Received: by 2002:a50:d756:0:b0:4ac:b7ba:3d58 with SMTP id i22-20020a50d756000000b004acb7ba3d58mr2401860edj.12.1676141647232;
+        Sat, 11 Feb 2023 10:54:07 -0800 (PST)
+Received: from [192.168.0.22] ([87.116.164.178])
+        by smtp.gmail.com with ESMTPSA id o8-20020a50c908000000b004a2666397casm4006188edh.63.2023.02.11.10.54.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Feb 2023 10:54:06 -0800 (PST)
+Message-ID: <00875064-0407-b114-56c9-87aecb0d3ee4@gmail.com>
+Date:   Sat, 11 Feb 2023 19:54:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230210163844.765074-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     savicaleksa83@gmail.com, Jack Doan <me@jackdoan.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/5] hwmon: (aquacomputer_d5next) Add temperature offset
+ control for Aquaero
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Leonard Anderweit <leonard.anderweit@gmail.com>,
+        linux-hwmon@vger.kernel.org
+References: <20230211165923.17807-1-leonard.anderweit@gmail.com>
+ <20230211165923.17807-4-leonard.anderweit@gmail.com>
+ <0664b935-d201-419a-3f1d-3df4226a8db1@roeck-us.net>
+Content-Language: en-US
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+In-Reply-To: <0664b935-d201-419a-3f1d-3df4226a8db1@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-02-10 17:38:43, Krzysztof Kozlowski wrote:
-> Add board compatible for QRD8550 - a mobile-like development board with
-> SM8550.
+On 2023-02-11 19:08:27 GMT+01:00, Guenter Roeck wrote:
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> aquaero is already supported, and the checksum is so far generated
+> and sent. Is it ignored ? Also, is it guaranteed that _all_ aquero devices
+> don't need it ?
 
-Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+Reading its sensors is currently supported, not writing to it (before these
+patches).
 
-> ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
->  1 file changed, 1 insertion(+)
+The checksum is ignored and not needed for either aquaero 5 (which Leonard has)
+nor 6 (which I have).
+
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> index 8b90b8d7e858..b1c6f0ad8c36 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> @@ -903,6 +903,7 @@ properties:
->        - items:
->            - enum:
->                - qcom,sm8550-mtp
-> +              - qcom,sm8550-qrd
->            - const: qcom,sm8550
->  
->    # Board compatibles go above
-> -- 
-> 2.34.1
+> If it is not needed and ignored, does it really add value to selectively drop it ?
+
+I think we can indeed remove that check.
+
+Thanks,
+Aleksa
+
 > 
+> Either case, this change is not mentioned in the commit log, and it
+> violates the "one logical change per patch" rule. Please split it into
+> a separate patch and explain why the change is needed.
+> 
+> Another change to separate is the introduction of ctrl_report_id
+> and the secondary_ctrl_report variables, which is also done silently
+> and not explained. That should also be a separate patch to simplify
+> review.
+> 
+> Thanks,
+> Guenter
+
