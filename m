@@ -2,101 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62338692FF4
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 11:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81974692FF6
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 11:22:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjBKKWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 05:22:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
+        id S229908AbjBKKW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 05:22:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBKKWP (ORCPT
+        with ESMTP id S229692AbjBKKWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 05:22:15 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF8035B0;
-        Sat, 11 Feb 2023 02:22:14 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31B7JWRF015351;
-        Sat, 11 Feb 2023 10:22:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2022-7-12; bh=tBTgJM0KkGvAb5FJlT7qRnEXVapWla1h3UTy1Xt65OM=;
- b=c/AMbQm5gAun2wtktYHg2D5pf4cVMwkaHLX3OIzwrxd03L3Jb4zC9ncE3QuB7qkxVZcy
- B9cUsNeuG6KZSqTmGpS6L9z2yTZi0LMN+lcGJNWZ2otfaUp+3+AC8atH8Ab3JxYGHTuU
- cqOjro9OdoEOJpnY1NIqnD90rFDCxmIc3F6TjtMci7W7fD9FyFP20gYtnNdasONnPMvh
- 78+uO0FtV1ZegZiqqJILKZzlz75bt5kA1P/4WnSvg7/qflhbSFiExLjMu6111dt4Ryf4
- nHvS9f0Izxh8SwU5xwvHTmS4WYPvEZVZbqrfUKVGR6SGq4ukTsLtiqnvXrM1SGlYbvZB lw== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np2w9r925-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 11 Feb 2023 10:22:13 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31B68LK8028837;
-        Sat, 11 Feb 2023 10:22:13 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3np1f22u7q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 11 Feb 2023 10:22:13 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31BAMCxc039215;
-        Sat, 11 Feb 2023 10:22:12 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3np1f22u7a-1;
-        Sat, 11 Feb 2023 10:22:12 +0000
-From:   Alok Tiwari <alok.a.tiwari@oracle.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     alok.a.tiwari@oracle.com, darren.kenny@oracle.com,
-        michael.christie@oracle.com, linux-kernel@vger.kernel.org,
-        martin.petersen@oracle.com, d.bogdanov@yadro.com,
-        target-devel@vger.kernel.org
-Subject: [PATCH v2] scsi: target: core: Added a blank line after target_remove_from_tmr_list()
-Date:   Sat, 11 Feb 2023 02:15:03 -0800
-Message-Id: <20230211101502.2615442-1-alok.a.tiwari@oracle.com>
-X-Mailer: git-send-email 2.39.1
+        Sat, 11 Feb 2023 05:22:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76093C7AC;
+        Sat, 11 Feb 2023 02:22:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88877B80C9D;
+        Sat, 11 Feb 2023 10:22:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B07F6C433EF;
+        Sat, 11 Feb 2023 10:22:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676110941;
+        bh=wXl+v2cYHgUVOYrT8Nhyj05SgXbb90sDCK2do+1O72Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WM04XY0XXQsO1ywofpTxfKKq89jA+kGnAq4tcROhzX22g6f0Yjs5U8EnRWSbn2Fti
+         RdsT9zw/0eHyTYOBaQTPjlfe2WImhhFK+1AbeUKh6vux1yc/nFPpU79zdOwojCXdiA
+         kgTU8m0vPpq20rvBFzNHzeFLmKETbdRV5RuCokBRuk+/shoL5xGsSoF+iAe/YQBVc5
+         3rUMb5YNF2fRM2SvkwvQ4b91ETFGgFK+xs8w+xutGzrpJdrWUIkS5Tt72UlQqRVx91
+         um9nL4Lj+lfPl7Lf5n1RpBh2gvadE2Sen3P6fHp6LDOTyQN7SjQU+JEQLx+uf23GRF
+         AfjTO/9qv8SKQ==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH] docs/mm: Physical Memory: add example of interleaving nodes
+Date:   Sat, 11 Feb 2023 12:22:07 +0200
+Message-Id: <20230211102207.1267058-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-11_06,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
- phishscore=0 spamscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302110093
-X-Proofpoint-GUID: qlzNnlfVNT-Yz7wV2chDKEiNrxcyCzCt
-X-Proofpoint-ORIG-GUID: qlzNnlfVNT-Yz7wV2chDKEiNrxcyCzCt
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no separate blank line between target_remove_from_tmr_list() and
-transport_cmd_check_stop_to_fabric
-As per coding-style, it is require to separate functions with one blank line.
+From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-Signed-off-by: Alok Tiwari <alok.a.tiwari@oracle.com>
----
-v2: remove  "fixes:" line and cc: stable
----
- drivers/target/target_core_transport.c | 1 +
- 1 file changed, 1 insertion(+)
+Add an example of memory layout with interleaving nodes where even memory
+banks belong to node 0 and odd memory banks belong to node 1
 
-diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
-index 5926316252eb..f1cdf78fc5ef 100644
---- a/drivers/target/target_core_transport.c
-+++ b/drivers/target/target_core_transport.c
-@@ -691,6 +691,7 @@ static void target_remove_from_tmr_list(struct se_cmd *cmd)
- 		spin_unlock_irqrestore(&dev->se_tmr_lock, flags);
- 	}
- }
+Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+---
+
+As per Michal's request add an example of interleaving nodes.
+This is based on Jon's docs-next of Wednesday.
+
+ Documentation/mm/physical_memory.rst | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/Documentation/mm/physical_memory.rst b/Documentation/mm/physical_memory.rst
+index 3f3c02aa6e6e..eb9a7a6d3216 100644
+--- a/Documentation/mm/physical_memory.rst
++++ b/Documentation/mm/physical_memory.rst
+@@ -114,6 +114,25 @@ RAM equally split between two nodes, there will be ``ZONE_DMA32``,
+   |  DMA32  |  NORMAL  |  MOVABLE  | |   NORMAL   |   MOVABLE   |
+   +---------+----------+-----------+ +------------+-------------+
+ 
 +
- /*
-  * This function is called by the target core after the target core has
-  * finished processing a SCSI command or SCSI TMF. Both the regular command
++Note, that memory banks may belong to interleaving nodes. In the example
++below an x86 machine has 16Gbytes or RAM in 4 memory banks, even banks
++belong to node 0 and odd banks belong to node 1::
++
++
++  0              4G              8G             12G            16G
++  +-------------+ +-------------+ +-------------+ +-------------+
++  |    node 0   | |    node 1   | |    node 0   | |    node 1   |
++  +-------------+ +-------------+ +-------------+ +-------------+
++
++  0   16M      4G
++  +-----+-------+ +-------------+ +-------------+ +-------------+
++  | DMA | DMA32 | |    NORMAL   | |    NORMAL   | |    NORMAL   |
++  +-----+-------+ +-------------+ +-------------+ +-------------+
++
++In such case node 0 will span from 0 to 12 Gbytes and node 1 will span from
++4 Gbytes to 16 Gbytes.
++
+ .. _nodes:
+ 
+ Nodes
+
+base-commit: e076f253283c3e55a128fa9665c0e6cd8146948d
 -- 
-2.39.1
+2.35.1
 
