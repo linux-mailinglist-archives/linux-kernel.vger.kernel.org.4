@@ -2,74 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BC4D69314E
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 14:46:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A723169314C
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 14:45:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbjBKNqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 08:46:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
+        id S229742AbjBKNpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 08:45:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjBKNqQ (ORCPT
+        with ESMTP id S229461AbjBKNph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 08:46:16 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6F12684C;
-        Sat, 11 Feb 2023 05:46:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676123175; x=1707659175;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=QVWnlp6HxiMITi+4G7GRDcMltvoFp3zphx53HM0P+90=;
-  b=iZkFMN43fykNwdNRdOH4U20rv54ownuEOSYTYk4KKl7UKaCTW60RXr9t
-   TAUCKe8dw7CcbfFwL23CBOzVq9aABhOxRScl0laHvQcRc09otBmRYBise
-   GE8N4mT3bllRGzJ6s8YRYJ7GBCvcNlH1Vy5+ure6C3hFXuQzoGLY5cAa9
-   NooDLxcuvBvGOm/sZBFpqUy8FJoMrB0R5+ygt4DY23Lb9QDJnsdWge88W
-   +k/V4c1AENQxZVcRDxXMaOcpMFaIvov5Lp02W5/b+ezFtV1FyXTLBnOB1
-   davzQs7yGDax5xGphnuJci6auhcZwTjg61p32+cpRtBNOfhWsuS1H4rMI
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="331915552"
-X-IronPort-AV: E=Sophos;i="5.97,289,1669104000"; 
-   d="scan'208";a="331915552"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2023 05:46:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="811117476"
-X-IronPort-AV: E=Sophos;i="5.97,289,1669104000"; 
-   d="scan'208";a="811117476"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Feb 2023 05:46:10 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pQqCg-0006Y3-0f;
-        Sat, 11 Feb 2023 13:46:10 +0000
-Date:   Sat, 11 Feb 2023 21:45:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        u-boot@lists.denx.de,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH 1/6] nvmem: core: add nvmem_dev_size() helper
-Message-ID: <202302112138.XOdXy4yF-lkp@intel.com>
-References: <20230110105425.13188-1-zajec5@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Sat, 11 Feb 2023 08:45:37 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2093.outbound.protection.outlook.com [40.107.223.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14BE526848;
+        Sat, 11 Feb 2023 05:45:36 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NJHKuVM2b30TnmsLAfESPN+OAMkWjKoumJpQjPRsurnYpZpFxSDEtbL/AOaNJwjAhupDKsy7oifMi2ETaZxdsXHL3Wfc38jSKRQdC6mE31p+c424K4sWdXnJaVLZgUAYwi+TFsoAMw+H7F8xAtT8dJraX6s1kjOoHfqr/0dqifqzuD5uBQlHioeDL/q9Os/tH9cbPujrcDb70Kb65zrzHKBVuA8Paqr0e5HTFUMyXo8QOhweTIXOhin81E1y/UsE3EsPsitxdIxQBXqCAmuzKJVVh40ni8MWSWv0lbtaMpk18aqsVHNLg6IHla+BamaQY59eFVt0MEdgJDTN/PcDrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SSKgPCWSlMwpF4PaXKxZM2+LDvaxuULkQV0+cuv1eHY=;
+ b=WbCJEE1GjKP5L2QUhb1+8TFFZSxPD8qdGE53xRgTit60oXqCkR1wmHpljmDIA/WGtNSXiVYqUBbdu0gRGuqS8/0hZn2i/DAEb2HLAnTix6k66FYwvVA13+kOd8i0ukX/9XTvy/dJa17Y8X6HLH6NKZT9jdYx4OKNgE48fPyOEYHmdHHUkIzuEhyc00gdS/24Aj+BxgpJffAc+wngP3eLNPlJXr9HQGcxgsBJYZcYZHHaXAv15He1aSOTF2p2q4oZ8KFzCDjNMYPB4Re7M39/mX/nex2B2Ap89KHspbuvkL5fGO16WSBH0jT8y8CAU9sv9FpI9illQUQ4Kp5jKWkzsg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SSKgPCWSlMwpF4PaXKxZM2+LDvaxuULkQV0+cuv1eHY=;
+ b=XGK9vMFRz0S87KlF3dsoK5O3Zrlg7/eHWpW/ir9tJ/m0ANqyAom7Mua44g+1DKv1g8/DIpx8CKxe86Jmxq8aldvn8n35lz9n0E63Wb2riinS9KGQ2uGomwO8Ng0uk2RGYlugbO1vOnrRHMKhjJPBLFpDbw7tOvrJdReBc+pECu0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SN4PR13MB6035.namprd13.prod.outlook.com (2603:10b6:806:20e::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.21; Sat, 11 Feb
+ 2023 13:45:34 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb5c:910f:3730:fd65]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb5c:910f:3730:fd65%9]) with mapi id 15.20.6086.022; Sat, 11 Feb 2023
+ 13:45:34 +0000
+Date:   Sat, 11 Feb 2023 14:45:26 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Natalia Petrova <n.petrova@fintech.ru>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, b43-dev@lists.infradead.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH] b43legacy: Add checking for null for
+ ssb_get_devtypedata(dev)
+Message-ID: <Y+eb9mZntfe6rO3v@corigine.com>
+References: <20230210111228.370513-1-n.petrova@fintech.ru>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230110105425.13188-1-zajec5@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+In-Reply-To: <20230210111228.370513-1-n.petrova@fintech.ru>
+X-ClientProxiedBy: AM0PR07CA0034.eurprd07.prod.outlook.com
+ (2603:10a6:208:ac::47) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SN4PR13MB6035:EE_
+X-MS-Office365-Filtering-Correlation-Id: b8f17f34-b8a8-464a-9fb0-08db0c363f49
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uXK5PS9XXKgd9QdSdtRoLIIAar+rjCOcyRc9d2m9DUpZyCfr58ktc90vuEbQ3rNkFRd5gF5I+mZm84fEclihN95cEB6P6QbPEl8TBSnl1SpyaERsZvvczHyajRak/bg5GZXaM9UkTgOFupRBr1HKdzRfsfEzirAelyGRKYz4IBdfLzc3S0qN8b/3Ao+0bHysN/chzRSoCPHGscEoR8uypDXGklXWIBdGAEfdGeMZh6Sr9zZFzvwYJ8aqmPpcws9oB7A3LMWCFgoYwiP77M9tRTOTKIaMxxBGFdAhxFJ0uazuTcyWTAxI8zWTJ6tw3QafM07LqkJ6VfRp5GdYtuZ4OnVN45se/2AlSWHiFamluRVht0RfkT9BMKErLMEcHV/qJj2+YZNE4YlO7hffkixqUar8+nPXEp9iqryOo30k4gq7zOlvQpNmM9Ato5vNo0EOxOQyCQlFtG3cZnNC+lTCkt509/k3+CaC17rf0Vz09MEs8c9xA/LQN+Ttgw0iasob4uMHuRDllJOIK6vfoCHq5KXRyT1qnZIW9AjouI01ex8bsFNP3jTYsOqG9avl2t9s2Onf7UR08+z0ATOeXHnlApjNNZWY2t8VhP5dD9iiAgHN39RaGEfnsBe+KuOX8QTV7NZLR5J4NTHAReKPKMOwxHZAl/iUBcvLr1PrqFu9wJXf8Vsa6cL757SIUUImLhbn
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(366004)(346002)(376002)(39830400003)(396003)(451199018)(44832011)(6506007)(186003)(5660300002)(7416002)(8936002)(83380400001)(36756003)(86362001)(38100700002)(6512007)(2616005)(2906002)(316002)(54906003)(6486002)(478600001)(6666004)(41300700001)(4326008)(66476007)(6916009)(66946007)(66556008)(8676002)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?G4Yu/55s7kfOY5rJjwSVQFnZLq/I3ag7GwGigxzZh/qywy6VGQvDWn5EKMA/?=
+ =?us-ascii?Q?ozbqqIwJfTuXLc/kXeoLP3g5czWnEOfgItmWo3G+h+8l0Vwoo1eP3X4RJErv?=
+ =?us-ascii?Q?eO0A8ACLf02pFiDJwj+h6N1veH7zT+9Vz26JGfzt06+ugosw8C0an1YF/WDh?=
+ =?us-ascii?Q?45lT/X0R/bBOBPooZ9WGHawS39dJYT4a8JaAUTNTtQD43aTaRV/b3jnlbg0H?=
+ =?us-ascii?Q?gswiirM/OWQLfV/yVdtKPF3KrgS96h1edhKPIDMzwnvq5g089uhN/u99SPTb?=
+ =?us-ascii?Q?1q6B7AWDJonSUWZJ6NK2qPNl4G60fSF5QAMkCG3QM99ZbLbo/RnLS/qZXfFz?=
+ =?us-ascii?Q?L4TEjROqLaNdZu4MFlNbQ/1szGpOCE1HQ2uQ8Lt7LYR7RjZ7PBBiUJDaS0QR?=
+ =?us-ascii?Q?X763YLeegJbt/f7Mz9R5/didhOg3plVgKuIQBkV/rrmBXxjYD0pUv2sBD6t6?=
+ =?us-ascii?Q?tAPEsWCmlDRmCuamSn7jI1XcZxJCYQllOF/AQj2E9W6mKmz2paYW4+QJajmx?=
+ =?us-ascii?Q?JyHUgokQ1y+YY6c3F9wF49ZIoj0hDrGhEz6nVniaBi+rtiS/S1UoJCdPvLs7?=
+ =?us-ascii?Q?wHCwLaMQ55kAvTafqCnClBQALruOEs18nMhSDRyeRalEgI0ZxjdzOcldAOcs?=
+ =?us-ascii?Q?OVr1zbX1vP7CjSECVFaj8aAGFUXlziak8HrwYVetcKfujYfh4pWwiPAur3dg?=
+ =?us-ascii?Q?H9WHDHyQz8zRH8R1lJnQxLmTqAC0hL/qLHE1hieUhEyjXN/KrvsSziUUq15H?=
+ =?us-ascii?Q?B6ML/75zwLvxCWPkObg30S5zF8mreyde7GO5Z9ujnlLLQsct1xo9riezqI+q?=
+ =?us-ascii?Q?Xh33ohIw+EPqJ1Yl+O8nBrRTSLx+N1x7wv1DfAOt1p4K+EgXfbECQ70C/0S2?=
+ =?us-ascii?Q?CPXwnHry8KNMPfipM0xiFkM4o+5rjYxxmkIIF4pxGeAB5lf1bx3Sh4xOFVqr?=
+ =?us-ascii?Q?19tgLKpzXVlgbsI9sHZZRKNve0/EgyiR2PD5uZtayZUJmckp5Zz/uKnbHaCI?=
+ =?us-ascii?Q?Pijv6ZekNYHfSQCe45BtGfMqxIi3ehI5B++zGW+fXSfHJn5aISaJddCUnInv?=
+ =?us-ascii?Q?El8vCynGKa4Zla8hT1ZO14a5NQi1AUNzAV+7qx+qSbxWBvNa5N3w6h388hNR?=
+ =?us-ascii?Q?0/cZukd/yNq7lqLWBo4RMSEh1kfEDGlYqO09omlUprM2qs/+1zQTNkwIBTQX?=
+ =?us-ascii?Q?TMzvL4wNtgnAca+j/n75xsJApFO0kjU6lYYwk66HF66v2vhkFWSR/cmbSZSL?=
+ =?us-ascii?Q?vViNCmAK7gHVZ7J1qORl8M99SDD5/s0MdY/cvzXDvvOd3Q3TtGZhUJc005Ey?=
+ =?us-ascii?Q?psSYNt6ndqpZoutgLVrMosBFffDXTGo7Zb3Vz45IgFtYp8ivWxnjc9R9aFcO?=
+ =?us-ascii?Q?eztCr7CiTpJKD2q0SSgaSiidgAiI2/Nyp4HFbBDFZMwWiCNuDbkCu+8o5CEJ?=
+ =?us-ascii?Q?hQmjhkZuiGwrs3efBfbMWHahq5yKU+k5cCydaMc8kJFM4tfoGwg6YYQRBkjN?=
+ =?us-ascii?Q?aIuCspfP26buTJJ8fgTAkKhkmeBcKU8I8fchhr55NyuIIpHJimARW9KzhDL1?=
+ =?us-ascii?Q?8jvX4HnG3S8eIikiuOq3di+Pn8Voop3vjF/CUyGg2jIWoIEjh8keFYMNGDAm?=
+ =?us-ascii?Q?qYOn7VhW/DtB5SYccMw7tFwB9WUKYaPKNgN8r4VSk7lW02rcFka/DNk94qPl?=
+ =?us-ascii?Q?QqecWw=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b8f17f34-b8a8-464a-9fb0-08db0c363f49
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2023 13:45:33.6988
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cr+ECbMbcU1ptP4zj7vgC+WGTZcFBFLKtgyy08SwKHRIIKFXT3NXKoJSvrR050PSeTz+dm8mdTiPuNrsGpZcZgwHsK5ulrnvuEBKD0Pc1k4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR13MB6035
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,92 +122,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafał,
+On Fri, Feb 10, 2023 at 02:12:28PM +0300, Natalia Petrova wrote:
+> Function ssb_get_devtypedata(dev) may return null (next call
+> B43legacy_WARN_ON(!wl) is used for error handling, including null-value).
+> Therefore, a check is added before calling b43legacy_wireless_exit(),
+> where the argument containing this value is expected to be dereferenced.
 
-I love your patch! Perhaps something to improve:
+I see that is true, however, in that case are resources leaked
+due to the ieee80211_free_hw() call in b43legacy_wireless_exit()
+not being made?
 
-[auto build test WARNING on next-20230110]
-[also build test WARNING on v6.2-rc7]
-[cannot apply to robh/for-next shawnguo/for-next mtd/mtd/next mtd/mtd/fixes linus/master v6.2-rc3 v6.2-rc2 v6.2-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Moreover, aren't there also unguarded dereferences of wl:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rafa-Mi-ecki/nvmem-core-allow-read_post_process-callbacks-to-adjust-data-length/20230110-185915
-patch link:    https://lore.kernel.org/r/20230110105425.13188-1-zajec5%40gmail.com
-patch subject: [PATCH 1/6] nvmem: core: add nvmem_dev_size() helper
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230211/202302112138.XOdXy4yF-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4d5cc61f8d02a82344468f172a852ffc56cf0d5c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Rafa-Mi-ecki/nvmem-core-allow-read_post_process-callbacks-to-adjust-data-length/20230110-185915
-        git checkout 4d5cc61f8d02a82344468f172a852ffc56cf0d5c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/nvmem/
+1. In the call to b43legacy_one_core_attach(),
+   which would branch to err_wireless_exit on failure.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302112138.XOdXy4yF-lkp@intel.com/
+2. In the call to schedule_work() just about the out: label.
 
-All warnings (new ones prefixed by >>):
+For the record, and because it seems relevant to give contexxt,
+b43legacy_probe() looks like this:
 
-   In file included from drivers/nvmem/core.c:16:
->> include/linux/nvmem-consumer.h:81:1: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
-      81 | const size_t nvmem_dev_size(struct nvmem_device *nvmem);
-         | ^~~~~
->> drivers/nvmem/core.c:2070:1: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
-    2070 | const size_t nvmem_dev_size(struct nvmem_device *nvmem)
-         | ^~~~~
---
-   In file included from drivers/nvmem/brcm_nvram.c:10:
->> include/linux/nvmem-consumer.h:81:1: warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
-      81 | const size_t nvmem_dev_size(struct nvmem_device *nvmem);
-         | ^~~~~
+static int b43legacy_probe(struct ssb_device *dev,
+                         const struct ssb_device_id *id)
+{
+        struct b43legacy_wl *wl;
+        int err;
+        int first = 0;
+
+        wl = ssb_get_devtypedata(dev);
+        if (!wl) {
+                /* Probing the first core - setup common struct b43legacy_wl */
+                first = 1;
+                err = b43legacy_wireless_init(dev);
+                if (err)
+                        goto out;
+                wl = ssb_get_devtypedata(dev);
+                B43legacy_WARN_ON(!wl);
+        }
+        err = b43legacy_one_core_attach(dev, wl);
+        if (err)
+                goto err_wireless_exit;
+
+        /* setup and start work to load firmware */
+        INIT_WORK(&wl->firmware_load, b43legacy_request_firmware);
+        schedule_work(&wl->firmware_load);
+
+out:
+        return err;
+
+err_wireless_exit:
+        if (first)
+                b43legacy_wireless_exit(dev, wl);
+        return err;
+}
 
 
-vim +81 include/linux/nvmem-consumer.h
-
-    49	
-    50	/* Cell based interface */
-    51	struct nvmem_cell *nvmem_cell_get(struct device *dev, const char *id);
-    52	struct nvmem_cell *devm_nvmem_cell_get(struct device *dev, const char *id);
-    53	void nvmem_cell_put(struct nvmem_cell *cell);
-    54	void devm_nvmem_cell_put(struct device *dev, struct nvmem_cell *cell);
-    55	void *nvmem_cell_read(struct nvmem_cell *cell, size_t *len);
-    56	int nvmem_cell_write(struct nvmem_cell *cell, void *buf, size_t len);
-    57	int nvmem_cell_read_u8(struct device *dev, const char *cell_id, u8 *val);
-    58	int nvmem_cell_read_u16(struct device *dev, const char *cell_id, u16 *val);
-    59	int nvmem_cell_read_u32(struct device *dev, const char *cell_id, u32 *val);
-    60	int nvmem_cell_read_u64(struct device *dev, const char *cell_id, u64 *val);
-    61	int nvmem_cell_read_variable_le_u32(struct device *dev, const char *cell_id,
-    62					    u32 *val);
-    63	int nvmem_cell_read_variable_le_u64(struct device *dev, const char *cell_id,
-    64					    u64 *val);
-    65	
-    66	/* direct nvmem device read/write interface */
-    67	struct nvmem_device *nvmem_device_get(struct device *dev, const char *name);
-    68	struct nvmem_device *devm_nvmem_device_get(struct device *dev,
-    69						   const char *name);
-    70	void nvmem_device_put(struct nvmem_device *nvmem);
-    71	void devm_nvmem_device_put(struct device *dev, struct nvmem_device *nvmem);
-    72	int nvmem_device_read(struct nvmem_device *nvmem, unsigned int offset,
-    73			      size_t bytes, void *buf);
-    74	int nvmem_device_write(struct nvmem_device *nvmem, unsigned int offset,
-    75			       size_t bytes, void *buf);
-    76	ssize_t nvmem_device_cell_read(struct nvmem_device *nvmem,
-    77				   struct nvmem_cell_info *info, void *buf);
-    78	int nvmem_device_cell_write(struct nvmem_device *nvmem,
-    79				    struct nvmem_cell_info *info, void *buf);
-    80	
-  > 81	const size_t nvmem_dev_size(struct nvmem_device *nvmem);
-    82	const char *nvmem_dev_name(struct nvmem_device *nvmem);
-    83	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> 
+> Found by Linux Verification Center (linuxtesting.org) with SVACE
+> 
+> Fixes: 75388acd0cd8 ("[B43LEGACY]: add mac80211-based driver for legacy BCM43xx devices")
+> Signed-off-by: Natalia Petrova <n.petrova@fintech.ru>
+> ---
+>  drivers/net/wireless/broadcom/b43legacy/main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/wireless/broadcom/b43legacy/main.c b/drivers/net/wireless/broadcom/b43legacy/main.c
+> index 760136638a95..1ae65679d704 100644
+> --- a/drivers/net/wireless/broadcom/b43legacy/main.c
+> +++ b/drivers/net/wireless/broadcom/b43legacy/main.c
+> @@ -3871,7 +3871,7 @@ static int b43legacy_probe(struct ssb_device *dev,
+>  	return err;
+>  
+>  err_wireless_exit:
+> -	if (first)
+> +	if (first && wl)
+>  		b43legacy_wireless_exit(dev, wl);
+>  	return err;
+>  }
+> -- 
+> 2.34.1
+> 
