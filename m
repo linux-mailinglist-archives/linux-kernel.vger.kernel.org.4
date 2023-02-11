@@ -2,221 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99897693219
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 16:49:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F253E69321C
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 16:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjBKPtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 10:49:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
+        id S229682AbjBKPuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 10:50:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjBKPtn (ORCPT
+        with ESMTP id S229448AbjBKPuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 10:49:43 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19EADBCF
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 07:49:41 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id 5so9124506qtp.9
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 07:49:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5AvGFPdQ9LV/OmxK5Fq/4Lrr3Ax5+9mdfcnywPcSJcU=;
-        b=ZrUqdOK8ekHcdzuGQmMbnnU5eAoV2ayWZcIMFNsopzw2CHrjweNd1qUiTFzL1jheIU
-         xq79EH6GRAIJNKl6BB2oQSKTJ4oLSJKnu+ZuRUL2z2Nk7Ba5vg2IqzNZdHvh9l4aB+Cz
-         qnKyG+VJa9mSSwMKumXkjPvyTPq4DKLxa6NT8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5AvGFPdQ9LV/OmxK5Fq/4Lrr3Ax5+9mdfcnywPcSJcU=;
-        b=ZC/zvlQwJh7vQ7iQLqdM189QzhfccxG1aD42/HcjURkbG1thjn3mDsO6wpHzzNlsBU
-         Ur38LTnZZUPaHsfZeU8FjOtJxnshOOJu+E2Dgu5EK9zQQva1DQM2w8yy7YHpTUgTWmUx
-         cKR/j89MLMvDePFAyrJVQi+OqaxZkPlTn1yjPOjTKrc8gs47oTyW1HlHFX4f7kAfa09+
-         oEgokeSuDKGCD8J0mFwc5bisTYO1UUSHofa2lsB4jabIvTnUeJ7O/E0cW+FiteNWx2wY
-         TS9T8JftOgv0wrjyFf7xM9S6LXEpbtNImty+UpSkKcTHKzp6q8mtvMjjXqXycw3fajgP
-         SeWw==
-X-Gm-Message-State: AO0yUKWldVdWbyHc55Po2K4yIvh74DvUJSm8PVDAFfPjtigydhrlETHe
-        TBZnKeDGVUOkErXfyfdG6x46OQ==
-X-Google-Smtp-Source: AK7set8osMHbOPu1ZyGjfZ9WEl9TknDZY6xdx8UGzGqYZa5wIcuE4iBV9PuVSrqHU3FKVu9CJYLIkg==
-X-Received: by 2002:a05:622a:11c2:b0:3a8:fdf:8ff8 with SMTP id n2-20020a05622a11c200b003a80fdf8ff8mr32397947qtk.36.1676130580909;
-        Sat, 11 Feb 2023 07:49:40 -0800 (PST)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id c20-20020ae9ed14000000b00720ae160601sm5870218qkg.22.2023.02.11.07.49.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Feb 2023 07:49:40 -0800 (PST)
-Date:   Sat, 11 Feb 2023 15:49:39 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com
-Subject: Re: Current LKMM patch disposition
-Message-ID: <Y+e5E6YkVw3C9YBk@google.com>
-References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
- <Y920w4QRLtC6kd+x@rowland.harvard.edu>
- <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
- <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9+41ctA54pjm/KG@google.com>
- <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
- <CAEXW_YR=J9Y9acRaZrU_F7S5Fwe7rhxwqKmxV2NOGwo0pjNBnA@mail.gmail.com>
+        Sat, 11 Feb 2023 10:50:50 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16B619F32;
+        Sat, 11 Feb 2023 07:50:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=IW8sOTr1S+sSd3KikWXfhJRwrqiYvg/psbaU5gYSmvw=; b=kNt1d0O96YZekLokKl76hC7t4y
+        VsTIUA1XyyIh5f0QoTdh/B4TvJf9smb2E8fotqYho1S143A4JQW4MVfIs1Nh17efmrmr+GekZIIOY
+        3H/Dj8aBzbCmNj2lz9e75v3KCaVk4rlTiHi/sxLXravypO1Fg6+Ta1RTYqRhEBlCcumY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pQs99-004hxL-6Z; Sat, 11 Feb 2023 16:50:39 +0100
+Date:   Sat, 11 Feb 2023 16:50:39 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: Advice on MFD-style probing of DSA switch SoCs
+Message-ID: <Y+e5TzNRckDADd5d@lunn.ch>
+References: <20221222134844.lbzyx5hz7z5n763n@skbuf>
+ <4263dc33-0344-16b6-df22-1db9718721b1@linaro.org>
+ <20221223134459.6bmiidn4mp6mnggx@skbuf>
+ <CAGETcx8De_qm9hVtK5CznfWke9nmOfV8OcvAW6kmwyeb7APr=g@mail.gmail.com>
+ <20230211012755.wh4unmkzibdyo4ln@skbuf>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEXW_YR=J9Y9acRaZrU_F7S5Fwe7rhxwqKmxV2NOGwo0pjNBnA@mail.gmail.com>
+In-Reply-To: <20230211012755.wh4unmkzibdyo4ln@skbuf>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 04:22:57PM -0500, Joel Fernandes wrote:
-> On Mon, Feb 6, 2023 at 1:39 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > On Sun, Feb 05, 2023 at 02:10:29PM +0000, Joel Fernandes wrote:
-> > > On Sat, Feb 04, 2023 at 02:24:11PM -0800, Paul E. McKenney wrote:
-> > > > On Sat, Feb 04, 2023 at 09:58:12AM -0500, Alan Stern wrote:
-> > > > > On Fri, Feb 03, 2023 at 05:49:41PM -0800, Paul E. McKenney wrote:
-> > > > > > On Fri, Feb 03, 2023 at 08:28:35PM -0500, Alan Stern wrote:
-> > > > > > > The "Provide exact semantics for SRCU" patch should have:
-> > > > > > >
-> > > > > > >       Portions suggested by Boqun Feng and Jonas Oberhauser.
-> > > > > > >
-> > > > > > > added at the end, together with your Reported-by: tag.  With that, I
-> > > > > > > think it can be queued for 6.4.
-> > > > > >
-> > > > > > Thank you!  Does the patch shown below work for you?
-> > > > > >
-> > > > > > (I have tentatively queued this, but can easily adjust or replace it.)
-> > > > >
-> > > > > It looks fine.
-> > > >
-> > > > Very good, thank you for looking it over!  I pushed it out on branch
-> > > > stern.2023.02.04a.
-> > > >
-> > > > Would anyone like to ack/review/whatever this one?
-> > >
-> > > Would it be possible to add comments, something like the following? Apologies
-> > > if it is missing some ideas. I will try to improve it later.
-> > >
-> > > thanks!
-> > >
-> > >  - Joel
-> > >
-> > > ---8<-----------------------
-> > >
-> > > diff --git a/tools/memory-model/linux-kernel.bell b/tools/memory-model/linux-kernel.bell
-> > > index ce068700939c..0a16177339bc 100644
-> > > --- a/tools/memory-model/linux-kernel.bell
-> > > +++ b/tools/memory-model/linux-kernel.bell
-> > > @@ -57,7 +57,23 @@ let rcu-rscs = let rec
-> > >  flag ~empty Rcu-lock \ domain(rcu-rscs) as unmatched-rcu-lock
-> > >  flag ~empty Rcu-unlock \ range(rcu-rscs) as unmatched-rcu-unlock
-> > >
-> > > +(***************************************************************)
-> > >  (* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
-> > > +(***************************************************************)
-> > > +(*
-> > > + * carry-srcu-data: To handle the case of the SRCU critical section split
-> > > + * across CPUs, where the idx is used to communicate the SRCU index across CPUs
-> > > + * (say CPU0 and CPU1), data is between the R[srcu-lock] to W[once][idx] on
-> > > + * CPU0, which is sequenced with the ->rf is between the W[once][idx] and the
-> > > + * R[once][idx] on CPU1.  The carry-srcu-data is made to exclude Srcu-unlock
-> > > + * events to prevent capturing accesses across back-to-back SRCU read-side
-> > > + * critical sections.
-> > > + *
-> > > + * srcu-rscs: Putting everything together, the carry-srcu-data is sequenced with
-> > > + * a data relation, which is the data dependency between R[once][idx] on CPU1
-> > > + * and the srcu-unlock store, and loc ensures the relation is unique for a
-> > > + * specific lock.
-> > > + *)
-> > >  let carry-srcu-data = (data ; [~ Srcu-unlock] ; rf)*
-> > >  let srcu-rscs = ([Srcu-lock] ; carry-srcu-data ; data ; [Srcu-unlock]) & loc
-> >
-> > My tendency has been to keep comments in the herd7 files to a minimum
-> > and to put more extended descriptions in the explanation.txt file.
-> > Right now that file contains almost nothing (a single paragraph!) about
-> > SRCU, so it needs to be updated to talk about the new definition of
-> > srcu-rscs.  In my opinion, that's where this sort of comment belongs.
+> Let's take an absolutely extreme (and hypothetical) example:
 > 
-> That makes sense, I agree.
+>     +--------------------------------+
+>     |                                |
+>     |     Host SoC running Linux     |
+>     |                                |
+>     |  +----------+   +----------+   |
+>     |  |   MDIO   |   |   ETH    |   |
+>     |  |controller|   |controller|   |
+>     |  |          |   |  (DSA    |   |
+>     |  |          |   | master)  |   |
+>     +--+----------+---+----------+---+
+>             |              |
+>             |              |
+>        MDIO |              | ETH
+>             |              |
+>             v              v
+>     +--------------------------------+
+>     |                    CPU port    |-------
+>     |                                |-------
+>     |               MDIO-controller  |-------
+>     |  +----------+  DSA switch #1   |------- External
+>     |  |   MDIO   |                  |------- ETH
+>     |  |controller|                  |------- ports
+>     |  |          |                  |-------
+>     |  |          |   cascade port   |-------
+>     +--+----------+------------------+
+>             |       ^      |
+>             |       |      |
+>        MDIO |   CLK |      | ETH
+>             |       |      |
+>             v       |      v
+>     +--------------------------------+
+>     |                 cascade port   |-------
+>     |                                |-------
+>     |                                |-------
+>     |         MDIO-controlled        |------- External
+>     |            switch #2           |------- ETH
+>     |                                |------- ports
+>     |                                |-------
+>     |                                |-------
+>     +--------------------------------+
 > 
-> > Joel, would you like to write an extra paragraph of two for that file,
-> > explaining in more detail how SRCU lock-to-unlock matching is different
-> > from regular RCU and how the definition of the srcu-rscs relation works?
-> > I'd be happy to edit anything you come up with.
+> where we have a DSA switch tree with 2 chips, both have their registers
+> accessible over MDIO. But chip #1 is accessed through the host's MDIO
+> controller, and chip #2 through chip #1's MDIO controller.
 > 
-> Yes I would love to, I'll spend some more time studying this up a bit
-> more so I don't write nonsense. But yes, I am quite interested in
-> writing something up and I will do so!
+> These chips are also going to be used with PTP, and the PTP timers of
+> the 2 switches don't feed off of individual oscillators as would be
+> usual, but instead, there is a single oscillator feeding into one
+> switch, and that switch forwards this as a clock to the other switch
+> (because board designers heard it's more trendy this way). So switch #2
+> provides a clock to switch #1.
+> 
+> 
+> With the current mainline DSA code structure, assuming a monolithically
+> written $vendor driver (as basically N-1 of them are), the above would
+> not work under any circumstance.
 
-Hi Alan, all,
+I'm not sure that is true. The switches probe method should register
+with the driver core any resources a switch provides. So switch #1
+MDIO bus driver is registered during its probe, allowing the probe of
+switch #2 to happen. When switch #2 probes, it should register its
+clock with the common clock framework, etc.
 
-One thing I noticed: Shouldn't the model have some notion of fences with the
-srcu lock primitive? SRCU implementation in the kernel does an unconditional
-memory barrier on srcu_read_lock() (which it has to do for a number of
-reasons including correctness), but currently both with/without this patch,
-the following returns "Sometimes", instead of "Never". Sorry if this was
-discussed before:
+However, the linking of resources together, the PTP clock in your
+example, should happen in the switches setup() call, which only
+happens once all the switches in the cluster have probed, so all the
+needed resources should be available.
 
-C MP+srcu
+Because we have these two phases, i think the above setup would work.
 
-(*
- * Result: Sometimes
- *
- * If an srcu_read_unlock() is called between 2 stores, they should propogate
- * in order.
- *)
-
-{}
-
-P0(struct srcu_struct *s, int *x, int *y)
-{
-	int r1;
-
-	r1 = srcu_read_lock(s);
-	WRITE_ONCE(*x, 1);
-	srcu_read_unlock(s, r1); // replace with smp_mb() makes Never.
-	WRITE_ONCE(*y, 1);
-}
-
-P1(struct srcu_struct *s, int *x, int *y)
-{
-	int r1;
-	int r2;
-
-	r1 = READ_ONCE(*y);
-	smp_rmb();
-	r2 = READ_ONCE(*x);
-}
-
-exists (1:r1=1 /\ 1:r2=0)
-
-Also, one more general (and likely silly) question about reflexive-transitive closures.
-
-Say you have 2 relations, R1 and R2. Except that R2 is completely empty.
-
-What does (R1; R2)* return?
-
-I expect (R1; R2) to be empty, since there does not exist a tail in R1, that
-is a head in R2.
-
-However, that does not appear to be true like in the carry-srcu-data relation
-in Alan's patch. For instance, if I have a simple litmus test with a single
-reader on a single CPU, and an updater on a second CPU, I see that
-carry-srcu-data is a bunch of self-loops on all individual loads and stores
-on all CPUs, including the loads and stores surrounding the updater's
-synchronize_srcu() call, far from being an empty relation!
-
-Thanks!
-
- - Joel
-
+	Andrew
