@@ -2,145 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972B769341A
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 22:52:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA6B693422
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 23:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjBKVwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 16:52:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
+        id S229545AbjBKWFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 17:05:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBKVwi (ORCPT
+        with ESMTP id S229447AbjBKWF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 16:52:38 -0500
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2061.outbound.protection.outlook.com [40.107.21.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8885476B6;
-        Sat, 11 Feb 2023 13:52:37 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ev6E+xzTjoxX0fAOB8p3mMZDlvTXzsMzZFesrFIm453KVZlYL0nDs49StikmlKvlkpsQAdEv9TeS2UOaaZlxMBhOLS+GKRAafQ64hgSaTKSljLIbwNCbdwLP+bwVVTzwQH/4jgRu84Gv4w8SK5xrhgZwceUnO/MVbTlTXP+TOfuI8M3tcx8aJJYUdFY881d5zFcJrIFKaH29HmiEovF6UnmPAoxga2jG3/taqnw+QHVF2Kk2iWw5kdwD70QTNPQ4t8E3rJlQ7kOAsKDpCDM5d44fwVedaOsSDVHKyexWEDCnJ04k7v1naVQHM10kWT3g2Zje7NCsXT3383bepw+9Tg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=axhT8NP1qdodm7u3Pdxrxhv7uf3m6ui7K34J1Sc95Ac=;
- b=WDbLXqEvLjzTbywbjGJCSgLhDhz3zSIYWV8fo6nwNgZk7B9V2KS14lk+GlNH85g9uWmKNMdSH0DLmHffxcT2Rv8AMT+O0c+MJ5hUP+PfesBj8YzPoDFZEN0ascEHgRhl8DfHkuWDTyBvMp2UgrhpwjJbrwZFeQwxFoLyeQxiJsel75mbQJoJF8ohEo68ZY07KE8ClKkpNRKHeaqNt+isoYA0cZi93iVINsu9pYabayrv1V0zwlrNq9nabh8BavJCKMQi+KiNKAvvBSH0anx64crs2sqMBua2NBL/eq6YnSONQSDoUaZWJ9MYFwZIlDrth9hf3hJZLKD4dauTlp0klA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=axhT8NP1qdodm7u3Pdxrxhv7uf3m6ui7K34J1Sc95Ac=;
- b=YhgXFlQIiTkSlhQTwEMR30hPY91yhIwwoQ4N+CVzVBMqi0ZGz216McJGkID03ELKjQblAXBc0fd1ajLj/Syk7OZ52mM6c827MKjcjGXHOrLKdcu0gdJTAdapdnnJPp5WKrcuJZVRdXxYd3LmW3b1qc6haSAcXzA1uMd5nBnMbjA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by PA4PR04MB7743.eurprd04.prod.outlook.com (2603:10a6:102:b8::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.22; Sat, 11 Feb
- 2023 21:52:33 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::3cfb:3ae7:1686:a68b%4]) with mapi id 15.20.6086.022; Sat, 11 Feb 2023
- 21:52:33 +0000
-Date:   Sat, 11 Feb 2023 23:52:29 +0200
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Ioana Ciornei <ioana.ciornei@nxp.com>
-Subject: Re: [PATCH net-next] net: pcs: tse: port to pcs-lynx
-Message-ID: <20230211215229.ra43h35rbuibpj2p@skbuf>
-References: <20230210190949.1115836-1-maxime.chevallier@bootlin.com>
- <20230210190949.1115836-1-maxime.chevallier@bootlin.com>
- <20230210193159.qmbtvwtx6kqagvxy@skbuf>
- <Y+ai3zHMUCDcxqxP@lunn.ch>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+ai3zHMUCDcxqxP@lunn.ch>
-X-ClientProxiedBy: BE0P281CA0030.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:14::17) To VI1PR04MB5136.eurprd04.prod.outlook.com
- (2603:10a6:803:55::19)
+        Sat, 11 Feb 2023 17:05:29 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855E013DF6
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 14:05:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676153128; x=1707689128;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zoTfmhWOcE0SUEMvbuujmyATgYFjCA9Uk+A4XShbsWc=;
+  b=IBlTcgeMR4+jZIJwyUY1gMvT3fBmhy2PEYyx1TjMh3U4cxU4O+m/ypfR
+   QKg3AkLHeFAz8FEdMnJrRlGHcs1UTILszdFh9mxgYYEi/kXIJsSAM0Qrv
+   rbv2xGAygyp9kAPWlvNMaWa86/VOdfMy936osO30KxOvYkQh9VNhyoX8L
+   jWCNE3YMXkX/FVyLPMqU4OLolbV0zBBFTraoVjNDfSrpRgTaIbf4J2QI6
+   Ojp+my9IHHrUWViSibbKib0cAglbYZ0Npf99fQGkRzCO8pInZCDLbtNu4
+   2BzQAY21qVDbjwrBQepWsPfKf/O8Ek6uSs2nNa1VcnYZqd39zDar0+Lln
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="393061801"
+X-IronPort-AV: E=Sophos;i="5.97,290,1669104000"; 
+   d="scan'208";a="393061801"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2023 14:05:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="777340724"
+X-IronPort-AV: E=Sophos;i="5.97,290,1669104000"; 
+   d="scan'208";a="777340724"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 11 Feb 2023 14:05:26 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pQxzq-0006pF-00;
+        Sat, 11 Feb 2023 22:05:26 +0000
+Date:   Sun, 12 Feb 2023 06:05:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/cleanups] BUILD SUCCESS
+ 6b8d5dde5b6903baf82fc7400e0b3376b10805b4
+Message-ID: <63e8110e.ugm764I1wwDhibkO%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|PA4PR04MB7743:EE_
-X-MS-Office365-Filtering-Correlation-Id: 52f57704-0dc9-4f0f-68f3-08db0c7a47b6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mRDPsR3okO1dwzXx2NvGBVc4JF+TuvqlL3XIvqiy/wrCSEMrLRaaxI0eeiuGf4VIoSu+B15Jz+2HX1yQG3OLgR3+1eFnAyHdscKELEusKd8V2BCfH0bjYRPX8ATDKQDVC3D91UnZF05IMJWeMcUZx6RaOlKnpKdocqf7Tqzh5ar5tfh0KXdQcjZ7q5lt8Iw2WYWSYMucwtgHejByE6qn7dV+EDFEu3Y1W1sywRDZbDsimaDW1vLDTvt1OOIIWL8ZW7U77WqPkOlHowIyTC4aKGTHlVgzVudLZp5TqVKDsh7tLknV0c6MTNMTv9W+r0975nmGPMsWH7i9ZDWEZPbLzFpeN9zPJcSsWVLsfBeXQMyxx397kUoAYNx8iXPVgioFZfQueMwq+xdD0+dNr2dnxxCX/M3VG+2EQSNtJmxQDeBJF6b0lZiGPUWhvV51qJt0hoUdA53vFG0dsq9OeDSzElPFvPpO+1i4zAxbDmVevwgeoXwFQnUX5wMV5X860Ydg5/1xlr5pdxzDwBPze/RaNMX06ApuUGI4FhmYaCc9Gf2Dg+SNQb9G4PcXDL0AriGcoFAB7OdcDaxkYTdqZyREo03p5CmVmIwrA0sIjMEeEXY+2d6yLo8nV+IGFn0w84cSQT6/RleA8VDjIn7xBmqYTw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(4636009)(136003)(39860400002)(366004)(396003)(376002)(346002)(451199018)(41300700001)(316002)(66946007)(54906003)(66556008)(33716001)(8676002)(6916009)(4326008)(8936002)(5660300002)(7416002)(86362001)(38100700002)(6506007)(1076003)(9686003)(186003)(26005)(6666004)(6512007)(66476007)(44832011)(4744005)(2906002)(478600001)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Mkoe3Mx2gZiClQdKJ5xfZ4aRFOkgs03SzjnpolAjmfs8XTRTW/STAL1NvY1b?=
- =?us-ascii?Q?k1sVvftmirJT/UQ8pe3Zq/OkMnkzuAIMMgjAtS9StZvkEr17ziOzEhy8PjCh?=
- =?us-ascii?Q?tk+FnN2q1qBHuwx/LZpaIzlx74I17aX1+ImzOs7e48OCdhfqoJt/HcWU2AUV?=
- =?us-ascii?Q?Eui8zw7vwT+KKbnPBpRpXb4p3QBF1cuHk6HBSriP99OUHpGzSY9sSwvFYjvf?=
- =?us-ascii?Q?dJ7PyMf+VotXtNPS5IRjNEU/aCv/YrHPv4VvQONjbmfFMe4556OCZIMoVpLX?=
- =?us-ascii?Q?qUY8clBYgmrLI0jTyO7N5dJwRSns/kLzk5+Iq2Dq0Q3GUuPJCPCyXlx97XEq?=
- =?us-ascii?Q?A4mkowlxwKRezrzRZWflpSpZKIiltGgH+GFjXdTrRS1GdbdP9d72aKD7KT1M?=
- =?us-ascii?Q?ZQVcWG0JCvkJB78TB0xMAlCfa2KPR15xBsR5fiIOkL5BB+pniCW4u4Fn4fkA?=
- =?us-ascii?Q?HgXo9tL/nDtA+DzJJSP5YQX/kVejxVAwl2ZBCHpnoNdHjj4c+1Uq2hfSHkKp?=
- =?us-ascii?Q?SFrechvrM16NiQHgXrq5wkTaeDiwRlVlRUaSgbMoI8dC2Bm1HyXx9yPUw5la?=
- =?us-ascii?Q?dm36BO3FjSObkEzjYXmRJdghNhOmpR54weoOzw364X+O1pzvcmFBNP/BIu3+?=
- =?us-ascii?Q?Sp6yjUym6mXJTwnBs+D46pyaAD7DLEqxvxCbAK5GGMnNM2Aqp6tkNtc1KlSo?=
- =?us-ascii?Q?aDy6RLoccyMvQzzIWQnbbaC4nB32eMV8/2MSBDuXyPyQTizVgvvNTrFPgLZP?=
- =?us-ascii?Q?jAMTUOWCAodMKKtOtfN+/7AmbM9MaNabnxj55HGdhF/YWlUX2QGSTIsm5+c+?=
- =?us-ascii?Q?YqKmpdZ+xfyH4S90OFMXtvC00x8tyScU65edjwubDnzDKn3k7F/KFXX5NoaN?=
- =?us-ascii?Q?th+6EDQifC7gPLosqQ8XBktd50MokAtAeV+5ZS4QYTZxoVfox3gDeDYlI+hJ?=
- =?us-ascii?Q?RDTQ2p2d6CyIVnbLM8gBFyyiIGrU/1V+ZNUdxk1AJSXfBEywfJx2A5gXUSHZ?=
- =?us-ascii?Q?NcMk1W71Ee0IVchBBpw2VBm2iLbGZVjsM0WlxXKAH3pl8Udou2yLZ6l/N2Wk?=
- =?us-ascii?Q?qi7agi+3VXizVHm5Tz7+PCiyeIjDac9tZkXwQaMXlU2HGsvbWizXMTrKPCre?=
- =?us-ascii?Q?14ZScRHwRp61eOVijxwHhSMLHbBKt3Km9iX2Ipbu7uDSrCe4GF2ECUsFZO7d?=
- =?us-ascii?Q?3DILgR2Rumd7TlYMGuVHLu4l5rLGmXCH4/vrNd1e1rc84ul6VI5EUyRfksP8?=
- =?us-ascii?Q?az5mFKguOw55B4EpWe9jYgVqdSuScFDVP3jOoSwvIqDg8Dja4DPb+jeO7Vf7?=
- =?us-ascii?Q?5T89TB27VloZzxYLF1q6bymNz4lNaRQKN09M1+8w7n81X1kQn3EzkcMzVKZU?=
- =?us-ascii?Q?wyfqeNbqKmGVLlZiHkj/lh/AuC/Nd83tCL5znQR6P/eoGIPoB5/j8Zz1+I38?=
- =?us-ascii?Q?fZExqJ3b2gbxITubURbvGjzUazTlhTVY5yqTJTVmpl3bTX9uEzM5Ql0MgwOw?=
- =?us-ascii?Q?+8ntTwV1jXGaaBsGOyVhyfDMZJqYdaareM8Pt7iBeGbEc+Mn3yie7GPlKCC0?=
- =?us-ascii?Q?BPKzANEnkXA4nTxoXGET49q9b971ASrkWtLBIkRgzdEpLU0h05oxTu+997U/?=
- =?us-ascii?Q?gA=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 52f57704-0dc9-4f0f-68f3-08db0c7a47b6
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2023 21:52:33.3768
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QbPrOi2uSH73uh9TlyN/grmjZaKULPrRGXg2ThS0nnumgNhtglENFa4i1VneJkeuSsVdVm11aneJ7VUExT8geQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7743
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 09:02:39PM +0100, Andrew Lunn wrote:
-> I was wondering if the glue could actually be made generic. The kernel
-> has a number of reasonably generic MMIO device drivers, which are just
-> given an address range and assume a logical mapping.
-> 
-> Could this be made into a generic MDIO MMIO bus driver, which just
-> gets configured with a base address, and maybe a stride between
-> registers?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cleanups
+branch HEAD: 6b8d5dde5b6903baf82fc7400e0b3376b10805b4  x86/tsc: Do feature check as the very first thing
 
-This sounds interesting to me because I also have at least one other
-potential use for it. The "nxp,sja1110-base-tx-mdio" driver does basically
-just that, except it's SPI instead of MMIO. So if the generic driver was a
-platform device driver and it was aware of dev_get_regmap(), it could
-get reused.
+elapsed time: 720m
 
-What I'm not sure of is the spacing between MDIO registers. For the
-SJA1110 CBTX PHY, the registers are 32-bit wide (but contain 16-bit
-values). So MII_BMCR is at offset 0x0, MII_BMSR at 0x4 etc. I'd imagine
-that other MDIO buses might have MII_BMSR at 0x2.
+configs tested: 54
+configs skipped: 86
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arc                 nsimosci_hs_smp_defconfig
+i386                             allyesconfig
+i386                              debian-10.3
+i386                                defconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+i386                          randconfig-c001
+loongarch                        allmodconfig
+loongarch                         allnoconfig
+loongarch                           defconfig
+m68k                          multi_defconfig
+parisc                generic-64bit_defconfig
+powerpc                 linkstation_defconfig
+powerpc                mpc7448_hpc2_defconfig
+powerpc                  storcenter_defconfig
+riscv                            allmodconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv             nommu_k210_sdcard_defconfig
+riscv                          rv32_defconfig
+s390                             allmodconfig
+s390                             allyesconfig
+s390                                defconfig
+um                               alldefconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                            allnoconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                                  kexec
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+x86_64                               rhel-8.3
+
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-k001
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
