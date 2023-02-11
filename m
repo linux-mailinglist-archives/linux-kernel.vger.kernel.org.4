@@ -2,154 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4864969313F
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 14:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B90693142
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 14:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjBKN1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 08:27:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46074 "EHLO
+        id S229628AbjBKNa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 08:30:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjBKN06 (ORCPT
+        with ESMTP id S229517AbjBKNa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 08:26:58 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB3E2367E
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 05:26:57 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id hx15so22006700ejc.11
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 05:26:57 -0800 (PST)
+        Sat, 11 Feb 2023 08:30:57 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31D42068F
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 05:30:55 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id o15so4517015wrc.9
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 05:30:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iOO5VT9qxtfT0anvEtJcfLGe9BZbxbhWePqPLX+Vj2c=;
-        b=Hurr6LqRk3PQsrfj3J10pydSByhinAUlX9iGKE7LgtXayFvkCe4e85Av1gMW/vVwnz
-         U8Sc+HkLjA11NcRrFDezYYH98nKLIWxRTkUgbVIr5c/tV9SKYcR+fr2h/D/cnSyVfMEq
-         XfgRrbUxgbeAiBQP4AmrhfGeG7J2CChvPPP/8lh7FD0exDLHr8eoXeHfLwN4MzZdH0cx
-         bPmY5uwu4csT506HKzDhC9Y97HjX7k1ygaqw8ENd1CesRE1hehomDSSI0AIO7yUlHRQA
-         YJToce72qb1ZWhl5dOrpkPj05bB6KqAi/vw9l2R60MZOv7Nnn52jPhxDoUMMf2cvX91p
-         OJoA==
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=rNl2Kd1xQruZWeNwQkjy47mqA/czch1BygI7D1oDIGk=;
+        b=NypymiZ55VkZtxkoH5z/U4OGmKZ77cRJCJ2ARcdXUJKWbFxkFwylG8nqccGwz66Ldy
+         QaybUIN3PItTTTc9NaWDcIT38O+s1HMOqNofIm9eIEKXHqDiTTeLD35LnwuEK27n1SFR
+         votELwEjqB6upTfl2OLtl7biccV1V6PZfJENzQxPX0q2C1vqlLFu4DavAeY6MKcaiEeI
+         9V/N+N9pNMD/l0R3PTH4DCffY9GQ19CjGxLtDi2zTr4Hg5CMW6mi7CCH569pEbIsBNk4
+         c8lIqKZCmCSpDlDUikJPHBsupK+RqBiOnL7W7iI8jVqSO+TZqnXSW8nPifHAmn5HQjGl
+         r/iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iOO5VT9qxtfT0anvEtJcfLGe9BZbxbhWePqPLX+Vj2c=;
-        b=S9ISNFBnwvtuanyOE2nAqBt9+5zwAjNULlKuSni3DyRh2+B/+PcBqa4fBdJwW4S8ss
-         twz05z/P3kM8iX0dGp8lE/RYTC/11aRFMBSAxLpFfWVENW/IiouY9V0J4iyCUIl0+GVi
-         gwoMRM/vRcAaLrjCL9J9j7uj3JP4SGDUl9eKukLEGGQ/CvGmSk2cg3//vLh6gtypALX9
-         y3Vg8MvQYt1QecGjkGQLbvibc5BX+SXvrL4hdCTvZfbCFrZM+Vq2gWWF39b9lTqFBc/e
-         XeKuwivFU0db15a3Xi66jhLXYbYa8BDN4gt9uhykIn20emyWyJKAGsFKJbPMGrgpwtdT
-         aFkA==
-X-Gm-Message-State: AO0yUKVKE3UwbyxngDx2lmXcPrtuVAO42CLardX+DQYMjxG8g4lFrmML
-        JEhwgwaCg4zlUO92O8NwTk7J/w==
-X-Google-Smtp-Source: AK7set95nB9W+dsHhMUkQqipXux6Wldjks5K60baLEAsG6Wzd8CBQdL5fDSQ/uDhw/ntcg9OENvLFQ==
-X-Received: by 2002:a17:906:7c91:b0:88c:b4c5:4006 with SMTP id w17-20020a1709067c9100b0088cb4c54006mr23317350ejo.45.1676122016333;
-        Sat, 11 Feb 2023 05:26:56 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id bo13-20020a170906d04d00b008874c903ec5sm3847224ejb.43.2023.02.11.05.26.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Feb 2023 05:26:55 -0800 (PST)
-Message-ID: <94882ab1-1eb0-b9f1-af70-dc070c96fd11@linaro.org>
-Date:   Sat, 11 Feb 2023 15:26:54 +0200
+        bh=rNl2Kd1xQruZWeNwQkjy47mqA/czch1BygI7D1oDIGk=;
+        b=duR6u9p3i5qTEKA2H4RlmF5c6FS/vraJQvRRYD4JA7ZFNeacCnK/BsezbUjktT08aH
+         PSakTGqc4gi7qdfbF8TjIZgkoz9Em+6llpflhM3EanD65mD7VrUf+iKNX/UftBHqyhMQ
+         oZQG5m+d9L6nK7YRpLPalPD6HKWtSAwPS0xdc0uT/5Omb7hu/0m8QNX9yKdbCyC9F55N
+         85U936C/qCrFMK3mKFRzx4ieutH4guDajNUeLB7cE+VkVBCK1Y1W4xPOh2OoBjzjW8Qh
+         zrmIqVboccu4M+zt4ONs8iLTH44jZZP6p8kiRifsV9J5HyB2obafGsVRjIlWMCvfYV/t
+         tmiA==
+X-Gm-Message-State: AO0yUKXHfyk7OE6MEy/hgEbx42HXrrSjFF+WLBPpKDdZF373MkFxgUeD
+        JH7me49EQPJItc3p+hIFFQRGfQ==
+X-Google-Smtp-Source: AK7set/EDcByCs1uVWSz5m9jpWdpI2meYZnoN7/eY1avQr4Ngzd1UY5TyU84+RvEAJp/o+j0yJSBAA==
+X-Received: by 2002:a05:6000:1811:b0:2c5:4b17:166 with SMTP id m17-20020a056000181100b002c54b170166mr4066156wrh.48.1676122254511;
+        Sat, 11 Feb 2023 05:30:54 -0800 (PST)
+Received: from localhost (p54ac5802.dip0.t-ipconnect.de. [84.172.88.2])
+        by smtp.gmail.com with ESMTPSA id t14-20020a05600c198e00b003dff870ce0esm12335853wmq.2.2023.02.11.05.30.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Feb 2023 05:30:53 -0800 (PST)
+Date:   Sat, 11 Feb 2023 14:30:52 +0100
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH RFT 0/3] drivers/thermal/rcar_gen3_thermal: add Gen4 fuse
+ support
+Message-ID: <Y+eYjJIITr2rgz7e@sleipner.dyn.berto.se>
+References: <20230211084728.27832-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 04/10] drm/msm/dsi: dsi_host: Fix DSI index detection when
- version clash occurs
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Archit Taneja <architt@codeaurora.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230211115110.1462920-1-konrad.dybcio@linaro.org>
- <20230211115110.1462920-5-konrad.dybcio@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230211115110.1462920-5-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230211084728.27832-1-wsa+renesas@sang-engineering.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/02/2023 13:51, Konrad Dybcio wrote:
-> Now that msm_dsi_config is ready to accept multiple sets of registers
-> (where array[n][idx] holds the base registers of DSI(idx) for the nth
-> entry), loop through all available configs to resolve hw version
-> clashes.
+Hi Wolfram,
+
+Thanks for your work.
+
+On 2023-02-11 09:47:24 +0100, Wolfram Sang wrote:
+> R-Car Gen4 has the fuse registers at different locations and with
+> different names, but with the same purpose. So, first refactor IP core
+> differences into a 'info' struct, then add the fuse_read callback to it.
 > 
-> Fixes: 32280d66fd44 ("drm/msm/dsi: Don't get DSI index from DT")
-
-Do we really want to backport this patch (and other patches from this 
-series to older kernels?)
-
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   drivers/gpu/drm/msm/dsi/dsi_cfg.h  |  1 +
->   drivers/gpu/drm/msm/dsi/dsi_host.c | 12 +++++++-----
->   2 files changed, 8 insertions(+), 5 deletions(-)
+> Patches are based on top of:
 > 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_cfg.h b/drivers/gpu/drm/msm/dsi/dsi_cfg.h
-> index 03493cc6b772..4a47705234bd 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_cfg.h
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_cfg.h
-> @@ -43,6 +43,7 @@ struct msm_dsi_config {
->   	const int num_bus_clks;
->   	/* Allow + 1 entry for the zero-terminator */
->   	const resource_size_t io_start[VARIANTS_MAX][DSI_MAX + 1];
-> +	const int num_variants;
->   };
->   
->   struct msm_dsi_host_cfg_ops {
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index f5092b4d0757..8dfa69bcff77 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -1862,16 +1862,18 @@ static int dsi_host_get_id(struct msm_dsi_host *msm_host)
->   	struct platform_device *pdev = msm_host->pdev;
->   	const struct msm_dsi_config *cfg = msm_host->cfg_hnd->cfg;
->   	struct resource *res;
-> -	int i;
-> +	int i, j, num_variants;
->   
->   	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dsi_ctrl");
->   	if (!res)
->   		return -EINVAL;
->   
-> -	for (i = 0; cfg->io_start[0][i]; i++) {
-> -		if (cfg->io_start[0][i] == res->start)
-> -			return i;
-> -	}
-> +	num_variants = cfg->num_variants ? cfg->num_variants : 1;
-> +
-> +	for (i = 0; i < num_variants; i++)
-> +		for (j = 0; cfg->io_start[i][j]; j++)
-> +			if (cfg->io_start[i][j] == res->start)
-> +				return j;
->   
->   	return -EINVAL;
->   }
+> [PATCH v2 0/3] drivers/thermal/rcar_gen3_thermal: Fix device initialization
+> [PATCH 0/2] thermal: Add support for R-Car V4H
+> 
+> They have been tested on R-Car H3 ES2.0 and M3-N against regressions.
+> Actual testing of the new fuses on S4-8 still needs to be done because I
+> don't have access to such HW.
+> 
+> @Shimoda-san: maybe the BSP team or Test team can test these patches?
+> 
+> Looking forward to other review comments, too, of course.
 
-Please squash this together with the patch 'drm/msm/dsi: Turn 
-msm_dsi_config::io_start into a 2d array'.
+For the whole series,
+
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+
+I boot tested this on V4H, but on that board the fuses where not set so 
+the driver fall-back to the default values. We had a similar situation 
+when we enabled fuses for Gen3. IIRC the BSP team helped out testing 
+that on a board that had the fuses set.
+
+> 
+> Happy hacking,
+> 
+>    Wolfram
+> 
+> 
+> Wolfram Sang (3):
+>   drivers/thermal/rcar_gen3_thermal: introduce 'info' structure
+>   drivers/thermal/rcar_gen3_thermal: refactor reading fuses into
+>     seprarate function
+>   drivers/thermal/rcar_gen3_thermal: add reading fuses for Gen4
+> 
+>  drivers/thermal/rcar_gen3_thermal.c | 141 ++++++++++++++++++++--------
+>  1 file changed, 102 insertions(+), 39 deletions(-)
+> 
+> -- 
+> 2.30.2
+> 
 
 -- 
-With best wishes
-Dmitry
-
+Kind Regards,
+Niklas Söderlund
