@@ -2,53 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5635569340F
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 22:41:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A61693413
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 22:45:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbjBKVlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 16:41:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46418 "EHLO
+        id S229747AbjBKVpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 16:45:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjBKVlN (ORCPT
+        with ESMTP id S229447AbjBKVpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 16:41:13 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id E9E0C11674
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 13:41:11 -0800 (PST)
-Received: (qmail 858280 invoked by uid 1000); 11 Feb 2023 16:41:11 -0500
-Date:   Sat, 11 Feb 2023 16:41:11 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     syzkaller <syzkaller@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Hillf Danton <hdanton@sina.com>
-Subject: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
- with unique class keys
-Message-ID: <Y+gLd78vChQERZ6A@rowland.harvard.edu>
-References: <Y+Egr4MmqlE6G+mr@rowland.harvard.edu>
- <a7d0e143-1e68-5531-5c2e-1f853d794bc0@I-love.SAKURA.ne.jp>
- <Y+KOeJlvQMYAaheZ@rowland.harvard.edu>
- <a67e24eb-b68f-2abc-50af-ae4c2d4cdd95@I-love.SAKURA.ne.jp>
- <20230208080739.1649-1-hdanton@sina.com>
- <1ad499bb-0c53-7529-ff00-e4328823f6fa@I-love.SAKURA.ne.jp>
- <Y+O6toMmAKBSILMf@rowland.harvard.edu>
- <f79e93ef-cfe8-1373-7c36-15d046c0e3c5@I-love.SAKURA.ne.jp>
- <Y+RZ2RKVo9FNMgSe@rowland.harvard.edu>
- <52c7d509-ba9e-a121-60c9-138d7ff3f667@I-love.SAKURA.ne.jp>
-MIME-Version: 1.0
+        Sat, 11 Feb 2023 16:45:54 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2073.outbound.protection.outlook.com [40.107.21.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F0A12873;
+        Sat, 11 Feb 2023 13:45:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mMMHiXY82ybkPGR9FXANgU8asHGUnxr+dRZl8qxcRDPfdcvc1uuoHRF+V1qG9B7uIlnAI4GOGnFc5k3CODIYOiN2oGbzFDgOI1VWHPnG7blWRfXnqhuGroSj3NIXRepZ26QatD1iLfObulmuTxsxL/ujQRDCY8+sf3atiZLBRXMvWAoFEOgFJcvHbT/8b4dgg/cS68/Hi3rkiwJ1aatKqfs+02etmL3kUTiIB3VtF5iclTZSVxoHEZzqgw3TSyXgA7A0XWwlRJ+N6foWjXjCYPEV/ze2RKYG8IwiOWbUrg5o9dSuUpQBnuxH5j2E+ly7ZtoZTzWtAWQk7ogG31oCnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OeKME+EOIHd9HGhrGd5WuGczpmELYh5cWW+4rQuMwJw=;
+ b=Fv6j0u+QsOKfNqpn8OTUS9wJjq+DPpo0xhQJELcBGaxjHBZNQJfU4UPnGnbUTDoV4tgneWYnCB0OXRFHBfeQ/o7Iu/G4bSN68nkPDmpj4KCLZlrPg8zdC8LqLpV1XkukBKLnT34YIqyJbyRTB2g6iVQRbrZVVoXkALOHkRK/faKBNExCvxwdQzqGVoaqIu7vUhu4TzGWMGIiAYFtkPwh/BmWAIiuEEf4CkCuuJQw9nBjKKMcmuhAJQ5J4SVJArwJ0xWI9OCImc8E8Ewb4kW0ji+KJtJQW9lxRi5IvJIZoLbnceOjnbAWhFBlPkkAjqlEN5vYLHB7ek8OwPcrEtoLhA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OeKME+EOIHd9HGhrGd5WuGczpmELYh5cWW+4rQuMwJw=;
+ b=VVGswdYRsNvkPwAPkUTfjOs58zgTLVXu4LSqqZL/pmb7d3vco4cXygqAXkactrJZWRcmNWib5/rIh6NcQBvupQv5BtklM6ihxR0oEt0M25wWOIWLZ4AOfyOId3jo5gNZWp0vdi7R5YQUJrO3hFFtMisgADYWPwkiVyTdh0/loD0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by PA4PR04MB7597.eurprd04.prod.outlook.com (2603:10a6:102:e0::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.23; Sat, 11 Feb
+ 2023 21:45:49 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::3cfb:3ae7:1686:a68b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::3cfb:3ae7:1686:a68b%4]) with mapi id 15.20.6086.022; Sat, 11 Feb 2023
+ 21:45:49 +0000
+Date:   Sat, 11 Feb 2023 23:45:45 +0200
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Ioana Ciornei <ioana.ciornei@nxp.com>
+Subject: Re: [PATCH net-next] net: pcs: tse: port to pcs-lynx
+Message-ID: <20230211214545.5tu5cfg6jcwy5njd@skbuf>
+References: <20230210190949.1115836-1-maxime.chevallier@bootlin.com>
+ <20230210190949.1115836-1-maxime.chevallier@bootlin.com>
+ <20230210193159.qmbtvwtx6kqagvxy@skbuf>
+ <Y+e1IfWcmHJjJlgp@lunn.ch>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <52c7d509-ba9e-a121-60c9-138d7ff3f667@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+In-Reply-To: <Y+e1IfWcmHJjJlgp@lunn.ch>
+X-ClientProxiedBy: BE1P281CA0131.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:7a::8) To VI1PR04MB5136.eurprd04.prod.outlook.com
+ (2603:10a6:803:55::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|PA4PR04MB7597:EE_
+X-MS-Office365-Filtering-Correlation-Id: f37f2527-928d-4ad7-ad95-08db0c7956aa
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UF6gkbGB9M4agTtd37OAOvN+yvjJUEmweulLPrB8lJLDWmXpg3/kvCKlyo6pefxzSxTchWbZnGFn9n8ZMh3HXGNNFDI7YeHihO/zkGFXpgEevxeOm8K/wYjir8EWNSYFXtbwpRAt5ocs+fgGDWuydleD79sdE4FGIr0VJIdYOD3Q4LIo70NcjAlqYOVcVQLMXbNxYI7Ay5LLdtU/UxU1jD/nT9NShiLQrmodhyMpjP3sGuBi3sbyHLCVRgXHBwvOE7xdUjEjULkxh/lbFT7OpJCpo29o7H2UQj5+AL8vZJz1aE05wK5ThKEiXJaCuffKwu4hv1WfB5KwjgA18XApX426+mu944yZNyFYFyG5LGF/qbrkflf9XMq3X1EEDzz5+JXpbrelUcq0TLnWHRmoZ8B9Kj4G0SAQYylX4kDJjO3oNDi0lNlI68Op3Pu5fTZJc7cXNtQ+SlVxZKOAL92YKlOMdT/ux16TIIyhQGBkh/cYYOlL03sIrT67VsUPMKhb/re8utMGfnAVtWg4DnWqxR7y8S3aXBelmBqH7IrVTP0F1fxmD1j0krm521PMW6FMeJcSV114vil1p8xrfLXHW56xIbibdal6VZDyWMEOMDw7Skaj/l1eIAAA2PQ2vVE15ApUtJU5AWm5GgeqrlTpyg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(7916004)(39860400002)(396003)(366004)(346002)(136003)(376002)(451199018)(316002)(54906003)(66556008)(5660300002)(8676002)(66476007)(4326008)(8936002)(6916009)(66946007)(4744005)(7416002)(2906002)(44832011)(41300700001)(6486002)(478600001)(6666004)(1076003)(6512007)(6506007)(186003)(26005)(9686003)(33716001)(86362001)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xdfY3ppHIWqnnWl8xHVE3pBRuhlJe3finCYi3FftpItWxXNNsTMPdEAh3yO6?=
+ =?us-ascii?Q?5iEt4EMMN6SwU/QlhN+tKI2JjHqjCh93qXR4xvwGjuHf+d1ER9UjcDzn5w8Q?=
+ =?us-ascii?Q?jcXkE4KqD3fNtOT4eTni7Ni64qg0IqZgeiLdqFthmIuO07oWkFLH1KzW6DOP?=
+ =?us-ascii?Q?r/+XFNB5tloVLTe8CkgYu9LLqhoU2CxakR9OXU2er+QxHGIe6/TSTsL4bbJm?=
+ =?us-ascii?Q?FmPx74349i5q3MXapT2+rUFvzjjplvZScGm/80Sy++mImdTzfN+taJzRUgi4?=
+ =?us-ascii?Q?dUr1nzXL9K2Uat6pEfkV2bNTWF8zo/vU78BxFMyWzxBfJ2kL/qFDnmsGBFL7?=
+ =?us-ascii?Q?6PlRoCLwnrsJZlM+ZLUmu8DxB9h8D+lINmSWw59diqqIiwrTMVSxhsTFdpHw?=
+ =?us-ascii?Q?ZL6UjNzXg4dazGQT5TQmNTyZLjnIkl87k+F6s/bptpB20gpW/LOwuYMzIiCy?=
+ =?us-ascii?Q?qlHxkWkLB+8fY2nXi4QwDzDoH1LdX+0PCXX2ewKk46PrQelCQetrQ8+ZXlrZ?=
+ =?us-ascii?Q?z6o75oYuUJ7mAE9AlpK7MeEr9gIoNrgp6VhkT9E02+pgQk8TxqeSL8qY1XOY?=
+ =?us-ascii?Q?yhGZb4T8hORLIwFusWd/2IfRzygx3p3h/fsMe1xws+vVNO3vnAZP4n8ilFKo?=
+ =?us-ascii?Q?A3FT+d3AlQlRTO8o8W75ppY7MhY7wyJ9lzuiOb3NPm3DmWEjCwai9e8ZbWAt?=
+ =?us-ascii?Q?OxxvW/hFzB+qVlXcsc6fnx4auwQU6pxOa4t8jsQkG3G136fmYf0LJ2XqZ26W?=
+ =?us-ascii?Q?K3lfzdYVfI2u8enBf+p4fZEDUfzTXpm5GuPgLII4PPcD5sdPFp7vfwPrHv85?=
+ =?us-ascii?Q?+Z/wRDEJvjlIU/jzkpSZYAb9M1GoHgJsVV0hcolIXJBjiGH7H4NmIom+oKE6?=
+ =?us-ascii?Q?R50m+4/2aym4HDPQT/SGBXGqic3+z1a38vXlAVm+QuwQeBtlm3Kq9WieySZR?=
+ =?us-ascii?Q?+Gs9UVj30h1CiZiYJz5MquLhgjpvOQqAPcxxqdhLpVHwXOhyiRzSrGusqCSV?=
+ =?us-ascii?Q?Ntjk/qJrqzREbH4IduI6nmfzEvCY/V5KMMpoBn66vvX49cd87s6dyeWW1ooX?=
+ =?us-ascii?Q?l91rlEv3BUCzBIexcnfkBLrIjW3h06qwrf6IXx9UuBZkZO0KaOyKZSYU1xwH?=
+ =?us-ascii?Q?vg76kJC40ppiW0BYjw7B4zhQ/+Ja3UIvT+CgDIc296BRi+mJqQ7NM//xwAfN?=
+ =?us-ascii?Q?flKoAphKSv2z51x9sc/reQswTcI+zPfWgdKV7hV2bc3IyCu7FnzehdwJtp5T?=
+ =?us-ascii?Q?qXJ8smcRUDGXFxy5+eVhef2Tn2sMkcT3HLgJc3mJbUuZm9o1ykm9dP0eNsAE?=
+ =?us-ascii?Q?X8tx0RCN1D76BrDHmqnWQe/KNXUIJdFBEL7HdoNgM8viV3YIkE2Q/D1YGgiz?=
+ =?us-ascii?Q?KukmM/DMtrWB6Is4JLZRi7X8ZPpFrztkF3KAOvtEHEcheAJW8LCqON55Rzyc?=
+ =?us-ascii?Q?7onZWeUTEV2fcQBd1Uaq/qgSj1TuNSMYfMDbttz4VWe2MQBDtEnnyQxaOz8v?=
+ =?us-ascii?Q?wvdD6iobcxmhrYpEqIQ279kQOrygD+f2Y7ZaDAbOnIznyVU4baZG/ze70wAQ?=
+ =?us-ascii?Q?Gl/YKDj1b0gzafBZ42N0TcJynzeUZ8GSUT1zKkhmJ2mi2XWtl12N/aC7ngrT?=
+ =?us-ascii?Q?/A=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f37f2527-928d-4ad7-ad95-08db0c7956aa
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2023 21:45:48.9534
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mYHD7TzV92FZusY3ZYE1uFUpL9/dQTFcA1ZYHh/5/EgEol5ACjVKehdAlFETdf169tYtYoyBsYhUz5M13R46kw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7597
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,129 +125,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lockdep is blind to the dev->mutex field of struct device, owing to
-the fact that these mutexes are assigned to lockdep's "novalidate"
-class.  Commit 1704f47b50b5 ("lockdep: Add novalidate class for
-dev->mutex conversion") did this because the hierarchical nature of
-the device tree makes it impossible in practice to determine whether
-acquiring one of these mutexes is safe or might lead to a deadlock.
+On Sat, Feb 11, 2023 at 04:32:49PM +0100, Andrew Lunn wrote:
+> Another option might be regmap. There are both regmap-mdio.c and
+> regmap-mmio.c.
 
-Unfortunately, this means that lockdep is unable to help diagnose real
-deadlocks involving these mutexes when they occur in testing [1] [2]
-or in actual use, or to detect bad locking patterns that might lead to
-a deadlock.  We would like to obtain as much of lockdep's benefits as
-possible without generating a flood of false positives -- which is
-what happens if one naively removes these mutexes from the
-"novalidate" class.
-
-Accordingly, as a middle ground the mutex in each non-static struct
-device will be placed in its own unique locking class.  This approach
-gives up some of lockdep's advantages (for example, all devices having
-a particular bus_type or device_type might reasonably be put into the
-same locking class), but it should at least allow us to gain the
-benefit of some of lockdep's capabilities.
-
-Link: https://syzkaller.appspot.com/bug?extid=2d6ac90723742279e101 [1]
-Link: https://syzkaller.appspot.com/bug?extid=2e39bc6569d281acbcfb [2]
-Link: https://lore.kernel.org/all/28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp/
-Suggested-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-CC: Peter Zijlstra <peterz@infradead.org>
-CC: Ingo Molnar <mingo@redhat.com>
-CC: Boqun Feng <boqun.feng@gmail.com>
-
----
-
-I decided to take your suggestion about introducing a new
-lockdep_static_obj() function, to reduce the size of the patch.  It
-can always be combined with the original static_obj() function later
-on, if that's what the lockdep developers want.
-
-If Hillf Danton contributed any of the code for this patch, I haven't
-seen it in any messages sent to me or in the mailing list archives.
-That's why I didn't include a Co-developed-by: tag for him.
-
- drivers/base/core.c      |    8 +++++++-
- include/linux/device.h   |    1 +
- include/linux/lockdep.h  |    6 ++++++
- kernel/locking/lockdep.c |    5 +++++
- 4 files changed, 19 insertions(+), 1 deletion(-)
-
-Index: usb-devel/drivers/base/core.c
-===================================================================
---- usb-devel.orig/drivers/base/core.c
-+++ usb-devel/drivers/base/core.c
-@@ -2322,6 +2322,9 @@ static void device_release(struct kobjec
- 	devres_release_all(dev);
- 
- 	kfree(dev->dma_range_map);
-+	mutex_destroy(&dev->mutex);
-+	if (!lockdep_static_obj(dev))
-+		lockdep_unregister_key(&dev->mutex_key);
- 
- 	if (dev->release)
- 		dev->release(dev);
-@@ -2941,7 +2944,10 @@ void device_initialize(struct device *de
- 	kobject_init(&dev->kobj, &device_ktype);
- 	INIT_LIST_HEAD(&dev->dma_pools);
- 	mutex_init(&dev->mutex);
--	lockdep_set_novalidate_class(&dev->mutex);
-+	if (!lockdep_static_obj(dev)) {
-+		lockdep_register_key(&dev->mutex_key);
-+		lockdep_set_class(&dev->mutex, &dev->mutex_key);
-+	}
- 	spin_lock_init(&dev->devres_lock);
- 	INIT_LIST_HEAD(&dev->devres_head);
- 	device_pm_init(dev);
-Index: usb-devel/include/linux/device.h
-===================================================================
---- usb-devel.orig/include/linux/device.h
-+++ usb-devel/include/linux/device.h
-@@ -570,6 +570,7 @@ struct device {
- 	struct mutex		mutex;	/* mutex to synchronize calls to
- 					 * its driver.
- 					 */
-+	struct lock_class_key	mutex_key;	/* Unique key for each device */
- 
- 	struct dev_links_info	links;
- 	struct dev_pm_info	power;
-Index: usb-devel/include/linux/lockdep.h
-===================================================================
---- usb-devel.orig/include/linux/lockdep.h
-+++ usb-devel/include/linux/lockdep.h
-@@ -172,6 +172,7 @@ do {							\
- 	current->lockdep_recursion -= LOCKDEP_OFF;	\
- } while (0)
- 
-+extern int lockdep_static_obj(const void *obj);
- extern void lockdep_register_key(struct lock_class_key *key);
- extern void lockdep_unregister_key(struct lock_class_key *key);
- 
-@@ -391,6 +392,11 @@ static inline void lockdep_set_selftest_
- # define lockdep_free_key_range(start, size)	do { } while (0)
- # define lockdep_sys_exit() 			do { } while (0)
- 
-+static inline int lockdep_static_obj(const void *obj)
-+{
-+	return 0;
-+}
-+
- static inline void lockdep_register_key(struct lock_class_key *key)
- {
- }
-Index: usb-devel/kernel/locking/lockdep.c
-===================================================================
---- usb-devel.orig/kernel/locking/lockdep.c
-+++ usb-devel/kernel/locking/lockdep.c
-@@ -857,6 +857,11 @@ static int static_obj(const void *obj)
- 	 */
- 	return is_module_address(addr) || is_module_percpu_address(addr);
- }
-+
-+int lockdep_static_obj(const void *obj)
-+{
-+	return static_obj(obj);
-+}
- #endif
- 
- /*
+Maxime had originally considered regmap too, but I thought it would
+involve too many changes in the lynx-pcs driver and I wasn't sure
+that those changes were for the better, since it would then need
+to use the more low-level variants of phylink helpers (for example
+phylink_mii_c22_pcs_decode_state() instead of phylink_mii_c22_pcs_get_state()).
