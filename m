@@ -2,134 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF911692F81
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 09:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E465F692F83
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 09:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbjBKIou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 03:44:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41024 "EHLO
+        id S229588AbjBKIpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 03:45:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjBKIos (ORCPT
+        with ESMTP id S229764AbjBKIpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 03:44:48 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 916ED1ABCE
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 00:44:20 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Ax3epjVedjuzERAA--.34355S3;
-        Sat, 11 Feb 2023 16:44:19 +0800 (CST)
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxf+RjVedjXv8wAA--.57308S2;
-        Sat, 11 Feb 2023 16:44:19 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] LoongArch: ptrace: Add function argument access API
-Date:   Sat, 11 Feb 2023 16:44:14 +0800
-Message-Id: <20230211084414.25998-1-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.20.1
+        Sat, 11 Feb 2023 03:45:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A5561D18;
+        Sat, 11 Feb 2023 00:44:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59735B8265C;
+        Sat, 11 Feb 2023 08:44:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3C7EC433EF;
+        Sat, 11 Feb 2023 08:44:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676105084;
+        bh=e4p3EfDk6PE2hribcSKd91RgeGPv/7wNlON+CBw55wQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YHOqJ7Ek4jtd9+4Gmvyt4opibsuubv6BOkxW9APKkNpqF3Xz0u/x3FafVvE9Bm9Px
+         BVgwRAZBbiLwSQh2jKdrZ7iVozVdNflJGqw12CQluQHLirBY2HqqBUdpN3wU0Y+RMa
+         8gZWIs1jlvzXtlWZ6d6cK0HR6cd6dHVORtl06IrM=
+Date:   Sat, 11 Feb 2023 09:44:41 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Tharunkumar.Pasumarthi@microchip.com
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH v4 char-misc-next] misc: microchip: pci1xxxx: Add
+ OTP/EEPROM driver for the pci1xxxx switch
+Message-ID: <Y+dVeeSODu8w5ns9@kroah.com>
+References: <20230209044237.3927293-1-tharunkumar.pasumarthi@microchip.com>
+ <Y+S05tQ5e5pE9/v0@kroah.com>
+ <PH7PR11MB59588BF687D7D2EDAC36E4899BDF9@PH7PR11MB5958.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cxf+RjVedjXv8wAA--.57308S2
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxWrWftryfGFW5ZF47KFyxuFg_yoW5JFWDpa
-        4kA3ZxGr48urs3uFW3J3WrZryrZrs7CrWakr1Ik34Syr9FqryrJFWkXr1qy3WktrWUJFWI
-        gF15t3yYgFs8Z3JanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b3xYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2kK
-        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280
-        aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28Icx
-        kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E
-        5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAV
-        WUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY
-        1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
-        0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7I
-        U8EeHDUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH7PR11MB59588BF687D7D2EDAC36E4899BDF9@PH7PR11MB5958.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add regs_get_argument() which returns N th argument of the function
-call, t show This enables ftrace kprobe events to access kernel function
-arguments via $argN syntax.
+On Sat, Feb 11, 2023 at 05:07:43AM +0000, Tharunkumar.Pasumarthi@microchip.com wrote:
+> > From: Greg KH <gregkh@linuxfoundation.org>
+> > Sent: Thursday, February 9, 2023 2:25 PM
+> > To: Tharunkumar Pasumarthi - I67821
+> > <Tharunkumar.Pasumarthi@microchip.com>
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the
+> > content is safe
+> > 
+> > > +     } while (data & EEPROM_CMD_EPC_BUSY_BIT);
+> > 
+> > That's a very busy "sit and spin" loop here, what happens if the read of the
+> > bit never actually succeeds?  You just locked up the system with no way to
+> > interrupt it :(
+> > 
+> > Please provide some sort of timeout, or way to break out of this.
+> > 
+> > > +
+> > > +     if (data & EEPROM_CMD_EPC_TIMEOUT_BIT) {
+> > > +             dev_err(&priv->pdev->dev, "EEPROM write timed out\n");
+> > 
+> > How can the timeout bit happen if the busy bit was still set?
+> > 
+> > And what can userspace do about this if it is reported?
+> 
+> Hi Greg,
+> If EEPROM_CMD_EPC_BUSY_BIT is set for more than 30ms, it will be cleared automatically by the hardware logic and EEPROM_CMD_EPC_TIMEOUT_BIT bit will be set to indicate the timeout. User space application will inform user about timeout on EEPROM write/read when this error occurs.
 
-eg:
-echo 'p bio_add_page arg1=$arg1' > kprobe_events
-bash: echo: write error: Invalid argument
+Ok, if the bit being set will notify userspace of the issue, then why
+also spam the kernel error log?
 
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
----
- arch/loongarch/Kconfig              |  1 +
- arch/loongarch/include/asm/ptrace.h | 33 +++++++++++++++++++++++++++++
- 2 files changed, 34 insertions(+)
+thanks,
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index e3eba2eb4b44..103046966893 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -97,6 +97,7 @@ config LOONGARCH
- 	select HAVE_EXIT_THREAD
- 	select HAVE_FAST_GUP
- 	select HAVE_FTRACE_MCOUNT_RECORD
-+	select HAVE_FUNCTION_ARG_ACCESS_API
- 	select HAVE_FUNCTION_GRAPH_TRACER
- 	select HAVE_FUNCTION_TRACER
- 	select HAVE_GENERIC_VDSO
-diff --git a/arch/loongarch/include/asm/ptrace.h b/arch/loongarch/include/asm/ptrace.h
-index 66a0e6c480a3..f6ffcc00753c 100644
---- a/arch/loongarch/include/asm/ptrace.h
-+++ b/arch/loongarch/include/asm/ptrace.h
-@@ -120,6 +120,39 @@ static inline long regs_return_value(struct pt_regs *regs)
- 	return regs->regs[4];
- }
- 
-+/**
-+ * regs_get_kernel_argument() - get Nth function argument in kernel
-+ * @regs:       pt_regs of that context
-+ * @n:          function argument number (start from 0)
-+ *
-+ * regs_get_argument() returns @n th argument of the function call.
-+ * Note that this chooses most probably assignment, in some case
-+ * it can be incorrect.
-+ * This is expected to be called from kprobes or ftrace with regs
-+ * where the top of stack is the return address.
-+ */
-+static inline unsigned long regs_get_kernel_argument(struct pt_regs *regs,
-+						     unsigned int n)
-+{
-+	static const unsigned int argument_offs[] = {
-+		offsetof(struct pt_regs, regs[4]),
-+		offsetof(struct pt_regs, regs[5]),
-+		offsetof(struct pt_regs, regs[6]),
-+		offsetof(struct pt_regs, regs[7]),
-+		offsetof(struct pt_regs, regs[8]),
-+		offsetof(struct pt_regs, regs[9]),
-+		offsetof(struct pt_regs, regs[10]),
-+		offsetof(struct pt_regs, regs[11]),
-+#define NR_REG_ARGUMENTS 8
-+	};
-+
-+	if (n >= NR_REG_ARGUMENTS) {
-+		n -= NR_REG_ARGUMENTS;
-+		return regs_get_kernel_stack_nth(regs, n);
-+	} else
-+		return regs_get_register(regs, argument_offs[n]);
-+}
-+
- #define instruction_pointer(regs) ((regs)->csr_era)
- #define profile_pc(regs) instruction_pointer(regs)
- 
--- 
-2.36.0
-
+greg k-h
