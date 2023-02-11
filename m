@@ -2,192 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 601206932E1
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 18:38:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E143A6932E5
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 18:42:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjBKRiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 12:38:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
+        id S229567AbjBKRl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 12:41:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjBKRiX (ORCPT
+        with ESMTP id S229485AbjBKRl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 12:38:23 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4EB10FE
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 09:38:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676137102; x=1707673102;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=BBIz+YYkehOT6KC2qTybMBmLmQQP2oBoZZLIDojUIk0=;
-  b=Y2rH/CYKwdaBJst0axEpVQ3IV3Q4dLGa56+EGzfVvsgH0gAkjGZzYA9e
-   9tUYc6J8vib513MYguMsU10m/R3nDPurhLpO3S47Al1p4udByS8pYXZbk
-   nO/ISsvJMCQOgZtUSp+tT1B9SBKP+JNx0rCKPWMm2kgluLRIM8gfokgjx
-   scEfj9cXWn4x6Gunpm06XwVVSMHG0Ab3YRuTNDFYVIS8H974AFuyh/vh9
-   8qE+Qq7gdpvoBTjbornSZnnUDx31LeYkVLN0yXdV1LHs3VwQ4YlyFKD3Q
-   OSqCY33DtPQArSdVs/RXQrQRM9FVi8mrs0QYKQV1AyOcPnEFHVod97WUa
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="395242469"
-X-IronPort-AV: E=Sophos;i="5.97,290,1669104000"; 
-   d="scan'208";a="395242469"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2023 09:38:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="670350295"
-X-IronPort-AV: E=Sophos;i="5.97,290,1669104000"; 
-   d="scan'208";a="670350295"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 11 Feb 2023 09:38:20 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pQtpM-0006iD-0e;
-        Sat, 11 Feb 2023 17:38:20 +0000
-Date:   Sun, 12 Feb 2023 01:37:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:srcu-always.2023.02.02a] BUILD SUCCESS
- 5634469360ddc3337bd73c2cdcdf7849fb779026
-Message-ID: <63e7d259.qejjIud9s87+FO7G%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 11 Feb 2023 12:41:57 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F4B126E0;
+        Sat, 11 Feb 2023 09:41:56 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id 70-20020a9d084c000000b0068bccf754f1so2527724oty.7;
+        Sat, 11 Feb 2023 09:41:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lB4BYaKypxug/Usxg3JHYWD2etWYVYsCzwgp8OF/toA=;
+        b=XGp0TX1TJXUAWmb8g/lMmsPjIPLN/i9DKQ8/skM9467YRbR83Po+Sowy1dm3gPTJt3
+         WTGqIpW4w5hgMBIe7+51AfYbv0SKfzt1igxb+t31qruN4Sije36MGn6w2ASbpryzyUBw
+         j4a1nP/jlDjpCkgMckStnuKvTWa+zq5vQIgR6YuCn+xxkOy7BUgb9XWCyKzTQ0cGArjH
+         hticXh43eIVW+xws6gcLtF5sX9lkNIrWjADxIi+V8drDOjgyh0hw55xcXHuFcnkJAxGE
+         y2hBn4iSixXuZF89uXeKKeqFh7/iIdL2Y/O3v8+81TvT+av4ZuOKoPPI/M3ip1HClfei
+         4MAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lB4BYaKypxug/Usxg3JHYWD2etWYVYsCzwgp8OF/toA=;
+        b=OgH0Hg1jqQsfzPnb2nizqzOksMnEi6nBrbU3n40lyNk7+R+cZwm1lGEdrvdVMxACc6
+         VPdKsgLHKQI6bVayI1IZX5lgFgnwYAWMdVCyC10zMcSwLL8p/4zbxPyYPfJT13uiPFE8
+         AMvhVLRxbWwDGYqS7PeFcbxWIk2vKt53gwSjWTw1LRPexXqtwWaFmB8Z1KZbv5qIQhpW
+         YCSL3nTfHJ72EWC0EUcPcsGYjRKvJ/J8rexYoziebLwGbLJdhEe7vpALJyOOJw2i5wNp
+         DsNAmX+3b30YIpxJzuZesYhvVS1C0PdIWTrtGAvINOA9BP+oaYYt6yQfb5qiLEiRjaWm
+         kmpw==
+X-Gm-Message-State: AO0yUKUuDZZG5DNezh4/cmH8s53TYJEpkDFYstKs5qjikF+C2Hr4LRpg
+        vXyC9dMNKxqFNsILqyEKtvZ/43asclU=
+X-Google-Smtp-Source: AK7set+XLqmBXbzcKZ8FKtIE+ku4zpYPa2S4L8c5yXo/kAp7AwMC/zgxRjW0lNooXwQGZQqd/6oOtg==
+X-Received: by 2002:a05:6830:610b:b0:68d:3e67:22a7 with SMTP id ca11-20020a056830610b00b0068d3e6722a7mr13771369otb.33.1676137315407;
+        Sat, 11 Feb 2023 09:41:55 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v23-20020a9d5a17000000b0068bc8968753sm3300435oth.17.2023.02.11.09.41.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Feb 2023 09:41:54 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ef64d9c3-65e1-636c-1cb7-8721b1e8746e@roeck-us.net>
+Date:   Sat, 11 Feb 2023 09:41:52 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Leonard Anderweit <leonard.anderweit@gmail.com>,
+        linux-hwmon@vger.kernel.org
+Cc:     Aleksa Savic <savicaleksa83@gmail.com>,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230211165923.17807-1-leonard.anderweit@gmail.com>
+ <20230211165923.17807-6-leonard.anderweit@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 5/5] hwmon: (aquacomputer_d5next) Add PWM mode control for
+ Aquaero
+In-Reply-To: <20230211165923.17807-6-leonard.anderweit@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git srcu-always.2023.02.02a
-branch HEAD: 5634469360ddc3337bd73c2cdcdf7849fb779026  kernel/notifier: Remove CONFIG_SRCU
+On 2/11/23 08:59, Leonard Anderweit wrote:
+> Add PWM mode control for the Aquacomputer Aquaero. On the Aquaero 6 all four
+> ports can switch between DC and PWM control. On the Aquaero 5 this is only
+> supported for the fourth port, but changing the setting for the other ports has
+> no consequences.
+> 
 
-elapsed time: 1304m
+Adding the capability without actually supporting it raises the expectation
+that it works from those who don't know better. Please only provide the
+capability to set the mode where it is actually supported.
 
-configs tested: 109
-configs skipped: 3
+Otherwise one could argue along the line of 'hey, let's just "enable"
+all attributes no matter if supported or not', which would lead to a
+lot of confusion. I really hope that isn't done with other attributes
+in this driver.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> Signed-off-by: Leonard Anderweit <leonard.anderweit@gmail.com>
+> ---
+>   Documentation/hwmon/aquacomputer_d5next.rst |  4 +-
+>   drivers/hwmon/aquacomputer_d5next.c         | 86 ++++++++++++++++-----
+>   2 files changed, 70 insertions(+), 20 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
+> index 2dbb3bd37878..002cb9eecdf5 100644
+> --- a/Documentation/hwmon/aquacomputer_d5next.rst
+> +++ b/Documentation/hwmon/aquacomputer_d5next.rst
+> @@ -26,7 +26,8 @@ communicate through proprietary USB HID protocols.
+>   The Aquaero devices expose eight physical, eight virtual and four calculated
+>   virtual temperature sensors, as well as two flow sensors. The fans expose their
+>   speed (in RPM), power, voltage and current. The temperature offset and the fan speed
+> -can be controlled.
+> +can be controlled. The fan PWM mode (DC/PWM) can be controlled. The Aquaero 6 supports
+> +this on all four fan connectors and the Aquaero 5 only on the fourth connector.
+>   
+>   For the D5 Next pump, available sensors are pump and fan speed, power, voltage
+>   and current, as well as coolant temperature and eight virtual temp sensors. Also
+> @@ -83,6 +84,7 @@ power[1-8]_input Pump/fan power (in micro Watts)
+>   in[0-7]_input    Pump/fan voltage (in milli Volts)
+>   curr[1-8]_input  Pump/fan current (in milli Amperes)
+>   pwm[1-8]         Fan PWM (0 - 255)
+> +pwm[1-4]_mode    Fan control mode (0: DC mode; 1: PWM mode)
 
-gcc tested configs:
-alpha                            allyesconfig
-alpha                               defconfig
-arc                               allnoconfig
-arc                              allyesconfig
-arc                                 defconfig
-arc                 nsimosci_hs_smp_defconfig
-arc                  randconfig-r043-20230210
-arm                              allmodconfig
-arm                              allyesconfig
-arm                       aspeed_g5_defconfig
-arm                                 defconfig
-arm                          exynos_defconfig
-arm                  randconfig-r046-20230210
-arm                         vf610m4_defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-csky                                defconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                         debian-10.3-func
-i386                   debian-10.3-kselftests
-i386                        debian-10.3-kunit
-i386                          debian-10.3-kvm
-i386                                defconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-i386                          randconfig-c001
-ia64                             allmodconfig
-ia64                                defconfig
-loongarch                        allmodconfig
-loongarch                         allnoconfig
-loongarch                           defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                          hp300_defconfig
-m68k                          multi_defconfig
-mips                             allmodconfig
-mips                             allyesconfig
-mips                       bmips_be_defconfig
-nios2                               defconfig
-openrisc                       virt_defconfig
-parisc                              defconfig
-parisc                generic-64bit_defconfig
-parisc64                            defconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-powerpc                 linkstation_defconfig
-powerpc                   motionpro_defconfig
-powerpc                mpc7448_hpc2_defconfig
-powerpc                  storcenter_defconfig
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv             nommu_k210_sdcard_defconfig
-riscv                          rv32_defconfig
-s390                             allmodconfig
-s390                             allyesconfig
-s390                                defconfig
-sh                               allmodconfig
-sh                ecovec24-romimage_defconfig
-sh                   rts7751r2dplus_defconfig
-sparc                               defconfig
-um                               alldefconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                            allnoconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-bpf
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-xtensa                generic_kc705_defconfig
+... and it isn't even mentioned here that the mode only works on
+Aquacomputer Aquaero, and only on the 4th port for Aquaero 5.
 
-clang tested configs:
-arm                       cns3420vb_defconfig
-arm                         lpc32xx_defconfig
-hexagon              randconfig-r041-20230210
-hexagon              randconfig-r045-20230210
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-mips                           ip22_defconfig
-powerpc                          allmodconfig
-powerpc                 mpc8272_ads_defconfig
-powerpc               mpc834x_itxgp_defconfig
-riscv                randconfig-r042-20230210
-s390                 randconfig-r044-20230210
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                        randconfig-k001
+Really, please don't do that, and I sincerely hope that the driver
+doesn't hide (i.e., claim to support when it isn't really supported)
+other similar limitations.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Guenter
+
+>   ================ ==============================================================
+>   
+>   Debugfs entries
+> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+> index 02551c26918a..2ec00124785f 100644
+> --- a/drivers/hwmon/aquacomputer_d5next.c
+> +++ b/drivers/hwmon/aquacomputer_d5next.c
+> @@ -123,6 +123,7 @@ static u16 aquaero_sensor_fan_offsets[] = { 0x167, 0x173, 0x17f, 0x18B };
+>   #define AQUAERO_TEMP_CTRL_OFFSET	0xdb
+>   #define AQUAERO_FAN_CTRL_MIN_PWR_OFFSET	0x04
+>   #define AQUAERO_FAN_CTRL_MAX_PWR_OFFSET	0x06
+> +#define AQUAERO_FAN_CTRL_MODE_OFFSET	0x0f
+>   #define AQUAERO_FAN_CTRL_SRC_OFFSET	0x10
+>   static u16 aquaero_ctrl_fan_offsets[] = { 0x20c, 0x220, 0x234, 0x248 };
+>   
+> @@ -672,10 +673,23 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+>   		break;
+>   	case hwmon_pwm:
+>   		if (priv->fan_ctrl_offsets && channel < priv->num_fans) {
+> -			switch (attr) {
+> -			case hwmon_pwm_input:
+> -				return 0644;
+> +			switch (priv->kind) {
+> +			case aquaero:
+> +				switch (attr) {
+> +				case hwmon_pwm_input:
+> +				case hwmon_pwm_mode:
+> +					return 0644;
+> +				default:
+> +					break;
+> +				}
+> +				break;
+>   			default:
+> +				switch (attr) {
+> +				case hwmon_pwm_input:
+> +					return 0644;
+> +				default:
+> +					break;
+> +				}
+>   				break;
+>   			}
+>   		}
+> @@ -863,22 +877,46 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>   		*val = priv->power_input[channel];
+>   		break;
+>   	case hwmon_pwm:
+> -		switch (priv->kind) {
+> -		case aquaero:
+> -			ret = aqc_get_ctrl_val(priv, AQUAERO_CTRL_PRESET_START + channel * AQUAERO_CTRL_PRESET_SIZE,
+> -					       val, AQC_BE16);
+> -			if (ret < 0)
+> -				return ret;
+> -			*val = aqc_percent_to_pwm(*val);
+> +		switch (attr) {
+> +		case hwmon_pwm_input:
+> +			switch (priv->kind) {
+> +			case aquaero:
+> +				ret = aqc_get_ctrl_val(priv, AQUAERO_CTRL_PRESET_START +
+> +						       channel * AQUAERO_CTRL_PRESET_SIZE,
+> +						       val, AQC_BE16);
+> +				if (ret < 0)
+> +					return ret;
+> +				*val = aqc_percent_to_pwm(*val);
+> +				break;
+> +			default:
+> +				ret = aqc_get_ctrl_val(priv, priv->fan_ctrl_offsets[channel],
+> +						       val, AQC_BE16);
+> +				if (ret < 0)
+> +					return ret;
+> +
+> +				*val = aqc_percent_to_pwm(ret);
+> +				break;
+> +			}
+>   			break;
+> -		default:
+> -			ret = aqc_get_ctrl_val(priv, priv->fan_ctrl_offsets[channel],
+> -					       val, AQC_BE16);
+> +		case hwmon_pwm_mode:
+> +			ret = aqc_get_ctrl_val(priv,
+> +					       priv->fan_ctrl_offsets[channel] +
+> +					       AQUAERO_FAN_CTRL_MODE_OFFSET, val, AQC_8);
+>   			if (ret < 0)
+>   				return ret;
+>   
+> -			*val = aqc_percent_to_pwm(ret);
+> +			switch (*val) {
+> +			case 0:	/* DC mode */
+> +				break;
+> +			case 2:	/* PWM mode */
+> +				*val = 1;
+> +				break;
+> +			default:
+> +				break;
+> +			}
+>   			break;
+> +		default:
+> +			return -EOPNOTSUPP;
+>   		}
+>   		break;
+>   	case hwmon_in:
+> @@ -936,7 +974,7 @@ static int aqc_read_string(struct device *dev, enum hwmon_sensor_types type, u32
+>   static int aqc_write(struct device *dev, enum hwmon_sensor_types type, u32 attr, int channel,
+>   		     long val)
+>   {
+> -	int ret, pwm_value;
+> +	int ret, pwm_value, ctrl_mode;
+>   	/* Arrays for setting multiple values at once in the control report */
+>   	int ctrl_values_offsets[4];
+>   	long ctrl_values[4];
+> @@ -1018,6 +1056,16 @@ static int aqc_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>   				break;
+>   			}
+>   			break;
+> +		case hwmon_pwm_mode:
+> +			if (val > 1 || val < 0)
+> +				return -EINVAL;
+> +			ctrl_mode = 2 * val;
+> +			ret = aqc_set_ctrl_val(priv,
+> +					       priv->fan_ctrl_offsets[channel] +
+> +					       AQUAERO_FAN_CTRL_MODE_OFFSET, ctrl_mode, AQC_8);
+> +			if (ret < 0)
+> +				return ret;
+> +			break;
+>   		default:
+>   			break;
+>   		}
+> @@ -1077,10 +1125,10 @@ static const struct hwmon_channel_info *aqc_info[] = {
+>   			   HWMON_P_INPUT | HWMON_P_LABEL,
+>   			   HWMON_P_INPUT | HWMON_P_LABEL),
+>   	HWMON_CHANNEL_INFO(pwm,
+> -			   HWMON_PWM_INPUT,
+> -			   HWMON_PWM_INPUT,
+> -			   HWMON_PWM_INPUT,
+> -			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_MODE,
+> +			   HWMON_PWM_INPUT | HWMON_PWM_MODE,
+>   			   HWMON_PWM_INPUT,
+>   			   HWMON_PWM_INPUT,
+>   			   HWMON_PWM_INPUT,
+
