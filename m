@@ -2,114 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DECEA693336
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 20:07:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FADA69333A
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 20:11:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjBKTHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 14:07:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48522 "EHLO
+        id S229588AbjBKTLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 14:11:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBKTHA (ORCPT
+        with ESMTP id S229447AbjBKTLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 14:07:00 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2FB1423D;
-        Sat, 11 Feb 2023 11:06:55 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id w3so1195302edc.2;
-        Sat, 11 Feb 2023 11:06:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rWWLFwjwXxaSFcUV635NAOtQG8/udwOIXa9FG4BJ85E=;
-        b=otZuQrVb7TFjSTbAIfCKtzLgQEIsq+6/ivb+xqO117HQpmaGlcbIXGw6o5C8D9UEgm
-         DKPZd651TxMQIg/DMFyhY7LMXx58/eWQFtCQV6NuNOnJztriBUb8QdttdvHL+MKFf1TG
-         zZKqXYJoWWFY3yedN39B53LbgZOaoFk7DrwK05y2lvgcvK2tY3JqBu0bmCsA/aRpK7EE
-         vpDQXOk8IrxTSmGn3GCKPCd+C7ZQiSCj5eJffhvF8uATtW+pngNIZCEmKUtST3cMIzfL
-         J1WjUojanJvQtELnDZqa2yfqxLeRh4sL5QaAhE7lRERa0hNrcJ+AYbP1Au8EC2jdxLbG
-         NtaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rWWLFwjwXxaSFcUV635NAOtQG8/udwOIXa9FG4BJ85E=;
-        b=oLrbIxIvvyoa5vNNWfjAHj0/odysCAfo42jxwtUfdeda3PYlWqxnbdKOtX6dmQBlFg
-         ExgB/AjDIAQonnrn+aEa+aNbfACHUpK+9qRj3YGU8EHGT1vasjsjnmjC7VOQVoVpw8eY
-         Wk/qTvl8YqgrECGFpOTHn8rDpjgV6Tg4Ag9GU7+juXgxzZEXwXvT/pPuDvM39uFuUNak
-         jejnjiF6akD4K3D8h1GmsN/VFXPZ73Hwpr3vM0sCkasK52gSc4dU3mElGDEX35n57yk0
-         GC1pfp/sLaJdqzzEPHwhPD6vXDHOF9OwxDj2gVUv8Kr8QRdjqkK3GgILnUhJQ4vAjlxz
-         7yLA==
-X-Gm-Message-State: AO0yUKV4pvY+VEqxtBtWbv90ylciRwl+zb13KRc75+vT0xt3KWlIRZyp
-        BURhO7JZEdeL6hvjvu7KgCs=
-X-Google-Smtp-Source: AK7set8k+CwM5OCEfLGAME57ZvTwoOl9TFBiE24RWY9+zmG2mnBLIBkTTeOBH81UI7GW0p07IHLHxg==
-X-Received: by 2002:a50:9352:0:b0:4a2:4675:2162 with SMTP id n18-20020a509352000000b004a246752162mr2078207eda.3.1676142414076;
-        Sat, 11 Feb 2023 11:06:54 -0800 (PST)
-Received: from [192.168.0.22] ([87.116.164.178])
-        by smtp.gmail.com with ESMTPSA id t2-20020a50d702000000b004a236384909sm4137637edi.10.2023.02.11.11.06.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Feb 2023 11:06:53 -0800 (PST)
-Message-ID: <ffb7aa61-20d1-e4be-1c67-e1d3cd7a15af@gmail.com>
-Date:   Sat, 11 Feb 2023 20:06:52 +0100
+        Sat, 11 Feb 2023 14:11:16 -0500
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D6512587;
+        Sat, 11 Feb 2023 11:11:15 -0800 (PST)
+Received: from [192.168.1.103] (31.173.83.74) by msexch01.omp.ru (10.188.4.12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 11 Feb
+ 2023 22:11:06 +0300
+Subject: Re: [PATCH 03/12] pata_parport: remove devtype from struct pi_adapter
+To:     Ondrej Zary <linux@zary.sk>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+CC:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Tim Waugh <tim@cyberelk.net>, <linux-block@vger.kernel.org>,
+        <linux-parport@lists.infradead.org>, <linux-ide@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230211144232.15138-1-linux@zary.sk>
+ <20230211144232.15138-4-linux@zary.sk>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <909afe94-d786-a94c-5142-818e540705cc@omp.ru>
+Date:   Sat, 11 Feb 2023 22:11:06 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Cc:     savicaleksa83@gmail.com, Jack Doan <me@jackdoan.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] hwmon: (aquacomputer_d5next) Add PWM mode control for
- Aquaero
+In-Reply-To: <20230211144232.15138-4-linux@zary.sk>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Leonard Anderweit <leonard.anderweit@gmail.com>,
-        linux-hwmon@vger.kernel.org
-References: <20230211165923.17807-1-leonard.anderweit@gmail.com>
- <20230211165923.17807-6-leonard.anderweit@gmail.com>
- <ef64d9c3-65e1-636c-1cb7-8721b1e8746e@roeck-us.net>
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-In-Reply-To: <ef64d9c3-65e1-636c-1cb7-8721b1e8746e@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [31.173.83.74]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 02/11/2023 18:56:43
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 175451 [Feb 10 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.83.74 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;31.173.83.74:7.1.2
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.83.74
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 02/11/2023 19:00:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 2/11/2023 2:00:00 PM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-11 18:41:52 GMT+01:00, Guenter Roeck wrote:
-> 
-> Adding the capability without actually supporting it raises the expectation
-> that it works from those who don't know better. Please only provide the
-> capability to set the mode where it is actually supported.
-> 
-> Otherwise one could argue along the line of 'hey, let's just "enable"
-> all attributes no matter if supported or not', which would lead to a
-> lot of confusion. I really hope that isn't done with other attributes
-> in this driver.
+On 2/11/23 5:42 PM, Ondrej Zary wrote:
 
-(snip)
-
+> Only bpck driver uses devtype but it never gets set in pata_parport.
+> Remove it.
 > 
-> ... and it isn't even mentioned here that the mode only works on
-> Aquacomputer Aquaero, and only on the 4th port for Aquaero 5.
+> Signed-off-by: Ondrej Zary <linux@zary.sk>
+> ---
+>  drivers/ata/pata_parport/bpck.c | 2 +-
+>  include/linux/pata_parport.h    | 3 ---
+>  2 files changed, 1 insertion(+), 4 deletions(-)
 > 
-> Really, please don't do that, and I sincerely hope that the driver
-> doesn't hide (i.e., claim to support when it isn't really supported)
-> other similar limitations.
-> 
-> Guenter
+> diff --git a/drivers/ata/pata_parport/bpck.c b/drivers/ata/pata_parport/bpck.c
+> index b9174cf8863c..451a068fe28a 100644
+> --- a/drivers/ata/pata_parport/bpck.c
+> +++ b/drivers/ata/pata_parport/bpck.c
+> @@ -241,7 +241,7 @@ static void bpck_connect ( PIA *pi  )
+>  
+>  	WR(5,8);
+>  
+> -	if (pi->devtype == PI_PCD) {
+> +	if (1 /*pi->devtype == PI_PCD*/) {	/* FIXME */
+>  		WR(0x46,0x10);		/* fiddle with ESS logic ??? */
 
-It doesn't, features are exposed if the device supports them. I'm part
-to blame for this one, I didn't create an issue at the upstream Github
-repo to track this. We'll try to find a way to differentiate between
-aquaero 5 and 6 - the aquaero 6 is basically an expanded version of
-the 5 with more powerful hardware, firmware seems to be relatively
-similar.
+   Why not drop this entire *if* stmt? 
 
-Aleksa
+>  		WR(0x4c,0x38);
+>  		WR(0x4d,0x88);
+[...]
+
+MBR, Sergey
