@@ -2,56 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED9569300B
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 11:38:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EBC869300D
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 11:41:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjBKKi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 05:38:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
+        id S229738AbjBKKlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 05:41:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBKKi0 (ORCPT
+        with ESMTP id S229460AbjBKKlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 05:38:26 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DEC20D2B;
-        Sat, 11 Feb 2023 02:38:25 -0800 (PST)
-Date:   Sat, 11 Feb 2023 10:38:23 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1676111903;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=zvoRWe8d4RiHsK7K2t4FuOGTF/jtKq6uzColTL/LSJk=;
-        b=uK2A267bSzItEoZx7/mC3oOOTDTrkLlbknImidujzGa38x3zpZSywkyliKGtxjPQ4+AAxq
-        rMeYSOoj2A5Plywslp0vk1tVlI3UtX3CwgFuOU7Wqr+kUCVQWUYtUPG0mkm+IrdNMNa11q
-        MEo4uptHikb4mZuUxE0PQEV2cKcZiRJwu3o2SAgA2kc2oShiQGQzLN5w4jFKSY7DYe56IX
-        rNrJZuYhy/jJrrLJLXWKVmKxl85MbLAK2ob0ThT6t/mFKgALR10fA6sUMArsrWlROMTGuE
-        6ecRjMdZkak2Ff3W4Kymw/y2RGoW4Zn+F7O+CdG0Kl3ef7c3VL78kKUaSDb7mA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1676111903;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=zvoRWe8d4RiHsK7K2t4FuOGTF/jtKq6uzColTL/LSJk=;
-        b=PUcCHPchELf3k11pnpd3mDFNgOQAfI0uw+aJsfxpgvwXIbe7yejd8PZKd1TFi1SqkhfUCO
-        uO8cWGOKwCprLGBw==
-From:   "tip-bot2 for Kan Liang" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/x86/intel/ds: Fix the conversion from TSC to perf time
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Sat, 11 Feb 2023 05:41:46 -0500
+Received: from mx.flying-snail.de (mx.flying-snail.de [IPv6:2a06:1c40:3::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EEC1F93A;
+        Sat, 11 Feb 2023 02:41:43 -0800 (PST)
+Received: from [2a02:908:1b0:8800:2ff:ffff:fe11:2236] (helo=mondbasis.internal.flying-snail.de)
+        by mx.flying-snail.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <pelzi@flying-snail.de>)
+        id 1pQnK3-002gx7-FD; Sat, 11 Feb 2023 11:41:35 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=feldner-bv.de; s=s1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=dWip9VTCW6cC5nOrzzG2T6wLCYe6+fumRe1N9al6DHc=; b=oLdhkUPtQRGGNj7U+VkxL9yAvh
+        VgaJOBYwcH38HW3cxk3d3+PyJvJIugH3XzvguiJumiV4LSX/yZjdxwiTyKj1DPRyOThmwEPoZGrZR
+        xactQJdS/cMlBuclOzHmpVEN9gMniEtxBoRQddvmFQsZC+XhDMGhpey7kBqibhLyMvxlixhqxIedz
+        T8J4k/AEN2toRZwmVTJSMMMZMznw7QDf3y21lYVvsQac/ICVSUWdn5Y+9N7/nNgL1Zm+k8mXIW2c/
+        QszZtg1nHBCsU8Zn2x7/7eWaWjKQnYJpVmmXVGfyRxhHpkBPl4ld3f5eu35Y6csuLft82zxIjgPoU
+        kIyyDi9g==;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=flying-snail.de; s=s1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To
+        :From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=dWip9VTCW6cC5nOrzzG2T6wLCYe6+fumRe1N9al6DHc=; b=JpQMAZsDLay7v3t9XuT5gDz05W
+        XXcbqM4UIfUB3RAK2UkEtJEA6CoHJvnd0TJk8vbtfzZTQbvxWUJfoIiKApOJhlX8oZiK+OMTZHerB
+        RQtI/ACU5wP+bX/9U0V01c6AqiZst2k9CUXZMEQDsMjYHH7XeDUGvqgl7OAoVnQw4ZCesZrBeneqh
+        GJwCfVwt5ITBVk8ITjgmYHclfUZPV+tQzA7sW137cBdxDMhCazPeGRQE85WKVFZcK5EdV51uU/tDl
+        kmJjHiLxui2G5VvDWoLizC98rJIudJOQJ6VDVoGscdxQBi5GZ+31PBPWi02VlKJFYxaCASKu2WNK7
+        pcoUx9Cw==;
+Received: from [2a02:908:1b0:8800:b4d0:2d46:3866:fddf]
+        by mondbasis.internal.flying-snail.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <pelzi@flying-snail.de>)
+        id 1pQnK0-000cQO-Of; Sat, 11 Feb 2023 11:41:34 +0100
+Message-ID: <d96a7c1f-4a12-18c9-377d-df69b17168d2@feldner-bv.de>
+Date:   Sat, 11 Feb 2023 11:41:32 +0100
 MIME-Version: 1.0
-Message-ID: <167611190335.4906.6861477771600380027.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] iio: dht11: Read bit stream from IRQ on falling edges
+ only
+To:     harald@ccbib.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <Y9a0RZ+inWs44Kn8@debian-qemu.internal.flying-snail.de>
+ <20230130202216.42034309@jic23-huawei>
+ <45efc11e5b4cdba3766f19190bb65840@ccbib.org>
+ <e1acd14e-400b-8896-bdc1-0b364cc52198@feldner-bv.de>
+ <ac9ab2224ad19ac606de38fa474dce0c@ccbib.org>
+From:   pelzi@flying-snail.de
+In-Reply-To: <ac9ab2224ad19ac606de38fa474dce0c@ccbib.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,119 +76,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the perf/core branch of tip:
+Am 07.02.23 um 11:33 schrieb harald@ccbib.org:
 
-Commit-ID:     89e97eb8cec0f1af5ebf2380308913256ca7915a
-Gitweb:        https://git.kernel.org/tip/89e97eb8cec0f1af5ebf2380308913256ca7915a
-Author:        Kan Liang <kan.liang@linux.intel.com>
-AuthorDate:    Wed, 25 Jan 2023 12:49:25 -08:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Sat, 11 Feb 2023 11:18:12 +01:00
+> Thanks, these are indeed interresting results. If you want to move this
+> forward, the next steps would be:
+> 1) Sharing your test script - yes it's trivial, but still ...
 
-perf/x86/intel/ds: Fix the conversion from TSC to perf time
+That appears fairly easy, you find the script here:
 
-The time order is incorrect when the TSC in a PEBS record is used.
+https://github.com/pelzvieh/banana_resources/tree/main/test_dht11
 
- $perf record -e cycles:upp dd if=/dev/zero of=/dev/null
-  count=10000
- $ perf script --show-task-events
-       perf-exec     0     0.000000: PERF_RECORD_COMM: perf-exec:915/915
-              dd   915   106.479872: PERF_RECORD_COMM exec: dd:915/915
-              dd   915   106.483270: PERF_RECORD_EXIT(915:915):(914:914)
-              dd   915   106.512429:          1 cycles:upp:
- ffffffff96c011b7 [unknown] ([unknown])
- ... ...
+> 2) A theoretical analysis about possible regressions depending on timer
+> resolution as mentioned in an earlier message.
 
-The perf time is from sched_clock_cpu(). The current PEBS code
-unconditionally convert the TSC to native_sched_clock(). There is a
-shift between the two clocks. If the TSC is stable, the shift is
-consistent, __sched_clock_offset. If the TSC is unstable, the shift has
-to be calculated at runtime.
+This sounds as if you were doing such an analysis for the original
+version. Can you share this work so I can attempt to repeat it
+for the modified algorithm?
 
-This patch doesn't support the conversion when the TSC is unstable. The
-TSC unstable case is a corner case and very unlikely to happen. If it
-happens, the TSC in a PEBS record will be dropped and fall back to
-perf_event_clock().
+> 3) Ideally figuring out, why your version performs better then what we
+> currently have. I have some suspicions, but better understanding might
+> lead to a better approach. E.g. maybe recording the other edges isn't
+> the problem so long as we ignore them during decoding?
+>
+> As I see it, the main thing we are losing with your current proposal is
+> some diagnostic features. If we keep them as much as possible and have
+> regressions understood and covered, I see no reason to reject your idea.
 
-Fixes: 47a3aeb39e8d ("perf/x86/intel/pebs: Fix PEBS timestamps overwritten")
-Reported-by: Namhyung Kim <namhyung@kernel.org>
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/all/CAM9d7cgWDVAq8-11RbJ2uGfwkKD6fA-OMwOKDrNUrU_=8MgEjg@mail.gmail.com/
----
- arch/x86/events/intel/ds.c | 35 ++++++++++++++++++++++++++---------
- 1 file changed, 26 insertions(+), 9 deletions(-)
+That's why I changed the script to separately count EIO and ETIMEDOUT.
+The latter indicates missed edges, the former failure to interpret
+the data read.
 
-diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
-index 183efa9..b0354dc 100644
---- a/arch/x86/events/intel/ds.c
-+++ b/arch/x86/events/intel/ds.c
-@@ -2,12 +2,14 @@
- #include <linux/bitops.h>
- #include <linux/types.h>
- #include <linux/slab.h>
-+#include <linux/sched/clock.h>
- 
- #include <asm/cpu_entry_area.h>
- #include <asm/perf_event.h>
- #include <asm/tlbflush.h>
- #include <asm/insn.h>
- #include <asm/io.h>
-+#include <asm/timer.h>
- 
- #include "../perf_event.h"
- 
-@@ -1568,6 +1570,27 @@ static u64 get_data_src(struct perf_event *event, u64 aux)
- 	return val;
- }
- 
-+static void setup_pebs_time(struct perf_event *event,
-+			    struct perf_sample_data *data,
-+			    u64 tsc)
-+{
-+	/* Converting to a user-defined clock is not supported yet. */
-+	if (event->attr.use_clockid != 0)
-+		return;
-+
-+	/*
-+	 * Doesn't support the conversion when the TSC is unstable.
-+	 * The TSC unstable case is a corner case and very unlikely to
-+	 * happen. If it happens, the TSC in a PEBS record will be
-+	 * dropped and fall back to perf_event_clock().
-+	 */
-+	if (!using_native_sched_clock() || !sched_clock_stable())
-+		return;
-+
-+	data->time = native_sched_clock_from_tsc(tsc) + __sched_clock_offset;
-+	data->sample_flags |= PERF_SAMPLE_TIME;
-+}
-+
- #define PERF_SAMPLE_ADDR_TYPE	(PERF_SAMPLE_ADDR |		\
- 				 PERF_SAMPLE_PHYS_ADDR |	\
- 				 PERF_SAMPLE_DATA_PAGE_SIZE)
-@@ -1715,11 +1738,8 @@ static void setup_pebs_fixed_sample_data(struct perf_event *event,
- 	 *
- 	 * We can only do this for the default trace clock.
- 	 */
--	if (x86_pmu.intel_cap.pebs_format >= 3 &&
--		event->attr.use_clockid == 0) {
--		data->time = native_sched_clock_from_tsc(pebs->tsc);
--		data->sample_flags |= PERF_SAMPLE_TIME;
--	}
-+	if (x86_pmu.intel_cap.pebs_format >= 3)
-+		setup_pebs_time(event, data, pebs->tsc);
- 
- 	if (has_branch_stack(event))
- 		perf_sample_save_brstack(data, event, &cpuc->lbr_stack);
-@@ -1781,10 +1801,7 @@ static void setup_pebs_adaptive_sample_data(struct perf_event *event,
- 	perf_sample_data_init(data, 0, event->hw.last_period);
- 	data->period = event->hw.last_period;
- 
--	if (event->attr.use_clockid == 0) {
--		data->time = native_sched_clock_from_tsc(basic->tsc);
--		data->sample_flags |= PERF_SAMPLE_TIME;
--	}
-+	setup_pebs_time(event, data, basic->tsc);
- 
- 	/*
- 	 * We must however always use iregs for the unwinder to stay sane; the
+What I see is that the patched driver's errors mostly result from missed
+IRQ (note in contrast to last results, I cut the number of reads):
+
+#    real[s]    user[s]    sys[s]    success    EIO    timeout err per succ
+1     20.57    0.25    0.03    10    0    0    0
+2     24.74    0.25    0.07    10    0    4    0,4
+3     21.55    0.20    0.07    10    0    0    0
+4     25.81    0.25    0.08    10    0    5    0,5
+5     21.56    0.23    0.05    10    0    0    0
+6     21.58    0.22    0.05    10    1    0    0,1
+7     25.86    0.24    0.08    10    1    5    0,6
+8     22.69    0.27    0.05    10    1    1    0,2
+9     23.67    0.26    0.04    10    0    2    0,2
+10     20.55    0.23    0.04    10    0    0    0
+
+Whereas the original driver has more errors resulting from
+mis-interpreted data:
+
+#    real[s]    user[s]    sys[s]    success    EIO    timeout err per succ
+1     24.88    0.26    0.07    10    5    4    0,9
+2     25.91    0.26    0.07    10    4    5    0,9
+3     31.27    0.31    0.10    10    6    10    1,6
+4     29.17    0.32    0.11    10    7    8    1,5
+5     22.73    0.24    0.08    10    4    2    0,6
+6     46.46    0.35    0.25    10    19    24    4,3
+7     23.79    0.23    0.09    10    3    3    0,6
+8     30.17    0.27    0.11    10    6    9    1,5
+9     23.77    0.26    0.06    10    3    2    0,5
+10     20.58    0.24    0.06    10    1    0    0,1
+
+I tried a variant that reads falling and rising edges and
+uses the redundany of information to eliminate some errors.
+This did not work out at all. It seems a relevant source of
+trouble is delayed call to the IRQ handler. The problem is
+that only then you try to find out if this IRQ is due to
+rising or falling edge by reading the current GPIO level. When
+you are to late, this might already have changed and you read
+a level, but for the edge of _this_ level you'll receive another
+IRQ a few us later.
+
+So the reason that this patch here is showing
+lower error rates seems to be the lower probability of such
+things happening by halving the IRQs to be handled, _plus_
+the information from the hardware, that this IRQ was due
+to a falling edge.
+
+Yours,
+
+Andreas.
+
