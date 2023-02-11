@@ -2,127 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C72D6930D0
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 13:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 986EA6930D3
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 13:18:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbjBKMPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 07:15:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
+        id S230139AbjBKMSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 07:18:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbjBKMO5 (ORCPT
+        with ESMTP id S229793AbjBKMSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 07:14:57 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6282023106
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 04:14:56 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id o18so7723487wrj.3
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 04:14:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yx4QveUkxsZ076CSy140ixdXzrbrRAsprIFkOwOHph8=;
-        b=frRGdTqBZv/KsdKobxihqMiDzGE6yzyL6O4P/bithC+kcSrWbWHlVRvVaCcWtI47ie
-         PsYGjy56QaKtblrUA7PFmyb57yZvWPzJ/i03UJrBVa5OWkyRcpfA71u97ZAu4OfVSHaV
-         GNdnS8f80DPjyK5Tf6qb1K0KBuOlciDjx7u3VaqevispGEWgy3L5IvqF7jqT9+S6sdjl
-         2HlSJlqy0XgTo5SVNUHyANUzLH5D7woVFh6jD14llKkOk0wiMFHwlPWD9qnEjJX/eJSM
-         hRCthdwnTN0RnmKnDurb+ybb4lQfVVowQgOmrF1jD8dm03rDYcP/1axGjKa1Q5SUx2Px
-         ZtIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Yx4QveUkxsZ076CSy140ixdXzrbrRAsprIFkOwOHph8=;
-        b=C3ymP/lsS32ASR8BnIRJhLdEjnGN8piaxkHZSWWG4/YLz6XRXwStp0pEQ2tXQsVJd4
-         sw2n165VO/8rbk6D1W29NlCCgbd/7pGC/zYCiXt+CF0Y2lUgH/4cf3Z4I9xyinG44o5m
-         w2oau7DfxLbubOPNTtWRe93OlVKdEDim/MVq0wyERFncI0OtJkvZwDysurHaQ5eu8cyh
-         tvyKpbWdg7U4X58eZfVcB1DwRgBXNNs2h2w6sfmkTkX6pXN0jFNjkNaXNxpzRg4uZaKB
-         kUjjbhvEjEYARV/8pZ1mL+BorLEqWk/RanU1w31NdfZYlKK6/QIMi2o1Ebi2zS+gsGFh
-         2J6Q==
-X-Gm-Message-State: AO0yUKUyOMJv9M6bjeWQDkr8Du/cZI2wDWhaOdENRXq7LcbpZ4OnTgXE
-        /rDV1SQ9o43fxe5ofMLzqrrwwg==
-X-Google-Smtp-Source: AK7set/Aj2QihFd7CLc49bJP+9LWC9eUVOuAma/o3Sf7yPxUcDQ0gUmtylPSPvsMTGJoLzFpyH2x+w==
-X-Received: by 2002:adf:cf0d:0:b0:2c5:4ccc:a770 with SMTP id o13-20020adfcf0d000000b002c54ccca770mr3055463wrj.7.1676117695014;
-        Sat, 11 Feb 2023 04:14:55 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id h12-20020adff4cc000000b002be505ab59asm6041645wrp.97.2023.02.11.04.14.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Feb 2023 04:14:54 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH] get_maintainer: add email addresses from dts files
-Date:   Sat, 11 Feb 2023 13:14:41 +0100
-Message-Id: <20230211121441.64359-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Sat, 11 Feb 2023 07:18:03 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F29241DA;
+        Sat, 11 Feb 2023 04:18:02 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31BBbgrw019114;
+        Sat, 11 Feb 2023 12:17:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=5h6MzoWQiCUa7cJYpAjuWIpHOhmwTSRHsB1DoYu9mV0=;
+ b=KElPFrFyL/WwdpGy8645TdrL9ZdnhcxUoV0gWU1Z2C8AZo81BwLuIps6svbVlFHpVmtA
+ ZpCV0d3YWn5yx6GzsBT6qTr5+LgojgcnTzAEbGOQLVm07FXH8IyQFZ7n/NWiwstPa2GS
+ eR0QUGs0tdd5PAjIZbJViw/FWL2XkRyFOKo1tvYkdIkWx7wH1iB7TedLx98lDVcgyoXV
+ gK+T4inRLkDd1davNoLfIz/avXTt97CODq3Hl37Q+nDyiedUGUQien+YmMwPr6IPh7cm
+ 4szwgDCQ4SrBbJQvz3BL9gGhicBKyhv1TRLC681Pd+LeMfL37nJy0AzGMVRXMDZhSjMf hg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np3derns7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 11 Feb 2023 12:17:56 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31BCHt39032237
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 11 Feb 2023 12:17:55 GMT
+Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Sat, 11 Feb 2023 04:17:52 -0800
+From:   Prashanth K <quic_prashk@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>
+CC:     Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Prashanth K <quic_prashk@quicinc.com>
+Subject: [PATCH v2] usb: gadget: u_serial: Add null pointer check in gserial_resume
+Date:   Sat, 11 Feb 2023 17:47:38 +0530
+Message-ID: <1676117858-32157-1-git-send-email-quic_prashk@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: SY-UZA_tNDGrO_D4R37iZS2MxnYPrHtC
+X-Proofpoint-ORIG-GUID: SY-UZA_tNDGrO_D4R37iZS2MxnYPrHtC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-11_06,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ clxscore=1015 adultscore=0 mlxlogscore=832 malwarescore=0 phishscore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302110111
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DTS/DTSI files represent hardware description for Linux kernel,
-which is necessary to properly recognize and configure hardware by
-Linux.  DTS is usually created by people having the actual hardware and
-having interest in keeping it in good shape.  Such people can provide
-review (they might have board schematics) and testing.  Unfortunately
-they mostly do not appear in MAINTAINERS file.  Adding per-DTS entries
-to MAINTAINERS would quickly make it bloated (hundreds of new per-DTS
-entries).
+Consider a case where gserial_disconnect has already cleared
+gser->ioport. And if a wakeup interrupt triggers afterwards,
+gserial_resume gets called, which will lead to accessing of
+gser->ioport and thus causing null pointer dereference.Add
+a null pointer check to prevent this.
 
-On the other hand there is no point in CC-ing every Copyright email
-appearing in files, because it might be outdated.  Add new in-file
-pattern for storing maintainers dedicated to specific boards:
+Added a static spinlock to prevent gser->ioport from becoming
+null after the newly added check.
 
-  Maintainer: John Smith <email>
-
-Suggested-by: Joe Perches <joe@perches.com>
-Suggested-by: Shawn Guo <shawnguo@kernel.org>
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
+Fixes: aba3a8d01d62 ("usb: gadget: u_serial: add suspend resume callbacks")
+Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
 ---
+v2: Added static spinlock and fixed Fixes tag.
 
-This is rework of earlier approach:
-Link: https://lore.kernel.org/r/20210809080204.8381-1-shawnguo@kernel.org
----
- scripts/get_maintainer.pl | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/usb/gadget/function/u_serial.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/scripts/get_maintainer.pl b/scripts/get_maintainer.pl
-index ab123b498fd9..f02a2a80c3bc 100755
---- a/scripts/get_maintainer.pl
-+++ b/scripts/get_maintainer.pl
-@@ -445,6 +445,17 @@ sub maintainers_in_file {
- 	my @poss_addr = $text =~ m$[A-Za-zÀ-ÿ\"\' \,\.\+-]*\s*[\,]*\s*[\(\<\{]{0,1}[A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+\.[A-Za-z0-9]+[\)\>\}]{0,1}$g;
- 	push(@file_emails, clean_file_emails(@poss_addr));
-     }
-+
-+    # Match "Maintainer: email" entries only in DTS sources
-+    if (-f $file && ($email_file_emails || $file =~ /\.dtsi?$/)) {
-+	open(my $f, '<', $file)
-+	    or die "$P: Can't open $file: $!\n";
-+	my $text = do { local($/) ; <$f> };
-+	close($f);
-+
-+	my @poss_addr = $text =~ m$Maintainer: [A-Za-zÀ-ÿ\"\' \,\.\+-]*\s*[\,]*\s*[\(\<\{]{0,1}[A-Za-z0-9_\.\+-]+\@[A-Za-z0-9\.-]+\.[A-Za-z0-9]+[\)\>\}]{0,1}$g;
-+	push(@file_emails, clean_file_emails(@poss_addr));
-+    }
- }
+diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
+index 840626e..9ced0fa 100644
+--- a/drivers/usb/gadget/function/u_serial.c
++++ b/drivers/usb/gadget/function/u_serial.c
+@@ -82,6 +82,8 @@
+ #define WRITE_BUF_SIZE		8192		/* TX only */
+ #define GS_CONSOLE_BUF_SIZE	8192
  
- #
++static DEFINE_SPINLOCK(serial_port_lock);
++
+ /* console info */
+ struct gs_console {
+ 	struct console		console;
+@@ -1370,11 +1372,13 @@ EXPORT_SYMBOL_GPL(gserial_connect);
+ void gserial_disconnect(struct gserial *gser)
+ {
+ 	struct gs_port	*port = gser->ioport;
+-	unsigned long	flags;
++	unsigned long flags, serial_flag;
+ 
+ 	if (!port)
+ 		return;
+ 
++	spin_lock_irqsave(&serial_port_lock, serial_flag);
++
+ 	/* tell the TTY glue not to do I/O here any more */
+ 	spin_lock_irqsave(&port->port_lock, flags);
+ 
+@@ -1392,6 +1396,7 @@ void gserial_disconnect(struct gserial *gser)
+ 	}
+ 	port->suspended = false;
+ 	spin_unlock_irqrestore(&port->port_lock, flags);
++	spin_unlock_irqrestore(&serial_port_lock, serial_flag);
+ 
+ 	/* disable endpoints, aborting down any active I/O */
+ 	usb_ep_disable(gser->out);
+@@ -1426,9 +1431,16 @@ EXPORT_SYMBOL_GPL(gserial_suspend);
+ void gserial_resume(struct gserial *gser)
+ {
+ 	struct gs_port *port = gser->ioport;
+-	unsigned long	flags;
++	unsigned long flags, serial_flag;
++
++	spin_lock_irqsave(&serial_port_lock, serial_flag);
++	if (!port) {
++		spin_unlock_irqrestore(&serial_port_lock, serial_flag);
++		return;
++	}
+ 
+ 	spin_lock_irqsave(&port->port_lock, flags);
++	spin_unlock_irqrestore(&serial_port_lock, serial_flag);
+ 	port->suspended = false;
+ 	if (!port->start_delayed) {
+ 		spin_unlock_irqrestore(&port->port_lock, flags);
 -- 
-2.34.1
+2.7.4
 
