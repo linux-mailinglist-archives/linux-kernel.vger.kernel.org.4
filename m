@@ -2,91 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE3B692C76
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 02:13:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B78A692C7A
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 02:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbjBKBNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 20:13:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
+        id S229867AbjBKBSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 20:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjBKBN2 (ORCPT
+        with ESMTP id S229447AbjBKBSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 20:13:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10ED475F7C;
-        Fri, 10 Feb 2023 17:13:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D1C861EAF;
-        Sat, 11 Feb 2023 01:13:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D79EC433D2;
-        Sat, 11 Feb 2023 01:13:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676078007;
-        bh=V7Qb9OAQuHot4T/u40xIQnotrUN3wi0TVhIm5E/8o0w=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=pheCj4N1xCyO9NIh1mcUfgZCkf1uH9u5UIDwu9ZqPSLSlkD2m2nFZEncQd6nOrDEY
-         EH1ib6F2IhHQi2Tu0eXp/lxliMGlQxvs3/LZFfMtYziVA6i0yQMF0ctTsKpAlDHRjF
-         zp0UTfyr9NERPrHtE7QPQsN3I2DJZaHXcqpolVdaK4j6tyeKdkNQnYLYf3Vm/dGGWo
-         bgBxUfQoeRRCblr7B/lbxc88deQu9Tq/T+yWVvy2U/DGRhpEfdnSKIezQxVde40hnH
-         3h0MWx5ygVhzzeIHmqTdRcLde/GgbygOtzQu6xiaaPb2NWs6+yJz/GwWRxpCSFPsv6
-         tt+fbPzz3PJKA==
-Message-ID: <f61aea20-8bbc-8775-3026-6eec459eda3d@kernel.org>
-Date:   Sat, 11 Feb 2023 09:13:23 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-From:   Chao Yu <chao@kernel.org>
-Subject: Re: [PATCH 1/2] proc: fix to check name length in proc_lookup_de()
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, adobriyan@gmail.com
-References: <20230131155559.35800-1-chao@kernel.org>
- <93c1e281-82a5-d7d0-04b1-67ac2cf3d0fa@kernel.org>
- <20230202154154.64a087a47bbf2210584b1734@linux-foundation.org>
-X-Mozilla-News-Host: news://lore.kernel.org
-Content-Language: en-US
-In-Reply-To: <20230202154154.64a087a47bbf2210584b1734@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 10 Feb 2023 20:18:02 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25D63A08D;
+        Fri, 10 Feb 2023 17:18:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676078281; x=1707614281;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=4hf1OloHBVcxR02BTOFRj9IkRyZKjqy/ZG29ImkR/mg=;
+  b=ZW/B5D2lbfx5/fy5z2THVTJ2Aqx28uwfiKVRXx9v5U8QcE1RwDwiOm8K
+   BeRN4DEjEf5r42x1nyRR7BBH54H3I2HH1nXPzwuD31YnZ98aqRyCI9m2i
+   oSwKYJIm1Z/bhPdDgKPpqZHag2hjH4mtgVDmlU58uCeguxRLlbuGVd3/V
+   z854/KcBxrsEF9d2xayKXEWVVnFEX4rTcc+1/IfsTVsyarenz+aIO6AIm
+   Cph9oaiK8gIdmHSrD1whVfZHq5d5e3Ab95JCrPPw2/fYQ7MHVzEjEoJvd
+   YGSyiFe7AJUgTOSkGECU5/3wrR4Vy4cRxnAbtriaVqTYN6+oEm0j4gNPy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="314210621"
+X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
+   d="scan'208";a="314210621"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 17:18:01 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="670188088"
+X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
+   d="scan'208";a="670188088"
+Received: from qiuxu-clx.sh.intel.com ([10.239.53.105])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 17:17:58 -0800
+From:   Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+To:     Tony Luck <tony.luck@intel.com>
+Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Aristeu Rozanski <aris@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Feng Xu <feng.f.xu@intel.com>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/1] EDAC/skx: Fix overflows on the DRAM row address mapping arrays
+Date:   Sat, 11 Feb 2023 09:17:28 +0800
+Message-Id: <20230211011728.71764-1-qiuxu.zhuo@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <IA1PR11MB61710A47690BD5DA2826F29389DF9@IA1PR11MB6171.namprd11.prod.outlook.com>
+References: <IA1PR11MB61710A47690BD5DA2826F29389DF9@IA1PR11MB6171.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/3 7:41, Andrew Morton wrote:
-> [patch 1/2]: Alexey wasn't keen on the v1 patch.  What changed?
+The current DRAM row address mapping arrays skx_{open,close}_row[]
+only support ranks with sizes up to 16G. Decoding a rank address
+to a DRAM row address for a 32G rank by using either one of the
+above arrays by the skx_edac driver, will result in an overflow on
+the array.
 
-I replied to Alexey's comments on v1, but still didn't get any
-feedback, so I just rebase the code to last -next. Sorry, too rush
-to missed to add change log on v2.
+For a 32G rank, the most significant DRAM row address bit (the
+bit17) is mapped from the bit34 of the rank address. Add this new
+mapping item to both arrays to fix the overflow issue.
 
-> 
-> [patch 2/2]: What is the benefit from this change?
+Fixes: 4ec656bdf43a ("EDAC, skx_edac: Add EDAC driver for Skylake")
+Reported-by: Feng Xu <feng.f.xu@intel.com>
+Tested-by: Feng Xu <feng.f.xu@intel.com>
+Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+---
+v1->v2:
+    Fix the Fixes tag in the commit message.
 
-Block size is mismatch in between results of stat() and statfs(),
-this patch tries to fix this issue.
+ drivers/edac/skx_base.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-stat  /proc/
-    File: /proc/
-    Size: 0         	Blocks: 0          IO Block: 1024   directory
-Device: 14h/20d	Inode: 1           Links: 310
-Access: (0555/dr-xr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
-Access: 2023-01-28 23:14:20.491937242 +0800
-Modify: 2023-01-28 23:14:20.491937242 +0800
-Change: 2023-01-28 23:14:20.491937242 +0800
-   Birth: -
-
-stat -f  /proc/
-    File: "/proc/"
-      ID: 0        Namelen: 255     Type: proc
-Block size: 4096       Fundamental block size: 4096
-Blocks: Total: 0          Free: 0          Available: 0
-Inodes: Total: 0          Free: 0
+diff --git a/drivers/edac/skx_base.c b/drivers/edac/skx_base.c
+index 9397abb42c49..0a862336a7ce 100644
+--- a/drivers/edac/skx_base.c
++++ b/drivers/edac/skx_base.c
+@@ -510,7 +510,7 @@ static bool skx_rir_decode(struct decoded_addr *res)
+ }
+ 
+ static u8 skx_close_row[] = {
+-	15, 16, 17, 18, 20, 21, 22, 28, 10, 11, 12, 13, 29, 30, 31, 32, 33
++	15, 16, 17, 18, 20, 21, 22, 28, 10, 11, 12, 13, 29, 30, 31, 32, 33, 34
+ };
+ 
+ static u8 skx_close_column[] = {
+@@ -518,7 +518,7 @@ static u8 skx_close_column[] = {
+ };
+ 
+ static u8 skx_open_row[] = {
+-	14, 15, 16, 20, 28, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 32, 33
++	14, 15, 16, 20, 28, 21, 22, 23, 24, 25, 26, 27, 29, 30, 31, 32, 33, 34
+ };
+ 
+ static u8 skx_open_column[] = {
+-- 
+2.17.1
 
