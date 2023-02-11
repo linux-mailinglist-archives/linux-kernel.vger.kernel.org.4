@@ -2,162 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CD0692FC8
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 10:34:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0B2692FCC
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 10:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjBKJeI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 11 Feb 2023 04:34:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
+        id S229894AbjBKJlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 04:41:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBKJdW (ORCPT
+        with ESMTP id S229477AbjBKJlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 04:33:22 -0500
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37E934F74
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 01:33:19 -0800 (PST)
-Received: by mail-qt1-f172.google.com with SMTP id h24so8613245qtr.0
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 01:33:19 -0800 (PST)
+        Sat, 11 Feb 2023 04:41:04 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799453C29D;
+        Sat, 11 Feb 2023 01:41:03 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id sa10so21319386ejc.9;
+        Sat, 11 Feb 2023 01:41:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PKTTB4KrCAiL8SRqB2lSSGDnA1+HoHmmXJxC0p1EX7w=;
+        b=n8shbWQqvG5ZrwU7/06sMCBiVo+lHWO2xDR2rSNdC5TUWcTDu8JVVL3+jAYNL0h2oF
+         dHDftU1DzWK75WDjq1INxacyNDYK0Q/iDQdcP4uvGVWN3tW6ARxtvCql/MW+MsrA3NpY
+         C6rBX/bGjAl4tvi0Bhri6EhDob/XEI3wooouNTEm/4+8N8fFj7QgNT05RKDZNbal34Go
+         7T8JWXXlbikvuyCW2EN6iQi9cIsQYoOUfq4EgarUHco5jG0Eqfl2DmxfMVNLxgJmpt9n
+         Gi5Ew4Z/2/tAosrbLjGItjvz3OIrHwmIoZcutnRcEg7K0OD8KT/E3fH/epyHsbcPOUTH
+         W+2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PKCok/saWtwpL+hGwHFuOC72IH0WDl/d7SJf3JAfucA=;
-        b=4mqQtM3ygfLWxioPYJIf7aFFH5QsDQ/wdLTZq61rRfCWTEfZZkjmQw5Oo024V5Td1L
-         mwXXMh4x4QN26mIu4p8rU/lmDFImwv4xtq2Py1smPz1lejxqL2RsYja9UB9qw/nDGZew
-         wgxbI0MCfQFrEKzx0diFP73ju9sdjolZyql0hQvsaiV20aAq1mN65jq4YGmdNQ5b7D25
-         1JXwQaPS0B41OM3xCE9bjPBapKEErEbDXaG6nzm5nrAkp48yXj9fXUuNg/VlII1kDyxF
-         0HLTy5SEeTRxKZnfx7DZ999WJ1RWBqRM+yCNTI257ttBqsxpRmifTofvuOUCblFZKpPJ
-         ARrQ==
-X-Gm-Message-State: AO0yUKWHDAjlhkInnCk8/pG6wdVv43Hp2uO8qlp3LZaFDH8P3cEdX1Vu
-        IEKJsz/GeCIl/6XJWcyzFbtgXE+SAMdrJQ==
-X-Google-Smtp-Source: AK7set+Pf2CKnCS4WaVCcaRupwA5Jfx+ceueKJN6hKf0zWw+Pn2IjQ4NOgBfzxoRqAa4OPYRErnI+A==
-X-Received: by 2002:a05:622a:1756:b0:3ba:1ea6:d993 with SMTP id l22-20020a05622a175600b003ba1ea6d993mr28816164qtk.44.1676107998666;
-        Sat, 11 Feb 2023 01:33:18 -0800 (PST)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id a191-20020ae9e8c8000000b0072396cb73cdsm5322368qkg.13.2023.02.11.01.33.16
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Feb 2023 01:33:17 -0800 (PST)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-52ee632329dso26242727b3.6
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 01:33:16 -0800 (PST)
-X-Received: by 2002:a81:6ad7:0:b0:52e:ea5b:f6cb with SMTP id
- f206-20020a816ad7000000b0052eea5bf6cbmr146235ywc.237.1676107996575; Sat, 11
- Feb 2023 01:33:16 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PKTTB4KrCAiL8SRqB2lSSGDnA1+HoHmmXJxC0p1EX7w=;
+        b=Xjyv+4XtyO7GaJMEhB0zgTOxBqXsF4A11YJYpPZl4Ewm0yny8c4m8twgvmu6mIfwMK
+         o0HcnkjADB6RknRZP1DVTq0xuQ13rjHFGfuz1rrlbC50CUyPiZZsb9Jgc94XCK/wAO4N
+         R7OXKzLkZmjfG2HAfVfv6BlV2xsG6Gel4e+h+KVTnnE8MudBQgi+HNuLscQAi/CKtS/2
+         pdMkaJh0U26zKbLFr3N2YJ70tTdD/ilLlk7UYKUy7x3bn76zWUgYbeNGjSxVkzgJWcm8
+         E91KKVm0ixsufoek+7iqrbsvNIDWEAJe0JXLk6WC6wSvDKcHjGUIstqGUZVaGyz+pon2
+         AU5w==
+X-Gm-Message-State: AO0yUKX4pZPQ7mPQNclPfFVjUgzX7FCjV8PcxNXkn44SS9INYnzD+P36
+        hi3tdtLboxRi0sZ2K0hY6qgtc345GPRzvGBfKTucEnHsiqs=
+X-Google-Smtp-Source: AK7set86j/BnrX9H2DMZ1YIqefpYkzcgEtuGz0ePMJhYcApjmjxiU6GJLRZcJYPTlsHhKm/FMBWKAnGW8e0DQsc/CKU=
+X-Received: by 2002:a17:907:20b3:b0:87b:d79f:9953 with SMTP id
+ pw19-20020a17090720b300b0087bd79f9953mr2041563ejb.11.1676108461930; Sat, 11
+ Feb 2023 01:41:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20221103213420.1395507-1-j.neuschaefer@gmx.net>
- <CAMuHMdWo5vHCeE6BeSHrUy12uT7_wFhW-VbQmQ5u+4Q8c7-wYQ@mail.gmail.com> <Y+bpODkxY3FlCjPg@probook>
-In-Reply-To: <Y+bpODkxY3FlCjPg@probook>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sat, 11 Feb 2023 10:33:05 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVzbSvA=1fm1ArwsN0=vU4-Ke_J7=s=N0i9jc69=Xa0qg@mail.gmail.com>
-Message-ID: <CAMuHMdVzbSvA=1fm1ArwsN0=vU4-Ke_J7=s=N0i9jc69=Xa0qg@mail.gmail.com>
-Subject: Re: [PATCH v6] soc: nuvoton: Add SoC info driver for WPCM450
-To:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     openbmc@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Hector Martin <marcan@marcan.st>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Sven Peter <sven@svenpeter.dev>, linux-kernel@vger.kernel.org
+References: <06f51bab-42e1-975a-ad4f-6815c2063adb@redhat.com> <20230209120923.331111-1-n.petrova@fintech.ru>
+In-Reply-To: <20230209120923.331111-1-n.petrova@fintech.ru>
+From:   Ilya Dryomov <idryomov@gmail.com>
+Date:   Sat, 11 Feb 2023 10:40:50 +0100
+Message-ID: <CAOi1vP9Wuzsx81O+yu_w5P-W=GHdXNv-LfL1dD6O0NxkdedCMw@mail.gmail.com>
+Subject: Re: [PATCH v2] rbd: fix freeing memory of 'rbd_dev->opts',
+ 'rbd_dev->spec', 'rbd_dev->rbd_client'
+To:     Natalia Petrova <n.petrova@fintech.ru>
+Cc:     Dongsheng Yang <dongsheng.yang@easystack.cn>,
+        Jens Axboe <axboe@kernel.dk>, ceph-devel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Nikita Zhandarovich <n.zhandarovich@fintech.ru>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
-
-On Sat, Feb 11, 2023 at 2:03 AM Jonathan Neuschäfer
-<j.neuschaefer@gmx.net> wrote:
-> On Fri, Feb 10, 2023 at 11:26:28AM +0100, Geert Uytterhoeven wrote:
-> > On Thu, Nov 3, 2022 at 10:37 PM Jonathan Neuschäfer
-> > <j.neuschaefer@gmx.net> wrote:
-> > > Add a SoC information driver for Nuvoton WPCM450 SoCs. It provides
-> > > information such as the SoC revision.
-> > >
-> > > Usage example:
-> > >
-> > >   # grep . /sys/devices/soc0/*
-> > >   /sys/devices/soc0/family:Nuvoton NPCM
-> > >   /sys/devices/soc0/revision:A3
-> > >   /sys/devices/soc0/soc_id:WPCM450
-> > >
-> > > Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-> > > Reviewed-by: Joel Stanley <joel@jms.id.au>
-> > > Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> > > ---
-> > > v6:
-> > > - Select REGMAP
-> > > - Rearrange Kconfig structure a bit
-> >
-> > Thanks for your patch!
-> >
-> > Unfortunately Joel seems to have sent v5 to Arnd instead of v6?
-> > https://lore.kernel.org/all/20230201051717.1005938-1-joel@jms.id.au
-> >
-> > Which is now commit 7dbb4a38bff34493 ("soc:
-> > nuvoton: Add SoC info driver for WPCM450") in soc/for-next...
-> >
-> > > --- /dev/null
-> > > +++ b/drivers/soc/nuvoton/Kconfig
-> > > @@ -0,0 +1,17 @@
-> > > +# SPDX-License-Identifier: GPL-2.0
-> > > +menu "Nuvoton SoC drivers"
-> > > +       depends on ARCH_NPCM || COMPILE_TEST
-> >
-> > ... and lacks the above dependency, hence appearing on my radar.
-> >
-> > > +
-> > > +config WPCM450_SOC
-> > > +       tristate "Nuvoton WPCM450 SoC driver"
-> > > +       default y if ARCH_WPCM450
-> > > +       select SOC_BUS
-> > > +       select REGMAP
-> > > +       help
-> > > +         Say Y here to compile the SoC information driver for Nuvoton
-> > > +         WPCM450 SoCs.
-> > > +
-> > > +         This driver provides information such as the SoC model and
-> > > +         revision.
-> > > +
-> > > +endmenu
-> >
-> > Do you plan to send a follow-up patch?
+On Thu, Feb 9, 2023 at 1:09 PM Natalia Petrova <n.petrova@fintech.ru> wrote:
 >
-> Yes, hopefully I'll get around to it a few days after rc1, when the dust
-> of the (upcoming) merge window has settled a bit.
+> If the rbd_dev_create() fails after assignment 'opts' to 'rbd_dev->opts',
+> double free of 'rbd_options' happens:
+> one is in rbd_dev_free() and another one is in do_rbd_add().
 >
-> Or should I rather send it earlier?
+> If the rbd_dev_create() fails, for 'spec' it will be freed in
+> rbd_dev_create()->rbd_spec_put() first and then in do_rbd_add()
+> it will call rbd_spec_put() again. The same for 'rbd_client'.
+> Unlike 'rbd_dev->opts', 'rbd_dev->spec' and 'rbd_dev->rbd_client'
+> are ref-counted, that's why the ref-count underflow warning
+> should be generated in rbd_spec_put() and rbd_put_client()
+> to handle the return values of kref_put().
 
-I'd say sooner rather than later.
-If I hadn't found your v6, I would have sent a patch myself to add the
-dependency.
+Hi Natalia,
 
-Does the "select REGMAP" fix a build issue? If yes, that's a very good
-reason to send it now...
+I think you misinterpreted Xiubo.  The underflow warning would be
+printed by kref_put() (if one is lucky and the freed memory doesn't get
+immediately reallocated and overwritten in which case straight memory
+corruption would occur).  There is no need to attempt to print another
+warning here.
 
-Thanks!
+The problem is potential use-after-free on struct rbd_spec and struct
+rbd_client (which is what the warning is for).  This use-after-free is
+very similar in nature to what the tool that you are using found for
+struct rbd_options (the same bug on the same error path) except that
+reference counting is involved: instead of kfree() being called
+directly, it's called indirectly from rbd_spec_free() and
+rbd_client_release() through rbd_spec_put() and rbd_put_client()
+respectively.  Both of these structs have a refcount of 1 here which
+means that the first rbd_spec_free() or rbd_client_release() call is
+equivalent to kfree() and, when either of them is called again from
+do_rbd_add(), use-after-free would occur.
 
-Gr{oetje,eeting}s,
+Hope this helps,
 
-                        Geert
+                Ilya
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>
+> Fixes: 1643dfa4c2c8 ("rbd: introduce a per-device ordered workqueue")
+> Signed-off-by: Natalia Petrova <n.petrova@fintech.ru>
+> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+> Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+> ---
+> v2: Remarks on the processing of 'rbd_dev->spec' and 'rbd_dev->rbd_client'
+> by Ilya Dryomov <idryomov@gmail.com> and Xiubo Li <xiubli@redhat.com>
+> were taken into account.
+>  drivers/block/rbd.c | 14 +++++++++-----
+>  1 file changed, 9 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/block/rbd.c b/drivers/block/rbd.c
+> index 04453f4a319c..f3f253febe0f 100644
+> --- a/drivers/block/rbd.c
+> +++ b/drivers/block/rbd.c
+> @@ -889,8 +889,10 @@ static void rbd_client_release(struct kref *kref)
+>   */
+>  static void rbd_put_client(struct rbd_client *rbdc)
+>  {
+> -       if (rbdc)
+> -               kref_put(&rbdc->kref, rbd_client_release);
+> +       if (rbdc) {
+> +               if (!kref_put(&rbdc->kref, rbd_client_release))
+> +                       pr_warn("The reference count underflow\n");
+> +       }
+>  }
+>
+>  /*
+> @@ -5225,8 +5227,10 @@ static struct rbd_spec *rbd_spec_get(struct rbd_spec *spec)
+>  static void rbd_spec_free(struct kref *kref);
+>  static void rbd_spec_put(struct rbd_spec *spec)
+>  {
+> -       if (spec)
+> -               kref_put(&spec->kref, rbd_spec_free);
+> +       if (spec) {
+> +               if (!kref_put(&spec->kref, rbd_spec_free))
+> +                       pr_warn("The reference count underflow\n");
+> +       }
+>  }
+>
+>  static struct rbd_spec *rbd_spec_alloc(void)
+> @@ -5357,7 +5361,6 @@ static struct rbd_device *rbd_dev_create(struct rbd_client *rbdc,
+>         if (!rbd_dev)
+>                 return NULL;
+>
+> -       rbd_dev->opts = opts;
+>
+>         /* get an id and fill in device name */
+>         rbd_dev->dev_id = ida_simple_get(&rbd_dev_id_ida, 0,
+> @@ -5372,6 +5375,7 @@ static struct rbd_device *rbd_dev_create(struct rbd_client *rbdc,
+>         if (!rbd_dev->task_wq)
+>                 goto fail_dev_id;
+>
+> +       rbd_dev->opts = opts;
+>         /* we have a ref from do_rbd_add() */
+>         __module_get(THIS_MODULE);
+>
+> --
+> 2.34.1
+>
