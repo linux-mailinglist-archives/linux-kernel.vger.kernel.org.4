@@ -2,130 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF5E692DF6
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 04:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D82F692E01
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 04:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjBKDiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 22:38:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50102 "EHLO
+        id S229577AbjBKDkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 22:40:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjBKDiM (ORCPT
+        with ESMTP id S229480AbjBKDkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 22:38:12 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54ADA33452;
-        Fri, 10 Feb 2023 19:38:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676086691; x=1707622691;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fjfJYgr9l7FY6AeaHSqoSGiUSdbIvnX9HseUvyVfHkU=;
-  b=FPyNJJMHgUe6XDbYFCq1eu0DOaQHWw8tAUfHEgruGJNZKCHfGwqYArA6
-   KjuakIBY38BMbFfmAnzTm7ozcAMc+os3duwv+a+YMuyZHRyoZldPI6ULF
-   T8J3vGERpc2fqMwS8ysekynLX3JZueXYK6Kd//QRh07nyf7YS0D1wFQZc
-   QRqjm2G0YMapwXwo02QDrEst1+vlikvPr+XA9FhY6JG9SERqHEklH366+
-   F8qGN8DnR/RqvzklrOIanCDnnLOFH+DjIl0mLRgiZ+mxv9mrTmP7pgEQy
-   PhPzt3kRnJ6YCFCk+NGyK87pM7v5rDnt+TOIvYzzSBK7luzMRjBDCG+i8
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="318597343"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="318597343"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 19:38:10 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="618087971"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="618087971"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.249.168.175]) ([10.249.168.175])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 19:38:05 -0800
-Message-ID: <b50ca15b-81fb-d8e6-90fd-210ab0916d31@linux.intel.com>
-Date:   Sat, 11 Feb 2023 11:38:03 +0800
+        Fri, 10 Feb 2023 22:40:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95DA73644A;
+        Fri, 10 Feb 2023 19:40:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30A4661F17;
+        Sat, 11 Feb 2023 03:40:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8D1D4C433A4;
+        Sat, 11 Feb 2023 03:40:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676086818;
+        bh=lXYofAqTFUqqqeC5+WMCdiZd7ho/+tOiS9hr6/ItLmg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=VcKML1MiPT14iaCXG8d2dDwRyw6oGstBqV7jXCrnoXShDWSsTHQxea90rHllVjDM8
+         OFP3/y8RI5xhKgYHVljtsjlsaNvPft8SF/2uzEM+px1pPukvajIFBCEf8wQRK9w3Ts
+         x/vL1+iopx68ZT3YMjyYyx5TwRxxVg789dD7BokKI8t0ZhYBMqDdrTfWZ0XaIJo+N/
+         WKu/82cZwZee142+p6DmsPU6MXswNsiqdOyFrZ5YiO7Wmtqwq/BUJrhm9GSB14wwWg
+         MSDEnYL1ZUy056buQwg1p9luq5sTDvymS5q5C2j+vc/42yuo2PhnIdFbnHgKozq8un
+         J6mrJZprwd3og==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 72326E21ECB;
+        Sat, 11 Feb 2023 03:40:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Cc:     baolu.lu@linux.intel.com, "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 1/6] iommu: Add new iommu op to get iommu hardware
- information
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>
-References: <20230209041642.9346-1-yi.l.liu@intel.com>
- <20230209041642.9346-2-yi.l.liu@intel.com>
- <BN9PR11MB5276CB88298F97177A7AAF448CDE9@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB5276CB88298F97177A7AAF448CDE9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2] sctp: sctp_sock_filter(): avoid list_entry()
+ on possibly empty list
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167608681846.24732.9268421682221173439.git-patchwork-notify@kernel.org>
+Date:   Sat, 11 Feb 2023 03:40:18 +0000
+References: <20230208-sctp-filter-v2-1-6e1f4017f326@diag.uniroma1.it>
+In-Reply-To: <20230208-sctp-filter-v2-1-6e1f4017f326@diag.uniroma1.it>
+To:     Pietro Borrello <borrello@diag.uniroma1.it>
+Cc:     nhorman@tuxdriver.com, marcelo.leitner@gmail.com,
+        lucien.xin@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, c.giuffrida@vu.nl,
+        h.j.bos@vu.nl, jkl820.git@gmail.com, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/10 15:28, Tian, Kevin wrote:
->> From: Liu, Yi L <yi.l.liu@intel.com>
->> Sent: Thursday, February 9, 2023 12:17 PM
->> @@ -223,6 +224,11 @@ struct iommu_iotlb_gather {
->>   /**
->>    * struct iommu_ops - iommu ops and capabilities
->>    * @capable: check capability
->> + * @hw_info: IOMMU hardware capabilities. The type of the returned data
->> is
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu, 09 Feb 2023 12:13:05 +0000 you wrote:
+> Use list_is_first() to check whether tsp->asoc matches the first
+> element of ep->asocs, as the list is not guaranteed to have an entry.
 > 
-> is it 'info' or 'capability'?
+> Fixes: 8f840e47f190 ("sctp: add the sctp_diag.c file")
+> Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
+> ---
+> Changes in v2:
+> - Use list_is_first()
+> - Link to v1: https://lore.kernel.org/r/20230208-sctp-filter-v1-1-84ae70d90091@diag.uniroma1.it
 > 
->> + *           defined in include/uapi/linux/iommufd.h. The data buffer is
->> + *           allocated in the IOMMU driver and the caller should free it
->> + *           after use. Return the data buffer if success, or ERR_PTR on
->> + *	      failure.
->>    * @domain_alloc: allocate iommu domain
->>    * @probe_device: Add device to iommu driver handling
->>    * @release_device: Remove device from iommu driver handling
->> @@ -252,6 +258,7 @@ struct iommu_iotlb_gather {
->>    */
->>   struct iommu_ops {
->>   	bool (*capable)(struct device *dev, enum iommu_cap);
->> +	void *(*hw_info)(struct device *dev, u32 *length);
->>
->>   	/* Domain allocation and freeing by the iommu driver */
->>   	struct iommu_domain *(*domain_alloc)(unsigned
->> iommu_domain_type);
->> @@ -280,6 +287,7 @@ struct iommu_ops {
->>   	void (*remove_dev_pasid)(struct device *dev, ioasid_t pasid);
->>
->>   	const struct iommu_domain_ops *default_domain_ops;
->> +	enum iommu_device_data_type driver_type;
-> 
-> the enum is called 'device_data_type' while the field is called 'driver_type'.
+> [...]
 
-The enum is named from uAPI's p-o-v and driver_type is from IOMMU's.
+Here is the summary with links:
+  - [net-next,v2] sctp: sctp_sock_filter(): avoid list_entry() on possibly empty list
+    https://git.kernel.org/netdev/net/c/a1221703a0f7
 
-> btw this new field is not documented above.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Yes. Will do that.
 
-Best regards,
-baolu
