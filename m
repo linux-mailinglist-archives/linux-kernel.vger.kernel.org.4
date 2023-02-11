@@ -2,194 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2632692E78
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 06:07:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFAD692E7A
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 06:11:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbjBKFHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 00:07:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47490 "EHLO
+        id S229657AbjBKFL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 00:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBKFHt (ORCPT
+        with ESMTP id S229447AbjBKFLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 00:07:49 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCEA2D76;
-        Fri, 10 Feb 2023 21:07:47 -0800 (PST)
+        Sat, 11 Feb 2023 00:11:24 -0500
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 10 Feb 2023 21:11:23 PST
+Received: from rcdn-iport-2.cisco.com (rcdn-iport-2.cisco.com [173.37.86.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446322D76;
+        Fri, 10 Feb 2023 21:11:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1676092067; x=1707628067;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=4PRZoGNYL7C+uRNqlMMHPzT3A9ThjDlbbZUALNVQGLc=;
-  b=hIJMErBxt9ZS8ngKhvJwX0Fo0GKiGfXEiDVy2+97r7jN1IH/49LD0WwY
-   +aq1FFOuPpMSlODJAuTkkW6I8LrTc5JBOH5y62FTvTGnZNST9PqiJA/YM
-   4nUTEstR5S4HdsCw2ntRmFUhNfI3w5BuOzYVUNyWSudTh6rJ7KxFWqXFN
-   MRpfwuzlmRitZldk9VEODGOqiZFBGptDhFeX2LR2iSmiNtP8erK6m8C6m
-   DoqntX9vKT/QFIitITapRm+D7cCUlp/sn4ImG0YjFT94t45kZs/bpB89y
-   lYSvapkObdJKVzHZS3KdU0LZ8/EK/aJIYXbJVK6pmyHEU+bDt9tozZj91
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,289,1669100400"; 
-   d="scan'208";a="211526243"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Feb 2023 22:07:47 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 10 Feb 2023 22:07:46 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Fri, 10 Feb 2023 22:07:46 -0700
+  d=cisco.com; i=@cisco.com; l=4100; q=dns/txt; s=iport;
+  t=1676092283; x=1677301883;
+  h=from:to:subject:date:message-id:
+   content-transfer-encoding:mime-version;
+  bh=lgBfKCHfZ4SeJg1k2U+sv76g5OeH//OjOEfYiiyLGnQ=;
+  b=E/J2Lbjq2W+rIK8eoomtEj4TS8PwLLyt+izbql4uNRw70W3L+srrbdap
+   ktCiekv8oWZiYv2xFvG53xN547xZ0u8yrMmbeGKWQhzwF4rounrThEaeP
+   t22oZPzyRC/CNdOiRfEwyKQFnXcglbavr4KepuCVEPqvw5IQxUrras9hO
+   M=;
+X-IPAS-Result: =?us-ascii?q?A0AsAACUIedjmI9dJa1aHQEBAQEJARIBBQUBQIE7CAELA?=
+ =?us-ascii?q?YFaUoEHAlk6RogeA4RQX4V9giWcGIEsgSUDVg8BAQENAQE5CwQBAYFaAYMyA?=
+ =?us-ascii?q?oUoAiU0CQ4BAgQBAQEBAwIDAQEBAQEBAwEBBQEBAQIBBwQUAQEBAQEBAQEeG?=
+ =?us-ascii?q?QUOECeFaA2GbigGAQE4EQE9AQU9JgEEARoaglwBgyIDAQ8GPqFLAYE/Aoofe?=
+ =?us-ascii?q?IE0gQGCCAEBBgQEnx8DBoFAAYdAHliIdSccgUlEgViCN4FXgXkCAQEYgUgwg?=
+ =?us-ascii?q?1+CLoEIAYxaJ4dygTZ3gSQOgUSBCQIJAhFzgRkIaIFhNwNEHUADC3U/NQYQJ?=
+ =?us-ascii?q?AUEPAYCDx82BgMJAwIhS3clJAUDCxUqRwQINgUGTxECCA8SDyxDDkI3NBMGg?=
+ =?us-ascii?q?QYLDhEDUIFJBHOBFwoCVJddgRoKLQEkgRQaCAwWAiBgTQQNXTySISiOUaFnC?=
+ =?us-ascii?q?oN2ij6BIpUuFqkuAZdSII0ylQQuAYRpAgQCBAUCDgEBBoFiOoFbcBWDIh8zG?=
+ =?us-ascii?q?Q9djUMJAw0JFYM7hRSKTXUCOQIHCwEBAwmMKQEB?=
+IronPort-PHdr: A9a23:VC6+DRMMa2UbmtSC9xAl6ncDWUAX0o4cdiYZ6Zsi3rRJdKnrv5HvJ
+ 1fW6vgliljVFZ7a5PRJh6uz0ejgVGUM7IzHvCUEd5pBBBMAgN8dygonBsPNAEbnLfnsOio9G
+ skKVFJs83yhd0ZPH8OrbFzJqXr05jkXSX3C
+IronPort-Data: A9a23:8THwTKKKR7khSPUkFE+R0pUlxSXFcZb7ZxGr2PjKsXjdYENShDcPn
+ WcXCm7VPf+JZ2Lyf4hxa9+zpEoPucTTytY3HQcd+CA2RRqmiyZq6fd1j6vUF3nPRiEWZBs/t
+ 63yUvGZcIZsCCW0Si6FatANl1EkvU2zbue6WbGs1hxZH1c+E3970Es7wobVv6Yx6TSHK1LV0
+ T/Ni5W31G+Ng1aY5UpNtspvADs21BjDkGtwUm4WPJinj3eC/5UhN6/zEInqR5fOria4KcbhL
+ wrL5OnREmo0ZH7BAPv9+lrwWhVirrI/oWFih1IOM5VOjCSuqQQV4IM0PvQMa30PyA2jtsBb4
+ 9dVtpavHFJB0q3kwIzxUjFCGC14eKZB4rKCfj60sNeYyAvNdH6EL/dGVR5te9ZHvLcsRzgSr
+ pT0KxhVBvyHr+u8wLO3Q8Fnh98oK4/gO4Z3VnRIl26AU6x4GcGrr6Pi2dRB0mg1pJlyHdHCQ
+ uYnNXlPTkuYfEgaUrsQIMtuwLj37pXlSBVcqVSIte807nLVwQhZzrfgKpzWd8aMSMETmVyXz
+ krC/mLkElQUL9CS1zeB2myji/WJni7hXo8WUrqi+ZZXbEa73GcfDlgdUkG25Kb/gU+lUNUZI
+ EsRksYzkUQs3GuZa9b3UQ26mibHhjQ1S/B7EfU54h7Yn8I4/D2lLmQDSzdAbvkvu8k3WSEm2
+ ze1czXBWGAHXFq9FC71y1uEkd+hEXNKcjJaNEfoWSNAsoaz+thi5v7aZo87SPbdszHjJd3nL
+ 9m3QMUWnb4fi4sA0L+2uA+BiDO3rZ+PRQkwjuk2Yo5Hxl0hDGJGT9X4gbQ+0RqmBNzJJrVml
+ CNd8/VyFMhUUfmweNWlGY3h5o2B6fefKyH7ilVyBZQn/DnF0yf9It4IvWoufxs2Y5lsldrVj
+ Kn75F45CHh7YSXCUEOLS9nZ5zkClPK5To21Cpg4kPIePckZmPC7ENFGPB7MgD+FfLkEmqAkM
+ pDTate3EXsfEsxaIMmeGY8gPUsQ7nlmnwv7HMmjpzz+iOb2TCDOE98tbgDRBt3VGYvZ+m05B
+ f4FaZvTo/ieOcWjChTqHXk7dAFQfCdhW8mrwyGVH8baSjdb9KgaI6e56dscl0ZNxsy5Ss+gE
+ qmBZ3Jl
+IronPort-HdrOrdr: A9a23:1RMVk6wT7nuSKl6e93CiKrPxreskLtp133Aq2lEZdPULSKKlfp
+ GV88jziyWZtN9IYgBapTnyAtj7fZq6z+8/3WBxB8brYOCCggqVxe5ZnPLfKlHbak/DH41mpO
+ 1dmspFeaXN5DFB5K6QimTZYrUdKbK8gcSVbJLlvhFQpHZRGsZdBmlCe2OmO3wzYDMDKYsyFZ
+ Ka6MYCjSGnY24rYsOyAWRAd/TfpvXQ/aiWLCIuNloC0k2jnDmo4Ln1H1yzxREFSQ5Cxr8k7C
+ zsjxH53KO+qPu2oyWsm1M7rq4m1+cJ+OEzRfBkufJlagkETTzYJ7iJbofy8gzdZtvfqmrC3u
+ O85ivIdP4Dlk85NlvF3ScFnTOQlArHLxTZuBmlabyJm72/eNtyMbs/uatJNhTe8EYup9d6ze
+ ZC2H+YrYNeCVfakD36/MWgbWAcqqOYmwtWrQcotQ0qbaIOLLtK6YAP9kJcF5kNWCr89YA8Ce
+ FrSMXR/uxff1+WZ23Q+jAH+q3kYl0jWhOdBkQSsM2c1DZb2Hh/0ksD3cQa2nMN7og0RZVI7/
+ nNdq5oiLZNRMkLar8VPpZ2feKnTmjWBR7cOmObJlrqUKkBJnLWspbypK444em7EaZ4vqfaWK
+ 6xI2+wmVRCC34GU/f+oqGj2iq9MVmAYQ==
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="5.97,289,1669075200"; 
+   d="scan'208";a="27162609"
+Received: from rcdn-core-7.cisco.com ([173.37.93.143])
+  by rcdn-iport-2.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 11 Feb 2023 05:10:20 +0000
+Received: from mail.cisco.com (xfe-rcd-003.cisco.com [173.37.227.251])
+        by rcdn-core-7.cisco.com (8.15.2/8.15.2) with ESMTPS id 31B5AIV1001429
+        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=OK);
+        Sat, 11 Feb 2023 05:10:18 GMT
+Received: from xfe-rcd-005.cisco.com (173.37.227.253) by xfe-rcd-003.cisco.com
+ (173.37.227.251) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Fri, 10 Feb
+ 2023 23:10:17 -0600
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (72.163.14.9) by
+ xfe-rcd-005.cisco.com (173.37.227.253) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9
+ via Frontend Transport; Fri, 10 Feb 2023 23:10:17 -0600
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jJTMaa922AqqENrTklxA+Zvdc5xRwJ6wpHnBfq4UvNPW6VE5whcLGgC4rU0iStSvxeyafoXGCoHKsL77CrWqkI1sj7p58M8SHETKVcrWAbP7zMisBVMH1nXDwcj7nXlJ+NfdAZWH4fOq3Q1ZSo98yBOFfROOolS4wPN15FvGVUeNa0/6UpoU1Waj/axOHX1VzmnhgRPynVd36I6kkDliiUB9nwrVSe8W+OgIvivHoiHaE/Gahfwq4FVu1gLeY0uiQ02p3smgEGCZWxpaCR+PKUXe4A6GSzBQsyuPoEhYKWxrd2GcVEEwUkvk1JyhJpF3ct1RM6+nSfqCpdaiiJa3dg==
+ b=QGfAlIJr61k5QDjShb78XwWusPgDlRBxmZHbmJcmnZy8gjBD+WEE/kDi2e2XODvuq60RH1AyDXzX+UUZMI0Ne0CfELmRq1mK7FCqdQ9Xsy3fbrmEtFW7b339PhWno//cZ7ON53bXhPNMYymhUjH29QaOfF9NcgVgjti21BBhEB0sM4dzgBc81rOcLOv36n/CIbxfyaeq8U43TmH1lm6b6fH3Fostg9xWNCHqUFdOseizvNP4WpHINCvOnnEqpbw1OOyzZD4cHdD4DxPRbjls7IIaM2ABPMQtseaYtifqHGcBOCCUo+UsQyB4JnAQW2s5FYpBkyzC8SJEyYcI2uV+fg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c/QT3Z/3RG8yw2MFshFfaS49Mdp/Y1WKqDXysDRCtro=;
- b=MTSGCUNMl+hhya7AkNiD5eal80pQ/gTlFF9NRv/igh0tYxGyBix0yqOddCZZfPgMbFWMK5JNXplTx7Jw90XqkgKqLKAp8bqKvSKR5OztDVnNEZC88W/MmWbzMjwF+9xAuQW3k39kW26J3JZGHd4JnlWMwOu1GpAtrtGEtEvTykVF7lSMHLHWOeWFO3Iarj5oKnFwFuX9eWq40qKT3ZUi+j3PtqS6HeNqgg3aZZL06AJ5XNleyMb4PSXKNYS0utePuxhrYceVdp6tHMYCz07wCj2rLxuOqlMfdbo9bCm+r0ZOCAnz/kxJQdZw5K1teAgFsQBpciEQZytRBST6rR9JBw==
+ bh=g342ofpIw5LThkKEUHP34JRY1CeQnV7LeBUgNdv73Z0=;
+ b=eOQsVCacvPEdjItmuh4SM6jZFMT1xpRm2r9HDr8Byjdm12XLkzFSkXBBZQvrjQI7ycvo+/AJ2Kt6NEFwAyDX2+jgbZAyYBxpSyRxBwONUJKmYhnBVJHJ551uVg/gB+NjEb/97HVaQ6kseCPwQ7GobiuPRr5/LTfpyoFokwCbprOFNGMzTMoPxselaU0N7/R9aEsqWGg0zcRJYv+WLJCRRYkYCQbRJq59xI9TC4U1iviMSB472jR5zGWmktOPzm/tt3WgsadL3xsmQW2RY1QpcMJE0N9UlLm++AgAudbhogUe5l7JC37ab5EZ/pr6yTzVpNU2dIYgJe9bwelBhgOp5A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
+ smtp.mailfrom=cisco.com; dmarc=pass action=none header.from=cisco.com;
+ dkim=pass header.d=cisco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cisco.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=c/QT3Z/3RG8yw2MFshFfaS49Mdp/Y1WKqDXysDRCtro=;
- b=d0OAaawft3WC8HZeWBuqhhh+SthtXc6fnVO3O/DoWNlhEehFnu5wCTwN3iYyQVDf6TmlHuz88YqDC4Z2bBUzsH1kBHmJXlm6/Tj2x66DxB1cMvnd4qELqEvYyMwX5cQ9TyW3hTvnewDR6F/CRniaAI/xMZEoTNyJh2yDhXAqOa4=
-Received: from PH7PR11MB5958.namprd11.prod.outlook.com (2603:10b6:510:1e1::22)
- by DM4PR11MB5438.namprd11.prod.outlook.com (2603:10b6:5:399::21) with
+ bh=g342ofpIw5LThkKEUHP34JRY1CeQnV7LeBUgNdv73Z0=;
+ b=F9ouOhJxoY+rqiG6uFhz6Ekw1mPGBKE/+DmlF9NaBb9cFqsDTXDX6neeoCzSuds3a5YlauELhfyAjpJJDPoij8zoUlAlgzjzJciBuUOKoz9LOF8wmpne9kAztIdJaO+5ud4vd5wVnr7wfzNah2DDaz5L0GdXeb1kmWIFP36Vt5k=
+Received: from PH7PR11MB5957.namprd11.prod.outlook.com (2603:10b6:510:1e0::14)
+ by BL1PR11MB5383.namprd11.prod.outlook.com (2603:10b6:208:318::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.21; Sat, 11 Feb
- 2023 05:07:44 +0000
-Received: from PH7PR11MB5958.namprd11.prod.outlook.com
- ([fe80::cf2e:97c:7f47:9ca6]) by PH7PR11MB5958.namprd11.prod.outlook.com
- ([fe80::cf2e:97c:7f47:9ca6%4]) with mapi id 15.20.6086.017; Sat, 11 Feb 2023
- 05:07:44 +0000
-From:   <Tharunkumar.Pasumarthi@microchip.com>
-To:     <gregkh@linuxfoundation.org>
-CC:     <arnd@arndb.de>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <UNGLinuxDriver@microchip.com>
-Subject: RE: [PATCH v4 char-misc-next] misc: microchip: pci1xxxx: Add
- OTP/EEPROM driver for the pci1xxxx switch
-Thread-Topic: [PATCH v4 char-misc-next] misc: microchip: pci1xxxx: Add
- OTP/EEPROM driver for the pci1xxxx switch
-Thread-Index: AQHZPED0IEC8iEmq9kS9Rw5j6ZWLp67GT+IAgALkDmA=
-Date:   Sat, 11 Feb 2023 05:07:43 +0000
-Message-ID: <PH7PR11MB59588BF687D7D2EDAC36E4899BDF9@PH7PR11MB5958.namprd11.prod.outlook.com>
-References: <20230209044237.3927293-1-tharunkumar.pasumarthi@microchip.com>
- <Y+S05tQ5e5pE9/v0@kroah.com>
-In-Reply-To: <Y+S05tQ5e5pE9/v0@kroah.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.22; Sat, 11 Feb
+ 2023 05:10:10 +0000
+Received: from PH7PR11MB5957.namprd11.prod.outlook.com
+ ([fe80::7077:cf27:946e:1d14]) by PH7PR11MB5957.namprd11.prod.outlook.com
+ ([fe80::7077:cf27:946e:1d14%5]) with mapi id 15.20.6086.017; Sat, 11 Feb 2023
+ 05:10:10 +0000
+From:   "Abhi Das (abhida)" <abhida@cisco.com>
+To:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [BUG REPORT] Coredump allocates and maps, unallocated sectors of
+ shared memory regions, in a program, during program termination
+Thread-Topic: [BUG REPORT] Coredump allocates and maps, unallocated sectors of
+ shared memory regions, in a program, during program termination
+Thread-Index: Adk91w+eAU83npduTcKhNRUKd0hsww==
+Date:   Sat, 11 Feb 2023 05:10:09 +0000
+Message-ID: <PH7PR11MB59570A36D6595A3EC2113E23C7DF9@PH7PR11MB5957.namprd11.prod.outlook.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
+ header.d=none;dmarc=none action=none header.from=cisco.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR11MB5958:EE_|DM4PR11MB5438:EE_
-x-ms-office365-filtering-correlation-id: 5c59ed1a-4685-491e-c046-08db0bede884
+x-ms-traffictypediagnostic: PH7PR11MB5957:EE_|BL1PR11MB5383:EE_
+x-ms-office365-filtering-correlation-id: 78df4ce9-f661-4ca2-83b7-08db0bee3f80
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Z4IvWTsTVdepeoqEe2tM/W3Ye7Icx58MANfdXWl8qZdt3TtIeWJpTuhNRPc68bajjTwRP+ZuYnuK+6tQns/yqkH7I2Ycx+uoqe28llmuPTI8lj3vml5kDkRT0qXyhJ2JzRrJ+QddtwEQCTEgJ0Am9/g3+xFiTD6JI8B3bkX2yxswQ0ILRb+tzz+TgPjkPbwvRTiYQRSxgbZZau9nVkeeCodmSSUpRURwfuSYru7ZoTWpzUovC6CqziQ82lgH5ZMYyOY390ba26M9kVQVGv7nf0rMCNk+C/eSDJ9xxasZ6CYavArgT5xs5xXjpy8X7kLd9jiLZhoyY1y1vomyF90wrwH1GF7/VZUVIloRrZDUPTMIUf9jRX0FqENfDma9mXQ+dI5udiKYoDlukLEAMWUJ68zaMKBPmi9Wpiyg1S8FBR9vWdUv5iYSDWsLtGfS/EX1PEs0/h57+fKIDGeBWaB+T3ourp1zxPdov0HLUPvJnvJXE+zrE7bikroEwjA1flzLuMQ7nPS9vPfgAfelwf9VgMJnZIo2kMv7l4LB1IjNxuOOYHvdHVI7T9I7jb1KgBnMahn090+z2s7ufLnJOUlzfXVZlBc7K/jDYcoGQXlE9AUFbpeqLuxL/BaCCeqtsUJy1wWl7oSqxvDMZHruJi6+f2gKoP4tDfHvEdkhtxLxW90saZGURZE2sAHY2wU28WEAG8PTssqF9OHxxMuJIcIGfpEg0mgYfMMC4IEoR7LbIiA=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB5958.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(346002)(396003)(366004)(39860400002)(136003)(451199018)(53546011)(186003)(26005)(6506007)(107886003)(9686003)(33656002)(54906003)(38070700005)(83380400001)(7696005)(71200400001)(122000001)(38100700002)(5660300002)(52536014)(8936002)(316002)(2906002)(86362001)(478600001)(4326008)(41300700001)(6916009)(55016003)(66556008)(8676002)(66946007)(64756008)(66446008)(76116006)(66476007)(32563001);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: ey7Qmj/lsRPpsSUUp5qRAPXQEODATqip4VPHgPY6RES227ZurfN3JLJIeXUbERKreNe8UAjfh6yzJE05Hzxbs+VlG/ylgHyD9UWi0UUcDL/wUFouet6iA+E0HKIi+IiWGHIDJ+ApGWoMU4keA2dF4dhfKCR+hd3zxMJ3MIbT2AijMEG8eRYhKqbNnmB+eyhllzwdNUB+CJBbuQZIgKgISUN55JiUTvrvuLmXSkBJzWO5eP8KKm1sziiSc2/Rqau1DvrTr1bOWLGhT0l8I8HAxnTJ61zrHJlQHsfOUCVDZME8Adnahl4GfzdCHdLW3r3d1s5qfZuHNB4sfo30Oc5zXZ+kKp6zY5a56VRbZAbvbV8r0mB/a/VxuQf4FqLbFFfo6X1hkG9ta/oO2No/kRUtK8nL3Q+6OLlPcl/KP00l0eG8q+gLljfj4Qhgj4ozyj8YpesFqOxsPl7bTmvtmZ6Uu4lZP1OVe5k2ls240VPgU7COQ6RL+RAyZXSUOZXUFsehUR+6QOO3HsOMGZKYV9cRuVqLi0be3CoRdcKLXFx7OGpGXxq3eb6AgLwaDsaPXq3SPBumDKGicqPywOgkSZY+DJqZ+gN0V+ZejUd0KOgU2z+rcSn4vkh/zyXyxnCvs5LhxOwiYF7tpRbvsJrjXvLuIzZNM4/09Rgb8dMjSG+8UJVMQmpsQTxtmtNzk4chxEKRvKt5Ri0sVsjWzunh5hMLybOanOMB6w0SkIk8pE19YHk=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB5957.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(346002)(39860400002)(376002)(396003)(366004)(451199018)(38070700005)(86362001)(33656002)(64756008)(8676002)(76116006)(316002)(66446008)(66476007)(66556008)(450100002)(110136005)(66946007)(966005)(478600001)(7696005)(71200400001)(2906002)(52536014)(8936002)(41300700001)(5660300002)(83380400001)(122000001)(38100700002)(55016003)(186003)(26005)(9686003)(6506007)(66574015);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?l/B7nrZGdWkJlH7nuLxkBJGGPCxZQm8wfLLPT21AmXdJrKiQA1MrGkrpwFjx?=
- =?us-ascii?Q?OihVQjSf6cOYsIAEhyF7NnrMPP8XOch9osyzeVr4UyI9QlInZkIlqX+yNk5t?=
- =?us-ascii?Q?+dErSlH9HGQvfuGXlyW4kvYzAkvKonzv0opr9tnNZ/YbVhtCIVPiNa3+1pI1?=
- =?us-ascii?Q?G2LY4f4m3Y7aO4PV7k9Z12yzwQBFvJpxf5u/+FxQTMEOI1NXZD8ui0+i0Edw?=
- =?us-ascii?Q?zAmM8qN/Wk11rEUhOu+yKd2QmIGr+7gfrGdPu4ZfIOKluiPH+h1sO5axYTEI?=
- =?us-ascii?Q?6RcwV1aVuVUVyMqoKXu2+udi2hn4ucgNrPi+nzB+JR/wX2sUIkKc756twr1Z?=
- =?us-ascii?Q?JW7q6qUHHdhNy4+IJQd37mOkN06H7H5rMPeG1YCRPf1IvpYQET862SUD2itc?=
- =?us-ascii?Q?Vjvwqy8aHI+CSEbOP6Unw8cJus1vvmO6dvTftqxVEjmGjeQpD678k+g1rWOB?=
- =?us-ascii?Q?hCavScgsaEQIwUCY2TUIIbwUTstEitjLx9ehGRDXz7sARpXEumVVkDfdPvHu?=
- =?us-ascii?Q?EWMTdWW7PFg+xc0yEaWL8fyNnkrrY3HiGPnoDkrlSJTPcKozkqgEA4RRYz7r?=
- =?us-ascii?Q?yvUOxe71LuJMmkmsQE/ZkZ9YE3H88IQpmAQEx6pJhD+0Hj+iQ6hnD51GbUwN?=
- =?us-ascii?Q?RRmE0feGRu90Sq8NL8mqms4UV5NILEucv9bYYe8RM5xN34+dfO9xAeQ5bfTo?=
- =?us-ascii?Q?PrbRn4CGibIJmHQDTu4ZKQFbFGOmrXU7EMc5wWBapCF4tHuL5MHCPrWuBhuz?=
- =?us-ascii?Q?k5ztytQiP72pAd1sC0Lywr1mdBFXaUF+5XgcArHLi1xVA5vixObL8+O2rOkG?=
- =?us-ascii?Q?Lz0gzC7oWf633fuwaCLoxs6gWl+LuuyuEawlr6Elycfsh6xOjtUs6cOn3EXJ?=
- =?us-ascii?Q?6rFM5VW9DFORpSjW08/OGXunndDRCk3VLVH5xAOVmIULQ8wwOFq0LGYMMm+c?=
- =?us-ascii?Q?+KoeRbTNNqhRohHJnjeOzCKt1eVvWroydaKIS8IdoHiMYlMXVKIRPtI76ARd?=
- =?us-ascii?Q?xQ3h8ShvH3YLjG8qgJbixO1wA8Vv00Zm8nQ3fVhGOhY3iCVWzW2m+pk+Ehj9?=
- =?us-ascii?Q?U2/VqsmKLLo/915ltIMXFDQ38J2iVQEjXmCJJxaJ/H429sF5qa6KxseqSniL?=
- =?us-ascii?Q?Ct37Cnrmswn96cvcZlZuhp6wBakCC9Q+3L1SvgCHtFNKF/IYost7cn6l9DBt?=
- =?us-ascii?Q?rQiEXgp15bW92OWug/o4Lc0uREHkx5qdjFgRDDX9Jb5dNFM+zz6qUDlr2NGi?=
- =?us-ascii?Q?qAN3p2ht849QViqNxOXTj413R9GkAXn2dOjFNSgX/UZXHNuzR6DqnPk+hUYf?=
- =?us-ascii?Q?9QERQli/WtIaNRBE7v4yIqzqGSd9Brb+reQ0N5MZD1QNDQYFFH88ghSMbcHs?=
- =?us-ascii?Q?Q5KXJj+cozu5HMlO51rVg6MJVU1/iqewaFK/mBy1crvoW9VF2wVkLPXqPvrv?=
- =?us-ascii?Q?Qbjoplev81P4L2ym6x91ZmS8KYjBM9bv54VbtAcMRCFw00oHymNbW37yqanJ?=
- =?us-ascii?Q?8XrfJVmizo0jF4PY4X+S9OXs0CgF0hyvU52EtQwTvTrPvISJnbFRZfIxgVdN?=
- =?us-ascii?Q?biYfuIq4r4eOFVQCJh6Nj7hrWaBBBGkoS5IGtQFCpDpzWYaRdUaFgFASMukZ?=
- =?us-ascii?Q?JK5x2eJKBDEvLAvcV1kuMZE=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?xnd1V0CIojzpFn3H5Dl4uJnKxATOoDZewfbPuhJnJHx2nGjLVyKo10YhqI2T?=
+ =?us-ascii?Q?Sa8Z67p0wN9Omu3mhDvBTB9rQYx2inEL2Ozm7xdE+PrN3XowG7rdzznZtNwQ?=
+ =?us-ascii?Q?dy0KW9nP5GqgCQtWuY7VAcTg5kl1mYethapHJkjoeYuQK+PUAn8wXTmrMDOG?=
+ =?us-ascii?Q?57ZBasuxHbX1GYCoEZhyGBNNIme2Xm1/gMjr3Y30g43ltW43LuB01CSL2+m9?=
+ =?us-ascii?Q?YL6LVLKy5i4KiJXwL3wshqh5k7LpSVJAmEk2zKwwpUwzJjQdA8pu5imeaY+g?=
+ =?us-ascii?Q?aF4IzlFwbCo3+8trYSo9LgOkyzGKEFFWOS+YLIE6Hf6yIhmAHxzE1skD+VRm?=
+ =?us-ascii?Q?FS143yeX9UUGV3+rq6CEWh0fBOF8CvlsRd5fQZXDUzXf6cI6MaAT985nVVPO?=
+ =?us-ascii?Q?rGkd1B2MkDixBp3BwOB/EmTBtH+aWLe3stx6QG2hSGMlx32juDxhg5IySEmg?=
+ =?us-ascii?Q?5JqGD3w/w7BYsavV6vz+ZtNd6hozs1VK2ABLMKovr6P54n7cTEVkwiL1DilF?=
+ =?us-ascii?Q?J6GIGIN6EugIYPZWNcBDIqctkYOO0MRKa4rZ6pYfOI6bO3WHQ37PUnFwr035?=
+ =?us-ascii?Q?k4z6Gz6tdQ7FWsJ8aGD3aHEOscjRo5Hd8oQLbp7P8cXgW3KFyRVE7z+a/mdm?=
+ =?us-ascii?Q?dBVLMchMiMLJQxQwjhidOqhTyiRNPxkfVlcKmAu2jq/ZBhVLVdroran5gQrj?=
+ =?us-ascii?Q?SYqHpaBKqediCTB/lY+nj/xDzpHcdOaAxIJ0aA5fXzu0NHmAGxQoM82fQdlj?=
+ =?us-ascii?Q?6NuVT8B3IMENjR5mx1z9l7UUAKfxH0QOX+EUUY385Jo9ZvQpp3KFRx4rCGnG?=
+ =?us-ascii?Q?VoBvoA8geVhkDa0ZsVUY8OYkLc3FOUN/PSeHVm86h2he2GbBWwucGCuGZfWe?=
+ =?us-ascii?Q?h33Dzx71MdCqMFbDo3qM0dRzDrlpSBJccZWVlRU9OA74imKiMUeSORd4bpOV?=
+ =?us-ascii?Q?A1+HuWe3fSU+/LKrXOlKmBQ+HaQI+itvW5Lj7ygRsbW2r5huZS76DsWUUaAk?=
+ =?us-ascii?Q?+JAanJew/KgKgTEjXVMZmv/SDpJCEsR0SRWU1aZwLI0Xxm78wtbbWmc9f5eG?=
+ =?us-ascii?Q?ZWc9K0NRhCMBMGTUyytmVy09uSNdnz2EVrRJdxc4TRCYgJA8jWsNnicK5lgn?=
+ =?us-ascii?Q?hCkzOKusrpuSpQRgKt+ya9ySblCw4z/y5cnxtVAbV47mFAgelHYwxSblXOjE?=
+ =?us-ascii?Q?8E2oJc0hN6htkO3divnWQ78rxv7VnHxhxeTI92eI9NZl1647xt9rz6k0KPky?=
+ =?us-ascii?Q?HjeJOwqNl6NEa8XO1ChE8SsxBvR/i0z6YUyTRXjKATYeeSD9vopgBKw4URZB?=
+ =?us-ascii?Q?FTcQkJrf7zaRn8c4f22PPSHpR6K7/XyHiXyQ2aEijm1a+NYLjb+GUI0UKbFK?=
+ =?us-ascii?Q?dp8RwWBI+SbjLFrfeqLJgv6C00s/TLAU9hl3EeZyAeVoanvzAYw/+ZCbvZPz?=
+ =?us-ascii?Q?AjKhFZc22jTygtvKdZ/tL7fu63wbnZCvhJs7FZRwWwNlh02EsGEmF/lrQlHu?=
+ =?us-ascii?Q?mVZ/31zzKCRlLjuRSwqXU6SWs848K3BtXFgXhpX1FACE7RAIFEpCRSRaE67W?=
+ =?us-ascii?Q?VrN+x1FKplj8kGondH8=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB5958.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c59ed1a-4685-491e-c046-08db0bede884
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Feb 2023 05:07:43.8757
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB5957.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 78df4ce9-f661-4ca2-83b7-08db0bee3f80
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Feb 2023 05:10:09.8253
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-id: 5ae1af62-9505-4097-a69a-c1553ef7840e
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9M4ZQ0759WXc0G3aXAyUqlJ49077pgNHRAHHwOEghFHwDPRsHUJbwyJ0iWssnFgd766HKOxl7foGlmYaiChqkGSgxL25w3UWKoKTKuSz9WTV4Iv9kk6Ff3XpQG1BABLb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5438
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: C2MWIiO0O1NGlNXVGEdLvnms/ts018MLBP1j3A/5xET9rKHblhvVrWIHiBvLwJCzRGuCiO5YNXrZ1xl4Ndg5iQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5383
+X-OriginatorOrg: cisco.com
+X-Outbound-SMTP-Client: 173.37.227.251, xfe-rcd-003.cisco.com
+X-Outbound-Node: rcdn-core-7.cisco.com
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Greg KH <gregkh@linuxfoundation.org>
-> Sent: Thursday, February 9, 2023 2:25 PM
-> To: Tharunkumar Pasumarthi - I67821
-> <Tharunkumar.Pasumarthi@microchip.com>
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
-e
-> content is safe
->=20
-> > +     } while (data & EEPROM_CMD_EPC_BUSY_BIT);
->=20
-> That's a very busy "sit and spin" loop here, what happens if the read of =
-the
-> bit never actually succeeds?  You just locked up the system with no way t=
-o
-> interrupt it :(
->=20
-> Please provide some sort of timeout, or way to break out of this.
->=20
-> > +
-> > +     if (data & EEPROM_CMD_EPC_TIMEOUT_BIT) {
-> > +             dev_err(&priv->pdev->dev, "EEPROM write timed out\n");
->=20
-> How can the timeout bit happen if the busy bit was still set?
->=20
-> And what can userspace do about this if it is reported?
+Hello,
 
-Hi Greg,
-If EEPROM_CMD_EPC_BUSY_BIT is set for more than 30ms, it will be cleared au=
-tomatically by the hardware logic and EEPROM_CMD_EPC_TIMEOUT_BIT bit will b=
-e set to indicate the timeout. User space application will inform user abou=
-t timeout on EEPROM write/read when this error occurs.
+I have noticed a flaw in the linux kernel's coredump system. I have observe=
+d that unallocated sectors of shared memory regions in any program's virtua=
+l address space, get forcefully allocated and mapped when said programs ter=
+minate and produce coredumps.
 
->=20
-> > +             return -EFAULT;
->=20
-> This return value is ONLY for when we have memory faults from reading
-> to/from userspace and the kernel.  It's not a valid return value for a de=
-vice
-> error, sorry.  -EIO maybe?
->=20
-> You return this error in a number of other places in the driver that shou=
-ldn't,
-> please fix this up.
+I created a simple 1G shared memory mapping, and wrote only 4kb of data to =
+the region. I expected only one, 4k sized page, to be allocated and mapped.=
+ On program termination with coredumps enabled, I expected the program's bi=
+nary core file, produced by coredump, to just contain 4kb of data for the s=
+hared memory region in question.=20
+I also expected the corresponding file for the shared memory region, in /de=
+v/shm, to be backed up by a single 4k sized block on the file system.=20
 
-Okay.
+However, I have observed that the terminated process' binary core file cont=
+ained 1Gb of data for the shared memory region. While the file for the shar=
+ed memory region, within /dev/shm, was now backed up by several blocks on t=
+he filesystem adding up to 1GB of data. This indicates that coredump forcef=
+ully allocated and mapped the remainder of the unused pages in the 1GB shar=
+ed memory region.
 
-Thanks,
-Tharun Kumar P
+I have replicated this issue on a ubuntu vm, with 8G of ram and vanilla lin=
+ux kernels 6.1, 6.0, 5.18, 5.15.64, 5.4.212. All vanilla kernels were compi=
+led and installed manually. The system was also never tainted. All thought =
+other kernel versions were not tested, I am quite confident that the issue =
+exists in other kernel versions.
+
+I have also filed the details of this issue in bugzilla, and I have detaile=
+d the steps that can be taken to reproduce the issue, here you can find the=
+ code I used to reproduce the bug: https://bugzilla.kernel.org/show_bug.cgi=
+?id=3D217010
+I have also attached a screenshot of shell commands from a system with kern=
+el 6.1, that clearly reproduce the issue: https://bugzilla.kernel.org/attac=
+hment.cgi?id=3D303704&action=3Dedit.
+
+To reproduce the issue, set core_pattern to "core" by running 'echo core > =
+/proc/sys/kernel/core_pattern' and set the coredump filter mask to 0x000000=
+7B, with 'echo 0x0000007B > /proc/self/coredump_filter'.
+This will ensure a programs core file will be kept in the same directory as=
+ the program, for simplicity. While the filter mask will ensure that coredu=
+mp collects all types of memory mappings from the virtual address space. Th=
+is information is referenced from https://man7.org/linux/man-pages/man5/cor=
+e.5.html
+
+The commands in the screenshot are explained as follow:
+- a system contains 6.9G of available memory.
+- begin execution of program called fractional_memeater.bin, with following=
+ input parameters
+    - size of shared memory sector in bytes
+    - fraction of shared memory sector to be written to, i.e 1/10th in this=
+ example.
+    - name of shared memory sector
+- program is stalled after it successfully creates the memory mapping and w=
+rites to a fraction of the total sector (it is now waiting to be terminated=
+).
+- the system now has 6.8G available memory, while displaying 100MB of share=
+d memory is being used.
+- the df utility is used to show that 100Mb, is the approximate amount of u=
+sed memory in the /dev/shm directory.=20
+- 'stat /dev/shm/shm_1G_100Mb' is used to show that the shared memory file =
+is currently being backed up by 100MB of data on the filesystem.
+- program is terminated with kill -6
+- free utility displays that the amount of available memory on the device i=
+s now 5.9G, it has dropped by 1Gb. While the amount of shared memory is now=
+ 1G.
+- df shows that /dev/shm is now using 1G on the file system.
+- stat utility on shared object file, shows that the file is being backed b=
+y 1G on the filesystem.
+
+Note: This system is a vm of ubuntu running a vanilla 6.1 kernel, with no o=
+ther shared memory objects on the system, expect the one discussed. The sys=
+tem has also not been tainted.
+
+Could this be expected behavior for fs/coredump.c? If not, how can we work =
+towards a potential upstream fix?
+
+Thanks.
