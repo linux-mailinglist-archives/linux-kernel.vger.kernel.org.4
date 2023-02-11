@@ -2,99 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8974692FA6
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 10:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4DD3692FAB
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 10:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjBKJGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 04:06:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51512 "EHLO
+        id S229777AbjBKJLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 04:11:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBKJGg (ORCPT
+        with ESMTP id S229447AbjBKJLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 04:06:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000C225E09;
-        Sat, 11 Feb 2023 01:06:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CF0960B80;
-        Sat, 11 Feb 2023 09:06:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B240C433D2;
-        Sat, 11 Feb 2023 09:06:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676106394;
-        bh=UNe3vJq2Jm1T7RdXEmNdh8v4p8jdahu221bYz5Rbsa4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iBpS53Sw+1hUTpR74BC0jld+p3oTylOg5MdW4szVKPT2v0yY4FX0oMSZrVj4tzT0l
-         F0mMqTk9YJ2WDWZHhvtDzARUvYHF6HbkbQu6k5pneSzC929un9B7849JxC2V8Ign35
-         nu4Te0gEQIBm7ZEz91Oy9/Y2arp9aOfUTAzCLlIM=
-Date:   Sat, 11 Feb 2023 10:06:31 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Qi Zheng <zhengqi.arch@bytedance.com>
-Cc:     patchwork-bot+netdevbpf@kernel.org, rafael@kernel.org,
-        j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
-        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH 0/3] some minor fixes of error checking about
- debugfs_rename()
-Message-ID: <Y+dal7QKULCa+mb4@kroah.com>
-References: <20230202093256.32458-1-zhengqi.arch@bytedance.com>
- <167548141786.31101.12461204128706467220.git-patchwork-notify@kernel.org>
- <aeae8fb8-b052-0d4a-5d3e-8de81e1b5092@bytedance.com>
- <20230207103124.052b5ce1@kernel.org>
- <Y+ONeIN0p25fwjEu@kroah.com>
- <420f2b78-2292-be4a-2e3f-cf0ed28f40d5@bytedance.com>
+        Sat, 11 Feb 2023 04:11:02 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A81E15CBF
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 01:11:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1676106635; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=XLpxwGDssbk28zpX4VqVA+NB4NYPD2zFICu8oQ3hCEpm6IHTT16uz5grkp8YpYdS7bm8njXNe3vMnF7aQD3IkstjF+fVaLZuDYm0uOdbatorbAsFmbwxBGVoGLqIeXJQrc1OwwTTFezyEHAkh6s0s5T4uFxyDF/0zzeJk8q/x2Q=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1676106635; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=P4v9Y6wWmEZjwnGp73bMYV/GVcHUdzW6CDlIM+NzznU=; 
+        b=X35hodZ6oJmxo4mJqpSKPNsRly6ad8Jy6nIqVIjgJuS9PKi0DlALcVZ/7XTHwViTReBZzq6Dos17U0SFFPn1dAkWpxej5zLS7s9pErUoYuiL3Fb3+M4EKz7OMtSU9wwaSx387PJbWVfo8HZU2ZxSACTyHpD8FBTpmVIMABpaVbE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1676106635;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=P4v9Y6wWmEZjwnGp73bMYV/GVcHUdzW6CDlIM+NzznU=;
+        b=UIUoylujyo7F/jmVOTsKaVdKzFzxGajtOGwExXVKxaYk5913l0RdyxfpsGCUE/Pa
+        oqHUx2IpZltVT3frJb73P3xALipjVQIlplQP1/yG5Dq6nb0+YXD6Ttgx3hGtY7e2Juy
+        0GCSPN82OQdGTzopBR4Z0+Lj0KWe43Qd3Cx7Ldb0=
+Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
+        with SMTPS id 1676106633895687.047830496387; Sat, 11 Feb 2023 01:10:33 -0800 (PST)
+Message-ID: <190b3135-82f3-4dfa-55ee-e048c5510e3c@arinc9.com>
+Date:   Sat, 11 Feb 2023 12:10:29 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <420f2b78-2292-be4a-2e3f-cf0ed28f40d5@bytedance.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 1/5] dt-bindings: watchdog: mt7621-wdt: add phandle to
+ access system controller registers
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-watchdog@vger.kernel.org
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        tsbogend@alpha.franken.de, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <20230211073357.755893-1-sergio.paracuellos@gmail.com>
+ <20230211073357.755893-2-sergio.paracuellos@gmail.com>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20230211073357.755893-2-sergio.paracuellos@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 08:05:44PM +0800, Qi Zheng wrote:
-> 
-> 
-> On 2023/2/8 19:54, Greg Kroah-Hartman wrote:
-> > On Tue, Feb 07, 2023 at 10:31:24AM -0800, Jakub Kicinski wrote:
-> > > On Tue, 7 Feb 2023 18:30:40 +0800 Qi Zheng wrote:
-> > > > > Here is the summary with links:
-> > > > >     - [1/3] debugfs: update comment of debugfs_rename()
-> > > > >       (no matching commit)
-> > > > >     - [2/3] bonding: fix error checking in bond_debug_reregister()
-> > > > >       https://git.kernel.org/netdev/net/c/cbe83191d40d
-> > > > >     - [3/3] PM/OPP: fix error checking in opp_migrate_dentry()
-> > > > >       (no matching commit)
-> > > > 
-> > > > Does "no matching commit" means that these two patches have not been
-> > > > applied? And I did not see them in the linux-next branch.
-> > > 
-> > > Correct, we took the networking patch to the networking tree.
-> > > You'd be better off not grouping patches from different subsystems
-> > > if there are no dependencies. Maintainers may get confused about
-> > > who's supposed to apply them, err on the side of caution and
-> > > not apply anything.
-> > > 
-> > > > If so, hi Greg, Can you help to review and apply these two patches
-> > > > ([1/3] and [3/3])?
-> > 
-> > If someone sends me patch 1, I can and will review it then.  Otherwise,
-> > digging it out of a random patch series is pretty impossible with my
-> > patch load, sorry.
-> 
-> Hi Greg,
-> 
-> Sorry about this. My bad. And I have sent the [1/3] separately, please
-> review it if you have time. :)
+Is this mediatek,sysctl property required after your changes on the 
+watchdog code?
 
-Ick, somehow all of these got marked as spam by my filters.  I'll look
-at them next week, sorry for the delay.
+Arınç
 
-greg k-h
+On 11.02.2023 10:33, Sergio Paracuellos wrote:
+> MT7621 SoC provides a system controller node for accessing to some registers.
+> Add a phandle in this node to avoid using MIPS related arch operations and
+> includes in watchdog driver code.
+> 
+> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> ---
+>   .../devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml  | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml b/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml
+> index b2b17fdf4..a668d0c2f 100644
+> --- a/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml
+> @@ -19,6 +19,12 @@ properties:
+>     reg:
+>       maxItems: 1
+>   
+> +  mediatek,sysctl:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      phandle to system controller 'sysc' syscon node which
+> +      controls system registers
+> +
+>   required:
+>     - compatible
+>     - reg
+> @@ -30,4 +36,5 @@ examples:
+>       watchdog@100 {
+>         compatible = "mediatek,mt7621-wdt";
+>         reg = <0x100 0x100>;
+> +      mediatek,sysctl = <&sysc>;
+>       };
