@@ -2,87 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C974D692D86
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 04:12:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 986E0692D88
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 04:12:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbjBKDL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 22:11:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57916 "EHLO
+        id S229585AbjBKDMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 22:12:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjBKDLz (ORCPT
+        with ESMTP id S229479AbjBKDM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 22:11:55 -0500
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C9F1DB81
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 19:11:54 -0800 (PST)
+        Fri, 10 Feb 2023 22:12:27 -0500
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EF51A95F
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 19:12:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1676085113; x=1707621113;
+  t=1676085146; x=1707621146;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=jnYrIAyLiLB6n7E5Ks/+GELpUMw3KMHdn1kuZ0eLaJc=;
-  b=UZeTMndH9ezICgOOnsf2q0pUzyjOyykiZWr92lQ/9sjkEk9r7fbYhfpV
-   ozWC8eT1ETGoxVsHF24K08pp0RdxQRMIz/x+fPoyaSXc3ZVyFKXI4CY5b
-   J4hnTyJFZOIJvZr1ZQdkMUCnZlam43gjFOo5Wt/R+ZYpc+AJbC+w0CbYJ
-   GmAi5tWL8gigik8/t/xJDm0BqotFtdn4JgMU4FdNnbbXRxJjJvUCIHkEc
-   mI8xlHnX6kCJ6tgikqifIX6B3plnV8cqG5ME4zcJf5NuW+F6ZSxfaO35Y
-   +zuwRqheotRqZoGjFr0UVOF1R56AG1sBnaOtwpI16dbe1ZtEgHf7y4inc
-   g==;
+  bh=cRNFIFSiH3UIhDPtCd3elJf0fnQt1BKoidMcaUkgeTg=;
+  b=NWgto0BaXNuSJF8ecsyzR7cUMUpHngHW4Ph1U1egMw0lDBpGEA9Q8OMZ
+   N97vhtr5rhebRQ4gLgahSHiYS2B2aRIIUfInCvLH3zgoRvKO6y6BGDJiF
+   VeIOUuu6AbHGEzIsPRx5Xmsr8FTs42KLwy5Zxke0gQN04gRtzDGoiCDTh
+   7v1bPxqDcliDpF5oX559+JrDvgXYWUezWUVhlytE1p36mzSpaIfdO+hKh
+   l9EEMU95/G/seJrG0OvSeF6WHvX959pprHJKtz+ChbbsOeh5JVeOr0nGa
+   0so1xO9gn4i07hLZwsOwcpOIqep2SwtIcuoOMXA2KKj5TLji7C9QUoPiw
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.97,287,1669046400"; 
-   d="scan'208";a="222843648"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 11 Feb 2023 11:11:51 +0800
-IronPort-SDR: PIXoAO2x9GI4vV0s5ANg4XqI+8pPAyo7PB5nr/OiGbZXjXI2Lvg7Qzoo4XVkDV8RfwbAwEhLR4
- 8N/eW2gOqeMOjvE1/ChGOywPdyannw+S4gqucrMwZIw09B3edr72KM1eIGiJ0uPaNrwk6gAghO
- xwA+m3TL2sG7I6xI8FIWDE5WnDkyAXN4HdEM3bQo5if0gkIXh02UqlBW0dzwRk2mCwcqkD7vQP
- 2GjJErsArsZIz3JHIYkc5UGKK+MOM/ED9kTLS/Vw2vfr+xgL71dFvTbb4YxZgUbII/y3lDPPv9
- DOg=
+   d="scan'208";a="335008781"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 11 Feb 2023 11:12:25 +0800
+IronPort-SDR: jjssRE0CutOIGI4xl0SUDHq7QBXutnLyG7GqxhX104aK3nMVf6D3WUnAmMTiEYzxiI6y1dLSyJ
+ AnAISvpofnRwwEPfc8/zi8ENxwkbrXu44wwgeYPQashnVnv213IUuoKTjHl3OoQMQiVCIfKPL4
+ 8orbb/6rRIF8ImydRNJHBzuZKUTAqPBGwugXlNMM8+AvcEIh3TXaaAr5psU3WjOSOXVl6Rzdjk
+ 0loa3mWl1owarOs3SSYepsUu/zuV7VBoFfiABOy0nlJuJ48IXNX1dbBxB/en1Y8T2xESuo0Kjl
+ xEs=
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Feb 2023 18:29:03 -0800
-IronPort-SDR: liLyZ7dzlGyHZoFGx4CR4YK7MUJh2T0SenRLKUhoLE75MWps66WnDuyBUyx2f4becOxL8dY5Ef
- Gaq82ow2D8O6Sz4h4zF4l3FNV/CalnhMyZVMIcOnElwn1WPS8NNMPgTcPBUeT6b2zobxU5U6dd
- gc1pS9z+vqNeQQYMVw+m6qSPCcEzISyx3VGdgRoYfOk33TAk235vxqDJW2jiWAph5J76gIjJcq
- w/a7gXpTj27Jq2KmbxrTWR3z+uWRZSRldWhnwSHKEkN0RQeMfPTgOOVCZciCcU4UyDQZgUNY7S
- Stk=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Feb 2023 18:23:53 -0800
+IronPort-SDR: M2tVw36DAIGDEWXde7tOKAb5wZpGVD9xcuHt6ip2NXNcL4G0To0UEl+oLUDIFjmh9MNILe8mdd
+ ja9jAriAX4lS8FhSSLWtWYTNQTks3NjlFUnbvL9j3flKPTcdmyKyl/ZtyFM2TYRStFKdLtB6ED
+ VEB7qYklU6jyf/bzcH5MxX2huCj+zkDu+nqzd/VIv9zhDYnBN6aiTkulWCNxCqMtdGfSLCuugK
+ FT2ghNBK7Yfs19IGmZEY3iPHD60JxrHheoOEaoLtiL77JHhRdRYZZX8RfwzY0p3RCPLvwaRioY
+ +Jk=
 WDCIronportException: Internal
 Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Feb 2023 19:11:51 -0800
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Feb 2023 19:12:26 -0800
 Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PDFxy6n8Jz1RwqL
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 19:11:50 -0800 (PST)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PDFyd6zkpz1RvTr
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 19:12:25 -0800 (PST)
 Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)"
         header.d=opensource.wdc.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
         opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:content-language:references:to
+        :in-reply-to:organization:from:references:to:content-language
         :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1676085110; x=1678677111; bh=jnYrIAyLiLB6n7E5Ks/+GELpUMw3KMHdn1k
-        uZ0eLaJc=; b=tOYgXGFU0/0Gp4yZOiZSFS84Rncdi6+ds7GQOTeh8ar5hTqjGk4
-        CrG4/y0W/HYefw19wyyLOsqSsdorPLL8GnZvMeRP4LlPMsXc6cxYO872lesMCg78
-        clIiTBrNO2VmBOncHF7Hfhcm+rmt9bVBWd9nbice0y0TQNzy3fP5Bhz1xbkwRkgr
-        Dao0NwlIDOhZ+ydVu5WVWocMSrnMIVncmlh8M7FfQ8N54J/1oGsXXTxYqpXDNLbJ
-        k6mGS2D5r0y6D/WZflNrd3N0lZxgtO9Tl+CyZHBtJViQElOqQPZtltmP7XSOGl1q
-        YEscr6AJexLtOlXrBUKQxp4VGnuaiIHI+Nw==
+        1676085145; x=1678677146; bh=cRNFIFSiH3UIhDPtCd3elJf0fnQt1BKoidM
+        caUkgeTg=; b=fvGh+zp6fhxV/Fq+ILp5k2xdBGar38kgrYpySv3C4NUMq9nyAF+
+        27AvspNy6EB8RzbE2b9dATMQFhepoAelwiS2ZQ6tlpszz+6AhIjcJExU1Iv8U69m
+        VlCUB3EAXH8bflfmCPWXfRP0/E9iu7GDjyU5Gg4/vN4EpJshtaDvFUhAHe8Kp1PD
+        /JfumgdHbQuiZdXqeatE7aBAg8lOuwznqFWQ8NJED4Ed4uSFCVTT2aLANjbPXLaW
+        KAojQHPL7JNOmSuLNhIv1+lNAtlgPjHr+ft5/Bwp1aRpQDu/WO/QcZPhSU1HY8Tm
+        baHAZUUrxfTG/+W7x7fnuvXgYXcZV5XPABg==
 X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
 Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
         by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id O12bgW3zAeaD for <linux-kernel@vger.kernel.org>;
-        Fri, 10 Feb 2023 19:11:50 -0800 (PST)
+        with ESMTP id e-4ZDqUV5zNf for <linux-kernel@vger.kernel.org>;
+        Fri, 10 Feb 2023 19:12:25 -0800 (PST)
 Received: from [10.225.163.108] (unknown [10.225.163.108])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PDFxx5svxz1RvLy;
-        Fri, 10 Feb 2023 19:11:49 -0800 (PST)
-Message-ID: <dce110de-649d-cde8-9401-346675c95263@opensource.wdc.com>
-Date:   Sat, 11 Feb 2023 12:11:48 +0900
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PDFyd06Yrz1RvLy;
+        Fri, 10 Feb 2023 19:12:24 -0800 (PST)
+Message-ID: <d2a0c3bd-d7ef-85ff-6268-712c098e9d32@opensource.wdc.com>
+Date:   Sat, 11 Feb 2023 12:12:23 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
 Subject: Re: [PATCH] ata: libata-core: Disable READ LOG DMA EXT for Samsung
  MZ7LH
+Content-Language: en-US
 To:     Patrick McLean <chutzpah@gentoo.org>, linux-kernel@vger.kernel.org
 Cc:     linux-ide@vger.kernel.org
 References: <20230210215151.812839-1-chutzpah@gentoo.org>
-Content-Language: en-US
 From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Organization: Western Digital Research
 In-Reply-To: <20230210215151.812839-1-chutzpah@gentoo.org>
@@ -90,8 +90,7 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -127,15 +126,14 @@ On 2/11/23 06:51, Patrick McLean wrote:
 >  						ATA_HORKAGE_ZERO_AFTER_TRIM |
 >  						ATA_HORKAGE_NO_NCQ_ON_ATI },
 > +	{ "SAMSUNG*MZ7LH*",		NULL,	ATA_HORKAGE_NO_NCQ_TRIM |
+
+Are you sure about the upper case here for this drive model name ?
+
 > +						ATA_HORKAGE_ZERO_AFTER_TRIM |
 > +						ATA_HORKAGE_NO_NCQ_ON_ATI, },
 >  	{ "FCCT*M500*",			NULL,	ATA_HORKAGE_NO_NCQ_TRIM |
 >  						ATA_HORKAGE_ZERO_AFTER_TRIM },
 >  
-
-Looks OK, but ATA_HORKAGE_NO_NCQ_ON_ATI is for PCI vendor ID 1002h. AMD
-also has vendor ID 1022h. Did you check you adapter vendor ID & tested
-this patch ?
 
 -- 
 Damien Le Moal
