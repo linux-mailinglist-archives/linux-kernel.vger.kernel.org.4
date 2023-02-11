@@ -2,94 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB51692FE6
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 11:08:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A729692FE9
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 11:09:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbjBKKIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 05:08:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45070 "EHLO
+        id S229772AbjBKKJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 05:09:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBKKIs (ORCPT
+        with ESMTP id S229523AbjBKKJI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 05:08:48 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515F7301BC
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 02:08:47 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 11 Feb 2023 05:09:08 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26C632E44;
+        Sat, 11 Feb 2023 02:09:02 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DD3071EC0758;
-        Sat, 11 Feb 2023 11:08:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1676110125;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=SjUwam36BHvZqpLaoUqMHGyknDCmWaXXVc3iHJRhjyc=;
-        b=O6/GowsgzYlVcPho8Wb/1vNXn3nOre++k619JopjK6rUqY8I5XkmmviDUq3IfUNa3qEJp2
-        lBZzunsKvqmbhKFle3Y9IOXOIEFvWW9GUd+x8CLVP33ZOXkXaJDsAUFKe8nCrNHZVdPvG8
-        R994LpzXJ8YxG2EeenCn7hLjPhx1+NQ=
-Date:   Sat, 11 Feb 2023 11:08:39 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        lists@nerdbynature.de, mikelley@microsoft.com,
-        torvalds@linux-foundation.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v2 1/8] x86/mtrr: split off physical address size
- calculation
-Message-ID: <Y+dpJ5BY1gI9jaI2@zn.tnic>
-References: <20230209072220.6836-1-jgross@suse.com>
- <20230209072220.6836-2-jgross@suse.com>
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id B70BE42300;
+        Sat, 11 Feb 2023 10:08:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1676110140; bh=xgElBP+tjDeZkk5no9nEVPZ3v18CazedQGwUh/vJETY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=JTGXd2AlOil2xNP6nYXSH5OsC7cMUTKh+G/WVZq/vjZOIFMtzd48SnDx53Mg/VcND
+         NfPRMPuvczFn4Ie2BgxvPlQHe7bAhsXUjKVuBCsB4E+L6BagmaMBpMRNa3ntuui5WS
+         PEZzsusPZw8DNVpngYjxdVpa60xQOIrDys+JMkVs28ZbiaV5w/5SMCMPzmvSaZHzFe
+         N6+bO8EH8aZX8biwIz84pNymvzZ3vuSll3vEg0g+QXUKEgAfvxuMiFdXlgE7DIGNjZ
+         RSKFel60jXPwhiambKMVND1UKQ0yLdnnuionb/8wQZ91Wmam+5AvQbr5igoVWIaKR8
+         x+SQSq5juSoRQ==
+Message-ID: <624c0a20-f4e6-14a5-02a2-eaf7b36e9331@marcan.st>
+Date:   Sat, 11 Feb 2023 19:08:50 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230209072220.6836-2-jgross@suse.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 1/4] wifi: brcmfmac: Rename Cypress 89459 to BCM4355
+Content-Language: en-US
+To:     Ping-Ke Shih <pkshih@realtek.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Alexander Prutskov <alep@cypress.com>,
+        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
+        Wright Feng <wright.feng@cypress.com>,
+        Ian Lin <ian.lin@infineon.com>,
+        Soontak Lee <soontak.lee@cypress.com>,
+        Joseph chuang <jiac@cypress.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Aditya Garg <gargaditya08@live.com>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        "asahi@lists.linux.dev" <asahi@lists.linux.dev>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "brcm80211-dev-list.pdl@broadcom.com" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Arend van Spriel <arend.vanspriel@broadcom.com>
+References: <20230210025009.21873-1-marcan@marcan.st>
+ <20230210025009.21873-2-marcan@marcan.st>
+ <0cd45af5812345878faf0dc8fa6b0963@realtek.com>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <0cd45af5812345878faf0dc8fa6b0963@realtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 08:22:13AM +0100, Juergen Gross wrote:
-> @@ -654,42 +638,54 @@ void __init mtrr_bp_init(void)
->  			    (boot_cpu_data.x86_stepping == 0x3 ||
->  			     boot_cpu_data.x86_stepping == 0x4))
->  				phys_addr = 36;
-> -
-> -			size_or_mask = SIZE_OR_MASK_BITS(phys_addr);
-> -			size_and_mask = ~size_or_mask & 0xfffff00000ULL;
->  		} else if (boot_cpu_data.x86_vendor == X86_VENDOR_CENTAUR &&
->  			   boot_cpu_data.x86 == 6) {
->  			/*
->  			 * VIA C* family have Intel style MTRRs,
->  			 * but don't support PAE
->  			 */
-> -			size_or_mask = SIZE_OR_MASK_BITS(32);
-> -			size_and_mask = 0;
->  			phys_addr = 32;
->  		}
-> +	}
-> +
-> +	size_or_mask = ~((1ULL << ((phys_addr) - PAGE_SHIFT)) - 1);
+On 10/02/2023 12.42, Ping-Ke Shih wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Hector Martin <marcan@marcan.st>
+>> Sent: Friday, February 10, 2023 10:50 AM
+>> To: Arend van Spriel <aspriel@gmail.com>; Franky Lin <franky.lin@broadcom.com>; Hante Meuleman
+>> <hante.meuleman@broadcom.com>; Kalle Valo <kvalo@kernel.org>; David S. Miller <davem@davemloft.net>; Eric
+>> Dumazet <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>
+>> Cc: Alexander Prutskov <alep@cypress.com>; Chi-Hsien Lin <chi-hsien.lin@cypress.com>; Wright Feng
+>> <wright.feng@cypress.com>; Ian Lin <ian.lin@infineon.com>; Soontak Lee <soontak.lee@cypress.com>; Joseph
+>> chuang <jiac@cypress.com>; Sven Peter <sven@svenpeter.dev>; Alyssa Rosenzweig <alyssa@rosenzweig.io>;
+>> Aditya Garg <gargaditya08@live.com>; Jonas Gorski <jonas.gorski@gmail.com>; asahi@lists.linux.dev;
+>> linux-wireless@vger.kernel.org; brcm80211-dev-list.pdl@broadcom.com; SHA-cyfmac-dev-list@infineon.com;
+>> netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Hector Martin <marcan@marcan.st>; Arend van Spriel
+>> <arend.vanspriel@broadcom.com>
+>> Subject: [PATCH v3 1/4] wifi: brcmfmac: Rename Cypress 89459 to BCM4355
+>>
+>> The commit that introduced support for this chip incorrectly claimed it
+>> is a Cypress-specific part, while in actuality it is just a variant of
+>> BCM4355 silicon (as evidenced by the chip ID).
+>>
+>> The relationship between Cypress products and Broadcom products isn't
+>> entirely clear but given what little information is available and prior
+>> art in the driver, it seems the convention should be that originally
+>> Broadcom parts should retain the Broadcom name.
+>>
+>> Thus, rename the relevant constants and firmware file. Also rename the
+>> specific 89459 PCIe ID to BCM43596, which seems to be the original
+>> subvariant name for this PCI ID (as defined in the out-of-tree bcmdhd
+>> driver).
+>>
+>> v2: Since Cypress added this part and will presumably be providing
+>> its supported firmware, we keep the CYW designation for this device.
+>>
+>> v3: Drop the RAW device ID in this commit. We don't do this for the
+>> other chips since apparently some devices with them exist in the wild,
+>> but there is already a 4355 entry with the Broadcom subvendor and WCC
+>> firmware vendor, so adding a generic fallback to Cypress seems
+>> redundant (no reason why a device would have the raw device ID *and* an
+>> explicitly programmed subvendor).
+> 
+> Do you really want to add changes of v2 and v3 to commit message? Or,
+> just want to let reviewers know that? If latter one is what you want,
+> move them after s-o-b with delimiter ---
 
-Too many brackets because you've taken the macro and put in the argument
-directly.
+Both; I thought those things were worth mentioning in the commit message
+as it stands on its own, and left the version tags in so reviewers know
+when they were introduced.
 
-In any case, reviewing patches which do code movement *and* changes in
-the same diff is always unnecessarily nasty. Please do the mechanical
-code movement only - cleanups come ontop.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+- Hector
