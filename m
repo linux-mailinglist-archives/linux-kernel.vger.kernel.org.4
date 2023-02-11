@@ -2,123 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41486930BF
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 12:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 779696930C1
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 12:58:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjBKL4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 06:56:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
+        id S230047AbjBKL6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 06:58:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjBKL4F (ORCPT
+        with ESMTP id S229624AbjBKL6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 06:56:05 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FC418A81;
-        Sat, 11 Feb 2023 03:55:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676116547; x=1707652547;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=95wQjL+Zc8jViWbxfkoTEwvp3PeuR6v8ELcSbnJPmnQ=;
-  b=HFtbvswWwDMdNR/JtZH28FlPUYxnUwXhOO1pL9JqI4e5n/aIrPGi+obE
-   y5moRHRhObbMUwfYPKWCZu0TMRkz/gls5Zh+8elGTb+LMujWUmXwfBbiJ
-   IrJC734tYZXNKIS3DuR4xZ2tdvrf+l+Z2PaVB14gFB0w6+e5Mw8rK76ZH
-   nxRXLg81iPih57rajSEevX3MY4pOQnf0Cg7c890kHBzInvJDR+qd490Cm
-   PNJU66vseLxVZYR/vrcAEQ6KzYerZJc7wGWqF8fEXSuguPGTTirh3zDAi
-   q60flafmzfGF9cSOzuSmjv7ekrctl4OW9eJzYrhv0GaSPtQpL0WkLWiTB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="328300434"
-X-IronPort-AV: E=Sophos;i="5.97,289,1669104000"; 
-   d="scan'208";a="328300434"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2023 03:55:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="811103125"
-X-IronPort-AV: E=Sophos;i="5.97,289,1669104000"; 
-   d="scan'208";a="811103125"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Feb 2023 03:55:33 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1pQoTc-005TIG-1R;
-        Sat, 11 Feb 2023 13:55:32 +0200
-Date:   Sat, 11 Feb 2023 13:55:32 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Asmaa Mnebhi <asmaa@nvidia.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] Support NVIDIA BlueField-3 pinctrl driver
-Message-ID: <Y+eCNEHcmo4qapcI@smile.fi.intel.com>
-References: <cover.1676042188.git.asmaa@nvidia.com>
- <acd85e20d3e8d45ce3254e6ffe5ad2b5039b1a34.1676042188.git.asmaa@nvidia.com>
+        Sat, 11 Feb 2023 06:58:08 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6358A2B2BD;
+        Sat, 11 Feb 2023 03:58:07 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so5865381wms.1;
+        Sat, 11 Feb 2023 03:58:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NRXF46+mjeBDdYeATScPjTk613xPVVf9nci3gZ3rPFM=;
+        b=gP3nwW5NmOGyIYbeuxc2DLrPiZoBThXf731AGcyvQUeZOOVbGQaqBHGPIXcqHQGuhr
+         GYHB966YKm0BByoAU+4cRdXI50d3YqNQ95wILcGlMpM9ZGpIhJgUm1W/rvTEuqgrMJLn
+         43lqoFO/YCWXRpgGb41R8xXEFqTeAP+QFx/3PJDpP0OSxEmMzS2CWr56dwUEaZ16uwUo
+         ksqsn6NFbIQ2UOUA9hbqmjm0lXdijUW4PggkAKfcqYEQ5+2Bzsb2moCSZKQ/YPSg59V7
+         3cO2NphwtJFWgOSqTVLxX6wHWnZnSlv2Pd3l4DD3s062Lu3Pqk8a3WocK+vwtnTs1Jhs
+         LJCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NRXF46+mjeBDdYeATScPjTk613xPVVf9nci3gZ3rPFM=;
+        b=kPKgC5vDQAjL4vFQFDYQwcTnV+ysnG3F56dfgV5zpvjlQIlu9L7gPTVvDVoSNu6cjQ
+         0mP1EP9LwNnD1Rfmq75MVTblCeTQ3okEsxy8pKGOrCEcp8k7QQnt9ke71sCA+82DiCsX
+         SvQk0zLPexbPSkaG8zBCxLs8ElZd1R9bk+MnZCPLtW4hVQI5DxXLFvK1im/nkkpWlpFO
+         aeHsLbBLTUcRidJa8UD9XpuQdiydPsRYRuYB8YWgUsSqwnqkGicrZjWENayT7EOOyLhu
+         3WL8KovbcG9GiIEQglhjJbQx2zr7bKMP7szVpyJR5nSYw+SJo5alPfz97qfFHli7HUFk
+         D3Ag==
+X-Gm-Message-State: AO0yUKUvIILDUZGFxtQ/Do+wbi17qakOyPXXuy+yKfBkb1JBq5KBKDcw
+        OkTnHW/01iIkj7D5ihIeb/lx5GL2nWV89A==
+X-Google-Smtp-Source: AK7set/O6l5BC3r2vT+5rSrInP1G4K0G19SNWDI+i/eg9xgkfeECpZk/ZYoSpP/49P1M0Y9gPGTmYw==
+X-Received: by 2002:a05:600c:998:b0:3dc:59ee:7978 with SMTP id w24-20020a05600c099800b003dc59ee7978mr14827167wmp.38.1676116685784;
+        Sat, 11 Feb 2023 03:58:05 -0800 (PST)
+Received: from michael-VirtualBox.. (109-186-125-17.bb.netvision.net.il. [109.186.125.17])
+        by smtp.googlemail.com with ESMTPSA id k21-20020a05600c1c9500b003e01493b136sm11646027wms.43.2023.02.11.03.58.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Feb 2023 03:58:05 -0800 (PST)
+From:   Michael Zaidman <michael.zaidman@gmail.com>
+To:     jikos@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        Michael Zaidman <michael.zaidman@gmail.com>
+Subject: [PATCH v1 0/1] HID: ft260: add GPIO support
+Date:   Sat, 11 Feb 2023 13:57:51 +0200
+Message-Id: <20230211115752.26276-1-michael.zaidman@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <acd85e20d3e8d45ce3254e6ffe5ad2b5039b1a34.1676042188.git.asmaa@nvidia.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 10:39:41AM -0500, Asmaa Mnebhi wrote:
-> This patch adds support to the BlueField-3 SoC pin controller.
+The FTDI FT260 chip implements USB to I2C/UART bridges through two USB
+HID class interfaces. The first is for I2C, and the second is for UART.
+Each interface is independent, and the kernel detects it as a separate
+USB hidraw device. In addition, the chip implements 14 GPIOs via
+multifunctional pins.
 
-Please read Submitting Patches on how to create better commit message.
+This patch set adds GPIO support.
 
-> It allows muxing individual GPIOs to switch from the default
-> hardware mode to software controlled mode.
+Michael Zaidman (1):
+  HID: ft260: add GPIO support
 
-...
-
-> +config PINCTRL_MLXBF
-> +	tristate "NVIDIA BlueField-3 SoC Pinctrl driver"
-> +	depends on (MELLANOX_PLATFORM && ARM64 && ACPI)
-
-This is wrong.
-Please make sure you cover more testing.
-Also, do you really need an ACPI dependency?
-
-> +	select PINMUX
-> +	select GPIOLIB
-> +	select GPIOLIB_IRQCHIP
-> +	select GPIO_MLXBF3
-> +	help
-> +	  This selects the pinctrl driver for BlueField-3 SoCs.
-
-Same comment as per previous patch.
-
-> +// SPDX-License-Identifier: GPL-2.0-only or BSD-3-Clause
-> +
-> +/*
-> + * Copyright (C) 2022 NVIDIA CORPORATION & AFFILIATES
-> + */
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/platform_device.h>
-
-Same comments as per previous patch.
-
-> +#include <linux/pinctrl/pinctrl.h>
-> +#include <linux/pinctrl/pinmux.h>
-
-Based on the above, I stop here and wait for next version where comments given
-anywhere are applied to all appropriate places.
-
-...
-
-> +	BUILD_BUG_ON(ARRAY_SIZE(mlxbf_pinctrl_single_group_names) !=
-> +		     ARRAY_SIZE(mlxbf_pinctrl_single_group_pins));
-
-static_assert().
+ drivers/hid/hid-ft260.c | 476 +++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 447 insertions(+), 29 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
