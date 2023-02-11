@@ -2,186 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609E96933FF
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 22:25:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C068A693406
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 22:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbjBKVZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 16:25:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42276 "EHLO
+        id S229710AbjBKVea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 16:34:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjBKVZu (ORCPT
+        with ESMTP id S229449AbjBKVe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 16:25:50 -0500
-Received: from mail.multiname.org (h4.multiname.org [94.130.68.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB92B444;
-        Sat, 11 Feb 2023 13:25:47 -0800 (PST)
-Received: from webmail.multiname.org (unknown [10.0.10.104])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.multiname.org (Postfix) with ESMTPSA id 4PDkD913TjzPLtZ3;
-        Sat, 11 Feb 2023 22:25:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ccbib.org; s=20220806;
-        t=1676150745;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k6EufGqREBPwPsUWjo0kh2zq6qE8EzqtdiieAXNT5C4=;
-        b=Uj9TZrucHMe1XdYpNPJDGIJOXKKfNcLBiJnmxKPpdUM0aku4c7Or/LKzJ35Pe9Uj38bB4o
-        kApbAOX1P5D2HI/p4IzwXM+9HREoHCtoqWzMW1ORn/lCBvWLNEtdKeSpCc/eadUGVmFJwl
-        5iwnv8tle/rOXgYMkSu0P9zTg6S6ZSP+DBCkew0oIfE+irotryKVNuXuqZaXylrhJargHP
-        tl3VQ/oVE3rT0KYaswa0EV+8qpQXeecImkvDBVSI601l5uGAMQohMWQBIib0Iep73DNTqa
-        dTwyVZhhjWvvEcjjYl4dkeHZADSIkHwqVvngrpfGRkam/ArL+uzRAjPiE80Q2jaaiQuL/W
-        6dVrlDlBqsmXqEInbiK5jeDdfef6vR+5OymQouCVGmxkQPktjBheMSFYJundoAtL1vhe6y
-        ijYXJxIArNAOsiS6SQZpLHnLvsh7+Ho+beU3oV0mztAqXO6tj91lN+OmVATLgCfVT0gPb/
-        SdhFKt+3bq9e+7icWhbyC3nV7+C0IdiYy8u2axbat90qLkrWA7ukbfMWcSiZyYydR6IXzk
-        o5f90FEUSvZlSNCrmW3Ng6a4pTrDL+yjWVfD+mOW1a8CTIUGp3luETd1vV5847f5Iphrgb
-        49tRY6uowU2vSzaDpj1dnbCaLRmyN6bpdDj1zeTkORBS4nNYZYJxw=
+        Sat, 11 Feb 2023 16:34:29 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2470218B22;
+        Sat, 11 Feb 2023 13:34:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676151268; x=1707687268;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UGdEtbEAzbSERnty//wgt/U2Epe6F7MQ024/er2PNLc=;
+  b=T/I4aLIJ78omiyrVriXFdLGF0LLgv1OANiAU2dlO4nMyTOfXF86KoG7X
+   byVBDjC8E9fVF+NDil/1yFqR3o8O5gafQkUuOLBFI8TQ3s7q7C/RqEg19
+   yKOGQL82ukyS0U4BUmsVclVZeE3P1Io6XkEkvXAwu/WzOr4cpjnHjj6f+
+   t4MB7Veyw4L80EFBvsMnkIJYdjowIyItDg2dSdFW8qq3+TcYtjKMQwEI2
+   AHbSB+XtYxwBHhT85uUkuwS95llOonNgzbi9wLVE/++3xegQowWurRAcP
+   lHbHpwo1Rgev2RKQcW8wcTdjtkU+6AP82HZXWKwmw9mcu3h08466WCJtm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="328356077"
+X-IronPort-AV: E=Sophos;i="5.97,290,1669104000"; 
+   d="scan'208";a="328356077"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2023 13:34:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="737081913"
+X-IronPort-AV: E=Sophos;i="5.97,290,1669104000"; 
+   d="scan'208";a="737081913"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 11 Feb 2023 13:34:26 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pQxVp-0006oj-1t;
+        Sat, 11 Feb 2023 21:34:25 +0000
+Date:   Sun, 12 Feb 2023 05:33:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Michael Zaidman <michael.zaidman@gmail.com>, jikos@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org,
+        Michael Zaidman <michael.zaidman@gmail.com>
+Subject: Re: [PATCH v1 1/1] HID: ft260: add GPIO support
+Message-ID: <202302120552.KrGf3GNw-lkp@intel.com>
+References: <20230211115752.26276-2-michael.zaidman@gmail.com>
 MIME-Version: 1.0
-Date:   Sat, 11 Feb 2023 22:25:44 +0100
-From:   harald@ccbib.org
-To:     pelzi@flying-snail.de
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: dht11: Read bit stream from IRQ on falling edges
- only
-In-Reply-To: <d96a7c1f-4a12-18c9-377d-df69b17168d2@feldner-bv.de>
-References: <Y9a0RZ+inWs44Kn8@debian-qemu.internal.flying-snail.de>
- <20230130202216.42034309@jic23-huawei>
- <45efc11e5b4cdba3766f19190bb65840@ccbib.org>
- <e1acd14e-400b-8896-bdc1-0b364cc52198@feldner-bv.de>
- <ac9ab2224ad19ac606de38fa474dce0c@ccbib.org>
- <d96a7c1f-4a12-18c9-377d-df69b17168d2@feldner-bv.de>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <130ee4a2c77ac9bd14a11aa38efa6d72@ccbib.org>
-X-Sender: harald@ccbib.org
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230211115752.26276-2-michael.zaidman@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-11 11:41, pelzi@flying-snail.de wrote:
-> Am 07.02.23 um 11:33 schrieb harald@ccbib.org:
->> 2) A theoretical analysis about possible regressions depending on 
->> timer
->> resolution as mentioned in an earlier message.
-> 
-> This sounds as if you were doing such an analysis for the original
-> version. Can you share this work so I can attempt to repeat it
-> for the modified algorithm?
+Hi Michael,
 
-The short version is in the comments. The relevant section is:
-/*
-  * Data transmission timing:
-  * Data bits are encoded as pulse length (high time) on the data line.
-  * 0-bit: 22-30uS -- typically 26uS (AM2302)
-  * 1-bit: 68-75uS -- typically 70uS (AM2302)
-  * The acutal timings also depend on the properties of the cable, with
-  * longer cables typically making pulses shorter.
-  *
-  * Our decoding depends on the time resolution of the system:
-  * timeres > 34uS ... don't know what a 1-tick pulse is
-  * 34uS > timeres > 30uS ... no problem (30kHz and 32kHz clocks)
-  * 30uS > timeres > 23uS ... don't know what a 2-tick pulse is
-  * timeres < 23uS ... no problem
+I love your patch! Perhaps something to improve:
 
-The long version I probably don't have anymore, but it's not rocket
-science. Just multiples of the time resolution. Eg:
-34 = 68/2
-23 = 68/3
+[auto build test WARNING on hid/for-next]
+[also build test WARNING on linus/master v6.2-rc7 next-20230210]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->> 3) Ideally figuring out, why your version performs better then what we
->> currently have. I have some suspicions, but better understanding might
->> lead to a better approach. E.g. maybe recording the other edges isn't
->> the problem so long as we ignore them during decoding?
->> 
->> As I see it, the main thing we are losing with your current proposal 
->> is
->> some diagnostic features. If we keep them as much as possible and have
->> regressions understood and covered, I see no reason to reject your 
->> idea.
-> 
-> That's why I changed the script to separately count EIO and ETIMEDOUT.
-> The latter indicates missed edges, the former failure to interpret
-> the data read.
-> 
-> What I see is that the patched driver's errors mostly result from 
-> missed
-> IRQ (note in contrast to last results, I cut the number of reads):
-> 
-> #    real[s]    user[s]    sys[s]    success    EIO    timeout err per 
-> succ
-> 1     20.57    0.25    0.03    10    0    0    0
-> 2     24.74    0.25    0.07    10    0    4    0,4
-> 3     21.55    0.20    0.07    10    0    0    0
-> 4     25.81    0.25    0.08    10    0    5    0,5
-> 5     21.56    0.23    0.05    10    0    0    0
-> 6     21.58    0.22    0.05    10    1    0    0,1
-> 7     25.86    0.24    0.08    10    1    5    0,6
-> 8     22.69    0.27    0.05    10    1    1    0,2
-> 9     23.67    0.26    0.04    10    0    2    0,2
-> 10     20.55    0.23    0.04    10    0    0    0
-> 
-> Whereas the original driver has more errors resulting from
-> mis-interpreted data:
-> 
-> #    real[s]    user[s]    sys[s]    success    EIO    timeout err per 
-> succ
-> 1     24.88    0.26    0.07    10    5    4    0,9
-> 2     25.91    0.26    0.07    10    4    5    0,9
-> 3     31.27    0.31    0.10    10    6    10    1,6
-> 4     29.17    0.32    0.11    10    7    8    1,5
-> 5     22.73    0.24    0.08    10    4    2    0,6
-> 6     46.46    0.35    0.25    10    19    24    4,3
-> 7     23.79    0.23    0.09    10    3    3    0,6
-> 8     30.17    0.27    0.11    10    6    9    1,5
-> 9     23.77    0.26    0.06    10    3    2    0,5
-> 10     20.58    0.24    0.06    10    1    0    0,1
-> 
-> I tried a variant that reads falling and rising edges and
-> uses the redundany of information to eliminate some errors.
-> This did not work out at all.
+url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Zaidman/HID-ft260-add-GPIO-support/20230211-195918
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
+patch link:    https://lore.kernel.org/r/20230211115752.26276-2-michael.zaidman%40gmail.com
+patch subject: [PATCH v1 1/1] HID: ft260: add GPIO support
+config: arm-randconfig-s041-20230210 (https://download.01.org/0day-ci/archive/20230212/202302120552.KrGf3GNw-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/d3ddadc80df8c149f97dc8ab8fa51ba53f5638cb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Michael-Zaidman/HID-ft260-add-GPIO-support/20230211-195918
+        git checkout d3ddadc80df8c149f97dc8ab8fa51ba53f5638cb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/hid/
 
-That's an interesting data point. Care to share the code?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302120552.KrGf3GNw-lkp@intel.com/
 
-> It seems a relevant source of
-> trouble is delayed call to the IRQ handler. The problem is
-> that only then you try to find out if this IRQ is due to
-> rising or falling edge by reading the current GPIO level. When
-> you are to late, this might already have changed and you read
-> a level, but for the edge of _this_ level you'll receive another
-> IRQ a few us later.
+sparse warnings: (new ones prefixed by >>)
+>> drivers/hid/hid-ft260.c:1289:1: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected unsigned short [usertype] value @@     got restricted __le16 [addressable] [usertype] clock @@
+   drivers/hid/hid-ft260.c:1289:1: sparse:     expected unsigned short [usertype] value
+   drivers/hid/hid-ft260.c:1289:1: sparse:     got restricted __le16 [addressable] [usertype] clock
 
-I doubt this interpretation. Mostly I don't think you would even
-get a second interrupt in this case: It is just a flag that
-indicates something has changed, not a counter.
+vim +1289 drivers/hid/hid-ft260.c
 
-I expect, that you just get one missing edge (which we don't notice,
-because we are tolerant about a missing preamble), which would
-show as two consecutive edges of the same value - not three as
-your explanation suggests.
+6a82582d9fa438 Michael Zaidman 2021-02-19  1287  
+6a82582d9fa438 Michael Zaidman 2021-02-19  1288  FT260_I2CST_ATTR_SHOW(clock);
+6a82582d9fa438 Michael Zaidman 2021-02-19 @1289  FT260_WORD_ATTR_STORE(clock, ft260_set_i2c_speed_report,
+d3ddadc80df8c1 Michael Zaidman 2023-02-11  1290  		      FT260_SET_I2C_CLOCK_SPEED, ft260_attr_dummy_func);
+6a82582d9fa438 Michael Zaidman 2021-02-19  1291  static DEVICE_ATTR_RW(clock);
+6a82582d9fa438 Michael Zaidman 2021-02-19  1292  
 
-I don't see, why it wouldn't be possible to recover from that,
-in cases, where the delay is small enough for your version to work.
-
-> So the reason that this patch here is showing
-> lower error rates seems to be the lower probability of such
-> things happening by halving the IRQs to be handled, _plus_
-> the information from the hardware, that this IRQ was due
-> to a falling edge.
-
-The first part is likely true at the moment and seems enough to
-explain the data you have shown. I still believe we could be
-smart about the second part in software.
-
-Thanks,
-Harald
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
