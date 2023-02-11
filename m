@@ -2,134 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 232CD6932CD
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 18:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1906932CF
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 18:18:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbjBKRST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 12:18:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
+        id S229630AbjBKRSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 12:18:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjBKRSR (ORCPT
+        with ESMTP id S229618AbjBKRSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 12:18:17 -0500
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08655193E0
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 09:18:15 -0800 (PST)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4PDckT72HJz9sTR;
-        Sat, 11 Feb 2023 18:18:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
-        s=MBO0001; t=1676135890;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lmPdZlycIN75f7vuovHWz+/2BHjIn41XrnOla1taexs=;
-        b=GYrpv1AUe7sTIk2cvOrNsK752yR8v7HrvOlN92yTHSCSc4EWa5UIJD34xk7rbZRrW8bfIY
-        yuBpn1D1QwG3+CAzHienzwaJa7T0GbfQ4WDub7xedHFxOqDO+ROJbhIT3JBzozZSK1TcCQ
-        7uhgTQaMqcdq3Fs5E8JuR0wzTzR6owIkT3di5jZU6WFH+YnWQDC3JBRsa1v1R0EsJ3pe+H
-        FE14BzPb4sesD1iZDRXNiUwxlWTin5aeyDQic6aEu+NJ6GDR0FwPZfoZWHG/bgbg9doNZm
-        YmjL2ZjU75t12b5UgiYz8zxSPPshHHoh0U3L2ct4lC2iF1nToBb2M/sDMNJ0bw==
-From:   Frank Oltmanns <frank@oltmanns.dev>
-To:     =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
-        Purism Kernel Team <kernel@puri.sm>,
-        Ondrej Jirman <megous@megous.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org (open list:DRM PANEL DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     Ondrej Jirman <megi@xff.cz>, Frank Oltmanns <frank@oltmanns.dev>,
-        Samuel Holland <samuel@sholland.org>
-Subject: [PATCH 1/1] drm/panel: st7703: Pick different reset sequence
-Date:   Sat, 11 Feb 2023 18:17:48 +0100
-Message-Id: <20230211171748.36692-2-frank@oltmanns.dev>
-In-Reply-To: <20230211171748.36692-1-frank@oltmanns.dev>
-References: <20230211171748.36692-1-frank@oltmanns.dev>
+        Sat, 11 Feb 2023 12:18:22 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C05D193E0
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 09:18:20 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id g8so9320021qtq.13
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 09:18:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rt94ODpGzToIGuiugKNP8sTPsxgShvJ5t+d54bpkATI=;
+        b=isXX/fBIHoWr9pj5V+k4FGzpoQYb6cHvvHeTZco7/A8Rlom/fga0taLPOaVpkBOBYk
+         9UeIVQej6DggjoJPuz+UxTpwEv8AnssHPFGBoygWR0iM8JVFeQbmKYLh597ofo1JMtKp
+         HnMoRHeDhkoEOUOUwWJO87Rgr6M0zEor1keXc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rt94ODpGzToIGuiugKNP8sTPsxgShvJ5t+d54bpkATI=;
+        b=SBDabS04wwC8WERcedIQ4h2tLitP4h07XKqkcyEDvPCdOpsA4kXTes1fHd8QQ431Uz
+         LpdFdCJu1o+4hpt6cfxVOEYrvDEVn8hJ2Ant3nieQ7Zk3wMIYiNLhMX5HMsZEXo7B+xG
+         upBDI+7Rylrgd3YNhRW2htlqZXqKR5FonZlkxpTWsy+9oQ8Tua1PgQ5L6PmV+IHqtDQC
+         nEvZOXJUUi1taDmHMImsBo12FkJojSp6oSj8HWJ2GhkkRUb+5grLutTB0fodEAHrSEaj
+         /rRRQhY/4p6+3c4ec2IPdKxBnX3ZecturzpnyeOJr0fc/+djxxIu/4CV/TII77zdLu+d
+         bo8Q==
+X-Gm-Message-State: AO0yUKU/Wbtfxpb2j3e2Q7gzhHFD4QQXhdFE0evCVwUnEhaKosRE7uzA
+        i6KUIsLapj7e2wZiqqeSAu75Mg==
+X-Google-Smtp-Source: AK7set/N7Y0as6ZG7e/Zr/eUqDMvW3qUjjBSg83rJTcRExflVo3PK+MGY8qYLaQSIy2xQLkziGiVBQ==
+X-Received: by 2002:ac8:7d88:0:b0:3b4:2b61:da32 with SMTP id c8-20020ac87d88000000b003b42b61da32mr36238315qtd.59.1676135899033;
+        Sat, 11 Feb 2023 09:18:19 -0800 (PST)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id p73-20020a37424c000000b0072692330190sm5978113qka.64.2023.02.11.09.18.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Feb 2023 09:18:18 -0800 (PST)
+Date:   Sat, 11 Feb 2023 17:18:17 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com
+Subject: Re: Current LKMM patch disposition
+Message-ID: <Y+fN2fvUjGDWBYrv@google.com>
+References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
+ <Y920w4QRLtC6kd+x@rowland.harvard.edu>
+ <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
+ <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9+41ctA54pjm/KG@google.com>
+ <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4PDckT72HJz9sTR
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ondrej Jirman <megi@xff.cz>
+On Mon, Feb 06, 2023 at 01:39:07PM -0500, Alan Stern wrote:
+> On Sun, Feb 05, 2023 at 02:10:29PM +0000, Joel Fernandes wrote:
+> > On Sat, Feb 04, 2023 at 02:24:11PM -0800, Paul E. McKenney wrote:
+> > > On Sat, Feb 04, 2023 at 09:58:12AM -0500, Alan Stern wrote:
+> > > > On Fri, Feb 03, 2023 at 05:49:41PM -0800, Paul E. McKenney wrote:
+> > > > > On Fri, Feb 03, 2023 at 08:28:35PM -0500, Alan Stern wrote:
+> > > > > > The "Provide exact semantics for SRCU" patch should have:
+> > > > > > 
+> > > > > > 	Portions suggested by Boqun Feng and Jonas Oberhauser.
+> > > > > > 
+> > > > > > added at the end, together with your Reported-by: tag.  With that, I 
+> > > > > > think it can be queued for 6.4.
+> > > > > 
+> > > > > Thank you!  Does the patch shown below work for you?
+> > > > > 
+> > > > > (I have tentatively queued this, but can easily adjust or replace it.)
+> > > > 
+> > > > It looks fine.
+> > > 
+> > > Very good, thank you for looking it over!  I pushed it out on branch
+> > > stern.2023.02.04a.
+> > > 
+> > > Would anyone like to ack/review/whatever this one?
+> > 
+> > Would it be possible to add comments, something like the following? Apologies
+> > if it is missing some ideas. I will try to improve it later.
+> > 
+> > thanks!
+> > 
+> >  - Joel
+> > 
+> > ---8<-----------------------
+> > 
+> > diff --git a/tools/memory-model/linux-kernel.bell b/tools/memory-model/linux-kernel.bell
+> > index ce068700939c..0a16177339bc 100644
+> > --- a/tools/memory-model/linux-kernel.bell
+> > +++ b/tools/memory-model/linux-kernel.bell
+> > @@ -57,7 +57,23 @@ let rcu-rscs = let rec
+> >  flag ~empty Rcu-lock \ domain(rcu-rscs) as unmatched-rcu-lock
+> >  flag ~empty Rcu-unlock \ range(rcu-rscs) as unmatched-rcu-unlock
+> >  
+> > +(***************************************************************)
+> >  (* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
+> > +(***************************************************************)
+> > +(*
+> > + * carry-srcu-data: To handle the case of the SRCU critical section split
+> > + * across CPUs, where the idx is used to communicate the SRCU index across CPUs
+> > + * (say CPU0 and CPU1), data is between the R[srcu-lock] to W[once][idx] on
+> > + * CPU0, which is sequenced with the ->rf is between the W[once][idx] and the
+> > + * R[once][idx] on CPU1.  The carry-srcu-data is made to exclude Srcu-unlock
+> > + * events to prevent capturing accesses across back-to-back SRCU read-side
+> > + * critical sections.
+> > + *
+> > + * srcu-rscs: Putting everything together, the carry-srcu-data is sequenced with
+> > + * a data relation, which is the data dependency between R[once][idx] on CPU1
+> > + * and the srcu-unlock store, and loc ensures the relation is unique for a
+> > + * specific lock.
+> > + *)
+> >  let carry-srcu-data = (data ; [~ Srcu-unlock] ; rf)*
+> >  let srcu-rscs = ([Srcu-lock] ; carry-srcu-data ; data ; [Srcu-unlock]) & loc
+> 
+> My tendency has been to keep comments in the herd7 files to a minimum 
+> and to put more extended descriptions in the explanation.txt file.  
+> Right now that file contains almost nothing (a single paragraph!) about 
+> SRCU, so it needs to be updated to talk about the new definition of 
+> srcu-rscs.  In my opinion, that's where this sort of comment belongs.
+> 
+> Joel, would you like to write an extra paragraph of two for that file, 
+> explaining in more detail how SRCU lock-to-unlock matching is different 
+> from regular RCU and how the definition of the srcu-rscs relation works?  
+> I'd be happy to edit anything you come up with.
+> 
 
-Switching to a different reset sequence, enabling IOVCC before enabling
-VCC.
+I am happy to make changes to explanation.txt (I am assuming that's the file
+you mentioned), but I was wondering what you thought of the following change.
+If the formulas are split up, that itself could be some documentation as
+well. I did add a small paragraph on the top of the formulas as well though.
 
-There also needs to be a delay after enabling the supplies and before
-deasserting the reset. The datasheet specifies 1ms after the supplies
-reach the required voltage. Use 10-20ms to also give the power supplies
-some time to reach the required voltage, too.
+Some light testing shows it works with the cross-CPU litmus test (could still
+have bugs though and needs more testing).
 
-This fixes intermittent panel initialization failures and screen
-corruption during resume from sleep on panel xingbangda,xbd599 (e.g.
-used in PinePhone).
+Let me know how you feel about it, and if I should submit something along
+these lines along with your suggestion to edit the explanation.txt. Thanks!
 
-Signed-off-by: Ondrej Jirman <megi@xff.cz>
-Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
-Reported-by: Samuel Holland <samuel@sholland.org>
----
- drivers/gpu/drm/panel/panel-sitronix-st7703.c | 25 ++++++++++---------
- 1 file changed, 13 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/gpu/drm/panel/panel-sitronix-st7703.c b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
-index 6747ca237ced..45695aa51f62 100644
---- a/drivers/gpu/drm/panel/panel-sitronix-st7703.c
-+++ b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
-@@ -411,29 +411,30 @@ static int st7703_prepare(struct drm_panel *panel)
- 		return 0;
+diff --git a/tools/memory-model/linux-kernel.bell b/tools/memory-model/linux-kernel.bell
+index ce068700939c..1390d1b8ceee 100644
+--- a/tools/memory-model/linux-kernel.bell
++++ b/tools/memory-model/linux-kernel.bell
+@@ -57,9 +57,28 @@ let rcu-rscs = let rec
+ flag ~empty Rcu-lock \ domain(rcu-rscs) as unmatched-rcu-lock
+ flag ~empty Rcu-unlock \ range(rcu-rscs) as unmatched-rcu-unlock
  
- 	dev_dbg(ctx->dev, "Resetting the panel\n");
--	ret = regulator_enable(ctx->vcc);
-+	gpiod_set_value_cansleep(ctx->reset_gpio, 1);
+-(* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
+-let carry-srcu-data = (data ; [~ Srcu-unlock] ; rf)*
+-let srcu-rscs = ([Srcu-lock] ; carry-srcu-data ; data ; [Srcu-unlock]) & loc
++(* SRCU read-side section modeling
++ * Compute matching pairs of nested Srcu-lock and Srcu-unlock:
++ * Each SRCU read-side critical section is treated as independent, of other
++ * overlapping SRCU read-side critical sections even when on the same domain.
++ * For this, each Srcu-lock and Srcu-unlock pair is treated as loads and
++ * stores, with the data-dependency flow also treated as independent to prevent
++ * fusing. *)
 +
-+	ret = regulator_enable(ctx->iovcc);
- 	if (ret < 0) {
--		dev_err(ctx->dev, "Failed to enable vcc supply: %d\n", ret);
-+		dev_err(ctx->dev, "Failed to enable iovcc supply: %d\n", ret);
- 		return ret;
- 	}
--	ret = regulator_enable(ctx->iovcc);
++(* Data dependency between lock and idx store *)
++let srcu-lock-to-store-idx = ([Srcu-lock]; data)
 +
-+	ret = regulator_enable(ctx->vcc);
- 	if (ret < 0) {
--		dev_err(ctx->dev, "Failed to enable iovcc supply: %d\n", ret);
--		goto disable_vcc;
-+		dev_err(ctx->dev, "Failed to enable vcc supply: %d\n", ret);
-+		regulator_disable(ctx->iovcc);
-+		return ret;
- 	}
- 
--	gpiod_set_value_cansleep(ctx->reset_gpio, 1);
--	usleep_range(20, 40);
-+	/* Give power supplies time to stabilize before deasserting reset. */
-+	usleep_range(10000, 20000);
++(* Data dependency between idx load and unlock *)
++let srcu-load-idx-to-unlock = (data; [Srcu-unlock])
 +
- 	gpiod_set_value_cansleep(ctx->reset_gpio, 0);
--	msleep(20);
-+	usleep_range(15000, 20000);
++(* Read-from dependency between idx store on one CPU and load on same/another.
++ * This is required to model the splitting of critical section across CPUs. *)
++let srcu-store-to-load-idx = (rf ; srcu-load-idx-to-unlock)
++
++(* SRCU data dependency flow. Exclude the Srcu-unlock to not transcend back to back rscs *)
++let carry-srcu-data = (srcu-lock-to-store-idx ; [~ Srcu-unlock] ; srcu-store-to-load-idx)*
++
++let srcu-rscs = ([Srcu-lock] ; carry-srcu-data ; [Srcu-unlock]) & loc
  
- 	ctx->prepared = true;
- 
- 	return 0;
--
--disable_vcc:
--	regulator_disable(ctx->vcc);
--	return ret;
- }
- 
- static const u32 mantix_bus_formats[] = {
+ (* Validate nesting *)
+ flag ~empty Srcu-lock \ domain(srcu-rscs) as unmatched-srcu-lock
 -- 
-2.39.1
+2.39.1.581.gbfd45094c4-goog
 
