@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FFA693375
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 21:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B440693377
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 21:05:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjBKUEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 15:04:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
+        id S229634AbjBKUFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 15:05:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjBKUEk (ORCPT
+        with ESMTP id S229499AbjBKUFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 15:04:40 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A24E18B1A;
-        Sat, 11 Feb 2023 12:04:37 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id fi26so8274875edb.7;
-        Sat, 11 Feb 2023 12:04:37 -0800 (PST)
+        Sat, 11 Feb 2023 15:05:49 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F50718B10;
+        Sat, 11 Feb 2023 12:05:48 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id fi26so8277100edb.7;
+        Sat, 11 Feb 2023 12:05:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nLRzVQJuho4KRCJYHa+XOexCcN/deBQDupu8wqYPNeU=;
-        b=f9xAwBzGmKfJzY1ytfGblS1ZpaOHiYcWLlu+ZfXn5Ac4tc2rAHQLEJ62K7WwNuUpzQ
-         wfOSeVi+WkwO2eA2KqapekPYswhm30DhaWBG2uNjMkFmYJ5shFyncpiVa4ZL3J59Ua16
-         oZ40Qw5scTSC8NJKYSx+AV7JQ/AUqavgKzHS+U3DMfGRAWJkdAlaKuc7jDJsHfPy9I0H
-         VlkCtHrlUwO+OUhU88ZtVMw98SYomNrj9JRigEsUW8JTYEL7UPIFB0pc4DepHS6TQhBx
-         oItxC/pLELggJ/RVfME3Fu5xiLST6ZGxLeEeAOeT0cl+CIX48oNTNUF04B5FfzzaK91S
-         BIrg==
+        bh=KzDSfUuHoNboS5QzLEHJDCgvHam8ZLPZmhS8geBp4Dk=;
+        b=kdX2lmhKxfR/ZMgxVpRW62qTK4BVDwB9SKRoEdGRQ3HzHWex/WAfUuaM0Z8VrWHskM
+         wt0DVN0FTRsYfOr8KA3IqKlWpIpzPx2b+3upOe4/nn5WOfLk32KVVA5Ox6ZLS9EPV5EA
+         W8wuLB8mw9lAqhGSEdE2OZUh3VwmAyEyaN7kPkcs5FQ5F+8CzaHWkrml3Z28FR4fmmvc
+         LIKwdIGRsIMwZKcm6Y7jMWXg2vpb9aNBmkiSuIB/BR9h4QkQG13r66fnsZRTDPM3J1pi
+         sGo1qL9c7wy3xlMNysL80YNUENI/Ix5qry4s3IZ/6TkjuhH5czuWtPUDwUZ40eA/qM01
+         1t9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nLRzVQJuho4KRCJYHa+XOexCcN/deBQDupu8wqYPNeU=;
-        b=A5abNV0aZZMCo97xMVY4Hi2VvoyJthXMYPUaTj78HZ6gp62L2J1VO4CqFTONgGYz9F
-         Hps5QuU6cw0xu/HrDRWgVpBw0G/HFdzsCzMn+5bYmIxWhAR0o7QVlXdZVnOmb7tBMSBb
-         Mtcngz8InejtUYHIxDhKEnppNmBnQiFk7Rlhjeiq9Js9Xbo/kvoj869c8LamlpHh4R2J
-         Bi2Lf0nEZPVCyUyvN7ftWmGD6HZQgxi55267/eQdVY+95Gh3PNdttTOUTrXTRPgsyj5z
-         3qqK8H/TWJJK8NWkvfQlLQlwdEXxv+10svq0saogFjzbnt+mJlFxgDu033cUxE06uLgG
-         dkMw==
-X-Gm-Message-State: AO0yUKVfE2LFkAlRfXJd5nNXblYFH/UoEhrrOOWxhJR1Tigq9f5HnfxC
-        XZ8RUTQv2KY63udLNm7IHzWQ5I0bO+D6c9KDV54=
-X-Google-Smtp-Source: AK7set+iuLmPIjCTCCsATcQ+k96fhQjjtBanERgYOBNisbhTPcAGROv3bck5gIb/Q1JMXZMDge77bhWE4X6sEyF8xFk=
-X-Received: by 2002:a50:c310:0:b0:4ac:bb37:a501 with SMTP id
- a16-20020a50c310000000b004acbb37a501mr784270edb.1.1676145875605; Sat, 11 Feb
- 2023 12:04:35 -0800 (PST)
+        bh=KzDSfUuHoNboS5QzLEHJDCgvHam8ZLPZmhS8geBp4Dk=;
+        b=FqE3obi99uH/E+tH81fzKhKCWdSKmwOxcFmwam5NH/cEPG68QtJZoG9VbvFcE4V2RF
+         G4IqIMG91rcQZJBD9McTpBwbwqFiJCjrSXBfdq9blNABZr+aUGx2qIdDKuzLRCAqCazz
+         QR5rKYa56QSE4ICcxT8ZwurySDPnVxjrUJBaBaa/u7/DJG5TShzT9WcjfFM5TWkSdhya
+         VIP+7tLjzBBcpGYTeZSXCWGTPC8AsicmMTdt7XUag3idHVoKWltHJfXN8wPeU3SBxezf
+         ZAluU/J1Nuyr1fC6U5PAo5XrBI9yDJk//bDhXAP3iSBGnNRgs1E50cKTgQe5Nl6kW3cF
+         z3/g==
+X-Gm-Message-State: AO0yUKWKMlWus0Uk1azgJ3mgtFeXyAgVDuNFchMbpwt2f4p/MeT2Tfpc
+        dgy1cIYQFyq7PCgapURBrNq6v1upiYTiYZboEx8=
+X-Google-Smtp-Source: AK7set+TBgxHZk/FJCszd+S4lVDv55G9LzI1GuUXh9/iIBefxgoFcd90YDIzCQJeclA6A6UWN2PrAtDe0oYRV7VvRMY=
+X-Received: by 2002:a50:ce59:0:b0:4ac:b8e1:7410 with SMTP id
+ k25-20020a50ce59000000b004acb8e17410mr866928edj.6.1676145946715; Sat, 11 Feb
+ 2023 12:05:46 -0800 (PST)
 MIME-Version: 1.0
 References: <20230207-b4-amlogic-bindings-fixups-v2-v1-0-93b7e50286e7@linaro.org>
- <20230207-b4-amlogic-bindings-fixups-v2-v1-6-93b7e50286e7@linaro.org>
-In-Reply-To: <20230207-b4-amlogic-bindings-fixups-v2-v1-6-93b7e50286e7@linaro.org>
+ <20230207-b4-amlogic-bindings-fixups-v2-v1-7-93b7e50286e7@linaro.org>
+In-Reply-To: <20230207-b4-amlogic-bindings-fixups-v2-v1-7-93b7e50286e7@linaro.org>
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 11 Feb 2023 21:04:24 +0100
-Message-ID: <CAFBinCDD2kF92TWbm3vktnGYF2vi5zJaY4S2Qy32sK9RcDek-Q@mail.gmail.com>
-Subject: Re: [PATCH 6/8] arm64: dts: amlogic: meson-s4: fix apb4 bus node name
+Date:   Sat, 11 Feb 2023 21:05:35 +0100
+Message-ID: <CAFBinCAJvw=N=KBcmbkLfg10brEwDN1sgSeofqxaDJ0AfydUAg@mail.gmail.com>
+Subject: Re: [PATCH 7/8] arm64: dts: amlogic: meson-sm1: use correct enable-gpios
 To:     Neil Armstrong <neil.armstrong@linaro.org>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -76,8 +76,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Tue, Feb 7, 2023 at 4:08 PM Neil Armstrong <neil.armstrong@linaro.org> wrote:
 >
-> Fixes the following bindings check error:
-> apb4@fe000000: $nodename:0: 'apb4@fe000000' does not match '^([a-z][a-z0-9\\-]+-bus|bus|localbus|soc|axi|ahb|apb)(@.+)?$'
+> Replace enable-gpio by enable-gpios to match the bindings.
 >
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
