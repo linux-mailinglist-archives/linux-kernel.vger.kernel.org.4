@@ -2,50 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F384693178
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 15:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CBE369317D
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 15:27:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjBKOXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 09:23:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
+        id S229738AbjBKO1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 09:27:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBKOXn (ORCPT
+        with ESMTP id S229447AbjBKO1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 09:23:43 -0500
+        Sat, 11 Feb 2023 09:27:34 -0500
 Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC98D23C6C;
-        Sat, 11 Feb 2023 06:23:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD232799A;
+        Sat, 11 Feb 2023 06:27:32 -0800 (PST)
 Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
         by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pQqmy-000309-Cp; Sat, 11 Feb 2023 15:23:40 +0100
-Message-ID: <3d702234-88b3-42ae-9b12-0ccf19bd9bcb@leemhuis.info>
-Date:   Sat, 11 Feb 2023 15:23:39 +0100
+        id 1pQqqg-0003jd-CB; Sat, 11 Feb 2023 15:27:30 +0100
+Message-ID: <6f97a117-0d9c-e21b-9adf-50f2233ba9e3@leemhuis.info>
+Date:   Sat, 11 Feb 2023 15:27:29 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 2/3] venus: firmware: Correct non-pix start and end
- addresses
+Subject: Re: [PATCH] Revert "venus: firmware: Correct non-pix start and end
+ addresses"
 Content-Language: en-US, de-DE
-From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Vikash Garodia <vgarodia@qti.qualcomm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mka@chromium.org" <mka@chromium.org>
+Cc:     Albert Esteve <aesteve@redhat.com>,
+        "stanimir.varbanov@linaro.org" <stanimir.varbanov@linaro.org>,
+        Enric Balletbo i Serra <eballetb@redhat.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        "Vikash Garodia (QUIC)" <quic_vgarodia@quicinc.com>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        Fritz Koenig <frkoenig@google.com>,
+        "Dikshita Agarwal (QUIC)" <quic_dikshita@quicinc.com>,
+        "Rajeshwar Kurapaty (QUIC)" <quic_rkurapat@quicinc.com>
+References: <20230207102254.1446461-1-javierm@redhat.com>
+ <DM8PR02MB8169809493BF2822E6C29EECF3DB9@DM8PR02MB8169.namprd02.prod.outlook.com>
+ <ef09bc9f-d570-be11-238b-bd34063917fc@redhat.com>
+ <70c01751-1dd7-c4bd-a96e-94dea437aa40@redhat.com>
+ <DM8PR02MB81696369DBFE619E43F81EEFF3DE9@DM8PR02MB8169.namprd02.prod.outlook.com>
+ <e87344c6-acef-7f3f-5cac-24961dbd9401@redhat.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
         <regressions@leemhuis.info>
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Nathan Hebert <nhebert@chromium.org>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
-          Linux regressions mailing list 
-          <regressions@lists.linux.dev>
-References: <20221005083730.963322-1-stanimir.varbanov@linaro.org>
- <20221005083730.963322-3-stanimir.varbanov@linaro.org>
- <Y9LSMap+jRxbtpC8@google.com>
- <b2007bc9-b05f-eb17-a373-9587b01d3788@leemhuis.info>
-In-Reply-To: <b2007bc9-b05f-eb17-a373-9587b01d3788@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <e87344c6-acef-7f3f-5cac-24961dbd9401@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676125421;f3f8427f;
-X-HE-SMSGID: 1pQqmy-000309-Cp
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676125653;fccb2c5e;
+X-HE-SMSGID: 1pQqqg-0003jd-CB
 X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -55,44 +67,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: This mail in primarily relevant for Linux regression tracking. A
-change or fix related to the regression discussed in this thread was
-posted or applied, but it did not use a Link: tag to point to the
-report, as Linus and the documentation call for. Things happen, no
-worries -- but now the regression tracking bot needs to be told manually
-about the fix. See link in footer if these mails annoy you.]
-
-On 05.02.23 12:00, Linux kernel regression tracking (#adding) wrote:
-> On 26.01.23 20:19, Matthias Kaehlcke wrote:
->> On Wed, Oct 05, 2022 at 11:37:29AM +0300, Stanimir Varbanov wrote:
->>> The default values for those registers are zero.
->>>
->>> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-> [...]
->> I found that this commit prevents the AOSS from entering sleep mode during
->> system suspend at least on sc7180 and sc7280. AOSS not entering sleep mode
->> leads to a (apparently significant) increase in S3 power consumption, on
->> trogdor and herobrine it prevents the system from staying suspended, because
->> the embedded controller detect the condition and wakes the sytem up again.
+On 10.02.23 11:07, Javier Martinez Canillas wrote:
+> On 2/10/23 10:22, Vikash Garodia wrote:
+>
+>>> So what should we do about this folks? Since not allowing the driver to probe on
+>>> at least SC7180 is a quite serious regression, can we revert for now until a proper
+>>> fix is figured out?
+>>
+>> I am able to repro this issue on sc7180 and discussing with firmware team on the cause
+>> of reset failure. The original patch was raised for fixing rare SMMU faults during warm
+>> boot of video hardware. Hence looking to understand the regressing part before we
+>> proceed to revert.
 > 
-> Thanks for the report. To be sure the issue doesn't fall through the
-> cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
-> tracking bot:
-> 
-> #regzbot ^introduced a837e5161cfffbb32
-> #regzbot title meida: venus: firmware: AOSS doesn't seel anymore on at
-> least sc7180 and sc7280
-> #regzbot ignore-activity
+> Great, if you are working on a proper fix then that would be much better indeed.
 
-#regzbot monitor:
-https://lore.kernel.org/all/20230207102254.1446461-1-javierm@redhat.com/
-#regzbot ignore-activity
+Yeah, that's great, but OTOH: there is almost certainly just one week
+before 6.2 will be released. Ideally this should be fixed by then.
+Vikash, do you think that's in the cards? If not: why not revert this
+now to make sure 6.2 works fine?
 
 Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 --
 Everything you wanna know about Linux kernel regression tracking:
 https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
-
-
-
+If I did something stupid, please tell me, as explained on that page.
