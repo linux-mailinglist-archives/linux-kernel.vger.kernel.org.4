@@ -2,112 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01735692E8A
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 07:06:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3E4692E8E
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 07:08:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbjBKGGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 01:06:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
+        id S229520AbjBKGIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 01:08:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBKGGD (ORCPT
+        with ESMTP id S229447AbjBKGIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 01:06:03 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E9B4DE36;
-        Fri, 10 Feb 2023 22:06:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676095562; x=1707631562;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JMEsPC/F0g+9M4k/jEp0dA2A9EJTETOkzMVm5ZZ6RLI=;
-  b=hCmccq62LmD8I7TqlSCMsSny/9gf3PK9ypND5lbBPb+8AX+vF7S2mAwo
-   KYH9S//VWkq8qpk0n//TtA9fX+44x+ldl8PhuI1SekGU5Um0X+o1BHDnn
-   wwl99P0Us1F9DR2/8ZvgZLYjuHA8dwV9W5vCsD+ispEfMtsUNGsnR2wEj
-   Ut9fTZXeejOuHrbAigtOV9QhPRu920ckVZg9Mx3yProWX0rksbwz0Q8Mg
-   2HCuzYiv4MEcqC6xkswB7t+qkSBCZDsVyC4BX464wc/jk/RWj0sshumsC
-   IMuk89Q+H0tot8Mt1intfTyMBS74TWz5b1fxinuDE0QlIwomntbzvMPbN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="310952423"
-X-IronPort-AV: E=Sophos;i="5.97,289,1669104000"; 
-   d="scan'208";a="310952423"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 22:06:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="757010576"
-X-IronPort-AV: E=Sophos;i="5.97,289,1669104000"; 
-   d="scan'208";a="757010576"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Feb 2023 22:05:58 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pQj1J-0006Hl-21;
-        Sat, 11 Feb 2023 06:05:57 +0000
-Date:   Sat, 11 Feb 2023 14:05:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        davem@davemloft.net
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>
-Subject: Re: [PATCH net-next] net: pcs: tse: port to pcs-lynx
-Message-ID: <202302111310.IO2xvRNi-lkp@intel.com>
-References: <20230210190949.1115836-1-maxime.chevallier@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230210190949.1115836-1-maxime.chevallier@bootlin.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 11 Feb 2023 01:08:50 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD645C89E
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 22:08:49 -0800 (PST)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31B5VWHk030701;
+        Sat, 11 Feb 2023 06:08:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2022-7-12;
+ bh=MOiEKHQKDJR9QHAHdY++al+Ze5H+rKY6te5kRImaaP0=;
+ b=T4Ovj5C56jgml/0MPqvz+yCZIXMVzWahzMhLB9OLtMmL/KHCmbIALlc9rYXmfFICtUpH
+ h/AJ1m5dk6zOVz2F0VriuzFJhKnMyfQ17cJqEikSukMpVJ8QepXoGc2eOF5WEDUA2wXA
+ X3DA+9xEgUbu0/Yh8iQhNNMxU5DQ0H4+OcnRdENRa/w6V6s0bcTMWWfk+WvB+933ItXt
+ WATYMW86fpImmxVWWdEyKYUDErfFCRTJL99lW4E9uKauNyUvEsEg1a5E9IHQPGAm31fy
+ rLpEiT9jBhhGJkU+06q3V8BiUg1CcrQCrB6bs6KyaoyMT3V6S1eebXEIVqG93IEnBY2W 2A== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np1t383qr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 11 Feb 2023 06:08:41 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31B1XGmL018005;
+        Sat, 11 Feb 2023 06:08:40 GMT
+Received: from ban25x6uut24.us.oracle.com (ban25x6uut24.us.oracle.com [10.153.73.24])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3np1f2mgmw-1;
+        Sat, 11 Feb 2023 06:08:40 +0000
+From:   Si-Wei Liu <si-wei.liu@oracle.com>
+To:     mst@redhat.com, jasowang@redhat.com, elic@nvidia.com
+Cc:     parav@nvidia.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] vdpa/mlx5: should not activate virtq object when suspended
+Date:   Fri, 10 Feb 2023 22:08:14 -0800
+Message-Id: <1676095694-15563-1-git-send-email-si-wei.liu@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-11_02,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 adultscore=0
+ malwarescore=0 phishscore=0 bulkscore=0 spamscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302110055
+X-Proofpoint-GUID: kH9EvAek0IomS8sLw0KS02YPYNNNmEjG
+X-Proofpoint-ORIG-GUID: kH9EvAek0IomS8sLw0KS02YPYNNNmEjG
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
+Otherwise the virtqueue object to instate could point to invalid address
+that was unmapped from the MTT:
 
-I love your patch! Yet something to improve:
+  mlx5_core 0000:41:04.2: mlx5_cmd_out_err:782:(pid 8321):
+  CREATE_GENERAL_OBJECT(0xa00) op_mod(0xd) failed, status
+  bad parameter(0x3), syndrome (0x5fa1c), err(-22)
 
-[auto build test ERROR on net-next/master]
+While at it, add warning message to tell apart which object is
+responsible for the CREATE_GENERAL_OBJECT command failure.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Chevallier/net-pcs-tse-port-to-pcs-lynx/20230211-021544
-patch link:    https://lore.kernel.org/r/20230210190949.1115836-1-maxime.chevallier%40bootlin.com
-patch subject: [PATCH net-next] net: pcs: tse: port to pcs-lynx
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230211/202302111310.IO2xvRNi-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/fc34f36dac37aedc9928f351a233c6f610fd5a68
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Maxime-Chevallier/net-pcs-tse-port-to-pcs-lynx/20230211-021544
-        git checkout fc34f36dac37aedc9928f351a233c6f610fd5a68
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Fixes: cae15c2ed8e6 ("vdpa/mlx5: Implement susupend virtqueue callback")
+Cc: Eli Cohen <elic@nvidia.com>
+Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
+---
+ drivers/vdpa/mlx5/net/mlx5_vnet.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302111310.IO2xvRNi-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "alt_tse_pcs_create" [drivers/net/ethernet/altera/altera_tse.ko] undefined!
->> ERROR: modpost: "alt_tse_pcs_destroy" [drivers/net/ethernet/altera/altera_tse.ko] undefined!
-
+diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+index 3a6dbbc6..c05c7f6 100644
+--- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
++++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+@@ -165,6 +165,7 @@ struct mlx5_vdpa_net {
+ 	u32 cur_num_vqs;
+ 	u32 rqt_size;
+ 	bool nb_registered;
++	bool suspended;
+ 	struct notifier_block nb;
+ 	struct vdpa_callback config_cb;
+ 	struct mlx5_vdpa_wq_ent cvq_ent;
+@@ -1245,12 +1246,18 @@ static int setup_vq(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueue *mvq)
+ 		goto err_connect;
+ 
+ 	err = counter_set_alloc(ndev, mvq);
+-	if (err)
++	if (err) {
++		mlx5_vdpa_warn(&ndev->mvdev, "failed to alloc counter on vq idx %d(%d)\n",
++			       idx, err);
+ 		goto err_counter;
++	}
+ 
+ 	err = create_virtqueue(ndev, mvq);
+-	if (err)
++	if (err) {
++		mlx5_vdpa_warn(&ndev->mvdev, "failed to create virtqueue idx %d(%d)\n",
++			       idx, err);
+ 		goto err_connect;
++	}
+ 
+ 	if (mvq->ready) {
+ 		err = modify_virtqueue(ndev, mvq, MLX5_VIRTIO_NET_Q_OBJECT_STATE_RDY);
+@@ -2411,7 +2418,7 @@ static int mlx5_vdpa_change_map(struct mlx5_vdpa_dev *mvdev,
+ 	if (err)
+ 		goto err_mr;
+ 
+-	if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK))
++	if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK) || ndev->suspended)
+ 		goto err_mr;
+ 
+ 	restore_channels_info(ndev);
+@@ -2580,6 +2587,7 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev)
+ 	mlx5_vdpa_destroy_mr(&ndev->mvdev);
+ 	ndev->mvdev.status = 0;
+ 	ndev->cur_num_vqs = 0;
++	ndev->suspended = false;
+ 	ndev->mvdev.cvq.received_desc = 0;
+ 	ndev->mvdev.cvq.completed_desc = 0;
+ 	memset(ndev->event_cbs, 0, sizeof(*ndev->event_cbs) * (mvdev->max_vqs + 1));
+@@ -2815,6 +2823,8 @@ static int mlx5_vdpa_suspend(struct vdpa_device *vdev)
+ 	struct mlx5_vdpa_virtqueue *mvq;
+ 	int i;
+ 
++	mlx5_vdpa_info(mvdev, "suspending device\n");
++
+ 	down_write(&ndev->reslock);
+ 	ndev->nb_registered = false;
+ 	mlx5_notifier_unregister(mvdev->mdev, &ndev->nb);
+@@ -2824,6 +2834,7 @@ static int mlx5_vdpa_suspend(struct vdpa_device *vdev)
+ 		suspend_vq(ndev, mvq);
+ 	}
+ 	mlx5_vdpa_cvq_suspend(mvdev);
++	ndev->suspended = true;
+ 	up_write(&ndev->reslock);
+ 	return 0;
+ }
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+1.8.3.1
+
