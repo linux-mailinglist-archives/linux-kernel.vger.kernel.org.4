@@ -2,89 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7F86931FE
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 16:32:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4DAD693202
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 16:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbjBKPcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 10:32:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
+        id S229713AbjBKPdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 10:33:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBKPcw (ORCPT
+        with ESMTP id S229517AbjBKPdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 10:32:52 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE8A23DAC;
-        Sat, 11 Feb 2023 07:32:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=+nZCzFH2CatPkmq5OyRhXq2N8qdPXlAo2cpPPyX955k=; b=JPgz2W6RMH1r9WhCBHuWhkIIde
-        K+o1bB+0DAySSNkTsZ57PdllSFv0vITYJ4OeaqvBim8R1pZeZxKSKbIcEItQGdFGbI60wR+vSp0QS
-        U/an4wV/lE9Sc/Cu70sPnWno6VV1HxuiISjMCYY7mwvVLw2SUbjJ+AGnKm4ma0MMFDy8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pQrrt-004htS-GZ; Sat, 11 Feb 2023 16:32:49 +0100
-Date:   Sat, 11 Feb 2023 16:32:49 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Ioana Ciornei <ioana.ciornei@nxp.com>
-Subject: Re: [PATCH net-next] net: pcs: tse: port to pcs-lynx
-Message-ID: <Y+e1IfWcmHJjJlgp@lunn.ch>
-References: <20230210190949.1115836-1-maxime.chevallier@bootlin.com>
- <20230210190949.1115836-1-maxime.chevallier@bootlin.com>
- <20230210193159.qmbtvwtx6kqagvxy@skbuf>
+        Sat, 11 Feb 2023 10:33:17 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719E82685A
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 07:33:07 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id on9-20020a17090b1d0900b002300a96b358so8490141pjb.1
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 07:33:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1676129586;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3C/YASUIoy+dQcEYZ+F2OwnfV9uUu+22o30wDUIMzBE=;
+        b=sbVTZ6emU72abJ/43S9dRNx91cA3NySmKA+Mc39t143FMQvGNsFplK+3YIgAKHCnaO
+         4qXaLeE/xNBoI3uIwiSDhFKJkQXYTZFzaENlUPdMc3aV6I+8ZVFouQH4mHwPiQruonYw
+         tWb4Q7KwVk1FAImU1/dwnKXcTlRWyzAXk7eIOJRCP+MAo6ivePzNK0yBjdmFWlbPTlw8
+         trRQR6EbK1LlwLzCNfMtuRtX+QqmUm8Juw/PWZxxc++sIPYwOlxDM8WDxL4+3Su1gYHF
+         uoD76qwrhx95BUZyN/Isod0iE6gRTMIF4kEjzD7OS2CR3r8QHrWLYeLKk9yC8x1WPx1G
+         Dvhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676129586;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3C/YASUIoy+dQcEYZ+F2OwnfV9uUu+22o30wDUIMzBE=;
+        b=mSn7ZvZFb0P6mLixpd6qaXN9+2EHbbl5T14Az9HWg8+zKJLKlrYzNrC/khwXKMakOo
+         tKy9Gx9otCngp0+f1LoAr68/jRIss/ZbedC+0q0C8dHWD0K2hW/WzPWFfRHWHO1suDR6
+         OlSXDy+J0NLcLfA3mIIHAAyFcxstz2amkcF4p5j3V+256t0hzSPx9J0LAJO6yo/N3R3B
+         b6ZjVpUvNS5ECsz0bJLZLioQgMWhsIlDtUT3zvEZe4kCciBByrgHdWtamhjRO/wN6Zum
+         v54k61RW9/lYKeB6+NovwMW8A3adhhkrsECYSM07kvihLW7Djo1+0n6IWeGRBg8nKwsT
+         6Flw==
+X-Gm-Message-State: AO0yUKVS5Nv2L5E5zRRse02lMvDdLc5QNoS5rADhxW7+AALJ43GyX5r1
+        6HQHhYdwVieJdIrI29G//r2ZiA==
+X-Google-Smtp-Source: AK7set8Qp1ZJeY9F/hMzd03j0PcrfY61A4xgg3Ab4f7G8S8p7WiH3f0uEwnVqAVhQtBxa7kXTpS9CA==
+X-Received: by 2002:a17:90a:5ae2:b0:230:b356:a35b with SMTP id n89-20020a17090a5ae200b00230b356a35bmr15997262pji.4.1676129586562;
+        Sat, 11 Feb 2023 07:33:06 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id w23-20020a17090a15d700b0022bf0b0e1b7sm2962226pjd.10.2023.02.11.07.33.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Feb 2023 07:33:06 -0800 (PST)
+Message-ID: <787c3b62-f5d8-694d-cd2f-24b40848e39f@kernel.dk>
+Date:   Sat, 11 Feb 2023 08:33:04 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230210193159.qmbtvwtx6kqagvxy@skbuf>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: copy on write for splice() from file to pipe?
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Stefan Metzmacher <metze@samba.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API Mailing List <linux-api@vger.kernel.org>,
+        io-uring <io-uring@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Samba Technical <samba-technical@lists.samba.org>
+References: <CAHk-=wiszt6btMPeT5UFcS=0=EVr=0injTR75KsvN8WetwQwkA@mail.gmail.com>
+ <fe8252bd-17bd-850d-dcd0-d799443681e9@kernel.dk>
+ <CAHk-=wiJ0QKKiORkVr8n345sPp=aHbrLTLu6CQ-S0XqWJ-kJ1A@mail.gmail.com>
+ <7a2e5b7f-c213-09ff-ef35-d6c2967b31a7@kernel.dk>
+ <CALCETrVx4cj7KrhaevtFN19rf=A6kauFTr7UPzQVage0MsBLrg@mail.gmail.com>
+ <b44783e6-3da2-85dd-a482-5d9aeb018e9c@kernel.dk>
+ <2bb12591-9d24-6b26-178f-05e939bf3251@kernel.dk>
+ <CAHk-=wjzqrD5wrfeaU390bXEEBY2JF-oKmFN4fREzgyXsbQRTQ@mail.gmail.com>
+ <Y+cJDnnMuirSjO3E@T590> <55eaac9e-0d77-1fa2-df27-4d64e123177e@kernel.dk>
+ <Y+euv+zR5ltTELqk@T590>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <Y+euv+zR5ltTELqk@T590>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 09:31:59PM +0200, Vladimir Oltean wrote:
-> On Fri, Feb 10, 2023 at 08:09:49PM +0100, Maxime Chevallier wrote:
-> > When submitting the initial driver for the Altera TSE PCS, Russell King
-> > noted that the register layout for the TSE PCS is very similar to the
-> > Lynx PCS. The main difference being that TSE PCS's register space is
-> > memory-mapped, whereas Lynx's is exposed over MDIO.
-> > 
-> > Convert the TSE PCS to reuse the whole logic from Lynx, by allowing
-> > the creation of a dummy MDIO bus, and a dummy MDIO device located at
-> > address 0 on that bus. The MAC driver that uses this PCS must provide
-> > callbacks to read/write the MMIO.
-> > 
-> > Also convert the Altera TSE MAC driver to this new way of using the TSE
-> > PCS.
-> > 
-> > Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-> > ---
-> >  drivers/net/ethernet/altera/altera_tse.h      |   2 +-
-> >  drivers/net/ethernet/altera/altera_tse_main.c |  50 ++++-
-> >  drivers/net/pcs/Kconfig                       |   4 +
-> >  drivers/net/pcs/pcs-altera-tse.c              | 194 +++++++-----------
-> >  include/linux/pcs-altera-tse.h                |  22 +-
-> >  5 files changed, 142 insertions(+), 130 deletions(-)
+On 2/11/23 8:05 AM, Ming Lei wrote:
+> On Sat, Feb 11, 2023 at 07:13:44AM -0700, Jens Axboe wrote:
+>> On 2/10/23 8:18?PM, Ming Lei wrote:
+>>> On Fri, Feb 10, 2023 at 02:08:35PM -0800, Linus Torvalds wrote:
+>>>> On Fri, Feb 10, 2023 at 1:51 PM Jens Axboe <axboe@kernel.dk> wrote:
+>>>>>
+>>>>> Speaking of splice/io_uring, Ming posted this today:
+>>>>>
+>>>>> https://lore.kernel.org/io-uring/20230210153212.733006-1-ming.lei@redhat.com/
+>>>>
+>>>> Ugh. Some of that is really ugly. Both 'ignore_sig' and
+>>>> 'ack_page_consuming' just look wrong. Pure random special cases.
+>>>>
+>>>> And that 'ignore_sig' is particularly ugly, since the only thing that
+>>>> sets it also sets SPLICE_F_NONBLOCK.
+>>>>
+>>>> And the *only* thing that actually then checks that field is
+>>>> 'splice_from_pipe_next()', where there are exactly two
+>>>> signal_pending() checks that it adds to, and
+>>>>
+>>>>  (a) the first one is to protect from endless loops
+>>>>
+>>>>  (b) the second one is irrelevant when  SPLICE_F_NONBLOCK is set
+>>>>
+>>>> So honestly, just NAK on that series.
+>>>>
+>>>> I think that instead of 'ignore_sig' (which shouldn't exist), that
+>>>> first 'signal_pending()' check in splice_from_pipe_next() should just
+>>>> be changed into a 'fatal_signal_pending()'.
+>>>
+>>> Good point, here the signal is often from task_work_add() called by
+>>> io_uring.
+>>
+>> Usually you'd use task_sigpending() to distinguis the two, but
+>> fatal_signal_pending() as Linus suggests would also work. The only
+>> concern here is that since you'll be potentially blocking on waiting for
+>> the pipe to be readable - if task does indeed have task_work pending and
+>> that very task_work is the one that will ensure that the pipe is now
+>> readable, then you're waiting condition will never be satisfied.
 > 
-> The glue layer is larger than the duplicated PCS code? :(
+> The 2nd signal_pending() will break the loop to get task_work handled,
+> so it is safe to only change the 1st one to fatal_signal_pending().
 
-Another option might be regmap. There are both regmap-mdio.c and
-regmap-mmio.c.
+OK, but then the ignore_sig change should not be needed at all, just
+changing that first bit to fatal_signal_pending() would do the trick?
 
-	Andrew
+-- 
+Jens Axboe
+
+
