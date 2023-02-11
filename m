@@ -2,188 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D006932A1
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 17:58:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEDD16932B6
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 17:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbjBKQ6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 11:58:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
+        id S229457AbjBKQ7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 11:59:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjBKQ6X (ORCPT
+        with ESMTP id S229576AbjBKQ7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 11:58:23 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546B6F4
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 08:58:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676134702; x=1707670702;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=p4XXuymRwp+J/VTgiGMEzOPaHXhpVeP+ADlmhlHfwp0=;
-  b=DFpSNPeDHlCzjZRzLDOItLIMcVAeETLeMYTII1OpD3G9TqaC+7STEyp9
-   KX0Of55UcYEwAAfxKOxhOSdA6yTwZXwlrN/Hz7wKdvx6W6n0nZsySiCey
-   760QVl50a9nbZ/p4rBLxhGpBGb5RLmv7ksPQ5K/mNeeJH8cVbD02FO9yC
-   4RFAC8u/WngZGglSaU05h7LXA1wKXe+oaWveDr6fOiTJKiugo+QTeVl0k
-   tNGsHCY1+YEZWN7btdCD75U7uO3K6OJo+kcdcRIPTnSIG8xkS3Ih4l2Dr
-   uCKovsh+mdy2DtYMP179rP7+DzYYgi0XOwExI5oW62k4cY5uf+QK/Belb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="395237118"
-X-IronPort-AV: E=Sophos;i="5.97,290,1669104000"; 
-   d="scan'208";a="395237118"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2023 08:58:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="700783637"
-X-IronPort-AV: E=Sophos;i="5.97,290,1669104000"; 
-   d="scan'208";a="700783637"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 11 Feb 2023 08:58:20 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pQtCd-0006hF-1i;
-        Sat, 11 Feb 2023 16:58:19 +0000
-Date:   Sun, 12 Feb 2023 00:58:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:conflict-resolution.2023.02.10a] BUILD SUCCESS
- 9adfa15b50c136ea02c94e0e98f861988bd88a35
-Message-ID: <63e7c922.ZqCJCJ2w1sQ9V8f8%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 11 Feb 2023 11:59:15 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83CA26BF;
+        Sat, 11 Feb 2023 08:59:09 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id o15so4851838wrc.9;
+        Sat, 11 Feb 2023 08:59:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MBkYE1i7V7Gb2zy1Mx0KGE+HC1Mrumou1Jxzkf6EEuM=;
+        b=b9KbvDEL0aw8o0PCi9XAGerGtsBALWi8mZn5crgkXiszm7QvD62el8b6+6MjMcIpzB
+         MGweAmVlkD3TNMin+dec9jKEmxvrhhJS0+Yp90zyvUCwpRf2PQBQI2tDA+l1WUfII7GX
+         Ly6rQCAdjK7bJB/zYBm1ejRHPQawyn7WGetqQHMWJi6QIeJ4+S0D0M3FkigLR7ItAjBG
+         8+n6syT6oAwgs4jMYCzx25lFA/QHvzc+tB4knq/3eKsTkLAjT73C4RzwPm0Octiapizj
+         Ssku8Uw/xgGa+d7eUqce31gBM4k2lQxa8+TAy/uguXqGnyiOYShqQEUHm2JfhYbIWq1R
+         7HuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MBkYE1i7V7Gb2zy1Mx0KGE+HC1Mrumou1Jxzkf6EEuM=;
+        b=Zs7QMdbrnwipBUMUtWjeDg3b2lGBD2wzJDtr3Dtt42f5VPSdmuaGGLebVapjd/Uvpg
+         hUFWBSmao7Tcny5kUjRggiav/FLp7Dj4mMPhafpZJf+puZx8DfYq8pES6qJJbqbpdB61
+         XskM4omljLKx9agn60X2agC5joO0CkTpzGGozX8vMnEvEbtRRyniNSVlDJHockVN0myG
+         Wwd5ymXiOGEeK/jcnFyg5DMnfaFqopIJepMky3oO8sknFUPqjuNOOir7TZLTetM3EhPT
+         ppuEXF4DHe9r0itCwpIcEL1ZFD816ip0PQMMHFyxkSRWHmozET79i0fqjmZiE7zX9G/6
+         1L7w==
+X-Gm-Message-State: AO0yUKW2Fu7XQrTE40W/ERu/vJkZcw5eOm2vhdG+m9+BLqZjaguE7yCa
+        G5YJZIeY8Cd+iUvQSZIDIia073xnGBpVPg==
+X-Google-Smtp-Source: AK7set9JPD4FLktPb4ijZxeI1eDXVBuaRM7Rw6wJEvSGSIg0+EvG2UbjLKQhsEZAg3pd3yNlZOk2YQ==
+X-Received: by 2002:a05:6000:12cb:b0:2c3:4ef0:343e with SMTP id l11-20020a05600012cb00b002c34ef0343emr17097337wrx.5.1676134748306;
+        Sat, 11 Feb 2023 08:59:08 -0800 (PST)
+Received: from localhost.localdomain ([2001:9e8:20d3:ac00:30d6:d4a1:e6f6:5876])
+        by smtp.gmail.com with ESMTPSA id k16-20020adfe8d0000000b002c54536c662sm5097893wrn.34.2023.02.11.08.59.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Feb 2023 08:59:07 -0800 (PST)
+From:   Leonard Anderweit <leonard.anderweit@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Aleksa Savic <savicaleksa83@gmail.com>,
+        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Leonard Anderweit <leonard.anderweit@gmail.com>
+Subject: [PATCH 0/5] hwmon: (aquacomputer_d5next) Add Aquacomputer Aquaero control
+Date:   Sat, 11 Feb 2023 17:59:18 +0100
+Message-Id: <20230211165923.17807-1-leonard.anderweit@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git conflict-resolution.2023.02.10a
-branch HEAD: 9adfa15b50c136ea02c94e0e98f861988bd88a35  Merge commit '3a2dbc510c437ca392516b0105bad8e7970e6614' into HEAD
+Add support for controlling the Aquacomputer Aquaero 5/6 fan controllers. The
+controllable settings include temperature offset, fan PWM and fan PWM mode.
 
-elapsed time: 1266m
+The first two patches expand the capabilities of the control system without
+changing functionality. Patches 3-5 add support for Aquaero control.
 
-configs tested: 105
-configs skipped: 3
+Leonard Anderweit (5):
+  hwmon: (aquacomputer_d5next) Support one byte control values
+  hwmon: (aquacomputer_d5next) Support writing multiple control values
+    at once
+  hwmon: (aquacomputer_d5next) Add temperature offset control for
+    Aquaero
+  hwmon: (aquacomputer_d5next) Add fan PWM control for Aquaero
+  hwmon: (aquacomputer_d5next) Add PWM mode control for Aquaero
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-alpha                            allyesconfig
-alpha                               defconfig
-arc                               allnoconfig
-arc                              allyesconfig
-arc                                 defconfig
-arc                 nsimosci_hs_smp_defconfig
-arc                  randconfig-r043-20230210
-arm                              allmodconfig
-arm                              allyesconfig
-arm                       aspeed_g5_defconfig
-arm                                 defconfig
-arm                          exynos_defconfig
-arm                  randconfig-r046-20230210
-arm                         vf610m4_defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-csky                                defconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                         debian-10.3-func
-i386                   debian-10.3-kselftests
-i386                        debian-10.3-kunit
-i386                          debian-10.3-kvm
-i386                                defconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-i386                          randconfig-c001
-ia64                             allmodconfig
-ia64                                defconfig
-loongarch                        allmodconfig
-loongarch                         allnoconfig
-loongarch                           defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                          hp300_defconfig
-m68k                          multi_defconfig
-mips                             allmodconfig
-mips                             allyesconfig
-mips                       bmips_be_defconfig
-nios2                               defconfig
-openrisc                       virt_defconfig
-parisc                              defconfig
-parisc                generic-64bit_defconfig
-parisc64                            defconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-powerpc                   motionpro_defconfig
-powerpc                  storcenter_defconfig
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv             nommu_k210_sdcard_defconfig
-riscv                          rv32_defconfig
-s390                             allmodconfig
-s390                             allyesconfig
-s390                                defconfig
-sh                               allmodconfig
-sh                ecovec24-romimage_defconfig
-sh                   rts7751r2dplus_defconfig
-sparc                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                            allnoconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-bpf
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-xtensa                generic_kc705_defconfig
-
-clang tested configs:
-arm                       cns3420vb_defconfig
-arm                         lpc32xx_defconfig
-hexagon              randconfig-r041-20230210
-hexagon              randconfig-r045-20230210
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-mips                           ip22_defconfig
-powerpc                          allmodconfig
-powerpc                 mpc8272_ads_defconfig
-riscv                randconfig-r042-20230210
-s390                 randconfig-r044-20230210
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                        randconfig-k001
+ Documentation/hwmon/aquacomputer_d5next.rst |   7 +-
+ drivers/hwmon/aquacomputer_d5next.c         | 247 ++++++++++++++++----
+ 2 files changed, 213 insertions(+), 41 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.1
+
