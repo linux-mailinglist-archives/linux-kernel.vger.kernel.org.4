@@ -2,202 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1906932CF
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 18:18:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1D06932D9
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 18:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjBKRSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 12:18:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35564 "EHLO
+        id S229485AbjBKR2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 12:28:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjBKRSW (ORCPT
+        with ESMTP id S229455AbjBKR2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 12:18:22 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C05D193E0
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 09:18:20 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id g8so9320021qtq.13
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 09:18:20 -0800 (PST)
+        Sat, 11 Feb 2023 12:28:34 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30B6105
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 09:28:32 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id az4-20020a05600c600400b003dff767a1f1so6176831wmb.2
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 09:28:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rt94ODpGzToIGuiugKNP8sTPsxgShvJ5t+d54bpkATI=;
-        b=isXX/fBIHoWr9pj5V+k4FGzpoQYb6cHvvHeTZco7/A8Rlom/fga0taLPOaVpkBOBYk
-         9UeIVQej6DggjoJPuz+UxTpwEv8AnssHPFGBoygWR0iM8JVFeQbmKYLh597ofo1JMtKp
-         HnMoRHeDhkoEOUOUwWJO87Rgr6M0zEor1keXc=
+        bh=Np4kuJWs/zx9FaMvum0wspWo2Gkd4utoKdBLjJ5zvug=;
+        b=ipsOzbT5DmzszZ8UzNrMuK1jxc7KXSaJEdY/+Bt/s5NWUQc/m5iJxT2Dj9qy234Ig3
+         gAaGc6nTwnbUGuTJkBr0aaMEuoSPRhd7MCGqSLcstOWQ5Lp/wv3PQTjxqUyjz/vK5Qq2
+         rPfXjy6ep/ebmAQdqAa7SgFhuQiAv7VQ0KuDAvnWWmwO1PXqaj9RJw6yDCvNhs3+Pu21
+         bcMpcW6EmDmt84UrGQ3qqKESneFERGrPkmrzbn6ViB0u39R7wrBtCCq61Zw3nu5UuoZP
+         FA3PIAKli0EsBP/iN2hhvr/FEpZz7BPdkHGxjcBzrFWUIrtvmU0176isKwy/uIo3QInV
+         /KkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rt94ODpGzToIGuiugKNP8sTPsxgShvJ5t+d54bpkATI=;
-        b=SBDabS04wwC8WERcedIQ4h2tLitP4h07XKqkcyEDvPCdOpsA4kXTes1fHd8QQ431Uz
-         LpdFdCJu1o+4hpt6cfxVOEYrvDEVn8hJ2Ant3nieQ7Zk3wMIYiNLhMX5HMsZEXo7B+xG
-         upBDI+7Rylrgd3YNhRW2htlqZXqKR5FonZlkxpTWsy+9oQ8Tua1PgQ5L6PmV+IHqtDQC
-         nEvZOXJUUi1taDmHMImsBo12FkJojSp6oSj8HWJ2GhkkRUb+5grLutTB0fodEAHrSEaj
-         /rRRQhY/4p6+3c4ec2IPdKxBnX3ZecturzpnyeOJr0fc/+djxxIu/4CV/TII77zdLu+d
-         bo8Q==
-X-Gm-Message-State: AO0yUKU/Wbtfxpb2j3e2Q7gzhHFD4QQXhdFE0evCVwUnEhaKosRE7uzA
-        i6KUIsLapj7e2wZiqqeSAu75Mg==
-X-Google-Smtp-Source: AK7set/N7Y0as6ZG7e/Zr/eUqDMvW3qUjjBSg83rJTcRExflVo3PK+MGY8qYLaQSIy2xQLkziGiVBQ==
-X-Received: by 2002:ac8:7d88:0:b0:3b4:2b61:da32 with SMTP id c8-20020ac87d88000000b003b42b61da32mr36238315qtd.59.1676135899033;
-        Sat, 11 Feb 2023 09:18:19 -0800 (PST)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id p73-20020a37424c000000b0072692330190sm5978113qka.64.2023.02.11.09.18.18
+        bh=Np4kuJWs/zx9FaMvum0wspWo2Gkd4utoKdBLjJ5zvug=;
+        b=oAmTRQ46BllGGsfV4Pok5VzCApUMYRU3Mvww9sB71tQBsiB+AjgCoarJgr91tYebCQ
+         CLzs9obEi8rOaiGXdso07PLt3SZajiysvAIv5FOhjBUF+XU+t0zjMre4cyIDrLCNyS6E
+         M2IkQvB931M6KsAfrg7jNM6Px/mOeys0sNiVuYP/rUzUDMa+Xs4VkkyHAezstMJ2gx2z
+         M2OVp7AACD4XC3BO3XtqvwQ7/bCwBEuHgAkE2e+AMgopnfnbirSVcyDubB8lRCiixA54
+         n645wV5EmFZLOwIyHedj2ZkSvunzk4Ln3kGqxljnggtWtYBEDhmZMpbQBTYYzVVyNZab
+         HukA==
+X-Gm-Message-State: AO0yUKV3gZLGnGqM92C2JFi8nbfdcmaTodhiqc/s/O7QEMJWngE5xIx4
+        4p05dv9jmcPcv0YxxMyFOP8quw==
+X-Google-Smtp-Source: AK7set/kmTZewNgyW2AAVbjwvBGh84S8q+fKCpMlBqPtq2RsfVhmQ2OFyFWcj07vBG7u40OG/pyfcQ==
+X-Received: by 2002:a05:600c:4496:b0:3dc:de85:5007 with SMTP id e22-20020a05600c449600b003dcde855007mr15361856wmo.21.1676136511360;
+        Sat, 11 Feb 2023 09:28:31 -0800 (PST)
+Received: from airbuntu (host86-163-35-10.range86-163.btcentralplus.com. [86.163.35.10])
+        by smtp.gmail.com with ESMTPSA id j7-20020a5d6047000000b002c53a89f042sm6379640wrt.30.2023.02.11.09.28.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Feb 2023 09:18:18 -0800 (PST)
-Date:   Sat, 11 Feb 2023 17:18:17 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com
-Subject: Re: Current LKMM patch disposition
-Message-ID: <Y+fN2fvUjGDWBYrv@google.com>
-References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
- <Y920w4QRLtC6kd+x@rowland.harvard.edu>
- <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
- <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9+41ctA54pjm/KG@google.com>
- <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
+        Sat, 11 Feb 2023 09:28:30 -0800 (PST)
+Date:   Sat, 11 Feb 2023 17:28:29 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-kernel@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
+        Wei Wang <wvw@google.com>, Xuewen Yan <xuewen.yan94@gmail.com>,
+        Hank <han.lin@mediatek.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
+Subject: Re: [PATCH v2 1/3] sched/uclamp: Set max_spare_cap_cpu even if
+ max_spare_cap is 0
+Message-ID: <20230211172829.f2igueizqpwijjjz@airbuntu>
+References: <20230205224318.2035646-1-qyousef@layalina.io>
+ <20230205224318.2035646-2-qyousef@layalina.io>
+ <CAKfTPtA9yOncmGuLfo-XaXDZ5F7+9iL-hdyGeaOQi1qrDa_RqQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAKfTPtA9yOncmGuLfo-XaXDZ5F7+9iL-hdyGeaOQi1qrDa_RqQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 01:39:07PM -0500, Alan Stern wrote:
-> On Sun, Feb 05, 2023 at 02:10:29PM +0000, Joel Fernandes wrote:
-> > On Sat, Feb 04, 2023 at 02:24:11PM -0800, Paul E. McKenney wrote:
-> > > On Sat, Feb 04, 2023 at 09:58:12AM -0500, Alan Stern wrote:
-> > > > On Fri, Feb 03, 2023 at 05:49:41PM -0800, Paul E. McKenney wrote:
-> > > > > On Fri, Feb 03, 2023 at 08:28:35PM -0500, Alan Stern wrote:
-> > > > > > The "Provide exact semantics for SRCU" patch should have:
-> > > > > > 
-> > > > > > 	Portions suggested by Boqun Feng and Jonas Oberhauser.
-> > > > > > 
-> > > > > > added at the end, together with your Reported-by: tag.  With that, I 
-> > > > > > think it can be queued for 6.4.
-> > > > > 
-> > > > > Thank you!  Does the patch shown below work for you?
-> > > > > 
-> > > > > (I have tentatively queued this, but can easily adjust or replace it.)
-> > > > 
-> > > > It looks fine.
-> > > 
-> > > Very good, thank you for looking it over!  I pushed it out on branch
-> > > stern.2023.02.04a.
-> > > 
-> > > Would anyone like to ack/review/whatever this one?
-> > 
-> > Would it be possible to add comments, something like the following? Apologies
-> > if it is missing some ideas. I will try to improve it later.
-> > 
-> > thanks!
-> > 
-> >  - Joel
-> > 
-> > ---8<-----------------------
-> > 
-> > diff --git a/tools/memory-model/linux-kernel.bell b/tools/memory-model/linux-kernel.bell
-> > index ce068700939c..0a16177339bc 100644
-> > --- a/tools/memory-model/linux-kernel.bell
-> > +++ b/tools/memory-model/linux-kernel.bell
-> > @@ -57,7 +57,23 @@ let rcu-rscs = let rec
-> >  flag ~empty Rcu-lock \ domain(rcu-rscs) as unmatched-rcu-lock
-> >  flag ~empty Rcu-unlock \ range(rcu-rscs) as unmatched-rcu-unlock
-> >  
-> > +(***************************************************************)
-> >  (* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
-> > +(***************************************************************)
-> > +(*
-> > + * carry-srcu-data: To handle the case of the SRCU critical section split
-> > + * across CPUs, where the idx is used to communicate the SRCU index across CPUs
-> > + * (say CPU0 and CPU1), data is between the R[srcu-lock] to W[once][idx] on
-> > + * CPU0, which is sequenced with the ->rf is between the W[once][idx] and the
-> > + * R[once][idx] on CPU1.  The carry-srcu-data is made to exclude Srcu-unlock
-> > + * events to prevent capturing accesses across back-to-back SRCU read-side
-> > + * critical sections.
-> > + *
-> > + * srcu-rscs: Putting everything together, the carry-srcu-data is sequenced with
-> > + * a data relation, which is the data dependency between R[once][idx] on CPU1
-> > + * and the srcu-unlock store, and loc ensures the relation is unique for a
-> > + * specific lock.
-> > + *)
-> >  let carry-srcu-data = (data ; [~ Srcu-unlock] ; rf)*
-> >  let srcu-rscs = ([Srcu-lock] ; carry-srcu-data ; data ; [Srcu-unlock]) & loc
+On 02/07/23 10:45, Vincent Guittot wrote:
+> On Sun, 5 Feb 2023 at 23:43, Qais Yousef <qyousef@layalina.io> wrote:
+> >
+> > When uclamp_max is being used, the util of the task could be higher than
+> > the spare capacity of the CPU, but due to uclamp_max value we force fit
+> > it there.
+> >
+> > The way the condition for checking for max_spare_cap in
+> > find_energy_efficient_cpu() was constructed; it ignored any CPU that has
+> > its spare_cap less than or _equal_ to max_spare_cap. Since we initialize
+> > max_spare_cap to 0; this lead to never setting max_spare_cap_cpu and
+> > hence ending up never performing compute_energy() for this cluster and
+> > missing an opportunity for a better energy efficient placement to honour
+> > uclamp_max setting.
+> >
+> >         max_spare_cap = 0;
+> >         cpu_cap = capacity_of(cpu) - task_util(p);  // 0 if task_util(p) is high
+> >
+> >         ...
+> >
+> >         util_fits_cpu(...);             // will return true if uclamp_max forces it to fit
+> >
+> >         ...
+> >
+> >         // this logic will fail to update max_spare_cap_cpu if cpu_cap is 0
+> >         if (cpu_cap > max_spare_cap) {
+> >                 max_spare_cap = cpu_cap;
+> >                 max_spare_cap_cpu = cpu;
+> >         }
+> >
+> > prev_spare_cap suffers from a similar problem.
+> >
+> > Fix the logic by converting the variables into long and treating -1
+> > value as 'not populated' instead of 0 which is a viable and correct
+> > spare capacity value.
+> >
+> > Fixes: 1d42509e475c ("sched/fair: Make EAS wakeup placement consider uclamp restrictions")
+> > Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
+> > ---
+> >  kernel/sched/fair.c | 9 ++++-----
+> >  1 file changed, 4 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index c6c8e7f52935..7a21ee74139f 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -7382,11 +7382,10 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> >         for (; pd; pd = pd->next) {
+> >                 unsigned long util_min = p_util_min, util_max = p_util_max;
+> >                 unsigned long cpu_cap, cpu_thermal_cap, util;
+> > -               unsigned long cur_delta, max_spare_cap = 0;
+> > +               long prev_spare_cap = -1, max_spare_cap = -1;
+> >                 unsigned long rq_util_min, rq_util_max;
+> > -               unsigned long prev_spare_cap = 0;
+> > +               unsigned long cur_delta, base_energy;
+> >                 int max_spare_cap_cpu = -1;
+> > -               unsigned long base_energy;
+> >                 int fits, max_fits = -1;
+> >
+> >                 cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
+> > @@ -7461,7 +7460,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> >                         }
+> >                 }
+> >
+> > -               if (max_spare_cap_cpu < 0 && prev_spare_cap == 0)
+> > +               if (max_spare_cap_cpu < 0 && prev_spare_cap < 0)
+> >                         continue;
+> >
+> >                 eenv_pd_busy_time(&eenv, cpus, p);
+> > @@ -7469,7 +7468,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> >                 base_energy = compute_energy(&eenv, pd, cpus, p, -1);
+> >
+> >                 /* Evaluate the energy impact of using prev_cpu. */
+> > -               if (prev_spare_cap > 0) {
+> > +               if (prev_spare_cap > -1) {
+> >                         prev_delta = compute_energy(&eenv, pd, cpus, p,
+> >                                                     prev_cpu);
+> >                         /* CPU utilization has changed */
 > 
-> My tendency has been to keep comments in the herd7 files to a minimum 
-> and to put more extended descriptions in the explanation.txt file.  
-> Right now that file contains almost nothing (a single paragraph!) about 
-> SRCU, so it needs to be updated to talk about the new definition of 
-> srcu-rscs.  In my opinion, that's where this sort of comment belongs.
+> I think that you also need the change below to make sure that the
+> signed comparison will be used. I have quickly checked the assembly
+> code for aarch64 and your patch keeps using unsigned comparison (b.ls)
+>    ((fits == max_fits) && (cpu_cap > max_spare_cap))) {
+> ffff8000080e4c94: f94067e0 ldr x0, [sp, #200]
+> ffff8000080e4c98: eb00003f cmp x1, x0
+> ffff8000080e4c9c: 54ff98a9 b.ls ffff8000080e3fb0
+> <select_task_rq_fair+0x570>  // b.plast
 > 
-> Joel, would you like to write an extra paragraph of two for that file, 
-> explaining in more detail how SRCU lock-to-unlock matching is different 
-> from regular RCU and how the definition of the srcu-rscs relation works?  
-> I'd be happy to edit anything you come up with.
+> Whereas the change below make it to use the signed version (b.le)
+>    ((fits == max_fits) && ((long)cpu_cap > max_spare_cap))) {
+> ffff8000080e4c94: f94067e0 ldr x0, [sp, #200]
+> ffff8000080e4c98: eb00003f cmp x1, x0
+> ffff8000080e4c9c: 54ff98ad b.le ffff8000080e3fb0 <select_task_rq_fair+0x570>
 > 
+> -- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -7522,7 +7522,7 @@ static int find_energy_efficient_cpu(struct
+> task_struct *p, int prev_cpu)
+>                                 prev_spare_cap = cpu_cap;
+>                                 prev_fits = fits;
+>                         } else if ((fits > max_fits) ||
+> -                                  ((fits == max_fits) && (cpu_cap >
+> max_spare_cap))) {
+> +                                  ((fits == max_fits) &&
+> ((long)cpu_cap > max_spare_cap))) {
+>                                 /*
+>                                  * Find the CPU with the maximum spare capacity
+>                                  * among the remaining CPUs in the performance
 
-I am happy to make changes to explanation.txt (I am assuming that's the file
-you mentioned), but I was wondering what you thought of the following change.
-If the formulas are split up, that itself could be some documentation as
-well. I did add a small paragraph on the top of the formulas as well though.
+Isn't it better to go back to v1 form then? The inconsistent type paired with
+the cast isn't getting too ugly for me :(
 
-Some light testing shows it works with the cross-CPU litmus test (could still
-have bugs though and needs more testing).
+I don't think we can convert cpu_cap to long without having to do more work as
+it is used with 'util'.
 
-Let me know how you feel about it, and if I should submit something along
-these lines along with your suggestion to edit the explanation.txt. Thanks!
 
-diff --git a/tools/memory-model/linux-kernel.bell b/tools/memory-model/linux-kernel.bell
-index ce068700939c..1390d1b8ceee 100644
---- a/tools/memory-model/linux-kernel.bell
-+++ b/tools/memory-model/linux-kernel.bell
-@@ -57,9 +57,28 @@ let rcu-rscs = let rec
- flag ~empty Rcu-lock \ domain(rcu-rscs) as unmatched-rcu-lock
- flag ~empty Rcu-unlock \ range(rcu-rscs) as unmatched-rcu-unlock
- 
--(* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
--let carry-srcu-data = (data ; [~ Srcu-unlock] ; rf)*
--let srcu-rscs = ([Srcu-lock] ; carry-srcu-data ; data ; [Srcu-unlock]) & loc
-+(* SRCU read-side section modeling
-+ * Compute matching pairs of nested Srcu-lock and Srcu-unlock:
-+ * Each SRCU read-side critical section is treated as independent, of other
-+ * overlapping SRCU read-side critical sections even when on the same domain.
-+ * For this, each Srcu-lock and Srcu-unlock pair is treated as loads and
-+ * stores, with the data-dependency flow also treated as independent to prevent
-+ * fusing. *)
-+
-+(* Data dependency between lock and idx store *)
-+let srcu-lock-to-store-idx = ([Srcu-lock]; data)
-+
-+(* Data dependency between idx load and unlock *)
-+let srcu-load-idx-to-unlock = (data; [Srcu-unlock])
-+
-+(* Read-from dependency between idx store on one CPU and load on same/another.
-+ * This is required to model the splitting of critical section across CPUs. *)
-+let srcu-store-to-load-idx = (rf ; srcu-load-idx-to-unlock)
-+
-+(* SRCU data dependency flow. Exclude the Srcu-unlock to not transcend back to back rscs *)
-+let carry-srcu-data = (srcu-lock-to-store-idx ; [~ Srcu-unlock] ; srcu-store-to-load-idx)*
-+
-+let srcu-rscs = ([Srcu-lock] ; carry-srcu-data ; [Srcu-unlock]) & loc
- 
- (* Validate nesting *)
- flag ~empty Srcu-lock \ domain(srcu-rscs) as unmatched-srcu-lock
--- 
-2.39.1.581.gbfd45094c4-goog
+Cheers
 
+--
+Qais Yousef
