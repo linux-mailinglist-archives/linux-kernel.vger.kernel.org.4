@@ -2,229 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D00D6933CB
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 21:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3E26933C5
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 21:48:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjBKUt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 15:49:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
+        id S229506AbjBKUr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 15:47:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBKUty (ORCPT
+        with ESMTP id S229461AbjBKUr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 15:49:54 -0500
-Received: from mr85p00im-hyfv06021301.me.com (mr85p00im-hyfv06021301.me.com [17.58.23.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FFC17CE7
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 12:49:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1676148592; bh=ipWlGnh3MW1Vz3Ivsi+SHRp2lRJTeFpeE+MicgoNRTM=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=JfMlIIyTeDQ/f5BHzmcDDlfJzGbSwZhs/uB76fCH2v+DBSNb4R+D9dptTKcAGyKNO
-         PA68sVIl/BE7XnypZ8J76uAcUtOfL2maHxE7QOJacelK/fIuoVVnW1c4QbLUuCes36
-         5+1TEdh/OVniKZonFu0q0OdHCjoBR5zmqh1mJLUocWkQgelrkx3K3sAjjUh0SrUY5M
-         btNLabDByExuZt3uZ2r/sQh/SL63PQLvHhBdq64YRXt/L5N+v4Kgvb9v4YYwKnUEAP
-         XkygDCgP0CzG0He2ipZ5LPikoJUqqz3gtNntvOtlMUftGRSgllFzdnCm0afWi6znmi
-         AKXMKmxRFaagw==
-Received: from localhost (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-        by mr85p00im-hyfv06021301.me.com (Postfix) with ESMTPSA id BA7E221510B9;
-        Sat, 11 Feb 2023 20:49:51 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>
-Cc:     Alain Volmat <avolmat@me.com>, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: remoteproc: sti: convert st-rproc into dt-schema
+        Sat, 11 Feb 2023 15:47:56 -0500
+Received: from hosting.gsystem.sk (hosting.gsystem.sk [212.5.213.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1C8017CEE;
+        Sat, 11 Feb 2023 12:47:54 -0800 (PST)
+Received: from [192.168.0.2] (chello089173232159.chello.sk [89.173.232.159])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by hosting.gsystem.sk (Postfix) with ESMTPSA id C8A877A0308;
+        Sat, 11 Feb 2023 21:47:53 +0100 (CET)
+From:   Ondrej Zary <linux@zary.sk>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: Re: [PATCH 03/12] pata_parport: remove devtype from struct pi_adapter
 Date:   Sat, 11 Feb 2023 21:47:50 +0100
-Message-Id: <20230211204751.9149-1-avolmat@me.com>
-X-Mailer: git-send-email 2.34.1
+User-Agent: KMail/1.9.10
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Tim Waugh <tim@cyberelk.net>, linux-block@vger.kernel.org,
+        linux-parport@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230211144232.15138-1-linux@zary.sk> <20230211144232.15138-4-linux@zary.sk> <909afe94-d786-a94c-5142-818e540705cc@omp.ru>
+In-Reply-To: <909afe94-d786-a94c-5142-818e540705cc@omp.ru>
+X-KMail-QuotePrefix: > 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: MDdap3thiMhZKujSL1PA1Ox-Q2HonM5A
-X-Proofpoint-ORIG-GUID: MDdap3thiMhZKujSL1PA1Ox-Q2HonM5A
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.11.62.513.0000000_definitions?=
- =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2021-12-02?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0
- mlxlogscore=999 malwarescore=0 phishscore=0 mlxscore=0 clxscore=1011
- spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2302110195
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: Text/Plain;
+  charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Message-Id: <202302112147.50725.linux@zary.sk>
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the st-rproc.txt binding into dt-schema YAML st,sti-rproc.yaml
+On Saturday 11 February 2023 20:11:06 Sergey Shtylyov wrote:
+> On 2/11/23 5:42 PM, Ondrej Zary wrote:
+> 
+> > Only bpck driver uses devtype but it never gets set in pata_parport.
+> > Remove it.
+> > 
+> > Signed-off-by: Ondrej Zary <linux@zary.sk>
+> > ---
+> >  drivers/ata/pata_parport/bpck.c | 2 +-
+> >  include/linux/pata_parport.h    | 3 ---
+> >  2 files changed, 1 insertion(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/ata/pata_parport/bpck.c b/drivers/ata/pata_parport/bpck.c
+> > index b9174cf8863c..451a068fe28a 100644
+> > --- a/drivers/ata/pata_parport/bpck.c
+> > +++ b/drivers/ata/pata_parport/bpck.c
+> > @@ -241,7 +241,7 @@ static void bpck_connect ( PIA *pi  )
+> >  
+> >  	WR(5,8);
+> >  
+> > -	if (pi->devtype == PI_PCD) {
+> > +	if (1 /*pi->devtype == PI_PCD*/) {	/* FIXME */
+> >  		WR(0x46,0x10);		/* fiddle with ESS logic ??? */
+> 
+>    Why not drop this entire *if* stmt? 
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
----
- .../bindings/remoteproc/st,sti-rproc.yaml     | 101 ++++++++++++++++++
- .../bindings/remoteproc/st-rproc.txt          |  41 -------
- 2 files changed, 101 insertions(+), 41 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/remoteproc/st,sti-rproc.yaml
- delete mode 100644 Documentation/devicetree/bindings/remoteproc/st-rproc.txt
+I decided to keep it (for now) as a marker of a possible bug. I currently don't have HW to test this driver.
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/st,sti-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/st,sti-rproc.yaml
-new file mode 100644
-index 000000000000..b9d84dfbcb58
---- /dev/null
-+++ b/Documentation/devicetree/bindings/remoteproc/st,sti-rproc.yaml
-@@ -0,0 +1,101 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/remoteproc/st,sti-rproc.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: STMicroelectronics STi remote processor controller
-+
-+description:
-+  This binding provides support for adjunct processors found on ST SoCs.
-+
-+  Co-processors can be controlled from the bootloader or the primary OS. If
-+  the bootloader starts a co-processor, the primary OS must detect its state
-+  and act accordingly.
-+
-+maintainers:
-+  - Patrice Chotard <patrice.chotard@foss.st.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - st,st231-rproc
-+      - st,st40-rproc
-+
-+  memory-region:
-+    description:
-+      List of phandles to the reserved memory regions associated with the
-+      remoteproc device. This is variable and describes the memories shared with
-+      the remote processor (e.g. remoteproc firmware and carveouts, rpmsg
-+      vrings, ...).
-+      (see ../reserved-memory/reserved-memory.txt)
-+
-+  resets:
-+    maxItems: 1
-+
-+  reset-names:
-+    maxItems: 1
-+
-+  st,syscfg:
-+    description:
-+      System configuration register which holds the boot vector for the co-processor
-+    $ref: "/schemas/types.yaml#/definitions/phandle-array"
-+    items:
-+      - items:
-+          - description: Phandle of syscon block
-+          - description: Boot vector register offset
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-frequency:
-+    description:
-+      Frequency of the processing clock of the remote processor
-+    $ref: "/schemas/types.yaml#/definitions/uint32"
-+
-+  "#mbox-cells":
-+    const: 1
-+
-+  mboxes:
-+    maxItems: 4
-+
-+  mbox-names:
-+    items:
-+      - const: vq0_rx
-+      - const: vq0_tx
-+      - const: vq1_rx
-+      - const: vq1_tx
-+
-+required:
-+  - compatible
-+  - memory-region
-+  - resets
-+  - reset-names
-+  - st,syscfg
-+  - clocks
-+  - clock-frequency
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/stih407-clks.h>
-+    #include <dt-bindings/reset/stih407-resets.h>
-+    audio_reserved: rproc@42000000 {
-+      compatible = "shared-dma-pool";
-+        reg = <0x42000000 0x01000000>;
-+        no-map;
-+    };
-+
-+    st231-audio {
-+      compatible = "st,st231-rproc";
-+      memory-region = <&audio_reserved>;
-+      resets = <&softreset STIH407_ST231_AUD_SOFTRESET>;
-+      reset-names = "sw_reset";
-+      clocks = <&clk_s_c0_flexgen CLK_ST231_AUD_0>;
-+      clock-frequency = <600000000>;
-+      st,syscfg	= <&syscfg_core 0x228>;
-+    };
-+
-+...
-diff --git a/Documentation/devicetree/bindings/remoteproc/st-rproc.txt b/Documentation/devicetree/bindings/remoteproc/st-rproc.txt
-deleted file mode 100644
-index 1031bcd90a79..000000000000
---- a/Documentation/devicetree/bindings/remoteproc/st-rproc.txt
-+++ /dev/null
-@@ -1,41 +0,0 @@
--STMicroelectronics Co-Processor Bindings
------------------------------------------
--
--This binding provides support for adjunct processors found on ST SoCs.
--
--Co-processors can be controlled from the bootloader or the primary OS. If
--the bootloader starts a co-processor, the primary OS must detect its state
--and act accordingly.
--
--Required properties:
--- compatible		Should be one of:
--				"st,st231-rproc"
--				"st,st40-rproc"
--- memory-region		Reserved memory (See: ../reserved-memory/reserved-memory.txt)
--- resets		Reset lines (See: ../reset/reset.txt)
--- reset-names		Must be "sw_reset" and "pwr_reset"
--- clocks		Clock for co-processor (See: ../clock/clock-bindings.txt)
--- clock-frequency	Clock frequency to set co-processor at if the bootloader
--			hasn't already done so
--- st,syscfg		System configuration register which holds the boot vector
--			for the co-processor
--				1st cell: Phandle to syscon block
--				2nd cell: Boot vector register offset
--
--Example:
--
--	audio_reserved: rproc@42000000 {
--		compatible = "shared-dma-pool";
--		reg = <0x42000000 0x01000000>;
--		no-map;
--	};
--
--	st231-audio {
--		compatible	= "st,st231-rproc";
--		memory-region	= <&audio_reserved>;
--		resets		= <&softreset STIH407_ST231_AUD_SOFTRESET>;
--		reset-names	= "sw_reset";
--		clocks		= <&clk_s_c0_flexgen CLK_ST231_AUD_0>;
--		clock-frequency	= <600000000>;
--		st,syscfg	= <&syscfg_core 0x228>;
--	};
+> 
+> >  		WR(0x4c,0x38);
+> >  		WR(0x4d,0x88);
+> [...]
+> 
+> MBR, Sergey
+> 
+
+
 -- 
-2.34.1
-
+Ondrej Zary
