@@ -2,152 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 986EA6930D3
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 13:18:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BE76930D9
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 13:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbjBKMSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 07:18:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46276 "EHLO
+        id S229516AbjBKM1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 07:27:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjBKMSD (ORCPT
+        with ESMTP id S229491AbjBKM1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 07:18:03 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F29241DA;
-        Sat, 11 Feb 2023 04:18:02 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31BBbgrw019114;
-        Sat, 11 Feb 2023 12:17:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=5h6MzoWQiCUa7cJYpAjuWIpHOhmwTSRHsB1DoYu9mV0=;
- b=KElPFrFyL/WwdpGy8645TdrL9ZdnhcxUoV0gWU1Z2C8AZo81BwLuIps6svbVlFHpVmtA
- ZpCV0d3YWn5yx6GzsBT6qTr5+LgojgcnTzAEbGOQLVm07FXH8IyQFZ7n/NWiwstPa2GS
- eR0QUGs0tdd5PAjIZbJViw/FWL2XkRyFOKo1tvYkdIkWx7wH1iB7TedLx98lDVcgyoXV
- gK+T4inRLkDd1davNoLfIz/avXTt97CODq3Hl37Q+nDyiedUGUQien+YmMwPr6IPh7cm
- 4szwgDCQ4SrBbJQvz3BL9gGhicBKyhv1TRLC681Pd+LeMfL37nJy0AzGMVRXMDZhSjMf hg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np3derns7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 11 Feb 2023 12:17:56 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31BCHt39032237
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 11 Feb 2023 12:17:55 GMT
-Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Sat, 11 Feb 2023 04:17:52 -0800
-From:   Prashanth K <quic_prashk@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>
-CC:     Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Prashanth K <quic_prashk@quicinc.com>
-Subject: [PATCH v2] usb: gadget: u_serial: Add null pointer check in gserial_resume
-Date:   Sat, 11 Feb 2023 17:47:38 +0530
-Message-ID: <1676117858-32157-1-git-send-email-quic_prashk@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Sat, 11 Feb 2023 07:27:04 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0E320D07
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 04:27:02 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id ml19so22033701ejb.0
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 04:27:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UHheap62xUTlR5nYAk+Jh1vpzTppzTaMXhpOmRALAYI=;
+        b=JZMN+4hSY640k6Kja8OEBIuj0yWLh5OZ1zOwcmtNaNn0KoXB0JLEBY9/Kwc7/GqgiF
+         m1ajvu/oQv9m83TfWB2xAJ8XRJTq+b6iDh92VLLtaqcKXEgguqz5BlupzibNuRLjbcEZ
+         YosZ6bhGT2WfNj9cLqEZYVGDKk6FCjMzxWI8i7R9/l1Ca1x6IO0mHBtfBX3RsHJYsM8S
+         2c6Ila8w+ZbK+3pe/IWZq+aV7lSBHAtsUPDn0UyIMVgYYsrJxKo/ACJivXEmt6GFzTPE
+         +/a3l/WMkp5C33z0vtu06C6DtXfbAfgSxPEtrhA6DgE16cTUUhbxNMYbAKNdcmu6+Wh6
+         pbZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UHheap62xUTlR5nYAk+Jh1vpzTppzTaMXhpOmRALAYI=;
+        b=SNmkrd2fW+FLa+qxiJ3kvNiYFunbpj9+Flw01tXqt6x5mWTLCq2aJ3X26K2Kpz8n4e
+         +SaNf5uexn2sAgj6R8VHYZbVlgQa5WfsZb6T1tTKDGenmjT3Ylcr8+COH7anoztKyP87
+         2tMKmvURrE4vtjiQ3VYRoDBfoewR7Wz/RbRYzhOTFNLfPJj0hZ15WVnM1Df0IP8q49QA
+         fYkwr0/zK/NBa7LCvwK1XHxe5pUvXdP7xxaYV87RE+kqVIyie7RlLj4hURSdNmyqlwob
+         Za5Y9sNL4p8mYHBbRYdtMHIBWOb+I8cA0sjLysjESQq0wDVQPW8eCf7j9mJijr4kZRqn
+         Kzzw==
+X-Gm-Message-State: AO0yUKVnawuzk/5yje2SkjY96U83k8pWR+OZmtCxiqYhGsUVzUR2R1Pv
+        aqwep69X+/ttg0h63aKLNuwQpg==
+X-Google-Smtp-Source: AK7set8ZFbIY5TBzWXOS1C1MfTjkBrsnU/cixmxrIKXASrqcqd0fgrjzx9nXG8WSbxwhzFSQIByu3Q==
+X-Received: by 2002:a17:907:6e17:b0:8af:2af5:1191 with SMTP id sd23-20020a1709076e1700b008af2af51191mr12961239ejc.18.1676118421369;
+        Sat, 11 Feb 2023 04:27:01 -0800 (PST)
+Received: from localhost.localdomain (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
+        by smtp.gmail.com with ESMTPSA id mv9-20020a170907838900b0087bd2ebe474sm3767941ejc.208.2023.02.11.04.26.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Feb 2023 04:27:01 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 01/10] dt-bindings: display/msm: dsi-controller-main: Add SM6350
+Date:   Sat, 11 Feb 2023 13:26:47 +0100
+Message-Id: <20230211122656.1479141-2-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230211122656.1479141-1-konrad.dybcio@linaro.org>
+References: <20230211122656.1479141-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: SY-UZA_tNDGrO_D4R37iZS2MxnYPrHtC
-X-Proofpoint-ORIG-GUID: SY-UZA_tNDGrO_D4R37iZS2MxnYPrHtC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-11_06,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- clxscore=1015 adultscore=0 mlxlogscore=832 malwarescore=0 phishscore=0
- lowpriorityscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302110111
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Consider a case where gserial_disconnect has already cleared
-gser->ioport. And if a wakeup interrupt triggers afterwards,
-gserial_resume gets called, which will lead to accessing of
-gser->ioport and thus causing null pointer dereference.Add
-a null pointer check to prevent this.
+Add the DSI host found on SM6350.
 
-Added a static spinlock to prevent gser->ioport from becoming
-null after the newly added check.
-
-Fixes: aba3a8d01d62 ("usb: gadget: u_serial: add suspend resume callbacks")
-Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-v2: Added static spinlock and fixed Fixes tag.
+ .../devicetree/bindings/display/msm/dsi-controller-main.yaml    | 2 ++
+ 1 file changed, 2 insertions(+)
 
- drivers/usb/gadget/function/u_serial.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index 840626e..9ced0fa 100644
---- a/drivers/usb/gadget/function/u_serial.c
-+++ b/drivers/usb/gadget/function/u_serial.c
-@@ -82,6 +82,8 @@
- #define WRITE_BUF_SIZE		8192		/* TX only */
- #define GS_CONSOLE_BUF_SIZE	8192
- 
-+static DEFINE_SPINLOCK(serial_port_lock);
-+
- /* console info */
- struct gs_console {
- 	struct console		console;
-@@ -1370,11 +1372,13 @@ EXPORT_SYMBOL_GPL(gserial_connect);
- void gserial_disconnect(struct gserial *gser)
- {
- 	struct gs_port	*port = gser->ioport;
--	unsigned long	flags;
-+	unsigned long flags, serial_flag;
- 
- 	if (!port)
- 		return;
- 
-+	spin_lock_irqsave(&serial_port_lock, serial_flag);
-+
- 	/* tell the TTY glue not to do I/O here any more */
- 	spin_lock_irqsave(&port->port_lock, flags);
- 
-@@ -1392,6 +1396,7 @@ void gserial_disconnect(struct gserial *gser)
- 	}
- 	port->suspended = false;
- 	spin_unlock_irqrestore(&port->port_lock, flags);
-+	spin_unlock_irqrestore(&serial_port_lock, serial_flag);
- 
- 	/* disable endpoints, aborting down any active I/O */
- 	usb_ep_disable(gser->out);
-@@ -1426,9 +1431,16 @@ EXPORT_SYMBOL_GPL(gserial_suspend);
- void gserial_resume(struct gserial *gser)
- {
- 	struct gs_port *port = gser->ioport;
--	unsigned long	flags;
-+	unsigned long flags, serial_flag;
-+
-+	spin_lock_irqsave(&serial_port_lock, serial_flag);
-+	if (!port) {
-+		spin_unlock_irqrestore(&serial_port_lock, serial_flag);
-+		return;
-+	}
- 
- 	spin_lock_irqsave(&port->port_lock, flags);
-+	spin_unlock_irqrestore(&serial_port_lock, serial_flag);
- 	port->suspended = false;
- 	if (!port->start_delayed) {
- 		spin_unlock_irqrestore(&port->port_lock, flags);
+diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+index f195530ae964..2f946bb9fe24 100644
+--- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+@@ -26,6 +26,7 @@ properties:
+               - qcom,sdm660-dsi-ctrl
+               - qcom,sdm845-dsi-ctrl
+               - qcom,sm6115-dsi-ctrl
++              - qcom,sm6350-dsi-ctrl
+               - qcom,sm8150-dsi-ctrl
+               - qcom,sm8250-dsi-ctrl
+               - qcom,sm8350-dsi-ctrl
+@@ -286,6 +287,7 @@ allOf:
+           contains:
+             enum:
+               - qcom,msm8998-dsi-ctrl
++              - qcom,sm6350-dsi-ctrl
+     then:
+       properties:
+         clocks:
 -- 
-2.7.4
+2.39.1
 
