@@ -2,158 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C9D6932EE
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 18:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E1E6932F1
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 19:02:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjBKRzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 12:55:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
+        id S229616AbjBKSB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 13:01:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBKRzV (ORCPT
+        with ESMTP id S229455AbjBKSBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 12:55:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E21B3;
-        Sat, 11 Feb 2023 09:55:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43403B80966;
-        Sat, 11 Feb 2023 17:55:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EC92C433EF;
-        Sat, 11 Feb 2023 17:55:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676138116;
-        bh=Cimg2dplNjIVjTVkvDDsDJ8LuO9N1uHdmJusLzhU7z8=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=SB8VKgJ7x06WR/kTHhb1EVQZRzuNIWs3f3IpE4j3fUYVpvpfODIfP/nyYK3n2utRZ
-         xvxNqtreM5BDIW2MhK+qIoCCODNyA+4GFBhAOvXSWzRA2hmWfeOxa4LD0bY7CW5cnN
-         /fGH5zbSMA2WFBDJ4nrY3+J04TCQHh3YBqho6Z8sCYHArqjGBTWrLEK8OVI5HyvXSe
-         qdhGjoMbaHuKI8ZBz6a/Bl6kPjUwVefxsyHAtZEOdj03XUbvvqg6NB5zZ92IqK8bXS
-         Tz6ZOglY12j65Nyyhq5WHRcGbzpf3+GKf+l/R62CUdaYKNGhye23TfhHDWDi89fJ8L
-         TvXoMM6f0FhtA==
-Date:   Sat, 11 Feb 2023 09:55:09 -0800
-From:   Kees Cook <kees@kernel.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Kees Cook <keescook@chromium.org>
-CC:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] bpf: Deprecate "data" member of bpf_lpm_trie_key
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CAADnVQJed84rqugpNDY2u1r89QEOyAMMKZHLHefX=GRWZ3haoQ@mail.gmail.com>
-References: <20230209192337.never.690-kees@kernel.org> <CAEf4BzZXrf48wsTP=2H2gkX6T+MM0B45o0WNswi50DQ_B-WG4Q@mail.gmail.com> <63e5521a.170a0220.297d7.3a80@mx.google.com> <CAADnVQKsB2n0=hShYpYnTr5yFYRt5MX2QMWo3V9SB9JrM6GhTg@mail.gmail.com> <63e561d8.a70a0220.250aa.3eb9@mx.google.com> <CAADnVQJed84rqugpNDY2u1r89QEOyAMMKZHLHefX=GRWZ3haoQ@mail.gmail.com>
-Message-ID: <E8CE1CDC-27F2-4F14-9AFF-3AE409B82F6C@kernel.org>
+        Sat, 11 Feb 2023 13:01:24 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB55268E
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 10:01:22 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id bg5-20020a05600c3c8500b003e00c739ce4so6181436wmb.5
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 10:01:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uo9tC0EKACotZK/Cddb6UcgXeVdOByRK5YCjZOlIXv8=;
+        b=lc3EUahjoDki5moCm8LjiRQUW1S+Hu6/lKGqlpQ6qBhGqkmsfPilPFhoQQ77P5Z0Cv
+         pz2YbGa6GViJPOQhXeSd7hecsqLt/THHBe5j2Bd6bisVmPKaL6gup1LSI8HRZ2+xi+KS
+         hfCep3eb94gKt795Q09MhAf7sLTQrYF4xkceskJFBDMt6gNw2m/8NOK0qotnEriKEDVA
+         2WGhWmXwaFlJWjxrYm6mp2zS7Y1c9nzzUXbwuUcaL+J8jQqHdjTReu8yfG8ehAPBQ9jP
+         iPhtThLRAoQ2KOPm1q/93TWqa/oa4IgBKG20iLJME5sGchmi48bmcpfFEpOqWYD8R9WT
+         DlFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uo9tC0EKACotZK/Cddb6UcgXeVdOByRK5YCjZOlIXv8=;
+        b=nl1CGw962joBP4NN7YVN9eMMFW+u4HC5NVsbtC+6oVemOoFLifvInck//ewS2wOutq
+         1dUEJ8HSU9JiNp/UCh2hsxaHVTBCrL87Izweswh8cOhCiNpqG69lJKG1XwOO5ihhGl1K
+         Uxa45NVKSyipg3+I+2nkMs0rDBTg1U1VoRlfDaLAhTSZonfjpOBypF+96Kcq/9w1kxOH
+         MWXibwYYDNiwv9SXDdXaaTTYUaxt28fHZCi18b6xsErJVSN7DiP9+it9SECVpxmEvS/W
+         1IRwQRe4sbGlQN1q4grvce/MuOopCKiEuBS/PwSibrK9q02FOHw9L5RlCkR0VjD4kPWQ
+         Iqxg==
+X-Gm-Message-State: AO0yUKXbEP5Ul+7KUNJayexS0WVCd3KJNl2QqWRf8zfrPW0tSwNgOzIR
+        dYCpKs0r5/Djehx1GYoBpXmzBA==
+X-Google-Smtp-Source: AK7set9wHz2tT/B/MQNwGsssdWjMeRTS00ceKlUj1xwLw3XqEu2/8GxcAT61rQYyhoLX7QZGBHQ4Jw==
+X-Received: by 2002:a05:600c:18a0:b0:3df:3bd6:63e5 with SMTP id x32-20020a05600c18a000b003df3bd663e5mr14881360wmp.12.1676138481424;
+        Sat, 11 Feb 2023 10:01:21 -0800 (PST)
+Received: from airbuntu (host86-163-35-10.range86-163.btcentralplus.com. [86.163.35.10])
+        by smtp.gmail.com with ESMTPSA id f8-20020a05600c4e8800b003da28dfdedcsm9802746wmq.5.2023.02.11.10.01.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Feb 2023 10:01:21 -0800 (PST)
+Date:   Sat, 11 Feb 2023 18:01:19 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
+        Wei Wang <wvw@google.com>, Xuewen Yan <xuewen.yan94@gmail.com>,
+        Hank <han.lin@mediatek.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
+Subject: Re: [PATCH v2 2/3] sched/uclamp: Ignore (util == 0) optimization in
+ feec() when p_util_max = 0
+Message-ID: <20230211180119.4mbfn7j3skvoasop@airbuntu>
+References: <20230205224318.2035646-1-qyousef@layalina.io>
+ <20230205224318.2035646-3-qyousef@layalina.io>
+ <CAKfTPtCf4+orEhYmFBg+tsMH7e5sV5zJZ1k8apjZkYwSAxAu+w@mail.gmail.com>
+ <d7f29def-7004-b62d-9266-3ad997111e2f@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <d7f29def-7004-b62d-9266-3ad997111e2f@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On February 9, 2023 2:01:15 PM PST, Alexei Starovoitov <alexei=2Estarovoito=
-v@gmail=2Ecom> wrote:
->On Thu, Feb 9, 2023 at 1:12 PM Kees Cook <keescook@chromium=2Eorg> wrote:
->>
->> On Thu, Feb 09, 2023 at 12:50:28PM -0800, Alexei Starovoitov wrote:
->> > On Thu, Feb 9, 2023 at 12:05 PM Kees Cook <keescook@chromium=2Eorg> w=
-rote:
->> > >
->> > > On Thu, Feb 09, 2023 at 11:52:10AM -0800, Andrii Nakryiko wrote:
->> > > > Do we need to add a new type to UAPI at all here? We can make thi=
-s new
->> > > > struct internal to kernel code (e=2Eg=2E struct bpf_lpm_trie_key_=
-kern) and
->> > > > point out that it should match the layout of struct bpf_lpm_trie_=
-key=2E
->> > > > User-space can decide whether to use bpf_lpm_trie_key as-is, or i=
-f
->> > > > just to ensure their custom struct has the same layout (I see som=
-e
->> > > > internal users at Meta do just this, just make sure that they hav=
-e
->> > > > __u32 prefixlen as first member)=2E
->> > >
->> > > The uses outside the kernel seemed numerous enough to justify a new=
- UAPI
->> > > struct (samples, selftests, etc)=2E It also paves a single way forw=
-ard
->> > > when the userspace projects start using modern compiler options (e=
-=2Eg=2E
->> > > systemd is usually pretty quick to adopt new features)=2E
->> >
->> > I don't understand how the new uapi struct bpf_lpm_trie_key_u8 helps=
-=2E
->> > cilium progs and progs/map_ptr_kern=2Ec
->> > cannot do s/bpf_lpm_trie_key/bpf_lpm_trie_key_u8/=2E
->> > They will fail to build, so they're stuck with bpf_lpm_trie_key=2E
->>
->> Right -- I'm proposing not changing bpf_lpm_trie_key=2E I'm proposing
->> _adding_ bpf_lpm_trie_key_u8 for new users who will be using modern
->> compiler options (i=2Ee=2E where "data[0]" is nonsense)=2E
->>
->> > Can we do just
->> > struct bpf_lpm_trie_key_kern {
->> >   __u32   prefixlen;
->> >   __u8    data[];
->> > };
->> > and use it in the kernel?
->>
->> Yeah, I can do that if that's preferred, but it leaves userspace hangin=
-g
->> when they eventually trip over this in their code when they enable
->> -fstrict-flex-arrays=3D3 too=2E
->>
->> > What is the disadvantage?
->>
->> It seemed better to give a working example of how to migrate this code=
-=2E
->
->I understand and agree with intent, but I'm still missing
->how you're going to achieve this migration=2E
->bpf_lpm_trie_key_u8 doesn't provide a migration path to cilium progs
->and pretty much all bpf progs that use LPM map=2E
->Sure, one can change the user space part, like you did in test_lpm_map=2E=
-c,
->but it doesn't address the full scope=2E
->imo half way is worse than not doing it=2E
+On 02/08/23 12:52, Dietmar Eggemann wrote:
+> On 07/02/2023 11:04, Vincent Guittot wrote:
+> > On Sun, 5 Feb 2023 at 23:43, Qais Yousef <qyousef@layalina.io> wrote:
+> >>
+> >> find_energy_efficient_cpu() bails out early if effective util of the
+> >> task is 0. When uclamp is being used, this could lead to wrong decisions
+> >> when uclamp_max is set to 0. Cater for that.
+> 
+> IMHO this needs a little bit more explanation. Someone could argue that
+> 'util > 0, uclamp_min=0, uclamp_max=0' is a valid setup for a task which
+> should let it appear as a task with 0 util (capped to 0).
 
-Maybe I'm missing something, but if a program isn't building with -fstrict=
--flex-arrays=3D3, it can keep on using struct bpf_lpm_trie_key as before=2E=
- If/when it starts using -fsfa, if can use struct bpf_lpm_trie_key in compo=
-site structs as a header just like before, but if it has places using the "=
-data" member as an array of u8, it can switch to something using struct bpf=
-_lpm_trie_key_u8, either directly or as a union with whatever ever struct t=
-hey have=2E (And this replacement is what I did for all the samples/selftes=
-ts=2E)
+You want me to explain the purpose of the optimization then?
+
+The optimization skips energy calculation when util is 0 because the delta will
+be 0. But when uclamp_max = 0 util is not really 0 - consequently  the delta
+will not be 0.
+
+Would such an explanation clarify things better?
+
+> 
+> >> Fixes: d81304bc6193 ("sched/uclamp: Cater for uclamp in find_energy_efficient_cpu()'s early exit condition")
+> >> Signed-off-by: Qais Yousef <qyousef@layalina.io>
+> >> ---
+> >>  kernel/sched/fair.c | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> >> index 7a21ee74139f..a8c3d92ff3f6 100644
+> >> --- a/kernel/sched/fair.c
+> >> +++ b/kernel/sched/fair.c
+> >> @@ -7374,7 +7374,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> >>         target = prev_cpu;
+> >>
+> >>         sync_entity_load_avg(&p->se);
+> >> -       if (!uclamp_task_util(p, p_util_min, p_util_max))
+> >> +       if (!uclamp_task_util(p, p_util_min, p_util_max) && p_util_max != 0)
+> > 
+> > The below should do the same without testing twice p_util_max:
+> > uclamp_task_util(p, p_util_min, ULONG_MAX)
+> 
+> Since uclamp_task_util() is only used here and we don't want to test for
+> capping to 0 anymore, why not just get rid of this function and use:
+> 
+>   !(task_util_est(p) || p_util_min)
+
+That would be better, yes!
+
+Question for you and Vincent. Do we really want this optimization? I started
+with removing it - then erred on the conservative side and kept it.
+
+I don't know how often we hit this case and I didn't see any benchmark run to
+be able to verify anything when I looked at the history.
+
+It seems helpful in theory - but why we save something if we ignore 0 but not
+1 which I suspect will not produce a significant delta either.
+
+I don't mind keeping it - but I think worth thinking if it is really adding
+much.
 
 
+Cheers
 
---=20
-Kees Cook
+--
+Qais Yousef
