@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F392E69335D
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 20:47:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3CE5693360
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 20:47:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjBKTr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 14:47:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
+        id S229524AbjBKTrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 14:47:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjBKTrZ (ORCPT
+        with ESMTP id S229687AbjBKTrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 14:47:25 -0500
+        Sat, 11 Feb 2023 14:47:37 -0500
 Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3ADCEB54;
-        Sat, 11 Feb 2023 11:47:24 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id qw12so23329364ejc.2;
-        Sat, 11 Feb 2023 11:47:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940DFEB54;
+        Sat, 11 Feb 2023 11:47:35 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id c26so18499682ejz.10;
+        Sat, 11 Feb 2023 11:47:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vt58wxl/vfRdmQWqW6l46iKB45NYcQ6smTWDkh/oDOU=;
-        b=NLIc72SU+vIVYdboVnsBBD3vBlXVZENUk2eaFzn8BWi5K6X/5U6rfMd3c8IHhvSdgQ
-         VawWtejPFAra0xaOK3cYkFyoWShCdqs0yHEduYZwLhnJJfCO8LlKjZ6JgdM1+DlQcPXh
-         JknfPhwzVNM+vX1HzSawZ6hRyZJUZ0wWUmtfSxsVhH62CyJrUulZfDIyT7CttFTcEK28
-         kyxGRzuRr2ihLDClhf6UhhWgaa/13SruTIZNX5tcw64x1l2vp+35KG8qHGs/epSCLCae
-         j4KdwDRaewPQtVlpG3qurebAiwGQK6ZLbkpAmgTHbweM95ZWR9KCpy+2aUUHYsHQLRon
-         xYUQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EXEDCEma1gMYRQAW/RN00tZ3sWe+13/Cf5q6JLW2DnE=;
+        b=QaVdL7A8hUHNBugmWLes/UMIqWNJvS5VaxjoV0mOc50q6J01gKe7HZGfGKPUuAabjR
+         hIjME+omCN/uxqdF7xU1h56O1jN3aZG4QWA3Nl1azxe9WVgKkZYp1WXAHNd2p5jt1R9j
+         wKwBNPrbrs63f6QAkUwxyYCZFZFJrEijmNE6ILegV4OPL8HUQd1Pia6BT5T4fqMRRTH+
+         xCCRyHzRNxFCoAxoSwXqsOYAaHe7S53Rs5L+zY50jX/+scwWmRrI2+ObfXu+Vr52M3u6
+         g0Jb9yhkpYKtlTb07ztQolbJG3BnN4OR1yolz48k/e+TrJ6TubTAhV7/JCtCEBqK/prx
+         JzPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vt58wxl/vfRdmQWqW6l46iKB45NYcQ6smTWDkh/oDOU=;
-        b=1esWPwvaayae9UdkTYkcfVI+gYawWTQVY1moM6aRWa9gwGRoSX5KyXa9sd7S5ezQti
-         qqS0XViVFWUUQbPr3AmBgnsX/Y885xS/u4NtLLoMBsTv0g5n2pZj+qsfDvFhUq/IrqzZ
-         IU31syJ+eQgXPoDbq+NBUMdT79RCTWLHB6C2MnrRakSovct3IyRXGIvW+P3w6N19vu3g
-         v8uMU9xtFpmKWa4cV1NvP216LldVn/tdz1xA2yNUc6II0IT6XEIqVELB9IUCYoHgkhw7
-         zL/1UKuTvUulrd7cTX9SSpktzULIKzVARzBnZW6d4/v8f4cQjn9JsOfQvOCFnV8Ta7si
-         KkVw==
-X-Gm-Message-State: AO0yUKXTAhZNj+h0+u3l7bL2y9XV/lT3e4N1yk6f9gZPreIpzsal0xU7
-        MIAfbaBXFBnmBtCZ1cOXLQa+r/jJpx46SypUDCg=
-X-Google-Smtp-Source: AK7set8TuD+bcbyQ9zbkjELm2cwtzJgDzXWbzgJ17AMPvZMnyzWcMxqOZJAXTwXtATaSt6Bk4olnC2/42tmOo+kSAwg=
-X-Received: by 2002:a17:906:4c99:b0:884:ead1:4e58 with SMTP id
- q25-20020a1709064c9900b00884ead14e58mr2614702eju.4.1676144843428; Sat, 11 Feb
- 2023 11:47:23 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EXEDCEma1gMYRQAW/RN00tZ3sWe+13/Cf5q6JLW2DnE=;
+        b=Yt9ZkQQflQFugqty2BxW68JIX/zA6r2qR7wmtIwiL2oqZp0zJz/wkcgenN4hEGDkkH
+         QztddGk0ktS4vg/IqW6rWqDkj9CkXEO80+uIaaYV4WJJbAOrxOnXqIS7fw/ek8ZASjiA
+         CsGgFsE/XQsz0XzKfc/SYxrWXEDLQF2x8jNfFoj9Vz+DdLk9uYb9NGFlr7+0TjgxL7ML
+         o3uhU7d/QaM2ziH5r7jWsgpyMqzTsri6KUWFbxwte3Sii8eu9W5X+D54TV76WB43IE35
+         ZDErS/zS5Lr6uLLuUpabSASEeWkryyAPlDwYtJsfBxIvNBDYT4kG8eA7k14k4118z0T+
+         dZDA==
+X-Gm-Message-State: AO0yUKV18gHwLT+x/ofNHivwW8vEWupc64k/hSMjcZI9NyiO2wtm4paK
+        U4vBEZvdHZt0b1EZqCr4Oxg=
+X-Google-Smtp-Source: AK7set8XMlNQbHpSDcd08bIPvsxTXOzgKIS66MLm4SWNrH2/LaDVMKygD5l1sXFeWugryT1XhfcY2g==
+X-Received: by 2002:a17:906:9b8b:b0:895:58be:96b with SMTP id dd11-20020a1709069b8b00b0089558be096bmr27839681ejc.3.1676144854103;
+        Sat, 11 Feb 2023 11:47:34 -0800 (PST)
+Received: from ?IPV6:2001:9e8:20d3:ac00:30d6:d4a1:e6f6:5876? ([2001:9e8:20d3:ac00:30d6:d4a1:e6f6:5876])
+        by smtp.gmail.com with ESMTPSA id k6-20020a1709065fc600b0081bfc79beaesm4193997ejv.75.2023.02.11.11.47.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Feb 2023 11:47:33 -0800 (PST)
+Message-ID: <b716a9ec-93ba-7c42-c8d3-1d6db950ad7b@gmail.com>
+Date:   Sat, 11 Feb 2023 20:48:26 +0100
 MIME-Version: 1.0
-References: <20230207-b4-amlogic-bindings-fixups-v2-v1-0-93b7e50286e7@linaro.org>
- <20230207-b4-amlogic-bindings-fixups-v2-v1-2-93b7e50286e7@linaro.org>
-In-Reply-To: <20230207-b4-amlogic-bindings-fixups-v2-v1-2-93b7e50286e7@linaro.org>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 11 Feb 2023 20:47:12 +0100
-Message-ID: <CAFBinCDm=5oFLLC6Y+wctWaenM0nmpjKuNjkkWPzVoo1Vg2grA@mail.gmail.com>
-Subject: Re: [PATCH 2/8] arm64: dts: amlogic: meson-gxm-s912-libretech-pc: add
- simple connector node in fusb302 node
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Yuntian Zhang <yt@radxa.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: de-DE, en-US, en-US-large
+To:     Aleksa Savic <savicaleksa83@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Cc:     Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230211165923.17807-1-leonard.anderweit@gmail.com>
+ <20230211165923.17807-4-leonard.anderweit@gmail.com>
+ <0664b935-d201-419a-3f1d-3df4226a8db1@roeck-us.net>
+ <00875064-0407-b114-56c9-87aecb0d3ee4@gmail.com>
+From:   Leonard Anderweit <leonard.anderweit@gmail.com>
+Subject: Re: [PATCH 3/5] hwmon: (aquacomputer_d5next) Add temperature offset
+ control for Aquaero
+In-Reply-To: <00875064-0407-b114-56c9-87aecb0d3ee4@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,10 +81,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 4:08 PM Neil Armstrong <neil.armstrong@linaro.org> wrote:
->
-> Fixes the following bindings check error:
-> fusb302@22: 'connector' is a required property
->
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Am 11.02.23 um 19:54 schrieb Aleksa Savic:
+> On 2023-02-11 19:08:27 GMT+01:00, Guenter Roeck wrote:
+>>
+>> aquaero is already supported, and the checksum is so far generated
+>> and sent. Is it ignored ? Also, is it guaranteed that _all_ aquero devices
+>> don't need it ?
+> 
+> Reading its sensors is currently supported, not writing to it (before these
+> patches).
+> 
+> The checksum is ignored and not needed for either aquaero 5 (which Leonard has)
+> nor 6 (which I have).
+> 
+>>
+>> If it is not needed and ignored, does it really add value to selectively drop it ?
+> 
+> I think we can indeed remove that check.
+
+I don't think that check can be removed as the checksum is not appended 
+to the control report but is in the last two bytes. So using the 
+checksum on Aquaero will overwrite the data at that location. It is 
+currently unknown what these two bytes do so I do not want to overwrite 
+them.
+
+> 
+> Thanks,
+> Aleksa
+> 
+>>
+>> Either case, this change is not mentioned in the commit log, and it
+>> violates the "one logical change per patch" rule. Please split it into
+>> a separate patch and explain why the change is needed.
+>>
+>> Another change to separate is the introduction of ctrl_report_id
+>> and the secondary_ctrl_report variables, which is also done silently
+>> and not explained. That should also be a separate patch to simplify
+>> review.
+
+I will separate the changes into more commits for the next version.
+
+Regards,
+Leonard
+
+>>
+>> Thanks,
+>> Guenter
+> 
