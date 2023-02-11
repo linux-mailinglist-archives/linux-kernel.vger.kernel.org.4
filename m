@@ -2,174 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 315B9692DCB
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 04:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E166692DCF
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 04:20:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbjBKDUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 22:20:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36524 "EHLO
+        id S229930AbjBKDUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 22:20:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjBKDTm (ORCPT
+        with ESMTP id S229814AbjBKDUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 22:19:42 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36031BDE5;
-        Fri, 10 Feb 2023 19:19:09 -0800 (PST)
-Received: from localhost (unknown [86.120.32.152])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 10 Feb 2023 22:20:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0430C85B03
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 19:18:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676085535;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fUy/CuYrWJP2Bt4Lb/Dgly0Z7KbcxY16FRGX/OI4RVI=;
+        b=FgIUUup6g6DYbJP0BFZeHn/VQHAMv5yf8VRhgm4CA+NNgunT3QgBs5tXe8InQ4//d0uq3O
+        xnyy5jYO/Ub4Uruj67wqod8MEMuQtSRb44RUxgMwzyFhMxOTJOhuGh8Ybrh5p+OU2d3T92
+        Zu2yPFvPVJEF1xAf5Sleih/OzwetfoY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-465-1ACS6fHSOc6JBoGHdLfIUA-1; Fri, 10 Feb 2023 22:18:51 -0500
+X-MC-Unique: 1ACS6fHSOc6JBoGHdLfIUA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id ADB21660211A;
-        Sat, 11 Feb 2023 03:19:07 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676085547;
-        bh=FVwCMHp81rng2JtkEJwcV2RSVh1OgfTEUNvp1icmEos=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dexWFXzTRq4fY6EDM50+F7V73z2VMXWhD7QBI80JWZJcfL9WLO95pS5knaTIet4Bn
-         LHRer0o/Sa4OYjCRDAaJxSohSsPgyPOIQ7IrQd7CRqilfOlmiSyiLDLznR97+Lvvze
-         RdFxvm8ZhJlP6GtGQ4BuqXjan1XgBR03B9Ab0HfLNWH1MMAEC7aacNMc639Jd69SU7
-         cgseOHhJHk8yzf9GuiMTytsJdiK265EvK5oNkiJW3iYeiIei/h+OAD7jIZU8PWwkFh
-         UXNcMN+O4qHGI6Xmxf7Dn1rhHru20cxjOBkWQLJ7kSF2LNPGz4VXwuaOoLipGJI79J
-         6oPlNU5ku7JTw==
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-To:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
-Subject: [PATCH 12/12] riscv: dts: starfive: jh7100-common: Setup pinmux and enable gmac
-Date:   Sat, 11 Feb 2023 05:18:21 +0200
-Message-Id: <20230211031821.976408-13-cristian.ciocaltea@collabora.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230211031821.976408-1-cristian.ciocaltea@collabora.com>
-References: <20230211031821.976408-1-cristian.ciocaltea@collabora.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D9DB21C0514F;
+        Sat, 11 Feb 2023 03:18:50 +0000 (UTC)
+Received: from T590 (ovpn-8-18.pek2.redhat.com [10.72.8.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 580F3400DFA1;
+        Sat, 11 Feb 2023 03:18:42 +0000 (UTC)
+Date:   Sat, 11 Feb 2023 11:18:38 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, Andy Lutomirski <luto@kernel.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Stefan Metzmacher <metze@samba.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API Mailing List <linux-api@vger.kernel.org>,
+        io-uring <io-uring@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Samba Technical <samba-technical@lists.samba.org>,
+        ming.lei@redhat.com
+Subject: Re: copy on write for splice() from file to pipe?
+Message-ID: <Y+cJDnnMuirSjO3E@T590>
+References: <CAHk-=wgA=rB=7M_Fe3n9UkoW_7dqdUT2D=yb94=6GiGXEuAHDA@mail.gmail.com>
+ <1dd85095-c18c-ed3e-38b7-02f4d13d9bd6@kernel.dk>
+ <CAHk-=wiszt6btMPeT5UFcS=0=EVr=0injTR75KsvN8WetwQwkA@mail.gmail.com>
+ <fe8252bd-17bd-850d-dcd0-d799443681e9@kernel.dk>
+ <CAHk-=wiJ0QKKiORkVr8n345sPp=aHbrLTLu6CQ-S0XqWJ-kJ1A@mail.gmail.com>
+ <7a2e5b7f-c213-09ff-ef35-d6c2967b31a7@kernel.dk>
+ <CALCETrVx4cj7KrhaevtFN19rf=A6kauFTr7UPzQVage0MsBLrg@mail.gmail.com>
+ <b44783e6-3da2-85dd-a482-5d9aeb018e9c@kernel.dk>
+ <2bb12591-9d24-6b26-178f-05e939bf3251@kernel.dk>
+ <CAHk-=wjzqrD5wrfeaU390bXEEBY2JF-oKmFN4fREzgyXsbQRTQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjzqrD5wrfeaU390bXEEBY2JF-oKmFN4fREzgyXsbQRTQ@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add pinmux configuration for the DWMAC found on the JH7100 based boards
-and enable the gmac DT node.
+On Fri, Feb 10, 2023 at 02:08:35PM -0800, Linus Torvalds wrote:
+> On Fri, Feb 10, 2023 at 1:51 PM Jens Axboe <axboe@kernel.dk> wrote:
+> >
+> > Speaking of splice/io_uring, Ming posted this today:
+> >
+> > https://lore.kernel.org/io-uring/20230210153212.733006-1-ming.lei@redhat.com/
+> 
+> Ugh. Some of that is really ugly. Both 'ignore_sig' and
+> 'ack_page_consuming' just look wrong. Pure random special cases.
+> 
+> And that 'ignore_sig' is particularly ugly, since the only thing that
+> sets it also sets SPLICE_F_NONBLOCK.
+> 
+> And the *only* thing that actually then checks that field is
+> 'splice_from_pipe_next()', where there are exactly two
+> signal_pending() checks that it adds to, and
+> 
+>  (a) the first one is to protect from endless loops
+> 
+>  (b) the second one is irrelevant when  SPLICE_F_NONBLOCK is set
+> 
+> So honestly, just NAK on that series.
+> 
+> I think that instead of 'ignore_sig' (which shouldn't exist), that
+> first 'signal_pending()' check in splice_from_pipe_next() should just
+> be changed into a 'fatal_signal_pending()'.
 
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
----
- .../boot/dts/starfive/jh7100-common.dtsi      | 78 +++++++++++++++++++
- 1 file changed, 78 insertions(+)
+Good point, here the signal is often from task_work_add() called by
+io_uring.
 
-diff --git a/arch/riscv/boot/dts/starfive/jh7100-common.dtsi b/arch/riscv/boot/dts/starfive/jh7100-common.dtsi
-index b93ce351a90f..9927e7462e9f 100644
---- a/arch/riscv/boot/dts/starfive/jh7100-common.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7100-common.dtsi
-@@ -41,7 +41,85 @@ led-ack {
- 	};
- };
- 
-+&gmac {
-+	starfive,gtxclk-dlychain = <4>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&gmac_pins>;
-+	status = "okay";
-+};
-+
- &gpio {
-+	gmac_pins: gmac-0 {
-+		gtxclk-pins {
-+			pins = <PAD_FUNC_SHARE(115)>;
-+			bias-pull-up;
-+			drive-strength = <35>;
-+			input-enable;
-+			input-schmitt-enable;
-+			slew-rate = <0>;
-+		};
-+		miitxclk-pins {
-+			pins = <PAD_FUNC_SHARE(116)>;
-+			bias-pull-up;
-+			drive-strength = <14>;
-+			input-enable;
-+			input-schmitt-disable;
-+			slew-rate = <0>;
-+		};
-+		tx-pins {
-+			pins = <PAD_FUNC_SHARE(117)>,
-+			       <PAD_FUNC_SHARE(119)>,
-+			       <PAD_FUNC_SHARE(120)>,
-+			       <PAD_FUNC_SHARE(121)>,
-+			       <PAD_FUNC_SHARE(122)>,
-+			       <PAD_FUNC_SHARE(123)>,
-+			       <PAD_FUNC_SHARE(124)>,
-+			       <PAD_FUNC_SHARE(125)>,
-+			       <PAD_FUNC_SHARE(126)>;
-+			bias-pull-up;
-+			drive-strength = <35>;
-+			input-disable;
-+			input-schmitt-disable;
-+			slew-rate = <0>;
-+		};
-+		rxclk-pins {
-+			pins = <PAD_FUNC_SHARE(127)>;
-+			bias-pull-up;
-+			drive-strength = <14>;
-+			input-enable;
-+			input-schmitt-disable;
-+			slew-rate = <6>;
-+		};
-+		rxer-pins {
-+			pins = <PAD_FUNC_SHARE(129)>;
-+			bias-pull-up;
-+			drive-strength = <14>;
-+			input-enable;
-+			input-schmitt-disable;
-+			slew-rate = <0>;
-+		};
-+		rx-pins {
-+			pins = <PAD_FUNC_SHARE(128)>,
-+			       <PAD_FUNC_SHARE(130)>,
-+			       <PAD_FUNC_SHARE(131)>,
-+			       <PAD_FUNC_SHARE(132)>,
-+			       <PAD_FUNC_SHARE(133)>,
-+			       <PAD_FUNC_SHARE(134)>,
-+			       <PAD_FUNC_SHARE(135)>,
-+			       <PAD_FUNC_SHARE(136)>,
-+			       <PAD_FUNC_SHARE(137)>,
-+			       <PAD_FUNC_SHARE(138)>,
-+			       <PAD_FUNC_SHARE(139)>,
-+			       <PAD_FUNC_SHARE(140)>,
-+			       <PAD_FUNC_SHARE(141)>;
-+			bias-pull-up;
-+			drive-strength = <14>;
-+			input-enable;
-+			input-schmitt-enable;
-+			slew-rate = <0>;
-+		};
-+	};
-+
- 	i2c0_pins: i2c0-0 {
- 		i2c-pins {
- 			pinmux = <GPIOMUX(62, GPO_LOW,
--- 
-2.39.1
+> 
+> But that 'ack_page_consuming' thing looks even more disgusting, and
+> since I'm not sure why it even exists, I don't know what it's doing
+> wrong.
+
+The motivation is for confirming that if the produced buffer can be used
+for READ or WRITE. Another way could be to add PIPE_BUF_FLAG_MAY_READ[WRITE].
+
+thanks,
+Ming
 
