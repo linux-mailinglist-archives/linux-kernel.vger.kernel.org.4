@@ -2,121 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69AD969336F
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 21:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A994693373
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 21:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjBKUAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 15:00:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
+        id S229618AbjBKUET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 15:04:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjBKUAQ (ORCPT
+        with ESMTP id S229461AbjBKUES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 15:00:16 -0500
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F729166C4;
-        Sat, 11 Feb 2023 12:00:15 -0800 (PST)
-Received: from fpc.. (unknown [46.242.14.200])
-        by mail.ispras.ru (Postfix) with ESMTPSA id F051440737BD;
-        Sat, 11 Feb 2023 20:00:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru F051440737BD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1676145614;
-        bh=93bV2WieYLWq+kaliUadEmc3b0Jd3KUsc6VwwvEQkXQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G2LAA5q9yi+O797y4LwnxNt+wc6wL6UkGwdDvtSfCds1jUaCddLqKlmmkEU/Am5qY
-         J8CuW7TBzaUdIEp7Za5ECsaKOVOClDqhe2ITB/iK98YqiPsNvwBEcN+iXRr0+Qdd8j
-         he9igLohqF8Z9nJBreq8RRHl/drYcNPZeSnt9TyM=
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     Ian Kent <raven@themaw.net>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Takeshi Misawa <jeliantsurux@gmail.com>,
-        autofs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org,
-        syzbot+5e53f70e69ff0c0a1c0c@syzkaller.appspotmail.com
-Subject: [PATCH 1/1] autofs: fix memory leak of waitqueues in autofs_catatonic_mode
-Date:   Sat, 11 Feb 2023 22:59:50 +0300
-Message-Id: <20230211195950.452364-2-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230211195950.452364-1-pchelkin@ispras.ru>
-References: <20230211195950.452364-1-pchelkin@ispras.ru>
+        Sat, 11 Feb 2023 15:04:18 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782BF18B0E;
+        Sat, 11 Feb 2023 12:04:17 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id hx15so23277861ejc.11;
+        Sat, 11 Feb 2023 12:04:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RjjXpGu22f36zsopOwOahgOOSD3GNRdJelEClXp6KLk=;
+        b=Wr/lthu3WnMgjFa7C+MuY/PMvXJmIl8jlIQRh3di2Xtzo+LSDs3VOzcUyvNiPi0Rhk
+         EQWlR6ZMvZ0Cx7F00jj1sZNWmGfS8TPHGdiSKx1U9swrW7UNpUfhesfSt84OElTM+/+e
+         +uwd6WPKOeEqiwBhV4TZE7YhXU64LjNCMQy8ML1ElVrdRlshXmxDTr25DHZBauS82Dr/
+         vGuXh8w20KXnw36RfoDpR4hZ6HMc45nfF8N68frpumroLKtX+oYw82SWYNLB4KzqG6zx
+         smROF9p7EeTORa9aCY86RFaeruoURD8rb+1XB5eUOtGmNK4p9/1C6XUQeDTYmfhQD8XY
+         l4fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RjjXpGu22f36zsopOwOahgOOSD3GNRdJelEClXp6KLk=;
+        b=jqTdJ9FgiSrsXipaLxgZolf1psyNAnhXSI68hx/RndlDtNIco9pku3EnZ5Df6jaSB6
+         7+VrCO8L0gxQ9IKJ3wohve3HHytYiTKDPM5KmbRB7667V0UreC1MCOM9wBSUUNBp4Vvc
+         wv5QrENcTp9j2u5BFYxXtnXSdFILiFcPg+PfIVrnp5eeA13UKt1I6g+2BGUbugtrih3u
+         L8ZgnH8xsCX6AyHrZHYgb4oBQ6cFQwLCH6+T6Bzo8Rt6QXxfjhQ5iWaQUgHNAjCbY1hr
+         vtHSaqtQBm6++cc6GKyV63WvvtadYCeKGNWzu4cJEKdT4v1uJSBhJd8iZo5QOPgEPbAr
+         Y7rg==
+X-Gm-Message-State: AO0yUKX38SZTOyLKA7J151MJVKB5fLl2yD9P9cUMGT1YcOger9pPMoAC
+        DjYOB67gSMsqYs90hawyOOXNrl/V1PdhcDbR/eE=
+X-Google-Smtp-Source: AK7set9gfXJ0lTgAC1WCpg7g6zQJ4VvoZQDgnULywOlp0nN6xiARxZfB98oEHqpDAMroivI76f6QHrHYDJD9MsOuSNU=
+X-Received: by 2002:a17:906:f9cb:b0:879:e721:9d33 with SMTP id
+ lj11-20020a170906f9cb00b00879e7219d33mr2729879ejb.4.1676145855971; Sat, 11
+ Feb 2023 12:04:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230207-b4-amlogic-bindings-fixups-v2-v1-0-93b7e50286e7@linaro.org>
+ <20230207-b4-amlogic-bindings-fixups-v2-v1-5-93b7e50286e7@linaro.org>
+In-Reply-To: <20230207-b4-amlogic-bindings-fixups-v2-v1-5-93b7e50286e7@linaro.org>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sat, 11 Feb 2023 21:04:05 +0100
+Message-ID: <CAFBinCC1O52eraLJ=GoZVM0fM0zVyqdDrkP3RCjNQ=KaqhByLQ@mail.gmail.com>
+Subject: Re: [PATCH 5/8] arm64: dts: amlogic: meson-g12b-odroid-go-ultra:
+ rename keypad-gpio pinctrl node
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Yuntian Zhang <yt@radxa.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzkaller reports a memory leak:
+On Tue, Feb 7, 2023 at 4:08 PM Neil Armstrong <neil.armstrong@linaro.org> wrote:
+>
+> Fixes the following bindings check error:
+> pinctrl@40: keypad-gpio: {...} is not of type 'array'
+>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-BUG: memory leak
-unreferenced object 0xffff88810b279e00 (size 96):
-  comm "syz-executor399", pid 3631, jiffies 4294964921 (age 23.870s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 08 9e 27 0b 81 88 ff ff  ..........'.....
-    08 9e 27 0b 81 88 ff ff 00 00 00 00 00 00 00 00  ..'.............
-  backtrace:
-    [<ffffffff814cfc90>] kmalloc_trace+0x20/0x90 mm/slab_common.c:1046
-    [<ffffffff81bb75ca>] kmalloc include/linux/slab.h:576 [inline]
-    [<ffffffff81bb75ca>] autofs_wait+0x3fa/0x9a0 fs/autofs/waitq.c:378
-    [<ffffffff81bb88a7>] autofs_do_expire_multi+0xa7/0x3e0 fs/autofs/expire.c:593
-    [<ffffffff81bb8c33>] autofs_expire_multi+0x53/0x80 fs/autofs/expire.c:619
-    [<ffffffff81bb6972>] autofs_root_ioctl_unlocked+0x322/0x3b0 fs/autofs/root.c:897
-    [<ffffffff81bb6a95>] autofs_root_ioctl+0x25/0x30 fs/autofs/root.c:910
-    [<ffffffff81602a9c>] vfs_ioctl fs/ioctl.c:51 [inline]
-    [<ffffffff81602a9c>] __do_sys_ioctl fs/ioctl.c:870 [inline]
-    [<ffffffff81602a9c>] __se_sys_ioctl fs/ioctl.c:856 [inline]
-    [<ffffffff81602a9c>] __x64_sys_ioctl+0xfc/0x140 fs/ioctl.c:856
-    [<ffffffff84608225>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84608225>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84800087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[...]
+>  &periphs_pinctrl {
+> -       keypad_gpio_pins: keypad-gpio {
+> +       keypad_gpio_pins: keypad-gpio-state {
+>                 mux {
+>                         groups = "GPIOX_0", "GPIOX_1", "GPIOX_2", "GPIOX_3",
+>                                  "GPIOX_4", "GPIOX_5", "GPIOX_6", "GPIOX_7",
+I'm wondering whether we make the keys work without having to specify
+a pinmux configuration for them separately.
+Our pinctrl driver already sets:
+   pc->chip.set_config = gpiochip_generic_config;
+So you should be able to use the GPIO_PULL_UP flag for these GPIOs in
+device-tree instead of specifying bias-pull-up here, for example:
+   gpios = <&gpio GPIOX_0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 
-autofs_wait_queue structs should be freed if their wait_ctr becomes zero.
-Otherwise they will be lost.
+output-disable is managed by the direction of the GPIO anyways.
+pinmux_ops.gpio_request_enable is also implemented by our pinctrl driver.
 
-In this case an AUTOFS_IOC_EXPIRE_MULTI ioctl is done, then a new
-waitqueue struct is allocated in autofs_wait(), its initial wait_ctr
-equals 2. After that wait_event_killable() is interrupted (it returns
--ERESTARTSYS), so that 'wq->name.name == NULL' condition may be not
-satisfied. Actually, this condition can be satisfied when
-autofs_wait_release() or autofs_catatonic_mode() is called and, what is
-also important, wait_ctr is decremented in those places. Upon the exit of
-autofs_wait(), wait_ctr is decremented to 1. Then the unmounting process
-begins: kill_sb calls autofs_catatonic_mode(), which should have freed the
-waitqueues, but it only decrements its usage counter to zero which is not
-a correct behaviour.
+This is not urgent - I am just curious as always :-)
 
-So in catatonic mode we should free waitqueues which counter becomes zero.
 
-Reported-by: syzbot+5e53f70e69ff0c0a1c0c@syzkaller.appspotmail.com
-Suggested-by: Takeshi Misawa <jeliantsurux@gmail.com>
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
----
- fs/autofs/waitq.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/fs/autofs/waitq.c b/fs/autofs/waitq.c
-index 54c1f8b8b075..efdc76732fae 100644
---- a/fs/autofs/waitq.c
-+++ b/fs/autofs/waitq.c
-@@ -32,8 +32,9 @@ void autofs_catatonic_mode(struct autofs_sb_info *sbi)
- 		wq->status = -ENOENT; /* Magic is gone - report failure */
- 		kfree(wq->name.name - wq->offset);
- 		wq->name.name = NULL;
--		wq->wait_ctr--;
- 		wake_up_interruptible(&wq->queue);
-+		if (!--wq->wait_ctr)
-+			kfree(wq);
- 		wq = nwq;
- 	}
- 	fput(sbi->pipe);	/* Close the pipe */
--- 
-2.34.1
-
+Best regards,
+Martin
