@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 980C3692CA5
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 02:47:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC2F692CA2
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 02:47:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjBKBqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 20:46:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57702 "EHLO
+        id S230043AbjBKBqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 20:46:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbjBKBql (ORCPT
+        with ESMTP id S229965AbjBKBqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 20:46:41 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323D584B96
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 17:46:40 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id pj9-20020a17090b4f4900b00232cca91108so3165226pjb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 17:46:40 -0800 (PST)
+        Fri, 10 Feb 2023 20:46:51 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A28E84F67
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 17:46:42 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id k2-20020a17090a658200b002311a9f6b3cso5006375pjj.6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 17:46:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+gGMkWLRs9fWzgoKMZp1xjTHNEtbWSt2tA+J164dR+I=;
-        b=n4w2JvSZxbvAx7VDuTa8a6gnidk7+fM4SN3MoyITzRdo8Zusatugfb0N1mp7zDdAtm
-         nkhT4ceurl+KSeBYu9KzUTa8oFiachS16q0TOsJhkSXmoY5VcCxLGE77JXnMLtd4AlJm
-         nYaND+RHtk6DaGb8UbXmjF67jjmu7+tbRomwRl8q4whlT68/prZH4lf6oAKIuMqg3Oog
-         7jRUqsAdomH6eGOi5pQpQdIXfWvKdc17woQPwGK56J49NXm1kQFEkeER/UbFB7IRBE4E
-         ds6/M+/hv1rxXm244otjozs+JI1/o3dSAAc9NOQzc/cN4c27HBZFHrDd9YmeV9F+D+Ts
-         TwYQ==
+        bh=ilQD1ZwfOZ+d2+O+AXt7dFLjcZcLaA1r/kAp0uBR7mU=;
+        b=PdwRuNZr5qWt72w20yZfAeNVSTn+Uwkm5WaseLyWoj7zvwCv5tBjeMIQQwybX4veDF
+         006bGVjCu6QI8eRjrg32Xec+RnDfgzWKAiq6UcM6h8DUFq5IEkcMpD++bzRF4nC56zP+
+         LO7TiApbuF2VCN52PILf2eZ9f2dAanYCU+9Ki7zwdjTUUIF1cdpPCCZ1H+Q9riLM3c/K
+         AknD+8fIbtUCg10CXhbQYiPpxBErkWPZDfpuCGjwX8y1NB7XClNWsirwkeCsiUfnUhqu
+         0Koth+qR6OIxRElg/2asJa+iK7/rpmoDuuS6qX9m9hA7rNk3qJ9C6mIQqrnKckRs8E8U
+         6LUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+gGMkWLRs9fWzgoKMZp1xjTHNEtbWSt2tA+J164dR+I=;
-        b=70nst99rhzxxhXMXH7Pq9k5128Jd9Iehxi4GpyfW/a0OvE77Bl+pvQZw6KfWuBoiTu
-         bJ7untnKu/aJXwoEb1RvS6MHHUlDVdPQgNwlxRTpEN9a5W6YdHmNVHf2CAkhBtYyuPFm
-         VotSfWvLxYC3vlqDjoCsxGn7NY440PIht4bVUKvb02CwbOviF6bBiw4K3A/eCjHFNShI
-         qLARFzGOw/Lsy+grzRKCdLO5iydNx4p7OjB2if0grraVG/rr0GGRWTowzqtj5az54EUD
-         /+W9MW8KfioJJz6rRetUG3nWnNmHl8ewSa9bbhntt8OgOK4aTGjG/PaX+OOPwX7qmJF2
-         YKqw==
-X-Gm-Message-State: AO0yUKU5ywmaEgkkTtXOrTtRoZywLsxx2AM1fINsIQ6JYul6mgvrlFqG
-        ertfRLvKOhq5cHV8QVJIY6AW9Krf7yRo
-X-Google-Smtp-Source: AK7set8K9Pxm27vSO52D5ATEFyE/B/V3FGyDTFtREQw5bTFuoc9urcOJfrVPxABPSX++bn6TZOR+0gt2vq91
+        bh=ilQD1ZwfOZ+d2+O+AXt7dFLjcZcLaA1r/kAp0uBR7mU=;
+        b=mscjVY7AxSlWzTqOazto8XvyYv+hfjuvAMJ8obinvmKO5YOjZarmiBryZY4RYlA28o
+         wen3HVGrzQnpaKjpxqbkBiUY9LLDCZKpjWrV52iX2iacmNxwU4eLw0C/18VDs0Jh6DFe
+         iHNizLDLEkhEcX04Su4RgE7Y9iXLpxsBQ4JGeK21uL0q4sF0/2HdceJI2v0/bWgXDxaJ
+         eEU47vLwSczOTbi9CW7NziXeq59brZQHLTBegoA2McrPIpKtBvIj4h2eaTUVS32EkfGq
+         RNet5El4tToTAUWGaTtOxvKXiJT5SbNH30OW9P1JdPiyJAPAkPQpUfyacV61KST5CmIt
+         9jmw==
+X-Gm-Message-State: AO0yUKWTccP6iMWHQ7sooOtsQ8X1E1rJTUWpLeiC0DbXOEjQFj6Tq9j5
+        6w/vFdvWMvo6B3PVQefMZ6gl5jPBAyEo
+X-Google-Smtp-Source: AK7set9U4Yaa0zpTFVx5Wxa0jeIjgqiyiZa13NAhHdcyUs62NVEkjx/lJfvzmjwiNtL4FFIrziz6y4YeF4qv
 X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:a17:902:e84f:b0:189:6df9:4f85 with SMTP id
- t15-20020a170902e84f00b001896df94f85mr4137680plg.27.1676079999320; Fri, 10
- Feb 2023 17:46:39 -0800 (PST)
-Date:   Fri, 10 Feb 2023 17:46:23 -0800
+ (user=vipinsh job=sendgmr) by 2002:a17:902:e806:b0:198:eeb5:637b with SMTP id
+ u6-20020a170902e80600b00198eeb5637bmr4391689plg.23.1676080000973; Fri, 10 Feb
+ 2023 17:46:40 -0800 (PST)
+Date:   Fri, 10 Feb 2023 17:46:24 -0800
 In-Reply-To: <20230211014626.3659152-1-vipinsh@google.com>
 Mime-Version: 1.0
 References: <20230211014626.3659152-1-vipinsh@google.com>
 X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
-Message-ID: <20230211014626.3659152-5-vipinsh@google.com>
-Subject: [Patch v3 4/7] KVM: x86/mmu: Optimize SPTE change for aging gfn range
+Message-ID: <20230211014626.3659152-6-vipinsh@google.com>
+Subject: [Patch v3 5/7] KVM: x86/mmu: Remove "record_acc_track" in __tdp_mmu_set_spte()
 From:   Vipin Sharma <vipinsh@google.com>
 To:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
         dmatlack@google.com
@@ -61,7 +61,7 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,89 +69,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No need to check all of the conditions in __handle_changed_spte(). Aging
-a gfn range implies resetting access bit or marking spte for access
-tracking.
+Remove bool parameter "record_acc_track" from __tdp_mmu_set_spte() and
+refactor the code. This variable is always set to true by its caller.
 
-Use atomic operation to only reset those bits. This avoids checking many
-conditions in __handle_changed_spte() API. Also, clean up code by
-removing dead code and API parameters.
+Remove single and double underscore prefix from tdp_mmu_set_spte()
+related APIs:
+1. Change __tdp_mmu_set_spte() to tdp_mmu_set_spte()
+2. Change _tdp_mmu_set_spte() to tdp_mmu_iter_set_spte()
 
 Signed-off-by: Vipin Sharma <vipinsh@google.com>
 ---
- arch/x86/kvm/mmu/tdp_mmu.c | 36 +++++++++++++++++++-----------------
- 1 file changed, 19 insertions(+), 17 deletions(-)
+ arch/x86/kvm/mmu/tdp_mmu.c | 51 +++++++++++++-------------------------
+ 1 file changed, 17 insertions(+), 34 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index c895560244de..5d6e77554797 100644
+index 5d6e77554797..e50e869bf879 100644
 --- a/arch/x86/kvm/mmu/tdp_mmu.c
 +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -758,13 +758,6 @@ static inline void tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
- 	_tdp_mmu_set_spte(kvm, iter, new_spte, true);
+@@ -697,7 +697,7 @@ static inline int tdp_mmu_zap_spte_atomic(struct kvm *kvm,
+ 
+ 
+ /*
+- * __tdp_mmu_set_spte - Set a TDP MMU SPTE and handle the associated bookkeeping
++ * tdp_mmu_set_spte - Set a TDP MMU SPTE and handle the associated bookkeeping
+  * @kvm:	      KVM instance
+  * @as_id:	      Address space ID, i.e. regular vs. SMM
+  * @sptep:	      Pointer to the SPTE
+@@ -705,18 +705,12 @@ static inline int tdp_mmu_zap_spte_atomic(struct kvm *kvm,
+  * @new_spte:	      The new value that will be set for the SPTE
+  * @gfn:	      The base GFN that was (or will be) mapped by the SPTE
+  * @level:	      The level _containing_ the SPTE (its parent PT's level)
+- * @record_acc_track: Notify the MM subsystem of changes to the accessed state
+- *		      of the page. Should be set unless handling an MMU
+- *		      notifier for access tracking. Leaving record_acc_track
+- *		      unset in that case prevents page accesses from being
+- *		      double counted.
+  *
+  * Returns the old SPTE value, which _may_ be different than @old_spte if the
+  * SPTE had voldatile bits.
+  */
+-static u64 __tdp_mmu_set_spte(struct kvm *kvm, int as_id, tdp_ptep_t sptep,
+-			      u64 old_spte, u64 new_spte, gfn_t gfn, int level,
+-			      bool record_acc_track)
++static u64 tdp_mmu_set_spte(struct kvm *kvm, int as_id, tdp_ptep_t sptep,
++			    u64 old_spte, u64 new_spte, gfn_t gfn, int level)
+ {
+ 	lockdep_assert_held_write(&kvm->mmu_lock);
+ 
+@@ -732,30 +726,19 @@ static u64 __tdp_mmu_set_spte(struct kvm *kvm, int as_id, tdp_ptep_t sptep,
+ 	old_spte = kvm_tdp_mmu_write_spte(sptep, old_spte, new_spte, level);
+ 
+ 	__handle_changed_spte(kvm, as_id, gfn, old_spte, new_spte, level, false);
+-
+-	if (record_acc_track)
+-		handle_changed_spte_acc_track(old_spte, new_spte, level);
+-
++	handle_changed_spte_acc_track(old_spte, new_spte, level);
+ 	handle_changed_spte_dirty_log(kvm, as_id, gfn, old_spte, new_spte,
+ 				      level);
+ 	return old_spte;
  }
  
--static inline void tdp_mmu_set_spte_no_acc_track(struct kvm *kvm,
--						 struct tdp_iter *iter,
--						 u64 new_spte)
--{
--	_tdp_mmu_set_spte(kvm, iter, new_spte, false);
+-static inline void _tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
+-				     u64 new_spte, bool record_acc_track)
++static inline void tdp_mmu_iter_set_spte(struct kvm *kvm, struct tdp_iter *iter,
++					 u64 new_spte)
+ {
+ 	WARN_ON_ONCE(iter->yielded);
+-
+-	iter->old_spte = __tdp_mmu_set_spte(kvm, iter->as_id, iter->sptep,
+-					    iter->old_spte, new_spte,
+-					    iter->gfn, iter->level,
+-					    record_acc_track);
 -}
 -
+-static inline void tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
+-				    u64 new_spte)
+-{
+-	_tdp_mmu_set_spte(kvm, iter, new_spte, true);
++	iter->old_spte = tdp_mmu_set_spte(kvm, iter->as_id, iter->sptep,
++					  iter->old_spte, new_spte,
++					  iter->gfn, iter->level);
+ }
+ 
  #define tdp_root_for_each_pte(_iter, _root, _start, _end) \
- 	for_each_tdp_pte(_iter, _root, _start, _end)
+@@ -847,7 +830,7 @@ static void __tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
+ 			continue;
  
-@@ -1251,32 +1244,41 @@ static __always_inline bool kvm_tdp_mmu_handle_gfn(struct kvm *kvm,
- /*
-  * Mark the SPTEs range of GFNs [start, end) unaccessed and return non-zero
-  * if any of the GFNs in the range have been accessed.
-+ *
-+ * No need to mark corresponding PFN as accessed as this call is coming from
-+ * the clear_young() or clear_flush_young() notifier, which uses the return
-+ * value to determine if the page has been accessed.
-  */
- static bool age_gfn_range(struct kvm *kvm, struct tdp_iter *iter,
- 			  struct kvm_gfn_range *range)
- {
--	u64 new_spte = 0;
-+	u64 new_spte;
- 
- 	/* If we have a non-accessed entry we don't need to change the pte. */
- 	if (!is_accessed_spte(iter->old_spte))
+ 		if (!shared)
+-			tdp_mmu_set_spte(kvm, &iter, 0);
++			tdp_mmu_iter_set_spte(kvm, &iter, 0);
+ 		else if (tdp_mmu_set_spte_atomic(kvm, &iter, 0))
+ 			goto retry;
+ 	}
+@@ -904,8 +887,8 @@ bool kvm_tdp_mmu_zap_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
+ 	if (WARN_ON_ONCE(!is_shadow_present_pte(old_spte)))
  		return false;
  
--	new_spte = iter->old_spte;
--
--	if (spte_ad_enabled(new_spte)) {
--		new_spte &= ~shadow_accessed_mask;
-+	if (spte_ad_enabled(iter->old_spte)) {
-+		iter->old_spte  = tdp_mmu_clear_spte_bits(iter->sptep,
-+							  iter->old_spte,
-+							  shadow_accessed_mask,
-+							  iter->level);
-+		new_spte = iter->old_spte & ~shadow_accessed_mask;
- 	} else {
-+		new_spte = mark_spte_for_access_track(iter->old_spte);
-+		iter->old_spte = kvm_tdp_mmu_write_spte(iter->sptep,
-+							iter->old_spte, new_spte,
-+							iter->level);
- 		/*
- 		 * Capture the dirty status of the page, so that it doesn't get
- 		 * lost when the SPTE is marked for access tracking.
- 		 */
--		if (is_writable_pte(new_spte))
--			kvm_set_pfn_dirty(spte_to_pfn(new_spte));
--
--		new_spte = mark_spte_for_access_track(new_spte);
-+		if (is_writable_pte(iter->old_spte))
-+			kvm_set_pfn_dirty(spte_to_pfn(iter->old_spte));
- 	}
- 
--	tdp_mmu_set_spte_no_acc_track(kvm, iter, new_spte);
-+	trace_kvm_tdp_mmu_spte_changed(iter->as_id, iter->gfn, iter->level,
-+				       iter->old_spte, new_spte);
+-	__tdp_mmu_set_spte(kvm, kvm_mmu_page_as_id(sp), sp->ptep, old_spte, 0,
+-			   sp->gfn, sp->role.level + 1, true);
++	tdp_mmu_set_spte(kvm, kvm_mmu_page_as_id(sp), sp->ptep, old_spte, 0,
++			 sp->gfn, sp->role.level + 1);
  
  	return true;
  }
+@@ -939,7 +922,7 @@ static bool tdp_mmu_zap_leafs(struct kvm *kvm, struct kvm_mmu_page *root,
+ 		    !is_last_spte(iter.old_spte, iter.level))
+ 			continue;
+ 
+-		tdp_mmu_set_spte(kvm, &iter, 0);
++		tdp_mmu_iter_set_spte(kvm, &iter, 0);
+ 		flush = true;
+ 	}
+ 
+@@ -1110,7 +1093,7 @@ static int tdp_mmu_link_sp(struct kvm *kvm, struct tdp_iter *iter,
+ 		if (ret)
+ 			return ret;
+ 	} else {
+-		tdp_mmu_set_spte(kvm, iter, spte);
++		tdp_mmu_iter_set_spte(kvm, iter, spte);
+ 	}
+ 
+ 	tdp_account_mmu_page(kvm, sp);
+@@ -1317,13 +1300,13 @@ static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
+ 	 * invariant that the PFN of a present * leaf SPTE can never change.
+ 	 * See __handle_changed_spte().
+ 	 */
+-	tdp_mmu_set_spte(kvm, iter, 0);
++	tdp_mmu_iter_set_spte(kvm, iter, 0);
+ 
+ 	if (!pte_write(range->pte)) {
+ 		new_spte = kvm_mmu_changed_pte_notifier_make_spte(iter->old_spte,
+ 								  pte_pfn(range->pte));
+ 
+-		tdp_mmu_set_spte(kvm, iter, new_spte);
++		tdp_mmu_iter_set_spte(kvm, iter, new_spte);
+ 	}
+ 
+ 	return true;
+@@ -1814,7 +1797,7 @@ static bool write_protect_gfn(struct kvm *kvm, struct kvm_mmu_page *root,
+ 		if (new_spte == iter.old_spte)
+ 			break;
+ 
+-		tdp_mmu_set_spte(kvm, &iter, new_spte);
++		tdp_mmu_iter_set_spte(kvm, &iter, new_spte);
+ 		spte_set = true;
+ 	}
+ 
 -- 
 2.39.1.581.gbfd45094c4-goog
 
