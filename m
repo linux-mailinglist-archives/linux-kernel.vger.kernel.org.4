@@ -2,104 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA716931FA
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 16:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1846931F9
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 16:29:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbjBKP3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 10:29:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
+        id S229587AbjBKP3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 10:29:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBKP3r (ORCPT
+        with ESMTP id S229447AbjBKP3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 10:29:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A866234D1
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 07:29:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676129345;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=vnewwx5BEEx6q0ZK/xXbQu7RnpiAewRN9TE3zelH0io=;
-        b=iL7c7usIa++zXfpukecc8MN9yI59LoHQ4DvXFoJz0NkTLBduR6NA25eVHJ2Myz1gMQiWCt
-        Rs6qNXuABJdJoueS/VO4HuG0xcyCgY6FYLt6eSZGRLJto6Tjr266gejzTaO4mHwkM1HX5H
-        VKAnehzWJOB0Mu2RIyU4PYxbmeb1c74=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-349-DBGvvWs6M36Ob6QDPtgnDA-1; Sat, 11 Feb 2023 10:29:03 -0500
-X-MC-Unique: DBGvvWs6M36Ob6QDPtgnDA-1
-Received: by mail-qk1-f199.google.com with SMTP id q21-20020a05620a0d9500b0070572ccdbf9so5139920qkl.10
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 07:29:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vnewwx5BEEx6q0ZK/xXbQu7RnpiAewRN9TE3zelH0io=;
-        b=XgwU/d9pGJlJlqmqlJD7VwaA6Nzko7w39MieBqMFqd/BgN8Yjrn8Uzpt6gUYtyVWw+
-         6yL/BIzVP9upJTIISuQfBXvzaUVBt+1u3sDFnJHiaOJOojLHv79TNmSbodKr5GWwoy8T
-         nwm9Hf5EY5A6NLYcrKDo/2lHcifS4uevAUhXl2TEVttUha9IxxKdGur67X1YpjjkWjYL
-         ewUMJ5j2ar3v3lBIzAF0Cn7VPHlgAX8AVrnFAt95Pv+Q4G57KzwNGc0+ZknwsSYpCR1L
-         +z4woNE9jcpEj+w8PEqptLKr2yY9CBs6KdhhHB5shgWjzeIygnvq9sPCIHrHKF6mfcXX
-         2u5Q==
-X-Gm-Message-State: AO0yUKWPZU899gP45cy8XAWlkVSsshtF/KO45M6JxGCxCpu8j5G/X+TZ
-        4KVRVB8E07AxRLSeFPK/fRWSwbchN6KNDzwcyqw8lfspvhL5JvnA8Z/tUjq5pGDfUsTt5tF4l8n
-        61/k1VKeEthY90sK+CuS2Vo5S
-X-Received: by 2002:a05:6214:19ec:b0:56e:9cf7:770e with SMTP id q12-20020a05621419ec00b0056e9cf7770emr4878170qvc.38.1676129343066;
-        Sat, 11 Feb 2023 07:29:03 -0800 (PST)
-X-Google-Smtp-Source: AK7set+laBPz4EUeiyMJzQAIrxTFZNbvmVxan4PQhSxa+Fh3lCfCJDceEIUr3+ynEqcHI9SLUJTjmA==
-X-Received: by 2002:a05:6214:19ec:b0:56e:9cf7:770e with SMTP id q12-20020a05621419ec00b0056e9cf7770emr4878147qvc.38.1676129342855;
-        Sat, 11 Feb 2023 07:29:02 -0800 (PST)
-Received: from borg.redhat.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id 9-20020a05620a048900b006fec1c0754csm5830350qkr.87.2023.02.11.07.29.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Feb 2023 07:29:02 -0800 (PST)
-From:   Tom Rix <trix@redhat.com>
-To:     gregkh@linuxfoundation.org, philipp.g.hortmann@gmail.com,
-        dragan.m.cvetic@gmail.com, wjsota@gmail.com
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] staging: rtl8192e: set dm_rx_path_sel_table storage-class-specifier to static
-Date:   Sat, 11 Feb 2023 07:28:56 -0800
-Message-Id: <20230211152856.2129062-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Sat, 11 Feb 2023 10:29:31 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544E5234E5;
+        Sat, 11 Feb 2023 07:29:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=8YPAqYrXs8xgVTeNN1RVK5WeYcrdHrjBJgamcx6JiKM=; b=bPTho8JMeWATFLKUG2ByZRkvWY
+        6ZE21x0qHhQ+N/jj69zQzyMjZki9BYI4hKNhn5L9nEMaVv1sKRsNiOX6OjDyC5uQpP0AHgXeFZ2nr
+        0yIdHVfnmDK6J2AiFEzeAdm9QDGT9TlhFjRzSEPSSk1rUOolXjOOFxTJQ/y0aHI2PUag=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pQroM-004hrp-2Y; Sat, 11 Feb 2023 16:29:10 +0100
+Date:   Sat, 11 Feb 2023 16:29:10 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     MD Danish Anwar <danishanwar@ti.com>
+Cc:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>, nm@ti.com,
+        ssantosh@kernel.org, srk@ti.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 2/2] net: ti: icssg-prueth: Add ICSSG ethernet driver
+Message-ID: <Y+e0RrevtDpEMqyg@lunn.ch>
+References: <20230210114957.2667963-1-danishanwar@ti.com>
+ <20230210114957.2667963-3-danishanwar@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230210114957.2667963-3-danishanwar@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smatch reports
-drivers/staging/rtl8192e/rtl8192e/rtl_dm.c:147:21:
-  warning: symbol 'dm_rx_path_sel_table' was not declared. Should it be static?
+On Fri, Feb 10, 2023 at 05:19:57PM +0530, MD Danish Anwar wrote:
+> From: Roger Quadros <rogerq@ti.com>
+> 
+> This is the Ethernet driver for TI AM654 Silicon rev. 2
+> with the ICSSG PRU Sub-system running dual-EMAC firmware.
+> 
+> The Programmable Real-time Unit and Industrial Communication Subsystem
+> Gigabit (PRU_ICSSG) is a low-latency microcontroller subsystem in the TI
+> SoCs. This subsystem is provided for the use cases like implementation of
+> custom peripheral interfaces, offloading of tasks from the other
+> processor cores of the SoC, etc.
+> 
+> Every ICSSG core has two Programmable Real-Time Unit(PRUs),
+> two auxiliary Real-Time Transfer Unit (RT_PRUs), and
+> two Transmit Real-Time Transfer Units (TX_PRUs). Each one of these runs
+> its own firmware. Every ICSSG core has two MII ports connect to these
+> PRUs and also a MDIO port.
+> 
+> The cores can run different firmwares to support different protocols and
+> features like switch-dev, timestamping, etc.
+> 
+> It uses System DMA to transfer and receive packets and
+> shared memory register emulation between the firmware and
+> driver for control and configuration.
+> 
+> This patch adds support for basic EMAC functionality with 1Gbps
+> and 100Mbps link speed. 10M and half duplex mode are not supported
+> currently as they require IEP, the support for which will be added later.
+> Support for switch-dev, timestamp, etc. will be added later
+> by subsequent patch series.
+> 
+> Signed-off-by: Roger Quadros <rogerq@ti.com>
+> [Vignesh Raghavendra: add 10M full duplex support]
+> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+> [Grygorii Strashko: add support for half duplex operation]
+> Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
+> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
 
-dm_rx_path_sel_table is only used in rtl_dm.c, so it should be static
+The PHY handling looks correct now.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-index d8455b23e555..3bc5dabf2e2c 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-@@ -144,7 +144,7 @@ const u8 dm_cck_tx_bb_gain_ch14[CCK_TX_BB_GAIN_TABLE_LEN][8] = {
- /*------------------------Define global variable-----------------------------*/
- struct dig_t dm_digtable;
- 
--struct drx_path_sel dm_rx_path_sel_table;
-+static struct drx_path_sel dm_rx_path_sel_table;
- /*------------------------Define global variable-----------------------------*/
- 
- 
--- 
-2.26.3
-
+    Andrew
