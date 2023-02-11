@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D376769337B
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 21:06:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC3C69337E
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 21:06:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjBKUGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 15:06:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
+        id S229669AbjBKUGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 15:06:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjBKUGV (ORCPT
+        with ESMTP id S229481AbjBKUGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 15:06:21 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6838D18B18;
-        Sat, 11 Feb 2023 12:06:19 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id ml19so23502067ejb.0;
-        Sat, 11 Feb 2023 12:06:19 -0800 (PST)
+        Sat, 11 Feb 2023 15:06:47 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721BC18B17;
+        Sat, 11 Feb 2023 12:06:41 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id s11so569154edd.10;
+        Sat, 11 Feb 2023 12:06:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HqCtyRejI4LLye8LToLaeilzkCo6PSscuoTSFnoz9AA=;
-        b=KWlQuieaEY0T9+WI/Ae3ej9OdlfQLPs87lBnTrDCv4VS+mjwBg76MmJUtIoGx9vQYM
-         z4e3nlYktL7uEoX0KS8NjSVA8wV9ZMCuLNlrIwgkaFnEJEp5spWIc3ejag9k+8JDOfYg
-         DfMKnQLVnuMXYGgakBwQAzV4jtYT5TFYT93q66YIlzqOm4DvePPOt8F1ZMFVnc66qGzX
-         ai5rXXDvHGWemdt49adOuNSjddGoi9eJnIHK5hPKs7/7X6z3dcyuNTae2DikxwIAsl3v
-         EYU81ZHGd3gh2euzA0OaLu/Nc0CBRRKHUTbWh8HgWp1qEynKm4Fza9BVhlLQEPNJuPy7
-         nk8Q==
+        bh=rnqh2DLP0np8pTj2BQOmeoswoqFE/C1tlKJL7Qk99hM=;
+        b=jqa03l//+OZWkVyEyhhu3gyjhfV9r2RVrkv1RbDe5GvohjbXjGBxXW+8rYm79v41nL
+         hM+3DHLNREFTd0LZ08PHOH2dQS/TdEs7BHlXcxLUJ0NBVWUtadArp88KxqOHgd81IlX8
+         96Jw4KRqKQch+/NbX7fztSygE18gsupVnXmsMBulOf4KwALB1knlC1AhStNeonF/J9g0
+         2fIlUyjqX4iMHeeOU4hY2CYITKc5KR0jvsxIxy6ORBU8KKfQi3duPKQqCLEnzeLZ9sAp
+         x2Bdv5ch+vcS3+do/Bt6KQA7nBDCe0cpg2VWBxwoCo3Jji/88e1pi3EwSpFZxO/4Pa2n
+         6xCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HqCtyRejI4LLye8LToLaeilzkCo6PSscuoTSFnoz9AA=;
-        b=2efA5XuVhbebW23JY1mvIMlsD0WG/sjlo0EGF3I+tulNzdRihyyuz25xtW1+Ab97IS
-         A5MdESA2g2ZDEtjGwIpsM1WAgMXSDaCffJpgX2gCa2/auNlWB0qK5aB+ukWB0roR5CEU
-         8R7nq5A6RJfWmzn6GkCgwGFRagaTOko0Obj0IahRG7HinxAQQNykMQ6i3uqyN4WFZdKL
-         OeNQoDZWANhGIAWfyhHuGD8wesZXl8yM4QIO7Y6xcw3IXLqbXu1KOHw57zZ6x5UDANtG
-         wf+8FEW5281LB5t76xqdeAXu85AvPqoEt9uHXrKb38HkAtqoTC4t5IqIIt8eJVc1It1k
-         jA+g==
-X-Gm-Message-State: AO0yUKUqZicU3Y66PVSjSPxTbQsj/fh6XKb/V/GT6cNGG4uHB1XtvwMM
-        mhB9J7v1ZjzUJ+Uglx98EGC0On0R9uG7nmOoeGQ=
-X-Google-Smtp-Source: AK7set+jUMcBstRu6KjIMkla5m20N/WtKCrZIy0hBuHNgkrs0suDuWtyS0++oPitclH5cc354hte0BFMcD3k+UyfUIE=
-X-Received: by 2002:a17:906:4c99:b0:884:ead1:4e58 with SMTP id
- q25-20020a1709064c9900b00884ead14e58mr2627530eju.4.1676145977931; Sat, 11 Feb
- 2023 12:06:17 -0800 (PST)
+        bh=rnqh2DLP0np8pTj2BQOmeoswoqFE/C1tlKJL7Qk99hM=;
+        b=ytqPf8tsbpI3A4LtpAlu50b34gDTov2TKi7BhxMP6hSUPEHJnC0kXLGbj2L7wbh3VT
+         laLi+q84ocoSsJLFAbsNJ2ZYZRKedGrLKqF98fhFrOjbNY/ESXtqv7yDSIBATRDJrX4+
+         LntphZ1IQSGPX1BFnNnqg4DH30+hWqonI3pP/zubEJA4hGUrYbt1YyzBCp2dUcmnIXFL
+         V/cPW5460sBPz1YV42GkQPk/cXgNw9MG2ZFUOO1colG9rXrX2sOUkHeQhtLJNUQ5mGov
+         ESKoalgpBeRzSW5Xcbm5gMjm1if5TuiAPLXj8RcXM7zZuwMMUQsAzWs6ff3wNWYBTXXC
+         IFIQ==
+X-Gm-Message-State: AO0yUKW6UJtqqpu37jN74BHmVF2h8j1ARrVO3EGFSLlgh5co89SRfyfH
+        MTN4/bpF/Ap7ecY0uv6FIcJsBWFPB+yH+6gEiZ8=
+X-Google-Smtp-Source: AK7set/vi99W3ZhR0iZH1E7CNMEgROCLeXaJIwHv4BojbNk9z4azaJ6NweCU9GbZaJmaAUzeji4SHBl6OptG89Q1as0=
+X-Received: by 2002:a50:9ecb:0:b0:49d:ec5d:28b4 with SMTP id
+ a69-20020a509ecb000000b0049dec5d28b4mr4808743edf.6.1676145999968; Sat, 11 Feb
+ 2023 12:06:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20230207-b4-amlogic-bindings-fixups-v2-v1-0-93b7e50286e7@linaro.org>
- <20230207-b4-amlogic-bindings-fixups-v2-v1-3-93b7e50286e7@linaro.org>
-In-Reply-To: <20230207-b4-amlogic-bindings-fixups-v2-v1-3-93b7e50286e7@linaro.org>
+References: <20230207-b4-amlogic-g12a-usb-ctrl-bindings-fix-v1-1-c310293da7a2@linaro.org>
+In-Reply-To: <20230207-b4-amlogic-g12a-usb-ctrl-bindings-fix-v1-1-c310293da7a2@linaro.org>
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 11 Feb 2023 21:06:07 +0100
-Message-ID: <CAFBinCAeN5gUauVpHgj02SUrbDZfEo-MBBE+=KirWnAbsiHsig@mail.gmail.com>
-Subject: Re: [PATCH 3/8] arm64: dts: amlogic: meson-axg-jethome-jethub-j1xx:
- remove invalid #gpio-cells in onewire node
+Date:   Sat, 11 Feb 2023 21:06:29 +0100
+Message-ID: <CAFBinCBHNTj_NAJ_PgProduVdi0BqUvzYLMfMzEjWsUniVJdRQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: usb: amlogic,meson-g12a-usb-ctrl: make G12A
+ usb3-phy0 optional
 To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Kevin Hilman <khilman@baylibre.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Yuntian Zhang <yt@radxa.com>, devicetree@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>, Rob Herring <robh@kernel.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -75,11 +75,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 4:08 PM Neil Armstrong <neil.armstrong@linaro.org> wrote:
+On Tue, Feb 7, 2023 at 4:02 PM Neil Armstrong <neil.armstrong@linaro.org> wrote:
 >
-> Fixes the following bindings check errors:
->  - #gpio-cells: [[1]] is not of type 'object'
->  - 'gpio-controller' is a dependency of '#gpio-cells'
+> On the G12A USB complex, the USB3 PHY is shared with the PCIe controller,
+> thus on designs without PCIe enabled the USB3 PHY entry can be ommited from
+> the PHY list.
 >
+> Fixes: cdff2c946f06 ("dt-bindings: usb: amlogic,meson-g12a-usb-ctrl: add the Amlogic AXG Families USB Glue Bindings")
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
