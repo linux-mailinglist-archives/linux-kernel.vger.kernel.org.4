@@ -2,45 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C646933A0
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 21:19:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 901F56933A7
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 21:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjBKUT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 15:19:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
+        id S229761AbjBKUZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 15:25:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjBKUT2 (ORCPT
+        with ESMTP id S229533AbjBKUZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 15:19:28 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id DB244193DB
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 12:19:26 -0800 (PST)
-Received: (qmail 856436 invoked by uid 1000); 11 Feb 2023 15:19:25 -0500
-Date:   Sat, 11 Feb 2023 15:19:25 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com
-Subject: Re: Current LKMM patch disposition
-Message-ID: <Y+f4TYZ9BPlt8y8B@rowland.harvard.edu>
-References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
- <Y920w4QRLtC6kd+x@rowland.harvard.edu>
- <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
- <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9+41ctA54pjm/KG@google.com>
- <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
- <Y+fN2fvUjGDWBYrv@google.com>
+        Sat, 11 Feb 2023 15:25:44 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931DE125BE;
+        Sat, 11 Feb 2023 12:25:42 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id qb15so21341380ejc.1;
+        Sat, 11 Feb 2023 12:25:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lLacBBRlz93H3GiKKvSQD2qZJYcpqiTjyuyAIXkHfUk=;
+        b=HnvlPd2wCVKP1vEA5oBzN09Hm7YBjsJX5upx2hujewee0OEBtMeFDjUN0pNfY1qNzj
+         /6e+ChM9OpYSHEHTVo/d5JN4LCYMYeMvjzMpTmh5pZ+FbQjTSiarXOl3fsp3LN3r5lrU
+         uVDbJHNlzEbGRXVmnwYdZ+4BdMeKqhSrmF7yAiLEgDHQOfQsGAU1ESNHG4p1GZ/FBk8C
+         PYnUrj+WyW5jtbwdj9wyGMdBbTO10UXCDDg9EzsoEbicsFM6IuGG6OOIQre7nLz3vyNV
+         Rx/nB7kR/S5q71duUSyDIiXocP70Q2eDFgGyiBMVG3XXFeN6BUnMsH1/O0MgRKRhZ9v1
+         peQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lLacBBRlz93H3GiKKvSQD2qZJYcpqiTjyuyAIXkHfUk=;
+        b=fhCtsIjS0Fm7/2hQo9u6KS71nPy6U8935uc98VX26SOATUoPWtaJYh0OxxO0wD8lL8
+         LVYISUqJRGkttHkgi+AqCLxx4Ud1DbqEKN2uYj7cxhs1dYk246DIlHgWbyEt7oxNl/GI
+         hHNdGr6q3ll7MkaBp6SNzZxV6R/9wtKE0pMg44EIBXdTpHe+umlNyg1p/2BAKouUo8TA
+         j0HsUOLt+KqfN9ub7OK1N9VUxEH3P8O0k4Rns+xwqAJMfgeinZSsM3UjmarDcVnLhFqa
+         aB07YzhlLkkuNxp+6lBMo7JicLati4uD/cPHn0pEK0KVxCo4t0kgzIa1dK3dUGhE/BEI
+         Fffw==
+X-Gm-Message-State: AO0yUKWZItBUq8Ps+OmOAobMdtj3H5Pw68Msn+RxwKUyUxZNe+zBWm8i
+        89MgpIYA2tNEAHDYQRG/qyv5MS1NXw/lEVj4lUM=
+X-Google-Smtp-Source: AK7set+r8/isemvwKFykUdz65hr3VaRSbzbkw3mFuod0hK8/niYyuljq/yGDoa19MVZw3qAcXd7psXWFNbni52Mh3LI=
+X-Received: by 2002:a17:906:c44e:b0:8af:341c:1f82 with SMTP id
+ ck14-20020a170906c44e00b008af341c1f82mr2622125ejb.4.1676147141118; Sat, 11
+ Feb 2023 12:25:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+fN2fvUjGDWBYrv@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+References: <20230209-b4-amlogic-bindings-convert-take2-v1-0-c4fe9049def9@linaro.org>
+ <20230209-b4-amlogic-bindings-convert-take2-v1-3-c4fe9049def9@linaro.org>
+In-Reply-To: <20230209-b4-amlogic-bindings-convert-take2-v1-3-c4fe9049def9@linaro.org>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sat, 11 Feb 2023 21:25:30 +0100
+Message-ID: <CAFBinCCACzEDaa2Z+h5JzXRjEcQ9QH0R+=_UXOKHe7zX02im=Q@mail.gmail.com>
+Subject: Re: [PATCH 3/6] dt-bindings: soc: amlogic: document System Control registers
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,85 +77,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 11, 2023 at 05:18:17PM +0000, Joel Fernandes wrote:
-> I am happy to make changes to explanation.txt (I am assuming that's the file
-> you mentioned), but I was wondering what you thought of the following change.
-> If the formulas are split up, that itself could be some documentation as
-> well. I did add a small paragraph on the top of the formulas as well though.
-> 
-> Some light testing shows it works with the cross-CPU litmus test (could still
-> have bugs though and needs more testing).
-> 
-> Let me know how you feel about it, and if I should submit something along
-> these lines along with your suggestion to edit the explanation.txt. Thanks!
-> 
-> diff --git a/tools/memory-model/linux-kernel.bell b/tools/memory-model/linux-kernel.bell
-> index ce068700939c..1390d1b8ceee 100644
-> --- a/tools/memory-model/linux-kernel.bell
-> +++ b/tools/memory-model/linux-kernel.bell
-> @@ -57,9 +57,28 @@ let rcu-rscs = let rec
->  flag ~empty Rcu-lock \ domain(rcu-rscs) as unmatched-rcu-lock
->  flag ~empty Rcu-unlock \ range(rcu-rscs) as unmatched-rcu-unlock
->  
-> -(* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
-> -let carry-srcu-data = (data ; [~ Srcu-unlock] ; rf)*
-> -let srcu-rscs = ([Srcu-lock] ; carry-srcu-data ; data ; [Srcu-unlock]) & loc
-> +(* SRCU read-side section modeling
-> + * Compute matching pairs of nested Srcu-lock and Srcu-unlock:
-> + * Each SRCU read-side critical section is treated as independent, of other
-> + * overlapping SRCU read-side critical sections even when on the same domain.
-> + * For this, each Srcu-lock and Srcu-unlock pair is treated as loads and
-> + * stores, with the data-dependency flow also treated as independent to prevent
-> + * fusing. *)
+Hi Neil,
 
-Even that is more than I would put in the source file.  Basically, the 
-memory model is so complex that trying to document it in comments is 
-hopeless.  The comments would have to be many times longer than the 
-actual code -- as is the case here with just this little part of the 
-model.  That's the main reason why I made explanation.txt a completely 
-separate file.
+On Thu, Feb 9, 2023 at 2:41 PM Neil Armstrong <neil.armstrong@linaro.org> wrote:
+>
+> Document the System Control registers regions found on all Amlogic
+> SoC families and it's clock, power, pinctrl and phy subnodes.
+I understand clock (main clock controller) power (power domain
+controller) and PHY (HDMI and CVBS PHYs). Are you sure about pinctrl?
 
-> +
-> +(* Data dependency between lock and idx store *)
-> +let srcu-lock-to-store-idx = ([Srcu-lock]; data)
-> +
-> +(* Data dependency between idx load and unlock *)
-> +let srcu-load-idx-to-unlock = (data; [Srcu-unlock])
-> +
-> +(* Read-from dependency between idx store on one CPU and load on same/another.
-> + * This is required to model the splitting of critical section across CPUs. *)
-> +let srcu-store-to-load-idx = (rf ; srcu-load-idx-to-unlock)
-> +
-> +(* SRCU data dependency flow. Exclude the Srcu-unlock to not transcend back to back rscs *)
-> +let carry-srcu-data = (srcu-lock-to-store-idx ; [~ Srcu-unlock] ; srcu-store-to-load-idx)*
-> +
-> +let srcu-rscs = ([Srcu-lock] ; carry-srcu-data ; [Srcu-unlock]) & loc
+[...]
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - amlogic,meson-gx-hhi-sysctrl
+> +          - amlogic,meson-gx-ao-sysctrl
+> +          - amlogic,meson-axg-hhi-sysctrl
+> +          - amlogic,meson-axg-ao-sysctrl
+If you have to re-send this then it would be great if you could add:
+          - amlogic,meson-hhi-sysctrl
+because we already have that in arch/arm/boot/dts/meson.dtsi for the
+32-bit SoCs.
 
-That doesn't look right at all.  Does it work with the following?
+[...]
+> +        power-controller {
+> +            compatible = "amlogic,meson-gxbb-pwrc";
+> +            #power-domain-cells = <1>;
+> +            amlogic,ao-sysctrl = <&sysctrl_AO>;
+For this node (and similar ones) I have a question to the device-tree
+maintainers:
+The power controller has a dedicated sub-range of registers. This also
+applies to the CVBS and HDMI PHYs.
+But the clock controller does not (it has its registers all over the
+place - unfortunately that's how the hardware is).
+I have been asked to add a "reg" property to child nodes with a
+sub-register space.
+Does this mean we need to add a reg property here as well (regardless
+of whether we're using it in the driver or not)? And what to do in
+case of the clock controller though?
 
-P0(struct srcu_struct *lock)
-{
-	int r1;
 
-	r1 = srcu_read_lock(lock);
-	srcu_read_unlock(lock, r1);
-}
-
-or
-
-P0(struct srcu_struct *lock, int *x, int *y)
-{
-	*x = srcu_read_lock(lock);
-	*y = *x;
-	srcu_read_unlock(lock, *y);
-}
-
-The idea is that the value returned by srcu_read_lock() can be stored to 
-and loaded from a sequence (possibly of length 0) of variables, and the 
-final load gets fed to srcu_read_unlock().  That's what the original 
-version of the code expresses.
-
-I'm not sure that breaking this relation up into pieces will make it any 
-easier to understand.
-
-Alan
+Best regards,
+Martin
