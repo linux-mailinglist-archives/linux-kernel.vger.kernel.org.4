@@ -2,129 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93AF669342E
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 23:28:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 515E0693430
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 23:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjBKW2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 17:28:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
+        id S229579AbjBKWcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 17:32:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjBKW2A (ORCPT
+        with ESMTP id S229472AbjBKWcO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 17:28:00 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B523318153
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 14:27:57 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id m2so23789920ejb.8
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 14:27:57 -0800 (PST)
+        Sat, 11 Feb 2023 17:32:14 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCAE16AC0
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 14:32:13 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id jg8so23837308ejc.6
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 14:32:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=diag.uniroma1.it; s=google;
+        d=linux-foundation.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qMKDRs1lk34OrFvNVQWLS3WpiXxoEN/LYfhGx5x/hFU=;
-        b=IH79DS3M0l1mAVgFhKyQehHTB+DbUiF3+hhzIIFUVk1nh0Po91xw++G416SsMO/ZcC
-         4gjsFf2P6dazBaU4ouymoeADTw3d6T7nQllB/ePdX2+hBt0Qg68jfTWgAnzPfT4AqJF6
-         mqcX3E/gcA5ZSuxYGWBoPw6TnKrVfNLzlYJYE=
+        bh=dh9Mfj+GJ1EDtE88jqp5PZHXrchX7Kr3iI5S46RntLo=;
+        b=ef3BEBDJzUmhAk4lbobcyVovew4ssFMQo3+OgYMkMwyjLreYQTqxte5LkLxtJPntii
+         MDCGE6/rNX52nAy3smz5Ylt3YEECyBL7ovNUVv0eRFQ1dADmJkRTNqx0WlrYU0QOeWuN
+         9/rYMJ5nC2TE4ZXIrWKHcpApr7fLFpkCR5OUU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qMKDRs1lk34OrFvNVQWLS3WpiXxoEN/LYfhGx5x/hFU=;
-        b=Ox8Nx3+sZp/wQtKUSf+LbKm/7Y/RIfnN9ER0KP48lXh/bxdZf2Z+hDTDIKxPRQYtGr
-         q8ebuK3lH4vO1AzS61BlN6WfbILxRr98XCMPSJpit7a/lJo7q5KKLJ16JC5W/0N4m6S7
-         xUNzywMPKDGks9WB+RmJgDbWIn2r/eWwP7sml7VVDqE1N9UhHguiNVhwQMqKkHzsAbJG
-         JFf2zQK55WXpu6oEaYy3dnFh9Ato99X3woqo3VVxdygeAuyA6YC8NzhaEVHh3wXTopfQ
-         kdEz1cdSKk/Pm/a5oosF82f8JCbdnEXtCXSmY4j59S3k6anDMce9/5sNklTMgupJCe3G
-         GC+Q==
-X-Gm-Message-State: AO0yUKXB5y8KCjrZdqzP6YhIkRR7Neov4PNPgRvwwzyBzB3vidZOiT3E
-        xPciG7Rv46lzpe44ygp3ZrI3WeJnFW7sIcZdhBCnQA==
-X-Google-Smtp-Source: AK7set9JpTVbpYWUVgepjW5bgCdwbzAkwbaYv/BpCtcgEuja4oCK7L8gRQDx4pRmHB1tc3UCXUgfkee/nxYBeAmfHA8=
-X-Received: by 2002:a17:906:1ba1:b0:879:b98d:eb08 with SMTP id
- r1-20020a1709061ba100b00879b98deb08mr2688866ejg.3.1676154476257; Sat, 11 Feb
- 2023 14:27:56 -0800 (PST)
+        bh=dh9Mfj+GJ1EDtE88jqp5PZHXrchX7Kr3iI5S46RntLo=;
+        b=y0qw6sNZcUVCCs2xV7NjZ7gHUhaMZRpqolES+1QCqS84OvUnjEtgZQkzajnrkWqrMV
+         LGC948HbzRcF6N5OlRD16xI8rDv2bXsbWyIKgYNkRYGLb2wrlXU/Zl510u+8g08ty2uZ
+         4x+DfNZ/SSVf9qlzr9juS3SUVZGItjPoNZ8vgx/bvjC/Q8Qf+fCC8hEHFpa9bvXKKUPZ
+         NRD8IwrDeimvopJNcydiTV51qrgZImZeXFgds2viAU9Uyp5e7HHu/cV9dHUgMgPCMsUZ
+         N8roWRU3KvcyJj6Lg3QCCeMiTPVBJAU+LCOwdW/8wWmSKqPKXFmwi5xeWzF7ldmnVbpy
+         lVAA==
+X-Gm-Message-State: AO0yUKVQSnKv10ymVcb7yYTZjvrVkjbmYFw5c5RlW8AujP4A29JN+yfR
+        sp8GDG7exK+ocCvvsGxhkgYybhahMPPJ3C1jDLpJDw==
+X-Google-Smtp-Source: AK7set/eFtfIrcqXsDityqoDVsvoBYv82TtTaxzBZ6TW1lfOllvK8ZeUj6Mq69QCk5ecB8JzBO9hEQ==
+X-Received: by 2002:a17:907:6d05:b0:880:3129:d84a with SMTP id sa5-20020a1709076d0500b008803129d84amr26883328ejc.60.1676154731824;
+        Sat, 11 Feb 2023 14:32:11 -0800 (PST)
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com. [209.85.218.52])
+        by smtp.gmail.com with ESMTPSA id r20-20020a170906705400b0087bd4e34eb8sm4385341ejj.203.2023.02.11.14.32.10
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Feb 2023 14:32:11 -0800 (PST)
+Received: by mail-ej1-f52.google.com with SMTP id hx15so23766958ejc.11
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 14:32:10 -0800 (PST)
+X-Received: by 2002:a17:906:fad2:b0:88d:d304:3424 with SMTP id
+ lu18-20020a170906fad200b0088dd3043424mr2691969ejb.0.1676154730590; Sat, 11
+ Feb 2023 14:32:10 -0800 (PST)
 MIME-Version: 1.0
-References: <20230125-hid-unregister-leds-v3-0-0a52ac225e00@diag.uniroma1.it>
- <20230125-hid-unregister-leds-v3-1-0a52ac225e00@diag.uniroma1.it> <20230210142634.2exh6mvbvysy3hqo@mail.corp.redhat.com>
-In-Reply-To: <20230210142634.2exh6mvbvysy3hqo@mail.corp.redhat.com>
-From:   Pietro Borrello <borrello@diag.uniroma1.it>
-Date:   Sat, 11 Feb 2023 23:27:45 +0100
-Message-ID: <CAEih1qXsWT2u_M45cuY0RbOts8RM2cM6iPDju07ZtT-gtgr=xQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] HID: bigben: use spinlock to safely schedule workers
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Jiri Kosina <jikos@kernel.org>, Hanno Zulla <kontakt@hanno.de>,
-        Carlo Caione <carlo@endlessm.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Roderick Colenbrander <roderick@gaikai.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <167613641114.2124708.9785978428796571420@leemhuis.info> <CAHk-=wiEJa-R50PTYPyAQDs02OAyK+Oqr67x5nxns=OKXCEf6A@mail.gmail.com>
+In-Reply-To: <CAHk-=wiEJa-R50PTYPyAQDs02OAyK+Oqr67x5nxns=OKXCEf6A@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 11 Feb 2023 14:31:53 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whncfNmZmWe4yh-M=DXYT6L6Eq1r=UYKdt57=4jUmKbTA@mail.gmail.com>
+Message-ID: <CAHk-=whncfNmZmWe4yh-M=DXYT6L6Eq1r=UYKdt57=4jUmKbTA@mail.gmail.com>
+Subject: Re: Linux regressions report for mainline [2023-02-11]
+To:     "Regzbot (on behalf of Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Chen <david.chen@nutanix.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Feb 2023 at 15:26, Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
+On Sat, Feb 11, 2023 at 1:39 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> [...]
-> >
-> > -     if (bigben->removed || !report_field)
+> Or even just reverting the original commit e320d3012d25
+> ("mm/page_alloc.c: fix freeing non-compound pages") and say that the
+> (very rare) memory leak is much less dangerous than that hacky fix
+> (that was buggy).
 >
-> You are removing an important test here: if (!report_field), please keep
-> it.
+> Because it's a bit dodgy how commit e320d3012d25 ends up hooking into
+> __free_pages(),
 
-To my understanding, that check was added in commit
-918aa1ef104d ("HID: bigbenff: prevent null pointer dereference")
-to prevent the NULL pointer crash, only fixing the crash point.
-However, the true root cause was a missing check for output
-reports patched in commit
-c7bf714f8755 ("HID: check empty report_list in bigben_probe()"),
-where the type-confused report list_entry was overlapping with
-a NULL pointer, which was then causing the crash.
-Let me know if there is any other path that may result in having a
-report with no fields. In that case, it would make sense to keep the
-check.
+Actually, that's not the only dodgy thing about it.
 
->
-> > -             return;
-> > +     spin_lock_irqsave(&bigben->lock, flags);
-> >
-> >       if (bigben->work_led) {
-> >               bigben->work_led = false;
-> > @@ -219,6 +229,8 @@ static void bigben_worker(struct work_struct *work)
-> >               report_field->value[7] = 0x00; /* padding */
-> >               hid_hw_request(bigben->hid, bigben->report, HID_REQ_SET_REPORT);
-> >       }
-> > +
-> > +     spin_unlock_irqrestore(&bigben->lock, flags);
->
-> Ouch, having hid_hw_request() called whithin a spinlock is definitely not
-> something that should be done.
->
-> However, the spinlock should be protecting 2 kinds of things:
-> - any access to any value of struct bigben_device, but in an atomic way
->   (i.e. copy everything you need locally in a spinlock, then release it
->   and never read that struct again in that function).
-> - the access to bigben->removed, which should be checked only in
->   bigben_schedule_work() and in the .remove() function.
->
-> Please note that this is what the playstation driver does: it prepares
-> the report under the spinlock (which is really fast) before sending the
-> report to the device which can be slow and be interrupted.
->
-> With that being said, it is clear that we need 2 patches for this one:
-> - the first one introduces the spinlock and protects the concurrent
->   accesses to struct bigben_device (which is roughly everything below
->   with the changes I just said)
-> - the second one introduces bigben_schedule_work() and piggy backs on
->   top of that new lock.
+It assumes that any multi-order page allocator user doesn't use the
+page counts and only ever has a single "alloc" and a "free".
 
-Thanks for clarifying. I will work on a v4 patch.
-Best regards,
-Pietro
+And apparently that assumption is correct, or we'd have seen a lot of problems.
+
+But it *also* assumes that the speculative page alloc/free was for one
+single page, and while that used to be true, the whole higher-order
+folio code means that it's not necessarily true any more.
+
+Or rather, I guess it *is* true in practice, but if you ever want to
+enable 16kB folios on some filesystem, that commit e320d3012d25 is
+just plain unfixably buggy.
+
+Are we there yet? Clearly not, considering bugs like this. But it all
+does make me go "Hmm, maybe we'd be better off with the outright
+revert and accept the unlikely memory leak for now".
+
+Willy?
+
+               Linus
