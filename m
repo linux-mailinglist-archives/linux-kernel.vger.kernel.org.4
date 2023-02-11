@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 310A56931D2
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 15:56:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1156931D3
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 15:58:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbjBKO4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 09:56:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51658 "EHLO
+        id S229546AbjBKO6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 09:58:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjBKOz7 (ORCPT
+        with ESMTP id S229463AbjBKO6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 09:55:59 -0500
-Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AD216AFE
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 06:55:58 -0800 (PST)
+        Sat, 11 Feb 2023 09:58:02 -0500
+Received: from smtp.smtpout.orange.fr (smtp-13.smtpout.orange.fr [80.12.242.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FA61B56F
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 06:58:01 -0800 (PST)
 Received: from [192.168.1.18] ([86.243.2.178])
         by smtp.orange.fr with ESMTPA
-        id QrI9p1F8JIxv0QrIApn25B; Sat, 11 Feb 2023 15:55:57 +0100
+        id QrK9pJcJMsavKQrK9pxr1Z; Sat, 11 Feb 2023 15:58:00 +0100
 X-ME-Helo: [192.168.1.18]
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 11 Feb 2023 15:55:57 +0100
+X-ME-Date: Sat, 11 Feb 2023 15:58:00 +0100
 X-ME-IP: 86.243.2.178
-Message-ID: <e75c23f0-9369-1848-d873-c48dffeab88c@wanadoo.fr>
-Date:   Sat, 11 Feb 2023 15:55:48 +0100
+Message-ID: <1f9d31ad-db91-a6b9-3a70-cfc983cd99b7@wanadoo.fr>
+Date:   Sat, 11 Feb 2023 15:57:51 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH] soc: brcmstb: pm-arm: Remove duplicate/repeating constant
+Subject: Re: [PATCH] iio: frequency: adf4377: remove duplicate/repeating
+ constant
 Content-Language: fr
 To:     Deepak R Varma <drv@mailo.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+        Antoniu Miclaus <antoniu.miclaus@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
         Praveen Kumar <kumarpraveen@linux.microsoft.com>
-References: <Y+dT6du6Nysyd8/t@ubun2204.myguest.virtualbox.org>
+References: <Y+c+mwNnlPpSH49/@ubun2204.myguest.virtualbox.org>
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <Y+dT6du6Nysyd8/t@ubun2204.myguest.virtualbox.org>
+In-Reply-To: <Y+c+mwNnlPpSH49/@ubun2204.myguest.virtualbox.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -50,63 +52,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 11/02/2023 à 09:38, Deepak R Varma a écrit :
-> Constant DDR_PHY_RST_N is unnecessarily or'ed with itself. Remove
-> the redundant constant from the expression.
+Le 11/02/2023 à 08:07, Deepak R Varma a écrit :
+> Constant ADF4377_0000_SOFT_RESET_R_MSK is unnecessarily or'ed with
+> itself. Remove the redundant constant from the expression.
 > Issue identified using doublebitand.cocci Coccinelle semantic patch.
 > 
 > Signed-off-by: Deepak R Varma <drv@mailo.com>
 > ---
-> Please note: I was unable to build the change though I had the appropriate
-> config, arch and  cross compiler. I used the following:
-> 	.config = bmips_stb_defconfig
-> 	ARCH=mips
-> 	CROSS_COMPILE=/usr/bin/mips-linux-gnu-
-> 	BRCMSTB_PM=y
-
-The driver is pm-arm.c, try with arm instead of mips?
-
-Worked for me with make.cross
-
-> 
-> Let me know what I missed so I can build the objects myself. Thank you.
-> 
-> 
->   drivers/soc/bcm/brcmstb/pm/pm-arm.c | 4 ++--
+>   drivers/iio/frequency/adf4377.c | 4 ++--
 >   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/soc/bcm/brcmstb/pm/pm-arm.c b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
-> index d681cd24c6e1..633e715446f7 100644
-> --- a/drivers/soc/bcm/brcmstb/pm/pm-arm.c
-> +++ b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
-> @@ -288,7 +288,7 @@ static inline void s5entry_method1(void)
->   		/* Step 3: Channel A (RST_N = CKE = 0) */
->   		tmp = readl_relaxed(ctrl.memcs[i].ddr_phy_base +
->   				  ctrl.phy_a_standby_ctrl_offs);
-> -		tmp &= ~(DDR_PHY_RST_N | DDR_PHY_RST_N);
-> +		tmp &= ~DDR_PHY_RST_N;
-
-Based on step 3 comment above, maybe:
-
-  -		tmp &= ~(DDR_PHY_RST_N | DDR_PHY_RST_N);
-  +		tmp &= ~(DDR_PHY_RST_N | DDR_PHY_CKE);
-
-?
->   		writel_relaxed(tmp, ctrl.memcs[i].ddr_phy_base +
->   			     ctrl.phy_a_standby_ctrl_offs);
+> diff --git a/drivers/iio/frequency/adf4377.c b/drivers/iio/frequency/adf4377.c
+> index 26abecbd51e0..caefd7ea6b14 100644
+> --- a/drivers/iio/frequency/adf4377.c
+> +++ b/drivers/iio/frequency/adf4377.c
+> @@ -495,8 +495,8 @@ static int adf4377_soft_reset(struct adf4377_state *st)
+>   		return ret;
 >   
-> @@ -296,7 +296,7 @@ static inline void s5entry_method1(void)
->   		if (ctrl.phy_b_standby_ctrl_offs != DDR_PHY_NO_CHANNEL) {
->   			tmp = readl_relaxed(ctrl.memcs[i].ddr_phy_base +
->   					  ctrl.phy_b_standby_ctrl_offs);
-> -			tmp &= ~(DDR_PHY_RST_N | DDR_PHY_RST_N);
-> +			tmp &= ~DDR_PHY_RST_N;
+>   	return regmap_read_poll_timeout(st->regmap, 0x0, read_val,
+> -					!(read_val & (ADF4377_0000_SOFT_RESET_R_MSK |
+> -					ADF4377_0000_SOFT_RESET_R_MSK)), 200, 200 * 100);
+> +					!(read_val & ADF4377_0000_SOFT_RESET_R_MSK),
+> +					200, 200 * 100);
 
-No such comment, but the code looks the same, so...
+Based on the code just above, it is likely that one is expected to be 
+ADF4377_0000_SOFT_RESET_MSK.
 
 CJ
 
->   			writel_relaxed(tmp, ctrl.memcs[i].ddr_phy_base +
->   				     ctrl.phy_b_standby_ctrl_offs);
->   		}
+>   }
+>   
+>   static int adf4377_get_freq(struct adf4377_state *st, u64 *freq)
 
