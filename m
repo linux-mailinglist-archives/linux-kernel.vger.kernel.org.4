@@ -2,63 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A05693544
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 00:25:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F4E693546
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 00:25:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbjBKXZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 18:25:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
+        id S229520AbjBKXZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 18:25:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBKXZH (ORCPT
+        with ESMTP id S229496AbjBKXZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 18:25:07 -0500
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9452B7297;
-        Sat, 11 Feb 2023 15:25:06 -0800 (PST)
-Received: by mail-pj1-f42.google.com with SMTP id d13-20020a17090ad3cd00b0023127b2d602so9061641pjw.2;
-        Sat, 11 Feb 2023 15:25:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fONSMRtXQOh+BhpQwqB8Z+bXfioq6fkZn5EXD/78cAs=;
-        b=7Q85jx/9BK0/73plBuQzK66+i0fNakSEI9/btC+FLewGVwsB/qQJI4JG9Zs1UvCSHZ
-         moyMF+sagnXyFoxNQ+5emuc4teqP6pMB1Yz9/LJUWUgNc6xEBbtEB8CiA2kFuyZefiXG
-         tY+b2r3IgAjYuFR35pUFgY0K58BnxSDGIwzkft6Tc/2WB/qr3v9SMvaqJiHb1X7rxKZt
-         XElzLjOPIkPABYMP9/KKg1QNahxQhC1pCQTEzHLviY9VSpMd29XmThVLxqZfDmouPpOR
-         OAoet0UfXASMxZGczb7BpKAo4kqjOLYdSTi1ZXThtFP6eL5Bv9uxuHAQCzaJP+DovIjH
-         uz1Q==
-X-Gm-Message-State: AO0yUKU3EBjK1u/hewXLPMJHbZEZiGuX5y0Akv5OAZb3r/oG2CBMRzwh
-        +wOjGDe1wfQk8o7lKfbx/i4=
-X-Google-Smtp-Source: AK7set9F9ALiczPrICTwj+b3U/yYp6i3Ib4Bs5LbBsag/UFBHfFCXUty+ocn4bn6aj77oRVcoxAIXw==
-X-Received: by 2002:a17:902:c941:b0:199:3e82:8ff9 with SMTP id i1-20020a170902c94100b001993e828ff9mr14063472pla.10.1676157905876;
-        Sat, 11 Feb 2023 15:25:05 -0800 (PST)
-Received: from [192.168.3.219] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id jj13-20020a170903048d00b0019a5aa7eab0sm5448762plb.54.2023.02.11.15.25.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Feb 2023 15:25:04 -0800 (PST)
-Message-ID: <aed35866-507c-870c-7e8a-c1868bcaa084@acm.org>
-Date:   Sat, 11 Feb 2023 15:25:03 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] scsi: qla1280: Replace arithmetic addition by bitwise OR
-Content-Language: en-US
-To:     Deepak R Varma <drv@mailo.com>, Michael Reed <mdr@sgi.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-References: <Y+I7/QpQYjBXutLf@ubun2204.myguest.virtualbox.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <Y+I7/QpQYjBXutLf@ubun2204.myguest.virtualbox.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        Sat, 11 Feb 2023 18:25:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820FA12846;
+        Sat, 11 Feb 2023 15:25:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42ADCB80B03;
+        Sat, 11 Feb 2023 23:25:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A8DEC433D2;
+        Sat, 11 Feb 2023 23:25:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676157924;
+        bh=e4wjNKz+lNpXFkGW45k8O521ZMwggG5GHVudmevaWK8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ob5dVR1r87sz4ELODkaa+AOsPjnqzoIqZejWHAHkHqFnSOMiqlZcY6Dl4vo+o8sZz
+         MTXoJf+UmRsZZvoaDbek+ClvUXnLUO92mo/ixByh2rMtKvKBQEP9GZ0VQAgFGM/VRA
+         PI5LUcU0M/2OnuncEMxWh5llc7U1Cli4pLCCd8NbysooVOyECkuwSq83kmaAcFIhgd
+         TOwHkziJ4zqeVgSSiHfR21dDJjVxxXrL3gNzb0Dtdajv1S6Z+wAZQZYPVjdLZEiebd
+         ZBdXk/6o9f/hYqbVotx5EIKpde34PlRE0rTM4yBrLjvvcn7Ct/yT9eFvtDXgQtsStL
+         5pxVYbvMwAGDA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v6.2-rc7
+Date:   Sat, 11 Feb 2023 23:25:10 +0000
+Message-Id: <20230211232523.6A8DEC433D2@smtp.kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,20 +48,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/7/23 03:54, Deepak R Varma wrote:
-> When adding two bit-field mask values, an OR operation offers higher
-> performance over an arithmetic operation. So, convert such addition to
-> an OR based expression.
+The following changes since commit b442990d244ba2ffe926c6603c42deb6fcc3b0db:
 
-Where is the evidence that supports this claim? On the following page I 
-read that there is no performance difference when using a modern CPU: 
-https://cs.stackexchange.com/questions/75811/why-is-addition-as-fast-as-bit-wise-operations-in-modern-processors
+  spi: Merge rename of spi-cs-setup-ns DT property (2023-01-11 14:15:22 +0000)
 
-> Issue identified using orplus.cocci semantic patch script.
+are available in the Git repository at:
 
-Where is that script located? Can it be deleted such that submission of 
-patches similar to this patch stops?
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.2-rc7
 
-Thanks,
+for you to fetch changes up to eede42c9459b58b71edc99303dad65216a655810:
 
-Bart.
+  spi: spidev: fix a recursive locking error (2023-01-27 16:38:05 +0000)
+
+----------------------------------------------------------------
+spi: Fixes for v6.2
+
+A couple of hopefully final fixes for spi, one driver specific fix for
+an issue with very large transfers and a fix for an issue with the
+locking fixes in spidev merged earlier this release cycle which was
+missed.
+
+----------------------------------------------------------------
+Bartosz Golaszewski (1):
+      spi: spidev: fix a recursive locking error
+
+Serge Semin (1):
+      spi: dw: Fix wrong FIFO level setting for long xfers
+
+ drivers/spi/spi-dw-core.c |  2 +-
+ drivers/spi/spidev.c      | 22 ++++++++++++++++------
+ 2 files changed, 17 insertions(+), 7 deletions(-)
