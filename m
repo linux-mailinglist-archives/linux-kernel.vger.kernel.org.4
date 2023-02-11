@@ -2,60 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3E4692E8E
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 07:08:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF31692E92
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 07:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjBKGIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 01:08:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
+        id S229483AbjBKGSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 01:18:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBKGIu (ORCPT
+        with ESMTP id S229454AbjBKGSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 01:08:50 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD645C89E
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 22:08:49 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31B5VWHk030701;
-        Sat, 11 Feb 2023 06:08:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2022-7-12;
- bh=MOiEKHQKDJR9QHAHdY++al+Ze5H+rKY6te5kRImaaP0=;
- b=T4Ovj5C56jgml/0MPqvz+yCZIXMVzWahzMhLB9OLtMmL/KHCmbIALlc9rYXmfFICtUpH
- h/AJ1m5dk6zOVz2F0VriuzFJhKnMyfQ17cJqEikSukMpVJ8QepXoGc2eOF5WEDUA2wXA
- X3DA+9xEgUbu0/Yh8iQhNNMxU5DQ0H4+OcnRdENRa/w6V6s0bcTMWWfk+WvB+933ItXt
- WATYMW86fpImmxVWWdEyKYUDErfFCRTJL99lW4E9uKauNyUvEsEg1a5E9IHQPGAm31fy
- rLpEiT9jBhhGJkU+06q3V8BiUg1CcrQCrB6bs6KyaoyMT3V6S1eebXEIVqG93IEnBY2W 2A== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np1t383qr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 11 Feb 2023 06:08:41 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31B1XGmL018005;
-        Sat, 11 Feb 2023 06:08:40 GMT
-Received: from ban25x6uut24.us.oracle.com (ban25x6uut24.us.oracle.com [10.153.73.24])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3np1f2mgmw-1;
-        Sat, 11 Feb 2023 06:08:40 +0000
-From:   Si-Wei Liu <si-wei.liu@oracle.com>
-To:     mst@redhat.com, jasowang@redhat.com, elic@nvidia.com
-Cc:     parav@nvidia.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] vdpa/mlx5: should not activate virtq object when suspended
-Date:   Fri, 10 Feb 2023 22:08:14 -0800
-Message-Id: <1676095694-15563-1-git-send-email-si-wei.liu@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-11_02,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 adultscore=0
- malwarescore=0 phishscore=0 bulkscore=0 spamscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302110055
-X-Proofpoint-GUID: kH9EvAek0IomS8sLw0KS02YPYNNNmEjG
-X-Proofpoint-ORIG-GUID: kH9EvAek0IomS8sLw0KS02YPYNNNmEjG
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Sat, 11 Feb 2023 01:18:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394DE7097B
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 22:17:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676096254;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+CTwGPJ6Nc46AzE4LIyhb9Ckm0HjZ8PmHDXQrmNlV6c=;
+        b=CUMknw3894rPv4NVuOpdECsiTl84eZhAqxijG3Wzc0QU1xHC7q305enk5/vDkGn4+kWnSD
+        pSwYFQpHqpvtvVI0/I3/VZ5jAVySP5dv7Ki/jYf20g19L09sqNpzbvBdl0NMkNQtd/Jk8p
+        FhYhwoAASN4uayUU83oTKxhJtnOqZtI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-137-mXpfP7K7MgOq65-LwG78LQ-1; Sat, 11 Feb 2023 01:17:31 -0500
+X-MC-Unique: mXpfP7K7MgOq65-LwG78LQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3B5FE29AA3B7;
+        Sat, 11 Feb 2023 06:17:30 +0000 (UTC)
+Received: from T590 (ovpn-8-18.pek2.redhat.com [10.72.8.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3F3DD492C3F;
+        Sat, 11 Feb 2023 06:17:22 +0000 (UTC)
+Date:   Sat, 11 Feb 2023 14:17:18 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, Andy Lutomirski <luto@kernel.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Stefan Metzmacher <metze@samba.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API Mailing List <linux-api@vger.kernel.org>,
+        io-uring <io-uring@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Samba Technical <samba-technical@lists.samba.org>,
+        ming.lei@redhat.com
+Subject: Re: copy on write for splice() from file to pipe?
+Message-ID: <Y+cy7tmxWM2HVnck@T590>
+References: <1dd85095-c18c-ed3e-38b7-02f4d13d9bd6@kernel.dk>
+ <CAHk-=wiszt6btMPeT5UFcS=0=EVr=0injTR75KsvN8WetwQwkA@mail.gmail.com>
+ <fe8252bd-17bd-850d-dcd0-d799443681e9@kernel.dk>
+ <CAHk-=wiJ0QKKiORkVr8n345sPp=aHbrLTLu6CQ-S0XqWJ-kJ1A@mail.gmail.com>
+ <7a2e5b7f-c213-09ff-ef35-d6c2967b31a7@kernel.dk>
+ <CALCETrVx4cj7KrhaevtFN19rf=A6kauFTr7UPzQVage0MsBLrg@mail.gmail.com>
+ <b44783e6-3da2-85dd-a482-5d9aeb018e9c@kernel.dk>
+ <2bb12591-9d24-6b26-178f-05e939bf3251@kernel.dk>
+ <CAHk-=wjzqrD5wrfeaU390bXEEBY2JF-oKmFN4fREzgyXsbQRTQ@mail.gmail.com>
+ <Y+cJDnnMuirSjO3E@T590>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+cJDnnMuirSjO3E@T590>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,90 +78,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Otherwise the virtqueue object to instate could point to invalid address
-that was unmapped from the MTT:
+On Sat, Feb 11, 2023 at 11:18:38AM +0800, Ming Lei wrote:
+> On Fri, Feb 10, 2023 at 02:08:35PM -0800, Linus Torvalds wrote:
+> > On Fri, Feb 10, 2023 at 1:51 PM Jens Axboe <axboe@kernel.dk> wrote:
+> > >
+> > > Speaking of splice/io_uring, Ming posted this today:
+> > >
+> > > https://lore.kernel.org/io-uring/20230210153212.733006-1-ming.lei@redhat.com/
+> > 
+> > Ugh. Some of that is really ugly. Both 'ignore_sig' and
+> > 'ack_page_consuming' just look wrong. Pure random special cases.
+> > 
+> > And that 'ignore_sig' is particularly ugly, since the only thing that
+> > sets it also sets SPLICE_F_NONBLOCK.
+> > 
+> > And the *only* thing that actually then checks that field is
+> > 'splice_from_pipe_next()', where there are exactly two
+> > signal_pending() checks that it adds to, and
+> > 
+> >  (a) the first one is to protect from endless loops
+> > 
+> >  (b) the second one is irrelevant when  SPLICE_F_NONBLOCK is set
+> > 
+> > So honestly, just NAK on that series.
+> > 
+> > I think that instead of 'ignore_sig' (which shouldn't exist), that
+> > first 'signal_pending()' check in splice_from_pipe_next() should just
+> > be changed into a 'fatal_signal_pending()'.
+> 
+> Good point, here the signal is often from task_work_add() called by
+> io_uring.
+> 
+> > 
+> > But that 'ack_page_consuming' thing looks even more disgusting, and
+> > since I'm not sure why it even exists, I don't know what it's doing
+> > wrong.
+> 
+> The motivation is for confirming that if the produced buffer can be used
+> for READ or WRITE. Another way could be to add PIPE_BUF_FLAG_MAY_READ[WRITE].
 
-  mlx5_core 0000:41:04.2: mlx5_cmd_out_err:782:(pid 8321):
-  CREATE_GENERAL_OBJECT(0xa00) op_mod(0xd) failed, status
-  bad parameter(0x3), syndrome (0x5fa1c), err(-22)
+BTW, I meant the added flags are source/sink private flags, which are
+not used by generic pipe/splice code, just used by the actual source and
+sink subsystem.
 
-While at it, add warning message to tell apart which object is
-responsible for the CREATE_GENERAL_OBJECT command failure.
-
-Fixes: cae15c2ed8e6 ("vdpa/mlx5: Implement susupend virtqueue callback")
-Cc: Eli Cohen <elic@nvidia.com>
-Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
----
- drivers/vdpa/mlx5/net/mlx5_vnet.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-index 3a6dbbc6..c05c7f6 100644
---- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-+++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-@@ -165,6 +165,7 @@ struct mlx5_vdpa_net {
- 	u32 cur_num_vqs;
- 	u32 rqt_size;
- 	bool nb_registered;
-+	bool suspended;
- 	struct notifier_block nb;
- 	struct vdpa_callback config_cb;
- 	struct mlx5_vdpa_wq_ent cvq_ent;
-@@ -1245,12 +1246,18 @@ static int setup_vq(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueue *mvq)
- 		goto err_connect;
- 
- 	err = counter_set_alloc(ndev, mvq);
--	if (err)
-+	if (err) {
-+		mlx5_vdpa_warn(&ndev->mvdev, "failed to alloc counter on vq idx %d(%d)\n",
-+			       idx, err);
- 		goto err_counter;
-+	}
- 
- 	err = create_virtqueue(ndev, mvq);
--	if (err)
-+	if (err) {
-+		mlx5_vdpa_warn(&ndev->mvdev, "failed to create virtqueue idx %d(%d)\n",
-+			       idx, err);
- 		goto err_connect;
-+	}
- 
- 	if (mvq->ready) {
- 		err = modify_virtqueue(ndev, mvq, MLX5_VIRTIO_NET_Q_OBJECT_STATE_RDY);
-@@ -2411,7 +2418,7 @@ static int mlx5_vdpa_change_map(struct mlx5_vdpa_dev *mvdev,
- 	if (err)
- 		goto err_mr;
- 
--	if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK))
-+	if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK) || ndev->suspended)
- 		goto err_mr;
- 
- 	restore_channels_info(ndev);
-@@ -2580,6 +2587,7 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev)
- 	mlx5_vdpa_destroy_mr(&ndev->mvdev);
- 	ndev->mvdev.status = 0;
- 	ndev->cur_num_vqs = 0;
-+	ndev->suspended = false;
- 	ndev->mvdev.cvq.received_desc = 0;
- 	ndev->mvdev.cvq.completed_desc = 0;
- 	memset(ndev->event_cbs, 0, sizeof(*ndev->event_cbs) * (mvdev->max_vqs + 1));
-@@ -2815,6 +2823,8 @@ static int mlx5_vdpa_suspend(struct vdpa_device *vdev)
- 	struct mlx5_vdpa_virtqueue *mvq;
- 	int i;
- 
-+	mlx5_vdpa_info(mvdev, "suspending device\n");
-+
- 	down_write(&ndev->reslock);
- 	ndev->nb_registered = false;
- 	mlx5_notifier_unregister(mvdev->mdev, &ndev->nb);
-@@ -2824,6 +2834,7 @@ static int mlx5_vdpa_suspend(struct vdpa_device *vdev)
- 		suspend_vq(ndev, mvq);
- 	}
- 	mlx5_vdpa_cvq_suspend(mvdev);
-+	ndev->suspended = true;
- 	up_write(&ndev->reslock);
- 	return 0;
- }
--- 
-1.8.3.1
+thanks,
+Ming
 
