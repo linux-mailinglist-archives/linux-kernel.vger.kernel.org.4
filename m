@@ -2,129 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AADE69327F
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 17:34:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA75693284
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 17:37:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjBKQeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 11:34:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39590 "EHLO
+        id S229599AbjBKQhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 11:37:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjBKQeH (ORCPT
+        with ESMTP id S229841AbjBKQg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 11:34:07 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id B49B92686F
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 08:34:04 -0800 (PST)
-Received: (qmail 851986 invoked by uid 1000); 11 Feb 2023 11:34:04 -0500
-Date:   Sat, 11 Feb 2023 11:34:04 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com
-Subject: Re: Current LKMM patch disposition
-Message-ID: <Y+fDfMaZ6ix3rxlF@rowland.harvard.edu>
-References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
- <Y920w4QRLtC6kd+x@rowland.harvard.edu>
- <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
- <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9+41ctA54pjm/KG@google.com>
- <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
- <CAEXW_YR=J9Y9acRaZrU_F7S5Fwe7rhxwqKmxV2NOGwo0pjNBnA@mail.gmail.com>
- <Y+e5E6YkVw3C9YBk@google.com>
+        Sat, 11 Feb 2023 11:36:56 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A535613535;
+        Sat, 11 Feb 2023 08:36:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7161FCE02C7;
+        Sat, 11 Feb 2023 16:36:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 963D6C433EF;
+        Sat, 11 Feb 2023 16:36:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676133410;
+        bh=GE2rigzIx2DjQ8O+jrd3+B734zaDnbN6WgDv4gJ5k2g=;
+        h=Date:From:To:Subject:In-Reply-To:References:From;
+        b=NjaXE8ie7K93I3+rPEAmtn704ih65qNievx7OSVmX41+zPGQhtQE4qfYz7DP2DGFq
+         sd9mgfbt2441+L0tYRKZMPYyoZQoJwBhQMtwYlRdcwyFRNVCkQRNR3Kr7mKTK4sgh9
+         2k5mpFVjbD7SF+zZ9IgYb7tmvg9Mdwn7XZxA5tSPmBAQ7lMyqnc1lnK+VK/SRHaNBG
+         jtVj0Oeg5Z2z4E19cKtAwfsiw3MPqAEjzmteKjfNms2eW8lBzeoRXc8MqqNYft1b+V
+         8x1FWOj8QvkILsIYzQbTcXI3YEHVwYTAsKX3iKcDvizkKlPcuFPOHPLrzz4BRKTerG
+         sf0l/ArpUTqFw==
+Date:   Sat, 11 Feb 2023 08:36:50 -0800
+From:   Kees Cook <kees@kernel.org>
+To:     syzbot <syzbot+cdd9922704fc75e03ffc@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, keescook@chromium.org,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
+        io-uring@vger.kernel.org
+Subject: Re: [syzbot] BUG: bad usercopy in io_openat2_prep
+User-Agent: K-9 Mail for Android
+In-Reply-To: <00000000000088b3d905f46ed421@google.com>
+References: <00000000000088b3d905f46ed421@google.com>
+Message-ID: <B83C9F6F-569B-4DCB-9FFE-45D9B1E32B21@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+e5E6YkVw3C9YBk@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 11, 2023 at 03:49:39PM +0000, Joel Fernandes wrote:
-> Hi Alan, all,
-> 
-> One thing I noticed: Shouldn't the model have some notion of fences with the
-> srcu lock primitive? SRCU implementation in the kernel does an unconditional
-> memory barrier on srcu_read_lock() (which it has to do for a number of
-> reasons including correctness), but currently both with/without this patch,
-> the following returns "Sometimes", instead of "Never". Sorry if this was
-> discussed before:
-> 
-> C MP+srcu
-> 
-> (*
->  * Result: Sometimes
->  *
->  * If an srcu_read_unlock() is called between 2 stores, they should propogate
->  * in order.
->  *)
-> 
-> {}
-> 
-> P0(struct srcu_struct *s, int *x, int *y)
-> {
-> 	int r1;
-> 
-> 	r1 = srcu_read_lock(s);
-> 	WRITE_ONCE(*x, 1);
-> 	srcu_read_unlock(s, r1); // replace with smp_mb() makes Never.
-> 	WRITE_ONCE(*y, 1);
-> }
-> 
-> P1(struct srcu_struct *s, int *x, int *y)
-> {
-> 	int r1;
-> 	int r2;
-> 
-> 	r1 = READ_ONCE(*y);
-> 	smp_rmb();
-> 	r2 = READ_ONCE(*x);
-> }
-> 
-> exists (1:r1=1 /\ 1:r2=0)
+On February 11, 2023 8:08:52 AM PST, syzbot <syzbot+cdd9922704fc75e03ffc@sy=
+zkaller=2Eappspotmail=2Ecom> wrote:
+>Hello,
+>
+>syzbot found the following issue on:
+>
+>HEAD commit:    ca72d58361ee Merge branch 'for-next/core' into for-kernel=
+ci
+>git tree:       git://git=2Ekernel=2Eorg/pub/scm/linux/kernel/git/arm64/l=
+inux=2Egit for-kernelci
+>console output: https://syzkaller=2Eappspot=2Ecom/x/log=2Etxt?x=3D14a882f=
+3480000
+>kernel config:  https://syzkaller=2Eappspot=2Ecom/x/=2Econfig?x=3Df3e7823=
+2c1ed2b43
+>dashboard link: https://syzkaller=2Eappspot=2Ecom/bug?extid=3Dcdd9922704f=
+c75e03ffc
+>compiler:       Debian clang version 15=2E0=2E7, GNU ld (GNU Binutils for=
+ Debian) 2=2E35=2E2
+>userspace arch: arm64
+>syz repro:      https://syzkaller=2Eappspot=2Ecom/x/repro=2Esyz?x=3D12037=
+77b480000
+>C reproducer:   https://syzkaller=2Eappspot=2Ecom/x/repro=2Ec?x=3D124c1ea=
+3480000
+>
+>Downloadable assets:
+>disk image: https://storage=2Egoogleapis=2Ecom/syzbot-assets/e2c91688b4cd=
+/disk-ca72d583=2Eraw=2Exz
+>vmlinux: https://storage=2Egoogleapis=2Ecom/syzbot-assets/af105438bee6/vm=
+linux-ca72d583=2Exz
+>kernel image: https://storage=2Egoogleapis=2Ecom/syzbot-assets/4a28ec4f8f=
+7e/Image-ca72d583=2Egz=2Exz
+>
+>IMPORTANT: if you fix the issue, please add the following tag to the comm=
+it:
+>Reported-by: syzbot+cdd9922704fc75e03ffc@syzkaller=2Eappspotmail=2Ecom
+>
+>usercopy: Kernel memory overwrite attempt detected to SLUB object 'pid' (=
+offset 24, size 24)!
 
-As far as I know, the SRCU API does not guarantee this behavior.  The 
-current implementation behaves this way, but future implementations 
-might not.  Therefore we don't want to put it in the memory model.
+This looks like some serious memory corruption=2E The pid slab is 24 bytes=
+ in size, but struct io_open is larger=2E=2E=2E Possible UAF after the memo=
+ry being reallocated to a new slab??
 
-> Also, one more general (and likely silly) question about reflexive-transitive closures.
-> 
-> Say you have 2 relations, R1 and R2. Except that R2 is completely empty.
-> 
-> What does (R1; R2)* return?
+-Kees
 
-It returns the identity relation, that is, a relation which links each 
-event with itself.  Remember, R* is defined as linking A to B if there 
-is a series of R links, of _any_ length (including 0!), going from A to 
-B.  Since there is always a series of length 0 linking A to itself, R* 
-always contains the identity relation.
+> [=2E=2E=2E]
+>Call trace:
+> usercopy_abort+0x90/0x94
+> __check_heap_object+0xa8/0x100
+> __check_object_size+0x208/0x6b8
+> io_openat2_prep+0xcc/0x2b8
+> io_submit_sqes+0x338/0xbb8
+> __arm64_sys_io_uring_enter+0x168/0x1308
+> invoke_syscall+0x64/0x178
+> el0_svc_common+0xbc/0x180
+> do_el0_svc+0x48/0x110
+> el0_svc+0x58/0x14c
+> el0t_64_sync_handler+0x84/0xf0
+> el0t_64_sync+0x190/0x194
 
-> I expect (R1; R2) to be empty, since there does not exist a tail in R1, that
-> is a head in R2.
 
-Correct.  But for any relation R, R* always contains the identity 
-relation -- even when R is empty.  R+, on the other hand, does not.  
-That's the difference between R* and R+: In R* the series of links can 
-be of any length, whereas in R+ there must be at least one link.
 
-In your example, both R2+ and (R1 ; R2)+ would be empty.
-
-> However, that does not appear to be true like in the carry-srcu-data relation
-> in Alan's patch. For instance, if I have a simple litmus test with a single
-> reader on a single CPU, and an updater on a second CPU, I see that
-> carry-srcu-data is a bunch of self-loops on all individual loads and stores
-> on all CPUs, including the loads and stores surrounding the updater's
-> synchronize_srcu() call, far from being an empty relation!
-
-Yep, that's the identity relation.
-
-Alan
+--=20
+Kees Cook
