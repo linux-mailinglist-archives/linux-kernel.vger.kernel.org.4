@@ -2,91 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C6E692FEC
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 11:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62338692FF4
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 11:22:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbjBKKNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 05:13:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
+        id S229802AbjBKKWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 05:22:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBKKNd (ORCPT
+        with ESMTP id S229448AbjBKKWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 05:13:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1171E5E0
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 02:13:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EBF0B80E3D
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 10:13:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A169BC433EF;
-        Sat, 11 Feb 2023 10:13:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676110409;
-        bh=p+IdxaBG7C0I9P6ldP+PpkrL7/XCuQ5WEyqo+TXFHXE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=fmOrGje95DQT3J1lJkLkBlgX0jcrdRhmgbH7yYiT04I3k2DtJvgFCms1WrQLD9DRe
-         DPVwfwXBX29epAl+HYwzjyLPKILn+wsV1MrTlv7kUMleoOZ09CTwVXJaybcaca2Ji1
-         tk5ZFL8nQ9bu5++4AHmbOxu9yWYZTNp/uOPwSn3xWaN9x44Wv5hI9rGIr+7MFb6wR/
-         oeNyG6Wh9QS/lcWZT88L6CsCdlb32jGB41s+gk8ZW/fiXKY6XjAt4DjUFLZO7Q8Qf1
-         Yf2O2a+r8u8v3nlTPRlspAsm9gC+fT+4A4ktwQA8WFqDJDWjmdHgfWGiQZ2jd/ASSm
-         +BVss6ol6Z7JQ==
-Date:   Sat, 11 Feb 2023 12:13:17 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Aaron Thompson <dev@aaront.org>, Mike Rapoport <rppt@kernel.org>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] memblock: Revert "mm: Always release pages to the buddy
- allocator in memblock_free_late()."
-Message-ID: <Y+dqPRXSqoP1x7u5@kernel.org>
+        Sat, 11 Feb 2023 05:22:15 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF8035B0;
+        Sat, 11 Feb 2023 02:22:14 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31B7JWRF015351;
+        Sat, 11 Feb 2023 10:22:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=tBTgJM0KkGvAb5FJlT7qRnEXVapWla1h3UTy1Xt65OM=;
+ b=c/AMbQm5gAun2wtktYHg2D5pf4cVMwkaHLX3OIzwrxd03L3Jb4zC9ncE3QuB7qkxVZcy
+ B9cUsNeuG6KZSqTmGpS6L9z2yTZi0LMN+lcGJNWZ2otfaUp+3+AC8atH8Ab3JxYGHTuU
+ cqOjro9OdoEOJpnY1NIqnD90rFDCxmIc3F6TjtMci7W7fD9FyFP20gYtnNdasONnPMvh
+ 78+uO0FtV1ZegZiqqJILKZzlz75bt5kA1P/4WnSvg7/qflhbSFiExLjMu6111dt4Ryf4
+ nHvS9f0Izxh8SwU5xwvHTmS4WYPvEZVZbqrfUKVGR6SGq4ukTsLtiqnvXrM1SGlYbvZB lw== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np2w9r925-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 11 Feb 2023 10:22:13 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31B68LK8028837;
+        Sat, 11 Feb 2023 10:22:13 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3np1f22u7q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 11 Feb 2023 10:22:13 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31BAMCxc039215;
+        Sat, 11 Feb 2023 10:22:12 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3np1f22u7a-1;
+        Sat, 11 Feb 2023 10:22:12 +0000
+From:   Alok Tiwari <alok.a.tiwari@oracle.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     alok.a.tiwari@oracle.com, darren.kenny@oracle.com,
+        michael.christie@oracle.com, linux-kernel@vger.kernel.org,
+        martin.petersen@oracle.com, d.bogdanov@yadro.com,
+        target-devel@vger.kernel.org
+Subject: [PATCH v2] scsi: target: core: Added a blank line after target_remove_from_tmr_list()
+Date:   Sat, 11 Feb 2023 02:15:03 -0800
+Message-Id: <20230211101502.2615442-1-alok.a.tiwari@oracle.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-11_06,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
+ phishscore=0 spamscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302110093
+X-Proofpoint-GUID: qlzNnlfVNT-Yz7wV2chDKEiNrxcyCzCt
+X-Proofpoint-ORIG-GUID: qlzNnlfVNT-Yz7wV2chDKEiNrxcyCzCt
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+There is no separate blank line between target_remove_from_tmr_list() and
+transport_cmd_check_stop_to_fabric
+As per coding-style, it is require to separate functions with one blank line.
 
-The following changes since commit 4ec5183ec48656cec489c49f989c508b68b518e3:
+Signed-off-by: Alok Tiwari <alok.a.tiwari@oracle.com>
+---
+v2: remove  "fixes:" line and cc: stable
+---
+ drivers/target/target_core_transport.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-  Linux 6.2-rc7 (2023-02-05 13:13:28 -0800)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock tags/fixes-2023-02-11
-
-for you to fetch changes up to 647037adcad00f2bab8828d3d41cd0553d41f3bd:
-
-  Revert "mm: Always release pages to the buddy allocator in memblock_free_late()." (2023-02-07 13:07:37 +0200)
-
-----------------------------------------------------------------
-Revert "mm: Always release pages to the buddy allocator in memblock_free_late()."
-
-This reverts commit 115d9d77bb0f9152c60b6e8646369fa7f6167593.
-
-The pages being freed by memblock_free_late() have already been
-initialized, but if they are in the deferred init range, __free_one_page()
-might access nearby uninitialized pages when trying to coalesce buddies,
-which will cause a crash.
-
-A proper fix will be more involved so revert this change for the time
-being.
-
-----------------------------------------------------------------
-Aaron Thompson (1):
-      Revert "mm: Always release pages to the buddy allocator in memblock_free_late()."
-
- mm/memblock.c                     | 8 +-------
- tools/testing/memblock/internal.h | 4 ----
- 2 files changed, 1 insertion(+), 11 deletions(-)
-
+diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
+index 5926316252eb..f1cdf78fc5ef 100644
+--- a/drivers/target/target_core_transport.c
++++ b/drivers/target/target_core_transport.c
+@@ -691,6 +691,7 @@ static void target_remove_from_tmr_list(struct se_cmd *cmd)
+ 		spin_unlock_irqrestore(&dev->se_tmr_lock, flags);
+ 	}
+ }
++
+ /*
+  * This function is called by the target core after the target core has
+  * finished processing a SCSI command or SCSI TMF. Both the regular command
 -- 
-Sincerely yours,
-Mike.
+2.39.1
+
