@@ -2,148 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E60A56933EF
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 22:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2B36933F9
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 22:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbjBKVIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 16:08:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35614 "EHLO
+        id S229650AbjBKVRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 16:17:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjBKVIV (ORCPT
+        with ESMTP id S229449AbjBKVRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 16:08:21 -0500
-Received: from mr85p00im-hyfv06021301.me.com (mr85p00im-hyfv06021301.me.com [17.58.23.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0546B14E84
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 13:08:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1676149695; bh=ANaeM9xES9AEOXol9pUlamK7auhn8OeqFAnfHrbeVsI=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=TJ7il2f/6xF5raV0WQOtkYjo47Mtb0baiRJYK58awae8y9HGUTxLM3Nt1EZBkoBKd
-         hGB5bRQJ+Hm6+Z3RbMhBO221DAhXc8iSwUonx4EAne7Rlj7cDtj8ouOcwz/2CdkLKh
-         toGJEF9xHlT7dkbovkOrAUdqlipllGIZ2mt7TngOU8U8EEkdEh7X15pnXG2chsRiPU
-         KBz6dE8vZ98XRqVuBWbMrbxt9tIKbh9Lmqyvgk1YVbMgnKcaPibs4hIVo6ILk0oej0
-         7EyqEb2ngujdWTvLwBvxzg8b4X9+6NqJvRTojM3wd6nhB5jXEHFj/tsi+N+ClSudJx
-         4g5QkznoKi52A==
-Received: from localhost (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-        by mr85p00im-hyfv06021301.me.com (Postfix) with ESMTPSA id 168472150ED2;
-        Sat, 11 Feb 2023 21:08:14 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>
-Cc:     Alain Volmat <avolmat@me.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] dt-bindings: arm: sti: add sti boards and remove stih415/stih416
-Date:   Sat, 11 Feb 2023 22:04:59 +0100
-Message-Id: <20230211210500.9919-2-avolmat@me.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230211210500.9919-1-avolmat@me.com>
-References: <20230211210500.9919-1-avolmat@me.com>
+        Sat, 11 Feb 2023 16:17:41 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126D3193D1;
+        Sat, 11 Feb 2023 13:17:38 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id jg8so23583158ejc.6;
+        Sat, 11 Feb 2023 13:17:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=9UfozzodgNMpv0iCizdFiyBjqgkbDBCRUkbfIRJrQus=;
+        b=VUhAdNmBiZuIVnM+YlyfphNCpgCVyUcbPy6waT5hd1vo45dv7kn08Vq0OuNtoCMwsq
+         VNGXSN7qjn0g7mP62fy2kAvwT1Tk0r1UV7LhwE817Bv1S/QPRmXEniE/Uj9Z0CoNurvl
+         o8JOk7E6gbJGk7/LZYm5yrgQstBmuFe/IUKRzQTFvB8ObQm/DhQPFFpk1b/nMYHHcYZC
+         t6duUNqF3y5bpjprH68f1jpxp0MSi01vhxGvuTXXl2EiFjPIdC3Mwqf8K6Tn9XPbT9GS
+         oZlnePyDkADRYv51URZF/x/D6y97tcVVSD8/dzbt1FEyyNzBkvkFhTcTiJ2ZM+SI55qs
+         ICcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9UfozzodgNMpv0iCizdFiyBjqgkbDBCRUkbfIRJrQus=;
+        b=53CSZRVMTxYE1D6Xk/8c1DGDSIt8Y7BXMw/HA7o9PYJeD3kyiiMeeWqnUO5IQ25R//
+         VYxLMHQ7qGLLFZg8ji3zwxp9eIutUVgqDhQ20rDbEHebvAO9A44eh5U6MFgjXRahy1ti
+         PUxYpIvx1tG/u83LvmLNxpKtGmZ8VceTA6SKdQOiYuuUkiaUCq3TJaS4WntopeUGT/LV
+         1uTXVCJdYFg+Rf/4F3isvpBP3um9hxNEOeWokrXAJvpMMMLCHTNPOE5MU9S07m/olFsj
+         jRQP9K7w7YAWqR44ZT5KBr+R0lgjDkGpGIxar2DLzYqhXZKT30pzw1mGn0LJdanHtq8y
+         kJ8A==
+X-Gm-Message-State: AO0yUKWhwx4AA+rDhK1OTufsVo0lYEEYCrvmbs5q/QjuecoRMkOm4fA7
+        NxkG8d4BAU3Ojhd6v7iEylo=
+X-Google-Smtp-Source: AK7set9c/0EcmQEV4VnlgPvyHUPwvfd8W1m/mseKVrocSW/oJnGHR2orHVNjOKbCxNgIR6veD9DTjw==
+X-Received: by 2002:a17:907:6d8a:b0:88f:8a5:b4cd with SMTP id sb10-20020a1709076d8a00b0088f08a5b4cdmr26458412ejc.1.1676150256536;
+        Sat, 11 Feb 2023 13:17:36 -0800 (PST)
+Received: from [192.168.0.22] ([87.116.164.178])
+        by smtp.gmail.com with ESMTPSA id og37-20020a1709071de500b00888161349desm4345531ejc.182.2023.02.11.13.17.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Feb 2023 13:17:36 -0800 (PST)
+Message-ID: <f9442671-1978-1e7b-f262-cac3504849df@gmail.com>
+Date:   Sat, 11 Feb 2023 22:17:34 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: qJVLtNsSOAhLxVFksJgP53dWBzrYWedI
-X-Proofpoint-GUID: qJVLtNsSOAhLxVFksJgP53dWBzrYWedI
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.11.62.513.0000000_definitions?=
- =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2021-12-02?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 adultscore=0
- malwarescore=0 mlxlogscore=999 suspectscore=0 spamscore=0 clxscore=1015
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2302110198
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+Subject: Re: [PATCH 3/5] hwmon: (aquacomputer_d5next) Add temperature offset
+ control for Aquaero
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Leonard Anderweit <leonard.anderweit@gmail.com>,
+        linux-hwmon@vger.kernel.org
+Cc:     savicaleksa83@gmail.com, Jack Doan <me@jackdoan.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230211165923.17807-1-leonard.anderweit@gmail.com>
+ <20230211165923.17807-4-leonard.anderweit@gmail.com>
+ <0664b935-d201-419a-3f1d-3df4226a8db1@roeck-us.net>
+ <00875064-0407-b114-56c9-87aecb0d3ee4@gmail.com>
+ <b716a9ec-93ba-7c42-c8d3-1d6db950ad7b@gmail.com>
+ <904da857-2e27-87a1-4541-6288df564d80@roeck-us.net>
+Content-Language: en-US
+In-Reply-To: <904da857-2e27-87a1-4541-6288df564d80@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings for STi platform boards and remove stih415/stih416 items.
-This commit also moves the sti.yaml binding file within the arm/sti/
-folder instead of arm/
+On 2023-02-11 21:48:56 GMT+01:00, Guenter Roeck wrote:
+> On 2/11/23 11:48, Leonard Anderweit wrote:
+>> Am 11.02.23 um 19:54 schrieb Aleksa Savic:
+>>> On 2023-02-11 19:08:27 GMT+01:00, Guenter Roeck wrote:
+>>>>
+>>>> aquaero is already supported, and the checksum is so far generated
+>>>> and sent. Is it ignored ? Also, is it guaranteed that _all_ aquero devices
+>>>> don't need it ?
+>>>
+>>> Reading its sensors is currently supported, not writing to it (before these
+>>> patches).
+>>>
+>>> The checksum is ignored and not needed for either aquaero 5 (which Leonard has)
+>>> nor 6 (which I have).
+>>>
+>>>>
+>>>> If it is not needed and ignored, does it really add value to selectively drop it ?
+>>>
+>>> I think we can indeed remove that check.
+>>
+>> I don't think that check can be removed as the checksum is not appended 
+>> to the control report but is in the last two bytes. So using the 
+>> checksum on Aquaero will overwrite the data at that location. It is 
+>> currently unknown what these two bytes do so I do not want to overwrite 
+>> them.
+>>
+> 
+> The current code _does_ overwrite those bytes, or am I missing something ?
+> 
+> If so, changing that would be a bug fix which really should not be hidden
+> in a patch making functional changes.
+> 
+> Thanks,
+> Guenter
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
----
- .../devicetree/bindings/arm/sti.yaml          | 26 ---------------
- .../devicetree/bindings/arm/sti/sti.yaml      | 33 +++++++++++++++++++
- 2 files changed, 33 insertions(+), 26 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/sti.yaml
- create mode 100644 Documentation/devicetree/bindings/arm/sti/sti.yaml
+The current code indeed does that because the devices that have writing
+implemented work that way (D5 Next, Quadro, Octo - they have priv->fan_ctrl_offsets
+set, which is checked in aqc_is_visible()) plus they need the checksum.
 
-diff --git a/Documentation/devicetree/bindings/arm/sti.yaml b/Documentation/devicetree/bindings/arm/sti.yaml
-deleted file mode 100644
-index 3ca054c64377..000000000000
---- a/Documentation/devicetree/bindings/arm/sti.yaml
-+++ /dev/null
-@@ -1,26 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0
--%YAML 1.2
-----
--$id: http://devicetree.org/schemas/arm/sti.yaml#
--$schema: http://devicetree.org/meta-schemas/core.yaml#
--
--title: ST STi Platforms
--
--maintainers:
--  - Patrice Chotard <patrice.chotard@foss.st.com>
--
--properties:
--  $nodename:
--    const: '/'
--  compatible:
--    items:
--      - enum:
--          - st,stih415
--          - st,stih416
--          - st,stih407
--          - st,stih410
--          - st,stih418
--
--additionalProperties: true
--
--...
-diff --git a/Documentation/devicetree/bindings/arm/sti/sti.yaml b/Documentation/devicetree/bindings/arm/sti/sti.yaml
-new file mode 100644
-index 000000000000..aefa1919207c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/sti/sti.yaml
-@@ -0,0 +1,33 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/arm/sti/sti.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ST STi Platforms
-+
-+maintainers:
-+  - Patrice Chotard <patrice.chotard@foss.st.com>
-+
-+properties:
-+  $nodename:
-+    const: '/'
-+  compatible:
-+    oneOf:
-+      - items:
-+          - const: st,stih407-b2120
-+          - const: st,stih407
-+      - items:
-+          - enum:
-+              - st,stih410-b2120
-+              - st,stih410-b2260
-+          - const: st,stih410
-+      - items:
-+          - enum:
-+              - st,stih418-b2199
-+              - st,stih418-b2264
-+          - const: st,stih418
-+
-+additionalProperties: true
-+
-+...
--- 
-2.34.1
+Regarding the aquaero checksum, I was under the wrong impression that its
+control report contained a place for it. I've just captured a few reports and it
+seems to contain purely settings all the way to the end. I've also compared
+reports before and after making changes and only the changed settings reflected
+in the hex dumps, showing there really is no checksum.
+
+So, to correct myself from earlier: the checksum is not getting ignored; it has
+no place in it at all, as the code and testing show.
+
+Thanks,
+Aleksa
+
+> 
+>>>
+>>> Thanks,
+>>> Aleksa
+>>>
+>>>>
+>>>> Either case, this change is not mentioned in the commit log, and it
+>>>> violates the "one logical change per patch" rule. Please split it into
+>>>> a separate patch and explain why the change is needed.
+>>>>
+>>>> Another change to separate is the introduction of ctrl_report_id
+>>>> and the secondary_ctrl_report variables, which is also done silently
+>>>> and not explained. That should also be a separate patch to simplify
+>>>> review.
+>>
+>> I will separate the changes into more commits for the next version.
+>>
+>> Regards,
+>> Leonard
+>>
+>>>>
+>>>> Thanks,
+>>>> Guenter
+>>>
+> 
 
