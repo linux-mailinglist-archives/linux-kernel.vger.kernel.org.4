@@ -2,200 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AEA6693344
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 20:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98CB069334B
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 20:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjBKTQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 14:16:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51630 "EHLO
+        id S229604AbjBKTYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 14:24:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjBKTQF (ORCPT
+        with ESMTP id S229463AbjBKTYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 14:16:05 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149FBFB;
-        Sat, 11 Feb 2023 11:16:02 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id B65AF42300;
-        Sat, 11 Feb 2023 19:15:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1676142961; bh=R7nPx5Q0d44U46OXUeCQa9uSKpfTp0ypZpN8xiIlHvg=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=I6T+Rdg1r4uzOC5eQTA1UfuFCXLjOxtZADRIKtzN1gIQHf794tdHjo6E8i4ly5hXD
-         iXFhuryEEL0+8sgpQdZfu3XCmCH1g3JpALgY0PSR0CfzNpZifCkyWEDPTXoGyOJFLz
-         fgCcPz4kuHOc+FI9E/85HFSulRRKo1KHy93+CyegAj9RIqZR4EdacmQ2G6rBFmHSqX
-         itXdeCO7Y7ScIhJx4kH4EaUqsKUNGB8fWe9sO6oGtLd6jjb6zzQUvV4cTas1uJuPpM
-         2Cm1SGFETf4aVSEZsJuaJKPG0mGotm1msCO2WVF218Iui+n5E4mGUWjrIW0KpEEwXS
-         141JOfrhImQtA==
-Message-ID: <180b9e56-fbf4-4d98-3d18-a71f3b15e045@marcan.st>
-Date:   Sun, 12 Feb 2023 04:15:52 +0900
+        Sat, 11 Feb 2023 14:24:37 -0500
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0C2193D0
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 11:24:35 -0800 (PST)
+Received: by mail-vk1-xa31.google.com with SMTP id t74so287709vkc.7
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 11:24:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1676143474;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UxlJ1ylLIbukjk1rqvmj0yN/uchUwg9M7RlTwLyGWuY=;
+        b=GkOee6yuha8KCFlJkb58KhoIf1WvDhoQGtKv5bfk3o8tsTw+l/AsWr+2V/5JogWj5S
+         e+tne2hDNFv1lpCplUyRYJ8XvXJT/A86j9C6i4RrCLDhYDzUH1pdJxgLHNZVq73aui39
+         5rcNE3u8qrpeAfy17RxKjgbVwdyWKa+QtwOz4hidJv8eZzgjnKhWEyvMMx14AqZH4Nq4
+         TG8+24y9MmfpA6DBbd/7StK3VZjcYSfq4ZkK0A81/+Jg014d+TErR5x9m4vwOP0lQK2R
+         C0H5Kz2iqI0dL1Yq2gcKuiAF8/iGmlIS/Vl6F/BWWqtKm9JR3f9wyanfKxR5l86KD4+I
+         fzXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676143474;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UxlJ1ylLIbukjk1rqvmj0yN/uchUwg9M7RlTwLyGWuY=;
+        b=6eluBLfe9CWqMLBLC8vzVe/HiYyPe9g2O9kOcZ8trfMn9GZd4v2WhtyEIMPxWAuYM8
+         JxGyA4rjnXe/DQsmOcjOpFm8a6sbvdxFqpfYisGNql5CgjXH5kXQ7nuQNeZQruupZepX
+         +F7075Rb4aRdrg1oEhtdQIjrG2hh2dftQMR8o1Yekj4/ILCz98oMFjHThgoBAuRnZx1o
+         GW28DpoH0SWJoUWWMLYNLdposgGNmPHG4GndmYn7zSofsHgl7rrIZLhN2QciRnWFzq+u
+         lKrvm78RJcT0uBpHsxF2hRZfDyy6Xuefw2x0QiOJgpufy54VSHeJICSGhHv+Lt9T1XW4
+         a8lQ==
+X-Gm-Message-State: AO0yUKVykgwA6m8ajO5anpLb6OzD7SBz7J2AgaZCjfqihLmZTJa0J6Ko
+        F5+rTo2qLWwEW3/2XX6rh3oiilPAXjm2Dcfpwo6hj15I10o=
+X-Google-Smtp-Source: AK7set+VxozcaMiBwzTBA/oB2AIISrAuQ7Bedp9xn0ogNT61aLcgqppS9XrHSr2WISoF0Ecv104SL7WHbg5llfrzjs4=
+X-Received: by 2002:a1f:1444:0:b0:400:db9c:7a9f with SMTP id
+ 65-20020a1f1444000000b00400db9c7a9fmr3680755vku.6.1676143473964; Sat, 11 Feb
+ 2023 11:24:33 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Arend Van Spriel <arend.vanspriel@broadcom.com>,
-        Aditya Garg <gargaditya08@live.com>
-Cc:     Ping-Ke Shih <pkshih@realtek.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Prutskov <alep@cypress.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
-        Wright Feng <wright.feng@cypress.com>,
-        Ian Lin <ian.lin@infineon.com>,
-        Soontak Lee <soontak.lee@cypress.com>,
-        Joseph chuang <jiac@cypress.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Jonas Gorski <jonas.gorski@gmail.com>, asahi@lists.linux.dev,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230210025009.21873-1-marcan@marcan.st>
- <20230210025009.21873-2-marcan@marcan.st>
- <0cd45af5812345878faf0dc8fa6b0963@realtek.com>
- <624c0a20-f4e6-14a5-02a2-eaf7b36e9331@marcan.st>
- <18640374b38.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
- <e9dbfa3d-6599-94b9-0176-e25bb074b2c7@marcan.st>
- <BM1PR01MB0931D1A15E7945A0D48B828EB8DF9@BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM>
- <18640c70048.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v3 1/4] wifi: brcmfmac: Rename Cypress 89459 to BCM4355
-In-Reply-To: <18640c70048.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230125203743.564009-1-jim.cromie@gmail.com> <20230125203743.564009-15-jim.cromie@gmail.com>
+In-Reply-To: <20230125203743.564009-15-jim.cromie@gmail.com>
+From:   jim.cromie@gmail.com
+Date:   Sat, 11 Feb 2023 12:24:07 -0700
+Message-ID: <CAJfuBxw+g6w9_p2ym-hpCQNbr01crRMK_aYb4oV4j_BhoPwQjw@mail.gmail.com>
+Subject: Re: [PATCH v3 14/19] drm_print: fix stale macro-name in comment
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org
+Cc:     jani.nikula@intel.com, ville.syrjala@linux.intel.com,
+        daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/02/2023 23.00, Arend Van Spriel wrote:
-> On February 11, 2023 1:50:00 PM Aditya Garg <gargaditya08@live.com> wrote:
-> 
->>> On 11-Feb-2023, at 6:16 PM, Hector Martin <marcan@marcan.st> wrote:
->>>
->>> ﻿On 11/02/2023 20.23, Arend Van Spriel wrote:
->>>>> On February 11, 2023 11:09:02 AM Hector Martin <marcan@marcan.st> wrote:
->>>>>
->>>>> On 10/02/2023 12.42, Ping-Ke Shih wrote:
->>>>>>
->>>>>>
->>>>>>> -----Original Message-----
->>>>>>> From: Hector Martin <marcan@marcan.st>
->>>>>>> Sent: Friday, February 10, 2023 10:50 AM
->>>>>>> To: Arend van Spriel <aspriel@gmail.com>; Franky Lin
->>>>>>> <franky.lin@broadcom.com>; Hante Meuleman
->>>>>>> <hante.meuleman@broadcom.com>; Kalle Valo <kvalo@kernel.org>; David S.
->>>>>>> Miller <davem@davemloft.net>; Eric
->>>>>>> Dumazet <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo
->>>>>>> Abeni <pabeni@redhat.com>
->>>>>>> Cc: Alexander Prutskov <alep@cypress.com>; Chi-Hsien Lin
->>>>>>> <chi-hsien.lin@cypress.com>; Wright Feng
->>>>>>> <wright.feng@cypress.com>; Ian Lin <ian.lin@infineon.com>; Soontak Lee
->>>>>>> <soontak.lee@cypress.com>; Joseph
->>>>>>> chuang <jiac@cypress.com>; Sven Peter <sven@svenpeter.dev>; Alyssa
->>>>>>> Rosenzweig <alyssa@rosenzweig.io>;
->>>>>>> Aditya Garg <gargaditya08@live.com>; Jonas Gorski <jonas.gorski@gmail.com>;
->>>>>>> asahi@lists.linux.dev;
->>>>>>> linux-wireless@vger.kernel.org; brcm80211-dev-list.pdl@broadcom.com;
->>>>>>> SHA-cyfmac-dev-list@infineon.com;
->>>>>>> netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Hector Martin
->>>>>>> <marcan@marcan.st>; Arend van Spriel
->>>>>>> <arend.vanspriel@broadcom.com>
->>>>>>> Subject: [PATCH v3 1/4] wifi: brcmfmac: Rename Cypress 89459 to BCM4355
->>>>>>>
->>>>>>> The commit that introduced support for this chip incorrectly claimed it
->>>>>>> is a Cypress-specific part, while in actuality it is just a variant of
->>>>>>> BCM4355 silicon (as evidenced by the chip ID).
->>>>>>>
->>>>>>> The relationship between Cypress products and Broadcom products isn't
->>>>>>> entirely clear but given what little information is available and prior
->>>>>>> art in the driver, it seems the convention should be that originally
->>>>>>> Broadcom parts should retain the Broadcom name.
->>>>>>>
->>>>>>> Thus, rename the relevant constants and firmware file. Also rename the
->>>>>>> specific 89459 PCIe ID to BCM43596, which seems to be the original
->>>>>>> subvariant name for this PCI ID (as defined in the out-of-tree bcmdhd
->>>>>>> driver).
->>>>>>>
->>>>>>> v2: Since Cypress added this part and will presumably be providing
->>>>>>> its supported firmware, we keep the CYW designation for this device.
->>>>>>>
->>>>>>> v3: Drop the RAW device ID in this commit. We don't do this for the
->>>>>>> other chips since apparently some devices with them exist in the wild,
->>>>>>> but there is already a 4355 entry with the Broadcom subvendor and WCC
->>>>>>> firmware vendor, so adding a generic fallback to Cypress seems
->>>>>>> redundant (no reason why a device would have the raw device ID *and* an
->>>>>>> explicitly programmed subvendor).
->>>>>>
->>>>>> Do you really want to add changes of v2 and v3 to commit message? Or,
->>>>>> just want to let reviewers know that? If latter one is what you want,
->>>>>> move them after s-o-b with delimiter ---
->>>>>
->>>>> Both; I thought those things were worth mentioning in the commit message
->>>>> as it stands on its own, and left the version tags in so reviewers know
->>>>> when they were introduced.
->>>>
->>>> The commit message is documenting what we end up with post reviewing so
->>>> patch versions are meaningless there. Of course useful information that
->>>> came up in review cycles should end up in the commit message.
->>>
->>> Do you really want me to respin this again just to remove 8 characters
->>> from the commit message? I know it doesn't have much meaning post review
->>> but it's not unheard of either, grep git logs and you'll find plenty of
->>> examples.
->>>
->>> - Hector
->>
->> Adding to that, I guess the maintainers can do a bit on their part. Imao it’s
->> really frustrating preparing the same patch again and again, especially for
->> bits like these.
-> 
-> Frustrating? I am sure that maintainers have another view on that when they 
-> have to mention the same type of submission errors again and again. That's 
-> why there is a wireless wiki page on the subject:
-> 
-> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+On Wed, Jan 25, 2023 at 1:38 PM Jim Cromie <jim.cromie@gmail.com> wrote:
+>
+> Cited commit uses stale macro name, fix this, and explain better.
 
-Which does not mention this particular issue as far as I can tell. How
-exactly is this a "submission error"? Neither you nor Kalle pointed it
-out through two revisions, only a drive-by reviewer did.
 
-> If Kalle is willing to cleanup the commit message in the current patch you 
-> are lucky. You are free to ask. Otherwise it should be not too much trouble 
-> resubmitting it.
 
-It's even less trouble to just take it as is, since an extra "v2: " in
-the commit message doesn't hurt anyone other than those who choose to be
-hurt by it. And as I said there's *tons* of commits with a changelog
-like this in Linux. It's not uncommon.
 
-I swear, some maintainers seem to take a perverse delight in making
-things as painful as possible for submitters, even when there is
-approximately zero benefit to the end result. And I say this as a
-maintainer myself.
+So this patch is somehow drawing an 'F' flag from patchwork,
+but theres no hint of what went wrong.
+(I have seen a merge conflict, probably not that).
 
-Maybe y'all should be the ones feeling lucky that so many people are
-willing to put up with all this bullshit to get things upstreamed to
-Linux. It's literally the worst open source project to upstream things
-to, by a *very long* shot. I'll respin a v4 if I must, but but it's.
-Just. This. Kind. Of. Nonsense. Every. Single. Time. And. Every. Single.
-Time. It's. Something. Different. This stuff burns people out and
-discourages submissions and turns huge numbers of people off from ever
-contributing to Linux, and you all need to seriously be aware of that.
+https://patchwork.freedesktop.org/series/113361/
 
-- Hector
+https://patchwork.freedesktop.org/patch/520460/?series=113361&rev=1
+
+Without this resolved, I cant see BAT results or the more exhaustive tests.
+
+
+
+
+
+>
+> When DRM_USE_DYNAMIC_DEBUG=y, DYNDBG_CLASSMAP_DEFINE() maps DRM_UT_*
+> onto BITs in drm.debug.  This still uses enum drm_debug_category, but
+> it is somewhat indirect, with the ordered set of DRM_UT_* enum-vals.
+> This requires that the macro args: DRM_UT_* list must be kept in sync
+> and in order.
+>
+> Fixes: f158936b60a7 ("drm: POC drm on dyndbg - use in core, 2 helpers, 3 drivers.")
+> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+> ---
+> . emphasize ABI non-change despite enum val change - Jani Nikula
+> . reorder to back of patchset to follow API name changes.
+> ---
+>  include/drm/drm_print.h | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/drm/drm_print.h b/include/drm/drm_print.h
+> index 6a27e8f26770..7695ba31b3a4 100644
+> --- a/include/drm/drm_print.h
+> +++ b/include/drm/drm_print.h
+> @@ -276,7 +276,10 @@ static inline struct drm_printer drm_err_printer(const char *prefix)
+>   *
+>   */
+>  enum drm_debug_category {
+> -       /* These names must match those in DYNAMIC_DEBUG_CLASSBITS */
+> +       /*
+> +        * Keep DYNDBG_CLASSMAP_DEFINE args in sync with changes here,
+> +        * the enum-values define BIT()s in drm.debug, so are ABI.
+> +        */
+>         /**
+>          * @DRM_UT_CORE: Used in the generic drm code: drm_ioctl.c, drm_mm.c,
+>          * drm_memory.c, ...
+> --
+> 2.39.1
+>
