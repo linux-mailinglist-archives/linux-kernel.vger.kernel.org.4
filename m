@@ -2,152 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A4906933AD
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 21:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC61F6933B5
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 21:43:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjBKUc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 15:32:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
+        id S229711AbjBKUnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 15:43:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBKUc0 (ORCPT
+        with ESMTP id S229461AbjBKUna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 15:32:26 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id AAB001164A
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 12:32:25 -0800 (PST)
-Received: (qmail 856943 invoked by uid 1000); 11 Feb 2023 15:32:25 -0500
-Date:   Sat, 11 Feb 2023 15:32:25 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Prashanth K <quic_prashk@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usb: gadget: u_serial: Add null pointer check in
- gserial_resume
-Message-ID: <Y+f7WaMmsNBHDIcZ@rowland.harvard.edu>
-References: <1676146033-3948-1-git-send-email-quic_prashk@quicinc.com>
+        Sat, 11 Feb 2023 15:43:30 -0500
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9608215569;
+        Sat, 11 Feb 2023 12:43:27 -0800 (PST)
+Received: from [192.168.1.103] (31.173.83.74) by msexch01.omp.ru (10.188.4.12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 11 Feb
+ 2023 23:43:18 +0300
+Subject: Re: [PATCH 06/12] pata_parport: remove verbose parameter from
+ log_adapter()
+To:     Ondrej Zary <linux@zary.sk>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+CC:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Tim Waugh <tim@cyberelk.net>, <linux-block@vger.kernel.org>,
+        <linux-parport@lists.infradead.org>, <linux-ide@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230211144232.15138-1-linux@zary.sk>
+ <20230211144232.15138-7-linux@zary.sk>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <0a88925d-2d8d-393f-5066-03a367deadde@omp.ru>
+Date:   Sat, 11 Feb 2023 23:43:18 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1676146033-3948-1-git-send-email-quic_prashk@quicinc.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230211144232.15138-7-linux@zary.sk>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [31.173.83.74]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 02/11/2023 20:21:12
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 175452 [Feb 11 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.83.74 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;31.173.83.74:7.1.2,7.7.3,7.4.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1
+X-KSE-AntiSpam-Info: {iprep_blacklist}
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.83.74
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 02/11/2023 20:24:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 2/11/2023 7:25:00 PM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 01:37:13AM +0530, Prashanth K wrote:
-> Consider a case where gserial_disconnect has already cleared
-> gser->ioport. And if a wakeup interrupt triggers afterwards,
-> gserial_resume gets called, which will lead to accessing of
-> gser->ioport and thus causing null pointer dereference.Add
-> a null pointer check to prevent this.
+On 2/11/23 5:42 PM, Ondrej Zary wrote:
+
+> verbose parameter of log_adapter() is unused, remove it.
 > 
-> Added a static spinlock to prevent gser->ioport from becoming
-> null after the newly added check.
-> 
-> Fixes: aba3a8d01d62 ("usb: gadget: u_serial: add suspend resume callbacks")
-> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-> ---
+> Signed-off-by: Ondrej Zary <linux@zary.sk>
 
-This looks pretty good, except for a couple of small things...
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-> v3: Fixed the spin_lock_irqsave flags.
-> 
->  drivers/usb/gadget/function/u_serial.c | 22 +++++++++++++++++-----
->  1 file changed, 17 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-> index 840626e..471087f 100644
-> --- a/drivers/usb/gadget/function/u_serial.c
-> +++ b/drivers/usb/gadget/function/u_serial.c
-> @@ -82,6 +82,8 @@
->  #define WRITE_BUF_SIZE		8192		/* TX only */
->  #define GS_CONSOLE_BUF_SIZE	8192
->  
-> +static DEFINE_SPINLOCK(serial_port_lock);
+[...]
 
-You might put a short comment before this line, explaining what the 
-purpose of serial_port_lock is.  Otherwise people will wonder what it is 
-for.
-
-> +
->  /* console info */
->  struct gs_console {
->  	struct console		console;
-> @@ -1370,13 +1372,15 @@ EXPORT_SYMBOL_GPL(gserial_connect);
->  void gserial_disconnect(struct gserial *gser)
->  {
->  	struct gs_port	*port = gser->ioport;
-> -	unsigned long	flags;
-> +	unsigned long flags;
-
-Unnecessary whitespace change.  Leave the original code as it is.
-
->  
->  	if (!port)
->  		return;
-
-Is it really possible for port to be NULL here?  If it is possible, 
-where would gser->ioport be set to NULL?
-
-And if it's not possible, this test should be removed.
-
->  
-> +	spin_lock_irqsave(&serial_port_lock, flags);
-> +
->  	/* tell the TTY glue not to do I/O here any more */
-> -	spin_lock_irqsave(&port->port_lock, flags);
-> +	spin_lock(&port->port_lock);
->  
->  	gs_console_disconnect(port);
->  
-> @@ -1391,7 +1395,8 @@ void gserial_disconnect(struct gserial *gser)
->  			tty_hangup(port->port.tty);
->  	}
->  	port->suspended = false;
-> -	spin_unlock_irqrestore(&port->port_lock, flags);
-> +	spin_unlock(&port->port_lock);
-> +	spin_unlock_irqrestore(&serial_port_lock, flags);
->  
->  	/* disable endpoints, aborting down any active I/O */
->  	usb_ep_disable(gser->out);
-> @@ -1426,9 +1431,16 @@ EXPORT_SYMBOL_GPL(gserial_suspend);
->  void gserial_resume(struct gserial *gser)
->  {
->  	struct gs_port *port = gser->ioport;
-
-You shouldn't read gser->ioport here; do it under the protection of the 
-static spinlock.  If you do the read here then there will still be a 
-data race, because gserial_disconnect() might change the value just as 
-you are reading it.
-
-> -	unsigned long	flags;
-> +	unsigned long flags;
-
-Again, unnecessary whitespace change.
-
->  
-> -	spin_lock_irqsave(&port->port_lock, flags);
-> +	spin_lock_irqsave(&serial_port_lock, flags);
-
-Here is where you should read gser->ioport.
-
-> +	if (!port) {
-> +		spin_unlock_irqrestore(&serial_port_lock, flags);
-> +		return;
-> +	}
-> +
-> +	spin_lock(&port->port_lock);
-> +	spin_unlock(&serial_port_lock);
->  	port->suspended = false;
->  	if (!port->start_delayed) {
->  		spin_unlock_irqrestore(&port->port_lock, flags);
-
-Alan Stern
+MBR, Sergey
