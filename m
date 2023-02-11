@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCF369301E
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 11:50:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B522A69301F
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 11:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjBKKuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 05:50:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33686 "EHLO
+        id S229948AbjBKKuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 05:50:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBKKuM (ORCPT
+        with ESMTP id S229768AbjBKKuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 05:50:12 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FFA1D938;
-        Sat, 11 Feb 2023 02:50:11 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id dr8so21487543ejc.12;
-        Sat, 11 Feb 2023 02:50:10 -0800 (PST)
+        Sat, 11 Feb 2023 05:50:13 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964C3227AD;
+        Sat, 11 Feb 2023 02:50:12 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id cq19so4465106edb.5;
+        Sat, 11 Feb 2023 02:50:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XOIDNWrvLuzXO/s8AOThCUhkQmtWjdE1KvUgoN/WDQU=;
-        b=ZAS1zc1RtMcqfpooZhzkwkU/m608/vSGtEQhWwvr4lDHM/QuQhcAPD5NFRvmG9Id6r
-         gGkbCxINd9cFwGsHSqrNw7Po2Vb8QuOJ4EHlJnf5qQxJoQ9KzRAb7tgjmSqBytqLeqzf
-         WGO2qQmQjgudaIwaQ3d7FfwudvNgj4dncaeMjhilAYY6t4jHd8bUcUzJwO0GpkG2/zhj
-         g6gAld8rStNeax0TTYSWItQWISYpol+d4StFl2ncDumt4LcUW3qR8m7WVPx+uYoL9lxT
-         0GwZTjJjcET87CvPc12n3yEhv3uQ9kIFU3G9yoNms/JlWLeRFO1xM3/pRMDwrRRCkJwp
-         n2DQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tT3cifnR/+tF3ipaHkd5EngPDjJXOxPeEMnt+INTFqo=;
+        b=W0zeHcrj8kI2dG485h6uY8dJc5EVSp5fpK/HzIBRGOCRRynJf6YJ8mxmCImqC+soX2
+         jYl4EZjR3cF+3KOUbhAAI12oXZFrCjOUqNug/g6V0WugPhC2W69Eh+O5rt1T74Lq/d/Y
+         z9ZEflzjw6PKG12iH7nkrI8zIzfAEyJ01JGrAhoD86vOejsAulG6yDtbB/MwoW+apuqR
+         tdfER9fo3BdXvz5GvOHSfy2+qXCKqtNqdp5ZDhrwoMOha/hqD9i6Zqx8o6Z6O1/TpYnu
+         S3xrgUyI2x4vKh4cRspdJeqKfEQFeB4RsjNH/u2pX2Vvswf2FnTNE3Wr956BYiyLfkHD
+         K8CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XOIDNWrvLuzXO/s8AOThCUhkQmtWjdE1KvUgoN/WDQU=;
-        b=fo39R7PrQp8/qrtemQOOkXNNrDfYmo+0mGhnTRPHtImO7tgObYREK3dYwSghajwGAt
-         Khfk+atvJlBlbj1+TOLIObFZSAJCsGNTs4wXHGBwrKd2F9n5tAkPczQN9RMlUvtWmUVr
-         oobbg/lO32vUyRbl/2TUqXzqVPky0/ipWDVwghrRR0xAcgKS1IwYyq7zGbpqJh0I+JRt
-         1YvJ/BEcVcCGj9u/dGeY/BFaV/9VVkq6BUAa7gXRR+QeudXByJJJhXtvhPw1fr5kCNmH
-         Kjcq1tcLzuOlC1yL+JQFbKFlwv1Xlz6lQ1HOxr9m7ZVJiMFrtmxwobYcGwygInJm8yne
-         HEmw==
-X-Gm-Message-State: AO0yUKVGlevAETkJKUx7cnSNqTWkms1BKeLvkknedT1tvyD+AKdfGQqj
-        16E3E4K12Nb8qrNJwzZvN6I=
-X-Google-Smtp-Source: AK7set/6Uv4EZ38y8b1ogJQDw5brhIFv3zO5QJAKoNcZhB2A9/JK1h+P7pkxX1u6hbiTdIx6tlJXeg==
-X-Received: by 2002:a17:906:49c6:b0:844:d342:3566 with SMTP id w6-20020a17090649c600b00844d3423566mr17952957ejv.22.1676112609434;
-        Sat, 11 Feb 2023 02:50:09 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tT3cifnR/+tF3ipaHkd5EngPDjJXOxPeEMnt+INTFqo=;
+        b=CCdCzranGbUIgkA1b7fQuPXiBYrmu17t2/peiK4Oc0Gzf8KgRa3+z9PmyzKVD/gnlN
+         e/DI82U8giZrJebXewF1RH6h83U5q1rV/K1An3GrqGJhoUEOGaFfLvyTXE7sQOYZDvIw
+         KRoSclBDX3b9ti0GkIpFSJv+baumJSmvTkCkaiIaJ4bo4HC/HjK49mT7QvM2TJsPBybE
+         IFHuEMuD2NnZlCsBa4C3s+MiwgVluhKpTSpbGrqFGxIrPYodwwwRr4DtImDFIlSVcz2h
+         20LMC17LCDJqSdNFDeb8eRu/6+xPJcgKB9a0vH7LZH7xp2SMqMj4oK7ntEFed+4PiuWc
+         gqWg==
+X-Gm-Message-State: AO0yUKUu9/Eq9BucOnWCdH6G+d/hXaOH46ca12K1HbYfl2ME4eGVH+Fk
+        doOeVPnos2lNDKhb+zf50nc=
+X-Google-Smtp-Source: AK7set+vWANpOv+9r2aKr1AJCvpXhOs6xKzfgiHggmDBe08EXAg/m5cVy203kP8Q+XiK4tfxqRllXQ==
+X-Received: by 2002:a05:6402:5297:b0:4ab:4410:ae1a with SMTP id en23-20020a056402529700b004ab4410ae1amr1274232edb.15.1676112611049;
+        Sat, 11 Feb 2023 02:50:11 -0800 (PST)
 Received: from arinc9-PC.lan ([37.120.152.236])
-        by smtp.gmail.com with ESMTPSA id cb10-20020a0564020b6a00b004ac54d4da22sm1597911edb.71.2023.02.11.02.50.07
+        by smtp.gmail.com with ESMTPSA id cb10-20020a0564020b6a00b004ac54d4da22sm1597911edb.71.2023.02.11.02.50.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Feb 2023 02:50:09 -0800 (PST)
+        Sat, 11 Feb 2023 02:50:10 -0800 (PST)
 From:   arinc9.unal@gmail.com
 X-Google-Original-From: arinc.unal@arinc9.com
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -65,10 +66,12 @@ Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
         devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, erkin.bozoglu@xeront.com
-Subject: [PATCH 1/2] mips: dts: align LED node names with dtschema
-Date:   Sat, 11 Feb 2023 13:49:14 +0300
-Message-Id: <20230211104915.116253-1-arinc.unal@arinc9.com>
+Subject: [PATCH 2/2] mips: dts: ralink: mt7621: add port@5 as CPU port
+Date:   Sat, 11 Feb 2023 13:49:15 +0300
+Message-Id: <20230211104915.116253-2-arinc.unal@arinc9.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230211104915.116253-1-arinc.unal@arinc9.com>
+References: <20230211104915.116253-1-arinc.unal@arinc9.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -84,406 +87,118 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-The node names should be generic and DT schema expects certain pattern:
+On MT7621AT, MT7621DAT, and MT7621ST SoCs, port 5 of the MT7530 switch is
+connected to the second MAC of the SoC as a CPU port. Add the port and set
+up the second MAC on the bindings. Revert PHY muxing on GB-PC1.
 
-  mt7621-gnubee-gb-pc1.dtb: gpio-leds: 'power', 'system' do not match any of the regexes: '(^led-[0-9a-f]$|led)', 'pinctrl-[0-9]+'
+There's an external PHY connected to the second MAC of the SoC on GB-PC2,
+therefore, disable port@5 for this device.
 
 Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 ---
- .../dts/cavium-octeon/dlink_dsr-1000n.dts     | 10 ++++-----
- .../boot/dts/cavium-octeon/dlink_dsr-500n.dts |  6 ++---
- arch/mips/boot/dts/ingenic/ci20.dts           |  8 +++----
- arch/mips/boot/dts/pic32/pic32mzda_sk.dts     |  6 ++---
- .../boot/dts/qca/ar9132_tl_wr1043nd_v1.dts    |  8 +++----
- .../mips/boot/dts/qca/ar9331_dragino_ms14.dts |  8 +++----
- arch/mips/boot/dts/qca/ar9331_omega.dts       |  2 +-
- arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts   |  8 +++----
- .../ralink/gardena_smart_gateway_mt7688.dts   | 22 +++++++++----------
- .../boot/dts/ralink/mt7621-gnubee-gb-pc1.dts  |  4 ++--
- .../boot/dts/ralink/mt7621-gnubee-gb-pc2.dts  | 12 +++++-----
- 11 files changed, 47 insertions(+), 47 deletions(-)
+ .../boot/dts/ralink/mt7621-gnubee-gb-pc1.dts  | 16 +++++-----------
+ .../boot/dts/ralink/mt7621-gnubee-gb-pc2.dts  |  9 ++++++++-
+ arch/mips/boot/dts/ralink/mt7621.dtsi         | 19 ++++++++++++++++++-
+ 3 files changed, 31 insertions(+), 13 deletions(-)
 
-diff --git a/arch/mips/boot/dts/cavium-octeon/dlink_dsr-1000n.dts b/arch/mips/boot/dts/cavium-octeon/dlink_dsr-1000n.dts
-index 2fdb4baad19c..cb460eaf8835 100644
---- a/arch/mips/boot/dts/cavium-octeon/dlink_dsr-1000n.dts
-+++ b/arch/mips/boot/dts/cavium-octeon/dlink_dsr-1000n.dts
-@@ -20,27 +20,27 @@ uart0: serial@1180000000800 {
- 	leds {
- 		compatible = "gpio-leds";
- 
--		usb1 {
-+		led-usb1 {
- 			label = "usb1";
- 			gpios = <&gpio 9 GPIO_ACTIVE_LOW>;
- 		};
- 
--		usb2 {
-+		led-usb2 {
- 			label = "usb2";
- 			gpios = <&gpio 10 GPIO_ACTIVE_LOW>;
- 		};
- 
--		wps {
-+		led-wps {
- 			label = "wps";
- 			gpios = <&gpio 11 GPIO_ACTIVE_LOW>;
- 		};
- 
--		wireless1 {
-+		led-wireless1 {
- 			label = "5g";
- 			gpios = <&gpio 17 GPIO_ACTIVE_LOW>;
- 		};
- 
--		wireless2 {
-+		led-wireless2 {
- 			label = "2.4g";
- 			gpios = <&gpio 18 GPIO_ACTIVE_LOW>;
- 		};
-diff --git a/arch/mips/boot/dts/cavium-octeon/dlink_dsr-500n.dts b/arch/mips/boot/dts/cavium-octeon/dlink_dsr-500n.dts
-index e04237281b41..c55845fd84ca 100644
---- a/arch/mips/boot/dts/cavium-octeon/dlink_dsr-500n.dts
-+++ b/arch/mips/boot/dts/cavium-octeon/dlink_dsr-500n.dts
-@@ -21,15 +21,15 @@ uart0: serial@1180000000800 {
- 	leds {
- 		compatible = "gpio-leds";
- 
--		usb {
-+		led-usb {
- 			gpios = <&gpio 9 GPIO_ACTIVE_LOW>;
- 		};
- 
--		wps {
-+		led-wps {
- 			gpios = <&gpio 11 GPIO_ACTIVE_LOW>;
- 		};
- 
--		wireless {
-+		led-wireless {
- 			label = "2.4g";
- 			gpios = <&gpio 18 GPIO_ACTIVE_LOW>;
- 		};
-diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-index f38c39572a9e..3483ae0c05f5 100644
---- a/arch/mips/boot/dts/ingenic/ci20.dts
-+++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -42,25 +42,25 @@ switch {
- 	leds {
- 		compatible = "gpio-leds";
- 
--		led0 {
-+		led-0 {
- 			label = "ci20:red:led0";
- 			gpios = <&gpc 3 GPIO_ACTIVE_HIGH>;
- 			linux,default-trigger = "none";
- 		};
- 
--		led1 {
-+		led-1 {
- 			label = "ci20:red:led1";
- 			gpios = <&gpc 2 GPIO_ACTIVE_HIGH>;
- 			linux,default-trigger = "nand-disk";
- 		};
- 
--		led2 {
-+		led-2 {
- 			label = "ci20:red:led2";
- 			gpios = <&gpc 1 GPIO_ACTIVE_HIGH>;
- 			linux,default-trigger = "cpu1";
- 		};
- 
--		led3 {
-+		led-3 {
- 			label = "ci20:red:led3";
- 			gpios = <&gpc 0 GPIO_ACTIVE_HIGH>;
- 			linux,default-trigger = "cpu0";
-diff --git a/arch/mips/boot/dts/pic32/pic32mzda_sk.dts b/arch/mips/boot/dts/pic32/pic32mzda_sk.dts
-index ab70637bbec5..b1c5ffdb33fc 100644
---- a/arch/mips/boot/dts/pic32/pic32mzda_sk.dts
-+++ b/arch/mips/boot/dts/pic32/pic32mzda_sk.dts
-@@ -28,19 +28,19 @@ leds0 {
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&user_leds_s0>;
- 
--		led@1 {
-+		led-1 {
- 			label = "pic32mzda_sk:red:led1";
- 			gpios = <&gpio7 0 GPIO_ACTIVE_HIGH>;
- 			linux,default-trigger = "heartbeat";
- 		};
- 
--		led@2 {
-+		led-2 {
- 			label = "pic32mzda_sk:yellow:led2";
- 			gpios = <&gpio7 1 GPIO_ACTIVE_HIGH>;
- 			linux,default-trigger = "mmc0";
- 		};
- 
--		led@3 {
-+		led-3 {
- 			label = "pic32mzda_sk:green:led3";
- 			gpios = <&gpio7 2 GPIO_ACTIVE_HIGH>;
- 			default-state = "on";
-diff --git a/arch/mips/boot/dts/qca/ar9132_tl_wr1043nd_v1.dts b/arch/mips/boot/dts/qca/ar9132_tl_wr1043nd_v1.dts
-index f3dff4009ab5..f894fe17816b 100644
---- a/arch/mips/boot/dts/qca/ar9132_tl_wr1043nd_v1.dts
-+++ b/arch/mips/boot/dts/qca/ar9132_tl_wr1043nd_v1.dts
-@@ -41,23 +41,23 @@ button-1 {
- 
- 	leds {
- 		compatible = "gpio-leds";
--		led@0 {
-+		led-0 {
- 			label = "tp-link:green:usb";
- 			gpios = <&gpio 1 GPIO_ACTIVE_LOW>;
- 		};
- 
--		led@1 {
-+		led-1 {
- 			label = "tp-link:green:system";
- 			gpios = <&gpio 2 GPIO_ACTIVE_LOW>;
- 			linux,default-trigger = "heartbeat";
- 		};
- 
--		led@2 {
-+		led-2 {
- 			label = "tp-link:green:qss";
- 			gpios = <&gpio 5 GPIO_ACTIVE_HIGH>;
- 		};
- 
--		led@3 {
-+		led-3 {
- 			label = "tp-link:green:wlan";
- 			gpios = <&gpio 9 GPIO_ACTIVE_LOW>;
- 		};
-diff --git a/arch/mips/boot/dts/qca/ar9331_dragino_ms14.dts b/arch/mips/boot/dts/qca/ar9331_dragino_ms14.dts
-index 40e4c5da0e65..7affa58d4fa6 100644
---- a/arch/mips/boot/dts/qca/ar9331_dragino_ms14.dts
-+++ b/arch/mips/boot/dts/qca/ar9331_dragino_ms14.dts
-@@ -22,25 +22,25 @@ memory@0 {
- 	leds {
- 		compatible = "gpio-leds";
- 
--		wlan {
-+		led-wlan {
- 			label = "dragino2:red:wlan";
- 			gpios = <&gpio 0 GPIO_ACTIVE_HIGH>;
- 			default-state = "off";
- 		};
- 
--		lan {
-+		led-lan {
- 			label = "dragino2:red:lan";
- 			gpios = <&gpio 13 GPIO_ACTIVE_LOW>;
- 			default-state = "off";
- 		};
- 
--		wan {
-+		led-wan {
- 			label = "dragino2:red:wan";
- 			gpios = <&gpio 17 GPIO_ACTIVE_LOW>;
- 			default-state = "off";
- 		};
- 
--		system {
-+		led-system {
- 			label = "dragino2:red:system";
- 			gpios = <&gpio 28 GPIO_ACTIVE_HIGH>;
- 			default-state = "off";
-diff --git a/arch/mips/boot/dts/qca/ar9331_omega.dts b/arch/mips/boot/dts/qca/ar9331_omega.dts
-index ed184d861d5f..8904aa917a6e 100644
---- a/arch/mips/boot/dts/qca/ar9331_omega.dts
-+++ b/arch/mips/boot/dts/qca/ar9331_omega.dts
-@@ -22,7 +22,7 @@ memory@0 {
- 	leds {
- 		compatible = "gpio-leds";
- 
--		system {
-+		led-system {
- 			label = "onion:amber:system";
- 			gpios = <&gpio 27 GPIO_ACTIVE_LOW>;
- 			default-state = "off";
-diff --git a/arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts b/arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts
-index 5f424c2cd781..10b9759228b7 100644
---- a/arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts
-+++ b/arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts
-@@ -22,25 +22,25 @@ memory@0 {
- 	leds {
- 		compatible = "gpio-leds";
- 
--		wlan {
-+		led-wlan {
- 			label = "tp-link:green:wlan";
- 			gpios = <&gpio 0 GPIO_ACTIVE_HIGH>;
- 			default-state = "off";
- 		};
- 
--		lan {
-+		led-lan {
- 			label = "tp-link:green:lan";
- 			gpios = <&gpio 17 GPIO_ACTIVE_LOW>;
- 			default-state = "off";
- 		};
- 
--		wps {
-+		led-wps {
- 			label = "tp-link:green:wps";
- 			gpios = <&gpio 26 GPIO_ACTIVE_LOW>;
- 			default-state = "off";
- 		};
- 
--		led3g {
-+		led-led3g {
- 			label = "tp-link:green:3g";
- 			gpios = <&gpio 27 GPIO_ACTIVE_LOW>;
- 			default-state = "off";
-diff --git a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-index 179558161f85..18107ca0a06b 100644
---- a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-+++ b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-@@ -47,67 +47,67 @@ leds {
- 		 * (see below). So we can't include it in this LED node.
- 		 */
- 
--		power_blue {
-+		led-power-blue {
- 			label = "smartgw:power:blue";
- 			gpios = <&gpio 18 GPIO_ACTIVE_HIGH>;
- 			default-state = "off";
- 		};
- 
--		power_green {
-+		led-power-green {
- 			label = "smartgw:power:green";
- 			gpios = <&gpio 19 GPIO_ACTIVE_HIGH>;
- 			default-state = "off";
- 		};
- 
--		power_red {
-+		led-power-red {
- 			label = "smartgw:power:red";
- 			gpios = <&gpio 22 GPIO_ACTIVE_HIGH>;
- 			default-state = "off";
- 		};
- 
--		radio_blue {
-+		led-radio-blue {
- 			label = "smartgw:radio:blue";
- 			gpios = <&gpio 23 GPIO_ACTIVE_HIGH>;
- 			default-state = "off";
- 		};
- 
--		radio_green {
-+		led-radio-green {
- 			label = "smartgw:radio:green";
- 			gpios = <&gpio 24 GPIO_ACTIVE_HIGH>;
- 			default-state = "off";
- 		};
- 
--		radio_red {
-+		led-radio-red {
- 			label = "smartgw:radio:red";
- 			gpios = <&gpio 25 GPIO_ACTIVE_HIGH>;
- 			default-state = "off";
- 		};
- 
--		internet_blue {
-+		led-internet-blue {
- 			label = "smartgw:internet:blue";
- 			gpios = <&gpio 26 GPIO_ACTIVE_HIGH>;
- 			default-state = "off";
- 		};
- 
--		internet_green {
-+		led-internet-green {
- 			label = "smartgw:internet:green";
- 			gpios = <&gpio 27 GPIO_ACTIVE_HIGH>;
- 			default-state = "off";
- 		};
- 
--		internet_red {
-+		led-internet-red {
- 			label = "smartgw:internet:red";
- 			gpios = <&gpio 28 GPIO_ACTIVE_HIGH>;
- 			default-state = "off";
- 		};
- 
--		ethernet_link {
-+		led-ethernet-link {
- 			label = "smartgw:eth:link";
- 			gpios = <&gpio 3 GPIO_ACTIVE_LOW>;
- 			linux,default-trigger = "netdev";
- 		};
- 
--		ethernet_activity {
-+		led-ethernet-activity {
- 			label = "smartgw:eth:act";
- 			gpios = <&gpio 43 GPIO_ACTIVE_LOW>;
- 			linux,default-trigger = "netdev";
 diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-index 0128bd8fa7ed..4314aee97e18 100644
+index 4314aee97e18..129b6710b699 100644
 --- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
 +++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-@@ -33,13 +33,13 @@ key-reset {
- 	gpio-leds {
- 		compatible = "gpio-leds";
+@@ -91,22 +91,16 @@ &pcie {
+ 	status = "okay";
+ };
  
--		power {
-+		led-power {
- 			label = "green:power";
- 			gpios = <&gpio 6 GPIO_ACTIVE_LOW>;
- 			linux,default-trigger = "default-on";
+-&gmac1 {
+-	status = "okay";
+-	phy-handle = <&ethphy4>;
+-};
+-
+-&mdio {
+-	ethphy4: ethernet-phy@4 {
+-		reg = <4>;
+-	};
+-};
+-
+ &switch0 {
+ 	ports {
+ 		port@0 {
+ 			status = "okay";
+ 			label = "ethblack";
  		};
- 
--		system {
-+		led-system {
- 			label = "green:system";
- 			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
- 			linux,default-trigger = "disk-activity";
++
++		port@4 {
++			status = "okay";
++			label = "ethblue";
++		};
+ 	};
+ };
 diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-index e31417569e09..3ebbf933f644 100644
+index 3ebbf933f644..f810cd10f4f4 100644
 --- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
 +++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-@@ -33,33 +33,33 @@ key-reset {
- 	gpio-leds {
- 		compatible = "gpio-leds";
+@@ -112,9 +112,12 @@ &pcie {
+ };
  
--		ethblack-green {
-+		led-ethblack-green {
- 			label = "green:ethblack";
- 			gpios = <&gpio 3 GPIO_ACTIVE_LOW>;
+ &gmac1 {
+-	status = "okay";
+ 	phy-mode = "rgmii-rxid";
+ 	phy-handle = <&ethphy5>;
++
++	fixed-link {
++		status = "disabled";
++	};
+ };
+ 
+ &mdio {
+@@ -134,5 +137,9 @@ port@4 {
+ 			status = "okay";
+ 			label = "ethblue";
+ 		};
++
++		port@5 {
++			status = "disabled";
++		};
+ 	};
+ };
+diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
+index aec85c779359..290d47fbcfbb 100644
+--- a/arch/mips/boot/dts/ralink/mt7621.dtsi
++++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
+@@ -332,8 +332,13 @@ fixed-link {
+ 		gmac1: mac@1 {
+ 			compatible = "mediatek,eth-mac";
+ 			reg = <1>;
+-			status = "disabled";
+ 			phy-mode = "rgmii";
++
++			fixed-link {
++				speed = <1000>;
++				full-duplex;
++				pause;
++			};
  		};
  
--		ethblue-green {
-+		led-ethblue-green {
- 			label = "green:ethblue";
- 			gpios = <&gpio 4 GPIO_ACTIVE_LOW>;
- 		};
+ 		mdio: mdio-bus {
+@@ -384,6 +389,18 @@ port@4 {
+ 						label = "swp4";
+ 					};
  
--		ethyellow-green {
-+		led-ethyellow-green {
- 			label = "green:ethyellow";
- 			gpios = <&gpio 15 GPIO_ACTIVE_LOW>;
- 		};
- 
--		ethyellow-orange {
-+		led-ethyellow-orange {
- 			label = "orange:ethyellow";
- 			gpios = <&gpio 13 GPIO_ACTIVE_LOW>;
- 		};
- 
--		power {
-+		led-power {
- 			label = "green:power";
- 			gpios = <&gpio 6 GPIO_ACTIVE_LOW>;
- 			linux,default-trigger = "default-on";
- 		};
- 
--		system {
-+		led-system {
- 			label = "green:system";
- 			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
- 			linux,default-trigger = "disk-activity";
++					port@5 {
++						reg = <5>;
++						ethernet = <&gmac1>;
++						phy-mode = "rgmii";
++
++						fixed-link {
++							speed = <1000>;
++							full-duplex;
++							pause;
++						};
++					};
++
+ 					port@6 {
+ 						reg = <6>;
+ 						ethernet = <&gmac0>;
 -- 
 2.37.2
 
