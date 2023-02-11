@@ -2,199 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1D06932D9
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 18:28:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C7A6932DA
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 18:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbjBKR2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 12:28:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
+        id S229532AbjBKR24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 12:28:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjBKR2e (ORCPT
+        with ESMTP id S229455AbjBKR2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 12:28:34 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30B6105
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 09:28:32 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id az4-20020a05600c600400b003dff767a1f1so6176831wmb.2
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 09:28:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Np4kuJWs/zx9FaMvum0wspWo2Gkd4utoKdBLjJ5zvug=;
-        b=ipsOzbT5DmzszZ8UzNrMuK1jxc7KXSaJEdY/+Bt/s5NWUQc/m5iJxT2Dj9qy234Ig3
-         gAaGc6nTwnbUGuTJkBr0aaMEuoSPRhd7MCGqSLcstOWQ5Lp/wv3PQTjxqUyjz/vK5Qq2
-         rPfXjy6ep/ebmAQdqAa7SgFhuQiAv7VQ0KuDAvnWWmwO1PXqaj9RJw6yDCvNhs3+Pu21
-         bcMpcW6EmDmt84UrGQ3qqKESneFERGrPkmrzbn6ViB0u39R7wrBtCCq61Zw3nu5UuoZP
-         FA3PIAKli0EsBP/iN2hhvr/FEpZz7BPdkHGxjcBzrFWUIrtvmU0176isKwy/uIo3QInV
-         /KkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Np4kuJWs/zx9FaMvum0wspWo2Gkd4utoKdBLjJ5zvug=;
-        b=oAmTRQ46BllGGsfV4Pok5VzCApUMYRU3Mvww9sB71tQBsiB+AjgCoarJgr91tYebCQ
-         CLzs9obEi8rOaiGXdso07PLt3SZajiysvAIv5FOhjBUF+XU+t0zjMre4cyIDrLCNyS6E
-         M2IkQvB931M6KsAfrg7jNM6Px/mOeys0sNiVuYP/rUzUDMa+Xs4VkkyHAezstMJ2gx2z
-         M2OVp7AACD4XC3BO3XtqvwQ7/bCwBEuHgAkE2e+AMgopnfnbirSVcyDubB8lRCiixA54
-         n645wV5EmFZLOwIyHedj2ZkSvunzk4Ln3kGqxljnggtWtYBEDhmZMpbQBTYYzVVyNZab
-         HukA==
-X-Gm-Message-State: AO0yUKV3gZLGnGqM92C2JFi8nbfdcmaTodhiqc/s/O7QEMJWngE5xIx4
-        4p05dv9jmcPcv0YxxMyFOP8quw==
-X-Google-Smtp-Source: AK7set/kmTZewNgyW2AAVbjwvBGh84S8q+fKCpMlBqPtq2RsfVhmQ2OFyFWcj07vBG7u40OG/pyfcQ==
-X-Received: by 2002:a05:600c:4496:b0:3dc:de85:5007 with SMTP id e22-20020a05600c449600b003dcde855007mr15361856wmo.21.1676136511360;
-        Sat, 11 Feb 2023 09:28:31 -0800 (PST)
-Received: from airbuntu (host86-163-35-10.range86-163.btcentralplus.com. [86.163.35.10])
-        by smtp.gmail.com with ESMTPSA id j7-20020a5d6047000000b002c53a89f042sm6379640wrt.30.2023.02.11.09.28.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Feb 2023 09:28:30 -0800 (PST)
-Date:   Sat, 11 Feb 2023 17:28:29 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
-        Wei Wang <wvw@google.com>, Xuewen Yan <xuewen.yan94@gmail.com>,
-        Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
-Subject: Re: [PATCH v2 1/3] sched/uclamp: Set max_spare_cap_cpu even if
- max_spare_cap is 0
-Message-ID: <20230211172829.f2igueizqpwijjjz@airbuntu>
-References: <20230205224318.2035646-1-qyousef@layalina.io>
- <20230205224318.2035646-2-qyousef@layalina.io>
- <CAKfTPtA9yOncmGuLfo-XaXDZ5F7+9iL-hdyGeaOQi1qrDa_RqQ@mail.gmail.com>
+        Sat, 11 Feb 2023 12:28:54 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58F7BDD7
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 09:28:49 -0800 (PST)
+Received: from [2a02:8108:8980:2478:5054:ff:feb3:8f48] (helo=regzbot.fritz.box); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id 1pQtg7-0005f0-Vi; Sat, 11 Feb 2023 18:28:48 +0100
+From:   "Regzbot (on behalf of Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Linux regressions report for mainline [2023-02-11]
+Date:   Sat, 11 Feb 2023 17:28:47 +0000
+Message-Id: <167613641114.2124708.9785978428796571420@leemhuis.info>
+X-Mailer: git-send-email 2.39.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtA9yOncmGuLfo-XaXDZ5F7+9iL-hdyGeaOQi1qrDa_RqQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676136529;271c7f5a;
+X-HE-SMSGID: 1pQtg7-0005f0-Vi
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/07/23 10:45, Vincent Guittot wrote:
-> On Sun, 5 Feb 2023 at 23:43, Qais Yousef <qyousef@layalina.io> wrote:
-> >
-> > When uclamp_max is being used, the util of the task could be higher than
-> > the spare capacity of the CPU, but due to uclamp_max value we force fit
-> > it there.
-> >
-> > The way the condition for checking for max_spare_cap in
-> > find_energy_efficient_cpu() was constructed; it ignored any CPU that has
-> > its spare_cap less than or _equal_ to max_spare_cap. Since we initialize
-> > max_spare_cap to 0; this lead to never setting max_spare_cap_cpu and
-> > hence ending up never performing compute_energy() for this cluster and
-> > missing an opportunity for a better energy efficient placement to honour
-> > uclamp_max setting.
-> >
-> >         max_spare_cap = 0;
-> >         cpu_cap = capacity_of(cpu) - task_util(p);  // 0 if task_util(p) is high
-> >
-> >         ...
-> >
-> >         util_fits_cpu(...);             // will return true if uclamp_max forces it to fit
-> >
-> >         ...
-> >
-> >         // this logic will fail to update max_spare_cap_cpu if cpu_cap is 0
-> >         if (cpu_cap > max_spare_cap) {
-> >                 max_spare_cap = cpu_cap;
-> >                 max_spare_cap_cpu = cpu;
-> >         }
-> >
-> > prev_spare_cap suffers from a similar problem.
-> >
-> > Fix the logic by converting the variables into long and treating -1
-> > value as 'not populated' instead of 0 which is a viable and correct
-> > spare capacity value.
-> >
-> > Fixes: 1d42509e475c ("sched/fair: Make EAS wakeup placement consider uclamp restrictions")
-> > Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
-> > ---
-> >  kernel/sched/fair.c | 9 ++++-----
-> >  1 file changed, 4 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index c6c8e7f52935..7a21ee74139f 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -7382,11 +7382,10 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >         for (; pd; pd = pd->next) {
-> >                 unsigned long util_min = p_util_min, util_max = p_util_max;
-> >                 unsigned long cpu_cap, cpu_thermal_cap, util;
-> > -               unsigned long cur_delta, max_spare_cap = 0;
-> > +               long prev_spare_cap = -1, max_spare_cap = -1;
-> >                 unsigned long rq_util_min, rq_util_max;
-> > -               unsigned long prev_spare_cap = 0;
-> > +               unsigned long cur_delta, base_energy;
-> >                 int max_spare_cap_cpu = -1;
-> > -               unsigned long base_energy;
-> >                 int fits, max_fits = -1;
-> >
-> >                 cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
-> > @@ -7461,7 +7460,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >                         }
-> >                 }
-> >
-> > -               if (max_spare_cap_cpu < 0 && prev_spare_cap == 0)
-> > +               if (max_spare_cap_cpu < 0 && prev_spare_cap < 0)
-> >                         continue;
-> >
-> >                 eenv_pd_busy_time(&eenv, cpus, p);
-> > @@ -7469,7 +7468,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >                 base_energy = compute_energy(&eenv, pd, cpus, p, -1);
-> >
-> >                 /* Evaluate the energy impact of using prev_cpu. */
-> > -               if (prev_spare_cap > 0) {
-> > +               if (prev_spare_cap > -1) {
-> >                         prev_delta = compute_energy(&eenv, pd, cpus, p,
-> >                                                     prev_cpu);
-> >                         /* CPU utilization has changed */
-> 
-> I think that you also need the change below to make sure that the
-> signed comparison will be used. I have quickly checked the assembly
-> code for aarch64 and your patch keeps using unsigned comparison (b.ls)
->    ((fits == max_fits) && (cpu_cap > max_spare_cap))) {
-> ffff8000080e4c94: f94067e0 ldr x0, [sp, #200]
-> ffff8000080e4c98: eb00003f cmp x1, x0
-> ffff8000080e4c9c: 54ff98a9 b.ls ffff8000080e3fb0
-> <select_task_rq_fair+0x570>  // b.plast
-> 
-> Whereas the change below make it to use the signed version (b.le)
->    ((fits == max_fits) && ((long)cpu_cap > max_spare_cap))) {
-> ffff8000080e4c94: f94067e0 ldr x0, [sp, #200]
-> ffff8000080e4c98: eb00003f cmp x1, x0
-> ffff8000080e4c9c: 54ff98ad b.le ffff8000080e3fb0 <select_task_rq_fair+0x570>
-> 
-> -- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -7522,7 +7522,7 @@ static int find_energy_efficient_cpu(struct
-> task_struct *p, int prev_cpu)
->                                 prev_spare_cap = cpu_cap;
->                                 prev_fits = fits;
->                         } else if ((fits > max_fits) ||
-> -                                  ((fits == max_fits) && (cpu_cap >
-> max_spare_cap))) {
-> +                                  ((fits == max_fits) &&
-> ((long)cpu_cap > max_spare_cap))) {
->                                 /*
->                                  * Find the CPU with the maximum spare capacity
->                                  * among the remaining CPUs in the performance
+Hi Linus. Below you'll find regzbot's report about regression from this
+cycle me or someone else told the bot about. One day earlier than usual,
+as I'm on the road tomorrow.
 
-Isn't it better to go back to v1 form then? The inconsistent type paired with
-the cast isn't getting too ugly for me :(
+Let me quickly mention a few random things with available fixes:
 
-I don't think we can convert cpu_cap to long without having to do more work as
-it is used with 'util'.
+* the fix for a SPI issue I already mentioned two weeks ago is still
+sitting in next; the reporter complained about that today, as the "whole
+test infrastructure crashes [due to that bug] preventing the normal
+testing we normally do on mainline kernel".
+https://lore.kernel.org/lkml/Y8U9vrwzHVAyBZHK@francesco-nb.int.toradex.com/
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=eede42c9459b58b71edc99303dad65216a655810
+https://lore.kernel.org/lkml/Y%2BexzSwy1UJQCUKg@francesco-nb.int.toradex.com/
+
+* David already sent BTRFS updates this week, but right after that
+merged a fix for a issue that affected quite a few people on 6.1 to his
+tree. Not sure if he'll send it in for rc8, which might be better than
+applying it next week right before the release. And it liekly would make
+a few 6.1.y users happy if the fix might land in 6.1.y a week earlier, too:
+https://lore.kernel.org/linux-btrfs/20230206184044.GD28288@twin.jikos.cz/
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=6afaed53cc9adde69d8a76ff5b4d740d5efbc54c
+
+* A patch to fix a page corruption caused by racy check in __free_pages
+emerged on Thursday. It's caused by a change merged for 5.10-rc1, but
+Vlastimil nevertheless said "That's nasty enough to go into 6.2, IMHO".
+Willy reviewed it, but Andrew didn't pick it up yet.
+https://lore.kernel.org/lkml/BYAPR02MB448855960A9656EEA81141FC94D99@BYAPR02MB4488.namprd02.prod.outlook.com/
+
+And one other thing:
+
+* Last week I mentioned a long and ongoing discussion about problems
+with the NFS client where there was some disagreement if the issue
+qualifies as regression, as it's an old problem with tmpfs that is more
+likely to happen now. That discussion afaics faded out a few days ago
+without a fix or a revert (which if I remember the discussion correctly
+would be possible) in sight (unless I missed it):
+https://lore.kernel.org/linux-nfs/9A4A5673-691D-47EC-BC44-C43BE7E50A48@oracle.com/
+
+There are still quite a few known issues from this cycle mentioned
+below. Afaics none of them affect a lot of people; and with a bit of
+luck one or two might still be fixed next week. I'm just a bit unhappy
+that it takes so long to get "Black screen when amdgpu started during
+6.2-rc1 boot with AMD IOMMU enabled" fixed, but well, there is quite a
+bit discussion about it, so people tried.
+https://bugzilla.kernel.org/show_bug.cgi?id=216865
+https://lore.kernel.org/lkml/15d0f9ff-2a56-b3e9-5b45-e6b23300ae3b@leemhuis.info/
+https://lore.kernel.org/all/20230114073420.759989-1-baolu.lu@linux.intel.com/
+
+Ciao, Thorsten
+
+---
+
+Hi, this is regzbot, the Linux kernel regression tracking bot.
+
+Currently I'm aware of 10 regressions in linux-mainline. Find the
+current status below and the latest on the web:
+
+https://linux-regtracking.leemhuis.info/regzbot/mainline/
+
+Bye bye, hope to see you soon for the next report.
+   Regzbot (on behalf of Thorsten Leemhuis)
 
 
-Cheers
+======================================================
+current cycle (v6.1.. aka v6.2-rc), culprit identified
+======================================================
 
---
-Qais Yousef
+
+spi: spidev: recursive locking error
+------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/Y8U9vrwzHVAyBZHK@francesco-nb.int.toradex.com/
+https://lore.kernel.org/lkml/Y8U9vrwzHVAyBZHK@francesco-nb.int.toradex.com/
+
+By Francesco Dolcini; 26 days ago; 13 activities, latest 0 days ago.
+Introduced in a720416d9463 (v6.2-rc4)
+
+Fix incoming:
+* spi: spidev: fix a recursive locking error
+  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=eede42c9459b58b71edc99303dad65216a655810
+
+
+meida: venus: firmware: AOSS doesn't seel anymore on at least sc7180 and sc7280
+-------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/Y9LSMap+jRxbtpC8@google.com/
+https://lore.kernel.org/lkml/Y9LSMap%2BjRxbtpC8@google.com/
+
+By Matthias Kaehlcke; 15 days ago; 11 activities, latest 0 days ago.
+Introduced in a837e5161cff (v6.2-rc1)
+
+Recent activities from: Javier Martinez Canillas (4), Vikash
+  Garodia (2), mka@chromium.org (2), Linux regression tracking (Thorsten
+  Leemhuis) (1)
+
+Noteworthy links:
+* [PATCH] Revert "venus: firmware: Correct non-pix start and end addresses"
+  https://lore.kernel.org/lkml/20230207102254.1446461-1-javierm@redhat.com/
+  4 days ago, by Javier Martinez Canillas; thread monitored.
+
+
+drm: nouveau: hangs on poweroff/reboot
+--------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com/
+https://lore.kernel.org/lkml/b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com/
+
+By Chris Clayton; 23 days ago; 21 activities, latest 0 days ago.
+Introduced in 0e44c2170876 (v6.2-rc1)
+
+Recent activities from: Chris Clayton (2), Linux regression tracking
+  (Thorsten Leemhuis) (2), Karol Herbst (1)
+
+
+nfs: NULL pointer dereference since NFS_V4_2_READ_PLUS is enabled by default
+----------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/f591b13c-4600-e2a4-8efa-aac6ad828dd1@linaro.org/
+https://lore.kernel.org/lkml/f591b13c-4600-e2a4-8efa-aac6ad828dd1@linaro.org/
+
+By Krzysztof Kozlowski; 35 days ago; 19 activities, latest 0 days ago.
+Introduced in 7fd461c47 (v6.2-rc1)
+
+Recent activities from: Krzysztof Kozlowski (3), Anna Schumaker (2)
+
+One patch associated with this regression:
+* Re: Regression: NULL pointer dereference after NFS_V4_2_READ_PLUS (commit 7fd461c47)
+  https://lore.kernel.org/lkml/CAFX2Jfmz7QqZBEdzbPUhPs0yctnXVaVF68tX1c57YX=6ki=0TA@mail.gmail.com/
+  0 days ago, by Anna Schumaker
+
+
+xen/usb(?): External USB disks not recognized anymore under Xen
+---------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/4fe9541e-4d4c-2b2a-f8c8-2d34a7284930@nerdbynature.de/
+https://lore.kernel.org/lkml/4fe9541e-4d4c-2b2a-f8c8-2d34a7284930@nerdbynature.de/
+
+By Christian Kujau; 12 days ago; 17 activities, latest 0 days ago.
+Introduced in 90b926e68f50 (v6.2-rc4)
+
+Recent activities from: Juergen Gross (3), Linux regression tracking
+  (Thorsten Leemhuis) (1), Borislav Petkov (1), Linus Torvalds (1)
+
+One patch associated with this regression:
+* Re: External USB disks not recognized with v6.1.8 when using Xen
+  https://lore.kernel.org/lkml/Y9%2BtDmLAlqg37TS%2B@zn.tnic/
+  6 days ago, by Borislav Petkov
+
+Noteworthy links:
+* [PATCH v2 5/8] x86/mtrr: revert commit 90b926e68f50
+  https://lore.kernel.org/lkml/20230209072220.6836-6-jgross@suse.com/
+  2 days ago, by Juergen Gross; thread monitored.
+
+
+usb: gadget: USB network interface is recognized, but 'ip link' sees it as 'NO-CARRIER'
+---------------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/f2a4f9847617a0929d62025748384092e5f35cce.camel@crapouillou.net/
+https://lore.kernel.org/lkml/f2a4f9847617a0929d62025748384092e5f35cce.camel@crapouillou.net/
+
+By Paul Cercueil; 10 days ago; 10 activities, latest 0 days ago.
+Introduced in 321b59870f85 (v6.2-rc1)
+
+Recent activities from: Sascha Hauer (4), Alan Stern (2), Paul
+  Cercueil (2), Greg Kroah-Hartman (1)
+
+
+Black screen when amdgpu started during 6.2-rc1 boot with AMD IOMMU enabled
+---------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/216865/
+https://bugzilla.kernel.org/show_bug.cgi?id=216865
+https://lore.kernel.org/lkml/15d0f9ff-2a56-b3e9-5b45-e6b23300ae3b@leemhuis.info/
+
+By Matt Fagnani and Matt Fagnani; 43 days ago; 56 activities, latest 5 days ago.
+Introduced in 201007ef707a (v6.2-rc1)
+
+Recent activities from: Tian, Kevin (1)
+
+One patch associated with this regression:
+* Re: [PATCH v3 1/1] PCI: Add translated request only flag for pci_enable_pasid()
+  https://lore.kernel.org/lkml/b75a5a94-a962-f88e-149e-7d23982a7ad2@linux.intel.com/
+  9 days ago, by Baolu Lu
+
+Noteworthy links:
+* [PATCH] PCI: revert "Enable PASID only when ACS RR & UF enabled on upstream path"
+  https://lore.kernel.org/linux-pci/20230111085745.401710-1-christian.koenig@amd.com/
+  31 days ago, by Christian König; thread monitored.
+* [PATCH 1/1] PCI: Add translated request only opt-in for pci_enable_pasid()
+  https://bugzilla.kernel.org/show_bug.cgi?id=20230112084629.737653-1-baolu.lu@linux.intel.com
+  30 days ago, by Lu Baolu; thread monitored.
+* [PATCH v2 1/1] PCI: Add translated request only flag for pci_enable_pasid()
+  https://bugzilla.kernel.org/show_bug.cgi?id=20230113014409.752405-1-baolu.lu@linux.intel.com
+  29 days ago, by Lu Baolu; thread monitored.
+* [PATCH v3 1/1] PCI: Add translated request only flag for pci_enable_pasid()
+  https://bugzilla.kernel.org/show_bug.cgi?id=20230114073420.759989-1-baolu.lu@linux.intel.com
+  28 days ago, by Lu Baolu; thread monitored.
+
+
+nfs: failures during the git regression suite on all NFS versions
+-----------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/9A4A5673-691D-47EC-BC44-C43BE7E50A48@oracle.com/
+https://lore.kernel.org/linux-nfs/9A4A5673-691D-47EC-BC44-C43BE7E50A48@oracle.com/
+
+By Chuck Lever III; 10 days ago; 25 activities, latest 6 days ago.
+Introduced in 85aa8ddc3818 (v6.2-rc1)
+
+
+==================================================
+current cycle (v6.1.. aka v6.2-rc), unkown culprit
+==================================================
+
+
+net: r8169: NETDEV WATCHDOG: enp6s0 (r8169): transmit queue 0 timed out
+-----------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/216884/
+https://bugzilla.kernel.org/show_bug.cgi?id=216884
+https://lore.kernel.org/regressions/f5b100c0-cdeb-59d1-5c82-e1df59ee3773@leemhuis.info/
+
+By HougeLangley and HougeLangley; 38 days ago; 21 activities, latest 8 days ago.
+Introduced in v6.1..v6.2-rc2
+
+Fix incoming:
+* PCI: loongson: Improve the MRRS quirk for LS7A
+  https://lore.kernel.org/regressions/2a9140bb-8c4f-dda8-cf43-92db792a29db@leemhuis.info/
+
+
+chrome crashes
+--------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/CAPaMSD3MM2BTW0REi4onUCPCLzz1B=-x0j9Uuvf2NHUOSefQ-w@mail.gmail.com/
+https://lore.kernel.org/lkml/CAPaMSD3MM2BTW0REi4onUCPCLzz1B=-x0j9Uuvf2NHUOSefQ-w@mail.gmail.com/
+
+By Chris McGimpsey-Jones; 14 days ago; 1 activities, latest 14 days ago.
+Introduced in v6.1..v6.2-rc5
+
+
+=============
+End of report
+=============
+
+All regressions marked '[ *NEW* ]' were added since the previous report,
+which can be found here:
+https://lore.kernel.org/r/167562163001.1743361.7332568307990617200@leemhuis.info
+
+Thanks for your attention, have a nice day!
+
+  Regzbot, your hard working Linux kernel regression tracking robot
+
+
+P.S.: Wanna know more about regzbot or how to use it to track regressions
+for your subsystem? Then check out the getting started guide or the
+reference documentation:
+
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The short version: if you see a regression report you want to see
+tracked, just send a reply to the report where you Cc
+regressions@lists.linux.dev with a line like this:
+
+#regzbot introduced: v5.13..v5.14-rc1
+
+If you want to fix a tracked regression, just do what is expected
+anyway: add a 'Link:' tag with the url to the report, e.g.:
+
+Link: https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/
