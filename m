@@ -2,170 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 614EF692C66
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 02:04:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9DF692C6B
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 02:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjBKBEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 20:04:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
+        id S229840AbjBKBGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 20:06:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjBKBEm (ORCPT
+        with ESMTP id S229746AbjBKBGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 20:04:42 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD6375F7C
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 17:04:40 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id s203so3287074ybc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 17:04:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KCmOGuBPv31UY5B1zXCetlCYTSlsv5u9zQ46BG1wFyA=;
-        b=bnrJaquB/tPkt/lJWzNkdevVm8WHdDmXnnxixhXv0x9lnfGxe4gwzSWC98z54m+fR/
-         adc82mymHz1NF4uljr7ef9/vKIIjKFR94YrzBrY88RH369na61ieBQ7AEGLtnJCeQjiv
-         PY4QbVjAedTx4HcKD0p+ArD0R0MYFW3hzmatI3y89dgPFsPdmOZ1Lw86dyTguSFCZjYf
-         0kPXBjj/LUbak2pOD0hpKK+FhaJgbt9oe57x9P0aF0N7Vo336x6Cck4WfUn0Rw8IJw+s
-         EzN0uvaGkooCyHezU7zRqbsXBKyXcVHclFnkD6IZvHT7zorm7uGFGo9UOYgAa6WxZY5/
-         /nHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KCmOGuBPv31UY5B1zXCetlCYTSlsv5u9zQ46BG1wFyA=;
-        b=YaHZIh/vyCgl3CX4Ru6U0XUzlEoJivCku0g4lqCyDu4R5yHhUBTfj9tJeAGrmGGJDL
-         o47B8Q3NfnLDWfJi8yCP8A2NUXY0MK2J7hLDbmhy9EwbvXLIXGjl0USNJx83dcSazUbK
-         FWfm0timJLyM5SUa5vPfdWskmi08s35WdlUDUxbaJs0/2xBeyHMZoEggifHaVybeDVp2
-         z2gbu6SUFFOihFrjClhad2oFx7hSZ9YPPDlFomziOIpMZQnOt6W381LrvOYddw9lZkcS
-         btRu+cKHm3vKJSmc8hUXSYBawdy2IJ46G5zQFDUAbCDZzihS5CKhyIVFrqGhYletn6or
-         hvzw==
-X-Gm-Message-State: AO0yUKWiiXLh9iLF0hpJgXbOUKbnkl7JNY0nhWhAeg3ASmCWdYktPkz1
-        3hsrrYABbEwSm/rUxCEidhNoelk7Jw5jmZ7So23D8fGKwYRoDBXj5A==
-X-Google-Smtp-Source: AK7set9g6Mafb/QDw8fUZh0hFORiAihjBIDqPTa+Vzv8SHnlH6la0bZEvLhiVF1mS2/6YN3/Z0uCPt1e1hdjSE9v81c=
-X-Received: by 2002:a05:6902:24c:b0:8b9:66a7:bb53 with SMTP id
- k12-20020a056902024c00b008b966a7bb53mr1742717ybs.219.1676077480028; Fri, 10
- Feb 2023 17:04:40 -0800 (PST)
+        Fri, 10 Feb 2023 20:06:05 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7D375F56;
+        Fri, 10 Feb 2023 17:06:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676077564; x=1707613564;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=qx2R+mkFnEf/WFU6ygZXkgLosuNf1yMYOQBPxKddLK4=;
+  b=Ny7bXOxUDqv6u4TaGMoBWtNvMQOSJhoVaqUnGnFSxMhl1ZCJ0MB4a9HU
+   ptX8Uax7fo1ySIyMVB5mJPL+rJ9ScVOUJPTJy42hTVnI7azNqmLVlmngD
+   lmpWIz73UCp4LOxYpem4sYe+eouRyLWbeaGVGzmVHFyvOZuJjRrBofcSQ
+   Ofn7ErwkNAtoZc6A7RQqsUWkrcrvOPe8t+AP7ywc0n1m50k7PHXZ+0Y6J
+   5aEEIYhGx56+hz8gqIK7ezzOlTbOO4MYbH+tig8AJAktoOrFBLulPs2MB
+   NwU3HeGpWNwPT1Gdcz0wS+vbZMReTmTXPEHP5vJw/MF6LmyIb6XdbefW1
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="314209477"
+X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
+   d="scan'208";a="314209477"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 17:06:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="997124870"
+X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
+   d="scan'208";a="997124870"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga005.fm.intel.com with ESMTP; 10 Feb 2023 17:06:02 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 10 Feb 2023 17:06:02 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 10 Feb 2023 17:06:02 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Fri, 10 Feb 2023 17:06:02 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.105)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Fri, 10 Feb 2023 17:06:01 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j7m7UUZsh3IqYVXQURkFitfckOgIWBLKjbzdPqQSMFty/TFqMTxFJSLfcv5da0SWLl5gMgSmkH9bA3BreHp+IWpGpbFiPsJhu3QZ78k+bULAp/JfZSXzfFVpBGoM10DwOKZz9wZZg75uWWkmEvLz1YEJxUmCRa4djofGZhWyrm/X0GZYHxu/48jwR1K6VJ+Ft/9FBsc3srDooe0z6x01aR3fBXONfYkwi0XNATyAIrOHeAC33M3XvewucWf852FLlu96du5w0+12vRzmM+7uyg0fPf6Gcfv1h+eFhHBggo/LdIMxi9ZEE7ADrBOal+EY8eeHpNK16LVvIydN9yBQuQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qx2R+mkFnEf/WFU6ygZXkgLosuNf1yMYOQBPxKddLK4=;
+ b=ZnxsuI19cvjY15g6dTJ8mpFePStEFE5uXnQTjwRCEiQNhKMLTIOa7zbzSX9A+YfwQHIPOScD6luHsTG+U9EgQDbX7vdv7MoxcCI4R7LSX0ZqPrGFQISKsW2HgB0muqaohhuNUBHMpRIL8ojUXkPbGnWHnd6mfbu5TVIqOr202IEx8wNhNwT/M9GcE2EZSirFZnEzcQZZd+4m+WXGwQssa50Jdjly6z0L4CLsaTayb95XQ3PMaSL59U2m5S6QqBW3DfQe+n0ThuKshU89Fyv90+U/rYZ/Eqq74kPlc8WshsjKBNCq0KYVay2FmDqLR1PpKpjnSKl/Xm/UVyhGS553Hw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from IA1PR11MB6171.namprd11.prod.outlook.com (2603:10b6:208:3e9::13)
+ by CO6PR11MB5585.namprd11.prod.outlook.com (2603:10b6:5:356::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Sat, 11 Feb
+ 2023 01:06:00 +0000
+Received: from IA1PR11MB6171.namprd11.prod.outlook.com
+ ([fe80::52f:ae62:7fbd:600e]) by IA1PR11MB6171.namprd11.prod.outlook.com
+ ([fe80::52f:ae62:7fbd:600e%9]) with mapi id 15.20.6086.021; Sat, 11 Feb 2023
+ 01:06:00 +0000
+From:   "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+To:     "Luck, Tony" <tony.luck@intel.com>
+CC:     Borislav Petkov <bp@alien8.de>, Aristeu Rozanski <aris@redhat.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        "Xu, Feng F" <feng.f.xu@intel.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH 1/1] EDAC/skx: Fix overflows on the DRAM row address
+ mapping arrays
+Thread-Topic: [PATCH 1/1] EDAC/skx: Fix overflows on the DRAM row address
+ mapping arrays
+Thread-Index: AQHZPIrEiNCcPcg1/UefCINIyHIFLa7G3zIAgADo76CAAKGyAIAAhlfg
+Date:   Sat, 11 Feb 2023 01:06:00 +0000
+Message-ID: <IA1PR11MB61710A47690BD5DA2826F29389DF9@IA1PR11MB6171.namprd11.prod.outlook.com>
+References: <20230209133023.39825-1-qiuxu.zhuo@intel.com>
+ <SJ1PR11MB6083CC9171E90537D09CB9B4FCD99@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <SJ1PR11MB617933E74BB2D538C0426A9589DE9@SJ1PR11MB6179.namprd11.prod.outlook.com>
+ <SJ1PR11MB6083F2E23723D45E52614E51FCDE9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+In-Reply-To: <SJ1PR11MB6083F2E23723D45E52614E51FCDE9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: IA1PR11MB6171:EE_|CO6PR11MB5585:EE_
+x-ms-office365-filtering-correlation-id: 63eb2c1c-a035-486b-5a82-08db0bcc2395
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: mWCv1ksIomQloooi4etrr9eAXmwZ1A/AE8sII3sZ0ZPd82lUn2wlZfABKwo5nZsPtjfONwCkNCBuREaZSCXk9pirOo0wi6OqQS792alUG6ooAGtn+xRqHcDKh8Th6xzSFdRTaA9LzSXcnZDLk2SdPsftBIFrUSk8kP+GwFff8PXGEOZLFRNCZ90NOSF6k6DFqvSvBQ6wvY8Nx2rhu4J2zi5hlOTO8wqmksbsAbDEfpfc6c25ZGQ9Rh8deU1UAPhuHTg1Y9pBCkNDu5Z1U4nosy37UrfKQL0l9zRG2H77aia2+jJNe2puGLL5J/N8vKIfORor0VlbEx7GfBVI12LdX44xOFSu/D8nQSUheQAQoQ2gBN8wiHRuP+C6pJ7Vq6aBUsgfFYm8VAO7gPDgAxkX/9FUfyFQwj03eI5v/g2uOcgMkE9wcCuOnXTMCO0QrcZ3ROVy0qc0t4F6mTChSYrkKQb5D+GDt9LPAvKelSmecYxXWlwSUpmiRdesnD+kzN4PyfBC9TM7Ojdp4c0MQykPbWDqtiI/dihNRYsdbGOmNOKB4qi5/faICWDL4ZExRoL98XlDER60V1BTFsvZ7WoI06TNgWiZImDkfl2rXS86nPlVvHG+XCp2AE5j/Vjhjn7D8cxYApyamMnRWeGAEeO80g1P9M+9JFc1VRn1Q94XuFQCiglBiiLPV/gwYaB28lrH
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB6171.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(396003)(346002)(366004)(39860400002)(136003)(451199018)(6636002)(86362001)(52536014)(26005)(316002)(5660300002)(54906003)(9686003)(186003)(7696005)(478600001)(55016003)(6506007)(4744005)(33656002)(71200400001)(6862004)(2906002)(38100700002)(38070700005)(82960400001)(122000001)(41300700001)(66446008)(66556008)(83380400001)(76116006)(64756008)(66476007)(66946007)(8676002)(8936002)(4326008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Y2NiNURQME1SZ2JRU0lGV2d2OEMrMnQ5QjNLSHlYdE8wUFZER2pvaHIyN2Vh?=
+ =?utf-8?B?VHphVDZUTFFiSU5JaWtMd1IwcTFjNjBhUE1HVkVMN3oxT2ZhRm1sSTRiM1BV?=
+ =?utf-8?B?MmF2YUxxYkI5eG9vY1ZIanM1aGFFMkE5eGl3SGRIdjZad0pFU0RZYWlDR3Br?=
+ =?utf-8?B?SjhFaXNPWUhZeHZRK01XZno1cFJoSTA0MStQQXpqTy9WUHQwdVdKb2pWcEZs?=
+ =?utf-8?B?dWVMcVFoOXJUOUJqWVVQSWU0QmhEZk1IeGRWWE1ULzlFL0RTak41SXdKTXZG?=
+ =?utf-8?B?dUxJNXU3UWY2RkptbEFRZDZwa21XKzg2MGlVN1E0UDNZaWxsU3p1OGpUd2Q2?=
+ =?utf-8?B?a1lzTVVVVjBITmo1SnpDdnZKZ2JUVnNiM3NmSEEyUVg0L0UwVWRwNzRmeGFh?=
+ =?utf-8?B?NU9qZ1pWL2xqamlYamRyeHZQbVNGaDFxTWx5clpnN2VuY295SHRsckNVekwr?=
+ =?utf-8?B?TzNoeFFhTStndDZPWFB3cHFaZTN5VERRMDZvallhaXpmMlVWYkliRDlxb3hO?=
+ =?utf-8?B?YzlTRFRUc1FsZlZUaUJ0Q2RrQWpFZVpHaEovY0NsRkhxaEVIUUhzdnF2MVE4?=
+ =?utf-8?B?MHpyUXVNbzI4ZTZVclgyWE9XNDhOSUV0ZSsybXkrWm5vQ25nYlZ0bVJiMm54?=
+ =?utf-8?B?TVBQQ0JkY2MyVGRYcjUxOU5jS3NrbzRlV2tjTk9uMExjN2p3cDB3akxyUFdH?=
+ =?utf-8?B?RlAzWEV5VHNndjdoYS91TWl1cmJDd3g2d1NFKzVqU1dhZ0Z1b1V3YlYyOStq?=
+ =?utf-8?B?YUpiMlc0dzZuL1pwVmU3WkNEb0pzMkFkUDJCYmN5cXNlQVlZZXZMTUNtZlc2?=
+ =?utf-8?B?dFZKQ3NLTzRJazhmWWIwUlNHTjR1Y0p4REJpQmJzSzFxaExUVVFBS1ZCL1Bm?=
+ =?utf-8?B?Tzh5bGRFbVJ1WVVWUmd6V2ptRytVS096UVNUNUNwYWptYXVnVnlxN28vNjVq?=
+ =?utf-8?B?ZjVKV08wZG5pT2RDaENZVFZRNUdqckdjcDcrRFc4a29GS0hsUk5lY3hPNkcw?=
+ =?utf-8?B?eFJvQVJodEFEZkwxYnB6R2VxZEhiaVNuVTVZcHJ6a3JickR6QnlGRmxFOFFt?=
+ =?utf-8?B?b2xwS0FDY0FvSGZWMmFDM3NqTjBrZy9HSzN1Q01FWjZMWmgwNThzcm5wUXN4?=
+ =?utf-8?B?VTBZVzIwN0NoU3NTRzNqaG8zWkh1S1BrOWpBWld0L01OdmorUnpPbi9MU3RY?=
+ =?utf-8?B?ZVUyMDRvZzlIME8yR2kwbUVHenNIZ2FDaXF0VU1USHRoamh5blliMGk1LzNs?=
+ =?utf-8?B?N2RkNmVSTEJSbXR2RnRzM0VZb0VJMjJ5bWdSaVQ2SXYraTZ6UURlVjFvR1pO?=
+ =?utf-8?B?SVhMQmlKWmtxME9CQ0VsdnAyYVpaVXIrbGNEdUxPTlpDT1ViSS9QbHFTTWhP?=
+ =?utf-8?B?MUw0SFJKNGU1RHpUVzZLSWY2a0RJaTBpZTNHQjh5d0F1bXp0R3hLcmhwVktL?=
+ =?utf-8?B?NisrWkhRTFpsSE4yVUM3WU51S00zY252MjVTVmZNRFZlMVpTZWo2aFcwRFY5?=
+ =?utf-8?B?dUUzOEhJTTdsT1VHWnBPWWMxL1IvS0lZVE5VekZEazVubEczQ0NjemRMZ1Bu?=
+ =?utf-8?B?elJxS3NCVHVvb2YwbEloa0JFSjRSVk1LQ29GYWdOTmNjU0hsR3VPNTM2U0JV?=
+ =?utf-8?B?RXpaVDQvcUo2UmpnL3RiaWdEcytWeWptMURIRFNhbnIreWFjMVNIMDNBa0pM?=
+ =?utf-8?B?NEJuK1dDUU44ZjhQeTBHVTZBZmFObjF6SW53RTF5Uk1KQkxQNU5EUDBkaHA1?=
+ =?utf-8?B?d2RvaExWR2kxZHBBYUVTc1Rpcjk3ZW10VnpNRG9ybmFPbEFYVGhsWW02eGJK?=
+ =?utf-8?B?NGZqb2VDQmtxSytZSUpFelNOaTVqMUZ1aU9GTlpZYytNaXNTczZOWStIZnNX?=
+ =?utf-8?B?MEZvaHRDWXU2Q1RueDQ3VS9qRXJhTEdpQnMySE90R0p1MjRtb3pmQ1FraGt5?=
+ =?utf-8?B?aGFKTnE1TTByV2YrWlZacld6S3NyT0hEcXpyTlA2WCtqWkdnSFpJb09KKyto?=
+ =?utf-8?B?ZGl4bkNOQ2hLQ3A1YkVxUlBtNkFZK0hBL3h5dmpvR3NZcVMvWXZ0S2NqK0pr?=
+ =?utf-8?B?K1B5YlU1R3hjVVU4NElUMk94b08wMnA4L0JvQktQamJSdjFEbERxSzIxdllz?=
+ =?utf-8?Q?rnnthY5OI/syAaWprkMT50mhB?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <S1728511AbfHaSEm/20190831180442Z+580@vger.kernel.org>
- <08fbdf25-faa1-aa13-4f13-d30acbf27dda@mipisi.de> <20190902074917.GA21922@piout.net>
- <alpine.DEB.2.21.1909021247250.3955@nanos.tec.linutronix.de>
- <4fc3a016-ec2f-a15e-5fd1-6794a001e2d9@mipisi.de> <alpine.DEB.2.21.1909040047210.1902@nanos.tec.linutronix.de>
- <Y+O+VBSNywC7LKhn@panicking> <87edr02fsc.ffs@tglx> <CAOf5uwn1SKBR+pREZy9f-wnQf6Lw3epyHxiX_hjf_pOaiiSDWA@mail.gmail.com>
- <87zg9m26f2.ffs@tglx>
-In-Reply-To: <87zg9m26f2.ffs@tglx>
-From:   John Stultz <jstultz@google.com>
-Date:   Fri, 10 Feb 2023 17:04:28 -0800
-Message-ID: <CANDhNCopf___L_3cARqK8WDHSJWFYYikxvANHh2CRMjDRag9yw@mail.gmail.com>
-Subject: Re: Problem when function alarmtimer_suspend returns 0 if time delta
- is zero
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Michael Nazzareno Trimarchi <michael@amarulasolutions.com>,
-        Michael <michael@mipisi.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB6171.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 63eb2c1c-a035-486b-5a82-08db0bcc2395
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Feb 2023 01:06:00.0813
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: vyeH+CUlpDbVpPUDkqx/XS9PU+lDx+OREK15Vu7BOMwMlm5PVqFCB0KN8AruRKEkn2Rh8n+iM7Vjg62Q/W4yLw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR11MB5585
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 9, 2023 at 7:40 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> On Thu, Feb 09 2023 at 12:19, Michael Nazzareno Trimarchi wrote:
-> > On Wed, Feb 8, 2023 at 7:06 PM Thomas Gleixner <tglx@linutronix.de> wrote:
-> >> I wrote that patch against the back then mainline code. No idea if it's
-> >> still applying, but the underlying issue is still the same AFAICT.
-> >>
-> >> It needs some polishing and a proper changelog.
-> >>
-> > Ok, I will try to update it on some mainline kernel in my environment
-> > and test it back. I need
-> > a little information if it's possible. Consider that I have no
-> > experience in this area. I understand how
-> > code was designed in general but the part around the freezer and all
-> > those code you remove, what was the logic behind in the removed code?
->
-> What I can oracle out of that well commented gem is:
->
->   A userspace task invokes clock_nanosleep(CLOCK_*_ALARM, ...), which
->   arms an alarm timer. The expiry of an alarmtimer causes the system to
->   come out of suspend.
->
->   As the task invokes schedule() it can also be brought back from
->   schedule() via a signal. If that happens then the task cancels the
->   alarmtimer and returns to handle the signal. While doing that it can
->   be frozen, which means the alarm and therefore the wake from suspend
->   is lost.
->
->   To prevent that the code tries to save the earliest expiring alarm if
->   the task is marked freezing() and the suspend code takes that into
->   account.
->
-> John, did I summarize that correctly?
->
-> The change I made remove that magic and marks the task freezable when it
-> goes to schedule, which prevents the signal wakeup. That ensures that
-> the alarm stays armed during freeze/suspend.
->
-> That obviously needs some testing and scrunity by the folks which use
-> this mechanism. IIRC that's used by android, but I might be wrong.
-
-So, thanks for dredging this old thread up, I'm sorry I didn't see it
-the first time it came around.
-
-Not having a clear memory of why we do the (min == 0) early return, I
-went digging in, and found it was in the original git commit, so I
-went looking to the archives.
-
-It's completely not present in the first version of the patch:
-  https://lore.kernel.org/lkml/1288809079-14663-8-git-send-email-john.stultz@linaro.org/
-
-But it did appear in the second version:
-  https://lore.kernel.org/lkml/1290136329-18291-6-git-send-email-john.stultz@linaro.org/
-
-And from there it's a clear case of wanting to avoid setting the RTC
-if there were just no timers to expire.
-
-But, indeed this is a bug, as initializing min to ktime_set(0, 0) as
-the "invalid" case isn't a good plan, as it might be possible that
-suspend is run right as an alarmtimer expires, and you get a real zero
-delta value (as has been reported).
-
-Instead it seemed I should have used KTIME_MAX as the "invalid" case
-(as Thomas' patch uses).
-
-However, before the patch was merged, it changed further to handle the
-freezer waking a current sleeper:
-  https://lore.kernel.org/lkml/1294280159-2513-13-git-send-email-john.stultz@linaro.org/
-
-Which was then used to initialize the min value (still erroneously
-using 0 as an "invalid" value) in the case that the freezer woke a
-task sleeping which would cause the alarm to be lost (as Thomas
-summarized).
-
-Thomas' patch fixes the erronious 0-as-invalid initialization issue
-using KTIME_MAX but also simplifies the logic getting rid of the
-freezer handling.
-
-I don't have as much familiarity with the freezer handling change, so
-while it looks sane, I can't say I would likely catch an issue doing a
-visual review.
-
-Michael: If you are still intending to send the patch out, please do,
-otherwise I've already forward ported it so I can do some testing with
-it. I'm happy to put together a commit message and send it out if
-that's easier for you.
-
-And, just for correct Reported-by: tags: Michael Trimarchi, are you
-the same Michael (michael@mipisi.de) that originally reported this
-issue?
-
-thanks
--john
+PiBGcm9tOiBMdWNrLCBUb255IDx0b255Lmx1Y2tAaW50ZWwuY29tPg0KPiBTZW50OiBTYXR1cmRh
+eSwgRmVicnVhcnkgMTEsIDIwMjMgMTowMiBBTQ0KPiAuLi4NCj4gPiBEbyB5b3UgdGhpbmsgdGhl
+IG9yaWdpbmFsIGNvbW1pdCAiNGVjNjU2YmRmNDNhIiBvZiB0aGUgZmlsZSBza3hfZWRhYy5jDQo+
+ID4gKHRob3VnaCBpdCB3YXMgcmVtb3ZlZCkgaXMgdGhlIHJpZ2h0IGNvbW1pdCB0byBiZSB1c2Vk
+IGFzIHRoZSBGaXhlcyB0YWcgZm9yIHRoaXMNCj4+IHBhdGNoPw0KPiA+DQo+ID4gICAgICBGaXhl
+czogNGVjNjU2YmRmNDNhICgiRURBQywgc2t4X2VkYWM6IEFkZCBFREFDIGRyaXZlciBmb3IgU2t5
+bGFrZSIpDQo+IA0KPiBUaGlzIGlzIHRoZSBjb3JyZWN0IHRhZyAodGhpcyBwcm9ibGVtIGdvZXMg
+YWxsIHRoZSB3YXkgYmFjayB0byB0aGUgdmVyeSBmaXJzdA0KPiB2ZXJzaW9uIG9mIHRoaXMgZHJp
+dmVyKS4NCg0KVGhhbmsgeW91IGZvciB0aGUgY29ycmVjdGlvbi4gV2lsbCB1cGRhdGUgaXQgaW4g
+djIuDQoNCi1RaXV4dQ0KDQo=
