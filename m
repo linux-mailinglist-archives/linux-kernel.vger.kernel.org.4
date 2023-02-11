@@ -2,206 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 487E9692D49
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 03:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07CD7692D57
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 03:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjBKCNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 21:13:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40918 "EHLO
+        id S229518AbjBKCXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 21:23:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBKCNv (ORCPT
+        with ESMTP id S229437AbjBKCXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 21:13:51 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A843A749A8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 18:13:50 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id t1so8494013ybd.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 18:13:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AVP4LC3gxGWSgfBKADHFIlAxBAsTci144FYv9y485hg=;
-        b=NPI837DV4EdaoeNJsQeGxGiORVPx5kAQoNueJgiD1XlDEvkL9LVfAu7g3ZGGyS2doo
-         9Bq1oBX5y/YPpS9ZrpUunYyN+Xf8nMnvZ2NizCyftSOeC5K86feu6z58rTOc/+fowTIQ
-         vhFpdKzZ8TEHx+/CEj1PuP1piN8qezpPEWCjcrLJjkOqDZi4I9ECxLWeilbpYRv9DrbX
-         +2CLc7jkXjeuF4sSaZGeDFLtLIHb3eFqaC5BoEOP4RUEoS8nMtDxR9kByfgXTEtRa7PV
-         qYAcc1DMFmNJX9QkrCx1RTtCFSWIKDVZw7YwjPaB3LKXHZI/2WI82Ahf9j5iT45u0pET
-         /v8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AVP4LC3gxGWSgfBKADHFIlAxBAsTci144FYv9y485hg=;
-        b=X5Of8lRzSOgqDnU3jS8ZsTenPE8XEg5RPSjbZX5NvXXklmmXq8SQLP/1ZI5k/fqVYk
-         bMK1Uq/I+ZaSahDdRTAPboY1ymlmslmtfOshN6M31D6IRNFirZy3O5D+cWa9tBZw1002
-         XMV+tQE1mk3BoVqcJDtYYOXIXXeVMp3+nKi1k4iAjOG/oGec9YxNXaRWvzqcOLeWaXev
-         z85p6NHuf1m6IlIvRMTCbno78eU5uzjykIuoFUriUAF4B/SJ/qLAKGAdepjKAnVzLTHR
-         6/HtxRs1y+8pyPg3lK9SWxvGIjMhv3af2E/EHAOkWJxUBukS9MzexzQayCiqR9rye8Ah
-         xz2g==
-X-Gm-Message-State: AO0yUKXm1eLT1OZvQD2vG546YVNtC+NM5aYOO7IW6edwX5K91Lcsi5og
-        3c6y3dqqBcmBzLiKTEWdzl0fw6Zcdd0vmReO//DKRw==
-X-Google-Smtp-Source: AK7set+3gfrSyBe2ekI0j3jHxJx6O06Jkj6lGbli3p2gDEex73DfaLxJS9IdJnjitOuP+Gh+sLvcheeC4VLot30O7pM=
-X-Received: by 2002:a25:eb0f:0:b0:8ef:c897:33aa with SMTP id
- d15-20020a25eb0f000000b008efc89733aamr373455ybs.288.1676081629619; Fri, 10
- Feb 2023 18:13:49 -0800 (PST)
+        Fri, 10 Feb 2023 21:23:51 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD7073582;
+        Fri, 10 Feb 2023 18:23:50 -0800 (PST)
+Date:   Sat, 11 Feb 2023 02:23:42 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=t-8ch.de; s=mail;
+        t=1676082227; bh=cND6peTvw/I7idpgc1XRWngdJLvgKPcW8uvL69WIsKw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TUH67zjYEcM4rphEoXAflumxV/kGAOpMKtZcnce3H1MCUPVBOFiJz5G1yrvNPvtDP
+         eKM13NRrvSZ91HY/1GGgCwMgU/gkpBPdblyUwLlFV38QccrCSRqRniny0T2kSi1OeU
+         2dih48HAu8YK7ZCtohAmN3cChsS6OrGwzsbGmeu4=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Orlando Chamberlain <orlandoch.dev@gmail.com>
+Cc:     Aditya Garg <gargaditya08@live.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        "jkosina@suse.cz" <jkosina@suse.cz>,
+        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+        Andy Shevchenko <andy@infradead.org>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "ronald@innovation.ch" <ronald@innovation.ch>,
+        "kekrby@gmail.com" <kekrby@gmail.com>
+Subject: Re: [PATCH 3/3] HID: apple-magic-backlight: Add driver for keyboard
+ backlight on internal Magic Keyboards
+Message-ID: <20230211022342.7xyvd3qsa42lwrkq@t-8ch.de>
+References: <E5D8BEBA-3C5B-460F-BD2C-39470A793CC3@live.com>
+ <40274C3D-4F4F-479C-944C-EEBDC78F959C@live.com>
+ <868AA58D-2399-4E4A-A6C6-73F88DB13992@live.com>
+ <7D70F1FE-7F54-4D0A-8922-5466AA2AD364@live.com>
+ <20230210162518.pe7ipe44falu3j3k@t-8ch.de>
+ <20230211102425.178e1c78@redecorated-mbp>
 MIME-Version: 1.0
-References: <cover.1676067791.git.quic_sudaraja@quicinc.com>
- <CAJuCfpHWQ8NV=iR3BN+pt1c8FynCnRqyyriHb1gLxFgiNVrwjA@mail.gmail.com>
- <e944536f-a04c-5528-601e-d7f505a761e8@quicinc.com> <CAJuCfpGLkkS2yx0d9+2nYtEtxANSH5H3EgCmWZax4N-ieEBG7g@mail.gmail.com>
- <15cd8816-b474-0535-d854-41982d3bbe5c@quicinc.com>
-In-Reply-To: <15cd8816-b474-0535-d854-41982d3bbe5c@quicinc.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Fri, 10 Feb 2023 18:13:38 -0800
-Message-ID: <CAJuCfpHihLgHCcsAqMJ_o2u7Ux9B5HFGsV2y_L2_5GXYAGYLnw@mail.gmail.com>
-Subject: Re: [PATCH] psi: reduce min window size to 50ms
-To:     Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        mark.rutland@arm.com, will@kernel.org,
-        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Sukadev Bhattiprolu <quic_sukadev@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Patrick Daly <quic_pdaly@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230211102425.178e1c78@redecorated-mbp>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 5:46 PM Sudarshan Rajagopalan
-<quic_sudaraja@quicinc.com> wrote:
->
->
-> On 2/10/2023 5:09 PM, Suren Baghdasaryan wrote:
-> > On Fri, Feb 10, 2023 at 4:45 PM Sudarshan Rajagopalan
-> > <quic_sudaraja@quicinc.com> wrote:
-> >>
-> >> On 2/10/2023 3:03 PM, Suren Baghdasaryan wrote:
-> >>> On Fri, Feb 10, 2023 at 2:31 PM Sudarshan Rajagopalan
-> >>> <quic_sudaraja@quicinc.com> wrote:
-> >>>> The PSI mechanism is useful tool to monitor pressure stall
-> >>>> information in the system. Currently, the minimum window size
-> >>>> is set to 500ms. May we know what is the rationale for this?
-> >>> The limit was set to avoid regressions in performance and power
-> >>> consumption if the window is set too small and the system ends up
-> >>> polling too frequently. That said, the limit was chosen based on
-> >>> results of specific experiments which might not represent all
-> >> Rightly as you said, the effect on power and performance depends on type
-> >> of the system - embedded systems, or Android mobile, or commercial VMs
-> >> or servers. With higher PSI sampling, it may not be much of power impact
-> >> to embedded systems with low-tier chipsets or performance impact to
-> >> powerful servers.
-> >>
-> >>> usecases. If you want to change this limit, you would need to describe
-> >>> why the new limit is inherently better than the current one (why not
-> >>> higher, why not lower).
-> >> This is in regards to the userspace daemon [1] that we are working on,
-> >> that dynamically resizes the VM memory based on PSI memory pressure
-> >> events. With current min window size of 500ms, the PSI monitor sampling
-> >> period would be 50ms. So to detect increase in memory demand in system
-> >> and plug-in memory into VM when pressure goes up, the minimum time the
-> >> process needs to stall for is 50ms before a event can be generated and
-> >> sent out to userspace and the daemon can do actions.
-> >>
-> >> This again I'm talking w.r.t. lightweight embedded systems, where even
-> >> background kswapd/kcompd (which I'm calling it as natural memory
-> >> pressure) in the system would be less than 5-10ms stall. So any stall
-> >> more than 5-10ms would "hint" us that a memory consuming usecase has
-> >> ranB  and memory may need to be plugged in.
-> >>
-> >> So in these cases, having as low as 5ms psimon sampling time would give
-> >> us faster reaction time and daemon can be responsive more quickly. In
-> >> general, this will reduce the malloc latencies significantly.
-> >>
-> >> Pasting here the same excerpt I mentioned in [1].
-> > My question is: why do you think 5ms is the optimal limit here? I want
-> > to avoid a race to the bottom where next time someone can argue that
-> > they would like to detect a stall within a lower period than 5ms.
-> > Technically the limit can be as small as one wants but at some point I
-> > think we should consider the possibility of this being used for a DoS
-> > attack.
->
-> Well the optimal limit should be something which is least destructive? I
-> do understand about possibility of DoS attacks, but wouldn't that still
-> be possible with 500ms window today? Which will atleast be 1/10th less
-> severe compared to 50ms window. The way I see it is - min pressure
-> sampling should be such that even the least pressure stall which we
-> think is significant should be captured (this could be 5ms or 50ms at
-> present) while balancing the power and performance impact across all
-> usecases.
->
-> At present, Android's LMKD sets 1000ms as window for which it considers
-> 100ms sampling to be significant. And here, with psi_daemon usecase we
-> are saying 5ms sampling would be significant. So there's no actual
-> optimal limit, but we must limit as much possible without effecting
-> power or performance as a whole. Also, this is just the "minimum
-> allowable" window, and system admins can configure it as per the system
-> type/requirement.
+On Sat, Feb 11, 2023 at 10:24:25AM +1100, Orlando Chamberlain wrote:
+> On Fri, 10 Feb 2023 16:25:18 +0000
+> Thomas Weißschuh <thomas@t-8ch.de> wrote:
+> 
+> > On Fri, Feb 10, 2023 at 03:45:15AM +0000, Aditya Garg wrote:
+> > > From: Orlando Chamberlain <orlandoch.dev@gmail.com>
+> > > +static void apple_magic_backlight_power_set(struct
+> > > apple_magic_backlight *backlight,
+> > > +					   char power, char rate)
+> > > +{
+> > > +	struct hid_report *rep = backlight->power;
+> > > +
+> > > +	rep->field[0]->value[0] = power ? 1 : 0;
+> > > +	rep->field[1]->value[0] = 0x5e; /* Mimic Windows */
+> > > +	rep->field[1]->value[0] |= rate << 8;
+> > > +
+> > > +	hid_hw_request(backlight->hdev, backlight->power,
+> > > HID_REQ_SET_REPORT); +}
+> > > +
+> > > +static void apple_magic_backlight_brightness_set(struct
+> > > apple_magic_backlight *backlight,
+> > > +						int brightness,
+> > > char rate) +{
+> > > +	struct hid_report *rep = backlight->brightness;
+> > > +
+> > > +	rep->field[0]->value[0] = brightness;
+> > > +	rep->field[1]->value[0] = 0x5e; /* Mimic Windows */
+> > > +	rep->field[1]->value[0] |= rate << 8;
+> > > +
+> > > +	hid_hw_request(backlight->hdev, backlight->brightness,
+> > > HID_REQ_SET_REPORT);
+> > > +  
+> > 
+> > The two functions above are nearly identical.
+> 
+> They are indeed quite similar, and I can turn the backlight off with the
+> brightness one, but when I logged the usb packets Windows used, it used
+> both so I've done the same in the Linux driver to (hopefully) ensure it
+> works with any other models or firmware updates that the Windows driver
+> works on.
 
-Ok, let me ask you another way which might be more productive. What
-caused you to choose 5ms as the time you care to react to a stall
-buildup?
+I didn't mean to suggest changing the logic, just the way the code is
+organized:
 
->
-> Also, about possible DoS attacks - file permissions for
-> /proc/pressure/... can be set such that not any random user can register
-> to psi events right?
+static void apple_magic_backlight_report_set(struct apple_magic_backlight *backlight,
+                                             struct hid_report *rep, char value, char rate)
+{
+	rep->field[0]->value[0] = value;
+	rep->field[1]->value[0] = 0x5e; /* Mimic Windows */
+	rep->field[1]->value[0] |= rate << 8;
 
-True. We have a CAP_SYS_RESOURCE check for the writers of these files.
+	hid_hw_request(backlight->hdev, rep, HID_REQ_SET_REPORT);
+}
 
->
-> >
-> >> "
-> >>
-> >> 4. Detecting increase in memory demand b   when a certain usecase starts
-> >> in VM that does memory allocations, it will stall causing PSI mechanism
-> >> to generate a memory pressure event to userspace. To simply put, when
-> >> pressure increases certain set threshold, it can make educated guess
-> >> that a memory requiring usecase has ran and VM system needs memory to be
-> >> added.
-> >>
-> >> "
-> >>
-> >> [1]
-> >> https://lore.kernel.org/linux-arm-kernel/1bf30145-22a5-cc46-e583-25053460b105@redhat.com/T/#m95ccf038c568271e759a277a08b8e44e51e8f90b
-> >>
-> >>> Thanks,
-> >>> Suren.
-> >>>
-> >>>> For lightweight systems such as Linux Embedded Systems, PSI
-> >>>> can be used to monitor and track memory pressure building up
-> >>>> in the system and respond quickly to such memory demands.
-> >>>> Example, the Linux Embedded Systems could be a secondary VM
-> >>>> system which requests for memory from Primary host. With 500ms
-> >>>> window size, the sampling period is 50ms (one-tenth of windwo
-> >>>> size). So the minimum amount of time the process needs to stall,
-> >>>> so that a PSI event can be generated and actions can be done
-> >>>> is 50ms. This reaction time can be much reduced by reducing the
-> >>>> sampling time (by reducing window size), so that responses to
-> >>>> such memory pressures in system can be serviced much quicker.
-> >>>>
-> >>>> Please let us know your thoughts on reducing window size to 50ms.
-> >>>>
-> >>>> Sudarshan Rajagopalan (1):
-> >>>>     psi: reduce min window size to 50ms
-> >>>>
-> >>>>    kernel/sched/psi.c | 2 +-
-> >>>>    1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>>
-> >>>> --
-> >>>> 2.7.4
-> >>>>
+static void apple_magic_backlight_set(struct apple_magic_backlight *backlight,
+				     int brightness, char rate)
+{
+	apple_magic_backlight_report_set(backlight, backlight->power, !!brightness, rate);
+	if (brightness)
+		apple_magic_backlight_report_set(backlight, backlight->brightness, brightness, rate);
+}
+
+This way you can get rid of the duplicated code.
+
+> > 
+> > > +
+> > > +static void apple_magic_backlight_set(struct apple_magic_backlight
+> > > *backlight,
+> > > +				     int brightness, char rate)
+> > > +{
+> > > +	apple_magic_backlight_power_set(backlight, brightness,
+> > > rate);
+> > > +	if (brightness)
+> > > +		apple_magic_backlight_brightness_set(backlight,
+> > > brightness, rate); +}
+> > > +
