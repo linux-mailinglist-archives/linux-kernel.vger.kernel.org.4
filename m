@@ -2,135 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 831CE693174
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 15:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F384693178
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 15:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbjBKONx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 09:13:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
+        id S229632AbjBKOXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 09:23:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjBKONu (ORCPT
+        with ESMTP id S229447AbjBKOXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 09:13:50 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F7C2B2B3
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 06:13:46 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id ja21so1829623plb.13
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 06:13:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oqGRKzSo6E4/f+woXcOCjpwjArDsyHYfDxL4HTg7iio=;
-        b=wCNiYJcLkvEUpEZHzCL9RSSTZah20e3Vx5u3HSFTxE8bpS6ViAr7yu2nh6p7lms2yc
-         yOAKa9NxNMFxnywW9IFuGVT0q1LbIqUR9FQgUsxxKG31pWabOZ5AxPL4nn2Eak6eBUFy
-         z9kShKrMpIJtUnj5hM/0l2fqIh8uVfF/GjluWOL0mUT0gf0a49ylXOVttlcfR+bB7PC3
-         GyAHRdXjdOPP7uzT3iNyZ4YznGS5MkfCepIrwxKiMOQ+SktVrYhDDeKcrgl50xxID1bi
-         32NrSPKIGD0eBfPDf3QV9+Hss3B8PpPqCifUU0VKfGtwDAHQrDhNqYh5ouBiCy0xt09G
-         ynvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oqGRKzSo6E4/f+woXcOCjpwjArDsyHYfDxL4HTg7iio=;
-        b=rjGF81qyNzNLAK7atON8+WZvaaZS0rlz6Jz0ICkIyWTN7Qg/GA9PjSowQ9q1ixGh9M
-         nn5QB03aCHC3t0sSJ66vCPoZxF5rN5B+sONH35csHdUuO/9GeHXJP42CPKPAnIfUQlaT
-         AIVEHfgA9TDNmWPYA2bOpGbZfLpIjlWAU3kE8jDV3N+GCCS78HVY5DA2+rJ0TLYi0jAC
-         x9fml2COSX297wu/JqmvtVWlM/NaE8ycXzSicqT6rrW5eweoCZJlWRlagC5Qv1gfak7r
-         B9XH2AfkGmyxU78sHPiqe2+6it/xi6UDoB566UpjMaNOU31nDk5AkbD9dP1zAPJVDGE6
-         tkOQ==
-X-Gm-Message-State: AO0yUKX0P9+hC5a2R/0g1+lJeykVTmuZkE6pfBoJ5cQC1aQqKui28yeV
-        geBWoIWYxkeLSDXqkqocHVwK5fkwLxaktl5P
-X-Google-Smtp-Source: AK7set/LnVAtiy5TUkkuzhteoCRyrs4pqpY8XSDBYd/FSNwWtCjGA99X1ZzvEOtfDL0WSzAPF6ud0g==
-X-Received: by 2002:a17:902:680b:b0:199:3f82:ef62 with SMTP id h11-20020a170902680b00b001993f82ef62mr15067071plk.5.1676124826228;
-        Sat, 11 Feb 2023 06:13:46 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id q10-20020a170902b10a00b00174f61a7d09sm5015531plr.247.2023.02.11.06.13.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Feb 2023 06:13:45 -0800 (PST)
-Message-ID: <55eaac9e-0d77-1fa2-df27-4d64e123177e@kernel.dk>
-Date:   Sat, 11 Feb 2023 07:13:44 -0700
+        Sat, 11 Feb 2023 09:23:43 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC98D23C6C;
+        Sat, 11 Feb 2023 06:23:41 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pQqmy-000309-Cp; Sat, 11 Feb 2023 15:23:40 +0100
+Message-ID: <3d702234-88b3-42ae-9b12-0ccf19bd9bcb@leemhuis.info>
+Date:   Sat, 11 Feb 2023 15:23:39 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: copy on write for splice() from file to pipe?
-Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Stefan Metzmacher <metze@samba.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API Mailing List <linux-api@vger.kernel.org>,
-        io-uring <io-uring@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Samba Technical <samba-technical@lists.samba.org>
-References: <CAHk-=wgA=rB=7M_Fe3n9UkoW_7dqdUT2D=yb94=6GiGXEuAHDA@mail.gmail.com>
- <1dd85095-c18c-ed3e-38b7-02f4d13d9bd6@kernel.dk>
- <CAHk-=wiszt6btMPeT5UFcS=0=EVr=0injTR75KsvN8WetwQwkA@mail.gmail.com>
- <fe8252bd-17bd-850d-dcd0-d799443681e9@kernel.dk>
- <CAHk-=wiJ0QKKiORkVr8n345sPp=aHbrLTLu6CQ-S0XqWJ-kJ1A@mail.gmail.com>
- <7a2e5b7f-c213-09ff-ef35-d6c2967b31a7@kernel.dk>
- <CALCETrVx4cj7KrhaevtFN19rf=A6kauFTr7UPzQVage0MsBLrg@mail.gmail.com>
- <b44783e6-3da2-85dd-a482-5d9aeb018e9c@kernel.dk>
- <2bb12591-9d24-6b26-178f-05e939bf3251@kernel.dk>
- <CAHk-=wjzqrD5wrfeaU390bXEEBY2JF-oKmFN4fREzgyXsbQRTQ@mail.gmail.com>
- <Y+cJDnnMuirSjO3E@T590>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <Y+cJDnnMuirSjO3E@T590>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/3] venus: firmware: Correct non-pix start and end
+ addresses
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Nathan Hebert <nhebert@chromium.org>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
+          Linux regressions mailing list 
+          <regressions@lists.linux.dev>
+References: <20221005083730.963322-1-stanimir.varbanov@linaro.org>
+ <20221005083730.963322-3-stanimir.varbanov@linaro.org>
+ <Y9LSMap+jRxbtpC8@google.com>
+ <b2007bc9-b05f-eb17-a373-9587b01d3788@leemhuis.info>
+In-Reply-To: <b2007bc9-b05f-eb17-a373-9587b01d3788@leemhuis.info>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1676125421;f3f8427f;
+X-HE-SMSGID: 1pQqmy-000309-Cp
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/10/23 8:18?PM, Ming Lei wrote:
-> On Fri, Feb 10, 2023 at 02:08:35PM -0800, Linus Torvalds wrote:
->> On Fri, Feb 10, 2023 at 1:51 PM Jens Axboe <axboe@kernel.dk> wrote:
+[TLDR: This mail in primarily relevant for Linux regression tracking. A
+change or fix related to the regression discussed in this thread was
+posted or applied, but it did not use a Link: tag to point to the
+report, as Linus and the documentation call for. Things happen, no
+worries -- but now the regression tracking bot needs to be told manually
+about the fix. See link in footer if these mails annoy you.]
+
+On 05.02.23 12:00, Linux kernel regression tracking (#adding) wrote:
+> On 26.01.23 20:19, Matthias Kaehlcke wrote:
+>> On Wed, Oct 05, 2022 at 11:37:29AM +0300, Stanimir Varbanov wrote:
+>>> The default values for those registers are zero.
 >>>
->>> Speaking of splice/io_uring, Ming posted this today:
->>>
->>> https://lore.kernel.org/io-uring/20230210153212.733006-1-ming.lei@redhat.com/
->>
->> Ugh. Some of that is really ugly. Both 'ignore_sig' and
->> 'ack_page_consuming' just look wrong. Pure random special cases.
->>
->> And that 'ignore_sig' is particularly ugly, since the only thing that
->> sets it also sets SPLICE_F_NONBLOCK.
->>
->> And the *only* thing that actually then checks that field is
->> 'splice_from_pipe_next()', where there are exactly two
->> signal_pending() checks that it adds to, and
->>
->>  (a) the first one is to protect from endless loops
->>
->>  (b) the second one is irrelevant when  SPLICE_F_NONBLOCK is set
->>
->> So honestly, just NAK on that series.
->>
->> I think that instead of 'ignore_sig' (which shouldn't exist), that
->> first 'signal_pending()' check in splice_from_pipe_next() should just
->> be changed into a 'fatal_signal_pending()'.
+>>> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+> [...]
+>> I found that this commit prevents the AOSS from entering sleep mode during
+>> system suspend at least on sc7180 and sc7280. AOSS not entering sleep mode
+>> leads to a (apparently significant) increase in S3 power consumption, on
+>> trogdor and herobrine it prevents the system from staying suspended, because
+>> the embedded controller detect the condition and wakes the sytem up again.
 > 
-> Good point, here the signal is often from task_work_add() called by
-> io_uring.
+> Thanks for the report. To be sure the issue doesn't fall through the
+> cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+> tracking bot:
+> 
+> #regzbot ^introduced a837e5161cfffbb32
+> #regzbot title meida: venus: firmware: AOSS doesn't seel anymore on at
+> least sc7180 and sc7280
+> #regzbot ignore-activity
 
-Usually you'd use task_sigpending() to distinguis the two, but
-fatal_signal_pending() as Linus suggests would also work. The only
-concern here is that since you'll be potentially blocking on waiting for
-the pipe to be readable - if task does indeed have task_work pending and
-that very task_work is the one that will ensure that the pipe is now
-readable, then you're waiting condition will never be satisfied.
+#regzbot monitor:
+https://lore.kernel.org/all/20230207102254.1446461-1-javierm@redhat.com/
+#regzbot ignore-activity
 
--- 
-Jens Axboe
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
+
+
 
