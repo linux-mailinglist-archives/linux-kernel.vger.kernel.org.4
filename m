@@ -2,67 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D35F693257
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 17:12:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 580FE69325B
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 17:15:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbjBKQLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 11:11:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
+        id S229771AbjBKQPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 11:15:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjBKQLw (ORCPT
+        with ESMTP id S229679AbjBKQPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 11:11:52 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8F28A66;
-        Sat, 11 Feb 2023 08:11:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=QIsGxB3foIcUzmrB1itBt2fP/mbnt75It4usqWhNhqE=; b=P7
-        vtKGwpGWflFG3N+B1RRIjxiM27gprx3GRBS7un6JwuWk8/FV4d9LEQ4CwLk+IFnSxLF22ydIkzt32
-        X9aBWQyuop1jYaVXEqsxufkvQT5F3P3eUtKeDSavDF2GGB9RX3+B35o5Hygx+fQ2daJPJiXTvnERk
-        aEASDZm9A+FlUko=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pQsTP-004iBC-Gy; Sat, 11 Feb 2023 17:11:35 +0100
-Date:   Sat, 11 Feb 2023 17:11:35 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH 08/12] net: stmmac: Add glue layer for StarFive JH7100 SoC
-Message-ID: <Y+e+N/aiqCctIp6e@lunn.ch>
-References: <20230211031821.976408-1-cristian.ciocaltea@collabora.com>
- <20230211031821.976408-9-cristian.ciocaltea@collabora.com>
+        Sat, 11 Feb 2023 11:15:06 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0857714229
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 08:15:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1676132094; bh=obYcn7IR8jiFOnVOs2E2wFw+fR1SLSLMq4/1K3z69X4=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=oS34WFIbPmdtwukzDrKYA05mX11v2hcFZ1uKoT1IPvEKVUgFNWtJCDuMgLwelhGhb
+         rFlDgh+toN3u7qNGr78AfjjpSIIOSNeFDM/tCs01lu5H1bzhhGxSDLi6lH47c07FRM
+         WWKgFmUv+HmAl48/a4+eRe7ZpOPbPFRYH75YpAdE=
+Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Sat, 11 Feb 2023 17:14:54 +0100 (CET)
+X-EA-Auth: tlLZDsFUGZ7clccaOzAbomGIsQ5H42fX/+AxviRK7WQFaJZ3026U9tqRI3JQp5e5tLx1JvjfwWY7toesuDhX1LbqiIXqNVYe
+Date:   Sat, 11 Feb 2023 21:44:47 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: [PATCH] soc: dove: release node before breaking child_of_node loop
+Message-ID: <Y+e+90hi6KwoB/xh@ubun2204.myguest.virtualbox.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230211031821.976408-9-cristian.ciocaltea@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,30 +49,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +
-> +#define JH7100_SYSMAIN_REGISTER28 0x70
-> +/* The value below is not a typo, just really bad naming by StarFive ¯\_(ツ)_/¯ */
-> +#define JH7100_SYSMAIN_REGISTER49 0xc8
+The iterator for_each_available_child_of_node() increments the refcount
+of the child node it is processing. Release such a reference when the
+loop needs to break due to an error during its execution.
+Issue identified using for_each_child.cocci Coccinelle semantic patch.
 
-Seems like the comment should be one line earlier?
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+Please note: The proposed change is compile tested only. I do not have the
+necessary hardware to perform additional testing. Please suggest if there is an
+alternate means available to further test this change.
+ drivers/soc/dove/pmu.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-There is value in basing the names on the datasheet, but you could
-append something meaningful on the end:
+diff --git a/drivers/soc/dove/pmu.c b/drivers/soc/dove/pmu.c
+index ffc5311c0ed8..6202dbcd20a8 100644
+--- a/drivers/soc/dove/pmu.c
++++ b/drivers/soc/dove/pmu.c
+@@ -410,13 +410,16 @@ int __init dove_init_pmu(void)
+ 		struct pmu_domain *domain;
+ 
+ 		domain = kzalloc(sizeof(*domain), GFP_KERNEL);
+-		if (!domain)
++		if (!domain) {
++			of_node_put(np);
+ 			break;
++		}
+ 
+ 		domain->pmu = pmu;
+ 		domain->base.name = kasprintf(GFP_KERNEL, "%pOFn", np);
+ 		if (!domain->base.name) {
+ 			kfree(domain);
++			of_node_put(np);
+ 			break;
+ 		}
+ 
+-- 
+2.34.1
 
-#define JH7100_SYSMAIN_REGISTER49_DLYCHAIN 0xc8
 
-???
 
-> +	if (!of_property_read_u32(np, "starfive,gtxclk-dlychain", &gtxclk_dlychain)) {
-> +		ret = regmap_write(sysmain, JH7100_SYSMAIN_REGISTER49, gtxclk_dlychain);
-> +		if (ret)
-> +			return dev_err_probe(dev, ret, "error selecting gtxclk delay chain\n");
-> +	}
-
-You should probably document that if starfive,gtxclk-dlychain is not
-found in the DT blob, the value for the delay chain is undefined.  It
-would actually be better to define it, set it to 0 for example. That
-way, you know you don't have any dependency on the bootloader for
-example.
-
-	Andrew
