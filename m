@@ -2,74 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7EA692C7C
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 02:18:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D842A692C7E
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 02:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjBKBSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 20:18:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
+        id S229886AbjBKBU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 20:20:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBKBSh (ORCPT
+        with ESMTP id S229447AbjBKBU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 20:18:37 -0500
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342333A08D
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 17:18:36 -0800 (PST)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-52ecd867d89so43067957b3.8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 17:18:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cp2zIBbIpvXAM7Zj4Wg0jFyWUO1R0STE0dCNXKFyBY4=;
-        b=AELaoNaTADorAiw+/Zz9py1vM8XiJQuku5iNqK6EosG6jV2SGVk0PQPEyYLgtzjy63
-         Kiv1zMwLkvvwExoFz3QfYzCTCfNQr3XB2G5E4tsDfCyFh8Todn0lZs+ZKACVgC6Uqo4E
-         2vapFN3R9BgKr2ekNd99ryKlPqvy+lMNo7kQ8TsyLXDNX21suN/FRH7Vlq1EU9HdliDV
-         CwM/vZS2W0bJgackJ6I6VILwPPXUWmek4YonUmROzRLojSpMCvwodLRVs8yOX1a1fT/r
-         2BvNW+VMIWRUzipzsh53iLe+fIXZFgCTlo2YBtMVHHUxCINVjxVf4mdbOc4pn8TaNn8g
-         kuZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cp2zIBbIpvXAM7Zj4Wg0jFyWUO1R0STE0dCNXKFyBY4=;
-        b=PGGfyVQq4aKOgPpHefECHKp9A6SWx+TQiTNWr0OXq3OZtwHiZkrt5Y4TkQYYJPSzL4
-         f9scEyNBX7v7Ct0XTwXzoHxu7jWtpC7RHuKOzrP35sI8vS02G48gQ6CN773ra3hYZvbG
-         LZpL2rsKjvjT3ydYzLCJObQFn1U+qEwHejir8BysYybp9jvqA8JUQIZutj546MNFR6ik
-         MEt6XvCndPvpJep4CPR/CO20IdhMphdFUhIHlzC4tbHdFp256wrLN/DbxVZ31Xu0s9Hd
-         56Te53hXuqFAZFLPMVMmIv8mTfxAJ1Rl1bJ7+v8n+fPt3sddBSQoZEY4+pCQvWo6Y0xm
-         sT6g==
-X-Gm-Message-State: AO0yUKVvXsvlhwFkOLXEGGShfOnoqzHP1VoMQowgPGfJiD32lVHvi2Fp
-        aFOtQBBS6LSAaPpiqcmhggMrhpq6ceH1OeDYU99t
-X-Google-Smtp-Source: AK7set+N85BqMue2v5DA9Vr88JsCXNggIFu/8mvX8mUPoZrr6/LcRki42XTM/2uOd37lvUPRUKmH16fMgwdWvO+OcmQ=
-X-Received: by 2002:a0d:cb04:0:b0:52b:e174:c153 with SMTP id
- n4-20020a0dcb04000000b0052be174c153mr1426017ywd.271.1676078315356; Fri, 10
- Feb 2023 17:18:35 -0800 (PST)
+        Fri, 10 Feb 2023 20:20:56 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076903A08D
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 17:20:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676078455; x=1707614455;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NvjO3EA2KmrquqdT0hI1GW8nOfSuMARy4qFYkmJmeSI=;
+  b=V128GrwrzXyz2cv31f0z/M1i5ibc7zMh87CzZwHpHJNDczzeuV0UWTUC
+   WMzLdTieB0XKy5NpzvJTZ8unhcwT4o++SQzgRrVvUQTU4hA+a9P/d2TRB
+   eMeWqpQryy+D/9Z80ukN5VmasP4JrpO12QBei14FaXeGe66JRQXXqk2FA
+   54USkPGFAJFsWX/NXP3qQust4mMPH4rTCpw7sT2z3hxKwCX1nfNlgqTKf
+   pjWshKsJJuaL9xYTHsWmJzUM1dwog4t/DoDKHAHeecQrTMNwIJFxiqC42
+   1MZk+dfHn4XEIwUW7Qv5rlKz5nVzz63xM3St1t42KuQ5eNx0IhFVXQkXX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="328263729"
+X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
+   d="scan'208";a="328263729"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 17:20:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="792154749"
+X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
+   d="scan'208";a="792154749"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 10 Feb 2023 17:20:52 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pQeZP-00069f-2d;
+        Sat, 11 Feb 2023 01:20:51 +0000
+Date:   Sat, 11 Feb 2023 09:19:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Qing Zhang <zhangqing@loongson.cn>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Huacai Chen <chenhuacai@kernel.org>
+Subject: net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1
+ (different address spaces)
+Message-ID: <202302110944.Q3Nt0hMV-lkp@intel.com>
 MIME-Version: 1.0
-References: <S1728511AbfHaSEm/20190831180442Z+580@vger.kernel.org>
- <08fbdf25-faa1-aa13-4f13-d30acbf27dda@mipisi.de> <20190902074917.GA21922@piout.net>
- <alpine.DEB.2.21.1909021247250.3955@nanos.tec.linutronix.de>
- <4fc3a016-ec2f-a15e-5fd1-6794a001e2d9@mipisi.de> <alpine.DEB.2.21.1909040047210.1902@nanos.tec.linutronix.de>
- <Y+O+VBSNywC7LKhn@panicking> <87edr02fsc.ffs@tglx> <CAOf5uwn1SKBR+pREZy9f-wnQf6Lw3epyHxiX_hjf_pOaiiSDWA@mail.gmail.com>
- <87zg9m26f2.ffs@tglx> <CANDhNCopf___L_3cARqK8WDHSJWFYYikxvANHh2CRMjDRag9yw@mail.gmail.com>
-In-Reply-To: <CANDhNCopf___L_3cARqK8WDHSJWFYYikxvANHh2CRMjDRag9yw@mail.gmail.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Fri, 10 Feb 2023 17:18:23 -0800
-Message-ID: <CANDhNCqaawcr6hxxKsk1Vd8e4kvwd8-qgVv--uLtWnB1AoJdig@mail.gmail.com>
-Subject: Re: Problem when function alarmtimer_suspend returns 0 if time delta
- is zero
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Michael Nazzareno Trimarchi <michael@amarulasolutions.com>,
-        Michael <michael@mipisi.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,22 +63,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 5:04 PM John Stultz <jstultz@google.com> wrote:
-> Thomas' patch fixes the erronious 0-as-invalid initialization issue
-> using KTIME_MAX but also simplifies the logic getting rid of the
-> freezer handling.
->
-> I don't have as much familiarity with the freezer handling change, so
-> while it looks sane, I can't say I would likely catch an issue doing a
-> visual review.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   420b2d431d18a2572c8e86579e78105cb5ed45b0
+commit: 93a4fa622eb061f75f87f0cf9609ab4e69c67d01 LoongArch: Add STACKTRACE support
+date:   6 months ago
+config: loongarch-randconfig-s052-20230210 (https://download.01.org/0day-ci/archive/20230211/202302110944.Q3Nt0hMV-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=93a4fa622eb061f75f87f0cf9609ab4e69c67d01
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 93a4fa622eb061f75f87f0cf9609ab4e69c67d01
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch SHELL=/bin/bash net/core/
 
-Actually, because of this, I'm going to split Thomas' change in two.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302110944.Q3Nt0hMV-lkp@intel.com/
 
-The first to just use KTIME_MAX as the invalid initialization value,
-and the second to cleanup the freezer logic.
+sparse warnings: (new ones prefixed by >>)
+   net/core/dev.c:3325:23: sparse: sparse: incorrect type in argument 4 (different base types) @@     expected restricted __wsum [usertype] csum @@     got unsigned int @@
+   net/core/dev.c:3325:23: sparse:     expected restricted __wsum [usertype] csum
+   net/core/dev.c:3325:23: sparse:     got unsigned int
+   net/core/dev.c:3325:23: sparse: sparse: cast from restricted __wsum
+   net/core/dev.c:204:9: sparse: sparse: context imbalance in 'unlist_netdevice' - different lock contexts for basic block
+   net/core/dev.c:3829:17: sparse: sparse: context imbalance in '__dev_queue_xmit' - different lock contexts for basic block
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
+   net/core/dev.c:5056:17: sparse: sparse: context imbalance in 'net_tx_action' - different lock contexts for basic block
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
+>> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   net/core/dev.c:4348:9: sparse:     expected void *ptr
+   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
 
-That way if the freezer change is problematic we can revert it and not
-lose the fix here.
+vim +4348 net/core/dev.c
 
-thanks
--john
+^1da177e4c3f41 Linus Torvalds            2005-04-16  4341  
+eecfd7c4e36ff5 Eric Dumazet              2010-05-06  4342  /* Called with irq disabled */
+eecfd7c4e36ff5 Eric Dumazet              2010-05-06  4343  static inline void ____napi_schedule(struct softnet_data *sd,
+eecfd7c4e36ff5 Eric Dumazet              2010-05-06  4344  				     struct napi_struct *napi)
+eecfd7c4e36ff5 Eric Dumazet              2010-05-06  4345  {
+29863d41bb6e1d Wei Wang                  2021-02-08  4346  	struct task_struct *thread;
+29863d41bb6e1d Wei Wang                  2021-02-08  4347  
+fbd9a2ceba5c74 Sebastian Andrzej Siewior 2022-03-11 @4348  	lockdep_assert_irqs_disabled();
+fbd9a2ceba5c74 Sebastian Andrzej Siewior 2022-03-11  4349  
+29863d41bb6e1d Wei Wang                  2021-02-08  4350  	if (test_bit(NAPI_STATE_THREADED, &napi->state)) {
+29863d41bb6e1d Wei Wang                  2021-02-08  4351  		/* Paired with smp_mb__before_atomic() in
+5fdd2f0e5c6484 Wei Wang                  2021-02-08  4352  		 * napi_enable()/dev_set_threaded().
+5fdd2f0e5c6484 Wei Wang                  2021-02-08  4353  		 * Use READ_ONCE() to guarantee a complete
+5fdd2f0e5c6484 Wei Wang                  2021-02-08  4354  		 * read on napi->thread. Only call
+29863d41bb6e1d Wei Wang                  2021-02-08  4355  		 * wake_up_process() when it's not NULL.
+29863d41bb6e1d Wei Wang                  2021-02-08  4356  		 */
+29863d41bb6e1d Wei Wang                  2021-02-08  4357  		thread = READ_ONCE(napi->thread);
+29863d41bb6e1d Wei Wang                  2021-02-08  4358  		if (thread) {
+cb038357937ee4 Wei Wang                  2021-03-16  4359  			/* Avoid doing set_bit() if the thread is in
+cb038357937ee4 Wei Wang                  2021-03-16  4360  			 * INTERRUPTIBLE state, cause napi_thread_wait()
+cb038357937ee4 Wei Wang                  2021-03-16  4361  			 * makes sure to proceed with napi polling
+cb038357937ee4 Wei Wang                  2021-03-16  4362  			 * if the thread is explicitly woken from here.
+cb038357937ee4 Wei Wang                  2021-03-16  4363  			 */
+2f064a59a11ff9 Peter Zijlstra            2021-06-11  4364  			if (READ_ONCE(thread->__state) != TASK_INTERRUPTIBLE)
+cb038357937ee4 Wei Wang                  2021-03-16  4365  				set_bit(NAPI_STATE_SCHED_THREADED, &napi->state);
+29863d41bb6e1d Wei Wang                  2021-02-08  4366  			wake_up_process(thread);
+29863d41bb6e1d Wei Wang                  2021-02-08  4367  			return;
+29863d41bb6e1d Wei Wang                  2021-02-08  4368  		}
+29863d41bb6e1d Wei Wang                  2021-02-08  4369  	}
+29863d41bb6e1d Wei Wang                  2021-02-08  4370  
+eecfd7c4e36ff5 Eric Dumazet              2010-05-06  4371  	list_add_tail(&napi->poll_list, &sd->poll_list);
+eecfd7c4e36ff5 Eric Dumazet              2010-05-06  4372  	__raise_softirq_irqoff(NET_RX_SOFTIRQ);
+eecfd7c4e36ff5 Eric Dumazet              2010-05-06  4373  }
+eecfd7c4e36ff5 Eric Dumazet              2010-05-06  4374  
+
+:::::: The code at line 4348 was first introduced by commit
+:::::: fbd9a2ceba5c74bbfa19cf257ae4b4b2c820860d net: Add lockdep asserts to ____napi_schedule().
+
+:::::: TO: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+:::::: CC: David S. Miller <davem@davemloft.net>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
