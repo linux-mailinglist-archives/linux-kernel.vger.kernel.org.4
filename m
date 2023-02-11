@@ -2,79 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F4E693546
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 00:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4019E693550
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 00:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjBKXZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 18:25:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45272 "EHLO
+        id S229545AbjBKXqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 18:46:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjBKXZ2 (ORCPT
+        with ESMTP id S229455AbjBKXqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 18:25:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820FA12846;
-        Sat, 11 Feb 2023 15:25:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42ADCB80B03;
-        Sat, 11 Feb 2023 23:25:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A8DEC433D2;
-        Sat, 11 Feb 2023 23:25:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676157924;
-        bh=e4wjNKz+lNpXFkGW45k8O521ZMwggG5GHVudmevaWK8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Ob5dVR1r87sz4ELODkaa+AOsPjnqzoIqZejWHAHkHqFnSOMiqlZcY6Dl4vo+o8sZz
-         MTXoJf+UmRsZZvoaDbek+ClvUXnLUO92mo/ixByh2rMtKvKBQEP9GZ0VQAgFGM/VRA
-         PI5LUcU0M/2OnuncEMxWh5llc7U1Cli4pLCCd8NbysooVOyECkuwSq83kmaAcFIhgd
-         TOwHkziJ4zqeVgSSiHfR21dDJjVxxXrL3gNzb0Dtdajv1S6Z+wAZQZYPVjdLZEiebd
-         ZBdXk/6o9f/hYqbVotx5EIKpde34PlRE0rTM4yBrLjvvcn7Ct/yT9eFvtDXgQtsStL
-         5pxVYbvMwAGDA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v6.2-rc7
-Date:   Sat, 11 Feb 2023 23:25:10 +0000
-Message-Id: <20230211232523.6A8DEC433D2@smtp.kernel.org>
+        Sat, 11 Feb 2023 18:46:32 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63771166E7;
+        Sat, 11 Feb 2023 15:46:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676159191; x=1707695191;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CBOXfc7Df2OpCW65atSvTCtLxCMYsFFbOkXU8N1hIUE=;
+  b=aDm46sDBnnwZuBKJvsoQunRnFxJdb4wsZARl2vTLSp4LX5SRzmlOK7zk
+   pj3MTzDSGyxPk644+BsyWNBP499jdZ6HDXyAfBKq5ugsRGqtg0WBZ5RZE
+   Y6OVgAUqS7XonHERs9pZeP2hXFqrnSlqNN9X9RFB4WsEMGTgdIOPAJTzf
+   7/HKQrx9MKNb3j5OTCKtXI5NfWxTP5T9upnkTHXGh04tI6GLoxHGCTRYK
+   02DC/I3huj/z707CzSqATNR8RLMxIrWryScvomkPR/NUSeST8pN6EHUes
+   pHsruj2QOzKHIQ4NHjwXAkJF+ZAMIctilX6mB1Znt456NYrgNbF/nJ+Wh
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="329298352"
+X-IronPort-AV: E=Sophos;i="5.97,290,1669104000"; 
+   d="scan'208";a="329298352"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2023 15:46:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="646004924"
+X-IronPort-AV: E=Sophos;i="5.97,290,1669104000"; 
+   d="scan'208";a="646004924"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 11 Feb 2023 15:46:29 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pQzZb-0006rt-2n;
+        Sat, 11 Feb 2023 23:46:27 +0000
+Date:   Sun, 12 Feb 2023 07:45:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/intel/pxa_camera.c:2449:34: warning: unused
+ variable 'pxa_camera_of_match'
+Message-ID: <202302120714.YWaROisP-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit b442990d244ba2ffe926c6603c42deb6fcc3b0db:
+Hi Mauro,
 
-  spi: Merge rename of spi-cs-setup-ns DT property (2023-01-11 14:15:22 +0000)
+First bad commit (maybe != root cause):
 
-are available in the Git repository at:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   47e9aa14ce5abca70d6584a8d8213707d197c38e
+commit: 95495f2aa9d8df1a7697bab24118544d3568f41d media: platform: place Intel drivers on a separate dir
+date:   11 months ago
+config: hexagon-randconfig-r022-20230212 (https://download.01.org/0day-ci/archive/20230212/202302120714.YWaROisP-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=95495f2aa9d8df1a7697bab24118544d3568f41d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 95495f2aa9d8df1a7697bab24118544d3568f41d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.2-rc7
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302120714.YWaROisP-lkp@intel.com/
 
-for you to fetch changes up to eede42c9459b58b71edc99303dad65216a655810:
+All warnings (new ones prefixed by >>):
 
-  spi: spidev: fix a recursive locking error (2023-01-27 16:38:05 +0000)
+>> drivers/media/platform/intel/pxa_camera.c:2449:34: warning: unused variable 'pxa_camera_of_match' [-Wunused-const-variable]
+   static const struct of_device_id pxa_camera_of_match[] = {
+                                    ^
+   1 warning generated.
 
-----------------------------------------------------------------
-spi: Fixes for v6.2
 
-A couple of hopefully final fixes for spi, one driver specific fix for
-an issue with very large transfers and a fix for an issue with the
-locking fixes in spidev merged earlier this release cycle which was
-missed.
+vim +/pxa_camera_of_match +2449 drivers/media/platform/intel/pxa_camera.c
 
-----------------------------------------------------------------
-Bartosz Golaszewski (1):
-      spi: spidev: fix a recursive locking error
+7254026cedd42d drivers/media/video/pxa_camera.c               Guennadi Liakhovetski 2011-06-29  2448  
+e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29 @2449  static const struct of_device_id pxa_camera_of_match[] = {
+e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2450  	{ .compatible = "marvell,pxa270-qci", },
+e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2451  	{},
+e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2452  };
+e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2453  MODULE_DEVICE_TABLE(of, pxa_camera_of_match);
+e9a1d94fa85542 drivers/media/platform/soc_camera/pxa_camera.c Robert Jarzmik        2014-06-29  2454  
 
-Serge Semin (1):
-      spi: dw: Fix wrong FIFO level setting for long xfers
+:::::: The code at line 2449 was first introduced by commit
+:::::: e9a1d94fa85542d4f3046ac82d234a3c8349c948 [media] media: pxa_camera device-tree support
 
- drivers/spi/spi-dw-core.c |  2 +-
- drivers/spi/spidev.c      | 22 ++++++++++++++++------
- 2 files changed, 17 insertions(+), 7 deletions(-)
+:::::: TO: Robert Jarzmik <robert.jarzmik@free.fr>
+:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
