@@ -2,98 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02174692C30
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 01:40:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 401EF692C36
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 01:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjBKAki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 19:40:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
+        id S229589AbjBKAo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 19:44:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjBKAkg (ORCPT
+        with ESMTP id S229479AbjBKAot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 19:40:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01171BBB2;
-        Fri, 10 Feb 2023 16:40:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8BD2B825B8;
-        Sat, 11 Feb 2023 00:40:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DB74C433D2;
-        Sat, 11 Feb 2023 00:40:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676076031;
-        bh=UKSvG2H35RhhTGJLlKDF+4pw8O05L9n2GRROzIg/SU4=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=e/A6yRDirseqEyazzRzQcgQUZMWhiGudcK3a6oqPZTePBlvqjCEBVO5+OXijS8cJA
-         KT+HzgYgGAkw3DxOTQPB9mxWTE/nuJOnwzpyeIw9hH8xCfflKSJzAjynvorbjr69DF
-         1q9ZsesHdXrAgGAatGVSbj8XYcT9/Bko8kTBl7/n9/Nnpu3JvoSaBFAesPjIV5iMdC
-         gmXf9qbb8UPFbqqbrOSW1W4w8u634Zi8h1JRx6f75ylOmQd7vUGZHee6zJtOMYW7kP
-         WUcNUbYReSEdGNwPORhbgC/rKY6JrtI4nQcSQDh2RKPC/JC8/xOCli6Y5zAdZactYQ
-         OI6qcFPtyJtGA==
-Message-ID: <e5b71c243022d341022b4f172060268b.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Fri, 10 Feb 2023 19:44:49 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2058.outbound.protection.outlook.com [40.107.243.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC3B6FE8D;
+        Fri, 10 Feb 2023 16:44:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=n565GDYPxpdaWYV+l+pXvsGFQfxQ4BTIawPTIz7mlM9KekKJJgy2Go/6Bx5GKdSAgCjej8wIapVtDvLr3MHzS66+wl17EbkoctHu4Gw/wdW68LynNazxjSAWEWRuh7+MBYpkKu6fOuT0iU8goSdlUpWS0L67wCsPAVSwSyPwmcJpGqky4Tt1a5a1HfnZEV69mWFmvC88bEH/rsHIU7iLJkImRGUFpLVphyGUGow0Sb+V5ZpX6aEe8EHs2z6LyFhQsWsN8A/pjXaV4HfYpqSZu0as1ovf55moM9LqhJaG/EdmbPHkZkT3/XJyi6R8tY9Yt078ul7X0A5lXza3H82GLg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jzyYI4SMIIRMKBVigltxXqbFrfGTHbn2xI+ZTH73ChU=;
+ b=VjX1dgC1oTyx1gIpr0sVti+KHzFhBuFC7dEVE78wWFCR7mWc4mUXknH2//QN4IRtuSW6WWBwH38kM5xFUT+6YoBcSQBkvQUCQSUOKzY2ITZ4C2JeoCY+m7wV8tDfDUcUbQ1ECJXqJFD9HEW3HQXrnEOyrctM4HKV5FD3b2s39L/NaXZH/YioG7m3A3KSXF9P1hEYaYLJSEVv2t+97ta/fPOGFhj1Wvx63pu5Ng6McJhck1fUqfIMZQs9gauRYwFNbp+0hETpyazKa2if6k2UgAShE10L8EPitMpPO6oc76MwWjxK5c9ml8tqI2kcSByQVXlAApx6IXAkjFd9/0GgeA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jzyYI4SMIIRMKBVigltxXqbFrfGTHbn2xI+ZTH73ChU=;
+ b=lGkUmkGgWt80x0fKTa4CgJEZ/Z+XVZsZ3GiACK6ehXnzHfGNbx8axl4zVFvwRi5Y7ANx7jXkfR0LmnufJNXAdEGd6CnUTShsrd7sPdePbs+jDDWvFV52QRTZ68kLuhNzphMjmXlZHYLl+5UqKk1/K/W+Mv+VvYVHteOPq1Ga+AYRLv83Amug8A3FVCfPW0ICmx7R9YwstriKUlEkpJi4lvOjKnIbMPYQ/GL0sk462h6t4zbbGH2hVHzQnoV1EPuUyFU5RQDOd+l7F9a25oCa0gJX8SGx0U2siGGzbqew7p5GoSTnORsp7+bm5ZRMP7VGPeF4uzZXMi2PVaN5YanwZA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by PH7PR12MB8594.namprd12.prod.outlook.com (2603:10b6:510:1b3::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19; Sat, 11 Feb
+ 2023 00:44:41 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6086.019; Sat, 11 Feb 2023
+ 00:44:41 +0000
+Date:   Fri, 10 Feb 2023 20:44:40 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     Nicolin Chen <nicolinc@nvidia.com>, kevin.tian@intel.com,
+        joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
+        shuah@kernel.org, yi.l.liu@intel.com, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, baolu.lu@linux.intel.com,
+        "Raj, Ashok" <ashok.raj@intel.com>
+Subject: Re: [PATCH v2 02/10] iommu: Introduce a new
+ iommu_group_replace_domain() API
+Message-ID: <Y+bk+GSCPKOJfr1f@nvidia.com>
+References: <cover.1675802050.git.nicolinc@nvidia.com>
+ <fa81379dca611c1d9f50f9d8cd2bca0d4ec7f965.1675802050.git.nicolinc@nvidia.com>
+ <20230210165110.4e89ce55.alex.williamson@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230210165110.4e89ce55.alex.williamson@redhat.com>
+X-ClientProxiedBy: BL1PR13CA0209.namprd13.prod.outlook.com
+ (2603:10b6:208:2be::34) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230131160829.23369-1-ansuelsmth@gmail.com>
-References: <20230131160829.23369-1-ansuelsmth@gmail.com>
-Subject: Re: [PATCH v2 1/2] clk: Warn and add workaround on misuse of .parent_data with .name only
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Christian Marangi <ansuelsmth@gmail.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 10 Feb 2023 16:40:29 -0800
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH7PR12MB8594:EE_
+X-MS-Office365-Filtering-Correlation-Id: 03a7c498-612b-4360-886c-08db0bc92916
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: O6azTgrSvBTARk5lVH/3GFVnZeCr29kIXX2O6MBFCDv2vyRAJXc53y8JoLg1XNgtdBLS+0roJrg6JAMZpq4Y6LZQoKfdjwq10h5TCMrhxz7KTIO2qu6Ul+l1FqT0Fl1Qy0oRd5XV3OlxR31Z5EMJ9WpVDVPbszqtAxVogqjd9KdDceTVcVJkplQjYlKRs0YeNRGumTdGjLEZRDSJ9581cJBtimjsrRrMQXnB2nS/ogZBnVQonX8JedrOlORVwwcJ8YoP5NdczV+yCg3S+j5sNIxykYTF6QnsLTTY1nTX6psz5dU69WK1nytO6ETjnFHDT2OOA1G+QDZWi+gSth46n2aQrwhdIh7DX/zYfKkHpy54Uxt8IOhAm+O2TQRh7X6dbcxklvjYuvf07+KDJguIclpx+XxQ6EB+QrAuvzBIyE0CUFrkw943K6nSRFQ3+1eiKb51abXW4Qk+Dg5CoCiF48Iz2/pldgtvJGb4BXwE8mJ5nC3l21HslbMGYm58AIUYIdHBBNPmLUMN1xuKrKv4MGdhYB6RtqFsxW4yGacjvpsftI275X3GS63tCtjUitjuKim20KAkhkNi70SHlMfDtMXIwTQGTx6i5Pc8sitlVsoGPtDt/pQillrEZZBDH92XWvje7phzlw2LoLfn6++KHA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(396003)(136003)(376002)(39860400002)(346002)(451199018)(86362001)(5660300002)(7416002)(41300700001)(8936002)(4326008)(66946007)(66476007)(8676002)(6916009)(66556008)(2906002)(83380400001)(38100700002)(36756003)(2616005)(26005)(6512007)(6506007)(316002)(186003)(478600001)(6486002)(54906003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?drZ8aNO3mFW7znSRkjLQrHGI0eKPXMaGy/6Zm5KjOxmbiH1Hz4tllynDlaMX?=
+ =?us-ascii?Q?QzZJ8Qb/N72pB8mPXkcoIOJCdVl5zQMrKeq5P0rosoCHMl5dSnjLW2urD4jC?=
+ =?us-ascii?Q?MOOyW7sw+YPF8xEW3uFo71cWBIFoEL4EROoWyl6So7kP6ILj0p5pwwxdr2HC?=
+ =?us-ascii?Q?F0iyQ7Bje/kV1NZi/Mv5ZSrNZKrvJ2CYVCKKzTeUICjx5HzAS7lKiTInIFcw?=
+ =?us-ascii?Q?4KKuz8d8nSu4TJfpNskgwGClDjDFG3K1B8q+CUy7E66jo0+Y+jxGAJFJvpRi?=
+ =?us-ascii?Q?i6RMmi82SfLU3Idysoj+DMEnsBlu4W/mJc1+OXKxnQzRnmXzvFIrFZ5WK0y6?=
+ =?us-ascii?Q?LUaDrPOW9umE17ff3k2LqCB7LlcEBZ2zHYcjB5QDjO9eba8IbQYEU09TgPII?=
+ =?us-ascii?Q?NlsyC/JROE3NHRMPv1F/neeClRYQ1OOH4PJuca53T6z7CAC8nGNtZ+j2lezG?=
+ =?us-ascii?Q?Bd2tPcQn4z8bIJxsjCmkTkiRCPzaClN0pVI6YKAt/jCGr3Um90n/WrVzOTP0?=
+ =?us-ascii?Q?qeqGIdFA4S/cZMEZnkLkPke8jpMcUZaPikcukPEf38hdS+2m2abXDPhv7vAg?=
+ =?us-ascii?Q?2qhqbRpQ3n8o3acDs/SbF0paWx9tVnNCIk1j4BEsYve9PIU9RDNgJoX4ns32?=
+ =?us-ascii?Q?P/WSkm4rAxi0MCo/+rqZkqrnDw4pfu+4ptfUQSc4Gt4/NUoFjIyQmOAXefkY?=
+ =?us-ascii?Q?z5SamF3vKrIo7JeGgQdGbMobXStvJDDpd/2xPZ6GqXtDxsYoZT6tZXOHmbmo?=
+ =?us-ascii?Q?OqblEK+ZvauYM4J9/8INb9JXIXJh68ba73FqJAedcF8eOVQTKxQO/YQk2Gck?=
+ =?us-ascii?Q?nV3p8ZdxF1V7oFeR1/7+shIE37YUJilLDn4hLuNkG2mnSrugqkf3auDUAYQc?=
+ =?us-ascii?Q?MzFP1EydTl1KDRzfQh9wjs4wdzliafhQLdBiJHzpBmp03hD0rn1Y6AEEQJE+?=
+ =?us-ascii?Q?xr6eP2Y3FofCTHWDNGLAR2nNE/weCJDLP/k3JLyn9Z0QhAFqamx6vZ8rqdcl?=
+ =?us-ascii?Q?spBt3DkVRSX1yWv6vHuOsDP34uENuGoxLCveziMOJqrto8EZoMSgwgBsVqCw?=
+ =?us-ascii?Q?5o2vx5yriiucuMr5ea0SVWuutEn5sITI+JnzTKaFhUIzUxXnoTXcoBF3ZbAZ?=
+ =?us-ascii?Q?ikD/NKaACSyYVWRntg+nbUIwFG/cNTIDU310LlVivYBrFHAJe5dr8RzNtrpO?=
+ =?us-ascii?Q?UV90Jbc4UbSSi4VbTlawysB4UUZwfu2axaJjsGJNQZcF7u4OUWNQdpbMr9N9?=
+ =?us-ascii?Q?Uh3aGX9siTAfDIANEfeD0i7lU991d7np+9+9lu2nZ3kFsSOv5EO95EbDVPeX?=
+ =?us-ascii?Q?Ai0t5t83439EEeGmIWMeSxSoYYQ2V/41WnGQu8nc2s/+8EPvR8QVcfgIjW9P?=
+ =?us-ascii?Q?qBRHVNY8PiI+nTbbXQX7EiTtsiWeTGaOgfq+Nxn0ugtf7ZoRPvMxxCXKVc8Y?=
+ =?us-ascii?Q?1wWpGtDOiUOTVZ4wG2C4v0LjCUSW9UBFgwpTY5KgfRcWUsStrDIjcGIpiWW7?=
+ =?us-ascii?Q?pC7+cwHSd/KYwKkYOuMbwCIshAVNwyuGA5xlX3wR0QI7IRenwobJzA1SurlC?=
+ =?us-ascii?Q?itsTpRcZRjCc0toWUDxvonnMzHzEEcMTvc/FC96Z?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 03a7c498-612b-4360-886c-08db0bc92916
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2023 00:44:41.0450
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GRxw1X9VpO1SbKV1gAG7XALT9EMEk0dzKlP9mnVhETTo3ozmrx5qWGIed9sgbPQ4
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8594
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Christian Marangi (2023-01-31 08:08:28)
-> By a simple mistake in a .parent_names to .parent_data conversion it was
-> found that clk core assume fw_name is always provided with a parent_data
-> struct for each parent and never fallback to .name to get parent name even
-> if declared.
+On Fri, Feb 10, 2023 at 04:51:10PM -0700, Alex Williamson wrote:
+> On Tue, 7 Feb 2023 13:17:54 -0800
+> Nicolin Chen <nicolinc@nvidia.com> wrote:
+> 
+> > qemu has a need to replace the translations associated with a domain
+> > when the guest does large-scale operations like switching between an
+> > IDENTITY domain and, say, dma-iommu.c.
+> > 
+> > Currently, it does this by replacing all the mappings in a single
+> > domain, but this is very inefficient and means that domains have to be
+> > per-device rather than per-translation.
+> > 
+> > Provide a high-level API to allow replacements of one domain with
+> > another. This is similar to a detach/attach cycle except it doesn't
+> > force the group to go to the blocking domain in-between.
+> > 
+> > By removing this forced blocking domain the iommu driver has the
+> > opportunity to implement an atomic replacement of the domains to the
+> > greatest extent its hardware allows.
+> > 
+> > It could be possible to adderss this by simply removing the protection
+> > from the iommu_attach_group(), but it is not so clear if that is safe
+> > for the few users. Thus, add a new API to serve this new purpose.
+> > 
+> > Atomic replacement allows the qemu emulation of the viommu to be more
+> > complete, as real hardware has this ability.
+> 
+> I was under the impression that we could not atomically switch a
+> device's domain relative to in-flight DMA.  
 
-It sounds like you have clk_parent_data and the .index member is 0? Can
-you show an example structure? I'm guessing it is like this:
+Certainly all the HW can be proper atomic but not necessarily easily -
+the usual issue is a SW complication to manage the software controlled
+cache tags in a way that doesn't corrupt the cache.
 
-	struct clk_parent_data pdata =3D { .name =3D "global_name" };
+This is because the cache tag and the io page table top are in
+different 64 bit words so atomic writes don't cover both, and thus the
+IOMMU HW could tear the two stores and mismatch the cache tag to the
+table top. This would corrupt the cache.
 
->=20
-> This is caused by clk_core_get that only checks for parent .fw_name and
-> doesn't handle .name.
+The easiest way to avoid this is for SW to use the same DID for the
+new and old tables. This is possible if this translation entry is the
+only user of the DID. A more complex way would use a temporary DID
+that can be safely corrupted. But realistically I'd expect VT-d
+drivers to simply make the PASID invalid for the duration of the
+update.
 
-clk_core_get() is not supposed to operate on the .name member. It is a
-firmware based lookup with clkdev as a fallback because clkdev is a
-psudeo-firmware interface to assign a name to a clk when some device
-pointer is used in conjunction with it.
+However something like AMD has a single cache tag for every entry in
+the PASID table so you could do an atomic replace trivially. Just
+update the PASID and invalidate the caches.
 
->=20
-> While it's sane to request the dev to correctly do the conversion and
-> add both .fw_name and .name in a parent_data struct, it's not sane to
-> silently drop parents without a warning.
+ARM has a flexible PASID table and atomic replace would be part of
+resizing it. eg you can atomically update the top of the PASID table
+with a single 64 bit store.
 
-I suppose we can do
+So replace lets the drivers implement those special behaviors if it
+makes sense for them.
 
-	WARN(parent->index >=3D 0 && !parent_data[i].fw_name && parent_data[i].nam=
-e, ...);
+> Or maybe atomic is the wrong word here since we expect no in-flight DMA
+> during the sort of mode transitions referred to here, and we're really
+> just trying to convey that we can do this via a single operation with
+> reduced latency?  Thanks,
 
-or maybe better would be to make the clk registration fail if there's a
-.name field and the index is non-negative and the fw_name is NULL.
+atomic means DMA will either translate with the old domain or the new
+domain but never a blocking domain. Keep in mind that with nesting
+"domain" can mean a full PASID table in guest memory.
 
-Can you grep the code and see if anyone is assigning a .name without a
-.fw_name or .index?
+I should reiterate that replace is not an API that is required to be
+atomic.
 
->=20
-> Fix this in 2 ways. Add a kernel warning when a wrong implementation is
-> used and copy .name in .fw_name in parent map populate function to
-> handle clk problems and malfunctions.
-
-We shouldn't be copying .name to .fw_name. They're different things.
+Jason
