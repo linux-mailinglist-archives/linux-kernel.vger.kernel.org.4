@@ -2,81 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6107C693395
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 21:13:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8F3693393
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 21:13:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbjBKUN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 15:13:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
+        id S229734AbjBKUNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 15:13:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjBKUN4 (ORCPT
+        with ESMTP id S229455AbjBKUNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 15:13:56 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04ECA19F2C
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 12:13:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1676146407; bh=mR4G8Da3PcoC4Ndmfyh+gy1+Eq3ntzsdbd77B7zeMwg=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=W6OzjpCx4Kzb33x7mUMpapNSAujsM5ujnx9GAfSJweGhq7k2TWOxtMHrbHlk0WTEJ
-         xcRf9f1qVcH9AdkYQWx75E/JjLAF497NJm2EkYb7fBRLRc/r5ASaSUbiRshOLrHG6/
-         /WG7TfC/n5wOTr72KyMtuEbNcOvFuhEma3AxTgpAe579Toi9Aa/921Lz7z1ivV55NW
-         Vh5oNonWSF2jhTWFHa7y4wCYN8OlsIXM1KPZnHyyflUMfRwnyEOVItQg9M770Ai6ZB
-         CB7tWlZkUwJaKJzooFAiglsrO36p+dKzNiavjeln0T48U5/AQaCLwN/hwqCAA7YVHU
-         UHEOyeu3QKSIA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([87.79.96.39]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MysW2-1odlVl337i-00vxB3; Sat, 11
- Feb 2023 21:13:27 +0100
-Date:   Sat, 11 Feb 2023 21:13:23 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        openbmc@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Hector Martin <marcan@marcan.st>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Sven Peter <sven@svenpeter.dev>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6] soc: nuvoton: Add SoC info driver for WPCM450
-Message-ID: <Y+f245CgehS4Eet2@probook>
-References: <20221103213420.1395507-1-j.neuschaefer@gmx.net>
- <CAMuHMdWo5vHCeE6BeSHrUy12uT7_wFhW-VbQmQ5u+4Q8c7-wYQ@mail.gmail.com>
- <Y+bpODkxY3FlCjPg@probook>
- <CAMuHMdVzbSvA=1fm1ArwsN0=vU4-Ke_J7=s=N0i9jc69=Xa0qg@mail.gmail.com>
+        Sat, 11 Feb 2023 15:13:50 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981F218B22;
+        Sat, 11 Feb 2023 12:13:49 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id ud5so23398988ejc.4;
+        Sat, 11 Feb 2023 12:13:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=c9e5tNbxrcBqEtClBWjdGwDiemkYMqsKA+UfmHWi9+Y=;
+        b=peycM+ujMjmntXoGI352UOHmuAfZD/7B8Z2kvOo6YTCh/KJgu4kYXEBBuJ9pF6eOni
+         n/jkAn2nzhAbTV4i161WMDkjtnc7jgH6wPfW7dTfm6LZTzvHFz+0b1tBY6pHhezeVhC1
+         wAUwDsP/tZsr0cvP7ENO4JD8TULOY6hnOuipeT8blB0aYiR/MqF2ycAkRMGv0ChVqUZy
+         VRdPfk5vN6lbG8pyVkZcT1tIMr72sRFO6AbBbckRAIs4ZmVOg5r9Jw1PmpQsOeeXhTrf
+         H9LT9SRgFrQTJ55BeTGy9aUCDUJFSlMPYeeKk5Npgc1gfYsiMy/iwC/OcluVY3HEeAfa
+         8GUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c9e5tNbxrcBqEtClBWjdGwDiemkYMqsKA+UfmHWi9+Y=;
+        b=4JRs46CgPAso5PTfhrXYRAege1Qu4FwQEG2dNy/t+9Onxo2yy5HkQhXXTFvM9fik9q
+         uwDO3Qhvdsh+xNuPeWGd5TyNPDG5vzHfxIrXEyEEt0ha66w7nj82Iqn2XcdT+L5yb58U
+         uEsNl94hF2dS4QZr/NEwfJl+DwuEnc8PxxwBDBPjhE6auxPRwHe3gH2gasIgAXCGZ/5L
+         X2oZ6C/L8CrXR8XxZ6dDyZ431uBDyDl13zzMj6U/LgwnBDFz1AfrO+1uiVqME0lnuBJH
+         WChjSP9FQel9xoyiIyNNhBdg+XF265hkA0J62CYdrzUnQSdATFUJ2dT9LODnQZRU1qfM
+         KdVQ==
+X-Gm-Message-State: AO0yUKXd+Qmma1FC9bO3EFqzKBR0Q+1t5j0UrZ33YltgdT2yhrqiqP0F
+        dmVHZLtI1ZvBJk6rA2tl7OuiLRIBmQDqSKkcTKt67GY2pMA=
+X-Google-Smtp-Source: AK7set+CLHA+r6hk9yDAzRpOY5AME8RdEBbntcSFFOqlzGdnQUpD1d7oJaCWx8p2BMFIbib4Qh1NGfRfm+it7DyoINU=
+X-Received: by 2002:a17:906:149b:b0:88a:5bed:62f2 with SMTP id
+ x27-20020a170906149b00b0088a5bed62f2mr2644188ejc.4.1676146428121; Sat, 11 Feb
+ 2023 12:13:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GNhp1dz4imwcRsMG"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdVzbSvA=1fm1ArwsN0=vU4-Ke_J7=s=N0i9jc69=Xa0qg@mail.gmail.com>
-X-Provags-ID: V03:K1:5uTXs6C60uVYn+tu5XGB2UQZvxOdnDCLvrG+k9cvP/zE4PIgsqB
- PsZvEi/4U9hSXS/dmK05qi9q6ooP4DkIAZUFJ+4RzBdSmWboXcboJhbL7qdrxPEH2Ey/uQM
- gddL5QodrNEnn6PBUAs0ru+GM6g15yxcvICv5WQVPX4X5MuQLsNIguH/zpTzD/zyUVWGt9V
- pxyZPS4C0dGCibRq55vjQ==
-UI-OutboundReport: notjunk:1;M01:P0:VTwYI0P0DqI=;mJxP7sCxLVqusisa8j6gODvYwZe
- A7zJW/epFOPMNo8pn68BX9w4Vm6VPRXMPixN13Z8LPdoViXtJK7tTWrPsFm/YTOik5TWR99u/
- py73knGrZu0rQViGQ8QAOkSOQvB1m/y9uI2IRVV4q55O1GCJe4q4bog/24yXcQvHMqiCrvM2k
- D4/SH2pSh2Md3SohD4E52SHE4MN0sTDYMIsCGPlfMahtbY8xLhQGH/S9eStH+SWQ1wsiwbElg
- TTlc9FqibToA/pUlJnr8kclpkLzCrw5WeyTVDDOOseBg1Ozh4jX/3YSMcBHF4PZqXLrb9v4rd
- l2Z8vb4Yt/UW90IGPLdq96jMCb9WkzsXrSsSQ2G8cjPWqYYVXI5fInHAWQ2cGHMOlecx2X8j+
- mElHZcEk/jUfyqstnhBumegYAsj9ERP/s0Qj+tjO+5pZy2M7lgMxQepsVbIqSzZCd9IBrx1tW
- wSqc0Z98QiXacCflVl6npXhumWoNahxLha+01wc6Uq7zjZawxo0NEC1NX6J7I00LalAZZ6+f2
- UuhlPMlIDkHY9rQMQxCnHx8T2jkwmILh48cQGQBLfmKUEL45FVJCYCRj7C16xcfX9GW+zuoJ7
- VtHw7xdqx3dstdfY2uN1mV+5tJFrMEsQFunF516HnKFjd1hvvquUXibuYAe2VLlejKKFfxZeK
- uXlJAt7lNE/YXmsH5WH6h6G4JvlEclk/P2mJh/jgMZZH+5O/GuFC7pUae3abdrWIoUTimcfXu
- Kcr7BKRv61HnsM6zRP+xaGOrBif56Lbvatp7lzdTciH1vG1VOfx8PfBvxjTQ6rX/YDLpMWUBM
- vH1EjDF+LJ96yGK1ndZ66hMOfS1WppXikvnOSmaqVcCx8/D4eN/5rVcVJI/45/lN1TFFeuH5f
- DiVfrOXI0n6xoxoRpmcQpR+wMau8oZ8BClenNJnj30v98My0sgKXsQMtw/z6IG6tJFfltgBdY
- Zbg23Q==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230209-b4-amlogic-bindings-convert-take2-v1-0-c4fe9049def9@linaro.org>
+ <20230209-b4-amlogic-bindings-convert-take2-v1-2-c4fe9049def9@linaro.org>
+In-Reply-To: <20230209-b4-amlogic-bindings-convert-take2-v1-2-c4fe9049def9@linaro.org>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sat, 11 Feb 2023 21:13:37 +0100
+Message-ID: <CAFBinCDEtwVYUB5KTJCQ+1KL5+bqeCNeF4gPe1jzx3SPeftqGQ@mail.gmail.com>
+Subject: Re: [PATCH 2/6] dt-bindings: soc: amlogic: convert clk-measure.txt to dt-schema
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,78 +77,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Neil,
 
---GNhp1dz4imwcRsMG
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Feb 9, 2023 at 2:41 PM Neil Armstrong <neil.armstrong@linaro.org> wrote:
+>
+> Convert the Amlogic Internal Clock Measurer bindings to dt-schema.
+>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  .../soc/amlogic/amlogic,meson-gx-clk-measure.yaml  | 40 ++++++++++++++++++++++
+>  .../bindings/soc/amlogic/clk-measure.txt           | 21 ------------
+>  2 files changed, 40 insertions(+), 21 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-clk-measure.yaml b/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-clk-measure.yaml
+> new file mode 100644
+> index 000000000000..77c281153010
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-clk-measure.yaml
+> @@ -0,0 +1,40 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/amlogic/amlogic,meson-gx-clk-measure.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Amlogic Internal Clock Measurer
+> +
+> +description:
+> +  The Amlogic SoCs contains an IP to measure the internal clocks.
+s/contains/contain/
+It's been there in the old bindings as well but it would be great to
+have it fixed.
 
-On Sat, Feb 11, 2023 at 10:33:05AM +0100, Geert Uytterhoeven wrote:
-> Hi Jonathan,
->=20
-> On Sat, Feb 11, 2023 at 2:03 AM Jonathan Neusch=C3=A4fer
-> <j.neuschaefer@gmx.net> wrote:
-> > On Fri, Feb 10, 2023 at 11:26:28AM +0100, Geert Uytterhoeven wrote:
-> > > On Thu, Nov 3, 2022 at 10:37 PM Jonathan Neusch=C3=A4fer
-> > > <j.neuschaefer@gmx.net> wrote:
-> > > > Add a SoC information driver for Nuvoton WPCM450 SoCs. It provides
-> > > > information such as the SoC revision.
 [...]
-> > > > +config WPCM450_SOC
-> > > > +       tristate "Nuvoton WPCM450 SoC driver"
-> > > > +       default y if ARCH_WPCM450
-> > > > +       select SOC_BUS
-> > > > +       select REGMAP
-> > > > +       help
-> > > > +         Say Y here to compile the SoC information driver for Nuvo=
-ton
-> > > > +         WPCM450 SoCs.
-> > > > +
-> > > > +         This driver provides information such as the SoC model and
-> > > > +         revision.
-> > > > +
-> > > > +endmenu
-> > >
-> > > Do you plan to send a follow-up patch?
-> >
-> > Yes, hopefully I'll get around to it a few days after rc1, when the dust
-> > of the (upcoming) merge window has settled a bit.
-> >
-> > Or should I rather send it earlier?
->=20
-> I'd say sooner rather than later.
-> If I hadn't found your v6, I would have sent a patch myself to add the
-> dependency.
-
-Ok, I'll send it today.
-
->=20
-> Does the "select REGMAP" fix a build issue? If yes, that's a very good
-> reason to send it now...
-
-Unfortunately I wasn't able to find the build issue report.
+> +properties:
+do we need something like the following?
+  $nodename:
+    pattern: "^clock-measurer(@.*|-[0-9a-f])*$"
 
 
-Jonathan
-
---GNhp1dz4imwcRsMG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmPn9sMACgkQCDBEmo7z
-X9tpYA//aphJFeq1uG2GYPGO3an3t6prRG9DA+Nn3M1auOjxjE7uI1lYoZNE6YEh
-g++zMFw6HFilz/vquGvW+hQX7nQ0uf+qLrq9c7g7svMorOmSWT+I+//yvR752Azb
-TDZiMlijiqvtX8DnTGkYMfiY521kt700CMYJfcvItv5O3juboV0SUAjS7Dp84HO2
-UHltaPm+mKEKl+rKvkaWWY0IWcZdydH1uO9oAIvoZOteX/5Sj3WZrJosnJcO0q7I
-efNzNaqKd5crpYkJgr9iLZhZOgu/QSQbusmN09zpAmntxKv+MaoUPRRKTiuHkUIU
-pVnZUXzHMGZl0IDtZdc/CPcU+EF73d0MwhlM8Q0W4K6+/ptYsSbOP6Mj4lPWTCnP
-0CD5rZbUGfQsnWrKmssusLpuCVCOgRXF+h8Ecdd1BFeOGeGaMTfXEvyrDN8nv8hl
-F5Gj3ogDuydkk8m9o9F6fo5ZvRH8XEgXnTAKgAXnPE7yyyxEIyHSpJi8wol4ZQNe
-YDFzQ5mlRKipwCPSxS98X45+tTB6Ldp7uDQTGNIWx0iaDWoFgnxo68V+9EsEeXs5
-bYfBpnG4nvqDwdmE7F/VswQChrMUzg7+4+pU5p/I6Oie9xG0muObHel1jZzdzFiN
-fkMacVqFGX0l/0UesS6gmgMlmZj9YTKqdzNkmkaAmSbfTA8XuO8=
-=2lZE
------END PGP SIGNATURE-----
-
---GNhp1dz4imwcRsMG--
+Best regards,
+Martin
