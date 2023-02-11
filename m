@@ -2,205 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60FF8692EBD
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 07:34:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83AE7692ECC
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 07:40:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjBKGe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 01:34:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
+        id S229517AbjBKGkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 01:40:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjBKGeM (ORCPT
+        with ESMTP id S229668AbjBKGjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 01:34:12 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD3184BAF;
-        Fri, 10 Feb 2023 22:33:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676097217; x=1707633217;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=GichFD27YyhQppdvaJp3UuTTE+SAB287jijQOETfxAE=;
-  b=byexQ/FJqLM4+5KTJIpF76+ZGf1BCKzMw3OWC6A9HqD3u5cwuMGNjCSW
-   OX0eo0YBsU3dSAvqlYhBmk4pehnkrx2VlRe/acLDr7NT9Lsq9/mi3qtBR
-   bJk2OiP5FgQppAMg/+aoLwV1NLt9kYVNyau/MajEMVlsHREaT3NK1xmnd
-   gjMSO68XHYVm76fFr7VnPJq51dkxt5JITwNC6fyBSQEZ59KhpyN69RJKu
-   VwY+iu1PbadvElHKC1n+i+pVRpY3qDhBniOh5nJ4q8GsZJqg3cucLmGU/
-   8RMG4eAJcAGuDx+XLGS5oRcObZrGFcxyyb7F/6ZwrhUuFgbdXoO/iXNmG
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="310223228"
-X-IronPort-AV: E=Sophos;i="5.97,289,1669104000"; 
-   d="scan'208";a="310223228"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 22:33:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="997171782"
-X-IronPort-AV: E=Sophos;i="5.97,289,1669104000"; 
-   d="scan'208";a="997171782"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga005.fm.intel.com with ESMTP; 10 Feb 2023 22:33:05 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     hdegoede@redhat.com, markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH 12/12] platform/x86: ISST: Add suspend/resume callbacks
-Date:   Fri, 10 Feb 2023 22:32:57 -0800
-Message-Id: <20230211063257.311746-13-srinivas.pandruvada@linux.intel.com>
+        Sat, 11 Feb 2023 01:39:52 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682D312F1E
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 22:39:50 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id bd6so6262786oib.6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 22:39:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zOL/t5qBo5/69OTBXU9K1Tb25sSUsXIonQCXIzPu+54=;
+        b=tHzsDq4HNF/rGckcDAHo6fj26lDoOoe8KuraYxDcWmx6Ab6WvmFZNUpMBfyQiBvqgI
+         btoJcI59TQYSEby+Gk2LMtpPuYRtCCTyxoAwIEFrHLQYqOWlRBjSBY/JpZPDgVWVm/Gx
+         bU9nioRCt9gDLYDPfdFzAVX8za0DNIsaDYU1T/wVrbTpaAeVEcZXDu6FzlKZgE+ONwfz
+         Pb1gwRd/I6CPVImHkEIyt/+J8QRcvHsXKZ/2NNStdJMfOitEAq46X8PYgw3ERHh0n3KB
+         jiD+fo6MciNYEau+57gvTTE6VfzQ8mRs099+rIlIuDXN7U2x51xcAivUl+qhuMhWx5u5
+         59pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zOL/t5qBo5/69OTBXU9K1Tb25sSUsXIonQCXIzPu+54=;
+        b=vTMaUxBQXYPtSpOndDqfYU30SklsI7UB2LUAHNUmME66KOH4PX96d2eKJvylOnkhgI
+         /wmt7dP5818DczqtoIPZqzmuxSR8V7GVRn1Pu8D+V3y4Srnc401QG7cxf5XEQ6L6e3lA
+         ed5gyhogCc2Xmi4bu2oP+ArMbd+6gUS7nfb/lKcFnnT144nQSMNqHyA4tcydZ5WWgn6L
+         LrPHsUryG+f+igm76VHEJ6nk0VKKXGrZEyVgV2ajmlSBE41y5BskwT9HdKK0rzvVrn7a
+         VtXv5Cuu9Li1NZoLE0cLS2Nji5DVXHHWQ2gL373KQ5o9aZF4P+BFLOXySYYH6+KuAlFa
+         bPmw==
+X-Gm-Message-State: AO0yUKUGo75EMFxCJ0/jcL4kEkMRqGHVcjKylgXFliz+w/IrtbLSEDb5
+        e7wLALVxr6LrM1bF3/nyf9YH5g==
+X-Google-Smtp-Source: AK7set+HnpNlRcQyXbCbbLqOkb0wDhIY0ti/vlL9ybU+Qhg2C9bTqXY/4LfABv+YVA51snNn1EpSTg==
+X-Received: by 2002:a05:6808:b13:b0:35e:d30c:e918 with SMTP id s19-20020a0568080b1300b0035ed30ce918mr8027850oij.39.1676097589646;
+        Fri, 10 Feb 2023 22:39:49 -0800 (PST)
+Received: from localhost ([136.49.140.41])
+        by smtp.gmail.com with ESMTPSA id w8-20020aca6208000000b0037832f60518sm2977541oib.14.2023.02.10.22.39.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 22:39:49 -0800 (PST)
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     David Virag <virag.david003@gmail.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/6] clk: samsung: exynos850: Add missing clocks for PM
+Date:   Sat, 11 Feb 2023 00:40:00 -0600
+Message-Id: <20230211064006.14981-1-semen.protsenko@linaro.org>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230211063257.311746-1-srinivas.pandruvada@linux.intel.com>
-References: <20230211063257.311746-1-srinivas.pandruvada@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To support S3/S4 with TPMI interface add suspend/resume callbacks.
-Here HW state is stored in suspend callback and restored during
-resume callback.
+As a part of preparation for PM enablement in Exynos850 clock driver,
+this patch series implements CMU_G3D, and also main gate clocks for AUD
+and HSI CMUs. The series brings corresponding changes to bindings, the
+driver and SoC dts file.
 
-The hardware state which needs to be stored/restored:
-- CLOS configuration
-- CLOS Association
-- SST-CP enable/disable status
-- SST-PP perf level setting
+Sam Protsenko (6):
+  dt-bindings: clock: exynos850: Add Exynos850 CMU_G3D
+  dt-bindings: clock: exynos850: Add AUD and HSI main gate clocks
+  clk: samsung: clk-pll: Implement pll0818x PLL type
+  clk: samsung: exynos850: Implement CMU_G3D domain
+  clk: samsung: exynos850: Add AUD and HSI main gate clocks
+  arm64: dts: exynos: Add CMU_G3D node for Exynos850 SoC
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- .../x86/intel/speed_select_if/isst_tpmi.c     | 21 ++++++++
- .../intel/speed_select_if/isst_tpmi_core.c    | 49 +++++++++++++++++++
- .../intel/speed_select_if/isst_tpmi_core.h    |  2 +
- 3 files changed, 72 insertions(+)
+ .../clock/samsung,exynos850-clock.yaml        |  19 +++
+ arch/arm64/boot/dts/exynos/exynos850.dtsi     |   9 ++
+ drivers/clk/samsung/clk-exynos850.c           | 139 ++++++++++++++++++
+ drivers/clk/samsung/clk-pll.c                 |   1 +
+ drivers/clk/samsung/clk-pll.h                 |   1 +
+ include/dt-bindings/clock/exynos850.h         |  28 +++-
+ 6 files changed, 194 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/platform/x86/intel/speed_select_if/isst_tpmi.c b/drivers/platform/x86/intel/speed_select_if/isst_tpmi.c
-index 7b4bdeefb8bc..ef39870c9829 100644
---- a/drivers/platform/x86/intel/speed_select_if/isst_tpmi.c
-+++ b/drivers/platform/x86/intel/speed_select_if/isst_tpmi.c
-@@ -34,6 +34,24 @@ static void intel_sst_remove(struct auxiliary_device *auxdev)
- 	tpmi_sst_exit();
- }
- 
-+static int __maybe_unused intel_sst_suspend(struct device *dev)
-+{
-+	tpmi_sst_dev_suspend(to_auxiliary_dev(dev));
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused intel_sst_resume(struct device *dev)
-+{
-+	tpmi_sst_dev_resume(to_auxiliary_dev(dev));
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops intel_sst_pm = {
-+	SET_SYSTEM_SLEEP_PM_OPS(intel_sst_suspend, intel_sst_resume)
-+};
-+
- static const struct auxiliary_device_id intel_sst_id_table[] = {
- 	{ .name = "intel_vsec.tpmi-sst" },
- 	{}
-@@ -44,6 +62,9 @@ static struct auxiliary_driver intel_sst_aux_driver = {
- 	.id_table       = intel_sst_id_table,
- 	.remove         = intel_sst_remove,
- 	.probe          = intel_sst_probe,
-+	.driver = {
-+		.pm = &intel_sst_pm,
-+	},
- };
- 
- module_auxiliary_driver(intel_sst_aux_driver);
-diff --git a/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c b/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c
-index 9eaff90bb649..e173167085ea 100644
---- a/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c
-+++ b/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c
-@@ -229,6 +229,10 @@ struct perf_level {
-  * @status_offset:	Store the status offset for each PP-level
-  * @sst_base:		Mapped SST base IO memory
-  * @auxdev:		Auxiliary device instance enumerated this instance
-+ * @saved_sst_cp_control: Save SST-CP control configuration to store restore for suspend/resume
-+ * @saved_clos_configs:	Save SST-CP CLOS configuration to store restore for suspend/resume
-+ * @saved_clos_assocs:	Save SST-CP CLOS association to store restore for suspend/resume
-+ * @saved_pp_control:	Save SST-PP control information to store restore for suspend/resume
-  *
-  * This structure is used store complete SST information for a power_domain. This information
-  * is used to read/write request for any SST IOCTL. Each physical CPU package can have multiple
-@@ -250,6 +254,10 @@ struct tpmi_per_power_domain_info {
- 	struct pp_status_offset status_offset;
- 	void __iomem *sst_base;
- 	struct auxiliary_device *auxdev;
-+	u64 saved_sst_cp_control;
-+	u64 saved_clos_configs[4];
-+	u64 saved_clos_assocs[4];
-+	u64 saved_pp_control;
- };
- 
- /**
-@@ -1333,6 +1341,47 @@ void tpmi_sst_dev_remove(struct auxiliary_device *auxdev)
- }
- EXPORT_SYMBOL_NS_GPL(tpmi_sst_dev_remove, INTEL_TPMI_SST);
- 
-+void tpmi_sst_dev_suspend(struct auxiliary_device *auxdev)
-+{
-+	struct tpmi_sst_struct *tpmi_sst = auxiliary_get_drvdata(auxdev);
-+	struct tpmi_per_power_domain_info *power_domain_info = tpmi_sst->power_domain_info;
-+	void __iomem *cp_base;
-+
-+	cp_base = power_domain_info->sst_base + power_domain_info->sst_header.cp_offset;
-+	power_domain_info->saved_sst_cp_control = readq(cp_base + SST_CP_CONTROL_OFFSET);
-+
-+	memcpy_fromio(power_domain_info->saved_clos_configs, cp_base + SST_CLOS_CONFIG_0_OFFSET,
-+		      sizeof(power_domain_info->saved_clos_configs));
-+
-+	memcpy_fromio(power_domain_info->saved_clos_assocs, cp_base + SST_CLOS_ASSOC_0_OFFSET,
-+		      sizeof(power_domain_info->saved_clos_assocs));
-+
-+	power_domain_info->saved_pp_control = readq(power_domain_info->sst_base +
-+						    power_domain_info->sst_header.pp_offset +
-+						    SST_PP_CONTROL_OFFSET);
-+}
-+EXPORT_SYMBOL_NS_GPL(tpmi_sst_dev_suspend, INTEL_TPMI_SST);
-+
-+void tpmi_sst_dev_resume(struct auxiliary_device *auxdev)
-+{
-+	struct tpmi_sst_struct *tpmi_sst = auxiliary_get_drvdata(auxdev);
-+	struct tpmi_per_power_domain_info *power_domain_info = tpmi_sst->power_domain_info;
-+	void __iomem *cp_base;
-+
-+	cp_base = power_domain_info->sst_base + power_domain_info->sst_header.cp_offset;
-+	writeq(power_domain_info->saved_sst_cp_control, cp_base + SST_CP_CONTROL_OFFSET);
-+
-+	memcpy_toio(cp_base + SST_CLOS_CONFIG_0_OFFSET, power_domain_info->saved_clos_configs,
-+		    sizeof(power_domain_info->saved_clos_configs));
-+
-+	memcpy_toio(cp_base + SST_CLOS_ASSOC_0_OFFSET, power_domain_info->saved_clos_assocs,
-+		    sizeof(power_domain_info->saved_clos_assocs));
-+
-+	writeq(power_domain_info->saved_pp_control, power_domain_info->sst_base +
-+				power_domain_info->sst_header.pp_offset + SST_PP_CONTROL_OFFSET);
-+}
-+EXPORT_SYMBOL_NS_GPL(tpmi_sst_dev_resume, INTEL_TPMI_SST);
-+
- #define ISST_TPMI_API_VERSION	0x02
- 
- int tpmi_sst_init(void)
-diff --git a/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.h b/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.h
-index 356cb02273b1..900b483703f9 100644
---- a/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.h
-+++ b/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.h
-@@ -13,4 +13,6 @@ int tpmi_sst_init(void);
- void tpmi_sst_exit(void);
- int tpmi_sst_dev_add(struct auxiliary_device *auxdev);
- void tpmi_sst_dev_remove(struct auxiliary_device *auxdev);
-+void tpmi_sst_dev_suspend(struct auxiliary_device *auxdev);
-+void tpmi_sst_dev_resume(struct auxiliary_device *auxdev);
- #endif
 -- 
 2.39.1
 
