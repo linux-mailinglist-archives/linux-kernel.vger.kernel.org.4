@@ -2,141 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8E6692FBB
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 10:13:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD7F692FBA
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 10:13:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbjBKJNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 04:13:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
+        id S229836AbjBKJNk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 11 Feb 2023 04:13:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjBKJNl (ORCPT
+        with ESMTP id S229455AbjBKJNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 04:13:41 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36AC1A965
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 01:13:34 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 38358424EC;
-        Sat, 11 Feb 2023 09:13:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1676106812;
-        bh=I+IK6qQ7gaXsQ1ViBTeWacu6GcpTW5fOOPr4of64kW4=;
-        h=From:To:Cc:Subject:Date;
-        b=PHMlETyumw5IcWqF65/BEQxoJJeVVwLmWGdfxAfFyvIU5qlDaYyQj49KuXHR8RLbB
-         JW0bMrm5Z1kmjY7woj6LHCj0cbTwGkDsluhhLXYRo9cl1hgXM02VRJsoValgx4tepJ
-         1Kpi1WTVux6WNEo2g5dW6rLIZt/IHGdCb/FOIxAheGoDcJj4/IeXrnQ0H0JFcrib/w
-         6iKiLvH7i9l9ekTjMrnAo14cuxX12Cww2m8tuJUqkWpXrmttcCaJKmh3nPSUdfpsUB
-         5qurZz4FqzaiyCtNtpBw0YsTKP6JKtWDRux7CbimErCKVKYrwp9EZ+XDSvetcoZpq2
-         hCm5mHLiTb2Ng==
-From:   Asahi Lina <lina@asahilina.net>
-To:     Arnd Bergmann <arnd@arndb.de>, Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Asahi Lina <lina@asahilina.net>
-Subject: [PATCH] soc: apple: rtkit: Do not copy the reg state structure to the stack
-Date:   Sat, 11 Feb 2023 18:13:02 +0900
-Message-Id: <20230211091302.4576-1-lina@asahilina.net>
-X-Mailer: git-send-email 2.35.1
+        Sat, 11 Feb 2023 04:13:39 -0500
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E2A5AB0B
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 01:13:33 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id B8EB3642ECB8;
+        Sat, 11 Feb 2023 10:13:30 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id E8ICStuihCQB; Sat, 11 Feb 2023 10:13:30 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 5C09F6323048;
+        Sat, 11 Feb 2023 10:13:30 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id H6gocNVHahkq; Sat, 11 Feb 2023 10:13:30 +0100 (CET)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 2F5A1642ECD2;
+        Sat, 11 Feb 2023 10:13:30 +0100 (CET)
+Date:   Sat, 11 Feb 2023 10:13:30 +0100 (CET)
+From:   Richard Weinberger <richard@nod.at>
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        anton ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        helpdesk <helpdesk@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>
+Message-ID: <1361318892.117105.1676106810037.JavaMail.zimbra@nod.at>
+In-Reply-To: <20230210230200.gmf27ywrookqoy5k@meerkat.local>
+References: <20221012191142.GA3109265@bhelgaas> <CAMuHMdVWWbonfT7-RRV4U9UUudUobpeAGOXpO9Y0Cyuqzy=DeQ@mail.gmail.com> <CAMuHMdU=TurB14tkAbqb9nWYvCOcr0UUScdga25h3-oWjYfzTg@mail.gmail.com> <20221013182912.k4deh5v47rjbpnnl@meerkat.local> <CAMuHMdWb5HHuBi2BUKatdJ4e9y3Tz2pM-DG6mt18U60cD64fjQ@mail.gmail.com> <CAMuHMdV5i3JGtg8e=STuP7SENVOKHAEtZ+WdUw8GPt7j9gH65A@mail.gmail.com> <CAMuHMdV5pbH-=8z0Qg2_t8ekzTQjZUopPrZeJHWs+z0DzJAZYg@mail.gmail.com> <20230210230200.gmf27ywrookqoy5k@meerkat.local>
+Subject: Re: Add linux-um archives to lore.kernel.org?
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
+Thread-Topic: Add linux-um archives to lore.kernel.org?
+Thread-Index: fVhge8UCM5b9e/zoQvNhFNGfGsbyQQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The register state struct is 848 bytes, which ends up bloating the
-apple_rtkit_crashlog_dump_regs stack frame beyond 1024 on some
-32-bit platforms, triggering compile warnings.
+----- Ursprüngliche Mail -----
+> Von: "Konstantin Ryabitsev" <konstantin@linuxfoundation.org>
+> Better late than never -- this is now done.
+> 
+> Sorry about the wait.
 
-This doesn't matter for 64BIT/ARM64, but there's also no good reason to
-copy the structure to the stack in this case. We can use __packed to
-avoid alignment issues, there are no double-read hazards, and this is a
-fatal error path so performance does not matter.
+No need to worry, thanks a lot! :-)
 
-Fixes: 22991d8d5725 ("soc: apple: rtkit: Add register dump decoding to crashlog")
-Signed-off-by: Asahi Lina <lina@asahilina.net>
----
- drivers/soc/apple/rtkit-crashlog.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/soc/apple/rtkit-crashlog.c b/drivers/soc/apple/rtkit-crashlog.c
-index dfa74b32eda2..8319e365110b 100644
---- a/drivers/soc/apple/rtkit-crashlog.c
-+++ b/drivers/soc/apple/rtkit-crashlog.c
-@@ -57,7 +57,7 @@ struct apple_rtkit_crashlog_regs {
- 	u64 unk_X;
- 	u64 esr;
- 	u64 unk_Z;
--};
-+} __packed;
- static_assert(sizeof(struct apple_rtkit_crashlog_regs) == 0x350);
- 
- static void apple_rtkit_crashlog_dump_str(struct apple_rtkit *rtk, u8 *bfr,
-@@ -126,18 +126,18 @@ static void apple_rtkit_crashlog_dump_mailbox(struct apple_rtkit *rtk, u8 *bfr,
- static void apple_rtkit_crashlog_dump_regs(struct apple_rtkit *rtk, u8 *bfr,
- 					   size_t size)
- {
--	struct apple_rtkit_crashlog_regs regs;
-+	struct apple_rtkit_crashlog_regs *regs;
- 	const char *el;
- 	int i;
- 
--	if (size < sizeof(regs)) {
-+	if (size < sizeof(*regs)) {
- 		dev_warn(rtk->dev, "RTKit: Regs section too small: 0x%zx", size);
- 		return;
- 	}
- 
--	memcpy(&regs, bfr, sizeof(regs));
-+	regs = (struct apple_rtkit_crashlog_regs *)bfr;
- 
--	switch (regs.psr & PSR_MODE_MASK) {
-+	switch (regs->psr & PSR_MODE_MASK) {
- 	case PSR_MODE_EL0t:
- 		el = "EL0t";
- 		break;
-@@ -160,11 +160,11 @@ static void apple_rtkit_crashlog_dump_regs(struct apple_rtkit *rtk, u8 *bfr,
- 
- 	dev_warn(rtk->dev, "RTKit: Exception dump:");
- 	dev_warn(rtk->dev, "  == Exception taken from %s ==", el);
--	dev_warn(rtk->dev, "  PSR    = 0x%llx", regs.psr);
--	dev_warn(rtk->dev, "  PC     = 0x%llx\n", regs.pc);
--	dev_warn(rtk->dev, "  ESR    = 0x%llx\n", regs.esr);
--	dev_warn(rtk->dev, "  FAR    = 0x%llx\n", regs.far);
--	dev_warn(rtk->dev, "  SP     = 0x%llx\n", regs.sp);
-+	dev_warn(rtk->dev, "  PSR    = 0x%llx", regs->psr);
-+	dev_warn(rtk->dev, "  PC     = 0x%llx\n", regs->pc);
-+	dev_warn(rtk->dev, "  ESR    = 0x%llx\n", regs->esr);
-+	dev_warn(rtk->dev, "  FAR    = 0x%llx\n", regs->far);
-+	dev_warn(rtk->dev, "  SP     = 0x%llx\n", regs->sp);
- 	dev_warn(rtk->dev, "\n");
- 
- 	for (i = 0; i < 31; i += 4) {
-@@ -172,12 +172,12 @@ static void apple_rtkit_crashlog_dump_regs(struct apple_rtkit *rtk, u8 *bfr,
- 			dev_warn(rtk->dev,
- 					 "  x%02d-x%02d = %016llx %016llx %016llx %016llx\n",
- 					 i, i + 3,
--					 regs.regs[i], regs.regs[i + 1],
--					 regs.regs[i + 2], regs.regs[i + 3]);
-+					 regs->regs[i], regs->regs[i + 1],
-+					 regs->regs[i + 2], regs->regs[i + 3]);
- 		else
- 			dev_warn(rtk->dev,
- 					 "  x%02d-x%02d = %016llx %016llx %016llx\n", i, i + 3,
--					 regs.regs[i], regs.regs[i + 1], regs.regs[i + 2]);
-+					 regs->regs[i], regs->regs[i + 1], regs->regs[i + 2]);
- 	}
- 
- 	dev_warn(rtk->dev, "\n");
--- 
-2.35.1
-
+Thanks,
+//richard
