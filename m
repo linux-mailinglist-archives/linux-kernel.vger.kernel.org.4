@@ -2,64 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E904692C6E
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 02:07:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00590692C70
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 02:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjBKBHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 20:07:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
+        id S229866AbjBKBJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 20:09:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjBKBHW (ORCPT
+        with ESMTP id S229819AbjBKBJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 20:07:22 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF42C6A30D
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 17:07:21 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id j14-20020aa7928e000000b00593bca77b0dso3389952pfa.9
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 17:07:21 -0800 (PST)
+        Fri, 10 Feb 2023 20:09:53 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEE36A30D
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 17:09:52 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id x8so8328881ybt.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 17:09:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+7bVeIY1PbqOirWdgJRd29ZTEGdTbk1KiTUdqiq2xys=;
-        b=NbsW7bgmb9w0c8Z3wplH9CxbF5d465YV9a6YZEeC+gL458CwvYjti1VMnaWP7Z2PFD
-         E3/PdrXz/tTnfsoFefOwwVxzT36bcbhU7oebgg5APoEThEgu/6cZk95YA4wfdWBk65Ow
-         W179TfNdJJpecVUeDQV5MAeQQjjyjhcAnWTzxX1V+jxChyb0I7jzq5fAr0ypHWmMTqLi
-         Ha2dEtfLO4MeqORSEr5rqXDMpQq5wkd+PQAgHBvO7JLIHTPlrzeNBPVMxa77XP5iH9S3
-         k+VctLEs1L9ncxca78xCABQM5jbL6I8WKIHSUxK8u3ykjZsj0lssnecu/SEqKpOQHsy9
-         /vOw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XC3OE2iIqVJFJ6R0Eeu5KTHfFtnBegsFQuYmWX1hk7k=;
+        b=WekWIQLebF5KjrFfzL8IcbO4+JZy6ZTRBje7mB4hTEercvPXDs0HjJ+tCvMgxlKsMS
+         WnlrJFkdf1rOzOfaQDdPz2yELe89ntq/wJZzq0OFkKJlY1aTEXPBagAEfzRw1mY+XfFg
+         sR7QEwFWFOC9zD/WFnJjqxSiQsHggFV+O/TqncTm4NvBUjiYIyaaC9yDsqx2yC5s/l4M
+         2ezg6B1Y7o4qnUAsRaX4fzSAJwc+Dz05oHKaj8mv5dXuYCLs9vHK9RDK3jxmgqyTqLGT
+         0o2TyxiQUeskMviKmnS9lql8kPR7SWsWKGWjFtE2hBy4wxOfKrnbmYJ6g2S83sooDUb7
+         aypw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+7bVeIY1PbqOirWdgJRd29ZTEGdTbk1KiTUdqiq2xys=;
-        b=DPdyZonhdMnL6ybjtfY8mm3+tCCQtQ8vYL3CRvOtAFZTeSFzWc0APeT+GaMSjG9SUF
-         GWt1t85aBCqhhJdcIGW+9VfGpYsYJpEq9Dki7jdX7ZMndAoXm3NntAQCFCMLDFrgN1Cj
-         keGRRckPWkWKobyPhuRFpKsoczT82DD2Sw7FTAF0H3qeKz8PLXWesvu6+lEg0vCFS2KP
-         /oVP4khksEOgibNL+2O02yxGxsXg9cGRSLZxasFpIjVWZsfAoESSPyXeZ/8hxkWFQO64
-         cUObbh2cvynZFOZwYTcl9kSXN5kZeXQqM/4yBRieROM9OYOqFgVdDFv133X2Pn60YVcL
-         P+7Q==
-X-Gm-Message-State: AO0yUKWpN0dfER1VP6r47GPT3xioxvH/wdtXquXMpFPcAkbkVLYioU/4
-        m+bqr08oTTF9s8UN39ZpLP2u18qfbt8=
-X-Google-Smtp-Source: AK7set8ZmZNKui4cyuIsZGJTyzW/4AnMfllWwuRWb6Ts7zjbrK7PidBuDnGgnzSzaS9mPCFxb/DCVfJ3PqA=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:e281:b0:230:3649:a362 with SMTP id
- d1-20020a17090ae28100b002303649a362mr2681970pjz.131.1676077641450; Fri, 10
- Feb 2023 17:07:21 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat, 11 Feb 2023 01:07:19 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
-Message-ID: <20230211010719.982919-1-seanjc@google.com>
-Subject: [PATCH] KVM: Protect vcpu->pid dereference via debugfs with RCU
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XC3OE2iIqVJFJ6R0Eeu5KTHfFtnBegsFQuYmWX1hk7k=;
+        b=crw+HpZAQtgK9zQ9waV5q5/K8485oJ5toFYiUMmJEXuQFZjat3MErdTiI6uQTpYHm0
+         o8ttqK7V6XU3ceRc43QMjMXT75pJgixdaD9nqhNiyMNX1A5j2p2RmkPJinD/nr6prfr7
+         8e5oO3r0zBorU4nG2T5rOrI7PBdrFbH3P0f+pVp9QWfSq5w2hNat/XJxpOV+NmnzapQi
+         uZasG0ddwdyROCtXqQQ9rgOclUwZnSaCMqBe0dkyCqiu4kmdgOi9t6DpUSxIZsj12wjI
+         LIv5Wy/vOOd1QXPFEobO0Go1nqZv/DQMcDSv8Hi7WLo/J1WjW6Zhe5bGC1n/ef0MIily
+         E8wQ==
+X-Gm-Message-State: AO0yUKVv5kdQpec0kvSRnBVN1OtRhCtcfKVzlDdJbWodzO7e4yEM3V7l
+        yuO4KFLiaBWp8aOJfW92Bcqj7N596SSddmJbAeoaZC2KGtrHC0fK
+X-Google-Smtp-Source: AK7set8UGTKsm+YOX8AAw4yvHGBGAaHjkcEpaELI8tgK0Vu08OWZuoQQre5zZiaKBjzuQCUIbW3rptH8tMwm8JpsiR0=
+X-Received: by 2002:a5b:707:0:b0:8bc:56a2:49d8 with SMTP id
+ g7-20020a5b0707000000b008bc56a249d8mr1095067ybq.428.1676077791362; Fri, 10
+ Feb 2023 17:09:51 -0800 (PST)
+MIME-Version: 1.0
+References: <cover.1676067791.git.quic_sudaraja@quicinc.com>
+ <CAJuCfpHWQ8NV=iR3BN+pt1c8FynCnRqyyriHb1gLxFgiNVrwjA@mail.gmail.com> <e944536f-a04c-5528-601e-d7f505a761e8@quicinc.com>
+In-Reply-To: <e944536f-a04c-5528-601e-d7f505a761e8@quicinc.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 10 Feb 2023 17:09:40 -0800
+Message-ID: <CAJuCfpGLkkS2yx0d9+2nYtEtxANSH5H3EgCmWZax4N-ieEBG7g@mail.gmail.com>
+Subject: Re: [PATCH] psi: reduce min window size to 50ms
+To:     Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        mark.rutland@arm.com, will@kernel.org,
+        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Sukadev Bhattiprolu <quic_sukadev@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Patrick Daly <quic_pdaly@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,40 +80,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wrap the vcpu->pid dereference in the debugfs hook vcpu_get_pid() with
-proper RCU read (un)lock.  Unlike the code in kvm_vcpu_ioctl(),
-vcpu_get_pid() is not a simple access; the pid pointer is passed to
-pid_nr() and fully dereferenced if the pointer is non-NULL.
+On Fri, Feb 10, 2023 at 4:45 PM Sudarshan Rajagopalan
+<quic_sudaraja@quicinc.com> wrote:
+>
+>
+> On 2/10/2023 3:03 PM, Suren Baghdasaryan wrote:
+> > On Fri, Feb 10, 2023 at 2:31 PM Sudarshan Rajagopalan
+> > <quic_sudaraja@quicinc.com> wrote:
+> >> The PSI mechanism is useful tool to monitor pressure stall
+> >> information in the system. Currently, the minimum window size
+> >> is set to 500ms. May we know what is the rationale for this?
+> > The limit was set to avoid regressions in performance and power
+> > consumption if the window is set too small and the system ends up
+> > polling too frequently. That said, the limit was chosen based on
+> > results of specific experiments which might not represent all
+>
+> Rightly as you said, the effect on power and performance depends on type
+> of the system - embedded systems, or Android mobile, or commercial VMs
+> or servers. With higher PSI sampling, it may not be much of power impact
+> to embedded systems with low-tier chipsets or performance impact to
+> powerful servers.
+>
+> > usecases. If you want to change this limit, you would need to describe
+> > why the new limit is inherently better than the current one (why not
+> > higher, why not lower).
+>
+> This is in regards to the userspace daemon [1] that we are working on,
+> that dynamically resizes the VM memory based on PSI memory pressure
+> events. With current min window size of 500ms, the PSI monitor sampling
+> period would be 50ms. So to detect increase in memory demand in system
+> and plug-in memory into VM when pressure goes up, the minimum time the
+> process needs to stall for is 50ms before a event can be generated and
+> sent out to userspace and the daemon can do actions.
+>
+> This again I'm talking w.r.t. lightweight embedded systems, where even
+> background kswapd/kcompd (which I'm calling it as natural memory
+> pressure) in the system would be less than 5-10ms stall. So any stall
+> more than 5-10ms would "hint" us that a memory consuming usecase has
+> ranB  and memory may need to be plugged in.
+>
+> So in these cases, having as low as 5ms psimon sampling time would give
+> us faster reaction time and daemon can be responsive more quickly. In
+> general, this will reduce the malloc latencies significantly.
+>
+> Pasting here the same excerpt I mentioned in [1].
 
-Failure to acquire RCU could result in use-after-free of the old pid if
-a different task invokes KVM_RUN and puts the last reference to the old
-vcpu->pid between vcpu_get_pid() reading the pointer and dereferencing it
-in pid_nr().
+My question is: why do you think 5ms is the optimal limit here? I want
+to avoid a race to the bottom where next time someone can argue that
+they would like to detect a stall within a lower period than 5ms.
+Technically the limit can be as small as one wants but at some point I
+think we should consider the possibility of this being used for a DoS
+attack.
 
-Fixes: e36de87d34a7 ("KVM: debugfs: expose pid of vcpu threads")
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- virt/kvm/kvm_main.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index d255964ec331..b7b72c8fb492 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -3867,7 +3867,10 @@ static int create_vcpu_fd(struct kvm_vcpu *vcpu)
- static int vcpu_get_pid(void *data, u64 *val)
- {
- 	struct kvm_vcpu *vcpu = (struct kvm_vcpu *) data;
--	*val = pid_nr(rcu_access_pointer(vcpu->pid));
-+
-+	rcu_read_lock();
-+	*val = pid_nr(rcu_dereference(vcpu->pid));
-+	rcu_read_unlock();
- 	return 0;
- }
- 
-
-base-commit: 7cb79f433e75b05d1635aefaa851cfcd1cb7dc4f
--- 
-2.39.1.581.gbfd45094c4-goog
-
+>
+> "
+>
+> 4. Detecting increase in memory demand b   when a certain usecase starts
+> in VM that does memory allocations, it will stall causing PSI mechanism
+> to generate a memory pressure event to userspace. To simply put, when
+> pressure increases certain set threshold, it can make educated guess
+> that a memory requiring usecase has ran and VM system needs memory to be
+> added.
+>
+> "
+>
+> [1]
+> https://lore.kernel.org/linux-arm-kernel/1bf30145-22a5-cc46-e583-25053460b105@redhat.com/T/#m95ccf038c568271e759a277a08b8e44e51e8f90b
+>
+> > Thanks,
+> > Suren.
+> >
+> >> For lightweight systems such as Linux Embedded Systems, PSI
+> >> can be used to monitor and track memory pressure building up
+> >> in the system and respond quickly to such memory demands.
+> >> Example, the Linux Embedded Systems could be a secondary VM
+> >> system which requests for memory from Primary host. With 500ms
+> >> window size, the sampling period is 50ms (one-tenth of windwo
+> >> size). So the minimum amount of time the process needs to stall,
+> >> so that a PSI event can be generated and actions can be done
+> >> is 50ms. This reaction time can be much reduced by reducing the
+> >> sampling time (by reducing window size), so that responses to
+> >> such memory pressures in system can be serviced much quicker.
+> >>
+> >> Please let us know your thoughts on reducing window size to 50ms.
+> >>
+> >> Sudarshan Rajagopalan (1):
+> >>    psi: reduce min window size to 50ms
+> >>
+> >>   kernel/sched/psi.c | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> --
+> >> 2.7.4
+> >>
