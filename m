@@ -2,75 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7793169340D
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 22:39:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5635569340F
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 22:41:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjBKVja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 16:39:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45914 "EHLO
+        id S229795AbjBKVlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 16:41:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjBKVj3 (ORCPT
+        with ESMTP id S229496AbjBKVlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 16:39:29 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C3611674
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 13:39:27 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id az4-20020a05600c600400b003dff767a1f1so6436930wmb.2
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 13:39:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xBpfjQs53Z/vP4xVPdxfYKFH+U3LxXkK1o+VPt/Oi8g=;
-        b=R7/eaeBH0rSwxf4SKitKDJkaCfR3iVTX5RrUHlBiDcKSvNxGfTwQ4NDa0SHQ0fdw25
-         e4aK3jZWEhOLO5VXllmREs5e/c7egvzvskveANqSiMRDpiwuuRV7T25373fo/ckoqxt8
-         wjCP+rZcngJDuPFNQB6bM4R+O/EFIZ/rruAfs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xBpfjQs53Z/vP4xVPdxfYKFH+U3LxXkK1o+VPt/Oi8g=;
-        b=d3FO1vPHlWGo8xro3kv3gYKxZce9k4aEyQiIRz9x2Rl3e4QfsdB6Obl3PjK7oLRdpi
-         rj3j1BoPNL1x9FzOk9RkMOAbQ2fE7cVoDZ1841sgEY0ba5tH5ee0s2uXKiUS/8vDXZ3X
-         DT7DapRPFMJsKA2pt38fr4WN8StpfbWh9D7jvdjBsnPu13bcGezyqoaZ4lV6OMhP+2dK
-         kFMeEBLlOok8VaAce/eFhzGh5AAofyGS7HnRgS+8YnEDZ7guKJPgyDDmMKUgZA3kSTAF
-         wlEjL7hJpshmPnh3BQBioV3bVC1Xivv3qNhN6CRIj2ws3kBjXDO5Uv0Ux8zIffecLbFC
-         KJmw==
-X-Gm-Message-State: AO0yUKVG6LzcWy+psPTxa+yXYC+F28n/UqSjKSQDzK2Tkw4zeYFSdn0S
-        BnpgHpHAPfYqDt6Pn3rOwsbyQHc0cgUN3Z5wQ1M=
-X-Google-Smtp-Source: AK7set+sjF4DtOZTjcZ/a2iIdX5453CiVJnuD/rqpUV/ncDWof1e2376ryEPbbJ/k1EvJVL4wbXsYA==
-X-Received: by 2002:a05:600c:4384:b0:3d9:ef72:190d with SMTP id e4-20020a05600c438400b003d9ef72190dmr15718210wmn.19.1676151565911;
-        Sat, 11 Feb 2023 13:39:25 -0800 (PST)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
-        by smtp.gmail.com with ESMTPSA id h8-20020a05600c314800b003e11ad0750csm8249400wmo.47.2023.02.11.13.39.25
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Feb 2023 13:39:25 -0800 (PST)
-Received: by mail-ej1-f51.google.com with SMTP id lu11so23678455ejb.3
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 13:39:25 -0800 (PST)
-X-Received: by 2002:a17:906:16c2:b0:8af:4100:28e5 with SMTP id
- t2-20020a17090616c200b008af410028e5mr2421071ejd.0.1676151564825; Sat, 11 Feb
- 2023 13:39:24 -0800 (PST)
+        Sat, 11 Feb 2023 16:41:13 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id E9E0C11674
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 13:41:11 -0800 (PST)
+Received: (qmail 858280 invoked by uid 1000); 11 Feb 2023 16:41:11 -0500
+Date:   Sat, 11 Feb 2023 16:41:11 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     syzkaller <syzkaller@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Hillf Danton <hdanton@sina.com>
+Subject: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
+ with unique class keys
+Message-ID: <Y+gLd78vChQERZ6A@rowland.harvard.edu>
+References: <Y+Egr4MmqlE6G+mr@rowland.harvard.edu>
+ <a7d0e143-1e68-5531-5c2e-1f853d794bc0@I-love.SAKURA.ne.jp>
+ <Y+KOeJlvQMYAaheZ@rowland.harvard.edu>
+ <a67e24eb-b68f-2abc-50af-ae4c2d4cdd95@I-love.SAKURA.ne.jp>
+ <20230208080739.1649-1-hdanton@sina.com>
+ <1ad499bb-0c53-7529-ff00-e4328823f6fa@I-love.SAKURA.ne.jp>
+ <Y+O6toMmAKBSILMf@rowland.harvard.edu>
+ <f79e93ef-cfe8-1373-7c36-15d046c0e3c5@I-love.SAKURA.ne.jp>
+ <Y+RZ2RKVo9FNMgSe@rowland.harvard.edu>
+ <52c7d509-ba9e-a121-60c9-138d7ff3f667@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-References: <167613641114.2124708.9785978428796571420@leemhuis.info>
-In-Reply-To: <167613641114.2124708.9785978428796571420@leemhuis.info>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 11 Feb 2023 13:39:08 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiEJa-R50PTYPyAQDs02OAyK+Oqr67x5nxns=OKXCEf6A@mail.gmail.com>
-Message-ID: <CAHk-=wiEJa-R50PTYPyAQDs02OAyK+Oqr67x5nxns=OKXCEf6A@mail.gmail.com>
-Subject: Re: Linux regressions report for mainline [2023-02-11]
-To:     "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Chen <david.chen@nutanix.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <52c7d509-ba9e-a121-60c9-138d7ff3f667@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,55 +56,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 11, 2023 at 9:28 AM Regzbot (on behalf of Thorsten
-Leemhuis) <regressions@leemhuis.info> wrote:
->
-> * A patch to fix a page corruption caused by racy check in __free_pages
-> emerged on Thursday. It's caused by a change merged for 5.10-rc1, but
-> Vlastimil nevertheless said "That's nasty enough to go into 6.2, IMHO".
-> Willy reviewed it, but Andrew didn't pick it up yet.
-> https://lore.kernel.org/lkml/BYAPR02MB448855960A9656EEA81141FC94D99@BYAPR02MB4488.namprd02.prod.outlook.com/
+Lockdep is blind to the dev->mutex field of struct device, owing to
+the fact that these mutexes are assigned to lockdep's "novalidate"
+class.  Commit 1704f47b50b5 ("lockdep: Add novalidate class for
+dev->mutex conversion") did this because the hierarchical nature of
+the device tree makes it impossible in practice to determine whether
+acquiring one of these mutexes is safe or might lead to a deadlock.
 
-Ugh. That's indeed nasty.
+Unfortunately, this means that lockdep is unable to help diagnose real
+deadlocks involving these mutexes when they occur in testing [1] [2]
+or in actual use, or to detect bad locking patterns that might lead to
+a deadlock.  We would like to obtain as much of lockdep's benefits as
+possible without generating a flood of false positives -- which is
+what happens if one naively removes these mutexes from the
+"novalidate" class.
 
-However, I'm now worried that the problem could be worse.
+Accordingly, as a middle ground the mutex in each non-static struct
+device will be placed in its own unique locking class.  This approach
+gives up some of lockdep's advantages (for example, all devices having
+a particular bus_type or device_type might reasonably be put into the
+same locking class), but it should at least allow us to gain the
+benefit of some of lockdep's capabilities.
 
-We do folio_ref_try_add_rcu() in the GUP code too (see try_get_folio()
-in mm/gup.c).
+Link: https://syzkaller.appspot.com/bug?extid=2d6ac90723742279e101 [1]
+Link: https://syzkaller.appspot.com/bug?extid=2e39bc6569d281acbcfb [2]
+Link: https://lore.kernel.org/all/28a82f50-39d5-a45f-7c7a-57a66cec0741@I-love.SAKURA.ne.jp/
+Suggested-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+CC: Peter Zijlstra <peterz@infradead.org>
+CC: Ingo Molnar <mingo@redhat.com>
+CC: Boqun Feng <boqun.feng@gmail.com>
 
-I *think* that in that case we're good, because in that case the
-underlying page is never really free'd (it's there in the page
-tables), so all we can race with is the splitting.
+---
 
-We also do folio_try_get()n in mm/vmscan.c (see isolate_lru_folios()).
-There we hold the lry lock and find the folio on the lru list, but if
-that is all safe then why could the refcount be zero? I guess it's
-because the count is decremented before the lru entry is removed..
+I decided to take your suggestion about introducing a new
+lockdep_static_obj() function, to reduce the size of the patch.  It
+can always be combined with the original static_obj() function later
+on, if that's what the lockdep developers want.
 
-So *hopefully* the only case where this can happen is the mm/filemap.c
-cases, but this all smells to me.
+If Hillf Danton contributed any of the code for this patch, I haven't
+seen it in any messages sent to me or in the mailing list archives.
+That's why I didn't include a Co-developed-by: tag for him.
 
-Maybe we should just bite the bullet and say "page cache pages are
-rcu-freed after removing them from the mapping", so that we don't need
-the whole folio_try_get_rcu() at all.
+ drivers/base/core.c      |    8 +++++++-
+ include/linux/device.h   |    1 +
+ include/linux/lockdep.h  |    6 ++++++
+ kernel/locking/lockdep.c |    5 +++++
+ 4 files changed, 19 insertions(+), 1 deletion(-)
 
-I think Andrew (and probably other people too) has always worried
-about that magical "tryget" thing forever, but I've always claimed it
-was clever and safe. This whole thing clearly shows it was neither of
-those things.
-
-But yeah, for 6.2, I think that patch by David Chen is likely the safest thing.
-
-Or even just reverting the original commit e320d3012d25
-("mm/page_alloc.c: fix freeing non-compound pages") and say that the
-(very rare) memory leak is much less dangerous than that hacky fix
-(that was buggy).
-
-Because it's a bit dodgy how commit e320d3012d25 ends up hooking into
-__free_pages(), even though that's very much not the only thing that
-can actually free memory (ie "put_folio()" itself does the same thing,
-just for a different class of allocations).
-
-I dunno.
-
-                  Linus
+Index: usb-devel/drivers/base/core.c
+===================================================================
+--- usb-devel.orig/drivers/base/core.c
++++ usb-devel/drivers/base/core.c
+@@ -2322,6 +2322,9 @@ static void device_release(struct kobjec
+ 	devres_release_all(dev);
+ 
+ 	kfree(dev->dma_range_map);
++	mutex_destroy(&dev->mutex);
++	if (!lockdep_static_obj(dev))
++		lockdep_unregister_key(&dev->mutex_key);
+ 
+ 	if (dev->release)
+ 		dev->release(dev);
+@@ -2941,7 +2944,10 @@ void device_initialize(struct device *de
+ 	kobject_init(&dev->kobj, &device_ktype);
+ 	INIT_LIST_HEAD(&dev->dma_pools);
+ 	mutex_init(&dev->mutex);
+-	lockdep_set_novalidate_class(&dev->mutex);
++	if (!lockdep_static_obj(dev)) {
++		lockdep_register_key(&dev->mutex_key);
++		lockdep_set_class(&dev->mutex, &dev->mutex_key);
++	}
+ 	spin_lock_init(&dev->devres_lock);
+ 	INIT_LIST_HEAD(&dev->devres_head);
+ 	device_pm_init(dev);
+Index: usb-devel/include/linux/device.h
+===================================================================
+--- usb-devel.orig/include/linux/device.h
++++ usb-devel/include/linux/device.h
+@@ -570,6 +570,7 @@ struct device {
+ 	struct mutex		mutex;	/* mutex to synchronize calls to
+ 					 * its driver.
+ 					 */
++	struct lock_class_key	mutex_key;	/* Unique key for each device */
+ 
+ 	struct dev_links_info	links;
+ 	struct dev_pm_info	power;
+Index: usb-devel/include/linux/lockdep.h
+===================================================================
+--- usb-devel.orig/include/linux/lockdep.h
++++ usb-devel/include/linux/lockdep.h
+@@ -172,6 +172,7 @@ do {							\
+ 	current->lockdep_recursion -= LOCKDEP_OFF;	\
+ } while (0)
+ 
++extern int lockdep_static_obj(const void *obj);
+ extern void lockdep_register_key(struct lock_class_key *key);
+ extern void lockdep_unregister_key(struct lock_class_key *key);
+ 
+@@ -391,6 +392,11 @@ static inline void lockdep_set_selftest_
+ # define lockdep_free_key_range(start, size)	do { } while (0)
+ # define lockdep_sys_exit() 			do { } while (0)
+ 
++static inline int lockdep_static_obj(const void *obj)
++{
++	return 0;
++}
++
+ static inline void lockdep_register_key(struct lock_class_key *key)
+ {
+ }
+Index: usb-devel/kernel/locking/lockdep.c
+===================================================================
+--- usb-devel.orig/kernel/locking/lockdep.c
++++ usb-devel/kernel/locking/lockdep.c
+@@ -857,6 +857,11 @@ static int static_obj(const void *obj)
+ 	 */
+ 	return is_module_address(addr) || is_module_percpu_address(addr);
+ }
++
++int lockdep_static_obj(const void *obj)
++{
++	return static_obj(obj);
++}
+ #endif
+ 
+ /*
