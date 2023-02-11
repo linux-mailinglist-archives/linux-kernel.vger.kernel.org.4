@@ -2,116 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E892692DA2
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 04:17:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F562692DA7
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 04:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjBKDR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Feb 2023 22:17:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34234 "EHLO
+        id S229683AbjBKDSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Feb 2023 22:18:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjBKDRy (ORCPT
+        with ESMTP id S229476AbjBKDSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Feb 2023 22:17:54 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3ADC56EC6;
-        Fri, 10 Feb 2023 19:17:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676085463; x=1707621463;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=sb+EmESFN2NwMi7oUF5AK4fv80o+2wrYvPnvn9rSR1A=;
-  b=mBu3WwJHYlx00v2WmeFJZQXG4ZpYvE2rVUrQsHFqEnxoDE/DZEF+Z2by
-   KVGqOIyGMstF6kPF8bLPb9c2pD3s70vZI5vhXmzKVkFxyLfKSK2nauKAN
-   0/aOFUSvZG5IVWXCYDBR2vHh38FNKcYvfYrDGME4N4GevRc2u9T5TziH8
-   spxtIjxQDYevxHw3CZiHer84p/KA03yt7Ft/RwA9tBA9v6CtIuvwMKLkA
-   cN57RenFWMywtzPBdHC3z8fO3kHr8sh89PbC/r73h5SsQBpVsNUlCP9dQ
-   kANvgDFGYWcd1Qlr3dLaPh2rZri3d0/vhnNQ3yBpC7h2nYU/nBbbE6Nwq
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="330586656"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="330586656"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 19:17:23 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10617"; a="731919112"
-X-IronPort-AV: E=Sophos;i="5.97,287,1669104000"; 
-   d="scan'208";a="731919112"
-Received: from danma-mobl1.ccr.corp.intel.com (HELO rzhang1-DESK.intel.com) ([10.254.213.8])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2023 19:17:22 -0800
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
-        daniel.lezcano@linaro.org
-Cc:     linux-kernel@vger.kernel.org, srinivas.pandruvada@intel.com
-Subject: [PATCH V2] powercap/intel_rapl: Fix handling for large time window
-Date:   Sat, 11 Feb 2023 11:17:10 +0800
-Message-Id: <20230211031710.277459-1-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 10 Feb 2023 22:18:35 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89C83C3D;
+        Fri, 10 Feb 2023 19:18:34 -0800 (PST)
+Received: from localhost (unknown [86.120.32.152])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: cristicc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E20ED6602112;
+        Sat, 11 Feb 2023 03:18:32 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676085513;
+        bh=LNDJxjgOHZY/eKro/BYac5WDP/pGehw2tg2CONtqn2Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HQoyAHzUSYcBTbkOlPiVQHjFJZH8Q1anOFaBK7aWcCdwa+BPuqeNEz8nRgYuf5eLk
+         UIXUYdhWbw2EaE2ndJCMAi7y6MYmhmtBhlq/Qhd9AUZP2SgDVG0wEg82H6PnoiIZ/g
+         P4/fn/t4P+5HGfszaushNeBZj9U4zxx5Vdt2llPbvTZn9uW5sP9JBlqowgqksLP+jG
+         M8vfRqUFzpvwlxEzfVMjp0Fdx4qRzavPAKFKvnlsI9kP8LebVASZD/H3Lv/Fh7Kv9C
+         93aOUEQTb1tt0At6R3yXB3CWh7/+5ThDcz9bA/nMujXCyNnz8+Akd2CYdRUgjUGXLS
+         Aue/+FZSRQboQ==
+From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+To:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+Subject: [PATCH 00/12] Enable networking support for StarFive JH7100 SoC
+Date:   Sat, 11 Feb 2023 05:18:09 +0200
+Message-Id: <20230211031821.976408-1-cristian.ciocaltea@collabora.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When setting the power limit time window, software updates the 'y' bits
-and 'f' bits in the power limit register, and the value hardware takes
-follows the formula below
+This patch series adds ethernet support for the StarFive JH7100 SoC and 
+makes it available for the StarFive VisionFive V1 and BeagleV Starlight 
+boards, although I could only validate on the former SBC.
 
-	Time window = 2 ^ y * (1 + f / 4) * Time_Unit
+The work is heavily based on the reference implementation [1] and requires 
+the non-coherent DMA support provided by Emil via the Sifive Composable 
+Cache controller.
 
-When handling large time window input from userspace, using left
-shifting breaks in two cases,
-1. when ilog2(value) is bigger than 31, in expression "1 << y", left
-   shifting by more than 31 bits has undefined behavior. This breaks
-   'y'. For example, on an Alderlake platform, "1 << 32" returns 1.
-2. when ilog2(value) equals 31, "1 << 31" returns negative value
-   because '1' is recognized as signed int. And this breaks 'f'.
+Also note there is an overlap in "[PATCH 08/12] net: stmmac: Add glue layer 
+for StarFive JH7100 SoC" with the Yanhong Wang's upstreaming attempt [2]:
+"[PATCH v4 5/7] net: stmmac: Add glue layer for StarFive JH7110 SoCs". 
 
-Given that 'y' has 5 bits and hardware can never take a value larger
-than 31, fix the first problem by clamp the time window to the maximum
-possible value that the hardware can take.
+Since I cannot test the JH7110 SoC, I dropped the support for it from Emil's
+variant of the stmmac glue layer. Hence, we might need a bit of coordination
+in order to get this properly merged.
 
-Fix the second problem by using unsigned bit left shift.
+[1] https://github.com/starfive-tech/linux/commits/visionfive
+[2] https://lore.kernel.org/linux-riscv/20230118061701.30047-6-yanhong.wang@starfivetech.com/
 
-Note that hardware has its own maximum time window limitation, which
-may be lower than the time window value retrieved from the power limit
-register. When this happens, hardware clamps the input to its maximum
-time window limitation. That is why a software clamp is preferred to
-handle the problem on hand.
+Cristian Ciocaltea (7):
+  dt-bindings: riscv: sifive-ccache: Add compatible for StarFive JH7100
+    SoC
+  dt-bindings: riscv: sifive-ccache: Add 'uncached-offset' property
+  dt-bindings: net: Add StarFive JH7100 SoC
+  riscv: dts: starfive: Add dma-noncoherent for JH7100 SoC
+  riscv: dts: starfive: jh7100: Add ccache DT node
+  riscv: dts: starfive: jh7100: Add sysmain and gmac DT nodes
+  riscv: dts: starfive: jh7100-common: Setup pinmux and enable gmac
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
-Change since V1:
-1. drop pr_warn message for bogus userspace input.
-2. Add a comment when handling the large exponent.
----
- drivers/powercap/intel_rapl_common.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+Emil Renner Berthing (5):
+  soc: sifive: ccache: Add StarFive JH7100 support
+  soc: sifive: ccache: Add non-coherent DMA handling
+  riscv: Implement non-coherent DMA support via SiFive cache flushing
+  dt-bindings: mfd: syscon: Add StarFive JH7100 sysmain compatible
+  net: stmmac: Add glue layer for StarFive JH7100 SoC
 
-diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-index 26d00b1853b4..69526d21699d 100644
---- a/drivers/powercap/intel_rapl_common.c
-+++ b/drivers/powercap/intel_rapl_common.c
-@@ -999,7 +999,15 @@ static u64 rapl_compute_time_window_core(struct rapl_package *rp, u64 value,
- 
- 		do_div(value, rp->time_unit);
- 		y = ilog2(value);
--		f = div64_u64(4 * (value - (1 << y)), 1 << y);
-+
-+		/*
-+		 * The target hardware field has 7 bits, return all ones if
-+		 * the exponent is too large.
-+		 */
-+		if (y > 0x1f)
-+			return 0x7f;
-+
-+		f = div64_u64(4 * (value - (1ULL << y)), 1ULL << y);
- 		value = (y & 0x1f) | ((f & 0x3) << 5);
- 	}
- 	return value;
+ .../devicetree/bindings/mfd/syscon.yaml       |   1 +
+ .../devicetree/bindings/net/snps,dwmac.yaml   |  15 +-
+ .../bindings/net/starfive,jh7100-dwmac.yaml   | 106 ++++++++++++
+ .../bindings/riscv/sifive,ccache0.yaml        |  33 +++-
+ MAINTAINERS                                   |   6 +
+ arch/riscv/Kconfig                            |   6 +-
+ .../boot/dts/starfive/jh7100-common.dtsi      |  78 +++++++++
+ arch/riscv/boot/dts/starfive/jh7100.dtsi      |  55 +++++++
+ arch/riscv/mm/dma-noncoherent.c               |  37 ++++-
+ drivers/net/ethernet/stmicro/stmmac/Kconfig   |  12 ++
+ drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
+ .../ethernet/stmicro/stmmac/dwmac-starfive.c  | 155 ++++++++++++++++++
+ drivers/soc/sifive/Kconfig                    |   1 +
+ drivers/soc/sifive/sifive_ccache.c            |  71 +++++++-
+ include/soc/sifive/sifive_ccache.h            |  21 +++
+ 15 files changed, 587 insertions(+), 11 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/starfive,jh7100-dwmac.yaml
+ create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+
 -- 
-2.25.1
+2.39.1
+
