@@ -2,114 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40D92692EE1
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 07:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB192692EE4
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 07:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjBKGku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 01:40:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
+        id S229577AbjBKGpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 01:45:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjBKGj5 (ORCPT
+        with ESMTP id S229480AbjBKGpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 01:39:57 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2014015CB5
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 22:39:56 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-15fe106c7c7so9385455fac.8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 22:39:56 -0800 (PST)
+        Sat, 11 Feb 2023 01:45:34 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B65835AF
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 22:45:33 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-52ed582a847so30514757b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Feb 2023 22:45:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hTv8boWiXl3Q8qm/+aQVqDvix+KsA9tTjnV3RAm1YEo=;
-        b=P+Oe5a1pah+Zr4CuFWfmfhGPerI7RTROI4usQQ2as0MnIS9p+f6YgVRk3NgRFqS9Xh
-         eWf8bjcqxRlb2VDSvKosj6dA3lU6PrnwDQQJLvWOFv7Xg5S//x42J65AWr8Hu5iEFj0c
-         L4JKGZrSXTKj5Llrg56gIgyr++/EEdJ0awwxN1IbcMglmp303lVfpjUhRb9s3GIBqOCQ
-         hk6wOO0mPvIx+e2tZuAdLkvGOhPS3CTdyluXRAhS/0Gv8LkG4BDl8C5/0vXWMUsTqETg
-         l1mb1a/etj+ePFvFMkIKnuesZWjDSZr/cVBT10IO90OGuv7MkxIE8KksHv8H3lPBPRVI
-         OWJQ==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/B9GAfQBYBoDhp2FsGVxBOlSI/O26/vnD5AYsxIyzR8=;
+        b=Yv539ZuxLzEXoqlnYNJ4YBJiTtbId/KwCDAMas26JG8dvIgIIHPaSZWDtR/CzvuUVP
+         ptyMI+e2fx2SyiZXjqX44ub7akJo68csVGHFXhCJ9OJSRg2dGOtwAOb9egWJH7BL1taq
+         tee4lpO0rn+caE1sS9lo3uI+UEldjkVwUy5naRuVeFA9fQqRx4ytRbM3bPMFOf8OB+Tk
+         ezMJj+jH/3XwS2q7I+JFN6GSE3uL55mgfu5suJRcLYUwOUN3Wk2QWwx9hdSmIFjL46EL
+         jd+Bdc2mWz965ZkWRd/cv60cFAjY3hRX9EARTZw9xzPrrKg4Xo26PiVbaOPlceRez8Ce
+         d/dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hTv8boWiXl3Q8qm/+aQVqDvix+KsA9tTjnV3RAm1YEo=;
-        b=2xBD/Th4SxY5M8GeU50c9+3rBgsUzHpo4voGg5nEybcUgpLlyzhS7ou775KIWtUirm
-         NhI35wCdlLaC5HkWGiHPz3vTUyYer8EO85DUeBZyw2Abrrs+bRzw6cX3p259s/0bdqCg
-         9H1j8UaMxYilq3KzqhfILDzAzGGLJhFkh2aFuqs9YLpXnp8alIM30+kAyUZJuhtrwNkr
-         sVa01PpY2yZhUY2Ip6ijsQSZfN2CabUbAUwSari78zsJDkLsIPAXVixGvN3+JNgAzHSH
-         fkRJBFTly5Q57KM8ZbMVlW97NCZLtEpqPY4Y8ocxFkf8yOSBMDLBPyLYG+7dBKs8uxjW
-         JYHw==
-X-Gm-Message-State: AO0yUKWLzkYKn8aH6J7vXD8VPA1NdfcVF0QTILn7cgyLQMiYFx4w5EcS
-        Ed07s+Au7Nd8+H0HmKSChwzKng==
-X-Google-Smtp-Source: AK7set9uzrsntw631tV4DP3rQ7Jj6aGuIrMBBqtNYlcwRR5cuwwLS0QTP9SXjkJTUM56WsqM07CgcQ==
-X-Received: by 2002:a05:6870:8a21:b0:16a:a457:655d with SMTP id p33-20020a0568708a2100b0016aa457655dmr6828806oaq.5.1676097595431;
-        Fri, 10 Feb 2023 22:39:55 -0800 (PST)
-Received: from localhost ([136.49.140.41])
-        by smtp.gmail.com with ESMTPSA id ed52-20020a056870b7b400b0016b7fe3be05sm1734264oab.39.2023.02.10.22.39.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Feb 2023 22:39:55 -0800 (PST)
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     David Virag <virag.david003@gmail.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] arm64: dts: exynos: Add CMU_G3D node for Exynos850 SoC
-Date:   Sat, 11 Feb 2023 00:40:06 -0600
-Message-Id: <20230211064006.14981-7-semen.protsenko@linaro.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230211064006.14981-1-semen.protsenko@linaro.org>
-References: <20230211064006.14981-1-semen.protsenko@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/B9GAfQBYBoDhp2FsGVxBOlSI/O26/vnD5AYsxIyzR8=;
+        b=K9qXN4qWZ2zthJmCsXKfaHBZ0ppF78KFOXNCTcvoESbA/Puqf5FB3cLloEhJkYOa+d
+         LpY7rjKw7MFAYLEFrcKHIACgsM5Cuahn27JYU0DCFp8Kk45UH31epdGjt4gqgd+qILcg
+         xTPv5+VtGSNSzEgfqTbZuusl1k81DjFK+piX/SmS61C+Z8tmPhtAAhcuEWrmcyERlZ9a
+         b/uys26KPhxv9rkAy8ByNX1Ti3KnsA6MG6Rd6YyzulROSTCGdkhf94RmgmFjTaz+n+kI
+         eVDcw95EmAg1lmwPI1HUlifxRRx7itfJwTP3Yt75G0gUjylAF67CEZEpq7MLiHYzbZXU
+         CQoQ==
+X-Gm-Message-State: AO0yUKWuGvSLEW4gcj5g4zuUE9OuT3aBcG2WqiG95cgIMOFFaxbUHbMu
+        xPI7wxeY9f2TZQ5d5STBUKFImWt0eYV/MFTDZlYtwsdKRUrzgMVxZX7UlUvbZG8nLmfRpShxzzP
+        EwTUIpqZ0oTllDu0FjLeoZe6BLDR8AjQn7Pr4FJR3PY9x95VpJib1+Cssfpgnd9bDbSHZIwE=
+X-Google-Smtp-Source: AK7set+ki8mezg9O1UkdIzgf8OnruyYeeAJKTirGl1WuhBHfTqZq2qa3dc8OFKVV1QmBe/8AxAWFkaIMjgIa
+X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
+ (user=jstultz job=sendgmr) by 2002:a81:a97:0:b0:52e:c29d:7328 with SMTP id
+ 145-20020a810a97000000b0052ec29d7328mr12ywk.7.1676097931564; Fri, 10 Feb 2023
+ 22:45:31 -0800 (PST)
+Date:   Sat, 11 Feb 2023 06:45:26 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
+Message-ID: <20230211064527.3481754-1-jstultz@google.com>
+Subject: [RFC][PATCH 1/2] time: alarmtimer: Fix erroneous case of using 0 as
+ an "invalid" initialization value
+From:   John Stultz <jstultz@google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Michael <michael@mipisi.de>,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing G3D clock domain to Exynos850 SoC device tree.
+Michael reported seeing an error where alarmtimers would
+occasionally not wake the system up.
 
-Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+It was found that in alarmtimer_suspend() it was exiting via
+the:
+    if (min == 0)
+        return 0;
+check. This logic was from one of the early versions of the
+original alarmtimer patch, where we initialized min to 0, and
+then this check would exit early if we found no timers to expire
+(leaving min still at 0).
+
+However, its possible for an alarmtimer to expire as we are
+checking it, leaving the calculated delta to be zero, and thus
+setting min to zero.
+
+This is the result of my using 0 as an invalid time value which
+is clearly erroneous. Instead KTIME_MAX should have been used.
+
+This patch, split out from a change originally suggested by
+Thomas Gleixner, changes the logic to instead use KTIME_MAX.
+
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Michael <michael@mipisi.de>
+Cc: Michael Trimarchi <michael@amarulasolutions.com>
+Cc: kernel-team@android.com
+Reported-by: Michael <michael@mipisi.de>
+Reported-by: Michael Trimarchi <michael@amarulasolutions.com>
+Fixes: ff3ead96d17f ("timers: Introduce in-kernel alarm-timer interface")
+Originally-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lore.kernel.org/lkml/alpine.DEB.2.21.1909021247250.3955@nanos.tec.linutronix.de/
+[jstultz: Forward ported to 6.2-rc, and split out just the
+          KTIME_MAX change]
+Signed-off-by: John Stultz <jstultz@google.com>
 ---
- arch/arm64/boot/dts/exynos/exynos850.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ kernel/time/alarmtimer.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/exynos/exynos850.dtsi b/arch/arm64/boot/dts/exynos/exynos850.dtsi
-index a38fe5129937..d67e98120313 100644
---- a/arch/arm64/boot/dts/exynos/exynos850.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynos850.dtsi
-@@ -245,6 +245,15 @@ cmu_peri: clock-controller@10030000 {
- 				      "dout_peri_uart", "dout_peri_ip";
- 		};
+diff --git a/kernel/time/alarmtimer.c b/kernel/time/alarmtimer.c
+index 5897828b9d7e..f7b2128f64e2 100644
+--- a/kernel/time/alarmtimer.c
++++ b/kernel/time/alarmtimer.c
+@@ -251,7 +251,7 @@ static int alarmtimer_suspend(struct device *dev)
+ 	min = freezer_delta;
+ 	expires = freezer_expires;
+ 	type = freezer_alarmtype;
+-	freezer_delta = 0;
++	freezer_delta = KTIME_MAX;
+ 	spin_unlock_irqrestore(&freezer_delta_lock, flags);
  
-+		cmu_g3d: clock-controller@11400000 {
-+			compatible = "samsung,exynos850-cmu-g3d";
-+			reg = <0x11400000 0x8000>;
-+			#clock-cells = <1>;
-+
-+			clocks = <&oscclk>, <&cmu_top CLK_DOUT_G3D_SWITCH>;
-+			clock-names = "oscclk", "dout_g3d_switch";
-+		};
-+
- 		cmu_apm: clock-controller@11800000 {
- 			compatible = "samsung,exynos850-cmu-apm";
- 			reg = <0x11800000 0x8000>;
+ 	rtc = alarmtimer_get_rtcdev();
+@@ -271,13 +271,14 @@ static int alarmtimer_suspend(struct device *dev)
+ 		if (!next)
+ 			continue;
+ 		delta = ktime_sub(next->expires, base->get_ktime());
+-		if (!min || (delta < min)) {
++		if (delta < min) {
+ 			expires = next->expires;
+ 			min = delta;
+ 			type = i;
+ 		}
+ 	}
+-	if (min == 0)
++	/* No timers to expire */
++	if (min == KTIME_MAX)
+ 		return 0;
+ 
+ 	if (ktime_to_ns(min) < 2 * NSEC_PER_SEC) {
+@@ -503,7 +504,7 @@ static void alarmtimer_freezerset(ktime_t absexp, enum alarmtimer_type type)
+ 	delta = ktime_sub(absexp, base->get_ktime());
+ 
+ 	spin_lock_irqsave(&freezer_delta_lock, flags);
+-	if (!freezer_delta || (delta < freezer_delta)) {
++	if (delta < freezer_delta) {
+ 		freezer_delta = delta;
+ 		freezer_expires = absexp;
+ 		freezer_alarmtype = type;
 -- 
-2.39.1
+2.39.1.581.gbfd45094c4-goog
 
