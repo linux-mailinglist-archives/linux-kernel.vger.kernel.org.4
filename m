@@ -2,65 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C2569349F
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 00:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B96C66934A0
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 00:08:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbjBKXGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 18:06:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40538 "EHLO
+        id S229564AbjBKXIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 18:08:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBKXGc (ORCPT
+        with ESMTP id S229455AbjBKXIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 18:06:32 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869D283D6;
-        Sat, 11 Feb 2023 15:06:31 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id q13so10213956qtx.2;
-        Sat, 11 Feb 2023 15:06:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XexWdl6TtTi4Fjueq7elzY32T2IN8DIhaj/CDtKmSgI=;
-        b=hU9jBn9f0Z7VUVlMUN5qwUG4iDjrdNVQZDMXe2ZNsME+AnigDg0eeBMxe9KpNwgFmT
-         4P1Wy3pqNZNuhhq3FVTERB9Xge/XNY2k7oNWuikHambKHtsH4dmN931+b5zL86XgCiHw
-         urLg/hrmgHufdi9F0UY6SEi+r2PhRRwDW6QPbDVBe+xQSQrSfRAjj083H3PPVQUHWyTW
-         dh9F73PiHAtQeH5LTLuxsDv94rmy4oX6zPQMVXw6ww89Aq1tRBNTDs2vfKkXKY9gicDj
-         eUkpqlbw9qFaCXy913832NetRyyi19avRiWSgXXcII/RIwwkPQgAsl3XiRNUSeEZ1xpG
-         ASgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XexWdl6TtTi4Fjueq7elzY32T2IN8DIhaj/CDtKmSgI=;
-        b=rRImkuCAr3Tpx85hBbT0sZzGe+0/oxsx4fWQonhsfXz36zNTOF7TY13Ug8K+EHYNCt
-         H5U+u+wWJ7vtxhd+N4YWlYCiNRu5IIdGQQImSd5DB46ZDHupXyxir/GCJ5rY6af/kIjF
-         aS4TZ6A8Yww+DbJ9QjUmroq6Zzk/MbgU0hRbA0H2ZMqw1jcD3Z16Q+tJRgIMbasolY7C
-         0qHCsUkp7SWWJ4KC/T50HkfPCImsW1Dw4O7hzKt7SdtorwUygIl7UTCqFPSRUaxyIiAB
-         iPsEW2NUIoMGiTAfPFx0c/go0Gc23Bnp3eGS4jHCF4wkLDB4iqnVpz8n43W+ybBrkS/C
-         Mt1w==
-X-Gm-Message-State: AO0yUKVS7Rf9NtBB0YrhdnoNSMUIVk08qbRV1Y3GrUsN8C02/zkx4yXO
-        t0k3jTGNiI1O/RlTXng8IQ==
-X-Google-Smtp-Source: AK7set/4FWruaqIagAvn6SDdiTFI+kroF1mRDTT+90HAp8bQrUMKdaI/DiabjQ9uO8tUDtKDElebYw==
-X-Received: by 2002:ac8:580f:0:b0:3ba:ef:fc0e with SMTP id g15-20020ac8580f000000b003ba00effc0emr37585314qtg.57.1676156790604;
-        Sat, 11 Feb 2023 15:06:30 -0800 (PST)
-Received: from [192.168.1.210] (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id o5-20020ac80245000000b003b64f1b1f40sm6126760qtg.40.2023.02.11.15.06.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Feb 2023 15:06:30 -0800 (PST)
-Message-ID: <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
-Date:   Sat, 11 Feb 2023 18:06:28 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
- with unique class keys
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Sat, 11 Feb 2023 18:08:21 -0500
+Received: from out-126.mta0.migadu.com (out-126.mta0.migadu.com [91.218.175.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26DF61B7
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 15:08:19 -0800 (PST)
+Date:   Sat, 11 Feb 2023 18:08:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1676156895;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jeaoWPG8qKepOXCpHP3PyDGxt09p0/Rrs7H163Xd+js=;
+        b=DarU0UB2DlLoHXCNgDs2QtsgHpACdjlnav1eTn8N2U9IcXU3fVuPqGhRUOQoXF+MpHrJxQ
+        7K6Bs/PBYSGysCtjf47hmJVGaz5jk3hTxJiQ5CSJ4aGzvj76/+38DZkTEq6DuhTh8c3TLR
+        ojPzF5B/YNoF/85pFZMmaiID9xvw3hM=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Kent Overstreet <kent.overstreet@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
-        Coly Li <colyli@suse.de>, kent.overstreet@linux.dev
-Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Coly Li <colyli@suse.de>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
         syzkaller <syzkaller@googlegroups.com>,
         Dmitry Vyukov <dvyukov@google.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -71,10 +42,10 @@ Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
         LKML <linux-kernel@vger.kernel.org>,
         USB list <linux-usb@vger.kernel.org>,
         Hillf Danton <hdanton@sina.com>
-References: <Y+Egr4MmqlE6G+mr@rowland.harvard.edu>
- <a7d0e143-1e68-5531-5c2e-1f853d794bc0@I-love.SAKURA.ne.jp>
- <Y+KOeJlvQMYAaheZ@rowland.harvard.edu>
- <a67e24eb-b68f-2abc-50af-ae4c2d4cdd95@I-love.SAKURA.ne.jp>
+Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
+ with unique class keys
+Message-ID: <Y+gf1SX9MXdBja1z@moria.home.lan>
+References: <a67e24eb-b68f-2abc-50af-ae4c2d4cdd95@I-love.SAKURA.ne.jp>
  <20230208080739.1649-1-hdanton@sina.com>
  <1ad499bb-0c53-7529-ff00-e4328823f6fa@I-love.SAKURA.ne.jp>
  <Y+O6toMmAKBSILMf@rowland.harvard.edu>
@@ -83,54 +54,118 @@ References: <Y+Egr4MmqlE6G+mr@rowland.harvard.edu>
  <52c7d509-ba9e-a121-60c9-138d7ff3f667@I-love.SAKURA.ne.jp>
  <Y+gLd78vChQERZ6A@rowland.harvard.edu>
  <CAHk-=whXYzkOJZo0xpyYfrhWQg1M7j0OeCojTJ84CN4q9sqb2Q@mail.gmail.com>
-Content-Language: en-US
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-In-Reply-To: <CAHk-=whXYzkOJZo0xpyYfrhWQg1M7j0OeCojTJ84CN4q9sqb2Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+ <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/11/23 16:51, Linus Torvalds wrote:
-> On Sat, Feb 11, 2023 at 1:41 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->>
->> @@ -2941,7 +2944,10 @@ void device_initialize(struct device *de
->>          kobject_init(&dev->kobj, &device_ktype);
->>          INIT_LIST_HEAD(&dev->dma_pools);
->>          mutex_init(&dev->mutex);
->> -       lockdep_set_novalidate_class(&dev->mutex);
->> +       if (!lockdep_static_obj(dev)) {
->> +               lockdep_register_key(&dev->mutex_key);
->> +               lockdep_set_class(&dev->mutex, &dev->mutex_key);
->> +       }
->>          spin_lock_init(&dev->devres_lock);
->>          INIT_LIST_HEAD(&dev->devres_head);
->>          device_pm_init(dev);
+On Sat, Feb 11, 2023 at 06:06:28PM -0500, Kent Overstreet wrote:
+> Yeah, what bcache really needs (and presumably dev->mutex as well) is just
+> to disable lockdep checking for self-deadlock of that lock type, since it's
+> got its own deadlock avoidance and the subclass thing isn't good enough.
 > 
-> So I think this is the right thing to do, but I note that while that
-> lockdep_set_novalidate_class() was "documented" to only be for
-> 'dev->mutex' by scripts/checkpatch.pl, that horrific thing is also
-> used by md/bcache/btree.c for the mca_bucket_alloc().
-> 
-> Can we *please* get rid of it there too (it was added by the initial
-> code, and never had any explicit excuse for it), possibly by using the
-> same model.
-> 
-> And then we could get rid of lockdep_set_novalidate_class() entirely.
-> That would be a good thing.
+> I've got a patch that should do what we want, replying from my other account
+> with it.
+-- >8 --
+Subject: [PATCH] locking/lockdep: lockdep_set_no_check_recursion()
 
-Yeah, what bcache really needs (and presumably dev->mutex as well) is 
-just to disable lockdep checking for self-deadlock of that lock type, 
-since it's got its own deadlock avoidance and the subclass thing isn't 
-good enough.
+This adds a method to tell lockdep not to check lock ordering within a
+lock class - but to still check lock ordering w.r.t. other lock types.
 
-I've got a patch that should do what we want, replying from my other 
-account with it.
+Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+---
+ include/linux/lockdep.h       |  6 ++++++
+ include/linux/lockdep_types.h |  2 +-
+ kernel/locking/lockdep.c      | 26 ++++++++++++++++++++++++++
+ 3 files changed, 33 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+index e027c504b7..66f28553c6 100644
+--- a/include/linux/lockdep.h
++++ b/include/linux/lockdep.h
+@@ -666,4 +666,10 @@ lockdep_rcu_suspicious(const char *file, const int line, const char *s)
+ }
+ #endif
+ 
++#ifdef CONFIG_DEBUG_LOCK_ALLOC
++void lockdep_set_no_check_recursion(struct lockdep_map *map);
++#else
++static inline void lockdep_set_no_check_recursion(struct lockdep_map *map) {}
++#endif
++
+ #endif /* __LINUX_LOCKDEP_H */
+diff --git a/include/linux/lockdep_types.h b/include/linux/lockdep_types.h
+index d22430840b..506e769b4a 100644
+--- a/include/linux/lockdep_types.h
++++ b/include/linux/lockdep_types.h
+@@ -128,7 +128,7 @@ struct lock_class {
+ 	u8				wait_type_inner;
+ 	u8				wait_type_outer;
+ 	u8				lock_type;
+-	/* u8				hole; */
++	u8				no_check_recursion;
+ 
+ #ifdef CONFIG_LOCK_STAT
+ 	unsigned long			contention_point[LOCKSTAT_POINTS];
+diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+index cae7d5f0ad..47ffb8df11 100644
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -3023,6 +3023,9 @@ check_deadlock(struct task_struct *curr, struct held_lock *next)
+ 		if ((next->read == 2) && prev->read)
+ 			continue;
+ 
++		if (hlock_class(next)->no_check_recursion)
++			continue;
++
+ 		/*
+ 		 * We're holding the nest_lock, which serializes this lock's
+ 		 * nesting behaviour.
+@@ -3084,6 +3087,10 @@ check_prev_add(struct task_struct *curr, struct held_lock *prev,
+ 		return 2;
+ 	}
+ 
++	if (hlock_class(prev) == hlock_class(next) &&
++	    hlock_class(prev)->no_check_recursion)
++		return 2;
++
+ 	/*
+ 	 * Prove that the new <prev> -> <next> dependency would not
+ 	 * create a circular dependency in the graph. (We do this by
+@@ -6617,3 +6624,22 @@ void lockdep_rcu_suspicious(const char *file, const int line, const char *s)
+ 	dump_stack();
+ }
+ EXPORT_SYMBOL_GPL(lockdep_rcu_suspicious);
++
++#ifdef CONFIG_DEBUG_LOCK_ALLOC
++void lockdep_set_no_check_recursion(struct lockdep_map *lock)
++{
++	struct lock_class *class = lock->class_cache[0];
++	unsigned long flags;
++
++	raw_local_irq_save(flags);
++	lockdep_recursion_inc();
++
++	if (!class)
++		class = register_lock_class(lock, 0, 0);
++	if (class)
++		class->no_check_recursion = true;
++	lockdep_recursion_finish();
++	raw_local_irq_restore(flags);
++}
++EXPORT_SYMBOL_GPL(lockdep_set_no_check_recursion);
++#endif
+-- 
+2.39.1
+
 
