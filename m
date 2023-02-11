@@ -2,261 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D8469304F
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 12:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E16A693052
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 12:29:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjBKL2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 06:28:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
+        id S229865AbjBKL3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 06:29:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBKL2D (ORCPT
+        with ESMTP id S229447AbjBKL3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 06:28:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1D040CC
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 03:27:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676114842;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+TWzbGwMUNW+n8L9sktXtMN7s4j2QAb4DRV1g3S7J38=;
-        b=bu8Dmz7z3uYl5g+DMcdGoOP4fnNBbFsp5gzAXtJ4J26NXu0mYNONW1zlpggu2WRWils9nL
-        /r0ZuL+j43xMsHL4QuKUNxGoB6G/4iqT79dXcfhQ0ytkPCoHtDi4cZ4mVj1L8J1FU2blG7
-        p7cQMliqhaUuU1WP22r3Apd1oWJwivw=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-609-2qRRMwiIPu6FVGugOhJT1g-1; Sat, 11 Feb 2023 06:27:21 -0500
-X-MC-Unique: 2qRRMwiIPu6FVGugOhJT1g-1
-Received: by mail-ej1-f69.google.com with SMTP id qk8-20020a1709077f8800b008af3fb43869so4440867ejc.4
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 03:27:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+TWzbGwMUNW+n8L9sktXtMN7s4j2QAb4DRV1g3S7J38=;
-        b=cXTfYoMhihgCTMsHf7jSPaYsDmlBxiVKWohdQf5/bcrEZYMRlL/93OxOxdPvZ/Gj3X
-         2A4OcjvQM3OW3SLbOUnSRUnuFZ5A/mo9Bu3SdfKsZnCrTb0DmPVOlG93NT4WqoiHM8TB
-         yYEgV4ymTswsqQr6AclEmSWbxTSCWsMX30rznU1sQEhBM8HYMx89abe9tt5aOvEa3KWa
-         gfWKvDz9Jo487gwo3Di+rwRx0Ih0NMFdwM+NVdEHq6mJihiwDNkwUCHf+9y4cLdblqsl
-         bSupIF6mF0O+8mH3yBChCIsQqbkkyY4XNhtB3owihjTgv8MmQswhCRCeCJHe1NIMQPJy
-         LrTg==
-X-Gm-Message-State: AO0yUKVGVgRkI0xodEcoVYork0Dbr3kp/yKkWCOMqvfDGqdoZd4RmWz+
-        u7Cle2WyRAS16E1LwffoRLn5CGBt3sY/J5rPgaxOzj1YBHHqLzoIkYvcagKNlfDa2ycRiNXQXzY
-        iS2WvAslw+slP/n3NljXLVahG
-X-Received: by 2002:a17:906:6a15:b0:895:58be:94d with SMTP id qw21-20020a1709066a1500b0089558be094dmr27969773ejc.3.1676114840055;
-        Sat, 11 Feb 2023 03:27:20 -0800 (PST)
-X-Google-Smtp-Source: AK7set+CyhHdGJQxbppC+Q3hsT5VQygsBF0ob0PfWcSKa7EUj25Mb49WmvY947P55TtHbER842rQYw==
-X-Received: by 2002:a17:906:6a15:b0:895:58be:94d with SMTP id qw21-20020a1709066a1500b0089558be094dmr27969751ejc.3.1676114839857;
-        Sat, 11 Feb 2023 03:27:19 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id b11-20020a170906490b00b0084d4b8f5889sm3715458ejq.102.2023.02.11.03.27.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Feb 2023 03:27:19 -0800 (PST)
-Message-ID: <3b6f8d89-f803-ace8-a3ae-ed9870f22b37@redhat.com>
-Date:   Sat, 11 Feb 2023 12:27:18 +0100
+        Sat, 11 Feb 2023 06:29:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E6640CC
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 03:29:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97BD460BFB
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 11:29:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2827C4339E
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 11:29:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676114972;
+        bh=C3bjROftDAPM+bZdQkNNgbRlbm6TOtzl9Ub93ftiVEo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LwMv/50uD4n72UOgutSUODC3C2KbqcgXa/4JPQi6yFjIPD+hFvA/c/iY+hBfU2M2w
+         4UCxgjW71QCIMUJLIIIyPAMGY2yXS8R0seUgpeeiC/z6ZVZxxKLYLhFcBXsBscdDtV
+         rkwa3um1nrH8kfRZw0a9lhBBZ3auZAWOyAqPEwFbmO1ZIy3U8o9JPp+Ci6XwNcABIJ
+         ikPHNQhPxQeRRI/AmmPMhUfza2saZOZ/dpe2be+SSw7O3LA8lrkS/+dinpa3c7TuiU
+         MVi/RPcK7opUrX/A/yFyqLKIdQ2Q66jhKbJqjAW6o39LdkM7gZp4JP/4AH1t2ybZ2c
+         lgZ7DGFfaCG1g==
+Received: by mail-ed1-f43.google.com with SMTP id d40so6028717eda.8
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 03:29:31 -0800 (PST)
+X-Gm-Message-State: AO0yUKV2P9QikAY+h19Z5nM7OmpPju8HQpRRXNQn34GmsetaT14xc6Za
+        9owJkuaWfz+w9OLzsW7M10OYw+VzOiRTkI47fZE=
+X-Google-Smtp-Source: AK7set+mmZzUyxF0iFAFzDbCYZQofszUN0H6Ke2DyAdDADTjdww9OENwHEgM992BZmbHnkRY8IK7Zr2NepClMRtDeik=
+X-Received: by 2002:a50:cd8e:0:b0:49d:ec5e:1e9a with SMTP id
+ p14-20020a50cd8e000000b0049dec5e1e9amr4443908edi.7.1676114970137; Sat, 11 Feb
+ 2023 03:29:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 1/9] apple-gmux: use cpu_to_be32 instead of manual
- reorder
-To:     Orlando Chamberlain <orlandoch.dev@gmail.com>
-Cc:     platform-driver-x86@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Mark Gross <markgross@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        YiPeng Chai <YiPeng.Chai@amd.com>,
-        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Bokun Zhang <Bokun.Zhang@amd.com>,
-        Jack Xiao <Jack.Xiao@amd.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Rander Wang <rander.wang@intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        Yong Zhi <yong.zhi@intel.com>, Evan Quan <evan.quan@amd.com>,
-        Kerem Karabay <kekrby@gmail.com>,
-        Aditya Garg <gargaditya08@live.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>
-References: <20230210044826.9834-1-orlandoch.dev@gmail.com>
- <20230210044826.9834-2-orlandoch.dev@gmail.com>
- <3af65b5e-1f52-79f6-4130-03901ce76d2f@redhat.com>
- <74e3c9ae-b1f1-1e7b-4af1-56f918471b36@redhat.com>
- <20230211103024.2a204487@redecorated-mbp>
-Content-Language: en-US, nl
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230211103024.2a204487@redecorated-mbp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1676114191-13386-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1676114191-13386-1-git-send-email-yangtiezhu@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sat, 11 Feb 2023 19:29:17 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H76gvrBFoFcFyqfr1rBew_cLmXEEh+4qWt+A-h_adAjBw@mail.gmail.com>
+Message-ID: <CAAhV-H76gvrBFoFcFyqfr1rBew_cLmXEEh+4qWt+A-h_adAjBw@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Only call get_timer_irq() once in constant_clockevent_init()
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi, Tiezhu,
 
-On 2/11/23 00:30, Orlando Chamberlain wrote:
-> On Fri, 10 Feb 2023 20:19:27 +0100
-> Hans de Goede <hdegoede@redhat.com> wrote:
-> 
->> Hi,
->>
->> On 2/10/23 20:09, Hans de Goede wrote:
->>> Hi,
->>>
->>> On 2/10/23 05:48, Orlando Chamberlain wrote:  
->>>> Currently it manually flips the byte order, but we can instead use
->>>> cpu_to_be32(val) for this.
->>>>
->>>> Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
->>>> ---
->>>>  drivers/platform/x86/apple-gmux.c | 18 ++----------------
->>>>  1 file changed, 2 insertions(+), 16 deletions(-)
->>>>
->>>> diff --git a/drivers/platform/x86/apple-gmux.c
->>>> b/drivers/platform/x86/apple-gmux.c index
->>>> 9333f82cfa8a..e8cb084cb81f 100644 ---
->>>> a/drivers/platform/x86/apple-gmux.c +++
->>>> b/drivers/platform/x86/apple-gmux.c @@ -94,13 +94,7 @@ static u32
->>>> gmux_pio_read32(struct apple_gmux_data *gmux_data, int port)
->>>> static void gmux_pio_write32(struct apple_gmux_data *gmux_data,
->>>> int port, u32 val) {
->>>> -	int i;
->>>> -	u8 tmpval;
->>>> -
->>>> -	for (i = 0; i < 4; i++) {
->>>> -		tmpval = (val >> (i * 8)) & 0xff;
->>>> -		outb(tmpval, gmux_data->iostart + port + i);
->>>> -	}
->>>> +	outl(cpu_to_be32(val), gmux_data->iostart + port);
->>>>  }
->>>>  
->>>>  static int gmux_index_wait_ready(struct apple_gmux_data
->>>> *gmux_data)  
->>>
->>> The ioport / indexed-ioport accessed apple_gmux-es likely are (part
->>> of?) LPC bus devices . Looking at the bus level you are now
->>> changing 4 io accesses with a size of 1 byte, to 1 32 bit io-access.
->>>
->>> Depending on the decoding hw in the chip this may work fine,
->>> or this may work not at all.
->>>
->>> I realized that you have asked for more testing, but most surviving
->>> macbooks from the older apple-gmux era appear to be models without
->>> a discrete GPU (which are often the first thing to break) and thus
->>> without a gmux.
->>>
->>> Unless we get a bunch of testers to show up, which I doubt. I would
->>> prefer slightly bigger / less pretty code and not change the
->>> functional behavior of the driver on these older models.  
->>
->> A quick follow up on this, I just noticed that only the pio_write32
->> is doing the one byte at a time thing:
->>
->> static u32 gmux_pio_read32(struct apple_gmux_data *gmux_data, int
->> port) {
->>         return inl(gmux_data->iostart + port);
->> }
->>
->> static void gmux_pio_write32(struct apple_gmux_data *gmux_data, int
->> port, u32 val)
->> {
->>         int i;
->>         u8 tmpval;
->>
->>         for (i = 0; i < 4; i++) {
->>                 tmpval = (val >> (i * 8)) & 0xff;
->>                 outb(tmpval, gmux_data->iostart + port + i);
->>         }
->> }
->>
->> And if you look closely gmux_pio_write32() is not swapping
->> the order to be32 at all, it is just taking the bytes
->> in little-endian memory order, starting with the first
->> (index 0) byte which is the least significant byte of
->> the value.
->>
->> On x86 the original code is no different then doing:
->>
->> static void gmux_pio_write32(struct apple_gmux_data *gmux_data, int
->> port, u32 val)
->> {
->>         u8 *data = (u8 *)&val;
->>         int i;
->>
->>         for (i = 0; i < 4; i++)
->>                 outb(data[i], gmux_data->iostart + port + i);
->> }
->>
->> So yeah this patch is definitely wrong, it actually swaps
->> the byte order compared to the original code. Which becomes
->> clear when you look the weird difference between the read32 and
->> write32 functions after this patch.
->>
->> Presumably there is a specific reason why gmux_pio_write32()
->> is not already doing a single outl(..., val) and byte-ordering
->> is not the reason.
->>
->> Regards,
->>
->> Hans
-> 
-> Sounds like it may be better to just drop this patch as there's very
-> little benefit for the risk of causing a regression.
+On Sat, Feb 11, 2023 at 7:16 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>
+> Under CONFIG_DEBUG_ATOMIC_SLEEP=y and CONFIG_DEBUG_PREEMPT=y, we can see
+> the following messages on LoongArch, this is because using might_sleep()
+> in preemption disable context.
+>
+> [    0.001127] smp: Bringing up secondary CPUs ...
+> [    0.001222] Booting CPU#1...
+> [    0.001244] 64-bit Loongson Processor probed (LA464 Core)
+> [    0.001247] CPU1 revision is: 0014c012 (Loongson-64bit)
+> [    0.001250] FPU1 revision is: 00000000
+> [    0.001252] BUG: sleeping function called from invalid context at kernel/locking/mutex.c:283
+> [    0.001255] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 0, name: swapper/1
+> [    0.001257] preempt_count: 1, expected: 0
+> [    0.001258] RCU nest depth: 0, expected: 0
+> [    0.001259] Preemption disabled at:
+> [    0.001261] [<9000000000223800>] arch_dup_task_struct+0x20/0x110
+> [    0.001272] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.2.0-rc7+ #43
+> [    0.001275] Hardware name: Loongson Loongson-3A5000-7A1000-1w-A2101/Loongson-LS3A5000-7A1000-1w-A2101, BIOS vUDK2018-LoongArch-V4.0.05132-beta10 12/13/202
+> [    0.001277] Stack : 0072617764726148 0000000000000000 9000000000222f1c 90000001001e0000
+> [    0.001286]         90000001001e3be0 90000001001e3be8 0000000000000000 0000000000000000
+> [    0.001292]         90000001001e3be8 0000000000000040 90000001001e3cb8 90000001001e3a50
+> [    0.001297]         9000000001642000 90000001001e3be8 be694d10ce4139dd 9000000100174500
+> [    0.001303]         0000000000000001 0000000000000001 00000000ffffe0a2 0000000000000020
+> [    0.001309]         000000000000002f 9000000001354116 00000000056b0000 ffffffffffffffff
+> [    0.001314]         0000000000000000 0000000000000000 90000000014f6e90 9000000001642000
+> [    0.001320]         900000000022b69c 0000000000000001 0000000000000000 9000000001736a90
+> [    0.001325]         9000000100038000 0000000000000000 9000000000222f34 0000000000000000
+> [    0.001331]         00000000000000b0 0000000000000004 0000000000000000 0000000000070000
+> [    0.001337]         ...
+> [    0.001339] Call Trace:
+> [    0.001342] [<9000000000222f34>] show_stack+0x5c/0x180
+> [    0.001346] [<90000000010bdd80>] dump_stack_lvl+0x60/0x88
+> [    0.001352] [<9000000000266418>] __might_resched+0x180/0x1cc
+> [    0.001356] [<90000000010c742c>] mutex_lock+0x20/0x64
+> [    0.001359] [<90000000002a8ccc>] irq_find_matching_fwspec+0x48/0x124
+> [    0.001364] [<90000000002259c4>] constant_clockevent_init+0x68/0x204
+> [    0.001368] [<900000000022acf4>] start_secondary+0x40/0xa8
+> [    0.001371] [<90000000010c0124>] smpboot_entry+0x60/0x64
+>
+> Here are the complete call chains:
+>
+> smpboot_entry()
+>   start_secondary()
+>     constant_clockevent_init()
+>       get_timer_irq()
+>         irq_find_matching_fwnode()
+>           irq_find_matching_fwspec()
+>             mutex_lock()
+>               might_sleep()
+>                 __might_sleep()
+>                   __might_resched()
+>
+> In order to avoid the above issue, we should break the call chains,
+> using timer_irq_installed variable as check condition to only call
+> get_timer_irq() once in constant_clockevent_init() is a simple and
+> proper way.
+>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  arch/loongarch/kernel/time.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/loongarch/kernel/time.c b/arch/loongarch/kernel/time.c
+> index a6576de..6263b5a 100644
+> --- a/arch/loongarch/kernel/time.c
+> +++ b/arch/loongarch/kernel/time.c
+> @@ -140,14 +140,15 @@ static int get_timer_irq(void)
+>
+>  int constant_clockevent_init(void)
+>  {
+> -       int irq;
+> +       static int irq;
+>         unsigned int cpu = smp_processor_id();
+>         unsigned long min_delta = 0x600;
+>         unsigned long max_delta = (1UL << 48) - 1;
+>         struct clock_event_device *cd;
+>         static int timer_irq_installed = 0;
+>
+> -       irq = get_timer_irq();
+> +       if (timer_irq_installed == 0)
+> +               irq = get_timer_irq();
+>         if (irq < 0)
+>                 pr_err("Failed to map irq %d (timer)\n", irq);
+This should also be in the if condition, but you don't need to send a
+new version. :)
 
-Yes if it is easy to drop this please drop this.
-
-And the same more or less applies to 2/9. I would rather have
-an extra "if () ... else ..."  in the code in a couple of places
-then change behavior on old hw where we cannot get proper test
-coverage (but will likely eventually get regressions reports
-if we break things).
-
-Thanks & Regards,
-
-Hans
-
-
-
->>>> @@ -177,16 +171,8 @@ static u32 gmux_index_read32(struct
->>>> apple_gmux_data *gmux_data, int port) static void
->>>> gmux_index_write32(struct apple_gmux_data *gmux_data, int port,
->>>> u32 val) {
->>>> -	int i;
->>>> -	u8 tmpval;
->>>> -
->>>>  	mutex_lock(&gmux_data->index_lock);
->>>> -
->>>> -	for (i = 0; i < 4; i++) {
->>>> -		tmpval = (val >> (i * 8)) & 0xff;
->>>> -		outb(tmpval, gmux_data->iostart + GMUX_PORT_VALUE
->>>> + i);
->>>> -	}
->>>> -
->>>> +	outl(cpu_to_be32(val), gmux_data->iostart +
->>>> GMUX_PORT_VALUE); gmux_index_wait_ready(gmux_data);
->>>>  	outb(port & 0xff, gmux_data->iostart + GMUX_PORT_WRITE);
->>>>  	gmux_index_wait_complete(gmux_data);  
->>>   
->>
-> 
-
+Huacai
+>
+> --
+> 2.1.0
+>
