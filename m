@@ -2,133 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A729692FE9
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 11:09:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C6E692FEC
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 11:13:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjBKKJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 05:09:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
+        id S229818AbjBKKNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 05:13:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjBKKJI (ORCPT
+        with ESMTP id S229448AbjBKKNd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 05:09:08 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26C632E44;
-        Sat, 11 Feb 2023 02:09:02 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sat, 11 Feb 2023 05:13:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1171E5E0
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 02:13:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id B70BE42300;
-        Sat, 11 Feb 2023 10:08:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1676110140; bh=xgElBP+tjDeZkk5no9nEVPZ3v18CazedQGwUh/vJETY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=JTGXd2AlOil2xNP6nYXSH5OsC7cMUTKh+G/WVZq/vjZOIFMtzd48SnDx53Mg/VcND
-         NfPRMPuvczFn4Ie2BgxvPlQHe7bAhsXUjKVuBCsB4E+L6BagmaMBpMRNa3ntuui5WS
-         PEZzsusPZw8DNVpngYjxdVpa60xQOIrDys+JMkVs28ZbiaV5w/5SMCMPzmvSaZHzFe
-         N6+bO8EH8aZX8biwIz84pNymvzZ3vuSll3vEg0g+QXUKEgAfvxuMiFdXlgE7DIGNjZ
-         RSKFel60jXPwhiambKMVND1UKQ0yLdnnuionb/8wQZ91Wmam+5AvQbr5igoVWIaKR8
-         x+SQSq5juSoRQ==
-Message-ID: <624c0a20-f4e6-14a5-02a2-eaf7b36e9331@marcan.st>
-Date:   Sat, 11 Feb 2023 19:08:50 +0900
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8EBF0B80E3D
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 10:13:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A169BC433EF;
+        Sat, 11 Feb 2023 10:13:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676110409;
+        bh=p+IdxaBG7C0I9P6ldP+PpkrL7/XCuQ5WEyqo+TXFHXE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fmOrGje95DQT3J1lJkLkBlgX0jcrdRhmgbH7yYiT04I3k2DtJvgFCms1WrQLD9DRe
+         DPVwfwXBX29epAl+HYwzjyLPKILn+wsV1MrTlv7kUMleoOZ09CTwVXJaybcaca2Ji1
+         tk5ZFL8nQ9bu5++4AHmbOxu9yWYZTNp/uOPwSn3xWaN9x44Wv5hI9rGIr+7MFb6wR/
+         oeNyG6Wh9QS/lcWZT88L6CsCdlb32jGB41s+gk8ZW/fiXKY6XjAt4DjUFLZO7Q8Qf1
+         Yf2O2a+r8u8v3nlTPRlspAsm9gC+fT+4A4ktwQA8WFqDJDWjmdHgfWGiQZ2jd/ASSm
+         +BVss6ol6Z7JQ==
+Date:   Sat, 11 Feb 2023 12:13:17 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Aaron Thompson <dev@aaront.org>, Mike Rapoport <rppt@kernel.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] memblock: Revert "mm: Always release pages to the buddy
+ allocator in memblock_free_late()."
+Message-ID: <Y+dqPRXSqoP1x7u5@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 1/4] wifi: brcmfmac: Rename Cypress 89459 to BCM4355
-Content-Language: en-US
-To:     Ping-Ke Shih <pkshih@realtek.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Alexander Prutskov <alep@cypress.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
-        Wright Feng <wright.feng@cypress.com>,
-        Ian Lin <ian.lin@infineon.com>,
-        Soontak Lee <soontak.lee@cypress.com>,
-        Joseph chuang <jiac@cypress.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Aditya Garg <gargaditya08@live.com>,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        "asahi@lists.linux.dev" <asahi@lists.linux.dev>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Arend van Spriel <arend.vanspriel@broadcom.com>
-References: <20230210025009.21873-1-marcan@marcan.st>
- <20230210025009.21873-2-marcan@marcan.st>
- <0cd45af5812345878faf0dc8fa6b0963@realtek.com>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <0cd45af5812345878faf0dc8fa6b0963@realtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/2023 12.42, Ping-Ke Shih wrote:
-> 
-> 
->> -----Original Message-----
->> From: Hector Martin <marcan@marcan.st>
->> Sent: Friday, February 10, 2023 10:50 AM
->> To: Arend van Spriel <aspriel@gmail.com>; Franky Lin <franky.lin@broadcom.com>; Hante Meuleman
->> <hante.meuleman@broadcom.com>; Kalle Valo <kvalo@kernel.org>; David S. Miller <davem@davemloft.net>; Eric
->> Dumazet <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>
->> Cc: Alexander Prutskov <alep@cypress.com>; Chi-Hsien Lin <chi-hsien.lin@cypress.com>; Wright Feng
->> <wright.feng@cypress.com>; Ian Lin <ian.lin@infineon.com>; Soontak Lee <soontak.lee@cypress.com>; Joseph
->> chuang <jiac@cypress.com>; Sven Peter <sven@svenpeter.dev>; Alyssa Rosenzweig <alyssa@rosenzweig.io>;
->> Aditya Garg <gargaditya08@live.com>; Jonas Gorski <jonas.gorski@gmail.com>; asahi@lists.linux.dev;
->> linux-wireless@vger.kernel.org; brcm80211-dev-list.pdl@broadcom.com; SHA-cyfmac-dev-list@infineon.com;
->> netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Hector Martin <marcan@marcan.st>; Arend van Spriel
->> <arend.vanspriel@broadcom.com>
->> Subject: [PATCH v3 1/4] wifi: brcmfmac: Rename Cypress 89459 to BCM4355
->>
->> The commit that introduced support for this chip incorrectly claimed it
->> is a Cypress-specific part, while in actuality it is just a variant of
->> BCM4355 silicon (as evidenced by the chip ID).
->>
->> The relationship between Cypress products and Broadcom products isn't
->> entirely clear but given what little information is available and prior
->> art in the driver, it seems the convention should be that originally
->> Broadcom parts should retain the Broadcom name.
->>
->> Thus, rename the relevant constants and firmware file. Also rename the
->> specific 89459 PCIe ID to BCM43596, which seems to be the original
->> subvariant name for this PCI ID (as defined in the out-of-tree bcmdhd
->> driver).
->>
->> v2: Since Cypress added this part and will presumably be providing
->> its supported firmware, we keep the CYW designation for this device.
->>
->> v3: Drop the RAW device ID in this commit. We don't do this for the
->> other chips since apparently some devices with them exist in the wild,
->> but there is already a 4355 entry with the Broadcom subvendor and WCC
->> firmware vendor, so adding a generic fallback to Cypress seems
->> redundant (no reason why a device would have the raw device ID *and* an
->> explicitly programmed subvendor).
-> 
-> Do you really want to add changes of v2 and v3 to commit message? Or,
-> just want to let reviewers know that? If latter one is what you want,
-> move them after s-o-b with delimiter ---
+Hi Linus,
 
-Both; I thought those things were worth mentioning in the commit message
-as it stands on its own, and left the version tags in so reviewers know
-when they were introduced.
+The following changes since commit 4ec5183ec48656cec489c49f989c508b68b518e3:
 
-- Hector
+  Linux 6.2-rc7 (2023-02-05 13:13:28 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock tags/fixes-2023-02-11
+
+for you to fetch changes up to 647037adcad00f2bab8828d3d41cd0553d41f3bd:
+
+  Revert "mm: Always release pages to the buddy allocator in memblock_free_late()." (2023-02-07 13:07:37 +0200)
+
+----------------------------------------------------------------
+Revert "mm: Always release pages to the buddy allocator in memblock_free_late()."
+
+This reverts commit 115d9d77bb0f9152c60b6e8646369fa7f6167593.
+
+The pages being freed by memblock_free_late() have already been
+initialized, but if they are in the deferred init range, __free_one_page()
+might access nearby uninitialized pages when trying to coalesce buddies,
+which will cause a crash.
+
+A proper fix will be more involved so revert this change for the time
+being.
+
+----------------------------------------------------------------
+Aaron Thompson (1):
+      Revert "mm: Always release pages to the buddy allocator in memblock_free_late()."
+
+ mm/memblock.c                     | 8 +-------
+ tools/testing/memblock/internal.h | 4 ----
+ 2 files changed, 1 insertion(+), 11 deletions(-)
+
+-- 
+Sincerely yours,
+Mike.
