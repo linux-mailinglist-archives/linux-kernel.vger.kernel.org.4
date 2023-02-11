@@ -2,250 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F526931E5
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 16:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E6F6931EC
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Feb 2023 16:16:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjBKPHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 10:07:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
+        id S229733AbjBKPQD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 11 Feb 2023 10:16:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBKPHy (ORCPT
+        with ESMTP id S229646AbjBKPQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 10:07:54 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF1025E08;
-        Sat, 11 Feb 2023 07:07:52 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-15f97c478a8so10228135fac.13;
-        Sat, 11 Feb 2023 07:07:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oc8Oeui3K1tb0XrrtmwUkZ3knxpX/4Xz8AB8zRYwT74=;
-        b=Ou+rBGt9DmvBAtwRnHGA4UyxE59kurGI2AULIOanzbE8AHzxg+UVbwaG6C5MY9VD89
-         RqoNMQzAR8i0zblJsqL9boxtp2ZWefM5SNBInQIouoSSpqSOD4cYecqQyR6r0J7UHOhb
-         kqfCARNLiWLg+ogqemIVOB5VlOE4Q10Pceqr/9kyLH3U4nVDiLA9s1xrcqkv3Ro2VVxx
-         Tz4al1YgxAIyoJlIClLU3FfReX2v8IeoAMTkjtf70fyB3iXQjq5pkTzmbQQgN6mVswTv
-         4wyfzLGS5zt6zSbnLaiE8sd7lFDS8vctrhR/ZEkD9K0Q77+rqRFfRN0EV1YEuFcWQOIz
-         VOoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oc8Oeui3K1tb0XrrtmwUkZ3knxpX/4Xz8AB8zRYwT74=;
-        b=rAqU7+sjLxRJ/X6xorYUAXNDZFQzGlD1kF1aNfhvb+BERA8/4lWcb8u9goWRlK3VhM
-         XJ+5HTLI4cRAxKHsFEpLcL6Mr+aE/tVQ5XrKZn67hSyYQ/vNKIxAv9B1ySJ7krRyR1zv
-         qfZOglFwxlgX1Rpz1HFk3//ohIQMcgkamnWsXKobaM7B5rhrYIWO0cYBU/R4bdEpOKb7
-         20Z0wCaXYyEl3Fa22IV5/w8WDf0l0jbDqrSPYM2dep+6JywCtbDN+rZ/vSZk9+36QdIC
-         F1/rCLptA7RVVsX+6CwdGINTf949flHY4+Bf1B9iXxlYz7b3cTJZakNqtqweJkbxQJkW
-         44wA==
-X-Gm-Message-State: AO0yUKWaeELwewA8mvSssvgjNedG7EzeEn14O1HTWOWQmZti1c5wUsGF
-        6H1lEaoNV+mGlqUiB3CsjVavEKG9gU4=
-X-Google-Smtp-Source: AK7set9lPcNP1UJwURIVHWLaCLdQnl44lpVSdejqmRef1HE6YFydIX2QQmnMfDNYoTKZeq2YewpEsw==
-X-Received: by 2002:a05:6870:1607:b0:16a:a8c2:c0a6 with SMTP id b7-20020a056870160700b0016aa8c2c0a6mr7925563oae.17.1676128071972;
-        Sat, 11 Feb 2023 07:07:51 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o191-20020a4a2cc8000000b0050dc3c2f77asm3105378ooo.8.2023.02.11.07.07.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Feb 2023 07:07:51 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 11 Feb 2023 07:07:49 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] hwmon: (pmbus/core) Generalise pmbus get status
-Message-ID: <20230211150749.GA202703@roeck-us.net>
-References: <20230207120241.2800662-1-Naresh.Solanki@9elements.com>
- <20230207120241.2800662-2-Naresh.Solanki@9elements.com>
+        Sat, 11 Feb 2023 10:16:01 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61D90211C9;
+        Sat, 11 Feb 2023 07:15:59 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5EA3D4B3;
+        Sat, 11 Feb 2023 07:16:41 -0800 (PST)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2C2873F71E;
+        Sat, 11 Feb 2023 07:15:57 -0800 (PST)
+Date:   Sat, 11 Feb 2023 15:13:58 +0000
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     pelzi@flying-snail.de
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: allwinner: minimize irq debounce filter per
+ default
+Message-ID: <20230211151358.3467b4f9@slackpad.lan>
+In-Reply-To: <ba463d40-3d39-a621-b198-191fdbe239a1@feldner-bv.de>
+References: <Y+FaVorMl37F5Dve@debian-qemu.internal.flying-snail.de>
+        <20230207011608.2ce24d17@slackpad.lan>
+        <d0534762-3785-ec2d-8d1e-aba0e39f701b@feldner-bv.de>
+        <20230209202952.673d5a60@slackpad.lan>
+        <20230210082936.qefzz4fsp3jpalvp@houat>
+        <20230210094425.474cfba5@donnerap.cambridge.arm.com>
+        <20230210100620.z6j7rvkiwyu7paij@houat>
+        <20230210101814.2d36ae57@donnerap.cambridge.arm.com>
+        <ba463d40-3d39-a621-b198-191fdbe239a1@feldner-bv.de>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230207120241.2800662-2-Naresh.Solanki@9elements.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 01:02:39PM +0100, Naresh Solanki wrote:
-> Add function pmbus get status that can be used to get both pmbus
-> specific status & regulator status
+On Sat, 11 Feb 2023 13:50:54 +0100
+pelzi@flying-snail.de wrote:
+
+Hi,
+
+> Am 10.02.23 um 11:18 schrieb Andre Przywara:
+> > On Fri, 10 Feb 2023 11:06:20 +0100
+> > Maxime Ripard <maxime@cerno.tech> wrote:
+> >  
+> >> On Fri, Feb 10, 2023 at 09:44:25AM +0000, Andre Przywara wrote:  
+> >>> On Fri, 10 Feb 2023 09:29:36 +0100
+> >>> Maxime Ripard <maxime@cerno.tech> wrote:
+> >>>
+> >>> Hi Maxime,
+> >>>
+> >>> thanks for the reply!
+> >>>      
+> >>>> On Thu, Feb 09, 2023 at 08:29:52PM +0000, Andre Przywara wrote:  
+> >>>>>>>>    &pio {
+> >>>>>>>> +	/* 1ï¿½s debounce filter on both IRQ banks */  
+> >>>>>>> Is that supposed to be <micro> in UTF-8? It seems to have got lost in
+> >>>>>>> translation, or is that just me?  
+> >>>>>> O yes, the Greek character slipped into the comment.  
+> >>>>>>>> +	input-debounce = <1 1>;  
+> >>>>>>> As mentioned above, I am not so sure this is generic enough to put it
+> >>>>>>> here for PA. And what is the significance of "1 us", in particular? Is
+> >>>>>>> that just the smallest value?  
+> >>>>>> Yes indeed it's a bit more complicated than I feel it needs to be. The
+> >>>>>> configuration is taken as microseconds and translated into the best
+> >>>>>> matching clock and divider by the driver. However, 0 is not translated
+> >>>>>> to the lowest divider of the high speed clock as would be logical if
+> >>>>>> you ask for zero microseconds, but to "leave at default". The default
+> >>>>>> of the board is 0 in the register, translating to lowest divider on the
+> >>>>>> _low_ speed clock.  
+> >>>>> I'd say the "if (!debounce) continue;" code is just to defend against
+> >>>>> the division by zero, which would be the next statement to execute.
+> >>>>>
+> >>>>> We might want to change that to interpret 0 as "lowest possible", which
+> >>>>> would be 24MHz/1. Please feel free to send a patch in this regard, and
+> >>>>> CC: Maxime, to get some input on that idea.  
+> >>>> I never had any complaint on that part either, so the default looks sane
+> >>>> to me.
+> >>>>
+> >>>> If some board needs a higher debouncing rate, then we should obviously
+> >>>> set it up in the device tree of that board, but changing it for every
+> >>>> user also introduces the risk of breaking other boards that actually
+> >>>> require a lower debouncing frequency.  
+> >>> Yeah, we definitely should keep the default at 32KHz/1, as this is also
+> >>> the hardware reset value.
+> >>>
+> >>> Not sure if you were actually arguing this, but the change I sketched
+> >>> above (interpreting 0 as 24MHz/1) is separate though, as the current
+> >>> default is "no DT property", and not 0. There is no input-debounce
+> >>> property user in the kernel tree at the moment, so we wouldn't break
+> >>> anyone. The only thing that would change is if a downstream user was
+> >>> relying on "0" being interpreted as "skip the setup", which isn't
+> >>> really documented and could be argued to be an implementation detail.
+> >>>
+> >>> So I'd suggest to implement 0 as "lowest possible", and documenting that
+> >>> and the 32KHz/1 default if no property is given.  
+> >> Ah, my bad.
+> >>
+> >> There's another thing to consider: there's already a generic per-pin
+> >> input-debounce property in pinctrl.
+> >>
+> >> Since we can't control it per pin but per bank, we moved it to the
+> >> controller back then, but there's always been this (implicit)
+> >> expectation that it was behaving the same way.
+> >>
+> >> And the generic, per-pin, input-debounce documentation says:
+> >>  
+> >>> Takes the debounce time in usec as argument or 0 to disable debouncing  
+> >> I agree that silently ignoring it is not great, but interpreting 0 as
+> >> the lowest possible is breaking that behaviour which, I believe, is a
+> >> worse outcome.  
+> > Is it really? If I understand the hardware manuals correctly, we cannot
+> > really turn that feature off, so isn't the lowest possible time period (24
+> > MHz/1 at the moment) the closest we can get to "turn it off"? So
+> > implementing this would bring us actually closer to the documented
+> > behaviour? Or did I get the meaning of this time period wrong?
+> > At least that's my understanding of how it fixed Andreas' problem: 1µs
+> > is still not "off", but much better than the 31µs of the default. The new
+> > 0 would then be 0.041µs.  
+> I would fully agree. There seems to be no way to turn off the debouncing
+> filter, and in terms of that filter, the lowest possible time is closest 
+> to "off".
+> The SoC default is equivalent to 31 us, far, far away from "off", the 
+> currently
+> configurable minimum is 1us.
 > 
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ...
-> Changes in V2:
-> - Add __maybe_unused attribute for pmbus_get_status function
-> - Remove unrelated changes
-> ---
->  drivers/hwmon/pmbus/pmbus_core.c | 118 +++++++++++++++++--------------
->  1 file changed, 66 insertions(+), 52 deletions(-)
+> I did a patch that enables to set "0" in the device tree configuration 
+> and it
+> takes care not to do a #div0, but to determine the lowest possible time. As
+> the patch is done in the driver for a device that cannot switch off 
+> debouncing,
+> I'd say, the driver patched in that way does its best to come as close 
+> to the
+> intended outcome as is possible.
 > 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 1b70cf3be313..5ccae8126a56 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2735,61 +2735,14 @@ static const struct pmbus_status_category __maybe_unused pmbus_status_flag_map[]
->  	},
->  };
->  
-> -#if IS_ENABLED(CONFIG_REGULATOR)
-> -static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
-> -{
-> -	struct device *dev = rdev_get_dev(rdev);
-> -	struct i2c_client *client = to_i2c_client(dev->parent);
-> -	struct pmbus_data *data = i2c_get_clientdata(client);
-> -	u8 page = rdev_get_id(rdev);
-> -	int ret;
-> -
-> -	mutex_lock(&data->update_lock);
-> -	ret = _pmbus_read_byte_data(client, page, PMBUS_OPERATION);
-> -	mutex_unlock(&data->update_lock);
-> -
-> -	if (ret < 0)
-> -		return ret;
-> -
-> -	return !!(ret & PB_OPERATION_CONTROL_ON);
-> -}
-> -
-> -static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
-> -{
-> -	struct device *dev = rdev_get_dev(rdev);
-> -	struct i2c_client *client = to_i2c_client(dev->parent);
-> -	struct pmbus_data *data = i2c_get_clientdata(client);
-> -	u8 page = rdev_get_id(rdev);
-> -	int ret;
-> -
-> -	mutex_lock(&data->update_lock);
-> -	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
-> -				     PB_OPERATION_CONTROL_ON,
-> -				     enable ? PB_OPERATION_CONTROL_ON : 0);
-> -	mutex_unlock(&data->update_lock);
-> -
-> -	return ret;
-> -}
-> -
-> -static int pmbus_regulator_enable(struct regulator_dev *rdev)
-> -{
-> -	return _pmbus_regulator_on_off(rdev, 1);
-> -}
-> -
-> -static int pmbus_regulator_disable(struct regulator_dev *rdev)
-> -{
-> -	return _pmbus_regulator_on_off(rdev, 0);
-> -}
->  
-> -static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
-> +static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags)
->  {
-> -	int i, status;
-> +	int i, status, ret;
->  	const struct pmbus_status_category *cat;
->  	const struct pmbus_status_assoc *bit;
-> -	struct device *dev = rdev_get_dev(rdev);
-> -	struct i2c_client *client = to_i2c_client(dev->parent);
-> -	struct pmbus_data *data = i2c_get_clientdata(client);
-> -	u8 page = rdev_get_id(rdev);
-> +	struct device *dev = data->dev;
-> +	struct i2c_client *client = to_i2c_client(dev);
->  	int func = data->info->func[page];
->  
->  	*flags = 0;
-> @@ -2827,7 +2780,13 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->  	if (status < 0)
->  		return status;
->  
-> -	if (pmbus_regulator_is_enabled(rdev)) {
-> +	mutex_lock(&data->update_lock);
-> +	ret = _pmbus_read_byte_data(client, page, PMBUS_OPERATION);
-> +	mutex_unlock(&data->update_lock);
-> +	if (ret < 0)
-> +		return status;
-> +
-> +	if (ret & PB_OPERATION_CONTROL_ON) {
+> I tested this setting on the Banana M2 Zero board, and it is working (does
+> the right thing setting the relevant registers to value 0x0001, and the 
+> board
+> works in general, w/o producing smoke. (I have no idea how to test if
+> the debouncing filter is actually faster with setting "0" than with 
+> setting "1",
+> I can only confirm it is not significantly slower).
+> 
+> If we can agree on a concrete way to go I'm happy to try to produce a new
+> patch version. My suggestion from the discussion:
+> 
+> - Change drivers/pinctrl/sunxi/pinctrl-sunxi.c to set the minimum
+>     possible filter time when input-debounce is configured to "0"
+>     (corresponding to 1 on the affected hardware register).
+>     What I don't like is the huge gap between configuration 1 and 0, but
+>     I have no idea what to do about it without breaking all compatibility.
 
-This code is now executed twice. Please keep the original function,
-just rename it to pmbus_is_enabled() or similar, then call it from
-pmbus_regulator_is_enabled() which then just needs to adjust the
-parameter (and maybe pass 'dev' as argument).
+I wouldn't be concerned about this gap, as 0 is supposed to mean off,
+so there is already an expectation of a fundamentally different
+behaviour. Plus the interface chose microseconds for a reason, I guess
+for mechanical debouncing a resolution of 1 microsecond is more than
+enough.
+Can you please send this patch, so that we can have any potential
+discussion there, on the code? And please add a Fixes: tag, so it can
+be backported to stable kernels.
 
->  		if (status & PB_STATUS_OFF)
->  			*flags |= REGULATOR_ERROR_FAIL;
->  
-> @@ -2855,6 +2814,61 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->  	return 0;
->  }
->  
-> +#if IS_ENABLED(CONFIG_REGULATOR)
-> +static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
-> +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +	u8 page = rdev_get_id(rdev);
-> +	int ret;
-> +
-> +	mutex_lock(&data->update_lock);
-> +	ret = _pmbus_read_byte_data(client, page, PMBUS_OPERATION);
-> +	mutex_unlock(&data->update_lock);
-> +
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return !!(ret & PB_OPERATION_CONTROL_ON);
+> - in arch/arm/boot/dts/sunxi-h3-h5.dtsi, set input-debounce <31 31>
+>     corresponding to the default "0" in both affected hardware registers.
+>     Note that the clocks hosc and losc that make this 31 map to 0 are
+>     configured exactly here.
 
-This could then be as simple as
+I am not fully decided on that, but there are some good points to it.
 
-	return pmbus_is_enabled(rdev_get_dev(rdev));
+> - in arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts, set
+>     input-debounce <31 0> as this board has electronic devices
+>     attached to bank G and only exposes bank A to its users.
+>     I'd like to advertise on that one: this board does not require
+>     debouncing on bank G. Plus it feels the board got more stable
+>     by this setting: my BananaPi is connected via WiFi (only) and in the
+>     past it went apparently dead every other day or so. Nothing like
+>     this happened after switching off input debounce. Anectdotal
+>     evidence, I know...
 
-Thanks,
-Guenter
+I am not convinced of that, for the generic DT in the kernel tree. For
+a start, I wouldn't use 0, as this does not do the right thing on older
+kernels. But again, I haven't heard of error reports, so I am a bit
+reluctant to change that setting.
+There are reports of unstable WiFi, but IIUC mostly due to the poor
+WiFi chip design and quality or driver problems.
 
-> +}
-> +
-> +static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
-> +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +	u8 page = rdev_get_id(rdev);
-> +	int ret;
-> +
-> +	mutex_lock(&data->update_lock);
-> +	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
-> +				     PB_OPERATION_CONTROL_ON,
-> +				     enable ? PB_OPERATION_CONTROL_ON : 0);
-> +	mutex_unlock(&data->update_lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int pmbus_regulator_enable(struct regulator_dev *rdev)
-> +{
-> +	return _pmbus_regulator_on_off(rdev, 1);
-> +}
-> +
-> +static int pmbus_regulator_disable(struct regulator_dev *rdev)
-> +{
-> +	return _pmbus_regulator_on_off(rdev, 0);
-> +}
-> +
-> +static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned int *flags)
-> +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +
-> +	return pmbus_get_flags(data, rdev_get_id(rdev), flags);
-> +}
-> +
->  static int pmbus_regulator_get_status(struct regulator_dev *rdev)
->  {
->  	struct device *dev = rdev_get_dev(rdev);
+If you can prove this more conclusively, that would be worth
+considering, though.
+
+> - (in my devicetree overlay, I set input-debounce <0 0> to make IRQ
+>     based drivers like drivers/iio/humidity/dht11.c work on bank A) -
+>     not part of the patch.
+
+Yes, but again I'd recommend to use <1 1>, as this is more compatible,
+in case you happen to load a stable kernel.
+
+> Would that appear right?
+> 
+> Best regards,
+> 
+> Andreas.
+> 
+> PS: Perhaps someone can point me to further reading regarding
+> drivers for electronic devices attached to GPIO. Assuming I want
+> to attach a device to a GPIO that is not accidentally covered by
+> hardware support of the pinctrl subsystem, what options do I
+> have _apart_ from registering edge IRQs to react on a digital
+> signal from that device? Isn't it called bit-banging and the
+> usual technique?
+
+I am not sure what you mean with "not accidentally covered ...", do you
+mean using a hardware peripheral interface like an I2C or SPI
+controller?
+Yes, there are some examples of bit-banging devices in the kernel,
+though it's not considered very efficient, but one might not have a
+choice, mostly.
+
+Cheers,
+Andre
