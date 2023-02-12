@@ -2,169 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F26693595
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 03:15:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D775269359D
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 03:28:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjBLCPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 21:15:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57718 "EHLO
+        id S229589AbjBLC2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 21:28:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjBLCPh (ORCPT
+        with ESMTP id S229477AbjBLC2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 21:15:37 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D09166F6
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 18:15:34 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id BB6A45C00B3;
-        Sat, 11 Feb 2023 21:15:33 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sat, 11 Feb 2023 21:15:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1676168133; x=1676254533; bh=Uq
-        5aQpvzKMkJKSQwmWMMR9mZ/TQ6KPX7R/4xIPuGG1g=; b=OFVr68CiMd+J4VCai1
-        FUJlZMLvrSrQMrEoDSPj/O5Vqvmp0ldboTq7dICCCWsKLeaghYu1pFCMfnPqTv4N
-        Mhg80hDab4lk0vBu0ud9noGiTLDdRU+HlB1DIjsf4QuYhes2FkqcUiS948G2SzTo
-        YcS7nyOUMzfAyGyzFEE3Xih5OyOO8etCwBEUlxRfq2d/4XXKYxuOQDEfg9/6fQcZ
-        m/DGnoKj4D8+xC5ppd7en/8fk/aC2hoe7nND8ErQGd5c5FyyIDB0Jc3sk7LwlEhe
-        a1hwy5e63fdnwRaSs8rEGBzxcTguG+OZaJeWmMOnrr/6T38ediDTRt57LMGYhQCZ
-        WepA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1676168133; x=1676254533; bh=Uq5aQpvzKMkJK
-        SQwmWMMR9mZ/TQ6KPX7R/4xIPuGG1g=; b=RB/lFibS3OCcZ6i4DMUJooHt3CEBF
-        bIXWeVju3bn82NDQn/wx8iWrGt3NiK1koybOH/w9FciB49nnnSOhlu+DKrn4s4CD
-        Kp0Dntv7tu/wfHE/pTnodFEaSysdXaxVGUK9Dh9S/tmhPJ3f1IU0veekIQ2rTfsy
-        08Vps085+0+N/bJd+hElaatAIr5f7B97Tt0/ZKMudn/XdmI5flBcXXnh1+Jtrdvh
-        djm7T7GcI+LiWQ7kq2C9lVSniGEwnZvMILtZHrEmYJIDU+nQOiTO4Kmy5d+j5p+x
-        LmUbawoNdag8A5nqWpciZMF213N3BNWmtz34PcChPi3nP14996Iq4as1Q==
-X-ME-Sender: <xms:xUvoY4ICKyqmMvwVsxxA3oZ4b8rir3Sv1rNUfHQl_gHZQ2sTFz6vjw>
-    <xme:xUvoY4L5Xuxvx9F9sb7yZk44ML9FsJPeoxNRz0bu0yDwlNJAohP4WfkAtZef29iiT
-    rOTq0F-dr3Ezm8Saw>
-X-ME-Received: <xmr:xUvoY4tg069NsDaqKpiATaWfckzKGwY5tldR8T6Fjb0dn2afWTube6uJ1P-5SvXFSK8KhnLZBzi3qfL5YNdwUiwl6WOFmGpF5cGk-RDT8-O8sYB2N5vcj-rgeZXJjv6F0plNVg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudehkedggedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnheplefgffdthfffvdeuhfdugfevlefggeegffdvueekkeevieehtdei
-    heegffelgffgnecuffhomhgrihhnpehsthhrtghmphdrshgspdhsthhrlhgvnhdrshgspd
-    hsthhrnhgtmhhprdhssgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgr
-    ihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:xUvoY1ZpxJRtSeuTir8JOmMU9eD08rJ3nT3TluVymMqCSt-D18xhvg>
-    <xmx:xUvoY_bhz7nvHJiDfiWOjfxfa8drjdYL-A-VJjVop-0Xk1mYP5w3Tg>
-    <xmx:xUvoYxDWNAbF9NBdGO-8a3A0Z92o5EH1xmMJpL2fFdUw-9j0w_-dDw>
-    <xmx:xUvoY8TdagE_KNaHL57ETSwLdUAZl0zlMv2o94b4TKqEAfw-3Ot2PA>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 11 Feb 2023 21:15:32 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Heiko Stuebner <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Christoph Muellner <christoph.muellner@vrull.eu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] riscv: Fix Zbb alternative IDs
-Date:   Sat, 11 Feb 2023 20:15:33 -0600
-Message-Id: <20230212021534.59121-3-samuel@sholland.org>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20230212021534.59121-1-samuel@sholland.org>
-References: <20230212021534.59121-1-samuel@sholland.org>
+        Sat, 11 Feb 2023 21:28:30 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1583B126D8;
+        Sat, 11 Feb 2023 18:28:29 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id v3so6129343pgh.4;
+        Sat, 11 Feb 2023 18:28:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ab8nNZ4NnCwidI3E6h4UCYw2TR2ZMGv/20qOsG7NwTM=;
+        b=n8IzhMCBorVm8WspAg4UaM1+8V4W7WTk4BxUtb/0Ukbd92LL3Mym657GCcgI9YNnWs
+         PQM3I2IwINepHM5FlCPKa1Bciij4QC3VSY/he0jTbceuBB6Mr+8y8GGcQ9NZAJc3oDA+
+         sPQ3+e0SOMT2fSDmPFBbvkqoSWzTneMDzUCg743EgDbeCeVt68MfyMvOy73CkZlSd1xf
+         Rk4iZ2LII3JzMGpAVrzFmEk5hiAraaRQg5fXynt6MUaRCAEdZeMSo/YdfagOoDQZZP3e
+         HKLeWZY5YHYC7JpotSbsLEzCHiIQdjEMcRrs7uzTqGUK+M9yN1BhzVVP9HP9nHq+4kjl
+         K/OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ab8nNZ4NnCwidI3E6h4UCYw2TR2ZMGv/20qOsG7NwTM=;
+        b=5RnsLclMkQxJPkYy4y/MhEealhrkO6pOf5Ho6TBNT2qVLVBRy1NMojZGQCGegaLeWy
+         Vm5uVf7JtObJz7Fbzp9s8pOEq2fYE6XFYz8SYugAzse5K4JtZCJThvwdPJDinKnAjeb5
+         auMfhUTKA27ez6YoZbgXY/ll6Ttc9DnGmWqaNAYVEMAZdI9BwDfoQXEsuv14N4Q6qU+3
+         BP/r/LsBIjoRAFOhjsHgGLGrKtA4oFYBfwvx6JKgkqujyW+Y2n6fhdApYPSFymwNwCNf
+         eQcK3QL4XKYGedSqS96qIdF+0Zxo2O5vRYlN+iUiU7qUsm2Flm+OBfJFtuv34d7fYpZd
+         jCOA==
+X-Gm-Message-State: AO0yUKVFUCIkltMnnLn2dYk9RVC2iSYXhR0fduNo9JQsIxZkVAOd5qdy
+        LNV5dvyMRmcAaYksHQgiyJw=
+X-Google-Smtp-Source: AK7set+uDpGVsDrcx/dLYEkzE2vlOl5xVXPo1q2n0pMBCsqKmh8YPINqp1Y8TS0ExOdEyVDwZbtKiw==
+X-Received: by 2002:aa7:9419:0:b0:592:5d7e:b01c with SMTP id x25-20020aa79419000000b005925d7eb01cmr16434482pfo.11.1676168908429;
+        Sat, 11 Feb 2023 18:28:28 -0800 (PST)
+Received: from redecorated-mbp ([202.53.32.211])
+        by smtp.gmail.com with ESMTPSA id g16-20020aa78750000000b0058e1e6a81e8sm474044pfo.38.2023.02.11.18.28.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Feb 2023 18:28:28 -0800 (PST)
+Date:   Sun, 12 Feb 2023 13:28:19 +1100
+From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Aditya Garg <gargaditya08@live.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        "jkosina@suse.cz" <jkosina@suse.cz>,
+        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+        Andy Shevchenko <andy@infradead.org>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "ronald@innovation.ch" <ronald@innovation.ch>,
+        "kekrby@gmail.com" <kekrby@gmail.com>
+Subject: Re: [PATCH 3/3] HID: apple-magic-backlight: Add driver for keyboard
+ backlight on internal Magic Keyboards
+Message-ID: <20230212132819.7952164c@redecorated-mbp>
+In-Reply-To: <Y+fIr5Fxozjkg6yo@duo.ucw.cz>
+References: <E5D8BEBA-3C5B-460F-BD2C-39470A793CC3@live.com>
+        <40274C3D-4F4F-479C-944C-EEBDC78F959C@live.com>
+        <868AA58D-2399-4E4A-A6C6-73F88DB13992@live.com>
+        <7D70F1FE-7F54-4D0A-8922-5466AA2AD364@live.com>
+        <Y+fIr5Fxozjkg6yo@duo.ucw.cz>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.35; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 4bf8860760d9 ("riscv: cpufeature: extend
-riscv_cpufeature_patch_func to all ISA extensions") switched ISA
-extension alternatives to use the RISCV_ISA_EXT_* macros instead of
-CPUFEATURE_*. This was mismerged when applied on top of the Zbb series,
-so the Zbb alternatives referenced the wrong errata ID values.
+On Sat, 11 Feb 2023 17:56:15 +0100
+Pavel Machek <pavel@ucw.cz> wrote:
 
-Fixes: 9daca9a5b9ac ("Merge patch series "riscv: improve boot time isa extensions handling"")
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+> Hi!
+> 
+> > From: Orlando Chamberlain <orlandoch.dev@gmail.com>
+> > 
+> > This driver adds support for the keyboard backlight on Intel T2 Macs
+> > with internal Magic Keyboards (MacBookPro16,x and MacBookAir9,1)  
+> 
+> > +	backlight->hdev = hdev;
+> > +	backlight->cdev.name = "apple::kbd_backlight";  
+> 
+> ":white:kbd_backlight", plus document this in
+> Documentation/leds/well-known-leds.txt so that we keep it consistent
+> accross machines?
 
- arch/riscv/include/asm/errata_list.h | 5 -----
- arch/riscv/lib/strcmp.S              | 2 +-
- arch/riscv/lib/strlen.S              | 2 +-
- arch/riscv/lib/strncmp.S             | 2 +-
- 4 files changed, 3 insertions(+), 8 deletions(-)
+As in "apple:white:kbd_backlight" or just ":white:kbd_backlight"?
 
-diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-index e158439029ce..274c6f889602 100644
---- a/arch/riscv/include/asm/errata_list.h
-+++ b/arch/riscv/include/asm/errata_list.h
-@@ -23,11 +23,6 @@
- #define	ERRATA_THEAD_NUMBER 3
- #endif
- 
--#define	CPUFEATURE_SVPBMT 0
--#define	CPUFEATURE_ZICBOM 1
--#define	CPUFEATURE_ZBB 2
--#define	CPUFEATURE_NUMBER 3
--
- #ifdef __ASSEMBLY__
- 
- #define ALT_INSN_FAULT(x)						\
-diff --git a/arch/riscv/lib/strcmp.S b/arch/riscv/lib/strcmp.S
-index 8148b6418f61..986ab23fe787 100644
---- a/arch/riscv/lib/strcmp.S
-+++ b/arch/riscv/lib/strcmp.S
-@@ -9,7 +9,7 @@
- /* int strcmp(const char *cs, const char *ct) */
- SYM_FUNC_START(strcmp)
- 
--	ALTERNATIVE("nop", "j strcmp_zbb", 0, CPUFEATURE_ZBB, CONFIG_RISCV_ISA_ZBB)
-+	ALTERNATIVE("nop", "j strcmp_zbb", 0, RISCV_ISA_EXT_ZBB, CONFIG_RISCV_ISA_ZBB)
- 
- 	/*
- 	 * Returns
-diff --git a/arch/riscv/lib/strlen.S b/arch/riscv/lib/strlen.S
-index 0f9dbf93301a..8345ceeee3f6 100644
---- a/arch/riscv/lib/strlen.S
-+++ b/arch/riscv/lib/strlen.S
-@@ -9,7 +9,7 @@
- /* int strlen(const char *s) */
- SYM_FUNC_START(strlen)
- 
--	ALTERNATIVE("nop", "j strlen_zbb", 0, CPUFEATURE_ZBB, CONFIG_RISCV_ISA_ZBB)
-+	ALTERNATIVE("nop", "j strlen_zbb", 0, RISCV_ISA_EXT_ZBB, CONFIG_RISCV_ISA_ZBB)
- 
- 	/*
- 	 * Returns
-diff --git a/arch/riscv/lib/strncmp.S b/arch/riscv/lib/strncmp.S
-index 7940ddab2d48..ee49595075be 100644
---- a/arch/riscv/lib/strncmp.S
-+++ b/arch/riscv/lib/strncmp.S
-@@ -9,7 +9,7 @@
- /* int strncmp(const char *cs, const char *ct, size_t count) */
- SYM_FUNC_START(strncmp)
- 
--	ALTERNATIVE("nop", "j strncmp_zbb", 0, CPUFEATURE_ZBB, CONFIG_RISCV_ISA_ZBB)
-+	ALTERNATIVE("nop", "j strncmp_zbb", 0, RISCV_ISA_EXT_ZBB, CONFIG_RISCV_ISA_ZBB)
- 
- 	/*
- 	 * Returns
--- 
-2.37.4
+It seems like most examples I can see by grepping around use
+"apple::kbd_backlight", "asus::kbd_backlight" etc, without any colour
+information or anything between the two colons.
+
+Would we want to start having the led names in new drivers (including
+this one) as "$vendor:$colour:$location_or_description"?
+
+I do notice you've also suggested doing that here
+https://lore.kernel.org/all/Y+I7xNqkq%2FX6Lag+@duo.ucw.cz/, and that
+conversation suggests adding the colour won't stop userspace tools from
+finding the backlight, which is good.
+
+One alternative would be to have the colour of the led stored in a
+sysfs file in the led's sysfs folder, not sure if that'd be better (it
+does mean the names stay the same), but also I'm not sure what the
+empty space between the two colons in the current led names is there
+for, if not colour.
+
+> 
+> Thanks,
+> 										Pavel
 
