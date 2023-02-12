@@ -2,79 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B5D69382C
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 16:45:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A9E69382F
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 16:46:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjBLPo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 10:44:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44700 "EHLO
+        id S229657AbjBLPqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 10:46:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjBLPo5 (ORCPT
+        with ESMTP id S229683AbjBLPqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 10:44:57 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54791206A;
-        Sun, 12 Feb 2023 07:44:30 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id bd6so8378375oib.6;
-        Sun, 12 Feb 2023 07:44:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s1lwP//DotclupvT7zcdSBCyhGBrTTN3v/X7piUZ1ak=;
-        b=AovCuEPXu/knechY/ITgtmlfxlmTCBAGiJ7NvYF8n1V4FZ37PeWSHRjKd09LXjWUjR
-         UwoHM0bkq4WpzcyIdLoC4eQlrro84f3PzrQdnWcCh/0F7wj8Jn2qyyaxjT1nfGq9Di0v
-         +202ZUKXgF1NvKpAJI0vrzJGLnOFL+YeZT+Rn6igM6082cSQfNhMzotrEyvJyK+/FopT
-         uV10b+tyHjA3KPQzoW4SKSQQEpIl1nzkLcCdT8Ztu1wpZS6r8gBdA0dmsWXFRtUiwo/J
-         0bF3TCRbwA/nsrxBmgQpxIWoKTgMOrEzdGDHbuuA800gVZRkPUQiMCXtNkHtxO59znkd
-         tUUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s1lwP//DotclupvT7zcdSBCyhGBrTTN3v/X7piUZ1ak=;
-        b=GcT+mWNyKHedoWzfR2TrhRFoRMRWInz0qMQeNjECklYUpTJpPfXEqTe+IIwEKnqJA+
-         BJD/xywcEAYIkaYoP+05oMCIpm6gFQKMJbbaMkNYoSGLVfFENFH3jZbGLlQXnV1cOT4+
-         lB6TbsKYwd4j4/Ut/WqDZQbGtZ5LVFovw1ct/gwBgGuHUUx21POvmqsL89WUNCy3K326
-         X4fpAuHMTY9GG1BBkZigAhNg+Bn373NsvDfRKXUzDGMqzjZLvNh9gXY5xLL9oPacR44a
-         /J7QJAyrCXB5cGsR5zIkepGW8MsJK1DmBAqSGAiX5M4gUDcpfiDTNInOM3zpmaAt0fka
-         mToQ==
-X-Gm-Message-State: AO0yUKWJRxIXAmJp9l39jC6bqi+dX59CvnC4dJcSgAbMaFrJ9hBt0c7v
-        B1GiRJzyEn0ttqTjcCRJJjk=
-X-Google-Smtp-Source: AK7set88HAaiqjGv2VgB4rVlV1ldK0w0wf02LWUR6dU/Ajy4AwVew7gMd54x8+7PMDtE7YjiSyULxg==
-X-Received: by 2002:a05:6808:4099:b0:37a:f363:1367 with SMTP id db25-20020a056808409900b0037af3631367mr10735454oib.11.1676216615270;
-        Sun, 12 Feb 2023 07:43:35 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v23-20020a9d5a17000000b0068bc8968753sm4243910oth.17.2023.02.12.07.43.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Feb 2023 07:43:34 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 12 Feb 2023 07:43:33 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v5 00/13] riscv: improve boot time isa extensions handling
-Message-ID: <20230212154333.GA3760469@roeck-us.net>
-References: <20230128172856.3814-1-jszhang@kernel.org>
+        Sun, 12 Feb 2023 10:46:01 -0500
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2060.outbound.protection.outlook.com [40.107.105.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A719C169;
+        Sun, 12 Feb 2023 07:45:35 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=klnrCccxA1pQDKXGzyo7MmsGZ2nNk01FWrP724+gFGgbBVHvpJ2X5iLnTQUL0U2lwiV2D2qs48wIS6eaGL7w/MHIdXYDpxGsZmy/d22iXlorRXk1RDlmZd5ThE/DPuN6DRJDll7m4IRaw3ctADYvqG5oAKM1sVuUM4C5H356yzQdZEndiWQr75Jq1beU6dMS7ajwPaw8m+LQhnjX1GCL8V9+3uHCrKfaKhYcZg1MsZsVz5dCgyirwPNTu+yYcXA84FceHL9caGhhBb5XnksKm563460exK0QPYJX2wVqu3IuRgaTOyBXL7Q7XtbPlV8gnVEp1gr40jbvN/wIRrWsFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gAJT88bSPJX8sprU72mhHJwKoFBgjxhiq1rvtTVGrCY=;
+ b=UkjFLC4XxH8gHfT60uPxUPIaUUz/GBTecaiBcm88Ro/ELCsHY8pCKFSSfzEX9eTFbsf3wX3dSfbQ/5UZutFeUMfMa0UZT0RCZBanoIa6mVK//Tsh75Y+ocm7YzX2DU6BPEmKT4ccJvXkhMy97a/nzg9F3xx4AKDc/ug3KP7Mh98On9BZ16HOap0noeJ60cqpCQTNVZx2qyIJkNFmyskJYnINvwZotbPVps5VjcXQbr1QXQDi9jrGRgZZUHcYp2qac0mtCmnIoHlEI49GwlUXXc7uebgXpszAEA5d0jsk46ACGKsIwZ4ugcpp6tjcPOJp8EB9NufUKmSiOUCwew1Mwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gAJT88bSPJX8sprU72mhHJwKoFBgjxhiq1rvtTVGrCY=;
+ b=WA8A1LxIYwXkLTz1er2/kx9rW9jNkr6bt5YwW0C8CbyGKyzppeQ7JjuLQPchU6cHPT7e2h+3ar32R8QId0w4JW8zjJBNZawv78cu+0MEhk8P9gd7FFkTrVi/VVuZ1pPdEXopChD4ew9577RdT5rmHKBnntmAjSUEX3ClflbFxGEuhjY2tqXyd3po0bH6zw9wvxLGllQt52xbOk1jXPkmfvZN76A+exSDD31CcnKXSoDXDiqjhENOXXavsfEdCZL23AlhMY/HHgr4SAsBt3cD0BfwO3JgNBCR4Y/YZ9eSRu6bzqApetpj7I7ZPwIYbqwgj7kWYtlQK/uvyyhflcXu2Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16) by AS4PR04MB9243.eurprd04.prod.outlook.com
+ (2603:10a6:20b:4e2::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.22; Sun, 12 Feb
+ 2023 15:44:49 +0000
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::cb43:d6bc:dad3:3dd]) by AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::cb43:d6bc:dad3:3dd%7]) with mapi id 15.20.6086.023; Sun, 12 Feb 2023
+ 15:44:49 +0000
+Message-ID: <61f84da3-78ae-e2c1-62a7-a623a415915c@suse.com>
+Date:   Sun, 12 Feb 2023 16:44:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] ACPI: cpufreq: use a platform device to load ACPI PPC and
+ PCC drivers
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>, Allan Day <aday@redhat.com>,
+        Michael Catanzaro <mcatanzaro.kernel@gmail.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
+        pmladek@suse.com, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230131130041.629-1-petr.pavlu@suse.com>
+ <Y+EqqRddrIZ8yWiT@bombadil.infradead.org>
+From:   Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <Y+EqqRddrIZ8yWiT@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0107.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a8::20) To AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230128172856.3814-1-jszhang@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR0402MB3395:EE_|AS4PR04MB9243:EE_
+X-MS-Office365-Filtering-Correlation-Id: f7aa739c-b025-4ef3-f4cb-08db0d1012f2
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9ceISvtz2HgJTGjqywSLh4G0fEGU9IIuJoE+JUwau6O7ecJ7jEIV7NgeXP/mkMxBA6qikDnEOPGYjLZyTP0udJ0iUQCXd9qxBhRJC9Jd+a+LvvP/J/3Kmd95tvS+L69ALePEF5Up/GjxVU5lulredCHPjBIbExUSL7TMMPgsBopoY5+j/01PgOpxoNaJO6Qu7CAzniRc6J8ubGgbNgd1llXeP0RRwh1YUwKOV+HJbJXT88Uc+zHd6oqhkPa7/h4ieKql+IGrXlsjjvQr6mlt6laSFJg7rm5NIwp3q7f4ND7P1r0yDad8zPMkQ+EglXZRFkuSaYlvY+UCNys7050PS5DwaT8VRqbsqoUq9x+iP9ktCBenaVTjlSGkMuLWnsjiTp8egb1zXaZ04juJ+ieAa8hH5JifITedTOxJ05T3UkioEMQoRbDIXwTYqLF0s6zmN29QffFivPt3hSewZeOvJYLNa683uXMCFyRSFBOkK768GlM1tsXqgU0LTPzPg+CsCYPcZeyAJj+MqQuzabEVYzPva4EN55Z9RGDeD3IjX4VfkPbMWh8S+L4MK/cEj7taYLZtVRwe2esl44uhiC3S99vChxOa4TYpjta9l9614Ny+193pW7TfFkwgck5XdwGpsq81A8nAUuxr9eg23oS0ignYG6M3mHbcZJRtpXOkwSBAL150n/bQQYFeo8VKYhwH6mS9V2L0189kuiSEghfvb7j2y0FMOyZTVeehO3IzrVM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3395.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(366004)(396003)(376002)(39860400002)(346002)(451199018)(316002)(110136005)(41300700001)(38100700002)(44832011)(36756003)(2906002)(8936002)(83380400001)(5660300002)(66946007)(66556008)(66476007)(8676002)(4326008)(31696002)(6486002)(2616005)(478600001)(86362001)(26005)(6512007)(186003)(6506007)(55236004)(53546011)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dFlzRHRLS2ovWUV2d05sa0g5R0xEME1HRndHc29mcEwrZFQ4bGRDWXNXeU1V?=
+ =?utf-8?B?dE1VdXp3MFJFcGwzV3BoMUpoMUp0MWM3Qm56b3RyZmM1ejRzSlV3MDZlSjU2?=
+ =?utf-8?B?QzRSRldXWEpHZ1pDb2R1VDBxN3pFaGhhNWpDVFU5NnI0cS9pV09NbEk0U1JF?=
+ =?utf-8?B?K3ppMG90bmFzRnFja3pJMjhSdkJ0ZFZ0KzBLQlRYT080NzFoTE1nOVhjQjhs?=
+ =?utf-8?B?OWdrSWZsY1NVM0hHNW1oMTF3cTBFYmxZa0Q0QjkzZHRhTzhSODhvUWlNbmlp?=
+ =?utf-8?B?ZEQzKy9jUmVNcXZMYlEzQTQ3bjlvZW1PRDJVVy9KUFdVY0dEMzlJRTltN0xp?=
+ =?utf-8?B?YXZWYnJBNHZ2SnZKS0JXbDh1TXVianVsNHF2eHB3Y2pqTUFlS3ZPb1pGaWdq?=
+ =?utf-8?B?YXlWc2pHNHF0TFZ4ZEhOY3hONksxN0lENjNJUk55Wkx2MGZCQ2MrQlhmSm1K?=
+ =?utf-8?B?ZS83MmhtOW8wcDFVU1crTUREZmxzLzNFRUsxYm1qZHRrMG0ya1pZRSs3S2hW?=
+ =?utf-8?B?cENzUlpMc2F1YkZ3dnk4MFcrRFBjeWlITEhhZUJnSHBVMXN1bzJTWXgyRVBS?=
+ =?utf-8?B?Sjg4Z2xYelNpb3VsbERJa05NY3FyRGtIeE1rdXpoUWpKN21BYUFKbjliN3ZH?=
+ =?utf-8?B?Y0ZVQVpaeWw0eHMyNzJhdE45eVE3R29IT1ZIYnRaVTZ4T3MzMHpYTklYTXpQ?=
+ =?utf-8?B?Zk9jSDl2MUJSdmc2MXYwOURmV1pEcUR3dWRTdFhKVmtjUy9GZVQwd05DeGIv?=
+ =?utf-8?B?ZlpTTnluUG0wbVdoWjROaDdCUGI2b2U5Z0haRm1DUUNQaHpuL2VYVTVKdXdL?=
+ =?utf-8?B?akIwb3J2M0ZHMnZRTEorTW8yMWlRYTlVeTBQU2VSaHB5aFRPcTErTVhDWExv?=
+ =?utf-8?B?dDhJTFlFVVB6Z1N3VnlWd0ZWTzBNNExJcXUzNnUrYitnZjhiYUI4UENDckIr?=
+ =?utf-8?B?YmVGZ1BOaEFSRkFqWHVMbWc4d0dERGluMUFoSTVrd3RLYUdwWE04OXQ3SWg2?=
+ =?utf-8?B?Z0c2RklTTUcvZ2Vsem52Y3IzUEh1eHVzK2NwQ28xeWp2ZDVMNkNUQWFjM0ht?=
+ =?utf-8?B?MU53N28zM3lJZVZkekFLQ0g3d3U2ZW1CeS9XVHdJQzExUloybWN2SER6Q2lU?=
+ =?utf-8?B?a2N1TjRhd01XbXQ4a3VIdkE5VWgxNGtVVnZKZ21Qc0lhbXJXbncrTFRvUWtS?=
+ =?utf-8?B?UHpvVDF5d1E0SmFYcXBtTG5ERWJUTGMvZkxIbWozYVVwWXVPa1MrS25IeGhp?=
+ =?utf-8?B?Um1HWHd3ZGxFYVF0NE1kMExoWXRLU21XWHRWcktPamtIRFRvSTV1UzI5ZmVH?=
+ =?utf-8?B?clVlTnN3SG1lTmJWZHkwOGl1UWJzMXoxampmc2czN1BhRnlDc0dhUVltSzB4?=
+ =?utf-8?B?S2g4aGE5TytUUVo5eGFHclczc056M2dkOU1JWU51SSt5TFpjWk9ITHdsaDYy?=
+ =?utf-8?B?S1lSS0dsc2Y1LzBIV2ZnZlRhWVdZSDVBenNXWVdON3BJVFpkNVZXaHVsQkZC?=
+ =?utf-8?B?QTIvTUNEclBleTBOMG94TTBCVlY2KzlUT3RVUDA0S0t0YzVxM1BDNGZQa0Rs?=
+ =?utf-8?B?YmsrNzcrMSswRXJpYlNVaU42TlY3bkxyRzVGWE5KNytkbG1iQlhsa2JmQ0hn?=
+ =?utf-8?B?c0UvTG0zc0RKOGJlbjVMVFNmZGQrcWJPMDlCTUJqWXErMTJoMW1FZ1Mxd3VR?=
+ =?utf-8?B?K1kxM3BxeVVOcElWdTB6a2R5OGFia0JaRE1KV0lHQUFuL0UyZ0F5b3l6Z3k1?=
+ =?utf-8?B?U2JEbFE1ZVNlT05KbHRSOENYN0tINE14LzNxLy9lMk05Z1Z0S3FiOWpPZk9Y?=
+ =?utf-8?B?Vi95NzJGVXFWbFJxRlVBK21nclNLY2E2QlB5S2FyNCtBZW9kT0dRMEVsVExx?=
+ =?utf-8?B?Y0VyQU9sc04vS0dKeUErTUIyRkwra1RtRFhwOThnRGZYN09TRTN0dlBZanlt?=
+ =?utf-8?B?dHR3RWlPQTg4NWFpSmhBWS9hOUI3RXNLVWsrVkQ3Z25HUGxPa3hvUUl1eDlq?=
+ =?utf-8?B?c3pWbzBFYSthb0w3S3BlcG1sQWxQU3BPTkRNMVdpYXlNS3NZQ1hqYTd5S2NU?=
+ =?utf-8?B?ZGdlYytVbkc0VmJDS0REUjJudWxlUFk2aWJKRjlYOGtSUHh3c2gwREVuTmFQ?=
+ =?utf-8?Q?g7y6ZtHhhlBnovZnpTYFL0jf+?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f7aa739c-b025-4ef3-f4cb-08db0d1012f2
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3395.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Feb 2023 15:44:49.2857
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OAqZMi7iRhC7ehNEag6H+kipU4JNI3uur1PYB3YZMWBfvdG8R7O6QWxCdOVUo6tB4qKFmYSubMdos/CfNBfdGw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR04MB9243
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,115 +129,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Sun, Jan 29, 2023 at 01:28:43AM +0800, Jisheng Zhang wrote:
-> Generally, riscv ISA extensions are fixed for any specific hardware
-> platform, so a hart's features won't change after booting, this
-> chacteristic makes it straightforward to use a static branch to check
-> a specific ISA extension is supported or not to optimize performance.
+On 2/6/23 17:28, Luis Chamberlain wrote:
+> On Tue, Jan 31, 2023 at 02:00:41PM +0100, Petr Pavlu wrote:
+>> The acpi-cpufreq and pcc-cpufreq drivers are loaded through per-CPU
+>> module aliases.
 > 
-> However, some ISA extensions such as SVPBMT and ZICBOM are handled
-> via. the alternative sequences.
+> It gets me to question, what makes this "per-CPU module aliases" and
+> how do we find other similar uses as they are likely incorrect too?
+
+The acpi-cpufreq module aliases:
+* 'cpu:type:x86,ven*fam*mod*:feature:*0016*' (X86_FEATURE_HW_PSTATE),
+* 'cpu:type:x86,ven*fam*mod*:feature:*00E8*' (X86_FEATURE_ACPI),
+* 'acpi*:LNXCPU:*' (ACPI_PROCESSOR_OBJECT_HID),
+* 'acpi*:ACPI0007:*' (ACPI_PROCESSOR_DEVICE_HID).
+
+The pcc-cpufreq similarly aliases:
+* 'acpi*:LNXCPU:*' (ACPI_PROCESSOR_OBJECT_HID),
+* 'acpi*:ACPI0007:*' (ACPI_PROCESSOR_DEVICE_HID).
+
+These per-CPU aliases can be found as follows:
+$ grep -E '(cpu:type|ACPI0007|LNXCPU)' /lib/modules/$(uname -r)/modules.alias
+
+I think it is generally ok for modules to use per-CPU aliases. The normal case
+should be that the first load succeeds and any subsequent one is then only
+a trivial check by libkmod that a given module has been already inserted.
+
+This breaks when a module repeatedly fails to load. In particular, arrangement
+of x86 cpufreq and edac drivers is done in a way that they cascade several
+modules and once the first one becomes a selected cpufreq/edac driver then any
+further module load fails.
+
+If a subsystem decides to use this kind of pattern then it should really limit
+the number of such failed loads. The proposed patch improves the situation for
+cpufreq. I've not yet looked at the edac stuff.
+
+The second problem with per-CPU aliases is a burst of same loads created by
+udevd (as also discussed on the linux-modules mailing list). The daemon
+normally processes devices in parallel and as it goes through CPUs, it will
+create a number of requests to load the same per-CPU module. This problem is
+present even if the needed module is loaded successfully. A lot of unnecessary
+CPU work and memory allocations is needed to handle each duplicate load.
+
+My thinking is that this second problem is something that should be addressed
+in udevd. The same situation can happen for other hardware devices when they
+all have the same type and need same modules. Udevd could avoid attempting
+a second parallel load if it recognizes that one of its workers is already
+doing the same insert. I hope to have a closer look at this.
+
+There is clearly some overlap in sense that if udevd was improved in this way
+then it makes this patch less useful. However, even if this would get
+implemented at some point, I think it's still good if acpi-cpufreq and
+pcc-cpufreq is on a given system explicitly attempted to be loaded only once.
+
+>> This can result in many unnecessary load requests during
+>> boot if another frequency module, such as intel_pstate, is already
+>> active. 
 > 
-> Basically, for ease of maintenance, we prefer to use static branches
-> in C code, but recently, Samuel found that the static branch usage in
-> cpu_relax() breaks building with CONFIG_CC_OPTIMIZE_FOR_SIZE[1]. As
-> Samuel pointed out, "Having a static branch in cpu_relax() is
-> problematic because that function is widely inlined, including in some
-> quite complex functions like in the VDSO. A quick measurement shows
-> this static branch is responsible by itself for around 40% of the jump
-> table."
+> Perhaps you should mention that in the worst case, without the fix in
+> commit 0254127ab977e ("module: Don't wait for GOING modules") some of
+> these module load requests could fail and prevent boot, and that
+> discussion over these duplicate module reqests ended up in us deciding that
+> they are not needed, we just need one.
+
+Ok, I'll add it in v2.
+
+>> For instance, on a typical Intel system, one can observe that
+>> udev makes 2x#CPUs attempts to insert acpi_cpufreq and 1x#CPUs attempts
+>> for pcc_cpufreq. All these tries then fail if another frequency module
+>> is already registered.
+>>
+>> Both acpi-cpufreq and pcc-cpufreq drivers have their platform firmware
+>> interface defined by ACPI. Allowed performance states and parameters
+>> must be same for each CPU. This makes it possible to model these
+>> interfaces as platform devices.
+>>
+>> The patch extends the ACPI parsing logic to check the ACPI namespace if
+>> the PPC or PCC interface is present and creates a virtual platform
+>> device for each if it is available. The acpi-cpufreq and pcc-cpufreq
+>> drivers are then updated to map to these devices.
+>>
+>> This allows to try loading acpi-cpufreq and pcc-cpufreq only once during
+>> boot and only if a given interface is available in the firmware.
 > 
-> Samuel's findings pointed out one of a few downsides of static branches
-> usage in C code to handle ISA extensions detected at boot time:
-> static branch's metadata in the __jump_table section, which is not
-> discarded after ISA extensions are finalized, wastes some space.
-> 
-> I want to try to solve the issue for all possible dynamic handling of
-> ISA extensions at boot time. Inspired by Mark[2], this patch introduces
-> riscv_has_extension_*() helpers, which work like static branches but
-> are patched using alternatives, thus the metadata can be freed after
-> patching.
-> 
+> That could cut boot time too? If so how much?
 
-This patch series results in boot failures when trying to boot the
-qemu sifive_u emulation. There are many log messages along the line of
+The following command should provide an approximate measurement of what
+happens during the boot:
 
-[    0.000000] WARNING: CPU: 0 PID: 0 at arch/riscv/kernel/patch.c:63 patch_insn_write+0x222/0x2f6
-[    0.000000] Modules linked in:
-[    0.000000] CPU: 0 PID: 0 Comm: swapper Tainted: G        W          6.2.0-rc7-next-20230210 #1
-[    0.000000] Hardware name: SiFive HiFive Unleashed A00 (DT)
-[    0.000000] epc : patch_insn_write+0x222/0x2f6
-[    0.000000]  ra : patch_insn_write+0x21e/0x2f6
-[    0.000000] epc : ffffffff800068c6 ra : ffffffff800068c2 sp : ffffffff81803df0
-[    0.000000]  gp : ffffffff81a1ab78 tp : ffffffff81814f80 t0 : ffffffffffffe000
-[    0.000000]  t1 : 0000000000000001 t2 : 4c45203a76637369 s0 : ffffffff81803e40
-[    0.000000]  s1 : 0000000000000004 a0 : 0000000000000000 a1 : ffffffffffffffff
-[    0.000000]  a2 : 0000000000000004 a3 : 0000000000000000 a4 : 0000000000000001
-[    0.000000]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000052464e43
-[    0.000000]  s2 : ffffffff80b4889c s3 : 000000000000082c s4 : ffffffff80b48828
-[    0.000000]  s5 : 0000000000000828 s6 : ffffffff8131a0a0 s7 : 0000000000000fff
-[    0.000000]  s8 : 0000000008000200 s9 : ffffffff8131a520 s10: 0000000000000018
-[    0.000000]  s11: 000000000000000b t3 : 0000000000000001 t4 : 000000000000000d
-[    0.000000]  t5 : ffffffffd8180000 t6 : ffffffff81803bc8
-[    0.000000] status: 0000000200000100 badaddr: 0000000000000000 cause: 0000000000000003
-[    0.000000] [<ffffffff800068c6>] patch_insn_write+0x222/0x2f6
-[    0.000000] [<ffffffff80006a36>] patch_text_nosync+0xc/0x2a
-[    0.000000] [<ffffffff80003b86>] riscv_cpufeature_patch_func+0x52/0x98
-[    0.000000] [<ffffffff80003348>] _apply_alternatives+0x46/0x86
-[    0.000000] [<ffffffff80c02d36>] apply_boot_alternatives+0x3c/0xfa
-[    0.000000] [<ffffffff80c03ad8>] setup_arch+0x584/0x5b8
-[    0.000000] [<ffffffff80c0075a>] start_kernel+0xa2/0x8f8
-[    0.000000] irq event stamp: 0
-[    0.000000] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
-[    0.000000] hardirqs last disabled at (0): [<0000000000000000>] 0x0
-[    0.000000] softirqs last  enabled at (0): [<0000000000000000>] 0x0
-[    0.000000] softirqs last disabled at (0): [<0000000000000000>] 0x0
-[    0.000000] ---[ end trace 0000000000000000 ]---
-[    0.000000] ------------[ cut here ]------------
+# perf stat --null --repeat 10 --post 'sleep 5' -- \
+    udevadm trigger --action=add --subsystem-match=acpi --sysname-match=LNXCPU* --subsystem-match=cpu --sysname-match=cpu* --settle
 
-then qemu hangs until the session is aborted.
+My test was with 6.2-rc7 which already contains commit 0254127ab977e ("module:
+Don't wait for GOING modules"). Kernel modules were signed and compressed with
+zstd. Test machines had intel_pstate loaded and so acpi-cpufreq and
+pcc-cpufreq always failed to initialize.
 
-Similar messages are also seen with the "virt" emulation, but there the boot
-does not hang but fails to find a root device.
+Test machine A, with 16 CPUs + 62 GiB memory:
+* vanilla:        0.20334 +- 0.00566 seconds time elapsed  ( +-  2.79% )
+* with the patch: 0.08939 +- 0.00308 seconds time elapsed  ( +-  3.44% )
 
-Guenter
+Test machine B, with 288 CPUs + 110 GiB memory.
+* vanilla:        1.3439 +- 0.0232 seconds time elapsed  ( +-  1.72% )
+* with the patch: 0.74916 +- 0.00253 seconds time elapsed  ( +-  0.34% )
 
+Udevd processing was parallel, maximum number of its workers was in both cases
+2*cpu_count+16. It means the reduced time roughly says how much less the whole
+system (all CPUs) was needed to be occupied.
 
+The smaller system A sees a reduction of ~100 ms with the patch while the
+bigger one B shows an improvement of ~600 ms.
 
----
-bisect:
-
-# bad: [6ba8a227fd19d19779005fb66ad7562608e1df83] Add linux-next specific files for 20230210
-# good: [4ec5183ec48656cec489c49f989c508b68b518e3] Linux 6.2-rc7
-git bisect start 'HEAD' 'v6.2-rc7'
-# bad: [94613f0efc69ed41f9229ef5c294db3ec37145da] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
-git bisect bad 94613f0efc69ed41f9229ef5c294db3ec37145da
-# bad: [8928ece68de4371dc6e1d3336d3029c1e18ae3b4] Merge branch 'for_next' of git://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git
-git bisect bad 8928ece68de4371dc6e1d3336d3029c1e18ae3b4
-# good: [78a9f460e33d103256f3abb38f02f4759710c7dc] soc: document merges
-git bisect good 78a9f460e33d103256f3abb38f02f4759710c7dc
-# good: [b35b2472ebafa29d0bbe79fbee1da6ef3c4ec619] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git
-git bisect good b35b2472ebafa29d0bbe79fbee1da6ef3c4ec619
-# bad: [57a87a64b520c37dd49f5fde84d09a4adb391180] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git
-git bisect bad 57a87a64b520c37dd49f5fde84d09a4adb391180
-# good: [cfc8ba01cc84b24ec6eb293ec9fba893f7cd4581] Merge branch 'clk-next' of git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git
-git bisect good cfc8ba01cc84b24ec6eb293ec9fba893f7cd4581
-# good: [6acecfa485d3de955c35a18730c106ddf1e7600e] powerpc/kcsan: Add KCSAN Support
-git bisect good 6acecfa485d3de955c35a18730c106ddf1e7600e
-# good: [8a16dea453dbc3e834b162640028e505882cd11e] Merge branch 'next' of git://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git
-git bisect good 8a16dea453dbc3e834b162640028e505882cd11e
-# good: [6be1ff430dab9fc047762b10b2c9669399ea1f37] riscv: pgtable: Fixup comment for KERN_VIRT_SIZE
-git bisect good 6be1ff430dab9fc047762b10b2c9669399ea1f37
-# good: [e0c267e03b0c77c9ac79ac08eada41ba8eb1b95f] riscv: module: move find_section to module.h
-git bisect good e0c267e03b0c77c9ac79ac08eada41ba8eb1b95f
-# good: [e8ad17d2b5f38e595d597a3e2419d6d7cc727b17] riscv: KVM: Switch has_svinval() to riscv_has_extension_unlikely()
-git bisect good e8ad17d2b5f38e595d597a3e2419d6d7cc727b17
-# good: [75ab93a244a516d1d3c03c4e27d5d0deff76ebfb] Merge patch series "Zbb string optimizations"
-git bisect good 75ab93a244a516d1d3c03c4e27d5d0deff76ebfb
-# bad: [9daca9a5b9ac35361ce2d8d5ec10b19b7048d6cd] Merge patch series "riscv: improve boot time isa extensions handling"
-git bisect bad 9daca9a5b9ac35361ce2d8d5ec10b19b7048d6cd
-# good: [03966594e1170303c037b0cded35c464a13a4a45] riscv: remove riscv_isa_ext_keys[] array and related usage
-git bisect good 03966594e1170303c037b0cded35c464a13a4a45
-# first bad commit: [9daca9a5b9ac35361ce2d8d5ec10b19b7048d6cd] Merge patch series "riscv: improve boot time isa extensions handling"
+Thanks,
+Petr
