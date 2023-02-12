@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A10B69371A
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 12:58:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5AF69371B
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 12:59:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbjBLL6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 06:58:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55398 "EHLO
+        id S229558AbjBLL7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 06:59:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjBLL6m (ORCPT
+        with ESMTP id S229468AbjBLL7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 06:58:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AA611EA9;
-        Sun, 12 Feb 2023 03:58:40 -0800 (PST)
+        Sun, 12 Feb 2023 06:59:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509F311E95;
+        Sun, 12 Feb 2023 03:59:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FD8260C8A;
-        Sun, 12 Feb 2023 11:58:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 541EAC433D2;
-        Sun, 12 Feb 2023 11:58:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E84360BA0;
+        Sun, 12 Feb 2023 11:59:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4221C433D2;
+        Sun, 12 Feb 2023 11:59:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676203119;
-        bh=llt2LXtBDHWGs6tAIpzLRReXdbfmGgNRRE07NC9gqXA=;
+        s=k20201202; t=1676203182;
+        bh=+RpDH0/cTiKgitsPw9+M0Ym/q48G8wKP3sv+C2fvWEk=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=n3a5gGWJi6G/K2nI4VBG91ivR9DBQvxbmws4wuJDtEt43LMTXUAMeHjOuzbm5wfhv
-         2bj5IIqSH/3VsBAc4jMMG5Hx2fY3Da3RPSSu2FA23ykNm51f2q3s/R0JrrIKI5ckpn
-         V4+zj+caHaM7SeThczYY2B1Y8dg34Z0u/82n8TNMNX3munfrgqxuj7qBIYxWGc9cM0
-         R7skLegroNvBI3WXIOnzAVNtuGAB+mljFRAl1bR5/t9Wj65BZXWxGZg9XR7Mg2J38Z
-         r1fTsdULPsgwfGxvKo0fN2T3H4C+Bv++vbT7AwMHEG8Kd6PQCIpvC7qmUAJGn4+xMv
-         9gQiDZafN96QA==
+        b=Lk2wX2hoC2Np8OnYwCnV/AoRrcqIdj7gNQu92CRvUdUWc80Inu2aFLgjvCPgVZdJS
+         LRONTz/VMHn3wDOxy8EFiGfsxhYX+/CozIg90+6zQqDJUT3JDT1nGUaS1zBhrDvSzc
+         i6jcuXTsyzAiDmbYE2778ipgmsuYxTI6uXNfqVHBlO/TbydqHktE1FQ5++YPsq3QJR
+         sWir/JU/8z71bvmIolWdPJAqFxW8+HEBRiR8kx1L0nUFZrWSjAXgV1b6J1TlWcfzsS
+         rDgUHQdA6uSqRiidwxzb+EL/QFAd9Dqz5J0PCbCZ9RttUV20ojNpOATf4gIM3jeque
+         qVPhEg1k0WGEA==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <maz@kernel.org>)
-        id 1pRB08-009ij5-Tv;
-        Sun, 12 Feb 2023 11:58:37 +0000
-Date:   Sun, 12 Feb 2023 11:58:36 +0000
-Message-ID: <865yc7yu1f.wl-maz@kernel.org>
+        id 1pRB1A-009ikJ-If;
+        Sun, 12 Feb 2023 11:59:40 +0000
+Date:   Sun, 12 Feb 2023 11:59:40 +0000
+Message-ID: <864jrrytzn.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
 To:     Zaid Al-Bassam <zalbassam@google.com>
 Cc:     Jesus Sanchez-Palencia <jesussanp@google.com>,
@@ -60,10 +60,10 @@ Cc:     Jesus Sanchez-Palencia <jesussanp@google.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-perf-users@vger.kernel.org, kvmarm@lists.linux.dev,
         kvmarm@lists.cs.columbia.edu, Marc Zyngier <marc.zyngier@arm.com>
-Subject: Re: [PATCH v2 2/8] arm64: perf: Abstract system register accesses away
-In-Reply-To: <20230210165500.2292608-3-zalbassam@google.com>
+Subject: Re: [PATCH v2 7/8] ARM: perf: Allow the use of the PMUv3 driver on 32bit ARM
+In-Reply-To: <20230210165500.2292608-8-zalbassam@google.com>
 References: <20230210165500.2292608-1-zalbassam@google.com>
-        <20230210165500.2292608-3-zalbassam@google.com>
+        <20230210165500.2292608-8-zalbassam@google.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
  (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -73,8 +73,8 @@ X-SA-Exim-Connect-IP: 185.219.108.64
 X-SA-Exim-Rcpt-To: zalbassam@google.com, jesussanp@google.com, linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, peterz@infradead.org, mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org, namhyung@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com, oliver.upton@linux.dev, yuzenghui@huawei.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, marc.zyngier@arm.com
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,40 +82,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Feb 2023 16:54:54 +0000,
+On Fri, 10 Feb 2023 16:54:59 +0000,
 Zaid Al-Bassam <zalbassam@google.com> wrote:
 > 
 > From: Marc Zyngier <marc.zyngier@arm.com>
 > 
-> As we want to enable 32bit support, we need to distanciate the
-> PMUv3 driver from the AArch64 system register names.
+> The only thing stopping the PMUv3 driver from compiling on 32bit
+> is the lack of defined system registers names and the handful of
+> required helpers.
 > 
-> This patch moves all system register accesses to an architecture
-> specific include file, allowing the 32bit counterpart to be
-> slotted in at a later time.
+> This is easily solved by providing the sysreg accessors and updating
+> the Kconfig entry.
 > 
 > Signed-off-by: Marc Zyngier <marc.zyngier@arm.com>
 > Co-developed-by: Zaid Al-Bassam <zalbassam@google.com>
 > Signed-off-by: Zaid Al-Bassam <zalbassam@google.com>
 > Signed-off-by: Marc Zyngier <maz@kernel.org>
-> Link: https://lore.kernel.org/r/20230126204444.2204061-3-zalbassam@google.com
-
-You can drop these links. They were inserted when I picked your series
-from the list, but they don't mean much at this stage.
-
+> Link: https://lore.kernel.org/r/20230126204444.2204061-8-zalbassam@google.com
 > ---
->  arch/arm64/include/asm/arm_pmuv3.h | 149 +++++++++++++++++++++++++++++
->  drivers/perf/arm_pmuv3.c           | 115 +++++-----------------
->  include/linux/perf/arm_pmuv3.h     |  45 +++++++++
->  3 files changed, 217 insertions(+), 92 deletions(-)
->  create mode 100644 arch/arm64/include/asm/arm_pmuv3.h
+>  arch/arm/include/asm/arm_pmuv3.h | 259 +++++++++++++++++++++++++++++++
+>  drivers/perf/Kconfig             |   5 +-
+>  drivers/perf/arm_pmuv3.c         |   5 +-
+>  3 files changed, 265 insertions(+), 4 deletions(-)
+>  create mode 100644 arch/arm/include/asm/arm_pmuv3.h
 > 
-> diff --git a/arch/arm64/include/asm/arm_pmuv3.h b/arch/arm64/include/asm/arm_pmuv3.h
+> diff --git a/arch/arm/include/asm/arm_pmuv3.h b/arch/arm/include/asm/arm_pmuv3.h
 > new file mode 100644
-> index 0000000000000..eb204adb8dee2
+> index 0000000000000..b2d9dc9dedbac
 > --- /dev/null
-> +++ b/arch/arm64/include/asm/arm_pmuv3.h
-> @@ -0,0 +1,149 @@
+> +++ b/arch/arm/include/asm/arm_pmuv3.h
+> @@ -0,0 +1,259 @@
 > +/* SPDX-License-Identifier: GPL-2.0 */
 > +/*
 > + * Copyright (C) 2012 ARM Ltd.
@@ -133,14 +129,7 @@ from the list, but they don't mean much at this stage.
 > + * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 > + */
 
-Please drop the license text, as we don't use this boilerplate anymore
-(the SPDX tag is enough). Just keep:
-
-/*
- * Copyright (C) 2012 ARM Ltd.
- */
-
-Thanks,
+Same remark here.
 
 	M.
 
