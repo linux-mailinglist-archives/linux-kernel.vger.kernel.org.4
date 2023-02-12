@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DFBA6936FF
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 12:29:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C59F8693701
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 12:31:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbjBLL3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 06:29:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
+        id S229561AbjBLLbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 06:31:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjBLL3n (ORCPT
+        with ESMTP id S229457AbjBLLbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 06:29:43 -0500
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060911284A;
-        Sun, 12 Feb 2023 03:29:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1676201355; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=HkGFvJeUk+bE6QufNRZaCyMbx8qdTD+HFi8LSv+UOmkHny7AG8XaN324TSs4Dg0pF3nDxkXzbrECXAltiWoQ+NHskdXpSvArmDfmMeRNapbGN6V9TSjxlMkefulJwHLLanftEYBedzBdyQ8LeHMG7t0Mgjo944/PlTl1QheS/II=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1676201355; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=sdKiqtHN6nftFsRpB9ipKjZhb69tnZdSxehkWarvD8A=; 
-        b=g5t+LEH6QDCe1Q2Gv348lXJ0xgpnfeyAjK+eGkfbhKm1NC3BBJtsiVHDjKCUe0aWi14ZzPIMUX1n4ihrciirbo8Un46IYqlssCsQ//rt78FN1RPpIDF6QGQUoSlvvnsAslwljMGh6ez3R6isuUGpohFC/YGkeF/F9R/8B9tG4FM=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1676201355;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=sdKiqtHN6nftFsRpB9ipKjZhb69tnZdSxehkWarvD8A=;
-        b=Hy8r1v89SG4Sv6Rol2/5mOrhOgIBDRCDTziw4D9gbmI/n2eA2cJVVuq5zNKGn0MC
-        9heT0NnuuP1e6KnuCwvksZBuuQ0f4wZE626HeQ+G97lu6kapMJ3Rl2L1LoSG5T+wwpT
-        tg8opL5fsiHMGfoRO+VVSWOMrRlO1sQwNu9xZHMQ=
-Received: from [10.10.10.3] (37.120.152.236 [37.120.152.236]) by mx.zohomail.com
-        with SMTPS id 1676201354267603.4220221328939; Sun, 12 Feb 2023 03:29:14 -0800 (PST)
-Message-ID: <ffc0f65b-8bdc-3353-8fb8-6e60582c2412@arinc9.com>
-Date:   Sun, 12 Feb 2023 14:29:10 +0300
+        Sun, 12 Feb 2023 06:31:32 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E541284A
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 03:31:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1676201479; bh=gKBqQtIfBEVq7yV5CnOjrJlvisaFqLrJnSZnk3EJCzo=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=Z400q/FQb6SZHab7k3Ie6Wbo9qmNuuuVXbl0cFmI7ZUojmtp1L/Y6h7dcz9EmrC3X
+         AkXoLPSaY909GXx0yytahBaiJLqzoS5m4+mjEqZiFvZ/pIuQAV3U6wUXRnx5ayU4bG
+         SEEX4X1kcJabgdOT0MdYW/Go2jyNoV6aGCm8l3eynNcU8Qxk9R9i0mZdIAQWcnHVqt
+         87J/oMZ+ofaiILxqLCTvVqnwdoFZ+oVuHkKjeZzEGOe/E0SeHVjmirS8MF0uXKm9gb
+         ba6k0hKEBvGD1d2EAc9alAg2049f9DZ3Abph7O/O+EDqeTi+qP84gigXgTjGH7m6IA
+         un7gI04qkHByQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MXGvG-1p4ab243R8-00YlmE; Sun, 12
+ Feb 2023 12:31:19 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     openbmc@lists.ozlabs.org
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Joel Stanley <joel@jms.id.au>, linux-kernel@vger.kernel.org
+Subject: [PATCH] soc: nuvoton: Fix Kconfig
+Date:   Sun, 12 Feb 2023 12:31:08 +0100
+Message-Id: <20230212113111.1720685-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: mtk-pmic-keys: Ignore power button if pressed before driver loads
-To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     linux-input@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        erkin.bozoglu@xeront.com
-References: <883798d8-f7d9-eadc-1343-7d241741ff67@arinc9.com>
- <87r0vcc51b.fsf@baylibre.com>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <87r0vcc51b.fsf@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:yLKJRwKH0j/kcqOmXwtM6ZooQ266YuDPRchRkA5R9WXrflmv3uB
+ O3JnPXxW1K7379Hxu275AhbDt+QwjISpL7QZmd/EcaTh7VQ6+CsU1nRTTNZK7XvT4SQ/Urk
+ bp+d0EOaDNfGnQWuiGNPMwBrux0psF8To6uUkPPpvqQVxqgMfEq/Ka7HnqQMLMkEz0jxeGK
+ 6gxJxXkSghEgSoDE9rpbA==
+UI-OutboundReport: notjunk:1;M01:P0:hPz1ubOp300=;N6Pz4MtFc0SCFWyBNr3efJ5vVUV
+ G8REO5XjaQJ9CSd4CQSFdcTEB4PijopweXbH0KOX2xhGnb5R6MuSWMep14eLgVtLr4rfxAZfv
+ Y+kJZzQTG7zvYAasygEXoXsdyMpv25dD2pC3TbGxPBt9U/xC727Os9C27gwnSC+uPLEwsPDTe
+ v2pZtkfy63+IuxtfCVAkm1OOpAdFr+GO/jJ+mvRWGehEeGVzMYImrDda7qtt0mmictN7OV6i4
+ rt0PbOzO3hymtnVvnFt6yt5WdQQ1ajjvoauyVYIOyXGx3rRTPtFtau2CsTnWar70IMdIudjsN
+ 8LGLRRo7hubhttgDD9CJSlI+/J04JFsfiuuk6/u/1ZMYZpjqv13LhfWimE510tK6IuDJK5JcC
+ mOyLDWaRbZaJYxbale6MlHAGTQNnzTkVd7XufrSvWMhWG6tva22/X0q+VuJ2+ApXIdmsiV2w0
+ aa9GDpK25LlvPzqsqateQFFn0X0qJx9V//eGZo5WOiMESCMoS10ODwUINqEDb7RQRaFysrgvq
+ dQghWVWpBNHa+WJN32nbAZyc7JRQLPd+79iWFzapBrqI9E34UJjL+HCCF7J9kbsAkgLdEvHck
+ wR38NX+k7Oii7MHlwGlv0K0zvKabdGJPxspea6mOfxGvnQejdHxf+mIVdTsHebOwweJRwHWaz
+ CBL9uL0lKhYwtAG5AqZaiLWOynbIRnOgdZGCspQHzyHhsSbZp8gkU60z6K39Uq1/tYHllbh+z
+ XQ5kqhnzYJk/AAA1eyKlBBLrC9jVcObyPK1vbT2AXsffVswr3bSDwz3AJzzPscfvCY0Mkr+qy
+ vGdiU5EB4Azvda6D21qGwFD9RvgWY0sE4VYKb4Lxe6xEQmhHKmaphNrkjZJ0mi6qxEUrGAHhS
+ 3zd6hoyo23fedt8bXyTQZG70JmRlZlKAqOhoqL/VHv6dxiHcv9yqBBHb81olm3X8VrpWhrpF4
+ 1aDVlYe88dOWF09EbWmqlcdSK8Q=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,91 +70,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Mattijs,
+Unfortunately, version 5 of the Nuvoton WPCM450 SoC driver was applied
+to bmc.git, which misses a few fixes that were in version 6.
 
-Sorry for the late response.
+This patch adds the missing fixes:
 
-On 30.01.2023 20:21, Mattijs Korpershoek wrote:
-> Hi Arınç,
-> 
-> On lun., janv. 30, 2023 at 16:36, Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
-> 
->> Hi all,
->>
->> The power button on my Bananapi BPI-R2 (MT7623NI SoC, mt6323-keys) is
->> shorted, so the device automatically boots when there's power. This
->> causes the device to reboot when KEYBOARD_MTK_PMIC is loaded because the
->> driver sees the power button being pressed.
-> 
-> What evidence do you have that there is actually a "press" event being
-> received by userspace? Did you tested this with evtest or something
-> similar?
-> 
-> If a "power button press" is generated, than I imagine that a userspace
-> process must receive it and halt the system, right?
-> 
-> The PMIC also has a feature to shutdown in case detect a long key-press,
-> which is controlled by the mediatek,long-press-mode device-tree
-> property.
-> So is it the pmic that shutdown your board (probably no evidence in
-> logs, just a "power cut" behaviour) or is it userspace?
+ - Add a menu "Nuvoton SoC drivers" to make it easier to add other
+   Nuvoton SoC drivers later on
+ - select CONFIG_REGMAP from CONFIG_WPCM450_SOC
 
-Nothing appears on the kernel log and evtest doesn't detect anything. 
-The input device appears only after loading mtk-pmic-keys.ko so I have 
-to run evtest after the driver is loaded. After that, I see nothing 
-noticeable running evtest:
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Fixes: 77b8c67b5637 ("soc: nuvoton: Add SoC info driver for WPCM450")
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ drivers/soc/nuvoton/Kconfig | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-# evtest
-No device specified, trying to scan all of /dev/input/event*
-Available devices:
-/dev/input/event0:	mtk_cir
-/dev/input/event1:	mtk-pmic-keys
-Select the device event number [0-1]: 1
-Input driver version is 1.0.1
-Input device ID: bus 0x19 vendor 0x1 product 0x1 version 0x1
-Input device name: "mtk-pmic-keys"
-Supported events:
-   Event type 0 (EV_SYN)
-   Event type 1 (EV_KEY)
-     Event code 114 (KEY_VOLUMEDOWN)
-     Event code 116 (KEY_POWER)
-Properties:
-Testing ... (interrupt to exit)
-(Device reboots)
+diff --git a/drivers/soc/nuvoton/Kconfig b/drivers/soc/nuvoton/Kconfig
+index df46182088ec2..2167d3d739d84 100644
+=2D-- a/drivers/soc/nuvoton/Kconfig
++++ b/drivers/soc/nuvoton/Kconfig
+@@ -1,11 +1,17 @@
+ # SPDX-License-Identifier: GPL-2.0
+-menuconfig WPCM450_SOC
++menu "Nuvoton SoC drivers"
++	depends on ARCH_NPCM || COMPILE_TEST
++
++config WPCM450_SOC
+ 	tristate "Nuvoton WPCM450 SoC driver"
+ 	default y if ARCH_WPCM450
+ 	select SOC_BUS
++	select REGMAP
+ 	help
+ 	  Say Y here to compile the SoC information driver for Nuvoton
+ 	  WPCM450 SoCs.
 
-I've set this on the devicetree of Bananapi BPI-R2:
+ 	  This driver provides information such as the SoC model and
+ 	  revision.
++
++endmenu
+=2D-
+2.39.1
 
-&mt6323keys {
-	mediatek,long-press-mode = <0>;
-};
-
-This prevents the device from rebooting after the driver is loaded so I 
-believe this proves that it's the driver that tries to shutdown the board.
-
-> 
->>
->> I was wondering if it's possible to change the driver in a way that
->> doesn't break in this situation. Maybe don't do anything if the first
->> state of the the power button the driver sees is being pressed, and if
->> the state doesn't change.
-> 
-> If the driver is an issue, can't we blacklist it from being probed
-> instead? or do you want to use the home key feature that that same
-> driver provides?
-
-Since it's a special case, specific to my own board, I just disabled the 
-key.
-
-&mt6323keys {
-	power {
-		status = "disabled";
-	};
-};
-
-I also see there's no home key on this board so I may submit a patch to 
-disable the home button for this device.
-
-Thanks for your help!
-
-Cheers.
-Arınç
