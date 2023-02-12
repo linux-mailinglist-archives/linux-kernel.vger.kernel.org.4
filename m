@@ -2,110 +2,351 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F1969387D
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 17:26:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9AF693883
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 17:27:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjBLQ0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 11:26:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40132 "EHLO
+        id S229713AbjBLQ1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 11:27:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBLQ0d (ORCPT
+        with ESMTP id S229663AbjBLQ1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 11:26:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3C611164;
-        Sun, 12 Feb 2023 08:26:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 976B9B80C2C;
-        Sun, 12 Feb 2023 16:26:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD8E1C433D2;
-        Sun, 12 Feb 2023 16:26:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676219190;
-        bh=PHaVWIiDiKuPiyj9CpZVeYgSGEpSXGrmMvcZSQN2a1w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WHZ1dOpcNlciKJV60ceMatG/ln4gwqhaZjp3ZE5RHjwYiIsNbKgPfiLOmHrkEtBNT
-         0LBqZ54vZ15wL/dO9fbXmNbGA5IZXywhsLgmuVeT8Mxh6nsVQ2XXz5mIslqXmGe9/g
-         AzIa8vrmuhuYMA0WsrKUzqY1iJ2X6VnzRjkJW1xeJOjb+i+e+3nJ6w3tM54rnCLk9r
-         bZn+yK6CEohAWfFi7LJuH0EYEVZLCz4dM4UGrtoZL997U+pcfquEEXsVB3fsWZbkQi
-         9pDJGG+mrF8objq54yFjgqFeB5zDvEOjRdynh9jYkrT7/GybhbLGr2AHJa/rTTFxa0
-         QsuwvU4Larsqw==
-Date:   Sun, 12 Feb 2023 18:26:06 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH v2 4/4] mm, arch: add generic implementation of
- pfn_valid() for FLATMEM
-Message-ID: <Y+kTHsaq8FAG72CX@kernel.org>
-References: <20230129124235.209895-1-rppt@kernel.org>
- <20230129124235.209895-5-rppt@kernel.org>
- <20230212161320.GA3784076@roeck-us.net>
+        Sun, 12 Feb 2023 11:27:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4891204C
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 08:26:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676219206;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=yeYEHWIK9fjX2YX7qbSY+5zehyoXDxenOialobzaTXk=;
+        b=RQO1q37mPnEmXpzNTjLUrOKxFwJZanEIPT6/0nrjavrN1Vs1m41K8bWjqhVVYXqf1dv3GO
+        m7HPmksMsVSKli07xl6iMr+p/WxW0VAh2IojYRKVkpKuqpMDasjTwmVYksNoPLml6c4QJy
+        ZmvzpntdQZ3SLjOzMqQ541u94NBcZjc=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-488-BtAqjtbIPbOhW9dH90E42w-1; Sun, 12 Feb 2023 11:26:45 -0500
+X-MC-Unique: BtAqjtbIPbOhW9dH90E42w-1
+Received: by mail-pj1-f70.google.com with SMTP id mi18-20020a17090b4b5200b00230e56d5a44so3803934pjb.1
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 08:26:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yeYEHWIK9fjX2YX7qbSY+5zehyoXDxenOialobzaTXk=;
+        b=aFb+8ad9gKOp06dSBKqRruxBoz3GXI6M18TaDAarqSrOXXHwV94KKfr83H+TOecQOI
+         2SkicXy71CJ/Grw/DlN5Q7WoI+4EWiPQgshOtp/MDsBhmq2OOAKdvHb4GZdgOZmxXV4K
+         enqTd22oizFI0+6rpB4O0ZqDKP/i3O60Z0+8VH6XKh3XMyPZ1eICdw9idTwnjQd7M1v6
+         S3WkhSxdsO/hsmsd3uhey5VTForAmg+Ok80pqNLoXEFiw05XLwLaEwkdvB63+dUVxDTV
+         5Yf872Bm4lWYP2W0rhqzeutwPYf+buzfiiyAJkDeU1oznNxM4OxovqGlIo0/tJHwBoEP
+         xXxA==
+X-Gm-Message-State: AO0yUKVe43SiHlZAN5M4FkujwIDVOO70I79ALejvlLWJQbHL6eqiLBy+
+        q2U6TZefC4YcXogN8aXzc/wP7O3VBu2Wbz+elfoWwu/i4uaMNz9N2wkVpTqZjSAXA56xyYnZ8L/
+        tPUxLY0XL08OgdDuWbbBG8Bkl
+X-Received: by 2002:a62:2582:0:b0:593:b169:ae51 with SMTP id l124-20020a622582000000b00593b169ae51mr16074837pfl.32.1676219203925;
+        Sun, 12 Feb 2023 08:26:43 -0800 (PST)
+X-Google-Smtp-Source: AK7set94DFtGn5+x/foEH514GWukPtkIpzLVTSdgqa86oZciglGiTlu/I+jaW076ug5lEAO1sw66RQ==
+X-Received: by 2002:a62:2582:0:b0:593:b169:ae51 with SMTP id l124-20020a622582000000b00593b169ae51mr16074826pfl.32.1676219203598;
+        Sun, 12 Feb 2023 08:26:43 -0800 (PST)
+Received: from localhost.localdomain ([240d:1a:c0d:9f00:ca6:1aff:fead:cef4])
+        by smtp.gmail.com with ESMTPSA id y4-20020aa78544000000b005a81885f342sm6352853pfn.21.2023.02.12.08.26.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Feb 2023 08:26:43 -0800 (PST)
+From:   Shigeru Yoshida <syoshida@redhat.com>
+To:     jchapman@katalix.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     gnault@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Shigeru Yoshida <syoshida@redhat.com>
+Subject: [PATCH v2] l2tp: Avoid possible recursive deadlock in l2tp_tunnel_register()
+Date:   Mon, 13 Feb 2023 01:26:23 +0900
+Message-Id: <20230212162623.2301597-1-syoshida@redhat.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230212161320.GA3784076@roeck-us.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
+When a file descriptor of pppol2tp socket is passed as file descriptor
+of UDP socket, a recursive deadlock occurs in l2tp_tunnel_register().
+This situation is reproduced by the following program:
 
-On Sun, Feb 12, 2023 at 08:13:20AM -0800, Guenter Roeck wrote:
-> On Sun, Jan 29, 2023 at 02:42:35PM +0200, Mike Rapoport wrote:
-> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> > 
-> > Every architecture that supports FLATMEM memory model defines its own
-> > version of pfn_valid() that essentially compares a pfn to max_mapnr.
-> > 
-> > Use mips/powerpc version implemented as static inline as a generic
-> > implementation of pfn_valid() and drop its per-architecture definitions.
-> > 
-> 
-> With this patch in the tree, sh4 and sh4eb qemu emulations no longer boot.
-> Reverting this patch fixes the problem.
+int main(void)
+{
+	int sock;
+	struct sockaddr_pppol2tp addr;
+
+	sock = socket(AF_PPPOX, SOCK_DGRAM, PX_PROTO_OL2TP);
+	if (sock < 0) {
+		perror("socket");
+		return 1;
+	}
+
+	addr.sa_family = AF_PPPOX;
+	addr.sa_protocol = PX_PROTO_OL2TP;
+	addr.pppol2tp.pid = 0;
+	addr.pppol2tp.fd = sock;
+	addr.pppol2tp.addr.sin_family = PF_INET;
+	addr.pppol2tp.addr.sin_port = htons(0);
+	addr.pppol2tp.addr.sin_addr.s_addr = inet_addr("192.168.0.1");
+	addr.pppol2tp.s_tunnel = 1;
+	addr.pppol2tp.s_session = 0;
+	addr.pppol2tp.d_tunnel = 0;
+	addr.pppol2tp.d_session = 0;
+
+	if (connect(sock, (const struct sockaddr *)&addr, sizeof(addr)) < 0) {
+		perror("connect");
+		return 1;
+	}
+
+	return 0;
+}
+
+This program causes the following lockdep warning:
+
+ ============================================
+ WARNING: possible recursive locking detected
+ 6.2.0-rc5-00205-gc96618275234 #56 Not tainted
+ --------------------------------------------
+ repro/8607 is trying to acquire lock:
+ ffff8880213c8130 (sk_lock-AF_PPPOX){+.+.}-{0:0}, at: l2tp_tunnel_register+0x2b7/0x11c0
+
+ but task is already holding lock:
+ ffff8880213c8130 (sk_lock-AF_PPPOX){+.+.}-{0:0}, at: pppol2tp_connect+0xa82/0x1a30
+
+ other info that might help us debug this:
+  Possible unsafe locking scenario:
+
+        CPU0
+        ----
+   lock(sk_lock-AF_PPPOX);
+   lock(sk_lock-AF_PPPOX);
+
+  *** DEADLOCK ***
+
+  May be due to missing lock nesting notation
+
+ 1 lock held by repro/8607:
+  #0: ffff8880213c8130 (sk_lock-AF_PPPOX){+.+.}-{0:0}, at: pppol2tp_connect+0xa82/0x1a30
+
+ stack backtrace:
+ CPU: 0 PID: 8607 Comm: repro Not tainted 6.2.0-rc5-00205-gc96618275234 #56
+ Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.1-2.fc37 04/01/2014
+ Call Trace:
+  <TASK>
+  dump_stack_lvl+0x100/0x178
+  __lock_acquire.cold+0x119/0x3b9
+  ? lockdep_hardirqs_on_prepare+0x410/0x410
+  lock_acquire+0x1e0/0x610
+  ? l2tp_tunnel_register+0x2b7/0x11c0
+  ? lock_downgrade+0x710/0x710
+  ? __fget_files+0x283/0x3e0
+  lock_sock_nested+0x3a/0xf0
+  ? l2tp_tunnel_register+0x2b7/0x11c0
+  l2tp_tunnel_register+0x2b7/0x11c0
+  ? sprintf+0xc4/0x100
+  ? l2tp_tunnel_del_work+0x6b0/0x6b0
+  ? debug_object_deactivate+0x320/0x320
+  ? lockdep_init_map_type+0x16d/0x7a0
+  ? lockdep_init_map_type+0x16d/0x7a0
+  ? l2tp_tunnel_create+0x2bf/0x4b0
+  ? l2tp_tunnel_create+0x3c6/0x4b0
+  pppol2tp_connect+0x14e1/0x1a30
+  ? pppol2tp_put_sk+0xd0/0xd0
+  ? aa_sk_perm+0x2b7/0xa80
+  ? aa_af_perm+0x260/0x260
+  ? bpf_lsm_socket_connect+0x9/0x10
+  ? pppol2tp_put_sk+0xd0/0xd0
+  __sys_connect_file+0x14f/0x190
+  __sys_connect+0x133/0x160
+  ? __sys_connect_file+0x190/0x190
+  ? lockdep_hardirqs_on+0x7d/0x100
+  ? ktime_get_coarse_real_ts64+0x1b7/0x200
+  ? ktime_get_coarse_real_ts64+0x147/0x200
+  ? __audit_syscall_entry+0x396/0x500
+  __x64_sys_connect+0x72/0xb0
+  do_syscall_64+0x38/0xb0
+  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+This patch fixes the issue by getting/creating the tunnel before
+locking the pppol2tp socket.
+
+Fixes: 0b2c59720e65 ("l2tp: close all race conditions in l2tp_tunnel_register()")
+Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+---
+v2: Get/create the tunnel before locking the pppol2tp socket suggested
+    by Guillaume Nault.
+v1: https://lore.kernel.org/all/20230130154438.1373750-1-syoshida@redhat.com/
+
+ net/l2tp/l2tp_ppp.c | 118 ++++++++++++++++++++++++--------------------
+ 1 file changed, 64 insertions(+), 54 deletions(-)
+
+diff --git a/net/l2tp/l2tp_ppp.c b/net/l2tp/l2tp_ppp.c
+index db2e584c625e..68d02e217ca3 100644
+--- a/net/l2tp/l2tp_ppp.c
++++ b/net/l2tp/l2tp_ppp.c
+@@ -650,6 +650,65 @@ static int pppol2tp_tunnel_mtu(const struct l2tp_tunnel *tunnel)
+ 	return mtu - PPPOL2TP_HEADER_OVERHEAD;
+ }
  
-Can you please test with only partial revert for arch/sh?
-
-> Guenter
-
++static struct l2tp_tunnel *pppol2tp_tunnel_get(struct net *net,
++					       struct l2tp_connect_info *info,
++					       bool *new_tunnel)
++{
++	struct l2tp_tunnel *tunnel;
++	int error;
++
++	*new_tunnel = false;
++
++	tunnel = l2tp_tunnel_get(net, info->tunnel_id);
++
++	/* Special case: create tunnel context if session_id and
++	 * peer_session_id is 0. Otherwise look up tunnel using supplied
++	 * tunnel id.
++	 */
++	if (!info->session_id && !info->peer_session_id) {
++		if (!tunnel) {
++			struct l2tp_tunnel_cfg tcfg = {
++				.encap = L2TP_ENCAPTYPE_UDP,
++			};
++
++			/* Prevent l2tp_tunnel_register() from trying to set up
++			 * a kernel socket.
++			 */
++			if (info->fd < 0)
++				return ERR_PTR(-EBADF);
++
++			error = l2tp_tunnel_create(info->fd,
++						   info->version,
++						   info->tunnel_id,
++						   info->peer_tunnel_id, &tcfg,
++						   &tunnel);
++			if (error < 0)
++				return ERR_PTR(error);
++
++			l2tp_tunnel_inc_refcount(tunnel);
++			error = l2tp_tunnel_register(tunnel, net, &tcfg);
++			if (error < 0) {
++				kfree(tunnel);
++				return ERR_PTR(error);
++			}
++
++			*new_tunnel = true;
++		}
++	} else {
++		/* Error if we can't find the tunnel */
++		if (!tunnel)
++			return ERR_PTR(-ENOENT);
++
++		/* Error if socket is not prepped */
++		if (!tunnel->sock) {
++			l2tp_tunnel_dec_refcount(tunnel);
++			return ERR_PTR(-ENOENT);
++		}
++	}
++
++	return tunnel;
++}
++
+ /* connect() handler. Attach a PPPoX socket to a tunnel UDP socket
+  */
+ static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
+@@ -663,7 +722,6 @@ static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
+ 	struct pppol2tp_session *ps;
+ 	struct l2tp_session_cfg cfg = { 0, };
+ 	bool drop_refcnt = false;
+-	bool drop_tunnel = false;
+ 	bool new_session = false;
+ 	bool new_tunnel = false;
+ 	int error;
+@@ -672,6 +730,10 @@ static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
+ 	if (error < 0)
+ 		return error;
+ 
++	tunnel = pppol2tp_tunnel_get(sock_net(sk), &info, &new_tunnel);
++	if (IS_ERR(tunnel))
++		return PTR_ERR(tunnel);
++
+ 	lock_sock(sk);
+ 
+ 	/* Check for already bound sockets */
+@@ -689,57 +751,6 @@ static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
+ 	if (!info.tunnel_id)
+ 		goto end;
+ 
+-	tunnel = l2tp_tunnel_get(sock_net(sk), info.tunnel_id);
+-	if (tunnel)
+-		drop_tunnel = true;
+-
+-	/* Special case: create tunnel context if session_id and
+-	 * peer_session_id is 0. Otherwise look up tunnel using supplied
+-	 * tunnel id.
+-	 */
+-	if (!info.session_id && !info.peer_session_id) {
+-		if (!tunnel) {
+-			struct l2tp_tunnel_cfg tcfg = {
+-				.encap = L2TP_ENCAPTYPE_UDP,
+-			};
+-
+-			/* Prevent l2tp_tunnel_register() from trying to set up
+-			 * a kernel socket.
+-			 */
+-			if (info.fd < 0) {
+-				error = -EBADF;
+-				goto end;
+-			}
+-
+-			error = l2tp_tunnel_create(info.fd,
+-						   info.version,
+-						   info.tunnel_id,
+-						   info.peer_tunnel_id, &tcfg,
+-						   &tunnel);
+-			if (error < 0)
+-				goto end;
+-
+-			l2tp_tunnel_inc_refcount(tunnel);
+-			error = l2tp_tunnel_register(tunnel, sock_net(sk),
+-						     &tcfg);
+-			if (error < 0) {
+-				kfree(tunnel);
+-				goto end;
+-			}
+-			drop_tunnel = true;
+-			new_tunnel = true;
+-		}
+-	} else {
+-		/* Error if we can't find the tunnel */
+-		error = -ENOENT;
+-		if (!tunnel)
+-			goto end;
+-
+-		/* Error if socket is not prepped */
+-		if (!tunnel->sock)
+-			goto end;
+-	}
+-
+ 	if (tunnel->peer_tunnel_id == 0)
+ 		tunnel->peer_tunnel_id = info.peer_tunnel_id;
+ 
+@@ -840,8 +851,7 @@ static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
+ 	}
+ 	if (drop_refcnt)
+ 		l2tp_session_dec_refcount(session);
+-	if (drop_tunnel)
+-		l2tp_tunnel_dec_refcount(tunnel);
++	l2tp_tunnel_dec_refcount(tunnel);
+ 	release_sock(sk);
+ 
+ 	return error;
 -- 
-Sincerely yours,
-Mike.
+2.39.0
+
