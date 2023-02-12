@@ -2,64 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A856938FB
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 18:06:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7324C693900
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 18:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbjBLRGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 12:06:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
+        id S229841AbjBLRMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 12:12:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjBLRGS (ORCPT
+        with ESMTP id S229556AbjBLRMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 12:06:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4F0EFA3;
-        Sun, 12 Feb 2023 09:06:17 -0800 (PST)
+        Sun, 12 Feb 2023 12:12:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1FC10A8C;
+        Sun, 12 Feb 2023 09:12:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5CD2B80D26;
-        Sun, 12 Feb 2023 17:06:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD2DC433D2;
-        Sun, 12 Feb 2023 17:06:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC41E60D37;
+        Sun, 12 Feb 2023 17:12:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20C8EC433EF;
+        Sun, 12 Feb 2023 17:12:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676221574;
-        bh=xp+pefU+YHy43K0Cj/XKFLXgNVyRDAe45y8OPXjYd98=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V0QrHsaoukwZplXnOXNUul981zsJ5R9VZid8ANCLlsXoEt2GZ4UA7+X4gFPFhOzkD
-         hxURisohnPmmTxRednradbcOxxqYYfhSdejp06G+6U3UHASgRDAMVbjdkCqIhDvaef
-         dptZCfppcYzMVv6nXLRj3soqyH3CAB+WFqbr1pDvyQLrKlsxxngkfHyXYnqyVNA8Y7
-         ILGEfLPaBvPLQNyK/nXlVaiLmhbCeIZ1bkD6dBfv683pu3K/igqXwkA/FAd6Qf4JHT
-         tD2F4bkQh8MwXcRbQyheXMYguE9yU/sFUyCgCTi8igc9yfKcvJ9jFeiAr3HudyEycd
-         IITgQL3rFCPvw==
-Date:   Sun, 12 Feb 2023 17:06:09 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     conor@kernel.org
-Cc:     Jisheng Zhang <jszhang@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v5 00/13] riscv: improve boot time isa extensions handling
-Message-ID: <Y+kcgcncQO/2DNLo@spud>
-References: <20230128172856.3814-1-jszhang@kernel.org>
- <20230212154333.GA3760469@roeck-us.net>
- <Y+kM//nuDv29Z9qJ@spud>
- <Y+kU9nDBTttZRLLq@spud>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="h6c3DYobJqr9hTJK"
-Content-Disposition: inline
-In-Reply-To: <Y+kU9nDBTttZRLLq@spud>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        s=k20201202; t=1676221964;
+        bh=NTFE8J83H4FQBIZXz1OKZ2YEeYUzOcnc1ScSc0IIJpI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=X8MuKKbhdQtEIi5I9wvmXUyY2tTt00zVSyUNWONWEfmqAeq5hX8COvdNhN3UGnCk2
+         ZkR77y4M1f3uwlpgRYqeM7RyCYJXbOK5qCsM96ek2bn04EfIJqSxSZqXuEwyWZmkGX
+         LgGvhGva1bDUyKd9JE9qaTd5c36akw/C8IvDjtAc+Y2Hu/V+JizMsnu00EfN1qSZje
+         rOuuIxljRTKHWYvlBK8UO5Nw8UWk9CyUBaNnztNr4rz8w1A0K7ZIQwMmCPXIdUH05S
+         sCO7AHqEmw2YJjwxi3NuHfemzuI8/9i66BWRoDOkPd0o8hWZbnxk809DcBmrNQekxT
+         3IAeaFu0YW52A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pRFu5-009lI8-Mf;
+        Sun, 12 Feb 2023 17:12:41 +0000
+Date:   Sun, 12 Feb 2023 17:12:40 +0000
+Message-ID: <87ilg6lsdz.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Janne Grunau <j@jannau.net>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        Thomas Gleixner <tglx@linutronix.de>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/17] dt-bindings: interrupt-controller: apple,aic2: Add apple,t8112-aic compatible
+In-Reply-To: <20230202-asahi-t8112-dt-v1-5-cb5442d1c229@jannau.net>
+References: <20230202-asahi-t8112-dt-v1-0-cb5442d1c229@jannau.net>
+        <20230202-asahi-t8112-dt-v1-5-cb5442d1c229@jannau.net>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: j@jannau.net, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, kettenis@openbsd.org, tglx@linutronix.de, asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,36 +72,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 12 Feb 2023 15:41:15 +0000,
+Janne Grunau <j@jannau.net> wrote:
+> 
+> The Apple M2 SoC uses AICv2 and is compatible with the existing driver.
+> Add its per-SoC compatible.
+> Since multi-die versions of the M2 are not expected decrease
+> '#interrupt-cells' to 3 for apple,t8112-aic. This is seamlessly handled
+> inside the driver.
+> 
+> Signed-off-by: Janne Grunau <j@jannau.net>
 
---h6c3DYobJqr9hTJK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Marc Zyngier <maz@kernel.org>
 
-On Sun, Feb 12, 2023 at 04:33:58PM +0000, Conor Dooley wrote:
-> On Sun, Feb 12, 2023 at 03:59:59PM +0000, Conor Dooley wrote:
+	M.
 
-So as not to lead anyone up the garden path, let me correct myself:
-
-> Hmm, so this appears to be us attempting to patch in alternatives where
-> none actually exists - seemingly F & D.
-
-And of course that's not true, riscv_has_extension_likely() now uses
-alternatives as of:
-bdda5d554e43 ("riscv: introduce riscv_has_extension_[un]likely()")
-
-=46rom a quick look, it just happens that the only users are F & D.
-
-
---h6c3DYobJqr9hTJK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+kcgAAKCRB4tDGHoIJi
-0haHAP47irJdLd+BYtO2693Gm0LwdwLkixyoiVtbaWgoOWK1kAEAr5pMmLqKw2+T
-l5ybCzYN+j3mUvmfex8RQuDNBnBj3gY=
-=SyUl
------END PGP SIGNATURE-----
-
---h6c3DYobJqr9hTJK--
+-- 
+Without deviation from the norm, progress is not possible.
