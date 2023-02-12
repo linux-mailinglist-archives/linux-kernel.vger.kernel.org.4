@@ -2,120 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CB3F6935EE
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 05:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C386935F1
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 05:07:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbjBLEHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 23:07:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
+        id S229671AbjBLEHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 23:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjBLEHQ (ORCPT
+        with ESMTP id S229628AbjBLEHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 23:07:16 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790A89757
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 20:07:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jzp5Gfw3Znt+vCFjS3OKhPej988pLhpWvnD0qzs7wg8=; b=idg3rNsrQpcUl7QxDY5HlFz0Qi
-        EFAGbu7eE2ZZ/KZsNjGRqd0egiWALFm+el7PBRKM63JVFHnCBCljLEzLynrU6cnWmtVx4ocY2fIyd
-        Y2a0MiU3eUFvVlhDeV2/+UfvLRvF1xx5zZ7iFl4l7wgJSjQxdnzBnZpuSgfDZL5NMNaxyedo3L4kN
-        bOzDFW1N8UFU6rC/t+PxlJOduJmoeHWaFAs19MlJwldVxZ2YL+weAyq8e15PUybgEV3qrVr9HG/gn
-        EOxL7JhiskNBkw6E0d6AriyWp0mtbVuvZoJl2dX/CaBbXKPEZ7eJ00scIU9wv4IFkn/qD7ONx0khY
-        ZajfeDNw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pR3dn-004bVU-Vz; Sun, 12 Feb 2023 04:07:04 +0000
-Date:   Sun, 12 Feb 2023 04:07:03 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>, Vlastimil Babka <vbabka@suse.cz>,
-        David Chen <david.chen@nutanix.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Re: Linux regressions report for mainline [2023-02-11]
-Message-ID: <Y+hl552juPj8BNux@casper.infradead.org>
-References: <167613641114.2124708.9785978428796571420@leemhuis.info>
- <CAHk-=wiEJa-R50PTYPyAQDs02OAyK+Oqr67x5nxns=OKXCEf6A@mail.gmail.com>
- <CAHk-=whncfNmZmWe4yh-M=DXYT6L6Eq1r=UYKdt57=4jUmKbTA@mail.gmail.com>
+        Sat, 11 Feb 2023 23:07:41 -0500
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2058.outbound.protection.outlook.com [40.107.15.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691EAF75A;
+        Sat, 11 Feb 2023 20:07:39 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nyo41S6if7VBieNm//9GrTxXLGp8L96crFqIhFeCY80l9IhIdk6bK3ZOU7l+jvlKoKCGlQvIEI+6yzFH+BbC+cPsZ8lea72nLuHPtkwNOfOMaXYqJibMXV7Qdx0aH2AwAgdLTwgOhb9knO6CCNd1bDuJO1whLiBkFM2OSXdCH9NgHeRB54S5S77XCj7E++6zEopWJfY/qEED1CUFrB8vjkDL57nwdjaXtnngbLoR2Iw/mwvZqoeg/cCClMei/1POqB2RpDPXw+huVbEVWHGctMjB3JuFaRWZW0X7e3ZVBZpUm0TPci2gKXn4/LO5n7g0mprbxlsPZXy200ykpH52xg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wNcEEFDNJEwrEupJoQ2YgqwWAKHLc8hz4ZCqMz7yFdg=;
+ b=DX0UNPWRkDVzbhCZoBaijf5WRa8T0DbKPfIJGs5YNjgBWqAcZz+swXI9SjD+F/1b9+uIbieUiLnGK3Yvwr0yppSC+7Wc5CjWPDsEiE7EhwYCWppea1qP3jMJnyuypJDeWjh66gQx0q8qYcXNkE7iw/IOLpkuT6kKsA9B4m5UhmUsJrLQLhwggIihfS+bSBFA44o7SUIdUqPXYXaUFmHlSohJqthCce7b0k5xSbz59E+LvSa9POOib8PatUcmcMN5hfunpt3xBY3/J3Z+T6KN1RAZUNYGtsvuXplStXqDtS3E3kYLZmVbczcALDjwnnNA3stAfpxoIHQRa6zeTwMUxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wNcEEFDNJEwrEupJoQ2YgqwWAKHLc8hz4ZCqMz7yFdg=;
+ b=Ng/G+yd46VWzXdbGgqwYIM/SNREVbWQZdc83gbqkNVghU/mPWT6fQnXoSGdLKnKYQCjs3GhZ6GBkFZtSwfysTgpVAUDhInSmpRcZ5llSA1PPdq+Y1vANfWYSenz/swoTqwj0l4B/1060vuH3HYO1K36nUlCv6QOeFJNlW/N1gy4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+ by AM0PR04MB7105.eurprd04.prod.outlook.com (2603:10a6:208:19b::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.23; Sun, 12 Feb
+ 2023 04:07:36 +0000
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::5725:92ec:f43e:f5fc]) by AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::5725:92ec:f43e:f5fc%9]) with mapi id 15.20.6086.022; Sun, 12 Feb 2023
+ 04:07:36 +0000
+From:   Liu Ying <victor.liu@nxp.com>
+To:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-imx@nxp.com
+Subject: [PATCH 0/2] drm/panel: panel-simple: Add BOE EV121WXM-N10-1850 panel support
+Date:   Sun, 12 Feb 2023 12:08:41 +0800
+Message-Id: <20230212040843.231934-1-victor.liu@nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SGBP274CA0024.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::36)
+ To AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whncfNmZmWe4yh-M=DXYT6L6Eq1r=UYKdt57=4jUmKbTA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|AM0PR04MB7105:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2ed4d22b-ace8-4b1f-669d-08db0caeac99
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2cnwLTBShqMeKg7zRZgfJaI4ayHDK05xUFGmAlDnuFduvyAU9r3AEgEJxdeWB6L7box8xBQpyXlNJ/vA8xXzlv6J3xKL+/7IN7+vrayWNdiB34yeaxp8qlBY+0PXJWhNJZu0VSEcgrAa1UdW/pLy05qeYJhZKmcf0AZFmymZ2pt4PptlEoQL1tfVX3VgmeyftQiXzIQts7j9OM28QK6NN+PqfsEUpNZEUPIdzCsG7Ti4+emvNTC4FiXqApmNhgeLNdAozJiWOVCZnD6TQmIinz+/q/edM0rbgUGst6TdJIJSlQ9V/hRxY9qfT+qkQbos8amhFbYPnksiD0bR8PEQAr7Wa841FoarBCw/RB7E4VCrA8o20O/v4BLtzLv+zWf0113nIIPAuDRk40LJuBwOKEbNEhhNpe/v7R0gkHXhz/ZRuHkOg+VZQic/iXy5PH0LgzvdPtxAaGYcdObNXAwO6KZ7Nh+0j4saCgreGVBAUoZdqCjsIRW1fyIiI+SLQweiNEJIWYMtNlDMrmZdxMHPMdRvEfURKcxLDL0xjfdd8LGs35PXFB6liXKym/xJ5Lf0x4AjtC3JtUXvvOyFEoLIC03L+xW4bvjlnVFJl3d/zc/1ZYgtfVAr5zgfvemcXXbaPuPKGVtXXXQV+PvyWpnDAZIgV0zOAk/D8SrKld70HCBzjxNziFjXbfEgYlBsqKMqtxCHkgDCcWmCMF0cZfArDw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(346002)(136003)(39860400002)(376002)(396003)(451199018)(86362001)(316002)(2616005)(6506007)(6512007)(6666004)(26005)(186003)(1076003)(478600001)(52116002)(6486002)(2906002)(4744005)(8936002)(38350700002)(38100700002)(36756003)(41300700001)(5660300002)(66476007)(66556008)(8676002)(4326008)(66946007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2bxh6X1gY9Ln6V97tJDNcvBABvHSljKGS66qM15sFWiRcV7Y+huwC80Nycpf?=
+ =?us-ascii?Q?Ag6tmVbML4fL/p5iahikloh/90xgJ0wvMrmtnGRA0UPBvaOe6p8SE+vSXp/r?=
+ =?us-ascii?Q?amnYOTlrUNjFHrpWpoRoE7dyfgS200MOKN3cNnJ+EjQl7ftyifiFc4HsoBdc?=
+ =?us-ascii?Q?JCtT+/HKhCyQoMpNcHJ+RhSH+wvVTd+R9N/SUFJGznSQHn1WDgCtJ0B4Q6X7?=
+ =?us-ascii?Q?nJY8l3vY4EdbU7OPuSWrSKJrAnx/D7gumcpj2piTMuIqkuGPxSxq6izfzRF0?=
+ =?us-ascii?Q?tOzE68cOnEsDjCtDrPOaK4CqXI3MG4K8DTH8WdkwJ3DDu/IAKi3mcgOluegn?=
+ =?us-ascii?Q?vlOH3QdV44vX29/vsFXoYI3daSoBGBUTDbXLEJG9kLXB2Z4K1BRIZaadNOgg?=
+ =?us-ascii?Q?6R+qNpJbpNavEscZA2KsIaON+z8Aw7zqrP9Qs7wAVEkxd7KaHNYe9Wvwg8Zf?=
+ =?us-ascii?Q?D+KLlMxo/EuHSO8vkn5/HZDxJqoGH5B0XdJZzNBqp90eVLZKi2wfyJGJImhh?=
+ =?us-ascii?Q?tQoHJFs3p10NLBjHfP/94jfW3kUqASIMfmCP+JBywDHC7urZQhj3AGN8GEdG?=
+ =?us-ascii?Q?6gabE7wiQpsT2ryKXiR0g7h88leSQLXgnAwKvujpuRYoTZKg97TBbAY8+RS4?=
+ =?us-ascii?Q?iM7jE200tCnX7gHoSg3AGSY3YPZUkIdPSTLFipcytf1+W9l6QJojwAgKE+SS?=
+ =?us-ascii?Q?i9UGX+4E3d/Sg21iY7RfAStugvgEjh/bIeKMPgx5POgBfv5qks0CD+YXRalh?=
+ =?us-ascii?Q?x53Bckc1zbaXz2nJKTD+d7DbxPstQMECPOUeaoXVPvsjMQXwlIXXQl8/PJvE?=
+ =?us-ascii?Q?QGdTIhaoUmghnHAq6Q9yFEhKDlboXcPbsMdSUupzEB0Aj+plvzgGz6gH5xtV?=
+ =?us-ascii?Q?vUNzmmkc44aWSeU2QFaHatkPG1Ri9ActKx8rjejsnWPWcBBWMOGUBbh003jd?=
+ =?us-ascii?Q?H+WwikrRDZWClSu3fZ+6sbvNTdxEgcs7F6MHHqoLlIGgABCEmDSthVdlR7h8?=
+ =?us-ascii?Q?O4tcNSgMhUgYU55EgXNrbuMxrgUIpC4stpKASG5mB+nY02kCp2s1TuCM4kBm?=
+ =?us-ascii?Q?d2IRPTl40rESbNzYEqxNTsprBWT9NpeEOo3+1sBsumBe4O6zVZMbpoWRfZTu?=
+ =?us-ascii?Q?pjPp2h5MxvWy59P/s5EV62+BYMgVLl3GvhBbPxMHoljYziCeSYsKOyWhj9Wk?=
+ =?us-ascii?Q?1YJp1iu54pXdO5pL4maOqk0agmX0bIc3OmVv3U2k3l/nhUPJ0qNyx+byqiEa?=
+ =?us-ascii?Q?cS7kuleYdP2O3ZHQSOC4udK4bM9a+T+bPiaNSqq9dN2eM2BGweXyyZ4E8qEl?=
+ =?us-ascii?Q?Gr8iM171Yn8zb9iA5Ky5GQW6HfC00/QlyTS8VlfvEmrhgNuQ/zJBCOmogp6g?=
+ =?us-ascii?Q?JGUynIu06ynKDRBoi/skCt2vCWhSB5Adju8rkfTfUXY1BwNlKJ1NraMaWcXm?=
+ =?us-ascii?Q?eXl762RTRApD1HzCIHj+xdMExCAVxycXLpjQqe9Snuhi68gTEzdW2RESKr5O?=
+ =?us-ascii?Q?TQzsLexr6781Xgfe41OuhnCZraVQut5OIxxUZHSuX7fGPgWFfXm/ZC0bF16x?=
+ =?us-ascii?Q?FecPXptoW09pfoxR2l24WuP/diEHMh6Df5Jen9Xy?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2ed4d22b-ace8-4b1f-669d-08db0caeac99
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Feb 2023 04:07:36.6383
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tUzex9QcgTMoEVZ99gfIrkuJF1/FIJX4Lpo6aqzSQiyOrEbWe8jAHTn7qTV1/O4hYbTb/uy5ur7Vu9giZQGxFw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7105
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 11, 2023 at 02:31:53PM -0800, Linus Torvalds wrote:
-> On Sat, Feb 11, 2023 at 1:39 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > Or even just reverting the original commit e320d3012d25
-> > ("mm/page_alloc.c: fix freeing non-compound pages") and say that the
-> > (very rare) memory leak is much less dangerous than that hacky fix
-> > (that was buggy).
-> >
-> > Because it's a bit dodgy how commit e320d3012d25 ends up hooking into
-> > __free_pages(),
-> 
-> Actually, that's not the only dodgy thing about it.
-> 
-> It assumes that any multi-order page allocator user doesn't use the
-> page counts and only ever has a single "alloc" and a "free".
-> 
-> And apparently that assumption is correct, or we'd have seen a lot of problems.
-> 
-> But it *also* assumes that the speculative page alloc/free was for one
-> single page, and while that used to be true, the whole higher-order
-> folio code means that it's not necessarily true any more.
-> 
-> Or rather, I guess it *is* true in practice, but if you ever want to
-> enable 16kB folios on some filesystem, that commit e320d3012d25 is
-> just plain unfixably buggy.
-> 
-> Are we there yet? Clearly not, considering bugs like this. But it all
-> does make me go "Hmm, maybe we'd be better off with the outright
-> revert and accept the unlikely memory leak for now".
-> 
-> Willy?
+Hi,
 
-OK, you've somehow got hold of the wrong end of this problem and that's
-why you think it's larger than it is.
+This patch series aims to add BOE EV121WXM-N10-1850 panel support
+in the DRM simple panel driver.
 
-Compound pages are not the problem.  They carry their size with them, and
-when the refcount drops to zero, we free the whole allocation as one unit.
+Patch 1/2 adds dt-bindings support for the panel.
+Patch 2/2 adds the panel support in the DRM simple panel driver.
 
-The problem is high-order allocations that don't set __GFP_COMP.
-They don't record the size of the allocation.  And so we had this problem
-where if there's a speculative refcount on the first page while the owner
-calls __free_pages(), the tail pages weren't freed.  And the first page
-isn't a head page, it looks like an order-0 page, so when the speculative
-owner calls put_page(), we still don't free the tail page.
+Liu Ying (2):
+  dt-bindings: display: simple: Add BOE EV121WXM-N10-1850 panel
+  drm/panel: panel-simple: Add BOE EV121WXM-N10-1850 panel support
 
-Somewhat complicating this is that some places which allocate a
-compound page free it by calling __free_pages().  It's not wrong,
-but we can't free the tail pages at this time because they'll be
-freed by put_page().  So that's why we're testing PageHead() --
-it's "Is this a compound page".
+ .../bindings/display/panel/panel-simple.yaml  |  2 ++
+ drivers/gpu/drm/panel/panel-simple.c          | 33 +++++++++++++++++++
+ 2 files changed, 35 insertions(+)
 
-What I was vaguely afraid of was that some code would do something like:
+-- 
+2.37.1
 
-p = alloc_pages(gfp, 2);
-get_page(p);
-__free_pages(p, 2);
-... do something with p[1] ...
-__free_pages(p, 2);
-
-but it seems like nobody does that, or we'd've seen complaints by now.
-
-If we could get rid of all non-compound allocations, I'd be happy, but I
-haven't even looked to see how hard that would be.  Slab, page cache and
-anon memory all use compound pages, including hugetlb.  I think crypto
-is the main remaining user of non-compound high-order allocations.
