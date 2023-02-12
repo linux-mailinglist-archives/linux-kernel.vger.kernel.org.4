@@ -2,74 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D90693B17
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 00:22:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD256693B22
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 00:32:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjBLXWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 18:22:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38668 "EHLO
+        id S229627AbjBLX31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 18:29:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjBLXWq (ORCPT
+        with ESMTP id S229476AbjBLX3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 18:22:46 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03901BC8;
-        Sun, 12 Feb 2023 15:22:45 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 12 Feb 2023 18:29:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0138BF750;
+        Sun, 12 Feb 2023 15:29:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PFNmc4LsWz4x7W;
-        Mon, 13 Feb 2023 10:22:40 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1676244160;
-        bh=RsoH4zXDNZAI4qNZsfWd35WEMUCkQt/8RrKIyZ10p1M=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=YynPQDup6rae+tCL1eEOJ1zlIm3/LZm2bQGrIWVtXb56rnW05yxyi6CzGiK/P3XQI
-         3sNpk8CCWQyF62t3juP4xzWyzQyXFZXCmvOMEBUsobRr7tPt6e3GviqRvcOkQhqBLc
-         jpQGhw1fBrws35ObnzYg0P4gGoNvvCCStih0QbR6UrS1KM6kpUqr+nIm1PnmiOeZZw
-         XI9AK6PkJrqGDdE0JHnBwwoGz3o7lkmIK1PeqX1Z27iYIPpepy6jvOMipBxcN1z+u1
-         ROJXbCCaaRoZRXJGls2cFbzXx8x5GNnOU+c6Sft51pbVfAuz7rjchUfYS0gYkq5T9I
-         TFnW3RhX8alSQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the powerpc tree
-In-Reply-To: <20230210143829.4ab676bd@canb.auug.org.au>
-References: <20230210143829.4ab676bd@canb.auug.org.au>
-Date:   Mon, 13 Feb 2023 10:22:38 +1100
-Message-ID: <871qmuwjsx.fsf@mpe.ellerman.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9AC10B80D26;
+        Sun, 12 Feb 2023 23:29:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CCCDC433D2;
+        Sun, 12 Feb 2023 23:29:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676244561;
+        bh=N5j1gNb+Re0EUJllz+g3X981RTaDhkZJEQX4YsWLntg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qZvbsejPY7adVJe/ylm0jXSnqaQjBr4gMjdLu7HD0MicyRS5mc87LmWeT1h4PFwai
+         7USe/MSYrrzYUoZRYEX28j9afBhTU1UThttTUFEAn+TcO0+vgDUDXQg+FixduVUzMy
+         zhQzmuKPl0Tx6tNTKkeWen10KCXMEsgSzIQpDxbC4J2ADHwSx1ou49wzJuMm6ZwMvq
+         90Ocx4edd8lNZatpDUJhk9EOQP0SCjULewWLzS3pV5RSb0UQbt1sbP0wQIqMkMB/sN
+         2kNrOf//yu/DW+uTrAN4jaMO+ttHdpRyDOq96yZIkFwbSvOojXhAdduIyFQCNDpLsA
+         5FDJjB1cfqttw==
+Date:   Mon, 13 Feb 2023 08:29:17 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Qing Zhang <zhangqing@loongson.cn>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/ftrace: add LoongArch support for kprobe args
+ string tests
+Message-Id: <20230213082917.68a4fde41f1143fd32c6111b@kernel.org>
+In-Reply-To: <20230211084346.25941-1-zhangqing@loongson.cn>
+References: <20230211084346.25941-1-zhangqing@loongson.cn>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
-> Hi all,
->
-> After merging the powerpc tree, today's linux-next build (powerpc64
-> allnoconfig) failed like this:
->
-> arch/powerpc/kernel/setup_64.c: In function 'early_setup':
-> arch/powerpc/kernel/setup_64.c:400:34: error: 'struct thread_info' has no member named 'cpu'
->   400 |         task_thread_info(current)->cpu = boot_cpuid; // fix task_cpu(current)
->       |                                  ^~
->
-> Caused by commit
->
->   0ecf51ca51e5 ("powerpc/64: Fix task_cpu in early boot when booting non-zero cpuid")
->
-> # CONFIG_SMP is not set
+On Sat, 11 Feb 2023 16:43:46 +0800
+Qing Zhang <zhangqing@loongson.cn> wrote:
 
-Thanks. I squashed in the fix.
+> before:
+> [5] Kprobe event string type argument	[UNTESTED]
+> [7] Kprobe event argument syntax	[UNTESTED]
+> after:
+> [5] Kprobe event string type argument	[PASS]
+> [7] Kprobe event argument syntax	[PASS]
+> 
 
-cheers
+Thanks for updating the test!
+
+Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+> ---
+>  .../selftests/ftrace/test.d/kprobe/kprobe_args_string.tc      | 3 +++
+>  .../selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc      | 4 ++++
+>  2 files changed, 7 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
+> index 459741565222..a4f8e7c53c1f 100644
+> --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_string.tc
+> @@ -28,6 +28,9 @@ s390*)
+>  mips*)
+>    ARG1=%r4
+>  ;;
+> +loongarch*)
+> +  ARG1=%r4
+> +;;
+>  *)
+>    echo "Please implement other architecture here"
+>    exit_untested
+> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
+> index d4662c8cf407..1df61e13a812 100644
+> --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
+> @@ -40,6 +40,10 @@ mips*)
+>    GOODREG=%r4
+>    BADREG=%r12
+>  ;;
+> +loongarch*)
+> +  GOODREG=%r4
+> +  BADREG=%r12
+> +;;
+>  *)
+>    echo "Please implement other architecture here"
+>    exit_untested
+> -- 
+> 2.36.0
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
