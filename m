@@ -2,44 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DDB7693955
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 19:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AEF2693957
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 19:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbjBLSTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 13:19:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54972 "EHLO
+        id S229603AbjBLSUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 13:20:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBLSTd (ORCPT
+        with ESMTP id S229436AbjBLSUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 13:19:33 -0500
-Received: from hosting.gsystem.sk (hosting.gsystem.sk [212.5.213.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1232D1025E;
-        Sun, 12 Feb 2023 10:19:31 -0800 (PST)
-Received: from [192.168.0.2] (chello089173232159.chello.sk [89.173.232.159])
+        Sun, 12 Feb 2023 13:20:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBBC1025E;
+        Sun, 12 Feb 2023 10:20:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by hosting.gsystem.sk (Postfix) with ESMTPSA id 4AB937A037B;
-        Sun, 12 Feb 2023 19:19:29 +0100 (CET)
-From:   Ondrej Zary <linux@zary.sk>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: Re: [PATCH 02/12] pata_parport: Introduce module_pata_parport_driver macro
-Date:   Sun, 12 Feb 2023 19:19:26 +0100
-User-Agent: KMail/1.9.10
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Tim Waugh <tim@cyberelk.net>, linux-block@vger.kernel.org,
-        linux-parport@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230211144232.15138-1-linux@zary.sk> <20230211144232.15138-3-linux@zary.sk> <2e8b5e5b-6e7d-471c-74aa-1c7debebef0f@omp.ru>
-In-Reply-To: <2e8b5e5b-6e7d-471c-74aa-1c7debebef0f@omp.ru>
-X-KMail-QuotePrefix: > 
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B4E2B80CBF;
+        Sun, 12 Feb 2023 18:20:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BACDC433EF;
+        Sun, 12 Feb 2023 18:20:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676226009;
+        bh=MJjysyKBHGe9JZ/bqgooxVcRfzQCFzHhpHVyrLvWeA4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=enQuMwuBn6D1txzxnlMuUu8ScrNWig9UjQGKD3652roF/zJR5ynT6DibKKroUQdNL
+         SCnOxAZfTlMGflXLK8xXj6Wq85KudB0sH+5yPds/d+hsfy/A/RyFZfB4/9+L7ulH1n
+         kHip0k1TGvb3iew8gX8mwxp1QJzdPZtiC0V1KSx1HY7N0kYpqlY95LeYSMfwVg/sz1
+         IUio0/iMp3+iSO6NepZVELn4vDb1I1ISnzWsPczD7EQssrLsUe/95qjbKvxTjyfjM4
+         pjGELgtKA8jQQQYKSr9UcKlJ9/uqLjtB9Cg41x4Ztl0j9cbt2LLI5ZB8LXWnUyJGgh
+         WHnr6C8KhYIKg==
+Date:   Sun, 12 Feb 2023 18:20:03 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jisheng Zhang <jszhang@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v5 00/13] riscv: improve boot time isa extensions handling
+Message-ID: <Y+kt04c1iRlzUNLA@spud>
+References: <20230128172856.3814-1-jszhang@kernel.org>
+ <20230212154333.GA3760469@roeck-us.net>
+ <Y+kM//nuDv29Z9qJ@spud>
+ <Y+kU9nDBTttZRLLq@spud>
+ <Y+kcgcncQO/2DNLo@spud>
+ <Y+kqi8bQE+8hLfOF@spud>
+ <a059a815-dcb0-c575-b5a4-f9433e268e9b@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="LL9KTVybbDibeZ25"
 Content-Disposition: inline
-Message-Id: <202302121919.26401.linux@zary.sk>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+In-Reply-To: <a059a815-dcb0-c575-b5a4-f9433e268e9b@roeck-us.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,55 +69,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sunday 12 February 2023 13:19:28 Sergey Shtylyov wrote:
-> On 2/11/23 5:42 PM, Ondrej Zary wrote:
-> 
-> > Introduce module_pata_parport_driver macro and use it in protocol
-> > drivers to reduce boilerplate code. Remove paride_(un)register
-> > compatibility defines.
-> > 
-> > Signed-off-by: Ondrej Zary <linux@zary.sk>
-> [...]
-> 
-> > diff --git a/drivers/ata/pata_parport/bpck6.c b/drivers/ata/pata_parport/bpck6.c
-> > index d897e2a28efe..3c358e66db25 100644
-> > --- a/drivers/ata/pata_parport/bpck6.c
-> > +++ b/drivers/ata/pata_parport/bpck6.c
-> > @@ -245,23 +245,8 @@ static struct pi_protocol bpck6 = {
-> >  	.release_proto	= bpck6_release_proto,
-> >  };
-> >  
-> > -static int __init bpck6_init(void)
-> > -{
-> > -	printk(KERN_INFO "bpck6: BACKPACK Protocol Driver V"BACKPACK_VERSION"\n");
-> > -	printk(KERN_INFO "bpck6: Copyright 2001 by Micro Solutions, Inc., DeKalb IL. USA\n");
-> > -	if(verbose)
-> > -		printk(KERN_DEBUG "bpck6: verbose debug enabled.\n");
-> 
->    Hm, perhaps should've been removed in a separate patch?
-> 
-> [...]
-> > diff --git a/drivers/ata/pata_parport/epat.c b/drivers/ata/pata_parport/epat.c
-> > index 6ce2dee7657f..eb72bcd0c8da 100644
-> > --- a/drivers/ata/pata_parport/epat.c
-> > +++ b/drivers/ata/pata_parport/epat.c
-> > @@ -327,12 +327,12 @@ static int __init epat_init(void)
-> >  #ifdef CONFIG_PARIDE_EPATC8
-> 
->    Hm, this is now called PATA_PARPORT_EPATC8, no?
 
-Yes, it's a bug. This compile-time option should go away completely.
+--LL9KTVybbDibeZ25
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> >  	epatc8 = 1;
-> 
->    Seems like a dead code?
-> 
-> >  #endif
-> [...]
-> 
-> MBR, Sergey
-> 
+On Sun, Feb 12, 2023 at 10:14:13AM -0800, Guenter Roeck wrote:
+> On 2/12/23 10:06, Conor Dooley wrote:
+> > On Sun, Feb 12, 2023 at 05:06:09PM +0000, Conor Dooley wrote:
+> > > On Sun, Feb 12, 2023 at 04:33:58PM +0000, Conor Dooley wrote:
+> > > > On Sun, Feb 12, 2023 at 03:59:59PM +0000, Conor Dooley wrote:
+> > >=20
+> > > So as not to lead anyone up the garden path, let me correct myself:
+> > >=20
+> > > > Hmm, so this appears to be us attempting to patch in alternatives w=
+here
+> > > > none actually exists - seemingly F & D.
+> > >=20
+> > > And of course that's not true, riscv_has_extension_likely() now uses
+> > > alternatives as of:
+> > > bdda5d554e43 ("riscv: introduce riscv_has_extension_[un]likely()")
+> > >=20
+> > >  From a quick look, it just happens that the only users are F & D.
+> > >=20
+> >=20
+> > Samuel pointed out that this is a lockdep splat on irc.
+> > There's a patch on the list that removes the lockdep annotation
+> > entirely:
+> > https://patchwork.kernel.org/project/linux-riscv/patch/20230202114116.3=
+695793-1-changbin.du@huawei.com/
+> >=20
+> > So ye, no surprises that it was config based!
+> >=20
+> > Palmer posted a "better" fix for that lockdep warning a while ago:
+> > https://lore.kernel.org/all/20220322022331.32136-1-palmer@rivosinc.com/
+> >=20
+> > So we'd have to duplicate/reuse that for cpufeature/errata patching.
+> >=20
+> >=20
+>=20
+> This does not (only) happen in stop_machine().
 
+Yah, sorry I meant that it's the same lockdep splat as is being
+addressed there.
+The first patch deletes the lockdep stuff entirely, so removes the
+splat. I was thinking that we'd need to take Palmer's (IMO better)
+patch and do the same thing for patching alternatives, but I figure we
+can just take the text_mutex itself for alternatives & not have to
+dance around the lock.
 
--- 
-Ondrej Zary
+I'll go do that I suppose!
+
+--LL9KTVybbDibeZ25
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+kt0wAKCRB4tDGHoIJi
+0lCHAP9dmIfODGeFB30mrFC0ZS7H8294Wq2cp9dIc6LMlnpd2AEAiBTRGyJfm/jN
+XVO7+oQ9i0CJT3HiApBW4j9H3mFCbgU=
+=gBzF
+-----END PGP SIGNATURE-----
+
+--LL9KTVybbDibeZ25--
