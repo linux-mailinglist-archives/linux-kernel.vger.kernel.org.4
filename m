@@ -2,138 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C102A693848
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 17:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 997C869384A
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 17:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbjBLQCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 11:02:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58634 "EHLO
+        id S229603AbjBLQE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 11:04:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjBLQCX (ORCPT
+        with ESMTP id S229496AbjBLQE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 11:02:23 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662DE113F7
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 08:02:21 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so9651134wma.1
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 08:02:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xSnlPEa/GZ306LzfSFRqnTcacQyMt4zeeEJhoYj2tJk=;
-        b=FkOjwC+bx0624CDwF5SPs/JA4cYCyFQTb9ZL8q1Ef7C9ZbrXDoAOYsOxPQ0GO1INhB
-         ddy1gji4F8ILapVHrhnS8/+qM2VwbaCSMmtgy8+rSz4CLMSWEjxmdLH+ztqW9qSfHGP5
-         I8mfcA3HMvVulHUHKJ28StXGLb4f1Srj11sDtMl9Ft+7Cd4MfujWBh9vxHVyRFOMJvCl
-         DZN7bvRejB0vDy2yttEBR2jByP0Xyymyd4murQGVg1R9ycym0U/gBOY7tgNdBuCgc+OP
-         AiLyBNb7Tzd5d8tw7Cix+flY3LeSlOlNTYDJx0NO1Wf3sZNjIhmU0af0zt/IURgd6oLf
-         Xq7A==
+        Sun, 12 Feb 2023 11:04:28 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CCE83CC
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 08:04:27 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id g19-20020a6b6b13000000b0073deb4b4272so1198403ioc.5
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 08:04:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xSnlPEa/GZ306LzfSFRqnTcacQyMt4zeeEJhoYj2tJk=;
-        b=PD1AuMx+m1NE13gp2kWIm3z8S398dWXP2tR1DIvA3JPvhpLuXHOXsdzwjuTiwcd3i+
-         6vVW6OmGcgIhg3O2676m0uSybSlun+IWmoQACtczx+zDU1A/+iaG50Mh7eBCi7QCmloS
-         sZIn2a8VaDeB4LP2Zwd1L9nhTcW1MkCH+T4nhxlxlFUF0Hnwpr5njolyALD/Jwzd0+qi
-         yS4DZdQYdir3KXPOS69DbFVgtYYFAQNVXyQw77GFu/fGLWe7ujoIupYRZ7F8pHeTQ1Rw
-         eJvc0/7vcfaFF6EsiUz1TzqVSyl2T3TQ368mXsDbephaygnucABEN3B+8kuyKT6mQhHm
-         detA==
-X-Gm-Message-State: AO0yUKVoWL4148yV17WQtx+wpkV2x9Tb5cYubJVyU7Agzu6Hk8fL5Iwc
-        W+tPuXei/EcbfNu7hbV6Kd8wVg==
-X-Google-Smtp-Source: AK7set8HoAqggtYb7RT9GySmXzmLnCR+WeyDp2jQIVdN0zyTlNhuLtCH37o3FwHqtZl6ycvfIlf6SA==
-X-Received: by 2002:a05:600c:16d6:b0:3e1:541:2b55 with SMTP id l22-20020a05600c16d600b003e105412b55mr12731591wmn.16.1676217740002;
-        Sun, 12 Feb 2023 08:02:20 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l9-20020a05600c4f0900b003db1ca20170sm12245741wmq.37.2023.02.12.08.02.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Feb 2023 08:02:19 -0800 (PST)
-Message-ID: <35ac595b-a451-870c-6e1c-613d1e817591@linaro.org>
-Date:   Sun, 12 Feb 2023 17:02:17 +0100
+        bh=uMdw4VNjkKTcp+sBTw6KN6DXlJ7EWhurhuyywUlLZ0s=;
+        b=J8j5wCk6ojwkW/uqEOntsWxW8DqtPSQHwLlV9oAUv8BsR9+TLUDLh1B8GZgBRqctad
+         qXGpPmfGG+YJZbDdxZ46yvRgn7S0Lv9nH2B14LGr7GrvSdKA824e9tpIWzFsruapiA7s
+         Ejchzk+0JWMtFQj0eRJ7bzc7UCGMCkaujjNOlFkP5e1lfHBYWoaS/WOCclVjBGUC1jVq
+         UlmB3XSJl9WwDSNf8ztrSGouIypH362pXX7JqYtIldMFJBSaqUFN2zCiwOVsGmGR+ni8
+         TTplyHGnObQMuhAzPVEoUreOAHmJ4ZQZeB1ez8Y8zCNPXiFr1IKBOTJSJMrU5g65lXLE
+         IZQQ==
+X-Gm-Message-State: AO0yUKUqEbJpBo8FS6ym9SMqKooyF7Y8GIFo1/69FWrHBjotvKiutw+U
+        RdYX1PGduUvnb0n+9yhBOXLboXC9IaouVgIg50xrth6BtFIy
+X-Google-Smtp-Source: AK7set8C7eOycha6Ttc3nwbfME05mwAqy7SvHEBO10twvw3kXJiXqj6V/JSxp46HxPZwwNDInj8vq17cBx/4POup3ry2DVB0gSW0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/2] dt-bindings: arm: sti: add sti boards and remove
- stih415/stih416
-Content-Language: en-US
-To:     Alain Volmat <avolmat@me.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230211210500.9919-1-avolmat@me.com>
- <20230211210500.9919-2-avolmat@me.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230211210500.9919-2-avolmat@me.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:1811:0:b0:313:c7f2:40be with SMTP id
+ 17-20020a921811000000b00313c7f240bemr12770410ily.26.1676217866477; Sun, 12
+ Feb 2023 08:04:26 -0800 (PST)
+Date:   Sun, 12 Feb 2023 08:04:26 -0800
+In-Reply-To: <9552a45f-6a26-e7fa-aa63-3c74a7d17261@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007f69b605f482e2ee@google.com>
+Subject: Re: [syzbot] BUG: bad usercopy in io_openat2_prep
+From:   syzbot <syzbot+cdd9922704fc75e03ffc@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, asml.silence@gmail.com,
+        io-uring@vger.kernel.org, kees@kernel.org, keescook@chromium.org,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/02/2023 22:04, Alain Volmat wrote:
-> Add bindings for STi platform boards and remove stih415/stih416 items.
-> This commit also moves the sti.yaml binding file within the arm/sti/
-> folder instead of arm/
-> 
-> Signed-off-by: Alain Volmat <avolmat@me.com>
-> ---
->  .../devicetree/bindings/arm/sti.yaml          | 26 ---------------
->  .../devicetree/bindings/arm/sti/sti.yaml      | 33 +++++++++++++++++++
->  2 files changed, 33 insertions(+), 26 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/arm/sti.yaml
->  create mode 100644 Documentation/devicetree/bindings/arm/sti/sti.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/sti.yaml b/Documentation/devicetree/bindings/arm/sti.yaml
-> deleted file mode 100644
-> index 3ca054c64377..000000000000
-> --- a/Documentation/devicetree/bindings/arm/sti.yaml
-> +++ /dev/null
-> @@ -1,26 +0,0 @@
-> -# SPDX-License-Identifier: GPL-2.0
-> -%YAML 1.2
-> ----
-> -$id: http://devicetree.org/schemas/arm/sti.yaml#
-> -$schema: http://devicetree.org/meta-schemas/core.yaml#
-> -
-> -title: ST STi Platforms
-> -
-> -maintainers:
-> -  - Patrice Chotard <patrice.chotard@foss.st.com>
-> -
-> -properties:
-> -  $nodename:
-> -    const: '/'
-> -  compatible:
-> -    items:
-> -      - enum:
-> -          - st,stih415
-> -          - st,stih416
-> -          - st,stih407
-> -          - st,stih410
-> -          - st,stih418
-> -
-> -additionalProperties: true
-> -
-> -...
-> diff --git a/Documentation/devicetree/bindings/arm/sti/sti.yaml b/Documentation/devicetree/bindings/arm/sti/sti.yaml
-> new file mode 100644
-> index 000000000000..aefa1919207c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/sti/sti.yaml
-> @@ -0,0 +1,33 @@
-> +# SPDX-License-Identifier: GPL-2.0
+Hello,
 
-Dual-license. I don't think there is anything from old binding being
-copied here (you can as well start from scratch from other binding and
-result will be the same).
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+BUG: bad usercopy in io_openat2_prep
 
-Best regards,
-Krzysztof
+usercopy: Kernel memory overwrite attempt detected to SLUB object 'pid' (offset 24, size 24)!
+------------[ cut here ]------------
+kernel BUG at mm/usercopy.c:102!
+Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 4995 Comm: syz-executor.0 Not tainted 6.2.0-rc6-syzkaller-00050-gfbe870a72fd1 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : usercopy_abort+0x90/0x94
+lr : usercopy_abort+0x90/0x94
+sp : ffff800012dd3be0
+x29: ffff800012dd3bf0 x28: 000000000000001c x27: ffff0000d0e13400
+x26: 00000000200000c0 x25: ffff80000cf51000 x24: fffffc0000000000
+x23: 05ffc00000000200 x22: fffffc0003108280 x21: ffff0000c420a118
+x20: 0000000000000000 x19: 0000000000000018 x18: 0000000000000000
+x17: 0000000000000000 x16: ffff0000d0e13df8 x15: ffff80000dbd1118
+x14: ffff0000d0e13400 x13: 00000000ffffffff x12: ffff0000d0e13400
+x11: ff808000081bd5b0 x10: 0000000000000000 x9 : 4c3aa38d2e853f00
+x8 : 4c3aa38d2e853f00 x7 : ffff800008162dbc x6 : 0000000000000000
+x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : ffff0001fefbff08 x1 : 0000000100000000 x0 : 000000000000005d
+Call trace:
+ usercopy_abort+0x90/0x94
+ __check_heap_object+0xa8/0x100
+ __check_object_size+0x208/0x6b8
+ io_openat2_prep+0xcc/0x2f0
+ io_submit_sqes+0x330/0xba8
+ __arm64_sys_io_uring_enter+0x168/0x9b0
+ invoke_syscall+0x64/0x178
+ el0_svc_common+0xbc/0x180
+ do_el0_svc+0x48/0x150
+ el0_svc+0x58/0x14c
+ el0t_64_sync_handler+0x84/0xf0
+ el0t_64_sync+0x190/0x194
+Code: 911d2800 aa0903e1 f90003e8 94e6d3da (d4210000) 
+---[ end trace 0000000000000000 ]---
 
+
+Tested on:
+
+commit:         fbe870a7 io_uring,audit: don't log IORING_OP_MADVISE
+git tree:       https://git.kernel.dk/linux.git for-6.3/io_uring
+console output: https://syzkaller.appspot.com/x/log.txt?x=17241257480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=22fc000172595f28
+dashboard link: https://syzkaller.appspot.com/bug?extid=cdd9922704fc75e03ffc
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+
+Note: no patches were applied.
