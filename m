@@ -2,160 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFFB36939CB
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 21:19:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE17C6939CF
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 21:24:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbjBLUTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 15:19:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
+        id S229570AbjBLUYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 15:24:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBLUTS (ORCPT
+        with ESMTP id S229554AbjBLUYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 15:19:18 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 12EB1BB83
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 12:19:16 -0800 (PST)
-Received: (qmail 886235 invoked by uid 1000); 12 Feb 2023 15:19:16 -0500
-Date:   Sun, 12 Feb 2023 15:19:16 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Coly Li <colyli@suse.de>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
- with unique class keys
-Message-ID: <Y+lJxCLpwMGuq0sP@rowland.harvard.edu>
-References: <Y+gLd78vChQERZ6A@rowland.harvard.edu>
- <CAHk-=whXYzkOJZo0xpyYfrhWQg1M7j0OeCojTJ84CN4q9sqb2Q@mail.gmail.com>
- <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
- <Y+gjuqJ5RFxwLmht@moria.home.lan>
- <Y+hRurRwm//1+IcK@rowland.harvard.edu>
- <Y+hTEtCKPuO0zGIt@moria.home.lan>
- <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
- <Y+hYn6uzIUBaxDdV@moria.home.lan>
- <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
- <Y+k6ehYLWa0cmbvb@moria.home.lan>
+        Sun, 12 Feb 2023 15:24:10 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45C7E39D
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 12:24:09 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id on9-20020a17090b1d0900b002300a96b358so10332688pjb.1
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 12:24:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HWFilNanFTJVAlWw1g+V6egLGtcyns2owNf2QnUOtlw=;
+        b=xIoeiysSVuOwzvHR2WqylR52/VFPJD8QO7aSMzAG3vsUdQ6ku/KCjEFhbvyOi7gp+F
+         ehZP+1uD9OGRznzjLNGSNa8MFEGCMwr+AKeEDDDDTslECNoGkaVzzYqYD4AHo0Y/T17K
+         3sRYUcwc0rvCF7OAwrk26/m9l87ytWMQoYaVv5PqPmW0VAiP3KqNg9kj4OJTFWKffF/k
+         uMVXczGpvPNo7ev/VDa5mc2NXgrO3LUNogegQacTyz0nXFCNdpeDkDqidwZPS9KmUNGi
+         mXVdRSnshsnkHqv56iV0s+RL1fYO6+v3AzKQapq0R4kSA+rGTU4iL23+zXFEtrLPe98a
+         SDZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HWFilNanFTJVAlWw1g+V6egLGtcyns2owNf2QnUOtlw=;
+        b=BD6C0czGZrPB1ZwwGSVP2YX96J2eepq6rha5Bv868FyYDFPZEH7rrRYR4hLm/SmdkO
+         6jh3DSkzQguSMdWYOPTbwFbX0uUhJ4ck0gmc09AS88YDrO9YOrR7zMmLHA+KT8zW6yZ9
+         UZ1YD/Z46N1rknM7YCGuQ9bZYeYYbMJvcXvEiju7b+WmjA/nF6BS2l0PoDrSLkZgB3P6
+         dHyBwFVXxxkXg2hTXxyig1vZuLk+d5VINabeLaXYG7m9Hlz3Se3iZSqWB9nYyS/Dg36X
+         gWDUoSFqpMgCEwQu++ZsqNDVOUasYPgte7iIcbmJqtFAg6HZAx1XxPmevb83LAg4PnsU
+         fyGg==
+X-Gm-Message-State: AO0yUKWaAdMv8d5SWA9046qU4sf0byEFl0iW1Jcuh7fJvo0xwt89nsmV
+        nwAnwcIQOoG8KVuy9oBnmc4yqQ==
+X-Google-Smtp-Source: AK7set8zTR5ia6k+GSss5gMoHr+xULpIqmDtvcfml6k8ThLqQ/yaeMPpmag80oG2dnErsUif+Th3vQ==
+X-Received: by 2002:a05:6a20:1453:b0:c2:4766:2b59 with SMTP id a19-20020a056a20145300b000c247662b59mr25045910pzi.21.1676233449184;
+        Sun, 12 Feb 2023 12:24:09 -0800 (PST)
+Received: from p14s ([2604:3d09:148c:c800:ee79:a5b1:b638:330c])
+        by smtp.gmail.com with ESMTPSA id j14-20020aa7928e000000b0058d8db0e4adsm6705528pfa.171.2023.02.12.12.24.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Feb 2023 12:24:08 -0800 (PST)
+Date:   Sun, 12 Feb 2023 13:24:06 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Tinghan Shen <tinghan.shen@mediatek.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v1] remoteproc: mediatek: Check the SCP image format
+Message-ID: <20230212202406.GA236598@p14s>
+References: <20230210031354.1335-1-tinghan.shen@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y+k6ehYLWa0cmbvb@moria.home.lan>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230210031354.1335-1-tinghan.shen@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 02:14:02PM -0500, Kent Overstreet wrote:
-> On Sun, Feb 12, 2023 at 10:23:44AM -0500, Alan Stern wrote:
-> > On Sat, Feb 11, 2023 at 10:10:23PM -0500, Kent Overstreet wrote:
-> > > So IMO the more correct way to do this would be to change
-> > > device_initialize() to __device_initialize(), have it take a
-> > > lock_class_key as a parameter, and then use __mutex_init() instead of
-> > > mutex_init().
-> > 
-> > Yes, maybe.  The increase in code size might outweigh the space saved.
+On Fri, Feb 10, 2023 at 11:13:54AM +0800, Tinghan Shen wrote:
+> Do a sanity check on the SCP image before loading it to avoid
+> driver crashes.
 > 
-> Where would the increase in code size come from?
-
-Maybe I didn't understand your suggestion.  Did you mean that all 
-callers of device_initialize() (or whatever) should be able to specify 
-their own lock_class_key?  Or were you just trying to avoid the single 
-static allocation of a lock_class_key in device_initialize() done as a 
-side-effect of the mutex_init() call?
-
-> And whatever effect
-> would only be when lockdep is enabled, so not a concern.
-
-Not if a new function is created (i.e., __device_initialize()).
-
-> But consider that the name of a lock as registered with lockdep really
-> should correspond to a source code location - i.e. it should be
-> something you can grep for. (We should probably consider adding file and
-> line number to that string, since current names are not unambiguous).
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> ---
+>  drivers/remoteproc/mtk_scp.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Whereas in your pass, you're calling lockdep_set_class(), which
-> generates a class name via stringifcation - with the same name every
-> time.
+
+I have applied this patch.
+
+Thanks,
+Mathieu
+
+> diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
+> index d421a2ccaa1e..0861b76f185f 100644
+> --- a/drivers/remoteproc/mtk_scp.c
+> +++ b/drivers/remoteproc/mtk_scp.c
+> @@ -649,6 +649,7 @@ static const struct rproc_ops scp_ops = {
+>  	.load		= scp_load,
+>  	.da_to_va	= scp_da_to_va,
+>  	.parse_fw	= scp_parse_fw,
+> +	.sanity_check	= rproc_elf_sanity_check,
+>  };
+>  
+>  /**
+> -- 
+> 2.18.0
 > 
-> Definitely _don't_ do that. With your patch, the generated lockdep
-> traces will be useless.
-
-I'll revise the patch to use the device's name for the class.  While it 
-may not be globally unique, it should be sufficiently specific.
-
-(Device names are often set after the device is initialized.  Does 
-lockdep mind if a lock_class_key's name is changed after it has been 
-registered?)
-
-> > > But let's think about this more. Will there ever be situations where
-> > > lock ordering is dependent on what hardware is plugged into what, or
-> > > what hardware is plugged in first?
-> > 
-> > Device lock ordering is always dependent on what hardware is plugged 
-> > into what.  However, I'm not aware of any situations where, given two 
-> > different kinds of hardware, either one could be plugged into the other.
-> > Such things may exist but I can't think of any examples.
-> 
-> Different brands of hubs?
-
-As far as the kernel is concerned they wouldn't be _different kinds_ of 
-hardware; they would both be hubs.
-
-> Lots of things have hubs embedded into them these days. 15 years ago I
-> had an Apple keyboard with an embedded hub.
-
-Apple keyboards get treated as two logically separate pieces of 
-hardware: a hub and a keyboard.  The fact that they are packaged as a 
-single unit is irrelevant.
-
-> > On the other hand, there are obvious cases where two pieces of the 
-> > _same_ kind of hardware can be plugged together in either order.  USB 
-> > hubs are a good example.
-> > 
-> > Consider the possibility that a driver might want to lock all of a 
-> > device's children at once.  (I don't know if this ever happens, but it 
-> > might.)  Provided it acquires the parent device's lock first, this is 
-> > utterly safe no matter what order the children are locked in.  Try 
-> > telling that to lockdep!  In the end, we'd probably have to enforce a 
-> > single fixed ordering.
-> 
-> The way you speak of hypotheticals and possibilities makes me think that
-> the actual locking rules are not ironed out at all :)
-
-You're right.  There are no explicitly documented rules for device 
-locking as far as I'm aware.  Each subsystem handles its own locking 
-independently (but self-consistently, we hope).  That's one of the 
-reasons that creating lockdep rules for devices is so difficult.
-
-The business about not locking a parent if you already own the child's 
-lock is perhaps the only universal -- and I don't know that it's written 
-down anywhere.
-
-> The patch I posted would be an improvement over the current situation,
-> because it'd get you checking w.r.t. other lock types - but with that
-> you would still have to have your own deadlock avoidance strategy, and
-> you'd have to be _really_ clear on what it is and how you know that
-> you're getting it right - you're still opting out of checking.
-
-Same with the patch I posted, except that it opts back into checking.
-
-> I think you should really be investigating wait/wound mutexes here.
-
-At this stage, converting would be most impractical.  And I don't think 
-it's really needed.
-
-Alan Stern
