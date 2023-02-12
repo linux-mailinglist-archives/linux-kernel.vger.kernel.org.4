@@ -2,176 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9FE6935D9
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 04:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 597686935DC
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 04:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjBLDf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 22:35:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
+        id S229612AbjBLDjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 22:39:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjBLDf6 (ORCPT
+        with ESMTP id S229473AbjBLDja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 22:35:58 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D070214EA9
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 19:35:56 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id j9so6411853qvt.0
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 19:35:56 -0800 (PST)
+        Sat, 11 Feb 2023 22:39:30 -0500
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B35511658;
+        Sat, 11 Feb 2023 19:39:29 -0800 (PST)
+Received: by mail-qv1-xf2b.google.com with SMTP id o42so3935109qvo.13;
+        Sat, 11 Feb 2023 19:39:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=y/qH6i65wbwYMWKkSUGs3ut6x3jSZ12DHRH6t670lp8=;
-        b=hCejaD+8ZOvRc26yk9fa4xQjZArmepS8a/Epauf5WcDpJwNw3VyOwDkWRR5a9e47S0
-         mvfjat+pRsBUXfc4YuLVUd2ZvdWpt0Zia4WtQSo0f4/8oXY0Tju7LNbbjKxNi2XMLoc3
-         xktqhXuoLmIRLuB47u5svoI2rJAxCN3bF+dFE=
+        d=gmail.com; s=20210112; t=1676173168;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=k38DlK0t/XHGBmKF/8ZrTC+4DU+EC3G+T7TmyTsfFvU=;
+        b=Eesg2pr21Hk2/SFlRpaZz6BWSDuCQ/lAmubyFyhQpXpmWUFBZwA3RMRmFl4R6kupMj
+         zIqimSmEfd8SJuRPncA7f70MIq1bYExvI5pTFbun6JKUsJZNcHRDzXvBezdU8A9IDOz9
+         S/KAxSCZfrwTD5epNKzAWf4XGqBE3lI9zOWH4r6myy1F/Kog4Mqu8l/+/0KMs42gMcw/
+         lunbSDYZj9MoJlmDA53Ub0uurhNXOzNtd70JVU5mY0X5OckxLpdhMHkEmh8xii43dAr3
+         ygFaw3kr1WSJiBYhv54OykPyCEASrCTnFAVWBt63tz1F0o3QWH6d4N8+M7w8JgbFaoUx
+         uYxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y/qH6i65wbwYMWKkSUGs3ut6x3jSZ12DHRH6t670lp8=;
-        b=Y1LWo4llYuueJUGm79U8XdRBnRA+X9tlt5p/zi32ERricQshsYaqfN6h1TAS1lbozc
-         zS7BK70Ic8wDkG/WV1N23Zc05KeybVJzZNeKPqn3zXSwi0gsjaP18KlCob2koErkfSPA
-         bQgSQ/fmkq5ePzn+spJmrcUVHvLFRr/XIrnyDmNQiB3ShrSXWvliOO8ivms7JnRl9mZu
-         2GSawXgebqw9xGCN5BMkEdxo3xvhDwvag5QNi0FXUPF/5SoEIqOg3a6lIA1JIZjPwYsn
-         8F/nYNPfkHIaIaHQEgrtMW/LyyMWqqsaF1Tsmsi36TXiBHVb7gJjf44cfvg0gY/U1887
-         XPuw==
-X-Gm-Message-State: AO0yUKU7bAoPSDkaV6avooHi/w3jazaFO4qHI4h9wC9WwlAPd+PNGEZ3
-        U35XuowawqfN6/u0gbPcf3wBxg==
-X-Google-Smtp-Source: AK7set8FxOwS2mxztBcIBPmwz4J8siwg4oixkjjVzYbLDpJMmdhkBIfpOxJ/lO2EWgO+mSF1kCkh9w==
-X-Received: by 2002:a05:6214:260f:b0:56b:fe6a:df87 with SMTP id gu15-20020a056214260f00b0056bfe6adf87mr39357522qvb.52.1676172955896;
-        Sat, 11 Feb 2023 19:35:55 -0800 (PST)
-Received: from smtpclient.apple ([2600:1003:b84a:b7b1:f9b7:db29:7194:1610])
-        by smtp.gmail.com with ESMTPSA id t3-20020a379103000000b0070617deb4b7sm6830212qkd.134.2023.02.11.19.35.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Feb 2023 19:35:54 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: Current LKMM patch disposition
-Date:   Sat, 11 Feb 2023 22:35:44 -0500
-Message-Id: <478E76E6-8DA4-4F55-B789-8D8DE0FE6621@joelfernandes.org>
-References: <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com
-In-Reply-To: <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
-To:     Alan Stern <stern@rowland.harvard.edu>
-X-Mailer: iPhone Mail (20B101)
+        d=1e100.net; s=20210112; t=1676173168;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k38DlK0t/XHGBmKF/8ZrTC+4DU+EC3G+T7TmyTsfFvU=;
+        b=qbsu6bKhIeYAVtJYQqP5w8TRDZKs8gJ+P0IbQXR4/uzkSS2OWUh1YkUpuNGnNFdCOF
+         vqdGktXV05onwQRNlwIluhe/t4YgNAIiBk9RJL+U/IWODIQbWf/+T/WgRYiSIqIjRsCC
+         gWqOPzhEPMixvJbLQoSPo5MyQ4S+WsK/+hxiVD1o7OVWUg3Sv4LtLn31Qx5Vjto1BMZC
+         G8EKK1nGsmAUEbjx7ZLexoGagTcczbXHF2EvbkrLI9hTxBUuN9oiMJU9Z8eXvewbBno/
+         szB+fGh0gRhkihSGfAhkn9l+ooEUB6hNMhsElTeI6laiOnxuoIZsWxzLOmojSZknnIe3
+         rZuQ==
+X-Gm-Message-State: AO0yUKUwznrQUQpPhFrsJSWTqhy3H3xFZ87mqOZwyQgfrgwv05YP2DCg
+        frlm5TiISg5FSL9Y9Ipq/H9kHExfn3qfwc+oS5E=
+X-Google-Smtp-Source: AK7set++fC5LRuz2dH+ErgwVb2ke3N2snEdx0tgAkIr73gknu4wwZoOPtJOeV6iq468KODoVusgaflTPhY0FFMyRNq4=
+X-Received: by 2002:a0c:b306:0:b0:537:6777:b744 with SMTP id
+ s6-20020a0cb306000000b005376777b744mr1598861qve.58.1676173168615; Sat, 11 Feb
+ 2023 19:39:28 -0800 (PST)
+MIME-Version: 1.0
+References: <20211120112738.45980-1-laoar.shao@gmail.com> <20211120112738.45980-8-laoar.shao@gmail.com>
+ <Y+QaZtz55LIirsUO@google.com> <CAADnVQ+nf8MmRWP+naWwZEKBFOYr7QkZugETgAVfjKcEVxmOtg@mail.gmail.com>
+ <CANDhNCo_=Q3pWc7h=ruGyHdRVGpsMKRY=C2AtZgLDwtGzRz8Kw@mail.gmail.com>
+ <20230208212858.477cd05e@gandalf.local.home> <20230208213343.40ee15a5@gandalf.local.home>
+ <20230211140011.4f15a633@gandalf.local.home>
+In-Reply-To: <20230211140011.4f15a633@gandalf.local.home>
+From:   Yafang Shao <laoar.shao@gmail.com>
+Date:   Sun, 12 Feb 2023 11:38:52 +0800
+Message-ID: <CALOAHbAnFHAiMH4QDgS6xN16B31qfhG8tfQ+iioCr9pw3sP=bw@mail.gmail.com>
+Subject: Re: [PATCH v2 7/7] tools/testing/selftests/bpf: replace open-coded 16
+ with TASK_COMM_LEN
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     John Stultz <jstultz@google.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel test robot <oliver.sang@intel.com>,
+        kbuild test robot <lkp@intel.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Qais Yousef <qyousef@google.com>,
+        Daniele Di Proietto <ddiproietto@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: multipart/mixed; boundary="0000000000004c630c05f4787a16"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--0000000000004c630c05f4787a16
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Sun, Feb 12, 2023 at 3:00 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Wed, 8 Feb 2023 21:33:43 -0500
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> > OK, so it doesn't break perf, trace-cmd and rasdaemon, because the enum=
+ is
+> > only needed in the print_fmt part. It can handle it in the field portio=
+n.
+> >
+> > That is:
+> >
+> >
+> > system: sched
+> > name: sched_switch
+> > ID: 285
+> > format:
+> >       field:unsigned short common_type;       offset:0;       size:2; s=
+igned:0;
+> >       field:unsigned char common_flags;       offset:2;       size:1; s=
+igned:0;
+> >       field:unsigned char common_preempt_count;       offset:3;       s=
+ize:1; signed:0;
+> >       field:int common_pid;   offset:4;       size:4; signed:1;
+> >
+> >       field:char prev_comm[TASK_COMM_LEN];    offset:8;       size:16; =
+       signed:0;
+> >                              ^^^^^^^^^^^^^^                          ^^
+> >                             is ignored                             is u=
+sed
+> >
+> >
+> >       field:pid_t prev_pid;   offset:24;      size:4; signed:1;
+> >       field:int prev_prio;    offset:28;      size:4; signed:1;
+> >       field:long prev_state;  offset:32;      size:8; signed:1;
+> >       field:char next_comm[TASK_COMM_LEN];    offset:40;      size:16; =
+       signed:0;
+> >       field:pid_t next_pid;   offset:56;      size:4; signed:1;
+> >       field:int next_prio;    offset:60;      size:4; signed:1;
+> >
+> > print fmt: "prev_comm=3D%s prev_pid=3D%d prev_prio=3D%d prev_state=3D%s=
+%s =3D=3D> next_comm=3D%s next_pid=3D%d next_prio=3D%d", REC->prev_comm, RE=
+C->prev_pid, REC->prev_prio, (REC->prev_state & ((((0x00000000 | 0x00000001=
+ | 0x00000002 | 0x00000004 | 0x00000008 | 0x00000010 | 0x00000020 | 0x00000=
+040) + 1) << 1) - 1)) ? __print_flags(REC->prev_state & ((((0x00000000 | 0x=
+00000001 | 0x00000002 | 0x00000004 | 0x00000008 | 0x00000010 | 0x00000020 |=
+ 0x00000040) + 1) << 1) - 1), "|", { 0x00000001, "S" }, { 0x00000002, "D" }=
+, { 0x00000004, "T" }, { 0x00000008, "t" }, { 0x00000010, "X" }, { 0x000000=
+20, "Z" }, { 0x00000040, "P" }, { 0x00000080, "I" }) : "R", REC->prev_state=
+ & (((0x00000000 | 0x00000001 | 0x00000002 | 0x00000004 | 0x00000008 | 0x00=
+000010 | 0x00000020 | 0x00000040) + 1) << 1) ? "+" : "", REC->next_comm, RE=
+C->next_pid, REC->next_prio
+> >
+> >    ^^^^^^^
+> >
+> > Is what requires the conversions. So I take that back. It only breaks
+> > perfetto, and that's because it writes its own parser and doesn't use
+> > libtraceevent.
+>
+> Actually, there are cases that this needs to be a number, as b3bc8547d3be=
+6
+> ("tracing: Have TRACE_DEFINE_ENUM affect trace event types as well") made
+> it update fields as well as the printk fmt.
+>
+
+It seems that TRACE_DEFINE_ENUM(TASK_COMM_LEN) in the trace events
+header files would be a better fix.
+
+> I think because libtraceevent noticed that it was a "char" array, it just
+> defaults to "size". But this does have meaning for all other types, and I
+> can see other parsers requiring that.
+>
+> -- Steve
 
 
-> On Feb 11, 2023, at 9:59 PM, Alan Stern <stern@rowland.harvard.edu> wrote:=
+--=20
+Regards
+Yafang
 
->=20
-> =EF=BB=BFOn Sat, Feb 11, 2023 at 07:30:32PM -0500, Joel Fernandes wrote:
->>> On Sat, Feb 11, 2023 at 3:19 PM Alan Stern <stern@rowland.harvard.edu> w=
-rote:
->>> The idea is that the value returned by srcu_read_lock() can be stored to=
+--0000000000004c630c05f4787a16
+Content-Type: application/octet-stream; name="TASK_COMM_LEN.diff"
+Content-Disposition: attachment; filename="TASK_COMM_LEN.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_le0u4tol0>
+X-Attachment-Id: f_le0u4tol0
 
->>> and loaded from a sequence (possibly of length 0) of variables, and the
->>> final load gets fed to srcu_read_unlock().  That's what the original
->>> version of the code expresses.
->>=20
->> Now I understand it somewhat, and I see where I went wrong. Basically,
->> you were trying to sequence zero or one "data + rf sequence" starting
->> from lock and unlock with a final "data" sequence. That data sequence
->> can be between the srcu-lock and srcu-unlock itself, in case where the
->> lock/unlock happened on the same CPU.
->=20
-> In which case the sequence has length 0.  Exactly right.
-
-Got it.
-
->=20
->> Damn, that's really complicated.. and I still don't fully understand it.
->=20
-> It sounds like you've made an excellent start.  :-)
-
-Thanks. :-)
-
->=20
->> In trying to understand your CAT code, I made some assumptions about
->> your formulas by reverse engineering the CAT code with the tests,
->> which is kind of my point that it is extremely hard to read CAT. That
->=20
-> I can't argue against that; it _is_ hard.  It helps to have had the=20
-> right kind of training beforehand (my degree was in mathematical logic).
-
-Got it, I am reviewing the academic material on these as well.
-
->> is kind of why I want to understand the CAT, because for me
->> explanation.txt is too much at a higher level to get a proper
->> understanding of the memory model.. I tried re-reading explanation.txt
->> many times.. then I realized I am just rewriting my own condensed set
->> of notes every few months.
->=20
-> Would you like to post a few examples showing some of the most difficult=20=
-
-> points you encountered?  Maybe explanation.txt can be improved.
-
-Sure, I will share some things I faced difficult with, tomorrow or so. Off t=
-he top, cumulativity was certainly pretty hard to parse.
-
->=20
->>> I'm not sure that breaking this relation up into pieces will make it any=
-
->>> easier to understand.
->>=20
->> Yes, but I tried. I will keep trying to understand your last patch
->> more. Especially I am still not sure, why in the case of an SRCU
->> reader on a single CPU, the following does not work:
->> let srcu-rscs =3D ([Srcu-lock]; data; [Srcu-unlock]).
->=20
-> You have to understand that herd7 does not track dependencies through=20
-> stores and subsequent loads.  That is, if you have something like:
->=20
->    r1 =3D READ_ONCE(*x);
->    WRITE_ONCE(*y, r1);
->    r2 =3D READ_ONCE(*y);
->    WRITE_ONCE(*z, r2);
->=20
-> then herd7 will realize that the write to y depends on the value read=20
-> from x, and it will realize that the write to z depends on the value=20
-> read from y.  But it will not realize that the write to z depends on the=20=
-
-> value read from x; it loses track of that dependency because of the=20
-> intervening store/load from y.
->=20
-> More to the point, if you have:
->=20
->    r1 =3D srcu_read_lock(lock);
->    WRITE_ONCE(*y, r1);
->    r2 =3D READ_ONCE(*y);
->    srcu_read_unlock(lock, r2);
->=20
-> then herd7 will not realize that the value of r2 depends on the value of=20=
-
-> r1.  So there will be no data dependency from the srcu_read_lock() to=20
-> the srcu_read_unlock().
-
-Got it!  Now I understand why the intermediate load stores needs to be model=
-ed with your carry-srcu-data formula, even on the same CPU! Thank you so muc=
-h Alan!!
-
-Thanks,
-
- - Joel
-
->=20
-> Alan
+ZGlmZiAtLWdpdCBhL2luY2x1ZGUvdHJhY2UvZXZlbnRzL2Jsb2NrLmggYi9pbmNsdWRlL3RyYWNl
+L2V2ZW50cy9ibG9jay5oDQppbmRleCA3ZjRkZmJkLi45N2NmNmMyIDEwMDY0NA0KLS0tIGEvaW5j
+bHVkZS90cmFjZS9ldmVudHMvYmxvY2suaA0KKysrIGIvaW5jbHVkZS90cmFjZS9ldmVudHMvYmxv
+Y2suaA0KQEAgLTEyLDYgKzEyLDggQEANCiANCiAjZGVmaW5lIFJXQlNfTEVOCTgNCiANCitUUkFD
+RV9ERUZJTkVfRU5VTShUQVNLX0NPTU1fTEVOKTsNCisNCiBERUNMQVJFX0VWRU5UX0NMQVNTKGJs
+b2NrX2J1ZmZlciwNCiANCiAJVFBfUFJPVE8oc3RydWN0IGJ1ZmZlcl9oZWFkICpiaCksDQpkaWZm
+IC0tZ2l0IGEvaW5jbHVkZS90cmFjZS9ldmVudHMvb29tLmggYi9pbmNsdWRlL3RyYWNlL2V2ZW50
+cy9vb20uaA0KaW5kZXggMjZhMTFlNC4uMTlkZTlhOCAxMDA2NDQNCi0tLSBhL2luY2x1ZGUvdHJh
+Y2UvZXZlbnRzL29vbS5oDQorKysgYi9pbmNsdWRlL3RyYWNlL2V2ZW50cy9vb20uaA0KQEAgLTcs
+NiArNyw4IEBADQogI2luY2x1ZGUgPGxpbnV4L3RyYWNlcG9pbnQuaD4NCiAjaW5jbHVkZSA8dHJh
+Y2UvZXZlbnRzL21tZmxhZ3MuaD4NCiANCitUUkFDRV9ERUZJTkVfRU5VTShUQVNLX0NPTU1fTEVO
+KTsNCisNCiBUUkFDRV9FVkVOVChvb21fc2NvcmVfYWRqX3VwZGF0ZSwNCiANCiAJVFBfUFJPVE8o
+c3RydWN0IHRhc2tfc3RydWN0ICp0YXNrKSwNCmRpZmYgLS1naXQgYS9pbmNsdWRlL3RyYWNlL2V2
+ZW50cy9vc25vaXNlLmggYi9pbmNsdWRlL3RyYWNlL2V2ZW50cy9vc25vaXNlLmgNCmluZGV4IDgy
+Zjc0MWUuLmFjM2MwYWIgMTAwNjQ0DQotLS0gYS9pbmNsdWRlL3RyYWNlL2V2ZW50cy9vc25vaXNl
+LmgNCisrKyBiL2luY2x1ZGUvdHJhY2UvZXZlbnRzL29zbm9pc2UuaA0KQEAgLTYsNiArNiw4IEBA
+DQogI2RlZmluZSBfT1NOT0lTRV9UUkFDRV9IDQogDQogI2luY2x1ZGUgPGxpbnV4L3RyYWNlcG9p
+bnQuaD4NCitUUkFDRV9ERUZJTkVfRU5VTShUQVNLX0NPTU1fTEVOKTsNCisNCiBUUkFDRV9FVkVO
+VCh0aHJlYWRfbm9pc2UsDQogDQogCVRQX1BST1RPKHN0cnVjdCB0YXNrX3N0cnVjdCAqdCwgdTY0
+IHN0YXJ0LCB1NjQgZHVyYXRpb24pLA0KZGlmZiAtLWdpdCBhL2luY2x1ZGUvdHJhY2UvZXZlbnRz
+L3NjaGVkLmggYi9pbmNsdWRlL3RyYWNlL2V2ZW50cy9zY2hlZC5oDQppbmRleCBmYmI5OWE2Li41
+N2VjMDllIDEwMDY0NA0KLS0tIGEvaW5jbHVkZS90cmFjZS9ldmVudHMvc2NoZWQuaA0KKysrIGIv
+aW5jbHVkZS90cmFjZS9ldmVudHMvc2NoZWQuaA0KQEAgLTIxNiw2ICsyMTYsNyBAQCBzdGF0aWMg
+aW5saW5lIGxvbmcgX190cmFjZV9zY2hlZF9zd2l0Y2hfc3RhdGUoYm9vbCBwcmVlbXB0LA0KIH0N
+CiAjZW5kaWYgLyogQ1JFQVRFX1RSQUNFX1BPSU5UUyAqLw0KIA0KK1RSQUNFX0RFRklORV9FTlVN
+KFRBU0tfQ09NTV9MRU4pOw0KIC8qDQogICogVHJhY2Vwb2ludCBmb3IgdGFzayBzd2l0Y2hlcywg
+cGVyZm9ybWVkIGJ5IHRoZSBzY2hlZHVsZXI6DQogICovDQpkaWZmIC0tZ2l0IGEvaW5jbHVkZS90
+cmFjZS9ldmVudHMvc2lnbmFsLmggYi9pbmNsdWRlL3RyYWNlL2V2ZW50cy9zaWduYWwuaA0KaW5k
+ZXggMWRiN2U0Yi4uM2IxY2RiNiAxMDA2NDQNCi0tLSBhL2luY2x1ZGUvdHJhY2UvZXZlbnRzL3Np
+Z25hbC5oDQorKysgYi9pbmNsdWRlL3RyYWNlL2V2ZW50cy9zaWduYWwuaA0KQEAgLTksNiArOSw4
+IEBADQogI2luY2x1ZGUgPGxpbnV4L3NjaGVkLmg+DQogI2luY2x1ZGUgPGxpbnV4L3RyYWNlcG9p
+bnQuaD4NCiANCitUUkFDRV9ERUZJTkVfRU5VTShUQVNLX0NPTU1fTEVOKTsNCisNCiAjZGVmaW5l
+IFRQX1NUT1JFX1NJR0lORk8oX19lbnRyeSwgaW5mbykJCQkJXA0KIAlkbyB7CQkJCQkJCVwNCiAJ
+CWlmIChpbmZvID09IFNFTkRfU0lHX05PSU5GTykgewkJCVwNCmRpZmYgLS1naXQgYS9pbmNsdWRl
+L3RyYWNlL2V2ZW50cy90YXNrLmggYi9pbmNsdWRlL3RyYWNlL2V2ZW50cy90YXNrLmgNCmluZGV4
+IDY0ZDE2MDkuLjBhOWUwM2E3IDEwMDY0NA0KLS0tIGEvaW5jbHVkZS90cmFjZS9ldmVudHMvdGFz
+ay5oDQorKysgYi9pbmNsdWRlL3RyYWNlL2V2ZW50cy90YXNrLmgNCkBAIC02LDYgKzYsNyBAQA0K
+ICNkZWZpbmUgX1RSQUNFX1RBU0tfSA0KICNpbmNsdWRlIDxsaW51eC90cmFjZXBvaW50Lmg+DQog
+DQorVFJBQ0VfREVGSU5FX0VOVU0oVEFTS19DT01NX0xFTik7DQogVFJBQ0VfRVZFTlQodGFza19u
+ZXd0YXNrLA0KIA0KIAlUUF9QUk9UTyhzdHJ1Y3QgdGFza19zdHJ1Y3QgKnRhc2ssIHVuc2lnbmVk
+IGxvbmcgY2xvbmVfZmxhZ3MpLA0K
+--0000000000004c630c05f4787a16--
