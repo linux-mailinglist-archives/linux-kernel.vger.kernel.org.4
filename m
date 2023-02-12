@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98943693A78
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2EA693A77
 	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 23:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjBLW2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 17:28:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51712 "EHLO
+        id S229577AbjBLW16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 17:27:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjBLW15 (ORCPT
+        with ESMTP id S229477AbjBLW15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 12 Feb 2023 17:27:57 -0500
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15339B452
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 14:27:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7AF900A
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 14:27:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676240877; x=1707776877;
+  t=1676240876; x=1707776876;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=MnAYejkMwtY77ck4ahb7w9m1TgCkYsJRkodfqv3+qpk=;
-  b=YRQkiWj4G9ZFOOvB+usd6+AACPUI4OLZtmcI66Ij+q+ZyyVKQc/+KuKm
-   aqYMIzDeutO1UEYoULWPWuF61r6cYe5kUxwHks/HaZ/eHzcRuSX5Vwr/u
-   pdtn3QSr5/uD8A3qceuB4sLxBtc7wC2aiecC+c1GN8wv2HRNmsDoQoJWl
-   sWcsMR+IUodBMcXwg2CE7aoVl2f4ShbD41Y3ooPNiPVmAM/ZkDHWDweCY
-   QPz2fUHWsiRvCrPz4a5bCyKTvZwApfbtFkH1sZrSXhNzcHUEhW6E+jBnY
-   XV9t4ihgpEhcziZTNeFKLszNWA+S3lB/fvBiWPxprYVcFlWXo+Z28V/pl
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="311126311"
+  bh=WO/bkqPOiBn4mhErZiCWT4p2mxzz6talKoGW84vsBlg=;
+  b=lqXjaqsw8eARnki4yehXgN1R/fn5PolDfMU2KZQcmEq01FfW2xCHSSMZ
+   jVXhAxQmnK1S9pRQH66lbgenlHc9SZtOvxP+Xs0Dkar08sOp16m2wgyXx
+   HS1cLVTyiAhcFGQaaWg6Lk1UTLbpg8sYO9Q6T0UAGtXm43QtgUnxBnjGC
+   7b1CodMC2pO2ECmZcpsGn9AAi9oRNaYXBTUBChInBLU7N1vMGrmbdEkCb
+   MD4/hMuJoxHIDjEugIzkP2/Xk9/aVhiAQ162BUIcOOlKDgl/05YMWFJ3P
+   RItSV08bvOeypWkGp61XGnscSNdBG6otAABUN2xOlGhIo3YKvAJUMqiRj
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="311126309"
 X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
-   d="scan'208";a="311126311"
+   d="scan'208";a="311126309"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 14:27:55 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="732289172"
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="732289171"
 X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
-   d="scan'208";a="732289172"
+   d="scan'208";a="732289171"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
   by fmsmga008.fm.intel.com with ESMTP; 12 Feb 2023 14:27:54 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pRKp8-0007Pb-0X;
+        id 1pRKp8-0007PY-0L;
         Sun, 12 Feb 2023 22:27:54 +0000
-Date:   Mon, 13 Feb 2023 06:27:35 +0800
+Date:   Mon, 13 Feb 2023 06:27:38 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "x86-ml" <x86@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:objtool/core] BUILD SUCCESS
- fc8fb04d7be0be76407f6542e2779dcac7604cef
-Message-ID: <63e967d7.eBumtPFm4j4HHjmS%lkp@intel.com>
+Subject: [tip:master] BUILD SUCCESS
+ 7853ca498861babdf3ae2f926ea912eb0bae74b9
+Message-ID: <63e967da.7RUXIhhey79K5737%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -63,8 +63,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git objtool/core
-branch HEAD: fc8fb04d7be0be76407f6542e2779dcac7604cef  Merge branch 'sched/core' into objtool/core, to pick up dependencies
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 7853ca498861babdf3ae2f926ea912eb0bae74b9  Merge branch 'linus'
 
 elapsed time: 726m
 
