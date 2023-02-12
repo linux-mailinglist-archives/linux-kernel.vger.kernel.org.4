@@ -2,61 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F44C6937DE
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 16:09:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E456937E1
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 16:12:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjBLPJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 10:09:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
+        id S229643AbjBLPME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 10:12:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjBLPJK (ORCPT
+        with ESMTP id S229501AbjBLPMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 10:09:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A641205D
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 07:09:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7D9DB80B1E
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 15:09:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5A24C433D2;
-        Sun, 12 Feb 2023 15:09:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676214546;
-        bh=Jv5s9BYTm0CiAwaoo6yTi+7p0Sq+M8TtW0BR2+nGXj0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gA7jsqsOGweKsTHdwGhUSiKOVU6CMGjjrUazMTHGzZAVNizP5M3n7dPekMpvJGyFd
-         hlEetqB/OxPTfMYe0PhfwzoDRU50EVaX0hKynTepPl7A7u6fZnb+BYqBjxIWs2AjVY
-         kSFOfZ47j3tQTYcX9NasMMRv9KhDt4mg35EkN30sY6eZAB+UD445fAI97T3DjcOdk/
-         U/A5YCtC9uUMcEA14RcW9bB7b9GeRoz57asdAAw2S55JCsZcfkN5E4P9pAzaOEdFLY
-         XOuvi7dAtk9Z0LE1vSfuFiZfh4IvNQ03NKs5CWWVOGs5Bbzt8gOLRTUoF3bX99jKrs
-         Upa6hwk5Q6LlA==
-Date:   Sun, 12 Feb 2023 15:09:01 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Christoph Muellner <christoph.muellner@vrull.eu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] riscv: Fix alternatives issues on for-next
-Message-ID: <Y+kBDQARCqIucrWi@spud>
-References: <20230212021534.59121-1-samuel@sholland.org>
+        Sun, 12 Feb 2023 10:12:03 -0500
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B271206B;
+        Sun, 12 Feb 2023 07:12:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=TRBsEcj+bcndYS2aps87v+puDogttJYSq5q3V0BYYFE=;
+  b=eKZm10UlcYbP8lqWGf1PzGxe9WMgexdv0BkVAldG9jbKEYecoq51JHRg
+   1tkj7qcrFM50rnaOOwBNph8Jo/j3u5WwRJ3dOlRZjrGBjPqjST7psW1dh
+   qkMpd9PZq8sx/xJ4MuRCbqeDXHgryy47DfJmTUk3EHdsHyno4tUR1C7Ct
+   8=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.97,291,1669071600"; 
+   d="scan'208";a="92317009"
+Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 16:11:58 +0100
+Date:   Sun, 12 Feb 2023 16:11:58 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Deepak R Varma <drv@mailo.com>
+cc:     Bart Van Assche <bvanassche@acm.org>, Michael Reed <mdr@sgi.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Subject: Re: [PATCH] scsi: qla1280: Replace arithmetic addition by bitwise
+ OR
+In-Reply-To: <Y+kA1j10JCsLG9mN@ubun2204.myguest.virtualbox.org>
+Message-ID: <alpine.DEB.2.22.394.2302121611010.9268@hadrien>
+References: <Y+I7/QpQYjBXutLf@ubun2204.myguest.virtualbox.org> <aed35866-507c-870c-7e8a-c1868bcaa084@acm.org> <Y+kA1j10JCsLG9mN@ubun2204.myguest.virtualbox.org>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="4e/rMjy/0rNyLepq"
-Content-Disposition: inline
-In-Reply-To: <20230212021534.59121-1-samuel@sholland.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,39 +58,35 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---4e/rMjy/0rNyLepq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-Hey Samuel,
+On Sun, 12 Feb 2023, Deepak R Varma wrote:
 
-On Sat, Feb 11, 2023 at 08:15:31PM -0600, Samuel Holland wrote:
-> Several people have reported that D1 fails to boot on linux-next.
-> Patch 1 fixes a bug where early alternative patching used the wrong
-> address. Patch 2 fixes a separate issue where the Zbb alternatives
-> are incorrectly applied based on the 'C' extension instead of Zbb.
+> On Sat, Feb 11, 2023 at 03:25:03PM -0800, Bart Van Assche wrote:
+> > On 2/7/23 03:54, Deepak R Varma wrote:
+> > > When adding two bit-field mask values, an OR operation offers higher
+> > > performance over an arithmetic operation. So, convert such addition to
+> > > an OR based expression.
+> >
+> > Where is the evidence that supports this claim? On the following page I read
+> > that there is no performance difference when using a modern CPU: https://cs.stackexchange.com/questions/75811/why-is-addition-as-fast-as-bit-wise-operations-in-modern-processors
+> >
+>
+> Hello Bart,
+> You are correct. Modern CPU designs have improved addition and the performance
+> is at par with the bitwise operation. The document I had read earlier mentioned
+> a performance improvement for old CPUs and microprocessors, which today is not
+> the case. Thank you for sharing the link.
+>
+> > > Issue identified using orplus.cocci semantic patch script.
+> >
+> > Where is that script located? Can it be deleted such that submission of
+> > patches similar to this patch stops?
+>
+> I have added Julia to this email to understand how to best use this semantic
+> patch. I already discussed with her on improving the Semantic patch such that it
+> doesn't suggest making change when constants are involved.
 
-On Icicle, Nezha & VisionFive 2:
-Tested-by: Conor Dooley <conor.dooley@microchip.com>
+FWIW, the semantic patch was never motivated by efficiency, but rather
+with the goal of making the code more understandable.
 
-I was really curious why my CI didn't catch this, but I think boot
-on Icicle wasn't broken as the toolchains pre-date Zbb and therefore it
-isn't even compiled in.
-And the VisionFive 2 doesn't care as it has Zbb.
-
-Thanks for the fixes :)
-Conor.
-
-
---4e/rMjy/0rNyLepq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+kA/QAKCRB4tDGHoIJi
-0t1YAQCCqBxh12UJYWn/YAcF7Ohr8omkhzgR75R1JQ/4Isj9ewEAmWLLN7v+hRWU
-+gfOHdDANwboZ4YWyRwhCG2ZutjDlA0=
-=3PTq
------END PGP SIGNATURE-----
-
---4e/rMjy/0rNyLepq--
+julia
