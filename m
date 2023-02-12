@@ -2,156 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED644693589
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 02:54:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0A869358D
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 02:58:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbjBLByg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 20:54:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
+        id S229609AbjBLB6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 20:58:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjBLByf (ORCPT
+        with ESMTP id S229585AbjBLB6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 20:54:35 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE0414484
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 17:54:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676166874; x=1707702874;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UM6wd2Gfo0aIxsLYNyHsKIjWtLhcRiMXKP81Wa21I2M=;
-  b=dhsJHHQE4MBsIF3mGYb846Zks9oZFxqxLHZSnB0V61vCpgsDoPL8bxES
-   fB8+PFZs/XRyq4E+kuVFrtXutBqcylmKPghWu3mBhpJWIfrj8bsdyeQLC
-   l8PKpVMfrtapltPNJWUD+iIDqGVywHwTFg2FKOVQ3V8zYtsBrY1rOTIE6
-   XS9jk0KqE9eqUUlny0o27e1e/0aXO1kDyTnILZNE2cjc2+dlZ5mKuMIDG
-   tTD4N0Wr7thvAtA535PG4Ehx1/VtfaAgNjHMGnuJOptE49XR9QxVX/dez
-   r78NLjgodfOI3+UaFjwX//XLx59WU7cm6pmADL2zRpBnOCzgT4HgrmTX2
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="332819170"
-X-IronPort-AV: E=Sophos;i="5.97,290,1669104000"; 
-   d="scan'208";a="332819170"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2023 17:54:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="757171888"
-X-IronPort-AV: E=Sophos;i="5.97,290,1669104000"; 
-   d="scan'208";a="757171888"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 11 Feb 2023 17:54:31 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pR1ZX-0006w5-0E;
-        Sun, 12 Feb 2023 01:54:31 +0000
-Date:   Sun, 12 Feb 2023 09:53:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:objtool/core] BUILD SUCCESS
- 37064583f63eca93c98a9cdf2360485ea05f617a
-Message-ID: <63e846ae.5GHQDGTC0BYmRcGp%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 11 Feb 2023 20:58:50 -0500
+Received: from mail-4317.proton.ch (mail-4317.proton.ch [185.70.43.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC01E15CAC;
+        Sat, 11 Feb 2023 17:58:46 -0800 (PST)
+Date:   Sun, 12 Feb 2023 01:58:33 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=connolly.tech;
+        s=protonmail; t=1676167124; x=1676426324;
+        bh=+Dqy/SLq6BVO3zqJNfQOnEGQobIgzLztHrmlEA53WfM=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=efcIyWs10UZZAn/KOimOH28tdACJw6QJJ9sQTM/UxzBu17BqOy4YpS34Y8UZdC93h
+         afs4+MrHsJsH4SEhYfef0D6X91dWnBp+aIyTbvPXbDbmpxt9QCt+TNZoTWsAXnaLCR
+         GR0j8GgdtPa3WDtLvyjA5Zzw8kX3dmnMSx+1l5ME=
+To:     Pavel Machek <pavel@ucw.cz>, Gergo Koteles <soyer@irl.hu>
+From:   Caleb Connolly <caleb@connolly.tech>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sdm845-oneplus: add tri-state-key
+Message-ID: <d1959211-bf33-f4fd-01a8-91dcd247aa70@connolly.tech>
+In-Reply-To: <Y+fE7gIMD4BDCffy@duo.ucw.cz>
+References: <20230209232556.91554-1-soyer@irl.hu> <Y+fE7gIMD4BDCffy@duo.ucw.cz>
+Feedback-ID: 10753939:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LONGWORDS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git objtool/core
-branch HEAD: 37064583f63eca93c98a9cdf2360485ea05f617a  x86/entry: Fix unwinding from kprobe on PUSH/POP instruction
 
-elapsed time: 829m
 
-configs tested: 73
-configs skipped: 3
+On 11/02/2023 16:40, Pavel Machek wrote:
+> Hi!
+>
+>> +++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+>> @@ -52,6 +52,43 @@ key-vol-up {
+>>  =09=09};
+>>  =09};
+>>
+>> +=09tri-state-key {
+>> +=09=09compatible =3D "gpio-keys";
+>> +=09=09label =3D "Tri-state key";
+>> +=09=09pinctrl-names =3D "default";
+>> +=09=09pinctrl-0 =3D <&tri_state_key_default>;
+>> +=09=09state-top {
+>> +=09=09=09label =3D "Tri-state key top";
+>
+> "top/middle" is not too useful. Do we need the label at all? If so,
+> should it say "loud/vibrations only/mute"?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+"mute", "vibrate" and "ring" sound good to me.
 
-gcc tested configs:
-alpha                            allyesconfig
-alpha                               defconfig
-arc                              allyesconfig
-arc                                 defconfig
-arc                  randconfig-r043-20230210
-arm                              allmodconfig
-arm                              allyesconfig
-arm                                 defconfig
-arm                  randconfig-r046-20230210
-arm64                            allyesconfig
-arm64                               defconfig
-csky                                defconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                                defconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-ia64                             allmodconfig
-ia64                                defconfig
-loongarch                        allmodconfig
-loongarch                         allnoconfig
-loongarch                           defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-mips                             allmodconfig
-mips                             allyesconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-s390                             allmodconfig
-s390                             allyesconfig
-s390                                defconfig
-sh                               allmodconfig
-sparc                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                            allnoconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-x86_64                               rhel-8.3
+Although it would be nice if users can easily map the physical key
+position to the action when viewing the input device or remapping the
+key in userspace.
 
-clang tested configs:
-hexagon              randconfig-r041-20230210
-hexagon              randconfig-r045-20230210
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-riscv                randconfig-r042-20230210
-s390                 randconfig-r044-20230210
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
+Do you have any ideas or recommendations on how to do this?
+>
+> BR,
+> =09=09=09=09=09=09=09=09Pavel
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--
+Kind Regards,
+Caleb
+
