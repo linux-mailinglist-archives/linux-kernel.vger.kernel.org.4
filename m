@@ -2,135 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23DF669383A
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 16:50:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD51693830
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 16:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjBLPu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 10:50:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
+        id S229737AbjBLPsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 10:48:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjBLPu0 (ORCPT
+        with ESMTP id S229604AbjBLPsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 10:50:26 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F317EB7B;
-        Sun, 12 Feb 2023 07:50:25 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id f23-20020a05600c491700b003dff4480a17so7223071wmp.1;
-        Sun, 12 Feb 2023 07:50:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G7TDx0ayV1s6yF8W14tJtZ/gbKxJ6Z8Rxoz1+MRRB7A=;
-        b=RKS4W5PTCEt8h9dxpM/VmdNqA+20A8T8yAYMfmPc0dhn6E8Kv9T2xsGcjbUQuohKWI
-         XvPX+mApehJ+YTXwwRMQcnQ833JK5y3nUtP0hMLPJu20MXof8CZ82lmXgnzSCmcFy7wq
-         S9lxWuRM0TPpLaRsYrGcUhGt2bxK80xvVyWLZ8vj2NZ4xAY47YueLcBwNbYnMV28lHo7
-         O0mhCJf6uovSA05Ecq1hwcMo0+ZlbCca3JkYncMQ8mLXmt92WAAe5iBDs9FWNEA4NhVd
-         sS5zR9mBtKyKnRKSIJ3Y2l9gzpX4Lw8ILxYyc9n4uTYJkDAOpJ/VrrFsAWhH2tOx+2Ao
-         uY7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G7TDx0ayV1s6yF8W14tJtZ/gbKxJ6Z8Rxoz1+MRRB7A=;
-        b=Gn4+QlXVMgnCoDMCskVD80LyE7Y1aHUPSTz+hazSe1CGxCgcGvv+88B3Qeed+nz1zJ
-         OyWzn2ri2zExHyO7fxaudvH7YFuX/Naup2prc2yCYtuYkQ2fW2qpGLCnqlTcB3CFCcEG
-         wFeNDp05C8++9aQQCPdEObFcrMXgDCRbi7rMsGCpAxePUqy/CQx3TfnaEQFkvtTh6hTr
-         YbyypRLN7MqpW1j7jVEhsrg5eayez9XnGFmgT2oVBDsiZ4gfSKk94b8G+FnfY87jN5SH
-         4OJVEIQOmIXffRKirbDGPf47ou4ncScRMyvE2wvzP82TLaXtvfuhm+f0McUdf8Z48Lmn
-         stFQ==
-X-Gm-Message-State: AO0yUKV564uww9LW0FPF2ch2/T9Tayf0VYcCXvJt4xtnHEqEAT2IEKFL
-        riDLHZhd/E13y3QusRAAq4U=
-X-Google-Smtp-Source: AK7set9vCBDynh/m6z0bywm/EzFdeZoj+1p47ggyzl7F4nwnQ/AjuV3M9XuLjkeEpY/nnWMbixJcmA==
-X-Received: by 2002:a05:600c:4383:b0:3df:f7f1:4fbe with SMTP id e3-20020a05600c438300b003dff7f14fbemr17209336wmn.1.1676217023726;
-        Sun, 12 Feb 2023 07:50:23 -0800 (PST)
-Received: from [192.168.8.100] (94.197.108.135.threembb.co.uk. [94.197.108.135])
-        by smtp.gmail.com with ESMTPSA id g9-20020a05600c308900b003dc3f195abesm11095560wmn.39.2023.02.12.07.50.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Feb 2023 07:50:23 -0800 (PST)
-Message-ID: <9552a45f-6a26-e7fa-aa63-3c74a7d17261@gmail.com>
-Date:   Sun, 12 Feb 2023 15:47:13 +0000
+        Sun, 12 Feb 2023 10:48:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3F74C29
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 07:48:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01C6460D37
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 15:48:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC434C433EF;
+        Sun, 12 Feb 2023 15:48:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676216910;
+        bh=Vukdoymwm/wEA58+hycxqrl3bmx2LN+x0akzNw5Yu2s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s4hRk23TmcLpC3qBZrOU7D2TKEUlF7xHXzs3SYhgVfrPxWvNBDxb2dvz/pbrehLJ5
+         ibjxhOPLcd/aUKIHHA1rK9qmS1W+ilXlxSnSAB90r2GzrogU0/PQoVDbYP8FOQ6pMu
+         ho4fp2QY+4mJnQGoYqPj0cVZQrEobBnIlodAHaSLR7u7QhXuM9BJm3flou3ajE0b3V
+         RO9IXfldG2mgrpJ5UDLsln9X64bd/kUzM5uNTBoVY9gDXF9d0PnUDjXYGxIhR1aK7N
+         +xTDGqNAXTXgdMYkGuHn927KUviECLNxqll2KcUXjocfIKRUqVLgKHeK6CTJqkTToG
+         gxFxDyC6rPnLQ==
+Date:   Sun, 12 Feb 2023 15:48:25 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Christoph Muellner <christoph.muellner@vrull.eu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] riscv: Fix early alternative patching
+Message-ID: <Y+kKSTuyvpw06VCG@spud>
+References: <20230212021534.59121-1-samuel@sholland.org>
+ <20230212021534.59121-2-samuel@sholland.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [syzbot] BUG: bad usercopy in io_openat2_prep
-Content-Language: en-US
-To:     Kees Cook <kees@kernel.org>,
-        syzbot <syzbot+cdd9922704fc75e03ffc@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, keescook@chromium.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
-        io-uring@vger.kernel.org
-References: <00000000000088b3d905f46ed421@google.com>
- <B83C9F6F-569B-4DCB-9FFE-45D9B1E32B21@kernel.org>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <B83C9F6F-569B-4DCB-9FFE-45D9B1E32B21@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ZZwqfOBoXuz7+HRs"
+Content-Disposition: inline
+In-Reply-To: <20230212021534.59121-2-samuel@sholland.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/11/23 16:36, Kees Cook wrote:
-> On February 11, 2023 8:08:52 AM PST, syzbot <syzbot+cdd9922704fc75e03ffc@syzkaller.appspotmail.com> wrote:
->> Hello,
->>
->> syzbot found the following issue on:
->>
->> HEAD commit:    ca72d58361ee Merge branch 'for-next/core' into for-kernelci
->> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
->> console output: https://syzkaller.appspot.com/x/log.txt?x=14a882f3480000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=f3e78232c1ed2b43
->> dashboard link: https://syzkaller.appspot.com/bug?extid=cdd9922704fc75e03ffc
->> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
->> userspace arch: arm64
->> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1203777b480000
->> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=124c1ea3480000
 
-I couldn't reproduce it, let's try latest io_uring first
+--ZZwqfOBoXuz7+HRs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-#syz test: https://git.kernel.dk/linux.git for-6.3/io_uring
+On Sat, Feb 11, 2023 at 08:15:32PM -0600, Samuel Holland wrote:
+> Now that the text to patch is located using a relative offset from the
+> alternative entry, the text address should be computed without applying
+> the kernel mapping offset, both before and after VM setup.
+>=20
+> Fixes: 8d23e94a4433 ("riscv: switch to relative alternative entries")
 
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
->> Downloadable assets:
->> disk image: https://storage.googleapis.com/syzbot-assets/e2c91688b4cd/disk-ca72d583.raw.xz
->> vmlinux: https://storage.googleapis.com/syzbot-assets/af105438bee6/vmlinux-ca72d583.xz
->> kernel image: https://storage.googleapis.com/syzbot-assets/4a28ec4f8f7e/Image-ca72d583.gz.xz
->>
->> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->> Reported-by: syzbot+cdd9922704fc75e03ffc@syzkaller.appspotmail.com
->>
->> usercopy: Kernel memory overwrite attempt detected to SLUB object 'pid' (offset 24, size 24)!
-> 
-> This looks like some serious memory corruption. The pid slab is 24 bytes in size, but struct io_open is larger... Possible UAF after the memory being reallocated to a new slab??
-> 
-> -Kees
-> 
->> [...]
->> Call trace:
->> usercopy_abort+0x90/0x94
->> __check_heap_object+0xa8/0x100
->> __check_object_size+0x208/0x6b8
->> io_openat2_prep+0xcc/0x2b8
->> io_submit_sqes+0x338/0xbb8
->> __arm64_sys_io_uring_enter+0x168/0x1308
->> invoke_syscall+0x64/0x178
->> el0_svc_common+0xbc/0x180
->> do_el0_svc+0x48/0x110
->> el0_svc+0x58/0x14c
->> el0t_64_sync_handler+0x84/0xf0
->> el0t_64_sync+0x190/0x194
-> 
-> 
-> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+>=20
+>  arch/riscv/errata/thead/errata.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>=20
+> diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/e=
+rrata.c
+> index c0bea5c94128..1dd90a5f86f0 100644
+> --- a/arch/riscv/errata/thead/errata.c
+> +++ b/arch/riscv/errata/thead/errata.c
+> @@ -102,9 +102,7 @@ void __init_or_module thead_errata_patch_func(struct =
+alt_entry *begin, struct al
+> =20
+>  			/* On vm-alternatives, the mmu isn't running yet */
+>  			if (stage =3D=3D RISCV_ALTERNATIVES_EARLY_BOOT)
+> -				memcpy((void *)__pa_symbol(oldptr),
+> -				       (void *)__pa_symbol(altptr),
+> -				       alt->alt_len);
+> +				memcpy(oldptr, altptr, alt->alt_len);
+>  			else
+>  				patch_text_nosync(oldptr, altptr, alt->alt_len);
+>  		}
+> --=20
+> 2.37.4
+>=20
 
--- 
-Pavel Begunkov
+--ZZwqfOBoXuz7+HRs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHQEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+kKSQAKCRB4tDGHoIJi
+0hTXAP9igWO796XC6hLAXjhirFkpfB6Cxc4+Iy3v0XaTjWbkKQD43amLsSE0ma63
+mWwEfULUWh6gbSdqjnv3HsVqCG9+DA==
+=O9Y0
+-----END PGP SIGNATURE-----
+
+--ZZwqfOBoXuz7+HRs--
