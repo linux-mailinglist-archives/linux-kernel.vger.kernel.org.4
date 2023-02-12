@@ -2,45 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48CCB6935B7
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 03:59:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB116935BB
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 04:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbjBLC7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 21:59:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
+        id S229552AbjBLDDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 22:03:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBLC7Q (ORCPT
+        with ESMTP id S229523AbjBLDDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 21:59:16 -0500
+        Sat, 11 Feb 2023 22:03:12 -0500
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2697AFF0E
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 18:59:15 -0800 (PST)
-Received: (qmail 864692 invoked by uid 1000); 11 Feb 2023 21:59:14 -0500
-Date:   Sat, 11 Feb 2023 21:59:14 -0500
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0400813DF1
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 19:03:11 -0800 (PST)
+Received: (qmail 864845 invoked by uid 1000); 11 Feb 2023 22:03:11 -0500
+Date:   Sat, 11 Feb 2023 22:03:11 -0500
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com
-Subject: Re: Current LKMM patch disposition
-Message-ID: <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
-References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
- <Y920w4QRLtC6kd+x@rowland.harvard.edu>
- <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
- <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9+41ctA54pjm/KG@google.com>
- <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
- <Y+fN2fvUjGDWBYrv@google.com>
- <Y+f4TYZ9BPlt8y8B@rowland.harvard.edu>
- <CAEXW_YRuTfjc=5OAskTV0Qt_zSJTPP3-01=Y=SypMdPsF_weAQ@mail.gmail.com>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Coly Li <colyli@suse.de>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
+ with unique class keys
+Message-ID: <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
+References: <Y+O6toMmAKBSILMf@rowland.harvard.edu>
+ <f79e93ef-cfe8-1373-7c36-15d046c0e3c5@I-love.SAKURA.ne.jp>
+ <Y+RZ2RKVo9FNMgSe@rowland.harvard.edu>
+ <52c7d509-ba9e-a121-60c9-138d7ff3f667@I-love.SAKURA.ne.jp>
+ <Y+gLd78vChQERZ6A@rowland.harvard.edu>
+ <CAHk-=whXYzkOJZo0xpyYfrhWQg1M7j0OeCojTJ84CN4q9sqb2Q@mail.gmail.com>
+ <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
+ <Y+gjuqJ5RFxwLmht@moria.home.lan>
+ <Y+hRurRwm//1+IcK@rowland.harvard.edu>
+ <Y+hTEtCKPuO0zGIt@moria.home.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEXW_YRuTfjc=5OAskTV0Qt_zSJTPP3-01=Y=SypMdPsF_weAQ@mail.gmail.com>
+In-Reply-To: <Y+hTEtCKPuO0zGIt@moria.home.lan>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
@@ -50,72 +59,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 11, 2023 at 07:30:32PM -0500, Joel Fernandes wrote:
-> On Sat, Feb 11, 2023 at 3:19 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > The idea is that the value returned by srcu_read_lock() can be stored to
-> > and loaded from a sequence (possibly of length 0) of variables, and the
-> > final load gets fed to srcu_read_unlock().  That's what the original
-> > version of the code expresses.
+On Sat, Feb 11, 2023 at 09:46:42PM -0500, Kent Overstreet wrote:
+> On Sat, Feb 11, 2023 at 09:40:58PM -0500, Alan Stern wrote:
+> > Or maybe you're referring to what this patch does?  It does indeed 
+> > create a bunch of dynamic classes -- one for each struct device.  The 
+> > ordering rules derived by lockdep will be somewhat arbitrary, as you 
+> > say.  But some of them certainly will be related to the structure of the 
+> > source code.
 > 
-> Now I understand it somewhat, and I see where I went wrong. Basically,
-> you were trying to sequence zero or one "data + rf sequence" starting
-> from lock and unlock with a final "data" sequence. That data sequence
-> can be between the srcu-lock and srcu-unlock itself, in case where the
-> lock/unlock happened on the same CPU.
+> I could be :) I haven't been able to find the patch in question - have a
+> link?
 
-In which case the sequence has length 0.  Exactly right.
+It was earlier in this email thread.  Here's a link:
 
-> Damn, that's really complicated.. and I still don't fully understand it.
+https://lore.kernel.org/r/Y+gLd78vChQERZ6A@rowland.harvard.edu/
 
-It sounds like you've made an excellent start.  :-)
+> If you're talking about making lock_class_key dynamic, I think I stand
+> by what I said though - OTOH, if all you're doing is lifting that to the
+> caller of the device object init function, so it'll still be a static
+> object in the driver, that would be totally fine.
 
-> In trying to understand your CAT code, I made some assumptions about
-> your formulas by reverse engineering the CAT code with the tests,
-> which is kind of my point that it is extremely hard to read CAT. That
+The patch does the first, not the second.  Feel free to object some 
+more...  :-)
 
-I can't argue against that; it _is_ hard.  It helps to have had the 
-right kind of training beforehand (my degree was in mathematical logic).
+Alan Stern
 
-> is kind of why I want to understand the CAT, because for me
-> explanation.txt is too much at a higher level to get a proper
-> understanding of the memory model.. I tried re-reading explanation.txt
-> many times.. then I realized I am just rewriting my own condensed set
-> of notes every few months.
-
-Would you like to post a few examples showing some of the most difficult 
-points you encountered?  Maybe explanation.txt can be improved.
-
-> > I'm not sure that breaking this relation up into pieces will make it any
-> > easier to understand.
-> 
-> Yes, but I tried. I will keep trying to understand your last patch
-> more. Especially I am still not sure, why in the case of an SRCU
-> reader on a single CPU, the following does not work:
-> let srcu-rscs = ([Srcu-lock]; data; [Srcu-unlock]).
-
-You have to understand that herd7 does not track dependencies through 
-stores and subsequent loads.  That is, if you have something like:
-
-	r1 = READ_ONCE(*x);
-	WRITE_ONCE(*y, r1);
-	r2 = READ_ONCE(*y);
-	WRITE_ONCE(*z, r2);
-
-then herd7 will realize that the write to y depends on the value read 
-from x, and it will realize that the write to z depends on the value 
-read from y.  But it will not realize that the write to z depends on the 
-value read from x; it loses track of that dependency because of the 
-intervening store/load from y.
-
-More to the point, if you have:
-
-	r1 = srcu_read_lock(lock);
-	WRITE_ONCE(*y, r1);
-	r2 = READ_ONCE(*y);
-	srcu_read_unlock(lock, r2);
-
-then herd7 will not realize that the value of r2 depends on the value of 
-r1.  So there will be no data dependency from the srcu_read_lock() to 
-the srcu_read_unlock().
-
-Alan
+> I probably should've found the patch before commenting :)
