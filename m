@@ -2,345 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB486693758
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 13:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 779F769377C
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 13:53:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjBLMmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 07:42:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
+        id S229665AbjBLMxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 07:53:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjBLMmM (ORCPT
+        with ESMTP id S229543AbjBLMxu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 07:42:12 -0500
-Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1221F126E8;
-        Sun, 12 Feb 2023 04:42:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-        s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:MIME-Version
-        :References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=+oko6H1Usz9qWR/ONrPZeHceZT+M5YAK1ooru0HzG3U=; b=ZrQHyZUI/BchtAr8qQcvNmPNqS
-        fyqzZI6oE5SLcV8gc1W7k1DPB2SFUrcI1VBUt90kNoOgx2WMOZkElBLyEh2udneKv9KbLivV8NMy8
-        M3k+bD1+UegUG49iqHbBH0JZk1q/5hrzc24oPBcA/HJObL7p3RUdpTtkRHzDUXk2qdu3aA657HryP
-        lBFMFt0gQBG778cft2QAqFw5TJ2+H55afKFVyAgXoSBEhFuEg3PhfImIZ2lxWOlWjuVvid27ac0Yj
-        TB0mudccie39yfuDD68h8HjXFPPosdeiVjXErYjyxQ6GK/5rWexcAOzHwl++KHXJZDTnosRlNYgMv
-        TU1Miokw==;
-Received: from authenticated user
-        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.94.2)
-        (envelope-from <bage@debian.org>)
-        id 1pRBg8-00HO62-5I; Sun, 12 Feb 2023 12:42:00 +0000
-From:   Bastian Germann <bage@debian.org>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     Vasily Khoruzhick <anarsoul@gmail.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Bastian Germann <bage@debian.org>
-Subject: [PATCH v5 2/2] Bluetooth: btrtl: add support for the RTL8723CS
-Date:   Sun, 12 Feb 2023 13:41:52 +0100
-Message-Id: <20230212124153.2415-3-bage@debian.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230212124153.2415-1-bage@debian.org>
-References: <20230212124153.2415-1-bage@debian.org>
+        Sun, 12 Feb 2023 07:53:50 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8AC12842;
+        Sun, 12 Feb 2023 04:53:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676206426; x=1707742426;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TUnLdQngEgMWvrkAudk6ufpyfmAnF3rSTSx+s3TYcnY=;
+  b=OGFPGNRjnJ57hiVNckOcePC/jz6BUlc1Gg2KzDziclx9IeQYuKWlLK1M
+   HkJQ+dj1TIib6Wu+pGN2F02ZRJypOGIFUrryYJ8D7MnLtkXN8g4UP3oei
+   Fj+QrTOmuOazD7UdKDhwTSPfGc/V5hb55L7t0VvsbE43l7117EMD30nz1
+   QDUauBDWDbt/y/sS80rsyqQpipOoLO4dZI7gYxeXE1CpbP3Z/t7XALCP1
+   qAq7x0ojz83H1Nn6GAqHhXmjxUGtCMK6OQ7AbkodvwgHJ5D/3eF1o8yZD
+   TYIJdkp7HkPMgnYPjH4zL9cgZUfyxAZxlUgTgor+bkyJnpRp82DJZRl89
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="310346659"
+X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
+   d="scan'208";a="310346659"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 04:53:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="842494185"
+X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
+   d="scan'208";a="842494185"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 12 Feb 2023 04:53:44 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pRBrT-0007DZ-2h;
+        Sun, 12 Feb 2023 12:53:43 +0000
+Date:   Sun, 12 Feb 2023 20:52:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning:
+ unused variable 'mtk_mdp_comp_dt_ids'
+Message-ID: <202302122022.1CJ8CO2t-lkp@intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Debian-User: bage
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vasily Khoruzhick <anarsoul@gmail.com>
+Hi Mauro,
 
-The Realtek RTL8723CS is a SDIO WiFi chip. It also contains a Bluetooth
-module which is connected via UART to the host.
+First bad commit (maybe != root cause):
 
-It shares lmp subversion with 8703B, so Realtek's userspace
-initialization tool (rtk_hciattach) differentiates varieties of RTL8723CS
-(CG, VF, XX) with RTL8703B using vendor's command to read chip type.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f339c2597ebb00e738f2b6328c14804ed19f5d57
+commit: 2023a99811110aebba9eee4aa09ef7bd21a8a249 media: platform: rename mediatek/mtk-jpeg/ to mediatek/jpeg/
+date:   11 months ago
+config: hexagon-randconfig-r022-20230212 (https://download.01.org/0day-ci/archive/20230212/202302122022.1CJ8CO2t-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2023a99811110aebba9eee4aa09ef7bd21a8a249
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2023a99811110aebba9eee4aa09ef7bd21a8a249
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/mediatek/mdp/
 
-Also this chip declares support for some features it doesn't support
-so add a quirk to indicate that these features are broken.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302122022.1CJ8CO2t-lkp@intel.com/
 
-Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
-Signed-off-by: Bastian Germann <bage@debian.org>
----
- drivers/bluetooth/btrtl.c  | 120 +++++++++++++++++++++++++++++++++++--
- drivers/bluetooth/btrtl.h  |   5 ++
- drivers/bluetooth/hci_h5.c |   4 ++
- 3 files changed, 125 insertions(+), 4 deletions(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
-index 69c3fe649ca7..44b672cca69e 100644
---- a/drivers/bluetooth/btrtl.c
-+++ b/drivers/bluetooth/btrtl.c
-@@ -17,7 +17,11 @@
- 
- #define VERSION "0.1"
- 
-+#define RTL_CHIP_8723CS_CG	3
-+#define RTL_CHIP_8723CS_VF	4
-+#define RTL_CHIP_8723CS_XX	5
- #define RTL_EPATCH_SIGNATURE	"Realtech"
-+#define RTL_ROM_LMP_8703B	0x8703
- #define RTL_ROM_LMP_8723A	0x1200
- #define RTL_ROM_LMP_8723B	0x8723
- #define RTL_ROM_LMP_8821A	0x8821
-@@ -30,6 +34,7 @@
- #define IC_MATCH_FL_HCIREV	(1 << 1)
- #define IC_MATCH_FL_HCIVER	(1 << 2)
- #define IC_MATCH_FL_HCIBUS	(1 << 3)
-+#define IC_MATCH_FL_CHIP_TYPE	(1 << 4)
- #define IC_INFO(lmps, hcir, hciv, bus) \
- 	.match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_HCIREV | \
- 		       IC_MATCH_FL_HCIVER | IC_MATCH_FL_HCIBUS, \
-@@ -59,6 +64,7 @@ struct id_table {
- 	__u16 hci_rev;
- 	__u8 hci_ver;
- 	__u8 hci_bus;
-+	__u8 chip_type;
- 	bool config_needed;
- 	bool has_rom_version;
- 	bool has_msft_ext;
-@@ -99,6 +105,39 @@ static const struct id_table ic_id_table[] = {
- 	  .fw_name  = "rtl_bt/rtl8723b_fw.bin",
- 	  .cfg_name = "rtl_bt/rtl8723b_config" },
- 
-+	/* 8723CS-CG */
-+	{ .match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_CHIP_TYPE |
-+			 IC_MATCH_FL_HCIBUS,
-+	  .lmp_subver = RTL_ROM_LMP_8703B,
-+	  .chip_type = RTL_CHIP_8723CS_CG,
-+	  .hci_bus = HCI_UART,
-+	  .config_needed = true,
-+	  .has_rom_version = true,
-+	  .fw_name  = "rtl_bt/rtl8723cs_cg_fw.bin",
-+	  .cfg_name = "rtl_bt/rtl8723cs_cg_config" },
-+
-+	/* 8723CS-VF */
-+	{ .match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_CHIP_TYPE |
-+			 IC_MATCH_FL_HCIBUS,
-+	  .lmp_subver = RTL_ROM_LMP_8703B,
-+	  .chip_type = RTL_CHIP_8723CS_VF,
-+	  .hci_bus = HCI_UART,
-+	  .config_needed = true,
-+	  .has_rom_version = true,
-+	  .fw_name  = "rtl_bt/rtl8723cs_vf_fw.bin",
-+	  .cfg_name = "rtl_bt/rtl8723cs_vf_config" },
-+
-+	/* 8723CS-XX */
-+	{ .match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_CHIP_TYPE |
-+			 IC_MATCH_FL_HCIBUS,
-+	  .lmp_subver = RTL_ROM_LMP_8703B,
-+	  .chip_type = RTL_CHIP_8723CS_XX,
-+	  .hci_bus = HCI_UART,
-+	  .config_needed = true,
-+	  .has_rom_version = true,
-+	  .fw_name  = "rtl_bt/rtl8723cs_xx_fw.bin",
-+	  .cfg_name = "rtl_bt/rtl8723cs_xx_config" },
-+
- 	/* 8723D */
- 	{ IC_INFO(RTL_ROM_LMP_8723B, 0xd, 0x8, HCI_USB),
- 	  .config_needed = true,
-@@ -208,7 +247,8 @@ static const struct id_table ic_id_table[] = {
- 	};
- 
- static const struct id_table *btrtl_match_ic(u16 lmp_subver, u16 hci_rev,
--					     u8 hci_ver, u8 hci_bus)
-+					     u8 hci_ver, u8 hci_bus,
-+					     u8 chip_type)
- {
- 	int i;
- 
-@@ -225,6 +265,9 @@ static const struct id_table *btrtl_match_ic(u16 lmp_subver, u16 hci_rev,
- 		if ((ic_id_table[i].match_flags & IC_MATCH_FL_HCIBUS) &&
- 		    (ic_id_table[i].hci_bus != hci_bus))
- 			continue;
-+		if ((ic_id_table[i].match_flags & IC_MATCH_FL_CHIP_TYPE) &&
-+		    (ic_id_table[i].chip_type != chip_type))
-+			continue;
- 
- 		break;
- 	}
-@@ -307,6 +350,7 @@ static int rtlbt_parse_firmware(struct hci_dev *hdev,
- 		{ RTL_ROM_LMP_8723B, 1 },
- 		{ RTL_ROM_LMP_8821A, 2 },
- 		{ RTL_ROM_LMP_8761A, 3 },
-+		{ RTL_ROM_LMP_8703B, 7 },
- 		{ RTL_ROM_LMP_8822B, 8 },
- 		{ RTL_ROM_LMP_8723B, 9 },	/* 8723D */
- 		{ RTL_ROM_LMP_8821A, 10 },	/* 8821C */
-@@ -587,6 +631,48 @@ static int btrtl_setup_rtl8723b(struct hci_dev *hdev,
- 	return ret;
- }
- 
-+static bool rtl_has_chip_type(u16 lmp_subver)
-+{
-+	switch (lmp_subver) {
-+	case RTL_ROM_LMP_8703B:
-+		return true;
-+	default:
-+		break;
-+	}
-+
-+	return  false;
-+}
-+
-+static int rtl_read_chip_type(struct hci_dev *hdev, u8 *type)
-+{
-+	struct rtl_chip_type_evt *chip_type;
-+	struct sk_buff *skb;
-+	const unsigned char cmd_buf[] = {0x00, 0x94, 0xa0, 0x00, 0xb0};
-+
-+	/* Read RTL chip type command */
-+	skb = __hci_cmd_sync(hdev, 0xfc61, 5, cmd_buf, HCI_INIT_TIMEOUT);
-+	if (IS_ERR(skb)) {
-+		rtl_dev_err(hdev, "Read chip type failed (%ld)",
-+			    PTR_ERR(skb));
-+		return PTR_ERR(skb);
-+	}
-+
-+	chip_type = skb_pull_data(skb, sizeof(*chip_type));
-+	if (!chip_type) {
-+		rtl_dev_err(hdev, "RTL chip type event length mismatch");
-+		kfree_skb(skb);
-+		return -EIO;
-+	}
-+
-+	rtl_dev_info(hdev, "chip_type status=%x type=%x",
-+		     chip_type->status, chip_type->type);
-+
-+	*type = chip_type->type & 0x0f;
-+
-+	kfree_skb(skb);
-+	return 0;
-+}
-+
- void btrtl_free(struct btrtl_device_info *btrtl_dev)
- {
- 	kvfree(btrtl_dev->fw_data);
-@@ -603,7 +689,7 @@ struct btrtl_device_info *btrtl_initialize(struct hci_dev *hdev,
- 	struct hci_rp_read_local_version *resp;
- 	char cfg_name[40];
- 	u16 hci_rev, lmp_subver;
--	u8 hci_ver;
-+	u8 hci_ver, chip_type = 0;
- 	int ret;
- 	u16 opcode;
- 	u8 cmd[2];
-@@ -629,8 +715,14 @@ struct btrtl_device_info *btrtl_initialize(struct hci_dev *hdev,
- 	hci_rev = le16_to_cpu(resp->hci_rev);
- 	lmp_subver = le16_to_cpu(resp->lmp_subver);
- 
-+	if (rtl_has_chip_type(lmp_subver)) {
-+		ret = rtl_read_chip_type(hdev, &chip_type);
-+		if (ret)
-+			goto err_free;
-+	}
-+
- 	btrtl_dev->ic_info = btrtl_match_ic(lmp_subver, hci_rev, hci_ver,
--					    hdev->bus);
-+					    hdev->bus, chip_type);
- 
- 	if (!btrtl_dev->ic_info)
- 		btrtl_dev->drop_fw = true;
-@@ -673,7 +765,7 @@ struct btrtl_device_info *btrtl_initialize(struct hci_dev *hdev,
- 		lmp_subver = le16_to_cpu(resp->lmp_subver);
- 
- 		btrtl_dev->ic_info = btrtl_match_ic(lmp_subver, hci_rev, hci_ver,
--						    hdev->bus);
-+						    hdev->bus, chip_type);
- 	}
- out_free:
- 	kfree_skb(skb);
-@@ -755,6 +847,7 @@ int btrtl_download_firmware(struct hci_dev *hdev,
- 	case RTL_ROM_LMP_8761A:
- 	case RTL_ROM_LMP_8822B:
- 	case RTL_ROM_LMP_8852A:
-+	case RTL_ROM_LMP_8703B:
- 		return btrtl_setup_rtl8723b(hdev, btrtl_dev);
- 	default:
- 		rtl_dev_info(hdev, "assuming no firmware upload needed");
-@@ -795,6 +888,19 @@ void btrtl_set_quirks(struct hci_dev *hdev, struct btrtl_device_info *btrtl_dev)
- 		rtl_dev_dbg(hdev, "WBS supported not enabled.");
- 		break;
- 	}
-+
-+	switch (btrtl_dev->ic_info->lmp_subver) {
-+	case RTL_ROM_LMP_8703B:
-+		/* 8723CS reports two pages for local ext features,
-+		 * but it doesn't support any features from page 2 -
-+		 * it either responds with garbage or with error status
-+		 */
-+		set_bit(HCI_QUIRK_BROKEN_LOCAL_EXT_FEATURES_PAGE_2,
-+			&hdev->quirks);
-+		break;
-+	default:
-+		break;
-+	}
- }
- EXPORT_SYMBOL_GPL(btrtl_set_quirks);
- 
-@@ -953,6 +1059,12 @@ MODULE_FIRMWARE("rtl_bt/rtl8723b_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723b_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723bs_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723bs_config.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723cs_cg_fw.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723cs_cg_config.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723cs_vf_fw.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723cs_vf_config.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723cs_xx_fw.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723cs_xx_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723ds_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723ds_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8761a_fw.bin");
-diff --git a/drivers/bluetooth/btrtl.h b/drivers/bluetooth/btrtl.h
-index ebf0101c959b..349d72ee571b 100644
---- a/drivers/bluetooth/btrtl.h
-+++ b/drivers/bluetooth/btrtl.h
-@@ -14,6 +14,11 @@
- 
- struct btrtl_device_info;
- 
-+struct rtl_chip_type_evt {
-+	__u8 status;
-+	__u8 type;
-+} __packed;
-+
- struct rtl_download_cmd {
- 	__u8 index;
- 	__u8 data[RTL_FRAG_LEN];
-diff --git a/drivers/bluetooth/hci_h5.c b/drivers/bluetooth/hci_h5.c
-index 6455bc4fb5bb..e90670955df2 100644
---- a/drivers/bluetooth/hci_h5.c
-+++ b/drivers/bluetooth/hci_h5.c
-@@ -936,6 +936,8 @@ static int h5_btrtl_setup(struct h5 *h5)
- 	err = btrtl_download_firmware(h5->hu->hdev, btrtl_dev);
- 	/* Give the device some time before the hci-core sends it a reset */
- 	usleep_range(10000, 20000);
-+	if (err)
-+		goto out_free;
- 
- 	btrtl_set_quirks(h5->hu->hdev, btrtl_dev);
- 
-@@ -1100,6 +1102,8 @@ static const struct of_device_id rtl_bluetooth_of_match[] = {
- 	  .data = (const void *)&h5_data_rtl8822cs },
- 	{ .compatible = "realtek,rtl8723bs-bt",
- 	  .data = (const void *)&h5_data_rtl8723bs },
-+	{ .compatible = "realtek,rtl8723cs-bt",
-+	  .data = (const void *)&h5_data_rtl8723bs },
- 	{ .compatible = "realtek,rtl8723ds-bt",
- 	  .data = (const void *)&h5_data_rtl8723bs },
- #endif
+>> drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: warning: unused variable 'mtk_mdp_comp_dt_ids' [-Wunused-const-variable]
+   static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
+                                    ^
+   1 warning generated.
+
+
+vim +/mtk_mdp_comp_dt_ids +31 drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
+
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  30  
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08 @31  static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  32  	{
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  33  		.compatible = "mediatek,mt8173-mdp-rdma",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  34  		.data = (void *)MTK_MDP_RDMA
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  35  	}, {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  36  		.compatible = "mediatek,mt8173-mdp-rsz",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  37  		.data = (void *)MTK_MDP_RSZ
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  38  	}, {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  39  		.compatible = "mediatek,mt8173-mdp-wdma",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  40  		.data = (void *)MTK_MDP_WDMA
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  41  	}, {
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  42  		.compatible = "mediatek,mt8173-mdp-wrot",
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  43  		.data = (void *)MTK_MDP_WROT
+55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  44  	},
+55d80506c5f7c3 drivers/media/platform/mtk-mdp/mtk_mdp_core.c Vincent Stehlé 2016-10-27  45  	{ },
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  46  };
+c8eb2d7e8202fd drivers/media/platform/mtk-mdp/mtk_mdp_core.c Minghsiu Tsai  2016-09-08  47  
+
+:::::: The code at line 31 was first introduced by commit
+:::::: c8eb2d7e8202fd9cb912f5d33cc34ede66dcb24a [media] media: Add Mediatek MDP Driver
+
+:::::: TO: Minghsiu Tsai <minghsiu.tsai@mediatek.com>
+:::::: CC: Mauro Carvalho Chehab <mchehab@s-opensource.com>
+
 -- 
-2.39.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
