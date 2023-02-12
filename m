@@ -2,437 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD46693718
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 12:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A10B69371A
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 12:58:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbjBLL4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 06:56:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
+        id S229586AbjBLL6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 06:58:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBLL4I (ORCPT
+        with ESMTP id S229484AbjBLL6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 06:56:08 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD78E11169;
-        Sun, 12 Feb 2023 03:56:06 -0800 (PST)
-X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="332848857"
-X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
-   d="scan'208";a="332848857"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 03:56:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="914012213"
-X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
-   d="scan'208";a="914012213"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 12 Feb 2023 03:56:03 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy@infradead.org>)
-        id 1pRAxd-005qmt-1H;
-        Sun, 12 Feb 2023 13:56:01 +0200
-Date:   Sun, 12 Feb 2023 13:56:01 +0200
-From:   Andy Shevchenko <andy@infradead.org>
-To:     Aditya Garg <gargaditya08@live.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        "jkosina@suse.cz" <jkosina@suse.cz>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "ronald@innovation.ch" <ronald@innovation.ch>,
-        "kekrby@gmail.com" <kekrby@gmail.com>,
-        Orlando Chamberlain <orlandoch.dev@gmail.com>
-Subject: Re: [PATCH 2/3] HID: apple-touchbar: Add driver for the Touch Bar on
- MacBook Pros
-Message-ID: <Y+jT0cDmlutS5CHg@smile.fi.intel.com>
-References: <E5D8BEBA-3C5B-460F-BD2C-39470A793CC3@live.com>
- <40274C3D-4F4F-479C-944C-EEBDC78F959C@live.com>
- <868AA58D-2399-4E4A-A6C6-73F88DB13992@live.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <868AA58D-2399-4E4A-A6C6-73F88DB13992@live.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 12 Feb 2023 06:58:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AA611EA9;
+        Sun, 12 Feb 2023 03:58:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FD8260C8A;
+        Sun, 12 Feb 2023 11:58:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 541EAC433D2;
+        Sun, 12 Feb 2023 11:58:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676203119;
+        bh=llt2LXtBDHWGs6tAIpzLRReXdbfmGgNRRE07NC9gqXA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=n3a5gGWJi6G/K2nI4VBG91ivR9DBQvxbmws4wuJDtEt43LMTXUAMeHjOuzbm5wfhv
+         2bj5IIqSH/3VsBAc4jMMG5Hx2fY3Da3RPSSu2FA23ykNm51f2q3s/R0JrrIKI5ckpn
+         V4+zj+caHaM7SeThczYY2B1Y8dg34Z0u/82n8TNMNX3munfrgqxuj7qBIYxWGc9cM0
+         R7skLegroNvBI3WXIOnzAVNtuGAB+mljFRAl1bR5/t9Wj65BZXWxGZg9XR7Mg2J38Z
+         r1fTsdULPsgwfGxvKo0fN2T3H4C+Bv++vbT7AwMHEG8Kd6PQCIpvC7qmUAJGn4+xMv
+         9gQiDZafN96QA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pRB08-009ij5-Tv;
+        Sun, 12 Feb 2023 11:58:37 +0000
+Date:   Sun, 12 Feb 2023 11:58:36 +0000
+Message-ID: <865yc7yu1f.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Zaid Al-Bassam <zalbassam@google.com>
+Cc:     Jesus Sanchez-Palencia <jesussanp@google.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, Marc Zyngier <marc.zyngier@arm.com>
+Subject: Re: [PATCH v2 2/8] arm64: perf: Abstract system register accesses away
+In-Reply-To: <20230210165500.2292608-3-zalbassam@google.com>
+References: <20230210165500.2292608-1-zalbassam@google.com>
+        <20230210165500.2292608-3-zalbassam@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: zalbassam@google.com, jesussanp@google.com, linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, peterz@infradead.org, mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@kernel.org, namhyung@kernel.org, james.morse@arm.com, suzuki.poulose@arm.com, oliver.upton@linux.dev, yuzenghui@huawei.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, marc.zyngier@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 03:44:26AM +0000, Aditya Garg wrote:
-> From: Ronald Tschalär <ronald@innovation.ch>
+On Fri, 10 Feb 2023 16:54:54 +0000,
+Zaid Al-Bassam <zalbassam@google.com> wrote:
 > 
-> This driver enables basic touch bar functionality: enabling it, switching
-> between modes on FN key press, and dimming and turning the display
-> off/on when idle/active.
-
-...
-
-> Signed-off-by: Ronald Tschalär <ronald@innovation.ch>
-> [Kerem Karabay: use USB product IDs from hid-ids.h]
-> [Kerem Karabay: use hid_hw_raw_request except when setting the touchbar mode on T1 Macs]
-> [Kerem Karabay: update Kconfig description]
-> Signed-off-by: Kerem Karabay <kekrby@gmail.com>
-> [Orlando Chamberlain: add usage check to not bind to keyboard backlight interface]
-> Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
-> [Aditya Garg: check if apple-touchbar is enabled in the special driver list]
-> [Aditya Garg: fix suspend on T2 Macs]
-
-Are you going to use this as a changelog? Not okay for a list of changes.
-Consider Co-developed-by and proper Changelog in the cover letter.
-
-> Signed-off-by: Aditya Garg <gargaditya08@live.com>
-
-...
-
-> +config HID_APPLE_TOUCHBAR
-> +	tristate "Apple Touch Bar"
-> +	depends on USB_HID
-> +	help
-
-> +	Say Y here if you want support for the Touch Bar on x86
-> +	MacBook Pros.
-> +
-> +	To compile this driver as a module, choose M here: the
-> +	module will be called apple-touchbar.
-
-Wrong indentation for the help description. Missing two spaces.
-
-...
-
-> +#define dev_fmt(fmt) "tb: " fmt
-
-Do we really need this?
-
-...
-
-
-> +static ssize_t idle_timeout_show(struct device *dev,
-> +				 struct device_attribute *attr, char *buf);
-> +static ssize_t idle_timeout_store(struct device *dev,
-> +				  struct device_attribute *attr,
-> +				  const char *buf, size_t size);
-
-> +static ssize_t dim_timeout_show(struct device *dev,
-> +				struct device_attribute *attr, char *buf);
-> +static ssize_t dim_timeout_store(struct device *dev,
-> +				 struct device_attribute *attr,
-> +				 const char *buf, size_t size);
-
-> +static ssize_t fnmode_show(struct device *dev, struct device_attribute *attr,
-> +			   char *buf);
-> +static ssize_t fnmode_store(struct device *dev, struct device_attribute *attr,
-> +			    const char *buf, size_t size);
-
-Make sure you will have no unnecessary forward declarations.
-
-...
-
-> +static struct attribute *appletb_attrs[] = {
-> +	&dev_attr_idle_timeout.attr,
-> +	&dev_attr_dim_timeout.attr,
-> +	&dev_attr_fnmode.attr,
-
-> +	NULL,
-
-No comma for terminator entry.
-
-> +};
-
-...
-
-> +static struct appletb_device *appletb_dev;
-
-Why is it global?
-
-...
-
-> +static bool appletb_disable_autopm(struct hid_device *hdev)
-> +{
-> +	int rc;
-> +
-> +	rc = hid_hw_power(hdev, PM_HINT_FULLON);
-
-> +
-
-Redundant blank line and see below.
-
-> +	if (rc == 0)
-> +		return true;
-> +
-> +	hid_err(hdev,
-> +		"Failed to disable auto-pm on touch bar device (%d)\n", rc);
-> +	return false;
-
-
-	if (rc)
-		hid_err(...);
-
-	return rc == 0;
-
-> +}
-
-...
-
-> +static bool appletb_any_tb_key_pressed(struct appletb_device *tb_dev)
-> +{
-> +	return !!memchr_inv(tb_dev->last_tb_keys_pressed, 0,
-> +			    sizeof(tb_dev->last_tb_keys_pressed));
-
-Sounds like last_tb_keys_pressed should be declared as a bitmap and hence
-
-	return !bitmap_empty(...);
-
-> +}
-
-...
-
-> +static ssize_t idle_timeout_show(struct device *dev,
-> +				 struct device_attribute *attr, char *buf)
-> +{
-> +	struct appletb_device *tb_dev = dev_get_drvdata(dev);
-> +
-> +	return snprintf(buf, PAGE_SIZE, "%d\n", tb_dev->idle_timeout);
-
-sysfs_emit().
-
-> +}
-
-...
-
-> +static ssize_t idle_timeout_store(struct device *dev,
-> +				  struct device_attribute *attr,
-> +				  const char *buf, size_t size)
-> +{
-> +	struct appletb_device *tb_dev = dev_get_drvdata(dev);
-> +	long new;
-> +	int rc;
-> +
-> +	rc = kstrtol(buf, 0, &new);
-> +	if (rc || new > INT_MAX || new < -2)
-> +		return -EINVAL;
-
-Do not shadow the error code.
-
-	if (rc)
-		return rc;
-
-Why do you use INT_MAX check with to-long conversion instead of simply calling
-kstrtoint()?
-
-
-> +	appletb_set_idle_timeout(tb_dev, new);
-> +	appletb_update_touchbar(tb_dev, true);
-> +
-> +	return size;
-> +}
-
-...
-
-> +static ssize_t dim_timeout_show(struct device *dev,
-> +				struct device_attribute *attr, char *buf)
-> +{
-> +	struct appletb_device *tb_dev = dev_get_drvdata(dev);
-> +
-> +	return snprintf(buf, PAGE_SIZE, "%d\n",
-> +			tb_dev->dim_to_is_calc ? -2 : tb_dev->dim_timeout);
-
-sysfs_emit()
-
-> +}
-> +
-> +static ssize_t dim_timeout_store(struct device *dev,
-> +				 struct device_attribute *attr,
-> +				 const char *buf, size_t size)
-> +{
-
-As per above.
-
-> +}
-> +
-> +static ssize_t fnmode_show(struct device *dev, struct device_attribute *attr,
-> +			   char *buf)
-> +{
-
-As per above.
-
-> +}
-> +
-> +static ssize_t fnmode_store(struct device *dev, struct device_attribute *attr,
-> +			    const char *buf, size_t size)
-> +{
-
-As per above.
-
-> +}
-
-...
-
-> +static int appletb_tb_key_to_slot(unsigned int code)
-> +{
-> +	switch (code) {
-> +	case KEY_ESC:
-> +		return 0;
-> +	case KEY_F1:
-> +	case KEY_F2:
-> +	case KEY_F3:
-> +	case KEY_F4:
-> +	case KEY_F5:
-> +	case KEY_F6:
-> +	case KEY_F7:
-> +	case KEY_F8:
-> +	case KEY_F9:
-> +	case KEY_F10:
-> +		return code - KEY_F1 + 1;
-> +	case KEY_F11:
-> +	case KEY_F12:
-> +		return code - KEY_F11 + 11;
-> +	default:
-> +		return -1;
-
-Use appropriate error code from errno.h.
-
-> +	}
-> +}
-
-...
-
-> +	{ },			/* Terminating zero entry */
-
-No comma.
-
-...
-
-> +static bool appletb_match_internal_device(struct input_handler *handler,
-> +					  struct input_dev *inp_dev)
-> +{
-> +	struct device *dev = &inp_dev->dev;
-> +
-> +	if (inp_dev->id.bustype == BUS_SPI)
-> +		return true;
-> +
-> +	/* in kernel: dev && !is_usb_device(dev) */
-> +	while (dev && !(dev->type && dev->type->name &&
-> +			!strcmp(dev->type->name, "usb_device")))
-> +		dev = dev->parent;
-
-I believe we have some helpers to mach like this.
-
-> +	/*
-> +	 * Apple labels all their internal keyboards and trackpads as such,
-> +	 * instead of maintaining an ever expanding list of product-id's we
-> +	 * just look at the device's product name.
-> +	 */
-> +	if (dev)
-> +		return !!strstr(to_usb_device(dev)->product, "Internal Keyboard");
-> +
-> +	return false;
-> +}
-
-...
-
-> +static int appletb_probe(struct hid_device *hdev,
-> +			 const struct hid_device_id *id)
-
-Can be a single line.
-
-...
-
-> +	rc = hid_parse(hdev);
-> +	if (rc) {
-> +		dev_err(tb_dev->log_dev, "hid parse failed (%d)\n", rc);
-> +		goto error;
-
-return dev_err_probe(...);
-
-(error label seems useless)
-
-> +	}
-
-...
-
-> +	if ((hdev->product == USB_DEVICE_ID_APPLE_TOUCHBAR_BACKLIGHT) &&
-> +			!(hdev->collection && hdev->collection[0].usage ==
-> +				HID_USAGE_APPLE_APP)) {
-
-Broken indentation.
-
-> +		return -ENODEV;
-> +	}
-
-...
-
-> +	if (rc) {
-> +		dev_err(tb_dev->log_dev, "hw start failed (%d)\n", rc);
-
-dev_err_probe()
-
-It will unite the style of error messaging.
-
-> +		goto clear_iface_info;
-> +	}
-
-> +	rc = hid_hw_open(hdev);
-> +	if (rc) {
-> +		dev_err(tb_dev->log_dev, "hw open failed (%d)\n", rc);
-
-Ditto. And so on.
-
-> +		goto stop_hid;
-> +	}
-
-...
-
-> +		/* initialize sysfs attributes */
-> +		rc = sysfs_create_group(&tb_dev->mode_iface.hdev->dev.kobj,
-> +					&appletb_attr_group);
-> +		if (rc) {
-> +			dev_err(tb_dev->log_dev,
-> +				"Failed to create sysfs attributes (%d)\n", rc);
-> +			goto unreg_handler;
-> +		}
-
-Can't you use .dev_groups?
-
-> +	}
-
-...
-
-> +	/* MacBook Pro's 2018, 2019, with T2 chip: iBridge Display */
-> +	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE,
-> +			USB_DEVICE_ID_APPLE_TOUCHBAR_DISPLAY) },
-> +	{ },
-
-No comma.
-
-...
-
-> +
-
-Redundant blank line.
-
-> +MODULE_DEVICE_TABLE(hid, appletb_hid_ids);
-
-...
-
-> +#ifdef CONFIG_PM
-> +	.suspend = appletb_suspend,
-> +	.reset_resume = appletb_reset_resume,
-> +#endif
-
-Why not using .driver.pm ?
-
-...
-
-> +module_init(appletb_init);
-> +module_exit(appletb_exit);
-
-Just move them closer to the implementation.
+> From: Marc Zyngier <marc.zyngier@arm.com>
+> 
+> As we want to enable 32bit support, we need to distanciate the
+> PMUv3 driver from the AArch64 system register names.
+> 
+> This patch moves all system register accesses to an architecture
+> specific include file, allowing the 32bit counterpart to be
+> slotted in at a later time.
+> 
+> Signed-off-by: Marc Zyngier <marc.zyngier@arm.com>
+> Co-developed-by: Zaid Al-Bassam <zalbassam@google.com>
+> Signed-off-by: Zaid Al-Bassam <zalbassam@google.com>
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> Link: https://lore.kernel.org/r/20230126204444.2204061-3-zalbassam@google.com
+
+You can drop these links. They were inserted when I picked your series
+from the list, but they don't mean much at this stage.
+
+> ---
+>  arch/arm64/include/asm/arm_pmuv3.h | 149 +++++++++++++++++++++++++++++
+>  drivers/perf/arm_pmuv3.c           | 115 +++++-----------------
+>  include/linux/perf/arm_pmuv3.h     |  45 +++++++++
+>  3 files changed, 217 insertions(+), 92 deletions(-)
+>  create mode 100644 arch/arm64/include/asm/arm_pmuv3.h
+> 
+> diff --git a/arch/arm64/include/asm/arm_pmuv3.h b/arch/arm64/include/asm/arm_pmuv3.h
+> new file mode 100644
+> index 0000000000000..eb204adb8dee2
+> --- /dev/null
+> +++ b/arch/arm64/include/asm/arm_pmuv3.h
+> @@ -0,0 +1,149 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2012 ARM Ltd.
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License version 2 as
+> + * published by the Free Software Foundation.
+> + *
+> + * This program is distributed in the hope that it will be useful,
+> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> + * GNU General Public License for more details.
+> + *
+> + * You should have received a copy of the GNU General Public License
+> + * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+> + */
+
+Please drop the license text, as we don't use this boilerplate anymore
+(the SPDX tag is enough). Just keep:
+
+/*
+ * Copyright (C) 2012 ARM Ltd.
+ */
+
+Thanks,
+
+	M.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Without deviation from the norm, progress is not possible.
