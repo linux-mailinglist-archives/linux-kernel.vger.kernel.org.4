@@ -2,50 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1EA0693674
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 09:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CBBA693679
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 09:34:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjBLIUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 03:20:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
+        id S229457AbjBLI2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 03:28:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjBLIUy (ORCPT
+        with ESMTP id S229449AbjBLI2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 03:20:54 -0500
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B588510AB9
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 00:20:51 -0800 (PST)
+        Sun, 12 Feb 2023 03:28:38 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C41A12F1A
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 00:28:37 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id i1so6566044qvo.9
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 00:28:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5ywUmUjhrrlXaGmQ81FtkxJbcvVwxqDLz6CNsxGlR6U=;
-  b=J2OozH6UPqL+j2dMAui4QUONMDOUzziBjg5MRV5ayKjpIhBH4hGoz6Lg
-   UFjD6GairHwowz/0QITNluVAH8DKewvwF2YzIghjhhdP+oLdou+qslgLa
-   jHjPXvzhNYyet3342gjwmsK0P/jUNQ/D0AeNrWMH+FuCXyDM4MGQldhw5
-   E=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.97,291,1669071600"; 
-   d="scan'208";a="47506092"
-Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 09:20:49 +0100
-Date:   Sun, 12 Feb 2023 09:20:47 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-cc:     linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Wojciech Ziemba <wojciech.ziemba@intel.com>,
-        Adam Guerin <adam.guerin@intel.com>
-Subject: drivers/crypto/qat/qat_common/qat_compression.c:238:24-25: WARNING
- opportunity for kfree_sensitive/kvfree_sensitive (memset at line 237)
- (fwd)
-Message-ID: <alpine.DEB.2.22.394.2302120919560.2799@hadrien>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q0Xwevp/QS8IrtZgkJqcj63hnhj2qn3eJyAR9QfSSpE=;
+        b=Lvi4o0/zm5NjAfWl2d7yGoZfoo9kGibQcnIvbCwUnWSQkFgPf2C4JD+Dpk7loQYkLb
+         j2DDJUduEe8L3eJ40SKzzf6VPZyjeCkj19TaW8ZR43281fDi51MCmVMdedXVQM2a5fjO
+         cIyLKl0NOAqgfw6BPvPi1GiP1ZXGLpYi9BKPYNDdHnD9IsOTMb7yXVEpc/iufl2If99m
+         LoMKl+GenAotxAXjS6L2n0W9GzXYYs3BScZCOvM4PlKq+AephlmBoSSiOW0f6oFz40ef
+         SpE9XLqIei+K3/ng/oyMaUVq3mepi1bkD14mcpn9Vq5leF6bipqxgmsxd6CDxCFFsNgw
+         PLiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q0Xwevp/QS8IrtZgkJqcj63hnhj2qn3eJyAR9QfSSpE=;
+        b=Q9sSUNpA8Y7hGWHLYnEzNEH7C0/zvx3FnJp/XmFjV1But20KmCkp8awyqI/yZjg9Ui
+         Qo40IURfW+LFgNQwtauevYKdo6kFDN7oVgGDNk+CspnGCEhrCAnspGQMxOKQoj3TOFAL
+         fOuLDYDiZhCqacgGrgQh8o+EZjtJEwSAvmszj7mqhCiTyqofWxI27arAtFtjLZ8rCN2y
+         S5Rsj70xdXZylYMMmaaIxdPlhZbXI/Mlci7+59BtrXZ/UEJIHIsadOXzw9ocQH8UbWVb
+         Mcl8vOeD4FnCWE5radq5wsdoMZp8+9nUtqgr6F0TAkKnW63GeCydK7ARBde/HYrTBKBI
+         FdSw==
+X-Gm-Message-State: AO0yUKUc+n5EF3DYOTDrlzHqgX2JMQFdCr3KZlvL7nb9isqRKWQyxrq4
+        +/OzXPKPtuQTvdwvO0s3V/U05EE6X2MLg8zSTCM=
+X-Google-Smtp-Source: AK7set+A4xJqVAPM510S94EVdLul1yHLpN3wXgml3YDdnK7mPBPE+k3BYFK4iOnD5Dj0Qe/cueupY2DHR/9J278+wdY=
+X-Received: by 2002:a0c:cb8f:0:b0:56e:a7f9:2e2a with SMTP id
+ p15-20020a0ccb8f000000b0056ea7f92e2amr93609qvk.80.1676190516449; Sun, 12 Feb
+ 2023 00:28:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Sender: ameliekengabawade@gmail.com
+Received: by 2002:ad4:5a52:0:b0:56e:9b6e:808b with HTTP; Sun, 12 Feb 2023
+ 00:28:35 -0800 (PST)
+From:   Abdulah Aziz Bello <abdulahazizbello1@gmail.com>
+Date:   Sun, 12 Feb 2023 09:28:35 +0100
+X-Google-Sender-Auth: lSU0Er_LgKQG9XVNG3nLYOiVAKg
+Message-ID: <CAMpbS81D8kK=zyqK3EtSPfPbYx12_Vm87CO6Vp1bfVAHx807oA@mail.gmail.com>
+Subject: Good business you will be happy in the rest of your life,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,41 +66,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
----------- Forwarded message ----------
-Date: Sun, 12 Feb 2023 11:41:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: oe-kbuild@lists.linux.dev
-Cc: lkp@intel.com, Julia Lawall <julia.lawall@inria.fr>
-Subject: drivers/crypto/qat/qat_common/qat_compression.c:238:24-25: WARNING
-    opportunity for kfree_sensitive/kvfree_sensitive (memset at line 237)
-
-BCC: lkp@intel.com
-CC: oe-kbuild-all@lists.linux.dev
-CC: linux-kernel@vger.kernel.org
-TO: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-CC: Herbert Xu <herbert@gondor.apana.org.au>
-CC: Wojciech Ziemba <wojciech.ziemba@intel.com>
-CC: Adam Guerin <adam.guerin@intel.com>
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f339c2597ebb00e738f2b6328c14804ed19f5d57
-commit: 1198ae56c9a520384dcf53f01cd9adecd73751d0 crypto: qat - expose deflate through acomp api for QAT GEN2
-date:   9 weeks ago
-:::::: branch date: 3 hours ago
-:::::: commit date: 9 weeks ago
-config: x86_64-randconfig-c002 (https://download.01.org/0day-ci/archive/20230212/202302121127.u0a27G8S-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Julia Lawall <julia.lawall@inria.fr>
-| Link: https://lore.kernel.org/r/202302121127.u0a27G8S-lkp@intel.com/
-
-cocci warnings: (new ones prefixed by >>)
->> drivers/crypto/qat/qat_common/qat_compression.c:238:24-25: WARNING opportunity for kfree_sensitive/kvfree_sensitive (memset at line 237)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+I contacted you in a business you will be happy for the rest of your
+life, God said knock the door will be open and ask it shall be given
+onto you, I asked on your behave and the prayer asked, so it left to
+you to complete it, get back to me and the details of the business
+will be review to you, thanks, from Mr. Abdulah Aziz Bello.
