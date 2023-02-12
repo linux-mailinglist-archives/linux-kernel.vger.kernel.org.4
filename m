@@ -2,298 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D27693709
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 12:36:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A564269370C
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 12:36:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjBLLgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 06:36:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48454 "EHLO
+        id S229561AbjBLLg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 06:36:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjBLLgB (ORCPT
+        with ESMTP id S229481AbjBLLg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 06:36:01 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34F7211E;
-        Sun, 12 Feb 2023 03:35:59 -0800 (PST)
-X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="358114206"
-X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
-   d="scan'208";a="358114206"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 03:35:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="914008350"
-X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
-   d="scan'208";a="914008350"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 12 Feb 2023 03:35:57 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy@infradead.org>)
-        id 1pRAeB-005qQE-16;
-        Sun, 12 Feb 2023 13:35:55 +0200
-Date:   Sun, 12 Feb 2023 13:35:55 +0200
-From:   Andy Shevchenko <andy@infradead.org>
-To:     Aditya Garg <gargaditya08@live.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        "jkosina@suse.cz" <jkosina@suse.cz>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "ronald@innovation.ch" <ronald@innovation.ch>,
-        "kekrby@gmail.com" <kekrby@gmail.com>,
-        Orlando Chamberlain <orlandoch.dev@gmail.com>
-Subject: Re: [PATCH 1/3] HID: apple-ibridge: Add Apple iBridge HID driver for
- T1 chip.
-Message-ID: <Y+jPG4/EkYt1otap@smile.fi.intel.com>
-References: <E5D8BEBA-3C5B-460F-BD2C-39470A793CC3@live.com>
- <40274C3D-4F4F-479C-944C-EEBDC78F959C@live.com>
+        Sun, 12 Feb 2023 06:36:56 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464E0E398;
+        Sun, 12 Feb 2023 03:36:55 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7DB69207B8;
+        Sun, 12 Feb 2023 11:36:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1676201813; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EY9kC8oKNJhpV9eyhjn6y9sJ0BjoWhCUKHtfu5N4lZU=;
+        b=xUKjeNCMc0FVMvMh/GvU434QDUPgzRg78iXjUczn/2m/HVRnMqlRGhaD9poq0G2YLMxaxZ
+        nB/Ns6NNmSJuHb184Jz9a58MMHJYTdPt/c5V7uheFLNCFm9HjuM8igbtWKXDdluC7pR54+
+        0tYxTY+BxtNBN6Kc4ddKk+TyEsYNvzo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1676201813;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EY9kC8oKNJhpV9eyhjn6y9sJ0BjoWhCUKHtfu5N4lZU=;
+        b=yU4eKF31TiM+78CvHJMm48EsfIi7l94M8U2RCJCqsOp3YLXYzIXgkNPekDWKmyJVKKyda3
+        bptL7YINTOMIxlAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4DB2913310;
+        Sun, 12 Feb 2023 11:36:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ZIgxElXP6GN0ZwAAMHmgww
+        (envelope-from <hare@suse.de>); Sun, 12 Feb 2023 11:36:53 +0000
+Message-ID: <9b0b9059-c0f6-df5b-863a-987970f3567d@suse.de>
+Date:   Sun, 12 Feb 2023 12:36:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH -next RFC 2/3] block: factor out the setting of
+ GD_NEED_PART_SCAN
+Content-Language: en-US
+To:     Yu Kuai <yukuai1@huaweicloud.com>, hch@infradead.org, jack@suse.cz,
+        axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com
+References: <20230212092641.2394146-1-yukuai1@huaweicloud.com>
+ <20230212092641.2394146-3-yukuai1@huaweicloud.com>
+From:   Hannes Reinecke <hare@suse.de>
+In-Reply-To: <20230212092641.2394146-3-yukuai1@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <40274C3D-4F4F-479C-944C-EEBDC78F959C@live.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 03:43:24AM +0000, Aditya Garg wrote:
-> From: Ronald Tschal�r <ronald@innovation.ch>
+On 2/12/23 10:26, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
 > 
-> The iBridge device provides access to several devices, including:
-> - the Touch Bar
-> - the iSight webcam
-> - the light sensor
-> - the fingerprint sensor
+> In order to prevent scan partition for a device that is opened
+> exclusively by someone else, new conditions will be added to
+> disk_scan_partitions() in the next patch. Hence if device is opened
+> exclusively between bdev_add() and disk_scan_partitions(), the first
+> partition scan will fail unexpected. This patch factor out the setting
+> of GD_NEED_PART_SCAN to prevent the problem.
 > 
-> This driver provides the core support for managing the iBridge device
-> and the access to the underlying devices. In particular, the
-> functionality for the touch bar and light sensor is exposed via USB HID
-> interfaces, and on devices with the T1 chip one of the HID devices is
-> used for both functions. So this driver creates virtual HID devices, one
-> per top-level report collection on each HID device (for a total of 3
-> virtual HID devices). The sub-drivers then bind to these virtual HID
-> devices.
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>   block/genhd.c | 2 +-
+>   block/ioctl.c | 1 +
+>   2 files changed, 2 insertions(+), 1 deletion(-)
 > 
-> This way the Touch Bar and ALS drivers can be kept in their own modules,
-> while at the same time making them look very much like as if they were
-> connected to the real HID devices. And those drivers then work (mostly)
-> without further changes on MacBooks with the T2 chip that don't need
-> this driver.
-
-...
-
-> [Kerem Karabay: convert to a platform driver]
-> [Kerem Karabay: fix appleib_forward_int_op]
-> [Kerem Karabay: rely on HID core's parsing in appleib_add_device]
-
-If somebody is going to update this (and update seems required for upstreaming)
-the list of changes will grow. I suggest to consider Co-developed-by and move
-these lines to cover-letter changelog.
-
-> Signed-off-by: Kerem Karabay <kekrby@gmail.com>
-
-...
-
-> +#include <linux/platform_device.h>
-> +#include <linux/acpi.h>
-> +#include <linux/device.h>
-> +#include <linux/hid.h>
-> +#include <linux/list.h>
-> +#include <linux/module.h>
-> +#include <linux/slab.h>
-> +#include <linux/usb.h>
-
-Can we keep it sorted?
-
-> +#include "hid-ids.h"
-> +#include "../hid/usbhid/usbhid.h"
-
-+ Blank line?
-
-> +#include "apple-ibridge.h"
-
-...
-
-> +static struct hid_device_id appleib_sub_hid_ids[] = {
-> +	{ HID_USB_DEVICE(USB_VENDOR_ID_LINUX_FOUNDATION,
-> +			 USB_DEVICE_ID_IBRIDGE_TB) },
-> +	{ HID_USB_DEVICE(USB_VENDOR_ID_LINUX_FOUNDATION,
-> +			 USB_DEVICE_ID_IBRIDGE_ALS) },
-> +};
-> +
-> +static struct {
-> +	unsigned int usage;
-> +	struct hid_device_id *dev_id;
-> +} appleib_usage_map[] = {
-> +	/* Default iBridge configuration, key inputs and mode settings */
-> +	{ 0x00010006, &appleib_sub_hid_ids[0] },
-> +	/* OS X iBridge configuration, digitizer inputs */
-> +	{ 0x000D0005, &appleib_sub_hid_ids[0] },
-> +	/* All iBridge configurations, display/DFR settings */
-> +	{ 0xFF120001, &appleib_sub_hid_ids[0] },
-> +	/* All iBridge configurations, ALS */
-> +	{ 0x00200041, &appleib_sub_hid_ids[1] },
-> +};
-
-Shouldn't be other way around, i.e. via driver_data?
-
-...
-
-> +struct appleib_device {
-> +	acpi_handle asoc_socw;
-> +};
-
-What's the point of having struct out of a single member? Can you use it directly?
-(you can try and see if it's not ugly, in some cases struct can be justified)
-
-...
-
-> +	bool			sub_open[ARRAY_SIZE(appleib_sub_hid_ids)];
-
-Why not using bitmap?
-
-	DECLARE_BITMAP(sub_open, ARRAY_SIZE(...));
-
-...
-
-> +static __u8 *appleib_report_fixup(struct hid_device *hdev, __u8 *rdesc,
-> +				  unsigned int *rsize)
-
-Why __ types are in use? Is it part of ABI?
-
-...
-
-> +static int appleib_forward_int_op(struct hid_device *hdev,
-
-> +				  int (*forward)(struct hid_driver *,
-> +						 struct hid_device *, void *),
-
-This can be on one line
-
-> +				  void *args)
-
-...
-
-> +	if (drv->suspend)
-> +		rc = drv->suspend(hdev, *(pm_message_t *)args);
-
-This looks like a hack. What's going on here and why the pm_message_t is in
-use? All new PM callbacks do not use it.
-
-...
-
-> +	for (i = 0; i < ARRAY_SIZE(hdev_info->sub_hdevs); i++) {
-> +		/*
-> +		 * hid_hw_open(), and hence appleib_ll_open(), is called
-> +		 * from the driver's probe function, which in turn is called
-> +		 * while adding the sub-hdev; but at this point we haven't yet
-> +		 * added the sub-hdev to our list. So if we don't find the
-> +		 * sub-hdev in our list assume it's in the process of being
-> +		 * added and set the flag on the first unset sub-hdev.
-> +		 */
-> +		if (hdev_info->sub_hdevs[i] == hdev ||
-> +		    !hdev_info->sub_hdevs[i]) {
-
-Unusual order of || operator arguments.
-
-This will have a side effect, i.e. if hdev is equal to NULL it will go to the
-true branch. Is it by design?
-
-> +			WRITE_ONCE(hdev_info->sub_open[i], open);
-> +			return 0;
-> +		}
-> +	}
-
-...
-
-> +				while (i-- > 0)
-
-while (i--) ?
-
-> +					hid_destroy_device(hdev_info->sub_hdevs[i]);
-
-> +				return (void *)hdev_info->sub_hdevs[i];
-
-This casting is strange. And entire code piece. You will always return 0
-element as a pointer here, why 'i'? Needs a lot of explanation.
-
-...
-
-> +static const struct hid_device_id appleib_hid_ids[] = {
-> +	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IBRIDGE) },
-
-> +	{ },
-
-No comma for the terminator entry.
-
-> +};
-
-...
-
-> +#ifdef CONFIG_PM
-> +	.suspend = appleib_hid_suspend,
-> +	.resume = appleib_hid_resume,
-> +	.reset_resume = appleib_hid_reset_resume,
-> +#endif
-
-Why not using
-
-	.driver = {
-		.pm = ...;
-	},
-
-?
-
-...
-
-> +	ret = hid_register_driver(&appleib_hid_driver);
-> +	if (ret) {
-
-> +		dev_err(&pdev->dev, "Error registering hid driver: %d\n",
-> +			ret);
-> +		return ret;
-
-	return dev_err_probe(...);
-
-> +	}
-
-...
-
-> +static int appleib_suspend(struct platform_device *pdev, pm_message_t message)
-> +{
-> +	struct appleib_device *ib_dev;
-> +	int rc;
-
-> +	ib_dev = platform_get_drvdata(pdev);
-
-Just unite it with the definition above.
-Ditto for the similar cases here and there.
-
-> +	rc = acpi_execute_simple_method(ib_dev->asoc_socw, NULL, 0);
-> +	if (ACPI_FAILURE(rc))
-> +		dev_warn(&pdev->dev, "SOCW(0) failed: %s\n",
-> +			 acpi_format_exception(rc));
-> +
-> +	return 0;
-> +}
-
-...
-
-> +static const struct acpi_device_id appleib_acpi_match[] = {
-> +	{ "APP7777", 0 },
-> +	{ },
-
-No comma for terminator entry.
-
-> +};
-
+> diff --git a/block/genhd.c b/block/genhd.c
+> index 075d8da284f5..c0d1220bd798 100644
+> --- a/block/genhd.c
+> +++ b/block/genhd.c
+> @@ -367,7 +367,6 @@ int disk_scan_partitions(struct gendisk *disk, fmode_t mode)
+>   	if (disk->open_partitions)
+>   		return -EBUSY;
+>   
+> -	set_bit(GD_NEED_PART_SCAN, &disk->state);
+>   	bdev = blkdev_get_by_dev(disk_devt(disk), mode, NULL);
+>   	if (IS_ERR(bdev))
+>   		return PTR_ERR(bdev);
+> @@ -493,6 +492,7 @@ int __must_check device_add_disk(struct device *parent, struct gendisk *disk,
+>   		if (ret)
+>   			goto out_unregister_bdi;
+>   
+> +		set_bit(GD_NEED_PART_SCAN, &disk->state);
+>   		bdev_add(disk->part0, ddev->devt);
+>   		if (get_capacity(disk))
+>   			disk_scan_partitions(disk, FMODE_READ);
+Usual caveat:
+What happens if the flag is already set here?
+Wouldn't that imply that another scan is underway?
+And wouldn't it be better to use 'test_and_set()'?
+
+
+> diff --git a/block/ioctl.c b/block/ioctl.c
+> index 6dd49d877584..0eefcdb936a0 100644
+> --- a/block/ioctl.c
+> +++ b/block/ioctl.c
+> @@ -528,6 +528,7 @@ static int blkdev_common_ioctl(struct block_device *bdev, fmode_t mode,
+>   			return -EACCES;
+>   		if (bdev_is_partition(bdev))
+>   			return -EINVAL;
+> +		set_bit(GD_NEED_PART_SCAN, &bdev->bd_disk->state);
+>   		return disk_scan_partitions(bdev->bd_disk, mode & ~FMODE_EXCL);
+>   	case BLKTRACESTART:
+>   	case BLKTRACESTOP:
+Similar here.
+
+Cheers,
+
+Hannes
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
+Myers, Andrew McDonald, Martje Boudien Moerman
 
