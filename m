@@ -2,146 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 851796935A5
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 03:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFC06935AC
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 03:46:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbjBLClC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 21:41:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
+        id S229647AbjBLCqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 21:46:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjBLClB (ORCPT
+        with ESMTP id S229557AbjBLCqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 21:41:01 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 219951449E
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 18:40:58 -0800 (PST)
-Received: (qmail 864277 invoked by uid 1000); 11 Feb 2023 21:40:58 -0500
-Date:   Sat, 11 Feb 2023 21:40:58 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Coly Li <colyli@suse.de>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
- with unique class keys
-Message-ID: <Y+hRurRwm//1+IcK@rowland.harvard.edu>
-References: <20230208080739.1649-1-hdanton@sina.com>
- <1ad499bb-0c53-7529-ff00-e4328823f6fa@I-love.SAKURA.ne.jp>
- <Y+O6toMmAKBSILMf@rowland.harvard.edu>
- <f79e93ef-cfe8-1373-7c36-15d046c0e3c5@I-love.SAKURA.ne.jp>
- <Y+RZ2RKVo9FNMgSe@rowland.harvard.edu>
- <52c7d509-ba9e-a121-60c9-138d7ff3f667@I-love.SAKURA.ne.jp>
- <Y+gLd78vChQERZ6A@rowland.harvard.edu>
- <CAHk-=whXYzkOJZo0xpyYfrhWQg1M7j0OeCojTJ84CN4q9sqb2Q@mail.gmail.com>
- <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
- <Y+gjuqJ5RFxwLmht@moria.home.lan>
+        Sat, 11 Feb 2023 21:46:17 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005C71449E
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 18:46:16 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id nn4-20020a17090b38c400b00233a6f118d0so6848502pjb.2
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 18:46:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=13n7orFtfB4ykJMQSCkI+SVHhcT583fh+bxIuvlC7mY=;
+        b=ESXg7vS2YfHpVFr9OQZAHv9M3hthBxU2Row9ea0aJR9IjQ6GL15VCoTe39SuK/apcz
+         lfGM7PXnvgu0PiiAykezRpIW1FRoeZgXJJ1f5yT+0kseS0KVDaqQDpA+I+Dymcgg1zY1
+         iJGmRqnL0dCDPWM41X5z2Oh7WP3Z/XxGAGv3Avnn9/JwRFp3kolnB1oZQv8VGQXmwX3d
+         rD5u2DHcmPTZ0/x3/2kVydfAybYsxNmLWQeSV3+yI7B70FNGMxThFxKX2Pd0AYuzKaP5
+         7cdqi426YYBSMwwbt6a0/WgGTHOQHmA3ZJ65WGdgZGheeKN3uSzavEMms8FWcLknPqQx
+         PyIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=13n7orFtfB4ykJMQSCkI+SVHhcT583fh+bxIuvlC7mY=;
+        b=tNfOaG6Vf+cXe5+KpWLKB4PqU+fD0lkIdTHL3q/liEyMSra3yfu/SQFf4FheAQQsOB
+         TFPG99J4snoMeQIDj5m/8I+NDo7dYjgTm3qmRGfvpjPCsB2sNaradN7Aji6sKvQicJI1
+         ZnXqDVPPK3Ecb9Jx/jLd2DKSL2z1T1VMXWEaOK74fH5Akl4+3EGpuIaxWE1MWLGgvIHk
+         3a2QF/enHMhGZc/VZCy5mC/8bq2iOGmQTwH4dbgu6wa6KrHKRp77IU4ObSmkMmKhcRnZ
+         iCbR4MdGZdy/70nHEH+tNJIbhIgOEnIARMaSDMtUTiJoPsikM4+f7LTsSgkHJ3gfO1f+
+         AOvg==
+X-Gm-Message-State: AO0yUKWeJspRFzsMwq7VtYSbIg2NTtflLM8PkM3a2f/GlOQH5ly5W+I4
+        Sw5ASutnPMgOBhZPTS16xMrwtQ==
+X-Google-Smtp-Source: AK7set8Q/Jh+L5ryxfXOAajWPMV5niu5B7Z5pm8YR78FRqb1qNpO8JtR/DWeRFI2ODz7Fg0mdVhiIg==
+X-Received: by 2002:a17:902:f685:b0:199:2ee:6248 with SMTP id l5-20020a170902f68500b0019902ee6248mr21267626plg.0.1676169976461;
+        Sat, 11 Feb 2023 18:46:16 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id g13-20020a63be4d000000b00478ca052819sm4935737pgo.47.2023.02.11.18.46.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Feb 2023 18:46:15 -0800 (PST)
+Message-ID: <467c0abe-251f-d74b-57c8-91e02bec1c05@kernel.dk>
+Date:   Sat, 11 Feb 2023 19:46:14 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+gjuqJ5RFxwLmht@moria.home.lan>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: copy on write for splice() from file to pipe?
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ming Lei <ming.lei@redhat.com>, Andy Lutomirski <luto@kernel.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Stefan Metzmacher <metze@samba.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API Mailing List <linux-api@vger.kernel.org>,
+        io-uring <io-uring@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Samba Technical <samba-technical@lists.samba.org>
+References: <CAHk-=wiszt6btMPeT5UFcS=0=EVr=0injTR75KsvN8WetwQwkA@mail.gmail.com>
+ <fe8252bd-17bd-850d-dcd0-d799443681e9@kernel.dk>
+ <CAHk-=wiJ0QKKiORkVr8n345sPp=aHbrLTLu6CQ-S0XqWJ-kJ1A@mail.gmail.com>
+ <7a2e5b7f-c213-09ff-ef35-d6c2967b31a7@kernel.dk>
+ <CALCETrVx4cj7KrhaevtFN19rf=A6kauFTr7UPzQVage0MsBLrg@mail.gmail.com>
+ <b44783e6-3da2-85dd-a482-5d9aeb018e9c@kernel.dk>
+ <2bb12591-9d24-6b26-178f-05e939bf3251@kernel.dk>
+ <CAHk-=wjzqrD5wrfeaU390bXEEBY2JF-oKmFN4fREzgyXsbQRTQ@mail.gmail.com>
+ <Y+cJDnnMuirSjO3E@T590> <55eaac9e-0d77-1fa2-df27-4d64e123177e@kernel.dk>
+ <Y+euv+zR5ltTELqk@T590> <787c3b62-f5d8-694d-cd2f-24b40848e39f@kernel.dk>
+ <CAHk-=whQ_V1ZE6jhQKHDk1MKvEkjpF2Pj-OcRQRXBTMsNpA1YA@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAHk-=whQ_V1ZE6jhQKHDk1MKvEkjpF2Pj-OcRQRXBTMsNpA1YA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 11, 2023 at 06:24:42PM -0500, Kent Overstreet wrote:
-> After scanning the rest of the thread: I don't think you want to create
-> separate lockdep classes for each bus and device type, that's defeating
-> how lockdep works.
-
-Not at all.  In fact, exactly the opposite: lockdep works by creating a 
-class for each lock-inside-a-data-structure-type combination.  A struct 
-device-bus_type/device_type combination is pretty much the same kind of 
-thing.
-
->  Maybe if it was only a small, _static_ number of new
-> classes,
-
-The collection of bus_types and device_types _is_ static, in the sense 
-that each one is a structure defined in a driver source file.  Whether 
-the number is "small" depends on your tolerance for large numbers; the 
-kernel has a lot of source files.  :-)
-
-Mind you, I'm not saying that having lockdep classes for each bus_type 
-or device_type is always the right thing to do.  There definitely are 
-cases where it wouldn't do what we want.  But perhaps in some cases it 
-would work.
-
-> but the basic premesis of lockdep is that there are static
-> human understandable lock ordering rules, so lockdep figures out what
-> they are and checks them: if you create a bunch of dynamic classes, the
-> classes are going to be different for everyone in practice and won't
-> have any real bearing on the structure of the code
-
-As a rule, bus_type's and device_type's aren't dynamic.  Maybe Greg KH 
-once published an example of such a thing; IIRC it was more like a 
-proof-of-principle rather than a serious recommendation on how to write 
-drivers.  (Or else I'm misremembering and it was actually an example of 
-creating dynamic sysfs attributes.)
-
-Or maybe you're referring to what this patch does?  It does indeed 
-create a bunch of dynamic classes -- one for each struct device.  The 
-ordering rules derived by lockdep will be somewhat arbitrary, as you 
-say.  But some of them certainly will be related to the structure of the 
-source code.
-
-For instance, there's a rule that you must not acquire a device's lock 
-if you're already holding the lock of one of its descendants, and this 
-is related to how device discovery works (the driver for a device is 
-responsible for discovering the device's children).  But that rule alone 
-isn't enough to prevent deadlocks.
-
->  that is, given a
-> lockdep splat, you won't be able to do anything with it.
-
-Nonsense.  Even if you don't know what the locking rules are, given a 
-splat you can see what the cycle is and try to figure out which of the 
-links should be invalid.  Without the splat you'd be a lot worse off.
-
-> If static lock ordering rules aren't working (say, because the lock
-> ordering rules are determined by hardware relationships or what
-> userspace is doing), then you have to do something more sophisticated.
+On 2/11/23 11:57 AM, Linus Torvalds wrote:
+> On Sat, Feb 11, 2023 at 7:33 AM Jens Axboe <axboe@kernel.dk> wrote:
+>>
+>> OK, but then the ignore_sig change should not be needed at all, just
+>> changing that first bit to fatal_signal_pending() would do the trick?
 > 
-> Wait/wound mutexes would be the next thing to look at, and DRM ended up
-> needing them for similar reasons as what you're running up against so I
-> think they bear serious consideration.
-> 
-> ww mutexes are the simple version of dynamic deadlock avoidance -
-> instead of doing full cycle detection they just compare transaction
-> start times, so they come at the cost of more frequent aborts. If this
-> is an issue for you, here's what full cycle detection looks like:
-> 
-> https://evilpiepirate.org/git/bcachefs.git/tree/fs/bcachefs/btree_locking.c#n53
+> Right. That was my point. The 'ignore_sig' flag just doesn't make
+> sense. It was a hack for a case that shouldn't exist.
 
-I'm not at all sure that w/w mutexes are the answer to device locking.  
-Not to mention that converting over to use them would require a huge 
-effort.
+Yep, just wanted to confirm that we'd _only_ do that first one and
+not go to sleep later on ignoring a signal as that could lead to
+issues. Your fatal signal pending suggestion is all we need.
 
-A typical kind of issue that seems to pop up a lot is a task trying to 
-flush a work queue while holding a lock that's needed by one of the 
-items on the queue.  (This isn't particularly limited to dev->mutex 
-locks, of course.  It can crop up anywhere, but it seems to happen with 
-some regularity in this setting.  Perhaps the fact that lockdep is 
-unable to warn about these things is a contributing factor.  Can w/w 
-mutexes can handle this sort of thing?  I'm not sufficiently familiar 
-with them to know.)  Apparently people write this sort of code because 
-they aren't aware of or don't pay attention to the context in which 
-their functions run -- that is, the locks that have automatically been 
-acquired by the callers.
+-- 
+Jens Axboe
 
-Alan Stern
+
