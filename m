@@ -2,327 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5F06939B5
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 20:43:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F586939B9
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 20:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbjBLTnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 14:43:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54710 "EHLO
+        id S229533AbjBLTxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 14:53:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjBLTnW (ORCPT
+        with ESMTP id S229436AbjBLTxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 14:43:22 -0500
-X-Greylist: delayed 462 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 12 Feb 2023 11:43:18 PST
-Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB42940F1
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 11:43:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
-        t=1676230533; bh=TkYf+84PvKRSkaliELVtR4f0pId2NmGRNiFxrvb//XI=;
-        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
-        b=HWeqLvWYZTUak2mmbkj+h6bWAbWrmv8zWIhADpvGo6FJeo1Z41Ky4c/63WBAlNjWS
-         dXugPQh8wRU3KrJ4alEWipjs9PJfzGB/Ox2fMMhc8WPg6KAGJT84/sVPBrhNnlbLZX
-         nfrXMI3CLRmZeEDwJa7GsX6e150kuGRJ8r1vlqRk=
-Date:   Sun, 12 Feb 2023 20:35:33 +0100
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
-To:     Frank Oltmanns <frank@oltmanns.dev>
-Cc:     Guido =?utf-8?Q?G=C3=BCnther?= <agx@sigxcpu.org>,
-        Purism Kernel Team <kernel@puri.sm>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH 1/1] drm/panel: st7703: Fix resume of XBD599 panel
-Message-ID: <20230212193533.3czfby4id4cpbu2s@core>
-Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
-        Frank Oltmanns <frank@oltmanns.dev>,
-        Guido =?utf-8?Q?G=C3=BCnther?= <agx@sigxcpu.org>,
-        Purism Kernel Team <kernel@puri.sm>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <20230212120830.46880-1-frank@oltmanns.dev>
- <20230212120830.46880-2-frank@oltmanns.dev>
- <20230212123621.jo56yqlburd6g6ir@core>
- <874jrq20kz.fsf@oltmanns.dev>
+        Sun, 12 Feb 2023 14:53:15 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85E672A6;
+        Sun, 12 Feb 2023 11:53:14 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31CIq0OX010593;
+        Sun, 12 Feb 2023 19:53:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : references : date : in-reply-to : message-id : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=Aamssj6bWIrT5YsmBF5eGQNq+0DEEZSluZDogH+dgG4=;
+ b=D0iE2oi4dKdjneVHEIO9hID1YI4FEvbr8lObRZ+KP9abzI3M4MRetPlLsVkAooGig/wq
+ hVfFl9TViK2Bugq/lPSr0ZPFWfPRUAcQN1XzWZWC5eLD/bNJcsesAYuHQSIAFBfhtye9
+ gefUbl8P9aASWwdwlkl5OJBy3dIxVUo4XKq4ucgbPV7TBjX0fGVGdTXhMo34Vblelc/n
+ NZew6wkUI7MrHCYQpVG/OWlrwp1lxEMiq7JHeXXUmZg4B3cTblvGGBclvVXalyNfvAJf
+ BN61zl4+5xaKuaUIbFvtWD+LlwGZlKMHQy6/rhX+VqKJEtQ4WYOjfKWO14bhYJcWILho XA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np2w9sjbj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 12 Feb 2023 19:53:06 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31CGXpMe028882;
+        Sun, 12 Feb 2023 19:53:05 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3np1f3b9ug-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 12 Feb 2023 19:53:04 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TEg7p5jjUAsgSRJrByPly4h5k2UiXRhFd/jUV2GVdyh9/DS3VVNN+Y0yQhjEiZ8+kWpttBAHah+zq5OM/qJOR2rPZsJ+V/NnLlwoi0JmIZifwPeEcgYryYpfSuzWlaIHQK9nt2X4gcazv2e/ddITj1g8NSxiQzY8kM13ORh4JWeaUmdjDJ/drCULQk4ABgjNFpc9tyHePPKueSWVRzfDgte0oQDerLCSDqveBxa2wus0cZ/rJSuJtI6aJox+F4eToCnFYFynkwRKQ+Hem9znWzDXL6rnTnn3LEjFCD5ZQQtycsrB/pIFSKY6rZt4OaAU1k6zEQnxSabWSgruB9OPdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Aamssj6bWIrT5YsmBF5eGQNq+0DEEZSluZDogH+dgG4=;
+ b=gzpnfe1tDiZ0ErZjZs+bqfPKovpFC2yADeMfZY54P0Ss4lhFV9jWz3cnJI2QYqPz1ahfrhWiPT4PdcMsPHjY9hx6aihFg6UUyBcDdwfaKmoWSmF4mqgW5Ey5a82Dx3cs6BaFKSDyd/D+S4tOB+oHM2lOZICLdxmY8otF6z86atmxiLPqV+xfB8KwdV/Q6j0C+dKcpMcx2Kt625f/WfEdo4pEg3lk2sseWuQbl8IQudWNUYvaSl9icf6ZAoQauhEX2+YmaRv8tkozGGRCj3UcjsEaSdeZvcmZRj+6644Iq9TxHwaUk6+EjFvqPSl1f0W9jhEN1FSJEzrYB+elZmHrPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Aamssj6bWIrT5YsmBF5eGQNq+0DEEZSluZDogH+dgG4=;
+ b=pigUfduws33xcHvJlY7Oaep1IHZo7rWIxFG9mkPyJetjlfUMSYLhsp+6MnEdApBuHemeb7iZiSHk1/uiu5mdAGxD7xaBn+pvFc+hwqnosUCyRfTA5sLqk+7OO/JYCXD6MWbgm6VPTevYEXtQ4pFPuwkLLyNTQDcN2uvpEU+W6Io=
+Received: from DS0PR10MB6798.namprd10.prod.outlook.com (2603:10b6:8:13c::20)
+ by SA1PR10MB5784.namprd10.prod.outlook.com (2603:10b6:806:23f::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.8; Sun, 12 Feb
+ 2023 19:53:03 +0000
+Received: from DS0PR10MB6798.namprd10.prod.outlook.com
+ ([fe80::b30f:e3aa:6ba:5c8d]) by DS0PR10MB6798.namprd10.prod.outlook.com
+ ([fe80::b30f:e3aa:6ba:5c8d%5]) with mapi id 15.20.6111.009; Sun, 12 Feb 2023
+ 19:53:03 +0000
+From:   Nick Alcock <nick.alcock@oracle.com>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Conor Dooley <conor@kernel.org>, mcgrof@kernel.org,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 8/8] kbuild, PCI: microchip: comment out MODULE_LICENSE
+ in non-modules
+References: <20230210164749.368998-1-nick.alcock@oracle.com>
+        <20230210164749.368998-9-nick.alcock@oracle.com>
+        <Y+aMh5e9bWaTphiZ@spud> <871qmx1fv5.fsf@esperi.org.uk>
+        <Y+akw9VBjg9oZ7QV@spud> <Y+kx3fb2Lzlg+u5+@unreal>
+Emacs:  the prosecution rests its case.
+Date:   Sun, 12 Feb 2023 19:52:57 +0000
+In-Reply-To: <Y+kx3fb2Lzlg+u5+@unreal> (Leon Romanovsky's message of "Sun, 12
+        Feb 2023 20:37:17 +0200")
+Message-ID: <87wn4my82u.fsf@esperi.org.uk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1.91 (gnu/linux)
+Content-Type: text/plain
+X-ClientProxiedBy: LO4P123CA0523.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c5::7) To DS0PR10MB6798.namprd10.prod.outlook.com
+ (2603:10b6:8:13c::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <874jrq20kz.fsf@oltmanns.dev>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR10MB6798:EE_|SA1PR10MB5784:EE_
+X-MS-Office365-Filtering-Correlation-Id: b015601a-2bca-44a0-d20c-08db0d32c036
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jcJtZaVosJJpkxpDW9XPOUff1JHa2Ipn+z2TZYbBJZD7i7v09y/x8v7nUbr+mxWuMdctra9qH7e0k96lq+SrYToFWHumCmUFV1VXSMghImxBgKnx9IUotGftCPJDUkY8EZ3S2CZI39s7ZK8Eb5yc+r7wPJpIjEfbS0Qv34SFnZ6wEkGLlH1lFsVoOgdC3W8FUuo/Q2P9CrXCeccz6Szefcs8Wz2LHc6ZyumF7xJX5V6Nozuirr3ExFIyb9YBZ3S2IrICl3V7uOXaN7vqxhcbVF9YQ5YA8ygDc3MIPDUsIwbNS2YlT0CRMsaIzbEymkYAatmNcFPqZGc93TPf0Q3oC65gF3pK5bMw16U4J3BXGwKfiHD/kqV7ij2TIB/puJz8AE9EzOMC+8ItTKtmAFw0KPWFuoHIgBfJeJynWAy0pDAPR/UauGOsozBMZRL87NH6vP7tJ/0P/opKtxyBfCDMEEw0KAw4N8wvPODw3/xjaFwCt2SASK0GuCT+LjUV5hevGImL31+H7/lfC05FY+D8VXnkbOlahQPcn8DdqhD+qGAeGZmwUCQCV8jJLWjee5wbTzydkxCWmRcwHWXLZ6lwdviUg53Gs9eFn2YBQhgfnuB2b7Qyk+9bkbEDUrI3vKMZCNa18y0FsPxdZC8+9wCibw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6798.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(376002)(346002)(39860400002)(366004)(396003)(451199018)(2906002)(36756003)(44832011)(86362001)(38100700002)(316002)(8936002)(4326008)(66946007)(6916009)(66556008)(8676002)(66476007)(41300700001)(5660300002)(6666004)(6506007)(186003)(9686003)(6512007)(478600001)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PBx4T5f+gYXoxexmyRFFW5VG4B3fOa+j79RBwcnH7pYQOeLdfXCjjeZp5awh?=
+ =?us-ascii?Q?PNl+/VYCbCQTkt/69rGXQBFPwVS8iJsGG/kToybO8vu//jk5Cc5Hjh2nuV7Q?=
+ =?us-ascii?Q?r9RY2cqFCgmgTUJ3q0SK9pcUtsJtwmJTmjP8BmU3UyQ4uHa+hjLWlyGbFeCY?=
+ =?us-ascii?Q?iHeldsxftnn/pPH3H5reRJorE40CWks9+ItPqIbwgXIt8J/Lp9GnoVAtQx6S?=
+ =?us-ascii?Q?WzWQi37kcKSjfqhzesGCsf2q/7BwyL4sArnY54d4WtcqcMZW1bf46kl2SDuY?=
+ =?us-ascii?Q?ab50ZBAlD8AiynsgLJIqBiXwJSVVvTALhoOGIg/oWXtAZLFylBPpSeM/NGlV?=
+ =?us-ascii?Q?I/zSxpDkHa/qs6BkNOCzUFTWQUbHE5gnY3bjVf47Jf6ZBtvlSWoHaDNdSbSX?=
+ =?us-ascii?Q?uqXOU+Gx+bVrMgTAe/0r+G1pn/nMm82RQVO2+c9sN3YmqElLHfjaCG6ja7Y6?=
+ =?us-ascii?Q?+g+oLZP/tHYYn3fDTG5ZQNsJnhUG03lfqavi18Zk/eOusoBaQZO48dgj8Zpe?=
+ =?us-ascii?Q?qXp7dh9stEfOb+b3TvxXFAZIy2WL9+WZnyRO2jvI7Vj4NVxQMdBF7z4itNFE?=
+ =?us-ascii?Q?jUEbbtdWszsOExsfGfugBbDMEc2s2yypLIILdiO4EyhLuFm/COMslKMJe810?=
+ =?us-ascii?Q?ECuUp83FBYOmAxe7mNV/pv8TvG3QLH1nzi04OU1g2HsuB6w2LQ0wwTVdOUCw?=
+ =?us-ascii?Q?yRakbSAJPsiYLLyDIhMWsl4NlJaSQZvLulGIMbOVuSiH4EOU26V+WcTL23a3?=
+ =?us-ascii?Q?+ogim8DzIjRQUa16st57NKQxJNuD04yhh/qo+f8Pu4Dz8HThZna4EneGTCur?=
+ =?us-ascii?Q?aSNczXqPZ4QlsjFAAsIo6Xyo6XLDcKNdogFgGsac+I/gHop9ntXw/vNeE0la?=
+ =?us-ascii?Q?uW6y0QSerRNNGclyg6oTn01qq2dWD5DniBagGGSgYGFSfWqR1sv5HTDMlahd?=
+ =?us-ascii?Q?Va8Da0kGueGQmpXtScFx16ytKSbCwv5IeJJzy/e0ktsZraGdevjMi6VP8/I0?=
+ =?us-ascii?Q?QfbPgtv+0o/NkVMRynokEvLWvRcYb9xJ0cq80J8A4tPV0II9WzVz01Vx6RNV?=
+ =?us-ascii?Q?eobVgccoKwxu2ra/GqlFl+tVpYzlRukWFIIIc6063WB5jcr5XohvWa98b21K?=
+ =?us-ascii?Q?hC6zrPwG4BwYznkTVFn/KIkJ0Mlu9CjYjw9hJOSPp9mpzPzOJ0lIzEpDQdUi?=
+ =?us-ascii?Q?QV+Qe3rKLxalhQf01BWr2ytM9JUnY0lP5TbKwYH3oFobXuvOnyZM4NDiveA9?=
+ =?us-ascii?Q?Zbr46kK2MtjBz2W+6pf1KMm8Vknq9QzucChWcUv8Qk7wiOpBPtQq5b2zZ/aF?=
+ =?us-ascii?Q?GUe+B9BIqYp6NyFrh/k+9bLcWmtrLpImJtLXxB9sitBqDNRfsBDTapu8CHLl?=
+ =?us-ascii?Q?Bbc2jcRGB3Olzc40G/jyUnFO9MSMq2H7eHCSmZKB3Vc4fq/hvu5UPNWboEkZ?=
+ =?us-ascii?Q?AgfggxqNWUS5yarMa/xdveLBeygWpnmvK1aF5sXHMJf/za+Ocp934q6B6ioK?=
+ =?us-ascii?Q?7fDT8EEJhkXLIEprMrcTCckyu2ww+NCw+DBbcZAwM+49Xa+z8S/k3QPfMNvN?=
+ =?us-ascii?Q?uqSz8B4Or+SQWWf1g0qsFJijJG9/1zcwBhqx71a8Xj0eVu2ZPqZ6Y6jckxBY?=
+ =?us-ascii?Q?ww=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: VGyWcSPu19J5RI/zCTunJsFwgtXpvM6jfQQsJXv6UP9M9mW9l/VnhwlFUzB5U9XGmGIFdlBqQpmD29Q1Yzz9+XyGIYzdnqLgXZMW8IzRufZ8NL0SyKWRjkTVLlKZ2lYtzCWGPmcKqa8aSoofyffwOKpgEM3xYMoPTt1mUzvt2ey9KaoKTa38W74RILqgriGF1nLlRruuWNIuw/XyG2m5yL15xaRkcJGMDxLNzJf93Sn9KaVRrZDWfxaniM6zOXbiYareBH3RI5I/yaF/xuGCoqvHMtB+2MhMbb3vq5zDivspBed8Oz+e6AUg2mM4Z0ssJjbZl9CVb89PGtJOHsNM8Jo56J3aQ6qNdHhqCNKjwAFCYaLXWaUjBJtUVlYBW1i45EmjwGriwMtPmjvs1X6lOHadzhsIl4JJg5KH+IIGWE/1fQffbHPaN2ix+m2wLvMVfT6mkII6CpU+t07I/ZD9OmQujfDBXzY1nyKdjZIPqTc2i9/4i/7Pj6Zpi8z3rlgAzh5pLqnL46KmrIezl8z8Mo0GE/xpD64VbC+QM4nkrQWwkPStWmZuFbvORxvWTHANd4VJpl+WgSci9p8Afd2F17KHPkOqY7VsTqf/SYO9Fm0Iv5GtRb2SKKfSRkK6XuiBa/IBcXzIGqKM7E0nae7GJeAFbgGbHvBoO1O7yp/dVaA9jp13diYb3tM23qPNARB7an9/SxCHYisUjZlujG+uKYhyXHJHyN7z14KkAzgZNlKNTa/UQhuSb+T14xGJvYToPLn07lRW33QmZCEnAWRknPQFUBFctJ6zaaXK4DsDwI5dmSIRS20wi3o6pQVfGKQdgJCfa7Hjz6fDeHH8v8V4Cw==
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b015601a-2bca-44a0-d20c-08db0d32c036
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6798.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Feb 2023 19:53:02.9120
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: j4NWF278rVyadcICBWvI07WxxKOT/5OqmMz+Pd3stcW4+hwH6Ia6vZlwuIFPMn1/EspRX9nhb7InM3CYfYYGQA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB5784
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-12_09,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 adultscore=0
+ mlxlogscore=784 phishscore=0 spamscore=0 mlxscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302120181
+X-Proofpoint-GUID: E5kbyDmLX66JS_0fGovJAv8Ap074oiqr
+X-Proofpoint-ORIG-GUID: E5kbyDmLX66JS_0fGovJAv8Ap074oiqr
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 12 Feb 2023, Leon Romanovsky uttered the following:
 
-On Sun, Feb 12, 2023 at 06:52:05PM +0100, Frank Oltmanns wrote:
-> Hi Ondřej,
-> hi Guido,
-> 
-> Ondřej, thank you very much for your feedback!
-> 
-> I have a couple of questions.
-> 
-> Ondřej Jirman <megi@xff.cz> writes:
-> 
-> > On Sun, Feb 12, 2023 at 01:08:29PM +0100, Frank Oltmanns wrote:
-> >> In contrast to the JH057N panel, the XBD599 panel does not require a 20
-> >> msec delay after initialization and exiting sleep mode. Therefore, move
-> >> the delay into the already existing device specific initialization
-> >> function.
-> >>
-> >> Also, the timing contraints after entering and exiting sleep mode differ
-> >> between the two panels:
-> >>  - The JH057N requires a shorter delay than the XDB599 after waking up
-> >>    from sleep mode and before enabling the display.
-> >>  - The XDB599 requires a delay in order to drain the display of charge,
-> >>    which is not required on the JH057N.
-> >
-> > There’s no difference between the panels here. It’s a controller specified
-> > requirement.
-> >
-> > <https://megous.com/dl/tmp/1ef533ed8a7ce841.png>
-> >
-> > 60ms used in the driver between sleep out and display on is just
-> > incorrect from the datasheet perspective.
-> 
-> Please let me point you to the discussion you and Guido had ~2.5 years ago:
-> <https://lore.kernel.org/all/20200729154809.GA435075@bogon.m.sigxcpu.org/>
+> On Fri, Feb 10, 2023 at 08:10:43PM +0000, Conor Dooley wrote:
+>> On Fri, Feb 10, 2023 at 07:26:38PM +0000, Nick Alcock wrote:
+>> > On 10 Feb 2023, Conor Dooley said:
+>> > > FYI $subject seems wrong, this is a PCI patch AFAICT.
+>
+> <...>
+>
+>> > kbuild is present in every patch in the series because this is a
+>> > kbuild-driven change (the thing it disturbs is part of the build system,
+>> > the construction of modules.builtin*). This seems to be common practice
+>> > for kbuild-related treewide changes.
+>> 
+>> Okay, I'll take your word for it. It just looked/looks odd to me!
+>
+> It looks odd to me too. Please add SPDX tag in modules which don't have
+> it already, instead of commenting code.
 
-Guido references some unspecified datasheet. We only have a st7703 datasheet
-to go by, and that requires 120ms and is relevant for both panels.
+OK, I now have two votes for removal-and-SPDX (you and Luis) and nobody
+suggesting that keeping it in but commented out is actually a good idea:
+I'll respin with removals instead, and add SPDX to anything so adjusted
+that doesn't already have it (if anything).
 
-Also the patch that Guido tested removed a few 20ms delays from the init
-sequence for the librem panel. Maybe that broke the init for librem panel and
-not the extra few ms after sleep out that the patch added.
+(I'll stick both the removal and addition in the same commit, so there
+is no point at which such files have no declared license at all.)
 
-> What resonates most with me is the following statement from Guido:
-> > > > > Given the amount of ST7703 look alikes i don’t think you can go by the
-> > > > > datasheet and hope not to break other panels. The current sleeps cater
-> > > > > for the rocktech panel (which suffered from similar issues you describe
-> > > > > when we took other parameters) so you need to make those panel specific.
-> 
-> My takeaway is, that neither panel needed the actual 120 msec wait time. But
-> Guido was reluctant to change the timing for the Librem 5 devkit panel. That’s
-> why I went for the panel specific implementation.
-> 
-> Of course, we can revisit that decision. Since I don’t have the Librem
-> 5 devkit, I have to kindly ask Guido for advise.
-> 
-> > You also have to wait 120ms after sleep in (or HW reset) and before shutting
-> > down the panel. If you don’t, after a bunch of cycles of this incorrect
-> > power up/down sequence the panel will start blinking weirdly, and the incorrect
-> > power up/down sequence without delays will not be able to recover it. You’ll
-> > have to let the panel sit for 5-10 minutes powered off before it starts to
-> > behave itself again.
-> >
-> > The documentation for sleep in specifies what’s happening during sleep in,
-> > and why this delay is necessary after sleep in:
-> >
-> > <https://megous.com/dl/tmp/2284b9d0f506b9b8.png>
-> 
-> I read that screenshot, that we need a 120 msec wait after sleep OUT before we
-> can send another sleep in (see the “Restriction” row). I can’t seem to find
-> the reference to the 120 msec delay after the sleep IN command. I read the
-> flow chart at the bottom as informational about the duration of the whole
-> procedure that happens after issuing the sleep in command. The only
-> restriction is that we can’t issue any command for 5 msec after sleep in was
-> issued.
-
-It's at the bottom, sleep in takes 120ms to execute. Part of the execution is
-draining the charge from the panel. You can't shutdown power supplies before
-sleep in completes, so you need the delay after sleep in and before regulator
-powerdown, otherwise the flow chart will not have the time to execute properly,
-and the panel will be left in a bad state.
-
-> > So there needs to be 120ms delay after sleep in and after sleep out,
-> > regardless of which panel is driven by this controller, to ensure the panel
-> > stays operational even when the user is quickly switching it on/off repeatedly.
-> >
-> > So I don’t think you should be doing panel specific quirks here.
-> 
-> Maybe. I can only say that without the timings in this patch (i.e. the ones
-> from your kernel branch) the display on my pinephone is flickering after the
-> first (and every subsequent) time the display is turned off. With your new
-> timing everything works great on the pinephone. Guido states that the timings
-> in your original patch (i.e. the XDB599 specific timings in this patch) the
-> Librem 5 devkit panel doesn’t work.
-
-Adding extra delays after sleep in/before sleep out should not break Librem
-panel. Previous patches also changed the powerup sequence to hold the reset
-before powerup of the power supplies, and rearranged other delays.
-
-They were made before the problem with the panel discharge was properly
-understood.
-
-I suggest just going a bit more conservatively than what I did with my original
-patch series, and just make sure there are 120ms delays after sleep out and
-before sleep in + extra delay after regulator powerup and don't do anything that
-may decrease delays for librem devkit panel. Just adding delays should not break
-anything, sine the only timings that have maximums specified in the datasheet
-are for power rail voltage rampup times.
-
-(Also some timings during powerup/down may appear to have different needs on
-Librem devkit simply because panel driver is not really affecting the
-regulators, because they are already powered up due to being referenced by other
-drivers/devices, because they are shared. This is a bit tricky to test
-properly. It's necessary to test both power sequence cases, where the regulators
-are known to be off, and when they are already referenced by other drivers.
-On librem devkit, one of them seems to be shared by audio codec and touchscreen,
-on pinephone there's less sharing. Easiest way to do that is to unload the
-relevant drivers for other devices that share the regulators and check with
-debugfs/regulator/regulator_summary that the refcount of lcd regulators)
-
-regards,
-	o.
-
-> Do you have a proposal how to proceed without implementing panel specific
-> timings?
-> 
-> Thanks,
->   Frank
-> 
-> >
-> > regards,
-> > 	o.
-> >
-> >> Therefore, introduce panel specific functions for the delays.
-> >>
-> >> The XDB599 does not require a 20 msec delay between the SETBGP and
-> >> SETVCOM commands. Therefore, remove the delay from the device specific
-> >> initialization function.
-> >>
-> >> Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
-> >> Cc: Ondrej Jirman <megi@xff.cz>
-> >> Reported-by: Samuel Holland <samuel@sholland.org>
-> >> —
-> >>  drivers/gpu/drm/panel/panel-sitronix-st7703.c | 40 ++++++++++++++++—
-> >>  1 file changed, 35 insertions(+), 5 deletions(-)
-> >>
-> >> diff –git a/drivers/gpu/drm/panel/panel-sitronix-st7703.c b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
-> >> index 6747ca237ced..a149341c4a8b 100644
-> >> — a/drivers/gpu/drm/panel/panel-sitronix-st7703.c
-> >> +++ b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
-> >> @@ -66,6 +66,8 @@ struct st7703_panel_desc {
-> >>  	unsigned long mode_flags;
-> >>  	enum mipi_dsi_pixel_format format;
-> >>  	int (*init_sequence)(struct st7703 *ctx);
-> >> +	void (*wait_after_sleep_out)(void);
-> >> +	void (*drain_charge)(void);
-> >>  };
-> >>
-> >>  static inline struct st7703 *panel_to_st7703(struct drm_panel *panel)
-> >> @@ -126,10 +128,24 @@ static int jh057n_init_sequence(struct st7703 *ctx)
-> >>  				   0x18, 0x00, 0x09, 0x0E, 0x29, 0x2D, 0x3C, 0x41,
-> >>  				   0x37, 0x07, 0x0B, 0x0D, 0x10, 0x11, 0x0F, 0x10,
-> >>  				   0x11, 0x18);
-> >> +	msleep(20);
-> >>
-> >>  	return 0;
-> >>  }
-> >>
-> >> +static void jh057n_wait_after_sleep_out(void)
-> >> +{
-> >> +	/*
-> >> +	 * Panel is operational 120 msec after reset, i.e. 60 msec after
-> >> +	 * sleep out.
-> >> +	 */
-> >> +	msleep(60);
-> >> +}
-> >> +
-> >> +static void jh057n_drain_charge(void)
-> >> +{
-> >> +}
-> >> +
-> >>  static const struct drm_display_mode jh057n00900_mode = {
-> >>  	.hdisplay    = 720,
-> >>  	.hsync_start = 720 + 90,
-> >> @@ -152,6 +168,8 @@ static const struct st7703_panel_desc jh057n00900_panel_desc = {
-> >>  		MIPI_DSI_MODE_VIDEO_BURST | MIPI_DSI_MODE_VIDEO_SYNC_PULSE,
-> >>  	.format = MIPI_DSI_FMT_RGB888,
-> >>  	.init_sequence = jh057n_init_sequence,
-> >> +	.wait_after_sleep_out = jh057n_wait_after_sleep_out,
-> >> +	.drain_charge = jh057n_drain_charge,
-> >>  };
-> >>
-> >>  static int xbd599_init_sequence(struct st7703 *ctx)
-> >> @@ -273,7 +291,6 @@ static int xbd599_init_sequence(struct st7703 *ctx)
-> >>  	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETBGP,
-> >>  			       0x07, /* VREF_SEL = 4.2V */
-> >>  			       0x07  /* NVREF_SEL = 4.2V */);
-> >> -	msleep(20);
-> >>
-> >>  	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETVCOM,
-> >>  			       0x2C, /* VCOMDC_F = -0.67V */
-> >> @@ -315,6 +332,18 @@ static int xbd599_init_sequence(struct st7703 *ctx)
-> >>  	return 0;
-> >>  }
-> >>
-> >> +static void xbd599_wait_after_sleep_out(void)
-> >> +{
-> >> +	msleep(120);
-> >> +}
-> >> +
-> >> +static void xbd599_drain_charge(void)
-> >> +{
-> >> +	/* Drain diplay of charge, to work correctly on next power on. */
-> >> +	msleep(120);
-> >> +}
-> >> +
-> >> +
-> >>  static const struct drm_display_mode xbd599_mode = {
-> >>  	.hdisplay    = 720,
-> >>  	.hsync_start = 720 + 40,
-> >> @@ -336,6 +365,8 @@ static const struct st7703_panel_desc xbd599_desc = {
-> >>  	.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULSE,
-> >>  	.format = MIPI_DSI_FMT_RGB888,
-> >>  	.init_sequence = xbd599_init_sequence,
-> >> +	.wait_after_sleep_out = xbd599_wait_after_sleep_out,
-> >> +	.drain_charge = xbd599_drain_charge,
-> >>  };
-> >>
-> >>  static int st7703_enable(struct drm_panel *panel)
-> >> @@ -350,16 +381,13 @@ static int st7703_enable(struct drm_panel *panel)
-> >>  		return ret;
-> >>  	}
-> >>
-> >> -	msleep(20);
-> >> -
-> >>  	ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
-> >>  	if (ret < 0) {
-> >>  		dev_err(ctx->dev, “Failed to exit sleep mode: %d\n”, ret);
-> >>  		return ret;
-> >>  	}
-> >>
-> >> -	/* Panel is operational 120 msec after reset */
-> >> -	msleep(60);
-> >> +	ctx->desc->wait_after_sleep_out();
-> >>
-> >>  	ret = mipi_dsi_dcs_set_display_on(dsi);
-> >>  	if (ret)
-> >> @@ -384,6 +412,8 @@ static int st7703_disable(struct drm_panel *panel)
-> >>  	if (ret < 0)
-> >>  		dev_err(ctx->dev, “Failed to enter sleep mode: %d\n”, ret);
-> >>
-> >> +	ctx->desc->drain_charge();
-> >> +
-> >>  	return 0;
-> >>  }
-> >>
-> >> –
-> >> 2.39.1
-> >>
-
+-- 
+NULL && (void)
