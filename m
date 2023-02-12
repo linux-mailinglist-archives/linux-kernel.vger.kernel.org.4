@@ -2,117 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2873B693852
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 17:11:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E778B69385C
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 17:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjBLQLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 11:11:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33794 "EHLO
+        id S229705AbjBLQN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 11:13:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBLQLX (ORCPT
+        with ESMTP id S229477AbjBLQNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 11:11:23 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C92DE057;
-        Sun, 12 Feb 2023 08:11:21 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31CFuDg2013216;
-        Sun, 12 Feb 2023 16:11:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=kNfy5wQpkTtMURp5286Q1lemGeJhipGcema3XxTJtTM=;
- b=SdTH73ESKze4zGF28B1YpZVicy6PJ3NIgPySNZmz8rourvujkOzBpRuIJAj9WMtEkLcf
- ZmSlCbKFHmU1U4y/NlpME/HXzDHnXHDTZ8M0qfr9LIumpRJYx+77fIIbZU0rWd+jP2S9
- KnqebHl9N/cwKvpQapbA2XPCCdjBjQJLW2n140D/mSZ10pQRcL/UsnYLfVSgEV3xIB5J
- Ynovg5mRcG6YHcNp8uv5qodOcUc3hrvW8vHcmF+d9R0cF1Ni7di92LhPqyG6HAla+NrA
- tuIfNvzvD8CAJsbjuSdY4YnUejyvKZBt1xsMCYe7FMF8PSchBHD+53tPgfVNEQOSs6uZ 4w== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np21ftc9w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 12 Feb 2023 16:11:11 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31CGBA0e017390
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 12 Feb 2023 16:11:10 GMT
-Received: from [10.216.50.155] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 12 Feb
- 2023 08:11:07 -0800
-Message-ID: <73474906-8376-9328-16c2-370a87477c6a@quicinc.com>
-Date:   Sun, 12 Feb 2023 21:41:04 +0530
+        Sun, 12 Feb 2023 11:13:23 -0500
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C060111E81;
+        Sun, 12 Feb 2023 08:13:22 -0800 (PST)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-16ab8581837so12596940fac.4;
+        Sun, 12 Feb 2023 08:13:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m9JNrWha4YKLX9rD9uaO4Le+Z0yMwIJejyvjLhFB0mM=;
+        b=RPfdfqoXr1Cw8prltm7TREoupX5eaNpNd+CDIlDXf9L709PnPoKQLyqZ+zboWylzWR
+         vxu85Zr3W8llfd+943ctWIFMuj/eUOowqYJKaVeMEAuOZh7DSd87i28bvDxNAQ6PoOwC
+         wXW2mjy0Nv7rWdLT7K6lR96N0WQft3GWf2KAFrqyzdPjhTZH7LFIYRkc0u2koR60TrCD
+         1hpxf+WoKXg0JbOE+h0e0CkhGndeecaH5fbwJ/zhVif01anzu3CRcpBwMXBGR6L77UGt
+         T0ZqZhaH9160JyrIQvfc6bBDGV0wnlmjvzDTuOmCpyHfThC29vCqk4lTBNsczBdn8qUd
+         qBXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m9JNrWha4YKLX9rD9uaO4Le+Z0yMwIJejyvjLhFB0mM=;
+        b=pgVrLQ0TtL6Y1aeMbU/cj5pgmiN3b9wgXaXsWtBGoWPC8Hv00vm4ikwrFK5VvWH5Mc
+         CYKn2xP0M4IrvO/4nKMUSmmyn+4CkpzZ1ahPkKQAgieSKT3hgkbrg0EBj9+T+bmi/FSg
+         h+p4Ko1zU+a/kw3GtiF/mId8mgFipikeRTREJ3cpXkiysNAbswcr1EB5zE9ZrUHWHylt
+         p8jYzr/a0yiChnltVFK+uDZ50zzqrujMqGkWuCCTADsgcqLhLCiZLCMkHRlusTy/MXf1
+         xqlrVqKqEdPM7xtWK+SsppGCNZ8JXvd/9gwNqxxNvWmCs9R7qb3rzpu1EP8PTtTKm4p9
+         DdYw==
+X-Gm-Message-State: AO0yUKXYSK0FMa6uiD5G2zZ+pWI1Cfs+D7vrmet9sEQ6CFUXT5oZR2JQ
+        Z37vCKKmWW8wijDTf1nd5GA=
+X-Google-Smtp-Source: AK7set9kfP8sfCh4EsN95J/ZdmLAzZQPNePNkWSy8sPECM/cP6PHARZOJXcrMxdY1LlBw1JK0pRDxg==
+X-Received: by 2002:a05:6870:b48d:b0:16d:ec6a:71ec with SMTP id y13-20020a056870b48d00b0016dec6a71ecmr2441541oap.27.1676218402068;
+        Sun, 12 Feb 2023 08:13:22 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n2-20020a056870844200b0010c727a3c79sm3225235oak.26.2023.02.12.08.13.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Feb 2023 08:13:21 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 12 Feb 2023 08:13:20 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rich Felker <dalias@libc.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vineet Gupta <vgupta@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH v2 4/4] mm, arch: add generic implementation of
+ pfn_valid() for FLATMEM
+Message-ID: <20230212161320.GA3784076@roeck-us.net>
+References: <20230129124235.209895-1-rppt@kernel.org>
+ <20230129124235.209895-5-rppt@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] remoteproc: qcom: fix sparse warnings
-Content-Language: en-US
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <mathieu.poirier@linaro.org>, <konrad.dybcio@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1675180866-16695-1-git-send-email-quic_mojha@quicinc.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <1675180866-16695-1-git-send-email-quic_mojha@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: WQXkNJfG5GrisyZVmNMJZfMHAJahg4WG
-X-Proofpoint-ORIG-GUID: WQXkNJfG5GrisyZVmNMJZfMHAJahg4WG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-12_06,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- priorityscore=1501 bulkscore=0 impostorscore=0 malwarescore=0 mlxscore=0
- adultscore=0 spamscore=0 mlxlogscore=831 lowpriorityscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302120145
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230129124235.209895-5-rppt@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Friendly reminder.
+On Sun, Jan 29, 2023 at 02:42:35PM +0200, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> 
+> Every architecture that supports FLATMEM memory model defines its own
+> version of pfn_valid() that essentially compares a pfn to max_mapnr.
+> 
+> Use mips/powerpc version implemented as static inline as a generic
+> implementation of pfn_valid() and drop its per-architecture definitions.
+> 
 
--Mukesh
+With this patch in the tree, sh4 and sh4eb qemu emulations no longer boot.
+Reverting this patch fixes the problem.
 
-On 1/31/2023 9:31 PM, Mukesh Ojha wrote:
-> This patch try to address below sparse warnings.
-> 
-> drivers/remoteproc/qcom_common.c:126:27: warning: restricted __le32 degrades to integer
-> drivers/remoteproc/qcom_common.c:133:32: warning: cast to restricted __le32
-> drivers/remoteproc/qcom_common.c:133:32: warning: cast from restricted __le64
-> 
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> ---
->   drivers/remoteproc/qcom_common.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/qcom_common.c b/drivers/remoteproc/qcom_common.c
-> index 020349f..7133c1f 100644
-> --- a/drivers/remoteproc/qcom_common.c
-> +++ b/drivers/remoteproc/qcom_common.c
-> @@ -123,14 +123,14 @@ static int qcom_add_minidump_segments(struct rproc *rproc, struct minidump_subsy
->   
->   	for (i = 0; i < seg_cnt; i++) {
->   		memcpy_fromio(&region, ptr + i, sizeof(region));
-> -		if (region.valid == MD_REGION_VALID) {
-> +		if (le32_to_cpu(region.valid) == MD_REGION_VALID) {
->   			name = kstrdup(region.name, GFP_KERNEL);
->   			if (!name) {
->   				iounmap(ptr);
->   				return -ENOMEM;
->   			}
->   			da = le64_to_cpu(region.address);
-> -			size = le32_to_cpu(region.size);
-> +			size = le64_to_cpu(region.size);
->   			rproc_coredump_add_custom_segment(rproc, da, size, NULL, name);
->   		}
->   	}
+Guenter
+
+---
+# bad: [6ba8a227fd19d19779005fb66ad7562608e1df83] Add linux-next specific files for 20230210
+# good: [4ec5183ec48656cec489c49f989c508b68b518e3] Linux 6.2-rc7
+git bisect start 'HEAD' 'v6.2-rc7'
+# good: [94613f0efc69ed41f9229ef5c294db3ec37145da] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
+git bisect good 94613f0efc69ed41f9229ef5c294db3ec37145da
+# good: [19e62c715fe70dae4582c2874ed3e66715d09af6] Merge branch 'rcu/next' of git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+git bisect good 19e62c715fe70dae4582c2874ed3e66715d09af6
+# good: [5d8b7ecef7f4a681b6e5538db59ff26c389c0ab6] Merge branch 'for-next' of https://gitlab.com/peda-linux/mux.git
+git bisect good 5d8b7ecef7f4a681b6e5538db59ff26c389c0ab6
+# good: [c349bf6ec83903b20fe570c5609b9a864a64e09c] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/krisman/unicode.git
+git bisect good c349bf6ec83903b20fe570c5609b9a864a64e09c
+# good: [5a06a9f17454df38f35672be522ff5eb9b4277d2] selftest: add testing unsharing and counting ksm zero page
+git bisect good 5a06a9f17454df38f35672be522ff5eb9b4277d2
+# bad: [f5d115a7b06e5661ed5218ffa9a2644c4ff1c135] Merge branch 'mm-nonmm-unstable' into mm-everything
+git bisect bad f5d115a7b06e5661ed5218ffa9a2644c4ff1c135
+# bad: [acb018d6ea0c055381fba7dddaef386ee28f8075] mm/vmalloc.c: allow vread() to read out vm_map_ram areas
+git bisect bad acb018d6ea0c055381fba7dddaef386ee28f8075
+# good: [1a5d9782ac969dc6e61c6786500b5160603188ea] mm/mmap: remove __vma_adjust()
+git bisect good 1a5d9782ac969dc6e61c6786500b5160603188ea
+# good: [4b32363697de957dcc890b6245bec3f58903639a] arm: include asm-generic/memory_model.h from page.h rather than memory.h
+git bisect good 4b32363697de957dcc890b6245bec3f58903639a
+# bad: [328cf3fa6682ce6a4de6f8bb8009c833dc33f3c8] mm/migrate: convert isolate_movable_page() to use folios
+git bisect bad 328cf3fa6682ce6a4de6f8bb8009c833dc33f3c8
+# bad: [b704c765b08cabe82adf76a4d1a74f3688eee410] mm/mempolicy: convert queue_pages_pmd() to queue_folios_pmd()
+git bisect bad b704c765b08cabe82adf76a4d1a74f3688eee410
+# bad: [e5734c8b0edfd2a053a5c256189586a3b1e9f63d] mm, arch: add generic implementation of pfn_valid() for FLATMEM
+git bisect bad e5734c8b0edfd2a053a5c256189586a3b1e9f63d
+# good: [ad8aecea034c591b9754bc5908da9719853aa7fa] mips: drop definition of pfn_valid() for DISCONTIGMEM
+git bisect good ad8aecea034c591b9754bc5908da9719853aa7fa
+# first bad commit: [e5734c8b0edfd2a053a5c256189586a3b1e9f63d] mm, arch: add generic implementation of pfn_valid() for FLATMEM
