@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D99F8693A50
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 22:53:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90BB6693A63
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 23:05:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjBLVxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 16:53:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
+        id S229581AbjBLWE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 17:04:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjBLVxF (ORCPT
+        with ESMTP id S229710AbjBLWEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 16:53:05 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEB5EFB0
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 13:53:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1676238768; bh=KhlXxGweVh+Ir5PG88PTEmiZLUcrwXaCiezH0mbqr0U=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=FjHfJmu9HRghHNWByh31Rn7pdpolVWQKRyjNfKuZK0FzuM2QVj4z1FUcvPyrbdOCv
-         ijTJx2cHJbBbYxedycnGYMstpQgQ3vuvwe7bFQGwPhdRRnZalRsK0GZAjqdm3z1usW
-         xzlmEUPf0A/Ga5MzrX8xEe0+pfpY4tGU4N2q7vG1aoJMHAZthtdjShqNoV9NUGZNtt
-         l9d2WgunVdWxIJm5n4UXhh9Nm6kU0bZpKVQ68VsC5R75tPq8JtwAXJx7LZQWoVpipm
-         P+bh5s+8HOBv+RkKfUc5O3zS8MPdPsCapBlIPjgLZKu7tHR8VGLvf2r1OjMLVLH08T
-         80KqZFyIimwpQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MiJVG-1oyI7V3Qog-00fWHx; Sun, 12
- Feb 2023 22:52:47 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     openbmc@lists.ozlabs.org
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Joel Stanley <joel@jms.id.au>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] soc: nuvoton: Fix Kconfig
-Date:   Sun, 12 Feb 2023 22:52:31 +0100
-Message-Id: <20230212215234.2608565-1-j.neuschaefer@gmx.net>
+        Sun, 12 Feb 2023 17:04:53 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1196E060
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 14:04:47 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id bu23so10378513wrb.8
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 14:04:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=u22a5v5o3jT0vNW8efPv3ynkn8H76zJKW0PLjbBhfLs=;
+        b=TzLVsDZBWBgb/SR3CX3JayNjW1U06W79VeSnMIFsPH0eWxogdISC3Mpghp1v1+i87X
+         Npp5GUACoxWT7rF4VLjehzsMqMQQK2+qJjMsvXQ4ZJSBNfTz5FdAr9XBx8fHcWeQ4cpZ
+         j7M23j2dE6JWmfm6Y86xS2TaWJvLz2TM2c03fVdCmPU7VaDSCY1lmNI1uOhkaBJehF6x
+         gkOeTmLKBDbmm4GFbmQKBb3En7k+zPjPADfU4d59GNXSOn6X/E9jiWrLJ7TUi8gIDJt8
+         ZwiDjDSdzXBQ4wgr+u88Loy5tglL+vMagPCrcrkukosXEfKtzpE1t1b5JtMmvpfaxmTA
+         P77A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u22a5v5o3jT0vNW8efPv3ynkn8H76zJKW0PLjbBhfLs=;
+        b=VDKhmDtyn4K3ppryvtNRUDOOXgb2x4W01vsMFiAoVrlA4LE5NvwYTH/dIwrzYc2ZB4
+         KKGnezfHSWblPgqmsNvxMJJPrdqYxfGCdn+Uq61eMn6bAdZNNknC81MQE1SbqW2vmT5q
+         J/g3RnMGZeky43/UjDM0xqxLUieAh3NXP4Z3BR8UgqW1sY/ALj/hYOBFi1e3i9SlV11v
+         XRbbDUfumn3WLmKfQQ/5z6CuvENrmq3JI1ftTEcVuKzEb2l+YYcjk5Mk9t5wnAe/fMU6
+         lwKAHo0ONaQzhe9qeC4vbAEc3g2RyqIfDHbzoJN6CHk9biMcDPivyuah0TN8YTOL4Vz2
+         IyNg==
+X-Gm-Message-State: AO0yUKVXATfr0Bh3cDOy7aI72YB8mD8c3qf0535qnjEGeMbCIoXcreoF
+        2nmC6JEOc1a2hNcpj3mJGGY8ZYLqXkrKKQ==
+X-Google-Smtp-Source: AK7set/9uoYp9n6DS7AV7tmAltFizY4S7pg3bgjl6MoqSudoKgLQsOVvetPiJ8T+c1VzWjO/Nk6oOg==
+X-Received: by 2002:a5d:6e8d:0:b0:2c5:4c5e:412b with SMTP id k13-20020a5d6e8d000000b002c54c5e412bmr5784788wrz.23.1676239485959;
+        Sun, 12 Feb 2023 14:04:45 -0800 (PST)
+Received: from localhost ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
+        by smtp.gmail.com with UTF8SMTPSA id i4-20020a05600011c400b002c556f36116sm1882361wrx.66.2023.02.12.14.04.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Feb 2023 14:04:45 -0800 (PST)
+From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH] driver: core: Prevent NULL pointer dereference in device name functions
+Date:   Sun, 12 Feb 2023 23:04:41 +0100
+Message-Id: <20230212220441.258258-1-alexander.sverdlin@gmail.com>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:e4yzc1meWECvQDbL1MGCjl5SLxQELkgTkQl50KXSTujchjAMPGE
- K1/3TWYIEA3V4Gt3xrdLB1LMTbeiGlVWvimEeOWRQBztopsq3P57N93DHnnRRNPDECQhvWd
- dOAIIWZSp22EBRavrovtdDuq2GrA6fTlUUIzE83I+qkFZCbfNKVhqqBf4JD8PuV453sTuDe
- OKVrz2tTCTkt4Gb2jOaOQ==
-UI-OutboundReport: notjunk:1;M01:P0:tzuN0GfOMi0=;GHXMDF8kjktfW+NYRAfeP2e+aMT
- fKcgjj/hr3ATI5rQwt0zzh9eW5ffuaV6LzgJOXyrr+U783H7W9gjt0CyVHhV/NOjYJrauSQuV
- zFh+3JgQ+i7s7ZY8Smvs5THXQRt6btkolTRz9orkEnscwmcFaDtwZxp1e5IY2xhl96gzBcYuX
- /KGeOjXOWeQ9U4BBnJaTPIJsn3JA2k/zUi0f68VQiGHv27qecXjAXCeEPQQ0EjN43Yj0TTtHk
- t8F8rwuXV7CQHzZGp3q6G7eM76f9QQ35SLC3187Tu31mME+/3v8OD2tVS+MW+Idseb2ZPOCJz
- AY0uz3DYAHvauuk8JrzTXyQKFwgYGPt4ipCqTaTh44CJ7Fjhj8eN23hwNpN5R2eYCU/R6SvaH
- dzXNJZUGcMkxXw+/wPAaM36g/bruNhkAM4JoQi/pEpJ89OXv16niahC87iKFrFPWZL+rsr08y
- jbrEZhg58gAktW9HQloZq/qyQEZkRFKnyNpaLiunuEcbNg8s55X2TBt5J+dAC76uJ3T5+VqXV
- xIlSnFkkVe9mw5LsxPTuaBvzbHQr9bsUagiYsH9gE4J2BxhuXJUAMAvrEKcY9hM+b4DM1JkL3
- kEhvTq3WIrOZcHfPkWm+KZp109ZkM5dndmIS4Uz6iOX7s5VsxkzSHwggnAQuRMShaEJDedoNY
- W9MS92f1Lwv0/gtGDo5gxaNfz1EDGQSjStXMYWI8dF6H5HUUA2dLlY6X1FCPRkZfkCiMtZcmH
- vTp6SVABiovUDaQMHfUNpMOcOuoj5sNdIVlmWHL0iTX4lRHWpZQvSMfdSkL5zO8yVxJ4dJ3Sg
- aTQynOm9+UHD5NCHrIDnATljFtHmwGJQc6hF370Rjc4tZfLRO1QhiCrYP6ErdWxsYbr4xGEGT
- TavntpTT5DsdBRBZcOBYSgs6UThRLCTBn7p8Bu5jY/H8jGr91jbiuqaC9DAAYLF0OOSDdbxgk
- Pypjtnn3C8K4nULlFmmu2cMEEi0=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,55 +70,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unfortunately, version 5 of the Nuvoton WPCM450 SoC driver was applied
-to bmc.git, which misses a few fixes that were in version 6.
+Prevent similar scenarios:
 
-This patch adds the missing fixes:
+Unable to handle kernel NULL pointer dereference at virtual address 00000038
+...
+PC is at dev_driver_string+0x0/0x38
 
- - Add a menu "Nuvoton SoC drivers" to make it easier to add other
-   Nuvoton SoC drivers later on and to prevent asking about the Nuvoton
-   WPCM450 SoC driver when configuring a kernel without support for
-   Nuvoton SoCs.
- - Select CONFIG_REGMAP from CONFIG_WPCM450_SOC, because the driver
-   relies on regmap to work.
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+---
+ drivers/base/core.c    | 3 +++
+ include/linux/device.h | 5 +++++
+ 2 files changed, 8 insertions(+)
 
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Link: https://lore.kernel.org/lkml/CAMuHMdWo5vHCeE6BeSHrUy12uT7_wFhW-VbQmQ=
-5u+4Q8c7-wYQ@mail.gmail.com/
-Fixes: 77b8c67b5637 ("soc: nuvoton: Add SoC info driver for WPCM450")
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
-
-v2:
-- Commit message improvements, as suggested by Geert Uytterhoeven.
-- Add Link after Reviewed-by, as checkpatch.pl now suggests
-=2D--
- drivers/soc/nuvoton/Kconfig | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/soc/nuvoton/Kconfig b/drivers/soc/nuvoton/Kconfig
-index df46182088ec2..2167d3d739d84 100644
-=2D-- a/drivers/soc/nuvoton/Kconfig
-+++ b/drivers/soc/nuvoton/Kconfig
-@@ -1,11 +1,17 @@
- # SPDX-License-Identifier: GPL-2.0
--menuconfig WPCM450_SOC
-+menu "Nuvoton SoC drivers"
-+	depends on ARCH_NPCM || COMPILE_TEST
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index a3e14143ec0c..4ff2ddea7c9b 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2174,6 +2174,9 @@ const char *dev_driver_string(const struct device *dev)
+ {
+ 	struct device_driver *drv;
+ 
++	if (!dev)
++		return "<null>";
 +
-+config WPCM450_SOC
- 	tristate "Nuvoton WPCM450 SoC driver"
- 	default y if ARCH_WPCM450
- 	select SOC_BUS
-+	select REGMAP
- 	help
- 	  Say Y here to compile the SoC information driver for Nuvoton
- 	  WPCM450 SoCs.
-
- 	  This driver provides information such as the SoC model and
- 	  revision.
+ 	/* dev->driver can change to NULL underneath us because of unbinding,
+ 	 * so be careful about accessing it.  dev->bus and dev->class should
+ 	 * never change once they are set, so they don't need special care.
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 44e3acae7b36..ff9e19e6d78c 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -696,6 +696,9 @@ static inline bool device_iommu_mapped(struct device *dev)
+ 
+ static inline const char *dev_name(const struct device *dev)
+ {
++	if (!dev)
++		return "<null>";
 +
-+endmenu
-=2D-
+ 	/* Use the init name until the kobject becomes available */
+ 	if (dev->init_name)
+ 		return dev->init_name;
+@@ -712,6 +715,8 @@ static inline const char *dev_name(const struct device *dev)
+  */
+ static inline const char *dev_bus_name(const struct device *dev)
+ {
++	if (!dev)
++		return "<null>";
+ 	return dev->bus ? dev->bus->name : (dev->class ? dev->class->name : "");
+ }
+ 
+-- 
 2.39.1
 
