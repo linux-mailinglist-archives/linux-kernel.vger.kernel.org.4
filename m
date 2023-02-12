@@ -2,164 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2486935C8
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 04:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9FE6935D9
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 04:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbjBLDOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 22:14:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45018 "EHLO
+        id S229552AbjBLDf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 22:35:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjBLDN7 (ORCPT
+        with ESMTP id S229473AbjBLDf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 22:13:59 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80AC315C8A;
-        Sat, 11 Feb 2023 19:13:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676171638; x=1707707638;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=8Ee53bw0HTAKCWMxXPAJRBW6Y+YE/qZmXr9sA0iMSzM=;
-  b=nTUw4M66NTXzklVY0e9u965pPREEaq4R/zwK1rf5gCpdWQMzG2HdsDCU
-   6GezG+wPjra26EHS2ckJRzBmsUG01clclvPGt8k5QmSkjaTTl+ogZv5m5
-   DOsvEPyT/9ACmmRVgCsBcyQxP6CZ3NpUnIlcg8TDy0iZrl8j1K0gTzMQ1
-   ryLp9c6bk2ocaWRISpjwU9ObhJcP0nUubtHSqK+d9+Qe7PAO+Ui4BMZsD
-   GS79gAnxVCskp1SjM3Axa+cMj8FZtL7m9fnuGAGHOIm6JcFVILidsI5/P
-   aujrpTvVA2wk4coiRefhAliRGQlr8uLrzP8II74Oyt8kpH3VzZytWHMfv
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="332824343"
-X-IronPort-AV: E=Sophos;i="5.97,290,1669104000"; 
-   d="scan'208";a="332824343"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2023 19:13:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="842406476"
-X-IronPort-AV: E=Sophos;i="5.97,290,1669104000"; 
-   d="scan'208";a="842406476"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga005.jf.intel.com with ESMTP; 11 Feb 2023 19:13:56 -0800
-Date:   Sat, 11 Feb 2023 19:23:45 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        rafael.j.wysocki@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Guillaume La Roque <glaroque@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        "open list:THERMAL DRIVER FOR AMLOGIC SOCS" 
-        <linux-amlogic@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "open list:SAMSUNG THERMAL DRIVER" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "moderated list:ARM/STM32 ARCHITECTURE" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH] thermal: Remove core header inclusion from drivers
-Message-ID: <20230212032345.GA17062@ranerica-svr.sc.intel.com>
-References: <20230206153432.1017282-1-daniel.lezcano@linaro.org>
- <20230211021023.GA13306@ranerica-svr.sc.intel.com>
- <9a121d43-b6d9-fe99-1e4c-498dac2e6b17@linaro.org>
- <258dedb542d4dcb73e9ec903d205ba64639c9f0a.camel@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <258dedb542d4dcb73e9ec903d205ba64639c9f0a.camel@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 11 Feb 2023 22:35:58 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D070214EA9
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 19:35:56 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id j9so6411853qvt.0
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 19:35:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y/qH6i65wbwYMWKkSUGs3ut6x3jSZ12DHRH6t670lp8=;
+        b=hCejaD+8ZOvRc26yk9fa4xQjZArmepS8a/Epauf5WcDpJwNw3VyOwDkWRR5a9e47S0
+         mvfjat+pRsBUXfc4YuLVUd2ZvdWpt0Zia4WtQSo0f4/8oXY0Tju7LNbbjKxNi2XMLoc3
+         xktqhXuoLmIRLuB47u5svoI2rJAxCN3bF+dFE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y/qH6i65wbwYMWKkSUGs3ut6x3jSZ12DHRH6t670lp8=;
+        b=Y1LWo4llYuueJUGm79U8XdRBnRA+X9tlt5p/zi32ERricQshsYaqfN6h1TAS1lbozc
+         zS7BK70Ic8wDkG/WV1N23Zc05KeybVJzZNeKPqn3zXSwi0gsjaP18KlCob2koErkfSPA
+         bQgSQ/fmkq5ePzn+spJmrcUVHvLFRr/XIrnyDmNQiB3ShrSXWvliOO8ivms7JnRl9mZu
+         2GSawXgebqw9xGCN5BMkEdxo3xvhDwvag5QNi0FXUPF/5SoEIqOg3a6lIA1JIZjPwYsn
+         8F/nYNPfkHIaIaHQEgrtMW/LyyMWqqsaF1Tsmsi36TXiBHVb7gJjf44cfvg0gY/U1887
+         XPuw==
+X-Gm-Message-State: AO0yUKU7bAoPSDkaV6avooHi/w3jazaFO4qHI4h9wC9WwlAPd+PNGEZ3
+        U35XuowawqfN6/u0gbPcf3wBxg==
+X-Google-Smtp-Source: AK7set8FxOwS2mxztBcIBPmwz4J8siwg4oixkjjVzYbLDpJMmdhkBIfpOxJ/lO2EWgO+mSF1kCkh9w==
+X-Received: by 2002:a05:6214:260f:b0:56b:fe6a:df87 with SMTP id gu15-20020a056214260f00b0056bfe6adf87mr39357522qvb.52.1676172955896;
+        Sat, 11 Feb 2023 19:35:55 -0800 (PST)
+Received: from smtpclient.apple ([2600:1003:b84a:b7b1:f9b7:db29:7194:1610])
+        by smtp.gmail.com with ESMTPSA id t3-20020a379103000000b0070617deb4b7sm6830212qkd.134.2023.02.11.19.35.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Feb 2023 19:35:54 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: Current LKMM patch disposition
+Date:   Sat, 11 Feb 2023 22:35:44 -0500
+Message-Id: <478E76E6-8DA4-4F55-B789-8D8DE0FE6621@joelfernandes.org>
+References: <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com
+In-Reply-To: <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
+To:     Alan Stern <stern@rowland.harvard.edu>
+X-Mailer: iPhone Mail (20B101)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 11, 2023 at 08:32:48AM -0800, srinivas pandruvada wrote:
-> On Sat, 2023-02-11 at 08:53 +0100, Daniel Lezcano wrote:
-> > On 11/02/2023 03:10, Ricardo Neri wrote:
-> > > On Mon, Feb 06, 2023 at 04:34:29PM +0100, Daniel Lezcano wrote:
-> > > > As the name states "thermal_core.h" is the header file for the
-> > > > core
-> > > > components of the thermal framework.
-> > > > 
-> > > > Too many drivers are including it. Hopefully the recent cleanups
-> > > > helped to self encapsulate the code a bit more and prevented the
-> > > > drivers to need this header.
-> > > > 
-> > > > Remove this inclusion in every place where it is possible.
-> > > > 
-> > > > Some other drivers did a confusion with the core header and the
-> > > > one
-> > > > exported in linux/thermal.h. They include the former instead of
-> > > > the
-> > > > latter. The changes also fix this.
-> > > > 
-> > > > The tegra/soctherm driver still remains as it uses an internal
-> > > > function which need to be replaced.
-> > > > 
-> > > > The Intel HFI driver uses the netlink internal framework core and
-> > > > should be changed to prevent to deal with the internals.
-> > > 
-> > > I don't see any of the thermal netlink functionality exposed. Is
-> > > there any work in progress?
-> > 
-> > commit bd30cdfd9bd73b68e4977ce7c5540aa7b14c25cd
-> > Author: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > 
-> >      thermal: intel: hfi: Notify user space for HFI events
-> > 
-> This is already exposed and we use it in user space.
-> thermal_genl_cpu_capability_event() is called from intel_hfi driver to
-> send the cpu capabilities.
-> 
-> Not sure what do you mean by  "don't see netlink functionality
-> exposed"?
-> 
-> thermal_genl_cpu_caps struct and thermal_genl_cpu_capability_event()
-> are defined in drivers/thermal/thermal_netlink.h.
 
-Yes, I mean exactly this. The HFI code uses this functionality, but it is
-declared in "../thermal_netlink.h". I just wondered if that is OK or also
-needs to be declared somewhere in include/linux/
 
-Thanks and BR,
-Ricardo
+> On Feb 11, 2023, at 9:59 PM, Alan Stern <stern@rowland.harvard.edu> wrote:=
+
+>=20
+> =EF=BB=BFOn Sat, Feb 11, 2023 at 07:30:32PM -0500, Joel Fernandes wrote:
+>>> On Sat, Feb 11, 2023 at 3:19 PM Alan Stern <stern@rowland.harvard.edu> w=
+rote:
+>>> The idea is that the value returned by srcu_read_lock() can be stored to=
+
+>>> and loaded from a sequence (possibly of length 0) of variables, and the
+>>> final load gets fed to srcu_read_unlock().  That's what the original
+>>> version of the code expresses.
+>>=20
+>> Now I understand it somewhat, and I see where I went wrong. Basically,
+>> you were trying to sequence zero or one "data + rf sequence" starting
+>> from lock and unlock with a final "data" sequence. That data sequence
+>> can be between the srcu-lock and srcu-unlock itself, in case where the
+>> lock/unlock happened on the same CPU.
+>=20
+> In which case the sequence has length 0.  Exactly right.
+
+Got it.
+
+>=20
+>> Damn, that's really complicated.. and I still don't fully understand it.
+>=20
+> It sounds like you've made an excellent start.  :-)
+
+Thanks. :-)
+
+>=20
+>> In trying to understand your CAT code, I made some assumptions about
+>> your formulas by reverse engineering the CAT code with the tests,
+>> which is kind of my point that it is extremely hard to read CAT. That
+>=20
+> I can't argue against that; it _is_ hard.  It helps to have had the=20
+> right kind of training beforehand (my degree was in mathematical logic).
+
+Got it, I am reviewing the academic material on these as well.
+
+>> is kind of why I want to understand the CAT, because for me
+>> explanation.txt is too much at a higher level to get a proper
+>> understanding of the memory model.. I tried re-reading explanation.txt
+>> many times.. then I realized I am just rewriting my own condensed set
+>> of notes every few months.
+>=20
+> Would you like to post a few examples showing some of the most difficult=20=
+
+> points you encountered?  Maybe explanation.txt can be improved.
+
+Sure, I will share some things I faced difficult with, tomorrow or so. Off t=
+he top, cumulativity was certainly pretty hard to parse.
+
+>=20
+>>> I'm not sure that breaking this relation up into pieces will make it any=
+
+>>> easier to understand.
+>>=20
+>> Yes, but I tried. I will keep trying to understand your last patch
+>> more. Especially I am still not sure, why in the case of an SRCU
+>> reader on a single CPU, the following does not work:
+>> let srcu-rscs =3D ([Srcu-lock]; data; [Srcu-unlock]).
+>=20
+> You have to understand that herd7 does not track dependencies through=20
+> stores and subsequent loads.  That is, if you have something like:
+>=20
+>    r1 =3D READ_ONCE(*x);
+>    WRITE_ONCE(*y, r1);
+>    r2 =3D READ_ONCE(*y);
+>    WRITE_ONCE(*z, r2);
+>=20
+> then herd7 will realize that the write to y depends on the value read=20
+> from x, and it will realize that the write to z depends on the value=20
+> read from y.  But it will not realize that the write to z depends on the=20=
+
+> value read from x; it loses track of that dependency because of the=20
+> intervening store/load from y.
+>=20
+> More to the point, if you have:
+>=20
+>    r1 =3D srcu_read_lock(lock);
+>    WRITE_ONCE(*y, r1);
+>    r2 =3D READ_ONCE(*y);
+>    srcu_read_unlock(lock, r2);
+>=20
+> then herd7 will not realize that the value of r2 depends on the value of=20=
+
+> r1.  So there will be no data dependency from the srcu_read_lock() to=20
+> the srcu_read_unlock().
+
+Got it!  Now I understand why the intermediate load stores needs to be model=
+ed with your carry-srcu-data formula, even on the same CPU! Thank you so muc=
+h Alan!!
+
+Thanks,
+
+ - Joel
+
+>=20
+> Alan
