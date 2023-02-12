@@ -2,122 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF1769365C
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 08:17:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D799069365D
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 08:24:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjBLHRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 02:17:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
+        id S229589AbjBLHYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 02:24:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjBLHRr (ORCPT
+        with ESMTP id S229484AbjBLHYT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 02:17:47 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6523E12863;
-        Sat, 11 Feb 2023 23:17:46 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id q13so10727789qtx.2;
-        Sat, 11 Feb 2023 23:17:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dj/mjlSWyy8D7sem3Xq7H9aE4xWUXTvKfBZb3PK5eN0=;
-        b=N8yfPYPIYoEstZAgozDt6SoDUHuyMIh27W8p77E/12OLrkhMfJ6wyLfG56qJ018uiC
-         XgQzQALaU2C1a5vfY3cyLFdXUO9bmeO5+tbTJ30f1+s7NeCFMIAYJzuQwxECmvs3D/2H
-         RHihEz4SUH2nk3uFpqz9JyyqJS5O+FEhabBmXH0TfkwAnVv1cKLYU9zL9zexOYMudXna
-         iCyaNEc9n52n5A31S9WJIYbMMUR8KDCQu+en8FLt+6XC3SPSwUvoDdf+XIJGrkPCmVv+
-         gPlbxfH0tAwMZJOUQ57ncEgK2RbX9/B9eXtxbzLUUSlQTkIaqhFTF6H+a9ZywF/jHqKO
-         LB+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dj/mjlSWyy8D7sem3Xq7H9aE4xWUXTvKfBZb3PK5eN0=;
-        b=RYUXG2TIGBh1MJJMfyq3n148Lel5XRj+NR1A7GguGkYg9Ec3DFGyBtleaMao8R81Ze
-         9K4RySdY6RPDT2MgiuHQzYWaO+XInaqfeVHGybmFxiMcK1qfFKSxXnVYH6gJa/i7VBTN
-         xAbY9Cd8E2gH/ueMwQJIOtH+BFcrS4zTHaIcH7SIYLveTbz0Kx7aVwu6WGcxAQunzLDO
-         2pVNxtQIXpdmQP1SEH2WAHCQghav4l86Sz/Gx5pGJMdbdMeWS4jX5TSabHsM99aJKK/X
-         tGVuWLBJYEtvesKoxLSatAtBMCwv3NnKfnhUCBhF32haiBBhPB2X/c1g7OZ3Zk3STt2y
-         FT1g==
-X-Gm-Message-State: AO0yUKUJUeXOEPvGyB7/rwnnrHIzY2keV4OystQLOKYXaswEHJVqE8MS
-        a2D9pgyOA1cPieSzhSauiDn5A6JvPdVJBwkzaAs=
-X-Google-Smtp-Source: AK7set83jJ9617n0phsImWW5xRUrXIZ/J7J+kM9Exrj5K8eVgkyRKc57XiunBfV99SSLOwj4nE5x5qY7MtcaFcSsUgk=
-X-Received: by 2002:a05:622a:610:b0:3b9:a37e:3a23 with SMTP id
- z16-20020a05622a061000b003b9a37e3a23mr3093912qta.418.1676186265462; Sat, 11
- Feb 2023 23:17:45 -0800 (PST)
+        Sun, 12 Feb 2023 02:24:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578BB86AC
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 23:24:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D360F60B50
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 07:24:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82B89C433EF;
+        Sun, 12 Feb 2023 07:24:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676186657;
+        bh=Ain59IlHj5wVumV3N4HWxfl2sizYfntAUYp+Sn0DUUo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QjwKOKvIq3jOYDKWswWg1wyPrc38dt8x0kBSCgy90YvzDwUlOvA5kg4symLZO6csT
+         l/DQOYPIH9bZPEddx3bKNG2rUebwBbCV622LqJHVmvBXuiIrLvGJlOpvXZ5beOpSCm
+         /C9gJ58opIVc3D7D7DvS2MFWiSmyx8Bj4mq3GkDA=
+Date:   Sun, 12 Feb 2023 08:24:13 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Shreenidhi Shedi <yesshedi@gmail.com>
+Cc:     dhowells@redhat.com, dwmw2@infradead.org,
+        linux-kernel@vger.kernel.org, Shreenidhi Shedi <sshedi@vmware.com>
+Subject: Re: [PATCH 1/4] sign-file: refactor argument parsing logic
+Message-ID: <Y+iUHa5xjNnkd77h@kroah.com>
+References: <20230209160523.858502-1-sshedi@vmware.com>
+ <dc852d8e-816a-0fb2-f50e-ff6c2aa11dd8@gmail.com>
 MIME-Version: 1.0
-References: <20230203190413.2559707-1-nphamcs@gmail.com> <20230203190413.2559707-3-nphamcs@gmail.com>
- <834254e6-a9c2-440c-9c67-fc5fa5ca43bc@app.fastmail.com>
-In-Reply-To: <834254e6-a9c2-440c-9c67-fc5fa5ca43bc@app.fastmail.com>
-From:   Nhat Pham <nphamcs@gmail.com>
-Date:   Sat, 11 Feb 2023 23:17:34 -0800
-Message-ID: <CAKEwX=OCURhs77Rdz81m8xyOKER_FvmVGVAKdmSWMgG--jWkKA@mail.gmail.com>
-Subject: Re: [PATCH v9 2/3] cachestat: implement cachestat syscall
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, bfoster@redhat.com,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-api@vger.kernel.org, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dc852d8e-816a-0fb2-f50e-ff6c2aa11dd8@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 5, 2023 at 1:56 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, Feb 3, 2023, at 20:04, Nhat Pham wrote:
->
-> > +SYSCALL_DEFINE5(cachestat, unsigned int, fd, loff_t, off, size_t, len,
-> > +             struct cachestat __user *, cstat, unsigned int, flags)
-> > +{
-> > +     return ksys_cachestat(fd, off, len, cstat, flags);
-> > +}
-> > +
-> > +#ifdef CONFIG_COMPAT
-> > +COMPAT_SYSCALL_DEFINE6(cachestat, unsigned int, fd,
-> > compat_arg_u64_dual(off),
-> > +             size_t, len, struct cachestat __user *, cstat, unsigned int, flags)
-> > +{
-> > +     return ksys_cachestat(fd, compat_arg_u64_glue(off), len, cstat,
-> > flags);
-> > +}
->
-> This still looks wrong to me, as this compat definition does not match
-> the native variant on architectures that require 64-bit arguments to
-> be passed in aligned register pairs, such as arm, mips or ppc, but
-> not x86, s390 or riscv.
+On Sun, Feb 12, 2023 at 01:04:08AM +0530, Shreenidhi Shedi wrote:
+> On Thu, 9-Feb-2023 21:35, Shreenidhi Shedi wrote:
+> > Add support for bulk signing of modules.
+> > 
+> > Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
+> > ---
+> >   sign-file.c | 349 ++++++++++++++++++++++++++++++++++------------------
+> >   1 file changed, 228 insertions(+), 121 deletions(-)
+> > 
+> > diff --git a/sign-file.c b/sign-file.c
+> > index 598ef54..76fee75 100644
+> > --- a/sign-file.c
+> > +++ b/sign-file.c
 
-(looks like I sent the last email in the wrong format - resending this
-in plain text to see if the problem persists...)
+Hi,
 
-Oh I see - thanks for pointing that out! And the last bit means this
-is a non-issue for x86, s390 or riscv right?
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-And iirc from the last thread, this is fixable via a simple reordering
-of the args in order to properly align the 64-bit arguments, for e.g:
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-SYSCALL_DEFINE5(cachestat, loff_t, off, unsigned int, fd, size_t, len,
-              struct cachestat __user *, cstat, unsigned int, flags)
+- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
+  and can not be applied.  Please read the file,
+  Documentation/process/email-clients.rst in order to fix this.
 
-...
+- Your patch did many different things all at once, making it difficult
+  to review.  All Linux kernel patches need to only do one thing at a
+  time.  If you need to do multiple things (such as clean up all coding
+  style issues in a file/driver), do it in a sequence of patches, each
+  one doing only one thing.  This will make it easier to review the
+  patches to ensure that they are correct, and to help alleviate any
+  merge issues that larger patches can cause.
 
-COMPAT_SYSCALL_DEFINE6(cachestat, compat_arg_u64_dual(off),
-             unsigned int, fd, size_t, len, struct cachestat __user *, cstat,
-             unsigned int, flags)
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what is needed in
+  order to properly describe the change.
 
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what a proper
+  Subject: line should look like.
 
-It looks a bit odd to me that fd is not the first argument, but perhaps this
-is an acceptable sacrifice to avoid unused arg and keep the flags...
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
-Let me know what you think about this!
+thanks,
 
->
->      Arnd
+greg k-h's patch email bot
