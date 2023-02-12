@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90BB6693A63
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 23:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB90E693A67
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 23:09:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbjBLWE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 17:04:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
+        id S229581AbjBLWJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 17:09:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjBLWEx (ORCPT
+        with ESMTP id S229503AbjBLWJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 17:04:53 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1196E060
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 14:04:47 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id bu23so10378513wrb.8
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 14:04:47 -0800 (PST)
+        Sun, 12 Feb 2023 17:09:29 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A568E3A2
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 14:09:28 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id h16so10369508wrz.12
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 14:09:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=u22a5v5o3jT0vNW8efPv3ynkn8H76zJKW0PLjbBhfLs=;
-        b=TzLVsDZBWBgb/SR3CX3JayNjW1U06W79VeSnMIFsPH0eWxogdISC3Mpghp1v1+i87X
-         Npp5GUACoxWT7rF4VLjehzsMqMQQK2+qJjMsvXQ4ZJSBNfTz5FdAr9XBx8fHcWeQ4cpZ
-         j7M23j2dE6JWmfm6Y86xS2TaWJvLz2TM2c03fVdCmPU7VaDSCY1lmNI1uOhkaBJehF6x
-         gkOeTmLKBDbmm4GFbmQKBb3En7k+zPjPADfU4d59GNXSOn6X/E9jiWrLJ7TUi8gIDJt8
-         ZwiDjDSdzXBQ4wgr+u88Loy5tglL+vMagPCrcrkukosXEfKtzpE1t1b5JtMmvpfaxmTA
-         P77A==
+        bh=kuVlO+i53wZEGLDs4VE0wb6Kv/D3ZFKHSN/pP+HaO34=;
+        b=Ov1FWYDjx785BvnGLnfe21+sXW+hRB8YPgRx0lBOAxM3HvLd3PCaCAdmt1SWTo6cw2
+         SVXdIHtmwgVuc4oYieM8ZxfqmI4upcHxzXQ53eU21HwjVkhTckj8MQsnfQcfOly8lCZQ
+         fCBvGqkFRgBlanIJE+8f4loy2Gi5FYIZ+M4WhLTkQoc+Yi5G2U0mCwaW9ail4ovKPnX2
+         ICPhoe+aTxKO3SWH0T8qAUHxkDOvY3fHdsMfNTbPnNcldRdpMfKLGhkLrBcycIQ0Yt2c
+         7qW7/Btp0aDG91732Iiurlj6LVR6DVdggMB3bAPp2y8irrWGYwweI5aTcshQUCat+8gg
+         aaQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=u22a5v5o3jT0vNW8efPv3ynkn8H76zJKW0PLjbBhfLs=;
-        b=VDKhmDtyn4K3ppryvtNRUDOOXgb2x4W01vsMFiAoVrlA4LE5NvwYTH/dIwrzYc2ZB4
-         KKGnezfHSWblPgqmsNvxMJJPrdqYxfGCdn+Uq61eMn6bAdZNNknC81MQE1SbqW2vmT5q
-         J/g3RnMGZeky43/UjDM0xqxLUieAh3NXP4Z3BR8UgqW1sY/ALj/hYOBFi1e3i9SlV11v
-         XRbbDUfumn3WLmKfQQ/5z6CuvENrmq3JI1ftTEcVuKzEb2l+YYcjk5Mk9t5wnAe/fMU6
-         lwKAHo0ONaQzhe9qeC4vbAEc3g2RyqIfDHbzoJN6CHk9biMcDPivyuah0TN8YTOL4Vz2
-         IyNg==
-X-Gm-Message-State: AO0yUKVXATfr0Bh3cDOy7aI72YB8mD8c3qf0535qnjEGeMbCIoXcreoF
-        2nmC6JEOc1a2hNcpj3mJGGY8ZYLqXkrKKQ==
-X-Google-Smtp-Source: AK7set/9uoYp9n6DS7AV7tmAltFizY4S7pg3bgjl6MoqSudoKgLQsOVvetPiJ8T+c1VzWjO/Nk6oOg==
-X-Received: by 2002:a5d:6e8d:0:b0:2c5:4c5e:412b with SMTP id k13-20020a5d6e8d000000b002c54c5e412bmr5784788wrz.23.1676239485959;
-        Sun, 12 Feb 2023 14:04:45 -0800 (PST)
+        bh=kuVlO+i53wZEGLDs4VE0wb6Kv/D3ZFKHSN/pP+HaO34=;
+        b=svb0UxTAnSpMtHLHcEEmyW+YixNN92aqQ2sCMnJF+a771wG2vgsuSnsgufWCEvIF/D
+         uEBdILaf2SYzq+wnB9RPKXnZqvAGpJQvfiEocR813X8fK7YlyztJAXRySe475uF86tD/
+         XsKiJ+UKmmCgznTp3NtZf1w1aM7K6nPkNwatpxl0rbzuvAY22P8TKHtazL6ACF7b9sWY
+         QcfdJGZK4gAHb3WWRrmk1bHlzGcZhnneGZ5dXRmq3IkM5JW6KyGpa1gM1KVH5aNrzAFG
+         E5NcEhxyMIQZxXyU4axc6+MIcnS9r8nSjTc3HS3T+qYKsEBtRBLQsd2HIDlp6Ws3tLRJ
+         AXsw==
+X-Gm-Message-State: AO0yUKXdEGJsV9XiOlZ7qTQLWgdGRyBvV/B+3eyApIPfTklAuV41FFzZ
+        lqcVtp9C8z3q97YrLSeBk0pCQRX02Q4tyQ==
+X-Google-Smtp-Source: AK7set86lVK48ULoHmlJx2sYbsZZGgjWn80e7L94dMOFoAEZynWgx7pm6OhaL7b7E5RaGDx3sUFjrw==
+X-Received: by 2002:adf:dcd2:0:b0:2c5:5a68:958 with SMTP id x18-20020adfdcd2000000b002c55a680958mr251528wrm.33.1676239766773;
+        Sun, 12 Feb 2023 14:09:26 -0800 (PST)
 Received: from localhost ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with UTF8SMTPSA id i4-20020a05600011c400b002c556f36116sm1882361wrx.66.2023.02.12.14.04.45
+        by smtp.gmail.com with UTF8SMTPSA id k2-20020a5d6d42000000b002c4061a687bsm9148656wri.31.2023.02.12.14.09.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Feb 2023 14:04:45 -0800 (PST)
+        Sun, 12 Feb 2023 14:09:26 -0800 (PST)
 From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To:     linux-kernel@vger.kernel.org
+To:     alsa-devel@alsa-project.org
 Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH] driver: core: Prevent NULL pointer dereference in device name functions
-Date:   Sun, 12 Feb 2023 23:04:41 +0100
-Message-Id: <20230212220441.258258-1-alexander.sverdlin@gmail.com>
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: ep93xx: ignore 0 Hz sysclk
+Date:   Sun, 12 Feb 2023 23:09:23 +0100
+Message-Id: <20230212220923.258414-1-alexander.sverdlin@gmail.com>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -70,55 +72,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prevent similar scenarios:
+Commit 2458adb8f92a
+("SoC: simple-card-utils: set 0Hz to sysclk when shutdown")
+added a call to snd_soc_dai_set_sysclk() with 0 Hz frequency. Being
+propagated further it causes a division by zero in clk-ep93xx driver:
 
-Unable to handle kernel NULL pointer dereference at virtual address 00000038
-...
-PC is at dev_driver_string+0x0/0x38
+Division by zero in kernel.
+CPU: 0 PID: 52 Comm: aplay Tainted: G        W          6.2.0-rc4-... #1
+Hardware name: Generic DT based system
+ unwind_backtrace from show_stack+0x10/0x18
+ show_stack from dump_stack_lvl+0x28/0x34
+ dump_stack_lvl from __div0+0x10/0x1c
+ __div0 from Ldiv0+0x8/0x1c
+ Ldiv0 from ep93xx_mux_determine_rate+0x78/0x1d0
+ ep93xx_mux_determine_rate from clk_core_round_rate_nolock+0x48/0xc8
+ clk_core_round_rate_nolock from clk_core_set_rate_nolock+0x48/0x160
+ clk_core_set_rate_nolock from clk_set_rate+0x30/0x8c
+ clk_set_rate from ep93xx_i2s_set_sysclk+0x30/0x6c
+ ep93xx_i2s_set_sysclk from snd_soc_dai_set_sysclk+0x3c/0xa4
+ snd_soc_dai_set_sysclk from asoc_simple_shutdown+0xb8/0x164
+ asoc_simple_shutdown from snd_soc_link_shutdown+0x44/0x54
+ snd_soc_link_shutdown from soc_pcm_clean+0x78/0x180
+ soc_pcm_clean from soc_pcm_close+0x28/0x40
+ soc_pcm_close from snd_pcm_release_substream.part.0+0x3c/0x84
+ snd_pcm_release_substream.part.0 from snd_pcm_release+0x40/0x88
+ snd_pcm_release from __fput+0x74/0x278
+
+There has been commit f1879d7b98dc ("ASoC: rockchip: ignore 0Hz sysclk"),
+but it prepared by far not all drivers.
 
 Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 ---
- drivers/base/core.c    | 3 +++
- include/linux/device.h | 5 +++++
- 2 files changed, 8 insertions(+)
+ sound/soc/cirrus/ep93xx-i2s.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index a3e14143ec0c..4ff2ddea7c9b 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -2174,6 +2174,9 @@ const char *dev_driver_string(const struct device *dev)
- {
- 	struct device_driver *drv;
+diff --git a/sound/soc/cirrus/ep93xx-i2s.c b/sound/soc/cirrus/ep93xx-i2s.c
+index 982151330c89..f41712df7994 100644
+--- a/sound/soc/cirrus/ep93xx-i2s.c
++++ b/sound/soc/cirrus/ep93xx-i2s.c
+@@ -359,6 +359,8 @@ static int ep93xx_i2s_set_sysclk(struct snd_soc_dai *cpu_dai, int clk_id,
  
-+	if (!dev)
-+		return "<null>";
-+
- 	/* dev->driver can change to NULL underneath us because of unbinding,
- 	 * so be careful about accessing it.  dev->bus and dev->class should
- 	 * never change once they are set, so they don't need special care.
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 44e3acae7b36..ff9e19e6d78c 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -696,6 +696,9 @@ static inline bool device_iommu_mapped(struct device *dev)
+ 	if (dir == SND_SOC_CLOCK_IN || clk_id != 0)
+ 		return -EINVAL;
++	if (!freq)
++		return 0;
  
- static inline const char *dev_name(const struct device *dev)
- {
-+	if (!dev)
-+		return "<null>";
-+
- 	/* Use the init name until the kobject becomes available */
- 	if (dev->init_name)
- 		return dev->init_name;
-@@ -712,6 +715,8 @@ static inline const char *dev_name(const struct device *dev)
-  */
- static inline const char *dev_bus_name(const struct device *dev)
- {
-+	if (!dev)
-+		return "<null>";
- 	return dev->bus ? dev->bus->name : (dev->class ? dev->class->name : "");
+ 	return clk_set_rate(info->mclk, freq);
  }
- 
 -- 
 2.39.1
 
