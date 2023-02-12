@@ -2,94 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A67FA693A37
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 22:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97603693A39
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 22:14:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjBLVN3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 12 Feb 2023 16:13:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57774 "EHLO
+        id S229758AbjBLVOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 16:14:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjBLVN1 (ORCPT
+        with ESMTP id S229499AbjBLVO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 16:13:27 -0500
-Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E32D1043E;
-        Sun, 12 Feb 2023 13:13:24 -0800 (PST)
-Received: from omf16.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay08.hostedemail.com (Postfix) with ESMTP id 174AA140441;
-        Sun, 12 Feb 2023 21:13:23 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf16.hostedemail.com (Postfix) with ESMTPA id 6317920016;
-        Sun, 12 Feb 2023 21:13:20 +0000 (UTC)
-Message-ID: <b82c782ee8c789a0bdc702526fd993952cabb6a2.camel@perches.com>
-Subject: Re: [PATCH] get_maintainer: add email addresses from dts files
-From:   Joe Perches <joe@perches.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Sun, 12 Feb 2023 13:13:19 -0800
-In-Reply-To: <0d1f5d23-7a91-eee9-c7fe-044db8869735@linaro.org>
-References: <20230211121441.64359-1-krzysztof.kozlowski@linaro.org>
-         <6b9347bc16febf724ca33fe99597eb163b4254ff.camel@perches.com>
-         <0d1f5d23-7a91-eee9-c7fe-044db8869735@linaro.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Sun, 12 Feb 2023 16:14:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5C2A254;
+        Sun, 12 Feb 2023 13:14:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2994B80DA0;
+        Sun, 12 Feb 2023 21:14:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4639C433EF;
+        Sun, 12 Feb 2023 21:14:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676236465;
+        bh=I188z32N+WIDJgWGIzK2pS6xx1UvPFQePimfGPEMjBs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gaC/2Ma8RZDfm5sRSF2OSsGHXB8flfgJuAPpV9bnvurx88WY6+NFZmTiXR/SSrU2V
+         Co2kIMz/wRGercmP55GiN+vThmkBV0aIfbI7DWTj7D8Tzm6uwsCKn2+x5wr9w+NCSQ
+         eJlbWXSJwcbJ8hPE0GOmNBWpGOIStZV/vskI6EvdlNirDNYPewWGv3B/Z5nDI4y3i9
+         p2pHqEyOpAbNb5ohlF2DuVGtXstfUTOCmVPCwWs2HQEgb5Znc10VPcUKCE5QLAaVLL
+         p9BGakhWhHGTXV1lBSSQ9KzvzGM44nnCizSnfnbklVcW3pCoriTY4nkMv3PbcpMHCD
+         j+AX1Q2y8ci9w==
+Date:   Sun, 12 Feb 2023 22:14:22 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     ye.xingchen@zte.com.cn
+Cc:     michal.simek@xilinx.com, linux-arm-kernel@lists.infradead.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: xiic: Use devm_platform_get_and_ioremap_resource()
+Message-ID: <Y+lWrijnACGg3/Mo@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, ye.xingchen@zte.com.cn,
+        michal.simek@xilinx.com, linux-arm-kernel@lists.infradead.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <202301281453121890132@zte.com.cn>
 MIME-Version: 1.0
-X-Stat-Signature: 85drdbu11d9ri3kc5zddytr3o6zknps9
-X-Rspamd-Server: rspamout06
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Rspamd-Queue-Id: 6317920016
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/mtyatMvdED3hyezBVZribRqNFiLZ/Jek=
-X-HE-Tag: 1676236400-339113
-X-HE-Meta: U2FsdGVkX1/5Zyzffp8AoqaHdodtalmQg+EYOIzEDxzEWcZ1mb6H852oXy66R0EQUWfmzIjMk/P3KxMyYTicAw==
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ta/r8DwciCrDGg78"
+Content-Disposition: inline
+In-Reply-To: <202301281453121890132@zte.com.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2023-02-12 at 16:51 +0100, Krzysztof Kozlowski wrote:
-> On 11/02/2023 17:27, Joe Perches wrote:
-> > On Sat, 2023-02-11 at 13:14 +0100, Krzysztof Kozlowski wrote:
-> > > The DTS/DTSI files represent hardware description for Linux kernel,
-> > > which is necessary to properly recognize and configure hardware by
-> > > Linux.  DTS is usually created by people having the actual hardware and
-> > > having interest in keeping it in good shape.  Such people can provide
-> > > review (they might have board schematics) and testing.  Unfortunately
-> > > they mostly do not appear in MAINTAINERS file.  Adding per-DTS entries
-> > > to MAINTAINERS would quickly make it bloated (hundreds of new per-DTS
-> > > entries).
-> > > 
-> > > On the other hand there is no point in CC-ing every Copyright email
-> > > appearing in files, because it might be outdated.
 
-That's what .mailmap is for.
+--ta/r8DwciCrDGg78
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > > Add new in-file
-> > > pattern for storing maintainers dedicated to specific boards:
+On Sat, Jan 28, 2023 at 02:53:12PM +0800, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+>=20
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+>=20
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 
-I think adding Maintainer: who <who@foo.tld>
+Could you kindly rebase this to i2c/for-next or i2c/for-mergewindow? An
+earlier series for xiic has been applied there. Thanks!
 
-to each dts and dtsi file would be a lot of unnecessary changes
-$ git ls-files | grep -P '\.dtsi?$' | wc -l
-4673
 
-> > > This is rework of earlier approach:
-> > > Link: https://lore.kernel.org/r/20210809080204.8381-1-shawnguo@kernel.org
-> > 
-> > Why the rework?  I think the older one is much simpler.
-> > 
-> > I believe I forwarded the older one to Andrew Morton awhile back.
-> > I'll check to see what happened to it.
-> 
-> It was never merged, thus I assumed some changes are needed, e.g. to
-> ignore emails in copyrights.
+--ta/r8DwciCrDGg78
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I think the old one is fine.
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPpVq4ACgkQFA3kzBSg
+KbagIBAAth9RzObTd6wfFr+VSdDusxRXYRuWut2c/6VXOtD4lv3r1DRpfs6+P40r
+cMksNjRleD+6Lu4BR26mhCgte8Cw9xl83lgrht67D0B+kcyBoe6Ozd0TUcASocoT
+xghSgGKyJQ9o8TKOzePOUblTbcYz1UIO/C3wb05KKtfjsPEqb6gVlV+M1gW6nsvL
+gp5JNqYrToGVzItGJwyYulOGUcuVNLtg/aqtZoybcxscvemYA+f6xkS0aHS6umw3
+CCbD5IVrR4qhbRm/HbwoF5W/udazipbnZp6q+szCXKGI+mvbfDF6MDawtToXUYT9
+pfsdHyU/bfIqZ4/4jUmgEtppnZvjXuLJVvFNaYlLyj7wibl7OWnWZ39GwQIxzJMt
+NjkQV62kNthbbuhKjRAiVI7hgIVv1E5TvpumRqrQvqlxCRo4cKPScZRE5B1BZJ+/
+Lqn0CXsuM584I3Id3ltNMKaRhnH2uvctpGdqkBIURW5pZOWpKowTGdXrplqH1itw
+pvfPsmJhjdkO1gkzlefdcLyrVR5qMxP56Cacu3Qh1R4qBT/rhPFqbuLeDw9qY7dx
+6/57vyvc1gKYsnWLVh4P1kJH62e8I4q5Sfp3gBvrajQjZauyP3vcnzXrwLcSCnz5
+NW7OLviFc9b26Acg+/tp3yzNoRpU2LfzUhGbE9ZO7xe45bEKMYs=
+=3cFn
+-----END PGP SIGNATURE-----
+
+--ta/r8DwciCrDGg78--
