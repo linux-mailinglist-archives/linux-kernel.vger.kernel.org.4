@@ -2,119 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD51693830
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 16:48:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1214693833
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 16:49:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjBLPsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 10:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
+        id S229783AbjBLPtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 10:49:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjBLPsc (ORCPT
+        with ESMTP id S229604AbjBLPtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 10:48:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3F74C29
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 07:48:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01C6460D37
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 15:48:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC434C433EF;
-        Sun, 12 Feb 2023 15:48:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676216910;
-        bh=Vukdoymwm/wEA58+hycxqrl3bmx2LN+x0akzNw5Yu2s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s4hRk23TmcLpC3qBZrOU7D2TKEUlF7xHXzs3SYhgVfrPxWvNBDxb2dvz/pbrehLJ5
-         ibjxhOPLcd/aUKIHHA1rK9qmS1W+ilXlxSnSAB90r2GzrogU0/PQoVDbYP8FOQ6pMu
-         ho4fp2QY+4mJnQGoYqPj0cVZQrEobBnIlodAHaSLR7u7QhXuM9BJm3flou3ajE0b3V
-         RO9IXfldG2mgrpJ5UDLsln9X64bd/kUzM5uNTBoVY9gDXF9d0PnUDjXYGxIhR1aK7N
-         +xTDGqNAXTXgdMYkGuHn927KUviECLNxqll2KcUXjocfIKRUqVLgKHeK6CTJqkTToG
-         gxFxDyC6rPnLQ==
-Date:   Sun, 12 Feb 2023 15:48:25 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Christoph Muellner <christoph.muellner@vrull.eu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] riscv: Fix early alternative patching
-Message-ID: <Y+kKSTuyvpw06VCG@spud>
-References: <20230212021534.59121-1-samuel@sholland.org>
- <20230212021534.59121-2-samuel@sholland.org>
+        Sun, 12 Feb 2023 10:49:21 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40CDBEC5C;
+        Sun, 12 Feb 2023 07:49:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=4ENNKNgGMla2jgQ0hM3x3OTfeS7knIzg4lDu/hDJhGs=; b=pjaD8GgURVm2ZZeYXWXhmoy2N3
+        PgbU+sjLUnirG2jKrbaQFSH451K0vx3vO8oAv1m4CJ1Sf4usvEi3CZcfPVXZuPIzW+7yLIMIcp2pe
+        4/LfgR4XxkEcRUNhQwycLFHmE+QhcDQd3cako+wKpxYOGk79VKWGm3AcuJOxoD3gld6I=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pREbJ-004lSF-1A; Sun, 12 Feb 2023 16:49:13 +0100
+Date:   Sun, 12 Feb 2023 16:49:13 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Janne Grunau <j@jannau.net>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mailing List <devicetree-spec@vger.kernel.org>,
+        Kalle Valo <kvalo@kernel.org>, van Spriel <arend@broadcom.com>,
+        =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Ley Foon Tan <lftan@altera.com>,
+        Chee Nouk Phoon <cnphoon@altera.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] dt-bindings: wireless: bcm4329-fmac: Use
+ network-class.yaml schema
+Message-ID: <Y+kKeTBw/Vmap0MH@lunn.ch>
+References: <20230203-dt-bindings-network-class-v2-0-499686795073@jannau.net>
+ <20230203-dt-bindings-network-class-v2-2-499686795073@jannau.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ZZwqfOBoXuz7+HRs"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230212021534.59121-2-samuel@sholland.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230203-dt-bindings-network-class-v2-2-499686795073@jannau.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Feb 12, 2023 at 01:16:30PM +0100, Janne Grunau wrote:
+> The network-class schema specifies local-mac-address as used in the
+> bcm4329-fmac device nodes of Apple silicon devices
+> (arch/arm64/boot/dts/apple).
+> Fixes `make dtbs_check` for those devices.
 
---ZZwqfOBoXuz7+HRs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Maybe a more hierarchical approach would be better? Add a
+wireless-controller.yaml which includes ieee80211.yaml and
+network-class.yaml? It would then follow the structure of Ethernet
+controllers, bluetooth controllers, and can controllers.
 
-On Sat, Feb 11, 2023 at 08:15:32PM -0600, Samuel Holland wrote:
-> Now that the text to patch is located using a relative offset from the
-> alternative entry, the text address should be computed without applying
-> the kernel mapping offset, both before and after VM setup.
->=20
-> Fixes: 8d23e94a4433 ("riscv: switch to relative alternative entries")
-
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
->=20
->  arch/riscv/errata/thead/errata.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->=20
-> diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/e=
-rrata.c
-> index c0bea5c94128..1dd90a5f86f0 100644
-> --- a/arch/riscv/errata/thead/errata.c
-> +++ b/arch/riscv/errata/thead/errata.c
-> @@ -102,9 +102,7 @@ void __init_or_module thead_errata_patch_func(struct =
-alt_entry *begin, struct al
-> =20
->  			/* On vm-alternatives, the mmu isn't running yet */
->  			if (stage =3D=3D RISCV_ALTERNATIVES_EARLY_BOOT)
-> -				memcpy((void *)__pa_symbol(oldptr),
-> -				       (void *)__pa_symbol(altptr),
-> -				       alt->alt_len);
-> +				memcpy(oldptr, altptr, alt->alt_len);
->  			else
->  				patch_text_nosync(oldptr, altptr, alt->alt_len);
->  		}
-> --=20
-> 2.37.4
->=20
-
---ZZwqfOBoXuz7+HRs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHQEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+kKSQAKCRB4tDGHoIJi
-0hTXAP9igWO796XC6hLAXjhirFkpfB6Cxc4+Iy3v0XaTjWbkKQD43amLsSE0ma63
-mWwEfULUWh6gbSdqjnv3HsVqCG9+DA==
-=O9Y0
------END PGP SIGNATURE-----
-
---ZZwqfOBoXuz7+HRs--
+	Andrew
