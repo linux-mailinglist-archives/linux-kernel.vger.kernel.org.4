@@ -2,121 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47CD96935AD
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 03:46:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48CCB6935B7
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 03:59:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjBLCqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 21:46:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36136 "EHLO
+        id S229499AbjBLC7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 21:59:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjBLCqu (ORCPT
+        with ESMTP id S229447AbjBLC7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 21:46:50 -0500
-Received: from out-32.mta1.migadu.com (out-32.mta1.migadu.com [95.215.58.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F14C35B0
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 18:46:48 -0800 (PST)
-Date:   Sat, 11 Feb 2023 21:46:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1676170006;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bqdhYtgkVAcGkIQ75yHgZna184M943pqypxQSlc3u3c=;
-        b=XknR+0K+coEIwVeXcrhh0eZg0HLSZJdxRyUKU5UxCe0ta+xPocW6dZCKJRXEw2ClF/0urg
-        6TrmWH3Kelt93Fa8yINib9+M3h21xkBhCh8y/EzZOkKPPzewXl5SBO1owz72so0lsljN4b
-        JMne/CtF0iyNhDX3Zaq/mU0NhmmxWXQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Coly Li <colyli@suse.de>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
- with unique class keys
-Message-ID: <Y+hTEtCKPuO0zGIt@moria.home.lan>
-References: <1ad499bb-0c53-7529-ff00-e4328823f6fa@I-love.SAKURA.ne.jp>
- <Y+O6toMmAKBSILMf@rowland.harvard.edu>
- <f79e93ef-cfe8-1373-7c36-15d046c0e3c5@I-love.SAKURA.ne.jp>
- <Y+RZ2RKVo9FNMgSe@rowland.harvard.edu>
- <52c7d509-ba9e-a121-60c9-138d7ff3f667@I-love.SAKURA.ne.jp>
- <Y+gLd78vChQERZ6A@rowland.harvard.edu>
- <CAHk-=whXYzkOJZo0xpyYfrhWQg1M7j0OeCojTJ84CN4q9sqb2Q@mail.gmail.com>
- <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
- <Y+gjuqJ5RFxwLmht@moria.home.lan>
- <Y+hRurRwm//1+IcK@rowland.harvard.edu>
+        Sat, 11 Feb 2023 21:59:16 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2697AFF0E
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Feb 2023 18:59:15 -0800 (PST)
+Received: (qmail 864692 invoked by uid 1000); 11 Feb 2023 21:59:14 -0500
+Date:   Sat, 11 Feb 2023 21:59:14 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com
+Subject: Re: Current LKMM patch disposition
+Message-ID: <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
+References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
+ <Y920w4QRLtC6kd+x@rowland.harvard.edu>
+ <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
+ <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9+41ctA54pjm/KG@google.com>
+ <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
+ <Y+fN2fvUjGDWBYrv@google.com>
+ <Y+f4TYZ9BPlt8y8B@rowland.harvard.edu>
+ <CAEXW_YRuTfjc=5OAskTV0Qt_zSJTPP3-01=Y=SypMdPsF_weAQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y+hRurRwm//1+IcK@rowland.harvard.edu>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAEXW_YRuTfjc=5OAskTV0Qt_zSJTPP3-01=Y=SypMdPsF_weAQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 11, 2023 at 09:40:58PM -0500, Alan Stern wrote:
-> On Sat, Feb 11, 2023 at 06:24:42PM -0500, Kent Overstreet wrote:
-> > After scanning the rest of the thread: I don't think you want to create
-> > separate lockdep classes for each bus and device type, that's defeating
-> > how lockdep works.
+On Sat, Feb 11, 2023 at 07:30:32PM -0500, Joel Fernandes wrote:
+> On Sat, Feb 11, 2023 at 3:19 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > The idea is that the value returned by srcu_read_lock() can be stored to
+> > and loaded from a sequence (possibly of length 0) of variables, and the
+> > final load gets fed to srcu_read_unlock().  That's what the original
+> > version of the code expresses.
 > 
-> Not at all.  In fact, exactly the opposite: lockdep works by creating a 
-> class for each lock-inside-a-data-structure-type combination.  A struct 
-> device-bus_type/device_type combination is pretty much the same kind of 
-> thing.
-> 
-> >  Maybe if it was only a small, _static_ number of new
-> > classes,
-> 
-> The collection of bus_types and device_types _is_ static, in the sense 
-> that each one is a structure defined in a driver source file.  Whether 
-> the number is "small" depends on your tolerance for large numbers; the 
-> kernel has a lot of source files.  :-)
-> 
-> Mind you, I'm not saying that having lockdep classes for each bus_type 
-> or device_type is always the right thing to do.  There definitely are 
-> cases where it wouldn't do what we want.  But perhaps in some cases it 
-> would work.
-> 
-> > but the basic premesis of lockdep is that there are static
-> > human understandable lock ordering rules, so lockdep figures out what
-> > they are and checks them: if you create a bunch of dynamic classes, the
-> > classes are going to be different for everyone in practice and won't
-> > have any real bearing on the structure of the code
-> 
-> As a rule, bus_type's and device_type's aren't dynamic.  Maybe Greg KH 
-> once published an example of such a thing; IIRC it was more like a 
-> proof-of-principle rather than a serious recommendation on how to write 
-> drivers.  (Or else I'm misremembering and it was actually an example of 
-> creating dynamic sysfs attributes.)
-> 
-> Or maybe you're referring to what this patch does?  It does indeed 
-> create a bunch of dynamic classes -- one for each struct device.  The 
-> ordering rules derived by lockdep will be somewhat arbitrary, as you 
-> say.  But some of them certainly will be related to the structure of the 
-> source code.
+> Now I understand it somewhat, and I see where I went wrong. Basically,
+> you were trying to sequence zero or one "data + rf sequence" starting
+> from lock and unlock with a final "data" sequence. That data sequence
+> can be between the srcu-lock and srcu-unlock itself, in case where the
+> lock/unlock happened on the same CPU.
 
-I could be :) I haven't been able to find the patch in question - have a
-link?
+In which case the sequence has length 0.  Exactly right.
 
-If you're talking about making lock_class_key dynamic, I think I stand
-by what I said though - OTOH, if all you're doing is lifting that to the
-caller of the device object init function, so it'll still be a static
-object in the driver, that would be totally fine.
+> Damn, that's really complicated.. and I still don't fully understand it.
 
-I probably should've found the patch before commenting :)
+It sounds like you've made an excellent start.  :-)
+
+> In trying to understand your CAT code, I made some assumptions about
+> your formulas by reverse engineering the CAT code with the tests,
+> which is kind of my point that it is extremely hard to read CAT. That
+
+I can't argue against that; it _is_ hard.  It helps to have had the 
+right kind of training beforehand (my degree was in mathematical logic).
+
+> is kind of why I want to understand the CAT, because for me
+> explanation.txt is too much at a higher level to get a proper
+> understanding of the memory model.. I tried re-reading explanation.txt
+> many times.. then I realized I am just rewriting my own condensed set
+> of notes every few months.
+
+Would you like to post a few examples showing some of the most difficult 
+points you encountered?  Maybe explanation.txt can be improved.
+
+> > I'm not sure that breaking this relation up into pieces will make it any
+> > easier to understand.
+> 
+> Yes, but I tried. I will keep trying to understand your last patch
+> more. Especially I am still not sure, why in the case of an SRCU
+> reader on a single CPU, the following does not work:
+> let srcu-rscs = ([Srcu-lock]; data; [Srcu-unlock]).
+
+You have to understand that herd7 does not track dependencies through 
+stores and subsequent loads.  That is, if you have something like:
+
+	r1 = READ_ONCE(*x);
+	WRITE_ONCE(*y, r1);
+	r2 = READ_ONCE(*y);
+	WRITE_ONCE(*z, r2);
+
+then herd7 will realize that the write to y depends on the value read 
+from x, and it will realize that the write to z depends on the value 
+read from y.  But it will not realize that the write to z depends on the 
+value read from x; it loses track of that dependency because of the 
+intervening store/load from y.
+
+More to the point, if you have:
+
+	r1 = srcu_read_lock(lock);
+	WRITE_ONCE(*y, r1);
+	r2 = READ_ONCE(*y);
+	srcu_read_unlock(lock, r2);
+
+then herd7 will not realize that the value of r2 depends on the value of 
+r1.  So there will be no data dependency from the srcu_read_lock() to 
+the srcu_read_unlock().
+
+Alan
