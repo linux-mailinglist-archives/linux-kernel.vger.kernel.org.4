@@ -2,79 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A09E0693B2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 00:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3CF8693B30
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 00:41:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjBLXk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 18:40:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
+        id S229717AbjBLXlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 18:41:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjBLXkZ (ORCPT
+        with ESMTP id S229677AbjBLXlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 18:40:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD62DF770
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 15:39:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676245181;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SK0wZXWovBD7DJL+Hoj+/Uuq1+hXGQ1+AFTjGroCWZU=;
-        b=bOAX2Z4pr+cTdWfFf7bu5bmqOGHf6U5tRfrEf2Pg+yYCKn0E/HcfPd6XQFB+T2JnzRFH5x
-        47yzSu8Az04hl7g5PCsfGwhB4cQvdOM32EzcuFGSU4ioOfzqYm3Mhiu3hHGd18ZW5IN5eP
-        6ZKANUHXLCwOskqpymZeiCSztTyyNf8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-646-NCtFzw2lOdGu_e8vXRWDsg-1; Sun, 12 Feb 2023 18:39:33 -0500
-X-MC-Unique: NCtFzw2lOdGu_e8vXRWDsg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 863F180006E;
-        Sun, 12 Feb 2023 23:39:32 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C6F494014D03;
-        Sun, 12 Feb 2023 23:39:30 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230210233205.1517459-12-dhowells@redhat.com>
-References: <20230210233205.1517459-12-dhowells@redhat.com> <20230210233205.1517459-1-dhowells@redhat.com>
-To:     Steve French <smfrench@gmail.com>
-Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Tom Talpey <tom@talpey.com>,
-        Stefan Metzmacher <metze@samba.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Long Li <longli@microsoft.com>,
-        Namjae Jeon <linkinjeon@kernel.org>
-Subject: Re: [PATCH 11/11] cifs: Fix problem with encrypted RDMA data read
+        Sun, 12 Feb 2023 18:41:01 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B80F774;
+        Sun, 12 Feb 2023 15:40:57 -0800 (PST)
+Received: from localhost.localdomain (unknown [182.253.88.204])
+        by gnuweeb.org (Postfix) with ESMTPSA id D425A8309B;
+        Sun, 12 Feb 2023 23:40:53 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1676245256;
+        bh=Q3x1ZpBxGYFXsgv+rQ4DgddHXDhSps4z+opjFHYAgz4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UuVVP4pagvf6aC4j99K6xpLvt86AVyTP2U9/tRRB7r4uofQLe2ITqSfsKzj/1K+X8
+         +0eHt0H7PzMQRtcTdfRi3ayCpcRCV+KAzoY8SzHUlX7eRdRsizjfKs8/Uu7Qa7N1Dp
+         5LPx9EA/CmTBe7rNvUpiLJEOtIxCKGNtqkKEo+z6UCODCM55Ti5nIkbg5jGnRFYBmS
+         712xLq5gQmUD39o204FpgNQLdFZTG1gOJoHLYisWk8saTk+uuHbJqrD5psVvXeWqRf
+         3EtmCrV8Kxsh86r8V8H78eKsHbTitjvkwaOGE5H/ouWE0SulKqSQM21mIXN2zmb6nl
+         P7crNrTeLe7+A==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        Sam James <sam@gentoo.org>,
+        io-uring Mailing List <io-uring@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Subject: [PATCH liburing] tests: Don't use error.h because it's not portable
+Date:   Mon, 13 Feb 2023 06:40:46 +0700
+Message-Id: <20230212234046.902869-1-ammarfaizi2@gnuweeb.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1614386.1676245170.1@warthog.procyon.org.uk>
-Date:   Sun, 12 Feb 2023 23:39:30 +0000
-Message-ID: <1614387.1676245170@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry, this one shouldn't have been included.  It's the one Stefan Metzmacher
-objected to and provided his own changes for.
+Sam reports that building liburing tests on Gentoo is broken due to
+'#include <error.h>':
+```
+  x86_64-gentoo-linux-musl-gcc -D_GNU_SOURCE -D__SANE_USERSPACE_TYPES__ \
+  -I../src/include/ -include ../config-host.h -pipe -march=native \
+  -fno-diagnostics-color -O2 -Wno-unused-parameter -Wno-sign-compare \
+  -Wstringop-overflow=0 -Warray-bounds=0 -DLIBURING_BUILD_TEST -o \
+  single-issuer.t single-issuer.c helpers.o -Wl,-O1 -Wl,--as-needed \
+  -Wl,--defsym=__gentoo_check_ldflags__=0 -L../src/ -luring -lpthread
 
-David
+  single-issuer.c:8:10: fatal error: error.h: No such file or directory
+      8 | #include <error.h>
+        |          ^~~~~~~~~
+```
+This header is a GNU extension for glibc. It doesn't exist in musl libc.
+Don't use error.h to make it portable.
+
+Fixes: https://github.com/axboe/liburing/issues/786
+Bug: https://bugs.gentoo.org/888956
+Reported-by: Sam James <sam@gentoo.org>
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
+ test/defer-taskrun.c |  1 -
+ test/poll.c          |  7 ++++---
+ test/send-zerocopy.c |  1 -
+ test/single-issuer.c | 43 ++++++++++++++++++++++++++++---------------
+ 4 files changed, 32 insertions(+), 20 deletions(-)
+
+diff --git a/test/defer-taskrun.c b/test/defer-taskrun.c
+index 4ae79792274ac723..bcc59a47b24c3e24 100644
+--- a/test/defer-taskrun.c
++++ b/test/defer-taskrun.c
+@@ -4,7 +4,6 @@
+ #include <unistd.h>
+ #include <stdlib.h>
+ #include <string.h>
+-#include <error.h>
+ #include <sys/eventfd.h>
+ #include <signal.h>
+ #include <poll.h>
+diff --git a/test/poll.c b/test/poll.c
+index 1b8b416887a9c44f..325c4f57cfc1b1c4 100644
+--- a/test/poll.c
++++ b/test/poll.c
+@@ -11,7 +11,6 @@
+ #include <signal.h>
+ #include <poll.h>
+ #include <sys/wait.h>
+-#include <error.h>
+ #include <assert.h>
+ 
+ #include "helpers.h"
+@@ -19,8 +18,10 @@
+ 
+ static void do_setsockopt(int fd, int level, int optname, int val)
+ {
+-	if (setsockopt(fd, level, optname, &val, sizeof(val)))
+-		error(1, errno, "setsockopt %d.%d: %d", level, optname, val);
++	if (setsockopt(fd, level, optname, &val, sizeof(val))) {
++		fprintf(stderr, "setsockopt %d.%d: %d\n", level, optname, val);
++		exit(T_EXIT_FAIL);
++	}
+ }
+ 
+ static bool check_cq_empty(struct io_uring *ring)
+diff --git a/test/send-zerocopy.c b/test/send-zerocopy.c
+index ab56397aca230dcc..86a31cd6403283a8 100644
+--- a/test/send-zerocopy.c
++++ b/test/send-zerocopy.c
+@@ -4,7 +4,6 @@
+ #include <stdint.h>
+ #include <assert.h>
+ #include <errno.h>
+-#include <error.h>
+ #include <limits.h>
+ #include <fcntl.h>
+ #include <unistd.h>
+diff --git a/test/single-issuer.c b/test/single-issuer.c
+index a014baabc758f4fa..2b3e8d50e615e705 100644
+--- a/test/single-issuer.c
++++ b/test/single-issuer.c
+@@ -5,7 +5,6 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <fcntl.h>
+-#include <error.h>
+ #include <sys/types.h>
+ #include <sys/wait.h>
+ 
+@@ -55,14 +54,20 @@ static int try_submit(struct io_uring *ring)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	if (ret != 1)
+-		error(1, ret, "submit %i", ret);
++	if (ret != 1) {
++		fprintf(stderr, "submit %i\n", ret);
++		exit(T_EXIT_FAIL);
++	}
+ 	ret = io_uring_wait_cqe(ring, &cqe);
+-	if (ret)
+-		error(1, ret, "wait fail %i", ret);
++	if (ret) {
++		fprintf(stderr, "wait fail %i\n", ret);
++		exit(T_EXIT_FAIL);
++	}
+ 
+-	if (cqe->res || cqe->user_data != 42)
+-		error(1, ret, "invalid cqe");
++	if (cqe->res || cqe->user_data != 42) {
++		fprintf(stderr, "invalid cqe %i\n", cqe->res);
++		exit(T_EXIT_FAIL);
++	}
+ 
+ 	io_uring_cqe_seen(ring, cqe);
+ 	return 0;
+@@ -104,8 +109,10 @@ int main(int argc, char *argv[])
+ 	/* test that the first submitter but not creator can submit */
+ 	ret = io_uring_queue_init(8, &ring, IORING_SETUP_SINGLE_ISSUER |
+ 					    IORING_SETUP_R_DISABLED);
+-	if (ret)
+-		error(1, ret, "ring init (2) %i", ret);
++	if (ret) {
++		fprintf(stderr, "ring init (2) %i\n", ret);
++		exit(T_EXIT_FAIL);
++	}
+ 
+ 	if (!fork_t()) {
+ 		io_uring_enable_rings(&ring);
+@@ -120,8 +127,10 @@ int main(int argc, char *argv[])
+ 	/* test that only the first enabler can submit */
+ 	ret = io_uring_queue_init(8, &ring, IORING_SETUP_SINGLE_ISSUER |
+ 					    IORING_SETUP_R_DISABLED);
+-	if (ret)
+-		error(1, ret, "ring init (3) %i", ret);
++	if (ret) {
++		fprintf(stderr, "ring init (3) %i\n", ret);
++		exit(T_EXIT_FAIL);
++	}
+ 
+ 	io_uring_enable_rings(&ring);
+ 	if (!fork_t()) {
+@@ -135,8 +144,10 @@ int main(int argc, char *argv[])
+ 
+ 	/* test that anyone can submit to a SQPOLL|SINGLE_ISSUER ring */
+ 	ret = io_uring_queue_init(8, &ring, IORING_SETUP_SINGLE_ISSUER|IORING_SETUP_SQPOLL);
+-	if (ret)
+-		error(1, ret, "ring init (4) %i", ret);
++	if (ret) {
++		fprintf(stderr, "ring init (4) %i\n", ret);
++		exit(T_EXIT_FAIL);
++	}
+ 
+ 	ret = try_submit(&ring);
+ 	if (ret) {
+@@ -155,8 +166,10 @@ int main(int argc, char *argv[])
+ 
+ 	/* test that IORING_ENTER_REGISTERED_RING doesn't break anything */
+ 	ret = io_uring_queue_init(8, &ring, IORING_SETUP_SINGLE_ISSUER);
+-	if (ret)
+-		error(1, ret, "ring init (5) %i", ret);
++	if (ret) {
++		fprintf(stderr, "ring init (5) %i\n", ret);
++		exit(T_EXIT_FAIL);
++	}
+ 
+ 	if (!fork_t()) {
+ 		ret = try_submit(&ring);
+
+base-commit: 7b09481f27fa86e8828f774ddca92ce14f14fafe
+-- 
+Ammar Faizi
 
