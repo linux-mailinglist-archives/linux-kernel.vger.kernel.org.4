@@ -2,104 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C75F693A35
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 22:13:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A67FA693A37
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 22:13:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjBLVNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 16:13:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57446 "EHLO
+        id S229750AbjBLVN3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 12 Feb 2023 16:13:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjBLVNM (ORCPT
+        with ESMTP id S229499AbjBLVN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 16:13:12 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC3A8A254
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 13:13:10 -0800 (PST)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 31CLCWem005521;
-        Sun, 12 Feb 2023 22:12:32 +0100
-Date:   Sun, 12 Feb 2023 22:12:32 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     chris.chenfeiyang@gmail.com
-Cc:     paulmck@kernel.org, Feiyang Chen <chenfeiyang@loongson.cn>,
-        arnd@arndb.de, chenhuacai@kernel.org, jiaxun.yang@flygoat.com,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Vincent Dagonneau <v@vda.io>
-Subject: Re: [PATCH v3 2/5] tools/nolibc: Add statx() and make stat() rely on
- statx() if necessary
-Message-ID: <Y+lWQC3XU3xWqEi2@1wt.eu>
-References: <cover.1675907639.git.chenfeiyang@loongson.cn>
- <f60027664200d6d1f0ed6c7b87915a223afb982f.1675907639.git.chenfeiyang@loongson.cn>
+        Sun, 12 Feb 2023 16:13:27 -0500
+Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E32D1043E;
+        Sun, 12 Feb 2023 13:13:24 -0800 (PST)
+Received: from omf16.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay08.hostedemail.com (Postfix) with ESMTP id 174AA140441;
+        Sun, 12 Feb 2023 21:13:23 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf16.hostedemail.com (Postfix) with ESMTPA id 6317920016;
+        Sun, 12 Feb 2023 21:13:20 +0000 (UTC)
+Message-ID: <b82c782ee8c789a0bdc702526fd993952cabb6a2.camel@perches.com>
+Subject: Re: [PATCH] get_maintainer: add email addresses from dts files
+From:   Joe Perches <joe@perches.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Sun, 12 Feb 2023 13:13:19 -0800
+In-Reply-To: <0d1f5d23-7a91-eee9-c7fe-044db8869735@linaro.org>
+References: <20230211121441.64359-1-krzysztof.kozlowski@linaro.org>
+         <6b9347bc16febf724ca33fe99597eb163b4254ff.camel@perches.com>
+         <0d1f5d23-7a91-eee9-c7fe-044db8869735@linaro.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f60027664200d6d1f0ed6c7b87915a223afb982f.1675907639.git.chenfeiyang@loongson.cn>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Stat-Signature: 85drdbu11d9ri3kc5zddytr3o6zknps9
+X-Rspamd-Server: rspamout06
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Rspamd-Queue-Id: 6317920016
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/mtyatMvdED3hyezBVZribRqNFiLZ/Jek=
+X-HE-Tag: 1676236400-339113
+X-HE-Meta: U2FsdGVkX1/5Zyzffp8AoqaHdodtalmQg+EYOIzEDxzEWcZ1mb6H852oXy66R0EQUWfmzIjMk/P3KxMyYTicAw==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Feiyang,
+On Sun, 2023-02-12 at 16:51 +0100, Krzysztof Kozlowski wrote:
+> On 11/02/2023 17:27, Joe Perches wrote:
+> > On Sat, 2023-02-11 at 13:14 +0100, Krzysztof Kozlowski wrote:
+> > > The DTS/DTSI files represent hardware description for Linux kernel,
+> > > which is necessary to properly recognize and configure hardware by
+> > > Linux.  DTS is usually created by people having the actual hardware and
+> > > having interest in keeping it in good shape.  Such people can provide
+> > > review (they might have board schematics) and testing.  Unfortunately
+> > > they mostly do not appear in MAINTAINERS file.  Adding per-DTS entries
+> > > to MAINTAINERS would quickly make it bloated (hundreds of new per-DTS
+> > > entries).
+> > > 
+> > > On the other hand there is no point in CC-ing every Copyright email
+> > > appearing in files, because it might be outdated.
 
-On Thu, Feb 09, 2023 at 11:24:13AM +0800, chris.chenfeiyang@gmail.com wrote:
-> From: Feiyang Chen <chenfeiyang@loongson.cn>
+That's what .mailmap is for.
+
+> > > Add new in-file
+> > > pattern for storing maintainers dedicated to specific boards:
+
+I think adding Maintainer: who <who@foo.tld>
+
+to each dts and dtsi file would be a lot of unnecessary changes
+$ git ls-files | grep -P '\.dtsi?$' | wc -l
+4673
+
+> > > This is rework of earlier approach:
+> > > Link: https://lore.kernel.org/r/20210809080204.8381-1-shawnguo@kernel.org
+> > 
+> > Why the rework?  I think the older one is much simpler.
+> > 
+> > I believe I forwarded the older one to Andrew Morton awhile back.
+> > I'll check to see what happened to it.
 > 
-> LoongArch and RISC-V 32-bit only have statx(). ARC, Hexagon, Nios2 and
-> OpenRISC have statx() and stat64() but not stat() or newstat(). Add
-> statx() and make stat() rely on statx() if necessary to make them happy.
-> We may just use statx() for all architectures in the future.
-> 
-> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> ---
->  tools/include/nolibc/sys.h | 56 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 56 insertions(+)
-> 
-> diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> index c4818a9c8823..70c30d457952 100644
-> --- a/tools/include/nolibc/sys.h
-> +++ b/tools/include/nolibc/sys.h
-> @@ -20,6 +20,7 @@
->  #include <linux/time.h>
->  #include <linux/auxvec.h>
->  #include <linux/fcntl.h> // for O_* and AT_*
-> +#include <linux/stat.h>  // for statx()
+> It was never merged, thus I assumed some changes are needed, e.g. to
+> ignore emails in copyrights.
 
-This one causes build warnings on all archs but x86_64:
-
-  /f/tc/nolibc/gcc-11.3.0-nolibc/aarch64-linux/bin/aarch64-linux-gcc -Os -fno-ident -fno-asynchronous-unwind-tables  -s -o nolibc-test \
-    -nostdlib -static -Isysroot/arm64/include nolibc-test.c -lgcc
-  In file included from sysroot/arm64/include/sys.h:23,
-                   from sysroot/arm64/include/nolibc.h:99,
-                   from sysroot/arm64/include/errno.h:26,
-                   from sysroot/arm64/include/stdio.h:14,
-                   from nolibc-test.c:15:
-  sysroot/arm64/include/linux/stat.h:9: warning: "S_IFMT" redefined
-      9 | #define S_IFMT  00170000
-        | 
-  In file included from sysroot/arm64/include/nolibc.h:98,
-                   from sysroot/arm64/include/errno.h:26,
-                   from sysroot/arm64/include/stdio.h:14,
-                   from nolibc-test.c:15:
-  sysroot/arm64/include/types.h:27: note: this is the location of the previous definition
-
-This is caused by the definitions for S_IF* and S_IS* in types.h. However
-if I remove them I'm seeing x86_64 fail on S_IFCHR not defined. The root
-cause is that the x86_64 toolchain falls back to /usr/include for the
-include_next <limits.h> that others do not do (probably that when built
-it thought it was a native compiler instead of a cross-compiler). I'm
-apparently able to work around this by ifdefing out the definitions but
-it makes me feel like I'm hiding the dust under the carpet. Instead I'm
-thinking of reusing Vincent's work who added stdint and the definitions
-for the various INT*MAX values that are normally found in limits.h and
-providing our own limits.h so that this issue is globally addressed.
-
-I'm going to experiment a little bit about this and will propose something
-once I'm satisfied with a solution that we can queue for 6.4. Most likely
-it will involve merging a variant of Vincent's series first, a few changes
-to have limits.h then your series.
-
-Best regards,
-Willy
+I think the old one is fine.
