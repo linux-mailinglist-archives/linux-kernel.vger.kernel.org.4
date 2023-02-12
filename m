@@ -2,109 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14066693728
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 13:14:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D289F69373C
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 13:16:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjBLMOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 07:14:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
+        id S229742AbjBLMQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 07:16:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjBLMOb (ORCPT
+        with ESMTP id S229656AbjBLMQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 07:14:31 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23751CA0B;
-        Sun, 12 Feb 2023 04:14:30 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id s11so1801098edd.10;
-        Sun, 12 Feb 2023 04:14:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lkVRJ9xqkrjXW8zGj3W60LSQ5OKgvmhXVCbi/Dr6uXo=;
-        b=TS3G1yE/apRlRoXVSwpEfjuqpPQlZmaIH/tRFqKpIP3AeMFB9G7cb5qODKZ9JXAk8c
-         IkS18fCvKP/EkcJEuwInxnr6l0O2kTOBmlQ4eCVx/JjUcAsvYPYLccDterVJNDc8Iun8
-         6FOZhiwPvPvzqf20mq+gTl8C6JW0Z8njMGvPA0WmUicZFh8AZTlb0Bb9xvU5ReySprfX
-         ycOdFuAwcCw5+fhbrmEAlCI5rzK7xVNaWuHG3VxySLRp2GE2Qf1SnKoICpL54e5137uy
-         tavVZKvWyxcZ2hRbRxV5BTtukk0lmDttNpcXQ3mt0iwx8y1WuOyoTX0TTYxt02I1546K
-         HKCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lkVRJ9xqkrjXW8zGj3W60LSQ5OKgvmhXVCbi/Dr6uXo=;
-        b=5F/KWLQ2H8SHE7JAYmmwSP6r2ogL31RY9O5wCcoImR8L/I61Ayh4S2EnBAnb7nVAa0
-         0j7nCuN0oYe1/AVrFJxHyb1GPubtbicDNm+onzgnehdvU4sBDntNCI1uFG2lFytJXiBx
-         wumyivfnNO2+2PouVjCiJGwFLYiQfD/3R2VWH6qekcEDI/OjWczLNa3VypO2BjbZhE8g
-         6mzBwQ4rxzCOnq5iWHTALPUdHw8iwnHBcbMWwVrRM1ALU1+tiuvRF69t4g0KH0j6AhDk
-         3gKa/vrr6aJwpWQS0uwP8WDmpcfpjZ9Nm779O/yWgLKCBL9Tj+DR2K+auE+sxD90+RrN
-         AkXg==
-X-Gm-Message-State: AO0yUKWMaN/muCHC8OPuFPBv9B2Tn4AiRLD/pHHcYp4hqplKnfnwWwmK
-        qYuRuo/zakZ+4oTiGEUdKFk=
-X-Google-Smtp-Source: AK7set9DUjDRrLSFJk9iyTooW+hGLFtMZQ1i/na/cPtoXKwQn43tVDK7EiCsSnmEB7z8BRUOTuRwEQ==
-X-Received: by 2002:a50:aad4:0:b0:4ab:4d55:6f74 with SMTP id r20-20020a50aad4000000b004ab4d556f74mr7792798edc.13.1676204068620;
-        Sun, 12 Feb 2023 04:14:28 -0800 (PST)
-Received: from arinc9-PC.lan ([37.120.152.236])
-        by smtp.gmail.com with ESMTPSA id a14-20020a50c30e000000b004ab4c28a967sm2976320edb.44.2023.02.12.04.14.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Feb 2023 04:14:28 -0800 (PST)
-From:   arinc9.unal@gmail.com
-X-Google-Original-From: arinc.unal@arinc9.com
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        erkin.bozoglu@xeront.com
-Subject: [PATCH] arm: dts: mt7623: disable home key on Bananapi BPI-R2
-Date:   Sun, 12 Feb 2023 15:13:54 +0300
-Message-Id: <20230212121354.44590-1-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.37.2
+        Sun, 12 Feb 2023 07:16:36 -0500
+Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D823DE052;
+        Sun, 12 Feb 2023 04:16:33 -0800 (PST)
+Received: from robin.home.jannau.net (p579ad32f.dip0.t-ipconnect.de [87.154.211.47])
+        by soltyk.jannau.net (Postfix) with ESMTPSA id 37C2626F76B;
+        Sun, 12 Feb 2023 13:16:31 +0100 (CET)
+From:   Janne Grunau <j@jannau.net>
+Subject: [PATCH v2 0/4] dt-bindings: net: Add network-class.yaml schema
+Date:   Sun, 12 Feb 2023 13:16:28 +0100
+Message-Id: <20230203-dt-bindings-network-class-v2-0-499686795073@jannau.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJzY6GMC/42OSwrCMBCGryJZOzKZ2IeuvIe4SDtDG5UpJLEip
+ Xc39QSufj74X4tJEoMkc94tJsocUpi0AO13ph+9DgKBCxtCckjogDN0QTnokEAlv6f4gP7pU4L
+ W1Y0w182JyZR855NAF73249aAiMBloZccRSC31lJp25xjSHmKn9+J2Ra5/rM3W0A4ViTomooQ+
+ XL3qv51KDZzW9f1C4fabxDdAAAA
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mailing List <devicetree-spec@vger.kernel.org>,
+        Kalle Valo <kvalo@kernel.org>, van Spriel <arend@broadcom.com>,
+        =?utf-8?q?J=C3=A9r=C3=B4me_Pouiller?= <jerome.pouiller@silabs.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Ley Foon Tan <lftan@altera.com>,
+        Chee Nouk Phoon <cnphoon@altera.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        Janne Grunau <j@jannau.net>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2214; i=j@jannau.net;
+ h=from:subject:message-id; bh=y7QrjK1UKfIGXPczHYVce0GeZzI5ACPm72GbLe9dHPc=;
+ b=owGbwMvMwCG2UNrmdq9+ahrjabUkhuQXN+atn7qg2jhxduj922unGymYVfUGnlw5RaUwdDuTT
+ aK6UHRRRykLgxgHg6yYIkuS9ssOhtU1ijG1D8Jg5rAygQxh4OIUgImIizAynGqae35x2N7/ospc
+ n1dGJhTnhh5h3Hmk9uKZ/JbpYnHHbBj+Sm9y+8fyXrj49t6J4dw+cqnPxUvz1vzhYs3I2rJznZU
+ qDwA=
+X-Developer-Key: i=j@jannau.net; a=openpgp;
+ fpr=8B336A6BE4E5695E89B8532B81E806F586338419
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arınç ÜNAL <arinc.unal@arinc9.com>
+The Devicetree Specification, Release v0.3 specifies in section 4.3.1
+a "Network Class Binding". This covers MAC address and maximal frame
+size properties. "local-mac-address" and "mac-address" with a fixed
+"address-size" of 48 bits are already in the ethernet-controller.yaml
+schema so move those over.
 
-There's no home key on Bananapi BPI-R2. Disable it.
+Keep "address-size" fixed to 48 bits as it's unclear if network protocols
+using 64-bit mac addresses like ZigBee, 6LoWPAN and others are relevant for
+this binding. This allows mac address array size validation for ethernet
+and wireless lan devices.
 
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+"max-frame-size" in the Devicetree Specification is written to cover the
+whole layer 2 ethernet frame but actual use for this property is the
+payload size. Keep the description from ethernet-controller.yaml which
+specifies the property as MTU.
+
+Signed-off-by: Janne Grunau <j@jannau.net>
 ---
- arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dts | 6 ++++++
- 1 file changed, 6 insertions(+)
+Changes in v2:
+- Added "max-frame-size" with the description from ethernet-controller.yaml
+- Restrict "address-size" to 48-bits
+- Fix the mac-address array size to 6 bytes
+- Drop duplicate default value from "max-frame-size" description
+- Fix 2 nios2 dts files which incorrectly use the ethernet frame size of 1518
+- Link to v1: https://lore.kernel.org/r/20230203-dt-bindings-network-class-v1-0-452e0375200d@jannau.net
 
-diff --git a/arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dts b/arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dts
-index 642b1c0a96ba..a37f3fa223c7 100644
---- a/arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dts
-+++ b/arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dts
-@@ -345,6 +345,12 @@ &mmc1 {
- 	vqmmc-supply = <&reg_3p3v>;
- };
- 
-+&mt6323keys {
-+	home {
-+		status = "disabled";
-+	};
-+};
-+
- &mt6323_leds {
- 	status = "okay";
- 
+---
+Janne Grunau (4):
+      dt-bindings: net: Add network-class schema for mac-address properties
+      dt-bindings: wireless: bcm4329-fmac: Use network-class.yaml schema
+      dt-bindings: wireless: silabs,wfx: Use network-class.yaml
+      nios2: dts: Fix tse_mac "max-frame-size" property
+
+ .../bindings/net/ethernet-controller.yaml          | 25 +-----------
+ .../devicetree/bindings/net/network-class.yaml     | 44 ++++++++++++++++++++++
+ .../bindings/net/wireless/brcm,bcm4329-fmac.yaml   |  5 ++-
+ .../bindings/net/wireless/silabs,wfx.yaml          |  5 +--
+ arch/nios2/boot/dts/10m50_devboard.dts             |  2 +-
+ arch/nios2/boot/dts/3c120_devboard.dts             |  2 +-
+ 6 files changed, 52 insertions(+), 31 deletions(-)
+---
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+change-id: 20230203-dt-bindings-network-class-8367edd679d2
+
+Best regards,
 -- 
-2.37.2
+Janne Grunau <j@jannau.net>
 
