@@ -2,224 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73B06937F7
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 16:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 965756937FB
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 16:39:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjBLPdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 10:33:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
+        id S229624AbjBLPju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 10:39:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjBLPdO (ORCPT
+        with ESMTP id S229457AbjBLPjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 10:33:14 -0500
-Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D68DC640
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 07:33:10 -0800 (PST)
-Received: by mail-wm1-x349.google.com with SMTP id l21-20020a05600c4f1500b003e00be23a70so7727136wmq.2
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 07:33:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M+d4ipAHpReLmFZk9nFLE2xPZqTKQlJEwK1FQJWisIY=;
-        b=bPDmQfdCZw8lNqkinMZjF8xpczDSiTRYQgdspyJY8Vf5QPMuk36Z0VU7JJThODDPWf
-         vlySehWqGwFR1EG95l6sJg0Eh6UNcQx1u8uOn5KZXDA3SRdUKHzyzcjA7KmhRijKJDDk
-         tXxtgR+W7Zw6QBTTz4E6dTH7+GHKtjGGNVqMbLGKulERjMwSDk34nPk3Qv9GFzktEY6L
-         fhD0Rd4Dtb4w0Aa2FKG8Lpk8I2jxs797I04cwrMRIocF8nKPyUNk9Lnx6y3hm1NTOZd7
-         1T0e13BQBz1GCug+pcPpAOP8Sy3eQIO1ekH4D3hJrp8Y1xraoZ/HkSuEUtDS39nD5TUi
-         mvhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M+d4ipAHpReLmFZk9nFLE2xPZqTKQlJEwK1FQJWisIY=;
-        b=VVaZwo+W120zOD0Hya6QZr/RJYMg/TP3Y599ttT8/mHzPSB2Y50CvxZ5DMLX8RjZCt
-         bztpLM4aHRLqR/S+oZMBIKs26zTrVoi45Aaxv8VeGuIKn2rFMruFlanX11zybg/e9b+P
-         M6BD4OclZvcUj4JUi0FXksQJYrvM1FH1+MIDo8mPidjLkZ8ur4XRoU6usBnNDxVktIch
-         Tn5Xa/BkK47Cvjga7YfECK3YZgB4RDc6HdD4XVzk3JSaMVRAMtTDD5p++5dCAQKkXOUO
-         DThkeWFXTnybmAISo6ou6V2HN6L/8mYdPgJsRPx9aEC5WkoknoYdL0fyaREGcw93lEid
-         tHLA==
-X-Gm-Message-State: AO0yUKUi1DaioSJdbLN3iFM+MW4Wlm4Purf7ZsClQX7SaSvWm1iKN9Wb
-        DwxPZhpdXX4nXstIbESvykTWq5yjvp0cBqnd
-X-Google-Smtp-Source: AK7set9HzQqLLwTBhCUfaS347mT3tH0TTlTVjXRiHOtP9X/USfmu8A7LMFbYHs3kJctWE2Hvss1QMZLLh7Qntj8u
-X-Received: from vdonnefort.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:2eea])
- (user=vdonnefort job=sendgmr) by 2002:a05:600c:1c81:b0:3db:105:85a4 with SMTP
- id k1-20020a05600c1c8100b003db010585a4mr1282764wms.124.1676215988772; Sun, 12
- Feb 2023 07:33:08 -0800 (PST)
-Date:   Sun, 12 Feb 2023 15:32:50 +0000
-In-Reply-To: <20230212153250.1099136-1-vdonnefort@google.com>
-Mime-Version: 1.0
-References: <20230212153250.1099136-1-vdonnefort@google.com>
-X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
-Message-ID: <20230212153250.1099136-3-vdonnefort@google.com>
-Subject: [RFC PATCH 2/2] tracing: Allow user-space mapping of the ring-buffer
-From:   Vincent Donnefort <vdonnefort@google.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Cc:     kernel-team@android.com, Vincent Donnefort <vdonnefort@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 12 Feb 2023 10:39:48 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BA7CA38;
+        Sun, 12 Feb 2023 07:39:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=6O+UuieJiqrqN8b+Jb4GL1MHOB3Fu+wejYkm3MKiKZs=; b=zVqRPIHa7Fd8aBKSeDGdpJrwuU
+        nnpM2/LLxyc0jo150A976XoGkGIxo/Uf0HLi4TmqXPAIgnmkxe9ElLSPRjfuwbTF0dJPRAv7Ypvm4
+        hktdh6pFGaDcHi1g6EYBPP0IV1BSyvZ74CW4F2SYfyEC2Iz/PlMxUecV2fM9AZype0fo=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pRERq-004lM2-VO; Sun, 12 Feb 2023 16:39:26 +0100
+Date:   Sun, 12 Feb 2023 16:39:26 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Janne Grunau <j@jannau.net>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mailing List <devicetree-spec@vger.kernel.org>,
+        Kalle Valo <kvalo@kernel.org>, van Spriel <arend@broadcom.com>,
+        =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Ley Foon Tan <lftan@altera.com>,
+        Chee Nouk Phoon <cnphoon@altera.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] dt-bindings: net: Add network-class schema for
+ mac-address properties
+Message-ID: <Y+kILknqMmR6+GXO@lunn.ch>
+References: <20230203-dt-bindings-network-class-v2-0-499686795073@jannau.net>
+ <20230203-dt-bindings-network-class-v2-1-499686795073@jannau.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230203-dt-bindings-network-class-v2-1-499686795073@jannau.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, user-space extracts data from the ring-buffer via splice,
-which is handy for storage or network sharing. However, due to splice
-limitations, it is not possible to do real-time analysis without a copy.
+> +  max-frame-size:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Maximum transfer unit (IEEE defined MTU).
 
-A solution for that problem is to let the user-space map the ring-buffer
-directly.
+Do you have a reference you can include here to a clause in an IEEE
+802 document? We need this unambiguously defined otherwise more DT
+blobs are going to use the wrong value.
 
-The mapping exposed via the per-CPU file trace_pipe_raw. The first page
-is the meta-page and is followed by each page of the ring-buffer,
-ordered by their unique page ID. It is therefore easy to translate a
-page-ID to an offset into the mapping.
-
-  * Meta-page -- include/uapi/linux/trace_mmap.h for a description
-  * Page ID 0
-  * Page ID 1
-     ...
-
-The mapper must then do what use to be the kernel jobs: swap the reader
-with the head. This is done with a newly introduced ioctl:
-TRACE_MMAP_IOCTL_GET_READER_PAGE.
-
-To avoid putting to much work on the writer, the meta-page is not
-automatically updated. User-space must query an update before reading
-with another ioctl: TRACE_MMAP_IOCTL_UPDATE_META_PAGE.
-
-Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
-
-diff --git a/include/uapi/linux/trace_mmap.h b/include/uapi/linux/trace_mmap.h
-index 0f3282fa1a94..fe3bbe02e571 100644
---- a/include/uapi/linux/trace_mmap.h
-+++ b/include/uapi/linux/trace_mmap.h
-@@ -11,4 +11,7 @@ struct ring_buffer_meta_page {
- 	__u32		data_pages[];
- };
- 
-+#define TRACE_MMAP_IOCTL_GET_READER_PAGE	_IO('T', 0x1)
-+#define TRACE_MMAP_IOCTL_UPDATE_META_PAGE	_IO('T', 0x2)
-+
- #endif /* _UAPI_TRACE_MMAP_H_ */
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 78ed5f1baa8c..e7d999499dde 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -6351,7 +6351,7 @@ static void tracing_set_nop(struct trace_array *tr)
- {
- 	if (tr->current_trace == &nop_trace)
- 		return;
--	
-+
- 	tr->current_trace->enabled--;
- 
- 	if (tr->current_trace->reset)
-@@ -8384,15 +8384,27 @@ tracing_buffers_splice_read(struct file *file, loff_t *ppos,
- 	return ret;
- }
- 
--/* An ioctl call with cmd 0 to the ring buffer file will wake up all waiters */
- static long tracing_buffers_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- {
- 	struct ftrace_buffer_info *info = file->private_data;
- 	struct trace_iterator *iter = &info->iter;
- 
-+	switch (cmd) {
-+	case TRACE_MMAP_IOCTL_GET_READER_PAGE:
-+		return ring_buffer_get_reader_page(iter->array_buffer->buffer,
-+						   iter->cpu_file);
-+	case TRACE_MMAP_IOCTL_UPDATE_META_PAGE:
-+		return ring_buffer_update_meta_page(iter->array_buffer->buffer,
-+						    iter->cpu_file);
-+	}
-+
- 	if (cmd)
--		return -ENOIOCTLCMD;
-+		return -ENOTTY;
- 
-+	/*
-+	 * An ioctl call with cmd 0 to the ring buffer file will wake up all
-+	 * waiters
-+	 */
- 	mutex_lock(&trace_types_lock);
- 
- 	iter->wait_index++;
-@@ -8405,6 +8417,61 @@ static long tracing_buffers_ioctl(struct file *file, unsigned int cmd, unsigned
- 	return 0;
- }
- 
-+static vm_fault_t tracing_buffers_mmap_fault(struct vm_fault *vmf)
-+{
-+	struct ftrace_buffer_info *info = vmf->vma->vm_file->private_data;
-+	struct trace_iterator *iter = &info->iter;
-+	vm_fault_t ret = VM_FAULT_SIGBUS;
-+	struct page *page;
-+
-+	page = ring_buffer_map_fault(iter->array_buffer->buffer, iter->cpu_file,
-+				     vmf->pgoff);
-+	if (!page)
-+		return ret;
-+
-+	get_page(page);
-+	vmf->page = page;
-+
-+	return 0;
-+}
-+
-+static void tracing_buffers_mmap_close(struct vm_area_struct *vma)
-+{
-+	struct ftrace_buffer_info *info = vma->vm_file->private_data;
-+	struct trace_iterator *iter = &info->iter;
-+
-+	ring_buffer_unmap(iter->array_buffer->buffer, iter->cpu_file);
-+}
-+
-+static void tracing_buffers_mmap_open(struct vm_area_struct *vma)
-+{
-+	struct ftrace_buffer_info *info = vma->vm_file->private_data;
-+	struct trace_iterator *iter = &info->iter;
-+
-+	WARN_ON(ring_buffer_map(iter->array_buffer->buffer, iter->cpu_file));
-+}
-+
-+static const struct vm_operations_struct tracing_buffers_vmops = {
-+	.open		= tracing_buffers_mmap_open,
-+	.close		= tracing_buffers_mmap_close,
-+	.fault		= tracing_buffers_mmap_fault,
-+};
-+
-+static int tracing_buffers_mmap(struct file *filp, struct vm_area_struct *vma)
-+{
-+	struct ftrace_buffer_info *info = filp->private_data;
-+	struct trace_iterator *iter = &info->iter;
-+
-+	if (vma->vm_flags & VM_WRITE)
-+		return -EPERM;
-+
-+	vma->vm_flags |= VM_DONTCOPY | VM_DONTDUMP;
-+	vma->vm_flags &= ~VM_MAYWRITE;
-+	vma->vm_ops = &tracing_buffers_vmops;
-+
-+	return ring_buffer_map(iter->array_buffer->buffer, iter->cpu_file);
-+}
-+
- static const struct file_operations tracing_buffers_fops = {
- 	.open		= tracing_buffers_open,
- 	.read		= tracing_buffers_read,
-@@ -8413,6 +8480,7 @@ static const struct file_operations tracing_buffers_fops = {
- 	.splice_read	= tracing_buffers_splice_read,
- 	.unlocked_ioctl = tracing_buffers_ioctl,
- 	.llseek		= no_llseek,
-+	.mmap		= tracing_buffers_mmap,
- };
- 
- static ssize_t
--- 
-2.39.1.581.gbfd45094c4-goog
-
+      Andrew
