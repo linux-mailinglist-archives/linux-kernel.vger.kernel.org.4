@@ -2,843 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ACE169366B
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 09:03:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB5C693670
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 09:13:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjBLIDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 03:03:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
+        id S229602AbjBLINv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 03:13:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjBLIDM (ORCPT
+        with ESMTP id S229449AbjBLINu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 03:03:12 -0500
-Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39D113529
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 00:03:08 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id R7KDp5vXjwevER7KDpPX3L; Sun, 12 Feb 2023 09:03:06 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 12 Feb 2023 09:03:06 +0100
-X-ME-IP: 86.243.2.178
-Message-ID: <99b3f6a9-ab7d-b3dd-2a54-3fcd72607ec6@wanadoo.fr>
-Date:   Sun, 12 Feb 2023 09:02:59 +0100
+        Sun, 12 Feb 2023 03:13:50 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2663BE38B;
+        Sun, 12 Feb 2023 00:13:47 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id bh15so7956723oib.4;
+        Sun, 12 Feb 2023 00:13:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nvROq1Ysin4iKmF7L5qnmUmZE+huLZ31SHq6Mu5DVtg=;
+        b=IaRYWpQ6frsgDcsD6edPNdjfb3TkXXkD203hGwxUJrrP8YSzYq8RnvIfgXQzF9iON5
+         BLsNdc96tgMCGfADIwaqmZ95eJF85v/VnGTDQIFMvkrHDoJo81Q3sfcSRzlMBwe6Fyu+
+         P6991khDl4+CUo5euTWmh4W6XHehUs104R6KRrFuwUkzAIOJM5cy9YwwQmyQucJ6blQC
+         9VAksPKdR7Nt7OlYtFRwMoFSawY0Rwj/H9rjznMcZBdmlU5orWtgIpzIFFw6Rwaogyjf
+         x2rmyiSGZVesaeFwNUO11MYWzZWBduvP558YTbi6TJ021im6zcCxfWXaY760cX6hetEP
+         oFnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nvROq1Ysin4iKmF7L5qnmUmZE+huLZ31SHq6Mu5DVtg=;
+        b=7EOf4MNyeHDcy7igUG5/v+s2h8APq82xa2mc+EKHelfSDx3oq+vuE6HOSTeoE6iQTi
+         cM4uk99pAGKI+cl/OlaokzdM6xCX0KTbNiClkGvPtV3GbjUqjUfBSWxr8cRePX9JzES0
+         tUX31tf24D4PXa6n8M403ViP4aid2CT89B/6OOTvCSuDvPtlrERFX6CbwMQ/Ipiqxv83
+         cLx6Z2xuOMPFb1ETtV9PFFvUdDF3ZOocui48AwvVQVDBCUkpVgmYpfYa6s3ixV7BI2YP
+         TFdOsgnoV+rQ7tKzCITXXPhutO+2ZcloyZCu3wpX10aiMXrxvhSuQpP1HVdNr8lSiH9g
+         4dgA==
+X-Gm-Message-State: AO0yUKVzAWpYfSVF362HD0Gu8pPxB6e9+exk49Mvd2/uw92eLVAaxMxo
+        OXt8njNISuZxNoyURiekhfeXx7v42Ob7jjL9ISk=
+X-Google-Smtp-Source: AK7set8TnzNOFqImJjPpCHh5tW2QRdderphK8943iNYTmjtSAMNRrq5sZirKjtzelCQLw2PZ/6HszLn+vhUv4VID4Bs=
+X-Received: by 2002:a05:6808:60d:b0:37b:7c36:4df8 with SMTP id
+ y13-20020a056808060d00b0037b7c364df8mr1570866oih.144.1676189626284; Sun, 12
+ Feb 2023 00:13:46 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v5 char-misc-next] misc: microchip: pci1xxxx: Add
- OTP/EEPROM driver for the pci1xxxx switch
-To:     Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-gpio@vger.kernel.org, gregkh@linuxfoundation.org,
-        arnd@arndb.de, UNGLinuxDriver@microchip.com
-References: <20230212035743.231353-1-tharunkumar.pasumarthi@microchip.com>
-Content-Language: fr
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230212035743.231353-1-tharunkumar.pasumarthi@microchip.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230211073357.755893-1-sergio.paracuellos@gmail.com>
+ <20230211073357.755893-2-sergio.paracuellos@gmail.com> <190b3135-82f3-4dfa-55ee-e048c5510e3c@arinc9.com>
+ <CAMhs-H8tehOWvYKmFtW_LHNb62h5mnzVGN_bfGOtLgNE9qUxqw@mail.gmail.com>
+ <d14f0065-e8d3-50ed-7ea4-ba57dbd18d51@arinc9.com> <CAMhs-H_1dtdAmeNW9arK9JxhdWaQJwcMU1Pk7TOW1f5MREzzug@mail.gmail.com>
+ <76353597-0170-e0d9-9f5d-f208a03e44e8@linaro.org>
+In-Reply-To: <76353597-0170-e0d9-9f5d-f208a03e44e8@linaro.org>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Sun, 12 Feb 2023 09:13:35 +0100
+Message-ID: <CAMhs-H-JGZMR6mB=USywAh4aRS9ZFOVebwLv8=N2f3uvWpcXDA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/5] dt-bindings: watchdog: mt7621-wdt: add phandle to
+ access system controller registers
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        tsbogend@alpha.franken.de, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 12/02/2023 à 04:57, Tharun Kumar P a écrit :
-> From: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-> 
-> Microchip's pci1xxxx is an unmanaged PCIe3.1a switch for consumer, industrial,
-> and automotive applications. This switch integrates OTP and EEPROM to enable
-> customization of the part in the field. This patch provides the OTP/EEPROM
-> driver to support the same.
-> 
-> Co-developed-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-> Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-> Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+On Sat, Feb 11, 2023 at 12:42 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 11/02/2023 12:01, Sergio Paracuellos wrote:
+> > On Sat, Feb 11, 2023 at 11:47 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@=
+arinc9.com> wrote:
+> >>
+> >> On 11.02.2023 13:41, Sergio Paracuellos wrote:
+> >>> On Sat, Feb 11, 2023 at 10:10 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.una=
+l@arinc9.com> wrote:
+> >>>>
+> >>>> Is this mediatek,sysctl property required after your changes on the
+> >>>> watchdog code?
+> >>>
+> >>> I don't really understand the question :-) Yes, it is. Since we have
+> >>> introduced a new phandle in the watchdog node to be able to access th=
+e
+> >>> reset status register through the 'sysc' syscon node.
+> >>> We need the bindings to be aligned with the mt7621.dtsi file and we
+> >>> are getting the syscon regmap handler via
+> >>> 'syscon_regmap_lookup_by_phandle()'. See PATCH 5 of the series, Ar=C4=
+=B1n=C3=A7.
+> >>
+> >> I believe you need to put mediatek,sysctl under "required:".
+> >
+> > Ah, I understood your question now :-). You meant 'required' property.
+> > I need more coffee, I guess :-). I am not sure if you can add
+> > properties as required after bindings are already mainlined for
+> > compatibility issues. The problem with this SoC is that drivers become
+> > mainlined before the device tree was so if things are properly fixed
+> > now this kind of issues appear.  Let's see Krzysztof and Rob comments
+> > for this.
+>
+> If your driver fails to probe without mediatek,sysctl, you already made
+> it required (thus broke the ABI) regardless what dt-binding is saying.
+> In such case you should update dt-binding to reflect reality.
+>
+> Now ABI break is different case. Usually you should not break it without
+> valid reasons (e.g. it was never working before). Your commit msg
+> suggests that you only improve the code, thus ABI break is not really
+> justified. In such case - binding is correct, driver should be reworked
+> to accept DTS without the new property.
 
-Hi,
+Thanks for clarification, Krzysztof. Ok, so if this is the case I need
+to add this property required (as Arinc was properly pointing out in
+previous mail) since without it the driver is going to fail on probe
+(PATCH 5 of the series). I understand the "it was never working
+before" argument reason for ABI breaks. What happens if the old driver
+code was not ideal and totally dependent on architecture specific
+operations when this could be totally avoided and properly make arch
+independent agnostic drivers? This driver was added in 2016 [0]. There
+was not a device tree file in the kernel for this SoC mainlined until
+2022 [1]. I also personally migrated this watchdog binding in 2022
+from text to YAML and maintained it without changes [2]. When this was
+mainlined not all drivers were properly reviewed and the current code
+was just maintained as it is. Most users of this SoC are in the
+openWRT community where the dtsi of the mainline is not used yet and
+they maintain their own mt7621.dtsi files. Also, when a new version of
+the openWRT selected kernel is added they also modify and align with
+its mt7621.dtsi file without maintaining previous dtb's. If "make the
+driver arch independent to be able to be compile tested" and this kind
+of arguments are not valid at all I need to know because I have
+started to review driver code for this SoC and other drivers also have
+the same arch dependency that ideally should be avoided in the same
+way. This at the end means to break the ABI again in the future for
+those drivers / bindings. So I can just let them be as it is and not
+provide any change at all and continue without being compile tested
+and other beneficial features to detect future driver breakage.
 
-a few nits below, should some be useful.
+Thanks in advance for clarification.
 
-CJ
+Best regards,
+    Sergio Paracuellos
 
-> ---
-> v4 -> v5:
-> - Used proper errno
-> - Removed un-necessary prints
-> 
-> v3 -> v4:
-> - Remove extra space, tab, un-necessary casting, paranthesis, do
->    while(false) loops
-> - Used read_poll_timeout for polling BUSY_BIT
-> 
-> v2 -> v3:
-> - Modified commit description to include build issues reported by Kernel
-> test robot <lkp@intel.com> which are fixed in this patch
-> 
-> v1 -> v2:
-> - Resolve build issue reported by kernel test robot <lkp@intel.com>
-> ---
->   MAINTAINERS                                   |   1 +
->   drivers/misc/mchp_pci1xxxx/Kconfig            |   1 +
->   drivers/misc/mchp_pci1xxxx/Makefile           |   2 +-
->   .../misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c | 649 ++++++++++++++++++
->   4 files changed, 652 insertions(+), 1 deletion(-)
->   create mode 100644 drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 69d1e8ad52c5..8a57683927fd 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13803,6 +13803,7 @@ S:	Supported
->   F:	drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c
->   F:	drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.h
->   F:	drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
-> +F:	drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c
->   
->   MICROCHIP OTPC DRIVER
->   M:	Claudiu Beznea <claudiu.beznea@microchip.com>
-> diff --git a/drivers/misc/mchp_pci1xxxx/Kconfig b/drivers/misc/mchp_pci1xxxx/Kconfig
-> index 4abb47de7219..67fa3299cfb6 100644
-> --- a/drivers/misc/mchp_pci1xxxx/Kconfig
-> +++ b/drivers/misc/mchp_pci1xxxx/Kconfig
-> @@ -2,6 +2,7 @@ config GP_PCI1XXXX
->          tristate "Microchip PCI1XXXX PCIe to GPIO Expander + OTP/EEPROM manager"
->          depends on PCI
->          depends on GPIOLIB
-> +       depends on BLOCK
->          select GPIOLIB_IRQCHIP
->          select AUXILIARY_BUS
->          help
-> diff --git a/drivers/misc/mchp_pci1xxxx/Makefile b/drivers/misc/mchp_pci1xxxx/Makefile
-> index fc4615cfe28b..ae31251dab37 100644
-> --- a/drivers/misc/mchp_pci1xxxx/Makefile
-> +++ b/drivers/misc/mchp_pci1xxxx/Makefile
-> @@ -1 +1 @@
-> -obj-$(CONFIG_GP_PCI1XXXX) := mchp_pci1xxxx_gp.o mchp_pci1xxxx_gpio.o
-> +obj-$(CONFIG_GP_PCI1XXXX) := mchp_pci1xxxx_gp.o mchp_pci1xxxx_gpio.o mchp_pci1xxxx_otpe2p.o
-> diff --git a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c
-> new file mode 100644
-> index 000000000000..0d097afc84aa
-> --- /dev/null
-> +++ b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c
-> @@ -0,0 +1,649 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +// Copyright (C) 2022-2023 Microchip Technology Inc.
-> +// PCI1xxxx OTP/EEPROM driver
-> +
-> +#include <linux/auxiliary_bus.h>
-> +#include <linux/bio.h>
-> +#include <linux/blkdev.h>
-> +#include <linux/blk-mq.h>
-> +#include <linux/delay.h>
-> +#include <linux/gpio/driver.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/kthread.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/spinlock.h>
-> +
-> +#include "mchp_pci1xxxx_gp.h"
-> +
-> +#define PERI_PF3_SYSTEM_REG_ADDR_BASE	(0x2000)
-> +#define PERI_PF3_SYSTEM_REG_LENGTH	(0x4000)
-> +
-> +#define CONFIG_REG_ADDR_BASE		(0)
-> +#define EEPROM_REG_ADDR_BASE		(0x0E00)
-> +#define OTP_REG_ADDR_BASE		(0x1000)
-> +
-> +#define MMAP_CFG_OFFSET(x)		(CONFIG_REG_ADDR_BASE + (x))
-> +
-> +#define CFG_SYS_LOCK_OFFSET		(0xA0)
-> +#define CFG_SYS_LOCK_PF3		BIT(5)
-> +
-> +#define MMAP_OTP_OFFSET(x)		(OTP_REG_ADDR_BASE + (x))
-> +
-> +#define OTP_PWR_DN_OFFSET		(0x00)
-> +#define OTP_ADDR_HIGH_OFFSET		(0x04)
-> +#define	OTP_ADDR_LOW_OFFSET		(0x08)
-> +#define	OTP_ADDR_BITS_OFFSET		(0x0C)
-> +#define OTP_PRGM_DATA_OFFSET		(0x10)
-> +#define OTP_PRGM_MODE_OFFSET		(0x14)
-> +#define OTP_RD_DATA_OFFSET		(0x18)
-> +#define OTP_FUNC_CMD_OFFSET		(0x20)
-> +#define OTP_TEST_CMD_OFFSET		(0x24)
-> +#define OTP_CMD_GO_OFFSET		(0x28)
-> +#define OTP_PASS_FAIL_OFFSET		(0x2C)
-> +#define OTP_STATUS_OFFSET		(0x30)
-> +#define OTP_MAX_PRG_OFFSET		(0x34)
-> +#define OTP_RSTB_PW_OFFSET		(0x50)
-> +#define OTP_PGM_PW_OFFSET		(0x60)
-> +#define OTP_READ_PW_OFFSET		(0x70)
-> +
-> +#define OTP_PWR_DN_BIT			BIT(0)
-> +#define OTP_CMD_GO_BIT			BIT(0)
-> +#define OTP_PGM_MODE_BYTE_BIT		BIT(0)
-> +#define OTP_STATUS_BUSY_BIT		BIT(0)
-> +#define OTP_FUNC_PGM_BIT		BIT(1)
-> +#define OTP_FUNC_RD_BIT			BIT(0)
-> +
-> +#define OTP_RW_TIMEOUT_MILLISECONDS	(5)
-> +#define OTP_STATUS_READ_DELAY_US	(4000)
-> +#define OTP_STATUS_READ_TIMEOUT_US	(20000)
-> +
-> +#define MMAP_EEPROM_OFFSET(x)		(EEPROM_REG_ADDR_BASE + (x))
-> +
-> +#define EEPROM_CMD_REG			(0x00)
-> +#define EEPROM_DATA_REG			(0x04)
-> +#define EEPROM_CFG_REG			(0x08)
-> +
-> +#define EEPROM_CMD_EPC_BUSY_BIT		BIT(31)
-> +#define EEPROM_CMD_EPC_TIMEOUT_BIT	BIT(17)
-> +#define EEPROM_CMD_EPC_WRITE		(BIT(29) | BIT(28))
-> +
-> +#define EEPROM_CFG_BAUD_RATE_100KHZ	BIT(9)
-> +#define EEPROM_CFG_SIZE_SEL		BIT(12)
-> +#define EEPROM_CFG_PULSE_WIDTH_100KHZ	(BIT(17) | BIT(16))
-> +#define OTP_EEPROM_SECTOR_SIZE		(512)
-> +#define OTP_SIZE_IN_BYTES		(8 * 1024)
-> +#define EEPROM_SIZE_IN_BYTES		(8 * 1024)
-> +
-> +struct pci1xxxx_otp_e2p_device {
-> +	struct pci1xxxx_otp_e2p_disk *otp_e2p_device;
-> +	struct auxiliary_device *pdev;
-> +	void __iomem *reg_base;
-> +	int block_device_count;
-> +};
-> +
-> +struct pci1xxxx_otp_e2p_disk {
-> +	struct blk_mq_tag_set tag_set;
-> +	struct auxiliary_device *pdev;
-> +	struct request_queue *queue;
-> +	struct mutex lock;
-> +	struct gendisk *gd;
-> +	bool has_eeprom;
-> +	int (*disk_write_byte)(struct pci1xxxx_otp_e2p_device *priv,
-> +		unsigned long byte_offset, u8 value);
-> +	int (*disk_read_byte)(struct pci1xxxx_otp_e2p_device *priv,
-> +		unsigned long byte_offset, u8 *data);
-> +};
-> +
-> +static int otp_sector_count = OTP_SIZE_IN_BYTES / OTP_EEPROM_SECTOR_SIZE;
-> +static int e2p_sector_count = EEPROM_SIZE_IN_BYTES / OTP_EEPROM_SECTOR_SIZE;
-> +static int otp_device_count, e2p_device_count;
-> +static int otp_block_driver_major;
-> +
-> +static void otp_device_set_address(struct pci1xxxx_otp_e2p_device *priv, u16 address)
-> +{
-> +	u32 lo, hi;
-> +
-> +	lo = address & 0xFF;
-> +	hi = (address & 0x1f00) >> 8;
-> +	writel(lo, priv->reg_base + MMAP_OTP_OFFSET(OTP_ADDR_LOW_OFFSET));
-> +	writel(hi, priv->reg_base + MMAP_OTP_OFFSET(OTP_ADDR_HIGH_OFFSET));
-> +}
-> +
-> +static int set_sys_lock(struct pci1xxxx_otp_e2p_device *priv)
-> +{
-> +	void __iomem *p = priv->reg_base + MMAP_CFG_OFFSET(CFG_SYS_LOCK_OFFSET);
-> +	u8 data;
-> +
-> +	writel(CFG_SYS_LOCK_PF3, p);
-> +	data = readl(p);
-> +	if (data != CFG_SYS_LOCK_PF3)
-> +		return -EPERM;
-> +
-> +	return 0;
-> +}
-> +
-> +static int release_sys_lock(struct pci1xxxx_otp_e2p_device *priv)
-> +{
-> +	void __iomem *p = priv->reg_base + MMAP_CFG_OFFSET(CFG_SYS_LOCK_OFFSET);
-> +	u8 data;
-> +
-> +	data = readl(p);
-> +	if (data != CFG_SYS_LOCK_PF3)
-> +		return 0;
-> +
-> +	writel(0, p);
-> +
-> +	data = readl(p);
-> +	if (data & CFG_SYS_LOCK_PF3)
-> +		return -EPERM;
-> +
-> +	return 0;
-> +}
-> +
-> +static int otp_e2p_device_open(struct block_device *bdev, fmode_t mode)
-> +{
-> +	struct pci1xxxx_otp_e2p_disk *disk_priv;
-> +	struct pci1xxxx_otp_e2p_device *priv;
-> +	struct auxiliary_device *pdev;
-> +	int retval = 0;
+[0]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/com=
+mit/drivers/watchdog/mt7621_wdt.c?id=3Dab3f09fe16d158cb4f84e558c61ec5d6d601=
+f2e0
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/com=
+mit/arch/mips/boot/dts/ralink/mt7621.dtsi?id=3D7a6ee0bbab2551d7189ce0f5e625=
+fef4d612ebea
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/com=
+mit/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml?id=
+=3D9023e05b7a5809593a7ea09896eee0bbb6ae1685
 
-No need to initialize.
-
-> +	u8 data;
-> +
-> +	disk_priv = bdev->bd_disk->private_data;
-> +	pdev = (struct auxiliary_device *)disk_priv->pdev;
-> +	priv = dev_get_drvdata(&pdev->dev);
-> +
-> +	mutex_lock(&disk_priv->lock);
-> +
-> +	retval = set_sys_lock(priv);
-> +	if (retval)
-> +		goto exit;
-> +
-> +	if (!disk_priv->has_eeprom) {
-> +		data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_PWR_DN_OFFSET));
-> +		writel((data & ~OTP_PWR_DN_BIT), priv->reg_base +
-> +			MMAP_OTP_OFFSET(OTP_PWR_DN_OFFSET));
-> +	}
-> +
-> +exit:
-> +	mutex_unlock(&disk_priv->lock);
-> +	return retval;
-> +}
-> +
-> +static void otp_e2p_device_release(struct gendisk *disk, fmode_t mode)
-> +{
-> +	struct pci1xxxx_otp_e2p_disk *disk_priv;
-> +	struct pci1xxxx_otp_e2p_device *priv;
-> +	u8 data;
-> +
-> +	disk_priv = disk->private_data;
-> +	priv = dev_get_drvdata(&disk_priv->pdev->dev);
-> +
-> +	mutex_lock(&disk_priv->lock);
-> +
-> +	if (!disk_priv->has_eeprom) {
-> +		data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_PWR_DN_OFFSET));
-> +		writel((data | OTP_PWR_DN_BIT), priv->reg_base +
-> +			MMAP_OTP_OFFSET(OTP_PWR_DN_OFFSET));
-> +	}
-> +	release_sys_lock(priv);
-> +
-> +	mutex_unlock(&disk_priv->lock);
-> +}
-> +
-> +static int e2p_device_write_byte(struct pci1xxxx_otp_e2p_device *priv,
-> +				 unsigned long byte_offset, u8 value)
-> +{
-> +	u32 data;
-> +
-> +	/* Write the value into EEPROM_DATA_REG register */
-> +	writel(value, priv->reg_base + MMAP_EEPROM_OFFSET(EEPROM_DATA_REG));
-> +	data = EEPROM_CMD_EPC_TIMEOUT_BIT | EEPROM_CMD_EPC_WRITE | byte_offset;
-> +
-> +	/* Write the data into EEPROM_CMD_REG register */
-> +	writel(data, priv->reg_base + MMAP_EEPROM_OFFSET(EEPROM_CMD_REG));
-> +
-> +	/* Set the EPC_BUSY bit of EEPROM_CMD_REG register */
-> +	writel(EEPROM_CMD_EPC_BUSY_BIT | data, priv->reg_base +
-> +	       MMAP_EEPROM_OFFSET(EEPROM_CMD_REG));
-> +
-> +	/* Wait for the EPC_BUSY bit to get cleared */
-> +	do {
-> +		data = readl(priv->reg_base + MMAP_EEPROM_OFFSET(EEPROM_CMD_REG));
-> +	} while (data & EEPROM_CMD_EPC_BUSY_BIT);
-
-Would it make sense to use read_poll_timeout() as below, instead of a 
-busy loop?
-
-> +
-> +	if (data & EEPROM_CMD_EPC_TIMEOUT_BIT)
-> +		return -EBUSY;
-> +
-> +	return 0;
-> +}
-> +
-> +static int e2p_device_read_byte(struct pci1xxxx_otp_e2p_device *priv,
-> +				unsigned long byte_offset, u8 *data)
-> +{
-> +	u32 regval;
-> +
-> +	/*
-> +	 * Write the byte offset into the EPC_ADDRESS field of EEPROM_CMD_REG
-> +	 * register
-> +	 */
-> +	writel(byte_offset, priv->reg_base + MMAP_EEPROM_OFFSET(EEPROM_CMD_REG));
-> +
-> +	/* Set the EPC_BUSY bit of EEPROM_CMD_REG register */
-> +	writel(EEPROM_CMD_EPC_BUSY_BIT | byte_offset, priv->reg_base +
-> +	       MMAP_EEPROM_OFFSET(EEPROM_CMD_REG));
-> +
-> +	/* Wait for the EPC_BUSY bit to get cleared */
-> +	do {
-> +		regval = readl(priv->reg_base + MMAP_EEPROM_OFFSET(EEPROM_CMD_REG));
-> +	} while (regval & EEPROM_CMD_EPC_BUSY_BIT);
-
-Would it make sense to use read_poll_timeout() as below, instead of a 
-busy loop?
-
-
-> +
-> +	if (regval & EEPROM_CMD_EPC_TIMEOUT_BIT)
-> +		return -EBUSY;
-> +
-> +	/* Read the contents from the EEPROM_DATA_REG */
-> +	*data = readl(priv->reg_base + MMAP_EEPROM_OFFSET(EEPROM_DATA_REG));
-> +	return 0;
-> +}
-> +
-> +static bool is_e2p_responsive(struct pci1xxxx_otp_e2p_device *priv)
-> +{
-> +	u32 data;
-> +
-> +	if (set_sys_lock(priv))
-> +		return false;
-> +
-> +	writel((EEPROM_CFG_PULSE_WIDTH_100KHZ | EEPROM_CFG_SIZE_SEL |
-> +		EEPROM_CFG_BAUD_RATE_100KHZ), priv->reg_base +
-> +		MMAP_EEPROM_OFFSET(EEPROM_CFG_REG));
-> +
-> +	/*
-> +	 * Write the byte offset into the EPC_ADDRESS field of EEPROM_CMD_REG
-> +	 * register
-> +	 */
-> +	writel(EEPROM_CMD_EPC_TIMEOUT_BIT, priv->reg_base +
-> +	       MMAP_EEPROM_OFFSET(EEPROM_CMD_REG));
-> +
-> +	/* Set the EPC_BUSY bit of EEPROM_CMD_REG register */
-> +	writel(EEPROM_CMD_EPC_BUSY_BIT, priv->reg_base +
-> +	       MMAP_EEPROM_OFFSET(EEPROM_CMD_REG));
-> +
-> +	/* Wait for the EPC_BUSY bit to get cleared or timeout bit to get set*/
-> +	do {
-> +		data = readl(priv->reg_base + MMAP_EEPROM_OFFSET(EEPROM_CMD_REG));
-> +	} while (data & EEPROM_CMD_EPC_BUSY_BIT);
-
-Would it make sense to use read_poll_timeout() as below, instead of a 
-busy loop?
-
-> +
-> +	/* If EPC_TIMEOUT is set, then the EEPROM is not responsive */
-> +	release_sys_lock(priv);
-> +
-> +	if (data & EEPROM_CMD_EPC_TIMEOUT_BIT) {
-> +		dev_err(&priv->pdev->dev,
-> +			"EPC_Timeout, EEPROM is unresponsive: %x\n", data);
-> +		return false;
-> +	}
-> +
-> +	return true;
-> +}
-> +
-> +static int otp_device_write_byte(struct pci1xxxx_otp_e2p_device *priv,
-> +				 unsigned long byte_offset, u8 value)
-> +{
-> +	u8 data;
-> +	int ret;
-> +
-> +	if (!value)
-> +		return 0;
-> +
-> +	otp_device_set_address(priv, (u16)byte_offset);
-> +
-> +	/* Set OTP_PGM_MODE_BYTE command bit in OTP_PRGM_MODE register */
-> +	data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_PRGM_MODE_OFFSET));
-> +	writel((data | OTP_PGM_MODE_BYTE_BIT), priv->reg_base +
-> +		MMAP_OTP_OFFSET(OTP_PRGM_MODE_OFFSET));
-> +
-> +	/* Write the value to program into OTP_PRGM_DATA register */
-> +	writel(value, priv->reg_base + MMAP_OTP_OFFSET(OTP_PRGM_DATA_OFFSET));
-> +
-> +	/* Set OTP_PROGRAM command bit in OTP_FUNC_CMD register */
-> +	data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_FUNC_CMD_OFFSET));
-> +	writel((data | OTP_FUNC_PGM_BIT), priv->reg_base +
-> +		MMAP_OTP_OFFSET(OTP_FUNC_CMD_OFFSET));
-> +
-> +	/* Set OTP_GO command bit in OTP_CMD_GO register */
-> +	data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_CMD_GO_OFFSET));
-> +	writel((data | OTP_CMD_GO_BIT), priv->reg_base +
-> +		MMAP_OTP_OFFSET(OTP_CMD_GO_OFFSET));
-> +
-> +	ret = read_poll_timeout(readl, data, !(data & OTP_STATUS_BUSY_BIT),
-> +				OTP_STATUS_READ_DELAY_US, OTP_STATUS_READ_TIMEOUT_US,
-> +				true, priv->reg_base + MMAP_OTP_OFFSET(OTP_STATUS_OFFSET));
-
-(here)
-
-> +	if (ret < 0)
-> +		return -EBUSY;
-> +
-> +	/* Read the result from OTP_RD_DATA register */
-> +	data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_PASS_FAIL_OFFSET));
-> +	if (data & 0x02)
-> +		return 0;
-> +
-> +	dev_err(&priv->pdev->dev, "OTP write read mismatch 0x%x\n", data);
-> +	return -EIO;
-> +}
-> +
-> +static int otp_device_read_byte(struct pci1xxxx_otp_e2p_device *priv,
-> +				unsigned long byte_offset, u8 *data)
-> +{
-> +	int ret;
-
-Some places use ret, some other retval. (I personnaly prefer ret because 
-it is shorter)
-
-Does it make sense to be consistent in the naming?
-
-> +
-> +	otp_device_set_address(priv, (u16)byte_offset);
-> +
-> +	/* Set OTP_READ command bit in OTP_FUNC_CMD register */
-> +	*data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_FUNC_CMD_OFFSET));
-> +	writel((*data | OTP_FUNC_RD_BIT), priv->reg_base +
-> +		MMAP_OTP_OFFSET(OTP_FUNC_CMD_OFFSET));
-> +
-> +	/* Set OTP_GO command bit in OTP_CMD_GO register */
-> +	*data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_CMD_GO_OFFSET));
-> +	writel((*data | OTP_CMD_GO_BIT), priv->reg_base +
-> +		MMAP_OTP_OFFSET(OTP_CMD_GO_OFFSET));
-> +
-> +	ret = read_poll_timeout(readl, *data, !(*data & OTP_STATUS_BUSY_BIT),
-> +				OTP_STATUS_READ_DELAY_US, OTP_STATUS_READ_TIMEOUT_US,
-> +				true, priv->reg_base + MMAP_OTP_OFFSET(OTP_STATUS_OFFSET));
-> +	if (ret < 0)
-> +		return -EBUSY;
-> +
-> +	/* Read the result from OTP_RD_DATA register */
-> +	*data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_RD_DATA_OFFSET));
-> +	return 0;
-> +}
-> +
-> +static int otp_e2P_device_transfer(struct request *req)
-> +{
-> +	struct pci1xxxx_otp_e2p_disk *disk_priv;
-> +	struct pci1xxxx_otp_e2p_device *priv;
-> +	unsigned long sector;
-> +	unsigned long nsect;
-> +	long byte_offset;
-> +	int retval;
-> +	u8 *buffer;
-> +	int write;
-> +	int i, j;
-> +
-> +	sector = blk_rq_pos(req);
-> +	nsect = blk_rq_cur_sectors(req);
-> +	buffer = bio_data(req->bio);
-> +	write = rq_data_dir(req);
-> +	disk_priv = req->q->disk->private_data;
-> +	priv = dev_get_drvdata(&disk_priv->pdev->dev);
-> +
-> +	if (write) {
-> +		for (i = 0; i < nsect; i++) {
-> +			byte_offset = (sector + i) * OTP_EEPROM_SECTOR_SIZE;
-> +			for (j = 0; j < OTP_EEPROM_SECTOR_SIZE; j++) {
-
-Not sure at all if it is a win, but testing for 'write' here would avoid 
-some code duplication.
-
-> +				retval = disk_priv->disk_write_byte(priv,
-> +								    byte_offset + j,
-> +								    *buffer);
-> +				if (retval)
-> +					return retval;
-> +
-> +				buffer++;
-> +			}
-> +		}
-> +	} else {
-> +		for (i = 0; i < nsect; i++) {
-> +			byte_offset = (sector + i) * OTP_EEPROM_SECTOR_SIZE;
-> +			for (j = 0; j < OTP_EEPROM_SECTOR_SIZE; j++) {
-> +				retval = disk_priv->disk_read_byte(priv,
-> +								   byte_offset + j,
-> +								   buffer);
-> +				if (retval)
-> +					return retval;
-> +
-> +				buffer++;
-> +			}
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static blk_status_t OTPE2P_queue_rq(struct blk_mq_hw_ctx *hctx,
-> +				    const struct blk_mq_queue_data *bd)
-> +{
-> +	struct request *req = bd->rq;
-> +
-> +	blk_mq_start_request(req);
-> +	if (!otp_e2P_device_transfer(req)) {
-> +		blk_mq_end_request(req, BLK_STS_OK);
-> +		return BLK_STS_OK;
-> +	}
-> +
-> +	return BLK_STS_IOERR;
-> +}
-> +
-> +static const struct blk_mq_ops OTPE2P_mq_ops = {
-> +	.queue_rq	= OTPE2P_queue_rq,
-> +};
-> +
-> +static const struct block_device_operations otp_e2p_device_ops = {
-> +	.owner = THIS_MODULE,
-> +	.open = otp_e2p_device_open,
-> +	.release = otp_e2p_device_release,
-> +};
-> +
-> +static int otp_e2p_device_create_block_device(struct auxiliary_device *aux_dev)
-> +{
-> +	struct auxiliary_device_wrapper *aux_dev_wrapper;
-> +	struct pci1xxxx_otp_e2p_device *priv;
-> +	struct gp_aux_data_type *pdata;
-> +	int retval = 0, i;
-> +
-> +	aux_dev_wrapper = container_of(aux_dev, struct auxiliary_device_wrapper, aux_dev);
-> +	pdata = &aux_dev_wrapper->gp_aux_data;
-> +	if (!pdata) {
-> +		dev_err(&aux_dev->dev, "Invalid data in aux_dev_wrapper->gp_aux_data\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	priv = devm_kzalloc(&aux_dev->dev, sizeof(struct pci1xxxx_otp_e2p_device),
-> +			    GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->pdev = aux_dev;
-> +
-> +	dev_set_drvdata(&aux_dev->dev, priv);
-> +
-> +	if (!devm_request_mem_region(&aux_dev->dev, pdata->region_start +
-> +				     PERI_PF3_SYSTEM_REG_ADDR_BASE,
-> +		PERI_PF3_SYSTEM_REG_LENGTH, aux_dev->name)) {
-> +		dev_err(&aux_dev->dev, "can't request otpe2p region\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	priv->reg_base = devm_ioremap(&aux_dev->dev, pdata->region_start +
-> +				      PERI_PF3_SYSTEM_REG_ADDR_BASE,
-> +				      PERI_PF3_SYSTEM_REG_LENGTH);
-> +	if (!priv->reg_base) {
-> +		dev_err(&aux_dev->dev, "ioremap failed\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	priv->block_device_count = 0;
-
-Useless. It is zalloc()'ed and overwritten just below anyway.
-
-> +	if (is_e2p_responsive(priv))
-> +		priv->block_device_count = 2;
-> +	else
-> +		priv->block_device_count = 1;
-> +
-> +	priv->otp_e2p_device = devm_kzalloc(&priv->pdev->dev,
-> +					    priv->block_device_count *
-> +					    sizeof(struct pci1xxxx_otp_e2p_disk),
-> +					    GFP_KERNEL);
-
-devm_kcalloc()?
-
-> +	if (!priv->otp_e2p_device)
-> +		return -ENOMEM;
-> +
-> +	for (i = 0; i < priv->block_device_count; i++) {
-
-having something like:
-		struct pci1xxxx_otp_e2p_disk *e2p_dev = &priv->otp_e2p_device[i];
-
-would slighly simplify the code below and would help keeping statement 
-on 1 line.
-
-> +		mutex_init(&priv->otp_e2p_device[i].lock);
-> +		priv->otp_e2p_device[i].tag_set.ops = &OTPE2P_mq_ops;
-> +		priv->otp_e2p_device[i].tag_set.nr_hw_queues = 1;
-> +		priv->otp_e2p_device[i].tag_set.queue_depth = 16;
-> +		priv->otp_e2p_device[i].tag_set.flags = BLK_MQ_F_SHOULD_MERGE;
-> +
-> +		retval = blk_mq_alloc_tag_set(&priv->otp_e2p_device[i].tag_set);
-> +		if (retval) {
-> +			dev_err(&aux_dev->dev, "blk_mq_alloc_tag_set failed\n");
-
-Should we have something like:
-			if (i)
-				goto otp_free_disk;
-			else
-
-> +			return retval;
-> +		}
-> +
-> +		priv->otp_e2p_device[i].queue =
-> +			blk_mq_init_queue(&priv->otp_e2p_device[i].tag_set);
-> +		if (IS_ERR(priv->otp_e2p_device[i].queue)) {
-> +			retval = PTR_ERR(priv->otp_e2p_device[i].queue);
-> +			priv->otp_e2p_device[i].queue = NULL;
-> +			if (i)
-> +				goto e2p_free_tag_set;
-> +			else
-> +				goto otp_free_tag_set;
-> +		}
-> +
-> +		blk_queue_logical_block_size(priv->otp_e2p_device[i].queue,
-> +				OTP_EEPROM_SECTOR_SIZE);
-> +		blk_queue_physical_block_size(priv->otp_e2p_device[i].queue,
-> +				OTP_EEPROM_SECTOR_SIZE);
-> +		priv->otp_e2p_device[i].queue->queuedata = priv;
-> +		priv->otp_e2p_device[i].gd =
-> +			blk_mq_alloc_disk(&priv->otp_e2p_device[i].tag_set,
-> +					  NULL);
-> +		if (IS_ERR(priv->otp_e2p_device[i].gd)) {
-> +			retval = PTR_ERR(priv->otp_e2p_device[i].gd);
-> +			if (i)
-> +				goto e2p_destroy_queue;
-> +			else
-> +				goto otp_destroy_queue;
-> +		}
-> +
-> +		priv->otp_e2p_device[i].pdev = aux_dev;
-> +		priv->otp_e2p_device[i].gd->major = otp_block_driver_major;
-> +		priv->otp_e2p_device[i].gd->minors = 1;
-> +		priv->otp_e2p_device[i].gd->first_minor =
-> +					otp_device_count + e2p_device_count;
-> +		priv->otp_e2p_device[i].gd->fops = &otp_e2p_device_ops;
-> +		priv->otp_e2p_device[i].gd->private_data =
-> +			&priv->otp_e2p_device[i];
-> +
-> +		if (i == 0) {
-> +			snprintf(priv->otp_e2p_device[i].gd->disk_name,
-> +					32, "PCI1xxxxOTP%x", otp_device_count);
-
-s/32/DISK_NAME_LEN/ ?
-
-> +			set_capacity(priv->otp_e2p_device[i].gd, otp_sector_count);
-> +			priv->otp_e2p_device[i].disk_read_byte = otp_device_read_byte;
-> +			priv->otp_e2p_device[i].disk_write_byte = otp_device_write_byte;
-> +			otp_device_count++;
-> +		} else {
-> +			snprintf(priv->otp_e2p_device[i].gd->disk_name,
-> +					32, "PCI1xxxxE2P%x", otp_device_count - 1);
-
-s/32/DISK_NAME_LEN/ ?
-
-> +			set_capacity(priv->otp_e2p_device[i].gd, e2p_sector_count);
-> +			priv->otp_e2p_device[i].has_eeprom = true;
-> +			priv->otp_e2p_device[i].disk_read_byte = e2p_device_read_byte;
-> +			priv->otp_e2p_device[i].disk_write_byte = e2p_device_write_byte;
-> +			e2p_device_count++;
-> +		}
-> +
-> +		retval = add_disk(priv->otp_e2p_device[i].gd);
-> +		if (retval) {
-> +			if (i)
-> +				goto e2p_free_disk;
-> +			else
-> +				goto otp_free_disk;
-> +		}
-> +	}
-> +
-> +	return retval;
-> +
-> +e2p_free_disk:
-> +	del_gendisk(priv->otp_e2p_device[1].gd);
-> +	put_disk(priv->otp_e2p_device[1].gd);
-> +e2p_destroy_queue:
-> +	blk_mq_destroy_queue(priv->otp_e2p_device[1].queue);
-> +e2p_free_tag_set:
-> +	blk_mq_free_tag_set(&priv->otp_e2p_device[1].tag_set);
-> +otp_free_disk:
-> +	del_gendisk(priv->otp_e2p_device[0].gd);
-> +	put_disk(priv->otp_e2p_device[0].gd);
-> +otp_destroy_queue:
-> +	blk_mq_destroy_queue(priv->otp_e2p_device[0].queue);
-> +otp_free_tag_set:
-> +	blk_mq_free_tag_set(&priv->otp_e2p_device[0].tag_set);
-> +
-> +	dev_err(&aux_dev->dev,
-> +		"otp/eeprom device enumeration failed with errno = %d\n",
-> +		retval);
-
-Maybe dev_err_probe() here?
-(and/or even in other places above?)
-
-> +	return retval;
-> +}
-> +
-> +static void pci1xxxx_otp_e2p_remove(struct auxiliary_device *aux_dev)
-> +{
-> +	struct pci1xxxx_otp_e2p_device *priv = dev_get_drvdata(&aux_dev->dev);
-> +	int i;
-> +
-> +	for (i = 0; i < priv->block_device_count; i++) {
-> +		if (priv->otp_e2p_device[i].queue)
-> +			blk_mq_destroy_queue(priv->otp_e2p_device[i].queue);
-> +
-> +		if (priv->otp_e2p_device[i].gd) {
-> +			del_gendisk(priv->otp_e2p_device[i].gd);
-> +			put_disk(priv->otp_e2p_device[i].gd);
-> +			blk_mq_free_tag_set(&priv->otp_e2p_device[i].tag_set);
-> +		}
-> +	}
-> +}
-> +
-> +static int pci1xxxx_otp_e2p_probe(struct auxiliary_device *aux_dev,
-> +				  const struct auxiliary_device_id *id)
-> +{
-> +	return otp_e2p_device_create_block_device(aux_dev);
-> +}
-> +
-> +static const struct auxiliary_device_id pci1xxxx_otp_e2p_auxiliary_id_table[] = {
-> +	{.name = "mchp_pci1xxxx_gp.gp_otp_e2p"},
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(auxiliary, pci1xxxx_otp_e2p_auxiliary_id_table);
-> +
-> +static struct auxiliary_driver pci1xxxx_otp_e2p_driver = {
-> +	.driver = {
-> +		.name = "PCI1xxxxOTPE2P",
-> +	},
-> +	.probe = pci1xxxx_otp_e2p_probe,
-> +	.remove = pci1xxxx_otp_e2p_remove,
-> +	.id_table = pci1xxxx_otp_e2p_auxiliary_id_table
-> +};
-> +
-> +static int __init pci1xxxx_otp_e2p_driver_init(void)
-> +{
-> +	int retval;
-> +
-> +	otp_block_driver_major = register_blkdev(otp_block_driver_major,
-> +						 "OTPBlockDevice");
-
-Would it make sense to have a #define for "OTPBlockDevice"?
-
-> +	if (otp_block_driver_major < 0)
-> +		return otp_block_driver_major;
-> +
-> +	retval = auxiliary_driver_register(&pci1xxxx_otp_e2p_driver);
-> +	if (retval)
-> +		unregister_blkdev(otp_block_driver_major, "OTPBlockDevice");
-> +
-> +	return retval;
-> +}
-> +
-> +static void __exit pci1xxxx_otp_e2p_driver_exit(void)
-> +{
-> +	unregister_blkdev(otp_block_driver_major, "OTPBlockDevice");
-> +	auxiliary_driver_unregister(&pci1xxxx_otp_e2p_driver);
-
-I think it is harmless, but shouldn't it be done in the reverse order to 
-match how resources have been allocated?
-
-> +}
-> +
-> +module_init(pci1xxxx_otp_e2p_driver_init);
-> +module_exit(pci1xxxx_otp_e2p_driver_exit);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_AUTHOR("Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>");
-> +MODULE_AUTHOR("Tharun Kumar P<tharunkumar.pasumarthi@microchip.com>");
-> +MODULE_DESCRIPTION("Microchip Technology Inc. PCI1xxxx OTP EEPROM programmer");
-
+>
+> Best regards,
+> Krzysztof
+>
