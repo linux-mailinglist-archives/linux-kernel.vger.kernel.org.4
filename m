@@ -2,155 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5B56935CD
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 04:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2486935C8
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 04:14:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjBLDUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Feb 2023 22:20:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
+        id S229581AbjBLDOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Feb 2023 22:14:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjBLDU2 (ORCPT
+        with ESMTP id S229560AbjBLDN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Feb 2023 22:20:28 -0500
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3AF1631B;
-        Sat, 11 Feb 2023 19:20:25 -0800 (PST)
-Received: by mail-qv1-xf31.google.com with SMTP id d13so6352251qvj.8;
-        Sat, 11 Feb 2023 19:20:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1676172024;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jV1+eUp6/la6bHJXVKZFSm553P2HVk0e+WKQfNoEdNc=;
-        b=j8FfzjjffbHe996BSSizWFQR8U1LbnObkHS0KW8Sxe+1TLrVLo8zfGGQInnU6xhzbH
-         gMukGPH+cudoOQUyCtBPxH09ZU2QkK/nJH8ttz5+m/XxBZSzTkAF4Ap4BYSEh5CyWXu5
-         Oapp+5NFd6/X03kKRS+eEcIGQbsuVSOR0T6TXsKtH1llkFVNF2hbgFGkDXAYC3CUbScz
-         uMe/G49BgtdoBhJd/CQtnIiXZwA9o8VLDw6QjV16jK+tWqv8k8XLX8azqyCTZjqVm4rG
-         N41ZuE+xIPxbYbnKDnOYkXcT+j/J6svp22SBMNzQA2X2XCNnyzisAN4pmaKROvaZqJ5G
-         VvlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676172024;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jV1+eUp6/la6bHJXVKZFSm553P2HVk0e+WKQfNoEdNc=;
-        b=Bt8yVgZsRvxq9R+CaQt7/tCVkxNE/PV6uV0ylvoahU+qXgG8oA2L/RZa1SsA3+Ywf3
-         vyQvDRGmH+q0pX+MgcnDkvpXGHEFg4IDFy2jg+oHSNkf+BAb7L4IOo06wiQkDhCp+KBP
-         vzozHY5d415FYt55JH0RDwetglfbezbRvK+7qRZh494uFxgi218gobKg5Jm2A4a1uZzU
-         deABIG02jjg+JqvHSC4NqjIRUrLAJLrdQf2otCLWeytCO093NdT3JaTy8MATfz+Hrn0u
-         ztOwrD/EUURAdkNT/i6XG6FeAwX4HVoGx6geWiEz2CVhff+CgKuSX50xdaUPgDTyIkqA
-         HP+A==
-X-Gm-Message-State: AO0yUKVeqGsAWsGBEGr5w69cAIIGUaQwQc9nwT/clFZlk/QC1Mc4r1ku
-        Vz65ALgO7gXCRTRs6q78K4SNR6NbUKltBk7iXH8=
-X-Google-Smtp-Source: AK7set9FOLosm1uHLls6cm+ufXyr97cSU/KvUyJyDOaMrnKJORlpTgb//i4VEJg64RftXvO3KX+HEdzTDo0amEJz+vU=
-X-Received: by 2002:a0c:e003:0:b0:56c:f4:989a with SMTP id j3-20020a0ce003000000b0056c00f4989amr2018254qvk.64.1676172024552;
- Sat, 11 Feb 2023 19:20:24 -0800 (PST)
+        Sat, 11 Feb 2023 22:13:59 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80AC315C8A;
+        Sat, 11 Feb 2023 19:13:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676171638; x=1707707638;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=8Ee53bw0HTAKCWMxXPAJRBW6Y+YE/qZmXr9sA0iMSzM=;
+  b=nTUw4M66NTXzklVY0e9u965pPREEaq4R/zwK1rf5gCpdWQMzG2HdsDCU
+   6GezG+wPjra26EHS2ckJRzBmsUG01clclvPGt8k5QmSkjaTTl+ogZv5m5
+   DOsvEPyT/9ACmmRVgCsBcyQxP6CZ3NpUnIlcg8TDy0iZrl8j1K0gTzMQ1
+   ryLp9c6bk2ocaWRISpjwU9ObhJcP0nUubtHSqK+d9+Qe7PAO+Ui4BMZsD
+   GS79gAnxVCskp1SjM3Axa+cMj8FZtL7m9fnuGAGHOIm6JcFVILidsI5/P
+   aujrpTvVA2wk4coiRefhAliRGQlr8uLrzP8II74Oyt8kpH3VzZytWHMfv
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="332824343"
+X-IronPort-AV: E=Sophos;i="5.97,290,1669104000"; 
+   d="scan'208";a="332824343"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2023 19:13:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10618"; a="842406476"
+X-IronPort-AV: E=Sophos;i="5.97,290,1669104000"; 
+   d="scan'208";a="842406476"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga005.jf.intel.com with ESMTP; 11 Feb 2023 19:13:56 -0800
+Date:   Sat, 11 Feb 2023 19:23:45 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        rafael.j.wysocki@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        "open list:THERMAL DRIVER FOR AMLOGIC SOCS" 
+        <linux-amlogic@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "open list:SAMSUNG THERMAL DRIVER" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH] thermal: Remove core header inclusion from drivers
+Message-ID: <20230212032345.GA17062@ranerica-svr.sc.intel.com>
+References: <20230206153432.1017282-1-daniel.lezcano@linaro.org>
+ <20230211021023.GA13306@ranerica-svr.sc.intel.com>
+ <9a121d43-b6d9-fe99-1e4c-498dac2e6b17@linaro.org>
+ <258dedb542d4dcb73e9ec903d205ba64639c9f0a.camel@linux.intel.com>
 MIME-Version: 1.0
-References: <20211120112738.45980-1-laoar.shao@gmail.com> <20211120112738.45980-8-laoar.shao@gmail.com>
- <Y+QaZtz55LIirsUO@google.com> <CAADnVQ+nf8MmRWP+naWwZEKBFOYr7QkZugETgAVfjKcEVxmOtg@mail.gmail.com>
- <CANDhNCo_=Q3pWc7h=ruGyHdRVGpsMKRY=C2AtZgLDwtGzRz8Kw@mail.gmail.com>
- <08e1c9d0-376f-d669-6fe8-559b2fbc2f2b@efficios.com> <CALOAHbBsmajStJ8TrnqEL_pv=UOt-vv0CH30EqThVq=JYXfi8A@mail.gmail.com>
- <Y+UCxSktKM0CzMlA@e126311.manchester.arm.com> <CALOAHbCdNZ21oBE2ii_XBxecYLSxM7Ws2LRMirdEOpeULiNk4g@mail.gmail.com>
- <20230211165120.byivmbfhwyegiyae@airbuntu>
-In-Reply-To: <20230211165120.byivmbfhwyegiyae@airbuntu>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Sun, 12 Feb 2023 11:19:48 +0800
-Message-ID: <CALOAHbBgTOU5z54GNdzCdKPcJR1Sr0T2XNCzSYOApE1A=MLDkA@mail.gmail.com>
-Subject: Re: [PATCH v2 7/7] tools/testing/selftests/bpf: replace open-coded 16
- with TASK_COMM_LEN
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        John Stultz <jstultz@google.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        kbuild test robot <lkp@intel.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Qais Yousef <qyousef@google.com>,
-        Daniele Di Proietto <ddiproietto@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <258dedb542d4dcb73e9ec903d205ba64639c9f0a.camel@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 12:51 AM Qais Yousef <qyousef@layalina.io> wrote:
->
-> On 02/09/23 23:37, Yafang Shao wrote:
-> > On Thu, Feb 9, 2023 at 10:28 PM Kajetan Puchalski
-> > <kajetan.puchalski@arm.com> wrote:
-> > >
-> > > On Thu, Feb 09, 2023 at 02:20:36PM +0800, Yafang Shao wrote:
-> > >
-> > > [...]
-> > >
-> > > Hi Yafang,
-> > >
-> > > > Many thanks for the detailed analysis. Seems it can work.
-> > > >
-> > > > Hi John,
-> > > >
-> > > > Could you pls. try the attached fix ? I have verified it in my test env.
-> > >
-> > > I tested the patch on my environment where I found the issue with newer
-> > > kernels + older Perfetto. The patch does improve things so that's nice.
-> >
-> > Thanks for the test. I don't have Perfetto in hand, so I haven't
-> > verify Perfetto.
->
-> FWIW, perfetto is not android specific and can run on normal linux distro setup
-> (which I do but haven't noticed this breakage).
->
-> It's easy to download the latest release (including for android though I never
-> tried that) from github
->
->         https://github.com/google/perfetto/releases
->
+On Sat, Feb 11, 2023 at 08:32:48AM -0800, srinivas pandruvada wrote:
+> On Sat, 2023-02-11 at 08:53 +0100, Daniel Lezcano wrote:
+> > On 11/02/2023 03:10, Ricardo Neri wrote:
+> > > On Mon, Feb 06, 2023 at 04:34:29PM +0100, Daniel Lezcano wrote:
+> > > > As the name states "thermal_core.h" is the header file for the
+> > > > core
+> > > > components of the thermal framework.
+> > > > 
+> > > > Too many drivers are including it. Hopefully the recent cleanups
+> > > > helped to self encapsulate the code a bit more and prevented the
+> > > > drivers to need this header.
+> > > > 
+> > > > Remove this inclusion in every place where it is possible.
+> > > > 
+> > > > Some other drivers did a confusion with the core header and the
+> > > > one
+> > > > exported in linux/thermal.h. They include the former instead of
+> > > > the
+> > > > latter. The changes also fix this.
+> > > > 
+> > > > The tegra/soctherm driver still remains as it uses an internal
+> > > > function which need to be replaced.
+> > > > 
+> > > > The Intel HFI driver uses the netlink internal framework core and
+> > > > should be changed to prevent to deal with the internals.
+> > > 
+> > > I don't see any of the thermal netlink functionality exposed. Is
+> > > there any work in progress?
+> > 
+> > commit bd30cdfd9bd73b68e4977ce7c5540aa7b14c25cd
+> > Author: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > 
+> >      thermal: intel: hfi: Notify user space for HFI events
+> > 
+> This is already exposed and we use it in user space.
+> thermal_genl_cpu_capability_event() is called from intel_hfi driver to
+> send the cpu capabilities.
+> 
+> Not sure what do you mean by  "don't see netlink functionality
+> exposed"?
+> 
+> thermal_genl_cpu_caps struct and thermal_genl_cpu_capability_event()
+> are defined in drivers/thermal/thermal_netlink.h.
 
-Thanks for the information. I will try to run it on my test env.
-I suspect the "systrace_parse_failure" error is caused by the field we
-introduced into struct ftrace_event_field in the proposed patch, but I
-haven't taken a deep look at the perfetto src code yet.
+Yes, I mean exactly this. The HFI code uses this functionality, but it is
+declared in "../thermal_netlink.h". I just wondered if that is OK or also
+needs to be declared somewhere in include/linux/
 
-> Kajetan might try to see if he can pick the latest version which IIUC contains
-> a workaround.
->
-> If this simple patch can be tweaked to make it work again against older
-> versions that'd be nice though.
->
-> HTH.
->
->
-> Cheers
->
-> --
-> Qais Yousef
-
-
-
--- 
-Regards
-Yafang
+Thanks and BR,
+Ricardo
