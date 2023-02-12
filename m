@@ -2,302 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45F4693963
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 19:36:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE2B693937
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 18:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjBLSgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 13:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
+        id S229641AbjBLR5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 12:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjBLSgN (ORCPT
+        with ESMTP id S229514AbjBLR5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 13:36:13 -0500
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B627A1026F
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 10:36:09 -0800 (PST)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4PFGPx4ss4z9sQT;
-        Sun, 12 Feb 2023 19:36:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
-        s=MBO0001; t=1676226965;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lxZXUVUBHauziIFIholFfSKQ5MMF9O6Qx9Uhvbrn2Dc=;
-        b=mVzkxhe7LAOda6XwjghO85f9MZnVtuQxilhNn4SLbA7WFLs8wZWnluwdeDA3CHbOnzQm5N
-        cS6+fmTZp4kKT58fbWQ+9BX5QGSqN4Xj5p0ni4kc1SIol43cvGjszMPxG/t0UcXc28cLRN
-        0OiQtZJBMlHJnK71FBrFfIFBk4crWQ+bfaqb4eEJNbW9TN3D3ThT7r7IoJYvaQ7Yqq8Gjz
-        xcl/wJS6EdUveHLjUW/VVR4R7XXJrcZv7rPkyiuyv9ZcwcZgqNhUIASbmK6q+8cn/htlpA
-        ma9pJoBUxzM0IIsVa60PCjkEq7d1wU7To1Q1EJc2oD5WHz2UHnGRXNJqnldhQA==
-From:   Frank Oltmanns <frank@oltmanns.dev>
-To:     =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
-        Guido =?utf-8?Q?G=C3=BCn?= =?utf-8?Q?ther?= <agx@sigxcpu.org>
-Cc:     Purism Kernel Team <kernel@puri.sm>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH 1/1] drm/panel: st7703: Fix resume of XBD599 panel
-Date:   Sun, 12 Feb 2023 18:52:05 +0100
-References: <20230212120830.46880-1-frank@oltmanns.dev>
- <20230212120830.46880-2-frank@oltmanns.dev>
- <20230212123621.jo56yqlburd6g6ir@core>
-In-reply-to: <20230212123621.jo56yqlburd6g6ir@core>
-Message-ID: <874jrq20kz.fsf@oltmanns.dev>
+        Sun, 12 Feb 2023 12:57:21 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30FCBDDE;
+        Sun, 12 Feb 2023 09:57:20 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31CHvI92026860;
+        Sun, 12 Feb 2023 17:57:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=u4CrzYM17ps5RxQQZYz8Hzad/nALC78BEWVZhD6asao=;
+ b=px9LvwXR9NATtFV0ngMLPLSeFtXtKYiKk9B3ZA5WwGFD+XHtSfF9uSDdUcMQrL6o0Q0T
+ qRCQNeNbCWrwCznKbbxlqMttad5ax6TMcxexxlBiocRZVD7kGILsFnhoLYsFuXExxe0a
+ zpo9wFhENQfpVVx8ladUizzJggbfLgHd0zTaR/LWcM2eIT6x8ykNyGdXnse0LFEZO3ek
+ sFa7AlIRdG12ZHZ/aY1aLNrElr3koKlWTZMxXHMpXjJW3py4ou1QOfRlTT6wcSD1Ey5D
+ KTtauOeePnLoO/7vuarD459RdjtwEXRD5SBgTlCuLrtoyo/5zxt8dxznBKmENzUJtuf8 Eg== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np3detd88-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 12 Feb 2023 17:57:17 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31CHvGbC003885
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 12 Feb 2023 17:57:16 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Sun, 12 Feb 2023 09:57:14 -0800
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [RFC] usb: gadget: ncm: Add support to configure wMaSegmentSize
+Date:   Sun, 12 Feb 2023 23:26:59 +0530
+Message-ID: <20230212175659.4480-1-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="=-=-="
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 5PLi-V00T40iaUWVtlMvy76AL5ZE5Ge6
+X-Proofpoint-ORIG-GUID: 5PLi-V00T40iaUWVtlMvy76AL5ZE5Ge6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-12_06,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ clxscore=1011 adultscore=0 mlxlogscore=999 malwarescore=0 phishscore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302120162
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Currently the NCM driver restricts wMasxSegmentSize that indicates
+the datagram size coming from network layer to 1514. However the
+spec doesn't have any limitation.
 
-Hi Ond=C5=99ej,
-hi Guido,
+Add support to configure this value before configfs symlink is
+created. Also since the NTB Out/In buffer sizes are fixed at 16384
+bytes, limit the segment size to an upper cap of 8192 bytes so that
+at least 2 packets can be aggregated.
 
-Ond=C5=99ej, thank you very much for your feedback!
+Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+---
+ drivers/usb/gadget/function/f_ncm.c | 55 +++++++++++++++++++++++++++++
+ drivers/usb/gadget/function/u_ncm.h |  1 +
+ 2 files changed, 56 insertions(+)
 
-I have a couple of questions.
+diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
+index 424bb3b666db..1969e276017f 100644
+--- a/drivers/usb/gadget/function/f_ncm.c
++++ b/drivers/usb/gadget/function/f_ncm.c
+@@ -118,6 +118,12 @@ static inline unsigned ncm_bitrate(struct usb_gadget *g)
+ /* Delay for the transmit to wait before sending an unfilled NTB frame. */
+ #define TX_TIMEOUT_NSECS	300000
+ 
++/*
++ * Currently the max NTB Buffer size is set to 16384. For atleast 2 packets
++ * to be aggregated, the size of datagram must at max be 8192.
++ */
++#define MAX_DATAGRAM_SIZE	8192
++
+ #define FORMATS_SUPPORTED	(USB_CDC_NCM_NTB16_SUPPORTED |	\
+ 				 USB_CDC_NCM_NTB32_SUPPORTED)
+ 
+@@ -1440,6 +1446,7 @@ static int ncm_bind(struct usb_configuration *c, struct usb_function *f)
+ 	 */
+ 	if (!ncm_opts->bound) {
+ 		mutex_lock(&ncm_opts->lock);
++		ncm_opts->net->mtu = (ncm_opts->max_segment_size - 14);
+ 		gether_set_gadget(ncm_opts->net, cdev->gadget);
+ 		status = gether_register_netdev(ncm_opts->net);
+ 		mutex_unlock(&ncm_opts->lock);
+@@ -1484,6 +1491,8 @@ static int ncm_bind(struct usb_configuration *c, struct usb_function *f)
+ 
+ 	status = -ENODEV;
+ 
++	ecm_desc.wMaxSegmentSize = ncm_opts->max_segment_size;
++
+ 	/* allocate instance-specific endpoints */
+ 	ep = usb_ep_autoconfig(cdev->gadget, &fs_ncm_in_desc);
+ 	if (!ep)
+@@ -1586,11 +1595,56 @@ USB_ETHERNET_CONFIGFS_ITEM_ATTR_QMULT(ncm);
+ /* f_ncm_opts_ifname */
+ USB_ETHERNET_CONFIGFS_ITEM_ATTR_IFNAME(ncm);
+ 
++static ssize_t ncm_opts_max_segment_size_show(struct config_item *item,
++						char *page)
++{
++	struct f_ncm_opts *opts = to_f_ncm_opts(item);
++	u32 segment_size;
++
++	mutex_lock(&opts->lock);
++	segment_size = opts->max_segment_size;
++	mutex_unlock(&opts->lock);
++
++	return sprintf(page, "%u\n", segment_size);
++}
++
++static ssize_t ncm_opts_max_segment_size_store(struct config_item *item,
++						const char *page, size_t len)
++{
++	struct f_ncm_opts *opts = to_f_ncm_opts(item);
++	int ret;
++	u32 segment_size;
++
++	mutex_lock(&opts->lock);
++	if (opts->refcnt) {
++		ret = -EBUSY;
++		goto out;
++	}
++
++	ret = kstrtou32(page, 0, &segment_size);
++	if (ret)
++		goto out;
++
++	if (segment_size > MAX_DATAGRAM_SIZE) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	opts->max_segment_size = segment_size;
++	ret = len;
++out:
++	mutex_unlock(&opts->lock);
++	return ret;
++}
++
++CONFIGFS_ATTR(ncm_opts_, max_segment_size);
++
+ static struct configfs_attribute *ncm_attrs[] = {
+ 	&ncm_opts_attr_dev_addr,
+ 	&ncm_opts_attr_host_addr,
+ 	&ncm_opts_attr_qmult,
+ 	&ncm_opts_attr_ifname,
++	&ncm_opts_attr_max_segment_size,
+ 	NULL,
+ };
+ 
+@@ -1633,6 +1687,7 @@ static struct usb_function_instance *ncm_alloc_inst(void)
+ 		kfree(opts);
+ 		return ERR_CAST(net);
+ 	}
++	opts->max_segment_size = cpu_to_le16(ETH_FRAME_LEN);
+ 	INIT_LIST_HEAD(&opts->ncm_os_desc.ext_prop);
+ 
+ 	descs[0] = &opts->ncm_os_desc;
+diff --git a/drivers/usb/gadget/function/u_ncm.h b/drivers/usb/gadget/function/u_ncm.h
+index 5408854d8407..fab99d997476 100644
+--- a/drivers/usb/gadget/function/u_ncm.h
++++ b/drivers/usb/gadget/function/u_ncm.h
+@@ -31,6 +31,7 @@ struct f_ncm_opts {
+ 	 */
+ 	struct mutex			lock;
+ 	int				refcnt;
++	u32				max_segment_size;
+ };
+ 
+ #endif /* U_NCM_H */
+-- 
+2.39.0
 
-Ond=C5=99ej Jirman <megi@xff.cz> writes:
-
-> On Sun, Feb 12, 2023 at 01:08:29PM +0100, Frank Oltmanns wrote:
->> In contrast to the JH057N panel, the XBD599 panel does not require a 20
->> msec delay after initialization and exiting sleep mode. Therefore, move
->> the delay into the already existing device specific initialization
->> function.
->>
->> Also, the timing contraints after entering and exiting sleep mode differ
->> between the two panels:
->>  - The JH057N requires a shorter delay than the XDB599 after waking up
->>    from sleep mode and before enabling the display.
->>  - The XDB599 requires a delay in order to drain the display of charge,
->>    which is not required on the JH057N.
->
-> There=E2=80=99s no difference between the panels here. It=E2=80=99s a con=
-troller specified
-> requirement.
->
-> <https://megous.com/dl/tmp/1ef533ed8a7ce841.png>
->
-> 60ms used in the driver between sleep out and display on is just
-> incorrect from the datasheet perspective.
-
-Please let me point you to the discussion you and Guido had ~2.5 years ago:
-<https://lore.kernel.org/all/20200729154809.GA435075@bogon.m.sigxcpu.org/>
-
-What resonates most with me is the following statement from Guido:
-> > > > Given the amount of ST7703 look alikes i don=E2=80=99t think you ca=
-n go by the
-> > > > datasheet and hope not to break other panels. The current sleeps ca=
-ter
-> > > > for the rocktech panel (which suffered from similar issues you desc=
-ribe
-> > > > when we took other parameters) so you need to make those panel spec=
-ific.
-
-My takeaway is, that neither panel needed the actual 120 msec wait time. Bu=
-t Guido was reluctant to change the timing for the Librem 5 devkit panel. T=
-hat=E2=80=99s why I went for the panel specific implementation.
-
-Of course, we can revisit that decision. Since I don=E2=80=99t have the Lib=
-rem 5 devkit, I have to kindly ask Guido for advise.
-
-> You also have to wait 120ms after sleep in (or HW reset) and before shutt=
-ing
-> down the panel. If you don=E2=80=99t, after a bunch of cycles of this inc=
-orrect
-> power up/down sequence the panel will start blinking weirdly, and the inc=
-orrect
-> power up/down sequence without delays will not be able to recover it. You=
-=E2=80=99ll
-> have to let the panel sit for 5-10 minutes powered off before it starts to
-> behave itself again.
->
-> The documentation for sleep in specifies what=E2=80=99s happening during =
-sleep in,
-> and why this delay is necessary after sleep in:
->
-> <https://megous.com/dl/tmp/2284b9d0f506b9b8.png>
-
-I read that screenshot, that we need a 120 msec wait after sleep OUT before=
- we can send another sleep in (see the =E2=80=9CRestriction=E2=80=9D row). =
-I can=E2=80=99t seem to find the reference to the 120 msec delay after the =
-sleep IN command. I read the flow chart at the bottom as informational abou=
-t the duration of the whole procedure that happens after issuing the sleep =
-in command. The only restriction is that we can=E2=80=99t issue any command=
- for 5 msec after sleep in was issued.
-
-> So there needs to be 120ms delay after sleep in and after sleep out,
-> regardless of which panel is driven by this controller, to ensure the pan=
-el
-> stays operational even when the user is quickly switching it on/off repea=
-tedly.
->
-> So I don=E2=80=99t think you should be doing panel specific quirks here.
-
-Maybe. I can only say that without the timings in this patch (i.e. the ones=
- from your kernel branch) the display on my pinephone is flickering after t=
-he first (and every subsequent) time the display is turned off. With your n=
-ew timing everything works great on the pinephone. Guido states that the ti=
-mings in your original patch (i.e. the XDB599 specific timings in this patc=
-h) the Librem 5 devkit panel doesn=E2=80=99t work.
-
-Do you have a proposal how to proceed without implementing panel specific t=
-imings?
-
-Thanks,
-  Frank
-
->
-> regards,
-> 	o.
->
->> Therefore, introduce panel specific functions for the delays.
->>
->> The XDB599 does not require a 20 msec delay between the SETBGP and
->> SETVCOM commands. Therefore, remove the delay from the device specific
->> initialization function.
->>
->> Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
->> Cc: Ondrej Jirman <megi@xff.cz>
->> Reported-by: Samuel Holland <samuel@sholland.org>
->> =E2=80=94
->>  drivers/gpu/drm/panel/panel-sitronix-st7703.c | 40 ++++++++++++++++=E2=
-=80=94
->>  1 file changed, 35 insertions(+), 5 deletions(-)
->>
->> diff =E2=80=93git a/drivers/gpu/drm/panel/panel-sitronix-st7703.c b/driv=
-ers/gpu/drm/panel/panel-sitronix-st7703.c
->> index 6747ca237ced..a149341c4a8b 100644
->> =E2=80=94 a/drivers/gpu/drm/panel/panel-sitronix-st7703.c
->> +++ b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
->> @@ -66,6 +66,8 @@ struct st7703_panel_desc {
->>  	unsigned long mode_flags;
->>  	enum mipi_dsi_pixel_format format;
->>  	int (*init_sequence)(struct st7703 *ctx);
->> +	void (*wait_after_sleep_out)(void);
->> +	void (*drain_charge)(void);
->>  };
->>
->>  static inline struct st7703 *panel_to_st7703(struct drm_panel *panel)
->> @@ -126,10 +128,24 @@ static int jh057n_init_sequence(struct st7703 *ctx)
->>  				   0x18, 0x00, 0x09, 0x0E, 0x29, 0x2D, 0x3C, 0x41,
->>  				   0x37, 0x07, 0x0B, 0x0D, 0x10, 0x11, 0x0F, 0x10,
->>  				   0x11, 0x18);
->> +	msleep(20);
->>
->>  	return 0;
->>  }
->>
->> +static void jh057n_wait_after_sleep_out(void)
->> +{
->> +	/*
->> +	 * Panel is operational 120 msec after reset, i.e. 60 msec after
->> +	 * sleep out.
->> +	 */
->> +	msleep(60);
->> +}
->> +
->> +static void jh057n_drain_charge(void)
->> +{
->> +}
->> +
->>  static const struct drm_display_mode jh057n00900_mode =3D {
->>  	.hdisplay    =3D 720,
->>  	.hsync_start =3D 720 + 90,
->> @@ -152,6 +168,8 @@ static const struct st7703_panel_desc jh057n00900_pa=
-nel_desc =3D {
->>  		MIPI_DSI_MODE_VIDEO_BURST | MIPI_DSI_MODE_VIDEO_SYNC_PULSE,
->>  	.format =3D MIPI_DSI_FMT_RGB888,
->>  	.init_sequence =3D jh057n_init_sequence,
->> +	.wait_after_sleep_out =3D jh057n_wait_after_sleep_out,
->> +	.drain_charge =3D jh057n_drain_charge,
->>  };
->>
->>  static int xbd599_init_sequence(struct st7703 *ctx)
->> @@ -273,7 +291,6 @@ static int xbd599_init_sequence(struct st7703 *ctx)
->>  	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETBGP,
->>  			       0x07, /* VREF_SEL =3D 4.2V */
->>  			       0x07  /* NVREF_SEL =3D 4.2V */);
->> -	msleep(20);
->>
->>  	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETVCOM,
->>  			       0x2C, /* VCOMDC_F =3D -0.67V */
->> @@ -315,6 +332,18 @@ static int xbd599_init_sequence(struct st7703 *ctx)
->>  	return 0;
->>  }
->>
->> +static void xbd599_wait_after_sleep_out(void)
->> +{
->> +	msleep(120);
->> +}
->> +
->> +static void xbd599_drain_charge(void)
->> +{
->> +	/* Drain diplay of charge, to work correctly on next power on. */
->> +	msleep(120);
->> +}
->> +
->> +
->>  static const struct drm_display_mode xbd599_mode =3D {
->>  	.hdisplay    =3D 720,
->>  	.hsync_start =3D 720 + 40,
->> @@ -336,6 +365,8 @@ static const struct st7703_panel_desc xbd599_desc =
-=3D {
->>  	.mode_flags =3D MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULSE,
->>  	.format =3D MIPI_DSI_FMT_RGB888,
->>  	.init_sequence =3D xbd599_init_sequence,
->> +	.wait_after_sleep_out =3D xbd599_wait_after_sleep_out,
->> +	.drain_charge =3D xbd599_drain_charge,
->>  };
->>
->>  static int st7703_enable(struct drm_panel *panel)
->> @@ -350,16 +381,13 @@ static int st7703_enable(struct drm_panel *panel)
->>  		return ret;
->>  	}
->>
->> -	msleep(20);
->> -
->>  	ret =3D mipi_dsi_dcs_exit_sleep_mode(dsi);
->>  	if (ret < 0) {
->>  		dev_err(ctx->dev, =E2=80=9CFailed to exit sleep mode: %d\n=E2=80=9D, =
-ret);
->>  		return ret;
->>  	}
->>
->> -	/* Panel is operational 120 msec after reset */
->> -	msleep(60);
->> +	ctx->desc->wait_after_sleep_out();
->>
->>  	ret =3D mipi_dsi_dcs_set_display_on(dsi);
->>  	if (ret)
->> @@ -384,6 +412,8 @@ static int st7703_disable(struct drm_panel *panel)
->>  	if (ret < 0)
->>  		dev_err(ctx->dev, =E2=80=9CFailed to enter sleep mode: %d\n=E2=80=9D,=
- ret);
->>
->> +	ctx->desc->drain_charge();
->> +
->>  	return 0;
->>  }
->>
->> =E2=80=93
->> 2.39.1
->>
-
---=-=-=--
