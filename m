@@ -2,92 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 363B4693A24
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 22:06:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20162693A26
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 22:07:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbjBLVG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 16:06:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52958 "EHLO
+        id S229710AbjBLVHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 16:07:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjBLVG0 (ORCPT
+        with ESMTP id S229584AbjBLVHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 16:06:26 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BD61AB;
-        Sun, 12 Feb 2023 13:06:23 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 12 Feb 2023 16:07:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D97E1AB;
+        Sun, 12 Feb 2023 13:07:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PFKlL2q6Dz4x7s;
-        Mon, 13 Feb 2023 08:06:21 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676235982;
-        bh=UGHELbkmj2TedD0l0ozq3b32EAteMMZe4ol73jksV8g=;
-        h=Date:From:To:Cc:Subject:From;
-        b=eKmzO+jrWaHplKTBElksxI2XqsMEXfUV6u7MXor0sQ4+Zlu7FfnYa51pRbvDz283+
-         RR8HI9LzsJcLUEyvhus7oYFqwk+kYCeSHDLymZYEkrUDDZc0+B3DKECLz2Oz0aBZQN
-         pvrtZhiXsVlIgah2dM7rD7XQj2/wYhQM0gwxxu7nNsMHLDp3/i3JzjfKdxakdldqxw
-         cydQ8JWpqRCjpqVKgWqvL4BV+SYDk3A8qwNba5aEAlDoJXrHdpie5eI3ZpvrpoiXX0
-         J02BdyZ9zEsvklVCqzm9S3dqyGcAnUpPFw3RHv6MpF5uDyEER0TE4K13J7UAtLDE7E
-         /y4zdcaZPxxhQ==
-Date:   Mon, 13 Feb 2023 08:06:20 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the pinctrl-intel-fixes tree
-Message-ID: <20230213080620.62f7eeb6@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8F8160DE2;
+        Sun, 12 Feb 2023 21:07:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2244C433EF;
+        Sun, 12 Feb 2023 21:07:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676236036;
+        bh=7SVdiHNv8+lwAj+uOvgm8qR+PM7AsCeos5m9byo+F8E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H7P+J4oh4e59nuw5uocf2dU/8hrqY1Koh01Vm4cU51xldaR1r7WSn+j6L8rAjsD96
+         /0hRTtQ4BfxBiJiamKMyMjxTbB+MwMVF5v7eo+wcQYDsriy9C+W6AXOj2s0j85Ay/Y
+         g7SUs9UBIVvzIOEAysdodhm43KOndsyVjMSI6OEDh4A3vZ1eIU6p7nwfps1XrwqASi
+         VWqyMEhfjYk7X9D/9ezdx28+YUyyTcVNI/RJtUhLfeKgm1Nshp/mZ29ZgBm34/vR9u
+         AkNc9pQFnuGZ9WvZIBfg2NmNNLZUAaRbLaknPlqzKevypERACtM8V18FUQwi0+jQHP
+         rLTvLxmmQFGJg==
+Date:   Sun, 12 Feb 2023 22:07:12 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Alain Volmat <avolmat@me.com>
+Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: st: use pm_sleep_ptr to avoid ifdef CONFIG_PM_SLEEP
+Message-ID: <Y+lVANYNHSKyYWvs@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Alain Volmat <avolmat@me.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230206210324.65508-1-avolmat@me.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/D/5WpCISzF0ORtwpy==lbha";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LAvzffcCjsK+nl2l"
+Content-Disposition: inline
+In-Reply-To: <20230206210324.65508-1-avolmat@me.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/D/5WpCISzF0ORtwpy==lbha
-Content-Type: text/plain; charset=US-ASCII
+
+--LAvzffcCjsK+nl2l
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Mon, Feb 06, 2023 at 10:03:23PM +0100, Alain Volmat wrote:
+> Rely on pm_sleep_ptr when setting the pm ops and get rid
+> of the ifdef CONFIG_PM_SLEEP around suspend/resume functions.
+>=20
+> Signed-off-by: Alain Volmat <avolmat@me.com>
 
-The following commit is also in Linus Torvalds' tree as a different commit
-(but the same patch):
+Applied to for-next, thanks!
 
-  a13bbd841bf8 ("pinctrl: intel: Restore the pins that used to be in Direct=
- IRQ mode")
 
-This is commit
-
-  a8520be3ffef ("pinctrl: intel: Restore the pins that used to be in Direct=
- IRQ mode")
-
-in Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/D/5WpCISzF0ORtwpy==lbha
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--LAvzffcCjsK+nl2l
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPpVM0ACgkQAVBC80lX
-0GyIGwgApmtffI+nlnGQ876NU3uqbLLX7mIHEbK7i+gQDFV9Xkv24B9dzBF5ZU74
-EZtv8/8uRxwoT/C4rApYfmio7O+uF7wwGLzTRi1FUzHZlk8UMzUjqGmdfpQ5BV3c
-eJPD0/1f11Id8Sz5IyKHbp8FlDlbFEMiDR325bvcvsbQrTSUyvhcx+u+8MxbxOhU
-tBAoi3Ip25gxvk7cI71PUd9NZrDTzT2KWbn1T7xBy7i/cnCwv/4grLBufM4CPDTF
-FAw/2Zn/4TalFQ+jqFRauJr1rwZlH43hjLMeFS/QcvQgG5V8OnR+Oj1U4lX9jtST
-UTXXRoUvZYnF4eVtY2i7zCcrKAeXgA==
-=SjUV
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPpVQAACgkQFA3kzBSg
+KbYCrw//e1a37vkRViTFQ1bMTElnLdIXjicbfAT5y5iVknvN8EV/HxTOeEeQpu5x
+76f9afCOOAh9dQh8LRrXy1JbBxb66jtweiLtPA4zDAuInqiHjig5ogHvx927ShR8
+E09yd9XqGslHIvYtJPa2y7wBgHkcFRCgZLvbod3Bo2ocVQFRPAiPSY5l1ItgFkoY
+/3W2q3B01MXUjyW1mz0BgjP03sOw/iHJ3NX7HyEjHZy/2wZ0QXswg1R4wrn1vFeO
+vNApVjr4zRU7K17t+d+2KlZ3Twrm0s8kb74QPxESvOJQjMFFNNxQrS2N4p41ohaK
+aGcJs0DemIFsSXdrvKIqpul3ZW8QnofmFu462o6g7Szg9dZO44WWu5/xbvGCOtnr
+r70cQfRB2AGhDx/rJNT9iig2hqsC8cOnVoghL7SY1LGvqqckkEtgiFEnJ9ifF3fF
+Mp3qh1bC/gJOXWPxvMvHrAYYxSpDMHoFYBhkC/MbQzkr9Q1LCcFGut7gJdf/DkHk
+OjMYymlK3d/0WE4xQ64ohcYNTUguz/PqAgJDii99+UaKNXHpiJSDMocw1XK3fxy2
+a2Gu5PciTGgvTe55/MEAwvb33nChj05K7hU1qaw9C9wH8pz+VrONnmKVWWaoqnJ6
+jj44dK6qBL0NCrBn6nngxdzjrvOoKyVJaKzRKUne0RiLm4x9hg0=
+=TT5S
 -----END PGP SIGNATURE-----
 
---Sig_/D/5WpCISzF0ORtwpy==lbha--
+--LAvzffcCjsK+nl2l--
