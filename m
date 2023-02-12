@@ -2,52 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D26693B0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 00:20:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0B91693B12
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 00:21:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbjBLXUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 18:20:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37178 "EHLO
+        id S229715AbjBLXVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 18:21:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjBLXUp (ORCPT
+        with ESMTP id S229624AbjBLXVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 18:20:45 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3FE1BC8;
-        Sun, 12 Feb 2023 15:20:43 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PFNkJ4sl8z4x7W;
-        Mon, 13 Feb 2023 10:20:40 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676244041;
-        bh=YcpfBkJvm0eyXiI5WWX9ZH+DXQjFdYu9GmRfUHAw6rQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Jcev2Ioq0DDRYQC6AkpMDsT3D+1roAcg4gHJD/lML7L0q5oY4MRRhiZV3mTnBs6GW
-         TP43cNCtjzN+nOCxRSIi3CsrC1R5ZPVfOS2GNdgkAEtt5uwdci86qNqGRXZ8wkKu70
-         3aOx9yA170nI7bcwWtCjrHjU4XUzPmxgOSXOvaMMuKHLGm/0FhNy3TMkiyE9l1kxL2
-         mVs6YsXe+svhQlVSOFVRwvxKOu+gKKQfr4BZoHw6MIP8uCoHwt7aHbE3NGUmga7lH3
-         p2Z10Ff5kbTaWSALlWvMjph36zb7lG8hS/sJ06n5n0umUu4sTbSxptuSA61cnW6KVO
-         DCB3nlIopJHUQ==
-Date:   Mon, 13 Feb 2023 10:20:38 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20230213102038.54cc9060@canb.auug.org.au>
+        Sun, 12 Feb 2023 18:21:44 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8158A1BC8;
+        Sun, 12 Feb 2023 15:21:42 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id n33so1562078wms.0;
+        Sun, 12 Feb 2023 15:21:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZxzNaW6I0fLNWCS9Oc9e/6gDL8buv4rI/3fG8NdUfZM=;
+        b=YxAW4UwTezMfmdVo1Nl41KG8a4sWPOcryhtlVzJT6IDZQys7SAk5XgHXBH+Mg273iV
+         5+yYjnaZhL1+NWtm3/KlVHau/wjEB+F/cIi1/ORB/gOdnmu8BUgit3HH7BcoRHZj+FSa
+         F4GdZsFS5+eFfZyTcLs9TK6Yw2kCdqKXz/sEH4cN7e0C2gMZb1fSqYB9usEghhjSkmuR
+         QMLT8x1F+wp+hASXNroo9caQGZx+3xTYVNcTfMI4rbMq3iYS2pxrhtRi28FPTjmaQjFx
+         zoX3OSAuAuSMmbCOINuwSGPWupzrpCKJjatfUV8fiD3PX3RgQ6vOzdcs1qjvBjmG1IHS
+         kgHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZxzNaW6I0fLNWCS9Oc9e/6gDL8buv4rI/3fG8NdUfZM=;
+        b=JxI8ytgNxo6gyAfekrff87h6MPTmNzHRGSC5+8nrqpEWh5KNc2nOm4cUeEdHo3qzzq
+         Ybbuds+vgTrbFkgszhLMwJuLzhp63DqM3Kgy3kSXRbIiC/7WAAjgNZQudnLik0E5qKdw
+         vwcZgXcfe+xFNVYdf81GBX8bL5WuO2sqvPdar+UumzY4ZlGvTjdwioGynAWtqhJKb5xU
+         7NRwPhUlq0hdxaRt4W1YfQ4deW8+4eBBvywzbKoQ8CaDPJrbmH95H+hhM0QxJsbfou8k
+         5OsXfqaXe1wKzR319wNRu+ZHcloy/fIVX+uYk/gUTsyV5/J4DphLySlNNbVypoiBYuQK
+         lZSw==
+X-Gm-Message-State: AO0yUKW8j/bwg0XRQ+EjUiJ/Di1wGSPO9sTzh01TV5PO2pYOUZ0ervt0
+        HjIFQXE41qXVFnx9Fhxw4EGEkK1B9Zw9A7U7
+X-Google-Smtp-Source: AK7set8FeLsNAVdoImo2fwRuicgKBYl6QRDgEjD9OLjW+s7/9U/IdECxA+GDa3j7X7NsiZx3ZSGzXg==
+X-Received: by 2002:a05:600c:3086:b0:3dc:5c86:12f3 with SMTP id g6-20020a05600c308600b003dc5c8612f3mr21658640wmn.1.1676244101006;
+        Sun, 12 Feb 2023 15:21:41 -0800 (PST)
+Received: from localhost ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
+        by smtp.gmail.com with UTF8SMTPSA id g20-20020a7bc4d4000000b003a3442f1229sm15417359wmk.29.2023.02.12.15.21.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Feb 2023 15:21:40 -0800 (PST)
+From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To:     devicetree@vger.kernel.org
+Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: sound: ep93xx: Add I2S and AC'97 descriptions
+Date:   Mon, 13 Feb 2023 00:21:36 +0100
+Message-Id: <20230212232137.299005-1-alexander.sverdlin@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/tc04duNOEoYLS7.NG43Bjis";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,175 +75,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/tc04duNOEoYLS7.NG43Bjis
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Add device tree bindings for Cirrus Logic EP93xx internal SoCs' I2S and
+AC'97 controllers.
 
-Hi all,
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+---
+ .../bindings/sound/cirrus,ep9301-ac97.yaml    | 47 ++++++++++++++
+ .../bindings/sound/cirrus,ep9301-i2s.yaml     | 63 +++++++++++++++++++
+ MAINTAINERS                                   |  1 +
+ 3 files changed, 111 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/cirrus,ep9301-ac97.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/cirrus,ep9301-i2s.yaml
 
-Today's linux-next merge of the net-next tree got a conflict in:
+diff --git a/Documentation/devicetree/bindings/sound/cirrus,ep9301-ac97.yaml b/Documentation/devicetree/bindings/sound/cirrus,ep9301-ac97.yaml
+new file mode 100644
+index 000000000000..bfa5d392f525
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/cirrus,ep9301-ac97.yaml
+@@ -0,0 +1,47 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/cirrus,ep9301-ac97.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Cirrus EP93xx AC'97 Controller
++
++description: |
++  The AC’97 Controller includes a 5-pin serial interface to an external audio
++  codec.
++
++maintainers:
++  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
++
++properties:
++  compatible:
++    const: cirrus,ep9301-ac97
++
++  '#sound-dai-cells':
++    const: 0
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - '#sound-dai-cells'
++  - reg
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    ac97: ac97@80880000 {
++        compatible = "cirrus,ep9301-ac97";
++        #sound-dai-cells = <0>;
++        reg = <0x80880000 0xac>;
++        interrupt-parent = <&vic0>;
++        interrupts = <6>;
++    };
++
++...
+diff --git a/Documentation/devicetree/bindings/sound/cirrus,ep9301-i2s.yaml b/Documentation/devicetree/bindings/sound/cirrus,ep9301-i2s.yaml
+new file mode 100644
+index 000000000000..b47d28dc8389
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/cirrus,ep9301-i2s.yaml
+@@ -0,0 +1,63 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/cirrus,ep9301-i2s.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Cirrus EP93xx I2S Controller
++
++description: |
++  The I2S controller is used to stream serial audio data between the external
++  I2S CODECs’, ADCs/DACs, and the ARM Core. The controller supports I2S, Left-
++  and Right-Justified DSP formats.
++
++maintainers:
++  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
++
++properties:
++  compatible:
++    const: cirrus,ep9301-i2s
++
++  '#sound-dai-cells':
++    const: 0
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    minItems: 3
++
++  clock-names:
++    items:
++      - const: mclk
++      - const: sclk
++      - const: lrclk
++
++required:
++  - compatible
++  - '#sound-dai-cells'
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++
++additionalProperties: false
++
++examples:
++  - |
++    i2s: i2s@80820000 {
++        compatible = "cirrus,ep9301-i2s";
++        #sound-dai-cells = <0>;
++        reg = <0x80820000 0x100>;
++        interrupt-parent = <&vic1>;
++        interrupts = <28>;
++        clocks = <&syscon 29
++                  &syscon 30
++                  &syscon 31>;
++        clock-names = "mclk", "sclk", "lrclk";
++    };
++
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 254aab631fd4..765902756c37 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2092,6 +2092,7 @@ M:	Alexander Sverdlin <alexander.sverdlin@gmail.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/iio/adc/cirrus,ep9301-adc.yaml
++F:	Documentation/devicetree/bindings/sound/cirrus,ep9301-*
+ F:	arch/arm/mach-ep93xx/
+ F:	arch/arm/mach-ep93xx/include/mach/
+ F:	drivers/iio/adc/ep93xx_adc.c
+-- 
+2.39.1
 
-  drivers/net/ethernet/intel/ice/ice_xsk.c
-
-between commit:
-
-  1f090494170e ("ice: xsk: Fix cleaning of XDP_TX frames")
-
-from the net tree and commit:
-
-  a24b4c6e9aab ("ice: xsk: Do not convert to buff to frame for XDP_TX")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/net/ethernet/intel/ice/ice_xsk.c
-index 374b7f10b549,a25a68c69f22..000000000000
---- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-+++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@@ -597,6 -597,107 +597,110 @@@ ice_construct_skb_zc(struct ice_rx_rin
-  	return skb;
-  }
- =20
-+ /**
-+  * ice_clean_xdp_irq_zc - AF_XDP ZC specific Tx cleaning routine
-+  * @xdp_ring: XDP Tx ring
-+  */
-+ static void ice_clean_xdp_irq_zc(struct ice_tx_ring *xdp_ring)
-+ {
-+ 	u16 ntc =3D xdp_ring->next_to_clean;
-+ 	struct ice_tx_desc *tx_desc;
-+ 	u16 cnt =3D xdp_ring->count;
-+ 	struct ice_tx_buf *tx_buf;
-++	u16 completed_frames =3D 0;
-+ 	u16 xsk_frames =3D 0;
-+ 	u16 last_rs;
-+ 	int i;
-+=20
-+ 	last_rs =3D xdp_ring->next_to_use ? xdp_ring->next_to_use - 1 : cnt - 1;
-+ 	tx_desc =3D ICE_TX_DESC(xdp_ring, last_rs);
-+ 	if (tx_desc->cmd_type_offset_bsz &
-+ 	    cpu_to_le64(ICE_TX_DESC_DTYPE_DESC_DONE)) {
-+ 		if (last_rs >=3D ntc)
- -			xsk_frames =3D last_rs - ntc + 1;
-++			completed_frames =3D last_rs - ntc + 1;
-+ 		else
- -			xsk_frames =3D last_rs + cnt - ntc + 1;
-++			completed_frames =3D last_rs + cnt - ntc + 1;
-+ 	}
-+=20
- -	if (!xsk_frames)
-++	if (!completed_frames)
-+ 		return;
-+=20
- -	if (likely(!xdp_ring->xdp_tx_active))
-++	if (likely(!xdp_ring->xdp_tx_active)) {
-++		xsk_frames =3D completed_frames;
-+ 		goto skip;
-++	}
-+=20
-+ 	ntc =3D xdp_ring->next_to_clean;
- -	for (i =3D 0; i < xsk_frames; i++) {
-++	for (i =3D 0; i < completed_frames; i++) {
-+ 		tx_buf =3D &xdp_ring->tx_buf[ntc];
-+=20
-+ 		if (tx_buf->xdp) {
-+ 			xsk_buff_free(tx_buf->xdp);
-+ 			xdp_ring->xdp_tx_active--;
-+ 		} else {
-+ 			xsk_frames++;
-+ 		}
-+=20
-+ 		ntc++;
-+ 		if (ntc =3D=3D cnt)
-+ 			ntc =3D 0;
-+ 	}
-+ skip:
-+ 	tx_desc->cmd_type_offset_bsz =3D 0;
- -	xdp_ring->next_to_clean +=3D xsk_frames;
-++	xdp_ring->next_to_clean +=3D completed_frames;
-+ 	if (xdp_ring->next_to_clean >=3D cnt)
-+ 		xdp_ring->next_to_clean -=3D cnt;
-+ 	if (xsk_frames)
-+ 		xsk_tx_completed(xdp_ring->xsk_pool, xsk_frames);
-+ }
-+=20
-+ /**
-+  * ice_xmit_xdp_tx_zc - AF_XDP ZC handler for XDP_TX
-+  * @xdp: XDP buffer to xmit
-+  * @xdp_ring: XDP ring to produce descriptor onto
-+  *
-+  * note that this function works directly on xdp_buff, no need to convert
-+  * it to xdp_frame. xdp_buff pointer is stored to ice_tx_buf so that clea=
-ning
-+  * side will be able to xsk_buff_free() it.
-+  *
-+  * Returns ICE_XDP_TX for successfully produced desc, ICE_XDP_CONSUMED if=
- there
-+  * was not enough space on XDP ring
-+  */
-+ static int ice_xmit_xdp_tx_zc(struct xdp_buff *xdp,
-+ 			      struct ice_tx_ring *xdp_ring)
-+ {
-+ 	u32 size =3D xdp->data_end - xdp->data;
-+ 	u32 ntu =3D xdp_ring->next_to_use;
-+ 	struct ice_tx_desc *tx_desc;
-+ 	struct ice_tx_buf *tx_buf;
-+ 	dma_addr_t dma;
-+=20
-+ 	if (ICE_DESC_UNUSED(xdp_ring) < ICE_RING_QUARTER(xdp_ring)) {
-+ 		ice_clean_xdp_irq_zc(xdp_ring);
-+ 		if (!ICE_DESC_UNUSED(xdp_ring)) {
-+ 			xdp_ring->ring_stats->tx_stats.tx_busy++;
-+ 			return ICE_XDP_CONSUMED;
-+ 		}
-+ 	}
-+=20
-+ 	dma =3D xsk_buff_xdp_get_dma(xdp);
-+ 	xsk_buff_raw_dma_sync_for_device(xdp_ring->xsk_pool, dma, size);
-+=20
-+ 	tx_buf =3D &xdp_ring->tx_buf[ntu];
-+ 	tx_buf->xdp =3D xdp;
-+ 	tx_desc =3D ICE_TX_DESC(xdp_ring, ntu);
-+ 	tx_desc->buf_addr =3D cpu_to_le64(dma);
-+ 	tx_desc->cmd_type_offset_bsz =3D ice_build_ctob(ICE_TX_DESC_CMD_EOP,
-+ 						      0, size, 0);
-+ 	xdp_ring->xdp_tx_active++;
-+=20
-+ 	if (++ntu =3D=3D xdp_ring->count)
-+ 		ntu =3D 0;
-+ 	xdp_ring->next_to_use =3D ntu;
-+=20
-+ 	return ICE_XDP_TX;
-+ }
-+=20
-  /**
-   * ice_run_xdp_zc - Executes an XDP program in zero-copy path
-   * @rx_ring: Rx ring
-
---Sig_/tc04duNOEoYLS7.NG43Bjis
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPpdEYACgkQAVBC80lX
-0GxOeAf9EWsX0B0MecMGqw5G4HSDx3pkxfHLv3sJKlY0mu6JRQPc+lkyfENcJrgG
-7B9rwjJptf5nc+B0TsKReWDcPGfmHfQUyHiCMinatc/EhCf59rGEKtiyAfy2jIqm
-COivqUihk0aWiyx+ca70XSvgnUHoMSFsl01bOA7mLW68bo6ZNJmuJ24L4K1jotYb
-xwFuFG43NZifdfkNhLAjeIE3vembJ+ogxZuwjDkOFh5yBmv5Y+5iWlOlzmJDiQZh
-YjUC8eHgvqdY9MqSeNyVMB+f+Tp/ayWGendRa1VKP/aSHUknHTRsbD3vkn4dEvCg
-4dkg74JGEU6EA3MufmyiuWcu0qQPKQ==
-=ipTx
------END PGP SIGNATURE-----
-
---Sig_/tc04duNOEoYLS7.NG43Bjis--
