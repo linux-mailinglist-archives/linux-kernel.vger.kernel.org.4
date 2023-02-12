@@ -2,182 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD1B693906
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 18:16:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFBF569390B
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Feb 2023 18:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbjBLRQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 12:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
+        id S229604AbjBLRUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 12:20:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjBLRQM (ORCPT
+        with ESMTP id S229472AbjBLRUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 12:16:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F370C5259;
-        Sun, 12 Feb 2023 09:16:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 971C5B80D34;
-        Sun, 12 Feb 2023 17:16:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E2E0C433EF;
-        Sun, 12 Feb 2023 17:16:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676222168;
-        bh=735fq6UVE89/trKjizPOfVcLcw0+bDcTZGMkRlKOQhQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=U/FkRg48g6hIo8dxfVXQF1lG1EAyxz9LLjYI16nohvKTHMEdeoPltsQRaIeXTsR59
-         a82U2DlO6sKBMgjm5iOwAWYKcYt2k8+5gxNRgYPM6yIQKqxSlmyEZIv40uyMaNKg6a
-         7rhABsOHWk8ev0Ptmc1uHB0Okq7DCdELvcFQcgk6rGyfh/d5KHqpkOolt5zKIZo3a9
-         FoKkJWoxQnXqs8pDrdhmaMf8bt0Z2EveWoJWGwG5zJy6PPAePoKDNWgUpAyvvxBcKb
-         S/VMAbaj7S1QzmNbtZ1flRtW2LLz/fNJ4mDBoOzov6yurI+SmBX4ZYs+71LV4wDsOY
-         oo2SOSEfLQw+Q==
-Received: by mail-oi1-f175.google.com with SMTP id bx13so8451120oib.13;
-        Sun, 12 Feb 2023 09:16:08 -0800 (PST)
-X-Gm-Message-State: AO0yUKVgSYeGwJ53yQ8ohAJ9Asvur4LtevRSnRl9KT96rYyn3n/k0ZDP
-        yap7W6sUgav5H7QUYXXXHuLkuWdxDvGwCCbD3YE=
-X-Google-Smtp-Source: AK7set8NlJ3Nz9R0blhc9ZKmuTmCfzqUpfr7bYxzopYW7P8pRL1HnVdlP+R5Cv8rJdKV9u/gJhsIY6F9Et2KO8usGoY=
-X-Received: by 2002:a05:6808:547:b0:37d:8037:7456 with SMTP id
- i7-20020a056808054700b0037d80377456mr307846oig.92.1676222167193; Sun, 12 Feb
- 2023 09:16:07 -0800 (PST)
+        Sun, 12 Feb 2023 12:20:05 -0500
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CDCEB69;
+        Sun, 12 Feb 2023 09:20:03 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1676222400; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=PvAUXO3QzyJCOQJ00svX9YbISUYxh0uUNbfeM4weO9kbWP8DZlnopvGEgnwC+hfhRd
+    ebaDet6DrMYn8k9zKR/O1IEpPJfDCZrfL/faHgSsdQpCMYiJHozW4Hre3gkaqsVZKSGx
+    lzWoThpSLWtLAOqH1aCWlC2ewvqQpYFZO1kX4QUUIhu80AfswqHu/sSYZzj+eVl07bP1
+    VV+ftiHty6raA/TK8uyJ8XmIw66DiyUq8RE8LJ7qvmrP2hANLnqcEpFQd/0KafvFaNpM
+    Yipx3DLHk2sidgwlbWjqMHE6vM5OM5K1IG+//x7jiszHxMdQ5LdRDN/niGNzjuOfpfri
+    jEXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1676222400;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=tpRq6A3b3gz2MzU44GplEArBEihWeWjcdtzeTXlz9gc=;
+    b=lrcxNxtuOjvp0YUNQzwl3FVm1f/MqxBv7XUR3/ihB+7lXZUkh6zubs45Y4FC81wHbE
+    hqOfnJ9lf4bvEKAtaCe4IdZNdpyXnlX/bOSv1AEn4iqOLQHf9RynnAQksafCAs+Mjvnt
+    janBCqX+7Jxi/RbDU/yR3vq1FFlfvR0tmC8ILI7miOXfZ8cd1KRFnrD7xkOMmEcu/sH3
+    OmTpBEDiby1iLOSKTlqmmaCUxfSCBwC4/KRZ0IFKfT9VZNt9fFgD6SwcoyZxS7yXo9fu
+    B1ESjgmSJadpabuc1eO+Vtmckl+sfZrkKHlKgsOYo++nygJUyEnVGrE66KZSx3Xl781R
+    fGrQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1676222400;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=tpRq6A3b3gz2MzU44GplEArBEihWeWjcdtzeTXlz9gc=;
+    b=QXDin2055ym64eDtAPjsqizstYMMdAiN+IApozKqv+cRqLdFXubRtcGOtwUA3DUWrK
+    6vQpODzOnX7oIB2Qw/zcAvdrWGdr00aKhgPqfsks+76OeAIwxNvPTBFQrDj9IQKfx+Y1
+    RMgBUiT0Eo8Zu2LHGtc87H6atpnJdmiQKTk4SejOPgTu/mCIQOPMwrkngVLFe2OJ+yIq
+    WZeOuLoRHqXySdFtn2dmnhnJBhEzRCOnlu9XSSevmXXQeLHKv2Ua27iI2AFOEL7vp6eE
+    7je43I+bKeVc26MQfmXAG7L5YekxMEsxqG8qYHLMhQoewXV02Oi9JFNcxvYe29gRYv0z
+    Nehw==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267EpF+OQRc4obTF5+SwHE="
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.3.0 DYNA|AUTH)
+    with ESMTPSA id K7ac91z1CHJxHsI
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 12 Feb 2023 18:19:59 +0100 (CET)
+Date:   Sun, 12 Feb 2023 18:19:52 +0100
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benl@squareup.com,
+        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
+        dmitry.baryshkov@linaro.org, Jun Nie <jun.nie@linaro.org>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
+        Vincent Knecht <vincent.knecht@mailoo.org>
+Subject: Re: [PATCH v5 2/5] arm64: dts: qcom: Add msm8939 SoC
+Message-ID: <Y+kfuHDMZCu1vKsA@gerhold.net>
+References: <20230206012336.2130341-1-bryan.odonoghue@linaro.org>
+ <20230206012336.2130341-3-bryan.odonoghue@linaro.org>
+ <Y+T5cF4d667RhrJp@gerhold.net>
+ <2b6bc14b-20df-b61e-6464-61ebb11f24f0@linaro.org>
 MIME-Version: 1.0
-References: <550e4190-c487-51db-6213-838d32183cbf@gmx.de>
-In-Reply-To: <550e4190-c487-51db-6213-838d32183cbf@gmx.de>
-From:   Filipe Manana <fdmanana@kernel.org>
-Date:   Sun, 12 Feb 2023 17:15:31 +0000
-X-Gmail-Original-Message-ID: <CAL3q7H6RY_6Di2HMbn+_nLXHNSpYcH+2hqQprTP_z-xjL8CjTA@mail.gmail.com>
-Message-ID: <CAL3q7H6RY_6Di2HMbn+_nLXHNSpYcH+2hqQprTP_z-xjL8CjTA@mail.gmail.com>
-Subject: Re: RIP in btrfs with kernel 6.1.4
-To:     =?UTF-8?Q?Toralf_F=C3=B6rster?= <toralf.foerster@gmx.de>
-Cc:     "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2b6bc14b-20df-b61e-6464-61ebb11f24f0@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 2:13 PM Toralf F=C3=B6rster <toralf.foerster@gmx.de=
-> wrote:
->
->
->
-> At a stable hardened Gentoo Linux server I got a month ago the RIP seen
-> below.
->
->
-> Just FWIW few hours before that RIP the BTRFS at my desktop (same OS,
-> but older stable kernel v5.15.86 IIRC) got big problems (100% full
-> despite that just about the half of 250 GB was used) - and I made the
-> mistake of the months and trusts the btrfs repair tool - after that the
-> fs could not even be found/mounted by the kernel.
->
->
-> The server is an SMP PREEMPT_DYNAMIC Thu Feb  9 17:45:03 UTC 2023 x86_64
-> AMD Ryzen 9 5950X 16-Core Processor AuthenticAMD GNU/Linux
-> The client was an ThinkPad T440s with an i5
->
->
-> Here is the RIP:
->
-> Jan 12 09:52:07 mr-fox kernel: BTRFS warning (device nvme0n1p4): bad eb
-> member end: ptr 0x3fe9 start 5994348707840 member offset 16382 size 8
-> Jan 12 09:52:07 mr-fox kernel: general protection fault, probably for
-> non-canonical address 0x142f000000000: 0000 [#1] PREEMPT SMP NOPTI
-> Jan 12 09:52:07 mr-fox kernel: CPU: 19 PID: 6458 Comm: tar Tainted: G
->              T  6.1.4 #10
-> Jan 12 09:52:07 mr-fox kernel: Hardware name: ASUS System Product
-> Name/Pro WS 565-ACE, BIOS 0502 01/15/2021
-> Jan 12 09:52:07 mr-fox kernel: RIP: 0010:btrfs_get_64+0x11e/0x170
-> Jan 12 09:52:07 mr-fox kernel: Code: 4a 8b 44 e5 70 48 2b 05 f0 cd c9 00
-> 48 c1 f8 06 48 c1 e0 0c 48 03 05 f1 cd c9 00 81 eb f8 0f 00 00 74 13 31
-> d2 89 d6 83 c2 01 <0f> b6 3c 30 40 88 3c 31 39 da 72 ef 48 8b 44 24 08
-> e9 5b ff ff ff
-> Jan 12 09:52:07 mr-fox kernel: RSP: 0018:ffff95c160b1fd48 EFLAGS: 0001020=
-2
-> Jan 12 09:52:07 mr-fox kernel: RAX: 000142f000000000 RBX:
-> 0000000000000006 RCX: ffff95c160b1fd52
-> Jan 12 09:52:07 mr-fox kernel: RDX: 0000000000000001 RSI:
-> 0000000000000000 RDI: 000000000000000a
-> Jan 12 09:52:07 mr-fox kernel: RBP: ffff95c13d2c6a00 R08:
-> 0000000000000000 R09: 0000000000000000
-> Jan 12 09:52:07 mr-fox kernel: R10: 0000000000000000 R11:
-> 0000000000000000 R12: 0000000000000004
-> Jan 12 09:52:07 mr-fox kernel: R13: 0000000000000002 R14:
-> 00000573ab068000 R15: 0000000000003fe9
-> Jan 12 09:52:07 mr-fox kernel: FS:  00007fe568d167c0(0000)
-> GS:ffff95dfaecc0000(0000) knlGS:0000000000000000
-> Jan 12 09:52:07 mr-fox kernel: CS:  0010 DS: 0000 ES: 0000 CR0:
-> 0000000080050033
-> Jan 12 09:52:07 mr-fox kernel: CR2: 000055d1eacc94a8 CR3:
-> 00000001347a4000 CR4: 0000000000750ee0
-> Jan 12 09:52:07 mr-fox kernel: PKRU: 55555554
-> Jan 12 09:52:07 mr-fox kernel: Call Trace:
-> Jan 12 09:52:07 mr-fox kernel:  <TASK>
-> Jan 12 09:52:07 mr-fox kernel:  btrfs_file_llseek+0x25d/0x670
-> Jan 12 09:52:07 mr-fox kernel:  ksys_lseek+0x73/0xc0
-> Jan 12 09:52:07 mr-fox kernel:  do_syscall_64+0x68/0xa0
-> Jan 12 09:52:07 mr-fox kernel:  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> Jan 12 09:52:07 mr-fox kernel: RIP: 0033:0x7fe56940a1f7
-> Jan 12 09:52:07 mr-fox kernel: Code: 00 00 90 89 c3 48 8b 05 27 5c 0d 00
-> f7 db 64 89 18 48 c7 c0 ff ff ff ff eb b1 66 0f 1f 84 00 00 00 00 00 b8
-> 08 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 01 c3 48 8b 15 f9 5b 0d 00 f7
-> d8 64 89 02 48
-> Jan 12 09:52:07 mr-fox kernel: RSP: 002b:00007fffef1a8348 EFLAGS:
-> 00000202 ORIG_RAX: 0000000000000008
-> Jan 12 09:52:07 mr-fox kernel: RAX: ffffffffffffffda RBX:
-> 0000000000000000 RCX: 00007fe56940a1f7
-> Jan 12 09:52:07 mr-fox kernel: RDX: 0000000000000003 RSI:
-> 0000000000000000 RDI: 000000000000000b
-> Jan 12 09:52:07 mr-fox kernel: RBP: 0000000000000000 R08:
-> 000000000000000b R09: 000055d1eacc7c00
-> Jan 12 09:52:07 mr-fox kernel: R10: 0ddfa64af0d29e4e R11:
-> 0000000000000202 R12: 0000000000000000
-> Jan 12 09:52:07 mr-fox kernel: R13: 000055d1eacad020 R14:
-> 000055d1eacac030 R15: 0000000000000002
-> Jan 12 09:52:07 mr-fox kernel:  </TASK>
-> Jan 12 09:52:07 mr-fox kernel: ---[ end trace 0000000000000000 ]---
-> Jan 12 09:52:07 mr-fox kernel: RIP: 0010:btrfs_get_64+0x11e/0x170
-> Jan 12 09:52:07 mr-fox kernel: Code: 4a 8b 44 e5 70 48 2b 05 f0 cd c9 00
-> 48 c1 f8 06 48 c1 e0 0c 48 03 05 f1 cd c9 00 81 eb f8 0f 00 00 74 13 31
-> d2 89 d6 83 c2 01 <0f> b6 3c 30 40 88 3c 31 39 da 72 ef 48 8b 44 24 08
-> e9 5b ff ff ff
-> Jan 12 09:52:07 mr-fox kernel: RSP: 0018:ffff95c160b1fd48 EFLAGS: 0001020=
-2
-> Jan 12 09:52:07 mr-fox kernel: RAX: 000142f000000000 RBX:
-> 0000000000000006 RCX: ffff95c160b1fd52
-> Jan 12 09:52:07 mr-fox kernel: RDX: 0000000000000001 RSI:
-> 0000000000000000 RDI: 000000000000000a
-> Jan 12 09:52:07 mr-fox kernel: RBP: ffff95c13d2c6a00 R08:
-> 0000000000000000 R09: 0000000000000000
-> Jan 12 09:52:07 mr-fox kernel: R10: 0000000000000000 R11:
-> 0000000000000000 R12: 0000000000000004
-> Jan 12 09:52:07 mr-fox kernel: R13: 0000000000000002 R14:
-> 00000573ab068000 R15: 0000000000003fe9
-> Jan 12 09:52:07 mr-fox kernel: FS:  00007fe568d167c0(0000)
-> GS:ffff95dfaecc0000(0000) knlGS:0000000000000000
-> Jan 12 09:52:07 mr-fox kernel: CS:  0010 DS: 0000 ES: 0000 CR0:
-> 0000000080050033
-> Jan 12 09:52:07 mr-fox kernel: CR2: 000055d1eacc94a8 CR3:
-> 00000001347a4000 CR4: 0000000000750ee0
-> Jan 12 09:52:07 mr-fox kernel: PKRU: 55555554
+On Sun, Feb 12, 2023 at 04:49:25PM +0000, Bryan O'Donoghue wrote:
+> On 09/02/2023 13:47, Stephan Gerhold wrote:
+> > > +			frame@b021000 {
+> > > +				reg = <0x0b021000 0x1000>,
+> > > +				      <0x0b022000 0x1000>;
+> > > +				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+> > > +					     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> > > +				frame-number = <0>;
+> > > +			};
+> > These timer interrupts are still wrong like mentioned in v3:
+> > https://lore.kernel.org/linux-arm-msm/Y8fC%2FGCHfENQmBNC@gerhold.net/
+> > 
+> 
+> Hmm.
+> 
+> This is a copy/paste error from 8916 which I guess we never see in our
+> production system, since we use LPM to get to do idle
+> 
 
-This is a bug that was already fixed by this commit:
+Huh?
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
-id=3D2f2e84ca60660402bd81d0859703567c59556e6a
+We had this discussion several times before and once you mentioned that
+Shawn fixed this in your production kernel at some point. You just keep
+forgetting to apply the same change to your upstream tree. ;)
 
-And it landed in 6.1.5, see:
-https://cdn.kernel.org/pub/linux/kernel/v6.x/ChangeLog-6.1.5
+You can either change the timer interrupt numbers or (more easily) just
+fix the address to point to the timer of the other cluster (which has
+the same interrupt numbers as on 8916):
 
-So just upgrade to a stable release > 6.1.4.
-
-
+On Mon, Sep 19, 2022 at 03:11:01PM +0100, Bryan O'Donoghue wrote:
+> Yep Shawn found that on our internal tree.
 >
-> --
-> Toralf
+> commit 91a842b81a713ede9ba76f3957e6fdd9067b5493
+> Author: Shawn Guo <shawn.guo@linaro.org>
+> Date:   Thu May 28 11:03:40 2020 +0800
+>
+>     arm64: dts: msm8939: fix base address of memory mapped timer
+> 
+>     The base address of memory mapped timer is changed from msm8916's
+>     0xb020000 to 0xb120000 on msm8939.  Fix it, so that the timer can start
+>     working as the broadcast device to wake up cpu from deep idle state.
+>
+>     Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+>
+> diff --git a/arch/arm64/boot/dts/qcom/msm8939.dtsi
+> b/arch/arm64/boot/dts/qcom/msm8939.dtsi
+> index dde56c2197eb..907f076b9808 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8939.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8939.dtsi
+> @@ -1326,61 +1326,61 @@
+>                         reg = <0x0b000000 0x1000>, <0x0b002000 0x1000>;
+>                 };
+> 
+> -               timer@b020000 {
+> +               timer@b120000 {
+>                         #address-cells = <1>;
+>                         #size-cells = <1>;
+>                         ranges;
+>                         compatible = "arm,armv7-timer-mem";
+> -                       reg = <0xb020000 0x1000>;
+> +                       reg = <0xb120000 0x1000>;
+>                         clock-frequency = <19200000>;
+>
+> -                       frame@b021000 {
+> +                       frame@b121000 {
+> 
+> but I see that didn't make it into my working tree
+
