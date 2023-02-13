@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CCB7693D99
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 05:55:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D44A1693D9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 05:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjBMEy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 23:54:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52264 "EHLO
+        id S229978AbjBMEzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 23:55:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjBMEym (ORCPT
+        with ESMTP id S229897AbjBMEyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 23:54:42 -0500
+        Sun, 12 Feb 2023 23:54:44 -0500
 Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047D11205B
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 20:54:17 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id w5so12280340plg.8
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 20:54:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F1111EAC
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 20:54:19 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id k13so12361796plg.0
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 20:54:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+JFNUn7jw7XrbPRCSrUHiiAgppCfO2t4yElt5XDL04Q=;
-        b=MAtbG5JUipDDMVBI03UWeY8vjoTpzFDhlMkb2IIUtB84hOxlG1WyPFh7MJnCD5jfl2
-         zjmODVBzL2cx3l1Qs7L7jfh8m/gnDVQInUF+dA+7OKyMVa5Haw7ygFvOQ8YMb5gB2b1K
-         UlKt6Pk9ptqgZjApSwCfRHwT68TIIrfBzX5Jl6JawGXdE/pmQdzIpKLWutJX9BdixuK3
-         dEg5UDIWG8GC41lON9Ist+iD/fEydT5SZ0c9JGyjv3ArzJbqW9GX9L4shJ7ODsyF8FR3
-         RJbtROJ3z2YLeDw7UoqghirtDnhWaLX120PYm1FT5abaJBxaZZknC9F4Um67Xjgs0Ewy
-         Rc6g==
+        bh=8YCem4BrJJv8uMiBliK+eUgJsgA757fo9l+siWv19bQ=;
+        b=K5WRT8kvkrTRnxFXNxNWmZZe1eWQeiMi1qunE1LIKywvna8j3v5SzYl1jChj3QeZjI
+         oNQVdHcccQpG2WuR1gzQg9kq/+0VuzgdVWD7JtRLTBXEFTOX1GEgMl7e5WBjD6OfQPdd
+         71LTAu0tFhni4ZSn88ImId4fpVYObX1bY6JW37HXCp7hvg9l286KFURTu9ooi1NBKqLt
+         u26MG8kM25n8svLfFhRQp8B3l5+xVXSXRfyHCQXaBio+kKCjC+Q8QLGXOyPk+PiaEIGE
+         UxpBMq4IRtaJ3U/MEkWjmDf10E4N70sMBA71dAXlsLakRYCt8pcisJr17siP90QETbWq
+         4NMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+JFNUn7jw7XrbPRCSrUHiiAgppCfO2t4yElt5XDL04Q=;
-        b=InlXifF59ZWUA5E7lt4Qm5YaeuhuGwpSphqNLLBbAKgk5vvN6SCR8a77xH+Nqscx2s
-         I5hE/sWukyVoCUduOVgPZyu9Ho/abWOhXlUcc1KHOaEpC/7eDgZNmR4GjSLw6oghjiar
-         xIRJIj5HYGwT+mtb74lLyIIwVx1e58686UU4PfGpXFppODCrCK4TCdidXgxxlRZrKA4Q
-         77jjUawfXiXYguxredKxR4i27zXCmJgQhFFNdSjdCneaB9A0YfMvNrl4KMVv2T/pw0He
-         xrTYRXB5sPQjC9uopO6srt0dQH2m/vCdTiUZCNYHbAFWfZvdLqq9CxQ0xLqvf2wgCFgj
-         NY2g==
-X-Gm-Message-State: AO0yUKW7XLlU9dbtZs1+vdl23qbSuoO1mvfDs6dixyye132duxk9F74w
-        e6chbIZu7faOJBygrx0bloWQtFfferusCYjt
-X-Google-Smtp-Source: AK7set/xGSag1fLoOp9DRLhykiGJTXM3xHC8HavU0BgIlPvd0BoyqCw5ivDdONyysoMRNXPdY5/4ZA==
-X-Received: by 2002:a17:902:d0d1:b0:19a:7548:da30 with SMTP id n17-20020a170902d0d100b0019a7548da30mr8231577pln.3.1676264056763;
-        Sun, 12 Feb 2023 20:54:16 -0800 (PST)
+        bh=8YCem4BrJJv8uMiBliK+eUgJsgA757fo9l+siWv19bQ=;
+        b=4B/NpWzf0qtQkmkBRHHIBdGzh0rUvhQ6FToMZz1H4oQsTxjwVzvnABvCj3m6xI9VW5
+         OcDjJ5Mpj4AxNQrBaAMWHStwCzvO/MEONnXGAzbLhBhDl02yYXA/lUgiTo0dLHnekwHI
+         I8YRbWsLc6IaZ9l6RHUm2OukUrVXbje86FOPr1RQIlZXzaD1Cib1KAScajLnIaGEwm4j
+         GL7yi/EFjpcT9fYlM2hhRp5PvnTu+Wtzpz4+HZXtqUo3AEfe3IM+SQ+kRY/+tRUgIN6H
+         QbXlvt3j+kc25xfnXRw1noFmgfIdDQXCn4vBZ07v0XG6MfixFzc1SmCmEas3Lb1xQ4h4
+         wFuQ==
+X-Gm-Message-State: AO0yUKXzataOCEysrZMbgx/btzY43IOB1Hw0d4ipn6f7a6fnPKRsVoUD
+        2RydXBrPwJyUTR+wC9270sK5J0yA/G9o+JVl
+X-Google-Smtp-Source: AK7set9FL/syEzV/2KBqufzNCOsrJUvHtlRk/LJL1zmvxtRWPEp1GVPCimz+TSI3kDQUud1c6m89VA==
+X-Received: by 2002:a17:902:e74c:b0:199:2a36:6c3f with SMTP id p12-20020a170902e74c00b001992a366c3fmr27035701plf.6.1676264058174;
+        Sun, 12 Feb 2023 20:54:18 -0800 (PST)
 Received: from debug.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id e5-20020a170902784500b00189e7cb8b89sm7078303pln.127.2023.02.12.20.54.15
+        by smtp.gmail.com with ESMTPSA id e5-20020a170902784500b00189e7cb8b89sm7078303pln.127.2023.02.12.20.54.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Feb 2023 20:54:16 -0800 (PST)
+        Sun, 12 Feb 2023 20:54:17 -0800 (PST)
 From:   Deepak Gupta <debug@rivosinc.com>
 To:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     Deepak Gupta <debug@rivosinc.com>
-Subject: [PATCH v1 RFC Zisslpcfi 10/20] riscv mmu: write protect and shadow stack
-Date:   Sun, 12 Feb 2023 20:53:39 -0800
-Message-Id: <20230213045351.3945824-11-debug@rivosinc.com>
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Deepak Gupta <debug@rivosinc.com>, linux-mm@kvack.org
+Subject: [PATCH v1 RFC Zisslpcfi 11/20] mmu: maybe_mkwrite updated to manufacture shadow stack PTEs
+Date:   Sun, 12 Feb 2023 20:53:40 -0800
+Message-Id: <20230213045351.3945824-12-debug@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230213045351.3945824-1-debug@rivosinc.com>
 References: <20230213045351.3945824-1-debug@rivosinc.com>
@@ -73,59 +71,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-`fork` implements copy on write (COW) by making pages readonly in child
-and parent both.
+maybe_mkwrite creates PTEs with WRITE encodings for underlying arch if
+VM_WRITE is turned on in vma->vm_flags. Shadow stack memory is a write-
+able memory except it can only be written by certain specific
+instructions. This patch allows maybe_mkwrite to create shadow stack PTEs
+if vma is shadow stack VMA. Each arch can define which combination of VMA
+flags means a shadow stack.
 
-ptep_set_wrprotect and pte_wrprotect clears _PAGE_WRITE in PTE.
-Assumption is that page is readable and on fault copy on write happens.
+Additionally pte_mkshdwstk must be provided by arch specific PTE
+construction headers to create shadow stack PTEs. (in arch specific
+pgtable.h).
 
-To implement COW on such pages, clearing up W bit makes them XWR = 000.
-This will result in wrong PTE setting which says no perms but V=1 and PFN
-field pointing to final page. Instead desired behavior is to turn it into
-a readable page, take an access (load/store) fault on sspush/sspop
-(shadow stack) and then perform COW on such pages. This way regular reads
-would still be allowed and not lead to COW maintaining current behavior
-of COW on non-shadow stack but writeable memory.
-
-On the other hand it doesn't interfere with existing COW for read-write
-memory. Assumption is always that _PAGE_READ must have been set and thus
-setting _PAGE_READ is harmless.
+This patch provides dummy/stub pte_mkshdwstk if CONFIG_USER_SHADOW_STACK
+is not selected.
 
 Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 ---
- arch/riscv/include/asm/pgtable.h | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ include/linux/mm.h      | 23 +++++++++++++++++++++--
+ include/linux/pgtable.h |  4 ++++
+ 2 files changed, 25 insertions(+), 2 deletions(-)
 
-diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-index 74dbe122f2fa..13b325253c99 100644
---- a/arch/riscv/include/asm/pgtable.h
-+++ b/arch/riscv/include/asm/pgtable.h
-@@ -334,7 +334,7 @@ static inline int pte_special(pte_t pte)
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 8f857163ac89..a7705bc49bfe 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1093,6 +1093,21 @@ static inline unsigned long thp_size(struct page *page)
+ void free_compound_page(struct page *page);
  
- static inline pte_t pte_wrprotect(pte_t pte)
+ #ifdef CONFIG_MMU
++
++#ifdef CONFIG_USER_SHADOW_STACK
++bool arch_is_shadow_stack_vma(struct vm_area_struct *vma);
++#endif
++
++static inline bool
++is_shadow_stack_vma(struct vm_area_struct *vma)
++{
++#ifdef CONFIG_USER_SHADOW_STACK
++	return arch_is_shadow_stack_vma(vma);
++#else
++	return false;
++#endif
++}
++
+ /*
+  * Do pte_mkwrite, but only if the vma says VM_WRITE.  We do this when
+  * servicing faults for write access.  In the normal case, do always want
+@@ -1101,8 +1116,12 @@ void free_compound_page(struct page *page);
+  */
+ static inline pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
  {
--	return __pte(pte_val(pte) & ~(_PAGE_WRITE));
-+	return __pte((pte_val(pte) & ~(_PAGE_WRITE)) | (_PAGE_READ));
+-	if (likely(vma->vm_flags & VM_WRITE))
+-		pte = pte_mkwrite(pte);
++	if (likely(vma->vm_flags & VM_WRITE)) {
++		if (unlikely(is_shadow_stack_vma(vma)))
++			pte = pte_mkshdwstk(pte);
++		else
++			pte = pte_mkwrite(pte);
++	}
+ 	return pte;
  }
  
- /* static inline pte_t pte_mkread(pte_t pte) */
-@@ -509,7 +509,15 @@ static inline int ptep_test_and_clear_young(struct vm_area_struct *vma,
- static inline void ptep_set_wrprotect(struct mm_struct *mm,
- 				      unsigned long address, pte_t *ptep)
- {
--	atomic_long_and(~(unsigned long)_PAGE_WRITE, (atomic_long_t *)ptep);
-+	volatile pte_t read_pte = *ptep;
-+	/*
-+	 * ptep_set_wrprotect can be called for shadow stack ranges too.
-+	 * shadow stack memory is XWR = 010 and thus clearing _PAGE_WRITE will lead to
-+	 * encoding 000b which is wrong encoding with V = 1. This should lead to page fault
-+	 * but we dont want this wrong configuration to be set in page tables.
-+	 */
-+	atomic_long_set((atomic_long_t *)ptep,
-+			((pte_val(read_pte) & ~(unsigned long)_PAGE_WRITE) | _PAGE_READ));
- }
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index 1159b25b0542..94b157218c73 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -1736,4 +1736,8 @@ pgprot_t vm_get_page_prot(unsigned long vm_flags)			\
+ }									\
+ EXPORT_SYMBOL(vm_get_page_prot);
  
- #define __HAVE_ARCH_PTEP_CLEAR_YOUNG_FLUSH
++#ifndef CONFIG_USER_SHADOW_STACK
++#define pte_mkshdwstk(pte) pte
++#endif
++
+ #endif /* _LINUX_PGTABLE_H */
 -- 
 2.25.1
 
