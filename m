@@ -2,166 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012CA694B15
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:26:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19171694B11
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbjBMP0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:26:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40764 "EHLO
+        id S230245AbjBMP0O convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Feb 2023 10:26:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjBMP0e (ORCPT
+        with ESMTP id S229945AbjBMP0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:26:34 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4980AEC4F;
-        Mon, 13 Feb 2023 07:26:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1676301991; x=1707837991;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Myql0AbsOX9YiON7G1lqeSB9ZHXoG2jmKJVBF9XTC/o=;
-  b=S227U5XbPha63EGMRnjeuTyqtVYLC+21ZhYpLBmJ9ValcsdjRPABAhij
-   8PSSL0vacphdGNBPJkf9BC7zn0exUBEywbH7WpLYV08Y0Zf36JPcIcIF5
-   EB+1S6bWabgpkj73yh4bL2mt1o7hflsb8QQTAs3rkuV8PkPIFNls0fCbf
-   +2GPw2tyxHVxTiuidGMBVZhHDYHW7fI1K6QSA6yiPR35DLsbYHlirjNsg
-   q6s+hgvo9WMGGDaomwCy5QiobmzPFr0+gGC3TsZGCU48hsibaoHTgzKEK
-   A2tX8ZG4cKQiXWhUYZpkheYMSNbJ/6uPj8BMj7ec081Y0PaW8gxWaUsPr
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,294,1669071600"; 
-   d="scan'208";a="29048553"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 13 Feb 2023 16:26:29 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Mon, 13 Feb 2023 16:26:29 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Mon, 13 Feb 2023 16:26:29 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1676301989; x=1707837989;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Myql0AbsOX9YiON7G1lqeSB9ZHXoG2jmKJVBF9XTC/o=;
-  b=IhCEx5kjYziJa9SK7o38BdNzhTgGaeUqUld2ytvHLW+dVfCtpEQZ784z
-   59kHJ0HXtOOfsTGoncggL+Xe751ZeVOxS3OLRQCg/XUehFYDeyIlHtDKr
-   odwhxyaA9sNOevmhlkoWcf3wHlwye/U20YMy3FottDtj8PPaOq3WHuhEO
-   5eMCetMMvxSxGPEyB8Yaxm/Chemk6z+yGJ0+9yd0fovCdCwiAtdwN+CwE
-   CILZQet9cb5sSgrLi3KF+sqphPij6fxuw0yKlnZ3NPRuCeuN03blIDZQy
-   A9/HCHZGtVaPUWJr04i+YopeDUOO+DVsVRTmaGyfgvnCT0pZVCZJ8PenU
-   g==;
-X-IronPort-AV: E=Sophos;i="5.97,294,1669071600"; 
-   d="scan'208";a="29048552"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 13 Feb 2023 16:26:29 +0100
-Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.49.14])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id BF54F280056;
-        Mon, 13 Feb 2023 16:26:28 +0100 (CET)
-From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     Nicolas Pitre <nico@fluxnic.net>, Ard Biesheuvel <ardb@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux@ew.tq-group.com,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Subject: [PATCH] i2c: mxs: ensure that DMA buffers are safe for DMA
-Date:   Mon, 13 Feb 2023 16:25:50 +0100
-Message-Id: <20230213152550.1776352-1-matthias.schiffer@ew.tq-group.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 13 Feb 2023 10:26:12 -0500
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8D910423;
+        Mon, 13 Feb 2023 07:26:11 -0800 (PST)
+Received: by mail-ej1-f49.google.com with SMTP id qw12so32822979ejc.2;
+        Mon, 13 Feb 2023 07:26:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aa38NYMz1XXOSVlpmXem5dRN1dL2OJwDoaPX2ECr5xA=;
+        b=CMZUBRJLx6wBBXGP0IzYzSG0Fy5NyYojMlLEutc/f62N8TTWlUudU8Z5vIRQ9oQ0Ny
+         LAJsHkujrzCdX0dQR0FrDStz1MmCHb69IfqpcpRIszePlCe6jm04N+K1fehNz4xtLHvh
+         81b6KqacoQQ9fuCzIeFI03k4I4h637lc8bfdEuEcnKFNsD3KjApraXMeQZH64UGq1AUD
+         tknxD3csh42vmttt7nKhZaeHffbwmwPo7vwUbBrsd8sH/3w6CXkcf+7kya2YQa17MN2I
+         m6IV9TIPVZGT2HJMT+pEp8BNv96pUPrH6UQBass9FWaVkTM6IzwQXnJQLgJkweyDJYjL
+         1U7Q==
+X-Gm-Message-State: AO0yUKXRj31WZBAxxEzdcUQQSZ1IYYxkcVpiTawR5NxzBl8oEHNFowFy
+        FnfTb2gCrX3URIZjP16/68lr/io3aB6w3HW2pPCZSMMB
+X-Google-Smtp-Source: AK7set/vtpXL/B8ZkBIim5ZWjxk81HFbgJYdWzBQORo0ay9JGge9f0/sPBCxSN85rgLuS9E325KEddvtjRBXOAWHlw8=
+X-Received: by 2002:a17:906:487:b0:8a6:91d9:c7ac with SMTP id
+ f7-20020a170906048700b008a691d9c7acmr4875377eja.5.1676301969873; Mon, 13 Feb
+ 2023 07:26:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <76fe1e13-761c-1153-b913-ed2c41c8d807@linaro.org>
+In-Reply-To: <76fe1e13-761c-1153-b913-ed2c41c8d807@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 13 Feb 2023 16:25:58 +0100
+Message-ID: <CAJZ5v0hMCnjjV1vCzCag0RK1owU6F401EXnda_e2yraS4rNrqw@mail.gmail.com>
+Subject: Re: [GIT PULL] thermal material for v6.3, take 2
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        yong qin <yongqin.liu@linaro.org>,
+        Vibhav Pant <vibhavp@gmail.com>, Alain Volmat <avolmat@me.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We found that after commit 9c46929e7989
-("ARM: implement THREAD_INFO_IN_TASK for uniprocessor systems"), the
-PCF85063 RTC driver stopped working on i.MX28 due to regmap_bulk_read()
-reading bogus data into a stack buffer. This is caused by the i2c-mxs
-driver using DMA transfers even for messages without the I2C_M_DMA_SAFE
-flag, and the aforementioned commit enabling vmapped stacks.
+On Mon, Feb 13, 2023 at 12:10 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> Hi Rafael,
+>
+> The following changes since commit 61b7614c114c817f9f326282c2f7a728bf0051a8:
+>
+>    Merge branch 'thermal-intel' into linux-next (2023-02-09 19:57:59 +0100)
+>
+> are available in the Git repository at:
+>
+>
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+> tags/thermal-v6.3-rc1-2
+>
+> for you to fetch changes up to f8da73d02bfcf6d61513912035150d91c14ea1e9:
+>
+>    thermal/drivers/st: Remove syscfg based driver (2023-02-13 11:42:35
+> +0100)
+>
+> ----------------------------------------------------------------
+> - Fix missing thermal_sampling_exit() call when unsubscribing (Vincent
+>    Guittot)
+>
+> - Add the LVTS Mediatek driver along with a relocation to the Mediatek
+> folder (Balsam Chihi)
+>
+> - Add the r8a779g0 RCar support (Geert Uytterhoeven)
+>
+> - Fix useless call to set_trips() when resuming and add interrupt
+>    support detection at init time on RCar gen3 (Niklas Söderlund)
+>
+> - Fix memory corruption in the hi3660 thermal driver (Yongqin Liu)
+>
+> - Fix include path for libnl3 in pkg-config file for the libthermal
+>    (Vibhav Pant)
+>
+> - Remove core header inclusion from drivers (Daniel Lezcano)
+>
+> - Remove syscfg based driver as the platform is removed (Alain Volmat)
+>
+> ----------------------------------------------------------------
+> Alain Volmat (1):
+>        thermal/drivers/st: Remove syscfg based driver
+>
+> Balsam CHIHI (3):
+>        thermal/drivers/mediatek: Relocate driver to mediatek folder
+>        dt-bindings: thermal: mediatek: Add LVTS thermal controllers
+>        thermal/drivers/mediatek: Add the Low Voltage Thermal Sensor driver
+>
+> Daniel Lezcano (1):
+>        thermal: Remove core header inclusion from drivers
+>
+> Geert Uytterhoeven (2):
+>        dt-bindings: thermal: rcar-gen3-thermal: Add r8a779g0 support
+>        thermal/drivers/rcar_gen3: Add support for R-Car V4H
+>
+> Niklas Söderlund (3):
+>        thermal/drivers/rcar_gen3_thermal: Do not call set_trips() when
+> resuming
+>        thermal/drivers/rcar_gen3_thermal: Create device local ops struct
+>        thermal/drivers/rcar_gen3_thermal: Fix device initialization
+>
+> Vibhav Pant (1):
+>        tools/lib/thermal: Fix include path for libnl3 in pkg-config file.
+>
+> Vincent Guittot (1):
+>        tools/lib/thermal: Fix thermal_sampling_exit()
+>
+> Yongqin Liu (1):
+>        thermal/drivers/hisi: Drop second sensor hi3660
 
-As the MXS I2C controller requires DMA for reads of >4 bytes, DMA can't be
-disabled, so the issue is fixed by using i2c_get_dma_safe_msg_buf() to
-create a bounce buffer when needed.
-
-Fixes: 9c46929e7989 ("ARM: implement THREAD_INFO_IN_TASK for uniprocessor systems")
-Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
----
- drivers/i2c/busses/i2c-mxs.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-mxs.c b/drivers/i2c/busses/i2c-mxs.c
-index d113bed795452..e0f3b3545cfe4 100644
---- a/drivers/i2c/busses/i2c-mxs.c
-+++ b/drivers/i2c/busses/i2c-mxs.c
-@@ -171,7 +171,7 @@ static void mxs_i2c_dma_irq_callback(void *param)
- }
- 
- static int mxs_i2c_dma_setup_xfer(struct i2c_adapter *adap,
--			struct i2c_msg *msg, uint32_t flags)
-+			struct i2c_msg *msg, u8 *buf, uint32_t flags)
- {
- 	struct dma_async_tx_descriptor *desc;
- 	struct mxs_i2c_dev *i2c = i2c_get_adapdata(adap);
-@@ -226,7 +226,7 @@ static int mxs_i2c_dma_setup_xfer(struct i2c_adapter *adap,
- 		}
- 
- 		/* Queue the DMA data transfer. */
--		sg_init_one(&i2c->sg_io[1], msg->buf, msg->len);
-+		sg_init_one(&i2c->sg_io[1], buf, msg->len);
- 		dma_map_sg(i2c->dev, &i2c->sg_io[1], 1, DMA_FROM_DEVICE);
- 		desc = dmaengine_prep_slave_sg(i2c->dmach, &i2c->sg_io[1], 1,
- 					DMA_DEV_TO_MEM,
-@@ -259,7 +259,7 @@ static int mxs_i2c_dma_setup_xfer(struct i2c_adapter *adap,
- 		/* Queue the DMA data transfer. */
- 		sg_init_table(i2c->sg_io, 2);
- 		sg_set_buf(&i2c->sg_io[0], &i2c->addr_data, 1);
--		sg_set_buf(&i2c->sg_io[1], msg->buf, msg->len);
-+		sg_set_buf(&i2c->sg_io[1], buf, msg->len);
- 		dma_map_sg(i2c->dev, i2c->sg_io, 2, DMA_TO_DEVICE);
- 		desc = dmaengine_prep_slave_sg(i2c->dmach, i2c->sg_io, 2,
- 					DMA_MEM_TO_DEV,
-@@ -563,6 +563,7 @@ static int mxs_i2c_xfer_msg(struct i2c_adapter *adap, struct i2c_msg *msg,
- 	struct mxs_i2c_dev *i2c = i2c_get_adapdata(adap);
- 	int ret;
- 	int flags;
-+	u8 *dma_buf;
- 	int use_pio = 0;
- 	unsigned long time_left;
- 
-@@ -588,13 +589,20 @@ static int mxs_i2c_xfer_msg(struct i2c_adapter *adap, struct i2c_msg *msg,
- 		if (ret && (ret != -ENXIO))
- 			mxs_i2c_reset(i2c);
- 	} else {
-+		dma_buf = i2c_get_dma_safe_msg_buf(msg, 1);
-+		if (!dma_buf)
-+			return -ENOMEM;
-+
- 		reinit_completion(&i2c->cmd_complete);
--		ret = mxs_i2c_dma_setup_xfer(adap, msg, flags);
--		if (ret)
-+		ret = mxs_i2c_dma_setup_xfer(adap, msg, dma_buf, flags);
-+		if (ret) {
-+			i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
- 			return ret;
-+		}
- 
- 		time_left = wait_for_completion_timeout(&i2c->cmd_complete,
- 						msecs_to_jiffies(1000));
-+		i2c_put_dma_safe_msg_buf(dma_buf, msg, true);
- 		if (!time_left)
- 			goto timeout;
- 
--- 
-2.34.1
-
+Pulled and pushed out, thanks!
