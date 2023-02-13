@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0C0694F40
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D64D8694F3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbjBMS0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:26:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46642 "EHLO
+        id S230174AbjBMS0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:26:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjBMS00 (ORCPT
+        with ESMTP id S229747AbjBMS00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Feb 2023 13:26:26 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BA026AE;
-        Mon, 13 Feb 2023 10:26:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AABA6EB5;
+        Mon, 13 Feb 2023 10:26:24 -0800 (PST)
 Date:   Mon, 13 Feb 2023 18:26:21 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1676312782;
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=I9C/RHQ23PWQE6219xLIoTf2rCC7qnKzbFR98gTwWxA=;
-        b=mzk9w/lqw0bnr7GqZJbONsR5+eD93+wiTTjo9RtvEM7OIMMsyEwpA7bhUVCmo9mvOT1FMF
-        QzfHRI6PqDMDwJ5HMNAOJE1KCfTu575tp4FHfOxz889/eAynhEyssZkbrNpOthGTYSn98R
-        LpF0tK1XyiH6KSitJL2jL/2FJ7LpKMzhXSltFHo48R8ZUKZSD79JFqqx1Ek9TYd+qMNNSY
-        SNLs4O29UG+GenC0REgPu5+wB1FDN49LA+KNvuZiRPV8bxDxpEibv/WsVqNP0TG1DF2HYT
-        0PIHK2ftYd0uVN+titKN5AsPge04tsCmPVcoJGchjpLqsUHW/mRRkCHugAPjwQ==
+        bh=iGg2QXQKl2CgLX1ZcBsVOjfuAPw42Vx4U2RONkij9ec=;
+        b=CH9GC2WFCixUvaf78/HF1IpsR8TXSjL9De8kbUDOw9sD/IsupvEpMUZX92zfoju9x9LXAF
+        Fz0ILrWr/J99jYmTr12TcuGBaUjIFSVF8QKfsfiEHgsQ4jU1B2YcTrCyQ7tg5zHzeHSWgs
+        Npzc8Fpxc8Tp0E7Nsi3utqBImi9EMb7cJqUFvqMBTkJYMDHGHBDLkyjqRvR0QILLo8sUxW
+        017Csp3lcXBMAKgQYzEF07mJaelJqE/WKNnyAOqCSXk/pnEXoO8o6SCGCllW+zddEORGVj
+        RcmJloeCC6XSD9PY2rbW9JEcBi7Xn6R1OTbYUjKhRsuKYEMaEhfAsFlqWwihgQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1676312782;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,22 +36,22 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=I9C/RHQ23PWQE6219xLIoTf2rCC7qnKzbFR98gTwWxA=;
-        b=G0E9vtzzmJ4o2ihBKm5A1LPVYdQA9yCN2ud+IFyxpgvLYCu8O0YTYBt/KAIlkK29ktbH0o
-        DGBD3eCwcIxP7rAg==
+        bh=iGg2QXQKl2CgLX1ZcBsVOjfuAPw42Vx4U2RONkij9ec=;
+        b=E78YwoE8OdA/N1opVM1T3RKE3AhF1uQfswOyd/IaxZ21qzOODbNq6G83u+bsrgRFjPyHbI
+        n8hKJoe+U79ZQDDA==
 From:   tip-bot2 for Uwe =?utf-8?q?Kleine-K=C3=B6nig?= 
         <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] clocksource/drivers/em_sti: Mark driver as non-removable
+Subject: [tip: timers/core] clocksource/drivers/sh_tmu: Mark driver as non-removable
 Cc:     u.kleine-koenig@pengutronix.de,
         Daniel Lezcano <daniel.lezcano@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230207193010.469495-1-u.kleine-koenig@pengutronix.de>
-References: <20230207193010.469495-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230207193614.472060-1-u.kleine-koenig@pengutronix.de>
+References: <20230207193614.472060-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Message-ID: <167631278165.4906.17139987456534507798.tip-bot2@tip-bot2>
+Message-ID: <167631278189.4906.11559302770332050280.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,59 +67,59 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     cf16f631b0bbd98df4b2ccc13346f564412eae68
-Gitweb:        https://git.kernel.org/tip/cf16f631b0bbd98df4b2ccc13346f564412=
-eae68
+Commit-ID:     d8c695d310a8607fd1d6a2750368467c4e0cef6a
+Gitweb:        https://git.kernel.org/tip/d8c695d310a8607fd1d6a2750368467c4e0=
+cef6a
 Author:        Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-AuthorDate:    Tue, 07 Feb 2023 20:30:10 +01:00
+AuthorDate:    Tue, 07 Feb 2023 20:36:14 +01:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Mon, 13 Feb 2023 13:10:17 +01:00
 
-clocksource/drivers/em_sti: Mark driver as non-removable
+clocksource/drivers/sh_tmu: Mark driver as non-removable
 
 The comment in the remove callback suggests that the driver is not
 supposed to be unbound. However returning an error code in the remove
 callback doesn't accomplish that. Instead set the suppress_bind_attrs
 property (which makes it impossible to unbind the driver via sysfs).
-The only remaining way to unbind a em_sti device would be module
+The only remaining way to unbind a sh_tmu device would be module
 unloading, but that doesn't apply here, as the driver cannot be built as
 a module.
 
 Also drop the useless remove callback.
 
 Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-Link: https://lore.kernel.org/r/20230207193010.469495-1-u.kleine-koenig@pengu=
+Link: https://lore.kernel.org/r/20230207193614.472060-1-u.kleine-koenig@pengu=
 tronix.de
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/clocksource/em_sti.c | 7 +------
+ drivers/clocksource/sh_tmu.c | 7 +------
  1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/clocksource/em_sti.c b/drivers/clocksource/em_sti.c
-index ab190df..c04b47b 100644
---- a/drivers/clocksource/em_sti.c
-+++ b/drivers/clocksource/em_sti.c
-@@ -333,11 +333,6 @@ static int em_sti_probe(struct platform_device *pdev)
+diff --git a/drivers/clocksource/sh_tmu.c b/drivers/clocksource/sh_tmu.c
+index b00dec0..932f31a 100644
+--- a/drivers/clocksource/sh_tmu.c
++++ b/drivers/clocksource/sh_tmu.c
+@@ -632,11 +632,6 @@ static int sh_tmu_probe(struct platform_device *pdev)
  	return 0;
  }
 =20
--static int em_sti_remove(struct platform_device *pdev)
+-static int sh_tmu_remove(struct platform_device *pdev)
 -{
 -	return -EBUSY; /* cannot unregister clockevent and clocksource */
 -}
 -
- static const struct of_device_id em_sti_dt_ids[] =3D {
- 	{ .compatible =3D "renesas,em-sti", },
- 	{},
-@@ -346,10 +341,10 @@ MODULE_DEVICE_TABLE(of, em_sti_dt_ids);
+ static const struct platform_device_id sh_tmu_id_table[] =3D {
+ 	{ "sh-tmu", SH_TMU },
+ 	{ "sh-tmu-sh3", SH_TMU_SH3 },
+@@ -652,10 +647,10 @@ MODULE_DEVICE_TABLE(of, sh_tmu_of_table);
 =20
- static struct platform_driver em_sti_device_driver =3D {
- 	.probe		=3D em_sti_probe,
--	.remove		=3D em_sti_remove,
+ static struct platform_driver sh_tmu_device_driver =3D {
+ 	.probe		=3D sh_tmu_probe,
+-	.remove		=3D sh_tmu_remove,
  	.driver		=3D {
- 		.name	=3D "em_sti",
- 		.of_match_table =3D em_sti_dt_ids,
+ 		.name	=3D "sh_tmu",
+ 		.of_match_table =3D of_match_ptr(sh_tmu_of_table),
 +		.suppress_bind_attrs =3D true,
- 	}
+ 	},
+ 	.id_table	=3D sh_tmu_id_table,
  };
-=20
