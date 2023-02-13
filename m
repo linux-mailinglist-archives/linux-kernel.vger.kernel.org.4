@@ -2,64 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80456694DF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF664694DFF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbjBMRaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 12:30:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43218 "EHLO
+        id S229852AbjBMRbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 12:31:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjBMRaC (ORCPT
+        with ESMTP id S229651AbjBMRa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 12:30:02 -0500
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7812D54;
-        Mon, 13 Feb 2023 09:30:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1676309402; x=1707845402;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=OXlmuN9Z7tYjafYF+DUI69ISpL+HB5AknBHBtTrE5z8=;
-  b=CEq+kSC7tFU0Uwbum7tKFO6UXQPiLVZsEe0lUWR0ijunEswaqIJDzi3c
-   dCyoynzhaBO7xuv7hmYeHRgK53qR2RjKQ1jDhTDVhWPDSvjB+l5ReXQlz
-   0T3Gq3nPjPFDkIxMN8PCSpYKKkEAS1mcgrWyhYetCCH+xHMXhqO7YP/dn
-   Q=;
-X-IronPort-AV: E=Sophos;i="5.97,294,1669075200"; 
-   d="scan'208";a="310451287"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-d8e96288.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 17:29:55 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-m6i4x-d8e96288.us-east-1.amazon.com (Postfix) with ESMTPS id 222238234D;
-        Mon, 13 Feb 2023 17:29:50 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Mon, 13 Feb 2023 17:29:50 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.161.198) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.24;
- Mon, 13 Feb 2023 17:29:47 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <kerneljasonxing@gmail.com>
-CC:     <bpf@vger.kernel.org>, <davem@davemloft.net>, <dsahern@kernel.org>,
-        <edumazet@google.com>, <kernelxing@tencent.com>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <kuniyu@amazon.com>
-Subject: Re: [PATCH net-next] net: Kconfig.debug: wrap socket refcnt debug into an option
-Date:   Mon, 13 Feb 2023 09:29:39 -0800
-Message-ID: <20230213172939.39449-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230211065153.54116-1-kerneljasonxing@gmail.com>
-References: <20230211065153.54116-1-kerneljasonxing@gmail.com>
+        Mon, 13 Feb 2023 12:30:58 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71682AD3E;
+        Mon, 13 Feb 2023 09:30:56 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31D8s9OC027759;
+        Mon, 13 Feb 2023 17:30:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=LB4Bnr9T0+rLlRQQGzShIM05D5rTUaPk+A17X0Tutzo=;
+ b=aYuEVouZbE7HrvsnkiqVP3ia0M0L41hn/5uuP27WPcNCxizKZgWwOQRkFljoqzTwLyI/
+ pM20N/RGMwZ7DwZWH5fBWg4jPR4xwo7wF4AGrFjP4FCNb7aqN6VKpd0ClO1QkUQ97sxX
+ uAj5ylmNjTsKUmx1he+tzlDO/QISDIiGTEEcKoMjVpUTpqGxYrhnw5HJQTwoN5ZUlU68
+ BF8wefWtLuv9A8LB3KLsKdaebhhbL5gHoHn/txqkjcIja2+BCeiNDM/lKHb6PDSxxEXF
+ 4G9hMP7qmcocvihNKslZBI3jsLr40IQA8032gnIW+ItE0liwyRjXOOlpUc+MVb95ze1s nA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np2m8vy4t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 17:30:48 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31DHUlRQ020836
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 17:30:47 GMT
+Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 13 Feb 2023 09:30:44 -0800
+From:   Prashanth K <quic_prashk@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>
+CC:     Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham <quic_jackp@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Prashanth K <quic_prashk@quicinc.com>
+Subject: [PATCH v5] usb: gadget: u_serial: Add null pointer check in gserial_resume
+Date:   Mon, 13 Feb 2023 23:00:38 +0530
+Message-ID: <1676309438-14922-1-git-send-email-quic_prashk@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.43.161.198]
-X-ClientProxiedBy: EX13D40UWA001.ant.amazon.com (10.43.160.53) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: w8meYxT5un6qJm7_rq83kpgLIw0ELVsJ
+X-Proofpoint-ORIG-GUID: w8meYxT5un6qJm7_rq83kpgLIw0ELVsJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-13_11,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ mlxlogscore=626 suspectscore=0 mlxscore=0 impostorscore=0 bulkscore=0
+ adultscore=0 priorityscore=1501 clxscore=1015 lowpriorityscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302130158
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,104 +77,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Sat, 11 Feb 2023 14:51:53 +0800
-> From: Jason Xing <kernelxing@tencent.com>
-> 
-> Since commit 463c84b97f24 ("[NET]: Introduce inet_connection_sock")
-> commented out the definition of SOCK_REFCNT_DEBUG and later another
-> patch deleted it,
+Consider a case where gserial_disconnect has already cleared
+gser->ioport. And if a wakeup interrupt triggers afterwards,
+gserial_resume gets called, which will lead to accessing of
+gser->ioport and thus causing null pointer dereference.Add
+a null pointer check to prevent this.
 
-e48c414ee61f ("[INET]: Generalise the TCP sock ID lookup routines")
-is the commit which commented out SOCK_REFCNT_DEBUG, and 463c84b97f24
-removed it.
+Added a static spinlock to prevent gser->ioport from becoming
+null after the newly added check.
 
+Fixes: aba3a8d01d62 ("usb: gadget: u_serial: add suspend resume callbacks")
+Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+---
+v5: Updated the comment in new patch
 
-> we need to enable it through defining it manually
-> somewhere. Wrapping it into an option in Kconfig.debug could make
-> it much clearer and easier for some developers to do things based
-> on this change.
+ drivers/usb/gadget/function/u_serial.c | 23 +++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
 
-Considering SOCK_REFCNT_DEBUG is removed in 2005, how about removing
-the whole feature?  I think we can track the same info easily with
-bpftrace + kprobe.
+diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
+index 840626e..a0ca47f 100644
+--- a/drivers/usb/gadget/function/u_serial.c
++++ b/drivers/usb/gadget/function/u_serial.c
+@@ -82,6 +82,9 @@
+ #define WRITE_BUF_SIZE		8192		/* TX only */
+ #define GS_CONSOLE_BUF_SIZE	8192
+ 
++/* Prevents race conditions while accessing gser->ioport */
++static DEFINE_SPINLOCK(serial_port_lock);
++
+ /* console info */
+ struct gs_console {
+ 	struct console		console;
+@@ -1375,8 +1378,10 @@ void gserial_disconnect(struct gserial *gser)
+ 	if (!port)
+ 		return;
+ 
++	spin_lock_irqsave(&serial_port_lock, flags);
++
+ 	/* tell the TTY glue not to do I/O here any more */
+-	spin_lock_irqsave(&port->port_lock, flags);
++	spin_lock(&port->port_lock);
+ 
+ 	gs_console_disconnect(port);
+ 
+@@ -1391,7 +1396,8 @@ void gserial_disconnect(struct gserial *gser)
+ 			tty_hangup(port->port.tty);
+ 	}
+ 	port->suspended = false;
+-	spin_unlock_irqrestore(&port->port_lock, flags);
++	spin_unlock(&port->port_lock);
++	spin_unlock_irqrestore(&serial_port_lock, flags);
+ 
+ 	/* disable endpoints, aborting down any active I/O */
+ 	usb_ep_disable(gser->out);
+@@ -1425,10 +1431,19 @@ EXPORT_SYMBOL_GPL(gserial_suspend);
+ 
+ void gserial_resume(struct gserial *gser)
+ {
+-	struct gs_port *port = gser->ioport;
++	struct gs_port *port;
+ 	unsigned long	flags;
+ 
+-	spin_lock_irqsave(&port->port_lock, flags);
++	spin_lock_irqsave(&serial_port_lock, flags);
++	port = gser->ioport;
++
++	if (!port) {
++		spin_unlock_irqrestore(&serial_port_lock, flags);
++		return;
++	}
++
++	spin_lock(&port->port_lock);
++	spin_unlock(&serial_port_lock);
+ 	port->suspended = false;
+ 	if (!port->start_delayed) {
+ 		spin_unlock_irqrestore(&port->port_lock, flags);
+-- 
+2.7.4
 
-
-> 
-> Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> ---
->  include/net/sock.h            | 8 ++++----
->  net/Kconfig.debug             | 8 ++++++++
->  net/ipv4/inet_timewait_sock.c | 2 +-
->  3 files changed, 13 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/net/sock.h b/include/net/sock.h
-> index dcd72e6285b2..1b001efeb9b5 100644
-> --- a/include/net/sock.h
-> +++ b/include/net/sock.h
-> @@ -1349,7 +1349,7 @@ struct proto {
->  	char			name[32];
->  
->  	struct list_head	node;
-> -#ifdef SOCK_REFCNT_DEBUG
-> +#ifdef CONFIG_SOCK_REFCNT_DEBUG
->  	atomic_t		socks;
->  #endif
->  	int			(*diag_destroy)(struct sock *sk, int err);
-> @@ -1359,7 +1359,7 @@ int proto_register(struct proto *prot, int alloc_slab);
->  void proto_unregister(struct proto *prot);
->  int sock_load_diag_module(int family, int protocol);
->  
-> -#ifdef SOCK_REFCNT_DEBUG
-> +#ifdef CONFIG_SOCK_REFCNT_DEBUG
->  static inline void sk_refcnt_debug_inc(struct sock *sk)
->  {
->  	atomic_inc(&sk->sk_prot->socks);
-> @@ -1378,11 +1378,11 @@ static inline void sk_refcnt_debug_release(const struct sock *sk)
->  		printk(KERN_DEBUG "Destruction of the %s socket %p delayed, refcnt=%d\n",
->  		       sk->sk_prot->name, sk, refcount_read(&sk->sk_refcnt));
->  }
-> -#else /* SOCK_REFCNT_DEBUG */
-> +#else /* CONFIG_SOCK_REFCNT_DEBUG */
->  #define sk_refcnt_debug_inc(sk) do { } while (0)
->  #define sk_refcnt_debug_dec(sk) do { } while (0)
->  #define sk_refcnt_debug_release(sk) do { } while (0)
-> -#endif /* SOCK_REFCNT_DEBUG */
-> +#endif /* CONFIG_SOCK_REFCNT_DEBUG */
->  
->  INDIRECT_CALLABLE_DECLARE(bool tcp_stream_memory_free(const struct sock *sk, int wake));
->  
-> diff --git a/net/Kconfig.debug b/net/Kconfig.debug
-> index 5e3fffe707dd..667396d70e10 100644
-> --- a/net/Kconfig.debug
-> +++ b/net/Kconfig.debug
-> @@ -18,6 +18,14 @@ config NET_NS_REFCNT_TRACKER
->  	  Enable debugging feature to track netns references.
->  	  This adds memory and cpu costs.
->  
-> +config SOCK_REFCNT_DEBUG
-> +	bool "Enable socket refcount debug"
-> +	depends on DEBUG_KERNEL && NET
-> +	default n
-> +	help
-> +	  Enable debugging feature to track socket references.
-> +	  This adds memory and cpu costs.
-> +
->  config DEBUG_NET
->  	bool "Add generic networking debug"
->  	depends on DEBUG_KERNEL && NET
-> diff --git a/net/ipv4/inet_timewait_sock.c b/net/ipv4/inet_timewait_sock.c
-> index beed32fff484..e313516b64ce 100644
-> --- a/net/ipv4/inet_timewait_sock.c
-> +++ b/net/ipv4/inet_timewait_sock.c
-> @@ -77,7 +77,7 @@ void inet_twsk_free(struct inet_timewait_sock *tw)
->  {
->  	struct module *owner = tw->tw_prot->owner;
->  	twsk_destructor((struct sock *)tw);
-> -#ifdef SOCK_REFCNT_DEBUG
-> +#ifdef CONFIG_SOCK_REFCNT_DEBUG
->  	pr_debug("%s timewait_sock %p released\n", tw->tw_prot->name, tw);
->  #endif
->  	kmem_cache_free(tw->tw_prot->twsk_prot->twsk_slab, tw);
-> -- 
-> 2.37.3
