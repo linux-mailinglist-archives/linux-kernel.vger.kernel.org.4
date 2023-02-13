@@ -2,57 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42CF169527D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:59:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 962B669527B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbjBMU7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 15:59:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbjBMU7e (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229901AbjBMU7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 13 Feb 2023 15:59:34 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844FF3AB0;
-        Mon, 13 Feb 2023 12:59:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229868AbjBMU7c (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Feb 2023 15:59:32 -0500
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5718D2056F;
+        Mon, 13 Feb 2023 12:59:31 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D23F4CE1D28;
-        Mon, 13 Feb 2023 20:59:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 474F6C4339E;
-        Mon, 13 Feb 2023 20:59:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676321969;
-        bh=97GwXdgmJT1YSQKnlPR0dKRkb1n6yw9H6kKAtR7Zvck=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=dBtH4iD/rGftLfB+4Ugxh2h3cMKp2Fu7YvesX60QZz+GqO3y8jmSac3OesOb3DDho
-         dVBJTW012BvMmyb04Mhw5UpqXcXuMsXLoMdZocFTgbXClr3jYMywTJG36otcYlsV/E
-         1ZEEYIG0hx6YUu9Y9BVtmM9p04OQjZ/jo6Kgb4yFsFYIyq1k3e20tAIrhMAVGRwvBc
-         Cw0kDAZ6iCo+Ae+udNLzHNYH+2hq1vA2Kb9hFvQsFHxVQ8B5tDsFsT+ZdP+5aKmVWk
-         bu4E93TOwu3vrUz9fCkdXJ5CdySntwH3NJzlX1IVE0CmT/7gfGk3Q9noAe5MuwbrWe
-         KJCzv7ALApIBQ==
-Date:   Mon, 13 Feb 2023 14:59:27 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Sergey.Semin@baikalelectronics.ru,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] dmaengine: dw-edma: Add support for native HDMA
-Message-ID: <20230213205927.GA2930625@bhelgaas>
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id E8A7285232;
+        Mon, 13 Feb 2023 21:59:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1676321969;
+        bh=vhmjBfKJllb1DaeaYosk4z9xVm2EbQAiMrbMD8erdZU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mz4a6xO+w7Pb2kWwOHddX8HWj3zie/VaPszErG058fPUWD4d7gXv5SQCVuyundDma
+         fEdvnHUaaq/jYCxnDvkuRIP/uJ9OBie5lVmr/RLC9WBDN4+cSroZbj6s/sNRFJu38F
+         SCF3EDH4ibLdWvZgkYqHiSMxPMAJx+gl04Dk3/yPxmJSDhZLZoJUboUnS175kHVCBh
+         QVI0VKajK3S58Buu5wCl3t+fUAYYs0cowytKR73kxG48BWq6SQCaVEUkVzqwlbaspe
+         RFw3CGRvLx0a7XbkgTZyD/lQ/GWY1nBTQj+RtQ4Lp1P2wgiay0lGYB26gWSh+RGHV3
+         xcMrIPr6ExaRA==
+Message-ID: <b900238d-b06a-a9d7-6892-6a726603b63b@denx.de>
+Date:   Mon, 13 Feb 2023 21:59:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230213132411.65524-4-cai.huoqing@linux.dev>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 6/6] arm64: dts: imx8mm-kontron: Add support for reading
+ SD_VSEL signal
+Content-Language: en-US
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     Frieder Schrempf <frieder@fris.de>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Heiko Thiery <heiko.thiery@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>
+References: <20230213155833.1644366-1-frieder@fris.de>
+ <20230213155833.1644366-7-frieder@fris.de>
+ <20230213161548.ucaqpza65byyqvfo@pengutronix.de>
+ <eef49a1c-4dc3-7517-c760-ecc20704f943@denx.de>
+ <20230213195617.xndagbarc3k5kegr@pengutronix.de>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20230213195617.xndagbarc3k5kegr@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,55 +73,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 09:24:08PM +0800, Cai Huoqing wrote:
-> From: Cai huoqing <cai.huoqing@linux.dev>
+On 2/13/23 20:56, Marco Felsch wrote:
+> Hi Marek, Frieder,
+
+Hi,
+
+> On 23-02-13, Marek Vasut wrote:
+>> On 2/13/23 17:15, Marco Felsch wrote:
+>>
+>> [...]
+>>
+>>>> @@ -347,7 +347,7 @@ MX8MM_IOMUXC_SD2_DATA1_USDHC2_DATA1		0x1d6
+>>>>    			MX8MM_IOMUXC_SD2_DATA2_USDHC2_DATA2		0x1d6
+>>>>    			MX8MM_IOMUXC_SD2_DATA3_USDHC2_DATA3		0x1d6
+>>>>    			MX8MM_IOMUXC_SD2_CD_B_GPIO2_IO12		0x019
+>>>> -			MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT		0x1d0
+>>>> +			MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT		0x400001d0
+>>>
+>>> The VSELECT pin should be driven by the (u)sdhc core...
+>>>
+>>>>    		>;
+>>>>    	};
+>>>>    };
+>>>> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
+>>>> index 5172883717d1..90daaf54e704 100644
+>>>> --- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
+>>>> +++ b/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
+>>>> @@ -196,6 +196,7 @@ reg_nvcc_sd: LDO5 {
+>>>>    				regulator-name = "NVCC_SD (LDO5)";
+>>>>    				regulator-min-microvolt = <1800000>;
+>>>>    				regulator-max-microvolt = <3300000>;
+>>>> +				sd-vsel-gpios = <&gpio1 4 GPIO_ACTIVE_HIGH>;
+>>>
+>>> and by using the sd-vsel-gpios property the IOMUXC_GPIO1_IO04 have to be
+>>> muxed as GPIO, which is not the case. So I think that u-boot have a bug
+>>> within the (u)sdhc core.
+>>
+>> The trick here is that the VSELECT is operated by the usdhc block as a
+>> function pin, but the PMIC driver can read the current state of the VSELECT
+>> pin by reading out the GPIO block SR register. Since the IOMUX SION bit is
+>> set on the VSELECT pin, the state of the pin is reflected in the GPIO block
+>> SR register even if the pin is muxed as function pin.
+>>
 > 
-> Add support for HDMA NATIVE, as long the IP design has set
-> the compatible register map parameter-HDMA_NATIVE,
-> which allows compatibility for native HDMA register configuration.
+> Thanks for this explanation :) Why does the regulator driver need to
+> know the current state of this pin?
 
-Rewrap to fill 75 columns.  Also applies below.
+Because that regulator has an input pin which selects between two states 
+of that regulator, L and H, and whatever L or H is depends on what is 
+configured into the regulator via I2C. To correctly report the state of 
+the regulator, you have to know the state of that input (selector) pin.
 
-> The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
-> And the native HDMA registers are different from eDMA,
-> so this patch add support for HDMA NATIVE mode.
+> Since the voltage switching requires
+> some cmd's before the actual voltage level switch. So this must be
+> handled within the core.
 > 
-> HDMA write and read channels operate independently to maximize
-> the performance of the HDMA read and write data transfer over
-> the link When you configure the HDMA with multiple read channels,
-> then it uses a round robin (RR) arbitration scheme to select
-> the next read channel to be serviced.
-> The same applies when you have multiple write channels.
+> Also after checking the driver, adding the sd-vsel-gpios will request
+> the specified gpio as output-high.
 
-Wrap into a single paragraph or add a blank line if you want the last
-sentence to be a new paragraph.
+The GPIO would have to be requested as input, obviously.
 
-> The native HDMA driver also supports a maximum of 16 independent
-> channels (8 write + 8 read), which can run simultaneously.
-> Both SAR (Source Address Register) and DAR (Destination Address Register)
-> are alignmented to byte.
+> Out of curiosity, what's the bug you
+> triggering within U-Boot?
 
-s/alignmented/aligned/
-
-> +	u32 watermark_en;			/* 0x0030 */
-> +	u32	control1;			/* 0x0034 */
-> +	u32	func_num;			/* 0x0038 */
-> +	u32	qos;				/* 0x003c */
-> +	u32	reserved;			/* 0x0040..0x007c */
-> +	u32 ch_stat;				/* 0x0080 */
-
-Weird indentation of control1, func_num, etc.  Is that meaningful or a
-mistake?
-
-> +	union {
-> +		u64 reg;			/* 0x00a0..0x00a4 */
-> +		struct {
-> +			u32 lsb;		/* 0x00a0 */
-> +			u32 msb;		/* 0x00a4 */
-> +		};
-> +	} msi_abort;
-> +	u32	msi_msgdata;			/* 0x00a8 */
-
-Again here.
-
-Bjorn
+AFAICT the readback of the initial state of the regulator (see paragraph 
+above), which affects Linux all the same.
