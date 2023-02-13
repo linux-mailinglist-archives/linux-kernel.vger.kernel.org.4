@@ -2,82 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C452694B79
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:44:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 231A3694B7C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbjBMPoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:44:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
+        id S230264AbjBMPoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:44:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjBMPoC (ORCPT
+        with ESMTP id S230149AbjBMPoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:44:02 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A328193E5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:44:01 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id o18so12722595wrj.3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:44:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2n1P+oxHN3aWLMoTlDV1sEh1xrBUj1nJ88KGxvBB7eo=;
-        b=GQxiPXdmDktffRQCnppmyv0xFEog6TPxrD2bymnw/uSvXzcoEYBoRfFoJQEgRdPwGW
-         /5x93+HS/fjxAeUe7aG1GCWt3OTViEd2o8qTxeBw11eXInsf/nAF5YEa3S0bQEtJ8oXy
-         pLF7Op8HU3AU19EtCPFGXhg7GTTzAlIzSyhFbLBYZHc7mfphPdNAgKOhjUFMpl2Mnqp4
-         bcAyneP743z3I6CdGGE/GTMGk7EPr6seWsk27jC/gSLBultzTr2IYeKSAVdmzN2L6kn1
-         ikj+nFHYXsuuG6QBT3R13WZ9yZ57KvKH4mTZtrBNW1nctKu01Lg9lSivCkn97K8fX0TQ
-         VleA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2n1P+oxHN3aWLMoTlDV1sEh1xrBUj1nJ88KGxvBB7eo=;
-        b=pVXFwYAAYxwUth2brashqiD0PYrXHvA9Ne/rUlIVjdvZTAzyGOOlWFeJW9K2eywrek
-         0T9dL/rfhK/4azRC6Mvu7ShnC5Y4hkLzDPJCKpl16B4Vohxu44INTNOn1dHNaUNvqWfj
-         QCwS47VnaQHgULkRzdZV0c7QVTreqQSU1mRK8I5hqFfAvDcXnQMpan4DveOObZnkzEpd
-         7W1lAjGvyXyhx1mEqyak6pLbGRonBadUA6O3ze58/RgunhvrxrrBoiNU5f5oA4A6WN80
-         h0QAJVs8vK8QVOFqWBbiu8rIgwbVxSyxgp4jy0yzgfZ2JtyCO8Pr3R8tjM1r4sVfbTpv
-         Q3Pg==
-X-Gm-Message-State: AO0yUKUJz2yXF9qv+BMQD6UQdjU4LexTgckZGMDcnUKlQdejYTVT9BxG
-        cZ7pQzoe4u5LuSPzt+GnQNRrtA==
-X-Google-Smtp-Source: AK7set+KF3h1+YGzYPh0y156dCFx+9jGfO3uVnyyofEcfGGK9uX+dB6tZ571mwgmhxAYwQ1kdZTrwg==
-X-Received: by 2002:adf:f14f:0:b0:2c5:561e:808e with SMTP id y15-20020adff14f000000b002c5561e808emr3415217wro.12.1676303039995;
-        Mon, 13 Feb 2023 07:43:59 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id a1-20020adff7c1000000b002c54a2037d1sm8657866wrq.75.2023.02.13.07.43.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 07:43:59 -0800 (PST)
-Message-ID: <2b67050c-7429-8528-de24-2d923e3c9671@linaro.org>
-Date:   Mon, 13 Feb 2023 16:43:57 +0100
+        Mon, 13 Feb 2023 10:44:14 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14985199C3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:44:11 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9E82E1F8AA;
+        Mon, 13 Feb 2023 15:44:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676303050; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zi4tgbomsN6kaZHVy0HsastDUiQMyXKKQ4Q7ib2L4LQ=;
+        b=kqp3UwzOQv5aMkzjyX0FhYjjdysY+JeM0YRiTi1I8wiGwQs0BdZ0wtDGlLeYXgsOJO70IF
+        L/rimKKo0X6WJGLIvFFUjoqkoaV8CTKrnJHnr9nkW1ixyBRZ1KD4lzJXfvGX2rfuHFBLWI
+        pLRXnFuy4goEDuUcWskzBdTOcuUuPrc=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4B0681391B;
+        Mon, 13 Feb 2023 15:44:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id HSi4EMpa6mMnKwAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 13 Feb 2023 15:44:10 +0000
+Message-ID: <ca2e1560-5846-2a4b-6c27-aa8ceb17ee5c@suse.com>
+Date:   Mon, 13 Feb 2023 16:44:09 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 17/17] arm64: dts: apple: t8112: Initial t8112 (M2) device
- trees
+Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
+ defined MTRRs
 Content-Language: en-US
-To:     Janne Grunau <j@jannau.net>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Kettenis <kettenis@openbsd.org>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230202-asahi-t8112-dt-v1-0-cb5442d1c229@jannau.net>
- <20230202-asahi-t8112-dt-v1-17-cb5442d1c229@jannau.net>
- <1ea2107a-bb86-8c22-0bbc-82c453ab08ce@linaro.org>
- <20230213140113.GE17933@jannau.net>
- <16804864-dce2-d68c-ce81-b6fdeb20a527@linaro.org>
- <20230213150823.GF17933@jannau.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230213150823.GF17933@jannau.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        lists@nerdbynature.de, mikelley@microsoft.com,
+        torvalds@linux-foundation.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <20230209072220.6836-1-jgross@suse.com>
+ <20230209072220.6836-3-jgross@suse.com> <Y+ohfE/wICFKO/93@zn.tnic>
+ <6257114d-a957-f586-145c-d2a885417360@suse.com> <Y+pRK6a419jenR9R@zn.tnic>
+ <Y+pTDFQlX9qNL35z@zn.tnic> <85de8576-05b7-400d-6020-7dba519c1d2e@suse.com>
+ <Y+pZ5ccprqequvpE@zn.tnic>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <Y+pZ5ccprqequvpE@zn.tnic>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------gzEssp0cNHMMvA4tuxAejI6P"
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,27 +74,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/02/2023 16:08, Janne Grunau wrote:
-> On 2023-02-13 15:36:33 +0100, Krzysztof Kozlowski wrote:
->> On 13/02/2023 15:01, Janne Grunau wrote:
->>>>> +
->>>>> +		pmgr: power-management@23b700000 {
->>>>> +			compatible = "apple,t8112-pmgr", "apple,pmgr", "syscon", "simple-mfd";
->>>>
->>>> Why this is simple-mfd?
->>>
->>> I suppose because the syscon device is not limited to power domain 
->>> controls. The dt-bindings in arm/apple/apple,pmgr.yaml specify those 
->>> compatibles. See the original discussion in:
->>>
->>> https://lore.kernel.org/linux-devicetree/57991dac-196e-a76d-831a-d4ac166bfe29@marcan.st/  
->>
->> This did not answer my concerns. There are no children here.
-> 
-> The child nodes are in t8112-pmgr.dtsi
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------gzEssp0cNHMMvA4tuxAejI6P
+Content-Type: multipart/mixed; boundary="------------IZnxSMYWtWMb92GvKSZJwBTe";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, lists@nerdbynature.de,
+ mikelley@microsoft.com, torvalds@linux-foundation.org,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <ca2e1560-5846-2a4b-6c27-aa8ceb17ee5c@suse.com>
+Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
+ defined MTRRs
+References: <20230209072220.6836-1-jgross@suse.com>
+ <20230209072220.6836-3-jgross@suse.com> <Y+ohfE/wICFKO/93@zn.tnic>
+ <6257114d-a957-f586-145c-d2a885417360@suse.com> <Y+pRK6a419jenR9R@zn.tnic>
+ <Y+pTDFQlX9qNL35z@zn.tnic> <85de8576-05b7-400d-6020-7dba519c1d2e@suse.com>
+ <Y+pZ5ccprqequvpE@zn.tnic>
+In-Reply-To: <Y+pZ5ccprqequvpE@zn.tnic>
 
-Ahhh, so this is overridden? Then it's fine.
+--------------IZnxSMYWtWMb92GvKSZJwBTe
+Content-Type: multipart/mixed; boundary="------------Emv1BGWy0OMRrsZLe4N3E0qy"
 
-Best regards,
-Krzysztof
+--------------Emv1BGWy0OMRrsZLe4N3E0qy
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
+T24gMTMuMDIuMjMgMTY6NDAsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gTW9uLCBG
+ZWIgMTMsIDIwMjMgYXQgMDQ6MTg6NDhQTSArMDEwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
+Cj4+IFllcywgeW91IHN0aWxsIGNvdWxkIGNvbnN0cnVjdCBjYXNlcyB3aGVyZSBpdCB3b3Vs
+ZCBnbyB3cm9uZywgYnV0IEkgZG9uJ3QNCj4+IHRoaW5rIHdlIHNob3VsZCBvdmVyLWVuZ2lu
+ZWVyIGl0Lg0KPiANCj4gQWN0dWFsbHksIHdlIHNob3VsZCBhbGxvdyBvbmx5IHRob3NlIGZv
+ciB3aGljaCB3ZSBrbm93IHRoZXkgZ2V0IHNwZWNpYWwNCj4gdHJlYXRtZW50IGZvciBNVFJS
+cyBzZXR0aW5ncyBhbmQgd2FybiBmb3IgYWxsIHRoZSByZXN0Lg0KPiANCj4gQW5kIGp1ZGdp
+bmcgYnkgRGF2ZSdzIHJlcGx5LCBJIHRoaW5rIFREWCBzaG91bGQgYmUgaW4gdGhhdCBjYXRl
+Z29yeSB0b28NCj4gc2luY2UgaXQgdGhyb3dzICNWRXMuLi4NCj4gDQoNCk9rYXksIGFuZCBp
+dCBoYXMgTVRSUnMgZW5hYmxlZCAoYXMgSHlwZXItViBTRVYtU05QIGd1ZXN0cyksIHNvIEkg
+c2hvdWxkbid0DQp0ZXN0IHRoYXQsIEkgZ3Vlc3MgKG9yIHdlIHNob3VsZCBkaXNhYmxlIHRo
+ZSBmZWF0dXJlIGJlZm9yZSBjYWxsaW5nIHRoZQ0Kb3ZlcndyaXRlIGZ1bmN0aW9uKS4NCg0K
+DQpKdWVyZ2VuDQo=
+--------------Emv1BGWy0OMRrsZLe4N3E0qy
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------Emv1BGWy0OMRrsZLe4N3E0qy--
+
+--------------IZnxSMYWtWMb92GvKSZJwBTe--
+
+--------------gzEssp0cNHMMvA4tuxAejI6P
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPqWskFAwAAAAAACgkQsN6d1ii/Ey/m
+Hwf8DyFEotBkUFLAupoqSJKydC0IXPz3bD9idAWbZS6L54ClEjIblY1dy6TJRDXjCiLaN4xsqOuX
+hWO9K5MdYSKaCc/PClXDghHNjsBI+N/NF0UFUUTO5m6UqMQZ2X1N7bPJ1UyvXoqfLfAAPiXPDbqC
+kFTLX6cwR68ryAaWbu1TmnBZMCZr/J7gS/s7txKhZbMQrxDQF+RZBwT0T2S0h5V65aIJrnP2Tecw
+fQuXNv7LZlmNBFSJi5pJ9LO0Q0i/nXEZtEUctBE/sRTCqzJyqkIccePVmfLlaFGjSo/nyAw+XSCd
+k7USGdE9VicCX6hTbiGPpbp12nYewdOfKD03/P/faA==
+=zjvC
+-----END PGP SIGNATURE-----
+
+--------------gzEssp0cNHMMvA4tuxAejI6P--
