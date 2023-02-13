@@ -2,42 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEFE4694A60
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F234F694A6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:10:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbjBMPJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:09:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
+        id S230121AbjBMPKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:10:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjBMPJG (ORCPT
+        with ESMTP id S231511AbjBMPJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:09:06 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDAC1BD4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:09:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F11ADCE0E93
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 15:09:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 414AFC433D2;
-        Mon, 13 Feb 2023 15:08:49 +0000 (UTC)
-Date:   Mon, 13 Feb 2023 10:08:36 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yafang Shao <laoar.shao@gmail.com>
-Subject: [GIT PULL] tracing: Make trace_define_field_ext() static
-Message-ID: <20230213100836.33d2b0b0@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 13 Feb 2023 10:09:53 -0500
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C885A1CF4B;
+        Mon, 13 Feb 2023 07:09:49 -0800 (PST)
+Received: by mail-il1-f182.google.com with SMTP id u8so5280850ilq.13;
+        Mon, 13 Feb 2023 07:09:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=izcvmEfYGF1qHX8/hJIplnh01MRs+KJ7qGdimHU+1VM=;
+        b=R87qvgecQxIsujLJPGiAEGXOR1B8xww3joOKiv1pYscZBKs2izLbYZv3HF13IZS2dV
+         FtmVY8Q/IKIqAm400Tmrac4XoC1B/odJAf1B9UtTiPjA2ObxHNe+02NqvCYYn1eRQE82
+         6BNLwRMAeDxS81E/O0JL2bhEZ43smDmeD0qT8gtydU8Oa9bbDDpcSzD8GMRld7HEnHFb
+         JU+FBwaJAYou+k8yq/E+Mebsvd5ugSrxYuNdHNNeLVALOIJEAWqOVjqOsHrg0ZyiK4Sy
+         dGX5qDkMrJTU6HRbBSZjjEMa78rSCwCVZIpP0jzJNnelSPjUweALcgG+QNv9GI3Now7+
+         53XA==
+X-Gm-Message-State: AO0yUKX1t/AuhXJ/ySNM8cgBK0aBuxYgdRl5Y7eOj11/EbdWbNplmqAd
+        7/oNH2OHhTib7C0ELgL0mg==
+X-Google-Smtp-Source: AK7set/PauQ/4h5+1OHFxdgFVp3PLCj5fX29L44DbapxgCZR3zDCwMZWu/ZKbFWwXtvHlLVLC8DXEg==
+X-Received: by 2002:a92:c263:0:b0:315:3948:1c5a with SMTP id h3-20020a92c263000000b0031539481c5amr5310369ild.15.1676300989045;
+        Mon, 13 Feb 2023 07:09:49 -0800 (PST)
+Received: from robh_at_kernel.org (c-73-14-99-67.hsd1.co.comcast.net. [73.14.99.67])
+        by smtp.gmail.com with ESMTPSA id g3-20020a056e020d0300b003153787b444sm1493791ilj.21.2023.02.13.07.09.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 07:09:48 -0800 (PST)
+Received: (nullmailer pid 11611 invoked by uid 1000);
+        Mon, 13 Feb 2023 15:09:41 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     andersson@kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        krzysztof.kozlowski@linaro.org, dri-devel@lists.freedesktop.org,
+        David Airlie <airlied@gmail.com>, Sean Paul <sean@poorly.run>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, marijn.suijten@somainline.org,
+        freedreno@lists.freedesktop.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, agross@kernel.org
+In-Reply-To: <20230211122656.1479141-5-konrad.dybcio@linaro.org>
+References: <20230211122656.1479141-1-konrad.dybcio@linaro.org>
+ <20230211122656.1479141-5-konrad.dybcio@linaro.org>
+Message-Id: <167630051091.6244.17725263778561654199.robh@kernel.org>
+Subject: Re: [PATCH 04/10] dt-bindings: display/msm: Add SM6375 DPU & MDSS
+Date:   Mon, 13 Feb 2023 09:09:41 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -45,59 +73,43 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Linus,
+On Sat, 11 Feb 2023 13:26:50 +0100, Konrad Dybcio wrote:
+> Document SM6375 DPU and MDSS.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../bindings/display/msm/qcom,sm6375-dpu.yaml | 106 +++++++++
+>  .../display/msm/qcom,sm6375-mdss.yaml         | 216 ++++++++++++++++++
+>  2 files changed, 322 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/msm/qcom,sm6375-dpu.yaml
+>  create mode 100644 Documentation/devicetree/bindings/display/msm/qcom,sm6375-mdss.yaml
+> 
 
-tracing: Make trace_define_field_ext() static
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Just after the fix to TASK_COMM_LEN not converted to its value in
-trace_events was pulled, the kernel test robot reported that the helper
-function trace_define_field_ext() added to that change was only used in
-the file it was defined in but was not declared static. Make it a local
-function.
+yamllint warnings/errors:
 
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm6375-mdss.example.dtb: dsi@5e94000: compatible:0: 'qcom,sm6375-dsi-ctrl' is not one of ['qcom,mdss-dsi-ctrl', 'qcom,dsi-ctrl-6g-qcm2290']
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm6375-mdss.example.dtb: dsi@5e94000: compatible: ['qcom,sm6375-dsi-ctrl', 'qcom,mdss-dsi-ctrl'] is too long
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
 
-Please pull the latest trace-v6.2-rc7-2 tree, which can be found at:
+doc reference errors (make refcheckdocs):
 
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230211122656.1479141-5-konrad.dybcio@linaro.org
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-trace-v6.2-rc7-2
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-Tag SHA1: 3883ec09ec4e45286f3c09d4a88dbde8b328573c
-Head SHA1: 70b5339caf847b8b6097b6dfab0c5a99b40713c8
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
+pip3 install dtschema --upgrade
 
-Steven Rostedt (Google) (1):
-      tracing: Make trace_define_field_ext() static
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
-----
- kernel/trace/trace_events.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
----------------------------
-commit 70b5339caf847b8b6097b6dfab0c5a99b40713c8
-Author: Steven Rostedt (Google) <rostedt@goodmis.org>
-Date:   Sun Feb 12 20:11:42 2023 -0500
-
-    tracing: Make trace_define_field_ext() static
-    
-    trace_define_field_ext() is not used outside of trace_events.c, it should
-    be static.
-    
-    Link: https://lore.kernel.org/oe-kbuild-all/202302130750.679RaRog-lkp@intel.com/
-    
-    Fixes: b6c7abd1c28a ("tracing: Fix TASK_COMM_LEN in trace event format file")
-    Reported-by: Reported-by: kernel test robot <lkp@intel.com>
-    Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 6a4696719297..6a942fa275c7 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -155,7 +155,7 @@ int trace_define_field(struct trace_event_call *call, const char *type,
- }
- EXPORT_SYMBOL_GPL(trace_define_field);
- 
--int trace_define_field_ext(struct trace_event_call *call, const char *type,
-+static int trace_define_field_ext(struct trace_event_call *call, const char *type,
- 		       const char *name, int offset, int size, int is_signed,
- 		       int filter_type, int len)
- {
