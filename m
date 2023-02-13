@@ -2,78 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ACF4694378
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:51:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A91DC694380
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:54:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjBMKvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 05:51:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60794 "EHLO
+        id S229876AbjBMKy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 05:54:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbjBMKvU (ORCPT
+        with ESMTP id S229814AbjBMKyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 05:51:20 -0500
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656A94224
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:51:19 -0800 (PST)
-Received: by mail-qv1-xf2e.google.com with SMTP id j5so5855849qvi.3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:51:19 -0800 (PST)
+        Mon, 13 Feb 2023 05:54:25 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F97CA26
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:54:24 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id r18so8385125wmq.5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:54:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1676285478;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NbmEomTaEbL/xC6kHsB9GRdSNVZ6oy/K3P7XpBsOsQw=;
-        b=Qfe34OpPJdqTxxheZAVWzG8hWYbDS7zTDrM618tSIUis2UcJnDYkkChsVhZvEIZzuW
-         qKY/x4i+Z92+RZAWyfefxOppIk7v8myMg1XmGgtRXVsxjyXKSGg1yN0+2KUmhbfAzfFU
-         O1iBAkH+LAfEpI6qa0XJbG2j6/gx5RZmn3BQazHSV29XjAFQHh7uah8TzWi1vF5lCBzi
-         3Svf4GePsL9xDFrix2gTpfdZ4KlO35MumO2xQC6ExNr1l0lPiLmBP1alVKXJR6/737hd
-         cbSgfAWx40buLC+Q1zIWwhKQ8A3uy99gzKJ8fSURqs2sFj2wj/4oWc5NU0Y+0vTEg6AW
-         j/TA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=c4gMj6DLk69LRUfrPQck9bSlMaISXZGCTkv4ZK5wjaA=;
+        b=xabJSuvfnWQ37OhcxWukJ0rXnPEPPnqpfPEl3xZ9fab+kcs6mpfL4TM7e8zIRCjW/4
+         cbyiT9qL5tOjl1arDVGpYqSYxESw8hMGf8evAiiZNAOcFams9kls907jCDm/PHJVZuqW
+         7a7rIklVAFSV41LWtX/EIADWfNc+dAJA73ppMk9wHuxfVHBAerHdJAVsHQnCr30BNUcT
+         gSPhyTZv0MaH6gyT857R0bCz0/kFmca+6WP5vcuxbxTCLZGZrZokHL/U8qKY8LSBk4Ly
+         gyHCSC86sq5RuEvEJzyYg62jNjnv75DBnfJCDMB8IwQ03o3CSs+cftV9AgKTewri8keA
+         tb7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676285478;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NbmEomTaEbL/xC6kHsB9GRdSNVZ6oy/K3P7XpBsOsQw=;
-        b=Rnq+QA5cllIoo8MAteLxSkydBrXqtWAhWLT1FEctUORax6KM6kTSoxA8NtgVrDY46+
-         sdIfNzGbTlVA5MIf9TdRHpm7gIMZSuvCsQpWs38HHX1jWmVkBNdpFBdk450H3LYLg3BM
-         j2Pc1V8QIDF7npHvL8Dd8MIZuMDg1BWEOuFaoXGZcOL7+EgXtQtXkwnK1qNPTs/T0PaV
-         0MzXs7Dv+V7oy+haVdrN3bDJLxwm400/778tc5PuayHQzKt56RFeHKPSja02oRhd0h6J
-         lx1dp87Ow1VEGW4Rpl6UjrePSDDWnQlOIJ+XbpTN6/nTAXz+EQBgAzbpJZEEfdBq1xIA
-         MjKw==
-X-Gm-Message-State: AO0yUKUZpxTYwuexGlmt5fCKM2S92u78eor5QRZPMIzDUaLb6/znzQRb
-        I5xsPOejqxhxrtIhQngV1BXD4c0PYO8Nv6SVqHk=
-X-Google-Smtp-Source: AK7set9SReYJqmMdKTDQFgJEcWjeR1sx/YfgC5s6Ww86yAmuCIS58tUOaZABW7mWYblo8kSArbUvZZav8S6TxWH2xzs=
-X-Received: by 2002:a0c:cb8f:0:b0:56e:a7f9:2e2a with SMTP id
- p15-20020a0ccb8f000000b0056ea7f92e2amr270269qvk.80.1676285478540; Mon, 13 Feb
- 2023 02:51:18 -0800 (PST)
+        bh=c4gMj6DLk69LRUfrPQck9bSlMaISXZGCTkv4ZK5wjaA=;
+        b=Drhgy14OrtOaYok9WBM3rGLaVvkq9aHCfY37dBCr7HPWKfXXwgYOoEXtuTeOoNMuO9
+         WLYYaxo+3dam/dyQk9QU8yAwoJA7+gkXkn4XOu+wmNB2DZylRZZvY8pZq9fi+PDY2BOH
+         prBj3Iwho4uPrE7WAHnZJxQVbBRPnP9eTGi1z0IlzrvKcAviz+XIu2N3IY5mEI6yEUMv
+         o2r48nypckOErFU9BWGASzSVhRM6CvYYwdWYEJBfZNJ60NdUid7s4nvv2gixrB2l28FX
+         /Mmwkk33vQsefokEVWy640NNbpNLTerYXy783TwphcolF41HJDBBQIUhH5cZWH0V/hV6
+         2dCA==
+X-Gm-Message-State: AO0yUKWPrUMbuzulJMfxAVznO71G4ahdIcKJfii1S54peDrf3BwHHmgg
+        NiwAxpbeoI6n+f2Nr4BTAlGHnQ==
+X-Google-Smtp-Source: AK7set+dmnC8fFHSMMpTa9TbZ82Axtabej6jsHRu8DYMsSuwhXURadcSWX18R3jADIv3rFMAblj0Sw==
+X-Received: by 2002:a05:600c:1688:b0:3dc:573c:6601 with SMTP id k8-20020a05600c168800b003dc573c6601mr20411857wmn.36.1676285662715;
+        Mon, 13 Feb 2023 02:54:22 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id j23-20020a05600c1c1700b003daf681d05dsm14507052wms.26.2023.02.13.02.54.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 02:54:22 -0800 (PST)
+Message-ID: <28f16bc4-a1a7-9345-10e8-e292b94420a7@linaro.org>
+Date:   Mon, 13 Feb 2023 11:54:20 +0100
 MIME-Version: 1.0
-Received: by 2002:a0c:e6ea:0:b0:56c:2207:1ed4 with HTTP; Mon, 13 Feb 2023
- 02:51:17 -0800 (PST)
-Reply-To: ahesterann@gmail.com
-From:   Ann Hester <viktormyasn54@gmail.com>
-Date:   Mon, 13 Feb 2023 02:51:17 -0800
-Message-ID: <CAH5q5bsC=etNj-ZsUQcF7ZHs3LLXX+qMyRmDnBRzh8m5nkxzzg@mail.gmail.com>
-Subject: URGENT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/6] dt-bindings: soc: amlogic: convert clk-measure.txt to
+ dt-schema
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20230209-b4-amlogic-bindings-convert-take2-v1-0-c4fe9049def9@linaro.org>
+ <20230209-b4-amlogic-bindings-convert-take2-v1-2-c4fe9049def9@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230209-b4-amlogic-bindings-convert-take2-v1-2-c4fe9049def9@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello ,
+On 09/02/2023 14:41, Neil Armstrong wrote:
+> Convert the Amlogic Internal Clock Measurer bindings to dt-schema.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
 
-I am Ann Hester from Germany but working with a non governmental
-organization here in Lome Togo which am one of the founders.
 
-Please i have a proposal I would  like  to offer you that will benefit
-u hugely, if you are interested, kindly get back to me for more
-extensive conversation.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
- Thanks for your cooperation as I await a response from you.
+Best regards,
+Krzysztof
+
