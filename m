@@ -2,94 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DC536947BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:11:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7CDA6947C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:13:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbjBMOK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 09:10:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38722 "EHLO
+        id S229767AbjBMONB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 09:13:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjBMOKz (ORCPT
+        with ESMTP id S229505AbjBMOM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 09:10:55 -0500
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FDD10258;
-        Mon, 13 Feb 2023 06:10:55 -0800 (PST)
-Received: by mail-qt1-f171.google.com with SMTP id cr22so13754129qtb.10;
-        Mon, 13 Feb 2023 06:10:54 -0800 (PST)
+        Mon, 13 Feb 2023 09:12:59 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EAAC17E
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:12:54 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id co8so8625033wrb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:12:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:cc:from:to:references
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EsqkxOvpnaFZCqHajOpHltyVhIkx+s6eYXNOmyQ4+o4=;
+        b=OUzZcLleBxOMqrP9XviKuUrD0xYSPYpPLESmUkD1O6ZcmLJxTCv8nULdz7i0tyZs60
+         /ERJgBT0bqLe9+7CQv5+/Bniht4E6MKnF95RcrMKk0rm3JLHFamh/Dw7Xq3XQcXwk3L0
+         cepU8kuWhq/7HKV127ztH7nXOnwNqY2dSnKewNDpMhj0UB+gIr64VdEQGaRdYH6aZ3/i
+         A9plwBGs20Yy1rjA9v5CIevipFF8L4XI7cG2IZGLTvXaoXOZczrOPIDxKkL4zEpwrZZ7
+         HnhClGGjw8mKRBY8tBK9+/hYx99wmLerEASStnvHqBfD2EvTq2cDRCzv+a1oEi+vQADl
+         0Uuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VgaxEZgP/aHK2LwLwDWflJdoNQsljt9UM71CZ67CXiU=;
-        b=ax9okrZp0c7koxWFazHaRkR2J2vngyXO5OacAMMFQ+GllxPcNTAJv8DQDEfAWPmBDH
-         V7B6JskldIZ7QI+B616h/QKOmdICfDhZ5nG+y2jf/od+vwHS5yUVK6wbNrkthcm0R/Xp
-         KJE6ydaVCimzJGIPdbNEUoosNdBibNkDrVMj8ssJsZUxr6XML0MM2IXuwsVtx2sGh6xw
-         wtZB5lGpzCV6YMqMaogFZcofH/Ad3GYCv1+3MGovBovUdEt2m5zeGAw6CdA3wg1McTxZ
-         1oPlOd3VdblrzkBLfWFDWQab28AqReQOXBAGZuQXAeoy35+JX7A92cJoHmWDeUe7t1ED
-         ENMA==
-X-Gm-Message-State: AO0yUKXdcPwmuS0YdoRUlzytp0AXwyt+/7FUj7woITM3EXcwsv/g3gAB
-        u4ZuulF8+NOoa/XwmRAbztDhEpBHgoTnHg==
-X-Google-Smtp-Source: AK7set9IIOAHHeelxfPs0MmWFK7XgKzNIvMY9DPGTlMEohCK46/LOb0nsWyfCN7CUrFX4mzzETDrSw==
-X-Received: by 2002:a05:622a:1aa0:b0:3b8:6a9f:9144 with SMTP id s32-20020a05622a1aa000b003b86a9f9144mr44048051qtc.46.1676297453916;
-        Mon, 13 Feb 2023 06:10:53 -0800 (PST)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id d186-20020a3768c3000000b006fa7b5ea2d1sm9750768qkc.125.2023.02.13.06.10.53
+        h=content-transfer-encoding:in-reply-to:cc:from:to:references
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EsqkxOvpnaFZCqHajOpHltyVhIkx+s6eYXNOmyQ4+o4=;
+        b=XhfH+oODT5pvuC/YZlQ4/9qg+OpsFba5SR5PodNZHXG8L+ehfueKJMr/sGlNLlT32C
+         iG4pX76Q+GOCSneTWavpZ/qTikFDoT6DOn+vlIlOCxTNDmeE8mzdPzdNGQF11Enup5mt
+         xRVJunMbDeN5Af5oz30pdkZwZzeTRyvIGRieUbJkytKT2T+3tBR4+b4DRp7lB48Di4mZ
+         6zRWJGUqC52e+NalYEKqH4XvMAanQDIMXo7mirNYs4rqbeVxvYBszFcvO0BSU5kThkAn
+         fQmWbwsITdf2S5O/L3XRpi+CFpN4f9Slqah2CGNzj3kJYxfuP1HbfNt5ZM2tMXYtCRD9
+         vS1A==
+X-Gm-Message-State: AO0yUKWRQXehA8ZPPD4PqwJyF129FNh6qS2u4ONsULaviPpRzUWNgsp8
+        DT1jfQ2vSxq1NkQLspbPgrU=
+X-Google-Smtp-Source: AK7set/wugfPYZOYQTzQrvfbcgzO0WnIG8etqnnThADl0ZnsrGA9jjVo3EGtn3NH4mRbfJ3Nruf9Wg==
+X-Received: by 2002:adf:e54a:0:b0:2c5:5984:6f07 with SMTP id z10-20020adfe54a000000b002c559846f07mr2319355wrm.26.1676297573096;
+        Mon, 13 Feb 2023 06:12:53 -0800 (PST)
+Received: from [192.168.1.10] (97e09f27.skybroadband.com. [151.224.159.39])
+        by smtp.googlemail.com with ESMTPSA id w11-20020adff9cb000000b002c54e9f6bc2sm6176883wrr.77.2023.02.13.06.12.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 06:10:53 -0800 (PST)
-Received: by mail-yb1-f171.google.com with SMTP id o66so8584946ybc.0;
-        Mon, 13 Feb 2023 06:10:53 -0800 (PST)
-X-Received: by 2002:a25:9348:0:b0:8ba:81cd:a7b7 with SMTP id
- g8-20020a259348000000b008ba81cda7b7mr1436536ybo.270.1676297453183; Mon, 13
- Feb 2023 06:10:53 -0800 (PST)
+        Mon, 13 Feb 2023 06:12:52 -0800 (PST)
+Message-ID: <e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com>
+Date:   Mon, 13 Feb 2023 14:12:51 +0000
 MIME-Version: 1.0
-References: <20230131223529.11905-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20230131223529.11905-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20230131223529.11905-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 13 Feb 2023 15:10:41 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU=6uSY2_cZDgzQg-81e00Jhys497mLAT5ni1knAWqnSw@mail.gmail.com>
-Message-ID: <CAMuHMdU=6uSY2_cZDgzQg-81e00Jhys497mLAT5ni1knAWqnSw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] arm64: dts: renesas: r9a07g054: Reuse RZ/G2L SoC DTSI
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Fwd: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
+Content-Language: en-GB
+References: <ab3b4b8a-93a7-5129-5996-f0b364b04dda@googlemail.com>
+To:     ">> ML dri-devel" <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ben Skeggs <skeggsb@gmail.com>, bskeggs@redhat.com,
+        Lyude Paul <lyude@redhat.com>,
+        ML nouveau <nouveau@lists.freedesktop.org>
+From:   Chris Clayton <chris2553@googlemail.com>
+Cc:     Dave Airlie <airlied@gmail.com>
+In-Reply-To: <ab3b4b8a-93a7-5129-5996-f0b364b04dda@googlemail.com>
+X-Forwarded-Message-Id: <ab3b4b8a-93a7-5129-5996-f0b364b04dda@googlemail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 11:43 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> RZ/V2L SoC is almost identical to RZ/G2L SoC hence re-use the RZ/G2L SoC
-> DTSI and just update the compatible strings wherever required.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> v1->v2
-> * Sorted the nodes based on the names
+Proof, if any where needed, that I should consume more coffee before dealing with email...
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Adding cc recipients that were dropped in my message this morning.
 
-Gr{oetje,eeting}s,
 
-                        Geert
+-------- Forwarded Message --------
+Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
+Date: Mon, 13 Feb 2023 09:21:10 +0000
+From: Chris Clayton <chris2553@googlemail.com>
+To: Dave Airlie <airlied@gmail.com>
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+[ Apologies for the incomplete message I sent a few minutes ago. I should have had more coffee before I started dealing
+with email. ]
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+On 13/02/2023 02:57, Dave Airlie wrote:
+> On Sun, 12 Feb 2023 at 00:43, Chris Clayton <chris2553@googlemail.com> wrote:
+>>
+>>
+>>
+>> On 10/02/2023 19:33, Linux regression tracking (Thorsten Leemhuis) wrote:
+>>> On 10.02.23 20:01, Karol Herbst wrote:
+>>>> On Fri, Feb 10, 2023 at 7:35 PM Linux regression tracking (Thorsten
+>>>> Leemhuis) <regressions@leemhuis.info> wrote:
+>>>>>
+>>>>> On 08.02.23 09:48, Chris Clayton wrote:
+>>>>>>
+>>>>>> I'm assuming  that we are not going to see a fix for this regression before 6.2 is released.
+>>>>>
+>>>>> Yeah, looks like it. That's unfortunate, but happens. But there is still
+>>>>> time to fix it and there is one thing I wonder:
+>>>>>
+>>>>> Did any of the nouveau developers look at the netconsole captures Chris
+>>>>> posted more than a week ago to check if they somehow help to track down
+>>>>> the root of this problem?
+>>>>
+>>>> I did now and I can't spot anything. I think at this point it would
+>>>> make sense to dump the active tasks/threads via sqsrq keys to see if
+>>>> any is in a weird state preventing the machine from shutting down.
+>>>
+>>> Many thx for looking into it!
+>>
+>> Yes, thanks Karol.
+>>
+>> Attached is the output from dmesg when this block of code:
+>>
+>>         /bin/mount /dev/sda7 /mnt/sda7
+>>         /bin/mountpoint /proc || /bin/mount /proc
+>>         /bin/dmesg -w > /mnt/sda7/sysrq.dmesg.log &
+>>         /bin/echo t > /proc/sysrq-trigger
+>>         /bin/sleep 1
+>>         /bin/sync
+>>         /bin/sleep 1
+>>         kill $(pidof dmesg)
+>>         /bin/umount /mnt/sda7
+>>
+>> is executed immediately before /sbin/reboot is called as the final step of rebooting my system.
+>>
+>> I hope this is what you were looking for, but if not, please let me know what you need
+> 
+
+Thanks, Dave.
+
+> Another shot in the dark, but does nouveau.runpm=0 help at all?
+> 
+Yes, it does. With runpm=0, both reboot and poweroff work on my laptop. Of course, it also means that the discrete
+(NVidia) GPU is now powered on permanently.
+
+Chris
+
+
+> Dave.
