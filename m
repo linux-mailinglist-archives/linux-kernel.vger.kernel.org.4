@@ -2,66 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E3C693ED6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 08:15:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AABEF693ED7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 08:16:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjBMHPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 02:15:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59504 "EHLO
+        id S229822AbjBMHQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 02:16:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjBMHP3 (ORCPT
+        with ESMTP id S229561AbjBMHQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 02:15:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8CD1AC;
-        Sun, 12 Feb 2023 23:15:28 -0800 (PST)
+        Mon, 13 Feb 2023 02:16:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4AB1AC
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 23:16:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 02A43B80C99;
-        Mon, 13 Feb 2023 07:15:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34B09C433D2;
-        Mon, 13 Feb 2023 07:15:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676272525;
-        bh=kXKrIKkF4Pu9CcKWI5PNeLrNZKIdxo0dgi5K9xPGp/w=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FC5C60DF7
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:16:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EE40C433EF;
+        Mon, 13 Feb 2023 07:16:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676272569;
+        bh=NwTfRM0ZXSqWhKuOcF1omNmuw15S2QrWDzzOubo6gys=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O1yz/Yv6oTPAWaNRVpj1JnF9ZBDsXPAH1RWSCKsTeeKJah/JH7Lr/zIowbs5fEi5j
-         7i8RmsI8DPJ/Jj1iRLkUBXjhEkn67FZrgpWqQYnbPpj45/tpj557qXkCNo+4Gysp1B
-         G7B/HUGPKl7EgRCYzyqnzIis8D21Fiw4GZ6IA6Z1SCTXs4OLEY73IlUNVGu6ck8K4U
-         2MEAH0k/MluhGWWKoan2mnkQVfN0T4UMl4KzH4MVcQNKp2S+2G3f+ALGzmGcX21a7I
-         m67tPhyzSgudF6E5ZmXwS4WHc5cVgfuqx8DNC6wUhmSKx5mvqirbuenklI5RH/6wXU
-         TNitnH2k+DmCQ==
-Date:   Mon, 13 Feb 2023 09:15:21 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Richard van Schagen <richard@routerhints.com>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Arinc Unal <arinc.unal@arinc9.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] Fix setting up CPU and User ports to be in the correct
- mode during setup and when toggling vlan_filtering on a bridge port.
-Message-ID: <Y+njic6vxAlGp72l@unreal>
-References: <20230212213949.672443-1-richard@routerhints.com>
+        b=zWrGRm3vihFOft206D160mF+KaRh7AVDbNqQ/qcPv1LIRYeHMhhMe9x2K79cOH8WS
+         LN2kkBm1hzdtRza8dzOu/1rn2mJq4vOy9+NthFZvAkrKFQljzSamydFPNEhC/YxEg5
+         4fHux3WNH1nxhkgCCETPiY1V0WAqWztG72E+bB44=
+Date:   Mon, 13 Feb 2023 08:16:06 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH] driver: core: Prevent NULL pointer dereference in device
+ name functions
+Message-ID: <Y+njtiyDAEJolpZU@kroah.com>
+References: <20230212220441.258258-1-alexander.sverdlin@gmail.com>
+ <Y+nhnauiUDspXwNM@kroah.com>
+ <78b980a9e913cb6d98fd7f99218ccb815926c9f3.camel@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230212213949.672443-1-richard@routerhints.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <78b980a9e913cb6d98fd7f99218ccb815926c9f3.camel@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,11 +54,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 10:39:49PM +0100, Richard van Schagen wrote:
-> ---
->  drivers/net/dsa/mt7530.c | 124 ++++++++++++++-------------------------
->  1 file changed, 43 insertions(+), 81 deletions(-)
+On Mon, Feb 13, 2023 at 08:12:08AM +0100, Alexander Sverdlin wrote:
+> Hi Greg,
+> 
+> On Mon, 2023-02-13 at 08:07 +0100, Greg Kroah-Hartman wrote:
+> > > Prevent similar scenarios:
+> > > 
+> > > Unable to handle kernel NULL pointer dereference at virtual address 00000038
+> > > ...
+> > > PC is at dev_driver_string+0x0/0x38
+> > 
+> > How did this "scenario" happen?  What in-tree code caused this?
+> > 
+> 
+> such in-tree code is not known to me, I stubled upon this putting dev_info()
+> all over the code in the platform we currently convert to DT (cirrus ep93xx).
 
-Please read Documentation/process/submitting-patches.rst
+Instead of using dev_info() for tracing, use ftrace instead, that's what
+it is there for!  :)
 
-Thanks
+thanks,
+
+greg k-h
