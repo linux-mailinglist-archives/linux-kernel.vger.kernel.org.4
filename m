@@ -2,177 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE68C694AEC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C642694AEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:20:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbjBMPUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:20:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
+        id S229695AbjBMPUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:20:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbjBMPUJ (ORCPT
+        with ESMTP id S230090AbjBMPUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:20:09 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEC759CB
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:19:43 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id bk16so12595444wrb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:19:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vBVRW3XJB/dsQe28qObDwY1va8U6ugsCHUwHE1TeoHo=;
-        b=w+/JciSH3sQgbIKPFpDqeYFFqcYSKc9sfMWWGZ+LuNnQjjCBJGWU7AfDpcq2/is5ph
-         10zTwvQ7dV0mTP9/gb0WBLZMy/iH3zkBdFcHCPk9FYD+xH30s9yj/U4S3YV7u+XPL8q5
-         TsN37/HlzpOioBVDQtU0S1onvBp/4+fd874/4ifD13jcz8x1Vf0fn4wC6fCiV5aYgyxD
-         aGBQuaU5inu7DcWLoAdwixV63e1qH6HdheX5iXH2E74/FTCx9OlBRKnfUcmrmjqmikWz
-         Eaq0uTsGLhv+hsInwKj0YQvfEHLExh1XtyJPrDmKivlaKc1Wnz4h0RVTFiMhWV7gp/vm
-         w92w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vBVRW3XJB/dsQe28qObDwY1va8U6ugsCHUwHE1TeoHo=;
-        b=fHOfWFWXbafjIoNBHZ0HDYbaTAW1BXMH/6asie6y4jIXeyHFoR7qAirnSJAk36XrIB
-         RoNbBdZwKJxpLZfVYsX4zQncUkb4ZCtRE1netG/4OMxdKMXdVnQ+rajJSKE6LThu9+Gu
-         QmJpsDqrBDcCcaySGPaWSkfSxrzf9BDrEFUXt2qeUF8WJkmkoVMps69t6ygLnm9fExJY
-         co90Mrs/0ZFG3Pbxx4DA7tqm9YM3y99V4M3Z1lv9D8qp9ieyGe6BOhZBsQldOVcjp5wP
-         aLXaVqJ1m/qEBmSsmTp72up/3dXx4IqWQGWv6eTNEE0GCoPu+4GQl9H1zkvkxKOgh8/W
-         P/sg==
-X-Gm-Message-State: AO0yUKX9Q+uKTtJ36MiEHjs9s0iP89hu52jTy6ZphWt+5JBWsJEA0tvH
-        u81l0gCFbkhywGhMx3v66rxM4A==
-X-Google-Smtp-Source: AK7set8He8H3zgxnh+9zUlZ4hjUThuw6BcQHtJBmflOPQ7yEaVLCEwj4WUR2/WuiDOiPowXJz2lTSw==
-X-Received: by 2002:adf:eb51:0:b0:2c3:dbe0:58b8 with SMTP id u17-20020adfeb51000000b002c3dbe058b8mr20763507wrn.41.1676301582442;
-        Mon, 13 Feb 2023 07:19:42 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b566:0:9e1:512:feb0:fe83? ([2a02:6b6a:b566:0:9e1:512:feb0:fe83])
-        by smtp.gmail.com with ESMTPSA id k1-20020adff5c1000000b002bff574a250sm10904252wrp.2.2023.02.13.07.19.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 07:19:41 -0800 (PST)
-Message-ID: <04d98646-7c2e-9a62-1340-2d8efe69a121@bytedance.com>
-Date:   Mon, 13 Feb 2023 15:19:41 +0000
+        Mon, 13 Feb 2023 10:20:30 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8607B76A4;
+        Mon, 13 Feb 2023 07:20:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676301627; x=1707837627;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ObQP9l0TevncY/9K8ieb/b6KtPH6c9i6zQUdHqY1bFg=;
+  b=hP9Cfkx+BJQQ4YyOp7gONaFgeVs264mPywHV27uEe+1K0QocCsTQWFaN
+   3+1u1MtInoEPHaTuK5IP29utZtfyPsvR4tOz0V+Eg9bVpx7Nwn/MOOaZX
+   KcBPAX1vgW7mfL5HDl6O4w+zRq6gUiTunUZa4wBqtJMacvgJ0Yv88rlQQ
+   BmdDf77Vlb4EDC5S9Tuj9LkJJ5TYQ2haS1ubzAC24TjEw5VLxLpPELFkr
+   NfRVa+e0IFuqrnJ/yekqTxgt3iu8SR5gF8AI9jmsH9XKvgdrEF7s0CVR+
+   a3f1faFaQi0GGeExnHcHZtj/QRVMWvAPwQ6f5BV6GBIPZVJnc3lqrXaCT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="333047988"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="333047988"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 07:20:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="699196719"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="699196719"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 13 Feb 2023 07:20:23 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pRacw-0007op-2S;
+        Mon, 13 Feb 2023 15:20:22 +0000
+Date:   Mon, 13 Feb 2023 23:20:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Cai Huoqing <cai.huoqing@linux.dev>,
+        Sergey.Semin@baikalelectronics.ru
+Cc:     oe-kbuild-all@lists.linux.dev, Cai huoqing <cai.huoqing@linux.dev>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] dmaengine: dw-edma: Add support for native HDMA
+Message-ID: <202302132344.oOgPHjYP-lkp@intel.com>
+References: <20230213132411.65524-4-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [External] Re: [PATCH v8 8/9] x86/mtrr: Avoid repeated save of
- MTRRs on boot-time CPU bringup
-Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>, kim.phillips@amd.com
-Cc:     arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com
-References: <20230209154156.266385-1-usama.arif@bytedance.com>
- <20230209154156.266385-9-usama.arif@bytedance.com> <87mt5m1yiz.ffs@tglx>
- <9b6bca9c-7189-a2d5-8c0a-f55c24f54b62@bytedance.com> <878rh61jqx.ffs@tglx>
- <6fc16f3048719058bccce9d488bcb75252f49031.camel@infradead.org>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <6fc16f3048719058bccce9d488bcb75252f49031.camel@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230213132411.65524-4-cai.huoqing@linux.dev>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Cai,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on next-20230213]
+[cannot apply to vkoul-dmaengine/next linus/master v6.2-rc8 v6.2-rc7 v6.2-rc6 v6.2-rc8]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Cai-Huoqing/dmaengine-dw-edma-Rename-dw_edma_core_ops-structure-to-dw_edma_plat_ops/20230213-213412
+patch link:    https://lore.kernel.org/r/20230213132411.65524-4-cai.huoqing%40linux.dev
+patch subject: [PATCH v3 3/4] dmaengine: dw-edma: Add support for native HDMA
+config: i386-randconfig-a016-20230213 (https://download.01.org/0day-ci/archive/20230213/202302132344.oOgPHjYP-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/04d89cfa187deda4fa5a7cc947dbb797ce05e72f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Cai-Huoqing/dmaengine-dw-edma-Rename-dw_edma_core_ops-structure-to-dw_edma_plat_ops/20230213-213412
+        git checkout 04d89cfa187deda4fa5a7cc947dbb797ce05e72f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302132344.oOgPHjYP-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/dma/dw-edma/dw-hdma-v0-core.c: In function 'dw_hdma_v0_write_ll_data':
+>> drivers/dma/dw-edma/dw-hdma-v0-core.c:195:17: error: implicit declaration of function 'writeq'; did you mean 'writel'? [-Werror=implicit-function-declaration]
+     195 |                 writeq(sar, &lli->sar.reg);
+         |                 ^~~~~~
+         |                 writel
+   cc1: some warnings being treated as errors
 
 
-On 10/02/2023 08:55, David Woodhouse wrote:
-> On Fri, 2023-02-10 at 00:50 +0100, Thomas Gleixner wrote:
->> On Thu, Feb 09 2023 at 20:32, Usama Arif wrote:
->>> On 09/02/2023 18:31, Thomas Gleixner wrote:
->>>>>          first_cpu = cpumask_first(cpu_online_mask);
->>>>>          smp_call_function_single(first_cpu, mtrr_save_fixed_ranges, NULL, 1);
->>>>
->>>> So why is this relevant after the initial bringup? The BP MTRRs have
->>>> been saved already above, no?
->>>>
->>>
->>> I will let David confirm if this is correct and why he did it, but this
->>> is what I thought while reviewing before posting v4:
->>>
->>> - At initial boot (system_state < SYSTEM_RUNNING), when mtrr_save_state
->>> is called in do_cpu_up at roughly the same time so MTRR is going to be
->>> the same, we can just save it once and then reuse for other secondary
->>> cores as it wouldn't have changed for the rest of the do_cpu_up calls.
->>>
->>> - When the system is running and you offline and then online a CPU, you
->>> want to make sure that hotplugged CPU gets the current MTRR (which might
->>> have changed since boot?), incase the MTRR has changed after the system
->>> has been booted, you save the MTRR of the first online CPU. When the
->>> hotplugged CPU runs its initialisation code, its fixed-range MTRRs will
->>> be updated with the newly saved fixed-range MTRRs.
->>
->> I knew that already :) But seriously:
->>
->> If the MTRRs are changed post boot then the cached values want to be
->> updated too.
-> 
+vim +195 drivers/dma/dw-edma/dw-hdma-v0-core.c
 
-I had previously only done smpboot time measurements for the whole 
-patchset, but I tested the patchset without this commit and it doesn't 
-make a difference to smpboot time as its negligable work to read those 
-MTRR MSRs into mtrr_state.fixed_ranges.
-This commit is also independent of parallel smp bringup, similar to 
-reusing timer calibration so I think it could be considered as a 
-separate patchset if needed. I will post the next revision without this 
-commit, but here is my view on MTRR save/restore (which shouldn't matter 
-for the next revision...).
+   177	
+   178	static void dw_hdma_v0_write_ll_data(struct dw_edma_chunk *chunk, int i,
+   179					     u32 control, u32 size, u64 sar, u64 dar)
+   180	{
+   181		ptrdiff_t ofs = i * sizeof(struct dw_hdma_v0_lli);
+   182	
+   183		if (chunk->chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL) {
+   184			struct dw_hdma_v0_lli *lli = chunk->ll_region.vaddr.mem + ofs;
+   185	
+   186			lli->control = control;
+   187			lli->transfer_size = size;
+   188			lli->sar.reg = sar;
+   189			lli->dar.reg = dar;
+   190		} else {
+   191			struct dw_hdma_v0_lli __iomem *lli = chunk->ll_region.vaddr.io + ofs;
+   192	
+   193			writel(control, &lli->control);
+   194			writel(size, &lli->transfer_size);
+ > 195			writeq(sar, &lli->sar.reg);
+   196			writeq(dar, &lli->dar.reg);
+   197		}
+   198	}
+   199	
 
-If the MTRR changes on a running system, there might be a bug during 
-hotplug in the original code that handles MTRR? which is also carried 
-over in this patch.
- From what I can see, MTRR is only saved+restored during initial boot, 
-hotplugging CPU and __save/__restore_processor_state() (used in creating 
-image for hibernation, suspend, kexec...). So if for e.g. in a running 
-system (that has not hibernated, suspended, kexeced), if MTRR for CPU0 
-(first_cpu) changed post-boot and CPU3 is hotplugged, only MTRR for CPU3 
-is updated and CPU0 and CPU3 will hold the same value, while the rest of 
-the CPUs will have the older first-boot value? This behavior will happen 
-with or without this patch. I think this is what Thomas is referring to 
-above when he says that the cached values want to be updated? But the 
-issue is present in the original code as well.
-
-Thanks!
-Usama
-
-> They are, aren't they? The only way we come out of mtrr_save_state()
-> without calling mtrr_save_fixed_ranges() — either directly or via
-> smp_call_function_single() — is if they've already been saved once
-> *and* system_state < SYSTEM_RUNNING.
-> 
-> I suppose we could make that clearer by moving the definition of the
-> mtrr_saved flags inside the if (system_state < SYSTEM_RUNNING) block?
-> 
-> @@ -721,11 +721,20 @@ void __init mtrr_bp_init(void)
->    */
->   void mtrr_save_state(void)
->   {
->   	int first_cpu;
->   
->   	if (!mtrr_enabled())
->   		return;
->   
-> +	if (system_state < SYSTEM_RUNNING) {
-> +		static bool mtrr_saved;
-> +		if (!mtrr_saved) {
-> +			mtrr_save_fixed_ranges(NULL);
-> +			mtrr_saved = true;
-> +		}
-> +		return;
-> +	}
-> +
->   	first_cpu = cpumask_first(cpu_online_mask);
->   	smp_call_function_single(first_cpu, mtrr_save_fixed_ranges, NULL, 1);
->   }
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
