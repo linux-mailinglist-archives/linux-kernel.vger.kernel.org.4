@@ -2,56 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3297694B05
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:25:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 012CA694B15
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjBMPZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:25:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38720 "EHLO
+        id S230366AbjBMP0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:26:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbjBMPZN (ORCPT
+        with ESMTP id S229709AbjBMP0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:25:13 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id BBF6A9018
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:25:11 -0800 (PST)
-Received: (qmail 909736 invoked by uid 1000); 13 Feb 2023 10:25:10 -0500
-Date:   Mon, 13 Feb 2023 10:25:10 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Coly Li <colyli@suse.de>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
- with unique class keys
-Message-ID: <Y+pWVksggbe3MT1f@rowland.harvard.edu>
-References: <Y+hRurRwm//1+IcK@rowland.harvard.edu>
- <Y+hTEtCKPuO0zGIt@moria.home.lan>
- <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
- <Y+hYn6uzIUBaxDdV@moria.home.lan>
- <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
- <Y+k6ehYLWa0cmbvb@moria.home.lan>
- <Y+lJxCLpwMGuq0sP@rowland.harvard.edu>
- <Y+lROV3Ii+WbmZCh@moria.home.lan>
- <Y+mRFUws3dOpU8qS@rowland.harvard.edu>
- <Y+memjO1BxrVF20h@moria.home.lan>
+        Mon, 13 Feb 2023 10:26:34 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4980AEC4F;
+        Mon, 13 Feb 2023 07:26:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1676301991; x=1707837991;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Myql0AbsOX9YiON7G1lqeSB9ZHXoG2jmKJVBF9XTC/o=;
+  b=S227U5XbPha63EGMRnjeuTyqtVYLC+21ZhYpLBmJ9ValcsdjRPABAhij
+   8PSSL0vacphdGNBPJkf9BC7zn0exUBEywbH7WpLYV08Y0Zf36JPcIcIF5
+   EB+1S6bWabgpkj73yh4bL2mt1o7hflsb8QQTAs3rkuV8PkPIFNls0fCbf
+   +2GPw2tyxHVxTiuidGMBVZhHDYHW7fI1K6QSA6yiPR35DLsbYHlirjNsg
+   q6s+hgvo9WMGGDaomwCy5QiobmzPFr0+gGC3TsZGCU48hsibaoHTgzKEK
+   A2tX8ZG4cKQiXWhUYZpkheYMSNbJ/6uPj8BMj7ec081Y0PaW8gxWaUsPr
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,294,1669071600"; 
+   d="scan'208";a="29048553"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 13 Feb 2023 16:26:29 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 13 Feb 2023 16:26:29 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 13 Feb 2023 16:26:29 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1676301989; x=1707837989;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Myql0AbsOX9YiON7G1lqeSB9ZHXoG2jmKJVBF9XTC/o=;
+  b=IhCEx5kjYziJa9SK7o38BdNzhTgGaeUqUld2ytvHLW+dVfCtpEQZ784z
+   59kHJ0HXtOOfsTGoncggL+Xe751ZeVOxS3OLRQCg/XUehFYDeyIlHtDKr
+   odwhxyaA9sNOevmhlkoWcf3wHlwye/U20YMy3FottDtj8PPaOq3WHuhEO
+   5eMCetMMvxSxGPEyB8Yaxm/Chemk6z+yGJ0+9yd0fovCdCwiAtdwN+CwE
+   CILZQet9cb5sSgrLi3KF+sqphPij6fxuw0yKlnZ3NPRuCeuN03blIDZQy
+   A9/HCHZGtVaPUWJr04i+YopeDUOO+DVsVRTmaGyfgvnCT0pZVCZJ8PenU
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,294,1669071600"; 
+   d="scan'208";a="29048552"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 13 Feb 2023 16:26:29 +0100
+Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.49.14])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id BF54F280056;
+        Mon, 13 Feb 2023 16:26:28 +0100 (CET)
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     Nicolas Pitre <nico@fluxnic.net>, Ard Biesheuvel <ardb@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux@ew.tq-group.com,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Subject: [PATCH] i2c: mxs: ensure that DMA buffers are safe for DMA
+Date:   Mon, 13 Feb 2023 16:25:50 +0100
+Message-Id: <20230213152550.1776352-1-matthias.schiffer@ew.tq-group.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+memjO1BxrVF20h@moria.home.lan>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,41 +83,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 09:21:14PM -0500, Kent Overstreet wrote:
-> On Sun, Feb 12, 2023 at 08:23:34PM -0500, Alan Stern wrote:
-> > I really don't think that's a good idea here.  When you've got a bus 
-> > containing multiple devices, typically all those device structures are 
-> > created by the same line of code.  So knowing the source code location 
-> > won't tell you _which_ device structure is involved in the locking 
-> > cycle or what driver it's using.
-> 
-> Yeah, I was thinking about this more and realized it'd be insufficient.
-> 
-> > By contrast, knowing the device name 
-> > would.
-> > 
-> > Furthermore, to the extent that the device's name identifies what kind 
-> > of device it is, the name would tell you what where the structure was 
-> > created and which driver it is using.
-> 
-> OTOH, with the device name, it seems like you'll additionally need the
-> full device topology to be able to do anything with lockdep splats, no?
+We found that after commit 9c46929e7989
+("ARM: implement THREAD_INFO_IN_TASK for uniprocessor systems"), the
+PCF85063 RTC driver stopped working on i.MX28 due to regmap_bulk_read()
+reading bogus data into a stack buffer. This is caused by the i2c-mxs
+driver using DMA transfers even for messages without the I2C_M_DMA_SAFE
+flag, and the aforementioned commit enabling vmapped stacks.
 
-Not necessarily.  Knowing the name already tells you something about 
-where the device fits into the full tree.  And if necessary, you can 
-probably glean the necessary information from the kernel log.
+As the MXS I2C controller requires DMA for reads of >4 bytes, DMA can't be
+disabled, so the issue is fixed by using i2c_get_dma_safe_msg_buf() to
+create a bounce buffer when needed.
 
-Besides, you often don't need the full device topology.  For instance, 
-if the problem is that a driver is flushing a work queue while holding a 
-lock needed by an item on the queue, mostly you just need to know what 
-driver and where the flush occurs -- and that information is already 
-provided by lockdep.
+Fixes: 9c46929e7989 ("ARM: implement THREAD_INFO_IN_TASK for uniprocessor systems")
+Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+---
+ drivers/i2c/busses/i2c-mxs.c | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
-> What if we just added a way to set a comparison function for a lockdep
-> class? I'm looking at the lockdep code now, and I think I could do that
-> for you.
+diff --git a/drivers/i2c/busses/i2c-mxs.c b/drivers/i2c/busses/i2c-mxs.c
+index d113bed795452..e0f3b3545cfe4 100644
+--- a/drivers/i2c/busses/i2c-mxs.c
++++ b/drivers/i2c/busses/i2c-mxs.c
+@@ -171,7 +171,7 @@ static void mxs_i2c_dma_irq_callback(void *param)
+ }
+ 
+ static int mxs_i2c_dma_setup_xfer(struct i2c_adapter *adap,
+-			struct i2c_msg *msg, uint32_t flags)
++			struct i2c_msg *msg, u8 *buf, uint32_t flags)
+ {
+ 	struct dma_async_tx_descriptor *desc;
+ 	struct mxs_i2c_dev *i2c = i2c_get_adapdata(adap);
+@@ -226,7 +226,7 @@ static int mxs_i2c_dma_setup_xfer(struct i2c_adapter *adap,
+ 		}
+ 
+ 		/* Queue the DMA data transfer. */
+-		sg_init_one(&i2c->sg_io[1], msg->buf, msg->len);
++		sg_init_one(&i2c->sg_io[1], buf, msg->len);
+ 		dma_map_sg(i2c->dev, &i2c->sg_io[1], 1, DMA_FROM_DEVICE);
+ 		desc = dmaengine_prep_slave_sg(i2c->dmach, &i2c->sg_io[1], 1,
+ 					DMA_DEV_TO_MEM,
+@@ -259,7 +259,7 @@ static int mxs_i2c_dma_setup_xfer(struct i2c_adapter *adap,
+ 		/* Queue the DMA data transfer. */
+ 		sg_init_table(i2c->sg_io, 2);
+ 		sg_set_buf(&i2c->sg_io[0], &i2c->addr_data, 1);
+-		sg_set_buf(&i2c->sg_io[1], msg->buf, msg->len);
++		sg_set_buf(&i2c->sg_io[1], buf, msg->len);
+ 		dma_map_sg(i2c->dev, i2c->sg_io, 2, DMA_TO_DEVICE);
+ 		desc = dmaengine_prep_slave_sg(i2c->dmach, i2c->sg_io, 2,
+ 					DMA_MEM_TO_DEV,
+@@ -563,6 +563,7 @@ static int mxs_i2c_xfer_msg(struct i2c_adapter *adap, struct i2c_msg *msg,
+ 	struct mxs_i2c_dev *i2c = i2c_get_adapdata(adap);
+ 	int ret;
+ 	int flags;
++	u8 *dma_buf;
+ 	int use_pio = 0;
+ 	unsigned long time_left;
+ 
+@@ -588,13 +589,20 @@ static int mxs_i2c_xfer_msg(struct i2c_adapter *adap, struct i2c_msg *msg,
+ 		if (ret && (ret != -ENXIO))
+ 			mxs_i2c_reset(i2c);
+ 	} else {
++		dma_buf = i2c_get_dma_safe_msg_buf(msg, 1);
++		if (!dma_buf)
++			return -ENOMEM;
++
+ 		reinit_completion(&i2c->cmd_complete);
+-		ret = mxs_i2c_dma_setup_xfer(adap, msg, flags);
+-		if (ret)
++		ret = mxs_i2c_dma_setup_xfer(adap, msg, dma_buf, flags);
++		if (ret) {
++			i2c_put_dma_safe_msg_buf(dma_buf, msg, false);
+ 			return ret;
++		}
+ 
+ 		time_left = wait_for_completion_timeout(&i2c->cmd_complete,
+ 						msecs_to_jiffies(1000));
++		i2c_put_dma_safe_msg_buf(dma_buf, msg, true);
+ 		if (!time_left)
+ 			goto timeout;
+ 
+-- 
+2.34.1
 
-I don't know what a lockdep class comparison function does (or would 
-do).  Nor how having one would help.
-
-Alan Stern
