@@ -2,155 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA54694AFA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:22:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CBF7694AFE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjBMPW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:22:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
+        id S230084AbjBMPXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:23:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjBMPWx (ORCPT
+        with ESMTP id S230016AbjBMPXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:22:53 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E796E9E;
-        Mon, 13 Feb 2023 07:22:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676301771; x=1707837771;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=o1K01OkpQ3fIZqS1M8k1+ZQBGAiuytgzdT2n9GoXrQg=;
-  b=ApbWcszGGl/1KhrUcBSMTxROd7QfHUjfGPcVTiXOZedVlU5jzDTLgmUT
-   sIRSAE9HYDuKtjj5qGUHRVRQNnHjBP49te4ZqZ6tSuf0EcTXdu1xeTF8C
-   82Rc84UC0TGxI0O3OuF8MC2tXSuHWrsUgaQlOOYVk9FgcOZ5g7QDsIjuK
-   8H2akh1mTLeySnwUw6+/g5bbvVhjtp1hjYUIERiZXDVjApB1G9K7C+rR+
-   AZ5Kj6zFAP3jUD2hiOxjcEDH7nCf78PtO23FM1utBp2gt1Pyr4DSZFu5j
-   HIDi6Ju/LSpwpUoX3Pu+4NKUQaYF4PjKluB9PtVtzs46nF6KftN09cH+N
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="332220160"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="332220160"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 07:22:50 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="737547368"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="737547368"
-Received: from eatoledo-mobl.amr.corp.intel.com (HELO [10.212.18.132]) ([10.212.18.132])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 07:22:49 -0800
-Message-ID: <2c398ffb-6dd8-d43a-f99c-2033519a36be@linux.intel.com>
-Date:   Mon, 13 Feb 2023 09:22:48 -0600
+        Mon, 13 Feb 2023 10:23:20 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958CC13D58
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:23:11 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id d2so12223321pjd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:23:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9obGSHJL1jP8Gz5Kbja6klYurFoCmsJVYRk2S1vme9o=;
+        b=eie3aBv1kf9buidJAGpA6sjCUIspKM3onHNjyA3f+XMBsaiyyUh+ez6iOqtEj/wtIZ
+         9HNAuexGDa8/GC28zBv4NlEjiFFtGteGZuCGW32sdX4szU1e3cY32JiCqZA+vM7+hlmM
+         soLyT5ta/pCQQUgNsQ0M0EGpqUCixLpzwfEEwgTlgWMesYaHmEf1p7vCRecs+gmeTLaX
+         CwVQ3ZiJHuNOKsHsP5KqD4kmRIMfJVKYyz+tBw771oSDw9ROyggzKXLGY8C1r/J8LWNs
+         MB8hhp6nwjqcDdRr6iA8kvd5MGao6qygP2exDTg6IgKDEVukRKQN0AgTuIyhGE5fAEfF
+         WObA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9obGSHJL1jP8Gz5Kbja6klYurFoCmsJVYRk2S1vme9o=;
+        b=DSW896hvcM2DtMXCkoJ3cZbMKawLGZQuQd0AM5Whpl0vK8kwlYHhyBYMImAr2qUB4q
+         ZVKBCTH72MQRW2cEvB9XqlOaodCN9tVjCYA9ElnWY+nrC3oPD5YysxozzI160TkxzXQl
+         5pPtmrA4L/106nKc/7ekmEZze9D/5ujppvlmtPgdyCxOOh793gIWTOR91pcRoPGOqtof
+         nLef51bjwOySVqlrLSwqsqM36E1mkxrskGOqOwQ9aLPwfMkb7jZw99T/PNIc51uWp0zN
+         72IZRXjogvsvxGklxtVgInZLF9vRYl7nLOLdWDE0YkhSogzGb50ykkulbObWJYTQCsbS
+         ziMg==
+X-Gm-Message-State: AO0yUKXPvMGeGntcQYLKLqjU0Fsl4TReB57c7cSxpaiGo7Vb6cW8f1Jv
+        e1LyCD4YvSUGDk/vzhk9SJ1I5w==
+X-Google-Smtp-Source: AK7set8Rza+nET49jhPHmTTBGt8AkRlUlcToHz5dQzC5MrTSlKyoWJUrwmupMo9PQo0vP9FvMR9CNA==
+X-Received: by 2002:a17:902:ce88:b0:19a:8304:21f1 with SMTP id f8-20020a170902ce8800b0019a830421f1mr9743420plg.69.1676301791021;
+        Mon, 13 Feb 2023 07:23:11 -0800 (PST)
+Received: from sunil-laptop ([49.206.14.226])
+        by smtp.gmail.com with ESMTPSA id jn9-20020a170903050900b0018963b8e131sm8318234plb.290.2023.02.13.07.23.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 07:23:10 -0800 (PST)
+Date:   Mon, 13 Feb 2023 20:53:01 +0530
+From:   Sunil V L <sunilvl@ventanamicro.com>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>
+Subject: Re: [PATCH 06/24] RISC-V: ACPI: Add PCI functions to build ACPI core
+Message-ID: <Y+pV1aafHUNP6QfU@sunil-laptop>
+References: <20230130182225.2471414-1-sunilvl@ventanamicro.com>
+ <20230130182225.2471414-7-sunilvl@ventanamicro.com>
+ <Y+QToXO2kYQ2ipdz@spud>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v2 20/22] sound: usb: Prevent starting of audio stream
- if in use
-Content-Language: en-US
-To:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        Thinh.Nguyen@synopsys.com, broonie@kernel.org,
-        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
-        agross@kernel.org
-Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
- <20230126031424.14582-21-quic_wcheng@quicinc.com>
- <557f8f76-38f5-5e07-905e-774e03120bd2@linux.intel.com>
- <b26c9e4c-5a9c-a2ff-19a7-78419c6b81df@quicinc.com>
- <b532bf7b-e1fb-3a9d-1b88-02f3159be47d@linux.intel.com>
- <60e42db4-1bbc-beea-d87d-6f93871b70c7@quicinc.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <60e42db4-1bbc-beea-d87d-6f93871b70c7@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+QToXO2kYQ2ipdz@spud>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/11/23 03:52, Wesley Cheng wrote:
-> Hi Pierre,
+On Wed, Feb 08, 2023 at 09:26:57PM +0000, Conor Dooley wrote:
+> On Mon, Jan 30, 2023 at 11:52:07PM +0530, Sunil V L wrote:
+> > When CONFIG_PCI is enabled, ACPI core expects few arch
+> > functions related to PCI. Add those functions so that
+> > ACPI core gets build. These are levraged from arm64.
+> > 
+> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> > ---
+> >  arch/riscv/kernel/Makefile |   1 +
+> >  arch/riscv/kernel/pci.c    | 173 +++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 174 insertions(+)
+> >  create mode 100644 arch/riscv/kernel/pci.c
 > 
-> On 2/7/2023 5:29 AM, Pierre-Louis Bossart wrote:
->>
->>
->> On 2/6/23 19:15, Wesley Cheng wrote:
->>> Hi Pierre,
->>>
->>> On 1/26/2023 8:12 AM, Pierre-Louis Bossart wrote:
->>>>
->>>>
->>>> On 1/25/23 21:14, Wesley Cheng wrote:
->>>>> With USB audio offloading, an audio session is started from the ASoC
->>>>> platform sound card and PCM devices.  Likewise, the USB SND path is
->>>>> still
->>>>> readily available for use, in case the non-offload path is
->>>>> desired.  In
->>>>> order to prevent the two entities from attempting to use the USB bus,
->>>>> introduce a flag that determines when either paths are in use.
->>>>>
->>>>> If a PCM device is already in use, the check will return an error to
->>>>> userspace notifying that the stream is currently busy.  This ensures
->>>>> that
->>>>> only one path is using the USB substream.
->>>>
->>>> It's good to maintain mutual exclusion, but it's still very hard for an
->>>> application to figure out which card can be used when.
->>>>
->>>> Returning -EBUSY is not super helpful. There should be something like a
->>>> notification or connection status so that routing decisions can be made
->>>> without trial-and-error.
->>>>
->>>
->>> The USB offload driver does have access to the USB substream that is
->>> being utilized/offloaded.  Maybe in addition to this check, we can also
->>> set the PCM runtime state as well (for that particular substream)?  That
->>> way userspace can fetch information about if the stream is busy or not.
->>
->> You're missing the point. When a card is exposed but the PCM devices may
->> or may not be usable (consuming data with no sound rendered or returning
->> an error), it's much better to provide a clear connection status to
->> userspace.
->>
->> Let me give you an example. Intel drivers can expose 3 HDMI/DP PCM
->> devices. Userspace has no idea which one to use, so there's a jack
->> control that tells userspace whether there is a receiver connected so
->> that the audio server can use the relevant PCM device.
->>
->> Audio routing based on trial and error is really problematic, errors can
->> happen but they should be exceptional (e.g. xruns), not a means of
->> driver-userspace communication on the device status.
+> > diff --git a/arch/riscv/kernel/pci.c b/arch/riscv/kernel/pci.c
+> > new file mode 100644
+> > index 000000000000..3388af3a67a0
+> > --- /dev/null
+> > +++ b/arch/riscv/kernel/pci.c
+> > @@ -0,0 +1,173 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Code borrowed from ARM64
+> > + *
+> > + * Copyright (C) 2003 Anton Blanchard <anton@au.ibm.com>, IBM
+> > + * Copyright (C) 2014 ARM Ltd.
+> > + * Copyright (C) 2022-2023 Ventana Micro System Inc.
+> > + */
+> > +
+> > +#include <linux/acpi.h>
+> > +#include <linux/init.h>
+> > +#include <linux/io.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/mm.h>
+> > +#include <linux/pci.h>
+> > +#include <linux/pci-acpi.h>
+> > +#include <linux/pci-ecam.h>
+> > +
+> > +#ifdef CONFIG_ACPI
 > 
-> Thanks for clarifying.  The example helped me understand a bit more on
-> how the potential use of the SND control interface.  Since we're dealing
-> with multiple sound cards here (platform sound card (offload) and USB
-> SND card (legacy)), what do you think about creating a SND control on
-> both the USB backend (platform card) and the USB SND card listing the
-> PCM device status?
+> Quickly checking against ARM64, they do not wrap the read/write
+> functions in this ifdef, so why do we need to do so?
 > 
-> That way at least userspace can have the information about which PCM dev
-> (USB substream) is available (and not offloaded, or vice versa).  So the
-> USB SND control will contain the PCM devices (exposed by the card) and
-> if any are offloaded (if so mark them as unavailable).  Likewise, for
-> the USB backend, if the legacy path is being used, mark them as
-> unavailable for offloading.
+I didn't find any callers other than ACPI. But let me keep them outside so
+that we are consistent.
 
-We definitively need a control to indicate that a PCM offload device is
-available or not.
-There's still a very large open with the notion of having separate cards
-for the same audio device. Not only would it duplicate the control parts
-for e.g. volume control, but it would introduce the need to tag devices
-across two cards are being the same physical device.
-I still think the least-bad option is to have a single card and an
-optional PCM device for offload.
+> > +/*
+> > + * raw_pci_read/write - Platform-specific PCI config space access.
+> > + */
+> > +int raw_pci_read(unsigned int domain, unsigned int bus,
+> > +		  unsigned int devfn, int reg, int len, u32 *val)
+> > +{
+> > +	struct pci_bus *b = pci_find_bus(domain, bus);
+> > +
+> > +	if (!b)
+> > +		return PCIBIOS_DEVICE_NOT_FOUND;
+> > +	return b->ops->read(b, devfn, reg, len, val);
+> 
+> A newline before the return would be appreciated by my eyes :)
+> 
+Okay.
+
+> > +}
+> > +
+> > +int raw_pci_write(unsigned int domain, unsigned int bus,
+> > +		unsigned int devfn, int reg, int len, u32 val)
+> 
+> Also, both read and write functions here appear to have incorrect
+> alignment on the second lines.
+> 
+Okay.
+
+> > +{
+> > +	struct pci_bus *b = pci_find_bus(domain, bus);
+> > +
+> > +	if (!b)
+> > +		return PCIBIOS_DEVICE_NOT_FOUND;
+> > +	return b->ops->write(b, devfn, reg, len, val);
+> > +}
+> > +
+> > +
+> 
+> Extra newline here too, looks to be exactly where you deleted the numa
+> stuff from arm64 ;)
+> 
+Okay.
+
+> > +struct acpi_pci_generic_root_info {
+> > +	struct acpi_pci_root_info	common;
+> > +	struct pci_config_window	*cfg;	/* config space mapping */
+> > +};
+> > +
+> > +int acpi_pci_bus_find_domain_nr(struct pci_bus *bus)
+> > +{
+> > +	struct pci_config_window *cfg = bus->sysdata;
+> > +	struct acpi_device *adev = to_acpi_device(cfg->parent);
+> > +	struct acpi_pci_root *root = acpi_driver_data(adev);
+> > +
+> > +	return root->segment;
+> > +}
+> > +
+> > +static int pci_acpi_root_prepare_resources(struct acpi_pci_root_info *ci)
+> 
+> Rhetorical question perhaps, but what does "ci" mean?
+>
+I don't know either :-). I guess since there is one more generic
+ri, this is named as ci.
+
+> > +{
+> > +	struct resource_entry *entry, *tmp;
+> > +	int status;
+> > +
+> > +	status = acpi_pci_probe_root_resources(ci);
+> > +	resource_list_for_each_entry_safe(entry, tmp, &ci->resources) {
+> > +		if (!(entry->res->flags & IORESOURCE_WINDOW))
+> > +			resource_list_destroy_entry(entry);
+> > +	}
+> > +	return status;
+> 
+> Perhaps that extra newline from above could migrate down to the line
+> above the return here.
+>
+Okay.
+
+> > +}
+> > +
+> > +/*
+> > + * Lookup the bus range for the domain in MCFG, and set up config space
+> > + * mapping.
+> > + */
+> > +static struct pci_config_window *
+> > +pci_acpi_setup_ecam_mapping(struct acpi_pci_root *root)
+> 
+> This all fits on 1 line.
+> 
+It actually goes beyond 80 characters, right?
+
+> > +{
+> > +	struct device *dev = &root->device->dev;
+> > +	struct resource *bus_res = &root->secondary;
+> > +	u16 seg = root->segment;
+> > +	const struct pci_ecam_ops *ecam_ops;
+> > +	struct resource cfgres;
+> > +	struct acpi_device *adev;
+> > +	struct pci_config_window *cfg;
+> > +	int ret;
+> > +
+> > +	ret = pci_mcfg_lookup(root, &cfgres, &ecam_ops);
+> > +	if (ret) {
+> > +		dev_err(dev, "%04x:%pR ECAM region not found\n", seg, bus_res);
+> > +		return NULL;
+> > +	}
+> > +
+> > +	adev = acpi_resource_consumer(&cfgres);
+> > +	if (adev)
+> > +		dev_info(dev, "ECAM area %pR reserved by %s\n", &cfgres,
+> > +			 dev_name(&adev->dev));
+> > +	else
+> > +		dev_warn(dev, FW_BUG "ECAM area %pR not reserved in ACPI namespace\n",
+> > +			 &cfgres);
+> > +
+> > +	cfg = pci_ecam_create(dev, &cfgres, bus_res, ecam_ops);
+> > +	if (IS_ERR(cfg)) {
+> > +		dev_err(dev, "%04x:%pR error %ld mapping ECAM\n", seg, bus_res,
+> > +			PTR_ERR(cfg));
+> > +		return NULL;
+> > +	}
+> > +
+> > +	return cfg;
+> > +}
+> > +
+> > +/* release_info: free resources allocated by init_info */
+> 
+> The fact that you haven't picked a consistent comment style for this
+> functions really bothers my OCD. Yes, it may be copy-paste from arm64,
+> but since this is "new code" I don't think there's harm in at least
+> *starting* with something that looks cohesive.
+> 
+Agree. Will try to fix them in the next revision.
+
+> > +static void pci_acpi_generic_release_info(struct acpi_pci_root_info *ci)
+> > +{
+> > +	struct acpi_pci_generic_root_info *ri;
+> > +
+> > +	ri = container_of(ci, struct acpi_pci_generic_root_info, common);
+> > +	pci_ecam_free(ri->cfg);
+> > +	kfree(ci->ops);
+> > +	kfree(ri);
+> > +}
+> > +
+> > +
+> 
+> Extra newline here.
+>
+Okay.
+ 
+> > +/* Interface called from ACPI code to setup PCI host controller */
+> > +struct pci_bus *pci_acpi_scan_root(struct acpi_pci_root *root)
+> > +{
+> > +	struct acpi_pci_generic_root_info *ri;
+> > +	struct pci_bus *bus, *child;
+> > +	struct acpi_pci_root_ops *root_ops;
+> > +	struct pci_host_bridge *host;
+> > +
+> > +	ri = kzalloc(sizeof(*ri), GFP_KERNEL);
+> > +	if (!ri)
+> > +		return NULL;
+> > +
+> > +	root_ops = kzalloc(sizeof(*root_ops), GFP_KERNEL);
+> > +	if (!root_ops) {
+> > +		kfree(ri);
+> > +		return NULL;
+> > +	}
+> > +
+> > +	ri->cfg = pci_acpi_setup_ecam_mapping(root);
+> > +	if (!ri->cfg) {
+> > +		kfree(ri);
+> > +		kfree(root_ops);
+> > +		return NULL;
+> > +	}
+> > +
+> > +	root_ops->release_info = pci_acpi_generic_release_info;
+> > +	root_ops->prepare_resources = pci_acpi_root_prepare_resources;
+> > +	root_ops->pci_ops = (struct pci_ops *)&ri->cfg->ops->pci_ops;
+> > +	bus = acpi_pci_root_create(root, root_ops, &ri->common, ri->cfg);
+> > +	if (!bus)
+> > +		return NULL;
+> > +
+> > +	/* If we must preserve the resource configuration, claim now */
+> > +	host = pci_find_host_bridge(bus);
+> > +	if (host->preserve_config)
+> > +		pci_bus_claim_resources(bus);
+> > +
+> > +	/*
+> > +	 * Assign whatever was left unassigned. If we didn't claim above,
+> > +	 * this will reassign everything.
+> > +	 */
+> > +	pci_assign_unassigned_root_bus_resources(bus);
+> > +
+> > +	list_for_each_entry(child, &bus->children, node)
+> > +		pcie_bus_configure_settings(child);
+> > +
+> > +	return bus;
+> > +}
+> 
+> Anyways, this does look to be "leveraged from arm64" as you say and I
+> only had minor nits to comment about...
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> 
+Thanks!
+Sunil
