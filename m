@@ -2,103 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16DB0694F91
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:41:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BAC3694F94
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbjBMSlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:41:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
+        id S230243AbjBMSnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:43:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjBMSlE (ORCPT
+        with ESMTP id S229614AbjBMSnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:41:04 -0500
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86B1F1;
-        Mon, 13 Feb 2023 10:41:03 -0800 (PST)
-Received: by mail-ed1-f50.google.com with SMTP id u21so14273878edv.3;
-        Mon, 13 Feb 2023 10:41:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CDtFU2Jc95gLjieOysLnzEfFJTUgaL6A5DtFJMyaKWg=;
-        b=xKOSdwHMWp6I/hRgP0t4YbcDhYfBNPaY8S0ONY6S67h2cAdvBwbhBjrBIjWukXeXyw
-         tnf/MdTg1dIHfRlfUykhKwrDpur2iBm24nPL2ywZeOJO5aIf/a1plReU0e1zA4Jejs6v
-         3FlaD6pD4vAyityca3+5lmAIgTjRjVq9oGHfqmjLLCknS9/gOlIe/1Q1HKgxDOPWeG0h
-         MW5xzYALM0KFFEGixPMJuXe9DaPgaLseUGRvOT39nnq4DbVyTQwSbSf5H15qPKgmKP5n
-         9kKx3YlHvq+nX4QkApFoh6i+Qhg33pQm9ATQPsXVbkw7PMfSi+TQKkDABJARsa3i8cmf
-         mIDA==
-X-Gm-Message-State: AO0yUKXdXlqTe4wMmE3aG9iGutjhXYfgqzoUaV9jAeLvQebR2bE0Vt88
-        tntJRL5B4XPl+j1hbKoGkkRXm9BsHV5J/IrfVmg=
-X-Google-Smtp-Source: AK7set9c7MrFAu9f5jlejY00/6IQgCiFdmwotU5SX7kkOfHGG0KHlQp9HH4RhJUJiR5WCISRbhRFTSlDhAMhz5lGcPE=
-X-Received: by 2002:a50:baab:0:b0:4ac:cdd9:1c97 with SMTP id
- x40-20020a50baab000000b004accdd91c97mr1386918ede.6.1676313662522; Mon, 13 Feb
- 2023 10:41:02 -0800 (PST)
+        Mon, 13 Feb 2023 13:43:21 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB901C5B4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:43:20 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A80D21EC0854;
+        Mon, 13 Feb 2023 19:43:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1676313798;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=qKRBuWMiSybC4tH9nU+jPPER1x7YmEq5bpWJr9SaMxw=;
+        b=Ao1+wg8mFc5mt4AvLNIg8BEcW0ssuxmPh4+Y7lV9mTsbWWs9VtqHkI9cqU9KKXypHrXKea
+        UArtg7VFLpdjcAAwVThd4OSKpBiBq3pldxmwvT595OI89UKEVQn8kDdIMz/VMTsg4+Yk9V
+        SiDb9GVjIKjb2ijYMQXaB1eV7dPzWG8=
+Date:   Mon, 13 Feb 2023 19:43:14 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        lists@nerdbynature.de, mikelley@microsoft.com,
+        torvalds@linux-foundation.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
+ defined MTRRs
+Message-ID: <Y+qEwtzCV65s+ZFq@zn.tnic>
+References: <20230209072220.6836-1-jgross@suse.com>
+ <20230209072220.6836-3-jgross@suse.com>
+ <Y+ohfE/wICFKO/93@zn.tnic>
+ <6257114d-a957-f586-145c-d2a885417360@suse.com>
+ <Y+pRK6a419jenR9R@zn.tnic>
+ <13520f45-7f4d-417e-f9a2-40c32cd0e739@suse.com>
 MIME-Version: 1.0
-References: <1676021646-2619-1-git-send-email-ssengar@linux.microsoft.com> <1676021646-2619-3-git-send-email-ssengar@linux.microsoft.com>
-In-Reply-To: <1676021646-2619-3-git-send-email-ssengar@linux.microsoft.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 13 Feb 2023 19:40:51 +0100
-Message-ID: <CAJZ5v0ivddzCoYFd4TauH3G83KxCWQK1NZSvn25oWt_iy0LOfQ@mail.gmail.com>
-Subject: Re: [PATCH v6 2/5] ACPI: bus: Add stub acpi_sleep_state_supported()
- in non-ACPI cases
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, daniel.lezcano@linaro.org, tglx@linutronix.de,
-        virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
-        dphadke@linux.microsoft.com, lenb@kernel.org, rafael@kernel.org,
-        linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <13520f45-7f4d-417e-f9a2-40c32cd0e739@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 10:34 AM Saurabh Sengar
-<ssengar@linux.microsoft.com> wrote:
->
-> acpi_sleep_state_supported() is defined only when CONFIG_ACPI=y. The
-> function is in acpi_bus.h, and acpi_bus.h can only be used in
-> CONFIG_ACPI=y cases. Add the stub function to linux/acpi.h to make
-> compilation successful for !CONFIG_ACPI cases.
->
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+On Mon, Feb 13, 2023 at 04:36:12PM +0100, Juergen Gross wrote:
+> In the end I wouldn't mind dropping the fixed MTRRs from the interface, as
+> they are currently not needed at all.
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Yes, the less the better.
 
-and please feel free to toute this patch whichever way is convenient.
+> I'd say we go with what is needed right now. And having a single interface
+> makes all the sanity checking you are asking for easier.
 
-Thanks!
+I guess I need to remember to finish designing this if more users
+appear...
 
-> ---
->  include/linux/acpi.h | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> index efff750f326d..d331f76b0c19 100644
-> --- a/include/linux/acpi.h
-> +++ b/include/linux/acpi.h
-> @@ -1075,6 +1075,11 @@ static inline u32 acpi_osc_ctx_get_cxl_control(struct acpi_osc_context *context)
->         return 0;
->  }
->
-> +static inline bool acpi_sleep_state_supported(u8 sleep_state)
-> +{
-> +       return false;
-> +}
-> +
->  #endif /* !CONFIG_ACPI */
->
->  #ifdef CONFIG_ACPI_HOTPLUG_IOAPIC
-> --
-> 2.34.1
->
+> What are you especially asking for?
+> 
+> With my current patches Xen PV dom0 will call mtrr_overwrite_state() before
+> x86_hyper_type is set, while a Hyper-V SEV-SNP guest will make the call after
+> it has been set. Both calls happen before cache_bp_init().
+> 
+> So I could move the mtrr_overwrite_state() call for Xen PV dom0 into its
+> init_platform() callback and check in mtrr_overwrite_state() x86_hyper_type
+> to be set,
+
+I believe that is good enough, see below.
+
+> or I could reject a call of mtrr_overwrite_state() after the call of
+> cache_bp_init() has happened, or I could do both.
+
+I think one thing is enough as we'll be loud enough.
+
+---
+diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
+index b73fe243c7fd..2dbe2c10e959 100644
+--- a/arch/x86/kernel/cpu/mtrr/mtrr.c
++++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
+@@ -49,6 +49,7 @@
+ #include <asm/cacheinfo.h>
+ #include <asm/cpufeature.h>
+ #include <asm/e820/api.h>
++#include <asm/hypervisor.h>
+ #include <asm/mtrr.h>
+ #include <asm/msr.h>
+ #include <asm/memtype.h>
+@@ -668,7 +669,12 @@ void __init mtrr_bp_init(void)
+ 	const char *why = "(not available)";
+ 	unsigned int phys_addr;
+ 
++#ifdef CONFIG_HYPERVISOR_GUEST
+ 	if (mtrr_state.enabled) {
++
++		/* This should not happen without a hypervisor present. */
++		WARN_ON_ONCE(!x86_hyper_type);
++
+ 		/* Software overwrite of MTRR state, only for generic case. */
+ 		mtrr_calc_physbits(true);
+ 		init_table();
+@@ -676,6 +682,7 @@ void __init mtrr_bp_init(void)
+ 
+ 		return;
+ 	}
++#endif
+ 
+ 	phys_addr = mtrr_calc_physbits(boot_cpu_has(X86_FEATURE_MTRR));
+ 
+
+
+
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
