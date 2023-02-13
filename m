@@ -2,316 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7217694709
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D5D6946F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbjBMNbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 08:31:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35932 "EHLO
+        id S229975AbjBMNZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 08:25:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbjBMNbW (ORCPT
+        with ESMTP id S229984AbjBMNYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 08:31:22 -0500
-Received: from out-210.mta1.migadu.com (out-210.mta1.migadu.com [IPv6:2001:41d0:203:375::d2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D53CB45E
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:31:20 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1676294694;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+        Mon, 13 Feb 2023 08:24:47 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617821A675
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:24:46 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id EF8041F37C;
+        Mon, 13 Feb 2023 13:24:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676294684; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=u/je6LjKAXTT4L7cZQHh0omexUfrc1LfneIWADnI9bw=;
-        b=mRrmmCE2sHSBaMEE/5sKB+KqxiWe32EEa6Y1rAIayQdB1rqwTPxJ15mywRXxFjr+hmPrmG
-        mW9gFfhKRIiJX5xF3WE9jByYlcADBgnYT6wLxCkiOXgLIFRMWswKhUO5pCG/fkMvhtRvYi
-        OrkeW31xFT4Xujt7OM+weIE8h1l3Fms=
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     Sergey.Semin@baikalelectronics.ru
-Cc:     Cai huoqing <cai.huoqing@linux.dev>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: [PATCH v3 4/4] dmaengine: dw-edma: Add HDMA DebugFS support
-Date:   Mon, 13 Feb 2023 21:24:09 +0800
-Message-Id: <20230213132411.65524-5-cai.huoqing@linux.dev>
-In-Reply-To: <20230213132411.65524-1-cai.huoqing@linux.dev>
-References: <20230213132411.65524-1-cai.huoqing@linux.dev>
+        bh=CFeeD/FeoAftAse3SY9UYdhWJJuUONcBCw7GnWfvrC4=;
+        b=YPLiEzL7evBGnHW8y3jLpspKY2gaLR1UBaa7Zhq7w6xOrKiO+zNV9rANi6akR12tElzClr
+        xAnjsAli7kFhb6QNkyJFWC6HFbRPCId7xVPCbdb4mb6cxIEtNYnSeKZlSa7ZyHHaUnjm3w
+        SFM+dHMJqfWSEjlQWZHG8n1mjOt7tWE=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D07921391B;
+        Mon, 13 Feb 2023 13:24:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id NCGIMBw66mPrXgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 13 Feb 2023 13:24:44 +0000
+Date:   Mon, 13 Feb 2023 14:24:44 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     huyd12@chinatelecom.cn
+Cc:     liuq131@chinatelecom.cn, akpm@linux-foundation.org,
+        agruenba@redhat.com, 'Christian Brauner' <christian@brauner.io>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: =?utf-8?B?5Zue5aSN?= =?utf-8?Q?=3A?= [PATCH] pid: add handling
+ of too many zombie processes
+Message-ID: <Y+o6HKUY/OzThJe/@dhcp22.suse.cz>
+References: <20230208094905.373-1-liuq131@chinatelecom.cn>
+ <000e01d93c56$3a4bcb00$aee36100$@chinatelecom.cn>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <000e01d93c56$3a4bcb00$aee36100$@chinatelecom.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cai huoqing <cai.huoqing@linux.dev>
+On Thu 09-02-23 15:14:57, huyd12@chinatelecom.cn wrote:
+> 
+> Any comments will be appreciated.
+> 
+> 
+> 
+> -----邮件原件-----
+> 发件人: liuq131@chinatelecom.cn <liuq131@chinatelecom.cn> 
+> 发送时间: 2023年2月8日 17:49
+> 收件人: akpm@linux-foundation.org
+> 抄送: agruenba@redhat.com; linux-mm@kvack.org; linux-kernel@vger.kernel.org;
+> huyd12@chinatelecom.cn; liuq <liuq131@chinatelecom.cn>
+> 主题: [PATCH] pid: add handling of too many zombie processes
+> 
+> There is a common situation that a parent process forks many child processes
+> to execute tasks, but the parent process does not execute wait/waitpid when
+> the child process exits, resulting in a large number of child processes
+> becoming zombie processes.
+> 
+> At this time, if the number of processes in the system out of
+> kernel.pid_max, the new fork syscall will fail, and the system will not be
+> able to execute any command at this time (unless an old process exits)
+> 
+> eg:
+> [root@lq-workstation ~]# ls
+> -bash: fork: retry: Resource temporarily unavailable
+> -bash: fork: retry: Resource temporarily unavailable
+> -bash: fork: retry: Resource temporarily unavailable
+> -bash: fork: retry: Resource temporarily unavailable
+> -bash: fork: Resource temporarily unavailable [root@lq-workstation ~]#
+> reboot
+> -bash: fork: retry: Resource temporarily unavailable
+> -bash: fork: retry: Resource temporarily unavailable
+> -bash: fork: retry: Resource temporarily unavailable
+> -bash: fork: retry: Resource temporarily unavailable
+> -bash: fork: Resource temporarily unavailable
+> 
+> I dealt with this situation in the alloc_pid function, and found a process
+> with the most zombie subprocesses, and more than 10(or other reasonable
+> values?) zombie subprocesses, so I tried to kill this process to release the
+> pid resources.
 
-Add HDMA DebugFS support to show register information
+Abusing oom_kill_process is not the right approach. Also any hard coded limit
+fir the number of zombies can turn out to be really tricky and it can
+cause regressions.
 
-Signed-off-by: Cai huoqing <cai.huoqing@linux.dev>
----
- drivers/dma/dw-edma/Makefile             |   3 +-
- drivers/dma/dw-edma/dw-hdma-v0-core.c    |   2 +
- drivers/dma/dw-edma/dw-hdma-v0-debugfs.c | 175 +++++++++++++++++++++++
- drivers/dma/dw-edma/dw-hdma-v0-debugfs.h |  22 +++
- 4 files changed, 201 insertions(+), 1 deletion(-)
- create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
- create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
-
-diff --git a/drivers/dma/dw-edma/Makefile b/drivers/dma/dw-edma/Makefile
-index b1c91ef2c63d..83ab58f87760 100644
---- a/drivers/dma/dw-edma/Makefile
-+++ b/drivers/dma/dw-edma/Makefile
-@@ -1,7 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- obj-$(CONFIG_DW_EDMA)		+= dw-edma.o
--dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o
-+dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o	\
-+				   dw-hdma-v0-debugfs.o
- dw-edma-objs			:= dw-edma-core.o	\
- 				   dw-edma-v0-core.o	\
- 				   dw-hdma-v0-core.o $(dw-edma-y)
-diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.c b/drivers/dma/dw-edma/dw-hdma-v0-core.c
-index 7e4f98987e29..3723d5d8127c 100644
---- a/drivers/dma/dw-edma/dw-hdma-v0-core.c
-+++ b/drivers/dma/dw-edma/dw-hdma-v0-core.c
-@@ -9,6 +9,7 @@
- #include "dw-edma-core.h"
- #include "dw-hdma-v0-core.h"
- #include "dw-hdma-v0-regs.h"
-+#include "dw-hdma-v0-debugfs.h"
- 
- enum dw_hdma_control {
- 	DW_HDMA_V0_CB					= BIT(0),
-@@ -294,6 +295,7 @@ static void dw_hdma_v0_core_ch_config(struct dw_edma_chan *chan)
- /* HDMA debugfs callbacks */
- static void dw_hdma_v0_core_debugfs_on(struct dw_edma *dw)
- {
-+	dw_hdma_v0_debugfs_on(dw);
- }
- 
- static const struct dw_edma_core_ops hdma_core = {
-diff --git a/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
-new file mode 100644
-index 000000000000..a0fafd788c14
---- /dev/null
-+++ b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
-@@ -0,0 +1,175 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2023 Cai Huoqing
-+ * Synopsys DesignWare HDMA v0 debugfs
-+ *
-+ * Author: Cai Huoqing <cai.huoqing@linux.dev>
-+ */
-+
-+#include <linux/debugfs.h>
-+#include <linux/bitfield.h>
-+
-+#include "dw-hdma-v0-debugfs.h"
-+#include "dw-hdma-v0-regs.h"
-+#include "dw-edma-core.h"
-+
-+#define REGS_ADDR(dw, name)						       \
-+	({								       \
-+		struct dw_hdma_v0_regs __iomem *__regs = (dw)->chip->reg_base; \
-+									       \
-+		(void __iomem *)&__regs->name;				       \
-+	})
-+
-+#define REGS_CH_ADDR(dw, name, _dir, _ch)				       \
-+	({								       \
-+		struct dw_hdma_v0_ch_regs __iomem *__ch_regs;		       \
-+									       \
-+		if (_dir == EDMA_DIR_READ)				       \
-+			__ch_regs = REGS_ADDR(dw, ch[_ch].rd);		       \
-+		else							       \
-+			__ch_regs = REGS_ADDR(dw, ch[_ch].wr);		       \
-+									       \
-+		(void __iomem *)&__ch_regs->name;			       \
-+	})
-+
-+#define CTX_REGISTER(dw, name, dir, ch) \
-+	{ dw, #name, REGS_CH_ADDR(dw, name, dir, ch), dir, ch }
-+
-+#define REGISTER(dw, name) \
-+	{ dw, #name, REGS_ADDR(dw, name) }
-+
-+#define WRITE_STR				"write"
-+#define READ_STR				"read"
-+#define CHANNEL_STR				"channel"
-+#define REGISTERS_STR				"registers"
-+
-+struct dw_hdma_debugfs_entry {
-+	struct dw_edma				*dw;
-+	const char				*name;
-+	void __iomem				*reg;
-+	enum dw_edma_dir			dir;
-+	u16					ch;
-+};
-+
-+static int dw_hdma_debugfs_u32_get(void *data, u64 *val)
-+{
-+	void __iomem *reg = (void __force __iomem *)data;
-+	*val = readl(reg);
-+
-+	return 0;
-+}
-+DEFINE_DEBUGFS_ATTRIBUTE(fops_x32, dw_hdma_debugfs_u32_get, NULL, "0x%08llx\n");
-+
-+static void dw_hdma_debugfs_create_x32(struct dw_edma *dw,
-+				       const struct dw_hdma_debugfs_entry ini[],
-+				       int nr_entries, struct dentry *dent)
-+{
-+	struct dw_hdma_debugfs_entry *entries;
-+	int i;
-+
-+	entries = devm_kcalloc(dw->chip->dev, nr_entries, sizeof(*entries),
-+			       GFP_KERNEL);
-+	for (i = 0; i < nr_entries; i++) {
-+		entries[i] = ini[i];
-+
-+		debugfs_create_file_unsafe(entries[i].name, 0444, dent,
-+					   &entries[i], &fops_x32);
-+	}
-+}
-+
-+static void dw_hdma_debugfs_regs_ch(struct dw_edma *dw, enum dw_edma_dir dir,
-+				    u16 ch, struct dentry *dent)
-+{
-+	int nr_entries;
-+	struct dw_hdma_debugfs_entry debugfs_regs[] = {
-+		CTX_REGISTER(dw, ch_en, dir, ch),
-+		CTX_REGISTER(dw, doorbell, dir, ch),
-+		CTX_REGISTER(dw, llp.lsb, dir, ch),
-+		CTX_REGISTER(dw, llp.msb, dir, ch),
-+		CTX_REGISTER(dw, cycle_sync, dir, ch),
-+		CTX_REGISTER(dw, transfer_size, dir, ch),
-+		CTX_REGISTER(dw, sar.lsb, dir, ch),
-+		CTX_REGISTER(dw, sar.msb, dir, ch),
-+		CTX_REGISTER(dw, dar.lsb, dir, ch),
-+		CTX_REGISTER(dw, dar.msb, dir, ch),
-+		CTX_REGISTER(dw, control1, dir, ch),
-+		CTX_REGISTER(dw, ch_stat, dir, ch),
-+		CTX_REGISTER(dw, int_stat, dir, ch),
-+		CTX_REGISTER(dw, int_setup, dir, ch),
-+		CTX_REGISTER(dw, int_clear, dir, ch),
-+		CTX_REGISTER(dw, msi_stop.lsb, dir, ch),
-+		CTX_REGISTER(dw, msi_stop.msb, dir, ch),
-+		CTX_REGISTER(dw, msi_abort.lsb, dir, ch),
-+		CTX_REGISTER(dw, msi_abort.msb, dir, ch),
-+		CTX_REGISTER(dw, msi_msgdata, dir, ch),
-+	};
-+
-+	nr_entries = ARRAY_SIZE(debugfs_regs);
-+	dw_hdma_debugfs_create_x32(dw, debugfs_regs, nr_entries, dent);
-+}
-+
-+static void dw_hdma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
-+{
-+	struct dentry *regs_dent, *ch_dent;
-+	int i;
-+	char name[16];
-+
-+	regs_dent = debugfs_create_dir(WRITE_STR, dent);
-+	if (!regs_dent)
-+		return;
-+
-+	for (i = 0; i < dw->wr_ch_cnt; i++) {
-+		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
-+
-+		ch_dent = debugfs_create_dir(name, regs_dent);
-+		if (!ch_dent)
-+			return;
-+
-+		dw_hdma_debugfs_regs_ch(dw, EDMA_DIR_WRITE, i, ch_dent);
-+	}
-+}
-+
-+static void dw_hdma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
-+{
-+	struct dentry *regs_dent, *ch_dent;
-+	int i;
-+	char name[16];
-+
-+	regs_dent = debugfs_create_dir(READ_STR, dent);
-+	if (!regs_dent)
-+		return;
-+
-+	for (i = 0; i < dw->rd_ch_cnt; i++) {
-+		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
-+
-+		ch_dent = debugfs_create_dir(name, regs_dent);
-+		if (!ch_dent)
-+			return;
-+
-+		dw_hdma_debugfs_regs_ch(dw, EDMA_DIR_READ, i, ch_dent);
-+	}
-+}
-+
-+static void dw_hdma_debugfs_regs(struct dw_edma *dw)
-+{
-+	struct dentry *regs_dent;
-+
-+	regs_dent = debugfs_create_dir(REGISTERS_STR, dw->dma.dbg_dev_root);
-+	if (!regs_dent)
-+		return;
-+
-+	dw_hdma_debugfs_regs_wr(dw, regs_dent);
-+	dw_hdma_debugfs_regs_rd(dw, regs_dent);
-+}
-+
-+void dw_hdma_v0_debugfs_on(struct dw_edma *dw)
-+{
-+	if (!debugfs_initialized())
-+		return;
-+
-+	debugfs_create_u32("mf", 0444, dw->dma.dbg_dev_root, &dw->chip->mf);
-+	debugfs_create_u16("wr_ch_cnt", 0444, dw->dma.dbg_dev_root, &dw->wr_ch_cnt);
-+	debugfs_create_u16("rd_ch_cnt", 0444, dw->dma.dbg_dev_root, &dw->rd_ch_cnt);
-+
-+	dw_hdma_debugfs_regs(dw);
-+}
-diff --git a/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
-new file mode 100644
-index 000000000000..e6842c83777d
---- /dev/null
-+++ b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
-@@ -0,0 +1,22 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2023 Cai Huoqing
-+ * Synopsys DesignWare HDMA v0 debugfs
-+ *
-+ * Author: Cai Huoqing <cai.huoqing@linux.dev>
-+ */
-+
-+#ifndef _DW_HDMA_V0_DEBUG_FS_H
-+#define _DW_HDMA_V0_DEBUG_FS_H
-+
-+#include <linux/dma/edma.h>
-+
-+#ifdef CONFIG_DEBUG_FS
-+void dw_hdma_v0_debugfs_on(struct dw_edma *dw);
-+#else
-+static inline void dw_hdma_v0_debugfs_on(struct dw_edma *dw)
-+{
-+}
-+#endif /* CONFIG_DEBUG_FS */
-+
-+#endif /* _DW_HDMA_V0_DEBUG_FS_H */
+Is there any reason you cannot contain those misbehaving workloads in a
+pid controller?
 -- 
-2.34.1
-
+Michal Hocko
+SUSE Labs
