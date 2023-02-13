@@ -2,84 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDDD46940BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:19:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 115A06940C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjBMJTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 04:19:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47252 "EHLO
+        id S229552AbjBMJUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 04:20:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjBMJT0 (ORCPT
+        with ESMTP id S229876AbjBMJUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 04:19:26 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8C6144BD
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:19:16 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id sa10so30111735ejc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:19:16 -0800 (PST)
+        Mon, 13 Feb 2023 04:20:09 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C7FEB66
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:20:08 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id h16so11356885wrz.12
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:20:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=bHu3VWFPa2PUiv+M72nCmChN6FXiZwy+qBIZ5VWBZE0=;
-        b=KG8fgOMPNDK047xvYS1/VEJVbemoOZQvkAV3IPeaWR0bvYmXnsgRLJi7vk35FQ+ME8
-         DJOrvut2VPNNW50AkKiQxsUmahgEuIXO2Xlv7re1cMGomi/Y4uDJWDEgBLYkGGaDTeCC
-         vGEQ11zVw3WHqtR6VE/PF7hLx0dFpr0gnB6ekkWJUEnYtnW16H2uZ61um4Z9vW1/eZuj
-         FfoQnuatswot/s1QgSVnD713vGJg/UfJrt6TiXES6hdv5r5i+XWm6F4sjKtoVN9CUptZ
-         AeqLbmk6tA/sEHWIlROlatdQLkpQoF8Gtzlf+gi/hrXggZ20IVhQPs05KZr41oLOpW2J
-         T8FQ==
+        bh=bNLG0F4sytAFJuPLCGJpmTMcMTuRJI0BMdm+O22mIWk=;
+        b=h65cQMGeWFtfyp2uBNLZIv4aNJ8crvS/MegClRzuhEPjPg+BDdR7aqGJ9/8XON1Bbu
+         2XZckirgzIKPNipgdUySyNJHJrZukrIayPooX+QCE92pl9aI7oQ7xxgpdLjhBnpDDAPx
+         ZhZyBa5ldmmym80vqoKngS1doGl41+7ZaRSDZNOjybDPD4DsJsWs3Z+64em6pAzfT/Iu
+         xCCuMtGP0ejC69sEtvzbxgq3YINw3hLGcc2NKAVJf7649m1FuUeyHhG+EzSEIGZu4wDd
+         rWYQWhSxHz6TCKYelQvbL1+SZVCWz5+AjihuLGHlsfu4ryj01UUEvu3Emw3dWnybevup
+         XjdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bHu3VWFPa2PUiv+M72nCmChN6FXiZwy+qBIZ5VWBZE0=;
-        b=dUdBt+AlSf7p6mrJG0vrJ3ksH6y117rwNW28KCXOMi1tvNxROhnOmbnAOYUspG7POu
-         pg/aVIAXE+Igv807Y6Q6l0usMks0Mr3ixxmz7dHS2Tl16MjOhXxFq/vNn2BTZyNAvOYl
-         Zct2F5jhOzgVqqzk87UrJLpawLZcTUSwu6HW+jaFMmynZwMy30vKG+e8mtotijjhaLAL
-         6fKti78AZHRO6Kn+C9oas7c+j2XfH3H/XsnzxzSNTxXKMcwBCtx7Jv7eY4/CiycLqFZ5
-         PFWpk7brdFhHeW7Hi8hmmqst3dDl7AmaEY0qOEOEM0yDeDp2RdQSqs08jaZjoUkGJWCf
-         mV5A==
-X-Gm-Message-State: AO0yUKVGs/Wlay+kb5hFy36SfBu3zUUuQsEGpqNAz3vnMlG4IXotjgMe
-        nGll6LohRm6Y/0wm+6DRZxZRjQ==
-X-Google-Smtp-Source: AK7set91u0gCsDmBKfkG639YOdzJKkWrdP5/ou8pgOviXHIwPofwVIBaN5T432BG8EKX4+H6QaDJqg==
-X-Received: by 2002:a17:907:3201:b0:8ae:b7a4:4cf5 with SMTP id xg1-20020a170907320100b008aeb7a44cf5mr24409539ejb.37.1676279955345;
-        Mon, 13 Feb 2023 01:19:15 -0800 (PST)
-Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id m16-20020a1709061ed000b0088f8a61eb48sm6498699ejj.154.2023.02.13.01.19.13
+        bh=bNLG0F4sytAFJuPLCGJpmTMcMTuRJI0BMdm+O22mIWk=;
+        b=E3s8zRulYVspcvV5sCRRf4QWfOgCLI4/5GzSsZrh888ySD3fZ+pzahV/nHgYNn8psT
+         33FgqhetDA8d8UCWIg4xM6JxUlj/wFRR3iSYzTsikrnpk+yuI9vFkri4C2/fW50SjKGD
+         /+TpM6cjqCt0EtGku5DO+fJc4WocRggg+AXo9txtAWggcnmtH9obiLBfwBtZneXSb8Qv
+         l6Vkm93CwD7dyImp1Uj1e1mVRg3PO801biz1wR6wXnK4n3nibKTt08zkTKXOGl4nWLC/
+         jHL77bCN2fzz0jcC8f4DMl3Af2Q0D37gLnpXJuzu0yj0Bhc3ODzrkg3Vvba+uxOQ2pLW
+         bD8g==
+X-Gm-Message-State: AO0yUKVnP9c398rKiCjiWAuJzLWxtayHX1y1WhfrVi6wUdKeRRfdzoeI
+        /7TsZpkkt4O30n7udH87ou1uuA==
+X-Google-Smtp-Source: AK7set9P9Rf/AgDFodMfFUkknlWiakKXK72hhfRuVm1tf2m8kXJEnbrxw1VZm/dlh2YKzny9lQPCuw==
+X-Received: by 2002:a5d:4682:0:b0:2c5:588f:c5c4 with SMTP id u2-20020a5d4682000000b002c5588fc5c4mr2650463wrq.37.1676280006817;
+        Mon, 13 Feb 2023 01:20:06 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id m18-20020a5d6252000000b002c3dc4131f5sm10133668wrv.18.2023.02.13.01.20.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 01:19:15 -0800 (PST)
-Message-ID: <4eed93cd-e5dd-9988-fd8a-4070922aab28@linaro.org>
-Date:   Mon, 13 Feb 2023 10:19:12 +0100
+        Mon, 13 Feb 2023 01:20:06 -0800 (PST)
+Message-ID: <17e7a0f4-38b2-cfc7-3058-1fea7bb28b81@linaro.org>
+Date:   Mon, 13 Feb 2023 10:20:03 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 04/10] drm/msm/dsi: dsi_host: Fix DSI index detection when
- version clash occurs
+Subject: Re: [PATCH 01/12] dt-bindings: riscv: sifive-ccache: Add compatible
+ for StarFive JH7100 SoC
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Archit Taneja <architt@codeaurora.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230211115110.1462920-1-konrad.dybcio@linaro.org>
- <20230211115110.1462920-5-konrad.dybcio@linaro.org>
- <94882ab1-1eb0-b9f1-af70-dc070c96fd11@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <94882ab1-1eb0-b9f1-af70-dc070c96fd11@linaro.org>
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+References: <20230211031821.976408-1-cristian.ciocaltea@collabora.com>
+ <20230211031821.976408-2-cristian.ciocaltea@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230211031821.976408-2-cristian.ciocaltea@collabora.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -90,64 +97,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11/02/2023 04:18, Cristian Ciocaltea wrote:
+> Document the compatible for the SiFive Composable Cache Controller found
+> on the StarFive JH7100 SoC.
+> 
+> This also requires extending the 'reg' property to handle distinct
+> ranges, as specified via 'reg-names'.
 
 
-On 11.02.2023 14:26, Dmitry Baryshkov wrote:
-> On 11/02/2023 13:51, Konrad Dybcio wrote:
->> Now that msm_dsi_config is ready to accept multiple sets of registers
->> (where array[n][idx] holds the base registers of DSI(idx) for the nth
->> entry), loop through all available configs to resolve hw version
->> clashes.
->>
->> Fixes: 32280d66fd44 ("drm/msm/dsi: Don't get DSI index from DT")
-> 
-> Do we really want to backport this patch (and other patches from this series to older kernels?)
-> 
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>   drivers/gpu/drm/msm/dsi/dsi_cfg.h  |  1 +
->>   drivers/gpu/drm/msm/dsi/dsi_host.c | 12 +++++++-----
->>   2 files changed, 8 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/dsi/dsi_cfg.h b/drivers/gpu/drm/msm/dsi/dsi_cfg.h
->> index 03493cc6b772..4a47705234bd 100644
->> --- a/drivers/gpu/drm/msm/dsi/dsi_cfg.h
->> +++ b/drivers/gpu/drm/msm/dsi/dsi_cfg.h
->> @@ -43,6 +43,7 @@ struct msm_dsi_config {
->>       const int num_bus_clks;
->>       /* Allow + 1 entry for the zero-terminator */
->>       const resource_size_t io_start[VARIANTS_MAX][DSI_MAX + 1];
->> +    const int num_variants;
->>   };
->>     struct msm_dsi_host_cfg_ops {
->> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
->> index f5092b4d0757..8dfa69bcff77 100644
->> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
->> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
->> @@ -1862,16 +1862,18 @@ static int dsi_host_get_id(struct msm_dsi_host *msm_host)
->>       struct platform_device *pdev = msm_host->pdev;
->>       const struct msm_dsi_config *cfg = msm_host->cfg_hnd->cfg;
->>       struct resource *res;
->> -    int i;
->> +    int i, j, num_variants;
->>         res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dsi_ctrl");
->>       if (!res)
->>           return -EINVAL;
->>   -    for (i = 0; cfg->io_start[0][i]; i++) {
->> -        if (cfg->io_start[0][i] == res->start)
->> -            return i;
->> -    }
->> +    num_variants = cfg->num_variants ? cfg->num_variants : 1;
->> +
->> +    for (i = 0; i < num_variants; i++)
->> +        for (j = 0; cfg->io_start[i][j]; j++)
->> +            if (cfg->io_start[i][j] == res->start)
->> +                return j;
->>         return -EINVAL;
->>   }
-> 
-> Please squash this together with the patch 'drm/msm/dsi: Turn msm_dsi_config::io_start into a 2d array'.
-Ack
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Konrad
-> 
+Best regards,
+Krzysztof
+
