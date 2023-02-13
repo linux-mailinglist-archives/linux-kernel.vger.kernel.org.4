@@ -2,90 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45022694139
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:32:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EAD569413B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjBMJcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 04:32:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
+        id S230421AbjBMJcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 04:32:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230297AbjBMJbj (ORCPT
+        with ESMTP id S230361AbjBMJbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 04:31:39 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC9916AEF
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:30:03 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id x4so13669968ybp.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:30:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fbCnS9qQOyU9623tJsn2QphhHvRbvyNNBbtC5U5z6J8=;
-        b=odroHUcqkgcojn02dHabgYmZH3VY11+Urwb7RTpZ5NyCwDhI/MTiKdbotFjm2yzYBU
-         8OVdx6KfYdT00gJY07OXJkj5tDo2fHRtR+a7ued0jN3bZjGm+bvqgGLd2iKkD+Iyce8Q
-         j3UKTikpP5Tr49t/XOxZMhip5nxQnPvBV/Aj+VN9liszJnJDp6b5SOxTtEwF4hq/IH9A
-         iTxmrUxzY2043+mlhVViU0qc/BSBZ5JBJW1Ni/MGuyGemOydRaaNQTwow0qHI/+vMRwN
-         NtmQh1SF6nuLSPa2nfc+jJJ+N1VVk9gWT59iCdto60h8O6dnTth3+yLTJGNK5mnJnfDo
-         M1Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fbCnS9qQOyU9623tJsn2QphhHvRbvyNNBbtC5U5z6J8=;
-        b=5tIBt1F7kRvt5HX9mEhDvwYx1JrWRdA+/gMECtLseuGmSPLYm6sSVENHpN56moEX2V
-         mPG+NsTEWtRGnmZymS1/5uUhSkIC4ZwFTZ9wSkDV2KnI3DkXRbm1Phr1F10R63X1lxGG
-         9MsOPRtzoZKqEHaEC7ZMmsdwmnoUrFffSeN03vMbDDEpAFAdu0jzfqLiF/6VaRaSC+Ij
-         ilXi0QwZoT3TttQSZmaa5tpufztznLiy78+GnGC5B/xhJp/dUiGotxbSiqi1lxBbCz74
-         pRh+lmq1NjnjofBaE6N3ypXMajMbwMZHl+Bnb46zw+sj4QRcs9k9Hsb2hsYorYYAaX8m
-         S36Q==
-X-Gm-Message-State: AO0yUKV6c4/rv5y7b4JauHZzYE3OpmLAP+g1kv0qPSpobJmfOufwMXcG
-        HZ4OLYxnZ+2eSM4S6c6wKzO74X+OAY6iOA++p5wU2w==
-X-Google-Smtp-Source: AK7set/Q/aym+udxSJIugldGIX6aULPrP69cxHciJd6Aja2+B3PO2NjOVa2H35aSpgMPo6/GConlmtxbwpwEyp0a2LI=
-X-Received: by 2002:a25:8e81:0:b0:8f7:f072:720d with SMTP id
- q1-20020a258e81000000b008f7f072720dmr1045699ybl.426.1676280600037; Mon, 13
- Feb 2023 01:30:00 -0800 (PST)
+        Mon, 13 Feb 2023 04:31:50 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A3C199DD;
+        Mon, 13 Feb 2023 01:30:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=SUtoERbxWFSwupPXeH5TrcEuh4VbNJCgfwYwJDpRLqM=; b=eD6reRK7jGipCYX9Uigst9vFk3
+        1RRafOh0/Zmvg7sJBHNNiUBhoSN/sIzJ0NGzeVdnZnWwNtdwLEBxCL+cdoIOS7rBfExs1d220mRpY
+        Js1njJKUVaWNy7SWVV1ZwBBhiPnGXIdijRRbC7H0f2OEDnBit8mAOpSKa5c1WHSZRft2jF49288VQ
+        NQxl9tra5h2OVaam9e91fjoaEd7rbXx76Jp3eVq9L7+6lIPNZcUoF/aFfnaeW3n6tQblj3VWouvPX
+        FwyXmEcr4LnNWBdN5BbYiwnQMmeKzm1g3kfUFCJBE4tW5rX1THasY6UISkvnGnOx1yhddrGliACaz
+        gYgg8FqQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pRV9i-005c7m-51; Mon, 13 Feb 2023 09:29:50 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B29F230049E;
+        Mon, 13 Feb 2023 10:29:49 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9AF6E20C6EEA1; Mon, 13 Feb 2023 10:29:49 +0100 (CET)
+Date:   Mon, 13 Feb 2023 10:29:49 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Coly Li <colyli@suse.de>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
+ with unique class keys
+Message-ID: <Y+oDDXQW1mY1IA/+@hirez.programming.kicks-ass.net>
+References: <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
+ <Y+gjuqJ5RFxwLmht@moria.home.lan>
+ <Y+hRurRwm//1+IcK@rowland.harvard.edu>
+ <Y+hTEtCKPuO0zGIt@moria.home.lan>
+ <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
+ <Y+hYn6uzIUBaxDdV@moria.home.lan>
+ <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
+ <Y+k6ehYLWa0cmbvb@moria.home.lan>
+ <Y+lJxCLpwMGuq0sP@rowland.harvard.edu>
+ <Y+lROV3Ii+WbmZCh@moria.home.lan>
 MIME-Version: 1.0
-References: <b151531d-c9fc-cafa-4e46-e213a9892247@microchip.com>
- <CACRpkdbK8A9X4nCZEc53-wXU0Vgkc53j_r5rLQiSeoNbmvm8sg@mail.gmail.com> <961a2164-640a-86b5-980f-73668eb161e4@microchip.com>
-In-Reply-To: <961a2164-640a-86b5-980f-73668eb161e4@microchip.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 13 Feb 2023 10:29:48 +0100
-Message-ID: <CACRpkdaKYN9eRtuOhBBp_50sR71AQvNSKtjAR1RZPhaKYhfJVw@mail.gmail.com>
-Subject: Re: I2c GPIO Recovery with pinctrl strict mode
-To:     Ryan.Wanner@microchip.com
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, alexandre.belloni@bootlin.com,
-        Ludovic.Desroches@microchip.com, Nicolas.Ferre@microchip.com,
-        Claudiu.Beznea@microchip.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+lROV3Ii+WbmZCh@moria.home.lan>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 4:21 PM <Ryan.Wanner@microchip.com> wrote:
+On Sun, Feb 12, 2023 at 03:51:05PM -0500, Kent Overstreet wrote:
+> But, this would add a lot of complexity to lockdep, and this is the sort
+> of situation where if you have a bug in the comparison function (i.e. it
+> doesn't define a total ordering) it'll break things in terribly fun
+> ways.
 
-> I am trying to enable .strict in the Atmel pinctrl driver, and that is
-> what is causing my issues.
-
-Strictly speaking (ha!) that flag is for when you *cannot* use a pin
-in GPIO mode at the same time as another mode.
-
-Example: if you use the pin in I2C mode, then reading the GPIO
-input register will *not* reflect the value on the electrical line,
-because it has been decoupled physically. Then .strict should
-be true.
-
-The strict mode was not intended for policy, i.e. stopping kernel
-developers from doing wrong things. They have enough tools to
-do wrong things anyway, one more or less doesn't matter.
-
-Yours,
-Linus Walleij
+FWIW, it is possible to annotate an actual deadlock away with many of
+the lockdep annotations -- care is always needed with this stuff.
