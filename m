@@ -2,105 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BCC694B66
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:39:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14924694B69
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbjBMPjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:39:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
+        id S229737AbjBMPk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:40:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbjBMPi4 (ORCPT
+        with ESMTP id S230043AbjBMPk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:38:56 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AB41BAD9;
-        Mon, 13 Feb 2023 07:38:47 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id z13so9002434wmp.2;
-        Mon, 13 Feb 2023 07:38:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZQlTtxIUYEHa/ubjSbDgZDFaflLT7rKtPF2clbJjFdQ=;
-        b=IkuG+5VXy1/buVb/yG+3jkuR9GTYgVMLQgivQycLe3nT6NbscEvMR0zVbWKuyyFIqE
-         75CzWiDBmX3R//55dD5CMZHLO35nawl+F7eAdRAHMFbcgwN54o6N4RHSZX4DwDQJtYcX
-         9v/YivZnQp5fuX1YNDvvREKvfYPLpUa9U7YvF6daDlaXa6qS/mKeL0Eejuuv5Hml/8Sf
-         ofNpf/8pOKGtPLP0EP5s2RVfqADQXT8K5zw68jC/AcXS9ECSbOPPoDtQn3mh9M1LGrdJ
-         mE3TXz+ANs4EgOWqeKy6V5QlPDrVpJ0KYhCieuEUtma6DclnGWpM0Ben4PjamNyjLVnK
-         ZFBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZQlTtxIUYEHa/ubjSbDgZDFaflLT7rKtPF2clbJjFdQ=;
-        b=2s+HuRWKyO2t7MniOWFRH6uf8GZqJGGKCgGaKimFbmYg0GuPotZBi5w4LZNpfyfw1m
-         C/X9yGI7FIbIoNZe+akJoSUvyx2aUl/4EQXdfW2fl0uggwz+t2WbzojF/GvWWZF+KoHy
-         2Z3J3HUcwFieZaHjvvPhuLoe1LaPxeBYtigDsYlJ4IxP9LF4U3NbTJLjgXs4jLFKwn5K
-         I/FI00jh7yjYsGVYUqwFHmX+V21OpCFYICKzr0FKW3qsutXTlEcHihLxif8TWHI3FOtk
-         VCMmO17Dtt1rxG/SAN73OHhrzkGH11BXjq/Kckgl80lYSfC7AthoS3G25pZjsIXvVA8S
-         KybQ==
-X-Gm-Message-State: AO0yUKX1Ew3VPT7AIPu2RxRMVyta2lnA7Gc1cCaji5BQvvIKc76UbUq9
-        8Xz39PS8rQrgiVvi7r5qL7A=
-X-Google-Smtp-Source: AK7set/zTcHr+nUd0IzYxEeesl8wx99P2JYnFPRqebR5Ib4Tk7OFyUNhjuNSUh856w9HUz9D5ZSr2g==
-X-Received: by 2002:a05:600c:2e87:b0:3e0:1a9:b1f5 with SMTP id p7-20020a05600c2e8700b003e001a9b1f5mr19081636wmn.28.1676302725704;
-        Mon, 13 Feb 2023 07:38:45 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id f24-20020a05600c491800b003dc0cb5e3f1sm13408900wmp.46.2023.02.13.07.38.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 07:38:45 -0800 (PST)
-Date:   Mon, 13 Feb 2023 18:38:40 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Steen Hegelund <steen.hegelund@microchip.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, UNGLinuxDriver@microchip.com,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        Nathan Huckleberry <nhuck@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Daniel Machon <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH net-next 02/10] net: microchip: sparx5: Clear rule
- counter even if lookup is disabled
-Message-ID: <Y+pZgFMDNrxxaSS9@kadam>
-References: <20230213092426.1331379-1-steen.hegelund@microchip.com>
- <20230213092426.1331379-3-steen.hegelund@microchip.com>
- <Y+ofJK2psEnj9QNh@kadam>
- <c5920cb1f3db053c705a988cf484bbbaa5c3dcfa.camel@microchip.com>
- <Y+pR4RZ8wJYFgSHL@kadam>
- <54791f7d5e4211b03a53e890a5d8a678039bec6d.camel@microchip.com>
+        Mon, 13 Feb 2023 10:40:27 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC24199E0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:40:26 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DB5991EC084F;
+        Mon, 13 Feb 2023 16:40:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1676302824;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=4TRupHnFjeMvnO7QDOkILwpoL1QEwksRw5s9PnBJfLs=;
+        b=JrEvIvHD+vdSaI76bbch/cu722qHGonEQCUC82ght6YD4pc+q+ugBDYMiBxbKoFhMuoN8N
+        jjtSeL+onVeGYeSQt7NRmcwaoCCM2cuhalgHYYvGz2313M84F32M0fLQCPJJ098GPw76CC
+        Cyj5NlzMWXhwPNFIEzv6pw+Fz8Dy5NU=
+Date:   Mon, 13 Feb 2023 16:40:21 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        lists@nerdbynature.de, mikelley@microsoft.com,
+        torvalds@linux-foundation.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
+ defined MTRRs
+Message-ID: <Y+pZ5ccprqequvpE@zn.tnic>
+References: <20230209072220.6836-1-jgross@suse.com>
+ <20230209072220.6836-3-jgross@suse.com>
+ <Y+ohfE/wICFKO/93@zn.tnic>
+ <6257114d-a957-f586-145c-d2a885417360@suse.com>
+ <Y+pRK6a419jenR9R@zn.tnic>
+ <Y+pTDFQlX9qNL35z@zn.tnic>
+ <85de8576-05b7-400d-6020-7dba519c1d2e@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <54791f7d5e4211b03a53e890a5d8a678039bec6d.camel@microchip.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <85de8576-05b7-400d-6020-7dba519c1d2e@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 04:32:21PM +0100, Steen Hegelund wrote:
-> There are two writes to the 792 address as the counter recides with the start of
-> the rule (the lowest address of the rule).  Instead of being written after the
-> rule, it is now being written before the rule, so the test array that records
-> the order of the write operations gets changed.
-> 
-> The is2_admin.last_used_addr on the other hand records the "low water mark" of
-> used addresses in the VCAP instance, so it does not change as the rule size is
-> the same.
+On Mon, Feb 13, 2023 at 04:18:48PM +0100, Juergen Gross wrote:
+> Yes, you still could construct cases where it would go wrong, but I don't
+> think we should over-engineer it.
 
-That explains it.  Thanks!
+Actually, we should allow only those for which we know they get special
+treatment for MTRRs settings and warn for all the rest.
 
-regards,
-dan carpenter
+And judging by Dave's reply, I think TDX should be in that category too
+since it throws #VEs...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
