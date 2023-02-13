@@ -2,115 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2D7694B8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:45:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F949694B87
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:45:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbjBMPpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:45:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58864 "EHLO
+        id S230367AbjBMPpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:45:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbjBMPpE (ORCPT
+        with ESMTP id S231220AbjBMPo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:45:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88ADF193E5;
-        Mon, 13 Feb 2023 07:45:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10A1E6118C;
-        Mon, 13 Feb 2023 15:45:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B4F9C433EF;
-        Mon, 13 Feb 2023 15:44:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676303101;
-        bh=3TCnaksRiCFT0Z0YvJMH4En9wOOliKkX6mIfVxch1/U=;
-        h=From:To:Cc:Subject:Date:From;
-        b=oYFoV1C5N4+99kOQgjte+Mu1C4C1loYygKcOeGLooD+7IDAvMRWOffEe4OTZYtGYX
-         PzZnFN6/AMPLYvxYrnkkazkkqLSskGo7Xl0mSO1FNKJBPdlUiTRfGSVf3v+nWoOtk6
-         U8Oxds2TR89PHDtjOqGDuNyYVD0oQmmEAHBlRT9NdcEIePxQgazWKnu8H2qZSODwKp
-         qFYxSU8p3IXWX1Jok49Y+3glLsUuIunphcHLOe1nGWgJn9d3bhCQcmrf1SWhHIV1tw
-         sqW5rA9NWOHKgiKYunURqRH8yq0cCpQ7ryVTEQAxzekI3XXNKXQilk2Tqb+SkUtbvG
-         IwoAiICoybG2g==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v3] docs/mm: Physical Memory: add example of interleaving nodes
-Date:   Mon, 13 Feb 2023 17:44:47 +0200
-Message-Id: <20230213154447.1631847-1-rppt@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Mon, 13 Feb 2023 10:44:59 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3E4193ED;
+        Mon, 13 Feb 2023 07:44:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676303098; x=1707839098;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xlBf3u2jIImE6JHKLtR/28/lGgiDloE+1ryfEFZJMy0=;
+  b=bJ0a39FmTWi6vMrRwXso1Ix2IoUOj6ddqF1gDCjKp3vQ+Aw3lduE/GiR
+   MiaxMsNV2yndYqEcvpH3qbDV4j2GTUrFi9B3qv2cJV1KIzJ1V2Rx5bH+A
+   rLC/sT3WJkWILaV+iY0rfSChl+5OjuzFqu//8d+VwrUdJBLnnA0nPQqFP
+   pGWuV1wJgcg5DnjTT2ILDtH1+NCF1QA2/RmJOWrbYYqJ3U2mRBh7RDa+W
+   6Z6wjkODv7WcCNCVVieU3Jkzxn8HSABtZcZRXhYqOBuFOfFLnekLJRz66
+   5h1OuZDum2YPD3mPMDZ4jgLcOPmCGkfzDyokR2T5FIZeoFT8S50pMDDy1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="318938337"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="318938337"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 07:44:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="618682262"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="618682262"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 13 Feb 2023 07:44:55 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 0D42E1A6; Mon, 13 Feb 2023 17:45:34 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 0/5] pinctrl: at91: Cleanups
+Date:   Mon, 13 Feb 2023 17:45:27 +0200
+Message-Id: <20230213154532.32992-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+The kasprintf() patch makes me look into the driver code and besides
+missed fix, there is a room to improve. Hence this series.
 
-Add an example of memory layout with interleaving nodes where even memory
-banks belong to node 0 and odd memory banks belong to node 1
+Compile tested only.
 
-Suggested-by: Michal Hocko <mhocko@kernel.org>
-Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
----
+Changes in v2:
+- fixed compilation errors (LKP)
 
-v3:
-* Fix typos and wording (Matthew) 
+Andy Shevchenko (5):
+  pinctrl: at91: use devm_kasprintf() to avoid potential leaks (part 2)
+  pinctrl: at91: Don't mix non-devm calls with devm ones
+  pinctrl: at91: Use of_device_get_match_data()
+  pinctrl: at91: Use dev_err_probe() instead of custom messaging
+  pinctrl: at91: Utilise temporary variable for struct device
 
-v2: https://lore.kernel.org/all/20230212095445.1311627-1-rppt@kernel.org
-* Wording update (Bagas)
-* Add forgotten Suggested-by
+ drivers/pinctrl/pinctrl-at91.c | 164 ++++++++++++++-------------------
+ 1 file changed, 67 insertions(+), 97 deletions(-)
 
-v1: https://lore.kernel.org/all/20230211102207.1267058-1-rppt@kernel.org
- Documentation/mm/physical_memory.rst | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
-
-diff --git a/Documentation/mm/physical_memory.rst b/Documentation/mm/physical_memory.rst
-index 3f3c02aa6e6e..863ddcd0b291 100644
---- a/Documentation/mm/physical_memory.rst
-+++ b/Documentation/mm/physical_memory.rst
-@@ -114,6 +114,25 @@ RAM equally split between two nodes, there will be ``ZONE_DMA32``,
-   |  DMA32  |  NORMAL  |  MOVABLE  | |   NORMAL   |   MOVABLE   |
-   +---------+----------+-----------+ +------------+-------------+
- 
-+
-+Memory banks may belong to interleaving nodes. In the example below an x86
-+machine has 16 Gbytes of RAM in 4 memory banks, even banks belong to node 0
-+and odd banks belong to node 1::
-+
-+
-+  0              4G              8G             12G            16G
-+  +-------------+ +-------------+ +-------------+ +-------------+
-+  |    node 0   | |    node 1   | |    node 0   | |    node 1   |
-+  +-------------+ +-------------+ +-------------+ +-------------+
-+
-+  0   16M      4G
-+  +-----+-------+ +-------------+ +-------------+ +-------------+
-+  | DMA | DMA32 | |    NORMAL   | |    NORMAL   | |    NORMAL   |
-+  +-----+-------+ +-------------+ +-------------+ +-------------+
-+
-+In this case node 0 will span from 0 to 12 Gbytes and node 1 will span from
-+4 to 16 Gbytes.
-+
- .. _nodes:
- 
- Nodes
-
-base-commit: e076f253283c3e55a128fa9665c0e6cd8146948d
 -- 
-2.35.1
+2.39.1
 
