@@ -2,110 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA57C694681
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BE669468F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:08:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbjBMNGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 08:06:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47084 "EHLO
+        id S230403AbjBMNIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 08:08:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBMNGM (ORCPT
+        with ESMTP id S230135AbjBMNIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 08:06:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E7F15CB8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:05:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676293536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OYkTV4tyLAcRG/rU/+4tGzBQIIPIsZ3hjAeuxGShtI0=;
-        b=bYEeZDrYXgZyTSI/uY/LEC0WLAG4eVLkZvXhz2oUZnBpiM7WW4/xpyyYrUjqiwOgo7ij2L
-        cHS9qlthIOLVCj9/iImAvF4STIj7wFhwTeBYyOGhJX57jbmMSdsMghQ0RFmkalR49z2IPl
-        daPcRgyGULxBhJzTQbXdcWgS3+ACAzQ=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-271-pwZhr5-vMCq3I_ogz6Mfng-1; Mon, 13 Feb 2023 08:05:35 -0500
-X-MC-Unique: pwZhr5-vMCq3I_ogz6Mfng-1
-Received: by mail-wr1-f72.google.com with SMTP id i1-20020adfa501000000b002c54aaa28dcso1475732wrb.16
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:05:35 -0800 (PST)
+        Mon, 13 Feb 2023 08:08:11 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE4416AE9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:08:09 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id a10so12760487edu.9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:08:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4AVcCCcYCu1fsMnLX3/oSK0Cfjy5k3u75GS4x79cKTs=;
+        b=tz0310KlBh5GPVmktnvrXetOzJbccq8d0VOEa29VycTzE8TFMdVcbAZkrZqHvpQ6E5
+         /mPBiEb61U5uICRbNb8ohFRT/hEed0y7fBhwHDJuH0oK4Vpub7OsMefusyxcrwbQEb51
+         lfap9Mb/wS6+t4S5EnJrw1yV+OHGXooglTLYGKs/h21Fh7GTjAa4ThRKOUe8G8FFb4cV
+         kmXhKdCYK/rsOsSnlDvqXUXk1orQ9DZTZie/o0LcKa2P0VEaY7jqO0T1r3EZZPSsgBE1
+         dKxoASAUcwKvJd/PLFxhCSZIUyDI9r/BVeVmL0wSQc8JaqmCQ03TQ04KrDBjRzBi+YUU
+         xhzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OYkTV4tyLAcRG/rU/+4tGzBQIIPIsZ3hjAeuxGShtI0=;
-        b=yJndFUG494w1SPtJLVvNvdZ2lamdstsm5EWnQfiEvHJqCy9g1D7xkqHAOCyFcZykX0
-         tRT84uB/3YQswibWVQA0FxAGty5IhxgBJ8G13olBALNiuQr7Z9cGsApt7qW6GuoRSW6n
-         tzYYYJt8GNbmv+B6pwXhtutmyT/PaIPxdC6j97GT3VEBSV4wZcO5Rx4ztsERU7gRHoZ7
-         Dpf0n21ZX2qClwRmt1bFyigvn1Ea/iVQiTPfh90yx8zWoufuJJ/+H2RzFM8NWcn3ZJnG
-         xl/lc/QXTqGK5RsPprkFZ+jRoeIUc+eVIxMXGQ2RVONBdHijP1nFmbfGU2MMd+TwquvI
-         V19g==
-X-Gm-Message-State: AO0yUKUaKqjS+E3Hw2aLV7sw+b9pOw48yJ2+U/Nkb3g8l2xSTd01pwys
-        bzRy8IJsK8Lwn0/J/wfw4S7EGorJ82TUs0LGWXfUs756v+vOekCW5yfETUh/g7ozWWxeilHdEzI
-        4MSJBa1DtAoEFzKSL6NpRi38XtTYQZw==
-X-Received: by 2002:a05:600c:16c5:b0:3d6:ecc4:6279 with SMTP id l5-20020a05600c16c500b003d6ecc46279mr19035307wmn.27.1676293534253;
-        Mon, 13 Feb 2023 05:05:34 -0800 (PST)
-X-Google-Smtp-Source: AK7set8FPuXkfVk83D9UQRYyECQ/K1rXbN2t+4k28Kku0b12C+mK4WR0jl69pa62ChZt11IwVmoBDA==
-X-Received: by 2002:a05:600c:16c5:b0:3d6:ecc4:6279 with SMTP id l5-20020a05600c16c500b003d6ecc46279mr19035293wmn.27.1676293534095;
-        Mon, 13 Feb 2023 05:05:34 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id k12-20020a7bc40c000000b003dfe549da4fsm16701912wmi.18.2023.02.13.05.05.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 05:05:33 -0800 (PST)
-Message-ID: <f8ec5586-7ac1-be33-76d8-48b62c253465@redhat.com>
-Date:   Mon, 13 Feb 2023 14:05:33 +0100
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4AVcCCcYCu1fsMnLX3/oSK0Cfjy5k3u75GS4x79cKTs=;
+        b=yP6rTIAgBy3xrDbsvDwap3KQyrlle5gRxK2wDJLP0nYPwmVtvX9UcRsJ9sp20xNQ1z
+         OLghnemR7ntcFb/d5ExPrWNDPge8APG8YQIfj9xtZo7cjvH+lh2aMLgj/1bYFwgm1ULQ
+         TL/Dqee5Ti/K1PtEBBy5JCTmJT7+kSNvgG6964FSMbeCnO6S9YZk5p8DVYtCdyDlluFG
+         T+G2ogh6Z1k1S7II7f5yJDTVllSiblJvA7VB+3waRGTHoj3c/3HdRXlojO0cyhdF/nOa
+         8IpdYkp+MBBNB9aQt8fl+Qx6/JcOVE0idZmeKUeormoT7DbDD9XiEvq8g0dXNAPfqDiP
+         0tDw==
+X-Gm-Message-State: AO0yUKX5hud2gvo4NE1rNYcY7hd2NmIpzR5ZLG7ZRdxzngfP7mjE4uHG
+        vQ/qvaIj/N55SE9g1ek8hXRTNg==
+X-Google-Smtp-Source: AK7set+DrDzcNW1MQoBQpzKs+ALuGsDq7h4QQMtvYUdTF4DzLCFf2Yo9TYPuGxg4SP/o8FbEb/NDYg==
+X-Received: by 2002:a50:cdc2:0:b0:4ab:d0de:f7ec with SMTP id h2-20020a50cdc2000000b004abd0def7ecmr9027613edj.5.1676293687757;
+        Mon, 13 Feb 2023 05:08:07 -0800 (PST)
+Received: from [172.16.220.87] (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id f22-20020a50a6d6000000b004acc6cbc451sm1616515edc.36.2023.02.13.05.08.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 05:08:07 -0800 (PST)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+X-Google-Original-From: Luca Weiss <luca@z3ntu.xyz>
+Subject: [PATCH v2 0/2] Add pm_runtime support to SM6350 camcc
+Date:   Mon, 13 Feb 2023 14:08:05 +0100
+Message-Id: <20230213-sm6350-camcc-runtime_pm-v2-0-60a507bf3e68@z3ntu.xyz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 4/4] Revert "drm/vc4: hdmi: Enforce the minimum rate at
- runtime_resume"
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>, Emma Anholt <emma@anholt.net>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org
-References: <20230126-rpi-display-fw-clk-cleanup-v1-0-d646ff6fb842@cerno.tech>
- <20230126-rpi-display-fw-clk-cleanup-v1-4-d646ff6fb842@cerno.tech>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20230126-rpi-display-fw-clk-cleanup-v1-4-d646ff6fb842@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIADU26mMC/4WOSw6DIBiEr2JY9zc8FGtXvUdjGkCoLEQCan3Eu
+ xe9QJffTL7M7CjqYHVEj2xHQc822sEloLcMqU64jwbbJkYUU4YpYRB7zkoMSvRKQZjcaHv99j1
+ wVsuqVKwtJEHJliJqkEE41Z2+8QXwnMLX+rP1QRu7XLuvJnFn4ziE9boxkzP9vzgTwFBxYhSvT
+ SXu+LkxN075sm6oOY7jB+dotlHcAAAA
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>
+X-Mailer: b4 0.12.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/26/23 18:05, Maxime Ripard wrote:
-> This reverts commit ae71ab585c819f83aec84f91eb01157a90552ef2.
-> 
-> Commit ae71ab585c81 ("drm/vc4: hdmi: Enforce the minimum rate at
-> runtime_resume") was introduced to work around an issue partly due to
-> the clk-bcm2835 driver on the RaspberryPi0-3.
-> 
-> Since we're not using that driver for our HDMI clocks, we can now revert
-> it.
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> ---
+As pointed out during patch review, we should make sure that we turn on
+the CX power domain when camcc is in use, and also disable it (or remove
+our vote on it) when camcc is not in use.
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+For this add pm_runtime support to the driver and stick the power-domain
+in the devicetree.
 
--- 
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+Changes in v2:
+- no change resend since I messed up To/CC in the initial submission
+- Link to v1: https://lore.kernel.org/r/20230213-sm6350-camcc-runtime_pm-v1-0-761fc69f7a80@z3ntu.xyz
+
+---
+Luca Weiss (2):
+      clk: qcom: camcc-sm6350: add pm_runtime support
+      arm64: dts: qcom: sm6350: add power domain to camcc
+
+ arch/arm64/boot/dts/qcom/sm6350.dtsi |  2 ++
+ drivers/clk/qcom/camcc-sm6350.c      | 29 ++++++++++++++++++++++++++++-
+ 2 files changed, 30 insertions(+), 1 deletion(-)
+---
+base-commit: 09e41676e35ab06e4bce8870ea3bf1f191c3cb90
+change-id: 20230213-sm6350-camcc-runtime_pm-639b75c3d4b1
+
 Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+-- 
+Luca Weiss <luca@z3ntu.xyz>
 
