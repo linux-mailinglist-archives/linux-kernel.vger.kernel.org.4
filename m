@@ -2,142 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C4069456D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7716469459A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:15:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbjBMMLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 07:11:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51336 "EHLO
+        id S230430AbjBMMPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 07:15:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbjBMMKn (ORCPT
+        with ESMTP id S230431AbjBMMPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 07:10:43 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FAB3C08
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:10:28 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id n33so2533925wms.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:10:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9MaV0V+7vWugnBV1ToolFUuuNSy4tV5osQNFJ4N+ljw=;
-        b=PSq69g92d9LKqQNBdzaFMIQ7WRDNvGmXjHLTpbtOKyT2QNfe95h38EVbbFa2G7UcLy
-         zDV/EnTJamYgnLq5t2KbZbVASQKaOmVvWl7MKSQaZ4NgWBpCpDh1unROKzC/rXmx84mx
-         /lM82PfGy7AvlhpdvQpFZIg2rLTuo0MLHwI6aI08XH94aIKVl6maSc0h4F+bsxoAeyE/
-         NdQ4W8G0uUvEgEWOFdqxXDT+4RzkO4PAlleJ/PD0fsj3fQ6bRnCx4GiYBbU2poycHkyc
-         mSzLgbc/xrj83O52tTAIYVsvS/p+Eb5fUubGXsy+2igGi/Uz1SAoiZgTU8NVeEBFuRrC
-         7LqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9MaV0V+7vWugnBV1ToolFUuuNSy4tV5osQNFJ4N+ljw=;
-        b=vdWKlVpTQ7Z0Jgg/otALnPl+JG1DDv7QKyfPRWHIQ6PL9ku7QGzauzf4jyz5AJXI4y
-         tz20rG6bX5RTXjpL58Ak1p0MtRivmEA/olrHEciY5OLTA8H2TTvjxXNwrWDoy7il7KqH
-         +pJb35xqyHLaaBq73F3EwuDXZeqBey9bZUENNHKXdRxsncdK7tZFCP2SnwQOyTqwvUmE
-         ZxXNe1SwRw/oWqFboSUh2CJ5vfMxTLyu2V6WggtRuMIRbnwvDD0VkODDn/FMlCIw7Scq
-         MDWmdPsggzzm5GrtagE6Zrrl38w/Ay3bet/WMZ2DeLx7l9vzZgPpFwChX2wk7dSN9dwN
-         D/8g==
-X-Gm-Message-State: AO0yUKWMH/kVursOssF1mWSFQZYAO8LRhulbeyptyPt/1TX3gbnhBfOv
-        9t8A+tDrUSdKUxQA/VyD0wA8Jg==
-X-Google-Smtp-Source: AK7set8bQ8INp/EJISlse7CDCP/1ExXeTUzaodeinMKBFLAToTqtqUVeMmw/ZfxSvpikfwKgdgrKsg==
-X-Received: by 2002:a05:600c:a295:b0:3dd:1bcc:eb17 with SMTP id hu21-20020a05600ca29500b003dd1bcceb17mr18735513wmb.28.1676290224741;
-        Mon, 13 Feb 2023 04:10:24 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id c15-20020adffb4f000000b002c5441dae62sm9119007wrs.17.2023.02.13.04.10.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 04:10:24 -0800 (PST)
-Message-ID: <dfb765a1-a2bd-c5e3-344a-b368fad6d8de@linaro.org>
-Date:   Mon, 13 Feb 2023 13:10:23 +0100
+        Mon, 13 Feb 2023 07:15:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60CA61AC
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:14:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676290444;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JS2FDTuOjv2Le4G4QixbRk8YLbH9ift3dEt6zZjeAc0=;
+        b=Ou1s2uuuPujwQ5qjM5ovkx0NO4qOBUUfI6alKO5nca2xoGhXhzroJJRpM8RO8hJgyNSI65
+        cDGgipSFbHDZUIY1Sz1I47QbMgUSelrPtZl69LEYRCnpFQX9WKlr3e206UFZOU1HFJc9R/
+        mf8hhVIOM4qu7H5FY6f6leKMWV26dLM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-541-YgAGbZbwNbKdit2YfL_Pkg-1; Mon, 13 Feb 2023 07:14:00 -0500
+X-MC-Unique: YgAGbZbwNbKdit2YfL_Pkg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D23533806739;
+        Mon, 13 Feb 2023 12:13:59 +0000 (UTC)
+Received: from fedora (unknown [10.22.32.207])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 92D51492B03;
+        Mon, 13 Feb 2023 12:13:56 +0000 (UTC)
+Date:   Mon, 13 Feb 2023 09:13:55 -0300
+From:   Wander Lairson Costa <wander@redhat.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Hu Chunyu <chuhu@redhat.com>, Oleg Nesterov <oleg@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>
+Subject: Re: [PATCH v5] kernel/fork: beware of __put_task_struct calling
+ context
+Message-ID: <20230213121355.z3guvrrbg5onryqa@fedora>
+References: <20230210161323.37400-1-wander@redhat.com>
+ <Y+Z8uqzJQOMahKWH@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 02/17] dt-bindings: arm: apple: apple,pmgr: Add t8112-pmgr
- compatible
-Content-Language: en-US
-To:     Janne Grunau <j@jannau.net>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Kettenis <kettenis@openbsd.org>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230202-asahi-t8112-dt-v1-0-cb5442d1c229@jannau.net>
- <20230202-asahi-t8112-dt-v1-2-cb5442d1c229@jannau.net>
- <5ebf96d9-689a-f915-29b8-31af891fc63f@linaro.org>
- <20230213115741.GA17933@jannau.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230213115741.GA17933@jannau.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+Z8uqzJQOMahKWH@linutronix.de>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/02/2023 12:57, Janne Grunau wrote:
-> On 2023-02-13 12:10:36 +0100, Krzysztof Kozlowski wrote:
->> On 12/02/2023 16:41, Janne Grunau wrote:
->>> The block on Apple M2 SoCs is compatible with the existing driver so
->>> just add its per-SoC compatible.
->>>
->>> Signed-off-by: Janne Grunau <j@jannau.net>
->>>
->>> ---
->>> This trivial dt-bindings update should be merged through the asahi-soc
->>> tree to ensure validation of the Apple M2 (t8112) devicetrees in this
->>> series.
->>
->> No, the bindings go via subsystem. Just because you want to validate
->> something is not really a reason - you can validate on next. Don't
->> create special rules for Asahi... or rather - why Asahi is special than
->> everyone else?
+On Fri, Feb 10, 2023 at 06:19:54PM +0100, Sebastian Andrzej Siewior wrote:
+> On 2023-02-10 13:13:21 [-0300], Wander Lairson Costa wrote:
+> > Under PREEMPT_RT, __put_task_struct() indirectly acquires sleeping
+> > locks. Therefore, it can't be called from an non-preemptible context.
+> > 
+> > One practical example is splat inside inactive_task_timer(), which is
+> > called in a interrupt context:
+> > 
+> > CPU: 1 PID: 2848 Comm: life Kdump: loaded Tainted: G W ---------
+> >  Hardware name: HP ProLiant DL388p Gen8, BIOS P70 07/15/2012
+> >  Call Trace:
+> >  dump_stack_lvl+0x57/0x7d
+> >  mark_lock_irq.cold+0x33/0xba
+> >  ? stack_trace_save+0x4b/0x70
+> >  ? save_trace+0x55/0x150
+> >  mark_lock+0x1e7/0x400
+> >  mark_usage+0x11d/0x140
+> >  __lock_acquire+0x30d/0x930
+> >  lock_acquire.part.0+0x9c/0x210
+> >  ? refill_obj_stock+0x3d/0x3a0
+> >  ? rcu_read_lock_sched_held+0x3f/0x70
+> >  ? trace_lock_acquire+0x38/0x140
+> >  ? lock_acquire+0x30/0x80
+> >  ? refill_obj_stock+0x3d/0x3a0
+> >  rt_spin_lock+0x27/0xe0
+> >  ? refill_obj_stock+0x3d/0x3a0
+> >  refill_obj_stock+0x3d/0x3a0
+> >  ? inactive_task_timer+0x1ad/0x340
+> >  kmem_cache_free+0x357/0x560
+> >  inactive_task_timer+0x1ad/0x340
+> >  ? switched_from_dl+0x2d0/0x2d0
+> >  __run_hrtimer+0x8a/0x1a0
+> >  __hrtimer_run_queues+0x91/0x130
+> >  hrtimer_interrupt+0x10f/0x220
+> >  __sysvec_apic_timer_interrupt+0x7b/0xd0
+> >  sysvec_apic_timer_interrupt+0x4f/0xd0
+> >  ? asm_sysvec_apic_timer_interrupt+0xa/0x20
+> >  asm_sysvec_apic_timer_interrupt+0x12/0x20
+> >  RIP: 0033:0x7fff196bf6f5
 > 
-> We did that 2 or 3 times in the past without commnts that it is not 
-> desired so I wasn't aware that this would be special handling.
+> Now that I looked around: There are other put_task_struct() while the rq
+> lock is held. I didn't look outside o dl.c.
 > 
-> Merging binding and devicetree updates together looks to me like the 
-> most sensible option since dtbs validation is the only testable 
-> dependecy of dt binding updates.
-
-But it is not the recommended practice. Bindings were always going with
-drivers and this was said by Rob multiple times.
-
-For sure if there is no driver update at all or subsystem maintainer is
-not responsive, bindings were picked up by SoC folks, but it's rather
-fallback, not the main path.
-
-> Keeping them together ensures the dtbs validate without delaying 
-> devicetree changes by one kernel release after the dt-bindings change 
-> was merged.
-
-dtbs will validate on next and in next release the same way if bindings
-go via subsystem. I don't see the benefit nor any difference for
-validation. What type of delay? Why would you ever need it?
-
-> I suppose it works out most of the time if the merge request is sent 
-> only if it validates in next. That still depends on the merge order in 
-> the merge window but -rc1 should be fine.
-
-There is no requirement of dtbs_check for bisectability. Bindings are
-separate (also exported to other users), thus it is expected to have
-here async.
-
+> > Instead of calling __put_task_struct() directly, we defer it using
+> > call_rcu(). A more natural approach would use a workqueue, but since
+> > in PREEMPT_RT, we can't allocate dynamic memory from atomic context,
+> > the code would become more complex because we would need to put the
+> > work_struct instance in the task_struct and initialize it when we
+> > allocate a new task_struct.
+> > 
+> > Changelog
+> > =========
+> > 
+> > v1:
+> > * Initial implementation fixing the splat.
+> > 
+> > v2:
+> > * Isolate the logic in its own function.
+> > * Fix two more cases caught in review.
+> > 
+> > v3:
+> > * Change __put_task_struct() to handle the issue internally.
+> > 
+> > v4:
+> > * Explain why call_rcu() is safe to call from interrupt context.
+> > 
+> > v5:
+> > * Explain why __put_task_struct() doesn't conflict with
+> >   put_task_sruct_rcu_user.
+> > 
+> > Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+> > Reported-by: Hu Chunyu <chuhu@redhat.com>
+> > Suggested-by: Oleg Nesterov <oleg@redhat.com>
+> > Suggested-by: Valentin Schneider <vschneid@redhat.com>
+> > Cc: Paul McKenney <paulmck@kernel.org>
+> > ---
+> >  kernel/fork.c | 33 ++++++++++++++++++++++++++++++++-
+> >  1 file changed, 32 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/fork.c b/kernel/fork.c
+> > index 9f7fe3541897..9bf30c725ed8 100644
+> > --- a/kernel/fork.c
+> > +++ b/kernel/fork.c
+> > @@ -840,7 +840,7 @@ static inline void put_signal_struct(struct signal_struct *sig)
+> >  		free_signal_struct(sig);
+> >  }
+> >  
+> > -void __put_task_struct(struct task_struct *tsk)
+> > +static void ___put_task_struct(struct task_struct *tsk)
+> >  {
+> >  	WARN_ON(!tsk->exit_state);
+> >  	WARN_ON(refcount_read(&tsk->usage));
+> > @@ -857,6 +857,37 @@ void __put_task_struct(struct task_struct *tsk)
+> >  	sched_core_free(tsk);
+> >  	free_task(tsk);
+> >  }
+> > +
+> > +static void __put_task_struct_rcu(struct rcu_head *rhp)
+> > +{
+> > +	struct task_struct *task = container_of(rhp, struct task_struct, rcu);
+> > +
+> > +	___put_task_struct(task);
+> > +}
+> > +
+> > +void __put_task_struct(struct task_struct *tsk)
+> > +{
+> > +	if (IS_ENABLED(CONFIG_PREEMPT_RT) && (!preemptible() || !in_task()))
 > 
-> I'll consider devicetree validation as eventually valid from now on and 
-> not care too much about it.
+> No. If you do this on non-RT kernel with CONFIG_PROVE_RAW_LOCK_NESTING
+> then it will complain. And why do we have in_task() here?
+> 
 
-Everything will validate once reaches next as well...
+Initially I thought you were saying it would cause a build failure, but
+I built the kernel successfully with CONFIG_PROVE_RAW_LOCK_NESTING.
+If it is a non-RT kernel, I understand the optimizer will vanish with
+the `if` clause. Would mind further explaining the conflict with
+CONFIG_PROVE_RAW_LOCK_NESTING?
 
-Best regards,
-Krzysztof
+The `!in_task()` call is to test if we are in interrupt context.
+
+> If Oleg does not want the unconditional RCU then I would prefer an
+> explicit put task which delays it to RCU for the few users that need it.
+> 
+
+Do you mean like the approach in v2[1]? I believe to spot all possible
+problematic scenarios, would should add
+
+```
+if (IS_ENABLED(CONFIG_PREEMPT_RT))
+    might_sleep();
+```
+
+to `put_task_struct()`.
+
+> A lockdep annotation _before_ ___put_task_struct() should spot users
+> which are not obviously visible from audit.
+> 
+> > +		/*
+> > +		 * under PREEMPT_RT, we can't call put_task_struct
+> > +		 * in atomic context because it will indirectly
+> > +		 * acquire sleeping locks.
+> > +		 *
+> > +		 * call_rcu() will schedule delayed_put_task_struct_rcu()
+> > +		 * to be called in process context.
+> > +		 *
+> > +		 * __put_task_struct() is called called when
+> > +		 * refcount_dec_and_test(&t->usage) succeeds.
+> > +		 *
+> > +		 * This means that it can't "conflict" with
+> > +		 * put_task_struct_rcu_user() which abuses ->rcu the same
+> > +		 * way; rcu_users has a reference so task->usage can't be
+> > +		 * zero after rcu_users 1 -> 0 transition.
+> > +		 */
+> > +		call_rcu(&tsk->rcu, __put_task_struct_rcu);
+> > +	else
+> > +		___put_task_struct(tsk);
+> > +}
+> >  EXPORT_SYMBOL_GPL(__put_task_struct);
+> >  
+> >  void __init __weak arch_task_cache_init(void) { }
+> > -- 
+> > 2.39.1
+> > 
+> 
+
+[1] https://lore.kernel.org/all/20230120150246.20797-1-wander@redhat.com/
 
