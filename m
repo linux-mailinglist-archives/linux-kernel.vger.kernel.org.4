@@ -2,106 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E106954BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 00:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F4C6954B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 00:25:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230412AbjBMXZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 18:25:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39328 "EHLO
+        id S230364AbjBMXZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 18:25:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230367AbjBMXZl (ORCPT
+        with ESMTP id S229485AbjBMXZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 18:25:41 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722F2DF
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 15:25:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676330740; x=1707866740;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Q+6NmF77p8sTxc2oOJDBN5pNjGanYhbtPu7jvoRKnv8=;
-  b=OcbLMhXvyREifxkmuo+kBodqZJRTmS4jvU5gJMMeOu/sVGmVGupxFN1b
-   KHPOGN6HHt+YwKX9RsmNuUgFXSBcShmsAON8mtEPXnZfK3UU6cb4HzfJO
-   tZHmNlaECezLNkLBG0bwAfng5KbEqVtLglpOdsFhpcjNIv1bz+MPAcVFU
-   7H5xvp8d1cs9XtXohGPjtAv2PeRIjgn9RBH0nu3YNQfckxmLn/uiDmnL0
-   NcV5i9XgeiH+KLg0nEvlRJdh/UPAMCS8yq8oyy6hS20ZAepaaqslkl5KN
-   ovJCC6Bq7xFuGUweHMsvvAzqPQxTAuzqZX5AP78Fik+v0V5kViFbkrMi0
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="393426031"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="393426031"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 15:25:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="997862194"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="997862194"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 13 Feb 2023 15:25:38 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pRiCX-00083r-36;
-        Mon, 13 Feb 2023 23:25:37 +0000
-Date:   Tue, 14 Feb 2023 07:24:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bitterblue Smith <rtl8821cerfe2@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Kalle Valo <kvalo@kernel.org>
-Subject: drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c:1580
- rtl8xxxu_print_chipinfo() warn: always true condition '(priv->chip_cut <=
- 15) => (0-15 <= 15)'
-Message-ID: <202302140753.71IgU77A-lkp@intel.com>
+        Mon, 13 Feb 2023 18:25:10 -0500
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE329D;
+        Mon, 13 Feb 2023 15:25:09 -0800 (PST)
+Received: by mail-oo1-xc35.google.com with SMTP id b10-20020a4a9fca000000b004e6f734c6b4so1361345oom.9;
+        Mon, 13 Feb 2023 15:25:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VG4M2FiCWZdfBc3bqex6t22oymKlU4aiV0BoUciV/7M=;
+        b=qfyyNtPm5aX7849RxnBVXfrh86MGk3uGh71xTAWWzX0BQDeHD4dtKDsFxHFd3sd19B
+         jzR00FFEPFNhBVZPg9OQHDn/HovTBm0SKeSl24J2xMrFbp+l45XQsRMgiBjAcL5dvozG
+         T2tbzV9KndhVMWvHizmqwZPgZjK+6OkQfWDWOW9TNu1iSE/cG8qiXJa6OTkzwMPHVcHl
+         YUZleisxw8iJie3JU5I9PSs9AJ3Ld0iVyv9O4Ttokp1VirSkhS+QQYPxFAtQT3GfE6m7
+         G8CEBsjdeHz4esXS6haAu9twfGKui5r0wfsDKjTSODzG/QRN3ztpyZjeiraPww70Hsek
+         jquQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VG4M2FiCWZdfBc3bqex6t22oymKlU4aiV0BoUciV/7M=;
+        b=2lm1LA71mOxxAklUjn2rjCGz8jwFFVSfVxZHwqFZPaBno1fFPsoa0LVHtK/X3Vlx7L
+         qtmWgVzQ4JU0sY/s26M7MQ2VKUoMy025xYj7kcaisqLvT3wyAr12Fb43qkT6nB3Lzp3B
+         RHtqk6VDXdU1xdBy5U5NDLDbIAm4mSIQA27msNniWORSatt8Vtyjy9tMJo/LHI9EnA6v
+         e81uxrRX0rYj1poXByzJf+3yitCeecwJEifK9KBoO+/MxPlEkm5y+0aeMI9LpbAPaZiE
+         TNqYVK/9lOXM4qayIUe6lLfKer+4gPVN80M0i98jG+0KMIFxM2xGxUtvjZsZopSqnJ56
+         hRGQ==
+X-Gm-Message-State: AO0yUKXu0nnUSrUAtU/FtkvF0clWPsugQUh5DP8KTK1VeRwGQsRS+Xqe
+        pqQJ/4C96CFK+e9y9bABtI7B36S4qnk=
+X-Google-Smtp-Source: AK7set/qALlndimeA9x3BBcoDg5VbwZLy8QzB7Xmc0UELSi3M7hFIniw3as3t//wHc5jLfC1GLOCbQ==
+X-Received: by 2002:a4a:8c6e:0:b0:517:8369:23e4 with SMTP id v43-20020a4a8c6e000000b00517836923e4mr10405ooj.0.1676330708821;
+        Mon, 13 Feb 2023 15:25:08 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q14-20020a4a88ce000000b005177c244f31sm5331482ooh.41.2023.02.13.15.25.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 15:25:08 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e9d2baf8-4a70-313d-eebe-f0e4d1646971@roeck-us.net>
+Date:   Mon, 13 Feb 2023 15:25:05 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>
+References: <55e2bef1-e8b5-3475-21df-487bddb47f5b@roeck-us.net>
+ <20230213180632.GA368628@roeck-us.net>
+ <20230209102954.528942-1-dhowells@redhat.com>
+ <20230209102954.528942-4-dhowells@redhat.com>
+ <2416073.1676328192@warthog.procyon.org.uk>
+ <2451113.1676329970@warthog.procyon.org.uk>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v13 03/12] splice: Do splice read from a buffered file
+ without using ITER_PIPE
+In-Reply-To: <2451113.1676329970@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b408817d48840847c00052ae0e02a54311913073
-commit: 7b0ac469e331d9f9fd77f4ebb7a6322f5562db67 wifi: rtl8xxxu: Recognise all possible chip cuts
-date:   3 months ago
-config: x86_64-randconfig-m001-20230213 (https://download.01.org/0day-ci/archive/20230214/202302140753.71IgU77A-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+On 2/13/23 15:12, David Howells wrote:
+> Guenter Roeck <linux@roeck-us.net> wrote:
+> 
+>> Both are initrd.
+> 
+> Do you mean rootfs?  And, if so, is that tmpfs-based or ramfs-based?
+> 
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302140753.71IgU77A-lkp@intel.com/
+Both are provided to the kernel using the -initrd qemu option,
+which usually means that the address/location is passed to the kernel
+through either a register or a data structure. I have not really paid
+much attention to what the kernel is doing with that information.
+It is in cpio format, so it must be decompressed, but I don't know how
+it is actually handled (nor why this doesn't fail on other boots
+from initrd).
 
-New smatch warnings:
-drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c:1580 rtl8xxxu_print_chipinfo() warn: always true condition '(priv->chip_cut <= 15) => (0-15 <= 15)'
+Guenter
 
-Old smatch warnings:
-drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c:5675 rtl8xxxu_c2hcmd_callback() warn: potential spectre issue 'rtl8xxxu_legacy_ratetable' [r] (local cap)
-
-vim +1580 drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-
-  1573	
-  1574	static void rtl8xxxu_print_chipinfo(struct rtl8xxxu_priv *priv)
-  1575	{
-  1576		struct device *dev = &priv->udev->dev;
-  1577		char cut = '?';
-  1578	
-  1579		/* Currently always true: chip_cut is 4 bits. */
-> 1580		if (priv->chip_cut <= 15)
-  1581			cut = 'A' + priv->chip_cut;
-  1582	
-  1583		dev_info(dev,
-  1584			 "RTL%s rev %c (%s) %iT%iR, TX queues %i, WiFi=%i, BT=%i, GPS=%i, HI PA=%i\n",
-  1585			 priv->chip_name, cut, priv->chip_vendor, priv->tx_paths,
-  1586			 priv->rx_paths, priv->ep_tx_count, priv->has_wifi,
-  1587			 priv->has_bluetooth, priv->has_gps, priv->hi_pa);
-  1588	
-  1589		dev_info(dev, "RTL%s MAC: %pM\n", priv->chip_name, priv->mac_addr);
-  1590	}
-  1591	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
