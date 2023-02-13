@@ -2,199 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6871693E3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 07:26:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF49F693E41
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 07:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjBMG0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 01:26:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60938 "EHLO
+        id S229672AbjBMG1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 01:27:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjBMG0A (ORCPT
+        with ESMTP id S229552AbjBMG13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 01:26:00 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4A383EE;
-        Sun, 12 Feb 2023 22:25:59 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id r28so9373539oiw.3;
-        Sun, 12 Feb 2023 22:25:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=WBfrO2gGyOvBRZ1A5wp4UK8YioFxtCNN29YZ0C6yJUM=;
-        b=oDTaHYE7Ifi7cTfoJaBKOA+euRlCFlo+ykP9tRkGsweDWCjfPlRLBkVyxOHGFcmNqc
-         PSZTRHnsx3UreCHv1p9ynDEvrC5nGpdC4VXbwWYrd2yYwCkykGDPLP2SNyHtKIRZ0Fzf
-         m5Q5HPiFjmx/8JH/hVxhNaJo4GLuifz/a00mQ5ccFU5DlCskiDprH6pwoBt/q7h6DDjY
-         XLGT8w6vJ24mYBL9QM1YV+CRlakf167YfDtx3KOo8lkNAunfJWM4pqGoRQPXTLOlgYkl
-         nosLoRl5OZPv9+Xx589w5Zoaba/auqZwvIrVa4S9ZAslff1MJvy24KQ2HNmX2D2e/q/v
-         LF/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WBfrO2gGyOvBRZ1A5wp4UK8YioFxtCNN29YZ0C6yJUM=;
-        b=pV+dDdyLjwdDjUYsiT2uOs7NRNNWuESJ42cbxGukDv/KoT5T58fWmOgKEcwHMlak3V
-         Ahvm/jTDOGT+kwCUFSMLiEcsZsh1UYvgXIY+hrxc1bw9mMzYuhHh0Bf7CTWqZEzqyBf5
-         JVy6yvCysXgcw4hhVY7Z6GjnBB8lNfAJq8+Jy4TGije+BMyYdhhzQlbxGZYflHWQj8yn
-         i9gVkLZJ1/raYwoW7V+jh6PuO2fOFnQLTxAtsGldpFsonpmqFrSoN4vUGmsRIJlLFJQI
-         QUXwsGazqsjMBlFBZk/XybT+NV2S9VIeNNurYei9NGGSnd5wb/M/lpQ6nJ3eEcsY5cw2
-         NkuQ==
-X-Gm-Message-State: AO0yUKXbRmLQTv7S1cV7VKO5yRPyDVYqEjDGB1iqZmQFKdh3t0hW6JeG
-        IFb3l0zLH1OebEoo2lPrX54=
-X-Google-Smtp-Source: AK7set/+6jsdhTf2sJtfJcDHaoQnUg14v4tlGoQakT99S8J8gTSqtG1+VHr+8pC/SE0SaaNJlMokqg==
-X-Received: by 2002:a05:6808:d2:b0:363:b918:643b with SMTP id t18-20020a05680800d200b00363b918643bmr10584927oic.31.1676269558366;
-        Sun, 12 Feb 2023 22:25:58 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id dq3-20020a056808428300b0037d8148cf04sm1851027oib.46.2023.02.12.22.25.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Feb 2023 22:25:57 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8267dc7e-329f-73cf-b50e-9bf2606b8751@roeck-us.net>
-Date:   Sun, 12 Feb 2023 22:25:52 -0800
+        Mon, 13 Feb 2023 01:27:29 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E06E39F
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 22:27:28 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 590E95D8C3;
+        Mon, 13 Feb 2023 06:27:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676269647; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aPL+vaVzX1H6jys+GZ/CFQzZsZFmg1G/CNrZGYV5GNQ=;
+        b=ann0v8rQ/ApQX2b+Ylc6RvBYR9nmiBXLBe2GSQqMdgUkdu63KesgNeoqM/qM9gMrigSTK0
+        UHrcQPw5kF5tMyhXxZVjNFio23WMJlnFKBe77qL2lHF91skpOV5LCMxHN3r5ix0gy2r9fK
+        vxlKEu3/k9MGNL7FW3O3ZUXBIxHq0FY=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0C94F1391B;
+        Mon, 13 Feb 2023 06:27:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id x6iFAU/Y6WMXBQAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 13 Feb 2023 06:27:27 +0000
+Message-ID: <b568c7e0-553c-4747-32c2-d2a25309f2d4@suse.com>
+Date:   Mon, 13 Feb 2023 07:27:26 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 2/4] m68k: use asm-generic/memory_model.h for both MMU
- and !MMU
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
+ defined MTRRs
 Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        x86@kernel.org
-References: <20230129124235.209895-1-rppt@kernel.org>
- <20230129124235.209895-3-rppt@kernel.org>
- <20230212173513.GA4052259@roeck-us.net> <Y+mPJYpVBk1YutDL@kernel.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <Y+mPJYpVBk1YutDL@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Cc:     "lists@nerdbynature.de" <lists@nerdbynature.de>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <20230209072220.6836-1-jgross@suse.com>
+ <20230209072220.6836-3-jgross@suse.com>
+ <BYAPR21MB168857905915E00B29BAFC7ED7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <BYAPR21MB168857905915E00B29BAFC7ED7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------ytCMa8DuorXCqrSOTuKcUpAv"
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/12/23 17:15, Mike Rapoport wrote:
-> Hi,
-> 
-> On Sun, Feb 12, 2023 at 09:35:13AM -0800, Guenter Roeck wrote:
->> Hi,
->>
->> On Sun, Jan 29, 2023 at 02:42:33PM +0200, Mike Rapoport wrote:
->>> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
->>>
->>> The MMU variant uses generic definitions of page_to_pfn() and
->>> pfn_to_page(), but !MMU defines them in include/asm/page_no.h for no
->>> good reason.
->>>
->>> Include asm-generic/memory_model.h in the common include/asm/page.h and
->>> drop redundant definitions.
->>>
->>> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
->>> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
->>> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
->>
->> This patch results in a boot failure when trying to boot the mcf5208evb qemu
->> emulation. Reverting it together with "mm, arch: add generic implementation
->> of pfn_valid() for FLATMEM" fixes the problem. There is no error log - the
->> emulation hangs silently until aborted.
-> 
-> With the patch below I was able to get to the mount of the root file system,
-> but I don't have one, so I couldn't test the boot properly.
-> 
-> diff --git a/arch/m68k/include/asm/page_no.h b/arch/m68k/include/asm/page_no.h
-> index 43ff6b109ebb..060e4c0e7605 100644
-> --- a/arch/m68k/include/asm/page_no.h
-> +++ b/arch/m68k/include/asm/page_no.h
-> @@ -28,6 +28,8 @@ extern unsigned long memory_end;
->   #define	virt_addr_valid(kaddr)	(((unsigned long)(kaddr) >= PAGE_OFFSET) && \
->   				((unsigned long)(kaddr) < memory_end))
->   
-> +#define ARCH_PFN_OFFSET PHYS_PFN(PAGE_OFFSET_RAW)
-> +
->   #endif /* __ASSEMBLY__ */
->   
->   #endif /* _M68K_PAGE_NO_H */
->   
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------ytCMa8DuorXCqrSOTuKcUpAv
+Content-Type: multipart/mixed; boundary="------------yn2Qx4Q01xzWKT7SuWDxeNhU";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "x86@kernel.org" <x86@kernel.org>
+Cc: "lists@nerdbynature.de" <lists@nerdbynature.de>,
+ "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <b568c7e0-553c-4747-32c2-d2a25309f2d4@suse.com>
+Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
+ defined MTRRs
+References: <20230209072220.6836-1-jgross@suse.com>
+ <20230209072220.6836-3-jgross@suse.com>
+ <BYAPR21MB168857905915E00B29BAFC7ED7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
+In-Reply-To: <BYAPR21MB168857905915E00B29BAFC7ED7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
 
-Yes, that works.
+--------------yn2Qx4Q01xzWKT7SuWDxeNhU
+Content-Type: multipart/mixed; boundary="------------rn3w2ivt7ensmUBtxZ2PwmYW"
 
-Thanks,
-Guenter
+--------------rn3w2ivt7ensmUBtxZ2PwmYW
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
->> Guenter
->>
->> ---
->> bisect log:
->>
->> # bad: [6ba8a227fd19d19779005fb66ad7562608e1df83] Add linux-next specific files for 20230210
->> # good: [4ec5183ec48656cec489c49f989c508b68b518e3] Linux 6.2-rc7
->> git bisect start 'HEAD' 'v6.2-rc7'
->> # good: [94613f0efc69ed41f9229ef5c294db3ec37145da] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
->> git bisect good 94613f0efc69ed41f9229ef5c294db3ec37145da
->> # good: [19e62c715fe70dae4582c2874ed3e66715d09af6] Merge branch 'rcu/next' of git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
->> git bisect good 19e62c715fe70dae4582c2874ed3e66715d09af6
->> # good: [5d8b7ecef7f4a681b6e5538db59ff26c389c0ab6] Merge branch 'for-next' of https://gitlab.com/peda-linux/mux.git
->> git bisect good 5d8b7ecef7f4a681b6e5538db59ff26c389c0ab6
->> # good: [c349bf6ec83903b20fe570c5609b9a864a64e09c] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/krisman/unicode.git
->> git bisect good c349bf6ec83903b20fe570c5609b9a864a64e09c
->> # good: [5a06a9f17454df38f35672be522ff5eb9b4277d2] selftest: add testing unsharing and counting ksm zero page
->> git bisect good 5a06a9f17454df38f35672be522ff5eb9b4277d2
->> # bad: [f5d115a7b06e5661ed5218ffa9a2644c4ff1c135] Merge branch 'mm-nonmm-unstable' into mm-everything
->> git bisect bad f5d115a7b06e5661ed5218ffa9a2644c4ff1c135
->> # bad: [acb018d6ea0c055381fba7dddaef386ee28f8075] mm/vmalloc.c: allow vread() to read out vm_map_ram areas
->> git bisect bad acb018d6ea0c055381fba7dddaef386ee28f8075
->> # good: [1a5d9782ac969dc6e61c6786500b5160603188ea] mm/mmap: remove __vma_adjust()
->> git bisect good 1a5d9782ac969dc6e61c6786500b5160603188ea
->> # good: [4b32363697de957dcc890b6245bec3f58903639a] arm: include asm-generic/memory_model.h from page.h rather than memory.h
->> git bisect good 4b32363697de957dcc890b6245bec3f58903639a
->> # bad: [328cf3fa6682ce6a4de6f8bb8009c833dc33f3c8] mm/migrate: convert isolate_movable_page() to use folios
->> git bisect bad 328cf3fa6682ce6a4de6f8bb8009c833dc33f3c8
->> # bad: [b704c765b08cabe82adf76a4d1a74f3688eee410] mm/mempolicy: convert queue_pages_pmd() to queue_folios_pmd()
->> git bisect bad b704c765b08cabe82adf76a4d1a74f3688eee410
->> # bad: [e5734c8b0edfd2a053a5c256189586a3b1e9f63d] mm, arch: add generic implementation of pfn_valid() for FLATMEM
->> git bisect bad e5734c8b0edfd2a053a5c256189586a3b1e9f63d
->> # bad: [ad8aecea034c591b9754bc5908da9719853aa7fa] mips: drop definition of pfn_valid() for DISCONTIGMEM
->> git bisect bad ad8aecea034c591b9754bc5908da9719853aa7fa
->> # bad: [1f6271a0dfdf952c2e3981f424784d48f243a2be] m68k: use asm-generic/memory_model.h for both MMU and !MMU
->> git bisect bad 1f6271a0dfdf952c2e3981f424784d48f243a2be
->> # first bad commit: [1f6271a0dfdf952c2e3981f424784d48f243a2be] m68k: use asm-generic/memory_model.h for both MMU and !MMU
-> 
+T24gMTMuMDIuMjMgMDI6MDcsIE1pY2hhZWwgS2VsbGV5IChMSU5VWCkgd3JvdGU6DQo+IEZy
+b206IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4gU2VudDogV2VkbmVzZGF5LCBG
+ZWJydWFyeSA4LCAyMDIzIDExOjIyIFBNDQo+Pg0KPj4gV2hlbiBydW5uaW5nIHZpcnR1YWxp
+emVkLCBNVFJSIGFjY2VzcyBjYW4gYmUgcmVkdWNlZCAoZS5nLiBpbiBYZW4gUFYNCj4+IGd1
+ZXN0cyBvciB3aGVuIHJ1bm5pbmcgYXMgYSBTRVYtU05QIGd1ZXN0IHVuZGVyIEh5cGVyLVYp
+LiBUeXBpY2FsbHkNCj4+IHRoZSBoeXBlcnZpc29yIHdpbGwgcmVzZXQgdGhlIE1UUlIgZmVh
+dHVyZSBpbiBjcHVpZCBkYXRhLCByZXN1bHRpbmcNCj4+IGluIG5vIE1UUlIgbWVtb3J5IHR5
+cGUgaW5mb3JtYXRpb24gYmVpbmcgYXZhaWxhYmxlIGZvciB0aGUga2VybmVsLg0KPj4NCj4+
+IFRoaXMgaGFzIHR1cm5lZCBvdXQgdG8gcmVzdWx0IGluIHByb2JsZW1zOg0KPj4NCj4+IC0g
+SHlwZXItViBTRVYtU05QIGd1ZXN0cyB1c2luZyB1bmNhY2hlZCBtYXBwaW5ncyB3aGVyZSB0
+aGV5IHNob3VsZG4ndA0KPj4gLSBYZW4gUFYgZG9tMCBtYXBwaW5nIG1lbW9yeSBhcyBXQiB3
+aGljaCBzaG91bGQgYmUgVUMtIGluc3RlYWQNCj4+DQo+PiBTb2x2ZSB0aG9zZSBwcm9ibGVt
+cyBieSBzdXBwb3J0aW5nIHRvIHNldCBhIGZpeGVkIE1UUlIgc3RhdGUsDQo+PiBvdmVyd3Jp
+dGluZyB0aGUgZW1wdHkgc3RhdGUgdXNlZCB0b2RheS4gSW4gY2FzZSBzdWNoIGEgc3RhdGUg
+aGFzIGJlZW4NCj4+IHNldCwgZG9uJ3QgY2FsbCBnZXRfbXRycl9zdGF0ZSgpIGluIG10cnJf
+YnBfaW5pdCgpLiBUaGUgc2V0IHN0YXRlDQo+PiB3aWxsIG9ubHkgYmUgdXNlZCBieSBtdHJy
+X3R5cGVfbG9va3VwKCksIGFzIGluIGFsbCBvdGhlciBjYXNlcw0KPj4gbXRycl9lbmFibGVk
+KCkgaXMgYmVpbmcgY2hlY2tlZCwgd2hpY2ggd2lsbCByZXR1cm4gZmFsc2UuIEFjY2VwdCB0
+aGUNCj4+IG92ZXJ3cml0ZSBjYWxsIG9ubHkgaW4gY2FzZSBvZiBNVFJScyBiZWluZyBkaXNh
+YmxlZCBpbiBjcHVpZC4NCj4+DQo+PiBTaWduZWQtb2ZmLWJ5OiBKdWVyZ2VuIEdyb3NzIDxq
+Z3Jvc3NAc3VzZS5jb20+DQo+PiAtLS0NCj4+IFYyOg0KPj4gLSBuZXcgcGF0Y2gNCj4+IC0t
+LQ0KPj4gICBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9tdHJyLmggICAgICAgIHwgIDIgKysNCj4+
+ICAgYXJjaC94ODYva2VybmVsL2NwdS9tdHJyL2dlbmVyaWMuYyB8IDM4ICsrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKw0KPj4gICBhcmNoL3g4Ni9rZXJuZWwvY3B1L210cnIvbXRy
+ci5jICAgIHwgIDkgKysrKysrKw0KPj4gICAzIGZpbGVzIGNoYW5nZWQsIDQ5IGluc2VydGlv
+bnMoKykNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYvaW5jbHVkZS9hc20vbXRyci5o
+IGIvYXJjaC94ODYvaW5jbHVkZS9hc20vbXRyci5oDQo+PiBpbmRleCBmMGVlYWY2ZTVmNWYu
+LjBiOGY1MWQ2ODNkYyAxMDA2NDQNCj4+IC0tLSBhL2FyY2gveDg2L2luY2x1ZGUvYXNtL210
+cnIuaA0KPj4gKysrIGIvYXJjaC94ODYvaW5jbHVkZS9hc20vbXRyci5oDQo+PiBAQCAtMzEs
+NiArMzEsOCBAQA0KPj4gICAgKi8NCj4+ICAgIyBpZmRlZiBDT05GSUdfTVRSUg0KPj4gICB2
+b2lkIG10cnJfYnBfaW5pdCh2b2lkKTsNCj4+ICt2b2lkIG10cnJfb3ZlcndyaXRlX3N0YXRl
+KHN0cnVjdCBtdHJyX3Zhcl9yYW5nZSAqdmFyLCB1bnNpZ25lZCBpbnQgbnVtX3ZhciwNCj4+
+ICsJCQkgIG10cnJfdHlwZSAqZml4ZWQsIG10cnJfdHlwZSBkZWZfdHlwZSk7DQo+IA0KPiBD
+b3VsZCB5b3UgYWRkIGEgc3R1YiBmb3IgdGhlICFDT05GSUdfTVRSUiBjYXNlPyAgVGhlbiB0
+aGUNCj4gI2lmZGVmIENPTkZJR19NVFJSIGNvdWxkIGJlIHJlbW92ZWQgaW4gUGF0Y2ggMyBv
+ZiB0aGlzIHNlcmllcy4NCg0KSSB3YXMgb24gdGhlIGVkZ2Ugd2hldGhlciB0byBhZGQgYSBz
+dHViLiBUaGUgWGVuIHVzZSBjYXNlIHN0cm9uZ2x5DQpzdWdnZXN0cyB0aGF0IHRoZSBjb2Rl
+IHdhbnRzIHRvIGJlIGluc2lkZSBhbiAjaWZkZWYsIHdoaWxlIHRoZSBIeXBlci1WDQpjYXNl
+IGlzIHNvIHNpbXBsZSwgdGhhdCBpdCB3b3VsZCBiZW5lZml0IGZyb20gdGhlIHN0dWIuIEFz
+IHRoZXJlIHdhcw0KYW5vdGhlciAjaWZkZWYganVzdCBhYm92ZSB0aGUgYWRkZWQgY29kZSBp
+biBtc2h5cGVydi5jIEkgYmVsaWV2ZWQgaXQNCndvdWxkIGJlIGZpbmUgd2l0aG91dCBhIHN0
+dWIuIEFzIHlvdSBzZWVtIHRvIGxpa2UgaXQgYmV0dGVyIHdpdGggdGhlDQpzdHViLCBJIGNh
+biBhZGQgaXQuDQoNCg0KSnVlcmdlbg0K
+--------------rn3w2ivt7ensmUBtxZ2PwmYW
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------rn3w2ivt7ensmUBtxZ2PwmYW--
+
+--------------yn2Qx4Q01xzWKT7SuWDxeNhU--
+
+--------------ytCMa8DuorXCqrSOTuKcUpAv
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPp2E4FAwAAAAAACgkQsN6d1ii/Ey9j
+twgAgHOMwoaAR1L9uMkHjO1h/fzM0DoBXmo0dbRDaHI8MTFgNH52SjPSJ1DPaxe1G8D+5fviA2eN
+scdDyZHPcuhuEWrFolPyqcglPPlKGeQAqGQlSEXTc34ftSpcijZ7NEAM6XeyxS7h6v4F/2xGWErh
+YiJmkXMvUMePxRoxhXMviDdPBC+iFlLw1Xaa8jsst/fDS9ffUgKf7ABN6NWLSjnWRfIwaruvG1mm
+yasYtJ2Yf4vdHe/USgeStkpMOtYMOsWLt2sYe4Tx7ouiq6l7mZtgR1exvaggsRL96F7LMrSN7eqH
+OZYC7oKqOoOK7tjGiFiElXRSKDdF/VW9G50H1Njw6g==
+=rJwk
+-----END PGP SIGNATURE-----
+
+--------------ytCMa8DuorXCqrSOTuKcUpAv--
