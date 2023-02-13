@@ -2,87 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8729B694286
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC6E6942AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:19:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjBMKRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 05:17:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
+        id S230486AbjBMKTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 05:19:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjBMKRV (ORCPT
+        with ESMTP id S231133AbjBMKTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 05:17:21 -0500
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6826E2134
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:17:19 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-5258f66721bso156680067b3.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:17:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=B/9LKJBt/uFWrt2eaPCZXoPKu9jtJqzqiT0yu2iiXgA=;
-        b=OM2Q7Dz3LTR45PgX0M0nt7MxrcR2SsThReuPjqCBzPxd5c4QunEGEjp/DRduZE3xIn
-         XPbEDm5u9h1ISmC3kXacdxf48PBPMYor6N97cjwrle9+odF9Upg5zlGqwyUV9xGl8DFK
-         GA2bKWRD3tAs1RscJKxKKAO6PkP5+MyxizdbL9PCPCiD0i94tLKhkM88lUi7qNXuQkg+
-         8oDO4qdXBEl2mkBfPrnLjFaR1/GBvFw9F5ZbBD/l0TpN549fZH9XbzytNOFJd6XE8VuA
-         Va6XjRrqIXwANHdCOdRNtMe0szAiHpQ6YEazgheQEgq2JMEkIFDR6zmnfInMNNqX/C2s
-         ivEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B/9LKJBt/uFWrt2eaPCZXoPKu9jtJqzqiT0yu2iiXgA=;
-        b=eGWb6ovQEN0Hvo3Da+Mkq93pOUqqKhHtaUHyl+zojd11yle2NYQx6+J+AG5k70I9Sb
-         tzwk0jL4pxNJcixEW3Inn4F7MoKjXOym29eZA1NfqJwuN2C5iVA32xmdF1rvZyPEypdi
-         XqWi2LkRhBNWznNVK0ooB/ul/0iIN4pdegTVYnWrRG0hi+a1VVwhKJNejA54SL5UZcC7
-         sjwBUTANHxhrjbuBz7G8V+f4gkopGiZReKZY4PPub/nj6s6aFEqIyNTMnjF0bnGOGwCT
-         q++cnWqTqE870XzLFLUCPhKz/C8mc80kyYSUnK4WVfcGaCbKJNGCLcpu2XceQyKmsyth
-         fwxg==
-X-Gm-Message-State: AO0yUKXRqFaN2jcRPbDcwKU5HKHgHpxTDHG0KIIHQv/h9Q0Je3ieq4GU
-        yGnVZWZXMT5gkxak9wwoHS3hA5VdQyjRfTCkcnr7Pb1qmQJg+Q==
-X-Google-Smtp-Source: AK7set+LOXZf9z2fNtm1MlC7Tu7YYgsXp5XaxlLDCioWXk45a/E7fhy5d6++PstBOHEi2eCQ0PxXdO+s20DwzyhcA3o=
-X-Received: by 2002:a0d:db96:0:b0:52e:c7a1:7439 with SMTP id
- d144-20020a0ddb96000000b0052ec7a17439mr1206379ywe.384.1676283438656; Mon, 13
- Feb 2023 02:17:18 -0800 (PST)
+        Mon, 13 Feb 2023 05:19:05 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651831714D;
+        Mon, 13 Feb 2023 02:18:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=szHm+HvGboe4zElnYyIS9I3M5ezn3gwosKJMm81UK2o=; b=4raiYwiGmbF9QTaprA787JVha+
+        ukzcXidyJqobihaG/aamGI8SdzEgpBKzI/9gN/rpadv+v6tiT8tIG5Xf8uy0yZjcIemuSJdtSww81
+        VXerBX49HpFpDZGzSKhOiuKuBhmIppBB9Qn68/e5+Wj+u1wzKRu68uSz2VD8wkUwRyvAwZ/V9hrgN
+        l8vf+RbafdbnIOiIcLmjV2BpEKg8U7/xKx+VfpZ3Qjwq09lGXGBNsLCuMP6V1V48I8xnznuaOgd+K
+        mmF4NKBzOxh4rDqsoLngtbV4HWWmf3ivQW08PNJOEMdwo6zVNbxrPQjU8HyldQyrMhMK2rb7LfaAe
+        g0C5HWPg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pRVue-00E5Ci-0Q; Mon, 13 Feb 2023 10:18:20 +0000
+Date:   Mon, 13 Feb 2023 02:18:19 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v13 03/12] splice: Do splice read from a buffered file
+ without using ITER_PIPE
+Message-ID: <Y+oOa3bbJZallKtl@infradead.org>
+References: <Y+n0n2UE8BQa/OwW@infradead.org>
+ <20230209102954.528942-1-dhowells@redhat.com>
+ <20230209102954.528942-4-dhowells@redhat.com>
+ <1753989.1676283061@warthog.procyon.org.uk>
 MIME-Version: 1.0
-References: <20230210150319.200799-1-asmaa@nvidia.com> <20230210150319.200799-2-asmaa@nvidia.com>
-In-Reply-To: <20230210150319.200799-2-asmaa@nvidia.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 13 Feb 2023 11:17:07 +0100
-Message-ID: <CACRpkdZB6nqsuMSH1Aq32kMcJuC29W987eUOdxNb37kx5KQ4tg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] Support NVIDIA BlueField-3 GPIO controller
-To:     Asmaa Mnebhi <asmaa@nvidia.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andy.shevchenko@gmail.com, bgolaszewski@baylibre.com,
-        linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1753989.1676283061@warthog.procyon.org.uk>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 4:03 PM Asmaa Mnebhi <asmaa@nvidia.com> wrote:
+On Mon, Feb 13, 2023 at 10:11:01AM +0000, David Howells wrote:
+> Christoph Hellwig <hch@infradead.org> wrote:
+> 
+> > Also why doesn't this use init_sync_kiocb?
+> 
+> I'm not sure I want ki_flags.
 
-> This patch adds support for the BlueField-3 SoC GPIO driver
-> which allows:
-> - setting certain GPIOs as interrupts from other dependent drivers
-> - ability to manipulate certain GPIO pins via libgpiod tools
->
-> BlueField-3 has 56 GPIOs but the user is only allowed to change some
-> of them into GPIO mode. Use valid_mask to make it impossible to alter
-> the rest of the GPIOs.
->
-> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
-
-Excellent work Asmaa,
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+Why?
