@@ -2,93 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD3C6942FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:35:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD9A6942F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:34:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjBMKfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 05:35:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
+        id S230479AbjBMKew convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Feb 2023 05:34:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbjBMKfe (ORCPT
+        with ESMTP id S230444AbjBMKel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 05:35:34 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF57212860
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:35:10 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id z5so1597739iow.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:35:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rg9iAwFg7IOMEVpt1NVV6rIqsGDrzeIrKjlgE6x+x4o=;
-        b=q+UOAYFClqtFajfl3PJDBMhfQHHVUWm2EdZfa0l8S60abdy6vsCoDt/EuOnoJ+tz3W
-         t68NgeaUoHkuPhrW9gUqPoAm7w1DHXviGFOnmfvCIMD5WXdBstyQclltReStd1qa++Ov
-         MiIYreizFvHngeQCxqaASlKXrVAmPqgV1q8uN+KhzbhFMOcarTNm9mBWxKl5UbOyTEKQ
-         qrIebhWB9Fc8MCJU+ANSZ5NlDJs2x5e20fizkMQFixGwE45JnEDOH+P7rv3vWN198u6s
-         BLROXrgaR3jDcFGPMUYm9mj9cgYXQgZOp0Q62iSJlNOZOHNgX0AsXAYXpcLNsqiNzziK
-         eZLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rg9iAwFg7IOMEVpt1NVV6rIqsGDrzeIrKjlgE6x+x4o=;
-        b=FCg2BBem6Ca5NGlx9sm1INzirA8wbt7lb8oqzQ+i+76YsSvzokKPfTZ7yPjMgSAY24
-         CRFEmKFMeNirE6ZlUwX86E7hev1b7RK0q8WstyNKxk191ISBOcaux9sf/WhusIoSkVl1
-         Yby9Pl7Sm/tK/K0f2rGsrjkGZ677ytOMu0mYuJOQ7OcCk2wJxLt2MhpCTVs3fDYJs8R3
-         SePMxZSf/789lcVBIv28tr9WIC0ylLpNeZATpeJ3B2EsqUxsJiPQFXK+Z/uHAVLn9L4N
-         mz9MJKVtupDWel5n4F39w/urUK+XPnNQzCo9UXZpRC5yKy9UCBRXCJmnl1QcgsoYyVtx
-         VZ8Q==
-X-Gm-Message-State: AO0yUKUNDcUIsD/HoHk8cTmWHo/9mjnzL6t8zpv8L8T6ArvGNOSdgLnZ
-        LTHahOQXxXulDr3LboSJhehkfdDOn3tD/74yPFP8WA==
-X-Google-Smtp-Source: AK7set9nUuh5E8gAYl8p0P/dG5mkhLqkGD0gKRsR5eXUx8exoJEwox3s1PbVBolGecOWwQFPfBvex+UpQNPq/axhsS8=
-X-Received: by 2002:a05:6602:3155:b0:732:9e46:de04 with SMTP id
- m21-20020a056602315500b007329e46de04mr11808742ioy.65.1676284509903; Mon, 13
- Feb 2023 02:35:09 -0800 (PST)
+        Mon, 13 Feb 2023 05:34:41 -0500
+Received: from mail5.swissbit.com (mail5.swissbit.com [148.251.244.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270B0E04D;
+        Mon, 13 Feb 2023 02:34:36 -0800 (PST)
+Received: from mail5.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id AE65B3A1F1A;
+        Mon, 13 Feb 2023 11:34:33 +0100 (CET)
+Received: from mail5.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 97AB03A1ECA;
+        Mon, 13 Feb 2023 11:34:33 +0100 (CET)
+X-TM-AS-ERS: 10.181.10.103-127.5.254.253
+X-TM-AS-SMTP: 1.0 bXgxLmRtei5zd2lzc2JpdC5jb20= Y2xvZWhsZUBoeXBlcnN0b25lLmNvb
+        Q==
+X-DDEI-TLS-USAGE: Used
+Received: from mx1.dmz.swissbit.com (mx1.dmz.swissbit.com [10.181.10.103])
+        by mail5.swissbit.com (Postfix) with ESMTPS;
+        Mon, 13 Feb 2023 11:34:33 +0100 (CET)
+From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+To:     "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        Avri Altman <Avri.Altman@wdc.com>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>
+Subject: RE: [PATCH] mmc: block: workaround long ioctl busy timeout
+Thread-Topic: [PATCH] mmc: block: workaround long ioctl busy timeout
+Thread-Index: Adkpq3tb+gXfT/KXQXawlvtJeLUDVwV6ujEw
+Date:   Mon, 13 Feb 2023 10:34:32 +0000
+Message-ID: <8f4a0fc6f2e64ef091784c5cd704c113@hyperstone.com>
+References: <68590206e8b044a2a71457cbbeda0794@hyperstone.com>
+In-Reply-To: <68590206e8b044a2a71457cbbeda0794@hyperstone.com>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <cover.1676063693.git.andreyknvl@google.com> <f166dd6f3cb2378aea78600714393dd568c33ee9.1676063693.git.andreyknvl@google.com>
-In-Reply-To: <f166dd6f3cb2378aea78600714393dd568c33ee9.1676063693.git.andreyknvl@google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 13 Feb 2023 11:34:29 +0100
-Message-ID: <CAG_fn=XsJAZK1bPP7KXtTOk_cZhxc6TwWZksB8w77Dfhpy4hQQ@mail.gmail.com>
-Subject: Re: [PATCH v2 08/18] lib/stackdepot: rename hash table constants and variables
-To:     andrey.konovalov@linux.dev
-Cc:     Marco Elver <elver@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        Evgenii Stepanov <eugenis@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TMASE-Version: DDEI-5.1-9.0.1002-27444.007
+X-TMASE-Result: 10--11.859300-10.000000
+X-TMASE-MatchedRID: 0aps3uOmWi7UL3YCMmnG4l/ZJ0h1vLl1kdS3kPlaZyUUsxngDoycC4Ay
+        Bv1w/1hJfE3qFp1T4KYvsWJXoHruFU7xWA6ntpDGHWRJEfGP5nkWUg/hm489yC99T+uJIleR2Si
+        3/7YtpVQi+t+0AiFaYvL3NxFKQpq18gFf6MN9cav2TS1YFaI5/2+TcmJcOPh12An5g1C6+/JZEI
+        hf8tdBvo33djKu5wMzf1PmKZ3/Yc0NdWPTMyGlNj4RbdPTGu78Sxj0b9FncUKbKItl61J/yRMZG
+        6kg1oMPdgkRR8OiM/8gBwKKRHe+r+sNXgWBsm2vNlN4gSb/lQwLlf05lO87n3kpCaNresUkfgJm
+        KoiOcok=
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: d2b847c7-e73b-43ff-9eaa-a246602cc7e4-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 10:17 PM <andrey.konovalov@linux.dev> wrote:
->
-> From: Andrey Konovalov <andreyknvl@google.com>
->
-> Give more meaningful names to hash table-related constants and variables:
->
-> 1. Rename STACK_HASH_SCALE to STACK_HASH_TABLE_SCALE to point out that it
->    is related to scaling the hash table.
->
-> 2. Rename STACK_HASH_ORDER_MIN/MAX to STACK_BUCKET_NUMBER_ORDER_MIN/MAX
->    to point out that it is related to the number of hash table buckets.
->
-> 3. Rename stack_hash_order to stack_bucket_number_order for the same
->    reason as #2.
->
-> No functional changes.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
+Any more comments regarding this patch?
+
+-----Original Message-----
+From: Christian Löhle 
+Sent: Montag, 16. Januar 2023 15:38
+To: adrian.hunter@intel.com; 'Avri Altman' <Avri.Altman@wdc.com>; linux-mmc@vger.kernel.org; linux-kernel@vger.kernel.org
+Cc: ulf.hansson@linaro.org
+Subject: [PATCH] mmc: block: workaround long ioctl busy timeout
+
+The ioctl interface allowed to set cmd_timeout_ms when polling for busy on R1B commands. This was often limited by the max hw timeout so work around it like for the sanitize command.
+
+Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+---
+ drivers/mmc/core/block.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c index 20da7ed43e6d..ba3bc9014179 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -472,6 +472,8 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+ 	struct scatterlist sg;
+ 	int err;
+ 	unsigned int target_part;
++	unsigned int busy_timeout = MMC_BLK_TIMEOUT_MS;
++	int poll_prog = false;
+ 
+ 	if (!card || !md || !idata)
+ 		return -EINVAL;
+@@ -493,6 +495,12 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+ 	cmd.opcode = idata->ic.opcode;
+ 	cmd.arg = idata->ic.arg;
+ 	cmd.flags = idata->ic.flags;
++	/* R1B flag might be removed here to work around hw, so save it */
++	poll_prog = (idata->rpmb || (cmd.flags & MMC_RSP_R1B) == MMC_RSP_R1B);
++	busy_timeout = idata->ic.cmd_timeout_ms ? :
++		MMC_BLK_TIMEOUT_MS;
++	if (poll_prog)
++		mmc_prepare_busy_cmd(card->host, &cmd, busy_timeout);
+ 
+ 	if (idata->buf_bytes) {
+ 		data.sg = &sg;
+@@ -596,7 +604,7 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+ 	if (idata->ic.postsleep_min_us)
+ 		usleep_range(idata->ic.postsleep_min_us, idata->ic.postsleep_max_us);
+ 
+-	if (idata->rpmb || (cmd.flags & MMC_RSP_R1B) == MMC_RSP_R1B) {
++	if (poll_prog) {
+ 		/*
+ 		 * Ensure RPMB/R1B command has completed by polling CMD13 "Send Status". Here we
+ 		 * allow to override the default timeout value if a custom timeout is specified.
+--
+2.37.3
+
+
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
+
