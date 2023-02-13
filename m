@@ -2,154 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A5B6953A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 23:16:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 816C46953AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 23:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbjBMWQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 17:16:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
+        id S229963AbjBMWSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 17:18:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjBMWQJ (ORCPT
+        with ESMTP id S229637AbjBMWSs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 17:16:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81DB17CCF;
-        Mon, 13 Feb 2023 14:16:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 57A2F61307;
-        Mon, 13 Feb 2023 22:16:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31077C433EF;
-        Mon, 13 Feb 2023 22:16:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676326567;
-        bh=R8u44Pov7pxbaplU5aT7hSJng3zVWh5ChmMdraTgJss=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qN3qmFutcJQfGi9qRW91+prCvEaXFX8doNsC1q84DmscMW2q3CkKAhAtLzf4sBxwh
-         AqEKjJQHEjHwF7NqsFDjYMMcxe+i0wZrtbEHIyn0PMmxroZRVZqGsfPf2cQdsWw8yl
-         eHGQhUFg46rxnLmSZOvtdrrafYshJ7jAu19mcFIRkeX77B4IbTYfAmFw/P8ssKdJq6
-         ePGBJfxJPw6rONb9M9sV+6LucFp/FU/vJVhHoQNQtK8Y2Euams7h/TTc8Wc7aupAwe
-         esYNja8HdvATIal2oPe1Qz9S44xyYkJsmkY4sKHRcmdCk/nWXvqgIa8/RL0N4UU7e2
-         ZEbxDKLRb7A6Q==
-Date:   Mon, 13 Feb 2023 15:16:05 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     Tom Rix <trix@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
-        rric@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/amd64: remove unneeded call to
- reserve_mc_sibling_devs()
-Message-ID: <Y+q2pXYI02qAje8N@dev-arch.thelio-3990X>
-References: <20230213191510.2237360-1-trix@redhat.com>
- <Y+qZthCMRL1m0p4B@yaz-fattaah>
- <Y+qcU2M5gchfzbky@zn.tnic>
- <Y+qdVHidnrrKvxiD@dev-arch.thelio-3990X>
- <03b91ce8-c6d0-63e7-561c-8cada0ece2fe@redhat.com>
- <Y+q1mhrAKTobp3fa@yaz-fattaah>
+        Mon, 13 Feb 2023 17:18:48 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850881C308
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 14:18:45 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id f10so5745118ilc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 14:18:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vjm/Vc/deIEaH+aQF6B66KE0Ii8SzYI9sL4Ts+fG4eA=;
+        b=Gm/qU0V+m9CFby80dIGwz8Bvy4C+/h4E3Pu/RHB0UfUt/L7jEu+j2qIQDZJnf/40zR
+         avAY5BR+DMqDa51rkrD/u1dh/tm/17aDn4x98iSAcAEa0PP1EBGCCQcBDFvX/+zzdcl2
+         MKkXGM8djPSDHCCZUmMrXJKargpJhE+xKoNfw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vjm/Vc/deIEaH+aQF6B66KE0Ii8SzYI9sL4Ts+fG4eA=;
+        b=26fugxsAv9X++u9ZMhz5Qb2J8RddCH9qfDZQo3fwXJyoBErzjQKoU7wm/RWym+33ZZ
+         y4wOVSfrvu9PnijSSlfvNl8d3y3lGU1EtXZcPh0mmahhX6dTqzLx6JjSvtglxIPue0mH
+         vWVFtHLgXz4kDnWeMKlx+Vns2kJwugx/Cn/KBzX6yA0dTHpTpOA+z3iqJIwBCBEW2utF
+         ufGAO6P/yRfFm5qgl6cF2A2YUHLmWuXSQp8cnaqPnBfsEsjidFAuwFkedbpxDzZw/xBB
+         zwWg9uSXUrULKI5XZXdUuTTo9pEL8eIjy7KMwIAr353pv1aKwW7HIF8esbKEYcn3f1+z
+         nCsA==
+X-Gm-Message-State: AO0yUKUK09D5vAw1esu4AVwskVqV42GYvu4O6DrKDw4NoQsCcMJAjtZY
+        TgssLTSKcvn88IvuvwwDBp4YlkBFw8Y5qxii
+X-Google-Smtp-Source: AK7set+gq2QLXYYprC0FQNPa5EjSAce6ZInOpbMokOscNfVCC3OFfj7XGoSHJvKkfSquDYOUM2VErg==
+X-Received: by 2002:a05:6e02:1c41:b0:315:415a:4e61 with SMTP id d1-20020a056e021c4100b00315415a4e61mr317985ilg.11.1676326724641;
+        Mon, 13 Feb 2023 14:18:44 -0800 (PST)
+Received: from ravnica.bld.corp.google.com ([2620:15c:183:200:d644:5bf8:7c67:1ab8])
+        by smtp.gmail.com with ESMTPSA id s8-20020a02cc88000000b003a60e5a2638sm4233508jap.94.2023.02.13.14.18.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 14:18:44 -0800 (PST)
+From:   Ross Zwisler <zwisler@chromium.org>
+X-Google-Original-From: Ross Zwisler <zwisler@google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ross Zwisler <zwisler@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-trace-kernel@vger.kernel.org,
+        "Michael S . Tsirkin" <mst@redhat.com>
+Subject: [PATCH bpf-next 1/2] bpf: use canonical ftrace path
+Date:   Mon, 13 Feb 2023 15:18:34 -0700
+Message-Id: <20230213221835.592763-1-zwisler@google.com>
+X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+q1mhrAKTobp3fa@yaz-fattaah>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 10:11:38PM +0000, Yazen Ghannam wrote:
-> On Mon, Feb 13, 2023 at 01:17:51PM -0800, Tom Rix wrote:
-> > 
-> > On 2/13/23 12:28 PM, Nathan Chancellor wrote:
-> > > On Mon, Feb 13, 2023 at 09:23:47PM +0100, Borislav Petkov wrote:
-> > > > On Mon, Feb 13, 2023 at 08:12:38PM +0000, Yazen Ghannam wrote:
-> > > > > These errors are encountered when extra warnings are enabled, correct?
-> > > > It says so in the warning which one it is: -Werror,-Wsometimes-uninitialized
-> > > > 
-> > > > Don't know if we enable that one for clang with W= or Nathan adds
-> > > > additional switches.
-> > > -Wsometimes-uninitialized is part of clang's -Wall so it is on by
-> > > default in all builds, regardless of W=
-> > > 
-> > > -Werror comes from CONFIG_WERROR, which is enabled with allmodconfig.
-> > > 
-> > > > > I think the following patch would resolve this issue. This is part of a set
-> > > > > that isn't fully applied.
-> > > > > https://lore.kernel.org/linux-edac/20230127170419.1824692-12-yazen.ghannam@amd.com/
-> > > > > 
-> > > > > Boris,
-> > > > > Do you think one of these patches should be applied or just hold off until the
-> > > > > entire original set is applied?
-> > > > I still wanted to go through the rest but I'm not sure I'll have time
-> > > > for it before the merge window. So unless this is breaking some silly
-> > > > testing scenario, I'd say I'll leave things as they are.
-> > > This breaks allmodconfig with clang, so it would be great if one of
-> > > these solutions was applied in the meantime.
-> > 
-> > This happens at least on allyesconfig clang W=1,2, i do not know about
-> > default, it's in a bad state as well.
-> >
-> 
-> Yes, this breaks on a default clang build. I just used "make LLVM=1" with the
-> same config I used before, and I see the error.
-> 
-> GCC doesn't seem to have a comparable warning to "-Wsometimes-uninitialized".
-> I went back and tried W=123 and no warnings in this code.
+The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
 
-GCC's -Wmaybe-uninitialized uses interprocedural analysis I believe,
-which would allow it to see that it is not possible for these variables
-to be used uninitialized. However, that type of analysis can go wrong
-with optimizations pretty quickly, so it was disabled for the kernel
-under normal builds and W=1; W=2 will show those instances again but
-again, I would not expect there to be one here.
+But, from Documentation/trace/ftrace.rst:
 
-> Building with clang was straightforward, so I'll try to include it in my
-> workflow in the future.
-> 
-> > It would be great if the clang build was working.
-> > 
-> > Nathan's patch is fine, go with that.
-> >
-> 
-> I agree Nathan's patch is fine, but would you all be okay with a simpler
-> change? Initializing the variables (as below) will silence the warnings, and
-> we know this is a false positive. Eventually this function will be reworked,
-> so a trivial workaround seems okay. What do y'all think?
+  Before 4.1, all ftrace tracing control files were within the debugfs
+  file system, which is typically located at /sys/kernel/debug/tracing.
+  For backward compatibility, when mounting the debugfs file system,
+  the tracefs file system will be automatically mounted at:
 
-I have no objections. Will you send the patch? Consider it
+  /sys/kernel/debug/tracing
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Many comments and samples in the bpf code still refer to this older
+debugfs path, so let's update them to avoid confusion.  There are a few
+spots where the bpf code explicitly checks both tracefs and debugfs
+(tools/bpf/bpftool/tracelog.c and tools/lib/api/fs/fs.c) and I've left
+those alone so that the tools can continue to work with both paths.
 
-in advanced.
+Signed-off-by: Ross Zwisler <zwisler@google.com>
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
+---
 
-Thanks for taking a further look at this problem!
+[ Per Alexei's request, resending towards bpf-next ]
 
-Cheers,
-Nathan
+ include/uapi/linux/bpf.h            | 8 ++++----
+ samples/bpf/cpustat_kern.c          | 4 ++--
+ samples/bpf/hbm.c                   | 4 ++--
+ samples/bpf/ibumad_kern.c           | 4 ++--
+ samples/bpf/lwt_len_hist.sh         | 2 +-
+ samples/bpf/offwaketime_kern.c      | 2 +-
+ samples/bpf/task_fd_query_user.c    | 4 ++--
+ samples/bpf/test_lwt_bpf.sh         | 2 +-
+ samples/bpf/test_overhead_tp_kern.c | 4 ++--
+ tools/include/uapi/linux/bpf.h      | 8 ++++----
+ 10 files changed, 21 insertions(+), 21 deletions(-)
 
-> 
-> Thanks,
-> Yazen
-> 
-> ------
-> 
-> diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-> index 1c4bef1cdf28..5b42533f306a 100644
-> --- a/drivers/edac/amd64_edac.c
-> +++ b/drivers/edac/amd64_edac.c
-> @@ -3928,7 +3928,7 @@ static const struct attribute_group
-> *amd64_edac_attr_groups[] = {
-> 
->  static int hw_info_get(struct amd64_pvt *pvt)
->   {
->   -       u16 pci_id1, pci_id2;
->   +       u16 pci_id1 = 0, pci_id2 = 0;
->           int ret;
-> 
-> 	          if (pvt->fam >= 0x17) {
-> 
-> ------
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 464ca3f01fe7..44387b31cbde 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1642,17 +1642,17 @@ union bpf_attr {
+  * 	Description
+  * 		This helper is a "printk()-like" facility for debugging. It
+  * 		prints a message defined by format *fmt* (of size *fmt_size*)
+- * 		to file *\/sys/kernel/debug/tracing/trace* from DebugFS, if
++ * 		to file *\/sys/kernel/tracing/trace* from TraceFS, if
+  * 		available. It can take up to three additional **u64**
+  * 		arguments (as an eBPF helpers, the total number of arguments is
+  * 		limited to five).
+  *
+  * 		Each time the helper is called, it appends a line to the trace.
+- * 		Lines are discarded while *\/sys/kernel/debug/tracing/trace* is
+- * 		open, use *\/sys/kernel/debug/tracing/trace_pipe* to avoid this.
++ * 		Lines are discarded while *\/sys/kernel/tracing/trace* is
++ * 		open, use *\/sys/kernel/tracing/trace_pipe* to avoid this.
+  * 		The format of the trace is customizable, and the exact output
+  * 		one will get depends on the options set in
+- * 		*\/sys/kernel/debug/tracing/trace_options* (see also the
++ * 		*\/sys/kernel/tracing/trace_options* (see also the
+  * 		*README* file under the same directory). However, it usually
+  * 		defaults to something like:
+  *
+diff --git a/samples/bpf/cpustat_kern.c b/samples/bpf/cpustat_kern.c
+index 5aefd19cdfa1..944f13fe164a 100644
+--- a/samples/bpf/cpustat_kern.c
++++ b/samples/bpf/cpustat_kern.c
+@@ -76,8 +76,8 @@ struct {
+ 
+ /*
+  * The trace events for cpu_idle and cpu_frequency are taken from:
+- * /sys/kernel/debug/tracing/events/power/cpu_idle/format
+- * /sys/kernel/debug/tracing/events/power/cpu_frequency/format
++ * /sys/kernel/tracing/events/power/cpu_idle/format
++ * /sys/kernel/tracing/events/power/cpu_frequency/format
+  *
+  * These two events have same format, so define one common structure.
+  */
+diff --git a/samples/bpf/hbm.c b/samples/bpf/hbm.c
+index 516fbac28b71..ff58ec43f56a 100644
+--- a/samples/bpf/hbm.c
++++ b/samples/bpf/hbm.c
+@@ -65,7 +65,7 @@ static void Usage(void);
+ static void read_trace_pipe2(void);
+ static void do_error(char *msg, bool errno_flag);
+ 
+-#define DEBUGFS "/sys/kernel/debug/tracing/"
++#define TRACEFS "/sys/kernel/tracing/"
+ 
+ static struct bpf_program *bpf_prog;
+ static struct bpf_object *obj;
+@@ -77,7 +77,7 @@ static void read_trace_pipe2(void)
+ 	FILE *outf;
+ 	char *outFname = "hbm_out.log";
+ 
+-	trace_fd = open(DEBUGFS "trace_pipe", O_RDONLY, 0);
++	trace_fd = open(TRACEFS "trace_pipe", O_RDONLY, 0);
+ 	if (trace_fd < 0) {
+ 		printf("Error opening trace_pipe\n");
+ 		return;
+diff --git a/samples/bpf/ibumad_kern.c b/samples/bpf/ibumad_kern.c
+index 9b193231024a..f07474c72525 100644
+--- a/samples/bpf/ibumad_kern.c
++++ b/samples/bpf/ibumad_kern.c
+@@ -39,8 +39,8 @@ struct {
+ /* Taken from the current format defined in
+  * include/trace/events/ib_umad.h
+  * and
+- * /sys/kernel/debug/tracing/events/ib_umad/ib_umad_read/format
+- * /sys/kernel/debug/tracing/events/ib_umad/ib_umad_write/format
++ * /sys/kernel/tracing/events/ib_umad/ib_umad_read/format
++ * /sys/kernel/tracing/events/ib_umad/ib_umad_write/format
+  */
+ struct ib_umad_rw_args {
+ 	u64 pad;
+diff --git a/samples/bpf/lwt_len_hist.sh b/samples/bpf/lwt_len_hist.sh
+index 0eda9754f50b..11fa0a087db6 100755
+--- a/samples/bpf/lwt_len_hist.sh
++++ b/samples/bpf/lwt_len_hist.sh
+@@ -5,7 +5,7 @@ NS1=lwt_ns1
+ VETH0=tst_lwt1a
+ VETH1=tst_lwt1b
+ 
+-TRACE_ROOT=/sys/kernel/debug/tracing
++TRACE_ROOT=/sys/kernel/tracing
+ 
+ function cleanup {
+ 	# To reset saved histogram, remove pinned map
+diff --git a/samples/bpf/offwaketime_kern.c b/samples/bpf/offwaketime_kern.c
+index eb4d94742e6b..23f12b47e9e5 100644
+--- a/samples/bpf/offwaketime_kern.c
++++ b/samples/bpf/offwaketime_kern.c
+@@ -110,7 +110,7 @@ static inline int update_counts(void *ctx, u32 pid, u64 delta)
+ }
+ 
+ #if 1
+-/* taken from /sys/kernel/debug/tracing/events/sched/sched_switch/format */
++/* taken from /sys/kernel/tracing/events/sched/sched_switch/format */
+ struct sched_switch_args {
+ 	unsigned long long pad;
+ 	char prev_comm[TASK_COMM_LEN];
+diff --git a/samples/bpf/task_fd_query_user.c b/samples/bpf/task_fd_query_user.c
+index a33d74bd3a4b..1e61f2180470 100644
+--- a/samples/bpf/task_fd_query_user.c
++++ b/samples/bpf/task_fd_query_user.c
+@@ -235,7 +235,7 @@ static int test_debug_fs_uprobe(char *binary_path, long offset, bool is_return)
+ 	struct bpf_link *link;
+ 	ssize_t bytes;
+ 
+-	snprintf(buf, sizeof(buf), "/sys/kernel/debug/tracing/%s_events",
++	snprintf(buf, sizeof(buf), "/sys/kernel/tracing/%s_events",
+ 		 event_type);
+ 	kfd = open(buf, O_WRONLY | O_TRUNC, 0);
+ 	CHECK_PERROR_RET(kfd < 0);
+@@ -252,7 +252,7 @@ static int test_debug_fs_uprobe(char *binary_path, long offset, bool is_return)
+ 	close(kfd);
+ 	kfd = -1;
+ 
+-	snprintf(buf, sizeof(buf), "/sys/kernel/debug/tracing/events/%ss/%s/id",
++	snprintf(buf, sizeof(buf), "/sys/kernel/tracing/events/%ss/%s/id",
+ 		 event_type, event_alias);
+ 	efd = open(buf, O_RDONLY, 0);
+ 	CHECK_PERROR_RET(efd < 0);
+diff --git a/samples/bpf/test_lwt_bpf.sh b/samples/bpf/test_lwt_bpf.sh
+index 65a976058dd3..db5691e6637f 100755
+--- a/samples/bpf/test_lwt_bpf.sh
++++ b/samples/bpf/test_lwt_bpf.sh
+@@ -19,7 +19,7 @@ IPVETH3="192.168.111.2"
+ 
+ IP_LOCAL="192.168.99.1"
+ 
+-TRACE_ROOT=/sys/kernel/debug/tracing
++TRACE_ROOT=/sys/kernel/tracing
+ 
+ function lookup_mac()
+ {
+diff --git a/samples/bpf/test_overhead_tp_kern.c b/samples/bpf/test_overhead_tp_kern.c
+index 80edadacb692..a1d53b0d8476 100644
+--- a/samples/bpf/test_overhead_tp_kern.c
++++ b/samples/bpf/test_overhead_tp_kern.c
+@@ -8,7 +8,7 @@
+ #include <uapi/linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ 
+-/* from /sys/kernel/debug/tracing/events/task/task_rename/format */
++/* from /sys/kernel/tracing/events/task/task_rename/format */
+ struct task_rename {
+ 	__u64 pad;
+ 	__u32 pid;
+@@ -22,7 +22,7 @@ int prog(struct task_rename *ctx)
+ 	return 0;
+ }
+ 
+-/* from /sys/kernel/debug/tracing/events/random/urandom_read/format */
++/* from /sys/kernel/tracing/events/random/urandom_read/format */
+ struct urandom_read {
+ 	__u64 pad;
+ 	int got_bits;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 464ca3f01fe7..44387b31cbde 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1642,17 +1642,17 @@ union bpf_attr {
+  * 	Description
+  * 		This helper is a "printk()-like" facility for debugging. It
+  * 		prints a message defined by format *fmt* (of size *fmt_size*)
+- * 		to file *\/sys/kernel/debug/tracing/trace* from DebugFS, if
++ * 		to file *\/sys/kernel/tracing/trace* from TraceFS, if
+  * 		available. It can take up to three additional **u64**
+  * 		arguments (as an eBPF helpers, the total number of arguments is
+  * 		limited to five).
+  *
+  * 		Each time the helper is called, it appends a line to the trace.
+- * 		Lines are discarded while *\/sys/kernel/debug/tracing/trace* is
+- * 		open, use *\/sys/kernel/debug/tracing/trace_pipe* to avoid this.
++ * 		Lines are discarded while *\/sys/kernel/tracing/trace* is
++ * 		open, use *\/sys/kernel/tracing/trace_pipe* to avoid this.
+  * 		The format of the trace is customizable, and the exact output
+  * 		one will get depends on the options set in
+- * 		*\/sys/kernel/debug/tracing/trace_options* (see also the
++ * 		*\/sys/kernel/tracing/trace_options* (see also the
+  * 		*README* file under the same directory). However, it usually
+  * 		defaults to something like:
+  *
+-- 
+2.39.1.581.gbfd45094c4-goog
+
