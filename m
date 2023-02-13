@@ -2,112 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F338B694E8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEC2694E8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbjBMR7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 12:59:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
+        id S230420AbjBMSAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:00:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbjBMR7j (ORCPT
+        with ESMTP id S230312AbjBMSAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 12:59:39 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D212005F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:59:34 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id qb15so31842420ejc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:59:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HD5L0OzAE4T1VnHQ4734G2vgLjw/5WBq54Z8hcfCrhE=;
-        b=ZA7IiFd34saI3SzeE2KVXbK1Puclk9kUuZOSWK8vlqd/O6QUgLEIngbVXek2dPaTaI
-         k0pLVz642K8D+NwhplatifYkZ8T82r1Jc3kbF8PUfhEZ9y3PhtrVVt3ETpomyk0MQdm3
-         etJs8SyboBFRXuFkUFUR5oD1L5z6cAJt17538zSvHLuFOp9+Qe10hRNJMFTPSYr1/7Dk
-         N4FcMbklrQ4mt7Dko8B7XwZEBhO81Ed7blg5ltLbS9wyyY0iGGtRckvCgVDnSr2rwFp/
-         oWgMwdhCKBgkVrBgAshevcsik3B9pP043EW+IvBBf/r+i22qK1JmwOuDwDn1HFx0cNu9
-         iGWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HD5L0OzAE4T1VnHQ4734G2vgLjw/5WBq54Z8hcfCrhE=;
-        b=HNp3vwEq6jNQk07FvDX99vSlBbv/SR3nlyEilabPgjHKXyOlW6rfJ81ETY1jWXfA8t
-         dDGpJ4z+W4nXhFSAzXTEhGUhgvsWFDmDpsW+hl8CT8UIhFSmo1F47uPYifdEp02g+HQo
-         +jWwJf3PFUqX59e3yR6iTnvrblgyJwDF661Ih5f5CnkSkQpeq+mx8konRb+Sf6Hdd0ZN
-         ApuHDL2AZBlPLkeHuAl+r1YZFXiz0RHlBSqgCf1F9rcplZE1W5aX9pMOCQGakpPtz483
-         cGMASghGanYfz+Feg03RhHIfQrDkV0kYIMNYW722h6a7l+HBjqVma4La8QJwTzpKphRC
-         Y1rQ==
-X-Gm-Message-State: AO0yUKUYdImiWL8A9NUDsRQrY1gJFTHPa1kuP6l59hD1MfStGUzCL8EA
-        6yPo/SO9W8EPnxxTnjWmJ+gT7Q==
-X-Google-Smtp-Source: AK7set+aEw/jx9c3aPqnoOKU5elwDHNeGgjIExg/5B0AjW8znvgeCOVyS+e0pR5Q0byixiaAS/H0pw==
-X-Received: by 2002:a17:907:80e:b0:8af:447a:ff8e with SMTP id wv14-20020a170907080e00b008af447aff8emr17167815ejb.20.1676311173155;
-        Mon, 13 Feb 2023 09:59:33 -0800 (PST)
-Received: from localhost.localdomain (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id kq15-20020a170906abcf00b0086ffe8a00fdsm7074309ejb.84.2023.02.13.09.59.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 09:59:32 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: sm6375: Add RMTFS
-Date:   Mon, 13 Feb 2023 18:59:28 +0100
-Message-Id: <20230213175928.1979637-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.1
+        Mon, 13 Feb 2023 13:00:07 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB841F5D3;
+        Mon, 13 Feb 2023 09:59:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676311199; x=1707847199;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IAYfQxj3OmelMwV5h9UuiFc/JbOUINQ2ZHqpvYayBxI=;
+  b=LkjRrS6gVHzk7TZW3NJsUWstYJ+L56yaXwHReoMFuCc/l6Qb8MOvJtqZ
+   LEfJcCBSJlCs4aXJHTXEljJBi6MTZFbIFe50cpxjwkecppuXhwwWZ6YX1
+   RBFuP2qcwNRakMa0CU9fcBBp087/euuJBsfk4ep+sPehPtLkqXBIiygYY
+   xPeN87zgSpzvH0Po4ShHHgogSOwak+sCP/RvNuu1l5uGzyR/AkDf/X1/e
+   NtGJV15bV25tPQsJt1lXuCFfLqzbyQp2N1ww6AxIPZ5cN8uIbfTDYF4Ed
+   chciteqTDn2WAgB8o8gzYnCVgGP5XkC3gE8QAQkpKqhPU+PwfdmJ2yVE6
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="318975416"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="318975416"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 09:59:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="646453952"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="646453952"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 13 Feb 2023 09:59:55 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pRd7J-006Tlv-1t;
+        Mon, 13 Feb 2023 19:59:53 +0200
+Date:   Mon, 13 Feb 2023 19:59:53 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Raul Rangel <rrangel@chromium.org>
+Cc:     Werner Sembach <wse@tuxedocomputers.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
+        brgl@bgdev.pl, linux-gpio@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: Re: [PATCH] gpiolib: acpi: Add a ignore wakeup quirk for Clevo NH5xAx
+Message-ID: <Y+p6mY+w9POvkBzC@smile.fi.intel.com>
+References: <20230210164636.628462-1-wse@tuxedocomputers.com>
+ <Y+Z5OSa6hepQBOyc@smile.fi.intel.com>
+ <029b8d80-db28-cdb2-5c39-334be6968fad@tuxedocomputers.com>
+ <Y+owDqifuU9nf+1i@smile.fi.intel.com>
+ <86db79fa-5efb-caad-3310-60928907cc58@amd.com>
+ <Y+pLLzLDotZQLpdA@smile.fi.intel.com>
+ <97026dc5-e92e-62fe-43ae-33533125d900@tuxedocomputers.com>
+ <CAHQZ30Cs+kp82coR10Wat7q3S_8+pFf=5=44kMEMcjBOjmn=6A@mail.gmail.com>
+ <Y+p4Sq/WnZ4jAp+F@smile.fi.intel.com>
+ <Y+p6I379g+V4vpIc@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+p6I379g+V4vpIc@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a node for RMTFS on SM6375.
+On Mon, Feb 13, 2023 at 07:57:55PM +0200, Andy Shevchenko wrote:
+> On Mon, Feb 13, 2023 at 07:50:02PM +0200, Andy Shevchenko wrote:
+> > On Mon, Feb 13, 2023 at 10:20:41AM -0700, Raul Rangel wrote:
+> > > On Mon, Feb 13, 2023 at 7:47 AM Werner Sembach <wse@tuxedocomputers.com> wrote:
+> > > > Am 13.02.23 um 15:37 schrieb Andy Shevchenko:
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm6375.dtsi | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+...
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6375.dtsi b/arch/arm64/boot/dts/qcom/sm6375.dtsi
-index 5795c6cb7364..404aeae0033f 100644
---- a/arch/arm64/boot/dts/qcom/sm6375.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6375.dtsi
-@@ -7,6 +7,7 @@
- #include <dt-bindings/clock/qcom,sm6375-dispcc.h>
- #include <dt-bindings/clock/qcom,sm6375-gcc.h>
- #include <dt-bindings/dma/qcom-gpi.h>
-+#include <dt-bindings/firmware/qcom,scm.h>
- #include <dt-bindings/interconnect/qcom,sm6375.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/mailbox/qcom-ipcc.h>
-@@ -426,6 +427,15 @@ removed_mem: removed@c0000000 {
- 			no-map;
- 		};
- 
-+		rmtfs_mem: rmtfs@f3900000 {
-+			compatible = "qcom,rmtfs-mem";
-+			reg = <0 0xf3900000 0 0x280000>;
-+			no-map;
-+
-+			qcom,client-id = <1>;
-+			qcom,vmid = <QCOM_SCM_VMID_MSS_MSA QCOM_SCM_VMID_NAV>;
-+		};
-+
- 		debug_mem: debug@ffb00000 {
- 			reg = <0 0xffb00000 0 0xc0000>;
- 			no-map;
+> > > > Schematics for the NH5xAx can also be found on this unofficial clevo mirror
+> > > > (service manuals, scroll to end for schematics):
+> > > >
+> > > > http://repo.palkeo.com/clevo-mirror/NH5xACx_AFx_ADx/NH50AC.zip
+> > > >
+> > > > http://repo.palkeo.com/clevo-mirror/NH5xACx_AFx_ADx/NH50AF1.zip
+> > > >
+> > > > User: repo
+> > > >
+> > > > PW: repo
+> > > >
+> > > > >> The schematics were shared by the reporter for the original issue which is
+> > > > >> how we reached the conclusion there was a mistake.
+> > > > >>
+> > > > >> As they're both Clevo designs it's certainly possible they have the same
+> > > > >> mistake in two systems.
+> > > 
+> > > > > Thank you!
+> > > > > I have looked at the schematics and read discussion.
+> > > > >
+> > > > > So, the conclusion that this is a BIOS bug is incorrect in my opinion.
+> > > > > The problem is either in the PMIC/EC firmware that shouldn't shut down 3.3VS
+> > > > > signal for a while or on the PCB level, so that pull up should be connected
+> > > > > to another power source that stays on.
+> > > > >
+> > > > > This means the description on the initial patch with the same issue is
+> > > > > incorrect.
+> > > > >
+> > > > > Do we know the power sequence on the suspend to see which and how on the
+> > > > > time line the power sources are off/on?
+> > > 
+> > > If you look at the load switch for 3.3VS, its EN2 pin is connected to
+> > > SUSB#_EN which is connected to SUSB# which is connected to
+> > > AND(SUSB#_PCH -> SLP_S3_L, PM_SLP_S0 -> S0A3_GPIO). So there is no
+> > > PMIC/EC firmware that is incharge of this. I guess I'm not quite sure
+> > > how they have S0A3_GPIO configured, so maybe I have an invert wrong.
+> > > 
+> > > The EC does control DD_ON which controls the 3.3V and 5V rails.
+> > 
+> > On page 6 of the schematics I see the U7 that forms SUSB# from SUSB#_APU
+> > (which corresponds to what you said) _and_ EC_EN, which is GPIO from IT5570,
+> > which is EC.
+> > 
+> > Are you using different schematics? I'm using the one from FDO bug report.
+> 
+> Just checked this one:
+> http://repo.palkeo.com/clevo-mirror/NH5xACx_AFx_ADx/NH50AC.zip
+> 
+> Also uses EC (SUSB_EC#).
+
+So this all makes me thing that either EC firmware is buggy or we have ACPI EC
+code in the kernel to fix.
+
 -- 
-2.39.1
+With Best Regards,
+Andy Shevchenko
+
 
