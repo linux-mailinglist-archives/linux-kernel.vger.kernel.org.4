@@ -2,281 +2,394 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E28694ED8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:08:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20535694EE1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:09:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjBMSIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:08:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
+        id S230121AbjBMSJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:09:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbjBMSIh (ORCPT
+        with ESMTP id S229907AbjBMSJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:08:37 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F359116ACD;
-        Mon, 13 Feb 2023 10:08:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676311692; x=1707847692;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=I4wUWVAt0JgAPkaj+v7ozUILvduaN+KtQYgpaSCliyY=;
-  b=T0yluZQj8cKJxVAmD1O175l2qGF8jUbO+0Dyjwk2PUXHCOLoVW6MYTLV
-   uQ461CuDnJ67Vqc9tORoeuci1aaZ2LDhjlIN6dyO1du3hkr4xsWzaqQ+4
-   lh0YM4dYky010JamVMz8XSOF4zLqqfZv9COFCPtkznOMvmNdQt1lGjNB3
-   TLla2hux/FYQZrC4XWhQlSEiRpncSbuZuylyiZ2kkY2cOhGvlPVvQ8pzK
-   GveyfxNVcdLBfm/iq6yOwtYS9ZwdxzKCZu2gwwAVuT4kKs7t0vFFAiLgC
-   NzHSTO+nlxNgRKbopCxK2/zKKnh53FnHihhLHz0rGDbPa1qcIexRhloB9
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="310587469"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="310587469"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 10:07:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="792817488"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="792817488"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 13 Feb 2023 10:07:04 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id C02701A6; Mon, 13 Feb 2023 20:07:43 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Xiaowei Song <songxiaowei@hisilicon.com>,
-        Binghui Wang <wangbinghui@hisilicon.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH v1 1/1] PCI: dwc: Convert to agnostic GPIO API
-Date:   Mon, 13 Feb 2023 20:07:35 +0200
-Message-Id: <20230213180735.42117-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        Mon, 13 Feb 2023 13:09:28 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F832715;
+        Mon, 13 Feb 2023 10:09:06 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id c15so3900924ils.12;
+        Mon, 13 Feb 2023 10:09:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1676311744;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7fCyiADTFkffN0YGHJqOV166FXiIeSdHDo8OhIMqjkY=;
+        b=iB2f4ocXCpV/FvA732vU9pTASYAVc7i5Pp7ET9ZmlcNG3pCoV1+X2dX6uP3seaxtsy
+         h34Ka+q2dLladO7aDKYYc/kTm8rjvypfFly7hGyodK49bKqBaHMvA1kwtWK/DjnL+3Q3
+         p++TXlk/KzI4iFUnCz+BFIvEfNSBpqWuVLrNvcaJ2sufKrA0PbEHKVKr6K2uSU2gVUTp
+         z7hwWgYfX1RMhsZJfuloHeXhAet3OnD9mVSN45EclvkorjgwpXsELDiwSCnvBvaomslJ
+         8M+L/d2Hbqu63dG8dEGSKzQa86DsUdIc2201a3C0enBVuNxBceggwTaBIEvRNXx3VjVy
+         EVIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676311744;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7fCyiADTFkffN0YGHJqOV166FXiIeSdHDo8OhIMqjkY=;
+        b=iVtP9jxNnPmQAp7xyNpo/arnuHlEf1OVJjbsyM3cVa3Cs2tQG1DvoZdxdL+Q+S6tu/
+         sVqGJ/0xt2/P88kdo8M7IKZUeZ9emE+AD8cLMTFifOMQJbAgQ4hvyXxuexalBJoCRji+
+         sce4jLTgZfvn+OVNMbAbJiFUnMPJL7PvJ/jqxXOFI0u1GhcipFqA9wLRGawN76RCReFj
+         R6Q3KCgKCuw3sd//8h5fSSNXFyrqyhIc4SCBtoo/rfF0sb3SXDMOS/TXWtkMWwlaiNJl
+         Q484HOH1Ypr4oHPAms6w+gBMCf8ghOQwIqmYtxK56qGJbyHnXDV+gSJT32oazMlUpUoD
+         NYTg==
+X-Gm-Message-State: AO0yUKV7Pi7PyoCJ+GaFKldjJsEOFPtEeD4oerxAg6sV+XlBOWBOxo5u
+        D/V7YkuURLRBfHPQ95k0qI0=
+X-Google-Smtp-Source: AK7set8A20rRlZg2lkC+gCRHnVv3oU7t32KtOZKX/4p++cl5o7oKKY77zLgisxyfU9yajusxiGwY3g==
+X-Received: by 2002:a92:c74a:0:b0:314:11c9:955b with SMTP id y10-20020a92c74a000000b0031411c9955bmr10724389ilp.1.1676311744079;
+        Mon, 13 Feb 2023 10:09:04 -0800 (PST)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id g10-20020a92cdaa000000b0030314a7f039sm2868693ild.10.2023.02.13.10.09.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 10:09:03 -0800 (PST)
+Date:   Mon, 13 Feb 2023 20:08:57 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Steven Price <steven.price@arm.com>
+Cc:     kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Joey Gouly <joey.gouly@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Fuad Tabba <tabba@google.com>, linux-coco@lists.linux.dev
+Subject: Re: [RFC PATCH 10/28] arm64: RME: Allocate/free RECs to match vCPUs
+Message-ID: <20230213200857.00007575@gmail.com>
+In-Reply-To: <20230127112932.38045-11-steven.price@arm.com>
+References: <20230127112248.136810-1-suzuki.poulose@arm.com>
+        <20230127112932.38045-1-steven.price@arm.com>
+        <20230127112932.38045-11-steven.price@arm.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The of_gpio.h is going to be removed. In preparation of that convert
-the driver to the agnostic API.
+On Fri, 27 Jan 2023 11:29:14 +0000
+Steven Price <steven.price@arm.com> wrote:
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/pci/controller/dwc/pcie-kirin.c | 105 ++++++++----------------
- 1 file changed, 35 insertions(+), 70 deletions(-)
+> The RMM maintains a data structure known as the Realm Execution Context
+> (or REC). It is similar to struct kvm_vcpu and tracks the state of the
+> virtual CPUs. KVM must delegate memory and request the structures are
+> created when vCPUs are created, and suitably tear down on destruction.
+> 
 
-diff --git a/drivers/pci/controller/dwc/pcie-kirin.c b/drivers/pci/controller/dwc/pcie-kirin.c
-index d09507f822a7..89cbbe97e79d 100644
---- a/drivers/pci/controller/dwc/pcie-kirin.c
-+++ b/drivers/pci/controller/dwc/pcie-kirin.c
-@@ -12,13 +12,11 @@
- #include <linux/compiler.h>
- #include <linux/delay.h>
- #include <linux/err.h>
--#include <linux/gpio.h>
- #include <linux/gpio/consumer.h>
- #include <linux/interrupt.h>
- #include <linux/mfd/syscon.h>
- #include <linux/of_address.h>
- #include <linux/of_device.h>
--#include <linux/of_gpio.h>
- #include <linux/of_pci.h>
- #include <linux/phy/phy.h>
- #include <linux/pci.h>
-@@ -79,16 +77,16 @@ struct kirin_pcie {
- 	void		*phy_priv;	/* only for PCIE_KIRIN_INTERNAL_PHY */
- 
- 	/* DWC PERST# */
--	int		gpio_id_dwc_perst;
-+	struct gpio_desc *id_dwc_perst_gpio;
- 
- 	/* Per-slot PERST# */
- 	int		num_slots;
--	int		gpio_id_reset[MAX_PCI_SLOTS];
-+	struct gpio_desc *id_reset_gpio[MAX_PCI_SLOTS];
- 	const char	*reset_names[MAX_PCI_SLOTS];
- 
- 	/* Per-slot clkreq */
- 	int		n_gpio_clkreq;
--	int		gpio_id_clkreq[MAX_PCI_SLOTS];
-+	struct gpio_desc *id_clkreq_gpio[MAX_PCI_SLOTS];
- 	const char	*clkreq_names[MAX_PCI_SLOTS];
- };
- 
-@@ -383,16 +381,21 @@ static int kirin_pcie_get_gpio_enable(struct kirin_pcie *pcie,
- 	pcie->n_gpio_clkreq = ret;
- 
- 	for (i = 0; i < pcie->n_gpio_clkreq; i++) {
--		pcie->gpio_id_clkreq[i] = of_get_named_gpio(dev->of_node,
--						    "hisilicon,clken-gpios", i);
--		if (pcie->gpio_id_clkreq[i] < 0)
--			return pcie->gpio_id_clkreq[i];
-+		pcie->id_clkreq_gpio[i] = devm_gpiod_get_index(dev,
-+							"hisilicon,clken", i,
-+							GPIOD_ASIS);
-+		if (IS_ERR(pcie->id_clkreq_gpio[i]))
-+			return dev_err_probe(dev, PTR_ERR(pcie->id_clkreq_gpio[i]),
-+					     "unable to get a valid clken gpio\n");
- 
- 		sprintf(name, "pcie_clkreq_%d", i);
- 		pcie->clkreq_names[i] = devm_kstrdup_const(dev, name,
- 							    GFP_KERNEL);
- 		if (!pcie->clkreq_names[i])
- 			return -ENOMEM;
-+
-+		gpiod_set_consumer_name(pcie->id_clkreq_gpio[i],
-+					pcie->clkreq_names[i]);
- 	}
- 
- 	return 0;
-@@ -411,10 +414,16 @@ static int kirin_pcie_parse_port(struct kirin_pcie *pcie,
- 		for_each_available_child_of_node(parent, child) {
- 			i = pcie->num_slots;
- 
--			pcie->gpio_id_reset[i] = of_get_named_gpio(child,
--							"reset-gpios", 0);
--			if (pcie->gpio_id_reset[i] < 0)
--				continue;
-+			pcie->id_reset_gpio[i] = devm_fwnode_gpiod_get_index(dev,
-+							 of_fwnode_handle(child),
-+							 "reset", 0, GPIOD_ASIS,
-+							 NULL);
-+			if (IS_ERR(pcie->id_reset_gpio[i])) {
-+				if (PTR_ERR(pcie->id_reset_gpio[i]) == -ENOENT)
-+					continue;
-+				return dev_err_probe(dev, PTR_ERR(pcie->id_reset_gpio[i]),
-+						     "unable to get a valid reset gpio\n");
-+			}
- 
- 			pcie->num_slots++;
- 			if (pcie->num_slots > MAX_PCI_SLOTS) {
-@@ -438,6 +447,9 @@ static int kirin_pcie_parse_port(struct kirin_pcie *pcie,
- 				ret = -ENOMEM;
- 				goto put_node;
- 			}
-+
-+			gpiod_set_consumer_name(pcie->id_reset_gpio[i],
-+						pcie->reset_names[i]);
- 		}
- 	}
- 
-@@ -467,14 +479,11 @@ static long kirin_pcie_get_resource(struct kirin_pcie *kirin_pcie,
- 		return PTR_ERR(kirin_pcie->apb);
- 
- 	/* pcie internal PERST# gpio */
--	kirin_pcie->gpio_id_dwc_perst = of_get_named_gpio(dev->of_node,
--							  "reset-gpios", 0);
--	if (kirin_pcie->gpio_id_dwc_perst == -EPROBE_DEFER) {
--		return -EPROBE_DEFER;
--	} else if (!gpio_is_valid(kirin_pcie->gpio_id_dwc_perst)) {
--		dev_err(dev, "unable to get a valid gpio pin\n");
--		return -ENODEV;
--	}
-+	kirin_pcie->id_dwc_perst_gpio = devm_gpiod_get(dev, "reset", GPIOD_ASIS);
-+	if (IS_ERR(kirin_pcie->id_dwc_perst_gpio))
-+		return dev_err_probe(dev, PTR_ERR(kirin_pcie->id_dwc_perst_gpio),
-+				     "unable to get a valid gpio pin\n");
-+	gpiod_set_consumer_name(kirin_pcie->id_dwc_perst_gpio, "pcie_perst_bridge");
- 
- 	ret = kirin_pcie_get_gpio_enable(kirin_pcie, pdev);
- 	if (ret)
-@@ -557,7 +566,7 @@ static int kirin_pcie_add_bus(struct pci_bus *bus)
- 
- 	/* Send PERST# to each slot */
- 	for (i = 0; i < kirin_pcie->num_slots; i++) {
--		ret = gpio_direction_output(kirin_pcie->gpio_id_reset[i], 1);
-+		ret = gpiod_direction_output_raw(kirin_pcie->id_reset_gpio[i], 1);
- 		if (ret) {
- 			dev_err(pci->dev, "PERST# %s error: %d\n",
- 				kirin_pcie->reset_names[i], ret);
-@@ -627,44 +636,6 @@ static int kirin_pcie_host_init(struct dw_pcie_rp *pp)
- 	return 0;
- }
- 
--static int kirin_pcie_gpio_request(struct kirin_pcie *kirin_pcie,
--				   struct device *dev)
--{
--	int ret, i;
--
--	for (i = 0; i < kirin_pcie->num_slots; i++) {
--		if (!gpio_is_valid(kirin_pcie->gpio_id_reset[i])) {
--			dev_err(dev, "unable to get a valid %s gpio\n",
--				kirin_pcie->reset_names[i]);
--			return -ENODEV;
--		}
--
--		ret = devm_gpio_request(dev, kirin_pcie->gpio_id_reset[i],
--					kirin_pcie->reset_names[i]);
--		if (ret)
--			return ret;
--	}
--
--	for (i = 0; i < kirin_pcie->n_gpio_clkreq; i++) {
--		if (!gpio_is_valid(kirin_pcie->gpio_id_clkreq[i])) {
--			dev_err(dev, "unable to get a valid %s gpio\n",
--				kirin_pcie->clkreq_names[i]);
--			return -ENODEV;
--		}
--
--		ret = devm_gpio_request(dev, kirin_pcie->gpio_id_clkreq[i],
--					kirin_pcie->clkreq_names[i]);
--		if (ret)
--			return ret;
--
--		ret = gpio_direction_output(kirin_pcie->gpio_id_clkreq[i], 0);
--		if (ret)
--			return ret;
--	}
--
--	return 0;
--}
--
- static const struct dw_pcie_ops kirin_dw_pcie_ops = {
- 	.read_dbi = kirin_pcie_read_dbi,
- 	.write_dbi = kirin_pcie_write_dbi,
-@@ -684,7 +655,7 @@ static int kirin_pcie_power_off(struct kirin_pcie *kirin_pcie)
- 		return hi3660_pcie_phy_power_off(kirin_pcie);
- 
- 	for (i = 0; i < kirin_pcie->n_gpio_clkreq; i++)
--		gpio_direction_output(kirin_pcie->gpio_id_clkreq[i], 1);
-+		gpiod_direction_output_raw(kirin_pcie->id_clkreq_gpio[i], 1);
- 
- 	phy_power_off(kirin_pcie->phy);
- 	phy_exit(kirin_pcie->phy);
-@@ -711,10 +682,6 @@ static int kirin_pcie_power_on(struct platform_device *pdev,
- 		if (IS_ERR(kirin_pcie->phy))
- 			return PTR_ERR(kirin_pcie->phy);
- 
--		ret = kirin_pcie_gpio_request(kirin_pcie, dev);
--		if (ret)
--			return ret;
--
- 		ret = phy_init(kirin_pcie->phy);
- 		if (ret)
- 			goto err;
-@@ -727,11 +694,9 @@ static int kirin_pcie_power_on(struct platform_device *pdev,
- 	/* perst assert Endpoint */
- 	usleep_range(REF_2_PERST_MIN, REF_2_PERST_MAX);
- 
--	if (!gpio_request(kirin_pcie->gpio_id_dwc_perst, "pcie_perst_bridge")) {
--		ret = gpio_direction_output(kirin_pcie->gpio_id_dwc_perst, 1);
--		if (ret)
--			goto err;
--	}
-+	ret = gpiod_direction_output_raw(kirin_pcie->id_dwc_perst_gpio, 1);
-+	if (ret)
-+		goto err;
- 
- 	usleep_range(PERST_2_ACCESS_MIN, PERST_2_ACCESS_MAX);
- 
--- 
-2.39.1
+It would be better to leave some pointers to the spec here. It really saves
+time for reviewers. 
+
+> Signed-off-by: Steven Price <steven.price@arm.com>
+> ---
+>  arch/arm64/include/asm/kvm_emulate.h |   2 +
+>  arch/arm64/include/asm/kvm_host.h    |   3 +
+>  arch/arm64/include/asm/kvm_rme.h     |  10 ++
+>  arch/arm64/kvm/arm.c                 |   1 +
+>  arch/arm64/kvm/reset.c               |  11 ++
+>  arch/arm64/kvm/rme.c                 | 144 +++++++++++++++++++++++++++
+>  6 files changed, 171 insertions(+)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_emulate.h b/arch/arm64/include/asm/kvm_emulate.h
+> index 5a2b7229e83f..285e62914ca4 100644
+> --- a/arch/arm64/include/asm/kvm_emulate.h
+> +++ b/arch/arm64/include/asm/kvm_emulate.h
+> @@ -504,6 +504,8 @@ static inline enum realm_state kvm_realm_state(struct kvm *kvm)
+>  
+>  static inline bool vcpu_is_rec(struct kvm_vcpu *vcpu)
+>  {
+> +	if (static_branch_unlikely(&kvm_rme_is_available))
+> +		return vcpu->arch.rec.mpidr != INVALID_HWID;
+>  	return false;
+>  }
+>  
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 04347c3a8c6b..ef497b718cdb 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -505,6 +505,9 @@ struct kvm_vcpu_arch {
+>  		u64 last_steal;
+>  		gpa_t base;
+>  	} steal;
+> +
+> +	/* Realm meta data */
+> +	struct rec rec;
+
+I think the name of the data structure "rec" needs a prefix, it is too common
+and might conflict with the private data structures in the other modules. Maybe
+rme_rec or realm_rec?
+>  };
+>  
+>  /*
+> diff --git a/arch/arm64/include/asm/kvm_rme.h b/arch/arm64/include/asm/kvm_rme.h
+> index eea5118dfa8a..4b219ebe1400 100644
+> --- a/arch/arm64/include/asm/kvm_rme.h
+> +++ b/arch/arm64/include/asm/kvm_rme.h
+> @@ -6,6 +6,7 @@
+>  #ifndef __ASM_KVM_RME_H
+>  #define __ASM_KVM_RME_H
+>  
+> +#include <asm/rmi_smc.h>
+>  #include <uapi/linux/kvm.h>
+>  
+>  enum realm_state {
+> @@ -29,6 +30,13 @@ struct realm {
+>  	unsigned int ia_bits;
+>  };
+>  
+> +struct rec {
+> +	unsigned long mpidr;
+> +	void *rec_page;
+> +	struct page *aux_pages[REC_PARAMS_AUX_GRANULES];
+> +	struct rec_run *run;
+> +};
+> +
+
+It is better to leave some comments for above members or pointers to the spec,
+that saves a lot of time for review.
+
+>  int kvm_init_rme(void);
+>  u32 kvm_realm_ipa_limit(void);
+>  
+> @@ -36,6 +44,8 @@ int kvm_realm_enable_cap(struct kvm *kvm, struct kvm_enable_cap *cap);
+>  int kvm_init_realm_vm(struct kvm *kvm);
+>  void kvm_destroy_realm(struct kvm *kvm);
+>  void kvm_realm_destroy_rtts(struct realm *realm, u32 ia_bits, u32 start_level);
+> +int kvm_create_rec(struct kvm_vcpu *vcpu);
+> +void kvm_destroy_rec(struct kvm_vcpu *vcpu);
+>  
+>  #define RME_RTT_BLOCK_LEVEL	2
+>  #define RME_RTT_MAX_LEVEL	3
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index badd775547b8..52affed2f3cf 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -373,6 +373,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+>  	/* Force users to call KVM_ARM_VCPU_INIT */
+>  	vcpu->arch.target = -1;
+>  	bitmap_zero(vcpu->arch.features, KVM_VCPU_MAX_FEATURES);
+> +	vcpu->arch.rec.mpidr = INVALID_HWID;
+>  
+>  	vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
+>  
+> diff --git a/arch/arm64/kvm/reset.c b/arch/arm64/kvm/reset.c
+> index 9e71d69e051f..0c84392a4bf2 100644
+> --- a/arch/arm64/kvm/reset.c
+> +++ b/arch/arm64/kvm/reset.c
+> @@ -135,6 +135,11 @@ int kvm_arm_vcpu_finalize(struct kvm_vcpu *vcpu, int feature)
+>  			return -EPERM;
+>  
+>  		return kvm_vcpu_finalize_sve(vcpu);
+> +	case KVM_ARM_VCPU_REC:
+> +		if (!kvm_is_realm(vcpu->kvm))
+> +			return -EINVAL;
+> +
+> +		return kvm_create_rec(vcpu);
+>  	}
+>  
+>  	return -EINVAL;
+> @@ -145,6 +150,11 @@ bool kvm_arm_vcpu_is_finalized(struct kvm_vcpu *vcpu)
+>  	if (vcpu_has_sve(vcpu) && !kvm_arm_vcpu_sve_finalized(vcpu))
+>  		return false;
+>  
+> +	if (kvm_is_realm(vcpu->kvm) &&
+> +	    !(vcpu_is_rec(vcpu) &&
+> +	      READ_ONCE(vcpu->kvm->arch.realm.state) == REALM_STATE_ACTIVE))
+> +		return false;
+
+That's why it is better to introduce the realm state in the previous patches so
+that people can really get the idea of the states at this stage.
+
+> +
+>  	return true;
+>  }
+>  
+> @@ -157,6 +167,7 @@ void kvm_arm_vcpu_destroy(struct kvm_vcpu *vcpu)
+>  	if (sve_state)
+>  		kvm_unshare_hyp(sve_state, sve_state + vcpu_sve_state_size(vcpu));
+>  	kfree(sve_state);
+> +	kvm_destroy_rec(vcpu);
+>  }
+>  
+>  static void kvm_vcpu_reset_sve(struct kvm_vcpu *vcpu)
+> diff --git a/arch/arm64/kvm/rme.c b/arch/arm64/kvm/rme.c
+> index f7b0e5a779f8..d79ed889ca4d 100644
+> --- a/arch/arm64/kvm/rme.c
+> +++ b/arch/arm64/kvm/rme.c
+> @@ -514,6 +514,150 @@ void kvm_destroy_realm(struct kvm *kvm)
+>  	kvm_free_stage2_pgd(&kvm->arch.mmu);
+>  }
+>  
+> +static void free_rec_aux(struct page **aux_pages,
+> +			 unsigned int num_aux)
+> +{
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < num_aux; i++) {
+> +		phys_addr_t aux_page_phys = page_to_phys(aux_pages[i]);
+> +
+> +		if (WARN_ON(rmi_granule_undelegate(aux_page_phys)))
+> +			continue;
+> +
+> +		__free_page(aux_pages[i]);
+> +	}
+> +}
+> +
+> +static int alloc_rec_aux(struct page **aux_pages,
+> +			 u64 *aux_phys_pages,
+> +			 unsigned int num_aux)
+> +{
+> +	int ret;
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < num_aux; i++) {
+> +		struct page *aux_page;
+> +		phys_addr_t aux_page_phys;
+> +
+> +		aux_page = alloc_page(GFP_KERNEL);
+> +		if (!aux_page) {
+> +			ret = -ENOMEM;
+> +			goto out_err;
+> +		}
+> +		aux_page_phys = page_to_phys(aux_page);
+> +		if (rmi_granule_delegate(aux_page_phys)) {
+> +			__free_page(aux_page);
+> +			ret = -ENXIO;
+> +			goto out_err;
+> +		}
+> +		aux_pages[i] = aux_page;
+> +		aux_phys_pages[i] = aux_page_phys;
+> +	}
+> +
+> +	return 0;
+> +out_err:
+> +	free_rec_aux(aux_pages, i);
+> +	return ret;
+> +}
+> +
+> +int kvm_create_rec(struct kvm_vcpu *vcpu)
+> +{
+> +	struct user_pt_regs *vcpu_regs = vcpu_gp_regs(vcpu);
+> +	unsigned long mpidr = kvm_vcpu_get_mpidr_aff(vcpu);
+> +	struct realm *realm = &vcpu->kvm->arch.realm;
+> +	struct rec *rec = &vcpu->arch.rec;
+> +	unsigned long rec_page_phys;
+> +	struct rec_params *params;
+> +	int r, i;
+> +
+> +	if (kvm_realm_state(vcpu->kvm) != REALM_STATE_NEW)
+> +		return -ENOENT;
+> +
+> +	/*
+> +	 * The RMM will report PSCI v1.0 to Realms and the KVM_ARM_VCPU_PSCI_0_2
+> +	 * flag covers v0.2 and onwards.
+> +	 */
+> +	if (!test_bit(KVM_ARM_VCPU_PSCI_0_2, vcpu->arch.features))
+> +		return -EINVAL;
+> +
+> +	BUILD_BUG_ON(sizeof(*params) > PAGE_SIZE);
+> +	BUILD_BUG_ON(sizeof(*rec->run) > PAGE_SIZE);
+> +
+> +	params = (struct rec_params *)get_zeroed_page(GFP_KERNEL);
+> +	rec->rec_page = (void *)__get_free_page(GFP_KERNEL);
+> +	rec->run = (void *)get_zeroed_page(GFP_KERNEL);
+> +	if (!params || !rec->rec_page || !rec->run) {
+> +		r = -ENOMEM;
+> +		goto out_free_pages;
+> +	}
+> +
+> +	for (i = 0; i < ARRAY_SIZE(params->gprs); i++)
+> +		params->gprs[i] = vcpu_regs->regs[i];
+> +
+> +	params->pc = vcpu_regs->pc;
+> +
+> +	if (vcpu->vcpu_id == 0)
+> +		params->flags |= REC_PARAMS_FLAG_RUNNABLE;
+> +
+> +	rec_page_phys = virt_to_phys(rec->rec_page);
+> +
+> +	if (rmi_granule_delegate(rec_page_phys)) {
+> +		r = -ENXIO;
+> +		goto out_free_pages;
+> +	}
+> +
+
+Wouldn't it be better to extend the alloc_rec_aux() to allocate and delegate
+pages above? so that you can same some gfps and rmi_granuale_delegates().
+
+> +	r = alloc_rec_aux(rec->aux_pages, params->aux, realm->num_aux);
+> +	if (r)
+> +		goto out_undelegate_rmm_rec;
+> +
+> +	params->num_rec_aux = realm->num_aux;
+> +	params->mpidr = mpidr;
+> +
+> +	if (rmi_rec_create(rec_page_phys,
+> +			   virt_to_phys(realm->rd),
+> +			   virt_to_phys(params))) {
+> +		r = -ENXIO;
+> +		goto out_free_rec_aux;
+> +	}
+> +
+> +	rec->mpidr = mpidr;
+> +
+> +	free_page((unsigned long)params);
+> +	return 0;
+> +
+> +out_free_rec_aux:
+> +	free_rec_aux(rec->aux_pages, realm->num_aux);
+> +out_undelegate_rmm_rec:
+> +	if (WARN_ON(rmi_granule_undelegate(rec_page_phys)))
+> +		rec->rec_page = NULL;
+> +out_free_pages:
+> +	free_page((unsigned long)rec->run);
+> +	free_page((unsigned long)rec->rec_page);
+> +	free_page((unsigned long)params);
+> +	return r;
+> +}
+> +
+> +void kvm_destroy_rec(struct kvm_vcpu *vcpu)
+> +{
+> +	struct realm *realm = &vcpu->kvm->arch.realm;
+> +	struct rec *rec = &vcpu->arch.rec;
+> +	unsigned long rec_page_phys;
+> +
+> +	if (!vcpu_is_rec(vcpu))
+> +		return;
+> +
+> +	rec_page_phys = virt_to_phys(rec->rec_page);
+> +
+> +	if (WARN_ON(rmi_rec_destroy(rec_page_phys)))
+> +		return;
+> +	if (WARN_ON(rmi_granule_undelegate(rec_page_phys)))
+> +		return;
+> +
+
+The two returns above feels off. What is the reason to skip the below page
+undelegates?
+
+> +	free_rec_aux(rec->aux_pages, realm->num_aux);
+> +	free_page((unsigned long)rec->rec_page);
+> +}
+> +
+>  int kvm_init_realm_vm(struct kvm *kvm)
+>  {
+>  	struct realm_params *params;
 
