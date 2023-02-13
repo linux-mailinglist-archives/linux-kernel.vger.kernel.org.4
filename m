@@ -2,145 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B64694E46
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A04694E4E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:45:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjBMRnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 12:43:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56830 "EHLO
+        id S229917AbjBMRpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 12:45:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjBMRnh (ORCPT
+        with ESMTP id S229618AbjBMRpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 12:43:37 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED341C5B3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:43:36 -0800 (PST)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 6CBFB3F131
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 17:43:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1676310214;
-        bh=92AwtEIk4tSFvds2ogNMkv3Byy8L08pLtOu+QAH2HLM=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=snQCEwItOp01bn/6Akrx+oQLCCpJUVTPF0vCkl1FkBvPtDMKD95j2eGymQscqic6n
-         iR+GtZcitFj1AveFfeCy9dWWVFpbsGPzbu+2kleby2l49zRD+tqNbpaHDLbViHXWYm
-         fTJAtqRH/aqDQMNbMLftuhHDxPPA5U6rG6XJ7Zgu1vcJ2PQsA5l75QQT6mtV5TP+p5
-         1U/wWPk1zMg5v48n/RSeUJZNMvaKkdvU4zVgOTRrkFt3G4uYMjwekaXRwQL5k8G63G
-         seo4BIE1ELzRl038tm7KG4yTyluue1iE9pKgjMnQK9DWQgZpIvkzId8I5oHInrL9+8
-         nXV2t7H6bgfYA==
-Received: by mail-ed1-f70.google.com with SMTP id eq22-20020a056402299600b004ab4da4a530so5302545edb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:43:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=92AwtEIk4tSFvds2ogNMkv3Byy8L08pLtOu+QAH2HLM=;
-        b=BuhHmdJfVCFhrmrzHQw7wGUFa8j3nuYfqDG0A/2ZzL/eiGYqErLbwyYmSNMhp8/pZb
-         UwO20jBtIr2vXGrVBM6Tp264sjoVnAMXNzJjsaTukuz3a5+jgnGG3UkHEG1BzURLwblk
-         MWknW+q3Mje+3NLaJnlUm1GsNUy3f2B/QRQp9IPPvO0szXSS1JdEQ9AGBgLFKAEJLqN6
-         tFb1WwvF7aR2v1fsUYI7LfoH2tN2T4epSo1E1162G4Jbuk502UPXCSJSeFK1OC9IKA4e
-         cet3MaPMWoBKwuP4Ja2JOfHLHlkd40aCN1YZG53lj+QHNvZ73UWwKYImp/Ak4PD31mAy
-         T1QQ==
-X-Gm-Message-State: AO0yUKUKWsu4Bdxoy9kCcPxzMFJhH48RBwuSA2eRlgEk+n9+hhn/u1r/
-        x3vWpxdN1y5+cZ0WdL/XiqGdi7JfUwhQS5Hd93dDHjX6FcfRLfvsXo/kWCxTjx72ucHovIVh+xe
-        9haYFEqc5yTb+c21HE8lkw7/ZJhhwcnPxeSccqdPYBw==
-X-Received: by 2002:a50:d0ce:0:b0:4ac:aa4d:51b8 with SMTP id g14-20020a50d0ce000000b004acaa4d51b8mr10224478edf.17.1676310214066;
-        Mon, 13 Feb 2023 09:43:34 -0800 (PST)
-X-Google-Smtp-Source: AK7set+FgGH4T/lCPgHkgjdP42X02A6Bc6RCVLpZeYniNtHchdPfEKEaUt8cYaecg1fD6CYvf4LEug==
-X-Received: by 2002:a50:d0ce:0:b0:4ac:aa4d:51b8 with SMTP id g14-20020a50d0ce000000b004acaa4d51b8mr10224456edf.17.1676310213849;
-        Mon, 13 Feb 2023 09:43:33 -0800 (PST)
-Received: from localhost (host-87-7-128-191.retail.telecomitalia.it. [87.7.128.191])
-        by smtp.gmail.com with ESMTPSA id f22-20020a50a6d6000000b004acc6cbc451sm1962685edc.36.2023.02.13.09.43.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 09:43:33 -0800 (PST)
-Date:   Mon, 13 Feb 2023 18:43:32 +0100
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Eric Curtin <ecurtin@redhat.com>
-Cc:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        miguel.ojeda.sandonis@gmail.com, alex.gaynor@gmail.com,
-        bjorn3_gh@protonmail.com, boqun.feng@gmail.com, dxu@dxuuu.xyz,
-        gary@garyguo.net, linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        rust-for-linux@vger.kernel.org, wedsonaf@gmail.com
-Subject: Re: [PATCH] rust: fix regexp in scripts/is_rust_module.sh
-Message-ID: <Y+p2xKIN6TJnQinK@righiandr-XPS-13-7390>
-References: <'CANiq72=FZtNmYvbb-YPHmQ=bm8rH8VO3M9nemT4i03g9A2PD2Q@mail.gmail.com'>
- <20230213151339.661225-1-yakoyoku@gmail.com>
- <Y+pbtZUaRM+gkOUC@righiandr-XPS-13-7390>
- <CAOgh=FySHZSceM_JKjSNX5qTXBSv3Kv3KP6yT27VXADt-_oB5w@mail.gmail.com>
+        Mon, 13 Feb 2023 12:45:15 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEAF1CF6B;
+        Mon, 13 Feb 2023 09:45:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676310314; x=1707846314;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=18gO/DhkVTAE/J5W1hK5vCor0AR6WYHp6E5QaFkses0=;
+  b=ORBmXtBelEABTtYdaAkNPzF1jYDZoMfRjVkHHGKCuntpVpOfLXWxIBav
+   PHvc/rvkk9Uxkb/ssXNO6KfdIbTq/dRUX95bICZPM+2KlKdZa6vrAax4N
+   alEynmpHyfa8M7hvJcDMaf9gWpvGDNM85hUyiQaQVFFQUm+hc9c9Cghg4
+   mgalE1E1kuPhXF0nxz5rYXnoaEx/P1KiiL/6Vpj7VIXfp0f3FU/T/YOrb
+   BCPQOgZm3sAqXyXafhzCaoybokbjVG+DZVNSi0R55R5tgGSd6Eka9nw00
+   GyXxpDs+wXkWjzcxB1CxwrSJf89Onog20dYGtPKRfb1pDGN9sszFVgvEQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="328654660"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="328654660"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 09:45:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="811682244"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="811682244"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga001.fm.intel.com with ESMTP; 13 Feb 2023 09:45:13 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 13 Feb 2023 09:45:13 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 13 Feb 2023 09:45:13 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 13 Feb 2023 09:45:13 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.108)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 13 Feb 2023 09:45:11 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a3QNMHy9e81r/heIoY7oUtaRKWxETPe6DuebU/fBuYGtqeogUMsXPAxTiNJROZTR64sFYpO9H5Bp2rYp0k0uaxC5/ChLF4WGHaN68GkH18Ler7UxIJCXsNWaMeEYwIYTUF5pKNCzbUwv0lauuYS/KM7MXI1A0pcWQKZ4qzY/4Va2TGiM9tndXKZQSJeLrL41J1rqhmaLo3iNzMZssKWTtY7jbQwqA3UXIfh30PuzwkJpyQIbWMvP80ZW8l5arK0JNEav164S7C9rvfAkpTowe2rYJ2s1W3AXvxsVRdxg+JnPD7axq31OE67VLtU4TZbiWOoA+Rr2AgI8dUE7FTAfdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dw2EyhTDJkPOzMPS4hY57zG9tidcrE+Taj3kyYqQ93g=;
+ b=O57EfojVxWxWfsaF5y550SWACRdcy9QR7xirbbxiK1QzWhLsMh0aol0sm2LZmOc6ku5fEAm9snYu4OeHBZTamAAL8mJH9k8IHPofEBjVzoDUSzLPO1SRh2R8RuuZkKGJjRPHT2nAUABwisayBj9jn9vnjIyxn9aQEugtlpc1OPYdj/d+RcaWF9TQi6Yckwz/708e1zJ5eppxUe9GQqbVNKC4vJOg+Rw/t6YnAHwAay7FkdKkP/6jDe4S0ImEkKbZEjTh3jv/g/kdM9bKh8TauBsCatMd1EYW4iGCUhwz8qcq7X9rEECtTPGyH/gWa6+HLVz9SMbrx69Crjlm7g9A9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by IA0PR11MB7305.namprd11.prod.outlook.com (2603:10b6:208:439::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Mon, 13 Feb
+ 2023 17:45:09 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::3ff6:ca60:f9fe:6934]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::3ff6:ca60:f9fe:6934%4]) with mapi id 15.20.6086.017; Mon, 13 Feb 2023
+ 17:45:09 +0000
+Message-ID: <8b25bd1f-4265-33ea-bdb9-bc700eff0b0e@intel.com>
+Date:   Mon, 13 Feb 2023 18:44:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH V2 net-next] net: fec: add CBS offload support
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     <wei.fang@nxp.com>, <shenwei.wang@nxp.com>,
+        <xiaoning.wang@nxp.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <simon.horman@corigine.com>, <netdev@vger.kernel.org>,
+        <linux-imx@nxp.com>, <linux-kernel@vger.kernel.org>
+References: <20230213092912.2314029-1-wei.fang@nxp.com>
+ <ed27795a-f81f-a913-8275-b6f516b4f384@intel.com> <Y+pjl3vzi7TQcLKm@lunn.ch>
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+In-Reply-To: <Y+pjl3vzi7TQcLKm@lunn.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P265CA0120.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c6::7) To DM6PR11MB3625.namprd11.prod.outlook.com
+ (2603:10b6:5:13a::21)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOgh=FySHZSceM_JKjSNX5qTXBSv3Kv3KP6yT27VXADt-_oB5w@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|IA0PR11MB7305:EE_
+X-MS-Office365-Filtering-Correlation-Id: 07cd7004-d542-42c5-227e-08db0dea0ce6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: T91ErE40Foyfyofj0YdYpObb6y6fDpLFILGxyd1+d38QlXkLutnCn0VrRtAOUHsYgkoIdSkU3zHgiUy1eRLltbi6R3mywYuMoL8YzRg9DK7BnAKL6pmmQDF7gTd0rhLXCIpp6VuACaTWZ95A9LomKgXaiCE2BX1wm7J32QG1oZyE7ZEFnyHFu+SKfXDWHQ9Jiy9XguHQ7nf5bBHQ+kaP9X1cSw2rhTdSDK5/M8sv7kZVc9waTVEgnhPNxT+UEwn2hWtJIUvIgpgWWv6EuZToNMJMFzaPS4DMo6Flbn1bGO2xBNBxTluaO8j8FQ8triTHLtBSjV8EntgaU8TRIMdzui3TwYc38xDJtM/HJY6dc69Riv59MTmZsDozpCfFIBqDFwo7lz0YremsWYAFIAp7H45Mizcp6yvQHc9bvHkHHgWIOEr0xPoban2b1b+3STTVOZyymBTykjJBw0lUFMyzGcpo1iYiZR5KKnNodL5ZkCSf6v1wPVyrrMtwopTaphbV2sg199HygcCuHRtyEkPj48aWBIqHdRlu9sW3TLOzmZozmsBpMG2e87/8765V1wdZt5C6e0e7PA0FHC05NTBw8byqAbZKoEWcKRZ68aLj1WOJqgnsCClpiHiV7TfHe05hYmpaKX5284513Wapkw++iaJO4k/lYv/arxTfO/nvRmlvcOOi/+l8vrASw8pzqfItzcKhELhjXkERegtkvt/C74L5UxEIf40GyWnMaxiqGCs=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(366004)(376002)(396003)(346002)(136003)(451199018)(41300700001)(38100700002)(36756003)(7416002)(5660300002)(8936002)(4744005)(478600001)(2906002)(6506007)(6666004)(6512007)(186003)(31696002)(26005)(86362001)(6486002)(82960400001)(2616005)(66476007)(66556008)(66946007)(6916009)(8676002)(4326008)(316002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eC95eHJWalNta1BDb2lPQXZ0QUMvRHJFNTlLTmVVNFJzakRmS0dNVXN5WmdT?=
+ =?utf-8?B?bjRkZk4vUGRoejlzR1pyMko0QllUZ3BISHFONGJGWXI5S2djU1haYm5zQzBU?=
+ =?utf-8?B?R3k4RmhXbUhvZEVWZER0NElYbjUwTCtORHV1Q3hoWUs2ZHBwLzZIR0IyTTZP?=
+ =?utf-8?B?cHd1bWlOU3FkRno2eVkvN29jMVc0UlhnYnVJd2FOaVh1U1ptUUROZ3ZjVTlC?=
+ =?utf-8?B?bnZDbVRWZS8vT0Q1dXdhM20rMndPSEtNSitDYS9HUzBCTVEyN1VMbmRMVURK?=
+ =?utf-8?B?bFhobDMvemFQdElQSE9NOXU4TlI5UWk2THdLL3NOTC9FdWxnajdxWlpMbXYx?=
+ =?utf-8?B?YWtqNWlXMTRRb2krTGQxSCtUNkFxRDVLVnlpU2ZlazZwZDNCTFFleVV4VTZ5?=
+ =?utf-8?B?THBqRkFROHhlV25uMUhaK0dtdDY4QnprZlZxV3poTnVjNlV3enZrdVA3OUd0?=
+ =?utf-8?B?YTRKWHh1cGVDUk1INGtyQzcrMzh1Ykk3dU0ySXZwNTlGb0o3NnJVUTJSNXdV?=
+ =?utf-8?B?eUNXYkJocTl4M1V6OVRGSHBHQlJ0MEZPalZDSHlrcW5NN3F5OWdpYlJQQlF1?=
+ =?utf-8?B?WUpxbXllblE1YTBSUzN6Q2RvOHVWaXI2SWpwcndjOEpHZzhhMGlsb09KNmp4?=
+ =?utf-8?B?MThmd3RpV0MyWlBMQU02ZUlsYUJnWU1GQkduVmZMV0U0U3ZJSTNhM1RBbkxw?=
+ =?utf-8?B?YmdCZXFVMk1EWWNPRjlkWllvT0hEYm9haDR0YnpQNk0zYWpvRFRHVWpaNWpI?=
+ =?utf-8?B?OHBldk5wWURQaWRIN1pHWThCZk9pWXVOcVpidjRtdUN5aHR1VHZxc0F6VGhI?=
+ =?utf-8?B?OG15eE1vUlJvUTRGbHdBZnBJTUdNRVIvbGdwQlUrbTJlby9scTlvRTdBRzcw?=
+ =?utf-8?B?KzdBYVRsQVdjcWFKN3AxczM4cGNtYVhINHp5RVU1ajhpazczMi9qdXR6NElz?=
+ =?utf-8?B?SkdKd25xcnBzZnNKVDg3UnFIUW5KalV0bHNQZDRkWjV0a0JHUUVMWWlKSlFQ?=
+ =?utf-8?B?aXVCKy8vdlJCNC9SUjl6R2NpLzN5a3ROcjJGTlZJTmxad2FWbU1BdW9aOU45?=
+ =?utf-8?B?TXBySG84ekg1Zkc5OFRYcW9zMzkvUXA0WmNOVGpZbEtobGxLTDZrOHFTQzdD?=
+ =?utf-8?B?UnFXR0I4OFY4QTFWZEF1TmxDenJPRHZ2bUExVzl3aUNXZlk4MlVSOWhqcDBm?=
+ =?utf-8?B?YnNaQWVvaEVHVnhCeHZpNlp6eEJVenV1eW43WVg2VUtoV2pUalpJWllYS2pL?=
+ =?utf-8?B?cG5XeG9TdUpMRHNDTm00bUpyc1pXbXJXSm1HTSttcmF5SVI4TUxKM0ljMFNw?=
+ =?utf-8?B?QmEyV2VybHVzUmVpV3hJVEV4MkpWSHBpVlZWZmJZMGpBcTM0L0poUFltalRL?=
+ =?utf-8?B?cGErQmJ4eU1ZckN1Z0dYZXE3NTFMd1JWVk0vT1NEMjNMMklYc0ZjNmZVNXVa?=
+ =?utf-8?B?RjNwcDFFdmJQRmdHMWdKTmowYmJCRVBKbXZIREFnVDU3aU83VVREZTBtOXBU?=
+ =?utf-8?B?clZCdjhUMTJyWG9zcXBDcWxIdnNSVUh4VFdxU2tpNVNibk9VSStzWVdJL3Bv?=
+ =?utf-8?B?RVcrelZ5VExNQmZacm1DS2RQZDl5RWJ1THJkSzlicWRRVkFYakJ5MUVZRWZY?=
+ =?utf-8?B?RVpSY2lhV09zcURCanRLOHg1U3pZaC9RVUlOcHdoWjYwVCt0c0lUYUVuZHpN?=
+ =?utf-8?B?OWFaV0J1eG5WMzJxTFRsblpEY0lVYnB5RlJtOVZXZGVxODNzczNoRE5Oa2xw?=
+ =?utf-8?B?ejZzOGpId2NFRytPL1pNanplcDVwN3l3OGt6RjBwbDZDenBuZ2xzNWo2dWZt?=
+ =?utf-8?B?RXJna0ttQWNCSnMrZGJyU1Nuc09UV2pYOGRhYVMwa2l6UGxUYmVoV0d4SWZx?=
+ =?utf-8?B?cXBiU3pMOG5rY2dZckRTRHV5TlpnemR2clZLYkRhdzNzV2M2ZE13NFNqRkhN?=
+ =?utf-8?B?Y0xwVEtJSFlVWUJCQXc1QkQvK0xNaEErM2tCWGhNTGUxRk1QYmN5SHEvMzdW?=
+ =?utf-8?B?ZDZ5Vk1yVFQwZFhtUEloRUFEZHZvbGtWSnB5bVZBamN1TXZVUmF6VWVNWmhW?=
+ =?utf-8?B?RUNmdFZmWWxGK1g2Q0JIR1lCODI3c2tJd3NyaGVMdWFnZFZibWF6M2dnUjla?=
+ =?utf-8?B?MjdXdUV6aWJUOENGL293WW5UN1BnNURVUHc3MkIvMEFqb0hOVFE1eHNPWXo2?=
+ =?utf-8?B?M2c9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 07cd7004-d542-42c5-227e-08db0dea0ce6
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2023 17:45:09.5942
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ITGoI0FGOvpiQnGvxqNQ0LDgHH2W0IjxmWabpjud5sa/1zWjZIoZODYTSIQ9UVTyr0oh9YCnCq6mEMCv4MyLyAFwZuRuPC3QEqwfQL4infQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB7305
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 04:03:46PM +0000, Eric Curtin wrote:
-> On Mon, 13 Feb 2023 at 15:48, Andrea Righi <andrea.righi@canonical.com> wrote:
-> >
-> > On Mon, Feb 13, 2023 at 12:13:39PM -0300, Martin Rodriguez Reboredo wrote:
-> > > On Mon, Feb 13, 2023 at 1:19 PM Miguel Ojeda <ojeda@kernel.org> wrote:
-> > > > On Fri, Feb 10, 2023 at 4:26 PM Andrea Righi <andrea.righi@canonical.com> wrote:
-> > > > >
-> > > > > nm can use "R" or "r" to show read-only data sections, but
-> > > > > scripts/is_rust_module.sh can only recognize "r", so with some versions
-> > > > > of binutils it can fail to detect if a module is a Rust module or not.
-> > > >
-> > > > Do you know which versions? If so, it would be nice to document it here.
-> > > >
-> > > > > Moreover, with this patch applied I can also relax the constraint of
-> > > > > "RUST depends on !DEBUG_INFO_BTF" and build a kernel with Rust and BTF
-> > > > > enabled at the same time (of course BTF generation is still skipped for
-> > > > > Rust modules).
-> > > >
-> > > > Even if that build succeeds, can you load the modules? i.e. the
-> > > > constraint was there due to
-> > > > https://github.com/Rust-for-Linux/linux/issues/735.
-> > >
-> > > Issue was that the kernel couldn't even load C modules, Rust CUs must be
-> > > skipped in vmlinux for it to work, and because of that the constraint
-> > > !DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE [1] cannot be relaxed until
-> > > version 1.24+ of Pahole is the minimum requirement by the kernel. I'm OK
-> > > with this change but keep in mind that it won't remedy that condition.
-> > >
-> > > Link: https://lore.kernel.org/bpf/20230111152050.559334-1-yakoyoku@gmail.com/ [1]
-> >
-> > Oh yes, I'm using pahole 1.24, that's probably why it's all working for
-> > me. So we can't just drop !DEBUG_INFO_BTF, but we can definitely relax
-> > the constraint to "!DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE".
+From: Andrew Lunn <andrew@lunn.ch>
+Date: Mon, 13 Feb 2023 17:21:43 +0100
+
+>>> +	if (!speed) {
+>>> +		netdev_err(ndev, "Link speed is 0!\n");
+>>
+>> ??? Is this possible? If so, why is it checked only here and why can it
+>> be possible?
 > 
-> Yup the patch is ok, but we can only build with RUST and
-> DEBUG_INFO_BTF if we have pahole 1.24+ because that is the version
-> smart enough to exclude the Rust CUs.
+> The obvious way this happens is that there is no link partner, so
+> auto-neg has not completed yet. The link speed is unknown.
+
+Sure, but why treat it an error path then?
+
 > 
-> If you have a version of pahole < 1.24 and you want to include RUST
-> you basically should not have DEBUG_INFO_BTF on at all because your
-> build will fail (unless this change alters the list of CUs passed to
-> pahole).
-> 
-> What is a little confusing is scripts/is_rust_module.sh and pahole
-> "--lang_exclude=rust" feature both attempt to do the same thing,
-> recognize and skip Rust CUs
+>      Andrew
 
-Yep, "pahole --lang_exclude=rust" makes scripts/is_rust_module.sh
-obsolete, so with this applied:
-https://lore.kernel.org/bpf/20230111152050.559334-1-yakoyoku@gmail.com/
-
-I can just drop scripts/is_rust_module.sh and everything is still
-working.
-
-So, if that patch is applied we can do another patch to get rid of
-is_rust_module.sh completely (because to my knowledge this script is
-only used to exclude the BTF generation for the Rust modules).
-
--Andrea
+Thanks,
+Olek
