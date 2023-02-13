@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F1E6950E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:41:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9876950E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231462AbjBMTl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 14:41:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
+        id S231469AbjBMTla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 14:41:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbjBMTlF (ORCPT
+        with ESMTP id S231298AbjBMTlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Feb 2023 14:41:05 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD8E1B312;
-        Mon, 13 Feb 2023 11:40:48 -0800 (PST)
-Date:   Mon, 13 Feb 2023 19:40:46 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A447F20D13;
+        Mon, 13 Feb 2023 11:40:49 -0800 (PST)
+Date:   Mon, 13 Feb 2023 19:40:47 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1676317247;
+        s=2020; t=1676317248;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eIfJbsPv/dve0KhKoFX7LXZbkAtcbgWM+riGxkn1gAE=;
-        b=ucp86TbM5lyY7T/cDglo77EgQmAVB9vdw3R5BEagJLZi2nDS+hD8hWrPA3RqVc9BWkawyx
-        mQs5nkpRyCq7DjwSGNjFW2wYz2IEU1Z6ZNf0EuZTwzSi1/UoBizVYDcNSg1FUVcF8o2IDO
-        CBvLCHH1BWgpPrTdeKjCumRDHHhUPQ66TnVtTx/9USGibN+IFCEhLgnBOQXIrTLR+1nF57
-        SXLxY4dH9B2AxzOqP+6eC+nLgrTWhSXci1o36U8+DyaXu+L54WEr2UCxHwHp0iDP1eyQuW
-        wD31hTJfj+cYTHd7Id6PyyewNLJNbwagcdS47wCmSwzLr+w9NMDSqN1gOfJHeg==
+        bh=I0P3cKwwzq7UwdBcPOvJrRfC3Q6kvdGRMBw77mYRrlM=;
+        b=Zcu/xBhUaRgtXBgkuz3N8RlBdS/PtSh2EVrZgp9VhK6Tavk2+IejcXLa1xqyIIWvefZf2l
+        rcuQCi2ZZgFyNLH28+R3cvcIuJQ8S7cMfGRBqVTLLfiePO8ov+dXED4/jecWK1xX5HNBIR
+        kXsusjl7JBFa+meoB5/hfqDk9NgFzFw8LSZJVwCp2drGSgI08JnW+yejRzdExufYhZSf6d
+        0GkFLMDyQqxvGf2gX6tpo7hj0/LOgrWvENAHl4sHb7qax9KxSxuvT8MZIHiJubdJIsQO8o
+        pZ/a4UQR8JsJdOA8bjSFQqv3+uDMIhSya2H/5oENNJukS+wUHWRBmEbNEfDsoA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1676317247;
+        s=2020e; t=1676317248;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eIfJbsPv/dve0KhKoFX7LXZbkAtcbgWM+riGxkn1gAE=;
-        b=nHeieAiHwo4/jvirJ2BVGpWow60CmJ7myY0IO6eGvfxZVNuLq4z2ZHAzLjj+QbFBA7mqSj
-        qpELBvtmYkmPcNAg==
+        bh=I0P3cKwwzq7UwdBcPOvJrRfC3Q6kvdGRMBw77mYRrlM=;
+        b=go1a7xAo4YDy0kf7182Zd00x33e7zBm0lqpilNbs+b5kwHC5LxcIJ2nUAstHnKa5sI63TN
+        rI8nB0BRJ4ofF5DQ==
 From:   "irqchip-bot for Johan Hovold" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqdomain: Look for existing mapping only once
+Subject: [irqchip: irq/irqchip-next] irqdomain: Fix disassociation race
 Cc:     stable@vger.kernel.org, #@tip-bot2.tec.linutronix.de,
-        4.8@tip-bot2.tec.linutronix.de,
+        4.13@tip-bot2.tec.linutronix.de,
         "Hsin-Yi Wang" <hsinyi@chromium.org>,
         "Mark-PK Tsai" <mark-pk.tsai@mediatek.com>,
         Johan Hovold <johan+linaro@kernel.org>,
         Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20230213104302.17307-5-johan+linaro@kernel.org>
-References: <20230213104302.17307-5-johan+linaro@kernel.org>
+In-Reply-To: <20230213104302.17307-3-johan+linaro@kernel.org>
+References: <20230213104302.17307-3-johan+linaro@kernel.org>
 MIME-Version: 1.0
-Message-ID: <167631724661.4906.1811820486082904866.tip-bot2@tip-bot2>
+Message-ID: <167631724735.4906.17602457971577144696.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,132 +69,55 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     6e6f75c9c98d2d246d90411ff2b6f0cd271f4cba
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/6e6f75c9c98d2d246d90411ff2b6f0cd271f4cba
+Commit-ID:     3f883c38f5628f46b30bccf090faec054088e262
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/3f883c38f5628f46b30bccf090faec054088e262
 Author:        Johan Hovold <johan+linaro@kernel.org>
-AuthorDate:    Mon, 13 Feb 2023 11:42:46 +01:00
+AuthorDate:    Mon, 13 Feb 2023 11:42:44 +01:00
 Committer:     Marc Zyngier <maz@kernel.org>
 CommitterDate: Mon, 13 Feb 2023 19:31:24 
 
-irqdomain: Look for existing mapping only once
+irqdomain: Fix disassociation race
 
-Avoid looking for an existing mapping twice when creating a new mapping
-using irq_create_fwspec_mapping() by factoring out the actual allocation
-which is shared with irq_create_mapping_affinity().
+The global irq_domain_mutex is held when mapping interrupts from
+non-hierarchical domains but currently not when disposing them.
 
-The new helper function will also be used to fix a shared-interrupt
-mapping race, hence the Fixes tag.
+This specifically means that updates of the domain mapcount is racy
+(currently only used for statistics in debugfs).
 
-Fixes: b62b2cf5759b ("irqdomain: Fix handling of type settings for existing mappings")
-Cc: stable@vger.kernel.org      # 4.8
+Make sure to hold the global irq_domain_mutex also when disposing
+mappings from non-hierarchical domains.
+
+Fixes: 9dc6be3d4193 ("genirq/irqdomain: Add map counter")
+Cc: stable@vger.kernel.org      # 4.13
 Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
 Tested-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20230213104302.17307-5-johan+linaro@kernel.org
+Link: https://lore.kernel.org/r/20230213104302.17307-3-johan+linaro@kernel.org
 ---
- kernel/irq/irqdomain.c | 60 ++++++++++++++++++++++-------------------
- 1 file changed, 33 insertions(+), 27 deletions(-)
+ kernel/irq/irqdomain.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
-index 9f5b96c..9f95047 100644
+index 6661de1..f77549a 100644
 --- a/kernel/irq/irqdomain.c
 +++ b/kernel/irq/irqdomain.c
-@@ -682,6 +682,34 @@ unsigned int irq_create_direct_mapping(struct irq_domain *domain)
- EXPORT_SYMBOL_GPL(irq_create_direct_mapping);
- #endif
+@@ -538,6 +538,9 @@ static void irq_domain_disassociate(struct irq_domain *domain, unsigned int irq)
+ 		return;
  
-+static unsigned int __irq_create_mapping_affinity(struct irq_domain *domain,
-+						  irq_hw_number_t hwirq,
-+						  const struct irq_affinity_desc *affinity)
-+{
-+	struct device_node *of_node = irq_domain_get_of_node(domain);
-+	int virq;
+ 	hwirq = irq_data->hwirq;
 +
-+	pr_debug("irq_create_mapping(0x%p, 0x%lx)\n", domain, hwirq);
++	mutex_lock(&irq_domain_mutex);
 +
-+	/* Allocate a virtual interrupt number */
-+	virq = irq_domain_alloc_descs(-1, 1, hwirq, of_node_to_nid(of_node),
-+				      affinity);
-+	if (virq <= 0) {
-+		pr_debug("-> virq allocation failed\n");
-+		return 0;
-+	}
-+
-+	if (irq_domain_associate(domain, virq, hwirq)) {
-+		irq_free_desc(virq);
-+		return 0;
-+	}
-+
-+	pr_debug("irq %lu on domain %s mapped to virtual irq %u\n",
-+		hwirq, of_node_full_name(of_node), virq);
-+
-+	return virq;
-+}
-+
- /**
-  * irq_create_mapping_affinity() - Map a hardware interrupt into linux irq space
-  * @domain: domain owning this hardware interrupt or NULL for default domain
-@@ -694,14 +722,11 @@ EXPORT_SYMBOL_GPL(irq_create_direct_mapping);
-  * on the number returned from that call.
-  */
- unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
--				       irq_hw_number_t hwirq,
--				       const struct irq_affinity_desc *affinity)
-+					 irq_hw_number_t hwirq,
-+					 const struct irq_affinity_desc *affinity)
- {
--	struct device_node *of_node;
- 	int virq;
+ 	irq_set_status_flags(irq, IRQ_NOREQUEST);
  
--	pr_debug("irq_create_mapping(0x%p, 0x%lx)\n", domain, hwirq);
--
- 	/* Look for default domain if necessary */
- 	if (domain == NULL)
- 		domain = irq_default_domain;
-@@ -709,34 +734,15 @@ unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
- 		WARN(1, "%s(, %lx) called with NULL domain\n", __func__, hwirq);
- 		return 0;
- 	}
--	pr_debug("-> using domain @%p\n", domain);
--
--	of_node = irq_domain_get_of_node(domain);
+ 	/* remove chip and handler */
+@@ -557,6 +560,8 @@ static void irq_domain_disassociate(struct irq_domain *domain, unsigned int irq)
  
- 	/* Check if mapping already exists */
- 	virq = irq_find_mapping(domain, hwirq);
- 	if (virq) {
--		pr_debug("-> existing mapping on virq %d\n", virq);
-+		pr_debug("existing mapping on virq %d\n", virq);
- 		return virq;
- 	}
- 
--	/* Allocate a virtual interrupt number */
--	virq = irq_domain_alloc_descs(-1, 1, hwirq, of_node_to_nid(of_node),
--				      affinity);
--	if (virq <= 0) {
--		pr_debug("-> virq allocation failed\n");
--		return 0;
--	}
--
--	if (irq_domain_associate(domain, virq, hwirq)) {
--		irq_free_desc(virq);
--		return 0;
--	}
--
--	pr_debug("irq %lu on domain %s mapped to virtual irq %u\n",
--		hwirq, of_node_full_name(of_node), virq);
--
--	return virq;
-+	return __irq_create_mapping_affinity(domain, hwirq, affinity);
+ 	/* Clear reverse map for this hwirq */
+ 	irq_domain_clear_mapping(domain, hwirq);
++
++	mutex_unlock(&irq_domain_mutex);
  }
- EXPORT_SYMBOL_GPL(irq_create_mapping_affinity);
  
-@@ -841,7 +847,7 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
- 			return 0;
- 	} else {
- 		/* Create mapping */
--		virq = irq_create_mapping(domain, hwirq);
-+		virq = __irq_create_mapping_affinity(domain, hwirq, NULL);
- 		if (!virq)
- 			return virq;
- 	}
+ static int irq_domain_associate_locked(struct irq_domain *domain, unsigned int virq,
