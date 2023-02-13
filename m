@@ -2,144 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 312416948AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A220B6948BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbjBMOvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 09:51:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45352 "EHLO
+        id S230473AbjBMOxB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Feb 2023 09:53:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbjBMOvn (ORCPT
+        with ESMTP id S229958AbjBMOwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 09:51:43 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2057.outbound.protection.outlook.com [40.107.92.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD421BAF3;
-        Mon, 13 Feb 2023 06:51:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aY87mxhN5sPbDg9SIqiejg3HYTIEHNJLG7Ebj1kFzKSVJt4ott/iOJBszwSTjrxzeVA3Vaw5LZx379Luvry1Wbrnx0Ckg0/4wq+XvIeGN1TZppRI1rgEHRWdpm4w8QjEjTFSDW5GC3jqOCyBF5jmkYwoi4AjcNapfdfPuo4tVWHJJi4VEY+JI5QklQPEqh9rrOCdsmdVrfzq55J88d711hA+LNQMS+a4BVDyNbqe/WcUpzn/xC2MH4Fz6qN8OjdQ5v3j97zGg3lVdR3IfFj2d80uSr0RrJdEMH0n8cGhNH04xVMXktQituk3idm71flEJWLyR/wwIumfCf8KoLM7uw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qZnDbqOju59BLOWg38WoCQ7Qvcie5Ro3mMyhaCs5DH4=;
- b=Y01n0xjWMHsm4iGN+rZt1s9ea8w1r1ljBZJcy1bwltUkBmV/h73EQshSGSMQ6xjlw101eciZ8rdD0F/z+qJlMhIByGHRZKiAHynXxOmcSGbfzrGgs0mVTsqMkyBPS8jKUQtOuFe4G/nOENaMaVhWu3G0u5+/nT24sW454lbHda3EOUEPkRPkq6w6mYIO4okeOAHCZ7OMHloKAkHqhyMGfqaFhgmLI0oEfGCp+pQdbV+TFlZooU8z6pQtEIWCQ706o0C3SSgNAku7Tl34GfIeYiNIYHawPMcbODMWSL/+SapuZG7fX3PUPfrdDMw+kUgTZekm2Fg2/GvJMLtLDn2kOg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qZnDbqOju59BLOWg38WoCQ7Qvcie5Ro3mMyhaCs5DH4=;
- b=VfM3nT8UpUBpICe+BPItc8JJ67F/Ji0zbxXvpAuoV8xcsQwLYFojh3sm8eHM9lwtFXsBSosHu+QLSuF+WL2LC/Yp5hyUEGn+a/0GZhYWewX50wSmwLC/iGH5/7iQpypgQ8rizmt7Nbc3F0GnjekMVBLF66VdwW8ptewsC8qsQ7S+JbFJrQTfUFry/nSu+7zFE3mowZvs7f6GOmI7o7nGPFul5lXfgsHzM73IDtA5SyK1VrnXMbv2dg638NOMOk7H2u25LTdNhUCc7Um1Tb80zAeAiA90zH1pRkclmX+3DOWO6r3GqqfDbHFRvxOFvJ6DbKvekc2ej3h1hebRPfqzTA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by MN0PR12MB6128.namprd12.prod.outlook.com (2603:10b6:208:3c4::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.23; Mon, 13 Feb
- 2023 14:51:22 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee%6]) with mapi id 15.20.6086.023; Mon, 13 Feb 2023
- 14:51:22 +0000
-Date:   Mon, 13 Feb 2023 10:51:20 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Yi Liu <yi.l.liu@intel.com>
-Cc:     joro@8bytes.org, alex.williamson@redhat.com, kevin.tian@intel.com,
-        robin.murphy@arm.com, cohuck@redhat.com, eric.auger@redhat.com,
-        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
-        peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        baolu.lu@linux.intel.com
-Subject: Re: [PATCH 2/6] iommu/vt-d: Implement hw_info for iommu capability
- query
-Message-ID: <Y+pOaPOaparSpkGj@nvidia.com>
-References: <20230209041642.9346-1-yi.l.liu@intel.com>
- <20230209041642.9346-3-yi.l.liu@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230209041642.9346-3-yi.l.liu@intel.com>
-X-ClientProxiedBy: BL0PR02CA0060.namprd02.prod.outlook.com
- (2603:10b6:207:3d::37) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Mon, 13 Feb 2023 09:52:55 -0500
+Received: from mail5.swissbit.com (mail5.swissbit.com [148.251.244.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5931C585;
+        Mon, 13 Feb 2023 06:52:36 -0800 (PST)
+Received: from mail5.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id DB8DD3A1F21;
+        Mon, 13 Feb 2023 15:52:34 +0100 (CET)
+Received: from mail5.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id C71663A1E83;
+        Mon, 13 Feb 2023 15:52:34 +0100 (CET)
+X-TM-AS-ERS: 10.181.10.103-127.5.254.253
+X-TM-AS-SMTP: 1.0 bXgxLmRtei5zd2lzc2JpdC5jb20= Y2xvZWhsZUBoeXBlcnN0b25lLmNvb
+        Q==
+X-DDEI-TLS-USAGE: Used
+Received: from mx1.dmz.swissbit.com (mx.dmz.swissbit.com [10.181.10.103])
+        by mail5.swissbit.com (Postfix) with ESMTPS;
+        Mon, 13 Feb 2023 15:52:34 +0100 (CET)
+From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>
+CC:     Adrian Hunter <adrian.hunter@intel.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] mmc: core: Align to common busy polling behaviour for mmc
+ ioctls
+Thread-Topic: [PATCH] mmc: core: Align to common busy polling behaviour for
+ mmc ioctls
+Thread-Index: AQHZP7BLniIOnZzrsUi603XryTU4yq7M9RcA
+Date:   Mon, 13 Feb 2023 14:52:11 +0000
+Message-ID: <a1094543b3ef43eabab345c5f05eaaa2@hyperstone.com>
+References: <20230213133707.27857-1-ulf.hansson@linaro.org>
+In-Reply-To: <20230213133707.27857-1-ulf.hansson@linaro.org>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MN0PR12MB6128:EE_
-X-MS-Office365-Filtering-Correlation-Id: 83c801de-9e57-4842-dccb-08db0dd1c5d3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2Teo3cVmgPfFlCaDdknwnS/6R55xX8Jd7ch62n32kRhWPQiNjT3AcdXGE8SReJbL6EkitM6M/FQtq65QzG7yJqZ7x2/2LyGo+vqcbtjQTDN+gZPSprVRHL4NBn9mjQF+MzOO4BwhxBKKhTimVI7VMvSk6Rug6j3ZYX/kww1OyLBaG2OpGg/9bbsP1M+vfbp5fIFbdnGtAxoM9FLQkSE1JWdbJRzYQUdXgv+paawrHaWr19SGusiTC7U6oZEDW66xht+ZhumY/Mdr1apZN1Ionfe+4rG5Kste6OORqRIQPnMV5vYzg+uTTm4R1XBapBAdEynNmqHS9k8mIgImh7qHDsA80xS8/aIoZggsZjkHIcj5sFB1WQUynoWKEtjyPEjs+qjtpURMfBHFs6/niG3GdnU7m1CKOwCMFrI6tazhvdltn6ibUL+S7e4xvdipk9ytBgtW55/7JGStnK94S8OKGkRJWgxwMbUB85BoCLAFQn8x+81fLDlHQnNNbn1WoLfbmIpD1ungdVt3M4stAC53zHQ50AtewIiZiFutKspCMBHtW551BbANw/7gS/+Sf0QDjNt/9R55RPbsmeoyHkrAGwI26LXuoQTlgJ32kk0i3lT916UusWFLr/0VadTLHh0nxDDD8fztKoYbpToa7JztJXUiKvsKYbm5U19HViqW9aarfvk+0Ldo1VGY+VImxcrf
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(396003)(346002)(366004)(376002)(451199018)(2906002)(86362001)(38100700002)(478600001)(4744005)(36756003)(7416002)(6512007)(5660300002)(6486002)(26005)(186003)(6506007)(8936002)(2616005)(41300700001)(8676002)(66556008)(66476007)(6916009)(4326008)(66946007)(316002)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Z2PgLYiVYJjtPihNx1W4qh0hvtK+21nY8in38mYJatHNEE1buCcruiuEC0zu?=
- =?us-ascii?Q?VNi1JgykVpywKd7WQEupSBE+jYYmwBh6BaiJLz5VQ6Lu1nGGBNgBZ+tjiezG?=
- =?us-ascii?Q?XOGqJW+gBITi4mwi2UOh08H0Rl3UdyfCPb8RrTO8eEWO9UTX/2C/DMTWblzc?=
- =?us-ascii?Q?L8bNwQ25SvxEwfkN09DNa9FIuAD2VdH//Krs1WuBmPepVRw6NImbO8vtk1QN?=
- =?us-ascii?Q?ORHOa0DyJO+Z5TFY8+3Q/7GZCJ3cXQvmYBJE4fnoF4JAK2nRSVbQse7UwI77?=
- =?us-ascii?Q?rFpvdNCGkhEqlROA525fS9J6Cmqy6Wwug4hV49Tyh73wNBnr+qoikAWNb3Hi?=
- =?us-ascii?Q?weW/ZlCiVX0owX5AgEJ6nwDB/Mth67qnyq9HYO4R17N9cCMaxkcd9Y6ZvosP?=
- =?us-ascii?Q?V5swTip3GdcTk7ZigZwuX9006aE2itYCNfP/rJlbe6K4sykGjQwIX/YbVo++?=
- =?us-ascii?Q?l0ky+dRRyfuA8w/LfTZaaacZkBygkG2l9rhxb7BhT+vkM3Ji7PIb1KMdTk1n?=
- =?us-ascii?Q?TrGfc7B0zB9R+H9+WnV3LMxhTuTBjw5KaVHuSTU+4noZUBKB2g5ryHAjIm5N?=
- =?us-ascii?Q?karqFoGhtLDSju6und7lncPTdWGygqGjX4P5BvOBK3vNMIWoN8PkSLPPCZO2?=
- =?us-ascii?Q?RdOMdnkXqYFMw8Y6kzafZIioOl779vnus4itIpgiTCdER5ILbjtzi8ZIkvOX?=
- =?us-ascii?Q?BzFlFSSIS6Q0YbVZ+xb8bPRLzNsQ6LudYEda3gMMhjIJP/napr1V41588wZC?=
- =?us-ascii?Q?O2A0L23YKz0MSTnk/lkrcILJZQ29tQsmnxLsFml+C1Zgjjn6JZfjsufze7qA?=
- =?us-ascii?Q?xxbOKl56OKvtYH6yB0cP1hGNtzoTLivmlLELh9i2pYdU7uXfsAjdI9SyTh2Y?=
- =?us-ascii?Q?9y2yIKUexA17gU6T6EAx/Eyt24W+N0dCUri1S8/752D2jGpJN9lE3gr7UeF7?=
- =?us-ascii?Q?i0bZ398VHcTYXDvUD6lUf60Sbs8JHG/n7VIowNBpVm0LtUbzcMiQwsxRoIMC?=
- =?us-ascii?Q?wdjDyuuE+bf7GZlungIPu3mB35dINfgaIgiTuNmwllh0OPVlfRMGckA1tSni?=
- =?us-ascii?Q?GQpld7ulNQ9lH4YWkUicWJrhmAG/XdnTqCN7fIHgKMGcOiV5mQDNI81v2YWm?=
- =?us-ascii?Q?rUgiDI+4iHiE5F90sLP05QKC6X60t/2l8TMYDxYxFSSd3EMzwLoyGVqfZ66h?=
- =?us-ascii?Q?Gc5voV7+qXX0p3QDkhtqvCyGsKXtkodl05t7M7rlvjArEVJ9nAomgjYwxMS8?=
- =?us-ascii?Q?0UneEprJqY35CIJlkP8B52eYDvPw8HM0sATIkafI70v6faHux/y4eAHnYZhj?=
- =?us-ascii?Q?4nByyuhslKN32s7/o9WzdeVPfJAXnb/mzxjU4oCcrMAFaL1rNqbvKvXmhecH?=
- =?us-ascii?Q?acVDK/DIkBlRhDcQ3tMsxNxMGwF/dslXlxhuY1YI4RZgY16pcb15cejpqJRc?=
- =?us-ascii?Q?ZnPxYL/Ezt23YYJROd+8AT8HzmSFxZb3aQaDGcgPQVSkW0P3a7tF0KOvPkVw?=
- =?us-ascii?Q?+qYNRurz8YTIfu4gLcFu94ZeuLkb/rmRTijSVwB0EjebLGzCORDKTDjyTYD3?=
- =?us-ascii?Q?mgukiT5oiHJQiPHL4QkPTY/wvBYreJZxnnuQp3wW?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 83c801de-9e57-4842-dccb-08db0dd1c5d3
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2023 14:51:22.3891
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pxQZWwj6ig+/NdQpXkWvXEqAQZbr0W65m5ZVFRYgpbNQzneklOjkHzBSvFDhhMc9
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6128
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-TMASE-Version: DDEI-5.1-9.0.1002-27444.007
+X-TMASE-Result: 10--11.638200-10.000000
+X-TMASE-MatchedRID: gIwa0kWWszLUL3YCMmnG4qoXHZz/dXlxyHdfpwipSH4UsxngDoycC4Ay
+        Bv1w/1hJfE3qFp1T4KbCnfj2t9y5LBxz/eFLcdUtHWRJEfGP5nk6rt3TPmIRUcbl1d1BOPY45L2
+        yUEzy9u5/VmtqhCUamN7J5X5VmQ0MtVDpc9bC13IReM8i8p3vgEyQ5fRSh265Z8i/MdLSpTtN8x
+        iZIhWc/TjUD80DDHCGweQc8uYeC4GHx1sV2zgpga28N8u7CkOHamKrgqy61cLI9EDAP/dptl5Yb
+        S0p5ywlCgENw8KnnTmfb6bl1YfU92gwIvLATTKBC24oEZ6SpSkgbhiVsIMQK9LdHHLXgng3Xnr2
+        FjV9kJhZHZkk+9g/hW6ER7AR3y0WT6EavwVfEFg+kK598Yf3Mg==
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: 2d41d59c-eaa2-458d-bcb6-583acc096ff2-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 08:16:38PM -0800, Yi Liu wrote:
-> From: Lu Baolu <baolu.lu@linux.intel.com>
-> 
-> To support nested translation in the userspace, it should check the
-> underlying hardware information for the capabilities.
-> 
-> Add intel_iommu_hw_info() to report cap_reg and ecap_reg information.
-> 
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> Signed-off-by: Yi Sun <yi.y.sun@linux.intel.com>
-> ---
->  drivers/iommu/intel/iommu.c  | 19 +++++++++++++++++++
->  drivers/iommu/intel/iommu.h  |  1 +
->  include/uapi/linux/iommufd.h | 21 +++++++++++++++++++++
->  3 files changed, 41 insertions(+)
+FWIW you can add a
+Reviewed-by: Christian Loehle <cloehle@hyperstone.com>
+Thanks!
 
-This should come after the next patch in the series
 
-Jason
+-----Original Message-----
+From: Ulf Hansson <ulf.hansson@linaro.org> 
+Sent: Montag, 13. Februar 2023 14:37
+To: linux-mmc@vger.kernel.org; Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Adrian Hunter <adrian.hunter@intel.com>; Avri Altman <avri.altman@wdc.com>; Christian Löhle <CLoehle@hyperstone.com>; linux-kernel@vger.kernel.org
+Subject: [PATCH] mmc: core: Align to common busy polling behaviour for mmc ioctls
+
+Let's align to the common busy polling behaviour for mmc ioctls, by updating the below two corresponding parts, that comes into play when using an R1B response for a command.
+
+*) A command with an R1B response should be prepared by calling mmc_prepare_busy_cmd(), which make us respects the host's busy timeout constraints.
+**) When an R1B response is being used and the host also supports HW busy detection, we should skip to poll for busy completion.
+
+Suggested-by: Christian Loehle <cloehle@hyperstone.com>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ drivers/mmc/core/block.c   | 25 +++++++++++++++++--------
+ drivers/mmc/core/mmc_ops.c |  1 +
+ 2 files changed, 18 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c index 20da7ed43e6d..672ab90c4b2d 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -470,6 +470,8 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+ 	struct mmc_data data = {};
+ 	struct mmc_request mrq = {};
+ 	struct scatterlist sg;
++	bool r1b_resp, use_r1b_resp = false;
++	unsigned int busy_timeout_ms;
+ 	int err;
+ 	unsigned int target_part;
+ 
+@@ -545,6 +547,13 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+ 	    (cmd.opcode == MMC_SWITCH))
+ 		return mmc_sanitize(card, idata->ic.cmd_timeout_ms);
+ 
++	/* If it's an R1B response we need some more preparations. */
++	busy_timeout_ms = idata->ic.cmd_timeout_ms ? : MMC_BLK_TIMEOUT_MS;
++	r1b_resp = (cmd.flags & MMC_RSP_R1B) == MMC_RSP_R1B;
++	if (r1b_resp)
++		use_r1b_resp = mmc_prepare_busy_cmd(card->host, &cmd,
++						    busy_timeout_ms);
++
+ 	mmc_wait_for_req(card->host, &mrq);
+ 	memcpy(&idata->ic.response, cmd.resp, sizeof(cmd.resp));
+ 
+@@ -596,14 +605,14 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+ 	if (idata->ic.postsleep_min_us)
+ 		usleep_range(idata->ic.postsleep_min_us, idata->ic.postsleep_max_us);
+ 
+-	if (idata->rpmb || (cmd.flags & MMC_RSP_R1B) == MMC_RSP_R1B) {
+-		/*
+-		 * Ensure RPMB/R1B command has completed by polling CMD13 "Send Status". Here we
+-		 * allow to override the default timeout value if a custom timeout is specified.
+-		 */
+-		err = mmc_poll_for_busy(card, idata->ic.cmd_timeout_ms ? : MMC_BLK_TIMEOUT_MS,
+-					false, MMC_BUSY_IO);
+-	}
++	/* No need to poll when using HW busy detection. */
++	if ((card->host->caps & MMC_CAP_WAIT_WHILE_BUSY) && use_r1b_resp)
++		return 0;
++
++	/* Ensure RPMB/R1B command has completed by polling with CMD13. */
++	if (idata->rpmb || r1b_resp)
++		err = mmc_poll_for_busy(card, busy_timeout_ms, false,
++					MMC_BUSY_IO);
+ 
+ 	return err;
+ }
+diff --git a/drivers/mmc/core/mmc_ops.c b/drivers/mmc/core/mmc_ops.c index 81c55bfd6e0c..3b3adbddf664 100644
+--- a/drivers/mmc/core/mmc_ops.c
++++ b/drivers/mmc/core/mmc_ops.c
+@@ -575,6 +575,7 @@ bool mmc_prepare_busy_cmd(struct mmc_host *host, struct mmc_command *cmd,
+ 	cmd->busy_timeout = timeout_ms;
+ 	return true;
+ }
++EXPORT_SYMBOL_GPL(mmc_prepare_busy_cmd);
+ 
+ /**
+  *	__mmc_switch - modify EXT_CSD register
+--
+2.34.1
+
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
+
