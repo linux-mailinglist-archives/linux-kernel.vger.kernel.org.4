@@ -2,105 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA40693ECC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 08:12:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E3C693ED6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 08:15:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjBMHMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 02:12:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
+        id S229773AbjBMHPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 02:15:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjBMHMq (ORCPT
+        with ESMTP id S229561AbjBMHP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 02:12:46 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876D0C172
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 23:12:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676272365; x=1707808365;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=oDApUliXcaJviTBYjIi5M5cuBczUHP+iwTF6Q32uhFk=;
-  b=hHeHsC+nhrraboR161YvhnRvXXPl4oCpWWe4Ws9ZCRRFTyazc3bJr6kN
-   WVF3L6WrM4b2SkFEEHXRkS0p4Jy3K2z6vgtvN4lgIteekADGu9hu3XMtO
-   jFXi8fX8AquXHDAyo+5gf7Rg7HbcIVY9ygvVv5blGcpX+5ebrgz5XNoPe
-   bckwZ8mVX1CFTSFtbJ8UyVsgyJDFV5KhVECxRW3Ft2/cWcF1WN0v5b4gu
-   0S6t5mBMOATvxQHJTK1mByz86+49Rkfv1k9cDN7PewJQAdlcgE2YPh1km
-   MDDOJfzj45Ksnk+sYQN5T45LTi+MG7hBwX10SowrT59PIlbQFb5IxYqV4
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="332134584"
-X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
-   d="scan'208";a="332134584"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 23:12:45 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="997597947"
-X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
-   d="scan'208";a="997597947"
-Received: from joe-255.igk.intel.com (HELO localhost) ([10.91.220.57])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 23:12:43 -0800
-Date:   Mon, 13 Feb 2023 08:12:41 +0100
-From:   Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     ogabbay@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        kelbaz@habana.ai, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] habanalabs: change unused extern decl of hdev to forward
- decl of hl_device
-Message-ID: <20230213071241.GA2799422@linux.intel.com>
-References: <20230208155450.1941608-1-trix@redhat.com>
+        Mon, 13 Feb 2023 02:15:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8CD1AC;
+        Sun, 12 Feb 2023 23:15:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 02A43B80C99;
+        Mon, 13 Feb 2023 07:15:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34B09C433D2;
+        Mon, 13 Feb 2023 07:15:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676272525;
+        bh=kXKrIKkF4Pu9CcKWI5PNeLrNZKIdxo0dgi5K9xPGp/w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O1yz/Yv6oTPAWaNRVpj1JnF9ZBDsXPAH1RWSCKsTeeKJah/JH7Lr/zIowbs5fEi5j
+         7i8RmsI8DPJ/Jj1iRLkUBXjhEkn67FZrgpWqQYnbPpj45/tpj557qXkCNo+4Gysp1B
+         G7B/HUGPKl7EgRCYzyqnzIis8D21Fiw4GZ6IA6Z1SCTXs4OLEY73IlUNVGu6ck8K4U
+         2MEAH0k/MluhGWWKoan2mnkQVfN0T4UMl4KzH4MVcQNKp2S+2G3f+ALGzmGcX21a7I
+         m67tPhyzSgudF6E5ZmXwS4WHc5cVgfuqx8DNC6wUhmSKx5mvqirbuenklI5RH/6wXU
+         TNitnH2k+DmCQ==
+Date:   Mon, 13 Feb 2023 09:15:21 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Richard van Schagen <richard@routerhints.com>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Arinc Unal <arinc.unal@arinc9.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] Fix setting up CPU and User ports to be in the correct
+ mode during setup and when toggling vlan_filtering on a bridge port.
+Message-ID: <Y+njic6vxAlGp72l@unreal>
+References: <20230212213949.672443-1-richard@routerhints.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230208155450.1941608-1-trix@redhat.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230212213949.672443-1-richard@routerhints.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 07:54:50AM -0800, Tom Rix wrote:
-> Building with clang W=2 has several similar warnings
-> drivers/accel/habanalabs/common/decoder.c:46:51: error: declaration shadows a variable in the global scope [-Werror,-Wshadow]
-> static void dec_error_intr_work(struct hl_device *hdev, u32 base_addr, u32 core_id)
->                                                   ^
-> drivers/accel/habanalabs/common/security.h:13:26: note: previous declaration is here
-> extern struct hl_device *hdev;
->                          ^
-> 
-> There is no global definition of hdev, so the extern is not needed.
-> Searched with
-> grep -r '^struct' . | grep hl_dev
-> 
-> Change to an forward decl to resolve these issues
-> drivers/accel/habanalabs/common/mmu/../security.h:133:40: error: ‘struct hl_device’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
->   133 |         bool (*skip_block_hook)(struct hl_device *hdev,
->       |                                        ^~~~~~~~~
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-
+On Sun, Feb 12, 2023 at 10:39:49PM +0100, Richard van Schagen wrote:
 > ---
->  drivers/accel/habanalabs/common/security.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/accel/habanalabs/common/security.h b/drivers/accel/habanalabs/common/security.h
-> index 234b4a6ed8bc..d7a3b3e82ea4 100644
-> --- a/drivers/accel/habanalabs/common/security.h
-> +++ b/drivers/accel/habanalabs/common/security.h
-> @@ -10,7 +10,7 @@
->  
->  #include <linux/io-64-nonatomic-lo-hi.h>
->  
-> -extern struct hl_device *hdev;
-> +struct hl_device;
->  
->  /* special blocks */
->  #define HL_MAX_NUM_OF_GLBL_ERR_CAUSE		10
-> -- 
-> 2.26.3
-> 
+>  drivers/net/dsa/mt7530.c | 124 ++++++++++++++-------------------------
+>  1 file changed, 43 insertions(+), 81 deletions(-)
+
+Please read Documentation/process/submitting-patches.rst
+
+Thanks
