@@ -2,89 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6AF694142
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C38669412D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbjBMJcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 04:32:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
+        id S230403AbjBMJbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 04:31:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjBMJbh (ORCPT
+        with ESMTP id S230252AbjBMJax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 04:31:37 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E68816AD2;
-        Mon, 13 Feb 2023 01:30:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=tlbtwloiMll80xsCP5JxReJzFyl0pMq9yses5MAk/Hw=; b=EYMskAFjqDUuDsKVLxh5WJIqSN
-        9XYUb/9Hr+XOo0u6+DfjwQDUegFHC1KiigfqbFKStMj5kZI8KZ1SoWFyvK0yfn/8Xa5/wGs30bpbT
-        Drh84WYjg2KkeqDXPOB9B6trmp6a9R4ODGiG9eNDZ5YauLGcoS/TjTzTuZMzQH5pw7VKlRMlI+D6V
-        VMGzZ2lHYiV6Oe3JzW8HSv7afWIG2EcS3S/MNLTg4jHV28cOk1JcamPznuzmmm5ua9WETKww8yhz0
-        rwcRU6ureLuNr7XmlGivnHo/9Ue4C7e0lf02weexO7gCw8+Y359T40Nv4v3SVdj+1BMLQ4dB57xK+
-        XwyHc/qQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pRV6d-009Fkm-2F;
-        Mon, 13 Feb 2023 09:28:40 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2014F30036B;
-        Mon, 13 Feb 2023 10:27:19 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0531520C6EEA1; Mon, 13 Feb 2023 10:27:18 +0100 (CET)
-Date:   Mon, 13 Feb 2023 10:27:18 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Coly Li <colyli@suse.de>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
- with unique class keys
-Message-ID: <Y+oCdlIwCDtRRG6T@hirez.programming.kicks-ass.net>
-References: <CAHk-=whXYzkOJZo0xpyYfrhWQg1M7j0OeCojTJ84CN4q9sqb2Q@mail.gmail.com>
- <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
- <Y+gjuqJ5RFxwLmht@moria.home.lan>
- <Y+hRurRwm//1+IcK@rowland.harvard.edu>
- <Y+hTEtCKPuO0zGIt@moria.home.lan>
- <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
- <Y+hYn6uzIUBaxDdV@moria.home.lan>
- <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
- <Y+k6ehYLWa0cmbvb@moria.home.lan>
- <Y+lJxCLpwMGuq0sP@rowland.harvard.edu>
+        Mon, 13 Feb 2023 04:30:53 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15B8193D1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:28:59 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id co8so7659572wrb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:28:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o773LmcUBl8OymGcQoiP93QpX2J1hD5pNWOtAJSPtj4=;
+        b=khCke+fR/UAjzlxCyCMdKltVJkHHEleXyYwvMF0+50/DPzCg5A6RieKJpEDSHeeXVO
+         VkrhsVzfSxq7JLXS6OeAwE0wF5Z6t3DF1Tuwu6PGXKqc/l0Nv/H+GQZNvSPOO0SaL5mF
+         WMrOa5QytgsoUx5JuJTF5QqVyevgRPG4MCea2HNpua0jEtHr57tH0UrMqzzr9IqgckNR
+         +VGANmvNa+9sdApt2H7h3H5K+gMrNEIxtIVCM0fKG8gT0sk8TCsM4mcyA+sikxR2XIXq
+         QhZDRw2PKkffml82ifLT3eeGnBGrou/VkMORLtLun8UGmQX6N9ddd3vEc3Qwvf5ricI3
+         g05Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o773LmcUBl8OymGcQoiP93QpX2J1hD5pNWOtAJSPtj4=;
+        b=rc2o4ubCoDcrOpkTI2qEXM0TIIAT1MwUKjTQS/5Ev5p+n890/ibCpPqvyIhraHuOUv
+         GqCEwJbrjDBbOzkSnjt/DjRx9ZgOxz8huzo1e3OTH7IUbSd/gvy6JljWWcTBXEUAzSgg
+         Rvahrk1tQVzNXlEo0hNkD9JmstrqzNp5m9kMXW9OQKzIkXYZyX7AEUMZjXZmJ20Yhspg
+         J1bIBKdMgHvusz/WfC7QventttGq+1ewf5iL8GO0yw/5wXtUvpCw8ofwQK1xuHoaepAo
+         xgs7TdMenKFP16pF6jdT74sQPSOiD0O8Ska+JoMydraWklCnEp2wZ4Qwtv3yDaUiaSlO
+         vLTw==
+X-Gm-Message-State: AO0yUKWZKIAqU3X9AIoiIQkyYzRuPoGoO/i25z3xbPrqRz1Ilkj/bXlD
+        Z3mBI85V45WUj34dQ5DrkBoQog==
+X-Google-Smtp-Source: AK7set9L87Lxu1KcxNg989VNiYJ7rY8aakXspZUnydQWYpAr5BVDZuwpmUPtR5Has1SVeEAQTwUUXQ==
+X-Received: by 2002:a5d:4c8a:0:b0:2c5:588c:84a8 with SMTP id z10-20020a5d4c8a000000b002c5588c84a8mr2608664wrs.19.1676280492081;
+        Mon, 13 Feb 2023 01:28:12 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id g4-20020a5d6984000000b002c552c6c8c2sm4363765wru.87.2023.02.13.01.28.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 01:28:11 -0800 (PST)
+Message-ID: <e94c3d2c-10ab-01a6-ff41-cbca34b88fcf@linaro.org>
+Date:   Mon, 13 Feb 2023 10:28:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+lJxCLpwMGuq0sP@rowland.harvard.edu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1 1/4] riscv: dts: starfive: jh7110: Add aon syscon node
+Content-Language: en-US
+To:     Changhuang Liang <changhuang.liang@starfivetech.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Jack Zhu <jack.zhu@starfivetech.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20230210061713.6449-1-changhuang.liang@starfivetech.com>
+ <20230210061713.6449-2-changhuang.liang@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230210061713.6449-2-changhuang.liang@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 03:19:16PM -0500, Alan Stern wrote:
+On 10/02/2023 07:17, Changhuang Liang wrote:
+> Add aon syscon node for the Starfive JH7110 SoC. It can be used by
+> other modules such as DPHY.
+> 
+> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
+> ---
+>  arch/riscv/boot/dts/starfive/jh7110.dtsi | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> index cfbaff4ea64b..bce3e407ab60 100644
+> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> @@ -251,6 +251,11 @@ soc {
+>  		#size-cells = <2>;
+>  		ranges;
+>  
+> +		aon_syscon: aon_syscon@17010000 {
 
-> (Device names are often set after the device is initialized.  Does 
-> lockdep mind if a lock_class_key's name is changed after it has been 
-> registered?)
+No underscores in node names, generic node names.
 
-It does, althought I don't at the moment recall how hard it would be to
-change that.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+> +			compatible = "syscon";
+
+Nope. syscon cannot be alone. Run dtbs_check before sending DTS.
+
+
+Best regards,
+Krzysztof
+
