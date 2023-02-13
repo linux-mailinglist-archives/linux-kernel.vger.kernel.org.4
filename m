@@ -2,112 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D80694A70
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B44E1694A72
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:10:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbjBMPKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:10:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45658 "EHLO
+        id S231494AbjBMPKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:10:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjBMPJs (ORCPT
+        with ESMTP id S229800AbjBMPK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:09:48 -0500
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196751D931;
-        Mon, 13 Feb 2023 07:09:48 -0800 (PST)
-Received: by mail-il1-f181.google.com with SMTP id c15so3681069ils.12;
-        Mon, 13 Feb 2023 07:09:48 -0800 (PST)
+        Mon, 13 Feb 2023 10:10:29 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD951E5E6;
+        Mon, 13 Feb 2023 07:10:19 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id bt8so7529283edb.12;
+        Mon, 13 Feb 2023 07:10:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=g+6NiBwrzMzY0iFEj5SAkgnlwVcJ6rcWHigS8pEBF38=;
+        b=ZfieTwOr+sqn+dobtezHop/Fmo/rAXS7NAUx17hb6ZFQ5lExV/uPWzDbSekJbgGzh1
+         yzM0lucIFOolljnvXTuxvddj2Kx73gj+Zg7wwniJwgUAsumoATRyJkS2l4z/DXexakZK
+         VaRndjH8zowNttv0SiX+3eEsf0dzhhqHfVv6ThsyWaPUd4b2NkLcVKo+BJw+zb8RHcQw
+         TaAqG0phoMsaEeUkztCN5Dw5QsIRQjyG3PvGAt7fqFLWRmxh3ZW8IGf+WTs4zejlZtYv
+         g1N7fID74/I9rvNKTMVugbhaUdLt1LVMwy5ZrnYrlPyxcXvwoGse0ePgm9iJlh2C3sM0
+         2Wfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nb3jt0wNeVIrLvYRA5KKUNf8Qt4b5JqZ1jqI/V5VbPc=;
-        b=DCmy1FCHRgW1t2xuokSEucUjSsZSXtIj4yIgUWAFuZuUJOgHNG/6vnlmMMVjHoObib
-         4MQUeX77jtqXVBCL9DJIpLY/ziAY998Du2t9XqdMzHID0if38vz+FJ4Og4Y2OYi1+R2U
-         GHCnA4SzQtttkOUZ2JoF8yv6m7V5zMEG/DpwHs55RS+feDFm8P23z5WkfcoXNw/Ldl7j
-         1lSqoQfvVMOCW7V26mT3cBubbRriNLZlSMIJAQkFTvlwB4yXXpwuhMAaI4y84PlesGHI
-         VgZZRJH4W7385FGB9pI7cwGQjWjhpoPeiCBntyw+tGYlRB6HZhzDX5NoV2g+7fOHUoxf
-         mhoQ==
-X-Gm-Message-State: AO0yUKUdWhAp4V0XSYHb8p2rO8lhUR1jGBP/kpzFvYqkfJhkz3ZgLM6V
-        Dprv8IZjXTr+DJiz5tEMeg==
-X-Google-Smtp-Source: AK7set9Hz7MafJCa1RH+CHg6DjLoQLRunpfIwveQ8c0QzUboYm+YoFFYrcM7Wii96E0ZvXUBq6rB3Q==
-X-Received: by 2002:a05:6e02:19cf:b0:315:2b7c:3bcd with SMTP id r15-20020a056e0219cf00b003152b7c3bcdmr11352271ill.23.1676300987324;
-        Mon, 13 Feb 2023 07:09:47 -0800 (PST)
-Received: from robh_at_kernel.org (c-73-14-99-67.hsd1.co.comcast.net. [73.14.99.67])
-        by smtp.gmail.com with ESMTPSA id s14-20020a056e0210ce00b00313fc4834a4sm703477ilj.86.2023.02.13.07.09.46
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g+6NiBwrzMzY0iFEj5SAkgnlwVcJ6rcWHigS8pEBF38=;
+        b=CKwkO5QGcrok7pvu+kaVxpBbW5M9VtKW2NTXXKJ9/S7VWLyCuDAm49ZWYGKg1buHwx
+         ZESZVVR+ZhIzsJSWhfp5GKryCS/2kjppDYjveJ7k5hUXi1VT4RPSQmoansrcoj8NOS3l
+         8bOH6TL+xqxrBcGoBdrPDniZzxwx8zuigxRC9o6/5q68FP2Zr9Ja0H8u4tSrpND9kdpi
+         nXPXuMEKA4xM3n0/3epherkvdC4n50sDSj9HpoFinbwHUY7fWoUCQBloVm+sKr4GIucT
+         NU8Gc5l7I9mVLd08g9vUulVJiQJL6ijvQ7DW50UjSJNPDMpcjU/O59hbdrmiR1aWFPpz
+         SWFw==
+X-Gm-Message-State: AO0yUKUDmVz70NT7wVG1gvZyoAyZN37aMMC1nhIlYq1oza2dpuosEg4y
+        vW1KU8ofp+l/yZTbtpedOyY=
+X-Google-Smtp-Source: AK7set8dTFfz1dPwGhl7i63pU30D2uHBEKusrO2akXLuxI/IZLMqDbz8FAEr1pKDGkrrvDaYZgrjWg==
+X-Received: by 2002:a50:d601:0:b0:4ac:bce7:370e with SMTP id x1-20020a50d601000000b004acbce7370emr7674377edi.14.1676301018078;
+        Mon, 13 Feb 2023 07:10:18 -0800 (PST)
+Received: from skbuf ([188.26.185.183])
+        by smtp.gmail.com with ESMTPSA id g22-20020a170906199600b0087bd629e9e4sm6924576ejd.179.2023.02.13.07.10.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 07:09:46 -0800 (PST)
-Received: (nullmailer pid 11613 invoked by uid 1000);
-        Mon, 13 Feb 2023 15:09:41 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
+        Mon, 13 Feb 2023 07:10:17 -0800 (PST)
+Date:   Mon, 13 Feb 2023 17:10:15 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Richard van Schagen <richard@routerhints.com>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Arinc Unal <arinc.unal@arinc9.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-In-Reply-To: <20230212190222.44977-3-krzysztof.kozlowski@linaro.org>
-References: <20230212190222.44977-1-krzysztof.kozlowski@linaro.org>
- <20230212190222.44977-3-krzysztof.kozlowski@linaro.org>
-Message-Id: <167630051330.6283.15554895477756313707.robh@kernel.org>
-Subject: Re: [PATCH 3/4] media: dt-bindings: samsung,exynos4212-is: convert
- to dtschema
-Date:   Mon, 13 Feb 2023 09:09:41 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net-next v2] net: dsa: mt7530: add support for changing
+ DSA master
+Message-ID: <20230213151015.pstwqpcpjk7vr4xq@skbuf>
+References: <20230211184101.651462-1-richard@routerhints.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230211184101.651462-1-richard@routerhints.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Sun, 12 Feb 2023 20:02:21 +0100, Krzysztof Kozlowski wrote:
-> Convert the Samsung Exynos4212/4412 SoC Imaging Subsystem (FIMC-IS)
-> bindings to DT schema.  Changes during conversion - adjust to existing
-> DTS and Linux driver: add iommus and power-domains.
+On Sat, Feb 11, 2023 at 07:41:01PM +0100, Richard van Schagen wrote:
+> Add support for changing the master of a port on the MT7530 DSA subdriver.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Signed-off-by: Richard van Schagen <richard@routerhints.com>
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 > ---
->  .../bindings/media/exynos4-fimc-is.txt        |  50 ----
->  .../media/samsung,exynos4212-fimc-is.yaml     | 221 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  3 files changed, 222 insertions(+), 50 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/media/exynos4-fimc-is.txt
->  create mode 100644 Documentation/devicetree/bindings/media/samsung,exynos4212-fimc-is.yaml
-> 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Currently with this driver, the only way for a frame to reach the CPU is
+via flooding. The DSA framework can do better: it can configure the driver
+to only accept certain whitelisted MAC addresses, which reduces unwanted
+traffic to the CPU. But it needs driver level support for some prerequisites,
+namely FDB isolation, se see dsa_switch_supports_uc_filtering() and
+dsa_switch_supports_mc_filtering().
 
-yamllint warnings/errors:
+If somebody decides to add support for RX filtering later to the mt7530 driver,
+he might not have access to a setup with multiple CPU ports. So this
+might become a blocking issue for him.
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/media/samsung,exynos4212-fimc-is.example.dtb: /example-0/fimc-is@12000000/i2c-isp@12140000/image-sensor@10: failed to match any schema with compatible: ['samsung,s5k6a3']
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230212190222.44977-3-krzysztof.kozlowski@linaro.org
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Would it make more sense to unlock RX filtering for the mt7530 driver
+now, and to make the FDB entries added on the CPU ports work when
+multiple CPU ports exist, too? Now seems like the most logical moment to
+do that, not later.
