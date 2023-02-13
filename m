@@ -2,228 +2,438 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE696947C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:16:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7936947C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjBMOQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 09:16:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40344 "EHLO
+        id S229906AbjBMOQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 09:16:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjBMOQ3 (ORCPT
+        with ESMTP id S229479AbjBMOQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 09:16:29 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD741449A;
-        Mon, 13 Feb 2023 06:16:28 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id e17so4776647plg.12;
-        Mon, 13 Feb 2023 06:16:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2epQmv2RAYoa7ftdeHQyIuTMBtxWyA80kI4YZESFMUY=;
-        b=JpuHfqr0h+k0uFEZDFc54bvHtosHHgMJleYNeYIqas01BA6BSpV1l1cXjeBCb4zm3m
-         +M8cP7cjxphNoeSpS3+yW3bwiXk5PpoMsGdq+Jt75+viX7ujsBAmzn5I3MTcpptDCTfF
-         G9FaRA7cQmKLJ91uqImbQiinCGjMH0Pfiixk7FET5Oy5CppKA1qYtsMDf5UIJ6Exua5k
-         vdFpuGzvQ4gDwGfxknUOVTXNWvj+prbqti6+GZpYGPje60uxaerUOZjcH4EDrWpCEgAR
-         dSEgpBO3NlkGx9CNy9nwiPKTZKLZLsa+L0xSeGHNaIcYzti2j5RE5ttHYsOZY0chZ3zA
-         P1eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2epQmv2RAYoa7ftdeHQyIuTMBtxWyA80kI4YZESFMUY=;
-        b=Y1Fr7+6BxApXfdGXwKXXxk9WTj2QhIVZUzCDrs6q6N9voPB06TVE/GZoP3Id1u4jwD
-         tVEV0EYRFowb1FIHlNVD5sqKBilti/NYf+Hm92o+wrruMnD506uaLnAlYfrspuWjzhBI
-         ZTH56CH0h2isxAgX4XXCEM214ODnIcmILlrZqPmTOoewbcRPdXKjfAWqTJekIUb69VOJ
-         aUqxfzd0nFjBIfcqRkyzYEUfgOhQc5fSH7JJc5WuNc1jfnaa2mrGVCqAgj77/6YjFH8o
-         9jeBNOwu38g2aNKWNihmrlTH95DR7BWluHV770mchoCVhWDkJh6lFrvicRj26UtHuU44
-         nRtQ==
-X-Gm-Message-State: AO0yUKXKGaL5BPzWEbY0RV7vevOKB3Ris4HxbMubegu1qbmQweAPBCxq
-        3K3cD3EbSBJJ7EGalyrC2as=
-X-Google-Smtp-Source: AK7set+R8SlYq1CkTebLvtJHs+QFHykfPjX6kMzUEQhXB0/X+f60clsx1XhD2yLMkimmLUqJa/Ue1Q==
-X-Received: by 2002:a17:903:2407:b0:198:adc4:229d with SMTP id e7-20020a170903240700b00198adc4229dmr16149726plo.24.1676297787631;
-        Mon, 13 Feb 2023 06:16:27 -0800 (PST)
-Received: from [192.168.0.133] ([106.51.67.219])
-        by smtp.gmail.com with ESMTPSA id a10-20020a170902b58a00b001991e4e0bdcsm8239884pls.233.2023.02.13.06.16.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 06:16:27 -0800 (PST)
-From:   Rishit Bansal <rishitbansal0@gmail.com>
-X-Google-Original-From: Rishit Bansal <rishit.bansal0@gmail.com>
-Message-ID: <b11185d3-fbf3-a461-39bc-67bee4739e40@gmail.com>
-Date:   Mon, 13 Feb 2023 19:46:23 +0530
+        Mon, 13 Feb 2023 09:16:55 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2054.outbound.protection.outlook.com [40.107.96.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43EAE1449A
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:16:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NWtrxes+/If6m5nahwPy56XDQSLNVK27tz2tN7EQGY4i58avgjFa+KZHXvxzXvQi0btltA9UrcxnSc15+qWGLxXVcxNZZ645kZXd55lTVGIsYOOw6zyzxkb6oy0y25ikzBFt4PSbDYJ+zQgB0UIkebF+m2f54j2av6MxdDhkZFQ45KQNtI7wOMmL8J0axKUGamqYUaRtKy70c/qkx05gPtKuxXBuGw89mxhbdRpipNX5ILrQyM66N4YrJw7XoB0J3jrfwNYqomAHH4dr65InYpQ4t0wcpItYVL8qN8IxLYVI0sIb6RUEAyKVKZ9eqgVsnHRrf8nTihSGZvG4V+JisQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gW6gnqhpsAi+M1nROmLJwL8sXh8y413YRigIK7xwmWg=;
+ b=EGaXnSsydf1/LVxsXUBf30UmZCxHrwuQcRrsL6Y4kezSypp5aln3T2rQMvd15bsjQi7BTOl/v0cLbNWUHN0Mgu8rcNr0vbD2CgKpuw6awlKTFEbOYZg1yN79Fr1kTrCW6rwxMMob2KPylFDd0rDFIq9CD4IcGy7ngSAHncDx0CEgqG+9EcizPL8o9NED2yIB1jkUT+y1wF5gwGydDu3rXTzzunZe9l5KUyGKtiY5qZg3rc/Jui/QEZERenI7bNZB6//urG8tgOgNul/E+oTpZSvofFTpkqCg89Wy4mhoOjUNfDib61WpyumUtw0vuApuPkDYsVoQ6Qz3x1003oayqg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gW6gnqhpsAi+M1nROmLJwL8sXh8y413YRigIK7xwmWg=;
+ b=Yd94bDrN3w9MWaXHqXczG0gFnZmQKqA5n38/wQcewUr20zefjK68dNXoH7z8jiYYMmmIFxKe1EtVxtnBpEPddCBPIgQO8rX4edRCFiHRiroDT45CbduXwWCRMypYIsWEOR1BtOk2ml+xiFPUgPhJLF5aSTcfs7eUNvWztdEAAQbF0T64HYBEtpC3n2HqM6qEaQERjqkmeClcsBHqd5KekXSCEku9NNw+Opz+LkI95pou+/9ibjNLxRBEp4PcZdgLv1OT41ElyoX8DeM19b+VgNacFySGdTYJDTbhHqZbke3aNQ28DvRohK4mI98nmn1sGz/JPNBdSYpJfj1gbXO1MQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DS7PR12MB6144.namprd12.prod.outlook.com (2603:10b6:8:98::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6086.24; Mon, 13 Feb 2023 14:16:51 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%6]) with mapi id 15.20.6086.023; Mon, 13 Feb 2023
+ 14:16:51 +0000
+Date:   Mon, 13 Feb 2023 10:16:48 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] iommu: Add dev_iommu->ops_rwsem
+Message-ID: <Y+pGUOkLVUMFYWOb@nvidia.com>
+References: <20230213074941.919324-1-baolu.lu@linux.intel.com>
+ <20230213074941.919324-2-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230213074941.919324-2-baolu.lu@linux.intel.com>
+X-ClientProxiedBy: MN2PR18CA0012.namprd18.prod.outlook.com
+ (2603:10b6:208:23c::17) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: API for setting colors of RGB backlit keyboard zones (was [PATCH
- V3] platform/x86: hp-wmi: Support omen backlight control wmi-acpi methods)
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Rishit Bansal <rishitbansal0@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>
-Cc:     Mark Gross <markgross@kernel.org>, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        Dan Murphy <dmurphy@ti.com>
-References: <20230131235027.36304-1-rishitbansal0@gmail.com>
- <9b761996-d522-b0f8-6472-10e40e09e036@redhat.com>
- <65a11a89-e780-6d60-a40e-cd3245780762@gmail.com>
- <b83ad6ba-7d55-f309-5d7b-4a5ff77ff5a3@redhat.com>
- <02c96cfe-ab10-513f-fc36-f474dd227656@gmail.com>
- <544484b9-c0ac-2fd0-1f41-8fa94cb94d4b@redhat.com>
- <Y+I7xNqkq/X6Lag+@duo.ucw.cz>
- <3c48e204-780c-f78c-8219-267e297dc1e3@gmail.com>
- <ec5bc4a6-dc9f-90dd-0cf6-5fab47bb5fa6@redhat.com>
-In-Reply-To: <ec5bc4a6-dc9f-90dd-0cf6-5fab47bb5fa6@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS7PR12MB6144:EE_
+X-MS-Office365-Filtering-Correlation-Id: eed19458-e176-4814-34b3-08db0dccf33b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6FPFRlQ9T8GLUqHTfpFZGInNVD/7UJANkli2DlNacFuufGNRc4Kt6RcsDeA11AFq5L6Y69eif2Nr27r+vGCn+e79jyZ0iNScI0JfVENc9ceVaEESOmW9/qRfXaymJ5ttvLfay5LnlJa+T+N/xLfGmIY4B4VX1z8W0tFP7dv2csbWvFBXtPWTWDI7xGBLLf4eJzERiSbmBRIqR10rZEMX+GSHnfqwxi0ckun4P+9rHDAkur8EDI7dH4Rh+cCsxgoyrCwnM/NUBZ6B/FD834DaaZU2cgkanLYOxya21bwTT0ItHW+t5xd+CMx3HXfIiBBuFf2lmsHGkcUByYF9GeIOFQVS8IntKs29uueBMvXa3bNrH3VcKzSv1xbt70LNLTYkPEVgD4eJKJAT1vXxLlwLFfELU90J3zJgYtTV5DlZSIuvm0EvMV64LjpCs1ssbxcTX6fwHxOHBlZf9udd3vnSX56/0Sgv7vGeceAR4jNpY0YAFpNkuAyMFKpGbjLxgSbNr8o9xud4WeuIrgvWk19E/gMi/bg3IVRaCHOWEWZ+Mzx0KKUdGVQD/Td+4keN21IJIPX00vXl+f5A0UMXLjoE9JOYd6zRzpUwmJUspEQIK9aisFBjn2fbrBZNQiLJ+gpSYxs0CMuMXBDdf+uOMvFf4Q4wUAuuPuY1C4ZGhVAwj0FZc+EJ/MQQnfComEd6yShko89wFclP6cxv/3P2E5HqkLLv8eZ+t/gwerOXOJsTnMmMLzOWwuWSS/pA8pSV7VIe5AKXrv5mk/XaKLiQDGJKwtvTNn+mHSZWt6SKAZfxVoZPmBp8OSzjubGBquIcROKp
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(136003)(396003)(366004)(39860400002)(451199018)(41300700001)(54906003)(83380400001)(38100700002)(2906002)(6666004)(6512007)(6506007)(86362001)(26005)(186003)(2616005)(5660300002)(966005)(6486002)(478600001)(8936002)(30864003)(36756003)(4326008)(316002)(66946007)(6916009)(8676002)(66476007)(66556008)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZvgaGL0qvNc5jHllB3Pnz8Osv6T5HNINJcJ1an4c8wTc2x4hGvMygIjnPJP6?=
+ =?us-ascii?Q?YMxhKzKYZrBqlHzOC1R+YK6b/Bc/8LdhjB+7yNiCew+ZNmRhpwNtKEug/pl4?=
+ =?us-ascii?Q?Ei9rOn6YP6m7JG9zeGhlRD8GrkiIWVCUGhqqyNJdz7N4tuCaayo5El6X/Re+?=
+ =?us-ascii?Q?VwVBdqqxAgIT8XPc0uVb6Yy/J05rbcKtqsxYO31ewK3AbO5p8e+tiVNf0x8F?=
+ =?us-ascii?Q?jkY7zM0f7LCYH2ym5sCC35ZYi8UmxTUY7xJVjrttxyRocrKyNo5VQ/y9uYO6?=
+ =?us-ascii?Q?u7tAuje5Ncd0liqWj5TTDnqV4652tAQpPKsAsC6gvBJSCY3MwHSB6Kt34Ngi?=
+ =?us-ascii?Q?DEw3VltjnASoC9zNNr1I2/BREQh9nIHGWHY36Np+yRg4PwfFACfWZS3Tra8q?=
+ =?us-ascii?Q?btrMbvB7+yE7h45K+GuLub4P14ItYy85Tz0pIc9QlxirEfkxNE4MndsaHRzu?=
+ =?us-ascii?Q?FPcdPfUFbmkr1WvuNFE4eh8fCwYsM0yWnFeq1rCYQvOdeDnOiAaqoczVDErO?=
+ =?us-ascii?Q?i7KWhhvk1Oopp8KRsJdsvrgYZIpaRm6ym+ch6sXHbQxUdaAnyNr2PTL7uJHO?=
+ =?us-ascii?Q?Dxz/9N9KGPN54EKf8E4TZ4EaYBQr32EpvAQRVCEt23fSgrKwAejb7VDtwRGY?=
+ =?us-ascii?Q?+SiO+BdhuTIrcd2UiBgzaGGYN7HFUDhAWCz2D+my0wRvhtq52ZYlz3uHUpVa?=
+ =?us-ascii?Q?0QvbvPrDj6Iinxm7AiFBrIE7pfxPln2hyKStxHVBM5qUReuhPGY+0oltQcjk?=
+ =?us-ascii?Q?TUJUSQYpST4fQVPVs4wkvB/aDmSwXYECK8KyLyL0uyRAThnV5ca0ieo7rct2?=
+ =?us-ascii?Q?qT7ouoGYx6QkU3bd34h2OE/oS4bPw+csbYjcubdLHZTwBlU5D06xm6aP8XRS?=
+ =?us-ascii?Q?HQBHRA7WFm/3Ydz3OeBr6p9XXMWRCaZ6NReuQxlxj/VQzW7sep8SMBUE61fi?=
+ =?us-ascii?Q?zQpgz9SuuBflrDWgMN9+SMIkbAYxj0BsXCnDsFarMn/XLGQ7k46V6u4LWzl5?=
+ =?us-ascii?Q?ZiUAb4Ey5M7vet7Y2lAbbQsTubcIrB5jSDLE9BrFRgl7050+V4zn3Qo2C4bt?=
+ =?us-ascii?Q?5oEbKajJikihQ0Og15gTU+khik8K83HhAtD1mXxglj2SM4mI/QwMyexKjxdx?=
+ =?us-ascii?Q?NRrsOmA60HhelFvJn5fMqIMB+HGhNZAwKhVU3iguGQYSf5by5RKifUjTd+aa?=
+ =?us-ascii?Q?+BIJcEuSMSafhr7jEWO8B7EUM84ALu+8+YawvkhoadzOLCeoRYdd6jGlfYk3?=
+ =?us-ascii?Q?OZaYkNI/YQ+Hq1z2hHTs7fvbpuklYnz2l3o/bXstItg90siakHpgxXWEv9r2?=
+ =?us-ascii?Q?ed98qAtm6W1W3pWEvHPv2CxCdQWp3Jh8vmohKLLCU9c1c1+Svkz6467UQKvR?=
+ =?us-ascii?Q?r5NuFu6IAVFykApNCFFHbJGMCYLb5pk/SQ73UTtMoaEc+yiaGr8VCVf2kjYn?=
+ =?us-ascii?Q?KYSqfW/OKIWGRrFqrLIzZx/r5kdZcIK8o7I+2QJzkWos+nyUsLp87L7cSyuB?=
+ =?us-ascii?Q?q52i8cnMaOpUoMJovUshX6U4UdJVr5nOuTLCNZFU/7UDvZ72IrGgU/e3y48Y?=
+ =?us-ascii?Q?jHb4ee6suJ7KRPm21oWPztjQS5ym0jkkhIiHt25z?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eed19458-e176-4814-34b3-08db0dccf33b
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2023 14:16:51.0164
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DZMERoe4RLAu9y1E+d65xMR5297cYwaAh5LuVu/jyh4hwa4feMM56rWZlwD4yHlj
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6144
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Feb 13, 2023 at 03:49:38PM +0800, Lu Baolu wrote:
 
-On 13/02/23 18:19, Hans de Goede wrote:
-> Hi,
-> 
-> On 2/7/23 14:05, Rishit Bansal wrote:
->> Hi,
->>
->> On 07/02/23 17:23, Pavel Machek wrote:
->>> Hi!
->>>
->>>>>> 2. Create 4 separate multi-color LED sysfs devices for each zone:
->>>>>>
->>>>>> /sys/class/leds/hp_omen::kbd_backlight-zone1/
->>>>>> /sys/class/leds/hp_omen::kbd_backlight-zone2/
->>>>>> /sys/class/leds/hp_omen::kbd_backlight-zone3/
->>>>>> /sys/class/leds/hp_omen::kbd_backlight-zone4/
->>>
->>> 4 separate devices, please. And the naming should be consistent with
->>> the rest, so
->>>
->>> :rbg:kbd_backlight-zone1
->>
->> As covered above previously, we cannot have kbd_backlight in the name as Upower and several other userspace software which depend on it assume that /sys/class/leds has just a single file name with the string "kbd_backlight" in it:
->>
->>> For example, Ubuntu (and most gnome based distros) by default ships with gnome-settings-daemon, which by default attempts to dim the keyboard backlight after a short duration when on the "Low Power" ACPI platform profile. (https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/blob/master/plugins/power/gsd-power-manager.c#L1671). This was currently working as intended with the v2 patch, but if we introduce 4 different files for each zone, this may start dimming only one keyboard zone on low power instead of all 4 of them, which is certainly not intended. There are also multiple projects (mostly gnome extensions) that interact with UPower which might also function incorrectly in other ways. I don't think we should release a feature in the driver which caused unintended consequences like the ones mentioned, especially if the software is popular. What is your opinion on this?
->>
->>
->> However, as Hans mentioned above, its possible to keep 4 seperate files and use a name other than kbd_backlight, so that we don't break existing stuff until the issue is fixed on upower:
->>
->>> /sys/class/leds/hp_omen::kbd_zoned_backlight-1/
->>> /sys/class/leds/hp_omen::kbd_zoned_backlight-2/
->>> /sys/class/leds/hp_omen::kbd_zoned_backlight-3/
->>> /sys/class/leds/hp_omen::kbd_zoned_backlight-4/
->>
->>
->>
->>>
->>> would be closer to something consistent. Should be documented in
->>>
->>> Documentation/leds/well-known-leds.txt
->>>
->>> . And if you take a look there, you'll notice we already have N900
->>> that has 6 zones with white backlight.
->>>
->>
->> This is interesting as well, it appears the N900 also doesn't have "kbd_backlight" in the name at all. It instead uses a format like the following:
->>
->> /sys/class/leds/lp5523:kb1/
->> /sys/class/leds/lp5523:kb2/
->> ...
->>
->>
->> I'm not sure if this is because the N900 driver was made long before we had the concept of "kbd_backlight" in the name, or because of some other reason. There are about 9-10 drivers on the kernel which are sticking with using the "kbd_backlight" convention, so N900 seems to be an outlier here.
->>
->>
->>> But I'd really like to see plan to go forward. AFAICT there are
->>> keyboards with per-key backlight, and those start to look less like a
->>> set of LEDs and more like a display..
->>
->>
->>>
->>> Best regards,
->>>                                  Pavel
->>
->>
->> Something else I would like to add. I had a look at include/dt-bindings/leds/common.h, and it defines the following:
->>
->> /* Standard LED colors */
->> #define LED_COLOR_ID_WHITE    0
->> #define LED_COLOR_ID_RED    1
->> #define LED_COLOR_ID_GREEN    2
->> #define LED_COLOR_ID_BLUE    3
->> #define LED_COLOR_ID_AMBER    4
->> #define LED_COLOR_ID_VIOLET    5
->> #define LED_COLOR_ID_YELLOW    6
->> #define LED_COLOR_ID_IR        7
->> #define LED_COLOR_ID_MULTI    8    /* For multicolor LEDs */
->> #define LED_COLOR_ID_RGB    9    /* For multicolor LEDs that can do arbitrary color,
->>                         so this would include RGBW and similar */
->> #define LED_COLOR_ID_PURPLE    10
->> #define LED_COLOR_ID_ORANGE    11
->> #define LED_COLOR_ID_PINK    12
->> #define LED_COLOR_ID_CYAN    13
->> #define LED_COLOR_ID_LIME    14
->> #define LED_COLOR_ID_MAX    15
->>
->> This means that the proposal I had made for supporting intensities such as zone_1_red zone_1_green zone_1_blue zone_2_red zone_2_green zone_2_blue ... would be invalid as well, and inconsistent with these definitions. The limit of "15" would also prohibit us from supporting keyboards in the future which support lighting for every single key, as we would need way more than 15 indexes to accommodate all of these.
->>
->> So we are at sort of a conflicted state where none of the standards seem to correctly "completely" accomodate every single case/scenario of keyboard backlighting and zones.
->>
->>
->> Here is yet another approach to handle this, which I feel we should consider:
->>
->> We can keep the kbd_backlight file, and additionally have the 4 zones as separate files, (a total of 5 files) like the following:
->>
->>
->> 1. /sys/class/leds/hp_omen::kbd_backlight
->>
->> This file controls the global backlight brightness for all 4 zones. It will have no control for RGB control at this level, this is just sort of a global switch for the entire backlight. Setting the brightness on this level will update the brightness for every zone. This file will also help us maintain support with Upower.
->>
->> 2.
->> /sys/class/leds/hp_omen::kbd_zoned_backlight-1/
->> /sys/class/leds/hp_omen::kbd_zoned_backlight-2/
->> /sys/class/leds/hp_omen::kbd_zoned_backlight-3/
->> /sys/class/leds/hp_omen::kbd_zoned_backlight-4/
->>
->> These will be multi intensity RGBs, each supporting "red green blue" intensities, and can be used to individually control the brightness of each zone. Note that these files don't have "kbd_backlight" in the name for us to not mess with Upower's logic of only having a single keyboard backlight. This can be documented in Documentation/leds/well-known-leds.txt for future drivers which plan to support something similar.
-> 
-> I am not really a fan of this. When the "global" LED then is turned off (brightness=0) then all the other LED devices all of a sudden do nothing and writing values > 0 to their brightness won't turn them on which is not how the LED class API is supposed to work. We can come up with various tricks to work around this, but the fact remains that if we go this route we end up with weird hard to define interaction between 2 LED devices while from an userspace API pov they really should be independent.
-> 
-> note that both Pavel and I suggested using 4 multi-color LED class devices (1 per zone) for this and I still/really believe that this is the best way to deal with this.
-> 
-> I do agree with you that we need to avoid kbd_backlight in the name to avoid causing existing upower code to have weird interactions with this (it supports / assumes there is only 1 kbd_backlight LED class device).
-> 
-> So lets go with just these 4:
-> 
-> /sys/class/leds/hp_omen::kbd_zoned_backlight-1/
-> /sys/class/leds/hp_omen::kbd_zoned_backlight-2/
-> /sys/class/leds/hp_omen::kbd_zoned_backlight-3/
-> /sys/class/leds/hp_omen::kbd_zoned_backlight-4/
-> 
-> Using the _zoned_ between kbd and baclight to avoid confusing the existing upower code. Then once this has landed we can look into extending upower support for this.
-> 
-> Note the requested documentation patch should probably also explain that the _zoned_ was done deliberately to make current upower code ignore the devices.
-> 
-> Regards,
-> 
-> hans
-> 
-> 
+> +static int iommu_group_freeze_dev_ops(struct iommu_group *group)
+> +{
+> +	struct group_device *device;
+> +	struct device *dev;
+> +
+> +	mutex_lock(&group->mutex);
+> +	list_for_each_entry(device, &group->devices, list) {
+> +		dev = device->dev;
+> +		down_read(&dev->iommu->ops_rwsem);
 
-This makes sense, I agree that the global LED file will cause more 
-confusion and hacks in the code. I'll start working on the  _zoned_ 
-naming scheme with 4 files + documentation changes and make a patch for 
-this soon!
+This isn't allowed, you can't obtain locks in a loop like this, it
+will deadlock.
 
+You don't need more locks, we already have the group mutex, the
+release path should be fixed to use it properly as I was trying to do here:
 
+https://lore.kernel.org/kvm/4-v1-ef00ffecea52+2cb-iommu_group_lifetime_jgg@nvidia.com/
+https://lore.kernel.org/kvm/YyyTxx0HnA3maxEk@nvidia.com/
+
+Then what you'd do in a path like this is:
+
+  mutex_lock(&group->mutex);
+  dev = iommu_group_first_device(group)
+  if (!dev)
+     /* Racing with group cleanup */
+     return -EINVAL;
+  
+  /* Now dev->ops is valid and must remain valid so long as
+     group->mutex is held */
+   
+
+The only reason this doesn't work already is because of the above
+stuff about release not holding the group mutex when manipulating the
+devices in the group. This is simply mis-locked.
+
+Robin explained it was done like this because
+arm_iommu_detach_device() re-enters the iommu core during release_dev,
+so I suggest fixing that by simply not doing that (see above)
+
+Below is the lastest attempt I had tried, I didn't have time to get back
+to it and we fixed the bug another way. It needs a bit of adjusting to
+also remove the device from the group after release is called within
+the same mutex critical region.
+
+Jason
+
+diff --git a/arch/arm/include/asm/dma-iommu.h b/arch/arm/include/asm/dma-iommu.h
+index fe9ef6f79e9cfe..ea7198a1786186 100644
+--- a/arch/arm/include/asm/dma-iommu.h
++++ b/arch/arm/include/asm/dma-iommu.h
+@@ -31,6 +31,7 @@ void arm_iommu_release_mapping(struct dma_iommu_mapping *mapping);
+ int arm_iommu_attach_device(struct device *dev,
+ 					struct dma_iommu_mapping *mapping);
+ void arm_iommu_detach_device(struct device *dev);
++void arm_iommu_release_device(struct device *dev);
+ 
+ #endif /* __KERNEL__ */
+ #endif
+diff --git a/arch/arm/mm/dma-mapping.c b/arch/arm/mm/dma-mapping.c
+index c135f6e37a00ca..3d7b385e3981ef 100644
+--- a/arch/arm/mm/dma-mapping.c
++++ b/arch/arm/mm/dma-mapping.c
+@@ -1680,13 +1680,15 @@ int arm_iommu_attach_device(struct device *dev,
+ EXPORT_SYMBOL_GPL(arm_iommu_attach_device);
+ 
+ /**
+- * arm_iommu_detach_device
++ * arm_iommu_release_device
+  * @dev: valid struct device pointer
+  *
+- * Detaches the provided device from a previously attached map.
+- * This overwrites the dma_ops pointer with appropriate non-IOMMU ops.
++ * This is like arm_iommu_detach_device() except it handles the special
++ * case of being called under an iommu driver's release operation. In this
++ * case the driver must have already detached the device from any attached
++ * domain before calling this function.
+  */
+-void arm_iommu_detach_device(struct device *dev)
++void arm_iommu_release_device(struct device *dev)
+ {
+ 	struct dma_iommu_mapping *mapping;
+ 
+@@ -1696,13 +1698,34 @@ void arm_iommu_detach_device(struct device *dev)
+ 		return;
+ 	}
+ 
+-	iommu_detach_device(mapping->domain, dev);
+ 	kref_put(&mapping->kref, release_iommu_mapping);
+ 	to_dma_iommu_mapping(dev) = NULL;
+ 	set_dma_ops(dev, NULL);
+ 
+ 	pr_debug("Detached IOMMU controller from %s device.\n", dev_name(dev));
+ }
++EXPORT_SYMBOL_GPL(arm_iommu_release_device);
++
++/**
++ * arm_iommu_detach_device
++ * @dev: valid struct device pointer
++ *
++ * Detaches the provided device from a previously attached map.
++ * This overwrites the dma_ops pointer with appropriate non-IOMMU ops.
++ */
++void arm_iommu_detach_device(struct device *dev)
++{
++	struct dma_iommu_mapping *mapping;
++
++	mapping = to_dma_iommu_mapping(dev);
++	if (!mapping) {
++		dev_warn(dev, "Not attached\n");
++		return;
++	}
++
++	iommu_detach_device(mapping->domain, dev);
++	arm_iommu_release_device(dev);
++}
+ EXPORT_SYMBOL_GPL(arm_iommu_detach_device);
+ 
+ static void arm_setup_iommu_dma_ops(struct device *dev, u64 dma_base, u64 size,
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index de91dd88705bd3..f3dbd980133567 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -101,6 +101,10 @@ static int iommu_create_device_direct_mappings(struct iommu_group *group,
+ static struct iommu_group *iommu_group_get_for_dev(struct device *dev);
+ static ssize_t iommu_group_store_type(struct iommu_group *group,
+ 				      const char *buf, size_t count);
++static struct group_device *
++__iommu_group_remove_device(struct iommu_group *group, struct device *dev);
++static void __iommu_group_remove_device_sysfs(struct iommu_group *group,
++					      struct group_device *device);
+ 
+ #define IOMMU_GROUP_ATTR(_name, _mode, _show, _store)		\
+ struct iommu_group_attribute iommu_group_attr_##_name =		\
+@@ -430,18 +434,50 @@ int iommu_probe_device(struct device *dev)
+ 
+ void iommu_release_device(struct device *dev)
+ {
++	struct iommu_group *group = dev->iommu_group;
+ 	const struct iommu_ops *ops;
++	struct group_device *device;
+ 
+ 	if (!dev->iommu)
+ 		return;
+ 
+ 	iommu_device_unlink(dev->iommu->iommu_dev, dev);
+ 
++	mutex_lock(&group->mutex);
++	device = __iommu_group_remove_device(group, dev);
+ 	ops = dev_iommu_ops(dev);
++
++	/*
++	 * If the group has become empty then ownership must have been released,
++	 * and the current domain must be set back to NULL or the default
++	 * domain.
++	 */
++	if (list_empty(&group->devices))
++		WARN_ON(group->owner_cnt ||
++			group->domain != group->default_domain);
++
++	/*
++	 * release_device() must stop using any attached domain on the device.
++	 * If there are still other devices in the group they are not effected
++	 * by this callback.
++	 *
++	 * The IOMMU driver must set the device to either an identity or
++	 * blocking translation and stop using any domain pointer, as it is
++	 * going to be freed.
++	 */
+ 	if (ops->release_device)
+ 		ops->release_device(dev);
++	mutex_unlock(&group->mutex);
++
++	__iommu_group_remove_device_sysfs(group, device);
++
++	/*
++	 * This will eventually call iommu_group_release() which will free the
++	 * iommu_domains.
++	 */
++	dev->iommu_group = NULL;
++	kobject_put(group->devices_kobj);
+ 
+-	iommu_group_remove_device(dev);
+ 	module_put(ops->owner);
+ 	dev_iommu_free(dev);
+ }
+@@ -1039,44 +1075,71 @@ int iommu_group_add_device(struct iommu_group *group, struct device *dev)
+ }
+ EXPORT_SYMBOL_GPL(iommu_group_add_device);
+ 
+-/**
+- * iommu_group_remove_device - remove a device from it's current group
+- * @dev: device to be removed
+- *
+- * This function is called by an iommu driver to remove the device from
+- * it's current group.  This decrements the iommu group reference count.
+- */
+-void iommu_group_remove_device(struct device *dev)
++static struct group_device *
++__iommu_group_remove_device(struct iommu_group *group, struct device *dev)
+ {
+-	struct iommu_group *group = dev->iommu_group;
+-	struct group_device *tmp_device, *device = NULL;
++	struct group_device *device;
++
++	lockdep_assert_held(&group->mutex);
+ 
+ 	if (!group)
+-		return;
++		return NULL;
+ 
+ 	dev_info(dev, "Removing from iommu group %d\n", group->id);
+ 
+-	mutex_lock(&group->mutex);
+-	list_for_each_entry(tmp_device, &group->devices, list) {
+-		if (tmp_device->dev == dev) {
+-			device = tmp_device;
++	list_for_each_entry(device, &group->devices, list) {
++		if (device->dev == dev) {
+ 			list_del(&device->list);
+-			break;
++			return device;
+ 		}
+ 	}
+-	mutex_unlock(&group->mutex);
++	return NULL;
++}
+ 
++static void __iommu_group_remove_device_sysfs(struct iommu_group *group,
++					      struct group_device *device)
++{
+ 	if (!device)
+ 		return;
+ 
+ 	sysfs_remove_link(group->devices_kobj, device->name);
+-	sysfs_remove_link(&dev->kobj, "iommu_group");
++	sysfs_remove_link(&device->dev->kobj, "iommu_group");
+ 
+-	trace_remove_device_from_group(group->id, dev);
++	trace_remove_device_from_group(group->id, device->dev);
+ 
+ 	kfree(device->name);
+ 	kfree(device);
+-	dev->iommu_group = NULL;
++}
++
++/**
++ * iommu_group_remove_device - remove a device from it's current group
++ * @dev: device to be removed
++ *
++ * This function is used by non-iommu drivers to create non-iommu subystem
++ * groups (eg VFIO mdev, SPAPR) Using this from inside an iommu driver is an
++ * abuse. Instead the driver should return the correct group from
++ * ops->device_group()
++ */
++void iommu_group_remove_device(struct device *dev)
++{
++	struct iommu_group *group = dev->iommu_group;
++	struct group_device *device;
++
++	/*
++	 * Since we don't do ops->release_device() there is no way for the
++	 * driver to stop using any attached domain before we free it. If a
++	 * domain is attached while this function is called it will eventually
++	 * UAF.
++	 *
++	 * Thus it is only useful for cases like VFIO/SPAPR that don't use an
++	 * iommu driver, or for cases like FSL that don't use default domains.
++	 */
++	WARN_ON(group->domain);
++
++	mutex_lock(&group->mutex);
++	device = __iommu_group_remove_device(group, dev);
++	mutex_unlock(&group->mutex);
++	__iommu_group_remove_device_sysfs(group, device);
+ 	kobject_put(group->devices_kobj);
+ }
+ EXPORT_SYMBOL_GPL(iommu_group_remove_device);
+diff --git a/drivers/iommu/ipmmu-vmsa.c b/drivers/iommu/ipmmu-vmsa.c
+index a003bd5fc65c13..703a6083172de1 100644
+--- a/drivers/iommu/ipmmu-vmsa.c
++++ b/drivers/iommu/ipmmu-vmsa.c
+@@ -302,11 +302,8 @@ static void ipmmu_utlb_enable(struct ipmmu_vmsa_domain *domain,
+ /*
+  * Disable MMU translation for the microTLB.
+  */
+-static void ipmmu_utlb_disable(struct ipmmu_vmsa_domain *domain,
+-			       unsigned int utlb)
++static void ipmmu_utlb_disable(struct ipmmu_vmsa_device *mmu, unsigned int utlb)
+ {
+-	struct ipmmu_vmsa_device *mmu = domain->mmu;
+-
+ 	ipmmu_imuctr_write(mmu, utlb, 0);
+ 	mmu->utlb_ctx[utlb] = IPMMU_CTX_INVALID;
+ }
+@@ -647,11 +644,11 @@ static void ipmmu_detach_device(struct iommu_domain *io_domain,
+ 				struct device *dev)
+ {
+ 	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
+-	struct ipmmu_vmsa_domain *domain = to_vmsa_domain(io_domain);
++	struct ipmmu_vmsa_device *mmu = to_ipmmu(dev);
+ 	unsigned int i;
+ 
+ 	for (i = 0; i < fwspec->num_ids; ++i)
+-		ipmmu_utlb_disable(domain, fwspec->ids[i]);
++		ipmmu_utlb_disable(mmu, fwspec->ids[i]);
+ 
+ 	/*
+ 	 * TODO: Optimize by disabling the context when no device is attached.
+@@ -847,7 +844,8 @@ static void ipmmu_probe_finalize(struct device *dev)
+ 
+ static void ipmmu_release_device(struct device *dev)
+ {
+-	arm_iommu_detach_device(dev);
++	ipmmu_detach_device(NULL, dev);
++	arm_iommu_release_device(dev);
+ }
+ 
+ static struct iommu_group *ipmmu_find_group(struct device *dev)
