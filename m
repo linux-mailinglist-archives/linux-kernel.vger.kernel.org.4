@@ -2,465 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A32B693F3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 08:57:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E72693F3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 08:58:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjBMH5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 02:57:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45126 "EHLO
+        id S229770AbjBMH6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 02:58:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjBMH5b (ORCPT
+        with ESMTP id S229661AbjBMH6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 02:57:31 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23CF4125A7
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 23:57:30 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id t17so7367033pfj.0
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 23:57:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ufispace-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gLX8z+VmkuhbOJU8SjqmtGQULQdYzLn1lbUbBir9szk=;
-        b=OC7yt40jxaTF6jNCYwPDvxK09QZDR6/XZpaTyUdw2Whoh/7qgTKFQcW9Twcn9XdQDw
-         Jibid8vcsogYD4lml+vglt9NLSOF8w/gxfh7gElRI+4k5077ui/+HgVApiEndX6MuXKP
-         NzeqFQoLLJYUu7HTs9Tynm34hnMPpeC495vFYUEEzFu5Rhpnn9qzaZsWGAR6oiIkzMuk
-         PCjSS+gKz/90DX3JY1FAlyWFu6r3MhUWhelOlnocWdt8CUHvU6xIijhez7AsqhIsH8TE
-         BTu/eXRAj5o2rvtmLqqdS2kwLQn43MkEtYdH5vBkYZ4sPzB3ZH6ruIrktQVT8Lk5wfTT
-         LVbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gLX8z+VmkuhbOJU8SjqmtGQULQdYzLn1lbUbBir9szk=;
-        b=3iSqdS/FvHY7RcTjMlAarc9txsOV83vgiFky3VS8aM12JRlzQYlOCHr43kpLoJfI3s
-         cTIG+HROOPT3QLnyF9mHPcUR0Lmox/y/7Di5gVNKWmtz9Mb/BYMIff2z0aFbPvCqkEXj
-         TtsUV6tZ31y6fKnDrG2fgTV1HwACvX96btZiXeXxTA/yX3DaxEWIbLDQt8sHSYh8uN43
-         637pvoUUw28sfx5VTuhgXTd95gFVrFcQ7tC2y3Kk/dT3/rdfeXQnaxXMPKa0+wSpd6F0
-         heZsf7FNTmQwCaNh1oLlps/3GWukrub4RroVAjASzJpHrFuvKgXHwlKNfqu7veRltvpO
-         MY1A==
-X-Gm-Message-State: AO0yUKXRzyWqpAW8E6Il0Gnl5jk+JBmGOK+ogvdQHKlIyAB4cF01LX8g
-        jlpgr33ldr+7Z0TbEcbklxTl6w==
-X-Google-Smtp-Source: AK7set+19kSuwlvtTPrZXjW9sq2dkiWDCq4qDWcYmb3Ln9K3Jns+sFYmxPEVf3a4CPd60nTDQtS6OA==
-X-Received: by 2002:a62:1c8d:0:b0:5a8:aa5e:4bc3 with SMTP id c135-20020a621c8d000000b005a8aa5e4bc3mr4389932pfc.1.1676275049606;
-        Sun, 12 Feb 2023 23:57:29 -0800 (PST)
-Received: from openbmc500G.LAB.ufispace (CH210-63-217-225.static.apol.com.tw. [210.63.217.225])
-        by smtp.gmail.com with ESMTPSA id e9-20020aa78249000000b00588e0d5124asm7255959pfn.160.2023.02.12.23.57.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Feb 2023 23:57:29 -0800 (PST)
-From:   Jordan Chang <jordan.chang@ufispace.com>
-To:     linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        joel@jms.id.au, andrew@aj.id.au, robh+dt@kernel.org
-Cc:     jay.tc.lin@ufispace.com, eason.ys.huang@ufispace.com
-Subject: [PATCH v5 1/1] ARM: dts: aspeed: Add device tree for Ufispace NCPLite BMC
-Date:   Mon, 13 Feb 2023 15:57:19 +0800
-Message-Id: <20230213075719.37276-2-jordan.chang@ufispace.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230213075719.37276-1-jordan.chang@ufispace.com>
-References: <20230213075719.37276-1-jordan.chang@ufispace.com>
+        Mon, 13 Feb 2023 02:58:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DAB4EE8;
+        Sun, 12 Feb 2023 23:57:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 285CCB80E17;
+        Mon, 13 Feb 2023 07:57:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60769C433EF;
+        Mon, 13 Feb 2023 07:57:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676275069;
+        bh=O3NlGEShjdz2hVyiGv6jX8/UEwZ/gQWDwfZ2qFIHjbI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LhwO/xICyTpZpDnewCt0RTlSwWYyR1irvklP+qQi2CvOyHG6EfZxFJ7NLfLwZx4yb
+         O8G+YjYkRTvIj/2zT+4JxI9zLW8sHb7duUHcxTr6LVPpe8gPUW5wqezTRrTZnU1G7+
+         8EO6TQW8ApB9ka1ptHKITXTaqnljM93VA5CZ4PpHN2KBbgyh8pN8h7VNJ35PoFhdBW
+         Py4EGIffFhZMLmwNPN/rAWsC8bq1YB9W2Y9ATrSC6Ul2EEKZsUkzCB7K6skAlZN05r
+         Bw7+Uu8plMCBqzwoFPzKcuC1FJSocvyu43NpNABrJkwTEA3ZVoB099ZuIG7n+/9WSt
+         sIyrDJ0pcCp1A==
+Date:   Mon, 13 Feb 2023 09:57:46 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Julien Gomes <julien@arista.com>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        jgg@ziepe.ca, peterhuewe@gmx.de
+Subject: Re: [PATCH] tpm: add vendor flag to command code validation
+Message-ID: <Y+ntemw98SY1Pjw6@kernel.org>
+References: <20230208195836.30175-1-julien@arista.com>
+ <Y+WUqcNTc8t0KIyD@kernel.org>
+ <865dfe9e-ee3d-1067-625e-2d93bf96da4b@arista.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,WEIRD_QUOTING
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <865dfe9e-ee3d-1067-625e-2d93bf96da4b@arista.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add initial version of device tree for Ufispace NCPLite platform
-which is equipped with AST2600-based BMC.
+On Fri, Feb 10, 2023 at 10:07:02AM -0800, Julien Gomes wrote:
+> On 2023-02-09 4:49 p.m., Jarkko Sakkinen wrote:
+> > On Wed, Feb 08, 2023 at 11:58:36AM -0800, Julien Gomes wrote:
+> > > Some TPM 2.0 devices have support for additional commands which are not
+> > > part of the TPM 2.0 specifications.
+> > > These commands are identified with bit 29 of the 32 bits command codes.
+> > > Contrarily to other fields of the TPMA_CC spec structure used to list
+> > > available commands, the Vendor flag also has to be present in the
+> > > command code itself (TPM_CC) when called.
+> > > 
+> > > Add this flag to tpm_find_cc() mask to prevent blocking vendor command
+> > > codes that can actually be supported by the underlying TPM device.
+> > > 
+> > > Signed-off-by: Julien Gomes <julien@arista.com>
+> > > ---
+> > >   drivers/char/tpm/tpm2-cmd.c | 4 +++-
+> > >   include/linux/tpm.h         | 1 +
+> > >   2 files changed, 4 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+> > > index 65d03867e114..93545be190a5 100644
+> > > --- a/drivers/char/tpm/tpm2-cmd.c
+> > > +++ b/drivers/char/tpm/tpm2-cmd.c
+> > > @@ -777,10 +777,12 @@ int tpm2_auto_startup(struct tpm_chip *chip)
+> > >   int tpm2_find_cc(struct tpm_chip *chip, u32 cc)
+> > >   {
+> > > +	u32 cc_mask;
+> > >   	int i;
+> > > +	cc_mask = 1 << TPM2_CC_ATTR_VENDOR | GENMASK(15, 0);
+> > >   	for (i = 0; i < chip->nr_commands; i++)
+> > > -		if (cc == (chip->cc_attrs_tbl[i] & GENMASK(15, 0)))
+> > > +		if (cc == (chip->cc_attrs_tbl[i] & cc_mask))
+> > >   			return i;
+> > >   	return -1;
+> > > diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> > > index dfeb25a0362d..4dc97b9f65fb 100644
+> > > --- a/include/linux/tpm.h
+> > > +++ b/include/linux/tpm.h
+> > > @@ -265,6 +265,7 @@ enum tpm2_startup_types {
+> > >   enum tpm2_cc_attrs {
+> > >   	TPM2_CC_ATTR_CHANDLES	= 25,
+> > >   	TPM2_CC_ATTR_RHANDLE	= 28,
+> > > +	TPM2_CC_ATTR_VENDOR	= 29,
+> > >   };
+> > >   #define TPM_VID_INTEL    0x8086
+> > > -- 
+> > > 2.39.1
+> > > 
+> > 
+> > Just checking: did you run testing/selftests/tpm2?
+> > 
+> > BR, Jarkko
+> 
+> I didn't know about these, good call.
+> Just ran the three test suites on a vm with a swtpm, as I don't have a
+> physical box with TPM 2.0 able to run latest kernels handy, all passed.
 
-Signed-off-by: Jordan Chang <jordan.chang@ufispace.com>
-Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../boot/dts/aspeed-bmc-ufispace-ncplite.dts  | 359 ++++++++++++++++++
- 2 files changed, 360 insertions(+)
- create mode 100644 arch/arm/boot/dts/aspeed-bmc-ufispace-ncplite.dts
+Neither broke on my side, thanks.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 2ee9c043218b..d26e0651e805 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1626,6 +1626,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
- 	aspeed-bmc-inventec-transformers.dtb \
- 	aspeed-bmc-tyan-s7106.dtb \
- 	aspeed-bmc-tyan-s8036.dtb \
-+	aspeed-bmc-ufispace-ncplite.dtb \
- 	aspeed-bmc-vegman-n110.dtb \
- 	aspeed-bmc-vegman-rx20.dtb \
- 	aspeed-bmc-vegman-sx20.dtb
-diff --git a/arch/arm/boot/dts/aspeed-bmc-ufispace-ncplite.dts b/arch/arm/boot/dts/aspeed-bmc-ufispace-ncplite.dts
-new file mode 100644
-index 000000000000..58bce8382cb5
---- /dev/null
-+++ b/arch/arm/boot/dts/aspeed-bmc-ufispace-ncplite.dts
-@@ -0,0 +1,359 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+// Copyright (c) 2022 Ufispace Co., Ltd.
-+/dts-v1/;
-+
-+#include "aspeed-g6.dtsi"
-+#include <dt-bindings/i2c/i2c.h>
-+#include <dt-bindings/gpio/aspeed-gpio.h>
-+
-+/ {
-+	model = "Ufispace NCPLite BMC";
-+	compatible = "ufispace,ncplite-bmc", "aspeed,ast2600";
-+
-+	aliases {
-+		serial4 = &uart5;
-+	};
-+
-+	chosen {
-+		stdout-path = &uart5;
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x80000000 0x80000000>;
-+	};
-+
-+	iio-hwmon {
-+		compatible = "iio-hwmon";
-+		io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
-+			      <&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
-+			      <&adc1 0>, <&adc1 1>, <&adc1 2>, <&adc1 3>,
-+			      <&adc1 4>, <&adc1 5>, <&adc1 6>, <&adc1 7>;
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		event-fan-alert {
-+			label = "fan-alert";
-+			gpios = <&gpio0 ASPEED_GPIO(M, 2) GPIO_ACTIVE_LOW>;
-+			linux,code = <ASPEED_GPIO(M, 2)>;
-+		};
-+
-+		event-allpwr-good {
-+			label = "allpwr-good";
-+			gpios = <&gpio0 ASPEED_GPIO(V, 4) GPIO_ACTIVE_HIGH>;
-+			linux,code = <ASPEED_GPIO(V, 4)>;
-+		};
-+
-+		event-psu0-alert {
-+			label = "psu0-alert";
-+			gpios = <&gpio0 ASPEED_GPIO(V, 1) GPIO_ACTIVE_LOW>;
-+			linux,code = <ASPEED_GPIO(V, 1)>;
-+		};
-+
-+		event-psu1-alert {
-+			label = "psu1-alert";
-+			gpios = <&gpio0 ASPEED_GPIO(V, 2) GPIO_ACTIVE_LOW>;
-+			linux,code = <ASPEED_GPIO(V, 2)>;
-+		};
-+
-+		event-thermal-alert {
-+			label = "thermal-alert";
-+			gpios = <&gpio0 ASPEED_GPIO(P, 2) GPIO_ACTIVE_LOW>;
-+			linux,code = <ASPEED_GPIO(P, 2)>;
-+		};
-+
-+		event-cpu-caterr {
-+			label = "cpu-caterr";
-+			gpios = <&gpio0 ASPEED_GPIO(N, 3) GPIO_ACTIVE_LOW>;
-+			linux,code = <ASPEED_GPIO(N, 3)>;
-+		};
-+
-+		event-cpu-thermtrip {
-+			label = "cpu-thermtrip";
-+			gpios = <&gpio0 ASPEED_GPIO(V, 5) GPIO_ACTIVE_LOW>;
-+			linux,code = <ASPEED_GPIO(V, 5)>;
-+		};
-+
-+		event-psu0-presence {
-+			label = "psu0-presence";
-+			gpios = <&gpio0 ASPEED_GPIO(F, 6) GPIO_ACTIVE_LOW>;
-+			linux,code = <ASPEED_GPIO(F, 6)>;
-+		};
-+
-+		event-psu1-presence {
-+			label = "psu1-presence";
-+			gpios = <&gpio0 ASPEED_GPIO(F, 7) GPIO_ACTIVE_LOW>;
-+			linux,code = <ASPEED_GPIO(F, 7)>;
-+		};
-+
-+		event-psu0-power-ok {
-+			label = "psu0-power-ok";
-+			gpios = <&gpio0 ASPEED_GPIO(M, 4) GPIO_ACTIVE_HIGH>;
-+			linux,code = <ASPEED_GPIO(M, 4)>;
-+		};
-+
-+		event-psu1-power-ok {
-+			label = "psu1-power-ok";
-+			gpios = <&gpio0 ASPEED_GPIO(M, 5) GPIO_ACTIVE_HIGH>;
-+			linux,code = <ASPEED_GPIO(M, 5)>;
-+		};
-+	};
-+
-+	gpio-keys-polled {
-+		compatible = "gpio-keys-polled";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		poll-interval = <1000>;
-+
-+		event-fan0-presence {
-+			label = "fan0-presence";
-+			gpios = <&fan_ioexp 2 GPIO_ACTIVE_LOW>;
-+			linux,code = <2>;
-+		};
-+
-+		event-fan1-presence {
-+			label = "fan1-presence";
-+			gpios = <&fan_ioexp 6 GPIO_ACTIVE_LOW>;
-+			linux,code = <6>;
-+		};
-+
-+		event-fan2-presence {
-+			label = "fan2-presence";
-+			gpios = <&fan_ioexp 10 GPIO_ACTIVE_LOW>;
-+			linux,code = <10>;
-+		};
-+
-+		event-fan3-presence {
-+			label = "fan3-presence";
-+			gpios = <&fan_ioexp 14 GPIO_ACTIVE_LOW>;
-+			linux,code = <14>;
-+		};
-+	};
-+};
-+
-+&mac2 {
-+	status = "okay";
-+	use-ncsi;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_rmii3_default>;
-+	clocks = <&syscon ASPEED_CLK_GATE_MAC3CLK>,
-+		 <&syscon ASPEED_CLK_MAC3RCLK>;
-+	clock-names = "MACCLK", "RCLK";
-+};
-+
-+&fmc {
-+	status = "okay";
-+	flash@0 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "bmc";
-+		spi-max-frequency = <50000000>;
-+#include "openbmc-flash-layout-64.dtsi"
-+	};
-+
-+	flash@1 {
-+		status = "okay";
-+		m25p,fast-read;
-+		label = "alt-bmc";
-+		spi-max-frequency = <50000000>;
-+#include "openbmc-flash-layout-64-alt.dtsi"
-+	};
-+};
-+
-+&uart1 {
-+	status = "okay";
-+};
-+
-+&uart4 {
-+	status = "okay";
-+};
-+
-+&uart5 {
-+	status = "okay";
-+};
-+
-+&kcs3 {
-+	status = "okay";
-+	aspeed,lpc-io-reg = <0xca2>;
-+};
-+
-+&lpc_reset {
-+	status = "okay";
-+};
-+
-+&lpc_ctrl {
-+	status = "okay";
-+};
-+
-+&uart_routing {
-+	status = "okay";
-+};
-+
-+&wdt1 {
-+	status = "okay";
-+};
-+
-+&wdt2 {
-+	status = "okay";
-+};
-+
-+&peci0 {
-+	status = "okay";
-+};
-+
-+&udc {
-+	status = "okay";
-+};
-+
-+&adc0 {
-+	vref = <2500>;
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
-+		&pinctrl_adc2_default &pinctrl_adc3_default
-+		&pinctrl_adc4_default &pinctrl_adc5_default
-+		&pinctrl_adc6_default &pinctrl_adc7_default>;
-+};
-+
-+&adc1 {
-+	vref = <2500>;
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc9_default
-+		&pinctrl_adc10_default &pinctrl_adc11_default
-+		&pinctrl_adc12_default &pinctrl_adc13_default
-+		&pinctrl_adc14_default &pinctrl_adc15_default>;
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+};
-+
-+&i2c1 {
-+	status = "okay";
-+
-+	temperature-sensor@48 {
-+		compatible = "national,lm75";
-+		reg = <0x48>;
-+	};
-+
-+	temperature-sensor@49 {
-+		compatible = "national,lm75";
-+		reg = <0x49>;
-+	};
-+
-+	temperature-sensor@4c {
-+		compatible = "national,lm86";
-+		reg = <0x4c>;
-+	};
-+};
-+
-+&i2c2 {
-+	status = "okay";
-+
-+	temperature-sensor@4f {
-+		compatible = "national,lm75";
-+		reg = <0x4f>;
-+	};
-+
-+	fan_ioexp: i2c-expander@20 {
-+		compatible = "nxp,pca9535";
-+		reg = <0x20>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+
-+		gpio-line-names =
-+		"","","presence-fan0","",
-+		"","","presence-fan1","",
-+		"","","presence-fan2","",
-+		"","","presence-fan3","";
-+	};
-+};
-+
-+&i2c3 {
-+	status = "okay";
-+
-+	eeprom@50 {
-+		compatible = "atmel,24c128";
-+		reg = <0x50>;
-+		pagesize = <64>;
-+	};
-+};
-+
-+&i2c4 {
-+	status = "okay";
-+
-+	psu@58 {
-+		compatible = "pmbus";
-+		reg = <0x58>;
-+	};
-+
-+	eeprom@50 {
-+		compatible = "atmel,24c02";
-+		reg = <0x50>;
-+		pagesize = <1>;
-+	};
-+};
-+
-+&i2c5 {
-+	status = "okay";
-+
-+	psu@58 {
-+		compatible = "pmbus";
-+		reg = <0x58>;
-+	};
-+
-+	eeprom@50 {
-+		compatible = "atmel,24c02";
-+		reg = <0x50>;
-+		pagesize = <1>;
-+	};
-+};
-+
-+&i2c8 {
-+	status = "okay";
-+};
-+
-+&i2c10 {
-+	status = "okay";
-+
-+	temperature-sensor@4d {
-+		compatible = "national,lm75";
-+		reg = <0x4d>;
-+	};
-+};
-+
-+&gpio0 {
-+	status = "okay";
-+
-+	gpio-line-names =
-+	/*A0-A7*/	"","","","","","","","",
-+	/*B0-B7*/	"","","","","","","","",
-+	/*C0-C7*/	"","","","","","","","",
-+	/*D0-D7*/	"","","","","","","","",
-+	/*E0-E7*/	"","","","","","","","",
-+	/*F0-F7*/	"CPU_PWRGD","","","power-button","host0-ready","","presence-ps0","presence-ps1",
-+	/*G0-G7*/	"","","","","","","","",
-+	/*H0-H7*/	"","","","","","","","",
-+	/*I0-I7*/	"","","","","","reset-button","","",
-+	/*J0-J7*/	"","","","","","","","",
-+	/*K0-K7*/	"","","","","","","","",
-+	/*L0-L7*/	"","","","","","","","",
-+	/*M0-M7*/	"","","","","","","","",
-+	/*N0-N7*/	"power-chassis-control0","power-chassis-control1","","","","","","",
-+	/*O0-O7*/	"","","","","","","","",
-+	/*P0-P7*/	"","","","","","","","",
-+	/*Q0-Q7*/	"","","","","","","","",
-+	/*R0-R7*/	"","","","","","","","",
-+	/*S0-S7*/	"","","","","","","","",
-+	/*T0-T7*/	"","","","","","","","",
-+	/*U0-U7*/	"","","","","","","","",
-+	/*V0-V7*/	"","","","","power-chassis-good","","","";
-+};
--- 
-2.39.0
+Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
+BR, Jarkko
