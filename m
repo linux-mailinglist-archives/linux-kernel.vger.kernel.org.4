@@ -2,83 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8826E693F2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 08:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1BF3693F32
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 08:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjBMHyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 02:54:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
+        id S229824AbjBMHzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 02:55:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBMHyn (ORCPT
+        with ESMTP id S229942AbjBMHzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 02:54:43 -0500
+        Mon, 13 Feb 2023 02:55:15 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD259422A;
-        Sun, 12 Feb 2023 23:54:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB498126CC;
+        Sun, 12 Feb 2023 23:54:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4871F60EC3;
-        Mon, 13 Feb 2023 07:54:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3884FC433EF;
-        Mon, 13 Feb 2023 07:54:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 764FB6091F;
+        Mon, 13 Feb 2023 07:54:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 887CAC433D2;
+        Mon, 13 Feb 2023 07:54:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676274881;
-        bh=6metnuiv9QkmKFu+JTHLVBvZLre3nFtuNi3AR7PlA78=;
+        s=k20201202; t=1676274897;
+        bh=DqzDuNoxyaD1ldPm3X/0qqam3Ewe4anz3SG/CvWps/0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P/NLBLn1QBccO0iLmwEVdjTRTOu/1JTVdr0CvbgYz4ThLcAoENpkQwi1mRk7/P19V
-         Brn+rbVYSD8LBBQWtetps+o6x9tV427CYirqerxd+gmGggehAz5OXTZeiD3MkT7U29
-         s/as2HenQlPGtPPTTf3fp/G4jLA+MmtrrPcey6hAK36CzGgOAg/0LtwnODYIfT0DI9
-         MUeph4dw/P2V8jMyhN9SftHlhcEV/JNhGKIKb6cMv7netYSdbt356AlVVkhPoiPUvd
-         r4aExWVaj3CL3McIngU/VdH3ENcuJwfiC6rBQVcgRCzZo3MtbE8U1j5N/4s5pn2pxp
-         sfCWQJUUPJk8Q==
-Date:   Mon, 13 Feb 2023 09:54:17 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH v2 4/4] mm, arch: add generic implementation of
- pfn_valid() for FLATMEM
-Message-ID: <Y+nsqV6u/PqNlwDS@kernel.org>
-References: <20230129124235.209895-1-rppt@kernel.org>
- <20230129124235.209895-5-rppt@kernel.org>
- <20230212161320.GA3784076@roeck-us.net>
- <Y+mRz6Wfocopv9jw@kernel.org>
- <15a2c023-fdfa-9543-ac36-a846e5f8a000@roeck-us.net>
+        b=dSpumf4qd22kq7DKkT0xsWGl8dAnbzWGS+fxJ73M1Hl/a0LIL65Zbwfe/ba5Mt/a/
+         TvWzd0SzTyHL99D7qW46cJJh28zDP9fZNNubkeZdDj+5TbxOnta+KOQv1k6aKKRlzC
+         /E4cW/i+DvnvAE616OXW9wZ9Da6Cdq+uuTL+ZE9BpEueQcdbsAEuGX07oc+jLoNuvr
+         IIFelrG2Ky3q1eKCBge8eTo6pE7oB7QE5TrrX8FKpbHEcAjRs5B2juikoRjfHQaePC
+         hkYAzoyodgrxv9UEoRTYGBvT85Odz8oBxT5cGMfuuV+2DHyR15ljw3MCcRXr24cJBQ
+         zZJ6FetTtsjEw==
+Date:   Mon, 13 Feb 2023 09:54:54 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Eric Snowberg <eric.snowberg@oracle.com>, dhowells@redhat.com,
+        dwmw2@infradead.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        pvorel@suse.cz, tadeusz.struk@intel.com, kanth.ghatraju@oracle.com,
+        konrad.wilk@oracle.com, erpalmer@linux.vnet.ibm.com,
+        coxu@redhat.com, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v4 6/6] integrity: machine keyring CA configuration
+Message-ID: <Y+nszt7I9rGem1az@kernel.org>
+References: <20230207025958.974056-1-eric.snowberg@oracle.com>
+ <20230207025958.974056-7-eric.snowberg@oracle.com>
+ <4bda209dfc891ac9044ce847785c383e89f14f97.camel@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <15a2c023-fdfa-9543-ac36-a846e5f8a000@roeck-us.net>
+In-Reply-To: <4bda209dfc891ac9044ce847785c383e89f14f97.camel@linux.ibm.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -88,45 +63,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrew, 
-
-On Sun, Feb 12, 2023 at 10:37:15PM -0800, Guenter Roeck wrote:
-> On 2/12/23 17:26, Mike Rapoport wrote:
-> > On Sun, Feb 12, 2023 at 08:13:20AM -0800, Guenter Roeck wrote:
-> > > On Sun, Jan 29, 2023 at 02:42:35PM +0200, Mike Rapoport wrote:
-> > > > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> > > > 
-> > > > Every architecture that supports FLATMEM memory model defines its own
-> > > > version of pfn_valid() that essentially compares a pfn to max_mapnr.
-> > > > 
-> > > > Use mips/powerpc version implemented as static inline as a generic
-> > > > implementation of pfn_valid() and drop its per-architecture definitions.
-> > > > 
-> > > 
-> > > With this patch in the tree, sh4 and sh4eb qemu emulations no longer boot.
-> > > Reverting this patch fixes the problem.
-> > 
-> > This should be a better fix than a revert:
-> > 
-> > diff --git a/arch/sh/mm/init.c b/arch/sh/mm/init.c
-> > index 506784702430..bf1b54055316 100644
-> > --- a/arch/sh/mm/init.c
-> > +++ b/arch/sh/mm/init.c
-> > @@ -301,6 +301,7 @@ void __init paging_init(void)
-> >   	 */
-> >   	max_low_pfn = max_pfn = memblock_end_of_DRAM() >> PAGE_SHIFT;
-> >   	min_low_pfn = __MEMORY_START >> PAGE_SHIFT;
-> > +	set_max_mapnr(max_low_pfn - min_low_pfn);
-> >   	nodes_clear(node_online_map);
+On Fri, Feb 10, 2023 at 08:05:22AM -0500, Mimi Zohar wrote:
+> Hi Eric,
 > 
-> Confirmed, this fixes the problem for me.
- 
-What is your preference for this and m68k fix? Fixups on top of mm-stable
-or v3 of the entire series? 
+> On Mon, 2023-02-06 at 21:59 -0500, Eric Snowberg wrote:
+> > Add a machine keyring CA restriction menu option to control the type of
+> > keys that may be added to it. The options include none, min and max
+> > restrictions.
+> > 
+> > When no restrictions are selected, all Machine Owner Keys (MOK) are added
+> > to the machine keyring.  When CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MIN is
+> > selected, the CA bit must be true.  Also the key usage must contain
+> > keyCertSign, any other usage field may be set as well.
+> > 
+> > When CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MAX is selected, the CA bit must
+> > be true. Also the key usage must contain keyCertSign and the
+> > digitialSignature usage may not be set.
+> > 
+> > Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> 
+> Missing from the patch description is the motivation for this change.  
+> The choices none, min, max implies a progression, which is good, and
+> the technical differences between the choices, but not the reason.
+> 
+> The motivation, at least from my perspective, is separation of
+> certificate signing from code signing keys, where "none" is no
+> separation and "max" being total separation of keys based on usage.
+> 
+> Subsequent work, as discussed in the cover letter thread, will limit
+> certificates being loaded onto the IMA keyring to code signing keys
+> used for signature verification.
 
-> Thanks,
-> Guenter
 
--- 
-Sincerely yours,
-Mike.
+It would be more robust just to have two binary options for CA bit and
+keyCertSign. You can use "select" for setting keyCertSign, when CA bit
+option is selected.
+
+BR, Jarkko
