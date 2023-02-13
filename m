@@ -2,292 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D566944C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D44A6944C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbjBMLl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 06:41:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
+        id S231308AbjBMLmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 06:42:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjBMLlw (ORCPT
+        with ESMTP id S230527AbjBMLmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 06:41:52 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0BA6593
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:41:50 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id n10so4174484ejc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:41:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HZjWtnpB+JR+MBocStwqEBme5hqHBhxurVGq44aOfNU=;
-        b=HUi+3gFrBgXnIlrzbwph68gdhbwXu6lrIkJLQ9MVScN8jvOSxUUga79QOD3rljCI2I
-         uZFzVrMdcuxFPAGnsqGB6BLCTaXlvmCYEPx6ImMVEx3btDN+4dMKHWkEOAz5kgCTXDXC
-         Ctc0QD5VADaGPTp2JWsjMb1SUd+xWoFWJ+rPANZlTdU0M4a+EXP+Xx2xtO+lym6O0q6B
-         7xHAcnB4a2kutPGoNt6ztTOrl3HKxNHBRNAbHxfUT1WOv+Ku6hnHLsM2+Ak6MeahEfAa
-         kQ62X4q6GzUL19PawJ+4xOCbF2MmPkIMEjyssdFvnQLDi1PqAO/Bhl9ZTLMlYMPH0xsZ
-         gs8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HZjWtnpB+JR+MBocStwqEBme5hqHBhxurVGq44aOfNU=;
-        b=I+eOFpK+XoDBVJxgO11ZLczZx+uUp8sr0duJhwWafsEnKYghwmPhPjxiHXunY9G5oN
-         lI5AfwbTJmtRttm+Xkxm4u/Jn5I30uEaSofsM1fnXKX0EsrZwV1nc7HyfGGHvrTPC3Bj
-         tzxm/AmnglX9fJ8NdaCY2PZMB9i16xbYPf8J7HkApHTUuf/1dZ5eA0tF3TTX11njPahR
-         E994y07SFrZ+yuhK/RUFLNSvqp50o2hQgxIAWLoZpsobj00kLU934JOl475diNTNkguq
-         PYB76sEAzJ5ZqCHKSqjbC5PcD+8MQQm6hUEyLhROZpMb5bJ08bEdfw7bVodIUgNiUW8v
-         eL8Q==
-X-Gm-Message-State: AO0yUKWwaDYlX1wSPW634vLVlAHfG2xfao4Hognfakr0yE81lf9MzHXb
-        B952pjOuDVpuJfqf6rcNtkrUog==
-X-Google-Smtp-Source: AK7set/JqR/EfdbOheMSXdE38Cii6+oDKYoEq3Y1vVZ8k68sBLrU6cxvBi6+mpfvkdvmOn0H88kN3g==
-X-Received: by 2002:a17:906:5a91:b0:8af:2bb3:80d7 with SMTP id l17-20020a1709065a9100b008af2bb380d7mr14223671ejq.31.1676288509552;
-        Mon, 13 Feb 2023 03:41:49 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id z20-20020a1709060ad400b0084d494b24dcsm6637284ejf.161.2023.02.13.03.41.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 03:41:48 -0800 (PST)
-Message-ID: <2da7da44-0700-2403-058a-10a011d097d9@linaro.org>
-Date:   Mon, 13 Feb 2023 13:41:47 +0200
+        Mon, 13 Feb 2023 06:42:09 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85F5AD07;
+        Mon, 13 Feb 2023 03:42:07 -0800 (PST)
+From:   Kurt Kanzenbach <kurt@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1676288526;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=x4VPdoQ34H5+UJSjJ7zXGVQPDVqelS5TJcTA3oWud1g=;
+        b=bFPX5m2oSyTtgkdr1q4f67FaMOn91lBmIrLpkP1SUUIwyym1qUy51o7fFgPI6iMC3anKUj
+        I3NVfT2AZhnV6rsBlJ+kNa9VIHf6V6bYPhuPh1CAuqVYwzvH3bvO1LbX5OijLx20t6jMLO
+        V8lFyFQGW56LguB4ocEhS895i7rCQm+x/UU8NyboXJ2NT4x+eG9xuFUHqyMEdqopZ+yxiR
+        Es9aU8c5/U849ih5TIecUol4CLWCFQG25w0NN8R3fpUhqhe8jkBhU0dJ5uK22ffvqJQluo
+        ZrBBM/PjGT1JtSm71wDrrc7qoDwJNlE/6Y5URKLar8md8IomV8we/c64K825fw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1676288526;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=x4VPdoQ34H5+UJSjJ7zXGVQPDVqelS5TJcTA3oWud1g=;
+        b=cE6/nqlT3INVUQ91GMKBukG9pwKjLSXniWpLxr/qS/XyXmJ847vT+oJgR2X2rHzB3+FKwe
+        BqgJmPyhkf9NxmDA==
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Michal Kubecek <mkubecek@suse.cz>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Rui Sousa <rui.sousa@nxp.com>,
+        Ferenc Fejes <ferenc.fejes@ericsson.com>,
+        Pranavi Somisetty <pranavi.somisetty@amd.com>,
+        Harini Katakam <harini.katakam@amd.com>,
+        UNGLinuxDriver@microchip.com, Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Aaron Conole <aconole@redhat.com>
+Subject: Re: [RFC PATCH net-next] selftests: forwarding: add a test for MAC
+ Merge layer
+In-Reply-To: <20230210221243.228932-1-vladimir.oltean@nxp.com>
+References: <20230210221243.228932-1-vladimir.oltean@nxp.com>
+Date:   Mon, 13 Feb 2023 12:42:04 +0100
+Message-ID: <871qmtvlkj.fsf@kurt>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 03/10] drm/msm/dsi: Zero-terminate
- msm_dsi_config::io_start
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Douglas Anderson <dianders@chromium.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230211115110.1462920-1-konrad.dybcio@linaro.org>
- <20230211115110.1462920-4-konrad.dybcio@linaro.org>
- <71b63ae5-1b2c-b0a9-913c-99b657133f0f@linaro.org>
- <8dfd429b-a77e-af58-c778-9c157844e494@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <8dfd429b-a77e-af58-c778-9c157844e494@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/02/2023 11:18, Konrad Dybcio wrote:
-> 
-> 
-> On 11.02.2023 14:19, Dmitry Baryshkov wrote:
->> On 11/02/2023 13:51, Konrad Dybcio wrote:
->>> In preparation for supporting multiple sets of possible base registers,
->>> Zero-terminate the array that contains them to remove the need of
->>> specifying num_dsi for each set.
->>>
->>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>> ---
->>>    drivers/gpu/drm/msm/dsi/dsi_cfg.c  | 39 ++++++++++--------------------
->>>    drivers/gpu/drm/msm/dsi/dsi_cfg.h  |  4 +--
->>>    drivers/gpu/drm/msm/dsi/dsi_host.c |  2 +-
->>>    3 files changed, 16 insertions(+), 29 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/dsi/dsi_cfg.c b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
->>> index 068d45b3a8f0..5f62c563bd1c 100644
->>> --- a/drivers/gpu/drm/msm/dsi/dsi_cfg.c
->>> +++ b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
->>> @@ -22,9 +22,8 @@ static const struct msm_dsi_config apq8064_dsi_cfg = {
->>>        .bus_clk_names = dsi_v2_bus_clk_names,
->>>        .num_bus_clks = ARRAY_SIZE(dsi_v2_bus_clk_names),
->>>        .io_start = {
->>> -        { 0x4700000, 0x5800000 },
->>> +        { 0x4700000, 0x5800000, 0 },
->>>        },
->>> -    .num_dsi = 2,
->>>    };
->>>      static const char * const dsi_6g_bus_clk_names[] = {
->>> @@ -44,9 +43,8 @@ static const struct msm_dsi_config msm8974_apq8084_dsi_cfg = {
->>>        .bus_clk_names = dsi_6g_bus_clk_names,
->>>        .num_bus_clks = ARRAY_SIZE(dsi_6g_bus_clk_names),
->>>        .io_start = {
->>> -        { 0xfd922800, 0xfd922b00 },
->>> +        { 0xfd922800, 0xfd922b00, 0 },
->>>        },
->>> -    .num_dsi = 2,
->>>    };
->>>      static const char * const dsi_8916_bus_clk_names[] = {
->>> @@ -65,9 +63,8 @@ static const struct msm_dsi_config msm8916_dsi_cfg = {
->>>        .bus_clk_names = dsi_8916_bus_clk_names,
->>>        .num_bus_clks = ARRAY_SIZE(dsi_8916_bus_clk_names),
->>>        .io_start = {
->>> -        { 0x1a98000 },
->>> +        { 0x1a98000, 0 },
->>>        },
->>> -    .num_dsi = 1,
->>>    };
->>>      static const char * const dsi_8976_bus_clk_names[] = {
->>> @@ -86,9 +83,8 @@ static const struct msm_dsi_config msm8976_dsi_cfg = {
->>>        .bus_clk_names = dsi_8976_bus_clk_names,
->>>        .num_bus_clks = ARRAY_SIZE(dsi_8976_bus_clk_names),
->>>        .io_start = {
->>> -        { 0x1a94000, 0x1a96000 },
->>> +        { 0x1a94000, 0x1a96000, 0 },
->>>        },
->>> -    .num_dsi = 2,
->>>    };
->>>      static const struct regulator_bulk_data msm8994_dsi_regulators[] = {
->>> @@ -107,9 +103,8 @@ static const struct msm_dsi_config msm8994_dsi_cfg = {
->>>        .bus_clk_names = dsi_6g_bus_clk_names,
->>>        .num_bus_clks = ARRAY_SIZE(dsi_6g_bus_clk_names),
->>>        .io_start = {
->>> -        { 0xfd998000, 0xfd9a0000 },
->>> +        { 0xfd998000, 0xfd9a0000, 0 },
->>>        },
->>> -    .num_dsi = 2,
->>>    };
->>>      static const char * const dsi_8996_bus_clk_names[] = {
->>> @@ -129,9 +124,8 @@ static const struct msm_dsi_config msm8996_dsi_cfg = {
->>>        .bus_clk_names = dsi_8996_bus_clk_names,
->>>        .num_bus_clks = ARRAY_SIZE(dsi_8996_bus_clk_names),
->>>        .io_start = {
->>> -        { 0x994000, 0x996000 },
->>> +        { 0x994000, 0x996000, 0 },
->>>        },
->>> -    .num_dsi = 2,
->>>    };
->>>      static const char * const dsi_msm8998_bus_clk_names[] = {
->>> @@ -150,9 +144,8 @@ static const struct msm_dsi_config msm8998_dsi_cfg = {
->>>        .bus_clk_names = dsi_msm8998_bus_clk_names,
->>>        .num_bus_clks = ARRAY_SIZE(dsi_msm8998_bus_clk_names),
->>>        .io_start = {
->>> -        { 0xc994000, 0xc996000 },
->>> +        { 0xc994000, 0xc996000, 0 },
->>>        },
->>> -    .num_dsi = 2,
->>>    };
->>>      static const char * const dsi_sdm660_bus_clk_names[] = {
->>> @@ -170,9 +163,8 @@ static const struct msm_dsi_config sdm660_dsi_cfg = {
->>>        .bus_clk_names = dsi_sdm660_bus_clk_names,
->>>        .num_bus_clks = ARRAY_SIZE(dsi_sdm660_bus_clk_names),
->>>        .io_start = {
->>> -        { 0xc994000, 0xc996000 },
->>> +        { 0xc994000, 0xc996000, 0 },
->>>        },
->>> -    .num_dsi = 2,
->>>    };
->>>      static const char * const dsi_sdm845_bus_clk_names[] = {
->>> @@ -194,9 +186,8 @@ static const struct msm_dsi_config sdm845_dsi_cfg = {
->>>        .bus_clk_names = dsi_sdm845_bus_clk_names,
->>>        .num_bus_clks = ARRAY_SIZE(dsi_sdm845_bus_clk_names),
->>>        .io_start = {
->>> -        { 0xae94000, 0xae96000 },
->>> +        { 0xae94000, 0xae96000, 0 },
->>>        },
->>> -    .num_dsi = 2,
->>>    };
->>>      static const struct regulator_bulk_data sm8550_dsi_regulators[] = {
->>> @@ -210,9 +201,8 @@ static const struct msm_dsi_config sm8550_dsi_cfg = {
->>>        .bus_clk_names = dsi_sdm845_bus_clk_names,
->>>        .num_bus_clks = ARRAY_SIZE(dsi_sdm845_bus_clk_names),
->>>        .io_start = {
->>> -        { 0xae94000, 0xae96000 },
->>> +        { 0xae94000, 0xae96000, 0 },
->>>        },
->>> -    .num_dsi = 2,
->>>    };
->>>      static const struct regulator_bulk_data sc7180_dsi_regulators[] = {
->>> @@ -226,9 +216,8 @@ static const struct msm_dsi_config sc7180_dsi_cfg = {
->>>        .bus_clk_names = dsi_sc7180_bus_clk_names,
->>>        .num_bus_clks = ARRAY_SIZE(dsi_sc7180_bus_clk_names),
->>>        .io_start = {
->>> -        { 0xae94000 },
->>> +        { 0xae94000, 0 },
->>>        },
->>> -    .num_dsi = 1,
->>>    };
->>>      static const char * const dsi_sc7280_bus_clk_names[] = {
->>> @@ -246,9 +235,8 @@ static const struct msm_dsi_config sc7280_dsi_cfg = {
->>>        .bus_clk_names = dsi_sc7280_bus_clk_names,
->>>        .num_bus_clks = ARRAY_SIZE(dsi_sc7280_bus_clk_names),
->>>        .io_start = {
->>> -        { 0xae94000, 0xae96000 },
->>> +        { 0xae94000, 0xae96000, 0 },
->>>        },
->>> -    .num_dsi = 2,
->>>    };
->>>      static const char * const dsi_qcm2290_bus_clk_names[] = {
->>> @@ -266,9 +254,8 @@ static const struct msm_dsi_config qcm2290_dsi_cfg = {
->>>        .bus_clk_names = dsi_qcm2290_bus_clk_names,
->>>        .num_bus_clks = ARRAY_SIZE(dsi_qcm2290_bus_clk_names),
->>>        .io_start = {
->>> -        { 0x5e94000 },
->>> +        { 0x5e94000, 0 },
->>>        },
->>> -    .num_dsi = 1,
->>>    };
->>>      static const struct msm_dsi_host_cfg_ops msm_dsi_v2_host_ops = {
->>> diff --git a/drivers/gpu/drm/msm/dsi/dsi_cfg.h b/drivers/gpu/drm/msm/dsi/dsi_cfg.h
->>> index df9f09876ccb..03493cc6b772 100644
->>> --- a/drivers/gpu/drm/msm/dsi/dsi_cfg.h
->>> +++ b/drivers/gpu/drm/msm/dsi/dsi_cfg.h
->>> @@ -41,8 +41,8 @@ struct msm_dsi_config {
->>>        int num_regulators;
->>>        const char * const *bus_clk_names;
->>>        const int num_bus_clks;
->>> -    const resource_size_t io_start[VARIANTS_MAX][DSI_MAX];
->>> -    const int num_dsi;
->>> +    /* Allow + 1 entry for the zero-terminator */
->>> +    const resource_size_t io_start[VARIANTS_MAX][DSI_MAX + 1];
->>>    };
->>>      struct msm_dsi_host_cfg_ops {
->>> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
->>> index 22ba8726b0ea..f5092b4d0757 100644
->>> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
->>> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
->>> @@ -1868,7 +1868,7 @@ static int dsi_host_get_id(struct msm_dsi_host *msm_host)
->>>        if (!res)
->>>            return -EINVAL;
->>>    -    for (i = 0; i < cfg->num_dsi; i++) {
->>> +    for (i = 0; cfg->io_start[0][i]; i++) {
->>>            if (cfg->io_start[0][i] == res->start)
->>>                return i;
->>>        }
->>
->> I think we have the easier way to do this: always loop towards DSI_MAX. Empty cells will contain the value of 0 which can not match against valid starting address.
-> Yep, your approach will save us NUM_ENTRIES*sizeof(u64) memory!
+--=-=-=
+Content-Type: text/plain
 
-As for me it not about saving memory, but rather about the driver logic. 
-Compare:
-- We have two possible DSI hosts, one which is ocassionally absent thus 
-the address is 0
+On Sat Feb 11 2023, Vladimir Oltean wrote:
+> The MAC Merge layer (IEEE 802.3-2018 clause 99) does all the heavy
+> lifting for Frame Preemption (IEEE 802.1Q-2018 clause 6.7.2), a TSN
+> feature for minimizing latency.
+>
+> Preemptible traffic is different on the wire from normal traffic in
+> incompatible ways. If we send a preemptible packet and the link partner
+> doesn't support preemption, it will drop it as an error frame and we
+> will never know. The MAC Merge layer has a control plane of its own,
+> which can be manipulated (using ethtool) in order to negotiate this
+> capability with the link partner (through LLDP).
+>
+> Actually the TLV format for LLDP solves this problem only partly,
+> because both partners only advertise:
+> - if they support preemption (RX and TX)
+> - if they have enabled preemption (TX)
+> so we cannot tell the link partner what to do - we cannot force it to
+> enable reception of our preemptible packets.
+>
+> That is fully solved by the verification feature, where the local device
+> generates some small probe frames which look like preemptible frames
+> with no useful content, and the link partner is obliged to respond to
+> them if it supports the standard. If the verification times out, we know
+> that preemption isn't active in our TX direction on the link.
+>
+> Having clarified the definition, this selftest exercises the manual
+> (ethtool) configuration path of 2 link partners (with and without
+> verification), and the LLDP code path, using the openlldp project.
+>
+> This is not really a "forwarding" selftest, but I put it near the other
+> "ethtool" selftests.
+>
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> ---
 
-vs
+Looks good to me. Is there any way to test this? I see mm support
+implemented for enetc and Felix. However, I only have access to Intel
+i225 NIC(s) which support frame preemption.
 
-- We have a zero-terminated list of 2+1 entries for not more than two 
-DSI hosts.
+Thanks,
+Kurt
 
-> 
->>
->> Also please shift this patch to the first place, it will be logical to add VARIANT_MAX after removing num_dsi.
-> Ack.
-> 
-> Konrad
->>
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-With best wishes
-Dmitry
+-----BEGIN PGP SIGNATURE-----
 
+iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmPqIgwTHGt1cnRAbGlu
+dXRyb25peC5kZQAKCRDBk9HyqkZzgoDaEACyF2GCliovq6k4HZ49L5jNh9f8CahV
+c/mC8Jhy0AqblYleGS96FxmkhyU/rd8tA+Hri+TaQVvKRzwXyvx3H7X49RnBAn93
+uwtevLXPtjTodCIQONmXLXhkuOeMR/mzDzsD8q/QYSPv6g/JB4A/B0KQGkj5J4Py
+DW617Keo4ta52YuEsuufx8AMkj7xTDpx8zhbA/YNxR44giMwaWl90NRYgrmjA/pW
+djylBDcpkdMsl74qAI24/Gs/6SnUxxMpV9ZTt6F0Vyi7SZTQx3C5bo6SHkRKpszC
+i6tdf/NvhjNhb+U1A3uUkCM+FNkLhZxTstNE/FJ1v78JnP2AOgrvNYeOmniGLDmI
+n750R6WkyNs2nUZmhELQrgkO7rkPxhTfUU+w0fQwHSKdoE7CW9xTfwfoypkP0d0K
+cLnBGBHNBwDXpwvmlLNssYlZnYd5a+HhGFanbwu2Ym1C9cRML3x7hhZbeMGGSjet
+bglzJ0MGns8neBc0eHDU2LoZGyuL0PwdGUvQaasOsshXEkiwCBCMQhzLRsWqA+YD
+0Vy3FgMWlS4/cnCeoW87GNGbtaT5HWIsZPtownulP+0sngek+ag9DP2R/+WL2WmJ
+nyFyOkr8ldGKcRXrSOsoritTFPZKOYaABdggcePFzOgzvz0e6L46pZ7dKHAicuwo
+pSa9SGspnWxwtw==
+=vm5f
+-----END PGP SIGNATURE-----
+--=-=-=--
