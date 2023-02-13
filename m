@@ -2,152 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE19D69480C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A75D0694807
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:28:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbjBMO3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 09:29:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50022 "EHLO
+        id S230001AbjBMO2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 09:28:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbjBMO3C (ORCPT
+        with ESMTP id S230059AbjBMO2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 09:29:02 -0500
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2321C312;
-        Mon, 13 Feb 2023 06:28:48 -0800 (PST)
-Received: by mail-wr1-f54.google.com with SMTP id a2so12435212wrd.6;
-        Mon, 13 Feb 2023 06:28:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Lok3ZLhsjP8W54qn1OxpKnwWM1NZsZOK2mTg9EECtAE=;
-        b=q+FftsCwi23qepmTi/BY+T68vSu+LR/50frlQOR2724HDV8iVEkvX31QRhAnvwcA8m
-         7v2NkGZnmKhujVH9o+q9+3vkHqerXKjH6dBVeYoYU4i0mQj84Kuv/dGDaBo0tiLgNlNi
-         t0COKNI1vXBuDm1v76pHHZ5vUvppYZb2mpJgi6ZggbUtcBd7TFVUK6/Jh+WjFd224gtK
-         /IMFudtBKKvjVEh6i8UVlUH/NjK2H0OU8eQ+8XFu2KpjfxnOQtrxzxNo3vz3sNxEsGs5
-         RC9qwy9cS+NMj//+QwEdmmUOnhZ71mtFB5yihdYSCs///50f8uOZ1rM6GiQMPbWbuohP
-         pfcg==
-X-Gm-Message-State: AO0yUKV9RMYK6KIXOzl1RqAixApiGiIYfBCXH1ewgDcj9yhGkJYCyoFr
-        MKjncYxfngCOHOyi+uci1Sp+m3LrKo4=
-X-Google-Smtp-Source: AK7set+cPxOD96d2gWM2mJKxosOBibOVuQAR8mgbWoc8QvmcQ0xKEUYwlQUDB4PHTo/o3RZooj62Rg==
-X-Received: by 2002:a5d:5267:0:b0:2c5:5234:882c with SMTP id l7-20020a5d5267000000b002c55234882cmr5553194wrc.7.1676298526561;
-        Mon, 13 Feb 2023 06:28:46 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id h18-20020a5d4312000000b002c54d970fd8sm6552523wrq.36.2023.02.13.06.28.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 06:28:45 -0800 (PST)
-Date:   Mon, 13 Feb 2023 14:28:29 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
-Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, wei.liu@kernel.org, jinankjain@linux.microsoft.com,
-        mikelley@microsoft.com, kys@microsoft.com,
-        Tianyu.Lan@microsoft.com, haiyangz@microsoft.com,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com
-Subject: Re: [PATCH] x86/hyperv: Fix hv_get/set_register for nested bringup
-Message-ID: <Y+pJDbMu8WEPFnEm@liuwe-devbox-debian-v2>
-References: <1675980172-6851-1-git-send-email-nunodasneves@linux.microsoft.com>
+        Mon, 13 Feb 2023 09:28:40 -0500
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62971B574
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:28:35 -0800 (PST)
+Received: from SoMainline.org (D57D4C6E.static.ziggozakelijk.nl [213.125.76.110])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 804A43E986;
+        Mon, 13 Feb 2023 15:28:32 +0100 (CET)
+Date:   Mon, 13 Feb 2023 15:28:31 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Robert Foss <rfoss@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Liu Shixin <liushixin2@huawei.com>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/10] drm/msm/dpu: Add SM6350 support
+Message-ID: <20230213142831.hbzfp2chekshsqyy@SoMainline.org>
+References: <20230211122656.1479141-1-konrad.dybcio@linaro.org>
+ <20230211122656.1479141-7-konrad.dybcio@linaro.org>
+ <a18cf663-115d-edc8-5e4b-3d19fcd9a02c@linaro.org>
+ <cc364658-478a-f239-5d17-5ca2b7f7df8b@linaro.org>
+ <20230213113008.ih7ii5m3cz4w3lmz@SoMainline.org>
+ <8560b69f-8d42-995d-2f4d-11d6a64afef0@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <1675980172-6851-1-git-send-email-nunodasneves@linux.microsoft.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8560b69f-8d42-995d-2f4d-11d6a64afef0@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A few comments on style.
-
-On Thu, Feb 09, 2023 at 02:02:52PM -0800, Nuno Das Neves wrote:
-> hv_get_nested_reg only translates SINT0, resulting in the wrong sint
-> being registered by nested vmbus.
-
-Please put a blank line between paragraphs.
-
-> Fix the issue with new utility function hv_is_sint_reg.
-> While at it, improve clarity of hv_set_non_nested_register and hv_is_synic_reg.
+On 2023-02-13 13:35:01, Dmitry Baryshkov wrote:
+> On 13/02/2023 13:30, Marijn Suijten wrote:
+> > On 2023-02-13 12:15:19, Konrad Dybcio wrote:
+> > [...]
+> >>>> @@ -1674,6 +1765,15 @@ static struct dpu_pingpong_cfg sc8280xp_pp[] = {
+> >>>>              DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31), -1),
+> >>>>    };
+> >>>>    +static struct dpu_pingpong_cfg sm6350_pp[] = {
+> >>>> +    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk,
+> >>>
+> >>> No TE support?
+> >> It's.. complicated.. With just this patch, display refreshes, albeit
+> >> not at 60fps. Marijn is working on getting it going, though
+> >>
+> >> https://github.com/SoMainline/linux/commits/marijn/longbois-next/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> > 
+> > This branch hasn't been updated for the longest time.  I'm preparing v2
+> > of the INTF TE series at:
+> > 
+> > https://github.com/SoMainline/linux/commits/marijn/dpu/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> > 
+> > and it has about ±40% of Dmitry's review applied.  More to come now that
+> > hiatus is over.
 > 
-> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-> ---
->  arch/x86/include/asm/mshyperv.h | 11 +++++++----
->  arch/x86/kernel/cpu/mshyperv.c  |  8 ++++----
->  2 files changed, 11 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-> index 9ae1a344536b..684c547c1cca 100644
-> --- a/arch/x86/include/asm/mshyperv.h
-> +++ b/arch/x86/include/asm/mshyperv.h
-> @@ -225,10 +225,13 @@ extern bool hv_isolation_type_snp(void);
->  
->  static inline bool hv_is_synic_reg(unsigned int reg)
->  {
-> -	if ((reg >= HV_REGISTER_SCONTROL) &&
-> -	    (reg <= HV_REGISTER_SINT15))
-> -		return true;
-> -	return false;
-> +	return (reg >= HV_REGISTER_SCONTROL) &&
-> +	       (reg <= HV_REGISTER_SINT15);
-> +}
+> We should agree on landing order for my rework vs your changes. Can I 
+> try persuading you to review that 50-patches beast? With the hope that 
+> you'd agree to land your changes on top of it?
 
-Please put a new line here.
+SM6115 unexpectedly landing in advance of SM8[345]0 was already an
+unnecessary headache to deal with, and now we're "changing direction" on
+landing SM6350/75 in advance of INTF TE too...  not to forget about
+SM6125 which I also keep rebasing locally but planned on landing _after_
+INTF TE.  Regardless of the extra effort it will take from me I'd be
+happy to land my patches after everyone else's to have final say over
+which setup gets what bitflags and interrupts, as these typically got
+botched in our trees after rebases leading to broken INTF TE.
+Perhaps I should resubmit the individual Fixes: commits though?
 
-I can fix these issues too if you don't end up sending a new version due
-to other issues.
+Feel free to propose a merge order listing all the aforementioned SoCs,
+your rework, my INTF TE patches and whatever else is in the pipeline.
+As I've been away for a while, and only have limited hobby time (_and_
+have to split that on various projects), I'm behind on what's currently
+in swing for DPU (need additional time to catch back up) nor will be
+able to rebase/resubmit my patches often (a set-in-stone merge order
+will really help prioritise/plan ahead here).
 
-Jinank, please take a look. The code looks sensible to me, but I would
-like you to have a look too.
+Sure, I will at least start looking at your 50-patch as part of catching
+back up.  Do you want to process that on the mailing list or via
+https://gitlab.freedesktop.org/drm/msm/-/merge_requests/44?
 
-Thanks,
-Wei.
-
-> +static inline bool hv_is_sint_reg(unsigned int reg)
-> +{
-> +	return (reg >= HV_REGISTER_SINT0) &&
-> +	       (reg <= HV_REGISTER_SINT15);
->  }
->  
->  u64 hv_get_register(unsigned int reg);
-> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-> index 0ceb6d1f9c3c..6bd344e1200f 100644
-> --- a/arch/x86/kernel/cpu/mshyperv.c
-> +++ b/arch/x86/kernel/cpu/mshyperv.c
-> @@ -44,6 +44,9 @@ struct ms_hyperv_info ms_hyperv;
->  #if IS_ENABLED(CONFIG_HYPERV)
->  static inline unsigned int hv_get_nested_reg(unsigned int reg)
->  {
-> +	if (hv_is_sint_reg(reg))
-> +		return reg - HV_REGISTER_SINT0 + HV_REGISTER_NESTED_SINT0;
-> +
->  	switch (reg) {
->  	case HV_REGISTER_SIMP:
->  		return HV_REGISTER_NESTED_SIMP;
-> @@ -53,8 +56,6 @@ static inline unsigned int hv_get_nested_reg(unsigned int reg)
->  		return HV_REGISTER_NESTED_SVERSION;
->  	case HV_REGISTER_SCONTROL:
->  		return HV_REGISTER_NESTED_SCONTROL;
-> -	case HV_REGISTER_SINT0:
-> -		return HV_REGISTER_NESTED_SINT0;
->  	case HV_REGISTER_EOM:
->  		return HV_REGISTER_NESTED_EOM;
->  	default:
-> @@ -80,8 +81,7 @@ void hv_set_non_nested_register(unsigned int reg, u64 value)
->  		hv_ghcb_msr_write(reg, value);
->  
->  		/* Write proxy bit via wrmsl instruction */
-> -		if (reg >= HV_REGISTER_SINT0 &&
-> -		    reg <= HV_REGISTER_SINT15)
-> +		if (hv_is_sint_reg(reg))
->  			wrmsrl(reg, value | 1 << 20);
->  	} else {
->  		wrmsrl(reg, value);
-> -- 
-> 2.25.1
-> 
+- Marijn
