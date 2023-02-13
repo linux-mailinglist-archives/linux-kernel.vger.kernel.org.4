@@ -2,144 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA31D6944E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:55:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DDCF6944EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:57:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjBMLza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 06:55:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33720 "EHLO
+        id S229831AbjBML5B convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Feb 2023 06:57:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbjBMLz2 (ORCPT
+        with ESMTP id S229539AbjBML5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 06:55:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2789814490
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:54:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676289289;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WcMhCkMbOmOTj/bH4Sy4OqKGZb6rFPHQNFiH34s50Yo=;
-        b=Mt8nLHrr4NKNJQnq7nUEUWg5UbpvoQQk/XqnS5up8uEAfYQHPDZNv631XearUfVsNZLIIq
-        6SESKGUgfxZrchCUe8LdHt/6ENdq4gpyPmexbxducAehwq4WhqybLuoNugMK1o3q7/vzog
-        ueDcf9CWpdG5pOc679U1hz2w347P4ag=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-75-Wq6YDqLyMRCMOjXWfoRNkg-1; Mon, 13 Feb 2023 06:54:48 -0500
-X-MC-Unique: Wq6YDqLyMRCMOjXWfoRNkg-1
-Received: by mail-qt1-f200.google.com with SMTP id cr22-20020a05622a429600b003b694a9f291so7226900qtb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:54:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WcMhCkMbOmOTj/bH4Sy4OqKGZb6rFPHQNFiH34s50Yo=;
-        b=p5h78803p1vTHIIVJsGyG4uXQaIe2DcUbmhFKNybelKHAEWeaLr/s3VyxlCQHdsU4J
-         rVeEfz9bH+gufj8nGqQtoRBTFksyfy4M0KrL5z6wCzb1YhTRRO136JAGgk5aDWqsrLE3
-         kwaBZOwoizUzEQpNE+hMq9fLEf2l+yYRoiZ4EKMofeXBdKYckifbhu3RtPemj8e4KaAd
-         BUi2QbrSIGEDKTr/bD0IgfR+UUiCqrUdfRLNBVtvD362Obe0VHRvYzVAVxZcxgTMHa2z
-         6VlUex/J3LWejAIqOjl7y+RBlX4S2dCrxznrEvHIvoN50znv0zXmwxTa/4FcqqnbabEW
-         nngg==
-X-Gm-Message-State: AO0yUKV4w1HnoGb1UF30WsYEdTt7eL3wA5OwXdyWWEoALYCM9qlEAnMg
-        QmPDYmEAHD02zmhPO3yVhg5Pbbot1teZonmpwL5wjywL1Lg7U6tBWuyvvblLWu7aYUmQDsRX00M
-        INIhJuezfwU29NYiun6tIomgTa60Zu0Ab90mOkrnWzTXHcpQCe+rmX1Fni/o1UOqp5wlV1MANyD
-        zcyzgFHA==
-X-Received: by 2002:a05:622a:c2:b0:3b7:fafc:73e3 with SMTP id p2-20020a05622a00c200b003b7fafc73e3mr41611992qtw.41.1676289287673;
-        Mon, 13 Feb 2023 03:54:47 -0800 (PST)
-X-Google-Smtp-Source: AK7set8wayXAY07eSAsLUy1EuKEjpZecWkh4cqVU76wUx7sPcdjPhPEbbVGGf6BKp6NafvFeXHvmsw==
-X-Received: by 2002:a05:622a:c2:b0:3b7:fafc:73e3 with SMTP id p2-20020a05622a00c200b003b7fafc73e3mr41611965qtw.41.1676289287297;
-        Mon, 13 Feb 2023 03:54:47 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id e11-20020ac8010b000000b003b62e9c82ebsm9268360qtg.48.2023.02.13.03.54.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 03:54:46 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] KVM: VMX: Rename "KVM is using eVMCS" static key
- to match its wrapper
-In-Reply-To: <20230211003534.564198-4-seanjc@google.com>
-References: <20230211003534.564198-1-seanjc@google.com>
- <20230211003534.564198-4-seanjc@google.com>
-Date:   Mon, 13 Feb 2023 12:54:44 +0100
-Message-ID: <87pmaddbln.fsf@redhat.com>
+        Mon, 13 Feb 2023 06:57:00 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6AC7F1353E;
+        Mon, 13 Feb 2023 03:56:58 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 890A44B3;
+        Mon, 13 Feb 2023 03:57:40 -0800 (PST)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7D2A73F703;
+        Mon, 13 Feb 2023 03:56:56 -0800 (PST)
+Date:   Mon, 13 Feb 2023 11:56:52 +0000
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     pelzi@flying-snail.de, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: allwinner: minimize irq debounce filter per
+ default
+Message-ID: <20230213115652.3ab4f25c@donnerap.cambridge.arm.com>
+In-Reply-To: <20230213091803.bxle6ly2sapodsbs@houat>
+References: <Y+FaVorMl37F5Dve@debian-qemu.internal.flying-snail.de>
+        <20230207011608.2ce24d17@slackpad.lan>
+        <d0534762-3785-ec2d-8d1e-aba0e39f701b@feldner-bv.de>
+        <20230209202952.673d5a60@slackpad.lan>
+        <20230210082936.qefzz4fsp3jpalvp@houat>
+        <20230210094425.474cfba5@donnerap.cambridge.arm.com>
+        <20230210100620.z6j7rvkiwyu7paij@houat>
+        <20230210101814.2d36ae57@donnerap.cambridge.arm.com>
+        <20230213084329.ulckaigwd7dof37u@houat>
+        <c3dda403-6963-040a-3827-443edf0a377a@flying-snail.de>
+        <20230213091803.bxle6ly2sapodsbs@houat>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+On Mon, 13 Feb 2023 10:18:03 +0100
+Maxime Ripard <maxime@cerno.tech> wrote:
 
-> Rename enable_evmcs to __kvm_is_using_evmcs to match its wrapper, and to
-> avoid confusion with enabling eVMCS for nested virtualization, i.e. have
-> "enable eVMCS" be reserved for "enable eVMCS support for L1".
->
-> No functional change intended.
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/vmx/hyperv.c | 2 +-
->  arch/x86/kvm/vmx/hyperv.h | 4 ++--
->  arch/x86/kvm/vmx/vmx.c    | 2 +-
->  3 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/x86/kvm/vmx/hyperv.c b/arch/x86/kvm/vmx/hyperv.c
-> index 274fbd38c64e..79450e1ed7cf 100644
-> --- a/arch/x86/kvm/vmx/hyperv.c
-> +++ b/arch/x86/kvm/vmx/hyperv.c
-> @@ -609,7 +609,7 @@ int nested_evmcs_check_controls(struct vmcs12 *vmcs12)
->  }
->  
->  #if IS_ENABLED(CONFIG_HYPERV)
-> -DEFINE_STATIC_KEY_FALSE(enable_evmcs);
-> +DEFINE_STATIC_KEY_FALSE(__kvm_is_using_evmcs);
->  
->  /*
->   * KVM on Hyper-V always uses the latest known eVMCSv1 revision, the assumption
-> diff --git a/arch/x86/kvm/vmx/hyperv.h b/arch/x86/kvm/vmx/hyperv.h
-> index a54a2fdf0a5b..9623fe1651c4 100644
-> --- a/arch/x86/kvm/vmx/hyperv.h
-> +++ b/arch/x86/kvm/vmx/hyperv.h
-> @@ -67,11 +67,11 @@ static inline u64 evmcs_read_any(struct hv_enlightened_vmcs *evmcs,
->  
->  #if IS_ENABLED(CONFIG_HYPERV)
->  
-> -DECLARE_STATIC_KEY_FALSE(enable_evmcs);
-> +DECLARE_STATIC_KEY_FALSE(__kvm_is_using_evmcs);
->  
->  static __always_inline bool kvm_is_using_evmcs(void)
->  {
-> -	return static_branch_unlikely(&enable_evmcs);
-> +	return static_branch_unlikely(&__kvm_is_using_evmcs);
->  }
->  
->  static __always_inline int get_evmcs_offset(unsigned long field,
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index d80cbe01b5d7..651037b06eb2 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -579,7 +579,7 @@ static __init void hv_init_evmcs(void)
->  
->  		if (enlightened_vmcs) {
->  			pr_info("Using Hyper-V Enlightened VMCS\n");
-> -			static_branch_enable(&enable_evmcs);
-> +			static_branch_enable(&__kvm_is_using_evmcs);
->  		}
->  
->  		if (ms_hyperv.nested_features & HV_X64_NESTED_DIRECT_FLUSH)
+Hi,
 
-Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> On Mon, Feb 13, 2023 at 09:49:55AM +0100, pelzi@flying-snail.de wrote:
+> > Am 13.02.23 um 09:43 schrieb Maxime Ripard:  
+> > > On Fri, Feb 10, 2023 at 10:18:14AM +0000, Andre Przywara wrote:  
+> > > > > > Not sure if you were actually arguing this, but the change I sketched
+> > > > > > above (interpreting 0 as 24MHz/1) is separate though, as the current
+> > > > > > default is "no DT property", and not 0. There is no input-debounce
+> > > > > > property user in the kernel tree at the moment, so we wouldn't break
+> > > > > > anyone. The only thing that would change is if a downstream user was
+> > > > > > relying on "0" being interpreted as "skip the setup", which isn't
+> > > > > > really documented and could be argued to be an implementation detail.
+> > > > > > 
+> > > > > > So I'd suggest to implement 0 as "lowest possible", and documenting that
+> > > > > > and the 32KHz/1 default if no property is given.  
+> > > > > Ah, my bad.
+> > > > > 
+> > > > > There's another thing to consider: there's already a generic per-pin
+> > > > > input-debounce property in pinctrl.
+> > > > > 
+> > > > > Since we can't control it per pin but per bank, we moved it to the
+> > > > > controller back then, but there's always been this (implicit)
+> > > > > expectation that it was behaving the same way.
+> > > > > 
+> > > > > And the generic, per-pin, input-debounce documentation says:
+> > > > >   
+> > > > > > Takes the debounce time in usec as argument or 0 to disable debouncing  
+> > > > > I agree that silently ignoring it is not great, but interpreting 0 as
+> > > > > the lowest possible is breaking that behaviour which, I believe, is a
+> > > > > worse outcome.  
+> > > > Is it really? If I understand the hardware manuals correctly, we cannot
+> > > > really turn that feature off, so isn't the lowest possible time period (24
+> > > > MHz/1 at the moment) the closest we can get to "turn it off"? So
+> > > > implementing this would bring us actually closer to the documented
+> > > > behaviour? Or did I get the meaning of this time period wrong?
+> > > > At least that's my understanding of how it fixed Andreas' problem: 1µs
+> > > > is still not "off", but much better than the 31µs of the default. The new
+> > > > 0 would then be 0.041µs.  
+> > > My point was that the property we share the name (and should share the
+> > > semantics with) documents 0 as disabled. We would have a behavior that
+> > > doesn't disable it. It's inconsistent.
+> > > 
+> > > The reason doesn't really matter, we would share the same name but have
+> > > a completely different behavior, this is super confusing to me.  
+> > 
+> > I got the point. As far as I can tell from the datasheet, it is not possible
+> > to actually switch off input-debounce. But as a debounce filter is actually
+> > a low-pass filter, setting the cut-off frequency as high as possible,
+> > appears to be the equivalent to switching it off.  
+> 
+> It's not really a matter of hardware here, it's a matter of driver
+> behavior vs generic behavior from the framework. The hardware obviously
+> influences the former, but it's marginal in that discussion.
+> 
+> As that whole discussion shows, whether the frequency would be high
+> enough is application dependent, and thus we cannot just claim that it's
+> equivalent in all circumstances.
+> 
+> Making such an assumption will just bite someone else down the road,
+> except this time we will have users (you, I'd assume) relying on that
+> behavior so we wouldn't be able to address it.
+> 
+> But I also agree with the fact that doing nothing with 0 is bad UX and
+> confusing as well.
+> 
+> I still think that we can address both by just erroring out on 0 /
+> printing an error message so that it's obvious that we can't support it,
+> and we wouldn't change the semantics of the property either.
+> 
+> And then you can set the actual debouncing time you need instead of
+> "whatever" in the device tree.
 
--- 
-Vitaly
+I am on the same page with regards to discouraging 0 as a proper value, and
+that we should warn if this is being used.
+However I think we should at the same time try to still get as low as
+possible when 0 is specified. The debounce property uses microseconds as
+the unit, but even the AW hardware allows us to go lower than this. So we
+would leave that on the table, somewhat needlessly: input-debounce = <1>
+would give us 1333 ns, when the lowest possible is about 42 ns (1/24MHz).
 
+So what about the following:
+We document that 0 does not mean off, but tries to get as low as possible.
+If the driver sees 0, it issues a warning, but still tries to lower the
+debounce period as much as possible, and reports that, like:
+[1.2345678] 1c20800.pinctrl: cannot turn off debouncing, setting to 41.7 ns
+
+Alternatively we use a different property name, if that is a concern. We
+could then use nanoseconds as a unit value, and then can error out on 0.
+Re-using input-debounce is somewhat dodgy anyway, since the generic
+property is for a single value only, per pin (in the pinmux DT node, not
+in the controller node), whereas we use an array of some non-obvious
+subset of ports.
+
+Cheers,
+Andre
