@@ -2,195 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C81836951BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:18:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D591D6951C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:22:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbjBMUS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 15:18:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
+        id S231177AbjBMUWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 15:22:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbjBMUS0 (ORCPT
+        with ESMTP id S230267AbjBMUWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 15:18:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411B91BEF
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 12:18:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 13 Feb 2023 15:22:50 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92F410C2;
+        Mon, 13 Feb 2023 12:22:48 -0800 (PST)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF90EB81907
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 20:18:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70E58C433EF;
-        Mon, 13 Feb 2023 20:18:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676319502;
-        bh=RnVBagAMOmkHvQopNbeQ+l1UqK7L+0+OD4GzcEr+ujw=;
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 884D26602154;
+        Mon, 13 Feb 2023 20:22:46 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676319766;
+        bh=1TObA8dqXQ2thCA8DbnCx9SQXVRva5RI5dmI1MX6Nqk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xir4goSRalMuDHdCcM8LIh2kAo9paTl0P17cnPsZOHHAajJ7pGbI8Tb+HYlbxZXau
-         faGhk/lHBcaPkQfEwO87UEe3kF8CbMoV7zOq69Sj0lvzeVYlik/JXn1osxDDyTNHk2
-         8Phx08FYAGyWhX3W+aWmHrdwJxzXMUIFTHy36VD2WDR3mvv93znyTnstxEyDoAcrfm
-         LGBoWI/f9heIIVlCfbintYAuG+8EmS8ZoofF4nkpyAMVB7ThmCp9q0FyqSdrIi4QkK
-         0wv1i2NR6ywi/hMT08G36U8bovc/jf+aVefy1AFgUqawo+OhOLSl2m1PSIFz9EAgDn
-         Go1pyISDhlNag==
-Received: by pali.im (Postfix)
-        id 18C00687; Mon, 13 Feb 2023 21:18:20 +0100 (CET)
-Date:   Mon, 13 Feb 2023 21:18:20 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Scott Wood <oss@buserror.net>, Sinan Akman <sinan@writeme.com>,
-        Martin Kennedy <hurricos@gmail.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 6/8] powerpc/85xx: p2020: Define just one machine
- description
-Message-ID: <20230213201820.xej7opc55e6obiti@pali>
-References: <20221224211425.14983-1-pali@kernel.org>
- <20221224211425.14983-7-pali@kernel.org>
- <fc688761-5854-a171-c5e9-fae9eb25e798@csgroup.eu>
+        b=C8//q4KgudNFloPH8JX/tYaHDYFPFIUY2GBGaULdc7GgHSfq6oreC1+IRlLjh8/bP
+         i1AEKizsmKQ1b6/q4Gve4lilaNKGuEG6OAzevnXLzcd1+/aQ7yNbhj/E55M564YyfJ
+         TTnT93zCyqKegRYV0m5Tyx2mJSwKB7JU9AecJsCtsVDqIbaVERHNyOlEyzTzXMlDb5
+         sXRbCXFIaj0I2P7QMWKmtONd2i8T/wlj9ZxHwoBb6r3Yugaf5GBmw6O4apJOo6kJdR
+         xboXIvhYdWZTqg/Y+93OEz0kwOGU4KXhY7/gLf3mluXbktQXg7gleZR2fskYIPh5Tk
+         G3RlGszvmOhbw==
+Received: by mercury (Postfix, from userid 1000)
+        id 076DB1060961; Mon, 13 Feb 2023 21:22:44 +0100 (CET)
+Date:   Mon, 13 Feb 2023 21:22:43 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH] power: supply: max77650: Make max77650_charger_disable()
+ return void
+Message-ID: <20230213202243.pvixph4v2i7nypsv@mercury.elektranox.org>
+References: <20230210212528.179627-1-u.kleine-koenig@pengutronix.de>
+ <CAMRc=Md-997mohAyUGGrf28zvTX1voKO24DWgfCjCLDKsRYu+A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fcva4ibhy5rewgna"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fc688761-5854-a171-c5e9-fae9eb25e798@csgroup.eu>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMRc=Md-997mohAyUGGrf28zvTX1voKO24DWgfCjCLDKsRYu+A@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 13 February 2023 20:08:52 Christophe Leroy wrote:
-> Le 24/12/2022 à 22:14, Pali Rohár a écrit :
-> > Combine machine descriptions and code of all P2020 boards into just one
-> > generic unified P2020 machine description. This allows kernel to boot on
-> > any P2020-based board with P2020 DTS file without need to patch kernel and
-> > define a new machine description in 85xx powerpc platform directory.
-> > 
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
+
+--fcva4ibhy5rewgna
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Mon, Feb 13, 2023 at 02:53:07PM +0100, Bartosz Golaszewski wrote:
+> On Fri, Feb 10, 2023 at 10:25 PM Uwe Kleine-K=F6nig
+> <u.kleine-koenig@pengutronix.de> wrote:
+> >
+> > The return value of max77650_charger_disable() is ignored by all but one
+> > caller. That one caller propagates the error code in the platform drive=
+r's
+> > remove function. The only effect of that is that the driver core emits
+> > a generic error message (but still removes the device). As
+> > max77650_charger_disable() already emits an error message, this can bet=
+ter
+> > be changed to return zero.
+> >
+> > This is a preparation for making struct platform_driver::remove return
+> > void, too.
+> >
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 > > ---
-> >   arch/powerpc/platforms/85xx/p2020.c | 83 +++++++----------------------
-> >   1 file changed, 19 insertions(+), 64 deletions(-)
-> > 
-> > diff --git a/arch/powerpc/platforms/85xx/p2020.c b/arch/powerpc/platforms/85xx/p2020.c
-> > index adf3750abef9..b3fb600e1d83 100644
-> > --- a/arch/powerpc/platforms/85xx/p2020.c
-> > +++ b/arch/powerpc/platforms/85xx/p2020.c
-> > @@ -156,83 +156,38 @@ static void __init p2020_setup_arch(void)
-> >   #endif
-> >   }
-> >   
-> > -#ifdef CONFIG_MPC85xx_DS
-> > -machine_arch_initcall(p2020_ds, mpc85xx_common_publish_devices);
-> > -#endif /* CONFIG_MPC85xx_DS */
+> >  drivers/power/supply/max77650-charger.c | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/power/supply/max77650-charger.c b/drivers/power/su=
+pply/max77650-charger.c
+> > index d913428bedc0..e8c25da40ab2 100644
+> > --- a/drivers/power/supply/max77650-charger.c
+> > +++ b/drivers/power/supply/max77650-charger.c
+> > @@ -141,7 +141,7 @@ static int max77650_charger_enable(struct max77650_=
+charger_data *chg)
+> >         return rv;
+> >  }
+> >
+> > -static int max77650_charger_disable(struct max77650_charger_data *chg)
+> > +static void max77650_charger_disable(struct max77650_charger_data *chg)
+> >  {
+> >         int rv;
+> >
+> > @@ -151,8 +151,6 @@ static int max77650_charger_disable(struct max77650=
+_charger_data *chg)
+> >                                 MAX77650_CHARGER_DISABLED);
+> >         if (rv)
+> >                 dev_err(chg->dev, "unable to disable the charger: %d\n"=
+, rv);
 > > -
-> > -#ifdef CONFIG_MPC85xx_RDB
-> > -machine_arch_initcall(p2020_rdb, mpc85xx_common_publish_devices);
-> > -machine_arch_initcall(p2020_rdb_pc, mpc85xx_common_publish_devices);
-> > -#endif /* CONFIG_MPC85xx_RDB */
-> > +machine_arch_initcall(p2020, mpc85xx_common_publish_devices);
-> >   
-> >   /*
-> >    * Called very early, device-tree isn't unflattened
-> >    */
-> > -#ifdef CONFIG_MPC85xx_DS
-> > -static int __init p2020_ds_probe(void)
-> > -{
-> > -	return !!of_machine_is_compatible("fsl,P2020DS");
-> > -}
-> > -#endif /* CONFIG_MPC85xx_DS */
-> > -
-> > -#ifdef CONFIG_MPC85xx_RDB
-> > -static int __init p2020_rdb_probe(void)
-> > -{
-> > -	if (of_machine_is_compatible("fsl,P2020RDB"))
-> > -		return 1;
-> > -	return 0;
-> > -}
-> > -
-> > -static int __init p2020_rdb_pc_probe(void)
-> > +static int __init p2020_probe(void)
-> >   {
-> > -	if (of_machine_is_compatible("fsl,P2020RDB-PC"))
-> > -		return 1;
-> > -	return 0;
-> > +	struct device_node *p2020_cpu;
+> > -       return rv;
+> >  }
+> >
+> >  static irqreturn_t max77650_charger_check_status(int irq, void *data)
+> > @@ -351,7 +349,9 @@ static int max77650_charger_remove(struct platform_=
+device *pdev)
+> >  {
+> >         struct max77650_charger_data *chg =3D platform_get_drvdata(pdev=
+);
+> >
+> > -       return max77650_charger_disable(chg);
+> > +       max77650_charger_disable(chg);
 > > +
-> > +	/*
-> > +	 * There is no common compatible string for all P2020 boards.
-> > +	 * The only common thing is "PowerPC,P2020@0" cpu node.
-> > +	 * So check for P2020 board via this cpu node.
-> > +	 */
-> > +	p2020_cpu = of_find_node_by_path("/cpus/PowerPC,P2020@0");
-> > +	if (!p2020_cpu)
-> > +		return 0;
-> > +
-> > +	of_node_put(p2020_cpu);
-> 
-> of_node_put() already checks for nullity of its parameter, so you can 
-> simplify stuff here, something like
-> 
-> 	p2020_cpu = of_find_node_by_path("/cpus/PowerPC,P2020@0");
-> 	of_node_put(p2020_cpu);
-> 
-> 	return !!p2020_cpu;
+> > +       return 0;
+> >  }
+> >
+> >  static const struct of_device_id max77650_charger_of_match[] =3D {
+> >
+> > base-commit: 4f72a263e162938de26866b862ed6015f5725946
+> > --
+> > 2.39.0
+> >
+>=20
+> Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Ok!
+Thanks, queued.
 
-> > +	return 1;
-> >   }
-> > -#endif /* CONFIG_MPC85xx_RDB */
-> > -
-> > -#ifdef CONFIG_MPC85xx_DS
-> > -define_machine(p2020_ds) {
-> > -	.name			= "P2020 DS",
-> > -	.probe			= p2020_ds_probe,
-> > -	.setup_arch		= p2020_setup_arch,
-> > -	.init_IRQ		= p2020_pic_init,
-> > -#ifdef CONFIG_PCI
-> > -	.pcibios_fixup_bus	= fsl_pcibios_fixup_bus,
-> > -	.pcibios_fixup_phb      = fsl_pcibios_fixup_phb,
-> > -#endif
-> > -	.get_irq		= mpic_get_irq,
-> > -	.calibrate_decr		= generic_calibrate_decr,
-> > -	.progress		= udbg_progress,
-> > -};
-> > -#endif /* CONFIG_MPC85xx_DS */
-> > -
-> > -#ifdef CONFIG_MPC85xx_RDB
-> > -define_machine(p2020_rdb) {
-> > -	.name			= "P2020 RDB",
-> > -	.probe			= p2020_rdb_probe,
-> > -	.setup_arch		= p2020_setup_arch,
-> > -	.init_IRQ		= p2020_pic_init,
-> > -#ifdef CONFIG_PCI
-> > -	.pcibios_fixup_bus	= fsl_pcibios_fixup_bus,
-> > -	.pcibios_fixup_phb      = fsl_pcibios_fixup_phb,
-> > -#endif
-> > -	.get_irq		= mpic_get_irq,
-> > -	.calibrate_decr		= generic_calibrate_decr,
-> > -	.progress		= udbg_progress,
-> > -};
-> >   
-> > -define_machine(p2020_rdb_pc) {
-> > -	.name			= "P2020RDB-PC",
-> > -	.probe			= p2020_rdb_pc_probe,
-> > +define_machine(p2020) {
-> > +	.name			= "Freescale P2020",
-> > +	.probe			= p2020_probe,
-> >   	.setup_arch		= p2020_setup_arch,
-> >   	.init_IRQ		= p2020_pic_init,
-> >   #ifdef CONFIG_PCI
-> >   	.pcibios_fixup_bus	= fsl_pcibios_fixup_bus,
-> > -	.pcibios_fixup_phb      = fsl_pcibios_fixup_phb,
-> > +	.pcibios_fixup_phb	= fsl_pcibios_fixup_phb,
-> >   #endif
-> >   	.get_irq		= mpic_get_irq,
-> >   	.calibrate_decr		= generic_calibrate_decr,
-> >   	.progress		= udbg_progress,
-> >   };
-> > -#endif /* CONFIG_MPC85xx_RDB */
+-- Sebastian
+
+--fcva4ibhy5rewgna
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPqnBAACgkQ2O7X88g7
++pq4cg//Rj0BlOAjxVkZApm61YnWxGpBnUfaKpI+kjRE3qj2h4vNsP1ZUdc7sg96
+AhD6j39blniYlBC0l2UzNHgReBwKqUn+NVvCE74oqPRC6TpzuAe5TmJURvzx0ucZ
+4wxjZ0/OzqDm9ajRdw1LLvVtHdphkWUp/rpZ1afEMxBqwAeFIkt/EYujZokSg/fw
+ZBIiQWKB9H3cBdNz7xTsQXtZmJY1auWmUnfB+ZB+JPmjGzwpJq4tjxkMGtriWSmf
+tnw54w16Drrnbcz+IpElbB2flq+isQQgt6j8eNY0LrJgrwOpGenNnihzHdpP8WMQ
+rYR2QEcUrw0ce1IIOUQYewEe6UeYaLSXg9926KEZ5rNn4pSawBKMKLgZ0iubRvgF
+NLauMVR/j7/SPMPtaJuJfdZZuj+Cxlhh+krxA5pJ83eSyeLJkEPMWvGf8/mU61xB
+sT7HM+et1pMxI36wXXoqLBaEF2dm6UkW8UJ1OQbIb1GJZayLAkDxsKqyXgItlf+H
+AgQnrRuCOeZYaYTTxGUBhToP6wBRoqijXKNQVGkZ0SrsSa8Py1ILeg8Vg5WAnZKE
+iw/IA4Y9mxdNAfhF1ABS18k/jBcdcb7OtfHVdSsf0IT4xq6bCegst5EtvHCpStal
+hxaLhoYbn4tKmnpGFMJD9IpiklgEcrPxRkivnZXq/zDQnd+VyOc=
+=TLCJ
+-----END PGP SIGNATURE-----
+
+--fcva4ibhy5rewgna--
