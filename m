@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0187693F71
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A84693F76
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:20:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjBMITr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 03:19:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
+        id S229929AbjBMIUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 03:20:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjBMITo (ORCPT
+        with ESMTP id S229921AbjBMIUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 03:19:44 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083D1125A1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 00:19:31 -0800 (PST)
+        Mon, 13 Feb 2023 03:20:13 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6478F12878
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 00:19:59 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8786C376F7;
-        Mon, 13 Feb 2023 08:19:29 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 162A467AC1;
+        Mon, 13 Feb 2023 08:19:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1676276369; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1676276398; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=SkuA5xII7+Ncctp/H+cyI401E5MSoxuprPOZVgQ02vo=;
-        b=RsY/DEF/MS2viQV0EowO8KkuorK0OAk9TqN2MF3+Y0loY5yTQXypryN9WHlbOQBegkBb+j
-        19GPh5bx7AQfjUQThikP6/lw6f1j5gHpGYBGADt3mdpXvj5aQdHXggXqNr3x9tR1Xywz6H
-        n5ZuwDwtBbAkR/AC6h+jVNnmwxS9GQE=
+        bh=QE3+ImDbv+iRMg0urx+hhREwWMlTqSaDmNJTX/t3b28=;
+        b=K8wk7UwJ8jvwXSQrTwUKGkT21bQRUW0XeObdsuY1QkLrz3CyFqteBaEltPWKxsPfaBqH3L
+        Uk+qI6aAlvsVmHvplKSJyMn3aBLlmYGvls0b8UbxBPteNBCaCp55AYhBtHWKjwz+DVqXYb
+        BuhDnfscfGqW2IQq3z1BJOqzUNG08lU=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 56D66138E6;
-        Mon, 13 Feb 2023 08:19:29 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DB979138E6;
+        Mon, 13 Feb 2023 08:19:57 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id Ib2uE5Hy6WNHNgAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 13 Feb 2023 08:19:29 +0000
-Message-ID: <dc9269b1-c91e-86d1-fd6d-9a3ffddf3ed9@suse.com>
-Date:   Mon, 13 Feb 2023 09:19:28 +0100
+        id eZO8M63y6WN4NgAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 13 Feb 2023 08:19:57 +0000
+Message-ID: <ecb93fed-ee16-0688-ec3b-744d599f0598@suse.com>
+Date:   Mon, 13 Feb 2023 09:19:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH] xen/pvcalls-back: fix permanently masked event channel
+Subject: Re: [PATCH] xen/grant-dma-iommu: Implement a dummy probe_device()
+ callback
 Content-Language: en-US
-To:     Volodymyr Babchuk <Volodymyr_Babchuk@epam.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>
-Cc:     "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
-References: <20230119211037.1234931-1-volodymyr_babchuk@epam.com>
+To:     Oleksandr Tyshchenko <olekstysh@gmail.com>,
+        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+References: <20230208153649.3604857-1-olekstysh@gmail.com>
 From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20230119211037.1234931-1-volodymyr_babchuk@epam.com>
+In-Reply-To: <20230208153649.3604857-1-olekstysh@gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha256;
  protocol="application/pgp-signature";
- boundary="------------o02q2LSfjS5J4W0k0xTSfHED"
+ boundary="------------RBH6UhIRkHMiUqsxgvy3xsXY"
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -68,46 +68,47 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------o02q2LSfjS5J4W0k0xTSfHED
-Content-Type: multipart/mixed; boundary="------------VrHgZmgU9EkzvUMOgLaXDPLp";
+--------------RBH6UhIRkHMiUqsxgvy3xsXY
+Content-Type: multipart/mixed; boundary="------------NGWlZ7vq7DpqRSV3qtp1bda3";
  protected-headers="v1"
 From: Juergen Gross <jgross@suse.com>
-To: Volodymyr Babchuk <Volodymyr_Babchuk@epam.com>,
- Boris Ostrovsky <boris.ostrovsky@oracle.com>,
- Stefano Stabellini <sstabellini@kernel.org>
-Cc: "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
-Message-ID: <dc9269b1-c91e-86d1-fd6d-9a3ffddf3ed9@suse.com>
-Subject: Re: [PATCH] xen/pvcalls-back: fix permanently masked event channel
-References: <20230119211037.1234931-1-volodymyr_babchuk@epam.com>
-In-Reply-To: <20230119211037.1234931-1-volodymyr_babchuk@epam.com>
+To: Oleksandr Tyshchenko <olekstysh@gmail.com>,
+ xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Cc: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+ Stefano Stabellini <sstabellini@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>
+Message-ID: <ecb93fed-ee16-0688-ec3b-744d599f0598@suse.com>
+Subject: Re: [PATCH] xen/grant-dma-iommu: Implement a dummy probe_device()
+ callback
+References: <20230208153649.3604857-1-olekstysh@gmail.com>
+In-Reply-To: <20230208153649.3604857-1-olekstysh@gmail.com>
 
---------------VrHgZmgU9EkzvUMOgLaXDPLp
-Content-Type: multipart/mixed; boundary="------------YxAi6fY1IXewUiJhyUIbZRaX"
+--------------NGWlZ7vq7DpqRSV3qtp1bda3
+Content-Type: multipart/mixed; boundary="------------gsVpOz0V7CNMqpfHNUPpAH8n"
 
---------------YxAi6fY1IXewUiJhyUIbZRaX
+--------------gsVpOz0V7CNMqpfHNUPpAH8n
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: base64
 
-T24gMTkuMDEuMjMgMjI6MTEsIFZvbG9keW15ciBCYWJjaHVrIHdyb3RlOg0KPiBUaGVyZSBp
-cyBhIHNlcXVlbmNlIG9mIGV2ZW50cyB0aGF0IGNhbiBsZWFkIHRvIGEgcGVybWFuZW50bHkg
-bWFza2VkDQo+IGV2ZW50IGNoYW5uZWwsIGJlY2F1c2UgeGVuX2lycV9sYXRlZW9pKCkgaXMg
-bmV3ZXIgY2FsbGVkLiBUaGlzIGhhcHBlbnMNCj4gd2hlbiBhIGJhY2tlbmQgcmVjZWl2ZXMg
-c3B1cmlvdXMgd3JpdGUgZXZlbnQgZnJvbSBhIGZyb250ZW5kLiBJbiB0aGlzDQo+IGNhc2Ug
-cHZjYWxsc19jb25uX2JhY2tfd3JpdGUoKSByZXR1cm5zIGVhcmx5IGFuZCBpdCBkb2VzIG5v
-dCBjbGVhcnMgdGhlDQo+IG1hcC0+d3JpdGUgY291bnRlci4gQXMgbWFwLT53cml0ZSA+IDAs
-IHB2Y2FsbHNfYmFja19pb3dvcmtlcigpIHJldHVybnMNCj4gd2l0aG91dCBjYWxsaW5nIHhl
-bl9pcnFfbGF0ZWVvaSgpLiBUaGlzIGxlYXZlcyB0aGUgZXZlbnQgY2hhbm5lbCBpbg0KPiBt
-YXNrZWQgc3RhdGUsIGEgYmFja2VuZCBkb2VzIG5vdCByZWNlaXZlIGFueSBuZXcgZXZlbnRz
-IGZyb20gYQ0KPiBmcm9udGVuZCBhbmQgdGhlIHdob2xlIGNvbW11bmljYXRpb24gc3RvcHMu
-DQo+IA0KPiBNb3ZlIGF0b21pY19zZXQoJm1hcC0+d3JpdGUsIDApIHRvIHRoZSB2ZXJ5IGJl
-Z2lubmluZyBvZg0KPiBwdmNhbGxzX2Nvbm5fYmFja193cml0ZSgpIHRvIGZpeCB0aGlzIGlz
-c3VlLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogVm9sb2R5bXlyIEJhYmNodWsgPHZvbG9keW15
-cl9iYWJjaHVrQGVwYW0uY29tPg0KPiBSZXBvcnRlZC1ieTogT2xla3NpaSBNb2lzaWVpZXYg
-PG9sZWtzaWlfbW9pc2llaWV2QGVwYW0uY29tPg0KDQpQdXNoZWQgdG86IHhlbi90aXAuZ2l0
-IGZvci1saW51cy02LjMNCg0KDQpKdWVyZ2VuDQoNCg==
---------------YxAi6fY1IXewUiJhyUIbZRaX
+T24gMDguMDIuMjMgMTY6MzYsIE9sZWtzYW5kciBUeXNoY2hlbmtvIHdyb3RlOg0KPiBGcm9t
+OiBPbGVrc2FuZHIgVHlzaGNoZW5rbyA8b2xla3NhbmRyX3R5c2hjaGVua29AZXBhbS5jb20+
+DQo+IA0KPiBVcGRhdGUgc3R1YiBJT01NVSBkcml2ZXIgKHdoaWNoIG1haW4gcHVycG9zZSBp
+cyB0byByZXVzZSBnZW5lcmljDQo+IElPTU1VIGRldmljZS10cmVlIGJpbmRpbmdzIGJ5IFhl
+biBncmFudCBETUEtbWFwcGluZyBsYXllciBvbiBBcm0pDQo+IGFjY29yZGluZyB0byB0aGUg
+cmVjZW50IGNoYW5nZXMgZG9uZSBpbiB0aGUgZm9sbG93aW5nDQo+IGNvbW1pdCA1NzM2NWEw
+NGM5MjEgKCJpb21tdTogTW92ZSBidXMgc2V0dXAgdG8gSU9NTVUgZGV2aWNlIHJlZ2lzdHJh
+dGlvbiIpLg0KPiANCj4gV2l0aCBwcm9iZV9kZXZpY2UoKSBjYWxsYmFjayBiZWluZyBjYWxs
+ZWQgZHVyaW5nIElPTU1VIGRldmljZSByZWdpc3RyYXRpb24sDQo+IHRoZSB1bmluaXRpYWxp
+emVkIGNhbGxiYWNrIGp1c3QgbGVhZHMgdG8gdGhlICJrZXJuZWwgTlVMTCBwb2ludGVyDQo+
+IGRlcmVmZXJlbmNlIiBpc3N1ZSBkdXJpbmcgYm9vdC4gRml4IHRoYXQgYnkgYWRkaW5nIGEg
+ZHVtbXkgY2FsbGJhY2suDQo+IA0KPiBMb29rcyBsaWtlIHRoZSByZWxlYXNlX2RldmljZSgp
+IGNhbGxiYWNrIGlzIG5vdCBtYW5kYXRvcnkgdG8gYmUNCj4gaW1wbGVtZW50ZWQgYXMgSU9N
+TVUgZnJhbWV3b3JrIG1ha2VzIHN1cmUgdGhhdCBjYWxsYmFjayBpcyBpbml0aWFsaXplZA0K
+PiBiZWZvcmUgZGVyZWZlcmVuY2luZy4NCj4gDQo+IFJlcG9ydGVkLWJ5OiBWaXJlc2ggS3Vt
+YXIgPHZpcmVzaC5rdW1hckBsaW5hcm8ub3JnPg0KPiBTaWduZWQtb2ZmLWJ5OiBPbGVrc2Fu
+ZHIgVHlzaGNoZW5rbyA8b2xla3NhbmRyX3R5c2hjaGVua29AZXBhbS5jb20+DQoNClB1c2hl
+ZC10bzogeGVuL3RpcC5naXQgZm9yLWxpbnVzLTYuMw0KDQoNCkp1ZXJnZW4NCg0K
+--------------gsVpOz0V7CNMqpfHNUPpAH8n
 Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
 Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
 Content-Description: OpenPGP public key
@@ -165,24 +166,24 @@ jR/i1DG86lem3iBDXzXsZDn8R38=3D
 =3D2wuH
 -----END PGP PUBLIC KEY BLOCK-----
 
---------------YxAi6fY1IXewUiJhyUIbZRaX--
+--------------gsVpOz0V7CNMqpfHNUPpAH8n--
 
---------------VrHgZmgU9EkzvUMOgLaXDPLp--
+--------------NGWlZ7vq7DpqRSV3qtp1bda3--
 
---------------o02q2LSfjS5J4W0k0xTSfHED
+--------------RBH6UhIRkHMiUqsxgvy3xsXY
 Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPp8pAFAwAAAAAACgkQsN6d1ii/Ey/c
-nAf/cLnO2nQuoqUvqA94flf8a/e5q/wYnPzoH8W0BT+b4NvK0eJedhEb30hd3Xg5SPhALA8npJE+
-/10ZXbYDuWbJYrEGMDs3ztFoGCLc+HlCbN7lIrbaBtHZMPCBUn5VUJe7mhoMYaOEqwT9Df6J8CPF
-5TASi6wAl14sivDM05X8KAcAqYcst8KrsNAspCNL0dFGlx+OhPRHD5JQyy232pUB7rldYkDheplh
-OPEDMAjE1qFCTmWAY7E8j+8a80At+Drhrmf29AC8lLF+H5dO8SdYvKtu2vMjk/rzymd0e9KVdtn7
-0Cmq35jyn6zfFiHTq0OYJbmPtH9xuQxdn7cWUYfrGw==
-=pCG1
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPp8q0FAwAAAAAACgkQsN6d1ii/Ey/S
+QAf/fRXsFUEMr+WD5+EQRdD8h1X1IsQTLpZWHreyPibtO4+gl1AooVP8oBzbGTPhKeygMpT0A8BK
+8i6optXzCxLAL6LYh8GNklO7XnwwSWCb39TKMtKrJ7kFkERbp1afX+EaWpArLoYzhOfQagpRZ7IX
+5ABbAT+kmH3incsqG9BPePDOO0h5Rzrx7Kzv2xW4o9ZRgqCYGVC2XFBiTcyMNoKLY1xIY/tyB1II
+zxpG+A0v1cgX2xmxyvQOFOHXn/CqSEgUa9b+f//4r8+9V7mUCHyx75DXBM+kqTtRBAQTtWnrBdGH
+Cvfb/Y3fLUPVh4MNrI0IKc1f0YLoSoBF3AryktWAPQ==
+=Gzun
 -----END PGP SIGNATURE-----
 
---------------o02q2LSfjS5J4W0k0xTSfHED--
+--------------RBH6UhIRkHMiUqsxgvy3xsXY--
