@@ -2,194 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D83E693BF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 02:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D68F3693BF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 02:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjBMByX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 20:54:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57582 "EHLO
+        id S229711AbjBMBzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 20:55:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjBMByV (ORCPT
+        with ESMTP id S229477AbjBMBzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 20:54:21 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75589EF97;
-        Sun, 12 Feb 2023 17:54:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676253260; x=1707789260;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=sEpt0T38DsLBoLnS933Po3XgycGa2RG8vzAErHBP3kA=;
-  b=lwvDqfj9BiyaFbRvJhpbndL8h3Bc4ZOSBnrWEazDEfO2SBm4uonxCAHk
-   mOiZMVl/StII2CiBfYq0rK0wpJ4oeKjH0+bUpDwK4sx0pfa7x/V5+dntN
-   1rQ/7IdMrfutTBx5du2SE7MrfgLscGdGsw++PWXfdZxPrmVzRpXYM4mIu
-   5aIKJj/GpzrHFGAfVwxVRxxt+KPIgUIoGOVZ0oI1qSDUiTDEWdoypv/y+
-   kR1ZMTyXVXgZsDmLBPWSlMfDa4k7HfTN8BM+zl8a5dvHq66Oq8I2ffFw8
-   Q5ODqODNxUQCTibcRAav1LwhDiqHK+qnlyk7OXjIrXNFn4a0D5rh7U67n
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="393187482"
-X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
-   d="scan'208";a="393187482"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 17:54:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="842604318"
-X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
-   d="scan'208";a="842604318"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga005.jf.intel.com with ESMTP; 12 Feb 2023 17:54:19 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Sun, 12 Feb 2023 17:54:18 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Sun, 12 Feb 2023 17:54:18 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.103)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sun, 12 Feb 2023 17:54:18 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T2xY7r5HtBfnNlBy114/3Sy2A/fshfq6jD4ooPnpvsQjDPvBfPcr49h/doeRSXvSHz3d3Hq+PhfncloYaahaEdcZkFAl5kZcymyKExyMWaiUEXBYO8UE5H9zZrCyn5Ep6Z9+oTo52t79/Btrm3WuTvODgxJ+Awf2Vgm93gv2bYTxaPd4d207K9AUqjuEQjVygokPdrIX4tsmsrepttHRDrNDqqPm6N3Lum1xfyY+KQi5XuX/vV9PFBT4rMjltQ50rp44bta6IZu2BnryXFUJFdJmlOsgm7frUfRkPPOQbTFm9pWcztK4b0Cl8fPdlTWlwQXlxZhB2RBW2Qd62h0Taw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sEpt0T38DsLBoLnS933Po3XgycGa2RG8vzAErHBP3kA=;
- b=i8nDHQ6IIHBGsV53mdijm275gb2/CKmjvUX6JqLvVLSozBtF7X5vd20xLfmhWc2/eAC8hfOcwq500usx23S1ZqEuiraIaQHSrWr2mDt8nCf/fJQq2cziPcJTy6MSviuCriVmGMAkqHzzoYN7cczwes2bvR7gZ9APfSmYSDPhFwlwIyraoWffb5+UJ43H0qGok8O/6cSoIaYFSVlcGLbkS/rgpNcNuPu107YYMphga8wR5HWExm4WBl36nvAYLCKjNZR/AG3aOoHFINu1D/BvuqjNDxfcZtB5XQa6w/oBIVHTvdDrfBukOx3yOaNMeGOyMGJywGu0ZXHbJ4jV3BVQmA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by CY8PR11MB6916.namprd11.prod.outlook.com (2603:10b6:930:58::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.23; Mon, 13 Feb
- 2023 01:54:16 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d%7]) with mapi id 15.20.6086.023; Mon, 13 Feb 2023
- 01:54:16 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>
-CC:     "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: RE: [PATCH 1/6] iommu: Add new iommu op to get iommu hardware
- information
-Thread-Topic: [PATCH 1/6] iommu: Add new iommu op to get iommu hardware
- information
-Thread-Index: AQHZPD1VEVujMOhMCUmoab2cFB5/6a7HyazggAFTpQCAAwY+oA==
-Date:   Mon, 13 Feb 2023 01:54:15 +0000
-Message-ID: <BN9PR11MB5276071461BC318B76A379348CDD9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230209041642.9346-1-yi.l.liu@intel.com>
- <20230209041642.9346-2-yi.l.liu@intel.com>
- <BN9PR11MB5276CB88298F97177A7AAF448CDE9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <8665f299-fd4f-738a-6492-59f0deef444f@linux.intel.com>
-In-Reply-To: <8665f299-fd4f-738a-6492-59f0deef444f@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|CY8PR11MB6916:EE_
-x-ms-office365-filtering-correlation-id: f103f54a-07f6-44c6-ac3f-08db0d65365d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Av+wiqFdpjI7Wn+pUM59bEL43Ysj1GjgUh6lFybSorL5rZafZxkrtVgXnvRqAHs4mfGAvb6T/QnC1pwYn4kppfVTmjePygoDeXs5RHE0QCC3MGBg34RKKDdr15HwJYVKi3x7Ve/CZUMngvpV9n8AsXOeim3aNoNnBeteLbt5Mqb1x7/gZb4FTbojQto7DwTMvJrlTt7LCgzXDfzB0rMvo9df3oIbLoDzXpZIYM+wWiPm1MsdWWNKw/lKK3Sw35Bw9SZORjCYwSZPEOLOd3Qy386BDyInIENj4vhR2f1SvMP+RlfCkAtBwb3baGES59jJi4L3SbCLdhr6HqDuneWmE9NOf5pUme+t9nVTBX3jZpWigzICz+2ByDQUYH76Cue9y9fRR5R6WS7V33GN/osb5hwwJxZw0v1l15nAQqGFQAhhSzoZu3b98QpphHnjNzdqpUpCrQCRk2D8UuNr1CVRMgwfJCNLqtDEVrPFM58B62FG0qIfnyYn9/noD97zD9HRFOgiozRHvz+v2g8hKxMXv99cspeDg8zmLdS8kXpYc2dQm4uuqRCnzonMR+Sl7RO5p/vlQfw213+rEZxtyBJ/hYqbXPbqlgiKgQZ7MlAwzvWulrwD01axZd64MZVfyfH2AVlQcG2ZMgwQODWkSz8kE8PW1VbUoFvW8hvXFbD3Dcf9lYxermG2aqF3gwx40tjfKFK3G+ADg7qIs6cvoJ86sA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(376002)(136003)(39860400002)(366004)(346002)(451199018)(7416002)(5660300002)(4744005)(41300700001)(8936002)(52536014)(38100700002)(122000001)(82960400001)(33656002)(86362001)(38070700005)(55016003)(2906002)(7696005)(316002)(110136005)(6506007)(53546011)(54906003)(26005)(186003)(9686003)(71200400001)(4326008)(478600001)(8676002)(66476007)(66446008)(64756008)(66556008)(76116006)(66946007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bXM2bVdsYTh3THZ5NnJ5ajRBMy9zNTVDalh6a1ZLRG1oTHhTaldpNUpoSE8y?=
- =?utf-8?B?TXQ4Y1pqRlhjN1lOTjNXZXloN2JZdzNTNnliSnNuNEs4eTFUZExYcVdwUVdQ?=
- =?utf-8?B?N2hBZkxZaGYyeUk5anpwQ3QxNTJjUWJ0NGx1MlM5c1NoVGhPN0FyVjIyRFlz?=
- =?utf-8?B?UVpXZXpYVnRpeHdhSnhza3lvNnhROE1hRE1EanpBK1FJcXhNbHR2Ti9sZWZG?=
- =?utf-8?B?Y2M0c3U3TmEyVHlYTVk5c2hORlJIWEh3dXErZW9Eb1gxbkQ2UjUzSXg1ZGQ2?=
- =?utf-8?B?Ui8wM1h5bnVZWnhzazc3OEhvK2hBd3hndHhMcVNCT0FPb0pDMnBRaEMrSG9s?=
- =?utf-8?B?MVBxTTNwWkl5SDRQc3ZMMlJ5WmlhaXFzRFVsYmplODAyT2V0ajQ2VnJXN2sv?=
- =?utf-8?B?dGRyNHF3VUFubGptNmNXeTV4Ukp6MHVjY09XdkZHOWlxZDVwMEVhM1dPazM2?=
- =?utf-8?B?cU1lTER5d1lYVnU0N0d1RnJjTU1MNXl4b1RwNmlVTTQ1TmlRaU5naTJ6WmNH?=
- =?utf-8?B?SW5LTkFkeGNCaDZQWTJWRGhSTTZXaXYyOUtVT0hGMm9WQVVSYWRGUFZYNks1?=
- =?utf-8?B?Z0p0TUhERDlwZkQ1M291Y3EyK2JhQXZneEEySitjczZOU0xERHR1QUFBazN3?=
- =?utf-8?B?SkU4QUZpUVhOWFIreXpsT0QwVkZoTzRhQ2RPdEpQZi9WSnR5MG5yUmV5WnI3?=
- =?utf-8?B?bHFXTjcyTkNCUHRVQzkzM1R0NG13ekRKT01oMEFPYytMMm5iUm1aOUt1MDlv?=
- =?utf-8?B?LzE0V1pENUZ4MzdRcE1CSXRRaXpxYWhUQXdmWlRTL214a2hoQjlNYnV3Nzhr?=
- =?utf-8?B?SjR4SVREZ1dvMEVoSG5JQWdaNTNLbUswYm1ZNnEveVhwUGltem1vNDU0WEMz?=
- =?utf-8?B?VHZGZnlLVmpieExGeEhHWFhvM0pNcEZ2VEtJcWE5ZkQ4R3M2SzB4UmF6SjRz?=
- =?utf-8?B?dGgxVVNyTVF2N3c5V2g0YURXZlQvY1JBTTBLKzJMaWtQNkJhUlc3UkhGa1p6?=
- =?utf-8?B?MmJSaStTdmhZandGbm1vTytMMGZ2NlhiTDN2VU9PcDVlVy9NOWFXUjZ2U0R3?=
- =?utf-8?B?OUpvVEt5TjRjbW9QU1NJbEIyditNekVLdlNSMzJhWGhYRXorSUpNaE9Cd3py?=
- =?utf-8?B?OGE1eng4UzVzZkdSa2tiNkdBT241QzF0cnArU2lrVnRYb0dkempHN2JCWW5k?=
- =?utf-8?B?QjJHUVVaS2Nra2dIbXY3SHcvWWVRM21PN1VWUVhhOElsVnN5L1pVN0xKbmRx?=
- =?utf-8?B?QUNLU09yTDdRVktjUWE2Q1R4Rk56MXEvMVI4d0NOWVhwUHNRam5IWElTMXZo?=
- =?utf-8?B?V2RsaTlOdHR2SG43ajQ3K1NtYlV6Z25PMnFDOHErUmF1TDBvbUVLVHdZYnFj?=
- =?utf-8?B?a1YydG1KSnp1TEhNdjd3WVgxV3VRS21mRWlFeFNEU0hoY21ZdVQreW04WnBa?=
- =?utf-8?B?b2NzM2tVYzBTZUYzV241VTZDYUUzNUJCRGxEdmRFZi96QVZONVhqMDBpTldn?=
- =?utf-8?B?bjB2aDRFYWZ5V1JrcDdDdDBKV2ZZWFlqYk9tRFNMVXFNeW5BWk12SnVsc25P?=
- =?utf-8?B?SUl5YjRxZFhOeTN2cGwrZncyMFhjdzRWL01MRWJPVVZrOENqVk5YVDZzaUpC?=
- =?utf-8?B?bEpPNXFJYXZvSXhuR0ViUG80SklCTmZpS3hZTFhwU05ZYUdNOEIwdzFuNUJH?=
- =?utf-8?B?eTFyOE9FR2RNZSsvTXFUSVpLOTRRSUhWR1JZY0tkMzVjREd2clVKN1FLWWJ5?=
- =?utf-8?B?aEtnMVVmVmo4M1RoWHJQL0pDMG5ScjFGcFlEMUwydDg1aGluMEk0NzlLdUx6?=
- =?utf-8?B?c21pKzQ0T2tDUEhPQmVFMk1vMXkxeGtpOHhQSDdZTyt4eFNVNnpGdGxhRjNs?=
- =?utf-8?B?M3hUdzBwQy9qd3RlTjNLa3I5aEkvaVl6anRBaXZONFd6NGMwSmRZelhXZTRy?=
- =?utf-8?B?dzdyZDd5YTNFZFBZTk1VRmtGTVlWU0kvc3FUamg4eDVhazhGUGJCZUR6bXdB?=
- =?utf-8?B?aXp2LzVnMFFvUENubFNBdVRJRHVxTnN6Wk1MTDNSaThreWxuRitYeW1GVXhX?=
- =?utf-8?B?YytBVnFzS09XQzdBRmF1TzdaMW5MMnJnODRtbFQ2T1hqbGxHZUhsWUJDR1Nx?=
- =?utf-8?Q?yD+UooFgmls5NXGqQBJE5VLJ5?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Sun, 12 Feb 2023 20:55:31 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3087EF94
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 17:55:29 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id c2so12410631qtw.5
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 17:55:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xfWgFky8Oo0dLRgocQgSyLFVq1vdjV8IYOHij7ANhkk=;
+        b=V3s3hHtb0C0w6Op4gMTtToGItfVkMz1GV1YRSAVo92QOgpk7wvHN2zcilMgF4sGWFM
+         hOb/28Kf14srY+IPR4svTMsgyt0CIbmWlQQ9DNT9OUi6mu09O2/jFaKumSu8NxW7A/SX
+         eeuA7pwAgJyeV5Ff514T4HO9DMuAjBeHHzZQg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xfWgFky8Oo0dLRgocQgSyLFVq1vdjV8IYOHij7ANhkk=;
+        b=06T5f0GUasfLikekuNt+8H+1J7MdPt49DNujsJTAAqYdoP58sirr+Dfaudrx8xLBV7
+         PFVKHsK92NssDYhf2hnhgLq6LE70yWoJTRE7gAwgeTIxen2kHtjaDbCStejJrly6WmDF
+         XOrAoqnWFQWbxWMz2pyeTJbpWcmQXzDFxFBBGeh02jBZo3fipVZ039HhnX3PnXVdWoNG
+         OaVjHCL9ioD8oM7FvwnFtEM+jM1sIdDlMRBebPus6t9NhAdoz8MSofKh126mDKCVS8P2
+         FPFKWee1uKuIahJJjbtIoj0JgbFnpxbKn9WAWiqlK9ggcawB3yh0QYV9Zjjl1t/t+REr
+         AX9g==
+X-Gm-Message-State: AO0yUKXZTyUBnb0fgVHH7WafLMjLnt6FQYhuyYwUjSd1om3x5gRsliWZ
+        jCxFbFWwQbdw+uWZ8uBjuPGc5blLO1ioBxMC
+X-Google-Smtp-Source: AK7set//NThWoUxiYJfrMFfd1jUGZhNb5mwxEiepweZLewVjNk7yyKmBtLsETVxMEQGplAQfaE+YRA==
+X-Received: by 2002:ac8:4e88:0:b0:3b8:8756:6de8 with SMTP id 8-20020ac84e88000000b003b887566de8mr38308317qtp.67.1676253328375;
+        Sun, 12 Feb 2023 17:55:28 -0800 (PST)
+Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id p18-20020ac84092000000b003a7eb5baf3csm8354975qtl.69.2023.02.12.17.55.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Feb 2023 17:55:27 -0800 (PST)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        David Howells <dhowells@redhat.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        linux-arch@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        =?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH] tools/memory-model: Add details about SRCU read-side critical sections
+Date:   Mon, 13 Feb 2023 01:55:06 +0000
+Message-Id: <20230213015506.778246-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f103f54a-07f6-44c6-ac3f-08db0d65365d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Feb 2023 01:54:15.7398
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: X7PO3WIWrkUL3A0ML+HG0aXFzMZ+ViG+LOPaJbyPacpnbnvlQUX0oD8LtqFNFKVT5CCndoiBwxC8VNAJLdx34A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB6916
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBCYW9sdSBMdSA8YmFvbHUubHVAbGludXguaW50ZWwuY29tPg0KPiBTZW50OiBTYXR1
-cmRheSwgRmVicnVhcnkgMTEsIDIwMjMgMTE6NDMgQU0NCj4gDQo+IE9uIDIwMjMvMi8xMCAxNToy
-OCwgVGlhbiwgS2V2aW4gd3JvdGU6DQo+ID4+IEZyb206IExpdSwgWWkgTDx5aS5sLmxpdUBpbnRl
-bC5jb20+DQo+ID4+IFNlbnQ6IFRodXJzZGF5LCBGZWJydWFyeSA5LCAyMDIzIDEyOjE3IFBNDQo+
-ID4+IEBAIC0yMjMsNiArMjI0LDExIEBAIHN0cnVjdCBpb21tdV9pb3RsYl9nYXRoZXIgew0KPiA+
-PiAgIC8qKg0KPiA+PiAgICAqIHN0cnVjdCBpb21tdV9vcHMgLSBpb21tdSBvcHMgYW5kIGNhcGFi
-aWxpdGllcw0KPiA+PiAgICAqIEBjYXBhYmxlOiBjaGVjayBjYXBhYmlsaXR5DQo+ID4+ICsgKiBA
-aHdfaW5mbzogSU9NTVUgaGFyZHdhcmUgY2FwYWJpbGl0aWVzLiBUaGUgdHlwZSBvZiB0aGUgcmV0
-dXJuZWQNCj4gZGF0YQ0KPiA+PiBpcw0KPiA+IGlzIGl0ICdpbmZvJyBvciAnY2FwYWJpbGl0eSc/
-DQo+IA0KPiBod19pbmZvLiBJT01NVSBjb3JlIGRvZXMgbm90IGNhcmUgYWJvdXQgc3BlY2lmaWMg
-Y29udGVudCwgc28gaXQgaXMgbm90DQo+IG5lY2Vzc2FyeSB0byBkZWZpbmUgaXQgYXMgY2FwYWJp
-bGl0eSBvciBhbnl0aGluZyBlbHNlLg0KPiANCj4gUGVyaGFwcyB3ZSBuZWVkIHRvIGNoYW5nZSB0
-aGUgY29tbWVudHMgYSBiaXQsIHNheSwgIklPTU1VIGhhcmR3YXJlDQo+IGluZm9ybWF0aW9uIj8N
-Cj4gDQoNCnllcywgdGhhdCBpcyBwcm9iYWJseSBtb3JlIGNvbnNpc3RlbnQuDQo=
+Add details about SRCU read-side critical sections and how they are
+modeled.
+
+Cc: Andrea Parri <andrea.parri@amarulasolutions.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Jade Alglave <j.alglave@ucl.ac.uk>
+Cc: Luc Maranget <luc.maranget@inria.fr>
+Cc: "Paul E. McKenney" <paulmck@linux.ibm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Will Deacon <will.deacon@arm.com>
+Cc: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+
+---
+ .../Documentation/explanation.txt             | 55 ++++++++++++++++++-
+ 1 file changed, 52 insertions(+), 3 deletions(-)
+
+diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+index 8e7085238470..5f486d39fe10 100644
+--- a/tools/memory-model/Documentation/explanation.txt
++++ b/tools/memory-model/Documentation/explanation.txt
+@@ -28,9 +28,10 @@ Explanation of the Linux-Kernel Memory Consistency Model
+   20. THE HAPPENS-BEFORE RELATION: hb
+   21. THE PROPAGATES-BEFORE RELATION: pb
+   22. RCU RELATIONS: rcu-link, rcu-gp, rcu-rscsi, rcu-order, rcu-fence, and rb
+-  23. LOCKING
+-  24. PLAIN ACCESSES AND DATA RACES
+-  25. ODDS AND ENDS
++  23. SRCU READ-SIDE CRITICAL SECTIONS
++  24. LOCKING
++  25. PLAIN ACCESSES AND DATA RACES
++  26. ODDS AND ENDS
+ 
+ 
+ 
+@@ -1858,6 +1859,54 @@ links having the same SRCU domain with proper nesting); the details
+ are relatively unimportant.
+ 
+ 
++SRCU READ-SIDE CRITICAL SECTIONS
++--------------------------------
++An SRCU read-side section is modeled with the srcu-rscs relation and
++is different from rcu-rscs in the following respects:
++
++1. SRCU read-side sections are associated with a specific domain and
++are independent of ones in different domains. Each domain has their
++own independent grace-periods.
++
++2. Partitially overlapping SRCU read-side sections cannot fuse. It is
++possible that among 2 partitally overlapping readers, the one that
++starts earlier, starts before a GP started and the later reader starts
++after the same GP started. These 2 readers are to be treated as
++different srcu-rscs even for the same SRCU domain.
++
++3. The srcu_down_read() and srcu_up_read() primitives permit an SRCU
++read-side lock to be acquired on one CPU and released another. While
++this is also true about preemptible RCU, the LKMM does not model
++preemption.  So unlike SRCU, RCU readers are still modeled and
++expected to be locked and unlocked on the same CPU in litmus tests.
++
++To make it easy to model SRCU readers in LKMM with the above 3
++properties, an SRCU lock operation is modeled as a load annotated with
++'srcu-lock' and an SRCU unlock operation is modeled as a store
++annotated with 'srcu-unlock'. This load and store takes the memory
++address of an srcu_struct as an input, and the value returned is the
++SRCU index (value). Thus LKMM creates a data-dependency between them
++by virtue of the load and store memory accesses before performed on
++the same srcu_struct:  R[srcu-lock] ->data W[srcu-unlock].
++This data dependency becomes: R[srcu-lock] ->srcu-rscs W[srcu-unlock].
++
++It is also possible that the data loaded from the R[srcu-lock] is
++stored back into a memory location, and loaded on the same or even
++another CPU, before doing an unlock.
++This becomes:
++  R[srcu-lock] ->data W[once] ->rf R[once] ->data W[srcu-unlock]
++
++The model also treats this chaining of ->data and ->rf relations as:
++  R[srcu-lock] ->srcu-rscs W[srcu-unlock] by the model.
++
++Care must be taken that:
++  R[srcu-lock] ->data W[srcu-unlock] ->rf R[srcu-lock] is not
++considered as a part of the above ->data and ->rf chain, which happens
++because of one reader unlocking and another locking right after it.
++The model excludes these ->rf relations when building the ->srcu-rscs
++relation.
++
++
+ LOCKING
+ -------
+ 
+-- 
+2.39.1.581.gbfd45094c4-goog
+
