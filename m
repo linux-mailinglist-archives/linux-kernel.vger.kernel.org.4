@@ -2,110 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44212694194
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:44:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5454D6941BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjBMJoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 04:44:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
+        id S229567AbjBMJqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 04:46:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjBMJoD (ORCPT
+        with ESMTP id S229552AbjBMJq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 04:44:03 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410A9C6
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:44:02 -0800 (PST)
-Received: from fsav116.sakura.ne.jp (fsav116.sakura.ne.jp [27.133.134.243])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 31D9i09j042887;
-        Mon, 13 Feb 2023 18:44:00 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav116.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav116.sakura.ne.jp);
- Mon, 13 Feb 2023 18:44:00 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav116.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 31D9hxnI042872
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 13 Feb 2023 18:43:59 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <f62b6a26-5c8c-91d5-efda-47b508879c58@I-love.SAKURA.ne.jp>
-Date:   Mon, 13 Feb 2023 18:43:59 +0900
+        Mon, 13 Feb 2023 04:46:27 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B34AC;
+        Mon, 13 Feb 2023 01:46:24 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31D8ruIN024214;
+        Mon, 13 Feb 2023 09:46:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=og6EfHPhWk0c/cGRG5aYCGGmctUJxAFh5Ec+L4vdgdo=;
+ b=RXF+s0LLC03/wAyBMd4mqkbYNVtPybIKtQL6vhYYxCDCCc+0e+DaAnnpv14bR1IBYgbV
+ Lwj6zJULhR14bwr3BfYGokyQ8JQWGnEqhtZImemT/6bdYHgj6UWh1DACDvFAeFWDT4qp
+ YiK7avZU54k7VUwEmLlbdPYxPHoMOpRCOGtbAYPIwrVXNZ4LXalYCVY+/WNoF27knxFy
+ gWo2Z/LgXgd+Dqzz2PNh3Cdi5D3NLV+MRU5YM9MxHBXgJsfN3k9//vwwiZu0RWy/zTfN
+ UJGmdiAS3spHBAsBlDQZJSbET3AZYMBexI/TH2IeIXPFQ5msOQx7FeSxXzkwZ8QuMW5N ag== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np3spuh3x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 09:46:16 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31D9kFme006486
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 09:46:15 GMT
+Received: from hu-mohs-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 13 Feb 2023 01:46:10 -0800
+From:   Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+To:     <swboyd@chromium.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <broonie@kernel.org>, <quic_plai@quicinc.com>,
+        <konrad.dybcio@somainline.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>, <quic_visr@quicinc.com>
+CC:     Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+Subject: [PATCH v8 0/5] Add resets for ADSP based audio clock controller driver
+Date:   Mon, 13 Feb 2023 15:15:23 +0530
+Message-ID: <20230213094528.3733509-1-quic_mohs@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v3] locking/lockdep: add debug_show_all_lock_holders()
-Content-Language: en-US
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <ed17797b-e732-0dd0-2b4e-dc293653c0ac@I-love.SAKURA.ne.jp>
-In-Reply-To: <ed17797b-e732-0dd0-2b4e-dc293653c0ac@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: O7v_mJhS3xf_y3CH5ywH3t-X086hT4QA
+X-Proofpoint-ORIG-GUID: O7v_mJhS3xf_y3CH5ywH3t-X086hT4QA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-13_04,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
+ suspectscore=0 spamscore=0 malwarescore=0 phishscore=0 adultscore=0
+ mlxlogscore=727 lowpriorityscore=0 priorityscore=1501 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302130087
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ingo or Peter, are you there?
+Add resets and remove qdsp6ss clcok controller for audioreach based platforms. 
+Changes since v7:
+    -- Modiy AHB clock probing method in "Merge lpasscc into lpass_aon patch".
+    -- Fix Typo errors in "Merge lpasscc into lpass_aon patch".
+    -- Update commit message in "Merge lpasscc into lpass_aon patch" 
+Changes since v6:
+    -- Update commit message in "Merge lpasscc into lpass_aon patch" patch.
+    -- Drop "Skip lpasscorecc registration" patch.
+    -- Add comment in the code in "Skip lpass_aon_cc_pll config" patch.
+Changes since v5:
+    -- Fix compilation issue.
+Changes since v4:
+    -- Update Fixes tag in Merge lpasscc into lpass_aon patch.
+    -- Revert removal of clk_regmap structure in Merge lpasscc into lpass_aon patch.
 
-Linus is expecting that this patch (if acceptable) is sent from the locking people.
+Changes since v3:
+    -- Remove duplicate clock resets patch.
+    -- Add binding headers for q6 clocks.
+    -- Create new patch for merging lpasscc q6 clocks into lpass_aon.
+    -- Create new patches for handling conflicts of ADSP and bypass solution.
 
-https://lkml.kernel.org/r/CAHk-=wjbu9USn=hVWQ9v9t1H+8R6qXj8REkm36==w10zM0cM6g@mail.gmail.com
+Changes since v2:
+    -- Revert removing qdsp6ss clock control.
+    -- Add Conditional check for qdsp6ss clock registration.
+Changes since v1:
+    -- Update commit message.
+    -- Remove qdsp6ss clock control.
 
-On 2023/02/02 22:59, Tetsuo Handa wrote:
-> Currently, check_hung_uninterruptible_tasks() reports details of locks
-> held in the system. Also, lockdep_print_held_locks() does not report
-> details of locks held by a thread if that thread is in TASK_RUNNING state.
-> Several years of experience of debugging without vmcore tells me that
-> these limitations have been a barrier for understanding what went wrong
-> in syzbot's "INFO: task hung in" reports.
-> 
-> I initially thought that the cause of "INFO: task hung in" reports is
-> due to over-stressing. But I understood that over-stressing is unlikely.
-> I now consider that there likely is a deadlock/livelock bug where lockdep
-> cannot report as a deadlock when "INFO: task hung in" is reported.
-> 
-> A typical case is that thread-1 is waiting for something to happen (e.g.
-> wait_event_*()) with a lock held. When thread-2 tries to hold that lock
-> using e.g. mutex_lock(), check_hung_uninterruptible_tasks() reports that
-> thread-2 is hung and thread-1 is holding a lock which thread-2 is trying
-> to hold. But currently check_hung_uninterruptible_tasks() cannot report
-> the exact location of thread-1 which gives us an important hint for
-> understanding why thread-1 is holding that lock for so long period.
-> 
-> When check_hung_uninterruptible_tasks() reports a thread waiting for a
-> lock, it is important to report backtrace of threads which already held
-> that lock. Therefore, allow check_hung_uninterruptible_tasks() to report
-> the exact location of threads which is holding any lock.
-> 
-> debug_show_all_lock_holders() skips current thread if the caller is
-> holding no lock, for reporting RCU lock taken inside that function is
-> generally useless.
-> 
-> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> ---
-> Changes in v3:
->   Unshare debug_show_all_lock_holders() and debug_show_all_locks(),
->   suggested by Ingo Molnar <mingo@kernel.org>.
-> 
-> Changes in v2:
->   Share debug_show_all_lock_holders() and debug_show_all_locks(),
->   suggested by Waiman Long <longman@redhat.com>.
-> 
->  include/linux/debug_locks.h |  5 +++++
->  kernel/hung_task.c          |  2 +-
->  kernel/locking/lockdep.c    | 28 ++++++++++++++++++++++++++++
->  3 files changed, 34 insertions(+), 1 deletion(-)
-> 
+Srinivasa Rao Mandadapu (5):
+  dt-bindings: clock: qcom,sc7280-lpasscc: Add qcom,adsp-pil-mode
+    property
+  dt-bindings: clock: lpassaudiocc-sc7280: Add binding headers for
+    lpasscc
+  clk: qcom: lpasscc-sc7280: Skip qdsp6ss clock registration
+  clk: qcom: lpassaudiocc-sc7280: Merge AHB clocks into lpass_aon
+  clk: qcom: lpassaudiocc-sc7280: Skip lpass_aon_cc_pll config
+
+ .../bindings/clock/qcom,sc7280-lpasscc.yaml       |  7 +++++++
+ drivers/clk/qcom/lpassaudiocc-sc7280.c            | 15 ++++++++++++---
+ drivers/clk/qcom/lpasscc-sc7280.c                 | 12 +++++++-----
+ .../dt-bindings/clock/qcom,lpassaudiocc-sc7280.h  |  2 ++
+ 4 files changed, 28 insertions(+), 8 deletions(-)
+
+-- 
+2.25.1
 
