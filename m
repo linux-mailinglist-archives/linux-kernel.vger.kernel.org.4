@@ -2,179 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8FC694DD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2475D694DDA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:23:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjBMRVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 12:21:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
+        id S229983AbjBMRXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 12:23:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjBMRU6 (ORCPT
+        with ESMTP id S229892AbjBMRXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 12:20:58 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98001CACA
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:20:56 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id d8so12974101plr.10
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:20:56 -0800 (PST)
+        Mon, 13 Feb 2023 12:23:01 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C5314EA8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:22:59 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id bd35so3424647pfb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:22:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=u3UYU5VuDwql0z0bUwRUw+J5kKvLOo1Kd32ar3uMe8A=;
-        b=oJ0JFVaFMr3+pu4NOs0ksHekVlOalYOzWxvNeNXGda9+dVBL+b8Ppr1JC7xg9b/FN+
-         pv9/leOpH7vul2MMWpO00p1cI0dW5p5Vkn4h+F8zpaWjzbrCaVAtSHXaR2eZg0UdNuNm
-         UW+D2fn74Xm417lK6Yp6Yrvh3rIcc5+R4vkRI=
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NKgWXn2Y3lviSOPdC3CehrW/DrYmAyletD6KjGkPpnA=;
+        b=FljE3nfrktQvbnRiGPJb9iov0n9BSYS9DNocCrt7ERcuObehINAb4rt350LipoQepK
+         NUhiDEWLIVYvVG+lIokSH0zfg+zKweHHl0wlSdKjqyNuJf5HTC4YJWySoW5qOZ9x+heF
+         ItvhkUznCBiN7bVzMRcIJT9nZLZAcuxGVz9RTToLl7aVhWsqKSS3mrYeju157WnVDFtI
+         i1WYSwJ9jXskS6zrbKVR03KFZl/au4rde0k5ckWGKsJ+jL6b8FHgl+yWT882vkmOlKxs
+         iIl7UIwlw1wb7a4bC8RuEXQ1WTm4d9oFGYIvS+IGDDkjGUa3fTdmdZ76u/CMd24Wmcga
+         S+jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u3UYU5VuDwql0z0bUwRUw+J5kKvLOo1Kd32ar3uMe8A=;
-        b=5OmkZkykQdhJcLLBOQlVroeVNdMMlUPZpxPLnhVgrtxrhTQV2yWDCZ04fmK+15aKTy
-         glrslnFyjAPZaT/66q3WgAXeY8QBh5Fgwy3fYpGQ4D4S7PRp2BXT2SAtHjXDkZJEiVzh
-         m3fk3IEynUSfXjf4+3k4Vj6XgCaUhAKhZeMqbZD9mghXHZj7y8H3vnzSE9Mo+4SCK9fL
-         6tdWWmm2dB9NyV0PcdJQPF8OkIa716f78QC2itQlkvvh9IR65S3M2+KfwG8Y1PwHYLb6
-         yJ0UrG8uAaM7I1ukM/T6xr0261C/c6Adj7HSp3MBRn2MhCKfMDjkzQLTQ2fhjFzhKyOt
-         2t7Q==
-X-Gm-Message-State: AO0yUKXbBmwxpUM9/A8zdWBUmsN77+iEVkwIqWH15emv7IL5HdKIbUZT
-        2nWCIEaZ3pAtUpeHiBiXR+ZPBIWgquRJsBYu
-X-Google-Smtp-Source: AK7set9i9PrwR5fXDOmheR/fR/2wcimyYg+DCFMJSrTGtxaF06q3brcyzaWbJllcvHuNUnTrq44qJA==
-X-Received: by 2002:a17:902:ec82:b0:196:56ae:ed1d with SMTP id x2-20020a170902ec8200b0019656aeed1dmr25783935plg.69.1676308856259;
-        Mon, 13 Feb 2023 09:20:56 -0800 (PST)
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com. [209.85.215.181])
-        by smtp.gmail.com with ESMTPSA id w4-20020a170902a70400b0019a7563ff15sm6261723plq.115.2023.02.13.09.20.54
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 09:20:54 -0800 (PST)
-Received: by mail-pg1-f181.google.com with SMTP id s8so8556380pgg.11
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:20:54 -0800 (PST)
-X-Received: by 2002:aa7:9795:0:b0:5a8:5b4e:908e with SMTP id
- o21-20020aa79795000000b005a85b4e908emr2958698pfp.10.1676308853423; Mon, 13
- Feb 2023 09:20:53 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NKgWXn2Y3lviSOPdC3CehrW/DrYmAyletD6KjGkPpnA=;
+        b=VeyhucR2EHd/v0XxuL7iaJ8pjc2+WqnL1axZPkxo1MzxcLBmLoNZZofvmEGIZ5dE4T
+         OWoSznr8y+/lAvnNrpRNyIRShH4dCKzP8Cfk4psvqe53WAPNhuYg/qAz5UA2PEnq3gyH
+         LrpMiFp/pje7AezPOuY/9YEwIdu/tx6qTuaePV9u05bUz0fmOf5UWhhPN+tZDnLVE9Tl
+         pTwqZl6cKz51rsrg4qMSckfwTBlR7Kn5+FxWG8/jWjyZ+p7v3R9KsY+8pdbVpZOaVVxU
+         +wrLRN8LFloF/HmPxMEp7VhNezYjwmnTE44owCbFIHBFWRTIyw2GMnuU7Ft4MWhBeteY
+         w5Vg==
+X-Gm-Message-State: AO0yUKXnCeH+Gu0bzwuJXzNFut63sNRpgclC2nGvTfKPJnKWPmnSZnxj
+        qtmctZfkxBpqxppiRfalsImpxk+00i2plrp/
+X-Google-Smtp-Source: AK7set+h3Ih9HypAt5vf5UEAyYTYlb4SiUZsGHHbI+IhcSLk5aOd55igK5iyPWmBDQ5P9zRcPXRSrQ==
+X-Received: by 2002:aa7:8f0b:0:b0:5a8:46b0:8269 with SMTP id x11-20020aa78f0b000000b005a846b08269mr18102684pfr.31.1676308978584;
+        Mon, 13 Feb 2023 09:22:58 -0800 (PST)
+Received: from sunil-laptop ([49.206.14.226])
+        by smtp.gmail.com with ESMTPSA id c10-20020aa78e0a000000b005898fcb7c1bsm8452052pfr.177.2023.02.13.09.22.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 09:22:58 -0800 (PST)
+Date:   Mon, 13 Feb 2023 22:52:51 +0530
+From:   Sunil V L <sunilvl@ventanamicro.com>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>
+Subject: Re: [PATCH 15/24] clocksource/timer-riscv: Refactor
+ riscv_timer_init_dt()
+Message-ID: <Y+px651SpESUdm4a@sunil-laptop>
+References: <20230130182225.2471414-1-sunilvl@ventanamicro.com>
+ <20230130182225.2471414-16-sunilvl@ventanamicro.com>
+ <Y+Vdc09bWb9CTXyt@spud>
 MIME-Version: 1.0
-References: <20230210164636.628462-1-wse@tuxedocomputers.com>
- <Y+Z5OSa6hepQBOyc@smile.fi.intel.com> <029b8d80-db28-cdb2-5c39-334be6968fad@tuxedocomputers.com>
- <Y+owDqifuU9nf+1i@smile.fi.intel.com> <86db79fa-5efb-caad-3310-60928907cc58@amd.com>
- <Y+pLLzLDotZQLpdA@smile.fi.intel.com> <97026dc5-e92e-62fe-43ae-33533125d900@tuxedocomputers.com>
-In-Reply-To: <97026dc5-e92e-62fe-43ae-33533125d900@tuxedocomputers.com>
-From:   Raul Rangel <rrangel@chromium.org>
-Date:   Mon, 13 Feb 2023 10:20:41 -0700
-X-Gmail-Original-Message-ID: <CAHQZ30Cs+kp82coR10Wat7q3S_8+pFf=5=44kMEMcjBOjmn=6A@mail.gmail.com>
-Message-ID: <CAHQZ30Cs+kp82coR10Wat7q3S_8+pFf=5=44kMEMcjBOjmn=6A@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: acpi: Add a ignore wakeup quirk for Clevo NH5xAx
-To:     Werner Sembach <wse@tuxedocomputers.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
-        brgl@bgdev.pl, linux-gpio@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+Vdc09bWb9CTXyt@spud>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SUSB#_EN
+Hi Conor,
 
-On Mon, Feb 13, 2023 at 7:47 AM Werner Sembach <wse@tuxedocomputers.com> wrote:
->
-> Am 13.02.23 um 15:37 schrieb Andy Shevchenko:
-> > On Mon, Feb 13, 2023 at 07:20:48AM -0600, Mario Limonciello wrote:
-> >> On 2/13/23 06:41, Andy Shevchenko wrote:
-> >>> On Mon, Feb 13, 2023 at 12:30:08PM +0100, Werner Sembach wrote:
-> >>>> Am 10.02.23 um 18:04 schrieb Andy Shevchenko:
-> >>>>> On Fri, Feb 10, 2023 at 05:46:36PM +0100, Werner Sembach wrote:
-> >>>>>> commit 1796f808e4bb ("HID: i2c-hid: acpi: Stop setting wakeup_capable")
-> >>>>>> changed the policy such that I2C touchpads may be able to wake up the
-> >>>>>> system by default if the system is configured as such.
-> >>>>>>
-> >>>>>> However on Clevo NH5xAx/TUXEDO XA15 Gen10 there is a mistake in the ACPI
-> >>>>>> tables that the TP_ATTN# signal connected to GPIO 10 is configured as
-> >>>>>> ActiveLow and level triggered but connected to a pull up.
-> >>>>> I'm not sure I understand the issue here. From what you say here it seems
-> >>>>> correct ACPI description.
-> >>>> TBH I copied the commit description from https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4cb786180dfb5258ff3111181b5e4ecb1d4a297b
-> >>>> which is for a different device having the exact same problem.
-> >>> Yeah, and I reviewed that and seems paid no attention to this detail.
-> >>>
-> >>> So, ActiveLow + PullUp is the _right_ thing to do in ACPI.
-> >>> The problem seems somewhere else.
-> >>>
-> >>> Mario, can we have an access to the schematics of the affected pin to
-> >>> understand better what's going on?
-> >>>
-> >>> Or is that description missing some crucial detail?
->
-> Schematics for the NH5xAx can also be found on this unofficial clevo mirror
-> (service manuals, scroll to end for schematics):
->
-> http://repo.palkeo.com/clevo-mirror/NH5xACx_AFx_ADx/NH50AC.zip
->
-> http://repo.palkeo.com/clevo-mirror/NH5xACx_AFx_ADx/NH50AF1.zip
->
-> User: repo
->
-> PW: repo
->
-> >> The schematics were shared by the reporter for the original issue which is
-> >> how we reached the conclusion there was a mistake.
-> >>
-> >> As they're both Clevo designs it's certainly possible they have the same
-> >> mistake in two systems.
+On Thu, Feb 09, 2023 at 08:54:11PM +0000, Conor Dooley wrote:
+> Hey Sunil,
+> 
+> On Mon, Jan 30, 2023 at 11:52:16PM +0530, Sunil V L wrote:
+> > Refactor the timer init function such that few things can be shared by
+> > both DT and ACPI based platforms.
+> > 
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> 
+> What did Anup do here? He's not author or co-author, so the SoB chain
+> looks incorrect.
+> 
+When I wanted to refactor, I realized Anup had done similar in his branch for
+a different purpose. So, I took some of his changes and I added SOB. Let me
+add him in co-developed-by:
 
-> > Thank you!
-> > I have looked at the schematics and read discussion.
-> >
-> > So, the conclusion that this is a BIOS bug is incorrect in my opinion.
-> > The problem is either in the PMIC/EC firmware that shouldn't shut down 3.3VS
-> > signal for a while or on the PCB level, so that pull up should be connected
-> > to another power source that stays on.
-> >
-> > This means the description on the initial patch with the same issue is
-> > incorrect.
-> >
-> > Do we know the power sequence on the suspend to see which and how on the
-> > time line the power sources are off/on?
-> >
+> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> > ---
+> >  drivers/clocksource/timer-riscv.c | 79 +++++++++++++++----------------
+> >  1 file changed, 37 insertions(+), 42 deletions(-)
+> > 
+> > diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
+> > index 1b4b36df5484..4016c065a01c 100644
+> > --- a/drivers/clocksource/timer-riscv.c
+> > +++ b/drivers/clocksource/timer-riscv.c
+> > @@ -119,61 +119,28 @@ static irqreturn_t riscv_timer_interrupt(int irq, void *dev_id)
+> >  	return IRQ_HANDLED;
+> >  }
+> >  
+> > -static int __init riscv_timer_init_dt(struct device_node *n)
+> > +static int __init riscv_timer_init_common(void)
+> >  {
+> > -	int cpuid, error;
+> > -	unsigned long hartid;
+> > -	struct device_node *child;
+> > -	struct irq_domain *domain;
+> > -
+> > -	error = riscv_of_processor_hartid(n, &hartid);
+> > -	if (error < 0) {
+> > -		pr_warn("Not valid hartid for node [%pOF] error = [%lu]\n",
+> > -			n, hartid);
+> > -		return error;
+> > -	}
+> > -
+> > -	cpuid = riscv_hartid_to_cpuid(hartid);
+> > -	if (cpuid < 0) {
+> > -		pr_warn("Invalid cpuid for hartid [%lu]\n", hartid);
+> > -		return cpuid;
+> > -	}
+> > -
+> > -	if (cpuid != smp_processor_id())
+> > -		return 0;
+> > +	int error;
+> > +	struct fwnode_handle *intc_fwnode = riscv_get_intc_hwnode();
+> > +	struct irq_domain *domain = NULL;
+> >  
+> > -	child = of_find_compatible_node(NULL, NULL, "riscv,timer");
+> > -	if (child) {
+> > -		riscv_timer_cannot_wake_cpu = of_property_read_bool(child,
+> > -					"riscv,timer-cannot-wake-cpu");
+> > -		of_node_put(child);
+> > -	}
+> 
+> Uhh, where did this code go?
+> Unless I've badly missed something, this has vanished in the patch.
+> 
+Oops! Anup's patch had moved this to a separate DT timer node instead of
+cpu node which I didn't realize. Thanks for catching this. Will fix it.
 
-If you look at the load switch for 3.3VS, its EN2 pin is connected to
-SUSB#_EN which is connected to SUSB# which is connected to
-AND(SUSB#_PCH -> SLP_S3_L, PM_SLP_S0 -> S0A3_GPIO). So there is no
-PMIC/EC firmware that is incharge of this. I guess I'm not quite sure
-how they have S0A3_GPIO configured, so maybe I have an invert wrong.
+> >  
+> > -	domain = NULL;
+> > -	child = of_get_compatible_child(n, "riscv,cpu-intc");
+> > -	if (!child) {
+> > -		pr_err("Failed to find INTC node [%pOF]\n", n);
+> > -		return -ENODEV;
+> > -	}
+> > -	domain = irq_find_host(child);
+> > -	of_node_put(child);
+> > +	domain = irq_find_matching_fwnode(intc_fwnode, DOMAIN_BUS_ANY);
+> >  	if (!domain) {
+> > -		pr_err("Failed to find IRQ domain for node [%pOF]\n", n);
+> > +		pr_err("Failed to find INTC node [%pfwP]\n", intc_fwnode);
+> >  		return -ENODEV;
+> >  	}
+> >  
+> >  	riscv_clock_event_irq = irq_create_mapping(domain, RV_IRQ_TIMER);
+> >  	if (!riscv_clock_event_irq) {
+> > -		pr_err("Failed to map timer interrupt for node [%pOF]\n", n);
+> > -		return -ENODEV;
+> > +		pr_err("Failed to map timer interrupt for node [%pfwP]\n",
+> > +			intc_fwnode);
+> >  	}
+> >  
+> > -	pr_info("%s: Registering clocksource cpuid [%d] hartid [%lu]\n",
+> > -	       __func__, cpuid, hartid);
+> >  	error = clocksource_register_hz(&riscv_clocksource, riscv_timebase);
+> >  	if (error) {
+> > -		pr_err("RISCV timer register failed [%d] for cpu = [%d]\n",
+> > -		       error, cpuid);
+> > +		pr_err("clocksource register failed [%d]\n", error);
+> 
+> If you're changing this, s/register/registration/ to be grammatically
+> correct I suppose.
+> 
+Sure.
+> >  		return error;
+> >  	}
+> >  
+> > @@ -199,7 +166,35 @@ static int __init riscv_timer_init_dt(struct device_node *n)
+> >  		static_branch_enable(&riscv_sstc_available);
+> >  	}
+> >  
+> > +	pr_info("timer registered using %s\n",
+> > +		(static_branch_likely(&riscv_sstc_available)) ?
+> > +		"RISC-V Sstc" : "RISC-V SBI");
+> 
+> Why is this needed? Isn't there a print like 3 lines above here that
+> says "Timer interrupt in S-mode is available via sstc extension"?
+> 
+Yes, will remove it.
 
-The EC does control DD_ON which controls the 3.3V and 5V rails.
+> > +
+> >  	return error;
+> >  }
+> >  
+> > +static int __init riscv_timer_init_dt(struct device_node *n)
+> > +{
+> > +	int cpuid, error;
+> > +	unsigned long hartid;
+> > +
+> > +	error = riscv_of_processor_hartid(n, &hartid);
+> > +	if (error < 0) {
+> > +		pr_warn("Not valid hartid for node [%pOF] error = [%lu]\n",
+> 
+> While you're already moving this, may as well fix the grammar IMO.
+> s/Not valid/Invalid/
+>
+Okay
 
-> >>>>>> As soon as the
-> >>>>>> system suspends the touchpad loses power and then the system wakes up.
-> >>>>>>
-> >>>>>> To avoid this problem, introduce a quirk for this model that will prevent
-> >>>>>> the wakeup capability for being set for GPIO 10.
-> >>>>> I'm not against fixing this, but wouldn't be better to actually target the root
-> >>>>> cause and have a different quirk? Or is it me who didn't get what is the root
-> >>>>> cause?
-> >>>>>
-> >>>> I missed to reference the original discussion while copying the description:
-> >>>> https://gitlab.freedesktop.org/drm/amd/-/issues/1722#note_1720627 (Note that
-> >>>> it's a somewhat convoluted issue spanning multiple bugs when you scroll up
-> >>>> from that particular linked comment, which are however irrelevant for this
-> >>>> patch)
-> >>>>
-> >>>> I'm not deep into how ACPI defined IRQ work so maybe not a good idea for me
-> >>>> summing it up, as I might have misunderstood parts of it ^^
-> >>> The GpioIo() and GpioInt() resources have gaps in them, due to this some
-> >>> additional information is required or some heuristics is used to deduct
-> >>> the settings.
-> >>>
-> >>> All this is described in
-> >>> https://www.kernel.org/doc/html/latest/firmware-guide/acpi/gpio-properties.html
-> >>>
-> >>>> I added the other ones from there to the cc.
-> >>> Thank you.
+Thanks!
+Sunil 
