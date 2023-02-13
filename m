@@ -2,76 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC9D69515D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:07:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BD469515F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:07:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjBMUHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 15:07:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43050 "EHLO
+        id S230220AbjBMUHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 15:07:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjBMUHQ (ORCPT
+        with ESMTP id S230317AbjBMUHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 15:07:16 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F171DB98;
-        Mon, 13 Feb 2023 12:07:10 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id h7so3650904pfc.11;
-        Mon, 13 Feb 2023 12:07:10 -0800 (PST)
+        Mon, 13 Feb 2023 15:07:22 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4B01E1FE
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 12:07:21 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id bg2so3720723pjb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 12:07:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=google.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VUlLPxnydlbsCnEsOBCMLuxerluJh+TD51PKhmBbyBo=;
-        b=OdYWl6WiWHYOKoRjuhdVdnodyVWZz0PAiTLiPhGC43aYFL1GsfkQCp7SmUQeLTiuPL
-         dWF/CODn6Sjj6j6vhRk/XdmR1Cu+sXeNDk6VpU1bQPTxp7PCmKVzcp0jAXcOBnZhD/ab
-         E6/asf4JFZYZCDXGWInrYZN3TXgt1J1K4xOei28IzaHfI2dM0ssZ8GmJyoHuLxN8jSTn
-         SY+jfBUc/mcB9NGGijeogxYuOX4llnuTQTBz0Vn9g5CS22MY3woA6w+gAN/IWSlDmn8f
-         vIrODZd8tUVXfc3l3hpFQv6kvS3UeiJBW7fMip0qQMksSC/mQ/3b/CIDZ0HEcFVK66Q1
-         IsuQ==
+        bh=7hiw45ltvpY/7ML6LM+IxRW/koSE15OxDQ83L5S1mw8=;
+        b=nzKX+9e9U5sWB0Yrn4wYgD7cSAfhSs9Q6u8uIPdIVyqSk9aQ3itsbJ8YQZ16EsiucL
+         z+lpmX8Rj+iYCxjsyhdrMCNMF4A+AdqbdgkOtWWYtCYvBTSfYaejZ/+XG6L/xEQFPJu4
+         S2E4VIto+8UvTM5Org7d3gsoUewpCnPNyWgefW6MszzyOz95ebFtifssi5ElmXzDhTJq
+         cB42eanVaEyID4tKlrQoe/Z2o1XTKsMAIFu/POZ/GRghb3hca7O3GiVpevaA8OJX25i6
+         XTbWUXLQfAgpaHZD1/gFqZIIiXCpMVm2Rn1OYtUbeNT0bNKbv5iTCslPYKkcapKimOoC
+         1z0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VUlLPxnydlbsCnEsOBCMLuxerluJh+TD51PKhmBbyBo=;
-        b=WF3gMBtoItqLscnccEeDlhqzPII6s16WoTcrlmk831W70aQLjG7sMY7FfdviK21q7L
-         ljaZJO8TaKUvQLeZtLWp4DxCaPFYhr4/X6Ulyjt8615SUxyyHR25KfD58KpiDfqbnLQg
-         3ZapDuJOLjGs/FuYN3v19poQHecWerwb+7gIdEFKTWlymIDGP0izO8NOmianP0qRTzjX
-         BcMzDGT9Cg+MBw/eaJQCCt2dxc6KENou8jwFZotzIS5cA0Jwyf7T99G/AIJI1aoiWti6
-         3t2PmMwbWAGBzYzsB417cnW6IDYwdFtsuQAb8D4y8CzNAOy0liy87VBL3ZMxEafjTpPD
-         jNqw==
-X-Gm-Message-State: AO0yUKW/Eea1H1Tyb6AeXOo424e9OVH9jHzxvBnl9O4LPcJqZblLeuaA
-        11eHWUkeRHUAVir6LMGpy1s=
-X-Google-Smtp-Source: AK7set/Ih0MR7DO60kpkQvKkq9+m+/wyU3kGHFmz6J/ZGAvvEBVgtlCAEISqcdNJ2oi6JyGFGfs3Xg==
-X-Received: by 2002:a05:6a00:5e:b0:5a8:bd95:6575 with SMTP id i30-20020a056a00005e00b005a8bd956575mr3493345pfk.23.1676318829435;
-        Mon, 13 Feb 2023 12:07:09 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id x27-20020aa793bb000000b005a8b4dcd21asm2739336pff.15.2023.02.13.12.07.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 12:07:08 -0800 (PST)
-Message-ID: <b5a8e85a-28a1-f59c-9bdd-377cadd9d11e@gmail.com>
-Date:   Mon, 13 Feb 2023 12:07:06 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 5.15 00/67] 5.15.94-rc1 review
-Content-Language: en-US
+        bh=7hiw45ltvpY/7ML6LM+IxRW/koSE15OxDQ83L5S1mw8=;
+        b=JPYuE1s1hG8S8ite01tcKICPhZC1vhEnR6IFbuo6Rg07ajBnXSHN/FNJEFBiqLQxz9
+         fHe/70RZk1Fwa6JctjMHY1W1HxfVqYtuvl+RF1/mHO4y1Rn/I3Srk8h/53cSOqZSn2q0
+         bBssRET54kWg8SkX7jQBEnuub/gxgCU73qNkNVhLyqaQoSS8k/E8ONumHb/Rdt1OAIFX
+         hWmSeiqOlX8eejxV77nb+BiSvpAN9RVXv2aatrSylcga+dudJtaYr/9bbIH7RKWoE2WY
+         dR0yKtDqKD/L9I/wGjUX+qq6u+O5DVt1mWzGdHk0RYgldI4NKcdlo4et7jQwbbilZtK7
+         MX4g==
+X-Gm-Message-State: AO0yUKXilkb6NY9nCuSo2l2S/CuMP3yCLzvU2DI+BWG6/vJ/vejbrCOx
+        TIrOG9J338WD8nRQ0OzrxgCqPzDVUTZFSKTd0DU=
+X-Google-Smtp-Source: AK7set+zBH7R/t8F8d5i8HeInR9uwLS0bM9n6S+OacY7EFetFl6bMeKJimvebjvRmWPFgqzqAqZz9Q==
+X-Received: by 2002:a17:902:d4c3:b0:19a:621d:cad with SMTP id o3-20020a170902d4c300b0019a621d0cadmr141889plg.18.1676318840747;
+        Mon, 13 Feb 2023 12:07:20 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id s17-20020a170902c65100b0019309be03e7sm8600978pls.66.2023.02.13.12.07.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 12:07:20 -0800 (PST)
+Date:   Mon, 13 Feb 2023 20:07:16 +0000
+From:   Carlos Llamas <cmllamas@google.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230213144732.336342050@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230213144732.336342050@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Jialu Xu <xujialu@vimux.org>
+Cc:     linux-kernel@vger.kernel.org, Jialu Xu <xujialu@vimux.org>
+Subject: libpcre2 breaks COMPILED_SOURCE=1 tags
+Message-ID: <Y+qYdA7OpRX16Lwf@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,29 +71,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/13/23 06:48, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.94 release.
-> There are 67 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 15 Feb 2023 14:46:51 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.94-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Newer versions of libpre2 have dropped default support for \K in
+lookarounds. Unfortunately, scripts/tags.sh relies on this option to
+collect all the _compiled_ sources. This is the error:
 
-On ARCH_BRCMSTB using 32-bit and 64-bit kernels, build tested on 
-BMIPS_GENERIC:
+  $ make COMPILED_SOURCE=1 tags
+    GEN     tags
+  grep: \K is not allowed in lookarounds (but see PCRE2_EXTRA_ALLOW_LOOKAROUND_BSK)
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+It seems there isn't an official maintainer for this script and I can't
+quite understand the regex used for the query. Does anyone have a good
+alternative for this? The regex pattern was introduced in commit
+4f491bb6ea2a ("scripts/tags.sh: collect compiled source precisely").
 
+The previous form of all_compiled_sources() seems to work for me and I'm
+guessing it wasn't efficient enough? I can't find much info about the
+switch to find/grep either. I believe the initial thread is this:
+https://lore.kernel.org/all/20200423103801.GA3730892@kroah.com/
+
+--
+Carlos Llamas
