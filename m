@@ -2,48 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0161695266
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31DBC69526C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:57:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjBMU4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 15:56:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
+        id S229947AbjBMU5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 15:57:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjBMU4I (ORCPT
+        with ESMTP id S229505AbjBMU5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 15:56:08 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13F420690;
-        Mon, 13 Feb 2023 12:56:03 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PFxSt23JMz4x5Z;
-        Tue, 14 Feb 2023 07:55:58 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676321759;
-        bh=Ab9iMl/Jr3htFtC4xv0rNZBCSyio11GMyeXKEUL/qPg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=MbFmSotJrL7/NKSNitYD/xaP/qpeIoCIjFKWOH9Zqdo8E8ptAc6JoG+PwDGbI1bXx
-         4jdsHXZuO8tuHQ3lZCykzSVXlSNt23zpyYl/stRVof9mheDrk2oPEWAg2Fhmh2rYpH
-         9nA18PaiqonAE5CCt1RWa9779kMm3POi1Tk/JRdsaTTMxrAtmArzHOB9FAQvzpTf7b
-         2eSWZwed5kkfDz7VAQ/pmfXnfVg6CXFW2MTXGWEg37JzzLH3Nuc4fEl4AJRpnvWeeR
-         tXS3nZUM3QuGN5NZ2iWa9nC/8OjewBc14SGq2x5/kojEjeZlGrEPMVibC/gmJvWn+T
-         PSPyefAJlnGEw==
-Date:   Tue, 14 Feb 2023 07:55:42 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the arm-soc tree
-Message-ID: <20230214075542.0cf88eba@canb.auug.org.au>
+        Mon, 13 Feb 2023 15:57:35 -0500
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99431F936;
+        Mon, 13 Feb 2023 12:57:34 -0800 (PST)
+Received: by mail-qv1-xf2d.google.com with SMTP id y2so3600711qvo.4;
+        Mon, 13 Feb 2023 12:57:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X9T1XxacdA8ndnvUpLliuxpb8eQwtpX1tyf1SdPkzuc=;
+        b=nvhM8oNBR/PWWGy0uSLopHV6OaM89T+GBlnrlad8bBhcH1uk1wOLodXVWXzRKGesRm
+         52IXvnsGYnJTF/35BlOCurz9tFEnk5GsDk8zekIMQ0Rt2t0MI2vQacI73QTyuAD7avGt
+         fyLsRrWHcFWIYih0Z+KqbfeoIGB/6k9RNyVDN3q12kzgrQGCL7S9Ej3XD417dRINYnIR
+         CSuujm5GNQDRYSnxlbgaVaQcqf2Lw/1+cygPZEqZxl0JJRBOTG67JhWNTnDkuRIhVq+2
+         Pe458RMZDpLu5MSqVj6IIXhFPcdYHdFK2w6gTmqA8nJ8moq/GFf1XplsiwQ8uZP7gjv7
+         M1ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X9T1XxacdA8ndnvUpLliuxpb8eQwtpX1tyf1SdPkzuc=;
+        b=kfXkdiJ8Wg3hHPWH86SPvM660E48AvqjU1XZ8k5J9xhPhm+jYjbuAr/JGQnsh3G6cX
+         LIPESyALE7B3+BXcZdXa3j6qTWLTxuRqsL7Xfbg09xqYd/xp3Pe9mOf7BRgP4cRLptJH
+         9XonIJnUHLimVPO25PZvqPCCivC1ZqXuGUhOWQliRGF5ZaVBMFkWrdE3gnX0EnEpw4+X
+         Cz+6eWHcpNhk1qtQnVxt5zBz0sE18KK+xay35kGAKFgfR48p4XM/OsIlwFFDCxhriZhM
+         nHVUgZJFoguZ0uHCvWG+2dtk+xr4zOpdl2aq0UG/qH2+o/Zl+r+ZcaPaJesJuw01DSjX
+         njYA==
+X-Gm-Message-State: AO0yUKVJwl+3DX3KiHDK+9BmDePxQ9VNZnmdax84WUcY88VOO8cQ/xOK
+        haJvT7dG9xMssGDhyzu0Sg8=
+X-Google-Smtp-Source: AK7set+COE3Ki8x13mf7uSUyaVPrSP2/TE12cUHxsDwlLZ85G2gUP5pumFlHX1Rr518NciO2lIwgrQ==
+X-Received: by 2002:a05:6214:4017:b0:56e:b33c:d990 with SMTP id kd23-20020a056214401700b0056eb33cd990mr585415qvb.24.1676321853859;
+        Mon, 13 Feb 2023 12:57:33 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id l67-20020a37bb46000000b0071d0f1d01easm10424569qkf.57.2023.02.13.12.57.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 12:57:33 -0800 (PST)
+Message-ID: <a4b17949-a7a2-1ffc-12cc-eec4b2fbead3@gmail.com>
+Date:   Mon, 13 Feb 2023 12:57:29 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/plFJsAfc4f8C+i9wwbn_N5=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 6.1 000/114] 6.1.12-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230213144742.219399167@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230213144742.219399167@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,37 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/plFJsAfc4f8C+i9wwbn_N5=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2/13/23 06:47, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.12 release.
+> There are 114 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 15 Feb 2023 14:46:51 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.12-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Hi all,
+On ARCH_BRCMSTB using 32-bit and 64-bit kernels, build tested on 
+BMIPS_GENERIC:
 
-Commits
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-  51d0bdb1f7f9 ("char/agp: introduce asm-generic/agp.h")
-  690422657cbf ("char/agp: consolidate {alloc,free}_gatt_pages()")
-
-are missing a Signed-off-by from their committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/plFJsAfc4f8C+i9wwbn_N5=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPqo84ACgkQAVBC80lX
-0Gzvxgf/dhqzriwcCkzrl3eNjr8jLCu+1M165gDEU4PJVn7HzhoKnsh6jzPcATZi
-TxN4x4nxntb2tS7Vl/ZW0LNsjUJ9+iyvrBT2aDR4ZP0WUVj1buUCxfkttf1CY/f3
-6s2HiDiPeK/Zl/oIr/C8u7Cx7sunVPAobdbhQnX6gUGZYSlTc44Opl6ge0FSL8TU
-GBnGJSH/kuZfqz44v3CRNHalNEgMhY4ShUo/Bmht9YlbxHGUn/hQkxYUY3L/JsOr
-sfXgFA3+V3nTfSw/bCKhKZ79OWlhPKpEdR4ZD3Lq6o/pgd1V0ge3obOqdDmxr9xW
-qdwd0Sv5SwxqBR2oz/hkKej0jwn6ug==
-=VuSb
------END PGP SIGNATURE-----
-
---Sig_/plFJsAfc4f8C+i9wwbn_N5=--
