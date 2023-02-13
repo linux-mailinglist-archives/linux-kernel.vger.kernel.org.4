@@ -2,108 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F641693CAA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 03:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D516693CAC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 03:57:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbjBMCzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 21:55:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
+        id S229819AbjBMC5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 21:57:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjBMCzt (ORCPT
+        with ESMTP id S229627AbjBMC5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 21:55:49 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCC0CDE4;
-        Sun, 12 Feb 2023 18:55:24 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PFTV265gFz4wgv;
-        Mon, 13 Feb 2023 13:55:22 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676256923;
-        bh=hRgej+cb0PonsHuSv7DShfsVANS44C9EXcXfNgC2cJo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=nLfODpBRSvUeAAn8A62UihapWCXEZpT9MEIivfks9NtceqYLzkTeNP8DeLzToNJ3v
-         J+pHAW2gcpC3q6cEd5YqQ8QuodgUiuv6Wrt7/DzRk+oWmVpVLRaHXAjo5SAvJikM0k
-         CzZhsIuodtKXWJYeLz7Oxed1/xzBdXaW+3j2GISdyQ2Fu4f0TT8NtZjpJ7hLOb+nEF
-         QCf/++8nl0zeW7d0kgaRoczYeX10fdpxz7DHgEcwJpSUJlsxyS/rluiGxKnj/89nIc
-         o6nHkS34IvM/rdxcGh6KodSy3x5ZWqs+Kp3Eb0kW8ogL6fwq+FcrS7myY2TnhnbSZE
-         ZjyHin9nAryfQ==
-Date:   Mon, 13 Feb 2023 13:55:21 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Abel Vesa <abel.vesa@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the phy-next tree
-Message-ID: <20230213135521.6ebc410b@canb.auug.org.au>
+        Sun, 12 Feb 2023 21:57:13 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FDD1BF3
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 18:57:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676257032; x=1707793032;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=97Lgg8uIQtwe1iMzxOxVYP7rMZGTdSoy6WJQZG6Gv68=;
+  b=au589UWMvhc3BlpcY7b529e8ZvXz3DOhA90DVOdgzm1JBT01t8eRezto
+   KfXOp1OXhHECEpLr2RPcfTK0elJEY7tkbyiTwNyQpmzOEEGVxZwehFrd/
+   tLIRcgnjWc4X6PbH0+KsZ4/sy3bJHiEbQCCxWWb0su9OH+ovmSJnEWVfR
+   UZdEnSJ4JD5xpXy7A2/wbFDSnNs3Wqks3zqUctmAkIXumAK3xyXVxWeRH
+   YS7GGrloVXRXcoh+gW0RjAyJQtVTRaDUKQGGvouTX3SUcN2QIpUjHr+wh
+   QzXW8bPm/0JfhTYa0MjQTLGv3gVOV8nonNuLfBq4ChyaY4nrxqDshBFmX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="332932908"
+X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
+   d="scan'208";a="332932908"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 18:57:08 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="757401606"
+X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
+   d="scan'208";a="757401606"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 18:57:05 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Bharata B Rao <bharata@amd.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <mgorman@suse.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <akpm@linux-foundation.org>, <luto@kernel.org>,
+        <tglx@linutronix.de>, <yue.li@memverge.com>,
+        <Ravikumar.Bangoria@amd.com>
+Subject: Re: [RFC PATCH 0/5] Memory access profiler(IBS) driven NUMA balancing
+References: <20230208073533.715-1-bharata@amd.com>
+        <Y+Pj+9bbBbHpf6xM@hirez.programming.kicks-ass.net>
+        <a0127c3c-22c9-ac46-1e9f-200978fec392@amd.com>
+Date:   Mon, 13 Feb 2023 10:56:17 +0800
+In-Reply-To: <a0127c3c-22c9-ac46-1e9f-200978fec392@amd.com> (Bharata B. Rao's
+        message of "Thu, 9 Feb 2023 11:27:40 +0530")
+Message-ID: <87cz6eb7e6.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/JjMfFhe.B7wC+oUKFGTBNkK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/JjMfFhe.B7wC+oUKFGTBNkK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Bharata B Rao <bharata@amd.com> writes:
 
-Hi all,
+> On 2/8/2023 11:33 PM, Peter Zijlstra wrote:
+>> On Wed, Feb 08, 2023 at 01:05:28PM +0530, Bharata B Rao wrote:
+>> 
+>> 
+>>> - Hardware provided access information could be very useful for driving
+>>>   hot page promotion in tiered memory systems. Need to check if this
+>>>   requires different tuning/heuristics apart from what NUMA balancing
+>>>   already does.
+>> 
+>> I think Huang Ying looked at that from the Intel POV and I think the
+>> conclusion was that it doesn't really work out. What you need is
+>> frequency information, but the PMU doesn't really give you that. You
+>> need to process a *ton* of PMU data in-kernel.
+>
+> What I am doing here is to feed the access data into NUMA balancing which
+> already has the logic to aggregate that at task and numa group level and
+> decide if that access is actionable in terms of migrating the page. In this
+> context, I am not sure about the frequency information that you and Dave
+> are mentioning. AFAIU, existing NUMA balancing takes care of taking
+> action, IBS becomes an alternative source of access information to NUMA
+> hint faults.
 
-After merging the phy-next tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+We do need frequency information to determine whether a page is hot
+enough to be migrated to the fast memory (promotion).  What PMU provided
+is just "recently" accessed pages, not "frequently" accessed pages.  For
+current NUMA balancing implementation, please check
+NUMA_BALANCING_MEMORY_TIERING in should_numa_migrate_memory().  In
+general, it estimates the page access frequency via measuring the
+latency between page table scanning and page fault, the shorter the
+latency, the higher the frequency.  This isn't perfect, but provides a
+starting point.  You need to consider how to get frequency information
+via PMU.  For example, you may count access number for each page, aging
+them periodically, and get hot threshold via some statistics.
 
-drivers/phy/qualcomm/phy-qcom-snps-eusb2.c: In function 'qcom_snps_eusb2_hs=
-phy_write_mask':
-drivers/phy/qualcomm/phy-qcom-snps-eusb2.c:147:15: error: implicit declarat=
-ion of function 'readl_relaxed' [-Werror=3Dimplicit-function-declaration]
-  147 |         reg =3D readl_relaxed(base + offset);
-      |               ^~~~~~~~~~~~~
-drivers/phy/qualcomm/phy-qcom-snps-eusb2.c:150:9: error: implicit declarati=
-on of function 'writel_relaxed' [-Werror=3Dimplicit-function-declaration]
-  150 |         writel_relaxed(reg, base + offset);
-      |         ^~~~~~~~~~~~~~
-drivers/phy/qualcomm/phy-qcom-snps-eusb2.c: In function 'qcom_eusb2_default=
-_parameters':
-drivers/phy/qualcomm/phy-qcom-snps-eusb2.c:161:42: error: implicit declarat=
-ion of function 'FIELD_PREP' [-Werror=3Dimplicit-function-declaration]
-  161 |                                          FIELD_PREP(PHY_CFG_TX_PREE=
-MP_TUNE_MASK, 0));
-      |                                          ^~~~~~~~~~
-cc1: all warnings being treated as errors
-
-Caused by commit
-
-  80090810f5d3 ("phy: qcom: Add QCOM SNPS eUSB2 driver")
-
-I have used the phy-next tree from next-20230210 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/JjMfFhe.B7wC+oUKFGTBNkK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPpppkACgkQAVBC80lX
-0Gy7VwgAmbxw26Talb9YO6PlxuOyGmPc3g457297iHMfQwovNmGy1DeWS0UsscrO
-keAAA2qUncrLjpCG8vtjo3xRMI7jEk7ivVQDjP2Iy9mrg0k8dWRttD2oqsdjro+l
-Va6YYQpdFtJ1kkXtRnapozIFyuG2E58YiEEU/DVgUj+Zg7AzLaEkjrdnyi5LSMP2
-ttaq4g3xSgk2rLfcP9YOwCQiVdtFZR4Z5tWv541MnfEXrWggio0qg83ZeX/xKvZe
-R6IHNQQChWIkEwWIsbjn1pegcGsk99ObJ9RYKH1bmHCeCtJWgEcULKfa6XkBRbdI
-GOIxlUVsYyJVhqmTwaRalDpyMCIpzQ==
-=CHpB
------END PGP SIGNATURE-----
-
---Sig_/JjMfFhe.B7wC+oUKFGTBNkK--
+Best Regards,
+Huang, Ying
