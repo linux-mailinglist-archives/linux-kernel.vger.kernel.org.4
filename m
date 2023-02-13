@@ -2,105 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3AED6954D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 00:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0DF6954D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 00:35:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjBMXdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 18:33:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
+        id S229975AbjBMXfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 18:35:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjBMXdL (ORCPT
+        with ESMTP id S229593AbjBMXfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 18:33:11 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDBA3AB2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 15:33:09 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id 65so5137194iou.3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 15:33:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1676331189;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WcecfU/edwS7AGp0sYBsDhgpFnK48au1GjUG6IZeTp0=;
-        b=f2/HZweqKXZU+CpwEr7Cl1OOoV9Aduc1XdOQ8Pf1qbQD6diDEQ6+NFOWdAzICR1NbP
-         rrrxm0rP+JCCk2F41Z+7qq4TQRiSF8dp7RVPRqV30zEtzFWd1dZftYO4r+aLSF2r4bP5
-         KtcxwiZsoQcSFKcbpG5FFU4jKyO3YqGZ4tRWE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676331189;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WcecfU/edwS7AGp0sYBsDhgpFnK48au1GjUG6IZeTp0=;
-        b=eCGY6oFBaRdpRKRvT0prK6sm+aFQ3wAOExRe048IovXf1ijdwG5nt0S11oZO7gbtMR
-         wP3q4kg2TziWxIV4KpYkzX7/uA5wcSXvaZ6nBeUZuklhHdqwnDV7asK4RJtL6iMluTeT
-         o/vlGXUiYGqAE1VdZurw7BUX4DH+JoVb+cu8VWP1axZZzewB5c0OlhCwodoCkWUGzMdb
-         I92cbBmGTeNF5sgmbq0EKi7Gay4zeogZvIq3H2x+djVLmaJHp1apyjf3WceXHYxtdzHU
-         oWfMtcf88011lp/DCk4Ml6l3APW3UAG3xeQ//HbQrijNDKK6iv6x/IHJfqovtfNAAJHJ
-         ivIQ==
-X-Gm-Message-State: AO0yUKXek2jUXzAlgyhT1Tg629/4DyQYp/Ac+jkDK2dGqtw8yxqvbdIl
-        YJaR14Zf6PoavHnTc86VbukN0Q==
-X-Google-Smtp-Source: AK7set+CX5Ojyt2t9CXcj4bboO8JFe8jXHIgv/Q/yAuQX8IkBAtuJyg+dKtVEWZ9rISdwGVTRudQ+g==
-X-Received: by 2002:a05:6602:2c92:b0:718:2903:780f with SMTP id i18-20020a0566022c9200b007182903780fmr263014iow.2.1676331188775;
-        Mon, 13 Feb 2023 15:33:08 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id x17-20020a029711000000b003ad13752c9csm4118474jai.72.2023.02.13.15.33.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 15:33:08 -0800 (PST)
-Message-ID: <130a351f-2113-e333-83d5-0e19e92c8209@linuxfoundation.org>
-Date:   Mon, 13 Feb 2023 16:33:07 -0700
+        Mon, 13 Feb 2023 18:35:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBE4AD3C;
+        Mon, 13 Feb 2023 15:35:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 56BC66130C;
+        Mon, 13 Feb 2023 23:35:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9607C433A1;
+        Mon, 13 Feb 2023 23:35:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676331319;
+        bh=/Ji09aDanjBQjhtjCe/XRna1C3DDnXOqIdSGkEE3PVk=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=nX7h1Vo1eZWt5dmMzKA/Ws+AGVjDmNh7emYRpeeB557yfFC8FLl9H/h3WJaIq7XC5
+         +plZ7ST6JQbuQy05XatEQJlLBXg07Z5U9SMvd7USkxiw7cOaOxSe+LH5EGoQuZbKgc
+         onXqOR3Mf9lKhcIBEtPH9ioMbLd3qWrJLwJerQL3PqsT12xEivoN81rpbo9pkwnChS
+         5qOrXwynL0zBJNIyRjP5gGOj7QM/FlJbbjFx1HANm3sJRB0RxETyTR4VURvt8624bf
+         up5hS3k1auuIBUKAvf6bQ6CGl3aBKIyXTsQc9XUVIGOX4pxLd1iVRyNM/OfjA1bPGF
+         /d8osp0837emg==
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-16aa71c1600so17056772fac.11;
+        Mon, 13 Feb 2023 15:35:19 -0800 (PST)
+X-Gm-Message-State: AO0yUKUI/4tFA6ncOM2rWZ5IWLgUf+cujuMQxkAfbCaMhn5Egadv7ky3
+        p7E7eg9FJ8G3aBcmSCpZ3CBK6tqQ3iybQN+qM9g=
+X-Google-Smtp-Source: AK7set9RFb/d0kHJyXl7tLftzSvGggC3zgXDkG6YDKzJA317PkqaWfBHk4lAWOgTXZMK0LFGz8PLb3WYm2OEeBYhbNY=
+X-Received: by 2002:a05:6870:8189:b0:163:5449:2b22 with SMTP id
+ k9-20020a056870818900b0016354492b22mr3935107oae.189.1676331318815; Mon, 13
+ Feb 2023 15:35:18 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 5.10 000/139] 5.10.168-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230213144745.696901179@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230213144745.696901179@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a8a:355:0:b0:4a5:1048:434b with HTTP; Mon, 13 Feb 2023
+ 15:35:18 -0800 (PST)
+In-Reply-To: <20230207080728.15725-1-hbh25y@gmail.com>
+References: <20230207080728.15725-1-hbh25y@gmail.com>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Tue, 14 Feb 2023 08:35:18 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd-0oHPS4ca4j7rPTe6i4EgZqvx2ukYkJ0NqaFh2gmkK3Q@mail.gmail.com>
+Message-ID: <CAKYAXd-0oHPS4ca4j7rPTe6i4EgZqvx2ukYkJ0NqaFh2gmkK3Q@mail.gmail.com>
+Subject: Re: [PATCH v3] ksmbd: fix possible memory leak in smb2_lock()
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     sfrench@samba.org, senozhatsky@chromium.org, tom@talpey.com,
+        hyc.lee@gmail.com, lsahlber@redhat.com, linux-cifs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/13/23 07:49, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.168 release.
-> There are 139 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 15 Feb 2023 14:46:51 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.168-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
-
-Compiled and booted on my test system. No dmesg regressions.
-
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+2023-02-07 17:07 GMT+09:00, Hangyu Hua <hbh25y@gmail.com>:
+> argv needs to be free when setup_async_work fails or when the current
+> process is woken up.
+>
+> Fixes: e2f34481b24d ("cifsd: add server-side procedures for SMB3")
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> ---
+>
+> v2: avoid NULL pointer dereference in set_close_state_blocked_works()
+> v3: avoid race condition between smb2_lock() and smb2_cancel()
+>
+>  fs/ksmbd/smb2pdu.c   | 23 ++++++++++++++---------
+>  fs/ksmbd/vfs_cache.c |  2 ++
+>  2 files changed, 16 insertions(+), 9 deletions(-)
+>
+> diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+> index d681f91947d9..f4079518eaf6 100644
+> --- a/fs/ksmbd/smb2pdu.c
+> +++ b/fs/ksmbd/smb2pdu.c
+> @@ -6644,7 +6644,7 @@ int smb2_cancel(struct ksmbd_work *work)
+>  	struct ksmbd_conn *conn = work->conn;
+>  	struct smb2_hdr *hdr = smb2_get_msg(work->request_buf);
+>  	struct smb2_hdr *chdr;
+> -	struct ksmbd_work *cancel_work = NULL, *iter;
+> +	struct ksmbd_work *iter;
+>  	struct list_head *command_list;
+>
+>  	ksmbd_debug(SMB, "smb2 cancel called on mid %llu, async flags 0x%x\n",
+> @@ -6666,7 +6666,9 @@ int smb2_cancel(struct ksmbd_work *work)
+>  				    "smb2 with AsyncId %llu cancelled command = 0x%x\n",
+>  				    le64_to_cpu(hdr->Id.AsyncId),
+>  				    le16_to_cpu(chdr->Command));
+> -			cancel_work = iter;
+> +			iter->state = KSMBD_WORK_CANCELLED;
+> +			if (iter->cancel_fn)
+> +				iter->cancel_fn(iter->cancel_argv);
+>  			break;
+>  		}
+>  		spin_unlock(&conn->request_lock);
+> @@ -6685,18 +6687,12 @@ int smb2_cancel(struct ksmbd_work *work)
+>  				    "smb2 with mid %llu cancelled command = 0x%x\n",
+>  				    le64_to_cpu(hdr->MessageId),
+>  				    le16_to_cpu(chdr->Command));
+> -			cancel_work = iter;
+> +			iter->state = KSMBD_WORK_CANCELLED;
+>  			break;
+>  		}
+>  		spin_unlock(&conn->request_lock);
+>  	}
+>
+> -	if (cancel_work) {
+> -		cancel_work->state = KSMBD_WORK_CANCELLED;
+> -		if (cancel_work->cancel_fn)
+> -			cancel_work->cancel_fn(cancel_work->cancel_argv);
+> -	}
+> -
+>  	/* For SMB2_CANCEL command itself send no response*/
+>  	work->send_no_response = 1;
+>  	return 0;
+> @@ -7050,6 +7046,7 @@ int smb2_lock(struct ksmbd_work *work)
+>  						      smb2_remove_blocked_lock,
+>  						      argv);
+>  				if (rc) {
+> +					kfree(argv);
+>  					err = -ENOMEM;
+>  					goto out;
+>  				}
+> @@ -7061,6 +7058,10 @@ int smb2_lock(struct ksmbd_work *work)
+>
+>  				ksmbd_vfs_posix_lock_wait(flock);
+>
+> +				spin_lock(&work->conn->request_lock);
+> +				list_del_init(&work->async_request_entry);
+It is called again in ksmbd_conn_try_dequeue_request().
+> +				spin_unlock(&work->conn->request_lock);
+> +
