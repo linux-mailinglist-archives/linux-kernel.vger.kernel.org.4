@@ -2,150 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0755D69487C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:46:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 667DF694881
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:47:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbjBMOqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 09:46:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37304 "EHLO
+        id S230349AbjBMOrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 09:47:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjBMOqo (ORCPT
+        with ESMTP id S229558AbjBMOr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 09:46:44 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3664E1C30F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:46:34 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id cq19so10492737edb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:46:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mYt0UvSCB3GCUEfFP2VKDcvyRzb86/6xZ/drofUnvWU=;
-        b=H7CmGL4toJujXUyjXiOqsBKS3oQ/OPCqgVxR2qZX3NIeNQomor2BuTBe3CxRxqblOg
-         yYfBXQny4rQqh8eTKQjULC97fd68fuEk/j88P6cGhkoqjNmfsUnk6Thq/HwPVKffaTLq
-         hJ4EVomttNgezaxMnpMSAekHR3CBBEALmptn7WxA8YPndyn/qrQcSI9L/239c9nhGfhs
-         AuLXsPwRbpI2oROquQp6CUGkJgaeWHc34u39xDVF+HhJJ7KpqfoS76/sy72Darn9lJRp
-         j0grQk86/WmBZx38gX2/wXwYFtMwjRQf3g+IlLzTgEtY4THIh0DXVw6OPRvpPDUHkNIk
-         3BOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mYt0UvSCB3GCUEfFP2VKDcvyRzb86/6xZ/drofUnvWU=;
-        b=xW9qe5TkbleA9h0yWtMS6AZuenDCCefGPOlmPlb8CVBIsv8zlLdgWQSKl9giBZbyxf
-         EkyyhxsxmSMJPQVP2ArgNhRctQxnC/sQEPZxIDcve/9Sbxyqh8OoOPZHVfvWv8vosDiH
-         HnGwiCjeVneK4Au+7PvrjbCOHcJyS0q642FGE/MO4rJkooExQGz19mTxPZcSjwbZGAAu
-         ngFI96+Z7gA4LpFvjcaKp/MhB3Nq9e3mi4HCqKLblLGXcUCJwoIMwr2h6Qt5XkSrQTWY
-         f9Al4Ezt8wskDqBoJPTqToTGCf93EsP99PLkkAvkGLa2sNgPSx/mhVFwrzumDVSU3bok
-         fTwA==
-X-Gm-Message-State: AO0yUKXNpbK89TFwAKw656n7nlGq4Xrj9s+sFrq7bsRwMpJ+mkzWYYTh
-        ewkdnAc3h43ERIVlGIeuxIIe+Q==
-X-Google-Smtp-Source: AK7set8kR2+9bPXCt4cS7kPEIOFtMli+K3NI8BYypsYy9bfi0z72yfNI8hiPIiJhzQbpCmp7+qBE+w==
-X-Received: by 2002:a50:c35a:0:b0:4ac:c12b:8ef8 with SMTP id q26-20020a50c35a000000b004acc12b8ef8mr4904070edb.26.1676299592737;
-        Mon, 13 Feb 2023 06:46:32 -0800 (PST)
-Received: from [172.16.220.87] (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id b19-20020a17090636d300b0085d6bfc6201sm6884208ejc.86.2023.02.13.06.46.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 06:46:32 -0800 (PST)
-From:   Luca Weiss <luca.weiss@fairphone.com>
-Date:   Mon, 13 Feb 2023 15:46:31 +0100
-Subject: [PATCH v2 2/2] arm64: dts: qcom: sm7225-fairphone-fp4: enable
- remaining i2c busses
+        Mon, 13 Feb 2023 09:47:26 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA8E1B30F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:47:12 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DDUiKu008361;
+        Mon, 13 Feb 2023 14:47:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=QPbIJT1R+C2zP+fBcszLLqmmE3eMP/+u6XJt5DvBiW8=;
+ b=FneBY2U1OErUNU2JlBwGEG+b0Ejt5GsE0ydoS4FWAftWhS/3bxddSiYo2H35310C2YDC
+ o0OHzUWtCjpbySOJ/gJqX8WXhJYqRmWNYpfABUmbVoiag2vTMMpScKb6zfhMtjwt5dOX
+ M8b9Eedop7ChEhbnBZ3eojwCdN8+bKUlBCJ0GJ97NfYRHIcM/N99ZhUvHm82r5mHbppW
+ vtsRQV1dZyxeQE6BCdt+x5QNRxuGEJkJkPzg05lzSU8KCiHgDuhmn6SJkIit5Fq+TV6B
+ e+4eX+xJxwzMH2mI9BjdnEbJBMwkrOyV7TsiKLpsEsVpOgzn7cqryG0ONmkJFCshDrQm UA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nqp5et605-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 14:47:01 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31DEkBij032281;
+        Mon, 13 Feb 2023 14:47:01 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nqp5et5w8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 14:47:01 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31DDJh5a000883;
+        Mon, 13 Feb 2023 14:46:53 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3np2n75mg6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 14:46:52 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31DEkoWi590432
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Feb 2023 14:46:51 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CBCB658065;
+        Mon, 13 Feb 2023 14:46:50 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B279A5805A;
+        Mon, 13 Feb 2023 14:46:50 +0000 (GMT)
+Received: from localhost (unknown [9.211.96.43])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 13 Feb 2023 14:46:50 +0000 (GMT)
+From:   Nathan Lynch <nathanl@linux.ibm.com>
+To:     Laurent Dufour <ldufour@linux.ibm.com>, mpe@ellerman.id.au,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        Srikar Dronamraju <srikar@linux.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+Subject: Re: [PATCH] powerpc/pseries/cpuhp: respect current SMT when adding
+ new CPU
+In-Reply-To: <20230213124510.12651-1-ldufour@linux.ibm.com>
+References: <20230213124510.12651-1-ldufour@linux.ibm.com>
+Date:   Mon, 13 Feb 2023 08:46:50 -0600
+Message-ID: <87ilg5aahx.fsf@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230213-fp4-more-i2c-v2-2-1c459c572f80@fairphone.com>
-References: <20230213-fp4-more-i2c-v2-0-1c459c572f80@fairphone.com>
-In-Reply-To: <20230213-fp4-more-i2c-v2-0-1c459c572f80@fairphone.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luca Weiss <luca.weiss@fairphone.com>
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: md95E-y93AZ79lrnfDcPw_kVHyuS2O3M
+X-Proofpoint-ORIG-GUID: ZKtSF9cYHdXI1pVJ8GkkUCtgV6K5kNUO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-13_09,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ priorityscore=1501 spamscore=0 lowpriorityscore=0 suspectscore=0
+ clxscore=1011 bulkscore=0 adultscore=0 phishscore=0 malwarescore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302130131
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable all i2c busses where something is connected on this phone. Add
-comments as placeholders for which components are still missing.
+Laurent Dufour <ldufour@linux.ibm.com> writes:
+> When a new CPU is added, the kernel is activating all its threads. This
+> leads to weird, but functional, result when adding CPU on a SMT 4 system
+> for instance.
+>
+> Here the newly added CPU 1 has 8 threads while the other one has 4 threads
+> active (system has been booted with the 'smt-enabled=4' kernel option):
+>
+> ltcden3-lp12:~ # ppc64_cpu --info
+> Core   0:    0*    1*    2*    3*    4     5     6     7
+> Core   1:    8*    9*   10*   11*   12*   13*   14*   15*
+>
+> There is no SMT value in the kernel. It is possible to run unbalanced LPAR
+> with 2 threads for a CPU, 4 for another one, and 5 on the latest.
+>
+> To work around this possibility, and assuming that the LPAR run with the
+> same number of threads for each CPU, which is the common case,
 
-Also enable gpi_dma and the other qupv3 for that.
+I am skeptical at best of baking that assumption into this code. Mixed
+SMT modes within a partition doesn't strike me as an unreasonable
+possibility for some use cases. And if that's wrong, then we should just
+add a global smt value instead of using heuristics.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
- arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts | 33 +++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+> the number
+> of active threads of the CPU doing the hot-plug operation is computed. Only
+> that number of threads will be activated for the newly added CPU.
+>
+> This way on a LPAR running in SMT=4, newly added CPU will be running 4
+> threads, which is what a end user would expect.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-index 86114dd2c0c4..7ae6aba5d2ec 100644
---- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-+++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-@@ -359,10 +359,39 @@ &cdsp {
- 	status = "okay";
- };
- 
-+&gpi_dma0 {
-+	status = "okay";
-+};
-+
-+&gpi_dma1 {
-+	status = "okay";
-+};
-+
-+&i2c0 {
-+	clock-frequency = <400000>;
-+	status = "okay";
-+
-+	/* ST21NFCD NFC @ 8 */
-+	/* VL53L3 ToF @ 29 */
-+	/* AW88264A amplifier @ 34 */
-+	/* AW88264A amplifier @ 35 */
-+};
-+
-+&i2c8 {
-+	clock-frequency = <400000>;
-+	status = "okay";
-+
-+	/* HX83112A touchscreen @ 48 */
-+};
-+
- &i2c10 {
- 	clock-frequency = <400000>;
- 	status = "okay";
- 
-+	/* PM8008 PMIC @ 8 and 9 */
-+	/* PX8618 @ 26 */
-+	/* SMB1395 PMIC @ 34 */
-+
- 	haptics@5a {
- 		compatible = "awinic,aw8695";
- 		reg = <0x5a>;
-@@ -495,6 +524,10 @@ adc-chan@644 {
- 	};
- };
- 
-+&qupv3_id_0 {
-+	status = "okay";
-+};
-+
- &qupv3_id_1 {
- 	status = "okay";
- };
+I could see why most users would prefer this new behavior. But surely
+some users have come to expect the existing behavior, which has been in
+place for years, and developed workarounds that might be broken by this
+change?
 
--- 
-2.39.1
+I would suggest that to handle this well, we need to give user space
+more ability to tell the kernel what actions to take on added cores, on
+an opt-in basis.
 
+This could take the form of extending the DLPAR sysfs command set:
+
+Option 1 - Add a flag that tells the kernel not to online any threads at
+all; user space will online the desired threads later.
+
+Option 2 - Add an option that tells the kernel which SMT mode to apply.
