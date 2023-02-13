@@ -2,118 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C476D6946F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:27:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2036946FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbjBMN1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 08:27:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
+        id S230100AbjBMN2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 08:28:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjBMN1N (ORCPT
+        with ESMTP id S229489AbjBMN2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 08:27:13 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843211ABCD;
-        Mon, 13 Feb 2023 05:27:10 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PFlVv1dYFz4f3jMK;
-        Mon, 13 Feb 2023 21:27:03 +0800 (CST)
-Received: from [10.174.178.129] (unknown [10.174.178.129])
-        by APP2 (Coremail) with SMTP id Syh0CgBHOOanOupj5dX_DQ--.24452S2;
-        Mon, 13 Feb 2023 21:27:05 +0800 (CST)
-Subject: Re: [PATCH 03/21] ext4: avoid to use preallocated blocks if
- EXT4_MB_HINT_GOAL_ONLY is set
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, jack@suse.cz,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230209194825.511043-1-shikemeng@huaweicloud.com>
- <20230209194825.511043-4-shikemeng@huaweicloud.com>
- <Y+n2+7pjkeb3vWQ7@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-Message-ID: <f967d63b-907e-a495-3ec5-9043c35b9938@huaweicloud.com>
-Date:   Mon, 13 Feb 2023 21:27:03 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        Mon, 13 Feb 2023 08:28:03 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D43C3C1A
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:28:02 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id r6so4443120ioj.5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:28:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8Gb42UgzE9IFoAhtdlpi/Pyg3SPeN3v0rXrGEsBRa7g=;
+        b=E1gJIgM6i6uNiQH0mH5azStrG+CTBCFXiugvdVofaImLpgmmoQl25g07MB++1ebtKA
+         O9rtt8vd8IgANh3/vKCJm/LuIZPCRs47liqNZBTb4EifwhmgLDz/TRm0e1O0ffP+0EQy
+         H5O9Sz8Z832xb9P0EM8cVDKqQOvDGz7eIuUXnsa6bcb6QGZ017P+l1Cmh+KD3aBIY8hW
+         KmLAJ+grPxdOYDye0pwQ3yeJkfwgD+wGMMDm/b49EGObdvOruBjs9KfuxJ43fo0A51fk
+         QjMTPftW/hpR8L2j+oaMwetoZmKtqdWAj5LRBSybiH0p7iNWpUblEHod+C53kE+mQWHd
+         WTIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8Gb42UgzE9IFoAhtdlpi/Pyg3SPeN3v0rXrGEsBRa7g=;
+        b=HwWMDgbzCcz1CVhvpdTltpKAP10S77DgF4WAzQ6NeyGVDYGYX3+g69U3RLT45Lg1YW
+         ityZn/Xk/S3+q6dkJrFMWs0KUKvpFMM3FAHm5jqiAOdl/07uvvJzYIrMrON+21fllTSq
+         HE3GH2BGzwF+IJ5Gz6nd9rPt9gLF84/c2eG2pY9BZ7am/fWVFrmVkl8wFiZoFkn8TJn5
+         /7RseFLozqe3TbKe+mdqVDzX7ju7Il4SAjhyVbpqwNs0zqmD0z79uc/F4EBbKvkYFxlG
+         c+hUxh4iBuunD7mMg2CQAM6nKCMfwAwVpUQy5bqL1I+3Tb5US7/h4j85TWqLLZC+mvUO
+         n5yQ==
+X-Gm-Message-State: AO0yUKV7keNx+txZgEQrpeOAZlDXUqs0uVXiI6Mz+x5BDIbzdXHKLlpT
+        VV6Cbhk1B4JsBxEOHfGbUNlbGhKz3udQAH9ZVKB6lg==
+X-Google-Smtp-Source: AK7set/caV2aIlg9ftVuB/YHkIPLKFmE8k3eaOUWPmmRwFcqA2fyNdrM7os82ZP6zYAgzpZuJfPAc02pjSIi4nnjG9M=
+X-Received: by 2002:a02:a794:0:b0:3ad:3cae:6378 with SMTP id
+ e20-20020a02a794000000b003ad3cae6378mr12315762jaj.16.1676294881849; Mon, 13
+ Feb 2023 05:28:01 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <Y+n2+7pjkeb3vWQ7@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-Content-Type: text/plain; charset=gbk
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: Syh0CgBHOOanOupj5dX_DQ--.24452S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CryfKF18Gw4DAr43Jw17Awb_yoW8Cr15pF
-        WfJay8KFn7uw47uanF9w15Gw409a1xKr18XF4FgryrZr9xA393KFsrKF1Fga40yrsruFn0
-        qF4aqFW3Cr1rua7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UE-erUUUUU=
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1676063693.git.andreyknvl@google.com> <fbfee41495b306dd8881f9b1c1b80999c885e82f.1676063693.git.andreyknvl@google.com>
+In-Reply-To: <fbfee41495b306dd8881f9b1c1b80999c885e82f.1676063693.git.andreyknvl@google.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 13 Feb 2023 14:27:22 +0100
+Message-ID: <CAG_fn=XEP2ETd5c8Pz2Eri2mHpDzewnBLWoQC=_Z3VKke9w_0g@mail.gmail.com>
+Subject: Re: [PATCH v2 18/18] lib/stackdepot: move documentation comments to stackdepot.h
+To:     andrey.konovalov@linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        Evgenii Stepanov <eugenis@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 10, 2023 at 10:19 PM <andrey.konovalov@linux.dev> wrote:
+>
+> From: Andrey Konovalov <andreyknvl@google.com>
+>
+> Move all interface- and usage-related documentation comments to
+> include/linux/stackdepot.h.
+>
+> It makes sense to have them in the header where they are available to
+> the interface users.
+>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>
 
-
-on 2/13/2023 4:38 PM, Ojaswin Mujoo wrote:
-> On Fri, Feb 10, 2023 at 03:48:07AM +0800, Kemeng Shi wrote:
->> ext4_mb_use_preallocated will ignore the demand to alloc at goal block
->> only. Return false if EXT4_MB_HINT_GOAL_ONLY is set before use
->> preallocated blocks in ext4_mb_use_preallocated.
->>
->> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
->> ---
->>  fs/ext4/mballoc.c | 3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
->> index 375d9655b525..352ac9139fee 100644
->> --- a/fs/ext4/mballoc.c
->> +++ b/fs/ext4/mballoc.c
->> @@ -4368,6 +4368,9 @@ ext4_mb_use_preallocated(struct ext4_allocation_context *ac)
->>  	if (!(ac->ac_flags & EXT4_MB_HINT_DATA))
->>  		return false;
->>  
->> +	if (unlikely(ac->ac_flags & EXT4_MB_HINT_GOAL_ONLY))
->> +		return false;
->> +
->>  	/* first, try per-file preallocation */
->>  	rcu_read_lock();
->>  	list_for_each_entry_rcu(pa, &ei->i_prealloc_list, pa_inode_list) {
->> -- 
->> 2.30.0
->>
-> So with the flag, even when we request for a logical/goal block
-> combination that can be satisfied by one of the inode PAs in the list,
-> we would still exit early and the allocation would eventually fail since
-> the goal block would be marked "in-use" in the buddy. This doesn't seem
-> to be desirable.
-> 
-> Maybe instead of exiting early we should try to find a PA that satisfies
-> the logical block we are asking for and then incase of
-> EXT4_MB_HINT_GOAL_ONLY, we can add a check to see if the physical block
-> of the PA corresponds to the goal block. Would like to hear your
-> thoughts on this.
-Yes, this is a more thoughtful, I will improve this in next version.
-Besides, maybe we should also test length if EXT4_MB_HINT_MERGE is set
-as ext4_mb_find_by_goal do.
-
-> Regards,
-> ojaswin
-> 
-
--- 
-Best wishes
-Kemeng Shi
-
+> + * For example, KASAN needs to save allocation and free stack traces for each
+> + * object. Storing two stack traces per object requires a lot of memory (e.g.
+> + * SLUB_DEBUG needs 256 bytes per object for that). Since allocation and free
+> + * stack traces often repeat, using stack depot allows to save about 100x space.
+> + *
+> + * Stack traces are never removed from stack depot.
+... from the stack depot?
