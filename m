@@ -2,116 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C19694F69
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:33:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA8B694F63
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbjBMSdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:33:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56068 "EHLO
+        id S230164AbjBMSbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:31:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjBMSdA (ORCPT
+        with ESMTP id S229805AbjBMSbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:33:00 -0500
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62B013DE1;
-        Mon, 13 Feb 2023 10:32:58 -0800 (PST)
-Received: by mail-pj1-f43.google.com with SMTP id oa11-20020a17090b1bcb00b002341a2656e5so1581344pjb.1;
-        Mon, 13 Feb 2023 10:32:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FNk3UELDGb/VaGugwXVxHzDA5RNRGF2dh5FGqDHZODo=;
-        b=TTFnzO1dJz85kCeHttfYg/BxqDzpw1FA3a05wiVvlj6tP3hQhPtAPBxfAfeyjVKWlY
-         MpXgJt2deNy7HFhwEpc21IjjeFrL6LCgacGYloriA4ESSvIF7sxiPdJxEwqPi/vVFSD6
-         iPIVcca/Fr4gNWHB67Pm3ZYk28TSC71SXWhzvqHGNI+lBSeZISsyepoisjUd09yr/UKk
-         RtURFpdMey+UO85tr+3mp3BpUiXWN9OOrWSjj/gbEwZvf4/eEMOoTSBewUt2xfRasGg2
-         99nXlf3Dnfc9FMTYrnZhg6Ivuj6CHrQuRm4k98XFIdOxe5ilmVhSKJeLJcN7YiDzt08H
-         34Yg==
-X-Gm-Message-State: AO0yUKWI4nfBidMSSnPJz3qFlq4qGCMVRkzmm9MLfFVJRY0BvDaZegV/
-        nXJ74aA47kRal8IK2qs/aXg=
-X-Google-Smtp-Source: AK7set8bqfAEsgoBzYy8J6ejBneEGYS/nL6hiIntMGR8g21NqX+cFWzSDRIL7ZHXcO32eieVSJk5Sg==
-X-Received: by 2002:a17:902:c942:b0:19a:aea3:8a92 with SMTP id i2-20020a170902c94200b0019aaea38a92mr1709128pla.16.1676313178378;
-        Mon, 13 Feb 2023 10:32:58 -0800 (PST)
-Received: from localhost (fpd11144dd.ap.nuro.jp. [209.17.68.221])
-        by smtp.gmail.com with ESMTPSA id h13-20020a170902f7cd00b0019a87514e00sm4527517plw.177.2023.02.13.10.32.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 10:32:57 -0800 (PST)
-Date:   Tue, 14 Feb 2023 03:32:54 +0900
-From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     linux-pci@vger.kernel.org, kishon@kernel.org,
-        lpieralisi@kernel.org, bhelgaas@google.com,
-        linux-kernel@vger.kernel.org, robh@kernel.org, vidyas@nvidia.com,
-        vigneshr@ti.com
-Subject: Re: [PATCH v5 0/5] PCI: endpoint: Rework the EPC to EPF notification
-Message-ID: <Y+qCVuGdlCeUR2Ro@rocinante>
-References: <20230124071158.5503-1-manivannan.sadhasivam@linaro.org>
- <20230124071602.GB4947@thinkpad>
- <20230213065718.GA4375@thinkpad>
+        Mon, 13 Feb 2023 13:31:44 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336E6EC
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:31:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676313103; x=1707849103;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ctixiST2ow9yoUlfeU4eXd6rri6AYzsTWly0/plDjIk=;
+  b=B9OMHz9yazT/HQlYJt3uSK1hcWFtKx1fkjcgVDKZFTF+nRHNfqPs/eRS
+   uZFJzPLsJCRXNShHgKFYYOwxbpBNlMq6cLS4MyzmQcz3UYRZTufNWvymF
+   rCOLYW5qL+IGRbc9T4lKlUj0CgAP0cFdZB5NBc73s1Pp3jSARRXlWyGMz
+   s5TRmZi/tgcjlXiR1qGcV5T+MO1D3VhuBfVB03cLW+pmb271XlbTbd89V
+   nGQ/RiGmrrXChIzvPz+bvS0rJKbRMFTDCxLIA7Zq4RsDJr9/3sMWed7CO
+   TegC0WcfzS4ly4MrILLInKevDq05UsP3+9+XWZ7RQstIZezpcbkNAlwIz
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="314602826"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="314602826"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 10:31:16 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="670917839"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="670917839"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 10:31:15 -0800
+Date:   Mon, 13 Feb 2023 10:34:55 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>, jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH 2/2] iommu/ioasid: Remove custom IOASID allocator
+Message-ID: <20230213103455.02f3ac37@jacob-builder>
+In-Reply-To: <Y+pjTR80bnl9rMK1@myrica>
+References: <20230210230206.3160144-1-jacob.jun.pan@linux.intel.com>
+        <20230210230206.3160144-3-jacob.jun.pan@linux.intel.com>
+        <Y+pjTR80bnl9rMK1@myrica>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230213065718.GA4375@thinkpad>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Jean-Philippe,
 
-> > > During the review of the patch that fixes DBI access in PCI EP, Rob
-> > > suggested [1] using a fixed interface for passing the events from EPC to
-> > > EPF instead of the in-kernel notifiers.
-> > > 
-> > > This series introduces a simple callback based mechanism for passing the
-> > > events from EPC to EPF. This interface is chosen for satisfying the below
-> > > requirements:
-> > > 
-> > > 1. The notification has to reach the EPF drivers without any additional
-> > > latency.
-> > > 2. The context of the caller (EPC) needs to be preserved while passing the
-> > > notifications.
-> > > 
-> > > With the existing notifier mechanism, the 1st case can be satisfied since
-> > > notifiers aren't adding any huge overhead. But the 2nd case is clearly not
-> > > satisfied, because the current atomic notifiers forces the EPF
-> > > notification context to be atomic even though the caller (EPC) may not be
-> > > in atomic context. In the notification function, the EPF drivers are
-> > > required to call several EPC APIs that might sleep and this triggers a
-> > > sleeping in atomic bug during runtime.
-> > > 
-> > > The above issue could be fixed by using a blocking notifier instead of
-> > > atomic, but that proposal was not accepted either [2].
-> > > 
-> > > So instead of working around the issues within the notifiers, let's get rid
-> > > of it and use the callback mechanism.
-> > > 
-> > > NOTE: DRA7xx and TEGRA194 drivers are only compile tested. Testing this series
-> > > on the real platforms is greatly appreciated.
-> > > 
+On Mon, 13 Feb 2023 16:20:29 +0000, Jean-Philippe Brucker
+<jean-philippe@linaro.org> wrote:
+
+> On Fri, Feb 10, 2023 at 03:02:06PM -0800, Jacob Pan wrote:
+> > Custom allocator feature was introduced to support VT-d's virtual
+> > command, an enlightened interface designed for VMs to allocate PASIDs
+> > from the host.
 > > 
-> > Lorenzo, all patches in this series got review tags. Can you please merge now?
+> > As we remove/withdraw the VT-d virtual command feature, the sole user
+> > of custom allocator, we can safely remove the custom allocator as well.
+> > Effectively, this will return IOASID core to the original simple global
+> > namespace allocator.
 > > 
+> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>  
 > 
-> Krzysztof, any update on this series?
+> You can also drop the spinlock.h include. With that:
+> 
+good catch, thanks
+> Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> 
+> On a related note, it looks like 100b8a14a370 ("iommu/vt-d: Add pasid
+> private data helpers") removed the last user of ioasid_set_data(). I guess
+> that could be dropped too, unless you plan to still use it?
+> 
+You are right, will remove.
+I was planning on the other way around which will convert VT-d's private
+pasid data helpers to common ioasid code, but when I look closer the
+private pasid xa is just holding a list of pasid/mm which could be per iommu
+not global. Another cleanup I suppose.
 
-Sorry for the late reply.  I just realised that my question from a few days
-ago has yet to make it to the mailing list. Again, I apologise for keeping
-you waiting.
+> We could also merge ioasid.c into iommu-sva.c at this point, since I
+> haven't seen any interest for having multiple IOASID sets on Arm, but I'm
+> not sure what the current plan is for vSVA on x86.
+VT-d do plan to use global PASIDs for DMA API with PASIDs since the
+work submited via ENQCMDS must use a PASID must != RIDPASID.
+https://lore.kernel.org/lkml/20220518182120.1136715-1-jacob.jun.pan@linux.intel.com/T/
+
+So I was thinking a separate ioasid_set for devices that allocates global
+PASIDs for DMA API usage. ioasid_set will be useful here for limiting
+lookup and resource management. e.g. PASIDs used under in-kernel DMA API
+are not subject to cgroups.
 
 
-Nevertheless, I was asking whether there would be any "Fixes:" tags to add
-and if we should let the stable maintainers know since this fixes an issue
-that might be worth back-porting to older kernels.
+> Thanks,
+> Jean
+> 
+> 
 
 
-Let me know.  Otherwise, everything looks good!  Thank you a lot!
- 
-	Krzysztof
+Thanks,
+
+Jacob
