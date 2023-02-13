@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6F8695060
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:08:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA28E695062
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:08:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbjBMTIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 14:08:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43208 "EHLO
+        id S230024AbjBMTIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 14:08:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjBMTH7 (ORCPT
+        with ESMTP id S229668AbjBMTH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Feb 2023 14:07:59 -0500
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE21FBB9C
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 11:07:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14940CA1A
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 11:07:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676315277; x=1707851277;
+  t=1676315279; x=1707851279;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=nthHD7ORD3zn2LmHh/lLY5cOKkIBSk15uJqRpUpGiOc=;
-  b=U9RvRuLY9cvI44iibSx2NrKWux7oU5di7PofNUO+4kj0Yh0QNlaLvH6V
-   q/nTnE7+Upz+4CB9ADJWNi/rOVK6xkTj3gRHyHkG5k4zLWbP2cpysPzLs
-   mYY9cI6nxGGvFTcoacLNmFHfGzsIazk5GVg5VlCqhqfUi5RZjfuPB4zjN
-   G5Y0RC4xucxVYyRIcTnK0eN4Akdmd7tGJK1CjWu/FqNyyE0iMQqOE1Gmc
-   IbLHc2PSYZ8Tl0vrrlD+H+r3xBb0KolHc3O8hxW3E+tAFukKqViU2p4H4
-   mTZIXCwtSfFXit11r9yvYHdd7ovArQU7Te4W9R4X8dDC3V41lU36PgZG5
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="333108679"
+  bh=9lgoINWxU1sPPhF4j2mJcGx7Hoa3TJdaZRev5+44tes=;
+  b=g2KxmUMVoIAHC1Crf3KbXVJOTw+tVN+7qO9huGhP9xjmfV1EuHY2esDs
+   pTb5e5iKbXCiYdu4t29T65YaqNAdPf1l/YqGS0jhDMWB2/kRwOwOtMxAe
+   sCLOFLlqTaRHSvuM+u+isJPB9xKuqVMVWEI0HFATCuXFTGIY9A+TeqRTi
+   FYQvy2GxzNhq4y92D0GJWpUK0QP2FGTwfiLmJLie0lk+nCT+2SNQAaSEM
+   uqC71kQ2y/A2qxb1lz/2jFIOjKtXJFEqtoU8Op510wiDc/76AluopGltm
+   eHltr98S0PkhS7ON50ZI1GDrSyZr7Lsv2KAmEXbXP/qHCoIa/jOpiecFK
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="333108696"
 X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="333108679"
+   d="scan'208";a="333108696"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 11:07:57 -0800
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 11:07:58 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="668901912"
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="668901920"
 X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="668901912"
+   d="scan'208";a="668901920"
 Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by orsmga002.jf.intel.com with ESMTP; 13 Feb 2023 11:07:57 -0800
+  by orsmga002.jf.intel.com with ESMTP; 13 Feb 2023 11:07:58 -0800
 From:   kan.liang@linux.intel.com
 To:     tglx@linutronix.de, jstultz@google.com, peterz@infradead.org,
         mingo@redhat.com, linux-kernel@vger.kernel.org
 Cc:     sboyd@kernel.org, eranian@google.com, namhyung@kernel.org,
         ak@linux.intel.com, adrian.hunter@intel.com,
         Kan Liang <kan.liang@linux.intel.com>
-Subject: [RFC PATCH V2 1/9] timekeeping: Expose the conversion information of monotonic raw
-Date:   Mon, 13 Feb 2023 11:07:46 -0800
-Message-Id: <20230213190754.1836051-2-kan.liang@linux.intel.com>
+Subject: [RFC PATCH V2 2/9] perf: Extend ABI to support post-processing monotonic raw conversion
+Date:   Mon, 13 Feb 2023 11:07:47 -0800
+Message-Id: <20230213190754.1836051-3-kan.liang@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230213190754.1836051-1-kan.liang@linux.intel.com>
 References: <20230213190754.1836051-1-kan.liang@linux.intel.com>
@@ -64,97 +64,99 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kan Liang <kan.liang@linux.intel.com>
 
-The conversion information of monotonic raw is not affected by NTP/PTP
-correction. The perf tool can utilize the information to correctly
-calculate the monotonic raw via a TSC in each PEBS record in the
-post-processing stage.
+The monotonic raw clock is not affected by NTP/PTP correction. The
+calculation of the monotonic raw clock can be done in the
+post-processing, which can reduce the kernel overhead.
 
-The current conversion information is hidden in the internal
-struct tk_read_base. Add a new external struct ktime_conv to store and
-share the conversion information with other subsystems.
+Add hw_time in the struct perf_event_attr to tell the kernel dump the
+raw HW time to user space. The perf tool will calculate the HW time
+in post-processing.
+Currently, only supports the monotonic raw conversion.
+Only dump the raw HW time with PERF_RECORD_SAMPLE, because the accurate
+HW time can only be provided in a sample by HW. For other type of
+records, the user requested clock should be returned as usual. Nothing
+is changed.
 
-Add a new interface ktime_get_fast_mono_raw_conv() to expose the
-conversion information of monotonic raw.  The function probably be
-invoked in a NMI. Use NMI safe tk_fast_raw to retrieve the conversion
-information.
+Add perf_event_mmap_page::cap_user_time_mono_raw ABI to dump the
+conversion information. The cap_user_time_mono_raw also indicates
+whether the monotonic raw conversion information is available.
+If yes, the clock monotonic raw can be calculated as
+mono_raw = base + ((cyc - last) * mult + nsec) >> shift
 
 Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 ---
- include/linux/timekeeping.h | 18 ++++++++++++++++++
- kernel/time/timekeeping.c   | 24 ++++++++++++++++++++++++
- 2 files changed, 42 insertions(+)
+ include/uapi/linux/perf_event.h | 21 ++++++++++++++++++---
+ kernel/events/core.c            |  7 +++++++
+ 2 files changed, 25 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/timekeeping.h b/include/linux/timekeeping.h
-index fe1e467ba046..94ba02e7eb13 100644
---- a/include/linux/timekeeping.h
-+++ b/include/linux/timekeeping.h
-@@ -253,6 +253,21 @@ struct system_time_snapshot {
- 	u8			cs_was_changed_seq;
- };
+diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+index ccb7f5dad59b..9d56fe027f6c 100644
+--- a/include/uapi/linux/perf_event.h
++++ b/include/uapi/linux/perf_event.h
+@@ -455,7 +455,8 @@ struct perf_event_attr {
+ 				inherit_thread :  1, /* children only inherit if cloned with CLONE_THREAD */
+ 				remove_on_exec :  1, /* event is removed from task on exec */
+ 				sigtrap        :  1, /* send synchronous SIGTRAP on event */
+-				__reserved_1   : 26;
++				hw_time        :  1, /* generate raw HW time for samples */
++				__reserved_1   : 25;
  
-+/**
-+ * struct ktime_conv - Timestamp conversion information
-+ * @mult:	Multiplier for scaled math conversion
-+ * @shift:	Shift value for scaled math conversion
-+ * @xtime_nsec: Shifted (fractional) nano seconds offset for readout
-+ * @base:	(nanoseconds) base time for readout
-+ */
-+struct ktime_conv {
-+	u64			cycle_last;
-+	u32			mult;
-+	u32			shift;
-+	u64			xtime_nsec;
-+	u64			base;
-+};
-+
- /**
-  * struct system_device_crosststamp - system/device cross-timestamp
-  *				      (synchronized capture)
-@@ -297,6 +312,9 @@ extern void ktime_get_snapshot(struct system_time_snapshot *systime_snapshot);
- /* NMI safe mono/boot/realtime timestamps */
- extern void ktime_get_fast_timestamps(struct ktime_timestamps *snap);
+ 	union {
+ 		__u32		wakeup_events;	  /* wakeup every n events */
+@@ -615,7 +616,8 @@ struct perf_event_mmap_page {
+ 				cap_user_time		: 1, /* The time_{shift,mult,offset} fields are used */
+ 				cap_user_time_zero	: 1, /* The time_zero field is used */
+ 				cap_user_time_short	: 1, /* the time_{cycle,mask} fields are used */
+-				cap_____res		: 58;
++				cap_user_time_mono_raw  : 1, /* The time_mono_* fields are used */
++				cap_____res		: 57;
+ 		};
+ 	};
  
-+/* NMI safe mono raw conv information */
-+extern void ktime_get_fast_mono_raw_conv(struct ktime_conv *conv);
-+
- /*
-  * Persistent clock related interfaces
-  */
-diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
-index 5579ead449f2..a202b7a0a249 100644
---- a/kernel/time/timekeeping.c
-+++ b/kernel/time/timekeeping.c
-@@ -505,6 +505,30 @@ u64 notrace ktime_get_raw_fast_ns(void)
- }
- EXPORT_SYMBOL_GPL(ktime_get_raw_fast_ns);
+@@ -692,11 +694,24 @@ struct perf_event_mmap_page {
+ 	__u64	time_cycles;
+ 	__u64	time_mask;
  
-+/**
-+ * ktime_get_fast_mono_raw_conv - NMI safe access to get the conversion
-+ *				  information of clock monotonic raw
-+ *
-+ * The conversion information is not affected by NTP/PTP correction.
-+ */
-+void ktime_get_fast_mono_raw_conv(struct ktime_conv *conv)
-+{
-+	struct tk_fast *tkf = &tk_fast_raw;
-+	struct tk_read_base *tkr;
-+	unsigned int seq;
++	/*
++	 * If cap_user_time_mono_raw, the monotonic raw clock can be calculated
++	 * from the hardware clock (e.g. TSC) 'cyc'.
++	 *
++	 * mono_raw = base + ((cyc - last) * mult + nsec) >> shift
++	 *
++	 */
++	__u64	time_mono_last;
++	__u32	time_mono_mult;
++	__u32	time_mono_shift;
++	__u64	time_mono_nsec;
++	__u64	time_mono_base;
 +
-+	do {
-+		seq = raw_read_seqcount_latch(&tkf->seq);
-+		tkr = tkf->base + (seq & 0x01);
-+		conv->cycle_last = tkr->cycle_last;
-+		conv->mult = tkr->mult;
-+		conv->shift = tkr->shift;
-+		conv->xtime_nsec = tkr->xtime_nsec;
-+		conv->base = tkr->base;
-+	} while (read_seqcount_latch_retry(&tkf->seq, seq));
-+}
-+EXPORT_SYMBOL_GPL(ktime_get_fast_mono_raw_conv);
-+
- /**
-  * ktime_get_boot_fast_ns - NMI safe and fast access to boot clock.
-  *
+ 		/*
+ 		 * Hole for extension of the self monitor capabilities
+ 		 */
+ 
+-	__u8	__reserved[116*8];	/* align to 1k. */
++	__u8	__reserved[112*8];	/* align to 1k. */
+ 
+ 	/*
+ 	 * Control data for the mmap() data buffer.
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 380476a934e8..f062cce2dafc 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -12135,6 +12135,13 @@ static int perf_copy_attr(struct perf_event_attr __user *uattr,
+ 	if (attr->sigtrap && !attr->remove_on_exec)
+ 		return -EINVAL;
+ 
++	if (attr->use_clockid) {
++		/*
++		 * Only support post-processing for the monotonic raw clock
++		 */
++		if (attr->hw_time && (attr->clockid != CLOCK_MONOTONIC_RAW))
++			return -EINVAL;
++	}
+ out:
+ 	return ret;
+ 
 -- 
 2.35.1
 
