@@ -2,195 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 647BA694E67
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:50:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB2A694E68
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbjBMRu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 12:50:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35010 "EHLO
+        id S229801AbjBMRuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 12:50:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbjBMRuR (ORCPT
+        with ESMTP id S229688AbjBMRuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 12:50:17 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C561F933
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:50:09 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id oa11-20020a17090b1bcb00b002341a2656e5so1462004pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:50:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M8NVw51hJujJ9w6ww4tXYpEn/8Vq7ox+Z1FASgY/bLU=;
-        b=Bd5fqu4Y/EyTummo2fVWma8W7zSH94KPXwjC+My/qv4w4lRqc2bTM0aeCnwo6RxXqx
-         Qr+kuCxm+ap5+tWeT8OpIKQQTipytFb7/VmEUWg7rfnNZKpqDqQEHV5nGn8XO1FGTIk+
-         Nv4k3G3cJKiR3Q7ObE4YCnakTxt7A81IvBvGWk1/KSvFfHtxEp6CPMyvhBkOKyOuYFvK
-         lTno7aCndNECZC+kSDNG8MR1VstW/BurZNGlpBM46+040Vmc0bbLtTufBBF0wZGWZc+x
-         zD2cd1bgxeINi8EXEJNHjiAb5HnZPX/jb5phCXk8ACCb2hEiYZweiC4Kbi2OEhcQmVTc
-         i1ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M8NVw51hJujJ9w6ww4tXYpEn/8Vq7ox+Z1FASgY/bLU=;
-        b=PaURErGfWrDkpsEG6WIeHcB6RmYe6SLfK4WOcYUzIVNSl/uBxLHo+zg0molmgoHs4N
-         kpYNomAwxxUrTgbEc31JHP/nibEMV7/fRrGzuJxs4WH2gr4R9eBwqCU/N+M7Tr3SX1pv
-         jJYP5FfBuCsu/KSvYRGMlFTzqCVzg+l+WUDc4z5hL++96tVV28G5iEZk1RRjecNAcLin
-         oUQURs4Hf7//6uZhJ+GRs0kirE+BsrQmWvLm9iO6sWcNSHmdzjxcsGeRfdN1vXqEbQVD
-         mBnHrPtXVQ9/RDhn0B9zWw1X2braxQNjrkDX7HFdZjDxip7tkV7elkSIUZQe7OT4qKkd
-         K5JA==
-X-Gm-Message-State: AO0yUKVT4hWMgWBNK/6aCJRzlFzDnNyV4EzpdZjcu28phuqvWBaDoK9o
-        rOm6dpbzgQayFOUAShUpUc2g+w==
-X-Google-Smtp-Source: AK7set9lsbgjl5TgXfCPbU1vvfIDzkRjBJr9zNN0yZX/rOiaR87z3+Pi1tvaUwDAPm+VBgOq2lq3rA==
-X-Received: by 2002:a17:90b:4a0b:b0:233:9fff:888e with SMTP id kk11-20020a17090b4a0b00b002339fff888emr13858074pjb.39.1676310609341;
-        Mon, 13 Feb 2023 09:50:09 -0800 (PST)
-Received: from p14s ([2604:3d09:148c:c800:8b5:7925:cf2a:8bac])
-        by smtp.gmail.com with ESMTPSA id i61-20020a17090a3dc300b00231224439c1sm4290656pjc.27.2023.02.13.09.50.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 09:50:08 -0800 (PST)
-Date:   Mon, 13 Feb 2023 10:50:06 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Iuliana Prodan <iuliana.prodan@nxp.com>
-Cc:     Peng Fan <peng.fan@nxp.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "andersson@kernel.org" <andersson@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "arnaud.pouliquen@foss.st.com" <arnaud.pouliquen@foss.st.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V3 0/6] remoteproc: imx_rproc: support firmware in DDR
-Message-ID: <20230213175006.GA310433@p14s>
-References: <20230209063816.2782206-1-peng.fan@oss.nxp.com>
- <2c4997fa-973c-dee4-9b26-6b38a1ca4540@nxp.com>
- <DU0PR04MB9417A9B81B86FAC0A477063D88DC9@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <73d34c86-7c31-6530-0915-aa470af5d9ca@nxp.com>
+        Mon, 13 Feb 2023 12:50:52 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB2A14E9C
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:50:47 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.179.179])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CAB226600357;
+        Mon, 13 Feb 2023 17:50:43 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676310645;
+        bh=xeODPhDIfFUyaS2Gon5ykxRQvpUcZt1AbKfG1EsXaCE=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=jMSob38MBuOfwjSoUmGu4kU2zAju9fanwAIlMOujFuggRlI6nkVfcrQIl+nHLx7tY
+         PilEa5cLKzGgYuakyeiC9tQKGCw5ui2j0pQZ6V0MiwZ/7u9kT7tr7xxZiP4N2rLbyj
+         R4oO1PpxyilWHV1ziQZR33f1HfuP/eJX5iEoFno8qhHJn9mj+gamdUxpEucFem4/Hm
+         vluSpuDKNmXTDU0gNhlywP6DM74eKIqDXgWJJcRMikfEzOp8ft+/Pe2YfVAE3Frk5o
+         ot79JUNS+okr6DJNQnKjHerNTlxN0D9sO3FJDXvg7ttRTpDxugM6qhPCKyhA56bkFa
+         zTtR/wfs00GrQ==
+Message-ID: <9f0278d7-54f1-960e-ffdf-eeb2572ff6d1@collabora.com>
+Date:   Mon, 13 Feb 2023 22:50:39 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <73d34c86-7c31-6530-0915-aa470af5d9ca@nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>, david@redhat.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kernel@collabora.com, Paul Gofman <pgofman@codeweavers.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] mm/userfaultfd: Support WP on multiple VMAs
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+References: <20230213163124.2850816-1-usama.anjum@collabora.com>
+ <Y+prUgFQqmytC/5M@x1n>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <Y+prUgFQqmytC/5M@x1n>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 12:15:59PM +0200, Iuliana Prodan wrote:
-> On 2/12/2023 9:43 AM, Peng Fan wrote:
-> > Hi Iuliana,
-> > 
-> > > Subject: Re: [PATCH V3 0/6] remoteproc: imx_rproc: support firmware in
-> > > DDR
-> > > 
-> > > 
-> > > On 2/9/2023 8:38 AM, Peng Fan (OSS) wrote:
-> > > > From: Peng Fan <peng.fan@nxp.com>
-> > > > 
-> > > > V3:
-> > > > 
-> > > >    Daniel, Iuliana
-> > > > 
-> > > >      Please help review this patchset per Mathieu's comments.
-> > > > 
-> > > >    Thanks,
-> > > >    Peng.
-> > > > 
-> > > >    Move patch 3 in v2 to 1st patch in v3 and add Fixes tag Per Daniel
-> > > >    IMX_RPROC_ANY in patch 3 Per Mathieu
-> > > >    Update comment and commit log in patch 5, 6.
-> > > > 
-> > > >    NXP SDK provides ".interrupts" section, but I am not sure how others
-> > > >    build the firmware. So I still keep patch 6 as v2, return bootaddr
-> > > >    if there is no ".interrupts" section.
-> > > > 
-> > > > V2:
-> > > >    patch 4 is introduced for sparse check warning fix
-> > > > 
-> > > > This pachset is to support i.MX8M and i.MX93 Cortex-M core firmware
-> > > > could be in DDR, not just the default TCM.
-> > > > 
-> > > > i.MX8M needs stack/pc value be stored in TCML entry address[0,4], the
-> > > > initial value could be got from firmware first section ".interrupts".
-> > > > i.MX93 is a bit different, it just needs the address of .interrupts
-> > > > section. NXP SDK always has .interrupts section.
-> > > > 
-> > > > So first we need find the .interrupts section from firmware, so patch
-> > > > 1 is to reuse the code of find_table to introduce a new API
-> > > > rproc_elf_find_shdr to find shdr, the it could reused by i.MX driver.
-> > > > 
-> > > > Patch 2 is introduce devtype for i.MX8M/93
-> > > > 
-> > > > Although patch 3 is correct the mapping, but this area was never used
-> > > > by NXP SW team, we directly use the DDR region, not the alias region.
-> > > > Since this patchset is first to support firmware in DDR, mark this
-> > > > patch as a fix does not make much sense.
-> > > > 
-> > > > patch 4 and 5 is support i.MX8M/93 firmware in DDR with parsing
-> > > > .interrupts section. Detailed information in each patch commit message.
-> > > > 
-> > > > Patches were tested on i.MX8MQ-EVK i.MX8MP-EVK i.MX93-11x11-EVK
-> > > If one can build their firmware as they want, then the .interrupt section can
-> > > also be called differently.
-> > > I don't think is a good idea to base all your implementation on this
-> > > assumption.
-> > > 
-> > > It's clear there's a limitation when linking firmware in DDR, so this should be
-> > > well documented so one can compile their firmware and put the needed
-> > > section (interrupt as we call it in NXP SDK) always in TCML - independently
-> > > where the other section go.
-> > Ok, so .interrupt section should be a must in elf file if I understand correctly.
-> > 
-> > I could add a check in V4 that if .interrupt section is not there, driver will report
-> > failure.
-> > 
-> > How do you think?
+On 2/13/23 9:54 PM, Peter Xu wrote:
+> On Mon, Feb 13, 2023 at 09:31:23PM +0500, Muhammad Usama Anjum wrote:
+>> mwriteprotect_range() errors out if [start, end) doesn't fall in one
+>> VMA. We are facing a use case where multiple VMAs are present in one
+>> range of interest. For example, the following pseudocode reproduces the
+>> error which we are trying to fix:
+>>
+>> - Allocate memory of size 16 pages with PROT_NONE with mmap
+>> - Register userfaultfd
+>> - Change protection of the first half (1 to 8 pages) of memory to
+>>   PROT_READ | PROT_WRITE. This breaks the memory area in two VMAs.
+>> - Now UFFDIO_WRITEPROTECT_MODE_WP on the whole memory of 16 pages errors
+>>   out.
+>>
+>> This is a simple use case where user may or may not know if the memory
+>> area has been divided into multiple VMAs.
+>>
+>> Reported-by: Paul Gofman <pgofman@codeweavers.com>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>> Changes since v1:
+>> - Correct the start and ending values passed to uffd_wp_range()
+>> ---
+>>  mm/userfaultfd.c | 38 ++++++++++++++++++++++----------------
+>>  1 file changed, 22 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+>> index 65ad172add27..bccea08005a8 100644
+>> --- a/mm/userfaultfd.c
+>> +++ b/mm/userfaultfd.c
+>> @@ -738,9 +738,12 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
+>>  			unsigned long len, bool enable_wp,
+>>  			atomic_t *mmap_changing)
+>>  {
+>> +	unsigned long end = start + len;
+>> +	unsigned long _start, _end;
+>>  	struct vm_area_struct *dst_vma;
+>>  	unsigned long page_mask;
+>>  	int err;
 > 
-> Peng, I stand by my opinion that the limitation of linking firmware in DDR
-> should be documented in an Application Note, or maybe there are other
-> documents where how to use imx_rproc is explained.
-> 
-> The implementation based on the .interrupt section is not robust.
-> Maybe a user linked his firmware correctly in TCML, but the section is not
-> called .interrupt so the firmware loading will work.
-> 
-> So, instead of using the section name, you should use the address.
-
-Can you be more specific on the above?
+> I think this needs to be initialized or it can return anything when range
+> not mapped.
+It is being initialized to -EAGAIN already. It is not visible in this patch.
 
 > 
-> First, check whether there is a section linked to TCML.
-> If there is none, check for section name - as you did.
-> If there is no section called .interrupt, give an error message.
-
-We have two ways of booting, one that puts the firmware image in the TCML and
-another in RAM.  Based on the processor type, the first 8 bytes of the TCML need
-to include the address for the stack and PC value.
-
-I think the first thing to do is have two different firmware images, one for
-i.MX8M and another one for i.MX93.  That should greatly simplify things.
-
-Second, there should always be a segment that adds the right information to the
-TMCL.  That segment doesn't need a name, it simply have to be part of the
-segments that are copied to memory (any kind of memory) so that function
-rproc_elf_load_segments() can do its job. 
-
-That pushes the complexity to the tool that generates the firmware image,
-exactly where it should be.
-
-This is how I think we should solve this problem based on the very limited
-information provided with this patchset.  Please let me know if I missed
-something and we'll go from there.    
+>> +	VMA_ITERATOR(vmi, dst_mm, start);
+>>  
+>>  	/*
+>>  	 * Sanitize the command parameters:
+>> @@ -762,26 +765,29 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
+>>  	if (mmap_changing && atomic_read(mmap_changing))
+>>  		goto out_unlock;
+>>  
+>> -	err = -ENOENT;
+>> -	dst_vma = find_dst_vma(dst_mm, start, len);
+>> +	for_each_vma_range(vmi, dst_vma, end) {
+>> +		err = -ENOENT;
+>>  
+>> -	if (!dst_vma)
+>> -		goto out_unlock;
+>> -	if (!userfaultfd_wp(dst_vma))
+>> -		goto out_unlock;
+>> -	if (!vma_can_userfault(dst_vma, dst_vma->vm_flags))
+>> -		goto out_unlock;
+>> +		if (!dst_vma->vm_userfaultfd_ctx.ctx)
+>> +			break;
+>> +		if (!userfaultfd_wp(dst_vma))
+>> +			break;
+>> +		if (!vma_can_userfault(dst_vma, dst_vma->vm_flags))
+>> +			break;
+>>  
+>> -	if (is_vm_hugetlb_page(dst_vma)) {
+>> -		err = -EINVAL;
+>> -		page_mask = vma_kernel_pagesize(dst_vma) - 1;
+>> -		if ((start & page_mask) || (len & page_mask))
+>> -			goto out_unlock;
+>> -	}
+>> +		if (is_vm_hugetlb_page(dst_vma)) {
+>> +			err = -EINVAL;
+>> +			page_mask = vma_kernel_pagesize(dst_vma) - 1;
+>> +			if ((start & page_mask) || (len & page_mask))
+>> +				break;
+>> +		}
+>>  
+>> -	uffd_wp_range(dst_mm, dst_vma, start, len, enable_wp);
+>> +		_start = (dst_vma->vm_start > start) ? dst_vma->vm_start : start;
+>> +		_end = (dst_vma->vm_end < end) ? dst_vma->vm_end : end;
+>>  
+>> -	err = 0;
+>> +		uffd_wp_range(dst_mm, dst_vma, _start, _end - _start, enable_wp);
+>> +		err = 0;
+>> +	}
+>>  out_unlock:
+>>  	mmap_read_unlock(dst_mm);
+>>  	return err;
+> 
+> This whole patch also changes the abi, so I'm worried whether there can be
+> app that relies on the existing behavior.
+Even if a app is dependent on it, this change would just don't return error
+if there are multiple VMAs under the hood and handle them correctly. Most
+apps wouldn't care about VMAs anyways. I don't know if there would be any
+drastic behavior change, other than the behavior becoming nicer.
 
 > 
-> For all the above options please add comments in code, explaining each step.
+> Is this for the new pagemap effort?  Can this just be done in the new
+> interface rather than changing the old?
+We found this bug while working on pagemap patches. It is already being
+handled in the new interface. We just thought that this use case can happen
+pretty easily and unknowingly. So the support should be added.
+
+Also mwriteprotect_range() gives a pretty straight forward way to WP or
+un-WP a range. Async WP can be used in coordination with pagemap file
+(PM_UFFD_WP flag in PTE) as well. There may be use cases for it. On another
+note, I don't see any use cases of WP async and PM_UFFD_WP flag as
+!PM_UFFD_WP flag doesn't give direct information if the page is written for
+!present pages.
+
 > 
+> Side note: in your other pagemap series, you can optimize "WP_ENGAGE &&
+> !GET" to not do generic pgtable walk at all, but use what it does in this
+> patch for the initial round or wr-protect.
+Yeah, it is implemented with some optimizations.
+
+> 
+> Thanks,
+> 
+
+-- 
+BR,
+Muhammad Usama Anjum
