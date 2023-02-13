@@ -2,66 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13F1694D17
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F1B694D1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjBMQnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 11:43:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36056 "EHLO
+        id S231204AbjBMQno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 11:43:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjBMQm7 (ORCPT
+        with ESMTP id S229484AbjBMQnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 11:42:59 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB53C7EF9;
-        Mon, 13 Feb 2023 08:42:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1676306575; bh=kMuFaY3wQzBvhpxqMdlvLXbloSKJ7H/uly0U7x/xmHg=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=Vko3gVJeHltQ+9HVqTLY7KnKTl/bZyfyRBHLFdWkRQuXmYGcmikg1451MmFpnF09j
-         CKOwRiUVM5Y044v6gcgqBERYs68Nhvx+vVNrtalfAoxjfOvRKFZiAdu9FNRsyUKT8d
-         AkOnbl+33Z84cbJ1rcLfMXu14LrlDbK1ukbAPnZ1Weuzg6mMcXXUYCk4xT+ieDIxlj
-         o43oZRLHvRu7qEK2RPxKbGNckk2oRha/CMy4rlunF0wyIJ1nZPn00OqdmmajDDXyW5
-         uM0mJ49KlnV3XUTNq1YgWMKeVBBVfyTERy8jR40n0Lj25k+BqSM6FBT/BsdC0RBYsr
-         3gbcZaeEjB3Kg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.100.20] ([46.142.32.8]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M3lY1-1pRL4827Wt-000waY; Mon, 13
- Feb 2023 17:42:55 +0100
-Message-ID: <1dec97a3-b674-500c-bba0-fd158268db27@gmx.de>
-Date:   Mon, 13 Feb 2023 17:42:55 +0100
+        Mon, 13 Feb 2023 11:43:43 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC807EF9;
+        Mon, 13 Feb 2023 08:43:41 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id j4so4654117iog.8;
+        Mon, 13 Feb 2023 08:43:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z/cV7+uN5DOlTqY06NHqC0N/yUfZmJu1nhPWEtUUSQU=;
+        b=R9/tuAfwfNdxMtocyIKsCn3o6dgkMH//wp6vIGcTnj+dT9S+haQq5JDRlzdbSPeOlY
+         OvsKg3cu410tPtU+IXwHMEJ+mNrS0gQvP4cLfJ3Y9GPorH9X5Np0eZf7K4jhzujERVJp
+         fwPjnKcg9B7NEHR8R6ZQnCu+nM9hVuDBdRZXIs/FBLRUS7sBKBSFbiXr4bYVT8svM8yp
+         sm1JQQf8Xk0a8qyuIMQSBDSmKS6aDjzbeRlKAwLcQ/28s4Q7f2pRb/9t8/2zE5iMDKZ+
+         4lRUHxKRKQalHQgkNUCD1dtu1+EvKYsSgYcIlsX0tX2KNfSiKSCVFAwSZsp/tdbKQUdU
+         DWSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=z/cV7+uN5DOlTqY06NHqC0N/yUfZmJu1nhPWEtUUSQU=;
+        b=E6tl2gPlnqqUMa93b2fArZkDMFmZ7lbUytdjtoSaDifXeE1KESeEPSIPUSTC3kT0mS
+         kPBDWrlAnE2UstXvtwyz9fRnG1zflZQCzWWf4v3Roe0SuxGZ7GQ/xZl534HGlrtCYfCT
+         IOAqvmIRokCzkciSoTYFuZ87GrlRCAIhP87bifW/ZFRuUzvtVir8Z5KV6VfetcLgih3x
+         6khQSpiyNYV+Wl2e29/gwgDtcM/Kic9nUOakkSSJlZ7IScLnLOkpXF4kd1szwG3kmc+S
+         wbpMVAL/Cx4HF2w+7DbovKomdLYxflnG4bWHEfV3xkzUlkVNUBYk0B8MEgrFBbQoqvJg
+         qdlw==
+X-Gm-Message-State: AO0yUKVkjDNFw4jVmm1cSkDSHHKxCogAmu+w7Pw5QwKadXDOqQ1HQR8R
+        PEFM2HLCBg+O4tfvBauWsNc=
+X-Google-Smtp-Source: AK7set92g8u0mkrant/iz85vjRdrLOyeBFys9VLdxblB3o4cFam52zSGpnDTFrnTCoRhCqiJWPXbow==
+X-Received: by 2002:a05:6602:3429:b0:73a:6c75:5a85 with SMTP id n41-20020a056602342900b0073a6c755a85mr11375804ioz.0.1676306621158;
+        Mon, 13 Feb 2023 08:43:41 -0800 (PST)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id h18-20020a02c732000000b00363d6918540sm4033880jao.171.2023.02.13.08.43.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 08:43:40 -0800 (PST)
+Date:   Mon, 13 Feb 2023 18:43:34 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Steven Price <steven.price@arm.com>
+Cc:     kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Joey Gouly <joey.gouly@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Fuad Tabba <tabba@google.com>, linux-coco@lists.linux.dev
+Subject: Re: [RFC PATCH 03/28] arm64: RME: Add wrappers for RMI calls
+Message-ID: <20230213184334.00007111@gmail.com>
+In-Reply-To: <20230127112932.38045-4-steven.price@arm.com>
+References: <20230127112248.136810-1-suzuki.poulose@arm.com>
+        <20230127112932.38045-1-steven.price@arm.com>
+        <20230127112932.38045-4-steven.price@arm.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE
-Subject: Re: [PATCH 6.1 000/114] 6.1.12-rc1 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:BQQlCv/MOUewkIZCKxtTSCqSTN6AWu879hvR//IPqsi2vauHNEn
- FIo0w349FRc5DqirBtzGUXn6CCAve3rGC9uZn3YPC4kfF0jGv6dwlw43nQXNV5629YIdXjC
- npTWx1pkm8Q556njruZiH0gP191a66336qCK87wRTUMOA7fqf2VST90o+6SP6XQP2Li+RHG
- mGbmHoRmFAi+21lOYHUqQ==
-UI-OutboundReport: notjunk:1;M01:P0:HL3Gt0LWNfA=;fWQpDRCOZlIErWM6spY9tCZAt8G
- MQwyGolTyrgsL6/ZzVLJihT45sqeBHbD/9FSWNLHoJmNlCUMD4U6PiUHexy4gHP4XvRDx/Y97
- +ge+smXJun11Y3DSU/goOIMer/tljO7mOuVN8KGQBhWMWAQOKe/+592ysuMD/K1zALWqID9jZ
- tDObv2eveGN2/X9auKm4kR172P9fYM10L4uA+sCe/eYJP6Ety6P993SbOKtGzSjlzbGMn+y2k
- I62YZcVZ5krtRdqke2PudyEVHDFdLfu+1cR0f6WvaYiT8jSBjHfLSM8vcwVu2TUHv+AbZqm79
- Z/BPFoD3EPkwVWgPkCoA5xg0TuDmyLEEHLkpkhYCyVsiusOGV9omcz/6JDpGD8a7lRbbDfAJO
- +rg2dqgjaFMjJSLOKvYoojlfw4zkxRCOqL/K2UJVjfBGODoTXbN01Uu8WjYjB95o7ZvgMvMs4
- qEsEoRMheiUi4ZXxOnC9A8e91oA+/3Flqg8NCX6qGY9f7FamFWdIdLEWa4wHQo/5JhlsbSTqH
- ONci3X92iTFXYTY+V5CTe/4ciBAU4knHUbm4BFgV5zJ0FqCEcwjePtSvD2xX6/3QQkeFK+aFY
- u0AqdcKQnuteV6yvj5x4b2t00ReQWFDfLSb5pmvlDZfwRxn2ang036VTkFAtdOkjY2HWRDZHG
- CpWJhf1ohwmpxZZzn4i5S1aiWYtwkH+oJ5cC/aMkiWZsKyTiJ9f8rH569l8ph2Ie67vmvzljO
- SMuVnMKvC+jwjQJkbgdyXiGsQILDCjHa4hj+3GNPKfKLTESu/mWFMQ1fThR2M6UiMFHDJpu0d
- kSowjpTGoY9tjSTSaWfLXGMJZOBYif/0sF+pmweNGoz/DpluIJgSINtSI9/FMZLnB8sX2VELp
- 39ldAfy5Awv52eNcquUXUvYjdjhU+1PP9dbLlx1J++AmbhbFrf7DfZylLuA2K4H5SBjCW46FI
- 8r03fg==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,14 +85,286 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
+On Fri, 27 Jan 2023 11:29:07 +0000
+Steven Price <steven.price@arm.com> wrote:
 
-6.1.12-rc1
+> The wrappers make the call sites easier to read and deal with the
+> boiler plate of handling the error codes from the RMM.
+> 
+> Signed-off-by: Steven Price <steven.price@arm.com>
+> ---
+>  arch/arm64/include/asm/rmi_cmds.h | 259 ++++++++++++++++++++++++++++++
+>  1 file changed, 259 insertions(+)
+>  create mode 100644 arch/arm64/include/asm/rmi_cmds.h
+> 
+> diff --git a/arch/arm64/include/asm/rmi_cmds.h b/arch/arm64/include/asm/rmi_cmds.h
+> new file mode 100644
+> index 000000000000..d5468ee46f35
+> --- /dev/null
+> +++ b/arch/arm64/include/asm/rmi_cmds.h
+> @@ -0,0 +1,259 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2023 ARM Ltd.
+> + */
+> +
+> +#ifndef __ASM_RMI_CMDS_H
+> +#define __ASM_RMI_CMDS_H
+> +
+> +#include <linux/arm-smccc.h>
+> +
+> +#include <asm/rmi_smc.h>
+> +
+> +struct rtt_entry {
+> +	unsigned long walk_level;
+> +	unsigned long desc;
+> +	int state;
+> +	bool ripas;
+> +};
+> +
 
-compiles, boots and runs here on x86_64
-(Intel i5-11400, Fedora 37)
+It would be nice to have some information of the follwoing wrappers. E.g.
+meaning of the return value. They will be quite helpful in the later patch
+review.
 
-Thanks
-
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
+> +static inline int rmi_data_create(unsigned long data, unsigned long rd,
+> +				  unsigned long map_addr, unsigned long src,
+> +				  unsigned long flags)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_DATA_CREATE, data, rd, map_addr, src,
+> +			     flags, &res);
+> +
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_data_create_unknown(unsigned long data,
+> +					  unsigned long rd,
+> +					  unsigned long map_addr)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_DATA_CREATE_UNKNOWN, data, rd, map_addr,
+> +			     &res);
+> +
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_data_destroy(unsigned long rd, unsigned long map_addr)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_DATA_DESTROY, rd, map_addr, &res);
+> +
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_features(unsigned long index, unsigned long *out)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_FEATURES, index, &res);
+> +
+> +	*out = res.a1;
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_granule_delegate(unsigned long phys)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_GRANULE_DELEGATE, phys, &res);
+> +
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_granule_undelegate(unsigned long phys)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_GRANULE_UNDELEGATE, phys, &res);
+> +
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_psci_complete(unsigned long calling_rec,
+> +				    unsigned long target_rec)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_PSCI_COMPLETE, calling_rec, target_rec,
+> +			     &res);
+> +
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_realm_activate(unsigned long rd)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_REALM_ACTIVATE, rd, &res);
+> +
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_realm_create(unsigned long rd, unsigned long params_ptr)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_REALM_CREATE, rd, params_ptr, &res);
+> +
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_realm_destroy(unsigned long rd)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_REALM_DESTROY, rd, &res);
+> +
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_rec_aux_count(unsigned long rd, unsigned long *aux_count)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_REC_AUX_COUNT, rd, &res);
+> +
+> +	*aux_count = res.a1;
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_rec_create(unsigned long rec, unsigned long rd,
+> +				 unsigned long params_ptr)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_REC_CREATE, rec, rd, params_ptr, &res);
+> +
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_rec_destroy(unsigned long rec)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_REC_DESTROY, rec, &res);
+> +
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_rec_enter(unsigned long rec, unsigned long run_ptr)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_REC_ENTER, rec, run_ptr, &res);
+> +
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_rtt_create(unsigned long rtt, unsigned long rd,
+> +				 unsigned long map_addr, unsigned long level)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_RTT_CREATE, rtt, rd, map_addr, level,
+> +			     &res);
+> +
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_rtt_destroy(unsigned long rtt, unsigned long rd,
+> +				  unsigned long map_addr, unsigned long level)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_RTT_DESTROY, rtt, rd, map_addr, level,
+> +			     &res);
+> +
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_rtt_fold(unsigned long rtt, unsigned long rd,
+> +			       unsigned long map_addr, unsigned long level)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_RTT_FOLD, rtt, rd, map_addr, level, &res);
+> +
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_rtt_init_ripas(unsigned long rd, unsigned long map_addr,
+> +				     unsigned long level)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_RTT_INIT_RIPAS, rd, map_addr, level, &res);
+> +
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_rtt_map_unprotected(unsigned long rd,
+> +					  unsigned long map_addr,
+> +					  unsigned long level,
+> +					  unsigned long desc)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_RTT_MAP_UNPROTECTED, rd, map_addr, level,
+> +			     desc, &res);
+> +
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_rtt_read_entry(unsigned long rd, unsigned long map_addr,
+> +				     unsigned long level, struct rtt_entry *rtt)
+> +{
+> +	struct arm_smccc_1_2_regs regs = {
+> +		SMC_RMI_RTT_READ_ENTRY,
+> +		rd, map_addr, level
+> +	};
+> +
+> +	arm_smccc_1_2_smc(&regs, &regs);
+> +
+> +	rtt->walk_level = regs.a1;
+> +	rtt->state = regs.a2 & 0xFF;
+> +	rtt->desc = regs.a3;
+> +	rtt->ripas = regs.a4 & 1;
+> +
+> +	return regs.a0;
+> +}
+> +
+> +static inline int rmi_rtt_set_ripas(unsigned long rd, unsigned long rec,
+> +				    unsigned long map_addr, unsigned long level,
+> +				    unsigned long ripas)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_RTT_SET_RIPAS, rd, rec, map_addr, level,
+> +			     ripas, &res);
+> +
+> +	return res.a0;
+> +}
+> +
+> +static inline int rmi_rtt_unmap_unprotected(unsigned long rd,
+> +					    unsigned long map_addr,
+> +					    unsigned long level)
+> +{
+> +	struct arm_smccc_res res;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_RTT_UNMAP_UNPROTECTED, rd, map_addr,
+> +			     level, &res);
+> +
+> +	return res.a0;
+> +}
+> +
+> +static inline phys_addr_t rmi_rtt_get_phys(struct rtt_entry *rtt)
+> +{
+> +	return rtt->desc & GENMASK(47, 12);
+> +}
+> +
+> +#endif
 
