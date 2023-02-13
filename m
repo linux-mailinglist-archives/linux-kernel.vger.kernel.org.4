@@ -2,161 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64CFA694580
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD4B694562
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbjBMML7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 07:11:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
+        id S231402AbjBMMKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 07:10:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbjBMMLH (ORCPT
+        with ESMTP id S231179AbjBMMK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 07:11:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0692C35AE
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:10:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676290206;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3mEYzxx/bkDFLt7byV5MhD22WdETXrhwLYc+g6bKb6Q=;
-        b=RudnBp4Y6Y9vW4gYLAnxOgdLCQw011jRCPKyC+BBTC2fTXiiy95J5a6N+G4LtKVqCGjLYC
-        YNoKnNzsh3w4i8rQ0B5gxQyVO4LvY68IgHFvlVafM49tvQQRkickjsCVKfGl4wUn1T/IJw
-        wCrjqRiE4mW+qQ4Xjcr5J/DiFSf7A+A=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-374-vVG_VysvPQq8abdpHdPnjw-1; Mon, 13 Feb 2023 07:09:57 -0500
-X-MC-Unique: vVG_VysvPQq8abdpHdPnjw-1
-Received: by mail-ej1-f72.google.com with SMTP id qn8-20020a170907210800b0088eda544bd6so7551043ejb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:09:57 -0800 (PST)
+        Mon, 13 Feb 2023 07:10:29 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A0C1A947
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:10:19 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id lu11so31315531ejb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:10:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sLkh67ooWyVObn1J2I1Qu7dXdNbX+Cd0UoL9axKT34o=;
+        b=p8WGCP9v5yIWbqJlLQRmMt4chiH79pIdn/7AB+4u36M/TTmmzVK1ZVLXeajFDjlSHT
+         cOO6it7vveZEhpkGjAAqnz+csbNPwy1aG25sAbzN4xBu1iIBCSLIb+fADM842f8D4gU1
+         vQ4YjvIWiUj59NG7bCE+aUwx3nanN3FFInJXJjsDakUUBBnZAw+6/B6KYznfiPE7vDgR
+         x/+Qq/jef9admT0KChEbH1aLvyLMslwfGF3JUJ/gV2UvFeChYwTlEswgOF0tTQtk4ig4
+         SmoFfdXxu1QehBVPm4G9hbjnzNCyjRlo/EIr6YaxVp4mWcB6aW2elIkYazjylBN6HoKN
+         8Xrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3mEYzxx/bkDFLt7byV5MhD22WdETXrhwLYc+g6bKb6Q=;
-        b=LC1Nt3QGZaJ+oX0hUOxt6WNMZRF7Dg26wOvI0jsmFtPm1ZoSxOD4uQj1qNBsqsz2ut
-         LF50Vojsf/+woZyBUCffRCzDolbzbtUK4xB383l74TPd6xO1khdD8zgo7cL66CS5xqY2
-         BckATanxBbF/ZkL5k7Uv7XU9aRKWDf30t67QMFcMzjkXCrijq8gg1ATUo7p9L9jeqnPX
-         FRkeyJzZc28eVDKMGy2mhMzRJ/6r6eQMc6O5ZDQqGU+hP+UTOZsT+yUFeUz6rqYNA6+I
-         H+4GLjq5CX3pi4vCi6TjyE9wImuHmRgLJqqzXBIqPqUhorJ7LGmarG4naNIZ05b9w+pr
-         7gbA==
-X-Gm-Message-State: AO0yUKV7bBVUUQficmgyjWAFwaM1R9RyCu7lYRzuTdbHaCILw1V4qu5a
-        qgjqmCLgWOL43fCvFtcKDdqGEqJ7UiKROC1HX59/9tD1vwV3ACnpwNTAF6+4/gt/ckl0q3AczMO
-        hqpCTGoZxOu2HSpDabOJ/+ISy
-X-Received: by 2002:a17:906:1286:b0:886:50d:be8d with SMTP id k6-20020a170906128600b00886050dbe8dmr26816168ejb.13.1676290196340;
-        Mon, 13 Feb 2023 04:09:56 -0800 (PST)
-X-Google-Smtp-Source: AK7set/LVnxEG3I8rnVK7885EnaICcxb+lvhiOf/rZbS+wU3TNmlvfBa8qzgmQnMIPHWTVKERIaRaw==
-X-Received: by 2002:a17:906:1286:b0:886:50d:be8d with SMTP id k6-20020a170906128600b00886050dbe8dmr26816157ejb.13.1676290196155;
-        Mon, 13 Feb 2023 04:09:56 -0800 (PST)
-Received: from redhat.com ([2.52.132.212])
-        by smtp.gmail.com with ESMTPSA id l26-20020a170906079a00b008966488a5f1sm6757478ejc.144.2023.02.13.04.09.53
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sLkh67ooWyVObn1J2I1Qu7dXdNbX+Cd0UoL9axKT34o=;
+        b=kv92onUwi0HIQYjMqfhGvo8ABB8x4XByVbpZb62qZyCrPs5L9O03ehClMAuciXjwvj
+         I/EXkxZ1RpObszBQ0C9NDdhvvljCja02noigCirou+LLrqVavLGD/QrMHhWPSWRW3gMr
+         p7t8u2dUxOLbxMpNwNYZ3x63kGIctUxXW0Lb8PdpHvPCjpTtGRWmR8gHXkcsA0BG1RJ6
+         bIhBboTzKJsSCW6njNcPh5P+JDETy4rx/gtLtiOxAOHPWN8IgWpsdwmtiKRuBuZ++2fm
+         VMRgbteF29FmjfpHWhdiaFLuc2aPIx8x0NMaWMTc45nLaPtdNiDCTgSboQ60PA/tmDio
+         Oeow==
+X-Gm-Message-State: AO0yUKXSHLzAHTHbToXw6k9zLgmdOuIWVMIvMgcwCYoTF3kX+ZLjkdis
+        8RxUwWx4xIbVmQxmdn96VqVMAA==
+X-Google-Smtp-Source: AK7set81z61FZiKoN0s7dy9ixfbbUA4wWNKA2rBI/8l8V7YwRzxhtMm5RnVtHF6TGfXBlSD4ZM0jEA==
+X-Received: by 2002:a17:906:1908:b0:878:5f8e:26c0 with SMTP id a8-20020a170906190800b008785f8e26c0mr17900635eje.7.1676290217679;
+        Mon, 13 Feb 2023 04:10:17 -0800 (PST)
+Received: from localhost.localdomain (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
+        by smtp.gmail.com with ESMTPSA id dt19-20020a170906b79300b0088ed7de4821sm6651586ejb.158.2023.02.13.04.10.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 04:09:55 -0800 (PST)
-Date:   Mon, 13 Feb 2023 07:09:50 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Zheng Wang <zyytlz.wz@163.com>
-Cc:     hackerzheng666@gmail.com, jasowang@redhat.com, pbonzini@redhat.com,
-        stefanha@redhat.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com,
-        virtualization@lists.linux-foundation.org,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        security@kernel.org, alex000young@gmail.com
-Subject: Re: [PATCH v2] scsi: virtio_scsi: Fix poential NULL pointer
- dereference in  virtscsi_rescan_hotunplug
-Message-ID: <20230213070906-mutt-send-email-mst@kernel.org>
-References: <20230202064124.22277-1-zyytlz.wz@163.com>
+        Mon, 13 Feb 2023 04:10:17 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/9] dt-bindings: display/msm: dsi-controller-main: Fix deprecated QCM2290 compatible
+Date:   Mon, 13 Feb 2023 13:10:04 +0100
+Message-Id: <20230213121012.1768296-2-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230213121012.1768296-1-konrad.dybcio@linaro.org>
+References: <20230213121012.1768296-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202064124.22277-1-zyytlz.wz@163.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 02:41:24PM +0800, Zheng Wang wrote:
-> There is no check about the return value of kmalloc in
-> virtscsi_rescan_hotunplug. Add the check to avoid use
-> of null pointer 'inq_result' in case of the failure
-> of kmalloc.
-> 
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> ---
+The qcom, prefix was missed previously. Fix it.
 
-I fixed a typo in subject and tweaked the patch a bit
+Fixes: 0c0f65c6dd44 ("dt-bindings: msm: dsi-controller-main: Add compatible strings for every current SoC")
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ .../devicetree/bindings/display/msm/dsi-controller-main.yaml    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> v2:
-> - add kfree to avoid memory leak
-> ---
->  drivers/scsi/virtio_scsi.c | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
-> index d07d24c06b54..a66d8815d738 100644
-> --- a/drivers/scsi/virtio_scsi.c
-> +++ b/drivers/scsi/virtio_scsi.c
-> @@ -330,7 +330,7 @@ static void virtscsi_handle_param_change(struct virtio_scsi *vscsi,
->  	scsi_device_put(sdev);
->  }
->  
-> -static void virtscsi_rescan_hotunplug(struct virtio_scsi *vscsi)
-> +static int virtscsi_rescan_hotunplug(struct virtio_scsi *vscsi)
->  {
->  	struct scsi_device *sdev;
->  	struct Scsi_Host *shost = virtio_scsi_host(vscsi->vdev);
-> @@ -338,6 +338,11 @@ static void virtscsi_rescan_hotunplug(struct virtio_scsi *vscsi)
->  	int result, inquiry_len, inq_result_len = 256;
->  	char *inq_result = kmalloc(inq_result_len, GFP_KERNEL);
->  
-> +	if (!inq_result) {
-> +		kfree(inq_result);
-> +		return -ENOMEM;
-> +	}
-> +
->  	shost_for_each_device(sdev, shost) {
->  		inquiry_len = sdev->inquiry_len ? sdev->inquiry_len : 36;
->  
-> @@ -366,6 +371,7 @@ static void virtscsi_rescan_hotunplug(struct virtio_scsi *vscsi)
->  	}
->  
->  	kfree(inq_result);
-> +	return 0;
->  }
->  
->  static void virtscsi_handle_event(struct work_struct *work)
-> @@ -374,12 +380,15 @@ static void virtscsi_handle_event(struct work_struct *work)
->  		container_of(work, struct virtio_scsi_event_node, work);
->  	struct virtio_scsi *vscsi = event_node->vscsi;
->  	struct virtio_scsi_event *event = &event_node->event;
-> +	int ret = 0;
->
-
-dropped = 0 here
-  
->  	if (event->event &
->  	    cpu_to_virtio32(vscsi->vdev, VIRTIO_SCSI_T_EVENTS_MISSED)) {
-
-and moved declaration here.
-
->  		event->event &= ~cpu_to_virtio32(vscsi->vdev,
->  						   VIRTIO_SCSI_T_EVENTS_MISSED);
-> -		virtscsi_rescan_hotunplug(vscsi);
-> +		ret = virtscsi_rescan_hotunplug(vscsi);
-> +		if (ret)
-> +			return;
->  		scsi_scan_host(virtio_scsi_host(vscsi->vdev));
->  	}
->  
-> -- 
-> 2.25.1
-> 
-> 
+diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+index e75a3efe4dac..2494817c1bd6 100644
+--- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+@@ -33,7 +33,7 @@ properties:
+           - const: qcom,mdss-dsi-ctrl
+       - items:
+           - enum:
+-              - dsi-ctrl-6g-qcm2290
++              - qcom,dsi-ctrl-6g-qcm2290
+           - const: qcom,mdss-dsi-ctrl
+         deprecated: true
+ 
+-- 
+2.39.1
 
