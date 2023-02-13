@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65188694B50
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:36:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E436694B61
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjBMPgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:36:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
+        id S229648AbjBMPil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:38:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbjBMPgx (ORCPT
+        with ESMTP id S229596AbjBMPic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:36:53 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A0714238
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:36:52 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id h29so3513506ila.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:36:52 -0800 (PST)
+        Mon, 13 Feb 2023 10:38:32 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2727D193CE;
+        Mon, 13 Feb 2023 07:38:29 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id rp23so32844755ejb.7;
+        Mon, 13 Feb 2023 07:38:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1676302611;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9UyDU4MXdtcc3tPXUF91DR09nLEipLuz0x/ndWCd0Uo=;
-        b=4lFt/ogHTlwnZIXVLIkV8bgFRCeSSwEh+zi7NGrdnuHeCeXVVTGgYZGgoSAdf3XAHs
-         11zm8Egmm5E7+DrMqBsTQuSEH1FwcHa9aCORPu3ESeFhe3cCt0hkLTGYadH0sjDShRUL
-         fb+2ulZofBB0S9oe/QrG2mJLBrCseMGr+4VAQdRtKe49ir7iqhoUk7yU1psH9SGcBcgi
-         eYVB82KHYK9yUj674/LV0S3Q2HHTpFBTlDfaovIHz0h9o0IGDV8u6+xaDt3gON9vs/FG
-         6kNnhB33/tRWuqxwo68WON2p73xV9wiNdFGyqcmj453MqNIhXxExDGYhOJ/LBrXCIzv9
-         i8vA==
+        bh=Q86xsnFvfvmah1G0eGQOi1KV205lT5RC6i71PTaiGzo=;
+        b=YNfKzAtIz72gcYaG7XV4PSq2NEXvrAgcCMjnPsI91+HELi7EmCHFa3h4v/3A9zLFQn
+         eiH1eheI31WtpJif3x+2OOK8Xz4DoEkCcRuLK59lss1ztdCoMu8sFoOHteG1OD6KSrbL
+         Ev8MEuIShNtQosDwH5de/OQhc61gNDKH73GvL/OKOWXAORkRh/yTwQGIKVUjJhYeMUYn
+         DqYHQ1dZewnMIWm3Kbr8D2rRW1OUeE8IEB2dQtF0EkHYPu+q10gnQBajelD4xPxvZA1p
+         kAXt7QQv6YugLjFyGT9tpF7eClkhCylEdqWoohIOa1EZ3SG724LY168OA+5zHKy/KARI
+         c4xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676302611;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9UyDU4MXdtcc3tPXUF91DR09nLEipLuz0x/ndWCd0Uo=;
-        b=C5nNdvOazdTPbBHGrsfRS8akbL2gNRYcKmjJ5TtdUqHWr/uXFD+F/nZbYKZ6S5cKRd
-         SoMq2e3XfRymOEoq02fLfvqrzZLKdAVLPZETH0SgwPs91/M9zTq8zq4HMAZvcZF3Mgf/
-         1dZdnobCtYO8L9R4Uwn4nuUR6oPGxPW9wK3b+2tTF5E29UQc24CWWmJ6NrggoH/l44op
-         BsrZWtvKUCJ9xXHA4CZdycnq4Axm5KX/dqjJ8PNfNYvtIho3scCGlCEu5FjBnBMxbw4x
-         CAe1KLMTENEqnIIJzavtB574uEGTAh08slHNr8Sc4GbesfbzB5I5RcDKH6jK3untl0+3
-         Ir7A==
-X-Gm-Message-State: AO0yUKUhw8mNU7y+pi880bVergkYrx4p+zQoMGFUg8dsGxBxebliDDYi
-        b++EiNzggQqn2qhIbfmY79pr2g==
-X-Google-Smtp-Source: AK7set+BeomEo/V9FsYyesBa0xKvkKn3cC6JBPZ+9tDcK/WyTLrd2sHqTa4xKLWJ8YwZBxtG5ea2/w==
-X-Received: by 2002:a05:6e02:1c24:b0:315:39d2:d5e8 with SMTP id m4-20020a056e021c2400b0031539d2d5e8mr4567402ilh.2.1676302611483;
-        Mon, 13 Feb 2023 07:36:51 -0800 (PST)
-Received: from [127.0.0.1] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id k18-20020a02c652000000b003a4e6b1e064sm3996935jan.90.2023.02.13.07.36.50
+        bh=Q86xsnFvfvmah1G0eGQOi1KV205lT5RC6i71PTaiGzo=;
+        b=6gzt9f4T9VHF6uRQDdmWmS8eZB0K+3s00llDeXqU3JYqm5PnlqfDBXQ9aUqv5qlFJS
+         TatVV2g/3kQ5SYbv5xUC8R9cM6n1NLVkcgQ3N6QNl/725eX5uz3RAHP8Hkjbz74f7s3s
+         v7HSeck2it53OG0YrQicWmZXxU6CBGuf5qLpCWRPOc0ua3TlA4PlRiNNnxSQIaU7eKgt
+         R1pDlWgJzFBWN8l4KzYmOL9i1qT5/8BS+EdhMxuKR+jT0FET21xsQoapUono5SQPMVN8
+         YZFIdtJAFrPgswVmVko59sS5QhmoHet2ZhcnRCKz8/KmFSRpTJ950+dd0dbK/dVcthlf
+         ylag==
+X-Gm-Message-State: AO0yUKVPXKn2JWxXwMC1b/OH8RVEvaJHLAafz380Zjl7r+B9iLCuYecI
+        idOd6uEcAVNsrHcmfcdWTQo=
+X-Google-Smtp-Source: AK7set9rpu4uOTlLBDoMG+BkveHrcsEYP70PEWPeRWFby5VyriFa/6JKgxhk4Nenhc+awLxNZsP00A==
+X-Received: by 2002:a17:906:6a1b:b0:8af:b63:b4bf with SMTP id qw27-20020a1709066a1b00b008af0b63b4bfmr23256890ejc.27.1676302707637;
+        Mon, 13 Feb 2023 07:38:27 -0800 (PST)
+Received: from localhost.localdomain (83.24.145.108.ipv4.supernova.orange.pl. [83.24.145.108])
+        by smtp.gmail.com with ESMTPSA id gf17-20020a170906e21100b008b12614ee06sm115901ejb.161.2023.02.13.07.38.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 07:36:50 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Ming Lei <ming.lei@redhat.com>,
-        Liu Xiaodong <xiaodong.liu@intel.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jim Harris <james.r.harris@intel.com>
-In-Reply-To: <20230210141356.112321-1-xiaodong.liu@intel.com>
-References: <20230210141356.112321-1-xiaodong.liu@intel.com>
-Subject: Re: [PATCH] block: ublk: check IO buffer based on flag
- need_get_data
-Message-Id: <167630261065.98786.1863973416590406572.b4-ty@kernel.dk>
-Date:   Mon, 13 Feb 2023 08:36:50 -0700
+        Mon, 13 Feb 2023 07:38:27 -0800 (PST)
+From:   Maya Matuszczyk <maccraft123mc@gmail.com>
+To:     heiko@sntech.de, Jagan Teki <jagan@amarulasolutions.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-rockchip@lists.infradead.org,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/4] dt-bindings: display: panel: sitronix,st7701: Add Elida KD50T048A Panel
+Date:   Mon, 13 Feb 2023 16:38:13 +0100
+Message-Id: <20230213153816.213526-2-maccraft123mc@gmail.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230213153816.213526-1-maccraft123mc@gmail.com>
+References: <20230213153816.213526-1-maccraft123mc@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,28 +80,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add compatible for 854x480 Elida KD50T048A panel, found in Odroid Go Super
+and Odroid Go Ultra
 
-On Fri, 10 Feb 2023 09:13:56 -0500, Liu Xiaodong wrote:
-> Currently, uring_cmd with UBLK_IO_FETCH_REQ or
-> UBLK_IO_COMMIT_AND_FETCH_REQ is always checked whether
-> userspace server has provided IO buffer even flag
-> UBLK_F_NEED_GET_DATA is configured.
-> 
-> This is a excessive check. If UBLK_F_NEED_GET_DATA is
-> configured, FETCH_RQ doesn't need to provide IO buffer;
-> COMMIT_AND_FETCH_REQ also doesn't need to do that if
-> the IO type is not READ.
-> 
-> [...]
+Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
+---
+ .../devicetree/bindings/display/panel/sitronix,st7701.yaml       | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied, thanks!
-
-[1/1] block: ublk: check IO buffer based on flag need_get_data
-      commit: 2f1e07dda1e1310873647abc40bbc49eaf3b10e3
-
-Best regards,
+diff --git a/Documentation/devicetree/bindings/display/panel/sitronix,st7701.yaml b/Documentation/devicetree/bindings/display/panel/sitronix,st7701.yaml
+index 34d5e20c6cb3..83d30eadf7d9 100644
+--- a/Documentation/devicetree/bindings/display/panel/sitronix,st7701.yaml
++++ b/Documentation/devicetree/bindings/display/panel/sitronix,st7701.yaml
+@@ -28,6 +28,7 @@ properties:
+     items:
+       - enum:
+           - densitron,dmt028vghmcmi-1a
++          - elida,kd50t048a
+           - techstar,ts8550b
+       - const: sitronix,st7701
+ 
 -- 
-Jens Axboe
-
-
+2.39.1
 
