@@ -2,138 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B78969511D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9C8695121
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:55:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbjBMTyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 14:54:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58324 "EHLO
+        id S231374AbjBMTzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 14:55:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjBMTyC (ORCPT
+        with ESMTP id S229632AbjBMTzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 14:54:02 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC96D1C7ED;
-        Mon, 13 Feb 2023 11:54:01 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DJS1YK020911;
-        Mon, 13 Feb 2023 19:53:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=XwhyzVfxPNRV8QVCyflPLlqVnFnZ6biKS8WtqpnJN3w=;
- b=Sv4ysFd8QYSe3mSa6XT9M0Tb49Sbdpcu+ZKYoQQv9wVrYH2Ym5vEKfNv1dzidD3b5qls
- dEf7qOOw6UIUkpVFiStcbs8l0PDPW/sxL+Drbto9lqqp9YD74zfXfG1XQHsFEak2CNJ/
- CRihJ/NMzP0h0eRfA67NtUr9XwXFEGyul7QnZx+tnEGFFUorxHU82kN6XG/IVTD6bGGq
- iFhWdZGlg+TkGisONow7Gxqzp/xT13rC458WhlbIPUhZ2EQJ5C9VNfpV5tc/6eZQHbcW
- FV6KCeO/aYpYDdMWj89+5Hy4JkBN8s/8Fs/TAu6AovF/NqAQK6D4c6pXeb/WooY6V3+m EQ== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nqucp8ed4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Feb 2023 19:53:53 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31DCxTAp017665;
-        Mon, 13 Feb 2023 19:53:51 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3np2n6k2fv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Feb 2023 19:53:51 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31DJrmHK31981826
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Feb 2023 19:53:48 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BA56320043;
-        Mon, 13 Feb 2023 19:53:48 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1D6A420040;
-        Mon, 13 Feb 2023 19:53:47 +0000 (GMT)
-Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.20.198])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon, 13 Feb 2023 19:53:46 +0000 (GMT)
-Date:   Tue, 14 Feb 2023 01:23:44 +0530
-From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
-To:     Kemeng Shi <shikemeng@huaweicloud.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, jack@suse.cz,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 15/21] ext4: use best found when complex scan of group
- finishs
-Message-ID: <Y+qVSCj/dIL68e9g@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-References: <20230209194825.511043-1-shikemeng@huaweicloud.com>
- <20230209194825.511043-16-shikemeng@huaweicloud.com>
+        Mon, 13 Feb 2023 14:55:49 -0500
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466E51C7FA
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 11:55:48 -0800 (PST)
+Received: from ipservice-092-217-079-080.092.217.pools.vodafone-ip.de ([92.217.79.80] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <martin@kaiser.cx>)
+        id 1pRevM-0004Cb-81; Mon, 13 Feb 2023 20:55:40 +0100
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Martin Kaiser <martin@kaiser.cx>,
+        Dan Carpenter <error27@gmail.com>
+Subject: [PATCH v2] staging: r8188eu: Revert "staging: r8188eu: simplify rtw_get_ff_hwaddr"
+Date:   Mon, 13 Feb 2023 20:54:08 +0100
+Message-Id: <20230213195407.15085-1-martin@kaiser.cx>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230211183205.426820-1-martin@kaiser.cx>
+References: <20230211183205.426820-1-martin@kaiser.cx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230209194825.511043-16-shikemeng@huaweicloud.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: UqAKeK9IYfmDr5zc0WsIlo6SByR2vlxO
-X-Proofpoint-GUID: UqAKeK9IYfmDr5zc0WsIlo6SByR2vlxO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-13_12,2023-02-13_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=999 bulkscore=0 clxscore=1015 impostorscore=0 mlxscore=0
- suspectscore=0 phishscore=0 adultscore=0 lowpriorityscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302130171
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 03:48:19AM +0800, Kemeng Shi wrote:
-> If any bex which meets bex->fe_len >= gex->fe_len is found, then it will
-> always be used when complex scan of group that bex belongs to finishs.
-> So there will not be any lock-unlock period.
-> 
-> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
-> ---
->  fs/ext4/mballoc.c | 14 ++------------
->  1 file changed, 2 insertions(+), 12 deletions(-)
-> 
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index e53f84de5018..c684758d6dbb 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -2019,8 +2019,6 @@ static void ext4_mb_check_limits(struct ext4_allocation_context *ac,
->  	struct ext4_sb_info *sbi = EXT4_SB(ac->ac_sb);
->  	struct ext4_free_extent *bex = &ac->ac_b_ex;
->  	struct ext4_free_extent *gex = &ac->ac_g_ex;
-> -	struct ext4_free_extent ex;
-> -	int max;
->  
->  	if (ac->ac_status == AC_STATUS_FOUND)
->  		return;
-> @@ -2039,16 +2037,8 @@ static void ext4_mb_check_limits(struct ext4_allocation_context *ac,
->  	if (bex->fe_len < gex->fe_len)
->  		return;
->  
-> -	if (finish_group && bex->fe_group == e4b->bd_group) {
-> -		/* recheck chunk's availability - we don't know
-> -		 * when it was found (within this lock-unlock
-> -		 * period or not) */
-> -		max = mb_find_extent(e4b, bex->fe_start, gex->fe_len, &ex);
-> -		if (max >= gex->fe_len) {
-> -			ext4_mb_use_best_found(ac, e4b);
-> -			return;
-> -		}
-> -	}
-> +	if (finish_group)
-> +		ext4_mb_use_best_found(ac, e4b);
->  }
->  
->  /*
-> -- 
-> 2.30.0
-> 
-Looks good. So when we have found bex > gex, then we wont have a lock
-unlock period since we always allocate the bex when we reach the end of
-group. 
+This reverts commit fd48124e0982 ("staging: r8188eu: simplify
+rtw_get_ff_hwaddr").
 
-Just a small typo in the commit message (finshs -> finishes), but other
-than that feel free to add:
+The cleanup in this commit removes the qsel to addr mappings in
+rtw_get_ff_hwaddr. The underlying assumption is that rtw_write_port
+uses its addr parameter only for the high_queue check.
 
-Reviewed-by: Ojaswin Mujoo <ojaswin@linux.ibm.com> 
+This is obviously incorrect as rtw_write_port calls
+ffaddr2pipehdl(pdvobj, addr);
+where addr is mapped to a usb bulk endpoint.
+
+Unfortunately, testing did not show any problems. The Edimax V2 on which I
+tested has two bulk out endpoints. I guess that with the incorrect patch,
+addr could only be 0 (no high queue) or 6 (high queue), both of which were
+mapped to the first bulk out endpoint. Data transfers did still work...
+
+Fixes: fd48124e0982 ("staging: r8188eu: simplify rtw_get_ff_hwaddr")
+Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+---
+v2:
+ - use correct patch prefix
+ - add a Fixes tag
+ - use 12-digit hash to refer to the reverted commit
+
+ drivers/staging/r8188eu/core/rtw_xmit.c    | 32 +++++++++++++++++++++-
+ drivers/staging/r8188eu/include/rtw_xmit.h |  7 +++++
+ 2 files changed, 38 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+index d0761ac2e695..df88b3e29e77 100644
+--- a/drivers/staging/r8188eu/core/rtw_xmit.c
++++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+@@ -1568,9 +1568,39 @@ static int rtw_br_client_tx(struct adapter *padapter, struct sk_buff **pskb)
+ 
+ u32 rtw_get_ff_hwaddr(struct xmit_frame *pxmitframe)
+ {
++	u32 addr;
+ 	struct pkt_attrib *pattrib = &pxmitframe->attrib;
+ 
+-	return pattrib->qsel == 0x11 ? HIGH_QUEUE_INX : 0;
++	switch (pattrib->qsel) {
++	case 0:
++	case 3:
++		addr = BE_QUEUE_INX;
++		break;
++	case 1:
++	case 2:
++		addr = BK_QUEUE_INX;
++		break;
++	case 4:
++	case 5:
++		addr = VI_QUEUE_INX;
++		break;
++	case 6:
++	case 7:
++		addr = VO_QUEUE_INX;
++		break;
++	case 0x10:
++		addr = BCN_QUEUE_INX;
++		break;
++	case 0x11:/* BC/MC in PS (HIQ) */
++		addr = HIGH_QUEUE_INX;
++		break;
++	case 0x12:
++	default:
++		addr = MGT_QUEUE_INX;
++		break;
++	}
++
++	return addr;
+ }
+ 
+ /*
+diff --git a/drivers/staging/r8188eu/include/rtw_xmit.h b/drivers/staging/r8188eu/include/rtw_xmit.h
+index e4e5af198eee..feeac85aedb0 100644
+--- a/drivers/staging/r8188eu/include/rtw_xmit.h
++++ b/drivers/staging/r8188eu/include/rtw_xmit.h
+@@ -26,7 +26,14 @@
+ #define XMIT_BE_QUEUE		(2)
+ #define XMIT_BK_QUEUE		(3)
+ 
++#define VO_QUEUE_INX		0
++#define VI_QUEUE_INX		1
++#define BE_QUEUE_INX		2
++#define BK_QUEUE_INX		3
++#define BCN_QUEUE_INX		4
++#define MGT_QUEUE_INX		5
+ #define HIGH_QUEUE_INX		6
++#define TXCMD_QUEUE_INX		7
+ 
+ #define HW_QUEUE_ENTRY		8
+ 
+-- 
+2.30.2
+
