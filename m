@@ -2,215 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4E569413C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58342694131
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:31:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjBMJcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 04:32:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjBMJbw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230395AbjBMJbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 13 Feb 2023 04:31:52 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616414C2E
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:30:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676280615; x=1707816615;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9FwOfNFDMQvA9eUplObDU3WspLsuxTJWoEuUtfj/uVw=;
-  b=kMRyQdrO0vhN03z8VovSFNxqmU0mnLiGThKFOjD/znh7GvESKWl4X+BO
-   6CbQX3PsOW98LbKo1cq7u+kAETaoJ7cIsMyFEiJq4W1wIwaKIT1ouq1Zl
-   TfuxihBaSG3r8UI9fLpA4HdXM4FImiyA3BLRm6iGr3rWY6Koz9IsBVyGS
-   VHIUcKmQ84TQb25A1Jn/OHCAysMlmxo4a2HSa15If+j/xCwFR9ySsHa2Q
-   vgTcaxHsC0ij8nT/OPhhePDidHJOtppP714ps47HurfLF+VULqEFI9V6i
-   mJOVdr3+WsM77XBl19ncPud78KCvaqwbnZa8+B1D5KUTiL4hX5fZ0l6ST
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="358258502"
-X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
-   d="scan'208";a="358258502"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 01:29:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="732433074"
-X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
-   d="scan'208";a="732433074"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 13 Feb 2023 01:29:13 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pRV96-0007eT-10;
-        Mon, 13 Feb 2023 09:29:12 +0000
-Date:   Mon, 13 Feb 2023 17:28:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "GuoRui.Yu" <GuoRui.Yu@linux.alibaba.com>, hch@lst.de,
-        m.szyprowski@samsung.com
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        robin.murphy@arm.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, GuoRui.Yu@linux.alibaba.com,
-        xiaokang.hxk@alibaba-inc.com
-Subject: Re: [PATCH] swiotlb: fix the deadlock in swiotlb_do_find_slots
-Message-ID: <202302131748.pa5NGbb9-lkp@intel.com>
-References: <20230213063604.127526-1-GuoRui.Yu@linux.alibaba.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229775AbjBMJb2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Feb 2023 04:31:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27AB14EB0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:29:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD83DB80EAD
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:29:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7D6DC433D2;
+        Mon, 13 Feb 2023 09:29:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676280552;
+        bh=BwYOX5bxqbd258lx4NZjPicBhmu6sXCQeAs5cOJ/RAs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DPuR0pXUJsvRAIRKYBYWq5uzSILPiXAjOqXDj/2UESWojUEl5bm/EmuQ5WBXLW5ZG
+         nocTb2nQ3odFxYI07+mTWk3Vg5WQkiUIgh50SP4of1BNNQ/cnpz59wpsbs3Y+fMrto
+         6/bjMZWqaBwU1l4Ko1FghnZi0g0Zc638k/sJqP1GDGpmFRFmm/rURWzKuWEOB5yV0R
+         nYjSyNuys9JLASpeZQqKg0KWu8vUjyPUrB4Z2hSMmjrOguWR5yHWoy79ZhGFR5sX93
+         QJatKMbkQNkANglQv/ZTcsJYDD0nb4cQ81RpMxXoOAK6thNfH/6YqZpjPX9Cksx4Ca
+         TArpFV4tRdlXg==
+Message-ID: <30af506c-8c4e-bb8a-6f4b-634f30632fb3@kernel.org>
+Date:   Mon, 13 Feb 2023 17:29:10 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230213063604.127526-1-GuoRui.Yu@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] f2fs: export ipu policy in debugfs
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>
+References: <20230209034044.22072-1-frank.li@vivo.com>
+ <Y+UswNp5NrDWjpGX@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <Y+UswNp5NrDWjpGX@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi GuoRui.Yu",
+On 2023/2/10 1:26, Jaegeuk Kim wrote:
+> On 02/09, Yangtao Li wrote:
+>> Export ipu_policy as a string in debugfs for better readability and
+>> it can help us better understand some strategies of the file system.
+>>
+>> Since we use ipu_policy as a bitmap, and the bitmap API parameter is
+>> unsigned long type data, let's change ipu_policy to unsigned long type.
+>>
+>> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+>> ---
+>>   fs/f2fs/debug.c   | 64 ++++++++++++++++++++++++++++++++---------------
+>>   fs/f2fs/f2fs.h    |  4 +--
+>>   fs/f2fs/segment.h |  1 +
+>>   fs/f2fs/sysfs.c   |  2 +-
+>>   4 files changed, 48 insertions(+), 23 deletions(-)
+>>
+>> diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
+>> index 32af4f0c5735..d50dc8e6abfd 100644
+>> --- a/fs/f2fs/debug.c
+>> +++ b/fs/f2fs/debug.c
+>> @@ -354,6 +354,17 @@ static char *s_flag[] = {
+>>   	[SBI_IS_FREEZING]	= " freezefs",
+>>   };
+>>   
+>> +static const char *ipu_mode_names[F2FS_IPU_MAX] = {
+>> +	[F2FS_IPU_FORCE]	= "FORCE",
+>> +	[F2FS_IPU_SSR]		= "SSR",
+>> +	[F2FS_IPU_UTIL]		= "UTIL",
+>> +	[F2FS_IPU_SSR_UTIL]	= "SSR_UTIL",
+>> +	[F2FS_IPU_FSYNC]	= "FSYNC",
+>> +	[F2FS_IPU_ASYNC]	= "ASYNC",
+>> +	[F2FS_IPU_NOCACHE]	= "NOCACHE",
+>> +	[F2FS_IPU_HONOR_OPU_WRITE]	= "HONOR_OPU_WRITE",
+>> +};
+>> +
+>>   static int stat_show(struct seq_file *s, void *v)
+>>   {
+>>   	struct f2fs_stat_info *si;
+>> @@ -362,18 +373,20 @@ static int stat_show(struct seq_file *s, void *v)
+>>   
+>>   	raw_spin_lock_irqsave(&f2fs_stat_lock, flags);
+>>   	list_for_each_entry(si, &f2fs_stat_list, stat_list) {
+>> -		update_general_status(si->sbi);
+>> +		struct f2fs_sb_info *sbi = si->sbi;
+>> +
+>> +		update_general_status(sbi);
+>>   
+>>   		seq_printf(s, "\n=====[ partition info(%pg). #%d, %s, CP: %s]=====\n",
+>> -			si->sbi->sb->s_bdev, i++,
+>> -			f2fs_readonly(si->sbi->sb) ? "RO" : "RW",
+>> -			is_set_ckpt_flags(si->sbi, CP_DISABLED_FLAG) ?
+>> -			"Disabled" : (f2fs_cp_error(si->sbi) ? "Error" : "Good"));
+>> -		if (si->sbi->s_flag) {
+>> +			sbi->sb->s_bdev, i++,
+>> +			f2fs_readonly(sbi->sb) ? "RO" : "RW",
+>> +			is_set_ckpt_flags(sbi, CP_DISABLED_FLAG) ?
+>> +			"Disabled" : (f2fs_cp_error(sbi) ? "Error" : "Good"));
 
-Thank you for the patch! Perhaps something to improve:
+How about making another patch to replace si->sbi w/ sbi?
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on hch-configfs/for-next v6.2-rc8]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/GuoRui-Yu/swiotlb-fix-the-deadlock-in-swiotlb_do_find_slots/20230213-143625
-patch link:    https://lore.kernel.org/r/20230213063604.127526-1-GuoRui.Yu%40linux.alibaba.com
-patch subject: [PATCH] swiotlb: fix the deadlock in swiotlb_do_find_slots
-config: x86_64-randconfig-a001-20230213 (https://download.01.org/0day-ci/archive/20230213/202302131748.pa5NGbb9-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d3d8e60e47bb50892fbde7c6fa81562f8ea916a3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review GuoRui-Yu/swiotlb-fix-the-deadlock-in-swiotlb_do_find_slots/20230213-143625
-        git checkout d3d8e60e47bb50892fbde7c6fa81562f8ea916a3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/dma/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302131748.pa5NGbb9-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> kernel/dma/swiotlb.c:668:4: warning: variable 'index_nowrap' is uninitialized when used here [-Wuninitialized]
-                           index_nowrap += 1;
-                           ^~~~~~~~~~~~
-   kernel/dma/swiotlb.c:635:34: note: initialize the variable 'index_nowrap' to silence this warning
-           unsigned int index, index_nowrap, wrap, count = 0, i;
-                                           ^
-                                            = 0
-   1 warning generated.
-
-
-vim +/index_nowrap +668 kernel/dma/swiotlb.c
-
-   617	
-   618	/*
-   619	 * Find a suitable number of IO TLB entries size that will fit this request and
-   620	 * allocate a buffer from that IO TLB pool.
-   621	 */
-   622	static int swiotlb_do_find_slots(struct device *dev, int area_index,
-   623			phys_addr_t orig_addr, size_t alloc_size,
-   624			unsigned int alloc_align_mask)
-   625	{
-   626		struct io_tlb_mem *mem = dev->dma_io_tlb_mem;
-   627		struct io_tlb_area *area = mem->areas + area_index;
-   628		unsigned long boundary_mask = dma_get_seg_boundary(dev);
-   629		dma_addr_t tbl_dma_addr =
-   630			phys_to_dma_unencrypted(dev, mem->start) & boundary_mask;
-   631		unsigned long max_slots = get_max_slots(boundary_mask);
-   632		unsigned int iotlb_align_mask =
-   633			dma_get_min_align_mask(dev) & ~(IO_TLB_SIZE - 1);
-   634		unsigned int nslots = nr_slots(alloc_size), stride;
-   635		unsigned int index, index_nowrap, wrap, count = 0, i;
-   636		unsigned int offset = swiotlb_align_offset(dev, orig_addr);
-   637		unsigned long flags;
-   638		unsigned int slot_base;
-   639		unsigned int slot_index;
-   640	
-   641		BUG_ON(!nslots);
-   642		BUG_ON(area_index >= mem->nareas);
-   643	
-   644		/*
-   645		 * For mappings with an alignment requirement don't bother looping to
-   646		 * unaligned slots once we found an aligned one.  For allocations of
-   647		 * PAGE_SIZE or larger only look for page aligned allocations.
-   648		 */
-   649		stride = (iotlb_align_mask >> IO_TLB_SHIFT) + 1;
-   650		if (alloc_size >= PAGE_SIZE)
-   651			stride = max(stride, stride << (PAGE_SHIFT - IO_TLB_SHIFT));
-   652		stride = max(stride, (alloc_align_mask >> IO_TLB_SHIFT) + 1);
-   653	
-   654		spin_lock_irqsave(&area->lock, flags);
-   655		if (unlikely(nslots > mem->area_nslabs - area->used))
-   656			goto not_found;
-   657	
-   658		slot_base = area_index * mem->area_nslabs;
-   659		index = wrap = wrap_area_index(mem, ALIGN(area->index, stride));
-   660	
-   661		do {
-   662			slot_index = slot_base + index;
-   663	
-   664			if (orig_addr &&
-   665			    (slot_addr(tbl_dma_addr, slot_index) &
-   666			     iotlb_align_mask) != (orig_addr & iotlb_align_mask)) {
-   667				index = wrap_area_index(mem, index + 1);
- > 668				index_nowrap += 1;
-   669				continue;
-   670			}
-   671	
-   672			/*
-   673			 * If we find a slot that indicates we have 'nslots' number of
-   674			 * contiguous buffers, we allocate the buffers from that slot
-   675			 * and mark the entries as '0' indicating unavailable.
-   676			 */
-   677			if (!iommu_is_span_boundary(slot_index, nslots,
-   678						    nr_slots(tbl_dma_addr),
-   679						    max_slots)) {
-   680				if (mem->slots[slot_index].list >= nslots)
-   681					goto found;
-   682			}
-   683			index = wrap_area_index(mem, index + stride);
-   684			index_nowrap += stride;
-   685		} while (index_nowrap < wrap + mem->area_nslabs);
-   686	
-   687	not_found:
-   688		spin_unlock_irqrestore(&area->lock, flags);
-   689		return -1;
-   690	
-   691	found:
-   692		for (i = slot_index; i < slot_index + nslots; i++) {
-   693			mem->slots[i].list = 0;
-   694			mem->slots[i].alloc_size = alloc_size - (offset +
-   695					((i - slot_index) << IO_TLB_SHIFT));
-   696		}
-   697		for (i = slot_index - 1;
-   698		     io_tlb_offset(i) != IO_TLB_SEGSIZE - 1 &&
-   699		     mem->slots[i].list; i--)
-   700			mem->slots[i].list = ++count;
-   701	
-   702		/*
-   703		 * Update the indices to avoid searching in the next round.
-   704		 */
-   705		if (index + nslots < mem->area_nslabs)
-   706			area->index = index + nslots;
-   707		else
-   708			area->index = 0;
-   709		area->used += nslots;
-   710		spin_unlock_irqrestore(&area->lock, flags);
-   711		return slot_index;
-   712	}
-   713	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>> +		if (sbi->s_flag) {
+>>   			seq_puts(s, "[SBI:");
+>> -			for_each_set_bit(j, &si->sbi->s_flag, 32)
+>> +			for_each_set_bit(j, &sbi->s_flag, 32)
+>>   				seq_puts(s, s_flag[j]);
+>> -			seq_puts(s, "]\n");
+>> +			seq_puts(s, "]\n\n");
+>>   		}
+>>   		seq_printf(s, "[SB: 1] [CP: 2] [SIT: %d] [NAT: %d] ",
+>>   			   si->sit_area_segs, si->nat_area_segs);
+>> @@ -383,8 +396,19 @@ static int stat_show(struct seq_file *s, void *v)
+>>   			   si->overp_segs, si->rsvd_segs);
+>>   		seq_printf(s, "Current Time Sec: %llu / Mounted Time Sec: %llu\n\n",
+>>   					ktime_get_boottime_seconds(),
+>> -					SIT_I(si->sbi)->mounted_time);
+>> -		if (test_opt(si->sbi, DISCARD))
+>> +					SIT_I(sbi)->mounted_time);
+>> +
+>> +		seq_puts(s, "Policy:\n");
+>> +		seq_puts(s, "  - IPU: [");
+>> +		if (IS_F2FS_IPU_DISABLE(sbi)) {
+>> +			seq_puts(s, " DISABLE\n");
+>> +		} else {
+>> +			for_each_set_bit(j, &SM_I(sbi)->ipu_policy, F2FS_IPU_MAX)
+>> +				seq_printf(s, " %s", ipu_mode_names[j]);
+>> +		}
+>> +		seq_puts(s, " ]\n");
+>> +
+>> +		if (test_opt(sbi, DISCARD))
+>>   			seq_printf(s, "Utilization: %u%% (%u valid blocks, %u discard blocks)\n",
+>>   				si->utilization, si->valid_count, si->discard_blks);
+>>   		else
+>> @@ -491,15 +515,15 @@ static int stat_show(struct seq_file *s, void *v)
+>>   		seq_printf(s, "  - node segments : %d (%d)\n",
+>>   				si->node_segs, si->bg_node_segs);
+>>   		seq_puts(s, "  - Reclaimed segs :\n");
+>> -		seq_printf(s, "    - Normal : %d\n", si->sbi->gc_reclaimed_segs[GC_NORMAL]);
+>> -		seq_printf(s, "    - Idle CB : %d\n", si->sbi->gc_reclaimed_segs[GC_IDLE_CB]);
+>> +		seq_printf(s, "    - Normal : %d\n", sbi->gc_reclaimed_segs[GC_NORMAL]);
+>> +		seq_printf(s, "    - Idle CB : %d\n", sbi->gc_reclaimed_segs[GC_IDLE_CB]);
+>>   		seq_printf(s, "    - Idle Greedy : %d\n",
+>> -				si->sbi->gc_reclaimed_segs[GC_IDLE_GREEDY]);
+>> -		seq_printf(s, "    - Idle AT : %d\n", si->sbi->gc_reclaimed_segs[GC_IDLE_AT]);
+>> +				sbi->gc_reclaimed_segs[GC_IDLE_GREEDY]);
+>> +		seq_printf(s, "    - Idle AT : %d\n", sbi->gc_reclaimed_segs[GC_IDLE_AT]);
+>>   		seq_printf(s, "    - Urgent High : %d\n",
+>> -				si->sbi->gc_reclaimed_segs[GC_URGENT_HIGH]);
+>> -		seq_printf(s, "    - Urgent Mid : %d\n", si->sbi->gc_reclaimed_segs[GC_URGENT_MID]);
+>> -		seq_printf(s, "    - Urgent Low : %d\n", si->sbi->gc_reclaimed_segs[GC_URGENT_LOW]);
+>> +				sbi->gc_reclaimed_segs[GC_URGENT_HIGH]);
+>> +		seq_printf(s, "    - Urgent Mid : %d\n", sbi->gc_reclaimed_segs[GC_URGENT_MID]);
+>> +		seq_printf(s, "    - Urgent Low : %d\n", sbi->gc_reclaimed_segs[GC_URGENT_LOW]);
+>>   		seq_printf(s, "Try to move %d blocks (BG: %d)\n", si->tot_blks,
+>>   				si->bg_data_blks + si->bg_node_blks);
+>>   		seq_printf(s, "  - data blocks : %d (%d)\n", si->data_blks,
+>> @@ -565,7 +589,7 @@ static int stat_show(struct seq_file *s, void *v)
+>>   			   si->ndirty_imeta);
+>>   		seq_printf(s, "  - fsync mark: %4lld\n",
+>>   			   percpu_counter_sum_positive(
+>> -					&si->sbi->rf_node_block_count));
+>> +					&sbi->rf_node_block_count));
+>>   		seq_printf(s, "  - NATs: %9d/%9d\n  - SITs: %9d/%9d\n",
+>>   			   si->dirty_nats, si->nats, si->dirty_sits, si->sits);
+>>   		seq_printf(s, "  - free_nids: %9d/%9d\n  - alloc_nids: %9d\n",
+>> @@ -592,12 +616,12 @@ static int stat_show(struct seq_file *s, void *v)
+>>   			   si->block_count[LFS], si->segment_count[LFS]);
+>>   
+>>   		/* segment usage info */
+>> -		f2fs_update_sit_info(si->sbi);
+>> +		f2fs_update_sit_info(sbi);
+>>   		seq_printf(s, "\nBDF: %u, avg. vblocks: %u\n",
+>>   			   si->bimodal, si->avg_vblocks);
+>>   
+>>   		/* memory footprint */
+>> -		update_mem_info(si->sbi);
+>> +		update_mem_info(sbi);
+>>   		seq_printf(s, "\nMemory: %llu KB\n",
+>>   			(si->base_mem + si->cache_mem + si->page_mem) >> 10);
+>>   		seq_printf(s, "  - static: %llu KB\n",
+> 
+> I don't think we need the changes below.
+> 
+>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+>> index 44f2d76525bf..b699ed74f438 100644
+>> --- a/fs/f2fs/f2fs.h
+>> +++ b/fs/f2fs/f2fs.h
+>> @@ -1070,7 +1070,7 @@ struct f2fs_sm_info {
+>>   
+>>   	struct list_head sit_entry_set;	/* sit entry set list */
+>>   
+>> -	unsigned int ipu_policy;	/* in-place-update policy */
+>> +	unsigned long ipu_policy;	/* in-place-update policy */
+>>   	unsigned int min_ipu_util;	/* in-place-update threshold */
+>>   	unsigned int min_fsync_blocks;	/* threshold for fsync */
+>>   	unsigned int min_seq_blocks;	/* threshold for sequential blocks */
+>> @@ -1322,7 +1322,7 @@ enum {
+>>   	MAX_TIME,
+>>   };
+>>   
+>> -/* Note that you need to keep synchronization with this gc_mode_names array */
+>> +/* Modification on enum should be synchronized with gc_mode_names array */
+>>   enum {
+>>   	GC_NORMAL,
+>>   	GC_IDLE_CB,
+>> diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
+>> index 8ee5e5db9287..92c8be00d396 100644
+>> --- a/fs/f2fs/segment.h
+>> +++ b/fs/f2fs/segment.h
+>> @@ -672,6 +672,7 @@ static inline int utilization(struct f2fs_sb_info *sbi)
+>>   
+>>   #define F2FS_IPU_DISABLE	0
+>>   
+>> +/* Modification on enum should be synchronized with ipu_mode_names array */
+>>   enum {
+>>   	F2FS_IPU_FORCE,
+>>   	F2FS_IPU_SSR,
+>> diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
+>> index 6082e132257a..228df201f6d4 100644
+>> --- a/fs/f2fs/sysfs.c
+>> +++ b/fs/f2fs/sysfs.c
+>> @@ -711,7 +711,7 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
+>>   			return -EINVAL;
+>>   		if (t && f2fs_lfs_mode(sbi))
+>>   			return -EINVAL;
+>> -		SM_I(sbi)->ipu_policy = (unsigned int)t;
+>> +		SM_I(sbi)->ipu_policy = t;
+>>   		return count;
+>>   	}
+>>   
+>> -- 
+>> 2.25.1
