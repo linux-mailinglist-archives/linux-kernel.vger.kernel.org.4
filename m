@@ -2,358 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0686940AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDB3694260
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbjBMJSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 04:18:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
+        id S229637AbjBMKLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 05:11:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbjBMJSN (ORCPT
+        with ESMTP id S229651AbjBMKLS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 04:18:13 -0500
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6380EC169
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:18:10 -0800 (PST)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4PFdzf3rD2z9sch;
-        Mon, 13 Feb 2023 10:18:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
-        s=MBO0001; t=1676279886;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gYqyG34jqUdKvdo77BmID3MiXQClrcvRYfpAOEWTeog=;
-        b=va9KHKi4x3hya+Y/SLqoYKhU5czz8wMACdharbjeLHaqcStbhkkAhlDsLNkYvxyJuf4zSD
-        DW8xejxEYyI3TWbdOa7guV73Z/Zrft/0Qo84UuN6M/xzGW3pUamZ5OCvMmSWiAdJ0tserS
-        tkKfTSWOnzSSf3BJUy7pip3SkwTqxST488j8a9kPW3vESGmfS9jeyJVpvKg7neXHMxyUEE
-        VIwcn4Fsbuvqq+NxDoYKSK9jnvsLBpR81V+xLVrriMcaAPyya9qUxsDu0CH7Neltp4Ho2m
-        NFbKiMxDb9pr8SLLo78BRgW3QvOUZ07eQEcuuGfyLXqydo7eddIC8nSxMIibuw==
-From:   Frank Oltmanns <frank@oltmanns.dev>
-To:     =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
-Cc:     Guido =?utf-8?Q?G=C3=BCnther?= <agx@sigxcpu.org>,
-        Purism Kernel Team <kernel@puri.sm>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH 1/1] drm/panel: st7703: Fix resume of XBD599 panel
-Date:   Mon, 13 Feb 2023 08:47:16 +0100
-References: <20230212120830.46880-1-frank@oltmanns.dev>
- <20230212120830.46880-2-frank@oltmanns.dev>
- <20230212123621.jo56yqlburd6g6ir@core> <874jrq20kz.fsf@oltmanns.dev>
- <20230212193533.3czfby4id4cpbu2s@core>
-In-reply-to: <20230212193533.3czfby4id4cpbu2s@core>
-Message-ID: <87bklxsz42.fsf@oltmanns.dev>
+        Mon, 13 Feb 2023 05:11:18 -0500
+X-Greylist: delayed 1817 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 13 Feb 2023 02:11:17 PST
+Received: from imap5.colo.codethink.co.uk (imap5.colo.codethink.co.uk [78.40.148.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262E0E387;
+        Mon, 13 Feb 2023 02:11:17 -0800 (PST)
+Received: from [167.98.27.226] (helo=[172.16.101.148])
+        by imap5.colo.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
+        id 1pRUEB-002EmZ-C6; Mon, 13 Feb 2023 08:30:23 +0000
+Message-ID: <f1a6c357-b7e0-2869-72e0-e850b63e6ca9@codethink.co.uk>
+Date:   Mon, 13 Feb 2023 08:30:22 +0000
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="=-=-="
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 05/12] riscv: Implement non-coherent DMA support via
+ SiFive cache flushing
+Content-Language: en-GB
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+References: <20230211031821.976408-1-cristian.ciocaltea@collabora.com>
+ <20230211031821.976408-6-cristian.ciocaltea@collabora.com>
+From:   Ben Dooks <ben.dooks@codethink.co.uk>
+Organization: Codethink Limited.
+In-Reply-To: <20230211031821.976408-6-cristian.ciocaltea@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 11/02/2023 03:18, Cristian Ciocaltea wrote:
+> From: Emil Renner Berthing <kernel@esmil.dk>
+> 
+> This variant is used on the StarFive JH7100 SoC.
+> 
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+> ---
+>   arch/riscv/Kconfig              |  6 ++++--
+>   arch/riscv/mm/dma-noncoherent.c | 37 +++++++++++++++++++++++++++++++--
+>   2 files changed, 39 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 9c687da7756d..05f6c77faf6f 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -232,12 +232,14 @@ config LOCKDEP_SUPPORT
+>   	def_bool y
+>   
+>   config RISCV_DMA_NONCOHERENT
+> -	bool
+> +	bool "Support non-coherent DMA"
+> +	default SOC_STARFIVE
+>   	select ARCH_HAS_DMA_PREP_COHERENT
+> +	select ARCH_HAS_DMA_SET_UNCACHED
+> +	select ARCH_HAS_DMA_CLEAR_UNCACHED
+>   	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+>   	select ARCH_HAS_SYNC_DMA_FOR_CPU
+>   	select ARCH_HAS_SETUP_DMA_OPS
+> -	select DMA_DIRECT_REMAP
+>   
+>   config AS_HAS_INSN
+>   	def_bool $(as-instr,.insn r 51$(comma) 0$(comma) 0$(comma) t0$(comma) t0$(comma) zero)
+> diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoherent.c
+> index d919efab6eba..e07e53aea537 100644
+> --- a/arch/riscv/mm/dma-noncoherent.c
+> +++ b/arch/riscv/mm/dma-noncoherent.c
+> @@ -9,14 +9,21 @@
+>   #include <linux/dma-map-ops.h>
+>   #include <linux/mm.h>
+>   #include <asm/cacheflush.h>
+> +#include <soc/sifive/sifive_ccache.h>
+>   
+>   static bool noncoherent_supported;
+>   
+>   void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
+>   			      enum dma_data_direction dir)
+>   {
+> -	void *vaddr = phys_to_virt(paddr);
+> +	void *vaddr;
+>   
+> +	if (sifive_ccache_handle_noncoherent()) {
+> +		sifive_ccache_flush_range(paddr, size);
+> +		return;
+> +	}
+> +
+> +	vaddr = phys_to_virt(paddr);
+>   	switch (dir) {
+>   	case DMA_TO_DEVICE:
+>   		ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
+> @@ -35,8 +42,14 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
+>   void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
+>   			   enum dma_data_direction dir)
+>   {
+> -	void *vaddr = phys_to_virt(paddr);
+> +	void *vaddr;
+> +
+> +	if (sifive_ccache_handle_noncoherent()) {
+> +		sifive_ccache_flush_range(paddr, size);
+> +		return;
+> +	}
 
-Hi Ond=C5=99ej,
+ok, what happens if we have an system where the ccache and another level
+of cache also requires maintenance operations?
 
-ok, now I get it. Thank you very much for your thorough explanation. It rea=
-lly appreciate it!
+>   
+> +	vaddr = phys_to_virt(paddr);
+>   	switch (dir) {
+>   	case DMA_TO_DEVICE:
+>   		break;
+> @@ -49,10 +62,30 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
+>   	}
+>   }
+>   
+> +void *arch_dma_set_uncached(void *addr, size_t size)
+> +{
+> +	if (sifive_ccache_handle_noncoherent())
+> +		return sifive_ccache_set_uncached(addr, size);
+> +
+> +	return addr;
+> +}
+> +
+> +void arch_dma_clear_uncached(void *addr, size_t size)
+> +{
+> +	if (sifive_ccache_handle_noncoherent())
+> +		sifive_ccache_clear_uncached(addr, size);
+> +}
+> +
+>   void arch_dma_prep_coherent(struct page *page, size_t size)
+>   {
+>   	void *flush_addr = page_address(page);
+>   
+> +	if (sifive_ccache_handle_noncoherent()) {
+> +		memset(flush_addr, 0, size);
+> +		sifive_ccache_flush_range(__pa(flush_addr), size);
+> +		return;
+> +	}
+> +
+>   	ALT_CMO_OP(flush, flush_addr, size, riscv_cbom_block_size);
+>   }
+>   
 
-Ond=C5=99ej Jirman <megous@megous.com> writes:
-> On Sun, Feb 12, 2023 at 06:52:05PM +0100, Frank Oltmanns wrote:
->> Ond=C5=99ej Jirman <megi@xff.cz> writes:
->>
->> > On Sun, Feb 12, 2023 at 01:08:29PM +0100, Frank Oltmanns wrote:
->> Please let me point you to the discussion you and Guido had ~2.5 years a=
-go:
->> <https://lore.kernel.org/all/20200729154809.GA435075@bogon.m.sigxcpu.org=
-/>
->
-> Guido references some unspecified datasheet. We only have a st7703 datash=
-eet
-> to go by, and that requires 120ms and is relevant for both panels.
->
-> Also the patch that Guido tested removed a few 20ms delays from the init
-> sequence for the librem panel. Maybe that broke the init for librem panel=
- and
-> not the extra few ms after sleep out that the patch added.
+-- 
+Ben Dooks				http://www.codethink.co.uk/
+Senior Engineer				Codethink - Providing Genius
 
-Ok, I see. You removed the 20 msec delay after the panel specific
-initialization sequence and before issuing SLPOUT in your original
-patch.
+https://www.codethink.co.uk/privacy.html
 
->> I read that screenshot, that we need a 120 msec wait after sleep OUT bef=
-ore we
->> can send another sleep in (see the =E2=80=9CRestriction=E2=80=9D row). I=
- can=E2=80=99t seem to find
->> the reference to the 120 msec delay after the sleep IN command. I read t=
-he
->> flow chart at the bottom as informational about the duration of the whole
->> procedure that happens after issuing the sleep in command. The only
->> restriction is that we can=E2=80=99t issue any command for 5 msec after =
-sleep in was
->> issued.
->
-> It=E2=80=99s at the bottom, sleep in takes 120ms to execute. Part of the =
-execution is
-> draining the charge from the panel. You can=E2=80=99t shutdown power supp=
-lies before
-> sleep in completes, so you need the delay after sleep in and before regul=
-ator
-> powerdown, otherwise the flow chart will not have the time to execute pro=
-perly,
-> and the panel will be left in a bad state.
-
-Ok, that makes sense.
-
->> > So there needs to be 120ms delay after sleep in and after sleep out,
->> > regardless of which panel is driven by this controller, to ensure the =
-panel
->> > stays operational even when the user is quickly switching it on/off re=
-peatedly.
->> >
->> > So I don=E2=80=99t think you should be doing panel specific quirks her=
-e.
->>
->> Maybe. I can only say that without the timings in this patch (i.e. the o=
-nes
->> from your kernel branch) the display on my pinephone is flickering after=
- the
->> first (and every subsequent) time the display is turned off. With your n=
-ew
->> timing everything works great on the pinephone. Guido states that the ti=
-mings
->> in your original patch (i.e. the XDB599 specific timings in this patch) =
-the
->> Librem 5 devkit panel doesn=E2=80=99t work.
->
-> Adding extra delays after sleep in/before sleep out should not break Libr=
-em
-> panel. Previous patches also changed the powerup sequence to hold the res=
-et
-> before powerup of the power supplies, and rearranged other delays.
->
-> They were made before the problem with the panel discharge was properly
-> understood.
->
-> I suggest just going a bit more conservatively than what I did with my or=
-iginal
-> patch series, and just make sure there are 120ms delays after sleep out a=
-nd
-> before sleep in + extra delay after regulator powerup and don=E2=80=99t d=
-o anything that
-> may decrease delays for librem devkit panel. Just adding delays should no=
-t break
-> anything, sine the only timings that have maximums specified in the datas=
-heet
-> are for power rail voltage rampup times.
-
-I agree, that the one 20 msec delay that you removed, is probably what
-broke the JH057N panel and not the extra delays. Unfortunately, there is
-no way for me to verify that statement, because I don=E2=80=99t have access=
- to
-Librem=E2=80=99s devkit.
-
-So, I can only offer to prepare a V2 and kindly ask Guido to test it. V2
-will be much simpler:
-=E2=80=A2 Increase the delay after issuing sleep out from 60 to 120 msec fo=
-r all
-  panels.
-=E2=80=A2 Add a delay of 120 msec after issuing sleep in for all panels.
-=E2=80=A2 Move the 20 msec delay between initialization and sleep out into =
-the
-  initialization function for the JH057N panel (like in this version of
-  the patch).
-=E2=80=A2 Remove a 20 msec delay from the initialization function of the XB=
-D599
-  panel (like in this version of the patch).
-
-> (Also some timings during powerup/down may appear to have different needs=
- on
-> Librem devkit simply because panel driver is not really affecting the
-> regulators, because they are already powered up due to being referenced b=
-y other
-> drivers/devices, because they are shared. This is a bit tricky to test
-> properly. It=E2=80=99s necessary to test both power sequence cases, where=
- the regulators
-> are known to be off, and when they are already referenced by other driver=
-s.
-> On librem devkit, one of them seems to be shared by audio codec and touch=
-screen,
-> on pinephone there=E2=80=99s less sharing. Easiest way to do that is to u=
-nload the
-> relevant drivers for other devices that share the regulators and check wi=
-th
-> debugfs/regulator/regulator_summary that the refcount of lcd regulators)
-
-Well, that was interesting! Thank you! I checked on my pinephone and I
-only have refcounts of 1 on the relevant child nodes as you expeceted. :)
-
-Thanks again,
-  Frank
-
-> regards,
-> 	o.
->
->> Do you have a proposal how to proceed without implementing panel specific
->> timings?
->>
->> Thanks,
->>   Frank
->>
->> >
->> > regards,
->> > 	o.
->> >
->> >> Therefore, introduce panel specific functions for the delays.
->> >>
->> >> The XDB599 does not require a 20 msec delay between the SETBGP and
->> >> SETVCOM commands. Therefore, remove the delay from the device specific
->> >> initialization function.
->> >>
->> >> Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
->> >> Cc: Ondrej Jirman <megi@xff.cz>
->> >> Reported-by: Samuel Holland <samuel@sholland.org>
->> >> =E2=80=94
->> >>  drivers/gpu/drm/panel/panel-sitronix-st7703.c | 40 ++++++++++++++++=
-=E2=80=94
->> >>  1 file changed, 35 insertions(+), 5 deletions(-)
->> >>
->> >> diff =E2=80=93git a/drivers/gpu/drm/panel/panel-sitronix-st7703.c b/d=
-rivers/gpu/drm/panel/panel-sitronix-st7703.c
->> >> index 6747ca237ced..a149341c4a8b 100644
->> >> =E2=80=94 a/drivers/gpu/drm/panel/panel-sitronix-st7703.c
->> >> +++ b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
->> >> @@ -66,6 +66,8 @@ struct st7703_panel_desc {
->> >>  	unsigned long mode_flags;
->> >>  	enum mipi_dsi_pixel_format format;
->> >>  	int (*init_sequence)(struct st7703 *ctx);
->> >> +	void (*wait_after_sleep_out)(void);
->> >> +	void (*drain_charge)(void);
->> >>  };
->> >>
->> >>  static inline struct st7703 *panel_to_st7703(struct drm_panel *panel)
->> >> @@ -126,10 +128,24 @@ static int jh057n_init_sequence(struct st7703 *=
-ctx)
->> >>  				   0x18, 0x00, 0x09, 0x0E, 0x29, 0x2D, 0x3C, 0x41,
->> >>  				   0x37, 0x07, 0x0B, 0x0D, 0x10, 0x11, 0x0F, 0x10,
->> >>  				   0x11, 0x18);
->> >> +	msleep(20);
->> >>
->> >>  	return 0;
->> >>  }
->> >>
->> >> +static void jh057n_wait_after_sleep_out(void)
->> >> +{
->> >> +	/*
->> >> +	 * Panel is operational 120 msec after reset, i.e. 60 msec after
->> >> +	 * sleep out.
->> >> +	 */
->> >> +	msleep(60);
->> >> +}
->> >> +
->> >> +static void jh057n_drain_charge(void)
->> >> +{
->> >> +}
->> >> +
->> >>  static const struct drm_display_mode jh057n00900_mode =3D {
->> >>  	.hdisplay    =3D 720,
->> >>  	.hsync_start =3D 720 + 90,
->> >> @@ -152,6 +168,8 @@ static const struct st7703_panel_desc jh057n00900=
-_panel_desc =3D {
->> >>  		MIPI_DSI_MODE_VIDEO_BURST | MIPI_DSI_MODE_VIDEO_SYNC_PULSE,
->> >>  	.format =3D MIPI_DSI_FMT_RGB888,
->> >>  	.init_sequence =3D jh057n_init_sequence,
->> >> +	.wait_after_sleep_out =3D jh057n_wait_after_sleep_out,
->> >> +	.drain_charge =3D jh057n_drain_charge,
->> >>  };
->> >>
->> >>  static int xbd599_init_sequence(struct st7703 *ctx)
->> >> @@ -273,7 +291,6 @@ static int xbd599_init_sequence(struct st7703 *ct=
-x)
->> >>  	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETBGP,
->> >>  			       0x07, /* VREF_SEL =3D 4.2V */
->> >>  			       0x07  /* NVREF_SEL =3D 4.2V */);
->> >> -	msleep(20);
->> >>
->> >>  	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETVCOM,
->> >>  			       0x2C, /* VCOMDC_F =3D -0.67V */
->> >> @@ -315,6 +332,18 @@ static int xbd599_init_sequence(struct st7703 *c=
-tx)
->> >>  	return 0;
->> >>  }
->> >>
->> >> +static void xbd599_wait_after_sleep_out(void)
->> >> +{
->> >> +	msleep(120);
->> >> +}
->> >> +
->> >> +static void xbd599_drain_charge(void)
->> >> +{
->> >> +	/* Drain diplay of charge, to work correctly on next power on. */
->> >> +	msleep(120);
->> >> +}
->> >> +
->> >> +
->> >>  static const struct drm_display_mode xbd599_mode =3D {
->> >>  	.hdisplay    =3D 720,
->> >>  	.hsync_start =3D 720 + 40,
->> >> @@ -336,6 +365,8 @@ static const struct st7703_panel_desc xbd599_desc=
- =3D {
->> >>  	.mode_flags =3D MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULS=
-E,
->> >>  	.format =3D MIPI_DSI_FMT_RGB888,
->> >>  	.init_sequence =3D xbd599_init_sequence,
->> >> +	.wait_after_sleep_out =3D xbd599_wait_after_sleep_out,
->> >> +	.drain_charge =3D xbd599_drain_charge,
->> >>  };
->> >>
->> >>  static int st7703_enable(struct drm_panel *panel)
->> >> @@ -350,16 +381,13 @@ static int st7703_enable(struct drm_panel *pane=
-l)
->> >>  		return ret;
->> >>  	}
->> >>
->> >> -	msleep(20);
->> >> -
->> >>  	ret =3D mipi_dsi_dcs_exit_sleep_mode(dsi);
->> >>  	if (ret < 0) {
->> >>  		dev_err(ctx->dev, =E2=80=9CFailed to exit sleep mode: %d\n=E2=80=
-=9D, ret);
->> >>  		return ret;
->> >>  	}
->> >>
->> >> -	/* Panel is operational 120 msec after reset */
->> >> -	msleep(60);
->> >> +	ctx->desc->wait_after_sleep_out();
->> >>
->> >>  	ret =3D mipi_dsi_dcs_set_display_on(dsi);
->> >>  	if (ret)
->> >> @@ -384,6 +412,8 @@ static int st7703_disable(struct drm_panel *panel)
->> >>  	if (ret < 0)
->> >>  		dev_err(ctx->dev, =E2=80=9CFailed to enter sleep mode: %d\n=E2=80=
-=9D, ret);
->> >>
->> >> +	ctx->desc->drain_charge();
->> >> +
->> >>  	return 0;
->> >>  }
->> >>
->> >> =E2=80=93
->> >> 2.39.1
->> >>
-
---=-=-=--
