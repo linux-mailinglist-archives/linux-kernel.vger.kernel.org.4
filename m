@@ -2,97 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A340C694EEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:12:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB68694ECE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:06:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbjBMSL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:11:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60040 "EHLO
+        id S229962AbjBMSG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:06:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230462AbjBMSL5 (ORCPT
+        with ESMTP id S229720AbjBMSGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:11:57 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7992B117;
-        Mon, 13 Feb 2023 10:11:24 -0800 (PST)
-Received: from [192.168.2.1] (77-166-152-30.fixed.kpn.net [77.166.152.30])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 30F6C20CEAA2;
-        Mon, 13 Feb 2023 10:05:14 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 30F6C20CEAA2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1676311515;
-        bh=g2sXOJcYBH6Oc9c82Iqdn7FrnECej31LP7qAuLdPq0U=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=M/y65pxMQl6pH/X1UpUIfm/f4tfy/NhCYdUowNlj4klFeMpJBuoWi6DGayg37dYwY
-         lIMyQknaQEbXLw4bzcgTTWH2ch2Brrxw75C+4TRpLOU9YW0kgHZ3annZ7ycdmmWAkb
-         RZFOalWttZUaFRe9yQNf9N6DcufABnvCDogvE8Ww=
-Message-ID: <21b1ee26-dfd4-923d-72da-d8ded3dd819c@linux.microsoft.com>
-Date:   Mon, 13 Feb 2023 19:05:12 +0100
+        Mon, 13 Feb 2023 13:06:53 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id E6DFBA5D1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:06:28 -0800 (PST)
+Received: (qmail 916650 invoked by uid 1000); 13 Feb 2023 13:05:48 -0500
+Date:   Mon, 13 Feb 2023 13:05:48 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
+ with unique class keys
+Message-ID: <Y+p7/Ie5PqSMtIrc@rowland.harvard.edu>
+References: <20230208080739.1649-1-hdanton@sina.com>
+ <1ad499bb-0c53-7529-ff00-e4328823f6fa@I-love.SAKURA.ne.jp>
+ <Y+O6toMmAKBSILMf@rowland.harvard.edu>
+ <f79e93ef-cfe8-1373-7c36-15d046c0e3c5@I-love.SAKURA.ne.jp>
+ <Y+RZ2RKVo9FNMgSe@rowland.harvard.edu>
+ <52c7d509-ba9e-a121-60c9-138d7ff3f667@I-love.SAKURA.ne.jp>
+ <Y+gLd78vChQERZ6A@rowland.harvard.edu>
+ <Y+oHvi5f+tDMPR31@hirez.programming.kicks-ass.net>
+ <Y+pi6pA0d22g7sCE@rowland.harvard.edu>
+ <Y+p4vUqOE87WGwuD@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: "KVM: x86/mmu: Overhaul TDP MMU zapping and flushing" breaks SVM
- on Hyper-V
-Content-Language: en-US
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tianyu Lan <ltykernel@gmail.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-References: <43980946-7bbf-dcef-7e40-af904c456250@linux.microsoft.com>
- <Y+aQyFJt9Tn2PJnC@google.com>
- <9a046de1-8085-3df4-94cd-39bb893c8c9a@linux.microsoft.com>
- <88a89319-a71e-fa90-0dbb-00cf8a549380@redhat.com>
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-In-Reply-To: <88a89319-a71e-fa90-0dbb-00cf8a549380@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-20.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+p4vUqOE87WGwuD@kroah.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 13, 2023 at 06:51:57PM +0100, Greg Kroah-Hartman wrote:
+> But back to the original issue here, why any of this?  What's wrong with
+> what we have now?  I haven't seen real locking issues reported yet (only
+> odd syzbot reports that didn't make any sense.)  Is this effort even
+> worth it?
 
+A large part of the reason those syzbot reports didn't make any sense 
+was because they didn't include any lockdep information.  Making lockdep 
+aware of device locking would make those reports a lot easier to 
+understand and would help with fixing the bugs.  And it might even help 
+with catching similar problems before they get merged into the kernel.
 
-On 13/02/2023 13:50, Paolo Bonzini wrote:
-> 
-> On 2/13/23 13:44, Jeremi Piotrowski wrote:
->> Just built a kernel from that tree, and it displays the same behavior. The problem
->> is not that the addresses are wrong, but that the flushes are issued at the wrong
->> time now. At least for what "enlightened NPT TLB flush" requires.
-> 
-> It is not clear to me why HvCallFluyshGuestPhysicalAddressSpace or HvCallFlushGuestPhysicalAddressList would have stricter requirements than a "regular" TLB shootdown using INVEPT.
-> 
-> Can you clarify what you mean by wrong time, preferrably with some kind of sequence of events?
-> 
-> That is, something like
-> 
-> CPU 0    Modify EPT from ... to ...
-> CPU 0    call_rcu() to free page table
-> CPU 1    ... which is invalid because ...
-> CPU 0    HvCallFlushGuestPhysicalAddressSpace
-> 
-> Paolo
+Will it be worthwhile in the end?  I have no idea.
 
-So I looked at the ftrace (all kvm&kvmmu events + hyperv_nested_* events) I see the following:
-With tdp_mmu=0:
-kvm_exit
-sequence of kvm_mmu_prepare_zap_page
-hyperv_nested_flush_guest_mapping (always follows every sequence of kvm_mmu_prepare_zap_page)
-kvm_entry
-
-With tdp_mmu=1 I see:
-kvm_mmu_prepare_zap_page and kvm_tdp_mmu_spte_changed events from a kworker context, but
-they are not followed by hyperv_nested_flush_guest_mapping. The only hyperv_nested_flush_guest_mapping
-events I see happen from the qemu process context.
-
-Also the number of flush hypercalls is significantly lower: a 7second sequence through OVMF with
-tdp_mmu=0 produces ~270 flush hypercalls. In the traces with tdp_mmu=1 I now see max 3.
-
-So this might be easier to diagnose than I thought: the HvCallFlushGuestPhysicalAddressSpace calls
-are missing now.
+Alan Stern
