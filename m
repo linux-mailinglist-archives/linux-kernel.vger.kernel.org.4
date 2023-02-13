@@ -2,132 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E10669445E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:25:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68018694462
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:26:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbjBMLZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 06:25:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36984 "EHLO
+        id S229941AbjBML04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 06:26:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbjBMLZA (ORCPT
+        with ESMTP id S229802AbjBML0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 06:25:00 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21D814E82;
-        Mon, 13 Feb 2023 03:24:59 -0800 (PST)
-Date:   Mon, 13 Feb 2023 11:24:57 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1676287498;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KRfwpv/HgZDdd4k+GFcTibHg4hbUMy4dGlmO3TPOkNc=;
-        b=hlYV+QdyR5oiMXms6YtHG9QeBgXLm2ypHhtpejJ57WKb0mzKCS1x5e6SjDneTTCPsukm5u
-        OW37suUvntxWvDMk7rwrS+BfjiHefdBfjgrkbr30grLaJx1COSFcFhqBeydpCBXKMUfWnY
-        71gx+O2faabfpFGmBY0bTq4vpAR3HNv7fRt2HSGj5A0q8ufkj5YEGyTMTfM8VYzzgUThqb
-        9wvEVSeDgKKa3HZa+GFhS/21VCOj1BXGtOohIaOPCTgQlMkNw3fVwZj4hSwFeDbBNlwJXS
-        i6USvznKK4ZapSrtU14COt5gDFa5FRjo/CmSYU5iCWEfpuEFAT4fpEC380HUaw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1676287498;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KRfwpv/HgZDdd4k+GFcTibHg4hbUMy4dGlmO3TPOkNc=;
-        b=D7Xo5nvRfihZliq/Pe50933/ND4c2MZzssos0eM02Yh5TM6HB+IqLtUxxarWeokaxLorrG
-        dHA4lUECqilbgSBw==
-From:   "tip-bot2 for Reinette Chatre" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/urgent] PCI/MSI: Provide missing stubs for CONFIG_PCI_MSI=n
-Cc:     kernel test robot <lkp@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: =?utf-8?q?=3C158e40e1cfcfc58ae30ecb2bbfaf86e5bba7a1ef=2E16759?=
- =?utf-8?q?78686=2Egit=2Ereinette=2Echatre=40intel=2Ecom=3E?=
-References: =?utf-8?q?=3C158e40e1cfcfc58ae30ecb2bbfaf86e5bba7a1ef=2E167597?=
- =?utf-8?q?8686=2Egit=2Ereinette=2Echatre=40intel=2Ecom=3E?=
+        Mon, 13 Feb 2023 06:26:53 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3B72D5E
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:26:52 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id j17so4330078ioa.9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:26:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AMZ+dV1nC8MEbsqkMnbGLqJoVdn1vA5Cn4dTYfSbU0w=;
+        b=VptsRcKp7YGcyynq1dr4wTNyQ7lCtzL2KOtVfQkXsoFea9+hzXJh3tRWkM/nTRvPn3
+         9nGJcEEXGKs6t4JC1qxCOArfYqI0KMQZ2O1XNBe1xv7T6/Kk1EV9GSAz7QcGRGRXkIV8
+         8U9sqsY+0uQhHZuuZ2CQmFw7I9uxjIGZrjWdYqPPwbbja1b8+6Dl68mgCSY+DqZp0FnF
+         xXB8vFhOvmW9z668O+0CgxwF625fZUq4ouHw5hD4aZBNmDT35zMELg3TrHj1MCz4NTZx
+         Q1vV692bdLOMr7CmsEXmzgrMM1+Zu0+ZX3E+rBdRdbO3FpgakaJWxR9XJ8XYSvmWoK1Z
+         C/eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AMZ+dV1nC8MEbsqkMnbGLqJoVdn1vA5Cn4dTYfSbU0w=;
+        b=RUGxFjsN35ME2svLQ8D3LreuTtBwm6gzOdatnErTijcM+y/9nUeNL6YZmY74aXAXsY
+         RQdFdstEbZQviVJzNqJfd30biJx5uVejcLPsBdQP/Rj0mG6d2T43H2TTrTdN1J6YYkMk
+         XPU/lAoFoU1EcVe4INcmvJVeXvv6ILxWoJS7ZQmYtIuIn6EHiws/7AMoBh+Xr/PQtJf5
+         qbaSk/NXf1m8qKD66Tbnpyv6WmyvqAIuDPNXUBSRJ90TDktUTwMZPfT7mpVda7aFiRHS
+         AdAUBaXzvlm+x+wi+sdVUSzSJOAdD9AQxCEwFggo8h5QHFNNBbAGlT7Lsl/5QPq4exc8
+         c55A==
+X-Gm-Message-State: AO0yUKWPHapbiC0ged+XTiitpPtYasQc4vyHpn6ePstYgxK3B+IJk6YG
+        ozBiNgxC5+kdtHjiU3uVEPANMOP/Iymy1yv+NF36Gw==
+X-Google-Smtp-Source: AK7set8zW9LvRliK051KK5j6srceN0dT5sB7oJKViCxiJBQFHh70oldULOIIUHbsspwfnwBThg0SXTm9jwqXex580X8=
+X-Received: by 2002:a05:6602:3155:b0:732:9e46:de04 with SMTP id
+ m21-20020a056602315500b007329e46de04mr11828525ioy.65.1676287611687; Mon, 13
+ Feb 2023 03:26:51 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <167628749774.4906.17069524905880641563.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1676063693.git.andreyknvl@google.com> <484fd2695dff7a9bdc437a32f8a6ee228535aa02.1676063693.git.andreyknvl@google.com>
+In-Reply-To: <484fd2695dff7a9bdc437a32f8a6ee228535aa02.1676063693.git.andreyknvl@google.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 13 Feb 2023 12:26:11 +0100
+Message-ID: <CAG_fn=VzvKnvqqPChYFi3mzbe4u2dfYz5mT=nJ-TSkKiLqB17g@mail.gmail.com>
+Subject: Re: [PATCH v2 14/18] lib/stackdepot: rename next_pool_inited to next_pool_required
+To:     andrey.konovalov@linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        Evgenii Stepanov <eugenis@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/urgent branch of tip:
-
-Commit-ID:     2b129f0b24ab578b02901b4a1744b7f97399faa0
-Gitweb:        https://git.kernel.org/tip/2b129f0b24ab578b02901b4a1744b7f97399faa0
-Author:        Reinette Chatre <reinette.chatre@intel.com>
-AuthorDate:    Thu, 09 Feb 2023 13:49:00 -08:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Mon, 13 Feb 2023 12:17:20 +01:00
-
-PCI/MSI: Provide missing stubs for CONFIG_PCI_MSI=n
-
-pci_msix_alloc_irq_at() and pci_msix_free_irq() are not declared when
-CONFIG_PCI_MSI is disabled.
-
-Users of these two calls do not yet exist but when users do appear (shown
-below is an attempt to use the new API in vfio-pci) the following errors
-will be encountered when compiling with CONFIG_PCI_MSI disabled:
-
-drivers/vfio/pci/vfio_pci_intrs.c:461:4: error: implicit declaration of\
-        function 'pci_msix_free_irq' is invalid in C99\
-        [-Werror,-Wimplicit-function-declaration]
-                           pci_msix_free_irq(pdev, msix_map);
-                           ^
-drivers/vfio/pci/vfio_pci_intrs.c:511:15: error: implicit declaration of\
-        function 'pci_msix_alloc_irq_at' is invalid in C99\
-        [-Werror,-Wimplicit-function-declaration]
-                   msix_map = pci_msix_alloc_irq_at(pdev, vector, NULL);
-
-Provide definitions for pci_msix_alloc_irq_at() and pci_msix_free_irq() in
-preparation for users that need to compile when CONFIG_PCI_MSI is
-disabled.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 34026364df8e ("PCI/MSI: Provide post-enable dynamic allocation interfaces for MSI-X")
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/158e40e1cfcfc58ae30ecb2bbfaf86e5bba7a1ef.1675978686.git.reinette.chatre@intel.com
----
- include/linux/pci.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index adffd65..254c8a4 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -1621,6 +1621,18 @@ pci_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
- 					      flags, NULL);
- }
- 
-+static inline struct msi_map pci_msix_alloc_irq_at(struct pci_dev *dev, unsigned int index,
-+						   const struct irq_affinity_desc *affdesc)
-+{
-+	struct msi_map map = { .index = -ENOSYS, };
-+
-+	return map;
-+}
-+
-+static inline void pci_msix_free_irq(struct pci_dev *pdev, struct msi_map map)
-+{
-+}
-+
- static inline void pci_free_irq_vectors(struct pci_dev *dev)
- {
- }
+On Fri, Feb 10, 2023 at 10:18 PM <andrey.konovalov@linux.dev> wrote:
+>
+> From: Andrey Konovalov <andreyknvl@google.com>
+>
+> Stack depot uses next_pool_inited to mark that either the next pool is
+> initialized or the limit on the number of pools is reached. However,
+> the flag name only reflects the former part of its purpose, which is
+> confusing.
+>
+> Rename next_pool_inited to next_pool_required and invert its value.
+>
+> Also annotate usages of next_pool_required with comments.
+>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>
