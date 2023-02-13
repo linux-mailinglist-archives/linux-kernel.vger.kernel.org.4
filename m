@@ -2,103 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9AD693CC5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 04:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C9D1693CCA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 04:09:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjBMDHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 22:07:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
+        id S229758AbjBMDJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 22:09:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjBMDHT (ORCPT
+        with ESMTP id S229804AbjBMDJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 22:07:19 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02B49ED7;
-        Sun, 12 Feb 2023 19:07:17 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id h10so1657390vsu.11;
-        Sun, 12 Feb 2023 19:07:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=kcHnI96zNjfQlLYDodJwKwSlXVI5y4LSVOx8M0TZ8ZU=;
-        b=K8g777QIwrLgN+pFUq/PZMZ/+GWhoFo9rfesTPx1SqpoegLAlgdTVtd/dbX/6tC93b
-         KPnWn0ig86IlPq/7dvzTaHb2v5WqAhborapk+r+F777pHrrdX6KRE3ZVz8kCIkcUePFv
-         UkU4XrOPpNBsVzc/ZhFQeGq+MlI0rpjez0cAYw+57Adcl+KLVtiyvjUCm7UeJVN3YDTY
-         7jXvsNfha33LcNHeZ+Bg11ipscl7H7p7IgXw6SQQjDoQSdiMLKGNimllZ0iJURkQilGj
-         CztYuleQjtiWvUQudWoZd+ro0m0NFzreUrRXga2K4KKGRVSba50XopmeikUU+WQAMkAX
-         mx+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kcHnI96zNjfQlLYDodJwKwSlXVI5y4LSVOx8M0TZ8ZU=;
-        b=KhQuFRbDlNi/78V+QZqORqztndro4jUpNJs+5QcQKcgHBQakyFTZzewwggmk5nrvMM
-         UkzV8FgU4gY52Sigs24oef3Z1l/LrGa6hvwov2+oOA2uEoucINzIab4OHG2eIBAxI4iG
-         G+LSoykghvO9ylpHr9WuXThv70clRymK0uJsgpYlt7AIjw+zTJfdrJKLTC+bwDcxZSB1
-         y05J9wihbodinpp+6kNsciXFEi6Ip81qLAMgmC+2RSOu6NGZ/bVQsQN/+lf23PQ5h6na
-         o0zsyGU9kNtxX/i88kknVW2JDSDUfSAyvT7zra1iMHWxQU8X3ata0XG39bq2oHMI1Ot/
-         0Rxg==
-X-Gm-Message-State: AO0yUKUtfE0opfwZHdGfUQRbzFFUe0agaOgbSirXXCKgOXDg4QdVRZgI
-        KgBBxBPGWWYbhTXuB8ZUPwXD95N0zQX8dBAIzMM=
-X-Google-Smtp-Source: AK7set8iEjeN78Q7+12/hG2Oj6DiGKxWZmsCx8JOLarTr8A1PYmgakLmXoZmHMsilJeX5BhTiaU0vJWHNrlWguub4Xw=
-X-Received: by 2002:a05:6102:a22:b0:412:317f:e15f with SMTP id
- 2-20020a0561020a2200b00412317fe15fmr32440vsb.29.1676257636873; Sun, 12 Feb
- 2023 19:07:16 -0800 (PST)
+        Sun, 12 Feb 2023 22:09:48 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD31D53A;
+        Sun, 12 Feb 2023 19:09:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676257788; x=1707793788;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Mx8hjkquFcdwVnwjv95J9hNvyTNxMHzbXHuu8sq9qEI=;
+  b=SmoTw1dyhECTZjl7kgKjJ42qcuiUYf1ySvGAYzeC2CAQnWU+ji0YLWJV
+   Xci9dC1f0HK6zXb3xNMlMmNQ6zzbFkIK1eqKpEc20i19LFVm3FklftUFL
+   jX5ZMebn+pLWIs1s660xHo4cP51zy1m5egQP5pZLqjCL2sf0a9KQJdRY+
+   6EiuCQYlIm3UXf7fQsdXFg1I0JNKwgG6UbQyJ5ZgBM5jor38gIkgjTG5t
+   A+CjZC0RSNcem1kXYrvXeBsdupaz4QyYd1YtX9ASiXVgGAUFY4/uonmBd
+   q8hjdM3aB77aQ4SGLMLaBtKp7pMNKQcZYY+paShX7CqgSg+7+xHTlVQiK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="329424705"
+X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
+   d="scan'208";a="329424705"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 19:09:46 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="842621921"
+X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
+   d="scan'208";a="842621921"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.254.214.18]) ([10.254.214.18])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 19:09:41 -0800
+Message-ID: <0581875e-f0af-582e-82fb-62cf03ba39b2@linux.intel.com>
+Date:   Mon, 13 Feb 2023 11:09:39 +0800
 MIME-Version: 1.0
-From:   Kyle Sanderson <kyle.leet@gmail.com>
-Date:   Sun, 12 Feb 2023 19:07:05 -0800
-Message-ID: <CACsaVZJvXpCt37nQOoe8qd1EPUpfdMM1HwHk9tVO8HdU_Azhhw@mail.gmail.com>
-Subject: RAID4 with no striping mode request
-To:     device-mapper development <dm-devel@redhat.com>,
-        linux-raid@vger.kernel.org
-Cc:     Song Liu <song@kernel.org>,
-        Linux-Kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 2/6] iommu/vt-d: Implement hw_info for iommu capability
+ query
+To:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
+        alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
+        robin.murphy@arm.com
+Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
+        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        baolu.lu@linux.intel.com
+References: <20230209041642.9346-1-yi.l.liu@intel.com>
+ <20230209041642.9346-3-yi.l.liu@intel.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20230209041642.9346-3-yi.l.liu@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi DM and Linux-RAID,
 
-There have been multiple proprietary solutions (some nearly 20 years
-old now) with a number of (userspace) bugs that are becoming untenable
-for me as an end user. Basically how they work is a closed MD module
-(typically administered through DM) that uses RAID4 for a dedicated
-parity disk across multiple other disks.
+On 2/9/2023 12:16 PM, Yi Liu wrote:
+> From: Lu Baolu <baolu.lu@linux.intel.com>
+>
+> To support nested translation in the userspace, it should check the
+> underlying hardware information for the capabilities.
+>
+> Add intel_iommu_hw_info() to report cap_reg and ecap_reg information.
+>
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> Signed-off-by: Yi Sun <yi.y.sun@linux.intel.com>
+> ---
+>   drivers/iommu/intel/iommu.c  | 19 +++++++++++++++++++
+>   drivers/iommu/intel/iommu.h  |  1 +
+>   include/uapi/linux/iommufd.h | 21 +++++++++++++++++++++
+>   3 files changed, 41 insertions(+)
+>
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index 59df7e42fd53..929f600cc350 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -4760,8 +4760,26 @@ static void intel_iommu_remove_dev_pasid(struct device *dev, ioasid_t pasid)
+>   	intel_pasid_tear_down_entry(iommu, dev, pasid, false);
+>   }
+>   
+> +static void *intel_iommu_hw_info(struct device *dev, u32 *length)
+> +{
+> +	struct device_domain_info *info = dev_iommu_priv_get(dev);
+> +	struct intel_iommu *iommu = info->iommu;
+> +	struct iommu_device_info_vtd *vtd;
+> +
+> +	vtd = kzalloc(sizeof(*vtd), GFP_KERNEL);
+> +	if (!vtd)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	vtd->cap_reg = iommu->cap;
+> +	vtd->ecap_reg = iommu->ecap;
+> +	*length = sizeof(*vtd);
+> +
+> +	return vtd;
+> +}
+> +
+>   const struct iommu_ops intel_iommu_ops = {
+>   	.capable		= intel_iommu_capable,
+> +	.hw_info		= intel_iommu_hw_info,
+>   	.domain_alloc		= intel_iommu_domain_alloc,
+>   	.probe_device		= intel_iommu_probe_device,
+>   	.probe_finalize		= intel_iommu_probe_finalize,
+> @@ -4774,6 +4792,7 @@ const struct iommu_ops intel_iommu_ops = {
+>   	.def_domain_type	= device_def_domain_type,
+>   	.remove_dev_pasid	= intel_iommu_remove_dev_pasid,
+>   	.pgsize_bitmap		= SZ_4K,
+> +	.driver_type		= IOMMU_DEVICE_DATA_INTEL_VTD,
+>   #ifdef CONFIG_INTEL_IOMMU_SVM
+>   	.page_response		= intel_svm_page_response,
+>   #endif
+> diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
+> index 06e61e474856..2e70265d4ceb 100644
+> --- a/drivers/iommu/intel/iommu.h
+> +++ b/drivers/iommu/intel/iommu.h
+> @@ -22,6 +22,7 @@
+>   #include <linux/ioasid.h>
+>   #include <linux/bitfield.h>
+>   #include <linux/xarray.h>
+> +#include <uapi/linux/iommufd.h>
+>   
+>   #include <asm/cacheflush.h>
+>   #include <asm/iommu.h>
+> diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
+> index 2309edb55028..fda75c8450ee 100644
+> --- a/include/uapi/linux/iommufd.h
+> +++ b/include/uapi/linux/iommufd.h
+> @@ -347,7 +347,28 @@ struct iommu_vfio_ioas {
+>   
+>   /**
+>    * enum iommu_device_data_type - IOMMU hardware Data types
+> + * @IOMMU_DEVICE_DATA_INTEL_VTD: Intel VT-d iommu data type
+>    */
+>   enum iommu_device_data_type {
+> +	IOMMU_DEVICE_DATA_INTEL_VTD = 1,
+> +};
+> +
+> +/**
+> + * struct iommu_device_info_vtd - Intel VT-d device info
+> + *
+> + * @flags: Must be set to 0
 
-As there is no striping, the maximum size of the protected data is the
-size of the parity disk (so a set of 4+8+12+16 disks can be protected
-by a single dedicated 16 disk).When a block is written on any disk,
-the parity bit is read from the parity disk again, and updated
-depending on the existing + new bit value (so writing disk + parity
-disk spun up). Additionally, if enough disks are already spun up, the
-parity information can be recalculated from all of the spinning disks,
-resulting in a single write to the parity disk (without a read on the
-parity, doubling throughput). Finally any of the data disks can be
-moved around within the array without impacting parity as the layout
-has not changed. I don't necessarily need all of these features, just
-the ability to remove a disk and still access the data that was on
-there by spinning up every other disk until the rebuild is complete is
-important.
+Could you add more description about the usage of flags here?
 
-The benefit of this can be the data disks are all zoned, and you can
-have a fast parity disk and still maintain excellent performance in
-the array (limited only by the speed of the disk in question +
-parity). Additionally, should 2 disks fail, you've either lost the
-parity and data disk, or 2 data disks with the parity and other disks
-not lost.
 
-I was reading through the DM and MD code and it looks like everything
-may already be there to do this, just needs (significant) stubs to be
-added to support this mode (or new code). Snapraid is a friendly (and
-respectable) implementation of this. Unraid and Synology SHR compete
-in this space, as well as other NAS and enterprise SAN providers.
-
-Kyle.
+> + * @__reserved: Must be 0
+> + * @cap_reg: Value of Intel VT-d capability register defined in chapter
+> + *	     11.4.2 of Intel VT-d spec.
+> + * @ecap_reg: Value of Intel VT-d capability register defined in chapter
+> + *	     11.4.3 of Intel VT-d spec.
+> + *
+> + * Intel hardware iommu capability.
+> + */
+> +struct iommu_device_info_vtd {
+> +	__u32 flags;
+> +	__u32 __reserved;
+> +	__aligned_u64 cap_reg;
+> +	__aligned_u64 ecap_reg;
+>   };
+>   #endif
