@@ -2,108 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1420694EFB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:12:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7164694EFD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231260AbjBMSM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:12:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33164 "EHLO
+        id S231255AbjBMSN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:13:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbjBMSMy (ORCPT
+        with ESMTP id S229945AbjBMSNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:12:54 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599881EFE7;
-        Mon, 13 Feb 2023 10:12:28 -0800 (PST)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id A0EEF8564B;
-        Mon, 13 Feb 2023 19:12:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1676311944;
-        bh=/yPHjrWLL3NXz1sw5YGJZHaZLQK8RuSfKRlUWsWgS+I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=vE8SkwKaVrMo5eOQY11TLrkpTuau7g2zVErD5wrAbqzb7JtSBtswTy0eF6/JBoky+
-         vLTUzSycoNzbrVx1dXplSf1Sa5b9Gt4hi7T/sc7DhQx3hTz7KPr/Os9kttUedw620V
-         zDIgHA2Orvm2QPtg8ulYnUaWXw6vOa8/9Os+ITfFXCDk5HDzzcPWyH7zvsxW07keRP
-         QEg5rhMCAU6DyMjnb7O1S8dzyb9+NlqBfBli1qSEzCKnDH9ZGMqChE8pmmqWN4oTll
-         0i3I+adj+81OCnnbhMAw+mX9GnUGx0YQyvkdrgvu/qlCwcOQ798jiPeplZgcubpyKD
-         yQp0E69vWBaww==
-Message-ID: <eef49a1c-4dc3-7517-c760-ecc20704f943@denx.de>
-Date:   Mon, 13 Feb 2023 19:12:23 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 6/6] arm64: dts: imx8mm-kontron: Add support for reading
- SD_VSEL signal
-Content-Language: en-US
-To:     Marco Felsch <m.felsch@pengutronix.de>,
-        Frieder Schrempf <frieder@fris.de>
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
+        Mon, 13 Feb 2023 13:13:54 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026E111D
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:13:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1676311991; bh=SAwHxQ/gSzx3tIPkoaBgffqQPABlaFMW+rxGRpZZdtU=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=WOxJY9doUQun7DHJGdNqL2N6NZJXqvNK6kLIo0oOCOiHGxZImLdYGtpTh9c8XIrrr
+         n3yBFPgJ/Qu1a2FXUAAlYspClGxVF0c1w9KaTzj0AicJo2B74IVPEw1cSN17aydPR/
+         8bTTt6oxQD/oTe6R/4QJoArYmV18fuCN6aCDPnX4=
+Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Mon, 13 Feb 2023 19:13:10 +0100 (CET)
+X-EA-Auth: mVOtM26hiXOBErT5zUvL2AUpwMZen8W1yzH2o2fU8H6i/YJLJZUYw/Hgyue7COmu2GQyHjdRlMk9Tu+oYwHqJ9yq0UfBQuWD
+Date:   Mon, 13 Feb 2023 23:43:03 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Heiko Thiery <heiko.thiery@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>
-References: <20230213155833.1644366-1-frieder@fris.de>
- <20230213155833.1644366-7-frieder@fris.de>
- <20230213161548.ucaqpza65byyqvfo@pengutronix.de>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <20230213161548.ucaqpza65byyqvfo@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        NXP Linux Team <linux-imx@nxp.com>,
+        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: [PATCH] ASoC: imx-pcm-rpmsg: Remove unused variable
+Message-ID: <Y+p9r5y9DPSJkPVf@ubun2204.myguest.virtualbox.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/13/23 17:15, Marco Felsch wrote:
+Variable ret is initialed but is never modified or used except for
+returning the initial value 0. The value can be directly returned
+instead and the variable definition can be dropped.
+Issue identified using returnvar.cocci Coccinelle semantic patch.
 
-[...]
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+ sound/soc/fsl/imx-pcm-rpmsg.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
->> @@ -347,7 +347,7 @@ MX8MM_IOMUXC_SD2_DATA1_USDHC2_DATA1		0x1d6
->>   			MX8MM_IOMUXC_SD2_DATA2_USDHC2_DATA2		0x1d6
->>   			MX8MM_IOMUXC_SD2_DATA3_USDHC2_DATA3		0x1d6
->>   			MX8MM_IOMUXC_SD2_CD_B_GPIO2_IO12		0x019
->> -			MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT		0x1d0
->> +			MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT		0x400001d0
-> 
-> The VSELECT pin should be driven by the (u)sdhc core...
-> 
->>   		>;
->>   	};
->>   };
->> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
->> index 5172883717d1..90daaf54e704 100644
->> --- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
->> +++ b/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
->> @@ -196,6 +196,7 @@ reg_nvcc_sd: LDO5 {
->>   				regulator-name = "NVCC_SD (LDO5)";
->>   				regulator-min-microvolt = <1800000>;
->>   				regulator-max-microvolt = <3300000>;
->> +				sd-vsel-gpios = <&gpio1 4 GPIO_ACTIVE_HIGH>;
-> 
-> and by using the sd-vsel-gpios property the IOMUXC_GPIO1_IO04 have to be
-> muxed as GPIO, which is not the case. So I think that u-boot have a bug
-> within the (u)sdhc core.
+diff --git a/sound/soc/fsl/imx-pcm-rpmsg.c b/sound/soc/fsl/imx-pcm-rpmsg.c
+index 2f310994f7ee..6614b3447649 100644
+--- a/sound/soc/fsl/imx-pcm-rpmsg.c
++++ b/sound/soc/fsl/imx-pcm-rpmsg.c
+@@ -140,7 +140,6 @@ static int imx_rpmsg_pcm_hw_params(struct snd_soc_component *component,
+ {
+ 	struct rpmsg_info *info = dev_get_drvdata(component->dev);
+ 	struct rpmsg_msg *msg;
+-	int ret = 0;
+ 
+ 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
+ 		msg = &info->msg[TX_HW_PARAM];
+@@ -184,7 +183,7 @@ static int imx_rpmsg_pcm_hw_params(struct snd_soc_component *component,
+ 
+ 	info->send_message(msg, info);
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static snd_pcm_uframes_t imx_rpmsg_pcm_pointer(struct snd_soc_component *component,
+@@ -282,7 +281,6 @@ static int imx_rpmsg_pcm_close(struct snd_soc_component *component,
+ 	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
+ 	struct rpmsg_info *info = dev_get_drvdata(component->dev);
+ 	struct rpmsg_msg *msg;
+-	int ret = 0;
+ 
+ 	/* Flush work in workqueue to make TX_CLOSE is the last message */
+ 	flush_workqueue(info->rpmsg_wq);
+@@ -305,7 +303,7 @@ static int imx_rpmsg_pcm_close(struct snd_soc_component *component,
+ 		dev_warn(rtd->dev, "Msg is dropped!, number is %d\n",
+ 			 info->msg_drop_count[substream->stream]);
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static int imx_rpmsg_pcm_prepare(struct snd_soc_component *component,
+-- 
+2.34.1
 
-The trick here is that the VSELECT is operated by the usdhc block as a 
-function pin, but the PMIC driver can read the current state of the 
-VSELECT pin by reading out the GPIO block SR register. Since the IOMUX 
-SION bit is set on the VSELECT pin, the state of the pin is reflected in 
-the GPIO block SR register even if the pin is muxed as function pin.
+
+
