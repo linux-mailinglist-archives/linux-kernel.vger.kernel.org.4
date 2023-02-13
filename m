@@ -2,134 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA7E69464C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:50:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F061B694655
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:51:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjBMMuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 07:50:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
+        id S230448AbjBMMv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 07:51:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjBMMuf (ORCPT
+        with ESMTP id S229629AbjBMMvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 07:50:35 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6083AB6;
-        Mon, 13 Feb 2023 04:50:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1676292629; x=1707828629;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=UB3JMVgsvcRlgpqs7yOTCnMRa0t0rNkSKFS1hu7Qga0=;
-  b=wF7JFeal/14iDyRVBdWK+xLHppXEu1AMWXDxm8jFJUvZufRCXFJAIsDT
-   gNOU3ZS5euQZsB2AY1FZk96xSozRgFKcQluKro68chIlFhVVe0yYU0qqO
-   /YoTUZSuCTlCmv7btEP9u5QTFpzJly6La6kznOyZj/1RsuFdByqmICmq5
-   sdOpD6aVN8prwJW1QHEAJ9P9n4KSsfmrTRkCLw6R1XjK3yuGfg+GObII7
-   VyhZsAkrDomJ0PIYoHJlaw3lWBp4zUD/STnq+lq5HPPBmIbQU7/l9vsHv
-   P3/951ox1LkPcGr2pOXZQp+7rOx+d4q2L8BZ9LGsdQ9n3s70B1k6yYu/+
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,294,1669100400"; 
-   d="scan'208";a="200219144"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Feb 2023 05:50:28 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 13 Feb 2023 05:50:26 -0700
-Received: from den-dk-m31857.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Mon, 13 Feb 2023 05:50:23 -0700
-Message-ID: <382f9239620edb44cf6b4e6b295e58fe31c45c12.camel@microchip.com>
-Subject: Re: [PATCH net-next 10/10] net: microchip: sparx5: Add TC vlan
- action support for the ES0 VCAP
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     Dan Carpenter <error27@gmail.com>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Casper Andersson <casper.casan@gmail.com>,
-        "Russell King" <rmk+kernel@armlinux.org.uk>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        "Nathan Huckleberry" <nhuck@google.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Daniel Machon" <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Michael Walle <michael@walle.cc>
-Date:   Mon, 13 Feb 2023 13:50:23 +0100
-In-Reply-To: <Y+oZHpMpW6ODQQpY@kadam>
-References: <20230213092426.1331379-1-steen.hegelund@microchip.com>
-         <20230213092426.1331379-11-steen.hegelund@microchip.com>
-         <Y+oZHpMpW6ODQQpY@kadam>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.46.3 
+        Mon, 13 Feb 2023 07:51:55 -0500
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BDE40C2;
+        Mon, 13 Feb 2023 04:51:52 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PFkk84Rxjz4f3jHY;
+        Mon, 13 Feb 2023 20:51:44 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+        by APP4 (Coremail) with SMTP id gCh0CgD3qa1dMupjSMMuDg--.19493S2;
+        Mon, 13 Feb 2023 20:51:45 +0800 (CST)
+Subject: Re: [PATCH] blk-ioprio: Introduce promote-to-rt policy
+To:     Jan Kara <jack@suse.cz>, Bart Van Assche <bvanassche@acm.org>
+Cc:     linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        cgroups@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, houtao1@huawei.com
+References: <20230201045227.2203123-1-houtao@huaweicloud.com>
+ <8c068af3-7199-11cf-5c69-a523c7c22d9a@acm.org>
+ <4f7dcb3e-2d5a-cae3-0e1c-a82bcc3d2217@huaweicloud.com>
+ <b6b3c498-e90b-7d1f-6ad5-a31334e433ae@acm.org>
+ <beb7782e-72a4-c350-3750-23a767c88753@huaweicloud.com>
+ <aedc240d-7c9e-248a-52d2-c9775f3e8ca1@acm.org>
+ <20230208134345.77bdep3kzp52haxu@quack3>
+ <7fcd4c38-ccbe-6411-e424-a57595ad9c0b@acm.org>
+ <20230209085603.dzqfcc3pp4hacqlz@quack3>
+ <55a065e7-7d86-d58f-15ba-c631a427843e@acm.org>
+ <20230210101244.zsmtmsoo4xjx7suj@quack3>
+From:   Hou Tao <houtao@huaweicloud.com>
+Message-ID: <48620099-0311-e752-ba3b-cbb4351cf81e@huaweicloud.com>
+Date:   Mon, 13 Feb 2023 20:51:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230210101244.zsmtmsoo4xjx7suj@quack3>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-CM-TRANSID: gCh0CgD3qa1dMupjSMMuDg--.19493S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWF43Ww1DtF4xtryUCw4UJwb_yoW5CF18pF
+        WxJFWqkFW8Xw1xA3WDt3WvqrWFg3s7Ja1UJrs8XFWjkFn8JF93XF4IkFWF9F17ArZ5WrnI
+        y393J34j9Fy3ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
+        6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+        9x07UWE__UUUUU=
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgRGFuLAoKT24gTW9uLCAyMDIzLTAyLTEzIGF0IDE0OjAzICswMzAwLCBEYW4gQ2FycGVudGVy
-IHdyb3RlOgo+IEVYVEVSTkFMIEVNQUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRh
-Y2htZW50cyB1bmxlc3MgeW91IGtub3cgdGhlCj4gY29udGVudCBpcyBzYWZlCj4gCj4gT24gTW9u
-LCBGZWIgMTMsIDIwMjMgYXQgMTA6MjQ6MjZBTSArMDEwMCwgU3RlZW4gSGVnZWx1bmQgd3JvdGU6
-Cj4gPiArc3RhdGljIGludCBzcGFyeDVfdGNfYWN0aW9uX3ZsYW5fbW9kaWZ5KHN0cnVjdCB2Y2Fw
-X2FkbWluICphZG1pbiwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0IHZjYXBfcnVsZSAqdnJ1
-bGUsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN0cnVjdCBmbG93X2Nsc19vZmZsb2FkICpmY28sCj4g
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIHN0cnVjdCBmbG93X2FjdGlvbl9lbnRyeSAqYWN0LAo+ID4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCB1MTYgdHBpZCkKPiA+ICt7Cj4gPiArwqDCoMKgwqAgaW50IGVyciA9IDA7
-Cj4gPiArCj4gPiArwqDCoMKgwqAgc3dpdGNoIChhZG1pbi0+dnR5cGUpIHsKPiA+ICvCoMKgwqDC
-oCBjYXNlIFZDQVBfVFlQRV9FUzA6Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVyciA9
-IHZjYXBfcnVsZV9hZGRfYWN0aW9uX3UzMih2cnVsZSwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoCBWQ0FQX0FGX1BVU0hfT1VURVJfVEFHLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIFNQWDVfT1RBR19UQUdfQSk7Cj4gCj4gVGhpcyBlcnIgYXNzaWdubWVudCBp
-cyBuZXZlciB1c2VkLgoKT29wcyEgIEkgd2lsbCB1cGRhdGUgdGhpcy4KCj4gCj4gPiArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOwo+ID4gK8KgwqDCoMKgIGRlZmF1bHQ6Cj4gPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgIE5MX1NFVF9FUlJfTVNHX01PRChmY28tPmNvbW1vbi5leHRh
-Y2ssCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgIlZMQU4gbW9kaWZ5IGFjdGlvbiBub3Qgc3VwcG9ydGVkIGluIHRoaXMK
-PiA+IFZDQVAiKTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJuIC1FT1BOT1RT
-VVBQOwo+ID4gK8KgwqDCoMKgIH0KPiA+ICsKPiA+ICvCoMKgwqDCoCBzd2l0Y2ggKHRwaWQpIHsK
-PiA+ICvCoMKgwqDCoCBjYXNlIEVUSF9QXzgwMjFROgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCBlcnIgPSB2Y2FwX3J1bGVfYWRkX2FjdGlvbl91MzIodnJ1bGUsCj4gPiArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgVkNBUF9BRl9UQUdfQV9UUElEX1NFTCwKPiA+ICvCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBTUFg1X1RQSURfQV84MTAwKTsKPiA+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgYnJlYWs7Cj4gPiArwqDCoMKgwqAgY2FzZSBFVEhfUF84MDIxQUQ6Cj4g
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVyciA9IHZjYXBfcnVsZV9hZGRfYWN0aW9uX3Uz
-Mih2cnVsZSwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBWQ0FQX0FGX1RBR19B
-X1RQSURfU0VMLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFNQWDVfVFBJRF9B
-Xzg4QTgpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsKPiA+ICvCoMKgwqDC
-oCBkZWZhdWx0Ogo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBOTF9TRVRfRVJSX01TR19N
-T0QoZmNvLT5jb21tb24uZXh0YWNrLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICJJbnZhbGlkIHZsYW4gcHJvdG8iKTsK
-PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZXJyID0gLUVJTlZBTDsKPiA+ICvCoMKgwqDC
-oCB9Cj4gPiArwqDCoMKgwqAgaWYgKGVycikKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-cmV0dXJuIGVycjsKPiA+ICsKPiA+ICvCoMKgwqDCoCBlcnIgPSB2Y2FwX3J1bGVfYWRkX2FjdGlv
-bl91MzIodnJ1bGUsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBWQ0FQX0FGX1RBR19BX1ZJRF9TRUwsCj4g
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoCBTUFg1X1ZJRF9BX1ZBTCk7Cj4gPiArwqDCoMKgwqAgaWYgKGVycikK
-PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJuIGVycjsKPiAKPiByZWdhcmRzLAo+
-IGRhbiBjYXJwZW50ZXIKPiAKClRoYW5rcyBmb3IgeW91ciBjb21tZW50cywgYXMgYWx3YXlzIHZl
-cnkgaGVscGZ1bC4KCkJSClN0ZWVuCgo=
+Hi Jan,
+
+On 2/10/2023 6:12 PM, Jan Kara wrote:
+> On Thu 09-02-23 11:09:33, Bart Van Assche wrote:
+>> On 2/9/23 00:56, Jan Kara wrote:
+>>> On Wed 08-02-23 09:53:41, Bart Van Assche wrote:
+>>>> The test results I shared some time ago show that IOPRIO_CLASS_NONE was the
+>>>> default I/O priority two years ago (see also https://lore.kernel.org/linux-block/20210927220328.1410161-5-bvanassche@acm.org/).
+>>>> The none-to-rt policy increases the priority of bio's that have not been
+>>>> assigned an I/O priority to RT. Does this answer your question?
+>>> Not quite. I know that historically we didn't set bio I/O priority in some
+>>> paths (but we did set it in other paths such as some (but not all) direct
+>>> IO implementations). But that was exactly a mess because how none-to-rt
+>>> actually behaved depended on the exact details of the kernel internal IO
+>>> path.  So my question is: Was none-to-rt actually just a misnomer and the
+>>> intended behavior was "always override to RT"? Or what was exactly the
+>>> expectation around when IO priority is not set and should be overridden?
+>>>
+>>> How should it interact with AIO submissions with IOCB_FLAG_IOPRIO? How
+>>> should it interact with task having its IO priority modified with
+>>> ioprio_set(2)? And what if task has its normal scheduling priority modified
+>>> but that translates into different IO priority (which happens in
+>>> __get_task_ioprio())?
+>>>
+>>> So I think that none-to-rt is just poorly defined and if we can just get
+>>> rid of it (or redefine to promote-to-rt), that would be good. But maybe I'm
+>>> missing some intended usecase...
+>> Hi Jan,
+>>
+>> We have no plans to use the ioprio_set() system call since it only affects
+>> foreground I/O and not page cache writeback.
+>>
+>> While Android supports io_uring, there are no plans to support libaio in the
+>> Android C library (Bionic).
+>>
+>> Regarding __get_task_ioprio(), I haven't found any code in that function
+>> that derives an I/O priority from the scheduling priority. Did I perhaps
+>> overlook something?
+> This condition in __get_task_ioprio():
+>
+>         if (IOPRIO_PRIO_CLASS(prio) == IOPRIO_CLASS_NONE)
+>                 prio = IOPRIO_PRIO_VALUE(task_nice_ioclass(p),
+>                                          task_nice_ioprio(p));
+>
+> sets task's IO priority based on scheduling priority.
+>
+>> Until recently "none-to-rt" meant "if no I/O priority has been assigned to a
+>> task, use IOPRIO_CLASS_RT". Promoting the I/O priority to IOPRIO_CLASS_RT
+>> works for us. I'm fine with changing the meaning of "none-to-rt" into
+>> promoting the I/O priority class to RT. Introducing "promote-to-rt" as a
+>> synonym of "none-to-rt" is also fine with me.
+> OK, so it seems we are all in agreement here that "none-to-rt" behavior is
+> not really needed. Hou, can you perhaps update your patches and the
+> documentation to make "none-to-rt" just an alias for "promote-to-rt"?
+> Thanks!
+Should I keep "none-to-rt" and make it work just like "promote-to-rt" or should
+I just remove "none-to-rt" and add "promote-to-rt" ? I think the latter will be
+more appropriate.
+>
+> 								Honza
 
