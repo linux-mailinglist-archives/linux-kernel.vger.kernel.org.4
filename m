@@ -2,100 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EDDD6945C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:28:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9105E6945CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:32:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbjBMM17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 07:27:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42012 "EHLO
+        id S229852AbjBMMc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 07:32:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbjBMM1z (ORCPT
+        with ESMTP id S229651AbjBMMcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 07:27:55 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335CA5FEC;
-        Mon, 13 Feb 2023 04:27:52 -0800 (PST)
+        Mon, 13 Feb 2023 07:32:25 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6500A10F5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:32:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=2Kt/ROz9GCT+psVlOSyjKfrnfI3lyNaAQ9FWHqO+GUY=; b=HdLK7ImOrfYSnVEnuS1Zbhl/tx
-        4kKSVabjF3tnKWtjOYv8tqBImy0Lh1rqP/nXivw3hMngCPhDJwsV4OojcLJZ1gIh3kVcth9XCidsK
-        7fCNtC77k2+Q05lCOkiLv/fL9RtCeZmO6rVgY6W76NBI2T0pcyeyt6yrMVbskGS788Ca8SAMCNqeN
-        ifm6/h/8/qE7hLdaVrKdX4tmuM6IT6J9iRCyza/hPBtSu2TzsWfNmVbRP8ZcLUfj9Izfp8AkTzq7G
-        apjcxu/L2Zn0bj4pUfQhWFjCMgx78cfDI3Lsulh5rjFzPcsj0X30wa977LA71bmpextg6Fs21Jpzu
-        xJlJMnIg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33454)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pRXvx-000428-P2; Mon, 13 Feb 2023 12:27:49 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pRXvw-0002xh-2E; Mon, 13 Feb 2023 12:27:48 +0000
-Date:   Mon, 13 Feb 2023 12:27:48 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Subject: Re: [PATCH v5 11/12] net: ethernet: mtk_eth_soc: switch to external
- PCS driver
-Message-ID: <Y+osxNlwxPFLZAWx@shell.armlinux.org.uk>
-References: <cover.1676128246.git.daniel@makrotopia.org>
- <a5360b8156aa6bda0bed01300e723c51f02c0de0.1676128247.git.daniel@makrotopia.org>
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=8TPm/BaZtYebhLCZqBDWI5ilC85NjFZZyhkowqSPzXY=; b=hHz8KncP9URMezpUaZY8Kz0m6a
+        U/H+WGYi0HRQAVrl2QU2JzTs/iizgTBCtl9VfaLyBaDJcSelDmkjkP9Zh20ks5yc0V48mHvecEmVm
+        CB/ZmT6PC8Gs+6VX7O8b/wlXSNCrpNmVtxKGf9scti5pMHlTsuy2GIe9SrWF2GPA5Va152qEgrXbZ
+        Ijs8PgPGhs5uTvsyblX/TMI5aAhD+AtwG30ue0FHYHc4Zr2f10FJxj8/0XydDpWr0UVzX1KkSRQOB
+        u4kbxeM2KXBo3QN+OSi4Jtr+lz9lW2/3kBvMaSx0xH6I7ASZPHvETnh1aU1E1SB4GptC0MgqeZPWN
+        0iGf7CcA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pRXzN-009IKF-0A;
+        Mon, 13 Feb 2023 12:31:21 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D1C0A300673;
+        Mon, 13 Feb 2023 13:31:59 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B88E92010F0F0; Mon, 13 Feb 2023 13:31:59 +0100 (CET)
+Date:   Mon, 13 Feb 2023 13:31:59 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
+        Hillf Danton <hdanton@sina.com>,
+        Mukesh Ojha <quic_mojha@quicinc.com>,
+        Ting11 Wang =?utf-8?B?546L5am3?= <wangting11@xiaomi.com>
+Subject: Re: [PATCH v7 4/4] locking/rwsem: Enable direct rwsem lock handoff
+Message-ID: <Y+otv+QGyMpHAFO1@hirez.programming.kicks-ass.net>
+References: <20230126003628.365092-1-longman@redhat.com>
+ <20230126003628.365092-5-longman@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a5360b8156aa6bda0bed01300e723c51f02c0de0.1676128247.git.daniel@makrotopia.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230126003628.365092-5-longman@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 11, 2023 at 04:05:18PM +0000, Daniel Golle wrote:
-> @@ -4582,6 +4583,7 @@ static int mtk_probe(struct platform_device *pdev)
->  		if (!eth->sgmii)
->  			return -ENOMEM;
+On Wed, Jan 25, 2023 at 07:36:28PM -0500, Waiman Long wrote:
+
+> @@ -609,6 +618,12 @@ static inline bool rwsem_try_write_lock(struct rw_semaphore *sem,
 >  
-> +		eth->sgmii->dev = eth->dev;
-
-My comment on this appears unaddressed (and not responded to either).
-
->  int mtk_sgmii_init(struct mtk_sgmii *ss, struct device_node *r, u32 ana_rgc3)
+>  	lockdep_assert_held(&sem->wait_lock);
+>  
+> +	if (!waiter->task) {
+> +		/* Write lock handed off */
+> +		smp_acquire__after_ctrl_dep();
+> +		return true;
+> +	}
+> +
+>  	count = atomic_long_read(&sem->count);
+>  	do {
+>  		bool has_handoff = !!(count & RWSEM_FLAG_HANDOFF);
+> @@ -754,6 +769,10 @@ rwsem_spin_on_owner(struct rw_semaphore *sem)
+>  
+>  	owner = rwsem_owner_flags(sem, &flags);
+>  	state = rwsem_owner_state(owner, flags);
+> +
+> +	if (owner == current)
+> +		return OWNER_NONSPINNABLE;	/* Handoff granted */
+> +
+>  	if (state != OWNER_WRITER)
+>  		return state;
+>  
+> @@ -1168,21 +1186,23 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
+>  		 * without sleeping.
+>  		 */
+>  		if (waiter.handoff_set) {
+> -			enum owner_state owner_state;
+> -
+> -			owner_state = rwsem_spin_on_owner(sem);
+> -			if (owner_state == OWNER_NULL)
+> -				goto trylock_again;
+> +			rwsem_spin_on_owner(sem);
+> +			if (!READ_ONCE(waiter.task)) {
+> +				/* Write lock handed off */
+> +				smp_acquire__after_ctrl_dep();
+> +				set_current_state(TASK_RUNNING);
+> +				goto out;
+> +			}
+>  		}
+>  
+>  		schedule_preempt_disabled();
+>  		lockevent_inc(rwsem_sleep_writer);
+>  		set_current_state(state);
+> -trylock_again:
+>  		raw_spin_lock_irq(&sem->wait_lock);
+>  	}
+>  	__set_current_state(TASK_RUNNING);
+>  	raw_spin_unlock_irq(&sem->wait_lock);
+> +out:
+>  	lockevent_inc(rwsem_wlock);
+>  	trace_contention_end(sem, 0);
+>  	return sem;
+> @@ -1190,6 +1210,11 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
+>  out_nolock:
+>  	__set_current_state(TASK_RUNNING);
+>  	raw_spin_lock_irq(&sem->wait_lock);
+> +	if (!waiter.task) {
+> +		smp_acquire__after_ctrl_dep();
+> +		raw_spin_unlock_irq(&sem->wait_lock);
+> +		goto out;
+> +	}
+>  	rwsem_del_wake_waiter(sem, &waiter, &wake_q);
+>  	lockevent_inc(rwsem_wlock_fail);
+>  	trace_contention_end(sem, -EINTR);
+> @@ -1202,14 +1227,41 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
+>   */
+>  static struct rw_semaphore *rwsem_wake(struct rw_semaphore *sem)
 >  {
-...
-> +		ss->pcs[i] = mtk_pcs_lynxi_create(ss->dev, regmap, ana_rgc3,
-> +						  flags);
+> -	unsigned long flags;
+>  	DEFINE_WAKE_Q(wake_q);
+> +	unsigned long flags;
+> +	unsigned long count;
+>  
+>  	raw_spin_lock_irqsave(&sem->wait_lock, flags);
+>  
+> -	if (!list_empty(&sem->wait_list))
+> -		rwsem_mark_wake(sem, RWSEM_WAKE_ANY, &wake_q);
+> +	if (list_empty(&sem->wait_list))
+> +		goto unlock_out;
+> +
+> +	/*
+> +	 * If the rwsem is free and handoff flag is set with wait_lock held,
+> +	 * no other CPUs can take an active lock.
+> +	 */
+> +	count = atomic_long_read(&sem->count);
+> +	if (!(count & RWSEM_LOCK_MASK) && (count & RWSEM_FLAG_HANDOFF)) {
+> +		/*
+> +		 * Since rwsem_mark_wake() will handle the handoff to reader
+> +		 * properly, we don't need to do anything extra for reader.
+> +		 * Special handoff processing will only be needed for writer.
+> +		 */
+> +		struct rwsem_waiter *waiter = rwsem_first_waiter(sem);
+> +		long adj = RWSEM_WRITER_LOCKED - RWSEM_FLAG_HANDOFF;
+> +
+> +		if (waiter->type == RWSEM_WAITING_FOR_WRITE) {
+> +			atomic_long_set(&sem->owner, (long)waiter->task);
+> +			atomic_long_add(adj, &sem->count);
+> +			wake_q_add(&wake_q, waiter->task);
+> +			rwsem_del_waiter(sem, waiter);
+> +			waiter->task = NULL;	/* Signal the handoff */
+> +			goto unlock_out;
+> +		}
+> +	}
+> +	rwsem_mark_wake(sem, RWSEM_WAKE_ANY, &wake_q);
+>  
+> +unlock_out:
+>  	raw_spin_unlock_irqrestore(&sem->wait_lock, flags);
+>  	wake_up_q(&wake_q);
+>  
 
-This appears to be the only place that sgmii->dev is used, and this
-function is only called immediately after the above assignment.
+I am once again confused...
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+*WHY* are you changing the writer wake-up path? The comments added here
+don't clarify anything.
+
+If we set handoff, we terminate/disallow the spinning/stealing. The
+direct consequence is that the slowpath/wait-list becomes the only way
+forward.
+
+Since we don't take wait_lock on up, we fundamentally have a race
+condition. But *WHY* do you insist on handling that in rwsem_wake()?
+Delaying all that until rwsem_try_write_lock()? Doing so would render
+pretty much all of the above pointless, no?
+
+After all, rwsem_mark_wake() already wakes the writer if it is first,
+no? Why invent yet another special way to wake up the writer.
+
+
+Also; and I asked this last time around; why do we care about the
+handoff to writer *at*all* ? It is the readers that set HANDOFF.
+
