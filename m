@@ -2,187 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12965693B54
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 01:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1C7693B5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 01:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbjBMAZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 19:25:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
+        id S229771AbjBMAdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 19:33:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBMAZw (ORCPT
+        with ESMTP id S229468AbjBMAdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 19:25:52 -0500
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1C4CDDA
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 16:25:51 -0800 (PST)
-Received: by mail-il1-f208.google.com with SMTP id j14-20020a056e02218e00b0031530fae00fso2696242ila.15
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 16:25:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=84tGHx2dc/bSnFn3PlEGqqtj4JokcAjpVRmrBLqOmcE=;
-        b=mAuzNpq+5IdcHnA8K/hYdy1LuUqIoeUP1oWTv/EBssYTNRuBTFkXpaN9REqL4wzyZ8
-         e0DS63qjNTNrbhyyON93TzXnO+RDDsryOINpHPMgq4+M48/JmjtzammMDQA4lOadTeOt
-         DVeCxYx65rPmX/n4/J4QFUfz/YGiRbOkHZoxyMkHXM11Wp2LBFxKGHKRiFIltCIan9LS
-         4R6GOn5tlJdxjKs2UrWaqZSVUOE68Ns43SwPFh6xIKf/EM9BPcrwaXLmq1wK65v+GYfk
-         vF96IGVbS/dpmFWa1MOq/3U/kB8mZKaW4JIz3OOzKEreJrWgiTeYjEXraPTyM1OC7dAM
-         LUpw==
-X-Gm-Message-State: AO0yUKWgLo7f+cOgmv3CZf7uKFCzBVz4JqWH7fjWUJHEc3AhgKRJcuYR
-        uURBT0Mage/kVUGdwoQkE23OTItHwnjT+47SD/x5zkphkg41
-X-Google-Smtp-Source: AK7set/i/sqqOGmFgt09qN5g0QG296Hn7EN5R+rfjDiPS0pT2DEFht5FIA7XeWf7TPT1DR3hy94RqOs9wseDFLSxY9YOyTvodlwT
+        Sun, 12 Feb 2023 19:33:16 -0500
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E884CEFB6;
+        Sun, 12 Feb 2023 16:33:13 -0800 (PST)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 31D0VlOI2012081, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 31D0VlOI2012081
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Mon, 13 Feb 2023 08:31:47 +0800
+Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.9; Mon, 13 Feb 2023 08:31:49 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Mon, 13 Feb 2023 08:31:48 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
+ RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
+ 15.01.2375.007; Mon, 13 Feb 2023 08:31:48 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Hector Martin <marcan@marcan.st>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+CC:     Alexander Prutskov <alep@cypress.com>,
+        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
+        Wright Feng <wright.feng@cypress.com>,
+        Ian Lin <ian.lin@infineon.com>,
+        Soontak Lee <soontak.lee@cypress.com>,
+        Joseph chuang <jiac@cypress.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Aditya Garg <gargaditya08@live.com>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        "asahi@lists.linux.dev" <asahi@lists.linux.dev>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "brcm80211-dev-list.pdl@broadcom.com" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Arend van Spriel" <arend.vanspriel@broadcom.com>
+Subject: RE: [PATCH v3 1/4] wifi: brcmfmac: Rename Cypress 89459 to BCM4355
+Thread-Topic: [PATCH v3 1/4] wifi: brcmfmac: Rename Cypress 89459 to BCM4355
+Thread-Index: AQHZPPqASPo0Y2xlw0ybs7L5iADUua7Hh+hggAF5swCAAweG8A==
+Date:   Mon, 13 Feb 2023 00:31:48 +0000
+Message-ID: <b7c79a4f35e147ad9b8da5d2409b1e7c@realtek.com>
+References: <20230210025009.21873-1-marcan@marcan.st>
+ <20230210025009.21873-2-marcan@marcan.st>
+ <0cd45af5812345878faf0dc8fa6b0963@realtek.com>
+ <624c0a20-f4e6-14a5-02a2-eaf7b36e9331@marcan.st>
+In-Reply-To: <624c0a20-f4e6-14a5-02a2-eaf7b36e9331@marcan.st>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIzLzIvMTIg5LiL5Y2IIDEwOjAwOjAw?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:889:b0:313:b6f1:e839 with SMTP id
- z9-20020a056e02088900b00313b6f1e839mr11390107ils.89.1676247950456; Sun, 12
- Feb 2023 16:25:50 -0800 (PST)
-Date:   Sun, 12 Feb 2023 16:25:50 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a47fd205f489e34b@google.com>
-Subject: [syzbot] memory leak in vma_node_allow
-From:   syzbot <syzbot+58ea3177ba8bd0a5d8ee@syzkaller.appspotmail.com>
-To:     airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        syzkaller-bugs@googlegroups.com, tzimmermann@suse.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    0983f6bf2bfc Merge tag 'devicetree-fixes-for-6.2-2' of git..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=134dab4d480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9e55e71813900595
-dashboard link: https://syzkaller.appspot.com/bug?extid=58ea3177ba8bd0a5d8ee
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15052a83480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13073cfb480000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/dfe2e2ac7b39/disk-0983f6bf.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/bd09e355e210/vmlinux-0983f6bf.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8409e5f10fab/bzImage-0983f6bf.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+58ea3177ba8bd0a5d8ee@syzkaller.appspotmail.com
-
-Warning: Permanently added '10.128.1.168' (ECDSA) to the list of known hosts.
-executing program
-executing program
-BUG: memory leak
-unreferenced object 0xffff88810f1c75c0 (size 64):
-  comm "syz-executor750", pid 5060, jiffies 4294945258 (age 13.860s)
-  hex dump (first 32 bytes):
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 d6 e4 04 81 88 ff ff  ................
-  backtrace:
-    [<ffffffff81508f84>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1062
-    [<ffffffff82787cca>] kmalloc include/linux/slab.h:580 [inline]
-    [<ffffffff82787cca>] vma_node_allow+0x3a/0x150 drivers/gpu/drm/drm_vma_manager.c:255
-    [<ffffffff8276788e>] drm_gem_handle_create_tail+0x10e/0x250 drivers/gpu/drm/drm_gem.c:377
-    [<ffffffff8278ed4d>] drm_gem_shmem_create_with_handle drivers/gpu/drm/drm_gem_shmem_helper.c:432 [inline]
-    [<ffffffff8278ed4d>] drm_gem_shmem_dumb_create+0xbd/0x200 drivers/gpu/drm/drm_gem_shmem_helper.c:534
-    [<ffffffff82753a5b>] drm_mode_create_dumb+0x11b/0x150 drivers/gpu/drm/drm_dumb_buffers.c:96
-    [<ffffffff82768e28>] drm_ioctl_kernel+0x148/0x260 drivers/gpu/drm/drm_ioctl.c:788
-    [<ffffffff82769230>] drm_ioctl+0x2f0/0x500 drivers/gpu/drm/drm_ioctl.c:891
-    [<ffffffff81642600>] vfs_ioctl fs/ioctl.c:51 [inline]
-    [<ffffffff81642600>] __do_sys_ioctl fs/ioctl.c:870 [inline]
-    [<ffffffff81642600>] __se_sys_ioctl fs/ioctl.c:856 [inline]
-    [<ffffffff81642600>] __x64_sys_ioctl+0x100/0x140 fs/ioctl.c:856
-    [<ffffffff8498c889>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff8498c889>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84a0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-BUG: memory leak
-unreferenced object 0xffff888109662d80 (size 64):
-  comm "syz-executor750", pid 5060, jiffies 4294945258 (age 13.870s)
-  hex dump (first 32 bytes):
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 d6 e4 04 81 88 ff ff  ................
-  backtrace:
-    [<ffffffff81508f84>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1062
-    [<ffffffff82787cca>] kmalloc include/linux/slab.h:580 [inline]
-    [<ffffffff82787cca>] vma_node_allow+0x3a/0x150 drivers/gpu/drm/drm_vma_manager.c:255
-    [<ffffffff8276788e>] drm_gem_handle_create_tail+0x10e/0x250 drivers/gpu/drm/drm_gem.c:377
-    [<ffffffff8278ed4d>] drm_gem_shmem_create_with_handle drivers/gpu/drm/drm_gem_shmem_helper.c:432 [inline]
-    [<ffffffff8278ed4d>] drm_gem_shmem_dumb_create+0xbd/0x200 drivers/gpu/drm/drm_gem_shmem_helper.c:534
-    [<ffffffff82753a5b>] drm_mode_create_dumb+0x11b/0x150 drivers/gpu/drm/drm_dumb_buffers.c:96
-    [<ffffffff82768e28>] drm_ioctl_kernel+0x148/0x260 drivers/gpu/drm/drm_ioctl.c:788
-    [<ffffffff82769230>] drm_ioctl+0x2f0/0x500 drivers/gpu/drm/drm_ioctl.c:891
-    [<ffffffff81642600>] vfs_ioctl fs/ioctl.c:51 [inline]
-    [<ffffffff81642600>] __do_sys_ioctl fs/ioctl.c:870 [inline]
-    [<ffffffff81642600>] __se_sys_ioctl fs/ioctl.c:856 [inline]
-    [<ffffffff81642600>] __x64_sys_ioctl+0x100/0x140 fs/ioctl.c:856
-    [<ffffffff8498c889>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff8498c889>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84a0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-BUG: memory leak
-unreferenced object 0xffff888109662900 (size 64):
-  comm "syz-executor750", pid 5069, jiffies 4294945834 (age 8.110s)
-  hex dump (first 32 bytes):
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 ce 8f 09 81 88 ff ff  ................
-  backtrace:
-    [<ffffffff81508f84>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1062
-    [<ffffffff82787cca>] kmalloc include/linux/slab.h:580 [inline]
-    [<ffffffff82787cca>] vma_node_allow+0x3a/0x150 drivers/gpu/drm/drm_vma_manager.c:255
-    [<ffffffff8276788e>] drm_gem_handle_create_tail+0x10e/0x250 drivers/gpu/drm/drm_gem.c:377
-    [<ffffffff8278ed4d>] drm_gem_shmem_create_with_handle drivers/gpu/drm/drm_gem_shmem_helper.c:432 [inline]
-    [<ffffffff8278ed4d>] drm_gem_shmem_dumb_create+0xbd/0x200 drivers/gpu/drm/drm_gem_shmem_helper.c:534
-    [<ffffffff82753a5b>] drm_mode_create_dumb+0x11b/0x150 drivers/gpu/drm/drm_dumb_buffers.c:96
-    [<ffffffff82768e28>] drm_ioctl_kernel+0x148/0x260 drivers/gpu/drm/drm_ioctl.c:788
-    [<ffffffff82769230>] drm_ioctl+0x2f0/0x500 drivers/gpu/drm/drm_ioctl.c:891
-    [<ffffffff81642600>] vfs_ioctl fs/ioctl.c:51 [inline]
-    [<ffffffff81642600>] __do_sys_ioctl fs/ioctl.c:870 [inline]
-    [<ffffffff81642600>] __se_sys_ioctl fs/ioctl.c:856 [inline]
-    [<ffffffff81642600>] __x64_sys_ioctl+0x100/0x140 fs/ioctl.c:856
-    [<ffffffff8498c889>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff8498c889>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84a0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-BUG: memory leak
-unreferenced object 0xffff888109662940 (size 64):
-  comm "syz-executor750", pid 5069, jiffies 4294945834 (age 8.110s)
-  hex dump (first 32 bytes):
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 ce 8f 09 81 88 ff ff  ................
-  backtrace:
-    [<ffffffff81508f84>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1062
-    [<ffffffff82787cca>] kmalloc include/linux/slab.h:580 [inline]
-    [<ffffffff82787cca>] vma_node_allow+0x3a/0x150 drivers/gpu/drm/drm_vma_manager.c:255
-    [<ffffffff8276788e>] drm_gem_handle_create_tail+0x10e/0x250 drivers/gpu/drm/drm_gem.c:377
-    [<ffffffff8278ed4d>] drm_gem_shmem_create_with_handle drivers/gpu/drm/drm_gem_shmem_helper.c:432 [inline]
-    [<ffffffff8278ed4d>] drm_gem_shmem_dumb_create+0xbd/0x200 drivers/gpu/drm/drm_gem_shmem_helper.c:534
-    [<ffffffff82753a5b>] drm_mode_create_dumb+0x11b/0x150 drivers/gpu/drm/drm_dumb_buffers.c:96
-    [<ffffffff82768e28>] drm_ioctl_kernel+0x148/0x260 drivers/gpu/drm/drm_ioctl.c:788
-    [<ffffffff82769230>] drm_ioctl+0x2f0/0x500 drivers/gpu/drm/drm_ioctl.c:891
-    [<ffffffff81642600>] vfs_ioctl fs/ioctl.c:51 [inline]
-    [<ffffffff81642600>] __do_sys_ioctl fs/ioctl.c:870 [inline]
-    [<ffffffff81642600>] __se_sys_ioctl fs/ioctl.c:856 [inline]
-    [<ffffffff81642600>] __x64_sys_ioctl+0x100/0x140 fs/ioctl.c:856
-    [<ffffffff8498c889>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff8498c889>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84a0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogSGVjdG9yIE1hcnRpbiA8
+bWFyY2FuQG1hcmNhbi5zdD4NCj4gU2VudDogU2F0dXJkYXksIEZlYnJ1YXJ5IDExLCAyMDIzIDY6
+MDkgUE0NCj4gVG86IFBpbmctS2UgU2hpaCA8cGtzaGloQHJlYWx0ZWsuY29tPjsgQXJlbmQgdmFu
+IFNwcmllbCA8YXNwcmllbEBnbWFpbC5jb20+OyBGcmFua3kgTGluDQo+IDxmcmFua3kubGluQGJy
+b2FkY29tLmNvbT47IEhhbnRlIE1ldWxlbWFuIDxoYW50ZS5tZXVsZW1hbkBicm9hZGNvbS5jb20+
+OyBLYWxsZSBWYWxvIDxrdmFsb0BrZXJuZWwub3JnPjsNCj4gRGF2aWQgUy4gTWlsbGVyIDxkYXZl
+bUBkYXZlbWxvZnQubmV0PjsgRXJpYyBEdW1hemV0IDxlZHVtYXpldEBnb29nbGUuY29tPjsgSmFr
+dWIgS2ljaW5za2kNCj4gPGt1YmFAa2VybmVsLm9yZz47IFBhb2xvIEFiZW5pIDxwYWJlbmlAcmVk
+aGF0LmNvbT4NCj4gQ2M6IEFsZXhhbmRlciBQcnV0c2tvdiA8YWxlcEBjeXByZXNzLmNvbT47IENo
+aS1Ic2llbiBMaW4gPGNoaS1oc2llbi5saW5AY3lwcmVzcy5jb20+OyBXcmlnaHQgRmVuZw0KPiA8
+d3JpZ2h0LmZlbmdAY3lwcmVzcy5jb20+OyBJYW4gTGluIDxpYW4ubGluQGluZmluZW9uLmNvbT47
+IFNvb250YWsgTGVlIDxzb29udGFrLmxlZUBjeXByZXNzLmNvbT47IEpvc2VwaA0KPiBjaHVhbmcg
+PGppYWNAY3lwcmVzcy5jb20+OyBTdmVuIFBldGVyIDxzdmVuQHN2ZW5wZXRlci5kZXY+OyBBbHlz
+c2EgUm9zZW56d2VpZyA8YWx5c3NhQHJvc2VuendlaWcuaW8+Ow0KPiBBZGl0eWEgR2FyZyA8Z2Fy
+Z2FkaXR5YTA4QGxpdmUuY29tPjsgSm9uYXMgR29yc2tpIDxqb25hcy5nb3Jza2lAZ21haWwuY29t
+PjsgYXNhaGlAbGlzdHMubGludXguZGV2Ow0KPiBsaW51eC13aXJlbGVzc0B2Z2VyLmtlcm5lbC5v
+cmc7IGJyY204MDIxMS1kZXYtbGlzdC5wZGxAYnJvYWRjb20uY29tOyBTSEEtY3lmbWFjLWRldi1s
+aXN0QGluZmluZW9uLmNvbTsNCj4gbmV0ZGV2QHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVs
+QHZnZXIua2VybmVsLm9yZzsgQXJlbmQgdmFuIFNwcmllbCA8YXJlbmQudmFuc3ByaWVsQGJyb2Fk
+Y29tLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2MyAxLzRdIHdpZmk6IGJyY21mbWFjOiBS
+ZW5hbWUgQ3lwcmVzcyA4OTQ1OSB0byBCQ000MzU1DQo+IA0KPiBPbiAxMC8wMi8yMDIzIDEyLjQy
+LCBQaW5nLUtlIFNoaWggd3JvdGU6DQo+ID4NCj4gPg0KPiA+PiAtLS0tLU9yaWdpbmFsIE1lc3Nh
+Z2UtLS0tLQ0KPiA+PiBGcm9tOiBIZWN0b3IgTWFydGluIDxtYXJjYW5AbWFyY2FuLnN0Pg0KPiA+
+PiBTZW50OiBGcmlkYXksIEZlYnJ1YXJ5IDEwLCAyMDIzIDEwOjUwIEFNDQo+ID4+IFRvOiBBcmVu
+ZCB2YW4gU3ByaWVsIDxhc3ByaWVsQGdtYWlsLmNvbT47IEZyYW5reSBMaW4gPGZyYW5reS5saW5A
+YnJvYWRjb20uY29tPjsgSGFudGUgTWV1bGVtYW4NCj4gPj4gPGhhbnRlLm1ldWxlbWFuQGJyb2Fk
+Y29tLmNvbT47IEthbGxlIFZhbG8gPGt2YWxvQGtlcm5lbC5vcmc+OyBEYXZpZCBTLiBNaWxsZXIg
+PGRhdmVtQGRhdmVtbG9mdC5uZXQ+Ow0KPiBFcmljDQo+ID4+IER1bWF6ZXQgPGVkdW1hemV0QGdv
+b2dsZS5jb20+OyBKYWt1YiBLaWNpbnNraSA8a3ViYUBrZXJuZWwub3JnPjsgUGFvbG8gQWJlbmkg
+PHBhYmVuaUByZWRoYXQuY29tPg0KPiA+PiBDYzogQWxleGFuZGVyIFBydXRza292IDxhbGVwQGN5
+cHJlc3MuY29tPjsgQ2hpLUhzaWVuIExpbiA8Y2hpLWhzaWVuLmxpbkBjeXByZXNzLmNvbT47IFdy
+aWdodCBGZW5nDQo+ID4+IDx3cmlnaHQuZmVuZ0BjeXByZXNzLmNvbT47IElhbiBMaW4gPGlhbi5s
+aW5AaW5maW5lb24uY29tPjsgU29vbnRhayBMZWUgPHNvb250YWsubGVlQGN5cHJlc3MuY29tPjsN
+Cj4gSm9zZXBoDQo+ID4+IGNodWFuZyA8amlhY0BjeXByZXNzLmNvbT47IFN2ZW4gUGV0ZXIgPHN2
+ZW5Ac3ZlbnBldGVyLmRldj47IEFseXNzYSBSb3Nlbnp3ZWlnIDxhbHlzc2FAcm9zZW56d2VpZy5p
+bz47DQo+ID4+IEFkaXR5YSBHYXJnIDxnYXJnYWRpdHlhMDhAbGl2ZS5jb20+OyBKb25hcyBHb3Jz
+a2kgPGpvbmFzLmdvcnNraUBnbWFpbC5jb20+OyBhc2FoaUBsaXN0cy5saW51eC5kZXY7DQo+ID4+
+IGxpbnV4LXdpcmVsZXNzQHZnZXIua2VybmVsLm9yZzsgYnJjbTgwMjExLWRldi1saXN0LnBkbEBi
+cm9hZGNvbS5jb207DQo+IFNIQS1jeWZtYWMtZGV2LWxpc3RAaW5maW5lb24uY29tOw0KPiA+PiBu
+ZXRkZXZAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBIZWN0
+b3IgTWFydGluIDxtYXJjYW5AbWFyY2FuLnN0PjsgQXJlbmQgdmFuDQo+IFNwcmllbA0KPiA+PiA8
+YXJlbmQudmFuc3ByaWVsQGJyb2FkY29tLmNvbT4NCj4gPj4gU3ViamVjdDogW1BBVENIIHYzIDEv
+NF0gd2lmaTogYnJjbWZtYWM6IFJlbmFtZSBDeXByZXNzIDg5NDU5IHRvIEJDTTQzNTUNCj4gPj4N
+Cj4gPj4gVGhlIGNvbW1pdCB0aGF0IGludHJvZHVjZWQgc3VwcG9ydCBmb3IgdGhpcyBjaGlwIGlu
+Y29ycmVjdGx5IGNsYWltZWQgaXQNCj4gPj4gaXMgYSBDeXByZXNzLXNwZWNpZmljIHBhcnQsIHdo
+aWxlIGluIGFjdHVhbGl0eSBpdCBpcyBqdXN0IGEgdmFyaWFudCBvZg0KPiA+PiBCQ000MzU1IHNp
+bGljb24gKGFzIGV2aWRlbmNlZCBieSB0aGUgY2hpcCBJRCkuDQo+ID4+DQo+ID4+IFRoZSByZWxh
+dGlvbnNoaXAgYmV0d2VlbiBDeXByZXNzIHByb2R1Y3RzIGFuZCBCcm9hZGNvbSBwcm9kdWN0cyBp
+c24ndA0KPiA+PiBlbnRpcmVseSBjbGVhciBidXQgZ2l2ZW4gd2hhdCBsaXR0bGUgaW5mb3JtYXRp
+b24gaXMgYXZhaWxhYmxlIGFuZCBwcmlvcg0KPiA+PiBhcnQgaW4gdGhlIGRyaXZlciwgaXQgc2Vl
+bXMgdGhlIGNvbnZlbnRpb24gc2hvdWxkIGJlIHRoYXQgb3JpZ2luYWxseQ0KPiA+PiBCcm9hZGNv
+bSBwYXJ0cyBzaG91bGQgcmV0YWluIHRoZSBCcm9hZGNvbSBuYW1lLg0KPiA+Pg0KPiA+PiBUaHVz
+LCByZW5hbWUgdGhlIHJlbGV2YW50IGNvbnN0YW50cyBhbmQgZmlybXdhcmUgZmlsZS4gQWxzbyBy
+ZW5hbWUgdGhlDQo+ID4+IHNwZWNpZmljIDg5NDU5IFBDSWUgSUQgdG8gQkNNNDM1OTYsIHdoaWNo
+IHNlZW1zIHRvIGJlIHRoZSBvcmlnaW5hbA0KPiA+PiBzdWJ2YXJpYW50IG5hbWUgZm9yIHRoaXMg
+UENJIElEIChhcyBkZWZpbmVkIGluIHRoZSBvdXQtb2YtdHJlZSBiY21kaGQNCj4gPj4gZHJpdmVy
+KS4NCj4gPj4NCj4gPj4gdjI6IFNpbmNlIEN5cHJlc3MgYWRkZWQgdGhpcyBwYXJ0IGFuZCB3aWxs
+IHByZXN1bWFibHkgYmUgcHJvdmlkaW5nDQo+ID4+IGl0cyBzdXBwb3J0ZWQgZmlybXdhcmUsIHdl
+IGtlZXAgdGhlIENZVyBkZXNpZ25hdGlvbiBmb3IgdGhpcyBkZXZpY2UuDQo+ID4+DQo+ID4+IHYz
+OiBEcm9wIHRoZSBSQVcgZGV2aWNlIElEIGluIHRoaXMgY29tbWl0LiBXZSBkb24ndCBkbyB0aGlz
+IGZvciB0aGUNCj4gPj4gb3RoZXIgY2hpcHMgc2luY2UgYXBwYXJlbnRseSBzb21lIGRldmljZXMg
+d2l0aCB0aGVtIGV4aXN0IGluIHRoZSB3aWxkLA0KPiA+PiBidXQgdGhlcmUgaXMgYWxyZWFkeSBh
+IDQzNTUgZW50cnkgd2l0aCB0aGUgQnJvYWRjb20gc3VidmVuZG9yIGFuZCBXQ0MNCj4gPj4gZmly
+bXdhcmUgdmVuZG9yLCBzbyBhZGRpbmcgYSBnZW5lcmljIGZhbGxiYWNrIHRvIEN5cHJlc3Mgc2Vl
+bXMNCj4gPj4gcmVkdW5kYW50IChubyByZWFzb24gd2h5IGEgZGV2aWNlIHdvdWxkIGhhdmUgdGhl
+IHJhdyBkZXZpY2UgSUQgKmFuZCogYW4NCj4gPj4gZXhwbGljaXRseSBwcm9ncmFtbWVkIHN1YnZl
+bmRvcikuDQo+ID4NCj4gPiBEbyB5b3UgcmVhbGx5IHdhbnQgdG8gYWRkIGNoYW5nZXMgb2YgdjIg
+YW5kIHYzIHRvIGNvbW1pdCBtZXNzYWdlPyBPciwNCj4gPiBqdXN0IHdhbnQgdG8gbGV0IHJldmll
+d2VycyBrbm93IHRoYXQ/IElmIGxhdHRlciBvbmUgaXMgd2hhdCB5b3Ugd2FudCwNCj4gPiBtb3Zl
+IHRoZW0gYWZ0ZXIgcy1vLWIgd2l0aCBkZWxpbWl0ZXIgLS0tDQo+IA0KPiBCb3RoOyBJIHRob3Vn
+aHQgdGhvc2UgdGhpbmdzIHdlcmUgd29ydGggbWVudGlvbmluZyBpbiB0aGUgY29tbWl0IG1lc3Nh
+Z2UNCj4gYXMgaXQgc3RhbmRzIG9uIGl0cyBvd24sIGFuZCBsZWZ0IHRoZSB2ZXJzaW9uIHRhZ3Mg
+aW4gc28gcmV2aWV3ZXJzIGtub3cNCj4gd2hlbiB0aGV5IHdlcmUgaW50cm9kdWNlZC4NCj4gDQoN
+CldpdGggdGhpcyByZXBseSwgaXQgaXMgY2xlYXIgdGhhdCB5b3UgZGlkIHRob3NlIGludGVudGlv
+bmFsbHksIG5vdCBmb3Jnb3QNCnNvbWV0aGluZywgc28gdGhpbmdzIGFyZSBjbGVhciB0byBtZS4g
+VGhlIGZ1cnRoZXIgZGlzY3Vzc2lvbiBpbiBkaWZmZXJlbnQNCmFzcGVjdHMgb2YgdmlldyBpbiB0
+aHJlYWQgYXJlIGFsc28gaGVscGZ1bCBmb3IgbWUgdG8gZ2V0IG11Y2guDQoNClBpbmctS2UNCg0K
