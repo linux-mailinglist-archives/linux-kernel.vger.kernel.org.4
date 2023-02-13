@@ -2,71 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231A3694B7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2D7694B8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:45:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbjBMPoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:44:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
+        id S231208AbjBMPpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:45:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjBMPoO (ORCPT
+        with ESMTP id S230127AbjBMPpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:44:14 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14985199C3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:44:11 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 13 Feb 2023 10:45:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88ADF193E5;
+        Mon, 13 Feb 2023 07:45:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 9E82E1F8AA;
-        Mon, 13 Feb 2023 15:44:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1676303050; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zi4tgbomsN6kaZHVy0HsastDUiQMyXKKQ4Q7ib2L4LQ=;
-        b=kqp3UwzOQv5aMkzjyX0FhYjjdysY+JeM0YRiTi1I8wiGwQs0BdZ0wtDGlLeYXgsOJO70IF
-        L/rimKKo0X6WJGLIvFFUjoqkoaV8CTKrnJHnr9nkW1ixyBRZ1KD4lzJXfvGX2rfuHFBLWI
-        pLRXnFuy4goEDuUcWskzBdTOcuUuPrc=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4B0681391B;
-        Mon, 13 Feb 2023 15:44:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id HSi4EMpa6mMnKwAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 13 Feb 2023 15:44:10 +0000
-Message-ID: <ca2e1560-5846-2a4b-6c27-aa8ceb17ee5c@suse.com>
-Date:   Mon, 13 Feb 2023 16:44:09 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10A1E6118C;
+        Mon, 13 Feb 2023 15:45:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B4F9C433EF;
+        Mon, 13 Feb 2023 15:44:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676303101;
+        bh=3TCnaksRiCFT0Z0YvJMH4En9wOOliKkX6mIfVxch1/U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oYFoV1C5N4+99kOQgjte+Mu1C4C1loYygKcOeGLooD+7IDAvMRWOffEe4OTZYtGYX
+         PzZnFN6/AMPLYvxYrnkkazkkqLSskGo7Xl0mSO1FNKJBPdlUiTRfGSVf3v+nWoOtk6
+         U8Oxds2TR89PHDtjOqGDuNyYVD0oQmmEAHBlRT9NdcEIePxQgazWKnu8H2qZSODwKp
+         qFYxSU8p3IXWX1Jok49Y+3glLsUuIunphcHLOe1nGWgJn9d3bhCQcmrf1SWhHIV1tw
+         sqW5rA9NWOHKgiKYunURqRH8yq0cCpQ7ryVTEQAxzekI3XXNKXQilk2Tqb+SkUtbvG
+         IwoAiICoybG2g==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v3] docs/mm: Physical Memory: add example of interleaving nodes
+Date:   Mon, 13 Feb 2023 17:44:47 +0200
+Message-Id: <20230213154447.1631847-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
- defined MTRRs
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        lists@nerdbynature.de, mikelley@microsoft.com,
-        torvalds@linux-foundation.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <20230209072220.6836-1-jgross@suse.com>
- <20230209072220.6836-3-jgross@suse.com> <Y+ohfE/wICFKO/93@zn.tnic>
- <6257114d-a957-f586-145c-d2a885417360@suse.com> <Y+pRK6a419jenR9R@zn.tnic>
- <Y+pTDFQlX9qNL35z@zn.tnic> <85de8576-05b7-400d-6020-7dba519c1d2e@suse.com>
- <Y+pZ5ccprqequvpE@zn.tnic>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <Y+pZ5ccprqequvpE@zn.tnic>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------gzEssp0cNHMMvA4tuxAejI6P"
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,122 +59,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------gzEssp0cNHMMvA4tuxAejI6P
-Content-Type: multipart/mixed; boundary="------------IZnxSMYWtWMb92GvKSZJwBTe";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org, lists@nerdbynature.de,
- mikelley@microsoft.com, torvalds@linux-foundation.org,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>
-Message-ID: <ca2e1560-5846-2a4b-6c27-aa8ceb17ee5c@suse.com>
-Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
- defined MTRRs
-References: <20230209072220.6836-1-jgross@suse.com>
- <20230209072220.6836-3-jgross@suse.com> <Y+ohfE/wICFKO/93@zn.tnic>
- <6257114d-a957-f586-145c-d2a885417360@suse.com> <Y+pRK6a419jenR9R@zn.tnic>
- <Y+pTDFQlX9qNL35z@zn.tnic> <85de8576-05b7-400d-6020-7dba519c1d2e@suse.com>
- <Y+pZ5ccprqequvpE@zn.tnic>
-In-Reply-To: <Y+pZ5ccprqequvpE@zn.tnic>
+From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
---------------IZnxSMYWtWMb92GvKSZJwBTe
-Content-Type: multipart/mixed; boundary="------------Emv1BGWy0OMRrsZLe4N3E0qy"
+Add an example of memory layout with interleaving nodes where even memory
+banks belong to node 0 and odd memory banks belong to node 1
 
---------------Emv1BGWy0OMRrsZLe4N3E0qy
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Suggested-by: Michal Hocko <mhocko@kernel.org>
+Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+---
 
-T24gMTMuMDIuMjMgMTY6NDAsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gTW9uLCBG
-ZWIgMTMsIDIwMjMgYXQgMDQ6MTg6NDhQTSArMDEwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
-Cj4+IFllcywgeW91IHN0aWxsIGNvdWxkIGNvbnN0cnVjdCBjYXNlcyB3aGVyZSBpdCB3b3Vs
-ZCBnbyB3cm9uZywgYnV0IEkgZG9uJ3QNCj4+IHRoaW5rIHdlIHNob3VsZCBvdmVyLWVuZ2lu
-ZWVyIGl0Lg0KPiANCj4gQWN0dWFsbHksIHdlIHNob3VsZCBhbGxvdyBvbmx5IHRob3NlIGZv
-ciB3aGljaCB3ZSBrbm93IHRoZXkgZ2V0IHNwZWNpYWwNCj4gdHJlYXRtZW50IGZvciBNVFJS
-cyBzZXR0aW5ncyBhbmQgd2FybiBmb3IgYWxsIHRoZSByZXN0Lg0KPiANCj4gQW5kIGp1ZGdp
-bmcgYnkgRGF2ZSdzIHJlcGx5LCBJIHRoaW5rIFREWCBzaG91bGQgYmUgaW4gdGhhdCBjYXRl
-Z29yeSB0b28NCj4gc2luY2UgaXQgdGhyb3dzICNWRXMuLi4NCj4gDQoNCk9rYXksIGFuZCBp
-dCBoYXMgTVRSUnMgZW5hYmxlZCAoYXMgSHlwZXItViBTRVYtU05QIGd1ZXN0cyksIHNvIEkg
-c2hvdWxkbid0DQp0ZXN0IHRoYXQsIEkgZ3Vlc3MgKG9yIHdlIHNob3VsZCBkaXNhYmxlIHRo
-ZSBmZWF0dXJlIGJlZm9yZSBjYWxsaW5nIHRoZQ0Kb3ZlcndyaXRlIGZ1bmN0aW9uKS4NCg0K
-DQpKdWVyZ2VuDQo=
---------------Emv1BGWy0OMRrsZLe4N3E0qy
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+v3:
+* Fix typos and wording (Matthew) 
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+v2: https://lore.kernel.org/all/20230212095445.1311627-1-rppt@kernel.org
+* Wording update (Bagas)
+* Add forgotten Suggested-by
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+v1: https://lore.kernel.org/all/20230211102207.1267058-1-rppt@kernel.org
+ Documentation/mm/physical_memory.rst | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
---------------Emv1BGWy0OMRrsZLe4N3E0qy--
+diff --git a/Documentation/mm/physical_memory.rst b/Documentation/mm/physical_memory.rst
+index 3f3c02aa6e6e..863ddcd0b291 100644
+--- a/Documentation/mm/physical_memory.rst
++++ b/Documentation/mm/physical_memory.rst
+@@ -114,6 +114,25 @@ RAM equally split between two nodes, there will be ``ZONE_DMA32``,
+   |  DMA32  |  NORMAL  |  MOVABLE  | |   NORMAL   |   MOVABLE   |
+   +---------+----------+-----------+ +------------+-------------+
+ 
++
++Memory banks may belong to interleaving nodes. In the example below an x86
++machine has 16 Gbytes of RAM in 4 memory banks, even banks belong to node 0
++and odd banks belong to node 1::
++
++
++  0              4G              8G             12G            16G
++  +-------------+ +-------------+ +-------------+ +-------------+
++  |    node 0   | |    node 1   | |    node 0   | |    node 1   |
++  +-------------+ +-------------+ +-------------+ +-------------+
++
++  0   16M      4G
++  +-----+-------+ +-------------+ +-------------+ +-------------+
++  | DMA | DMA32 | |    NORMAL   | |    NORMAL   | |    NORMAL   |
++  +-----+-------+ +-------------+ +-------------+ +-------------+
++
++In this case node 0 will span from 0 to 12 Gbytes and node 1 will span from
++4 to 16 Gbytes.
++
+ .. _nodes:
+ 
+ Nodes
 
---------------IZnxSMYWtWMb92GvKSZJwBTe--
+base-commit: e076f253283c3e55a128fa9665c0e6cd8146948d
+-- 
+2.35.1
 
---------------gzEssp0cNHMMvA4tuxAejI6P
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPqWskFAwAAAAAACgkQsN6d1ii/Ey/m
-Hwf8DyFEotBkUFLAupoqSJKydC0IXPz3bD9idAWbZS6L54ClEjIblY1dy6TJRDXjCiLaN4xsqOuX
-hWO9K5MdYSKaCc/PClXDghHNjsBI+N/NF0UFUUTO5m6UqMQZ2X1N7bPJ1UyvXoqfLfAAPiXPDbqC
-kFTLX6cwR68ryAaWbu1TmnBZMCZr/J7gS/s7txKhZbMQrxDQF+RZBwT0T2S0h5V65aIJrnP2Tecw
-fQuXNv7LZlmNBFSJi5pJ9LO0Q0i/nXEZtEUctBE/sRTCqzJyqkIccePVmfLlaFGjSo/nyAw+XSCd
-k7USGdE9VicCX6hTbiGPpbp12nYewdOfKD03/P/faA==
-=zjvC
------END PGP SIGNATURE-----
-
---------------gzEssp0cNHMMvA4tuxAejI6P--
