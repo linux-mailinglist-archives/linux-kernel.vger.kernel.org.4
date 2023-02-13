@@ -2,159 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020C1694BD2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDBDB694BD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:56:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbjBMPz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:55:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
+        id S231311AbjBMP4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:56:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231243AbjBMPzq (ORCPT
+        with ESMTP id S231296AbjBMP4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:55:46 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9E91F5C3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:55:31 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id sa10so32946805ejc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:55:31 -0800 (PST)
+        Mon, 13 Feb 2023 10:56:00 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A7E1F480;
+        Mon, 13 Feb 2023 07:55:48 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id t7so3688689ilq.2;
+        Mon, 13 Feb 2023 07:55:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vuapDqdagNGnFpo6uhL7k0neEZp9M4gz2OrukVtMrUk=;
-        b=K4Iqa4GhRfHb+pDFe/SkIa74T/KmapgIhH5krvXfe49NjyMplxwmP1Jsm78gwC7DT3
-         Sr1nbbEwQiVx8nDHf36NzuQiJt5WZJIA3T3D/7yVgkQ5nP+EeN8WhSFi0HeosPqTQdFH
-         SjYQ5cPJlPdIrHefP4dhusrlHj5hNMS0rg17EY4sSNtXeUhJuPmqrxy9dU80hnPJe/1o
-         ofg2h8s78dWEY60ka1hrYajZj4b4nO4TMCCurU3nLecnJMJv4MV13wd6DcNsUAWi0Ows
-         /DLLWB+3NqnUQ/UE8p9ppHnqVaP2VNK0pTlHJeBZupCquC/HsC0NI13ez846N3V7WJ0E
-         bRSQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0+TZfyO96MuT6z1hpaU/81N8W1L7K7DdH8/8YCsn0po=;
+        b=cPyl1tdDXZ5qYnw44R9BEJT8bydv2rE67zAHJcwa0Gjm/AAQihVKqXkGJ+WEMdvVBm
+         t+rjMBR4VcGYJ4VNQekZJVijsjkK+EdlwPmNQ35ZAomo4G+JeTrSon1F1vGs57gMckwb
+         55uQpCHmoXMv8KV6rL+sEQPZyKrS5dJ6dSds4J5egseJG/5bISNybr2JDBtAhzaH54Yj
+         bsjPIXzqjQhDhGoO7QQ0SJT2ldbC0IXcF+j3lK6tIAA2RjdZz6pi6A4JtZd/OkhmSVEh
+         S/fhCBKaqLuV0PcxTqxjfhu6JOogve1E/8rdtlcfUAIUs7IDdjwMXaUcgHrdm9fbBb5a
+         BWpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vuapDqdagNGnFpo6uhL7k0neEZp9M4gz2OrukVtMrUk=;
-        b=C8QF0DvcWOtRR7rTYIGmkY4IznPdMfva1QaXrhwak84SzUSRi35FyYytzqiAQ3nTuy
-         GL2XI3Tz611DRoGKieRcYSQSs7w/ZgJcmcMP3RFD/Nqt6oYKmow3MCkbZDXEERF8K26S
-         joHD5dK2SW9/Yt0rRnuGyGfducwSPHFHVcHDX4vmQNBgLHAVSTyo63LqC1WFMvDLTHfj
-         IV8iZr5aN2ia5SmstoRsrX8gyHmZhsD2abGQhKpGghv/M0A/GjgqAWI5qNe803ZdkDBy
-         fHPXp6QoG9ShfZOrxTsELHya4hdGaK9IU6UKtiEwejqfPfeCPvYI3QDGqqs3YsfkDGvf
-         P6xg==
-X-Gm-Message-State: AO0yUKXnMF41ytHmIAmPPEv1OUcvvcN4KzSBCVdQGDmNqveL1jv7+/Fr
-        F1eCv4GjUdVnN7sRWpc1+Lo+PxeL+kIdhg8BfRa0zg==
-X-Google-Smtp-Source: AK7set9U1akcHIKuL0+KX0vTYez7hYPW+SEKgxRVoV8Zx2osQnaDonnagZ++a1daYV4ESYRduLdCKQ==
-X-Received: by 2002:a17:907:168e:b0:8b0:23a6:c491 with SMTP id hc14-20020a170907168e00b008b023a6c491mr11788390ejc.31.1676303730005;
-        Mon, 13 Feb 2023 07:55:30 -0800 (PST)
-Received: from jade (h-46-59-78-111.A175.priv.bahnhof.se. [46.59.78.111])
-        by smtp.gmail.com with ESMTPSA id n8-20020a1709065e0800b0087fa83790d8sm7045465eju.13.2023.02.13.07.55.29
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0+TZfyO96MuT6z1hpaU/81N8W1L7K7DdH8/8YCsn0po=;
+        b=IOCQvK7JtfsbaUQmjQIJNVK2OC0IXjzHKOnQ1mCTyV0yrawr/OKmrIe0zHiMW/qoKc
+         pSyCkKyV5nJOgQTsspwqLWZnzO0PjtsbgzziJbEEKZzmy4X3vJ7US04qHzCJ/uPTaWgm
+         i/G7W8Qq8zE6hCHEsD+DdQ96qKbK2POxAb6vhSS39D2H8TvRtq0jUaTWA0/aZ3GlGgmu
+         TDfQipp8vRblWqkFxUcqEf2OTTRLEqGUkynzJh1FgURFZm1szrr34u26fUT8ZkfDYCUr
+         ep0EW+UFaK7xJUxxCRZt84fiBK9YPBLx8DopvJNpsb6mtnDHePs6cdI8RG3BSgl3cRY8
+         BVEw==
+X-Gm-Message-State: AO0yUKWrPeIkuuYtmjiT51d/kc9y+iw2PYoSo5heMXQxlD11JtqHLMgv
+        bYVn55o886Aiu09se0P/iKU=
+X-Google-Smtp-Source: AK7set+GP57b23l4H7mZbkBUG5+1tmsloUkZbk2K4Lht+GiGt0jBGf9WhoYhh29+cRjOHLVgOKAXEw==
+X-Received: by 2002:a92:6801:0:b0:315:5436:a632 with SMTP id d1-20020a926801000000b003155436a632mr635911ilc.2.1676303747888;
+        Mon, 13 Feb 2023 07:55:47 -0800 (PST)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id r13-20020a92d44d000000b0031550a3dc7esm399373ilm.32.2023.02.13.07.55.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 07:55:29 -0800 (PST)
-Date:   Mon, 13 Feb 2023 16:55:27 +0100
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Sumit Garg <sumit.garg@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
-        op-tee@lists.trustedfirmware.org, linux-mm@kvack.org,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mel Gorman <mgorman@suse.de>
-Subject: Re: [PATCH v2 4/4] mm: Remove get_kernel_pages()
-Message-ID: <Y+pdbyqLVxZp4vYk@jade>
-References: <20230203-get_kernel_pages-v2-0-f1dc4af273f1@intel.com>
- <20230203-get_kernel_pages-v2-4-f1dc4af273f1@intel.com>
+        Mon, 13 Feb 2023 07:55:47 -0800 (PST)
+Date:   Mon, 13 Feb 2023 17:55:41 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Steven Price <steven.price@arm.com>
+Cc:     kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Joey Gouly <joey.gouly@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Fuad Tabba <tabba@google.com>, linux-coco@lists.linux.dev
+Subject: Re: [RFC PATCH 04/28] arm64: RME: Check for RME support at KVM init
+Message-ID: <20230213175541.00007cc9@gmail.com>
+In-Reply-To: <20230127112932.38045-5-steven.price@arm.com>
+References: <20230127112248.136810-1-suzuki.poulose@arm.com>
+        <20230127112932.38045-1-steven.price@arm.com>
+        <20230127112932.38045-5-steven.price@arm.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230203-get_kernel_pages-v2-4-f1dc4af273f1@intel.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 08:06:35PM -0800, Ira Weiny wrote:
-> The only caller to get_kernel_pages() [shm_get_kernel_pages()] has been
-> updated to not need it.
+On Fri, 27 Jan 2023 11:29:08 +0000
+Steven Price <steven.price@arm.com> wrote:
+
+> Query the RMI version number and check if it is a compatible version. A
+> static key is also provided to signal that a supported RMM is available.
 > 
-> Remove get_kernel_pages().
+> Functions are provided to query if a VM or VCPU is a realm (or rec)
+> which currently will always return false.
 > 
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Al Viro <viro@zeniv.linux.org.uk>
-> Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Acked-by: John Hubbard <jhubbard@nvidia.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Steven Price <steven.price@arm.com>
 > ---
->  include/linux/mm.h |  2 --
->  mm/swap.c          | 30 ------------------------------
->  2 files changed, 32 deletions(-)
-
-Added to https://git.linaro.org/people/jens.wiklander/linux-tee.git/log/?h=get_kernel_pages-for-v6.4
-
-Thanks,
-Jens
-
+>  arch/arm64/include/asm/kvm_emulate.h | 17 ++++++++++
+>  arch/arm64/include/asm/kvm_host.h    |  4 +++
+>  arch/arm64/include/asm/kvm_rme.h     | 22 +++++++++++++
+>  arch/arm64/include/asm/virt.h        |  1 +
+>  arch/arm64/kvm/Makefile              |  3 +-
+>  arch/arm64/kvm/arm.c                 |  8 +++++
+>  arch/arm64/kvm/rme.c                 | 49 ++++++++++++++++++++++++++++
+>  7 files changed, 103 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/arm64/include/asm/kvm_rme.h
+>  create mode 100644 arch/arm64/kvm/rme.c
 > 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 8f857163ac89..2041e6d4fa27 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -2095,8 +2095,6 @@ int __account_locked_vm(struct mm_struct *mm, unsigned long pages, bool inc,
->  			struct task_struct *task, bool bypass_rlim);
->  
->  struct kvec;
-> -int get_kernel_pages(const struct kvec *iov, int nr_pages, int write,
-> -			struct page **pages);
->  struct page *get_dump_page(unsigned long addr);
->  
->  bool folio_mark_dirty(struct folio *folio);
-> diff --git a/mm/swap.c b/mm/swap.c
-> index 70e2063ef43a..4c03ecab698e 100644
-> --- a/mm/swap.c
-> +++ b/mm/swap.c
-> @@ -158,36 +158,6 @@ void put_pages_list(struct list_head *pages)
+> diff --git a/arch/arm64/include/asm/kvm_emulate.h b/arch/arm64/include/asm/kvm_emulate.h
+> index 9bdba47f7e14..5a2b7229e83f 100644
+> --- a/arch/arm64/include/asm/kvm_emulate.h
+> +++ b/arch/arm64/include/asm/kvm_emulate.h
+> @@ -490,4 +490,21 @@ static inline bool vcpu_has_feature(struct kvm_vcpu *vcpu, int feature)
+>  	return test_bit(feature, vcpu->arch.features);
 >  }
->  EXPORT_SYMBOL(put_pages_list);
 >  
-> -/*
-> - * get_kernel_pages() - pin kernel pages in memory
-> - * @kiov:	An array of struct kvec structures
-> - * @nr_segs:	number of segments to pin
-> - * @write:	pinning for read/write, currently ignored
-> - * @pages:	array that receives pointers to the pages pinned.
-> - *		Should be at least nr_segs long.
-> - *
-> - * Returns number of pages pinned. This may be fewer than the number requested.
-> - * If nr_segs is 0 or negative, returns 0.  If no pages were pinned, returns 0.
-> - * Each page returned must be released with a put_page() call when it is
-> - * finished with.
-> - */
-> -int get_kernel_pages(const struct kvec *kiov, int nr_segs, int write,
-> -		struct page **pages)
-> -{
-> -	int seg;
-> -
-> -	for (seg = 0; seg < nr_segs; seg++) {
-> -		if (WARN_ON(kiov[seg].iov_len != PAGE_SIZE))
-> -			return seg;
-> -
-> -		pages[seg] = kmap_to_page(kiov[seg].iov_base);
-> -		get_page(pages[seg]);
-> -	}
-> -
-> -	return seg;
-> -}
-> -EXPORT_SYMBOL_GPL(get_kernel_pages);
-> -
->  typedef void (*move_fn_t)(struct lruvec *lruvec, struct folio *folio);
+> +static inline bool kvm_is_realm(struct kvm *kvm)
+> +{
+> +	if (static_branch_unlikely(&kvm_rme_is_available))
+> +		return kvm->arch.is_realm;
+> +	return false;
+> +}
+> +
+> +static inline enum realm_state kvm_realm_state(struct kvm *kvm)
+> +{
+> +	return READ_ONCE(kvm->arch.realm.state);
+> +}
+> +
+> +static inline bool vcpu_is_rec(struct kvm_vcpu *vcpu)
+> +{
+> +	return false;
+> +}
+> +
+>  #endif /* __ARM64_KVM_EMULATE_H__ */
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 35a159d131b5..04347c3a8c6b 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -26,6 +26,7 @@
+>  #include <asm/fpsimd.h>
+>  #include <asm/kvm.h>
+>  #include <asm/kvm_asm.h>
+> +#include <asm/kvm_rme.h>
 >  
->  static void lru_add_fn(struct lruvec *lruvec, struct folio *folio)
-> 
-> -- 
-> 2.39.1
+>  #define __KVM_HAVE_ARCH_INTC_INITIALIZED
+>  
+> @@ -240,6 +241,9 @@ struct kvm_arch {
+>  	 * the associated pKVM instance in the hypervisor.
+>  	 */
+>  	struct kvm_protected_vm pkvm;
+> +
+> +	bool is_realm;
+> +	struct realm realm;
+>  };
+>  
+>  struct kvm_vcpu_fault_info {
+> diff --git a/arch/arm64/include/asm/kvm_rme.h b/arch/arm64/include/asm/kvm_rme.h
+> new file mode 100644
+> index 000000000000..c26bc2c6770d
+> --- /dev/null
+> +++ b/arch/arm64/include/asm/kvm_rme.h
+> @@ -0,0 +1,22 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2023 ARM Ltd.
+> + */
+> +
+> +#ifndef __ASM_KVM_RME_H
+> +#define __ASM_KVM_RME_H
+> +
+> +enum realm_state {
+> +	REALM_STATE_NONE,
+> +	REALM_STATE_NEW,
+> +	REALM_STATE_ACTIVE,
+> +	REALM_STATE_DYING
+> +};
+> +
+
+By the way, it is better to add more comments to introduce about the states
+here.
+
+> +struct realm {
+> +	enum realm_state state;
+> +};
+> +
+> +int kvm_init_rme(void);
+> +
+> +#endif
+> diff --git a/arch/arm64/include/asm/virt.h b/arch/arm64/include/asm/virt.h
+> index 4eb601e7de50..be1383e26626 100644
+> --- a/arch/arm64/include/asm/virt.h
+> +++ b/arch/arm64/include/asm/virt.h
+> @@ -80,6 +80,7 @@ void __hyp_set_vectors(phys_addr_t phys_vector_base);
+>  void __hyp_reset_vectors(void);
+>  
+>  DECLARE_STATIC_KEY_FALSE(kvm_protected_mode_initialized);
+> +DECLARE_STATIC_KEY_FALSE(kvm_rme_is_available);
+>  
+>  /* Reports the availability of HYP mode */
+>  static inline bool is_hyp_mode_available(void)
+> diff --git a/arch/arm64/kvm/Makefile b/arch/arm64/kvm/Makefile
+> index 5e33c2d4645a..d2f0400c50da 100644
+> --- a/arch/arm64/kvm/Makefile
+> +++ b/arch/arm64/kvm/Makefile
+> @@ -20,7 +20,8 @@ kvm-y += arm.o mmu.o mmio.o psci.o hypercalls.o pvtime.o \
+>  	 vgic/vgic-v3.o vgic/vgic-v4.o \
+>  	 vgic/vgic-mmio.o vgic/vgic-mmio-v2.o \
+>  	 vgic/vgic-mmio-v3.o vgic/vgic-kvm-device.o \
+> -	 vgic/vgic-its.o vgic/vgic-debug.o
+> +	 vgic/vgic-its.o vgic/vgic-debug.o \
+> +	 rme.o
+>  
+>  kvm-$(CONFIG_HW_PERF_EVENTS)  += pmu-emul.o pmu.o
+>  
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 9c5573bc4614..d97b39d042ab 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -38,6 +38,7 @@
+>  #include <asm/kvm_asm.h>
+>  #include <asm/kvm_mmu.h>
+>  #include <asm/kvm_pkvm.h>
+> +#include <asm/kvm_rme.h>
+>  #include <asm/kvm_emulate.h>
+>  #include <asm/sections.h>
+>  
+> @@ -47,6 +48,7 @@
+>  
+>  static enum kvm_mode kvm_mode = KVM_MODE_DEFAULT;
+>  DEFINE_STATIC_KEY_FALSE(kvm_protected_mode_initialized);
+> +DEFINE_STATIC_KEY_FALSE(kvm_rme_is_available);
+>  
+>  DECLARE_KVM_HYP_PER_CPU(unsigned long, kvm_hyp_vector);
+>  
+> @@ -2213,6 +2215,12 @@ int kvm_arch_init(void *opaque)
+>  
+>  	in_hyp_mode = is_kernel_in_hyp_mode();
+>  
+> +	if (in_hyp_mode) {
+> +		err = kvm_init_rme();
+> +		if (err)
+> +			return err;
+> +	}
+> +
+>  	if (cpus_have_final_cap(ARM64_WORKAROUND_DEVICE_LOAD_ACQUIRE) ||
+>  	    cpus_have_final_cap(ARM64_WORKAROUND_1508412))
+>  		kvm_info("Guests without required CPU erratum workarounds can deadlock system!\n" \
+> diff --git a/arch/arm64/kvm/rme.c b/arch/arm64/kvm/rme.c
+> new file mode 100644
+> index 000000000000..f6b587bc116e
+> --- /dev/null
+> +++ b/arch/arm64/kvm/rme.c
+> @@ -0,0 +1,49 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2023 ARM Ltd.
+> + */
+> +
+> +#include <linux/kvm_host.h>
+> +
+> +#include <asm/rmi_cmds.h>
+> +#include <asm/virt.h>
+> +
+> +static int rmi_check_version(void)
+> +{
+> +	struct arm_smccc_res res;
+> +	int version_major, version_minor;
+> +
+> +	arm_smccc_1_1_invoke(SMC_RMI_VERSION, &res);
+> +
+> +	if (res.a0 == SMCCC_RET_NOT_SUPPORTED)
+> +		return -ENXIO;
+> +
+> +	version_major = RMI_ABI_VERSION_GET_MAJOR(res.a0);
+> +	version_minor = RMI_ABI_VERSION_GET_MINOR(res.a0);
+> +
+> +	if (version_major != RMI_ABI_MAJOR_VERSION) {
+> +		kvm_err("Unsupported RMI ABI (version %d.%d) we support %d\n",
+> +			version_major, version_minor,
+> +			RMI_ABI_MAJOR_VERSION);
+> +		return -ENXIO;
+> +	}
+> +
+> +	kvm_info("RMI ABI version %d.%d\n", version_major, version_minor);
+> +
+> +	return 0;
+> +}
+> +
+> +int kvm_init_rme(void)
+> +{
+> +	if (PAGE_SIZE != SZ_4K)
+> +		/* Only 4k page size on the host is supported */
+> +		return 0;
+> +
+> +	if (rmi_check_version())
+> +		/* Continue without realm support */
+> +		return 0;
+> +
+> +	/* Future patch will enable static branch kvm_rme_is_available */
+> +
+> +	return 0;
+> +}
+
