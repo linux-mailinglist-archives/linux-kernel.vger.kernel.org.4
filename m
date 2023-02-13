@@ -2,193 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0AB9694AE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE68C694AEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjBMPTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:19:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33410 "EHLO
+        id S229747AbjBMPUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:20:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjBMPTA (ORCPT
+        with ESMTP id S229695AbjBMPUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:19:00 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23177CA18
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:18:51 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 509072184E;
-        Mon, 13 Feb 2023 15:18:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1676301529; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jOb+IL5ig8z4xsMbFjVhjykQYYTP972M2IdLfnX2EYE=;
-        b=qb6jdfYnMAlqhvt5ZDYk1BT/6dXxmjQGkLid4Y0S12liyTzpiy5KC7xN9I/qPgx7Ulq2k2
-        AZiTMN2WCwtoujJPq/0COdnFb6nVBa2xS7+kzC5VkynjLrGC8SzUphDJFYY+8JV9duTTVz
-        3aHxwlQXH+k22Qpux7J85eFLjlnM97c=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EE18B1391B;
-        Mon, 13 Feb 2023 15:18:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /DK4ONhU6mP7HQAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 13 Feb 2023 15:18:48 +0000
-Message-ID: <85de8576-05b7-400d-6020-7dba519c1d2e@suse.com>
-Date:   Mon, 13 Feb 2023 16:18:48 +0100
+        Mon, 13 Feb 2023 10:20:09 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEC759CB
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:19:43 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id bk16so12595444wrb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:19:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vBVRW3XJB/dsQe28qObDwY1va8U6ugsCHUwHE1TeoHo=;
+        b=w+/JciSH3sQgbIKPFpDqeYFFqcYSKc9sfMWWGZ+LuNnQjjCBJGWU7AfDpcq2/is5ph
+         10zTwvQ7dV0mTP9/gb0WBLZMy/iH3zkBdFcHCPk9FYD+xH30s9yj/U4S3YV7u+XPL8q5
+         TsN37/HlzpOioBVDQtU0S1onvBp/4+fd874/4ifD13jcz8x1Vf0fn4wC6fCiV5aYgyxD
+         aGBQuaU5inu7DcWLoAdwixV63e1qH6HdheX5iXH2E74/FTCx9OlBRKnfUcmrmjqmikWz
+         Eaq0uTsGLhv+hsInwKj0YQvfEHLExh1XtyJPrDmKivlaKc1Wnz4h0RVTFiMhWV7gp/vm
+         w92w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vBVRW3XJB/dsQe28qObDwY1va8U6ugsCHUwHE1TeoHo=;
+        b=fHOfWFWXbafjIoNBHZ0HDYbaTAW1BXMH/6asie6y4jIXeyHFoR7qAirnSJAk36XrIB
+         RoNbBdZwKJxpLZfVYsX4zQncUkb4ZCtRE1netG/4OMxdKMXdVnQ+rajJSKE6LThu9+Gu
+         QmJpsDqrBDcCcaySGPaWSkfSxrzf9BDrEFUXt2qeUF8WJkmkoVMps69t6ygLnm9fExJY
+         co90Mrs/0ZFG3Pbxx4DA7tqm9YM3y99V4M3Z1lv9D8qp9ieyGe6BOhZBsQldOVcjp5wP
+         aLXaVqJ1m/qEBmSsmTp72up/3dXx4IqWQGWv6eTNEE0GCoPu+4GQl9H1zkvkxKOgh8/W
+         P/sg==
+X-Gm-Message-State: AO0yUKX9Q+uKTtJ36MiEHjs9s0iP89hu52jTy6ZphWt+5JBWsJEA0tvH
+        u81l0gCFbkhywGhMx3v66rxM4A==
+X-Google-Smtp-Source: AK7set8He8H3zgxnh+9zUlZ4hjUThuw6BcQHtJBmflOPQ7yEaVLCEwj4WUR2/WuiDOiPowXJz2lTSw==
+X-Received: by 2002:adf:eb51:0:b0:2c3:dbe0:58b8 with SMTP id u17-20020adfeb51000000b002c3dbe058b8mr20763507wrn.41.1676301582442;
+        Mon, 13 Feb 2023 07:19:42 -0800 (PST)
+Received: from ?IPV6:2a02:6b6a:b566:0:9e1:512:feb0:fe83? ([2a02:6b6a:b566:0:9e1:512:feb0:fe83])
+        by smtp.gmail.com with ESMTPSA id k1-20020adff5c1000000b002bff574a250sm10904252wrp.2.2023.02.13.07.19.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 07:19:41 -0800 (PST)
+Message-ID: <04d98646-7c2e-9a62-1340-2d8efe69a121@bytedance.com>
+Date:   Mon, 13 Feb 2023 15:19:41 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
- defined MTRRs
+ Thunderbird/102.4.2
+Subject: Re: [External] Re: [PATCH v8 8/9] x86/mtrr: Avoid repeated save of
+ MTRRs on boot-time CPU bringup
 Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        lists@nerdbynature.de, mikelley@microsoft.com,
-        torvalds@linux-foundation.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <20230209072220.6836-1-jgross@suse.com>
- <20230209072220.6836-3-jgross@suse.com> <Y+ohfE/wICFKO/93@zn.tnic>
- <6257114d-a957-f586-145c-d2a885417360@suse.com> <Y+pRK6a419jenR9R@zn.tnic>
- <Y+pTDFQlX9qNL35z@zn.tnic>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <Y+pTDFQlX9qNL35z@zn.tnic>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------X0wZ0FTBxSCMxPqZG36OLAI6"
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>, kim.phillips@amd.com
+Cc:     arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com
+References: <20230209154156.266385-1-usama.arif@bytedance.com>
+ <20230209154156.266385-9-usama.arif@bytedance.com> <87mt5m1yiz.ffs@tglx>
+ <9b6bca9c-7189-a2d5-8c0a-f55c24f54b62@bytedance.com> <878rh61jqx.ffs@tglx>
+ <6fc16f3048719058bccce9d488bcb75252f49031.camel@infradead.org>
+From:   Usama Arif <usama.arif@bytedance.com>
+In-Reply-To: <6fc16f3048719058bccce9d488bcb75252f49031.camel@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------X0wZ0FTBxSCMxPqZG36OLAI6
-Content-Type: multipart/mixed; boundary="------------9AowkjKk7DGThMIvvGs92yrE";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org, lists@nerdbynature.de,
- mikelley@microsoft.com, torvalds@linux-foundation.org,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>
-Message-ID: <85de8576-05b7-400d-6020-7dba519c1d2e@suse.com>
-Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
- defined MTRRs
-References: <20230209072220.6836-1-jgross@suse.com>
- <20230209072220.6836-3-jgross@suse.com> <Y+ohfE/wICFKO/93@zn.tnic>
- <6257114d-a957-f586-145c-d2a885417360@suse.com> <Y+pRK6a419jenR9R@zn.tnic>
- <Y+pTDFQlX9qNL35z@zn.tnic>
-In-Reply-To: <Y+pTDFQlX9qNL35z@zn.tnic>
 
---------------9AowkjKk7DGThMIvvGs92yrE
-Content-Type: multipart/mixed; boundary="------------Bbwh0yUt0sy0cKFhuiAobGdU"
 
---------------Bbwh0yUt0sy0cKFhuiAobGdU
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On 10/02/2023 08:55, David Woodhouse wrote:
+> On Fri, 2023-02-10 at 00:50 +0100, Thomas Gleixner wrote:
+>> On Thu, Feb 09 2023 at 20:32, Usama Arif wrote:
+>>> On 09/02/2023 18:31, Thomas Gleixner wrote:
+>>>>>          first_cpu = cpumask_first(cpu_online_mask);
+>>>>>          smp_call_function_single(first_cpu, mtrr_save_fixed_ranges, NULL, 1);
+>>>>
+>>>> So why is this relevant after the initial bringup? The BP MTRRs have
+>>>> been saved already above, no?
+>>>>
+>>>
+>>> I will let David confirm if this is correct and why he did it, but this
+>>> is what I thought while reviewing before posting v4:
+>>>
+>>> - At initial boot (system_state < SYSTEM_RUNNING), when mtrr_save_state
+>>> is called in do_cpu_up at roughly the same time so MTRR is going to be
+>>> the same, we can just save it once and then reuse for other secondary
+>>> cores as it wouldn't have changed for the rest of the do_cpu_up calls.
+>>>
+>>> - When the system is running and you offline and then online a CPU, you
+>>> want to make sure that hotplugged CPU gets the current MTRR (which might
+>>> have changed since boot?), incase the MTRR has changed after the system
+>>> has been booted, you save the MTRR of the first online CPU. When the
+>>> hotplugged CPU runs its initialisation code, its fixed-range MTRRs will
+>>> be updated with the newly saved fixed-range MTRRs.
+>>
+>> I knew that already :) But seriously:
+>>
+>> If the MTRRs are changed post boot then the cached values want to be
+>> updated too.
+> 
 
-T24gMTMuMDIuMjMgMTY6MTEsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gTW9uLCBG
-ZWIgMTMsIDIwMjMgYXQgMDQ6MDM6MDdQTSArMDEwMCwgQm9yaXNsYXYgUGV0a292IHdyb3Rl
-Og0KPj4+IFdvdWxkbid0ICFjcHVfZmVhdHVyZV9lbmFibGVkKFg4Nl9GRUFUVVJFX0hZUEVS
-VklTT1IpIGJlIGVub3VnaD8NCj4+Pg0KPj4+IEknbSBub3Qgc3VyZSB3ZSB3b24ndCBuZWVk
-IHRoYXQgZm9yIFREWCBndWVzdHMsIHRvby4NCj4+DQo+PiBTZWUsIHRoYXQncyB0aGUgcHJv
-YmxlbS4gSSB3YW5uYSBoYXZlIGl0IHNpbXBsZSB0b28uIExlbW1lIGNoZWNrIHdpdGgNCj4+
-IGRoYW5zZW4uDQo+IA0KPiBIZSBzYXlzIE1UUlJzIGFyZSBlbmFibGVkIGluIFREWCBndWVz
-dHM6ICJYODZfRkVBVFVSRV9NVFJSIGlzIGZpeGVkIHRvDQo+IDEgaW4gVERYIGd1ZXN0cy4i
-DQo+IA0KPiBTbyB3ZSB3aWxsIGhhdmUgdG8gZG8gdGhlIG1vcmUgZmluZXItZ3JhaW5lZCBj
-aGVjayBJIGd1ZXNzLg0KDQpJc24ndCB0aGUgY2hlY2sgZm9yICFYODZfRkVBVFVSRV9NVFJS
-ICYmIFg4Nl9GRUFUVVJFX0hZUEVSVklTT1IgZW5vdWdoDQp0aGVuPw0KDQpZZXMsIHlvdSBz
-dGlsbCBjb3VsZCBjb25zdHJ1Y3QgY2FzZXMgd2hlcmUgaXQgd291bGQgZ28gd3JvbmcsIGJ1
-dCBJIGRvbid0DQp0aGluayB3ZSBzaG91bGQgb3Zlci1lbmdpbmVlciBpdC4NCg0KDQpKdWVy
-Z2VuDQoNCg==
---------------Bbwh0yUt0sy0cKFhuiAobGdU
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+I had previously only done smpboot time measurements for the whole 
+patchset, but I tested the patchset without this commit and it doesn't 
+make a difference to smpboot time as its negligable work to read those 
+MTRR MSRs into mtrr_state.fixed_ranges.
+This commit is also independent of parallel smp bringup, similar to 
+reusing timer calibration so I think it could be considered as a 
+separate patchset if needed. I will post the next revision without this 
+commit, but here is my view on MTRR save/restore (which shouldn't matter 
+for the next revision...).
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+If the MTRR changes on a running system, there might be a bug during 
+hotplug in the original code that handles MTRR? which is also carried 
+over in this patch.
+ From what I can see, MTRR is only saved+restored during initial boot, 
+hotplugging CPU and __save/__restore_processor_state() (used in creating 
+image for hibernation, suspend, kexec...). So if for e.g. in a running 
+system (that has not hibernated, suspended, kexeced), if MTRR for CPU0 
+(first_cpu) changed post-boot and CPU3 is hotplugged, only MTRR for CPU3 
+is updated and CPU0 and CPU3 will hold the same value, while the rest of 
+the CPUs will have the older first-boot value? This behavior will happen 
+with or without this patch. I think this is what Thomas is referring to 
+above when he says that the cached values want to be updated? But the 
+issue is present in the original code as well.
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+Thanks!
+Usama
 
---------------Bbwh0yUt0sy0cKFhuiAobGdU--
-
---------------9AowkjKk7DGThMIvvGs92yrE--
-
---------------X0wZ0FTBxSCMxPqZG36OLAI6
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPqVNgFAwAAAAAACgkQsN6d1ii/Ey94
-dQf+L93V4weQhgc3YmhXgdCIDnIf24O4ESovfr6JqqjfPaBxzL2Qs0lNieCNYCLDxckS3A+lIwym
-Y3QIrdjcGNmVhqr8WCRCiOGVMlD7ut50P4jwJpet6QHZ1BYEneDuKt5/Ghg5ZB2eSLawvU336+IL
-P51qf2ga3gKknK8KzrLMDtXI4BvSm5aojD0XhI2vth4A8To+4IIUwZU6gOtENpGCIab9yefpB8fS
-+OBi/suTWQZ3YZsN2m/+WvgjrCv0jseo4C2zkSQNZUI+IkThMZPwMZZPuKQJ+aBnQtNDwi0X+tIA
-jr6+nPczv7H+00oGwa2E8MnMajRJ/xiVnvUwMqTgsg==
-=/t3R
------END PGP SIGNATURE-----
-
---------------X0wZ0FTBxSCMxPqZG36OLAI6--
+> They are, aren't they? The only way we come out of mtrr_save_state()
+> without calling mtrr_save_fixed_ranges() — either directly or via
+> smp_call_function_single() — is if they've already been saved once
+> *and* system_state < SYSTEM_RUNNING.
+> 
+> I suppose we could make that clearer by moving the definition of the
+> mtrr_saved flags inside the if (system_state < SYSTEM_RUNNING) block?
+> 
+> @@ -721,11 +721,20 @@ void __init mtrr_bp_init(void)
+>    */
+>   void mtrr_save_state(void)
+>   {
+>   	int first_cpu;
+>   
+>   	if (!mtrr_enabled())
+>   		return;
+>   
+> +	if (system_state < SYSTEM_RUNNING) {
+> +		static bool mtrr_saved;
+> +		if (!mtrr_saved) {
+> +			mtrr_save_fixed_ranges(NULL);
+> +			mtrr_saved = true;
+> +		}
+> +		return;
+> +	}
+> +
+>   	first_cpu = cpumask_first(cpu_online_mask);
+>   	smp_call_function_single(first_cpu, mtrr_save_fixed_ranges, NULL, 1);
+>   }
+> 
