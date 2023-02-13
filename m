@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23EC0693F41
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 08:58:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4617C693F43
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 08:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbjBMH6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 02:58:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46690 "EHLO
+        id S229950AbjBMH6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 02:58:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbjBMH6S (ORCPT
+        with ESMTP id S229747AbjBMH6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 02:58:18 -0500
+        Mon, 13 Feb 2023 02:58:23 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DA4125A5
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 23:58:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC684EE8
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 23:58:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676275096; x=1707811096;
+  t=1676275099; x=1707811099;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=2Rrie2bPqPi5V+Iz3CI03igARGPvTfvHLhvvVc+LOMs=;
-  b=GoCPvHYsNojra/bYA3NVeNo5Yo/qftY+vxrdrpIH3yv25svsRcxr6uSz
-   glq1zNSDZn+bzPqP5fngLpuBiPwRk2loSNlB4e2TCcz+jVs1etmzvYxJP
-   kKYJq1GyE4+IPLAh0sHQvVKHnMScPOoik040buaUwRl6bgQeV9uH9UFvJ
-   sGTUR+yDMbaOK0e4eXNxLQYqLDp3+beEufyTRrCH9Nzv3Ld1ZwRtOGFvl
-   7wt+Y7ssKJlHH+w4nuvh25TPjtwMshNA5KmLRFjcJS8mjEnMAMbu0F41/
-   k7xkbB57xlvrXgNVs/2vHImb0ILMHPWRqeFxKfvMJefD3pf/fStPerdcH
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="417058757"
+  bh=AazWd96xxOSoSDyvZpaQLi9s44x2C1YOu7YcySHmaWw=;
+  b=njK/FKk/1ET1BQz9vbmL0Z9czc4Xl6Cj4ohlu9cQZRun3c42H+mEwGZO
+   tbC4L231KL63zRk3GsWhskmEoIzHekbV0YMr65T4dtV13KWjQDLfUefpO
+   2k7lOlSV6rNuVbqQ/MEfb3o1CONqlalImg2TVtXBtM226OFCpBRiSLQN2
+   N64nSFY12Am8dRZ6Ew+JfsLsRjzgaWXhWrNMU5AR1OkezFKsBfB7CyWe6
+   zomoY8RIZOAlT/soDH83ywrIWhQVo8G5w3IqTwSTNesdIXckrFaYcDxKM
+   1dayHrQsIDIDD6f7mYGtO46+uaAPWEdoYtfTSLs9bMq1mLab0jO/n7VLC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="417058772"
 X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
-   d="scan'208";a="417058757"
+   d="scan'208";a="417058772"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 23:58:16 -0800
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 23:58:18 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="842684803"
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="842684807"
 X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
-   d="scan'208";a="842684803"
+   d="scan'208";a="842684807"
 Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga005.jf.intel.com with ESMTP; 12 Feb 2023 23:58:13 -0800
+  by orsmga005.jf.intel.com with ESMTP; 12 Feb 2023 23:58:16 -0800
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     iommu@lists.linux.dev
 Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
@@ -47,9 +47,9 @@ Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
         Will Deacon <will@kernel.org>,
         Robin Murphy <robin.murphy@arm.com>,
         linux-kernel@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH 1/4] iommu: Add dev_iommu->ops_rwsem
-Date:   Mon, 13 Feb 2023 15:49:38 +0800
-Message-Id: <20230213074941.919324-2-baolu.lu@linux.intel.com>
+Subject: [PATCH 2/4] iommu: Use group ownership to avoid driver attachment
+Date:   Mon, 13 Feb 2023 15:49:39 +0800
+Message-Id: <20230213074941.919324-3-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230213074941.919324-1-baolu.lu@linux.intel.com>
 References: <20230213074941.919324-1-baolu.lu@linux.intel.com>
@@ -64,137 +64,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a RW semaphore to make sure that iommu_ops of a device is consistent
-in any non-driver-oriented path, such as a store operation on the iommu
-group sysfs node.
+The iommu_group_store_type() requires the devices in the iommu group are
+not bound to any device driver during the whole operation. The existing
+code locks the device with device_lock(dev) and use device_is_bound() to
+check whether any driver is bound to device.
 
-Add a pair of helpers to freeze and unfreeze the iommu ops of all devices
-in an iommu group, and use them in iommu_group_store_type().
+In fact, this can be achieved through the DMA ownership helpers. Replace
+them with iommu_group_claim/release_dma_owner() helpers.
 
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- include/linux/iommu.h |  3 +++
- drivers/iommu/iommu.c | 53 ++++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 55 insertions(+), 1 deletion(-)
+ drivers/iommu/iommu.c | 27 +++++++++++++--------------
+ 1 file changed, 13 insertions(+), 14 deletions(-)
 
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 3589d1b8f922..a4204e1bfef3 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -402,6 +402,8 @@ struct iommu_fault_param {
-  * @fwspec:	 IOMMU fwspec data
-  * @iommu_dev:	 IOMMU device this device is linked to
-  * @priv:	 IOMMU Driver private data
-+ * @ops_rwsem:	 RW semaphore to synchronize between device release
-+ *		 path and the sysfs interfaces.
-  * @max_pasids:  number of PASIDs this device can consume
-  * @attach_deferred: the dma domain attachment is deferred
-  *
-@@ -415,6 +417,7 @@ struct dev_iommu {
- 	struct iommu_fwspec		*fwspec;
- 	struct iommu_device		*iommu_dev;
- 	void				*priv;
-+	struct rw_semaphore		ops_rwsem;
- 	u32				max_pasids;
- 	u32				attach_deferred:1;
- };
 diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index 5f1dc9aaba52..4f71dcd2621b 100644
+index 4f71dcd2621b..6547cb38480c 100644
 --- a/drivers/iommu/iommu.c
 +++ b/drivers/iommu/iommu.c
-@@ -267,6 +267,7 @@ static struct dev_iommu *dev_iommu_get(struct device *dev)
- 		return NULL;
+@@ -2807,12 +2807,6 @@ static int iommu_change_dev_def_domain(struct iommu_group *group,
  
- 	mutex_init(&param->lock);
-+	init_rwsem(&param->ops_rwsem);
- 	dev->iommu = param;
- 	return param;
- }
-@@ -461,12 +462,19 @@ void iommu_release_device(struct device *dev)
+ 	mutex_lock(&group->mutex);
  
- 	iommu_device_unlink(dev->iommu->iommu_dev, dev);
+-	if (group->default_domain != group->domain) {
+-		dev_err_ratelimited(prev_dev, "Group not assigned to default domain\n");
+-		ret = -EBUSY;
+-		goto out;
+-	}
+-
+ 	/*
+ 	 * iommu group wasn't locked while acquiring device lock in
+ 	 * iommu_group_store_type(). So, make sure that the device count hasn't
+@@ -2971,6 +2965,7 @@ static void iommu_group_unfreeze_dev_ops(struct iommu_group *group)
+ static ssize_t iommu_group_store_type(struct iommu_group *group,
+ 				      const char *buf, size_t count)
+ {
++	bool group_owner_claimed = false;
+ 	struct group_device *grp_dev;
+ 	struct device *dev;
+ 	int ret, req_type;
+@@ -2992,6 +2987,14 @@ static ssize_t iommu_group_store_type(struct iommu_group *group,
+ 	else
+ 		return -EINVAL;
  
-+	/*
-+	 * The device's iommu_ops will be released in .release_device
-+	 * callback. Hold ops_rwsem to avoid use after release.
-+	 */
-+	down_write(&dev->iommu->ops_rwsem);
- 	ops = dev_iommu_ops(dev);
- 	if (ops->release_device)
- 		ops->release_device(dev);
-+	module_put(ops->owner);
-+	dev->iommu->iommu_dev = NULL;
-+	up_write(&dev->iommu->ops_rwsem);
- 
- 	iommu_group_remove_device(dev);
--	module_put(ops->owner);
- 	dev_iommu_free(dev);
- }
- 
-@@ -2911,6 +2919,46 @@ static int iommu_change_dev_def_domain(struct iommu_group *group,
- 	return ret;
- }
- 
-+static int iommu_group_freeze_dev_ops(struct iommu_group *group)
-+{
-+	struct group_device *device;
-+	struct device *dev;
-+
-+	mutex_lock(&group->mutex);
-+	list_for_each_entry(device, &group->devices, list) {
-+		dev = device->dev;
-+		down_read(&dev->iommu->ops_rwsem);
-+		/* .release_device has been called. */
-+		if (!dev->iommu->iommu_dev) {
-+			up_read(&dev->iommu->ops_rwsem);
-+			goto restore_out;
-+		}
++	if (req_type != IOMMU_DOMAIN_DMA_FQ ||
++	    group->default_domain->type != IOMMU_DOMAIN_DMA) {
++		ret = iommu_group_claim_dma_owner(group, (void *)buf);
++		if (ret)
++			return ret;
++		group_owner_claimed = true;
 +	}
-+	mutex_unlock(&group->mutex);
 +
-+	return 0;
-+
-+restore_out:
-+	list_for_each_entry(device, &group->devices, list) {
-+		if (device->dev == dev)
-+			break;
-+		up_read(&device->dev->iommu->ops_rwsem);
-+	}
-+	mutex_unlock(&group->mutex);
-+
-+	return -EINVAL;
-+}
-+
-+static void iommu_group_unfreeze_dev_ops(struct iommu_group *group)
-+{
-+	struct group_device *device;
-+
-+	mutex_lock(&group->mutex);
-+	list_for_each_entry(device, &group->devices, list)
-+		up_read(&device->dev->iommu->ops_rwsem);
-+	mutex_unlock(&group->mutex);
-+}
-+
- /*
-  * Changing the default domain through sysfs requires the users to unbind the
-  * drivers from the devices in the iommu group, except for a DMA -> DMA-FQ
-@@ -2988,6 +3036,8 @@ static ssize_t iommu_group_store_type(struct iommu_group *group,
- 	 */
- 	mutex_unlock(&group->mutex);
+ 	/*
+ 	 * Lock/Unlock the group mutex here before device lock to
+ 	 * 1. Make sure that the iommu group has only one device (this is a
+@@ -3001,6 +3004,8 @@ static ssize_t iommu_group_store_type(struct iommu_group *group,
+ 	mutex_lock(&group->mutex);
+ 	if (iommu_group_device_count(group) != 1) {
+ 		mutex_unlock(&group->mutex);
++		if (group_owner_claimed)
++			iommu_group_release_dma_owner(group);
+ 		pr_err_ratelimited("Cannot change default domain: Group has more than one device\n");
+ 		return -EINVAL;
+ 	}
+@@ -3038,22 +3043,16 @@ static ssize_t iommu_group_store_type(struct iommu_group *group,
  
-+	iommu_group_freeze_dev_ops(group);
-+
- 	/* Check if the device in the group still has a driver bound to it */
+ 	iommu_group_freeze_dev_ops(group);
+ 
+-	/* Check if the device in the group still has a driver bound to it */
  	device_lock(dev);
- 	if (device_is_bound(dev) && !(req_type == IOMMU_DOMAIN_DMA_FQ &&
-@@ -3002,6 +3052,7 @@ static ssize_t iommu_group_store_type(struct iommu_group *group,
+-	if (device_is_bound(dev) && !(req_type == IOMMU_DOMAIN_DMA_FQ &&
+-	    group->default_domain->type == IOMMU_DOMAIN_DMA)) {
+-		pr_err_ratelimited("Device is still bound to driver\n");
+-		ret = -EBUSY;
+-		goto out;
+-	}
  
- out:
+ 	ret = iommu_change_dev_def_domain(group, dev, req_type);
+ 	ret = ret ?: count;
+ 
+-out:
  	device_unlock(dev);
-+	iommu_group_unfreeze_dev_ops(group);
+ 	iommu_group_unfreeze_dev_ops(group);
  	put_device(dev);
++	if (group_owner_claimed)
++		iommu_group_release_dma_owner(group);
  
  	return ret;
+ }
 -- 
 2.34.1
 
