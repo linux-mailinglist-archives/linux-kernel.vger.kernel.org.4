@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3942B693D9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 05:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E94693DA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 05:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbjBMEz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 23:55:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52598 "EHLO
+        id S230045AbjBMEzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 23:55:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbjBMEy4 (ORCPT
+        with ESMTP id S229909AbjBMEzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 23:54:56 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44847113F1
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 20:54:30 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id i18so3870699pli.3
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 20:54:30 -0800 (PST)
+        Sun, 12 Feb 2023 23:55:11 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C58C126CA
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 20:54:39 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id mg23so4213246pjb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 20:54:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=H5RDh/4h33AXRCvzLgyL6r/ZYBcOU/v7pv8PufXaHhU=;
-        b=wq1vjGt5Dk5GTt2uM2o1fsU4IewccIkdZiTiZ7Q6QROKj7XotzLnQnbGMt7mkKvcxn
-         Uxr0y6xeaOCw0m3jmFx4LdilZxIzFkNBZUysklHVUGRQgJUL2fG/YYfw9ujVUppzfGLO
-         K2+9aqLeM3PSle+L5sFQoNf3ArhkOzkMUImcbHjhQmj01b4KtjSLsZc0o27pdRVwgFoD
-         gmJsi6NkemAEVMiZjtqLPqgGgv2Z5vh743ofDqsf+8HUhJwOQVi30lbfExMhXxuLElj8
-         xHOnKu08Ovp/uV/YddPhlNoEHhLPdW6MlLGLla9JQ4zUjud10AC/I0X8tPdayr8dpskh
-         va1g==
+        bh=w7d4Qtypw6ksd0rXUCdfOWzkU5LDKwcQ9sGuN3ONcAw=;
+        b=31KnFLQ1jXjMLjTchl1w4moDo9CD9TiKyNs+4OObUXS/bu6U2VBl4731Df6PD7Y9/g
+         2XNYNTjZyG7bXyvHEUioI3gERdD7LvSkrCK98xrIHVYmvA5asSACcG8DzwHY9Elw91gc
+         KrYDDfbQ0WGQKLe3OQqMCXoSdQognrXbgKTQeLFi2du2ewZSoi8M3yoq4iVIAUO0iC8j
+         c+HEm7ay6XzwKJD0dg054Mp6qh6jGMCArVxGFrAxDUUDqIrGtX7IhEKyTa8tCMlq6uPJ
+         YpP8FzRMvT6ihcXz/hH1cCXAqlBEJCSPIWcmpziCZgstPBhZ07n1DnUYd6pvHpmuIT8C
+         lNMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=H5RDh/4h33AXRCvzLgyL6r/ZYBcOU/v7pv8PufXaHhU=;
-        b=XxC0CuBi5aO/iMmC2jTvZnmp0blR9hG6B3krn1lUuMgL4xRn14Sf9U9ri97sI2Dtmc
-         SVGDcgL1f4xcTgM96tFECSCL4XzCw8uFcfA4k1DOFaCOkFymOZOXcVpfjq/MxZ+sPsz/
-         ByOeFf6xN0NN4n9/ozkFBeO7gq+bTVd/YxVBVzVJiOjU2VtZhKJibxE6pexXZegSiVcz
-         4o8c+dpXdNtWBhVetUQjgvgSHL1EYZb9PqYLx3u1u/Zq+pHPETjjlwqzM6y1LmTGM3Ef
-         BiR5RNFwRGuhewgk4nw80FF2NQbBbfOC2HQjNmjZAVs2649AFATMnnk2VWDrtVhWQZqM
-         Uxzg==
-X-Gm-Message-State: AO0yUKWaDeJfZb5YCEbRmS2PhKe524tlA6F4m3WHxJHVoP6BYlPgAgVR
-        QYlTeZa01wF3f4ZAA9Z7yjG88x3d1TWTnf47
-X-Google-Smtp-Source: AK7set/buAEv0Dcf3oki/D1OsCxjOnHbCXwSRzLrgXj1477fOT32uLPajUBPeIjkACO2s7SI5kT0TA==
-X-Received: by 2002:a17:902:f20b:b0:199:aae:7569 with SMTP id m11-20020a170902f20b00b001990aae7569mr17492690plc.28.1676264069586;
-        Sun, 12 Feb 2023 20:54:29 -0800 (PST)
+        bh=w7d4Qtypw6ksd0rXUCdfOWzkU5LDKwcQ9sGuN3ONcAw=;
+        b=uphVc5LetU2O2THXc8NksRM3oDoPpEVeU/U3WTlHb2I8o60lEIW4cjFqgIMTTAkzGT
+         6QkNrHx3iWdW8wv3WDBMr5EsHzBZoVEP0tYalpYwdQOyKSMgSZg0kl+PmdytR+UHObim
+         doQpunw1X4PvcA7YJMfhNNS9iN8oJ7y8Io0QS2rgCMbmU9xCN7cZuAAvqreH/MWAFxmM
+         bLZrrFPu4YYn0qxv3xAT36oMVNJC/OR7g9NMJMBSjJ0FKRkIeDq3YzILojNSgq6piLxU
+         89nl9FPsxcaUpoBCiuQpiixQ8MlMwvebkXRCPcDttg/a/yLyLDo08gRncJRFXyLs6rAT
+         0Knw==
+X-Gm-Message-State: AO0yUKUswz0j4+UwyAF6havxgRJh9ASphjYe0vec5839ZN9HKiXAJNIF
+        JWij3xMkTjrhcKwumboH5sDEUQbsxAQWgL+Q
+X-Google-Smtp-Source: AK7set/LsQt20km3cdR/Kp4fADKzzPOahuIH182d8bTSETTWkRIjfVk2zOeUnxJfWQP4yrfUrjZ6+g==
+X-Received: by 2002:a17:902:e843:b0:199:2a89:f912 with SMTP id t3-20020a170902e84300b001992a89f912mr27069676plg.20.1676264070858;
+        Sun, 12 Feb 2023 20:54:30 -0800 (PST)
 Received: from debug.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id e5-20020a170902784500b00189e7cb8b89sm7078303pln.127.2023.02.12.20.54.28
+        by smtp.gmail.com with ESMTPSA id e5-20020a170902784500b00189e7cb8b89sm7078303pln.127.2023.02.12.20.54.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Feb 2023 20:54:29 -0800 (PST)
+        Sun, 12 Feb 2023 20:54:30 -0800 (PST)
 From:   Deepak Gupta <debug@rivosinc.com>
 To:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>
 Cc:     Deepak Gupta <debug@rivosinc.com>
-Subject: [PATCH v1 RFC Zisslpcfi 19/20] config: adding two new config for control flow integrity
-Date:   Sun, 12 Feb 2023 20:53:48 -0800
-Message-Id: <20230213045351.3945824-20-debug@rivosinc.com>
+Subject: [PATCH v1 RFC Zisslpcfi 20/20] riscv: select config for shadow stack and landing pad instr support
+Date:   Sun, 12 Feb 2023 20:53:49 -0800
+Message-Id: <20230213045351.3945824-21-debug@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230213045351.3945824-1-debug@rivosinc.com>
 References: <20230213045351.3945824-1-debug@rivosinc.com>
@@ -73,65 +73,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To maintain control flow integrity of a program, integrity of indirect
-control transfers has to be maintained. Almost in all architectures there
-are two mechanisms for indirect control transfer
- - Indirect call relying on a memory operand.
- - Returns which pop an address from stack and return to caller.
-
-Control transfers relying on memory operands are inherently susceptible to
-memory corruption bugs and thus allowing attackers to perform code re-use
-attacks which eventually is used to inject attacker's payload.
-
-All major architectures (x86, aarch64 and riscv) have introduced hardware
-assistance in form of architectural extensions to protect returns (using
-alternate shadow/control stack) and forward control flow (by enforcing
-all indirect control transfers land on a landing pad instruction)
-
-This patch introduces two new CONFIGs
-
-  - CONFIG_USER_SHADOW_STACK
-    Config to enable kernel support for user mode shadow stacks
-
-  - CONFIG_USER_INDIRECT_BR_LP
-    Config to enable kernel support for enforcing landing pad instruction
-    on target of an indirect control transfer.
+This patch selects config shadow stack support and landing pad instr
+support. Since shadow stack support and landing instr support relies
+on ELF header, this change also selects ARCH_USE_GNU_PROPERTY and
+ARCH_BINFMT_ELF_STATE.
 
 Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 ---
- init/Kconfig | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ arch/riscv/Kconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/init/Kconfig b/init/Kconfig
-index 44e90b28a30f..8867ea4b074f 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -121,6 +121,25 @@ config THREAD_INFO_IN_TASK
- 	  One subtle change that will be needed is to use try_get_task_stack()
- 	  and put_task_stack() in save_thread_stack_tsk() and get_wchan().
- 
-+config USER_SHADOW_STACK
-+	bool
-+	help
-+	  Select this to enable kernel to support user mode shadow stack. Most
-+	  major architectures now support hardware assisted shadow stack. This
-+	  allows to enable non-arch specifics related to shadow stack in kernel.
-+	  Arch specific configuration options may also need to be enabled.
-+
-+config USER_INDIRECT_BR_LP
-+	bool
-+	help
-+	  Select this to allow user mode apps to opt-in to force requirement for
-+	  a landing pad instruction on indirect jumps or indirect calls in user mode.
-+	  Most major architectures now support hardware assistance for landing pad
-+	  instruction on indirect call or a jump. This config option allows non-arch
-+	  specifics related to landing pad instruction to be enabled separately from
-+	  arch specific implementations. Arch specific configuration options may also
-+	  need to be enabled.
-+
- menu "General setup"
- 
- config BROKEN
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index e2b656043abf..9a39ada1d9d0 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -132,6 +132,10 @@ config RISCV
+ 	select SYSCTL_EXCEPTION_TRACE
+ 	select THREAD_INFO_IN_TASK
+ 	select TRACE_IRQFLAGS_SUPPORT
++	select USER_SHADOW_STACK
++	select USER_INDIRECT_BR_LP
++	select ARCH_USE_GNU_PROPERTY
++	select ARCH_BINFMT_ELF_STATE
+ 	select UACCESS_MEMCPY if !MMU
+ 	select ZONE_DMA32 if 64BIT
+ 	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && $(cc-option,-fpatchable-function-entry=8)
 -- 
 2.25.1
 
