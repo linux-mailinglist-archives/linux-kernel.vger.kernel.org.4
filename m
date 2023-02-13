@@ -2,215 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE3B694C96
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3A4694C98
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:25:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbjBMQZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 11:25:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45580 "EHLO
+        id S230011AbjBMQZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 11:25:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbjBMQZH (ORCPT
+        with ESMTP id S229928AbjBMQZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 11:25:07 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36302D5B
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:24:30 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BC5811F8B9;
-        Mon, 13 Feb 2023 16:23:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1676305438; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=u3KZsWS9yq587wT8ZzVLFMR8Ts3cCsLRIsEUUms7WOI=;
-        b=LTMij1N3N8Lb+4bkpAC9VeC1wsKsxXm9gkPHTABZ9ajCXFmfYVnsCUo+OYgSbSW0H5SwYX
-        FYvjcwJ6ujggFk1lta3UbvMgbJAjgtmgkf0byiecwAGP6IMe2uprQfbXx+BxaCE8tEwENT
-        eqXZxiRkboXk3js3oAfwrPGsu1Qzdp0=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5985E138E6;
-        Mon, 13 Feb 2023 16:23:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id lQVlFB5k6mP2QAAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 13 Feb 2023 16:23:58 +0000
-Message-ID: <f18e315f-bfe2-426d-0ecf-d82fb22a05f4@suse.com>
-Date:   Mon, 13 Feb 2023 17:23:57 +0100
+        Mon, 13 Feb 2023 11:25:19 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2059.outbound.protection.outlook.com [40.107.220.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97411E064
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:24:45 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OvDL1M/wiIiF5a1WMFUAVvUPjhNIW/gzr7mqkSMZ5zkD+KKbFBUAsolJuaXkFDYYFJj1FsxSjGRf+YpJqiNHD4sX79V3DTBN0aG/kH3WXsaDgA1FNZIoN+V00IZpvX0gLaAgZyP+isleq679WDDqhTIASMgTurmdzzMVqEQol+3J9UjK0zcmVKKsYBZjx8/GedjKfIaesvosmA00kD6qyDhPUl++xrnoJ4TYBBjLh3+mctVq0XaI+rPQSiiOuskZRhnzIB9FpaRdjxaoNwPlJ/9Dg2QzMn54+AK/mJUvN+HDYEvm6as9s2TKzEnPkhDEXCdXxKsKAck6K7aGeJjmBw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ca33ST9f0dV0ZfZqzYw+0H4nWCk/IKrvDiQq4eaFKlI=;
+ b=Y+eLHePUH/C5Q4bTiymW7MI7SaTxDDJdaJC9uqD2ySiuTwJF67mumWgCFpyk8NU5HLqhwRKPcCthpj13tiJr9PuLKyjjwkhdZ+/AI0uas9795c0LNpLQ9tPItII5wuqHwloetPaIoD4QnxvjqUAJ2xgopV/ZjB4rUVp4Gsu1sJsyRZfemjuKQQ9OmGa9t1B0Jtrjl2pLIUJg2GPPed1a1t/Hhxspt9s3rAMOdFwJBejLwkBieY7hYghTwuadmHsnRUrZGVjws44+i9gZ2T9zurhnOlS0mCb2THJB2zrY0bZV2FUqEwZOlCqSrFgFFMPh/kJQ2rBK5nyDbhWV+NC4CA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ca33ST9f0dV0ZfZqzYw+0H4nWCk/IKrvDiQq4eaFKlI=;
+ b=NGC5UCDhdJZFNLPQYBHEM6Fk5dCiuGk8UzaKD2M9nJgbw+U6Xh2msNH16298oApubd/F0YUdVT/9GwgA6BPE5iRwVsGc36HM7Q+3Zy/JefqEl/OD1kaizyLZ5w6KnyF7UtcYzGoqp0yeuHkxPqhqvZh3IeKeSOfV6G0qoN6cAm56MsBFyz7JAnOc3ySBNNv7dgGzMq6UAi+ivBbfzeiK14CUN1kG7FvyHMw2qJE2kJGmrAY72knbmk3mpHKSqixifc5QdZcvNVCWo8a6g8+oRK37lE5uB7A5stvcfI0iJPNRYHj3efT0esud0621z1dh/TCvNPykPDq8KZrbadVLHg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DM6PR12MB4958.namprd12.prod.outlook.com (2603:10b6:5:20a::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Mon, 13 Feb
+ 2023 16:24:16 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%6]) with mapi id 15.20.6086.023; Mon, 13 Feb 2023
+ 16:24:16 +0000
+Date:   Mon, 13 Feb 2023 12:24:15 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>
+Subject: Re: [PATCH 2/2] iommu/ioasid: Remove custom IOASID allocator
+Message-ID: <Y+pkL5b6mGv40nZy@nvidia.com>
+References: <20230210230206.3160144-1-jacob.jun.pan@linux.intel.com>
+ <20230210230206.3160144-3-jacob.jun.pan@linux.intel.com>
+ <Y+pjTR80bnl9rMK1@myrica>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+pjTR80bnl9rMK1@myrica>
+X-ClientProxiedBy: BL0PR1501CA0020.namprd15.prod.outlook.com
+ (2603:10b6:207:17::33) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 5/8] x86/mtrr: revert commit 90b926e68f50
-Content-Language: en-US
-To:     Christian Kujau <lists@nerdbynature.de>, mikelley@microsoft.com
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        torvalds@linux-foundation.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <20230209072220.6836-1-jgross@suse.com>
- <20230209072220.6836-6-jgross@suse.com>
- <9046a3cb-928a-5476-1e72-63bd197c039e@leemhuis.info>
- <129d8c1d-ffa6-dac2-f516-dab4fc8c6218@suse.com>
- <6e4198c2-d79c-8ebd-82f7-3826dd807f1b@nerdbynature.de>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <6e4198c2-d79c-8ebd-82f7-3826dd807f1b@nerdbynature.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------ZpXCMa5vtEEn05cd52m0ectS"
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM6PR12MB4958:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8e8abf81-372b-4b87-c289-08db0ddec04a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ko1rTybnVt4cmkqhzbRmAVXxLmhfw6Pwk9td21xqrqzvB3z54y9bqRooGjFARuTWOGpp1aoPonMEFIGz/JH3SgqJUTpj3r/YWcOlsEjC3fJWPJ24+Tp0u/IwIfhYZf6bIoQ0yhIb4EHfqdFsUAF4GN4/ev+Y1HHA/l/vWLDWDS6cgQYSBXkMXxZ/DRN29dW3Yf7NL+sDTvjFUXqKLKpDY3593r6BgEsbywsf0YUO63Q7W7B86ycekreg217GnMNzo+RNBk48HDPArXAUuLet/mfSuxp3+z0eY13kPZNOZWhhjnPR/Bsv479bfFpgaK63eprG0NhxKV6oR+7KC7whMq0Zna4o9htliafEM43+ayiBfvuVGaYM+Uz2jgqNnXwbLT8il/KLMCfeROfvV35mYsDKGgh7diQbN1+OOdnB7sJU8c5fWcP6q1k19RWfkjfhg7BmpgxS9e+/btJniSLrW3A4Zi69MWXMF1RY3+mVsb4nDYuJDpRYN/oMFoN1FfZftykwHhXB2ARvYalod2AzviAp/uD/1KRJ1AeDWBW1w/zzCOKi0JYGyAdHJv/A5a8f7I0z0+V32zdxXkuWPxpwtg2RuJAtMxR+PzTAAt/D8b9fcQlh86cs8RXhfWI0DwIDLv4trS0d7dOW9bvk0OkkNGeqzieDklHNzBJQfsrijpBe6HCF1ofjQB77biYpcXju
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(376002)(136003)(396003)(366004)(451199018)(6512007)(7416002)(26005)(66556008)(6486002)(66946007)(66476007)(4326008)(6916009)(8676002)(41300700001)(478600001)(86362001)(316002)(54906003)(36756003)(38100700002)(5660300002)(6506007)(8936002)(186003)(2906002)(83380400001)(2616005)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pCtfiRjHGOj6KbtMKGLK/6LPgqNdhjmQGQWlSSQE3K1rjQx7mNEFaUAzvzBr?=
+ =?us-ascii?Q?Zew9HdGyyD/x0ZQ2s4uKtkvtHhEA4J33KMxzyDmj4vMMlygPZZK/7P/LmdRy?=
+ =?us-ascii?Q?xFIe0hHOP6DIM9CK7qUKXMJ1dKuqJ9611WhiWDFyL4RZ3il5AAYEGiNrv6u+?=
+ =?us-ascii?Q?MtoXnijb/IuQgswsahbmEOcWAcI8JKxcXfj4ZPNnCpTfelSju57Sg68uIpU2?=
+ =?us-ascii?Q?KDYo7+1O1+HlqybKYPG0N1yLxqAWFJSTqCpgm9ns7oyzkL0RWdIf3wN/vsXI?=
+ =?us-ascii?Q?cMyzQwJZSWh0FGx6suWm5CAH4Y8G3mapgmd3/I7pgvYG3KghQORRysdews5e?=
+ =?us-ascii?Q?CKr0S9dNnTxagZiBv99ZjxbGfr/WTvMiHbeu3HJzsY6h1onenG2XdjJC3Unx?=
+ =?us-ascii?Q?M+z/0eHIRXE7e27C4nDth/AZ3bYv5LzoKrxuOXlUUqZhA2xiX69Jktl0XTGB?=
+ =?us-ascii?Q?zxda1TmLKx18jfto3iop4mUjE1cUnmbgQ2JtR5l84hPEe9v+ULHPoA5e8wAX?=
+ =?us-ascii?Q?q+hSC6b2ZjQH2XXzhQ6TA+gSc/uBLeCR0N5cWrpFh8eGxtAkgaEaJ75T7mIj?=
+ =?us-ascii?Q?4ZtfMAdSdr24SwlADYtDWk6OqxbYcapaEkoU4d6bk43+/NdJMOewtBECDvg7?=
+ =?us-ascii?Q?79IhDdotsHOMPtbq0fCh1xm8JVK4aeEHzfR/lg7ReoFwsFOvCp5/t/idtL2E?=
+ =?us-ascii?Q?7ID67mSyn4Zgm+qj7lRxc/2/6Yq2p0TZqXOeFg8TIbuBMaH1d6zBzlK3MrOl?=
+ =?us-ascii?Q?ftX1d0oRfBC2OuKqXVvdRtDShDHtsI0G1+T/InVMubJQ9/P73YbqOjnUhCoP?=
+ =?us-ascii?Q?sH/AFQpHarPXYE3H8ewetYtiK5jk3+gOaZe7FVhKPOz/OtTpbInq3U3csLcz?=
+ =?us-ascii?Q?bTHPY1A/VR+2OQzRpTCZV7aTCQqC0lHQJ3NCVA4ada8H676z08qMomQTlu+8?=
+ =?us-ascii?Q?mQPilgvKAmdix7Hv85DiXCzA1KrBDLMC5UjlvQAM7BCFKX/w5kF/ecZ6Wq/Q?=
+ =?us-ascii?Q?gG2CmC1wYFekRhoe2uGCecq7KMjLotfKKrPeEWYsDQtOhMp1IhlEZ4U18qEq?=
+ =?us-ascii?Q?5M0JHtYht4RrzbP+Y153BC+XPBLSYGxyIbnRgnJ1vrGA1j+sARAsR6/EybbV?=
+ =?us-ascii?Q?/Fs8i4vmTUriaKFnRkY3qx14tcwJf4fH+KzjxNSNZGPndYPJHoV12bi9rdGb?=
+ =?us-ascii?Q?YTN3xhM3MwRtfq1HYb4ujvIEKTF8XyPCWdxKtKb+V3jnls8RiuwKGDecEVAr?=
+ =?us-ascii?Q?Ni5MrWcjnNJkFi8eaSeKgTE7Lj6U0aMdHjN85BPCADstjDdkmwrMgobNYD2E?=
+ =?us-ascii?Q?kz1gscJiruF9jyvFewxpEKyAy+lsT0OfFJMO4ybfV6vCrlNlSkBFuZq80wsO?=
+ =?us-ascii?Q?jpQ/8sUcng8MHKeoxDEfveURPoH5o1CMHM4Us4FT3+LSzUjN+AuEQQoQxugt?=
+ =?us-ascii?Q?W2QL0w4jBtiFK+sZ27U7xRKLMHsoglOuhkpsM6XzF/LNscj1SMlxHZKhlcd+?=
+ =?us-ascii?Q?oyY7KaEhtYO9nz7/+9zXbS1IDrVfLnQyIF+3tU3eJnaoc/VOfIjzGqCmG4/n?=
+ =?us-ascii?Q?hZ1A0vRGFNJ6WUmwrpq5dQ+tgBGwwhBMLCtOFfoR?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e8abf81-372b-4b87-c289-08db0ddec04a
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2023 16:24:16.5741
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 072hLAkTpX7fU0mekVC4MAf1cfkCCvek2v95hO6N1HfpUVvtzjxMT9v9GkYTRLKJ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4958
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------ZpXCMa5vtEEn05cd52m0ectS
-Content-Type: multipart/mixed; boundary="------------d1gUdTw0OLkvmENL1ViLh1yA";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Christian Kujau <lists@nerdbynature.de>, mikelley@microsoft.com
-Cc: Linux regressions mailing list <regressions@lists.linux.dev>,
- linux-kernel@vger.kernel.org, x86@kernel.org, torvalds@linux-foundation.org,
- Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski
- <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>
-Message-ID: <f18e315f-bfe2-426d-0ecf-d82fb22a05f4@suse.com>
-Subject: Re: [PATCH v2 5/8] x86/mtrr: revert commit 90b926e68f50
-References: <20230209072220.6836-1-jgross@suse.com>
- <20230209072220.6836-6-jgross@suse.com>
- <9046a3cb-928a-5476-1e72-63bd197c039e@leemhuis.info>
- <129d8c1d-ffa6-dac2-f516-dab4fc8c6218@suse.com>
- <6e4198c2-d79c-8ebd-82f7-3826dd807f1b@nerdbynature.de>
-In-Reply-To: <6e4198c2-d79c-8ebd-82f7-3826dd807f1b@nerdbynature.de>
+On Mon, Feb 13, 2023 at 04:20:29PM +0000, Jean-Philippe Brucker wrote:
+> On Fri, Feb 10, 2023 at 03:02:06PM -0800, Jacob Pan wrote:
+> > Custom allocator feature was introduced to support VT-d's virtual
+> > command, an enlightened interface designed for VMs to allocate PASIDs
+> > from the host.
+> > 
+> > As we remove/withdraw the VT-d virtual command feature, the sole user
+> > of custom allocator, we can safely remove the custom allocator as well.
+> > Effectively, this will return IOASID core to the original simple global
+> > namespace allocator.
+> > 
+> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> 
+> You can also drop the spinlock.h include. With that:
+> 
+> Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> 
+> On a related note, it looks like 100b8a14a370 ("iommu/vt-d: Add pasid
+> private data helpers") removed the last user of ioasid_set_data(). I guess
+> that could be dropped too, unless you plan to still use it?
+> 
+> We could also merge ioasid.c into iommu-sva.c at this point, since I
+> haven't seen any interest for having multiple IOASID sets on Arm, but I'm
+> not sure what the current plan is for vSVA on x86.
 
---------------d1gUdTw0OLkvmENL1ViLh1yA
-Content-Type: multipart/mixed; boundary="------------mPY7KgYP8W0xmk0oWL40WHYi"
+Once the customer allocator is removed this is bascially a thin
+wrapper around xarray
 
---------------mPY7KgYP8W0xmk0oWL40WHYi
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+So anything that needs multiple pasid spaces should just create it on
+its own directly with xarray
 
-T24gMTMuMDIuMjMgMTI6NDYsIENocmlzdGlhbiBLdWphdSB3cm90ZToNCj4gT24gTW9uLCAx
-MyBGZWIgMjAyMywgSnVlcmdlbiBHcm9zcyB3cm90ZToNCj4+IE9uIDEwLjAyLjIzIDE5OjU5
-LCBMaW51eCByZWdyZXNzaW9uIHRyYWNraW5nIChUaG9yc3RlbiBMZWVtaHVpcykgd3JvdGU6
-DQo+Pj4gSGksIHRoaXMgaXMgeW91ciBMaW51eCBrZXJuZWwgcmVncmVzc2lvbiB0cmFja2Vy
-Lg0KPj4+DQo+Pj4gT24gMDkuMDIuMjMgMDg6MjIsIEp1ZXJnZW4gR3Jvc3Mgd3JvdGU6DQo+
-Pj4+IENvbW1pdCA5MGI5MjZlNjhmNTAgKCJ4ODYvcGF0OiBGaXggcGF0X3hfbXRycl90eXBl
-KCkgZm9yIE1UUlIgZGlzYWJsZWQNCj4+Pj4gY2FzZSIpIGhhcyBpbnRyb2R1Y2VkIGEgcmVn
-cmVzc2lvbiB3aXRoIFhlbi4NCj4+Pj4NCj4+Pj4gUmV2ZXJ0IHRoZSBwYXRjaC4NCj4+Pg0K
-Pj4+IFRoYXQgcmVncmVzc2lvbiB5b3UgcmVmZXIgdG8gaXMgYWZhaWNzIG9uZSBJJ20gdHJh
-Y2tpbmdbMV0gdGhhdCB3YXMNCj4+PiBpbnRyb2R1Y2VkIHRoaXMgY3ljbGUuIFRoYXQgbWFr
-ZXMgbWUgd29uZGVyOiBjb3VsZCB0aGlzIHBhdGNoIGJlIGFwcGxpZWQNCj4+PiBkaXJlY3Rs
-eSB0byBmaXggdGhlIGlzc3VlIHF1aWNrbHk/IE9yIGFyZSBwYXRjaGVzIDEgdG8gNCBuZWVk
-ZWQgYXMgd2VsbA0KPj4+IChvciB0aGUgd2hvbGUgc2VyaWVzPykgdG8gYXZvaWQgb3RoZXIg
-cHJvYmxlbXM/DQo+Pg0KPj4gUGF0Y2hlcyAxLTQgYXJlIG5lZWRlZCwgdG9vLCBhcyBvdGhl
-cndpc2UgdGhlIGlzc3VlIGNsYWltZWQgdG8gYmUgZml4ZWQNCj4+IHdpdGggcGF0Y2ggNSB3
-b3VsZCBzaG93IHVwIGFnYWluLg0KPiANCj4gVGhlIChsYXN0PykgLXJjOCB2ZXJzaW9uIHdh
-cyByZWxlYXNlZCB5ZXN0ZXJkYXkuIFdvdWxkIGl0IGJlIHBvc3NpYmxlIHRvDQo+IGluY2x1
-ZGUgYXQgbGVhc3QgKG9ubHkpIHRoZSByZXZlcnQgaW4gbWFpbmxpbmUgc28gdGhhdCA2LjIg
-d2lsbCBiZQ0KPiByZWxlYXNlZCB3aXRoIGEgd29ya2luZyBzdG9yYWdlIGNvbmZpZ3VyYXRp
-b24gdW5kZXIgWGVuPw0KDQpIbW0sIHRoaXMgd291bGQgbWFrZSBIeXBlci1WIFNFVi1TTlAg
-Z3Vlc3RzIHNsb3cgYWdhaW4uDQoNCkknbSBub3QgY29tcGxldGVseSBhZ2FpbnN0IGl0LCBi
-dXQgT1RPSCBJJ20gYSBsaXR0bGUgYml0IGJpYXNlZCBhcyB0aGUNCm1haW50YWluZXIgb2Yg
-dGhlIFhlbiBjb2RlLiA6LSkNCg0KTWljaGFlbCwgd291bGQgeW91IHNlZSBtYWpvciBwcm9i
-bGVtcyB3aXRoIGRvaW5nIHRoZSByZXZlcnQgYmVmb3JlIGhhdmluZw0KdGhlIGZpbmFsIHBh
-dGNoZXMgZm9yIGZpeGluZyB5b3VyIGlzc3VlLCB0b28/DQoNCj4gT3RoZXJ3aXNlIG9uZSB3
-b3VsZCBoYXZlIHRvIGNhcnJ5IGFyb3VuZCB0aGF0IHNpbmdsZSByZXZlcnQgbWFudWFsbHkg
-dW50aWwNCj4gdGhpcyBwYXRjaCBzZXJpZXMgaGFzIGxhbmRlZCBpbiBtYWlubGluZSwgb3Ig
-Y29udmluY2UgYWxsIHRoZQ0KPiBkaXN0cmlidXRpb25zIHRvIGRvIHNvIDotXA0KPiANCj4g
-QW55d2F5LCB0aGFua3MgZm9yIGZpeGluZyB0aGlzIHByb2JsZW0sIEkgZGlkIG5vdCBleHBl
-Y3QgdGhpcyB0byBiZSBzdWNoIGENCj4gY29tcGxpY2F0ZWQgaXNzdWUgd2hlbiBJIHJlcG9y
-dGVkIHRoYXQgdGhpbmcgOi0pDQoNClllcywgSSBoYXZlIG9wZW5lZCBhIGNhbiBvZiB3b3Jt
-cyB3aXRoIG15IE1UUlIvUEFUIGRpc2VudGFuZ2xpbmcuDQoNCg0KSnVlcmdlbg0K
---------------mPY7KgYP8W0xmk0oWL40WHYi
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+This is bascially a shared xarray for a global pasid space.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------mPY7KgYP8W0xmk0oWL40WHYi--
-
---------------d1gUdTw0OLkvmENL1ViLh1yA--
-
---------------ZpXCMa5vtEEn05cd52m0ectS
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPqZB0FAwAAAAAACgkQsN6d1ii/Ey/N
-AQf+IJ4HaUBDT91Q5o0DXnpsa/A1qUj9iQGBaPhgpGU1EqgQuJ6WrQXwLptI5qh9V/HGO9dKEWOA
-YtsMA6YVk5Qv8Rkumg4tCb7PYw74DqAu2LdEdi9PazkxvnZTLMCmKnkekK56c5gu/BGaDpXWJ+ks
-XrPVkd9vopn18gwsXmUTxcaD3QMTzM92KBN48JjAG03/J5uW2+wzg2Yi4iKU8IhpG9dNBJvURmSJ
-bXks1NpnjmAuqaevG8vbGoACZagoNW8WzxZt3vzf82+B6pplinWi/M+8vwQLyo0gJ+wihZXUCVqO
-npS1bnedB0eqpf6Nn2cKxfb0bZAGuOIrLHd+06K9YQ==
-=BA4R
------END PGP SIGNATURE-----
-
---------------ZpXCMa5vtEEn05cd52m0ectS--
+Jason
