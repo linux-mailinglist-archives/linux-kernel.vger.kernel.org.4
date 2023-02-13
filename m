@@ -2,122 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8406693BBA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 02:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A506693BBD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 02:26:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjBMBYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 20:24:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
+        id S229672AbjBMB0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 20:26:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjBMBYX (ORCPT
+        with ESMTP id S229468AbjBMB0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 20:24:23 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EBB975F;
-        Sun, 12 Feb 2023 17:24:21 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PFRSy5Bv1z4x1S;
-        Mon, 13 Feb 2023 12:24:18 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676251459;
-        bh=hkd22KfgPVUj7WypptryT5xdEKzZSTfd73qCwjO6prA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=nw3KPNtfLH6R5e4HxblM7EMXTH0IMEpS6+uJO/ByW6HeuCP+fud77R0UlwxF/JcOt
-         P4Ifp1RRqvh3T5TwLeEsNX4082nC6EjPo0jFTD7WdnyO4QnLadoqQtiRWR5D5aPxvg
-         U7Uxd2oQAtaKgcW2rmUUefPFFv1G4lVD4cy4z2kg9ksm9jPtt4LEsjBoIEjfFJs18I
-         bFjIWE7yUyic2cPPfVZTABR7ofvRp0IIgXdVVW+bCy6FSO9YJXuhgRfjGG53Abacpy
-         rXIiFnW5PASn+L4dtThaYezjI1gkJvvMYL07GvBeU3g8c4igFNTmCEHUGd35yoqPT+
-         9Go9gWOZl30Dg==
-Date:   Mon, 13 Feb 2023 12:24:16 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Donglin Peng <dolinux.peng@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Yoann Congal <yoann.congal@smile.fr>
-Subject: linux-next: manual merge of the ftrace tree with the jc_docs tree
-Message-ID: <20230213122416.5bf20111@canb.auug.org.au>
+        Sun, 12 Feb 2023 20:26:21 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74AF9EB4D;
+        Sun, 12 Feb 2023 17:26:20 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 75A18320029B;
+        Sun, 12 Feb 2023 20:26:16 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sun, 12 Feb 2023 20:26:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=themaw.net; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1676251576; x=
+        1676337976; bh=guqNRHcMVWDS1JdER/xG2jRdN0GsHvvgSiGFe5DcgXY=; b=e
+        I6TMHYyIs5bJi5kLyccPbbwLCfxp8I0GEVNspDZrb/Fnj5YHoEG9QD9FW/Sjoe65
+        ZGFWRtyjJRj8HoKWhCTiBkz4rf/e1XR3HdCxUpY9BLt2BbIs0zBkMhauAB8+mkJp
+        B4iqZfFkgIjvq3vZE8u7HZvqSlbYmdjfk5mkpDZG8BPBifuYT5Oasrv9WAinDbd+
+        k+zdWpnoPfi8rMwdSiigWKyxQNewURO5Ls0w5sia05lLH1DHiC7feejldYN0xRrD
+        0G6Kt3cnePfaydatBd9vBu/ngmFR+tHq0cWhYaNstZZ1UAKCLbfTKPpz88oK1+UQ
+        YI4gFupmE9n/QT93nnlCA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1676251576; x=
+        1676337976; bh=guqNRHcMVWDS1JdER/xG2jRdN0GsHvvgSiGFe5DcgXY=; b=M
+        vQvn4d646Z43jqisClI5d4KOLtMfslF18wt84EClUidLO5zXHsgBf8QjsGjv6Qbi
+        s6dc5G+HWNRZJqkvPGsOM5tt2H3EMn/pUWmZCvpwAMziOmWlZ1+D3PO+kvHkbrnJ
+        NSGWZ/mduGvJh2a9IvMAa9fLkbMc8wA1yRZU1EpcjsZdJXx7jzTsnthw9fi32fI/
+        UCh8P6VRrv9zgeqRjbdz0KBDEk12i3jF9VnDKJuD8jihIS8qM2NG51gDJ90ibyGM
+        xGPKPcXjObiiNin/t3oPp28Gw7YboU+GAj44/aQ7WFWKA9xtT/gPE1aSHKw+voUu
+        T1FjMH7pufD1O77c/U1dQ==
+X-ME-Sender: <xms:rZHpYyyFB7LrtW30_ioQcaGMLN1VCxYcn5WpYzgANqB_SIKxvbCEXA>
+    <xme:rZHpY-RXX8M3p_wivH7AWzvIljNMPsaAyLbs8mqaqP-mvbq3LeSPsrESSP0Kltkvh
+    76yYKM4Kt0E>
+X-ME-Received: <xmr:rZHpY0WcH45pJsAUiNZjaHj_ToZciSgN5eV5P7noh9tcTIX-bjm-dtnmz_BEhdWsIDNvXpLODqwcdwLB8eAtFE19jx2TWC-bPYmybycGDMGiZjuwMiWl>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeitddgfeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpefkrghn
+    ucfmvghnthcuoehrrghvvghnsehthhgvmhgrfidrnhgvtheqnecuggftrfgrthhtvghrnh
+    epuefhueeiieejueevkefgiedtteehgfdutdelfffhleeflefhudeuvdefhfeghfehnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprhgrvhgvnh
+    esthhhvghmrgifrdhnvght
+X-ME-Proxy: <xmx:rZHpY4jzWhRSbZ2PLvNacufOieZ6sqhyhBxcKUtDEeDli_kMhnLwqQ>
+    <xmx:rZHpY0ClKQ9cDPW4vDkOaXtVoXMwYYw_45sKkc94t7H9Ld48uEdtGA>
+    <xmx:rZHpY5J4GTfwq2ULAosFOB4e5WrpWdqJOphTCUUuptqw2fdlR-cl3g>
+    <xmx:uJHpYz6OnsokHDCRjMs0gkYy1U1u42yRYdCxirnk_ylXFKpnedWKzA>
+Feedback-ID: i31e841b0:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 12 Feb 2023 20:26:02 -0500 (EST)
+Message-ID: <0011cfb4-5dee-a1f9-ae6d-2c9e71842a52@themaw.net>
+Date:   Mon, 13 Feb 2023 09:25:59 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/u8FujN0_yy3ru2WdC.A/MO3";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 0/1] autofs: fix memory leak of waitqueues in
+ autofs_catatonic_mode
+To:     Fedor Pchelkin <pchelkin@ispras.ru>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Takeshi Misawa <jeliantsurux@gmail.com>,
+        autofs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org
+References: <20230211195950.452364-1-pchelkin@ispras.ru>
+Content-Language: en-US
+From:   Ian Kent <raven@themaw.net>
+In-Reply-To: <20230211195950.452364-1-pchelkin@ispras.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/u8FujN0_yy3ru2WdC.A/MO3
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 12/2/23 03:59, Fedor Pchelkin wrote:
+> Syzkaller reports the leak [1]. It is reproducible.
+>
+> The following patch fixes the leak. It was proposed by Takeshi Misawa and
+> tested by Syzbot.
+>
+> In other places of the code the waitqueue is freed when its wait_ctr
+> becomes zero (see autofs_wait_release). So I think it is not actually
+> supposed that inside autofs_catatonic_mode wait_ctr cannot be decreased to
+> zero. Please correct me if I'm wrong.
 
-Hi all,
+Clearly there's a problem here but I'll need to think about what's going
 
-Today's linux-next merge of the ftrace tree got a conflict in:
+a bit more myself.
 
-  Documentation/trace/kprobetrace.rst
 
-between commit:
+>
+> Also, looking at the discussion [2] of the '[PATCH] autofs4: use wake_up()
+> instead of wake_up_interruptible', shouldn't wake_up_interruptible()
+> inside autofs_catatonic_mode() be replaced with wake_up()?
 
-  5d18c23c763d ("Documentation: kprobetrace: Split paragraphs")
+Yes, I think so but that also deserves a bit of thought.
 
-from the jc_docs tree and commit:
 
-  ce9c752ee1e7 ("tracing/probe: add a char type to show the character value=
- of traced arguments")
-
-from the ftrace tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc Documentation/trace/kprobetrace.rst
-index 0d103074d3d2,ef223b8ad6d5..000000000000
---- a/Documentation/trace/kprobetrace.rst
-+++ b/Documentation/trace/kprobetrace.rst
-@@@ -81,7 -80,7 +81,9 @@@ E.g. 'x16[4]' means an array of x16 (2-
-  Note that the array can be applied to memory type fetchargs, you can not
-  apply it to registers/stack-entries etc. (for example, '$stack1:x8[8]' is
-  wrong, but '+8($stack):x8[8]' is OK.)
- +
-+ Char type can be used to show the character value of traced arguments.
-++
-  String type is a special type, which fetches a "null-terminated" string f=
-rom
-  kernel space. This means it will fail and store NULL if the string contai=
-ner
-  has been paged out. "ustring" type is an alternative of string for user-s=
-pace.
-
---Sig_/u8FujN0_yy3ru2WdC.A/MO3
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPpkUAACgkQAVBC80lX
-0GxK9Qf/bqaOAhI1YipDDNlHZ+r0308k4miuXF6h0FUnQ9wXnmbCBh+lRfcgoZat
-uDRWnMpPxywqRai8xCc+9dqFRE2iTKf/6gHeG8NufsC//PffjaaGXQVuKR6mDmXm
-eHhBBCVrHmcq2XnpmXYb8fGHJvuKGtOhprHNHBNApx0EJXWmLERT/QgRxPLowdoq
-ICmDW7tptL7xBKj/pth5KEWouaBclcOH3gpVO1RqX+SWEPQAj2YgGPEGvYt9xcen
-x71/Q7yvHGq3vghkK1VJfZ1qnbYEURl7ZoI38cbY39gA7TwjcMUZLs2J91z0wd2g
-AIc73/VdqvSVmaPnD3cZ8N6xM0rQYg==
-=MFX7
------END PGP SIGNATURE-----
-
---Sig_/u8FujN0_yy3ru2WdC.A/MO3--
+Ian
