@@ -2,112 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B036950B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:30:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA6B6950B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbjBMTak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 14:30:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
+        id S231290AbjBMTbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 14:31:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBMTaj (ORCPT
+        with ESMTP id S229841AbjBMTb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 14:30:39 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAF0272C
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 11:30:38 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id co8so9625747wrb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 11:30:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7+PQ5ihkLZBX24QKUEX6RYAfdl271h7g2O+CKjE4XF8=;
-        b=W9Fhgi3XjTdcf7W0zcPgebL2IWIvv30t9YVJAYhFMJZgypIwvmhTDrlTjlx7bj4JyY
-         PpAj2Rnj+Eu0F/ftO4StwyJ+ydtbU+O5Odfx3z9IVQx9MvXEN+LHzpORKuG7eB6fAvwt
-         qVhWF4Qf3TXzdUUzRv9xX+MO49/Vyq13B8YiAjscE+Ww+WQKq8Yqzk7cvzMLN7Lepm4q
-         IWAgciG95B8WQUxEIPkzY6VZuyEktXzzv1M81AHayyUqNTsEFvXOcDXuQFMus0P6j/zT
-         PJa9kk5ViT/sg0qGq7qAQ8pmUHQIp2ybCri5YlLGTawCl3xOYjgFRVpIJIx1lhGDX87v
-         sDDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7+PQ5ihkLZBX24QKUEX6RYAfdl271h7g2O+CKjE4XF8=;
-        b=VPfTEMNf2lGVqsw31ncFXWmWdVqxkCgFL7IvgZzhQ9SOi0v7d2DFrXzhLxg9/RnaGL
-         isjExjX7v0QU6oDAOFIKrH7T4CzrtlfoNZdy3+vJ2M+YXEBssM5dsuq4+yizA1s5At+N
-         X2k0MH6j5ZtoJ1swq1IXZa1+c3/ap6yL1uwt+Fo5VlsPX1EPEbtvD2+4vmX4OGlL8Irn
-         tMVXSTRE3olS9gO5Funxx/rhMgifRKpeDJYDlpoijOQFH1H5SDvIsV65Zhhsfs9VxR5x
-         Q2f1YRdPtao+cIV4hJrACgcJAleMdC5ew1VPon/v/dytnNCyaNvb+kExeObRPGf0j5iX
-         KS3g==
-X-Gm-Message-State: AO0yUKXbfRyiTK9QWHsUX/ltOA3eNlq5B3mmQE1diVbJYzejPoRyc7/l
-        g+x06+MGxey7sT6qH1iBB5Y3Zg==
-X-Google-Smtp-Source: AK7set/SYf0lCxkP9aBTPKdR3/1lqJqR5cFvQtyk1WKeA0gQqK2dqeIy6SzYJwn/pOlPJbO9Mr0yMw==
-X-Received: by 2002:a05:6000:10c2:b0:2c5:53e6:9aba with SMTP id b2-20020a05600010c200b002c553e69abamr4941296wrx.5.1676316636680;
-        Mon, 13 Feb 2023 11:30:36 -0800 (PST)
-Received: from myrica (054592b0.skybroadband.com. [5.69.146.176])
-        by smtp.gmail.com with ESMTPSA id j40-20020a05600c1c2800b003dc4480df80sm20126681wms.34.2023.02.13.11.30.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 11:30:36 -0800 (PST)
-Date:   Mon, 13 Feb 2023 19:30:26 +0000
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: Re: [PATCH 2/2] iommu/ioasid: Remove custom IOASID allocator
-Message-ID: <Y+qP0q9U0J2UfIxX@myrica>
-References: <20230210230206.3160144-1-jacob.jun.pan@linux.intel.com>
- <20230210230206.3160144-3-jacob.jun.pan@linux.intel.com>
- <Y+pjTR80bnl9rMK1@myrica>
- <20230213103455.02f3ac37@jacob-builder>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230213103455.02f3ac37@jacob-builder>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 13 Feb 2023 14:31:29 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407AC4EE4;
+        Mon, 13 Feb 2023 11:31:28 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DDuFGE021585;
+        Mon, 13 Feb 2023 19:31:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=RZnTSrTjia7ioYJJ02vHl+H8jsIOKXAYsAItBwNZ7cs=;
+ b=c2GVjhhaRFWcAu2yvusZiUo2IE25OgEYgTyr9bItuw38FI3msZzQ2pq0NGyRn3qsYARJ
+ N1UOOV0TZ80zSjvr1iej3ION0AdXQz8X14StJnw8lRTXX+6rwFGByPy/V8mSL0lmTV0O
+ p0792OoPCuSSmZGUkCxEyD5GrHKBKYHJ36B28CvDmO4+Imtf+LTKwZXwdfbg1WROnXSg
+ +gihqmasEAv+iYvk/qaLtrItT2b+FCU1DwUJ5WgNXUFVgKpGOIPYYGLxDillax0T+Ho5
+ 771naw6KqYFM0Lbez9VmmhCm2Emp1O9yHFf01VtjDHB6uniu86ixz4DSSp5PqXv5pedt 2g== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np389vuy4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 19:31:22 +0000
+Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 31DJVMiX003260;
+        Mon, 13 Feb 2023 19:31:22 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTP id 3np43m348q-1;
+        Mon, 13 Feb 2023 19:31:21 +0000
+Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31DJVLUw003248;
+        Mon, 13 Feb 2023 19:31:21 GMT
+Received: from hu-devc-lv-c.qualcomm.com (hu-eserrao-lv.qualcomm.com [10.47.235.164])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTP id 31DJVLGB003243;
+        Mon, 13 Feb 2023 19:31:21 +0000
+Received: by hu-devc-lv-c.qualcomm.com (Postfix, from userid 464172)
+        id 89CF920E2F; Mon, 13 Feb 2023 11:31:21 -0800 (PST)
+From:   Elson Roy Serrao <quic_eserrao@quicinc.com>
+To:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        balbi@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
+        Elson Roy Serrao <quic_eserrao@quicinc.com>
+Subject: [PATCH v4 0/5] Add function suspend/resume and remote wakeup support
+Date:   Mon, 13 Feb 2023 11:31:11 -0800
+Message-Id: <1676316676-28377-1-git-send-email-quic_eserrao@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: ZMCjyimOYyxy6BT489b9266QoGFSa1D9
+X-Proofpoint-GUID: ZMCjyimOYyxy6BT489b9266QoGFSa1D9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-13_12,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ bulkscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0 impostorscore=0
+ adultscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=645 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302130170
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 10:34:55AM -0800, Jacob Pan wrote:
-> > On a related note, it looks like 100b8a14a370 ("iommu/vt-d: Add pasid
-> > private data helpers") removed the last user of ioasid_set_data(). I guess
-> > that could be dropped too, unless you plan to still use it?
-> > 
-> You are right, will remove.
-> I was planning on the other way around which will convert VT-d's private
-> pasid data helpers to common ioasid code, but when I look closer the
-> private pasid xa is just holding a list of pasid/mm which could be per iommu
-> not global. Another cleanup I suppose.
+Changes in v4
+ - Moved the wakeup bit check to bind function for warning the user at an early
+   stage itself.
+ - Added the remote wakeup configured check to gadget_wakeup() and func_wakeup()
+   routines so that wakeup can be triggered only if user has configured it.
+ - Cosmetic changes with respect to renaming the variables to reflect the operation
+   better.
 
-Yes that should probably be common to SVA. I'm planning to take another
-look at SVA on the SMMU side following the recent API changes, and from a
-quick glance the problem that VT-d's private helpers solves is common.
+Changes in v3
+ - Modified rw_capable flag to reflect the gadgets capability for wakeup
+   signalling.
+ - Added a check to configure wakeup bit in bmAttributes only if gadget
+   is capable of triggering wakeup.
+ - Implemented a gadget op for composite layer to inform UDC whether device
+   is configured for remote wakeup.
+ - Added a check in __usb_gadget_wakeup() API to trigger wakeup only if the
+   device is configured for it.
+ - Cosmetic changes in dwc3_gadget_func_wakeup() API.
 
-> > We could also merge ioasid.c into iommu-sva.c at this point, since I
-> > haven't seen any interest for having multiple IOASID sets on Arm, but I'm
-> > not sure what the current plan is for vSVA on x86.
-> VT-d do plan to use global PASIDs for DMA API with PASIDs since the
-> work submited via ENQCMDS must use a PASID must != RIDPASID.
-> https://lore.kernel.org/lkml/20220518182120.1136715-1-jacob.jun.pan@linux.intel.com/T/
-> 
-> So I was thinking a separate ioasid_set for devices that allocates global
-> PASIDs for DMA API usage. ioasid_set will be useful here for limiting
-> lookup and resource management. e.g. PASIDs used under in-kernel DMA API
-> are not subject to cgroups.
+Changes in v2
+ - Added a flag to indicate whether the device is remote wakeup capable.
+ - Added an async parameter to _dwc3_gadget_wakeup() API and few cosmetic
+   changes.
+ - Added flags to reflect the state of  function suspend and function remote
+   wakeup to usb_function struct rather than function specific struct (f_ecm).
+ - Changed the dwc3_gadget_func__wakeup() API to run synchronously by first
+   checking the link state and then sending the device notification. Also
+   added debug log for DEVICE_NOTIFICATION generic cmd.
+ - Added changes to arm the device for remotewakeup/function remotewakeup
+   only if device is capable.
 
-Ok. Yes that was the goal of ioasid_set
+An usb device can initate a remote wakeup and bring the link out of
+suspend as dictated by the DEVICE_REMOTE_WAKEUP feature selector.
+To achieve this an interface can invoke gadget_wakeup op and wait for the
+device to come out of LPM. But the current polling based implementation
+fails if the host takes a long time to drive the resume signaling specially
+in high speed capable devices. Switching to an interrupt based approach is
+more robust and efficient. This can be leveraged by enabling link status
+change events and triggering a gadget resume when the link comes to active
+state.
 
-Thanks,
-Jean
+If the device is enhanced super-speed capable, individual interfaces can
+also be put into suspend state. An interface can be in function suspend
+state even when the device is not in suspend state. Function suspend state
+is retained throughout the device suspend entry and exit process.
+A function can be put to function suspend through FUNCTION_SUSPEND feature
+selector sent by the host. This setup packet also decides whether that
+function is capable of initiating a function remote wakeup. When the
+function sends a wakeup notification to the host the link must be first
+brought to a non-U0 state and then this notification is sent.
+
+This change adds the infrastructure needed to support the above
+functionalities.
+
+Elson Roy Serrao (5):
+  usb: gadget: Properly configure the device for remote wakeup
+  usb: dwc3: Add remote wakeup handling
+  usb: gadget: Add function wakeup support
+  usb: dwc3: Add function suspend and function wakeup support
+  usb: gadget: f_ecm: Add suspend/resume and remote wakeup support
+
+ drivers/usb/dwc3/core.h               |   5 ++
+ drivers/usb/dwc3/debug.h              |   2 +
+ drivers/usb/dwc3/ep0.c                |  16 ++---
+ drivers/usb/dwc3/gadget.c             | 116 ++++++++++++++++++++++++++++++++--
+ drivers/usb/gadget/composite.c        |  42 ++++++++++++
+ drivers/usb/gadget/configfs.c         |   3 +
+ drivers/usb/gadget/function/f_ecm.c   |  68 ++++++++++++++++++++
+ drivers/usb/gadget/function/u_ether.c |  63 ++++++++++++++++++
+ drivers/usb/gadget/function/u_ether.h |   4 ++
+ drivers/usb/gadget/udc/core.c         |  48 ++++++++++++++
+ drivers/usb/gadget/udc/trace.h        |   5 ++
+ include/linux/usb/composite.h         |   8 +++
+ include/linux/usb/gadget.h            |  12 ++++
+ 13 files changed, 378 insertions(+), 14 deletions(-)
+
+-- 
+2.7.4
+
