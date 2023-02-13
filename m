@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA80694352
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:44:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D123694350
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:44:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbjBMKoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 05:44:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
+        id S231280AbjBMKoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 05:44:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbjBMKnX (ORCPT
+        with ESMTP id S230062AbjBMKnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Feb 2023 05:43:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789A916AD4;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857A416AD9;
         Mon, 13 Feb 2023 02:43:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D7CE60FBD;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 753D060FB5;
         Mon, 13 Feb 2023 10:43:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75DD9C43235;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F354C4322D;
         Mon, 13 Feb 2023 10:43:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1676284997;
-        bh=g3QrnnkP4AAAVKLpcN2UD/9G9Q9P7im2mBObh2fnrA8=;
+        bh=xReQQbRP8f3ZcgElG5HL2OX/F0HPnUSW+WJ1I2BgRtE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KuIt3xJBOZo7Xx97A1g8XYExdjejDUDPgjx3OG9mnmJ+vjA6ZQA6UuN0JtlB5My1J
-         Q6jR71HtvGBqTsgHQ8vBPRwI5s6LUxyb0IBpV9o3rQ9D4zYtmezgYIngAtKE1Fldj8
-         blB4z+g+8xml0KsvHjzw4ldwHUMzdKXGSvUpVxsIOXeDbL7shIq6zBGb2EWh1OvHlU
-         ZkQ/ongSdHsOpxxij7KzV+fuWIyfAk96MA9DEnmcSj5oT1io1lgt51QzPClRL1bc1u
-         yyeXEUdw1GBhwIdAjWO5+YYVCOCpkFrIqs0uesnFYbAfaN4pHXOYiICaQuv/SkRCdp
-         nfrBOkzhOvfzg==
+        b=gdoiOf9PS9M5a8bj/h1JirELfWDz1MVJxqCr+NulstJZ22rF+WQt7n/JmppMxMNyF
+         CiwKKUyQz3CDQA4/otENz0FUjvvvcyR2GnVO54ZMRrk9DiPaJNOXcjo0d0fPRbG005
+         lEiGNim1/eF6DSZJG0PywpjO+qpSc4db6VJxpwzmx/EA2GbLVC3vGnY/UBl5mwHwYY
+         c5lEMKYzOpD1ABoaCh0cW1m/fPcrmMKoZU6gHBOjWoR++ecSm5Vf6wM2AGrtC0OVvx
+         srPUaSDdIVR6GZAI7AbRt/SZKr2AZQ1M3anmWZpZZiS4TjAytM9AvYQclKMsII7dxC
+         Frn5Q2en7ySJQ==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1pRWJc-0004X3-E4; Mon, 13 Feb 2023 11:44:08 +0100
+        id 1pRWJc-0004X6-Gg; Mon, 13 Feb 2023 11:44:08 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
 Cc:     x86@kernel.org, platform-driver-x86@vger.kernel.org,
@@ -44,17 +44,17 @@ Cc:     x86@kernel.org, platform-driver-x86@vger.kernel.org,
         =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
         Hsin-Yi Wang <hsinyi@chromium.org>,
         Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: [PATCH v6 17/20] irqchip/gic-v3-mbi: Use irq_domain_create_hierarchy()
-Date:   Mon, 13 Feb 2023 11:42:59 +0100
-Message-Id: <20230213104302.17307-18-johan+linaro@kernel.org>
+Subject: [PATCH v6 18/20] irqchip/loongson-pch-msi: Use irq_domain_create_hierarchy()
+Date:   Mon, 13 Feb 2023 11:43:00 +0100
+Message-Id: <20230213104302.17307-19-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230213104302.17307-1-johan+linaro@kernel.org>
 References: <20230213104302.17307-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,29 +71,34 @@ Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
 Tested-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/irqchip/irq-gic-v3-mbi.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/irqchip/irq-loongson-pch-msi.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/irqchip/irq-gic-v3-mbi.c b/drivers/irqchip/irq-gic-v3-mbi.c
-index e1efdec9e9ac..dbb8b1efda44 100644
---- a/drivers/irqchip/irq-gic-v3-mbi.c
-+++ b/drivers/irqchip/irq-gic-v3-mbi.c
-@@ -233,13 +233,12 @@ static int mbi_allocate_domains(struct irq_domain *parent)
- 	struct irq_domain *nexus_domain, *pci_domain, *plat_domain;
- 	int err;
+diff --git a/drivers/irqchip/irq-loongson-pch-msi.c b/drivers/irqchip/irq-loongson-pch-msi.c
+index a72ede90ffc6..6e1e1f011bb2 100644
+--- a/drivers/irqchip/irq-loongson-pch-msi.c
++++ b/drivers/irqchip/irq-loongson-pch-msi.c
+@@ -163,16 +163,15 @@ static int pch_msi_init_domains(struct pch_msi_data *priv,
+ {
+ 	struct irq_domain *middle_domain, *msi_domain;
  
--	nexus_domain = irq_domain_create_tree(parent->fwnode,
--					      &mbi_domain_ops, NULL);
-+	nexus_domain = irq_domain_create_hierarchy(parent, 0, 0, parent->fwnode,
-+						   &mbi_domain_ops, NULL);
- 	if (!nexus_domain)
+-	middle_domain = irq_domain_create_linear(domain_handle,
+-						priv->num_irqs,
+-						&pch_msi_middle_domain_ops,
+-						priv);
++	middle_domain = irq_domain_create_hierarchy(parent, 0, priv->num_irqs,
++						    domain_handle,
++						    &pch_msi_middle_domain_ops,
++						    priv);
+ 	if (!middle_domain) {
+ 		pr_err("Failed to create the MSI middle domain\n");
  		return -ENOMEM;
+ 	}
  
- 	irq_domain_update_bus_token(nexus_domain, DOMAIN_BUS_NEXUS);
--	nexus_domain->parent = parent;
+-	middle_domain->parent = parent;
+ 	irq_domain_update_bus_token(middle_domain, DOMAIN_BUS_NEXUS);
  
- 	err = mbi_allocate_pci_domain(nexus_domain, &pci_domain);
- 
+ 	msi_domain = pci_msi_create_irq_domain(domain_handle,
 -- 
 2.39.1
 
