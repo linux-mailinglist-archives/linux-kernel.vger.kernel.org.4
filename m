@@ -2,152 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 268D5693F5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:12:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14328693F5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:12:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjBMIMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 03:12:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52868 "EHLO
+        id S229804AbjBMIMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 03:12:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjBMIMn (ORCPT
+        with ESMTP id S229477AbjBMIMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Feb 2023 03:12:43 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2089.outbound.protection.outlook.com [40.107.22.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B913CC0B;
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAF6EC54;
         Mon, 13 Feb 2023 00:12:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L050zO1VJyr16b6BXPWCLbd+V95G+CWKnU0ejcsqaM9rV3yD2MiNccDcowcXvkWJ56yrxOKxpdIwVeZNHhhYiO4k6NBFQ2Z7X+YUwGdXHEUQYincSZhTuuZQYLK0ZPk2PbUqUfSSYJtbdu516+NdBfixjfjtZg0XtMUXXmN/eT6bKhehi/3XbqDnmROg8p76NfXsoLoElM4cW5CTC4JHl4eDPCDN7azxmC4JcedBq1KszSj0o9iBv37krvqT5rYvfUo7eRqxmssHPyE6T/AQvMD7fUDP6goO+y9wg2o56KVW6YfSPCIKK52zg026YMzsGlagYHOnH20ccV4nGyAK2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yr+fPa8m/Gl2PUGxtOhHmtwXx3HAxTKTX92tiN6EADA=;
- b=BiTsKikMLK/a9Rs0f/WKPCPtSJvCOQgE40RuZzwX1YJbBYU/iD8HmEf4sjXyH0YmdYaMZCxHNhh8AzLrf2k2F8QFf+IWOdhrjbvBDpNYUKBSlXlE2BJ9lKidbZ4aMa1CcwVhHW7FmGJSeDyzCMJkxvbzaA4xLPfdvu2SKrPF+LyRTBnIANWK8pZwYQpRf5hkHuDJK+WYDb4bekF1GTgguG0MQGs4lGqzS8DDm/NFYq9PB6LbO9Mf730eriNFVfpq4aE//26GLj4atII4NKLf6n1crCENiC098creLhtFkpvIujTsrSaTgrUETjRRswxVj5YFyrAD95CIdIDjlg3wwA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yr+fPa8m/Gl2PUGxtOhHmtwXx3HAxTKTX92tiN6EADA=;
- b=HCsgc9iYFQpbYjKCKU+q9AnJC6SoNKEDo3FU5ihSMHZpAyMdCmsM4zNsFQkb/jpWjROUZumVB3UGnfuYMtoWfi1k5kmeY+Keob+5scrdTYxIsLknMSEvH7G76S1ujs+HTZyo32B1pxV0Vt5kc29AcYycw0JPQXX3FKwpmzAYl+s=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by DBAPR04MB7272.eurprd04.prod.outlook.com (2603:10a6:10:1ad::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Mon, 13 Feb
- 2023 08:12:37 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::f55a:cf12:da08:6d2a]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::f55a:cf12:da08:6d2a%3]) with mapi id 15.20.6086.022; Mon, 13 Feb 2023
- 08:12:37 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Abel Vesa <abel.vesa@linaro.org>, Stephen Boyd <sboyd@kernel.org>,
-        Mike Turquette <mturquette@baylibre.com>
-CC:     Abel Vesa <abelvesa@kernel.org>, dl-linux-imx <linux-imx@nxp.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] MAINTAINERS: clk: imx: Add Peng Fan as reviewer
-Thread-Topic: [PATCH] MAINTAINERS: clk: imx: Add Peng Fan as reviewer
-Thread-Index: AQHZP4KwEJSr3wsQR0Shg2JUVB6a1K7Mhn4A
-Date:   Mon, 13 Feb 2023 08:12:37 +0000
-Message-ID: <DU0PR04MB9417CA0869E867DB50A3688C88DD9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20230213081038.3958833-1-abel.vesa@linaro.org>
-In-Reply-To: <20230213081038.3958833-1-abel.vesa@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|DBAPR04MB7272:EE_
-x-ms-office365-filtering-correlation-id: 196170c0-5313-4560-495c-08db0d9a118a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9FOv+s1pWzZzJLqIBNgQyhRTTkwjvtdRDaynN99Xr60U+JtU2B1AN1S72SaDhOxQ33iiYahkeSWp7T/cO8W3Vuzm74B3W0/Dqh+CiGfygkkYgd/oBbNTopNq3JdqhvHSDKQdAc07djM0Yv3hyci4zexk+2WP63wsD91JLuz/wFyPhUb2H9cLxSvZiuUssrz3zoPWMDbW7RyPxJ3pf6xpbqgNbpssQth7CdiosTNl+uWd6MkAWCeM1LAkNvJXE739wkkB6dF+4RuJY0Gl+VmZHBPF0Y8xNcmQjYAVj8f6ICSqhqU8b3ahizG89OVa2uL4S6LhH3BD0C0BUunTSYEgWU+USxIbxvMKoGjKCjPtlSumugaUxwRDgwnrJ5zxVi0AKYaiokefDUXkE4D5wnF+LHRp5xPoGOfvejtZhV8VVtmhey6MvKGJuRCa3hfWzt1ineB8K2cHp8ZxVjjqBDLPy3m25omrzQwYcapSYpa+q32M5UJBaksZzygmzvDGoNqvtO8bodwqQjYTrtRBbPCoWo4KsS7Mhe3UgO0DJcwqaZMz3KY3IoX6r8X8553lEDVOW4kOj4bpGUER7vZfAObqnaHMkyOJet/B//EssJQ8LV+fbJmQEvnfCeTpX8anc7vP9Qjxoc+irISEtHgwt64mT9wYL4kTyD1jOdksq35WQRf9VXSWQzXeCxMQCbbhUutNo++qbQ6D8/78F5yIca5ZXw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(366004)(39860400002)(136003)(396003)(451199018)(8936002)(6506007)(4326008)(5660300002)(52536014)(41300700001)(33656002)(38100700002)(8676002)(66446008)(66946007)(76116006)(64756008)(71200400001)(86362001)(66476007)(66556008)(55016003)(38070700005)(478600001)(2906002)(122000001)(110136005)(26005)(316002)(4744005)(54906003)(7696005)(9686003)(44832011)(83380400001)(186003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9KY1jb8RHEAINKgQDXbY1LoAr+xsu1VaW0CNH8x3+rcdSYPKNBLelDP97BQk?=
- =?us-ascii?Q?urah9Ze2+2KkGNWWlt2FS99E88XS8uz5GihRNN1/UyuSQ31GUNy6dodTFzr0?=
- =?us-ascii?Q?3qlQ4yv27Fn6kY5cu0L4nxOgvYKJyx/RpDncAFOb+Hir1VjRYiMVODEOdsBt?=
- =?us-ascii?Q?6cwp6fTRq6YlaH4Hm4oCg2oFdlbnwyL1XarQszSYuXSx6GyPzakoGIj5pcKo?=
- =?us-ascii?Q?bR0kKnb5eG7yzv5okyz1nDadupf0fHmeV8jQ5ujnhcADnQMPyJ8IhlpzWBQn?=
- =?us-ascii?Q?aSMwyCerupKwh5SjliNmMY4eexHjWVYkEYWq7/Cs83j8bAVWGZaX5m7mptj4?=
- =?us-ascii?Q?XP77UaTLLKWla1nVb1tHIfXCLaJaHu5mrFOO2GGdrnn0Zl7khruiajS4o6Zm?=
- =?us-ascii?Q?IRIlE/sPNIh4+8OLCqLVX86+LPzcZ3Vwi4onpvYRyEzE8Y/XxF2QL28+h5gh?=
- =?us-ascii?Q?GNoUDZTxzj4cKJfWM7GSbagneOuNW7L+ofaj++e5bW6CxhCGNL/WM8hkpOgE?=
- =?us-ascii?Q?ZrONfi8fcBIAwfOG8iZJZkm42Gkv9WILLcmijbqCZvXRAhYLk2WddaDY7VOa?=
- =?us-ascii?Q?tvEGoTVg1fxTHnjloS5J6SO38Qr0F+3vG7t7NeTMwgEXC0UEkFKMbl7R6rGE?=
- =?us-ascii?Q?VeIWXy6iRtnaovYs/LEGyXyUMB0VGut0KE9DYRKP/z3iTpDYn8SFMrI2aGe/?=
- =?us-ascii?Q?YvgVBa/jYtheSnYnck4ytzogjr0AJeO2W1pzs+ITZz+5+6x8ZIvKBjOt+Y/w?=
- =?us-ascii?Q?WGk/G1yiIXLtCyFwe0JxjWUyRH8mdP2MBvWQ12o2BTfYwDjSopoKACBGNnrl?=
- =?us-ascii?Q?f1ogjg4jBJarJVnljJWGHO7+GOG79ZkE74QVY0Vcw+HdHetyMstn0jnh3Ibc?=
- =?us-ascii?Q?od3nONjB/Qse6E9GKSU+ziRAcEOCnnFW4oph6YQ1HhDiJrPigQ3yvb0ywPPr?=
- =?us-ascii?Q?0X4X04aUVTvJQNGI1TnZnPiXWBGkxJh1WgzMMBxbwML6HQ1LSxr8G/SviF0u?=
- =?us-ascii?Q?JQVhbJ8gHAHJowOoCQ5g3pKjIICEGZQ5PpSTBHKMYH6imLK+5c27kYx2909Q?=
- =?us-ascii?Q?hBcOLO0W3e5tAEYNBbbSAKMBIO7/3LEGafeye/I++lefMMXGQcdOcZrhPNHb?=
- =?us-ascii?Q?jmFKKldpmZ7lAIQk7pfCaZ3Cw9anAZAnzYQGcC0gPFAjHQIq313u/Qc52J/k?=
- =?us-ascii?Q?vOJ9Qs5s82EYmqPFGdI1z2ISC1EuQpT8pbbWRtANm1q5E2xtiEOE8mF5h7fP?=
- =?us-ascii?Q?3iBXpsQ3+29mKwy9fYx7vhreCXFwV0GZrU8kW1jvH1ruwcKc7pmVcUrRmcOl?=
- =?us-ascii?Q?6+jnIEMbG5GsjNdeDJfwyw4RSHRMpBIytOxq9mKF9k7QlDl8xfjNofzoT5hg?=
- =?us-ascii?Q?HYMFJiRnd/3WbYQy2SMoDq2kGcFQdou1qBL2Kzg1ajn5DPYsLs+YJ1m3f0s4?=
- =?us-ascii?Q?dX4TI0/9vGgkiCs6bwy7bWPhat3N8noiueomoGMnbkMa2o2zrG0GmOaIUf0l?=
- =?us-ascii?Q?VYXnr4jRUxdowtO/xxuF1HbwcU5eogjkcG2NJ+Nq6Qlk+jwXtZfPJ3BV44bd?=
- =?us-ascii?Q?DhwhKjbztxgN+nvqn1Q=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0684C67A96;
+        Mon, 13 Feb 2023 08:12:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676275959; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Goj0CVYbqJm9f9dvo9/K7xYI+JDbxMaoqo4CZZFkBBk=;
+        b=LQEMz/X/MWGXbrqTPHrYKwlbxa3iGttJOvMPqltHTvt6iWpcUhsSJsA8ivRxYAn505tiH1
+        YWPgsupEz7eQLntjATa0KJapT1vpEP+6wq1sPOSMfCu3z+COXwKAHqNZinKleJ6elF85tQ
+        hRSvtR6JjWXasMKTeKQgCCUEsrCRfTM=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B6406138E6;
+        Mon, 13 Feb 2023 08:12:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id maG3Kvbw6WOJMgAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 13 Feb 2023 08:12:38 +0000
+Message-ID: <f1715894-8bb5-fef9-3f92-77ae293ebfb4@suse.com>
+Date:   Mon, 13 Feb 2023 09:12:38 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 196170c0-5313-4560-495c-08db0d9a118a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Feb 2023 08:12:37.2832
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: BpLIuSVcK5fA8hD9tttYpbO0CDYvZcH4TEg5/R7Uf42Kn7Dq+b+pFz4vqQ9OFTZphzaTSQTMjI+3IVEIAZHmlQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7272
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH][next] xen: Replace one-element array with flexible-array
+ member
+Content-Language: en-US
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+References: <Y9xjN6Wa3VslgXeX@work>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <Y9xjN6Wa3VslgXeX@work>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------eNpq4uVnbNf970ybwQrjr0CB"
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Abel,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------eNpq4uVnbNf970ybwQrjr0CB
+Content-Type: multipart/mixed; boundary="------------BMX3LvNHt974ooZRj4nUmQiw";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Stefano Stabellini <sstabellini@kernel.org>,
+ Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Cc: xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+ linux-hardening@vger.kernel.org
+Message-ID: <f1715894-8bb5-fef9-3f92-77ae293ebfb4@suse.com>
+Subject: Re: [PATCH][next] xen: Replace one-element array with flexible-array
+ member
+References: <Y9xjN6Wa3VslgXeX@work>
+In-Reply-To: <Y9xjN6Wa3VslgXeX@work>
 
-> Subject: [PATCH] MAINTAINERS: clk: imx: Add Peng Fan as reviewer
->=20
-> Peng Fan will step up to help with reviewing.
-> Add his email to the i.MX clocks drivers entry.
->=20
-> Cc: Peng Fan <peng.fan@nxp.com>
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+--------------BMX3LvNHt974ooZRj4nUmQiw
+Content-Type: multipart/mixed; boundary="------------0z5CCKY7k5kyMrtZRYWOKqVY"
 
-Thanks!! Acked-by: Peng Fan <peng.fan@nxp.com>
+--------------0z5CCKY7k5kyMrtZRYWOKqVY
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Thanks,
-Peng.
+T24gMDMuMDIuMjMgMDI6MjgsIEd1c3Rhdm8gQS4gUi4gU2lsdmEgd3JvdGU6DQo+IE9uZS1l
+bGVtZW50IGFycmF5cyBhcmUgZGVwcmVjYXRlZCwgYW5kIHdlIGFyZSByZXBsYWNpbmcgdGhl
+bSB3aXRoIGZsZXhpYmxlDQo+IGFycmF5IG1lbWJlcnMgaW5zdGVhZC4gU28sIHJlcGxhY2Ug
+b25lLWVsZW1lbnQgYXJyYXkgd2l0aCBmbGV4aWJsZS1hcnJheQ0KPiBtZW1iZXIgaW4gc3Ry
+dWN0IHhlbl9wYWdlX2RpcmVjdG9yeS4NCj4gDQo+IFRoaXMgaGVscHMgd2l0aCB0aGUgb25n
+b2luZyBlZmZvcnRzIHRvIHRpZ2h0ZW4gdGhlIEZPUlRJRllfU09VUkNFDQo+IHJvdXRpbmVz
+IG9uIG1lbWNweSgpIGFuZCBoZWxwIHVzIG1ha2UgcHJvZ3Jlc3MgdG93YXJkcyBnbG9iYWxs
+eQ0KPiBlbmFibGluZyAtZnN0cmljdC1mbGV4LWFycmF5cz0zIFsxXS4NCj4gDQo+IFRoaXMg
+cmVzdWx0cyBpbiBubyBkaWZmZXJlbmNlcyBpbiBiaW5hcnkgb3V0cHV0Lg0KPiANCj4gTGlu
+azogaHR0cHM6Ly9naXRodWIuY29tL0tTUFAvbGludXgvaXNzdWVzLzc5DQo+IExpbms6IGh0
+dHBzOi8vZ2l0aHViLmNvbS9LU1BQL2xpbnV4L2lzc3Vlcy8yNTUNCj4gTGluazogaHR0cHM6
+Ly9nY2MuZ251Lm9yZy9waXBlcm1haWwvZ2NjLXBhdGNoZXMvMjAyMi1PY3RvYmVyLzYwMjkw
+Mi5odG1sIFsxXQ0KPiBTaWduZWQtb2ZmLWJ5OiBHdXN0YXZvIEEuIFIuIFNpbHZhIDxndXN0
+YXZvYXJzQGtlcm5lbC5vcmc+DQoNClJldmlld2VkLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jv
+c3NAc3VzZS5jb20+DQoNCg0KSnVlcmdlbg0KDQo=
+--------------0z5CCKY7k5kyMrtZRYWOKqVY
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 57d1d6ecb33d..af62e299726f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14905,6 +14905,7 @@ F:	drivers/iio/gyro/fxas21002c_spi.c
->=20
->  NXP i.MX CLOCK DRIVERS
->  M:	Abel Vesa <abelvesa@kernel.org>
-> +R:	Peng Fan <peng.fan@nxp.com>
->  L:	linux-clk@vger.kernel.org
->  L:	linux-imx@nxp.com
->  S:	Maintained
-> --
-> 2.34.1
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------0z5CCKY7k5kyMrtZRYWOKqVY--
+
+--------------BMX3LvNHt974ooZRj4nUmQiw--
+
+--------------eNpq4uVnbNf970ybwQrjr0CB
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPp8PYFAwAAAAAACgkQsN6d1ii/Ey+9
+uQf/eQfbMt2KRzkI4NOdIg9qgtM1yIbcE6jCTytb2TlPZD1woI72l+dOp7H/O9blL0vuRMZcd7wk
+icr1zJWysBJ9ZSJSZyPbHwbwX9A37t8L+DvK6gIbgm8tg6Si1jHY9KlvvxrzWJx0Qwtcl0dptfZY
+6gjk/PEgxzbh1+dwFBApHucTQLZoxr9WXQVpzItZobKArtLTLbnHjvz7Nnqoxh2ljkRvue0QqjhA
+xTZeBaoow5rzQOVCyt5v+u0xxuPm1h0k33q2ScNl5Eapli/Cez1mtmiQSIa4mg8QTr5kYTwZGk3f
+7wE/ZmlgP8nl5gXkM/cGCX1ANdOSlmdL3puiPcVNhg==
+=gH+G
+-----END PGP SIGNATURE-----
+
+--------------eNpq4uVnbNf970ybwQrjr0CB--
