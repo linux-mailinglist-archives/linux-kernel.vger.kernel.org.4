@@ -2,185 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 606D8695363
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:50:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CAE9695364
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbjBMVuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 16:50:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        id S230503AbjBMVvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 16:51:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjBMVul (ORCPT
+        with ESMTP id S229622AbjBMVvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 16:50:41 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52337CC19;
-        Mon, 13 Feb 2023 13:50:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676325040; x=1707861040;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=v79E84a7qAMQPFswqfoVVKqD06DuvOQc5wsFTfybqtE=;
-  b=ObMNXKnqJq0LytuImRYlRAEJ6gP9I8UPIX47PhWGQw8mZGr+3TUoIX4H
-   if6pgI4LW1wLdyPx8VcE8zIqtx5Mqb/M7dCkmKIXuMf2nYPLCV2DWOWmB
-   8EpWAXoGcH5vuqoOKH01JBnMd8o976CRr2nqv0LCgvxOrxWM/fsO616TZ
-   O6oKEyq312cFimWiwJbbzA1X+Rxh5ecBIcaipxKXqYPi1CmFqAgmm/Ns/
-   THE0LOExP3d2x2OGOYGcCdLpcy0cB0K6Z0hP+lxN0Tujxz8urKJa0Nl2Y
-   GKwLr6MNN5yWQVnq51dzcgHpCgivDuCHi5mBoguKbOmk51a0UKSUxwQPJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="393410515"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="393410515"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 13:50:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="778028455"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="778028455"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 13 Feb 2023 13:50:36 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pRgiZ-00081t-2U;
-        Mon, 13 Feb 2023 21:50:35 +0000
-Date:   Tue, 14 Feb 2023 05:49:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Florian Eckert <fe@dev.tdt.de>, u.kleine-koenig@pengutronix.de,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org, pavel@ucw.cz,
-        lee@kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        Eckert.Florian@googlemail.com
-Subject: Re: [PATCH 1/2] tty: new helper function tty_get_mget
-Message-ID: <202302140536.fks6kujh-lkp@intel.com>
-References: <20230213140638.620206-2-fe@dev.tdt.de>
+        Mon, 13 Feb 2023 16:51:06 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B421717B
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:51:00 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3182B22459;
+        Mon, 13 Feb 2023 21:50:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1676325059; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=c9NOANQ/j8mNxhV9ZOxgGkAaTG41rz166SP38LuJvG8=;
+        b=p8yCJdA2kUyyStWh6301z3L5TcuBh46826gh6pyFNhpJCOMq53RWt6BWkaaHzTxaaaIQQi
+        Gsl2nVC1GLXoGNIczT3In/BY2gs+WKu+ljqvO2bNw+xxVYuhSaFAUB0W7okkDV1TGp3OA6
+        SaMyTWYXmHHU1rEuUXcF1yWpvJAY5po=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1676325059;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=c9NOANQ/j8mNxhV9ZOxgGkAaTG41rz166SP38LuJvG8=;
+        b=sJFwGlTSNQQ+CHBYXXx4U8vPYoSb2kzWSjZFgnMarp1+h6TuLEJDrAvIvilNhHcRXKE2/X
+        MFYzMK+xk7EHmcAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E225B138E6;
+        Mon, 13 Feb 2023 21:50:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id RJZiNsKw6mO2VgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 13 Feb 2023 21:50:58 +0000
+Message-ID: <bddb8cd0-398b-bd57-5d19-7b046db6c0ea@suse.cz>
+Date:   Mon, 13 Feb 2023 22:50:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230213140638.620206-2-fe@dev.tdt.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 4/4] mm, compaction: Finish pageblocks on complete
+ migration failure
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Pedro Falcato <pedro.falcato@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Chuyi Zhou <zhouchuyi@bytedance.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230125134434.18017-1-mgorman@techsingularity.net>
+ <20230125134434.18017-5-mgorman@techsingularity.net>
+ <a55cf026-a2f9-ef01-9a4c-398693e048ea@suse.cz>
+In-Reply-To: <a55cf026-a2f9-ef01-9a4c-398693e048ea@suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Florian,
+On 2/7/23 18:42, Vlastimil Babka wrote:
+> On 1/25/23 14:44, Mel Gorman wrote:
+>> Commit 7efc3b726103 ("mm/compaction: fix set skip in
+>> fast_find_migrateblock") address an issue where a pageblock selected
+>> by fast_find_migrateblock() was ignored. Unfortunately, the same fix
+>> resulted in numerous reports of khugepaged or kcompactd stalling for
+>> long periods of time or consuming 100% of CPU.
+>>
+>> Tracing showed that there was a lot of rescanning between a small subset
+>> of pageblocks because the conditions for marking the block skip are not
+>> met. The scan is not reaching the end of the pageblock because enough
+>> pages were isolated but none were migrated successfully. Eventually it
+>> circles back to the same block.
+>>
+>> Pageblock skip tracking tries to minimise both latency and excessive
+>> scanning but tracking exactly when a block is fully scanned requires an
+>> excessive amount of state. This patch forcibly rescans a pageblock when
+>> all isolated pages fail to migrate even though it could be for transient
+>> reasons such as page writeback or page dirty. This will sometimes migrate
+>> too many pages but pageblocks will be marked skip and forward progress
+>> will be made.
+>>
+>> "Usemen" from the mmtests configuration
+>> workload-usemem-stress-numa-compact was used to stress compaction.
+>> The compaction trace events were recorded using a 6.2-rc5 kernel that
+>> includes commit 7efc3b726103 and count of unique ranges were measured. The
+>> top 5 ranges were
+>>
+>>    3076 range=(0x10ca00-0x10cc00)
+>>    3076 range=(0x110a00-0x110c00)
+>>    3098 range=(0x13b600-0x13b800)
+>>    3104 range=(0x141c00-0x141e00)
+>>   11424 range=(0x11b600-0x11b800)
+>>
+>> While this workload is very different than what the bugs reported,
+>> the pattern of the same subset of blocks being repeatedly scanned is
+>> observed. At one point, *only* the range range=(0x11b600 ~ 0x11b800)
+>> was scanned for 2 seconds. 14 seconds passed between the first
+>> migration-related event and the last.
+>>
+>> With the series applied including this patch, the top 5 ranges were
+>>
+>>       1 range=(0x11607e-0x116200)
+>>       1 range=(0x116200-0x116278)
+>>       1 range=(0x116278-0x116400)
+>>       1 range=(0x116400-0x116424)
+>>       1 range=(0x116424-0x116600)
+>>
+>> Only unique ranges were scanned and the time between the first
+>> migration-related event was 0.11 milliseconds.
+>>
+>> Fixes: 7efc3b726103 ("mm/compaction: fix set skip in fast_find_migrateblock")
+>> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+> 
+> While this seems like it will mostly prevent the issue at hand (I think
+> kcompactd is still a hazard, see below), I'm not super happy about some of
+> the implementation details.
 
-Thank you for the patch! Yet something to improve:
+For the record, after some discussion with Mel, my concerns are not a blocker
+and the series can proceed from mm-stable to 6.3.
 
-[auto build test ERROR on tty/tty-testing]
-[also build test ERROR on tty/tty-next tty/tty-linus pavel-leds/for-next staging/staging-testing staging/staging-next staging/staging-linus linus/master v6.2-rc8 next-20230213]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 1. it modifies code that was meant to quickly skip an order-aligned block
+> where a page migration failed during MIGRATE_ASYNC direct compaction, as
+> it's very unlikely to sucessfully form a free page of that order in that
+> block. Now instead it will finish the whole pageblock in that case, which
+> could be lots of useless work and thus exactly the opposite of what we
+> wanted for MIGRATE_ASYNC direct compaction.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Florian-Eckert/tty-new-helper-function-tty_get_mget/20230213-223413
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-patch link:    https://lore.kernel.org/r/20230213140638.620206-2-fe%40dev.tdt.de
-patch subject: [PATCH 1/2] tty: new helper function tty_get_mget
-config: x86_64-randconfig-a005-20230213 (https://download.01.org/0day-ci/archive/20230214/202302140536.fks6kujh-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/096ca9c9428ec2a8ebab4af0798461e66585cdde
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Florian-Eckert/tty-new-helper-function-tty_get_mget/20230213-223413
-        git checkout 096ca9c9428ec2a8ebab4af0798461e66585cdde
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+There are both advantages and disadvantages to this so not clear win or lose.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302140536.fks6kujh-lkp@intel.com/
+> 2. The conditions "cc->direct_compaction" and "(cc->mode < MIGRATE_SYNC)"
+> seem a bit hazardous. I think we can have a compaction where these are not
+> true, and yet it uses fast_find_migrateblock() and thus can exhibit the bug
+> but won't be forced to rescan?
+> AFAICS kcompactd_do_work()
+> - is MIGRATE_SYNC_LIGHT
+> - has ignore_skip_hint = false
+> - has direct_compaction = false
+> 
+> so AFAICS it will use fast_find_migrateblock() and not bail out in one of
+> the preconditions. But the cc->direct_compaction condition here won't apply.
 
-All errors (new ones prefixed by >>):
+This is only a concern once we attempt to un-revert 7efc3b726103 again so
+only necessary to be addressed as part of future series leading to the un-revert.
 
-   In file included from drivers/leds/trigger/ledtrig-tty.c:7:
-   include/linux/tty.h:423:3: error: expected ')'
-                   struct serial_icounter_struct *icount);
-                   ^
-   include/linux/tty.h:422:19: note: to match this '('
-   int tty_get_icount(struct tty_struct *tty
-                     ^
->> drivers/leds/trigger/ledtrig-tty.c:116:42: error: too many arguments to function call, expected single argument 'tty', have 2 arguments
-           ret = tty_get_icount(trigger_data->tty, &icount);
-                 ~~~~~~~~~~~~~~                    ^~~~~~~
-   include/linux/tty.h:422:5: note: 'tty_get_icount' declared here
-   int tty_get_icount(struct tty_struct *tty
-       ^
-   2 errors generated.
-
-
-vim +/tty +116 drivers/leds/trigger/ledtrig-tty.c
-
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   78  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   79  static void ledtrig_tty_work(struct work_struct *work)
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   80  {
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   81  	struct ledtrig_tty_data *trigger_data =
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   82  		container_of(work, struct ledtrig_tty_data, dwork.work);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   83  	struct serial_icounter_struct icount;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   84  	int ret;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   85  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   86  	mutex_lock(&trigger_data->mutex);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   87  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   88  	if (!trigger_data->ttyname) {
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   89  		/* exit without rescheduling */
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   90  		mutex_unlock(&trigger_data->mutex);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   91  		return;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   92  	}
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   93  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   94  	/* try to get the tty corresponding to $ttyname */
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   95  	if (!trigger_data->tty) {
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   96  		dev_t devno;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   97  		struct tty_struct *tty;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   98  		int ret;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13   99  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  100  		ret = tty_dev_name_to_number(trigger_data->ttyname, &devno);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  101  		if (ret < 0)
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  102  			/*
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  103  			 * A device with this name might appear later, so keep
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  104  			 * retrying.
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  105  			 */
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  106  			goto out;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  107  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  108  		tty = tty_kopen_shared(devno);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  109  		if (IS_ERR(tty) || !tty)
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  110  			/* What to do? retry or abort */
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  111  			goto out;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  112  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  113  		trigger_data->tty = tty;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  114  	}
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  115  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13 @116  	ret = tty_get_icount(trigger_data->tty, &icount);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  117  	if (ret) {
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  118  		dev_info(trigger_data->tty->dev, "Failed to get icount, stopped polling\n");
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  119  		mutex_unlock(&trigger_data->mutex);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  120  		return;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  121  	}
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  122  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  123  	if (icount.rx != trigger_data->rx ||
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  124  	    icount.tx != trigger_data->tx) {
-ba8a86e4dadb33 Uwe Kleine-König 2021-02-19  125  		led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  126  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  127  		trigger_data->rx = icount.rx;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  128  		trigger_data->tx = icount.tx;
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  129  	} else {
-ba8a86e4dadb33 Uwe Kleine-König 2021-02-19  130  		led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  131  	}
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  132  
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  133  out:
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  134  	mutex_unlock(&trigger_data->mutex);
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  135  	schedule_delayed_work(&trigger_data->dwork, msecs_to_jiffies(100));
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  136  }
-fd4a641ac88fbb Uwe Kleine-König 2021-01-13  137  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> So it might be better to leave the current "skip the rest of block" check
+> alone, and add a separate check for the finish_pageblock rescan that will
+> not miss some cases where it should apply - maybe it could check for a
+> complete migration failure specifically as well?
+>> ---
+>>  mm/compaction.c | 30 ++++++++++++++++++++++--------
+>>  1 file changed, 22 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/mm/compaction.c b/mm/compaction.c
+>> index 4b3a0238879c..937ec2f05f2c 100644
+>> --- a/mm/compaction.c
+>> +++ b/mm/compaction.c
+>> @@ -2394,6 +2394,7 @@ compact_zone(struct compact_control *cc, struct capture_control *capc)
+>>  			cc->finish_pageblock = true;
+>>  		}
+>>  
+>> +rescan:
+>>  		switch (isolate_migratepages(cc)) {
+>>  		case ISOLATE_ABORT:
+>>  			ret = COMPACT_CONTENDED;
+>> @@ -2436,15 +2437,28 @@ compact_zone(struct compact_control *cc, struct capture_control *capc)
+>>  				goto out;
+>>  			}
+>>  			/*
+>> -			 * We failed to migrate at least one page in the current
+>> -			 * order-aligned block, so skip the rest of it.
+>> +			 * If an ASYNC or SYNC_LIGHT fails to migrate a page
+>> +			 * within the current order-aligned block, scan the
+>> +			 * remainder of the pageblock. This will mark the
+>> +			 * pageblock "skip" to avoid rescanning in the near
+>> +			 * future. This will isolate more pages than necessary
+>> +			 * for the request but avoid loops due to
+>> +			 * fast_find_migrateblock revisiting blocks that were
+>> +			 * recently partially scanned.
+>>  			 */
+>> -			if (cc->direct_compaction &&
+>> -						(cc->mode == MIGRATE_ASYNC)) {
+>> -				cc->migrate_pfn = block_end_pfn(
+>> -						cc->migrate_pfn - 1, cc->order);
+>> -				/* Draining pcplists is useless in this case */
+>> -				last_migrated_pfn = 0;
+>> +			if (cc->direct_compaction && !cc->finish_pageblock &&
+>> +						(cc->mode < MIGRATE_SYNC)) {
+>> +				cc->finish_pageblock = true;
+>> +
+>> +				/*
+>> +				 * Draining pcplists does not help THP if
+>> +				 * any page failed to migrate. Even after
+>> +				 * drain, the pageblock will not be free.
+>> +				 */
+>> +				if (cc->order == COMPACTION_HPAGE_ORDER)
+>> +					last_migrated_pfn = 0;
+>> +
+>> +				goto rescan;
+>>  			}
+>>  		}
+>>  
+> 
+> 
