@@ -2,98 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57088694F14
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3B3694F2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:25:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbjBMSS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:18:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
+        id S230122AbjBMSZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:25:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjBMSSx (ORCPT
+        with ESMTP id S229630AbjBMSYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:18:53 -0500
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C0A10430;
-        Mon, 13 Feb 2023 10:18:52 -0800 (PST)
-Received: by mail-ed1-f54.google.com with SMTP id v13so14127118eda.11;
-        Mon, 13 Feb 2023 10:18:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1SKYj8OvgCYN/iU7ggdNVrfsLHo704AktG+/S1pLrRM=;
-        b=K3MRiipSpAD/B214b/hOEEpY0KRSkEVfZvtw6NgoVoF3cYxVXQTY3dKMPnGuJ9XxFt
-         txtUTHUvRDMqGE3hlzlhYvtKJ8IeO8DnC7T56YwrhhiqCdIQocjs2j49EeQGWNvEMkKs
-         aSxPqbtuik3a6Sbrkb6wzvnV/c6SJ2i6n2MTE7F5ESxy4mT5El3NwhD7jLuL4QET0TPi
-         0FBXBLuOyK2j8EXe9q100WJFD/sfFV4VETMSynAYrVLcVrAs2uGOJZZe9AmxXFMmX7mj
-         mAh+VybC/iqRhUm/FqfSSf6XuRbiMwpB853zeoVRFZ/rijaqJHppkkz+XzWcrWAHRoZf
-         fE0g==
-X-Gm-Message-State: AO0yUKXlrtpxGH9MWbPRBOgSonI7zJxC0Po3p7azzUy+w57lmkzwT8pB
-        YWMyl72M+aVZ+8MjIu//t0IcS80vzvX2Z9aIRzs=
-X-Google-Smtp-Source: AK7set9Reyndahu2DrUtCmDaatIhuUu5gAV7Emfh6vqL37rzyOSXAa1jV6mMd9aheuf66lKvR5VeRmjBLLCluZnaV+g=
-X-Received: by 2002:a50:baab:0:b0:4ac:cdd9:1c97 with SMTP id
- x40-20020a50baab000000b004accdd91c97mr1353074ede.6.1676312331145; Mon, 13 Feb
- 2023 10:18:51 -0800 (PST)
+        Mon, 13 Feb 2023 13:24:52 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633411BE1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:24:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676312691; x=1707848691;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=c+q7Nn9Rsvv1nO+4W6DB2XtQZhG0cfDRiAWTu+oyL1k=;
+  b=H3xVc7TKYHQslpR2e/sCGpOsV6HDzbGufJOUyQlYbuAYqzQ4ZvXxnl25
+   oDdMR64myboUAj2FfqKXepVyYeudjInaNnH4r/7NnfdV1Ys8tvuwaYgcq
+   5ctELlkEQc0ALcAkDjK2bnt5ELYwm9sDGxvLHzEFsZd8O7vyCzPs3xb83
+   6LL7sVUhsb9W+pyEyCLRJ8+NoUtJlSdhTJs8MvbNRQFlbO6t3i12CCB9H
+   Nirwk5sTjCLMu0swoQOcR7qhszXbzBKQm2xpJRChK9qRlIEIiS7Vb0qPW
+   t4m++7LxJYtbw+MfC+zL9gwOU0fwHn/Sa2Npn94vGE7GRunxJdmcpzGeE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="328664081"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="328664081"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 10:24:41 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="701369326"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="701369326"
+Received: from eatoledo-mobl.amr.corp.intel.com (HELO [10.212.18.132]) ([10.212.18.132])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 10:24:40 -0800
+Message-ID: <383a8166-bc60-8557-e76b-f6287c967598@linux.intel.com>
+Date:   Mon, 13 Feb 2023 12:20:14 -0600
 MIME-Version: 1.0
-References: <20230213165005.2943219-1-rf@opensource.cirrus.com>
-In-Reply-To: <20230213165005.2943219-1-rf@opensource.cirrus.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 13 Feb 2023 19:18:39 +0100
-Message-ID: <CAJZ5v0g1S8U6+UxzfN5xxzYFB7PZK5V5zdsb3RdJj0sHkYPkTA@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: Add EXPORT macros for exporting PM functions
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH V2 6/8] soundwire: amd: add runtime pm ops for AMD
+ soundwire manager driver
+Content-Language: en-US
+To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>, vkoul@kernel.org
+Cc:     amadeuszx.slawinski@linux.intel.com, Mario.Limonciello@amd.com,
+        Sunil-kumar.Dommati@amd.com, Basavaraj.Hiregoudar@amd.com,
+        Mastan.Katragadda@amd.com, Arungopal.kondaveeti@amd.com,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        "moderated list:SOUNDWIRE SUBSYSTEM" <alsa-devel@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230213094031.2231058-1-Vijendar.Mukunda@amd.com>
+ <20230213094031.2231058-7-Vijendar.Mukunda@amd.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230213094031.2231058-7-Vijendar.Mukunda@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 5:50 PM Richard Fitzgerald
-<rf@opensource.cirrus.com> wrote:
->
-> Add a pair of macros for exporting functions only if CONFIG_PM
-> is enabled.
->
-> The naming follows the style of the standard EXPORT_SYMBOL_*()
-> macros that they replace.
->
-> Sometimes a module wants to export PM functions directly to other
-> drivers, not a complete struct dev_pm_ops. A typical example is
-> where a core library exports the generic (shared) implementation
-> and calling code wraps one or more of these in custom code.
->
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-> ---
->  include/linux/pm.h | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/include/linux/pm.h b/include/linux/pm.h
-> index 93cd34f00822..035d9649eba4 100644
-> --- a/include/linux/pm.h
-> +++ b/include/linux/pm.h
-> @@ -379,9 +379,13 @@ const struct dev_pm_ops name = { \
->         const struct dev_pm_ops name;                                   \
->         __EXPORT_SYMBOL(name, sec, ns);                                 \
->         const struct dev_pm_ops name
-> +#define EXPORT_PM_FN_GPL(name)         EXPORT_SYMBOL_GPL(name)
-> +#define EXPORT_PM_FN_NS_GPL(name, ns)  EXPORT_SYMBOL_NS_GPL(name, ns)
->  #else
->  #define _EXPORT_DEV_PM_OPS(name, sec, ns)                              \
->         static __maybe_unused const struct dev_pm_ops __static_##name
-> +#define EXPORT_PM_FN_GPL(name)
-> +#define EXPORT_PM_FN_NS_GPL(name, ns)
->  #endif
->
->  #define EXPORT_DEV_PM_OPS(name) _EXPORT_DEV_PM_OPS(name, "", "")
-> --
 
-Applied as 6.3 material, thanks!
+
+On 2/13/23 03:40, Vijendar Mukunda wrote:
+> Add support for runtime pm ops for AMD soundwire manager driver.
+> 
+> Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+> Signed-off-by: Mastan Katragadda <Mastan.Katragadda@amd.com>
+> ---
+>  drivers/soundwire/amd_manager.c   | 163 ++++++++++++++++++++++++++++++
+>  drivers/soundwire/amd_manager.h   |   3 +
+>  include/linux/soundwire/sdw_amd.h |  16 +++
+>  3 files changed, 182 insertions(+)
+> 
+> diff --git a/drivers/soundwire/amd_manager.c b/drivers/soundwire/amd_manager.c
+> index 87f9a987d93a..eced189ba6e0 100644
+> --- a/drivers/soundwire/amd_manager.c
+> +++ b/drivers/soundwire/amd_manager.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/soundwire/sdw.h>
+>  #include <linux/soundwire/sdw_registers.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/wait.h>
+>  #include <sound/pcm_params.h>
+>  #include <sound/soc.h>
+> @@ -185,6 +186,15 @@ static void amd_disable_sdw_interrupts(struct amd_sdw_manager *amd_manager)
+>  	acp_reg_writel(0x00, amd_manager->mmio + ACP_SW_ERROR_INTR_MASK);
+>  }
+>  
+> +static int amd_deinit_sdw_manager(struct amd_sdw_manager *amd_manager)
+> +{
+> +	int ret;
+> +
+> +	amd_disable_sdw_interrupts(amd_manager);
+> +	ret = amd_disable_sdw_manager(amd_manager);
+> +	return ret;
+> +}
+> +
+>  static void amd_sdw_set_frameshape(struct amd_sdw_manager *amd_manager)
+>  {
+>  	u32 frame_size;
+> @@ -1043,6 +1053,12 @@ static int amd_sdw_manager_probe(struct platform_device *pdev)
+>  	INIT_WORK(&amd_manager->amd_sdw_work, amd_sdw_update_slave_status_work);
+>  	INIT_WORK(&amd_manager->probe_work, amd_sdw_probe_work);
+>  	schedule_work(&amd_manager->probe_work);
+> +	/* Enable runtime PM */
+> +	pm_runtime_set_autosuspend_delay(dev, AMD_SDW_MASTER_SUSPEND_DELAY_MS);
+> +	pm_runtime_use_autosuspend(dev);
+> +	pm_runtime_mark_last_busy(dev);
+> +	pm_runtime_set_active(dev);
+> +	pm_runtime_enable(dev);
+
+that doesn't sound good to me, why do this here and not in the work
+function? That creates a racy case where the device might suspend before
+being initialized.
+
+>  	return 0;
+>  }
+>  
+> @@ -1057,14 +1073,161 @@ static int amd_sdw_manager_remove(struct platform_device *pdev)
+>  	amd_disable_sdw_interrupts(amd_manager);
+>  	sdw_bus_master_delete(&amd_manager->bus);
+>  	ret = amd_disable_sdw_manager(amd_manager);
+> +	pm_runtime_disable(&pdev->dev);
+
+shouldn't you do the pm_runtime_disable first?
+
+>  	return ret;
+>  }
+
+> +/* AMD pm_runtime quirk definitions */
+> +
+> +/*
+> + * Force the clock to stop(ClockStopMode0) when suspend callback
+> + * is invoked.
+> + */
+> +#define AMD_SDW_CLK_STOP_MODE		1
+> +
+> +/*
+> + * Stop the bus when runtime suspend/system level suspend callback
+> + * is invoked. If set, a complete bus reset and re-enumeration will
+> + * be performed when the bus restarts.
+> + */
+> +#define AMD_SDW_POWER_OFF_MODE		2
+
+You need to clarify this mode, can you deal with device in-band wakes if
+the power is off?
+
+>  #define ACP_SDW0	0
+>  #define ACP_SDW1	1
+>  
+> @@ -57,6 +71,7 @@ struct sdw_amd_dai_runtime {
+>   * @instance: soundwire manager instance
+>   * @quirks: soundwire manager quirks
+>   * @wake_en_mask: wake enable mask per soundwire manager
+> + * @clk_stopped: flag set to true when clock is stopped
+>   * @power_mode_mask: flag interprets amd soundwire manager power mode
+>   * @dai_runtime_array: dai runtime array
+>   */
+> @@ -86,6 +101,7 @@ struct amd_sdw_manager {
+>  	u32 quirks;
+>  	u32 wake_en_mask;
+>  	u32 power_mode_mask;
+> +	bool clk_stopped;
+>  
+>  	struct sdw_amd_dai_runtime **dai_runtime_array;
+>  };
