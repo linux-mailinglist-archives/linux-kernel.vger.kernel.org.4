@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1EF695029
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:01:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D658695026
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbjBMTBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 14:01:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
+        id S230403AbjBMTA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 14:00:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230486AbjBMTAx (ORCPT
+        with ESMTP id S230451AbjBMTAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 14:00:53 -0500
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDD021A3C;
-        Mon, 13 Feb 2023 11:00:20 -0800 (PST)
-Received: by mail-ed1-f52.google.com with SMTP id w3so7314192edc.2;
-        Mon, 13 Feb 2023 11:00:20 -0800 (PST)
+        Mon, 13 Feb 2023 14:00:21 -0500
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BE05B8D;
+        Mon, 13 Feb 2023 10:59:55 -0800 (PST)
+Received: by mail-ej1-f42.google.com with SMTP id n10so7373861ejc.4;
+        Mon, 13 Feb 2023 10:59:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
         bh=G8q51kK6EcMWY45OADx0YlrUAHXXNckmxq84G+AMDoo=;
-        b=YfC88XkPJx0TinV9OmDlbKySs7K89erJdZW3Sb9E8zVyOrbSo4zaK7YHLrStTOTlp1
-         D3Daq+yGjbtJIAFqoPMuDH1R77VY4QvuxXXDjduIw7eJWefE4VMc4DyGeznHBKBlqQqe
-         moe1S68nAV9UJTp45QPHx2+1GO+gGDzjwyLhtHl5c2CilNZSxR++JAiZ+RD+RHFFdb+1
-         28g9gk6ZrKGLdV8mhShdMIGWTpUXVIP4D1OogvSQJBfhB97NZkqOQAbJ6XD6slHKs/yP
-         4dgX7htNF8YUNzQuBDx98cQBq0JVMjrnH+x8+oLvmHSszs2KTJ7X2upK50UVIspm8oSU
-         44TQ==
-X-Gm-Message-State: AO0yUKWKwxgxCH/niQPe0SutJ7eRK8Cyo0D7rwh7YqBEmP6O1ZPUsxXP
-        Yculx4YTlnddxu31jGdHkM2pgnhY+IHBXwlo9cfUARmQ
+        b=I/4NsOWCc8x67ptEEuUxp7fSdh+XsKdLD1XwPcF+GLH0I3T2o7l1lxDRD1qk1QKjv3
+         bRlSzJobJmfdHFfp101rDy+EfpRww0wmaUuFge6TRQF6uDf/+Q2tj86w4kURDGxllPCw
+         XAYSUefJ3x/53iN86Ny8Y7dYd2nhfPvWpEhNgzquKh/DixNOw8qZWCJf1wQ4shF/xJzD
+         R/+qoayhL6dWsFR2Zwo9Otx9TnOE0qa+iHHbD3M/XwAZE0EkLK/Yxgkas2YJPZprqxUX
+         biJrhje8DSu/tfn8XvZw1JyEAwbvta/ZI1rfIQNYX1/PQzkA0b/Tv1SLRagtEytwLuK0
+         bnRw==
+X-Gm-Message-State: AO0yUKXDFL1P29P/WuntopZZ7rYEtuiXFShsz6lglp4T+VEQsoPaD6uJ
+        HZT31RfOc28FOH3oCbEteuteiO0gW4C3k+2HYLjABs/j
 X-Google-Smtp-Source: AK7set/XqnK1+BZIJW75M4vIKfORxIqDUeumVJlSYEssuFY13C3BbT0IgoVIcP5Oz4V35FSTeb4LLvTCwUWrN+l9aq0=
 X-Received: by 2002:a17:906:4e19:b0:8b1:28e5:a1bc with SMTP id
  z25-20020a1709064e1900b008b128e5a1bcmr182776eju.5.1676314777309; Mon, 13 Feb
@@ -55,8 +55,8 @@ Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
