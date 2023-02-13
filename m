@@ -2,145 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E5C694E07
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65575694D96
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:03:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbjBMRcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 12:32:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
+        id S229721AbjBMRDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 12:03:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjBMRcT (ORCPT
+        with ESMTP id S229554AbjBMRDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 12:32:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526C6A276;
-        Mon, 13 Feb 2023 09:32:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E68C5B8163F;
-        Mon, 13 Feb 2023 17:32:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ACE3C4339B;
-        Mon, 13 Feb 2023 17:32:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676309535;
-        bh=i+t2JBZ+52dMxItNuyDw9F/YTqCD0RC13zGq4NymM6U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J7gU2mVBZ7q/gdiyWhdLiNJ/AWYg5UmxnMexcZLtthRyUI9saaYRZT7zP863SV2hO
-         KRHa2dJinfpVmBAsYPPyxKdLVezfkPVqkwMg+SMcOa5OFcrMUMZkN/mvSuh+Q7HhUd
-         7ddUdP/JXVnUxA60q0YA58Fa881eHcs/5SDJG68c=
-Date:   Mon, 13 Feb 2023 16:15:56 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        jirislaby@kernel.org, alok.a.tiwari@oracle.com, hdanton@sina.com,
-        ilpo.jarvinen@linux.intel.com, leon@kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-serial@vger.kernel.org, amitkumar.karwar@nxp.com,
-        rohit.fule@nxp.com, sherry.sun@nxp.com
-Subject: Re: [PATCH v3 3/3] Bluetooth: NXP: Add protocol support for NXP
- Bluetooth chipsets
-Message-ID: <Y+pULHm2Qys738Zg@kroah.com>
-References: <20230213145432.1192911-1-neeraj.sanjaykale@nxp.com>
- <20230213145432.1192911-4-neeraj.sanjaykale@nxp.com>
+        Mon, 13 Feb 2023 12:03:48 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BA91BC8;
+        Mon, 13 Feb 2023 09:03:45 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0FDFB1BF204;
+        Mon, 13 Feb 2023 17:03:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1676307823;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=g20IozxcPu/cLozwZlBnvYiVCX7Gf7LJ+VUCodqo4Qo=;
+        b=Svr+D2e3zApWrdKfaG63ay91RuLQvKIF31fC8jNcY8zj2Rtc6dqCxxxMUGwJ/0jTrusqr/
+        899+WlhhOzbG6TvkKEnOFkEDupKUb2ZBRcrLBkMShFFAgqgCk6WJ0jAO3/5bB6vsh2AF76
+        +vGpyY1PTCwJNcGriksZ/3ZQ9rXPhhCXtF72jkKtJ6SxXOXIehjrZ3OC0i4QroZD5hiQ9u
+        SZg50wozvBI4EVHzcksBmhlCW3CJ5F6n5c5jBqNCaz54zhKOe188RFlEUtgHU1RCDxUC+w
+        WtzBPj5twGvpXKX25p3xUJdGR1viMXsWgFHZhk2JDmxzCUcz2Z7d5a3IvKAkMQ==
+Date:   Mon, 13 Feb 2023 18:03:42 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Javier Carrasco <javier.carrasco@wolfvision.net>
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Subject: Re: [PATCH 1/2] rtc: pcf85363: add support for the
+ quartz-load-femtofarads property
+Message-ID: <Y+ptbuZWXrVigvKz@mail.local>
+References: <20230213095018.2255225-1-javier.carrasco@wolfvision.net>
+ <12dc51e4-622e-4a26-8bde-2795d77ce36e.e0c24246-04d4-485f-8d5f-1cc8fbefd095.f44d6731-6fc0-4ea1-bc6d-c08581fb532e@emailsignatures365.codetwo.com>
+ <20230213095018.2255225-2-javier.carrasco@wolfvision.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230213145432.1192911-4-neeraj.sanjaykale@nxp.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230213095018.2255225-2-javier.carrasco@wolfvision.net>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 08:24:32PM +0530, Neeraj Sanjay Kale wrote:
-> This adds a driver based on serdev driver for the NXP BT serial
-> protocol based on running H:4, which can enable the built-in
-> Bluetooth device inside a generic NXP BT chip.
+On 13/02/2023 10:50:17+0100, Javier Carrasco wrote:
+> The quartz oscillator load capacitance of the PCF85263 and PCF85363 can
+> be adjusted to 6 pF, 7 pF (default) and 12.5 pF with the CL[1:0] bits in
+> the oscillator control register (address 25h).
 > 
-> This driver has Power Save feature that will put the chip into
-> sleep state whenever there is no activity for 2000ms, and will
-> be woken up when any activity is to be initiated over UART.
-> 
-> This driver enables the power save feature by default by sending
-> the vendor specific commands to the chip during setup.
-> 
-> During setup, the driver checks if a FW is already running on the
-> chip based on the CTS line, and downloads device specific FW file
-> into the chip over UART.
-> 
-> The driver contains certain device specific default parameters
-> related to FW filename, baudrate and timeouts which can be
-> overwritten by an optional user space config file. These parameters
-> may vary from one module vendor to another.
-> 
-> Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+> Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
 > ---
-> v2: Removed conf file support and added static data for each chip
-> based on compatibility devices mentioned in DT bindings. Handled
-> potential memory leaks and null pointer dereference issues,
-> simplified FW download feature, handled byte-order and few cosmetic
-> changes. (Ilpo Järvinen, Alok Tiwari, Hillf Danton)
-> v3: Added conf file support necessary to support different vendor
-> modules, moved .h file contents to .c, cosmetic changes. (Luiz
-> Augusto von Dentz, Rob Herring, Leon Romanovsky)
-> ---
->  drivers/bluetooth/Kconfig     |   11 +
->  drivers/bluetooth/Makefile    |    1 +
->  drivers/bluetooth/btnxpuart.c | 1370 +++++++++++++++++++++++++++++++++
->  3 files changed, 1382 insertions(+)
->  create mode 100644 drivers/bluetooth/btnxpuart.c
+>  drivers/rtc/rtc-pcf85363.c | 37 ++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 36 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/bluetooth/Kconfig b/drivers/bluetooth/Kconfig
-> index 5a1a7bec3c42..773b40d34b7b 100644
-> --- a/drivers/bluetooth/Kconfig
-> +++ b/drivers/bluetooth/Kconfig
-> @@ -465,4 +465,15 @@ config BT_VIRTIO
->  	  Say Y here to compile support for HCI over Virtio into the
->  	  kernel or say M to compile as a module.
+> diff --git a/drivers/rtc/rtc-pcf85363.c b/drivers/rtc/rtc-pcf85363.c
+> index c05b722f0060..941f9264cf0a 100644
+> --- a/drivers/rtc/rtc-pcf85363.c
+> +++ b/drivers/rtc/rtc-pcf85363.c
+> @@ -101,6 +101,10 @@
+>  #define PIN_IO_INTA_OUT	2
+>  #define PIN_IO_INTA_HIZ	3
 >  
-> +config BT_NXPUART
-> +	tristate "NXP protocol support"
-> +	depends on SERIAL_DEV_BUS
-> +	help
-> +	  NXP is serial driver required for NXP Bluetooth
-> +	  devices with UART interface.
+> +#define OSC_CAP_SEL	GENMASK(1, 0)
+> +#define OSC_CAP_6000	0x01
+> +#define OSC_CAP_12500	0x02
 > +
-> +	  Say Y here to compile support for NXP Bluetooth UART device into
-> +	  the kernel, or say M here to compile as a module.
+>  #define STOP_EN_STOP	BIT(0)
+>  
+>  #define RESET_CPR	0xa4
+> @@ -117,6 +121,32 @@ struct pcf85x63_config {
+>  	unsigned int num_nvram;
+>  };
+>  
+> +static int pcf85363_load_capacitance(struct pcf85363 *pcf85363, struct device_node *node)
+> +{
+> +	u32 load = 7000;
+> +	u8 value = 0;
+> +
+> +	of_property_read_u32(node, "quartz-load-femtofarads", &load);
+> +
+> +	switch (load) {
+> +	default:
+> +		dev_warn(&pcf85363->rtc->dev, "Unknown quartz-load-femtofarads value: %d. Assuming 7000",
+> +			 load);
+> +		fallthrough;
+> +	case 7000:
+> +		break;
+> +	case 6000:
+> +		value |= OSC_CAP_6000;
 
-What is the module name?
+Why are you using the |= operator?
 
-> +#define MAX_TAG_STR_LEN				20
-> +#define BT_FW_CONF_FILE				"nxp/bt_mod_para.conf"
+> +		break;
+> +	case 12500:
+> +		value |= OSC_CAP_12500;
+> +		break;
+> +	}
+> +
+> +	return regmap_update_bits(pcf85363->regmap, CTRL_OSCILLATOR,
+> +				  OSC_CAP_SEL, value);
+> +}
+> +
+>  static int pcf85363_rtc_read_time(struct device *dev, struct rtc_time *tm)
+>  {
+>  	struct pcf85363 *pcf85363 = dev_get_drvdata(dev);
+> @@ -372,7 +402,7 @@ static int pcf85363_probe(struct i2c_client *client)
+>  			.reg_write = pcf85363_nvram_write,
+>  		},
+>  	};
+> -	int ret, i;
+> +	int ret, i, err;
+>  
+>  	if (data)
+>  		config = data;
+> @@ -394,6 +424,11 @@ static int pcf85363_probe(struct i2c_client *client)
+>  	if (IS_ERR(pcf85363->rtc))
+>  		return PTR_ERR(pcf85363->rtc);
+>  
+> +	err = pcf85363_load_capacitance(pcf85363, client->dev.of_node);
+> +	if (err < 0)
+> +		dev_warn(&client->dev, "failed to set xtal load capacitance: %d",
+> +			 err);
+> +
+>  	pcf85363->rtc->ops = &rtc_ops;
+>  	pcf85363->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+>  	pcf85363->rtc->range_max = RTC_TIMESTAMP_END_2099;
+> -- 
+> 2.37.2
+> 
+> 
+> Javier Carrasco 
+> Research and Development
+> 
+> Wolfvision GmbH 
+> Oberes Ried 14 | 6833 Klaus | Austria 
+> Tel: +43 5523 52250 <tel:+43552352250> | Mail: javier.carrasco@wolfvision.net <mailto:javier.carrasco@wolfvision.net>
+> 
+> Website: wolfvision.com <www.wolfvision.com> 
+> Firmenbuch / Commercial Register: FN283521v Feldkirch/Austria
+> 
 
-You can not load "configuration files" as firmware, as that is not what
-firmware is for.
-
-Firmware is to be sent straight to the device, the kernel is not
-supposed to do any parsing like you are doing:
-
-> +#define USER_CONFIG_TAG				"user_config"
-> +#define FW_NAME_TAG					"fw_name"
-> +#define OPER_SPEED_TAG				"oper_speed"
-> +#define FW_DL_PRI_BAUDRATE_TAG		"fw_dl_pri_speed"
-> +#define FW_DL_SEC_BAUDRATE_TAG		"fw_dl_sec_speed"
-> +#define FW_INIT_BAUDRATE			"fw_init_speed"
-> +#define PS_INTERVAL_MS				"ps_interval_ms"
-
-With these values.
-
-Please use the normal kernel interfaces for configuring your device.
-that is NOT the firmware interface, sorry.
-
-thanks,
-
-greg k-h
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
