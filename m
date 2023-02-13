@@ -2,113 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22540694DAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC59694DAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:06:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbjBMRFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 12:05:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
+        id S230232AbjBMRG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 12:06:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjBMRFq (ORCPT
+        with ESMTP id S229867AbjBMRG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 12:05:46 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01E91E5F6
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:05:45 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id b5so14146164plz.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:05:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2YA3nXeavi2IgC2QVEKNh3Y5rIck8xWQVEfND0oydho=;
-        b=nkZVzJbW+0bAOf26p5HsohKx+B3sQMov+Uu3S1eeRd1i6SPBBuU8E80VWtaV9x5Fuv
-         apJjdn41Pn5CsXsDS1amjSOZNn0Mm7GDqwrfOcuUmCDXpl5jHorRFr61rZLPw5EjFe+3
-         phU4Ys0/xnT+xVZ0Oo2VlG0PFGOP4aSKq91PbjPbK1UsLxhWFytCwUwCeISVYhzvFiVS
-         ThHQ66pYGUzCsXWFCFd8qkw1XlMlhqd3l51mb4/QRyMBe2R0osZMaRkO6CEjhZks0hQl
-         IK4JRKaPfNXnS+wjQCDalqbSQF12pMk3SzgthO1wpw1ZhBchUa4pc6ogThsp8L7ldgDu
-         4ngw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2YA3nXeavi2IgC2QVEKNh3Y5rIck8xWQVEfND0oydho=;
-        b=M9s9LRj1JkmG8+P99zrxTyCSbzrEcbDa/xtxoz8sCDU0p8B4HfrooRCYGwJd5oIF2E
-         br+pm0WzOGb/eiMMjgPFdVN17VP9JapnmT01fqiQvPNTzWwEOJwOF4Ulj4psDTeRs0jb
-         u8PGRLp+6l6CxwqKjJSWXKh6ypgRIzsr0QEAmDyXPjJbOKPHR3z4PZtDprO+hw83adhn
-         XdynBAYZaT9ISaIk4yKYK1mMMzxmqGFNb8SZNIhcn5/65pefPuRbufLtbQsx8NTMJoku
-         zzZkmbrlwoxP/cm2Y78SZjZa+BThzcqkTQ+SOy+JdK0hEWvDWstSTfSqxxGVZgS7huAM
-         sthg==
-X-Gm-Message-State: AO0yUKX6CzTH9Z8kAi272Dt8SmST1BnRlsx7CPViPjx0M4PcP8IELIow
-        5lE3D4b5TtlSK7wexOr7k4lMB5lp5jw41HewDx8=
-X-Google-Smtp-Source: AK7set9EH5feIANijfgT1ULe2nAmv+dr9K+OHOXj94Qu4ry1lc9l+1uto405Lq0mYsu9jjzTnSvx0Q==
-X-Received: by 2002:a17:902:e003:b0:199:3909:eaee with SMTP id o3-20020a170902e00300b001993909eaeemr505647plo.6.1676307945009;
-        Mon, 13 Feb 2023 09:05:45 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id t1-20020a63b701000000b004fb5704f19bsm6174181pgf.31.2023.02.13.09.05.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 09:05:44 -0800 (PST)
-Date:   Mon, 13 Feb 2023 17:05:40 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mathias Krause <minipli@grsecurity.net>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH 0/5] KVM: Put struct kvm_vcpu on a diet
-Message-ID: <Y+pt5MGR+EjLH4qQ@google.com>
-References: <20230213163351.30704-1-minipli@grsecurity.net>
+        Mon, 13 Feb 2023 12:06:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 536201E9E0;
+        Mon, 13 Feb 2023 09:06:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D02F4B815DB;
+        Mon, 13 Feb 2023 17:06:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6596AC433D2;
+        Mon, 13 Feb 2023 17:06:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676307981;
+        bh=bNVKiFGzFNcgLu9Ct0qPxdKZ+t9ooRo2mpmfqxrFIyk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mdo34bAownW6S8yU6TMr0sLxud3egcvCKiOFv9SCMu85L4jQV31fV4tQVQZbHmEYW
+         03GA6Xb/el6HMKuPSJRvPus5nsqgj5VvfZwF5rTnwEFkVhyStRjkC+rCAnd1IrrVoU
+         5YWy3sVXhXX3Suj2SNcCpxKFi91utbQj29uASxSI8g29PTw62OGTBDP/5lxZ9kqGHd
+         MpLyat2v78cnZm0NASAJlU+zoUXDqt8xUXuMLqClEdAAF1MK9/Ogqb4qtDOKE259vm
+         740uYWf3+ybPO2xJlE3kDuL6X54oM5/UUPI/gok5CGe7GTBjGPawMW4Xz184qTvJDM
+         YYy4yiTA2GXvQ==
+Date:   Mon, 13 Feb 2023 19:06:11 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     Conor Dooley <conor@kernel.org>, mcgrof@kernel.org,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 8/8] kbuild, PCI: microchip: comment out MODULE_LICENSE
+ in non-modules
+Message-ID: <Y+puA2V5BoH/Cbr2@unreal>
+References: <20230210164749.368998-1-nick.alcock@oracle.com>
+ <20230210164749.368998-9-nick.alcock@oracle.com>
+ <Y+aMh5e9bWaTphiZ@spud>
+ <871qmx1fv5.fsf@esperi.org.uk>
+ <Y+akw9VBjg9oZ7QV@spud>
+ <Y+kx3fb2Lzlg+u5+@unreal>
+ <87k00ly25v.fsf@esperi.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230213163351.30704-1-minipli@grsecurity.net>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <87k00ly25v.fsf@esperi.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023, Mathias Krause wrote:
-> Relayout members of struct kvm_vcpu and embedded structs to reduce its
-> memory footprint. Not that it makes sense from a memory usage point of
-> view (given how few of such objects get allocated), but this series
-> achieves to make it consume two cachelines less, which should provide a
-> micro-architectural net win. However, I wasn't able to see a noticeable
-> difference running benchmarks within a guest VM -- the VMEXIT costs are
-> likely still high enough to mask any gains.
+On Mon, Feb 13, 2023 at 04:13:00PM +0000, Nick Alcock wrote:
+> [Modified resend: my MTA claimed not to send it but then sent it to some
+>  recipients anyway, and then I was asked not to do some of the things
+>  I'd offered after I sent it.]
+> 
+> On 12 Feb 2023, Leon Romanovsky told this:
+> 
+> > On Fri, Feb 10, 2023 at 08:10:43PM +0000, Conor Dooley wrote:
+> >> On Fri, Feb 10, 2023 at 07:26:38PM +0000, Nick Alcock wrote:
+> >> > On 10 Feb 2023, Conor Dooley said:
+> >> > > FYI $subject seems wrong, this is a PCI patch AFAICT.
+> >
+> > <...>
+> >
+> >> > kbuild is present in every patch in the series because this is a
+> >> > kbuild-driven change (the thing it disturbs is part of the build system,
+> >> > the construction of modules.builtin*). This seems to be common practice
+> >> > for kbuild-related treewide changes.
+> >> 
+> >> Okay, I'll take your word for it. It just looked/looks odd to me!
+> >
+> > It looks odd to me too. Please add SPDX tag in modules which don't have
+> > it already, instead of commenting code.
+> 
+> Alas... nearly all of them *do* have it already, and in most cases it is
+> different. Usually not *very* different, but different. In most cases it
+> is more specific, e.g. drivers/soc/fujitsu/a64fx-diag.c, where we have
+> MODULE_LICENSE("GPL") but SPDX says it's GPL-2.0-only, but then there
+> are things like lib/packing.c, which throughout its history in the tree
+> has combined // SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0
+> and MODULE_LICENSE("GPL v2"); which are just not the same thing.
+> 
+> I commented the MODULE_LICENSEs out specifically because I wanted to
+> avoid getting into hundreds of simultaneous license flamewars while
+> trying to get *a different thing entirely* into the kernel (kallmodsyms,
+> which depends on modules.builtin.objs being correct).
+> 
+> I still don't want to get into hundreds of simultaneous license
+> flamewars or get my employer into legal hot water, so I think I'll leave
+> things commented out and let individual maintainers decide whether they
+> want to reconcile any contradictory info that may exist or not (and as
+> noted *most* of these are conflicting.)
+> 
+> 
+> This email is the closest thing I have to indicating what Luis would
+> prefer (and the only reason I'm doing this is because I need it before
+> Luis's modules.builtin.objs change can work):
+> 
+> <https://lore.kernel.org/linux-modules/Y5AgMuMu75gne6Ka@bombadil.infradead.org/>
+> 
+> Yes, Luis thinks we can just use SPDX, but given that they are usually
+> different, making such a change seems well beyond my pay grade. Even in
+> the PCI domain, we see (second column, MODULE_LICENSE: third: SPDX,
+> sorry about the line lengths).
+> 
+> drivers/pci/controller/dwc/pcie-histb.c:		GPL v2		// SPDX-License-Identifier: GPL-2.0
+> drivers/pci/controller/mobiveil/pcie-mobiveil-plat.c:	GPL v2		// SPDX-License-Identifier: GPL-2.0
+> drivers/pci/controller/pci-tegra.c: 			GPL		// SPDX-License-Identifier: GPL-2.0+
+> drivers/pci/controller/pci-versatile.c:			GPL v2		// SPDX-License-Identifier: GPL-2.0
+> drivers/pci/controller/pcie-hisi-error.c:		GPL v2		// SPDX-License-Identifier: GPL-2.0
+> drivers/pci/controller/pcie-microchip-host.c:		GPL		// SPDX-License-Identifier: GPL-2.0
+> drivers/pci/endpoint/pci-ep-cfs.c:			GPL v2		// SPDX-License-Identifier: GPL-2.0
+> drivers/pci/endpoint/pci-epc-core.c:			GPL v2		// SPDX-License-Identifier: GPL-2.0
+> drivers/pci/endpoint/pci-epc-mem.c:			GPL v2		// SPDX-License-Identifier: GPL-2.0
+> drivers/pci/endpoint/pci-epf-core.c:			GPL v2		// SPDX-License-Identifier: GPL-2.0
+> drivers/pci/hotplug/acpiphp_core.c:			GPL		// SPDX-License-Identifier: GPL-2.0+
+> drivers/pci/hotplug/shpchp_core.c:			GPL		// SPDX-License-Identifier: GPL-2.0+
+> 
+> Not much in the way of consistency here: GPL sometimes means 2.0+ but
+> sometimes it means 2.0. GPL v2 appears to consistently mean GPL-2.0, but
+> if you look at other affected modules you soon see inconsistency:
+> 
+> drivers/powercap/powercap_sys.c: GPL v2		// SPDX-License-Identifier: GPL-2.0-only
+> drivers/firmware/imx/imx-scu.c: GPL v2		// SPDX-License-Identifier: GPL-2.0+
+> arch/x86/crypto/blake2s-glue.c: GPL v2		// SPDX-License-Identifier: GPL-2.0 OR MIT
+> drivers/iommu/sun50i-iommu.c: Dual BSD/GPL	// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> 
+> We even have
+> 
+> drivers/gpu/drm/drm_mipi_dsi.c: "GPL and additional rights" (header is
+> non-SPDX -- a BSD license header with advertising clause!)
+> 
+> So SPDX is usually more precise than the MODULE_LICENSE, but is it more
+> *accurate*? I have no idea, and I don't see how I could possibly know:
+> going by the presence of advertising clauses that obviously nobody is
+> obeying it doesn't seem like we can trust header comments to be any more
+> accurate than MODULE_LICENSE. Best to just leave both in (and comment it
+> out so it has no side-effects on the build any more, which is all I'm
+> after).
 
-...
+You are overcomplicating things.
 
-> Below is the high level pahole(1) diff. Most significant is the overall
-> size change from 6688 to 6560 bytes, i.e. -128 bytes.
+First, GPL == GPL v2.
+Second, SPDX is the right one. License in module is needed to limit
+EXPORT_SYMBOL* exposure.
+Third, we have git log and git blame to audit and revert any change.
+There is no need in leaving (even as commented) dead code.
 
-While part of me wishes KVM were more careful about struct layouts, IMO fiddling
-with per vCPU or per VM structures isn't worth the ongoing maintenance cost.
+Thanks
 
-Unless the size of the vCPU allocation (vcpu_vmx or vcpu_svm in x86 land) crosses
-a meaningful boundary, e.g. drops the size from an order-3 to order-2 allocation,
-the memory savings are negligible in the grand scheme.  Assuming the kernel is
-even capable of perfectly packing vCPU allocations, saving even a few hundred bytes
-per vCPU is uninteresting unless the vCPU count gets reaaally high, and at that
-point the host likely has hundreds of GiB of memory, i.e. saving a few KiB is again
-uninteresting.
-
-And as you observed, imperfect struct layouts are highly unlikely to have a
-measurable impact on performance.  The types of operations that are involved in
-a world switch are just too costly for the layout to matter much.  I do like to
-shave cycles in the VM-Enter/VM-Exit paths, but only when a change is inarguably
-more performant, doesn't require ongoing mainteance, and/or also improves the code
-quality.
-
-I am in favor in cleaning up kvm_mmu_memory_cache as there's no reason to carry
-a sub-optimal layouy and the change is arguably warranted even without the change
-in size.  Ditto for kvm_pmu, logically I think it makes sense to have the version
-at the very top.
-
-But I dislike using bitfields instead of bools in kvm_queued_exception, and shuffling
-fields in kvm_vcpu, kvm_vcpu_arch, vcpu_vmx, vcpu_svm, etc. unless there's a truly
-egregious field(s) just isn't worth the cost in the long term.
+> 
+> -- 
+> NULL && (void)
