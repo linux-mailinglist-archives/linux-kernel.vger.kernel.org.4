@@ -2,119 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2BC6953D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 23:23:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3E16953D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 23:23:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbjBMWXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 17:23:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36352 "EHLO
+        id S229649AbjBMWXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 17:23:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbjBMWXN (ORCPT
+        with ESMTP id S229896AbjBMWXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 17:23:13 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2046.outbound.protection.outlook.com [40.107.22.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B531BAF6;
-        Mon, 13 Feb 2023 14:23:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Km27YAM6lZ6TH6YK0W9WpNDFD4NKf6ZYOhUjniHa/wkBBaXFyRFgnR1kMHW0ij1XWb4etHea0CLWNTVfOpYfd4y6mbjd+tiZsQtPoXryZDpl+nZ3LQcfquhlMsXfnbEkzV0T+oqVMsxIsPgwPX+0d/i7EBc6gsIeALmApEuVYVVLqL3xLJQ32rkuX9+yDjBp7GMRlsOE+fjk7LLXoepfDfpV4gREBV5leeYzH9uDOzzrf/fkQ+c2XbZo+gdmz3WUkmOivRXQxUqjfZ5W4KiTxNDqvVBSy8lFDuGdSEKfkvM50kRa1cSk1B5AfAwisRFWlWYfTOFl29DZbctvuEJkUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7LIpkf+6B6pGBG5rA0oJi5017tojUEm4VkOVlQ8XJo0=;
- b=m0S2vcsU+4cfs7+OM9vobUfW0ui5EwdI2gX/MmnEU5mGbJkCpPpt8ei2pscjJs8dpQRCCjyPgR+tqn+JOoSink2Vk+DVZbvYXlnvXN5NZryS9KcUVOdxg3S/lj/VAXPShZRo1lxmIkuUwnm6iI8uCwc8FCmSR98QKsmHGzy3nCZX0xjVXDuHwNnDJFv6sGBNy5rDZIDEa2L0dY1xEjglw1PY7abThzaySaMJEMYpiAF95yIdAu65LbQ6Ap4JY3Fxetp3uxQ8RsFxg+iey5PW44X3Uj8/h2DMnvgeU8DzQyPhjvf1gu8kv2sVy4F5UCuMvhSqgCDcBbP35IZqHMDYSg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7LIpkf+6B6pGBG5rA0oJi5017tojUEm4VkOVlQ8XJo0=;
- b=kG3G6cwBF5ubkjT3xsbST0JPcpX/q4UZU+LqvtPR/+Va+F/4s2F6x6pMnlJUFj7nQeVuFIxHUtLNqIeIpkgeT7zjBswhYQGYI7O24oLiDQKffKCgvluq58khUU7NAaCBqHVeq91HF7BLfVpqp05W+e9+kYEMxXGvNZ0eMv9VnsE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com (2603:10a6:3:24::22)
- by AS8PR04MB8756.eurprd04.prod.outlook.com (2603:10a6:20b:42f::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Mon, 13 Feb
- 2023 22:22:56 +0000
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::ca48:3816:f0b6:3fcd]) by HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::ca48:3816:f0b6:3fcd%6]) with mapi id 15.20.6086.023; Mon, 13 Feb 2023
- 22:22:56 +0000
-From:   Frank Li <Frank.Li@nxp.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
-        / MXC ARM ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
-Cc:     imx@lists.linux.dev
-Subject: [PATCH 2/2] arm64: dts: freescale: imx8qxp-mek: enable cadence usb3
-Date:   Mon, 13 Feb 2023 17:22:28 -0500
-Message-Id: <20230213222229.686072-2-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230213222229.686072-1-Frank.Li@nxp.com>
-References: <20230213222229.686072-1-Frank.Li@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR05CA0076.namprd05.prod.outlook.com
- (2603:10b6:a03:332::21) To HE1PR0401MB2331.eurprd04.prod.outlook.com
- (2603:10a6:3:24::22)
+        Mon, 13 Feb 2023 17:23:07 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB56CA09
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 14:22:53 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id i137so7276658ybg.4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 14:22:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=aEhZU2tjgxgx4gUNpwE1dTHD6gZf4GTEmF74G7k/PYQ=;
+        b=F9TW3ieWJfw7obfnndlumToKLbiFKDkJANQF4eWUPbLO97hCHUzf9kdL1nCPfXIK1m
+         p+xb2LkHH/mgSqbKURZ1oMK7uJoGXMg61/4hRm58kajo9h5apmdDLJddnDPgHyOG/SvM
+         fmHc94CYvRq5JeHP1A3glrltDo1MwXFT51TCUHRbyNHyHXZStLXITqgnOHWEMdw7H1mY
+         ZS+ObVIlaVsbP+TGr9gYwtdprsPknXJbkMYv0gUJgsF4V5VZLqkiu7P+BguyZo/17NWW
+         UlmhKTUa614Qn4vQxVqJDo0hATFsuQpqZVrfHC/Q2tEd6RFwsijyXKybf8mSImcw4bCt
+         jdTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aEhZU2tjgxgx4gUNpwE1dTHD6gZf4GTEmF74G7k/PYQ=;
+        b=EJmoDUDQWYvDOegnqH7MddFQ8+mtVpAE2pl968HJanNReAf7HjNN1S0RHIV4SDLYx4
+         6gowbgUoO5mMg37dpCMh9e3ZYw5lPsv4594V7PQfTEeu/lIdV5d/i5kg5GrUFmI1nJc8
+         wcSGnHNvKU4RwcgvV1a6z0fA7FS9yei+CaSXbtd3aEMghC+5oe+OZYAujsUEPF0V5G6X
+         RtNXqzytYIdMI2ZjdypyyA2LX0B1W3QPz5auLjWcWlq7CH5sNC4gfMdVUu51mTHZrAZr
+         1rZRwwd4vKcqlg9gF3/N8dbWaTBkkZ8T6hzCHu1OvA+SQfT3RUMbH9TI+zxBK2ORVlmw
+         YXQw==
+X-Gm-Message-State: AO0yUKWsVvpHczJktVWtjZVvN80VYeYofbSmbn/YlZvNaaqNHT169Sme
+        TyrI4tfq4AHYMNtZV6g5KVfnFiigSB0bymsLTo6z
+X-Google-Smtp-Source: AK7set/VD2XbjGCWMn720W1KjUKN1TbAjHIjAnb416DrptoFwCM5jxLa46vXciW0MA6ShQYHKrDICYV7eDxgebj7oT4=
+X-Received: by 2002:a25:8a09:0:b0:80b:83b0:c87e with SMTP id
+ g9-20020a258a09000000b0080b83b0c87emr45320ybl.360.1676326971470; Mon, 13 Feb
+ 2023 14:22:51 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HE1PR0401MB2331:EE_|AS8PR04MB8756:EE_
-X-MS-Office365-Filtering-Correlation-Id: 73f6bce5-7623-4c0d-b192-08db0e10db3b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jYfic7h5dLHsc3WtiSLT1z95hv8kFqftlQUAC+J/pBWh2qxPL6zoNH/26ZW8r6YlYfxXc822KZzEDagWhaLVFJf4hOKgR6yvwn7JsNoO7m9RlBDFhfsf3JBxD/eNmx4dT5K7ZUwMsxCmb8D2PblTM1vBMgZKZ87aN/zxpn8rlVItOuGn0jKgBmFlDYAKqDBRDEIlPQNkUHHX/lPD58+ozvi34lHLaxVb24qTvs/mXVgQy6vmTUfgL9uBcta5hFt7TD++VRk7/LC3jkWM8XJieofB8UhiCY0Pi0Te36e6acyzzhZPAj6JtAHE8PGWgX9StJbGq+V/+qK878v9Z0ZsYbC/7WNEaWQ4OnSbfxi4TQe3J1Lc/7QENpXlGHnoRZI5w8sQJdrqkekgAYB611Sq5thqnnIpuEOP3AR1oihLqjVSAGYBPe27FRhzYqmCglS/Vi/MAejyxUWoRLyt4Nyps1EEq+Hw4eb/7GHCez5NphOa6Sv0vhMJMvRnVZq8Gj/2CYnjcWO+89jCNveX8Pacuslf1FGHbGo9vWMp7ogoi7rpxKtYo7VOuLrgAOb069e4fOQWDMYPLQYj/FXO6iM5e/0EIi4UTmQPAgPzbFZ+ZUggDHPlfsf2NoERTduck4yxzXBJ1EdwfGrcAo6v/BVq4Yk2voqGv7n3FUf4AgbrkVCqoTPht3GCfOQ4BBWEwRZw+KUOAlMPmo+uhH0p9CqUJeG/OBEMTjbeDg0GruQ3cZmGzuP3TqM+YXba9ATZQIsoVXDvYlD4uLFCepNbmJMQGQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0401MB2331.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(136003)(376002)(39860400002)(396003)(451199018)(38100700002)(86362001)(921005)(38350700002)(36756003)(4326008)(66476007)(41300700001)(66556008)(8676002)(110136005)(316002)(66946007)(7416002)(8936002)(2906002)(2616005)(5660300002)(6486002)(478600001)(6506007)(52116002)(186003)(26005)(6666004)(1076003)(6512007)(32563001)(473944003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kmFvkLga4936iSFSuF1qJ0WzmPk1JtZJbLpAx7LOAOTSqFFkfGvKS1mBfJEr?=
- =?us-ascii?Q?N+g5EeqyoZfKYmqY251C0HWbpghdiZYmilGcoyGtWaOeOXqofup22NMu6zvp?=
- =?us-ascii?Q?s4vxBjmv1cUmdBrBG2z50rkpbodhtopaVUrX5Znwi42DTzBo2ODshMM3Y446?=
- =?us-ascii?Q?bKaKC5ER7QNZVzTTCuWA/d3mQse3mpvkO2nR++w3IuEDL0rrb/8Z9h4sFdOC?=
- =?us-ascii?Q?7GTC7GF7lXAgZYgW67i2XUW7Ad7O0VPjuBoPuKCvmJWR/0+XfoMzezbXhsrn?=
- =?us-ascii?Q?qLLOn/p2Gks5hHVwL1SsBOMfw/hpAIquoNaMiphTHtaJutjgH4SsvzkQzENi?=
- =?us-ascii?Q?joUrwS/thM1xfTliVDE1y9YW7IXlYCI7HDPb9SJvfVHfwBcTzfppAuiXWbkL?=
- =?us-ascii?Q?NXVPa611OiwqPyeve1QSdM4N4pBXJYoN3EtEz8GNvxA3rRL5A+R3Eeo7fcOt?=
- =?us-ascii?Q?/0JrZy6pisedlGWE6fojqx0/1ytiG0xrMPto3vsF4thv8zysiuLfBIbj0+DM?=
- =?us-ascii?Q?MQ0ItaIKtY8gWgyzMVEK/6As2tjQ9U1+GSOsfrwBlD8IrXZT1Luk088BrEgE?=
- =?us-ascii?Q?dUQlYKw5wrIFX5jhybTGSdHSZxs1GfFlVm6pXeM9Il0Rgfm+X9igsai7KBfa?=
- =?us-ascii?Q?bNykeOIVexUdcG/WrURDPmhTqmgUH/Cuc61EzvfIVT7uefEiaeuBauk/Bgk/?=
- =?us-ascii?Q?3TDQxHaNSzkIwkCNTugCsnKVd57xPIaZjeoULN3HylCFokB11tIbSpTZAAaF?=
- =?us-ascii?Q?L7qWzpsR/ZLE/9jJFz0dh9+GwjeOpRE1+AhFj59MYm6PolkpE3SVXRzeJSoZ?=
- =?us-ascii?Q?eeohHwCytl2OLfKoJOyZ32Qq+6pOR8HTpNSXmD4t1hLrFbuumpZqCA5p6xIZ?=
- =?us-ascii?Q?ttQUoU/TWWGwX8fL9oGyclHbT7RW5ldPfgCnPqcAfZULGPact26hJq6z9aU2?=
- =?us-ascii?Q?sHxjTMCWtewIT2b2eJqSLOxHagUqwY9OeaIMmOnzdirCXyJq044SNj8FiZN5?=
- =?us-ascii?Q?P2fczs0T9JqY0A77NV8Ws4NaSJEDiE5uo68uReuLCQxuMxyYGQo5q0jS/+lD?=
- =?us-ascii?Q?l3l4ej7zojTV3Dw3SV9s4YxRO0RNKrBA9f3KKy/f1KsmEaY23/eAJmvsztYx?=
- =?us-ascii?Q?jLKxOXHHuQuGZr3aS7eDuSK1mQMn30UczI91aBMk8Rb2dI2cuv5x/jElxkny?=
- =?us-ascii?Q?pgi/0Rc8Ud/F9ga1F4y3bl5yjTiKMlY1r0y3Y/3hGhD5JOhj5RoUaLinGqFq?=
- =?us-ascii?Q?sZpBjuFdkcHNJsOeVFCZdMBhQHv6cQCyauZQ3qKbW25VMv7TdeG1VAnn/Dej?=
- =?us-ascii?Q?EVjZFMfeihMiD10vDUJ8DgXGfmKOphuQDDGIrR29V+GklJ7o6DgSt25qzhrQ?=
- =?us-ascii?Q?h2oz0pVXR75v/zX274WxPfsK/mFee3ZbC46oRw1osiTHym5d8BJ0m5Dl64uk?=
- =?us-ascii?Q?gVbsb2Lk36IVny5e9QpDpsONuXcdwVz6yQ3LgaOghrHaUBRHpL7Q69L8gbiw?=
- =?us-ascii?Q?0D7t5rG0oLI7j4Bmlzr/YR+eKd9PnQfUmUNLBSowPqo6sZXDBKReQa6EntCj?=
- =?us-ascii?Q?CFceCyvvBPuxqdnilnpFbS6xi6tQePKHdMn/7k1Y?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 73f6bce5-7623-4c0d-b192-08db0e10db3b
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0401MB2331.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2023 22:22:56.5788
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7BbMqqTgjy565lkrTykQ+IgRiap81P6OEpjazv51SxSRHjL1TIS68AU8hHz0NOnVzOs/hepQFKM04GRE3d17Sw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8756
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20230213190754.1836051-1-kan.liang@linux.intel.com>
+ <20230213190754.1836051-3-kan.liang@linux.intel.com> <CANDhNCqVcrZHGW4QJBD8_hZehmRpnNAsGFsmwsxBZNm3wpFZpQ@mail.gmail.com>
+ <e306e2ea-dea5-0eab-9eae-f9ea5fe7d52e@linux.intel.com>
+In-Reply-To: <e306e2ea-dea5-0eab-9eae-f9ea5fe7d52e@linux.intel.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Mon, 13 Feb 2023 14:22:39 -0800
+Message-ID: <CANDhNCq1b-7C=cox6ufC3Kxycu87qPzDHtJH_5jwPmPjjig5ww@mail.gmail.com>
+Subject: Re: [RFC PATCH V2 2/9] perf: Extend ABI to support post-processing
+ monotonic raw conversion
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, peterz@infradead.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org, sboyd@kernel.org,
+        eranian@google.com, namhyung@kernel.org, ak@linux.intel.com,
+        adrian.hunter@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -122,139 +73,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable USB3 controller, phy and typec related nodes.
+On Mon, Feb 13, 2023 at 1:40 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
+> On 2023-02-13 2:37 p.m., John Stultz wrote:
+> > On Mon, Feb 13, 2023 at 11:08 AM <kan.liang@linux.intel.com> wrote:
+> >>
+> >> From: Kan Liang <kan.liang@linux.intel.com>
+> >>
+> >> The monotonic raw clock is not affected by NTP/PTP correction. The
+> >> calculation of the monotonic raw clock can be done in the
+> >> post-processing, which can reduce the kernel overhead.
+> >>
+> >> Add hw_time in the struct perf_event_attr to tell the kernel dump the
+> >> raw HW time to user space. The perf tool will calculate the HW time
+> >> in post-processing.
+> >> Currently, only supports the monotonic raw conversion.
+> >> Only dump the raw HW time with PERF_RECORD_SAMPLE, because the accurate
+> >> HW time can only be provided in a sample by HW. For other type of
+> >> records, the user requested clock should be returned as usual. Nothing
+> >> is changed.
+> >>
+> >> Add perf_event_mmap_page::cap_user_time_mono_raw ABI to dump the
+> >> conversion information. The cap_user_time_mono_raw also indicates
+> >> whether the monotonic raw conversion information is available.
+> >> If yes, the clock monotonic raw can be calculated as
+> >> mono_raw = base + ((cyc - last) * mult + nsec) >> shift
+> >
+> > Again, I appreciate you reworking and resending this series out, I
+> > know it took some effort.
+> >
+> > But oof, I'd really like to make sure we're not exporting timekeeping
+> > internals to userland.
+> >
+> > I think Thomas' suggestion of doing the timestamp conversion in
+> > post-processing was more about interpolating collected system times
+> > with the counter (tsc) values captured.
+> >
+>
+> Thomas, could you please clarify your suggestion regarding "the relevant
+> conversion information" provided by the kernel?
+> https://lore.kernel.org/lkml/87ilgsgl5f.ffs@tglx/
+>
+> Is it only the interpolation information or the entire conversion
+> information (Mult, shift etc.)?
+>
+> If it's only the interpolation information, the user space will be lack
+> of information to handle all the cases. If I understand John's comments
+> correctly, it could also bring some interpolation error which can only
+> be addressed by the mult/shift conversion.
 
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8qxp-mek.dts | 87 +++++++++++++++++++
- 1 file changed, 87 insertions(+)
+"Only" is maybe too strong a word. I think having the driver use
+kernel timekeeping accessors to CLOCK_MONONOTONIC_RAW time with
+counter values will minimize the error.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
-index afa883389456..64f20ff44ba7 100644
---- a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
-@@ -6,6 +6,7 @@
- /dts-v1/;
- 
- #include "imx8qxp.dtsi"
-+#include <dt-bindings/usb/pd.h>
- 
- / {
- 	model = "Freescale i.MX8QXP MEK";
-@@ -28,6 +29,21 @@ reg_usdhc2_vmmc: usdhc2-vmmc {
- 		gpio = <&lsio_gpio4 19 GPIO_ACTIVE_HIGH>;
- 		enable-active-high;
- 	};
-+
-+	gpio-sbu-mux {
-+		compatible = "gpio-sbu-mux";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_typec_mux>;
-+		select-gpios = <&lsio_gpio5 9 GPIO_ACTIVE_LOW>;
-+		enable-gpios = <&pca9557_a 7 GPIO_ACTIVE_LOW>;
-+		orientation-switch;
-+
-+		port {
-+			usb3_data_ss: endpoint {
-+				remote-endpoint = <&typec_con_ss>;
-+			};
-+		};
-+	};
- };
- 
- &dsp {
-@@ -127,6 +143,44 @@ light-sensor@44 {
- 			};
- 		};
- 	};
-+
-+	ptn5110: tcpc@50 {
-+		compatible = "nxp,ptn5110";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_typec>;
-+		reg = <0x50>;
-+
-+		interrupt-parent = <&lsio_gpio1>;
-+		interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
-+		status = "okay";
-+
-+		port {
-+			typec_dr_sw: endpoint {
-+				remote-endpoint = <&usb3_drd_sw>;
-+			};
-+		};
-+
-+		usb_con1: connector {
-+			compatible = "usb-c-connector";
-+			label = "USB-C";
-+			power-role = "source";
-+			data-role = "dual";
-+			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@1 {
-+					reg = <1>;
-+						typec_con_ss: endpoint {
-+							remote-endpoint = <&usb3_data_ss>;
-+					};
-+				};
-+			};
-+		};
-+	};
-+
- };
- 
- &lpuart0 {
-@@ -204,6 +258,27 @@ &usdhc2 {
- 	status = "okay";
- };
- 
-+&usb3_phy {
-+	status = "okay";
-+};
-+
-+&usbotg3 {
-+	status = "okay";
-+};
-+
-+&usbotg3_cdns3 {
-+	dr_mode = "otg";
-+	usb-role-switch;
-+	status = "okay";
-+
-+	port {
-+		usb3_drd_sw: endpoint {
-+			remote-endpoint = <&typec_dr_sw>;
-+		};
-+	};
-+};
-+
-+
- &vpu {
- 	compatible = "nxp,imx8qxp-vpu";
- 	status = "okay";
-@@ -267,6 +342,18 @@ IMX8QXP_UART0_TX_ADMA_UART0_TX				0x06000020
- 		>;
- 	};
- 
-+	pinctrl_typec: typecgrp {
-+		fsl,pins = <
-+			IMX8QXP_SPI2_SCK_LSIO_GPIO1_IO03                        0x06000021
-+		>;
-+	};
-+
-+	pinctrl_typec_mux: typecmuxgrp {
-+		fsl,pins = <
-+			IMX8QXP_ENET0_REFCLK_125M_25M_LSIO_GPIO5_IO09           0x60
-+		>;
-+	};
-+
- 	pinctrl_usdhc1: usdhc1grp {
- 		fsl,pins = <
- 			IMX8QXP_EMMC0_CLK_CONN_EMMC0_CLK			0x06000041
--- 
-2.34.1
+But again, it's not yet established that any interpolation error using
+existing interfaces is great enough to be problematic here.
 
+The interpoloation is pretty easy to do:
+
+do {
+    start= readtsc();
+    clock_gett(CLOCK_MONOTONIC_RAW, &ts);
+    end = readtsc();
+    delta = end-start;
+} while (delta  > THRESHOLD)   // make sure the reads were not preempted
+mid = start + (delta +(delta/2))/2; //round-closest
+
+and be able to get you a fairly close matching of TSC to
+CLOCK_MONOTONIC_RAW value.
+
+Once you have that mapping you can take a few samples and establish
+the linear function.
+
+But that will have some error, so quantifying that error helps
+establish why being able to get an atomic mapping of TSC ->
+CLOCK_MONOTONIC_RAW would help.
+
+So I really don't think we need to expose the kernel internal values
+to userland, but I'm willing to guess the atomic mapping (which the
+driver will have access to, not userland) may be helpful for the fine
+granularity you want in the trace.
+
+thanks
+-john
