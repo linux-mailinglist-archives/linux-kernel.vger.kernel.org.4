@@ -2,75 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0454F694847
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B0E69484C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjBMOks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 09:40:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60148 "EHLO
+        id S229984AbjBMOlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 09:41:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjBMOkq (ORCPT
+        with ESMTP id S229931AbjBMOlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 09:40:46 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E678F35AE
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:40:44 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id dr8so32335577ejc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:40:44 -0800 (PST)
+        Mon, 13 Feb 2023 09:41:03 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B2193CE
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:41:00 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id bt8so7395345edb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:41:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=uBayqw74PPvQCx2HJiiYQZDL5HXV2Ozwx8vKgVmuZRs=;
-        b=qlhybUUjcgP92wOVOEsL8uC9F6J/KLndphTynsijnjtSfCgU+VTPeKkib3wKq+FBSh
-         hpLh/EkIcKu1bUM/o5joK4otQIDxCOUMlUThj/sDn8W+XnK5VLHc0oXLA7/BDm7Ss5ty
-         Po58OAoyJdYr0sASipn0/TfUyBXsQ1FYXTVrAAGzvd5E02/a/Exz3I6+W/VnSPSAtqCT
-         EKpRwKrKyitNYiH84ML4u9qG401sMcic1aRM8oxrmKY7RMeimkERPQrhWQBl1y3GhxSC
-         0JHmK153CSzBh6DKTk69WZ50E7Rdf3WmLsQZ+xXkEVK2pwxf9qHKlghie4Z1i1dqxNGm
-         CC5w==
+        bh=wDjFxcjkidaHjzPxBdKqNTdzUqhlhn10myWbGJIgOuU=;
+        b=trwjh13kzbqOvLJjn/dVumh2LtVz4aNU9W8NOe/b7iMWFoa808iU/lD7oia/hYawSn
+         814oqZK+48F7N3XWBEVAhRP7hm136EdEQmHZhfKESnSh6mcaKyShH68iXiCciB+TCIkv
+         rfLW3fPlQCQ9Vzr3zpqkHDCY1P57v6lqSpakeAQdKSOdcdp+ennjvNdQvHKyAxUsw6XJ
+         9ln9mCJlYXvYx00wO1BqG6vUugA4/cOJRiU+viv9LDScXy+yCT9UnYXvg/2ROr13sACV
+         rgfKWpSnTm2DgOQPExgViuJLbKTzfwJ2qctxe78gUtR61JVKeypvbp/lZl9zNJy9RrAM
+         eiPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uBayqw74PPvQCx2HJiiYQZDL5HXV2Ozwx8vKgVmuZRs=;
-        b=ZdnEmwlmV4r+nvZP/4W7XFpwNyI7g20mKrgfafncGO+i9WV0eyDNlHVUeX2/dVCv6m
-         nFhwGxgRHKoOFi7+raG9ry1jgPtBOQImvSixybMKD6wXtT5Vb4P5hzyGckuqExiA1zzi
-         TnXkBsINYozCTSBZO4fiyfu9XwUKOS2hC/qEXiwchJerHHD6/0wqTZfv3BtFuBb6bYLP
-         rMSvIoblYq3FRk0JkU9khfxzw3mWbXBaUV56Fwd0SKx7U+MnORdsSm0c1Z5UPE8Ug6K7
-         VgRmpgYZDHe5/10qx9ZPVVGoTUQKspaNzTm0yZ/LN7SlG1vQDsENqy/JkFuL8spKtP9Y
-         qCVg==
-X-Gm-Message-State: AO0yUKWmIyWvoySPpYnXdLZIJWtsRoLme/jb+k2Wh3YgTBVs7NhYSOCy
-        vt7BGGhcDXdYFl3oJOkLSMc3ZA==
-X-Google-Smtp-Source: AK7set9tx3xgc/kdgdq2vLHkUJ9hI7Db1NOLUCnZqYjelQSQagQp4bPgdFVtWnRoiOS8B9Yhl30n5w==
-X-Received: by 2002:a17:907:7e94:b0:85d:dd20:60a4 with SMTP id qb20-20020a1709077e9400b0085ddd2060a4mr34744336ejc.40.1676299243518;
-        Mon, 13 Feb 2023 06:40:43 -0800 (PST)
-Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id ot11-20020a170906cccb00b008775b8a5a5fsm6834465ejb.198.2023.02.13.06.40.42
+        bh=wDjFxcjkidaHjzPxBdKqNTdzUqhlhn10myWbGJIgOuU=;
+        b=3Ksuc0+CRCZ34WKYeBNpSDr8Qomx45NAAO/WHrd6f4OsDNKx0ak3AMEFWS0xQR5EDo
+         IIp4azWmIIE9oYrdRDw438FAzfu63M/tc5x/O4X/dT3MlSY5j3v7zL/YMYXcMDVy4cO9
+         NA8oE8rOVXfEyISU1oNPLhNrO13xZLSPwj+UqKU07f28//Gm416FWsaLWF/j5y9QfVLE
+         Oz1MFdqMdpIWzCiVZxKIUGI7hov0oDqsSxmxoYwzEjUS4XhQWk2Eg5TZrstii+BHZ1k2
+         N6cHP5vBlvnqbmY2QgW8R2J7zPPOOSMG+M/TkJKBby5YM9ilwKx1HYjRlHr+d6BaC5VK
+         DmpA==
+X-Gm-Message-State: AO0yUKXTsfOA8Nr/JA8HLzYX0VyuTv767fVxU4jQhs3qctSYckL8W8jY
+        1Xejpty2cZ9qqjwCyRQ3s12mQw==
+X-Google-Smtp-Source: AK7set8T0/X40ckTN9aZdS3UwOUDtnfhtWUWpBrsO8NZ/w66BWKgB1k3acnw0hX6LBPkR17ily/rDQ==
+X-Received: by 2002:a50:d69b:0:b0:4ac:b866:7ebb with SMTP id r27-20020a50d69b000000b004acb8667ebbmr7917577edi.9.1676299258633;
+        Mon, 13 Feb 2023 06:40:58 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id t17-20020a508d51000000b004acc44ad062sm2177063edt.61.2023.02.13.06.40.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 06:40:43 -0800 (PST)
-Message-ID: <f25f9854-8faf-7469-19bd-5ff998cdb97d@linaro.org>
-Date:   Mon, 13 Feb 2023 15:40:41 +0100
+        Mon, 13 Feb 2023 06:40:58 -0800 (PST)
+Message-ID: <e3c1a048-a9e1-53fa-5a19-cba62e8b1580@linaro.org>
+Date:   Mon, 13 Feb 2023 16:40:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: sm7225-fairphone-fp4: enable
- remaining i2c busses
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+Subject: Re: [PATCH 05/10] drm/msm/dpu: Allow variable SSPP/INTF_BLK size
+Content-Language: en-GB
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Robert Foss <rfoss@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-References: <20230213-fp4-more-i2c-v1-0-5be09dbb5ce6@fairphone.com>
- <20230213-fp4-more-i2c-v1-2-5be09dbb5ce6@fairphone.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230213-fp4-more-i2c-v1-2-5be09dbb5ce6@fairphone.com>
-Content-Type: text/plain; charset=UTF-8
+References: <20230211122656.1479141-1-konrad.dybcio@linaro.org>
+ <20230211122656.1479141-6-konrad.dybcio@linaro.org>
+ <20230213111220.ietr4aro6xu4emtu@SoMainline.org>
+ <e6653ceb-bce1-9552-019d-278f455ba8a5@linaro.org>
+ <20230213143148.qvyagudd3qm5jgwd@SoMainline.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230213143148.qvyagudd3qm5jgwd@SoMainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -82,67 +89,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 13.02.2023 14:26, Luca Weiss wrote:
-> Enable all i2c busses where something is connected on this phone. Add
-> comments as placeholders for which components are still missing.
+On 13/02/2023 16:31, Marijn Suijten wrote:
+> On 2023-02-13 13:38:33, Dmitry Baryshkov wrote:
+>> On 13/02/2023 13:12, Marijn Suijten wrote:
+>>> On 2023-02-11 13:26:51, Konrad Dybcio wrote:
+>>>> These blocks are of variable length on different SoCs. Set the
+>>>> correct values where I was able to retrieve it from downstream
+>>>> DTs and leave the old defaults (0x1c8 for sspp and 0x280 for
+>>>> intf) otherwise.
+>>>>
+>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>> ---
+>>>>    .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 242 +++++++++---------
+>>>>    1 file changed, 121 insertions(+), 121 deletions(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>>> index 802050118345..d9ef1e133c1e 100644
+>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>> [..]
+>>>> @@ -1848,10 +1848,10 @@ static struct dpu_dsc_cfg sm8150_dsc[] = {
+>>>>    /*************************************************************
+>>>>     * INTF sub blocks config
+>>>>     *************************************************************/
+>>>> -#define INTF_BLK(_name, _id, _base, _type, _ctrl_id, _progfetch, _features, _reg, _underrun_bit, _vsync_bit) \
+>>>> +#define INTF_BLK(_name, _id, _base, _len, _type, _ctrl_id, _progfetch, _features, _reg, _underrun_bit, _vsync_bit) \
+>>>
+>>> Dmitry and I discussed in #freedreno to instead add the INTF_BLK_DSI_TE
+>>> macro that accounts for the INTF TE registers using this higher register
+>>> area, as well as an extended signature to configure extra interrupts.
+>>
+>> Yes, that's still the plan. It's slightly painful that we are touching
+>> this are simultaneously.
 > 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Should we (Konrad) then drop this patch as there's no need to add these
+> (mostly RAZ/WI) registers to the dump until my INTF TE series starts
+> using them?  That'll make rebasing easier on everyone too.
 
-Any reason you've not enabled GPI DMA yet?
+RAZ/WI is for not present registers (read-as-zero/write-ignore). I think 
+that the growing register space is getting populated with registers 
+(which we have been ignoring up to now).
 
-Konrad
->  arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts | 25 +++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-> index 86114dd2c0c4..d0f08b42592f 100644
-> --- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-> @@ -359,10 +359,31 @@ &cdsp {
->  	status = "okay";
->  };
->  
-> +&i2c0 {
-> +	clock-frequency = <400000>;
-> +	status = "okay";
-> +
-> +	/* ST21NFCD NFC @ 8 */
-> +	/* VL53L3 ToF @ 29 */
-> +	/* AW88264A amplifier @ 34 */
-> +	/* AW88264A amplifier @ 35 */
-> +};
-> +
-> +&i2c8 {
-> +	clock-frequency = <400000>;
-> +	status = "okay";
-> +
-> +	/* HX83112A touchscreen @ 48 */
-> +};
-> +
->  &i2c10 {
->  	clock-frequency = <400000>;
->  	status = "okay";
->  
-> +	/* PM8008 PMIC @ 8 and 9 */
-> +	/* PX8618 @ 26 */
-> +	/* SMB1395 PMIC @ 34 */
-> +
->  	haptics@5a {
->  		compatible = "awinic,aw8695";
->  		reg = <0x5a>;
-> @@ -495,6 +516,10 @@ adc-chan@644 {
->  	};
->  };
->  
-> +&qupv3_id_0 {
-> +	status = "okay";
-> +};
-> +
->  &qupv3_id_1 {
->  	status = "okay";
->  };
+> - Marijn
 > 
+>>> (Besides, I think the len is currently only used for snapshot dumping
+>>> and no validation for out-of-blk reads/writes)
+>>
+>> Yes. Because in most of the cases non-existing registers seem to be RAZ/WI.
+>>
+>>>
+>>>>    	{\
+>>>>    	.name = _name, .id = _id, \
+>>>> -	.base = _base, .len = 0x280, \
+>>>> +	.base = _base, .len = _len, \
+>>>>    	.features = _features, \
+>>>>    	.type = _type, \
+>>>>    	.controller_id = _ctrl_id, \
+>>> [..]
+>>>
+>>> - Marijn
+>>
+>> -- 
+>> With best wishes
+>> Dmitry
+>>
+
+-- 
+With best wishes
+Dmitry
+
