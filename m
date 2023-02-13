@@ -2,99 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2068694EE3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:09:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E28694ED8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbjBMSJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:09:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
+        id S230303AbjBMSIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:08:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbjBMSJg (ORCPT
+        with ESMTP id S230270AbjBMSIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:09:36 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B053C2D;
-        Mon, 13 Feb 2023 10:09:18 -0800 (PST)
+        Mon, 13 Feb 2023 13:08:37 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F359116ACD;
+        Mon, 13 Feb 2023 10:08:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676311758; x=1707847758;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=G5AV2pkXDQoTS6YCv9ce9+5JFgN9La2hpC0dnMFOo9o=;
-  b=gT+wtp6M6kV/Yyf3QTkDS8xJBxZ57EXxp4E9GdpIBnQxUqqlgPQSnyY6
-   kff2ADZbPOJHUKJgsnzyqYhyAnzKKJy7dqcLdfCN9QK66s8CQynDBWJOY
-   w/qJDi4iFuItQqdXlu7OU5DY0TRqnMzl5IlfFKLLsVUkj8b/1aRcg/kdQ
-   8xVSf2Yf2QG4vGVw/fHl8UlaP5ib2/HB9xW1QAt8pF+DKZ0B+cBuwFhpi
-   l3xKuWXKwLuMQ+7EcCa9hPLdFFOAY2RSqLQIrtr8jQhYjFIM3OM9BfMTf
-   h6tFn5iKeZ3YCSe+1oVXuiZ2m/OHXmflazjvWtH1/MOLCGaQ1UQ0NCNnJ
+  t=1676311692; x=1707847692;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=I4wUWVAt0JgAPkaj+v7ozUILvduaN+KtQYgpaSCliyY=;
+  b=T0yluZQj8cKJxVAmD1O175l2qGF8jUbO+0Dyjwk2PUXHCOLoVW6MYTLV
+   uQ461CuDnJ67Vqc9tORoeuci1aaZ2LDhjlIN6dyO1du3hkr4xsWzaqQ+4
+   lh0YM4dYky010JamVMz8XSOF4zLqqfZv9COFCPtkznOMvmNdQt1lGjNB3
+   TLla2hux/FYQZrC4XWhQlSEiRpncSbuZuylyiZ2kkY2cOhGvlPVvQ8pzK
+   GveyfxNVcdLBfm/iq6yOwtYS9ZwdxzKCZu2gwwAVuT4kKs7t0vFFAiLgC
+   NzHSTO+nlxNgRKbopCxK2/zKKnh53FnHihhLHz0rGDbPa1qcIexRhloB9
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="395567986"
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="310587469"
 X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="395567986"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 10:07:32 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="842854085"
+   d="scan'208";a="310587469"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 10:07:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="792817488"
 X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="842854085"
-Received: from mlswanso-mobl.amr.corp.intel.com (HELO [10.251.26.232]) ([10.251.26.232])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 10:07:30 -0800
-Message-ID: <2d9172c5-e1e7-bf94-c52b-0e9bc5b5b319@intel.com>
-Date:   Mon, 13 Feb 2023 10:07:30 -0800
+   d="scan'208";a="792817488"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 13 Feb 2023 10:07:04 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id C02701A6; Mon, 13 Feb 2023 20:07:43 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Xiaowei Song <songxiaowei@hisilicon.com>,
+        Binghui Wang <wangbinghui@hisilicon.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH v1 1/1] PCI: dwc: Convert to agnostic GPIO API
+Date:   Mon, 13 Feb 2023 20:07:35 +0200
+Message-Id: <20230213180735.42117-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v9 07/18] x86/virt/tdx: Do TDX module per-cpu
- initialization
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     linux-mm@kvack.org, peterz@infradead.org, tglx@linutronix.de,
-        seanjc@google.com, pbonzini@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
-        ying.huang@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, david@redhat.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-References: <cover.1676286526.git.kai.huang@intel.com>
- <557c526a1190903d11d67c4e2c76e01f67f6eb15.1676286526.git.kai.huang@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <557c526a1190903d11d67c4e2c76e01f67f6eb15.1676286526.git.kai.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/13/23 03:59, Kai Huang wrote:
-> @@ -247,8 +395,17 @@ int tdx_enable(void)
->  		ret = __tdx_enable();
->  		break;
->  	case TDX_MODULE_INITIALIZED:
-> -		/* Already initialized, great, tell the caller. */
-> -		ret = 0;
-> +		/*
-> +		 * The previous call of __tdx_enable() may only have
-> +		 * initialized part of present cpus during module
-> +		 * initialization, and new cpus may have become online
-> +		 * since then.
-> +		 *
-> +		 * To make sure all online cpus are TDX-runnable, always
-> +		 * do per-cpu initialization for all online cpus here
-> +		 * even the module has been initialized.
-> +		 */
-> +		ret = __tdx_enable_online_cpus();
+The of_gpio.h is going to be removed. In preparation of that convert
+the driver to the agnostic API.
 
-I'm missing something here.  CPUs get initialized through either:
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/pci/controller/dwc/pcie-kirin.c | 105 ++++++++----------------
+ 1 file changed, 35 insertions(+), 70 deletions(-)
 
- 1. __tdx_enable(), for the CPUs around at the time
- 2. tdx_cpu_online(), for hotplugged CPUs after __tdx_enable()
+diff --git a/drivers/pci/controller/dwc/pcie-kirin.c b/drivers/pci/controller/dwc/pcie-kirin.c
+index d09507f822a7..89cbbe97e79d 100644
+--- a/drivers/pci/controller/dwc/pcie-kirin.c
++++ b/drivers/pci/controller/dwc/pcie-kirin.c
+@@ -12,13 +12,11 @@
+ #include <linux/compiler.h>
+ #include <linux/delay.h>
+ #include <linux/err.h>
+-#include <linux/gpio.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/interrupt.h>
+ #include <linux/mfd/syscon.h>
+ #include <linux/of_address.h>
+ #include <linux/of_device.h>
+-#include <linux/of_gpio.h>
+ #include <linux/of_pci.h>
+ #include <linux/phy/phy.h>
+ #include <linux/pci.h>
+@@ -79,16 +77,16 @@ struct kirin_pcie {
+ 	void		*phy_priv;	/* only for PCIE_KIRIN_INTERNAL_PHY */
+ 
+ 	/* DWC PERST# */
+-	int		gpio_id_dwc_perst;
++	struct gpio_desc *id_dwc_perst_gpio;
+ 
+ 	/* Per-slot PERST# */
+ 	int		num_slots;
+-	int		gpio_id_reset[MAX_PCI_SLOTS];
++	struct gpio_desc *id_reset_gpio[MAX_PCI_SLOTS];
+ 	const char	*reset_names[MAX_PCI_SLOTS];
+ 
+ 	/* Per-slot clkreq */
+ 	int		n_gpio_clkreq;
+-	int		gpio_id_clkreq[MAX_PCI_SLOTS];
++	struct gpio_desc *id_clkreq_gpio[MAX_PCI_SLOTS];
+ 	const char	*clkreq_names[MAX_PCI_SLOTS];
+ };
+ 
+@@ -383,16 +381,21 @@ static int kirin_pcie_get_gpio_enable(struct kirin_pcie *pcie,
+ 	pcie->n_gpio_clkreq = ret;
+ 
+ 	for (i = 0; i < pcie->n_gpio_clkreq; i++) {
+-		pcie->gpio_id_clkreq[i] = of_get_named_gpio(dev->of_node,
+-						    "hisilicon,clken-gpios", i);
+-		if (pcie->gpio_id_clkreq[i] < 0)
+-			return pcie->gpio_id_clkreq[i];
++		pcie->id_clkreq_gpio[i] = devm_gpiod_get_index(dev,
++							"hisilicon,clken", i,
++							GPIOD_ASIS);
++		if (IS_ERR(pcie->id_clkreq_gpio[i]))
++			return dev_err_probe(dev, PTR_ERR(pcie->id_clkreq_gpio[i]),
++					     "unable to get a valid clken gpio\n");
+ 
+ 		sprintf(name, "pcie_clkreq_%d", i);
+ 		pcie->clkreq_names[i] = devm_kstrdup_const(dev, name,
+ 							    GFP_KERNEL);
+ 		if (!pcie->clkreq_names[i])
+ 			return -ENOMEM;
++
++		gpiod_set_consumer_name(pcie->id_clkreq_gpio[i],
++					pcie->clkreq_names[i]);
+ 	}
+ 
+ 	return 0;
+@@ -411,10 +414,16 @@ static int kirin_pcie_parse_port(struct kirin_pcie *pcie,
+ 		for_each_available_child_of_node(parent, child) {
+ 			i = pcie->num_slots;
+ 
+-			pcie->gpio_id_reset[i] = of_get_named_gpio(child,
+-							"reset-gpios", 0);
+-			if (pcie->gpio_id_reset[i] < 0)
+-				continue;
++			pcie->id_reset_gpio[i] = devm_fwnode_gpiod_get_index(dev,
++							 of_fwnode_handle(child),
++							 "reset", 0, GPIOD_ASIS,
++							 NULL);
++			if (IS_ERR(pcie->id_reset_gpio[i])) {
++				if (PTR_ERR(pcie->id_reset_gpio[i]) == -ENOENT)
++					continue;
++				return dev_err_probe(dev, PTR_ERR(pcie->id_reset_gpio[i]),
++						     "unable to get a valid reset gpio\n");
++			}
+ 
+ 			pcie->num_slots++;
+ 			if (pcie->num_slots > MAX_PCI_SLOTS) {
+@@ -438,6 +447,9 @@ static int kirin_pcie_parse_port(struct kirin_pcie *pcie,
+ 				ret = -ENOMEM;
+ 				goto put_node;
+ 			}
++
++			gpiod_set_consumer_name(pcie->id_reset_gpio[i],
++						pcie->reset_names[i]);
+ 		}
+ 	}
+ 
+@@ -467,14 +479,11 @@ static long kirin_pcie_get_resource(struct kirin_pcie *kirin_pcie,
+ 		return PTR_ERR(kirin_pcie->apb);
+ 
+ 	/* pcie internal PERST# gpio */
+-	kirin_pcie->gpio_id_dwc_perst = of_get_named_gpio(dev->of_node,
+-							  "reset-gpios", 0);
+-	if (kirin_pcie->gpio_id_dwc_perst == -EPROBE_DEFER) {
+-		return -EPROBE_DEFER;
+-	} else if (!gpio_is_valid(kirin_pcie->gpio_id_dwc_perst)) {
+-		dev_err(dev, "unable to get a valid gpio pin\n");
+-		return -ENODEV;
+-	}
++	kirin_pcie->id_dwc_perst_gpio = devm_gpiod_get(dev, "reset", GPIOD_ASIS);
++	if (IS_ERR(kirin_pcie->id_dwc_perst_gpio))
++		return dev_err_probe(dev, PTR_ERR(kirin_pcie->id_dwc_perst_gpio),
++				     "unable to get a valid gpio pin\n");
++	gpiod_set_consumer_name(kirin_pcie->id_dwc_perst_gpio, "pcie_perst_bridge");
+ 
+ 	ret = kirin_pcie_get_gpio_enable(kirin_pcie, pdev);
+ 	if (ret)
+@@ -557,7 +566,7 @@ static int kirin_pcie_add_bus(struct pci_bus *bus)
+ 
+ 	/* Send PERST# to each slot */
+ 	for (i = 0; i < kirin_pcie->num_slots; i++) {
+-		ret = gpio_direction_output(kirin_pcie->gpio_id_reset[i], 1);
++		ret = gpiod_direction_output_raw(kirin_pcie->id_reset_gpio[i], 1);
+ 		if (ret) {
+ 			dev_err(pci->dev, "PERST# %s error: %d\n",
+ 				kirin_pcie->reset_names[i], ret);
+@@ -627,44 +636,6 @@ static int kirin_pcie_host_init(struct dw_pcie_rp *pp)
+ 	return 0;
+ }
+ 
+-static int kirin_pcie_gpio_request(struct kirin_pcie *kirin_pcie,
+-				   struct device *dev)
+-{
+-	int ret, i;
+-
+-	for (i = 0; i < kirin_pcie->num_slots; i++) {
+-		if (!gpio_is_valid(kirin_pcie->gpio_id_reset[i])) {
+-			dev_err(dev, "unable to get a valid %s gpio\n",
+-				kirin_pcie->reset_names[i]);
+-			return -ENODEV;
+-		}
+-
+-		ret = devm_gpio_request(dev, kirin_pcie->gpio_id_reset[i],
+-					kirin_pcie->reset_names[i]);
+-		if (ret)
+-			return ret;
+-	}
+-
+-	for (i = 0; i < kirin_pcie->n_gpio_clkreq; i++) {
+-		if (!gpio_is_valid(kirin_pcie->gpio_id_clkreq[i])) {
+-			dev_err(dev, "unable to get a valid %s gpio\n",
+-				kirin_pcie->clkreq_names[i]);
+-			return -ENODEV;
+-		}
+-
+-		ret = devm_gpio_request(dev, kirin_pcie->gpio_id_clkreq[i],
+-					kirin_pcie->clkreq_names[i]);
+-		if (ret)
+-			return ret;
+-
+-		ret = gpio_direction_output(kirin_pcie->gpio_id_clkreq[i], 0);
+-		if (ret)
+-			return ret;
+-	}
+-
+-	return 0;
+-}
+-
+ static const struct dw_pcie_ops kirin_dw_pcie_ops = {
+ 	.read_dbi = kirin_pcie_read_dbi,
+ 	.write_dbi = kirin_pcie_write_dbi,
+@@ -684,7 +655,7 @@ static int kirin_pcie_power_off(struct kirin_pcie *kirin_pcie)
+ 		return hi3660_pcie_phy_power_off(kirin_pcie);
+ 
+ 	for (i = 0; i < kirin_pcie->n_gpio_clkreq; i++)
+-		gpio_direction_output(kirin_pcie->gpio_id_clkreq[i], 1);
++		gpiod_direction_output_raw(kirin_pcie->id_clkreq_gpio[i], 1);
+ 
+ 	phy_power_off(kirin_pcie->phy);
+ 	phy_exit(kirin_pcie->phy);
+@@ -711,10 +682,6 @@ static int kirin_pcie_power_on(struct platform_device *pdev,
+ 		if (IS_ERR(kirin_pcie->phy))
+ 			return PTR_ERR(kirin_pcie->phy);
+ 
+-		ret = kirin_pcie_gpio_request(kirin_pcie, dev);
+-		if (ret)
+-			return ret;
+-
+ 		ret = phy_init(kirin_pcie->phy);
+ 		if (ret)
+ 			goto err;
+@@ -727,11 +694,9 @@ static int kirin_pcie_power_on(struct platform_device *pdev,
+ 	/* perst assert Endpoint */
+ 	usleep_range(REF_2_PERST_MIN, REF_2_PERST_MAX);
+ 
+-	if (!gpio_request(kirin_pcie->gpio_id_dwc_perst, "pcie_perst_bridge")) {
+-		ret = gpio_direction_output(kirin_pcie->gpio_id_dwc_perst, 1);
+-		if (ret)
+-			goto err;
+-	}
++	ret = gpiod_direction_output_raw(kirin_pcie->id_dwc_perst_gpio, 1);
++	if (ret)
++		goto err;
+ 
+ 	usleep_range(PERST_2_ACCESS_MIN, PERST_2_ACCESS_MAX);
+ 
+-- 
+2.39.1
 
-But, this is a third class.  CPUs that came online after #1, but which
-got missed by #2.  How can that happen?
