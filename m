@@ -2,186 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC6B693F6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:19:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1079693F6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:19:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjBMITJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 03:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59814 "EHLO
+        id S229871AbjBMIT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 03:19:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjBMITD (ORCPT
+        with ESMTP id S229584AbjBMIT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 03:19:03 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA27DBD8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 00:19:01 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 13 Feb 2023 03:19:27 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6199DD51F;
+        Mon, 13 Feb 2023 00:19:19 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.179.179])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B951E33A08;
-        Mon, 13 Feb 2023 08:18:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1676276339; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dVnZ7esjSavwyVx5aDMl7nXGYzgJrmRgZ8E0mkjqaU0=;
-        b=pjQXaTSOIZXki8TtiDkPMi9Gk5NmWNQjKOkvzxK1OCRCDZJeWdqX8lGw+QLuv+mQh4rohh
-        DnA6QzbqqfEYgk/sogw1vZomO5CKFlcKoS4ZJt7jEdYVxh/32S9L4dBOFBDZKGB6yoNFPe
-        XYWMCV+zIc6Wz/rsEyI6AF0qJniYb+E=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 87541138E6;
-        Mon, 13 Feb 2023 08:18:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id X0SOH3Py6WP3NQAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 13 Feb 2023 08:18:59 +0000
-Message-ID: <a045836e-25c1-3d9b-b3fa-a212f0432cda@suse.com>
-Date:   Mon, 13 Feb 2023 09:18:59 +0100
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7E8686602111;
+        Mon, 13 Feb 2023 08:19:10 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676276357;
+        bh=HcrRqQGTLDavaisdiDBAWZL7DbjBX2aS5kmcVSQao9Q=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=RUj+x5+hhHCs3+pYxQ5m7xQYA5s4//MWmZV4sAdJYmHle5VjOFUndXl1IARCprau9
+         4D78YmxFNBexbqZdeuK3bDJa44gajzUkLybaGpDtGXnG0BTueF2iOeO7ECQLHLGvc9
+         KB4Yu+kA26B5mf5CDFUlpOR+14iEiCtL3GknqNMCW1DU3E64WuKugoCV3aLgIimmrY
+         wFurCzXK5sasmdjFS9oOixnYXyXFoP32BaL8oGQgvB1ezXe69nBGEVop2qJPrx+Y2I
+         EpzrosGLYPHaIhrUhmj+3a/DyjJwZ3pA+2x0yvVlYRWB3v806AYcTtG4X3LG37kVBz
+         JmBh1fhE7MOZA==
+Message-ID: <355ef60e-0918-13a5-196a-97e4e793edd4@collabora.com>
+Date:   Mon, 13 Feb 2023 13:19:06 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH] xen: Allow platform PCI interrupt to be shared
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
 Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        xen-devel <xen-devel@lists.xenproject.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Paul Durrant <paul@xen.org>
-References: <f9a29a68d05668a3636dd09acd94d970269eaec6.camel@infradead.org>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <f9a29a68d05668a3636dd09acd94d970269eaec6.camel@infradead.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------XjEXuqBs0m1ktJEb7SXwGXVm"
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Cyrill Gorcunov <gorcunov@gmail.com>
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-4-usama.anjum@collabora.com> <Y+QgtVSEl4w2NgtJ@grain>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <Y+QgtVSEl4w2NgtJ@grain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------XjEXuqBs0m1ktJEb7SXwGXVm
-Content-Type: multipart/mixed; boundary="------------sc7du0J3EGAH8GCtz6wUalHX";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: David Woodhouse <dwmw2@infradead.org>,
- Stefano Stabellini <sstabellini@kernel.org>,
- xen-devel <xen-devel@lists.xenproject.org>, linux-kernel@vger.kernel.org,
- Thomas Gleixner <tglx@linutronix.de>, Paul Durrant <paul@xen.org>
-Message-ID: <a045836e-25c1-3d9b-b3fa-a212f0432cda@suse.com>
-Subject: Re: [PATCH] xen: Allow platform PCI interrupt to be shared
-References: <f9a29a68d05668a3636dd09acd94d970269eaec6.camel@infradead.org>
-In-Reply-To: <f9a29a68d05668a3636dd09acd94d970269eaec6.camel@infradead.org>
+Hi Cyrill,
 
---------------sc7du0J3EGAH8GCtz6wUalHX
-Content-Type: multipart/mixed; boundary="------------TeW6mhYtv2gyTu4GdSJwXTix"
+Thank you for your time and review.
 
---------------TeW6mhYtv2gyTu4GdSJwXTix
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On 2/9/23 3:22 AM, Cyrill Gorcunov wrote:
+> On Thu, Feb 02, 2023 at 04:29:12PM +0500, Muhammad Usama Anjum wrote:
+> ...
+> Hi Muhammad! I'm really sorry for not commenting this code, just out of time and i
+> fear cant look with precise care at least for some time, hopefully other CRIU guys
+> pick it up. Anyway, here a few comment from a glance.
+> 
+>> +
+>> +static inline int pagemap_scan_output(bool wt, bool file, bool pres, bool swap,
+>> +				      struct pagemap_scan_private *p, unsigned long addr,
+>> +				      unsigned int len)
+>> +{
+> 
+> This is a big function and usually it's a flag to not declare it as "inline" until
+> there very serious reson to.
+I'll remove all these inline in next revision.
 
-T24gMTguMDEuMjMgMTM6MjIsIERhdmlkIFdvb2Rob3VzZSB3cm90ZToNCj4gRnJvbTogRGF2
-aWQgV29vZGhvdXNlIDxkd213QGFtYXpvbi5jby51az4NCj4gDQo+IFdoZW4gd2UgZG9uJ3Qg
-dXNlIHRoZSBwZXItQ1BVIHZlY3RvciBjYWxsYmFjaywgd2UgYXNrIFhlbiB0byBkZWxpdmVy
-IGV2ZW50DQo+IGNoYW5uZWwgaW50ZXJydXB0cyBhcyBJTlR4IG9uIHRoZSBQQ0kgcGxhdGZv
-cm0gZGV2aWNlLiBBcyBzdWNoLCBpdCBjYW4gYmUNCj4gc2hhcmVkIHdpdGggSU5UeCBvbiBv
-dGhlciBQQ0kgZGV2aWNlcy4NCj4gDQo+IFNldCBJUlFGX1NIQVJFRCwgYW5kIG1ha2UgaXQg
-cmV0dXJuIElSUV9IQU5ETEVEIG9yIElSUV9OT05FIGFjY29yZGluZyB0bw0KPiB3aGV0aGVy
-IHRoZSBldnRjaG5fdXBjYWxsX3BlbmRpbmcgZmxhZyB3YXMgYWN0dWFsbHkgc2V0LiBOb3cg
-SSBjYW4gc2hhcmUNCj4gdGhlIGludGVycnVwdDoNCj4gDQo+ICAgMTE6ICAgICAgICAgODIg
-ICAgICAgICAgMCAgIElPLUFQSUMgIDExLWZhc3Rlb2kgICB4ZW4tcGxhdGZvcm0tcGNpLCBl
-bnM0DQo+IA0KPiBEcm9wIHRoZSBJUlFGX1RSSUdHRVJfUklTSU5HLiBJdCBoYXMgbm8gZWZm
-ZWN0IHdoZW4gdGhlIElSUSBpcyBzaGFyZWQsDQo+IGFuZCBiZXNpZGVzLCB0aGUgb25seSBl
-ZmZlY3QgaXQgd2FzIGhhdmluZyBldmVuIGJlZm9yZWhhbmQgd2FzIHRvIHRyaWdnZXINCj4g
-YSBkZWJ1ZyBtZXNzYWdlIGluIGJvdGggSS9PQVBJQyBhbmQgbGVnYWN5IFBJQyBjYXNlczoN
-Cj4gDQo+IFsgICAgMC45MTU0NDFdIGdlbmlycTogTm8gc2V0X3R5cGUgZnVuY3Rpb24gZm9y
-IElSUSAxMSAoSU8tQVBJQykNCj4gWyAgICAwLjk1MTkzOV0gZ2VuaXJxOiBObyBzZXRfdHlw
-ZSBmdW5jdGlvbiBmb3IgSVJRIDExIChYVC1QSUMpDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBE
-YXZpZCBXb29kaG91c2UgPGR3bXdAYW1hem9uLmNvLnVrPg0KDQpQdXNoZWQgdG86IHhlbi90
-aXAuZ2l0IGZvci1saW51cy02LjMNCg0KDQpKdWVyZ2VuDQoNCg==
---------------TeW6mhYtv2gyTu4GdSJwXTix
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+> 
+>> +	unsigned long bitmap, cur = PAGEMAP_SCAN_BITMAP(wt, file, pres, swap);
+>> +	bool cpy = true;
+>> +	struct page_region *prev = &p->prev;
+>> +
+>> +	if (HAS_NO_SPACE(p))
+>> +		return -ENOSPC;
+>> +
+>> +	if (p->max_pages && p->found_pages + len >= p->max_pages)
+>> +		len = p->max_pages - p->found_pages;
+>> +	if (!len)
+>> +		return -EINVAL;
+>> +
+>> +	if (p->required_mask)
+>> +		cpy = ((p->required_mask & cur) == p->required_mask);
+>> +	if (cpy && p->anyof_mask)
+>> +		cpy = (p->anyof_mask & cur);
+>> +	if (cpy && p->excluded_mask)
+>> +		cpy = !(p->excluded_mask & cur);
+>> +	bitmap = cur & p->return_mask;
+>> +	if (cpy && bitmap) {
+> 
+> You can exit early here simply
+> 
+> 	if (!cpy || !bitmap)
+> 		return 0;
+I'm avoiding an extra return here.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+> 
+> saving one tab for the code below.
+> 
+>> +		if ((prev->len) && (prev->bitmap == bitmap) &&
+>> +		    (prev->start + prev->len * PAGE_SIZE == addr)) {
+>> +			prev->len += len;
+>> +			p->found_pages += len;
+>> +		} else if (p->vec_index < p->vec_len) {
+>> +			if (prev->len) {
+>> +				memcpy(&p->vec[p->vec_index], prev, sizeof(struct page_region));
+>> +				p->vec_index++;
+>> +			}
+>> +			prev->start = addr;
+>> +			prev->len = len;
+>> +			prev->bitmap = bitmap;
+>> +			p->found_pages += len;
+>> +		} else {
+>> +			return -ENOSPC;
+>> +		}
+>> +	}
+>> +	return 0;
+>> +}
+>> +
+>> +static inline int export_prev_to_out(struct pagemap_scan_private *p, struct page_region __user *vec,
+>> +				     unsigned long *vec_index)
+>> +{
+> 
+> No need for inline either.
+> 
+>> +	struct page_region *prev = &p->prev;
+>> +
+>> +	if (prev->len) {
+>> +		if (copy_to_user(&vec[*vec_index], prev, sizeof(struct page_region)))
+>> +			return -EFAULT;
+>> +		p->vec_index++;
+>> +		(*vec_index)++;
+>> +		prev->len = 0;
+>> +	}
+>> +	return 0;
+>> +}
+>> +
+>> +static inline int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+>> +					 unsigned long end, struct mm_walk *walk)
+>> +{
+> 
+> Same, no need for inline. I've a few comments more in my mind will try to
+> collect them tomorrow.
+Your review would be much appreciated.
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------TeW6mhYtv2gyTu4GdSJwXTix--
-
---------------sc7du0J3EGAH8GCtz6wUalHX--
-
---------------XjEXuqBs0m1ktJEb7SXwGXVm
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPp8nMFAwAAAAAACgkQsN6d1ii/Ey9Q
-XQgAkeN5Ytwitra2Jv+KFtnD/SZfWvMnS6Gq0ml4iVdxUwKen+2jpZmczoCovziPt7hzUJSl9JiU
-TVTOrNG4mqPgHnhODHjRLI4dGpzM1evLusKbS5fMODi6HPQAzKQ5R/qp7y2NQQKnVhn7z3S8bXzb
-j7jO+P0f5n6FwR080IoGNmdMoB2d9LUYuQGu5wyrFP1qZ85fA1dTtrQaNugHF8fjEnk+jcMYw+re
-mxeWKANCdL1u20egHPZH30P4wZHvSLKzNGwH3Ep4/f+f8Oadm5p9ECc3MRlJ6bjrlRiq0c1yVczD
-UAZGCqpKexhEM7kWWq1PjAwow8xgHyuL6e29ENcVvQ==
-=zttk
------END PGP SIGNATURE-----
-
---------------XjEXuqBs0m1ktJEb7SXwGXVm--
+-- 
+BR,
+Muhammad Usama Anjum
