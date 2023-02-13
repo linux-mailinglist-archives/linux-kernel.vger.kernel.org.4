@@ -2,59 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD5C6694FD3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:52:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1D5694FF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbjBMSwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:52:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
+        id S230232AbjBMSxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:53:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjBMSww (ORCPT
+        with ESMTP id S229754AbjBMSxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:52:52 -0500
+        Mon, 13 Feb 2023 13:53:23 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDF53AB4;
-        Mon, 13 Feb 2023 10:52:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876A7166F5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:53:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A12F3B816D4;
-        Mon, 13 Feb 2023 18:52:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5903BC433D2;
-        Mon, 13 Feb 2023 18:52:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676314367;
-        bh=2BWWt/J89MFCn5EsUF/rEu2a1i3znp0shRx37Kzt25k=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=TVpXFDPAvkaoSm/7ZIxHX+JyywDDvT97HRsJrj4dpum2R4DB7y67M/hFCkXCMgCX6
-         cfkdaBsjT8IUWOhptskCyyXXi469/XzuX14BhwILut11u9LDBUzjSbc6hUP2mpkiPG
-         N+Isnrf9ZoMPjJ1LTd+rmKhefcJYXFtfM/1LZkRgN/iMwCcVtb8D/QT3I//+/JZ3L8
-         +b0ddn4dQ+Zl2WVpq5k/g+ns8HS6CGq36exmNXl/uIf0cc6G0opl0BWAOkU1H2S8vf
-         jltY8vaSV270pnfHG4mNrG8K7r/DV8ERq2QHQJ8HFUNY75z4ONHIZqZyBVgab72sBl
-         /TgU/6NsYzBKw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 455CBE68D2E;
-        Mon, 13 Feb 2023 18:52:47 +0000 (UTC)
-Subject: Re: [GIT PULL] platform-drivers-x86 for 6.2-5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <06020103-8bbb-c02f-f59a-b4cad88d9184@redhat.com>
-References: <06020103-8bbb-c02f-f59a-b4cad88d9184@redhat.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <06020103-8bbb-c02f-f59a-b4cad88d9184@redhat.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v6.2-5
-X-PR-Tracked-Commit-Id: eb4b55f2f26fc8a7b7dc6f06f1de91480d53485b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b408817d48840847c00052ae0e02a54311913073
-Message-Id: <167631436726.22765.13874147412630914796.pr-tracker-bot@kernel.org>
-Date:   Mon, 13 Feb 2023 18:52:47 +0000
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38CB4B818D1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 18:53:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B81FBC433D2;
+        Mon, 13 Feb 2023 18:53:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1676314398;
+        bh=xcGaRIwbb5nq215+b4sWh8e7QlbCOHLwlg1rA/vLzh8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kKv7xvfhCcg6uANkHNPtgENlkk9RrI75JUYFMfTDK3KJxMpWCW1zwCojsst9DIxrY
+         tudn4xDfG/kFVOjli1g/5SyMkiU6AEyluHzrZ/hFAGDHkBszfcIOkYrbmQ9Bd1crsT
+         2m3Uq0w+As0ANxhZCUiubgnVbHJZLXRo5ldB38Yw=
+Date:   Mon, 13 Feb 2023 10:53:18 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Qi Zheng <zhengqi.arch@bytedance.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: page_alloc: call panic() when memoryless node
+ allocation fails
+Message-Id: <20230213105318.e2a83d60c12e734d45dccf1a@linux-foundation.org>
+In-Reply-To: <20230212111027.95520-1-zhengqi.arch@bytedance.com>
+References: <20230212111027.95520-1-zhengqi.arch@bytedance.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,15 +51,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 13 Feb 2023 11:27:15 +0100:
+On Sun, 12 Feb 2023 19:10:27 +0800 Qi Zheng <zhengqi.arch@bytedance.com> wrote:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v6.2-5
+> In free_area_init(), we will continue to run after pgdat of memoryless
+> node allocation fails. However, in the subsequent process (such as when
+> initializing zonelist), the case that NODE_DATA(nid) is NULL is not
+> handled, which will cause panic. Instead of this, it's better to call
+> panic() directly when the memory allocation fails during system boot.
+> 
+> ...
+>
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -8360,11 +8360,9 @@ void __init free_area_init(unsigned long *max_zone_pfn)
+>  
+>  			/* Allocator not initialized yet */
+>  			pgdat = arch_alloc_nodedata(nid);
+> -			if (!pgdat) {
+> -				pr_err("Cannot allocate %zuB for node %d.\n",
+> -						sizeof(*pgdat), nid);
+> -				continue;
+> -			}
+> +			if (!pgdat)
+> +				panic("Cannot allocate %zuB for node %d.\n",
+> +				       sizeof(*pgdat), nid);
+>  			arch_refresh_nodedata(nid, pgdat);
+>  			free_area_init_memoryless_node(nid);
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b408817d48840847c00052ae0e02a54311913073
+Have you actually hit this at runtime?  If so, is there something we
+can do to handle this failure more gracefully?
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
