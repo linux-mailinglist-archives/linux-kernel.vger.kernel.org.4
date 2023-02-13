@@ -2,84 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F3E6943B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:02:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B30D36943BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:02:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjBMLCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 06:02:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38858 "EHLO
+        id S229902AbjBMLCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 06:02:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjBMLCE (ORCPT
+        with ESMTP id S229643AbjBMLCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 06:02:04 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653F5C162
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:02:03 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id n13so8404590wmr.4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:02:03 -0800 (PST)
+        Mon, 13 Feb 2023 06:02:37 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C720117CC3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:02:22 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id sa10so30793098ejc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:02:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8WzWyArS5gEO/wRc+fU03BRey5p9sqIym9cvOO3Y6eU=;
-        b=zTMeYc9cO7mscsDds2h1TZLFUu8Tl/dWC1eLhgkAYD33QzKi6lOyFZCe4+5knSiBwW
-         XR9UNZ7XsvjvO+JG615egdZseIchSL73cinaBanQbKXDwrgW6dI+LJeA0+4BOQMu1/PF
-         v9zI5YVn0kLkc96zUF45F0XddOourilUsjqZ5szNWdTcjvKSgFQ7Kr49GHZCMqFk8XYo
-         6nXIBHRxVldefmfy3uIgJCqG2AYHb6yEFGpeYNwKl0qVOBfBX4MJGRdOwPOuRWvjK2iH
-         i+aPALN0LvPGF6CkeuXz11c6z1jOZewTHifzj233mIEG8CXKDMNEdNxzgiLC/bHO7oc6
-         XePw==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=70NMlQcw2iBDbRyN8g9R2UaDW8v0WsBUWLxPKnQsybw=;
+        b=c7+dVyzFuA7FINtkSmjmxRUKSB2Bl19v2Vt3RFREtrf0BounA7cRttqNJLgOoW3+ub
+         aX+Frz6guaGOHS2YiK8mYQyzthBjzxt+Yh01a9Q0SprnC7pXvfGaF2tMWf77AnWfmvVd
+         Ya+doB0PJj6PpjMpGEF6tq85pWy++zHQlz1pmF94OnyNLjqnbo0MA4JJRVJY9hUXzHLq
+         wL56JmJbnZb4Eu0Rv6bZnNity5ZbCzS+QBldrB83Z2d7HhS+4sgxakPsPfqCC/fRcUPw
+         FVlkQjmuW+TccEtYrQP3E/L2z+r8MYnIuBK6R+wYShX9tSgFQMWhGcyAdgfjBCGzaZ3i
+         cFRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8WzWyArS5gEO/wRc+fU03BRey5p9sqIym9cvOO3Y6eU=;
-        b=E/YAIi86Qrget/4ffPSwX1rpH5ADlH0mbEBiPUU0i2cmhP9OqwtxXdVQeQY8iEFrZX
-         4nMauRU8eD4nz+lVwRJrU54CE+MOoVXB5KZR7C471RttSak7b4aCDuQvIVsYdTsY89om
-         5fwHLClpxPQmZB8xqf9leP9gU07PyEWF12dXzSJtcpdmpMtpjKZUPu+oBhJ1qbOOPr9n
-         Bdmu5hb+6ehc6XBjD0SKZbqKp6EHZgRVffelSlBVUi9VpahKWMgvB+cYWL0/D89asiPX
-         fwQKJWN4vCKrjm8c8YjW11+53cke65iYflTmph3GNIsgB8RvIJXiLRXwoiwlqnfrLO0T
-         YhhQ==
-X-Gm-Message-State: AO0yUKWcJiSTYyKN+9W1iVh9Sbw9ts6PuBCXLkKcqgfaSFTANHTwImig
-        9yWhVHSBQZqenuv1QRdiMe3fdQ==
-X-Google-Smtp-Source: AK7set+QKXqhsOFrxdGsWPqrhu0Ju0VH7kga/YlH2Hs/FF4nhofUvdKD5RlJPyj/WOB3XGC6kDFFXg==
-X-Received: by 2002:a05:600c:30ca:b0:3df:c284:7e78 with SMTP id h10-20020a05600c30ca00b003dfc2847e78mr20536285wmn.38.1676286121946;
-        Mon, 13 Feb 2023 03:02:01 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id g10-20020a05600c310a00b003e1e8d794e1sm4719972wmo.13.2023.02.13.03.02.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 03:02:01 -0800 (PST)
-Message-ID: <4b8e3164-f39a-c559-7bac-86c4fdcd6834@linaro.org>
-Date:   Mon, 13 Feb 2023 12:01:59 +0100
+        bh=70NMlQcw2iBDbRyN8g9R2UaDW8v0WsBUWLxPKnQsybw=;
+        b=q5Irz2Z6DtO1RX1KXZ/CpoiKpUVh/YzH/zbHKwt9w5DVUCrSJWS0SHm6u3JGSI2pWw
+         gdLfo0P+BVfwkrYdwSmFFPrgxO9S3pQY9MS56OSbk1k/fcHFI8+WTzz96bucaPP386Z/
+         je23/rrLTUewWV2WWEeIY1DBD0YtVxng3/RLIGs0H8DTlG9vDzb+wkcRHfbI4dEuLHaL
+         l8LkVnVUA8IvNXrHz7XTv7WsPMwWIG29xLzBfKpxfsJJ8KGyGdcWVByDpcVgw40+a0k2
+         w5k7w2JcYYRJYV8ENVgpk+EepyGzgUTLlx2dRfODbD8JRgcu2X/RPbJ9yxUhCikwTlK7
+         uc6Q==
+X-Gm-Message-State: AO0yUKUgQWrK8NN3CnVoU9x+qEQZ7panN3LbVnwEa7TXynY/3hA/1C0B
+        7pC4V+H2xleyJ0gHA6yUtjk7pQ==
+X-Google-Smtp-Source: AK7set8cYRCrSRY/vmPzO6qb6ELLhtVHAtQS9hVUyeOcISQNnglfyNIgD+XLwVGCSteK3zVaYKevDw==
+X-Received: by 2002:a17:907:8686:b0:8aa:be85:fc56 with SMTP id qa6-20020a170907868600b008aabe85fc56mr28490957ejc.47.1676286141103;
+        Mon, 13 Feb 2023 03:02:21 -0800 (PST)
+Received: from jade (h-46-59-78-111.A175.priv.bahnhof.se. [46.59.78.111])
+        by smtp.gmail.com with ESMTPSA id d18-20020a1709063cf200b008af4dadd9c4sm5217871ejh.116.2023.02.13.03.02.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 03:02:20 -0800 (PST)
+Date:   Mon, 13 Feb 2023 12:02:18 +0100
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+To:     Cyrille Fleury <cyrille.fleury@nxp.com>
+Cc:     Jerome Forissier <jerome.forissier@linaro.org>,
+        Etienne Carriere <etienne.carriere@linaro.org>,
+        Olivier Masse <olivier.masse@nxp.com>,
+        "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "fredgc@google.com" <fredgc@google.com>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+        "afd@ti.com" <afd@ti.com>,
+        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
+        "joakim.bech@linaro.org" <joakim.bech@linaro.org>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        Peter Griffin <peter.griffin@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        =?utf-8?Q?Cl=C3=A9ment?= Faure <clement.faure@nxp.com>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>
+Subject: Re: [EXT] Re: [PATCH v2 1/1] tee: new ioctl to a register tee_shm
+ from a dmabuf file descriptor
+Message-ID: <Y+oYundNEN9TDiQ8@jade>
+References: <20220812143055.12938-2-olivier.masse@nxp.com>
+ <30534fadb8172088eddef46ae71d87c167cbf32e.camel@nxp.com>
+ <CAFA6WYOMCswgHHxsgc9Hgi7rmTPaZDqce=BixvYoFTfL0bTFDQ@mail.gmail.com>
+ <PA4PR04MB75204E8D2B959893A04D55F388D69@PA4PR04MB7520.eurprd04.prod.outlook.com>
+ <CAFA6WYPGT8xZnB1idcxcHT1bvM=0kwFssBQbn063-qg=czM-ZQ@mail.gmail.com>
+ <CAN5uoS8XgvAKVwKHx-uOe3hAa4Jrd5FJt6xNOG5s-simkRND9w@mail.gmail.com>
+ <c86d1a46af6e076038b3f0c2dd68213ff1e8b254.camel@nxp.com>
+ <CAN5uoS-A8EovbnxvcXqiYHcy95d-PTYUZvnNr3=kf84AGkG8Kw@mail.gmail.com>
+ <f3ccd7ad-0bbb-be39-c989-765552e2c6af@linaro.org>
+ <PA4PR04MB75207FF08A6C2EEC1944FFFE88D79@PA4PR04MB7520.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 4/6] dt-bindings: soc: amlogic: convert
- amlogic,gxbb-clkc.txt to dt-schema
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20230209-b4-amlogic-bindings-convert-take2-v1-0-c4fe9049def9@linaro.org>
- <20230209-b4-amlogic-bindings-convert-take2-v1-4-c4fe9049def9@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230209-b4-amlogic-bindings-convert-take2-v1-4-c4fe9049def9@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <PA4PR04MB75207FF08A6C2EEC1944FFFE88D79@PA4PR04MB7520.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,59 +97,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/02/2023 14:41, Neil Armstrong wrote:
-> Convert the Amlogic Clock Controller bindings to dt-schema.
+Hi,
 
-Subject prefix - clock, not soc.
-
+On Fri, Feb 03, 2023 at 02:13:53PM +0000, Cyrille Fleury wrote:
 > 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../bindings/clock/amlogic,gxbb-clkc.txt           | 53 ----------------------
->  .../bindings/clock/amlogic,gxbb-clkc.yaml          | 51 +++++++++++++++++++++
->  2 files changed, 51 insertions(+), 53 deletions(-)
-
-
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    const: xtal
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - clock-names
-> +  - '#clock-cells'
-> +
-> +unevaluatedProperties: false
-
-additionalProperties: false
-
-> +
-> +examples:
-> +  - |
-> +    sysctrl: system-controller@0 {
-> +        compatible = "amlogic,meson-gx-hhi-sysctrl", "simple-mfd", "syscon";
-> +        reg = <0 0x400>;
-
-Drop the parent node, not needed here. You could even skip the example
-entirely as it is part of your syscon. If you keep example, then without
-parent pieces.
-
-> + 
-> +        clkc: clock-controller {
-> +            compatible = "amlogic,gxbb-clkc";
-> +            #clock-cells = <1>;
-> +            clocks = <&xtal>;
-> +            clock-names = "xtal";
-> +        };
-> +    };
 > 
+> -----Original Message-----
+> From: Jerome Forissier <jerome.forissier@linaro.org>
+> Sent: Friday, February 3, 2023 1:32 PM
+> To: Etienne Carriere <etienne.carriere@linaro.org>; Olivier Masse <olivier.masse@nxp.com>
+> Cc: sumit.garg@linaro.org; linux-media@vger.kernel.org; fredgc@google.com; linaro-mm-sig@lists.linaro.org; afd@ti.com; op-tee@lists.trustedfirmware.org; jens.wiklander@linaro.org; joakim.bech@linaro.org; sumit.semwal@linaro.org; Cyrille Fleury <cyrille.fleury@nxp.com>; Peter Griffin <peter.griffin@linaro.org>; linux-kernel@vger.kernel.org; dri-devel@lists.freedesktop.org; Clément Faure <clement.faure@nxp.com>; christian.koenig@amd.com
+> Subject: Re: [EXT] Re: [PATCH v2 1/1] tee: new ioctl to a register tee_shm from a dmabuf file descriptor
+> 
+> On 2/3/23 15:12, Cyrille Fleury wrote:
+> Hi all,
+> 
+> >On 2/3/23 12:37, Etienne Carriere wrote:
+> >> Hell all,
+> >>
+> >> +jerome f.
+> >>
+> >> On Fri, 3 Feb 2023 at 12:01, Olivier Masse <olivier.masse@nxp.com> wrote:
+> >>>
+> >>> On jeu., 2023-02-02 at 10:58 +0100, Etienne Carriere wrote:
+> >>>> Caution: EXT Email
+> >>>>
+> >>>> On Thu, 2 Feb 2023 at 09:35, Sumit Garg <sumit.garg@linaro.org>
+> >>>> wrote:
+> >>>>> Hi Cyrille,
+> >>>>>
+> >>>>> Please don't top post as it makes it harder to follow-up.
+> >>>>>
+> >>>>> On Thu, 2 Feb 2023 at 13:26, Cyrille Fleury <cyrille.fleury@nxp.com
+> >>>>>> wrote:
+> >>>>>> Hi Sumit, all
+> >>>>>>
+> >>>>>> Upstream OP-TEE should support registering a dmabuf since a while, 
+> >>>>>> given how widely dmabuf is used in Linux for passing buffers 
+> >>>>>> around between devices.
+> >>>>>>
+> >>>>>> Purpose of the new register_tee_shm ioctl is to allow OPTEE to use 
+> >>>>>> memory allocated from the exiting linux dma buffer. We don't need 
+> >>>>>> to have secure dma-heap up streamed.
+> >>>>>>
+> >>>>>> You mentioned secure dma-buffer, but secure dma-buffer is a dma- 
+> >>>>>> buffer, so the work to be done for secure or "regular" dma buffers 
+> >>>>>> by the register_tee_shm ioctl is 100% the same.
+> >>>>>>
+> >>>>>> The scope of this ioctl is limited to what existing upstream dma- 
+> >>>>>> buffers are:
+> >>>>>>         -> sharing buffers for hardware (DMA) access across 
+> >>>>>> multiple device drivers and subsystems, and for synchronizing 
+> >>>>>> asynchronous hardware access.
+> >>>>>>        -> It means continuous memory only.
+> >>>>>>
+> >>>>>> So if we reduce the scope of register tee_shm to exiting dma- 
+> >>>>>> buffer area, the current patch does the job.
+> >>>>>
+> >>>>> Do you have a corresponding real world use-case supported by 
+> >>>>> upstream OP-TEE? AFAIK, the Secure Data Path (SDP) use-case is the 
+> >>>>> one supported in OP-TEE upstream but without secure dmabuf heap [1] 
+> >>>>> available, the new ioctl can't be exercised.
+> >>>>>
+> >>>>> [1] 
+> >>>>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fg
+> >>>>> ithub.com%2FOP-TEE%2Foptee_test%2Fblob%2Fmaster%2Fhost%2Fxtest%2Fsd
+> >>>>> p_basic.h%23L15&data=05%7C01%7Ccyrille.fleury%40nxp.com%7C9ff962fb5
+> >>>>> 8f6401c597808db05e2a64b%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%
+> >>>>> 7C638110243232457377%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLC
+> >>>>> JQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=
+> >>>>> UNB88rvmhQ5qRoIGN%2FpS4cQTES5joM8AjoyAAYzPKl0%3D&reserved=0
+> >>>>
+> >>>> OP-TEE has some SDP test taht can exercice SDP: 'xtest 
+> >>>> regression_1014'.
+> >>>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgi
+> >>>> thub.com%2FOP-TEE%2Foptee_test%2Fblob%2F3.20.0%2Fhost%2Fxtest%2Fregr
+> >>>> ession_1000.c%23L1256&data=05%7C01%7Ccyrille.fleury%40nxp.com%7C9ff9
+> >>>> 62fb58f6401c597808db05e2a64b%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%
+> >>>> 7C0%7C638110243232457377%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDA
+> >>>> iLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdat
+> >>>> a=e%2B40rwWvtvVFG8aWZNeu%2FgjMXXvZ3pRhJfHLkdurovs%3D&reserved=0
+> >>>>
+> >>>> The test relies on old staged ION + local secure dmabuf heaps no 
+> >>>> more maintained, so this test is currently not functional.
+> >>>> If we upgrade the test to mainline dmabuf alloc means, and apply the 
+> >>>> change discussed here, we should be able to regularly test SDP in 
+> >>>> OP-TEE project CI.
+> >>>> The part to update is the userland allocation of the dmabuf:
+> >>>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgi
+> >>>> thub.com%2FOP-TEE%2Foptee_test%2Fblob%2F3.20.0%2Fhost%2Fxtest%2Fsdp_
+> >>>> basic.c%23L91&data=05%7C01%7Ccyrille.fleury%40nxp.com%7C9ff962fb58f6
+> >>>> 401c597808db05e2a64b%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C63
+> >>>> 8110243232457377%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjo
+> >>>> iV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=5rPV1j
+> >>>> qzqjVh2N5pdUW41YwF6EkgIDwfhyfYkgmtdZI%3D&reserved=0
+> >>>>
+> >>>>
+> >>>
+> >>> the test was already updated to support secure dma heap with Kernel 
+> >>> version 5.11 and higher. the userland allocation could be find here:
+> >>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit
+> >>> hub.com%2FOP-TEE%2Foptee_test%2Fblob%2F3.20.0%2Fhost%2Fxtest%2Fsdp_ba
+> >>> sic.c%23L153&data=05%7C01%7Ccyrille.fleury%40nxp.com%7C9ff962fb58f640
+> >>> 1c597808db05e2a64b%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C63811
+> >>> 0243232457377%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2l
+> >>> uMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=01H96n47K6R
+> >>> mBKZQhRdcqX3nE5VBHOXNfGuMmmkVSvc%3D&reserved=0
+> >>>
+> >>
+> >> Oh, right. So fine, optee_test is ready for the new flavor of secure 
+> >> buffer fd's.
+> >>
+> >>
+> >>> This upgrade need a Linux dma-buf patch:
+> >>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flor
+> >>> e.kernel.org%2Fall%2F20220805154139.2qkqxwklufjpsfdx%40000377403353%2
+> >>> FT%2F&data=05%7C01%7Ccyrille.fleury%40nxp.com%7C9ff962fb58f6401c59780
+> >>> 8db05e2a64b%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638110243232
+> >>> 457377%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLC
+> >>> JBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=yCS%2BDcuGp%2BafAL
+> >>> tpw74O1bI0K%2Fwnt%2FOw5ob1ngfDA0E%3D&reserved=0
+> >>
+> >> @Jens, @Jerome, do we want to pick the 2 necessary Linux patches in 
+> >> our Linux kernel fork (github.com/linaro-swg/linux.git) to exercise 
+> >> SDP in our CI and be ready if dma-buf secure heaps (ref right above) 
+> >> is accepted and merged in mainline kernel?.
+> >
+> >How would that help? I mean, when the kernel patches are merged and if things break we can make the necessary adjustments in the optee_test app or whatever, but in the meantime I don't see much point. I suppose the people who are actively developing the patches do make sure it works with OP-TEE ;-)
+> >
+> >Regards,
+> >--
+> >Jerome
+> 
+> As mentioned in the cover letter, this IOCTL got tested by Jens Wiklander <jens.wiklander@linaro.org>, using Linaro reference board from Hikey 6620:
+> https://lists.trustedfirmware.org/archives/list/op-tee@lists.trustedfirmware.org/thread/I3TZN4TBDOUVE567VMMN2TAXGWZNY7S3/
+> It also works on i.MX8M EVK boards.
+> 
+> My understanding today is we are good to upstream this patch, knowing:
+>      - Upstream OPTEE driver should support registering a dmabuf since a while, given how widely dmabuf is used in Linux for passing buffers around between devices.
+>      - review is OK 
+>      - test environment is already available in optee-test
+>      - it has been tested on 2 different platforms
+>      - the scope of the new ioctl is limited to existing feature in dma-buffer
+>      
+> What is missing from this list preventing to upstream ? 
 
-Best regards,
-Krzysztof
+Please address the comments from Etienne and post a new version of the
+patch based on the latest kernel. Please try to improve the language in
+the commit message.
 
+Is it possible to update the tests so this can be tested on QEMU in our
+CI loop? That should help to get the review restarted.
+
+Thanks,
+Jens
+
+> Who do we still need to convince ?
+> 
+> Regards.
