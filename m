@@ -2,117 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2A1694B95
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:48:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA3E694B9D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbjBMPsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:48:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35482 "EHLO
+        id S230095AbjBMPtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:49:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbjBMPsN (ORCPT
+        with ESMTP id S229567AbjBMPtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:48:13 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBAF1C5B4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:48:10 -0800 (PST)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E5D1F3F12A
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 15:48:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1676303286;
-        bh=LS3uJV4RoNcYDITLeaGCVTEoPkqiwpzZCjKSsb4C24g=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=QCxmrpKFEffpsLiIukGsOirx4xadDvWiBBOgTTjdY2v1Jq+HsB6qFmf0eIQinwJh8
-         aojGKsT4KoVPWnYWMkPiKyS/TkNQyxUhwedoPpvVuTtCBAxL+qH21A5tdEZEhZ+gtA
-         3sQXOzMQ/rStx31oZbh99cGyymavXBzogdS9ZB8jN/kv2pS4CVbwBsvjp+O/WWrHP3
-         yqf9TO+VbwfVXUVkvDVMFP+CCeiy+b3JetijbOIUPxJ07vQ8EqkIr34wgJvuJnvKgv
-         hIhUfP7g+L6ia7WiA1VRb/MLfX3Ip/We6pBl8lNrwx33Nt0pf2DzOCJYGiIuRTpNQM
-         A9KdJKTYp++Gw==
-Received: by mail-ej1-f72.google.com with SMTP id qa17-20020a170907869100b0088ea39742c8so7897912ejc.13
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:48:06 -0800 (PST)
+        Mon, 13 Feb 2023 10:49:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57371A665
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:48:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676303327;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/sUpm4OM8C3gUXzYRuakEx3dra1Fn9qudKJHgMzZ+HE=;
+        b=J5k5SDMHiVC13fLqJi66zV7mF0OsNP1qxx1/QWrsjBIuEFf7GMnYTmtcw6SWcl3kU0v1jq
+        ViAbberKHtTZdfYrrtqbhAeucSvtZFoTf1suH8LZjAtm1rk4hV6oUeA+i+/7ow09kfDaU+
+        ukYMgwLZrgVaiQuDBpflrtx6BJJ8oaE=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-331-4F9QiT36NJ2BWQ8nRIUGQA-1; Mon, 13 Feb 2023 10:48:46 -0500
+X-MC-Unique: 4F9QiT36NJ2BWQ8nRIUGQA-1
+Received: by mail-wm1-f69.google.com with SMTP id a20-20020a05600c349400b003dfecb98d38so9363419wmq.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:48:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LS3uJV4RoNcYDITLeaGCVTEoPkqiwpzZCjKSsb4C24g=;
-        b=CoPTarr6M0yOB5PA0GazyzEJe1JTndYGljX7Iuyhmho1a0/ec4B6CMBcJn6aLc2Aum
-         ejqJaV4yZ5fW37aS7yLF69MZDqQsbzcY0r2hiCgk/+YR4oTymUNR7+4/sDSwVbu7ogHo
-         J9v2rk6VVsV2wmG3UjyQsUaFl6hyDB7ZRbakWB61GRYzDBWGxObJEmMPtpNBaypGF9bY
-         sqnAc4QIn1J1p4hUeU9MTR6r8MGwLV+L5Qztml4XnqcOvFFGkJanq7QP7zw0EwvhGGau
-         omaKyRqImmG9Vo0/sqeL1ntzIwKHhXXXwuMPeHl3zgGlllzhLYsv9GYExCHANowBA/DI
-         ZFfQ==
-X-Gm-Message-State: AO0yUKWgydVFEP8JArOrbgdWnUdXNME/8JGlCs3XM1YFICblZr5nRGNK
-        ckB734OF20NUgsq0lqjVlKoXGdWUT8mr8gIz3iaN7JqLT+JRPbF/R6CWLQ8gCp5OHrJp/rdSLH5
-        RQQBLU6jNoIakMRaFadq1OqKoD9/RlZCUX8bXSA5G7A==
-X-Received: by 2002:a17:907:6d1b:b0:8b1:fc:d737 with SMTP id sa27-20020a1709076d1b00b008b100fcd737mr8167201ejc.19.1676303286399;
-        Mon, 13 Feb 2023 07:48:06 -0800 (PST)
-X-Google-Smtp-Source: AK7set/8BhyNgYyInCWuLKLaLzmUGYSgc92oXYQypaK3rCWpKmw3G4blSiKEz6pJhZv18iTKl9fY/Q==
-X-Received: by 2002:a17:907:6d1b:b0:8b1:fc:d737 with SMTP id sa27-20020a1709076d1b00b008b100fcd737mr8167180ejc.19.1676303286144;
-        Mon, 13 Feb 2023 07:48:06 -0800 (PST)
-Received: from localhost (host-87-7-128-191.retail.telecomitalia.it. [87.7.128.191])
-        by smtp.gmail.com with ESMTPSA id kq15-20020a170906abcf00b0086ffe8a00fdsm6928135ejb.84.2023.02.13.07.48.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 07:48:05 -0800 (PST)
-Date:   Mon, 13 Feb 2023 16:48:05 +0100
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Cc:     miguel.ojeda.sandonis@gmail.com, alex.gaynor@gmail.com,
-        bjorn3_gh@protonmail.com, boqun.feng@gmail.com, dxu@dxuuu.xyz,
-        ecurtin@redhat.com, gary@garyguo.net, linux-kernel@vger.kernel.org,
-        ojeda@kernel.org, rust-for-linux@vger.kernel.org,
-        wedsonaf@gmail.com
-Subject: Re: [PATCH] rust: fix regexp in scripts/is_rust_module.sh
-Message-ID: <Y+pbtZUaRM+gkOUC@righiandr-XPS-13-7390>
-References: <'CANiq72=FZtNmYvbb-YPHmQ=bm8rH8VO3M9nemT4i03g9A2PD2Q@mail.gmail.com'>
- <20230213151339.661225-1-yakoyoku@gmail.com>
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/sUpm4OM8C3gUXzYRuakEx3dra1Fn9qudKJHgMzZ+HE=;
+        b=CQGWv+kOno+eusDaXP3j3iRuOBKx1JvEjR2Qfr/1M/XBerqJ93psUlav355sKFigyj
+         XW3D1tj3VgXerTOOIGce73OFPCG+TBqbfqlN/Mk4RtbCi3g5YxxM1hiTegMGHRcHkEdb
+         Ewtoam33qmxj9OteC0WtgndUXwoXYPnUZohV5V26E1/AroquU9VXNiQvfNTQ8aIkQqce
+         UgCxFVCcaXo/kiQ2DguHqZS719u9PzC1szxG8ZAzdPtTQF8WrFWXG+xas5dcFb8Fqr1I
+         lc7qcO9+XefxJw9EEnRsrqo6jIwQoVCNZ+pIFRyqmpGLNnKxfTbKu8V5g8O5Ed+6YfS1
+         IbhA==
+X-Gm-Message-State: AO0yUKWUv4skNFvgLaD+9INY62GajFSwW8QhtDLdJaL+dgB63QSnIDIC
+        ySOQZO4RYQy7uZPKpvk3HGr77m1QioDIdZsBmAJaFhvSXqthlEYZOpNkbDLnMPl7WrWL/pR/NzB
+        Rq5thjYJI0+mvMdoqW2VyJWM+
+X-Received: by 2002:a5d:6e06:0:b0:2c3:e4eb:3c12 with SMTP id h6-20020a5d6e06000000b002c3e4eb3c12mr19179596wrz.64.1676303325548;
+        Mon, 13 Feb 2023 07:48:45 -0800 (PST)
+X-Google-Smtp-Source: AK7set8PhYzgJ6stajpIQWACA5seKzBS2Et14vSbRKWgVli14Fv6m1xvKOhu8wS5pXGt1KWXHAEmJA==
+X-Received: by 2002:a5d:6e06:0:b0:2c3:e4eb:3c12 with SMTP id h6-20020a5d6e06000000b002c3e4eb3c12mr19179579wrz.64.1676303325265;
+        Mon, 13 Feb 2023 07:48:45 -0800 (PST)
+Received: from ?IPV6:2003:cb:c705:6d00:5870:9639:1c17:8162? (p200300cbc7056d00587096391c178162.dip0.t-ipconnect.de. [2003:cb:c705:6d00:5870:9639:1c17:8162])
+        by smtp.gmail.com with ESMTPSA id j16-20020adfff90000000b002c55efa9cbesm1321826wrr.39.2023.02.13.07.48.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 07:48:44 -0800 (PST)
+Message-ID: <463118d9-8db2-7d21-ead5-cb35c10cf3e2@redhat.com>
+Date:   Mon, 13 Feb 2023 16:48:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230213151339.661225-1-yakoyoku@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 2/4] splice: Provide pipe_head_buf() helper
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>
+References: <20230213153301.2338806-1-dhowells@redhat.com>
+ <20230213153301.2338806-3-dhowells@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230213153301.2338806-3-dhowells@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 12:13:39PM -0300, Martin Rodriguez Reboredo wrote:
-> On Mon, Feb 13, 2023 at 1:19 PM Miguel Ojeda <ojeda@kernel.org> wrote:
-> > On Fri, Feb 10, 2023 at 4:26 PM Andrea Righi <andrea.righi@canonical.com> wrote:
-> > >
-> > > nm can use "R" or "r" to show read-only data sections, but
-> > > scripts/is_rust_module.sh can only recognize "r", so with some versions
-> > > of binutils it can fail to detect if a module is a Rust module or not.
-> >
-> > Do you know which versions? If so, it would be nice to document it here.
-> >
-> > > Moreover, with this patch applied I can also relax the constraint of
-> > > "RUST depends on !DEBUG_INFO_BTF" and build a kernel with Rust and BTF
-> > > enabled at the same time (of course BTF generation is still skipped for
-> > > Rust modules).
-> >
-> > Even if that build succeeds, can you load the modules? i.e. the
-> > constraint was there due to
-> > https://github.com/Rust-for-Linux/linux/issues/735.
+On 13.02.23 16:32, David Howells wrote:
+> Provide a helper, pipe_head_buf(), to get the current head buffer from a
+> pipe.  Implement this as a wrapper around a more general function,
+> pipe_buf(), that gets a specified buffer.
 > 
-> Issue was that the kernel couldn't even load C modules, Rust CUs must be
-> skipped in vmlinux for it to work, and because of that the constraint
-> !DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE [1] cannot be relaxed until
-> version 1.24+ of Pahole is the minimum requirement by the kernel. I'm OK
-> with this change but keep in mind that it won't remedy that condition.
-> 
-> Link: https://lore.kernel.org/bpf/20230111152050.559334-1-yakoyoku@gmail.com/ [1]
+> Requested-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Al Viro <viro@zeniv.linux.org.uk>
+> cc: John Hubbard <jhubbard@nvidia.com>
+> cc: David Hildenbrand <david@redhat.com>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: linux-block@vger.kernel.org
+> cc: linux-fsdevel@vger.kernel.org
+> cc: linux-mm@kvack.org
+> ---
 
-Oh yes, I'm using pahole 1.24, that's probably why it's all working for
-me. So we can't just drop !DEBUG_INFO_BTF, but we can definitely relax
-the constraint to "!DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE".
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
--Andrea
+-- 
+Thanks,
+
+David / dhildenb
+
