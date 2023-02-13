@@ -2,208 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FD71694B63
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:39:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2BCC694B66
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbjBMPir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:38:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
+        id S230225AbjBMPjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:39:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjBMPik (ORCPT
+        with ESMTP id S231339AbjBMPi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:38:40 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEBA1A64E
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:38:37 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id EC5EB1F8A3;
-        Mon, 13 Feb 2023 15:38:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1676302715; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aP8MoTcXldOtkjJVyZxNGZTI+G/6BSZkETJURU03Np0=;
-        b=D02GCZ6dssuIno7oX7J/RYqYIQ3FvHLOgg7T47CjfcJrxgXyZKaPD0OpwebtQqh2onVR48
-        3yooK6JOnMQLN4mlTCFk1M8MDuFeXtczPH7BbW+YeW9GPcZiu2CuP/5T6Fp0Pxps9tNLGa
-        FeV4HWnHrvDFo1+2oofi56Pi/HIWkhA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 954551391B;
-        Mon, 13 Feb 2023 15:38:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 0fmnIntZ6mM9KAAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 13 Feb 2023 15:38:35 +0000
-Message-ID: <d9fd5c97-7ef1-b7b1-30a2-0c617841fdf2@suse.com>
-Date:   Mon, 13 Feb 2023 16:38:35 +0100
+        Mon, 13 Feb 2023 10:38:56 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AB41BAD9;
+        Mon, 13 Feb 2023 07:38:47 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id z13so9002434wmp.2;
+        Mon, 13 Feb 2023 07:38:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZQlTtxIUYEHa/ubjSbDgZDFaflLT7rKtPF2clbJjFdQ=;
+        b=IkuG+5VXy1/buVb/yG+3jkuR9GTYgVMLQgivQycLe3nT6NbscEvMR0zVbWKuyyFIqE
+         75CzWiDBmX3R//55dD5CMZHLO35nawl+F7eAdRAHMFbcgwN54o6N4RHSZX4DwDQJtYcX
+         9v/YivZnQp5fuX1YNDvvREKvfYPLpUa9U7YvF6daDlaXa6qS/mKeL0Eejuuv5Hml/8Sf
+         ofNpf/8pOKGtPLP0EP5s2RVfqADQXT8K5zw68jC/AcXS9ECSbOPPoDtQn3mh9M1LGrdJ
+         mE3TXz+ANs4EgOWqeKy6V5QlPDrVpJ0KYhCieuEUtma6DclnGWpM0Ben4PjamNyjLVnK
+         ZFBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZQlTtxIUYEHa/ubjSbDgZDFaflLT7rKtPF2clbJjFdQ=;
+        b=2s+HuRWKyO2t7MniOWFRH6uf8GZqJGGKCgGaKimFbmYg0GuPotZBi5w4LZNpfyfw1m
+         C/X9yGI7FIbIoNZe+akJoSUvyx2aUl/4EQXdfW2fl0uggwz+t2WbzojF/GvWWZF+KoHy
+         2Z3J3HUcwFieZaHjvvPhuLoe1LaPxeBYtigDsYlJ4IxP9LF4U3NbTJLjgXs4jLFKwn5K
+         I/FI00jh7yjYsGVYUqwFHmX+V21OpCFYICKzr0FKW3qsutXTlEcHihLxif8TWHI3FOtk
+         VCMmO17Dtt1rxG/SAN73OHhrzkGH11BXjq/Kckgl80lYSfC7AthoS3G25pZjsIXvVA8S
+         KybQ==
+X-Gm-Message-State: AO0yUKX1Ew3VPT7AIPu2RxRMVyta2lnA7Gc1cCaji5BQvvIKc76UbUq9
+        8Xz39PS8rQrgiVvi7r5qL7A=
+X-Google-Smtp-Source: AK7set/zTcHr+nUd0IzYxEeesl8wx99P2JYnFPRqebR5Ib4Tk7OFyUNhjuNSUh856w9HUz9D5ZSr2g==
+X-Received: by 2002:a05:600c:2e87:b0:3e0:1a9:b1f5 with SMTP id p7-20020a05600c2e8700b003e001a9b1f5mr19081636wmn.28.1676302725704;
+        Mon, 13 Feb 2023 07:38:45 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id f24-20020a05600c491800b003dc0cb5e3f1sm13408900wmp.46.2023.02.13.07.38.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 07:38:45 -0800 (PST)
+Date:   Mon, 13 Feb 2023 18:38:40 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Steen Hegelund <steen.hegelund@microchip.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, UNGLinuxDriver@microchip.com,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Casper Andersson <casper.casan@gmail.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        Nathan Huckleberry <nhuck@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Daniel Machon <daniel.machon@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH net-next 02/10] net: microchip: sparx5: Clear rule
+ counter even if lookup is disabled
+Message-ID: <Y+pZgFMDNrxxaSS9@kadam>
+References: <20230213092426.1331379-1-steen.hegelund@microchip.com>
+ <20230213092426.1331379-3-steen.hegelund@microchip.com>
+ <Y+ofJK2psEnj9QNh@kadam>
+ <c5920cb1f3db053c705a988cf484bbbaa5c3dcfa.camel@microchip.com>
+ <Y+pR4RZ8wJYFgSHL@kadam>
+ <54791f7d5e4211b03a53e890a5d8a678039bec6d.camel@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
- defined MTRRs
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>, Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        lists@nerdbynature.de, mikelley@microsoft.com,
-        torvalds@linux-foundation.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>
-References: <20230209072220.6836-1-jgross@suse.com>
- <20230209072220.6836-3-jgross@suse.com> <Y+ohfE/wICFKO/93@zn.tnic>
- <6257114d-a957-f586-145c-d2a885417360@suse.com> <Y+pRK6a419jenR9R@zn.tnic>
- <Y+pTDFQlX9qNL35z@zn.tnic> <23b851db-a2a6-a854-94fc-a747f360d509@intel.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <23b851db-a2a6-a854-94fc-a747f360d509@intel.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------pDBwy2UnXDgHMaHvz58kg6ic"
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <54791f7d5e4211b03a53e890a5d8a678039bec6d.camel@microchip.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------pDBwy2UnXDgHMaHvz58kg6ic
-Content-Type: multipart/mixed; boundary="------------3UhyzQdidhO7UIiT2jQ0RV8Z";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Dave Hansen <dave.hansen@intel.com>, Borislav Petkov <bp@alien8.de>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org, lists@nerdbynature.de,
- mikelley@microsoft.com, torvalds@linux-foundation.org,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
- "Shutemov, Kirill" <kirill.shutemov@intel.com>
-Message-ID: <d9fd5c97-7ef1-b7b1-30a2-0c617841fdf2@suse.com>
-Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
- defined MTRRs
-References: <20230209072220.6836-1-jgross@suse.com>
- <20230209072220.6836-3-jgross@suse.com> <Y+ohfE/wICFKO/93@zn.tnic>
- <6257114d-a957-f586-145c-d2a885417360@suse.com> <Y+pRK6a419jenR9R@zn.tnic>
- <Y+pTDFQlX9qNL35z@zn.tnic> <23b851db-a2a6-a854-94fc-a747f360d509@intel.com>
-In-Reply-To: <23b851db-a2a6-a854-94fc-a747f360d509@intel.com>
+On Mon, Feb 13, 2023 at 04:32:21PM +0100, Steen Hegelund wrote:
+> There are two writes to the 792 address as the counter recides with the start of
+> the rule (the lowest address of the rule).  Instead of being written after the
+> rule, it is now being written before the rule, so the test array that records
+> the order of the write operations gets changed.
+> 
+> The is2_admin.last_used_addr on the other hand records the "low water mark" of
+> used addresses in the VCAP instance, so it does not change as the rule size is
+> the same.
 
---------------3UhyzQdidhO7UIiT2jQ0RV8Z
-Content-Type: multipart/mixed; boundary="------------14ky1hx6JueEsowu30uK7x10"
+That explains it.  Thanks!
 
---------------14ky1hx6JueEsowu30uK7x10
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-
-T24gMTMuMDIuMjMgMTY6MjcsIERhdmUgSGFuc2VuIHdyb3RlOg0KPiBPbiAyLzEzLzIzIDA3
-OjExLCBCb3Jpc2xhdiBQZXRrb3Ygd3JvdGU6DQo+PiBPbiBNb24sIEZlYiAxMywgMjAyMyBh
-dCAwNDowMzowN1BNICswMTAwLCBCb3Jpc2xhdiBQZXRrb3Ygd3JvdGU6DQo+Pj4+IFdvdWxk
-bid0ICFjcHVfZmVhdHVyZV9lbmFibGVkKFg4Nl9GRUFUVVJFX0hZUEVSVklTT1IpIGJlIGVu
-b3VnaD8NCj4+Pj4NCj4+Pj4gSSdtIG5vdCBzdXJlIHdlIHdvbid0IG5lZWQgdGhhdCBmb3Ig
-VERYIGd1ZXN0cywgdG9vLg0KPj4+IFNlZSwgdGhhdCdzIHRoZSBwcm9ibGVtLiBJIHdhbm5h
-IGhhdmUgaXQgc2ltcGxlIHRvby4gTGVtbWUgY2hlY2sgd2l0aA0KPj4+IGRoYW5zZW4uDQo+
-PiBIZSBzYXlzIE1UUlJzIGFyZSBlbmFibGVkIGluIFREWCBndWVzdHM6ICJYODZfRkVBVFVS
-RV9NVFJSIGlzIGZpeGVkIHRvDQo+PiAxIGluIFREWCBndWVzdHMuIg0KPj4NCj4+IFNvIHdl
-IHdpbGwgaGF2ZSB0byBkbyB0aGUgbW9yZSBmaW5lci1ncmFpbmVkIGNoZWNrIEkgZ3Vlc3Mu
-DQo+IA0KPiBZZXMsIFREWCBndWVzdHMgc2VlIE1UUlJzIGFzIGJlaW5nIHN1cHBvcnRlZC4g
-IEJ1dCwgdGhlIFREWCBtb2R1bGUgYWxzbw0KPiBhcHBlYXJzIHRvIGluamVjdCBhICNWRSBm
-b3IgYWxsIFJETVNSIG9yIFdSTVNSJ3MgdG8gdGhlIE1UUlJzLiAgVGhhdA0KPiBtYWtlcyB0
-aGVtIGVmZmVjdGl2ZWx5IHVzZWxlc3MuDQo+IA0KPiBJIGFjdHVhbGx5IGRvbid0IGtub3cg
-d2hhdCB0aGUgaGVjayBURFggZ3Vlc3RzIGFyZSBzdXBwb3NlZCB0byBkbyBpZg0KPiB0aGV5
-IGZlZWwgbGlrZSBtdWNraW5nIHdpdGggdGhlIE1TUnMuICBUaGUgYXJjaGl0ZWN0dXJlIChD
-UFVJRCkgaXMNCj4gZXNzZW50aWFsbHkgdGVsbGluZyB0aGVtOiAiU3VyZSwgZ28gYWhlYWQg
-TVRSUnMgYXJlIGZpaWlpaWlpbmUiLiAgQnV0DQo+IHRoZSBURFggbW9kdWxlIGlzIHNpdHRp
-bmcgdGhlcmUgdGhyb3dpbmcgZXhjZXB0aW9ucyAoI1ZFKSBpZiB0aGUgZ3Vlc3QNCj4gdHJp
-ZXMgdG8gdG91Y2ggTVRSUnMuDQo+IA0KPiBJdCBzb3VuZHMgbGlrZSB0aGVyZSBhcmUgc29t
-ZSBndWVzdDwtPmhvc3QgQUJJcyBvbiBYZW4gdG8gaGVscCB0aGUNCj4gZ3Vlc3RzIGRvIHRo
-aXMuICBCdXQgSSBkb24ndCBzZWUgYW55dGhpbmcgaW4gdGhlIFREWCAiR0hDSSIgYWJvdXQg
-aXQuDQoNClRoaXMgaXMgaW4gbGluZSBvZiB0aGUgUEFUIGluaXQgc2VxdWVuY2Ugb2YgVERY
-IGd1ZXN0cy4gUEFUIGlzIHNhaWQgdG8NCmJlIHN1cHBvcnRlZCwgYnV0IGEgVERYIGd1ZXN0
-IGNhbid0IHVzZSB0aGUgc2VxdWVuY2UgYXMgd3JpdHRlbiBpbiB0aGUNClNETSBmb3Igc2V0
-dGluZyB0aGUgUEFUIE1TUiAoZGlzYWJsZSBjYWNoZXMsIGV0Yy4pLg0KDQoNCkp1ZXJnZW4N
-Cg==
---------------14ky1hx6JueEsowu30uK7x10
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjri
-oyspZKOBycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2
-kaV2KL9650I1SJvedYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i
-1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/B
-BLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xqG7/377qptDmrk42GlSK
-N4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR3Jvc3Mg
-PGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsE
-FgIDAQIeAQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4F
-UGNQH2lvWAUy+dnyThpwdtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3Tye
-vpB0CA3dbBQp0OW0fgCetToGIQrg0MbD1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u
-+6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbvoPHZ8SlM4KWm8rG+lIkGurq
-qu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v5QL+qHI3EIP
-tyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVy
-Z2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJ
-CAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4
-RF7HoZhPVPogNVbC4YA6lW7DrWf0teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz7
-8X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC/nuAFVGy+67q2DH8As3KPu0344T
-BDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0LhITTd9jLzdDad1pQ
-SToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLmXBK
-7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkM
-nQfvUewRz80hSnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMB
-AgAjBQJTjHDXAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/
-Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJnFOXgMLdBQgBlVPO3/D9R8LtF9DBAFPN
-hlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1jnDkfJZr6jrbjgyoZHi
-w/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0N51N5Jf
-VRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwP
-OoE+lotufe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK
-/1xMI3/+8jbO0tsn1tqSEUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1
-c2UuZGU+wsB5BBMBAgAjBQJTjHDrAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgEC
-F4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3g3OZUEBmDHVVbqMtzwlmNC4
-k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5dM7wRqzgJpJ
-wK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu
-5D+jLRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzB
-TNh30FVKK1EvmV2xAKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37Io
-N1EblHI//x/e2AaIHpzK5h88NEawQsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6
-AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpWnHIs98ndPUDpnoxWQugJ6MpMncr
-0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZRwgnBC5mVM6JjQ5x
-Dk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNVbVF
-LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mm
-we0icXKLkpEdIXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0I
-v3OOImwTEe4co3c1mwARAQABwsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMv
-Q/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEwTbe8YFsw2V/Buv6Z4Mysln3nQK5ZadD
-534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1vJzQ1fOU8lYFpZXTXIH
-b+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8VGiwXvT
-yJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqc
-suylWsviuGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5B
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------14ky1hx6JueEsowu30uK7x10--
-
---------------3UhyzQdidhO7UIiT2jQ0RV8Z--
-
---------------pDBwy2UnXDgHMaHvz58kg6ic
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPqWXsFAwAAAAAACgkQsN6d1ii/Ey/s
-KAf+NhbK3eBxuspF38rQM8BxGIEf7S54Vc0ja88WG+6FvQmX5d/vmGTGRg4R52et/Plbjmsa2ju1
-UorBkQrBah+A/FdWIepOp4eFWoWJDlRAmGTE/NVtwm8R2FGTRgwA0P7D/9iQppTBZS9+x2X3rWkS
-8sfktSFbMY49Acjrt8emApDpJGxU6ypwW3uZGvZ6bniNbysEYkVAevbQeanQi+wkBOyDi0likkTi
-mFUVgeMxAj4Qj5Ash8KncQVTPX6gV4bkO1uUy5+TlylsO6+UQnJJ2N51mepzrjL6mH0ov2/d9HSr
-tsc++4LjR7tw1+CusGLgSyD5q524AA/jDVIAw1cVeQ==
-=H5Bu
------END PGP SIGNATURE-----
-
---------------pDBwy2UnXDgHMaHvz58kg6ic--
+regards,
+dan carpenter
