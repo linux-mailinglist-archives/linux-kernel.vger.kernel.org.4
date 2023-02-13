@@ -2,160 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB99695504
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 00:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51EFC695507
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 00:50:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231256AbjBMXuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 18:50:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
+        id S231287AbjBMXuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 18:50:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbjBMXum (ORCPT
+        with ESMTP id S231269AbjBMXuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 18:50:42 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B8318AA3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 15:50:16 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id i137so7482550ybg.4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 15:50:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/FT+wytgM0VWNp2khoBQRK6+3iQndNyjsjvLj9/BF0o=;
-        b=YX6UBeGBrDsSaPExb1/m/al7La5LF8ds9CzmACNP5wZ3A7aRy0S5n5EYAboZE1AVYk
-         LKnS6iCpkm+NCAJRfgXMBPAAee82MANl6z9Egn3HBQL8+DDTloIoKF1hf0rqhrRR3Z4Q
-         HDEumfMrljpTLskBJLusW4Aux5ztIp5pSnmGrygyRElhRq2bGknFQFca17kbpN+mn/uI
-         /pNjKVTVOxwi4EedxjiXrKLI/5GAUFJ1uKqMaYfPHvKEbtrVEK7s574QvJ6sxN6KuPpK
-         GF3ID5mQGWn/fj5+twl9PJdyzo8T2o7cl8RC5jgz4gthQhBLpoFPgZzJzgFk0EPvzo7B
-         yg6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/FT+wytgM0VWNp2khoBQRK6+3iQndNyjsjvLj9/BF0o=;
-        b=vYeFue9ZMm2n7JFEfTDKEeRfM0TL04rW/krN87x4eaix6wLrvUhHdSZTG5AJJGIzHH
-         0aR8SjdvVvtAm99dLV8heqGroXLETYsVOL4JFGYmquJo0PyZ9gdY3tgQkZNtoTc48iS7
-         cFUdnRVdm4d6B2HAtwydA2d7KCwmmMBE2SfnmyU0ozLTFj9R4PdVxMvJ8QAAzTYg8pPn
-         F6kV3pKeccqH3WSXqbBG0iOwjhaDfUQ085qj6ov/9H26rXjnaWbygsT4BcaSuKVGZZXi
-         KddQ0HRwSJ9kPqsmudf21LmuQCJSsLc3zNCk7jbdHXqxBK2Duujz0feR9qnEMKZmDtj6
-         LhyA==
-X-Gm-Message-State: AO0yUKWBS6QrO8cphXr3yxtTsI/10nbA99oe+2dF75QwPvgmz4bNNOGR
-        iYI4UEU9i2R2vq8o+Hg7I5HbUINOU70XxXgTDSLrfQ==
-X-Google-Smtp-Source: AK7set9YvqKjU6/vp0rfYhefce64PiRsLuVzPrjuRi58c5zUNgAb80Bye1pFfse0I4QrxilSLOi+TmkNQydBgyh36MQ=
-X-Received: by 2002:a05:6902:52a:b0:900:c3fd:a078 with SMTP id
- y10-20020a056902052a00b00900c3fda078mr76541ybs.657.1676332215989; Mon, 13 Feb
- 2023 15:50:15 -0800 (PST)
+        Mon, 13 Feb 2023 18:50:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACCC17176;
+        Mon, 13 Feb 2023 15:50:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30736B81A2C;
+        Mon, 13 Feb 2023 23:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90339C433D2;
+        Mon, 13 Feb 2023 23:50:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676332215;
+        bh=nZoqCIzntooHyG/7O/cvPGIWw/MK4HLeMmg+I6toqr0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NblVv/QUcjtqg2tOds2OzXshr7zDMAYVBBYrAQxu4adZj8UawL4mMLfGSM3G5jY1G
+         b2mjr6+q9bB0DA2XMaoJqNFfpguLJRdSfQeaTBlGczj6tLSOGrdhPTtZDFht+G8r64
+         JGOup4IWFJ5BhjQvd6OoWZP2Z3wzI5cIJK89CD20rMV9ZpGE9V7BFrE+M+C0m3bn1n
+         iwdtwAkWsETBTZKRpv/pEu5qWvTYeCB+1bVNRf9g2np5R27ZrM1vIVSZWPk9U6TjDx
+         aOtxcef29tACnHbigA24xFmqh63cdfzcehNeWe1PA+JwAqY3SuSzxIjeut1UIyldxH
+         d3fGix6veS3+g==
+Date:   Mon, 13 Feb 2023 17:50:14 -0600
+From:   Seth Forshee <sforshee@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     shuah@kernel.org, brauner@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/mount_setattr: fix redefine struct mount_attr
+ build error
+Message-ID: <Y+rMtlvx31w7eWCA@do-x1extreme>
+References: <20230213183149.231779-1-skhan@linuxfoundation.org>
 MIME-Version: 1.0
-References: <CAJuCfpFZ3B4530TgsSHqp5F_gwfrDujwRYewKReJru==MdEHQg@mail.gmail.com>
- <20230202030023.1847084-1-kamatam@amazon.com> <Y9tCl4r/qjqsrVj9@sol.localdomain>
- <CAJuCfpFb0J5ZwO6kncjRG0_4jQLXUy-_dicpH5uGiWP8aKYEJQ@mail.gmail.com>
- <CAJuCfpH4aAAfEJeFzZSGsifhFNCpzZ17MEzXtxhZqoX04jrWbA@mail.gmail.com>
- <Y+U/k678tB5w5hJP@gmail.com> <CAJuCfpECvLiEdp+VfDo=_ZmhakEbtL2JzcwDfFahUk4XBOYNpg@mail.gmail.com>
-In-Reply-To: <CAJuCfpECvLiEdp+VfDo=_ZmhakEbtL2JzcwDfFahUk4XBOYNpg@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 13 Feb 2023 15:50:05 -0800
-Message-ID: <CAJuCfpHa+RhNk_-C=c=E8opF7mR2tnpd-KyhaXCQ8XnKvwVXoQ@mail.gmail.com>
-Subject: Re: [PATCH] sched/psi: fix use-after-free in ep_remove_wait_queue()
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Munehisa Kamata <kamatam@amazon.com>, hannes@cmpxchg.org,
-        hdanton@sina.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        mengcc@amazon.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230213183149.231779-1-skhan@linuxfoundation.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 9, 2023 at 11:13 AM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Thu, Feb 9, 2023 at 10:46 AM Eric Biggers <ebiggers@kernel.org> wrote:
-> >
-> > On Thu, Feb 09, 2023 at 09:09:03AM -0800, Suren Baghdasaryan wrote:
-> > > On Thu, Feb 2, 2023 at 1:11 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> > > >
-> > > > On Wed, Feb 1, 2023 at 8:56 PM Eric Biggers <ebiggers@kernel.org> wrote:
-> > > > >
-> > > > > On Wed, Feb 01, 2023 at 07:00:23PM -0800, Munehisa Kamata wrote:
-> > > > > > diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> > > > > > index 8ac8b81bfee6..6e66c15f6450 100644
-> > > > > > --- a/kernel/sched/psi.c
-> > > > > > +++ b/kernel/sched/psi.c
-> > > > > > @@ -1343,10 +1343,11 @@ void psi_trigger_destroy(struct psi_trigger *t)
-> > > > > >
-> > > > > >       group = t->group;
-> > > > > >       /*
-> > > > > > -      * Wakeup waiters to stop polling. Can happen if cgroup is deleted
-> > > > > > -      * from under a polling process.
-> > > > > > +      * Wakeup waiters to stop polling and clear the queue to prevent it from
-> > > > > > +      * being accessed later. Can happen if cgroup is deleted from under a
-> > > > > > +      * polling process otherwise.
-> > > > > >        */
-> > > > > > -     wake_up_interruptible(&t->event_wait);
-> > > > > > +     wake_up_pollfree(&t->event_wait);
-> > > > > >
-> > > > > >       mutex_lock(&group->trigger_lock);
-> > > > >
-> > > > > wake_up_pollfree() should only be used in extremely rare cases.  Why can't the
-> > > > > lifetime of the waitqueue be fixed instead?
-> > > >
-> > > > waitqueue lifetime in this case is linked to cgroup_file_release(),
-> > > > which seems appropriate to me here. Unfortunately
-> > > > cgroup_file_release() is not directly linked to the file's lifetime.
-> > > > For more details see:
-> > > > https://lore.kernel.org/all/CAJuCfpFZ3B4530TgsSHqp5F_gwfrDujwRYewKReJru==MdEHQg@mail.gmail.com/#t
-> > > > .
-> > > > So, if we want to fix the lifetime of the waitqueue, we would have to
-> > > > tie cgroup_file_release() to the fput() somehow. IOW, the fix would
-> > > > have to be done at the cgroups or higher (kernfs?) layer.
-> > >
-> > > Hi Eric,
-> > > Do you still object to using wake_up_pollfree() for this case?
-> > > Changing higher levels to make cgroup_file_release() be tied to fput()
-> > > would be ideal but I think that would be a big change for this one
-> > > case. If you agree I'll Ack this patch.
-> > > Thanks,
-> > > Suren.
-> > >
-> >
-> > I haven't read the code closely in this case.  I'm just letting you know that
-> > wake_up_pollfree() is very much a last-resort option for when the waitqueue
-> > lifetime can't be fixed.
->
-> Got it. Thanks for the warning.
-> I think it can be fixed but the right fix would require a sizable
-> higher level refactoring which might be more justifiable if we have
-> more such cases in the future.
->
-> >  So if you want to use wake_up_pollfree(), you need to
-> > explain why no other fix is possible.  For example maybe the UAPI depends on the
-> > waitqueue having a nonstandard lifetime.
->
-> I think the changelog should explain that the waitqueue lifetime in
-> cases of non-root cgroups is tied to cgroup_file_release() callback,
-> which in turn is not tied to file's lifetime. That's the reason for
-> waitqueue and the file having different lifecycles. Would that suffice
-> as the justification?
+On Mon, Feb 13, 2023 at 11:31:49AM -0700, Shuah Khan wrote:
+> Fix the following build error due to redefining struct mount_attr by
+> removing duplicate define from mount_setattr_test.c
+> 
+> gcc -g -isystem .../tools/testing/selftests/../../../usr/include -Wall -O2 -pthread     mount_setattr_test.c  -o .../tools/testing/selftests/mount_setattr/mount_setattr_test
+> mount_setattr_test.c:107:8: error: redefinition of ‘struct mount_attr’
+>   107 | struct mount_attr {
+>       |        ^~~~~~~~~~
+> In file included from /usr/include/x86_64-linux-gnu/sys/mount.h:32,
+>                  from mount_setattr_test.c:10:
+> .../usr/include/linux/mount.h:129:8: note: originally defined here
+>   129 | struct mount_attr {
+>       |        ^~~~~~~~~~
+> make: *** [../lib.mk:145: .../tools/testing/selftests/mount_setattr/mount_setattr_test] Error 1
+> 
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+> ---
+>  tools/testing/selftests/mount_setattr/mount_setattr_test.c | 7 -------
+>  1 file changed, 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+> index 8c5fea68ae67..582669ca38e9 100644
+> --- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+> +++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+> @@ -103,13 +103,6 @@
+>  	#else
+>  		#define __NR_mount_setattr 442
+>  	#endif
+> -
+> -struct mount_attr {
+> -	__u64 attr_set;
+> -	__u64 attr_clr;
+> -	__u64 propagation;
+> -	__u64 userns_fd;
+> -};
+>  #endif
 
-Ok, in the absence of objections, I would suggest resending this patch
-with the changelog including details about waitqueue lifetime and
-reasons wake_up_pollfree() is required here.
-Munehisa, feel free to reuse
-https://lore.kernel.org/all/CAJuCfpFZ3B4530TgsSHqp5F_gwfrDujwRYewKReJru==MdEHQg@mail.gmail.com/#t
-if you find it useful.
-Thanks,
-Suren.
+The difficulty with this is that whether or not you need this definition
+depends on your system headers. My laptop doesn't have definitions for
+either __NR_mount_setattr or struct mount_attr, so for me the build
+works without this patch but fails with it.
 
-> Again, I'm not saying that no other fix is possible, but that the
-> right fix would be much more complex.
-> Thanks,
-> Suren.
->
-> >
-> > - Eric
+I suppose we could fix this universally by using a different name for
+the struct in the test, e.g.:
+
+diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+index 8c5fea68ae67..0658129d526e 100644
+--- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
++++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+@@ -103,13 +103,6 @@
+ 	#else
+ 		#define __NR_mount_setattr 442
+ 	#endif
+-
+-struct mount_attr {
+-	__u64 attr_set;
+-	__u64 attr_clr;
+-	__u64 propagation;
+-	__u64 userns_fd;
+-};
+ #endif
+ 
+ #ifndef __NR_open_tree
+@@ -132,6 +125,13 @@ struct mount_attr {
+ 	#endif
+ #endif
+ 
++struct __mount_attr {
++	__u64 attr_set;
++	__u64 attr_clr;
++	__u64 propagation;
++	__u64 userns_fd;
++};
++
+ #ifndef MOUNT_ATTR_IDMAP
+ #define MOUNT_ATTR_IDMAP 0x00100000
+ #endif
+@@ -141,7 +141,7 @@ struct mount_attr {
+ #endif
+ 
+ static inline int sys_mount_setattr(int dfd, const char *path, unsigned int flags,
+-				    struct mount_attr *attr, size_t size)
++				    struct __mount_attr *attr, size_t size)
+ {
+ 	return syscall(__NR_mount_setattr, dfd, path, flags, attr, size);
+ }
+@@ -347,7 +347,7 @@ static bool is_shared_mount(const char *path)
+ 
+ static void *mount_setattr_thread(void *data)
+ {
+-	struct mount_attr attr = {
++	struct __mount_attr attr = {
+ 		.attr_set	= MOUNT_ATTR_RDONLY | MOUNT_ATTR_NOSUID,
+ 		.attr_clr	= 0,
+ 		.propagation	= MS_SHARED,
+@@ -445,7 +445,7 @@ FIXTURE_TEARDOWN(mount_setattr)
+ 
+ TEST_F(mount_setattr, invalid_attributes)
+ {
+-	struct mount_attr invalid_attr = {
++	struct __mount_attr invalid_attr = {
+ 		.attr_set = (1U << 31),
+ 	};
+ 
+@@ -479,11 +479,11 @@ TEST_F(mount_setattr, extensibility)
+ {
+ 	unsigned int old_flags = 0, new_flags = 0, expected_flags = 0;
+ 	char *s = "dummy";
+-	struct mount_attr invalid_attr = {};
++	struct __mount_attr invalid_attr = {};
+ 	struct mount_attr_large {
+-		struct mount_attr attr1;
+-		struct mount_attr attr2;
+-		struct mount_attr attr3;
++		struct __mount_attr attr1;
++		struct __mount_attr attr2;
++		struct __mount_attr attr3;
+ 	} large_attr = {};
+ 
+ 	if (!mount_setattr_supported())
+@@ -542,7 +542,7 @@ TEST_F(mount_setattr, extensibility)
+ TEST_F(mount_setattr, basic)
+ {
+ 	unsigned int old_flags = 0, new_flags = 0, expected_flags = 0;
+-	struct mount_attr attr = {
++	struct __mount_attr attr = {
+ 		.attr_set	= MOUNT_ATTR_RDONLY | MOUNT_ATTR_NOEXEC | MOUNT_ATTR_RELATIME,
+ 		.attr_clr	= MOUNT_ATTR__ATIME,
+ 	};
+@@ -578,7 +578,7 @@ TEST_F(mount_setattr, basic_recursive)
+ {
+ 	int fd;
+ 	unsigned int old_flags = 0, new_flags = 0, expected_flags = 0;
+-	struct mount_attr attr = {
++	struct __mount_attr attr = {
+ 		.attr_set	= MOUNT_ATTR_RDONLY | MOUNT_ATTR_NOEXEC | MOUNT_ATTR_RELATIME,
+ 		.attr_clr	= MOUNT_ATTR__ATIME,
+ 	};
+@@ -672,7 +672,7 @@ TEST_F(mount_setattr, mount_has_writers)
+ {
+ 	int fd, dfd;
+ 	unsigned int old_flags = 0, new_flags = 0;
+-	struct mount_attr attr = {
++	struct __mount_attr attr = {
+ 		.attr_set	= MOUNT_ATTR_RDONLY | MOUNT_ATTR_NOEXEC | MOUNT_ATTR_RELATIME,
+ 		.attr_clr	= MOUNT_ATTR__ATIME,
+ 		.propagation	= MS_SHARED,
+@@ -729,7 +729,7 @@ TEST_F(mount_setattr, mount_has_writers)
+ TEST_F(mount_setattr, mixed_mount_options)
+ {
+ 	unsigned int old_flags1 = 0, old_flags2 = 0, new_flags = 0, expected_flags = 0;
+-	struct mount_attr attr = {
++	struct __mount_attr attr = {
+ 		.attr_clr = MOUNT_ATTR_RDONLY | MOUNT_ATTR_NOSUID | MOUNT_ATTR_NOEXEC | MOUNT_ATTR__ATIME,
+ 		.attr_set = MOUNT_ATTR_RELATIME,
+ 	};
+@@ -763,7 +763,7 @@ TEST_F(mount_setattr, mixed_mount_options)
+ TEST_F(mount_setattr, time_changes)
+ {
+ 	unsigned int old_flags = 0, new_flags = 0, expected_flags = 0;
+-	struct mount_attr attr = {
++	struct __mount_attr attr = {
+ 		.attr_set	= MOUNT_ATTR_NODIRATIME | MOUNT_ATTR_NOATIME,
+ 	};
+ 
+@@ -967,7 +967,7 @@ TEST_F(mount_setattr, multi_threaded)
+ TEST_F(mount_setattr, wrong_user_namespace)
+ {
+ 	int ret;
+-	struct mount_attr attr = {
++	struct __mount_attr attr = {
+ 		.attr_set = MOUNT_ATTR_RDONLY,
+ 	};
+ 
+@@ -983,7 +983,7 @@ TEST_F(mount_setattr, wrong_user_namespace)
+ TEST_F(mount_setattr, wrong_mount_namespace)
+ {
+ 	int fd, ret;
+-	struct mount_attr attr = {
++	struct __mount_attr attr = {
+ 		.attr_set = MOUNT_ATTR_RDONLY,
+ 	};
+ 
+@@ -1074,7 +1074,7 @@ FIXTURE_TEARDOWN(mount_setattr_idmapped)
+  */
+ TEST_F(mount_setattr_idmapped, invalid_fd_negative)
+ {
+-	struct mount_attr attr = {
++	struct __mount_attr attr = {
+ 		.attr_set	= MOUNT_ATTR_IDMAP,
+ 		.userns_fd	= -EBADF,
+ 	};
+@@ -1092,7 +1092,7 @@ TEST_F(mount_setattr_idmapped, invalid_fd_negative)
+  */
+ TEST_F(mount_setattr_idmapped, invalid_fd_large)
+ {
+-	struct mount_attr attr = {
++	struct __mount_attr attr = {
+ 		.attr_set	= MOUNT_ATTR_IDMAP,
+ 		.userns_fd	= INT64_MAX,
+ 	};
+@@ -1111,7 +1111,7 @@ TEST_F(mount_setattr_idmapped, invalid_fd_large)
+ TEST_F(mount_setattr_idmapped, invalid_fd_closed)
+ {
+ 	int fd;
+-	struct mount_attr attr = {
++	struct __mount_attr attr = {
+ 		.attr_set = MOUNT_ATTR_IDMAP,
+ 	};
+ 
+@@ -1134,7 +1134,7 @@ TEST_F(mount_setattr_idmapped, invalid_fd_closed)
+ TEST_F(mount_setattr_idmapped, invalid_fd_initial_userns)
+ {
+ 	int open_tree_fd = -EBADF;
+-	struct mount_attr attr = {
++	struct __mount_attr attr = {
+ 		.attr_set = MOUNT_ATTR_IDMAP,
+ 	};
+ 
+@@ -1243,7 +1243,7 @@ static int get_userns_fd(unsigned long nsid, unsigned long hostid, unsigned long
+ TEST_F(mount_setattr_idmapped, attached_mount_inside_current_mount_namespace)
+ {
+ 	int open_tree_fd = -EBADF;
+-	struct mount_attr attr = {
++	struct __mount_attr attr = {
+ 		.attr_set = MOUNT_ATTR_IDMAP,
+ 	};
+ 
+@@ -1273,7 +1273,7 @@ TEST_F(mount_setattr_idmapped, attached_mount_inside_current_mount_namespace)
+ TEST_F(mount_setattr_idmapped, attached_mount_outside_current_mount_namespace)
+ {
+ 	int open_tree_fd = -EBADF;
+-	struct mount_attr attr = {
++	struct __mount_attr attr = {
+ 		.attr_set = MOUNT_ATTR_IDMAP,
+ 	};
+ 
+@@ -1303,7 +1303,7 @@ TEST_F(mount_setattr_idmapped, attached_mount_outside_current_mount_namespace)
+ TEST_F(mount_setattr_idmapped, detached_mount_inside_current_mount_namespace)
+ {
+ 	int open_tree_fd = -EBADF;
+-	struct mount_attr attr = {
++	struct __mount_attr attr = {
+ 		.attr_set = MOUNT_ATTR_IDMAP,
+ 	};
+ 
+@@ -1333,7 +1333,7 @@ TEST_F(mount_setattr_idmapped, detached_mount_inside_current_mount_namespace)
+ TEST_F(mount_setattr_idmapped, detached_mount_outside_current_mount_namespace)
+ {
+ 	int open_tree_fd = -EBADF;
+-	struct mount_attr attr = {
++	struct __mount_attr attr = {
+ 		.attr_set = MOUNT_ATTR_IDMAP,
+ 	};
+ 
+@@ -1365,7 +1365,7 @@ TEST_F(mount_setattr_idmapped, detached_mount_outside_current_mount_namespace)
+ TEST_F(mount_setattr_idmapped, change_idmapping)
+ {
+ 	int open_tree_fd = -EBADF;
+-	struct mount_attr attr = {
++	struct __mount_attr attr = {
+ 		.attr_set = MOUNT_ATTR_IDMAP,
+ 	};
+ 
+@@ -1410,7 +1410,7 @@ static bool expected_uid_gid(int dfd, const char *path, int flags,
+ TEST_F(mount_setattr_idmapped, idmap_mount_tree_invalid)
+ {
+ 	int open_tree_fd = -EBADF;
+-	struct mount_attr attr = {
++	struct __mount_attr attr = {
+ 		.attr_set = MOUNT_ATTR_IDMAP,
+ 	};
+ 
+@@ -1445,7 +1445,7 @@ TEST_F(mount_setattr, mount_attr_nosymfollow)
+ {
+ 	int fd;
+ 	unsigned int old_flags = 0, new_flags = 0, expected_flags = 0;
+-	struct mount_attr attr = {
++	struct __mount_attr attr = {
+ 		.attr_set	= MOUNT_ATTR_NOSYMFOLLOW,
+ 	};
