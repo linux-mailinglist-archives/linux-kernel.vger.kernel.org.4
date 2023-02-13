@@ -2,121 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D376942D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:28:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 859926942DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:29:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbjBMK2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 05:28:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
+        id S229932AbjBMK3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 05:29:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjBMK2K (ORCPT
+        with ESMTP id S230013AbjBMK3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 05:28:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58C617CF4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:27:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676284039;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=3CE4eMa3FyiLCFaW2IEzgSX8SFgyrVdO0vnWlAIO6nA=;
-        b=KtLqC/T6lblPbvys/TJAD2zGYAVz33AeFShPXhkFThIZgH6fUbcuwG42DDEQocxJYfk/cZ
-        bvD+ESaAXhjXn3+fG8dn+8ga23VAoR/+QHXXUkrpQxEjLQd5O/O7B2jCRQ4rMjphgm90EF
-        MFLLOZSMUWNXBaNvF0P7XBIDswOCbb0=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-591-yr7U-x29PUugnTwny-zCow-1; Mon, 13 Feb 2023 05:27:17 -0500
-X-MC-Unique: yr7U-x29PUugnTwny-zCow-1
-Received: by mail-ej1-f69.google.com with SMTP id d14-20020a170906c20e00b00889f989d8deso7389786ejz.15
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:27:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3CE4eMa3FyiLCFaW2IEzgSX8SFgyrVdO0vnWlAIO6nA=;
-        b=PjrWk57zRpitOyTpS+tRgWniviRVSrCSSqwu17SHic4xXgBlsyMuJADOS17hltHr7z
-         F8f9asP94eQVDYR3U2PyCmcdSy8IXboehj9J3MHf6/IZufkBpKP4X2/JfcqWbrK+EOjj
-         KXcfMIec/i8DigD00i0dkds/2U+9DvGSLNbDowLmIybYOJwdPAEp3AemufRdzdKSxE6c
-         vCjGkvam6doALt7BONEOWJCWSMaBb6H/WxcNbtc2dGNbFmAoH034rBiDxrXZ9Mc6Ao7R
-         ZdNWClJiu9GCwsoSJYbnQMasFxikqQej8lv6XSdl8LKIZrjQ2itQyQdeSHByF5tRsq13
-         JIwA==
-X-Gm-Message-State: AO0yUKXv8ipmX3hKeU9w0EyfHGjJtDe5t2dEvzrIExFRUqhWDg46pgxO
-        1bnYE9K4rjG9Dyu73vq6Lw9oCvDRgaiVliULZQbv23i0/vtv4RRzFI2p8b11YNp+LOId3haXAP7
-        Dn0nM5b2w+LvuK71Je/wxj+tt
-X-Received: by 2002:a50:f68f:0:b0:4ac:bd71:c595 with SMTP id d15-20020a50f68f000000b004acbd71c595mr6052587edn.23.1676284036689;
-        Mon, 13 Feb 2023 02:27:16 -0800 (PST)
-X-Google-Smtp-Source: AK7set9QGHi+YsmDnD9yqlqMdgEAeBYm8x6qQMbITvCHZ+TrYaMAuKZ6VJkCEQkGSU7621PEz/lV3Q==
-X-Received: by 2002:a50:f68f:0:b0:4ac:bd71:c595 with SMTP id d15-20020a50f68f000000b004acbd71c595mr6052581edn.23.1676284036572;
-        Mon, 13 Feb 2023 02:27:16 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id t18-20020a50c252000000b0049148f6461dsm6340025edf.65.2023.02.13.02.27.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 02:27:16 -0800 (PST)
-Message-ID: <06020103-8bbb-c02f-f59a-b4cad88d9184@redhat.com>
-Date:   Mon, 13 Feb 2023 11:27:15 +0100
+        Mon, 13 Feb 2023 05:29:48 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3121CC37;
+        Mon, 13 Feb 2023 02:29:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676284186; x=1707820186;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Nf320NwdQ3AvlMHzKHnvarphv0YLb22mbr/M6SepNEc=;
+  b=FUtY7NQBjw7ObfbaCuwUnZZzjGdTMusfF45YZ1lHfY6Op/vCMeL+0PXm
+   HPKqUWGIqf23P/5oqXVUjgDegA6OGWoWnXBpulurj1NKZB2ghW4weoqv0
+   pPautJzk+vVkGE/az2mBj6CLibb5LUYJHLMZAICJ0RU0Xnp+Zkk6XM0FV
+   qAnZxRr2kP74JPdoMckx+DlK/aB4Tksspp+94Yzjsm0jasJYloc+lvMJd
+   4JC+tTRquDn5jzgmccdCSbAjYeAciWvw92rZgiD14L3C8J6tIj0rbYKpF
+   d9P5qDXkkxhF2GJqP7WsGJ6EcYO7yAvrz8VMWSuMVjXOHL0ptUmDui74B
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="314502140"
+X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
+   d="scan'208";a="314502140"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 02:29:46 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="811540812"
+X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
+   d="scan'208";a="811540812"
+Received: from hdevries-mobl.ger.corp.intel.com ([10.249.36.140])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 02:29:44 -0800
+Date:   Mon, 13 Feb 2023 12:29:41 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v7 5/6] selftests/resctrl: Commonize the signal handler
+ register/unregister for all tests
+In-Reply-To: <20230213062428.1721572-6-tan.shaopeng@jp.fujitsu.com>
+Message-ID: <b0c6fd3a-c983-1082-da46-6bcb754f3ff4@linux.intel.com>
+References: <20230213062428.1721572-1-tan.shaopeng@jp.fujitsu.com> <20230213062428.1721572-6-tan.shaopeng@jp.fujitsu.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-From:   Hans de Goede <hdegoede@redhat.com>
-Subject: [GIT PULL] platform-drivers-x86 for 6.2-5
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mark Gross <mgross@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1666962008-1676284185=:1712"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Here is the (hopefully) final platform-drivers-x86 fixes pull-req for 6.2.
+--8323329-1666962008-1676284185=:1712
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
 
-This pull-req contains just 1 trivial change, a set of Intel vsec driver
-Meteor Lake PCI id additions.
+On Mon, 13 Feb 2023, Shaopeng Tan wrote:
 
-Regards,
+> After creating a child process with fork() in CAT test, if a signal such
+> as SIGINT is received, the parent process will be terminated immediately,
+> and therefor the child process will not be killed and also resctrlfs is
 
-Hans
+therefore
 
+> not unmounted.
+> 
+> There is a signal handler registered in CMT/MBM/MBA tests, which kills
+> child process, unmount resctrlfs, cleanups result files, etc., if a
+> signal such as SIGINT is received.
+> 
+> Commonize the signal handler registered for CMT/MBM/MBA tests and
+> reuse it in CAT.
+> 
+> To reuse the signal handler to kill child process use global bm_pid
+> instead of local bm_pid.
+> 
+> Also, since the MBA/MBA/CMT/CAT are run in order, unregister the signal
+> handler at the end of each test so that the signal handler cannot be
+> inherited by other tests.
+> 
+> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 
-The following changes since commit eecf2acd4a580e9364e5087daf0effca60a240b7:
+This looks okay.
 
-  platform/x86: touchscreen_dmi: Add Chuwi Vi8 (CWI501) DMI match (2023-02-02 11:34:38 +0100)
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-are available in the Git repository at:
+As a general comment, it would be probably nicer structure to put all
+IPC related code into ipc.c rather than have it in the test related files
+(mainly signal handling, pipe write/wait).
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v6.2-5
-
-for you to fetch changes up to eb4b55f2f26fc8a7b7dc6f06f1de91480d53485b:
-
-  platform/x86/intel/vsec: Add support for Meteor Lake (2023-02-06 14:40:47 +0100)
-
-----------------------------------------------------------------
-platform-drivers-x86 for v6.2-5
-
-Intel vsec driver Meteor Lake PCI ids addition.
-
-The following is an automated git shortlog grouped by driver:
-
-platform/x86/intel/vsec:
- -  Add support for Meteor Lake
-
-----------------------------------------------------------------
-Gayatri Kammela (1):
-      platform/x86/intel/vsec: Add support for Meteor Lake
-
- drivers/platform/x86/intel/vsec.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
+> ---
+>  tools/testing/selftests/resctrl/cat_test.c    |  9 ++-
+>  tools/testing/selftests/resctrl/fill_buf.c    | 14 ----
+>  tools/testing/selftests/resctrl/resctrl.h     |  2 +
+>  tools/testing/selftests/resctrl/resctrl_val.c | 66 ++++++++++++++-----
+>  4 files changed, 58 insertions(+), 33 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+> index 477b62dac546..0bdf0305a506 100644
+> --- a/tools/testing/selftests/resctrl/cat_test.c
+> +++ b/tools/testing/selftests/resctrl/cat_test.c
+> @@ -103,7 +103,6 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+>  	unsigned long l_mask, l_mask_1;
+>  	int ret, pipefd[2], sibling_cpu_no;
+>  	char pipe_message;
+> -	pid_t bm_pid;
+>  
+>  	cache_size = 0;
+>  
+> @@ -181,6 +180,12 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+>  		strcpy(param.filename, RESULT_FILE_NAME1);
+>  		param.num_of_runs = 0;
+>  		param.cpu_no = sibling_cpu_no;
+> +	} else {
+> +		ret = signal_handler_register();
+> +		if (ret) {
+> +			kill(bm_pid, SIGKILL);
+> +			goto out;
+> +		}
+>  	}
+>  
+>  	remove(param.filename);
+> @@ -217,8 +222,10 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+>  		}
+>  		close(pipefd[0]);
+>  		kill(bm_pid, SIGKILL);
+> +		signal_handler_unregister();
+>  	}
+>  
+> +out:
+>  	cat_test_cleanup();
+>  	if (bm_pid)
+>  		umount_resctrlfs();
+> diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
+> index 56ccbeae0638..322c6812e15c 100644
+> --- a/tools/testing/selftests/resctrl/fill_buf.c
+> +++ b/tools/testing/selftests/resctrl/fill_buf.c
+> @@ -33,14 +33,6 @@ static void sb(void)
+>  #endif
+>  }
+>  
+> -static void ctrl_handler(int signo)
+> -{
+> -	free(startptr);
+> -	printf("\nEnding\n");
+> -	sb();
+> -	exit(EXIT_SUCCESS);
+> -}
+> -
+>  static void cl_flush(void *p)
+>  {
+>  #if defined(__i386) || defined(__x86_64)
+> @@ -198,12 +190,6 @@ int run_fill_buf(unsigned long span, int malloc_and_init_memory,
+>  	unsigned long long cache_size = span;
+>  	int ret;
+>  
+> -	/* set up ctrl-c handler */
+> -	if (signal(SIGINT, ctrl_handler) == SIG_ERR)
+> -		printf("Failed to catch SIGINT!\n");
+> -	if (signal(SIGHUP, ctrl_handler) == SIG_ERR)
+> -		printf("Failed to catch SIGHUP!\n");
+> -
+>  	ret = fill_cache(cache_size, malloc_and_init_memory, memflush, op,
+>  			 resctrl_val);
+>  	if (ret) {
+> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+> index f0ded31fb3c7..92b59d2f603d 100644
+> --- a/tools/testing/selftests/resctrl/resctrl.h
+> +++ b/tools/testing/selftests/resctrl/resctrl.h
+> @@ -107,6 +107,8 @@ void mba_test_cleanup(void);
+>  int get_cbm_mask(char *cache_type, char *cbm_mask);
+>  int get_cache_size(int cpu_no, char *cache_type, unsigned long *cache_size);
+>  void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
+> +int signal_handler_register(void);
+> +void signal_handler_unregister(void);
+>  int cat_val(struct resctrl_val_param *param);
+>  void cat_test_cleanup(void);
+>  int cat_perf_miss_val(int cpu_no, int no_of_bits, char *cache_type);
+> diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+> index 6948843bf995..7c8d5c25e6da 100644
+> --- a/tools/testing/selftests/resctrl/resctrl_val.c
+> +++ b/tools/testing/selftests/resctrl/resctrl_val.c
+> @@ -476,6 +476,45 @@ void ctrlc_handler(int signum, siginfo_t *info, void *ptr)
+>  	exit(EXIT_SUCCESS);
+>  }
+>  
+> +/*
+> + * Register CTRL-C handler for parent, as it has to kill
+> + * child process before exiting.
+> + */
+> +int signal_handler_register(void)
+> +{
+> +	struct sigaction sigact;
+> +	int ret = 0;
+> +
+> +	sigact.sa_sigaction = ctrlc_handler;
+> +	sigemptyset(&sigact.sa_mask);
+> +	sigact.sa_flags = SA_SIGINFO;
+> +	if (sigaction(SIGINT, &sigact, NULL) ||
+> +	    sigaction(SIGTERM, &sigact, NULL) ||
+> +	    sigaction(SIGHUP, &sigact, NULL)) {
+> +		perror("# sigaction");
+> +		ret = -1;
+> +	}
+> +	return ret;
+> +}
+> +
+> +/*
+> + * Reset signal handler to SIG_DFL.
+> + * Non-Value return because the caller should keep
+> + * the error code of other path even if sigaction fails.
+> + */
+> +void signal_handler_unregister(void)
+> +{
+> +	struct sigaction sigact;
+> +
+> +	sigact.sa_handler = SIG_DFL;
+> +	sigemptyset(&sigact.sa_mask);
+> +	if (sigaction(SIGINT, &sigact, NULL) ||
+> +	    sigaction(SIGTERM, &sigact, NULL) ||
+> +	    sigaction(SIGHUP, &sigact, NULL)) {
+> +		perror("# sigaction");
+> +	}
+> +}
+> +
+>  /*
+>   * print_results_bw:	the memory bandwidth results are stored in a file
+>   * @filename:		file that stores the results
+> @@ -671,39 +710,28 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
+>  
+>  	ksft_print_msg("Benchmark PID: %d\n", bm_pid);
+>  
+> -	/*
+> -	 * Register CTRL-C handler for parent, as it has to kill benchmark
+> -	 * before exiting
+> -	 */
+> -	sigact.sa_sigaction = ctrlc_handler;
+> -	sigemptyset(&sigact.sa_mask);
+> -	sigact.sa_flags = SA_SIGINFO;
+> -	if (sigaction(SIGINT, &sigact, NULL) ||
+> -	    sigaction(SIGTERM, &sigact, NULL) ||
+> -	    sigaction(SIGHUP, &sigact, NULL)) {
+> -		perror("# sigaction");
+> -		ret = errno;
+> +	ret = signal_handler_register();
+> +	if (ret)
+>  		goto out;
+> -	}
+>  
+>  	value.sival_ptr = benchmark_cmd;
+>  
+>  	/* Taskset benchmark to specified cpu */
+>  	ret = taskset_benchmark(bm_pid, param->cpu_no);
+>  	if (ret)
+> -		goto out;
+> +		goto unregister;
+>  
+>  	/* Write benchmark to specified control&monitoring grp in resctrl FS */
+>  	ret = write_bm_pid_to_resctrl(bm_pid, param->ctrlgrp, param->mongrp,
+>  				      resctrl_val);
+>  	if (ret)
+> -		goto out;
+> +		goto unregister;
+>  
+>  	if (!strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)) ||
+>  	    !strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR))) {
+>  		ret = initialize_mem_bw_imc();
+>  		if (ret)
+> -			goto out;
+> +			goto unregister;
+>  
+>  		initialize_mem_bw_resctrl(param->ctrlgrp, param->mongrp,
+>  					  param->cpu_no, resctrl_val);
+> @@ -718,7 +746,7 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
+>  		    sizeof(pipe_message)) {
+>  			perror("# failed reading message from child process");
+>  			close(pipefd[0]);
+> -			goto out;
+> +			goto unregister;
+>  		}
+>  	}
+>  	close(pipefd[0]);
+> @@ -727,7 +755,7 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
+>  	if (sigqueue(bm_pid, SIGUSR1, value) == -1) {
+>  		perror("# sigqueue SIGUSR1 to child");
+>  		ret = errno;
+> -		goto out;
+> +		goto unregister;
+>  	}
+>  
+>  	/* Give benchmark enough time to fully run */
+> @@ -761,6 +789,8 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
+>  		}
+>  	}
+>  
+> +unregister:
+> +	signal_handler_unregister();
+>  out:
+>  	kill(bm_pid, SIGKILL);
+>  	umount_resctrlfs();
+> 
+--8323329-1666962008-1676284185=:1712--
