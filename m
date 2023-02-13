@@ -2,151 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31AB0695339
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8384E695344
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:41:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbjBMVjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 16:39:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
+        id S230030AbjBMVlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 16:41:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjBMVi7 (ORCPT
+        with ESMTP id S229841AbjBMVlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 16:38:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A2A22DE8;
-        Mon, 13 Feb 2023 13:38:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 13 Feb 2023 16:41:21 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC54CDD6
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:41:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676324468; x=1707860468;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=I+Do5yG6CSTWM/1NENZGpIrLn3nrV0kj+LIwDd2hl3o=;
+  b=TBKrMG6sPu0550tz1gyC9tlKvS4+TjULSM7pbbGvpyR3A80h5zORsnm8
+   rdQG3RtF3MgQPlk/Abidqz/545z9KxLqaLoBHq1p3lDrt98zDdLECUvwD
+   xDioa6Ed9gvafBNLjAdpO8KsgOwOBQk1OpXtX5jHz+yuYj05lbBflLr1S
+   fg577RU8IHSA7QHfmLfiDwp2P4pzcl4GL6GlcRWocwN3WYuVoOi8r38CK
+   ex9xQdumD0GGEsK1rjlL7m+IKlbGW1wjFlewMLPZIcR0cftWVXvJmfVQh
+   +W9zQ2FoLpW6Nve0Zc9i8mkuSsnAC9iuUkq8ym97ZedtVHIrVxTwXn6pl
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="314652877"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="314652877"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 13:40:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="997828871"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="997828871"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga005.fm.intel.com with ESMTP; 13 Feb 2023 13:40:46 -0800
+Received: from [10.251.27.51] (kliang2-mobl1.ccr.corp.intel.com [10.251.27.51])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A124B81906;
-        Mon, 13 Feb 2023 21:38:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF532C433D2;
-        Mon, 13 Feb 2023 21:38:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676324302;
-        bh=9nebqvQ7ySSjFeV8SLUotJs6wqet5/xLHxl7MoVxxEg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=tQL42HF5NlkdQ3RbhTe7i9NDKF4D/lyFwaas814GdXW3JnyXEgRsN1Fonkm1P1apG
-         CMnWRRWHVpScq3GbQGxTP+nYGIqVZOgrQjpIOiJ92tNY20409xP4PlK+YeXicSUnsm
-         6JUN6CoqbYIK/Kzw3+7fIxORg/6Xdg3PDjdcLIIGWUifm3J/mmWYPNMacHy8U6HfL9
-         sNj4zyexO3vVHukETDYbjzU92v4W+8W/ELpwR+5P2EEkwB9O3OKPVw4AbPeertcNir
-         F85jNu4KczfP51l6rfGFEEqYTGLST/+bheozyDdUudGIKdP6O6VwMzmCJXS0PjvtyF
-         EAz3WDtyMLbGQ==
-Date:   Mon, 13 Feb 2023 15:38:20 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Dave Jiang <dave.jiang@intel.com>, Stefan Roese <sr@denx.de>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [PATCH RFC] PCI/AER: Enable internal AER errors by default
-Message-ID: <20230213213820.GA2935044@bhelgaas>
+        by linux.intel.com (Postfix) with ESMTPS id 7ABEB580BE4;
+        Mon, 13 Feb 2023 13:40:45 -0800 (PST)
+Message-ID: <e306e2ea-dea5-0eab-9eae-f9ea5fe7d52e@linux.intel.com>
+Date:   Mon, 13 Feb 2023 16:40:44 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230209-cxl-pci-aer-v1-1-f9a817fa4016@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH V2 2/9] perf: Extend ABI to support post-processing
+ monotonic raw conversion
+Content-Language: en-US
+To:     John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, sboyd@kernel.org, eranian@google.com,
+        namhyung@kernel.org, ak@linux.intel.com, adrian.hunter@intel.com
+References: <20230213190754.1836051-1-kan.liang@linux.intel.com>
+ <20230213190754.1836051-3-kan.liang@linux.intel.com>
+ <CANDhNCqVcrZHGW4QJBD8_hZehmRpnNAsGFsmwsxBZNm3wpFZpQ@mail.gmail.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <CANDhNCqVcrZHGW4QJBD8_hZehmRpnNAsGFsmwsxBZNm3wpFZpQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 02:33:23PM -0800, Ira Weiny wrote:
-> The CXL driver expects internal error reporting to be enabled via
-> pci_enable_pcie_error_reporting().  It is likely other drivers expect the same.
-> Dave submitted a patch to enable the CXL side[1] but the PCI AER registers
-> still mask errors.
-> 
-> PCIe v6.0 Uncorrectable Mask Register (7.8.4.3) and Correctable Mask
-> Register (7.8.4.6) default to masking internal errors.  The
-> Uncorrectable Error Severity Register (7.8.4.4) defaults internal errors
-> as fatal.
-> 
-> Enable internal errors to be reported via the standard
-> pci_enable_pcie_error_reporting() call.  Ensure uncorrectable errors are set
-> non-fatal to limit any impact to other drivers.
 
-Do you have any background on why the spec makes these errors masked
-by default?  I'm sympathetic to wanting to learn about all the errors
-we can, but I'm a little wary if the spec authors thought it was
-important to mask these by default.
 
-> [1] https://lore.kernel.org/all/167604864163.2392965.5102660329807283871.stgit@djiang5-mobl3.local/
+On 2023-02-13 2:37 p.m., John Stultz wrote:
+> On Mon, Feb 13, 2023 at 11:08 AM <kan.liang@linux.intel.com> wrote:
+>>
+>> From: Kan Liang <kan.liang@linux.intel.com>
+>>
+>> The monotonic raw clock is not affected by NTP/PTP correction. The
+>> calculation of the monotonic raw clock can be done in the
+>> post-processing, which can reduce the kernel overhead.
+>>
+>> Add hw_time in the struct perf_event_attr to tell the kernel dump the
+>> raw HW time to user space. The perf tool will calculate the HW time
+>> in post-processing.
+>> Currently, only supports the monotonic raw conversion.
+>> Only dump the raw HW time with PERF_RECORD_SAMPLE, because the accurate
+>> HW time can only be provided in a sample by HW. For other type of
+>> records, the user requested clock should be returned as usual. Nothing
+>> is changed.
+>>
+>> Add perf_event_mmap_page::cap_user_time_mono_raw ABI to dump the
+>> conversion information. The cap_user_time_mono_raw also indicates
+>> whether the monotonic raw conversion information is available.
+>> If yes, the clock monotonic raw can be calculated as
+>> mono_raw = base + ((cyc - last) * mult + nsec) >> shift
 > 
-> Cc: Bjorn Helgaas <helgaas@kernel.org>
-> Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Dave Jiang <dave.jiang@intel.com>
-> Cc: Stefan Roese <sr@denx.de>
-> Cc: "Kuppuswamy Sathyanarayanan" <sathyanarayanan.kuppuswamy@linux.intel.com>
-> Cc: Mahesh J Salgaonkar <mahesh@linux.ibm.com>
-> Cc: Oliver O'Halloran <oohall@gmail.com>
-> Cc: linux-cxl@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-pci@vger.kernel.org
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> ---
-> This is RFC to see if it is acceptable to be part of the standard
-> pci_enable_pcie_error_reporting() call or perhaps a separate pci core
-> call should be introduced.  It is anticipated that enabling this error
-> reporting is what existing drivers are expecting.  The errors are marked
-> non-fatal therefore it should not adversely affect existing devices.
-> ---
->  drivers/pci/pcie/aer.c | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
+> Again, I appreciate you reworking and resending this series out, I
+> know it took some effort.
 > 
-> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> index 625f7b2cafe4..9d3ed3a5fc23 100644
-> --- a/drivers/pci/pcie/aer.c
-> +++ b/drivers/pci/pcie/aer.c
-> @@ -229,11 +229,28 @@ int pcie_aer_is_native(struct pci_dev *dev)
->  
->  int pci_enable_pcie_error_reporting(struct pci_dev *dev)
->  {
-> +	int pos_cap_err;
-> +	u32 reg;
->  	int rc;
->  
->  	if (!pcie_aer_is_native(dev))
->  		return -EIO;
->  
-> +	pos_cap_err = dev->aer_cap;
-> +
-> +	/* Unmask correctable and uncorrectable (non-fatal) internal errors */
-> +	pci_read_config_dword(dev, pos_cap_err + PCI_ERR_COR_MASK, &reg);
-> +	reg &= ~PCI_ERR_COR_INTERNAL;
-> +	pci_write_config_dword(dev, pos_cap_err + PCI_ERR_COR_MASK, reg);
-> +
-> +	pci_read_config_dword(dev, pos_cap_err + PCI_ERR_UNCOR_SEVER, &reg);
-> +	reg &= ~PCI_ERR_UNC_INTN;
-> +	pci_write_config_dword(dev, pos_cap_err + PCI_ERR_UNCOR_SEVER, reg);
-> +
-> +	pci_read_config_dword(dev, pos_cap_err + PCI_ERR_UNCOR_MASK, &reg);
-> +	reg &= ~PCI_ERR_UNC_INTN;
-> +	pci_write_config_dword(dev, pos_cap_err + PCI_ERR_UNCOR_MASK, reg);
-> +
->  	rc = pcie_capability_set_word(dev, PCI_EXP_DEVCTL, PCI_EXP_AER_FLAGS);
->  	return pcibios_err_to_errno(rc);
->  }
+> But oof, I'd really like to make sure we're not exporting timekeeping
+> internals to userland.
 > 
-> ---
-> base-commit: e5ab7f206ffc873160bd0f1a52cae17ab692a9d1
-> change-id: 20230209-cxl-pci-aer-18dda61c8239
+> I think Thomas' suggestion of doing the timestamp conversion in
+> post-processing was more about interpolating collected system times
+> with the counter (tsc) values captured.
+>
+
+Thomas, could you please clarify your suggestion regarding "the relevant
+conversion information" provided by the kernel?
+https://lore.kernel.org/lkml/87ilgsgl5f.ffs@tglx/
+
+Is it only the interpolation information or the entire conversion
+information (Mult, shift etc.)?
+
+If it's only the interpolation information, the user space will be lack
+of information to handle all the cases. If I understand John's comments
+correctly, it could also bring some interpolation error which can only
+be addressed by the mult/shift conversion.
+
+If the suggestion is to dump the entire conversion information into the
+user space, we have to expose the timekeeping internals.
+
+Considering the above difficulties, could we use the kernel conversion?
+(The current perf already uses the kernel conversion for monotonic raw.
+It should not bring extra overhead.)
+
+Thanks,
+Kan
+
+> I get the interpolation can be difficult as the counter value and
+> system time can't currently atomically collected, so potentially there
+> may be a need for a way to tie two together (see my previous email's
+> thought of ktime_get_raw_monotonic_from_timestamp()), but we'd
+> probably want a clear understanding of the benefit (quantitative
+> reduction in interpolation error, and what real benefit that brings),
+> and would also want the driver to generate and share those pairs
+> rather than having userland have access.
 > 
-> Best regards,
-> -- 
-> Ira Weiny <ira.weiny@intel.com>
-> 
+> thanks
+> -john
