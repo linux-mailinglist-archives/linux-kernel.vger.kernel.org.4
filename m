@@ -2,540 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E82A4694433
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB6FA694435
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjBMLP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 06:15:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
+        id S230483AbjBMLQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 06:16:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbjBMLP4 (ORCPT
+        with ESMTP id S230472AbjBMLP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 06:15:56 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0642C1817F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:15:42 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id qb15so28875532ejc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:15:41 -0800 (PST)
+        Mon, 13 Feb 2023 06:15:58 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D0A199D0;
+        Mon, 13 Feb 2023 03:15:43 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id z13so8446122wmp.2;
+        Mon, 13 Feb 2023 03:15:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fgeqEXl8Xi/zqmjdMwyKazwu9YMRx74kiYLzB77dQUc=;
-        b=ZOXE9ImvIj9YnIyHKqgs9RON1AgeiUEHP36Dpkd8+fS51HQJBeIlDYYFPnMwXwQ9mR
-         FBj/GUfYigwautpqSQjh262+hLyqiLALvwwKcKXnf+WX9EZn+CnHrL9Oo0vRVKnsvrsB
-         6ObfZZTLqKsM/OSfrdeiwd0C+D8XKLsOU3GmDxe3QYfE/ELyvN+23Y9ad2hEOP9PYdTA
-         p+kDa19l80aqb8iddJN/JoyF4tZMZN4Jie6LNMLWIdPXcPsLS3q7w9R4286HXyfDASAF
-         96bhx/isZU+gGbcMg9IKgnyaeK0IZtgloAPv5JrHc3ufkQAPNvlFaPoH5P8afQ/HVpzl
-         ljXg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=U97JWXqi1StumDff2f9VyDMu5Xn1n9829sI3DxVJ5HQ=;
+        b=H8GxlqYckQkUbXmNepI6CEAfvHnK8tZPmwsg24djiCW7a8rP3kf0ABVTbeLz7gqZQ0
+         DGh4QAQ9izHxssN35TBJUIu5/gilSashG9G1jg890weWvhDDo5G0kQ3Jot23bhL9yRN9
+         WIH77lgNIMe9+Mp4os9CtYgMv84lvnopGuVriaDVorhHafeuiD2sGvWDg4B5WVhXNcBB
+         ZOnw69WxHYtyVvCaFf4zraK/0xJI9RTS8KoqxxVACJ8S3j/zOz7GLCQ07WYXsQbIYFza
+         bWz8UnW0MNE8Erz/ZpfDPKAhr4F5D5fpEQAMyznjIGQE0PsXm2bJ6MIOYPkBW8rDxNum
+         VJfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fgeqEXl8Xi/zqmjdMwyKazwu9YMRx74kiYLzB77dQUc=;
-        b=jG3NaQkbJPPZijeKGLBa5MBMLe5KdJAcD9UZJ5LCDqj+Wl10By4ITNU6yVGCibT3oz
-         yGt3vhPG3xxJyjDUIbm0CNQ0uDn7yRjN0TJcLlsQOhseZZJRMGa4ELfAAX3gpGAbMp/H
-         qXt/eVX7CDIMpXT2XflVKJDGjtwlJ68IS6Pry97ZBSuYyS5SknibiXaLNFeL8HelJTuI
-         a0x4WQDqZqJ3O1FLYSRGgoJCpYvvVHy86b4KeXhpvZ6r+/bg2k2RmDgyj2Uq6UCVEKfd
-         bVPMJ1mV7wX5JlsNoezQv6LNPgj4McdCPOMn7rDi7++e8N8jQyrY3YgLX3vCJ6tEDwck
-         NFdg==
-X-Gm-Message-State: AO0yUKU/7KL5ruS2iR+xQYmeOO/Bx42Rl0wbCHbMGp4MYQ/oLXEguN9B
-        tNrUVqGTL41H048sp0flqmdmiw==
-X-Google-Smtp-Source: AK7set/OOZOS4n7L32x8yT+kBfLV7sAhrLJBYICJXtzMbkeAunf9wZNVMBdxBCpxNMoHnyV5LmlVHQ==
-X-Received: by 2002:a17:907:6e07:b0:878:7ef1:4a20 with SMTP id sd7-20020a1709076e0700b008787ef14a20mr31817179ejc.4.1676286922394;
-        Mon, 13 Feb 2023 03:15:22 -0800 (PST)
-Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id kk21-20020a170907767500b0088ef3c38a52sm6733233ejc.19.2023.02.13.03.15.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 03:15:22 -0800 (PST)
-Message-ID: <cc364658-478a-f239-5d17-5ca2b7f7df8b@linaro.org>
-Date:   Mon, 13 Feb 2023 12:15:19 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U97JWXqi1StumDff2f9VyDMu5Xn1n9829sI3DxVJ5HQ=;
+        b=dSGpwi0tgHtNfWwsL2ylnN1MWeLbWNCGWn20dNI4CN3ys9Xx42tCdc90PXiVgiE1ua
+         6tRpyFctFs2i/eEN4aFlLa/9NSWsHwyfFuFaujCU62rEfpWxtg+QuGUuA3ppNMMY4+R2
+         O793b9ziMs+uLRhLm1mEpSkTva7izZGldA6Vmp4rOen3RZodoEyLj/E2i1Bie69ncFMd
+         6iBuCg0HFhHFTEO27NLxIu8L+Qtn8e89DCQwdJoVkWd1h/Ej6bedna+4YSjt0gFEQeXs
+         DOCPW4UoSB9Np1wc58X+pYm4qxi2IWJs93kUf13W5a7PwU4WL9McF8prJ1GGvViA5Q2R
+         uMLA==
+X-Gm-Message-State: AO0yUKUs6xAAfd1djMSdFarf0xKO/55F2NjEcQGF9iYEWdde3VxZ4H2q
+        eX4JO9ymi9WcZ2AvEdzUVGGKCMbDrTiP6ixI
+X-Google-Smtp-Source: AK7set+wEqHeUX27CNwuZ6TDHzo1S9Xj/xG44P5Oeg1IKP8BPhgdwKe5jyDnjQvB3wjHaTzvZQiKwA==
+X-Received: by 2002:a05:600c:810:b0:3de:25f2:3aee with SMTP id k16-20020a05600c081000b003de25f23aeemr20323959wmp.31.1676286938615;
+        Mon, 13 Feb 2023 03:15:38 -0800 (PST)
+Received: from andrea ([84.242.162.60])
+        by smtp.gmail.com with ESMTPSA id h8-20020a05600c314800b003e11ad0750csm12873275wmo.47.2023.02.13.03.15.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 03:15:38 -0800 (PST)
+Date:   Mon, 13 Feb 2023 12:15:31 +0100
+From:   Andrea Parri <parri.andrea@gmail.com>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com
+Subject: Re: Current LKMM patch disposition
+Message-ID: <Y+ob0xFUp+d7LROE@andrea>
+References: <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
+ <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9+41ctA54pjm/KG@google.com>
+ <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
+ <Y+fN2fvUjGDWBYrv@google.com>
+ <Y+f4TYZ9BPlt8y8B@rowland.harvard.edu>
+ <CAEXW_YRuTfjc=5OAskTV0Qt_zSJTPP3-01=Y=SypMdPsF_weAQ@mail.gmail.com>
+ <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
+ <CAEXW_YQUOgYxYUNkQ9W6PS-JPwPSOFU5B=COV7Vf+qNF1jFC7g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 06/10] drm/msm/dpu: Add SM6350 support
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Robert Foss <rfoss@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Liu Shixin <liushixin2@huawei.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230211122656.1479141-1-konrad.dybcio@linaro.org>
- <20230211122656.1479141-7-konrad.dybcio@linaro.org>
- <a18cf663-115d-edc8-5e4b-3d19fcd9a02c@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <a18cf663-115d-edc8-5e4b-3d19fcd9a02c@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEXW_YQUOgYxYUNkQ9W6PS-JPwPSOFU5B=COV7Vf+qNF1jFC7g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> > Would you like to post a few examples showing some of the most difficult
+> > points you encountered?  Maybe explanation.txt can be improved.
+> 
+> Just to list 2 of the pain points:
+> 
+> 1. I think it is hard to reason this section
+> "PROPAGATION ORDER RELATION: cumul-fence"
+> 
+> All store-related fences should affect propagation order, even the
+> smp_wmb() which is not A-cumulative should do so (po-earlier stores
+> appearing before po-later). I think expanding this section with some
+> examples would make sense to understand what makes "cumul-fence"
+> different from any other store-related fence.
+
+FWIW, litmus-tests/WRC+pooncerelease+fencermbonceonce+Once.litmus illustrates
+the concept of A-cumulativity.  (The terminology is not LKMM-specific, it was
+borrowed from other MCM literature, e.g. "Understanding POWER Multiprocessors"
+in Documentation/references.txt.)
 
 
-On 11.02.2023 17:32, Dmitry Baryshkov wrote:
-> On 11/02/2023 14:26, Konrad Dybcio wrote:
->> Add SM6350 support to the DPU1 driver to enable display output.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 187 ++++++++++++++++++
->>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |   3 +
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       |   1 +
->>   drivers/gpu/drm/msm/msm_mdss.c                |   2 +
->>   4 files changed, 193 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> index d9ef1e133c1e..ba0bc795e5ff 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> @@ -364,6 +364,25 @@ static const struct dpu_caps sm6115_dpu_caps = {
->>       .pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
->>   };
->>   +static const struct dpu_caps sm6350_dpu_caps = {
->> +    .max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
->> +    .max_mixer_blendstages = 0x7,
->> +    .qseed_type = DPU_SSPP_SCALER_QSEED3LITE,
+> 2. This part is confusing and has always confused me " The
+> happens-before relation (hb) links memory accesses that have to
+> execute in a certain order"
 > 
-> QSEED4
-Confirmed with a register write at 0x0ae05a00
-(mdp_base + 0x4000 + 0xa00) => 0x3000 (QSEED4)
+> It is not memory accesses that execute, it is instructions that
+> execute. Can we separate out "memory access" from "instruction
+> execution" in this description?
+> 
+> I think ->hb tries to say that A ->hb B means, memory access A
+> happened before memory access B exactly in its associated
+> instruction's execution order (time order), but to be specific --
+> should that be instruction issue order, or instruction retiring order?
+> 
+> AFAICS ->hb maps instruction execution order to memory access order.
+> Not all ->po does  fall into that category because of out-of-order
+> hardware execution. As does not ->co because the memory subsystem may
+> have writes to the same variable to be resolved out of order. It would
+> be nice to call out that ->po is instruction issue order, which is
+> different from execution/retiring and that's why it cannot be ->hb.
+> 
+> ->rf does because of data flow causality, ->ppo does because of
+> program structure, so that makes sense to be ->hb.
+> 
+> IMHO, ->rfi should as well, because it is embodying a flow of data, so
+> that is a bit confusing. It would be great to clarify more perhaps
+> with an example about why ->rfi cannot be ->hb, in the
+> "happens-before" section.
+> 
+> That's really how far I typically get (line 1368) before life takes
+> over, and I have to go do other survival-related things. Then I
+> restart the activity. Now that I started reading the CAT file as well,
+> I feel I can make it past that line :D. But I never wanted to get past
+> it, till I built a solid understanding of the contents before it.
+> 
+> As I read the file more, I can give more feedback, but the above are
+> different 2 that persist.
 
-> 
->> +    .smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
->> +    .ubwc_version = DPU_HW_UBWC_VER_20,
->> +    .has_src_split = true,
->> +    .has_dim_layer = true,
->> +    .has_idle_pc = true,
->> +    /*
->> +     * There is *NO* 3DMERGE hw, but we *need* to set this property to true,
->> +     * because SM6350 includes newer hardware that requires a different reset
->> +     * sequence and it is executed based on this confusingly named variable..
->> +     */
-> 
-> Which reset sequence is that? Is it something that was not posted yet?
-Hm.. this patch came to life about 1.5y ago so it's hard to tell..
+AFAICT, sections "The happens-before relation: hb" and "An operational model"
+in Documentation/explanation.txt elaborate (should help) clarify such issues.
+About the ->rfi example cf. e.g. Test PPOCA in the above mentioned paper; the
+test remains allowed in arm64 and riscv.
 
-Grepping for 3dmerge I found that there is some legacy reset sequence
-which should not be executed for anything >=8150 (probably related
-to the intf te moving), but currently it's only evaluated in
-disp/dpu1/dpu_encoder.c : dpu_encoder_get_topology(). Interestingly
-enough, that legacy reset sequence is not implemented upstream, so
-there was really no way to hit it..
-
-Downstream has a has_3d_merge_reset flag for that and I'm not sure
-how relevant the check we have upstream in dpu_encoder is to anything
-newer than 845.
-
-While testing on PDX213 is near impossible (the panel is acting up
-and only initializes once in like 10 boots, otherwise it comes to life
-after $random minutes; this is a panel-specific issue though..), Luca
-reported no regressions after settings this to false on his Fairphone 4.
-
-
-> 
->> +    .has_3d_merge = true,
->> +    .max_linewidth = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
->> +    .pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
->> +};
->> +
->>   static const struct dpu_caps sm8150_dpu_caps = {
->>       .max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
->>       .max_mixer_blendstages = 0xb,
->> @@ -554,6 +573,25 @@ static const struct dpu_mdp_cfg sc7180_mdp[] = {
->>       },
->>   };
->>   +static const struct dpu_mdp_cfg sm6350_mdp[] = {
->> +    {
->> +    .name = "top_0", .id = MDP_TOP,
->> +    .base = 0x0, .len = 0x494,
->> +    .features = 0,
->> +    .highest_bank_bit = 0x1,
->> +    .clk_ctrls[DPU_CLK_CTRL_VIG0] = {
->> +        .reg_off = 0x2ac, .bit_off = 0},
->> +    .clk_ctrls[DPU_CLK_CTRL_DMA0] = {
->> +        .reg_off = 0x2ac, .bit_off = 8},
->> +    .clk_ctrls[DPU_CLK_CTRL_CURSOR0] = {
-> 
-> DPU_CLK_CTRL_DMA1
-> 
->> +        .reg_off = 0x2b4, .bit_off = 8},
->> +    .clk_ctrls[DPU_CLK_CTRL_CURSOR1] = {
-> 
-> DPU_CLK_CTRL_DMA2
-> 
->> +        .reg_off = 0x2c4, .bit_off = 8},
->> +    .clk_ctrls[DPU_CLK_CTRL_REG_DMA] = {
->> +        .reg_off = 0x2bc, .bit_off = 20},
->> +    },
-> 
-> Please fit them into a single line
-Ack x3
-
-> 
->> +};
->> +
->>   static const struct dpu_mdp_cfg sc8180x_mdp[] = {
->>       {
->>       .name = "top_0", .id = MDP_TOP,
->> @@ -888,6 +926,33 @@ static const struct dpu_ctl_cfg sc8280xp_ctl[] = {
->>       },
->>   };
->>   +static const struct dpu_ctl_cfg sm6350_ctl[] = {
-> 
-> We need to fix sc7180_ctl[].len, then we can use it here instead.
-Yep, good find!
-
-> 
->> +    {
->> +    .name = "ctl_0", .id = CTL_0,
->> +    .base = 0x1000, .len = 0x1dc,
->> +    .features = BIT(DPU_CTL_ACTIVE_CFG),
->> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 9),
->> +    },
->> +    {
->> +    .name = "ctl_1", .id = CTL_1,
->> +    .base = 0x1200, .len = 0x1dc,
->> +    .features = BIT(DPU_CTL_ACTIVE_CFG),
->> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 10),
->> +    },
->> +    {
->> +    .name = "ctl_2", .id = CTL_2,
->> +    .base = 0x1400, .len = 0x1dc,
->> +    .features = BIT(DPU_CTL_ACTIVE_CFG),
->> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 11),
->> +    },
->> +    {
->> +    .name = "ctl_3", .id = CTL_3,
->> +    .base = 0x1600, .len = 0x1dc,
->> +    .features = BIT(DPU_CTL_ACTIVE_CFG),
->> +    .intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 12),
->> +    },
->> +};
->> +
->>   static const struct dpu_ctl_cfg sm8150_ctl[] = {
->>       {
->>       .name = "ctl_0", .id = CTL_0,
->> @@ -1244,6 +1309,20 @@ static const struct dpu_sspp_cfg sm6115_sspp[] = {
->>           sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
->>   };
->>   +static const struct dpu_sspp_sub_blks sm6350_vig_sblk_0 =
->> +                _VIG_SBLK("0", 4, DPU_SSPP_SCALER_QSEED3LITE);
-> 
-> QSEED4
-Confirmed with a register read.
-
-> 
->> +
->> +static const struct dpu_sspp_cfg sm6350_sspp[] = {
->> +    SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, 0x1f8, VIG_SM8250_MASK,
->> +        sm6350_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
->> +    SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000, 0x1f8, DMA_SDM845_MASK,
->> +        sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
->> +    SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000, 0x1f8, DMA_CURSOR_SDM845_MASK,
->> +        sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
-> 
-> DPU_CLK_CTRL_DMA1
-> 
->> +    SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000, 0x1f8, DMA_CURSOR_SDM845_MASK,
->> +        sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
-> 
-> DPU_CLK_CTRL_DMA2
-Double ack
-
-> 
->> +};
->> +
->>   static const struct dpu_sspp_sub_blks sm8250_vig_sblk_0 =
->>                   _VIG_SBLK("0", 5, DPU_SSPP_SCALER_QSEED3LITE);
->>   static const struct dpu_sspp_sub_blks sm8250_vig_sblk_1 =
->> @@ -1491,6 +1570,13 @@ static const struct dpu_lm_cfg sc8280xp_lm[] = {
->>       LM_BLK("lm_5", LM_5, 0x49000, MIXER_SDM845_MASK, &sdm845_lm_sblk, PINGPONG_5, LM_4, 0),
->>   };
->>   +static const struct dpu_lm_cfg sm6350_lm[] = {
-> 
-> I think we can use sc7180_lm here
-Yep!
-
-> 
->> +    LM_BLK("lm_0", LM_0, 0x44000, MIXER_SDM845_MASK,
->> +        &sc7180_lm_sblk, PINGPONG_0, LM_1, DSPP_0),
->> +    LM_BLK("lm_1", LM_1, 0x45000, MIXER_SDM845_MASK,
->> +        &sc7180_lm_sblk, PINGPONG_1, LM_0, 0),
->> +};
->> +
->>   /* SM8150 */
->>     static const struct dpu_lm_cfg sm8150_lm[] = {
->> @@ -1572,6 +1658,11 @@ static const struct dpu_dspp_cfg sc7180_dspp[] = {
->>            &sc7180_dspp_sblk),
->>   };
->>   +static const struct dpu_dspp_cfg sm6350_dspp[] = {
-> 
-> sc7180_dspp
-Yes, but 7180 should be fixed up too, as the downstream dt
-entry for both is identical: 
-
-qcom,sde-dspp-pcc = <0x1700 0x00040000>;
-
-(7180 sets version to 0x1000 upstream as of now)
-
-> 
->> +    DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
->> +         &sm8150_dspp_sblk),
->> +};
->> +
->>   static const struct dpu_dspp_cfg sm8150_dspp[] = {
->>       DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
->>            &sm8150_dspp_sblk),
->> @@ -1674,6 +1765,15 @@ static struct dpu_pingpong_cfg sc8280xp_pp[] = {
->>             DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31), -1),
->>   };
->>   +static struct dpu_pingpong_cfg sm6350_pp[] = {
->> +    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk,
-> 
-> No TE support?
-It's.. complicated.. With just this patch, display refreshes, albeit
-not at 60fps. Marijn is working on getting it going, though
-
-https://github.com/SoMainline/linux/commits/marijn/longbois-next/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-
-> 
->> +            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->> +            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
->> +    PP_BLK("pingpong_1", PINGPONG_1, 0x70800, 0, sdm845_pp_sblk,
->> +            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->> +            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
->> +};
->> +
->>   static const struct dpu_pingpong_cfg sm8150_pp[] = {
->>       PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, MERGE_3D_0, sdm845_pp_sblk_te,
->>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->> @@ -1879,6 +1979,11 @@ static const struct dpu_intf_cfg sc7180_intf[] = {
->>       INTF_BLK("intf_1", INTF_1, 0x6A800, 0x280, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
->>   };
->>   +static const struct dpu_intf_cfg sm6350_intf[] = {
-> 
-> Interesting. Size is 0x2b8 for sc7180 (if I'm not mistaken), but 0x2c0 for sm6350. Do you know by chance what's the difference?
-2 bytes ;)
-
-On a more serious note, I really don't, 7180 was made with TSMC and 6350 with
-"foundry ID 3" (as per socinfo on my device), if that's Samsung or some other
-fab, maybe they had to make some changes. Or wild erratas.
-
-> 
->> +    INTF_BLK("intf_0", INTF_0, 0x6a000, 0x2c0, INTF_DP, 0, 35, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
->> +    INTF_BLK("intf_1", INTF_1, 0x6a800, 0x2c0, INTF_DSI, 0, 35, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
->> +};
->> +
->>   static const struct dpu_intf_cfg sm8150_intf[] = {
->>       INTF_BLK("intf_0", INTF_0, 0x6A000, 0x280, INTF_DP, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
->>       INTF_BLK("intf_1", INTF_1, 0x6A800, 0x280, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
->> @@ -2039,6 +2144,25 @@ static const struct dpu_vbif_cfg sdm845_vbif[] = {
->>       },
->>   };
->>   +static const struct dpu_vbif_cfg sm6350_vbif[] = {
->> +    {
->> +    .name = "vbif_0", .id = VBIF_RT,
->> +    .base = 0, .len = 0x1044,
-> 
-> So, the only difference from sdm845_vbif is the len? Can we ignore it?
-Won't that break/mess with at least register dumping?
-
-> 
->> +    .features = BIT(DPU_VBIF_QOS_REMAP),
->> +    .xin_halt_timeout = 0x4000,
->> +    .qos_rt_tbl = {
->> +        .npriority_lvl = ARRAY_SIZE(sdm845_rt_pri_lvl),
->> +        .priority_lvl = sdm845_rt_pri_lvl,
->> +        },
->> +    .qos_nrt_tbl = {
->> +        .npriority_lvl = ARRAY_SIZE(sdm845_nrt_pri_lvl),
->> +        .priority_lvl = sdm845_nrt_pri_lvl,
->> +        },
->> +    .memtype_count = 14,
->> +    .memtype = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
->> +    },
->> +};
->> +
->>   static const struct dpu_reg_dma_cfg sc8280xp_regdma = {
->>       .base = 0x0,
->>       .version = 0x00020000,
->> @@ -2128,6 +2252,11 @@ static const struct dpu_qos_lut_entry sc7180_qos_linear[] = {
->>       {.fl = 0, .lut = 0x0011222222335777},
->>   };
->>   
-> 
-> Two LUT entries with the same fill level sound strange. Yes, I see the same in the vendor dts. Let me check how they are parsend and used.
-> 
->> +static const struct dpu_qos_lut_entry sm6350_qos_linear[] = {
->> +    {.fl = 0, .lut = 0x0011223344556677 },
->> +    {.fl = 0, .lut = 0x0011223445566777 },
->> +};
->> +
->>   static const struct dpu_qos_lut_entry sm8150_qos_linear[] = {
->>       {.fl = 0, .lut = 0x0011222222223357 },
->>   };
->> @@ -2153,6 +2282,11 @@ static const struct dpu_qos_lut_entry sc7180_qos_macrotile[] = {
->>       {.fl = 0, .lut = 0x0011223344556677},
->>   };
->>   +static const struct dpu_qos_lut_entry sm6350_qos_macrotile[] = {
->> +    {.fl = 0, .lut = 0x0011223344556677 },
->> +    {.fl = 0, .lut = 0x0011223445566777 },
->> +};
->> +
->>   static const struct dpu_qos_lut_entry sc8180x_qos_macrotile[] = {
->>       {.fl = 10, .lut = 0x0000000344556677},
->>   };
->> @@ -2298,6 +2432,34 @@ static const struct dpu_perf_cfg sm6115_perf_data = {
->>       .bw_inefficiency_factor = 120,
->>   };
->>   +static const struct dpu_perf_cfg sm6350_perf_data = {
->> +    .max_bw_low = 4200000,
->> +    .max_bw_high = 5100000,
->> +    .min_core_ib = 2500000,
->> +    .min_llcc_ib = 0,
->> +    .min_dram_ib = 1600000,
->> +    .min_prefill_lines = 35,
->> +    /* TODO: confirm danger_lut_tbl */
->> +    .danger_lut_tbl = {0xffff, 0xffff, 0x0, 0x0, 0xffff},
->> +    .qos_lut_tbl = {
->> +        {.nentry = ARRAY_SIZE(sm6350_qos_linear),
->> +        .entries = sm6350_qos_linear
->> +        },
->> +        {.nentry = ARRAY_SIZE(sm6350_qos_macrotile),
->> +        .entries = sm6350_qos_macrotile
->> +        },
->> +        {.nentry = ARRAY_SIZE(sc7180_qos_nrt),
->> +        .entries = sc7180_qos_nrt
->> +        },
->> +    },
->> +    .cdp_cfg = {
->> +        {.rd_enable = 1, .wr_enable = 1},
->> +        {.rd_enable = 1, .wr_enable = 0}
->> +    },
->> +    .clk_inefficiency_factor = 105,
->> +    .bw_inefficiency_factor = 120,
->> +};
->> +
->>   static const struct dpu_perf_cfg sm8150_perf_data = {
->>       .max_bw_low = 12800000,
->>       .max_bw_high = 12800000,
->> @@ -2618,6 +2780,30 @@ static const struct dpu_mdss_cfg sm6115_dpu_cfg = {
->>       .mdss_irqs = IRQ_SC7180_MASK,
->>   };
->>   +static const struct dpu_mdss_cfg sm6350_dpu_cfg = {
->> +    .caps = &sm6350_dpu_caps,
->> +    .mdp_count = ARRAY_SIZE(sm6350_mdp),
->> +    .mdp = sm6350_mdp,
->> +    .ctl_count = ARRAY_SIZE(sm6350_ctl),
->> +    .ctl = sm6350_ctl,
->> +    .sspp_count = ARRAY_SIZE(sm6350_sspp),
->> +    .sspp = sm6350_sspp,
->> +    .mixer_count = ARRAY_SIZE(sm6350_lm),
->> +    .mixer = sm6350_lm,
->> +    .dspp_count = ARRAY_SIZE(sm6350_dspp),
->> +    .dspp = sm6350_dspp,
->> +    .pingpong_count = ARRAY_SIZE(sm6350_pp),
->> +    .pingpong = sm6350_pp,
->> +    .intf_count = ARRAY_SIZE(sm6350_intf),
->> +    .intf = sm6350_intf,
->> +    .vbif_count = ARRAY_SIZE(sm6350_vbif),
->> +    .vbif = sm6350_vbif,
->> +    .reg_dma_count = 1,
->> +    .dma_cfg = &sm8250_regdma,
->> +    .perf = &sm6350_perf_data,
->> +    .mdss_irqs = IRQ_SC7180_MASK,
->> +};
->> +
->>   static const struct dpu_mdss_cfg sm8150_dpu_cfg = {
->>       .caps = &sm8150_dpu_caps,
->>       .mdp_count = ARRAY_SIZE(sdm845_mdp),
->> @@ -2861,6 +3047,7 @@ static const struct dpu_mdss_hw_cfg_handler cfg_handler[] = {
->>       { .hw_rev = DPU_HW_VER_600, .dpu_cfg = &sm8250_dpu_cfg},
->>       { .hw_rev = DPU_HW_VER_620, .dpu_cfg = &sc7180_dpu_cfg},
->>       { .hw_rev = DPU_HW_VER_630, .dpu_cfg = &sm6115_dpu_cfg},
->> +    { .hw_rev = DPU_HW_VER_640, .dpu_cfg = &sm6350_dpu_cfg},
->>       { .hw_rev = DPU_HW_VER_650, .dpu_cfg = &qcm2290_dpu_cfg},
->>       { .hw_rev = DPU_HW_VER_700, .dpu_cfg = &sm8350_dpu_cfg},
->>       { .hw_rev = DPU_HW_VER_720, .dpu_cfg = &sc7280_dpu_cfg},
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->> index c7a2e6237d2b..cbf21613e121 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->> @@ -45,6 +45,7 @@
->>   #define DPU_HW_VER_600    DPU_HW_VER(6, 0, 0) /* sm8250 */
->>   #define DPU_HW_VER_620    DPU_HW_VER(6, 2, 0) /* sc7180 v1.0 */
->>   #define DPU_HW_VER_630    DPU_HW_VER(6, 3, 0) /* sm6115|sm4250 */
->> +#define DPU_HW_VER_640    DPU_HW_VER(6, 4, 0) /* sm6350 */
->>   #define DPU_HW_VER_650    DPU_HW_VER(6, 5, 0) /* qcm2290|sm4125 */
->>   #define DPU_HW_VER_700    DPU_HW_VER(7, 0, 0) /* sm8350 */
->>   #define DPU_HW_VER_720    DPU_HW_VER(7, 2, 0) /* sc7280 */
->> @@ -352,6 +353,8 @@ enum dpu_qos_lut_usage {
->>       DPU_QOS_LUT_USAGE_LINEAR,
->>       DPU_QOS_LUT_USAGE_MACROTILE,
->>       DPU_QOS_LUT_USAGE_NRT,
->> +    DPU_QOS_LUT_USAGE_CWB,
->> +    DPU_QOS_LUT_USAGE_MACROTILE_QSEED,
->>       DPU_QOS_LUT_USAGE_MAX,
->>   };
->>   diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->> index a683bd9b5a04..ebfbbd2d105e 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->> @@ -1306,6 +1306,7 @@ static const struct of_device_id dpu_dt_match[] = {
->>       { .compatible = "qcom,sc8180x-dpu", },
->>       { .compatible = "qcom,sc8280xp-dpu", },
->>       { .compatible = "qcom,sm6115-dpu", },
->> +    { .compatible = "qcom,sm6350-dpu", },
->>       { .compatible = "qcom,sm8150-dpu", },
->>       { .compatible = "qcom,sm8250-dpu", },
->>       { .compatible = "qcom,sm8350-dpu", },
->> diff --git a/drivers/gpu/drm/msm/msm_mdss.c b/drivers/gpu/drm/msm/msm_mdss.c
-> 
-> Please split mdss to a separate patch.
-Ack
-
-Konrad
-> 
->> index 02646e4bb4cd..841016f3983a 100644
->> --- a/drivers/gpu/drm/msm/msm_mdss.c
->> +++ b/drivers/gpu/drm/msm/msm_mdss.c
->> @@ -279,6 +279,7 @@ static int msm_mdss_enable(struct msm_mdss *msm_mdss)
->>           msm_mdss_setup_ubwc_dec_40(msm_mdss, UBWC_4_0, 6, 1, 3, 1);
->>           break;
->>       case DPU_HW_VER_620:
->> +    case DPU_HW_VER_640:
->>           /* UBWC_2_0 */
->>           msm_mdss_setup_ubwc_dec_20(msm_mdss, 0x1e);
->>           break;
->> @@ -529,6 +530,7 @@ static const struct of_device_id mdss_dt_match[] = {
->>       { .compatible = "qcom,sc8180x-mdss" },
->>       { .compatible = "qcom,sc8280xp-mdss" },
->>       { .compatible = "qcom,sm6115-mdss" },
->> +    { .compatible = "qcom,sm6350-mdss" },
->>       { .compatible = "qcom,sm8150-mdss" },
->>       { .compatible = "qcom,sm8250-mdss" },
->>       { .compatible = "qcom,sm8350-mdss" },
-> 
+  Andrea
