@@ -2,75 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA799695406
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 23:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A527695296
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbjBMWoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 17:44:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
+        id S229810AbjBMVDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 16:03:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbjBMWoW (ORCPT
+        with ESMTP id S229581AbjBMVDd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 17:44:22 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170A32057F;
-        Mon, 13 Feb 2023 14:44:17 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id co8so10038064wrb.1;
-        Mon, 13 Feb 2023 14:44:16 -0800 (PST)
+        Mon, 13 Feb 2023 16:03:33 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D3A1ABC8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:03:32 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id t3-20020a170902e1c300b0019a84b88f70so4286315pla.19
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:03:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=b5Nie9z/6uzDA7Xv3vo+T2ySPWYh0uKc2BDIxZYHNtY=;
-        b=QBJ4Cf3lK8jkkhwi4icD9MExmeSqtKyiYqSwBk6+Ai431i75JhfRSEj0NGVQCse6jA
-         D4N73wqy2vdFy8YG9l98ZBWyxaDNFGmRwy0mh40poyKT16tcRAQMVGkNvMASv+khWHKU
-         wjge2U6bhKlu1ObVR+mMnDxRIBAII8tPbwwDrQj8A58HR/dJSSHU+wkprmfNCOHhUCzy
-         BKGW6+wjqJ9ixpbFs+tgq+Q4sCFmjoC4Zr6ZatblyGjkC2gxjINJXseFIrnGWjyLDiLO
-         nIQqCg2fHQvCLKB0dj1eYTfyO/efpn5z0SbTiXlWzTL4Gc6kmNzMx1KJMGIOVukqloXy
-         MD6g==
+        d=google.com; s=20210112; t=1676322212;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=IH3jJcJ/IoZtR7vL3Ek1HckoQScJmDuoE0WIjUb4KK8=;
+        b=dGWV2JGDl4a32c3CxY9ycW7JCWmkwvjFsm2CupzNfand10jYMJ8qQlpFj3kbO3CZmR
+         6UX2IUVXTGA5e0VFugUjCDsKiugRnjCaocM4DNhnQztU3vqv54Bbb+Vw/ok5L+3DXntf
+         tA5tXBCVz3JlE0ZIIZavJflsEsOQhD5AUtNkEqa4YHoSl8TozBtbpcuW05NZ3xDux+vV
+         kF4d7mkBmEexy897IFi7oIbSOFhVzUctYylJNqrD20l0bJP1ummHvXInwWF1MUvn6BNm
+         /da2V5/XfFq4NKrOTQqriI8mCv/OYTfAhW2opih+oXTmKx9zMM0/mSrxCERtqg09QL0+
+         C09g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b5Nie9z/6uzDA7Xv3vo+T2ySPWYh0uKc2BDIxZYHNtY=;
-        b=4kJRDZoVlmPmreFDuYVTDVqBoi6Ozay1xyBKeD/IqAsjXEnookjoFKs0R6KhwrBehX
-         TnU2ZZsSXLuGuggfte5lCU6Kf+GGrT4SRNrOV9ZO0V9JNd54aIwrsDge3qodar7GW1nF
-         SnKIOqCrVWBd398r3uZEoeB67Fq1G96XfRE6RufRnW35bDpnb3I+4K72WFie0Xyut3l0
-         kCdxo/FaIBlCSvkHPxet8+1k7Cy8blzMaA9K8PffAD/fWVl9vQ3V4BjTnLdQSZ1hMXsL
-         bL1ePJmLhZynLYuDls8XueX2/56B+wahl1p5ZLMItljC2y61kPPxmdvkxHh322Y1gLda
-         +YNw==
-X-Gm-Message-State: AO0yUKWaL3FCdDSM909i234YMNs8H39qIxbJtEsFIrmfW3GB7mhGfj9K
-        WmGo7JOpx65NfR3yDOhN3aLeS/A0oHQ=
-X-Google-Smtp-Source: AK7set+pv3rKKfFH25IFKSJ9TbE7DVZ2pwi0iGEWNOoTi19utgiGe+bj151JjjUAS0z2FTvLxN1uoQ==
-X-Received: by 2002:a5d:678a:0:b0:2c4:71e:5565 with SMTP id v10-20020a5d678a000000b002c4071e5565mr237454wru.54.1676328255302;
-        Mon, 13 Feb 2023 14:44:15 -0800 (PST)
-Received: from Ansuel-xps. (93-34-91-73.ip49.fastwebnet.it. [93.34.91.73])
-        by smtp.gmail.com with ESMTPSA id v14-20020adfe28e000000b0027cb20605e3sm11421347wri.105.2023.02.13.14.44.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 14:44:14 -0800 (PST)
-Message-ID: <63eabd3e.df0a0220.f8fb1.b4f3@mx.google.com>
-X-Google-Original-Message-ID: <Y+is2WLR7yZetbxV@Ansuel-xps.>
-Date:   Sun, 12 Feb 2023 10:09:45 +0100
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] clk: qcom: clk-hfpll: switch to .determine_rate
-References: <20230212-clk-qcom-determine_rate-v1-0-b4e447d4926e@z3ntu.xyz>
- <20230212-clk-qcom-determine_rate-v1-2-b4e447d4926e@z3ntu.xyz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230212-clk-qcom-determine_rate-v1-2-b4e447d4926e@z3ntu.xyz>
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        d=1e100.net; s=20210112; t=1676322212;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IH3jJcJ/IoZtR7vL3Ek1HckoQScJmDuoE0WIjUb4KK8=;
+        b=Hk+oAg2KePlpQLiNMJDewadMeE0DSkQkSmsr7f8whjpu9Nckj3/zHem3pnrBVQdRHf
+         JD8iNFh/RBk/BQVKwKrMvvM1hN9oHkJktQpGBKRFjjwEBjVxEFfLISXLqJNbXuDuM07N
+         HMUIAUeX5yICqDqB9Uqw6zGkFzynMVBkPFpHG2yNpXmcc3ahAVjCK3cwqp97pnlBHajU
+         vt8Ji5mzTYzuPmx3gQthejm4YfbPbZRCGGt/HY+RMbw8w1MYulk8HqGfag6htW4ZPAZV
+         LeM8+gCs5yCIZjatEAOugiNb3j+MZ5LddwkJuW/hng3BfJCedPfw156OQ0KDS29ty/HO
+         XJXg==
+X-Gm-Message-State: AO0yUKVdaj9xLYhdH1fLJNrjAJqZAlpwSZnWhoOtdjw5Es3C5f5Bhl5V
+        aUcxVFkIViYiE/V82vcCjDqJv/P6sFLH4Us=
+X-Google-Smtp-Source: AK7set+CiP9aL8UBtV5TmqF28XLkt6IaxJ0mcncY8JVwJXtnw2rLbvuAxo6bzvnfqn8OHGaKAqhZ2FFHm5R13Uc=
+X-Received: from zaidcloud.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5325])
+ (user=zalbassam job=sendgmr) by 2002:a17:903:2309:b0:19a:b302:516d with SMTP
+ id d9-20020a170903230900b0019ab302516dmr94777plh.1.1676322212079; Mon, 13 Feb
+ 2023 13:03:32 -0800 (PST)
+Date:   Mon, 13 Feb 2023 16:03:11 -0500
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
+Message-ID: <20230213210319.1075872-1-zalbassam@google.com>
+Subject: [PATCH v3 0/8] perf: arm: Make PMUv3 driver available for aarch32
+From:   Zaid Al-Bassam <zalbassam@google.com>
+To:     Jesus Sanchez-Palencia <jesussanp@google.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu
+Cc:     Zaid Al-Bassam <zalbassam@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,65 +83,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 03:11:09PM +0100, Luca Weiss wrote:
-> .determine_rate is meant to replace .round_rate. The former comes with a
-> benefit which is especially relevant on 32-bit systems: since
-> .determine_rate uses an "unsigned long" (compared to a "signed long"
-> which is used by .round_rate) the maximum value on 32-bit systems
-> increases from 2^31 (or approx. 2.14GHz) to 2^32 (or approx. 4.29GHz).
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+Currently, PMUv3 driver is only available for ARMv8 aarch64 platforms,
+ARMv8 platorms running in aarch32 mode dont have access to the driver.
+This is, especially, a problem for ARMv8 platforms that only have
+aarch32 support, like the Cortex-A32.
 
-Tested-by: Christian Marangi <ansuelsmth@gmail.com>
+Make the PMUv3 driver available to arm arch (ARMv8 aarch32) by moving
+the PMUv3 driver from arm64 to drivers, that makes the driver common
+to both arm and arm64 architectures, then add PMUv3 arm Support.
 
-> ---
->  drivers/clk/qcom/clk-hfpll.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/clk-hfpll.c b/drivers/clk/qcom/clk-hfpll.c
-> index 7dd17c184b69..86f728dc69e5 100644
-> --- a/drivers/clk/qcom/clk-hfpll.c
-> +++ b/drivers/clk/qcom/clk-hfpll.c
-> @@ -128,20 +128,20 @@ static void clk_hfpll_disable(struct clk_hw *hw)
->  	spin_unlock_irqrestore(&h->lock, flags);
->  }
->  
-> -static long clk_hfpll_round_rate(struct clk_hw *hw, unsigned long rate,
-> -				 unsigned long *parent_rate)
-> +static int clk_hfpll_determine_rate(struct clk_hw *hw, struct clk_rate_request *req)
->  {
->  	struct clk_hfpll *h = to_clk_hfpll(hw);
->  	struct hfpll_data const *hd = h->d;
->  	unsigned long rrate;
->  
-> -	rate = clamp(rate, hd->min_rate, hd->max_rate);
-> +	req->rate = clamp(req->rate, hd->min_rate, hd->max_rate);
->  
-> -	rrate = DIV_ROUND_UP(rate, *parent_rate) * *parent_rate;
-> +	rrate = DIV_ROUND_UP(req->rate, req->best_parent_rate) * req->best_parent_rate;
->  	if (rrate > hd->max_rate)
-> -		rrate -= *parent_rate;
-> +		rrate -= req->best_parent_rate;
->  
-> -	return rrate;
-> +	req->rate = rrate;
-> +	return 0;
->  }
->  
->  /*
-> @@ -241,7 +241,7 @@ const struct clk_ops clk_ops_hfpll = {
->  	.enable = clk_hfpll_enable,
->  	.disable = clk_hfpll_disable,
->  	.is_enabled = hfpll_is_enabled,
-> -	.round_rate = clk_hfpll_round_rate,
-> +	.determine_rate = clk_hfpll_determine_rate,
->  	.set_rate = clk_hfpll_set_rate,
->  	.recalc_rate = clk_hfpll_recalc_rate,
->  	.init = clk_hfpll_init,
-> 
-> -- 
-> 2.39.1
-> 
+The main work in this patchset was made a while back by Marc Zyngier
+in [1]. Patchset version 1 [v1] rebases Marc's patches to the latest
+kernel revision and adds additional patches to accommodate the changes
+in the kernel since Marc wrote the patches.
+
+version 2 [v2] of the patchset was created by Marc Zyngier and I
+picked it up from [2].
+
+Changes in v2:
+- Flattened the nested switches in the arm_pmuv3.h for arm.
+- Removed wrappers and added stubs for the PMU KVM functions for arm.
+- Added PMU version abstractions.
+
+Changes in v3:
+- Removed the link tag from the commit messages.
+- Fixed the license header in the arm_pmuv3.h files.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=kvm-arm/pmuv3-32bit
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=arm/pmuv3
+
+[v1] https://lore.kernel.org/all/20230126204444.2204061-1-zalbassam@google.com/
+[v2] https://lore.kernel.org/all/20230210165500.2292608-1-zalbassam@google.com/
+
+Thank you,
+Zaid Al-Bassam
+
+Marc Zyngier (5):
+  arm64: perf: Move PMUv3 driver to drivers/perf
+  arm64: perf: Abstract system register accesses away
+  ARM: Make CONFIG_CPU_V7 valid for 32bit ARMv8 implementations
+  ARM: perf: Allow the use of the PMUv3 driver on 32bit ARM
+  ARM: mach-virt: Select PMUv3 driver by default
+
+Zaid Al-Bassam (3):
+  perf: pmuv3: Abstract PMU version checks
+  perf: pmuv3: Move inclusion of kvm_host.h to the arch-specific helper
+  perf: pmuv3: Change GENMASK to GENMASK_ULL
+
+ arch/arm/Kconfig                              |   1 +
+ arch/arm/include/asm/arm_pmuv3.h              | 247 ++++++++++++++
+ arch/arm/mm/Kconfig                           |   2 +-
+ arch/arm64/include/asm/arm_pmuv3.h            | 155 +++++++++
+ arch/arm64/include/asm/perf_event.h           | 249 --------------
+ arch/arm64/kernel/Makefile                    |   1 -
+ drivers/perf/Kconfig                          |  10 +
+ drivers/perf/Makefile                         |   1 +
+ .../perf_event.c => drivers/perf/arm_pmuv3.c  | 131 ++------
+ include/kvm/arm_pmu.h                         |   2 +-
+ include/linux/perf/arm_pmuv3.h                | 303 ++++++++++++++++++
+ 11 files changed, 751 insertions(+), 351 deletions(-)
+ create mode 100644 arch/arm/include/asm/arm_pmuv3.h
+ create mode 100644 arch/arm64/include/asm/arm_pmuv3.h
+ rename arch/arm64/kernel/perf_event.c => drivers/perf/arm_pmuv3.c (93%)
+ create mode 100644 include/linux/perf/arm_pmuv3.h
 
 -- 
-	Ansuel
+2.39.1.581.gbfd45094c4-goog
+
