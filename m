@@ -2,90 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C401F6951DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:28:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87294695204
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbjBMU2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 15:28:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
+        id S229754AbjBMUiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 15:38:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjBMU2T (ORCPT
+        with ESMTP id S229485AbjBMUiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 15:28:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F93993F9;
-        Mon, 13 Feb 2023 12:28:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 13 Feb 2023 15:38:23 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E939BDDF;
+        Mon, 13 Feb 2023 12:38:22 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.179.179])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D25C0612A5;
-        Mon, 13 Feb 2023 20:28:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABDDFC433EF;
-        Mon, 13 Feb 2023 20:28:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676320087;
-        bh=WRsDjx6vLHYE5t7FxP3nuqc5RTyTv1xh54+zk9QTuX8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f9s9G4AUQpaz5Q4ut8lZway799vsFIQBfYlkg+G5KYZa2rQgiuK5eNKirMEA2sHyZ
-         BLLatRIW/n9o4JGuavPJ4jmQqzdgDL/f2TAxK//hTwAF1pe5xwReEmqCukgrak6cnf
-         Bx7zlOoXm+NLt8y+t27x3aTJ1FXaKQQycoS2BhHkamRAOdQww7GbdzeUNZANHUyb87
-         GFW1i0dx6tsqgP/IGImN/xSkgYHmPMm0Qb/QyJ4fcZHzeN/E4sn4/vTj4Vov/AyP0X
-         vVJXSHSdIBq3/Xfi7Q0ME7zx2Pw2PQGV06bBHCg0LnySjYBWYvA1Li8p9buHH1NKhs
-         OnCe+uWvwfeUA==
-Date:   Mon, 13 Feb 2023 13:28:04 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Yazen Ghannam <yazen.ghannam@amd.com>, Tom Rix <trix@redhat.com>,
-        tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
-        rric@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/amd64: remove unneeded call to
- reserve_mc_sibling_devs()
-Message-ID: <Y+qdVHidnrrKvxiD@dev-arch.thelio-3990X>
-References: <20230213191510.2237360-1-trix@redhat.com>
- <Y+qZthCMRL1m0p4B@yaz-fattaah>
- <Y+qcU2M5gchfzbky@zn.tnic>
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DF25A6600013;
+        Mon, 13 Feb 2023 20:38:17 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676320701;
+        bh=fq69WVgNbrGinAN68EgUpT0UsJ02u0P+bko0XQCpqXw=;
+        h=Date:Cc:To:From:Subject:From;
+        b=mzNju+SCqbBSDZoGwXMVr08omuvvlAMsFNbYistdArfwoslteAGSQjmlFrpEOpy9o
+         u8nCWRvT/v4nCJctTzmIfcB+cklN4oBPiKOukFxAJwe+D7Q6MagOCABJeRwhq8tVxE
+         Uq+XPJCfWYt2rmmHINgqswtFup2WLKwV7PUYf+SgtLGoAoq8wFUDrHAIGOPn/ha5Ro
+         9q4NyqJLK6PbAAPuk5AIWh8sgKITzZKWPq7emFmZfG+KINMVlvvZMxdgwOvphuigoB
+         +qseBp7vYpn94Ynfuw6a2cPFhlxhtPZ2Fp9z+6fiOCkwXIYrlaFqbKje2EYoT/nSFm
+         Uv7hZwa/HpMJg==
+Message-ID: <2dcc7926-4d80-0d70-edf3-d05ea3dc542e@collabora.com>
+Date:   Tue, 14 Feb 2023 01:38:13 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+qcU2M5gchfzbky@zn.tnic>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org
+Content-Language: en-US
+To:     Ping-Ke Shih <pkshih@realtek.com>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+Subject: [Issue Report] Realtek 8852AE Bluetooth audio issues while using WiFi
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 09:23:47PM +0100, Borislav Petkov wrote:
-> On Mon, Feb 13, 2023 at 08:12:38PM +0000, Yazen Ghannam wrote:
-> > These errors are encountered when extra warnings are enabled, correct?
-> 
-> It says so in the warning which one it is: -Werror,-Wsometimes-uninitialized
-> 
-> Don't know if we enable that one for clang with W= or Nathan adds
-> additional switches.
+Hi,
 
--Wsometimes-uninitialized is part of clang's -Wall so it is on by
-default in all builds, regardless of W=
+I'm running 6.1.0-3 kernel and getting Bluetooth audio glitches constantly
+on a pair of buds and all the time when WiFi is connecting and working on
+RTL 8852AE card. Some Bluetooth audio devices work fine without issue. But
+some devices get glitchy audio all the time when Wifi is being used. The
+audio becomes more and more glitchy as the WiFi use increases. [1] mentions
+that the problem for Realtek 8723BE gets solved by switching to 5GHz wifi
+or upgrading drives. Is this issue present on other operating systems for
+this chip as well? Can it be solved for Linux if Wifi is used at 2.4 GHz?
 
--Werror comes from CONFIG_WERROR, which is enabled with allmodconfig.
+Any pointers on this problem would be much appreciated.
 
-> > I think the following patch would resolve this issue. This is part of a set
-> > that isn't fully applied.
-> > https://lore.kernel.org/linux-edac/20230127170419.1824692-12-yazen.ghannam@amd.com/
-> > 
-> > Boris,
-> > Do you think one of these patches should be applied or just hold off until the
-> > entire original set is applied?
-> 
-> I still wanted to go through the rest but I'm not sure I'll have time
-> for it before the merge window. So unless this is breaking some silly
-> testing scenario, I'd say I'll leave things as they are.
+04:00.0 Network controller: Realtek Semiconductor Co., Ltd. RTL8852AE
+802.11ax PCIe Wireless Network Adapter
+        Subsystem: Lenovo RTL8852AE 802.11ax PCIe Wireless Network Adapter
+        Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
+Stepping- SERR- FastB2B- DisINTx+
+        Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
+<TAbort- <MAbort- >SERR- <PERR- INTx-
+        Latency: 0, Cache Line Size: 64 bytes
+        Interrupt: pin A routed to IRQ 100
+        IOMMU group: 15
+        Region 0: I/O ports at 1000 [size=256]
+        Region 2: Memory at d1700000 (64-bit, non-prefetchable) [size=1M]
+        Capabilities: <access denied>
+        Kernel driver in use: rtw89_8852ae
+        Kernel modules: rtw89_8852ae
 
-This breaks allmodconfig with clang, so it would be great if one of
-these solutions was applied in the meantime.
+[1] https://wiki.archlinux.org/title/bluetooth_headset
 
-Cheers,
-Nathan
+-- 
+BR,
+Muhammad Usama Anjum
