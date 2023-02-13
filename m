@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94514694FCD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8987A694FCF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:51:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbjBMSu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:50:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
+        id S229567AbjBMSvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:51:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbjBMSuo (ORCPT
+        with ESMTP id S230063AbjBMSup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:50:44 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F93206A9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:50:31 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id d13-20020a17090ad3cd00b0023127b2d602so13156960pjw.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:50:31 -0800 (PST)
+        Mon, 13 Feb 2023 13:50:45 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2ACC1CF77
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:50:32 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id w5so14453155plg.8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:50:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wmM4r2OMh3Z32taltePOHPkCX28LIQpMjGdIpNNCepQ=;
-        b=oV+CDAboP9CwLuNWFmxr43IPnIbYgHm5io/9RxtjfnskTG6XliM8h/GsK31HOjSviA
-         nGk18OpI2RAL9UakURhU1+d6KkoSl5bQb/NUI62dK8jq/fHA9S56uS3wmI+rLtUtet2q
-         KirX6GfMIiiEKMal5WWK8g63opD/Nj0NlIBR+OKFi4RPOgRiiqcYVS52RHeh0H3T/1rZ
-         QIujUQ+UlIPKivu7mFcl9oqP2RhPHOTI6SPcApQqonQtAdQ6+KIvK/icmr+z+jlv1c6L
-         Ylzf0jLXjk8SEsgzwcwuOLxyhGS98zcTDoFVQ1u/bzAPhQLs41n7o3o+us9/WxrPtCXD
-         3fCw==
+        bh=q/XMzJ+L5J3d0/+ssV6BRnN4NRVloomzU3VBGcZ4wik=;
+        b=KhdeTFjVn62yGlGeO0UlCLlRdy1lL4f/HH3KtvyPQpZqb9ysc8seDOZ1COaU9pQLaw
+         0V/kx7cErOHN3vSLcUnQQDn9VbyuFlIE8yXGWRDRtLrBOfi12uuMPsxC6PK+74DZVVIP
+         DMkvz045TEEEjSce4O5n7Q0B/fxDkCEAiAnYOSfozdMEwmmavyAzPUhD/Az38oRMutdQ
+         R5oH2Km/4OmUpiLfQGTPA+K9dn8A07kaKUbQzkIdbYrudeXttcEwB2kL7APHbMtVxI0T
+         zU+845c6U01o0HU7Ffqi8vt2wR2c9SgtPHjG3viTxYFuUGWIRGsAsipHG+OVu6vVgAxu
+         HK8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wmM4r2OMh3Z32taltePOHPkCX28LIQpMjGdIpNNCepQ=;
-        b=csLHLAC7BWRgpsz+TSMH07cvUA+8876jclCKdjTVEANS8tqHR3Db/UQT9TCdqaiclC
-         3EJcW1PEc+YxkrJankIzod5PmhM2XMKEAWXJ4IDw4l379fXxbxNwY7FVd92CR0uOPdin
-         0xBGhImfdC+NpsTmm56gysRkCKoOaEHzsLBaNX8IfNDssxDsyK3COihODKcDIwY2c7F4
-         YCFXKi+Rrfal9BNN6x3VaHRHBdzssKNMNWZqTfbGKuspi0YBuoPC10aVBwvYVEqJ/+tv
-         GWPEb/Bo10FgzRReSY8nwudVeksSNZY3r8h+gI2/XEe/hXI8hYqw2Pmry120ew7pzY0I
-         u82A==
-X-Gm-Message-State: AO0yUKULpiIzpiEm8+n5TQccafSKde0uejQ95wdI9NGpU4kT3RZmTEgI
-        eaTNfpq1to3BBN6t1PCvqTE=
-X-Google-Smtp-Source: AK7set9+dyUeOBkh6n/hI1BBPXlp4XavXHDSuRu7QocNMMRE/VuP4ohYjHiXHAr00/JoShGa9K8qLQ==
-X-Received: by 2002:a17:903:41cd:b0:199:4be8:be48 with SMTP id u13-20020a17090341cd00b001994be8be48mr17938311ple.19.1676314230890;
-        Mon, 13 Feb 2023 10:50:30 -0800 (PST)
+        bh=q/XMzJ+L5J3d0/+ssV6BRnN4NRVloomzU3VBGcZ4wik=;
+        b=MXlr6+L0+KZEc1Vfy1dtBsQQso7Vn3P99xjZjQUea0i1mY7SX1+9OopyzBmwncg+IF
+         SJCGGN0/nZSb82ownebhc5Qdz93YfduxL+aYlwUD+dDLEVOZ7rAM7gcihNaXpRrPwHWs
+         5/fSxSMZOAZ+jOYovLZ9uhofZI3slZeDDSHOFfuRNktxYnwOrw1PdSQfbYOq5s78xZYX
+         QRp92e7F/mQRrvvxZrS0JKVowz9l0O0e2s/K3eMhfMmMAJmt9qEuPYDSXyFX1T4kng/Q
+         6YCvrMJHC4OdgR/SjbKeRxEIpTnImCdnqoa33ADU+LfF0PhjRJ9+wyDWO3oFh3sAn63Z
+         gnCQ==
+X-Gm-Message-State: AO0yUKVXbBcivglllov6FeF927zb+FUgDifpR6VJqAFpXm5LG0SAnDB0
+        ij6lHGgDxZHZeYQTZX/rOWU=
+X-Google-Smtp-Source: AK7set+4RFdyqlfahmB2Q1NGruBzWd4fNQlD/W8SOBCur3GY6BNMQt39wOUauyvDbHLcpi29ucc71Q==
+X-Received: by 2002:a17:902:cacb:b0:19a:b427:230a with SMTP id y11-20020a170902cacb00b0019ab427230amr503834pld.63.1676314232143;
+        Mon, 13 Feb 2023 10:50:32 -0800 (PST)
 Received: from f37.eng.vmware.com ([66.170.99.1])
-        by smtp.googlemail.com with ESMTPSA id p14-20020a170902a40e00b00198f256a192sm8535036plq.171.2023.02.13.10.50.29
+        by smtp.googlemail.com with ESMTPSA id p14-20020a170902a40e00b00198f256a192sm8535036plq.171.2023.02.13.10.50.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 10:50:30 -0800 (PST)
+        Mon, 13 Feb 2023 10:50:31 -0800 (PST)
 From:   Shreenidhi Shedi <yesshedi@gmail.com>
 X-Google-Original-From: Shreenidhi Shedi <sshedi@vmware.com>
 To:     dhowells@redhat.com, dwmw2@infradead.org,
         gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, Shreenidhi Shedi <sshedi@vmware.com>
-Subject: [PATCH v2 5/6] sign-file: use const with a global string constant
-Date:   Tue, 14 Feb 2023 00:20:18 +0530
-Message-Id: <20230213185019.56902-6-sshedi@vmware.com>
+Subject: [PATCH v2 6/6] sign-file: improve help message
+Date:   Tue, 14 Feb 2023 00:20:19 +0530
+Message-Id: <20230213185019.56902-7-sshedi@vmware.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230213185019.56902-1-sshedi@vmware.com>
 References: <20230213185019.56902-1-sshedi@vmware.com>
@@ -73,36 +73,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix a space issue (cosmetic)
-Both reported by checkpatch.
+Add a proper help message with examples on how to use this tool.
 
 Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
 ---
- scripts/sign-file.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ scripts/sign-file.c | 49 ++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 40 insertions(+), 9 deletions(-)
 
 diff --git a/scripts/sign-file.c b/scripts/sign-file.c
-index b48832d54f45..0729d8df5660 100644
+index 0729d8df5660..d9499ea5c8cc 100644
 --- a/scripts/sign-file.c
 +++ b/scripts/sign-file.c
-@@ -71,7 +71,7 @@ struct module_signature {
- 
- #define PKEY_ID_PKCS7 2
- 
--static char magic_number[] = "~Module signature appended~\n";
-+static const char magic_number[] = "~Module signature appended~\n";
+@@ -74,13 +74,44 @@ struct module_signature {
+ static const char magic_number[] = "~Module signature appended~\n";
  
  static __attribute__((noreturn))
- void format(void)
-@@ -116,7 +116,7 @@ static void drain_openssl_errors(void)
- 		if (__cond) {				\
- 			errx(1, fmt, ## __VA_ARGS__);	\
- 		}					\
--	} while(0)
-+	} while (0)
+-void format(void)
++void print_usage(int retval)
+ {
+-	fprintf(stderr,
+-		"Usage: scripts/sign-file [-dp] <hash algo> <key> <x509> <module> [<dest>]\n");
+-	fprintf(stderr,
+-		"       scripts/sign-file -s <raw sig> <hash algo> <x509> <module> [<dest>]\n");
+-	exit(2);
++	fprintf(stderr, "Usage: scripts/sign-file [OPTIONS]... [MODULE]...\n");
++	fprintf(stderr, "Available options:\n");
++	fprintf(stderr, "-h, --help		Print this help message and exit\n");
++
++	fprintf(stderr, "\nOptional args:\n");
++	fprintf(stderr, "-s, --savesig		Save signature\n");
++	fprintf(stderr, "-o, --signonly		Sign only\n");
++	fprintf(stderr, "-b, --bulksign		Sign modules in bulk\n");
++	fprintf(stderr, "-l, --replaceorig	Replace original\n");
++#ifndef USE_PKCS7
++	fprintf(stderr, "-k, --usekeyid		Use key ID\n");
++#endif
++	fprintf(stderr, "-r, --rawsig <sig>	Raw signature\n");
++	fprintf(stderr, "-d, --dest <dest>	Destination path ");
++	fprintf(stderr, "(Exclusive with bulk option)\n");
++
++	fprintf(stderr, "\nMandatory args:\n");
++	fprintf(stderr, "-p, --privkey <key>	Private key\n");
++	fprintf(stderr, "-a, --hashalgo <alg>	Hash algorithm\n");
++	fprintf(stderr, "-x, --x509 <x509>	X509\n");
++
++	fprintf(stderr, "\nExamples:\n");
++
++	fprintf(stderr, "\nRegular signing:\n");
++	fprintf(stderr, "scripts/sign-file -a sha512 -p certs/signing_key.pem ");
++	fprintf(stderr, "-x certs/signing_key.x509 <module>\n");
++
++	fprintf(stderr, "\nSigning with destination path:\n");
++	fprintf(stderr, "scripts/sign-file -a sha512 -p certs/signing_key.pem ");
++	fprintf(stderr, "-x certs/signing_key.x509 <module> -d <path>\n");
++
++	fprintf(stderr, "\nSigning modules in bulk:\n");
++	fprintf(stderr, "scripts/sign-file -a sha512 -p certs/signing_key.pem ");
++	fprintf(stderr, "-x certs/signing_key.x509 -b <module1> <module2> ...\n");
++
++	exit(retval);
+ }
  
- static const char *key_pass;
+ static void display_openssl_errors(int l)
+@@ -264,7 +295,7 @@ static void parse_args(int argc, char **argv, struct cmd_opts *opts)
+ #endif
+ 		switch (opt) {
+ 		case 'h':
+-			format();
++			print_usage(0);
+ 			break;
  
+ 		case 'r':
+@@ -315,7 +346,7 @@ static void parse_args(int argc, char **argv, struct cmd_opts *opts)
+ 			break;
+ 
+ 		default:
+-			format();
++			print_usage(2);
+ 			break;
+ 		}
+ 	} while (opt != -1);
+@@ -355,7 +386,7 @@ int sign_file(int argc, char **argv, struct cmd_opts *opts)
+ #endif
+ 
+ 	if ((bulk_sign && dest_name) || (!bulk_sign && argc != 1))
+-		format();
++		print_usage(2);
+ 
+ 	if (dest_name && strcmp(argv[0], dest_name)) {
+ 		replace_orig = false;
 -- 
 2.39.1
 
