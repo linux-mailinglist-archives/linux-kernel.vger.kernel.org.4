@@ -2,346 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0AAF694444
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:17:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE8A694446
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:18:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbjBMLRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 06:17:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58532 "EHLO
+        id S230495AbjBMLSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 06:18:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbjBMLRF (ORCPT
+        with ESMTP id S230395AbjBMLST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 06:17:05 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7093E8A7D
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:17:01 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id cq19so9617615edb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:17:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pPjPtWTtU4tuQlnFUtUQdD/AT+OCRusY921XYLfdUKs=;
-        b=Pw8uznEmJqIKLhLI1G18CBCzznxt0t0TusIjBfml0Z8dxXbo0nXgKzMsYauHIp8VBZ
-         ClRO9DAixTu0vtPlbQ1/7pyXJpn675eU7TcxsFa+nEqxLkqTfnQrnChxgoeSsdX/QT/M
-         64ZU/7qZD2oitpAy/qIwW1vgAZGNAMMgdRGZb90IwhOAsKmYvoKAP9r+iXurHGTpFWM4
-         thEfjUCkWpLSaU8uCD+qb/QNxcs/tyld4SmMLaYM5w6kOsw5ZexZTSgA2e367tVbgCUw
-         qf80qY4EFu4LBWZmczr5JRGXpkSZJ6xQFDmZfiGssXxosTjEIU+lVEXRU080n6j8hli/
-         4uzQ==
+        Mon, 13 Feb 2023 06:18:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975D51A48C
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:17:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676287036;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+r5vx7IWGfAUW6kMiX9+DAbfp5oEB9HB/LjP4Uymy1U=;
+        b=O4mkMZNj9WuzmXNyIF1Nx0xoEQ+G0u+NvZlann/Lq+2L17g8LZx/kK9f8j5sOvNQpNlyWD
+        qJRnrmsa+DLHmfhXIr77M7FO7obIc93txdvIM/hpLqG6N+g9AcxchM1/rEjftiQkvMuAPp
+        D4/lZYw+2FdgGZjy00TQo2k91/RJ7JE=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-614-M2MOdexjPMicDFeUv5vacg-1; Mon, 13 Feb 2023 06:17:15 -0500
+X-MC-Unique: M2MOdexjPMicDFeUv5vacg-1
+Received: by mail-ed1-f69.google.com with SMTP id g19-20020a056402115300b004a26cc7f6cbso7358773edw.4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:17:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pPjPtWTtU4tuQlnFUtUQdD/AT+OCRusY921XYLfdUKs=;
-        b=FYpVko5M9cNoivGmLOj+O20caNHPpWp4l2FU2Uw69kdiFz9QB+jixZ0yDvPJG4Pd69
-         F1+GvAbK6Z+SPNyZ4f+zQXNfXc78QT4rlhr5ft/i/DrzXXzzzu6LzZ8+NDxzUHHWAAWg
-         zP6QaBMc+hzHvM5XJHpVqNM0R/OFScbf2ChuwNvcrb2TxwUMmGbBZsb6wj6wd+DQBYZY
-         jD1di9sejJIj3NzN961Gl+y0cPAf2trDxgGL4jikb2SmT4w4q4zSdpS5G+pcjDOOkFW3
-         Y+58BCytnyrlYcHSu8KHgb8NVlg+gaTRGw3Bgh+5HA1yZr41AZhyib/asthZCaIRpQ8K
-         CrPA==
-X-Gm-Message-State: AO0yUKWLYOLKUV6Qe8HdgEbqjEher9bBllcbEHTgR6KOekVRm24opUDP
-        xi2Hh2typl+6ZhbOrlyt3IM/pA==
-X-Google-Smtp-Source: AK7set+7K1sGs/RmBCAOuS2lUTjpWuqm2f1imEZN3g3k1xLlRhBE+npc6sEMx2AWj6wOpqeYghfMTg==
-X-Received: by 2002:a50:8d4e:0:b0:4ac:bba6:dab with SMTP id t14-20020a508d4e000000b004acbba60dabmr6610160edt.38.1676287019956;
-        Mon, 13 Feb 2023 03:16:59 -0800 (PST)
-Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id t23-20020a50ab57000000b004acbf1d8412sm2358597edc.1.2023.02.13.03.16.57
+        bh=+r5vx7IWGfAUW6kMiX9+DAbfp5oEB9HB/LjP4Uymy1U=;
+        b=s8ppY1EM2rIA+Fv6lMaV8R7dAofGSd0OmaaEn35qHXF7wlq7ZmeQYJJy1pOtM7chsc
+         cmxhHvQPk0AUV5A0VlRlbgzUuGE1Zbwo/m7Nvay7QgHJbGVslwPYPfeMyPyDVDiWdC3Z
+         oDf0ZlWI/gRwTrHJ+TuEyvAthvp+NOV75QPfL4oV0TXL9JkNMg8qd1r+Xn5I7TXdqyOh
+         ixHINrux9QV/ohEo4NfpX5jlQUAcff76Rxt7FnPI7TlImiI1IPHuvn/Sdk5AtbAC36O/
+         6TSDMJzfHtLgVXlrgZzzMhdN3DHaJHTfOQwAAf75cOEgjz6xADmWtWUHf33ysQFsy6zu
+         Xprg==
+X-Gm-Message-State: AO0yUKUtOiWzotoMoNmJQbtRMJkNwK6j1U7V/IJvRH21asqRrrvRFFJJ
+        /5shfmpGjS8S+IuJu98CwFRTUgCgTGRnRDQYFlLPuri8O6rVp0wP3gsnumr0Pm0ui+7rcyjH14B
+        yosScujPRsynC7h6qUos648FQgS+GqQ==
+X-Received: by 2002:a17:906:5295:b0:8ae:f18f:f2b5 with SMTP id c21-20020a170906529500b008aef18ff2b5mr20931286ejm.16.1676287034156;
+        Mon, 13 Feb 2023 03:17:14 -0800 (PST)
+X-Google-Smtp-Source: AK7set9XzK5zx6EohmjepBAaDv4Jg0lMKK5ZVkOPqXFHM8xYU+j4c8CYsCuEEnayZgmvokl+HPFLeg==
+X-Received: by 2002:a17:906:5295:b0:8ae:f18f:f2b5 with SMTP id c21-20020a170906529500b008aef18ff2b5mr20931277ejm.16.1676287033949;
+        Mon, 13 Feb 2023 03:17:13 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id n8-20020a1709065e0800b0087fa83790d8sm6732127eju.13.2023.02.13.03.17.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 03:16:59 -0800 (PST)
-Message-ID: <ff7097b1-fab4-5fc5-fff7-26ce2a31bc6b@linaro.org>
-Date:   Mon, 13 Feb 2023 12:16:57 +0100
+        Mon, 13 Feb 2023 03:17:13 -0800 (PST)
+Message-ID: <7685a109-99fd-8b41-6911-5eba8924c0d6@redhat.com>
+Date:   Mon, 13 Feb 2023 12:17:12 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 07/10] drm/msm/dpu: Add SM6375 support
+Subject: Re: [PATCH v2] iio: light: cm32181: Unregister second I2C client if
+ present
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Robert Foss <rfoss@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Liu Shixin <liushixin2@huawei.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230211122656.1479141-1-konrad.dybcio@linaro.org>
- <20230211122656.1479141-8-konrad.dybcio@linaro.org>
- <8b6f0398-9a5a-d4e4-cd78-b06aaef46b68@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <8b6f0398-9a5a-d4e4-cd78-b06aaef46b68@linaro.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        ktsai@capellamicro.com, jic23@kernel.org, lars@metafoo.de
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230208072141.1103738-1-kai.heng.feng@canonical.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230208072141.1103738-1-kai.heng.feng@canonical.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
+
+Thank you for working on this, some remarks inline.
+
+On 2/8/23 08:21, Kai-Heng Feng wrote:
+> If a second client that talks to the actual I2C address was created in
+> probe(), there should be a corresponding cleanup in remove() to avoid
+> leakage.
+> 
+> So if the "client" is not the same one used by I2C core, unregister it
+> accordingly.
+> 
+> Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=2152281
+> Fixes: c1e62062ff54 ("iio: light: cm32181: Handle CM3218 ACPI devices with 2 I2C resources")
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+> v2:
+>  - Use devm_add_action_or_reset() instead of remove() callback to avoid
+>    race.
+> 
+>  drivers/iio/light/cm32181.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/drivers/iio/light/cm32181.c b/drivers/iio/light/cm32181.c
+> index b1674a5bfa368..a3e5f56101c9f 100644
+> --- a/drivers/iio/light/cm32181.c
+> +++ b/drivers/iio/light/cm32181.c
+> @@ -429,6 +429,16 @@ static const struct iio_info cm32181_info = {
+>  	.attrs			= &cm32181_attribute_group,
+>  };
+>  
+> +static void cm32181_disable(void *data)
+> +{
+> +	struct i2c_client *client = data;
+> +	struct cm32181_chip *cm32181 = iio_priv(i2c_get_clientdata(client));
+> +
+> +	/* Unregister the dummy client */
+> +	if (cm32181->client != client)
+> +		i2c_unregister_device(cm32181->client);
+> +}
+> +
+>  static int cm32181_probe(struct i2c_client *client)
+>  {
+>  	struct device *dev = &client->dev;
+> @@ -479,6 +489,12 @@ static int cm32181_probe(struct i2c_client *client)
+>  		return ret;
+>  	}
+>  
+> +	ret = devm_add_action_or_reset(dev, cm32181_disable, client);
+> +	if (ret) {
+> +		dev_err(dev, "%s: add devres action failed\n", __func__);
+> +		return ret;
+> +	}
+> +
+
+This is too late, we will still exit without unregistering the client if
+the cm32181_reg_init() call fails.
+
+It would be best to do this directly after the i2c_acpi_new_device()
+call, so inside the "if (ACPI_HANDLE(dev) && client->addr == SMBUS_ALERT_RESPONSE_ADDRESS) {"
+block.
+
+This way you can also remove the "if (cm32181->client != client)"
+check from cm32181_disable() since it now only runs when the client
+was registered in the first place.
+
+Also please rename cm32181_disable() to cm32181_unregister_dummy_client()
+so that the name actually matches what it does.
+
+Regards,
+
+Hans
 
 
-On 11.02.2023 17:47, Dmitry Baryshkov wrote:
-> On 11/02/2023 14:26, Konrad Dybcio wrote:
->> Add basic SM6375 support to the DPU1 driver to enable display output.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
-In short, ack to all, thanks for prompt review.
 
-Konrad
->>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 120 ++++++++++++++++++
->>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |   1 +
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       |   1 +
->>   drivers/gpu/drm/msm/msm_mdss.c                |   1 +
->>   4 files changed, 123 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> index ba0bc795e5ff..327aa21f01fc 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> @@ -383,6 +383,24 @@ static const struct dpu_caps sm6350_dpu_caps = {
->>       .pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
->>   };
->>   +static const struct dpu_caps sm6375_dpu_caps = {
->> +    .max_mixer_width = 2048,
-> 
-> It looks like we got this wrong for sm6115, I
-> 
->> +    .max_mixer_blendstages = 0x4,
->> +    .qseed_type = DPU_SSPP_SCALER_QSEED3LITE,
-> 
-> QSEED4
-> 
-> v3lite with the version >= 3.0 is v4. We should rework this to be more sensible and easy to support.
-> 
->> +    .smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
->> +    .ubwc_version = DPU_HW_UBWC_VER_20,
->> +    .has_dim_layer = true,
->> +    .has_idle_pc = true,
->> +    /*
->> +     * There is *NO* 3DMERGE hw, but we *need* to set this property to true,
->> +     * because SM6375 includes newer hardware that requires a different reset
->> +     * sequence and it is executed based on this confusingly named variable..
->> +     */
->> +    .has_3d_merge = true,
->> +    .max_linewidth = 2160,
->> +    .pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
->> +};
->> +
->>   static const struct dpu_caps sm8150_dpu_caps = {
->>       .max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
->>       .max_mixer_blendstages = 0xb,
->> @@ -592,6 +610,19 @@ static const struct dpu_mdp_cfg sm6350_mdp[] = {
->>       },
->>   };
->>   +static const struct dpu_mdp_cfg sm6375_mdp[] = {
-> 
-> sm6116_mdp ?
-> 
->> +    {
->> +    .name = "top_0", .id = MDP_TOP,
->> +    .base = 0x0, .len = 0x494,
->> +    .features = 0,
->> +    .highest_bank_bit = 0x1,
->> +    .clk_ctrls[DPU_CLK_CTRL_VIG0] = {
->> +        .reg_off = 0x2ac, .bit_off = 0},
->> +    .clk_ctrls[DPU_CLK_CTRL_DMA0] = {
->> +        .reg_off = 0x2ac, .bit_off = 8},
->> +    },
->> +};
->> +
->>   static const struct dpu_mdp_cfg sc8180x_mdp[] = {
->>       {
->>       .name = "top_0", .id = MDP_TOP,
->> @@ -1577,6 +1608,19 @@ static const struct dpu_lm_cfg sm6350_lm[] = {
->>           &sc7180_lm_sblk, PINGPONG_1, LM_0, 0),
->>   };
->>   +static const struct dpu_lm_sub_blks sm6375_lm_sblk = {
-> 
-> qcm2290_lm_sblk after we fix the width there.
-> 
->> +    .maxwidth = 2048,
->> +    .maxblendstages = 4, /* excluding base layer */
->> +    .blendstage_base = { /* offsets relative to mixer base */
->> +        0x20, 0x38, 0x50, 0x68
->> +    },
->> +};
->> +
->> +static const struct dpu_lm_cfg sm6375_lm[] = {
-> 
-> qcm2290_lm
-> 
->> +    LM_BLK("lm_0", LM_0, 0x44000, MIXER_QCM2290_MASK,
->> +        &sm6375_lm_sblk, PINGPONG_0, 0, DSPP_0),
->> +};
->> +
->>   /* SM8150 */
->>     static const struct dpu_lm_cfg sm8150_lm[] = {
->> @@ -1984,6 +2028,11 @@ static const struct dpu_intf_cfg sm6350_intf[] = {
->>       INTF_BLK("intf_1", INTF_1, 0x6a800, 0x2c0, INTF_DSI, 0, 35, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
->>   };
->>   +static const struct dpu_intf_cfg sm6375_intf[] = {
-> 
-> ack, size difference from sm6115/qcm2290
-> 
->> +    INTF_BLK("intf_0", INTF_0, 0x00000, 0x2c0, INTF_NONE, 0, 0, 0, 0, 0, 0),
->> +    INTF_BLK("intf_1", INTF_1, 0x6a800, 0x2c0, INTF_DSI, 0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
->> +};
->> +
->>   static const struct dpu_intf_cfg sm8150_intf[] = {
->>       INTF_BLK("intf_0", INTF_0, 0x6A000, 0x280, INTF_DP, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
->>       INTF_BLK("intf_1", INTF_1, 0x6A800, 0x280, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
->> @@ -2171,6 +2220,26 @@ static const struct dpu_reg_dma_cfg sc8280xp_regdma = {
->>       .clk_ctrl = DPU_CLK_CTRL_REG_DMA,
->>   };
->>   +static const struct dpu_vbif_cfg sm6375_vbif[] = {
->> +    {
->> +    .name = "vbif_0", .id = VBIF_RT,
->> +    .base = 0, .len = 0x2008,
-> 
-> Ugh
-> 
->> +    .features = BIT(DPU_VBIF_QOS_REMAP),
->> +    .xin_halt_timeout = 0x4000,
->> +    .qos_rp_remap_size = 0x40,
->> +    .qos_rt_tbl = {
->> +        .npriority_lvl = ARRAY_SIZE(sdm845_rt_pri_lvl),
->> +        .priority_lvl = sdm845_rt_pri_lvl,
->> +        },
->> +    .qos_nrt_tbl = {
->> +        .npriority_lvl = ARRAY_SIZE(sdm845_nrt_pri_lvl),
->> +        .priority_lvl = sdm845_nrt_pri_lvl,
->> +        },
->> +    .memtype_count = 14,
->> +    .memtype = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
->> +    },
->> +};
->> +
->>   static const struct dpu_reg_dma_cfg sdm845_regdma = {
->>       .base = 0x0, .version = 0x1, .trigger_sel_off = 0x119c
->>   };
->> @@ -2460,6 +2529,34 @@ static const struct dpu_perf_cfg sm6350_perf_data = {
->>       .bw_inefficiency_factor = 120,
->>   };
->>   +static const struct dpu_perf_cfg sm6375_perf_data = {
->> +    .max_bw_low = 5200000,
->> +    .max_bw_high = 6200000,
->> +    .min_core_ib = 2500000,
->> +    .min_llcc_ib = 0,
->> +    .min_dram_ib = 1600000,
->> +    .min_prefill_lines = 24,
->> +    /* TODO: confirm danger_lut_tbl */
->> +    .danger_lut_tbl = {0xffff, 0xffff, 0x0, 0x0, 0xffff},
->> +    .qos_lut_tbl = {
->> +        {.nentry = ARRAY_SIZE(sm6350_qos_linear),
->> +        .entries = sm6350_qos_linear
->> +        },
->> +        {.nentry = ARRAY_SIZE(sm6350_qos_macrotile),
->> +        .entries = sm6350_qos_macrotile
->> +        },
->> +        {.nentry = ARRAY_SIZE(sc7180_qos_nrt),
->> +        .entries = sc7180_qos_nrt
->> +        },
->> +    },
->> +    .cdp_cfg = {
->> +        {.rd_enable = 1, .wr_enable = 1},
->> +        {.rd_enable = 1, .wr_enable = 0}
->> +    },
->> +    .clk_inefficiency_factor = 105,
->> +    .bw_inefficiency_factor = 120,
->> +};
->> +
->>   static const struct dpu_perf_cfg sm8150_perf_data = {
->>       .max_bw_low = 12800000,
->>       .max_bw_high = 12800000,
->> @@ -2804,6 +2901,28 @@ static const struct dpu_mdss_cfg sm6350_dpu_cfg = {
->>       .mdss_irqs = IRQ_SC7180_MASK,
->>   };
->>   +static const struct dpu_mdss_cfg sm6375_dpu_cfg = {
->> +    .caps = &sm6350_dpu_caps,
->> +    .mdp_count = ARRAY_SIZE(sm6375_mdp),
->> +    .mdp = sm6375_mdp,
->> +    .ctl_count = ARRAY_SIZE(qcm2290_ctl),
->> +    .ctl = qcm2290_ctl,
->> +    .sspp_count = ARRAY_SIZE(sm6115_sspp),
->> +    .sspp = sm6115_sspp,
->> +    .mixer_count = ARRAY_SIZE(sm6375_lm),
->> +    .mixer = sm6375_lm,
->> +    .dspp_count = ARRAY_SIZE(qcm2290_dspp),
->> +    .dspp = qcm2290_dspp,
->> +    .pingpong_count = ARRAY_SIZE(qcm2290_pp),
->> +    .pingpong = qcm2290_pp,
->> +    .intf_count = ARRAY_SIZE(sm6375_intf),
->> +    .intf = sm6375_intf,
->> +    .vbif_count = ARRAY_SIZE(sm6375_vbif),
->> +    .vbif = sm6375_vbif,
->> +    .perf = &sm6375_perf_data,
->> +    .mdss_irqs = IRQ_SC7180_MASK,
->> +};
->> +
->>   static const struct dpu_mdss_cfg sm8150_dpu_cfg = {
->>       .caps = &sm8150_dpu_caps,
->>       .mdp_count = ARRAY_SIZE(sdm845_mdp),
->> @@ -3049,6 +3168,7 @@ static const struct dpu_mdss_hw_cfg_handler cfg_handler[] = {
->>       { .hw_rev = DPU_HW_VER_630, .dpu_cfg = &sm6115_dpu_cfg},
->>       { .hw_rev = DPU_HW_VER_640, .dpu_cfg = &sm6350_dpu_cfg},
->>       { .hw_rev = DPU_HW_VER_650, .dpu_cfg = &qcm2290_dpu_cfg},
->> +    { .hw_rev = DPU_HW_VER_690, .dpu_cfg = &sm6375_dpu_cfg},
->>       { .hw_rev = DPU_HW_VER_700, .dpu_cfg = &sm8350_dpu_cfg},
->>       { .hw_rev = DPU_HW_VER_720, .dpu_cfg = &sc7280_dpu_cfg},
->>       { .hw_rev = DPU_HW_VER_800, .dpu_cfg = &sc8280xp_dpu_cfg},
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->> index cbf21613e121..a22b5965acfe 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->> @@ -47,6 +47,7 @@
->>   #define DPU_HW_VER_630    DPU_HW_VER(6, 3, 0) /* sm6115|sm4250 */
->>   #define DPU_HW_VER_640    DPU_HW_VER(6, 4, 0) /* sm6350 */
->>   #define DPU_HW_VER_650    DPU_HW_VER(6, 5, 0) /* qcm2290|sm4125 */
->> +#define DPU_HW_VER_690    DPU_HW_VER(6, 9, 0) /* sm6375 */
->>   #define DPU_HW_VER_700    DPU_HW_VER(7, 0, 0) /* sm8350 */
->>   #define DPU_HW_VER_720    DPU_HW_VER(7, 2, 0) /* sc7280 */
->>   #define DPU_HW_VER_800    DPU_HW_VER(8, 0, 0) /* sc8280xp */
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->> index ebfbbd2d105e..fd561974a6b1 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->> @@ -1307,6 +1307,7 @@ static const struct of_device_id dpu_dt_match[] = {
->>       { .compatible = "qcom,sc8280xp-dpu", },
->>       { .compatible = "qcom,sm6115-dpu", },
->>       { .compatible = "qcom,sm6350-dpu", },
->> +    { .compatible = "qcom,sm6375-dpu", },
->>       { .compatible = "qcom,sm8150-dpu", },
->>       { .compatible = "qcom,sm8250-dpu", },
->>       { .compatible = "qcom,sm8350-dpu", },
->> diff --git a/drivers/gpu/drm/msm/msm_mdss.c b/drivers/gpu/drm/msm/msm_mdss.c
->> index 841016f3983a..fedc1a1fc289 100644
->> --- a/drivers/gpu/drm/msm/msm_mdss.c
->> +++ b/drivers/gpu/drm/msm/msm_mdss.c
-> 
-> Please split to the separate patch
-> 
->> @@ -531,6 +531,7 @@ static const struct of_device_id mdss_dt_match[] = {
->>       { .compatible = "qcom,sc8280xp-mdss" },
->>       { .compatible = "qcom,sm6115-mdss" },
->>       { .compatible = "qcom,sm6350-mdss" },
->> +    { .compatible = "qcom,sm6375-mdss" },
-> 
-> Missing UBWC setup.
-> 
->>       { .compatible = "qcom,sm8150-mdss" },
->>       { .compatible = "qcom,sm8250-mdss" },
->>       { .compatible = "qcom,sm8350-mdss" },
-> 
+
+
+>  	ret = devm_iio_device_register(dev, indio_dev);
+>  	if (ret) {
+>  		dev_err(dev, "%s: regist device failed\n", __func__);
+
