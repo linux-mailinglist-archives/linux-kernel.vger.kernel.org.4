@@ -2,167 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE91695486
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 00:13:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E106954BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 00:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjBMXNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 18:13:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58046 "EHLO
+        id S230412AbjBMXZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 18:25:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjBMXNf (ORCPT
+        with ESMTP id S230367AbjBMXZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 18:13:35 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F169C1EFEF
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 15:13:32 -0800 (PST)
+        Mon, 13 Feb 2023 18:25:41 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722F2DF
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 15:25:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676330012; x=1707866012;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6tvq+BOuk38zeNN0hmdoPLf3V+BGZZvkpvGaQlGVS0I=;
-  b=TCO37ct3v6IJA+u3c+XwTYZc8knuueT9vD8ckJE0hNqNLAUh3fuZcyzQ
-   Auz+t7F4SFwjU4Hya0rExT+Fn5o5YvML6Xj0PKUNFm8C4K+JQRr7F1r3e
-   rLarj7ZJEM0F726CuPUQ14AilonMiuDyZtoDBprXcA9i6YdKcPOWboEnS
-   dAxv7RWr9rqyI1g3HD4bGJrO/Qxa/CwU7Y2Mzq4iX2nAPfTkMn3a+RSyC
-   /Z3i78agG9MHx3O4br3iU2mlSdPHKx7yAv2h+Fn9ga1qFXWzsN9f3pt4H
-   h+iq/WmRzPELDYPmikZJ30ka2O0CjBYu5qH12WyISAIPKmye7s4mPBBJ2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="358429440"
+  t=1676330740; x=1707866740;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Q+6NmF77p8sTxc2oOJDBN5pNjGanYhbtPu7jvoRKnv8=;
+  b=OcbLMhXvyREifxkmuo+kBodqZJRTmS4jvU5gJMMeOu/sVGmVGupxFN1b
+   KHPOGN6HHt+YwKX9RsmNuUgFXSBcShmsAON8mtEPXnZfK3UU6cb4HzfJO
+   tZHmNlaECezLNkLBG0bwAfng5KbEqVtLglpOdsFhpcjNIv1bz+MPAcVFU
+   7H5xvp8d1cs9XtXohGPjtAv2PeRIjgn9RBH0nu3YNQfckxmLn/uiDmnL0
+   NcV5i9XgeiH+KLg0nEvlRJdh/UPAMCS8yq8oyy6hS20ZAepaaqslkl5KN
+   ovJCC6Bq7xFuGUweHMsvvAzqPQxTAuzqZX5AP78Fik+v0V5kViFbkrMi0
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="393426031"
 X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="358429440"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 15:13:32 -0800
+   d="scan'208";a="393426031"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 15:25:40 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="668956882"
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="997862194"
 X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="668956882"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga002.jf.intel.com with ESMTP; 13 Feb 2023 15:13:31 -0800
-Date:   Mon, 13 Feb 2023 15:23:24 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v3 04/10] sched/fair: Let low-priority cores help
- high-priority busy SMT cores
-Message-ID: <20230213232324.GB6164@ranerica-svr.sc.intel.com>
-References: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com>
- <20230207045838.11243-5-ricardo.neri-calderon@linux.intel.com>
- <3a41995b-c39c-7346-e04b-7f13433b51c2@arm.com>
+   d="scan'208";a="997862194"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 13 Feb 2023 15:25:38 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pRiCX-00083r-36;
+        Mon, 13 Feb 2023 23:25:37 +0000
+Date:   Tue, 14 Feb 2023 07:24:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bitterblue Smith <rtl8821cerfe2@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Kalle Valo <kvalo@kernel.org>
+Subject: drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c:1580
+ rtl8xxxu_print_chipinfo() warn: always true condition '(priv->chip_cut <=
+ 15) => (0-15 <= 15)'
+Message-ID: <202302140753.71IgU77A-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3a41995b-c39c-7346-e04b-7f13433b51c2@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 02:40:24PM +0100, Dietmar Eggemann wrote:
-> On 07/02/2023 05:58, Ricardo Neri wrote:
-> 
-> [...]
-> 
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 80c86462c6f6..c9d0ddfd11f2 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -10436,11 +10436,20 @@ static struct rq *find_busiest_queue(struct lb_env *env,
-> >  		    nr_running == 1)
-> >  			continue;
-> >  
-> > -		/* Make sure we only pull tasks from a CPU of lower priority */
-> > +		/*
-> > +		 * Make sure we only pull tasks from a CPU of lower priority
-> > +		 * when balancing between SMT siblings.
-> > +		 *
-> > +		 * If balancing between cores, let lower priority CPUs help
-> > +		 * SMT cores with more than one busy sibling.
-> > +		 */
-> >  		if ((env->sd->flags & SD_ASYM_PACKING) &&
-> >  		    sched_asym_prefer(i, env->dst_cpu) &&
-> > -		    nr_running == 1)
-> > -			continue;
-> > +		    nr_running == 1) {
-> > +			if (env->sd->flags & SD_SHARE_CPUCAPACITY ||
-> > +			    (!(env->sd->flags & SD_SHARE_CPUCAPACITY) && is_core_idle(i)))
-> > +				continue;
-> 
-> is_core_idle(i) returns true for !CONFIG_SCHED_SMP. So far it was always
-> guarded by `flags & SD_SHARE_CPUCAPACITY` which is only set for
-> CONFIG_SCHED_SMP.
-> 
-> Here it's different but still depends on `flags & SD_ASYM_PACKING`.
-> 
-> Can we have SD_ASYM_PACKING w/o CONFIG_SCHED_SMP? The comment just says
-> `If balancing between cores (MC), let lower priority CPUs help SMT cores
-> with more than one busy sibling.`
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b408817d48840847c00052ae0e02a54311913073
+commit: 7b0ac469e331d9f9fd77f4ebb7a6322f5562db67 wifi: rtl8xxxu: Recognise all possible chip cuts
+date:   3 months ago
+config: x86_64-randconfig-m001-20230213 (https://download.01.org/0day-ci/archive/20230214/202302140753.71IgU77A-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
 
-We cannot have SD_ASYM_PACKING w/o CONFIG_SCHED_SMP. We may have it without
-CONFIG_SCHED_SMT. In the latter case we want is_core_idle() to return true
-as there are no SMT siblings competing for core throughput and CPU priority 
-is meaningful. I can add an extra comment clarifying the !CONFIG_SCHED_SMT /
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302140753.71IgU77A-lkp@intel.com/
 
-> 
-> So this only mentions your specific asymmetric e-cores w/o SMT and
-> p-cores w/ SMT case.
-> 
-> I'm asking since numa_idle_core(), the only user of is_core_idle() so
-> far has an extra `!static_branch_likely(&sched_smt_present)` condition
-> before calling it.
+New smatch warnings:
+drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c:1580 rtl8xxxu_print_chipinfo() warn: always true condition '(priv->chip_cut <= 15) => (0-15 <= 15)'
 
-That is a good point. Calling is_core_idle() is pointless if
-!static_branch_likely(&sched_smt_present).
+Old smatch warnings:
+drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c:5675 rtl8xxxu_c2hcmd_callback() warn: potential spectre issue 'rtl8xxxu_legacy_ratetable' [r] (local cap)
 
-As per feedback from Vincent and Peter, I have put this logic in a helper
-function. I'll add an extra check for this static key.
+vim +1580 drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
 
-> 
-> > +		}
-> >  
-> >  		switch (env->migration_type) {
-> >  		case migrate_load:
-> > @@ -10530,8 +10539,20 @@ asym_active_balance(struct lb_env *env)
-> >  	 * lower priority CPUs in order to pack all tasks in the
-> >  	 * highest priority CPUs.
-> >  	 */
-> > -	return env->idle != CPU_NOT_IDLE && (env->sd->flags & SD_ASYM_PACKING) &&
-> > -	       sched_asym_prefer(env->dst_cpu, env->src_cpu);
-> > +	if (env->idle != CPU_NOT_IDLE && (env->sd->flags & SD_ASYM_PACKING)) {
-> > +		/* Always obey priorities between SMT siblings. */
-> > +		if (env->sd->flags & SD_SHARE_CPUCAPACITY)
-> > +			return sched_asym_prefer(env->dst_cpu, env->src_cpu);
-> > +
-> > +		/*
-> > +		 * A lower priority CPU can help an SMT core with more than one
-> > +		 * busy sibling.
-> > +		 */
-> > +		return sched_asym_prefer(env->dst_cpu, env->src_cpu) ||
-> > +		       !is_core_idle(env->src_cpu);
-> 
-> Here it is similar.
+  1573	
+  1574	static void rtl8xxxu_print_chipinfo(struct rtl8xxxu_priv *priv)
+  1575	{
+  1576		struct device *dev = &priv->udev->dev;
+  1577		char cut = '?';
+  1578	
+  1579		/* Currently always true: chip_cut is 4 bits. */
+> 1580		if (priv->chip_cut <= 15)
+  1581			cut = 'A' + priv->chip_cut;
+  1582	
+  1583		dev_info(dev,
+  1584			 "RTL%s rev %c (%s) %iT%iR, TX queues %i, WiFi=%i, BT=%i, GPS=%i, HI PA=%i\n",
+  1585			 priv->chip_name, cut, priv->chip_vendor, priv->tx_paths,
+  1586			 priv->rx_paths, priv->ep_tx_count, priv->has_wifi,
+  1587			 priv->has_bluetooth, priv->has_gps, priv->hi_pa);
+  1588	
+  1589		dev_info(dev, "RTL%s MAC: %pM\n", priv->chip_name, priv->mac_addr);
+  1590	}
+  1591	
 
-I will use my helper function here as well.
-
-Thanks and BR,
-Ricardo
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
