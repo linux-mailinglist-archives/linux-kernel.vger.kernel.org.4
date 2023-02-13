@@ -2,91 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A8906942C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:22:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CAAF6942C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:25:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbjBMKWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 05:22:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
+        id S231230AbjBMKZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 05:25:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbjBMKWv (ORCPT
+        with ESMTP id S231218AbjBMKYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 05:22:51 -0500
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242281BEA
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:22:49 -0800 (PST)
-Received: by mail-wm1-f46.google.com with SMTP id l21-20020a05600c1d1500b003dfe462b7e4so8267031wms.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:22:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pH0ZPRW44cRqRjeRqfvW1keJmEULHDXfxjp1kWDi+Po=;
-        b=HUe4mSG/R0kcHOxC+1DlC/XFExpQKx+bhdmCsoaAePZuiOPiyE7oULUn5W8no2xd3T
-         RKCIbzU3rWbMynhG9utVoBiPS6vsHPHhQTnTkgUb63X86F+yZgJ3RWUD9VFcTSqnykuT
-         dJXdDf7pgw+AK4hFUQqz4b0nAtHQo/hQa19+K09VJ36ZNicNZi8Qlfxb8PNO7Dm6R385
-         UkXoelWq9t/d0i+VBExwaLNN62ZD3iGiiJ1KTtD/1L/79xCBDce4zsiBz3ZZQE9kcnr9
-         C9g7ieckT8xMpCnbSklfzngtPbyyWWdi61zsWXZ8UB3F940zLzFGjq4M/mvRbdRjr5V4
-         jROg==
-X-Gm-Message-State: AO0yUKXnBeEB0d/9dKSQ8PKvs7yYrEFy9YNGuy39k8cee7IzoUQmjdQJ
-        qdUuQbe0R4m40xdEaI2prC0=
-X-Google-Smtp-Source: AK7set855zDTrzmCyVYGzn5OjOWDS/iJyZa3b6uAkBb7ZHmxAI2ur5qAxgInbrxDSjmXxU8eVdBl2w==
-X-Received: by 2002:a05:600c:5108:b0:3db:35e3:baf6 with SMTP id o8-20020a05600c510800b003db35e3baf6mr22572396wms.4.1676283767754;
-        Mon, 13 Feb 2023 02:22:47 -0800 (PST)
-Received: from [192.168.64.80] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
-        by smtp.gmail.com with ESMTPSA id o16-20020a5d6850000000b002bfbda53b98sm10140041wrw.35.2023.02.13.02.22.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 02:22:47 -0800 (PST)
-Message-ID: <fa0f909e-9d3c-ff0d-d887-a3ce838c0769@grimberg.me>
-Date:   Mon, 13 Feb 2023 12:22:46 +0200
+        Mon, 13 Feb 2023 05:24:47 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C90B1BEA;
+        Mon, 13 Feb 2023 02:24:46 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id AB0423200907;
+        Mon, 13 Feb 2023 05:24:43 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 13 Feb 2023 05:24:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-transfer-encoding:date
+        :date:from:from:in-reply-to:message-id:mime-version:reply-to
+        :sender:subject:subject:to:to; s=fm3; t=1676283883; x=
+        1676370283; bh=mmdn/5U15CkHYElQVUNYUP3/OAbo6/VgMQ5noy+p1YY=; b=n
+        gF8Ss4Yx7j/g+jT3RU3b0wX+fLun5/myeAP1lXpi3U3XH64yHySguHKWx2rNz8vd
+        8r2mZ4SLxYrzza9uBeS3rG4rfC5v4O51a6RPmdqCDeDZbcxYlWWPjgwD2VQ42xVA
+        bA6FEErMHFCDtiwUF4fcBkXdriyA4e4NsxddOBUOfodmMOgx5Pw0O6In42qblxhn
+        X5sQw7ZCkaj8Q79LpuN92YlqsKW41Q9S+xyBkgquChwrstQzGyKUu15ENZtQCfEz
+        hLQ1ZsEhbPapoQqcLbew7ilFwnvY4/7JiHwm9+czRPH/Y7lB7qLq48gqCuIHzgXa
+        baraCFFeoomqVxjYvgrxA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1676283883; x=1676370283; bh=mmdn/5U15CkHYElQVUNYUP3/OAbo6/VgMQ5
+        noy+p1YY=; b=pI1HMqsoqWTQ3kzcpHXER9OC8xbvKkg0I0zd63tEYNTRNq2sg2l
+        wxEh1twhPrhkDwNj7wglVzUD0THcFhPKNAjtzc1NQrXRhBIbJ81qN8zC7nuZsUs0
+        l+97XXj8OL+dHMsWqabd7bcc/qTpc+OOywsg351yU13Y8w3g6t3FQmPAKJFxzvXU
+        5RGlLCel4gg7HViu1uJFF+7z4tEtgn5AUXIZZ5o4gbRQHxQoQcIcsChOkzw5+Qf1
+        vnFZ4MJKOmcD1DT7G/UcojF71ZvxnNa3w2vn6vppv828mvMTnZt3BqSJfF8wZ8AW
+        ym8VFPwpepzzeuH+8GMAWHb4QJdrDq66p5w==
+X-ME-Sender: <xms:6g_qY4LiHKZ9JlB-LMNld5ZJM9FT0zASlPZIteOnzHBcGFxU6pFJIg>
+    <xme:6g_qY4JZm4HGForcooEfYIfjoVd4L32kBZr8NBgOzMKse1suPw_wNabFwcPl0ENhB
+    i7E150gjTU5qTw>
+X-ME-Received: <xmr:6g_qY4tAyPh9_y-Y18Hi2Awgrch-UUEGSp4ebSWSWHRMRs2XDrrqRzYaHDXBfEC6SuRKpjjmANXRwpBBU2B7HtU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeiuddgudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufhimhhonhcu
+    ifgrihhsvghruceoshhimhhonhesihhnvhhishhisghlvghthhhinhhgshhlrggsrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpeeiueethfehudfhtdejgeelvdefheduvdejgeekjeet
+    fefhgeehiedtgfekleefveenucffohhmrghinhepihhnthgvlhdrtghomhenucevlhhush
+    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsihhmohhnsehinhhv
+    ihhsihgslhgvthhhihhnghhslhgrsgdrtghomh
+X-ME-Proxy: <xmx:6g_qY1bJRyYXXIqg4Vf36rBtCI5Rdr5HJ9QTuXC3mreK9LhYYByUIg>
+    <xmx:6g_qY_bB_zY1eithdShE-qRn3yKBVuc7gfLsykhovB_pSzeRBW4CDw>
+    <xmx:6g_qYxA219YTOe8knuLxosGvw4bAKxkLWiBGp5lmhdugmxS1XXtPZA>
+    <xmx:6w_qY-nXyH-P3gjJ-5-vRoI2nR2VeTKl1fA8U4JiO7wiXCVneFar1g>
+Feedback-ID: idc5945a3:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 13 Feb 2023 05:24:38 -0500 (EST)
+From:   Simon Gaiser <simon@invisiblethingslab.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Simon Gaiser <simon@invisiblethingslab.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] ata: ahci: Add Tiger Lake UP{3,4} AHCI controller
+Date:   Mon, 13 Feb 2023 11:24:49 +0100
+Message-Id: <20230213102450.1604-1-simon@invisiblethingslab.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] Add quirk for ADATA SX6000PNP
-Content-Language: en-US
-To:     Ivan Rubinov <soltime@riseup.net>, kbusch@kernel.org, axboe@fb.com,
-        hch@lst.de, linux-nvme@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <96afa026-e1a9-0ce5-d9ff-36f7e5c1a5b2@riseup.net>
-From:   Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <96afa026-e1a9-0ce5-d9ff-36f7e5c1a5b2@riseup.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Mark the Tiger Lake UP{3,4} AHCI controller as "low_power". This enables
+S0ix to work out of the box. Otherwise this isn't working unless the
+user manually sets /sys/class/scsi_host/*/link_power_management_policy.
 
-> From: Ivan Rubinov <linuxkernelpatch8234@riseup.net>
-> Date: Fri, 10 Feb 2023 14:59:41 +0300
-> Subject: [PATCH] Add quirk for ADATA SX6000PNP
+Intel lists a total of 4 SATA controller IDs in [1] for those mobile
+PCHs. This commit just adds the "AHCI" variant since I only tested
+those.
 
-Is this referencing to a bugzilla or other?
+[1]: https://cdrdv2.intel.com/v1/dl/getContent/631119
 
-> 
-> Signed-off-by: Ivan Rubinov <linuxkernelpatch8234@riseup.net>
-> ---
->   drivers/nvme/host/pci.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-> index c734934c407c..c63443d531b3 100644
-> --- a/drivers/nvme/host/pci.c
-> +++ b/drivers/nvme/host/pci.c
-> @@ -3365,6 +3365,8 @@ static const struct pci_device_id nvme_id_table[] = {
->       { PCI_VDEVICE(INTEL, 0x0953),    /* Intel 750/P3500/P3600/P3700 */
->           .driver_data = NVME_QUIRK_STRIPE_SIZE |
->                   NVME_QUIRK_DEALLOCATE_ZEROES, },
-> +    { PCI_DEVICE(0x10ec, 0x5763),   /* ADATA SX6000PNP */
-> +        .driver_data = NVME_QUIRK_IGNORE_DEV_SUBNQN | 
-> NVME_QUIRK_BOGUS_NID, },
->       { PCI_VDEVICE(INTEL, 0x0a53),    /* Intel P3520 */
->           .driver_data = NVME_QUIRK_STRIPE_SIZE |
->                   NVME_QUIRK_DEALLOCATE_ZEROES, },
+Signed-off-by: Simon Gaiser <simon@invisiblethingslab.com>
+CC: stable@vger.kernel.org
+---
+
+As noted above this doesn't include the other PCI IDs listed by Intel
+for those PCHs (RAID modes). Also the same is probably needed for newer
+generations. But for both I don't have hardware to test handy right now,
+so only included what I have actually tested.
+
+Added stable to CC, since on systems using S0ix this prevents S0ix
+residency and therefore leads to such high power consumption that
+suspend is effectively broken.
+
+ drivers/ata/ahci.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
+index 14a1c0d14916..3bb9bb483fe3 100644
+--- a/drivers/ata/ahci.c
++++ b/drivers/ata/ahci.c
+@@ -421,6 +421,7 @@ static const struct pci_device_id ahci_pci_tbl[] = {
+ 	{ PCI_VDEVICE(INTEL, 0x34d3), board_ahci_low_power }, /* Ice Lake LP AHCI */
+ 	{ PCI_VDEVICE(INTEL, 0x02d3), board_ahci_low_power }, /* Comet Lake PCH-U AHCI */
+ 	{ PCI_VDEVICE(INTEL, 0x02d7), board_ahci_low_power }, /* Comet Lake PCH RAID */
++	{ PCI_VDEVICE(INTEL, 0xa0d3), board_ahci_low_power }, /* Tiger Lake UP{3,4} AHCI */
+ 
+ 	/* JMicron 360/1/3/5/6, match class to avoid IDE function */
+ 	{ PCI_VENDOR_ID_JMICRON, PCI_ANY_ID, PCI_ANY_ID, PCI_ANY_ID,
+-- 
+2.39.1
+
