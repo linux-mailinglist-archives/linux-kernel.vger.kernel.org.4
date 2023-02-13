@@ -2,63 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3EB694A20
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB3E0694A28
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbjBMPEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:04:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
+        id S231444AbjBMPFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:05:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231429AbjBMPEk (ORCPT
+        with ESMTP id S231534AbjBMPE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:04:40 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927BA1C7ED
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:04:35 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 124F91F385;
-        Mon, 13 Feb 2023 15:04:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1676300674; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OToXXZIiWyAXEWcNWyx7IuheXO6/EAzirjW2J5oIVV8=;
-        b=jeiuJTj7Atw+amz6Q6JVcsHkMzhJtLLZAZB0WGuZruMAcoS6BkxP2GDc5J6w/IhAt1Zxc3
-        33Gs/gyhDUJTn+en/dTdYkILOT06hkOkv6pkKfGr0I3aXB5v7CwsIcFxBBAP50RLNt1woY
-        8Dmd3mUYubLXPE9908DGDz2J0N89/Fk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1676300674;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OToXXZIiWyAXEWcNWyx7IuheXO6/EAzirjW2J5oIVV8=;
-        b=Fuyr7ypH29sejDdyzCavt4aKXfOGvtbOIQ8gs49CBpeEkD0xjflMdNhW25mvxU7yGphGBq
-        9ObgRgxkM0d4w0BA==
-Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 13 Feb 2023 10:04:59 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39AC1E1E6
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:04:52 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.179.179])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 2A9DF2C141;
-        Mon, 13 Feb 2023 15:04:31 +0000 (UTC)
-Date:   Mon, 13 Feb 2023 16:04:29 +0100
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Nathan Lynch <nathanl@linux.ibm.com>
-Cc:     Laurent Dufour <ldufour@linux.ibm.com>, mpe@ellerman.id.au,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        Srikar Dronamraju <srikar@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Subject: Re: [PATCH] powerpc/pseries/cpuhp: respect current SMT when adding
- new CPU
-Message-ID: <20230213150429.GZ19419@kitsune.suse.cz>
-References: <20230213124510.12651-1-ldufour@linux.ibm.com>
- <87ilg5aahx.fsf@linux.ibm.com>
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B4A2D66020C9;
+        Mon, 13 Feb 2023 15:04:49 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676300691;
+        bh=FFqNTh+pB9jzq4L/qxAe2P9DHqtSP7GObqnLLJOP62Y=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=RJVlpdbXOUDvG6eFedao3CmykJitwVSB9lbpAeQgCgKwRD8DBXEqlwXWP5mY2yG7H
+         HmjEPxQ8rjHHIiis2fTwZ3Jch1334xdQcp6DMXcX1Yre/wDtIAT7v4Ao3P9x2s5Acn
+         Yg90o5cvO7bUWQ8VYfbxnRcV7ZkwMSDo1MymHlyFKjnHDMmH0jfB1xQ3qeKQ5xj8im
+         OP+wvZxy8nZBZ/YHhxejuJIAthFIQAUQn4SAWgwRj1+pqDb0Oz7/8YH4zT5fDppM3G
+         mFmI727ud5T8AU/FcevIpg4pYRWJ8tqT2OexLGpUA+n2enK4CuLCHm2X6qjnKrN4rw
+         CxD70vfnAUCHA==
+Message-ID: <ca5ce36f-5821-a946-1c41-d1905c88c9f3@collabora.com>
+Date:   Mon, 13 Feb 2023 20:04:45 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87ilg5aahx.fsf@linux.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, Paul Gofman <pgofman@codeweavers.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/userfaultfd: Support operation on multiple VMAs
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>, peterx@redhat.com,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20230213104323.1792839-1-usama.anjum@collabora.com>
+ <bb1c9707-d127-43c9-b5ec-5e5dad282726@redhat.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <bb1c9707-d127-43c9-b5ec-5e5dad282726@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,58 +59,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi David,
 
-On Mon, Feb 13, 2023 at 08:46:50AM -0600, Nathan Lynch wrote:
-> Laurent Dufour <ldufour@linux.ibm.com> writes:
-> > When a new CPU is added, the kernel is activating all its threads. This
-> > leads to weird, but functional, result when adding CPU on a SMT 4 system
-> > for instance.
-> >
-> > Here the newly added CPU 1 has 8 threads while the other one has 4 threads
-> > active (system has been booted with the 'smt-enabled=4' kernel option):
-> >
-> > ltcden3-lp12:~ # ppc64_cpu --info
-> > Core   0:    0*    1*    2*    3*    4     5     6     7
-> > Core   1:    8*    9*   10*   11*   12*   13*   14*   15*
-> >
-> > There is no SMT value in the kernel. It is possible to run unbalanced LPAR
-> > with 2 threads for a CPU, 4 for another one, and 5 on the latest.
-> >
-> > To work around this possibility, and assuming that the LPAR run with the
-> > same number of threads for each CPU, which is the common case,
-> 
-> I am skeptical at best of baking that assumption into this code. Mixed
-> SMT modes within a partition doesn't strike me as an unreasonable
-> possibility for some use cases. And if that's wrong, then we should just
-> add a global smt value instead of using heuristics.
-> 
-> > the number
-> > of active threads of the CPU doing the hot-plug operation is computed. Only
-> > that number of threads will be activated for the newly added CPU.
-> >
-> > This way on a LPAR running in SMT=4, newly added CPU will be running 4
-> > threads, which is what a end user would expect.
-> 
-> I could see why most users would prefer this new behavior. But surely
-> some users have come to expect the existing behavior, which has been in
-> place for years, and developed workarounds that might be broken by this
-> change?
-> 
-> I would suggest that to handle this well, we need to give user space
-> more ability to tell the kernel what actions to take on added cores, on
-> an opt-in basis.
-> 
-> This could take the form of extending the DLPAR sysfs command set:
-> 
-> Option 1 - Add a flag that tells the kernel not to online any threads at
-> all; user space will online the desired threads later.
-> 
-> Option 2 - Add an option that tells the kernel which SMT mode to apply.
+Thank you for quick review!
 
-powerpc-utils grew some drmgr hooks recently so maybe the policy can be
-moved to userspace?
+On 2/13/23 4:44 PM, David Hildenbrand wrote:
+> On 13.02.23 11:43, Muhammad Usama Anjum wrote:
+>> mwriteprotect_range() errors out if [start, end) doesn't fall in one
+>> VMA. We are facing a use case where multiple VMAs are present in one
+>> range of interest. For example, the following pseudocode reproduces the
+>> error which we are trying to fix:
+>>
+>> - Allocate memory of size 16 pages with PROT_NONE with mmap
+>> - Register userfaultfd
+>> - Change protection of the first half (1 to 8 pages) of memory to
+>>    PROT_READ | PROT_WRITE. This breaks the memory area in two VMAs.
+>> - Now UFFDIO_WRITEPROTECT_MODE_WP on the whole memory of 16 pages errors
+>>    out.
+>>
+>> This is a simple use case where user may or may not know if the memory
+>> area has been divided into multiple VMAs.
+>>
+>> Reported-by: Paul Gofman <pgofman@codeweavers.com>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>>   mm/userfaultfd.c | 36 +++++++++++++++++++-----------------
+>>   1 file changed, 19 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+>> index 65ad172add27..46e0a014af68 100644
+>> --- a/mm/userfaultfd.c
+>> +++ b/mm/userfaultfd.c
+>> @@ -738,9 +738,11 @@ int mwriteprotect_range(struct mm_struct *dst_mm,
+>> unsigned long start,
+>>               unsigned long len, bool enable_wp,
+>>               atomic_t *mmap_changing)
+>>   {
+>> +    unsigned long end = start + len;
+>>       struct vm_area_struct *dst_vma;
+>>       unsigned long page_mask;
+>>       int err;
+>> +    VMA_ITERATOR(vmi, dst_mm, start);
+>>         /*
+>>        * Sanitize the command parameters:
+>> @@ -762,26 +764,26 @@ int mwriteprotect_range(struct mm_struct *dst_mm,
+>> unsigned long start,
+>>       if (mmap_changing && atomic_read(mmap_changing))
+>>           goto out_unlock;
+>>   -    err = -ENOENT;
+>> -    dst_vma = find_dst_vma(dst_mm, start, len);
+>> -
+>> -    if (!dst_vma)
+>> -        goto out_unlock;
+>> -    if (!userfaultfd_wp(dst_vma))
+>> -        goto out_unlock;
+>> -    if (!vma_can_userfault(dst_vma, dst_vma->vm_flags))
+>> -        goto out_unlock;
+>> +    for_each_vma_range(vmi, dst_vma, end) {
+>> +        err = -ENOENT;
+>>   -    if (is_vm_hugetlb_page(dst_vma)) {
+>> -        err = -EINVAL;
+>> -        page_mask = vma_kernel_pagesize(dst_vma) - 1;
+>> -        if ((start & page_mask) || (len & page_mask))
+>> -            goto out_unlock;
+>> -    }
+>> +        if (!dst_vma->vm_userfaultfd_ctx.ctx)
+>> +            break;
+>> +        if (!userfaultfd_wp(dst_vma))
+>> +            break;
+>> +        if (!vma_can_userfault(dst_vma, dst_vma->vm_flags))
+>> +            break;
+>>   -    uffd_wp_range(dst_mm, dst_vma, start, len, enable_wp);
+>> +        if (is_vm_hugetlb_page(dst_vma)) {
+>> +            err = -EINVAL;
+>> +            page_mask = vma_kernel_pagesize(dst_vma) - 1;
+>> +            if ((start & page_mask) || (len & page_mask))
+>> +                break;
+>> +        }
+>>   -    err = 0;
+>> +        uffd_wp_range(dst_mm, dst_vma, start, len, enable_wp);
+> 
+> I suspect you should be adjusting the range to only cover that specific VMA
+> here.
+Sorry, you are right. I don't know why it is still working with the
+blunder. Will send a v2.
 
-Thanks
+Thanks,
+Usama
 
-Michal
+-- 
+BR,
+Muhammad Usama Anjum
