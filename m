@@ -2,188 +2,413 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74F686947AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 835B26947B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:09:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjBMOGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 09:06:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
+        id S229906AbjBMOJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 09:09:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbjBMOGQ (ORCPT
+        with ESMTP id S229505AbjBMOJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 09:06:16 -0500
+        Mon, 13 Feb 2023 09:09:22 -0500
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99951DBF4;
-        Mon, 13 Feb 2023 06:06:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5700BF742;
+        Mon, 13 Feb 2023 06:09:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676297175; x=1707833175;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=AAljeAuHxNSFFUWl8kFK3hpDgGNWvewNMfuKOKJ7tFA=;
-  b=GLCM3a3Vc5QzcPRpbHIJo0FzXMPvi4VaUFxXqVwfROZ9fEgVLM+tp568
-   JLyHNimnEdMElNWcSlJDRfVrN7Dbyev5rRyRUWoLWN4Mq3HZmTkicU2/4
-   e3X/2qgmVCohXAQ/S+ucvLeGiHdSbba05lqFY0yz0vJdzSHfKIBFcIv6C
-   Ag8TynADzUTOwdsPcCxGW/wVLjxGXmfy+dFOR6WDyuEXwzeca0nTXghh2
-   1kEetCLLsL3EnUPsa3XM/8I1mUTNchoAXWx1pcIpUnlRRJLFRIvog5ieW
-   4XF/2DLUXG/8BHc7fDdN/r12cA03vOXfF6izmRy6CXDT3EqRf44Q1WKaW
+  t=1676297360; x=1707833360;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=De/ni8P0/bGzpe6fHZCmAkBqupFI5AQWrto54XnN2vc=;
+  b=Y4UFRoJEcl4L5AueC96r7j4zS1Se6oxjVT5POBSqCs8AJcuVlvJ5Tiir
+   7Yof4flYsCiY19vkW35vSkL8WZjcXTajwLNDSfkfdXnMWvU9n/dFVtIhA
+   54zzpCBoy+R55zmde5oAvadWI17A5vWZgKRaH6dxN+SBCgXHRUuoA22op
+   aBu2+9ZjsZUtJKkH+C8yDIZwobfiBvT3603NIRHK0UR1PqTC+kd6+C0fV
+   9XtxnEkG58ljzEEBVHbsy0IXCGfJFlLQJuuBKpv8ULwjOhtRlRshif5zf
+   vVbeWy8XPvdMJFNXDo9w5b0fKrSdm8FadT+qh68Tcw1KXIfN7+mMP1x0X
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="314537439"
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="314539451"
 X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="314537439"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 06:04:15 -0800
+   d="scan'208";a="314539451"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 06:09:19 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="997702353"
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="701271761"
 X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="997702353"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga005.fm.intel.com with ESMTP; 13 Feb 2023 06:04:14 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+   d="scan'208";a="701271761"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga001.jf.intel.com with ESMTP; 13 Feb 2023 06:09:18 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 13 Feb 2023 06:04:13 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ 15.1.2507.16; Mon, 13 Feb 2023 06:09:17 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 13 Feb 2023 06:04:13 -0800
+ 15.1.2507.16 via Frontend Transport; Mon, 13 Feb 2023 06:09:17 -0800
 Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Mon, 13 Feb 2023 06:04:13 -0800
+ 15.1.2507.16; Mon, 13 Feb 2023 06:09:17 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GeUjySTyxE1y0iZCO5OVgUkL4fe7EbAdfoO8PLxa1jxS04/zU5X+T9AU54KaajKlicn99dDrKlTS1GjHMNdgm4zp5Yyf1EKcHhX97sS6nLNEgUne4TJoeGJsTtN9LwB52fDAbakdpZNUdsCvE2Xtks8tfKso/ma2I53bHVTOHyAga56ij4u+Exl1kJCiDXxKaD8H81+6fPVbNBpvHHxF9yR19swdNY6Fcd1kYC8Dzuhu0JaDCU3bStiDrniXCAc5Bb+bjC1fDO6m6aPx8amPtNxyL5i8koQ1CRflkaXMK1ORkAO9WpQMDcRP0qwOof5xPljQNQ7+hv+c/u1f6NiY2Q==
+ b=RDH8uyrfiWQxFYGQPSuUISw3XaOjK45wGKmjlfxbNcYi9t0z5LUtxn5AJSJwZk2uRoebiad7+kw/pP5IoU6EnqwI3ZKQSfUC/DMwz2bOqLVT2zy3l/9vvA5yHdyjfoGADun5chRWBHKwbQask/+a3Wb2QO+/Pv1WSWv2o2KFeOwgUDw3ATjSmkftV94+qmgyCNd0vQUzDNtQA2SP6yABeyCLdRAbWy05a2DVhrKKTW6+4Cwzi8V4V/s4pi2w+mGLwM8q594bts83zveFYnsYDu687+ZswjwxaFCmj/WwByOnWLx4jyf/wJWXwWHeDsZKXfcSdOOc/KMBPQoEP2ljCg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WZfOcsSM9JfGlTyOrEaf2VvtPrkdu383LXB49PTNvOg=;
- b=Oe1PMFUnp3QPUd66INfHZNLYGywJAx4T2yAWDnT3IU3Tzqf4zRAu8P5DFakoRGshdfJr2nr/amZUE7wmtFny/RsYpyEwBaOi1K9QbtE0VUbUWkwvrH1FO61bOSmB3tP0MjnU9NHIfCXFnlHHVyNB5lrTcNt5kw3oucUINm7TjstYoDs03fx44V/D8VKN+tEvjU+/j1DLqbA61oHfbrxcPgUyXgu2hZuuJGKcvZRmfwM9qYU2mYVHnD/WfjhNC69lZ7l01W4RY6/n39Ooa20jCydla+AEqM+lCqEV/xqQh8ZQJVUpddSBujbRVvWRMZztKounnB07gYwjp6/v5s/uHg==
+ bh=sgbomMwLnH8LXd/KZZM8dtMZvEG9jJ1iUoszxQISlkE=;
+ b=V9aojqJE8+E/7gZn4VKzVHPJw7RwnIrQhGSqXzC4YXNDesOEeON7kOIlSOC8oBA+XqIR7WhgO6LDoQ7BX4QW48wPrrWfS7CjHdIVv7dqu/rI/mcKbMdb7G623cCwDrtatrjPNlGqn0kXyeE0G9o2KDy9a5lcKQzSRaOySMNariTC1q8pp1ocaCtaApJ9ozmaC6I5yO4+qE8toz+fAU8OwRHxxKrH04o42FLmdPuR34n8H+B/w/TqS2d3+49VkkeAGKKfk3b9vavkRwi47ET6jjASpe1IhC+QcluwYYX2yCoFE/Si3qPl95XuFCiR9F0skG1UsunKgKOsQFIVIh1ayA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
- by IA0PR11MB7402.namprd11.prod.outlook.com (2603:10b6:208:432::21) with
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
+ by DM4PR11MB6479.namprd11.prod.outlook.com (2603:10b6:8:8c::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.21; Mon, 13 Feb
- 2023 14:04:12 +0000
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::3ff6:ca60:f9fe:6934]) by DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::3ff6:ca60:f9fe:6934%4]) with mapi id 15.20.6086.017; Mon, 13 Feb 2023
- 14:04:12 +0000
-Message-ID: <0f304e2b-f49e-a3c6-9f8a-0061b7665e5f@intel.com>
-Date:   Mon, 13 Feb 2023 15:03:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH bpf] bpf, test_run: fix &xdp_frame misplacement for
- LIVE_FRAMES
-Content-Language: en-US
-To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230209172827.874728-1-alexandr.lobakin@intel.com>
- <87v8ka7gh5.fsf@toke.dk> <8d3a9feb-9ee5-4a49-330a-9a475e459228@intel.com>
- <87lel5774q.fsf@toke.dk>
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-In-Reply-To: <87lel5774q.fsf@toke.dk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO4P265CA0044.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2ac::23) To DM6PR11MB3625.namprd11.prod.outlook.com
- (2603:10b6:5:13a::21)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Mon, 13 Feb
+ 2023 14:09:15 +0000
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::868b:ff1f:d827:188d]) by MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::868b:ff1f:d827:188d%8]) with mapi id 15.20.6086.017; Mon, 13 Feb 2023
+ 14:09:15 +0000
+Date:   Mon, 13 Feb 2023 22:04:35 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Joe Mario <jmario@redhat.com>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "Namhyung Kim" <namhyung@kernel.org>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>
+Subject: Re: [PATCH] perf c2c: Add report option to show false sharing in
+ adjacent cachelines
+Message-ID: <Y+pDc9pgydL09jSj@feng-clx>
+References: <20230213031733.236485-1-feng.tang@intel.com>
+ <649f813d-2500-3015-57dc-b2e1fe290388@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <649f813d-2500-3015-57dc-b2e1fe290388@redhat.com>
+X-ClientProxiedBy: SG2PR03CA0090.apcprd03.prod.outlook.com
+ (2603:1096:4:7c::18) To MN0PR11MB6304.namprd11.prod.outlook.com
+ (2603:10b6:208:3c0::7)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|IA0PR11MB7402:EE_
-X-MS-Office365-Filtering-Correlation-Id: f5911714-9730-497c-9d72-08db0dcb2eb5
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6304:EE_|DM4PR11MB6479:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5c35da68-f176-4b31-9a6e-08db0dcbe3b4
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +xMN+QviDAni24TrcpPGYEwDXe3DhBGpx5B+h04sjO7dtyeyJH3hp1Xpjf7N1cHWT5cAvENxGeijvcIevgrZg87APytkP96MHc4BxoBk2YQzSwsaBNIKIGi0qtsUMnP8NiYyMYLRqlZMxmHC6iQTs4g1DoJLK1AEz/74b0B/OmdWJH9mA50INhubGSXMkwlYVJYcbZDISwpPJ+7vF81cL6fBvS2uQh6MIFRzVfW4GdZLs8+InJynuImmYwUXZFaVLMpopzlNa5ETiAL+TdpiK6Jb13z1L6m3IqvaSgaiV8zuu7k1SuhFK5wj5gmO9pDks6LII0lDdF4x7h+Gi1yK1n6MpWGm742iKbfb5yExx3qf+BviTrnQJRVtTj/Jgid1ovCipZx8idGJGXJ4mx5eE09eQEpADwyFaWssEnCFNy0SoDQJqf9Bt1G8+IKHhN7oAmqjVYYSoIh/0wZ3KErf+s1EhESc3sN2wL8sBr4IYU6VibVTFauuXVVo8mnLpaf7Oul0Z1Zf+1mjrDann//neE8tX+LwL8iYZ6vUT4OsIf4oYMk4qYkpX55GGR3szVJT/DT2NH3GAkfbV8CuFJJtY3Az5x2zCf7s0ARzIc2mqLf7fmqheyXihu0HwcBIWKdDRUtJVkFO6BILcZVUYU2b5nBwUcjkgtmzgwPXE79ArmmE8C3YZQbzpWxPQPA7nz8qFHJgixMLfKARQjdN4uZ8QbA7VBobONuGdVbFSWkmZXc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(346002)(376002)(39860400002)(396003)(136003)(451199018)(31686004)(66946007)(186003)(8936002)(7416002)(4744005)(8676002)(66556008)(6512007)(4326008)(66476007)(86362001)(36756003)(26005)(31696002)(82960400001)(6506007)(38100700002)(6916009)(66574015)(2906002)(5660300002)(2616005)(6486002)(6666004)(478600001)(41300700001)(54906003)(83380400001)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: Zw/V1PfDKiAVwBoC3npsCZOKxbFd0PFKO8dlWYzreCj+GvkMgi/inn4z+hWnCa6PdY/itU99/KuZ4rpbkJabEW7WGBtTOOev1F/X2Jl7K4NcgLgeFe2mfUmznmTBCRf3EnJ4itSZjV08HR2nNktHYN2EgEfYdzED6f5Mj/ZDkhw6SLI9n034f6ccL5qPMcZqlmENFjs2Beqep2TaFWjBI7tFI5+VeGEsv0lWS/MEzt3LGDaURrTtbluN32mFQtdzOZLPhsjQc0/ru9TPyiImcSjxFj93jXR6jXU85Ohtd9gtZ6zC3FCfUkvQ9P/dSrYqtWiVrJU+GQehGO8154B0yiRYfNue1hIbYKnrmE391bJN2aHREGdooVxj+fHBXTNaA/M1ZbOcBWwelIerAKgt65MzJO5++cF4SSbDBN1BvJbvHpbMgeXWcdjjpztn8+h/kICTnjSybRNEjasYi8/sZ8IfDUu2CFNLMVxJMiSsGlMsWIY+60kAqSiMdH1aZ/DCBHaHnZVmQsU1ISfCSIuJhaoV/SoaXZLz3Ou9jW10F5xDFKiKNzy1uxBOYOwQKK9FZ2rB1tBd5qAEIX9k+qxZ1iObk/MBGUnFk5gFol/WBYyG2QMdNQBuiDJ8TxhLONz8SrSi1bBaWIxChSdYNYPvXRG22teMavPPIL6K0QBYeIk2nRoR1pgL4TSUVgzRUF7y8zyfsK8ZHwbZgJo+OqtN8YzUKQTqSPMZMYR2uQ5fTss=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6304.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(39860400002)(136003)(366004)(396003)(376002)(346002)(451199018)(66556008)(8676002)(66946007)(66574015)(6916009)(4326008)(83380400001)(66476007)(41300700001)(33716001)(38100700002)(82960400001)(5660300002)(86362001)(186003)(26005)(9686003)(54906003)(316002)(6512007)(6506007)(966005)(7416002)(2906002)(6486002)(53546011)(44832011)(478600001)(6666004)(30864003)(8936002)(67856001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cC9SaTFQRDM2ZTlWVkFrc21nRHZXTmV2OWZLVWJYOTREOVRkYXd3MmxMQUF6?=
- =?utf-8?B?bGx5WGpHZHh6blFjM01UWk9BVTBxYnlCaE1MUzRzNmFvclFYZEZXZGlzZlQ0?=
- =?utf-8?B?WlpjQklHZkJPUnVrNXJBVnArL0QwYzhpdWptRHNUTVFxZWZRTFdaeFBTdkhz?=
- =?utf-8?B?YjlBcFNFeHRZY1F4YnozbmRYNkJGUXJRQ1c2WHFsSEVwVm03V3FCSWczMi9u?=
- =?utf-8?B?dkFqZ25BQmw0OFM0RS9hTGd6SlR0TWtoYW9UQlJhYzM0Ry95bUhjMW1qdkdT?=
- =?utf-8?B?VkZhNTRTS1p5WkhEVENYWVhBd0kycUpJU3hoNkxVWGcvR2hkSjVLNUlaSW1s?=
- =?utf-8?B?OVRpdFZ3WDFBb3pUQTZjK054eFlmU3JRY0IzK0ViZzdMbitmY2ZTUzZvVmFh?=
- =?utf-8?B?eUFvd0l4aEwzZ2dKMGVka3JEQjZGeFlkbDJJdEVnSWV1cDZJalFPT1lyYXA4?=
- =?utf-8?B?czBTdjlzRGsyQy9sdFJ1LzFxWXhCa1U1YmhFYktxUVJZaDgwWGM0Mi80eXYz?=
- =?utf-8?B?cVBSd1BydmlDOGdabmRjdzAxOExEeVhyclkrR2t5QWFkTWQ1a2FrV0w5MjFs?=
- =?utf-8?B?SXFZZ0dFRVY3R29VWWJXaWhmUm40UTM0ZXNOK1FQVWNsdWs4alhyOEJicUp0?=
- =?utf-8?B?cVF0VExNYWx5VTluZjlDeUY5eEpXRmZubDlSckZsMXVUekZNZDl4bm1hUFl5?=
- =?utf-8?B?SUtHcndQNE1nc0tXcnh0TGlBUHdnQlVYQjZyZXIxVjNqbHpiWmNvNE1IZ1p0?=
- =?utf-8?B?SmVPa0ZIclIxMzdNKzlQMG16KzdwKy9TQXpJZUxrYVpmSi8xamI1cDBiTFhZ?=
- =?utf-8?B?WVdZQUNlR1dHN1ZTN20xcXNCRytaRmpWUHFEZkIrUW9KU3Fjb05mUFcxVWtF?=
- =?utf-8?B?UWhWek9kdnR0bmJ2dmdLbFEzWWdOZTZhWTdYN1BueUltVEh3M2EvRWM2aUJ5?=
- =?utf-8?B?K2VQbEE2ZU9TK05BV1VBMUZzeEJQQU9Qa3VydzNUdVFrSGM5MG5FVm45ZmQr?=
- =?utf-8?B?emt6MVNRNEtNTDJ5ZzBhMUIwTTlQWWswbTd3dGREVHNzajNUeFBycG9LYjQx?=
- =?utf-8?B?ZHFtZjZDK2lpU1dNTXNNdExUTzMrbHhxOExsZkhqaDVRSVR3Sk9pUmhOMCtQ?=
- =?utf-8?B?NE0yTmh4Sk9GZFFmSTIyNDR0NVIxWVdicCsrajlLbEdpbkt4ZHp0WTJ6aVI1?=
- =?utf-8?B?bEJTRTdHbDZHRkxFZHZpREh3bGk0eTAvc3QySTI2cXZjeVYxTVJaWlE2aE5i?=
- =?utf-8?B?YmhUR1dZYXVmQjBjNExjM3pJSkZscUkxemE4VEloUTNVT2o5RTM0aXFVTG00?=
- =?utf-8?B?L2oxcldKaHBtM0h4V3VzUnYxM2NZYVAwcDB1UnpPd3VPSWVDMWl1dGtGYS9i?=
- =?utf-8?B?WXRQUU55alFqQU1nZnRObXoxL2JyNVNldm9UVmRVaFpiN0lkeHhZM0JtL2tt?=
- =?utf-8?B?aFNnaWZkMFIrSWlIaHFvQ0dLNCt4cWlaN0lBVThGWkFOcDI1cDFqOHp0VlFH?=
- =?utf-8?B?dlVMREFjN2NkWjJVLzVYd0FYSE40aVJhbG9aU2M4OWZjdTVWZUltOVRPVTVw?=
- =?utf-8?B?SUMyZUd3SngweEdBaHhoRGwxa2tkc2w0TFBWOGpqVkQ5NzMwbklsUndjV0NR?=
- =?utf-8?B?WkM3MTgybjUyTUp1QjY3R3ExY0NGQ1c2MFY1ck82R1E0K3hEYkpEek83MnlT?=
- =?utf-8?B?clFyUG15MUJnWG1tVmZOdSttRXdGTzRPcjFMbndHL1hEM2ZCSmMrdFdTcUNR?=
- =?utf-8?B?cUIxc3d1ZmFiMnlaU3lQWGVqNXBKV2RvazM1ZmMxbEE4OUJmWDM3Q2pEMVU4?=
- =?utf-8?B?Wko3YnlBbnB3ZHFuVExNc3lsS01VS3NxckF3VE01SGhRb242VnprZ2NoRHQr?=
- =?utf-8?B?akZpY3czaUludWVrNEg1S1JMbHZXTGQrNEZvRU9LREk4VSs2dUQzYmpRM0dG?=
- =?utf-8?B?OWNibjlVUFJ2K1dwcWVzZ2drdHNKUEVnQ1M5bHJZcEZMcGgxTHl0aXNMOGdq?=
- =?utf-8?B?aVU5V09mc0JJZ3RaUG4yNnE5SlVTMVZPWE03ZVZPYkoxUmI5NmY0WjZUM2FS?=
- =?utf-8?B?SWU4dFVtSnhrK1duOHVOWDlwZEhkamk4bEFPbW1zaW96RDhzcklKT3M4bkdy?=
- =?utf-8?B?RGM2MlpDdjBSSEtUS2RrTWlGNXZ1M1o4QkJLd0pkb0xpS09QdTVuSDJWUlF3?=
- =?utf-8?B?anc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f5911714-9730-497c-9d72-08db0dcb2eb5
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?a+BfNq2lSEOxRfmvpEY5LtHm9ZXLDYvrAcWsCKVUjqWh7bhKELqLdBGJp49s?=
+ =?us-ascii?Q?NKUrMvAFxOMvdLe88hDc45bmhVinXfOQ5nh1lF7WjYpFpimw4u8HWTyh8rIs?=
+ =?us-ascii?Q?cMwrmbgaWDu1ND3OLAu4lRmKe2EaQYrc3zTJGc5lkYCvybV70BYZyio+xDjo?=
+ =?us-ascii?Q?PMRx7kk9hX0L3jsaYGdq79AlJWzRAF1RmNCiKlN+Q33W8kuf6PZuXC0M6uuC?=
+ =?us-ascii?Q?a5d6ZB3qiRLVci0mb0sb8Kb8jdNealPFIamq9AISl9xtbNOkRzNyMX5NBD0F?=
+ =?us-ascii?Q?Nfw0mqg/fOudqC3A1DV1nNP0OaCT/H44c9vzUP0un2b7/ndgkCfQRrLBLM+0?=
+ =?us-ascii?Q?OSZvlj9bjxu/290ApZBNOH1e3r9xtF3+hueBN9xAtRzZTM4hSb9sgIWlN/SA?=
+ =?us-ascii?Q?ecZOflfQ9x6dcdZ6U5RNnhmQLJV9U6qAl2aKHPUkJ1ivIwgmSyAw1m9aW/iQ?=
+ =?us-ascii?Q?482TCnF2RCnDDNIO7odItv1Jg89N62syN26uW0HAThe/pDqLlkUnFNlsfokH?=
+ =?us-ascii?Q?uN+IrvKln6JLoakV6glLTFkukcj8ir2YeezLexmrb03UCWXMD3SWkapgHfy/?=
+ =?us-ascii?Q?CvnLdFFwHXx6om90/SUGlRx79EC8Utnvm0pP5kI5QTXRpvcBDUjL4loGt4fV?=
+ =?us-ascii?Q?LF8GbEMefAq2SOkAExQFdSdFhPF+t7iNMXhYsWkgsimFuHfG4FWOcDlFp2Al?=
+ =?us-ascii?Q?CiV8x5iqE1rAv7IDbdy5CIdvZGEUFEHWzOkQ+b9NOjFHvT4rEuLhGLxNOiDs?=
+ =?us-ascii?Q?z9Uy3ohQs6Jwb/utzl6sQzFKfF1i5EdEpdA47t5k9lJwxB9So8HYO38o6JEH?=
+ =?us-ascii?Q?rdF9VO+CQ5AgLeG7lFvNzNZHiw42FgPqVZT6mg8cTP68TD0DzjSGvgOMkeYm?=
+ =?us-ascii?Q?xCFBSWGjBrkfSd3Wwb/nR5SIMBePPdU744iT73fKvMmd2NfyvZy6WuRWvq6L?=
+ =?us-ascii?Q?tTaITcc46itu6RmogR6ZkcnV+6IfpEzYbviZcXFOpJUtXWWqETI9OEXvKy9D?=
+ =?us-ascii?Q?LEQSxmeZ8xuT2ULkH1nx69MBMSVP01JHqecA+1heKJAO2JFQ/fS7omg7l205?=
+ =?us-ascii?Q?LPA/2CdYLZ9dqfwOcHG+YP6pMRxYyt/1/L8zaBKlrw8rE5oAbbX5frqACODg?=
+ =?us-ascii?Q?uSGUOJ6Wsu+5Xz7SO5Vwd1YGMgf6delYG7M42f2jUeX0e7vorJMTBgl2nceV?=
+ =?us-ascii?Q?3LJcKyLWKI4e/HA2TVpkg9zSCFcQq+KkKeo0Ucde9lZc/3ik+xvRSU1kKR2U?=
+ =?us-ascii?Q?7pnG8GmeffLX3Zv2YePx6A24xQ5HRjqoSqhXP4FwkFE804+PS/b60voAGplZ?=
+ =?us-ascii?Q?4V4p8x87nkfLXIYTmrJglOF0p4N8HmEM6eyoNuEPOtdImVWRwGJBs2b5912f?=
+ =?us-ascii?Q?zyO899DnLoHn6OHiyMPKMNICJqXOSNZvIerJte2g9+seBIKcbq95VmDpDwUY?=
+ =?us-ascii?Q?wahjgZ/lB/1BItJ97nal/W4BVgGPiAzy7vyVSR9YCQEj+eQkHgaz6aqhYbOs?=
+ =?us-ascii?Q?Q88m49MhZr9n80OXDTrRi9l2irfmBC3kBhkhikuXbV4wHNkCUiduL4Nx/IKz?=
+ =?us-ascii?Q?3JMuUKidUhHGyESVOF4GckHzUkDzAfa+dqhkcs8Q?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c35da68-f176-4b31-9a6e-08db0dcbe3b4
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6304.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2023 14:04:11.9358
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2023 14:09:15.4249
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M2cjqCXXNN4S7HJvxa/JUQRxIi620SRHwok75rZ9hBRycCdlOv7gUdZALSM8BhUPfJP8ToWmiLdD6z94cqid9IYw2Z3nEWfqakTzRiYctLU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB7402
+X-MS-Exchange-CrossTenant-UserPrincipalName: nFUy++pFQPg0lL+imfK39xUCU9mFZJ9Kwhuxw669NVUumnW+BTOzmtenYIWTQ+b1g0ZTFwKu5Pg2mKDTMQHzAA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6479
 X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Toke Høiland-Jørgensen <toke@redhat.com>
-Date: Fri, 10 Feb 2023 18:38:45 +0100
+Hi Joe,
 
-> Alexander Lobakin <alexandr.lobakin@intel.com> writes:
+On Mon, Feb 13, 2023 at 08:39:15AM -0500, Joe Mario wrote:
 > 
->> From: Toke Høiland-Jørgensen <toke@redhat.com>
->> Date: Thu, 09 Feb 2023 21:04:38 +0100
-
-[...]
-
-> both of those assignments refer to flex arrays, which seems a bit
-> inconsistent. The second one works because it's assigning to a void
-> pointer, so the compiler doesn't complain about the type mismatch; but
-> it should work with just 'data = head->data' as well, so can we update
-> that as well for consistency?
-
-Aaaah, I see, you're right. Will do in a minute.
-
 > 
-> -Toke
+> On 2/12/23 10:17 PM, Feng Tang wrote:
+> > Many platforms have feature of adjacent cachelines prefetch, when it
+> > is enabled, for data in RAM of 2 cachelines (2N and 2N+1) granularity,
+> > if one is fetched to cache, the other one could likely be fetched too,
+> > which sort of extends the cacheline size to double, thus the false
+> > sharing could happens in adjacent cachelines.
+> > 
+> > 0Day has captured performance changed related with this [1], and some
+> > commercial software explicitly makes its hot global variables 128 bytes
+> > aligned (2 cache lines) to avoid this kind of extended false sharing.
+> > 
+> > So add an option "-a" or "--double-cl" for c2c report to show false
+> > sharing in double cache line granularity, which acts just like the
+> > cacheline size is doubled. There is no change to c2c record. The
+> > hardware HITM events are still per cacheline. The option just changes
+> > the granularity of how events are grouped and displayed.
+> > 
+> > In the c2c report below (will-it-scale's pagefault2 case on old kernel):
+> > 
+> >   ----------------------------------------------------------------------
+> >      26       31        2        0        0        0  0xffff888103ec6000
+> >   ----------------------------------------------------------------------
+> >    35.48%   50.00%    0.00%    0.00%    0.00%   0x10     0       1  0xffffffff8133148b      1153        66       971     3748        74  [k] get_mem_cgroup_from_mm
+> >     6.45%    0.00%    0.00%    0.00%    0.00%   0x10     0       1  0xffffffff813396e4       570         0      1531      879        75  [k] mem_cgroup_charge
+> >    25.81%   50.00%    0.00%    0.00%    0.00%   0x54     0       1  0xffffffff81331472       949        70       593     3359        74  [k] get_mem_cgroup_from_mm
+> >    19.35%    0.00%    0.00%    0.00%    0.00%   0x54     0       1  0xffffffff81339686      1352         0      1073     1022        74  [k] mem_cgroup_charge
+> >     9.68%    0.00%    0.00%    0.00%    0.00%   0x54     0       1  0xffffffff813396d6      1401         0       863      768        74  [k] mem_cgroup_charge
+> >     3.23%    0.00%    0.00%    0.00%    0.00%   0x54     0       1  0xffffffff81333106       618         0       804       11         9  [k] uncharge_batch
+> > 
+> > The offset 0x10 and 0x54 used to displayed in 2 groups, and now they
+> > are listed together to give users a hint.
+> > 
+> > [1]. https://lore.kernel.org/lkml/20201102091543.GM31092@shao2-debian/
+> > 
+> > Signed-off-by: Feng Tang <feng.tang@intel.com>
+> > Reviewed-by: Andi Kleen <ak@linux.intel.com>
+> > ---
+> >  tools/perf/Documentation/perf-c2c.txt |  6 ++++++
+> >  tools/perf/builtin-c2c.c              | 22 +++++++++++++---------
+> >  tools/perf/util/cacheline.h           | 25 ++++++++++++++++++++-----
+> >  tools/perf/util/sort.c                | 13 ++++++++++---
+> >  tools/perf/util/sort.h                |  1 +
+> >  5 files changed, 50 insertions(+), 17 deletions(-)
+> > 
+> > diff --git a/tools/perf/Documentation/perf-c2c.txt b/tools/perf/Documentation/perf-c2c.txt
+> > index 5c5eb2def83e..a8e1e40d270e 100644
+> > --- a/tools/perf/Documentation/perf-c2c.txt
+> > +++ b/tools/perf/Documentation/perf-c2c.txt
+> > @@ -126,6 +126,12 @@ REPORT OPTIONS
+> >  	The known limitations include exception handing such as
+> >  	setjmp/longjmp will have calls/returns not match.
+> >  
+> > +-a::
+> > +--double-cl::
+> > +	Group HITM events in double cacheline granularity. Some architecture
+> > +	has Adjacent Cacheline Prefetch feature, which behaves like the
+> > +	cachline size is doubled.
+> > +
+> 
+> Hi Feng:
+> One or two of the recent C2C patches changed the Intel-specifc "HITM" wording to something more generic, mostly because other arches do not have HITM events.
+> 
+> How about changing the above description to something like:
+> +-a::
+> +--double-cl::
+> +       Group the detection of shared cacheline events into double cacheline granularity.
+> +       Some architectures have an Adjacent Cacheline Prefetch feature, which causes
+> +       cacheline sharing to behave like the cachline size is doubled.
+
+Yes, HITM should not be in this architecture independent description.
+Thanks for helping to improve it, which is much better now!
+
+> By the way, this patch is awesome.  
+> It's not often that Adjacent Cacheline Prefetching causes performance problems, but when it does, it's a pain to track down.
+> This will really help.  Thank you for doing it.
+ 
+Thanks for your work on perf-c2c and the great blog (I forwarded the
+link to tens of colleagues :))
+
 Thanks,
-Olek
+Feng
+
+> Joe
+> 
+> >  C2C RECORD
+> >  ----------
+> >  The perf c2c record command setup options related to HITM cacheline analysis
+> > diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
+> > index 52d94c7dd836..7d495db7e5a2 100644
+> > --- a/tools/perf/builtin-c2c.c
+> > +++ b/tools/perf/builtin-c2c.c
+> > @@ -524,7 +524,7 @@ static int dcacheline_entry(struct perf_hpp_fmt *fmt, struct perf_hpp *hpp,
+> >  	char buf[20];
+> >  
+> >  	if (he->mem_info)
+> > -		addr = cl_address(he->mem_info->daddr.addr);
+> > +		addr = cl_address(he->mem_info->daddr.addr, chk_double_cl);
+> >  
+> >  	return scnprintf(hpp->buf, hpp->size, "%*s", width, HEX_STR(buf, addr));
+> >  }
+> > @@ -562,7 +562,7 @@ static int offset_entry(struct perf_hpp_fmt *fmt, struct perf_hpp *hpp,
+> >  	char buf[20];
+> >  
+> >  	if (he->mem_info)
+> > -		addr = cl_offset(he->mem_info->daddr.al_addr);
+> > +		addr = cl_offset(he->mem_info->daddr.al_addr, chk_double_cl);
+> >  
+> >  	return scnprintf(hpp->buf, hpp->size, "%*s", width, HEX_STR(buf, addr));
+> >  }
+> > @@ -574,9 +574,10 @@ offset_cmp(struct perf_hpp_fmt *fmt __maybe_unused,
+> >  	uint64_t l = 0, r = 0;
+> >  
+> >  	if (left->mem_info)
+> > -		l = cl_offset(left->mem_info->daddr.addr);
+> > +		l = cl_offset(left->mem_info->daddr.addr, chk_double_cl);
+> > +
+> >  	if (right->mem_info)
+> > -		r = cl_offset(right->mem_info->daddr.addr);
+> > +		r = cl_offset(right->mem_info->daddr.addr, chk_double_cl);
+> >  
+> >  	return (int64_t)(r - l);
+> >  }
+> > @@ -2590,7 +2591,7 @@ perf_c2c_cacheline_browser__title(struct hist_browser *browser,
+> >  	he = cl_browser->he;
+> >  
+> >  	if (he->mem_info)
+> > -		addr = cl_address(he->mem_info->daddr.addr);
+> > +		addr = cl_address(he->mem_info->daddr.addr, chk_double_cl);
+> >  
+> >  	scnprintf(bf, size, "Cacheline 0x%lx", addr);
+> >  	return 0;
+> > @@ -2788,15 +2789,16 @@ static int ui_quirks(void)
+> >  	if (!c2c.use_stdio) {
+> >  		dim_offset.width  = 5;
+> >  		dim_offset.header = header_offset_tui;
+> > -		nodestr = "CL";
+> > +		nodestr = chk_double_cl ? "Double-CL" : "CL";
+> >  	}
+> >  
+> >  	dim_percent_costly_snoop.header = percent_costly_snoop_header[c2c.display];
+> >  
+> >  	/* Fix the zero line for dcacheline column. */
+> > -	buf = fill_line("Cacheline", dim_dcacheline.width +
+> > -				     dim_dcacheline_node.width +
+> > -				     dim_dcacheline_count.width + 4);
+> > +	buf = fill_line(chk_double_cl ? "Double-Cacheline" : "Cacheline",
+> > +				dim_dcacheline.width +
+> > +				dim_dcacheline_node.width +
+> > +				dim_dcacheline_count.width + 4);
+> >  	if (!buf)
+> >  		return -ENOMEM;
+> >  
+> > @@ -3037,6 +3039,8 @@ static int perf_c2c__report(int argc, const char **argv)
+> >  	OPT_BOOLEAN('f', "force", &symbol_conf.force, "don't complain, do it"),
+> >  	OPT_BOOLEAN(0, "stitch-lbr", &c2c.stitch_lbr,
+> >  		    "Enable LBR callgraph stitching approach"),
+> > +	OPT_BOOLEAN('a', "double-cl", &chk_double_cl,
+> > +		    "Check adjacent cachline false sharing"),
+> >  	OPT_PARENT(c2c_options),
+> >  	OPT_END()
+> >  	};
+> > diff --git a/tools/perf/util/cacheline.h b/tools/perf/util/cacheline.h
+> > index dec8c0fb1f4a..630d16731b4f 100644
+> > --- a/tools/perf/util/cacheline.h
+> > +++ b/tools/perf/util/cacheline.h
+> > @@ -6,16 +6,31 @@
+> >  
+> >  int __pure cacheline_size(void);
+> >  
+> > -static inline u64 cl_address(u64 address)
+> > +
+> > +/*
+> > + * Some architecture has 'Adjacent Cacheline Prefetch' feature,
+> > + * which performs like the cacheline size being doubled.
+> > + */
+> > +static inline u64 cl_address(u64 address, bool double_cl)
+> >  {
+> > +	u64 size = cacheline_size();
+> > +
+> > +	if (double_cl)
+> > +		size *= 2;
+> > +
+> >  	/* return the cacheline of the address */
+> > -	return (address & ~(cacheline_size() - 1));
+> > +	return (address & ~(size - 1));
+> >  }
+> >  
+> > -static inline u64 cl_offset(u64 address)
+> > +static inline u64 cl_offset(u64 address, bool double_cl)
+> >  {
+> > -	/* return the cacheline of the address */
+> > -	return (address & (cacheline_size() - 1));
+> > +	u64 size = cacheline_size();
+> > +
+> > +	if (double_cl)
+> > +		size *= 2;
+> > +
+> > +	/* return the offset inside cachline */
+> > +	return (address & (size - 1));
+> >  }
+> >  
+> >  #endif // PERF_CACHELINE_H
+> > diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
+> > index e188f74698dd..148b28f0a7e2 100644
+> > --- a/tools/perf/util/sort.c
+> > +++ b/tools/perf/util/sort.c
+> > @@ -52,6 +52,13 @@ enum sort_mode	sort__mode = SORT_MODE__NORMAL;
+> >  static const char *const dynamic_headers[] = {"local_ins_lat", "ins_lat", "local_p_stage_cyc", "p_stage_cyc"};
+> >  static const char *const arch_specific_sort_keys[] = {"local_p_stage_cyc", "p_stage_cyc"};
+> >  
+> > +/*
+> > + * Some architecture has Adjacent Cacheline Prefetch feature, which behaves
+> > + * like the cachline size is doubled. Enable this flag to check things in
+> > + * double cacheline granularity.
+> > + */
+> > +bool chk_double_cl;
+> > +
+> >  /*
+> >   * Replaces all occurrences of a char used with the:
+> >   *
+> > @@ -1499,8 +1506,8 @@ sort__dcacheline_cmp(struct hist_entry *left, struct hist_entry *right)
+> >  
+> >  addr:
+> >  	/* al_addr does all the right addr - start + offset calculations */
+> > -	l = cl_address(left->mem_info->daddr.al_addr);
+> > -	r = cl_address(right->mem_info->daddr.al_addr);
+> > +	l = cl_address(left->mem_info->daddr.al_addr, chk_double_cl);
+> > +	r = cl_address(right->mem_info->daddr.al_addr, chk_double_cl);
+> >  
+> >  	if (l > r) return -1;
+> >  	if (l < r) return 1;
+> > @@ -1519,7 +1526,7 @@ static int hist_entry__dcacheline_snprintf(struct hist_entry *he, char *bf,
+> >  	if (he->mem_info) {
+> >  		struct map *map = he->mem_info->daddr.ms.map;
+> >  
+> > -		addr = cl_address(he->mem_info->daddr.al_addr);
+> > +		addr = cl_address(he->mem_info->daddr.al_addr, chk_double_cl);
+> >  		ms = &he->mem_info->daddr.ms;
+> >  
+> >  		/* print [s] for shared data mmaps */
+> > diff --git a/tools/perf/util/sort.h b/tools/perf/util/sort.h
+> > index 921715e6aec4..04f0a6dc7381 100644
+> > --- a/tools/perf/util/sort.h
+> > +++ b/tools/perf/util/sort.h
+> > @@ -35,6 +35,7 @@ extern struct sort_entry sort_sym_from;
+> >  extern struct sort_entry sort_sym_to;
+> >  extern struct sort_entry sort_srcline;
+> >  extern const char default_mem_sort_order[];
+> > +extern bool chk_double_cl;
+> >  
+> >  struct res_sample {
+> >  	u64 time;
+> 
