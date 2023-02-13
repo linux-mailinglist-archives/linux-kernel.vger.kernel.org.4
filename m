@@ -2,194 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 586B069485F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA08694860
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjBMOnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 09:43:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34128 "EHLO
+        id S230106AbjBMOoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 09:44:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbjBMOnk (ORCPT
+        with ESMTP id S230070AbjBMOoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 09:43:40 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC431B300
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:43:34 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id c2so13915756qtw.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:43:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=supPlbRV+eXNOD5GvgOhEaREvhsUxhfFsRvEzRM91kg=;
-        b=S3xs/YaUgwS/zqCeJq7rbhRz2wk3lUmqMIM1Q/usfQNjMiQ/rshmRjU0ibdxdhTSer
-         X5k1idvLs+Pajtes+qGQzw+14FNhb4lj/8OoFTgPJRuGDWf2Pel/yVh+pviYxbu0SUQx
-         1qns1ibC8ZBGZh9hJBrgppvKTq9/BKA3PdvEs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=supPlbRV+eXNOD5GvgOhEaREvhsUxhfFsRvEzRM91kg=;
-        b=ELOfAzeEST1lcbpl+dLyCS48QCNVBNt2uJnzgirK67UOivSv60HybGVmON19cwU+V5
-         ETWafJP02lagcFW4FrJR/zfvwKd8UnlITuhuow/F0o1DRrSuKQoKdeuNx2k859aGRYII
-         NCgZq4GI4vqdSCH/IvQbtDZztHB+Y6ANY4VF1MtblIWGAd77Hhcct7BV6bxTqRz1jEzU
-         QajokhxjfkE/t64BNQBQKYuHzzOTb96GYOO8A0G5GGO079C5TOX9y5AH8OvGkpjYIz48
-         Dmx8OBrDGGB8y6TflpzqYnAAY4G18qjPkV3wi4BTFO3TbUgUaHJyd455TTDzjWWbVS7P
-         mMLw==
-X-Gm-Message-State: AO0yUKX6vINxnPcrV9DDFtrS7p4kYV1fe7SGVBtWvF8ojSrAoQACRi1P
-        WguaTPtdnNWJbTARqoti9Mq/Jg==
-X-Google-Smtp-Source: AK7set8tQPTqBA0b25zIwUlADaTbPTHAEn0hgT04h88qEE/1sdpw3uPRL44ZZjt7skwz/IEpMJVHCA==
-X-Received: by 2002:a05:622a:c2:b0:3b7:fafc:73e3 with SMTP id p2-20020a05622a00c200b003b7fafc73e3mr42607583qtw.41.1676299413429;
-        Mon, 13 Feb 2023 06:43:33 -0800 (PST)
-Received: from smtpclient.apple (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
-        by smtp.gmail.com with ESMTPSA id l25-20020ac84cd9000000b003ba1428e8d8sm5480600qtv.20.2023.02.13.06.43.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 06:43:32 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH] rcu/tree: Improve comments in rcu_report_qs_rdp()
-Date:   Mon, 13 Feb 2023 09:43:22 -0500
-Message-Id: <B0B5741B-2A89-4092-935B-39B23EFEDC27@joelfernandes.org>
-References: <PH0PR11MB588015D6429D592BBD599733DADF9@PH0PR11MB5880.namprd11.prod.outlook.com>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-In-Reply-To: <PH0PR11MB588015D6429D592BBD599733DADF9@PH0PR11MB5880.namprd11.prod.outlook.com>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-X-Mailer: iPhone Mail (20B101)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 13 Feb 2023 09:44:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1F31ABED
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:44:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8455CB81256
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 14:44:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73C6EC433EF;
+        Mon, 13 Feb 2023 14:43:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676299441;
+        bh=IoA6/aIetZiYfNme3k88Q+6cnZ1MI5iAenT7WjZKAsE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rPdSZvOW6ltdJlDVklGMG3smJyjPTqBSO9YHKtHJ7YZ4PDjUay74euooWVOp1zEwI
+         nxfJEb3M+PYaGGEHvz/aVxraZ9YC269n1TMb43D40t40MA6nV1m259f7H6NyBfNFD6
+         3Qdy5mC853kauIc2CDrewWLJHcdba7YseqpOdCQB/faSdkty9/K3BnHPEXoXtwiEVB
+         TKWGy4b36yourE8iZag/HDvlFybP5sefgtefbr0sxZEjh4HudMUnVb6jmnvhOdKWPw
+         IsmR5Df/Aa3W0jhKpMrqvGxnUG8dSrQqfFmsi58do0ie9MH9FYFZLljQQPpFgZGZM3
+         BCOki+4zDL6VA==
+Date:   Mon, 13 Feb 2023 23:43:57 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH 2/2] x86/entry: Fix unwinding from kprobe on PUSH/POP
+ instruction
+Message-Id: <20230213234357.1fe194b2767d9bc431202d4c@kernel.org>
+In-Reply-To: <baafcd3cc1abb14cb757fe081fa696012a5265ee.1676068346.git.jpoimboe@kernel.org>
+References: <cover.1676068346.git.jpoimboe@kernel.org>
+        <baafcd3cc1abb14cb757fe081fa696012a5265ee.1676068346.git.jpoimboe@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 10 Feb 2023 14:42:02 -0800
+Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+
+> If a kprobe (INT3) is set on a stack-modifying single-byte instruction,
+> like a single-byte PUSH/POP or a LEAVE, ORC fails to unwind past it:
+> 
+>   Call Trace:
+>    <TASK>
+>    dump_stack_lvl+0x57/0x90
+>    handler_pre+0x33/0x40 [kprobe_example]
+>    aggr_pre_handler+0x49/0x90
+>    kprobe_int3_handler+0xe3/0x180
+>    do_int3+0x3a/0x80
+>    exc_int3+0x7d/0xc0
+>    asm_exc_int3+0x35/0x40
+>   RIP: 0010:kernel_clone+0xe/0x3a0
+>   Code: cc e8 16 b2 bf 00 66 0f 1f 44 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 0f 1f 44 00 00 41 57 41 56 41 55 41 54 cc <53> 48 89 fb 48 83 ec 68 4c 8b 27 65 48 8b 04 25 28 00 00 00 48 89
+>   RSP: 0018:ffffc9000074fda0 EFLAGS: 00000206
+>   RAX: 0000000000808100 RBX: ffff888109de9d80 RCX: 0000000000000000
+>   RDX: 0000000000000011 RSI: ffff888109de9d80 RDI: ffffc9000074fdc8
+>   RBP: ffff8881019543c0 R08: ffffffff81127e30 R09: 00000000e71742a5
+>   R10: ffff888104764a18 R11: 0000000071742a5e R12: ffff888100078800
+>   R13: ffff888100126000 R14: 0000000000000000 R15: ffff888100126005
+>    ? __pfx_call_usermodehelper_exec_async+0x10/0x10
+>    ? kernel_clone+0xe/0x3a0
+>    ? user_mode_thread+0x5b/0x80
+>    ? __pfx_call_usermodehelper_exec_async+0x10/0x10
+>    ? call_usermodehelper_exec_work+0x77/0xb0
+>    ? process_one_work+0x299/0x5f0
+>    ? worker_thread+0x4f/0x3a0
+>    ? __pfx_worker_thread+0x10/0x10
+>    ? kthread+0xf2/0x120
+>    ? __pfx_kthread+0x10/0x10
+>    ? ret_from_fork+0x29/0x50
+>    </TASK>
+> 
+> The problem is that #BP saves the pointer to the instruction immediately
+> *after* the INT3, rather than to the INT3 itself.  The instruction
+> replaced by the INT3 hasn't actually run, but ORC assumes otherwise and
+> expects the wrong stack layout.
+
+Ah, regs->ip is not adjusted. Yes. kprobes user usually use kp->addr.
+Hmm, maybe we also can adjust regs->ip in kprobes, but this change may
+help future use of stackdump in the int3 code. So I agree.
+
+> Fix it by annotating the #BP exception as a non-signal stack frame,
+> which tells the ORC unwinder to decrement the instruction pointer before
+> looking up the corresponding ORC entry.
+
+Just to make it clear, this sounds like a 'hack' use of non-signal stack
+frame. If so, can we change the flag name as 'literal' or 'non-literal' etc?
+I concern that the 'signal' flag is used differently in the future.
+
+Thank you,
 
 
-> On Feb 11, 2023, at 6:18 AM, Zhang, Qiang1 <qiang1.zhang@intel.com> wrote:=
+> 
+> Reported-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> ---
+>  arch/x86/entry/entry_64.S | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+> index 15739a2c0983..8d21881adf86 100644
+> --- a/arch/x86/entry/entry_64.S
+> +++ b/arch/x86/entry/entry_64.S
+> @@ -385,7 +385,14 @@ SYM_CODE_END(xen_error_entry)
+>   */
+>  .macro idtentry vector asmsym cfunc has_error_code:req
+>  SYM_CODE_START(\asmsym)
+> -	UNWIND_HINT_IRET_REGS offset=\has_error_code*8
+> +
+> +	.if \vector == X86_TRAP_BP
+> +		/* #BP advances %rip to the next instruction */
+> +		UNWIND_HINT_IRET_REGS offset=\has_error_code*8 signal=0
+> +	.else
+> +		UNWIND_HINT_IRET_REGS offset=\has_error_code*8
+> +	.endif
+> +
+>  	ENDBR
+>  	ASM_CLAC
+>  	cld
+> -- 
+> 2.39.1
+> 
 
->=20
-> =EF=BB=BF
->>=20
->>=20
->>> On Sat, Feb 04, 2023 at 02:20:50AM +0000, Joel Fernandes (Google) wrote:=
 
->>> Recent discussion triggered due to a patch linked below, from Qiang,
->>> shed light on the need to accelerate from QS reporting paths.
->>>=20
->>> Update the comments to capture this piece of knowledge.
->>>=20
->>> Link: https://lore.kernel.org/all/20230118073014.2020743-1-qiang1.zhang@=
-intel.com/
->>> Cc: Qiang Zhang <Qiang1.zhang@intel.com>
->>> Cc: Frederic Weisbecker <frederic@kernel.org>
->>> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
->>>=20
->>> ---
->>> kernel/rcu/tree.c | 13 ++++++++++++-
->>> 1 file changed, 12 insertions(+), 1 deletion(-)
->>>=20
->>> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
->>> index 93eb03f8ed99..713eb6ca6902 100644
->>> --- a/kernel/rcu/tree.c
->>> +++ b/kernel/rcu/tree.c
->>> @@ -1983,7 +1983,12 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
->>>      } else {
->>>              /*
->>>               * This GP can't end until cpu checks in, so all of our
->>> -              * callbacks can be processed during the next GP.
->>> +              * callbacks can be processed during the next GP. Do
->>> +              * the acceleration from here otherwise there may be extra=
-
->>> +              * grace period delays, as any accelerations from rcu_core=
-()
->>> +              * or note_gp_changes() may happen only after the GP after=
- the
->>> +              * current one has already started. Further, rcu_core()
->>> +              * only accelerates if RCU is idle (no GP in progress).
->>=20
->> Actually note_gp_changes() should take care of that.
->>=20
->> You are referring to  rcu_core() -> rcu_check_quiescent_state() ->
->> note_gp_changes() doing the acceleration prior to the  rcu_core() ->
->> rcu_report_qs_rdp() call, correct?
->>=20
->> Ah, but note_gp_changes() has an early return which triggers if either:
->> 1. The rnp spinlock trylock failed.
->> 2. The start of a new grace period was already detected before, so
->> rdp->gp_seq =3D=3D rnp->gp_seq.
->>=20
->> So I think it is possible that we are in the middle of a GP, and
->> rcu_core() is called because QS reporting is required for the CPU, and
->> say the current GP started we are in the middle off occurs from the
->> same CPU so rdp->gp_seq =3D=3D rnp->gp_seq.
->>=20
->> Now, rcu_core()'s call to note_gp_changes() should return early but
->> its later call to report_qs_rdp() will not accelerate the callback
->> without the code we are commenting here.
->>=20
->> My gut feeling is that the
->> acceleration in rcu_report_qs_rdp() only stands for:
->>=20
->> * callbacks that may be enqueued from an IRQ firing during the small wind=
-ow
->>  between the RNP unlock in note_gp_changes() and the RNP lock in
->>  rcu_report_qs_rdp()
->=20
-> For rdp which is in the middle of a de-offloading process, the bypass list=
- have been
-> flushed, the nocb kthreads may miss callbacks acceleration.   invoke call_=
-rcu()
-> will also not use bypass list. if at this time a new gp starts, before cal=
-l rcu_report_qs_rdp()
-> to report qs,  even if rcu_core() invoke note_gp_changes() notice gp start=
-, this rdp's callback
-> may still miss acceleration if rdp still in de-offloading process, because=
- invoke rcu_rdp_is_offloaded()
-> still return true.
->=20
-> I think this is also a reason.
-
-I tend to agree with you. I am wondering the best way to document all these r=
-easons. Perhaps it suffices to mention a few reasons briefly here, without g=
-oing into too much detail (because details may be subject to change).
-
-I will look through this entire thread again and take a call on how to proce=
-ed, but do let me know what you and Frederic think about the next steps. The=
- main benefit of commenting is we dont look at this in a few years and run i=
-nto the same question=E2=80=A6
-
-Thanks!
-
-Joel
-
->=20
-> Thanks
-> Zqiang
->=20
->>=20
->> Sure, this also seems like a valid reason.
->>=20
->> * __note_gp_changes() got called even before from the GP kthread, and cal=
-lbacks
->>  got enqueued between that and rcu_core().
->>=20
->> Agreed. In this case we will take the early return in
->> note_gp_changes() when called from the rcu_core(). So yeah, that was
->> kind of my point as well but slightly different reasoning.
->>=20
->> Let me know if you disagree with anything I mentioned, though.
->>=20
->> - Joel
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
