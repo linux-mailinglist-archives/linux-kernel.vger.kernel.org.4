@@ -2,97 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6824C694713
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 090D7694723
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbjBMNcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 08:32:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38200 "EHLO
+        id S229983AbjBMNed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 08:34:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbjBMNcu (ORCPT
+        with ESMTP id S229668AbjBMNec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 08:32:50 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95FB1ABF3;
-        Mon, 13 Feb 2023 05:32:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=WfnC+oG7H1liXzVZT+FHK51tDwPsM5vOONmGvVct5/g=; b=E7GbKirLHmxm03B7GCg417Nf0h
-        jMSD/eKkwkcEx1V661JfTIjS6zbv5RFTlvl+gNcv3mZ3O/0Zm60Ku8Fsz9zZYIXbl7J0eAdQfP1sk
-        cBo1LL1zPqx7pX3j3UEMV0BQt8TT+c9r1g/NQ+Abhcs11EsrzjnrUO0YeEaIYgp3uEtI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pRYwR-004qF9-U7; Mon, 13 Feb 2023 14:32:23 +0100
-Date:   Mon, 13 Feb 2023 14:32:23 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     wei.fang@nxp.com
-Cc:     shenwei.wang@nxp.com, xiaoning.wang@nxp.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, simon.horman@corigine.com,
-        linux-imx@nxp.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 net-next] net: fec: add CBS offload support
-Message-ID: <Y+o75wT84f6RTohf@lunn.ch>
-References: <20230213092912.2314029-1-wei.fang@nxp.com>
+        Mon, 13 Feb 2023 08:34:32 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDAB269C;
+        Mon, 13 Feb 2023 05:34:28 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A051C21867;
+        Mon, 13 Feb 2023 13:34:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676295267; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=saciHrBqwPQPzdodH5ZXO9iXT8uGZbs1hjAThfGOX/I=;
+        b=BC6hazDDMXHKpRkZWsOSWgGkkhDysckN0BIGsh9eYVLoFwx8ieX8PHP6IdWYj4e7wjhhNy
+        4gdwyIdrR3ibbBV1z8mYpZgnP+zyuHhminpQI4ngTo2vGnhBHFQ52LNFASsHh32AJgYZHh
+        vYiYeH//eF3kJ8oB0Bkc47W5tRshTgo=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7CE0B1391B;
+        Mon, 13 Feb 2023 13:34:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id X1FAHGM86mMqZAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 13 Feb 2023 13:34:27 +0000
+Date:   Mon, 13 Feb 2023 14:34:26 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Leonardo <leobras@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>, cgroups@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 2/2] sched/isolation: Add cpu_is_isolated() API
+Message-ID: <Y+o8Yndho4fpl3IS@dhcp22.suse.cz>
+References: <20230203232409.163847-1-frederic@kernel.org>
+ <20230203232409.163847-3-frederic@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230213092912.2314029-1-wei.fang@nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230203232409.163847-3-frederic@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> 3. According to Andrew's comments, the speed may be equal to 0 when the
->    link is not up, so added a check to see if speed is equal to 0. In
->    addtion, the change in link speed also need to be taken into account.
->    Considering that the change of link speed has invalidated the original
->    configuration, so we just fall back to the default setting.
+On Sat 04-02-23 00:24:09, Frederic Weisbecker wrote:
+> Provide this new API to check if a CPU has been isolated either through
+> isolcpus= or nohz_full= kernel parameter.
+> 
+> It aims at avoiding kernel load deemed to be safely spared on CPUs
+> running sensitive workload that can't bear any disturbance, such as
+> pcp cache draining.
+> 
+> Suggested-by: Michal Hocko <mhocko@suse.com>
+> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 
-I don't think that is what you have actually implemented. A link
-status change causes a fec_restart. And in fac_restart, you now
-reprogram the hardware. So if the link speed is sufficient to support
-the request, the hardware should be setup to support it.
+Is there any locking required? I do not think so as these should be
+boot time configured AFAIR. From the discussion around this I have
+understood that this might change in the future once cpusets gain a
+better isolation support. Maybe this should be documented at this stage?
 
-What are the real uses cases here? VoIP? Video streaming? So 128kbps,
-2Mbps. Both of those are fine over a 10Half limk. So i think you
-should try to configure the hardware whenever possible, after link
-change or any other condition which causes a reset of the hardware.
+Thanks!
 
-What i have not seen addresses here is my comment/question about what
-tc shows when it is not possible to perform the request after a link
-change? Did you look at how other drivers handle this? Maybe you need
-to ask Jamal?
-
-> +static int fec_enet_setup_tc_cbs(struct net_device *ndev, void *type_data)
+> ---
+>  include/linux/sched/isolation.h | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/include/linux/sched/isolation.h b/include/linux/sched/isolation.h
+> index b645cc81fe01..088672f08469 100644
+> --- a/include/linux/sched/isolation.h
+> +++ b/include/linux/sched/isolation.h
+> @@ -53,4 +53,10 @@ static inline bool housekeeping_cpu(int cpu, enum hk_type type)
+>  	return true;
+>  }
+>  
+> +static inline bool cpu_is_isolated(int cpu)
 > +{
-> +	struct fec_enet_private *fep = netdev_priv(ndev);
-> +	struct tc_cbs_qopt_offload *cbs = type_data;
-> +	int queue = cbs->queue;
-> +	int speed = fep->speed;
-> +	int queue2;
+> +	return !housekeeping_test_cpu(cpu, HK_TYPE_DOMAIN) ||
+> +		 !housekeeping_test_cpu(cpu, HK_TYPE_KERNEL_NOISE);
+> +}
 > +
-> +	if (!(fep->quirks & FEC_QUIRK_HAS_AVB))
-> +		return -EOPNOTSUPP;
-> +
-> +	/* Queue 1 for Class A, Queue 2 for Class B, so the ENET must
-> +	 * have three queues.
-> +	 */
-> +	if (fep->num_tx_queues != FEC_ENET_MAX_TX_QS)
-> +		return -EOPNOTSUPP;
-> +
-> +	if (!speed) {
-> +		netdev_err(ndev, "Link speed is 0!\n");
-> +		return -ECANCELED;
+>  #endif /* _LINUX_SCHED_ISOLATION_H */
+> -- 
+> 2.34.1
 
-ECANCLED? First time i've seen that one used. I had to go look it up
-to see what it means. It does not really give the user any idea why it
-failed. How about -ENETDOWN?
-
-	Andrew
+-- 
+Michal Hocko
+SUSE Labs
