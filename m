@@ -2,289 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D316A6953AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 23:19:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF5D6953AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 23:19:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjBMWS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 17:18:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58740 "EHLO
+        id S229873AbjBMWTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 17:19:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjBMWSt (ORCPT
+        with ESMTP id S229946AbjBMWTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 17:18:49 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F221C32B
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 14:18:46 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id y8so39671ilv.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 14:18:46 -0800 (PST)
+        Mon, 13 Feb 2023 17:19:40 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557661BAFE
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 14:19:39 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id k16so3944414ejv.10
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 14:19:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eRWQduPmN91iFAS5BBJCNCcuPyWFBW+Nj2BiZbIFrWo=;
-        b=cHwRGNoPEWFDIRtyTqHsxecvM7OojiMb4qU1yfogG5wYgk3a+8u4GK/+uwjhJinaSw
-         TwQw+90Cj+tjRsaZ0tRq8TdcUS+mt/pkVIjprDUpUan5qxlCWiLng+/WWHknceaVVIDk
-         Oo11X/cLi3F1fvUU983xzgJ/0lfpiU3Fr8UuM=
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DdMCs5H/JbVPnWmVGco7GaqG11iC0AcIT5fsrf+QDfI=;
+        b=KFhLIbySr50Oa8sCR5/ttrXS+KaoYFaH6AeqV/8/irVu90nmkKYvpyt1TUBsRKxQc2
+         iFw2sIJul+x6NLvT3VEF5EcS7gCvG9AeCpfAtltEgntiSmb4MN++sQrtO7ovQ57xEPoR
+         +IZ/HqRpLpbx6wQzywccDeDlwK04i5gUsyZEg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eRWQduPmN91iFAS5BBJCNCcuPyWFBW+Nj2BiZbIFrWo=;
-        b=Jyr2rR5TIhXMnl4DZYkW/smWHQdipcfVXCHWtOWH9aOnnNit5q7JuWbmVCuvxNXBgE
-         EelXiueUluAhEtnB6pdKXYRqLiIBnxabx9wpk064Y/5HOOyISOZiHy7hilF0iBeAos2p
-         6ZbEzI57nqmKVw5TLa35O6KAh9pdVU0U/RAP1FVjqX/nnko14AiSbURo5jAhAAREvcEm
-         XQhCag8YCXD87ebkS+3uAmQXTNqPC2xdysOOjGfntgvdWvtfgk9cTD5iwTECiiXPv05i
-         /MVpXlsw4GVUnLysU+XDOGA3cogirRKYpJsHsKm6UdAVlczEzz96uU8zIZS8aNNeglzF
-         MOOQ==
-X-Gm-Message-State: AO0yUKXMr6VEzcbprxQphbI1I/CpgkDK+SfsNZz7s6K0Uh5ViMc0LJfo
-        OMg5CGDLFRBgEClq/6jg3fqP/5S7F3d7H0h/
-X-Google-Smtp-Source: AK7set89VlubTgzaLUf91OOFVU/glsOKFNCyHhNv+9INbUdipmkq/oitdjYBwf2S79zB5BALj4KMwQ==
-X-Received: by 2002:a92:c54f:0:b0:315:4b70:8376 with SMTP id a15-20020a92c54f000000b003154b708376mr221388ilj.29.1676326725758;
-        Mon, 13 Feb 2023 14:18:45 -0800 (PST)
-Received: from ravnica.bld.corp.google.com ([2620:15c:183:200:d644:5bf8:7c67:1ab8])
-        by smtp.gmail.com with ESMTPSA id s8-20020a02cc88000000b003a60e5a2638sm4233508jap.94.2023.02.13.14.18.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 14:18:45 -0800 (PST)
-From:   Ross Zwisler <zwisler@chromium.org>
-X-Google-Original-From: Ross Zwisler <zwisler@google.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ross Zwisler <zwisler@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hao Luo <haoluo@google.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jiri Olsa <jolsa@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Song Liu <song@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-trace-kernel@vger.kernel.org,
-        "Michael S . Tsirkin" <mst@redhat.com>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: use canonical ftrace path
-Date:   Mon, 13 Feb 2023 15:18:35 -0700
-Message-Id: <20230213221835.592763-2-zwisler@google.com>
-X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
-In-Reply-To: <20230213221835.592763-1-zwisler@google.com>
-References: <20230213221835.592763-1-zwisler@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DdMCs5H/JbVPnWmVGco7GaqG11iC0AcIT5fsrf+QDfI=;
+        b=dQ9cv31gNT7xEHkUpGW8EXKbO6no4eeBvofNwNrxal9m3/qv7tYj+4+7IPMy2krWhQ
+         McMybyCq0VCJiYn+INHjLjwH9eSnohxZQN8E8D4r1Cyjfl8t6QsykvuyynzuVLClwmap
+         HguzNi7QdAm7DgLd8b8Bj6dFppyMhMTBgzzjNBMGughkqb2ZuGThZ1xlKBNgjK8h7EfB
+         QadcBhtF0BNSU83tXbfOjsUJ98h+kJwlDTdva72UvXUA4SDlQXygJfPBSw9b+H23+RUJ
+         0HhrvQHKBfSbPILegr1+lpuJ5mwKbNhcoyh1FbsxI3JJjF0bPmGhDf6LEjTO9qLEIMkx
+         cSBQ==
+X-Gm-Message-State: AO0yUKV7C6YK5LzYpE3ja2fAyu93guLrEXKciIrONEXFQAqjToGMQoX0
+        tc1x3mgL2RHbjwauCKzvhw9PWKEoOAMEOXpvR4c=
+X-Google-Smtp-Source: AK7set9mesTA8ncXZbiDErnz1Lz+hIptJVKOJvOoQb5voi7yvIdQtkYuGFI8sWUBhyDudb4m8CzXiQ==
+X-Received: by 2002:a17:906:b807:b0:8af:7efc:84a7 with SMTP id dv7-20020a170906b80700b008af7efc84a7mr472663ejb.43.1676326777684;
+        Mon, 13 Feb 2023 14:19:37 -0800 (PST)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
+        by smtp.gmail.com with ESMTPSA id v7-20020a1709064e8700b0088ad82a8de4sm7337872eju.34.2023.02.13.14.19.36
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 14:19:37 -0800 (PST)
+Received: by mail-ej1-f42.google.com with SMTP id qb15so33424859ejc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 14:19:36 -0800 (PST)
+X-Received: by 2002:a17:907:984a:b0:88f:a9ec:dfd7 with SMTP id
+ jj10-20020a170907984a00b0088fa9ecdfd7mr268381ejc.0.1676326776594; Mon, 13 Feb
+ 2023 14:19:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230213140812.db63c7146ebc396691594b73@linux-foundation.org>
+In-Reply-To: <20230213140812.db63c7146ebc396691594b73@linux-foundation.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 13 Feb 2023 14:19:19 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiBrY+O-4=2mrbVyxR+hOqfdJ=Do6xoucfJ9_5az01L4Q@mail.gmail.com>
+Message-ID: <CAHk-=wiBrY+O-4=2mrbVyxR+hOqfdJ=Do6xoucfJ9_5az01L4Q@mail.gmail.com>
+Subject: Re: [GIT PULL] hotfixes for 6.2
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, mm-commits@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
+On Mon, Feb 13, 2023 at 2:08 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> Kuan-Ying Lee (1):
+>       mm/gup: add folio to list when folio_isolate_lru() succeed
 
-But, from Documentation/trace/ftrace.rst:
+Ugh. I really hate fixes like this.
 
-  Before 4.1, all ftrace tracing control files were within the debugfs
-  file system, which is typically located at /sys/kernel/debug/tracing.
-  For backward compatibility, when mounting the debugfs file system,
-  the tracefs file system will be automatically mounted at:
+The problem came from mis-understanding the return value of
+folio_isolate_lru(), and thinking that it was a boolean
+success/failure thing.
 
-  /sys/kernel/debug/tracing
+It wasn't, it was an integer "success/errno" thing, and the sense of
+the test was wrong. So the patch is
 
-Many tests in the bpf selftest code still refer to this older debugfs
-path, so let's update them to avoid confusion.
+-       if (!folio_isolate_lru(folio))
++       if (folio_isolate_lru(folio))
+                continue;
 
-Signed-off-by: Ross Zwisler <zwisler@google.com>
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
----
+but at no point was the code *clarified*.
 
-[ Per Alexei's request, resending towards bpf-next ]
+Wouldn't it have been much better to write the new code to be
 
- tools/testing/selftests/bpf/get_cgroup_id_user.c          | 2 +-
- .../testing/selftests/bpf/prog_tests/kprobe_multi_test.c  | 2 +-
- tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c | 2 +-
- tools/testing/selftests/bpf/prog_tests/tp_attach_query.c  | 2 +-
- tools/testing/selftests/bpf/prog_tests/trace_printk.c     | 2 +-
- tools/testing/selftests/bpf/prog_tests/trace_vprintk.c    | 2 +-
- tools/testing/selftests/bpf/progs/test_stacktrace_map.c   | 2 +-
- tools/testing/selftests/bpf/progs/test_tracepoint.c       | 2 +-
- tools/testing/selftests/bpf/test_ftrace.sh                | 2 +-
- tools/testing/selftests/bpf/test_tunnel.sh                | 8 ++++----
- tools/testing/selftests/bpf/trace_helpers.c               | 4 ++--
- 11 files changed, 15 insertions(+), 15 deletions(-)
+        if (folio_isolate_lru(folio) < 0)
+                continue;
 
-diff --git a/tools/testing/selftests/bpf/get_cgroup_id_user.c b/tools/testing/selftests/bpf/get_cgroup_id_user.c
-index 156743cf5870..478e080128be 100644
---- a/tools/testing/selftests/bpf/get_cgroup_id_user.c
-+++ b/tools/testing/selftests/bpf/get_cgroup_id_user.c
-@@ -87,7 +87,7 @@ int main(int argc, char **argv)
- 	bpf_map_update_elem(pidmap_fd, &key, &pid, 0);
- 
- 	snprintf(buf, sizeof(buf),
--		 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
-+		 "/sys/kernel/tracing/events/%s/id", probe_name);
- 	efd = open(buf, O_RDONLY, 0);
- 	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
- 		goto close_prog;
-diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-index c6f37e825f11..6f0f2d8984db 100644
---- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-@@ -338,7 +338,7 @@ static int get_syms(char ***symsp, size_t *cntp)
- 	 * Filtering out duplicates by using hashmap__add, which won't
- 	 * add existing entry.
- 	 */
--	f = fopen("/sys/kernel/debug/tracing/available_filter_functions", "r");
-+	f = fopen("/sys/kernel/tracing/available_filter_functions", "r");
- 	if (!f)
- 		return -EINVAL;
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c b/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
-index c717741bf8b6..6d70559fc19b 100644
---- a/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
-+++ b/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
-@@ -18,7 +18,7 @@ static void test_task_fd_query_tp_core(const char *probe_name,
- 		goto close_prog;
- 
- 	snprintf(buf, sizeof(buf),
--		 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
-+		 "/sys/kernel/tracing/events/%s/id", probe_name);
- 	efd = open(buf, O_RDONLY, 0);
- 	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
- 		goto close_prog;
-diff --git a/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c b/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
-index a479080533db..4308e3a828d8 100644
---- a/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
-@@ -17,7 +17,7 @@ void serial_test_tp_attach_query(void)
- 		obj[i] = NULL;
- 
- 	snprintf(buf, sizeof(buf),
--		 "/sys/kernel/debug/tracing/events/sched/sched_switch/id");
-+		 "/sys/kernel/tracing/events/sched/sched_switch/id");
- 	efd = open(buf, O_RDONLY, 0);
- 	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
- 		return;
-diff --git a/tools/testing/selftests/bpf/prog_tests/trace_printk.c b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
-index cade7f12315f..ff50a928cb98 100644
---- a/tools/testing/selftests/bpf/prog_tests/trace_printk.c
-+++ b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
-@@ -5,7 +5,7 @@
- 
- #include "trace_printk.lskel.h"
- 
--#define TRACEBUF	"/sys/kernel/debug/tracing/trace_pipe"
-+#define TRACEBUF	"/sys/kernel/tracing/trace_pipe"
- #define SEARCHMSG	"testing,testing"
- 
- void serial_test_trace_printk(void)
-diff --git a/tools/testing/selftests/bpf/prog_tests/trace_vprintk.c b/tools/testing/selftests/bpf/prog_tests/trace_vprintk.c
-index 7a4e313e8558..e568d7f247ec 100644
---- a/tools/testing/selftests/bpf/prog_tests/trace_vprintk.c
-+++ b/tools/testing/selftests/bpf/prog_tests/trace_vprintk.c
-@@ -5,7 +5,7 @@
- 
- #include "trace_vprintk.lskel.h"
- 
--#define TRACEBUF	"/sys/kernel/debug/tracing/trace_pipe"
-+#define TRACEBUF	"/sys/kernel/tracing/trace_pipe"
- #define SEARCHMSG	"1,2,3,4,5,6,7,8,9,10"
- 
- void serial_test_trace_vprintk(void)
-diff --git a/tools/testing/selftests/bpf/progs/test_stacktrace_map.c b/tools/testing/selftests/bpf/progs/test_stacktrace_map.c
-index 728dbd39eff0..47568007b668 100644
---- a/tools/testing/selftests/bpf/progs/test_stacktrace_map.c
-+++ b/tools/testing/selftests/bpf/progs/test_stacktrace_map.c
-@@ -38,7 +38,7 @@ struct {
- 	__type(value, stack_trace_t);
- } stack_amap SEC(".maps");
- 
--/* taken from /sys/kernel/debug/tracing/events/sched/sched_switch/format */
-+/* taken from /sys/kernel/tracing/events/sched/sched_switch/format */
- struct sched_switch_args {
- 	unsigned long long pad;
- 	char prev_comm[TASK_COMM_LEN];
-diff --git a/tools/testing/selftests/bpf/progs/test_tracepoint.c b/tools/testing/selftests/bpf/progs/test_tracepoint.c
-index 43bd7a20cc50..4cb8bbb6a320 100644
---- a/tools/testing/selftests/bpf/progs/test_tracepoint.c
-+++ b/tools/testing/selftests/bpf/progs/test_tracepoint.c
-@@ -4,7 +4,7 @@
- #include <vmlinux.h>
- #include <bpf/bpf_helpers.h>
- 
--/* taken from /sys/kernel/debug/tracing/events/sched/sched_switch/format */
-+/* taken from /sys/kernel/tracing/events/sched/sched_switch/format */
- struct sched_switch_args {
- 	unsigned long long pad;
- 	char prev_comm[TASK_COMM_LEN];
-diff --git a/tools/testing/selftests/bpf/test_ftrace.sh b/tools/testing/selftests/bpf/test_ftrace.sh
-index 20de7bb873bc..e3e2328a1b65 100755
---- a/tools/testing/selftests/bpf/test_ftrace.sh
-+++ b/tools/testing/selftests/bpf/test_ftrace.sh
-@@ -1,6 +1,6 @@
- #!/bin/bash
- 
--TR=/sys/kernel/debug/tracing/
-+TR=/sys/kernel/tracing/
- clear_trace() { # reset trace output
-     echo > $TR/trace
- }
-diff --git a/tools/testing/selftests/bpf/test_tunnel.sh b/tools/testing/selftests/bpf/test_tunnel.sh
-index 2eaedc1d9ed3..bbbd242f7cef 100755
---- a/tools/testing/selftests/bpf/test_tunnel.sh
-+++ b/tools/testing/selftests/bpf/test_tunnel.sh
-@@ -543,7 +543,7 @@ setup_xfrm_tunnel()
- test_xfrm_tunnel()
- {
- 	config_device
--	> /sys/kernel/debug/tracing/trace
-+	> /sys/kernel/tracing/trace
- 	setup_xfrm_tunnel
- 	mkdir -p ${BPF_PIN_TUNNEL_DIR}
- 	bpftool prog loadall ${BPF_FILE} ${BPF_PIN_TUNNEL_DIR}
-@@ -552,11 +552,11 @@ test_xfrm_tunnel()
- 		${BPF_PIN_TUNNEL_DIR}/xfrm_get_state
- 	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
- 	sleep 1
--	grep "reqid 1" /sys/kernel/debug/tracing/trace
-+	grep "reqid 1" /sys/kernel/tracing/trace
- 	check_err $?
--	grep "spi 0x1" /sys/kernel/debug/tracing/trace
-+	grep "spi 0x1" /sys/kernel/tracing/trace
- 	check_err $?
--	grep "remote ip 0xac100164" /sys/kernel/debug/tracing/trace
-+	grep "remote ip 0xac100164" /sys/kernel/tracing/trace
- 	check_err $?
- 	cleanup
- 
-diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
-index 09a16a77bae4..d2816aa35a9b 100644
---- a/tools/testing/selftests/bpf/trace_helpers.c
-+++ b/tools/testing/selftests/bpf/trace_helpers.c
-@@ -12,7 +12,7 @@
- #include <sys/mman.h>
- #include "trace_helpers.h"
- 
--#define DEBUGFS "/sys/kernel/debug/tracing/"
-+#define TRACEFS "/sys/kernel/tracing/"
- 
- #define MAX_SYMS 300000
- static struct ksym syms[MAX_SYMS];
-@@ -136,7 +136,7 @@ void read_trace_pipe(void)
- {
- 	int trace_fd;
- 
--	trace_fd = open(DEBUGFS "trace_pipe", O_RDONLY, 0);
-+	trace_fd = open(TRACEFS "trace_pipe", O_RDONLY, 0);
- 	if (trace_fd < 0)
- 		return;
- 
--- 
-2.39.1.581.gbfd45094c4-goog
+to actually make it clear that this is a "negative error return check".
 
+I've pulled this, but I really think that when somebody notices that
+we had a silly bug because of a misunderstanding like this, it's not
+just that the bug should be fixed, the code should also be *clarified*
+at the same time.
+
+                 Linus
