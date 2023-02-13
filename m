@@ -2,144 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E268D694459
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD20569445C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:24:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbjBMLYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 06:24:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
+        id S231218AbjBMLYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 06:24:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbjBMLYQ (ORCPT
+        with ESMTP id S230162AbjBMLYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 06:24:16 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F5E2D5E
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:24:15 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id o36so8470678wms.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:24:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=g+rvGSkMi2Ng+V+zK96Pn4bjPDP4wSlwRKDICoOknY0=;
-        b=EHAV7oVomODni8aKSUTkGu5X3fuYV/FzpgT5Vt1NZ5LC3vyUPHpceFrDugGwRcK/bV
-         m+St/bvUqjsnxczh+x0oJ5XXLI8pryf1EtgO0vxTlfYnkrOW104tXb9Ulofnt2QrpQjG
-         0fUHH8sMgP7wEd+s1H1p4HQumfP0uDH7r3KZ0HlOtWgoib5jswzy895IFpr5dbHxHeeG
-         PnwB6Tn6LLTzXHEzfVoImPUoi+yaz3IMPrsciJ4AplUZdrQno3NXzORqtiX18OkzlWDk
-         Z4d1kb60tfQNoAbWIKwgWf4xN4dOMXJR2yX+GUNud1BhHT/VFZGfcO0oPALWLYRqWIaI
-         p6og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g+rvGSkMi2Ng+V+zK96Pn4bjPDP4wSlwRKDICoOknY0=;
-        b=hqurID4Y+eUa2Cz0ZlCbsgPWMqgNo7oaXROGtf/R1bgs8sQJJN3NXl70MUSXeDcNyN
-         /d8GR/qB6bhYPq7ZcTQlWVqnRN1XxSb897TsyyfEK2tMzbmXYG4joWti2XnhGTy//uep
-         6Wk9l0lZqQ91hQ5gWp9+2fnw0peC1d73yZB/jV2vF9/nGHwGwZyy/NaKX9+AZgYzqvyQ
-         kP/o3vyfWmLdueuSu0dgi0b69tJGe7x19LE3annj9dAsQTCe+mf3yt8V3HXc4h/hGdvv
-         vxXpzKzj9+ROpEAjrsJJ4WuHBXMeuV2NV0boPKYt+XAgAABDNuAqsutzcGKuwZ6oW0yl
-         UwIw==
-X-Gm-Message-State: AO0yUKX7aXDce4aNAlKdtrYa1gjOhwBx1wUSAvTaaFlmvRpecApEABYP
-        DYHSXlop2YaLtFPqGiauFdb5mw==
-X-Google-Smtp-Source: AK7set/+Q2Fq63xoPo4GT4dkWdY906MVgtXJgA6lf/hRlrTtv1waCbPwVDDra752x+ps5XyvQyd+Jw==
-X-Received: by 2002:a1c:f016:0:b0:3df:e468:17dc with SMTP id a22-20020a1cf016000000b003dfe46817dcmr18941579wmb.40.1676287453680;
-        Mon, 13 Feb 2023 03:24:13 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id x2-20020a1c7c02000000b003df30c94850sm16623154wmc.25.2023.02.13.03.24.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 03:24:13 -0800 (PST)
-Message-ID: <d4d7eb38-9b2a-fa41-0041-dc88d5b6f89b@linaro.org>
-Date:   Mon, 13 Feb 2023 12:24:11 +0100
+        Mon, 13 Feb 2023 06:24:41 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E24716311;
+        Mon, 13 Feb 2023 03:24:40 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id 0658520C8B72; Mon, 13 Feb 2023 03:24:40 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0658520C8B72
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1676287480;
+        bh=MEsnHvXWFAOovLlVk47JELdPbpuOssvqm5zPjs4Ja7E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q7BNsz/brXr52pj6rubpWj+JoKqYyBpi0DJWp4TqKP+uEsN0/r9EObUQaIy225Bcr
+         d78u+PLBWyDOqb5Fv7q+L7KiAUbifkGHZ4ZurRDZgP/M9jXYGk8u6QMeZ3vKM3jHJ6
+         7LRwVYvgZ9Pv0Zc3ypmpRD8y3dIsKf9lWiE5Vh4k=
+Date:   Mon, 13 Feb 2023 03:24:39 -0800
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        daniel.lezcano@linaro.org, tglx@linutronix.de,
+        virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+        dphadke@linux.microsoft.com
+Subject: Re: [PATCH v5 5/5] Driver: VMBus: Add device tree support
+Message-ID: <20230213112439.GA15305@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675944939-22631-1-git-send-email-ssengar@linux.microsoft.com>
+ <1675944939-22631-6-git-send-email-ssengar@linux.microsoft.com>
+ <CAL_JsqK0WgWm-mG=fYyDVAi4uhL+fM0OD7KEF+xYYOOGNX8-oQ@mail.gmail.com>
+ <20230209174641.GB1346@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <CAL_JsqK+4ecEmGyo0jVs3B-E6Rjj4Lo8vB0En6pEUR1P4cRXpA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: sm8550-qrd: add QRD8550
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Abel Vesa <abel.vesa@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-References: <20230210163844.765074-1-krzysztof.kozlowski@linaro.org>
- <20230210163844.765074-2-krzysztof.kozlowski@linaro.org>
- <69bbabd1-2248-000d-f0ac-ba9bb4b14665@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <69bbabd1-2248-000d-f0ac-ba9bb4b14665@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqK+4ecEmGyo0jVs3B-E6Rjj4Lo8vB0En6pEUR1P4cRXpA@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/02/2023 12:14, Konrad Dybcio wrote:
-> 
-> 
-> On 10.02.2023 17:38, Krzysztof Kozlowski wrote:
->> Add a minimal DTS for the new QRD8550 board - a mobile-like development
->> board with SM8550.  Serial, UFS and USB should be working.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> ---
->>
-> [...]
->> +
->> +		vreg_l17b_2p5: ldo17 {
->> +			regulator-name = "vreg_l17b_2p5";
->> +			regulator-min-microvolt = <2504000>;
->> +			regulator-max-microvolt = <2504000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
+On Fri, Feb 10, 2023 at 04:37:28PM -0600, Rob Herring wrote:
+> On Thu, Feb 9, 2023 at 11:46 AM Saurabh Singh Sengar
+> <ssengar@linux.microsoft.com> wrote:
+> >
+> > On Thu, Feb 09, 2023 at 09:50:31AM -0600, Rob Herring wrote:
+> > > On Thu, Feb 9, 2023 at 6:15 AM Saurabh Sengar
+> > > <ssengar@linux.microsoft.com> wrote:
+> > > >
+> > > > Update the driver to support device tree boot as well along with ACPI.
+> > >
+> > > Devicetree
 > 
 > [...]
 > 
->> +		};
->> +
->> +		vreg_l1g_1p2: ldo1 {
->> +			regulator-name = "vreg_l1g_1p2";
->> +			regulator-min-microvolt = <1200000>;
->> +			regulator-max-microvolt = <1200000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
->> +
->> +		vreg_l3g_1p2: ldo3 {
->> +			regulator-name = "vreg_l3g_1p2";
->> +			regulator-min-microvolt = <1200000>;
->> +			regulator-max-microvolt = <1200000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
->> +	};
+> > > > +       for_each_of_range(&parser, &range) {
+> > > > +               struct resource *res;
+> > > > +
+> > > > +               res = kzalloc(sizeof(*res), GFP_ATOMIC);
+> > > > +               if (!res)
+> > > > +                       return -ENOMEM;
+> > > > +
+> > > > +               res->name = "hyperv mmio";
+> > > > +               res->flags = IORESOURCE_MEM | IORESOURCE_MEM_64;
+> > > > +               res->start = range.pci_addr;
+> > >
+> > > This is not PCI. It's a union, so use 'bus_addr' instead.
+> > >
+> > > But wait, resources and IORESOURCE_MEM are *CPU* addresses. You need
+> > > cpu_addr here. Your DT happens to do 1:1 addresses so it happens to
+> > > work either way.
+> >
+> > bus_addr works for us, will send V6
 > 
-> [...]
+> Sigh. bus_addr may work, but is wrong as I explained.
 > 
->> +
->> +&ufs_mem_hc {
->> +	reset-gpios = <&tlmm 210 GPIO_ACTIVE_LOW>;
->> +	vcc-supply = <&vreg_l17b_2p5>;
->> +	vcc-max-microamp = <1300000>;
->> +	vccq-supply = <&vreg_l1g_1p2>;
->> +	vccq-max-microamp = <1200000>;
->> +	vccq2-supply = <&vreg_l3g_1p2>;
-> None of these regulators have allowed-modes + allow-set-load,
-> I think you may want that.
-> 
-> With or without that:
-> 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> And you've already sent v6... Please slow down your pace with sending
+> new versions. 4 versions in a week is too much. Give others time to
+> comment and me to respond to discussions. Like a week...
 
-It's something to fix also for SM8550 MTP.
+I apologize if my actions may have come across as overly hasty. I will make
+sure to allow for more time between submissions in the future, to ensure that
+everyone has an adequate opportunity to review and provide feedback.
 
-Best regards,
-Krzysztof
+Regarding the use of bus_addr instead of cpu_addr, I found that cpu_addr was
+populating as OF_BAD_ADDR while bus_addr was populating correctly.  I think
+this is because I should be defining a empty ranges property in parent node
+for indicating 1:1 mapping between parent and child.
 
+But once I add empty ranges in property I get other warnings by dt_binding_check
+tool. After fixing all I am able to come up with below device tree example, please
+let me know if there is anything to be corrected. If this is good I will send
+the next version (offcource after a week :)) using cpu_addr.
+
+    soc {
+        #address-cells = <2>;
+        #size-cells = <1>;
+        bus {
+            compatible = "simple-bus";
+            #address-cells = <2>;
+            #size-cells = <1>;
+            ranges;
+
+            vmbus@ff0000000 {
+                compatible = "microsoft,vmbus";
+                #address-cells = <2>;
+                #size-cells = <1>;
+                ranges = <0x0f 0xf0000000 0x0f 0xf0000000 0x10000000>;
+            };
+        };
+    };
+
+> 
+> Rob
