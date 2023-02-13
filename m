@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F234F694A6F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1CA9694A64
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:09:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbjBMPKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
+        id S231490AbjBMPJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:09:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbjBMPJx (ORCPT
+        with ESMTP id S229643AbjBMPJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:09:53 -0500
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C885A1CF4B;
-        Mon, 13 Feb 2023 07:09:49 -0800 (PST)
-Received: by mail-il1-f182.google.com with SMTP id u8so5280850ilq.13;
-        Mon, 13 Feb 2023 07:09:49 -0800 (PST)
+        Mon, 13 Feb 2023 10:09:46 -0500
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA624232;
+        Mon, 13 Feb 2023 07:09:44 -0800 (PST)
+Received: by mail-il1-f177.google.com with SMTP id a5so5298305ilk.6;
+        Mon, 13 Feb 2023 07:09:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=izcvmEfYGF1qHX8/hJIplnh01MRs+KJ7qGdimHU+1VM=;
-        b=R87qvgecQxIsujLJPGiAEGXOR1B8xww3joOKiv1pYscZBKs2izLbYZv3HF13IZS2dV
-         FtmVY8Q/IKIqAm400Tmrac4XoC1B/odJAf1B9UtTiPjA2ObxHNe+02NqvCYYn1eRQE82
-         6BNLwRMAeDxS81E/O0JL2bhEZ43smDmeD0qT8gtydU8Oa9bbDDpcSzD8GMRld7HEnHFb
-         JU+FBwaJAYou+k8yq/E+Mebsvd5ugSrxYuNdHNNeLVALOIJEAWqOVjqOsHrg0ZyiK4Sy
-         dGX5qDkMrJTU6HRbBSZjjEMa78rSCwCVZIpP0jzJNnelSPjUweALcgG+QNv9GI3Now7+
-         53XA==
-X-Gm-Message-State: AO0yUKX1t/AuhXJ/ySNM8cgBK0aBuxYgdRl5Y7eOj11/EbdWbNplmqAd
-        7/oNH2OHhTib7C0ELgL0mg==
-X-Google-Smtp-Source: AK7set/PauQ/4h5+1OHFxdgFVp3PLCj5fX29L44DbapxgCZR3zDCwMZWu/ZKbFWwXtvHlLVLC8DXEg==
-X-Received: by 2002:a92:c263:0:b0:315:3948:1c5a with SMTP id h3-20020a92c263000000b0031539481c5amr5310369ild.15.1676300989045;
-        Mon, 13 Feb 2023 07:09:49 -0800 (PST)
+        bh=ogFsLNQEFVm7C6QvQZMbka0qqj2F6J8HwmRYO32/VOg=;
+        b=nN1WVzTtidMaq8VLcja7o2Xw2hyq7nTZPj/f0fsqFl0aEdPua8dnM4Bv+msUbcr1Mn
+         DQF1rR9zPusGiQ6fGa3iYss0Mn2Y91yZlvX/Bj58Wl7FUNfcFP+VzrIxgT1eS2WIDiI4
+         KMAaTjO3avtjgklRfT1SFlOSoQpzcBXDUnlrlBJ6eBLS13yUMLCkgDqqw5q3CbBP1zeS
+         kEEsYPqXdwl6MaxkvaC5/wjER403UrkbHfJ3Fag5YZp4xHzv8SeYqZqzLD/Hy57G4xTD
+         noqSmHRRi3Ex8QX7GawtYSqHKhELhKEflwx1OFpAgfD4EzGAn2ZqADM1TvcpO6kmRUWA
+         NAyg==
+X-Gm-Message-State: AO0yUKWYz3YJC4TNRki46fWC9EEpXdYflB28jP/mPQG+H0N3LC630KEi
+        NN2ZIAmFV2z7z7JPV53hcQ==
+X-Google-Smtp-Source: AK7set9DOOH8pVq0q18oUvyYwV+s2TWpICsRn/3fLBdCPEA0O6cjKYg+qIAzs4dUab0rq9PFB6kMoQ==
+X-Received: by 2002:a92:a007:0:b0:313:d914:e544 with SMTP id e7-20020a92a007000000b00313d914e544mr21549100ili.23.1676300983976;
+        Mon, 13 Feb 2023 07:09:43 -0800 (PST)
 Received: from robh_at_kernel.org (c-73-14-99-67.hsd1.co.comcast.net. [73.14.99.67])
-        by smtp.gmail.com with ESMTPSA id g3-20020a056e020d0300b003153787b444sm1493791ilj.21.2023.02.13.07.09.47
+        by smtp.gmail.com with ESMTPSA id g15-20020a056e021a2f00b003141eddd283sm2746676ile.22.2023.02.13.07.09.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 07:09:48 -0800 (PST)
-Received: (nullmailer pid 11611 invoked by uid 1000);
+        Mon, 13 Feb 2023 07:09:43 -0800 (PST)
+Received: (nullmailer pid 11608 invoked by uid 1000);
         Mon, 13 Feb 2023 15:09:41 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
 To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     andersson@kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        krzysztof.kozlowski@linaro.org, dri-devel@lists.freedesktop.org,
-        David Airlie <airlied@gmail.com>, Sean Paul <sean@poorly.run>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-kernel@vger.kernel.org, marijn.suijten@somainline.org,
-        freedreno@lists.freedesktop.org,
+Cc:     Sean Paul <sean@poorly.run>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, agross@kernel.org
-In-Reply-To: <20230211122656.1479141-5-konrad.dybcio@linaro.org>
+        Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        freedreno@lists.freedesktop.org, marijn.suijten@somainline.org,
+        David Airlie <airlied@gmail.com>, andersson@kernel.org,
+        dri-devel@lists.freedesktop.org, krzysztof.kozlowski@linaro.org,
+        agross@kernel.org
+In-Reply-To: <20230211122656.1479141-4-konrad.dybcio@linaro.org>
 References: <20230211122656.1479141-1-konrad.dybcio@linaro.org>
- <20230211122656.1479141-5-konrad.dybcio@linaro.org>
-Message-Id: <167630051091.6244.17725263778561654199.robh@kernel.org>
-Subject: Re: [PATCH 04/10] dt-bindings: display/msm: Add SM6375 DPU & MDSS
+ <20230211122656.1479141-4-konrad.dybcio@linaro.org>
+Message-Id: <167630050949.6199.14243256327599171035.robh@kernel.org>
+Subject: Re: [PATCH 03/10] dt-bindings: display/msm: Add SM6350 DPU & MDSS
 Date:   Mon, 13 Feb 2023 09:09:41 -0600
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -73,32 +75,38 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Sat, 11 Feb 2023 13:26:50 +0100, Konrad Dybcio wrote:
-> Document SM6375 DPU and MDSS.
+On Sat, 11 Feb 2023 13:26:49 +0100, Konrad Dybcio wrote:
+> Document 6350 DPU and MDSS.
 > 
 > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  .../bindings/display/msm/qcom,sm6375-dpu.yaml | 106 +++++++++
->  .../display/msm/qcom,sm6375-mdss.yaml         | 216 ++++++++++++++++++
->  2 files changed, 322 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/msm/qcom,sm6375-dpu.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/msm/qcom,sm6375-mdss.yaml
+>  .../bindings/display/msm/qcom,sm6350-dpu.yaml |  94 ++++++++
+>  .../display/msm/qcom,sm6350-mdss.yaml         | 213 ++++++++++++++++++
+>  2 files changed, 307 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/msm/qcom,sm6350-dpu.yaml
+>  create mode 100644 Documentation/devicetree/bindings/display/msm/qcom,sm6350-mdss.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
+./Documentation/devicetree/bindings/display/msm/qcom,sm6350-mdss.yaml:55:11: [warning] wrong indentation: expected 8 but found 10 (indentation)
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm6375-mdss.example.dtb: dsi@5e94000: compatible:0: 'qcom,sm6375-dsi-ctrl' is not one of ['qcom,mdss-dsi-ctrl', 'qcom,dsi-ctrl-6g-qcm2290']
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm6350-mdss.yaml: patternProperties:^dsi@[0-9a-f]+$:properties:compatible: [{'const': 'qcom,sm6350-dsi-ctrl'}, {'const': 'qcom,mdss-dsi-ctrl'}] is not of type 'object', 'boolean'
+	from schema $id: http://json-schema.org/draft-07/schema#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm6350-mdss.yaml: ignoring, error in schema: patternProperties: ^dsi@[0-9a-f]+$: properties: compatible
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm6350-mdss.example.dtb: dsi@ae94000: compatible:0: 'qcom,sm6350-dsi-ctrl' is not one of ['qcom,mdss-dsi-ctrl', 'qcom,dsi-ctrl-6g-qcm2290']
 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm6375-mdss.example.dtb: dsi@5e94000: compatible: ['qcom,sm6375-dsi-ctrl', 'qcom,mdss-dsi-ctrl'] is too long
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm6350-mdss.example.dtb: dsi@ae94000: compatible: ['qcom,sm6350-dsi-ctrl', 'qcom,mdss-dsi-ctrl'] is too long
 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm6350-mdss.example.dtb: phy@ae94400: 'vdds-supply' is a required property
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/dsi-phy-10nm.yaml
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230211122656.1479141-5-konrad.dybcio@linaro.org
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230211122656.1479141-4-konrad.dybcio@linaro.org
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
