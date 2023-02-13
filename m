@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE360694141
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:32:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4E569413C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:32:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjBMJcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 04:32:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36754 "EHLO
+        id S230043AbjBMJcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 04:32:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjBMJcS (ORCPT
+        with ESMTP id S230334AbjBMJbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 04:32:18 -0500
+        Mon, 13 Feb 2023 04:31:52 -0500
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C4617166
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:30:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616414C2E
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:30:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676280639; x=1707816639;
+  t=1676280615; x=1707816615;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=bainX+rNjEUG4h7jBawjp/NmO2u89bcT7SfBlCxrDXk=;
-  b=jsP7MJeGFFc2W++4R3EHULYTWzWSzJc54MJBXed5MUZMIBH239mb6VM+
-   C0jdU+9FXSNpU9BbunkuPIPDDwXSK1fNBa1q48JH6P6+eBSR5KRCMn+Dq
-   zezSN8OZJksif3X6G5CCMO7PU+CZBdVUqI046rflj/CKrR7qGJgfpjhLT
-   VmuQgHlsZWehGgR61vwmQYDHeI1FNcMnHXchXZ2uQblfRX7cCObsfqCBP
-   Px5Q/8tCZHCuwSvhx5a/52zdNP0dvSpX18gTm6hnObyU6GKQwnFkf3UHw
-   viw0XV1bL5O8YMHWTh+2+0xnGY/D8hJuP4c2X1hcZ2UwjuReCE9s2dEs2
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="358258509"
+  bh=9FwOfNFDMQvA9eUplObDU3WspLsuxTJWoEuUtfj/uVw=;
+  b=kMRyQdrO0vhN03z8VovSFNxqmU0mnLiGThKFOjD/znh7GvESKWl4X+BO
+   6CbQX3PsOW98LbKo1cq7u+kAETaoJ7cIsMyFEiJq4W1wIwaKIT1ouq1Zl
+   TfuxihBaSG3r8UI9fLpA4HdXM4FImiyA3BLRm6iGr3rWY6Koz9IsBVyGS
+   VHIUcKmQ84TQb25A1Jn/OHCAysMlmxo4a2HSa15If+j/xCwFR9ySsHa2Q
+   vgTcaxHsC0ij8nT/OPhhePDidHJOtppP714ps47HurfLF+VULqEFI9V6i
+   mJOVdr3+WsM77XBl19ncPud78KCvaqwbnZa8+B1D5KUTiL4hX5fZ0l6ST
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="358258502"
 X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
-   d="scan'208";a="358258509"
+   d="scan'208";a="358258502"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 01:29:15 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="732433075"
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="732433074"
 X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
-   d="scan'208";a="732433075"
+   d="scan'208";a="732433074"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
   by fmsmga008.fm.intel.com with ESMTP; 13 Feb 2023 01:29:13 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pRV96-0007eX-18;
+        id 1pRV96-0007eT-10;
         Mon, 13 Feb 2023 09:29:12 +0000
-Date:   Mon, 13 Feb 2023 17:28:32 +0800
+Date:   Mon, 13 Feb 2023 17:28:41 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "GuoRui.Yu" <GuoRui.Yu@linux.alibaba.com>, hch@lst.de,
         m.szyprowski@samsung.com
@@ -52,7 +52,7 @@ Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
         linux-kernel@vger.kernel.org, GuoRui.Yu@linux.alibaba.com,
         xiaokang.hxk@alibaba-inc.com
 Subject: Re: [PATCH] swiotlb: fix the deadlock in swiotlb_do_find_slots
-Message-ID: <202302131745.cIrweVLs-lkp@intel.com>
+Message-ID: <202302131748.pa5NGbb9-lkp@intel.com>
 References: <20230213063604.127526-1-GuoRui.Yu@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -73,7 +73,7 @@ Hi GuoRui.Yu",
 Thank you for the patch! Perhaps something to improve:
 
 [auto build test WARNING on linus/master]
-[also build test WARNING on v6.2-rc8 next-20230213]
+[also build test WARNING on hch-configfs/for-next v6.2-rc8]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
@@ -81,25 +81,23 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 url:    https://github.com/intel-lab-lkp/linux/commits/GuoRui-Yu/swiotlb-fix-the-deadlock-in-swiotlb_do_find_slots/20230213-143625
 patch link:    https://lore.kernel.org/r/20230213063604.127526-1-GuoRui.Yu%40linux.alibaba.com
 patch subject: [PATCH] swiotlb: fix the deadlock in swiotlb_do_find_slots
-config: riscv-randconfig-r004-20230213 (https://download.01.org/0day-ci/archive/20230213/202302131745.cIrweVLs-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
+config: x86_64-randconfig-a001-20230213 (https://download.01.org/0day-ci/archive/20230213/202302131748.pa5NGbb9-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
         # https://github.com/intel-lab-lkp/linux/commit/d3d8e60e47bb50892fbde7c6fa81562f8ea916a3
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review GuoRui-Yu/swiotlb-fix-the-deadlock-in-swiotlb_do_find_slots/20230213-143625
         git checkout d3d8e60e47bb50892fbde7c6fa81562f8ea916a3
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash kernel/dma/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/dma/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302131745.cIrweVLs-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202302131748.pa5NGbb9-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
