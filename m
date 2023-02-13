@@ -2,127 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B705E693FB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0C40693FB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:35:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjBMIfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 03:35:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
+        id S230035AbjBMIfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 03:35:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbjBMIeu (ORCPT
+        with ESMTP id S229902AbjBMIfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 03:34:50 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AFDA25D;
-        Mon, 13 Feb 2023 00:34:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676277289; x=1707813289;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=cwbWY0MYycEcAmZ1WT+ohW6HXdmMTj+4gVFJ3q+KyUo=;
-  b=kTY8dzc1UBlCNRZJEF4uYVXS8DWsZwzOlmiBHYPSwnqn8hX4WZKtDioW
-   9je0n1wYk7QBk+1RZ6P3xd6zM7MUYUbtcHOcekXHv/Fi8aU0rGP9TwkvL
-   NZIK1vNpqnRFpNBsvSCt4hIX5JpZmDZgVjiQFRp+cLuHLQd8wa5lvJjF8
-   zOcCEn1SmpwaBsPwSMMBPd7CMvz9amPG0K/PWGEJczl7iFw+RD96wz2QR
-   +cpsX+zfLU6wzBTyu8dRlRjvs2bp/WqshcDH3AHw5nyuWLclQTFgUOvHi
-   H2jg8E3pSVXWm7EXzUQD40SECAD4HWqPv3XhY7cI/hDjR8oVvECRBH6Wy
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="329468498"
-X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
-   d="scan'208";a="329468498"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 00:34:48 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="701185884"
-X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
-   d="scan'208";a="701185884"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.249.169.207]) ([10.249.169.207])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 00:34:34 -0800
-Message-ID: <ff0b2a68-8aeb-426b-0fb4-010c5e7b20b8@linux.intel.com>
-Date:   Mon, 13 Feb 2023 16:34:32 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Cc:     baolu.lu@linux.intel.com, Nicolin Chen <nicolinc@nvidia.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>
-Subject: Re: [PATCH v2 02/10] iommu: Introduce a new
- iommu_group_replace_domain() API
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Alex Williamson <alex.williamson@redhat.com>
-References: <cover.1675802050.git.nicolinc@nvidia.com>
- <fa81379dca611c1d9f50f9d8cd2bca0d4ec7f965.1675802050.git.nicolinc@nvidia.com>
- <20230210165110.4e89ce55.alex.williamson@redhat.com>
- <Y+bk+GSCPKOJfr1f@nvidia.com>
- <BL1PR11MB527176BE1F6DFA3D2942664D8CDD9@BL1PR11MB5271.namprd11.prod.outlook.com>
-Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BL1PR11MB527176BE1F6DFA3D2942664D8CDD9@BL1PR11MB5271.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 13 Feb 2023 03:35:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61C9A25D
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 00:35:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 708BBB80E65
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:35:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32A5DC433D2;
+        Mon, 13 Feb 2023 08:35:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676277327;
+        bh=7P1js0XW8d28XSm8A7ZyRMA5jXBPNKrzJ/lvhmEmNgI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=R3hSglsy04v/rF/3O8oOlf65f4F8A0cLbQ/aE62YahK64iXVoKoJnwsiQnOiGpILt
+         7LVWfsPAtpQGe0OekSeTkgrcNtEEZLK/dua9I/kregG++z4rt9HcpqD4mQr7c4NtVJ
+         lYuZAh5cqyrPgotqSowiG2GbWjLo591M2vIhHwIis0uas6qHvrAM13n5gfFYLoIxBv
+         Hvk0nQesG3qfWYEDEgbBaCePI/loDegAS5YRAfWCzWBShCs7vBml+kGZJs8+CwOAdF
+         com6xYvlxLHzgBQIl6DuKDOjsMJobC9p29L5TSPRTlWhBRI4aNSGZWPoiCztWo2Ox4
+         7h8yB6CeUfoww==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pRUJ2-009tTX-TK;
+        Mon, 13 Feb 2023 08:35:25 +0000
+Date:   Mon, 13 Feb 2023 08:35:24 +0000
+Message-ID: <86357ayncj.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Harry Song <jundongsong1@gmail.com>
+Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        tglx@linutronix.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] irqchip/gic-v3-its: remove the shareability of ITS
+In-Reply-To: <CAJqh2TL9p-qBoJRf292MaRHFLPnXXaT-sBxUGO+-q23MCq8QAw@mail.gmail.com>
+References: <20221207135223.3938-1-jundongsong1@gmail.com>
+        <86a63zkzru.wl-maz@kernel.org>
+        <CAJqh2T+h2oHZoxc5-zbjPWEGFUVnTs9JB04Dh-sR4WeUMYrj2A@mail.gmail.com>
+        <20221208165820.5maej4we3mfdeprm@mercury.elektranox.org>
+        <CAJqh2TJvkk5o+MkET8UED-8AUhsDdehvsnR2+7bfeRoY7AmPdQ@mail.gmail.com>
+        <86fsdorfs9.wl-maz@kernel.org>
+        <CAJqh2TKZJd6iuVexYV0Usq1j_+cMK5x=AyEZEip7A6KpQz3-dg@mail.gmail.com>
+        <CAJqh2TL9p-qBoJRf292MaRHFLPnXXaT-sBxUGO+-q23MCq8QAw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jundongsong1@gmail.com, sebastian.reichel@collabora.com, tglx@linutronix.de, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/13 10:24, Tian, Kevin wrote:
->> From: Jason Gunthorpe<jgg@nvidia.com>
->> Sent: Saturday, February 11, 2023 8:45 AM
->>
->> On Fri, Feb 10, 2023 at 04:51:10PM -0700, Alex Williamson wrote:
->>> On Tue, 7 Feb 2023 13:17:54 -0800
->>> Nicolin Chen<nicolinc@nvidia.com>  wrote:
->>>
->>>> qemu has a need to replace the translations associated with a domain
->>>> when the guest does large-scale operations like switching between an
->>>> IDENTITY domain and, say, dma-iommu.c.
->>>>
->>>> Currently, it does this by replacing all the mappings in a single
->>>> domain, but this is very inefficient and means that domains have to be
->>>> per-device rather than per-translation.
->>>>
->>>> Provide a high-level API to allow replacements of one domain with
->>>> another. This is similar to a detach/attach cycle except it doesn't
->>>> force the group to go to the blocking domain in-between.
->>>>
->>>> By removing this forced blocking domain the iommu driver has the
->>>> opportunity to implement an atomic replacement of the domains to the
->>>> greatest extent its hardware allows.
->>>>
->>>> It could be possible to adderss this by simply removing the protection
->>>> from the iommu_attach_group(), but it is not so clear if that is safe
->>>> for the few users. Thus, add a new API to serve this new purpose.
->>>>
->>>> Atomic replacement allows the qemu emulation of the viommu to be
->> more
->>>> complete, as real hardware has this ability.
->>> I was under the impression that we could not atomically switch a
->>> device's domain relative to in-flight DMA.
-> it's possible as long as the mappings for in-flight DMA don't change
-> in the transition.
-> 
+On Mon, 13 Feb 2023 07:30:08 +0000,
+Harry Song <jundongsong1@gmail.com> wrote:
+>=20
+> On Fri, Dec 9, 2022 at 9:37 PM Harry Song <jundongsong1@gmail.com> wrote:
+> >
+> > Thank you again.
+> >
+> > Harry
+> >
+> > On Fri, Dec 9, 2022 at 7:13 PM Marc Zyngier <maz@kernel.org> wrote:
+> > >
+> > > On Fri, 09 Dec 2022 03:34:21 +0000,
+> > > Harry Song <jundongsong1@gmail.com> wrote:
+> > > >
+> > > > Thank you for your reply. I know these two links.
+> > > > My email is to ask about the root cause of this bug.
+> > > >
+> > > > I would like to know whether the driver design of ITS requires that
+> > > > the CPU and ITS must be in a shared domain. Such as using CCI in
+> > > > chips;
+> > >
+> > > This problem has nothing to do with CCI or coherency. It has to do
+> > > with how the GIC is plugged in the interconnect and what attributes it
+> > > advertises.
+>=20
+> This problem has nothing to do with CCI or coherency ??
+>
+> Now , I have a question about this sentence=EF=BC=9A
+> If CCI is not used, how does the hardware realize the interconnection
+> between GIC-600 and cache?
+> If CCI is not used, our hardware colleagues said that the internal ITS
+> of the GIC-600 sends out operations with cache attributes (Inner/Outer
+> Shareable),
+> and there is no way to be captured by the cache and directly enter the
+> DDR. How does arm realize the interconnection between GIC-600 and
+> cache without CCI?
 
-It also requires the mappings in old and new domains are identical. In
-another word, any IOVA should be translated to a same result no matter
-through the old domain, the new domain, or hardware caches.
+This is becoming tedious.
 
-A similar replacement has been implemented in the code. For example,
-the Intel IOMMU driver dynamically transforms a large range (2M or 1G)
-mapping from discrete 4k pages to a super pages to improve the paging
-cache efficiency.
+Why do you need things to be cacheable/shareable? The HW doesn't need
+it, and the SW doesn't need it either.
 
-Best regards,
-baolu
+All that SW needs is to be told *how* the HW behaves, and it relies on
+the GIC to tell it by not accepting configurations it cannot support.
+That's all. This is all described in the thread I pointed you to last
+year.
+
+If your HW is accepting configurations it cannot deal with, then it is
+a bug. You can work around it (again see the thread I pointed you to),
+or you can continue to moan about it.
+
+But I'm not interested in arguing further about this.
+
+Also, for ARM integration problems, please contact the ARM technical
+support. I'm here for Linux, and nothing else.
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
