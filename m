@@ -2,54 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B962469448B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 205A869448E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjBMLal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 06:30:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
+        id S231299AbjBMLax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 06:30:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231264AbjBMLad (ORCPT
+        with ESMTP id S231250AbjBMLaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 06:30:33 -0500
-Received: from srv6.fidu.org (srv6.fidu.org [159.69.62.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC4719F2F;
-        Mon, 13 Feb 2023 03:30:14 -0800 (PST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by srv6.fidu.org (Postfix) with ESMTP id 21E22C80098;
-        Mon, 13 Feb 2023 12:30:10 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
-Received: from srv6.fidu.org ([127.0.0.1])
-        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id QE8ircAh1K_g; Mon, 13 Feb 2023 12:30:09 +0100 (CET)
-Received: from [192.168.176.165] (host-88-217-226-44.customer.m-online.net [88.217.226.44])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Mon, 13 Feb 2023 06:30:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBB44EE2;
+        Mon, 13 Feb 2023 03:30:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: wse@tuxedocomputers.com)
-        by srv6.fidu.org (Postfix) with ESMTPSA id 4A15DC80095;
-        Mon, 13 Feb 2023 12:30:09 +0100 (CET)
-Message-ID: <029b8d80-db28-cdb2-5c39-334be6968fad@tuxedocomputers.com>
-Date:   Mon, 13 Feb 2023 12:30:08 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49517B81193;
+        Mon, 13 Feb 2023 11:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 11B2CC433D2;
+        Mon, 13 Feb 2023 11:30:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676287818;
+        bh=SMomGZUWf/X7WdKybml+B0OSPVKkL3Uyt487pPjNiNQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=WyfCEEShHQ6AW/TKI7y3OTF57IPygN6yBnstNojtQ+WQCKMOFjfqXEj8CRoNeIeEy
+         BO5cGSpxa1E8L2D/ROKoamQoIX0eCvu4JdFSc8ganfCywJCIwMIyQU2lJqrnl4fi53
+         5dkOHtw7zSJieAFSURqUP2QGIkzc3UPYSL0mcA1GYGkCqSu1Ku+Ujc3Vsif/MIgUJr
+         qH0jdrBxij5BrEeHVzchjW502aaBbpNxkSClxGTsolR/rZF7k3QjVhgE42SXv7GDPD
+         C7z+bkLuGAGLDrJ5TDw7QUdN5GhBGzMJKgaapIxAYY9zr3ZKViWMAp5C0CDq1nH/lD
+         afgprwGZ9K9gQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ECA2DE68D2E;
+        Mon, 13 Feb 2023 11:30:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] gpiolib: acpi: Add a ignore wakeup quirk for Clevo NH5xAx
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
-        brgl@bgdev.pl, linux-gpio@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Raul E Rangel <rrangel@chromium.org>
-References: <20230210164636.628462-1-wse@tuxedocomputers.com>
- <Y+Z5OSa6hepQBOyc@smile.fi.intel.com>
-From:   Werner Sembach <wse@tuxedocomputers.com>
-In-Reply-To: <Y+Z5OSa6hepQBOyc@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v8 0/9] net: add EEE support for KSZ9477 switch
+ family
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167628781796.3463.3151948451131518084.git-patchwork-notify@kernel.org>
+Date:   Mon, 13 Feb 2023 11:30:17 +0000
+References: <20230211074113.2782508-1-o.rempel@pengutronix.de>
+In-Reply-To: <20230211074113.2782508-1-o.rempel@pengutronix.de>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, wei.fang@nxp.com,
+        hkallweit1@gmail.com, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Arun.Ramadoss@microchip.com, intel-wired-lan@lists.osuosl.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,37 +62,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 10.02.23 um 18:04 schrieb Andy Shevchenko:
-> On Fri, Feb 10, 2023 at 05:46:36PM +0100, Werner Sembach wrote:
->> commit 1796f808e4bb ("HID: i2c-hid: acpi: Stop setting wakeup_capable")
->> changed the policy such that I2C touchpads may be able to wake up the
->> system by default if the system is configured as such.
->>
->> However on Clevo NH5xAx/TUXEDO XA15 Gen10 there is a mistake in the ACPI
->> tables that the TP_ATTN# signal connected to GPIO 10 is configured as
->> ActiveLow and level triggered but connected to a pull up.
-> I'm not sure I understand the issue here. From what you say here it seems
-> correct ACPI description.
-TBH I copied the commit description from 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4cb786180dfb5258ff3111181b5e4ecb1d4a297b 
-which is for a different device having the exact same problem.
->
->> As soon as the
->> system suspends the touchpad loses power and then the system wakes up.
->>
->> To avoid this problem, introduce a quirk for this model that will prevent
->> the wakeup capability for being set for GPIO 10.
-> I'm not against fixing this, but wouldn't be better to actually target the root
-> cause and have a different quirk? Or is it me who didn't get what is the root
-> cause?
->
-I missed to reference the original discussion while copying the description: 
-https://gitlab.freedesktop.org/drm/amd/-/issues/1722#note_1720627 (Note that 
-it's a somewhat convoluted issue spanning multiple bugs when you scroll up from 
-that particular linked comment, which are however irrelevant for this patch)
+Hello:
 
-I'm not deep into how ACPI defined IRQ work so maybe not a good idea for me 
-summing it up, as I might have misunderstood parts of it ^^
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-I added the other ones from there to the cc.
+On Sat, 11 Feb 2023 08:41:04 +0100 you wrote:
+> changes v8:
+> - fix comment for linkmode_to_mii_eee_cap1_t() function
+> - add Acked-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+> - add Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
+> 
+> changes v7:
+> - update documentation for genphy_c45_eee_is_active()
+> - address review comments on "net: dsa: microchip: enable EEE support"
+>   patch
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v8,1/9] net: dsa: microchip: enable EEE support
+    https://git.kernel.org/netdev/net-next/c/69d3b36ca045
+  - [net-next,v8,2/9] net: phy: add genphy_c45_read_eee_abilities() function
+    https://git.kernel.org/netdev/net-next/c/14e47d1fb8f9
+  - [net-next,v8,3/9] net: phy: micrel: add ksz9477_get_features()
+    https://git.kernel.org/netdev/net-next/c/48fb19940f2b
+  - [net-next,v8,4/9] net: phy: export phy_check_valid() function
+    https://git.kernel.org/netdev/net-next/c/cf9f60796968
+  - [net-next,v8,5/9] net: phy: add genphy_c45_ethtool_get/set_eee() support
+    https://git.kernel.org/netdev/net-next/c/022c3f87f88e
+  - [net-next,v8,6/9] net: phy: c22: migrate to genphy_c45_write_eee_adv()
+    https://git.kernel.org/netdev/net-next/c/9b01c885be36
+  - [net-next,v8,7/9] net: phy: c45: migrate to genphy_c45_write_eee_adv()
+    https://git.kernel.org/netdev/net-next/c/5827b168125d
+  - [net-next,v8,8/9] net: phy: migrate phy_init_eee() to genphy_c45_eee_is_active()
+    https://git.kernel.org/netdev/net-next/c/6340f9fd43d5
+  - [net-next,v8,9/9] net: phy: start using genphy_c45_ethtool_get/set_eee()
+    https://git.kernel.org/netdev/net-next/c/8b68710a3121
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
