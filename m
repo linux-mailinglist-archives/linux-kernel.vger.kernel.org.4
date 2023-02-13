@@ -2,190 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F12416950AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:28:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7846D6950AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:29:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbjBMT2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 14:28:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60172 "EHLO
+        id S230506AbjBMT3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 14:29:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231182AbjBMT22 (ORCPT
+        with ESMTP id S229468AbjBMT3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 14:28:28 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309BD10E4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 11:28:27 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-52bed2ce9bdso176912807b3.13
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 11:28:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HiC3ULqXX8cO6R+XcTEyifNGmzSfzPzamHLxwxaEXII=;
-        b=BjvlkveF0bQPhQ8RyvdHfborNYN2Wt3s6+KrhvpWOFYsfi3O1yCCT/NPfPWwe1LZWo
-         /jNNSe8lVs36FURxn9Sgfxgn9OAbVQwkkDyYxHGyEfk8CUkMSnaTwh1ulkJVW0isSauw
-         mElUtgKk/Le2WWy2wSFvSb+pK4tuuZSezKMqAQ5eaelJYB84QIQ35pHdauuKteZGrm/r
-         T6XSiqxCTqUzruSJvc90kOWGKHks7khi3283pOkjx/LpHD5wuwFPZhExpR70oWJygola
-         /11+DF2O9FxonKaDic9Je5+sQFdkli4Ie5/5V794h//427HYhSBqHxD1B2gWgMo0uvJV
-         URXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HiC3ULqXX8cO6R+XcTEyifNGmzSfzPzamHLxwxaEXII=;
-        b=IA28r9agPGeA0akXHDZSv6kuPCfA8G2TjwTt4QJJ0tE/dhtjiidCOxFmx6A1OSvlFA
-         F7ky+qbWGVF6wOk/MqK9mrjGof3+OJk4T85xEWfx0MmNaWT3kMUfcyhGFu1GiBSDlq2X
-         TG6VVyb00TR9lZLOvMk+W5svuZE7WgYETW3USK7HASNMIY0Z+k3BF/JPwz0ZDzi6cs1f
-         hcHIps/FPBxbwnUdM50CT2DCabjwNPAKbShuj6IBFtscFId/xkHsLMth1UrosZd2F0dm
-         tWNj9MTSOmNIB/e0ixCnQKpua7YqwVEx64Ns4kB5CupP+VPyftmf/k/JoKtZWb4014Up
-         UUHg==
-X-Gm-Message-State: AO0yUKUdsvRUMOIJc4rOhrlJUggon4xJopxD4+W15JMVRxWpLw80/itv
-        cdUrJy1gO9FpwGxf1bfHy8t6ONWnM6oDTabODU7r
-X-Google-Smtp-Source: AK7set/PJjiz4KvZe2Co45e+2mFfpQrUMHCwbjYbxXayHYdUpsWIagheJ+1/PWsYd1ZTn71aqfVPQrcqqhW5edqh7tI=
-X-Received: by 2002:a0d:cb54:0:b0:52e:fb6b:fd61 with SMTP id
- n81-20020a0dcb54000000b0052efb6bfd61mr1060391ywd.271.1676316506243; Mon, 13
- Feb 2023 11:28:26 -0800 (PST)
+        Mon, 13 Feb 2023 14:29:54 -0500
+Received: from out-203.mta0.migadu.com (out-203.mta0.migadu.com [91.218.175.203])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFD910E4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 11:29:52 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1676316590;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=TFd86/lZY0jUwVlpn5vMoRoTnYYIyh1u0uvkFRiAkpw=;
+        b=vcCNvhUPB1Y6hXQuytul217yOHmDBd7yes08cATKxZTHFzbOcEBZlNeBKLTwoPWWPNEGiC
+        EnCJt24L+EWKP8lqR9217v9hvv44u690jr3k8DWb/v28XIunVbQTc7XXy+D5vYFIBVTJrW
+        b0W84QPIWgdxTN09+f1VjjpA6Nc0yhU=
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Dennis Zhou <dennis@kernel.org>, linux-mm@kvack.org
+Subject: [PATCH] mm: memcontrol: rename memcg_kmem_enabled()
+Date:   Mon, 13 Feb 2023 11:29:22 -0800
+Message-Id: <20230213192922.1146370-1-roman.gushchin@linux.dev>
 MIME-Version: 1.0
-References: <20230213190754.1836051-1-kan.liang@linux.intel.com> <20230213190754.1836051-2-kan.liang@linux.intel.com>
-In-Reply-To: <20230213190754.1836051-2-kan.liang@linux.intel.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Mon, 13 Feb 2023 11:28:14 -0800
-Message-ID: <CANDhNCoC9qry7pohkfqn8zT07-+FycRS7SH51Z0wYBv5gw_hzQ@mail.gmail.com>
-Subject: Re: [RFC PATCH V2 1/9] timekeeping: Expose the conversion information
- of monotonic raw
-To:     kan.liang@linux.intel.com
-Cc:     tglx@linutronix.de, peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, sboyd@kernel.org, eranian@google.com,
-        namhyung@kernel.org, ak@linux.intel.com, adrian.hunter@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 11:08 AM <kan.liang@linux.intel.com> wrote:
->
-> From: Kan Liang <kan.liang@linux.intel.com>
->
-> The conversion information of monotonic raw is not affected by NTP/PTP
-> correction. The perf tool can utilize the information to correctly
-> calculate the monotonic raw via a TSC in each PEBS record in the
-> post-processing stage.
->
-> The current conversion information is hidden in the internal
-> struct tk_read_base. Add a new external struct ktime_conv to store and
-> share the conversion information with other subsystems.
->
-> Add a new interface ktime_get_fast_mono_raw_conv() to expose the
-> conversion information of monotonic raw.  The function probably be
-> invoked in a NMI. Use NMI safe tk_fast_raw to retrieve the conversion
-> information.
->
-> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-> ---
->  include/linux/timekeeping.h | 18 ++++++++++++++++++
->  kernel/time/timekeeping.c   | 24 ++++++++++++++++++++++++
->  2 files changed, 42 insertions(+)
->
-> diff --git a/include/linux/timekeeping.h b/include/linux/timekeeping.h
-> index fe1e467ba046..94ba02e7eb13 100644
-> --- a/include/linux/timekeeping.h
-> +++ b/include/linux/timekeeping.h
-> @@ -253,6 +253,21 @@ struct system_time_snapshot {
->         u8                      cs_was_changed_seq;
->  };
->
-> +/**
-> + * struct ktime_conv - Timestamp conversion information
-> + * @mult:      Multiplier for scaled math conversion
-> + * @shift:     Shift value for scaled math conversion
-> + * @xtime_nsec: Shifted (fractional) nano seconds offset for readout
-> + * @base:      (nanoseconds) base time for readout
-> + */
-> +struct ktime_conv {
-> +       u64                     cycle_last;
-> +       u32                     mult;
-> +       u32                     shift;
-> +       u64                     xtime_nsec;
-> +       u64                     base;
-> +};
-> +
->  /**
->   * struct system_device_crosststamp - system/device cross-timestamp
->   *                                   (synchronized capture)
-> @@ -297,6 +312,9 @@ extern void ktime_get_snapshot(struct system_time_snapshot *systime_snapshot);
->  /* NMI safe mono/boot/realtime timestamps */
->  extern void ktime_get_fast_timestamps(struct ktime_timestamps *snap);
->
-> +/* NMI safe mono raw conv information */
-> +extern void ktime_get_fast_mono_raw_conv(struct ktime_conv *conv);
-> +
->  /*
->   * Persistent clock related interfaces
->   */
-> diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
-> index 5579ead449f2..a202b7a0a249 100644
-> --- a/kernel/time/timekeeping.c
-> +++ b/kernel/time/timekeeping.c
-> @@ -505,6 +505,30 @@ u64 notrace ktime_get_raw_fast_ns(void)
->  }
->  EXPORT_SYMBOL_GPL(ktime_get_raw_fast_ns);
->
-> +/**
-> + * ktime_get_fast_mono_raw_conv - NMI safe access to get the conversion
-> + *                               information of clock monotonic raw
-> + *
-> + * The conversion information is not affected by NTP/PTP correction.
-> + */
-> +void ktime_get_fast_mono_raw_conv(struct ktime_conv *conv)
-> +{
-> +       struct tk_fast *tkf = &tk_fast_raw;
-> +       struct tk_read_base *tkr;
-> +       unsigned int seq;
-> +
-> +       do {
-> +               seq = raw_read_seqcount_latch(&tkf->seq);
-> +               tkr = tkf->base + (seq & 0x01);
-> +               conv->cycle_last = tkr->cycle_last;
-> +               conv->mult = tkr->mult;
-> +               conv->shift = tkr->shift;
-> +               conv->xtime_nsec = tkr->xtime_nsec;
-> +               conv->base = tkr->base;
-> +       } while (read_seqcount_latch_retry(&tkf->seq, seq));
-> +}
-> +EXPORT_SYMBOL_GPL(ktime_get_fast_mono_raw_conv);
+Currently there are two kmem-related helper functions with a confusing
+semantics: memcg_kmem_enabled() and mem_cgroup_kmem_disabled().
 
-Thanks for taking another pass at this!  Using CLOCK_MONOTONIC_RAW
-removes a lot of the issues around time inconsistencies.
+The problem is that an obvious expectation
+memcg_kmem_enabled() == !mem_cgroup_kmem_disabled(),
+can be false.
 
-Though, I'm not super excited about exporting a lot of timekeeping
-state out to drivers to have drivers then duplicate timekeeping logic.
+mem_cgroup_kmem_disabled() is similar to mem_cgroup_disabled(): it
+returns true only if CONFIG_MEMCG_KMEM is not set or the kmem
+accounting is disabled using a boot time kernel option
+"cgroup.memory=nokmem". It never changes the value dynamically.
 
-Would it make more sense to have the timekeeping core export an
-interface like: ktime_get_mono_raw_from_timestamp(struct clocksource
-*cs, cycle_t  timestamp)?
+memcg_kmem_enabled() is different: it always returns false until
+the first non-root memory cgroup will get online (assuming the kernel
+memory accounting is enabled). It's goal is to improve the performance
+on systems without the cgroupfs mounted/memory controller enabled or
+on the systems with only the root memory cgroup.
 
-The complexity is that the timestamp may be pretty far in the past, so
-special handling will be needed to do the mult/shift conversion for a
-large negative delta.
+To make things more obvious and avoid potential bugs, let's rename
+memcg_kmem_enabled() to memcg_kmem_online().
 
-Also we need some way of checking that the current clocksource
-(because it can change) matches the timestamp source?
+Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Shakeel Butt <shakeelb@google.com>
+Cc: Muchun Song <muchun.song@linux.dev>
+Cc: Dennis Zhou <dennis@kernel.org>
+Cc: linux-mm@kvack.org
+---
+ include/linux/memcontrol.h | 14 +++++++-------
+ mm/memcontrol.c            |  8 ++++----
+ mm/page_alloc.c            |  8 ++++----
+ mm/percpu.c                |  2 +-
+ mm/slab.h                  | 10 +++++-----
+ mm/vmscan.c                |  2 +-
+ 6 files changed, 22 insertions(+), 22 deletions(-)
 
-Maybe some get_mono_raw_timestamp(&cs) accessor that captures both the
-current clocksource and the timestamp?
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 35478695cabf..5567319027d1 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -1776,24 +1776,24 @@ struct obj_cgroup *get_obj_cgroup_from_page(struct page *page);
+ int obj_cgroup_charge(struct obj_cgroup *objcg, gfp_t gfp, size_t size);
+ void obj_cgroup_uncharge(struct obj_cgroup *objcg, size_t size);
+ 
+-extern struct static_key_false memcg_kmem_enabled_key;
++extern struct static_key_false memcg_kmem_online_key;
+ 
+-static inline bool memcg_kmem_enabled(void)
++static inline bool memcg_kmem_online(void)
+ {
+-	return static_branch_likely(&memcg_kmem_enabled_key);
++	return static_branch_likely(&memcg_kmem_online_key);
+ }
+ 
+ static inline int memcg_kmem_charge_page(struct page *page, gfp_t gfp,
+ 					 int order)
+ {
+-	if (memcg_kmem_enabled())
++	if (memcg_kmem_online())
+ 		return __memcg_kmem_charge_page(page, gfp, order);
+ 	return 0;
+ }
+ 
+ static inline void memcg_kmem_uncharge_page(struct page *page, int order)
+ {
+-	if (memcg_kmem_enabled())
++	if (memcg_kmem_online())
+ 		__memcg_kmem_uncharge_page(page, order);
+ }
+ 
+@@ -1814,7 +1814,7 @@ static inline void count_objcg_event(struct obj_cgroup *objcg,
+ {
+ 	struct mem_cgroup *memcg;
+ 
+-	if (!memcg_kmem_enabled())
++	if (!memcg_kmem_online())
+ 		return;
+ 
+ 	rcu_read_lock();
+@@ -1854,7 +1854,7 @@ static inline struct obj_cgroup *get_obj_cgroup_from_page(struct page *page)
+ 	return NULL;
+ }
+ 
+-static inline bool memcg_kmem_enabled(void)
++static inline bool memcg_kmem_online(void)
+ {
+ 	return false;
+ }
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 17335459d8dc..3e3cdb9bed95 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -345,8 +345,8 @@ static void memcg_reparent_objcgs(struct mem_cgroup *memcg,
+  * conditional to this static branch, we'll have to allow modules that does
+  * kmem_cache_alloc and the such to see this symbol as well
+  */
+-DEFINE_STATIC_KEY_FALSE(memcg_kmem_enabled_key);
+-EXPORT_SYMBOL(memcg_kmem_enabled_key);
++DEFINE_STATIC_KEY_FALSE(memcg_kmem_online_key);
++EXPORT_SYMBOL(memcg_kmem_online_key);
+ #endif
+ 
+ /**
+@@ -3034,7 +3034,7 @@ struct obj_cgroup *get_obj_cgroup_from_page(struct page *page)
+ {
+ 	struct obj_cgroup *objcg;
+ 
+-	if (!memcg_kmem_enabled())
++	if (!memcg_kmem_online())
+ 		return NULL;
+ 
+ 	if (PageMemcgKmem(page)) {
+@@ -3746,7 +3746,7 @@ static int memcg_online_kmem(struct mem_cgroup *memcg)
+ 	objcg->memcg = memcg;
+ 	rcu_assign_pointer(memcg->objcg, objcg);
+ 
+-	static_branch_enable(&memcg_kmem_enabled_key);
++	static_branch_enable(&memcg_kmem_online_key);
+ 
+ 	memcg->kmemcg_id = memcg->id.id;
+ 
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 6721c0ba12f8..7bbe514d1bdc 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -1410,7 +1410,7 @@ static __always_inline bool free_pages_prepare(struct page *page,
+ 		 * Do not let hwpoison pages hit pcplists/buddy
+ 		 * Untie memcg state and reset page's owner
+ 		 */
+-		if (memcg_kmem_enabled() && PageMemcgKmem(page))
++		if (memcg_kmem_online() && PageMemcgKmem(page))
+ 			__memcg_kmem_uncharge_page(page, order);
+ 		reset_page_owner(page, order);
+ 		page_table_check_free(page, order);
+@@ -1441,7 +1441,7 @@ static __always_inline bool free_pages_prepare(struct page *page,
+ 	}
+ 	if (PageMappingFlags(page))
+ 		page->mapping = NULL;
+-	if (memcg_kmem_enabled() && PageMemcgKmem(page))
++	if (memcg_kmem_online() && PageMemcgKmem(page))
+ 		__memcg_kmem_uncharge_page(page, order);
+ 	if (check_free && free_page_is_bad(page))
+ 		bad++;
+@@ -5446,7 +5446,7 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
+ 		goto out;
+ 
+ 	/* Bulk allocator does not support memcg accounting. */
+-	if (memcg_kmem_enabled() && (gfp & __GFP_ACCOUNT))
++	if (memcg_kmem_online() && (gfp & __GFP_ACCOUNT))
+ 		goto failed;
+ 
+ 	/* Use the single page allocator for one page. */
+@@ -5618,7 +5618,7 @@ struct page *__alloc_pages(gfp_t gfp, unsigned int order, int preferred_nid,
+ 	page = __alloc_pages_slowpath(alloc_gfp, order, &ac);
+ 
+ out:
+-	if (memcg_kmem_enabled() && (gfp & __GFP_ACCOUNT) && page &&
++	if (memcg_kmem_online() && (gfp & __GFP_ACCOUNT) && page &&
+ 	    unlikely(__memcg_kmem_charge_page(page, gfp, order) != 0)) {
+ 		__free_pages(page, order);
+ 		page = NULL;
+diff --git a/mm/percpu.c b/mm/percpu.c
+index acd78da0493b..28e07ede46f6 100644
+--- a/mm/percpu.c
++++ b/mm/percpu.c
+@@ -1625,7 +1625,7 @@ static bool pcpu_memcg_pre_alloc_hook(size_t size, gfp_t gfp,
+ {
+ 	struct obj_cgroup *objcg;
+ 
+-	if (!memcg_kmem_enabled() || !(gfp & __GFP_ACCOUNT))
++	if (!memcg_kmem_online() || !(gfp & __GFP_ACCOUNT))
+ 		return true;
+ 
+ 	objcg = get_obj_cgroup_from_current();
+diff --git a/mm/slab.h b/mm/slab.h
+index 63fb4c00d529..43966aa5fadf 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -494,7 +494,7 @@ static inline bool memcg_slab_pre_alloc_hook(struct kmem_cache *s,
+ {
+ 	struct obj_cgroup *objcg;
+ 
+-	if (!memcg_kmem_enabled())
++	if (!memcg_kmem_online())
+ 		return true;
+ 
+ 	if (!(flags & __GFP_ACCOUNT) && !(s->flags & SLAB_ACCOUNT))
+@@ -535,7 +535,7 @@ static inline void memcg_slab_post_alloc_hook(struct kmem_cache *s,
+ 	unsigned long off;
+ 	size_t i;
+ 
+-	if (!memcg_kmem_enabled() || !objcg)
++	if (!memcg_kmem_online() || !objcg)
+ 		return;
+ 
+ 	for (i = 0; i < size; i++) {
+@@ -567,7 +567,7 @@ static inline void memcg_slab_free_hook(struct kmem_cache *s, struct slab *slab,
+ 	struct obj_cgroup **objcgs;
+ 	int i;
+ 
+-	if (!memcg_kmem_enabled())
++	if (!memcg_kmem_online())
+ 		return;
+ 
+ 	objcgs = slab_objcgs(slab);
+@@ -649,7 +649,7 @@ static inline struct kmem_cache *virt_to_cache(const void *obj)
+ static __always_inline void account_slab(struct slab *slab, int order,
+ 					 struct kmem_cache *s, gfp_t gfp)
+ {
+-	if (memcg_kmem_enabled() && (s->flags & SLAB_ACCOUNT))
++	if (memcg_kmem_online() && (s->flags & SLAB_ACCOUNT))
+ 		memcg_alloc_slab_cgroups(slab, s, gfp, true);
+ 
+ 	mod_node_page_state(slab_pgdat(slab), cache_vmstat_idx(s),
+@@ -659,7 +659,7 @@ static __always_inline void account_slab(struct slab *slab, int order,
+ static __always_inline void unaccount_slab(struct slab *slab, int order,
+ 					   struct kmem_cache *s)
+ {
+-	if (memcg_kmem_enabled())
++	if (memcg_kmem_online())
+ 		memcg_free_slab_cgroups(slab);
+ 
+ 	mod_node_page_state(slab_pgdat(slab), cache_vmstat_idx(s),
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index d4b9fd1ae0ed..7c8d95b2b3aa 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -915,7 +915,7 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+ 		}
+ 
+ 		/* Call non-slab shrinkers even though kmem is disabled */
+-		if (!memcg_kmem_enabled() &&
++		if (!memcg_kmem_online() &&
+ 		    !(shrinker->flags & SHRINKER_NONSLAB))
+ 			continue;
+ 
+-- 
+2.39.1
 
-I've not thought this out fully, but curious if something like that
-might work for you and also encapsulate the timekeeping logic better
-so we don't have to have that logic leak out to various driver
-implementations.
-
-thanks
--john
