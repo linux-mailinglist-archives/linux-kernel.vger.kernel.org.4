@@ -2,100 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5148E693F7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:22:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6795693F82
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjBMIWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 03:22:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
+        id S229989AbjBMIWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 03:22:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbjBMIWR (ORCPT
+        with ESMTP id S229854AbjBMIWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 03:22:17 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD2D1285D;
-        Mon, 13 Feb 2023 00:22:11 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id k13so12793938plg.0;
-        Mon, 13 Feb 2023 00:22:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8Cc8oF+7BeFkTvl0tiR5ilyaJsXX8cQAcNRTUnSXCuQ=;
-        b=VAptGiqps+dmcLjKqESSax0nsydlcGffI+aeuewHs7zeVP8k792ryUoTO/lifmMFHG
-         6+khFc3eFXA7ip8sGiWRHW7Dm5Hr/9kWqTGRqEd7yquopVGS3/kg/SgEY+aQrvZ52rtv
-         tQsMZ191fqzbgsi++mUddK+fI0sKdyyO+RlyJd5qR8JO5bNwfPXrDB493zUOctLZvDYh
-         2rq5GxVzq7SUWH9twM5e4V2xgCpDCC8REg1C3Abu5yzYy/NuW5ajMCczxfFZqvRzL2B5
-         wiTDjTlvk12G1tI7/2/izzh8N65JAOdzOePjPG+QPRnFK7wKJ/8gBgdBvIdvzytxIwbN
-         k+EA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8Cc8oF+7BeFkTvl0tiR5ilyaJsXX8cQAcNRTUnSXCuQ=;
-        b=Iv0Iz7fD1c6PXxMbGxBrcHb7FlW80ShoR0sN2GHyZfWQFQKYEj8ix7tHxRdymB53Ak
-         ACSdKmc9V92GcB6qqaPwc1zC8wEJVgL88TNFiJfr5fHydlguKMuMndUH4XrTXEdK0zKZ
-         28n5Bj2bxgTCDG93FB9r2Wk3TIvCti+dYaIvQZzSHLdioEMd45pJq7AVUru++cd2iT7/
-         fVmwvlVQL26AxIYVNxOQkuIl8oJqSeqt2B137qbxy8+sZLmUhmJjaHf74bJ/uSv/4fIi
-         O3DWOjcEtc/d/NmjR/LuOvqtI8e7lDjqS9gPbCRTnoPSdrbLvuWl0JwlvkS+n3YU900X
-         NK3Q==
-X-Gm-Message-State: AO0yUKWv+KVpR0BnbcAwEvHrZfqmxc5iuaSDFz+t1yWHYZxp8jY/V1qo
-        EqYBO78yNaw9CSTtVSc3eLlVbXeWWAFt8ZBIeKB1G9P0LsuHvA==
-X-Google-Smtp-Source: AK7set+4dh1XshE8gce5zGUW9rPYY15T59wx4nemxaVNdbh+uY9RR+5EIHm0X46Dws3T8NdcyNTKIxuPr5MFua5vTC8=
-X-Received: by 2002:a17:902:c40c:b0:198:f92d:9a2c with SMTP id
- k12-20020a170902c40c00b00198f92d9a2cmr5586324plk.2.1676276530208; Mon, 13 Feb
- 2023 00:22:10 -0800 (PST)
+        Mon, 13 Feb 2023 03:22:50 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E32D51F;
+        Mon, 13 Feb 2023 00:22:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
+        :Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=mQA/TMoqGXtzaC3xl5xqOmLbaTvrl04Kg+nkMyx7H6o=; b=myKwfl24JBnnudqvTZWtxcOoM7
+        vSYq9vFkJ6kLpTtn34g7Zd6tKdd+GZxaccqbhIP3MKORXGysgWarLaZqld2FaU2px9GtU7DwAVWRb
+        RSSz9Dc/bFMeFNpohNDcmrffxwAA9f0HQp5WRChtNR3cLbjR8Gx2sOn+uzo42IBATYhwi2JGWni+4
+        TevkWhFX3zbzw1GvT/L2V2ei8t/Fmd+aUtJtHjpk1Dt4bjReVoKee2JUtMuQzZX5KozrtEngJx76l
+        iI6pjlfh6OYrle1Ml0EonQvRBLd2gG9fQc6hpn0b9jk+Cf/bsQtpRQxy7UfLKKBNxyzBivUhch/2F
+        S0CT16qQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pRU6N-00DZfL-En; Mon, 13 Feb 2023 08:22:19 +0000
+Date:   Mon, 13 Feb 2023 00:22:19 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org,
+        syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v14 01/12] splice: Fix O_DIRECT file read splice to avoid
+ reversion of ITER_PIPE
+Message-ID: <Y+nzO2H8AizX4lAQ@infradead.org>
+References: <Y+UJAdnllBw+uxK+@casper.infradead.org>
+ <20230209102954.528942-1-dhowells@redhat.com>
+ <20230209102954.528942-2-dhowells@redhat.com>
+ <909202.1675959337@warthog.procyon.org.uk>
 MIME-Version: 1.0
-References: <20230210041030.865478-1-zyytlz.wz@163.com> <868017d2-c85f-20a1-292f-0b97ab8bf752@molgen.mpg.de>
-In-Reply-To: <868017d2-c85f-20a1-292f-0b97ab8bf752@molgen.mpg.de>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Mon, 13 Feb 2023 16:21:58 +0800
-Message-ID: <CAJedcCx9Ur4a7isrEEDRaCThq2T=3=Z9b1dmfjUNh5qABkdBqg@mail.gmail.com>
-Subject: Re: [PATCH] Bluetooth: hci_core: Fix poential Use-after-Free bug in hci_remove_adv_monitor
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, marcel@holtmann.org,
-        alex000young@gmail.com, johan.hedberg@gmail.com,
-        luiz.dentz@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <909202.1675959337@warthog.procyon.org.uk>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paul Menzel <pmenzel@molgen.mpg.de> =E4=BA=8E2023=E5=B9=B42=E6=9C=8813=E6=
-=97=A5=E5=91=A8=E4=B8=80 16:19=E5=86=99=E9=81=93=EF=BC=9A
->
-> Dear Zheng,
->
->
-> Thank you for your patch.
->
-> Am 10.02.23 um 05:10 schrieb Zheng Wang:
-> > In hci_remove_adv_monitor, if it gets into HCI_ADV_MONITOR_EXT_MSFT cas=
-e,
-> > the function will free the monitor and print its handle after that.
-> >
-> > Fix it by switch the order.
->
-> =E2=80=A6 by switch*ing* =E2=80=A6
->
-> There is a small typo in the commit message summary/title: po*t*ential
->
-Hi Paul,
+> +	if (!bv)
+> +		return -ENOMEM;
+> +
+> +	pages = (void *)(bv + npages);
 
-Thanks for pointing that out ^^. Will correct it in the next version of pat=
-ch.
+I think this cast should be to struct page **… not void *.
 
-Best regards,
-Zheng Wang
+> +	npages = alloc_pages_bulk_array(GFP_USER, npages, pages);
+> +	if (!npages) {
+> +		kfree(bv);
+> +		return -ENOMEM;
+> +	}
+
+> +	reclaim = npages * PAGE_SIZE;
+> +	remain = 0;
+> +	if (ret > 0) {
+> +		reclaim -= ret;
+> +		remain = ret;
+
+...
+
+> +	/* Free any pages that didn't get touched at all. */
+> +	reclaim /= PAGE_SIZE;
+
+Any reason not to keep reclaim in PAGE_SIZE units to start with?
+
