@@ -2,180 +2,394 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E43BF6950C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:36:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC216950C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjBMTgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 14:36:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
+        id S230056AbjBMThh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 14:37:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjBMTgS (ORCPT
+        with ESMTP id S229556AbjBMThf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 14:36:18 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1E01BF;
-        Mon, 13 Feb 2023 11:36:17 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id p24-20020a056830131800b0068d4b30536aso4070242otq.9;
-        Mon, 13 Feb 2023 11:36:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HlUwM5/8oymp4K70XoDUwsO3GnP9r5Zf4hM5G2ZAGRg=;
-        b=DL6ogzN03jXRR0WMlULu8x/lTz7LjCnuBbYjic0VsnSoQd5bo1gPorLCGB7x8mXUXw
-         JwqI899c0IJTD5yh9QGdpsNH/OvBy2R4Kqncl0GEZZPQAL4KjjiyZGSSu/dztN8+6Adn
-         lpci6Twq9QTtTgzqx81Se9K4pRcC5KWuFOf/PDQa+YvCa1KZN11ogPJLN0uTe1m7M7nQ
-         GNYgjrRhGdHsTPqVxL1tkv0EsgZnGVbdGSfMK12I2iQdRSTOMS5Wbr8bHGPv4yEqtaPA
-         ObAaHh4bSsompE6oUoBk+D1e/C25KSM692XG1BMbZtE5bKDBmWg8AIVUPy6P/kSYJ0ja
-         bg+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HlUwM5/8oymp4K70XoDUwsO3GnP9r5Zf4hM5G2ZAGRg=;
-        b=uUYkn7TqUDAA6lcur2dSye44k4m8cWGri7sNfV8YsiUS5mG+JfDs4JWXZmfuz/AROy
-         4shzjMpH6Dks7mMo6TAUXpKn+Cc55EwcJa/7VnWcNbkkibOJpo8Y2m09tE8Z3FtIUgmf
-         U8rd4JVT42Mu1dhh+LY88Kt7JAj3t8HkL99eynZ3rtb+D4saiZ/VEWaWOMq4iujtDxHi
-         q/zS/8m+tIxwdIWQy+0OXxMsFa6OtbnFe7RhnhVOY2H6XvIqfJnRjo0XZm1t+l/KoN7S
-         0qImrLBSfsPUJ6EuDSdu0I7eS329aljpElJtoYRSDB5n7S61QMV7rg2e/GkOw4PTt80J
-         ezMw==
-X-Gm-Message-State: AO0yUKUl9Eg2s6/WDq/kutee69+qSgh6suXZ7cvFTsEv8CuJ1F4YPNyU
-        dMLBsmwTJq01xwqhJk3lBNq4G23DCbI=
-X-Google-Smtp-Source: AK7set/xCcQ7tGUsLetlO9bx2krIG6QOtusRt6j8kS7mB55rPNflD2uXhfYgMKEaA+2X90axcSdDJA==
-X-Received: by 2002:a9d:7095:0:b0:68b:d0cc:d1c2 with SMTP id l21-20020a9d7095000000b0068bd0ccd1c2mr14820687otj.19.1676316976292;
-        Mon, 13 Feb 2023 11:36:16 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w10-20020a9d638a000000b0068d3f341dd9sm5580101otk.62.2023.02.13.11.36.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 11:36:15 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 13 Feb 2023 11:36:13 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, tsbogend@alpha.franken.de,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v4 1/5] dt-bindings: watchdog: mt7621-wdt: add phandle to
- access system controller registers
-Message-ID: <20230213193613.GA371102@roeck-us.net>
-References: <20230211073357.755893-1-sergio.paracuellos@gmail.com>
- <20230211073357.755893-2-sergio.paracuellos@gmail.com>
- <190b3135-82f3-4dfa-55ee-e048c5510e3c@arinc9.com>
- <CAMhs-H8tehOWvYKmFtW_LHNb62h5mnzVGN_bfGOtLgNE9qUxqw@mail.gmail.com>
- <d14f0065-e8d3-50ed-7ea4-ba57dbd18d51@arinc9.com>
- <CAMhs-H_1dtdAmeNW9arK9JxhdWaQJwcMU1Pk7TOW1f5MREzzug@mail.gmail.com>
- <76353597-0170-e0d9-9f5d-f208a03e44e8@linaro.org>
- <CAMhs-H-JGZMR6mB=USywAh4aRS9ZFOVebwLv8=N2f3uvWpcXDA@mail.gmail.com>
- <afe68663-8ade-ae5a-00a1-083b2f263cb0@roeck-us.net>
- <CAMhs-H9BkQNwNyYQQgSig9vkW-_+i0+x8CLogXNgkRyi9Un6xw@mail.gmail.com>
+        Mon, 13 Feb 2023 14:37:35 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14AA1BC5;
+        Mon, 13 Feb 2023 11:37:31 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DJPOaY028625;
+        Mon, 13 Feb 2023 19:37:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=UBlGb3ZRbBBaGOWdx1oTO/ER4dXltViw5GOGbB1sVUQ=;
+ b=VlSXV2ZWv5f1u4B3iX+rN2KqybvBm3F091JYbXsDQqCbTenX+0zK5LBoABt+p+h7BnoK
+ c5b4vP59+qNB7wjhee6j5W8JzSbOCCFCTG6rGRuPcbrn/5sJnc5zVgt6QfGNIIamfBgP
+ z4s+VYgj7qIUd9nUrapvE6K9av5zyJzK9YmjRkTWnLJSVZ5ba8IMjo1wYz7a+fQFUIpj
+ aUjMZMVX56CUZfbTWUgGvjFB6Fob4Cej9xydQBO+wyO6yC19MCkKsqjER7nkXgyQah68
+ UL5DJ7xbeAP6tIBvWJrPOsR/8HvmIA6MTlEiY7K23T6GmsFniA2hcqfHcWqxUwt1TwzD UA== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nqpmmgrbm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 19:37:17 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31DJbGH9020514
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 19:37:16 GMT
+Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 13 Feb
+ 2023 11:37:15 -0800
+Message-ID: <773cd72b-a766-1764-e25f-0af1174f0e51@quicinc.com>
+Date:   Mon, 13 Feb 2023 11:37:14 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMhs-H9BkQNwNyYQQgSig9vkW-_+i0+x8CLogXNgkRyi9Un6xw@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [RFC PATCH 5/7] drm/msm/dpu: Document and enable TEAR interrupts
+ on DSI interfaces
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        <phone-devel@vger.kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+CC:     <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        "Jami Kettunen" <jami.kettunen@somainline.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Loic Poulain" <loic.poulain@linaro.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20221231215006.211860-1-marijn.suijten@somainline.org>
+ <20221231215006.211860-6-marijn.suijten@somainline.org>
+From:   Jessica Zhang <quic_jesszhan@quicinc.com>
+In-Reply-To: <20221231215006.211860-6-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: JEZBexlGk0nECIoGpUcYGnIKPoAtwR_O
+X-Proofpoint-GUID: JEZBexlGk0nECIoGpUcYGnIKPoAtwR_O
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-13_12,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 priorityscore=1501 suspectscore=0 adultscore=0 impostorscore=0
+ bulkscore=0 clxscore=1011 mlxscore=0 mlxlogscore=999 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302130171
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 09:59:35AM +0100, Sergio Paracuellos wrote:
-> On Sun, Feb 12, 2023 at 4:27 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > On 2/12/23 00:13, Sergio Paracuellos wrote:
-> > > On Sat, Feb 11, 2023 at 12:42 PM Krzysztof Kozlowski
-> > > <krzysztof.kozlowski@linaro.org> wrote:
-> > >>
-> > >> On 11/02/2023 12:01, Sergio Paracuellos wrote:
-> > >>> On Sat, Feb 11, 2023 at 11:47 AM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
-> > >>>>
-> > >>>> On 11.02.2023 13:41, Sergio Paracuellos wrote:
-> > >>>>> On Sat, Feb 11, 2023 at 10:10 AM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
-> > >>>>>>
-> > >>>>>> Is this mediatek,sysctl property required after your changes on the
-> > >>>>>> watchdog code?
-> > >>>>>
-> > >>>>> I don't really understand the question :-) Yes, it is. Since we have
-> > >>>>> introduced a new phandle in the watchdog node to be able to access the
-> > >>>>> reset status register through the 'sysc' syscon node.
-> > >>>>> We need the bindings to be aligned with the mt7621.dtsi file and we
-> > >>>>> are getting the syscon regmap handler via
-> > >>>>> 'syscon_regmap_lookup_by_phandle()'. See PATCH 5 of the series, Arınç.
-> > >>>>
-> > >>>> I believe you need to put mediatek,sysctl under "required:".
-> > >>>
-> > >>> Ah, I understood your question now :-). You meant 'required' property.
-> > >>> I need more coffee, I guess :-). I am not sure if you can add
-> > >>> properties as required after bindings are already mainlined for
-> > >>> compatibility issues. The problem with this SoC is that drivers become
-> > >>> mainlined before the device tree was so if things are properly fixed
-> > >>> now this kind of issues appear.  Let's see Krzysztof and Rob comments
-> > >>> for this.
-> > >>
-> > >> If your driver fails to probe without mediatek,sysctl, you already made
-> > >> it required (thus broke the ABI) regardless what dt-binding is saying.
-> > >> In such case you should update dt-binding to reflect reality.
-> > >>
-> > >> Now ABI break is different case. Usually you should not break it without
-> > >> valid reasons (e.g. it was never working before). Your commit msg
-> > >> suggests that you only improve the code, thus ABI break is not really
-> > >> justified. In such case - binding is correct, driver should be reworked
-> > >> to accept DTS without the new property.
-> > >
-> > > Thanks for clarification, Krzysztof. Ok, so if this is the case I need
-> > > to add this property required (as Arinc was properly pointing out in
-> > > previous mail) since without it the driver is going to fail on probe
-> > > (PATCH 5 of the series). I understand the "it was never working
-> > > before" argument reason for ABI breaks. What happens if the old driver
-> > > code was not ideal and totally dependent on architecture specific
-> > > operations when this could be totally avoided and properly make arch
-> > > independent agnostic drivers? This driver was added in 2016 [0]. There
-> > > was not a device tree file in the kernel for this SoC mainlined until
-> > > 2022 [1]. I also personally migrated this watchdog binding in 2022
-> > > from text to YAML and maintained it without changes [2]. When this was
-> > > mainlined not all drivers were properly reviewed and the current code
-> > > was just maintained as it is. Most users of this SoC are in the
-> > > openWRT community where the dtsi of the mainline is not used yet and
-> > > they maintain their own mt7621.dtsi files. Also, when a new version of
-> > > the openWRT selected kernel is added they also modify and align with
-> > > its mt7621.dtsi file without maintaining previous dtb's. If "make the
-> > > driver arch independent to be able to be compile tested" and this kind
-> > > of arguments are not valid at all I need to know because I have
-> > > started to review driver code for this SoC and other drivers also have
-> > > the same arch dependency that ideally should be avoided in the same
-> > > way. This at the end means to break the ABI again in the future for
-> > > those drivers / bindings. So I can just let them be as it is and not
-> > > provide any change at all and continue without being compile tested
-> > > and other beneficial features to detect future driver breakage.
-> > >
-> >
-> > Problem is that there are (presumably) shipped systems out there with
-> > the old devicetree file. The watchdog driver would no longer instantiate
-> > on those systems.
-> 
-> Ok, I will maintain only the PATCH that changes the driver to not use
-> globals and send v5.
-> 
 
-Other options might be to search for the "syscon" node name or to search
-for the "mediatek,mt7621-sysc" compatible.
 
-Guenter
+On 12/31/2022 1:50 PM, Marijn Suijten wrote:
+> All SoCs since DPU 5.0.0 (and seemingly up until and including 6.0.0,
+> but excluding 7.x.x) have the tear interrupt and control registers moved
+> out of the PINGPONG block and into the INTF block.  Wire up the
+> necessary interrupts and IRQ masks on all supported hardware.
 
-> >
-> > Guenter
-> >
+Hi Marijn,
+
+Thanks for the patch.
+
+I saw that in your commit msg, you mentioned that 7.x doesn't have 
+tearcheck in the INTF block -- can you double check that this is correct?
+
+I'm working on SM8350 (DPU v7) and I'm seeing that it does have 
+tearcheck in INTF block.
+
 > 
-> Thanks,
->     Sergio Paracuellos
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 78 +++++++++++--------
+>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |  6 +-
+>   .../gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c | 12 +++
+>   .../gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h |  2 +
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h      |  3 +
+>   5 files changed, 68 insertions(+), 33 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> index 1cfe94494135..b9b9b5b0b615 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> @@ -86,6 +86,15 @@
+>   
+>   #define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN)
+>   
+> +#define IRQ_MSM8998_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+> +			 BIT(MDP_SSPP_TOP0_INTR2) | \
+> +			 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+> +			 BIT(MDP_INTF0_INTR) | \
+> +			 BIT(MDP_INTF1_INTR) | \
+> +			 BIT(MDP_INTF2_INTR) | \
+> +			 BIT(MDP_INTF3_INTR) | \
+> +			 BIT(MDP_INTF4_INTR))
+> +
+>   #define IRQ_SDM845_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>   			 BIT(MDP_SSPP_TOP0_INTR2) | \
+>   			 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+> @@ -100,13 +109,15 @@
+>   #define IRQ_QCM2290_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>   			 BIT(MDP_SSPP_TOP0_INTR2) | \
+>   			 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+> -			 BIT(MDP_INTF1_INTR))
+> +			 BIT(MDP_INTF1_INTR) | \
+> +			 BIT(MDP_INTF1_TEAR_INTR))
+>   
+>   #define IRQ_SC7180_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>   			 BIT(MDP_SSPP_TOP0_INTR2) | \
+>   			 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>   			 BIT(MDP_INTF0_INTR) | \
+> -			 BIT(MDP_INTF1_INTR))
+> +			 BIT(MDP_INTF1_INTR) | \
+> +			 BIT(MDP_INTF1_TEAR_INTR))
+>   
+>   #define IRQ_SC7280_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>   			 BIT(MDP_SSPP_TOP0_INTR2) | \
+> @@ -120,7 +131,9 @@
+>   			 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>   			 BIT(MDP_INTF0_INTR) | \
+>   			 BIT(MDP_INTF1_INTR) | \
+> +			 BIT(MDP_INTF1_TEAR_INTR) | \
+>   			 BIT(MDP_INTF2_INTR) | \
+> +			 BIT(MDP_INTF2_TEAR_INTR) | \
+>   			 BIT(MDP_INTF3_INTR) | \
+>   			 BIT(MDP_INTF4_INTR))
+>   
+> @@ -129,7 +142,9 @@
+>   			  BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>   			  BIT(MDP_INTF0_INTR) | \
+>   			  BIT(MDP_INTF1_INTR) | \
+> +			  BIT(MDP_INTF1_TEAR_INTR) | \
+>   			  BIT(MDP_INTF2_INTR) | \
+> +			  BIT(MDP_INTF2_TEAR_INTR) | \
+>   			  BIT(MDP_INTF3_INTR) | \
+>   			  BIT(MDP_INTF4_INTR) | \
+>   			  BIT(MDP_INTF5_INTR) | \
+> @@ -1300,63 +1315,64 @@ static struct dpu_dsc_cfg sdm845_dsc[] = {
+>   /*************************************************************
+>    * INTF sub blocks config
+>    *************************************************************/
+> -#define INTF_BLK(_name, _id, _base, _type, _ctrl_id, _progfetch, _features, _reg, _underrun_bit, _vsync_bit) \
+> +#define INTF_BLK(_name, _id, _base, _len, _type, _ctrl_id, _progfetch, _features, _reg, _underrun_bit, _vsync_bit, _tear_reg, _tear_rd_ptr_bit) \
+>   	{\
+>   	.name = _name, .id = _id, \
+> -	.base = _base, .len = 0x280, \
+> +	.base = _base, .len = _len, \
+>   	.features = _features, \
+>   	.type = _type, \
+>   	.controller_id = _ctrl_id, \
+>   	.prog_fetch_lines_worst_case = _progfetch, \
+>   	.intr_underrun = DPU_IRQ_IDX(_reg, _underrun_bit), \
+>   	.intr_vsync = DPU_IRQ_IDX(_reg, _vsync_bit), \
+> +	.intr_tear_rd_ptr = DPU_IRQ_IDX(_tear_reg, _tear_rd_ptr_bit), \
+>   	}
+>   
+>   static const struct dpu_intf_cfg msm8998_intf[] = {
+> -	INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, 0, 25, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+> -	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 25, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> -	INTF_BLK("intf_2", INTF_2, 0x6B000, INTF_DSI, 1, 25, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
+> -	INTF_BLK("intf_3", INTF_3, 0x6B800, INTF_HDMI, 0, 25, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
+> +	INTF_BLK("intf_0", INTF_0, 0x6A000, 0x268, INTF_DP, 0, 25, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 24, 25, -1, -1),
+
+Just wondering, how were the lengths calculated for the INTF blocks? The 
+values in general seem a little off to me.
+
+For example, I'm looking downstream and it seems to me that the length 
+for the INTF_0 on MSM8998 should be 0x280. Similarly for SC7280, I'm 
+seeing that length for INTF + tearcheck should be 0x2c4.
+
+Thanks,
+
+Jessica Zhang
+
+> +	INTF_BLK("intf_1", INTF_1, 0x6A800, 0x268, INTF_DSI, 0, 25, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 26, 27, -1, -1),
+> +	INTF_BLK("intf_2", INTF_2, 0x6B000, 0x268, INTF_DSI, 1, 25, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 28, 29, -1, -1),
+> +	INTF_BLK("intf_3", INTF_3, 0x6B800, 0x268, INTF_HDMI, 0, 25, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 30, 31, -1, -1),
+>   };
+>   
+>   static const struct dpu_intf_cfg sdm845_intf[] = {
+> -	INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, 0, 24, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+> -	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 24, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> -	INTF_BLK("intf_2", INTF_2, 0x6B000, INTF_DSI, 1, 24, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
+> -	INTF_BLK("intf_3", INTF_3, 0x6B800, INTF_DP, 1, 24, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
+> +	INTF_BLK("intf_0", INTF_0, 0x6A000, 0x280, INTF_DP, 0, 24, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 24, 25, -1, -1),
+> +	INTF_BLK("intf_1", INTF_1, 0x6A800, 0x280, INTF_DSI, 0, 24, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 26, 27, -1, -1),
+> +	INTF_BLK("intf_2", INTF_2, 0x6B000, 0x280, INTF_DSI, 1, 24, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 28, 29, -1, -1),
+> +	INTF_BLK("intf_3", INTF_3, 0x6B800, 0x280, INTF_DP, 1, 24, INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 30, 31, -1, -1),
+>   };
+>   
+>   static const struct dpu_intf_cfg sc7180_intf[] = {
+> -	INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+> -	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> +	INTF_BLK("intf_0", INTF_0, 0x6A000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25, -1, -1),
+> +	INTF_BLK("intf_1", INTF_1, 0x6A800, 0x2b8, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27, MDP_INTF1_TEAR_INTR, 2),
+>   };
+>   
+>   static const struct dpu_intf_cfg sm8150_intf[] = {
+> -	INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+> -	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> -	INTF_BLK("intf_2", INTF_2, 0x6B000, INTF_DSI, 1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
+> -	INTF_BLK("intf_3", INTF_3, 0x6B800, INTF_DP, 1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
+> +	INTF_BLK("intf_0", INTF_0, 0x6A000, 0x280, INTF_DP, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25, -1, -1),
+> +	INTF_BLK("intf_1", INTF_1, 0x6A800, 0x2b8, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27, MDP_INTF1_TEAR_INTR, 2),
+> +	INTF_BLK("intf_2", INTF_2, 0x6B000, 0x2b8, INTF_DSI, 1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 28, 29, MDP_INTF2_TEAR_INTR, 2),
+> +	INTF_BLK("intf_3", INTF_3, 0x6B800, 0x280, INTF_DP, 1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 30, 31, -1, -1),
+>   };
+>   
+>   static const struct dpu_intf_cfg sc7280_intf[] = {
+> -	INTF_BLK("intf_0", INTF_0, 0x34000, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+> -	INTF_BLK("intf_1", INTF_1, 0x35000, INTF_DSI, 0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> -	INTF_BLK("intf_5", INTF_5, 0x39000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
+> +	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 24, 25, -1, -1),
+> +	INTF_BLK("intf_1", INTF_1, 0x35000, 0x2b8, INTF_DSI, 0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 26, 27, MDP_INTF1_TEAR_INTR, 2),
+> +	INTF_BLK("intf_5", INTF_5, 0x39000, 0x280, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 22, 23, -1, -1),
+>   };
+>   
+>   static const struct dpu_intf_cfg sc8180x_intf[] = {
+> -	INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+> -	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> -	INTF_BLK("intf_2", INTF_2, 0x6B000, INTF_DSI, 1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
+> +	INTF_BLK("intf_0", INTF_0, 0x6A000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25, -1, -1),
+> +	INTF_BLK("intf_1", INTF_1, 0x6A800, 0x2b8, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27, MDP_INTF1_TEAR_INTR, 2),
+> +	INTF_BLK("intf_2", INTF_2, 0x6B000, 0x2b8, INTF_DSI, 1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 28, 29, MDP_INTF2_TEAR_INTR, 2),
+>   	/* INTF_3 is for MST, wired to INTF_DP 0 and 1, use dummy index until this is supported */
+> -	INTF_BLK("intf_3", INTF_3, 0x6B800, INTF_DP, 999, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
+> -	INTF_BLK("intf_4", INTF_4, 0x6C000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 20, 21),
+> -	INTF_BLK("intf_5", INTF_5, 0x6C800, INTF_DP, MSM_DP_CONTROLLER_2, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
+> +	INTF_BLK("intf_3", INTF_3, 0x6B800, 0x280, INTF_DP, 999, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 30, 31, -1, -1),
+> +	INTF_BLK("intf_4", INTF_4, 0x6C000, 0x280, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 20, 21, -1, -1),
+> +	INTF_BLK("intf_5", INTF_5, 0x6C800, 0x280, INTF_DP, MSM_DP_CONTROLLER_2, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 22, 23, -1, -1),
+>   };
+>   
+>   static const struct dpu_intf_cfg qcm2290_intf[] = {
+> -	INTF_BLK("intf_0", INTF_0, 0x00000, INTF_NONE, 0, 0, 0, 0, 0, 0),
+> -	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> +	INTF_BLK("intf_0", INTF_0, 0x00000, 0x2b8, INTF_NONE, 0, 0, 0, 0, 0, 0, -1, -1),
+> +	INTF_BLK("intf_1", INTF_1, 0x6A800, 0x2b8, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27, MDP_INTF2_TEAR_INTR, 2),
+>   };
+>   
+>   /*************************************************************
+> @@ -1849,7 +1865,7 @@ static const struct dpu_mdss_cfg msm8998_dpu_cfg = {
+>   	.vbif = msm8998_vbif,
+>   	.reg_dma_count = 0,
+>   	.perf = &msm8998_perf_data,
+> -	.mdss_irqs = IRQ_SM8250_MASK,
+> +	.mdss_irqs = IRQ_MSM8998_MASK,
+>   };
+>   
+>   static const struct dpu_mdss_cfg sdm845_dpu_cfg = {
+> @@ -1947,7 +1963,7 @@ static const struct dpu_mdss_cfg sm8150_dpu_cfg = {
+>   	.reg_dma_count = 1,
+>   	.dma_cfg = &sm8150_regdma,
+>   	.perf = &sm8150_perf_data,
+> -	.mdss_irqs = IRQ_SDM845_MASK,
+> +	.mdss_irqs = IRQ_SM8250_MASK,
+>   };
+>   
+>   static const struct dpu_mdss_cfg sc8180x_dpu_cfg = {
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> index e0e153889ab7..2ea17e4ef3e5 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> @@ -638,8 +638,9 @@ struct dpu_dsc_cfg {
+>    * @type:              Interface type(DSI, DP, HDMI)
+>    * @controller_id:     Controller Instance ID in case of multiple of intf type
+>    * @prog_fetch_lines_worst_case	Worst case latency num lines needed to prefetch
+> - * @intr_underrun:	index for INTF underrun interrupt
+> - * @intr_vsync:	        index for INTF VSYNC interrupt
+> + * @intr_underrun:     index for INTF underrun interrupt
+> + * @intr_vsync:        index for INTF VSYNC interrupt
+> + * @intr_tear_rd_ptr:  index for INTF TEAR_RD_PTR interrupt
+>    */
+>   struct dpu_intf_cfg  {
+>   	DPU_HW_BLK_INFO;
+> @@ -648,6 +649,7 @@ struct dpu_intf_cfg  {
+>   	u32 prog_fetch_lines_worst_case;
+>   	s32 intr_underrun;
+>   	s32 intr_vsync;
+> +	s32 intr_tear_rd_ptr;
+>   };
+>   
+>   /**
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+> index cf1b6d84c18a..044136a97fac 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+> @@ -24,6 +24,8 @@
+>   #define MDP_INTF_3_OFF			0x6B800
+>   #define MDP_INTF_4_OFF			0x6C000
+>   #define MDP_INTF_5_OFF			0x6C800
+> +#define MDP_INTF_1_TEAR_OFF		0x6D800
+> +#define MDP_INTF_2_TEAR_OFF		0x6D900
+>   #define MDP_AD4_0_OFF			0x7C000
+>   #define MDP_AD4_1_OFF			0x7D000
+>   #define MDP_AD4_INTR_EN_OFF		0x41c
+> @@ -99,6 +101,16 @@ static const struct dpu_intr_reg dpu_intr_set[] = {
+>   		MDP_INTF_5_OFF+INTF_INTR_EN,
+>   		MDP_INTF_5_OFF+INTF_INTR_STATUS
+>   	},
+> +	[MDP_INTF1_TEAR_INTR] = {
+> +		MDP_INTF_1_TEAR_OFF+INTF_INTR_TEAR_CLEAR,
+> +		MDP_INTF_1_TEAR_OFF+INTF_INTR_TEAR_EN,
+> +		MDP_INTF_1_TEAR_OFF+INTF_INTR_TEAR_STATUS
+> +	},
+> +	[MDP_INTF2_TEAR_INTR] = {
+> +		MDP_INTF_2_TEAR_OFF+INTF_INTR_TEAR_CLEAR,
+> +		MDP_INTF_2_TEAR_OFF+INTF_INTR_TEAR_EN,
+> +		MDP_INTF_2_TEAR_OFF+INTF_INTR_TEAR_STATUS
+> +	},
+>   	[MDP_AD4_0_INTR] = {
+>   		MDP_AD4_0_OFF + MDP_AD4_INTR_CLEAR_OFF,
+>   		MDP_AD4_0_OFF + MDP_AD4_INTR_EN_OFF,
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h
+> index 46443955443c..b447e4a1d9f4 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h
+> @@ -23,6 +23,8 @@ enum dpu_hw_intr_reg {
+>   	MDP_INTF3_INTR,
+>   	MDP_INTF4_INTR,
+>   	MDP_INTF5_INTR,
+> +	MDP_INTF1_TEAR_INTR,
+> +	MDP_INTF2_TEAR_INTR,
+>   	MDP_AD4_0_INTR,
+>   	MDP_AD4_1_INTR,
+>   	MDP_INTF0_7xxx_INTR,
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h
+> index c8156ed4b7fb..6bdac515fd54 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h
+> @@ -10,6 +10,9 @@
+>   /**
+>    * MDP TOP block Register and bit fields and defines
+>    */
+> +#define INTF_INTR_TEAR_EN               0x000
+> +#define INTF_INTR_TEAR_STATUS           0x004
+> +#define INTF_INTR_TEAR_CLEAR            0x008
+>   #define DISP_INTF_SEL                   0x004
+>   #define INTR_EN                         0x010
+>   #define INTR_STATUS                     0x014
+> -- 
+> 2.39.0
+> 
