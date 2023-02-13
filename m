@@ -2,125 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B246469540D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 23:45:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B52C695412
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 23:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjBMWpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 17:45:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
+        id S229877AbjBMWsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 17:48:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjBMWpp (ORCPT
+        with ESMTP id S229521AbjBMWsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 17:45:45 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95BB1D91C;
-        Mon, 13 Feb 2023 14:45:44 -0800 (PST)
-Received: from mercury (unknown [185.209.196.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3B7786602154;
-        Mon, 13 Feb 2023 22:45:43 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676328343;
-        bh=9ZqLO7u9wSSWylBMnQo4JHT+AC8VOGxAaq9hFglbWFM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IzeZKCYvRlFrs4yVkPEm6idXIx3tSARIcMt/ufUhergxwEaz2ZyIWysC+2kLsveaW
-         8z9Q/nw6zNKgZAaEViw93IzBdu47AaZ48TETC7JsrqYp9/y+aa4gLz6wMaq0YZKKch
-         zw7SO167/TQE86+q2RnXpnQmbxcLbYG3cUHQegJ1nRn/ys2JWHYvxc8Zo3MMCcEQOw
-         mHMQXhBnRcpi/DoedRVO+lE3wbahIooUVGAq0H27aChZiR2sd6x9ylNrYpuZ+F8MJd
-         YVt7irvYZMy3kkw6ekTuVw0JvpBlAkHVqWeLcr2qUkRfV0iLcYb0a6tl6c7MHFyekg
-         lzkzJUmZsxoHA==
-Received: by mercury (Postfix, from userid 1000)
-        id 8E28F10603FE; Mon, 13 Feb 2023 23:45:40 +0100 (CET)
-Date:   Mon, 13 Feb 2023 23:45:40 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org,
-        marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: power: supply: pm8941-coincell: Don't
- require charging properties
-Message-ID: <20230213224540.o4fd554ippzdej7a@mercury.elektranox.org>
-References: <20230213204950.2100538-1-konrad.dybcio@linaro.org>
- <20230213204950.2100538-2-konrad.dybcio@linaro.org>
- <20230213212733.rhvuzrshfrvzgo4a@mercury.elektranox.org>
- <83637cc7-21ae-7778-37b3-4522cc0a06c9@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hvdkk6p6no65upka"
-Content-Disposition: inline
-In-Reply-To: <83637cc7-21ae-7778-37b3-4522cc0a06c9@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 13 Feb 2023 17:48:38 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859FA20D13
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 14:48:37 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DMNsj6001430;
+        Mon, 13 Feb 2023 22:48:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2022-7-12;
+ bh=vzh1vblswBntiUG827iCoSwI+1/49s7W/10M5vk2q8Y=;
+ b=oZ9H3L5hRHSrMHuwdbOL6i4+kFOW4wSE9e4cGiqAO3eIZGawTrFgAPwoK8A8ZNEu3KFI
+ f3JBLjOII89cHj3xcVmFrbkSfpxzeb2ueoAiGZwLfxHVZ+MhpKE0evJ+M6NVnOA8IL5b
+ TajjNejn4IEU7kPnBg+3Qtzz+GIBrIuEteyfIkHQ7twkNWtnZibNVHUbKzew2r/EwK1g
+ kxIdQ5e3jLB8QK4WxKSONj1ktEeX7Fgu6A8omoE3vTTNf9tEeZQobJ/5QKg+XuPLj/bz
+ 57Jg5B7odKU2lJjSbQLQbBUHrq8hgVvL+dYAMzROSAuzH8C8o0zJRZsB6TgylBVh08rw iw== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np2w9v2qf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Feb 2023 22:48:33 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31DMcuf5028894;
+        Mon, 13 Feb 2023 22:48:32 GMT
+Received: from ban25x6uut24.us.oracle.com (ban25x6uut24.us.oracle.com [10.153.73.24])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3np1f4g002-1;
+        Mon, 13 Feb 2023 22:48:32 +0000
+From:   Si-Wei Liu <si-wei.liu@oracle.com>
+To:     mst@redhat.com, jasowang@redhat.com, elic@nvidia.com
+Cc:     parav@nvidia.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, eperezma@redhat.com
+Subject: [PATCH v2] vdpa/mlx5: should not activate virtq object when suspended
+Date:   Mon, 13 Feb 2023 14:48:09 -0800
+Message-Id: <1676328489-16842-1-git-send-email-si-wei.liu@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-13_12,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
+ phishscore=0 spamscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302130199
+X-Proofpoint-GUID: 0nDABNbF88bb7cuHvz8C_oHXdId5RoTr
+X-Proofpoint-ORIG-GUID: 0nDABNbF88bb7cuHvz8C_oHXdId5RoTr
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Otherwise the virtqueue object to instate could point to invalid address
+that was unmapped from the MTT:
 
---hvdkk6p6no65upka
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  mlx5_core 0000:41:04.2: mlx5_cmd_out_err:782:(pid 8321):
+  CREATE_GENERAL_OBJECT(0xa00) op_mod(0xd) failed, status
+  bad parameter(0x3), syndrome (0x5fa1c), err(-22)
 
-Hi,
+Fixes: cae15c2ed8e6 ("vdpa/mlx5: Implement susupend virtqueue callback")
+Cc: Eli Cohen <elic@nvidia.com>
+Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
 
-On Mon, Feb 13, 2023 at 10:41:10PM +0100, Konrad Dybcio wrote:
-> On 13.02.2023 22:27, Sebastian Reichel wrote:
-> > On Mon, Feb 13, 2023 at 09:49:49PM +0100, Konrad Dybcio wrote:
-> >> It's fine for these properties to be absent, as the driver doesn't fail
-> >> without them and functions with settings inherited from the reset/prev=
-ious
-> >> stage bootloader state.
-> >>
-> >> Fixes: 6c463222a21d ("dt-bindings: power: supply: pm8941-coincell: Con=
-vert to DT schema format")
-> >> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> >> ---
-> > Please update the description of these properties to describe the
-> > default behaviour.
-> Not sure if there's any default behavior other than "go with
-> whatever was there previously, no matter how it got there".
+---
+v2: removed the change for improving warning message
+---
+ drivers/vdpa/mlx5/net/mlx5_vnet.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-I got that from the patch description, but that behaviour should be
-described in the binding.
+diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+index 3a6dbbc6..d7e8ca0 100644
+--- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
++++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+@@ -165,6 +165,7 @@ struct mlx5_vdpa_net {
+ 	u32 cur_num_vqs;
+ 	u32 rqt_size;
+ 	bool nb_registered;
++	bool suspended;
+ 	struct notifier_block nb;
+ 	struct vdpa_callback config_cb;
+ 	struct mlx5_vdpa_wq_ent cvq_ent;
+@@ -2411,7 +2412,7 @@ static int mlx5_vdpa_change_map(struct mlx5_vdpa_dev *mvdev,
+ 	if (err)
+ 		goto err_mr;
+ 
+-	if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK))
++	if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK) || ndev->suspended)
+ 		goto err_mr;
+ 
+ 	restore_channels_info(ndev);
+@@ -2580,6 +2581,7 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev)
+ 	mlx5_vdpa_destroy_mr(&ndev->mvdev);
+ 	ndev->mvdev.status = 0;
+ 	ndev->cur_num_vqs = 0;
++	ndev->suspended = false;
+ 	ndev->mvdev.cvq.received_desc = 0;
+ 	ndev->mvdev.cvq.completed_desc = 0;
+ 	memset(ndev->event_cbs, 0, sizeof(*ndev->event_cbs) * (mvdev->max_vqs + 1));
+@@ -2815,6 +2817,8 @@ static int mlx5_vdpa_suspend(struct vdpa_device *vdev)
+ 	struct mlx5_vdpa_virtqueue *mvq;
+ 	int i;
+ 
++	mlx5_vdpa_info(mvdev, "suspending device\n");
++
+ 	down_write(&ndev->reslock);
+ 	ndev->nb_registered = false;
+ 	mlx5_notifier_unregister(mvdev->mdev, &ndev->nb);
+@@ -2824,6 +2828,7 @@ static int mlx5_vdpa_suspend(struct vdpa_device *vdev)
+ 		suspend_vq(ndev, mvq);
+ 	}
+ 	mlx5_vdpa_cvq_suspend(mvdev);
++	ndev->suspended = true;
+ 	up_write(&ndev->reslock);
+ 	return 0;
+ }
+-- 
+1.8.3.1
 
-> Is it okay if I just add:
->=20
-> "If unspecified, inherit the bootloader configuration"
-
-Technically the bindings are also for bootloaders. I suggest:
-
-If unspecified, inherit the previous configuration (e.g. from
-bootloader or hardware default value).
-
--- Sebastian
-
---hvdkk6p6no65upka
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPqvZAACgkQ2O7X88g7
-+pqK5A/7B+mt+IoHQ+S5V1ix2613TjN9+JjnUr/fmRmVvPNtac+u6oukLqgGngwp
-UwtnP34uerWTYzIQAeNXIa287PbBuDpYwSh+CL9QrRtR+7Bp9olslee+dHz4bv+n
-rXuxQifQ8FroUZhtXfaNBL3g/y+fQKHN3HXrXLjwpM4ZZ+mW8vVpHc4alejCvDQx
-mjAYsRh/TZDgS8bsUoxndVcmO26o3pBV0ockEdj4vTfvwMmTUQncejUyGAJcoWJv
-eC92EgWj5+ldaCx1E0Sgc+3LHtlZljU49FNEkXzppXZxBdoYF/TVggvrLdrGjX/8
-Oh17YsJ2cE0Lyu1nf37jEGqJDZNGICLOrJ0nnC3UlH3CXfGyEB9h/C4BrbVYdtuh
-BWXvZbYTjT5k2PEc8exAyigfGNIZ8plHEyVDP2Ra+yNXGG/3N474iUQV8Z7nQKPu
-jotzhZKxFr8ecOr6B6XCBLV0UljIRqTEUqqWSmQs7J1M/hwW1Ad9mOYTdjeRTU7+
-SucSyhXRNSlB6D5ASFXk9ggiQvOdtGBCyCRMzuXDq8qRfSc1auPSsInat4O2bKQO
-82DdM41izrDX4ZTkxYl7PhZMROl13MKLy1kSOp4YrolXN6pzeLpEvu1gHn3t7XR+
-kxGP+ie/ZL4JluGRmLJ8kKDBpU1DVSCECOhQT2RRvsbmmy2Ct2s=
-=G77K
------END PGP SIGNATURE-----
-
---hvdkk6p6no65upka--
