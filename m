@@ -2,108 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F117B6952D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:15:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E38A76952E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:18:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjBMVO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 16:14:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38872 "EHLO
+        id S230225AbjBMVSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 16:18:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjBMVOz (ORCPT
+        with ESMTP id S229852AbjBMVSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 16:14:55 -0500
-Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1546E20548
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:14:41 -0800 (PST)
-Received: by mail-il1-f207.google.com with SMTP id 15-20020a92190f000000b00315509b129aso1403470ilz.3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:14:41 -0800 (PST)
+        Mon, 13 Feb 2023 16:18:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42CC1CF71
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:17:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676323076;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p1oNS0vOfF/bAfVUsYaumPLXjxKPjDgFW6IpBNQoMeQ=;
+        b=VOpyjZoDEAMTyVvv/46jqz7d6SgGOHHde6ozUq9g0+7xKs6GkxxVO/i40kmaLCQO4jnwFp
+        eunvriKIstkgMT97RwxBUXimev/90kB13MwHJIYkogyhiqFjPr61O72HxCiMC8CmXdshgD
+        VcwDWNEJBWTFwXF+4Xf9ThAcSlku6ew=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-61-MB-R6nbPMHCtcVZobTIJ3A-1; Mon, 13 Feb 2023 16:17:55 -0500
+X-MC-Unique: MB-R6nbPMHCtcVZobTIJ3A-1
+Received: by mail-qv1-f72.google.com with SMTP id 98-20020a0c806b000000b0056c2797aa8bso7306724qva.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:17:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5MOkuFS9QIN3mf/KRy78aCAqz7A+XmCO2P1W5d9dmcE=;
-        b=p0hd9EVXG/RU9R4b/Q6z3KCqPNEicZz1J7SEu5SBcIMRxFOthyb5NRs1eYKFdkpGhe
-         6hfyGbPyQJH0f7wYxY04BBoVVH03g2JXLsq512mk1DEXOqNpvSIlUWmWOThCvpI7AEtQ
-         vkBgccrgUvRg1H6wu1iidRWlxqowWg6HqBe9uNxRHP0dUD71uEWa08Xk8W998XBG6CAE
-         Ey8HeNHkEb14HungkEFwswqbfjrGVO37DjDq8Bq9Ci+7XqTLM23Lha2dC6YSlElSOikE
-         c1FoboC392e48Ue6D4w5Ycd6QGD3x+l9n32Droe6WInGne3ODSHOrSgRln8qP4CiJf38
-         ST9w==
-X-Gm-Message-State: AO0yUKX52Njvz8cvHCqPIyHzHlSXlVGNlvLY0RR9wJmy+I0GrJaAzdfD
-        7xgYTxhk1qgK88DqMbH47RzbMdfgferbo/mWQ4pgN6piBNFX
-X-Google-Smtp-Source: AK7set/pAxwmNE14kr483ZJxL58VyTsM9vtXj+L/vRdydrx/Cjd+AOO1D/oO8Rw3FfGbzFqamqHiq88zxHchWOXVRzY/eQmle91o
+        bh=p1oNS0vOfF/bAfVUsYaumPLXjxKPjDgFW6IpBNQoMeQ=;
+        b=hDs2ivI5/nnEP6KSv0FwkfTM312xPqpdP/RDxi1KzDe8jVNrc1jfAy9qXCR0I+UYLZ
+         A7b6ampInqrxEPPBuuFh2G7qLRGTM7JUndMh/1qaey64ScHdIhvN2sZQf8kRBq/rkoBO
+         J1fotA1sUHnczXr8/7PI9uqxsF4WMsMdYG/PrP7jgSUcIjnkSj++PueGJJlvtXmN9SHf
+         MGfO16NLyx7uLvbBNU3sCpzrrGTpb2vJLmA9/l4Ccc++B5RZ+pufkTfEAtAjynuO0OZS
+         XLqlNVbhJglnkChOhzOTqUExtwvChX7v62asOPsLl31RXfPhGNYaU5lfpDDgnCGVx0S3
+         Tnkw==
+X-Gm-Message-State: AO0yUKUjzj7usdroiqnPzSUQ/1y5fCQguXSQ86oBNAPoCM4exTH6YCey
+        vHpWPfyxVTIRlHCn61SkXJysnXxijRTNgNxqchOLK3JzM0/joy22BTv1CYvYmEVFDvYLik6avqt
+        UFtn0gjjMBahjXkx+mknjLN+afP4XkSjtbS65FVvsS9kNEG/W0fc85P6rcDKtSyvQV4jVGRVEX5
+        tS
+X-Received: by 2002:a05:622a:1356:b0:3b8:6bab:1e4d with SMTP id w22-20020a05622a135600b003b86bab1e4dmr41247210qtk.51.1676323074393;
+        Mon, 13 Feb 2023 13:17:54 -0800 (PST)
+X-Google-Smtp-Source: AK7set9aALYiUoVdZJT/bcPbV3M/l4oYZpMatd/WDteYg/QH6cKNpAEijVuqFTI25OrMAajvijakDw==
+X-Received: by 2002:a05:622a:1356:b0:3b8:6bab:1e4d with SMTP id w22-20020a05622a135600b003b86bab1e4dmr41247180qtk.51.1676323074134;
+        Mon, 13 Feb 2023 13:17:54 -0800 (PST)
+Received: from [192.168.1.19] (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id p11-20020a05622a00cb00b003b86d3ee49asm10327388qtw.74.2023.02.13.13.17.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 13:17:53 -0800 (PST)
+Subject: Re: [PATCH] EDAC/amd64: remove unneeded call to
+ reserve_mc_sibling_devs()
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Yazen Ghannam <yazen.ghannam@amd.com>, tony.luck@intel.com,
+        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230213191510.2237360-1-trix@redhat.com>
+ <Y+qZthCMRL1m0p4B@yaz-fattaah> <Y+qcU2M5gchfzbky@zn.tnic>
+ <Y+qdVHidnrrKvxiD@dev-arch.thelio-3990X>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <03b91ce8-c6d0-63e7-561c-8cada0ece2fe@redhat.com>
+Date:   Mon, 13 Feb 2023 13:17:51 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:ccf4:0:b0:38a:adeb:d4d1 with SMTP id
- l20-20020a02ccf4000000b0038aadebd4d1mr13143021jaq.81.1676322880445; Mon, 13
- Feb 2023 13:14:40 -0800 (PST)
-Date:   Mon, 13 Feb 2023 13:14:40 -0800
-In-Reply-To: <0000000000000df2c105f4929eb5@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d1610405f49b5514@google.com>
-Subject: Re: [syzbot] KMSAN: kernel-infoleak in iommufd_vfio_ioctl
-From:   syzbot <syzbot+cb1e0978f6bf46b83a58@syzkaller.appspotmail.com>
-To:     eric.auger@redhat.com, glider@google.com, iommu@lists.linux.dev,
-        jgg@nvidia.com, jgg@ziepe.ca, joro@8bytes.org,
-        kevin.tian@intel.com, linux-kernel@vger.kernel.org,
-        lixiao.yang@intel.com, mjrosato@linux.ibm.com, nicolinc@nvidia.com,
-        robin.murphy@arm.com, syzkaller-bugs@googlegroups.com,
-        will@kernel.org, yi.l.liu@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y+qdVHidnrrKvxiD@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
 
-HEAD commit:    da13c00eebfb kmsan: silence -Wmissing-prototypes warnings
-git tree:       https://github.com/google/kmsan.git master
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=10d56c2b480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=41295d7e980cccef
-dashboard link: https://syzkaller.appspot.com/bug?extid=cb1e0978f6bf46b83a58
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16560c43480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=109a7207480000
+On 2/13/23 12:28 PM, Nathan Chancellor wrote:
+> On Mon, Feb 13, 2023 at 09:23:47PM +0100, Borislav Petkov wrote:
+>> On Mon, Feb 13, 2023 at 08:12:38PM +0000, Yazen Ghannam wrote:
+>>> These errors are encountered when extra warnings are enabled, correct?
+>> It says so in the warning which one it is: -Werror,-Wsometimes-uninitialized
+>>
+>> Don't know if we enable that one for clang with W= or Nathan adds
+>> additional switches.
+> -Wsometimes-uninitialized is part of clang's -Wall so it is on by
+> default in all builds, regardless of W=
+>
+> -Werror comes from CONFIG_WERROR, which is enabled with allmodconfig.
+>
+>>> I think the following patch would resolve this issue. This is part of a set
+>>> that isn't fully applied.
+>>> https://lore.kernel.org/linux-edac/20230127170419.1824692-12-yazen.ghannam@amd.com/
+>>>
+>>> Boris,
+>>> Do you think one of these patches should be applied or just hold off until the
+>>> entire original set is applied?
+>> I still wanted to go through the rest but I'm not sure I'll have time
+>> for it before the merge window. So unless this is breaking some silly
+>> testing scenario, I'd say I'll leave things as they are.
+> This breaks allmodconfig with clang, so it would be great if one of
+> these solutions was applied in the meantime.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/316f273df601/disk-da13c00e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c2802e9a4fe3/vmlinux-da13c00e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6211b8a40cab/bzImage-da13c00e.xz
+This happens at least on allyesconfig clang W=1,2, i do not know about 
+default, it's in a bad state as well.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cb1e0978f6bf46b83a58@syzkaller.appspotmail.com
+It would be great if the clang build was working.
 
-=====================================================
-BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:121 [inline]
-BUG: KMSAN: kernel-infoleak in _copy_to_user+0x1c5/0x270 lib/usercopy.c:33
- instrument_copy_to_user include/linux/instrumented.h:121 [inline]
- _copy_to_user+0x1c5/0x270 lib/usercopy.c:33
- copy_to_user include/linux/uaccess.h:169 [inline]
- iommufd_vfio_iommu_get_info drivers/iommu/iommufd/vfio_compat.c:437 [inline]
- iommufd_vfio_ioctl+0x1e57/0x2330 drivers/iommu/iommufd/vfio_compat.c:462
- iommufd_fops_ioctl+0x254/0xb10 drivers/iommu/iommufd/main.c:315
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0x2dd/0x4b0 fs/ioctl.c:856
- __x64_sys_ioctl+0xdc/0x120 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Nathan's patch is fine, go with that.
 
-Local variable info.i created at:
- iommufd_vfio_iommu_get_info drivers/iommu/iommufd/vfio_compat.c:384 [inline]
- iommufd_vfio_ioctl+0x423/0x2330 drivers/iommu/iommufd/vfio_compat.c:462
- iommufd_fops_ioctl+0x254/0xb10 drivers/iommu/iommufd/main.c:315
+Tom
 
-Bytes 20-23 of 24 are uninitialized
-Memory access of size 24 starts at ffff88810ed3bcb0
-Data copied to user address 0000000020000100
-
-CPU: 0 PID: 5039 Comm: syz-executor178 Not tainted 6.2.0-rc8-syzkaller-80994-gda13c00eebfb #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-=====================================================
+>
+> Cheers,
+> Nathan
+>
 
