@@ -2,76 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B4969426D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E6E694275
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:12:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjBMKMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 05:12:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
+        id S230131AbjBMKMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 05:12:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230486AbjBMKLz (ORCPT
+        with ESMTP id S229911AbjBMKMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 05:11:55 -0500
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E151E3A7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:11:53 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:5d34:d0af:a884:130e])
-        by laurent.telenet-ops.be with bizsmtp
-        id LaBq2900Q3vMoCy01aBqf9; Mon, 13 Feb 2023 11:11:51 +0100
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pRVoM-008u3i-AL;
-        Mon, 13 Feb 2023 11:11:50 +0100
-Date:   Mon, 13 Feb 2023 11:11:50 +0100 (CET)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-kernel@vger.kernel.org
-cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: Build regressions/improvements in v6.2-rc8
-In-Reply-To: <20230213100542.328169-1-geert@linux-m68k.org>
-Message-ID: <7154f87-ca35-4d13-7a7c-1e29105d3b8c@linux-m68k.org>
-References: <CAHk-=wj1=T1KzpPWbhqfFWOEp5Wf_kj3JjTHSHmEngf0-Vv7aA@mail.gmail.com> <20230213100542.328169-1-geert@linux-m68k.org>
+        Mon, 13 Feb 2023 05:12:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C271517178;
+        Mon, 13 Feb 2023 02:12:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D65D60F6E;
+        Mon, 13 Feb 2023 10:12:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22B65C433EF;
+        Mon, 13 Feb 2023 10:12:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676283143;
+        bh=tFR8Is7pavXEpFk5U0TVtxzOu/qBmPCX8MhgYgxKFFc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UF30ZRTO6xpYhEi8j35cVSgfYP9ZdsE6hYPizE+vpA3PNOkw6orROmUQjSjxtnqi4
+         92r0J751DcQr3xxPO7A9mFxmUc1YoXExPVVYb1rO8iYELTqC9CF+3jpcHuK7Hhy8fA
+         XnXfJvkOZdNtIT1PsCZl3iATABuC3RlD6/2AvhBRVTijVmbEBw7edQw+aKXV0VMXfg
+         s5hySEdjeKAOlgY1mKWFz+jJVFfzKqYevQ7KKZhZcJzpXOOpUKZmcSvlyJqlZmGXE0
+         Lsdvrcr8Ep2jvIIUdKUFVRE7tj2SP6dQ4voqLuqe8fspZQXLuH8oY0/Go/B979rjzl
+         aG36IBVhjnNpA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Dave Jiang <dave.jiang@intel.com>,
+        Dan Carpenter <error27@gmail.com>, linux-cxl@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] cxl: avoid returning uninitialized error code
+Date:   Mon, 13 Feb 2023 11:12:11 +0100
+Message-Id: <20230213101220.3821689-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset=US-ASCII
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Feb 2023, Geert Uytterhoeven wrote:
-> JFYI, when comparing v6.2-rc8[1] to v6.2-rc7[3], the summaries are:
->  - build errors: +11/-1
+From: Arnd Bergmann <arnd@arndb.de>
 
-   + {standard input}: Error: unrecognized opcode: `dcbfl':  => 5736, 4743, 4327, 4476, 4447, 5067, 4602, 5212, 5224, 4298, 5594, 4315, 5050, 5195, 4464, 5079
-   + {standard input}: Error: unrecognized opcode: `dlmzb.':  => 2848, 18800, 2842, 2383, 106, 2377, 3327, 112
-   + {standard input}: Error: unrecognized opcode: `iccci':  => 204, 163, 510
-   + {standard input}: Error: unrecognized opcode: `lbarx':  => 570, 196
-   + {standard input}: Error: unrecognized opcode: `mbar':  => 887, 558, 1172, 539, 516, 837, 1457, 1125, 815, 7523, 1100, 1385, 368, 703, 662, 468, 441, 1410
-   + {standard input}: Error: unrecognized opcode: `mfdcr':  => 3589, 4358, 3565, 3493, 3614, 128, 3445, 276, 3518, 3541, 3469, 4413
-   + {standard input}: Error: unrecognized opcode: `mtdcr':  => 265, 4402, 4430, 4375, 4388, 4347, 117, 4443
-   + {standard input}: Error: unrecognized opcode: `stbcx.':  => 196, 570
-   + {standard input}: Error: unrecognized opcode: `tlbwe':  => 475, 476, 477
+The new cxl_add_to_region() function returns an uninitialized
+value on success:
 
-powerpc-gcc11/ppc64_book3e_allmodconfig
-powerpc-gcc11/powerpc-allmodconfig
-powerpc-gcc11/corenet64_smp_defconfig
-powerpc-gcc11/powerpc-allyesconfig
-powerpc-gcc11/44x/fsp2_defconfig
+drivers/cxl/core/region.c:2628:6: error: variable 'rc' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+        if (IS_ERR(cxlr)) {
+            ^~~~~~~~~~~~
+drivers/cxl/core/region.c:2654:9: note: uninitialized use occurs here
+        return rc;
 
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/ceaa837f96adb69c0df0397937cd74991d5d821a/ (all 152 configs)
-> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/4ec5183ec48656cec489c49f989c508b68b518e3/ (all 152 configs)
+Simplify the logic to have the rc variable always initialized in the
+same place.
 
-Gr{oetje,eeting}s,
+Fixes: a32320b71f08 ("cxl/region: Add region autodiscovery")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/cxl/core/region.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
- 						Geert
+diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
+index fe1d8392870e..f29028148806 100644
+--- a/drivers/cxl/core/region.c
++++ b/drivers/cxl/core/region.c
+@@ -2625,10 +2625,9 @@ int cxl_add_to_region(struct cxl_port *root, struct cxl_endpoint_decoder *cxled)
+ 		cxlr = to_cxl_region(region_dev);
+ 	mutex_unlock(&cxlrd->range_lock);
+ 
+-	if (IS_ERR(cxlr)) {
+-		rc = PTR_ERR(cxlr);
++	rc = PTR_ERR_OR_ZERO(cxlr);
++	if (rc)
+ 		goto out;
+-	}
+ 
+ 	attach_target(cxlr, cxled, -1, TASK_UNINTERRUPTIBLE);
+ 
+-- 
+2.39.1
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
