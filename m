@@ -2,111 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F4C6954B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 00:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB986954C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 00:26:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbjBMXZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 18:25:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38866 "EHLO
+        id S229769AbjBMX0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 18:26:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBMXZK (ORCPT
+        with ESMTP id S230367AbjBMX0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 18:25:10 -0500
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE329D;
-        Mon, 13 Feb 2023 15:25:09 -0800 (PST)
-Received: by mail-oo1-xc35.google.com with SMTP id b10-20020a4a9fca000000b004e6f734c6b4so1361345oom.9;
-        Mon, 13 Feb 2023 15:25:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VG4M2FiCWZdfBc3bqex6t22oymKlU4aiV0BoUciV/7M=;
-        b=qfyyNtPm5aX7849RxnBVXfrh86MGk3uGh71xTAWWzX0BQDeHD4dtKDsFxHFd3sd19B
-         jzR00FFEPFNhBVZPg9OQHDn/HovTBm0SKeSl24J2xMrFbp+l45XQsRMgiBjAcL5dvozG
-         T2tbzV9KndhVMWvHizmqwZPgZjK+6OkQfWDWOW9TNu1iSE/cG8qiXJa6OTkzwMPHVcHl
-         YUZleisxw8iJie3JU5I9PSs9AJ3Ld0iVyv9O4Ttokp1VirSkhS+QQYPxFAtQT3GfE6m7
-         G8CEBsjdeHz4esXS6haAu9twfGKui5r0wfsDKjTSODzG/QRN3ztpyZjeiraPww70Hsek
-         jquQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VG4M2FiCWZdfBc3bqex6t22oymKlU4aiV0BoUciV/7M=;
-        b=2lm1LA71mOxxAklUjn2rjCGz8jwFFVSfVxZHwqFZPaBno1fFPsoa0LVHtK/X3Vlx7L
-         qtmWgVzQ4JU0sY/s26M7MQ2VKUoMy025xYj7kcaisqLvT3wyAr12Fb43qkT6nB3Lzp3B
-         RHtqk6VDXdU1xdBy5U5NDLDbIAm4mSIQA27msNniWORSatt8Vtyjy9tMJo/LHI9EnA6v
-         e81uxrRX0rYj1poXByzJf+3yitCeecwJEifK9KBoO+/MxPlEkm5y+0aeMI9LpbAPaZiE
-         TNqYVK/9lOXM4qayIUe6lLfKer+4gPVN80M0i98jG+0KMIFxM2xGxUtvjZsZopSqnJ56
-         hRGQ==
-X-Gm-Message-State: AO0yUKXu0nnUSrUAtU/FtkvF0clWPsugQUh5DP8KTK1VeRwGQsRS+Xqe
-        pqQJ/4C96CFK+e9y9bABtI7B36S4qnk=
-X-Google-Smtp-Source: AK7set/qALlndimeA9x3BBcoDg5VbwZLy8QzB7Xmc0UELSi3M7hFIniw3as3t//wHc5jLfC1GLOCbQ==
-X-Received: by 2002:a4a:8c6e:0:b0:517:8369:23e4 with SMTP id v43-20020a4a8c6e000000b00517836923e4mr10405ooj.0.1676330708821;
-        Mon, 13 Feb 2023 15:25:08 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q14-20020a4a88ce000000b005177c244f31sm5331482ooh.41.2023.02.13.15.25.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 15:25:08 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e9d2baf8-4a70-313d-eebe-f0e4d1646971@roeck-us.net>
-Date:   Mon, 13 Feb 2023 15:25:05 -0800
+        Mon, 13 Feb 2023 18:26:20 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B03D9D;
+        Mon, 13 Feb 2023 15:26:19 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DMXXEo006618;
+        Mon, 13 Feb 2023 23:26:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=9zOsI7wDgUioyr1LYFvU/oJQKYz2SyKvRYNSma0iYpQ=;
+ b=dt0UaPjUxGFQVPgKkEB/KKbQB/rInofyOQz5ph0A2DspCfXW0TahZyP0xV0O5SxYPuV6
+ WfAxfvHqspt+XiO56cP+HlhaPMfg/bqvXBlksKO5amUDtffpW/NE/29i8CF3R2IyHc4d
+ DXxxce4WRC4kp4eduDBL1ViKTx38Xv43TfTTAFLsDSHiYscEgvdtxemBL/dTHaMuIkwF
+ CkhgXIlX6Plm9VXRfZABPxSn9GECSmBMsXxRfNniZ8pRNL0rnPUZDgtRyRBegOvuCOQp
+ QSV9jIWEjCOyM4QpfVzeQ9D9e6duqfZlGPzFB6bAev1e9FqYY6m3FP1xyD+tgVf0WQgQ AQ== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nqpmmh4y5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 23:26:15 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31DNQEe7015102
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 23:26:14 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 13 Feb 2023 15:26:13 -0800
+From:   Elliot Berman <quic_eberman@quicinc.com>
+To:     Jassi Brar <jassisinghbrar@gmail.com>
+CC:     Elliot Berman <quic_eberman@quicinc.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        <linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>
+Subject: [PATCH 0/3] mailbox: Allow direct registration to a channel
+Date:   Mon, 13 Feb 2023 15:25:34 -0800
+Message-ID: <20230213232537.2040976-1-quic_eberman@quicinc.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>
-References: <55e2bef1-e8b5-3475-21df-487bddb47f5b@roeck-us.net>
- <20230213180632.GA368628@roeck-us.net>
- <20230209102954.528942-1-dhowells@redhat.com>
- <20230209102954.528942-4-dhowells@redhat.com>
- <2416073.1676328192@warthog.procyon.org.uk>
- <2451113.1676329970@warthog.procyon.org.uk>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v13 03/12] splice: Do splice read from a buffered file
- without using ITER_PIPE
-In-Reply-To: <2451113.1676329970@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: qe4rdIla3ZIoRo8CM9jeNAGxf6fWRCgt
+X-Proofpoint-GUID: qe4rdIla3ZIoRo8CM9jeNAGxf6fWRCgt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-13_12,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 priorityscore=1501 suspectscore=0 adultscore=0 impostorscore=0
+ bulkscore=0 clxscore=1011 mlxscore=0 mlxlogscore=651 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302130205
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/13/23 15:12, David Howells wrote:
-> Guenter Roeck <linux@roeck-us.net> wrote:
-> 
->> Both are initrd.
-> 
-> Do you mean rootfs?  And, if so, is that tmpfs-based or ramfs-based?
-> 
+Two mailbox controllers have channel/client binding mechanisms that are
+controller-specific and not using the devicetree binding mechanisms. Mailbox
+channel/client is conceptually done in two steps: selecting the channel
+and binding the selected to channel to a client. Channel selection is sometimes
+controller specific (pcc and omap are examples). The channel/client binding
+code is all the same.
 
-Both are provided to the kernel using the -initrd qemu option,
-which usually means that the address/location is passed to the kernel
-through either a register or a data structure. I have not really paid
-much attention to what the kernel is doing with that information.
-It is in cpio format, so it must be decompressed, but I don't know how
-it is actually handled (nor why this doesn't fail on other boots
-from initrd).
+This small series de-duplicates and refactors the channel/client binding
+into a common framework function: "mbox_bind_client" which all of the
+channel selection mechanisms can use.
 
-Guenter
+I found this duplicate code while working on the support for Gunyah hypervisor
+message queues [1]. I've only been able to compile-test omap-maiblox and pcc,
+however it is a straightforward conversion here.
+
+[1]: https://lore.kernel.org/all/20230120224627.4053418-9-quic_eberman@quicinc.com/
+
+Elliot Berman (3):
+  mailbox: Allow direct registration to a channel
+  mailbox: omap: Use mbox_bind_client
+  mailbox: pcc: Use mbox_bind_client
+
+ drivers/mailbox/mailbox.c      | 96 ++++++++++++++++++++++++----------
+ drivers/mailbox/omap-mailbox.c | 22 ++------
+ drivers/mailbox/pcc.c          | 82 ++++++++++++++++-------------
+ include/linux/mailbox_client.h |  1 +
+ 4 files changed, 118 insertions(+), 83 deletions(-)
+
+
+base-commit: 09e41676e35ab06e4bce8870ea3bf1f191c3cb90
+-- 
+2.39.1
 
