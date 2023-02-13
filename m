@@ -2,357 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA6D693D7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 05:41:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFFA5693D80
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 05:45:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjBMElQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 23:41:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
+        id S229663AbjBMEo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 23:44:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBMElN (ORCPT
+        with ESMTP id S229468AbjBMEo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 23:41:13 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50987EFB
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 20:41:11 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31D4Euc5001196;
-        Mon, 13 Feb 2023 04:40:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=pQeIhHvZlGYQdi2dbUU1v4nqpazEgG4r3FPSffNPfKw=;
- b=H2Ie82YkI5gKP/Fryau8fyg/ZvLwCVTDaGdsjMB4VAAbCPvIpe78icJKT94v3BLT7/hT
- 5twqqOzeYxrhxGWYru8wimBArMwbmiH4GdmR3wVuS1hiBvY3iSWIMEyc4yMQ9L50ohhL
- oCd080JinIdyXrTrodN9rkPHeSGBk2oe4Wm43Upv5WFv32nQH8eR4OVB7/sYLyPaP+Dw
- qeQ+cz+4diheeYQFqBsq1a5HuPQsg/mDu+u0zHZUpL5QGTVdCi7jCYlsmj/tTq3lZKTD
- 9Wf7pw8YU5stHbforPCgp4Tkkc5zihmJk1vUHHLDY/CNZpPpNHWdytn5PGnbEm6IkZiU SA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nq2qd1y5n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Feb 2023 04:40:35 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31D4aeIi012684;
-        Mon, 13 Feb 2023 04:40:34 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nq2qd1y4w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Feb 2023 04:40:34 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31CH93bW010698;
-        Mon, 13 Feb 2023 04:40:31 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3np2n6t55n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Feb 2023 04:40:31 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31D4eT1U42008860
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Feb 2023 04:40:29 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 74C342004F;
-        Mon, 13 Feb 2023 04:40:29 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6A7592004B;
-        Mon, 13 Feb 2023 04:40:25 +0000 (GMT)
-Received: from [9.43.42.45] (unknown [9.43.42.45])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 13 Feb 2023 04:40:25 +0000 (GMT)
-Message-ID: <f7c0269b-05e7-c706-f111-c768d4a13b72@linux.ibm.com>
-Date:   Mon, 13 Feb 2023 10:10:24 +0530
+        Sun, 12 Feb 2023 23:44:56 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2053.outbound.protection.outlook.com [40.107.220.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9111FC652;
+        Sun, 12 Feb 2023 20:44:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Dgwqu88pRF1z3dI7Kzd0DS2n+f+A4Pl0MGW2uJtXvXC3wtLpr43GQvK9K5XxtkP5KFEnrxC22LDr269S8qubKh+SBZclaGqh1gJeMObg7RII2aATBlmjEy+mL5HYGczeU14Mfh+nNcnG7rtXAx+TyF/bU6uasZj2Zip6nPWYpglV9/ygCHZvVTz394ljI3rOaE1FSbQiGMTyaAzZMlTSENikmWnsk9GnhqwOQNus0H95JaFUjoKuqAhAfhPvc4sAp4vVulHccS6x/5nGEBckdfXEDOMNeN3R3d7sqxs9Ttdj3DJUkK0rl5LjR3TuIKEBR0+qgnLtAyRjkfP6vjohIQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=A/WZVYzDzukQqORrB/kxHhA39a9OrbA2HJFGuFmiPIE=;
+ b=Vui/Q9dEedH00ZPA96s2WBpESMgLAjHE/4ouUna4llpGmPul5Fa2D9taM4nHIfq5J6aa4Uc3XdMN+EEeSgutHP6UD7jf3eUJQ5sapma9J2F2LQfFK3VfjjNdLuzKuvVgDW5svYoUY34DmCyyRebNN7JrYE58/UYU4aejLwRqVolR05bHpyDkmNHPPBhDBB0+sSHU6CaUrXERqSG5XziVAnBs6DYUZJNXQVRMQTF0Y59nxi3iUvvJyALyJDb7YFYWpmVicQbwqvR62gH24hU4TXQKgzdgxDTrioHQ8slgYqxc2zUN4touGKPh2MvNeb8YhOsEANpLwHcHUeGkXl8DjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=A/WZVYzDzukQqORrB/kxHhA39a9OrbA2HJFGuFmiPIE=;
+ b=rDrAmm3V8haabP8/7+V7CI1tJZP89NDohOstwVl+W/FUsOInLufMkNYSM0XdR8N3KRtywJFtFMxZo6x20O59CODcsj2tj8uEKlyDOOElBi3VU0UklRApZUbJYY46j1nRKdYgOFt9k1vrGQ+U9+TzhOdBO6iHHiTGTGLMusSKtj8s+tt1qrW1PppIgGFq1JEfCUtXxiLIynIzUnsG+Oh0RLnKSPXxBJi877/qWl55QmYvEr0PNVk8z0xu+Hj0YJlKqZO/FDHdzRtU1lpB5aqEMjR0OFaVL5mIf6HkOuXRQO7ttJlZEumsVDlBbCnMeLAMTcuiJX2IrCH9F+ic3PziJQ==
+Received: from DM6PR14CA0038.namprd14.prod.outlook.com (2603:10b6:5:18f::15)
+ by CH0PR12MB8463.namprd12.prod.outlook.com (2603:10b6:610:187::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Mon, 13 Feb
+ 2023 04:44:51 +0000
+Received: from DM6NAM11FT111.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:18f:cafe::70) by DM6PR14CA0038.outlook.office365.com
+ (2603:10b6:5:18f::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.23 via Frontend
+ Transport; Mon, 13 Feb 2023 04:44:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DM6NAM11FT111.mail.protection.outlook.com (10.13.173.26) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6086.24 via Frontend Transport; Mon, 13 Feb 2023 04:44:50 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 12 Feb
+ 2023 20:44:50 -0800
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 12 Feb
+ 2023 20:44:49 -0800
+Received: from audio.nvidia.com (10.127.8.10) by mail.nvidia.com (10.129.68.9)
+ with Microsoft SMTP Server id 15.2.986.36 via Frontend Transport; Sun, 12 Feb
+ 2023 20:44:45 -0800
+From:   Sameer Pujar <spujar@nvidia.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <oder_chiou@realtek.com>, <broonie@kernel.org>
+CC:     <perex@perex.cz>, <tiwai@suse.com>, <lgirdwood@gmail.com>,
+        <kuninori.morimoto.gx@renesas.com>, <devicetree@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, Sameer Pujar <spujar@nvidia.com>
+Subject: [PATCH v2] arm64: tegra: Audio codec support on Jetson AGX Orin
+Date:   Mon, 13 Feb 2023 10:14:34 +0530
+Message-ID: <1676263474-13346-1-git-send-email-spujar@nvidia.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v18 5/7] kexec: exclude hot remove cpu from elfcorehdr
- notes
-To:     Eric DeVolder <eric.devolder@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-References: <20230131224236.122805-1-eric.devolder@oracle.com>
- <20230131224236.122805-6-eric.devolder@oracle.com> <87sffpzkle.ffs@tglx>
- <dd03f47a-0017-6239-04e9-e796dca03c0c@oracle.com> <87h6vw2rwf.ffs@tglx>
- <7580421a-648a-2c4b-3c33-82e7622d9585@oracle.com>
- <d465173e-a31a-c4d6-af51-59d9ff0c2edc@linux.ibm.com>
- <24034f33-739b-e5f5-40c0-8d5abeb1ad89@oracle.com>
- <18c57fd0-2ad0-361a-9a53-ac49c372f021@linux.ibm.com>
- <b3d5c730-60ee-8f1c-978c-e3df41e3a3f1@oracle.com>
-Content-Language: en-US
-From:   Sourabh Jain <sourabhjain@linux.ibm.com>
-In-Reply-To: <b3d5c730-60ee-8f1c-978c-e3df41e3a3f1@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: cVXnd4-q-cem41TIHgdaqO3IRHhYsL3X
-X-Proofpoint-GUID: z7G_vycPBg6muc4TyWFD2guQLM5CRQ62
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-12_12,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- phishscore=0 malwarescore=0 suspectscore=0 bulkscore=0 priorityscore=1501
- mlxscore=0 impostorscore=0 mlxlogscore=999 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302130041
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT111:EE_|CH0PR12MB8463:EE_
+X-MS-Office365-Filtering-Correlation-Id: a6d2dcbc-7b98-4e0e-4add-08db0d7d0aff
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uybXYJJFwgIV+MC3o4LKMg7MiJ2bQOez2ZCVx9k2YOkkuDkQQnG3c2TGHnV/ggMcQCXW8yJjGjOnOSI3juCju63zsjETzseXa9lYpPU0dlfwHDdDQDH4Bkg2fPBP84MQrUSywPSagzFt7Pc2OTonqhEXISKheaLiRl67eiMTowa2BIttvAKqb0OuB2xoqSZdzzlUNhxQPWxxPXpoSk1hQyjXfYgezegmKosJC/7JuD2S8HCXTVFB2raoU8hI1wuBYhx+LUsQ6MgMoOhI3oXJSV2kfo4DtvzzxHXq9u0jGTxFxgmwnkaF33FD+P6/36aI2Xc6qoPFL71aZCxGOJMDc77WuN3NVtaeM9RCuLeexaIp9qchOUlnBeHSdTIQ4EnRpHqukhXJ/SmXbJHRXZs1jDjITcpdE32SNJ9zwZXPax3yXLkBUn/JYkzCoX6SqcXH4ACxtCxawh3BzLRf/wjF0j0egP+rO7zoeYIhC7pU9+1Gn/wsO3aL+DDChcuwxJSDH4fMNKhw8H7Kpj4PBTf/RzQ89hGWaEb9gowPHb5dgKx+7DAT/2d6+204omrLaSHu9as/FBCJdXgNkFxR02TuV/gg8iy2rKte/NBuKVWaS8EjA1ZF6IMzWFGZZmX0kn+9sA+vkKs31GsdjS8Mmp+FGDPFNwr6QF0V/bNsq4a+dBuwoIodN6k7qheUDLZPwCo2XgqHUsLGw9bUybu7JEdVHA==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(136003)(396003)(39860400002)(451199018)(40470700004)(36840700001)(46966006)(83380400001)(40460700003)(2616005)(47076005)(36756003)(426003)(336012)(356005)(82310400005)(82740400003)(40480700001)(7636003)(36860700001)(8936002)(41300700001)(7416002)(5660300002)(6666004)(107886003)(2906002)(186003)(26005)(316002)(110136005)(54906003)(86362001)(7696005)(70586007)(70206006)(8676002)(4326008)(478600001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2023 04:44:50.8227
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a6d2dcbc-7b98-4e0e-4add-08db0d7d0aff
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT111.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB8463
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Jetson AGX Orin has onboard RT5640 audio codec. This patch adds the
+codec device node and the bindings to I2S1 interface.
 
-On 11/02/23 06:05, Eric DeVolder wrote:
->
->
-> On 2/10/23 00:29, Sourabh Jain wrote:
->>
->> On 10/02/23 01:09, Eric DeVolder wrote:
->>>
->>>
->>> On 2/9/23 12:43, Sourabh Jain wrote:
->>>> Hello Eric,
->>>>
->>>> On 09/02/23 23:01, Eric DeVolder wrote:
->>>>>
->>>>>
->>>>> On 2/8/23 07:44, Thomas Gleixner wrote:
->>>>>> Eric!
->>>>>>
->>>>>> On Tue, Feb 07 2023 at 11:23, Eric DeVolder wrote:
->>>>>>> On 2/1/23 05:33, Thomas Gleixner wrote:
->>>>>>>
->>>>>>> So my latest solution is introduce two new CPUHP states, 
->>>>>>> CPUHP_AP_ELFCOREHDR_ONLINE
->>>>>>> for onlining and CPUHP_BP_ELFCOREHDR_OFFLINE for offlining. I'm 
->>>>>>> open to better names.
->>>>>>>
->>>>>>> The CPUHP_AP_ELFCOREHDR_ONLINE needs to be placed after 
->>>>>>> CPUHP_BRINGUP_CPU. My
->>>>>>> attempts at locating this state failed when inside the STARTING 
->>>>>>> section, so I located
->>>>>>> this just inside the ONLINE sectoin. The crash hotplug handler 
->>>>>>> is registered on
->>>>>>> this state as the callback for the .startup method.
->>>>>>>
->>>>>>> The CPUHP_BP_ELFCOREHDR_OFFLINE needs to be placed before 
->>>>>>> CPUHP_TEARDOWN_CPU, and I
->>>>>>> placed it at the end of the PREPARE section. This crash hotplug 
->>>>>>> handler is also
->>>>>>> registered on this state as the callback for the .teardown method.
->>>>>>
->>>>>> TBH, that's still overengineered. Something like this:
->>>>>>
->>>>>> bool cpu_is_alive(unsigned int cpu)
->>>>>> {
->>>>>>     struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
->>>>>>
->>>>>>     return data_race(st->state) <= CPUHP_AP_IDLE_DEAD;
->>>>>> }
->>>>>>
->>>>>> and use this to query the actual state at crash time. That spares 
->>>>>> all
->>>>>> those callback heuristics.
->>>>>>
->>>>>>> I'm making my way though percpu crash_notes, elfcorehdr, 
->>>>>>> vmcoreinfo,
->>>>>>> makedumpfile and (the consumer of it all) the userspace crash 
->>>>>>> utility,
->>>>>>> in order to understand the impact of moving from 
->>>>>>> for_each_present_cpu()
->>>>>>> to for_each_online_cpu().
->>>>>>
->>>>>> Is the packing actually worth the trouble? What's the actual win?
->>>>>>
->>>>>> Thanks,
->>>>>>
->>>>>>          tglx
->>>>>>
->>>>>>
->>>>>
->>>>> Thomas,
->>>>> I've investigated the passing of crash notes through the vmcore. 
->>>>> What I've learned is that:
->>>>>
->>>>> - linux/fs/proc/vmcore.c (which makedumpfile references to do its 
->>>>> job) does
->>>>>   not care what the contents of cpu PT_NOTES are, but it does 
->>>>> coalesce them together.
->>>>>
->>>>> - makedumpfile will count the number of cpu PT_NOTES in order to 
->>>>> determine its
->>>>>   nr_cpus variable, which is reported in a header, but otherwise 
->>>>> unused (except
->>>>>   for sadump method).
->>>>>
->>>>> - the crash utility, for the purposes of determining the cpus, 
->>>>> does not appear to
->>>>>   reference the elfcorehdr PT_NOTEs. Instead it locates the various
->>>>>   cpu_[possible|present|online]_mask and computes nr_cpus from 
->>>>> that, and also of
->>>>>   course which are online. In addition, when crash does reference 
->>>>> the cpu PT_NOTE,
->>>>>   to get its prstatus, it does so by using a percpu technique 
->>>>> directly in the vmcore
->>>>>   image memory, not via the ELF structure. Said differently, it 
->>>>> appears to me that
->>>>>   crash utility doesn't rely on the ELF PT_NOTEs for cpus; rather 
->>>>> it obtains them
->>>>>   via kernel cpumasks and the memory within the vmcore.
->>>>>
->>>>> With this understanding, I did some testing. Perhaps the most 
->>>>> telling test was that I
->>>>> changed the number of cpu PT_NOTEs emitted in the 
->>>>> crash_prepare_elf64_headers() to just 1,
->>>>> hot plugged some cpus, then also took a few offline sparsely via 
->>>>> chcpu, then generated a
->>>>> vmcore. The crash utility had no problem loading the vmcore, it 
->>>>> reported the proper number
->>>>> of cpus and the number offline (despite only one cpu PT_NOTE), and 
->>>>> changing to a different
->>>>> cpu via 'set -c 30' and the backtrace was completely valid.
->>>>>
->>>>> My take away is that crash utility does not rely upon ELF cpu 
->>>>> PT_NOTEs, it obtains the
->>>>> cpu information directly from kernel data structures. Perhaps at 
->>>>> one time crash relied
->>>>> upon the ELF information, but no more. (Perhaps there are other 
->>>>> crash dump analyzers
->>>>> that might rely on the ELF info?)
->>>>>
->>>>> So, all this to say that I see no need to change 
->>>>> crash_prepare_elf64_headers(). There
->>>>> is no compelling reason to move away from for_each_present_cpu(), 
->>>>> or modify the list for
->>>>> online/offline.
->>>>>
->>>>> Which then leaves the topic of the cpuhp state on which to 
->>>>> register. Perhaps reverting
->>>>> back to the use of CPUHP_BP_PREPARE_DYN is the right answer. There 
->>>>> does not appear to
->>>>> be a compelling need to accurately track whether the cpu went 
->>>>> online/offline for the
->>>>> purposes of creating the elfcorehdr, as ultimately the crash 
->>>>> utility pulls that from
->>>>> kernel data structures, not the elfcorehdr.
->>>>>
->>>>> I think this is what Sourabh has known and has been advocating for 
->>>>> an optimization
->>>>> path that allows not regenerating the elfcorehdr on cpu changes 
->>>>> (because all the percpu
->>>>> structs are all laid out). I do think it best to leave that as an 
->>>>> arch choice.
->>>>
->>>> Since things are clear on how the PT_NOTES are consumed in kdump 
->>>> kernel [fs/proc/vmcore.c],
->>>> makedumpfile, and crash tool I need your opinion on this:
->>>>
->>>> Do we really need to regenerate elfcorehdr for CPU hotplug events?
->>>> If yes, can you please list the elfcorehdr components that changes 
->>>> due to CPU hotplug.
->>> Due to the use of for_each_present_cpu(), it is possible for the 
->>> number of cpu PT_NOTEs
->>> to fluctuate as cpus are un/plugged. Onlining/offlining of cpus does 
->>> not impact the
->>> number of cpu PT_NOTEs (as the cpus are still present).
->>>
->>>>
->>>>  From what I understood, crash notes are prepared for possible CPUs 
->>>> as system boots and
->>>> could be used to create a PT_NOTE section for each possible CPU 
->>>> while generating the elfcorehdr
->>>> during the kdump kernel load.
->>>>
->>>> Now once the elfcorehdr is loaded with PT_NOTEs for every possible 
->>>> CPU there is no need to
->>>> regenerate it for CPU hotplug events. Or do we?
->>>
->>> For onlining/offlining of cpus, there is no need to regenerate the 
->>> elfcorehdr. However,
->>> for actual hot un/plug of cpus, the answer is yes due to 
->>> for_each_present_cpu(). The
->>> caveat here of course is that if crash utility is the only coredump 
->>> analyzer of concern,
->>> then it doesn't care about these cpu PT_NOTEs and there would be no 
->>> need to re-generate them.
->>>
->>> Also, I'm not sure if ARM cpu hotplug, which is just now coming into 
->>> mainstream, impacts
->>> any of this.
->>>
->>> Perhaps the one item that might help here is to distinguish between 
->>> actual hot un/plug of
->>> cpus, versus onlining/offlining. At the moment, I can not 
->>> distinguish between a hot plug
->>> event and an online event (and unplug/offline). If those were 
->>> distinguishable, then we
->>> could only regenerate on un/plug events.
->>>
->>> Or perhaps moving to for_each_possible_cpu() is the better choice?
->>
->> Yes, because once elfcorehdr is built with possible CPUs we don't 
->> have to worry about
->> hot[un]plug case.
->>
->> Here is my view on how things should be handled if a core-dump 
->> analyzer is dependent on
->> elfcorehdr PT_NOTEs to find online/offline CPUs.
->>
->> A PT_NOTE in elfcorehdr holds the address of the corresponding crash 
->> notes (kernel has
->> one crash note per CPU for every possible CPU). Though the crash 
->> notes are allocated
->> during the boot time they are populated when the system is on the 
->> crash path.
->>
->> This is how crash notes are populated on PowerPC and I am expecting 
->> it would be something
->> similar on other architectures too.
->>
->> The crashing CPU sends IPI to every other online CPU with a callback 
->> function that updates the
->> crash notes of that specific CPU. Once the IPI completes the crashing 
->> CPU updates its own crash
->> note and proceeds further.
->>
->> The crash notes of CPUs remain uninitialized if the CPUs were offline 
->> or hot unplugged at the time
->> system crash. The core-dump analyzer should be able to identify 
->> [un]/initialized crash notes
->> and display the information accordingly.
->>
->> Thoughts?
->>
->> - Sourabh
->
-> In general, I agree with your points. You've presented a strong case 
-> to go with for_each_possible_cpu() in crash_prepare_elf64_headers() 
-> and those crash notes would always be present, and we can ignore 
-> changes to cpus wrt/ elfcorehdr updates.
->
-> But what do we do about kexec_load() syscall? The way the userspace 
-> utility works is it determines cpus by:
->  nr_cpus = sysconf(_SC_NPROCESSORS_CONF);
-> which is not the equivalent of possible_cpus. So the complete list of 
-> cpu PT_NOTEs is not generated up front. We would need a solution for 
-> that?
-Hello Eric,
+Signed-off-by: Sameer Pujar <spujar@nvidia.com>
+---
+ changes in v2:
+   * removed explicit 'status' property from audio codec node
+   * driver change in the series got merged, so just sending v2 for DT patch.
 
-The sysconf document says _SC_NPROCESSORS_CONF is processors configured, 
-isn't that equivalent to possible CPUs?
+ .../dts/nvidia/tegra234-p3737-0000+p3701-0000.dts  | 45 +++++++++++++++++++++-
+ 1 file changed, 44 insertions(+), 1 deletion(-)
 
-What exactly sysconf(_SC_NPROCESSORS_CONF) returns on x86? IIUC, on 
-powerPC it is possible CPUs.
+diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+index 8a97478..ddc057f 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
++++ b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+@@ -3,6 +3,7 @@
+ 
+ #include <dt-bindings/input/linux-event-codes.h>
+ #include <dt-bindings/input/gpio-keys.h>
++#include <dt-bindings/sound/rt5640.h>
+ 
+ #include "tegra234-p3701-0000.dtsi"
+ #include "tegra234-p3737-0000.dtsi"
+@@ -49,7 +50,7 @@
+ 
+ 							i2s1_dap: endpoint {
+ 								dai-format = "i2s";
+-								/* placeholder for external codec */
++								remote-endpoint = <&rt5640_ep>;
+ 							};
+ 						};
+ 					};
+@@ -2017,6 +2018,30 @@
+ 			status = "okay";
+ 		};
+ 
++		i2c@31e0000 {
++			status = "okay";
++
++			audio-codec@1c {
++				compatible = "realtek,rt5640";
++				reg = <0x1c>;
++				interrupt-parent = <&gpio>;
++				interrupts = <TEGRA234_MAIN_GPIO(AC, 5) GPIO_ACTIVE_HIGH>;
++				clocks = <&bpmp TEGRA234_CLK_AUD_MCLK>;
++				clock-names = "mclk";
++				realtek,dmic1-data-pin = <RT5640_DMIC1_DATA_PIN_NONE>;
++				realtek,dmic2-data-pin = <RT5640_DMIC2_DATA_PIN_NONE>;
++				realtek,jack-detect-source = <RT5640_JD_SRC_HDA_HEADER>;
++				sound-name-prefix = "CVB-RT";
++
++				port {
++					rt5640_ep: endpoint {
++						remote-endpoint = <&i2s1_dap>;
++						mclk-fs = <256>;
++					};
++				};
++			};
++		};
++
+ 		pwm@32a0000 {
+ 			assigned-clocks = <&bpmp TEGRA234_CLK_PWM3>;
+ 			assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLP_OUT0>;
+@@ -2293,5 +2318,23 @@
+ 		       <&dmic3_port>;
+ 
+ 		label = "NVIDIA Jetson AGX Orin APE";
++
++		widgets = "Microphone",	"CVB-RT MIC Jack",
++			  "Microphone",	"CVB-RT MIC",
++			  "Headphone",	"CVB-RT HP Jack",
++			  "Speaker",	"CVB-RT SPK";
++
++		routing = /* I2S1 <-> RT5640 */
++			  "CVB-RT AIF1 Playback",	"I2S1 DAP-Playback",
++			  "I2S1 DAP-Capture",		"CVB-RT AIF1 Capture",
++			  /* RT5640 codec controls */
++			  "CVB-RT HP Jack",		"CVB-RT HPOL",
++			  "CVB-RT HP Jack",		"CVB-RT HPOR",
++			  "CVB-RT IN1P",		"CVB-RT MIC Jack",
++			  "CVB-RT IN2P",		"CVB-RT MIC Jack",
++			  "CVB-RT SPK",			"CVB-RT SPOLP",
++			  "CVB-RT SPK",			"CVB-RT SPORP",
++			  "CVB-RT DMIC1",		"CVB-RT MIC",
++			  "CVB-RT DMIC2",		"CVB-RT MIC";
+ 	};
+ };
+-- 
+2.7.4
 
-In case sysconf(_SC_NPROCESSORS_CONF) is not consistent then we can go with:
-/sys/devices/system/cpu/possible for kexec_load case.
-
-Thoughts?
-
-- Sourabh Jain
