@@ -2,161 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8949693D0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 04:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 705D4693D15
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 04:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjBMDif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 22:38:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
+        id S229836AbjBMDlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 22:41:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbjBMDiP (ORCPT
+        with ESMTP id S229536AbjBMDlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 22:38:15 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A81CDF2;
-        Sun, 12 Feb 2023 19:38:12 -0800 (PST)
-X-UUID: d374ff1eab4f11eda06fc9ecc4dadd91-20230213
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=e6eQQOvqn+zPWnCwihlkrd8bxgyCpuOOMe/nTlCqPLo=;
-        b=XpqDAnWrAhpipnsfhow9eDnZQOiLfzHaWDJS3yIMFiwiTfxEr6IyXLvdGI5BV841V8KugBfTNc73OkAfhUycama4f//Rb+CyvlQw2Sba0fgcvb76WS/zeQVFxMROY7Yc8kF9pRH6ULyLNaGUC9UYsVqghGKeCv7WB+TdFc0OB7g=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.19,REQID:a5463a69-7150-4ecd-ab3a-6705b0248bfe,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.19,REQID:a5463a69-7150-4ecd-ab3a-6705b0248bfe,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:885ddb2,CLOUDID:a1cd1257-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:230213113807BZSMG37V,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-UUID: d374ff1eab4f11eda06fc9ecc4dadd91-20230213
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1131588885; Mon, 13 Feb 2023 11:38:05 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 13 Feb 2023 11:38:04 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Mon, 13 Feb 2023 11:38:04 +0800
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>
-CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v6 12/12] arm64: dts: mediatek: mt8195: Add SCP 2nd core
-Date:   Mon, 13 Feb 2023 11:37:58 +0800
-Message-ID: <20230213033758.16681-13-tinghan.shen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230213033758.16681-1-tinghan.shen@mediatek.com>
-References: <20230213033758.16681-1-tinghan.shen@mediatek.com>
+        Sun, 12 Feb 2023 22:41:45 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C300CDFE;
+        Sun, 12 Feb 2023 19:41:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676259690; x=1707795690;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=kOm/lqLnIhrBfbKI2sllGDgMmet2FVVHyUaQ+tQOp88=;
+  b=OGEbqrYUQ8KgNYvMiF7o80mHSCnLVT0kwt/n3++43ACI3IgSWovpGXju
+   2m2UbLPF42bX75kTGoEFjQRdKRPvq7s2mwSZNeVRTApCbGU4MyV8jInxb
+   JRwuHVi1YZ/3ed5LeeS2fDDBkBcGr/cppf0Qwd9fbqbPYu0ItZq4ryz2s
+   NNmkNabmAoaC4/ss20TOxBDbp1JtZ995pi4cAwV7P8LgY6xFGun2tX4EQ
+   igZCm4tXOyIa8rjSGHtxsKMO4S6uXgpv5pSeu0ZrXhyyRyYBPCrk7ux2P
+   W84wO/pc5kVuh7K2SJQampI5Mwy4C6XhkfCwq92+BqpwFYYs/i61NU3iV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="332937980"
+X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
+   d="scan'208";a="332937980"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 19:41:20 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="668669864"
+X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
+   d="scan'208";a="668669864"
+Received: from rajatkha-mobl.gar.corp.intel.com (HELO [10.213.70.43]) ([10.213.70.43])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 19:41:17 -0800
+Message-ID: <15eda586-b094-8d42-a6cb-deb8fd5eaca8@linux.intel.com>
+Date:   Mon, 13 Feb 2023 09:11:08 +0530
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v5] platform/x86/intel/pmc: core: Add support to show
+ LTR-ignored components
+To:     "Box, David E" <david.e.box@intel.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "irenic.rajneesh@gmail.com" <irenic.rajneesh@gmail.com>
+Cc:     "Khandelwal, Rajat" <rajat.khandelwal@intel.com>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230210181614.192578-1-rajat.khandelwal@linux.intel.com>
+ <7853400f2472fe799540de86bebddfe4b3d76c6c.camel@intel.com>
+Content-Language: en-US
+From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+In-Reply-To: <7853400f2472fe799540de86bebddfe4b3d76c6c.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rewrite the MT8195 SCP device node as a cluster and
-add the SCP 2nd core in it.
+Hi David,
+I didn't know such restriction exists in the upstream community. :)
 
-Since the SCP device node is changed to multi-core structure,
-enable SCP cluster to enable probing SCP core 0.
+How about?
+"Currently, 'ltr_ignore' sysfs attribute, when read, returns nothing, even
+if there are components whose LTR values have been ignored.
 
-Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- .../boot/dts/mediatek/mt8195-cherry.dtsi      |  6 +++-
- arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 32 ++++++++++++++-----
- 2 files changed, 29 insertions(+), 9 deletions(-)
+Make the sysfs attribute print out such components, if they exist, and return
+EEXIST, if tried to set an already ignored component."
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-index 56749cfe7c33..31415d71b6a4 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-@@ -933,7 +933,11 @@
- 	interrupts-extended = <&pio 222 IRQ_TYPE_LEVEL_HIGH>;
- };
- 
--&scp {
-+&scp_cluster {
-+	status = "okay";
-+};
-+
-+&scp_c0 {
- 	status = "okay";
- 
- 	firmware-name = "mediatek/mt8195/scp.img";
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index 8f1264d5290b..31209ef7e55d 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -826,14 +826,30 @@
- 			clocks = <&infracfg_ao CLK_INFRA_AO_GCE2>;
- 		};
- 
--		scp: scp@10500000 {
--			compatible = "mediatek,mt8195-scp";
--			reg = <0 0x10500000 0 0x100000>,
--			      <0 0x10720000 0 0xe0000>,
--			      <0 0x10700000 0 0x8000>;
--			reg-names = "sram", "cfg", "l1tcm";
--			interrupts = <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH 0>;
-+		scp_cluster: scp@10500000 {
-+			compatible = "mediatek,mt8195-scp-dual";
-+			reg = <0 0x10720000 0 0xe0000>, <0 0x10700000 0 0x8000>;
-+			reg-names = "cfg", "l1tcm";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x10500000 0x100000>;
- 			status = "disabled";
-+
-+			scp_c0: scp@0 {
-+				compatible = "mediatek,scp-core";
-+				reg = <0x0 0xa0000>;
-+				reg-names = "sram";
-+				interrupts = <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH 0>;
-+				status = "disabled";
-+			};
-+
-+			scp_c1: scp@a0000 {
-+				compatible = "mediatek,scp-core";
-+				reg = <0xa0000 0x20000>;
-+				reg-names = "sram";
-+				interrupts = <GIC_SPI 463 IRQ_TYPE_LEVEL_HIGH 0>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		scp_adsp: clock-controller@10720000 {
-@@ -2291,7 +2307,7 @@
- 				 <&iommu_vdo M4U_PORT_L19_VENC_REF_LUMA>,
- 				 <&iommu_vdo M4U_PORT_L19_VENC_REF_CHROMA>;
- 			interrupts = <GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH 0>;
--			mediatek,scp = <&scp>;
-+			mediatek,scp = <&scp_c0>;
- 			clocks = <&vencsys CLK_VENC_VENC>;
- 			clock-names = "venc_sel";
- 			assigned-clocks = <&topckgen CLK_TOP_VENC>;
--- 
-2.18.0
+Thanks
+Rajat
 
+On 2/13/2023 12:58 AM, Box, David E wrote:
+> On Fri, 2023-02-10 at 23:46 +0530, Rajat Khandelwal wrote:
+>> Currently, 'ltr_ignore' sysfs attribute, when read, returns nothing, even
+>> if there are components whose LTR values have been ignored.
+>>
+>> This patch adds the feature to print out such components, if they exist.
+>> Further, if user tries to set an already ignored component, he will
+>> encounter the error code of EEXIST.
+> Sorry to nit, but should describe the changes in "imperative mood" per the
+> guidelines in submitting-patches.rst.
+>
+> David
+>
+>> Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+>> ---
+>>
+>> v5:
+>> 1. Ignore the LTR of the respective component after unlocking the mutex lock
+>> 2. Adding error code details to the commit message
+>>
+>> v4: Mutex unlock during error conditions
+>>
+>> v3: Incorporated a mutex lock for accessing 'ltr_ignore_list'
+>>
+>> v2: kmalloc -> devm_kmalloc
+>>
+>>   drivers/platform/x86/intel/pmc/core.c | 64 ++++++++++++++++++++++-----
+>>   drivers/platform/x86/intel/pmc/core.h |  2 +-
+>>   2 files changed, 53 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/drivers/platform/x86/intel/pmc/core.c
+>> b/drivers/platform/x86/intel/pmc/core.c
+>> index 3a15d32d7644..16cf6c634db8 100644
+>> --- a/drivers/platform/x86/intel/pmc/core.c
+>> +++ b/drivers/platform/x86/intel/pmc/core.c
+>> @@ -53,6 +53,17 @@ const struct pmc_bit_map msr_map[] = {
+>>          {}
+>>   };
+>>   
+>> +/* Mutual exclusion to access the list of LTR-ignored components */
+>> +static DEFINE_MUTEX(ltr_entry_mutex);
+>> +
+>> +struct ltr_entry {
+>> +       u32 comp_index;
+>> +       const char *comp_name;
+>> +       struct list_head node;
+>> +};
+>> +
+>> +static LIST_HEAD(ltr_ignore_list);
+>> +
+>>   static inline u32 pmc_core_reg_read(struct pmc_dev *pmcdev, int reg_offset)
+>>   {
+>>          return readl(pmcdev->regbase + reg_offset);
+>> @@ -435,27 +446,18 @@ static int pmc_core_pll_show(struct seq_file *s, void
+>> *unused)
+>>   }
+>>   DEFINE_SHOW_ATTRIBUTE(pmc_core_pll);
+>>   
+>> -int pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value)
+>> +void pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value)
+>>   {
+>>          const struct pmc_reg_map *map = pmcdev->map;
+>>          u32 reg;
+>> -       int err = 0;
+>>   
+>>          mutex_lock(&pmcdev->lock);
+>>   
+>> -       if (value > map->ltr_ignore_max) {
+>> -               err = -EINVAL;
+>> -               goto out_unlock;
+>> -       }
+>> -
+>>          reg = pmc_core_reg_read(pmcdev, map->ltr_ignore_offset);
+>>          reg |= BIT(value);
+>>          pmc_core_reg_write(pmcdev, map->ltr_ignore_offset, reg);
+>>   
+>> -out_unlock:
+>>          mutex_unlock(&pmcdev->lock);
+>> -
+>> -       return err;
+>>   }
+>>   
+>>   static ssize_t pmc_core_ltr_ignore_write(struct file *file,
+>> @@ -464,6 +466,8 @@ static ssize_t pmc_core_ltr_ignore_write(struct file
+>> *file,
+>>   {
+>>          struct seq_file *s = file->private_data;
+>>          struct pmc_dev *pmcdev = s->private;
+>> +       const struct pmc_reg_map *map = pmcdev->map;
+>> +       struct ltr_entry *entry;
+>>          u32 buf_size, value;
+>>          int err;
+>>   
+>> @@ -473,13 +477,49 @@ static ssize_t pmc_core_ltr_ignore_write(struct file
+>> *file,
+>>          if (err)
+>>                  return err;
+>>   
+>> -       err = pmc_core_send_ltr_ignore(pmcdev, value);
+>> +       if (value > map->ltr_ignore_max)
+>> +               return -EINVAL;
+>> +
+>> +       mutex_lock(&ltr_entry_mutex);
+>> +
+>> +       list_for_each_entry(entry, &ltr_ignore_list, node) {
+>> +               if (entry->comp_index == value) {
+>> +                       err = -EEXIST;
+>> +                       goto out_unlock;
+>> +               }
+>> +       }
+>> +
+>> +       entry = devm_kmalloc(&pmcdev->pdev->dev, sizeof(*entry), GFP_KERNEL);
+>> +       if (!entry) {
+>> +               err = -ENOMEM;
+>> +               goto out_unlock;
+>> +       }
+>> +
+>> +       entry->comp_name = map->ltr_show_sts[value].name;
+>> +       entry->comp_index = value;
+>> +       list_add_tail(&entry->node, &ltr_ignore_list);
+>> +
+>> +out_unlock:
+>> +       mutex_unlock(&ltr_entry_mutex);
+>> +
+>> +       if (err)
+>> +               return err;
+>> +
+>> +       pmc_core_send_ltr_ignore(pmcdev, value);
+>>   
+>> -       return err == 0 ? count : err;
+>> +       return count;
+>>   }
+>>   
+>>   static int pmc_core_ltr_ignore_show(struct seq_file *s, void *unused)
+>>   {
+>> +       struct ltr_entry *entry;
+>> +
+>> +       mutex_lock(&ltr_entry_mutex);
+>> +       list_for_each_entry(entry, &ltr_ignore_list, node) {
+>> +               seq_printf(s, "%s\n", entry->comp_name);
+>> +       }
+>> +       mutex_unlock(&ltr_entry_mutex);
+>> +
+>>          return 0;
+>>   }
+>>   
+>> diff --git a/drivers/platform/x86/intel/pmc/core.h
+>> b/drivers/platform/x86/intel/pmc/core.h
+>> index 810204d758ab..da35b0fcbe6e 100644
+>> --- a/drivers/platform/x86/intel/pmc/core.h
+>> +++ b/drivers/platform/x86/intel/pmc/core.h
+>> @@ -396,7 +396,7 @@ extern const struct pmc_reg_map adl_reg_map;
+>>   extern const struct pmc_reg_map mtl_reg_map;
+>>   
+>>   extern void pmc_core_get_tgl_lpm_reqs(struct platform_device *pdev);
+>> -extern int pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value);
+>> +extern void pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value);
+>>   
+>>   void spt_core_init(struct pmc_dev *pmcdev);
+>>   void cnp_core_init(struct pmc_dev *pmcdev);
