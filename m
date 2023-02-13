@@ -2,190 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB2A694E68
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DCFB694E69
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:51:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjBMRuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 12:50:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
+        id S230040AbjBMRvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 12:51:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjBMRuw (ORCPT
+        with ESMTP id S229567AbjBMRvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 12:50:52 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB2A14E9C
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:50:47 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.179.179])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 13 Feb 2023 12:51:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FA21EFD9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:51:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CAB226600357;
-        Mon, 13 Feb 2023 17:50:43 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676310645;
-        bh=xeODPhDIfFUyaS2Gon5ykxRQvpUcZt1AbKfG1EsXaCE=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=jMSob38MBuOfwjSoUmGu4kU2zAju9fanwAIlMOujFuggRlI6nkVfcrQIl+nHLx7tY
-         PilEa5cLKzGgYuakyeiC9tQKGCw5ui2j0pQZ6V0MiwZ/7u9kT7tr7xxZiP4N2rLbyj
-         R4oO1PpxyilWHV1ziQZR33f1HfuP/eJX5iEoFno8qhHJn9mj+gamdUxpEucFem4/Hm
-         vluSpuDKNmXTDU0gNhlywP6DM74eKIqDXgWJJcRMikfEzOp8ft+/Pe2YfVAE3Frk5o
-         ot79JUNS+okr6DJNQnKjHerNTlxN0D9sO3FJDXvg7ttRTpDxugM6qhPCKyhA56bkFa
-         zTtR/wfs00GrQ==
-Message-ID: <9f0278d7-54f1-960e-ffdf-eeb2572ff6d1@collabora.com>
-Date:   Mon, 13 Feb 2023 22:50:39 +0500
+        by ams.source.kernel.org (Postfix) with ESMTPS id 031B8B81624
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 17:51:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FA75C433D2;
+        Mon, 13 Feb 2023 17:51:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676310671;
+        bh=CsA1YC3h9+17N2G4n4oB6a9IScP2GHFSVsLcAWvNOv0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mglqRwxvj8ZNNWXqjBCM25H2ljZLkeKgpNQA9pPqfev/fXL659WjuC0fQK07hYmSA
+         xhmVMR/z/0gnclYtSCmJLCdf9m5VDlTEMPKhvO0TrjcV0eVk0C5Z8kA8ttEH5+vwJN
+         al7LcJUZm+DuL2N3l2HashUdqb5xrwmuHACAioIxiBT7VCQuSlpr/rDDF9LM5ESkvA
+         kXM2u1Xe8zff+OjVrJX9dcUiCA3Y3hgFsO1UTNmIFg/vpOKX+DsUYAxUNkbgrB9gM/
+         ZJ9Egcpz1Omv8HJj0Vyij21jO3k0nT4o+foUaHOaO/BsZD1sFSOzijMGW9jiZsFf+Y
+         sHdR10yVsIyfQ==
+Date:   Mon, 13 Feb 2023 09:51:09 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] f2fs: make kobj_type structures constant
+Message-ID: <Y+p4jezz5asWoPhu@google.com>
+References: <20230209-kobj_type-f2fs-v1-1-b6feedbdd4a8@weissschuh.net>
+ <cc338b66-f0f5-d9b7-81d3-b15bccc9d463@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>, david@redhat.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kernel@collabora.com, Paul Gofman <pgofman@codeweavers.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mm/userfaultfd: Support WP on multiple VMAs
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-References: <20230213163124.2850816-1-usama.anjum@collabora.com>
- <Y+prUgFQqmytC/5M@x1n>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <Y+prUgFQqmytC/5M@x1n>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cc338b66-f0f5-d9b7-81d3-b15bccc9d463@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/13/23 9:54‚ÄØPM, Peter Xu wrote:
-> On Mon, Feb 13, 2023 at 09:31:23PM +0500, Muhammad Usama Anjum wrote:
->> mwriteprotect_range() errors out if [start, end) doesn't fall in one
->> VMA. We are facing a use case where multiple VMAs are present in one
->> range of interest. For example, the following pseudocode reproduces the
->> error which we are trying to fix:
->>
->> - Allocate memory of size 16 pages with PROT_NONE with mmap
->> - Register userfaultfd
->> - Change protection of the first half (1 to 8 pages) of memory to
->>   PROT_READ | PROT_WRITE. This breaks the memory area in two VMAs.
->> - Now UFFDIO_WRITEPROTECT_MODE_WP on the whole memory of 16 pages errors
->>   out.
->>
->> This is a simple use case where user may or may not know if the memory
->> area has been divided into multiple VMAs.
->>
->> Reported-by: Paul Gofman <pgofman@codeweavers.com>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->> Changes since v1:
->> - Correct the start and ending values passed to uffd_wp_range()
->> ---
->>  mm/userfaultfd.c | 38 ++++++++++++++++++++++----------------
->>  1 file changed, 22 insertions(+), 16 deletions(-)
->>
->> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
->> index 65ad172add27..bccea08005a8 100644
->> --- a/mm/userfaultfd.c
->> +++ b/mm/userfaultfd.c
->> @@ -738,9 +738,12 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
->>  			unsigned long len, bool enable_wp,
->>  			atomic_t *mmap_changing)
->>  {
->> +	unsigned long end = start + len;
->> +	unsigned long _start, _end;
->>  	struct vm_area_struct *dst_vma;
->>  	unsigned long page_mask;
->>  	int err;
+On 02/13, Chao Yu wrote:
+> On 2023/2/9 11:20, Thomas Weiﬂschuh wrote:
+> > Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+> > the driver core allows the usage of const struct kobj_type.
+> > 
+> > Take advantage of this to constify the structure definitions to prevent
+> > modification at runtime.
+> > 
+> > Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
 > 
-> I think this needs to be initialized or it can return anything when range
-> not mapped.
-It is being initialized to -EAGAIN already. It is not visible in this patch.
+> Reviewed-by: Chao Yu <chao@kernel.org>
 
-> 
->> +	VMA_ITERATOR(vmi, dst_mm, start);
->>  
->>  	/*
->>  	 * Sanitize the command parameters:
->> @@ -762,26 +765,29 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
->>  	if (mmap_changing && atomic_read(mmap_changing))
->>  		goto out_unlock;
->>  
->> -	err = -ENOENT;
->> -	dst_vma = find_dst_vma(dst_mm, start, len);
->> +	for_each_vma_range(vmi, dst_vma, end) {
->> +		err = -ENOENT;
->>  
->> -	if (!dst_vma)
->> -		goto out_unlock;
->> -	if (!userfaultfd_wp(dst_vma))
->> -		goto out_unlock;
->> -	if (!vma_can_userfault(dst_vma, dst_vma->vm_flags))
->> -		goto out_unlock;
->> +		if (!dst_vma->vm_userfaultfd_ctx.ctx)
->> +			break;
->> +		if (!userfaultfd_wp(dst_vma))
->> +			break;
->> +		if (!vma_can_userfault(dst_vma, dst_vma->vm_flags))
->> +			break;
->>  
->> -	if (is_vm_hugetlb_page(dst_vma)) {
->> -		err = -EINVAL;
->> -		page_mask = vma_kernel_pagesize(dst_vma) - 1;
->> -		if ((start & page_mask) || (len & page_mask))
->> -			goto out_unlock;
->> -	}
->> +		if (is_vm_hugetlb_page(dst_vma)) {
->> +			err = -EINVAL;
->> +			page_mask = vma_kernel_pagesize(dst_vma) - 1;
->> +			if ((start & page_mask) || (len & page_mask))
->> +				break;
->> +		}
->>  
->> -	uffd_wp_range(dst_mm, dst_vma, start, len, enable_wp);
->> +		_start = (dst_vma->vm_start > start) ? dst_vma->vm_start : start;
->> +		_end = (dst_vma->vm_end < end) ? dst_vma->vm_end : end;
->>  
->> -	err = 0;
->> +		uffd_wp_range(dst_mm, dst_vma, _start, _end - _start, enable_wp);
->> +		err = 0;
->> +	}
->>  out_unlock:
->>  	mmap_read_unlock(dst_mm);
->>  	return err;
-> 
-> This whole patch also changes the abi, so I'm worried whether there can be
-> app that relies on the existing behavior.
-Even if a app is dependent on it, this change would just don't return error
-if there are multiple VMAs under the hood and handle them correctly. Most
-apps wouldn't care about VMAs anyways. I don't know if there would be any
-drastic behavior change, other than the behavior becoming nicer.
+Hi Chao,
 
-> 
-> Is this for the new pagemap effort?  Can this just be done in the new
-> interface rather than changing the old?
-We found this bug while working on pagemap patches. It is already being
-handled in the new interface. We just thought that this use case can happen
-pretty easily and unknowingly. So the support should be added.
+Note that, next time, I won't apply/modify any patches merged in -dev,
+unless it has a problem.
 
-Also mwriteprotect_range() gives a pretty straight forward way to WP or
-un-WP a range. Async WP can be used in coordination with pagemap file
-(PM_UFFD_WP flag in PTE) as well. There may be use cases for it. On another
-note, I don't see any use cases of WP async and PM_UFFD_WP flag as
-!PM_UFFD_WP flag doesn't give direct information if the page is written for
-!present pages.
-
-> 
-> Side note: in your other pagemap series, you can optimize "WP_ENGAGE &&
-> !GET" to not do generic pgtable walk at all, but use what it does in this
-> patch for the initial round or wr-protect.
-Yeah, it is implemented with some optimizations.
+Thanks,
 
 > 
 > Thanks,
-> 
-
--- 
-BR,
-Muhammad Usama Anjum
