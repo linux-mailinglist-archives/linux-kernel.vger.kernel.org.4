@@ -2,81 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBF8693BAC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 02:15:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59158693BB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 02:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjBMBPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 20:15:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44298 "EHLO
+        id S229645AbjBMBUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 20:20:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBMBPm (ORCPT
+        with ESMTP id S229489AbjBMBUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 20:15:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BEACC23;
-        Sun, 12 Feb 2023 17:15:41 -0800 (PST)
+        Sun, 12 Feb 2023 20:20:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBCCDBF1
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 17:20:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0474960E0B;
-        Mon, 13 Feb 2023 01:15:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B8BDC433D2;
-        Mon, 13 Feb 2023 01:15:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DF1AB80DE9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:20:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56431C433A1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:20:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676250940;
-        bh=6xoS4EH/AvrMxo4l4vmXuR4AQHVc+FNzj7T1N0mRmNE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bKep+A7+xJ/92/b5KLIU8b6MYcaWdBzqmXK2ccWLreI9FGxL9egqBJn5q9Vph791j
-         puzGhxH7ZpaphtMdqK+3u3KsDuIEgHvlXlfLgmHHLQNOyillSnmjqnmwiGzCbHWjb2
-         2krsDHjlf6yqyGqww3UHLRxAwb0QSBHd/9sygOcwxOdkSqrf1/TVIPBqYAN5wMsPzT
-         PnV7iDcLnk7lrEiGPpJTZccklii69bbqjJq5C+ceXe3xFjyi/KyqxO5SmsQLDNoU+D
-         LBpxjUIf9Bd02MtBnZ2ZZuuQW+pyfJ5367aFv0T2s55DZVNFbZYgmjmloY7QF6OTXd
-         vYxO5PxdceqiA==
-Date:   Mon, 13 Feb 2023 03:15:17 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v2 2/4] m68k: use asm-generic/memory_model.h for both MMU
- and !MMU
-Message-ID: <Y+mPJYpVBk1YutDL@kernel.org>
-References: <20230129124235.209895-1-rppt@kernel.org>
- <20230129124235.209895-3-rppt@kernel.org>
- <20230212173513.GA4052259@roeck-us.net>
+        s=k20201202; t=1676251213;
+        bh=tMn82ZFgecAOke6UY7vDBe002Fq1P54OXLQ/Ss8d7MY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=CDadx8BK8ujuBS8OdbaYHormLblZTzajxc6ecVyodekjAiSOn9wzAPbhv7W0ftm0E
+         Ny+fMgzm6OIEdqiV57zaenus91gh5yo2M9tOYHyB1AiJvxglpJQPnJhrg9tt7DSBwO
+         SwqbCHU3r21RwdGiuFxIM9deTa6SVNX1ZVzjdsbfTFRUnfSG8jeverlb1Lhy6oWcXZ
+         vu7oVe7j5hO175IEU5ZlPRcG4zT89AMwxT2cHjN9AcYyWZL34mwCQNsTaChLuJRJk1
+         MJcRi9udcXGK0YAKjaJUZCWmRlgkY5gIKpoO2/9QHh8ftEIXwAjqamHblf+KtCT8hS
+         KFlko8t19bxAA==
+Received: by mail-ej1-f51.google.com with SMTP id ml19so28433722ejb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 17:20:13 -0800 (PST)
+X-Gm-Message-State: AO0yUKUdobw+XQTg2HMVkFJej0rAc1JVaXcI0nV11REboRiLJLu7M8Az
+        KFYqK11kIBBAC1dz6cpSAMUoYbOtJ3Kxg5r2hes=
+X-Google-Smtp-Source: AK7set8qmyH8LWQvKpy+BVdOAVhp0PQFwgzl+tpl/5bU6AF/bFHYEeTvmB/c1xtbDyPVXioudecilbEWcgUeLo4MESc=
+X-Received: by 2002:a17:907:9710:b0:8af:3ddd:c43c with SMTP id
+ jg16-20020a170907971000b008af3dddc43cmr4554736ejc.1.1676251211491; Sun, 12
+ Feb 2023 17:20:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230212173513.GA4052259@roeck-us.net>
+References: <20230212021534.59121-1-samuel@sholland.org> <20230212021534.59121-3-samuel@sholland.org>
+In-Reply-To: <20230212021534.59121-3-samuel@sholland.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 13 Feb 2023 09:19:59 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSMAhweKKaztFz1G3Y_PUJwAvugRSHhKM69pA-VqnCs3g@mail.gmail.com>
+Message-ID: <CAJF2gTSMAhweKKaztFz1G3Y_PUJwAvugRSHhKM69pA-VqnCs3g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] riscv: Fix Zbb alternative IDs
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Christoph Muellner <christoph.muellner@vrull.eu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -86,85 +69,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Reviewed-by: Guo Ren <guoren@kernel.org>
 
-On Sun, Feb 12, 2023 at 09:35:13AM -0800, Guenter Roeck wrote:
-> Hi,
-> 
-> On Sun, Jan 29, 2023 at 02:42:33PM +0200, Mike Rapoport wrote:
-> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> > 
-> > The MMU variant uses generic definitions of page_to_pfn() and
-> > pfn_to_page(), but !MMU defines them in include/asm/page_no.h for no
-> > good reason.
-> > 
-> > Include asm-generic/memory_model.h in the common include/asm/page.h and
-> > drop redundant definitions.
-> > 
-> > Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> > Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> 
-> This patch results in a boot failure when trying to boot the mcf5208evb qemu
-> emulation. Reverting it together with "mm, arch: add generic implementation
-> of pfn_valid() for FLATMEM" fixes the problem. There is no error log - the
-> emulation hangs silently until aborted.
-
-With the patch below I was able to get to the mount of the root file system,
-but I don't have one, so I couldn't test the boot properly.
-
-diff --git a/arch/m68k/include/asm/page_no.h b/arch/m68k/include/asm/page_no.h
-index 43ff6b109ebb..060e4c0e7605 100644
---- a/arch/m68k/include/asm/page_no.h
-+++ b/arch/m68k/include/asm/page_no.h
-@@ -28,6 +28,8 @@ extern unsigned long memory_end;
- #define	virt_addr_valid(kaddr)	(((unsigned long)(kaddr) >= PAGE_OFFSET) && \
- 				((unsigned long)(kaddr) < memory_end))
- 
-+#define ARCH_PFN_OFFSET PHYS_PFN(PAGE_OFFSET_RAW)
-+
- #endif /* __ASSEMBLY__ */
- 
- #endif /* _M68K_PAGE_NO_H */
- 
-> Guenter
-> 
+On Sun, Feb 12, 2023 at 10:15 AM Samuel Holland <samuel@sholland.org> wrote:
+>
+> Commit 4bf8860760d9 ("riscv: cpufeature: extend
+> riscv_cpufeature_patch_func to all ISA extensions") switched ISA
+> extension alternatives to use the RISCV_ISA_EXT_* macros instead of
+> CPUFEATURE_*. This was mismerged when applied on top of the Zbb series,
+> so the Zbb alternatives referenced the wrong errata ID values.
+>
+> Fixes: 9daca9a5b9ac ("Merge patch series "riscv: improve boot time isa extensions handling"")
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 > ---
-> bisect log:
-> 
-> # bad: [6ba8a227fd19d19779005fb66ad7562608e1df83] Add linux-next specific files for 20230210
-> # good: [4ec5183ec48656cec489c49f989c508b68b518e3] Linux 6.2-rc7
-> git bisect start 'HEAD' 'v6.2-rc7'
-> # good: [94613f0efc69ed41f9229ef5c294db3ec37145da] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
-> git bisect good 94613f0efc69ed41f9229ef5c294db3ec37145da
-> # good: [19e62c715fe70dae4582c2874ed3e66715d09af6] Merge branch 'rcu/next' of git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
-> git bisect good 19e62c715fe70dae4582c2874ed3e66715d09af6
-> # good: [5d8b7ecef7f4a681b6e5538db59ff26c389c0ab6] Merge branch 'for-next' of https://gitlab.com/peda-linux/mux.git
-> git bisect good 5d8b7ecef7f4a681b6e5538db59ff26c389c0ab6
-> # good: [c349bf6ec83903b20fe570c5609b9a864a64e09c] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/krisman/unicode.git
-> git bisect good c349bf6ec83903b20fe570c5609b9a864a64e09c
-> # good: [5a06a9f17454df38f35672be522ff5eb9b4277d2] selftest: add testing unsharing and counting ksm zero page
-> git bisect good 5a06a9f17454df38f35672be522ff5eb9b4277d2
-> # bad: [f5d115a7b06e5661ed5218ffa9a2644c4ff1c135] Merge branch 'mm-nonmm-unstable' into mm-everything
-> git bisect bad f5d115a7b06e5661ed5218ffa9a2644c4ff1c135
-> # bad: [acb018d6ea0c055381fba7dddaef386ee28f8075] mm/vmalloc.c: allow vread() to read out vm_map_ram areas
-> git bisect bad acb018d6ea0c055381fba7dddaef386ee28f8075
-> # good: [1a5d9782ac969dc6e61c6786500b5160603188ea] mm/mmap: remove __vma_adjust()
-> git bisect good 1a5d9782ac969dc6e61c6786500b5160603188ea
-> # good: [4b32363697de957dcc890b6245bec3f58903639a] arm: include asm-generic/memory_model.h from page.h rather than memory.h
-> git bisect good 4b32363697de957dcc890b6245bec3f58903639a
-> # bad: [328cf3fa6682ce6a4de6f8bb8009c833dc33f3c8] mm/migrate: convert isolate_movable_page() to use folios
-> git bisect bad 328cf3fa6682ce6a4de6f8bb8009c833dc33f3c8
-> # bad: [b704c765b08cabe82adf76a4d1a74f3688eee410] mm/mempolicy: convert queue_pages_pmd() to queue_folios_pmd()
-> git bisect bad b704c765b08cabe82adf76a4d1a74f3688eee410
-> # bad: [e5734c8b0edfd2a053a5c256189586a3b1e9f63d] mm, arch: add generic implementation of pfn_valid() for FLATMEM
-> git bisect bad e5734c8b0edfd2a053a5c256189586a3b1e9f63d
-> # bad: [ad8aecea034c591b9754bc5908da9719853aa7fa] mips: drop definition of pfn_valid() for DISCONTIGMEM
-> git bisect bad ad8aecea034c591b9754bc5908da9719853aa7fa
-> # bad: [1f6271a0dfdf952c2e3981f424784d48f243a2be] m68k: use asm-generic/memory_model.h for both MMU and !MMU
-> git bisect bad 1f6271a0dfdf952c2e3981f424784d48f243a2be
-> # first bad commit: [1f6271a0dfdf952c2e3981f424784d48f243a2be] m68k: use asm-generic/memory_model.h for both MMU and !MMU
+>
+>  arch/riscv/include/asm/errata_list.h | 5 -----
+>  arch/riscv/lib/strcmp.S              | 2 +-
+>  arch/riscv/lib/strlen.S              | 2 +-
+>  arch/riscv/lib/strncmp.S             | 2 +-
+>  4 files changed, 3 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
+> index e158439029ce..274c6f889602 100644
+> --- a/arch/riscv/include/asm/errata_list.h
+> +++ b/arch/riscv/include/asm/errata_list.h
+> @@ -23,11 +23,6 @@
+>  #define        ERRATA_THEAD_NUMBER 3
+>  #endif
+>
+> -#define        CPUFEATURE_SVPBMT 0
+> -#define        CPUFEATURE_ZICBOM 1
+> -#define        CPUFEATURE_ZBB 2
+> -#define        CPUFEATURE_NUMBER 3
+> -
+>  #ifdef __ASSEMBLY__
+>
+>  #define ALT_INSN_FAULT(x)                                              \
+> diff --git a/arch/riscv/lib/strcmp.S b/arch/riscv/lib/strcmp.S
+> index 8148b6418f61..986ab23fe787 100644
+> --- a/arch/riscv/lib/strcmp.S
+> +++ b/arch/riscv/lib/strcmp.S
+> @@ -9,7 +9,7 @@
+>  /* int strcmp(const char *cs, const char *ct) */
+>  SYM_FUNC_START(strcmp)
+>
+> -       ALTERNATIVE("nop", "j strcmp_zbb", 0, CPUFEATURE_ZBB, CONFIG_RISCV_ISA_ZBB)
+> +       ALTERNATIVE("nop", "j strcmp_zbb", 0, RISCV_ISA_EXT_ZBB, CONFIG_RISCV_ISA_ZBB)
+>
+>         /*
+>          * Returns
+> diff --git a/arch/riscv/lib/strlen.S b/arch/riscv/lib/strlen.S
+> index 0f9dbf93301a..8345ceeee3f6 100644
+> --- a/arch/riscv/lib/strlen.S
+> +++ b/arch/riscv/lib/strlen.S
+> @@ -9,7 +9,7 @@
+>  /* int strlen(const char *s) */
+>  SYM_FUNC_START(strlen)
+>
+> -       ALTERNATIVE("nop", "j strlen_zbb", 0, CPUFEATURE_ZBB, CONFIG_RISCV_ISA_ZBB)
+> +       ALTERNATIVE("nop", "j strlen_zbb", 0, RISCV_ISA_EXT_ZBB, CONFIG_RISCV_ISA_ZBB)
+>
+>         /*
+>          * Returns
+> diff --git a/arch/riscv/lib/strncmp.S b/arch/riscv/lib/strncmp.S
+> index 7940ddab2d48..ee49595075be 100644
+> --- a/arch/riscv/lib/strncmp.S
+> +++ b/arch/riscv/lib/strncmp.S
+> @@ -9,7 +9,7 @@
+>  /* int strncmp(const char *cs, const char *ct, size_t count) */
+>  SYM_FUNC_START(strncmp)
+>
+> -       ALTERNATIVE("nop", "j strncmp_zbb", 0, CPUFEATURE_ZBB, CONFIG_RISCV_ISA_ZBB)
+> +       ALTERNATIVE("nop", "j strncmp_zbb", 0, RISCV_ISA_EXT_ZBB, CONFIG_RISCV_ISA_ZBB)
+>
+>         /*
+>          * Returns
+> --
+> 2.37.4
+>
+
 
 -- 
-Sincerely yours,
-Mike.
+Best Regards
+ Guo Ren
