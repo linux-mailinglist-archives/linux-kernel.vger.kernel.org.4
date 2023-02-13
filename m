@@ -2,104 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04ED86945AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A31C46945B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:23:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbjBMMUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 07:20:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35928 "EHLO
+        id S230451AbjBMMXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 07:23:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbjBMMU2 (ORCPT
+        with ESMTP id S229696AbjBMMXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 07:20:28 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B3DCDEE
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:20:27 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id o15so8679476wrc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:20:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1RUiDD3BHhlqCpOjKjv9whKB2P06JmlcSFZbd1kJnhM=;
-        b=KhuztlcTg/PMm11aZvBlHcjpnHotQ9xLJ0zvA3pdempjme4Cs9VrJ39GH/ZONlRhOZ
-         YGn2xod2W6mNkXqUbxLTAgm9yl/vnbk9tr0HoSt2+szHVad7q3fC3JORUEzQlwV3R2zz
-         NwY+Yb+V7MHbDwg8YLg5Ut1gQ3CNyn1Povpw3MaGNMnw/joRIOylGnAnAWHRamvRmUKn
-         IQh0Uiint3viHFDkBgmV8k4pXle1gJVvRFKPSVNJMssvu5u2Iz+Yzqyv2nfVmFmBgHdn
-         PRc2aK3ynQJIG4lGPW5MsXrXmfajX9t/R3YL/IGR78FVs4NGmbbpsMzRW/fw9krJqrCa
-         DVDA==
+        Mon, 13 Feb 2023 07:23:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A074C33
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:22:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676290954;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=B4q1SzzSkeGCFe9/8C3qxd/S7XbmX53zhkt3d/qbfHY=;
+        b=RbXzvmpP7Hl1iM9WiJlAD53Sfk/YiicJ8An5CM/ZPW3eA35DOqPp+uXtQLk/Y/XsIR/JLf
+        yru7JKkmnFSfB6cRIiucPoOHPgSFvmBf6R3koNco81iXKTvteNDopIGjMHw96UIO1iUUeP
+        fNYMzOojnoeeZYFH1PhIUmv647oK+nE=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-379-26kDKktEMtSItrkwg24sTw-1; Mon, 13 Feb 2023 07:22:33 -0500
+X-MC-Unique: 26kDKktEMtSItrkwg24sTw-1
+Received: by mail-wm1-f72.google.com with SMTP id l21-20020a05600c4f1500b003e00be23a70so9078626wmq.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:22:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1RUiDD3BHhlqCpOjKjv9whKB2P06JmlcSFZbd1kJnhM=;
-        b=HLxSOS/gv3RfoipzhGXZatqWn4h7pGFowcfWFK1v5ICtq6qchzHyb8lDbMYbWP122y
-         4EKGoL1LhVVyAL7m/cquBMTzcUSfkjXUeirGjTHj0pdrAB0e618B6sWA1wMek12Udu1/
-         WpaO4/f63UicGR9SigypSYb/KB9AIBHbKZs3ivhHIH6VisNLcnP6HzEMTWpuD1qYYudI
-         K6eI7u82dES3sPatPfABIVEixZvuWppGP2LE286SIJT52xuxC/+vkx+oA0s9iBTNR58e
-         ypDdfIGjHshE27Ph9C6tkWF2WAP21LE1rWbbnoKvPTGCwjCZvOqCJlJwgIGhppJHCJpc
-         Kr/A==
-X-Gm-Message-State: AO0yUKWVXx/Z4a/F6zTDGdcXKY8Qq/2mK2/gLc+bL9Kj/hcIpPwAyLoU
-        omUIzDfvSffyyb7NEUssOjlE6Q==
-X-Google-Smtp-Source: AK7set89FkNhiCPxpnkK76tQM5xvvbrWbUVea99QXLeZbhluUfzetqGrin/ar/FHc4nSnKUMHRV/Fw==
-X-Received: by 2002:a5d:624a:0:b0:2c3:f8b8:87 with SMTP id m10-20020a5d624a000000b002c3f8b80087mr18069188wrv.25.1676290826133;
-        Mon, 13 Feb 2023 04:20:26 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l22-20020a05600c089600b003dc59081603sm12856722wmp.48.2023.02.13.04.20.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 04:20:25 -0800 (PST)
-Message-ID: <4e13868d-4263-9e30-e832-6dff25900fce@linaro.org>
-Date:   Mon, 13 Feb 2023 13:20:24 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B4q1SzzSkeGCFe9/8C3qxd/S7XbmX53zhkt3d/qbfHY=;
+        b=knmOdPI1qt6qzE/XKc4cYlKITcVy3OtBDtGLtBXUrDbjHbV0HH066nsu2sYst0Fm6e
+         ajplO7P9LJNVdXDopL0mu49vcTdJhZpMv97lSPUbvcdAYy6IKgfnxQQp//hHNKyw85E2
+         EvC45U3lbavM/h6lDlvDFXFEWlh7ikbUZMFIrFWBlJPmKRpdbcfqsU0Lj+Dowo1+qHe2
+         x9HeS1DU2Jk6IbSY0C/BG8l/P8hbz4yTZwNAMXaze+N6XMQl0vxnWzHuymfQYQvTXhqt
+         IzOdwmntaKVIcIcZawGHJ+lxIdhj9oNGVjcSNy3L9oWr4I6B1g1mrj9iyDwg2LibT3DL
+         ew1w==
+X-Gm-Message-State: AO0yUKUl0OwnX84ivoK58OnnwfdA5w6PuLbgmNcGr6vKAIhm5e5oxX/K
+        rbkllCrkBHeUlf7+SuXVb7QmvLvmjtCmP7R/B7+zC0Vm1Y/RFxW2wbC/ITLl1FVWuyySmkRtBt6
+        /adQDIPr0DyRWVBRY4xLccgK0
+X-Received: by 2002:a05:600c:70a:b0:3d2:bca5:10a2 with SMTP id i10-20020a05600c070a00b003d2bca510a2mr18060998wmn.22.1676290952125;
+        Mon, 13 Feb 2023 04:22:32 -0800 (PST)
+X-Google-Smtp-Source: AK7set/T7H3nAjnlRKhrLexMtRRHRR8M9RpmKLwTHA0bClwCZtI38bMLCp3Sa2SV3T6zx059/lY1zQ==
+X-Received: by 2002:a05:600c:70a:b0:3d2:bca5:10a2 with SMTP id i10-20020a05600c070a00b003d2bca510a2mr18060988wmn.22.1676290951881;
+        Mon, 13 Feb 2023 04:22:31 -0800 (PST)
+Received: from redhat.com ([2.52.132.212])
+        by smtp.gmail.com with ESMTPSA id y6-20020a05600c364600b003df7b40f99fsm16255933wmq.11.2023.02.13.04.22.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 04:22:31 -0800 (PST)
+Date:   Mon, 13 Feb 2023 07:22:27 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Nanyong Sun <sunnanyong@huawei.com>
+Cc:     joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
+        jasowang@redhat.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        wangrong68@huawei.com
+Subject: Re: [PATCH v2] vhost/vdpa: Add MSI translation tables to iommu for
+ software-managed MSI
+Message-ID: <20230213072118-mutt-send-email-mst@kernel.org>
+References: <20230207120843.1580403-1-sunnanyong@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v8 1/5] dt-bindings: clock: qcom,sc7280-lpasscc: Add
- qcom,adsp-pil-mode property
-Content-Language: en-US
-To:     Mohammad Rafi Shaik <quic_mohs@quicinc.com>, swboyd@chromium.org,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org, broonie@kernel.org,
-        quic_plai@quicinc.com, konrad.dybcio@somainline.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
-        quic_visr@quicinc.com
-Cc:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-References: <20230213094528.3733509-1-quic_mohs@quicinc.com>
- <20230213094528.3733509-2-quic_mohs@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230213094528.3733509-2-quic_mohs@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230207120843.1580403-1-sunnanyong@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/02/2023 10:45, Mohammad Rafi Shaik wrote:
-> From: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+On Tue, Feb 07, 2023 at 08:08:43PM +0800, Nanyong Sun wrote:
+> From: Rong Wang <wangrong68@huawei.com>
 > 
-> When this property is set, the remoteproc is used to boot the
-> LPASS and therefore qdsp6ss clocks would be used to bring LPASS
-> out of reset, hence they are directly controlled by the remoteproc.
+> Once enable iommu domain for one device, the MSI
+> translation tables have to be there for software-managed MSI.
+> Otherwise, platform with software-managed MSI without an
+> irq bypass function, can not get a correct memory write event
+> from pcie, will not get irqs.
+> The solution is to obtain the MSI phy base address from
+> iommu reserved region, and set it to iommu MSI cookie,
+> then translation tables will be created while request irq.
 > 
-> This is a cleanup done to handle overlap of regmap of lpasscc
-> and adsp remoteproc blocks.
+> Change log
+> ----------
 > 
-> Signed-off-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> v1->v2:
+> - add resv iotlb to avoid overlap mapping.
+> 
+> Signed-off-by: Rong Wang <wangrong68@huawei.com>
+> Signed-off-by: Nanyong Sun <sunnanyong@huawei.com>
 
-SoB chain looks not correct. Your should be after Srinivasa.
 
+Could I get an ACK from IOMMU maintainers on exporting this pls?
+> ---
+>  drivers/iommu/iommu.c |  1 +
+>  drivers/vhost/vdpa.c  | 59 ++++++++++++++++++++++++++++++++++++++++---
+>  2 files changed, 57 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 5f6a85aea501..af9c064ad8b2 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -2623,6 +2623,7 @@ void iommu_get_resv_regions(struct device *dev, struct list_head *list)
+>  	if (ops->get_resv_regions)
+>  		ops->get_resv_regions(dev, list);
+>  }
+> +EXPORT_SYMBOL(iommu_get_resv_regions);
+>  
+>  /**
+>   * iommu_put_resv_regions - release resered regions
+> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> index ec32f785dfde..a58979da8acd 100644
+> --- a/drivers/vhost/vdpa.c
+> +++ b/drivers/vhost/vdpa.c
+> @@ -49,6 +49,7 @@ struct vhost_vdpa {
+>  	struct completion completion;
+>  	struct vdpa_device *vdpa;
+>  	struct hlist_head as[VHOST_VDPA_IOTLB_BUCKETS];
+> +	struct vhost_iotlb resv_iotlb;
+>  	struct device dev;
+>  	struct cdev cdev;
+>  	atomic_t opened;
+> @@ -216,6 +217,8 @@ static int vhost_vdpa_reset(struct vhost_vdpa *v)
+>  
+>  	v->in_batch = 0;
+>  
+> +	vhost_iotlb_reset(&v->resv_iotlb);
+> +
+>  	return vdpa_reset(vdpa);
+>  }
+>  
+> @@ -1013,6 +1016,10 @@ static int vhost_vdpa_process_iotlb_update(struct vhost_vdpa *v,
+>  	    msg->iova + msg->size - 1 > v->range.last)
+>  		return -EINVAL;
+>  
+> +	if (vhost_iotlb_itree_first(&v->resv_iotlb, msg->iova,
+> +					msg->iova + msg->size - 1))
+> +		return -EINVAL;
+> +
+>  	if (vhost_iotlb_itree_first(iotlb, msg->iova,
+>  				    msg->iova + msg->size - 1))
+>  		return -EEXIST;
+> @@ -1103,6 +1110,45 @@ static ssize_t vhost_vdpa_chr_write_iter(struct kiocb *iocb,
+>  	return vhost_chr_write_iter(dev, from);
+>  }
+>  
+> +static int vhost_vdpa_resv_iommu_region(struct iommu_domain *domain, struct device *dma_dev,
+> +	struct vhost_iotlb *resv_iotlb)
+> +{
+> +	struct list_head dev_resv_regions;
+> +	phys_addr_t resv_msi_base = 0;
+> +	struct iommu_resv_region *region;
+> +	int ret = 0;
+> +	bool with_sw_msi = false;
+> +	bool with_hw_msi = false;
+> +
+> +	INIT_LIST_HEAD(&dev_resv_regions);
+> +	iommu_get_resv_regions(dma_dev, &dev_resv_regions);
+> +
+> +	list_for_each_entry(region, &dev_resv_regions, list) {
+> +		ret = vhost_iotlb_add_range_ctx(resv_iotlb, region->start,
+> +				region->start + region->length - 1,
+> +				0, 0, NULL);
+> +		if (ret) {
+> +			vhost_iotlb_reset(resv_iotlb);
+> +			break;
+> +		}
+> +
+> +		if (region->type == IOMMU_RESV_MSI)
+> +			with_hw_msi = true;
+> +
+> +		if (region->type == IOMMU_RESV_SW_MSI) {
+> +			resv_msi_base = region->start;
+> +			with_sw_msi = true;
+> +		}
+> +	}
+> +
+> +	if (!ret && !with_hw_msi && with_sw_msi)
+> +		ret = iommu_get_msi_cookie(domain, resv_msi_base);
+> +
+> +	iommu_put_resv_regions(dma_dev, &dev_resv_regions);
+> +
+> +	return ret;
+> +}
+> +
+>  static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
+>  {
+>  	struct vdpa_device *vdpa = v->vdpa;
+> @@ -1128,11 +1174,16 @@ static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
+>  
+>  	ret = iommu_attach_device(v->domain, dma_dev);
+>  	if (ret)
+> -		goto err_attach;
+> +		goto err_alloc_domain;
+>  
+> -	return 0;
+> +	ret = vhost_vdpa_resv_iommu_region(v->domain, dma_dev, &v->resv_iotlb);
+> +	if (ret)
+> +		goto err_attach_device;
+>  
+> -err_attach:
+> +	return 0;
+> +err_attach_device:
+> +	iommu_detach_device(v->domain, dma_dev);
+> +err_alloc_domain:
+>  	iommu_domain_free(v->domain);
+>  	return ret;
+>  }
+> @@ -1385,6 +1436,8 @@ static int vhost_vdpa_probe(struct vdpa_device *vdpa)
+>  		goto err;
+>  	}
+>  
+> +	vhost_iotlb_init(&v->resv_iotlb, 0, 0);
+> +
+>  	r = dev_set_name(&v->dev, "vhost-vdpa-%u", minor);
+>  	if (r)
+>  		goto err;
 
+Jason any feedback on vdpa change here?
 
-Best regards,
-Krzysztof
+> -- 
+> 2.25.1
 
