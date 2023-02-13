@@ -2,126 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A30693FCC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:38:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A36A0693FCB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:38:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbjBMIir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 03:38:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
+        id S230062AbjBMIim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 03:38:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbjBMIik (ORCPT
+        with ESMTP id S230102AbjBMIid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 03:38:40 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3E64C0A;
-        Mon, 13 Feb 2023 00:38:39 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31D8Ln7q004417;
-        Mon, 13 Feb 2023 08:38:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=iW4QlO+M/Cz+2rOSOobCIw15xr8jaLQx/aOyS2Gq0gg=;
- b=YSX9H1EICtsiJ88lumzH9XaDvjIgVeo3FalFCbCZuUdaMo8QPnqeavQAZlDkIGwYhUvb
- BXa/i+SP5qPk5nUBeUeliRCxPaivHClZBE+EiA9VE2ixIGOTVeRlCVPk7gryqZjiFcR0
- pgNG7WjyYDSa0OtO1idSAPQnoYrR8E4Nn6Tft6B5Fplabehi/SxDd2pG+mI9AiPldrDn
- noovj5kGl7Qu7jy5yUgl9L3UmPd8CH5jVKZXy6ZT0S1IKOWbuvx1FUjnmYG/vnfDEmoC
- 83VG2aMLcBm0qjBmKlL8hPIccn6FWRb5gUeUYt2z+LCStcrnoSPmgulBEsBttJxcsF1K 1w== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nqhmnr9x5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Feb 2023 08:38:28 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31CImXIj010856;
-        Mon, 13 Feb 2023 08:38:26 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3np2n6tcs6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Feb 2023 08:38:26 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31D8cNDJ20382166
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Feb 2023 08:38:24 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9D7862004B;
-        Mon, 13 Feb 2023 08:38:23 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1A07620040;
-        Mon, 13 Feb 2023 08:38:22 +0000 (GMT)
-Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.109.253.169])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon, 13 Feb 2023 08:38:21 +0000 (GMT)
-Date:   Mon, 13 Feb 2023 14:08:19 +0530
-From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
-To:     Kemeng Shi <shikemeng@huaweicloud.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, jack@suse.cz,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/21] ext4: avoid to use preallocated blocks if
- EXT4_MB_HINT_GOAL_ONLY is set
-Message-ID: <Y+n2+7pjkeb3vWQ7@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-References: <20230209194825.511043-1-shikemeng@huaweicloud.com>
- <20230209194825.511043-4-shikemeng@huaweicloud.com>
+        Mon, 13 Feb 2023 03:38:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390E94C0A;
+        Mon, 13 Feb 2023 00:38:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5D9D60EE0;
+        Mon, 13 Feb 2023 08:38:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACDF2C433EF;
+        Mon, 13 Feb 2023 08:38:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676277509;
+        bh=FKtCydh9BD0e/LHKfKCIJTVoObje2MGUwpf/rlBD/OY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OoKbJzb/LKp0SqzjPLOahO8ejh9BisPvo/RLq66V5+mPYJaMoSF4YV4kB/hTDOaQX
+         DzWyUl8wo+DO2uNxkLygN9Z/xWqK8B2Nr8o+g7vUhJZjU4nDhvqoevwRG3LpOjcO7t
+         wKgwLogsVNqb1sJnVI/JHHua37NMkGQRd4VFwj70R/sMTxR6R7VsWGX8S3Sb/QtJcU
+         8N1k/5sTCzsnrt54miZka0tR+EUzCtsl0H7m/NUY0Elk1mgBw+0qXv168+i3ae7CR2
+         shyqXVuw9rkAJyfvHsi7No3LbmNfYqtatC0KYxuVx+My4xKPvzKBLrJILN8wjUbUsX
+         fHfybME90AoZA==
+Date:   Mon, 13 Feb 2023 10:38:26 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] tpm: changes for v6.3-rc1
+Message-ID: <Y+n3AoInyQkuyTfM@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230209194825.511043-4-shikemeng@huaweicloud.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: fJdF6FuAx3eqb8yhNXj9yL7QAUim8BDK
-X-Proofpoint-ORIG-GUID: fJdF6FuAx3eqb8yhNXj9yL7QAUim8BDK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-13_04,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- spamscore=0 adultscore=0 mlxlogscore=794 malwarescore=0 clxscore=1015
- impostorscore=0 phishscore=0 priorityscore=1501 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302130076
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 03:48:07AM +0800, Kemeng Shi wrote:
-> ext4_mb_use_preallocated will ignore the demand to alloc at goal block
-> only. Return false if EXT4_MB_HINT_GOAL_ONLY is set before use
-> preallocated blocks in ext4_mb_use_preallocated.
-> 
-> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
-> ---
->  fs/ext4/mballoc.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index 375d9655b525..352ac9139fee 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -4368,6 +4368,9 @@ ext4_mb_use_preallocated(struct ext4_allocation_context *ac)
->  	if (!(ac->ac_flags & EXT4_MB_HINT_DATA))
->  		return false;
->  
-> +	if (unlikely(ac->ac_flags & EXT4_MB_HINT_GOAL_ONLY))
-> +		return false;
-> +
->  	/* first, try per-file preallocation */
->  	rcu_read_lock();
->  	list_for_each_entry_rcu(pa, &ei->i_prealloc_list, pa_inode_list) {
-> -- 
-> 2.30.0
-> 
-So with the flag, even when we request for a logical/goal block
-combination that can be satisfied by one of the inode PAs in the list,
-we would still exit early and the allocation would eventually fail since
-the goal block would be marked "in-use" in the buddy. This doesn't seem
-to be desirable.
+Hi,
 
-Maybe instead of exiting early we should try to find a PA that satisfies
-the logical block we are asking for and then incase of
-EXT4_MB_HINT_GOAL_ONLY, we can add a check to see if the physical block
-of the PA corresponds to the goal block. Would like to hear your
-thoughts on this.
+In additon to bug fixes, these are noteworthy changes:
 
-Regards,
-ojaswin
+* In TPM I2C drivers, migrate from probe() to probe_new() (a new
+  driver model in I2C).
+* TPM CRB: Pluton support
+* Add duplicate hash detection to the blacklist keyring in order to
+  give more meaningful klog output than e.g. [1].
+
+[1] https://askubuntu.com/questions/1436856/ubuntu-22-10-blacklist-problem-blacklisting-hash-13-message-on-boot
+
+The following changes since commit ceaa837f96adb69c0df0397937cd74991d5d821a:
+
+  Linux 6.2-rc8 (2023-02-12 14:10:17 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpm-v6.3-rc1
+
+for you to fetch changes up to 85b93bbd1c9768d09adebbe9f33bab0d4ec94404:
+
+  tpm: add vendor flag to command code validation (2023-02-13 10:11:20 +0200)
+
+----------------------------------------------------------------
+tpm: v6.3-rc1
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      crypto: certs: fix FIPS selftest dependency
+
+Denis Kenzior (1):
+      KEYS: asymmetric: Fix ECDSA use via keyctl uapi
+
+Eddie James (2):
+      tpm: Use managed allocation for bios event log
+      tpm: Add reserved memory event log
+
+Julien Gomes (1):
+      tpm: add vendor flag to command code validation
+
+Matthew Garrett (1):
+      tpm_crb: Add support for CRB devices based on Pluton
+
+Thomas Weißschuh (3):
+      certs: make blacklisted hash available in klog
+      KEYS: Add new function key_create()
+      certs: don't try to update blacklist keys
+
+Uwe Kleine-König (5):
+      tpm: st33zp24: Convert to i2c's .probe_new()
+      tpm: tpm_i2c_atmel: Convert to i2c's .probe_new()
+      tpm: tpm_i2c_infineon: Convert to i2c's .probe_new()
+      tpm: tpm_i2c_nuvoton: Convert to i2c's .probe_new()
+      tpm: tis_i2c: Convert to i2c's .probe_new()
+
+ certs/blacklist.c                     |  21 +++---
+ crypto/asymmetric_keys/Kconfig        |   2 +-
+ crypto/asymmetric_keys/pkcs7_verify.c |   1 +
+ crypto/asymmetric_keys/public_key.c   |  24 +++++-
+ drivers/char/tpm/eventlog/acpi.c      |   5 +-
+ drivers/char/tpm/eventlog/efi.c       |  13 ++--
+ drivers/char/tpm/eventlog/of.c        |  35 ++++++++-
+ drivers/char/tpm/st33zp24/i2c.c       |   5 +-
+ drivers/char/tpm/tpm-chip.c           |   1 -
+ drivers/char/tpm/tpm2-cmd.c           |   4 +-
+ drivers/char/tpm/tpm_crb.c            | 100 ++++++++++++++++++++++---
+ drivers/char/tpm/tpm_i2c_atmel.c      |   5 +-
+ drivers/char/tpm/tpm_i2c_infineon.c   |   5 +-
+ drivers/char/tpm/tpm_i2c_nuvoton.c    |   6 +-
+ drivers/char/tpm/tpm_tis_i2c.c        |   5 +-
+ include/acpi/actbl3.h                 |   1 +
+ include/linux/key.h                   |   8 ++
+ include/linux/tpm.h                   |   1 +
+ security/keys/key.c                   | 137 +++++++++++++++++++++++++---------
+ 19 files changed, 293 insertions(+), 86 deletions(-)
