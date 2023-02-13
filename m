@@ -2,70 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C431A694CDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:31:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E30694CF0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbjBMQbC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Feb 2023 11:31:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
+        id S231182AbjBMQcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 11:32:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjBMQbA (ORCPT
+        with ESMTP id S230047AbjBMQbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 11:31:00 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97041CA3E;
-        Mon, 13 Feb 2023 08:30:58 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pRbiw-0043kT-S2; Mon, 13 Feb 2023 17:30:38 +0100
-Received: from p5b13aa49.dip0.t-ipconnect.de ([91.19.170.73] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pRbiw-0046cc-HY; Mon, 13 Feb 2023 17:30:38 +0100
-Message-ID: <dbda1f6e1c280c13d963ad6e7f68a853a7741199.camel@physik.fu-berlin.de>
-Subject: Re: remove arch/sh
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Date:   Mon, 13 Feb 2023 17:30:36 +0100
-In-Reply-To: <20230206100856.603a0f8f@canb.auug.org.au>
-References: <20230113062339.1909087-1-hch@lst.de>
-         <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
-         <20230116071306.GA15848@lst.de>
-         <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
-         <20230203071423.GA24833@lst.de>
-         <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
-         <20230203083037.GA30738@lst.de> <20230206100856.603a0f8f@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 
+        Mon, 13 Feb 2023 11:31:50 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B5A1DB9C
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:31:44 -0800 (PST)
+Received: from localhost.localdomain (unknown [39.45.179.179])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 030E26602146;
+        Mon, 13 Feb 2023 16:31:40 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676305902;
+        bh=OiTcyrHZ0v3oC/V7QnPlyQu3zF7d7MV1OS0jVwPURZU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Uc3zOm2nBYWIjJv2z1Is850ACuGzKXcoqliy3ugB5rRc28XwAUkhcyLgGezS62dNw
+         vWsv8rsKCEB+V4zQOzvteoxgT//NwYQ0BSlVzV+dNnOuwp3otEQWzbiqnKHRbCei/l
+         osOICLKHWG29ijdU4Rha4hg7tq/Nsk9r4mTZYSajGQHnlqDVWh55D5mYB0OJxHdvyQ
+         52yFWnOTgus4Nstl0Iva3Mw9bUSYhyjz6m2SCf2qRMXT8PFb3UdY8LyrOO3cS9SERP
+         xyelRMHwlM9SbA5h+7MCpehfW5a8HWQyrDx/zZFw9cNC9TKcjWFgK/J3+sc6gVMZcn
+         +5VpNA5l3YPxQ==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     peterx@redhat.com, david@redhat.com,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, Paul Gofman <pgofman@codeweavers.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] mm/userfaultfd: Support WP on multiple VMAs
+Date:   Mon, 13 Feb 2023 21:31:23 +0500
+Message-Id: <20230213163124.2850816-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 91.19.170.73
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,46 +53,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steve!
+mwriteprotect_range() errors out if [start, end) doesn't fall in one
+VMA. We are facing a use case where multiple VMAs are present in one
+range of interest. For example, the following pseudocode reproduces the
+error which we are trying to fix:
 
-On Mon, 2023-02-06 at 10:08 +1100, Stephen Rothwell wrote:
-> Hi,
-> 
-> On Fri, 3 Feb 2023 09:30:37 +0100 Christoph Hellwig <hch@lst.de> wrote:
-> > 
-> > On Fri, Feb 03, 2023 at 09:24:46AM +0100, John Paul Adrian Glaubitz wrote:
-> > > Since this is my very first time stepping up as a kernel maintainer, I was hoping
-> > > to get some pointers on what to do to make this happen.
-> > > 
-> > > So far, we have set up a new kernel tree and I have set up a local development and
-> > > test environment for SH kernels using my SH7785LCR board as the target platform.
-> > > 
-> > > Do I just need to send a patch asking to change the corresponding entry in the
-> > > MAINTAINERS file?  
-> > 
-> > I'm not sure a there is a document, but:
-> > 
-> >  - add the MAINTAINERS change to your tree
-> >  - ask Stephen to get your tree included in linux-next
-> 
-> And by "Stephen", Christoph means me.  When you are ready, please send
-> me a request to include your tree/branch in linux-next (usually the
-> branch is called something like "for-next" or just "next") telling me
-> the git URL, and the contacts I should send email to if there are
-> conflicts/build issues with the branch.  I will then fetch the branch
-> every time I create a new linux-next release (most work days), so all
-> you need to do is update that branch each time you are ready to publish
-> more commits.
+- Allocate memory of size 16 pages with PROT_NONE with mmap
+- Register userfaultfd
+- Change protection of the first half (1 to 8 pages) of memory to
+  PROT_READ | PROT_WRITE. This breaks the memory area in two VMAs.
+- Now UFFDIO_WRITEPROTECT_MODE_WP on the whole memory of 16 pages errors
+  out.
 
-I'm in the MAINTAINERS now in Linus' tree. I have requested a kernel.org
-account now and will hopefully have my trees set up later this week.
+This is a simple use case where user may or may not know if the memory
+area has been divided into multiple VMAs.
 
-I'll let you know about the URLs as soon as possible.
+Reported-by: Paul Gofman <pgofman@codeweavers.com>
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+Changes since v1:
+- Correct the start and ending values passed to uffd_wp_range()
+---
+ mm/userfaultfd.c | 38 ++++++++++++++++++++++----------------
+ 1 file changed, 22 insertions(+), 16 deletions(-)
 
-Adrian
-
+diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+index 65ad172add27..bccea08005a8 100644
+--- a/mm/userfaultfd.c
++++ b/mm/userfaultfd.c
+@@ -738,9 +738,12 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
+ 			unsigned long len, bool enable_wp,
+ 			atomic_t *mmap_changing)
+ {
++	unsigned long end = start + len;
++	unsigned long _start, _end;
+ 	struct vm_area_struct *dst_vma;
+ 	unsigned long page_mask;
+ 	int err;
++	VMA_ITERATOR(vmi, dst_mm, start);
+ 
+ 	/*
+ 	 * Sanitize the command parameters:
+@@ -762,26 +765,29 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
+ 	if (mmap_changing && atomic_read(mmap_changing))
+ 		goto out_unlock;
+ 
+-	err = -ENOENT;
+-	dst_vma = find_dst_vma(dst_mm, start, len);
++	for_each_vma_range(vmi, dst_vma, end) {
++		err = -ENOENT;
+ 
+-	if (!dst_vma)
+-		goto out_unlock;
+-	if (!userfaultfd_wp(dst_vma))
+-		goto out_unlock;
+-	if (!vma_can_userfault(dst_vma, dst_vma->vm_flags))
+-		goto out_unlock;
++		if (!dst_vma->vm_userfaultfd_ctx.ctx)
++			break;
++		if (!userfaultfd_wp(dst_vma))
++			break;
++		if (!vma_can_userfault(dst_vma, dst_vma->vm_flags))
++			break;
+ 
+-	if (is_vm_hugetlb_page(dst_vma)) {
+-		err = -EINVAL;
+-		page_mask = vma_kernel_pagesize(dst_vma) - 1;
+-		if ((start & page_mask) || (len & page_mask))
+-			goto out_unlock;
+-	}
++		if (is_vm_hugetlb_page(dst_vma)) {
++			err = -EINVAL;
++			page_mask = vma_kernel_pagesize(dst_vma) - 1;
++			if ((start & page_mask) || (len & page_mask))
++				break;
++		}
+ 
+-	uffd_wp_range(dst_mm, dst_vma, start, len, enable_wp);
++		_start = (dst_vma->vm_start > start) ? dst_vma->vm_start : start;
++		_end = (dst_vma->vm_end < end) ? dst_vma->vm_end : end;
+ 
+-	err = 0;
++		uffd_wp_range(dst_mm, dst_vma, _start, _end - _start, enable_wp);
++		err = 0;
++	}
+ out_unlock:
+ 	mmap_read_unlock(dst_mm);
+ 	return err;
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+2.39.1
+
