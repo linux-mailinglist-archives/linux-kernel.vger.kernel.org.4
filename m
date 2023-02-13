@@ -2,116 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26908693DBF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 06:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ABE0693DC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 06:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjBMFKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 00:10:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35308 "EHLO
+        id S229784AbjBMFNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 00:13:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBMFKB (ORCPT
+        with ESMTP id S229585AbjBMFNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 00:10:01 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99F8B775;
-        Sun, 12 Feb 2023 21:09:57 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31D4D8TH031574;
-        Mon, 13 Feb 2023 05:09:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Lqr6wA0XXMDzweVvSVAryYKxbFkYwiHBKxdl7X4z09s=;
- b=QWYObgUtdI4liulTyXdfb+S7Tq63Ch+dwIwN1Tkc7gT1Le0cdrnjRuno9Sz4kfdYS55N
- UEvT1MUpuwuFZkXW3dbWxuxgj9YPBbkL0xQBQN1OJ7sC0hTNCU4NyocK1grR5GAFG5+u
- rozXIeKqtEK1rk3h0W5WFHp7MT3tskJu+f/3R+3Xfvdu4tlVjknWPM8HCwkmJVUDbctk
- 353GxZA0G6Kvw61lrNloh8nQM25EAoDQZp4hMO8k4sIYiDxFt4oddtPucfcsmeoNbDvY
- QkteKlSZuonlEWdMJjx+jIBwPR/6fJ0k+J/oNf3jrzjxYel1RZICYj/QxmN+2F8whbXs bA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np342u7tf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Feb 2023 05:09:42 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31D59egM025261
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Feb 2023 05:09:41 GMT
-Received: from [10.216.16.215] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 12 Feb
- 2023 21:09:30 -0800
-Message-ID: <17e304cf-ac4c-a91b-9a37-6d56d06a1057@quicinc.com>
-Date:   Mon, 13 Feb 2023 10:39:27 +0530
+        Mon, 13 Feb 2023 00:13:53 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2198FE3A7
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 21:13:52 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id o8so9964823pls.11
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 21:13:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1/rXlbQZUiYssX0GWdtn60fAH8aeaRBmLehOaQBY1mE=;
+        b=BczA9Dit8WldsIfP8UBgYlgc8TWJhovdzXsusWUlS+5qwERWfEecSRfNvw2jdkipTt
+         FftWA7ruHlkUk3JVzZ1R2/G95S9ueaU75uXAfKH/d+o6Wvx4A4+tsy2UkZIZma/LHypW
+         b1HtPzukBNiYeS0/OLsWF5NHpFKXqO/xMwlEYEGDKUzBZ8D91k9sx7/8fVBaxjddDALw
+         /YCfRX/nPAgzOb51JRnSuTkMLiQr0ZQA5dXciGNdnFXKrI+gu84pYpUm/ENQNd65VC1s
+         ugorSZLeiHIEBj3MNBjGdwfT2IeeGdw1kY8bm8vt05A2ZhJTkpwI5IEJNhKGy16PpfJv
+         i99Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1/rXlbQZUiYssX0GWdtn60fAH8aeaRBmLehOaQBY1mE=;
+        b=7woVO8dIiqRSYsOaha2k0fqRxOBM6OyQkahtjaswnSOU7AhcGJDq9CjbbU7fXDoxyQ
+         3Q+zruTw71YzaE8P13LIKeG+Iq30CfqI9S9BoeYYyLoJASXj69SUN4Gly+xp5Q8BMXnI
+         ITMtkKKlJ28ZU72KX71GhLVlnrsMoO0TaOdU79K4jb+GS98g+X6wlPZPjtSJ6hau54M7
+         1RNT0AAs1DnIeSMRzUODR3jHYpmpqmN126sgkq4rcQcqp6k4ZbLyK/33DG3RPVP/69rK
+         SfzMMNFMIJOpAa8ZQ3ahJNojifFTG/i2+hOJz2RYppYnK1NYY0sQjnTEICyE9pI+C8eO
+         6j7g==
+X-Gm-Message-State: AO0yUKXgS/mC7XwSr1EGVpW+yOsyQKEma4Y2BmJmPldPQqX3xVEjLPtA
+        hf3TBtoU1DdC/s4Qhtt9jJV5hg==
+X-Google-Smtp-Source: AK7set+HBd/TKOpekO2R5ZNBdJ5nlE4W2Q0OVyhq7zVLBYibkTxtu4XeGFM4NuzAT9/O7iEzdrKiyA==
+X-Received: by 2002:a17:903:24c:b0:198:a715:d26d with SMTP id j12-20020a170903024c00b00198a715d26dmr25510023plh.8.1676265231494;
+        Sun, 12 Feb 2023 21:13:51 -0800 (PST)
+Received: from sunil-laptop ([49.206.14.226])
+        by smtp.gmail.com with ESMTPSA id e9-20020a170902784900b00198f9fa23a3sm7079601pln.287.2023.02.12.21.13.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Feb 2023 21:13:51 -0800 (PST)
+Date:   Mon, 13 Feb 2023 10:43:42 +0530
+From:   Sunil V L <sunilvl@ventanamicro.com>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Robert Moore <robert.moore@intel.com>,
+        acpica-devel@lists.linuxfoundation.org
+Subject: Re: [PATCH 02/24] ACPICA: MADT: Add RISC-V INTC interrupt controller
+Message-ID: <Y+nHBivfemYR2NGD@sunil-laptop>
+References: <20230130182225.2471414-1-sunilvl@ventanamicro.com>
+ <20230130182225.2471414-3-sunilvl@ventanamicro.com>
+ <Y+P/BDbP68vNTOao@spud>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH V3] arm64: defconfig: Enable scm download mode config for
- IPQ Targets
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <lee@kernel.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <jassisinghbrar@gmail.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <marcel.ziswiler@toradex.com>, <robimarko@gmail.com>,
-        <dmitry.baryshkov@linaro.org>, <nfraprado@collabora.com>,
-        <broonie@kernel.org>, <quic_gurus@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_devipriy@quicinc.com>
-References: <20230208053332.16537-1-quic_poovendh@quicinc.com>
- <20230208053332.16537-5-quic_poovendh@quicinc.com>
- <614486df-c792-c349-d383-c8d9910ead16@linaro.org>
-From:   POOVENDHAN SELVARAJ <quic_poovendh@quicinc.com>
-In-Reply-To: <614486df-c792-c349-d383-c8d9910ead16@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: rOCIFs5RbQd21Uo9TKPA76GzITE3lAqN
-X-Proofpoint-ORIG-GUID: rOCIFs5RbQd21Uo9TKPA76GzITE3lAqN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-13_02,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 phishscore=0 spamscore=0 adultscore=0 impostorscore=0
- mlxlogscore=999 suspectscore=0 bulkscore=0 malwarescore=0
- lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302130046
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+P/BDbP68vNTOao@spud>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 08, 2023 at 07:59:00PM +0000, Conor Dooley wrote:
+> On Mon, Jan 30, 2023 at 11:52:03PM +0530, Sunil V L wrote:
+> > The ECR to add RISC-V INTC interrupt controller is approved by
+> > the UEFI forum and will be availabl in the next revision of
+> 
+> nit: available
+> 
+Thanks!
 
-On 2/8/2023 1:30 PM, Krzysztof Kozlowski wrote:
-> On 08/02/2023 06:33, Poovendhan Selvaraj wrote:
->> Enabling the download mode config by default as the IPQ Targets use
-> Freescale IPQ?
->
->> crashdump feature extensively to debug crashes.
-> That's still not enough. Only few targets use it, but all 99% others
-> don't yet you want to enable it by default. That's not a justification
-> for me, especially that I do not see problem with enabling it during
-> runtime.
->
-> Best regards,
-> Krzysztof
+> > the ACPI specification.
+> > 
+> > This patch is not yet merged in ACPICA but a PR is raised.
+> > 
+> > ACPICA PR: https://github.com/acpica/acpica/pull/804
+> 
+> I had a quick check with git grep, and as this doesn't appear to be a
+> regular pattern in the history, so could you please make this a regular
+> Link: trailer?
+> 
+This patch should be merged in acpica repo first and then we will get
+this in standard format. Until then, it exists to allow other
+patches get reviewed. I believe by the time we get all other patches
+reviewed, acpica will have this merged.
 
-Okay sure...will remove this patch in next series.
-
-Regards,
-Poovendhan S
-
+Thanks!
+Sunil
