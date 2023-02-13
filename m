@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9C146954CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 00:31:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3AED6954D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 00:33:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjBMXbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 18:31:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
+        id S229963AbjBMXdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 18:33:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjBMXbc (ORCPT
+        with ESMTP id S229758AbjBMXdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 18:31:32 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238756A57
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 15:31:31 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id w24so5127623iow.13
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 15:31:31 -0800 (PST)
+        Mon, 13 Feb 2023 18:33:11 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDBA3AB2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 15:33:09 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id 65so5137194iou.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 15:33:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
+        d=linuxfoundation.org; s=google; t=1676331189;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=jGmzuGPn9I/FZ09CbZiNPtzTdFC7E/SYikD0S6LcbdQ=;
-        b=gdA8Fg229Zr8Gi+sF6aRnk6TS9c9zyZ2tFpA5dJJE9mNcXQSIIY2WM6BD3q+hP0RTD
-         nqHJBgPhJnT5m0iujz1Xuv0TQGvJQRx4qFw0ynhNOHBaEg2bWOJdJwQBZVk4cPvqa6yU
-         KXa/Th/HaLkMwrtTxERCLzRwQO9dFzWKbwiRk=
+        bh=WcecfU/edwS7AGp0sYBsDhgpFnK48au1GjUG6IZeTp0=;
+        b=f2/HZweqKXZU+CpwEr7Cl1OOoV9Aduc1XdOQ8Pf1qbQD6diDEQ6+NFOWdAzICR1NbP
+         rrrxm0rP+JCCk2F41Z+7qq4TQRiSF8dp7RVPRqV30zEtzFWd1dZftYO4r+aLSF2r4bP5
+         KtcxwiZsoQcSFKcbpG5FFU4jKyO3YqGZ4tRWE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
+        d=1e100.net; s=20210112; t=1676331189;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jGmzuGPn9I/FZ09CbZiNPtzTdFC7E/SYikD0S6LcbdQ=;
-        b=n5zZOBxvqQ4hZ/CAe9kTy/7ou9wl5DIlSh8u5kPRMJZqlkRPofnFoMzGtGNVLnPd0C
-         qhQrKus0NpRnsE2l2iEV8YPXVL5EH+awcbaBS4sEHLGw+ZhEhYE4h5dUtVsGmyP36BWK
-         Rf6R5nYHPWB5CYPoFeHj8/7e6IUarfFr6YqW9RUIuOgAxE3O07EESzLVbHti0xqKTEen
-         WNz1MUCz8k1/1GH4zW0N8nxHGXdOTQThae34vmZbQqGbbUZLJ+iejYPehiCZ4OLjjw2D
-         sXCcmdxtvPs/mJFOf6abnGno5U5OhkrR0th/uVc4iDgO3ByKYsTF4XMiTUl7HnpkJDoh
-         OHSw==
-X-Gm-Message-State: AO0yUKXZ/QXpX0SN7XM3QKqoe4jMEnEy0OFMg0166KyYK/wImvT1RbhT
-        nSvuQY8hmyEDjYHZ8wE2rfGyhg==
-X-Google-Smtp-Source: AK7set/7TKUE2Tnu+YddFY7KD5UJ0yXLaaGtJxJEJm2w3ZTnV133eeBo/RnZmbbyfXBVLvpsfZB+RQ==
-X-Received: by 2002:a6b:7f03:0:b0:716:8f6a:f480 with SMTP id l3-20020a6b7f03000000b007168f6af480mr222872ioq.0.1676331090473;
-        Mon, 13 Feb 2023 15:31:30 -0800 (PST)
+        bh=WcecfU/edwS7AGp0sYBsDhgpFnK48au1GjUG6IZeTp0=;
+        b=eCGY6oFBaRdpRKRvT0prK6sm+aFQ3wAOExRe048IovXf1ijdwG5nt0S11oZO7gbtMR
+         wP3q4kg2TziWxIV4KpYkzX7/uA5wcSXvaZ6nBeUZuklhHdqwnDV7asK4RJtL6iMluTeT
+         o/vlGXUiYGqAE1VdZurw7BUX4DH+JoVb+cu8VWP1axZZzewB5c0OlhCwodoCkWUGzMdb
+         I92cbBmGTeNF5sgmbq0EKi7Gay4zeogZvIq3H2x+djVLmaJHp1apyjf3WceXHYxtdzHU
+         oWfMtcf88011lp/DCk4Ml6l3APW3UAG3xeQ//HbQrijNDKK6iv6x/IHJfqovtfNAAJHJ
+         ivIQ==
+X-Gm-Message-State: AO0yUKXek2jUXzAlgyhT1Tg629/4DyQYp/Ac+jkDK2dGqtw8yxqvbdIl
+        YJaR14Zf6PoavHnTc86VbukN0Q==
+X-Google-Smtp-Source: AK7set+CX5Ojyt2t9CXcj4bboO8JFe8jXHIgv/Q/yAuQX8IkBAtuJyg+dKtVEWZ9rISdwGVTRudQ+g==
+X-Received: by 2002:a05:6602:2c92:b0:718:2903:780f with SMTP id i18-20020a0566022c9200b007182903780fmr263014iow.2.1676331188775;
+        Mon, 13 Feb 2023 15:33:08 -0800 (PST)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id z4-20020a6b5c04000000b0073f2c68483esm1306208ioh.32.2023.02.13.15.31.29
+        by smtp.gmail.com with ESMTPSA id x17-20020a029711000000b003ad13752c9csm4118474jai.72.2023.02.13.15.33.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 15:31:29 -0800 (PST)
-Message-ID: <c08a57c1-49cc-e5e9-3b98-30c7f697818e@linuxfoundation.org>
-Date:   Mon, 13 Feb 2023 16:31:28 -0700
+        Mon, 13 Feb 2023 15:33:08 -0800 (PST)
+Message-ID: <130a351f-2113-e333-83d5-0e19e92c8209@linuxfoundation.org>
+Date:   Mon, 13 Feb 2023 16:33:07 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 5.15 00/67] 5.15.94-rc1 review
+Subject: Re: [PATCH 5.10 000/139] 5.10.168-rc1 review
 Content-Language: en-US
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org
@@ -63,9 +63,9 @@ Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
         f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
         srw@sladewatkins.net, rwarsow@gmx.de,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20230213144732.336342050@linuxfoundation.org>
+References: <20230213144745.696901179@linuxfoundation.org>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230213144732.336342050@linuxfoundation.org>
+In-Reply-To: <20230213144745.696901179@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -78,9 +78,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/13/23 07:48, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.94 release.
-> There are 67 patches in this series, all will be posted as a response
+On 2/13/23 07:49, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.168 release.
+> There are 139 patches in this series, all will be posted as a response
 > to this one.  If anyone has any issues with these being applied, please
 > let me know.
 > 
@@ -88,9 +88,9 @@ On 2/13/23 07:48, Greg Kroah-Hartman wrote:
 > Anything received after that time might be too late.
 > 
 > The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.94-rc1.gz
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.168-rc1.gz
 > or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
 > and the diffstat can be found below.
 > 
 > thanks,
