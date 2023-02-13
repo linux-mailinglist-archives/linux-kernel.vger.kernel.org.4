@@ -2,139 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C20969471B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:33:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C476D6946F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjBMNdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 08:33:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38668 "EHLO
+        id S230056AbjBMN1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 08:27:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbjBMNdE (ORCPT
+        with ESMTP id S229978AbjBMN1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 08:33:04 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B691ABC4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:33:01 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id jg8so31899142ejc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:33:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=70OvqASv0mjZllhMqhkKWtUGVSAnAQUMLpze65KxTCo=;
-        b=Ufl0lz+8F8Gv68rGLtMmMpLGiOD4XsDVpokfoh54YtWrD1I3E5ID3zwxHISNMtvnSG
-         7f4w7Q/14y/OoJWeCcQVAqO2sG7qHSLroGKk0QB9fCiciT1+Ik7IJfuug5j5HRK7139c
-         3L+vrW4qKEA7NO6x1gI5kIDAMYL2khBaDfnwiZGxqnRQ+6dn7fqmZ+eGUJYPZWPiYUtm
-         EaGn0nzdsrnOu5pXxw0XJUwYmCPS6ZW1FzFNoryGCtwvhpNS4hb2YYQ7kqXy1vl9Ab+I
-         n+Gz/oKbWEvZP8b0LDlzhqh6BSP4rV/i7x1F8gmNdq9ZhNsr2+btyvZRx0ygZNIc+qXi
-         R+ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=70OvqASv0mjZllhMqhkKWtUGVSAnAQUMLpze65KxTCo=;
-        b=ZJCCFlOusIq5pWVbUgDfM+21tTymME0WFRBdBtIdx07IGlr0yN1LqiRsNN1jlKzxNk
-         op1WE335FzuNqahBFoP4kf41kt7XbAhIVDWvvH4RjiqDmWs7gH8NGqbHWleQVDxIk29G
-         MKd9S3cvkRLf24xpDmtpm7M3D6hl0d6qvSVws7oIqKKBPnUWYM2R98YG0vZZ4dJdIFKw
-         7eJ7BPLl3R5JpV/o9NL4+lS3gLMZhCYoRlzGFLZdaoHamAfa2YXHVz57x+zAGNUTQtAE
-         r3bAdI7Ecw1X6xKtTmqrbNVpDv5dL7vvDftDYFE9d12QLj9U4vFTmqsQUwYM8bu2C3ww
-         sebg==
-X-Gm-Message-State: AO0yUKX2caS9toMBWZPUSBvRIRC2Szc/CZf5x5/szv1T694sF+PlA3m5
-        LRxoLo3Ki+2w6ieQ8+KhbJMiww==
-X-Google-Smtp-Source: AK7set+nssou59xHVmaH/Q4nYYZy5U3YjvGk2efyx7dTUsVP2Q+dP5FCZEMqrN2EgxHoC3ZiaboTcQ==
-X-Received: by 2002:a17:906:2a0b:b0:887:d0e6:fa24 with SMTP id j11-20020a1709062a0b00b00887d0e6fa24mr23836713eje.76.1676295179311;
-        Mon, 13 Feb 2023 05:32:59 -0800 (PST)
-Received: from [172.16.220.87] (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id h24-20020a170906829800b008aa0305dbe8sm6661180ejx.80.2023.02.13.05.32.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 05:32:59 -0800 (PST)
-From:   Luca Weiss <luca.weiss@fairphone.com>
-Date:   Mon, 13 Feb 2023 14:26:50 +0100
-Subject: [PATCH 2/2] arm64: dts: qcom: sm7225-fairphone-fp4: enable
- remaining i2c busses
+        Mon, 13 Feb 2023 08:27:13 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843211ABCD;
+        Mon, 13 Feb 2023 05:27:10 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PFlVv1dYFz4f3jMK;
+        Mon, 13 Feb 2023 21:27:03 +0800 (CST)
+Received: from [10.174.178.129] (unknown [10.174.178.129])
+        by APP2 (Coremail) with SMTP id Syh0CgBHOOanOupj5dX_DQ--.24452S2;
+        Mon, 13 Feb 2023 21:27:05 +0800 (CST)
+Subject: Re: [PATCH 03/21] ext4: avoid to use preallocated blocks if
+ EXT4_MB_HINT_GOAL_ONLY is set
+To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, jack@suse.cz,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230209194825.511043-1-shikemeng@huaweicloud.com>
+ <20230209194825.511043-4-shikemeng@huaweicloud.com>
+ <Y+n2+7pjkeb3vWQ7@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+Message-ID: <f967d63b-907e-a495-3ec5-9043c35b9938@huaweicloud.com>
+Date:   Mon, 13 Feb 2023 21:27:03 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <Y+n2+7pjkeb3vWQ7@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+Content-Type: text/plain; charset=gbk
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230213-fp4-more-i2c-v1-2-5be09dbb5ce6@fairphone.com>
-References: <20230213-fp4-more-i2c-v1-0-5be09dbb5ce6@fairphone.com>
-In-Reply-To: <20230213-fp4-more-i2c-v1-0-5be09dbb5ce6@fairphone.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luca Weiss <luca.weiss@fairphone.com>
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: Syh0CgBHOOanOupj5dX_DQ--.24452S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CryfKF18Gw4DAr43Jw17Awb_yoW8Cr15pF
+        WfJay8KFn7uw47uanF9w15Gw409a1xKr18XF4FgryrZr9xA393KFsrKF1Fga40yrsruFn0
+        qF4aqFW3Cr1rua7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
+        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0
+        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
+        k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UE-erUUUUU=
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable all i2c busses where something is connected on this phone. Add
-comments as placeholders for which components are still missing.
 
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
- arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts | 25 +++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-index 86114dd2c0c4..d0f08b42592f 100644
---- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-+++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-@@ -359,10 +359,31 @@ &cdsp {
- 	status = "okay";
- };
- 
-+&i2c0 {
-+	clock-frequency = <400000>;
-+	status = "okay";
-+
-+	/* ST21NFCD NFC @ 8 */
-+	/* VL53L3 ToF @ 29 */
-+	/* AW88264A amplifier @ 34 */
-+	/* AW88264A amplifier @ 35 */
-+};
-+
-+&i2c8 {
-+	clock-frequency = <400000>;
-+	status = "okay";
-+
-+	/* HX83112A touchscreen @ 48 */
-+};
-+
- &i2c10 {
- 	clock-frequency = <400000>;
- 	status = "okay";
- 
-+	/* PM8008 PMIC @ 8 and 9 */
-+	/* PX8618 @ 26 */
-+	/* SMB1395 PMIC @ 34 */
-+
- 	haptics@5a {
- 		compatible = "awinic,aw8695";
- 		reg = <0x5a>;
-@@ -495,6 +516,10 @@ adc-chan@644 {
- 	};
- };
- 
-+&qupv3_id_0 {
-+	status = "okay";
-+};
-+
- &qupv3_id_1 {
- 	status = "okay";
- };
+on 2/13/2023 4:38 PM, Ojaswin Mujoo wrote:
+> On Fri, Feb 10, 2023 at 03:48:07AM +0800, Kemeng Shi wrote:
+>> ext4_mb_use_preallocated will ignore the demand to alloc at goal block
+>> only. Return false if EXT4_MB_HINT_GOAL_ONLY is set before use
+>> preallocated blocks in ext4_mb_use_preallocated.
+>>
+>> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+>> ---
+>>  fs/ext4/mballoc.c | 3 +++
+>>  1 file changed, 3 insertions(+)
+>>
+>> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+>> index 375d9655b525..352ac9139fee 100644
+>> --- a/fs/ext4/mballoc.c
+>> +++ b/fs/ext4/mballoc.c
+>> @@ -4368,6 +4368,9 @@ ext4_mb_use_preallocated(struct ext4_allocation_context *ac)
+>>  	if (!(ac->ac_flags & EXT4_MB_HINT_DATA))
+>>  		return false;
+>>  
+>> +	if (unlikely(ac->ac_flags & EXT4_MB_HINT_GOAL_ONLY))
+>> +		return false;
+>> +
+>>  	/* first, try per-file preallocation */
+>>  	rcu_read_lock();
+>>  	list_for_each_entry_rcu(pa, &ei->i_prealloc_list, pa_inode_list) {
+>> -- 
+>> 2.30.0
+>>
+> So with the flag, even when we request for a logical/goal block
+> combination that can be satisfied by one of the inode PAs in the list,
+> we would still exit early and the allocation would eventually fail since
+> the goal block would be marked "in-use" in the buddy. This doesn't seem
+> to be desirable.
+> 
+> Maybe instead of exiting early we should try to find a PA that satisfies
+> the logical block we are asking for and then incase of
+> EXT4_MB_HINT_GOAL_ONLY, we can add a check to see if the physical block
+> of the PA corresponds to the goal block. Would like to hear your
+> thoughts on this.
+Yes, this is a more thoughtful, I will improve this in next version.
+Besides, maybe we should also test length if EXT4_MB_HINT_MERGE is set
+as ext4_mb_find_by_goal do.
+
+> Regards,
+> ojaswin
+> 
 
 -- 
-2.39.1
+Best wishes
+Kemeng Shi
 
