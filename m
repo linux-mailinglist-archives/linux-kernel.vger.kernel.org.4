@@ -2,71 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8384E695344
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:41:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3181695348
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjBMVlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 16:41:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
+        id S231156AbjBMVl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 16:41:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbjBMVlV (ORCPT
+        with ESMTP id S230249AbjBMVlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 16:41:21 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC54CDD6
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:41:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676324468; x=1707860468;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=I+Do5yG6CSTWM/1NENZGpIrLn3nrV0kj+LIwDd2hl3o=;
-  b=TBKrMG6sPu0550tz1gyC9tlKvS4+TjULSM7pbbGvpyR3A80h5zORsnm8
-   rdQG3RtF3MgQPlk/Abidqz/545z9KxLqaLoBHq1p3lDrt98zDdLECUvwD
-   xDioa6Ed9gvafBNLjAdpO8KsgOwOBQk1OpXtX5jHz+yuYj05lbBflLr1S
-   fg577RU8IHSA7QHfmLfiDwp2P4pzcl4GL6GlcRWocwN3WYuVoOi8r38CK
-   ex9xQdumD0GGEsK1rjlL7m+IKlbGW1wjFlewMLPZIcR0cftWVXvJmfVQh
-   +W9zQ2FoLpW6Nve0Zc9i8mkuSsnAC9iuUkq8ym97ZedtVHIrVxTwXn6pl
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="314652877"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="314652877"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 13:40:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="997828871"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="997828871"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga005.fm.intel.com with ESMTP; 13 Feb 2023 13:40:46 -0800
-Received: from [10.251.27.51] (kliang2-mobl1.ccr.corp.intel.com [10.251.27.51])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 7ABEB580BE4;
-        Mon, 13 Feb 2023 13:40:45 -0800 (PST)
-Message-ID: <e306e2ea-dea5-0eab-9eae-f9ea5fe7d52e@linux.intel.com>
-Date:   Mon, 13 Feb 2023 16:40:44 -0500
+        Mon, 13 Feb 2023 16:41:24 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6F39027
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:41:13 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id dz21so2796388edb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:41:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SXb2wBOT0LurWdGsoyTt17ekBKNUZrsqRtveFQNt4nQ=;
+        b=z1v7IJ/L49vgAuqUVJCPTCh16RYIOgtH3JfOPSjlP7iw0RmPuutgOY/F6FqTkuEEG5
+         Q9z0i7bJk3fbSz/QN+5noH1x8n9yQyRip8muvcDr810PHPV7+4+KjBinZZ38nD6piQ9K
+         1utxwIiBdPSJrS7wFbD+h/+N3QvZbjP62ixkdYcFKEOnyEGMl95tpBUa3RKRa7KIpKB7
+         12Dg4jEBDJLHvX8aIqFO5n4VQDZzuTbbxCXUIhX91hrm0LBRUMM7kQ06ddjkwKwJXhry
+         sH9s68W1MKnA/6bIeBJ8U/Hne71xCtKVrvVvFszbeNXWG70UGgYznCOA2mNyWNu9ja4R
+         nDig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SXb2wBOT0LurWdGsoyTt17ekBKNUZrsqRtveFQNt4nQ=;
+        b=jtb8Wpb2dYfysJiPnNAILFuJjZ0IfMm9qgt/pGwIBA3lB77lCjhv8QqVX2r5w8MVcF
+         rsK5WRYMlF2Q6OyHH/fXvaZSlvkMDYwE2n8eGWz20jW+FW1xk61oC7vhEt+O9dZU9uDs
+         067XLJ4mTtdxXhpu3rC+XK+lU2P+Iwh7nqDD83qT48Qs5+l2UdnSDPkA0MVkdXTpDMdS
+         t902HzAfYkSfdCdCythC2deF0RDRZCpuAVzZNze4/1Wa3JFxrUvC/eGKkaxFz7FuRNmf
+         M4eyJg6qxEKDScqyaNM9noAIfOzV3OGjVrbngVM3CmWGF0m+Z9Ov/H3FtkXzna7T17P+
+         Bjpg==
+X-Gm-Message-State: AO0yUKXTKvVLhHBgW7rz9IIvUdfoCa47o4nG2NcIjJPsLIw+eX4p0oVZ
+        +YpilyoVYBliAKP+VfKCzpDJsg==
+X-Google-Smtp-Source: AK7set9aQzXbOVQSMzQenYRV6W4FxrtJ/vxZGkwXVcVSbKAUnD68l0E6Z8ccUd7qwBPKUVhGbIhExg==
+X-Received: by 2002:a50:d617:0:b0:4ac:c29d:5c4a with SMTP id x23-20020a50d617000000b004acc29d5c4amr137942edi.29.1676324472163;
+        Mon, 13 Feb 2023 13:41:12 -0800 (PST)
+Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
+        by smtp.gmail.com with ESMTPSA id m2-20020a509302000000b004aad8d2158dsm7157131eda.66.2023.02.13.13.41.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 13:41:11 -0800 (PST)
+Message-ID: <83637cc7-21ae-7778-37b3-4522cc0a06c9@linaro.org>
+Date:   Mon, 13 Feb 2023 22:41:10 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH V2 2/9] perf: Extend ABI to support post-processing
- monotonic raw conversion
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/3] dt-bindings: power: supply: pm8941-coincell: Don't
+ require charging properties
 Content-Language: en-US
-To:     John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, sboyd@kernel.org, eranian@google.com,
-        namhyung@kernel.org, ak@linux.intel.com, adrian.hunter@intel.com
-References: <20230213190754.1836051-1-kan.liang@linux.intel.com>
- <20230213190754.1836051-3-kan.liang@linux.intel.com>
- <CANDhNCqVcrZHGW4QJBD8_hZehmRpnNAsGFsmwsxBZNm3wpFZpQ@mail.gmail.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <CANDhNCqVcrZHGW4QJBD8_hZehmRpnNAsGFsmwsxBZNm3wpFZpQ@mail.gmail.com>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org,
+        marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230213204950.2100538-1-konrad.dybcio@linaro.org>
+ <20230213204950.2100538-2-konrad.dybcio@linaro.org>
+ <20230213212733.rhvuzrshfrvzgo4a@mercury.elektranox.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230213212733.rhvuzrshfrvzgo4a@mercury.elektranox.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,71 +84,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023-02-13 2:37 p.m., John Stultz wrote:
-> On Mon, Feb 13, 2023 at 11:08 AM <kan.liang@linux.intel.com> wrote:
->>
->> From: Kan Liang <kan.liang@linux.intel.com>
->>
->> The monotonic raw clock is not affected by NTP/PTP correction. The
->> calculation of the monotonic raw clock can be done in the
->> post-processing, which can reduce the kernel overhead.
->>
->> Add hw_time in the struct perf_event_attr to tell the kernel dump the
->> raw HW time to user space. The perf tool will calculate the HW time
->> in post-processing.
->> Currently, only supports the monotonic raw conversion.
->> Only dump the raw HW time with PERF_RECORD_SAMPLE, because the accurate
->> HW time can only be provided in a sample by HW. For other type of
->> records, the user requested clock should be returned as usual. Nothing
->> is changed.
->>
->> Add perf_event_mmap_page::cap_user_time_mono_raw ABI to dump the
->> conversion information. The cap_user_time_mono_raw also indicates
->> whether the monotonic raw conversion information is available.
->> If yes, the clock monotonic raw can be calculated as
->> mono_raw = base + ((cyc - last) * mult + nsec) >> shift
+On 13.02.2023 22:27, Sebastian Reichel wrote:
+> Hi,
 > 
-> Again, I appreciate you reworking and resending this series out, I
-> know it took some effort.
+> On Mon, Feb 13, 2023 at 09:49:49PM +0100, Konrad Dybcio wrote:
+>> It's fine for these properties to be absent, as the driver doesn't fail
+>> without them and functions with settings inherited from the reset/previous
+>> stage bootloader state.
+>>
+>> Fixes: 6c463222a21d ("dt-bindings: power: supply: pm8941-coincell: Convert to DT schema format")
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
 > 
-> But oof, I'd really like to make sure we're not exporting timekeeping
-> internals to userland.
+> Please update the description of these properties to describe the
+> default behaviour.
+Not sure if there's any default behavior other than "go with
+whatever was there previously, no matter how it got there".
+
+Is it okay if I just add:
+
+"If unspecified, inherit the bootloader configuration"
+
+?
+
+Konrad
 > 
-> I think Thomas' suggestion of doing the timestamp conversion in
-> post-processing was more about interpolating collected system times
-> with the counter (tsc) values captured.
->
-
-Thomas, could you please clarify your suggestion regarding "the relevant
-conversion information" provided by the kernel?
-https://lore.kernel.org/lkml/87ilgsgl5f.ffs@tglx/
-
-Is it only the interpolation information or the entire conversion
-information (Mult, shift etc.)?
-
-If it's only the interpolation information, the user space will be lack
-of information to handle all the cases. If I understand John's comments
-correctly, it could also bring some interpolation error which can only
-be addressed by the mult/shift conversion.
-
-If the suggestion is to dump the entire conversion information into the
-user space, we have to expose the timekeeping internals.
-
-Considering the above difficulties, could we use the kernel conversion?
-(The current perf already uses the kernel conversion for monotonic raw.
-It should not bring extra overhead.)
-
-Thanks,
-Kan
-
-> I get the interpolation can be difficult as the counter value and
-> system time can't currently atomically collected, so potentially there
-> may be a need for a way to tie two together (see my previous email's
-> thought of ktime_get_raw_monotonic_from_timestamp()), but we'd
-> probably want a clear understanding of the benefit (quantitative
-> reduction in interpolation error, and what real benefit that brings),
-> and would also want the driver to generate and share those pairs
-> rather than having userland have access.
+> -- Sebastian
 > 
-> thanks
-> -john
+>>  .../devicetree/bindings/power/supply/qcom,pm8941-coincell.yaml  | 2 --
+>>  1 file changed, 2 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/power/supply/qcom,pm8941-coincell.yaml b/Documentation/devicetree/bindings/power/supply/qcom,pm8941-coincell.yaml
+>> index b7b58aed3f3c..d62e3af55560 100644
+>> --- a/Documentation/devicetree/bindings/power/supply/qcom,pm8941-coincell.yaml
+>> +++ b/Documentation/devicetree/bindings/power/supply/qcom,pm8941-coincell.yaml
+>> @@ -43,8 +43,6 @@ properties:
+>>  required:
+>>    - compatible
+>>    - reg
+>> -  - qcom,rset-ohms
+>> -  - qcom,vset-millivolts
+>>  
+>>  additionalProperties: false
+>>  
+>> -- 
+>> 2.39.1
+>>
