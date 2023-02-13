@@ -2,171 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F43D694D18
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:43:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9792694D24
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbjBMQnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 11:43:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36450 "EHLO
+        id S229872AbjBMQpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 11:45:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjBMQnK (ORCPT
+        with ESMTP id S230063AbjBMQpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 11:43:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09AA7EF9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:43:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F769B815E5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 16:43:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D684EC433EF;
-        Mon, 13 Feb 2023 16:43:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676306585;
-        bh=lcQssz5GZvB6lYAVKB7ugyDljl7BQcwCEzuevcbonTY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OzgVhKRfyGoz4Zfey6vqxxM9aRUL4x4C/h4BUyTyDsvaRJeMECtI/h1K9FWbLo2ML
-         JSVzfvATdPStl15wXipIdDYIrELrj16/1DbROSaHQ2LZi9TPAB9pMZH8KtvYlsy2d7
-         4TC9VQwv2YTPjtFyr1ZRVqXb45JPva5xgovjOFTAYA9Sp72j4fLyXnlYCfbiHTnHjk
-         PeUbbiMW2EnZERh7OyOPJMV4O6NwqQqOeaWo8HJucppV/luKW/Gk4+HDpQd3MakSe2
-         HCmT5OdV+Ew+Csmq29ZceqaI0S5SsrQURzon/3nkB+PWsLsJ2KQ2aSHJhI3qCcRDX7
-         2tiaP8k4tVa8g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pRbvo-0004Z9-Fc; Mon, 13 Feb 2023 17:43:57 +0100
-Date:   Mon, 13 Feb 2023 17:43:56 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     will@kernel.org, joro@8bytes.org, robin.murphy@arm.com,
-        andersson@kernel.org, johan+linaro@kernel.org, steev@kali.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iommu/arm-smmu-qcom: Rework the logic finding the bypass
- quirk
-Message-ID: <Y+pozM9iTbQcx6cl@hovoldconsulting.com>
-References: <20230201082500.61656-1-manivannan.sadhasivam@linaro.org>
+        Mon, 13 Feb 2023 11:45:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B544B9ED0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:44:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676306668;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MsgfwTosbRUQDzEfsJb6jddw2oFK8bsqV0kBqfN76bI=;
+        b=UgN35lPt9EQzxXnsYLKVbLZWb5KZiyTJzfHNLOl4lGlus0Cft25loW6Rk+Zm30QqqhkpGM
+        jLRWyZj/JDs4HpE+VJHiF8CwIP5qn5DQ3pG9AEtHoeSiaKvswbzbN3hM7F5CXVa7YwymYf
+        5dPQYw75WhAXy9GHnl5OYDfvX5mqfzQ=
+Received: from mail-ua1-f71.google.com (mail-ua1-f71.google.com
+ [209.85.222.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-587-PtGpXsacOKaZvrJcP8RSlQ-1; Mon, 13 Feb 2023 11:44:26 -0500
+X-MC-Unique: PtGpXsacOKaZvrJcP8RSlQ-1
+Received: by mail-ua1-f71.google.com with SMTP id y44-20020a9f326f000000b00657d8cfac32so4483273uad.8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:44:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MsgfwTosbRUQDzEfsJb6jddw2oFK8bsqV0kBqfN76bI=;
+        b=2g3Uo34oJGaUvyw36e1PKjywWcK1G4AFPpRSz1OvChVIsH5A+vSqK+z33ZQjWfI2D9
+         iLa2KsloAQ9xOCyMPAhfRTHflbtZIH9P+Tzuk/88uhO3dkZVu0BYWaTE/cYtuFexYJS5
+         YPBSs5I5prownmZ2i6PFf9gKkoV4py4rDUZUZDzVzNnT4MreAIm+8nf1B/pCRX6LJp+2
+         AluscA2cNvSIHFWvdUyU+jKxRkEirlmzQ6hIK/sMcKitvBcxCdZvmG5Ri67/vpLGP53g
+         t2MQcLiiG3tmyqfbjz4FWkglRMTgKlgkA3NbGFKxh5MEMB7TYrchI2JShdt3PUzrmuu8
+         72EQ==
+X-Gm-Message-State: AO0yUKVVylDQm/2fYqsdj90IMZsSs/hjHjSwWwzBmy/M5JKezyfHSndG
+        8Y0Jm4MevDefh0gqX4iiuR3PPbIIVBLuNBW6+UO4PdrCDP/uKAPAu6jGpxdLcCM2TJgZ1RA2OZp
+        rzh7UgbsbQFyBNWimfwubhDbneSOXrka6vsKs7h/A
+X-Received: by 2002:ab0:70c1:0:b0:68a:6575:553e with SMTP id r1-20020ab070c1000000b0068a6575553emr862246ual.57.1676306665364;
+        Mon, 13 Feb 2023 08:44:25 -0800 (PST)
+X-Google-Smtp-Source: AK7set/kA7cjqqbQSmhH8hSOVWxtbpxERo8grhio+1GjfUfR4Is7upEaQdca8nbiIJM+1sdaV72AdAi9BA9HF7HjVfg=
+X-Received: by 2002:ab0:70c1:0:b0:68a:6575:553e with SMTP id
+ r1-20020ab070c1000000b0068a6575553emr862225ual.57.1676306665093; Mon, 13 Feb
+ 2023 08:44:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230201082500.61656-1-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230212063813.27622-1-marcan@marcan.st> <20230212063813.27622-3-marcan@marcan.st>
+In-Reply-To: <20230212063813.27622-3-marcan@marcan.st>
+From:   Eric Curtin <ecurtin@redhat.com>
+Date:   Mon, 13 Feb 2023 16:44:09 +0000
+Message-ID: <CAOgh=Fy5PwR6Cf8694nP_wwjoRyhGY+qxvFby7k4N+6XBEaj+w@mail.gmail.com>
+Subject: Re: [PATCH v4 2/4] brcmfmac: pcie: Add IDs/properties for BCM4355
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Prutskov <alep@cypress.com>,
+        Ian Lin <ian.lin@infineon.com>,
+        Joseph chuang <jiac@cypress.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Aditya Garg <gargaditya08@live.com>,
+        Jonas Gorski <jonas.gorski@gmail.com>, asahi@lists.linux.dev,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Arend van Spriel <arend.vanspriel@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 01:55:00PM +0530, Manivannan Sadhasivam wrote:
-> The logic used to find the quirky firmware that intercepts the writes to
-> S2CR register to replace bypass type streams with a fault, and ignore the
-> fault type, is not working with the firmware on newer SoCs like SC8280XP.
-> 
-> The current logic uses the last stream mapping group (num_mapping_groups
-> - 1) as an index for finding quirky firmware. But on SC8280XP, this
-> logic is not working as the number of stream mapping groups reported by
-> the SMMU (163 as on the SC8280XP-CRD device) is not valid for some reason.
+On Sun, 12 Feb 2023 at 06:45, Hector Martin <marcan@marcan.st> wrote:
+>
+> This chip is present on at least these Apple T2 Macs:
+>
+> * hawaii: MacBook Air 13" (Late 2018)
+> * hawaii: MacBook Air 13" (True Tone, 2019)
+>
+> Users report seeing PCI revision ID 12 for this chip, which Arend
+> reports should be revision C2, but Apple has the firmware tagged as
+> revision C1. Assume the right cutoff point for firmware versions is
+> revision ID 11 then, and leave older revisions using the non-versioned
+> firmware filename (Apple only uses C1 firmware builds).
+>
+> Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 
-NUMSMRG read back as 162 here, both on my CRD and X13s. Was '163' a typo
-or a real difference?
+Reviewed-by: Eric Curtin <ecurtin@redhat.com>
 
-> So the current logic that checks the (163-1) S2CR entry fails to detect
-> the quirky firmware on these devices and triggers invalid context fault
-> for bypass streams.
-> 
-> To fix this issue, rework the logic to find the first non-valid (free)
-> stream mapping register group (SMR) and use that index to access S2CR
-> for detecting the bypass quirk.
+Is mise le meas/Regards,
 
-So while this works for the quirk detection, shouldn't we also do
-something about that bogus NUMSMRG value? At least cap it at 128, which
-appears to be the maximum according to the specification, for example,
-by clearing bit 7 when any of the lower bits are set?
+Eric Curtin
 
-That would give us 35 (or 36) groups and working quirk detection with
-just the following smaller patch:
-
-diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-index 2ff7a72cf377..0f564a86c352 100644
---- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
-+++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-@@ -1744,6 +1744,12 @@ static int arm_smmu_device_cfg_probe(struct arm_smmu_device *smmu)
-                        return -ENODEV;
-                }
- 
-+               if (size > 0x80) {
-+                       dev_warn(smmu->dev,
-+                                "invalid number of SMR groups, clearing bit 7\n");
-+                       size -= 0x80;
-+               }
-+
-                /* Zero-initialised to mark as invalid */
-                smmu->smrs = devm_kcalloc(smmu->dev, size, sizeof(*smmu->smrs),
-                                          GFP_KERNEL);
-
-I also verified that using index 127 (group 128) for the quirk detection
-works on my CRD, while the invalid index 128 fails (as do index 161
-which would currently be used).
-
-> This also warrants a change in variable name from last_s2cr to free_s2cr.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
->  drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 24 +++++++++++++++++-----
->  1 file changed, 19 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> index 78fc0e1bf215..4104f81b8d8f 100644
-> --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> @@ -267,23 +267,37 @@ static int qcom_smmu_init_context(struct arm_smmu_domain *smmu_domain,
->  
->  static int qcom_smmu_cfg_probe(struct arm_smmu_device *smmu)
->  {
-> -	unsigned int last_s2cr = ARM_SMMU_GR0_S2CR(smmu->num_mapping_groups - 1);
->  	struct qcom_smmu *qsmmu = to_qcom_smmu(smmu);
-> +	u32 free_s2cr;
->  	u32 reg;
->  	u32 smr;
->  	int i;
->  
-> +	/*
-> +	 * Find the first non-valid (free) stream mapping register group and
-> +	 * use that index to access S2CR for detecting the bypass quirk.
-> +	 */
-> +	for (i = 0; i < smmu->num_mapping_groups; i++) {
-> +		smr = arm_smmu_gr0_read(smmu, ARM_SMMU_GR0_SMR(i));
-> +
-> +		if (!FIELD_GET(ARM_SMMU_SMR_VALID, smr))
-> +			break;
-> +	}
-> +
-> +	free_s2cr = ARM_SMMU_GR0_S2CR(i);
+>  .../net/wireless/broadcom/brcm80211/brcmfmac/pcie.c    | 10 +++++++++-
+>  .../wireless/broadcom/brcm80211/include/brcm_hw_ids.h  |  1 +
+>  2 files changed, 10 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> index 96608174a123..7135f889907a 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> @@ -52,6 +52,7 @@ BRCMF_FW_DEF(43602, "brcmfmac43602-pcie");
+>  BRCMF_FW_DEF(4350, "brcmfmac4350-pcie");
+>  BRCMF_FW_DEF(4350C, "brcmfmac4350c2-pcie");
+>  BRCMF_FW_CLM_DEF(4355, "brcmfmac4355-pcie");
+> +BRCMF_FW_CLM_DEF(4355C1, "brcmfmac4355c1-pcie");
+>  BRCMF_FW_CLM_DEF(4356, "brcmfmac4356-pcie");
+>  BRCMF_FW_CLM_DEF(43570, "brcmfmac43570-pcie");
+>  BRCMF_FW_DEF(4358, "brcmfmac4358-pcie");
+> @@ -78,7 +79,8 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
+>         BRCMF_FW_ENTRY(BRCM_CC_4350_CHIP_ID, 0x000000FF, 4350C),
+>         BRCMF_FW_ENTRY(BRCM_CC_4350_CHIP_ID, 0xFFFFFF00, 4350),
+>         BRCMF_FW_ENTRY(BRCM_CC_43525_CHIP_ID, 0xFFFFFFF0, 4365C),
+> -       BRCMF_FW_ENTRY(BRCM_CC_4355_CHIP_ID, 0xFFFFFFFF, 4355),
+> +       BRCMF_FW_ENTRY(BRCM_CC_4355_CHIP_ID, 0x000007FF, 4355),
+> +       BRCMF_FW_ENTRY(BRCM_CC_4355_CHIP_ID, 0xFFFFF800, 4355C1), /* rev ID 12/C2 seen */
+>         BRCMF_FW_ENTRY(BRCM_CC_4356_CHIP_ID, 0xFFFFFFFF, 4356),
+>         BRCMF_FW_ENTRY(BRCM_CC_43567_CHIP_ID, 0xFFFFFFFF, 43570),
+>         BRCMF_FW_ENTRY(BRCM_CC_43569_CHIP_ID, 0xFFFFFFFF, 43570),
+> @@ -1994,6 +1996,11 @@ static int brcmf_pcie_read_otp(struct brcmf_pciedev_info *devinfo)
+>         int ret;
+>
+>         switch (devinfo->ci->chip) {
+> +       case BRCM_CC_4355_CHIP_ID:
+> +               coreid = BCMA_CORE_CHIPCOMMON;
+> +               base = 0x8c0;
+> +               words = 0xb2;
+> +               break;
+>         case BRCM_CC_4378_CHIP_ID:
+>                 coreid = BCMA_CORE_GCI;
+>                 base = 0x1120;
+> @@ -2590,6 +2597,7 @@ static const struct pci_device_id brcmf_pcie_devid_table[] = {
+>         BRCMF_PCIE_DEVICE(BRCM_PCIE_4350_DEVICE_ID, WCC),
+>         BRCMF_PCIE_DEVICE_SUB(0x4355, BRCM_PCIE_VENDOR_ID_BROADCOM, 0x4355, WCC),
+>         BRCMF_PCIE_DEVICE(BRCM_PCIE_4354_RAW_DEVICE_ID, WCC),
+> +       BRCMF_PCIE_DEVICE(BRCM_PCIE_4355_DEVICE_ID, WCC),
+>         BRCMF_PCIE_DEVICE(BRCM_PCIE_4356_DEVICE_ID, WCC),
+>         BRCMF_PCIE_DEVICE(BRCM_PCIE_43567_DEVICE_ID, WCC),
+>         BRCMF_PCIE_DEVICE(BRCM_PCIE_43570_DEVICE_ID, WCC),
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
+> index 28b6cf8ff286..6e27e3966655 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
+> +++ b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
+> @@ -72,6 +72,7 @@
+>  #define BRCM_PCIE_4350_DEVICE_ID       0x43a3
+>  #define BRCM_PCIE_4354_DEVICE_ID       0x43df
+>  #define BRCM_PCIE_4354_RAW_DEVICE_ID   0x4354
+> +#define BRCM_PCIE_4355_DEVICE_ID       0x43dc
+>  #define BRCM_PCIE_4356_DEVICE_ID       0x43ec
+>  #define BRCM_PCIE_43567_DEVICE_ID      0x43d3
+>  #define BRCM_PCIE_43570_DEVICE_ID      0x43d9
+> --
+> 2.35.1
+>
+>
 
-In the unlikely event that there is no free group this would access an
-invalid index.
-
-> +
->  	/*
->  	 * With some firmware versions writes to S2CR of type FAULT are
->  	 * ignored, and writing BYPASS will end up written as FAULT in the
-> -	 * register. Perform a write to S2CR to detect if this is the case and
-> -	 * if so reserve a context bank to emulate bypass streams.
-> +	 * register. Perform a write to the first free S2CR to detect if
-> +	 * this is the case and if so reserve a context bank to emulate
-> +	 * bypass streams.
->  	 */
->  	reg = FIELD_PREP(ARM_SMMU_S2CR_TYPE, S2CR_TYPE_BYPASS) |
->  	      FIELD_PREP(ARM_SMMU_S2CR_CBNDX, 0xff) |
->  	      FIELD_PREP(ARM_SMMU_S2CR_PRIVCFG, S2CR_PRIVCFG_DEFAULT);
-> -	arm_smmu_gr0_write(smmu, last_s2cr, reg);
-> -	reg = arm_smmu_gr0_read(smmu, last_s2cr);
-> +	arm_smmu_gr0_write(smmu, free_s2cr, reg);
-> +	reg = arm_smmu_gr0_read(smmu, free_s2cr);
->  	if (FIELD_GET(ARM_SMMU_S2CR_TYPE, reg) != S2CR_TYPE_BYPASS) {
->  		qsmmu->bypass_quirk = true;
->  		qsmmu->bypass_cbndx = smmu->num_context_banks - 1;
-
-Johan
