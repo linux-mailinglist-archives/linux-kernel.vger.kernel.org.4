@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4CB694FBA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:48:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC512694FB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:48:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjBMSsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:48:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
+        id S229729AbjBMSsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:48:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbjBMSsf (ORCPT
+        with ESMTP id S229479AbjBMSse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:48:35 -0500
+        Mon, 13 Feb 2023 13:48:34 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B6A1CAEC;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7139C1CAE9;
         Mon, 13 Feb 2023 10:48:33 -0800 (PST)
 Date:   Mon, 13 Feb 2023 18:48:31 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -21,35 +21,32 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=QktjQdaPWXrlU2U5DJ5UdMkhC/ABQCVbeDlMTF+Qflo=;
-        b=r/qU9kaAAFZJZC+xfs8i87E8mlk88m2U0J1BLMNwmDnpHAmI+3NkyXpHDnbYYbhq3oyV2o
-        IIEQ8x8V/WCdRMsnlKYL8T3NcByR8xg+rjOnkDqvAum8bf/BfJR3ueYCUKpHqPboV/iz8b
-        yNzmkSlK9Qqh1gQw2cH1ts+UfM70oNnAAbPpdyOQ9Y/tyKnQz8X92tTFYbaJ773pxNuOlK
-        v2sPiPoTUVdac6otOOM7Ho9fjaWW6FllF/ny5zyBfAVYMobtjvoZ5BYClo8mkxJcdpIZKa
-        /iKHOQbZFAgqAjhx3dZYp47++W+lg/5cYQLsLu5lO957c5ZGpS+AY7MGj1VD3Q==
+        bh=10aKowH0O7xPF52QLDURYI+M9aMFRFNzFxX/Nv4RgY8=;
+        b=0ugPr2Mvu5D2SCsN+V+b59CqI5Vtf+oE0KShAnXvOzv4PBNy3L7Bx9JxyQEKanEJROhmnO
+        GTHy3El/JmEauWIHXLmtyF6OZG05V5fWEWJcym3HvGey1k0SHg+pvr0wKgrT+u7crBgLiD
+        fQgSUlMLpyC1AK/4a4YdDy/QZU0zgdzp+uZqPrCNiuEbK17SaK27/NU/mYQ0ni1SYoDBsu
+        35pgiW7VVNIR2tAFFnJ9u9hRLmqWvz4Bjk/lYpr3msNCAM9CwFjdgSw7lST0xq5Dgk7t0A
+        m1ddnA8t+0+bZBtLfJZlv65RWPlH0yiIJWD6l4Fnwj09vPDcaTF6JDBz7sGAyw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1676314112;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=QktjQdaPWXrlU2U5DJ5UdMkhC/ABQCVbeDlMTF+Qflo=;
-        b=engVG8xBzqN/+/A0oUST9xZIbf318V+GP+AUkhEbAOQYqytt6zSqzq446kn08qqPEobUVX
-        WMUqY8chQWtVqiDQ==
+        bh=10aKowH0O7xPF52QLDURYI+M9aMFRFNzFxX/Nv4RgY8=;
+        b=cPcXBWmC2Uq9efntRZOeXbKuyNww9A8Q0OLORtCopYYy1MmpHBlL7oipAAi9zvb0SZLWxX
+        7hu1WV+/4BDTL6CA==
 From:   "tip-bot2 for Paul E. McKenney" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] clocksource: Verify HPET and PMTMR when TSC unverified
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Waiman Long <longman@redhat.com>, <x86@kernel.org>,
-        Feng Tang <feng.tang@intel.com>, linux-kernel@vger.kernel.org
+Subject: [tip: timers/core] clocksource: Enable TSC watchdog checking of HPET
+ and PMTMR only when requested
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <167631411184.4906.7018924399872835917.tip-bot2@tip-bot2>
+Message-ID: <167631411143.4906.5479453461226971405.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -65,115 +62,90 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     efc8b329c7fdc30921a7dfc109237523e1e5b1cc
-Gitweb:        https://git.kernel.org/tip/efc8b329c7fdc30921a7dfc109237523e1e5b1cc
+Commit-ID:     0051293c533017e2a860e0a0a33517bc40240fff
+Gitweb:        https://git.kernel.org/tip/0051293c533017e2a860e0a0a33517bc40240fff
 Author:        Paul E. McKenney <paulmck@kernel.org>
-AuthorDate:    Wed, 21 Dec 2022 16:20:25 -08:00
+AuthorDate:    Wed, 01 Feb 2023 13:53:07 -08:00
 Committer:     Paul E. McKenney <paulmck@kernel.org>
-CommitterDate: Thu, 02 Feb 2023 14:23:02 -08:00
+CommitterDate: Mon, 06 Feb 2023 16:38:30 -08:00
 
-clocksource: Verify HPET and PMTMR when TSC unverified
+clocksource: Enable TSC watchdog checking of HPET and PMTMR only when requested
 
-On systems with two or fewer sockets, when the boot CPU has CONSTANT_TSC,
-NONSTOP_TSC, and TSC_ADJUST, clocksource watchdog verification of the
-TSC is disabled.  This works well much of the time, but there is the
-occasional production-level system that meets all of these criteria, but
-which still has a TSC that skews significantly from atomic-clock time.
-This is usually attributed to a firmware or hardware fault.  Yes, the
-various NTP daemons do express their opinions of userspace-to-atomic-clock
-time skew, but they put them in various places, depending on the daemon
-and distro in question.  It would therefore be good for the kernel to
-have some clue that there is a problem.
+Unconditionally enabling TSC watchdog checking of the HPET and PMTMR
+clocksources can degrade latency and performance.  Therefore, provide
+a new "watchdog" option to the tsc= boot parameter that opts into such
+checking.  Note that tsc=watchdog is overridden by a tsc=nowatchdog
+regardless of their relative positions in the list of boot parameters.
 
-The old behavior of marking the TSC unstable is a non-starter because a
-great many workloads simply cannot tolerate the overheads and latencies
-of the various non-TSC clocksources.  In addition, NTP-corrected systems
-sometimes can tolerate significant kernel-space time skew as long as
-the userspace time sources are within epsilon of atomic-clock time.
-
-Therefore, when watchdog verification of TSC is disabled, enable it for
-HPET and PMTMR (AKA ACPI PM timer).  This provides the needed in-kernel
-time-skew diagnostic without degrading the system's performance.
-
+Reported-by: Thomas Gleixner <tglx@linutronix.de>
+Reported-by: Waiman Long <longman@redhat.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Waiman Long <longman@redhat.com>
-Cc: <x86@kernel.org>
-Tested-by: Feng Tang <feng.tang@intel.com>
+Acked-by: Waiman Long <longman@redhat.com>
 ---
- arch/x86/include/asm/time.h   | 1 +
- arch/x86/kernel/hpet.c        | 2 ++
- arch/x86/kernel/tsc.c         | 5 +++++
- drivers/clocksource/acpi_pm.c | 6 ++++--
- 4 files changed, 12 insertions(+), 2 deletions(-)
+ Documentation/admin-guide/kernel-parameters.txt |  6 +++++-
+ arch/x86/kernel/tsc.c                           | 18 ++++++++++++++--
+ 2 files changed, 22 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/time.h b/arch/x86/include/asm/time.h
-index 8ac563a..a53961c 100644
---- a/arch/x86/include/asm/time.h
-+++ b/arch/x86/include/asm/time.h
-@@ -8,6 +8,7 @@
- extern void hpet_time_init(void);
- extern void time_init(void);
- extern bool pit_timer_init(void);
-+extern bool tsc_clocksource_watchdog_disabled(void);
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 95f0d10..7b4df6d 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -6373,6 +6373,12 @@
+ 			(HPET or PM timer) on systems whose TSC frequency was
+ 			obtained from HW or FW using either an MSR or CPUID(0x15).
+ 			Warn if the difference is more than 500 ppm.
++			[x86] watchdog: Use TSC as the watchdog clocksource with
++			which to check other HW timers (HPET or PM timer), but
++			only on systems where TSC has been deemed trustworthy.
++			This will be suppressed by an earlier tsc=nowatchdog and
++			can be overridden by a later tsc=nowatchdog.  A console
++			message will flag any such suppression or overriding.
  
- extern struct clock_event_device *global_clock_event;
- 
-diff --git a/arch/x86/kernel/hpet.c b/arch/x86/kernel/hpet.c
-index 71f3364..c8eb1ac 100644
---- a/arch/x86/kernel/hpet.c
-+++ b/arch/x86/kernel/hpet.c
-@@ -1091,6 +1091,8 @@ int __init hpet_enable(void)
- 	if (!hpet_counting())
- 		goto out_nohpet;
- 
-+	if (tsc_clocksource_watchdog_disabled())
-+		clocksource_hpet.flags |= CLOCK_SOURCE_MUST_VERIFY;
- 	clocksource_register_hz(&clocksource_hpet, (u32)hpet_freq);
- 
- 	if (id & HPET_ID_LEGSUP) {
+ 	tsc_early_khz=  [X86] Skip early TSC calibration and use the given
+ 			value instead. Useful when the early TSC frequency discovery
 diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-index 92bbc4a..a5371c6 100644
+index a5371c6..306c233 100644
 --- a/arch/x86/kernel/tsc.c
 +++ b/arch/x86/kernel/tsc.c
-@@ -1190,6 +1190,11 @@ static void __init tsc_disable_clocksource_watchdog(void)
- 	clocksource_tsc.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
- }
+@@ -294,6 +294,7 @@ __setup("notsc", notsc_setup);
  
-+bool tsc_clocksource_watchdog_disabled(void)
-+{
-+	return !(clocksource_tsc.flags & CLOCK_SOURCE_MUST_VERIFY);
-+}
-+
- static void __init check_system_tsc_reliable(void)
+ static int no_sched_irq_time;
+ static int no_tsc_watchdog;
++static int tsc_as_watchdog;
+ 
+ static int __init tsc_setup(char *str)
  {
- #if defined(CONFIG_MGEODEGX1) || defined(CONFIG_MGEODE_LX) || defined(CONFIG_X86_GENERIC)
-diff --git a/drivers/clocksource/acpi_pm.c b/drivers/clocksource/acpi_pm.c
-index 279ddff..8233877 100644
---- a/drivers/clocksource/acpi_pm.c
-+++ b/drivers/clocksource/acpi_pm.c
-@@ -23,6 +23,7 @@
- #include <linux/pci.h>
- #include <linux/delay.h>
- #include <asm/io.h>
-+#include <asm/time.h>
- 
- /*
-  * The I/O port the PMTMR resides at.
-@@ -210,8 +211,9 @@ static int __init init_acpi_pm_clocksource(void)
- 		return -ENODEV;
- 	}
- 
--	return clocksource_register_hz(&clocksource_acpi_pm,
--						PMTMR_TICKS_PER_SEC);
-+	if (tsc_clocksource_watchdog_disabled())
-+		clocksource_acpi_pm.flags |= CLOCK_SOURCE_MUST_VERIFY;
-+	return clocksource_register_hz(&clocksource_acpi_pm, PMTMR_TICKS_PER_SEC);
+@@ -303,10 +304,22 @@ static int __init tsc_setup(char *str)
+ 		no_sched_irq_time = 1;
+ 	if (!strcmp(str, "unstable"))
+ 		mark_tsc_unstable("boot parameter");
+-	if (!strcmp(str, "nowatchdog"))
++	if (!strcmp(str, "nowatchdog")) {
+ 		no_tsc_watchdog = 1;
++		if (tsc_as_watchdog)
++			pr_alert("%s: Overriding earlier tsc=watchdog with tsc=nowatchdog\n",
++				 __func__);
++		tsc_as_watchdog = 0;
++	}
+ 	if (!strcmp(str, "recalibrate"))
+ 		tsc_force_recalibrate = 1;
++	if (!strcmp(str, "watchdog")) {
++		if (no_tsc_watchdog)
++			pr_alert("%s: tsc=watchdog overridden by earlier tsc=nowatchdog\n",
++				 __func__);
++		else
++			tsc_as_watchdog = 1;
++	}
+ 	return 1;
  }
  
- /* We use fs_initcall because we want the PCI fixups to have run
+@@ -1192,7 +1205,8 @@ static void __init tsc_disable_clocksource_watchdog(void)
+ 
+ bool tsc_clocksource_watchdog_disabled(void)
+ {
+-	return !(clocksource_tsc.flags & CLOCK_SOURCE_MUST_VERIFY);
++	return !(clocksource_tsc.flags & CLOCK_SOURCE_MUST_VERIFY) &&
++	       tsc_as_watchdog && !no_tsc_watchdog;
+ }
+ 
+ static void __init check_system_tsc_reliable(void)
