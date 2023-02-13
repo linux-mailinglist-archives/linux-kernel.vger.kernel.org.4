@@ -2,133 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 942006953EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 23:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 703D36953E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 23:30:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbjBMWbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 17:31:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41406 "EHLO
+        id S229630AbjBMWar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 17:30:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjBMWbI (ORCPT
+        with ESMTP id S229973AbjBMWap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 17:31:08 -0500
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD1C1CF7C;
-        Mon, 13 Feb 2023 14:31:00 -0800 (PST)
-Received: from g550jk.localnet (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id B93E1CDFDF;
-        Mon, 13 Feb 2023 22:30:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1676327428; bh=W5e6SYUWX17zrMB98W//q9HU+zE0DKgEBiyUmTDCQWo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=KU+C4uBtvCf7rgcT20qCwmxXtxu8zgGNHy3EKJ1DQiSulaQIKrqnk82aM79i9n/7C
-         uKY3XYez7l8aY/5Rfj1ZFKgLZK41EA0ahbCPgxZdCR9N11/M4hBjhj5Tph6hi2Rc1F
-         o85Xk6aza9AHxMVOT+L0589qUlC51FciJ0xoKG1I=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Weiss <luca.weiss@fairphone.com>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] clk: qcom: camcc-sm6350: add pm_runtime support
-Date:   Mon, 13 Feb 2023 23:30:27 +0100
-Message-ID: <4777254.GXAFRqVoOG@z3ntu.xyz>
-In-Reply-To: <20230213-sm6350-camcc-runtime_pm-v2-1-60a507bf3e68@z3ntu.xyz>
-References: <20230213-sm6350-camcc-runtime_pm-v2-0-60a507bf3e68@z3ntu.xyz>
- <20230213-sm6350-camcc-runtime_pm-v2-1-60a507bf3e68@z3ntu.xyz>
+        Mon, 13 Feb 2023 17:30:45 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCC41D93E
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 14:30:44 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id w24so5071975iow.13
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 14:30:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1676327444;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wx7rLgjo31q4aRFngZaMZvvBuOkUVt0KZOQkB/G6VhE=;
+        b=UGnugubJQHiQKh1fUKagWN0eCSxWHJnX1T8ppG3v25k5W1wMi/U77Ogm6zUSYdIMwE
+         JVZNqI6rULxN82YJIiKRYDlwSvs6NkCloq5/pDRHZBeDIGy3zk5h8wSSFKE+tC/SccLk
+         0obqZDHv4o+sPYpR53NnvVTYPtVg27RrHas80=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676327444;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wx7rLgjo31q4aRFngZaMZvvBuOkUVt0KZOQkB/G6VhE=;
+        b=aSubIxZLlYzODW2mU4MxLmH+IjwKlusPsXYhzA9HIQ7SZsSCnG/LwEaN+JRbJKBZQT
+         pvEdwffElLTJS/7DY7fcL+FpcJgXt7qr1kurerlZf65hf8UqLIdXGsBdpRrWqujGYgxD
+         ymdr0AL+2NG07Bo4o0zvDQE98znSs6zwfZp7fRSl9nw5ADqmkfq5Kz8TnM2iURcsUpPj
+         D8JUU6k3HHC5mb6h+QahqqOrNcpJXTWzMyI9NmZYudSypA1GbS6ODd9Vci8Bv8ZckS80
+         Zomd8ku/uBOeH68jxEcnQ1WS8u4H874dEJJcEniqpO6V7vGc47zaSl2ln4FIhXEUMbyX
+         JBWQ==
+X-Gm-Message-State: AO0yUKUhGNdqdhHW2lCNufq0p/H1QbMJh7JZOhSa7J4WGlN2oUoAmQq+
+        EQBIJifXHvFfpt6S2HqtVFPZQA==
+X-Google-Smtp-Source: AK7set/qkONysWSWunirShm5nK5En++rvYEyBksmNjPhTvo9bFHNmDs1uU4A4iFH2F8UniVDWrIz3g==
+X-Received: by 2002:a6b:3bd8:0:b0:72c:f57a:a37b with SMTP id i207-20020a6b3bd8000000b0072cf57aa37bmr85672ioa.2.1676327443835;
+        Mon, 13 Feb 2023 14:30:43 -0800 (PST)
+Received: from shuah-tx13.internal ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id n17-20020a056638121100b003a9515b47ebsm4341806jas.68.2023.02.13.14.30.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 14:30:43 -0800 (PST)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     shuah@kernel.org, brauner@kernel.org, sforshee@kernel.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/mount_setattr: fix to make run_tests failure
+Date:   Mon, 13 Feb 2023 15:30:41 -0700
+Message-Id: <20230213223041.242089-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Montag, 13. Februar 2023 14:08:06 CET Luca Weiss wrote:
-> Make sure that we can enable and disable the power domains used for
-> camcc when the clocks are and aren't used.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+make run_tests doesn't run the test. Fix Makefile to set TEST_GEN_PROGS
+instead of TEST_GEN_FILES to fix the problem.
 
-Apparently I messed up v2 too and had the wrong email in my git config. Will 
-send a v3 to fix that as well...
+run_tests runs TEST_GEN_PROGS, TEST_CUSTOM_PROGS, and TEST_PROGS.
+TEST_GEN_FILES is for files generated by tests.
 
-> ---
->  drivers/clk/qcom/camcc-sm6350.c | 29 ++++++++++++++++++++++++++++-
->  1 file changed, 28 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/qcom/camcc-sm6350.c
-> b/drivers/clk/qcom/camcc-sm6350.c index acba9f99d960..dd65f3ef0857 100644
-> --- a/drivers/clk/qcom/camcc-sm6350.c
-> +++ b/drivers/clk/qcom/camcc-sm6350.c
-> @@ -7,6 +7,8 @@
->  #include <linux/clk-provider.h>
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
-> +#include <linux/pm_clock.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/regmap.h>
-> 
->  #include <dt-bindings/clock/qcom,sm6350-camcc.h>
-> @@ -1869,6 +1871,19 @@ MODULE_DEVICE_TABLE(of, camcc_sm6350_match_table);
->  static int camcc_sm6350_probe(struct platform_device *pdev)
->  {
->  	struct regmap *regmap;
-> +	int ret;
-> +
-> +	ret = devm_pm_runtime_enable(&pdev->dev);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = devm_pm_clk_create(&pdev->dev);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = pm_runtime_get(&pdev->dev);
-> +	if (ret)
-> +		return ret;
-> 
->  	regmap = qcom_cc_map(pdev, &camcc_sm6350_desc);
->  	if (IS_ERR(regmap))
-> @@ -1879,14 +1894,26 @@ static int camcc_sm6350_probe(struct platform_device
-> *pdev) clk_agera_pll_configure(&camcc_pll2, regmap, &camcc_pll2_config);
-> clk_fabia_pll_configure(&camcc_pll3, regmap, &camcc_pll3_config);
-> 
-> -	return qcom_cc_really_probe(pdev, &camcc_sm6350_desc, regmap);
-> +	ret = qcom_cc_really_probe(pdev, &camcc_sm6350_desc, regmap);
-> +	pm_runtime_put(&pdev->dev);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev, "Failed to register CAM CC 
-clocks\n");
-> +		return ret;
-> +	}
-> +
-> +	return 0;
->  }
-> 
-> +static const struct dev_pm_ops camcc_pm_ops = {
-> +	SET_RUNTIME_PM_OPS(pm_clk_suspend, pm_clk_resume, NULL)
-> +};
-> +
->  static struct platform_driver camcc_sm6350_driver = {
->  	.probe = camcc_sm6350_probe,
->  	.driver = {
->  		.name = "sm6350-camcc",
->  		.of_match_table = camcc_sm6350_match_table,
-> +		.pm = &camcc_pm_ops,
->  	},
->  };
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ tools/testing/selftests/mount_setattr/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-
+diff --git a/tools/testing/selftests/mount_setattr/Makefile b/tools/testing/selftests/mount_setattr/Makefile
+index fde72df01b11..0c0d7b1234c1 100644
+--- a/tools/testing/selftests/mount_setattr/Makefile
++++ b/tools/testing/selftests/mount_setattr/Makefile
+@@ -2,6 +2,6 @@
+ # Makefile for mount selftests.
+ CFLAGS = -g $(KHDR_INCLUDES) -Wall -O2 -pthread
+ 
+-TEST_GEN_FILES += mount_setattr_test
++TEST_GEN_PROGS := mount_setattr_test
+ 
+ include ../lib.mk
+-- 
+2.37.2
 
