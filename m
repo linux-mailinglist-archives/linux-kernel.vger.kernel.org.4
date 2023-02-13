@@ -2,133 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A36A0693FCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:38:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F006F693FD3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:43:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjBMIim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 03:38:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
+        id S229747AbjBMInH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 03:43:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbjBMIid (ORCPT
+        with ESMTP id S229683AbjBMInD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 03:38:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390E94C0A;
-        Mon, 13 Feb 2023 00:38:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5D9D60EE0;
-        Mon, 13 Feb 2023 08:38:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACDF2C433EF;
-        Mon, 13 Feb 2023 08:38:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676277509;
-        bh=FKtCydh9BD0e/LHKfKCIJTVoObje2MGUwpf/rlBD/OY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=OoKbJzb/LKp0SqzjPLOahO8ejh9BisPvo/RLq66V5+mPYJaMoSF4YV4kB/hTDOaQX
-         DzWyUl8wo+DO2uNxkLygN9Z/xWqK8B2Nr8o+g7vUhJZjU4nDhvqoevwRG3LpOjcO7t
-         wKgwLogsVNqb1sJnVI/JHHua37NMkGQRd4VFwj70R/sMTxR6R7VsWGX8S3Sb/QtJcU
-         8N1k/5sTCzsnrt54miZka0tR+EUzCtsl0H7m/NUY0Elk1mgBw+0qXv168+i3ae7CR2
-         shyqXVuw9rkAJyfvHsi7No3LbmNfYqtatC0KYxuVx+My4xKPvzKBLrJILN8wjUbUsX
-         fHfybME90AoZA==
-Date:   Mon, 13 Feb 2023 10:38:26 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] tpm: changes for v6.3-rc1
-Message-ID: <Y+n3AoInyQkuyTfM@kernel.org>
+        Mon, 13 Feb 2023 03:43:03 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C695B775;
+        Mon, 13 Feb 2023 00:43:02 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31D7xgbK004245;
+        Mon, 13 Feb 2023 08:42:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=SQO+Y5aVpcbnpSCkCwLdw9OJ9Tq2Ic/kqk6N9Te4vfM=;
+ b=luA+8pq+zoraIo8IAJGJnMYOgFRcnZOf48IQDpKLmi4ibHs9IyZQtOTjPHSs/xzGWzhZ
+ nQjWRC7tdMyn08MQmcMH330JUg8vVrdiPi6uhYIfnwOHxMY/BTn6HFaI1Xga+FOGYVdg
+ hEHx0y3oA1i1dYFrvn6bP21vKVIWFzeyrbKKFb8f0kTNTa0iDV3ZYnJK75l9HAk49CCf
+ /ruvE+141HzrRyRgRIar9GMF2xrMHLlySiSCIZpaiZxQYzLkxNnae3BE3ESBoKNhbudi
+ A4paCeyDP7jF+NuuLV1tHNspFKhQPnmC8XkusI5kok6WZDI5bECogunPz9FPJ1Oz5lMH PA== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nqha28xhh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 08:42:55 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31CIUfP9031193;
+        Mon, 13 Feb 2023 08:42:53 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3np29fjdej-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 08:42:53 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31D8gpwx42729836
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Feb 2023 08:42:51 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1C22F20049;
+        Mon, 13 Feb 2023 08:42:51 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8D03620040;
+        Mon, 13 Feb 2023 08:42:49 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.109.253.169])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Mon, 13 Feb 2023 08:42:49 +0000 (GMT)
+Date:   Mon, 13 Feb 2023 14:12:46 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, jack@suse.cz,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 07/21] ext4: protect pa->pa_free in
+ ext4_discard_allocated_blocks
+Message-ID: <Y+n4Bgph6QpjU8m+@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <20230209194825.511043-1-shikemeng@huaweicloud.com>
+ <20230209194825.511043-8-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230209194825.511043-8-shikemeng@huaweicloud.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: ZPFEQGeuuNleqb69f1HLK6oA1D4Gruz8
+X-Proofpoint-GUID: ZPFEQGeuuNleqb69f1HLK6oA1D4Gruz8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-13_04,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ lowpriorityscore=0 adultscore=0 spamscore=0 mlxscore=0 malwarescore=0
+ phishscore=0 mlxlogscore=999 bulkscore=0 suspectscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302130076
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Feb 10, 2023 at 03:48:11AM +0800, Kemeng Shi wrote:
+> If ext4_mb_mark_diskspace_used fails in ext4_mb_new_blocks, we may
+> discard pa already in list. Protect pa with pa_lock to avoid race.
+> 
+> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+> ---
+>  fs/ext4/mballoc.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index 433337ac8da2..4e1caac74b44 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -4263,8 +4263,11 @@ static void ext4_discard_allocated_blocks(struct ext4_allocation_context *ac)
+>  		ext4_mb_unload_buddy(&e4b);
+>  		return;
+>  	}
+> -	if (pa->pa_type == MB_INODE_PA)
+> +	if (pa->pa_type == MB_INODE_PA) {
+> +		spin_lock(&pa->pa_lock);
+>  		pa->pa_free += ac->ac_b_ex.fe_len;
+> +		spin_unlock(&pa->pa_lock);
+> +	}
+>  }
+>  
+>  /*
+> -- 
+> 2.30.0
+> 
+Looks correct. Feel free to add:
 
-In additon to bug fixes, these are noteworthy changes:
+Reviewed-by: Ojaswin Mujoo <ojaswin@linux.ibm.com> 
 
-* In TPM I2C drivers, migrate from probe() to probe_new() (a new
-  driver model in I2C).
-* TPM CRB: Pluton support
-* Add duplicate hash detection to the blacklist keyring in order to
-  give more meaningful klog output than e.g. [1].
-
-[1] https://askubuntu.com/questions/1436856/ubuntu-22-10-blacklist-problem-blacklisting-hash-13-message-on-boot
-
-The following changes since commit ceaa837f96adb69c0df0397937cd74991d5d821a:
-
-  Linux 6.2-rc8 (2023-02-12 14:10:17 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpm-v6.3-rc1
-
-for you to fetch changes up to 85b93bbd1c9768d09adebbe9f33bab0d4ec94404:
-
-  tpm: add vendor flag to command code validation (2023-02-13 10:11:20 +0200)
-
-----------------------------------------------------------------
-tpm: v6.3-rc1
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      crypto: certs: fix FIPS selftest dependency
-
-Denis Kenzior (1):
-      KEYS: asymmetric: Fix ECDSA use via keyctl uapi
-
-Eddie James (2):
-      tpm: Use managed allocation for bios event log
-      tpm: Add reserved memory event log
-
-Julien Gomes (1):
-      tpm: add vendor flag to command code validation
-
-Matthew Garrett (1):
-      tpm_crb: Add support for CRB devices based on Pluton
-
-Thomas Weißschuh (3):
-      certs: make blacklisted hash available in klog
-      KEYS: Add new function key_create()
-      certs: don't try to update blacklist keys
-
-Uwe Kleine-König (5):
-      tpm: st33zp24: Convert to i2c's .probe_new()
-      tpm: tpm_i2c_atmel: Convert to i2c's .probe_new()
-      tpm: tpm_i2c_infineon: Convert to i2c's .probe_new()
-      tpm: tpm_i2c_nuvoton: Convert to i2c's .probe_new()
-      tpm: tis_i2c: Convert to i2c's .probe_new()
-
- certs/blacklist.c                     |  21 +++---
- crypto/asymmetric_keys/Kconfig        |   2 +-
- crypto/asymmetric_keys/pkcs7_verify.c |   1 +
- crypto/asymmetric_keys/public_key.c   |  24 +++++-
- drivers/char/tpm/eventlog/acpi.c      |   5 +-
- drivers/char/tpm/eventlog/efi.c       |  13 ++--
- drivers/char/tpm/eventlog/of.c        |  35 ++++++++-
- drivers/char/tpm/st33zp24/i2c.c       |   5 +-
- drivers/char/tpm/tpm-chip.c           |   1 -
- drivers/char/tpm/tpm2-cmd.c           |   4 +-
- drivers/char/tpm/tpm_crb.c            | 100 ++++++++++++++++++++++---
- drivers/char/tpm/tpm_i2c_atmel.c      |   5 +-
- drivers/char/tpm/tpm_i2c_infineon.c   |   5 +-
- drivers/char/tpm/tpm_i2c_nuvoton.c    |   6 +-
- drivers/char/tpm/tpm_tis_i2c.c        |   5 +-
- include/acpi/actbl3.h                 |   1 +
- include/linux/key.h                   |   8 ++
- include/linux/tpm.h                   |   1 +
- security/keys/key.c                   | 137 +++++++++++++++++++++++++---------
- 19 files changed, 293 insertions(+), 86 deletions(-)
