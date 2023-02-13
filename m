@@ -2,102 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D71E86946A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:11:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2EC76946CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:16:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbjBMNL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 08:11:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
+        id S231127AbjBMNQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 08:16:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbjBMNLV (ORCPT
+        with ESMTP id S229599AbjBMNQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 08:11:21 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32BE1ADF8;
-        Mon, 13 Feb 2023 05:11:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=sY0Xw97tkK80XNIR32EODzqw53Y3bbnKuPghntbXvNM=; b=naakW9McTESgZUSXJL5EEszbPv
-        5s89w5K+4FYADoJObYVIcxzM+mVhIROms2qhFrQpm92rlt1ycJUrdtyYh8dHrq8F3kk5J1Mp+SurC
-        iHN4INvuOVfINKgJ/Gv8tCxehyqpZOFvw5TrYBzqYJ45fDI3BHIukQNsND0v3WjOza9kl1jYB3+YM
-        p/4zTdQde4wNyAVDOi1LumVI0uAy/dvMa48pyV/JM2A3iietbnBaYK45o6ArSADz+N21NwlLBWuJF
-        H4xSanFzENWT4SngvrApgnZa0i6CkVs1D0mKVqs3ogdY9qQJrjGBuc4nufQRQ/HsOSQIyJ52RmbYB
-        d/rgW0NA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pRYb0-009J8f-2S;
-        Mon, 13 Feb 2023 13:10:14 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+        Mon, 13 Feb 2023 08:16:44 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5381B541;
+        Mon, 13 Feb 2023 05:16:08 -0800 (PST)
+Received: from [192.168.0.192] (unknown [194.146.248.75])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2306030020C;
-        Mon, 13 Feb 2023 14:10:55 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F0907209F7549; Mon, 13 Feb 2023 14:10:54 +0100 (CET)
-Date:   Mon, 13 Feb 2023 14:10:54 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Manali Shukla <manali.shukla@amd.com>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com, acme@kernel.org,
-        jolsa@kernel.org, namhyung@kernel.org, tglx@linutronix.de,
-        bp@alien8.de, dave.hansen@linux.intel.com, seanjc@google.com,
-        pbonzini@redhat.com, jpoimboe@kernel.org,
-        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
-        sandipan.das@amd.com, jmattson@google.com, thomas.lendacky@amd.com,
-        nikunj@amd.com, ravi.bangoria@amd.com, eranian@google.com,
-        irogers@google.com, kvm@vger.kernel.org, x86@kernel.org,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [RFC PATCH kernel 1/2] perf/x86/amd: Add
- amd_prevent_hostibs_window() to set per-cpu ibs_flags
-Message-ID: <Y+o23lcYHbYWua62@hirez.programming.kicks-ass.net>
-References: <20230206060545.628502-1-manali.shukla@amd.com>
- <20230206060545.628502-2-manali.shukla@amd.com>
+        (No client certificate requested)
+        (Authenticated sender: andrzej.p)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AC3A1660213F;
+        Mon, 13 Feb 2023 13:16:06 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676294166;
+        bh=jMBOjH6pRCVn0ggo6g9jbKywsnY6hk/WSYnGy9qbmwQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=UZE+4xmu5A+2y9m2RMoBBvbndp1uHy8fEjhBiLTkx/wiyABuFOpoZbDosRr0eTm0k
+         M8qPazOwELrfzP6MleMXQHirU7F0DVF9GtCdPMTmt/yWJ0O+U4PRbxXIqDveCE2Aox
+         k9KDTno/iuLmiU0E/xbvdatGSUXZSwFeFiki1+ONON1oR6Z1k0k/GMrg6rOjJnmy+6
+         BZ9FLZYr4vRWoR80EhWCCOnZbz9r/5UrHec5Vaj6tHo5Gj25HKOMrfz+mcARnYs14P
+         IKUDSk36MbTZJkRzPBj1/yq3hW2orslavmHMWubbOnWbrAXu3R+VFgEYdAEHIpLXos
+         9gdMY2eS5EgiA==
+Message-ID: <3d1f6fb3-0fcf-7aff-3676-4dfb6aa60d2a@collabora.com>
+Date:   Mon, 13 Feb 2023 14:16:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230206060545.628502-2-manali.shukla@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH V3 2/2] usb: gadget: u_ether: Don't warn in
+ gether_setup_name_default()
+To:     Jon Hunter <jonathanh@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <20230209125319.18589-1-jonathanh@nvidia.com>
+ <20230209125319.18589-2-jonathanh@nvidia.com>
+Content-Language: en-US
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+In-Reply-To: <20230209125319.18589-2-jonathanh@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 06:05:44AM +0000, Manali Shukla wrote:
-> Add a function to set per-cpu ibs_flags based on an active or inactive
-> PreventHostIBS window.
+W dniu 9.02.2023 o 13:53, Jon Hunter pisze:
+> The function gether_setup_name_default() is called by various USB
+> ethernet gadget drivers. Calling this function will select a random
+> host and device MAC addresses. A properly working driver should be
+> silent and not warn the user about default MAC addresses selection.
+> Given that the MAC addresses are also printed when the function
+> gether_register_netdev() is called, remove these unnecessary warnings.
 > 
-> MSR_AMD64_IBSFETCHCTL[IbsFetchEn] and MSR_AMD64_IBSOPCTL[IbsOpEn] bits
-> need to be cleared for PreventHostIBS feature to be enabled before VMRUN
-> is executed.
-> 
-> ENABLE bit and VALID bit for MSR_AMD64_IBSFETCHCTL are contained in the
-> same MSR and same is the case with MSR_AMD64_IBSOPCTL.
-> 
-> Consider the following scenario:
-> - The IBS MSR which has ENABLE bit set and VALID bit clear is read.
-> - During the process of clearing the ENABLE bit and writing the IBS MSR
->   to disable IBS, an IBS event can occur that sets the VALID bit.
-> - The write operation on IBS MSR can clear the newly set VALID bit.
-> - Since this situation is occurring in the CLGI/STGI window
->   (PreventHostIBS window), the actual NMI is not taken.
-> - Once VMRUN is issued, it will exit with VMEXIT_NMI. As soon as STGI is
->   executed, the pending NMI will trigger.
-> - The IBS NMI handler checks for the VALID bit to determine if the NMI
->   is generated because of IBS.
-> - Since VALID bit is now clear, it doesn't recognize that an IBS event
->   is occurred. Due to this reason, the dazed and confused unknown NMI
->   messages are generated.
-> 
-> amd_prevent_hostibs_window() is added to avoid these messages when
-> PreventHostIBS window is active and PreventHostIBS feature is enabled
-> for the guest.
-> 
-> Signed-off-by: Manali Shukla <manali.shukla@amd.com>
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
 
-URGH... so am I reading this right that this is a sodding terrible
-software implementation of perf_event_attr::exclude_guest ?
+Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+
+> ---
+> V3: Updated patch to remove the prints completely.
+> V2: Changed print to debug instead of info.
+> 
+>   drivers/usb/gadget/function/u_ether.c | 2 --
+>   1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
+> index 740331882e8d..953d936fbae6 100644
+> --- a/drivers/usb/gadget/function/u_ether.c
+> +++ b/drivers/usb/gadget/function/u_ether.c
+> @@ -811,13 +811,11 @@ struct net_device *gether_setup_name_default(const char *netname)
+>   	snprintf(net->name, sizeof(net->name), "%s%%d", netname);
+>   
+>   	eth_random_addr(dev->dev_mac);
+> -	pr_warn("using random %s ethernet address\n", "self");
+>   
+>   	/* by default we always have a random MAC address */
+>   	net->addr_assign_type = NET_ADDR_RANDOM;
+>   
+>   	eth_random_addr(dev->host_mac);
+> -	pr_warn("using random %s ethernet address\n", "host");
+>   
+>   	net->netdev_ops = &eth_netdev_ops;
+>   
+
