@@ -2,167 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA01693C68
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 03:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D56FC693C6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 03:38:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjBMCgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 21:36:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
+        id S229611AbjBMCir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 21:38:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjBMCgr (ORCPT
+        with ESMTP id S229479AbjBMCio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 21:36:47 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93467E3BA;
-        Sun, 12 Feb 2023 18:36:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676255806; x=1707791806;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=eVq7V0e9oDRa3tglIxQm8yw7Q5bc8l5Dv9QXPiPst28=;
-  b=eo4u6gl32jitO44MSmG5APTLgwoU5krk5stjZXlAAUCDbLqn3eHLnhtx
-   +OQanTCucgV9UW8CCzVgSqGZkaoeRmwE8tiRnmue5d6i2/XvL4x+ytmZq
-   K98199nPJ3X9uSPVXxABcB3nSIzZ6FfOYyR4yd/rx06FgrYAJ4QnvlD9U
-   D8oZxOka6gIhun2I7o7LhVoUdB6P4aCNPL5mLw4ajKCxZN2/nWw/uG84Y
-   IdzXR1wmUNkJmJnpRXi2ib6OBsRtEPinrNx7QvzDxU7j+pEwFzUHdWNlU
-   x5GFouAlHGJHIaCmK8RLXeKeU4UG2Wx5mw3wW0izG9p0OhEZq4hVL8l9C
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="314433174"
-X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
-   d="scan'208";a="314433174"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 18:36:45 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="701105234"
-X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
-   d="scan'208";a="701105234"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.254.214.18]) ([10.254.214.18])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 18:36:41 -0800
-Message-ID: <aa9ee0db-c9d9-9b3f-8f63-cbc76bb3ccdd@linux.intel.com>
-Date:   Mon, 13 Feb 2023 10:36:38 +0800
+        Sun, 12 Feb 2023 21:38:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A299BB86
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 18:37:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676255878;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QuL61XvFmiacFTLyythNDoZAC7AZvsH4GcjyynvJnMY=;
+        b=Np6akfax7ipJBUqV5UrwaehMp4n5f1xD9e07AP4qGcPw38gbgyujcyFNqNXF8g3o8/wokw
+        8+/yMFGAAAY8gzhJBnLikDqHqw8v/F/wME110Puya1r/fZxD3ylIqnn28MEAkDz2mPj+tJ
+        ZO3K79PQQIMbTXBimhBZfF1Tl5/Kbhc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-139-qdRlb8xTPzGPo5zI2Oc1rQ-1; Sun, 12 Feb 2023 21:37:44 -0500
+X-MC-Unique: qdRlb8xTPzGPo5zI2Oc1rQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 12FFD101A55E;
+        Mon, 13 Feb 2023 02:37:44 +0000 (UTC)
+Received: from T590 (ovpn-8-16.pek2.redhat.com [10.72.8.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6E8A32026D4B;
+        Mon, 13 Feb 2023 02:37:38 +0000 (UTC)
+Date:   Mon, 13 Feb 2023 10:37:32 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Liu Xiaodong <xiaodong.liu@intel.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jim Harris <james.r.harris@intel.com>,
+        Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+Subject: Re: [PATCH] block: ublk: check IO buffer based on flag need_get_data
+Message-ID: <Y+mibLjCjiDXoPRt@T590>
+References: <20230210141356.112321-1-xiaodong.liu@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 1/6] iommu: Add new iommu op to get iommu hardware
- information
-To:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
-        alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
-        robin.murphy@arm.com
-Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
-        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
-        peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        baolu.lu@linux.intel.com
-References: <20230209041642.9346-1-yi.l.liu@intel.com>
- <20230209041642.9346-2-yi.l.liu@intel.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20230209041642.9346-2-yi.l.liu@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230210141356.112321-1-xiaodong.liu@intel.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 10, 2023 at 09:13:56AM -0500, Liu Xiaodong wrote:
+> Currently, uring_cmd with UBLK_IO_FETCH_REQ or
+> UBLK_IO_COMMIT_AND_FETCH_REQ is always checked whether
+> userspace server has provided IO buffer even flag
+> UBLK_F_NEED_GET_DATA is configured.
+> 
+> This is a excessive check. If UBLK_F_NEED_GET_DATA is
+> configured, FETCH_RQ doesn't need to provide IO buffer;
+> COMMIT_AND_FETCH_REQ also doesn't need to do that if
+> the IO type is not READ.
+> 
+> Check ub_cmd->addr together with ublk_need_get_data()
+> and IO type in ublk_ch_uring_cmd().
+> 
+> With this fix, userspace server doesn't need to preserve
+> buffers for every ublk_io when flag UBLK_F_NEED_GET_DATA
+> is configured, in order to save memory.
+> 
+> Signed-off-by: Liu Xiaodong <xiaodong.liu@intel.com>
 
-On 2/9/2023 12:16 PM, Yi Liu wrote:
-> From: Lu Baolu <baolu.lu@linux.intel.com>
->
-> Introduce a new iommu op get
+Good catch!
 
-get -> to get
+Fixes: c86019ff75c1 ("ublk_drv: add support for UBLK_IO_NEED_GET_DATA")
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
 
+Thanks,
+Ming
 
-> the IOMMU hardware capabilities for iommufd.
-> This information will be used by any vIOMMU driver which is owned by
-> userspace.
->
-> This op chooses to make the special parameters opaque to the core. This
-> suits the current usage model where accessing any of the IOMMU device
-> special parameters does require a userspace driver that matches the kernel
-> driver. If a need for common parameters, implemented similarly by several
-> drivers, arises then there is room in the design to grow a generic parameter
-> set as well. No warpper
-
-warpper -> wrapper
-
-
->   API is added as it is supposed to be used by
-> iommufd only.
->
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> ---
->   include/linux/iommu.h        | 8 ++++++++
->   include/uapi/linux/iommufd.h | 6 ++++++
->   2 files changed, 14 insertions(+)
->
-> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> index cb586d054c57..97b398d19fd2 100644
-> --- a/include/linux/iommu.h
-> +++ b/include/linux/iommu.h
-> @@ -15,6 +15,7 @@
->   #include <linux/of.h>
->   #include <linux/ioasid.h>
->   #include <uapi/linux/iommu.h>
-> +#include <uapi/linux/iommufd.h>
->   
->   #define IOMMU_READ	(1 << 0)
->   #define IOMMU_WRITE	(1 << 1)
-> @@ -223,6 +224,11 @@ struct iommu_iotlb_gather {
->   /**
->    * struct iommu_ops - iommu ops and capabilities
->    * @capable: check capability
-> + * @hw_info: IOMMU hardware capabilities. The type of the returned data is
-> + *           defined in include/uapi/linux/iommufd.h. The data buffer is
-> + *           allocated in the IOMMU driver and the caller should free it
-> + *           after use. Return the data buffer if success, or ERR_PTR on
-> + *	      failure.
->    * @domain_alloc: allocate iommu domain
->    * @probe_device: Add device to iommu driver handling
->    * @release_device: Remove device from iommu driver handling
-> @@ -252,6 +258,7 @@ struct iommu_iotlb_gather {
->    */
->   struct iommu_ops {
->   	bool (*capable)(struct device *dev, enum iommu_cap);
-> +	void *(*hw_info)(struct device *dev, u32 *length);
->   
->   	/* Domain allocation and freeing by the iommu driver */
->   	struct iommu_domain *(*domain_alloc)(unsigned iommu_domain_type);
-> @@ -280,6 +287,7 @@ struct iommu_ops {
->   	void (*remove_dev_pasid)(struct device *dev, ioasid_t pasid);
->   
->   	const struct iommu_domain_ops *default_domain_ops;
-> +	enum iommu_device_data_type driver_type;
-
-
-How to understand the name "iommu_device_data_type"?
-Is it just refer to the driver types or it has a more generic meaning?
-
-
->   	unsigned long pgsize_bitmap;
->   	struct module *owner;
->   };
-> diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-> index 98ebba80cfa1..2309edb55028 100644
-> --- a/include/uapi/linux/iommufd.h
-> +++ b/include/uapi/linux/iommufd.h
-> @@ -344,4 +344,10 @@ struct iommu_vfio_ioas {
->   	__u16 __reserved;
->   };
->   #define IOMMU_VFIO_IOAS _IO(IOMMUFD_TYPE, IOMMUFD_CMD_VFIO_IOAS)
-> +
-> +/**
-> + * enum iommu_device_data_type - IOMMU hardware Data types
-> + */
-> +enum iommu_device_data_type {
-> +};
->   #endif
