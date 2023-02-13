@@ -2,122 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2615694EF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:12:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A040694EF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:12:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbjBMSMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:12:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
+        id S231209AbjBMSMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:12:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjBMSMl (ORCPT
+        with ESMTP id S231208AbjBMSME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:12:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2CB71F5D3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:11:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676311875;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=btENug+HNZMgsHueHpBS/EHiJOI8qsodxlQ5SGXxzpc=;
-        b=WFGfMLy7GOxtL8j8yCOihQpGIVn0QTwP6ETfnTZQvOSW9IBpkLMi9vCUBmtWnZq1fA1RBY
-        1Erz12w5gbtfEIGGo/YnSYYwgC3uNtwqZMHsWy327aVB6fx5WlKBNkoN5QzOoirK8EGgLL
-        WkwR5q1KVEytHULaOkb4GF34Tf8tTxI=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-90-M7xXVt6lN5aAQfk5lrqsWA-1; Mon, 13 Feb 2023 13:11:12 -0500
-X-MC-Unique: M7xXVt6lN5aAQfk5lrqsWA-1
-Received: by mail-ed1-f71.google.com with SMTP id s20-20020a05640217d400b004ab46449f12so6109146edy.23
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:11:12 -0800 (PST)
+        Mon, 13 Feb 2023 13:12:04 -0500
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5040FC655
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:11:34 -0800 (PST)
+Received: by mail-vs1-xe34.google.com with SMTP id g8so13960428vso.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:11:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YhyueGm0rbJoXfAMuP4ME9y20a+9vEsRucr9LaCFZhw=;
+        b=SVjPeLrC97MbzGve1F6WSqRht948tpI14Bwxv9/AJydgcsAhw641XoEX6j3j67NsS1
+         IqGHj2wxZY9CTt0ZEHwT/6H31umeLxUHTwMStANUidaIIJWsfVUYlK1ANPNyXd78J+2/
+         3mTe11CYF/HJ2JZj2tLKeCcpP4i6yRbjk1wMw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=btENug+HNZMgsHueHpBS/EHiJOI8qsodxlQ5SGXxzpc=;
-        b=gTC75AOkgFI7V56M0AeAxSiRBc07ssYyJC0ej19Ez43czDAS9jGOeKCkgg+Bplsso7
-         pAIVW58uUJHJlvh4xDVqwVcWmgroSdjGnhUN48T4e5h4DnzVm+ElhmGPVexhxpb2cqyI
-         t4GvyBl2Tfdys69Ym3h/oAXtPVfZlgMNYnLLMCT63tZV6GwT0jJnPVbhK1jEjNJ8oAXb
-         o42qWXXcVQGLZ3AYT9Ba3fy8WGOJH2rWZRNJODbFSqXjXDdDDi/PhP0Xdwa1PAwKL+/l
-         553SrzF9TijxNBjeaWSQ9gC3lp/aY4UnCfMI1YmpywaVyGqBHXPcoy83WqriKS4S8wl7
-         Cuag==
-X-Gm-Message-State: AO0yUKW8KHZ1kWWB3gCVO0DgUjDJ3pqrpOQN4hqqkMNvWLTvDsJLeOIR
-        F5ukejwKN70l8w9g+hRGoepzK4R/akwXoEXosTZjTee5hyMN7CrLFz6llbmUoN44483FUXm8niO
-        9MpO1gmXPyIhyvOPoALB6KWbB
-X-Received: by 2002:a50:c007:0:b0:4ac:d2b3:b724 with SMTP id r7-20020a50c007000000b004acd2b3b724mr1951821edb.27.1676311871479;
-        Mon, 13 Feb 2023 10:11:11 -0800 (PST)
-X-Google-Smtp-Source: AK7set/2IiZueKNbZNJhFBMmU9KPuO2w+xCZ6ywEnPIDIDhVsdPwjrHBnwQ6oyt753mIL9L3C/68yg==
-X-Received: by 2002:a50:c007:0:b0:4ac:d2b3:b724 with SMTP id r7-20020a50c007000000b004acd2b3b724mr1951812edb.27.1676311871311;
-        Mon, 13 Feb 2023 10:11:11 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id u12-20020a50950c000000b004aac44175e7sm6942278eda.12.2023.02.13.10.11.10
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YhyueGm0rbJoXfAMuP4ME9y20a+9vEsRucr9LaCFZhw=;
+        b=XpuwvZLoK3AUlL99KNoNVkubJePMsas3zMj7reoYaIVDX9dpOww+Ld9Y4Qx9Q50Qfz
+         pf6/+FuwEx0095mVX4vvynnsa08JK5A9aiIfDkFz4/MS0GmdiGnrMA4ySw7IoXSHSkDZ
+         Fzr4F6EZTv08EFf7Z48YZfQQWrhEeZJA9HpHKRg/IC+3wQg9sS8CT5GEQXSuzqg7lvHF
+         M4nbNjLx4pxI3ol/XzBiQMQkbG3l3Dc5A6AR/omB52z+QbaHCwTmt0qWfePryJqzLI+Q
+         LBqgrbp3Huf/RbAIG9LJE6UXe2+ffkQwC3f4spUAjpJ0ONrxTvj6dcnYAPwnzTjgXbrW
+         ugpw==
+X-Gm-Message-State: AO0yUKVCbDWv/6OqwsMtY6ropm6pShCa/Du2leAuvWEv6rCi+Is6vjWT
+        Ajq3YGMMzd8192fO4cdPMKqw1YeHWZ4i2DVm
+X-Google-Smtp-Source: AK7set9wwRVZ2aOiKnrkex5pAschJvmYIWpVmQsHZlwe3aWklxqULLly2pxsvtTI6MWxMfoaSrxcfQ==
+X-Received: by 2002:a05:6102:948:b0:412:a93:ec50 with SMTP id a8-20020a056102094800b004120a93ec50mr4024287vsi.29.1676311891055;
+        Mon, 13 Feb 2023 10:11:31 -0800 (PST)
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com. [209.85.221.172])
+        by smtp.gmail.com with ESMTPSA id p18-20020a67f312000000b003d3f819a19fsm342073vsf.19.2023.02.13.10.11.28
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 10:11:10 -0800 (PST)
-Message-ID: <35ff8f48-2677-78ea-b5f3-329c75ce65c9@redhat.com>
-Date:   Mon, 13 Feb 2023 19:11:09 +0100
+        Mon, 13 Feb 2023 10:11:29 -0800 (PST)
+Received: by mail-vk1-f172.google.com with SMTP id i4so2032978vkn.13
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:11:28 -0800 (PST)
+X-Received: by 2002:a05:6122:243:b0:401:4f4b:22c2 with SMTP id
+ t3-20020a056122024300b004014f4b22c2mr967178vko.28.1676311888469; Mon, 13 Feb
+ 2023 10:11:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tianyu Lan <ltykernel@gmail.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-References: <43980946-7bbf-dcef-7e40-af904c456250@linux.microsoft.com>
- <Y+p1j7tYT+16MX6B@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: "KVM: x86/mmu: Overhaul TDP MMU zapping and flushing" breaks SVM
- on Hyper-V
-In-Reply-To: <Y+p1j7tYT+16MX6B@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <1674814487-2112-1-git-send-email-quic_kalyant@quicinc.com>
+In-Reply-To: <1674814487-2112-1-git-send-email-quic_kalyant@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 13 Feb 2023 10:11:15 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=XKOm1zLH+grTMD33QX_uX67AQ1ZUoyCYoAfUpqktCshg@mail.gmail.com>
+Message-ID: <CAD=FV=XKOm1zLH+grTMD33QX_uX67AQ1ZUoyCYoAfUpqktCshg@mail.gmail.com>
+Subject: Re: [v12] drm/msm/disp/dpu1: add support for dspp sub block flush in sc7280
+To:     Kalyan Thota <quic_kalyant@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robdclark@chromium.org,
+        swboyd@chromium.org, quic_vpolimer@quicinc.com,
+        dmitry.baryshkov@linaro.org, quic_abhinavk@quicinc.com,
+        marijn.suijten@somainline.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/13/23 18:38, Sean Christopherson wrote:
-> On Fri, Feb 10, 2023, Jeremi Piotrowski wrote:
->> Hi Paolo/Sean,
->>
->> We've noticed that changes introduced in "KVM: x86/mmu: Overhaul TDP MMU
->> zapping and flushing" conflict with a nested Hyper-V enlightenment that is
->> always enabled on AMD CPUs (HV_X64_NESTED_ENLIGHTENED_TLB). The scenario that
->> is affected is L0 Hyper-V + L1 KVM on AMD,
-> 
-> Do you see issues with Intel and HV_X64_NESTED_GUEST_MAPPING_FLUSH?  IIUC, on the
-> KVM side, that setup is equivalent to HV_X64_NESTED_ENLIGHTENED_TLB.
+Hi,
 
-My reading of the spec[1] is that HV_X64_NESTED_ENLIGHTENED_TLB will 
-cause svm_flush_tlb_current to behave (in Intel parlance) as an INVVPID 
-rather than an INVEPT.  So svm_flush_tlb_current has to be changed to 
-also add a call to HvCallFlushGuestPhysicalAddressSpace.  I'm not sure 
-if that's a good idea though.
+On Fri, Jan 27, 2023 at 2:15 AM Kalyan Thota <quic_kalyant@quicinc.com> wrote:
+>
+> Flush mechanism for DSPP blocks has changed in sc7280 family, it
+> allows individual sub blocks to be flushed in coordination with
+> master flush control.
+>
+> Representation: master_flush && (PCC_flush | IGC_flush .. etc )
+>
+> This change adds necessary support for the above design.
+>
+> Changes in v1:
+> - Few nits (Doug, Dmitry)
+> - Restrict sub-block flush programming to dpu_hw_ctl file (Dmitry)
+>
+> Changes in v2:
+> - Move the address offset to flush macro (Dmitry)
+> - Separate ops for the sub block flush (Dmitry)
+>
+> Changes in v3:
+> - Reuse the DPU_DSPP_xx enum instead of a new one (Dmitry)
+>
+> Changes in v4:
+> - Use shorter version for unsigned int (Stephen)
+>
+> Changes in v5:
+> - Spurious patch please ignore.
+>
+> Changes in v6:
+> - Add SOB tag (Doug, Dmitry)
+>
+> Changes in v7:
+> - Cache flush mask per dspp (Dmitry)
+> - Few nits (Marijn)
+>
+> Changes in v8:
+> - Few nits (Marijn)
+>
+> Changes in v9:
+> - Use DSPP enum while accessing flush mask to make it readable (Dmitry)
+> - Few nits (Dmitry)
+>
+> Changes in v10:
+> - Fix white spaces in a separate patch (Dmitry)
+>
+> Changes in v11:
+> - Define a macro for dspp flush selection (Marijn)
+> - Few nits (Marijn)
+>
+> Changes in v12:
+> - Minor comments (reorder macros and a condition) (Marijn)
+>
+> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+> ---
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c       |  2 +-
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c |  5 ++-
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |  4 +++
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c     | 49 +++++++++++++++++++++++---
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h     |  5 ++-
+>  5 files changed, 58 insertions(+), 7 deletions(-)
 
-First, that's a TLB shootdown rather than just a local thing; 
-flush_tlb_current is supposed to be relatively cheap, and there would be 
-a lot of them because of the unconditional calls to 
-nested_svm_transition_tlb_flush on vmentry/vmexit.
+There's a (trivial to resolve) merge conflict when applying this patch
+against msm-next. I dunno if that means you should send a v13?
 
-Second, while the nCR3 matches across virtual processors for SVM, the 
-(nCR3, ASID) pair does not, so it doesn't even make much sense to do a 
-TLB shootdown.
+In any case, when using this patch together with the DSPP series [1]
+the internal night light works on sc7280-herobrine based boards. Thus:
 
-Depending on the performance results of adding the hypercall to 
-svm_flush_tlb_current, the fix could indeed be to just disable usage of 
-HV_X64_NESTED_ENLIGHTENED_TLB.
+Tested-by: Douglas Anderson <dianders@chromium.org>
 
-Paolo
 
-[1] 
-https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/nested-virtualization
-
+[1] https://lore.kernel.org/r/1676286704-818-1-git-send-email-quic_kalyant@quicinc.com/
