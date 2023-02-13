@@ -2,157 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08980694B91
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:47:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A4EC694B99
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjBMPrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:47:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
+        id S230088AbjBMPsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:48:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjBMPrJ (ORCPT
+        with ESMTP id S230149AbjBMPs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:47:09 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7825193F5;
-        Mon, 13 Feb 2023 07:47:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1676303229; x=1707839229;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=26zBXs9U0xIVIcE1270XHPcpO39gO3jje/xpCU6DrnM=;
-  b=TX+kXeRcwGyt2OnPArLm7Kb2DwLJ8yq3PHBwJUGrbi1rdhHab0p9VU9P
-   5yfR7qnRMe3SCZuTBq7LB7hMd1SN/WgQqXcMsbMsficuzCv5dhJkC8Fnp
-   K7l4zcVPAiiGM9xJaJ/84tPAU7YZ8n7uU3WLm9wcD9OlOzbkFLmEhuq2D
-   BGhR0TF6OeMPcmLajdZdJFwdfeHX2I/yurUkP6YgReQm9I+7PlPsn4t7x
-   SSQ8BiV2jLL+lteDU4YlPx2KWwA5wHK8RR+kNW/xpaD8DaoLDZlCVoHFm
-   rbz67QM+2U85zEeuoETKhBtgK8Pr051+raVizP21QucNIPSuLSp+Gmv2i
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,294,1669100400"; 
-   d="scan'208";a="196669922"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Feb 2023 08:47:06 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 13 Feb 2023 08:47:03 -0700
-Received: from den-dk-m31857.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Mon, 13 Feb 2023 08:46:59 -0700
-Message-ID: <1c317ed5e3f70b403206e6fdb181c1d0573e8b17.camel@microchip.com>
-Subject: Re: [PATCH net-next 04/10] net: microchip: sparx5: Use chain ids
- without offsets when enabling rules
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     Dan Carpenter <error27@gmail.com>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Casper Andersson <casper.casan@gmail.com>,
-        "Russell King" <rmk+kernel@armlinux.org.uk>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        "Nathan Huckleberry" <nhuck@google.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Daniel Machon" <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Michael Walle <michael@walle.cc>
-Date:   Mon, 13 Feb 2023 16:46:59 +0100
-In-Reply-To: <Y+pTlf+2o0mVEErX@kadam>
-References: <20230213092426.1331379-1-steen.hegelund@microchip.com>
-         <20230213092426.1331379-5-steen.hegelund@microchip.com>
-         <Y+oZjg8EkKp46V9Z@kadam>
-         <b755fa1c818639a1e7c11ab3b2ac56443757ac3c.camel@microchip.com>
-         <Y+pSKQdcpMw3YGvh@kadam> <Y+pTlf+2o0mVEErX@kadam>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 
+        Mon, 13 Feb 2023 10:48:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671931E9F9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:47:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676303252;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zk9ZB85N8qJ1vK9VuqUk4MadsaC7d3r9I0xTkyZcACk=;
+        b=Fq8PFZYSCFcnuT7S5D0Ldv/QazvSRLpu74DdT66rRaV6CzpBpT92m0hsdCTsYrXSn5xxMB
+        cKGRXNJ3okNOTj4H6bhgphe67pcKHE5IZCMI8JJK/rDVxYoRt7+V6OjpVuvjPLm1pILk3r
+        yGWhRQUcPpqgCP9Iszb4/b4pXL88AOE=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-447-yHMgJUXVNvSfJoi1m7UncA-1; Mon, 13 Feb 2023 10:47:31 -0500
+X-MC-Unique: yHMgJUXVNvSfJoi1m7UncA-1
+Received: by mail-wm1-f72.google.com with SMTP id bg3-20020a05600c3c8300b003e1e7d3cf9fso2881643wmb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:47:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zk9ZB85N8qJ1vK9VuqUk4MadsaC7d3r9I0xTkyZcACk=;
+        b=srNGYr68tfGXald5CdlSAmLGlwrP3remWwpr3edGqXlIgIA+7cXhKxY5f9NEBjtldO
+         zMtZXBcrZMCrar1qyEYOeiNBP5onZqAxqS6NRa6j+Z++aZjHf9X6iFFFevj/bKSv0+K4
+         6tbYRoRbJvhuaz2fUhvlPkZU74b0ixHpS5vhsDQYpPxAfcvE4rLIKl8gUR65BW2IXaws
+         34qYavaXmkSAG+3Qv2bliiPr/nZjPKv8mFX6+Dcjg96S+Gdi6zjAPLFgjw9h70wdEPkk
+         VlbiE2NeP35dqbrK06dchDF+IPjBZIBaxPjitIo20JgjcK6EtrUyh4WJ1p7B93OVJtlx
+         IuVw==
+X-Gm-Message-State: AO0yUKXC2PuJRgKZcaqNW9fztzHM+Bjf0sqjfYhbApwtlQtAHL/1UGKS
+        YTrFbwlq3EsBscD2QNbyakQDYQ0dyPN/52YgVNjHqHht3hTHbLF6hTet3bFZyXFERgTS+SkQ6Rt
+        jFrNIvxvpDdp3pjV+2eiA21bA
+X-Received: by 2002:adf:fcc1:0:b0:2c3:f78f:518f with SMTP id f1-20020adffcc1000000b002c3f78f518fmr18794829wrs.39.1676303249979;
+        Mon, 13 Feb 2023 07:47:29 -0800 (PST)
+X-Google-Smtp-Source: AK7set9kzLbhn6FVuDM3325N5rlxLs5gU4rYjW2jekddTSwamP6u7flJXRTM1zAOMwya96tpyHAZIg==
+X-Received: by 2002:adf:fcc1:0:b0:2c3:f78f:518f with SMTP id f1-20020adffcc1000000b002c3f78f518fmr18794818wrs.39.1676303249742;
+        Mon, 13 Feb 2023 07:47:29 -0800 (PST)
+Received: from ?IPV6:2003:cb:c705:6d00:5870:9639:1c17:8162? (p200300cbc7056d00587096391c178162.dip0.t-ipconnect.de. [2003:cb:c705:6d00:5870:9639:1c17:8162])
+        by smtp.gmail.com with ESMTPSA id k1-20020adff5c1000000b002bff574a250sm10959411wrp.2.2023.02.13.07.47.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 07:47:29 -0800 (PST)
+Message-ID: <5f3d8009-7579-32e9-ab24-347f71fa5ce6@redhat.com>
+Date:   Mon, 13 Feb 2023 16:47:28 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 1/4] splice: Rename new splice functions
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>
+References: <20230213153301.2338806-1-dhowells@redhat.com>
+ <20230213153301.2338806-2-dhowells@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230213153301.2338806-2-dhowells@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
+On 13.02.23 16:32, David Howells wrote:
+> Rename generic_file_buffered_splice_read() to filemap_splice_read().
+> 
+> Rename generic_file_direct_splice_read() to direct_splice_read().
+> 
+> Requested-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Al Viro <viro@zeniv.linux.org.uk>
+> cc: John Hubbard <jhubbard@nvidia.com>
+> cc: David Hildenbrand <david@redhat.com>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: linux-block@vger.kernel.org
+> cc: linux-fsdevel@vger.kernel.org
+> cc: linux-mm@kvack.org
+> ---
 
-On Mon, 2023-02-13 at 18:13 +0300, Dan Carpenter wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
-e
-> content is safe
->=20
-> On Mon, Feb 13, 2023 at 06:07:21PM +0300, Dan Carpenter wrote:
-> > On Mon, Feb 13, 2023 at 01:48:50PM +0100, Steen Hegelund wrote:
-> > > Hi Dan,
-> > >=20
-> > > On Mon, 2023-02-13 at 14:05 +0300, Dan Carpenter wrote:
-> > > > EXTERNAL EMAIL: Do not click links or open attachments unless you k=
-now
-> > > > the
-> > > > content is safe
-> > > >=20
-> > > > On Mon, Feb 13, 2023 at 10:24:20AM +0100, Steen Hegelund wrote:
-> > > > > diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api.c
-> > > > > b/drivers/net/ethernet/microchip/vcap/vcap_api.c
-> > > > > index 68e04d47f6fd..9ca0cb855c3c 100644
-> > > > > --- a/drivers/net/ethernet/microchip/vcap/vcap_api.c
-> > > > > +++ b/drivers/net/ethernet/microchip/vcap/vcap_api.c
-> > > > > @@ -1568,6 +1568,18 @@ static int vcap_write_counter(struct
-> > > > > vcap_rule_internal *ri,
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
-> > > > > =C2=A0}
-> > > > >=20
-> > > > > +/* Return the chain id rounded down to nearest lookup */
-> > > > > +static int vcap_round_down_chain(int cid)
-> > > > > +{
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0 return cid - (cid % VCAP_CID_LOOKUP_SIZ=
-E);
-> > > > > +}
-> > > > > +
-> > > > > +/* Return the chain id rounded up to nearest lookup */
-> > > > > +static int vcap_round_up_chain(int cid)
-> > > > > +{
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0 return vcap_round_down_chain(cid + VCAP=
-_CID_LOOKUP_SIZE);
-> > > >=20
-> > > > Just use the round_up/down() macros.
-> > >=20
-> > > The only round up/down macros that I am aware of are:
-> > >=20
-> > > =C2=A0* round_up - round up to next specified power of 2
-> > > =C2=A0* round_down - round down to next specified power of 2
-> > >=20
-> > > And I cannot use these as the VCAP_CID_LOOKUP_SIZE is not a power of =
-2.
-> > >=20
-> > > Did I miss something here?
-> > >=20
-> >=20
-> > Oh wow.=C2=A0 I didn't realize they needed to be a power of 2.=C2=A0 So=
-rry!
->=20
-> The correct macros are roundup/down().=C2=A0 Those don't have the power o=
-f
-> two requirement.
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-Yep - You are right, these are a bit further down in the math.h file, and I
-never noticed them before :-)
+-- 
+Thanks,
 
-I will update my code to use these instead.
+David / dhildenb
 
->=20
-> regards,
-> dan carpenter
->=20
-
-Thanks for the investigation!
-
-BR
-Steen
