@@ -2,88 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2384C6940EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F04E66940E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:25:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbjBMJZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 04:25:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
+        id S229828AbjBMJYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 04:24:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjBMJYq (ORCPT
+        with ESMTP id S229728AbjBMJYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 04:24:46 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D78BDDA;
-        Mon, 13 Feb 2023 01:24:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gFeqYOXczwx3CAc2qMLDLlbFrxDEgSjP5KEBsqfU5cI=; b=JJfbRNqykp3u5JZxLoa1Sb6y5s
-        lW+WGSPGaD+NXTBHbLcMRwhcADLsSvMAtIMWiLafYTjxpJrjZIGSUJjFoK2lA3rXmCZxRSmyiPfQU
-        4XPaF16EQlhBfjdrCsnY9M0asc52iUoF3HyUsF1DxVwjTlEm9/4NDuFFvzFVdJ8jEBXn+usci59nc
-        vIDK9FWG11om3OSpzNNGLqHIsbQxacsH3Qe9Eweh8DBtuQvbP6kf4hXt3Y6JH/xxUrU1J2F3ClF+N
-        eCUGWNpUqJOMGE3Rx6qBXn+BjLks6v6TEecGTuY/s4FM13n4rD+KA+uX98e4OOV5Fs3qE9kaPyT4Z
-        DouLopsg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pRV4K-005btr-9T; Mon, 13 Feb 2023 09:24:16 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A531530020C;
-        Mon, 13 Feb 2023 10:24:13 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 80E8F20C6EEA1; Mon, 13 Feb 2023 10:24:13 +0100 (CET)
-Date:   Mon, 13 Feb 2023 10:24:13 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Coly Li <colyli@suse.de>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
- with unique class keys
-Message-ID: <Y+oBveWO2z6xdTW/@hirez.programming.kicks-ass.net>
-References: <52c7d509-ba9e-a121-60c9-138d7ff3f667@I-love.SAKURA.ne.jp>
- <Y+gLd78vChQERZ6A@rowland.harvard.edu>
- <CAHk-=whXYzkOJZo0xpyYfrhWQg1M7j0OeCojTJ84CN4q9sqb2Q@mail.gmail.com>
- <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
- <Y+gjuqJ5RFxwLmht@moria.home.lan>
- <Y+hRurRwm//1+IcK@rowland.harvard.edu>
- <Y+hTEtCKPuO0zGIt@moria.home.lan>
- <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
- <Y+hYn6uzIUBaxDdV@moria.home.lan>
- <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
+        Mon, 13 Feb 2023 04:24:44 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CBA14E8B;
+        Mon, 13 Feb 2023 01:24:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1676280279; x=1707816279;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0cjmFjyZ0y5LsKhYMj2E4+r0Krs4C84DnjiMFk2+QdY=;
+  b=noqTGe7+xtYLRZ8CYowRGqOrCkEGR2dAcj6KVuigauAbsAHs1JBlaLsQ
+   mmwd/i97yOTs99geraz1xcJuY4/EG5uQogiUl+Ig+K/ihFKQCsjDJogX/
+   zdLMRDN3YuBXX1dmES2rECwkyUiVUFs5GAziD5MtMHm3X+JgS69YMErzm
+   ndYjecC5geY4ofqv1QWI9QFN7r1ZsMWZqMfGeOH3abGw9QldPAkY0018q
+   RIjmvZH7Vx+UP86V3LQPvLLVqburAYpZUtjsVdO9DkZlxoc1m6jRbF9s7
+   m6LkST9el46q66c5MO0rRnNx3/qj0V2v3uUvVB3ndXsQLAYhFb6YwmDRy
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,293,1669100400"; 
+   d="scan'208";a="200188819"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Feb 2023 02:24:38 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 13 Feb 2023 02:24:35 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Mon, 13 Feb 2023 02:24:31 -0700
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     Steen Hegelund <steen.hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Casper Andersson" <casper.casan@gmail.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        "Nathan Huckleberry" <nhuck@google.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Steen Hegelund" <Steen.Hegelund@microchip.com>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH net-next 00/10] Adding Sparx5 ES0 VCAP support
+Date:   Mon, 13 Feb 2023 10:24:16 +0100
+Message-ID: <20230213092426.1331379-1-steen.hegelund@microchip.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 10:23:44AM -0500, Alan Stern wrote:
-> Provided it acquires the parent device's lock first, this is 
-> utterly safe no matter what order the children are locked in.  Try 
-> telling that to lockdep! 
+This provides the Egress Stage 0 (ES0) VCAP (Versatile Content-Aware
+Processor) support for the Sparx5 platform.
 
-mutex_lock_next_lock(child->lock, parent->lock) is there to express this
-exact pattern, it allows taking multiple child->lock class locks (in any
-order) provided parent->lock is held.
+The ES0 VCAP is an Egress Access Control VCAP that uses frame keyfields and
+previously classified keyfields to add, rewrite or remove VLAN tags on the
+egress frames, and is therefore often referred to as the rewriter.
+
+The ES0 VCAP also supports trapping frames to the host.
+
+The ES0 VCAP has 1 lookup accessible with this chain id:
+
+- chain 10000000: ES0 Lookup 0
+
+The ES0 VCAP does not do traffic classification to select a keyset, but it
+does have two keysets that can be used on all traffic.  For now only the
+ISDX keyset is used.
+
+The ES0 VCAP can match on an ISDX key (Ingress Service Index) as one of the
+frame metadata keyfields, similar to the ES2 VCAP.
+
+The ES0 VCAP uses external counters in the XQS (statistics) group.
+
+Steen Hegelund (10):
+  net: microchip: sparx5: Discard frames with SMAC multicast addresses
+  net: microchip: sparx5: Clear rule counter even if lookup is disabled
+  net: microchip: sparx5: Egress VLAN TPID configuration follows IFH
+  net: microchip: sparx5: Use chain ids without offsets when enabling
+    rules
+  net: microchip: sparx5: Improve the error handling for linked rules
+  net: microchip: sparx5: Add ES0 VCAP model and updated KUNIT VCAP
+    model
+  net: microchip: sparx5: Updated register interface with VCAP ES0
+    access
+  net: microchip: sparx5: Add ES0 VCAP keyset configuration for Sparx5
+  net: microchip: sparx5: Add TC support for the ES0 VCAP
+  net: microchip: sparx5: Add TC vlan action support for the ES0 VCAP
+
+ .../ethernet/microchip/sparx5/sparx5_main.c   |    1 +
+ .../microchip/sparx5/sparx5_main_regs.h       | 1829 ++++++++++++-----
+ .../ethernet/microchip/sparx5/sparx5_port.c   |    5 +
+ .../net/ethernet/microchip/sparx5/sparx5_tc.h |   74 +
+ .../microchip/sparx5/sparx5_tc_flower.c       |  368 +++-
+ .../microchip/sparx5/sparx5_vcap_ag_api.c     |  385 +++-
+ .../microchip/sparx5/sparx5_vcap_debugfs.c    |   41 +
+ .../microchip/sparx5/sparx5_vcap_impl.c       |  274 +++
+ .../microchip/sparx5/sparx5_vcap_impl.h       |   25 +
+ .../ethernet/microchip/sparx5/sparx5_vlan.c   |    4 +-
+ .../net/ethernet/microchip/vcap/vcap_ag_api.h |  174 +-
+ .../net/ethernet/microchip/vcap/vcap_api.c    |   28 +-
+ .../microchip/vcap/vcap_api_debugfs_kunit.c   |    4 +-
+ .../ethernet/microchip/vcap/vcap_api_kunit.c  |    4 +-
+ .../microchip/vcap/vcap_model_kunit.c         |  270 ++-
+ .../microchip/vcap/vcap_model_kunit.h         |   10 +-
+ drivers/net/ethernet/microchip/vcap/vcap_tc.c |    3 +
+ drivers/net/ethernet/microchip/vcap/vcap_tc.h |    1 +
+ 18 files changed, 2758 insertions(+), 742 deletions(-)
+
+-- 
+2.39.1
+
