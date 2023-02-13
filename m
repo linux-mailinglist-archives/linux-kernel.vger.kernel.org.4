@@ -2,150 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B0F693E93
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 08:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 040C7693E9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 08:03:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjBMHAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 02:00:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47900 "EHLO
+        id S229714AbjBMHDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 02:03:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBMHAO (ORCPT
+        with ESMTP id S229468AbjBMHD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 02:00:14 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9758DDA;
-        Sun, 12 Feb 2023 23:00:12 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id C7B495C0113;
-        Mon, 13 Feb 2023 02:00:08 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 13 Feb 2023 02:00:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1676271608; x=1676358008; bh=MYUhSAwp6n
-        JgwmtSsWCxNN4aifIdwOQy7DHsVCaQUmc=; b=pwbeMXK2JIaejs3NfA1C33stmx
-        bPPtO+OnYD3GWAEolZGQP1vbxQnTIAjBpRRVIal68apAQv9I7qtJj4dcsXEmf7PI
-        Uz0hWokK2LQbYL7wy289RlwoMXqMbRhtPIKNGKMLpHRtrQWf8/S/zg7OncATv/Kx
-        qOeHiAjiVXmeP4vPdFZzM6GbIq+N5Rvy449MnVtJ+3Dyr2G+1n7/69l0GcoYFLo1
-        aS7tTZ7TDrwJrr4ZA1xp/YQ3/K3WCf1VQSm8HUYhYY0765OBgm630+/nPZHzI3SE
-        so3tN6hpcDWKTpksOXoCBSzzU1NlJJrqrhlh0JDNx6VGSb/mNTQMka+EAAQw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1676271608; x=1676358008; bh=MYUhSAwp6nJgwmtSsWCxNN4aifId
-        wOQy7DHsVCaQUmc=; b=eJ61mCKGo43fuBwMWnjDdu7AmtpD6lE3eVIddHrwj9AT
-        qNWM28a58XeGQzKAyyeoAXvEPhTnCbtwmomnSdQ4KhzMiRh3yMsfik9EPvPgA/+r
-        RWOGI/0V2qWKPhEUceMva4u6yJGpBkZUOZyfuEjIl4zsdnrl+2TGXjJx6G/qkGGf
-        H8+64MOXPNpOo4ak+3TqyEBTMrWAZiHCU0Tuo52i2TVajplElYszxBURIFh8xoPo
-        VOUuZlnrp9bkq4irzAIHLmRVRsHx6DsCB/0HJIURyjZ9gUMjQJpzXUFF7yGKFZHa
-        P6BjQFmYCYT2gjdnSHvEeBw7Q+irUzWgI+M6G5XVew==
-X-ME-Sender: <xms:-N_pY-5X4QfGElVV0hTziHnVFflBAqO5mWC09xUQqfo2VsNRmPFX-A>
-    <xme:-N_pY35gUItem9qO8Y25AfmFSXt50zCib-LN10tdQgPsCjkW53MHIAY8OCmLeWEK-
-    uata0IqiLlGXW3B8c0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeitddguddtudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecunecujfgurhepofgfggfkjghffffhvfevufgtse
-    httdertderredtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgu
-    segrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnhepffehueegteeihfegtefhjefgtd
-    eugfegjeelheejueethfefgeeghfektdekteffnecuvehluhhsthgvrhfuihiivgeptden
-    ucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:-N_pY9ehcreFPvzmx4obytf1EFhs_Gl9UQJcAHa5z7zDpvyEhzqngQ>
-    <xmx:-N_pY7J-TQIpWMnsvFFKQwHxbHJIov31wmZ99KVzQRrixvDTDfgYQA>
-    <xmx:-N_pYyKiLv_EQ5o_Uzkff_idu82_RkhIh9iUkfDxVt76jx8E7MEJ_A>
-    <xmx:-N_pY6-ULIYQDU8DqO4vUCvYaOqPG1NoOE95O6E19m5ekaYGBOtM6w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 32E94B60089; Mon, 13 Feb 2023 02:00:08 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
-Mime-Version: 1.0
-Message-Id: <3f70f54e-206f-438e-9ef4-2cd514d3a690@app.fastmail.com>
-In-Reply-To: <CAKEwX=MneVSm49FYxNAP+-uQijOZnNfWjuzF7FPub_rcDFY__A@mail.gmail.com>
-References: <20230203190413.2559707-1-nphamcs@gmail.com>
- <20230203190413.2559707-3-nphamcs@gmail.com>
- <834254e6-a9c2-440c-9c67-fc5fa5ca43bc@app.fastmail.com>
- <CAKEwX=MneVSm49FYxNAP+-uQijOZnNfWjuzF7FPub_rcDFY__A@mail.gmail.com>
-Date:   Mon, 13 Feb 2023 08:00:06 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Nhat Pham" <nphamcs@gmail.com>
-Cc:     "Andrew Morton" <akpm@linux-foundation.org>,
-        "Johannes Weiner" <hannes@cmpxchg.org>,
-        "Matthew Wilcox" <willy@infradead.org>, bfoster@redhat.com,
-        kernel-team@meta.com, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v9 2/3] cachestat: implement cachestat syscall
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 13 Feb 2023 02:03:27 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F71BDF8
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 23:03:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=CAMl6bbB4VBhku/eCWB/73USL/Lw7fBbnEebQaGO7JI=; b=VfDbAeWoe5xctNA++Tc2HaNUer
+        FuoNeuqYfG4Vmo/E7G4pbVa+sDQYBkM7aaxFFjdcdzynWmdPOXoezgBvkQ+On+pguoeBG1WeEnpOl
+        o9R+kzwyoN7t2pv1Om6UrFTlnTftz4rOOfvmuZ9yuriOpPbCCd6wACMdE8njolPzcWBek2+85cX+f
+        eu5mRyMioEsfW+mLrN5WJBsXsrbBRzqYhp+/VtRN9Wi+DcDrkQ5Rtjmvvag3N/rIxDStG9GJfGlTL
+        SpUtzx0th4TCOv8ptSvCmLbGDtahZrdA7UVSZ5b+IQz1Q2DrYR9L6fV/JVLBZl0JDiU8B8P+NfYH9
+        OtVwWydQ==;
+Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pRSs1-00DP1S-6k; Mon, 13 Feb 2023 07:03:25 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Boris Brezillon <boris.brezillon@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-i3c@lists.infradead.org
+Subject: [PATCH -next] i3c: fix device.h kernel-doc warnings
+Date:   Sun, 12 Feb 2023 23:03:24 -0800
+Message-Id: <20230213070324.1564-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 12, 2023, at 07:58, Nhat Pham wrote:
-> On Sun, Feb 5, 2023 at 4:56 PM Arnd Bergmann <arnd@arndb.de> wrote:
->> On Fri, Feb 3, 2023, at 20:04, Nhat Pham wrote:
->> 
->> > +SYSCALL_DEFINE5(cachestat, unsigned int, fd, loff_t, off, size_t, len,
->> > +             struct cachestat __user *, cstat, unsigned int, flags)
->> > +{
->> > +     return ksys_cachestat(fd, off, len, cstat, flags);
->> > +}
->> > +
->> > +#ifdef CONFIG_COMPAT
->> > +COMPAT_SYSCALL_DEFINE6(cachestat, unsigned int, fd, 
->> > compat_arg_u64_dual(off),
->> > +             size_t, len, struct cachestat __user *, cstat, unsigned int, flags)
->> > +{
->> > +     return ksys_cachestat(fd, compat_arg_u64_glue(off), len, cstat, 
->> > flags);
->> > +}
->> 
->> This still looks wrong to me, as this compat definition does not match
->> the native variant on architectures that require 64-bit arguments to
->> be passed in aligned register pairs, such as arm, mips or ppc, but
->> not x86, s390 or riscv.
->
-> Oh I see - thanks for pointing that out! And the last bit means this
-> is a non-issue for x86, s390 or riscv right? 
+Fix all kernel-doc warnings in <linux/i3c/device.h>:
 
-Right. It still requires the separate compat entry point that we
-generally try to avoid for new syscalls, but it's probably still
-better than passing the offset through a pointer.
+include/linux/i3c/device.h:27: warning: contents before sections
+include/linux/i3c/device.h:196: warning: Excess function parameter 'dev' description in 'dev_to_i3cdev'
 
+Fixes: fa838c8ce537 ("i3c: move dev_to_i3cdev() to use container_of_const()")
+Fixes: 3a379bbcea0a ("i3c: Add core I3C infrastructure")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Boris Brezillon <boris.brezillon@bootlin.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-i3c@lists.infradead.org
+---
+ include/linux/i3c/device.h |   13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-> And iirc from the last thread, this is fixable via a simple reordering
-> of the args in order to properly align the 64-bit arguments, for e.g:
->
-> SYSCALL_DEFINE5(cachestat, loff_t, off, unsigned int, fd, size_t, len,
->               struct cachestat __user *, cstat, unsigned int, flags)
->
-> ...
->
-> COMPAT_SYSCALL_DEFINE6(cachestat, compat_arg_u64_dual(off), 
->              unsigned int, fd, size_t, len, struct cachestat __user *, cstat, 
->              unsigned int, flags)
->
->
-> It looks a bit odd to me that fd is not the first argument, but perhaps this
-> is an acceptable sacrifice to avoid unused arg and keep the flags...
->
-> Let me know what you think about this!
-
-Right, this should work. You can also move the offset to the third
-or fifth argument in order to keep the fd one first.
-
-I would actually like to change all the syscalls that have loff_t
-arguments to have explicit '64-bit' and '32-bit' versions rather
-than 'native' and 'compat', to make it more obvious what is going on
-even on the architectures that have no 64-bit variant.
-That is something to do later though, you should definitely keep
-doing this the same way we do for all other syscalls.
-
-    Arnd
+diff -- a/include/linux/i3c/device.h b/include/linux/i3c/device.h
+--- a/include/linux/i3c/device.h
++++ b/include/linux/i3c/device.h
+@@ -18,17 +18,18 @@
+ /**
+  * enum i3c_error_code - I3C error codes
+  *
++ * @I3C_ERROR_UNKNOWN: unknown error, usually means the error is not I3C
++ *		       related
++ * @I3C_ERROR_M0: M0 error
++ * @I3C_ERROR_M1: M1 error
++ * @I3C_ERROR_M2: M2 error
++ *
+  * These are the standard error codes as defined by the I3C specification.
+  * When -EIO is returned by the i3c_device_do_priv_xfers() or
+  * i3c_device_send_hdr_cmds() one can check the error code in
+  * &struct_i3c_priv_xfer.err or &struct i3c_hdr_cmd.err to get a better idea of
+  * what went wrong.
+  *
+- * @I3C_ERROR_UNKNOWN: unknown error, usually means the error is not I3C
+- *		       related
+- * @I3C_ERROR_M0: M0 error
+- * @I3C_ERROR_M1: M1 error
+- * @I3C_ERROR_M2: M2 error
+  */
+ enum i3c_error_code {
+ 	I3C_ERROR_UNKNOWN = 0,
+@@ -189,7 +190,7 @@ struct device *i3cdev_to_dev(struct i3c_
+ 
+ /**
+  * dev_to_i3cdev() - Returns the I3C device containing @dev
+- * @dev: device object
++ * @__dev: device object
+  *
+  * Return: a pointer to an I3C device object.
+  */
