@@ -2,217 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D06C76950BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:33:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E43BF6950C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:36:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbjBMTdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 14:33:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36412 "EHLO
+        id S229963AbjBMTgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 14:36:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjBMTdH (ORCPT
+        with ESMTP id S229556AbjBMTgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 14:33:07 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527FC211DD;
-        Mon, 13 Feb 2023 11:32:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676316749; x=1707852749;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=N1Mx/ZUwtrMlVJyoS0WWIPB2+ycGXyKKHySSSyRR1Is=;
-  b=ilC680RSq1JLofKJtoY70kmAGEk50dGQnfLvXxMyIKfYpFGNKGcZ09KC
-   CpxidNKJJrge4XRRklvZ9qatibCzCR7RuU3o1naQJj1vKdgRgI9GCFFYf
-   X8+X+NQ0ZsGQ6//12Uq9DOOO71YMdbBA9IM0/D+OHZdUuv9wrnVU5Dss0
-   cPR0/OzUPBjtdQ97gW8Xvtf9IFyGLsxHODKmfwu5vBhbF1FOO8vAzzIts
-   F5WVIorMqG75umsZMuQF/8+b3NOUu21CL6JBsqgpzWPjoge1O2E+lTJA3
-   kZWIlGj1sbWkHKjNKmJmuEJ1tMwhKQfdZsqAbL8bmAi69KyLd4BjBojBL
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="319004201"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="319004201"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 11:31:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="732607469"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="732607469"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga008.fm.intel.com with ESMTP; 13 Feb 2023 11:31:57 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 13 Feb 2023 11:31:57 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 13 Feb 2023 11:31:56 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 13 Feb 2023 11:31:56 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.102)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Mon, 13 Feb 2023 11:31:56 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MysP116Nz2H9URyn8zAm2ABqjEse+mopnqhVgf8g2FQ3MH+LqoQZJF1UpUoBV0lW+sEuFDv1j0HttVI3p0u6vMgkIE8MljORAT02wFdsQEuasMB5D8BfD44TatthGdNKD59noIqxbAI0AEA3e+rZAQBLWyLecrNEbSOyJ1X3g8NN0XkoISPkseieM/E35qTn4BNIt8XqFVKrxEasHrzI1/3s6msS/e31P/HqY7EQHVPC1Uu444pPN+vbzFneXPx4xsma9+2O9KL77xxRZnhDcWGr9N3HK42MW1peFC+Mdma36JE/6XPsE3soOWzUI8LJi/rhlsYi8vVH7Dwguy/viw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5IXQTOVX32QfFn7woH4FgpbAp6Wusn57svQofSzu/xg=;
- b=G/e3U+cHegI29T6Tj++9eE/h5KjWhVDwqhQRuZgtI2vJmP8FN58veY1Dwt9DtKCasYCtQclXuI7/dORdZmuk0rWZgpLTBoXkUDQbqq+pB1h5LOyYkYWpWb9t2ZqpkYpWvnq0rbDLkrNFP5gtwjOjDKSUPlM1r2UQ2aAOlnf5NJrf8rktstkyMY98PSKp8UbAObbejtLoY0E3UhDamUVsZQb1b1pzLVrEBHZ5H6ze0Zj4SYXLTdX12ALAxYyiEjB/qpgN0HYY87495CsSB8mcb3F+qQWUHsaWK1V1uVDN591klNrTxyd/ztaxMwTt9WIEqpMEwqtTYGb0xgC84yJ7eA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MW5PR11MB5810.namprd11.prod.outlook.com (2603:10b6:303:192::22)
- by SA3PR11MB7413.namprd11.prod.outlook.com (2603:10b6:806:31a::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Mon, 13 Feb
- 2023 19:31:54 +0000
-Received: from MW5PR11MB5810.namprd11.prod.outlook.com
- ([fe80::8836:6aeb:e872:30c3]) by MW5PR11MB5810.namprd11.prod.outlook.com
- ([fe80::8836:6aeb:e872:30c3%4]) with mapi id 15.20.6086.024; Mon, 13 Feb 2023
- 19:31:54 +0000
-Message-ID: <2299e6f5-b7f7-c875-3244-9b4a311519d6@intel.com>
-Date:   Mon, 13 Feb 2023 20:31:47 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2] ACPICA: Replace fake flexible arrays with flexible
- array members
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Kees Cook <keescook@chromium.org>
-CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <devel@acpica.org>, <linux-hardening@vger.kernel.org>
-References: <20230127191621.gonna.262-kees@kernel.org>
- <20230213003546.GA3280303@roeck-us.net>
-From:   "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>
-In-Reply-To: <20230213003546.GA3280303@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BE1P281CA0064.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:26::12) To MW5PR11MB5810.namprd11.prod.outlook.com
- (2603:10b6:303:192::22)
+        Mon, 13 Feb 2023 14:36:18 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1E01BF;
+        Mon, 13 Feb 2023 11:36:17 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id p24-20020a056830131800b0068d4b30536aso4070242otq.9;
+        Mon, 13 Feb 2023 11:36:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HlUwM5/8oymp4K70XoDUwsO3GnP9r5Zf4hM5G2ZAGRg=;
+        b=DL6ogzN03jXRR0WMlULu8x/lTz7LjCnuBbYjic0VsnSoQd5bo1gPorLCGB7x8mXUXw
+         JwqI899c0IJTD5yh9QGdpsNH/OvBy2R4Kqncl0GEZZPQAL4KjjiyZGSSu/dztN8+6Adn
+         lpci6Twq9QTtTgzqx81Se9K4pRcC5KWuFOf/PDQa+YvCa1KZN11ogPJLN0uTe1m7M7nQ
+         GNYgjrRhGdHsTPqVxL1tkv0EsgZnGVbdGSfMK12I2iQdRSTOMS5Wbr8bHGPv4yEqtaPA
+         ObAaHh4bSsompE6oUoBk+D1e/C25KSM692XG1BMbZtE5bKDBmWg8AIVUPy6P/kSYJ0ja
+         bg+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HlUwM5/8oymp4K70XoDUwsO3GnP9r5Zf4hM5G2ZAGRg=;
+        b=uUYkn7TqUDAA6lcur2dSye44k4m8cWGri7sNfV8YsiUS5mG+JfDs4JWXZmfuz/AROy
+         4shzjMpH6Dks7mMo6TAUXpKn+Cc55EwcJa/7VnWcNbkkibOJpo8Y2m09tE8Z3FtIUgmf
+         U8rd4JVT42Mu1dhh+LY88Kt7JAj3t8HkL99eynZ3rtb+D4saiZ/VEWaWOMq4iujtDxHi
+         q/zS/8m+tIxwdIWQy+0OXxMsFa6OtbnFe7RhnhVOY2H6XvIqfJnRjo0XZm1t+l/KoN7S
+         0qImrLBSfsPUJ6EuDSdu0I7eS329aljpElJtoYRSDB5n7S61QMV7rg2e/GkOw4PTt80J
+         ezMw==
+X-Gm-Message-State: AO0yUKUl9Eg2s6/WDq/kutee69+qSgh6suXZ7cvFTsEv8CuJ1F4YPNyU
+        dMLBsmwTJq01xwqhJk3lBNq4G23DCbI=
+X-Google-Smtp-Source: AK7set/xCcQ7tGUsLetlO9bx2krIG6QOtusRt6j8kS7mB55rPNflD2uXhfYgMKEaA+2X90axcSdDJA==
+X-Received: by 2002:a9d:7095:0:b0:68b:d0cc:d1c2 with SMTP id l21-20020a9d7095000000b0068bd0ccd1c2mr14820687otj.19.1676316976292;
+        Mon, 13 Feb 2023 11:36:16 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w10-20020a9d638a000000b0068d3f341dd9sm5580101otk.62.2023.02.13.11.36.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 11:36:15 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 13 Feb 2023 11:36:13 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, tsbogend@alpha.franken.de,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v4 1/5] dt-bindings: watchdog: mt7621-wdt: add phandle to
+ access system controller registers
+Message-ID: <20230213193613.GA371102@roeck-us.net>
+References: <20230211073357.755893-1-sergio.paracuellos@gmail.com>
+ <20230211073357.755893-2-sergio.paracuellos@gmail.com>
+ <190b3135-82f3-4dfa-55ee-e048c5510e3c@arinc9.com>
+ <CAMhs-H8tehOWvYKmFtW_LHNb62h5mnzVGN_bfGOtLgNE9qUxqw@mail.gmail.com>
+ <d14f0065-e8d3-50ed-7ea4-ba57dbd18d51@arinc9.com>
+ <CAMhs-H_1dtdAmeNW9arK9JxhdWaQJwcMU1Pk7TOW1f5MREzzug@mail.gmail.com>
+ <76353597-0170-e0d9-9f5d-f208a03e44e8@linaro.org>
+ <CAMhs-H-JGZMR6mB=USywAh4aRS9ZFOVebwLv8=N2f3uvWpcXDA@mail.gmail.com>
+ <afe68663-8ade-ae5a-00a1-083b2f263cb0@roeck-us.net>
+ <CAMhs-H9BkQNwNyYQQgSig9vkW-_+i0+x8CLogXNgkRyi9Un6xw@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW5PR11MB5810:EE_|SA3PR11MB7413:EE_
-X-MS-Office365-Filtering-Correlation-Id: db40c3c6-5304-4b92-febe-08db0df8f688
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 63GSRxYOmmO9nujjoCG4+/0/qc0fw92rGi6eGcWhHD82LESTa7MB/0qS7A/PDdxnNySRt7bjCNtDVJeeWZNlN/6cb/cFc65O/vBi+uzeBYeSFt44C21Tki5kCtn23VU4iEnezWDlfOWOOIT6BmTbP2RlSY2yCNrOZuoizFJSZKbPPNhO4pE4XN6n/fLOvGXu/T84vV+kMeZo/wgCzeZJgS3pEipHdjv/3Q/ePQTCVj+XfkHsOGUCGDmIAaL52bhVZ4zdOoNYQFjF6rzL4GRhaOYXgzonP4msAu1X+kOi4bqtYiCM6oon0NYLLJGkPpD/mAmecfnToVaojHKOEM+P+RtrIfLAuaw3DGVOtFQCJKFyAKyXGsv4+8ZI2GjDBxYgQucA7R6c5wSG7kmI1ph2R6Ovphc+Uvaho80T428auAN5HezvjI0e/nfxrAU1XqBqZE+DBq6HwEJxFpCZk7Rkkz7YF/kWJ5TZ8jEeaxAqnQBgTa4y72y/Xp21+r7Yq34SQfNvS3AAhENeP9DOhDi+LLLsgebd1xFBRpKp9RHN48/XZ4F4/WCNso0hOQMUXGHJ4pOwZbhndx4hNyx+9Y86XvkXsKB7Fl7p+v845RW6Kb4JV4bzeAq+wtbbKvF80Yc3oszpD4So3zNKRsYe1qUGNEA0pGoCWFMt1HT5lrLlp/bJTekFZ7Ro/txcB1sU2S0fTpGDV3ZM+IiLyl9Oo7ZOj5SeHlFcIjm6kNZja8G7kFdnayLrsTXp6Wxj65FWIoyxVRTwIw4qhGltI7Kr/8Bd+A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5810.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(346002)(366004)(376002)(39860400002)(136003)(451199018)(4326008)(8676002)(2906002)(478600001)(66556008)(66476007)(66946007)(6512007)(186003)(966005)(31686004)(6486002)(6506007)(26005)(53546011)(2616005)(83380400001)(38100700002)(5660300002)(82960400001)(8936002)(6666004)(41300700001)(36756003)(316002)(31696002)(86362001)(110136005)(54906003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VlAvdEhUbU44RHNzQU9uSTRVZFhYc0hLRDBleWRSQVZ2ZWRnMUNjZ0lGb3JY?=
- =?utf-8?B?ODMyRTl1ZFdFcm9aN0Exc2JoaUEzK2huMUYxTm93V0E0YnFYSGtqSDZ6cFFa?=
- =?utf-8?B?aE5MUVdjUVFCVDFnWDRwZW9pamtzNHovaDVHaDZxK3RuSHd6RzVHaUZIdDlP?=
- =?utf-8?B?eGZJalVMWkRCWklCMmQ3b3JpT1crVzI0SjZBRUprOFVKNXFSanlRTHUycXpJ?=
- =?utf-8?B?bVJWTFMxcXNIcGxiYkl1dzlLckI5aFdrQ1hRK1E4eTBjOU93d0NSWTFqS3Bv?=
- =?utf-8?B?Y29sYlhFZ0dGcDZBcUk5NUE2QnNaMGMyNGtWTnVmNkpTTTd6Z0VDcDNyYUg5?=
- =?utf-8?B?cFkvdFFHbUszSGF2TjRBM09wSXEwUkRMblVXOVpFTEVSS0ZaeVBtQ3NGMFBo?=
- =?utf-8?B?MW92a1NkWkVCZDBFQ2pwUDRpVHFKRTBqUzNLM2FveHYraEE2TXNXdlJMVER0?=
- =?utf-8?B?L0oxVnpvSzdRTmZmZjFrMzYvNjRqaGhYTXhTVGRDN2NUSXE2amxwRHN2MGRG?=
- =?utf-8?B?b2FiczBtblRKeGdOWjZYM2UyYk0xeVpXbjZrZTVJL2NuMnJYdGVWZk9od3U3?=
- =?utf-8?B?UVJYZzdJcmFJSTdNUW85Mk1NcnlsQmsvb0dKYWRRSndQZW9CMFF3NGZjaUI1?=
- =?utf-8?B?UStKeUZSRGRRdzY0dUtBVUtIeVo0RHhOVlhqc3VSZDZwTHdGVldHdFl6cjA3?=
- =?utf-8?B?WkdET3VBeVlGK3RyNDg4WVVIa2w2ZnpxR2lzUys3dXVGZ1N3OWxaNUdxby9D?=
- =?utf-8?B?enRvdGZFUDU2MnNxbUJaRlkvQnJsL1JMZ3lNV2hNV0xGZ1RMSGdkYlV1c2ZO?=
- =?utf-8?B?MlRITFNKVzNqSE5XT2J2RzRObjBJTVZCS3dadVF0RDkrcUZHU1p1UDlJNGNh?=
- =?utf-8?B?SHBWK3ZIRnJ1U0VMMjZaWXpBWTd3YTV5WWozM0h1dk0rc1o2T1RVN2lZbXlQ?=
- =?utf-8?B?QU9XZVYvQUc0ODY3S3laQVJtRWk2SFBPUzZkNS9ORktpeVhyOElYYkEwcC9P?=
- =?utf-8?B?UE5RSXBWdkRINDZGUk5oT0x4dmVGeVBJM3ZXLzdlZ1JTNUNXSWdwTllrK2Jy?=
- =?utf-8?B?MlU3WFZwMW8xUWd1OHpUenNNK3NtblRRM25DM2U1bDIrNytQUXNjZzJnNk5L?=
- =?utf-8?B?U0gzNU9hcG04N2J1aUVZVWx2STRuNzlrenU5a2ptdUNtUGlpMjBqMldTN3Q0?=
- =?utf-8?B?NGh2eFlSN1dFUlpOQzl4NWpJYWZ2bWllQXJaUmMwanJNUVhMYlJIRVJBZnYx?=
- =?utf-8?B?VmNmZmpHMU9ZODcwNkNWRjlONStZb09DU3BYdUlBdGFKYUJQSmU0RDJodGt3?=
- =?utf-8?B?NmtpaGh2UHRBYkNjdFdsQmRuclRIbTFJMzUrNlVIeHFES0gyMjlMc3diTDMz?=
- =?utf-8?B?YTZ4UTc3N2dIcGpXeWsweU5vTVZEQTQ0Yklmd1BaZXlGa1FMM2VJSlcxRUhJ?=
- =?utf-8?B?bzAzejdUa0Q2T1E3bDZLKy9ETENCUllraWo4NldJQTBvNnMyYXg0Q2tUTyt5?=
- =?utf-8?B?cHBoUE9UZUhNczYrUGMrdVFRMklMbmU4MTh0QXg3bnVEV3BNVDc4SnhQMk9q?=
- =?utf-8?B?L0VKUG9SZi9YT3dzRGRvRlgweUVHaHpWK05BRWRKTXdoL2JkdW5aT0pMaWd6?=
- =?utf-8?B?YmVmaWhEaHAxS1N6MzdkTVNRTm5xYkRFejB2RGdFeE9sTEU0azBCRFJVSXlh?=
- =?utf-8?B?dnB6V3hsa1FnTzBqTHZPMmZzS096U2hoNFpnN1I4azB6cWQ5M0ZDTlNCdE1a?=
- =?utf-8?B?RnpaeUl2eGVkNm8vcTdNaEc2WVREYmlyWXV3bStpODZzMnFuVmQ5bGE4bFlx?=
- =?utf-8?B?Wkg0UzJyN2l6cnRKenB3YW1oL2p3bUVqZUhDRGFibmxMTzhRY01wQi92TWRM?=
- =?utf-8?B?NDZuM3dJa1ZiTjIyYlVyeDhTWFo1bnhzeTBUM29vZG9kVkprVjhBUllyeUlp?=
- =?utf-8?B?R0ptTDZqTG1rckNhSEpRaHFqdk9velJhUGwzczlvd2hFYWFvRE5UV2M2d0Yw?=
- =?utf-8?B?WS9ISzRVeFdmOG5INmxUUmRCVHJIc0FiZGcxQXdwL1JsM1hkNFBOMmJQcHRt?=
- =?utf-8?B?ZTNhaEI5VHhJaGJRamlmMWtpOG0yMWRCUElxeGM2cTlzL09sQzNGMk5Ma083?=
- =?utf-8?B?VTZGUXNOdHNZQ25aRWo3c0RJclk1NklJa05RYWljdGNiL1dVWjhUOURLdU1N?=
- =?utf-8?B?SEE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: db40c3c6-5304-4b92-febe-08db0df8f688
-X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5810.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2023 19:31:54.5873
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8r1B/dmL0RT1g2caUMH30wiqi8C5ivf2WO0lOH8WIBg4xha6iwsipE1x1pc9ZNpy/wvJHfz9WYSTDQyjYKbHqYbPME2R+bH1EYAQKyl9m5k=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR11MB7413
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMhs-H9BkQNwNyYQQgSig9vkW-_+i0+x8CLogXNgkRyi9Un6xw@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 13, 2023 at 09:59:35AM +0100, Sergio Paracuellos wrote:
+> On Sun, Feb 12, 2023 at 4:27 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > On 2/12/23 00:13, Sergio Paracuellos wrote:
+> > > On Sat, Feb 11, 2023 at 12:42 PM Krzysztof Kozlowski
+> > > <krzysztof.kozlowski@linaro.org> wrote:
+> > >>
+> > >> On 11/02/2023 12:01, Sergio Paracuellos wrote:
+> > >>> On Sat, Feb 11, 2023 at 11:47 AM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
+> > >>>>
+> > >>>> On 11.02.2023 13:41, Sergio Paracuellos wrote:
+> > >>>>> On Sat, Feb 11, 2023 at 10:10 AM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
+> > >>>>>>
+> > >>>>>> Is this mediatek,sysctl property required after your changes on the
+> > >>>>>> watchdog code?
+> > >>>>>
+> > >>>>> I don't really understand the question :-) Yes, it is. Since we have
+> > >>>>> introduced a new phandle in the watchdog node to be able to access the
+> > >>>>> reset status register through the 'sysc' syscon node.
+> > >>>>> We need the bindings to be aligned with the mt7621.dtsi file and we
+> > >>>>> are getting the syscon regmap handler via
+> > >>>>> 'syscon_regmap_lookup_by_phandle()'. See PATCH 5 of the series, Arınç.
+> > >>>>
+> > >>>> I believe you need to put mediatek,sysctl under "required:".
+> > >>>
+> > >>> Ah, I understood your question now :-). You meant 'required' property.
+> > >>> I need more coffee, I guess :-). I am not sure if you can add
+> > >>> properties as required after bindings are already mainlined for
+> > >>> compatibility issues. The problem with this SoC is that drivers become
+> > >>> mainlined before the device tree was so if things are properly fixed
+> > >>> now this kind of issues appear.  Let's see Krzysztof and Rob comments
+> > >>> for this.
+> > >>
+> > >> If your driver fails to probe without mediatek,sysctl, you already made
+> > >> it required (thus broke the ABI) regardless what dt-binding is saying.
+> > >> In such case you should update dt-binding to reflect reality.
+> > >>
+> > >> Now ABI break is different case. Usually you should not break it without
+> > >> valid reasons (e.g. it was never working before). Your commit msg
+> > >> suggests that you only improve the code, thus ABI break is not really
+> > >> justified. In such case - binding is correct, driver should be reworked
+> > >> to accept DTS without the new property.
+> > >
+> > > Thanks for clarification, Krzysztof. Ok, so if this is the case I need
+> > > to add this property required (as Arinc was properly pointing out in
+> > > previous mail) since without it the driver is going to fail on probe
+> > > (PATCH 5 of the series). I understand the "it was never working
+> > > before" argument reason for ABI breaks. What happens if the old driver
+> > > code was not ideal and totally dependent on architecture specific
+> > > operations when this could be totally avoided and properly make arch
+> > > independent agnostic drivers? This driver was added in 2016 [0]. There
+> > > was not a device tree file in the kernel for this SoC mainlined until
+> > > 2022 [1]. I also personally migrated this watchdog binding in 2022
+> > > from text to YAML and maintained it without changes [2]. When this was
+> > > mainlined not all drivers were properly reviewed and the current code
+> > > was just maintained as it is. Most users of this SoC are in the
+> > > openWRT community where the dtsi of the mainline is not used yet and
+> > > they maintain their own mt7621.dtsi files. Also, when a new version of
+> > > the openWRT selected kernel is added they also modify and align with
+> > > its mt7621.dtsi file without maintaining previous dtb's. If "make the
+> > > driver arch independent to be able to be compile tested" and this kind
+> > > of arguments are not valid at all I need to know because I have
+> > > started to review driver code for this SoC and other drivers also have
+> > > the same arch dependency that ideally should be avoided in the same
+> > > way. This at the end means to break the ABI again in the future for
+> > > those drivers / bindings. So I can just let them be as it is and not
+> > > provide any change at all and continue without being compile tested
+> > > and other beneficial features to detect future driver breakage.
+> > >
+> >
+> > Problem is that there are (presumably) shipped systems out there with
+> > the old devicetree file. The watchdog driver would no longer instantiate
+> > on those systems.
+> 
+> Ok, I will maintain only the PATCH that changes the driver to not use
+> globals and send v5.
+> 
 
-On 2/13/2023 1:35 AM, Guenter Roeck wrote:
-> Hi,
->
-> On Fri, Jan 27, 2023 at 11:16:25AM -0800, Kees Cook wrote:
->> One-element arrays (and multi-element arrays being treated as
->> dynamically sized) are deprecated[1] and are being replaced with
->> flexible array members in support of the ongoing efforts to tighten the
->> FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
->> with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
->>
->> Replace one-element array with flexible-array member in struct
->> acpi_resource_extended_irq. Replace 4-byte fixed-size array with 4-byte
->> padding in a union with a flexible-array member in struct
->> acpi_pci_routing_table.
->>
->> This results in no differences in binary output.
->>
->> Link: https://github.com/acpica/acpica/pull/813
->> Signed-off-by: Kees Cook <keescook@chromium.org>
->> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> This patch results in boot failures of 32-bit images.
-> Reverting it fixes the problem.
->
-> On the failing boot tests, I see messages such as
->
-> ACPI: \_SB_.GSIA: Enabled at IRQ 117440528
-> ERROR: Unable to locate IOAPIC for GSI 117440528
-> ahci 0000:00:1f.2: PCI INT A: failed to register GSI
->
-> ACPI: \_SB_.GSIG: Enabled at IRQ 117440534
-> ERROR: Unable to locate IOAPIC for GSI 117440534
-> 8139cp 0000:00:02.0: PCI INT A: failed to register GSI
->
-> Given that 117440534 == 0x7000016, that looks quite suspicious.
-> Indeed, after reverting this patch, the messages are different.
->
-> ACPI: \_SB_.GSIA: Enabled at IRQ 16
-> ahci 0000:00:1f.2: AHCI 0001.0000 32 slots 6 ports 1.5 Gbps 0x3f impl SATA mode
->
-> ACPI: \_SB_.GSIG: Enabled at IRQ 22
-> 8139cp 0000:00:02.0 eth0: RTL-8139C+ at 0xd0804000, 52:54:00:12:34:56, IRQ 22
+Other options might be to search for the "syscon" node name or to search
+for the "mediatek,mt7621-sysc" compatible.
 
-Thanks for the report, I have reverted this commit from my linux-next 
-branch and will not include it into my 6.3-rc1 pull requests at all.
+Guenter
 
-Thanks!
-
-
+> >
+> > Guenter
+> >
+> 
+> Thanks,
+>     Sergio Paracuellos
