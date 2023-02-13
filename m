@@ -2,148 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18A53694E96
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE11694E9C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:01:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjBMSBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:01:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44720 "EHLO
+        id S229925AbjBMSBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:01:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjBMSB2 (ORCPT
+        with ESMTP id S230415AbjBMSBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:01:28 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2470515CB6;
-        Mon, 13 Feb 2023 10:01:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676311287; x=1707847287;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zfiYtpXmeOgRxJECqmsl4smbrbGOVNgV6uhqjDs/mRI=;
-  b=k951xyCx+ol03Eo20P7baWI2ey/7tEcElhHFJsLaSAZ1cwqogut7CgON
-   M7kWKTTN1Mkzqu0c5Necu2i4uk17CMnOMxZE60blvL+ZdJlGAzsXkzMM4
-   12TG0bVf1m3xwjxDbY+Nc800x4fvzTvcEyrB0PFDI8yLxq1mm0cNWU2bW
-   abpP5blg3bku0gHS4Q5GvCg1EvDgr6WEiuKoDHAVNVeYzdb/EdtQR70s3
-   g5MDpF5Is3UGV30ddC7dCZ0jpBH16K3aFL+du+jbE3vfp/XI3kyqzgl48
-   aq25FBx70VqL1/ZUEqZE9Lr7qMR4t842JLi6mJFnVPd74zvOR7s4b8kV/
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="333088954"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="333088954"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 10:01:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="701360009"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="701360009"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 13 Feb 2023 10:01:22 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pRd8i-006Tob-2Y;
-        Mon, 13 Feb 2023 20:01:20 +0200
-Date:   Mon, 13 Feb 2023 20:01:20 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Raul Rangel <rrangel@chromium.org>
-Cc:     Werner Sembach <wse@tuxedocomputers.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
-        brgl@bgdev.pl, linux-gpio@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: Re: [PATCH] gpiolib: acpi: Add a ignore wakeup quirk for Clevo NH5xAx
-Message-ID: <Y+p68FfTYpUP7B1F@smile.fi.intel.com>
-References: <Y+Z5OSa6hepQBOyc@smile.fi.intel.com>
- <029b8d80-db28-cdb2-5c39-334be6968fad@tuxedocomputers.com>
- <Y+owDqifuU9nf+1i@smile.fi.intel.com>
- <86db79fa-5efb-caad-3310-60928907cc58@amd.com>
- <Y+pLLzLDotZQLpdA@smile.fi.intel.com>
- <97026dc5-e92e-62fe-43ae-33533125d900@tuxedocomputers.com>
- <CAHQZ30Cs+kp82coR10Wat7q3S_8+pFf=5=44kMEMcjBOjmn=6A@mail.gmail.com>
- <Y+p4Sq/WnZ4jAp+F@smile.fi.intel.com>
- <Y+p6I379g+V4vpIc@smile.fi.intel.com>
- <Y+p6mY+w9POvkBzC@smile.fi.intel.com>
+        Mon, 13 Feb 2023 13:01:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA20A20053
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:01:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73DC161221
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 18:01:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE3F4C4339B
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 18:01:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676311301;
+        bh=hUhMtFd+L7kU2UfBGgkzPSaKO2S0M+fHeGGsoULquzs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mJhto6ulcvsXEIAxzLZBgi5DE3HQnOQsI6Gk46sWL0sVxD7q5fL0cJnuqYKwEOSwH
+         QM7RwPx/lHR3+uyZ1gUqbKoMlYlXH4Q8JGioqsLnmew3IrN5fyl8Gquc8B9gwz+y0X
+         sAQ2pQWGRj8Ir0w66U53uiit6AirOHpcMDPAxpBsp+cpWDUEmcmWjWo9j42RmX7L+U
+         dq1XejB2AnDNpbQFriMv9O0m/hhta5a5/LG0l+CIw/O6jIVwa+0qCiSAKlrcv6LfA3
+         k83v2zHTBSZO//0FhTyuF7H8NpwnOMTUrCA5KTVzGQZw21Me8uigMyWLNbBGJpQErq
+         dhowz+ufACTIA==
+Received: by mail-ed1-f50.google.com with SMTP id eq11so14084794edb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:01:41 -0800 (PST)
+X-Gm-Message-State: AO0yUKU0vb1qWpyDeKcr2tuCQShdLQqglyqVPK/oL0PSGw/hErJfakl/
+        abs1EwZFmkTsAhCchAFCUHrjRnWxXfLNITBY8vCStw==
+X-Google-Smtp-Source: AK7set9UjffZ8cIv9LXOfN7BXhlzgG3TlnmR1bNpfFvkCexf/s6su8bQqb/Qcrsj/09g6AsCSSy+hLqepFw/ZDipxP4=
+X-Received: by 2002:a50:ba8d:0:b0:4ab:1c64:a9ed with SMTP id
+ x13-20020a50ba8d000000b004ab1c64a9edmr5213538ede.2.1676311300124; Mon, 13 Feb
+ 2023 10:01:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+p6mY+w9POvkBzC@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230210061953.GC2825702@dread.disaster.area> <Y+oCBnz2nLtXrz7O@gondor.apana.org.au>
+In-Reply-To: <Y+oCBnz2nLtXrz7O@gondor.apana.org.au>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Mon, 13 Feb 2023 10:01:27 -0800
+X-Gmail-Original-Message-ID: <CALCETrXKkZw3ojpmTftur1_-dEi6BOo9Q0cems_jgabntNFYig@mail.gmail.com>
+Message-ID: <CALCETrXKkZw3ojpmTftur1_-dEi6BOo9Q0cems_jgabntNFYig@mail.gmail.com>
+Subject: Re: copy on write for splice() from file to pipe?
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Dave Chinner <david@fromorbit.com>, torvalds@linux-foundation.org,
+        metze@samba.org, axboe@kernel.dk, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        samba-technical@lists.samba.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 07:59:53PM +0200, Andy Shevchenko wrote:
-> On Mon, Feb 13, 2023 at 07:57:55PM +0200, Andy Shevchenko wrote:
-> > On Mon, Feb 13, 2023 at 07:50:02PM +0200, Andy Shevchenko wrote:
-> > > On Mon, Feb 13, 2023 at 10:20:41AM -0700, Raul Rangel wrote:
-> > > > On Mon, Feb 13, 2023 at 7:47 AM Werner Sembach <wse@tuxedocomputers.com> wrote:
-> > > > > Am 13.02.23 um 15:37 schrieb Andy Shevchenko:
+On Mon, Feb 13, 2023 at 1:45 AM Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>
+> Dave Chinner <david@fromorbit.com> wrote:
+> >
+> > IOWs, the application does not care if the data changes whilst they
+> > are in transport attached to the pipe - it only cares that the
+> > contents are stable once they have been delivered and are now wholly
+> > owned by the network stack IO path so that the OTW encodings
+> > (checksum, encryption, whatever) done within the network IO path
+> > don't get compromised.
+>
+> Is this even a real problem? The network stack doesn't care at
+> all if you modify the pages while it's being processed.  All the
+> things you've mentioned (checksum, encryption, etc.) will be
+> self-consistent on the wire.
+>
+> Even when actual hardware offload is involved it's hard to see how
+> things could possibly go wrong unless the hardware was going out of
+> its way to do the wrong thing by fetching from memory twice.
+>
 
-...
+There's a difference between "kernel speaks TCP (or whatever)
+correctly" and "kernel does what the application needs it to do".
+When I write programs that send data on the network, I want the kernel
+to send the data that I asked it to send.  As a silly but obvious
+example, suppose I have two threads, and all I/O is blocking
+(O_NONBLOCK is not set, etc):
 
-> > > > > Schematics for the NH5xAx can also be found on this unofficial clevo mirror
-> > > > > (service manuals, scroll to end for schematics):
-> > > > >
-> > > > > http://repo.palkeo.com/clevo-mirror/NH5xACx_AFx_ADx/NH50AC.zip
-> > > > >
-> > > > > http://repo.palkeo.com/clevo-mirror/NH5xACx_AFx_ADx/NH50AF1.zip
-> > > > >
-> > > > > User: repo
-> > > > >
-> > > > > PW: repo
-> > > > >
-> > > > > >> The schematics were shared by the reporter for the original issue which is
-> > > > > >> how we reached the conclusion there was a mistake.
-> > > > > >>
-> > > > > >> As they're both Clevo designs it's certainly possible they have the same
-> > > > > >> mistake in two systems.
-> > > > 
-> > > > > > Thank you!
-> > > > > > I have looked at the schematics and read discussion.
-> > > > > >
-> > > > > > So, the conclusion that this is a BIOS bug is incorrect in my opinion.
-> > > > > > The problem is either in the PMIC/EC firmware that shouldn't shut down 3.3VS
-> > > > > > signal for a while or on the PCB level, so that pull up should be connected
-> > > > > > to another power source that stays on.
-> > > > > >
-> > > > > > This means the description on the initial patch with the same issue is
-> > > > > > incorrect.
-> > > > > >
-> > > > > > Do we know the power sequence on the suspend to see which and how on the
-> > > > > > time line the power sources are off/on?
-> > > > 
-> > > > If you look at the load switch for 3.3VS, its EN2 pin is connected to
-> > > > SUSB#_EN which is connected to SUSB# which is connected to
-> > > > AND(SUSB#_PCH -> SLP_S3_L, PM_SLP_S0 -> S0A3_GPIO). So there is no
-> > > > PMIC/EC firmware that is incharge of this. I guess I'm not quite sure
-> > > > how they have S0A3_GPIO configured, so maybe I have an invert wrong.
-> > > > 
-> > > > The EC does control DD_ON which controls the 3.3V and 5V rails.
-> > > 
-> > > On page 6 of the schematics I see the U7 that forms SUSB# from SUSB#_APU
-> > > (which corresponds to what you said) _and_ EC_EN, which is GPIO from IT5570,
-> > > which is EC.
-> > > 
-> > > Are you using different schematics? I'm using the one from FDO bug report.
-> > 
-> > Just checked this one:
-> > http://repo.palkeo.com/clevo-mirror/NH5xACx_AFx_ADx/NH50AC.zip
-> > 
-> > Also uses EC (SUSB_EC#).
+char buffer[1024] = "A";
 
-Sorry, this has to be read as SUSBC_EC#.
+Thread A:
+send(fd, buffer, 1, 0);
 
-> So this all makes me thing that either EC firmware is buggy or we have ACPI EC
-> code in the kernel to fix.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Thread B:
+mb();
+buffer[0] = 'B';
+mb();
 
 
+Obviously, there are three possible valid outcomes: Thread A can go
+first (send returns before B changes the buffer), and 'A' gets sent.
+Thread B can go first (the buffer is changed before send() starts),
+and 'B' gets sent.  Or both can run concurrently, in which case the
+data sent is indeterminate.
+
+But it is not valid for send() to return, then the buffer to change,
+and 'B' to get sent, just like:
+
+char foo[] = "A";
+send(fd, foo, 1, 0);
+foo[0] = 'B';
+
+must send 'A', not 'B'.
+
+The trouble with splice() is that there is no clear point at which the
+splice is complete and the data being sent is committed.  I don't
+think user applications need the data committed particularly quickly,
+but I do think it needs to be committed "eventually* and there needs
+to be a point at which the application knows it's been committed.
+Right now, if a user program does:
+
+Write 'A' to a file
+splice that file to a pipe
+splice that pipe to a socket
+... wait until when? ...
+Write 'B' to a file
+
+There is nothing the user program can wait for to make sure that 'A'
+gets sent, but saying that the kernel speaks TCP correctly without
+solving this problem doesn't actually solve the problem.
