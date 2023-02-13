@@ -2,229 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D745169426C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 669CA694270
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbjBMKMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 05:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46648 "EHLO
+        id S230052AbjBMKM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 05:12:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbjBMKLl (ORCPT
+        with ESMTP id S230413AbjBMKLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 05:11:41 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4567EB6E
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:11:39 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id bp15so18075892lfb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:11:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EiRAvYfruz2LwVkJecvV8bOL6r0255EKOkvzv5hr740=;
-        b=TiK8XnATOnj70Vd48zegfPwLdxp9VAHHam3Q5OPSfn6GOAaaXMvF+oRT7Hih1o6TDO
-         8TPizkNDh0X++hSjXcQ99cBOtbcBLrsSvztSvxu8j0dZO2KaPaRhNAEhtLd3M/6o8lkl
-         ytDaRdIJgcFQ4DePsZCAB5ojlht3JWscXJ6cU3XSv72PY0oa/NcxYCYZzJiXl0yEkRgV
-         5a2me/VyI88/8MM/Yciu6mmrWahP5+NPXnWUEvhBT7EsTczKm4XvMJn3EMNS1oi0yqgB
-         qfIZmnY/BVZCjfWZ8j5CtCJ247Peu/xLosA/+ol79EIa8k0D4jucZXwKLFP1Q3+vCJmx
-         UEpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EiRAvYfruz2LwVkJecvV8bOL6r0255EKOkvzv5hr740=;
-        b=Th4Dct0f80wwvv55X0s93Q0oG3OtDMQT6qdjdHn1lC+F4w+yPLvdNQlfqUkq6jGBHb
-         h30V5MC8H3wGHBTzWqiTkbnj4Z+GLbZo0uKa75pQCcjMd3LSam8K/RyBoVeAEJtGa4r8
-         UrSOBVTWqaspiyD/Gy95yU4pABpH0XKXCsanY0KKuDpHbKQM0butIjEYsKs3CcoEGvxu
-         WvJAjAjk4nlgH7Zs+E1PFqJ2P2UQQ5bYnM8KCBkSf9/vHns/zFVeusytA7cKIhnVMnEp
-         Lvq7BpANJoB/kTGKKsu1X/xke+f8fJgcGIfndcde/2By/1bW/6aDSzi8FtVkCqwsu+lF
-         +bLg==
-X-Gm-Message-State: AO0yUKXNFlqZ3471a1FpicXB3ZahZSP6duA/GV7cpRXRV6SYjAgs+2wu
-        SArYVsEBC+UtYFholcS2fTo6BP8/J8SmwfnapyE=
-X-Google-Smtp-Source: AK7set9/jBHFXSbATRj6t/69h0znHJ7EalDvMZumXrTdcY+nIWuLh0rni3xqTLIOVrqvieMqOiewFA==
-X-Received: by 2002:ac2:5319:0:b0:4db:964:51b5 with SMTP id c25-20020ac25319000000b004db096451b5mr5015516lfh.41.1676283097810;
-        Mon, 13 Feb 2023 02:11:37 -0800 (PST)
-Received: from jazctssd.c.googlers.com.com (138.58.228.35.bc.googleusercontent.com. [35.228.58.138])
-        by smtp.gmail.com with ESMTPSA id t6-20020a19ad06000000b004b55da14ba8sm834416lfc.291.2023.02.13.02.11.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 02:11:37 -0800 (PST)
-From:   Grzegorz Jaszczyk <jaz@semihalf.com>
-To:     linux-kernel@vger.kernel.org, rafael@kernel.org
-Cc:     dmy@semihalf.com, tn@semihalf.com, dbehr@google.com,
-        zide.chen@intel.corp-partner.google.com, seanjc@google.com,
-        upstream@semihalf.com, hdegoede@redhat.com, markgross@kernel.org,
-        dtor@google.com, mario.limonciello@amd.com,
-        linux-pm@vger.kernel.org, x86@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Grzegorz Jaszczyk <jaz@semihalf.com>
-Subject: [RFCv3 1/1] platform/x86: Add virtual PMC driver used for S2Idle
-Date:   Mon, 13 Feb 2023 10:09:21 +0000
-Message-Id: <20230213100921.268770-2-jaz@semihalf.com>
-X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
-In-Reply-To: <20230213100921.268770-1-jaz@semihalf.com>
-References: <20230213100921.268770-1-jaz@semihalf.com>
+        Mon, 13 Feb 2023 05:11:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3FCEB50;
+        Mon, 13 Feb 2023 02:11:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AC2260F6F;
+        Mon, 13 Feb 2023 10:11:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C393C433EF;
+        Mon, 13 Feb 2023 10:11:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676283109;
+        bh=KmxhvE36dKCr6usX/7ZPMiQfVhwCpu/l1nVcDSJNzVg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=vFEH8VQx0gwz8O6w32Y7mPqoUOef5EXwTgpKcvPr/sSWKOkoItCNqUtz06UnpPy+h
+         tWRE20WNoxM0IdmZtgBwuulPFLcPrDfh2yljc9z2iuD8mCAwEFCPF5FJJISJK0RLvh
+         otZwqHIWi6KlQVw5hFBgAz/7lQ1nrAK2QJiZ5DGyXpJR0qsNOiJsM5WjKtJ1jdl3VV
+         Qx5koUPoVnWhOUEwmdf9okt2s0y3ql7DyijE+2bk03kZJ7lfAlAMrtX2ZC1SYDpZFi
+         boRgntwJwHIi39k2ilOj+00YIxJqwNOeJUyVoYVqRu6U4SXeTBJQLW+Minp2INbr95
+         hGnYdQ4p9i08A==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Brian King <brking@us.ibm.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] scsi: ipr: work around fortify-string warning
+Date:   Mon, 13 Feb 2023 11:10:46 +0100
+Message-Id: <20230213101143.3821483-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Virtual PMC driver is meant for the guest VMs for the S2Idle
-notification. Its purpose is to register S2Idle dev ops check handler,
-which will evaluate ACPI _DSM just before the guest enters S2Idle power
-state.
+From: Arnd Bergmann <arnd@arndb.de>
 
-This allows to trap on MMIO access done as a consequence of _DSM
-evaluation and therefore notify the VMM about the guest entering S2Idle
-state.
+The ipr_log_vpd_compact() function triggers a fortified memcpy() warning
+about a potential string overflow with all versions of clang:
 
-Signed-off-by: Grzegorz Jaszczyk <jaz@semihalf.com>
+In file included from drivers/scsi/ipr.c:43:
+In file included from include/linux/string.h:254:
+include/linux/fortify-string.h:520:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+                        __write_overflow_field(p_size_field, size);
+                        ^
+include/linux/fortify-string.h:520:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+2 errors generated.
+
+I don't see anything actually wrong with the function, but this is the
+only instance I can reproduce of the fortification going wrong in the
+kernel at the moment, so the easiest solution may be to rewrite the
+function into something that does not trigger the warning.
+
+Instead of having a combined buffer for vendor/device/serial strings,
+use three separate local variables and just truncate the whitespace
+individually.
+
+Fixes: 8cf093e275d0 ("[SCSI] ipr: Improved dual adapter errors")
+Cc: Kees Cook <keescook@chromium.org>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-Changelog v1..v2:
-- Take advantage of acpi_s2idle_dev_ops's check() instead of notify()
-
-Changelog v2..v3:
-- Add MODULE_LICENSE
-- Remove "amd" prefixes
-- Be more verbose in VIRT_PMC config description and make it
-  HYPERVISOR_GUEST dependent
-- Add extra check ensuring that DSM method supports ACPI_VIRT_PMC_NOTIFY function
+I did not try to bisect which commit introduced this behavior into
+the fortified memcpy(), the Fixes: commit is the one that introduced
+the ipr_log_vpd_compact() function but this predates the fortified
+string helpers.
 ---
- drivers/platform/x86/Kconfig    |  7 +++
- drivers/platform/x86/Makefile   |  3 ++
- drivers/platform/x86/virt_pmc.c | 83 +++++++++++++++++++++++++++++++++
- 3 files changed, 93 insertions(+)
- create mode 100644 drivers/platform/x86/virt_pmc.c
+ drivers/scsi/ipr.c | 38 ++++++++++++++++++--------------------
+ 1 file changed, 18 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-index 5692385e2d26..837ce201b68b 100644
---- a/drivers/platform/x86/Kconfig
-+++ b/drivers/platform/x86/Kconfig
-@@ -1099,6 +1099,13 @@ config WINMATE_FM07_KEYS
- 	  buttons below the display. This module adds an input device
- 	  that delivers key events when these buttons are pressed.
+diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
+index 198d3f20d682..490fd81e7cfd 100644
+--- a/drivers/scsi/ipr.c
++++ b/drivers/scsi/ipr.c
+@@ -1516,23 +1516,19 @@ static void ipr_process_ccn(struct ipr_cmnd *ipr_cmd)
+ }
  
-+config VIRT_PMC
-+	tristate "Virtual Power Management Controller"
-+	depends on ACPI && SUSPEND && HYPERVISOR_GUEST
-+	help
-+	  The Virtual PMC driver is meant for the guest VMs and its main
-+	  purpose is to notify about guest entering s2idle state.
-+
- endif # X86_PLATFORM_DEVICES
+ /**
+- * strip_and_pad_whitespace - Strip and pad trailing whitespace.
+- * @i:		index into buffer
+- * @buf:		string to modify
++ * strip_whitespace - Strip and pad trailing whitespace.
++ * @i:		size of buffer
++ * @buf:	string to modify
+  *
+- * This function will strip all trailing whitespace, pad the end
+- * of the string with a single space, and NULL terminate the string.
++ * This function will strip all trailing whitespace and
++ * NUL terminate the string.
+  *
+- * Return value:
+- * 	new length of string
+  **/
+-static int strip_and_pad_whitespace(int i, char *buf)
++static void strip_whitespace(int i, char *buf)
+ {
+ 	while (i && buf[i] == ' ')
+ 		i--;
+-	buf[i+1] = ' ';
+-	buf[i+2] = '\0';
+-	return i + 2;
++	buf[i+1] = '\0';
+ }
  
- config P2SB
-diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
-index 1d3d1b02541b..c4d3056cf4ea 100644
---- a/drivers/platform/x86/Makefile
-+++ b/drivers/platform/x86/Makefile
-@@ -129,6 +129,9 @@ obj-$(CONFIG_INTEL_SCU_WDT)		+= intel_scu_wdt.o
- obj-$(CONFIG_INTEL_SCU_IPC_UTIL)	+= intel_scu_ipcutil.o
- obj-$(CONFIG_X86_INTEL_LPSS)		+= pmc_atom.o
+ /**
+@@ -1547,19 +1543,21 @@ static int strip_and_pad_whitespace(int i, char *buf)
+ static void ipr_log_vpd_compact(char *prefix, struct ipr_hostrcb *hostrcb,
+ 				struct ipr_vpd *vpd)
+ {
+-	char buffer[IPR_VENDOR_ID_LEN + IPR_PROD_ID_LEN + IPR_SERIAL_NUM_LEN + 3];
+-	int i = 0;
++	char vendor_id[IPR_VENDOR_ID_LEN + 1];
++	char product_id[IPR_PROD_ID_LEN + 1];
++	char sn[IPR_SERIAL_NUM_LEN + 1];
  
-+# Virtual PMC
-+obj-$(CONFIG_VIRT_PMC)			+= virt_pmc.o
-+
- # Siemens Simatic Industrial PCs
- obj-$(CONFIG_SIEMENS_SIMATIC_IPC)	+= simatic-ipc.o
+-	memcpy(buffer, vpd->vpids.vendor_id, IPR_VENDOR_ID_LEN);
+-	i = strip_and_pad_whitespace(IPR_VENDOR_ID_LEN - 1, buffer);
++	memcpy(vendor_id, vpd->vpids.vendor_id, IPR_VENDOR_ID_LEN);
++	strip_whitespace(IPR_VENDOR_ID_LEN, vendor_id);
  
-diff --git a/drivers/platform/x86/virt_pmc.c b/drivers/platform/x86/virt_pmc.c
-new file mode 100644
-index 000000000000..a5966bb9048f
---- /dev/null
-+++ b/drivers/platform/x86/virt_pmc.c
-@@ -0,0 +1,83 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Virtual Power Management Controller Driver
-+ *
-+ * Author: Grzegorz Jaszczyk <jaz@semihalf.com>
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/platform_device.h>
-+
-+#define ACPI_VIRT_PMC_DSM_UUID	"9ea49ba3-434a-49a6-be30-37cc55c4d397"
-+#define ACPI_VIRT_PMC_NOTIFY 1
-+
-+static acpi_handle virt_pmc_handle;
-+
-+static void virt_pmc_s2idle_notify(void)
-+{
-+	union acpi_object *out_obj;
-+	guid_t dsm_guid;
-+
-+	guid_parse(ACPI_VIRT_PMC_DSM_UUID, &dsm_guid);
-+
-+	out_obj = acpi_evaluate_dsm(virt_pmc_handle, &dsm_guid,
-+					0, ACPI_VIRT_PMC_NOTIFY, NULL);
-+
-+	acpi_handle_debug(virt_pmc_handle, "_DSM function %u evaluation %s\n",
-+			  ACPI_VIRT_PMC_NOTIFY, out_obj ? "successful" : "failed");
-+
-+	ACPI_FREE(out_obj);
-+}
-+
-+static struct acpi_s2idle_dev_ops pmc_s2idle_dev_ops = {
-+	.check = virt_pmc_s2idle_notify,
-+};
-+
-+static int virt_pmc_probe(struct platform_device *pdev)
-+{
-+	int err = 0;
-+	guid_t dsm_guid;
-+
-+	virt_pmc_handle = ACPI_HANDLE(&pdev->dev);
-+
-+	guid_parse(ACPI_VIRT_PMC_DSM_UUID, &dsm_guid);
-+
-+	if (!acpi_check_dsm(virt_pmc_handle, &dsm_guid, 0,
-+			    1 << ACPI_VIRT_PMC_NOTIFY)) {
-+		dev_err(&pdev->dev, "DSM method doesn't support ACPI_VIRT_PMC_NOTIFY\n");
-+		return -ENODEV;
-+	}
-+
-+	err = acpi_register_lps0_dev(&pmc_s2idle_dev_ops);
-+	if (err)
-+		dev_err(&pdev->dev, "failed to register LPS0 sleep handler\n");
-+
-+	return err;
-+}
-+
-+static int virt_pmc_remove(struct platform_device *pdev)
-+{
-+	acpi_unregister_lps0_dev(&pmc_s2idle_dev_ops);
-+
-+	return 0;
-+}
-+
-+static const struct acpi_device_id virt_pmc_acpi_ids[] = {
-+	{"HYPE0001", 0}, /* _HID for XXX Power Engine, _CID PNP0D80*/
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(acpi, virt_pmc_acpi_ids);
-+
-+static struct platform_driver virt_pmc_driver = {
-+	.driver = {
-+		.name = "virtual_pmc",
-+		.acpi_match_table = ACPI_PTR(virt_pmc_acpi_ids),
-+	},
-+	.probe = virt_pmc_probe,
-+	.remove = virt_pmc_remove,
-+};
-+
-+module_platform_driver(virt_pmc_driver);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Virtual PMC Driver");
+-	memcpy(&buffer[i], vpd->vpids.product_id, IPR_PROD_ID_LEN);
+-	i = strip_and_pad_whitespace(i + IPR_PROD_ID_LEN - 1, buffer);
++	memcpy(product_id, vpd->vpids.product_id, IPR_PROD_ID_LEN);
++	strip_whitespace(IPR_PROD_ID_LEN, product_id);
+ 
+-	memcpy(&buffer[i], vpd->sn, IPR_SERIAL_NUM_LEN);
+-	buffer[IPR_SERIAL_NUM_LEN + i] = '\0';
++	memcpy(sn, vpd->sn, IPR_SERIAL_NUM_LEN);
++	strip_whitespace(IPR_SERIAL_NUM_LEN, sn);
+ 
+-	ipr_hcam_err(hostrcb, "%s VPID/SN: %s\n", prefix, buffer);
++	ipr_hcam_err(hostrcb, "%s VPID/SN: %s %s %s\n", prefix,
++		     vendor_id, product_id, sn);
+ }
+ 
+ /**
 -- 
-2.39.1.581.gbfd45094c4-goog
+2.39.1
 
