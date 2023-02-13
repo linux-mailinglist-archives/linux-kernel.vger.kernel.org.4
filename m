@@ -2,109 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845A569464E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA7E69464C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230412AbjBMMvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 07:51:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S230370AbjBMMuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 07:50:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjBMMvC (ORCPT
+        with ESMTP id S229629AbjBMMuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 07:51:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA887D89
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:50:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676292616;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PgLQ6zOF160defT8Ds9P+E2M/1VCvo9hFksAoPbKUJE=;
-        b=Ic0070F7tMpAIoWqIk/5LrttLPtDGJKApDrBLEyX6+yU4oyB8dYvOTD4neSmpxbTGrT1CY
-        wLpDTPqfQK8i32GWY4xUDTCUXMlPYTSVyCR6MsSgOD3LRpPii5sMIN/1aw0TOQeTy+SmyE
-        tUEjt0Eik2VF8NY9ryPbTjNPsFGH+Vs=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-587-gWV5vzs1NHGGbQFPG0OXmA-1; Mon, 13 Feb 2023 07:50:14 -0500
-X-MC-Unique: gWV5vzs1NHGGbQFPG0OXmA-1
-Received: by mail-ed1-f69.google.com with SMTP id z19-20020a05640235d300b004aaca83cd87so7560594edc.20
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:50:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PgLQ6zOF160defT8Ds9P+E2M/1VCvo9hFksAoPbKUJE=;
-        b=rbGpCOh9AQ7jBFicnshnW7g8dSn3M43RnPmTgT/sjB9SVV/pyqMM6RK5FOv5FptyFq
-         MNt8W47UhcTCG1fGPkOCTXyETjBTHvQZoZeAYICS0lsjbZ/9Bg1ioigKFtLW/Y5N25dJ
-         QDBESHlGdgxLhuE8sClr3fQVrkN91QLgwhdp+C1VKPHM7P1y5MYi5nEiv7nldZ9yy3BQ
-         Lnd+RvjQDRWmEMjarEYiBrnMQsRom4IOJcSI5ycWjVxVSvZQKhgnWeJG1bnfTACAnOVT
-         dlu/ue4XveLObGnr+JEQtmFQHRA2OEhKF/7iELEPC3e5LM5jiBCvTNkiR8o0hTWy4tjE
-         HJIw==
-X-Gm-Message-State: AO0yUKXOulqoU0LFSfH/War4HYHErUFtYzZKJPQGB0gCTGI6++a/7tFL
-        hFTv0D3MRA7TgEXdlarqxo2WghbI+7Cb1zLoySx/4m5VpvbNoYWl66NjNC1CGWIBcaT84G5Kujm
-        yyEiIXwUoTaEwNmcLFG3+DSCr
-X-Received: by 2002:a17:907:7ea8:b0:8b1:15ab:f4cd with SMTP id qb40-20020a1709077ea800b008b115abf4cdmr2485956ejc.53.1676292613797;
-        Mon, 13 Feb 2023 04:50:13 -0800 (PST)
-X-Google-Smtp-Source: AK7set988aY5h338ir+/KHdB4LqQr3BYrvN4X1DsZMqEr4WXANn9H4WIA5oj3gjPEwtYrkusriJ/eg==
-X-Received: by 2002:a17:907:7ea8:b0:8b1:15ab:f4cd with SMTP id qb40-20020a1709077ea800b008b115abf4cdmr2485946ejc.53.1676292613620;
-        Mon, 13 Feb 2023 04:50:13 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:4783:a68:c1ee:15c5? ([2001:b07:6468:f312:4783:a68:c1ee:15c5])
-        by smtp.googlemail.com with ESMTPSA id g22-20020a17090670d600b008b0ff9c1ea8sm2369922ejk.56.2023.02.13.04.50.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 04:50:13 -0800 (PST)
-Message-ID: <88a89319-a71e-fa90-0dbb-00cf8a549380@redhat.com>
-Date:   Mon, 13 Feb 2023 13:50:12 +0100
+        Mon, 13 Feb 2023 07:50:35 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6083AB6;
+        Mon, 13 Feb 2023 04:50:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1676292629; x=1707828629;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=UB3JMVgsvcRlgpqs7yOTCnMRa0t0rNkSKFS1hu7Qga0=;
+  b=wF7JFeal/14iDyRVBdWK+xLHppXEu1AMWXDxm8jFJUvZufRCXFJAIsDT
+   gNOU3ZS5euQZsB2AY1FZk96xSozRgFKcQluKro68chIlFhVVe0yYU0qqO
+   /YoTUZSuCTlCmv7btEP9u5QTFpzJly6La6kznOyZj/1RsuFdByqmICmq5
+   sdOpD6aVN8prwJW1QHEAJ9P9n4KSsfmrTRkCLw6R1XjK3yuGfg+GObII7
+   VyhZsAkrDomJ0PIYoHJlaw3lWBp4zUD/STnq+lq5HPPBmIbQU7/l9vsHv
+   P3/951ox1LkPcGr2pOXZQp+7rOx+d4q2L8BZ9LGsdQ9n3s70B1k6yYu/+
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,294,1669100400"; 
+   d="scan'208";a="200219144"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Feb 2023 05:50:28 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 13 Feb 2023 05:50:26 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Mon, 13 Feb 2023 05:50:23 -0700
+Message-ID: <382f9239620edb44cf6b4e6b295e58fe31c45c12.camel@microchip.com>
+Subject: Re: [PATCH net-next 10/10] net: microchip: sparx5: Add TC vlan
+ action support for the ES0 VCAP
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     Dan Carpenter <error27@gmail.com>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Casper Andersson <casper.casan@gmail.com>,
+        "Russell King" <rmk+kernel@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        "Nathan Huckleberry" <nhuck@google.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Daniel Machon" <daniel.machon@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Michael Walle <michael@walle.cc>
+Date:   Mon, 13 Feb 2023 13:50:23 +0100
+In-Reply-To: <Y+oZHpMpW6ODQQpY@kadam>
+References: <20230213092426.1331379-1-steen.hegelund@microchip.com>
+         <20230213092426.1331379-11-steen.hegelund@microchip.com>
+         <Y+oZHpMpW6ODQQpY@kadam>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: "KVM: x86/mmu: Overhaul TDP MMU zapping and flushing" breaks SVM
- on Hyper-V
-Content-Language: en-US
-To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tianyu Lan <ltykernel@gmail.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-References: <43980946-7bbf-dcef-7e40-af904c456250@linux.microsoft.com>
- <Y+aQyFJt9Tn2PJnC@google.com>
- <9a046de1-8085-3df4-94cd-39bb893c8c9a@linux.microsoft.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <9a046de1-8085-3df4-94cd-39bb893c8c9a@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2/13/23 13:44, Jeremi Piotrowski wrote:
-> Just built a kernel from that tree, and it displays the same behavior. The problem
-> is not that the addresses are wrong, but that the flushes are issued at the wrong
-> time now. At least for what "enlightened NPT TLB flush" requires.
-
-It is not clear to me why HvCallFluyshGuestPhysicalAddressSpace or 
-HvCallFlushGuestPhysicalAddressList would have stricter requirements 
-than a "regular" TLB shootdown using INVEPT.
-
-Can you clarify what you mean by wrong time, preferrably with some kind 
-of sequence of events?
-
-That is, something like
-
-CPU 0	Modify EPT from ... to ...
-CPU 0	call_rcu() to free page table
-CPU 1	... which is invalid because ...
-CPU 0	HvCallFlushGuestPhysicalAddressSpace
-
-Paolo
+SGkgRGFuLAoKT24gTW9uLCAyMDIzLTAyLTEzIGF0IDE0OjAzICswMzAwLCBEYW4gQ2FycGVudGVy
+IHdyb3RlOgo+IEVYVEVSTkFMIEVNQUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRh
+Y2htZW50cyB1bmxlc3MgeW91IGtub3cgdGhlCj4gY29udGVudCBpcyBzYWZlCj4gCj4gT24gTW9u
+LCBGZWIgMTMsIDIwMjMgYXQgMTA6MjQ6MjZBTSArMDEwMCwgU3RlZW4gSGVnZWx1bmQgd3JvdGU6
+Cj4gPiArc3RhdGljIGludCBzcGFyeDVfdGNfYWN0aW9uX3ZsYW5fbW9kaWZ5KHN0cnVjdCB2Y2Fw
+X2FkbWluICphZG1pbiwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0IHZjYXBfcnVsZSAqdnJ1
+bGUsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN0cnVjdCBmbG93X2Nsc19vZmZsb2FkICpmY28sCj4g
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgIHN0cnVjdCBmbG93X2FjdGlvbl9lbnRyeSAqYWN0LAo+ID4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCB1MTYgdHBpZCkKPiA+ICt7Cj4gPiArwqDCoMKgwqAgaW50IGVyciA9IDA7
+Cj4gPiArCj4gPiArwqDCoMKgwqAgc3dpdGNoIChhZG1pbi0+dnR5cGUpIHsKPiA+ICvCoMKgwqDC
+oCBjYXNlIFZDQVBfVFlQRV9FUzA6Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVyciA9
+IHZjYXBfcnVsZV9hZGRfYWN0aW9uX3UzMih2cnVsZSwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCBWQ0FQX0FGX1BVU0hfT1VURVJfVEFHLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIFNQWDVfT1RBR19UQUdfQSk7Cj4gCj4gVGhpcyBlcnIgYXNzaWdubWVudCBp
+cyBuZXZlciB1c2VkLgoKT29wcyEgIEkgd2lsbCB1cGRhdGUgdGhpcy4KCj4gCj4gPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOwo+ID4gK8KgwqDCoMKgIGRlZmF1bHQ6Cj4gPiArwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIE5MX1NFVF9FUlJfTVNHX01PRChmY28tPmNvbW1vbi5leHRh
+Y2ssCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgIlZMQU4gbW9kaWZ5IGFjdGlvbiBub3Qgc3VwcG9ydGVkIGluIHRoaXMK
+PiA+IFZDQVAiKTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJuIC1FT1BOT1RT
+VVBQOwo+ID4gK8KgwqDCoMKgIH0KPiA+ICsKPiA+ICvCoMKgwqDCoCBzd2l0Y2ggKHRwaWQpIHsK
+PiA+ICvCoMKgwqDCoCBjYXNlIEVUSF9QXzgwMjFROgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCBlcnIgPSB2Y2FwX3J1bGVfYWRkX2FjdGlvbl91MzIodnJ1bGUsCj4gPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgVkNBUF9BRl9UQUdfQV9UUElEX1NFTCwKPiA+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBTUFg1X1RQSURfQV84MTAwKTsKPiA+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgYnJlYWs7Cj4gPiArwqDCoMKgwqAgY2FzZSBFVEhfUF84MDIxQUQ6Cj4g
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVyciA9IHZjYXBfcnVsZV9hZGRfYWN0aW9uX3Uz
+Mih2cnVsZSwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBWQ0FQX0FGX1RBR19B
+X1RQSURfU0VMLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFNQWDVfVFBJRF9B
+Xzg4QTgpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsKPiA+ICvCoMKgwqDC
+oCBkZWZhdWx0Ogo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBOTF9TRVRfRVJSX01TR19N
+T0QoZmNvLT5jb21tb24uZXh0YWNrLAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICJJbnZhbGlkIHZsYW4gcHJvdG8iKTsK
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZXJyID0gLUVJTlZBTDsKPiA+ICvCoMKgwqDC
+oCB9Cj4gPiArwqDCoMKgwqAgaWYgKGVycikKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+cmV0dXJuIGVycjsKPiA+ICsKPiA+ICvCoMKgwqDCoCBlcnIgPSB2Y2FwX3J1bGVfYWRkX2FjdGlv
+bl91MzIodnJ1bGUsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBWQ0FQX0FGX1RBR19BX1ZJRF9TRUwsCj4g
+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCBTUFg1X1ZJRF9BX1ZBTCk7Cj4gPiArwqDCoMKgwqAgaWYgKGVycikK
+PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJuIGVycjsKPiAKPiByZWdhcmRzLAo+
+IGRhbiBjYXJwZW50ZXIKPiAKClRoYW5rcyBmb3IgeW91ciBjb21tZW50cywgYXMgYWx3YXlzIHZl
+cnkgaGVscGZ1bC4KCkJSClN0ZWVuCgo=
 
