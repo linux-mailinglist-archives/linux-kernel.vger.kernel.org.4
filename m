@@ -2,98 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED3C695253
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A8869525D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbjBMUvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 15:51:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
+        id S230087AbjBMUyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 15:54:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjBMUva (ORCPT
+        with ESMTP id S229953AbjBMUyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 15:51:30 -0500
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F59E1F5D1;
-        Mon, 13 Feb 2023 12:51:29 -0800 (PST)
-Received: from [192.168.1.103] (178.176.72.240) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Mon, 13 Feb
- 2023 23:51:21 +0300
-Subject: Re: [PATCH 12/12] pata_parport: move pata_parport.h to
- drivers/ata/pata_parport
-To:     Ondrej Zary <linux@zary.sk>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-CC:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Tim Waugh <tim@cyberelk.net>, <linux-block@vger.kernel.org>,
-        <linux-parport@lists.infradead.org>, <linux-ide@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230211144232.15138-1-linux@zary.sk>
- <20230211144232.15138-13-linux@zary.sk>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <5e3c8754-54ab-b2ff-0963-94f15ecb9155@omp.ru>
-Date:   Mon, 13 Feb 2023 23:51:21 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Mon, 13 Feb 2023 15:54:12 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B9920069;
+        Mon, 13 Feb 2023 12:54:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :MIME-Version:Message-ID:References:In-Reply-To:Subject:CC:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=L9Lp70nKi81urUNH/P20ez0LtfS+viLTxmxtWz3Dtp0=; b=H3t89eeMooGlhIz6hiBQXvjRQQ
+        dM2XLF1imB62BLLyF8ysJ5H2Bvmj3Txr0wpFPF/Kg8ztcRrLp5+eltRMS6YlUMl2fcGctmmYeOBAm
+        e6L5Ll90FgfvtPBTG/g9tGx/uaK3RXQCcb9winjrAKvpF3Jy3sqn0NQQEpD2r0moOXEV0qGLlYnhX
+        pwEMhOBgf6RJPoTIV8Np7OZ08kLySOEFenh9NKCnmX4XN2FB42dSWblW2wmm7Es3U00Ge5KOfM3R5
+        ZBRhQsbg667/r6P/Yc8dxHpj8Blv7VOEBY/UAZZTSbb7F0Bes4alcGflAcxHi/8HPHMWgefRKOrlv
+        xStaFbEg==;
+Received: from [2001:871:43:561d:2d56:2cf3:ed22:ad26] (helo=[IPv6:::1])
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pRfoT-009SDs-00;
+        Mon, 13 Feb 2023 20:52:37 +0000
+Date:   Mon, 13 Feb 2023 21:53:15 +0100
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Usama Arif <usama.arif@bytedance.com>, kim.phillips@amd.com
+CC:     arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        David Woodhouse <dwmw@amazon.co.uk>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v8_9/9=5D_x86/smpboot=3A_Serializ?= =?US-ASCII?Q?e_topology_updates_for_secondary_bringup?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <87v8k5s3dq.ffs@tglx>
+References: <20230209154156.266385-1-usama.arif@bytedance.com> <20230209154156.266385-10-usama.arif@bytedance.com> <87v8k5s3dq.ffs@tglx>
+Message-ID: <BE9F9210-4DBD-4A9F-BA5A-A7B5BA580FCC@infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <20230211144232.15138-13-linux@zary.sk>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [178.176.72.240]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 02/13/2023 20:34:45
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 175483 [Feb 13 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 504 504 dc137e1f9c062eb6c0671e7d509ab442ae395562
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.72.240 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.72.240 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.72.240
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 02/13/2023 20:38:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 2/13/2023 6:59:00 PM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/11/23 5:42 PM, Ondrej Zary wrote:
 
-> Now that paride is gone, pata_parport.h does not need to be in
-> include/linux. Move it to drivers/ata/pata_parport.
-> 
-> Signed-off-by: Ondrej Zary <linux@zary.sk>
 
-Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+On 13 February 2023 21:43:13 CET, Thomas Gleixner <tglx@linutronix=2Ede> w=
+rote:
+>On Thu, Feb 09 2023 at 15:41, Usama Arif wrote:
+>> From: David Woodhouse <dwmw@amazon=2Eco=2Euk>
+>>
+>> The toplogy update is performed by the AP via smp_callin() after the BS=
+P
+>> has called do_wait_cpu_initialized(), setting the AP's bit in
+>> cpu_callout_mask to allow it to proceed=2E
+>>
+>> In preparation to enable further parallelism of AP bringup, add locking=
+ to
+>> serialize the update even if multiple APs are (in future) permitted to
+>> proceed through the next stages of bringup in parallel=2E
+>
+>This one is also only relevant for further parallelisation, right?
 
-[...]
-
-MBR, Sergey
+I believe so, yes=2E But it's low-hanging fruit and might as well go in no=
+w=2E
