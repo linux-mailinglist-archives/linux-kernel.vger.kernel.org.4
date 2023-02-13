@@ -2,121 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA1E694751
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:45:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 675C2694758
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:47:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbjBMNpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 08:45:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
+        id S229684AbjBMNrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 08:47:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjBMNpc (ORCPT
+        with ESMTP id S229992AbjBMNrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 08:45:32 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A948A7E;
-        Mon, 13 Feb 2023 05:45:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 13 Feb 2023 08:47:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF5983D3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:46:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676295987;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jpj+Hi64Ov256tSq+vKlLJQsr7J0tYvdjVC2kndFEfc=;
+        b=ZW2eBBPWs3tlnR6F/v7PxPtbrJ+vO0RvdPbRuyNsJ8nFMX8SmsUmiTHVYGYfBsc9IPrqxW
+        jFmuYqXeQWkNg3JGFMTu/Gq1aInp/DSpHG2IP0PnR7op/V+pnLF+cNopJFiNssWoUxoWe7
+        tv+5E2Sfoc5iX9Am2GVKzRUYGTFkEvw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-414-7ekccTIgNjWw5z9w3Wxjfg-1; Mon, 13 Feb 2023 08:46:24 -0500
+X-MC-Unique: 7ekccTIgNjWw5z9w3Wxjfg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 93F37CE178F;
-        Mon, 13 Feb 2023 13:45:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EDEEC433EF;
-        Mon, 13 Feb 2023 13:45:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676295925;
-        bh=Nouoz0V3KyjK32tUvJB+DgTGfTacIM/L0pvOEy6vqCY=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=jVh0MJJVi+1/fp6YJ96GyqoKbVAd7tI1aSwMPcL45uCJ/FP5vi4+UkLss+EhGMxrj
-         C9EPZUyFd/hheaRMRj6P9SgVUWtz1ZbqWLedMdtd17iQS7dmGtOmdcR8Dj21QJLzMK
-         XDElvldvm/7g2W/LMU6+i+hwGQNrPUVo3xko5uqgJl3c4NCnTSvd67OQ37rusm0U8P
-         BzdfrTdDjtUZn1pDbtyN292KXs81ZSi+Cv7t1kpR8jGMJXU8OVDzb6o+qgcngZW1TJ
-         JSXg2igwVTF1/YBmc63wiO/cMzKR5n7FFNdj05g44oGF6HFxK0KjOzPXzlByGWa2Ay
-         3hObGdMf8bPTg==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Arend Van Spriel <arend.vanspriel@broadcom.com>,
-        Aditya Garg <gargaditya08@live.com>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Prutskov <alep@cypress.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
-        Wright Feng <wright.feng@cypress.com>,
-        Ian Lin <ian.lin@infineon.com>,
-        Soontak Lee <soontak.lee@cypress.com>,
-        Joseph chuang <jiac@cypress.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Jonas Gorski <jonas.gorski@gmail.com>, asahi@lists.linux.dev,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/4] wifi: brcmfmac: Rename Cypress 89459 to BCM4355
-References: <20230210025009.21873-1-marcan@marcan.st>
-        <20230210025009.21873-2-marcan@marcan.st>
-        <0cd45af5812345878faf0dc8fa6b0963@realtek.com>
-        <624c0a20-f4e6-14a5-02a2-eaf7b36e9331@marcan.st>
-        <18640374b38.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
-        <e9dbfa3d-6599-94b9-0176-e25bb074b2c7@marcan.st>
-        <BM1PR01MB0931D1A15E7945A0D48B828EB8DF9@BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM>
-        <18640c70048.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
-        <180b9e56-fbf4-4d98-3d18-a71f3b15e045@marcan.st>
-Date:   Mon, 13 Feb 2023 15:45:17 +0200
-In-Reply-To: <180b9e56-fbf4-4d98-3d18-a71f3b15e045@marcan.st> (Hector Martin's
-        message of "Sun, 12 Feb 2023 04:15:52 +0900")
-Message-ID: <877cwl65n6.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6DDF0811E6E;
+        Mon, 13 Feb 2023 13:46:23 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E51E040C83B6;
+        Mon, 13 Feb 2023 13:46:20 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH 0/4] iov_iter: Adjust styling/location of new splice functions
+Date:   Mon, 13 Feb 2023 13:46:15 +0000
+Message-Id: <20230213134619.2198965-1-dhowells@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hector Martin <marcan@marcan.st> writes:
+Hi Jens, Al, Christoph,
 
->> If Kalle is willing to cleanup the commit message in the current patch you 
->> are lucky. You are free to ask. Otherwise it should be not too much trouble 
->> resubmitting it.
+Here are patches to make some changes that Christoph requested[1] to the
+new generic file splice functions that I implemented[2].  Apart from one
+functional change, they just altering the styling and move one of the
+functions to a different file:
 
-FWIW I can edit commit logs as long as the changes are simple and the
-edit instructions are clear, ie. it takes no more than a minute for me
-to do the edit.
+ (1) Rename the main functions:
 
-> It's even less trouble to just take it as is, since an extra "v2: " in
-> the commit message doesn't hurt anyone other than those who choose to be
-> hurt by it. And as I said there's *tons* of commits with a changelog
-> like this in Linux. It's not uncommon.
->
-> I swear, some maintainers seem to take a perverse delight in making
-> things as painful as possible for submitters, even when there is
-> approximately zero benefit to the end result. And I say this as a
-> maintainer myself.
->
-> Maybe y'all should be the ones feeling lucky that so many people are
-> willing to put up with all this bullshit to get things upstreamed to
-> Linux. It's literally the worst open source project to upstream things
-> to, by a *very long* shot. I'll respin a v4 if I must, but but it's.
-> Just. This. Kind. Of. Nonsense. Every. Single. Time. And. Every. Single.
-> Time. It's. Something. Different. This stuff burns people out and
-> discourages submissions and turns huge numbers of people off from ever
-> contributing to Linux, and you all need to seriously be aware of that.
+	generic_file_buffered_splice_read() -> filemap_splice_read()
+	generic_file_direct_splice_read()   -> direct_splice_read()
 
-I understand it's frustrating but please also try understand us
-maintainers. For example, I have 150 patches in patchwork right now. So
-it's not easy for us maintainers either, far from it.
+ (2) Abstract out the calculation of the location of the head pipe buffer
+     into a helper function in linux/pipe_fs_i.h.
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+ (3) Use init_sync_kiocb() in filemap_splice_read().
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+     This is where the functional change is.  Some kiocb fields are then
+     filled in where they were set to 0 before, including setting ki_flags
+     from f_iocb_flags.  I've filtered out IOCB_NOWAIT as the function is
+     supposed to be synchronous.
+
+ (4) Move filemap_splice_read() to mm/filemap.c.  filemap_get_pages() can
+     then be made static again.
+
+I've pushed the patches here also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-extract-3
+
+I've also updated worked the changes into the commits on my iov-extract
+branch if that would be preferable, though that means Jens would need to
+update his for-6.3/iov-extract again.
+
+David
+
+Link: https://lore.kernel.org/r/Y+n0n2UE8BQa/OwW@infradead.org/ [1]
+Link: https://lore.kernel.org/r/20230207171305.3716974-1-dhowells@redhat.com/ [2]
+
+David Howells (4):
+  splice: Rename new splice functions
+  splice: Provide pipe_head_buf() helper
+  splice: Use init_sync_kiocb() in filemap_splice_read()
+  splice: Move filemap_read_splice() to mm/filemap.c
+
+ fs/splice.c               | 146 ++------------------------------------
+ include/linux/pagemap.h   |   2 -
+ include/linux/pipe_fs_i.h |  20 ++++++
+ include/linux/splice.h    |   4 ++
+ mm/filemap.c              | 138 +++++++++++++++++++++++++++++++++--
+ 5 files changed, 163 insertions(+), 147 deletions(-)
+
