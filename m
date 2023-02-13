@@ -2,97 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0ABB694FA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:46:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5E8694FA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:46:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjBMSq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:46:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38856 "EHLO
+        id S229679AbjBMSqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:46:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjBMSq1 (ORCPT
+        with ESMTP id S229436AbjBMSqw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:46:27 -0500
-X-Greylist: delayed 156087 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 13 Feb 2023 10:46:18 PST
-Received: from out-80.mta1.migadu.com (out-80.mta1.migadu.com [IPv6:2001:41d0:203:375::50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E881E1D0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:46:18 -0800 (PST)
-Date:   Mon, 13 Feb 2023 13:46:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1676313975;
+        Mon, 13 Feb 2023 13:46:52 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C2D1C58F;
+        Mon, 13 Feb 2023 10:46:51 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1676314010;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=YioAr6XjueHplzus2lFvpvi8p2nekmVJOeyTQCK8hnU=;
-        b=is/Pm32wjeb+az5eM7cNbDFrk7BI9ydUnFRxt1jFUczcDf30rVGI+Q9fKcZ0RRo6c4z6Cr
-        lfqWphTk2GQmMTePbSQYvjrU0foEeVux1clHEa3pgBndccmPHDWoC7ReRstSF8AVU98ar3
-        Be4PBOUSrlxp9AQk1/IDHqHarvZzLuw=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Coly Li <colyli@suse.de>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>
-Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
- with unique class keys
-Message-ID: <Y+qFc7Q2NfXERwYT@moria.home.lan>
-References: <Y+gLd78vChQERZ6A@rowland.harvard.edu>
- <CAHk-=whXYzkOJZo0xpyYfrhWQg1M7j0OeCojTJ84CN4q9sqb2Q@mail.gmail.com>
- <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
- <Y+gjuqJ5RFxwLmht@moria.home.lan>
- <Y+hRurRwm//1+IcK@rowland.harvard.edu>
- <Y+hTEtCKPuO0zGIt@moria.home.lan>
- <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
- <Y+hYn6uzIUBaxDdV@moria.home.lan>
- <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
- <Y+oBveWO2z6xdTW/@hirez.programming.kicks-ass.net>
+        bh=DG/YHFOjMURtXqdamtgmYShJo+wF2f98tUavHFx54+c=;
+        b=O2BG4BKLutfEOdkyUTXeYw9wJNERnS+DwHWEQEOGTCgt54RBsR1H+N+U4+SAh3N07LKDDP
+        0/OXGBy2CcCNMLy15dJjQ46emmIMQbFnGQ7B/dZsC7+Q8F0tBNlUPy46Xsx3cPN4JI3rOy
+        OT4VGS0sNMRNa+o3qfNncFQNBWT39HhO/tcTFSQ+vKlbT9qnYtEmCfl6o4UbBS+R4L6t7V
+        kDJb+g9iez8pDhZzYOMmeiFKV3RztFzaGicVWtks/Z9SgRF9y7EnoEJ5zVFqy3G6haE+ZK
+        EXbo/7QvxNgQZSS8E/G6ait4Git6RxkrfkbfCJQ0Wze1iKvt/6JlDfDFWs9RNQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1676314010;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DG/YHFOjMURtXqdamtgmYShJo+wF2f98tUavHFx54+c=;
+        b=YRZdTJTE5M3Ly5D0xBpCAZbhLWPeV5OESOrwz+F9b9Lt+Wpu0n7mZS1is6fyii6VyBho2p
+        IenI9nGKgik+LcCA==
+To:     ALOK TIWARI <alok.a.tiwari@oracle.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        bhelgaas@google.com, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, kevin.tian@intel.com, darwi@linutronix.de
+Subject: Re: [External] : Re: [PATCH] PCI: Fix build error when
+ CONFIG_PCI_MSI disabled
+In-Reply-To: <5945f254-0581-093b-168d-8cf2c0a34eab@oracle.com>
+References: <158e40e1cfcfc58ae30ecb2bbfaf86e5bba7a1ef.1675978686.git.reinette.chatre@intel.com>
+ <333dee5b-6710-998c-bf3f-2cb1d676a7da@oracle.com>
+ <af294def-fff7-469c-b8c6-a245ba641c2c@intel.com>
+ <5945f254-0581-093b-168d-8cf2c0a34eab@oracle.com>
+Date:   Mon, 13 Feb 2023 19:46:49 +0100
+Message-ID: <87cz6dtnc6.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+oBveWO2z6xdTW/@hirez.programming.kicks-ass.net>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 10:24:13AM +0100, Peter Zijlstra wrote:
-> On Sun, Feb 12, 2023 at 10:23:44AM -0500, Alan Stern wrote:
-> > Provided it acquires the parent device's lock first, this is 
-> > utterly safe no matter what order the children are locked in.  Try 
-> > telling that to lockdep! 
-> 
-> mutex_lock_next_lock(child->lock, parent->lock) is there to express this
-> exact pattern, it allows taking multiple child->lock class locks (in any
-> order) provided parent->lock is held.
+Alok!
 
-Perhaps I'm stupid, but I've never understood how subclasses - or this -
-are supposed to work.
+On Sat, Feb 11 2023 at 10:35, ALOK TIWARI wrote:
 
-Locks don't get a fixed subclass, so what's to prevent some code from
-going
+Please do not top-post and trim your replies.
 
-/* thread 1: */
-mutex_lock(&a->lock);
-mutex_lock_nested(&b->lock, 1);
+  https://people.kernel.org/tglx/notes-about-netiquette
 
-/* thread 2: */
-mutex_lock(&b->lock);
-mutex_lock_nested(&a->lock, 1);
+> if, new function going to part of #else case . that is absolutely fine.
+> but that is not present in given PATCH.
 
-I don't see how they can be used to check that we're obeying a lock
-ordering?
+Care to apply the patch and look where the stub functions are placed
+instead of making uninformed claims?
+
+Thanks,
+
+        tglx
