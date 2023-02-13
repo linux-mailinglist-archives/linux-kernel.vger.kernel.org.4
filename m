@@ -2,131 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3181695348
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:41:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F62695351
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:43:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbjBMVl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 16:41:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
+        id S231165AbjBMVnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 16:43:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbjBMVlY (ORCPT
+        with ESMTP id S229877AbjBMVnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 16:41:24 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6F39027
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:41:13 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id dz21so2796388edb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:41:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SXb2wBOT0LurWdGsoyTt17ekBKNUZrsqRtveFQNt4nQ=;
-        b=z1v7IJ/L49vgAuqUVJCPTCh16RYIOgtH3JfOPSjlP7iw0RmPuutgOY/F6FqTkuEEG5
-         Q9z0i7bJk3fbSz/QN+5noH1x8n9yQyRip8muvcDr810PHPV7+4+KjBinZZ38nD6piQ9K
-         1utxwIiBdPSJrS7wFbD+h/+N3QvZbjP62ixkdYcFKEOnyEGMl95tpBUa3RKRa7KIpKB7
-         12Dg4jEBDJLHvX8aIqFO5n4VQDZzuTbbxCXUIhX91hrm0LBRUMM7kQ06ddjkwKwJXhry
-         sH9s68W1MKnA/6bIeBJ8U/Hne71xCtKVrvVvFszbeNXWG70UGgYznCOA2mNyWNu9ja4R
-         nDig==
+        Mon, 13 Feb 2023 16:43:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422CC273B
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:42:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676324532;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IAOGrIHROVWBHfLS+YnDTuX5cvviqED0/XTEnbV1xpM=;
+        b=Vmv7aEzNdB3sQi8WiLqLcWYPsLH2+YfDmD4rQk6QYBfhLapFgAN+KlF0cFBLj2IeArw/CM
+        oADzrjgRIfrlxC77MZdPdpOYUcvgmOb2oWt29kguOkbNXCXoLiveb1Mg5SzK88Xq251TFy
+        apmrBIzWsfeyH0PGClScvr4V7Eho0Y0=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-80-R343e0mnODuyljglzRaSUQ-1; Mon, 13 Feb 2023 16:42:11 -0500
+X-MC-Unique: R343e0mnODuyljglzRaSUQ-1
+Received: by mail-qv1-f70.google.com with SMTP id dz7-20020ad45887000000b0056e9274a7e1so5503715qvb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:42:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SXb2wBOT0LurWdGsoyTt17ekBKNUZrsqRtveFQNt4nQ=;
-        b=jtb8Wpb2dYfysJiPnNAILFuJjZ0IfMm9qgt/pGwIBA3lB77lCjhv8QqVX2r5w8MVcF
-         rsK5WRYMlF2Q6OyHH/fXvaZSlvkMDYwE2n8eGWz20jW+FW1xk61oC7vhEt+O9dZU9uDs
-         067XLJ4mTtdxXhpu3rC+XK+lU2P+Iwh7nqDD83qT48Qs5+l2UdnSDPkA0MVkdXTpDMdS
-         t902HzAfYkSfdCdCythC2deF0RDRZCpuAVzZNze4/1Wa3JFxrUvC/eGKkaxFz7FuRNmf
-         M4eyJg6qxEKDScqyaNM9noAIfOzV3OGjVrbngVM3CmWGF0m+Z9Ov/H3FtkXzna7T17P+
-         Bjpg==
-X-Gm-Message-State: AO0yUKXTKvVLhHBgW7rz9IIvUdfoCa47o4nG2NcIjJPsLIw+eX4p0oVZ
-        +YpilyoVYBliAKP+VfKCzpDJsg==
-X-Google-Smtp-Source: AK7set9aQzXbOVQSMzQenYRV6W4FxrtJ/vxZGkwXVcVSbKAUnD68l0E6Z8ccUd7qwBPKUVhGbIhExg==
-X-Received: by 2002:a50:d617:0:b0:4ac:c29d:5c4a with SMTP id x23-20020a50d617000000b004acc29d5c4amr137942edi.29.1676324472163;
-        Mon, 13 Feb 2023 13:41:12 -0800 (PST)
-Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id m2-20020a509302000000b004aad8d2158dsm7157131eda.66.2023.02.13.13.41.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 13:41:11 -0800 (PST)
-Message-ID: <83637cc7-21ae-7778-37b3-4522cc0a06c9@linaro.org>
-Date:   Mon, 13 Feb 2023 22:41:10 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IAOGrIHROVWBHfLS+YnDTuX5cvviqED0/XTEnbV1xpM=;
+        b=f/wSaVAJzSvksC1QZljG1z2kSpQhcZIf0pdmDosWa2hUr1N8AKm2Egpm2bX6nJpIcJ
+         usRAYIL5RGu6Pgk71irMTKy6ztPDgi7MnERdvEqiAE1uqNPk+WQ8fEZMo4pBK/bMUe0b
+         Smw89mRLJg4K2LuUBr1KQo+2ib8pHqeMZdRotj+Y0yGqDn3fG4BYl9pRXKVfMJPv5Whm
+         4M1ehak7a7uHE8e7HmgOehizu0N1ahU+ri0rpDeBhdrw2ReBPEHPeDcVc9/8+ryZe6IY
+         zObsVx0WuCrU2njwhCKL5MELG0EmeFHSrtbwV1rhjEmyDu1I7IHuFNNDUku716ikUHdH
+         SrIg==
+X-Gm-Message-State: AO0yUKWKYEo0NHIcTLLLPper6PVKbaciwG0Tnn+PVq8ClXqk4aHEudDl
+        L4DJv+KRquuJHfW/fMc1yV+GZy+6O5dpxk5dE54MSO6UBGwIsF2CfexwTz4x7Ff0eijFt5XgKE3
+        582VSvwAfM2un2eQVfPmo/CEC
+X-Received: by 2002:a05:622a:1981:b0:3b8:695b:aad1 with SMTP id u1-20020a05622a198100b003b8695baad1mr50949947qtc.1.1676324530526;
+        Mon, 13 Feb 2023 13:42:10 -0800 (PST)
+X-Google-Smtp-Source: AK7set9ssAPziIyB06p9/jd1fNqwXmEFiJFS1F+WtS7txqSELl2uM/hTDGmdTMxbgS3uqtH//pGScQ==
+X-Received: by 2002:a05:622a:1981:b0:3b8:695b:aad1 with SMTP id u1-20020a05622a198100b003b8695baad1mr50949888qtc.1.1676324530159;
+        Mon, 13 Feb 2023 13:42:10 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id p6-20020ac84086000000b003b9a573aec6sm10026617qtl.70.2023.02.13.13.42.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 13:42:09 -0800 (PST)
+Date:   Mon, 13 Feb 2023 16:42:07 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+Message-ID: <Y+qur8iIUQTLyE8f@x1n>
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-4-usama.anjum@collabora.com>
+ <Y+QfDN4Y5Q10x8GQ@x1n>
+ <8b2959fb-2a74-0a1f-8833-0b18eab142dc@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/3] dt-bindings: power: supply: pm8941-coincell: Don't
- require charging properties
-Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org,
-        marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230213204950.2100538-1-konrad.dybcio@linaro.org>
- <20230213204950.2100538-2-konrad.dybcio@linaro.org>
- <20230213212733.rhvuzrshfrvzgo4a@mercury.elektranox.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230213212733.rhvuzrshfrvzgo4a@mercury.elektranox.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8b2959fb-2a74-0a1f-8833-0b18eab142dc@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 13.02.2023 22:27, Sebastian Reichel wrote:
-> Hi,
+On Mon, Feb 13, 2023 at 05:55:19PM +0500, Muhammad Usama Anjum wrote:
+> On 2/9/23 3:15 AM, Peter Xu wrote:
+> > On Thu, Feb 02, 2023 at 04:29:12PM +0500, Muhammad Usama Anjum wrote:
+> >> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+> >> the info about page table entries. The following operations are supported
+> >> in this ioctl:
+> >> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
+> >>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+> >>   (PAGE_IS_SWAPPED).
+> >> - Write-protect the pages (PAGEMAP_WP_ENGAGE) to start finding which
+> >>   pages have been written-to.
+> >> - Find pages which have been written-to and write protect the pages
+> >>   (atomic PAGE_IS_WRITTEN + PAGEMAP_WP_ENGAGE)
+> >>
+> >> To get information about which pages have been written-to and/or write
+> >> protect the pages, following must be performed first in order:
+> >> - The userfaultfd file descriptor is created with userfaultfd syscall.
+> >> - The UFFD_FEATURE_WP_ASYNC feature is set by UFFDIO_API IOCTL.
+> >> - The memory range is registered with UFFDIO_REGISTER_MODE_WP mode
+> >>   through UFFDIO_REGISTER IOCTL.
+> >> Then the any part of the registered memory or the whole memory region
+> >> can be write protected using the UFFDIO_WRITEPROTECT IOCTL or
+> >> PAGEMAP_SCAN IOCTL.
+> >>
+> >> struct pagemap_scan_args is used as the argument of the IOCTL. In this
+> >> struct:
+> >> - The range is specified through start and len.
+> >> - The output buffer of struct page_region array and size is specified as
+> >>   vec and vec_len.
+> >> - The optional maximum requested pages are specified in the max_pages.
+> >> - The flags can be specified in the flags field. The PAGEMAP_WP_ENGAGE
+> >>   is the only added flag at this time.
+> >> - The masks are specified in required_mask, anyof_mask, excluded_ mask
+> >>   and return_mask.
+> >>
+> >> This IOCTL can be extended to get information about more PTE bits. This
+> >> IOCTL doesn't support hugetlbs at the moment. No information about
+> >> hugetlb can be obtained. This patch has evolved from a basic patch from
+> >> Gabriel Krisman Bertazi.
+> >>
+> >> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> >> ---
+> >> Changes in v10:
+> >> - move changes in tools/include/uapi/linux/fs.h to separate patch
+> >> - update commit message
+> >>
+> >> Change in v8:
+> >> - Correct is_pte_uffd_wp()
+> >> - Improve readability and error checks
+> >> - Remove some un-needed code
+> >>
+> >> Changes in v7:
+> >> - Rebase on top of latest next
+> >> - Fix some corner cases
+> >> - Base soft-dirty on the uffd wp async
+> >> - Update the terminologies
+> >> - Optimize the memory usage inside the ioctl
+> >>
+> >> Changes in v6:
+> >> - Rename variables and update comments
+> >> - Make IOCTL independent of soft_dirty config
+> >> - Change masks and bitmap type to _u64
+> >> - Improve code quality
+> >>
+> >> Changes in v5:
+> >> - Remove tlb flushing even for clear operation
+> >>
+> >> Changes in v4:
+> >> - Update the interface and implementation
+> >>
+> >> Changes in v3:
+> >> - Tighten the user-kernel interface by using explicit types and add more
+> >>   error checking
+> >>
+> >> Changes in v2:
+> >> - Convert the interface from syscall to ioctl
+> >> - Remove pidfd support as it doesn't make sense in ioctl
+> >> ---
+> >>  fs/proc/task_mmu.c      | 290 ++++++++++++++++++++++++++++++++++++++++
+> >>  include/uapi/linux/fs.h |  50 +++++++
+> >>  2 files changed, 340 insertions(+)
+> >>
+> >> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> >> index e35a0398db63..c6bde19d63d9 100644
+> >> --- a/fs/proc/task_mmu.c
+> >> +++ b/fs/proc/task_mmu.c
+> >> @@ -19,6 +19,7 @@
+> >>  #include <linux/shmem_fs.h>
+> >>  #include <linux/uaccess.h>
+> >>  #include <linux/pkeys.h>
+> >> +#include <linux/minmax.h>
+> >>  
+> >>  #include <asm/elf.h>
+> >>  #include <asm/tlb.h>
+> >> @@ -1135,6 +1136,22 @@ static inline void clear_soft_dirty(struct vm_area_struct *vma,
+> >>  }
+> >>  #endif
+> >>  
+> >> +static inline bool is_pte_uffd_wp(pte_t pte)
+> >> +{
+> >> +	if ((pte_present(pte) && pte_uffd_wp(pte)) ||
+> >> +	    (pte_swp_uffd_wp_any(pte)))
+> >> +		return true;
+> >> +	return false;
+> > 
+> > Sorry I should have mentioned this earlier: you can directly return here.
+> No problem at all. I'm replacing these two helper functions with following
+> in next version so that !present pages don't show as dirty:
 > 
-> On Mon, Feb 13, 2023 at 09:49:49PM +0100, Konrad Dybcio wrote:
->> It's fine for these properties to be absent, as the driver doesn't fail
->> without them and functions with settings inherited from the reset/previous
->> stage bootloader state.
->>
->> Fixes: 6c463222a21d ("dt-bindings: power: supply: pm8941-coincell: Convert to DT schema format")
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
+> static inline bool is_pte_written(pte_t pte)
+> {
+> 	if ((pte_present(pte) && pte_uffd_wp(pte)) ||
+> 	    (pte_swp_uffd_wp_any(pte)))
+> 		return false;
+> 	return (pte_present(pte) || is_swap_pte(pte));
+> }
+
+Could you explain why you don't want to return dirty for !present?  A page
+can be written then swapped out.  Don't you want to know that happened
+(from dirty tracking POV)?
+
+The code looks weird to me too..  We only have three types of ptes: (1)
+present, (2) swap, (3) none.
+
+Then, "(pte_present() || is_swap_pte())" is the same as !pte_none().  Is
+that what you're really looking for?
+
 > 
-> Please update the description of these properties to describe the
-> default behaviour.
-Not sure if there's any default behavior other than "go with
-whatever was there previously, no matter how it got there".
+> static inline bool is_pmd_written(pmd_t pmd)
+> {
+> 	if ((pmd_present(pmd) && pmd_uffd_wp(pmd)) ||
+> 	    (is_swap_pmd(pmd) && pmd_swp_uffd_wp(pmd)))
+> 		return false;
+> 	return (pmd_present(pmd) || is_swap_pmd(pmd));
+> }
 
-Is it okay if I just add:
+[...]
 
-"If unspecified, inherit the bootloader configuration"
-
-?
-
-Konrad
+> >> +	bitmap = cur & p->return_mask;
+> >> +	if (cpy && bitmap) {
+> >> +		if ((prev->len) && (prev->bitmap == bitmap) &&
+> >> +		    (prev->start + prev->len * PAGE_SIZE == addr)) {
+> >> +			prev->len += len;
+> >> +			p->found_pages += len;
+> >> +		} else if (p->vec_index < p->vec_len) {
+> >> +			if (prev->len) {
+> >> +				memcpy(&p->vec[p->vec_index], prev, sizeof(struct page_region));
+> >> +				p->vec_index++;
+> >> +			}
+> > 
+> > IIUC you can have:
+> > 
+> >   int pagemap_scan_deposit(p)
+> >   {
+> >         if (p->vec_index >= p->vec_len)
+> >                 return -ENOSPC;
+> > 
+> >         if (p->prev->len) {
+> >                 memcpy(&p->vec[p->vec_index], prev, sizeof(struct page_region));
+> >                 p->vec_index++;
+> >         }
+> > 
+> >         return 0;
+> >   }
+> > 
+> > Then call it here.  I think it can also be called below to replace
+> > export_prev_to_out().
+> No this isn't possible. We fill up prev until the next range doesn't merge
+> with it. At that point, we put prev into the output buffer and new range is
+> put into prev. Now that we have shifted to smaller page walks of <= 512
+> entries. We want to visit all ranges before finally putting the prev to
+> output. Sorry to have this some what complex method. The problem is that we
+> want to merge the consective matching regions into one entry in the output.
+> So to achieve this among multiple different page walks, the prev is being used.
 > 
-> -- Sebastian
+> Lets suppose we want to visit memory from 0x7FFF00000000 to 7FFF00400000
+> having length of 1024 pages and all of the memory has been written.
+> walk_page_range() will be called 2 times. In the first call, prev will be
+> set having length of 512. In second call, prev will be updated to 1024 as
+> the previous range stored in prev could be extended. After this, the prev
+> will be stored to the user output buffer consuming only 1 struct of page_range.
 > 
->>  .../devicetree/bindings/power/supply/qcom,pm8941-coincell.yaml  | 2 --
->>  1 file changed, 2 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/power/supply/qcom,pm8941-coincell.yaml b/Documentation/devicetree/bindings/power/supply/qcom,pm8941-coincell.yaml
->> index b7b58aed3f3c..d62e3af55560 100644
->> --- a/Documentation/devicetree/bindings/power/supply/qcom,pm8941-coincell.yaml
->> +++ b/Documentation/devicetree/bindings/power/supply/qcom,pm8941-coincell.yaml
->> @@ -43,8 +43,6 @@ properties:
->>  required:
->>    - compatible
->>    - reg
->> -  - qcom,rset-ohms
->> -  - qcom,vset-millivolts
->>  
->>  additionalProperties: false
->>  
->> -- 
->> 2.39.1
->>
+> If we store prev back to output memory in every walk_page_range() call, we
+> wouldn't get 1 struct of page_range with length 1024. Instead we would get
+> 2 elements of page_range structs with half the length.
+
+I didn't mean to merge PREV for each pgtable walk.  What I meant is I think
+with such a pagemap_scan_deposit() you can rewrite it as:
+
+if (cpy && bitmap) {
+        if ((prev->len) && (prev->bitmap == bitmap) &&
+            (prev->start + prev->len * PAGE_SIZE == addr)) {
+                prev->len += len;
+                p->found_pages += len;
+        } else {
+                if (pagemap_scan_deposit(p))
+                        return -ENOSPC;
+                prev->start = addr;
+                prev->len = len;
+                prev->bitmap = bitmap;
+                p->found_pages += len;
+        }
+}
+
+Then you can reuse pagemap_scan_deposit() when before returning to
+userspace, just to flush PREV to p->vec properly in a single helper.
+It also makes the code slightly easier to read.
+
+-- 
+Peter Xu
+
