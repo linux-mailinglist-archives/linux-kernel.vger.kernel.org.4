@@ -2,156 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD9569517A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:13:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02BB0695183
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjBMUM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 15:12:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
+        id S230159AbjBMUNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 15:13:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbjBMUM5 (ORCPT
+        with ESMTP id S230361AbjBMUNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 15:12:57 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2086.outbound.protection.outlook.com [40.107.244.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414994EF5;
-        Mon, 13 Feb 2023 12:12:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H/8Nxou7J3DHBtt7Mso9loSiJBv6VZ/6nKl4slLIfsmBjEhMKWGH9ekxtA/xN/Z8UDWmzMq5F5e4bynnIy2pzP6rGYQJ2eR6aLHN3892ggzLhJAXPB2IB+o3lueqQE0bcGd1Y8fjstP3Z2etaqUb4Yk447d7ldrygTpow40AdYlICgXEB9RaM1re+VeaBY3i1twYMy2x7cDZtodvk3J205gq+UpzTs7oEFVJh/gdXr9FUs2N5LYX1UFXQXxdMgrSv1WUKZsOnBIGfY8BMsGbuqh+oRVRcZE42lQHfANLiaI4gcv+sh3oCO8Bf0i2mosEMJblbjJN3Y286UzcOUvFdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1myZNj4CMi9i/aAmz0DJ+2BFbbk3zqHZ2BFOgEJfT00=;
- b=Cs75zUYjiCmBaYnoaPIDAYk7GPZZwbTtJfVWotUf6b6wUDRdBkCqFjEJHBVMIV/tdtO3UMYDmLBwtORjMffC2mPsKg1vJ8MQV0PZD8xy/eG/Q3akMkqjZxKQxDKuRV+XZjNIuqRZOSvroF1+tAzvfSyBlFg/y0199NtJjWUVFYDyKWdjWrPplBldqlwmvHFbCF6u1lM7Qeo/Q2+yao7o4egXcou8JSTno+JQz7em1vE/het3LezDe+xs2al3cvOP2bZHJtJ8/PwTrkM5yHqS4g8gdz55T7lo3VKIap8eegWVCDv3KOajvS7mOKihUijPvMtKFDawE2+LVAvguDSGCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1myZNj4CMi9i/aAmz0DJ+2BFbbk3zqHZ2BFOgEJfT00=;
- b=E4prZoUzb5bY0lzruXIIcv3E9/82noULqPF6eC2F/10GOAiCBYf4SRiBpQJc/SQay6vT6B2FLWZ/5YlYeHmk5nfzxTlTa5WwxVGNyTRnp98nslNYNm7KvvFziKIwte9mV6oHL8eMyhL3ifWqxNdScAOkwg3Rn/JwB2b4Mn2RJnM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by IA0PR12MB7556.namprd12.prod.outlook.com (2603:10b6:208:43c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Mon, 13 Feb
- 2023 20:12:47 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::8a66:1432:79ca:52ff]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::8a66:1432:79ca:52ff%7]) with mapi id 15.20.6086.019; Mon, 13 Feb 2023
- 20:12:47 +0000
-Date:   Mon, 13 Feb 2023 20:12:38 +0000
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Tom Rix <trix@redhat.com>, Nathan Chancellor <nathan@kernel.org>
-Cc:     bp@alien8.de, tony.luck@intel.com, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/amd64: remove unneeded call to
- reserve_mc_sibling_devs()
-Message-ID: <Y+qZthCMRL1m0p4B@yaz-fattaah>
-References: <20230213191510.2237360-1-trix@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230213191510.2237360-1-trix@redhat.com>
-X-ClientProxiedBy: CH2PR03CA0012.namprd03.prod.outlook.com
- (2603:10b6:610:59::22) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|IA0PR12MB7556:EE_
-X-MS-Office365-Filtering-Correlation-Id: 339a3bb0-c661-4b85-4c8c-08db0dfeac9d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jmFsJUiogumKERp5ZoZ357YvM8KgR6qxbT4thoC30AiiSZf3qScEKn+UqQX26cYLNp4v4mCpUfZqLAn7iriwaPldigc/1YFBc7ZH2Gi2qVuCcvkWJTsN3LWNnE2k6IRsKTTRZxVOXJWnqjDPqvbD0omOY+PlYOtBHLbKqrexk4JwqAHxjXfn0K2OURES+zGnhyIpZsvdHdS6ZY9VwPWxhH1ChZIFgUJuTAicQlO1ssqawCCfVEbcyl4ue/pZ2fgoz+WWHF7R8OIM/IqF8yjlAu+YSbGSeBDExWE20RPWqrSYQzzqg3ZW/mZ6UQDOvCzqhFk5iDdIsogbBLuczUzo8tepwvSUN2/0Z4zUKFszuziE5dNEVeMzhdjdJORHFgI7nFQB6I3ZuLoIXGh2WIVaZMA0cJQVb7uN0IIHCj4MkeCxFdXiLr+JsNMOqCwkXgFnQ+Mq3gr1iqHjw+w7l9il/usZfhkz6bqT2+8FaSn+RZYjRNfV4YvMKl6guWvNV/p0D4DiyqTzubpyTEcyj480eTmqbdvus8csOUbFZ8K18H1NCQhCZpzwrVfhfA1stqDdL/H8vS23jWFAGF2llj2VzuWLMlWG8/vf58BTaDH1Ma+M8xB24PI2VjjaWg8V4uyNRD+kZNVEi08sMFpj8fTzXPte9TbsE6ZqHjpR1Pw8ln2ENJcksJdnLJbok5SNEaD7RwysJlZJMXENkehnP/PFF13lqzwTaCw+gY87ptycstwd4+GNw0s8+P0sz8b5xXTsVnnMFTVNxsr1Cy+ZehAXOA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(4636009)(346002)(396003)(366004)(136003)(39860400002)(376002)(451199018)(8936002)(4326008)(66476007)(66556008)(110136005)(41300700001)(8676002)(316002)(66946007)(5660300002)(38100700002)(86362001)(33716001)(9686003)(6512007)(966005)(26005)(186003)(6506007)(6666004)(44832011)(2906002)(478600001)(6486002)(83380400001)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ELMtUViILISQaHJdFBI7hasXPDdYJPmQzFpd2EUzWGOiTrcsveptAGeV9uSm?=
- =?us-ascii?Q?LljPmq5oOOdQi0bJnUVD8lX7ScB1zLLo/yEr0H3kSokT9YS/T+u13EatGC/T?=
- =?us-ascii?Q?QoytDD5YXb0TCtpwQFASm8BJvxfIhvTCaKKM9PBIuDpYFsW7AZkz0ezhswsr?=
- =?us-ascii?Q?2X2eE3Os3bi6st48j0epdI9HYJfrnA4zuMRrGAsLWdRDtDqCEswnh+K6E+ZA?=
- =?us-ascii?Q?8YtGhqB6RMa7t+yzanz12atM49wPLONtdc/uhMKGUr6bedqHGRgLb1Q4r9d4?=
- =?us-ascii?Q?k4b9Sh7HEB+Wu5S8wxRKmwdU8UbjJsfpdYLpsmK6s5cMbE5JPppOlY6tsx01?=
- =?us-ascii?Q?BGNCUlF8dxwD2DxJbwsgYPHCuWIEg8mP/Va5lO/xdqe2DPRg7Zj99pZQRSil?=
- =?us-ascii?Q?GsgTp22Y0iyUsssiSXhvCnQVmhRzfodxEXP70tJR46pyEGTE7AgpNHXjABns?=
- =?us-ascii?Q?iqDmKsZ7RGRCddIQhjDvNwX76aK+U9EGOXDnLGpX7KWKwfnE1v90lY/5GbCd?=
- =?us-ascii?Q?zGCakvfmmAFvOxwkRS/tCEffMieZ9LuAjIk3JRC0dmFm783UCNeZfDLSV/cU?=
- =?us-ascii?Q?FTUnmhZQlFWhMYrSXQkyuaht+CJFu05ZluGJqZgkPSip1K9dHzpsHxxZXzzM?=
- =?us-ascii?Q?Bnn9saPOV+AtYtYkVq8+ixmcd8A0Er8tx/wTdLDDhI+bStTn8IqcG18CU22Q?=
- =?us-ascii?Q?t7gJ8Q3qsqbWQzustdT0fBEgsrjE+UvuyVcvjuQUTLGMu+7V6QBTnQhVna/q?=
- =?us-ascii?Q?DE5jcxtQC4FMWaMuhR837UYRySTsZghlUkOVE6pKOI1SExRNllS7D7J1ocJx?=
- =?us-ascii?Q?dc/czma9VplRY6Mtdv9+t2t54ParGK2aodwo2kN8ixhK5tzincTNB643jKUd?=
- =?us-ascii?Q?TprKHRQbnFMXcVhNrHAtDud8dHW42YBUdWlNaCf3fUfpj5WxXjGnykDYxVoQ?=
- =?us-ascii?Q?6C9Jdb74IeY7UeWZA2oStCrGgkkVlRzsK8JtnmEML1mt+3SckTuIw68wFzU0?=
- =?us-ascii?Q?+qlDhX3RPnlTB7kL0+bxUxOVt7b/rrDtlfqWjQFdxFU+mnMgplYFmp1qHak+?=
- =?us-ascii?Q?16GA/t13ox2zyeeIB/gHKelxANh2Z7HWcb+efnBgnj9/T3S2sZQ3T9YHyfE7?=
- =?us-ascii?Q?jWiOWZLAzlpZ2MQpoWOUWw3Wi4F7tvFv4776yr7TMq+cZ7Xtx8bv7qzydmrK?=
- =?us-ascii?Q?idtrIx81AwFPOdZjJsVYa9uwCiOrNZPvSLPhhnwzsBmYNz8VzXsVthDEBr0f?=
- =?us-ascii?Q?LxboPuWjvdJ4qRYoZJOGtWlqYrTVtGbgMAXyq9c62K1ffhGQ0UksWtuESldb?=
- =?us-ascii?Q?/Cr8Zl7Ey+3A5gJfle4i7CHj3NW78PEh7bWddVN9e8AA2KVjxSaHT63rOcTI?=
- =?us-ascii?Q?eSPZ69fz2/1z4UUgQ5DxtNI0Ova8+m04sqkoLNlwWODjU1f5eTkUzzRSAXqI?=
- =?us-ascii?Q?xUyKFMYkZE1S/XhpdzkJftNy6tS1LlwKC3aVs9ghnnFFCUoMvuvSd71GhFdM?=
- =?us-ascii?Q?lggQjmyCmemHgQUFfFozw268+LzhTYZNSFS7JqrgkA8K5vEpx0m58HSCAGhx?=
- =?us-ascii?Q?F80B1/VU9xzKciWddzxFmatMQP3PpQLf4mdDPRx3?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 339a3bb0-c661-4b85-4c8c-08db0dfeac9d
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2023 20:12:47.4088
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 55bqUxx2jeCSoGp53ZHjnfg1N3QGQ3P0bMDgtqhebkK5gHV5hN+EnVugwcbs0Uhm0zLOL1COY41tbm0E3jiqCg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7556
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 13 Feb 2023 15:13:52 -0500
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7C61E2B0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 12:13:51 -0800 (PST)
+Received: by mail-ej1-x64a.google.com with SMTP id z2-20020a1709060be200b0088b579825f9so8212541ejg.18
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 12:13:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VhrJl5YJ7d2XgMTj7m/kCtzHq/X4U46pZjqetmx6EIU=;
+        b=E84LspmK1D8CXYJ1386IiSX+2k5JvewADoqzxlVfJfiuzplqS+qe96ezEhckq47eoC
+         I7MJxBjlzNIhSX7Luw4uTSli+Chwbl/PPWFlMOWohdwzIjriQ7EN6xOiPO0fJ0/VuUvg
+         8cgjJ+VL2sso67wojRMlMstNwr4HP2B8/KtBlYx9+ulA3D5b7xkHHflOa5+nsJEEjLxV
+         xTZVcIVI/F2oQ9HDud3W+SFSQoSiA3TSAXdF0W8PZvJyp/y88r50fsxg4TWdiUKdeIXN
+         uL82iRVvCTHNjqxwZ+4Y6O2F0xn403iW7uF/DnPkemHbXKiDYFAcQoAPHJzBi1NhRl9/
+         ZkCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VhrJl5YJ7d2XgMTj7m/kCtzHq/X4U46pZjqetmx6EIU=;
+        b=BdWPsB4fN8YGKF5/jpLI/9EpalWp9hPE3+1Y1EAJE7VpmyZ5hgpuL7DOmGHMxMf5mY
+         pnGLVffuD/7aDHIa9hDhtWtVFKGzxpQzpegJuo4Y5oyT/M49pf7i//f8J5sJUuJrF2+G
+         D9FC/UTSHg9SpMiuvUMVBiVLceZAyOeU/M+zjW2kuw1Ppy5qEw2O8XUnWhTDbly42uv9
+         xEOVtlyIvL+6JbAEnp7DeZnM6y7KLyyGyukGV2G2rtYcRVRuEm2UUsevbRqS+QjCmGR1
+         FLJeRGQoamB6dLccZvJGesXc6sJ41Zw7J8s7stjMvgnbwGXHavAiw7fTaC1zK9mkUnOx
+         3ErA==
+X-Gm-Message-State: AO0yUKWeY0POv2BUrJiiMPgPXhgcSdgg+0DuBL4FOsSafVp+0tl4GMNa
+        /hWa+NjSPy8KBlAVKgrghbzjjicc3Q==
+X-Google-Smtp-Source: AK7set/YX+nQGo+fkH1LmT5uNQKhRY+VXPy7aEj/l1Z715GOIrZhtZCLlU/Yyd4YY6+utR6I4vl/W5A/Fw==
+X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:6cba:3834:3b50:a0b2])
+ (user=elver job=sendgmr) by 2002:a50:ab5b:0:b0:4ab:c702:656 with SMTP id
+ t27-20020a50ab5b000000b004abc7020656mr4694edc.1.1676319229479; Mon, 13 Feb
+ 2023 12:13:49 -0800 (PST)
+Date:   Mon, 13 Feb 2023 21:13:35 +0100
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
+Message-ID: <20230213201334.1494626-1-elver@google.com>
+Subject: [PATCH -tip v3] kasan: Emit different calls for instrumentable memintrinsics
+From:   Marco Elver <elver@google.com>
+To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-kbuild@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jakub Jelinek <jakub@redhat.com>,
+        linux-toolchains@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 11:15:10AM -0800, Tom Rix wrote:
-> cpp_check reports
-> drivers/edac/amd64_edac.c:3943:37: error: Uninitialized variable: pci_id1 [uninitvar]
->  ret = reserve_mc_sibling_devs(pvt, pci_id1, pci_id2);
->                                     ^
-> drivers/edac/amd64_edac.c:3943:46: error: Uninitialized variable: pci_id2 [uninitvar]
->  ret = reserve_mc_sibling_devs(pvt, pci_id1, pci_id2);
->                                              ^
-> The call to reserve_mc_sibling_devs() will not fail because
->   if (pvt->umc)
->     return 0;
-> 
-> reserve_mc_sibling_devs() is only called by hw_info_get() and pvt->umc is only set
-> in hw_info_get(), so with fam >= 0x17, the call to reserver_mc_siblings will
-> just return, so the call the call is not needed.  And when that call is moved
-> the check for umc is not needed.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
+Clang 15 will provide an option to prefix calls to memcpy/memset/memmove
+with __asan_ in instrumented functions: https://reviews.llvm.org/D122724
 
-Link to similar patch from Nathan:
-https://lore.kernel.org/linux-edac/20230213-amd64_edac-wsometimes-uninitialized-v1-1-5bde32b89e02@kernel.org/
+GCC will add support in future:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108777
 
-Hi Tom and Nathan,
+Use it to regain KASAN instrumentation of memcpy/memset/memmove on
+architectures that require noinstr to be really free from instrumented
+mem*() functions (all GENERIC_ENTRY architectures).
 
-These errors are encountered when extra warnings are enabled, correct?
+Fixes: 69d4c0d32186 ("entry, kasan, x86: Disallow overriding mem*() functions")
+Signed-off-by: Marco Elver <elver@google.com>
+---
+v3:
+* Resend with actual fix.
 
-I think the following patch would resolve this issue. This is part of a set
-that isn't fully applied.
-https://lore.kernel.org/linux-edac/20230127170419.1824692-12-yazen.ghannam@amd.com/
+v2:
+* Use asan-kernel-mem-intrinsic-prefix=1, so that once GCC supports the
+  param, it also works there (it needs the =1).
 
-Boris,
-Do you think one of these patches should be applied or just hold off until the
-entire original set is applied?
+The Fixes tag is just there to show the dependency, and that people
+shouldn't apply this patch without 69d4c0d32186.
+---
+ scripts/Makefile.kasan | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-As for myself, I'll start including builds with extra warnings enabled for
-each patch in my workflow. Currently I do a regular build for each patch and a
-build with extra warnings for the entire set.
+diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
+index b9e94c5e7097..3b35a88af60d 100644
+--- a/scripts/Makefile.kasan
++++ b/scripts/Makefile.kasan
+@@ -38,6 +38,13 @@ endif
+ 
+ CFLAGS_KASAN += $(call cc-param,asan-stack=$(stack_enable))
+ 
++ifdef CONFIG_GENERIC_ENTRY
++# Instrument memcpy/memset/memmove calls by using instrumented __asan_mem*()
++# instead. With compilers that don't support this option, compiler-inserted
++# memintrinsics won't be checked by KASAN.
++CFLAGS_KASAN += $(call cc-param,asan-kernel-mem-intrinsic-prefix=1)
++endif
++
+ endif # CONFIG_KASAN_GENERIC
+ 
+ ifdef CONFIG_KASAN_SW_TAGS
+-- 
+2.39.1.581.gbfd45094c4-goog
 
-Thanks,
-Yazen
