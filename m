@@ -2,246 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75319695357
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:46:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F42B69535C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:48:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbjBMVqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 16:46:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
+        id S230415AbjBMVsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 16:48:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbjBMVqP (ORCPT
+        with ESMTP id S231187AbjBMVsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 16:46:15 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6D62108
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:46:13 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id sa10so35251644ejc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:46:13 -0800 (PST)
+        Mon, 13 Feb 2023 16:48:08 -0500
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1A3166FF
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:48:07 -0800 (PST)
+Received: by mail-vk1-xa2a.google.com with SMTP id b81so6993941vkf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:48:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cLqbD4GL7wGt7wb5qOSWcpBX+EUA83fR85j9v5NAA80=;
-        b=yHlIZp5ficXr4X8XRD0YbnUlgk9MpuTsDUbZ9rqtE2SXrhMeI7NHGFo4bCZ1uACMtR
-         V3ho3QqXsAl0JxMknz4NE8nNturALTlkGsji1a5ONcfjxDFxo5p0FfGgc7V3LuatrsIp
-         TGxUbn7AqxoyyVxBGk+MBaP11Pmc/37SmSEPQtSbd3D69W8IxGxlFlgCk9urHd10wj76
-         6UehSRgHmFBBR1SwRmpV4vzHL9u2q7TbeGXB5hzCUhBkkO8q6reUyOziIk/rxyJRBDC3
-         gBqcQj08hFkpwGQ833GLdDyVO0BKvDPHyf+dLFxsCcrEkF3Lu59I9N63cH5aeAvLHwea
-         s+Ng==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=S3obMmlZQYaGRz/X7lxV778PRHC7QpUlV9JI6kMs3aI=;
+        b=FC1McpksbJo1OWPJfmFPFoBTApwDonUMQk4mGUWl5F0CbuAEMsjumwh3hGu/1JBVpK
+         Iye8KHJ5yy+0R82YMbXfycQm5GVzBjjUwQX0HVeZ9KXzvlhpXpnE9icUTNOXr+X7cINk
+         ZhY8hFETETqjEJEygxs6P8Cgki17dTkSKCurBYNbitq9GSh9u2sr+YD8s1pLZQsFUq7N
+         Blj8KeOagLyESkIgzgUTy2iyYzgqmZIim2GC9xEqHcqx23V+KYCQY4tVwlwPP/Lecsqw
+         m3TCyK5qGCI+hXTGgB2wo7x0vis8G/AMbDoHAfiEikGgtKy//75+1OVPlN2+9S6ppC7G
+         Xc6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cLqbD4GL7wGt7wb5qOSWcpBX+EUA83fR85j9v5NAA80=;
-        b=M++peayNlYUT6dMERj9frpGCunl3zXfVj2mO9yd03LfP7knZ7HjfRhr4T00/zkP5nA
-         2hKV4GloQBdXimQk22l0cD4OlGbYRrLHF+1vlnbCqzc2VrttYDazRuKR2EoXHRMCiNo2
-         fOlFxv7KEYLphF4smn+Ht+Svd5yoGBwnbbMVbN5zVfeLlnZSRDYv77dlTmnMIYtwJwp8
-         3RgP0GhxAUrMPwgg/DClMRzYsxxnKHqLtqJtKkTZYGeW4Y9qsyyAqL9T2Nzo9K085gkj
-         +D4bsMhIGPwM04Gg3uH8MIEmOF5QqPo5zS0luDqebOVaxJkDQNvYO0QqiNTx+pahHH6a
-         W0Iw==
-X-Gm-Message-State: AO0yUKW1ax5cDR83ayXNxTQgzLQRf4qElmktG1igJNKoopNXGpEpCHMu
-        0pK5yDuM82NyablfpQfap/SCNQ==
-X-Google-Smtp-Source: AK7set9aAcUj8MPJa0hpm1RoqSyPXeXAENwlb572NSMRk8UGq6YFqH3lfDUTDPiGMw1iZzQiQnH4rQ==
-X-Received: by 2002:a17:906:d7b3:b0:8a4:e0a2:e774 with SMTP id pk19-20020a170906d7b300b008a4e0a2e774mr411473ejb.29.1676324772363;
-        Mon, 13 Feb 2023 13:46:12 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id gh2-20020a1709073c0200b008b124134fb4sm554895ejc.115.2023.02.13.13.46.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 13:46:11 -0800 (PST)
-Message-ID: <1051d6bd-eb3c-6293-0bd2-3f4ea28fa3f8@linaro.org>
-Date:   Mon, 13 Feb 2023 23:46:09 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S3obMmlZQYaGRz/X7lxV778PRHC7QpUlV9JI6kMs3aI=;
+        b=TEshjL1IJQ4x3Gyj7EcKVX0whHY7HfsBpV5R603QqbgKedMVbZH1IOgIy2jPgLQbV7
+         NhZMNMWDEO1g8ZYkOfyeg/2vL/CVGFvSaG4Rs35iSTcDVXG8vqMQccrWDnlAk1AjE5JJ
+         CQ80asHpX4mXaphoIQOb4tRwBtHepVRv94uyPkt0Cu8LDsr89GCcNg7SW0kjHlNOvNDj
+         kWJKHYRov5Nse9SbiI8wJElerbgWW85z9EhT19jONupCOr/ADr8tU1Sjw+2fMSP3v2D8
+         Et4ccK0BQOmlt7ZEOCyToEuXniPFpMxnfYcgJTR1LeGB5yx5UZmIPn1LTqnA0ERQn/nS
+         A1lA==
+X-Gm-Message-State: AO0yUKVLHsjh48dQwM+OxTJNn4Nh/KPwIw13HFskSCX9Sfr15C+GNUdg
+        yyQKExG+cJqnd8DuI11nutW5v1SYvG6FB4qeKwhLmQ==
+X-Google-Smtp-Source: AK7set9HKIO2aDRBpW9el5kRiOlDiAxD3gxwAa16FMDcKG30HHhfU5/GrCumWG+i9Mtm3FnDIYK9ZkLFfuXG6rv8CRk=
+X-Received: by 2002:a1f:23d4:0:b0:3e7:295d:64d8 with SMTP id
+ j203-20020a1f23d4000000b003e7295d64d8mr4345228vkj.35.1676324886552; Mon, 13
+ Feb 2023 13:48:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 5/7] drm/msm/dpu: Document and enable TEAR interrupts
- on DSI interfaces
-Content-Language: en-GB
-To:     Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221231215006.211860-1-marijn.suijten@somainline.org>
- <20221231215006.211860-6-marijn.suijten@somainline.org>
- <773cd72b-a766-1764-e25f-0af1174f0e51@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <773cd72b-a766-1764-e25f-0af1174f0e51@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230212175659.4480-1-quic_kriskura@quicinc.com>
+In-Reply-To: <20230212175659.4480-1-quic_kriskura@quicinc.com>
+From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+Date:   Mon, 13 Feb 2023 13:47:54 -0800
+Message-ID: <CANP3RGerSsUPhzdExrok_sc2jst2firjsEkaLepHDgt_sFmO4w@mail.gmail.com>
+Subject: Re: [RFC] usb: gadget: ncm: Add support to configure wMaSegmentSize
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_ppratap@quicinc.com, quic_jackp@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/02/2023 21:37, Jessica Zhang wrote:
-> 
-> 
-> On 12/31/2022 1:50 PM, Marijn Suijten wrote:
->> All SoCs since DPU 5.0.0 (and seemingly up until and including 6.0.0,
->> but excluding 7.x.x) have the tear interrupt and control registers moved
->> out of the PINGPONG block and into the INTF block.  Wire up the
->> necessary interrupts and IRQ masks on all supported hardware.
-> 
-> Hi Marijn,
-> 
-> Thanks for the patch.
-> 
-> I saw that in your commit msg, you mentioned that 7.x doesn't have 
-> tearcheck in the INTF block -- can you double check that this is correct?
-> 
-> I'm working on SM8350 (DPU v7) and I'm seeing that it does have 
-> tearcheck in INTF block.
+This isn't a review per say - just some loose comments.
 
-I confirm, according to the vendor drivers INTF TE should be used for 
-all DPU >= 5.0, including 7.x and 8.x
+On Sun, Feb 12, 2023 at 9:57 AM Krishna Kurapati
+<quic_kriskura@quicinc.com> wrote:
+> Currently the NCM driver restricts wMasxSegmentSize that indicates
 
-However I think I know what Marijn meant here. For 5.x and 6.x these 
-IRQs are handled at the address MDSS + 0x6e800 / + 0x6e900 (which means 
-offset here should 0x6d800 and 0x6d900) for INTF_1 and INTF_2. Since DPU 
-7.x these IRQ registers were moved close to the main INTF block (0x36800 
-and 0x37800 = INTF + 0x800).
+there's a number of spelling mistakes, here, and in the commit title
 
-> 
->>
->> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
->> ---
->>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 78 +++++++++++--------
->>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |  6 +-
->>   .../gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c | 12 +++
->>   .../gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h |  2 +
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h      |  3 +
->>   5 files changed, 68 insertions(+), 33 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> index 1cfe94494135..b9b9b5b0b615 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> @@ -86,6 +86,15 @@
->>   #define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN)
->> +#define IRQ_MSM8998_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
->> +             BIT(MDP_SSPP_TOP0_INTR2) | \
->> +             BIT(MDP_SSPP_TOP0_HIST_INTR) | \
->> +             BIT(MDP_INTF0_INTR) | \
->> +             BIT(MDP_INTF1_INTR) | \
->> +             BIT(MDP_INTF2_INTR) | \
->> +             BIT(MDP_INTF3_INTR) | \
->> +             BIT(MDP_INTF4_INTR))
->> +
->>   #define IRQ_SDM845_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
->>                BIT(MDP_SSPP_TOP0_INTR2) | \
->>                BIT(MDP_SSPP_TOP0_HIST_INTR) | \
->> @@ -100,13 +109,15 @@
->>   #define IRQ_QCM2290_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
->>                BIT(MDP_SSPP_TOP0_INTR2) | \
->>                BIT(MDP_SSPP_TOP0_HIST_INTR) | \
->> -             BIT(MDP_INTF1_INTR))
->> +             BIT(MDP_INTF1_INTR) | \
->> +             BIT(MDP_INTF1_TEAR_INTR))
->>   #define IRQ_SC7180_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
->>                BIT(MDP_SSPP_TOP0_INTR2) | \
->>                BIT(MDP_SSPP_TOP0_HIST_INTR) | \
->>                BIT(MDP_INTF0_INTR) | \
->> -             BIT(MDP_INTF1_INTR))
->> +             BIT(MDP_INTF1_INTR) | \
->> +             BIT(MDP_INTF1_TEAR_INTR))
->>   #define IRQ_SC7280_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
->>                BIT(MDP_SSPP_TOP0_INTR2) | \
->> @@ -120,7 +131,9 @@
->>                BIT(MDP_SSPP_TOP0_HIST_INTR) | \
->>                BIT(MDP_INTF0_INTR) | \
->>                BIT(MDP_INTF1_INTR) | \
->> +             BIT(MDP_INTF1_TEAR_INTR) | \
->>                BIT(MDP_INTF2_INTR) | \
->> +             BIT(MDP_INTF2_TEAR_INTR) | \
->>                BIT(MDP_INTF3_INTR) | \
->>                BIT(MDP_INTF4_INTR))
->> @@ -129,7 +142,9 @@
->>                 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
->>                 BIT(MDP_INTF0_INTR) | \
->>                 BIT(MDP_INTF1_INTR) | \
->> +              BIT(MDP_INTF1_TEAR_INTR) | \
->>                 BIT(MDP_INTF2_INTR) | \
->> +              BIT(MDP_INTF2_TEAR_INTR) | \
->>                 BIT(MDP_INTF3_INTR) | \
->>                 BIT(MDP_INTF4_INTR) | \
->>                 BIT(MDP_INTF5_INTR) | \
->> @@ -1300,63 +1315,64 @@ static struct dpu_dsc_cfg sdm845_dsc[] = {
->>   /*************************************************************
->>    * INTF sub blocks config
->>    *************************************************************/
->> -#define INTF_BLK(_name, _id, _base, _type, _ctrl_id, _progfetch, 
->> _features, _reg, _underrun_bit, _vsync_bit) \
->> +#define INTF_BLK(_name, _id, _base, _len, _type, _ctrl_id, 
->> _progfetch, _features, _reg, _underrun_bit, _vsync_bit, _tear_reg, 
->> _tear_rd_ptr_bit) \
->>       {\
->>       .name = _name, .id = _id, \
->> -    .base = _base, .len = 0x280, \
->> +    .base = _base, .len = _len, \
->>       .features = _features, \
->>       .type = _type, \
->>       .controller_id = _ctrl_id, \
->>       .prog_fetch_lines_worst_case = _progfetch, \
->>       .intr_underrun = DPU_IRQ_IDX(_reg, _underrun_bit), \
->>       .intr_vsync = DPU_IRQ_IDX(_reg, _vsync_bit), \
->> +    .intr_tear_rd_ptr = DPU_IRQ_IDX(_tear_reg, _tear_rd_ptr_bit), \
->>       }
->>   static const struct dpu_intf_cfg msm8998_intf[] = {
->> -    INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, 0, 25, 
->> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
->> -    INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 25, 
->> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
->> -    INTF_BLK("intf_2", INTF_2, 0x6B000, INTF_DSI, 1, 25, 
->> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
->> -    INTF_BLK("intf_3", INTF_3, 0x6B800, INTF_HDMI, 0, 25, 
->> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
->> +    INTF_BLK("intf_0", INTF_0, 0x6A000, 0x268, INTF_DP, 0, 25, 
->> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 24, 25, -1, -1),
-> 
-> Just wondering, how were the lengths calculated for the INTF blocks? The 
-> values in general seem a little off to me.
-> 
-> For example, I'm looking downstream and it seems to me that the length 
-> for the INTF_0 on MSM8998 should be 0x280. Similarly for SC7280, I'm 
-> seeing that length for INTF + tearcheck should be 0x2c4.
+> the datagram size coming from network layer to 1514. However the
+> spec doesn't have any limitation.
+>
+> Add support to configure this value before configfs symlink is
+> created. Also since the NTB Out/In buffer sizes are fixed at 16384
+> bytes, limit the segment size to an upper cap of 8192 bytes so that
+> at least 2 packets can be aggregated.
 
-We have discussed INTF lengths in [1]. The current understanding of the 
-block lengths can be found at [2]. Please comment there if any of the 
-fixed lengths sounds incorrect to you.
+I've experimented with increasing mtu to boost performance before
+(have some half-baked patches/scripts somewhere).
+And while it did improve point-to-point performance, it wasn't
+actually useful for any real world use cases,
+as internet mtu is simply never above 1500.
 
-[1] https://patchwork.freedesktop.org/patch/522187/
-[2] https://patchwork.freedesktop.org/patch/522227/
+Note that you cannot simply receive, aggregate (lro/gro) and forward
+aggregated packets without splitting them back up.
 
-[skipped the rest]
+A change like this to be useful would require negotiating some sort of
+gso capabilities between the two devices
+(and thus extending the NCM standard).  I've been meaning to do
+this... but time...
 
--- 
-With best wishes
-Dmitry
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  drivers/usb/gadget/function/f_ncm.c | 55 +++++++++++++++++++++++++++++
+>  drivers/usb/gadget/function/u_ncm.h |  1 +
+>  2 files changed, 56 insertions(+)
+>
+> diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
+> index 424bb3b666db..1969e276017f 100644
+> --- a/drivers/usb/gadget/function/f_ncm.c
+> +++ b/drivers/usb/gadget/function/f_ncm.c
+> @@ -118,6 +118,12 @@ static inline unsigned ncm_bitrate(struct usb_gadget *g)
+>  /* Delay for the transmit to wait before sending an unfilled NTB frame. */
+>  #define TX_TIMEOUT_NSECS       300000
+>
+> +/*
+> + * Currently the max NTB Buffer size is set to 16384. For atleast 2 packets
+> + * to be aggregated, the size of datagram must at max be 8192.
+> + */
+> +#define MAX_DATAGRAM_SIZE      8192
 
+From what I recall, there's a fair bit of overhead, and 8192 x2
+doesn't actually fit in 16384...
+That said... is it reasonable to require 2 to fit?  why? what's wrong
+with 15000?
+
+> +
+>  #define FORMATS_SUPPORTED      (USB_CDC_NCM_NTB16_SUPPORTED |  \
+>                                  USB_CDC_NCM_NTB32_SUPPORTED)
+>
+> @@ -1440,6 +1446,7 @@ static int ncm_bind(struct usb_configuration *c, struct usb_function *f)
+>          */
+>         if (!ncm_opts->bound) {
+>                 mutex_lock(&ncm_opts->lock);
+> +               ncm_opts->net->mtu = (ncm_opts->max_segment_size - 14);
+
+this should use a constant, ETH_HLEN probably
+
+>                 gether_set_gadget(ncm_opts->net, cdev->gadget);
+>                 status = gether_register_netdev(ncm_opts->net);
+>                 mutex_unlock(&ncm_opts->lock);
+> @@ -1484,6 +1491,8 @@ static int ncm_bind(struct usb_configuration *c, struct usb_function *f)
+>
+>         status = -ENODEV;
+>
+> +       ecm_desc.wMaxSegmentSize = ncm_opts->max_segment_size;
+> +
+
+Curious... wasn't this set previously?
+
+>         /* allocate instance-specific endpoints */
+>         ep = usb_ep_autoconfig(cdev->gadget, &fs_ncm_in_desc);
+>         if (!ep)
+> @@ -1586,11 +1595,56 @@ USB_ETHERNET_CONFIGFS_ITEM_ATTR_QMULT(ncm);
+>  /* f_ncm_opts_ifname */
+>  USB_ETHERNET_CONFIGFS_ITEM_ATTR_IFNAME(ncm);
+>
+> +static ssize_t ncm_opts_max_segment_size_show(struct config_item *item,
+> +                                               char *page)
+> +{
+> +       struct f_ncm_opts *opts = to_f_ncm_opts(item);
+> +       u32 segment_size;
+> +
+> +       mutex_lock(&opts->lock);
+> +       segment_size = opts->max_segment_size;
+> +       mutex_unlock(&opts->lock);
+> +
+> +       return sprintf(page, "%u\n", segment_size);
+> +}
+> +
+> +static ssize_t ncm_opts_max_segment_size_store(struct config_item *item,
+> +                                               const char *page, size_t len)
+> +{
+> +       struct f_ncm_opts *opts = to_f_ncm_opts(item);
+> +       int ret;
+> +       u32 segment_size;
+> +
+> +       mutex_lock(&opts->lock);
+> +       if (opts->refcnt) {
+> +               ret = -EBUSY;
+> +               goto out;
+> +       }
+> +
+> +       ret = kstrtou32(page, 0, &segment_size);
+> +       if (ret)
+> +               goto out;
+> +
+> +       if (segment_size > MAX_DATAGRAM_SIZE) {
+> +               ret = -EINVAL;
+> +               goto out;
+> +       }
+> +
+> +       opts->max_segment_size = segment_size;
+> +       ret = len;
+> +out:
+> +       mutex_unlock(&opts->lock);
+> +       return ret;
+> +}
+> +
+> +CONFIGFS_ATTR(ncm_opts_, max_segment_size);
+> +
+>  static struct configfs_attribute *ncm_attrs[] = {
+>         &ncm_opts_attr_dev_addr,
+>         &ncm_opts_attr_host_addr,
+>         &ncm_opts_attr_qmult,
+>         &ncm_opts_attr_ifname,
+> +       &ncm_opts_attr_max_segment_size,
+>         NULL,
+>  };
+>
+> @@ -1633,6 +1687,7 @@ static struct usb_function_instance *ncm_alloc_inst(void)
+>                 kfree(opts);
+>                 return ERR_CAST(net);
+>         }
+> +       opts->max_segment_size = cpu_to_le16(ETH_FRAME_LEN);
+>         INIT_LIST_HEAD(&opts->ncm_os_desc.ext_prop);
+>
+>         descs[0] = &opts->ncm_os_desc;
+> diff --git a/drivers/usb/gadget/function/u_ncm.h b/drivers/usb/gadget/function/u_ncm.h
+> index 5408854d8407..fab99d997476 100644
+> --- a/drivers/usb/gadget/function/u_ncm.h
+> +++ b/drivers/usb/gadget/function/u_ncm.h
+> @@ -31,6 +31,7 @@ struct f_ncm_opts {
+>          */
+>         struct mutex                    lock;
+>         int                             refcnt;
+> +       u32                             max_segment_size;
+>  };
+>
+>  #endif /* U_NCM_H */
+> --
+> 2.39.0
+>
