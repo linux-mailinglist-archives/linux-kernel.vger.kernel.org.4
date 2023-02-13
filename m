@@ -2,98 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38377694366
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A4F694368
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjBMKrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 05:47:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
+        id S230329AbjBMKsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 05:48:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbjBMKqx (ORCPT
+        with ESMTP id S230049AbjBMKrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 05:46:53 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2371193D7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:46:24 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id bk16so11653357wrb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:46:24 -0800 (PST)
+        Mon, 13 Feb 2023 05:47:49 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDD818AAB
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:47:15 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id k3so4046326wrv.5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:47:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=nohBvmIt0eGJB1fu9RPvPc9mXS9BKECYIplYz9S8CE8=;
-        b=lfxLx83jvo/7V/dpwOEAtqY05CIGTbR2wKc5UWT8jdAGjCejzqdejOnMVdDB9QW4pN
-         PsSFy8q2NrYtxPYJ9DY+8WEvlIyoCgTKhmBkpQ2WIE/KrWSVPkQc7er9fST7UxRDruCz
-         wPJsM2JjFoNFLPA5zgG73of1DXnngv3ALp6QVOr0iAs3iLug9fp796sqvis07jFhQiHO
-         Q/MpJvKbuYSyty5XpBFAXdwMR1sdSmCDkAScOLSPTjU7ECWR+HvrCI4rreaycw3uPrIi
-         dEpmyS+dltG2OxzW1pvYBcKEo9YQYu2Q+50RWs9osr+r7C4AXgHpEYhlLkOxjG1baxzY
-         7egQ==
+        bh=e/3Rg46LCIECXTmzltYeLCxx09WgeNrt+MNMZLrlGZs=;
+        b=QkGvEARzZi10SgW85SKmLQmKqQ+qcLW6GuRTFW8BoP9HzXDvAOtxgAiwEe2qOAgJFm
+         +CcxUgGM2Op+PUPbnvcleVwWUyQd8R94g6XZ4kI/p6nmtUbvH1emQe7Fa4BHNWzS3vz5
+         0ughZebnyCurIDTuwcfVDiUbZOt92HRRG/MJPjOWN/BXPtouwwfmg6xUl1e95LJVhdgQ
+         nffIbSHcA1pdRzAW+mzdIKuOnAcDKrHXV+hCRELjchKwhjVxLaeqAcJoIREH6YkJ8YB/
+         +ugpwh9MxtAa/jEQ22tUqxmoOXLTqQSSXRv0c7GW8cJ9XG5/PkUJNlNAwSPL6I3lCAKY
+         u6zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nohBvmIt0eGJB1fu9RPvPc9mXS9BKECYIplYz9S8CE8=;
-        b=aYpdU7lyjRLXIc4/dJ0hsSldOQWkN9eFfo4M60KFeZ8zb4LdRP5lnMFYx6EfS8AsFE
-         F7sHXIxrc+O2m6o4QyxzJFd3sE6B4dIxPbKnszt/wbhNHfa5JghncmIGutBh48tKq3dZ
-         YcUZsqfR7/wRiv+Qv2LE9DYlBWN92lDNmtn8j5k2MU3EoqJd94Kme956gjWrC7W2D0C4
-         VIWdCF4vN4xztIPnaHUwutXpafjlYMoBLjlTPfASK7AwakG4idnXrE731q/iu/J+pslk
-         1Ew8xmDykfGI8qoZlOc+bYSEhnGiqSLfs3T5vLy+bV3UPCGW4pulXk3EGIPr0DW179Zl
-         oQog==
-X-Gm-Message-State: AO0yUKVi+5YdAQoO+547LwSRNchJJnRnUZ6Z581avxK27jqf+4Ze6SYb
-        lognSOoOCE1Ky8H87aZ8PXBezg==
-X-Google-Smtp-Source: AK7set/MjqaMn/vigM1AfzmzEd4USxcAMjKddUbglHG/FzriPT3YB4D2qJPSjcnV5P+PkvEuKQM6iA==
-X-Received: by 2002:adf:ee4a:0:b0:2c5:557f:93bb with SMTP id w10-20020adfee4a000000b002c5557f93bbmr3353815wro.10.1676285163309;
-        Mon, 13 Feb 2023 02:46:03 -0800 (PST)
+        bh=e/3Rg46LCIECXTmzltYeLCxx09WgeNrt+MNMZLrlGZs=;
+        b=ANuLBTSUhXAwl+oOwDed5oeTS+E5B2/xQLgXBKRReRGwyek5eSEsAlOQn57Wxs4e7Q
+         GtDfjVt8J+j9CRVbxYTb/fT2l0cp9uIYOkwlNSGFV4hrZ+S7wh79z99yrnlWernYqL35
+         UQ331ruddy7kB6uqvuLBdjNq8q1qytdoWnmzGxz+HBYLRlwhA42nNyaUP58bT0Nb4BV0
+         Ef2vMSJ8pwRDOyJjn4H/c2ep/CeaG5bibWT+R0K/yzcfvwf4fXRYncPOTTjogcOHvLhZ
+         WXfdsQjxvbjEbK+1Z2QXlkHEvE1NoCzcnMKKnzaOp9TzGODqAfaHaSHcHj8ujNyIGC2p
+         Nxow==
+X-Gm-Message-State: AO0yUKXD3xeuKmWkZuSdvv21+0zG8e/HQzNcyFTlRacojuGyWKWoBSUN
+        fwW5d96yuRPy/qgwRlv218QA6g==
+X-Google-Smtp-Source: AK7set8+ZM/gk0bgd963R9l41/fNKoVfugJ7Yjx+aAI34GotvjQNR7W2PgS/YAcS5882VaYHTHsT5A==
+X-Received: by 2002:a5d:5c06:0:b0:2c5:483f:1580 with SMTP id cc6-20020a5d5c06000000b002c5483f1580mr8250292wrb.12.1676285232897;
+        Mon, 13 Feb 2023 02:47:12 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id h12-20020adff4cc000000b002be505ab59asm10325333wrp.97.2023.02.13.02.46.02
+        by smtp.gmail.com with ESMTPSA id l2-20020a5d6742000000b002c55cdb1de5sm1153145wrw.116.2023.02.13.02.47.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 02:46:02 -0800 (PST)
-Message-ID: <a09437c1-4a09-67a5-b5c2-ac616b1b07b4@linaro.org>
-Date:   Mon, 13 Feb 2023 11:46:01 +0100
+        Mon, 13 Feb 2023 02:47:12 -0800 (PST)
+Message-ID: <d2af0b1d-7eb6-85f0-7e2d-3a1d3a3fc382@linaro.org>
+Date:   Mon, 13 Feb 2023 11:47:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v5 1/2] dt-bindings: leds-lp55xx: add ti,charge-pump-mode
+Subject: Re: [PATCH v2 1/2] dt-bindings: arm: sti: add STi platform syscon
 Content-Language: en-US
-To:     Maarten Zanders <maarten.zanders@mind.be>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Alain Volmat <avolmat@me.com>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230213102027.29961-1-maarten.zanders@mind.be>
- <20230213102027.29961-2-maarten.zanders@mind.be>
- <1a8268a1-e656-10b2-8ca5-495867e521e7@linaro.org>
- <4fc0f90a-36b1-bc48-6842-fb64c3d1b7c5@mind.be>
+        Patrice Chotard <patrice.chotard@foss.st.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230212205107.8073-1-avolmat@me.com>
+ <20230212205107.8073-2-avolmat@me.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <4fc0f90a-36b1-bc48-6842-fb64c3d1b7c5@mind.be>
+In-Reply-To: <20230212205107.8073-2-avolmat@me.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/02/2023 11:32, Maarten Zanders wrote:
-> 
-> On 2/13/23 11:22, Krzysztof Kozlowski wrote:
->>
->> While technically it is almost equal to BSD-2, any particular reason for
->> using different second license than the binding and generic
->> recommendation (checkpatch)?
->>
->>
-> No, no specific reason. I'm happy to adapt.
+On 12/02/2023 21:51, Alain Volmat wrote:
+> Add DT schema of STi platform syscon
 
-Then please switch to recommended ones. With that:
+Full stop.
+
+Subject: dt-bindings: soc: sti: ......
+
+> 
+> Signed-off-by: Alain Volmat <avolmat@me.com>
+> ---
+> v2: update wording of commit log
+>     reorder compatible enum
+>     update example within the binding file
+> 
 
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
