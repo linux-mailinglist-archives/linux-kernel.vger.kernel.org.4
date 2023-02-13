@@ -2,150 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66EFF694F12
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:18:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 733AE694F19
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbjBMSSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:18:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38718 "EHLO
+        id S230430AbjBMSTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:19:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjBMSSW (ORCPT
+        with ESMTP id S230027AbjBMSTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:18:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E617E3BD;
-        Mon, 13 Feb 2023 10:18:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C62D6B81601;
-        Mon, 13 Feb 2023 18:18:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06D0FC433EF;
-        Mon, 13 Feb 2023 18:18:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676312298;
-        bh=plxL0IpanD4+o7p9KsPW9YVmlD3aZBjrcEcomkvSXeo=;
-        h=From:Date:Subject:To:Cc:From;
-        b=PVT0ltpXYv6TCBrFDg6YckuccXtr689CM3M/kU6cXPDLg+Zpv/dzxDFMWU+HwPtDx
-         ZOHH9XenDy5rUV13jWfhX983Ky7+tqEN+4ZCVIMKooMwEzIygRRK0rJB/x8oBdAwun
-         PaGLPvnuNMCdjgatPyuDnc8LMky8CYnkEP140S4mwZI+h8U8tLJ5t+6CXF+ugL6eeW
-         jadEIrtrxpXDWCWv98FViX97xZYttCazpWnibX/afZZTqKwYM05e1E7Ssk8T0WNMjT
-         SY3nWfCeLsbJ581/0p+nsmCAJEJNuU/PEAiEGjBVgiEzlm6bpoX6t/VHwirqQjLEBO
-         HaF5Wv93uYPxw==
-From:   Nathan Chancellor <nathan@kernel.org>
-Date:   Mon, 13 Feb 2023 11:17:49 -0700
-Subject: [PATCH] EDAC/amd64: Avoid clang -Wsometimes-uninitialized in
- hw_info_get()
+        Mon, 13 Feb 2023 13:19:15 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC4913506;
+        Mon, 13 Feb 2023 10:19:11 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DHGVQo006845;
+        Mon, 13 Feb 2023 18:18:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=Y+Le7LwRjpxda1vxKUtObFrDXg1v7xhnLppJdxbxaWs=;
+ b=l3yLtaChpVY0x4FcEVEWhZ2dGD7ztX/W9v9fbhcoG4WKtn8f6Q3COUb5vbQszkhUQ5Dl
+ gBV+07cMpQHPDjptNaclDtp5eiR6IGKFvY3LLTRjZDkPKMjw+/PIkWgTEjyuP4KfwfNQ
+ QkF+5E6umLnx1AMDwF9WKfcqkPlQ2ZpgcC5nv/Ko0gUhVzbKlelWmQYvSCNgBxiWTdej
+ oleVaDGssOIoXVd7yCk4T+Z0SPC7febYbSDwQEEtes2Lm0UXwFr/1mXQ2tYi403Z2Xt5
+ 54a6uikWApmNt4xdDTgB9shCopH5xrKa3/e9DoTbr3uqYNAACmyg6d/6nKJwjAJ9oA3f dA== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np4agcpw0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 18:18:54 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31DIIram000624
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 18:18:53 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 13 Feb 2023 10:18:51 -0800
+From:   Elliot Berman <quic_eberman@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Elliot Berman <quic_eberman@quicinc.com>,
+        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <ath10k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
+Subject: [PATCH] firmware: qcom_scm: Use fixed width src vm bitmap
+Date:   Mon, 13 Feb 2023 10:18:29 -0800
+Message-ID: <20230213181832.3489174-1-quic_eberman@quicinc.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230213-amd64_edac-wsometimes-uninitialized-v1-1-5bde32b89e02@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAMx+6mMC/x2NWwrCMBAAr1Ly7UL6oBCvIiKb7NYumFSyqYqld
- zf1cxiY2YxyFlZzbjaT+SUqS6rQnhoTZkx3BqHKprNdb7u2B4w0DjcmDPDWJXKRyAprkiRF8CF
- fJnCePE2DdW5kU0selcFnTGE+WhG1cD7EM/Mkn//+ct33HxNQiE6OAAAA
-To:     yazen.ghannam@amd.com, bp@alien8.de, tony.luck@intel.com
-Cc:     james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3027; i=nathan@kernel.org;
- h=from:subject:message-id; bh=plxL0IpanD4+o7p9KsPW9YVmlD3aZBjrcEcomkvSXeo=;
- b=owGbwMvMwCEmm602sfCA1DTG02pJDMmv6l6uniDg8sQq4dizTbN7RG+4yPvs9VOSXNAn35Hvs
- 2BxJXNpRykLgxgHg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZjInhMM/ysN/X/wLS7UlnBa
- fmhVgcJzBrb4kh5FTo05fTJuPxay1DIy9O5Yl6G8cumZG2eex159l1ryeGnwekNdr00l5kU7pfn
- ncgEA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Vl4WWr97nClKVOvR-5PTydbX9DG6Bncr
+X-Proofpoint-GUID: Vl4WWr97nClKVOvR-5PTydbX9DG6Bncr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-13_12,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 impostorscore=0 clxscore=1015 adultscore=0 bulkscore=0
+ suspectscore=0 lowpriorityscore=0 mlxscore=0 spamscore=0 mlxlogscore=999
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302130163
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang warns:
+The maximum VMID for assign_mem is 63. Use a u64 to represent this
+bitmap instead of architecture-dependent "unsigned int" which varies in
+size on 32-bit and 64-bit platforms.
 
-  drivers/edac/amd64_edac.c:3936:7: error: variable 'pci_id1' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-                  if (!pvt->umc)
-                      ^~~~~~~~~
-  drivers/edac/amd64_edac.c:3943:37: note: uninitialized use occurs here
-          ret = reserve_mc_sibling_devs(pvt, pci_id1, pci_id2);
-                                             ^~~~~~~
-  ...
-  drivers/edac/amd64_edac.c:3936:7: error: variable 'pci_id2' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-                  if (!pvt->umc)
-                      ^~~~~~~~~
-  drivers/edac/amd64_edac.c:3943:46: note: uninitialized use occurs here
-          ret = reserve_mc_sibling_devs(pvt, pci_id1, pci_id2);
-                                                      ^~~~~~~
-
-This is technically a false postive, as it is not possible for pci_id1
-or pci_id2 to be used in reserve_mc_sibling_devs() when pvt->umc is not
-NULL, since it returns right away. However, clang does not perform
-interprodecural analysis for this warning, so it cannot tell that from
-the way the code is currently written.
-
-To silence the warning, reduce the scope of the local variables and the
-call to reserve_mc_sibling_devs() to the else branch, which will not
-functionally change anything.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1803
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Acked-by: Kalle Valo <kvalo@kernel.org> (ath10k)
+Tested-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 ---
-I left the check for 'pvt->umc' alone in reserve_mc_sibling_devs() in
-case it was ever called from a different path but if I should remove, I
-am happy to do so in another revision.
+ drivers/firmware/qcom_scm.c            | 12 +++++++-----
+ drivers/misc/fastrpc.c                 |  2 +-
+ drivers/net/wireless/ath/ath10k/qmi.c  |  4 ++--
+ drivers/remoteproc/qcom_q6v5_mss.c     |  8 ++++----
+ drivers/remoteproc/qcom_q6v5_pas.c     |  2 +-
+ drivers/soc/qcom/rmtfs_mem.c           |  2 +-
+ include/linux/firmware/qcom/qcom_scm.h |  2 +-
+ 7 files changed, 17 insertions(+), 15 deletions(-)
 
-Since this is technically a false positive, I did not include fixes
-tags. If they are so desired:
-
-Fixes: 6229235f7c66 ("EDAC/amd64: Remove PCI Function 6")
-Fixes: cf981562e627 ("EDAC/amd64: Remove PCI Function 0")
----
- drivers/edac/amd64_edac.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 1c4bef1cdf28..a9dd66988b1d 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -3928,21 +3928,21 @@ static const struct attribute_group *amd64_edac_attr_groups[] = {
- 
- static int hw_info_get(struct amd64_pvt *pvt)
+diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+index 468d4d5ab550..b95616b35bff 100644
+--- a/drivers/firmware/qcom_scm.c
++++ b/drivers/firmware/qcom_scm.c
+@@ -905,7 +905,7 @@ static int __qcom_scm_assign_mem(struct device *dev, phys_addr_t mem_region,
+  * Return negative errno on failure or 0 on success with @srcvm updated.
+  */
+ int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz,
+-			unsigned int *srcvm,
++			u64 *srcvm,
+ 			const struct qcom_scm_vmperm *newvm,
+ 			unsigned int dest_cnt)
  {
--	u16 pci_id1, pci_id2;
--	int ret;
--
- 	if (pvt->fam >= 0x17) {
- 		pvt->umc = kcalloc(fam_type->max_mcs, sizeof(struct amd64_umc), GFP_KERNEL);
- 		if (!pvt->umc)
- 			return -ENOMEM;
- 	} else {
-+		u16 pci_id1, pci_id2;
-+		int ret;
-+
- 		pci_id1 = fam_type->f1_id;
- 		pci_id2 = fam_type->f2_id;
--	}
+@@ -922,9 +922,9 @@ int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz,
+ 	__le32 *src;
+ 	void *ptr;
+ 	int ret, i, b;
+-	unsigned long srcvm_bits = *srcvm;
++	u64 srcvm_bits = *srcvm;
  
--	ret = reserve_mc_sibling_devs(pvt, pci_id1, pci_id2);
--	if (ret)
--		return ret;
-+		ret = reserve_mc_sibling_devs(pvt, pci_id1, pci_id2);
-+		if (ret)
-+			return ret;
+-	src_sz = hweight_long(srcvm_bits) * sizeof(*src);
++	src_sz = hweight64(srcvm_bits) * sizeof(*src);
+ 	mem_to_map_sz = sizeof(*mem_to_map);
+ 	dest_sz = dest_cnt * sizeof(*destvm);
+ 	ptr_sz = ALIGN(src_sz, SZ_64) + ALIGN(mem_to_map_sz, SZ_64) +
+@@ -937,8 +937,10 @@ int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz,
+ 	/* Fill source vmid detail */
+ 	src = ptr;
+ 	i = 0;
+-	for_each_set_bit(b, &srcvm_bits, BITS_PER_LONG)
+-		src[i++] = cpu_to_le32(b);
++	for (b = 0; b < BITS_PER_TYPE(u64); b++) {
++		if (srcvm_bits & BIT(b))
++			src[i++] = cpu_to_le32(b);
 +	}
  
- 	read_mc_regs(pvt);
+ 	/* Fill details of mem buff to map */
+ 	mem_to_map = ptr + ALIGN(src_sz, SZ_64);
+diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+index a701132638cf..f48466960f1b 100644
+--- a/drivers/misc/fastrpc.c
++++ b/drivers/misc/fastrpc.c
+@@ -262,7 +262,7 @@ struct fastrpc_channel_ctx {
+ 	int domain_id;
+ 	int sesscount;
+ 	int vmcount;
+-	u32 perms;
++	u64 perms;
+ 	struct qcom_scm_vmperm vmperms[FASTRPC_MAX_VMIDS];
+ 	struct rpmsg_device *rpdev;
+ 	struct fastrpc_session_ctx session[FASTRPC_MAX_SESSIONS];
+diff --git a/drivers/net/wireless/ath/ath10k/qmi.c b/drivers/net/wireless/ath/ath10k/qmi.c
+index 90f457b8e1fe..038c5903c0dc 100644
+--- a/drivers/net/wireless/ath/ath10k/qmi.c
++++ b/drivers/net/wireless/ath/ath10k/qmi.c
+@@ -33,7 +33,7 @@ static int ath10k_qmi_map_msa_permission(struct ath10k_qmi *qmi,
+ {
+ 	struct qcom_scm_vmperm dst_perms[3];
+ 	struct ath10k *ar = qmi->ar;
+-	unsigned int src_perms;
++	u64 src_perms;
+ 	u32 perm_count;
+ 	int ret;
+ 
+@@ -65,7 +65,7 @@ static int ath10k_qmi_unmap_msa_permission(struct ath10k_qmi *qmi,
+ {
+ 	struct qcom_scm_vmperm dst_perms;
+ 	struct ath10k *ar = qmi->ar;
+-	unsigned int src_perms;
++	u64 src_perms;
+ 	int ret;
+ 
+ 	src_perms = BIT(QCOM_SCM_VMID_MSS_MSA) | BIT(QCOM_SCM_VMID_WLAN);
+diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
+index ab053084f7a2..1ba711bc0100 100644
+--- a/drivers/remoteproc/qcom_q6v5_mss.c
++++ b/drivers/remoteproc/qcom_q6v5_mss.c
+@@ -235,8 +235,8 @@ struct q6v5 {
+ 	bool has_qaccept_regs;
+ 	bool has_ext_cntl_regs;
+ 	bool has_vq6;
+-	int mpss_perm;
+-	int mba_perm;
++	u64 mpss_perm;
++	u64 mba_perm;
+ 	const char *hexagon_mdt_image;
+ 	int version;
+ };
+@@ -414,7 +414,7 @@ static void q6v5_pds_disable(struct q6v5 *qproc, struct device **pds,
+ 	}
+ }
+ 
+-static int q6v5_xfer_mem_ownership(struct q6v5 *qproc, int *current_perm,
++static int q6v5_xfer_mem_ownership(struct q6v5 *qproc, u64 *current_perm,
+ 				   bool local, bool remote, phys_addr_t addr,
+ 				   size_t size)
+ {
+@@ -967,7 +967,7 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
+ 	unsigned long dma_attrs = DMA_ATTR_FORCE_CONTIGUOUS;
+ 	dma_addr_t phys;
+ 	void *metadata;
+-	int mdata_perm;
++	u64 mdata_perm;
+ 	int xferop_ret;
+ 	size_t size;
+ 	void *ptr;
+diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+index 1e14ae4d233a..a0fa7176fde7 100644
+--- a/drivers/remoteproc/qcom_q6v5_pas.c
++++ b/drivers/remoteproc/qcom_q6v5_pas.c
+@@ -94,7 +94,7 @@ struct qcom_adsp {
+ 	size_t region_assign_size;
+ 
+ 	int region_assign_idx;
+-	int region_assign_perms;
++	u64 region_assign_perms;
+ 
+ 	struct qcom_rproc_glink glink_subdev;
+ 	struct qcom_rproc_subdev smd_subdev;
+diff --git a/drivers/soc/qcom/rmtfs_mem.c b/drivers/soc/qcom/rmtfs_mem.c
+index 2d3ee22b9249..2657c6105bb7 100644
+--- a/drivers/soc/qcom/rmtfs_mem.c
++++ b/drivers/soc/qcom/rmtfs_mem.c
+@@ -31,7 +31,7 @@ struct qcom_rmtfs_mem {
+ 
+ 	unsigned int client_id;
+ 
+-	unsigned int perms;
++	u64 perms;
+ };
+ 
+ static ssize_t qcom_rmtfs_mem_show(struct device *dev,
+diff --git a/include/linux/firmware/qcom/qcom_scm.h b/include/linux/firmware/qcom/qcom_scm.h
+index 1e449a5d7f5c..250ea4efb7cb 100644
+--- a/include/linux/firmware/qcom/qcom_scm.h
++++ b/include/linux/firmware/qcom/qcom_scm.h
+@@ -94,7 +94,7 @@ extern int qcom_scm_mem_protect_video_var(u32 cp_start, u32 cp_size,
+ 					  u32 cp_nonpixel_start,
+ 					  u32 cp_nonpixel_size);
+ extern int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz,
+-			       unsigned int *src,
++			       u64 *src,
+ 			       const struct qcom_scm_vmperm *newvm,
+ 			       unsigned int dest_cnt);
  
 
----
-base-commit: c4605bde334367b22bbf43cbbef0d1b7c75433dc
-change-id: 20230213-amd64_edac-wsometimes-uninitialized-9bdbdf40996e
-
-Best regards,
+base-commit: 09e41676e35ab06e4bce8870ea3bf1f191c3cb90
 -- 
-Nathan Chancellor <nathan@kernel.org>
+2.39.1
 
