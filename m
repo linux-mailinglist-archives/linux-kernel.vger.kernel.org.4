@@ -2,103 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F6669489A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D3D69489D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:50:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbjBMOuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 09:50:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
+        id S230435AbjBMOuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 09:50:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjBMOuN (ORCPT
+        with ESMTP id S229584AbjBMOuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 09:50:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBED01C5A3;
-        Mon, 13 Feb 2023 06:50:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9088FB81258;
-        Mon, 13 Feb 2023 14:50:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52788C433D2;
-        Mon, 13 Feb 2023 14:49:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676299799;
-        bh=m0Chpo40bobQ2eEBsgYq2sC8P/wqR6TPt8UCc2tCPf4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KA4RgytHpbAv8I5kNhM16QsS6vuPHJeZmeierPXj2riN1zQ5GF0XKL9UBs15okDmg
-         XeceNDzyG0cdVPq6zXL35nAjQxA9SMc8XSA9QS2WTXtuC+biJXCPEp2cO9YG/0fF7V
-         bglsnzQlktYrSwkfndentHAXKy4B94WNrRxwUGrbQ81u4HNlbp533spWW3+6efRoNo
-         mqKOfwBnmp/Y5GURsr0+FOdb8QEPfo9rZTPHYGnMptlGae8i5lLKD4iqsVB4Dz99LT
-         0cjHuMKGCm8UXavJHlItwPxCnxMHnXZjUw6ZawGtwfXmKrgA7Tam/fgxHXJ9ZTY5F3
-         tBSYGDlZyqzXA==
-Date:   Mon, 13 Feb 2023 15:49:51 +0100
-From:   Robert Richter <rric@kernel.org>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Robert Richter <rrichter@amd.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        Dave Jiang <dave.jiang@intel.com>, linux-cxl@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cxl/port: Disable decoder setup for endpoints in RCD mode
-Message-ID: <Y+pOD5+DAsm3IKup@rric.localdomain>
-References: <20230208071758.658652-1-rrichter@amd.com>
- <63e52846175ae_36c729428@dwillia2-xfh.jf.intel.com.notmuch>
+        Mon, 13 Feb 2023 09:50:32 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EC41C320
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:50:28 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31D5UX5C028354;
+        Mon, 13 Feb 2023 08:50:13 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=RFBJEatO/vsWNkGO54aXwHGrOOAWKM+ZNa81J3Z8pYQ=;
+ b=CODnYzQ+wQhw60eQ/0MnEQP89Fxg3p4Bik0h6GNNDgAD9/HkN1tOIDiVVgWuTLPUBsWO
+ KAj6n5IVvXRrCAEvGTyASfilcWhobNLHxz5bL2huG+rWcnREM4hKZH2JU1SNfZrleAiD
+ xRx5Olbe9mHegeklMoURCGHFgI+4vWp9Mz4481o/5k/WF0h9xqFPcayHHY4XEntu77oE
+ Jb8llVou1PxtNJU0X7t7xSkFD1QzCFm+1j3eXgGgPaYuJUKRCGEdYA1IZHow/k9QSUsG
+ DOf5WEDSK53la+/XrJ8tWvQl4NDsTKiONRCtK3eqMnS036ei/0vs++hbFRChG+LbPvnr /g== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3np9a72amh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 08:50:13 -0600
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Mon, 13 Feb
+ 2023 08:50:10 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.21 via Frontend Transport; Mon, 13 Feb 2023 08:50:10 -0600
+Received: from sbinding-cirrus-dsktp2.ad.cirrus.com (unknown [198.90.202.160])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id AF00EB0E;
+        Mon, 13 Feb 2023 14:50:10 +0000 (UTC)
+From:   Stefan Binding <sbinding@opensource.cirrus.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: [PATCH v2 0/3] Fixes and Improvements for CS35L41 HDA
+Date:   Mon, 13 Feb 2023 14:50:05 +0000
+Message-ID: <20230213145008.1215849-1-sbinding@opensource.cirrus.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <63e52846175ae_36c729428@dwillia2-xfh.jf.intel.com.notmuch>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: zEjz3ARui3DbGe9xsOdn2PJLUMSlCXvz
+X-Proofpoint-ORIG-GUID: zEjz3ARui3DbGe9xsOdn2PJLUMSlCXvz
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dan,
+Fixes issue in calibration, where return codes were misinterpreted.
+Enable High Pass filter to reduce pops and clicks.
+Add improvement to ensure firmware and tuning files are always loaded
+together. This ensure the firmware is alsways running with valid
+coefficients.
 
-On 09.02.23 09:07:18, Dan Williams wrote:
-> Robert Richter wrote:
-> > In RCD mode the HDM decoder capability is optional for endpoints and
-> > may not exist. The HDM range registers are used instead. Since the
-> > driver relies on the existence of an HDM decoder capability, its
-> > absence will cause the initialization of a memory card to fail.
-> > 
-> > Moreover, the driver also tries to enable or reuse enabled memory
-> > ranges. In the worst case this may lead to a system hang due to
-> > disabling system memory that was previously provided and setup by
-> > system firmware.
-> > 
-> > To solve the issues described, disable decoder setup for RCD endpoints
-> > and instead rely exclusively on system firmware to enable those memory
-> > ranges. Decoders are used by the kernel to setup and configure CXL
-> > memory regions, esp. to enable and disable them. Since Hot-plug is not
-> > supported for devices in RCD mode, the ability to disable that memory
-> > by the kernel using a decoder is not a necessarily requirement,
-> > decoders are not needed then.
-> > 
-> > Fixes: 34e37b4c432c ("cxl/port: Enable HDM Capability after validating DVSEC Ranges")
-> > Signed-off-by: Robert Richter <rrichter@amd.com>
-> 
-> Does Dave's series address this problem?
-> 
-> https://lore.kernel.org/linux-cxl/167588394236.1155956.8466475582138210344.stgit@djiang5-mobl3.local/
-> 
-> ...that is arranging for the driver to carry-on in the absence of the
-> HDM Decoder Capability.
+Stefan Binding (2):
+  ALSA: hda: cs35l41: Ensure firmware/tuning pairs are always loaded
+  ALSA: hda: cs35l41: Enable Amp High Pass Filter
 
-it might only solve the missing hdm decoder capability. I need to take
-a closer look if that also solves a system hang I was debugging which
-is caused by clearing the memory disable bit in the hdm dvsec range
-register. So the best would be to use this patch now to fix decoder
-initialization in RCD mode and then have Dave's patches on top. I am
-going to test the series too.
+Vitaly Rodionov (1):
+  ALSA: hda: cs35l41: Correct error condition handling
 
-Thanks,
+ sound/pci/hda/cs35l41_hda.c    | 109 ++++++++++++++++-----------------
+ sound/pci/hda/hda_cs_dsp_ctl.c |   4 +-
+ 2 files changed, 56 insertions(+), 57 deletions(-)
 
--Robert
+-- 
+2.34.1
+
