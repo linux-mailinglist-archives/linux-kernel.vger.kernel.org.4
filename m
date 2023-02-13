@@ -2,159 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD89694543
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0C4694536
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbjBMMIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 07:08:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
+        id S230137AbjBMMHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 07:07:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbjBMMHo (ORCPT
+        with ESMTP id S229637AbjBMMH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 07:07:44 -0500
+        Mon, 13 Feb 2023 07:07:29 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C381A6E87
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:06:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B67B1A941
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:06:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676289921;
+        s=mimecast20190719; t=1676289927;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=LWwnaVVkHZ3TxJmod/JcejUfCO6MlIwBZ7PTsYBSbh0=;
-        b=Xi/TasoEo4x/Etc4Fw08cTAeAVYG+mQf5cDlttMBSloohd7QUeCDbpiknsTrCetQbeNin/
-        hNFTAYYrM1yL9ycScFH599VtBnYxhaJWjYzfp7J2kFqohnFQhtz3wkfvrYKmtBUBj4et0k
-        Nw/jQG56NHWRwRSv8QF4t10tuk9LTE8=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=UaQt4tD4vN8vEYX8llmTWE5DxpRIBPo44MMhOl7gUpg=;
+        b=imJWKjju1CEZMeAwKx4I1H0BFKJWy4Rgh/74jiYC15ZWXwW2i8jTpqNuh0zjAoYyPwOQSO
+        doO16mF3mSHylXpLjJgHfjz8BmdCWsqVPPajMHAu0krsTuZ39nL1LkaXnJDDB65FJb9TQ9
+        pqqYxclexV2pkxLd0hn7ayaK5UhMnWM=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-590-J4S4PusjPG2SGKqX9AJJLg-1; Mon, 13 Feb 2023 07:05:19 -0500
-X-MC-Unique: J4S4PusjPG2SGKqX9AJJLg-1
-Received: by mail-wr1-f72.google.com with SMTP id l15-20020adff48f000000b002c55dbddb59so350824wro.6
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:05:19 -0800 (PST)
+ us-mta-112-LZ9PUgRwOmCVx3gFh4h_UA-1; Mon, 13 Feb 2023 07:05:26 -0500
+X-MC-Unique: LZ9PUgRwOmCVx3gFh4h_UA-1
+Received: by mail-ej1-f69.google.com with SMTP id nd38-20020a17090762a600b00871ff52c6b5so7442444ejc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:05:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LWwnaVVkHZ3TxJmod/JcejUfCO6MlIwBZ7PTsYBSbh0=;
-        b=UXU73xEPIhmUpxVIZFqVOjsXmzBhogeKjPE8akNXW3EjGR48DKoLR1VzXVd2JmfJXp
-         t/4Vr3crTU4LKofP0uKTXXmz3pfhAWaZA+PnkutalJqYp5uzdSFn4MohyQ4MmEoGv8dZ
-         y8MErU7o2MFYaIiFseCFl51MNEKwPb8xli6MDJKzt8RnHlNuUFH3xoYZx0HFKlQQVTm5
-         +DSDIdgucCk/HIOqtU8EkrnKU3mP9mMQu0Ln8Bf+TlZLl6bOgvJQMJkshXdtWat5MfU3
-         hjlFvtR0XRuspfFVhL149YGAsb7a0xiDnysretdcvl+jkl61na9FPcGYyX3frbob7irO
-         2nWg==
-X-Gm-Message-State: AO0yUKV87LRaVjyVzm7EI7VEsfJbF0Ns8MjMadzgB2bJUNJGMvh3bsma
-        Dh0gZzNZ/nzB7GcmHbBKO8f9qf7bVRPUCfaMAx+CcTPiO/mZbf4MswVZvcNEG6Pu7pein/C3AKX
-        0ghUevPCSXyikj/i49wk/GjRF51C75g==
-X-Received: by 2002:a05:600c:704:b0:3df:d8c5:ec18 with SMTP id i4-20020a05600c070400b003dfd8c5ec18mr19163997wmn.13.1676289918373;
-        Mon, 13 Feb 2023 04:05:18 -0800 (PST)
-X-Google-Smtp-Source: AK7set/TvfuGOjSTFiefa5UXGSPN6E8+yK5KOhZR7JAxIR0Nqy6UHZc73gYlaZp/IBbv/pX2T70tdA==
-X-Received: by 2002:a05:600c:704:b0:3df:d8c5:ec18 with SMTP id i4-20020a05600c070400b003dfd8c5ec18mr19163980wmn.13.1676289918082;
-        Mon, 13 Feb 2023 04:05:18 -0800 (PST)
-Received: from ?IPV6:2003:cb:c705:6d00:5870:9639:1c17:8162? (p200300cbc7056d00587096391c178162.dip0.t-ipconnect.de. [2003:cb:c705:6d00:5870:9639:1c17:8162])
-        by smtp.gmail.com with ESMTPSA id y9-20020adfee09000000b002c550eb062fsm5407008wrn.14.2023.02.13.04.05.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 04:05:17 -0800 (PST)
-Message-ID: <2d6eefb8-c7c5-7d32-9a75-ae716f828cd9@redhat.com>
-Date:   Mon, 13 Feb 2023 13:05:16 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UaQt4tD4vN8vEYX8llmTWE5DxpRIBPo44MMhOl7gUpg=;
+        b=kSvDJs10s1I0U7QDlbh/MkiliyGgu5KpMvkiT+J9r7fpFQdZzjEcY/GLeyG1lzJ3yx
+         70cGFw0WWMXNyoorJ8a4WB5ni32GxZciOqDdoB4Q5/AgBalfQ6FfCzsU/gK4zjsVFS4S
+         i1V5oi9er+rUZduwxTLnp6oNVBxJXt0eTeSaNW58hnyeE+929tf4M3VZqeIrF62U+XTq
+         bXH1SCA24jhPyWSlDrvTiZV/mUDUHtJc+PSp081FhXtVU3602v6rT8o6cBD0TAQ91Knt
+         AJkvgrNRFvErP0I3JcCsoiHb8JHA/bagh5jAU/HzV/pSJskRxj/zF/hP0ofYIwMxjrze
+         T0dw==
+X-Gm-Message-State: AO0yUKVFu+VDgjPQecR0WK7GoAp+FoRWbaVAASSBC6xTszKhLATU+I41
+        VrfKjYg7p1UKAzW6OuWcz3BHtenQrdl/R7q9Zq2Wi2fuO4bAMC7VNdAjyjh8thpfY24H7drLuyx
+        VgaAxtEgSWIhXnbQwXxQbcRNb
+X-Received: by 2002:a50:cc8f:0:b0:4aa:a9c7:4224 with SMTP id q15-20020a50cc8f000000b004aaa9c74224mr25967284edi.30.1676289925622;
+        Mon, 13 Feb 2023 04:05:25 -0800 (PST)
+X-Google-Smtp-Source: AK7set8C1H8SL3svwiLGRb2G1yS7hB3/rkA0BDJCFoYEwc0XZzusUMp7unwZ5t+nSHnK6QZN4dA0ag==
+X-Received: by 2002:a50:cc8f:0:b0:4aa:a9c7:4224 with SMTP id q15-20020a50cc8f000000b004aaa9c74224mr25967266edi.30.1676289925379;
+        Mon, 13 Feb 2023 04:05:25 -0800 (PST)
+Received: from redhat.com ([2.52.132.212])
+        by smtp.gmail.com with ESMTPSA id t16-20020a508d50000000b004acbe66e653sm2661308edt.84.2023.02.13.04.05.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 04:05:24 -0800 (PST)
+Date:   Mon, 13 Feb 2023 07:05:21 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     "Longpeng(Mike)" <longpeng2@huawei.com>, stefanha@redhat.com,
+        sgarzare@redhat.com, arei.gonglei@huawei.com, yechuan@huawei.com,
+        huangzhichao@huawei.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, eperezma@redhat.com
+Subject: Re: [PATCH v3 2/2] vdpasim: support doorbell mapping
+Message-ID: <20230213070446-mutt-send-email-mst@kernel.org>
+References: <20230129025034.2000-1-longpeng2@huawei.com>
+ <20230129025034.2000-3-longpeng2@huawei.com>
+ <CACGkMEvZsfxQW0fVdy0CpqxoWQzz6z=dYK__xFisncuSRms67A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v1 RFC Zisslpcfi 11/20] mmu: maybe_mkwrite updated to
- manufacture shadow stack PTEs
-Content-Language: en-US
-To:     Deepak Gupta <debug@rivosinc.com>, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org
-References: <20230213045351.3945824-1-debug@rivosinc.com>
- <20230213045351.3945824-12-debug@rivosinc.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230213045351.3945824-12-debug@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEvZsfxQW0fVdy0CpqxoWQzz6z=dYK__xFisncuSRms67A@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.02.23 05:53, Deepak Gupta wrote:
-> maybe_mkwrite creates PTEs with WRITE encodings for underlying arch if
-> VM_WRITE is turned on in vma->vm_flags. Shadow stack memory is a write-
-> able memory except it can only be written by certain specific
-> instructions. This patch allows maybe_mkwrite to create shadow stack PTEs
-> if vma is shadow stack VMA. Each arch can define which combination of VMA
-> flags means a shadow stack.
+On Sun, Jan 29, 2023 at 02:19:51PM +0800, Jason Wang wrote:
+> On Sun, Jan 29, 2023 at 10:51 AM Longpeng(Mike) <longpeng2@huawei.com> wrote:
+> >
+> > From: Longpeng <longpeng2@huawei.com>
+> >
+> > Support doorbell mapping for vdpasim devices, then we can test the notify
+> > passthrough feature even if there's no real hardware on hand.
+> >
+> > Allocates a dummy page which is used to emulate the notify page of the device,
+> > all VQs share the same notify register  that initiated to 0xffff. A  periodic
+> > work will check whether there're requests need to process ( the value of the
+> > notify register is 0xffff or not ).
+> > ---
+> >  drivers/vdpa/vdpa_sim/vdpa_sim.c | 65 ++++++++++++++++++++++++++++++++
+> >  drivers/vdpa/vdpa_sim/vdpa_sim.h |  3 ++
+> >  2 files changed, 68 insertions(+)
+> >
+> > diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> > index b071f0d842fb..4fcfeb6e2fb8 100644
+> > --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> > +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> > @@ -39,6 +39,8 @@ MODULE_PARM_DESC(max_iotlb_entries,
+> >  #define VDPASIM_QUEUE_ALIGN PAGE_SIZE
+> >  #define VDPASIM_QUEUE_MAX 256
+> >  #define VDPASIM_VENDOR_ID 0
+> > +#define VDPASIM_VRING_POLL_PERIOD 100 /* ms */
+> > +#define VDPASIM_NOTIFY_DEFVAL 0xffff
+> >
+> >  static struct vdpasim *vdpa_to_sim(struct vdpa_device *vdpa)
+> >  {
+> > @@ -246,6 +248,28 @@ static const struct dma_map_ops vdpasim_dma_ops = {
+> >  static const struct vdpa_config_ops vdpasim_config_ops;
+> >  static const struct vdpa_config_ops vdpasim_batch_config_ops;
+> >
+> > +static void vdpasim_notify_work(struct work_struct *work)
+> > +{
+> > +       struct vdpasim *vdpasim;
+> > +       u16 *val;
+> > +
+> > +       vdpasim = container_of(work, struct vdpasim, notify_work.work);
+> > +
+> > +       if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
+> > +               goto out;
+> > +
+> > +       if (!vdpasim->running)
+> > +               goto out;
+> > +
+> > +       val = (u16 *)vdpasim->notify;
+> > +       if (xchg(val, VDPASIM_NOTIFY_DEFVAL) != VDPASIM_NOTIFY_DEFVAL)
+> > +               schedule_work(&vdpasim->work);
+> > +
+> > +out:
+> > +       schedule_delayed_work(&vdpasim->notify_work,
+> > +                             msecs_to_jiffies(VDPASIM_VRING_POLL_PERIOD));
+> > +}
+> > +
+> >  struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
+> >                                const struct vdpa_dev_set_config *config)
+> >  {
+> > @@ -287,6 +311,13 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
+> >         set_dma_ops(dev, &vdpasim_dma_ops);
+> >         vdpasim->vdpa.mdev = dev_attr->mgmt_dev;
+> >
+> > +       INIT_DELAYED_WORK(&vdpasim->notify_work, vdpasim_notify_work);
+> > +
+> > +       vdpasim->notify = __get_free_page(GFP_KERNEL | __GFP_ZERO);
+> > +       if (!vdpasim->notify)
+> > +               goto err_iommu;
 > 
-> Additionally pte_mkshdwstk must be provided by arch specific PTE
-> construction headers to create shadow stack PTEs. (in arch specific
-> pgtable.h).
+> We can simply avoid the advertising notification area in this case.
 > 
-> This patch provides dummy/stub pte_mkshdwstk if CONFIG_USER_SHADOW_STACK
-> is not selected.
+> > +       *(u16 *)vdpasim->notify = VDPASIM_NOTIFY_DEFVAL;
 > 
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> ---
->   include/linux/mm.h      | 23 +++++++++++++++++++++--
->   include/linux/pgtable.h |  4 ++++
->   2 files changed, 25 insertions(+), 2 deletions(-)
+> WRITE_ONCE()?
+
+it is just initialization so it should not matter.
+
+> > +
+> >         vdpasim->config = kzalloc(dev_attr->config_size, GFP_KERNEL);
+> >         if (!vdpasim->config)
+> >                 goto err_iommu;
+> > @@ -498,16 +529,21 @@ static u8 vdpasim_get_status(struct vdpa_device *vdpa)
+> >  static void vdpasim_set_status(struct vdpa_device *vdpa, u8 status)
+> >  {
+> >         struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+> > +       bool started = vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK;
 > 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 8f857163ac89..a7705bc49bfe 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1093,6 +1093,21 @@ static inline unsigned long thp_size(struct page *page)
->   void free_compound_page(struct page *page);
->   
->   #ifdef CONFIG_MMU
-> +
-> +#ifdef CONFIG_USER_SHADOW_STACK
-> +bool arch_is_shadow_stack_vma(struct vm_area_struct *vma);
-> +#endif
-> +
-> +static inline bool
-> +is_shadow_stack_vma(struct vm_area_struct *vma)
-> +{
-> +#ifdef CONFIG_USER_SHADOW_STACK
-> +	return arch_is_shadow_stack_vma(vma);
-> +#else
-> +	return false;
-> +#endif
-> +}
-> +
->   /*
->    * Do pte_mkwrite, but only if the vma says VM_WRITE.  We do this when
->    * servicing faults for write access.  In the normal case, do always want
-> @@ -1101,8 +1116,12 @@ void free_compound_page(struct page *page);
->    */
->   static inline pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
->   {
-> -	if (likely(vma->vm_flags & VM_WRITE))
-> -		pte = pte_mkwrite(pte);
-> +	if (likely(vma->vm_flags & VM_WRITE)) {
-> +		if (unlikely(is_shadow_stack_vma(vma)))
-> +			pte = pte_mkshdwstk(pte);
-> +		else
-> +			pte = pte_mkwrite(pte);
-> +	}
->   	return pte;
-
-Exactly what we are trying to avoid in the x86 approach right now. 
-Please see the x86 series on details, we shouldn't try reinventing the 
-wheel but finding a core-mm approach that fits multiple architectures.
-
-https://lkml.kernel.org/r/20230119212317.8324-1-rick.p.edgecombe@intel.com
-
--- 
-Thanks,
-
-David / dhildenb
+> Do we need to do the check under the vdpasim->lock?
+> 
+> >
+> >         spin_lock(&vdpasim->lock);
+> >         vdpasim->status = status;
+> >         spin_unlock(&vdpasim->lock);
+> > +       if (!started && (status & VIRTIO_CONFIG_S_DRIVER_OK))
+> > +               schedule_delayed_work(&vdpasim->notify_work,
+> > +                                     msecs_to_jiffies(VDPASIM_VRING_POLL_PERIOD));
+> >  }
+> >
+> >  static int vdpasim_reset(struct vdpa_device *vdpa)
+> >  {
+> >         struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+> >
+> > +       cancel_delayed_work_sync(&vdpasim->notify_work);
+> 
+> Do we need to do this after setting running to zero? Otherwise it's racy.
+> 
+> Thanks
+> 
+> >         spin_lock(&vdpasim->lock);
+> >         vdpasim->status = 0;
+> >         vdpasim_do_reset(vdpasim);
+> > @@ -672,11 +708,34 @@ static int vdpasim_dma_unmap(struct vdpa_device *vdpa, unsigned int asid,
+> >         return 0;
+> >  }
+> >
+> > +static pgprot_t vdpasim_get_vq_notification_pgprot(struct vdpa_device *vdpa,
+> > +                                                  u16 qid, pgprot_t prot)
+> > +{
+> > +       /*
+> > +        * We use normal RAM pages to emulate the vq notification area, so
+> > +        * just keep the pgprot as it mmaped.
+> > +        */
+> > +       return prot;
+> > +}
+> > +
+> > +static struct vdpa_notification_area
+> > +vdpasim_get_vq_notification(struct vdpa_device *vdpa, u16 qid)
+> > +{
+> > +       struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+> > +       struct vdpa_notification_area notify;
+> > +
+> > +       notify.addr = virt_to_phys((void *)vdpasim->notify);
+> > +       notify.size = PAGE_SIZE;
+> > +
+> > +       return notify;
+> > +}
+> > +
+> >  static void vdpasim_free(struct vdpa_device *vdpa)
+> >  {
+> >         struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+> >         int i;
+> >
+> > +       cancel_delayed_work_sync(&vdpasim->notify_work);
+> >         cancel_work_sync(&vdpasim->work);
+> >
+> >         for (i = 0; i < vdpasim->dev_attr.nvqs; i++) {
+> > @@ -693,6 +752,8 @@ static void vdpasim_free(struct vdpa_device *vdpa)
+> >         vhost_iotlb_free(vdpasim->iommu);
+> >         kfree(vdpasim->vqs);
+> >         kfree(vdpasim->config);
+> > +       if (vdpasim->notify)
+> > +               free_page(vdpasim->notify);
+> >  }
+> >
+> >  static const struct vdpa_config_ops vdpasim_config_ops = {
+> > @@ -704,6 +765,8 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
+> >         .get_vq_ready           = vdpasim_get_vq_ready,
+> >         .set_vq_state           = vdpasim_set_vq_state,
+> >         .get_vq_state           = vdpasim_get_vq_state,
+> > +       .get_vq_notification    = vdpasim_get_vq_notification,
+> > +       .get_vq_notification_pgprot = vdpasim_get_vq_notification_pgprot,
+> >         .get_vq_align           = vdpasim_get_vq_align,
+> >         .get_vq_group           = vdpasim_get_vq_group,
+> >         .get_device_features    = vdpasim_get_device_features,
+> > @@ -737,6 +800,8 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
+> >         .get_vq_ready           = vdpasim_get_vq_ready,
+> >         .set_vq_state           = vdpasim_set_vq_state,
+> >         .get_vq_state           = vdpasim_get_vq_state,
+> > +       .get_vq_notification    = vdpasim_get_vq_notification,
+> > +       .get_vq_notification_pgprot = vdpasim_get_vq_notification_pgprot,
+> >         .get_vq_align           = vdpasim_get_vq_align,
+> >         .get_vq_group           = vdpasim_get_vq_group,
+> >         .get_device_features    = vdpasim_get_device_features,
+> > diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> > index 0e78737dcc16..0769ccbd3911 100644
+> > --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> > +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> > @@ -69,6 +69,9 @@ struct vdpasim {
+> >         bool running;
+> >         /* spinlock to synchronize iommu table */
+> >         spinlock_t iommu_lock;
+> > +       /* dummy notify page */
+> > +       unsigned long notify;
+> > +       struct delayed_work notify_work;
+> >  };
+> >
+> >  struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *attr,
+> > --
+> > 2.23.0
+> >
 
