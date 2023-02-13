@@ -2,85 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C5A695431
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 23:57:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9109D695489
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 00:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbjBMW5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 17:57:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
+        id S230175AbjBMXNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 18:13:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjBMW52 (ORCPT
+        with ESMTP id S229545AbjBMXNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 17:57:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B06A1DBB9;
-        Mon, 13 Feb 2023 14:57:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 13 Feb 2023 18:13:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F159A1EFED
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 15:13:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676329981;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LYmJn2Xer4KEDlDXHqGYG+hy1nC8sep09jW5bSjh8tI=;
+        b=cep28xi14oqCbRJ9wqVHa/FHmTnK7STRdaH7HQ7UayHIPhgK+PKsIyhAaA8nDIqLIXKL+5
+        weNceB5DoPR3KGu4eTZK5A5TlsTVHIGEejJ3qPEb1BsEbpQsYMX29pjbtfbGrgWZaEJxSj
+        5O7AgR3Y92kd9mBoN4ldxoe3fpcg1kk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-208-xMiptjDDNwet5_-0FdnxTw-1; Mon, 13 Feb 2023 18:12:54 -0500
+X-MC-Unique: xMiptjDDNwet5_-0FdnxTw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24ACAB815DE;
-        Mon, 13 Feb 2023 22:57:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B84DFC433D2;
-        Mon, 13 Feb 2023 22:57:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676329044;
-        bh=6B74k2/9qoR7D5Y3uyBNWCUwY/n8BT4T+JeDx0KNIXE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=f3wYtIAg3DxNfUnDnm0X/pWYI0y83wxQTitkXRK6dqcedIMDfdNHPwCF4EEgfTdbU
-         KcEx7Lmqm31hk/JKTYTwXE0TjCDOZbX3WpvRAjD91UD1t9tP7aXQgkHKcUHiOLA2i9
-         8x+qC919a3RrSzB8/vbepPYd/xekMKpaD0KAzWYOFUnDcwV0wFd00arf3ywQP+M9ja
-         UKz0KsEcCyHJSbo3qwVjzxCN5qUnjnICshiBfwztBKADD3+u6nzFa0X/9Knhw6Jqy7
-         348KeZdLxIUtDsjIBiR5fkzMmN1yq9lFKal94PtmQZuzclAc1EgD9dcmdNEWIPBBIo
-         RNdHpPkyh8Mrw==
-Date:   Mon, 13 Feb 2023 16:57:23 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/8] kbuild, PCI: generic,versatile: comment out
- MODULE_LICENSE in non-modules
-Message-ID: <20230213225723.GA2941414@bhelgaas>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6C51429A9D4E;
+        Mon, 13 Feb 2023 23:12:53 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 477A940CF8ED;
+        Mon, 13 Feb 2023 23:12:51 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <55e2bef1-e8b5-3475-21df-487bddb47f5b@roeck-us.net>
+References: <55e2bef1-e8b5-3475-21df-487bddb47f5b@roeck-us.net> <20230213180632.GA368628@roeck-us.net> <20230209102954.528942-1-dhowells@redhat.com> <20230209102954.528942-4-dhowells@redhat.com> <2416073.1676328192@warthog.procyon.org.uk>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v13 03/12] splice: Do splice read from a buffered file without using ITER_PIPE
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230210164749.368998-2-nick.alcock@oracle.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2451112.1676329970.1@warthog.procyon.org.uk>
+Date:   Mon, 13 Feb 2023 23:12:50 +0000
+Message-ID: <2451113.1676329970@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 04:47:42PM +0000, Nick Alcock wrote:
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
-> 
-> So comment out all uses of MODULE_LICENSE that are not in real modules
-> (the license declaration is left in as documentation).
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-Weird that all the patches are for drivers/pci/, but the cover letter
-didn't go to linux-pci@vger.kernel.org.
+> Both are initrd.
 
-  - Please drop "kbuild," from the subject; I don't think it's really
-    relevant.
+Do you mean rootfs?  And, if so, is that tmpfs-based or ramfs-based?
 
-  - Please follow the subject line convention for each file.  They're
-    mostly there after dropping "kbuild", but do capitalize the
-    sentence that follows the prefix.  The prefix should always be
-    "PCI/<driver-tag>: "
+David
 
-  - Remove the MODULE_LICENSE instead of commenting it out.
-
-  - I think every file in drivers/pci that needs one already has SPDX.
-
-  - AFAICT, SPDX is the dispositive license and MODULE_LICENSE just
-    determines which interfaces are available to the module, so
-    dropping MODULE_LICENSE shouldn't be a problem as far as legal
-    issues.
