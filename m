@@ -2,113 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 715D06942BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E39236942C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:22:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbjBMKWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 05:22:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
+        id S229941AbjBMKW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 05:22:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231152AbjBMKW2 (ORCPT
+        with ESMTP id S231152AbjBMKWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 05:22:28 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB8D11EBC
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:22:09 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id k8-20020a05600c1c8800b003dc57ea0dfeso10903301wms.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:22:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WEaVaR3pJQlndiKqh5ZokTFdMHbHbPbZkEmGATqRZYY=;
-        b=jQO1yGiaeuQ4C3W8uQybW+b/n2PTgQSFhz5hDEOnh6QGJEwij3zLRQZIq92XaTZ4lR
-         ZtusVEY3m0Yu+rLjOyj7Hyok6b5fShTToWgd7VBCkqtvlP7xrtAhx1fiSSt81/MGEFL4
-         YVW68r+lZRjHJbTu/4A9orIqCaUb1+xmNwUp2JdhWSH1sL9BbpvtyXz+wG3PTqNrVdtF
-         j+vPYrf5shPohAqRUQlnxGEotzOLcSEp8LnTUufVDD3QummwVZkC4gK9d/Iw9MMModsC
-         G/tGx+u//h0OvQSJB0O3VIrgwIXoTbe/ruD8gyOslaE87W+CfpZVQG4xJlKQZXqlMC7f
-         sCjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WEaVaR3pJQlndiKqh5ZokTFdMHbHbPbZkEmGATqRZYY=;
-        b=pWOWxpY074Z+xo4n1F4/0ZLKtbYrD7WuIkNoEu5axSb54XiCc2mMop7P2o/r77OIWo
-         IOMyNw0ClDYpv8pC7MMP7TKQLSxyAmNnutMQf0ncJknGa6UcOg7rhBSiZa7eFfzBEAJo
-         Qr2d6yZ6SBTZ8++ZMExjEX3zibwIsK1lFtHlkbPqVOdt3B0xC4qPNrD1/PBiHu0B1uDP
-         c8uZNbpnOoBrKrq4+yvFdcxGnOnh5iNEWiTnGcLEhgjNWspCp1OmDVR6YF4Gp1jNWkI3
-         9Mct9EridER0CMrGoXAzfm8EzG8FZnOLKJpZHDMgeO6AQu7syHBRLKkeOxzvq9w3PnlD
-         MdRQ==
-X-Gm-Message-State: AO0yUKUOM/s8JAQDtGDRoBIRcUKwiZwUHRvpGJ7yg/KCbYOGxrdN/h29
-        mtNFszcbLfSnnplS0sU9FR3cKg==
-X-Google-Smtp-Source: AK7set/YSkJ3lo4sL7+jsNhbWDUo6sMqoN013q7KyFE3YepQ1+9B5t71dyticVVQrB6VvW0cNKPI7w==
-X-Received: by 2002:a05:600c:43c7:b0:3dc:5d34:dbe5 with SMTP id f7-20020a05600c43c700b003dc5d34dbe5mr18684412wmn.28.1676283728277;
-        Mon, 13 Feb 2023 02:22:08 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id be7-20020a05600c1e8700b003dff2b493c8sm17983147wmb.36.2023.02.13.02.22.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 02:22:07 -0800 (PST)
-Message-ID: <1a8268a1-e656-10b2-8ca5-495867e521e7@linaro.org>
-Date:   Mon, 13 Feb 2023 11:22:06 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v5 1/2] dt-bindings: leds-lp55xx: add ti,charge-pump-mode
-Content-Language: en-US
-To:     Maarten Zanders <maarten.zanders@mind.be>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Mon, 13 Feb 2023 05:22:53 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9EE2739;
+        Mon, 13 Feb 2023 02:22:51 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31D8cDgK018599;
+        Mon, 13 Feb 2023 04:22:23 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=WmTxnrtas4FxyKYUXIiNzvVIg6UVb3xuByCPXTtKw/A=;
+ b=QmKUCHgI48UwX0gnY7AxjGfWcIY+YVZjxECRnfjtV1keSNy6eHFEl//fIpIVK9TZfLDw
+ 4P0okHxiiM53hvW7WQjqISnHMZkO8T1HSq1Cx4wlNGuFqcJbAjcslKRcerp8ZJydKSBu
+ ubNv40SqK+6oYP2CQManTYb+gZ90p5KLojBdp5GuRUCKFt6iUCwlb57SbsK9y9BLibS9
+ TZqAmc8zNdzHuejRM3kreh+F9TZ3t1DvMGjITEQadAlGMZITLrVnPiZ0LOjGTsV+JCG9
+ BW8w98TEmYHtWvCbDI0ZY4AawS6eCLFfn7P9/I9yWuXX1vhpm9E0n5TUhk7UOsylkCSH /g== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3np8att3yh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 04:22:23 -0600
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Mon, 13 Feb
+ 2023 04:22:21 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.21 via Frontend Transport; Mon, 13 Feb 2023 04:22:21 -0600
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id BC4C011AA;
+        Mon, 13 Feb 2023 10:22:21 +0000 (UTC)
+Date:   Mon, 13 Feb 2023 10:22:21 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Lucas Tanure <lucas.tanure@collabora.com>
+CC:     David Rhodes <david.rhodes@cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230213102027.29961-1-maarten.zanders@mind.be>
- <20230213102027.29961-2-maarten.zanders@mind.be>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230213102027.29961-2-maarten.zanders@mind.be>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mark Brown <broonie@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <patches@opensource.cirrus.com>,
+        <linux-kernel@vger.kernel.org>, <kernel@collabora.com>
+Subject: Re: [PATCH v5 3/4] ALSA: cs35l41: Add shared boost feature
+Message-ID: <20230213102221.GH68926@ediswmail.ad.cirrus.com>
+References: <20230210091942.10866-1-lucas.tanure@collabora.com>
+ <20230210091942.10866-4-lucas.tanure@collabora.com>
+ <20230210134341.GF68926@ediswmail.ad.cirrus.com>
+ <cfacc3d6-2daa-6aa3-ba19-281b7e48bb47@collabora.com>
+ <20230211170638.GG68926@ediswmail.ad.cirrus.com>
+ <1e3ef067-9b39-dc19-5fbc-75436c67f206@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1e3ef067-9b39-dc19-5fbc-75436c67f206@collabora.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: dlH4lLI6ybbsohT-AgI4bUsSjcs2XAVH
+X-Proofpoint-ORIG-GUID: dlH4lLI6ybbsohT-AgI4bUsSjcs2XAVH
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/02/2023 11:20, Maarten Zanders wrote:
-> Add a binding to configure the internal charge pump for lp55xx.
+On Sun, Feb 12, 2023 at 09:28:39AM +0000, Lucas Tanure wrote:
+> On 11-02-2023 17:06, Charles Keepax wrote:
+> >On Fri, Feb 10, 2023 at 02:39:56PM +0000, Lucas Tanure wrote:
+> >>On 10-02-2023 13:43, Charles Keepax wrote:
+> >>>On Fri, Feb 10, 2023 at 09:19:41AM +0000, Lucas Tanure wrote:
+> Ok, but the other side doesn't have both RX and TX enabled.
+> If the active side needed RX to receive information for the other
+> side, the passive one would need TX enabled too.
+> So if a feedback is necessary, both channels on both sides would be
+> enabled, not one channel in one side and both on the other.
+
+A very good point :-)
+
+> >"When powering up a second (and each subsequent) CS35L41B onto a
+> >shared MDSYNC bus, the following protocol must
+> >be followed"
+> >
+> >But very unclear if that sequence should be followed on only the
+> >new device, the master device, or on all devices. I will try to
+> >find some time to chase some apps guys next week see if anyone
+> >has any ideas.
+> I had long talks with apps guys on this when I was at Cirrus.
+> And my understanding is:
+> A new CS35L41 can misunderstand the information on MDSYNC bus if a
+> communication is already in place, between another pair of CS35L41,
+> so to avoid that, any CS35L41 being turn on in a already active
+> MDSYNC bus, must execute those steps.
+
+Ok so that implies we are ok, since that suggests we are
+saying that only the new amp to the bus needs to execute the
+sequence, not the amps already on the bus.
+
+> We could move the active amp up in DAPM graph so its enabled before
+> all passive ones, but we would still need to execute that for all
+> passive amps. So there is not much point in that.
+
+Agree, fine as is.
+
 > 
-> Signed-off-by: Maarten Zanders <maarten.zanders@mind.be>
-> ---
+> Here I can see that if I enable SYNC_EN during probe without clocks
+> the device becomes unresponsive, at least with the current code.
+> So following the datasheet and enabling SYNC_EN only after clocks
+> seems to resolve Steam decks issue.
 > 
-> Notes:
->     v1: implement as bool to disable charge pump
->     v2: rewrite to use string configuration, supporting all modes
->     v3: simplification by replacing string option by u8 constant,
->         removing previous Reviewed-by tags as it's a complete
->         rewrite of the patch.
->     v4: added notes
->     v5: dual license, change property type to u32
+> Questions I never got an answer from APPS guys:
+> 
+> - Can we enable SYNC_EN during probe if we know there is no playback
+> happening, no clocks and Global enable off? Steam decks seem to
+> answer no here. If yes, why having pm_runtime features makes the
+> device become unresponsive?
+> 
+> - Can we leave SYNC_EN enabled during Global enable off and no clocks?
 
-Thank you for your patch. There is something to discuss/improve.
+These two I think are not too much of a concern, turning sync on as
+part of powering up the amps doesn't seem to be a big concern,
+its not a lot of writes.
 
+> - If SYNC_EN is enabled and we only set Global enable on after the
+> PLL lock happened, do we still need to execute those steps? I mean,
+> if the driver only deals with Global enable and leaves shared boost
+> configured since boost, will MDSYNC bus work?
 
-> diff --git a/include/dt-bindings/leds/leds-lp55xx.h b/include/dt-bindings/leds/leds-lp55xx.h
-> new file mode 100644
-> index 000000000000..e2256312714b
-> --- /dev/null
-> +++ b/include/dt-bindings/leds/leds-lp55xx.h
-> @@ -0,0 +1,10 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR MIT) */
+Yeah I think here it is also probably safer to just do it anyway.
 
-While technically it is almost equal to BSD-2, any particular reason for
-using different second license than the binding and generic
-recommendation (checkpatch)?
+I would still like David to do a quick review, unfortunately he
+is off at the moment but should be back Monday next week. But
+from my side I think this is probably all good:
 
-Best regards,
-Krzysztof
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
+Thanks,
+Charles
