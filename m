@@ -2,82 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F63B69515A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 386AA69515B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:06:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbjBMUGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 15:06:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
+        id S229709AbjBMUGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 15:06:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjBMUGb (ORCPT
+        with ESMTP id S230449AbjBMUGn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 15:06:31 -0500
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957D91DBB2;
-        Mon, 13 Feb 2023 12:06:05 -0800 (PST)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-15fe106c7c7so16484424fac.8;
-        Mon, 13 Feb 2023 12:06:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=qocm/KHxkvqzT8k/bpHmNW+PSj6cXLlUolt4tjyFl+E=;
-        b=JkXJi95vQcsUzo51+MeRB0MO/6Qnsyp3AuJzG2ty6VxKFBgQDgFKdF1o293R6YPlsZ
-         rnv4N/2w/+hqKbMZHbpWCdEvgL70QvGfuGTGp9v0rCJAibHY4c4iMc0u2otvYW/9P/UE
-         jQuvn7q93m78Dco7tkgtMwaM3X0x6TrqoAdriROQWGa7+BGueff+n5GcH0fNampXgjfa
-         zRYmJGMa+EE3sBt+5Od9fZp5HdQqQ6LFQ9KI0DfxdV/fRPdm3HD3vSropR6HWGCT5Te0
-         /aSrQM0k7iWmfrl2Ftqhan8ySkd1f5Bo8j63xDj4ZvStHaETCYLj/g3oGwbKuvDOc7ha
-         orSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qocm/KHxkvqzT8k/bpHmNW+PSj6cXLlUolt4tjyFl+E=;
-        b=PBEtf2LyTKIgvD/zj4WtOrl7iWwyLdaA0j2UBZIP05l7CC2+JNZu3P4dLpozx0bfv5
-         NEoVNmwjY7FZN1ssiD/gJGCDVKaxfEtSYCL8bc3S54kn3iCaUuQJkgcOqr5SyzGwlyFy
-         KJ6YLB27DN/V7ZOXfkt4B4xUrIjvQXYfkY45Dx7sH8AYvkcxx3vQuZXJzDcJJx1bA2u0
-         ZQotThK3hNoMNYnCbrd5lrBKeGoCk2F7CzwJ02sAsvImig/2DWh3wBkfxI0j/iFh6DDk
-         BiabMwKdP0mtS9tH7joe3WxLHjkbeqmLnYI01gA+XbnTimmtebaxPuEy44bUIseqLd4Y
-         msQw==
-X-Gm-Message-State: AO0yUKWytK1NyRFYR8AT16/ZrtYVdFOe0wXcTwAxCrh3GANMcj/f+W96
-        xGYGmhhu/i4+m/cfsTq8E1xy6w9pjMk=
-X-Google-Smtp-Source: AK7set9UILrrA7QwH0pt32603M6erZ5p3R4YEyLQJlSYXPCEaG47zmSnJIMsiNHBJf4F7aUriUCNvQ==
-X-Received: by 2002:a05:6870:d10d:b0:16a:b526:59a6 with SMTP id e13-20020a056870d10d00b0016ab52659a6mr13061134oac.43.1676318757902;
-        Mon, 13 Feb 2023 12:05:57 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h15-20020a4abb8f000000b004f21af81e0csm5176889oop.46.2023.02.13.12.05.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 12:05:57 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e742a790-5322-666d-5f27-33a51445bd07@roeck-us.net>
-Date:   Mon, 13 Feb 2023 12:05:55 -0800
+        Mon, 13 Feb 2023 15:06:43 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2074.outbound.protection.outlook.com [40.107.21.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1726D1E1FE
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 12:06:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D4+TZUcYB95c4qXnXCl4UTKrjzslTjG4jyJLRofWkLPRirY0aa2gn0ubb0uZR3obU1Lg+ipLrGoFSlVv2LhXk8+AShViXZxCXZTkGDQYZz7BCzK+vZkHXCeWb+CrDFL9frnnBIE+5dtYkItyXjWEN+wFxiFFJV+KJPowJtDItJljmX3PlPFdlh6Dslam6gARIAz07zHUwtrv3JELFsJ4cllQRUmWFDMXkpR3n4A5yyKRmJrZqZyzMljIgNO/AbgoxcENvUc91R2SI+owihnLKQN4E9loPmt3udTOE4jVg10G+vU3XHgulvRKdVoii0JLYRvABCBxMaI3zYyYKT1uZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=06TEoIA72djlRCL6kFBOdwYdDv66p7jxat0Wl7JPuwc=;
+ b=NgRq8cPaMrICeBmMLIuBkEq2TJgCtTYmhnbuB+woHxttTot7gsCJWw5WfRRmuITt6SNy+MT4TmPS8beiBCgI6RTQZ8mqpUVayNRSrVSXXiIRY2HHhvTEIzzcMiztGaf+Joqc+h/ot+1859lO/sEjzOeNsJTXOtw6do3U1w1j0j8VjNKU6udPV3XgvNbsxzk/A0YtGQkv6ZWsAInbRhA5SQDZWEqaMiwKicn7+vxodNmuvanaHRopDe/AzIcAa32cpp/XLsvWCbx4LYtvbR4KA0zNXlG90yhCOYRuOsoxBoGc9DBtfpZ9pdE9BHQNuUe9gcOCw9nFb++4OLfvXDV+YQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=06TEoIA72djlRCL6kFBOdwYdDv66p7jxat0Wl7JPuwc=;
+ b=sEt/QjVU8fx/jbTs+d7kSjeualxWM8Rm5Di5bAfrShzrr7Env1/ivwG3P9QfBX/i5miLC1UYPtkTSW+xwAh3vMLDzueoGDDwEiy2QUrQwvNSaY/Scd3tWC+f7SLipyNbEThm8/oZYHWYBxJ7WjWdiBQqEnF0mjfyLgyhQMPCVH88QsEFceETKzQj4FBq3LWQ7qQ9eqJ71t7pWiNCAWL90aTSRIpTcLBS9s270LxJz+32EksF+eGxJremIoFHTIq1zxTVhxbhAxn5i9ewFHVz/tobwKNEdKFn/pHnMLShXWIVEiPGvBszV9HnKz8Ix20obGr1iguRQkk63PDlMjP2qQ==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR1P264MB2189.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1b5::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Mon, 13 Feb
+ 2023 20:06:27 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2cfb:d4c:1932:b097]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2cfb:d4c:1932:b097%5]) with mapi id 15.20.6086.024; Mon, 13 Feb 2023
+ 20:06:27 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     =?utf-8?B?UGFsaSBSb2jDoXI=?= <pali@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Scott Wood <oss@buserror.net>, Sinan Akman <sinan@writeme.com>,
+        Martin Kennedy <hurricos@gmail.com>
+CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 4/8] powerpc/85xx: p2020: Move i8259 code into own
+ function
+Thread-Topic: [PATCH v2 4/8] powerpc/85xx: p2020: Move i8259 code into own
+ function
+Thread-Index: AQHZF90EtKTKHD5mTUqgm4K5FfUPDq7NnZMA
+Date:   Mon, 13 Feb 2023 20:06:27 +0000
+Message-ID: <0953ffd2-dddc-2706-66ab-d6913eff19df@csgroup.eu>
+References: <20221224211425.14983-1-pali@kernel.org>
+ <20221224211425.14983-5-pali@kernel.org>
+In-Reply-To: <20221224211425.14983-5-pali@kernel.org>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR1P264MB2189:EE_
+x-ms-office365-filtering-correlation-id: 6fbfd007-6480-4277-6d7d-08db0dfdca59
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rXlTtQhUmOKBhrkYM9pGdk80SyTyxqMMtx71Iz9OeG60Dml/JRrpjSEvnNgIDiXIX7hYKmsCzgrLQcdyCl55gkNNCRNt6kaDC+hIE/B9MqSXELyLRaKCzZMrOwM5KH16djFuTn1tsIdQbN7gu+qseb/J6RVKRG1419+Z+bvr1CxkDg/Ghi3D6R/oMxMmgMRgyGALqX0tZuHKQxA8STM3nTIc3nc56W6JC2/p7BVWUwZ/jPDD5wq97kzc2ASdB3ZHGtacZUVxXHNzNGHdjcVzOWkA+nBWHG5yvdkVdmEJKh29lISGo1XsEUnCa727dQHVFOqs9U+8xfQd3v0j31S93pYFfw8kBOJWTU5B5cnZpDCMs7lNwuRwx68gjVdotagzVpgQRwVapPArsevuCzvpdnJXw20rdIbDx7fpwKr7jaUKywfqoWWD2tQzYh6wZTRd5yCw6bQV5LJOsNfGFcMc4LOlcV9ZzgY+I2l3lYi84Nitdq4bnQ+ushFXABMSWDue5ABUIGNCM1iY12yFYYlJehyurGEvEAqbwymAnDXPbE8wTuHwYLfj5M/BMqchBPhGkugD+M/WVz3bCq6P/U2hSdzqSR7qSvLB32OE/1kYdGc/l19OYXm++sNfMBeUIrtbdxUwU5q8KoMfVdc0RDYjr+TxXrxU2YfCMdrVBSSkON1h+dmm0vKkp6O0T0yTvkcP6rdceelc3CcleS+RdUMWDcMOb+iJ3i/KgxEKG5mr2rVPzilwjPp8fvSGxapSVp52+cI+Hr4Wgwefi/6FL/s8cw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(396003)(366004)(346002)(376002)(451199018)(44832011)(86362001)(31696002)(2906002)(38100700002)(122000001)(31686004)(110136005)(71200400001)(6486002)(6512007)(26005)(186003)(6506007)(36756003)(38070700005)(76116006)(91956017)(66946007)(83380400001)(54906003)(316002)(41300700001)(4326008)(8676002)(2616005)(478600001)(66556008)(66476007)(66446008)(64756008)(8936002)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WTdQZldQa0VnS3I1bktOZVFCbkhaQytScUNQV0RqQ0REanVYbm1XUlhtbEhO?=
+ =?utf-8?B?VnBNeENzZFhKVktTWjk2VFNaMnZuVjJWRTA3SXNpQmlxMUJVOURUcWdBdDUr?=
+ =?utf-8?B?Y0NkU3BEbGFDUkYyR3JZQzgxcjFoRUZUNHlNTWRQdCtwT3cxdkliZVg1R1lw?=
+ =?utf-8?B?eURiRVdTT01yamhPcldrQVBtMWVYdSt3N2xhakRhaDBUV0ZsVFhFMTNHejZa?=
+ =?utf-8?B?dkpMRUFCa011enlsVU9sQ0xXeWMrNjNJRnpCa1FVMnh1Q0xGWndic2g4T1Rt?=
+ =?utf-8?B?WHZoSHhoNUw0RlZRQVA5WUVPWW41cU1mQlc1ZUwxc0xZN2h2Y01WMXhIaU9L?=
+ =?utf-8?B?QmFjVDNFb0kyRlpxeDdxUG9aamw0RUtLQm1OZ0RuL21lY0dWY2wwTFpGWlJD?=
+ =?utf-8?B?R3FETmR3YUYrbDdERjdQUU8yZHN6YmsvYVpndWVaQXRiaURic3VQU1ZTaisy?=
+ =?utf-8?B?eE1aelY1cXJZMGhURWpjZitkdUpNeGhLSTdGaU9LODl6Vks3RDZLMzB3cHNp?=
+ =?utf-8?B?N2ZKWVdFNEsxenJyazBNVnRRdGNNNU1DeW5jcE0raE55RmxLaS9kREU1WHZo?=
+ =?utf-8?B?Wjh0ejl4a0NSenB3NDJ4ZmNCN1ZLTGpUL2ZWRjNsNHZDYW5MeFR6dFFTcDA3?=
+ =?utf-8?B?ZXQ1eGRBMWVUenVrbUFMZUdiZGpZdlNGYXY4b3RJVGdQM2Y1SWZEd1A0WTQz?=
+ =?utf-8?B?Y2liT2pkNHR6NTBKWUk2MmVKNU9RcGIvK3lyVXY3Sm1XejVDZTlkZDZYMDI1?=
+ =?utf-8?B?N2o5QTRWMkI5THk4UTRBb0RsY1M5YURiQU1yR1p0dWF3YitHRXhCYSs3bmlT?=
+ =?utf-8?B?SUxUMThlSVladEtSdHQ3dXdOSms4YS9uakYrbFNDbktGTWVsc3VIbjFYOTF6?=
+ =?utf-8?B?MWk5Zlp3em12aHkydWxyajRFZ0ZnTHltSE9VZkZMQVlqK2NOK3FjVy9jQzRC?=
+ =?utf-8?B?SzNWYjlZMi9YKzdlTHJLSDJlUHhVYjRGZUZsS0o2MzhDQmZPZmRmaXpXZzYw?=
+ =?utf-8?B?bmlnVSsxbERsb0Zhd0Y2U01ySVpCR2MwOGthemZOYjN1MjNmc2E5T0pUS1M0?=
+ =?utf-8?B?TTE1VEI3NzF6SmdPQjI3aW9WdnhoVHVraHNrQ3MvZXk2UVo5NHlQM2ZFSEtL?=
+ =?utf-8?B?enJ3ZGZZL3dQemQ4dEVyMUFadlhlU0wvWlRQdkN3b0NWZmVkcWU5eFl3MkVs?=
+ =?utf-8?B?TU1zRUF5dFhGVGRYUC90dDloSVJ6L2tSZnpRdHFSbWNmUU1PQUZPRjJGQVJB?=
+ =?utf-8?B?S1haS21nc2hzQk5GeFVpdEczbzFOK08xbnFrbmU0Z0dxeEFCR0llMVRzaUhu?=
+ =?utf-8?B?eVllVm5qMlg2NTdYeWpoVWZZWEoyaTd1VDBRMHYySU4ybGViYm1nTnppaU16?=
+ =?utf-8?B?U013ZUN6S1R1U1JRY296ajVwMTRJZFFjMEE0cC9hWG03RlJXYndjZVBZd1Jk?=
+ =?utf-8?B?QUJLVXpDejJmam9VcVo4TDBxaGNaanhRZWFxM0VZb29FWmpuL2NhZzNqUWJz?=
+ =?utf-8?B?K3Z1b2xlZXBPTmRzZ2FweEVKcklkSkIzRGs5RmsvSUpFbnFhNDVwclNveFFV?=
+ =?utf-8?B?MllscG1qZ05mZXBIdHJJM2VvV1NxbGMzNkV6VXFsTHl0RjZPU0pIRWlrK1Jr?=
+ =?utf-8?B?SnpKK0hMMVltOHdMZ3k1T3ZIM0s1T2JWZWhQYXdVRWQrVFAxR3gvNW1CR1Mw?=
+ =?utf-8?B?eWVlYTFnb2VaM0c1UTFweFkxYmJxNFNzWlEycERYUGRudDc4allPSGhzbC8r?=
+ =?utf-8?B?YnVITkxVOWR3eGRNRVY3MHljS0k1eHpoYm5pRFFiR0NXWnNZQ3NSOHpNUDRw?=
+ =?utf-8?B?S015eEl2d0hNYU9aaVEyRmRhM1pubVkwblRCdDA5VGVQSDBRWXVNaTR2V3Q4?=
+ =?utf-8?B?ZW1VSGRXc2k4WHJoaTRUU2N0WGFEeVJieGJWRTBzTDlrUGUydkt4VitSMk51?=
+ =?utf-8?B?NDVYcFpEMThacTI1WEZ3OFRjRklJdnNNWXVuNTNVaWE5TWZEKzFMUDhDVUpP?=
+ =?utf-8?B?c0h6YzA3OXpjcDZoZ3V3N29VQjN4aEVzRXJaWFlyQUIwdXYxU0IrOTdxYmY0?=
+ =?utf-8?B?bHd0S1V2T2c3dnlaSkd5Tzk0V2VwT1RkVDhBR3BUVXBkU3U1NzBqYkhDMnBu?=
+ =?utf-8?B?aUtheXhEeGdMT1ZHTW5CbEw5VndTMWo1RGlrUHExNGI0SytyS2I2ZnVRdElj?=
+ =?utf-8?B?aVE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <368940C70DA1334793F323F514C72E2F@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] ACPICA: Replace fake flexible arrays with flexible
- array members
-Content-Language: en-US
-To:     Kees Cook <kees@kernel.org>, Kees Cook <keescook@chromium.org>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        devel@acpica.org, linux-hardening@vger.kernel.org
-References: <20230127191621.gonna.262-kees@kernel.org>
- <20230213003546.GA3280303@roeck-us.net>
- <66C64DB0-94A2-47E8-932C-519544C5FE90@kernel.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <66C64DB0-94A2-47E8-932C-519544C5FE90@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6fbfd007-6480-4277-6d7d-08db0dfdca59
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Feb 2023 20:06:27.5489
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BJ3h4Ac0BLMo+EyWGa+DH9amn01pxo5uahgK4WAidZ2fyaH3afXxZHA47jpClaJLfidN0UI5+GmLUYQQrO6b8HO4aH4Pa2fSrNPcqEDoQoM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB2189
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,67 +136,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/13/23 11:51, Kees Cook wrote:
-> On February 12, 2023 4:35:46 PM PST, Guenter Roeck <linux@roeck-us.net> wrote:
->> Hi,
->>
->> On Fri, Jan 27, 2023 at 11:16:25AM -0800, Kees Cook wrote:
->>> One-element arrays (and multi-element arrays being treated as
->>> dynamically sized) are deprecated[1] and are being replaced with
->>> flexible array members in support of the ongoing efforts to tighten the
->>> FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
->>> with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
->>>
->>> Replace one-element array with flexible-array member in struct
->>> acpi_resource_extended_irq. Replace 4-byte fixed-size array with 4-byte
->>> padding in a union with a flexible-array member in struct
->>> acpi_pci_routing_table.
->>>
->>> This results in no differences in binary output.
->>>
->>> Link: https://github.com/acpica/acpica/pull/813
->>> Signed-off-by: Kees Cook <keescook@chromium.org>
->>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>
->> This patch results in boot failures of 32-bit images.
-> 
-> Weird -- I didn't see any binary differences. I'll investigate. What compiler and arch?
-> 
-
-gcc 11.3, binutils 2.39, x86 (32-bit build). This is pretty much defconfig
-with ARCH=i386 and various debug options enabled.
-
-64-bit builds do not have the problem.
-
-Guenter
-
-> -Kees
-> 
->> Reverting it fixes the problem.
->>
->> On the failing boot tests, I see messages such as
->>
->> ACPI: \_SB_.GSIA: Enabled at IRQ 117440528
->> ERROR: Unable to locate IOAPIC for GSI 117440528
->> ahci 0000:00:1f.2: PCI INT A: failed to register GSI
->>
->> ACPI: \_SB_.GSIG: Enabled at IRQ 117440534
->> ERROR: Unable to locate IOAPIC for GSI 117440534
->> 8139cp 0000:00:02.0: PCI INT A: failed to register GSI
->>
->> Given that 117440534 == 0x7000016, that looks quite suspicious.
->> Indeed, after reverting this patch, the messages are different.
-> 
-> Yeah, seems like a high byte not getting cleared. Hmm.
-> 
->>
->> ACPI: \_SB_.GSIA: Enabled at IRQ 16
->> ahci 0000:00:1f.2: AHCI 0001.0000 32 slots 6 ports 1.5 Gbps 0x3f impl SATA mode
->>
->> ACPI: \_SB_.GSIG: Enabled at IRQ 22
->> 8139cp 0000:00:02.0 eth0: RTL-8139C+ at 0xd0804000, 52:54:00:12:34:56, IRQ 22
->>
->> Guenter
-> 
-> 
-
+DQoNCkxlIDI0LzEyLzIwMjIgw6AgMjI6MTQsIFBhbGkgUm9ow6FyIGEgw6ljcml0wqA6DQo+IFNw
+bGl0cyBtcGljIGFuZCBpODI1OSBpbml0aWFsaXphdGlvbiBjb2RlcyBpbnRvIHNlcGFyYXRlIGZ1
+bmN0aW9ucy4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFBhbGkgUm9ow6FyIDxwYWxpQGtlcm5lbC5v
+cmc+DQo+IC0tLQ0KPiAgIGFyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvODV4eC9wMjAyMC5jIHwgMzcg
+KysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMjEgaW5z
+ZXJ0aW9ucygrKSwgMTYgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC9wb3dl
+cnBjL3BsYXRmb3Jtcy84NXh4L3AyMDIwLmMgYi9hcmNoL3Bvd2VycGMvcGxhdGZvcm1zLzg1eHgv
+cDIwMjAuYw0KPiBpbmRleCBkNjVkNGM4OGFjNDcuLmI4NTg0YmYzMDdiMCAxMDA2NDQNCj4gLS0t
+IGEvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy84NXh4L3AyMDIwLmMNCj4gKysrIGIvYXJjaC9wb3dl
+cnBjL3BsYXRmb3Jtcy84NXh4L3AyMDIwLmMNCj4gQEAgLTQ1LDYgKzQ1LDcgQEANCj4gICAjaWZk
+ZWYgQ09ORklHX01QQzg1eHhfRFMNCj4gICANCj4gICAjaWZkZWYgQ09ORklHX1BQQ19JODI1OQ0K
+PiArDQo+ICAgc3RhdGljIHZvaWQgbXBjODV4eF84MjU5X2Nhc2NhZGUoc3RydWN0IGlycV9kZXNj
+ICpkZXNjKQ0KPiAgIHsNCj4gICAJc3RydWN0IGlycV9jaGlwICpjaGlwID0gaXJxX2Rlc2NfZ2V0
+X2NoaXAoZGVzYyk7DQo+IEBAIC01NSwyNyArNTYsMTMgQEAgc3RhdGljIHZvaWQgbXBjODV4eF84
+MjU5X2Nhc2NhZGUoc3RydWN0IGlycV9kZXNjICpkZXNjKQ0KPiAgIAl9DQo+ICAgCWNoaXAtPmly
+cV9lb2koJmRlc2MtPmlycV9kYXRhKTsNCj4gICB9DQo+IC0jZW5kaWYJLyogQ09ORklHX1BQQ19J
+ODI1OSAqLw0KPiAgIA0KPiAtc3RhdGljIHZvaWQgX19pbml0IG1wYzg1eHhfZHNfcGljX2luaXQo
+dm9pZCkNCj4gK3N0YXRpYyB2b2lkIF9faW5pdCBtcGM4NXh4XzgyNTlfaW5pdCh2b2lkKQ0KPiAg
+IHsNCj4gLQlzdHJ1Y3QgbXBpYyAqbXBpYzsNCj4gLSNpZmRlZiBDT05GSUdfUFBDX0k4MjU5DQo+
+ICAgCXN0cnVjdCBkZXZpY2Vfbm9kZSAqbnA7DQo+ICAgCXN0cnVjdCBkZXZpY2Vfbm9kZSAqY2Fz
+Y2FkZV9ub2RlID0gTlVMTDsNCj4gICAJaW50IGNhc2NhZGVfaXJxOw0KPiAtI2VuZGlmDQo+IC0N
+Cj4gLQltcGljID0gbXBpY19hbGxvYyhOVUxMLCAwLA0KPiAtCQkgIE1QSUNfQklHX0VORElBTiB8
+DQo+IC0JCSAgTVBJQ19TSU5HTEVfREVTVF9DUFUsDQo+IC0JCTAsIDI1NiwgIiBPcGVuUElDICAi
+KTsNCj4gLQ0KPiAtCUJVR19PTihtcGljID09IE5VTEwpOw0KPiAtCW1waWNfaW5pdChtcGljKTsN
+Cj4gICANCj4gLSNpZmRlZiBDT05GSUdfUFBDX0k4MjU5DQo+IC0JLyogSW5pdGlhbGl6ZSB0aGUg
+aTgyNTkgY29udHJvbGxlciAqLw0KPiAgIAlmb3JfZWFjaF9ub2RlX2J5X3R5cGUobnAsICJpbnRl
+cnJ1cHQtY29udHJvbGxlciIpDQo+ICAgCSAgICBpZiAob2ZfZGV2aWNlX2lzX2NvbXBhdGlibGUo
+bnAsICJjaHJwLGlpYyIpKSB7DQo+ICAgCQljYXNjYWRlX25vZGUgPSBucDsNCj4gQEAgLTkzLDEz
+ICs4MCwzMSBAQCBzdGF0aWMgdm9pZCBfX2luaXQgbXBjODV4eF9kc19waWNfaW5pdCh2b2lkKQ0K
+PiAgIAkJcmV0dXJuOw0KPiAgIAl9DQo+ICAgDQo+IC0JREJHKCJtcGM4NXh4ZHM6IGNhc2NhZGUg
+bWFwcGVkIHRvIGlycSAlZFxuIiwgY2FzY2FkZV9pcnEpOw0KPiArCURCRygiaTgyNTk6IGNhc2Nh
+ZGUgbWFwcGVkIHRvIGlycSAlZFxuIiwgY2FzY2FkZV9pcnEpOw0KPiAgIA0KPiAgIAlpODI1OV9p
+bml0KGNhc2NhZGVfbm9kZSwgMCk7DQo+ICAgCW9mX25vZGVfcHV0KGNhc2NhZGVfbm9kZSk7DQo+
+ICAgDQo+ICAgCWlycV9zZXRfY2hhaW5lZF9oYW5kbGVyKGNhc2NhZGVfaXJxLCBtcGM4NXh4Xzgy
+NTlfY2FzY2FkZSk7DQo+ICt9DQo+ICsNCj4gICAjZW5kaWYJLyogQ09ORklHX1BQQ19JODI1OSAq
+Lw0KPiArDQo+ICtzdGF0aWMgdm9pZCBfX2luaXQgbXBjODV4eF9kc19waWNfaW5pdCh2b2lkKQ0K
+PiArew0KPiArCXN0cnVjdCBtcGljICptcGljOw0KPiArDQo+ICsJbXBpYyA9IG1waWNfYWxsb2Mo
+TlVMTCwgMCwNCj4gKwkJICBNUElDX0JJR19FTkRJQU4gfA0KPiArCQkgIE1QSUNfU0lOR0xFX0RF
+U1RfQ1BVLA0KPiArCQkwLCAyNTYsICIgT3BlblBJQyAgIik7DQo+ICsNCj4gKwlCVUdfT04obXBp
+YyA9PSBOVUxMKTsNCj4gKwltcGljX2luaXQobXBpYyk7DQo+ICsNCj4gKyNpZmRlZiBDT05GSUdf
+UFBDX0k4MjU5DQoNCkNhIHdlIG1pbmltaXNlIG51bWJlciBvZiAjaWZkZWYgQ09ORklHX1BQQ19J
+ODI1OSBieSB1c2luZyANCklTX0VOQUJMRUQoQ09ORklHX1BQQ19JODI1OSkgaW5zaWRlIGlmL2Vs
+c2UgPw0KDQo+ICsJbXBjODV4eF84MjU5X2luaXQoKTsNCj4gKyNlbmRpZg0KPiAgIH0NCj4gICAN
+Cj4gICAjaWZkZWYgQ09ORklHX1BDSQ0K
