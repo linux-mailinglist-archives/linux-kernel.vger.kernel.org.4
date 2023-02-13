@@ -2,181 +2,358 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1178B694043
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:01:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0686940AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:18:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbjBMJBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 04:01:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
+        id S230280AbjBMJSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 04:18:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjBMJBk (ORCPT
+        with ESMTP id S229839AbjBMJSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 04:01:40 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C01E30C8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:01:39 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id w20-20020a17090a8a1400b00233d7314c1cso3614162pjn.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:01:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=knZk8UU+gILKuGNRfB7GT0O6VmEC+8WJYZQJqqmgOU0=;
-        b=KNEceGhov0dwIzDFqRccLblZBmNCS12Y+7pw2sezMNDnTZkMcE1yexx71pOlAdF9Zk
-         EGnJXkH0JkzRvWgutMCejHyyA4OtlPi65jEh6B/3/8eW50MEz8Fc0Tx5XEd4woZP/E0C
-         mHkTHAyg7maQNuNgiHDForqvujhi3a1CRUNVwah0ohtAbcOvKsLAWytGLEDv9z08D2zD
-         76O29qVsBldSfiRN1oZOp0yObO6pY7U/Cemp4NzONI3USI+tS4FoIJ4dl7F+TDomjg4H
-         lWAvTC4ZgB0o1Jd7gshnH3tgNQm4jlTJ5WuuTH2u51LPNvZ63VaNuGJFvDoasQefa17X
-         rSUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=knZk8UU+gILKuGNRfB7GT0O6VmEC+8WJYZQJqqmgOU0=;
-        b=zkEo9wOTl7EvN8PDwYj4NeWBjOSACGpuWX+usLhqqWfD6DuWq4V4pbHJntHQnKh/H4
-         8NarpiLBjgTa0AYMG5G5+W7jJVfQ0uEDFJ96dUX6fR8QCNJY6scpcfyRkKkC79JxXtFq
-         UBY5b+D9XFb9IRhVfCLHYqOkjmDhWk0KipViCalSzeIn7oYCjMUi5W7qvZWzQUKdHY+H
-         V9dv9h1HSyd5wBfiDqpbURQ6emLGZvTzyZY8NA6NMR5vOKH5qqsYA98J6IrMAX2yv9z4
-         tbzWo3Hn6vq3S9QSuUQrACfXI/JpnxttA8AxTOBX+iAwyylfgaHmWcLP+KoDc0DO5oNI
-         z+TA==
-X-Gm-Message-State: AO0yUKWwWYLrdwNhlCNyjRURiMRTC1ELQJOEkKgg/UfSxg+xTqikbK2l
-        hmHGf1hWOFnu2HRpbZ29vvh1
-X-Google-Smtp-Source: AK7set/09d393s5gixpvWGjjSLjuwgH5lvWqLfMrJsru5MwM0BE1bIBxx1IfXj2obI5BB0vLe8KJiQ==
-X-Received: by 2002:a17:902:9a42:b0:199:1804:48aa with SMTP id x2-20020a1709029a4200b00199180448aamr23251087plv.13.1676278898566;
-        Mon, 13 Feb 2023 01:01:38 -0800 (PST)
-Received: from localhost.localdomain ([117.217.182.252])
-        by smtp.gmail.com with ESMTPSA id jb14-20020a170903258e00b001964c8164aasm7677963plb.129.2023.02.13.01.01.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 01:01:38 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Patrick Wildt <patrick@blueri.se>
-Subject: [PATCH] arm64: dts: qcom: sc8280xp-pmics: Specify interrupt parent explicitly
-Date:   Mon, 13 Feb 2023 14:31:18 +0530
-Message-Id: <20230213090118.11527-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Mon, 13 Feb 2023 04:18:13 -0500
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6380EC169
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:18:10 -0800 (PST)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4PFdzf3rD2z9sch;
+        Mon, 13 Feb 2023 10:18:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1676279886;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gYqyG34jqUdKvdo77BmID3MiXQClrcvRYfpAOEWTeog=;
+        b=va9KHKi4x3hya+Y/SLqoYKhU5czz8wMACdharbjeLHaqcStbhkkAhlDsLNkYvxyJuf4zSD
+        DW8xejxEYyI3TWbdOa7guV73Z/Zrft/0Qo84UuN6M/xzGW3pUamZ5OCvMmSWiAdJ0tserS
+        tkKfTSWOnzSSf3BJUy7pip3SkwTqxST488j8a9kPW3vESGmfS9jeyJVpvKg7neXHMxyUEE
+        VIwcn4Fsbuvqq+NxDoYKSK9jnvsLBpR81V+xLVrriMcaAPyya9qUxsDu0CH7Neltp4Ho2m
+        NFbKiMxDb9pr8SLLo78BRgW3QvOUZ07eQEcuuGfyLXqydo7eddIC8nSxMIibuw==
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
+Cc:     Guido =?utf-8?Q?G=C3=BCnther?= <agx@sigxcpu.org>,
+        Purism Kernel Team <kernel@puri.sm>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH 1/1] drm/panel: st7703: Fix resume of XBD599 panel
+Date:   Mon, 13 Feb 2023 08:47:16 +0100
+References: <20230212120830.46880-1-frank@oltmanns.dev>
+ <20230212120830.46880-2-frank@oltmanns.dev>
+ <20230212123621.jo56yqlburd6g6ir@core> <874jrq20kz.fsf@oltmanns.dev>
+ <20230212193533.3czfby4id4cpbu2s@core>
+In-reply-to: <20230212193533.3czfby4id4cpbu2s@core>
+Message-ID: <87bklxsz42.fsf@oltmanns.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="=-=-="
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nodes like pwrkey, resin, iadc, adc-tm, temp-alarm which are the grand
-children of spmi_bus node represent the interrupt generating devices but
-don't have "interrupt-parent" property.
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-As per the devicetree spec v0.3, section 2.4:
+Hi Ond=C5=99ej,
 
-"The physical wiring of an interrupt source to an interrupt controller is
-represented in the devicetree with the interrupt-parent property. Nodes
-that represent interrupt-generating devices contain an interrupt-parent
-property which has a phandle value that points to the device to which the
-device’s interrupts are routed, typically an interrupt controller. If an
-interrupt-generating device does not have an interrupt-parent property,
-its interrupt parent is assumed to be its devicetree parent."
+ok, now I get it. Thank you very much for your thorough explanation. It rea=
+lly appreciate it!
 
-This clearly says that if the "interrupt-parent" property is absent, then
-the immediate devicetree parent will be assumed as the interrupt parent.
-But the immediate parents of these nodes are not interrupt controllers
-themselves.
+Ond=C5=99ej Jirman <megous@megous.com> writes:
+> On Sun, Feb 12, 2023 at 06:52:05PM +0100, Frank Oltmanns wrote:
+>> Ond=C5=99ej Jirman <megi@xff.cz> writes:
+>>
+>> > On Sun, Feb 12, 2023 at 01:08:29PM +0100, Frank Oltmanns wrote:
+>> Please let me point you to the discussion you and Guido had ~2.5 years a=
+go:
+>> <https://lore.kernel.org/all/20200729154809.GA435075@bogon.m.sigxcpu.org=
+/>
+>
+> Guido references some unspecified datasheet. We only have a st7703 datash=
+eet
+> to go by, and that requires 120ms and is relevant for both panels.
+>
+> Also the patch that Guido tested removed a few 20ms delays from the init
+> sequence for the librem panel. Maybe that broke the init for librem panel=
+ and
+> not the extra few ms after sleep out that the patch added.
 
-This may lead to failure while wiring the interrupt for these nodes by an
-operating system. But a few operating systems like Linux, workaround this
-issue by walking up the parent nodes until it finds the "interrupt-cells"
-property. Then the node that has the "interrupt-cells" property will be
-used as the interrupt parent.
+Ok, I see. You removed the 20 msec delay after the panel specific
+initialization sequence and before issuing SLPOUT in your original
+patch.
 
-But this workaround is not as per the DT spec and is not being implemented
-by other operating systems such as OpenBSD.
+>> I read that screenshot, that we need a 120 msec wait after sleep OUT bef=
+ore we
+>> can send another sleep in (see the =E2=80=9CRestriction=E2=80=9D row). I=
+ can=E2=80=99t seem to find
+>> the reference to the 120 msec delay after the sleep IN command. I read t=
+he
+>> flow chart at the bottom as informational about the duration of the whole
+>> procedure that happens after issuing the sleep in command. The only
+>> restriction is that we can=E2=80=99t issue any command for 5 msec after =
+sleep in was
+>> issued.
+>
+> It=E2=80=99s at the bottom, sleep in takes 120ms to execute. Part of the =
+execution is
+> draining the charge from the panel. You can=E2=80=99t shutdown power supp=
+lies before
+> sleep in completes, so you need the delay after sleep in and before regul=
+ator
+> powerdown, otherwise the flow chart will not have the time to execute pro=
+perly,
+> and the panel will be left in a bad state.
 
-Hence, fix this issue by adding the "interrupts-extended" property that
-explicitly specifies the spmi_bus node as the interrupt parent. Note that
-the "interrupts-extended" property is chosen over "interrupt-parent" as it
-allows specifying both interrupt parent phandle and interrupt specifiers in
-a single property.
+Ok, that makes sense.
 
-Reported-by: Patrick Wildt <patrick@blueri.se>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
+>> > So there needs to be 120ms delay after sleep in and after sleep out,
+>> > regardless of which panel is driven by this controller, to ensure the =
+panel
+>> > stays operational even when the user is quickly switching it on/off re=
+peatedly.
+>> >
+>> > So I don=E2=80=99t think you should be doing panel specific quirks her=
+e.
+>>
+>> Maybe. I can only say that without the timings in this patch (i.e. the o=
+nes
+>> from your kernel branch) the display on my pinephone is flickering after=
+ the
+>> first (and every subsequent) time the display is turned off. With your n=
+ew
+>> timing everything works great on the pinephone. Guido states that the ti=
+mings
+>> in your original patch (i.e. the XDB599 specific timings in this patch) =
+the
+>> Librem 5 devkit panel doesn=E2=80=99t work.
+>
+> Adding extra delays after sleep in/before sleep out should not break Libr=
+em
+> panel. Previous patches also changed the powerup sequence to hold the res=
+et
+> before powerup of the power supplies, and rearranged other delays.
+>
+> They were made before the problem with the panel discharge was properly
+> understood.
+>
+> I suggest just going a bit more conservatively than what I did with my or=
+iginal
+> patch series, and just make sure there are 120ms delays after sleep out a=
+nd
+> before sleep in + extra delay after regulator powerup and don=E2=80=99t d=
+o anything that
+> may decrease delays for librem devkit panel. Just adding delays should no=
+t break
+> anything, sine the only timings that have maximums specified in the datas=
+heet
+> are for power rail voltage rampup times.
 
-I just fixed one dtsi since wanted to make sure that everyone agrees to
-this implementation, otherwise I'll end up wasting too much time fixing
-every other DTs making use of these nodes.
+I agree, that the one 20 msec delay that you removed, is probably what
+broke the JH057N panel and not the extra delays. Unfortunately, there is
+no way for me to verify that statement, because I don=E2=80=99t have access=
+ to
+Librem=E2=80=99s devkit.
 
-Next step would be to fix the bindings of these nodes to include interrupt-
-parent or interrupts-extended properties and affected DTs.
+So, I can only offer to prepare a V2 and kindly ask Guido to test it. V2
+will be much simpler:
+=E2=80=A2 Increase the delay after issuing sleep out from 60 to 120 msec fo=
+r all
+  panels.
+=E2=80=A2 Add a delay of 120 msec after issuing sleep in for all panels.
+=E2=80=A2 Move the 20 msec delay between initialization and sleep out into =
+the
+  initialization function for the JH057N panel (like in this version of
+  the patch).
+=E2=80=A2 Remove a 20 msec delay from the initialization function of the XB=
+D599
+  panel (like in this version of the patch).
 
- arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+> (Also some timings during powerup/down may appear to have different needs=
+ on
+> Librem devkit simply because panel driver is not really affecting the
+> regulators, because they are already powered up due to being referenced b=
+y other
+> drivers/devices, because they are shared. This is a bit tricky to test
+> properly. It=E2=80=99s necessary to test both power sequence cases, where=
+ the regulators
+> are known to be off, and when they are already referenced by other driver=
+s.
+> On librem devkit, one of them seems to be shared by audio codec and touch=
+screen,
+> on pinephone there=E2=80=99s less sharing. Easiest way to do that is to u=
+nload the
+> relevant drivers for other devices that share the regulators and check wi=
+th
+> debugfs/regulator/regulator_summary that the refcount of lcd regulators)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
-index f2c0b71b5d8e..df7d28f7ae60 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
-@@ -64,14 +64,14 @@ pmk8280_pon: pon@1300 {
- 
- 			pmk8280_pon_pwrkey: pwrkey {
- 				compatible = "qcom,pmk8350-pwrkey";
--				interrupts = <0x0 0x13 0x7 IRQ_TYPE_EDGE_BOTH>;
-+				interrupts-extended = <&spmi_bus 0x0 0x13 0x7 IRQ_TYPE_EDGE_BOTH>;
- 				linux,code = <KEY_POWER>;
- 				status = "disabled";
- 			};
- 
- 			pmk8280_pon_resin: resin {
- 				compatible = "qcom,pmk8350-resin";
--				interrupts = <0x0 0x13 0x6 IRQ_TYPE_EDGE_BOTH>;
-+				interrupts-extended = <&spmi_bus 0x0 0x13 0x6 IRQ_TYPE_EDGE_BOTH>;
- 				status = "disabled";
- 			};
- 		};
-@@ -79,7 +79,7 @@ pmk8280_pon_resin: resin {
- 		pmk8280_vadc: adc@3100 {
- 			compatible = "qcom,spmi-adc7";
- 			reg = <0x3100>;
--			interrupts = <0x0 0x31 0x0 IRQ_TYPE_EDGE_RISING>;
-+			interrupts-extended = <&spmi_bus 0x0 0x31 0x0 IRQ_TYPE_EDGE_RISING>;
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 			#io-channel-cells = <1>;
-@@ -89,7 +89,7 @@ pmk8280_vadc: adc@3100 {
- 		pmk8280_adc_tm: adc-tm@3400 {
- 			compatible = "qcom,spmi-adc-tm5-gen2";
- 			reg = <0x3400>;
--			interrupts = <0x0 0x34 0x0 IRQ_TYPE_EDGE_RISING>;
-+			interrupts-extended = <&spmi_bus 0x0 0x34 0x0 IRQ_TYPE_EDGE_RISING>;
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 			#thermal-sensor-cells = <1>;
-@@ -106,7 +106,7 @@ pmc8280_1: pmic@1 {
- 		pm8280_1_temp_alarm: temp-alarm@a00 {
- 			compatible = "qcom,spmi-temp-alarm";
- 			reg = <0xa00>;
--			interrupts = <0x1 0xa 0x0 IRQ_TYPE_EDGE_BOTH>;
-+			interrupts-extended = <&spmi_bus 0x1 0xa 0x0 IRQ_TYPE_EDGE_BOTH>;
- 			#thermal-sensor-cells = <0>;
- 		};
- 
-@@ -158,7 +158,7 @@ pmc8280_2: pmic@3 {
- 		pm8280_2_temp_alarm: temp-alarm@a00 {
- 			compatible = "qcom,spmi-temp-alarm";
- 			reg = <0xa00>;
--			interrupts = <0x2 0xa 0x0 IRQ_TYPE_EDGE_BOTH>;
-+			interrupts-extended = <&spmi_bus 0x2 0xa 0x0 IRQ_TYPE_EDGE_BOTH>;
- 			#thermal-sensor-cells = <0>;
- 		};
- 
--- 
-2.25.1
+Well, that was interesting! Thank you! I checked on my pinephone and I
+only have refcounts of 1 on the relevant child nodes as you expeceted. :)
 
+Thanks again,
+  Frank
+
+> regards,
+> 	o.
+>
+>> Do you have a proposal how to proceed without implementing panel specific
+>> timings?
+>>
+>> Thanks,
+>>   Frank
+>>
+>> >
+>> > regards,
+>> > 	o.
+>> >
+>> >> Therefore, introduce panel specific functions for the delays.
+>> >>
+>> >> The XDB599 does not require a 20 msec delay between the SETBGP and
+>> >> SETVCOM commands. Therefore, remove the delay from the device specific
+>> >> initialization function.
+>> >>
+>> >> Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
+>> >> Cc: Ondrej Jirman <megi@xff.cz>
+>> >> Reported-by: Samuel Holland <samuel@sholland.org>
+>> >> =E2=80=94
+>> >>  drivers/gpu/drm/panel/panel-sitronix-st7703.c | 40 ++++++++++++++++=
+=E2=80=94
+>> >>  1 file changed, 35 insertions(+), 5 deletions(-)
+>> >>
+>> >> diff =E2=80=93git a/drivers/gpu/drm/panel/panel-sitronix-st7703.c b/d=
+rivers/gpu/drm/panel/panel-sitronix-st7703.c
+>> >> index 6747ca237ced..a149341c4a8b 100644
+>> >> =E2=80=94 a/drivers/gpu/drm/panel/panel-sitronix-st7703.c
+>> >> +++ b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
+>> >> @@ -66,6 +66,8 @@ struct st7703_panel_desc {
+>> >>  	unsigned long mode_flags;
+>> >>  	enum mipi_dsi_pixel_format format;
+>> >>  	int (*init_sequence)(struct st7703 *ctx);
+>> >> +	void (*wait_after_sleep_out)(void);
+>> >> +	void (*drain_charge)(void);
+>> >>  };
+>> >>
+>> >>  static inline struct st7703 *panel_to_st7703(struct drm_panel *panel)
+>> >> @@ -126,10 +128,24 @@ static int jh057n_init_sequence(struct st7703 *=
+ctx)
+>> >>  				   0x18, 0x00, 0x09, 0x0E, 0x29, 0x2D, 0x3C, 0x41,
+>> >>  				   0x37, 0x07, 0x0B, 0x0D, 0x10, 0x11, 0x0F, 0x10,
+>> >>  				   0x11, 0x18);
+>> >> +	msleep(20);
+>> >>
+>> >>  	return 0;
+>> >>  }
+>> >>
+>> >> +static void jh057n_wait_after_sleep_out(void)
+>> >> +{
+>> >> +	/*
+>> >> +	 * Panel is operational 120 msec after reset, i.e. 60 msec after
+>> >> +	 * sleep out.
+>> >> +	 */
+>> >> +	msleep(60);
+>> >> +}
+>> >> +
+>> >> +static void jh057n_drain_charge(void)
+>> >> +{
+>> >> +}
+>> >> +
+>> >>  static const struct drm_display_mode jh057n00900_mode =3D {
+>> >>  	.hdisplay    =3D 720,
+>> >>  	.hsync_start =3D 720 + 90,
+>> >> @@ -152,6 +168,8 @@ static const struct st7703_panel_desc jh057n00900=
+_panel_desc =3D {
+>> >>  		MIPI_DSI_MODE_VIDEO_BURST | MIPI_DSI_MODE_VIDEO_SYNC_PULSE,
+>> >>  	.format =3D MIPI_DSI_FMT_RGB888,
+>> >>  	.init_sequence =3D jh057n_init_sequence,
+>> >> +	.wait_after_sleep_out =3D jh057n_wait_after_sleep_out,
+>> >> +	.drain_charge =3D jh057n_drain_charge,
+>> >>  };
+>> >>
+>> >>  static int xbd599_init_sequence(struct st7703 *ctx)
+>> >> @@ -273,7 +291,6 @@ static int xbd599_init_sequence(struct st7703 *ct=
+x)
+>> >>  	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETBGP,
+>> >>  			       0x07, /* VREF_SEL =3D 4.2V */
+>> >>  			       0x07  /* NVREF_SEL =3D 4.2V */);
+>> >> -	msleep(20);
+>> >>
+>> >>  	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETVCOM,
+>> >>  			       0x2C, /* VCOMDC_F =3D -0.67V */
+>> >> @@ -315,6 +332,18 @@ static int xbd599_init_sequence(struct st7703 *c=
+tx)
+>> >>  	return 0;
+>> >>  }
+>> >>
+>> >> +static void xbd599_wait_after_sleep_out(void)
+>> >> +{
+>> >> +	msleep(120);
+>> >> +}
+>> >> +
+>> >> +static void xbd599_drain_charge(void)
+>> >> +{
+>> >> +	/* Drain diplay of charge, to work correctly on next power on. */
+>> >> +	msleep(120);
+>> >> +}
+>> >> +
+>> >> +
+>> >>  static const struct drm_display_mode xbd599_mode =3D {
+>> >>  	.hdisplay    =3D 720,
+>> >>  	.hsync_start =3D 720 + 40,
+>> >> @@ -336,6 +365,8 @@ static const struct st7703_panel_desc xbd599_desc=
+ =3D {
+>> >>  	.mode_flags =3D MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULS=
+E,
+>> >>  	.format =3D MIPI_DSI_FMT_RGB888,
+>> >>  	.init_sequence =3D xbd599_init_sequence,
+>> >> +	.wait_after_sleep_out =3D xbd599_wait_after_sleep_out,
+>> >> +	.drain_charge =3D xbd599_drain_charge,
+>> >>  };
+>> >>
+>> >>  static int st7703_enable(struct drm_panel *panel)
+>> >> @@ -350,16 +381,13 @@ static int st7703_enable(struct drm_panel *pane=
+l)
+>> >>  		return ret;
+>> >>  	}
+>> >>
+>> >> -	msleep(20);
+>> >> -
+>> >>  	ret =3D mipi_dsi_dcs_exit_sleep_mode(dsi);
+>> >>  	if (ret < 0) {
+>> >>  		dev_err(ctx->dev, =E2=80=9CFailed to exit sleep mode: %d\n=E2=80=
+=9D, ret);
+>> >>  		return ret;
+>> >>  	}
+>> >>
+>> >> -	/* Panel is operational 120 msec after reset */
+>> >> -	msleep(60);
+>> >> +	ctx->desc->wait_after_sleep_out();
+>> >>
+>> >>  	ret =3D mipi_dsi_dcs_set_display_on(dsi);
+>> >>  	if (ret)
+>> >> @@ -384,6 +412,8 @@ static int st7703_disable(struct drm_panel *panel)
+>> >>  	if (ret < 0)
+>> >>  		dev_err(ctx->dev, =E2=80=9CFailed to enter sleep mode: %d\n=E2=80=
+=9D, ret);
+>> >>
+>> >> +	ctx->desc->drain_charge();
+>> >> +
+>> >>  	return 0;
+>> >>  }
+>> >>
+>> >> =E2=80=93
+>> >> 2.39.1
+>> >>
+
+--=-=-=--
