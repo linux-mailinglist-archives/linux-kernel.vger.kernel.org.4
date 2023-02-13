@@ -2,338 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51EFC695507
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 00:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C68C7695509
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 00:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbjBMXuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 18:50:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
+        id S231263AbjBMXwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 18:52:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbjBMXuo (ORCPT
+        with ESMTP id S229956AbjBMXwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 18:50:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACCC17176;
-        Mon, 13 Feb 2023 15:50:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30736B81A2C;
-        Mon, 13 Feb 2023 23:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90339C433D2;
-        Mon, 13 Feb 2023 23:50:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676332215;
-        bh=nZoqCIzntooHyG/7O/cvPGIWw/MK4HLeMmg+I6toqr0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NblVv/QUcjtqg2tOds2OzXshr7zDMAYVBBYrAQxu4adZj8UawL4mMLfGSM3G5jY1G
-         b2mjr6+q9bB0DA2XMaoJqNFfpguLJRdSfQeaTBlGczj6tLSOGrdhPTtZDFht+G8r64
-         JGOup4IWFJ5BhjQvd6OoWZP2Z3wzI5cIJK89CD20rMV9ZpGE9V7BFrE+M+C0m3bn1n
-         iwdtwAkWsETBTZKRpv/pEu5qWvTYeCB+1bVNRf9g2np5R27ZrM1vIVSZWPk9U6TjDx
-         aOtxcef29tACnHbigA24xFmqh63cdfzcehNeWe1PA+JwAqY3SuSzxIjeut1UIyldxH
-         d3fGix6veS3+g==
-Date:   Mon, 13 Feb 2023 17:50:14 -0600
-From:   Seth Forshee <sforshee@kernel.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     shuah@kernel.org, brauner@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/mount_setattr: fix redefine struct mount_attr
- build error
-Message-ID: <Y+rMtlvx31w7eWCA@do-x1extreme>
-References: <20230213183149.231779-1-skhan@linuxfoundation.org>
+        Mon, 13 Feb 2023 18:52:14 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1645E1632D;
+        Mon, 13 Feb 2023 15:52:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676332333; x=1707868333;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4fzPXXlr+NKT3FMdKI22Byml/iVzpZd9hBiHmFnYHyY=;
+  b=Wq1Q3WTeYGlJNoqg9vqUC/WzlY3c8z2l/d2DTQY9SV3NCtH4cJX7xz/1
+   7gTwJmAjptj7O5HMQEffc6NPAYJvJIbV98yoyzuULI8BQ6Urri9Q7ZLD+
+   rrRYt46xI/cF5acyk1U0hVJjwKQT3O1pzvV8FJYL54CKWwEnBHCpsLWy3
+   dM2oX//M5c3/IAhZAteEaMmfoJ1M8qYtoPYIVIiYqLQmxYgZMqzzuM9yy
+   Whd2v35tHGjDHI0P75O1HDPGU7nv2bSyBXCpIfsK2B/CHBF+yW0WNtCum
+   Pel3v/ck+j848rOqrA6BDuEuzxveN/79Y4XvOLR0okZnxTobElmqMz3UW
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="417248470"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="417248470"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 15:52:12 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="792905130"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="792905130"
+Received: from mlswanso-mobl.amr.corp.intel.com (HELO [10.251.26.232]) ([10.251.26.232])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 15:52:11 -0800
+Message-ID: <5803a3f2-72c8-fb1e-9ba3-e52747c990d3@intel.com>
+Date:   Mon, 13 Feb 2023 15:52:11 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230213183149.231779-1-skhan@linuxfoundation.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v9 07/18] x86/virt/tdx: Do TDX module per-cpu
+ initialization
+Content-Language: en-US
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "Luck, Tony" <tony.luck@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+References: <cover.1676286526.git.kai.huang@intel.com>
+ <557c526a1190903d11d67c4e2c76e01f67f6eb15.1676286526.git.kai.huang@intel.com>
+ <2d9172c5-e1e7-bf94-c52b-0e9bc5b5b319@intel.com>
+ <BL1PR11MB5978F562548EA22BFFD13970F7DD9@BL1PR11MB5978.namprd11.prod.outlook.com>
+ <2d7141b1-1d76-4e67-60d2-471a524c372e@intel.com>
+ <8e9238bbcccedfa00e2dbec87e1d77d370911846.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <8e9238bbcccedfa00e2dbec87e1d77d370911846.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 11:31:49AM -0700, Shuah Khan wrote:
-> Fix the following build error due to redefining struct mount_attr by
-> removing duplicate define from mount_setattr_test.c
-> 
-> gcc -g -isystem .../tools/testing/selftests/../../../usr/include -Wall -O2 -pthread     mount_setattr_test.c  -o .../tools/testing/selftests/mount_setattr/mount_setattr_test
-> mount_setattr_test.c:107:8: error: redefinition of ‘struct mount_attr’
->   107 | struct mount_attr {
->       |        ^~~~~~~~~~
-> In file included from /usr/include/x86_64-linux-gnu/sys/mount.h:32,
->                  from mount_setattr_test.c:10:
-> .../usr/include/linux/mount.h:129:8: note: originally defined here
->   129 | struct mount_attr {
->       |        ^~~~~~~~~~
-> make: *** [../lib.mk:145: .../tools/testing/selftests/mount_setattr/mount_setattr_test] Error 1
-> 
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> ---
->  tools/testing/selftests/mount_setattr/mount_setattr_test.c | 7 -------
->  1 file changed, 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-> index 8c5fea68ae67..582669ca38e9 100644
-> --- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-> +++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-> @@ -103,13 +103,6 @@
->  	#else
->  		#define __NR_mount_setattr 442
->  	#endif
-> -
-> -struct mount_attr {
-> -	__u64 attr_set;
-> -	__u64 attr_clr;
-> -	__u64 propagation;
-> -	__u64 userns_fd;
-> -};
->  #endif
+On 2/13/23 15:43, Huang, Kai wrote:
+> ( My main concern is "Run after the KVM handler" seems a little bit hacky to me.
+> Logically, it's more reasonable to have the TDX callback _before_ KVM's but not
+> _after_.  If any user (KVM) has done tdx_enable() successfully, the TDX code
+> should give the user a "TDX-runnable" cpu before user (KVM)'s own callback is
+> involved. Anyway as mentioned above, I'll do above as you suggested.)
 
-The difficulty with this is that whether or not you need this definition
-depends on your system headers. My laptop doesn't have definitions for
-either __NR_mount_setattr or struct mount_attr, so for me the build
-works without this patch but fails with it.
+I was assuming that the KVM callback is what does VMXON for a given
+logical CPU.  If that were the case, you'd need to do the TDX stuff
+*AFTER* VMXON.
 
-I suppose we could fix this universally by using a different name for
-the struct in the test, e.g.:
+Am I wrong?
 
-diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-index 8c5fea68ae67..0658129d526e 100644
---- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-+++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-@@ -103,13 +103,6 @@
- 	#else
- 		#define __NR_mount_setattr 442
- 	#endif
--
--struct mount_attr {
--	__u64 attr_set;
--	__u64 attr_clr;
--	__u64 propagation;
--	__u64 userns_fd;
--};
- #endif
- 
- #ifndef __NR_open_tree
-@@ -132,6 +125,13 @@ struct mount_attr {
- 	#endif
- #endif
- 
-+struct __mount_attr {
-+	__u64 attr_set;
-+	__u64 attr_clr;
-+	__u64 propagation;
-+	__u64 userns_fd;
-+};
-+
- #ifndef MOUNT_ATTR_IDMAP
- #define MOUNT_ATTR_IDMAP 0x00100000
- #endif
-@@ -141,7 +141,7 @@ struct mount_attr {
- #endif
- 
- static inline int sys_mount_setattr(int dfd, const char *path, unsigned int flags,
--				    struct mount_attr *attr, size_t size)
-+				    struct __mount_attr *attr, size_t size)
- {
- 	return syscall(__NR_mount_setattr, dfd, path, flags, attr, size);
- }
-@@ -347,7 +347,7 @@ static bool is_shared_mount(const char *path)
- 
- static void *mount_setattr_thread(void *data)
- {
--	struct mount_attr attr = {
-+	struct __mount_attr attr = {
- 		.attr_set	= MOUNT_ATTR_RDONLY | MOUNT_ATTR_NOSUID,
- 		.attr_clr	= 0,
- 		.propagation	= MS_SHARED,
-@@ -445,7 +445,7 @@ FIXTURE_TEARDOWN(mount_setattr)
- 
- TEST_F(mount_setattr, invalid_attributes)
- {
--	struct mount_attr invalid_attr = {
-+	struct __mount_attr invalid_attr = {
- 		.attr_set = (1U << 31),
- 	};
- 
-@@ -479,11 +479,11 @@ TEST_F(mount_setattr, extensibility)
- {
- 	unsigned int old_flags = 0, new_flags = 0, expected_flags = 0;
- 	char *s = "dummy";
--	struct mount_attr invalid_attr = {};
-+	struct __mount_attr invalid_attr = {};
- 	struct mount_attr_large {
--		struct mount_attr attr1;
--		struct mount_attr attr2;
--		struct mount_attr attr3;
-+		struct __mount_attr attr1;
-+		struct __mount_attr attr2;
-+		struct __mount_attr attr3;
- 	} large_attr = {};
- 
- 	if (!mount_setattr_supported())
-@@ -542,7 +542,7 @@ TEST_F(mount_setattr, extensibility)
- TEST_F(mount_setattr, basic)
- {
- 	unsigned int old_flags = 0, new_flags = 0, expected_flags = 0;
--	struct mount_attr attr = {
-+	struct __mount_attr attr = {
- 		.attr_set	= MOUNT_ATTR_RDONLY | MOUNT_ATTR_NOEXEC | MOUNT_ATTR_RELATIME,
- 		.attr_clr	= MOUNT_ATTR__ATIME,
- 	};
-@@ -578,7 +578,7 @@ TEST_F(mount_setattr, basic_recursive)
- {
- 	int fd;
- 	unsigned int old_flags = 0, new_flags = 0, expected_flags = 0;
--	struct mount_attr attr = {
-+	struct __mount_attr attr = {
- 		.attr_set	= MOUNT_ATTR_RDONLY | MOUNT_ATTR_NOEXEC | MOUNT_ATTR_RELATIME,
- 		.attr_clr	= MOUNT_ATTR__ATIME,
- 	};
-@@ -672,7 +672,7 @@ TEST_F(mount_setattr, mount_has_writers)
- {
- 	int fd, dfd;
- 	unsigned int old_flags = 0, new_flags = 0;
--	struct mount_attr attr = {
-+	struct __mount_attr attr = {
- 		.attr_set	= MOUNT_ATTR_RDONLY | MOUNT_ATTR_NOEXEC | MOUNT_ATTR_RELATIME,
- 		.attr_clr	= MOUNT_ATTR__ATIME,
- 		.propagation	= MS_SHARED,
-@@ -729,7 +729,7 @@ TEST_F(mount_setattr, mount_has_writers)
- TEST_F(mount_setattr, mixed_mount_options)
- {
- 	unsigned int old_flags1 = 0, old_flags2 = 0, new_flags = 0, expected_flags = 0;
--	struct mount_attr attr = {
-+	struct __mount_attr attr = {
- 		.attr_clr = MOUNT_ATTR_RDONLY | MOUNT_ATTR_NOSUID | MOUNT_ATTR_NOEXEC | MOUNT_ATTR__ATIME,
- 		.attr_set = MOUNT_ATTR_RELATIME,
- 	};
-@@ -763,7 +763,7 @@ TEST_F(mount_setattr, mixed_mount_options)
- TEST_F(mount_setattr, time_changes)
- {
- 	unsigned int old_flags = 0, new_flags = 0, expected_flags = 0;
--	struct mount_attr attr = {
-+	struct __mount_attr attr = {
- 		.attr_set	= MOUNT_ATTR_NODIRATIME | MOUNT_ATTR_NOATIME,
- 	};
- 
-@@ -967,7 +967,7 @@ TEST_F(mount_setattr, multi_threaded)
- TEST_F(mount_setattr, wrong_user_namespace)
- {
- 	int ret;
--	struct mount_attr attr = {
-+	struct __mount_attr attr = {
- 		.attr_set = MOUNT_ATTR_RDONLY,
- 	};
- 
-@@ -983,7 +983,7 @@ TEST_F(mount_setattr, wrong_user_namespace)
- TEST_F(mount_setattr, wrong_mount_namespace)
- {
- 	int fd, ret;
--	struct mount_attr attr = {
-+	struct __mount_attr attr = {
- 		.attr_set = MOUNT_ATTR_RDONLY,
- 	};
- 
-@@ -1074,7 +1074,7 @@ FIXTURE_TEARDOWN(mount_setattr_idmapped)
-  */
- TEST_F(mount_setattr_idmapped, invalid_fd_negative)
- {
--	struct mount_attr attr = {
-+	struct __mount_attr attr = {
- 		.attr_set	= MOUNT_ATTR_IDMAP,
- 		.userns_fd	= -EBADF,
- 	};
-@@ -1092,7 +1092,7 @@ TEST_F(mount_setattr_idmapped, invalid_fd_negative)
-  */
- TEST_F(mount_setattr_idmapped, invalid_fd_large)
- {
--	struct mount_attr attr = {
-+	struct __mount_attr attr = {
- 		.attr_set	= MOUNT_ATTR_IDMAP,
- 		.userns_fd	= INT64_MAX,
- 	};
-@@ -1111,7 +1111,7 @@ TEST_F(mount_setattr_idmapped, invalid_fd_large)
- TEST_F(mount_setattr_idmapped, invalid_fd_closed)
- {
- 	int fd;
--	struct mount_attr attr = {
-+	struct __mount_attr attr = {
- 		.attr_set = MOUNT_ATTR_IDMAP,
- 	};
- 
-@@ -1134,7 +1134,7 @@ TEST_F(mount_setattr_idmapped, invalid_fd_closed)
- TEST_F(mount_setattr_idmapped, invalid_fd_initial_userns)
- {
- 	int open_tree_fd = -EBADF;
--	struct mount_attr attr = {
-+	struct __mount_attr attr = {
- 		.attr_set = MOUNT_ATTR_IDMAP,
- 	};
- 
-@@ -1243,7 +1243,7 @@ static int get_userns_fd(unsigned long nsid, unsigned long hostid, unsigned long
- TEST_F(mount_setattr_idmapped, attached_mount_inside_current_mount_namespace)
- {
- 	int open_tree_fd = -EBADF;
--	struct mount_attr attr = {
-+	struct __mount_attr attr = {
- 		.attr_set = MOUNT_ATTR_IDMAP,
- 	};
- 
-@@ -1273,7 +1273,7 @@ TEST_F(mount_setattr_idmapped, attached_mount_inside_current_mount_namespace)
- TEST_F(mount_setattr_idmapped, attached_mount_outside_current_mount_namespace)
- {
- 	int open_tree_fd = -EBADF;
--	struct mount_attr attr = {
-+	struct __mount_attr attr = {
- 		.attr_set = MOUNT_ATTR_IDMAP,
- 	};
- 
-@@ -1303,7 +1303,7 @@ TEST_F(mount_setattr_idmapped, attached_mount_outside_current_mount_namespace)
- TEST_F(mount_setattr_idmapped, detached_mount_inside_current_mount_namespace)
- {
- 	int open_tree_fd = -EBADF;
--	struct mount_attr attr = {
-+	struct __mount_attr attr = {
- 		.attr_set = MOUNT_ATTR_IDMAP,
- 	};
- 
-@@ -1333,7 +1333,7 @@ TEST_F(mount_setattr_idmapped, detached_mount_inside_current_mount_namespace)
- TEST_F(mount_setattr_idmapped, detached_mount_outside_current_mount_namespace)
- {
- 	int open_tree_fd = -EBADF;
--	struct mount_attr attr = {
-+	struct __mount_attr attr = {
- 		.attr_set = MOUNT_ATTR_IDMAP,
- 	};
- 
-@@ -1365,7 +1365,7 @@ TEST_F(mount_setattr_idmapped, detached_mount_outside_current_mount_namespace)
- TEST_F(mount_setattr_idmapped, change_idmapping)
- {
- 	int open_tree_fd = -EBADF;
--	struct mount_attr attr = {
-+	struct __mount_attr attr = {
- 		.attr_set = MOUNT_ATTR_IDMAP,
- 	};
- 
-@@ -1410,7 +1410,7 @@ static bool expected_uid_gid(int dfd, const char *path, int flags,
- TEST_F(mount_setattr_idmapped, idmap_mount_tree_invalid)
- {
- 	int open_tree_fd = -EBADF;
--	struct mount_attr attr = {
-+	struct __mount_attr attr = {
- 		.attr_set = MOUNT_ATTR_IDMAP,
- 	};
- 
-@@ -1445,7 +1445,7 @@ TEST_F(mount_setattr, mount_attr_nosymfollow)
- {
- 	int fd;
- 	unsigned int old_flags = 0, new_flags = 0, expected_flags = 0;
--	struct mount_attr attr = {
-+	struct __mount_attr attr = {
- 		.attr_set	= MOUNT_ATTR_NOSYMFOLLOW,
- 	};
+
