@@ -2,131 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD20569445C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:24:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E10669445E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:25:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbjBMLYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 06:24:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
+        id S231230AbjBMLZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 06:25:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbjBMLYl (ORCPT
+        with ESMTP id S230144AbjBMLZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 06:24:41 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E24716311;
-        Mon, 13 Feb 2023 03:24:40 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id 0658520C8B72; Mon, 13 Feb 2023 03:24:40 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0658520C8B72
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1676287480;
-        bh=MEsnHvXWFAOovLlVk47JELdPbpuOssvqm5zPjs4Ja7E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q7BNsz/brXr52pj6rubpWj+JoKqYyBpi0DJWp4TqKP+uEsN0/r9EObUQaIy225Bcr
-         d78u+PLBWyDOqb5Fv7q+L7KiAUbifkGHZ4ZurRDZgP/M9jXYGk8u6QMeZ3vKM3jHJ6
-         7LRwVYvgZ9Pv0Zc3ypmpRD8y3dIsKf9lWiE5Vh4k=
-Date:   Mon, 13 Feb 2023 03:24:39 -0800
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        daniel.lezcano@linaro.org, tglx@linutronix.de,
-        virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
-        dphadke@linux.microsoft.com
-Subject: Re: [PATCH v5 5/5] Driver: VMBus: Add device tree support
-Message-ID: <20230213112439.GA15305@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1675944939-22631-1-git-send-email-ssengar@linux.microsoft.com>
- <1675944939-22631-6-git-send-email-ssengar@linux.microsoft.com>
- <CAL_JsqK0WgWm-mG=fYyDVAi4uhL+fM0OD7KEF+xYYOOGNX8-oQ@mail.gmail.com>
- <20230209174641.GB1346@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <CAL_JsqK+4ecEmGyo0jVs3B-E6Rjj4Lo8vB0En6pEUR1P4cRXpA@mail.gmail.com>
+        Mon, 13 Feb 2023 06:25:00 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21D814E82;
+        Mon, 13 Feb 2023 03:24:59 -0800 (PST)
+Date:   Mon, 13 Feb 2023 11:24:57 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1676287498;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KRfwpv/HgZDdd4k+GFcTibHg4hbUMy4dGlmO3TPOkNc=;
+        b=hlYV+QdyR5oiMXms6YtHG9QeBgXLm2ypHhtpejJ57WKb0mzKCS1x5e6SjDneTTCPsukm5u
+        OW37suUvntxWvDMk7rwrS+BfjiHefdBfjgrkbr30grLaJx1COSFcFhqBeydpCBXKMUfWnY
+        71gx+O2faabfpFGmBY0bTq4vpAR3HNv7fRt2HSGj5A0q8ufkj5YEGyTMTfM8VYzzgUThqb
+        9wvEVSeDgKKa3HZa+GFhS/21VCOj1BXGtOohIaOPCTgQlMkNw3fVwZj4hSwFeDbBNlwJXS
+        i6USvznKK4ZapSrtU14COt5gDFa5FRjo/CmSYU5iCWEfpuEFAT4fpEC380HUaw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1676287498;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KRfwpv/HgZDdd4k+GFcTibHg4hbUMy4dGlmO3TPOkNc=;
+        b=D7Xo5nvRfihZliq/Pe50933/ND4c2MZzssos0eM02Yh5TM6HB+IqLtUxxarWeokaxLorrG
+        dHA4lUECqilbgSBw==
+From:   "tip-bot2 for Reinette Chatre" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/urgent] PCI/MSI: Provide missing stubs for CONFIG_PCI_MSI=n
+Cc:     kernel test robot <lkp@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, maz@kernel.org
+In-Reply-To: =?utf-8?q?=3C158e40e1cfcfc58ae30ecb2bbfaf86e5bba7a1ef=2E16759?=
+ =?utf-8?q?78686=2Egit=2Ereinette=2Echatre=40intel=2Ecom=3E?=
+References: =?utf-8?q?=3C158e40e1cfcfc58ae30ecb2bbfaf86e5bba7a1ef=2E167597?=
+ =?utf-8?q?8686=2Egit=2Ereinette=2Echatre=40intel=2Ecom=3E?=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqK+4ecEmGyo0jVs3B-E6Rjj4Lo8vB0En6pEUR1P4cRXpA@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <167628749774.4906.17069524905880641563.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 04:37:28PM -0600, Rob Herring wrote:
-> On Thu, Feb 9, 2023 at 11:46 AM Saurabh Singh Sengar
-> <ssengar@linux.microsoft.com> wrote:
-> >
-> > On Thu, Feb 09, 2023 at 09:50:31AM -0600, Rob Herring wrote:
-> > > On Thu, Feb 9, 2023 at 6:15 AM Saurabh Sengar
-> > > <ssengar@linux.microsoft.com> wrote:
-> > > >
-> > > > Update the driver to support device tree boot as well along with ACPI.
-> > >
-> > > Devicetree
-> 
-> [...]
-> 
-> > > > +       for_each_of_range(&parser, &range) {
-> > > > +               struct resource *res;
-> > > > +
-> > > > +               res = kzalloc(sizeof(*res), GFP_ATOMIC);
-> > > > +               if (!res)
-> > > > +                       return -ENOMEM;
-> > > > +
-> > > > +               res->name = "hyperv mmio";
-> > > > +               res->flags = IORESOURCE_MEM | IORESOURCE_MEM_64;
-> > > > +               res->start = range.pci_addr;
-> > >
-> > > This is not PCI. It's a union, so use 'bus_addr' instead.
-> > >
-> > > But wait, resources and IORESOURCE_MEM are *CPU* addresses. You need
-> > > cpu_addr here. Your DT happens to do 1:1 addresses so it happens to
-> > > work either way.
-> >
-> > bus_addr works for us, will send V6
-> 
-> Sigh. bus_addr may work, but is wrong as I explained.
-> 
-> And you've already sent v6... Please slow down your pace with sending
-> new versions. 4 versions in a week is too much. Give others time to
-> comment and me to respond to discussions. Like a week...
+The following commit has been merged into the irq/urgent branch of tip:
 
-I apologize if my actions may have come across as overly hasty. I will make
-sure to allow for more time between submissions in the future, to ensure that
-everyone has an adequate opportunity to review and provide feedback.
+Commit-ID:     2b129f0b24ab578b02901b4a1744b7f97399faa0
+Gitweb:        https://git.kernel.org/tip/2b129f0b24ab578b02901b4a1744b7f97399faa0
+Author:        Reinette Chatre <reinette.chatre@intel.com>
+AuthorDate:    Thu, 09 Feb 2023 13:49:00 -08:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Mon, 13 Feb 2023 12:17:20 +01:00
 
-Regarding the use of bus_addr instead of cpu_addr, I found that cpu_addr was
-populating as OF_BAD_ADDR while bus_addr was populating correctly.  I think
-this is because I should be defining a empty ranges property in parent node
-for indicating 1:1 mapping between parent and child.
+PCI/MSI: Provide missing stubs for CONFIG_PCI_MSI=n
 
-But once I add empty ranges in property I get other warnings by dt_binding_check
-tool. After fixing all I am able to come up with below device tree example, please
-let me know if there is anything to be corrected. If this is good I will send
-the next version (offcource after a week :)) using cpu_addr.
+pci_msix_alloc_irq_at() and pci_msix_free_irq() are not declared when
+CONFIG_PCI_MSI is disabled.
 
-    soc {
-        #address-cells = <2>;
-        #size-cells = <1>;
-        bus {
-            compatible = "simple-bus";
-            #address-cells = <2>;
-            #size-cells = <1>;
-            ranges;
+Users of these two calls do not yet exist but when users do appear (shown
+below is an attempt to use the new API in vfio-pci) the following errors
+will be encountered when compiling with CONFIG_PCI_MSI disabled:
 
-            vmbus@ff0000000 {
-                compatible = "microsoft,vmbus";
-                #address-cells = <2>;
-                #size-cells = <1>;
-                ranges = <0x0f 0xf0000000 0x0f 0xf0000000 0x10000000>;
-            };
-        };
-    };
+drivers/vfio/pci/vfio_pci_intrs.c:461:4: error: implicit declaration of\
+        function 'pci_msix_free_irq' is invalid in C99\
+        [-Werror,-Wimplicit-function-declaration]
+                           pci_msix_free_irq(pdev, msix_map);
+                           ^
+drivers/vfio/pci/vfio_pci_intrs.c:511:15: error: implicit declaration of\
+        function 'pci_msix_alloc_irq_at' is invalid in C99\
+        [-Werror,-Wimplicit-function-declaration]
+                   msix_map = pci_msix_alloc_irq_at(pdev, vector, NULL);
 
-> 
-> Rob
+Provide definitions for pci_msix_alloc_irq_at() and pci_msix_free_irq() in
+preparation for users that need to compile when CONFIG_PCI_MSI is
+disabled.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 34026364df8e ("PCI/MSI: Provide post-enable dynamic allocation interfaces for MSI-X")
+Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lore.kernel.org/r/158e40e1cfcfc58ae30ecb2bbfaf86e5bba7a1ef.1675978686.git.reinette.chatre@intel.com
+---
+ include/linux/pci.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index adffd65..254c8a4 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -1621,6 +1621,18 @@ pci_alloc_irq_vectors(struct pci_dev *dev, unsigned int min_vecs,
+ 					      flags, NULL);
+ }
+ 
++static inline struct msi_map pci_msix_alloc_irq_at(struct pci_dev *dev, unsigned int index,
++						   const struct irq_affinity_desc *affdesc)
++{
++	struct msi_map map = { .index = -ENOSYS, };
++
++	return map;
++}
++
++static inline void pci_msix_free_irq(struct pci_dev *pdev, struct msi_map map)
++{
++}
++
+ static inline void pci_free_irq_vectors(struct pci_dev *dev)
+ {
+ }
