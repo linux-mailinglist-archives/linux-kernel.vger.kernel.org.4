@@ -2,130 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC91694646
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:49:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 845A569464E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:51:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjBMMtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 07:49:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
+        id S230412AbjBMMvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 07:51:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230412AbjBMMtt (ORCPT
+        with ESMTP id S229629AbjBMMvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 07:49:49 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8FC3C21
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:49:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=608dizr75uPBUsKJ/0W0QtAph9stnK2E4frkEXs4nGE=; b=E73a0/vcrRiyCWXUDw+b2v+gYY
-        3DaNoE8Vu8w0aKzx8ikF4VhtkVYTmg0KhBtLwe7fXKNY/JGtDJeR5i7MNZR6J8yeMyoZ0jE7p1nCu
-        dRxZEFjqomcMOzuLv9Soyxwg07st2iK4qJsblVl+URUy+Jv6bC60XChrvK8diKsVSxNNwIQN2GwY+
-        9kc7aHaFok7v8Jy2w3sBEN87RuTFyZQq+/Mkh/PugcGbHXq+ErMCaNXEa76HOo1O/wN44ieAeZNNo
-        qt5ybJj1wkz7zcYnG87ufvohIuQkvKq8WbEpkdwHw3xGKfUHfgQ+gvYpu8fYDeycco0GYLtZTHfNU
-        9wHbcKuQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pRYGN-009IgA-19;
-        Mon, 13 Feb 2023 12:48:55 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1070D300033;
-        Mon, 13 Feb 2023 13:49:36 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id ED5C120C18264; Mon, 13 Feb 2023 13:49:35 +0100 (CET)
-Date:   Mon, 13 Feb 2023 13:49:35 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Ingo Molnar <mingo@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v3] locking/lockdep: add debug_show_all_lock_holders()
-Message-ID: <Y+ox39WhgY/iaVsG@hirez.programming.kicks-ass.net>
-References: <ed17797b-e732-0dd0-2b4e-dc293653c0ac@I-love.SAKURA.ne.jp>
- <Y+oY3Xd43nNnkDSB@hirez.programming.kicks-ass.net>
- <274adab4-9922-1586-7593-08d9db5479a1@I-love.SAKURA.ne.jp>
+        Mon, 13 Feb 2023 07:51:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA887D89
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:50:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676292616;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PgLQ6zOF160defT8Ds9P+E2M/1VCvo9hFksAoPbKUJE=;
+        b=Ic0070F7tMpAIoWqIk/5LrttLPtDGJKApDrBLEyX6+yU4oyB8dYvOTD4neSmpxbTGrT1CY
+        wLpDTPqfQK8i32GWY4xUDTCUXMlPYTSVyCR6MsSgOD3LRpPii5sMIN/1aw0TOQeTy+SmyE
+        tUEjt0Eik2VF8NY9ryPbTjNPsFGH+Vs=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-587-gWV5vzs1NHGGbQFPG0OXmA-1; Mon, 13 Feb 2023 07:50:14 -0500
+X-MC-Unique: gWV5vzs1NHGGbQFPG0OXmA-1
+Received: by mail-ed1-f69.google.com with SMTP id z19-20020a05640235d300b004aaca83cd87so7560594edc.20
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:50:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PgLQ6zOF160defT8Ds9P+E2M/1VCvo9hFksAoPbKUJE=;
+        b=rbGpCOh9AQ7jBFicnshnW7g8dSn3M43RnPmTgT/sjB9SVV/pyqMM6RK5FOv5FptyFq
+         MNt8W47UhcTCG1fGPkOCTXyETjBTHvQZoZeAYICS0lsjbZ/9Bg1ioigKFtLW/Y5N25dJ
+         QDBESHlGdgxLhuE8sClr3fQVrkN91QLgwhdp+C1VKPHM7P1y5MYi5nEiv7nldZ9yy3BQ
+         Lnd+RvjQDRWmEMjarEYiBrnMQsRom4IOJcSI5ycWjVxVSvZQKhgnWeJG1bnfTACAnOVT
+         dlu/ue4XveLObGnr+JEQtmFQHRA2OEhKF/7iELEPC3e5LM5jiBCvTNkiR8o0hTWy4tjE
+         HJIw==
+X-Gm-Message-State: AO0yUKXOulqoU0LFSfH/War4HYHErUFtYzZKJPQGB0gCTGI6++a/7tFL
+        hFTv0D3MRA7TgEXdlarqxo2WghbI+7Cb1zLoySx/4m5VpvbNoYWl66NjNC1CGWIBcaT84G5Kujm
+        yyEiIXwUoTaEwNmcLFG3+DSCr
+X-Received: by 2002:a17:907:7ea8:b0:8b1:15ab:f4cd with SMTP id qb40-20020a1709077ea800b008b115abf4cdmr2485956ejc.53.1676292613797;
+        Mon, 13 Feb 2023 04:50:13 -0800 (PST)
+X-Google-Smtp-Source: AK7set988aY5h338ir+/KHdB4LqQr3BYrvN4X1DsZMqEr4WXANn9H4WIA5oj3gjPEwtYrkusriJ/eg==
+X-Received: by 2002:a17:907:7ea8:b0:8b1:15ab:f4cd with SMTP id qb40-20020a1709077ea800b008b115abf4cdmr2485946ejc.53.1676292613620;
+        Mon, 13 Feb 2023 04:50:13 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:4783:a68:c1ee:15c5? ([2001:b07:6468:f312:4783:a68:c1ee:15c5])
+        by smtp.googlemail.com with ESMTPSA id g22-20020a17090670d600b008b0ff9c1ea8sm2369922ejk.56.2023.02.13.04.50.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 04:50:13 -0800 (PST)
+Message-ID: <88a89319-a71e-fa90-0dbb-00cf8a549380@redhat.com>
+Date:   Mon, 13 Feb 2023 13:50:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <274adab4-9922-1586-7593-08d9db5479a1@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: "KVM: x86/mmu: Overhaul TDP MMU zapping and flushing" breaks SVM
+ on Hyper-V
+Content-Language: en-US
+To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tianyu Lan <ltykernel@gmail.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+References: <43980946-7bbf-dcef-7e40-af904c456250@linux.microsoft.com>
+ <Y+aQyFJt9Tn2PJnC@google.com>
+ <9a046de1-8085-3df4-94cd-39bb893c8c9a@linux.microsoft.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <9a046de1-8085-3df4-94cd-39bb893c8c9a@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 08:34:55PM +0900, Tetsuo Handa wrote:
-> On 2023/02/13 20:02, Peter Zijlstra wrote:
-> >> @@ -213,7 +213,7 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
-> >>   unlock:
-> >>  	rcu_read_unlock();
-> >>  	if (hung_task_show_lock)
-> >> -		debug_show_all_locks();
-> >> +		debug_show_all_lock_holders();
-> >>  
-> >>  	if (hung_task_show_all_bt) {
-> >>  		hung_task_show_all_bt = false;
-> > 
-> > This being the hung-task detector, which is mostly about sleeping locks.
-> 
-> Yes, the intent of this patch is to report tasks sleeping with locks held,
-> for the cause of hung task is sometimes a deadlock.
-> 
-> >> +	rcu_read_lock();
-> >> +	for_each_process_thread(g, p) {
-> >> +		if (!p->lockdep_depth)
-> >> +			continue;
-> >> +		if (p == current && p->lockdep_depth == 1)
-> >> +			continue;
-> >> +		sched_show_task(p);
-> > 
-> > And sched_show_task() being an utter piece of crap that will basically
-> > print garbage for anything that's running (it doesn't have much
-> > options).
-> > 
-> > Should we try and do better? dump_cpu_task() prefers
-> > trigger_single_cpu_backtrace(), which sends an interrupt in order to get
-> > active registers for the CPU.
-> 
-> What is the intent of using trigger_single_cpu_backtrace() here?
-> check_hung_uninterruptible_tasks() is calling trigger_all_cpu_backtrace()
-> if sysctl_hung_task_all_cpu_backtrace is set.
 
-Then have that also print the held locks for those tasks. And skip over
-them again later.
+On 2/13/23 13:44, Jeremi Piotrowski wrote:
+> Just built a kernel from that tree, and it displays the same behavior. The problem
+> is not that the addresses are wrong, but that the flushes are issued at the wrong
+> time now. At least for what "enlightened NPT TLB flush" requires.
 
-> Locks held and kernel backtrace are helpful for describing deadlock
-> situation, but registers values are not.
+It is not clear to me why HvCallFluyshGuestPhysicalAddressSpace or 
+HvCallFlushGuestPhysicalAddressList would have stricter requirements 
+than a "regular" TLB shootdown using INVEPT.
 
-Register state is required to start the unwind. You can't unwind a
-running task out of thin-air.
+Can you clarify what you mean by wrong time, preferrably with some kind 
+of sequence of events?
 
-> What is important is that tasks which are not on CPUs are reported,
-> for when a task is reported as hung, that task must be sleeping.
-> Therefore, I think sched_show_task() is fine.
+That is, something like
 
-The backtraces generated by sched_show_task() for a running task are
-absolutely worthless, might as well not print them.
+CPU 0	Modify EPT from ... to ...
+CPU 0	call_rcu() to free page table
+CPU 1	... which is invalid because ...
+CPU 0	HvCallFlushGuestPhysicalAddressSpace
 
-And if I read your Changelog right, you explicitly wanted useful
-backtraces for the running tasks -- such that you could see what they
-were doing while holding the lock the other tasks were blocked on.
-
-The only way to do that is to send an interrupt, the interrupt will have
-the register state for the interrupted task -- including the stack
-pointer. By virtue of running the interrupt handler we know the stack
-won't shrink, so we can then safely traverse the stack starting from the
-given stack pointer.
-
+Paolo
 
