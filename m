@@ -2,106 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC2C6949FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB24E694A11
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:04:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbjBMPDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:03:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36590 "EHLO
+        id S231319AbjBMPEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:04:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231367AbjBMPD2 (ORCPT
+        with ESMTP id S231367AbjBMPET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:03:28 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B091D40D2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:03:13 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Mon, 13 Feb 2023 10:04:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB7E1C7E4;
+        Mon, 13 Feb 2023 07:04:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B7CA01EC084F;
-        Mon, 13 Feb 2023 16:03:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1676300591;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=G2XLsILWuLy0mObeCRY84pwqfNezNiWo75dnx0uGFOY=;
-        b=mKnxelfkHZ13ppOB3Qg1an0qR+KAky4w2Y9c46raajPa/jRtN1PgeRSIbwi8Qha1mO/Ncz
-        rLKbnvsX+IKkq8fxe2tPX4r8288Oou/2h0Tthm+I6wLC6qNZTjwjbDujwVwiBQCzDVbi3H
-        mIHI2fkjAseXiXGrfHSx+2xB/r8EiQ4=
-Date:   Mon, 13 Feb 2023 16:03:07 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        lists@nerdbynature.de, mikelley@microsoft.com,
-        torvalds@linux-foundation.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
- defined MTRRs
-Message-ID: <Y+pRK6a419jenR9R@zn.tnic>
-References: <20230209072220.6836-1-jgross@suse.com>
- <20230209072220.6836-3-jgross@suse.com>
- <Y+ohfE/wICFKO/93@zn.tnic>
- <6257114d-a957-f586-145c-d2a885417360@suse.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E12BB81257;
+        Mon, 13 Feb 2023 15:03:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA2BDC4339B;
+        Mon, 13 Feb 2023 15:03:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676300631;
+        bh=+wEwi3uP6m+OmiYJZXywwSEgwz7I5NuC9HzyYKFbRm4=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=QoWMvey/OJC7lIr4yZ9tWaFKtgh6fLbY6hn+ORxeTB0NUkCSFz9y1KVxEG8klG1SV
+         hpq8BbH7DxBkfQO4p1/KVcoFoo5nOloFAcFUag611jvwZsMJSGN7280gCWtOjuVSpZ
+         USPRd951JzYLDrhNrE7zaZU4cwr4VnSoPfeNpLVutlG0fIrqJu1+qBYJFUWo55zd6M
+         e/4uo6KATDUFyO8qZQwVPQutYdtQRvYsXcn9Ww6aSwPHRdnI1DhPjd1opBJrAkkFO5
+         fYEHvlqNQFyJ6wNxzzbahbYDa8AMQGN2/EHXii0ZxWcNL8m53/NCLzKXc7KCFhwTRU
+         uVPbrH8UFs58w==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6257114d-a957-f586-145c-d2a885417360@suse.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v2] brcmfmac: support CQM RSSI notification with older
+ firmware
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20230124104248.2917465-1-john@metanate.com>
+References: <20230124104248.2917465-1-john@metanate.com>
+To:     John Keeping <john@metanate.com>
+Cc:     netdev@vger.kernel.org, John Keeping <john@metanate.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        =?utf-8?q?Alvin_=C5=A0ipraga?= <ALSI@bang-olufsen.dk>,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, linux-kernel@vger.kernel.org
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <167630062469.12830.3942976448765702685.kvalo@kernel.org>
+Date:   Mon, 13 Feb 2023 15:03:47 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 03:07:07PM +0100, Juergen Gross wrote:
-> Fixed in the sense of static.
+John Keeping <john@metanate.com> wrote:
 
-Well, you can't use "fixed" to say "static" when former means something
-very specific already in MTRR land.
-
-> Wouldn't !cpu_feature_enabled(X86_FEATURE_HYPERVISOR) be enough?
+> Using the BCM4339 firmware from linux-firmware (version "BCM4339/2 wl0:
+> Sep  5 2019 11:05:52 version 6.37.39.113 (r722271 CY)" from
+> cypress/cyfmac4339-sdio.bin) the RSSI respose is only 4 bytes, which
+> results in an error being logged.
 > 
-> I'm not sure we won't need that for TDX guests, too.
-
-See, that's the problem. I wanna have it simple too. Lemme check with
-dhansen.
-
-> Yes, it is only relevant for PV dom0.
-
-Right, I was asking whether "PV dom0" == X86_FEATURE_XENPV?
-
-:)
-
-> The number of fixed MTRRs is not dynamic AFAIK.
-
-But nothing guarantees that the caller would pass an array "mtrr_type
-*fixed" of size MTRR_NUM_FIXED_RANGES, right?
-
-> A single interface makes it easier to avoid multiple calls.
+> It seems that older devices send only the RSSI field and neither SNR nor
+> noise is included.  Handle this by accepting a 4 byte message and
+> reading only the RSSI from it.
 > 
-> In the end I'm fine with either way.
+> Fixes: 7dd56ea45a66 ("brcmfmac: add support for CQM RSSI notifications")
+> Signed-off-by: John Keeping <john@metanate.com>
 
-Yeah, I know. Question is, how much of this functionality will be
-needed/used so that we can go all out on the interface design or we can
-do a single one and forget about it...
-
-> > Can Xen use x86_hyper_type() too?
-> 
-> It does.
-
-Then pls add a x86_hyper_type check too to make sure a potential move of
-this call is caught in the future.
-
-Thx.
+Arend, could you take a look?
 
 -- 
-Regards/Gruss,
-    Boris.
+https://patchwork.kernel.org/project/linux-wireless/patch/20230124104248.2917465-1-john@metanate.com/
 
-https://people.kernel.org/tglx/notes-about-netiquette
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
