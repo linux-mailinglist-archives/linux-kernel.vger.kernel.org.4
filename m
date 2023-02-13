@@ -2,165 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE2C694837
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D45C969483A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:38:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjBMOiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 09:38:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
+        id S230257AbjBMOih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 09:38:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjBMOiO (ORCPT
+        with ESMTP id S230131AbjBMOi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 09:38:14 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27717974A
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:37:57 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id 24so8236143pgt.7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:37:57 -0800 (PST)
+        Mon, 13 Feb 2023 09:38:29 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335D81C591
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:38:23 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id sb24so8435296ejb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:38:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=v46IGf7aK9w6Ujjdk9pH0Sd2OlQiZacAgD2cBvk1jT0=;
-        b=SzFpKuzH1Wg1EhWOGZPaNWQd2POITNEL5ZP8sLHp25iK+Mn6828HZ6U13HeQCN93Sx
-         +0ZNI0ubnqjUSBiqLTF8TSzT8ESdFmVXQ0TpJZ3Qm5ltt+EMXxjri/+uueQF1nGjGMA4
-         stDvus1Ojiffvsbq+nnE/UFkipL/riZobKSSy4IW/WVEusJyPLHO1nE6z5Bpy4fnOsgP
-         kJ51zGJGuGpgfXmSA8YquHUgckB/TBqhkvuuQyNOeijvGHmV19pXSOA3v2MlP7wD95ls
-         UEl9GtUVFINyfXgxkowUI5R/zjVUa2yd5uwaFVOYIaNuZiIogxSqqpN2//Dbkl2WDX51
-         yzPA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oUlXZt5oQBO5ZjSgXSiLtzBvwbC0c48+aoeBfUKza8k=;
+        b=uSjmmIZRhpr3H/PWz2qzwBO0ZzRl8xH9kPFNtCdf77h6AL5t1xjPSE+ZqVB8YFw3/h
+         SaSUfdwwzzPF9AEH6Oh0Sf7NsTdeSFZnzWiEQVugAnxRsqCNbRqVA+v2r1/WFZ8FVKxD
+         LIw/ngaiXUEx2nzMNlWFghMJY5FPzOEsdwRtt5TJUCMmpXDFE2GhR1LEfOVBmEQrF7k/
+         IHBaBH3fSzkyxxS9MD0Br4ZtqcHSs8zNOBE3vGBgh0u+QIuua5fAI9urJMmSwdnzX/0x
+         WVsRMLy14HUXpyhcm+Fki3In6mCurLM3tpdzuaV7he8fd1PQ5fn/6HUTZo7MgVysJm9Q
+         OpWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v46IGf7aK9w6Ujjdk9pH0Sd2OlQiZacAgD2cBvk1jT0=;
-        b=4zAKATGEM8/SJVBj0vGd22d/iO4jRzDo21+PuGuykTiZBS5Pp2OnlaCTqCtnC77gT/
-         fv+qoyMw91A3QBoChBqrJNFVsYlsaqG+1QF4Vm9owvJZqMGcVfG+LgN6Z31PlRCrNfKk
-         ihtfSH1FQzDQDixLlaJRIcduAMS7Lg9WjzK42UbuHqy/5arQvFvhRHDHqGgazY28VluQ
-         VhVWjwCC3jEX+evoA2oXjOpheYUg/94szT9cb/HxPxiCl7GyPvNw8LpMmxbmOrMlncAQ
-         ZTsMtoHpWOzBMtV1aePu4LrAV3RHzsmMYVVA/t/la+3er73DYG+1bQA9sBOpofSb8LxD
-         1kDg==
-X-Gm-Message-State: AO0yUKU8thoX4bFBsPlIThhUz2rmGaHZt5doXEFZfE4fWlO9/Me8oxt2
-        4PB0pxgbc+9P0cypU5IhUmuilg==
-X-Google-Smtp-Source: AK7set/DKESMToA1CvFzD8s7hPzM1C6fYF5uRXkJ8n+Af4LEgHbtdNDBVTegNt3NTjuOhT2mPBEStg==
-X-Received: by 2002:a62:4ec3:0:b0:5a8:c40e:891c with SMTP id c186-20020a624ec3000000b005a8c40e891cmr1406360pfb.31.1676299076568;
-        Mon, 13 Feb 2023 06:37:56 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id t13-20020a62ea0d000000b0057fec210d33sm8028139pfh.152.2023.02.13.06.37.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 06:37:56 -0800 (PST)
-Date:   Mon, 13 Feb 2023 06:37:54 -0800
-From:   Deepak Gupta <debug@rivosinc.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Subject: Re: [PATCH v1 RFC Zisslpcfi 11/20] mmu: maybe_mkwrite updated to
- manufacture shadow stack PTEs
-Message-ID: <20230213143754.GC3943238@debug.ba.rivosinc.com>
-References: <20230213045351.3945824-1-debug@rivosinc.com>
- <20230213045351.3945824-12-debug@rivosinc.com>
- <2d6eefb8-c7c5-7d32-9a75-ae716f828cd9@redhat.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oUlXZt5oQBO5ZjSgXSiLtzBvwbC0c48+aoeBfUKza8k=;
+        b=LLnOQwL9wdQxRduqkF9XBXzn0Jsem6zHT5UqiQeh1zjX2bVRfPcEGV9tiArH0ofWtx
+         AUwulwBBjaw+xQqAQVJ6yFpqwZk3c1r4xjMAF0De7DZxcEWfX0B98mmB0ccfZJqdKr0+
+         mRSGxmHFujE8/xVsLz9H5BueEfe15M4VeW1QJ4WofL9nLN6wql0XbRRFBeAs1l12jJ6Q
+         S742a7NMuG+5/JjMLgoJnd3yxMwYsMLWP1jKa3XFHOE0J9FfMZTEpnjTpb3qnhRGDzj3
+         4kimqSXpuM9/QtLwKAr4qUzW7c75925AiAfcAhvpr5iP0I6H1SaFEooYqS1apjzr0xwI
+         Sp1Q==
+X-Gm-Message-State: AO0yUKUH2kAix0F+Oh2Aj9mjzksyn6sN4Er87zOUkkZ1Ba4tf+UBMaJS
+        5UhUrUWQOYQZWP/PhMC2ppvRuw==
+X-Google-Smtp-Source: AK7set91nYaB1XNNNxb+llEG/j3BYKk/kVjm4FMLyh+w/aFGEsk4rvwfhWkei8OKAbdKr/+VRc503g==
+X-Received: by 2002:a17:906:eb14:b0:87b:d409:f087 with SMTP id mb20-20020a170906eb1400b0087bd409f087mr25101635ejb.21.1676299101809;
+        Mon, 13 Feb 2023 06:38:21 -0800 (PST)
+Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
+        by smtp.gmail.com with ESMTPSA id n5-20020a17090673c500b0088aadc18b69sm6885347ejl.101.2023.02.13.06.38.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 06:38:21 -0800 (PST)
+Message-ID: <632e5aa9-6b0a-032f-27db-3cbda6c66d7f@linaro.org>
+Date:   Mon, 13 Feb 2023 15:38:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <2d6eefb8-c7c5-7d32-9a75-ae716f828cd9@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/2] arm64: dts: qcom: sm7225-fairphone-fp4: move status
+ property down
+Content-Language: en-US
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230213-fp4-more-i2c-v1-0-5be09dbb5ce6@fairphone.com>
+ <20230213-fp4-more-i2c-v1-1-5be09dbb5ce6@fairphone.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230213-fp4-more-i2c-v1-1-5be09dbb5ce6@fairphone.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 01:05:16PM +0100, David Hildenbrand wrote:
->On 13.02.23 05:53, Deepak Gupta wrote:
->>maybe_mkwrite creates PTEs with WRITE encodings for underlying arch if
->>VM_WRITE is turned on in vma->vm_flags. Shadow stack memory is a write-
->>able memory except it can only be written by certain specific
->>instructions. This patch allows maybe_mkwrite to create shadow stack PTEs
->>if vma is shadow stack VMA. Each arch can define which combination of VMA
->>flags means a shadow stack.
->>
->>Additionally pte_mkshdwstk must be provided by arch specific PTE
->>construction headers to create shadow stack PTEs. (in arch specific
->>pgtable.h).
->>
->>This patch provides dummy/stub pte_mkshdwstk if CONFIG_USER_SHADOW_STACK
->>is not selected.
->>
->>Signed-off-by: Deepak Gupta <debug@rivosinc.com>
->>---
->>  include/linux/mm.h      | 23 +++++++++++++++++++++--
->>  include/linux/pgtable.h |  4 ++++
->>  2 files changed, 25 insertions(+), 2 deletions(-)
->>
->>diff --git a/include/linux/mm.h b/include/linux/mm.h
->>index 8f857163ac89..a7705bc49bfe 100644
->>--- a/include/linux/mm.h
->>+++ b/include/linux/mm.h
->>@@ -1093,6 +1093,21 @@ static inline unsigned long thp_size(struct page *page)
->>  void free_compound_page(struct page *page);
->>  #ifdef CONFIG_MMU
->>+
->>+#ifdef CONFIG_USER_SHADOW_STACK
->>+bool arch_is_shadow_stack_vma(struct vm_area_struct *vma);
->>+#endif
->>+
->>+static inline bool
->>+is_shadow_stack_vma(struct vm_area_struct *vma)
->>+{
->>+#ifdef CONFIG_USER_SHADOW_STACK
->>+	return arch_is_shadow_stack_vma(vma);
->>+#else
->>+	return false;
->>+#endif
->>+}
->>+
->>  /*
->>   * Do pte_mkwrite, but only if the vma says VM_WRITE.  We do this when
->>   * servicing faults for write access.  In the normal case, do always want
->>@@ -1101,8 +1116,12 @@ void free_compound_page(struct page *page);
->>   */
->>  static inline pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
->>  {
->>-	if (likely(vma->vm_flags & VM_WRITE))
->>-		pte = pte_mkwrite(pte);
->>+	if (likely(vma->vm_flags & VM_WRITE)) {
->>+		if (unlikely(is_shadow_stack_vma(vma)))
->>+			pte = pte_mkshdwstk(pte);
->>+		else
->>+			pte = pte_mkwrite(pte);
->>+	}
->>  	return pte;
->
->Exactly what we are trying to avoid in the x86 approach right now. 
->Please see the x86 series on details, we shouldn't try reinventing the 
->wheel but finding a core-mm approach that fits multiple architectures.
->
->https://lkml.kernel.org/r/20230119212317.8324-1-rick.p.edgecombe@intel.com
 
-Thanks David for comment here. I looked at x86 approach. This patch
-actually written in a way which is not re-inventing wheel and is following
-a core-mm approach that fits multiple architectures.
 
-Change above checks `is_shadow_stack_vma` and if it returns true then only
-it manufactures shadow stack pte else it'll make a regular writeable mapping.
+On 13.02.2023 14:26, Luca Weiss wrote:
+> Currently the dts contains a mix of status-as-first-property (old qcom
+> style) and status-as-last-property (new style).
+> 
+> Move all status properties down to the bottom once and for all so that
+> the style is consistent between different nodes.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Now if we look at `is_shadow_stack_vma` implementation, it returns false if
-`CONFIG_USER_SHADOW_STACK` is not defined. If `CONFIG_USER_SHADOW_STACK is
-defined then it calls `arch_is_shadow_stack_vma` which should be implemented
-by arch specific code. This allows each architecture to define their own vma
-flag encodings for shadow stack (riscv chooses presence of only `VM_WRITE`
-which is analogous to choosen PTE encodings on riscv W=1,R=0,X=0)
-
-Additionally pte_mkshdwstk will be nop if not implemented by architecture.
-
-Let me know if this make sense. If I am missing something here, let me know.
-
->
->-- 
->Thanks,
->
->David / dhildenb
->
+Konrad
+>  arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts | 34 +++++++++++------------
+>  1 file changed, 17 insertions(+), 17 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+> index f7602e93121a..86114dd2c0c4 100644
+> --- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+> @@ -110,8 +110,8 @@ active-config0 {
+>  };
+>  
+>  &adsp {
+> -	status = "okay";
+>  	firmware-name = "qcom/sm7225/fairphone4/adsp.mdt";
+> +	status = "okay";
+>  };
+>  
+>  &apps_rsc {
+> @@ -355,13 +355,13 @@ &cci1_i2c0 {
+>  };
+>  
+>  &cdsp {
+> -	status = "okay";
+>  	firmware-name = "qcom/sm7225/fairphone4/cdsp.mdt";
+> +	status = "okay";
+>  };
+>  
+>  &i2c10 {
+> -	status = "okay";
+>  	clock-frequency = <400000>;
+> +	status = "okay";
+>  
+>  	haptics@5a {
+>  		compatible = "awinic,aw8695";
+> @@ -396,8 +396,8 @@ &ipa {
+>  };
+>  
+>  &mpss {
+> -	status = "okay";
+>  	firmware-name = "qcom/sm7225/fairphone4/modem.mdt";
+> +	status = "okay";
+>  };
+>  
+>  &pm6150l_flash {
+> @@ -423,11 +423,11 @@ led-1 {
+>  };
+>  
+>  &pm6150l_wled {
+> -	status = "okay";
+> -
+>  	qcom,switching-freq = <800>;
+>  	qcom,current-limit-microamp = <20000>;
+>  	qcom,num-strings = <2>;
+> +
+> +	status = "okay";
+>  };
+>  
+>  &pm6350_gpios {
+> @@ -441,8 +441,8 @@ gpio_keys_pin: gpio-keys-state {
+>  };
+>  
+>  &pm6350_resin {
+> -	status = "okay";
+>  	linux,code = <KEY_VOLUMEDOWN>;
+> +	status = "okay";
+>  };
+>  
+>  &pm7250b_adc {
+> @@ -535,21 +535,21 @@ &uart9 {
+>  };
+>  
+>  &ufs_mem_hc {
+> -	status = "okay";
+> -
+>  	reset-gpios = <&tlmm 156 GPIO_ACTIVE_LOW>;
+>  
+>  	vcc-supply = <&vreg_l7e>;
+>  	vcc-max-microamp = <800000>;
+>  	vccq2-supply = <&vreg_l12a>;
+>  	vccq2-max-microamp = <800000>;
+> +
+> +	status = "okay";
+>  };
+>  
+>  &ufs_mem_phy {
+> -	status = "okay";
+> -
+>  	vdda-phy-supply = <&vreg_l18a>;
+>  	vdda-pll-supply = <&vreg_l22a>;
+> +
+> +	status = "okay";
+>  };
+>  
+>  &usb_1 {
+> @@ -562,26 +562,26 @@ &usb_1_dwc3 {
+>  };
+>  
+>  &usb_1_hsphy {
+> -	status = "okay";
+> -
+>  	vdd-supply = <&vreg_l18a>;
+>  	vdda-pll-supply = <&vreg_l2a>;
+>  	vdda-phy-dpdm-supply = <&vreg_l3a>;
+> +
+> +	status = "okay";
+>  };
+>  
+>  &usb_1_qmpphy {
+> -	status = "okay";
+> -
+>  	vdda-phy-supply = <&vreg_l22a>;
+>  	vdda-pll-supply = <&vreg_l16a>;
+> +
+> +	status = "okay";
+>  };
+>  
+>  &wifi {
+> -	status = "okay";
+> -
+>  	vdd-0.8-cx-mx-supply = <&vreg_l4a>;
+>  	vdd-1.8-xo-supply = <&vreg_l7a>;
+>  	vdd-1.3-rfa-supply = <&vreg_l2e>;
+>  	vdd-3.3-ch0-supply = <&vreg_l10e>;
+>  	vdd-3.3-ch1-supply = <&vreg_l11e>;
+> +
+> +	status = "okay";
+>  };
+> 
