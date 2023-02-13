@@ -2,134 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1F569476A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2255569476E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjBMNtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 08:49:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
+        id S230355AbjBMNuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 08:50:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjBMNte (ORCPT
+        with ESMTP id S230082AbjBMNt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 08:49:34 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894BE1B559
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:49:25 -0800 (PST)
-Received: from fsav115.sakura.ne.jp (fsav115.sakura.ne.jp [27.133.134.242])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 31DDnMrp098357;
-        Mon, 13 Feb 2023 22:49:22 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav115.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp);
- Mon, 13 Feb 2023 22:49:22 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 31DDnM90098353
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 13 Feb 2023 22:49:22 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <393a440f-5f82-432c-bc24-e8de33e29d75@I-love.SAKURA.ne.jp>
-Date:   Mon, 13 Feb 2023 22:49:21 +0900
+        Mon, 13 Feb 2023 08:49:59 -0500
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF921B578
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:49:56 -0800 (PST)
+Received: by mail-vs1-xe2e.google.com with SMTP id k6so13118929vsk.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:49:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UCZ9/hjhw8oIjIDXMYo6eqNKWR70rfBUy82CaQZ+lNA=;
+        b=JCW5rZcmgMPyJrkpZlFS2ZCoA/WLAaMncxjQpR5PjqOIVu312nFuBvNCFRW/0/gmEX
+         0kdpS55aEx6vPbkjm5DQtnzkGUhvMnlfOaiu+HRQOErgrUdo7FWafNDdbSFQ8j5G28i4
+         FTrWRs6f1ZqDDgkXJZfUEW6bZ/V9uEy2ahrH+EmmPfYS/3WkKBeaQ0gNYo4bDIPu9gNs
+         XgBVbRnhTbeVzMY7lUa8hEcI4tVPqgahAKBx/MvA5NhHj4E1AtkJSdnProIHlS17UbI6
+         ns1THSyfKDyh3qTx4x9lzRF1hAR6aJRdveWG2Upgpoc6hUEWPZQRzQAFcZMIhzGqR2eS
+         vyvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UCZ9/hjhw8oIjIDXMYo6eqNKWR70rfBUy82CaQZ+lNA=;
+        b=3oxPX1pRWlQPuEyFukZE5/QEL2+6HNfa/9OhjW6DaC1EWtKZHUV81rPDTuLhYtKwLZ
+         eN7ak636vi7nTiswRPo2n7HvHsxDQfNEMFSTD/KLaAazAQHlfSo6EtTHIDVK7xIsJNrN
+         G5sL8cYdbr2crYObW/ffKvsfSSAjvXv10ue2O//2E9EGzQ7+o9DZvDB0I/86qR7VRNdY
+         krqmI47emJrDQxrbDYCSKrTB/SuQknuA2kI61NUvYiUValtXKe+UTU8Kv2SHNu3X32j9
+         bP/YQIhlJsXuVY+xPsA71eAMNVNtNO38wONXZCObYGtPlRwXAsCdadFYhKKgSWEXOLJS
+         uL9A==
+X-Gm-Message-State: AO0yUKXT28J6VonaA8W+0XB39kuiJbzjWNQSkYzP7CTbvYYPdrtDbamG
+        dQgxdbtlfUSH41MbHzy8sZRd7iJWKKAIlkicsI3ECQ==
+X-Google-Smtp-Source: AK7set+W7lsI5WANmdZJA6NIfSwQ3wNhy8m0EutQ4NytSIo/qoBFRbrS8EYp+BFsmGOk4qYWQZrD3JMOrl33L1ZHApg=
+X-Received: by 2002:a05:6102:d86:b0:3fd:7046:9232 with SMTP id
+ d6-20020a0561020d8600b003fd70469232mr4195413vst.29.1676296195470; Mon, 13 Feb
+ 2023 05:49:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v3] locking/lockdep: add debug_show_all_lock_holders()
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <ed17797b-e732-0dd0-2b4e-dc293653c0ac@I-love.SAKURA.ne.jp>
- <Y+oY3Xd43nNnkDSB@hirez.programming.kicks-ass.net>
- <274adab4-9922-1586-7593-08d9db5479a1@I-love.SAKURA.ne.jp>
- <Y+ox39WhgY/iaVsG@hirez.programming.kicks-ass.net>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <Y+ox39WhgY/iaVsG@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230212141355.12794-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230212141355.12794-1-andriy.shevchenko@linux.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 13 Feb 2023 14:49:44 +0100
+Message-ID: <CAMRc=McDPZMs+YTWbiFiG=WzkmrOKZmhSBfTyc7WwviX_ci+Cw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] gpio: sim: Use %pfwP specifier instead of calling
+ fwnode API directly
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/02/13 21:49, Peter Zijlstra wrote:
->>> And sched_show_task() being an utter piece of crap that will basically
->>> print garbage for anything that's running (it doesn't have much
->>> options).
->>>
->>> Should we try and do better? dump_cpu_task() prefers
->>> trigger_single_cpu_backtrace(), which sends an interrupt in order to get
->>> active registers for the CPU.
->>
->> What is the intent of using trigger_single_cpu_backtrace() here?
->> check_hung_uninterruptible_tasks() is calling trigger_all_cpu_backtrace()
->> if sysctl_hung_task_all_cpu_backtrace is set.
-> 
-> Then have that also print the held locks for those tasks. And skip over
-> them again later.
-> 
->> Locks held and kernel backtrace are helpful for describing deadlock
->> situation, but registers values are not.
-> 
-> Register state is required to start the unwind. You can't unwind a
-> running task out of thin-air.
+On Sun, Feb 12, 2023 at 3:14 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Instead of calling fwnode_get_name() and supply as %s, use %pfwP which
+> will do the same inside printf() call.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/gpio/gpio-sim.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
+> index 60514bc5454f..a51b5ea38ad5 100644
+> --- a/drivers/gpio/gpio-sim.c
+> +++ b/drivers/gpio/gpio-sim.c
+> @@ -377,8 +377,8 @@ static int gpio_sim_add_bank(struct fwnode_handle *swnode, struct device *dev)
+>
+>         ret = fwnode_property_read_string(swnode, "gpio-sim,label", &label);
+>         if (ret) {
+> -               label = devm_kasprintf(dev, GFP_KERNEL, "%s-%s",
+> -                                      dev_name(dev), fwnode_get_name(swnode));
+> +               label = devm_kasprintf(dev, GFP_KERNEL, "%s-%pfwP",
+> +                                      dev_name(dev), swnode);
+>                 if (!label)
+>                         return -ENOMEM;
+>         }
+> @@ -784,10 +784,9 @@ static int gpio_sim_add_hogs(struct gpio_sim_device *dev)
+>                                                           GFP_KERNEL);
+>                         else
+>                                 hog->chip_label = kasprintf(GFP_KERNEL,
+> -                                                       "gpio-sim.%u-%s",
+> +                                                       "gpio-sim.%u-%pfwP",
+>                                                         dev->id,
+> -                                                       fwnode_get_name(
+> -                                                               bank->swnode));
+> +                                                       bank->swnode);
+>                         if (!hog->chip_label) {
+>                                 gpio_sim_remove_hogs(dev);
+>                                 return -ENOMEM;
+> --
+> 2.39.1
+>
 
-Excuse me. There are two types of TASK_RUNNING tasks, one is that a thread
-is actually running on some CPU, and the other is that a thread is waiting
-for CPU to become available for that thread, aren't there?
+Applied, thanks!
 
-lockdep_print_held_locks() does not show locks held even if a thread is
-waiting for CPU to become available for that thread, does it?
-
-But sched_show_task() can show backtrace even if a thread is waiting for
-CPU to become available for that thread, can't it?
-
-Therefore, calling sched_show_task() helps understanding what that thread
-is doing when lockdep_print_held_locks() did not show locks held.
-
-> 
->> What is important is that tasks which are not on CPUs are reported,
->> for when a task is reported as hung, that task must be sleeping.
->> Therefore, I think sched_show_task() is fine.
-> 
-> The backtraces generated by sched_show_task() for a running task are
-> absolutely worthless, might as well not print them.
-
-"a thread actually running on some CPU" or
-"a thread waiting for CPU to become available for that thread",
-which does this "running task" mean?
-
-> 
-> And if I read your Changelog right, you explicitly wanted useful
-> backtraces for the running tasks -- such that you could see what they
-> were doing while holding the lock the other tasks were blocked on.
-
-Yes, we can get useful backtraces for threads that are waiting for CPU
-to become available for that thread. That's why sched_show_task() is chosen.
-
-> 
-> The only way to do that is to send an interrupt, the interrupt will have
-> the register state for the interrupted task -- including the stack
-> pointer. By virtue of running the interrupt handler we know the stack
-> won't shrink, so we can then safely traverse the stack starting from the
-> given stack pointer.
-
-But trigger_single_cpu_backtrace() is for a thread actually running on some CPU,
-isn't it? While it would be helpful to get backtrace of a thread that is actually
-running on some CPU, it would be helpless not getting backtrace of a thread
-that is waiting for CPU to become available for that thread.
-
-We can later get backtrace of threads actually running on some CPU using
-trigger_all_cpu_backtrace() via sysctl_hung_task_all_cpu_backtrace setting,
-though I seldom find useful backtraces via trigger_all_cpu_backtrace(); it is
-likely that khungtaskd thread and some random workqueue thread (which are
-irrelevant to hung task) are reported via trigger_all_cpu_backtrace()...
-
+Bart
