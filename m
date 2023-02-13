@@ -2,106 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 222E9694E17
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:33:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D814D694E25
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:36:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjBMRdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 12:33:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
+        id S229903AbjBMRgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 12:36:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjBMRdM (ORCPT
+        with ESMTP id S229680AbjBMRgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 12:33:12 -0500
-Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271541CAC6;
-        Mon, 13 Feb 2023 09:33:00 -0800 (PST)
-Date:   Mon, 13 Feb 2023 17:32:51 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=systemb.ch;
-        s=protonmail; t=1676309577; x=1676568777;
-        bh=IAvPwW5JFdNEA6N93fJnWUTElrXDvQHH5qEMqEhQ+gc=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=QBE40F4hyiMCm7q4ItAr2ynOs/uLyGeUPilBgdqmgVvpFyvJadYqBDW6l15VVAY9q
-         efzj+XoG1CYMLyPRrch3p3KRpfQpxi/16315dnmNkLIUGrxDTGcCKNMahjNrFk32JR
-         FdAr0Qb8Dm0oDMKFvmmSq7A7hDo5md3mHHgAtX17FXxkfPGlT+JdpHmce5nvHiQJWv
-         c8JqBYF6G3F1ZKFsmfTEGvsJLY2sDJuxQYoVamLJtduf5+TrJLPP5zQcyK1fLVG9O6
-         zc0bsT9B0cqkC17taARQF2Ez0DJ3goEPql6Lif//DeV8gMZKj0p6BPWVkbvP+8IKn+
-         gUTunu8gf4jTw==
-To:     Johannes Berg <johannes@sipsolutions.net>
-From:   Marc Bornand <dev.mbornand@systemb.ch>
-Cc:     linux-wireless@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
-        Yohan Prod'homme <kernel@zoddo.fr>, stable@vger.kernel.org
-Subject: Re: [PATCH v2] Set ssid when authenticating
-Message-ID: <NTBtzDurDf0W90JuEPzaHfxCYkWzyZ5jjPwcy6LpqebS6S1NekVcfBU3sNWczfvhHEJGOSyzQrb40UfSIK8AFZpd71MExKldK7EFnMkkdUk=@systemb.ch>
-In-Reply-To: <5a1d1244c8d3e20408732858442f264d26cc2768.camel@sipsolutions.net>
-References: <20230213105436.595245-1-dev.mbornand@systemb.ch> <5a1d1244c8d3e20408732858442f264d26cc2768.camel@sipsolutions.net>
-Feedback-ID: 65519157:user:proton
+        Mon, 13 Feb 2023 12:36:51 -0500
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A2B5FFB;
+        Mon, 13 Feb 2023 09:36:50 -0800 (PST)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id DDE8861CC457B;
+        Mon, 13 Feb 2023 18:36:47 +0100 (CET)
+Message-ID: <dc78660f-c4cf-37a3-ad5a-91d24624d7c6@molgen.mpg.de>
+Date:   Mon, 13 Feb 2023 18:36:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v1 3/3] Bluetooth: NXP: Add protocol support for NXP
+ Bluetooth chipsets
+To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+Cc:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "marcel@holtmann.org" <marcel@holtmann.org>,
+        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
+        "luiz.dentz@gmail.com" <luiz.dentz@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Amitkumar Karwar <amitkumar.karwar@nxp.com>,
+        Rohit Fule <rohit.fule@nxp.com>,
+        Sherry Sun <sherry.sun@nxp.com>
+References: <20230124174714.2775680-1-neeraj.sanjaykale@nxp.com>
+ <20230124174714.2775680-4-neeraj.sanjaykale@nxp.com>
+ <bd10dd58-35ff-e0e2-5ac4-97df1f6a30a8@linux.intel.com>
+ <AM9PR04MB8603E350AC2E06CB788909C0E7DD9@AM9PR04MB8603.eurprd04.prod.outlook.com>
+ <ad1fc5d4-6d44-4982-71f9-6721aa8914d2@linux.intel.com>
+ <AM9PR04MB8603C653BE4266E3343B1F12E7DD9@AM9PR04MB8603.eurprd04.prod.outlook.com>
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <AM9PR04MB8603C653BE4266E3343B1F12E7DD9@AM9PR04MB8603.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday, February 13th, 2023 at 12:01, Johannes Berg <johannes@sipsolutio=
-ns.net> wrote:
->=20
->=20
-> On Mon, 2023-02-13 at 10:55 +0000, Marc Bornand wrote:
->=20
-> > changes since v1:
-> > - add some informations
-> > - test it on wireless-2023-01-18 tag
-> > - no real code change
-> >=20
-> > When a connexion was established without going through
-> > NL80211_CMD_CONNECT, the ssid was never set in the wireless_dev struct.
-> > Now we set it during when an NL80211_CMD_AUTHENTICATE is issued.
->=20
->=20
-> This is incorrect, doing an authentication doesn't require doing an
-> association afterwards, and doesn't necessarily imply any state change
-> in the kernel.
-
-So is it intended behavior that the ssid in wireless_dev is not set
-or is there a place were this state change should happen?
-
->=20
-> > alternatives:
-> > 1. Do the same but during association and not authentication.
->=20
->=20
-> Which should probably be done after successful authentication, even in
-> the CONNECT command case, which currently does it in cfg80211_connect()
-> but I guess that should move to __cfg80211_connect_result().
-
-Is there an existing way to get the ssid in __cfg80211_connect_result()?
+Dear Neeraj,
 
 
->=20
-> > 2. use ieee80211_bss_get_elem in nl80211_send_iface, this would report
-> > the right ssid to userspace, but this would not fix the root cause,
-> > this alos wa the behavior prior to 7b0a0e3c3a882 when the bug was
-> > introduced.
->=20
->=20
-> That would be OK too but the reason I changed it there (missing the fact
-> that it wasn't set) is that we have multiple BSSes with MLO. So it's
-> hard to get one to do this with.
->=20
-> johannes
+Am 13.02.23 um 18:25 schrieb Neeraj sanjay kale:
 
-Just a side question do the BSSes all have the same SSID?
+>>> Thank you for your review comments and sorry for the delay in
+>>> replying to some of your queries.
+>> 
+>> I made some additional comments against v2 and I meant those ones
+>> were not addressed, the ones I made for v1 you've addressed I
+>> think.
 
-Marc
+> I checked with my colleagues Amitkumar and Rohit (in CC) and we can't
+> seem to find your comments on V2 patch in our inbox. It might have
+> probably been blocked by firewall or due to some other issue we have
+> not received it.
+> 
+> Maybe you could please re-send that email and I can quickly take a
+> look at it and resolve them.
+
+lore.kernel.org allows you to access the messages. I found Ilpo’s reply [1].
+
+
+Kind regards,
+
+Paul
+
+
+[1]: 
+https://lore.kernel.org/linux-bluetooth/1dde194e-2e44-663d-b128-f8ef7edd03f@linux.intel.com/
