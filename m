@@ -2,151 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E39236942C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:22:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A8906942C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjBMKW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 05:22:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231152AbjBMKWx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231178AbjBMKWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 13 Feb 2023 05:22:53 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9EE2739;
-        Mon, 13 Feb 2023 02:22:51 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31D8cDgK018599;
-        Mon, 13 Feb 2023 04:22:23 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=WmTxnrtas4FxyKYUXIiNzvVIg6UVb3xuByCPXTtKw/A=;
- b=QmKUCHgI48UwX0gnY7AxjGfWcIY+YVZjxECRnfjtV1keSNy6eHFEl//fIpIVK9TZfLDw
- 4P0okHxiiM53hvW7WQjqISnHMZkO8T1HSq1Cx4wlNGuFqcJbAjcslKRcerp8ZJydKSBu
- ubNv40SqK+6oYP2CQManTYb+gZ90p5KLojBdp5GuRUCKFt6iUCwlb57SbsK9y9BLibS9
- TZqAmc8zNdzHuejRM3kreh+F9TZ3t1DvMGjITEQadAlGMZITLrVnPiZ0LOjGTsV+JCG9
- BW8w98TEmYHtWvCbDI0ZY4AawS6eCLFfn7P9/I9yWuXX1vhpm9E0n5TUhk7UOsylkCSH /g== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3np8att3yh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Feb 2023 04:22:23 -0600
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.21; Mon, 13 Feb
- 2023 04:22:21 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.21 via Frontend Transport; Mon, 13 Feb 2023 04:22:21 -0600
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id BC4C011AA;
-        Mon, 13 Feb 2023 10:22:21 +0000 (UTC)
-Date:   Mon, 13 Feb 2023 10:22:21 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Lucas Tanure <lucas.tanure@collabora.com>
-CC:     David Rhodes <david.rhodes@cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <patches@opensource.cirrus.com>,
-        <linux-kernel@vger.kernel.org>, <kernel@collabora.com>
-Subject: Re: [PATCH v5 3/4] ALSA: cs35l41: Add shared boost feature
-Message-ID: <20230213102221.GH68926@ediswmail.ad.cirrus.com>
-References: <20230210091942.10866-1-lucas.tanure@collabora.com>
- <20230210091942.10866-4-lucas.tanure@collabora.com>
- <20230210134341.GF68926@ediswmail.ad.cirrus.com>
- <cfacc3d6-2daa-6aa3-ba19-281b7e48bb47@collabora.com>
- <20230211170638.GG68926@ediswmail.ad.cirrus.com>
- <1e3ef067-9b39-dc19-5fbc-75436c67f206@collabora.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230109AbjBMKWv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Feb 2023 05:22:51 -0500
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242281BEA
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:22:49 -0800 (PST)
+Received: by mail-wm1-f46.google.com with SMTP id l21-20020a05600c1d1500b003dfe462b7e4so8267031wms.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:22:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pH0ZPRW44cRqRjeRqfvW1keJmEULHDXfxjp1kWDi+Po=;
+        b=HUe4mSG/R0kcHOxC+1DlC/XFExpQKx+bhdmCsoaAePZuiOPiyE7oULUn5W8no2xd3T
+         RKCIbzU3rWbMynhG9utVoBiPS6vsHPHhQTnTkgUb63X86F+yZgJ3RWUD9VFcTSqnykuT
+         dJXdDf7pgw+AK4hFUQqz4b0nAtHQo/hQa19+K09VJ36ZNicNZi8Qlfxb8PNO7Dm6R385
+         UkXoelWq9t/d0i+VBExwaLNN62ZD3iGiiJ1KTtD/1L/79xCBDce4zsiBz3ZZQE9kcnr9
+         C9g7ieckT8xMpCnbSklfzngtPbyyWWdi61zsWXZ8UB3F940zLzFGjq4M/mvRbdRjr5V4
+         jROg==
+X-Gm-Message-State: AO0yUKXnBeEB0d/9dKSQ8PKvs7yYrEFy9YNGuy39k8cee7IzoUQmjdQJ
+        qdUuQbe0R4m40xdEaI2prC0=
+X-Google-Smtp-Source: AK7set855zDTrzmCyVYGzn5OjOWDS/iJyZa3b6uAkBb7ZHmxAI2ur5qAxgInbrxDSjmXxU8eVdBl2w==
+X-Received: by 2002:a05:600c:5108:b0:3db:35e3:baf6 with SMTP id o8-20020a05600c510800b003db35e3baf6mr22572396wms.4.1676283767754;
+        Mon, 13 Feb 2023 02:22:47 -0800 (PST)
+Received: from [192.168.64.80] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
+        by smtp.gmail.com with ESMTPSA id o16-20020a5d6850000000b002bfbda53b98sm10140041wrw.35.2023.02.13.02.22.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 02:22:47 -0800 (PST)
+Message-ID: <fa0f909e-9d3c-ff0d-d887-a3ce838c0769@grimberg.me>
+Date:   Mon, 13 Feb 2023 12:22:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1e3ef067-9b39-dc19-5fbc-75436c67f206@collabora.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: dlH4lLI6ybbsohT-AgI4bUsSjcs2XAVH
-X-Proofpoint-ORIG-GUID: dlH4lLI6ybbsohT-AgI4bUsSjcs2XAVH
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] Add quirk for ADATA SX6000PNP
+Content-Language: en-US
+To:     Ivan Rubinov <soltime@riseup.net>, kbusch@kernel.org, axboe@fb.com,
+        hch@lst.de, linux-nvme@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <96afa026-e1a9-0ce5-d9ff-36f7e5c1a5b2@riseup.net>
+From:   Sagi Grimberg <sagi@grimberg.me>
+In-Reply-To: <96afa026-e1a9-0ce5-d9ff-36f7e5c1a5b2@riseup.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 09:28:39AM +0000, Lucas Tanure wrote:
-> On 11-02-2023 17:06, Charles Keepax wrote:
-> >On Fri, Feb 10, 2023 at 02:39:56PM +0000, Lucas Tanure wrote:
-> >>On 10-02-2023 13:43, Charles Keepax wrote:
-> >>>On Fri, Feb 10, 2023 at 09:19:41AM +0000, Lucas Tanure wrote:
-> Ok, but the other side doesn't have both RX and TX enabled.
-> If the active side needed RX to receive information for the other
-> side, the passive one would need TX enabled too.
-> So if a feedback is necessary, both channels on both sides would be
-> enabled, not one channel in one side and both on the other.
 
-A very good point :-)
+> From: Ivan Rubinov <linuxkernelpatch8234@riseup.net>
+> Date: Fri, 10 Feb 2023 14:59:41 +0300
+> Subject: [PATCH] Add quirk for ADATA SX6000PNP
 
-> >"When powering up a second (and each subsequent) CS35L41B onto a
-> >shared MDSYNC bus, the following protocol must
-> >be followed"
-> >
-> >But very unclear if that sequence should be followed on only the
-> >new device, the master device, or on all devices. I will try to
-> >find some time to chase some apps guys next week see if anyone
-> >has any ideas.
-> I had long talks with apps guys on this when I was at Cirrus.
-> And my understanding is:
-> A new CS35L41 can misunderstand the information on MDSYNC bus if a
-> communication is already in place, between another pair of CS35L41,
-> so to avoid that, any CS35L41 being turn on in a already active
-> MDSYNC bus, must execute those steps.
-
-Ok so that implies we are ok, since that suggests we are
-saying that only the new amp to the bus needs to execute the
-sequence, not the amps already on the bus.
-
-> We could move the active amp up in DAPM graph so its enabled before
-> all passive ones, but we would still need to execute that for all
-> passive amps. So there is not much point in that.
-
-Agree, fine as is.
+Is this referencing to a bugzilla or other?
 
 > 
-> Here I can see that if I enable SYNC_EN during probe without clocks
-> the device becomes unresponsive, at least with the current code.
-> So following the datasheet and enabling SYNC_EN only after clocks
-> seems to resolve Steam decks issue.
+> Signed-off-by: Ivan Rubinov <linuxkernelpatch8234@riseup.net>
+> ---
+>   drivers/nvme/host/pci.c | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-> Questions I never got an answer from APPS guys:
-> 
-> - Can we enable SYNC_EN during probe if we know there is no playback
-> happening, no clocks and Global enable off? Steam decks seem to
-> answer no here. If yes, why having pm_runtime features makes the
-> device become unresponsive?
-> 
-> - Can we leave SYNC_EN enabled during Global enable off and no clocks?
-
-These two I think are not too much of a concern, turning sync on as
-part of powering up the amps doesn't seem to be a big concern,
-its not a lot of writes.
-
-> - If SYNC_EN is enabled and we only set Global enable on after the
-> PLL lock happened, do we still need to execute those steps? I mean,
-> if the driver only deals with Global enable and leaves shared boost
-> configured since boost, will MDSYNC bus work?
-
-Yeah I think here it is also probably safer to just do it anyway.
-
-I would still like David to do a quick review, unfortunately he
-is off at the moment but should be back Monday next week. But
-from my side I think this is probably all good:
-
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-
-Thanks,
-Charles
+> diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+> index c734934c407c..c63443d531b3 100644
+> --- a/drivers/nvme/host/pci.c
+> +++ b/drivers/nvme/host/pci.c
+> @@ -3365,6 +3365,8 @@ static const struct pci_device_id nvme_id_table[] = {
+>       { PCI_VDEVICE(INTEL, 0x0953),    /* Intel 750/P3500/P3600/P3700 */
+>           .driver_data = NVME_QUIRK_STRIPE_SIZE |
+>                   NVME_QUIRK_DEALLOCATE_ZEROES, },
+> +    { PCI_DEVICE(0x10ec, 0x5763),   /* ADATA SX6000PNP */
+> +        .driver_data = NVME_QUIRK_IGNORE_DEV_SUBNQN | 
+> NVME_QUIRK_BOGUS_NID, },
+>       { PCI_VDEVICE(INTEL, 0x0a53),    /* Intel P3520 */
+>           .driver_data = NVME_QUIRK_STRIPE_SIZE |
+>                   NVME_QUIRK_DEALLOCATE_ZEROES, },
