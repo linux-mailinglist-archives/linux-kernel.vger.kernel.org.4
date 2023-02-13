@@ -2,108 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BAA0694F66
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD8E694F6B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbjBMSb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:31:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
+        id S230386AbjBMSdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:33:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbjBMSb4 (ORCPT
+        with ESMTP id S230332AbjBMSdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:31:56 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3801C5BE
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:31:52 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id b9so5372464ila.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:31:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1676313111;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YhELXdf05zY7CUQbBTvzj+Gb4RqQa3WJ6RXbjMshAvY=;
-        b=NZV5uVS4lxJPp6p+1qBjsjYANGdxCjU7BFs2Bw5/LGTp+ssG20JBv/nuomJtaEkAar
-         kWcxozx9PDBw6h5DQipSxnERGEJfQHqgMPDd7uF3YZdckcLeIE/Rq8wnigt9JVrWqJxr
-         s9zdbhYDTE49SrvplNgADwzRqwTIFnNNmGRr4=
+        Mon, 13 Feb 2023 13:33:03 -0500
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB8413DE1;
+        Mon, 13 Feb 2023 10:33:01 -0800 (PST)
+Received: by mail-ed1-f51.google.com with SMTP id d40so12965869eda.8;
+        Mon, 13 Feb 2023 10:33:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676313111;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YhELXdf05zY7CUQbBTvzj+Gb4RqQa3WJ6RXbjMshAvY=;
-        b=Tw+5usSDZtZELok//mCaY4ilPy/WLwFnMspdGJphUd6w5UyUbKHU1QeVd6pvC1ewpB
-         HzFEVkncx6YfKJZv3ULXeEr0Wn33xH+5/oPftGmG1nzyjh+IEitx/9HDhQWzuNzGEJMh
-         nSbuMhFATMshQ3QZFjTGO/Oor2Ag+imxyQNVC0Pcg96CxxKlTzukmbTZvbcTyepc+FYV
-         Ht5tcYWJa9XYiuLos2Q1FSXYtJo+Naxudr2KVzC3IKStzUNnFE5UoV31sjt2Np0z5lNk
-         Af0szKaQOaL/hOgoEsQ9HhbePnipH05Hf7NTrUdW9L7LKxSxTUMQsRcPvZIG96420gr1
-         zSRg==
-X-Gm-Message-State: AO0yUKVs4oG/fZRECBvgKK0GCMbAA0Ixd9Ky9B+29jIZunfeuuyjCRpK
-        ir+oWW3Z6irABBcHYh/9oRR2Kw==
-X-Google-Smtp-Source: AK7set8mpQPw2+GHtj5ZOfErydEdxIXuNq2fH1Iph/NA7mZTRndHLsb8zko5n9EIpwjE1fYaXs0icQ==
-X-Received: by 2002:a92:d7c4:0:b0:313:fb1b:2f86 with SMTP id g4-20020a92d7c4000000b00313fb1b2f86mr14498260ilq.0.1676313111559;
-        Mon, 13 Feb 2023 10:31:51 -0800 (PST)
-Received: from shuah-tx13.internal ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id t25-20020a02ccb9000000b0036cc14af7adsm4148662jap.149.2023.02.13.10.31.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 10:31:50 -0800 (PST)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     shuah@kernel.org, brauner@kernel.org, sforshee@kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/mount_setattr: fix redefine struct mount_attr build error
-Date:   Mon, 13 Feb 2023 11:31:49 -0700
-Message-Id: <20230213183149.231779-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
+        bh=aCOwZ3PJTz/TYlI3e/xWEaAlHZ5jKi/xOzNSjCqqJlA=;
+        b=XQGymBWg1yqfCdD2veGZJcLrcmw+wmQBh6H6zyBfjN3jyK3mwqLXOI7IUdeyhx0z6X
+         l7jUGJU6r3k0vTgAmyu3oUnYgYy67cxiJ+Kd//gN8GbWGA6tiSYbsZ4sGlFC8FD0O17g
+         Sn0B7H43vCtcZry/zRjGVPgrZr2/rf9vlinKto4+PvEQxzjMxm6axj2VlVNhfuoPgwPM
+         6xdwoN4UYOBhNHTVP+4djcwTQ9ojjjbgrJIuIy2FUC7tbtBOt1cGkJFiirX8G7fibpHG
+         fixLJBaXr+N1/VE81LlMEtgZZ6024O5VOmi8uQ5cdYKdUloNypTkY3iXpmHWL2f2UCri
+         68VA==
+X-Gm-Message-State: AO0yUKVKXRbeUiTmIntc3eUOk9OD0vJOuyT+uo9U9TGIUoFijSYb+fmK
+        fKe1LtuvcXqtDwyexsMM4O1A6CgIlfSyHelWlp4=
+X-Google-Smtp-Source: AK7set8dcv494iw1o904AMOIdM6+FAb/VU8nA9TV06pLrweb1zuOx3xcHp6RTxeaYGL98ibjI9b9XlTWcWvt7FBRpKU=
+X-Received: by 2002:a50:d6c1:0:b0:4ac:c297:5520 with SMTP id
+ l1-20020a50d6c1000000b004acc2975520mr2370636edj.6.1676313180405; Mon, 13 Feb
+ 2023 10:33:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230213181653.587327-1-wse@tuxedocomputers.com>
+In-Reply-To: <20230213181653.587327-1-wse@tuxedocomputers.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 13 Feb 2023 19:32:49 +0100
+Message-ID: <CAJZ5v0iM83dDX+92LKTcUvKo9rUaSf_av5WV4ri=Q8QHd1gkQw@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: resource: Do IRQ override on all TongFang GMxRGxx
+To:     Werner Sembach <wse@tuxedocomputers.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following build error due to redefining struct mount_attr by
-removing duplicate define from mount_setattr_test.c
+On Mon, Feb 13, 2023 at 7:17 PM Werner Sembach <wse@tuxedocomputers.com> wrote:
+>
+> Apply
+> commit 7592b79ba4a9 ("ACPI: resource: do IRQ override on XMG Core 15")
+> override for all vendors using this mainboard.
+>
+> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+> Cc: <stable@vger.kernel.org>
+> ---
+>  drivers/acpi/resource.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
+> index 16dcd31d124fe..176e1f6684dc6 100644
+> --- a/drivers/acpi/resource.c
+> +++ b/drivers/acpi/resource.c
+> @@ -460,11 +460,10 @@ static const struct dmi_system_id lenovo_laptop[] = {
+>         { }
+>  };
+>
+> -static const struct dmi_system_id schenker_gm_rg[] = {
+> +static const struct dmi_system_id tongfang_gm_rg[] = {
+>         {
+> -               .ident = "XMG CORE 15 (M22)",
+> +               .ident = "TongFang GMxRGxx/XMG CORE 15 (M22)/TUXEDO Stellaris 15 Gen4 AMD",
+>                 .matches = {
+> -                       DMI_MATCH(DMI_SYS_VENDOR, "SchenkerTechnologiesGmbH"),
+>                         DMI_MATCH(DMI_BOARD_NAME, "GMxRGxx"),
+>                 },
+>         },
+> @@ -485,7 +484,7 @@ static const struct irq_override_cmp override_table[] = {
+>         { asus_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
+>         { lenovo_laptop, 6, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
+>         { lenovo_laptop, 10, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
+> -       { schenker_gm_rg, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
+> +       { tongfang_gm_rg, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
+>  };
+>
+>  static bool acpi_dev_irq_override(u32 gsi, u8 triggering, u8 polarity,
+> --
 
-gcc -g -isystem .../tools/testing/selftests/../../../usr/include -Wall -O2 -pthread     mount_setattr_test.c  -o .../tools/testing/selftests/mount_setattr/mount_setattr_test
-mount_setattr_test.c:107:8: error: redefinition of ‘struct mount_attr’
-  107 | struct mount_attr {
-      |        ^~~~~~~~~~
-In file included from /usr/include/x86_64-linux-gnu/sys/mount.h:32,
-                 from mount_setattr_test.c:10:
-.../usr/include/linux/mount.h:129:8: note: originally defined here
-  129 | struct mount_attr {
-      |        ^~~~~~~~~~
-make: *** [../lib.mk:145: .../tools/testing/selftests/mount_setattr/mount_setattr_test] Error 1
-
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- tools/testing/selftests/mount_setattr/mount_setattr_test.c | 7 -------
- 1 file changed, 7 deletions(-)
-
-diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-index 8c5fea68ae67..582669ca38e9 100644
---- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-+++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-@@ -103,13 +103,6 @@
- 	#else
- 		#define __NR_mount_setattr 442
- 	#endif
--
--struct mount_attr {
--	__u64 attr_set;
--	__u64 attr_clr;
--	__u64 propagation;
--	__u64 userns_fd;
--};
- #endif
- 
- #ifndef __NR_open_tree
--- 
-2.37.2
-
+Applied as 6.3 material, thanks!
