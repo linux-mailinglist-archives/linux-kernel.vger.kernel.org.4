@@ -2,99 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A19F694E0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 222E9694E17
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:33:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjBMRch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 12:32:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
+        id S229983AbjBMRdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 12:33:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbjBMRcb (ORCPT
+        with ESMTP id S229680AbjBMRdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 12:32:31 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4171CF63
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:32:29 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id a2so13057784wrd.6
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:32:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=D4PcfKaxRmL7zaCKK1nGyLbHIr82PFf8TM5OtSq5QjY=;
-        b=YmEEeWgCK7MSOIeLFerVvG68/F8gyBS+Vs+WFrcAt5YbhWGiGuNIHZVpjIeAthRfAa
-         f1HoUJqXlIJZBiLX10Xjj3aL4XpJuX8it63ohN8TVv1AhzfE27z0s3Vn++4f0DRlouyH
-         872wY7Qz4YPwRQqHdJt68n2B5P64oivO0ex8MirMmZZwtMWWUQ0Tw7LhZWG3+pRXVmLm
-         QYGkB13xGBkVb1zPvGGFY9XO+XtFMM1e4GhIb8gucWbdgggZnDi2RnXy931s4CfcMizE
-         X1pVV/RWdHJvNJNrE2kTGGmZaAd+iMzvPs9gGPMPZCr1sR8W6HNhsYamRk734kf/xUUU
-         TXZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D4PcfKaxRmL7zaCKK1nGyLbHIr82PFf8TM5OtSq5QjY=;
-        b=MvHvT8ItfQSTj/CPOn4FoAgEeq5vzJPJpz+vQlAkmn+gwvV7FzNUPotPYbwhumXzXx
-         k1lnAO/dUMT14KVQ3GPLsmWK2XkcVvO6in0z3FLTz4LOoQilSJi8MI+wfdOB7ab0tyOc
-         vRdlFYHhjLkvFQ7mbpZewiumFvUj+6EHr3FHL818NcptbBgNO88nlAfbzbuM0Sz/LIy9
-         9HLy4R4QxFHPYVtSJea4aqscDzjPTCPhSQGTv49pdykwfceSjknc6XKghDCG/A1s8+Ee
-         iaHgX/4C+J2uu3VPmuFfwL1jpjV+W2FjG0pDC+fP+HYaLcwkNT6lt0s8Kk5EOz0bDTDk
-         EILA==
-X-Gm-Message-State: AO0yUKXWtoSc7BISSQ2TDdyoNaieUJQbW7B+PUae5G+2HcQZrmWUjwBb
-        dVhAQYzJfOT+1KkbaErZiv5gHA==
-X-Google-Smtp-Source: AK7set/bbSpFpv0+vU9038RpP1C1S2nRM5ejGZK+qdJ9AF+vxKYu0VTMlnJ7ID9TiDTlZEZRX5Xo7Q==
-X-Received: by 2002:adf:fa83:0:b0:2c3:ea86:974e with SMTP id h3-20020adffa83000000b002c3ea86974emr20936235wrr.46.1676309547671;
-        Mon, 13 Feb 2023 09:32:27 -0800 (PST)
-Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id s7-20020a5d5107000000b002c556a4f1casm3987926wrt.42.2023.02.13.09.32.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 09:32:27 -0800 (PST)
-Message-ID: <9abac641-73d6-7457-4b63-c25666e536b6@linaro.org>
-Date:   Mon, 13 Feb 2023 18:32:25 +0100
+        Mon, 13 Feb 2023 12:33:12 -0500
+Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271541CAC6;
+        Mon, 13 Feb 2023 09:33:00 -0800 (PST)
+Date:   Mon, 13 Feb 2023 17:32:51 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=systemb.ch;
+        s=protonmail; t=1676309577; x=1676568777;
+        bh=IAvPwW5JFdNEA6N93fJnWUTElrXDvQHH5qEMqEhQ+gc=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=QBE40F4hyiMCm7q4ItAr2ynOs/uLyGeUPilBgdqmgVvpFyvJadYqBDW6l15VVAY9q
+         efzj+XoG1CYMLyPRrch3p3KRpfQpxi/16315dnmNkLIUGrxDTGcCKNMahjNrFk32JR
+         FdAr0Qb8Dm0oDMKFvmmSq7A7hDo5md3mHHgAtX17FXxkfPGlT+JdpHmce5nvHiQJWv
+         c8JqBYF6G3F1ZKFsmfTEGvsJLY2sDJuxQYoVamLJtduf5+TrJLPP5zQcyK1fLVG9O6
+         zc0bsT9B0cqkC17taARQF2Ez0DJ3goEPql6Lif//DeV8gMZKj0p6BPWVkbvP+8IKn+
+         gUTunu8gf4jTw==
+To:     Johannes Berg <johannes@sipsolutions.net>
+From:   Marc Bornand <dev.mbornand@systemb.ch>
+Cc:     linux-wireless@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
+        Yohan Prod'homme <kernel@zoddo.fr>, stable@vger.kernel.org
+Subject: Re: [PATCH v2] Set ssid when authenticating
+Message-ID: <NTBtzDurDf0W90JuEPzaHfxCYkWzyZ5jjPwcy6LpqebS6S1NekVcfBU3sNWczfvhHEJGOSyzQrb40UfSIK8AFZpd71MExKldK7EFnMkkdUk=@systemb.ch>
+In-Reply-To: <5a1d1244c8d3e20408732858442f264d26cc2768.camel@sipsolutions.net>
+References: <20230213105436.595245-1-dev.mbornand@systemb.ch> <5a1d1244c8d3e20408732858442f264d26cc2768.camel@sipsolutions.net>
+Feedback-ID: 65519157:user:proton
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [PATCH v5 1/2] mips: dts: ralink: mt7621: rename watchdog node
- from 'wdt' into 'watchdog'
-Content-Language: en-US
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-watchdog@vger.kernel.org
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-References: <20230213120638.850612-1-sergio.paracuellos@gmail.com>
- <20230213120638.850612-2-sergio.paracuellos@gmail.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230213120638.850612-2-sergio.paracuellos@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/2/23 13:06, Sergio Paracuellos wrote:
-> Watchdog nodes must use 'watchdog' for node name. When a 'make dtbs_check'
-> is performed the following warning appears:
-> 
-> wdt@100: $nodename:0: 'wdt@100' does not match '^watchdog(@.*|-[0-9a-f])?$'
-> 
-> Fix this warning up properly renaming the node into 'watchdog'.
-> 
-> Reviewed-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> ---
->   arch/mips/boot/dts/ralink/mt7621.dtsi | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+On Monday, February 13th, 2023 at 12:01, Johannes Berg <johannes@sipsolutio=
+ns.net> wrote:
+>=20
+>=20
+> On Mon, 2023-02-13 at 10:55 +0000, Marc Bornand wrote:
+>=20
+> > changes since v1:
+> > - add some informations
+> > - test it on wireless-2023-01-18 tag
+> > - no real code change
+> >=20
+> > When a connexion was established without going through
+> > NL80211_CMD_CONNECT, the ssid was never set in the wireless_dev struct.
+> > Now we set it during when an NL80211_CMD_AUTHENTICATE is issued.
+>=20
+>=20
+> This is incorrect, doing an authentication doesn't require doing an
+> association afterwards, and doesn't necessarily imply any state change
+> in the kernel.
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+So is it intended behavior that the ssid in wireless_dev is not set
+or is there a place were this state change should happen?
+
+>=20
+> > alternatives:
+> > 1. Do the same but during association and not authentication.
+>=20
+>=20
+> Which should probably be done after successful authentication, even in
+> the CONNECT command case, which currently does it in cfg80211_connect()
+> but I guess that should move to __cfg80211_connect_result().
+
+Is there an existing way to get the ssid in __cfg80211_connect_result()?
 
 
+>=20
+> > 2. use ieee80211_bss_get_elem in nl80211_send_iface, this would report
+> > the right ssid to userspace, but this would not fix the root cause,
+> > this alos wa the behavior prior to 7b0a0e3c3a882 when the bug was
+> > introduced.
+>=20
+>=20
+> That would be OK too but the reason I changed it there (missing the fact
+> that it wasn't set) is that we have multiple BSSes with MLO. So it's
+> hard to get one to do this with.
+>=20
+> johannes
+
+Just a side question do the BSSes all have the same SSID?
+
+Marc
