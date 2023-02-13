@@ -2,228 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2982694D0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:38:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F16694D11
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbjBMQiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 11:38:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
+        id S230431AbjBMQkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 11:40:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbjBMQio (ORCPT
+        with ESMTP id S230165AbjBMQkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 11:38:44 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0768F11641
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:38:43 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id cr22so14347516qtb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:38:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=of5ICr9L1SNi/fIIwLV0Ou7LNrmAbw9vuFF0UoeHvV0=;
-        b=D0b3HumuyZdrCW31MwzKs4JncPmAdXl/+lI40vyr3i253KzPDxd/I0M0sTPGj/xVLO
-         J74GErmrkmv7vaOwjmZBpgV826+Y7aL0s/CXR/zCzOKRFmLl/bMUUSKQDT1LRkpGYqGs
-         xjIOy2IoXkpX+Pxbam0PxnCNmCZQp4RkvXUzknqYvAMyQIDb3vP6xNJjGIRiLu3NoJBA
-         ugWXnBUNfPw/7cUdPUJGaGjR8VoosuugGCxJvcrbmqZcc6wj/y06QT/cR7/OMqHEWbV9
-         quvZB0vUnoB5wwdnq8r1gdDWGoaKRwsFQmAHUy581BGG7ZGfjq183yb0+AJt4ndAVFeu
-         u1UA==
+        Mon, 13 Feb 2023 11:40:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FD014498
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:39:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676306371;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+qAAmSC/RdZV41RXB0GFMswk+G+3tU5R49dqo8QmqQA=;
+        b=Wxdm5T1ygogW8nIkQYVAehYilEgEGTA3xzgD+XKH1Conm7MA8kr3NCSw1nnjgU7N6gcko7
+        /WM+XH5TZqIyIhJ1IMDatL+sf/gbBkIhmYTCSp+Syq0hnB/+Ow4xXCVTa8s7hVLLFvQDS4
+        ztJKHBdJokO68Bl5NlNFT79ZH46B2CA=
+Received: from mail-vs1-f70.google.com (mail-vs1-f70.google.com
+ [209.85.217.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-93-FoeVEtG-MWuXGxMQd-JAfQ-1; Mon, 13 Feb 2023 11:39:30 -0500
+X-MC-Unique: FoeVEtG-MWuXGxMQd-JAfQ-1
+Received: by mail-vs1-f70.google.com with SMTP id f2-20020a67e082000000b0040682163230so2757889vsl.10
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:39:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=of5ICr9L1SNi/fIIwLV0Ou7LNrmAbw9vuFF0UoeHvV0=;
-        b=S8ULd3J6oEqfYpM4cmbQrWfR9bCVaNH79+N3E2rSHs+yuujkPXdRmWbc2Q8EXayV8e
-         c+DoNc2TA3uZXJ0eChtT8zLaCM/UJDBd2RAS6jNxOZh2rHqr4y8qc865odMm/wV2b085
-         LLab+RyIF52qF9DzelICUAJ0SW9jiZvDBZD6tnVYPsD9z0UqBWbUsOiVAAR0DXmLCBG3
-         9rIQQgQmDphYnVlSzThCq99FBwBhSfqSRVdQXQarJ/fBDJEmTjrRhMmobNcs8EXXArtf
-         kKXu0CkDmYoE/OKCTAhpyeC967vtkPA0zEBaPYjaeD0dysRqiP0nwzhkm1Elr+mbE0j4
-         O9vg==
-X-Gm-Message-State: AO0yUKX5KSsfI14jQzfO/sNcM7sQ3qcWYRPMNl3H6hfmejC1ZIzVsSq3
-        l1riNlKZAwrG6TGYFTMKRzihsw==
-X-Google-Smtp-Source: AK7set/eFg9C/RdSOP104CBK6c0/68ffH4q9gO44zsLJrYEKZP0sqMZqqVyLsKKxGZFMvCbNA8nkog==
-X-Received: by 2002:a05:622a:413:b0:3b9:b57d:4646 with SMTP id n19-20020a05622a041300b003b9b57d4646mr45134039qtx.18.1676306322110;
-        Mon, 13 Feb 2023 08:38:42 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
-        by smtp.gmail.com with ESMTPSA id o5-20020ac80245000000b003b64f1b1f40sm9503620qtg.40.2023.02.13.08.38.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 08:38:41 -0800 (PST)
-Message-ID: <ddd0082ee020165dc84d7e57265cd4e92135c144.camel@ndufresne.ca>
-Subject: Re: [EXT] Re: [PATCH v2 02/10] media: Add Y012 video format
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Ming Qian <ming.qian@nxp.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "Mirela Rabulea (OSS)" <mirela.rabulea@oss.nxp.com>,
-        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>
-Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "X.H. Bao" <xiahong.bao@nxp.com>, dl-linux-imx <linux-imx@nxp.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Mon, 13 Feb 2023 11:38:40 -0500
-In-Reply-To: <AM6PR04MB63418F16201148ECB0935A4CE7DD9@AM6PR04MB6341.eurprd04.prod.outlook.com>
-References: <cover.1675230665.git.ming.qian@nxp.com>
-         <93889cdefacaad260d978a8353066dd384a64609.1675230665.git.ming.qian@nxp.com>
-         <fa6fcd8a905bff34f6d436ef328f5142b72b854c.camel@ndufresne.ca>
-         <AM6PR04MB63418F16201148ECB0935A4CE7DD9@AM6PR04MB6341.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        d=1e100.net; s=20210112; t=1676306368;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+qAAmSC/RdZV41RXB0GFMswk+G+3tU5R49dqo8QmqQA=;
+        b=AigXj82igE/nhaUvblZAtg53hYH4XnF3tigTPe+FRy9Bx/RcoEn+6cakQTc2/IFquD
+         WcnFQ42ycFCc1Md5QWb/Hx0jDXGcrBa234bnernxUkZN3HLNiPFr/FQLRZLYeEF76uZh
+         kO13mdZ6zdTgANzKmmYtC3xp+jUNV8wJhK4m4/Dqq/3onrpxuZ8YCAdjaCoA7BOCe9OB
+         ZU+q6c1iAc36sd8Svz50IqCSEZg+VF7AjEoXce6Rar4gwzUQxcxxeqoyYE5zO3AFmfgn
+         84V0pQUpEzX7JkIH40dk0LYHSz53rROJ4w2daQRotw5ZWs7o3c5X+95ZSn7F+m+/yj0m
+         euaQ==
+X-Gm-Message-State: AO0yUKVi8ksf6YahhNNjj+q9JdqkedYpCUgv65+ns3fZ2xZOmEFNWJIZ
+        +XOPjJllmaOHue0Zii7geuvVCEjfWkIhK68iSkFIt9GC7wwjuQnE2LPGFdRaT0jdxAZGaxRdgEY
+        H0rdWOgXNS0gItQwkFsUEytMmGuM5PMW4rNT24aZN
+X-Received: by 2002:a67:e087:0:b0:412:45d2:b3db with SMTP id f7-20020a67e087000000b0041245d2b3dbmr210441vsl.40.1676306368373;
+        Mon, 13 Feb 2023 08:39:28 -0800 (PST)
+X-Google-Smtp-Source: AK7set+qZ97j8GyNwGUqw/4y0w/veR+TgM//1Z1Z/a+q/FO9QSBVpNZsFnr0pldGW1SMqDW9TIaw5LwH9euZUMlrNlw=
+X-Received: by 2002:a67:e087:0:b0:412:45d2:b3db with SMTP id
+ f7-20020a67e087000000b0041245d2b3dbmr210426vsl.40.1676306368108; Mon, 13 Feb
+ 2023 08:39:28 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230210025009.21873-1-marcan@marcan.st> <20230210025009.21873-2-marcan@marcan.st>
+In-Reply-To: <20230210025009.21873-2-marcan@marcan.st>
+From:   Eric Curtin <ecurtin@redhat.com>
+Date:   Mon, 13 Feb 2023 16:39:12 +0000
+Message-ID: <CAOgh=FyHs+kG-hVamwyHDefE9TLOO-R=ZKs3VciaBhvW+nBsKw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] wifi: brcmfmac: Rename Cypress 89459 to BCM4355
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Prutskov <alep@cypress.com>,
+        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
+        Wright Feng <wright.feng@cypress.com>,
+        Ian Lin <ian.lin@infineon.com>,
+        Soontak Lee <soontak.lee@cypress.com>,
+        Joseph chuang <jiac@cypress.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Aditya Garg <gargaditya08@live.com>,
+        Jonas Gorski <jonas.gorski@gmail.com>, asahi@lists.linux.dev,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Arend van Spriel <arend.vanspriel@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le lundi 13 f=C3=A9vrier 2023 =C3=A0 09:22 +0000, Ming Qian a =C3=A9crit=C2=
-=A0:
-> > From: Nicolas Dufresne <nicolas@ndufresne.ca>
-> > Sent: 2023=E5=B9=B42=E6=9C=8810=E6=97=A5 23:18
-> > To: Ming Qian <ming.qian@nxp.com>; mchehab@kernel.org; Mirela Rabulea
-> > (OSS) <mirela.rabulea@oss.nxp.com>; hverkuil-cisco@xs4all.nl
-> > Cc: shawnguo@kernel.org; s.hauer@pengutronix.de; kernel@pengutronix.de;
-> > festevam@gmail.com; X.H. Bao <xiahong.bao@nxp.com>; dl-linux-imx <linux=
--
-> > imx@nxp.com>; linux-media@vger.kernel.org; linux-kernel@vger.kernel.org=
-;
-> > devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org
-> > Subject: [EXT] Re: [PATCH v2 02/10] media: Add Y012 video format
-> >=20
-> > Caution: EXT Email
-> >=20
-> > Le mercredi 01 f=C3=A9vrier 2023 =C3=A0 14:02 +0800, Ming Qian a =C3=A9=
-crit :
-> > > Y012 is a luma-only formats with 12-bits per pixel, expanded to
-> > > 16bits.
-> > > Data in the 12 high bits, zeros in the 4 low bits, arranged in little
-> > > endian order.
-> > >=20
-> > > Signed-off-by: Ming Qian <ming.qian@nxp.com>
-> > > ---
-> > > =C2=A0.../userspace-api/media/v4l/pixfmt-yuv-luma.rst       | 11 ++++=
-+++++++
-> > > =C2=A0drivers/media/v4l2-core/v4l2-ioctl.c                  |  1 +
-> > > =C2=A0include/uapi/linux/videodev2.h                        |  1 +
-> > > =C2=A03 files changed, 13 insertions(+)
-> > >=20
-> > > diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rs=
-t
-> > > b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-> > > index 6a387f9df3ba..3ffa29000238 100644
-> > > --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-> > > +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-> > > @@ -103,6 +103,17 @@ are often referred to as greyscale formats.
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0- ...
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0- ...
-> > >=20
-> > > +    * .. _V4L2-PIX-FMT-Y012:
-> >=20
-> > Why the 0, can't this be name Y12 (just like Y14) ?
-> >=20
->=20
-> Hi Nicolas,
-> =C2=A0=C2=A0=C2=A0=C2=A0As the V4L2_PIX_FMT_Y12 is defined, but it's data=
- is in the 12 low bits,
-> zeros in the high bits.
-> =C2=A0=C2=A0=C2=A0=C2=A0Here I want to place the 12 bits data in the high=
- bits, with zeros in the
-> 4 low bits.
-> =C2=A0=C2=A0=C2=A0=C2=A0So I add 0 before 12, I want to say that the low =
-bits are padding data 0.
-> =C2=A0=C2=A0=C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0Or do you have a better suggestion?
+On Fri, 10 Feb 2023 at 02:59, Hector Martin <marcan@marcan.st> wrote:
+>
+> The commit that introduced support for this chip incorrectly claimed it
+> is a Cypress-specific part, while in actuality it is just a variant of
+> BCM4355 silicon (as evidenced by the chip ID).
+>
+> The relationship between Cypress products and Broadcom products isn't
+> entirely clear but given what little information is available and prior
+> art in the driver, it seems the convention should be that originally
+> Broadcom parts should retain the Broadcom name.
+>
+> Thus, rename the relevant constants and firmware file. Also rename the
+> specific 89459 PCIe ID to BCM43596, which seems to be the original
+> subvariant name for this PCI ID (as defined in the out-of-tree bcmdhd
+> driver).
+>
+> v2: Since Cypress added this part and will presumably be providing
+> its supported firmware, we keep the CYW designation for this device.
+>
+> v3: Drop the RAW device ID in this commit. We don't do this for the
+> other chips since apparently some devices with them exist in the wild,
+> but there is already a 4355 entry with the Broadcom subvendor and WCC
+> firmware vendor, so adding a generic fallback to Cypress seems
+> redundant (no reason why a device would have the raw device ID *and* an
+> explicitly programmed subvendor).
+>
+> Fixes: dce45ded7619 ("brcmfmac: Support 89459 pcie")
+> Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 
-I see, I had missed this aspect. I think in this context, it would be fair
-naming. Maybe drop a note in the doc saying just that:
+LGTM
 
-"In contrast to V4L2_PIX_FMT_Y12 format, which have its padding located in =
-the
-most significant bits of the 16 bit word".
+Reviewed-by: Eric Curtin <ecurtin@redhat.com>
 
-Or something similar.,
-Nicolas
+Is mise le meas/Regards,
 
->=20
-> Ming
->=20
-> > > +
-> > > +      - ``V4L2_PIX_FMT_Y012``
-> > > +      - 'Y012'
-> > > +
-> > > +      - Y'\ :sub:`0`\ [3:0] `0000`
-> > > +      - Y'\ :sub:`0`\ [11:4]
-> > > +      - ...
-> > > +      - ...
-> > > +      - ...
-> > > +
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0* .. _V4L2-PIX-FMT-Y14:
-> > >=20
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0- ``V4L2_PIX_FMT_Y14``
-> > > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > index 067dbdd0a9ef..0ee730aa6cc7 100644
-> > > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > > @@ -1303,6 +1303,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdes=
-c
-> > *fmt)
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case V4L2_PIX_FMT_Y6:           d=
-escr =3D "6-bit Greyscale"; break;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case V4L2_PIX_FMT_Y10:          d=
-escr =3D "10-bit Greyscale"; break;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case V4L2_PIX_FMT_Y12:          d=
-escr =3D "12-bit Greyscale"; break;
-> > > +     case V4L2_PIX_FMT_Y012:         descr =3D "12-bit Greyscale"; b=
-reak;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case V4L2_PIX_FMT_Y14:          d=
-escr =3D "14-bit Greyscale"; break;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case V4L2_PIX_FMT_Y16:          d=
-escr =3D "16-bit Greyscale"; break;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case V4L2_PIX_FMT_Y16_BE:       d=
-escr =3D "16-bit Greyscale BE";
-> > > break;
-> > > diff --git a/include/uapi/linux/videodev2.h
-> > > b/include/uapi/linux/videodev2.h index 5448aa3b7858..3d8f89bff33c
-> > > 100644
-> > > --- a/include/uapi/linux/videodev2.h
-> > > +++ b/include/uapi/linux/videodev2.h
-> > > @@ -583,6 +583,7 @@ struct v4l2_pix_format {
-> > > =C2=A0#define V4L2_PIX_FMT_Y6      v4l2_fourcc('Y', '0', '6', ' ') /*=
-  6=20
-> > > Greyscale     */
-> > > =C2=A0#define V4L2_PIX_FMT_Y10     v4l2_fourcc('Y', '1', '0', ' ') /*=
- 10=20
-> > > Greyscale
-> > */
-> > > =C2=A0#define V4L2_PIX_FMT_Y12     v4l2_fourcc('Y', '1', '2', ' ') /*=
- 12=20
-> > > Greyscale
-> > */
-> > > +#define V4L2_PIX_FMT_Y012    v4l2_fourcc('Y', '0', '1', '2') /* 12=
-=20
-> > > Greyscale
-> > */
-> > > =C2=A0#define V4L2_PIX_FMT_Y14     v4l2_fourcc('Y', '1', '4', ' ') /*=
- 14=20
-> > > Greyscale
-> > */
-> > > =C2=A0#define V4L2_PIX_FMT_Y16     v4l2_fourcc('Y', '1', '6', ' ') /*=
- 16=20
-> > > Greyscale
-> > */
-> > > =C2=A0#define V4L2_PIX_FMT_Y16_BE  v4l2_fourcc_be('Y', '1', '6', ' ')=
- /* 16
-> > > Greyscale BE  */
->=20
+Eric Curtin
+
+> ---
+>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c    | 5 ++---
+>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c    | 7 +++----
+>  .../net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h  | 5 ++---
+>  3 files changed, 7 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
+> index 121893bbaa1d..3e42c2bd0d9a 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
+> @@ -726,6 +726,7 @@ static u32 brcmf_chip_tcm_rambase(struct brcmf_chip_priv *ci)
+>         case BRCM_CC_43664_CHIP_ID:
+>         case BRCM_CC_43666_CHIP_ID:
+>                 return 0x200000;
+> +       case BRCM_CC_4355_CHIP_ID:
+>         case BRCM_CC_4359_CHIP_ID:
+>                 return (ci->pub.chiprev < 9) ? 0x180000 : 0x160000;
+>         case BRCM_CC_4364_CHIP_ID:
+> @@ -735,8 +736,6 @@ static u32 brcmf_chip_tcm_rambase(struct brcmf_chip_priv *ci)
+>                 return 0x170000;
+>         case BRCM_CC_4378_CHIP_ID:
+>                 return 0x352000;
+> -       case CY_CC_89459_CHIP_ID:
+> -               return ((ci->pub.chiprev < 9) ? 0x180000 : 0x160000);
+>         default:
+>                 brcmf_err("unknown chip: %s\n", ci->pub.name);
+>                 break;
+> @@ -1426,8 +1425,8 @@ bool brcmf_chip_sr_capable(struct brcmf_chip *pub)
+>                 addr = CORE_CC_REG(base, sr_control1);
+>                 reg = chip->ops->read32(chip->ctx, addr);
+>                 return reg != 0;
+> +       case BRCM_CC_4355_CHIP_ID:
+>         case CY_CC_4373_CHIP_ID:
+> -       case CY_CC_89459_CHIP_ID:
+>                 /* explicitly check SR engine enable bit */
+>                 addr = CORE_CC_REG(base, sr_control0);
+>                 reg = chip->ops->read32(chip->ctx, addr);
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> index ae57a9a3ab05..96608174a123 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> @@ -51,6 +51,7 @@ enum brcmf_pcie_state {
+>  BRCMF_FW_DEF(43602, "brcmfmac43602-pcie");
+>  BRCMF_FW_DEF(4350, "brcmfmac4350-pcie");
+>  BRCMF_FW_DEF(4350C, "brcmfmac4350c2-pcie");
+> +BRCMF_FW_CLM_DEF(4355, "brcmfmac4355-pcie");
+>  BRCMF_FW_CLM_DEF(4356, "brcmfmac4356-pcie");
+>  BRCMF_FW_CLM_DEF(43570, "brcmfmac43570-pcie");
+>  BRCMF_FW_DEF(4358, "brcmfmac4358-pcie");
+> @@ -62,7 +63,6 @@ BRCMF_FW_DEF(4366B, "brcmfmac4366b-pcie");
+>  BRCMF_FW_DEF(4366C, "brcmfmac4366c-pcie");
+>  BRCMF_FW_DEF(4371, "brcmfmac4371-pcie");
+>  BRCMF_FW_CLM_DEF(4378B1, "brcmfmac4378b1-pcie");
+> -BRCMF_FW_DEF(4355, "brcmfmac89459-pcie");
+>
+>  /* firmware config files */
+>  MODULE_FIRMWARE(BRCMF_FW_DEFAULT_PATH "brcmfmac*-pcie.txt");
+> @@ -78,6 +78,7 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
+>         BRCMF_FW_ENTRY(BRCM_CC_4350_CHIP_ID, 0x000000FF, 4350C),
+>         BRCMF_FW_ENTRY(BRCM_CC_4350_CHIP_ID, 0xFFFFFF00, 4350),
+>         BRCMF_FW_ENTRY(BRCM_CC_43525_CHIP_ID, 0xFFFFFFF0, 4365C),
+> +       BRCMF_FW_ENTRY(BRCM_CC_4355_CHIP_ID, 0xFFFFFFFF, 4355),
+>         BRCMF_FW_ENTRY(BRCM_CC_4356_CHIP_ID, 0xFFFFFFFF, 4356),
+>         BRCMF_FW_ENTRY(BRCM_CC_43567_CHIP_ID, 0xFFFFFFFF, 43570),
+>         BRCMF_FW_ENTRY(BRCM_CC_43569_CHIP_ID, 0xFFFFFFFF, 43570),
+> @@ -93,7 +94,6 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
+>         BRCMF_FW_ENTRY(BRCM_CC_43666_CHIP_ID, 0xFFFFFFF0, 4366C),
+>         BRCMF_FW_ENTRY(BRCM_CC_4371_CHIP_ID, 0xFFFFFFFF, 4371),
+>         BRCMF_FW_ENTRY(BRCM_CC_4378_CHIP_ID, 0xFFFFFFFF, 4378B1), /* revision ID 3 */
+> -       BRCMF_FW_ENTRY(CY_CC_89459_CHIP_ID, 0xFFFFFFFF, 4355),
+>  };
+>
+>  #define BRCMF_PCIE_FW_UP_TIMEOUT               5000 /* msec */
+> @@ -2609,9 +2609,8 @@ static const struct pci_device_id brcmf_pcie_devid_table[] = {
+>         BRCMF_PCIE_DEVICE(BRCM_PCIE_4366_2G_DEVICE_ID, BCA),
+>         BRCMF_PCIE_DEVICE(BRCM_PCIE_4366_5G_DEVICE_ID, BCA),
+>         BRCMF_PCIE_DEVICE(BRCM_PCIE_4371_DEVICE_ID, WCC),
+> +       BRCMF_PCIE_DEVICE(BRCM_PCIE_43596_DEVICE_ID, CYW),
+>         BRCMF_PCIE_DEVICE(BRCM_PCIE_4378_DEVICE_ID, WCC),
+> -       BRCMF_PCIE_DEVICE(CY_PCIE_89459_DEVICE_ID, CYW),
+> -       BRCMF_PCIE_DEVICE(CY_PCIE_89459_RAW_DEVICE_ID, CYW),
+>         { /* end: all zeroes */ }
+>  };
+>
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
+> index f4939cf62767..28b6cf8ff286 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
+> +++ b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
+> @@ -37,6 +37,7 @@
+>  #define BRCM_CC_4350_CHIP_ID           0x4350
+>  #define BRCM_CC_43525_CHIP_ID          43525
+>  #define BRCM_CC_4354_CHIP_ID           0x4354
+> +#define BRCM_CC_4355_CHIP_ID           0x4355
+>  #define BRCM_CC_4356_CHIP_ID           0x4356
+>  #define BRCM_CC_43566_CHIP_ID          43566
+>  #define BRCM_CC_43567_CHIP_ID          43567
+> @@ -56,7 +57,6 @@
+>  #define CY_CC_43012_CHIP_ID            43012
+>  #define CY_CC_43439_CHIP_ID            43439
+>  #define CY_CC_43752_CHIP_ID            43752
+> -#define CY_CC_89459_CHIP_ID            0x4355
+>
+>  /* USB Device IDs */
+>  #define BRCM_USB_43143_DEVICE_ID       0xbd1e
+> @@ -90,9 +90,8 @@
+>  #define BRCM_PCIE_4366_2G_DEVICE_ID    0x43c4
+>  #define BRCM_PCIE_4366_5G_DEVICE_ID    0x43c5
+>  #define BRCM_PCIE_4371_DEVICE_ID       0x440d
+> +#define BRCM_PCIE_43596_DEVICE_ID      0x4415
+>  #define BRCM_PCIE_4378_DEVICE_ID       0x4425
+> -#define CY_PCIE_89459_DEVICE_ID         0x4415
+> -#define CY_PCIE_89459_RAW_DEVICE_ID     0x4355
+>
+>  /* brcmsmac IDs */
+>  #define BCM4313_D11N2G_ID      0x4727  /* 4313 802.11n 2.4G device */
+> --
+> 2.35.1
+>
+>
 
