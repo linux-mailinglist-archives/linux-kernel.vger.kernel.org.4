@@ -2,132 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A7CA69472E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA65694730
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:38:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbjBMNiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 08:38:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
+        id S229680AbjBMNir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 08:38:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjBMNiV (ORCPT
+        with ESMTP id S230209AbjBMNin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 08:38:21 -0500
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1941E1716B
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:38:20 -0800 (PST)
-Received: by mail-vk1-xa35.google.com with SMTP id t74so2172718vkc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:38:20 -0800 (PST)
+        Mon, 13 Feb 2023 08:38:43 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B9E199CD
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:38:39 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id j184so3010197pfg.10
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:38:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1676295499;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QiocV00En5D5cLXBZHTCzW16cVc0Pj8et9mT/H0L18Y=;
-        b=HxTUETCUsjJ18Q9E4rFJV4FjWTaROLW3+AtHothjcu7bNoPaqml3RyiyTic08AYEpk
-         jTFHU7hGK8/gc9MK1yXPO6ShAH3XJqr4G9jDRAAh5zQWysE8Q/M8BJcagkLGNCLCD4Qg
-         aGnzn6botuEeOo9CddWeqM7bd5+8V8M9cjam2jQ4o/YBMKzF5JQwdkJP7q5kwcJMutRN
-         5jVj1e2Qum6g48RK3buasXKXSfqwrZITbCcAE5y0naCNG/krgYMUK4792vZRMMXunqEe
-         19GMrMjdgnUCPZVH3MSfw7LGROB6nku1tyESlO8FzoEVPLtbm+RGQ4xNbDabQu+/UGxL
-         osEQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vF1P5TfBIPKJ6WFS9mQOcribHkWp6/vWF2K7YLacH5c=;
+        b=nk2Lg55U9ZLgq8RFWdX82Nth7uZ9ret2VEvDT0H8OBXxROiHcNYQjOlUXpnUbjtnhF
+         IDU6XtOn5tOdK+m2w31riTEh22/cGOgzZreofdnHuyx1bsOwFRtEkv99+F2BdRn0Y+lG
+         qDNnD9UlHu3sObbt0Ieh/r+7yeeo4LsNzQmZ7z06YTkLu9TEXym821N7vYeHmBzjyhOe
+         5iLUhrUUEfi5dwi5jih66vvO7BDoR/S7Gb/yg+qqyTWUePcfR+RcANkQh2EycPRG6h1g
+         Z7chA9qjOdGGDKoBL00d2RPbO3VXqRqHVJ7hpGsL1MeRdiNSMZRTEfJFUgx/yRGx5Z18
+         uzzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676295499;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QiocV00En5D5cLXBZHTCzW16cVc0Pj8et9mT/H0L18Y=;
-        b=oNK8FKR4xAAXN5E2DX+ZrlP7SYbe6Uugg8HDf9wq+VE89csVneTtV9JxKX1UKu6wK3
-         MMWws6eOiGN8yVc2y6ViofPud08jcudsYMz7qSb9pOe8IqvnaNjBrjVlFg0mdWjBzYlD
-         E1ZeTGjPMXyUh72Ks9cCE61NCF0c3BlahGsGgHgSrPicfg27PefnDunM8iE8VisN8KkX
-         YofhEXPTuSL07za4JE9/7VbK/eZbTKfRP5TPIiu5Ztrh9JQl83blPgYgnaiQkk+eNqSg
-         Ov6LH/HQgjHa7yC2kU2hFMsEqd9exL/wkfIQhJ2lVNE3W4kNo3tTTTnz5dtRpSKlic/a
-         1Gvw==
-X-Gm-Message-State: AO0yUKVhDTb95HgRZMcMhz6/4XY81x+7t/v/NHev52nLJmF8Mp6ZZhmw
-        fC1avnMogUuu3oJ4ZElO32j21HagJljrEfCcLL/+kZE+oT89FsykNTM=
-X-Google-Smtp-Source: AK7set/l3c8GmYteAMqSJ6SPYkS1v+afgnQO1saFsyMt/OzFIAUcb8IlbO8CA0+xxyWvCN279WdrtcqJghM37ky6Zuk=
-X-Received: by 2002:a1f:2bd0:0:b0:3e8:a035:4860 with SMTP id
- r199-20020a1f2bd0000000b003e8a0354860mr4437186vkr.7.1676295499037; Mon, 13
- Feb 2023 05:38:19 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vF1P5TfBIPKJ6WFS9mQOcribHkWp6/vWF2K7YLacH5c=;
+        b=mvY4JBe0G6MN64wVsmG0272cVxFEi4o21wAbQdshyTH5XvQHeZ3aIfcRo/Q5i36HoU
+         LVVrKVlmjcHz6PE77UCTlGXY8soOlMbeCAKXih6OlC1QHo0wAL9RzAWj/bNp6pxAqd5T
+         DlvDA2SUAGv3H8doEQyWewEfht6fjRl1NdmnSALdIy5V2rOoSysdeHUUmwd0ZilR/wlQ
+         +f+57Pe5/9n6LhVxmxYDrPKbkzjbtLTum4lliO9zQPn7OIYLtbk+zcr4AN9qay/U06pD
+         l1fknLbTRNWgfDxqz3KXRGPwPa7lFIqqXGuss0lusAgnBn11Ny/fPFclHFzrm8ysCeiz
+         +C6w==
+X-Gm-Message-State: AO0yUKVHleV9ZQYzkpIffNYOJ4nbLE3NdcSwhAX+QtpXu/XNXQYwa9CP
+        VJNliNbcILWoOIX2RcIo32b7ff+AEjoyuQaGZpHvDA==
+X-Google-Smtp-Source: AK7set89uIuHycKuwV9oCG1G6vsIgA+92KlIBOAt5JdpAhjlhJzvtgLGPgckmHFpDdRpXHaiP/qNKEJi5uaurolZYlo=
+X-Received: by 2002:a62:154c:0:b0:5a8:925b:f68e with SMTP id
+ 73-20020a62154c000000b005a8925bf68emr1174634pfv.28.1676295518622; Mon, 13 Feb
+ 2023 05:38:38 -0800 (PST)
 MIME-Version: 1.0
-References: <20230208184203.2260394-1-elver@google.com> <Y+aaDP32wrsd8GZq@tucnak>
- <CANpmjNO3w9h=QLQ9NRf0QZoR86S7aqJrnAEQ3i2L0L3axALzmw@mail.gmail.com>
- <Y+oYlD0IH8zwEgqp@tucnak> <Y+ouq8ooI7UH4cL+@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y+ouq8ooI7UH4cL+@hirez.programming.kicks-ass.net>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 13 Feb 2023 14:37:42 +0100
-Message-ID: <CANpmjNNxX-YpRkEHYjpZGVDw=9nRpyHbGRz6jCV14=bxtsXENg@mail.gmail.com>
-Subject: Re: [PATCH -tip] kasan: Emit different calls for instrumentable memintrinsics
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Jakub Jelinek <jakub@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-kbuild@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-toolchains@vger.kernel.org
+References: <68590206e8b044a2a71457cbbeda0794@hyperstone.com>
+In-Reply-To: <68590206e8b044a2a71457cbbeda0794@hyperstone.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 13 Feb 2023 14:38:02 +0100
+Message-ID: <CAPDyKFoUUoHVjCzhDeeSiQFa2s1ewYN20QcbhpQfL50jOSdxwQ@mail.gmail.com>
+Subject: Re: [PATCH] mmc: block: workaround long ioctl busy timeout
+To:     =?UTF-8?Q?Christian_L=C3=B6hle?= <CLoehle@hyperstone.com>
+Cc:     "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        Avri Altman <Avri.Altman@wdc.com>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Feb 2023 at 13:36, Peter Zijlstra <peterz@infradead.org> wrote:
+On Mon, 16 Jan 2023 at 15:38, Christian L=C3=B6hle <CLoehle@hyperstone.com>=
+ wrote:
 >
-> On Mon, Feb 13, 2023 at 12:01:40PM +0100, Jakub Jelinek wrote:
+> The ioctl interface allowed to set cmd_timeout_ms when polling for
+> busy on R1B commands. This was often limited by the max hw timeout
+> so work around it like for the sanitize command.
 >
-> > The current gcc behavior is that operations like aggregate copies, or
-> > clearing which might or might not need memcpy/memset/memmove under the hood
-> > later are asan instrumented before the operation (in order not to limit the
-> > choices on how it will be expanded), uses of builtins (__builtin_ prefixed
-> > or not) are also instrumented before the calls unless they are one of the
-> > calls that is recognized as always instrumented.  None for hwasan,
-> > for asan:
-> > index, memchr, memcmp, memcpy, memmove, memset, strcasecmp, strcat, strchr,
-> > strcmp, strcpy, strdup, strlen, strncasecmp, strncat, strncmp, strcspn,
-> > strpbrk, strspn, strstr, strncpy
-> > and for those builtins gcc disables inline expansion and enforces a library
-> > call (but until the expansion they are treated in optimizations like normal
-> > builtins and so could be say DCEd, or their aliasing behavior is considered
-> > etc.).  kasan behaves the same I think.
-> >
-> > Now, I think libasan only has __asan_ prefixed
-> > __asan_memmove, __asan_memset and __asan_memcpy, nothing else, so most of
-> > the calls from the above list even can't be prefixed.
+> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+> ---
+>  drivers/mmc/core/block.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+> index 20da7ed43e6d..ba3bc9014179 100644
+> --- a/drivers/mmc/core/block.c
+> +++ b/drivers/mmc/core/block.c
+> @@ -472,6 +472,8 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card,=
+ struct mmc_blk_data *md,
+>         struct scatterlist sg;
+>         int err;
+>         unsigned int target_part;
+> +       unsigned int busy_timeout =3D MMC_BLK_TIMEOUT_MS;
+> +       int poll_prog =3D false;
+>
+>         if (!card || !md || !idata)
+>                 return -EINVAL;
+> @@ -493,6 +495,12 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card=
+, struct mmc_blk_data *md,
+>         cmd.opcode =3D idata->ic.opcode;
+>         cmd.arg =3D idata->ic.arg;
+>         cmd.flags =3D idata->ic.flags;
+> +       /* R1B flag might be removed here to work around hw, so save it *=
+/
+> +       poll_prog =3D (idata->rpmb || (cmd.flags & MMC_RSP_R1B) =3D=3D MM=
+C_RSP_R1B);
+> +       busy_timeout =3D idata->ic.cmd_timeout_ms ? :
+> +               MMC_BLK_TIMEOUT_MS;
+> +       if (poll_prog)
+> +               mmc_prepare_busy_cmd(card->host, &cmd, busy_timeout);
 
-Correct, right now libasan only does memmove, memset, and memcpy. I
-don't think it'll ever do more, at least not in the near future.
+This may end up using R1B for rpmb commands, we don't want that.
 
-> > So, do you want for --param asan-kernel-mem-intrinsic-prefix=1 to __asan_
-> > prefix just memcpy/memmove/memset and nothing else?
+>
+>         if (idata->buf_bytes) {
+>                 data.sg =3D &sg;
+> @@ -596,7 +604,7 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card,=
+ struct mmc_blk_data *md,
+>         if (idata->ic.postsleep_min_us)
+>                 usleep_range(idata->ic.postsleep_min_us, idata->ic.postsl=
+eep_max_us);
+>
+> -       if (idata->rpmb || (cmd.flags & MMC_RSP_R1B) =3D=3D MMC_RSP_R1B) =
+{
+> +       if (poll_prog) {
 
-Yes.
+If we end up using R1B and the host supports HW busy detection, we
+should skip polling.
 
-> > Is it ok to emit
-> > memcpy/memset/memmove from aggregate operations which are instrumented
-> > already at the caller (and similarly is it ok to handle those operations
-> > inline)?
+>                 /*
+>                  * Ensure RPMB/R1B command has completed by polling CMD13=
+ "Send Status". Here we
+>                  * allow to override the default timeout value if a custo=
+m timeout is specified.
 
-Yes, I think that's fair.
+I believe I understand the problem you are trying to address in the
+$subject patch. Let me try to help out, by sending a re-worked patch
+to try to cover the things I pointed out above in a more consistent
+way.
 
-> I'm thinking it is trivial to add more __asan prefixed functions as
-> needed, while trying to untangle the trainwreck created by assuming the
-> normal functions are instrumented is much more work.
-
-For the kernel param, I'd only do memcpy/memmove/memset, as those are
-the most brittle ones. The string functions are instrumented on most
-architectures through lib/string.c being instrumented.
-
-Thanks,
--- Marco
+Kind regards
+Uffe
