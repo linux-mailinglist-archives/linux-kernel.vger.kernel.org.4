@@ -2,155 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5EF1693FC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:38:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A30693FCC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:38:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbjBMIiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 03:38:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46720 "EHLO
+        id S230093AbjBMIir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 03:38:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjBMIiK (ORCPT
+        with ESMTP id S230078AbjBMIik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 03:38:10 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC0C3CDF2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 00:38:08 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id hn2-20020a05600ca38200b003dc5cb96d46so10664454wmb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 00:38:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=x93TSjXtO2TlBbQBk5NGYGAmIwuwgwhV00wjEqEE7Ys=;
-        b=cENjSiAp/PKrOCayJWJN1sfYW7o5AjlEiGfBmJW6RbMtdZDQ+Tgr5Lz/zBpkcdTiZw
-         lY9XIPWbgwgPKc83YQDqDJic4iWhRledbERbyDRX9vv5VKn9kzqi582th6XVx/qr+AFA
-         3bdwU116Zd0XZkPh6/RmFVKrrBQK1NO6DFqaAKl+LocAHAdSD1TFKOQkRxldhBLVwro1
-         Jzm5hW1reFVAcD9AEqHSvFpGN2xw8bACf+/SMZD/U/bWmRLg+rAibvGdbnfMcs1Sc+0i
-         a/gr21XFHk7ZoHXs3/+vyxLufhJ8rOSxqkDJzux/IxJw9RiFbnP67n3j80xfCRNcz26R
-         SjOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x93TSjXtO2TlBbQBk5NGYGAmIwuwgwhV00wjEqEE7Ys=;
-        b=xJ5CAbV0wqXyRLbsGS9F5AU1L8Xth68xDArhBjejYPzpfyHhnW/zRng6Qt4c6gDLTg
-         cMWfVeJQWsyGkvHyhRhL32EJcynM28z5dUtDFpzInkTxs8SFQhouaHhZxpp1jvsrkRlO
-         IuVKC81ySITAbQovwYXE5WwgYBQNH5st0yT2ZtgevijSwu7ky9vYlydh6NUR3qLQ6Uer
-         4cGbtabysFES8dSKtJfiIql4qVMzS4w1sJtnsKqX/BZbPvDSagnDIRa8GUbuyo7NdgNV
-         JhgjPt9LKLaPyedColY4bHQBDNMcXHCXtCjDSp8TffCAy66Cd8czMacpFXDqYbhYYW6u
-         aVzg==
-X-Gm-Message-State: AO0yUKWeejmBJE39/rNhTfLXbR3hQwekehMdS00O3RZX54aPCdYKAVK9
-        myGxKXO12hJqBa+MxWyPDy+DxLpPpz25CWnR
-X-Google-Smtp-Source: AK7set/x2ojpgyB5m1IoMLipum1xi70lchdc6voJigmp6PgY5rE/K5spEew1vHApe+/oMNVamvMVCQ==
-X-Received: by 2002:a05:600c:491d:b0:3da:2a78:d7a4 with SMTP id f29-20020a05600c491d00b003da2a78d7a4mr18267334wmp.21.1676277487553;
-        Mon, 13 Feb 2023 00:38:07 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id o19-20020a05600c379300b003b47b80cec3sm16081969wmr.42.2023.02.13.00.38.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 00:38:07 -0800 (PST)
-Message-ID: <d10e541a-cdfd-08af-6a2c-eb7edcdb486a@linaro.org>
-Date:   Mon, 13 Feb 2023 09:38:05 +0100
+        Mon, 13 Feb 2023 03:38:40 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3E64C0A;
+        Mon, 13 Feb 2023 00:38:39 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31D8Ln7q004417;
+        Mon, 13 Feb 2023 08:38:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=iW4QlO+M/Cz+2rOSOobCIw15xr8jaLQx/aOyS2Gq0gg=;
+ b=YSX9H1EICtsiJ88lumzH9XaDvjIgVeo3FalFCbCZuUdaMo8QPnqeavQAZlDkIGwYhUvb
+ BXa/i+SP5qPk5nUBeUeliRCxPaivHClZBE+EiA9VE2ixIGOTVeRlCVPk7gryqZjiFcR0
+ pgNG7WjyYDSa0OtO1idSAPQnoYrR8E4Nn6Tft6B5Fplabehi/SxDd2pG+mI9AiPldrDn
+ noovj5kGl7Qu7jy5yUgl9L3UmPd8CH5jVKZXy6ZT0S1IKOWbuvx1FUjnmYG/vnfDEmoC
+ 83VG2aMLcBm0qjBmKlL8hPIccn6FWRb5gUeUYt2z+LCStcrnoSPmgulBEsBttJxcsF1K 1w== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nqhmnr9x5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 08:38:28 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31CImXIj010856;
+        Mon, 13 Feb 2023 08:38:26 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3np2n6tcs6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 08:38:26 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31D8cNDJ20382166
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Feb 2023 08:38:24 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9D7862004B;
+        Mon, 13 Feb 2023 08:38:23 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1A07620040;
+        Mon, 13 Feb 2023 08:38:22 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.109.253.169])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Mon, 13 Feb 2023 08:38:21 +0000 (GMT)
+Date:   Mon, 13 Feb 2023 14:08:19 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, jack@suse.cz,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/21] ext4: avoid to use preallocated blocks if
+ EXT4_MB_HINT_GOAL_ONLY is set
+Message-ID: <Y+n2+7pjkeb3vWQ7@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <20230209194825.511043-1-shikemeng@huaweicloud.com>
+ <20230209194825.511043-4-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 1/5] dt-bindings: watchdog: mt7621-wdt: add phandle to
- access system controller registers
-Content-Language: en-US
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        tsbogend@alpha.franken.de, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <20230211073357.755893-1-sergio.paracuellos@gmail.com>
- <20230211073357.755893-2-sergio.paracuellos@gmail.com>
- <190b3135-82f3-4dfa-55ee-e048c5510e3c@arinc9.com>
- <CAMhs-H8tehOWvYKmFtW_LHNb62h5mnzVGN_bfGOtLgNE9qUxqw@mail.gmail.com>
- <d14f0065-e8d3-50ed-7ea4-ba57dbd18d51@arinc9.com>
- <CAMhs-H_1dtdAmeNW9arK9JxhdWaQJwcMU1Pk7TOW1f5MREzzug@mail.gmail.com>
- <76353597-0170-e0d9-9f5d-f208a03e44e8@linaro.org>
- <CAMhs-H-JGZMR6mB=USywAh4aRS9ZFOVebwLv8=N2f3uvWpcXDA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMhs-H-JGZMR6mB=USywAh4aRS9ZFOVebwLv8=N2f3uvWpcXDA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230209194825.511043-4-shikemeng@huaweicloud.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: fJdF6FuAx3eqb8yhNXj9yL7QAUim8BDK
+X-Proofpoint-ORIG-GUID: fJdF6FuAx3eqb8yhNXj9yL7QAUim8BDK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-13_04,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ spamscore=0 adultscore=0 mlxlogscore=794 malwarescore=0 clxscore=1015
+ impostorscore=0 phishscore=0 priorityscore=1501 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302130076
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/02/2023 09:13, Sergio Paracuellos wrote:
-> On Sat, Feb 11, 2023 at 12:42 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 11/02/2023 12:01, Sergio Paracuellos wrote:
->>> On Sat, Feb 11, 2023 at 11:47 AM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
->>>>
->>>> On 11.02.2023 13:41, Sergio Paracuellos wrote:
->>>>> On Sat, Feb 11, 2023 at 10:10 AM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
->>>>>>
->>>>>> Is this mediatek,sysctl property required after your changes on the
->>>>>> watchdog code?
->>>>>
->>>>> I don't really understand the question :-) Yes, it is. Since we have
->>>>> introduced a new phandle in the watchdog node to be able to access the
->>>>> reset status register through the 'sysc' syscon node.
->>>>> We need the bindings to be aligned with the mt7621.dtsi file and we
->>>>> are getting the syscon regmap handler via
->>>>> 'syscon_regmap_lookup_by_phandle()'. See PATCH 5 of the series, Arınç.
->>>>
->>>> I believe you need to put mediatek,sysctl under "required:".
->>>
->>> Ah, I understood your question now :-). You meant 'required' property.
->>> I need more coffee, I guess :-). I am not sure if you can add
->>> properties as required after bindings are already mainlined for
->>> compatibility issues. The problem with this SoC is that drivers become
->>> mainlined before the device tree was so if things are properly fixed
->>> now this kind of issues appear.  Let's see Krzysztof and Rob comments
->>> for this.
->>
->> If your driver fails to probe without mediatek,sysctl, you already made
->> it required (thus broke the ABI) regardless what dt-binding is saying.
->> In such case you should update dt-binding to reflect reality.
->>
->> Now ABI break is different case. Usually you should not break it without
->> valid reasons (e.g. it was never working before). Your commit msg
->> suggests that you only improve the code, thus ABI break is not really
->> justified. In such case - binding is correct, driver should be reworked
->> to accept DTS without the new property.
+On Fri, Feb 10, 2023 at 03:48:07AM +0800, Kemeng Shi wrote:
+> ext4_mb_use_preallocated will ignore the demand to alloc at goal block
+> only. Return false if EXT4_MB_HINT_GOAL_ONLY is set before use
+> preallocated blocks in ext4_mb_use_preallocated.
 > 
-> Thanks for clarification, Krzysztof. Ok, so if this is the case I need
-> to add this property required (as Arinc was properly pointing out in
-> previous mail) since without it the driver is going to fail on probe
-> (PATCH 5 of the series). I understand the "it was never working
-> before" argument reason for ABI breaks. What happens if the old driver
-> code was not ideal and totally dependent on architecture specific
-> operations when this could be totally avoided and properly make arch
-> independent agnostic drivers?
+> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+> ---
+>  fs/ext4/mballoc.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index 375d9655b525..352ac9139fee 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -4368,6 +4368,9 @@ ext4_mb_use_preallocated(struct ext4_allocation_context *ac)
+>  	if (!(ac->ac_flags & EXT4_MB_HINT_DATA))
+>  		return false;
+>  
+> +	if (unlikely(ac->ac_flags & EXT4_MB_HINT_GOAL_ONLY))
+> +		return false;
+> +
+>  	/* first, try per-file preallocation */
+>  	rcu_read_lock();
+>  	list_for_each_entry_rcu(pa, &ei->i_prealloc_list, pa_inode_list) {
+> -- 
+> 2.30.0
+> 
+So with the flag, even when we request for a logical/goal block
+combination that can be satisfied by one of the inode PAs in the list,
+we would still exit early and the allocation would eventually fail since
+the goal block would be marked "in-use" in the buddy. This doesn't seem
+to be desirable.
 
-It's just an improvement and improvements should be incremental and not
-break ABI.
+Maybe instead of exiting early we should try to find a PA that satisfies
+the logical block we are asking for and then incase of
+EXT4_MB_HINT_GOAL_ONLY, we can add a check to see if the physical block
+of the PA corresponds to the goal block. Would like to hear your
+thoughts on this.
 
-> This driver was added in 2016 [0]. There
-> was not a device tree file in the kernel for this SoC mainlined until
-> 2022 [1]. 
-
-2022 march was almost a year ago, so there were kernel releases with
-this ABI.
-
-Also, what about all out of tree DTS? What about other operating
-systems, bootloaders, firmwares etc?
-
-
-Best regards,
-Krzysztof
-
+Regards,
+ojaswin
