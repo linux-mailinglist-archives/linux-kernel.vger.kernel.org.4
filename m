@@ -2,97 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC5F693EF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 08:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B203693EF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 08:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbjBMHc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 02:32:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
+        id S229837AbjBMHkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 02:40:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjBMHc1 (ORCPT
+        with ESMTP id S229468AbjBMHkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 02:32:27 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A94D517
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 23:32:25 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id q3-20020a5edb03000000b00725625524e5so7800009iop.2
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 23:32:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=quj/8o7gTMSH+S+wTa1zjEbyVtT9EYHOFb83bFu8E1g=;
-        b=WLfiOQfn7dkj1/NaPAZBxnC4tsgwnT9V+DoCenFU6DMQ4LSUsJhWDgiUwtVMFs4WaQ
-         j1FIQCkf/hDdg4r/thUkMhsktrfpX0RL0Zdo1+c0qOyyiSoJMc2TePRMNyvWxIqxWr0q
-         837Zi6ONmaUMCFH1aTuyd2klMDByqnveRSxZL+fTI+Kx2kT4ubFKpQw6m5Ucyc5Wi15i
-         T3MrsWAD82L2t6tLOwPJC7026YqyPQTjZjtzEz/ClAVZ6UfYeLYg9Xf2i8sO1ZpXsYTa
-         YiblRfIYJcNA5c9n0QNZXBqMKQ9XOGqbCU+iZt0Ff/UBaMCBXbsCmI5ugrEVUfdUhbpT
-         oDTQ==
-X-Gm-Message-State: AO0yUKXGZ6UliImtpFxBjgR00JfSc9m5Y8hQt2kJRN8x1kWKHGgEf5Kz
-        H6hvjS73DOLQXPyI0rFAtLVfyEOn1grA4DYMLXgMX3+8fPVm
-X-Google-Smtp-Source: AK7set91ScUm74tbttLJhTTiDPNTwirgV+qr+5SPp4I3IY4zM1LggDLslbYGTnHlWHUzrq20kjjaMjqAeT5d4UxW+pJWmCKjUUDT
+        Mon, 13 Feb 2023 02:40:06 -0500
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B87BE3AD;
+        Sun, 12 Feb 2023 23:40:05 -0800 (PST)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id 657521C0002;
+        Mon, 13 Feb 2023 07:40:02 +0000 (UTC)
+Message-ID: <7dd732b9-d05d-1494-4624-c25d05c443b1@ghiti.fr>
+Date:   Mon, 13 Feb 2023 08:40:02 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:ecb:b0:3ac:ca0a:6fdf with SMTP id
- q11-20020a0566380ecb00b003acca0a6fdfmr13231209jas.56.1676273545103; Sun, 12
- Feb 2023 23:32:25 -0800 (PST)
-Date:   Sun, 12 Feb 2023 23:32:25 -0800
-In-Reply-To: <20230213071422.2985-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000033d42305f48fd97f@google.com>
-Subject: Re: [syzbot] INFO: trying to register non-static key in __timer_delete_sync
-From:   syzbot <syzbot+1e164be619b690a43d79@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 00/24] Remove COMMAND_LINE_SIZE from uapi
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20221211061358.28035-1-palmer@rivosinc.com>
+ <639b020c-7419-cbda-64c4-caffd8683131@ghiti.fr>
+ <aa40847d-1814-4a20-821e-650c8f1f7cad@app.fastmail.com>
+Content-Language: en-US
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <aa40847d-1814-4a20-821e-650c8f1f7cad@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-unregister_netdevice: waiting for DEV to become free
+On 2/10/23 20:37, Arnd Bergmann wrote:
+> On Fri, Feb 10, 2023, at 18:10, Alexandre Ghiti wrote:
+>> On 12/11/22 07:13, Palmer Dabbelt wrote:
+>>> This all came up in the context of increasing COMMAND_LINE_SIZE in the
+>>> RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
+>>> maximum length of /proc/cmdline and userspace could staticly rely on
+>>> that to be correct.
+>>>
+>>> Usually I wouldn't mess around with changing this sort of thing, but
+>>> PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
+>>> to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
+>>> increasing, but they're from before the UAPI split so I'm not quite sure
+>>> what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
+>>> asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
+>>> boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
+>>> and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
+>>> asm-generic/setup.h.").
+>>>
+>>> It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
+>>> part of the uapi to begin with, and userspace should be able to handle
+>>> /proc/cmdline of whatever length it turns out to be.  I don't see any
+>>> references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
+>>> search, but that's not really enough to consider it unused on my end.
+>>>
+>>> The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE really
+>>> shouldn't be part of uapi, so this now touches all the ports.  I've
+>>> tried to split this all out and leave it bisectable, but I haven't
+>>> tested it all that aggressively.
+>>>
+>>> Changes since v1 <https://lore.kernel.org/all/20210423025545.313965-1-palmer@dabbelt.com/>:
+>>> * Touches every arch.
+>>>
+>>>
+>> The command line size is still an issue on riscv, any comment on this so
+>> we can make progress?
+> I think this makes sense overall, but I see there were a couple
+> of architecture specific regressions introduced in v2 that should
+> be resolved, see
+>
+> https://lore.kernel.org/all/20221211061358.28035-1-palmer@rivosinc.com/
 
-unregister_netdevice: waiting for lo to become free. Usage count = 2
-leaked reference.
- __netdev_tracker_alloc include/linux/netdevice.h:4039 [inline]
- netdev_hold include/linux/netdevice.h:4068 [inline]
- ipv6_add_dev+0x43e/0x1320 net/ipv6/addrconf.c:401
- addrconf_notify+0x61e/0x18c0 net/ipv6/addrconf.c:3552
- notifier_call_chain+0xb5/0x200 kernel/notifier.c:87
- call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1945
- call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
- call_netdevice_notifiers net/core/dev.c:1997 [inline]
- register_netdevice+0xfb4/0x1640 net/core/dev.c:10084
- register_netdev+0x31/0x50 net/core/dev.c:10179
- loopback_net_init+0x7a/0x170 drivers/net/loopback.c:219
- ops_init+0xb9/0x670 net/core/net_namespace.c:135
- setup_net+0x793/0xe60 net/core/net_namespace.c:333
- copy_net_ns+0x31b/0x6b0 net/core/net_namespace.c:483
- create_new_namespaces+0x3f6/0xb20 kernel/nsproxy.c:110
- unshare_nsproxy_namespaces+0xc5/0x1f0 kernel/nsproxy.c:228
- ksys_unshare+0x449/0x920 kernel/fork.c:3202
- __do_sys_unshare kernel/fork.c:3273 [inline]
- __se_sys_unshare kernel/fork.c:3271 [inline]
- __x64_sys_unshare+0x31/0x40 kernel/fork.c:3271
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Thanks, I had not noticed those failures. I'll take over and send a v3 
+that fixes that,
+
+Thanks again,
+
+Alex
 
 
-Tested on:
-
-commit:         75da437a Merge branch '40GbE' of git://git.kernel.org/..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=16527cc7480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6e5fc864153bbc8c
-dashboard link: https://syzkaller.appspot.com/bug?extid=1e164be619b690a43d79
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=10692a4f480000
-
+>
+> for the archive of this thread.
+>
+>       Arnd
