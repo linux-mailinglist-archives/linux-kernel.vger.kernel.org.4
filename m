@@ -2,74 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9B2694BFD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:04:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77637694BF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:04:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbjBMQEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 11:04:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53216 "EHLO
+        id S231374AbjBMQEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 11:04:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231391AbjBMQEp (ORCPT
+        with ESMTP id S229479AbjBMQEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 11:04:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF051C585
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:04:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676304244;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z+3XeIGkgLxorQE2MKfz/0QshNsn2TACmyCRtPNykmc=;
-        b=c0546usbhk94rsZ6ZkjdA/GlCtuy0hCYsAQLr+sBBBT1AjvmwY20wAAIRQnAPBNujr9yLB
-        bYBddkVnlhyhlPxyFNMX4yPKs4NGJ63nS+xsBlBC/UEQ1hQkRVaI3/AGaaOq+UU41UVilw
-        2MYBJFWP7WG048Qpa73yfEs7XdXEIOE=
-Received: from mail-vk1-f198.google.com (mail-vk1-f198.google.com
- [209.85.221.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-551-yOr3cIaRPa-_VEtv443xRw-1; Mon, 13 Feb 2023 11:04:03 -0500
-X-MC-Unique: yOr3cIaRPa-_VEtv443xRw-1
-Received: by mail-vk1-f198.google.com with SMTP id bq33-20020a056122232100b003ea473c36b3so4929687vkb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:04:02 -0800 (PST)
+        Mon, 13 Feb 2023 11:04:20 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050ED1C583;
+        Mon, 13 Feb 2023 08:04:20 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id u8so5360357ilq.13;
+        Mon, 13 Feb 2023 08:04:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1676304259;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YqDYG1HQsanaYHBVxFBRuCH5DheOkEu9TeGl3/Ddq7Q=;
+        b=afONKsgbdi3KwIs4EedRq2qbreVbE8uxI7D2Pc3wqRgODgNXgOpOkInLyJrDR29XFB
+         NccqEqDigwkzv7/CLb0JLmr2qQ0ZjxPg9GODMmlYa7+ykl8Z+emK737D/V+PxCO2g7f8
+         jc1cU9j+1XW4/tVlLMHDgsG8/8C8KvMjegPKTqB2CSnrG3BZIP+PQAcQS4Hci5k5UA4a
+         wqADlJuvL7y9QS+pEZEEJx5n2Drk0waQMEV0q0Pyjp6+X28J4vtFOyyPKmSN+rVlY0Vb
+         UezyNZCcDlp/RCMMoWGV0HVKvX9ygUmMlIv+RBqnSngJ4Vf/xS7eRu3kxIKhQEvIrYxJ
+         yhBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z+3XeIGkgLxorQE2MKfz/0QshNsn2TACmyCRtPNykmc=;
-        b=yevDk85LLjJfY1ol3ff5sygI3nn/PMgtHmKsoE9AXjzOmN7nPCv/yhCPjWEiMu3rrp
-         xIHeoBxH+DB+8G2ZFL2XGAK4mygirHyWiyI1YEMTLwNg6Iln18sP0c3zwx3sOpTXT2fS
-         rPJtLynyl0PLki0xndFudqe4Om8xbQ20SihpD3dbncHXlC0/ko+FdALDSECJaiRZJITp
-         mF2yno7w+NPFXaz33GOC+92zUiOLImd25pm7aX+NwTc8Dji8BcmNss/bVIP7hyTg8RcG
-         j0x8DoUI7sKxdXhmq7OAmZhzV2XiAINz+Y9t4Aj2c4V+begadNsb97kOjRscrXEawjT8
-         jy1g==
-X-Gm-Message-State: AO0yUKXw07ll1d5CStW4C1Mv1XtZNCPntWrv6M2O/L66u1WRioTXfTvC
-        iFBhw0rZO2Kcpu8yxd9o4r6arg20DKoSf7vTJnBdp3yc6/e7fs1ptXdYSFmMukB+/S0CpeeLIKz
-        twvVcIyC5ExfyUeNS/ew7AidyN5QaCMruG3Zp3vW1
-X-Received: by 2002:a05:6102:3750:b0:411:bd2e:11ac with SMTP id u16-20020a056102375000b00411bd2e11acmr2920850vst.75.1676304242481;
-        Mon, 13 Feb 2023 08:04:02 -0800 (PST)
-X-Google-Smtp-Source: AK7set8f2Uc45pxarfLQxoAEndqNBof2SbJiNo6wh8cEftHeFujSHMV+bZPuLuaL05xaIESBdpPxqaZ9Sv0rQStmnOQ=
-X-Received: by 2002:a05:6102:3750:b0:411:bd2e:11ac with SMTP id
- u16-20020a056102375000b00411bd2e11acmr2920835vst.75.1676304242260; Mon, 13
- Feb 2023 08:04:02 -0800 (PST)
+        d=1e100.net; s=20210112; t=1676304259;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YqDYG1HQsanaYHBVxFBRuCH5DheOkEu9TeGl3/Ddq7Q=;
+        b=km+YHXAHn4H/K4ye3E/TbvdN4ULLbfW+lAguLMIVVU5cOIqEOVu68lwM/3lYTnLGOz
+         4hUSfjctuJR6DtYh6Vih0KlXs3LwfJiecUIMYx/qe97C9dT+xJgVJjncWkxH0aX/Se3H
+         gPce3urqPbONbO2hJGVzSZhf61h1xB9+vskmu0BeTUfSTmeSx4uKs8csCuwgAUNWM0cE
+         Kb3LnoZHxUZQjYMsEnhVad8r0/m0MuLmZtiDtFLESJakwMTjgxArZKJiwITtIhwwLACG
+         meXg84Y1XUUhkNGZkolhJXnZf2HfKkBzorohhEfyqwsoTRbKUNNq2V2jlHN8qk3fF4Wc
+         FLKQ==
+X-Gm-Message-State: AO0yUKVTqs7Ex/yrer+XeyXUYVRewgrBhQ3QlV3lzIHM6MnCv8HxS3hi
+        5Fmo+CgjvjccW7iWRjtsJGA=
+X-Google-Smtp-Source: AK7set/6PScffJ7w+oMo65G5e41ypk8lLhhClh94EFjhQWApYrG1Hcvs3gbSbnei1vZ76SuskHIR7g==
+X-Received: by 2002:a05:6e02:ee3:b0:315:363e:b140 with SMTP id j3-20020a056e020ee300b00315363eb140mr4801191ilk.1.1676304259347;
+        Mon, 13 Feb 2023 08:04:19 -0800 (PST)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id k2-20020a02ccc2000000b0035a40af60fcsm4067532jaq.86.2023.02.13.08.04.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 08:04:19 -0800 (PST)
+Date:   Mon, 13 Feb 2023 18:04:13 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Steven Price <steven.price@arm.com>
+Cc:     kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Joey Gouly <joey.gouly@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Fuad Tabba <tabba@google.com>, linux-coco@lists.linux.dev
+Subject: Re: [RFC PATCH 05/28] arm64: RME: Define the user ABI
+Message-ID: <20230213180413.00000392@gmail.com>
+In-Reply-To: <20230127112932.38045-6-steven.price@arm.com>
+References: <20230127112248.136810-1-suzuki.poulose@arm.com>
+        <20230127112932.38045-1-steven.price@arm.com>
+        <20230127112932.38045-6-steven.price@arm.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-References: <'CANiq72=FZtNmYvbb-YPHmQ=bm8rH8VO3M9nemT4i03g9A2PD2Q@mail.gmail.com'>
- <20230213151339.661225-1-yakoyoku@gmail.com> <Y+pbtZUaRM+gkOUC@righiandr-XPS-13-7390>
-In-Reply-To: <Y+pbtZUaRM+gkOUC@righiandr-XPS-13-7390>
-From:   Eric Curtin <ecurtin@redhat.com>
-Date:   Mon, 13 Feb 2023 16:03:46 +0000
-Message-ID: <CAOgh=FySHZSceM_JKjSNX5qTXBSv3Kv3KP6yT27VXADt-_oB5w@mail.gmail.com>
-Subject: Re: [PATCH] rust: fix regexp in scripts/is_rust_module.sh
-To:     Andrea Righi <andrea.righi@canonical.com>
-Cc:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        miguel.ojeda.sandonis@gmail.com, alex.gaynor@gmail.com,
-        bjorn3_gh@protonmail.com, boqun.feng@gmail.com, dxu@dxuuu.xyz,
-        gary@garyguo.net, linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        rust-for-linux@vger.kernel.org, wedsonaf@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,53 +85,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Feb 2023 at 15:48, Andrea Righi <andrea.righi@canonical.com> wrote:
->
-> On Mon, Feb 13, 2023 at 12:13:39PM -0300, Martin Rodriguez Reboredo wrote:
-> > On Mon, Feb 13, 2023 at 1:19 PM Miguel Ojeda <ojeda@kernel.org> wrote:
-> > > On Fri, Feb 10, 2023 at 4:26 PM Andrea Righi <andrea.righi@canonical.com> wrote:
-> > > >
-> > > > nm can use "R" or "r" to show read-only data sections, but
-> > > > scripts/is_rust_module.sh can only recognize "r", so with some versions
-> > > > of binutils it can fail to detect if a module is a Rust module or not.
-> > >
-> > > Do you know which versions? If so, it would be nice to document it here.
-> > >
-> > > > Moreover, with this patch applied I can also relax the constraint of
-> > > > "RUST depends on !DEBUG_INFO_BTF" and build a kernel with Rust and BTF
-> > > > enabled at the same time (of course BTF generation is still skipped for
-> > > > Rust modules).
-> > >
-> > > Even if that build succeeds, can you load the modules? i.e. the
-> > > constraint was there due to
-> > > https://github.com/Rust-for-Linux/linux/issues/735.
-> >
-> > Issue was that the kernel couldn't even load C modules, Rust CUs must be
-> > skipped in vmlinux for it to work, and because of that the constraint
-> > !DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE [1] cannot be relaxed until
-> > version 1.24+ of Pahole is the minimum requirement by the kernel. I'm OK
-> > with this change but keep in mind that it won't remedy that condition.
-> >
-> > Link: https://lore.kernel.org/bpf/20230111152050.559334-1-yakoyoku@gmail.com/ [1]
->
-> Oh yes, I'm using pahole 1.24, that's probably why it's all working for
-> me. So we can't just drop !DEBUG_INFO_BTF, but we can definitely relax
-> the constraint to "!DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE".
+On Fri, 27 Jan 2023 11:29:09 +0000
+Steven Price <steven.price@arm.com> wrote:
 
-Yup the patch is ok, but we can only build with RUST and
-DEBUG_INFO_BTF if we have pahole 1.24+ because that is the version
-smart enough to exclude the Rust CUs.
+> There is one (multiplexed) CAP which can be used to create, populate and
+> then activate the realm.
+> 
+> Signed-off-by: Steven Price <steven.price@arm.com>
+> ---
+>  Documentation/virt/kvm/api.rst    |  1 +
+>  arch/arm64/include/uapi/asm/kvm.h | 63 +++++++++++++++++++++++++++++++
+>  include/uapi/linux/kvm.h          |  2 +
+>  3 files changed, 66 insertions(+)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 0dd5d8733dd5..f1a59d6fb7fc 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -4965,6 +4965,7 @@ Recognised values for feature:
+>  
+>    =====      ===========================================
+>    arm64      KVM_ARM_VCPU_SVE (requires KVM_CAP_ARM_SVE)
+> +  arm64      KVM_ARM_VCPU_REC (requires KVM_CAP_ARM_RME)
+>    =====      ===========================================
+>  
+>  Finalizes the configuration of the specified vcpu feature.
+> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+> index a7a857f1784d..fcc0b8dce29b 100644
+> --- a/arch/arm64/include/uapi/asm/kvm.h
+> +++ b/arch/arm64/include/uapi/asm/kvm.h
+> @@ -109,6 +109,7 @@ struct kvm_regs {
+>  #define KVM_ARM_VCPU_SVE		4 /* enable SVE for this CPU */
+>  #define KVM_ARM_VCPU_PTRAUTH_ADDRESS	5 /* VCPU uses address authentication */
+>  #define KVM_ARM_VCPU_PTRAUTH_GENERIC	6 /* VCPU uses generic authentication */
+> +#define KVM_ARM_VCPU_REC		7 /* VCPU REC state as part of Realm */
+>  
+>  struct kvm_vcpu_init {
+>  	__u32 target;
+> @@ -401,6 +402,68 @@ enum {
+>  #define   KVM_DEV_ARM_VGIC_SAVE_PENDING_TABLES	3
+>  #define   KVM_DEV_ARM_ITS_CTRL_RESET		4
+>  
+> +/* KVM_CAP_ARM_RME on VM fd */
+> +#define KVM_CAP_ARM_RME_CONFIG_REALM		0
+> +#define KVM_CAP_ARM_RME_CREATE_RD		1
+> +#define KVM_CAP_ARM_RME_INIT_IPA_REALM		2
+> +#define KVM_CAP_ARM_RME_POPULATE_REALM		3
+> +#define KVM_CAP_ARM_RME_ACTIVATE_REALM		4
+> +
 
-If you have a version of pahole < 1.24 and you want to include RUST
-you basically should not have DEBUG_INFO_BTF on at all because your
-build will fail (unless this change alters the list of CUs passed to
-pahole).
-
-What is a little confusing is scripts/is_rust_module.sh and pahole
-"--lang_exclude=rust" feature both attempt to do the same thing,
-recognize and skip Rust CUs
-
->
-> -Andrea
->
+It is a little bit confusing here. These seems more like 'commands' not caps.
+Will leave more comments after reviewing the later patches.
+ 
+> +#define KVM_CAP_ARM_RME_MEASUREMENT_ALGO_SHA256		0
+> +#define KVM_CAP_ARM_RME_MEASUREMENT_ALGO_SHA512		1
+> +
+> +#define KVM_CAP_ARM_RME_RPV_SIZE 64
+> +
+> +/* List of configuration items accepted for KVM_CAP_ARM_RME_CONFIG_REALM */
+> +#define KVM_CAP_ARM_RME_CFG_RPV			0
+> +#define KVM_CAP_ARM_RME_CFG_HASH_ALGO		1
+> +#define KVM_CAP_ARM_RME_CFG_SVE			2
+> +#define KVM_CAP_ARM_RME_CFG_DBG			3
+> +#define KVM_CAP_ARM_RME_CFG_PMU			4
+> +
+> +struct kvm_cap_arm_rme_config_item {
+> +	__u32 cfg;
+> +	union {
+> +		/* cfg == KVM_CAP_ARM_RME_CFG_RPV */
+> +		struct {
+> +			__u8	rpv[KVM_CAP_ARM_RME_RPV_SIZE];
+> +		};
+> +
+> +		/* cfg == KVM_CAP_ARM_RME_CFG_HASH_ALGO */
+> +		struct {
+> +			__u32	hash_algo;
+> +		};
+> +
+> +		/* cfg == KVM_CAP_ARM_RME_CFG_SVE */
+> +		struct {
+> +			__u32	sve_vq;
+> +		};
+> +
+> +		/* cfg == KVM_CAP_ARM_RME_CFG_DBG */
+> +		struct {
+> +			__u32	num_brps;
+> +			__u32	num_wrps;
+> +		};
+> +
+> +		/* cfg == KVM_CAP_ARM_RME_CFG_PMU */
+> +		struct {
+> +			__u32	num_pmu_cntrs;
+> +		};
+> +		/* Fix the size of the union */
+> +		__u8	reserved[256];
+> +	};
+> +};
+> +
+> +struct kvm_cap_arm_rme_populate_realm_args {
+> +	__u64 populate_ipa_base;
+> +	__u64 populate_ipa_size;
+> +};
+> +
+> +struct kvm_cap_arm_rme_init_ipa_args {
+> +	__u64 init_ipa_base;
+> +	__u64 init_ipa_size;
+> +};
+> +
+>  /* Device Control API on vcpu fd */
+>  #define KVM_ARM_VCPU_PMU_V3_CTRL	0
+>  #define   KVM_ARM_VCPU_PMU_V3_IRQ	0
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 20522d4ba1e0..fec1909e8b73 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -1176,6 +1176,8 @@ struct kvm_ppc_resize_hpt {
+>  #define KVM_CAP_S390_PROTECTED_ASYNC_DISABLE 224
+>  #define KVM_CAP_DIRTY_LOG_RING_WITH_BITMAP 225
+>  
+> +#define KVM_CAP_ARM_RME 300 // FIXME: Large number to prevent conflicts
+> +
+>  #ifdef KVM_CAP_IRQ_ROUTING
+>  
+>  struct kvm_irq_routing_irqchip {
 
