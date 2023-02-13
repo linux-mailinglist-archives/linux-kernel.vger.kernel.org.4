@@ -2,85 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09113694279
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D34F269427D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbjBMKOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 05:14:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
+        id S229931AbjBMKPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 05:15:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjBMKO3 (ORCPT
+        with ESMTP id S229477AbjBMKPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 05:14:29 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0829D2694
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:14:28 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-52bfa3dfd95so156224717b3.9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:14:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=m24dMml2jSsL7Dl+CG8vq6QyqBxUdcOiPSlfJt9P/gU=;
-        b=dE2vgPahqJN7F/K1m9ROLqCom5+Eovp9L8bfNcPdximbdKLGcCyli9VhHJJ6scj4ng
-         avy/w/0zSP4GRNmvUk6hcT+Va2/KMge2BIxpA0RYQEUbvCMw9fPLXtWUEm0Ry6jHZ8So
-         E5TDI1o+5iJkkRvMIrc/Nv0bf5fh64ST0ifoQ1hA4XOnulMD/m/8ofstgAXaHgfxxWJG
-         S2c4k0ZhFOD/c4lqig543GHI20z+6VNiE6d9paWKFiOh/pQmg+QlojRQ5f14stuLyCVA
-         sunw43YfiiXnapdsh5eTnhUuJ8h0L1wQDftkz+XE08sOwEfwAXyY/WchXmYdRGC0Rb5t
-         y0rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m24dMml2jSsL7Dl+CG8vq6QyqBxUdcOiPSlfJt9P/gU=;
-        b=nfTlLY56ZogvMNmSZqV4D8GLE80MFfP4dqkbcEYX/rtjMwJ3dEgio0ClVwBrKuQOry
-         DSoB+1wHWxdzcXF6r3K6LnM50iFwvJKtjD09+rFpR0F+LOxzIPV1lbVxdznTaz7eb1vj
-         R8JFhByu4IV9eQuIZY2IVgGnksNxDOH28BqvXbVTx0grcr1SrkqBq5/2i0ITpvzL9uDM
-         sdQZo8fPZlcxvJHlriU53rQEpOujJKkMsJomiqlyJjQVZPKTOJP2lqfJQl/zyMG+3WLb
-         TaJLyksSoOtTiWIbNkMudoObTVpC6nVu43iVvGKE4rYa91xmHhSkv3xDzEqSTbTUCODe
-         o3ig==
-X-Gm-Message-State: AO0yUKV0jdwN18uv9XAMLTt6XiP2ZneLsdgwbERDSmD7kybJ23r8G5wt
-        AmnTUeXbybQf6gp3VWXv4ZXo0fhd/DLyTgk7G79nTA==
-X-Google-Smtp-Source: AK7set+LuEjq0hGS8kTkbDCf7Aen0jDGWuexoGHd2jNkgiQU/80/rPS3PmbPLavbhwF7RZcjpke/lJUVBzgNfpa3fRQ=
-X-Received: by 2002:a0d:f804:0:b0:527:ad38:2c5b with SMTP id
- i4-20020a0df804000000b00527ad382c5bmr3046509ywf.336.1676283267256; Mon, 13
- Feb 2023 02:14:27 -0800 (PST)
-MIME-Version: 1.0
-References: <20230202-asahi-t8112-dt-v1-0-cb5442d1c229@jannau.net> <20230202-asahi-t8112-dt-v1-11-cb5442d1c229@jannau.net>
-In-Reply-To: <20230202-asahi-t8112-dt-v1-11-cb5442d1c229@jannau.net>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 13 Feb 2023 11:14:16 +0100
-Message-ID: <CACRpkdadj1Jwh+XwbEvzsULOo2vaKX9ioJVw3aekRbPB371A_Q@mail.gmail.com>
-Subject: Re: [PATCH 11/17] dt-bindings: pinctrl: apple,pinctrl: Add
- apple,t8112-pinctrl compatible
-To:     Janne Grunau <j@jannau.net>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Kettenis <kettenis@openbsd.org>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+        Mon, 13 Feb 2023 05:15:51 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0201BCD;
+        Mon, 13 Feb 2023 02:15:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676283350; x=1707819350;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=8pxbrVMMBeuKldEB4rEpcQ/HEmb3Tvb3aO7aDW2woT8=;
+  b=Tyd8rORmBvqcD3RkoTn0hIROEKTWroko8+/CYJx7SqiecPL15e9jzSZr
+   afN3DKwL+oCuSa8wGa016LX3VwO+gKmva1fKkFx8FrkhHmkcfqHgQy6br
+   5knixyuxfjRNSct2VXSs55M+6Ft41emQzdtvaw/myioTD2rUaf+0q7/AL
+   Bf8OsYAYr6GDyYOPlM1IoFOjxkQS4S3sYojEDgXISynM9dRQeEP5DOeVY
+   GeBWkeE6XVNwJKZ2iUe0aEOe7j6joYgr8ov0bopIKQsHSjTJg96M2WQJ4
+   e9w7IDwFF6UHXxaYS5M037lzg0A6qUPTwKWgwn58KIakqqClNkWrpd8Mu
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="417082719"
+X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
+   d="scan'208";a="417082719"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 02:15:48 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="668753842"
+X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
+   d="scan'208";a="668753842"
+Received: from pranavk3-mobl.gar.corp.intel.com ([10.213.82.89])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 02:15:41 -0800
+Message-ID: <6cc45a32e92e6a261b7d497eb48ac59472c35508.camel@linux.intel.com>
+Subject: Re: [PATCH 1/3] Documentation: admin-guide: Add toctree entry for
+ thermal docs
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Power Management <linux-pm@vger.kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        oe-kbuild-all@lists.linux.dev, kernel test robot <lkp@intel.com>
+Date:   Mon, 13 Feb 2023 02:15:36 -0800
+In-Reply-To: <20230213100800.28333-2-bagasdotme@gmail.com>
+References: <20230213100800.28333-1-bagasdotme@gmail.com>
+         <20230213100800.28333-2-bagasdotme@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 4:41 PM Janne Grunau <j@jannau.net> wrote:
+Hi Sanjaya,
 
-> This new SoC uses the same pinctrl hardware, so just add a new per-SoC
-> compatible.
->
-> Signed-off-by: Janne Grunau <j@jannau.net>
+On Mon, 2023-02-13 at 17:07 +0700, Bagas Sanjaya wrote:
+> kernel test robot reported htmldocs warnings:
+>=20
+> Documentation/admin-guide/index.rst:62: WARNING: toctree contains
+> reference to nonexisting document 'admin-guide/thermal'
+> Documentation/admin-guide/thermal/intel_powerclamp.rst: WARNING:
+> document isn't included in any toctree
+>=20
+> Add toctree entry for thermal/ docs to fix these warnings.
+>=20
+I submitted a patch=20
+	[thermal-bleeding-edge][PATCH] thermal: intel: powerclamp: Fix
+warnings
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Thanks,
+Srinivas
 
-Yours,
-Linus Walleij
+> Link:
+> https://lore.kernel.org/linux-doc/202302121759.MmJgDTxc-lkp@intel.com/
+> Fixes: 707bf8e1dfd51d ("Documentation: admin-guide: Move
+> intel_powerclamp documentation")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
+> =C2=A0Documentation/admin-guide/index.rst=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 | 2 +-
+> =C2=A0Documentation/admin-guide/thermal/index.rst | 8 ++++++++
+> =C2=A02 files changed, 9 insertions(+), 1 deletion(-)
+> =C2=A0create mode 100644 Documentation/admin-guide/thermal/index.rst
+>=20
+> diff --git a/Documentation/admin-guide/index.rst
+> b/Documentation/admin-guide/index.rst
+> index c872a8a1ddfa28..0571938ecdc868 100644
+> --- a/Documentation/admin-guide/index.rst
+> +++ b/Documentation/admin-guide/index.rst
+> @@ -116,7 +116,7 @@ configure specific aspects of kernel behavior to
+> your liking.
+> =C2=A0=C2=A0=C2=A0 svga
+> =C2=A0=C2=A0=C2=A0 syscall-user-dispatch
+> =C2=A0=C2=A0=C2=A0 sysrq
+> -=C2=A0=C2=A0 thermal
+> +=C2=A0=C2=A0 thermal/index
+> =C2=A0=C2=A0=C2=A0 thunderbolt
+> =C2=A0=C2=A0=C2=A0 ufs
+> =C2=A0=C2=A0=C2=A0 unicode
+> diff --git a/Documentation/admin-guide/thermal/index.rst
+> b/Documentation/admin-guide/thermal/index.rst
+> new file mode 100644
+> index 00000000000000..193b7b01a87d7e
+> --- /dev/null
+> +++ b/Documentation/admin-guide/thermal/index.rst
+> @@ -0,0 +1,8 @@
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +Thermal Subsystem
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +.. toctree::
+> +=C2=A0=C2=A0 :maxdepth: 1
+> +
+> +=C2=A0=C2=A0 intel_powerclamp
+
