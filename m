@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0482693D09
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 04:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3492C693D07
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 04:38:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjBMDi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 22:38:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49136 "EHLO
+        id S229985AbjBMDiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 22:38:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjBMDiN (ORCPT
+        with ESMTP id S229877AbjBMDiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 12 Feb 2023 22:38:13 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E5DCDC3;
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F0CCDC5;
         Sun, 12 Feb 2023 19:38:11 -0800 (PST)
-X-UUID: d2b688aeab4f11eda06fc9ecc4dadd91-20230213
+X-UUID: d34eeaaeab4f11ed945fc101203acc17-20230213
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=83LxHn0KuLIOw5PeHj1B8xMXUMZvQjuTlPj32+8lR4s=;
-        b=g0kbqHpnaUsFOA8IZXkOy4a3J9mb4ejy7cYRq3D56RsiXjkpgjEH9hfczzC0yjsCIoR8Q3PuaeBgMOMw6J/r4Zg3dyo5mI277GePmBgi5vOLh+KcajfGOZAiBHskIBfmewSutttDZHx+n5pjjpHdjtEOaRpKXcPM+BDyEUbfFEQ=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Kw/laKt8Jh/wyQuS+44ClXZkURDa/heTSZaQkJO9kBU=;
+        b=Ec4UdRcd/j0sY3wo+3D4u3TXYH4tv7B/bLmjhXeoeAfiSppJ+706Zj2AsJxEgqjK7aSMmVH86siPA33oWoROKLnxJXPSUnIAyjva1juBrZaZflDWtl3JlH4XKvvoX+sl1I22WP6crAKMPqENPSNOsfEJGmCmmA2uQbGfsjgO4j4=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.19,REQID:c9a8aac3-d99e-42fd-9226-f6df99171d36,IP:0,U
+X-CID-O-INFO: VERSION:1.1.19,REQID:26ebdf6f-1617-4daa-b032-540659061b8d,IP:0,U
         RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
         :release,TS:95
-X-CID-INFO: VERSION:1.1.19,REQID:c9a8aac3-d99e-42fd-9226-f6df99171d36,IP:0,URL
+X-CID-INFO: VERSION:1.1.19,REQID:26ebdf6f-1617-4daa-b032-540659061b8d,IP:0,URL
         :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
         :quarantine,TS:95
-X-CID-META: VersionHash:885ddb2,CLOUDID:63823cf8-ff42-4fb0-b929-626456a83c14,B
-        ulkID:230213113807YTWK3BYU,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+X-CID-META: VersionHash:885ddb2,CLOUDID:6d823cf8-ff42-4fb0-b929-626456a83c14,B
+        ulkID:230213113807GU93AZUA,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
         C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
         ,OSI:0,OSA:0,AV:0
 X-CID-BVR: 0
-X-UUID: d2b688aeab4f11eda06fc9ecc4dadd91-20230213
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+X-UUID: d34eeaaeab4f11ed945fc101203acc17-20230213
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
         (envelope-from <tinghan.shen@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1738861086; Mon, 13 Feb 2023 11:38:04 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+        with ESMTP id 66067966; Mon, 13 Feb 2023 11:38:05 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.792.15; Mon, 13 Feb 2023 11:38:04 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
@@ -57,9 +57,9 @@ CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v6 10/12] remoteproc: mediatek: Handle MT8195 SCP core 1 watchdog timeout
-Date:   Mon, 13 Feb 2023 11:37:56 +0800
-Message-ID: <20230213033758.16681-11-tinghan.shen@mediatek.com>
+Subject: [PATCH v6 11/12] remoteproc: mediatek: Refine ipi handler error message
+Date:   Mon, 13 Feb 2023 11:37:57 +0800
+Message-ID: <20230213033758.16681-12-tinghan.shen@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20230213033758.16681-1-tinghan.shen@mediatek.com>
 References: <20230213033758.16681-1-tinghan.shen@mediatek.com>
@@ -76,77 +76,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MT8195 SCP core 1 watchdog timeout needs to be handled in the
-SCP core 0 IRQ handler because the MT8195 SCP core 1 watchdog timeout
-IRQ is wired on the same IRQ entry for core 0 watchdog timeout.
-MT8195 SCP has a watchdog status register to identify the watchdog
-timeout source when IRQ triggered.
+The error message doesn't accurately reflect the cause of
+the error. The error is due to a handler not being found,
+not an invalid IPI ID.
 
 Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/remoteproc/mtk_common.h |  4 ++++
- drivers/remoteproc/mtk_scp.c    | 25 ++++++++++++++++++++++++-
- 2 files changed, 28 insertions(+), 1 deletion(-)
+ drivers/remoteproc/mtk_scp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
-index 47c06882880c..7cba34462ece 100644
---- a/drivers/remoteproc/mtk_common.h
-+++ b/drivers/remoteproc/mtk_common.h
-@@ -55,6 +55,10 @@
- #define MT8192_CORE0_WDT_IRQ		0x10030
- #define MT8192_CORE0_WDT_CFG		0x10034
- 
-+#define MT8195_SYS_STATUS		0x4004
-+#define MT8195_CORE0_WDT		BIT(16)
-+#define MT8195_CORE1_WDT		BIT(17)
-+
- #define MT8195_L1TCM_SRAM_PDN_RESERVED_RSI_BITS		GENMASK(7, 4)
- 
- #define MT8195_CPU1_SRAM_PD			0x1084
 diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-index 50eea0eb1fb9..ffb60190e0e3 100644
+index ffb60190e0e3..3522f458c33c 100644
 --- a/drivers/remoteproc/mtk_scp.c
 +++ b/drivers/remoteproc/mtk_scp.c
-@@ -229,6 +229,29 @@ static void mt8192_scp_irq_handler(struct mtk_scp *scp)
+@@ -113,7 +113,7 @@ static void scp_ipi_handler(struct mtk_scp *scp)
+ 	scp_ipi_lock(scp, id);
+ 	handler = ipi_desc[id].handler;
+ 	if (!handler) {
+-		dev_err(scp->dev, "No such ipi id = %d\n", id);
++		dev_err(scp->dev, "No handler for ipi id = %d\n", id);
+ 		scp_ipi_unlock(scp, id);
+ 		return;
  	}
- }
- 
-+static void mt8195_scp_irq_handler(struct mtk_scp *scp)
-+{
-+	u32 scp_to_host;
-+
-+	scp_to_host = readl(scp->reg_base + MT8192_SCP2APMCU_IPC_SET);
-+
-+	if (scp_to_host & MT8192_SCP_IPC_INT_BIT) {
-+		scp_ipi_handler(scp);
-+	} else {
-+		u32 reason = readl(scp->reg_base + MT8195_SYS_STATUS);
-+
-+		if (reason & MT8195_CORE0_WDT)
-+			writel(1, scp->reg_base + MT8192_CORE0_WDT_IRQ);
-+
-+		if (reason & MT8195_CORE1_WDT)
-+			writel(1, scp->reg_base + MT8195_CORE1_WDT_IRQ);
-+
-+		scp_wdt_handler(scp, reason);
-+	}
-+
-+	writel(scp_to_host, scp->reg_base + MT8192_SCP2APMCU_IPC_CLR);
-+}
-+
- static void mt8195_scp_c1_irq_handler(struct mtk_scp *scp)
- {
- 	u32 scp_to_host;
-@@ -1280,7 +1303,7 @@ static const struct mtk_scp_of_data mt8192_of_data = {
- static const struct mtk_scp_of_data mt8195_of_data = {
- 	.scp_clk_get = mt8195_scp_clk_get,
- 	.scp_before_load = mt8195_scp_before_load,
--	.scp_irq_handler = mt8192_scp_irq_handler,
-+	.scp_irq_handler = mt8195_scp_irq_handler,
- 	.scp_reset_assert = mt8192_scp_reset_assert,
- 	.scp_reset_deassert = mt8192_scp_reset_deassert,
- 	.scp_stop = mt8195_scp_stop,
 -- 
 2.18.0
 
