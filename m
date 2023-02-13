@@ -2,103 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8A8695240
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED3C695253
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:51:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjBMUuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 15:50:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
+        id S229980AbjBMUvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 15:51:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjBMUuG (ORCPT
+        with ESMTP id S229736AbjBMUva (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 15:50:06 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E76F1F5D9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 12:50:04 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id jg8so35001542ejc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 12:50:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P2EKmFD/uLCmdYgJ9rbVqoH0K8+zTnB6m2O8sRKrnrk=;
-        b=G9wokKLe0gYPoQN+jQX38Ml1Pv83XDj7zNvFBv2UJdls8nCd6Vrtg/xTlEp9RB3eCc
-         tQ/ma5pNSvc9H2KdZASNooO4+eVR2oP02VyntFu6S//vePCn5SCHNA/iGoR2mXtJi2vJ
-         LC3PKh6zsDfnWDN4Dr6E0QM+a+b5rpjcwytAf89oRnjRTuQcYd0AvhcXmQaKdzOcePRU
-         g8qOCM2I2n5vBnB3bOzJhDfYyzniaAI5Eg7wGZj0akOFeiSbw8Wkhgri7pxB2rEPlW8S
-         BsPjbf5TrgP/v0rd9OKnO0wei0LHX5850BM3evsSYSnheWFifW0iPZf542lYSYzrh43c
-         OBEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P2EKmFD/uLCmdYgJ9rbVqoH0K8+zTnB6m2O8sRKrnrk=;
-        b=hSRhXpcX/v7wT4qkBCY77WgLaYshnBScXKtzihXHVetGr/iS5hXUrJu/lQrRQtdIE2
-         Zac0ZQFs8KW3cQ9M3zbKiJ+lRKXBB8BsYnKTMfG8m3R3rcS7it8bkG1qdASzgatMnYzh
-         CbsHzyZkk5sxNsI5TjmgXaZD49dfn5BcFNSqN7g7KCopkOXBT1ymI0GQKQJXtZxVbG8D
-         4pdFSMMYq5Ua5rgGFs5C5NutQWQawsoIURgC9Vfz3A70rhuKxOEaM5m5CdAY8fhrMzZZ
-         HzGh2ppUdYF38GqCR4AmKhVIcJL1pwdcXsjWGI6r7ls8qa14X3R9ACotqLQVQyUGJj9O
-         OYOw==
-X-Gm-Message-State: AO0yUKVd7iy2KO4kf2AxJqrLN9fqNN/87akPChmTKpxzMIbB3uy4OLhw
-        7lpHMQ1A/baAsKbZnJUrVJraoO6xevwd+KBu
-X-Google-Smtp-Source: AK7set/f+xxG2O4MMtQXGC+ZfzFTdI8pROMejW7fdrRD9XbtsKprHvnkE8GXtoC2Vfl8GRO0C1Nneg==
-X-Received: by 2002:a17:906:110a:b0:886:9b85:ac5d with SMTP id h10-20020a170906110a00b008869b85ac5dmr275231eja.44.1676321402705;
-        Mon, 13 Feb 2023 12:50:02 -0800 (PST)
-Received: from localhost.localdomain (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id f21-20020a170906739500b008a94f69a1e7sm7303123ejl.163.2023.02.13.12.50.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 12:50:02 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] arm64: dts: qcom: pm8998: Add a specific compatible for coincell chg
-Date:   Mon, 13 Feb 2023 21:49:50 +0100
-Message-Id: <20230213204950.2100538-3-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230213204950.2100538-1-konrad.dybcio@linaro.org>
-References: <20230213204950.2100538-1-konrad.dybcio@linaro.org>
+        Mon, 13 Feb 2023 15:51:30 -0500
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F59E1F5D1;
+        Mon, 13 Feb 2023 12:51:29 -0800 (PST)
+Received: from [192.168.1.103] (178.176.72.240) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Mon, 13 Feb
+ 2023 23:51:21 +0300
+Subject: Re: [PATCH 12/12] pata_parport: move pata_parport.h to
+ drivers/ata/pata_parport
+To:     Ondrej Zary <linux@zary.sk>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+CC:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Tim Waugh <tim@cyberelk.net>, <linux-block@vger.kernel.org>,
+        <linux-parport@lists.infradead.org>, <linux-ide@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230211144232.15138-1-linux@zary.sk>
+ <20230211144232.15138-13-linux@zary.sk>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <5e3c8754-54ab-b2ff-0963-94f15ecb9155@omp.ru>
+Date:   Mon, 13 Feb 2023 23:51:21 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230211144232.15138-13-linux@zary.sk>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.72.240]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 02/13/2023 20:34:45
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 175483 [Feb 13 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 504 504 dc137e1f9c062eb6c0671e7d509ab442ae395562
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.72.240 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.72.240 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.72.240
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 02/13/2023 20:38:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 2/13/2023 6:59:00 PM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a PM8998-specific compatibel to the coincell charger and keep the
-PM8941 one as fallback.
+On 2/11/23 5:42 PM, Ondrej Zary wrote:
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/pm8998.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Now that paride is gone, pata_parport.h does not need to be in
+> include/linux. Move it to drivers/ata/pata_parport.
+> 
+> Signed-off-by: Ondrej Zary <linux@zary.sk>
 
-diff --git a/arch/arm64/boot/dts/qcom/pm8998.dtsi b/arch/arm64/boot/dts/qcom/pm8998.dtsi
-index adbba9f4089a..340033ac3186 100644
---- a/arch/arm64/boot/dts/qcom/pm8998.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pm8998.dtsi
-@@ -72,7 +72,7 @@ pm8998_temp: temp-alarm@2400 {
- 		};
- 
- 		pm8998_coincell: charger@2800 {
--			compatible = "qcom,pm8941-coincell";
-+			compatible = "qcom,pm8998-coincell", "qcom,pm8941-coincell";
- 			reg = <0x2800>;
- 
- 			status = "disabled";
--- 
-2.39.1
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
+[...]
+
+MBR, Sergey
