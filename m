@@ -2,175 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA8D693CCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 04:14:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C551693CDE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 04:22:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjBMDOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 22:14:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38332 "EHLO
+        id S229852AbjBMDWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 22:22:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBMDOd (ORCPT
+        with ESMTP id S229477AbjBMDWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 22:14:33 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA32A262
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 19:14:32 -0800 (PST)
+        Sun, 12 Feb 2023 22:22:08 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B51A262;
+        Sun, 12 Feb 2023 19:22:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676258072; x=1707794072;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Q0hCbkIjpAAXbWK8nI+t6JVWKPTKE5AZ1iHXjjq/Vvg=;
-  b=g2W+HbcEZwVdAgZhnRaRX1N26kfO/Fzv5nkcJU+wj03bUfcbWOKtcIwJ
-   IYRAR9zuhBzCFl4Tiy91ROSPdJwMJPmBJqp2hNc5WekTnrOvqBdVS8c2n
-   2hii6tDYnV4qF3LyBQ8+5YhF1J9BX1+sKteokVvgctVwgR6OFBBiXXaA7
-   PlJf9mvNK0WhUZ6brmmzE4c4ZEN4MbXOvvEQ0Ic7C1yRTOD3Ii8YPT/M1
-   UNDaBxiSvjv4HEBYkSfRf+SoFX1kwzIo3Q13uiDF9IKClSQJ5rnDTy5Nj
-   EN2WOnXxID78svNLzVT30Uw1bq404HCSvV+NRYpfEb2OPfPeQgJsw+D4t
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="332103929"
+  t=1676258526; x=1707794526;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sbUryGN2GlhD5JhBXbYxOcllmwJOGL46QI8dL79t/vY=;
+  b=iEbA9WF3mcH0LSR7B8Egz5DosTZGK4MpQQhBW7bGV+x3tIyeyGcZZOPp
+   EbV7IrmoMojzPkx7pMXowcNn6PyDiY1gSsfhlqXBuUlSJQSI/Vgfy/HXW
+   MvC9m0QQ2XuQqJCTNMFptCgIEhVex95fw6m4RO1UWqRBx1civ3H5B2gsb
+   WcuodL3cuqlqkUPlo1wSpc9Rf/tXmzoi9el7x4tp8wskLAdymZcQ9nirU
+   tfEVRWcrETW41dJ6Swft855iFMjh5nEfcV6AvfGIpQ8s8xevhmBGTTADm
+   G5vq0we70wLFAowJfVfMmufIzR0OA7fRFA+O6uayjWwl9xrNVwbjRCP+v
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="311158675"
 X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
-   d="scan'208";a="332103929"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 19:14:31 -0800
+   d="scan'208";a="311158675"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 19:22:05 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="914158608"
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="732336201"
 X-IronPort-AV: E=Sophos;i="5.97,291,1669104000"; 
-   d="scan'208";a="914158608"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga006.fm.intel.com with ESMTP; 12 Feb 2023 19:14:29 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Sun, 12 Feb 2023 19:14:27 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Sun, 12 Feb 2023 19:14:27 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Sun, 12 Feb 2023 19:14:27 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.42) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sun, 12 Feb 2023 19:14:26 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nOQ9g075bk0iA8SlCZQZ/QGYy1urq1KYsmvU5YLEMq47/xMDVUuAjwlIw9YDqv5QN1xcz3g14YDgDSUG+SDrvVbY/nMNbyqeSN6CyzyL3QOZ+FCdlVKH9Mxd01pehM9/LwIc7ejNzqX9yt2mLOk2gth1y4RthPKLtxW6ozH2SuVTgm/E5Zr+XXgAgJ2MGooPI0vJlLErmoCdweu7NYNH6gXHANvcFN2F3SuSv8C/fiyE2L4vSZVrIoOkWFKvna5LJXLRsdQ3nnFnkJqcjvI+lhsqh/egqxiKsMpR+/6l0fshTGUCX+ID94l21d4eVCnl9N1nW7NwGaBlgGsqu6aHmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q0hCbkIjpAAXbWK8nI+t6JVWKPTKE5AZ1iHXjjq/Vvg=;
- b=dFj8rNphNX6ARXVTq+QnxZ7uXpw6Wa45NJtFV8n14R6yvfMo01UVSQzzmj0rYRgbqN0I6sKvJp8qVvdwNIk95HzU/y6ETmEExctaUh4yDGqCnSUyS4lnq0jBNESyOVMdmHz6emQb0Pkw1Y+eH9vFFnPR68zNsEXz6I/5fapVutRfweK72rZGFIx8bWg9RgjQrimsdZ2kDZvYJa6yYlNjIpQ7dLubB4gNkNuWewy6Rf2Gw+YUxbMOBKCBkarg0RkfcBq/bLuXQDhqCwT/ErBxqZVDF6lJ9EB85V71Pp8uy6APB+GjZc/G6JhnawBBbedcl4tAQHa0Oed81C+xl+jxKQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by SN7PR11MB7114.namprd11.prod.outlook.com (2603:10b6:806:299::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.23; Mon, 13 Feb
- 2023 03:14:20 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d%9]) with mapi id 15.20.6086.024; Mon, 13 Feb 2023
- 03:14:20 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        "Robin Murphy" <robin.murphy@arm.com>
-CC:     David Woodhouse <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>, Jason Gunthorpe <jgg@nvidia.com>
-Subject: RE: [PATCH 2/2] iommu/ioasid: Remove custom IOASID allocator
-Thread-Topic: [PATCH 2/2] iommu/ioasid: Remove custom IOASID allocator
-Thread-Index: AQHZPaM4X827KMb2AkC/Wtvslyhpl67MNy0A
-Date:   Mon, 13 Feb 2023 03:14:20 +0000
-Message-ID: <BN9PR11MB527675C04037838BC703AA818CDD9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230210230206.3160144-1-jacob.jun.pan@linux.intel.com>
- <20230210230206.3160144-3-jacob.jun.pan@linux.intel.com>
-In-Reply-To: <20230210230206.3160144-3-jacob.jun.pan@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SN7PR11MB7114:EE_
-x-ms-office365-filtering-correlation-id: 457404b9-5491-48fb-9edc-08db0d706613
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: DHaE7kv7ZbSWFt1nQ2YTC+lg4pztc4Mk3KhkDDiRfjuk77FYLD1CoJfK1+sFDF/FLjeLaScxgVn96r4AquhlK1pL6C1rX+5aH4D+LUN2Ly+Rj5gppl/rFmD21B4CuGdKYD+8/BhJpwd6Q8GdX6VXtDrndIgFwiI1/Pvhn9re13aWjkLOyHn1aMHc34xzvZFMkP6zQiHCKpsGkct88m1hD0UDMu6xnsOufVlXqsnt26wtwl6tXx6dIVfncxYfcqSpEzapYpQSjkkJBP3mOELQpQsQVTCcp/R3AuXxu59slIFC8uq8lGbBW8/qx1bwL/xuWhRZG+eR4t8lUuPOipgbqAfunBlRjmwg6Shd0ZwY6rSgJ3SvHd7VowT7CCdSY8PfS+e4CIA09A2p9eZ93l+KyWLk/OnZIwj3YGPwDZB5gyancOdJ69aPbJNOpbiceVbjWebAmv9AKmvnKn6ZO/3/+s5fQ794vNnh/X4Z1yjwaWnrj1bCkNcuaV6VTgzrtQFmiv1sJah4BTBmdzxlomYw1zSrgw5Rlc+psygJSfZGLqGT/mmQFB95Tc6NqYRw7czaGNpn4cvBiNjyxVG9nu8DJRkGOLgNNfrrbpMAKPGW1yQg4FjqtubGEikNmorqqsVwLKpsqe/Rp9Vb2DUJgB1tP4Y6gJXGV0qHEOy8lvVXYVKwGzt2PUUqqRKv6DcjA+3hh+P6WU8nYnGbRjSHht9FvQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(396003)(376002)(136003)(366004)(39860400002)(451199018)(4744005)(26005)(9686003)(186003)(5660300002)(6506007)(8936002)(52536014)(478600001)(2906002)(316002)(7696005)(110136005)(71200400001)(54906003)(4326008)(41300700001)(64756008)(66446008)(66556008)(8676002)(66476007)(66946007)(38100700002)(55016003)(76116006)(38070700005)(82960400001)(86362001)(33656002)(122000001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?DEYUE8EmBlkrFLSdphEjE31FVn+OsGQSVK4lZezlk/jLVpVwEDjD1kZzaqu+?=
- =?us-ascii?Q?Ga05nKSD1SAyM1WDLoYKlCfKTo9/babPfofHWlSkQ38vavhnia7cE5frCiP1?=
- =?us-ascii?Q?vFHO7qFsqywOhR+193UH0mdLmU0T6Ye8Bh60zvHMryCIG699GIv6Ff5pbo5t?=
- =?us-ascii?Q?TJS4gMgivJoiYXTR+AVLEFrcTVK1U25ziGM+q52xSj9aaQrzKtqEZZ2s6c4t?=
- =?us-ascii?Q?pt3KkdyiZjkTIULzhNeqZyC2s4vFkvXfu8SyMv32QtTOl+SKzXqxEUH5mT0Y?=
- =?us-ascii?Q?5klzM7wvSBsHzU1qe3MNShEfEwRPfkotAuD+wLgfw7BA/wCFU6Ai7d1i6pFP?=
- =?us-ascii?Q?ohO1pidltPTb0RzuYOs9bhAi885jpa9dWcOVrVsR82LqHjHq7BuQ3DGTZgeG?=
- =?us-ascii?Q?En1/MRfSeyhUxgn22BRfYlDpXa/g1l3hkIwQ2WC5myn1oBpI4+S1DsCFCf0f?=
- =?us-ascii?Q?haiuu8xkggJWHCx6dbkAENodgk/MCqBpaH2GoOnlk8k1USCflXiBhNjlUIsc?=
- =?us-ascii?Q?BI1voNRBPbBCxXIrt/DOkGdnHT7SdvAG5t6UzYpFltcScfooXtwAYYFJGTNU?=
- =?us-ascii?Q?irhlsBqciaIdpFxHnKfez8BTDlCstd/NzArbb5xkdZZadjg9lK0N9fQGumf2?=
- =?us-ascii?Q?7gq5qytwEqRGDMIUqQgbpAI8RXe/M/h/jVpr8vqq/iiOGyahhhIrZjO8/TT7?=
- =?us-ascii?Q?HeHONMYR5LnFc7bDo6oXldfi/Rg5/W6WW7mAWp36ytpIE1pXPUbN1nk5qcRA?=
- =?us-ascii?Q?2dKh4u9r6ROHirlwLJhyxP4RdrZY0R2rVqp4xbRaC+J8w02unsmc1Eb1b/M6?=
- =?us-ascii?Q?QZDY8RWa63PYnenYalfsprywa+FjBlzLGj3v2IW7alGe69xsJKAqJ934P5ld?=
- =?us-ascii?Q?BQJIeAQDVSul9sjiTnS3fjojKxSjoK//J+zR8cAdkR5TGuoh2w30bqibNI/m?=
- =?us-ascii?Q?ddqW6A/tOLQxLdHIEkd6E9FsUsl/816sXedZQRtXvprl+3N4QdvdFp3DKbeN?=
- =?us-ascii?Q?tXMnIFdIlGiIlpF0+LrrpNjbyltWCu2rApZX+OSBN6fZ3CWbmNms63dN6BrR?=
- =?us-ascii?Q?kjEtthNaStkd2WC4Or+Eerlc4ljimD1e7eRyvEhqVM8UkwyYxngUIqX9eGlF?=
- =?us-ascii?Q?sbSLaz2WEKQ7jYtP+6N0NMB2VVY6IMX2j8iclNqoL4V2IC4+bfbtBCpkbYhk?=
- =?us-ascii?Q?SyghrL2AUHGPKimPW9q8PTpU3A8oC0AMBDa7jCAgj/uj+22zt5QPcaf4DY/q?=
- =?us-ascii?Q?4WsuXn2cmvagaaHsGxrTQIRq/6uEAIGHZx7f+A7eNKrSThYwA9rfcK63zhFS?=
- =?us-ascii?Q?vV/iWtJawWyQK+2DatNR9vFqLpBsWiLDjwI7MCNJJVbYwIRRlO9BKB3wjUBU?=
- =?us-ascii?Q?0SzBGq9WMNWLuLgm7X9ez85ylhyUJ06ULRP/jK3VCsuBYRyWFRXKTmhLWqvn?=
- =?us-ascii?Q?OFcach34slV/pb7XIXaCwuGAkzuCS1xuFGiPZT6vkd7ET0edSU/CTwm+LPIQ?=
- =?us-ascii?Q?zgrXD27AYfFkyqqglUpcHi/wMfOD2Fpm+LFSRvz+eE4WaTxX4dgb6lyTuDVU?=
- =?us-ascii?Q?8Q6VKJtRaorntZRNLt7xwt2qbVKiVSgbVusH46ms?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+   d="scan'208";a="732336201"
+Received: from feng-clx.sh.intel.com ([10.238.200.228])
+  by fmsmga008.fm.intel.com with ESMTP; 12 Feb 2023 19:22:01 -0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Joe Mario <jmario@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Feng Tang <feng.tang@intel.com>
+Subject: [PATCH] perf c2c: Add report option to show false sharing in adjacent cachelines
+Date:   Mon, 13 Feb 2023 11:17:33 +0800
+Message-Id: <20230213031733.236485-1-feng.tang@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 457404b9-5491-48fb-9edc-08db0d706613
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Feb 2023 03:14:20.2804
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LaO0b53KTah7Fp8HN8c0YM2yhMfaYk3sHzKk3+CNC/d3ulPb+Pp+y70OMV5e9eZeW+AEH2cWUPXv9TDJib/DqQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7114
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> Sent: Saturday, February 11, 2023 7:02 AM
->=20
-> Custom allocator feature was introduced to support VT-d's virtual
-> command, an enlightened interface designed for VMs to allocate PASIDs
-> from the host.
->=20
-> As we remove/withdraw the VT-d virtual command feature, the sole user
-> of custom allocator, we can safely remove the custom allocator as well.
-> Effectively, this will return IOASID core to the original simple global
-> namespace allocator.
->=20
-> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+Many platforms have feature of adjacent cachelines prefetch, when it
+is enabled, for data in RAM of 2 cachelines (2N and 2N+1) granularity,
+if one is fetched to cache, the other one could likely be fetched too,
+which sort of extends the cacheline size to double, thus the false
+sharing could happens in adjacent cachelines.
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+0Day has captured performance changed related with this [1], and some
+commercial software explicitly makes its hot global variables 128 bytes
+aligned (2 cache lines) to avoid this kind of extended false sharing.
+
+So add an option "-a" or "--double-cl" for c2c report to show false
+sharing in double cache line granularity, which acts just like the
+cacheline size is doubled. There is no change to c2c record. The
+hardware HITM events are still per cacheline. The option just changes
+the granularity of how events are grouped and displayed.
+
+In the c2c report below (will-it-scale's pagefault2 case on old kernel):
+
+  ----------------------------------------------------------------------
+     26       31        2        0        0        0  0xffff888103ec6000
+  ----------------------------------------------------------------------
+   35.48%   50.00%    0.00%    0.00%    0.00%   0x10     0       1  0xffffffff8133148b      1153        66       971     3748        74  [k] get_mem_cgroup_from_mm
+    6.45%    0.00%    0.00%    0.00%    0.00%   0x10     0       1  0xffffffff813396e4       570         0      1531      879        75  [k] mem_cgroup_charge
+   25.81%   50.00%    0.00%    0.00%    0.00%   0x54     0       1  0xffffffff81331472       949        70       593     3359        74  [k] get_mem_cgroup_from_mm
+   19.35%    0.00%    0.00%    0.00%    0.00%   0x54     0       1  0xffffffff81339686      1352         0      1073     1022        74  [k] mem_cgroup_charge
+    9.68%    0.00%    0.00%    0.00%    0.00%   0x54     0       1  0xffffffff813396d6      1401         0       863      768        74  [k] mem_cgroup_charge
+    3.23%    0.00%    0.00%    0.00%    0.00%   0x54     0       1  0xffffffff81333106       618         0       804       11         9  [k] uncharge_batch
+
+The offset 0x10 and 0x54 used to displayed in 2 groups, and now they
+are listed together to give users a hint.
+
+[1]. https://lore.kernel.org/lkml/20201102091543.GM31092@shao2-debian/
+
+Signed-off-by: Feng Tang <feng.tang@intel.com>
+Reviewed-by: Andi Kleen <ak@linux.intel.com>
+---
+ tools/perf/Documentation/perf-c2c.txt |  6 ++++++
+ tools/perf/builtin-c2c.c              | 22 +++++++++++++---------
+ tools/perf/util/cacheline.h           | 25 ++++++++++++++++++++-----
+ tools/perf/util/sort.c                | 13 ++++++++++---
+ tools/perf/util/sort.h                |  1 +
+ 5 files changed, 50 insertions(+), 17 deletions(-)
+
+diff --git a/tools/perf/Documentation/perf-c2c.txt b/tools/perf/Documentation/perf-c2c.txt
+index 5c5eb2def83e..a8e1e40d270e 100644
+--- a/tools/perf/Documentation/perf-c2c.txt
++++ b/tools/perf/Documentation/perf-c2c.txt
+@@ -126,6 +126,12 @@ REPORT OPTIONS
+ 	The known limitations include exception handing such as
+ 	setjmp/longjmp will have calls/returns not match.
+ 
++-a::
++--double-cl::
++	Group HITM events in double cacheline granularity. Some architecture
++	has Adjacent Cacheline Prefetch feature, which behaves like the
++	cachline size is doubled.
++
+ C2C RECORD
+ ----------
+ The perf c2c record command setup options related to HITM cacheline analysis
+diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
+index 52d94c7dd836..7d495db7e5a2 100644
+--- a/tools/perf/builtin-c2c.c
++++ b/tools/perf/builtin-c2c.c
+@@ -524,7 +524,7 @@ static int dcacheline_entry(struct perf_hpp_fmt *fmt, struct perf_hpp *hpp,
+ 	char buf[20];
+ 
+ 	if (he->mem_info)
+-		addr = cl_address(he->mem_info->daddr.addr);
++		addr = cl_address(he->mem_info->daddr.addr, chk_double_cl);
+ 
+ 	return scnprintf(hpp->buf, hpp->size, "%*s", width, HEX_STR(buf, addr));
+ }
+@@ -562,7 +562,7 @@ static int offset_entry(struct perf_hpp_fmt *fmt, struct perf_hpp *hpp,
+ 	char buf[20];
+ 
+ 	if (he->mem_info)
+-		addr = cl_offset(he->mem_info->daddr.al_addr);
++		addr = cl_offset(he->mem_info->daddr.al_addr, chk_double_cl);
+ 
+ 	return scnprintf(hpp->buf, hpp->size, "%*s", width, HEX_STR(buf, addr));
+ }
+@@ -574,9 +574,10 @@ offset_cmp(struct perf_hpp_fmt *fmt __maybe_unused,
+ 	uint64_t l = 0, r = 0;
+ 
+ 	if (left->mem_info)
+-		l = cl_offset(left->mem_info->daddr.addr);
++		l = cl_offset(left->mem_info->daddr.addr, chk_double_cl);
++
+ 	if (right->mem_info)
+-		r = cl_offset(right->mem_info->daddr.addr);
++		r = cl_offset(right->mem_info->daddr.addr, chk_double_cl);
+ 
+ 	return (int64_t)(r - l);
+ }
+@@ -2590,7 +2591,7 @@ perf_c2c_cacheline_browser__title(struct hist_browser *browser,
+ 	he = cl_browser->he;
+ 
+ 	if (he->mem_info)
+-		addr = cl_address(he->mem_info->daddr.addr);
++		addr = cl_address(he->mem_info->daddr.addr, chk_double_cl);
+ 
+ 	scnprintf(bf, size, "Cacheline 0x%lx", addr);
+ 	return 0;
+@@ -2788,15 +2789,16 @@ static int ui_quirks(void)
+ 	if (!c2c.use_stdio) {
+ 		dim_offset.width  = 5;
+ 		dim_offset.header = header_offset_tui;
+-		nodestr = "CL";
++		nodestr = chk_double_cl ? "Double-CL" : "CL";
+ 	}
+ 
+ 	dim_percent_costly_snoop.header = percent_costly_snoop_header[c2c.display];
+ 
+ 	/* Fix the zero line for dcacheline column. */
+-	buf = fill_line("Cacheline", dim_dcacheline.width +
+-				     dim_dcacheline_node.width +
+-				     dim_dcacheline_count.width + 4);
++	buf = fill_line(chk_double_cl ? "Double-Cacheline" : "Cacheline",
++				dim_dcacheline.width +
++				dim_dcacheline_node.width +
++				dim_dcacheline_count.width + 4);
+ 	if (!buf)
+ 		return -ENOMEM;
+ 
+@@ -3037,6 +3039,8 @@ static int perf_c2c__report(int argc, const char **argv)
+ 	OPT_BOOLEAN('f', "force", &symbol_conf.force, "don't complain, do it"),
+ 	OPT_BOOLEAN(0, "stitch-lbr", &c2c.stitch_lbr,
+ 		    "Enable LBR callgraph stitching approach"),
++	OPT_BOOLEAN('a', "double-cl", &chk_double_cl,
++		    "Check adjacent cachline false sharing"),
+ 	OPT_PARENT(c2c_options),
+ 	OPT_END()
+ 	};
+diff --git a/tools/perf/util/cacheline.h b/tools/perf/util/cacheline.h
+index dec8c0fb1f4a..630d16731b4f 100644
+--- a/tools/perf/util/cacheline.h
++++ b/tools/perf/util/cacheline.h
+@@ -6,16 +6,31 @@
+ 
+ int __pure cacheline_size(void);
+ 
+-static inline u64 cl_address(u64 address)
++
++/*
++ * Some architecture has 'Adjacent Cacheline Prefetch' feature,
++ * which performs like the cacheline size being doubled.
++ */
++static inline u64 cl_address(u64 address, bool double_cl)
+ {
++	u64 size = cacheline_size();
++
++	if (double_cl)
++		size *= 2;
++
+ 	/* return the cacheline of the address */
+-	return (address & ~(cacheline_size() - 1));
++	return (address & ~(size - 1));
+ }
+ 
+-static inline u64 cl_offset(u64 address)
++static inline u64 cl_offset(u64 address, bool double_cl)
+ {
+-	/* return the cacheline of the address */
+-	return (address & (cacheline_size() - 1));
++	u64 size = cacheline_size();
++
++	if (double_cl)
++		size *= 2;
++
++	/* return the offset inside cachline */
++	return (address & (size - 1));
+ }
+ 
+ #endif // PERF_CACHELINE_H
+diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
+index e188f74698dd..148b28f0a7e2 100644
+--- a/tools/perf/util/sort.c
++++ b/tools/perf/util/sort.c
+@@ -52,6 +52,13 @@ enum sort_mode	sort__mode = SORT_MODE__NORMAL;
+ static const char *const dynamic_headers[] = {"local_ins_lat", "ins_lat", "local_p_stage_cyc", "p_stage_cyc"};
+ static const char *const arch_specific_sort_keys[] = {"local_p_stage_cyc", "p_stage_cyc"};
+ 
++/*
++ * Some architecture has Adjacent Cacheline Prefetch feature, which behaves
++ * like the cachline size is doubled. Enable this flag to check things in
++ * double cacheline granularity.
++ */
++bool chk_double_cl;
++
+ /*
+  * Replaces all occurrences of a char used with the:
+  *
+@@ -1499,8 +1506,8 @@ sort__dcacheline_cmp(struct hist_entry *left, struct hist_entry *right)
+ 
+ addr:
+ 	/* al_addr does all the right addr - start + offset calculations */
+-	l = cl_address(left->mem_info->daddr.al_addr);
+-	r = cl_address(right->mem_info->daddr.al_addr);
++	l = cl_address(left->mem_info->daddr.al_addr, chk_double_cl);
++	r = cl_address(right->mem_info->daddr.al_addr, chk_double_cl);
+ 
+ 	if (l > r) return -1;
+ 	if (l < r) return 1;
+@@ -1519,7 +1526,7 @@ static int hist_entry__dcacheline_snprintf(struct hist_entry *he, char *bf,
+ 	if (he->mem_info) {
+ 		struct map *map = he->mem_info->daddr.ms.map;
+ 
+-		addr = cl_address(he->mem_info->daddr.al_addr);
++		addr = cl_address(he->mem_info->daddr.al_addr, chk_double_cl);
+ 		ms = &he->mem_info->daddr.ms;
+ 
+ 		/* print [s] for shared data mmaps */
+diff --git a/tools/perf/util/sort.h b/tools/perf/util/sort.h
+index 921715e6aec4..04f0a6dc7381 100644
+--- a/tools/perf/util/sort.h
++++ b/tools/perf/util/sort.h
+@@ -35,6 +35,7 @@ extern struct sort_entry sort_sym_from;
+ extern struct sort_entry sort_sym_to;
+ extern struct sort_entry sort_srcline;
+ extern const char default_mem_sort_order[];
++extern bool chk_double_cl;
+ 
+ struct res_sample {
+ 	u64 time;
+-- 
+2.30.2
+
