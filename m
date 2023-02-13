@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D78694FC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7442694FCE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:51:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjBMSus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:50:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45262 "EHLO
+        id S230214AbjBMSvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:51:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjBMSuo (ORCPT
+        with ESMTP id S229683AbjBMSuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Feb 2023 13:50:44 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871C620D0A
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:50:27 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id f16-20020a17090a9b1000b0023058bbd7b2so13183231pjp.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:50:27 -0800 (PST)
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DA720D37
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:50:28 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id bx22so12818552pjb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:50:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6lltnqRTRNoEuVBC2frXraT3uoYPn9Hgk54L2yQV9Zs=;
-        b=HPjVNKjie2Ne8id2IJb5s600oVO3rK9YarwM/JanyPegDSpPi3WJIy4a0CVaU2hnE2
-         AAl+1IKmHToNaDkegK8MFzM7sIlY06fO5Sf0K3ZfCqeVvtn4vSd6zEYmqhKqjpGyZgN6
-         91bMNDduJW9raHORVOmMQdrN0Y/Kn+q6TAP3JSTVSsMgaVR2XCGsjY11nVDUphgY1HRD
-         JVpqSf1cxdVtEH9rBfg+onVg15AsxL2be7Ehb2K9yxaeeozMm0A5Oz+zgZmfuW4oLhXb
-         REEbtLEvcsGN2xE9YriV0L9ymqqLu5HjaTXzQqh15AVV6Ccny8J+GFhr4d7WN/Q6bFti
-         z1tw==
+        bh=STZigHHyNhqv/GnxfesbmPhkyAgKL79hhcVjuALeJ+Y=;
+        b=dnwgzW+cTXs23t15J2n+Pu/SgSKfrZk9FwkAsqjFdfplA4CRNFwwUlfjkT4F+jEQmm
+         /kZp9jrHtpm31QTytsiG1ixlFTODIpX9UqRQ+ud0FZ+X+9OMaMEdR8fkfT6xFRg7yui5
+         evRJiIQ3STb1LAy5r1JEGBgGpYe2hhy0MTntDYJV2AHqQczHkZHGDE3sFsJCyQupYUqQ
+         4ZaTlRs+sg+QfLe4EXfWoOxXzaHbvtuSG6UljOLIphs4HgEsI+zMhUu+R91KdAsyveRl
+         fz0mcH9qinJGdpsrZyQqbIuUfsQnz8/A6J6cmqPmaZnwJWBsRkO60sC0xt6m0sKnV2ny
+         pK5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6lltnqRTRNoEuVBC2frXraT3uoYPn9Hgk54L2yQV9Zs=;
-        b=sMbM7GAVr+PLy5k53Iw2I/kvv/UPOohW2QPJankcxBjmWKlP0fEVfbllptV/my+jxp
-         kYXXGmLml08zteMFVAiBay0wHW1NPcGaT/asLLnC8LtmzhFIiX4ZKV3FJVhxPNcyQCXW
-         wpK3j4St6jw6ThmZeman1PdhAC7nzJ0vJIvaHhfbaCfsSZSq8Vf6U738k/IkcCa0IVcL
-         plDdZlk5Hf78T1lTBBr1fIt6eTRvBHWbW1YaMBqF26bsVdyu/2Stttn2uLYziQKIcr1d
-         GcFWnf12Qh9eVr7p7hV2jU5P53L4oerWJkjN0XHXm2FTkLA2VJCQjSKhT6ujcIJmJaUd
-         6rng==
-X-Gm-Message-State: AO0yUKX9da+nVC5uFUNsB8+y8KfZZuF7ogk/Q4p/OrkJDiw9n8NiC1dl
-        nlL8/oxsRyrZLm4EH0PJgKs=
-X-Google-Smtp-Source: AK7set9JXL58xLmo684rZLycRCsjl+qPbAouzuJ2Uail+P7W/tGXgkDKNzx9OSelpSsAnyHKmKG71Q==
-X-Received: by 2002:a17:903:1c2:b0:196:63d0:a674 with SMTP id e2-20020a17090301c200b0019663d0a674mr31697395plh.9.1676314227056;
-        Mon, 13 Feb 2023 10:50:27 -0800 (PST)
+        bh=STZigHHyNhqv/GnxfesbmPhkyAgKL79hhcVjuALeJ+Y=;
+        b=zH5weH4h3fQLyJkXPRvgxB5Thz3JuWhxu21GApxKD8SmU0OffoxQZSXhuMZMc4OQ+C
+         AAAkQ6VlzceZAIyIsndGGx51BJ75lnWGJzKMfMTaDl4HCxT9GNzwY+dEZCo12fSsDmLw
+         OIjP1UCYauvfSwZM3ZYCpJHwVi6z4SnPfywNDxLlGcAOea8WL1foNsOrYqbosNwxxhE1
+         Siz5VVzhJtQok8MpHGZ8/fwqrSP+bPzDjgHoEGtypQeZBPLbIM+71Eb4AztwCgp+wtOB
+         CRQ+LaXw+mc8X5iJaCwgVPFmRQ/C7X/iLUt+Re5nbCgBpG5caPUbCnvqinstOMTXiJos
+         l9gw==
+X-Gm-Message-State: AO0yUKUqh8QPhEUwpwgureVolcbfQLPnytmvnQxgAq5Ic74+lCttA/Kb
+        eWHh99ICU/6jkZPbJI621vA=
+X-Google-Smtp-Source: AK7set+oYFRM82Nk+LEhtJR28xPFu5cd4p2HWGvvYH73g8fVAm5VKeDN6LqOyGH9yxt1uGkQuA2osA==
+X-Received: by 2002:a17:903:2306:b0:19a:aaac:f4d1 with SMTP id d6-20020a170903230600b0019aaaacf4d1mr2342583plh.13.1676314228365;
+        Mon, 13 Feb 2023 10:50:28 -0800 (PST)
 Received: from f37.eng.vmware.com ([66.170.99.1])
-        by smtp.googlemail.com with ESMTPSA id p14-20020a170902a40e00b00198f256a192sm8535036plq.171.2023.02.13.10.50.25
+        by smtp.googlemail.com with ESMTPSA id p14-20020a170902a40e00b00198f256a192sm8535036plq.171.2023.02.13.10.50.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 10:50:26 -0800 (PST)
+        Mon, 13 Feb 2023 10:50:28 -0800 (PST)
 From:   Shreenidhi Shedi <yesshedi@gmail.com>
 X-Google-Original-From: Shreenidhi Shedi <sshedi@vmware.com>
 To:     dhowells@redhat.com, dwmw2@infradead.org,
         gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, Shreenidhi Shedi <sshedi@vmware.com>
-Subject: [PATCH v2 3/6] sign-file: add support sign modules in bulk
-Date:   Tue, 14 Feb 2023 00:20:15 +0530
-Message-Id: <20230213185019.56902-3-sshedi@vmware.com>
+Subject: [PATCH v2 4/6] sign-file: cosmetic fix
+Date:   Tue, 14 Feb 2023 00:20:16 +0530
+Message-Id: <20230213185019.56902-4-sshedi@vmware.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230213185019.56902-1-sshedi@vmware.com>
 References: <20230213185019.56902-1-sshedi@vmware.com>
@@ -73,86 +73,220 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the existing system, we need to invoke sign-file binary for every
-module we want to sign. This patch adds support to give modules in bulk
-and it will sign them all one by one.
+In the previous patch for adding bulk modules support, this was not done
+because it will add a lot to review in one patch.
 
 Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
 ---
- scripts/sign-file.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+ scripts/sign-file.c | 174 ++++++++++++++++++++++----------------------
+ 1 file changed, 87 insertions(+), 87 deletions(-)
 
 diff --git a/scripts/sign-file.c b/scripts/sign-file.c
-index 4732201feb96..7ad330b47d64 100644
+index 7ad330b47d64..b48832d54f45 100644
 --- a/scripts/sign-file.c
 +++ b/scripts/sign-file.c
-@@ -224,6 +224,7 @@ struct cmd_opts {
- 	bool replace_orig;
- 	bool raw_sig;
- 	bool sign_only;
-+	bool bulk_sign;
+@@ -395,114 +395,114 @@ int sign_file(int argc, char **argv, struct cmd_opts *opts)
+ 				replace_orig = true;
+ 		}
  
- #ifndef USE_PKCS7
- 	unsigned int use_keyid;
-@@ -237,6 +238,7 @@ static void parse_args(int argc, char **argv, struct cmd_opts *opts)
- 		{"help", no_argument, 0, 'h'},
- 		{"savesig", no_argument, 0, 's'},
- 		{"signonly", no_argument, 0, 'o'},
-+		{"bulksign", no_argument, 0, 'b'},
- #ifndef USE_PKCS7
- 		{"usekeyid", no_argument, 0, 'k'},
- #endif
-@@ -305,6 +307,10 @@ static void parse_args(int argc, char **argv, struct cmd_opts *opts)
- 			opts->replace_orig = true;
- 			break;
- 
-+		case 'b':
-+			opts->bulk_sign = true;
-+			break;
+-	/* Open the module file */
+-	bm = BIO_new_file(module_name, "rb");
+-	ERR(!bm, "%s", module_name);
+-
+-	if (!raw_sig) {
+-		/* Read the private key and the X.509 cert the PKCS#7 message
+-		 * will point to.
+-		 */
+-		private_key = read_private_key(private_key_name);
+-		x509 = read_x509(x509_name);
+-
+-		/* Digest the module data. */
+-		OpenSSL_add_all_digests();
+-		display_openssl_errors(__LINE__);
+-		digest_algo = EVP_get_digestbyname(hash_algo);
+-		ERR(!digest_algo, "EVP_get_digestbyname");
++		/* Open the module file */
++		bm = BIO_new_file(module_name, "rb");
++		ERR(!bm, "%s", module_name);
 +
- 		case -1:
- 			break;
- 
-@@ -342,12 +348,13 @@ int sign_file(int argc, char **argv, struct cmd_opts *opts)
- 	bool replace_orig = opts->replace_orig;
- 	bool raw_sig = opts->raw_sig;
- 	bool sign_only = opts->sign_only;
-+	bool bulk_sign = opts->bulk_sign;
++		if (!raw_sig) {
++			/* Read the private key and the X.509 cert the PKCS#7 message
++			 * will point to.
++			 */
++			private_key = read_private_key(private_key_name);
++			x509 = read_x509(x509_name);
++
++			/* Digest the module data. */
++			OpenSSL_add_all_digests();
++			display_openssl_errors(__LINE__);
++			digest_algo = EVP_get_digestbyname(hash_algo);
++			ERR(!digest_algo, "EVP_get_digestbyname");
  
  #ifndef USE_PKCS7
- 	unsigned int use_keyid = opts->use_keyid;
- #endif
- 
--	if (!argv[0] || argc != 1)
-+	if ((bulk_sign && dest_name) || (!bulk_sign && argc != 1))
- 		format();
- 
- 	if (dest_name && strcmp(argv[0], dest_name)) {
-@@ -378,6 +385,16 @@ int sign_file(int argc, char **argv, struct cmd_opts *opts)
- 	use_signed_attrs = PKCS7_NOATTR;
- #endif
- 
-+	for (i = 0; i < argc; i++) {
-+		module_name = argv[i];
+-		/* Load the signature message from the digest buffer. */
+-		cms = CMS_sign(NULL, NULL, NULL, NULL,
+-			       CMS_NOCERTS | CMS_PARTIAL | CMS_BINARY |
+-			       CMS_DETACHED | CMS_STREAM);
+-		ERR(!cms, "CMS_sign");
+-
+-		ERR(!CMS_add1_signer(cms, x509, private_key, digest_algo,
+-				     CMS_NOCERTS | CMS_BINARY |
+-				     CMS_NOSMIMECAP | use_keyid |
+-				     use_signed_attrs),
+-		    "CMS_add1_signer");
+-		ERR(CMS_final(cms, bm, NULL, CMS_NOCERTS | CMS_BINARY) < 0,
+-		    "CMS_final");
++			/* Load the signature message from the digest buffer. */
++			cms = CMS_sign(NULL, NULL, NULL, NULL,
++					CMS_NOCERTS | CMS_PARTIAL | CMS_BINARY |
++					CMS_DETACHED | CMS_STREAM);
++			ERR(!cms, "CMS_sign");
 +
-+		if (bulk_sign) {
-+			ERR(asprintf(&dest_name, "%s.~signed~", module_name) < 0,
-+					"asprintf");
-+			if (!replace_orig)
-+				replace_orig = true;
++			ERR(!CMS_add1_signer(cms, x509, private_key, digest_algo,
++						CMS_NOCERTS | CMS_BINARY |
++						CMS_NOSMIMECAP | use_keyid |
++						use_signed_attrs),
++					"CMS_add1_signer");
++			ERR(CMS_final(cms, bm, NULL, CMS_NOCERTS | CMS_BINARY) < 0,
++					"CMS_final");
+ 
+ #else
+-		pkcs7 = PKCS7_sign(x509, private_key, NULL, bm,
+-				   PKCS7_NOCERTS | PKCS7_BINARY |
+-				   PKCS7_DETACHED | use_signed_attrs);
+-		ERR(!pkcs7, "PKCS7_sign");
++			pkcs7 = PKCS7_sign(x509, private_key, NULL, bm,
++					PKCS7_NOCERTS | PKCS7_BINARY |
++					PKCS7_DETACHED | use_signed_attrs);
++			ERR(!pkcs7, "PKCS7_sign");
+ #endif
+ 
+-		if (save_sig) {
+-			char *sig_file_name;
+-			BIO *b;
++			if (save_sig) {
++				char *sig_file_name;
++				BIO *b;
+ 
+-			ERR(asprintf(&sig_file_name, "%s.p7s", module_name) < 0,
+-			    "asprintf");
+-			b = BIO_new_file(sig_file_name, "wb");
+-			ERR(!b, "%s", sig_file_name);
++				ERR(asprintf(&sig_file_name, "%s.p7s", module_name) < 0,
++						"asprintf");
++				b = BIO_new_file(sig_file_name, "wb");
++				ERR(!b, "%s", sig_file_name);
+ #ifndef USE_PKCS7
+-			ERR(i2d_CMS_bio_stream(b, cms, NULL, 0) < 0,
+-			    "%s", sig_file_name);
++				ERR(i2d_CMS_bio_stream(b, cms, NULL, 0) < 0,
++						"%s", sig_file_name);
+ #else
+-			ERR(i2d_PKCS7_bio(b, pkcs7) < 0,
+-			    "%s", sig_file_name);
++				ERR(i2d_PKCS7_bio(b, pkcs7) < 0,
++						"%s", sig_file_name);
+ #endif
+-			BIO_free(b);
+-		}
++				BIO_free(b);
++			}
+ 
+-		if (sign_only) {
+-			BIO_free(bm);
+-			return 0;
++			if (sign_only) {
++				BIO_free(bm);
++				return 0;
++			}
+ 		}
+-	}
+ 
+-	/* Open the destination file now so that we can shovel the module data
+-	 * across as we read it.
+-	 */
+-	bd = BIO_new_file(dest_name, "wb");
+-	ERR(!bd, "%s", dest_name);
+-
+-	/* Append the marker and the PKCS#7 message to the destination file */
+-	ERR(BIO_reset(bm) < 0, "%s", module_name);
+-	while ((n = BIO_read(bm, buf, sizeof(buf))),
+-	       n > 0) {
+-		ERR(BIO_write(bd, buf, n) < 0, "%s", dest_name);
+-	}
+-	BIO_free(bm);
+-	ERR(n < 0, "%s", module_name);
+-	module_size = BIO_number_written(bd);
++		/* Open the destination file now so that we can shovel the module data
++		 * across as we read it.
++		 */
++		bd = BIO_new_file(dest_name, "wb");
++		ERR(!bd, "%s", dest_name);
+ 
+-	if (!raw_sig) {
++		/* Append the marker and the PKCS#7 message to the destination file */
++		ERR(BIO_reset(bm) < 0, "%s", module_name);
++		while ((n = BIO_read(bm, buf, sizeof(buf))),
++				n > 0) {
++			ERR(BIO_write(bd, buf, n) < 0, "%s", dest_name);
 +		}
++		BIO_free(bm);
++		ERR(n < 0, "%s", module_name);
++		module_size = BIO_number_written(bd);
 +
- 	/* Open the module file */
- 	bm = BIO_new_file(module_name, "rb");
- 	ERR(!bm, "%s", module_name);
-@@ -486,6 +503,7 @@ int sign_file(int argc, char **argv, struct cmd_opts *opts)
- 	/* Finally, if we're signing in place, replace the original. */
- 	if (replace_orig)
- 		ERR(rename(dest_name, module_name) < 0, "%s", dest_name);
-+	}
++		if (!raw_sig) {
+ #ifndef USE_PKCS7
+-		ERR(i2d_CMS_bio_stream(bd, cms, NULL, 0) < 0, "%s", dest_name);
++			ERR(i2d_CMS_bio_stream(bd, cms, NULL, 0) < 0, "%s", dest_name);
+ #else
+-		ERR(i2d_PKCS7_bio(bd, pkcs7) < 0, "%s", dest_name);
++			ERR(i2d_PKCS7_bio(bd, pkcs7) < 0, "%s", dest_name);
+ #endif
+-	} else {
+-		BIO *b;
++		} else {
++			BIO *b;
+ 
+-		/* Read the raw signature file and write the data to the
+-		 * destination file
+-		 */
+-		b = BIO_new_file(raw_sig_name, "rb");
+-		ERR(!b, "%s", raw_sig_name);
+-		while ((n = BIO_read(b, buf, sizeof(buf))), n > 0)
+-			ERR(BIO_write(bd, buf, n) < 0, "%s", dest_name);
+-		BIO_free(b);
+-	}
++			/* Read the raw signature file and write the data to the
++			 * destination file
++			 */
++			b = BIO_new_file(raw_sig_name, "rb");
++			ERR(!b, "%s", raw_sig_name);
++			while ((n = BIO_read(b, buf, sizeof(buf))), n > 0)
++				ERR(BIO_write(bd, buf, n) < 0, "%s", dest_name);
++			BIO_free(b);
++		}
+ 
+-	sig_size = BIO_number_written(bd) - module_size;
+-	sig_info.sig_len = htonl(sig_size);
+-	ERR(BIO_write(bd, &sig_info, sizeof(sig_info)) < 0, "%s", dest_name);
+-	ERR(BIO_write(bd, magic_number, sizeof(magic_number) - 1) < 0, "%s", dest_name);
++		sig_size = BIO_number_written(bd) - module_size;
++		sig_info.sig_len = htonl(sig_size);
++		ERR(BIO_write(bd, &sig_info, sizeof(sig_info)) < 0, "%s", dest_name);
++		ERR(BIO_write(bd, magic_number, sizeof(magic_number) - 1) < 0, "%s", dest_name);
+ 
+-	ERR(BIO_free(bd) < 0, "%s", dest_name);
++		ERR(BIO_free(bd) < 0, "%s", dest_name);
+ 
+-	/* Finally, if we're signing in place, replace the original. */
+-	if (replace_orig)
+-		ERR(rename(dest_name, module_name) < 0, "%s", dest_name);
++		/* Finally, if we're signing in place, replace the original. */
++		if (replace_orig)
++			ERR(rename(dest_name, module_name) < 0, "%s", dest_name);
+ 	}
  
  	return 0;
- }
 -- 
 2.39.1
 
