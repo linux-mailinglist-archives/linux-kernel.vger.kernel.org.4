@@ -2,135 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE10693B7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 01:54:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2042C693B7E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 01:55:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjBMAyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 19:54:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
+        id S229614AbjBMAzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 19:55:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBMAya (ORCPT
+        with ESMTP id S229588AbjBMAzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 19:54:30 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D7E5240
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 16:54:28 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id a9so12907916ljr.13
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 16:54:28 -0800 (PST)
+        Sun, 12 Feb 2023 19:55:50 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0C4CDE7
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 16:55:49 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id qb15so26128600ejc.1
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 16:55:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dz+a3mPWtoysx88tn67g1rPbKFZYyy96xE3GUFKUHts=;
-        b=H5UiGmapwOiGC1yt24WxT2LWYXaMz3wEtskkj9kcQXVyellCrNwOPGnVImX0VpssPP
-         NlF6rXCNLk9VLnUtqRsNipGu5yP4b+9Pi/HW3ClyaLEgnj3Eks069hz6gG0VCHoj/RWX
-         8c/CLn7mAKJmcUwuTdI2nzoOGNJ0y5KKw+J3o=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JH49W9eMFnXRT5zK561nWkTm+ipq8KfAKnXusgHt7cc=;
+        b=InfDGWsdqjq+cceTSFETLw4Mbym27Gi+BialupS1gc/qBlKNTiUr9W/LqS/VHHRHpw
+         ta3NouOiODa/YPLV2fMGtUDGPu/k2Ft/VnqCmKhqLuqQ8hy4GoCt60IWdMPxugOyDFqp
+         PSXZ/tRhx71gImJbGQwbBDjV2jSFAcrHD2B8pvJGz2CVU/Ub00yas4j0YzYxYTbwJsFd
+         DwcuAq+G64//CwLL+4n7kC7HZrmSysDH76MCP33YnbC2L0W/0vTih7efFL+iTk8boqr+
+         erzrL5/SbXf8CEUYsttqFBfW0r8tiId4z1SKOKEfvJT6IuO8183ds+Mmid5/hINO9AeI
+         1zXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Dz+a3mPWtoysx88tn67g1rPbKFZYyy96xE3GUFKUHts=;
-        b=W77HPUlEKmIHERKMsxHwvYPOWgRbq9SzJsVxPKr1UACykAULxaSN8MbmSpd/8kHFyM
-         fOJWLD03o6h6Pc8nhcxCxpQ/QsQoesO1EAWzuR2QhjPXFB5KA8u6u9kRgUvzETB81BZq
-         +dJCGwAKt6k9OT67XZIkJl8Tva0x3m+JxAD5eeHkNUQvWiRl50kJ6xeBxcK9fKilqvWL
-         Vefs9V0EN2K9zEfU3rKfMl9wf23Sf1Ih5w7nty1gWrgE5wg5TAsc1UzsPUBIZnQkf/J6
-         46BPRQF1yquxtRux6Zq3eTPrBGfP9DMwrirn+umK7Ba8Woxxrx9qUgfNBNQyElfVMYam
-         Zfqw==
-X-Gm-Message-State: AO0yUKWC4+nkEVk2uA7gHIlYHf/7vYR2qRcro1MeunOWt7klOoiPZpLV
-        z97GEJHa8w1FcFB6MuhFTekG+gSqPUJ8I2s+HW9l0w==
-X-Google-Smtp-Source: AK7set/ZwJcDlthA7ojaCtH1HvCYwIA2SFhRWcxCP4DA/PdYuRinjHeX1iAlU+S6JOWl2/XfVkKBYMa6d9THdcgN/sg=
-X-Received: by 2002:a2e:2f1e:0:b0:293:25c1:808f with SMTP id
- v30-20020a2e2f1e000000b0029325c1808fmr2873798ljv.154.1676249666804; Sun, 12
- Feb 2023 16:54:26 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JH49W9eMFnXRT5zK561nWkTm+ipq8KfAKnXusgHt7cc=;
+        b=cg53fQSrZvFqgyeDW0i8UKe24ZMbakOOKtjOnAUP8eGjouiOzQKWttxDSeI7I0gWTQ
+         bNgU3nJxr/Y9iykR7Q0LVr7Ms0uWNPxMY5ofhXnRkg3tbzdBKhcdo9vIpr/Ojv7dWTgE
+         Cv4mmsetKFpQtv/Q5Uuc1WrJk+/WBWqsJAznyxlwAl1njGeyca3y82mnWnFvq141xyUm
+         P/DzErJqslCOI2/KcxSgMiSC/cei6BOFNhNq5NVJfEQC7fFjcKx0NTTq8WnV76d1uCEu
+         EcPLJ2kPGyN41a+ueipKsUY1hQ7gDOuRV99v/GWc5W/NMPTcRdV57PG5Na2g4ChMO48x
+         SY3w==
+X-Gm-Message-State: AO0yUKUyp7bBK6utf4qIipt1H/IECWcyiDoTnRUkjVgar8LnDke3hYPw
+        5qIP2E++KIxhtXxFfya7YvA2jKoUDxTZmEmK
+X-Google-Smtp-Source: AK7set8QUwLRWNyvL7CfMo590Y3EkQeCNSXSQsySnRd8ihnCh4XTm9IENRFJGz6akokzeufdbwIHKQ==
+X-Received: by 2002:a17:906:198f:b0:879:43d5:3832 with SMTP id g15-20020a170906198f00b0087943d53832mr17073880ejd.14.1676249747702;
+        Sun, 12 Feb 2023 16:55:47 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id f20-20020a170906c09400b00872c0bccab2sm6003864ejz.35.2023.02.12.16.55.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Feb 2023 16:55:47 -0800 (PST)
+Message-ID: <bba9e244-0a02-4d46-8ba8-bc8b11ddf6b4@linaro.org>
+Date:   Mon, 13 Feb 2023 02:55:45 +0200
 MIME-Version: 1.0
-References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
- <Y920w4QRLtC6kd+x@rowland.harvard.edu> <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y95yhJgNq8lMXPdF@rowland.harvard.edu> <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9+41ctA54pjm/KG@google.com> <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
- <Y+fN2fvUjGDWBYrv@google.com> <Y+f4TYZ9BPlt8y8B@rowland.harvard.edu>
- <CAEXW_YRuTfjc=5OAskTV0Qt_zSJTPP3-01=Y=SypMdPsF_weAQ@mail.gmail.com> <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
-In-Reply-To: <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Sun, 12 Feb 2023 19:54:15 -0500
-Message-ID: <CAEXW_YQUOgYxYUNkQ9W6PS-JPwPSOFU5B=COV7Vf+qNF1jFC7g@mail.gmail.com>
-Subject: Re: Current LKMM patch disposition
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] remoteproc: qcom: fix sparse warnings
+Content-Language: en-GB
+To:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, mathieu.poirier@linaro.org,
+        konrad.dybcio@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1675180866-16695-1-git-send-email-quic_mojha@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1675180866-16695-1-git-send-email-quic_mojha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 11, 2023 at 9:59 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-[...]
-> > is kind of why I want to understand the CAT, because for me
-> > explanation.txt is too much at a higher level to get a proper
-> > understanding of the memory model.. I tried re-reading explanation.txt
-> > many times.. then I realized I am just rewriting my own condensed set
-> > of notes every few months.
->
-> Would you like to post a few examples showing some of the most difficult
-> points you encountered?  Maybe explanation.txt can be improved.
+On 31/01/2023 18:01, Mukesh Ojha wrote:
+> This patch try to address below sparse warnings.
+> 
+> drivers/remoteproc/qcom_common.c:126:27: warning: restricted __le32 degrades to integer
+> drivers/remoteproc/qcom_common.c:133:32: warning: cast to restricted __le32
+> drivers/remoteproc/qcom_common.c:133:32: warning: cast from restricted __le64
+> 
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
 
-Just to list 2 of the pain points:
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-1. I think it is hard to reason this section
-"PROPAGATION ORDER RELATION: cumul-fence"
+Also see below.
 
-All store-related fences should affect propagation order, even the
-smp_wmb() which is not A-cumulative should do so (po-earlier stores
-appearing before po-later). I think expanding this section with some
-examples would make sense to understand what makes "cumul-fence"
-different from any other store-related fence.
+> ---
+>   drivers/remoteproc/qcom_common.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/qcom_common.c b/drivers/remoteproc/qcom_common.c
+> index 020349f..7133c1f 100644
+> --- a/drivers/remoteproc/qcom_common.c
+> +++ b/drivers/remoteproc/qcom_common.c
+> @@ -123,14 +123,14 @@ static int qcom_add_minidump_segments(struct rproc *rproc, struct minidump_subsy
+>   
+>   	for (i = 0; i < seg_cnt; i++) {
+>   		memcpy_fromio(&region, ptr + i, sizeof(region));
+> -		if (region.valid == MD_REGION_VALID) {
+> +		if (le32_to_cpu(region.valid) == MD_REGION_VALID) {
+>   			name = kstrdup(region.name, GFP_KERNEL);
 
-2. This part is confusing and has always confused me " The
-happens-before relation (hb) links memory accesses that have to
-execute in a certain order"
+While you are at it, please replace this kstrdup() with kstrndup(). 
+There is no guarantee that region.name will be 0-terminated.
 
-It is not memory accesses that execute, it is instructions that
-execute. Can we separate out "memory access" from "instruction
-execution" in this description?
+>   			if (!name) {
+>   				iounmap(ptr);
+>   				return -ENOMEM;
+>   			}
+>   			da = le64_to_cpu(region.address);
+> -			size = le32_to_cpu(region.size);
+> +			size = le64_to_cpu(region.size);
+>   			rproc_coredump_add_custom_segment(rproc, da, size, NULL, name);
+>   		}
+>   	}
 
-I think ->hb tries to say that A ->hb B means, memory access A
-happened before memory access B exactly in its associated
-instruction's execution order (time order), but to be specific --
-should that be instruction issue order, or instruction retiring order?
+-- 
+With best wishes
+Dmitry
 
-AFAICS ->hb maps instruction execution order to memory access order.
-Not all ->po does  fall into that category because of out-of-order
-hardware execution. As does not ->co because the memory subsystem may
-have writes to the same variable to be resolved out of order. It would
-be nice to call out that ->po is instruction issue order, which is
-different from execution/retiring and that's why it cannot be ->hb.
-
-->rf does because of data flow causality, ->ppo does because of
-program structure, so that makes sense to be ->hb.
-
-IMHO, ->rfi should as well, because it is embodying a flow of data, so
-that is a bit confusing. It would be great to clarify more perhaps
-with an example about why ->rfi cannot be ->hb, in the
-"happens-before" section.
-
-That's really how far I typically get (line 1368) before life takes
-over, and I have to go do other survival-related things. Then I
-restart the activity. Now that I started reading the CAT file as well,
-I feel I can make it past that line :D. But I never wanted to get past
-it, till I built a solid understanding of the contents before it.
-
-As I read the file more, I can give more feedback, but the above are
-different 2 that persist.
-
-Thanks!
-
- - Joel
