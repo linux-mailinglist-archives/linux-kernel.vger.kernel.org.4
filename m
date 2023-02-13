@@ -2,114 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38EDB6940FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69EAA6940F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbjBMJZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 04:25:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
+        id S230084AbjBMJZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 04:25:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbjBMJZD (ORCPT
+        with ESMTP id S229955AbjBMJYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 04:25:03 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D361314E8A;
-        Mon, 13 Feb 2023 01:25:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1676280301; x=1707816301;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=0Dz6X4Xb9XGpExKsggN/aLNn8f0s4UocxH2zuKRm47Y=;
-  b=wJkqgBQTEoYHrKPqsrEbpnuhzmQfPjFiKAR48qhGMVbhggauR+iXCskL
-   Fivtadi63ns73GTNFg6JtwPDJTxQAZR+7GYxl2T4SkiD9xlH56tTq7KmI
-   uLoaDdiVv71n6Z4tvFfV1JJu7GKS2fFMPcQRFb6aMIGkDZmsOVW6ff3Va
-   EreiW58tQ5NijuXaBXuLjSXSiPoePVsr6aWyeHXR/6lYzbc8cu1j+6z/M
-   J32VBzBcjH4PdXQQhkKXmwIex+qe/Hv6K+GYZSdqoLAdUM3FOzR0VkskP
-   ft/XpzyxVR/+ydUk9XcjWLsAQ0gxeE+b9dbYIlnIYFlz+IEkq+Aku29fw
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,293,1669100400"; 
-   d="scan'208";a="196611601"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Feb 2023 02:24:58 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 13 Feb 2023 02:24:54 -0700
-Received: from den-dk-m31857.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Mon, 13 Feb 2023 02:24:51 -0700
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     Steen Hegelund <steen.hegelund@microchip.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Casper Andersson" <casper.casan@gmail.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        "Nathan Huckleberry" <nhuck@google.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Steen Hegelund" <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH net-next 05/10] net: microchip: sparx5: Improve the error handling for linked rules
-Date:   Mon, 13 Feb 2023 10:24:21 +0100
-Message-ID: <20230213092426.1331379-6-steen.hegelund@microchip.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230213092426.1331379-1-steen.hegelund@microchip.com>
-References: <20230213092426.1331379-1-steen.hegelund@microchip.com>
+        Mon, 13 Feb 2023 04:24:54 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 915FD14EBF;
+        Mon, 13 Feb 2023 01:24:52 -0800 (PST)
+Received: from vm02.corp.microsoft.com (unknown [167.220.196.155])
+        by linux.microsoft.com (Postfix) with ESMTPSA id A6C7320C8B6E;
+        Mon, 13 Feb 2023 01:24:49 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A6C7320C8B6E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1676280292;
+        bh=4QUbK/o9M3m8NodgfLJgSex5yc5ApLq708AIPOlvkWc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QqwuvsXOI11qwMfX6Y/EsOY0w+dNHVfb18/3Jx5e6jjgjA0jAAmyX9NU8ez9HLxS7
+         nhbXmfm6N168W4W3T1kk3v/MjD4ZoOz2N3E9dy/j133foWYC/9V4Gd50x43uvbhfs5
+         yuXvDbWcfWElHWSt4e+gMpXADPpoMh3f0jA9nMP0=
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        "Brijesh Singh" <brijesh.singh@amd.com>,
+        "Tom Lendacky" <thomas.lendacky@amd.com>,
+        "Kalra, Ashish" <ashish.kalra@amd.com>,
+        linux-crypto@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Len Brown" <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org
+Subject: [PATCH v2 0/8] Support ACPI PSP on Hyper-V
+Date:   Mon, 13 Feb 2023 09:24:21 +0000
+Message-Id: <20230213092429.1167812-1-jpiotrowski@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ensure that an error is returned if the VCAP instance was not found.
-The chain offset (diff) is allowed to be zero as this just means that the
-user did not request rules to be linked.
+This patch series introduces support for discovering AMD's PSP from an ACPI
+table and extends the CCP driver to allow binding to that device on x86. This
+method of PSP discovery is used on Hyper-V when SNP isolation support is
+exposed to the guest. There is no ACPI node associated with this PSP, so after
+parsing the ASPT it is registered with the system as a platform_device.
 
-Signed-off-by: Steen Hegelund <steen.hegelund@microchip.com>
----
- drivers/net/ethernet/microchip/sparx5/sparx5_tc_flower.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+I thought about putting psp.c in arch/x86/coco, but that directory is meant for
+the (confidential) guest side of CoCo, not the supporting host side code.
+It was kept in arch/x86/kernel because configuring the irq for the PSP through
+the ACPI interface requires poking at bits from the architectural vector
+domain.
 
-diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_tc_flower.c b/drivers/net/ethernet/microchip/sparx5/sparx5_tc_flower.c
-index d73668dcc6b6..82d5138f149e 100644
---- a/drivers/net/ethernet/microchip/sparx5/sparx5_tc_flower.c
-+++ b/drivers/net/ethernet/microchip/sparx5/sparx5_tc_flower.c
-@@ -551,12 +551,16 @@ static int sparx5_tc_add_rule_link(struct vcap_control *vctrl,
- 	struct vcap_admin *to_admin = vcap_find_admin(vctrl, to_cid);
- 	int diff, err = 0;
- 
--	diff = vcap_chain_offset(vctrl, from_cid, to_cid);
--	if (!(to_admin && diff > 0)) {
-+	if (!to_admin) {
- 		pr_err("%s:%d: unsupported chain direction: %d\n",
- 		       __func__, __LINE__, to_cid);
- 		return -EINVAL;
- 	}
-+
-+	diff = vcap_chain_offset(vctrl, from_cid, to_cid);
-+	if (!diff)
-+		return 0;
-+
- 	if (admin->vtype == VCAP_TYPE_IS0 &&
- 	    to_admin->vtype == VCAP_TYPE_IS0) {
- 		/* Between IS0 instances the G_IDX value is used */
+This series is a prerequisite for nested SNP-host support on Hyper-V but is
+independent of the SNP-host support patch set. Hyper-V only supports nested
+SEV-SNP (not SEV or SEV-ES) so the PSP only supports a subset of the full PSP
+command set. Without SNP-host support (which is not upstream yet), the only
+PSP command that will succeed is SEV_PLATFORM_STATUS.
+
+Changes since v1:
+* move platform_device_add_data() call to commit that introduces psp device
+* change psp dependency from CONFIG_AMD_MEM_ENCRYPT to CONFIG_KVM_AMD_SEV
+* add blank lines, s/plat/platform/, remove variable initializers before first
+  use, remove masking/shifting where not needed
+* dynamically allocate sev_vdata/psp_vdata structs instead of overwriting static
+  variables
+
+Jeremi Piotrowski (8):
+  include/acpi: add definition of ASPT table
+  ACPI: ASPT: Add helper to parse table
+  x86/psp: Register PSP platform device when ASP table is present
+  x86/psp: Add IRQ support
+  crypto: cpp - Bind to psp platform device on x86
+  crypto: ccp - Add vdata for platform device
+  crypto: ccp - Skip DMA coherency check for platform psp
+  crypto: ccp - Allow platform device to be psp master device
+
+ arch/x86/kernel/Makefile          |   1 +
+ arch/x86/kernel/psp.c             | 219 ++++++++++++++++++++++++++++++
+ drivers/acpi/Makefile             |   1 +
+ drivers/acpi/aspt.c               | 104 ++++++++++++++
+ drivers/crypto/ccp/sp-dev.c       |  66 +++++++++
+ drivers/crypto/ccp/sp-dev.h       |   4 +
+ drivers/crypto/ccp/sp-pci.c       |  48 -------
+ drivers/crypto/ccp/sp-platform.c  |  76 ++++++++++-
+ include/acpi/actbl1.h             |  46 +++++++
+ include/linux/platform_data/psp.h |  32 +++++
+ 10 files changed, 548 insertions(+), 49 deletions(-)
+ create mode 100644 arch/x86/kernel/psp.c
+ create mode 100644 drivers/acpi/aspt.c
+ create mode 100644 include/linux/platform_data/psp.h
+
 -- 
-2.39.1
+2.25.1
 
