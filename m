@@ -2,188 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 901ED69492A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7678F69494A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbjBMO4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 09:56:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
+        id S231181AbjBMO6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 09:58:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbjBMO4X (ORCPT
+        with ESMTP id S230491AbjBMO6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 09:56:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A6A1CF58
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:55:30 -0800 (PST)
+        Mon, 13 Feb 2023 09:58:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754931C33E
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:56:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676300130;
+        s=mimecast20190719; t=1676300186;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zl63jsky81erb0FQXv5yXqKKrGCIcE7sOvGJJky9NkM=;
-        b=Qw+TPfCKwTpto8vxn2oCXNfSQ/b6pVqoTk5MLXfLifBujeH+tLWsqrh+8JEZYceDZgVf0F
-        xbYpYyJ+zjoKkGMtqWbpRSO4PgCnSsgyrZiJVJjrNc2BXmKJFrMfjQSh2MAKW3rzeKcUA9
-        ejauTT4ofs6MYvwriOBhVqWNeS4ju9A=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=UcbvgdOnqyzXVAQogo/oCkD+sYlM47nFoe7fwRrExSo=;
+        b=hS+TfkJcbEl3SBRsqWNqXMDEG2+xrfESdtZWPzM6u59AiiHWDbni2gc4aauP0ybGPjFIPg
+        CtdGX2LiA23PDqQ3NtlBb7NXh4AnkJX+ctU4Znkwjf2Rv81NAyy5S4n3ol9hlTItQidGDL
+        13WlYKrLN9BEygn9ka8YZy2aZf6fhus=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-443-VB3uqy2POHWAbvNBWxpHow-1; Mon, 13 Feb 2023 09:55:29 -0500
-X-MC-Unique: VB3uqy2POHWAbvNBWxpHow-1
-Received: by mail-qt1-f199.google.com with SMTP id z12-20020ac8710c000000b003b829a0eda2so7573808qto.21
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:55:28 -0800 (PST)
+ us-mta-26-CCwyuu0pO8qHpC7TpjFU7A-1; Mon, 13 Feb 2023 09:56:25 -0500
+X-MC-Unique: CCwyuu0pO8qHpC7TpjFU7A-1
+Received: by mail-wr1-f70.google.com with SMTP id r11-20020a5d498b000000b002c5588d962fso607353wrq.10
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:56:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zl63jsky81erb0FQXv5yXqKKrGCIcE7sOvGJJky9NkM=;
-        b=gp0WWNo5fnqwV4e6hEMfFJzAOyYH5W26QVtryxvPAbkyT9Ltqx6LfiQ8vO1s8GKubn
-         /jI5ANXM+J2ZnDUt0Plg/y0Fb4LblTeHwLvkzHLjNwjC8oHsei5cR6kv7e+GeyK6SY0t
-         XqVtmYlQO2CWyCyMFJHzk9QHw6Es8nuc5g4kBZUtoOCwDUQimvwba07yxa4SI4InsiQD
-         ZY9I5mFNGs+N67OtF2HcWoL7PccMFPcv0kciyBR98QUZrA+U2mXBatTC//Yakvgi4Hoa
-         dB6x/LUM14+FXHUmXJ/8X5KVHZ5YNlkxthC7VGxQy20sMo9zXrQIPb7a8pCijUcRVYrx
-         /C3g==
-X-Gm-Message-State: AO0yUKXi4ya8691nl2KglDmQOtLiZU4YoHYiBsY/CdvTI3UBwLfCrZxG
-        Wr9WdXioPxEjSRofFYfy/nX7McSQ9LkYGnJHkxTHRwdP90Mh5Y+7Y4sEpNnn1U3TSsysGQWJekT
-        f4NGEP2O//8HcfnSJyr7VB659
-X-Received: by 2002:a05:622a:4084:b0:3b9:bc8c:c20e with SMTP id cg4-20020a05622a408400b003b9bc8cc20emr22774272qtb.25.1676300128409;
-        Mon, 13 Feb 2023 06:55:28 -0800 (PST)
-X-Google-Smtp-Source: AK7set/voaD06hHqmVn8o1/r1OntQREu64g27uMIQbxbd8hliMG2MSEOcwYxRW8AwbTRvID0EMlAWA==
-X-Received: by 2002:a05:622a:4084:b0:3b9:bc8c:c20e with SMTP id cg4-20020a05622a408400b003b9bc8cc20emr22774247qtb.25.1676300128108;
-        Mon, 13 Feb 2023 06:55:28 -0800 (PST)
-Received: from debian (2a01cb058918ce0052a1c4711233f5f0.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:52a1:c471:1233:f5f0])
-        by smtp.gmail.com with ESMTPSA id u123-20020a379281000000b0073b4d9e2e8dsm722213qkd.43.2023.02.13.06.55.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 06:55:27 -0800 (PST)
-Date:   Mon, 13 Feb 2023 15:55:24 +0100
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Shigeru Yoshida <syoshida@redhat.com>
-Cc:     jchapman@katalix.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] l2tp: Avoid possible recursive deadlock in
- l2tp_tunnel_register()
-Message-ID: <Y+pPXOqfrYkXPg1K@debian>
-References: <20230212162623.2301597-1-syoshida@redhat.com>
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UcbvgdOnqyzXVAQogo/oCkD+sYlM47nFoe7fwRrExSo=;
+        b=R9YxslkMkyIsaA5hgaJVoe0RfVDcx2o44orvhXylycwk6n3R+Qr/1QCtNoYCRIeLPI
+         oTKZZd99c/rs4RTNVUludpGIUao9OjW5QpZLRibYH2K4tF1BzB56T4WYY/ZX2+EUT5XA
+         pj18f7+fJCpEBDrdpleh06+KKuAsFvEOQrLY6/LIJsOtUq1j7loBJ7HQDFQQ4jJvD4Ok
+         CQGwovdo1e5CT5RNNOHPIpoEPwHlK7OTvUZz62VnfWEn37Jk9ESNd5Cf+fU6zaR/Ktmy
+         CvdW1X1iuI1bR/dfr797LwcWFPMznLYW2kdoUIYzsaYApwNonJ2fXjdfhJsRXEyGZAAd
+         Swsg==
+X-Gm-Message-State: AO0yUKVZeWf8MiUzLbpy+FecdLtZ0ojIO1LUEunRZ6OvzAn22ycC1XKC
+        wwYRotPBYtIi8nOK5Ou3n8ibrg6mCH0TlbwwK+VXLWrm4dHeYzYsAR2C+Jx2WpYwTGxZgKFwKzg
+        dYIL2ewLLDSAP/xOI7sFlN0YT
+X-Received: by 2002:adf:e5ce:0:b0:2c5:4d97:4a23 with SMTP id a14-20020adfe5ce000000b002c54d974a23mr6683046wrn.70.1676300183675;
+        Mon, 13 Feb 2023 06:56:23 -0800 (PST)
+X-Google-Smtp-Source: AK7set/wp7iAqKD66CPLnH5FMLYm4u2nsJT3GTHCfZvBlZXNJR8IoCTQJqlclnW3q98J4QCVN7UwtQ==
+X-Received: by 2002:adf:e5ce:0:b0:2c5:4d97:4a23 with SMTP id a14-20020adfe5ce000000b002c54d974a23mr6683036wrn.70.1676300183412;
+        Mon, 13 Feb 2023 06:56:23 -0800 (PST)
+Received: from ?IPV6:2003:cb:c705:6d00:5870:9639:1c17:8162? (p200300cbc7056d00587096391c178162.dip0.t-ipconnect.de. [2003:cb:c705:6d00:5870:9639:1c17:8162])
+        by smtp.gmail.com with ESMTPSA id g9-20020a5d5409000000b002c558228b6dsm3365811wrv.12.2023.02.13.06.56.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 06:56:22 -0800 (PST)
+Message-ID: <7693247c-a55d-a375-3621-1b07115a9d99@redhat.com>
+Date:   Mon, 13 Feb 2023 15:56:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230212162623.2301597-1-syoshida@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v1 RFC Zisslpcfi 11/20] mmu: maybe_mkwrite updated to
+ manufacture shadow stack PTEs
+Content-Language: en-US
+To:     Deepak Gupta <debug@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+References: <20230213045351.3945824-1-debug@rivosinc.com>
+ <20230213045351.3945824-12-debug@rivosinc.com>
+ <2d6eefb8-c7c5-7d32-9a75-ae716f828cd9@redhat.com>
+ <20230213143754.GC3943238@debug.ba.rivosinc.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230213143754.GC3943238@debug.ba.rivosinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 01:26:23AM +0900, Shigeru Yoshida wrote:
-> +static struct l2tp_tunnel *pppol2tp_tunnel_get(struct net *net,
-> +					       struct l2tp_connect_info *info,
+On 13.02.23 15:37, Deepak Gupta wrote:
+> On Mon, Feb 13, 2023 at 01:05:16PM +0100, David Hildenbrand wrote:
+>> On 13.02.23 05:53, Deepak Gupta wrote:
+>>> maybe_mkwrite creates PTEs with WRITE encodings for underlying arch if
+>>> VM_WRITE is turned on in vma->vm_flags. Shadow stack memory is a write-
+>>> able memory except it can only be written by certain specific
+>>> instructions. This patch allows maybe_mkwrite to create shadow stack PTEs
+>>> if vma is shadow stack VMA. Each arch can define which combination of VMA
+>>> flags means a shadow stack.
+>>>
+>>> Additionally pte_mkshdwstk must be provided by arch specific PTE
+>>> construction headers to create shadow stack PTEs. (in arch specific
+>>> pgtable.h).
+>>>
+>>> This patch provides dummy/stub pte_mkshdwstk if CONFIG_USER_SHADOW_STACK
+>>> is not selected.
+>>>
+>>> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+>>> ---
+>>>   include/linux/mm.h      | 23 +++++++++++++++++++++--
+>>>   include/linux/pgtable.h |  4 ++++
+>>>   2 files changed, 25 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/include/linux/mm.h b/include/linux/mm.h
+>>> index 8f857163ac89..a7705bc49bfe 100644
+>>> --- a/include/linux/mm.h
+>>> +++ b/include/linux/mm.h
+>>> @@ -1093,6 +1093,21 @@ static inline unsigned long thp_size(struct page *page)
+>>>   void free_compound_page(struct page *page);
+>>>   #ifdef CONFIG_MMU
+>>> +
+>>> +#ifdef CONFIG_USER_SHADOW_STACK
+>>> +bool arch_is_shadow_stack_vma(struct vm_area_struct *vma);
+>>> +#endif
+>>> +
+>>> +static inline bool
+>>> +is_shadow_stack_vma(struct vm_area_struct *vma)
+>>> +{
+>>> +#ifdef CONFIG_USER_SHADOW_STACK
+>>> +	return arch_is_shadow_stack_vma(vma);
+>>> +#else
+>>> +	return false;
+>>> +#endif
+>>> +}
+>>> +
+>>>   /*
+>>>    * Do pte_mkwrite, but only if the vma says VM_WRITE.  We do this when
+>>>    * servicing faults for write access.  In the normal case, do always want
+>>> @@ -1101,8 +1116,12 @@ void free_compound_page(struct page *page);
+>>>    */
+>>>   static inline pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
+>>>   {
+>>> -	if (likely(vma->vm_flags & VM_WRITE))
+>>> -		pte = pte_mkwrite(pte);
+>>> +	if (likely(vma->vm_flags & VM_WRITE)) {
+>>> +		if (unlikely(is_shadow_stack_vma(vma)))
+>>> +			pte = pte_mkshdwstk(pte);
+>>> +		else
+>>> +			pte = pte_mkwrite(pte);
+>>> +	}
+>>>   	return pte;
+>>
+>> Exactly what we are trying to avoid in the x86 approach right now.
+>> Please see the x86 series on details, we shouldn't try reinventing the
+>> wheel but finding a core-mm approach that fits multiple architectures.
+>>
+>> https://lkml.kernel.org/r/20230119212317.8324-1-rick.p.edgecombe@intel.com
+> 
+> Thanks David for comment here. I looked at x86 approach. This patch
+> actually written in a way which is not re-inventing wheel and is following
+> a core-mm approach that fits multiple architectures.
+> 
+> Change above checks `is_shadow_stack_vma` and if it returns true then only
+> it manufactures shadow stack pte else it'll make a regular writeable mapping.
+> 
+> Now if we look at `is_shadow_stack_vma` implementation, it returns false if
+> `CONFIG_USER_SHADOW_STACK` is not defined. If `CONFIG_USER_SHADOW_STACK is
+> defined then it calls `arch_is_shadow_stack_vma` which should be implemented
+> by arch specific code. This allows each architecture to define their own vma
+> flag encodings for shadow stack (riscv chooses presence of only `VM_WRITE`
+> which is analogous to choosen PTE encodings on riscv W=1,R=0,X=0)
+> 
+> Additionally pte_mkshdwstk will be nop if not implemented by architecture.
+> 
+> Let me know if this make sense. If I am missing something here, let me know.
 
-Please make "*info" const.
+See the discussion in that thread. The idea is to pass a VMA to 
+pte_mkwrite() and let it handle how to actually set it writable.
 
-> +					       bool *new_tunnel)
-> +{
-> +	struct l2tp_tunnel *tunnel;
-> +	int error;
-> +
-> +	*new_tunnel = false;
-> +
-> +	tunnel = l2tp_tunnel_get(net, info->tunnel_id);
-> +
-> +	/* Special case: create tunnel context if session_id and
-> +	 * peer_session_id is 0. Otherwise look up tunnel using supplied
-> +	 * tunnel id.
-> +	 */
-> +	if (!info->session_id && !info->peer_session_id) {
-> +		if (!tunnel) {
-> +			struct l2tp_tunnel_cfg tcfg = {
-> +				.encap = L2TP_ENCAPTYPE_UDP,
-> +			};
-> +
-> +			/* Prevent l2tp_tunnel_register() from trying to set up
-> +			 * a kernel socket.
-> +			 */
-> +			if (info->fd < 0)
-> +				return ERR_PTR(-EBADF);
-> +
-> +			error = l2tp_tunnel_create(info->fd,
-> +						   info->version,
-> +						   info->tunnel_id,
-> +						   info->peer_tunnel_id, &tcfg,
-> +						   &tunnel);
-> +			if (error < 0)
-> +				return ERR_PTR(error);
-> +
-> +			l2tp_tunnel_inc_refcount(tunnel);
-> +			error = l2tp_tunnel_register(tunnel, net, &tcfg);
-> +			if (error < 0) {
-> +				kfree(tunnel);
-> +				return ERR_PTR(error);
-> +			}
-> +
-> +			*new_tunnel = true;
-> +		}
-> +	} else {
-> +		/* Error if we can't find the tunnel */
-> +		if (!tunnel)
-> +			return ERR_PTR(-ENOENT);
-> +
-> +		/* Error if socket is not prepped */
-> +		if (!tunnel->sock) {
-> +			l2tp_tunnel_dec_refcount(tunnel);
-> +			return ERR_PTR(-ENOENT);
-> +		}
-> +	}
-> +
-> +	return tunnel;
-> +}
-> +
->  /* connect() handler. Attach a PPPoX socket to a tunnel UDP socket
->   */
->  static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
-> @@ -663,7 +722,6 @@ static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
->  	struct pppol2tp_session *ps;
->  	struct l2tp_session_cfg cfg = { 0, };
->  	bool drop_refcnt = false;
-> -	bool drop_tunnel = false;
->  	bool new_session = false;
->  	bool new_tunnel = false;
->  	int error;
-> @@ -672,6 +730,10 @@ static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
->  	if (error < 0)
->  		return error;
->  
-> +	tunnel = pppol2tp_tunnel_get(sock_net(sk), &info, &new_tunnel);
-> +	if (IS_ERR(tunnel))
-> +		return PTR_ERR(tunnel);
-> +
->  	lock_sock(sk);
->  
->  	/* Check for already bound sockets */
-> @@ -689,57 +751,6 @@ static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
->  	if (!info.tunnel_id)
->  		goto end;
+-- 
+Thanks,
 
-The original code did test info.tunnel_id before trying to get or
-create the tunnel (as it doesn't make sense to work on a tunnel whose
-ID is 0). So we need move this test before the pppol2tp_tunnel_get()
-call.
-
-> -	tunnel = l2tp_tunnel_get(sock_net(sk), info.tunnel_id);
-> -	if (tunnel)
-> -		drop_tunnel = true;
-> -
-> -	/* Special case: create tunnel context if session_id and
-> -	 * peer_session_id is 0. Otherwise look up tunnel using supplied
-> -	 * tunnel id.
-> -	 */
-
-Just a note for your future submissions: for networking patches, we
-normally indicate which tree the patch is targetted to in the mail
-subject (for example "[PATCH net v2]"). Also, you should Cc:
-the author of the patch listed in the Fixes tag.
+David / dhildenb
 
