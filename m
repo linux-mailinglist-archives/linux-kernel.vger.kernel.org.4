@@ -2,120 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90D34694785
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE5069472B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:37:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjBMN4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 08:56:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
+        id S230157AbjBMNhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 08:37:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbjBMN4j (ORCPT
+        with ESMTP id S230045AbjBMNhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 08:56:39 -0500
-X-Greylist: delayed 1173 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 13 Feb 2023 05:56:37 PST
-Received: from 4.mo560.mail-out.ovh.net (4.mo560.mail-out.ovh.net [87.98.172.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E184ECF
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:56:37 -0800 (PST)
-Received: from director8.ghost.mail-out.ovh.net (unknown [10.108.20.144])
-        by mo560.mail-out.ovh.net (Postfix) with ESMTP id 3FCE8205F4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:37:02 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-dhg5x (unknown [10.110.171.76])
-        by director8.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 080351FE0E;
-        Mon, 13 Feb 2023 13:37:02 +0000 (UTC)
-Received: from RCM-web6.webmail.mail.ovh.net ([151.80.29.20])
-        by ghost-submission-6684bf9d7b-dhg5x with ESMTPSA
-        id SLZVAf486mOMBQAAsqmxVA
-        (envelope-from <rafal@milecki.pl>); Mon, 13 Feb 2023 13:37:02 +0000
-MIME-Version: 1.0
-Date:   Mon, 13 Feb 2023 14:37:01 +0100
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     INAGAKI Hiroshi <musashino.open@gmail.com>
-Cc:     srinivas.kandagatla@linaro.org, chunkeey@gmail.com,
+        Mon, 13 Feb 2023 08:37:19 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60D1468F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:37:17 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id bt8so7105598edb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:37:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VWQukUmOBboD3ve0t2WRko6zyPeadupb+Yh41Dodqd0=;
+        b=Zye4jEMN+Yl53MaO/BHLu1SWyGYajA+w0bxj16SpsO3ZyIzI5bBZaVnaZfcgH2VRkC
+         KPmKoFmw+sXR3Sl06y62D5DuLImsp/nViquQ4hMy9hbvpMRLXCykeQSGbxlEqr0YMgMs
+         1yGIUY4MgPsuOLelM/DhBm5CnB9y7QtYB19Gp0RhLFxrH5a7A53+wQN4i/BFkQnmfFZv
+         7qTbqvP6pO/zgzTRv/yuNC+GC02cXw6BJVNB3W3bgAD4Et62spQt480dIZLc1nqWgEZI
+         TGRhZ5x1rf390PSpkuRNkB8eDAWs+b9rakkX6iJQT300BJWRgN3DNfvLKsglcF28nnCU
+         D9Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VWQukUmOBboD3ve0t2WRko6zyPeadupb+Yh41Dodqd0=;
+        b=kt/NPzL3WCed2bozcojx4wWI5yCUllrq8Qb0abwTayWz04eXoYhT5HgOJ2bSL9MIRg
+         Yu22cn7nlF9l3fDzDZhEEPSFeGT4IFCg6wR7Jdy7ln4W+KHdemIByvt7j1B74w7KAGdY
+         jI/SJWuJH/JiSTOY477loG++l2NlRgu+aNBxAPeJDNP8HiS4hPKmY2ADNDckPG9oQbYX
+         /uS4gcdtNmZhVYLC0pNR8D1gkPDorPYWgXhLUI3+Hpn0wNn0kI3H08Hj/aVJlFfmxM+7
+         Z4QOuYUUpSl8YNPK94NxvLK0VNY4DqP6cXoTjppvcVQRRtO7w5PIOzmRzBuqpqjILVLv
+         2+iA==
+X-Gm-Message-State: AO0yUKURox8yRSvPr80yrjagUK4XRLB0bR8Pmn1nwFZSWISVAlczbVnE
+        +Zfa/AdSYmkxsiby0RyREamJ4w==
+X-Google-Smtp-Source: AK7set8Lj62T8qa7+NLRmOhfIL/j5f1E2nG3gDc9Eur29BCoi0KMNC8239U6ykKD/urpvIfb4wxEZw==
+X-Received: by 2002:a50:bace:0:b0:4ac:cc7a:24c1 with SMTP id x72-20020a50bace000000b004accc7a24c1mr2235597ede.37.1676295436512;
+        Mon, 13 Feb 2023 05:37:16 -0800 (PST)
+Received: from uffe-XPS13.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id n25-20020a50c219000000b004a21c9facd5sm6602798edf.67.2023.02.13.05.37.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 05:37:15 -0800 (PST)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     linux-mmc@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Christian Lohle <cloehle@hyperstone.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] nvmem: u-boot-env: align endianness of crc32 values
-In-Reply-To: <20230213132351.837-1-musashino.open@gmail.com>
-References: <20230213132351.837-1-musashino.open@gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <d8e6135f837462a7f7cdf59e20bfc449@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 4394950287709023195
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrudeiuddghedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpeggfffhvfevufgjfhgfkfigihgtgfesthejjhdttdervdenucfhrhhomheptfgrfhgrlhcuofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepteehleefgfejuddtiedvuddvtefhhfehudelgfegiedtjeduhfekteejkeeijefgnecukfhppeduvdejrddtrddtrddupdduleegrddukeejrdejgedrvdeffedpudehuddrkedtrddvledrvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorhgrfhgrlhesmhhilhgvtghkihdrphhlqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeitddpmhhouggvpehsmhhtphhouhht
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH] mmc: core: Align to common busy polling behaviour for mmc ioctls
+Date:   Mon, 13 Feb 2023 14:37:07 +0100
+Message-Id: <20230213133707.27857-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-13 14:23, INAGAKI Hiroshi wrote:
-> This patch fixes crc32 error on Big-Endianness system by conversion of
-> calculated crc32 value.
-> 
-> Little-Endianness system:
-> 
->   obtained crc32: Little
-> calculated crc32: Little
-> 
-> Big-Endianness system:
-> 
->   obtained crc32: Little
-> calculated crc32: Big
-> 
-> log (APRESIA ApresiaLightGS120GT-SS, RTL8382M, Big-Endianness):
-> 
-> [    8.570000] u_boot_env
-> 18001200.spi:flash@0:partitions:partition@c0000: Invalid calculated
-> CRC32: 0x88cd6f09 (expected: 0x096fcd88)
-> [    8.580000] u_boot_env: probe of
-> 18001200.spi:flash@0:partitions:partition@c0000 failed with error -22
-> 
-> Fixes: f955dc144506 ("nvmem: add driver handling U-Boot environment 
-> variables")
-> 
-> Signed-off-by: INAGAKI Hiroshi <musashino.open@gmail.com>
-> ---
-> v2 -> v3
-> 
-> - fix sparse warning by using __le32 type and cpu_to_le32
-> - fix character length of the short commit hash in "Fixes:" tag
-> 
-> v1 -> v2
-> 
-> - wrong fix for sparse warning due to misunderstanding
-> - add missing "Fixes:" tag
-> 
->  drivers/nvmem/u-boot-env.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/nvmem/u-boot-env.c b/drivers/nvmem/u-boot-env.c
-> index 29b1d87a3c51..164bb04dfc3b 100644
-> --- a/drivers/nvmem/u-boot-env.c
-> +++ b/drivers/nvmem/u-boot-env.c
-> @@ -117,8 +117,8 @@ static int u_boot_env_parse(struct u_boot_env 
-> *priv)
->  	size_t crc32_offset;
->  	size_t data_offset;
->  	size_t data_len;
-> -	uint32_t crc32;
-> -	uint32_t calc;
-> +	__le32 crc32;
-> +	__le32 calc;
->  	size_t bytes;
->  	uint8_t *buf;
->  	int err;
+Let's align to the common busy polling behaviour for mmc ioctls, by
+updating the below two corresponding parts, that comes into play when using
+an R1B response for a command.
 
-This looks counter-intuitive to me, to store values on host system in
-specified endianness. I'd say we should use __le32 type only to
-represent numbers in device stored data (e.g. structs as processed by
-device).
+*) A command with an R1B response should be prepared by calling
+mmc_prepare_busy_cmd(), which make us respects the host's busy timeout
+constraints.
+**) When an R1B response is being used and the host also supports HW busy
+detection, we should skip to poll for busy completion.
 
-My suggesion: leave uint32_t for local variables and use le32_to_cpu().
+Suggested-by: Christian Loehle <cloehle@hyperstone.com>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ drivers/mmc/core/block.c   | 25 +++++++++++++++++--------
+ drivers/mmc/core/mmc_ops.c |  1 +
+ 2 files changed, 18 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index 20da7ed43e6d..672ab90c4b2d 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -470,6 +470,8 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+ 	struct mmc_data data = {};
+ 	struct mmc_request mrq = {};
+ 	struct scatterlist sg;
++	bool r1b_resp, use_r1b_resp = false;
++	unsigned int busy_timeout_ms;
+ 	int err;
+ 	unsigned int target_part;
+ 
+@@ -545,6 +547,13 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+ 	    (cmd.opcode == MMC_SWITCH))
+ 		return mmc_sanitize(card, idata->ic.cmd_timeout_ms);
+ 
++	/* If it's an R1B response we need some more preparations. */
++	busy_timeout_ms = idata->ic.cmd_timeout_ms ? : MMC_BLK_TIMEOUT_MS;
++	r1b_resp = (cmd.flags & MMC_RSP_R1B) == MMC_RSP_R1B;
++	if (r1b_resp)
++		use_r1b_resp = mmc_prepare_busy_cmd(card->host, &cmd,
++						    busy_timeout_ms);
++
+ 	mmc_wait_for_req(card->host, &mrq);
+ 	memcpy(&idata->ic.response, cmd.resp, sizeof(cmd.resp));
+ 
+@@ -596,14 +605,14 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+ 	if (idata->ic.postsleep_min_us)
+ 		usleep_range(idata->ic.postsleep_min_us, idata->ic.postsleep_max_us);
+ 
+-	if (idata->rpmb || (cmd.flags & MMC_RSP_R1B) == MMC_RSP_R1B) {
+-		/*
+-		 * Ensure RPMB/R1B command has completed by polling CMD13 "Send Status". Here we
+-		 * allow to override the default timeout value if a custom timeout is specified.
+-		 */
+-		err = mmc_poll_for_busy(card, idata->ic.cmd_timeout_ms ? : MMC_BLK_TIMEOUT_MS,
+-					false, MMC_BUSY_IO);
+-	}
++	/* No need to poll when using HW busy detection. */
++	if ((card->host->caps & MMC_CAP_WAIT_WHILE_BUSY) && use_r1b_resp)
++		return 0;
++
++	/* Ensure RPMB/R1B command has completed by polling with CMD13. */
++	if (idata->rpmb || r1b_resp)
++		err = mmc_poll_for_busy(card, busy_timeout_ms, false,
++					MMC_BUSY_IO);
+ 
+ 	return err;
+ }
+diff --git a/drivers/mmc/core/mmc_ops.c b/drivers/mmc/core/mmc_ops.c
+index 81c55bfd6e0c..3b3adbddf664 100644
+--- a/drivers/mmc/core/mmc_ops.c
++++ b/drivers/mmc/core/mmc_ops.c
+@@ -575,6 +575,7 @@ bool mmc_prepare_busy_cmd(struct mmc_host *host, struct mmc_command *cmd,
+ 	cmd->busy_timeout = timeout_ms;
+ 	return true;
+ }
++EXPORT_SYMBOL_GPL(mmc_prepare_busy_cmd);
+ 
+ /**
+  *	__mmc_switch - modify EXT_CSD register
+-- 
+2.34.1
+
