@@ -2,174 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDBF169403C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1178B694043
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:01:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjBMI7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 03:59:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
+        id S230051AbjBMJBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 04:01:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjBMI7s (ORCPT
+        with ESMTP id S229720AbjBMJBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 03:59:48 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBFDE8;
-        Mon, 13 Feb 2023 00:59:47 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id r34-20020a05683044a200b0068d4a8a8d2dso3491392otv.12;
-        Mon, 13 Feb 2023 00:59:47 -0800 (PST)
+        Mon, 13 Feb 2023 04:01:40 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C01E30C8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:01:39 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id w20-20020a17090a8a1400b00233d7314c1cso3614162pjn.5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:01:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S8DWJEO3mtpNA7q0D4H3YS1sJmeVACF/QDAtzNdcs1k=;
-        b=DLYPP7tIZaQr6wYy2yphr3aYOpJF/Od4RjBwWQIIMLEienUfUhjcnSphlAkwLNDheB
-         bruU1UpCC+34AJUEH93TsBCGHrNvu2nTzgXVko018Jhv/nhLPXAAs8+IQh8oxgBzFdQE
-         /SY7nJDzZllHBG5JVokReRm1OeR05/hye9EsiOJk5tfUoAx1roLEVqaKhOd2TE1xBE/t
-         5bjRwnnlQXoFOL/+hO6dbtGfdIsQQIfxEsTWEPEzF2DX7uTD1thxSRi8JlLFLg+V99wb
-         F2pxGS4EzfqQdDAQOOfbIerVjZWIN0ZQuRYyK1RH9vx0udE0g2af7gVvcx8cLSX3dtKn
-         a7hQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=knZk8UU+gILKuGNRfB7GT0O6VmEC+8WJYZQJqqmgOU0=;
+        b=KNEceGhov0dwIzDFqRccLblZBmNCS12Y+7pw2sezMNDnTZkMcE1yexx71pOlAdF9Zk
+         EGnJXkH0JkzRvWgutMCejHyyA4OtlPi65jEh6B/3/8eW50MEz8Fc0Tx5XEd4woZP/E0C
+         mHkTHAyg7maQNuNgiHDForqvujhi3a1CRUNVwah0ohtAbcOvKsLAWytGLEDv9z08D2zD
+         76O29qVsBldSfiRN1oZOp0yObO6pY7U/Cemp4NzONI3USI+tS4FoIJ4dl7F+TDomjg4H
+         lWAvTC4ZgB0o1Jd7gshnH3tgNQm4jlTJ5WuuTH2u51LPNvZ63VaNuGJFvDoasQefa17X
+         rSUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S8DWJEO3mtpNA7q0D4H3YS1sJmeVACF/QDAtzNdcs1k=;
-        b=zbtndtotOexuuPdmdw32i1d54XDa1QsPVvKm0EPTIzvOtJxSQLvOp5pdG5+A5Q5MFU
-         vhLLr8QftCFH5m8I4PKWlwIfkBrgsWfKeb8I+o5menuaFv7aWrYRzRiE5+xE51cJZaxJ
-         FqdCfGFyqEA4QJjPJ9Zem9/2Kw9RfhtuWbn5R6IB366jQCrEEb3VUgJoPtQ6LVWx6ly8
-         OmO4gc9vWquuC8pkndOANpXIwWm0Wz/JD7rWogVnx682/zRmtw8zk6ej4wmBvCAK2Enc
-         VWGID4W4JNm3YsLuvQGTcbsfPfx7qz1cWxbeXBxvpq/rklFZNGkSHnqSrfHlutzxHhIY
-         0mdw==
-X-Gm-Message-State: AO0yUKWP2Spj5fwfiZXZqVXlBEoY18FvCEadNgQk4J2ZdWxAdWT7cH+i
-        05gFzJjRItM9F3qI702hPQMcUY3+H5nCQae1zsQ=
-X-Google-Smtp-Source: AK7set8KFfp95AbiwDGBaRYNY5/QDp64TVyTYrvKkcOXQ3ceRSsFU6cWUWAg29g5mFXtUJHdRguD6wHpgTcyZbHE0n8=
-X-Received: by 2002:a9d:600b:0:b0:68d:a306:4550 with SMTP id
- h11-20020a9d600b000000b0068da3064550mr2287626otj.91.1676278786692; Mon, 13
- Feb 2023 00:59:46 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=knZk8UU+gILKuGNRfB7GT0O6VmEC+8WJYZQJqqmgOU0=;
+        b=zkEo9wOTl7EvN8PDwYj4NeWBjOSACGpuWX+usLhqqWfD6DuWq4V4pbHJntHQnKh/H4
+         8NarpiLBjgTa0AYMG5G5+W7jJVfQ0uEDFJ96dUX6fR8QCNJY6scpcfyRkKkC79JxXtFq
+         UBY5b+D9XFb9IRhVfCLHYqOkjmDhWk0KipViCalSzeIn7oYCjMUi5W7qvZWzQUKdHY+H
+         V9dv9h1HSyd5wBfiDqpbURQ6emLGZvTzyZY8NA6NMR5vOKH5qqsYA98J6IrMAX2yv9z4
+         tbzWo3Hn6vq3S9QSuUQrACfXI/JpnxttA8AxTOBX+iAwyylfgaHmWcLP+KoDc0DO5oNI
+         z+TA==
+X-Gm-Message-State: AO0yUKWwWYLrdwNhlCNyjRURiMRTC1ELQJOEkKgg/UfSxg+xTqikbK2l
+        hmHGf1hWOFnu2HRpbZ29vvh1
+X-Google-Smtp-Source: AK7set/09d393s5gixpvWGjjSLjuwgH5lvWqLfMrJsru5MwM0BE1bIBxx1IfXj2obI5BB0vLe8KJiQ==
+X-Received: by 2002:a17:902:9a42:b0:199:1804:48aa with SMTP id x2-20020a1709029a4200b00199180448aamr23251087plv.13.1676278898566;
+        Mon, 13 Feb 2023 01:01:38 -0800 (PST)
+Received: from localhost.localdomain ([117.217.182.252])
+        by smtp.gmail.com with ESMTPSA id jb14-20020a170903258e00b001964c8164aasm7677963plb.129.2023.02.13.01.01.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 01:01:38 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Patrick Wildt <patrick@blueri.se>
+Subject: [PATCH] arm64: dts: qcom: sc8280xp-pmics: Specify interrupt parent explicitly
+Date:   Mon, 13 Feb 2023 14:31:18 +0530
+Message-Id: <20230213090118.11527-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230211073357.755893-1-sergio.paracuellos@gmail.com>
- <20230211073357.755893-2-sergio.paracuellos@gmail.com> <190b3135-82f3-4dfa-55ee-e048c5510e3c@arinc9.com>
- <CAMhs-H8tehOWvYKmFtW_LHNb62h5mnzVGN_bfGOtLgNE9qUxqw@mail.gmail.com>
- <d14f0065-e8d3-50ed-7ea4-ba57dbd18d51@arinc9.com> <CAMhs-H_1dtdAmeNW9arK9JxhdWaQJwcMU1Pk7TOW1f5MREzzug@mail.gmail.com>
- <76353597-0170-e0d9-9f5d-f208a03e44e8@linaro.org> <CAMhs-H-JGZMR6mB=USywAh4aRS9ZFOVebwLv8=N2f3uvWpcXDA@mail.gmail.com>
- <afe68663-8ade-ae5a-00a1-083b2f263cb0@roeck-us.net>
-In-Reply-To: <afe68663-8ade-ae5a-00a1-083b2f263cb0@roeck-us.net>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Mon, 13 Feb 2023 09:59:35 +0100
-Message-ID: <CAMhs-H9BkQNwNyYQQgSig9vkW-_+i0+x8CLogXNgkRyi9Un6xw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/5] dt-bindings: watchdog: mt7621-wdt: add phandle to
- access system controller registers
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, tsbogend@alpha.franken.de,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 4:27 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 2/12/23 00:13, Sergio Paracuellos wrote:
-> > On Sat, Feb 11, 2023 at 12:42 PM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 11/02/2023 12:01, Sergio Paracuellos wrote:
-> >>> On Sat, Feb 11, 2023 at 11:47 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.una=
-l@arinc9.com> wrote:
-> >>>>
-> >>>> On 11.02.2023 13:41, Sergio Paracuellos wrote:
-> >>>>> On Sat, Feb 11, 2023 at 10:10 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.u=
-nal@arinc9.com> wrote:
-> >>>>>>
-> >>>>>> Is this mediatek,sysctl property required after your changes on th=
-e
-> >>>>>> watchdog code?
-> >>>>>
-> >>>>> I don't really understand the question :-) Yes, it is. Since we hav=
-e
-> >>>>> introduced a new phandle in the watchdog node to be able to access =
-the
-> >>>>> reset status register through the 'sysc' syscon node.
-> >>>>> We need the bindings to be aligned with the mt7621.dtsi file and we
-> >>>>> are getting the syscon regmap handler via
-> >>>>> 'syscon_regmap_lookup_by_phandle()'. See PATCH 5 of the series, Ar=
-=C4=B1n=C3=A7.
-> >>>>
-> >>>> I believe you need to put mediatek,sysctl under "required:".
-> >>>
-> >>> Ah, I understood your question now :-). You meant 'required' property=
-.
-> >>> I need more coffee, I guess :-). I am not sure if you can add
-> >>> properties as required after bindings are already mainlined for
-> >>> compatibility issues. The problem with this SoC is that drivers becom=
-e
-> >>> mainlined before the device tree was so if things are properly fixed
-> >>> now this kind of issues appear.  Let's see Krzysztof and Rob comments
-> >>> for this.
-> >>
-> >> If your driver fails to probe without mediatek,sysctl, you already mad=
-e
-> >> it required (thus broke the ABI) regardless what dt-binding is saying.
-> >> In such case you should update dt-binding to reflect reality.
-> >>
-> >> Now ABI break is different case. Usually you should not break it witho=
-ut
-> >> valid reasons (e.g. it was never working before). Your commit msg
-> >> suggests that you only improve the code, thus ABI break is not really
-> >> justified. In such case - binding is correct, driver should be reworke=
-d
-> >> to accept DTS without the new property.
-> >
-> > Thanks for clarification, Krzysztof. Ok, so if this is the case I need
-> > to add this property required (as Arinc was properly pointing out in
-> > previous mail) since without it the driver is going to fail on probe
-> > (PATCH 5 of the series). I understand the "it was never working
-> > before" argument reason for ABI breaks. What happens if the old driver
-> > code was not ideal and totally dependent on architecture specific
-> > operations when this could be totally avoided and properly make arch
-> > independent agnostic drivers? This driver was added in 2016 [0]. There
-> > was not a device tree file in the kernel for this SoC mainlined until
-> > 2022 [1]. I also personally migrated this watchdog binding in 2022
-> > from text to YAML and maintained it without changes [2]. When this was
-> > mainlined not all drivers were properly reviewed and the current code
-> > was just maintained as it is. Most users of this SoC are in the
-> > openWRT community where the dtsi of the mainline is not used yet and
-> > they maintain their own mt7621.dtsi files. Also, when a new version of
-> > the openWRT selected kernel is added they also modify and align with
-> > its mt7621.dtsi file without maintaining previous dtb's. If "make the
-> > driver arch independent to be able to be compile tested" and this kind
-> > of arguments are not valid at all I need to know because I have
-> > started to review driver code for this SoC and other drivers also have
-> > the same arch dependency that ideally should be avoided in the same
-> > way. This at the end means to break the ABI again in the future for
-> > those drivers / bindings. So I can just let them be as it is and not
-> > provide any change at all and continue without being compile tested
-> > and other beneficial features to detect future driver breakage.
-> >
->
-> Problem is that there are (presumably) shipped systems out there with
-> the old devicetree file. The watchdog driver would no longer instantiate
-> on those systems.
+Nodes like pwrkey, resin, iadc, adc-tm, temp-alarm which are the grand
+children of spmi_bus node represent the interrupt generating devices but
+don't have "interrupt-parent" property.
 
-Ok, I will maintain only the PATCH that changes the driver to not use
-globals and send v5.
+As per the devicetree spec v0.3, section 2.4:
 
->
-> Guenter
->
+"The physical wiring of an interrupt source to an interrupt controller is
+represented in the devicetree with the interrupt-parent property. Nodes
+that represent interrupt-generating devices contain an interrupt-parent
+property which has a phandle value that points to the device to which the
+device’s interrupts are routed, typically an interrupt controller. If an
+interrupt-generating device does not have an interrupt-parent property,
+its interrupt parent is assumed to be its devicetree parent."
 
-Thanks,
-    Sergio Paracuellos
+This clearly says that if the "interrupt-parent" property is absent, then
+the immediate devicetree parent will be assumed as the interrupt parent.
+But the immediate parents of these nodes are not interrupt controllers
+themselves.
+
+This may lead to failure while wiring the interrupt for these nodes by an
+operating system. But a few operating systems like Linux, workaround this
+issue by walking up the parent nodes until it finds the "interrupt-cells"
+property. Then the node that has the "interrupt-cells" property will be
+used as the interrupt parent.
+
+But this workaround is not as per the DT spec and is not being implemented
+by other operating systems such as OpenBSD.
+
+Hence, fix this issue by adding the "interrupts-extended" property that
+explicitly specifies the spmi_bus node as the interrupt parent. Note that
+the "interrupts-extended" property is chosen over "interrupt-parent" as it
+allows specifying both interrupt parent phandle and interrupt specifiers in
+a single property.
+
+Reported-by: Patrick Wildt <patrick@blueri.se>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+
+I just fixed one dtsi since wanted to make sure that everyone agrees to
+this implementation, otherwise I'll end up wasting too much time fixing
+every other DTs making use of these nodes.
+
+Next step would be to fix the bindings of these nodes to include interrupt-
+parent or interrupts-extended properties and affected DTs.
+
+ arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
+index f2c0b71b5d8e..df7d28f7ae60 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi
+@@ -64,14 +64,14 @@ pmk8280_pon: pon@1300 {
+ 
+ 			pmk8280_pon_pwrkey: pwrkey {
+ 				compatible = "qcom,pmk8350-pwrkey";
+-				interrupts = <0x0 0x13 0x7 IRQ_TYPE_EDGE_BOTH>;
++				interrupts-extended = <&spmi_bus 0x0 0x13 0x7 IRQ_TYPE_EDGE_BOTH>;
+ 				linux,code = <KEY_POWER>;
+ 				status = "disabled";
+ 			};
+ 
+ 			pmk8280_pon_resin: resin {
+ 				compatible = "qcom,pmk8350-resin";
+-				interrupts = <0x0 0x13 0x6 IRQ_TYPE_EDGE_BOTH>;
++				interrupts-extended = <&spmi_bus 0x0 0x13 0x6 IRQ_TYPE_EDGE_BOTH>;
+ 				status = "disabled";
+ 			};
+ 		};
+@@ -79,7 +79,7 @@ pmk8280_pon_resin: resin {
+ 		pmk8280_vadc: adc@3100 {
+ 			compatible = "qcom,spmi-adc7";
+ 			reg = <0x3100>;
+-			interrupts = <0x0 0x31 0x0 IRQ_TYPE_EDGE_RISING>;
++			interrupts-extended = <&spmi_bus 0x0 0x31 0x0 IRQ_TYPE_EDGE_RISING>;
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+ 			#io-channel-cells = <1>;
+@@ -89,7 +89,7 @@ pmk8280_vadc: adc@3100 {
+ 		pmk8280_adc_tm: adc-tm@3400 {
+ 			compatible = "qcom,spmi-adc-tm5-gen2";
+ 			reg = <0x3400>;
+-			interrupts = <0x0 0x34 0x0 IRQ_TYPE_EDGE_RISING>;
++			interrupts-extended = <&spmi_bus 0x0 0x34 0x0 IRQ_TYPE_EDGE_RISING>;
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+ 			#thermal-sensor-cells = <1>;
+@@ -106,7 +106,7 @@ pmc8280_1: pmic@1 {
+ 		pm8280_1_temp_alarm: temp-alarm@a00 {
+ 			compatible = "qcom,spmi-temp-alarm";
+ 			reg = <0xa00>;
+-			interrupts = <0x1 0xa 0x0 IRQ_TYPE_EDGE_BOTH>;
++			interrupts-extended = <&spmi_bus 0x1 0xa 0x0 IRQ_TYPE_EDGE_BOTH>;
+ 			#thermal-sensor-cells = <0>;
+ 		};
+ 
+@@ -158,7 +158,7 @@ pmc8280_2: pmic@3 {
+ 		pm8280_2_temp_alarm: temp-alarm@a00 {
+ 			compatible = "qcom,spmi-temp-alarm";
+ 			reg = <0xa00>;
+-			interrupts = <0x2 0xa 0x0 IRQ_TYPE_EDGE_BOTH>;
++			interrupts-extended = <&spmi_bus 0x2 0xa 0x0 IRQ_TYPE_EDGE_BOTH>;
+ 			#thermal-sensor-cells = <0>;
+ 		};
+ 
+-- 
+2.25.1
+
