@@ -2,316 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E385D6947E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:23:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 759A16947B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:07:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjBMOXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 09:23:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
+        id S230079AbjBMOHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 09:07:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbjBMOXA (ORCPT
+        with ESMTP id S229760AbjBMOHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 09:23:00 -0500
-X-Greylist: delayed 960 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 13 Feb 2023 06:22:57 PST
-Received: from mxout70.expurgate.net (mxout70.expurgate.net [91.198.224.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69FF93F2;
-        Mon, 13 Feb 2023 06:22:55 -0800 (PST)
-Received: from [127.0.0.1] (helo=localhost)
-        by relay.expurgate.net with smtp (Exim 4.92)
-        (envelope-from <prvs=9422104eba=fe@dev.tdt.de>)
-        id 1pRZTk-000Rur-8h; Mon, 13 Feb 2023 15:06:48 +0100
-Received: from [195.243.126.94] (helo=securemail.tdt.de)
-        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <fe@dev.tdt.de>)
-        id 1pRZTj-0002KA-Ie; Mon, 13 Feb 2023 15:06:47 +0100
-Received: from securemail.tdt.de (localhost [127.0.0.1])
-        by securemail.tdt.de (Postfix) with ESMTP id 3FB21240049;
-        Mon, 13 Feb 2023 15:06:47 +0100 (CET)
-Received: from mail.dev.tdt.de (unknown [10.2.4.42])
-        by securemail.tdt.de (Postfix) with ESMTP id A9943240040;
-        Mon, 13 Feb 2023 15:06:46 +0100 (CET)
-Received: from localhost.localdomain (unknown [10.2.3.40])
-        by mail.dev.tdt.de (Postfix) with ESMTPSA id 45E0A2C02C;
-        Mon, 13 Feb 2023 15:06:46 +0100 (CET)
-From:   Florian Eckert <fe@dev.tdt.de>
-To:     u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, pavel@ucw.cz, lee@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        Eckert.Florian@googlemail.com
-Subject: [PATCH 2/2] leds: trigger: ledtrig-tty: add additional modes
-Date:   Mon, 13 Feb 2023 15:06:38 +0100
-Message-ID: <20230213140638.620206-3-fe@dev.tdt.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230213140638.620206-1-fe@dev.tdt.de>
-References: <20230213140638.620206-1-fe@dev.tdt.de>
+        Mon, 13 Feb 2023 09:07:33 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C716A1A641;
+        Mon, 13 Feb 2023 06:07:31 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31DE6x7J041095;
+        Mon, 13 Feb 2023 08:06:59 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1676297219;
+        bh=8Y0OYbS4fdAewdB9+FGdvfWhIU9qJDnWJuRH7rldSd0=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=rsdc/e69SeX/g/KJvpqK/NtEmWdVY9KM6ZF0FOjPUSaa39VG32Ht740UbGX1UCdgQ
+         ZQUP7v/BMPdqWCREehECZfTNNh+QAv9aIt3HzsWOcVi5QtHSv6PtV3ucI6bPhDSX6h
+         gg5Qau+LBLMFOvIJ/vDiBFOrCvDTCBgoTxg/g15s=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31DE6xv9005112
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 13 Feb 2023 08:06:59 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 13
+ Feb 2023 08:06:59 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 13 Feb 2023 08:06:59 -0600
+Received: from [10.250.233.148] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 31DE6tdU061344;
+        Mon, 13 Feb 2023 08:06:56 -0600
+Message-ID: <6ca5d863-8382-0b13-97f8-a69c3271e3ac@ti.com>
+Date:   Mon, 13 Feb 2023 19:36:55 +0530
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: K3 AM62x SoC dts/dtsi include hierarchy and naming scheme
+Content-Language: en-US
+To:     Francesco Dolcini <francesco@dolcini.it>,
+        Nishanth Menon <nm@ti.com>
+CC:     Dave Gerlach <d-gerlach@ti.com>, Tero Kristo <kristo@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <francesco.dolcini@toradex.com>
+References: <Y+KcJdvgDw9EqFCz@francesco-nb.int.toradex.com>
+ <20230209153352.5tgkqe3xbby7pmju@polio>
+ <Y+aHh7B73mkAjR7Q@francesco-nb.int.toradex.com>
+From:   "Raghavendra, Vignesh" <vigneshr@ti.com>
+In-Reply-To: <Y+aHh7B73mkAjR7Q@francesco-nb.int.toradex.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-Content-Transfer-Encoding: quoted-printable
-X-purgate-ID: 151534::1676297208-31DC8E48-44C4B06A/0/0
-X-purgate: clean
-X-purgate-type: clean
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add additional modes to trigger the selected LED.
-The following modes are supported:
 
-TD/RD:	Flash LED on data transmission (default)
-CTS:	DCE Ready to accept data from the DTE.
-DSR:	DCE is ready to receive and send data.
-CAR:	DCE is receiving a carrier from a remote DTE.
-RNG:	DCE has detected an incoming ring signal.
 
-The mode can be changed for example with the following command:
-echo "CTS" /sys/class/leds/<led>/mode
+On 2/10/2023 11:35 PM, Francesco Dolcini wrote:
+[...]
 
-This would turn on the LED, when the DTE(modem) signals the DCE that it
-is ready to accept data.
+>>>
+>>
+>> Typically, our strategy has been to introduce the superset device,
+>> primarily because the device variants are quite a few, and without
+>> actual users, it makes no sense to introduce a dtsi in kernel
+>> in-anticipation of a potential board. Now that said, also keep in mind
+>> the part number definitions do change depending on the market demands
+>> over time (qualification requirements etc..), The initial device tree
+>> was based on the definition we had at the time, as usual, over time,
+>> definitions are changing :(.
+> 	
+> ... and from my point of view this is normal and fine. All good :-)
+> 
+>> Considering the potential combinatorial explosion if we are trying
+>> to constantly catching up with variations of chip configurations as
+>> market definitions change over time, we need to be a bit pragmatic in
+>> the various dtsi files we introduce. With that in mind, If we have
+>> just one board using the part variant, we should reduce the churn in
+>> the tree by keeping the processor variation isolated to the board
+>> (See arch/arm64/boot/dts/ti/k3-am6528-iot2050-basic-common.dtsi as an
+>> example), on the other hand, the AM6251 (Single A53 variant) promises
+>> to be a variant that will probably get used in multiple boards, I'd
+>> suggest introducing a dtsi that is reused across the boards.
+> 
+> Our current plan is to have multiple SKUs that will differentiate by the
+> specific SoC SKU, not sure if this was clear to you, as an example we
+> will have.
+> 
+> for board in variant1 variant2 variant3
+>   k3-am6251-${board}.dts
+>   k3-am6252-${board}.dts
+>   k3-am6254-${board}.dts
+>   k3-am6231-${board}.dts
+>   k3-am6232-${board}.dts
+>   k3-am6234-${board}.dts
+> 
+> that are just the same apart the AM62x SKU.
+> Do you expect something like that (18 .dts files, in this example) ?
+> 
+> To me this is absolutely fine, I just want to be sure this is what you
+> expect.
 
-Signed-off-by: Florian Eckert <fe@dev.tdt.de>
----
- .../ABI/testing/sysfs-class-led-trigger-tty   |  16 ++
- drivers/leds/trigger/ledtrig-tty.c            | 148 ++++++++++++++++--
- 2 files changed, 149 insertions(+), 15 deletions(-)
+I am not sure if we need 18 files, IMO having dts for superset SoC per
+board variant for each SoC variant is sufficient:
 
-diff --git a/Documentation/ABI/testing/sysfs-class-led-trigger-tty b/Docu=
-mentation/ABI/testing/sysfs-class-led-trigger-tty
-index 2bf6b24e781b..bb6333ed7028 100644
---- a/Documentation/ABI/testing/sysfs-class-led-trigger-tty
-+++ b/Documentation/ABI/testing/sysfs-class-led-trigger-tty
-@@ -4,3 +4,19 @@ KernelVersion:	5.10
- Contact:	linux-leds@vger.kernel.org
- Description:
- 		Specifies the tty device name of the triggering tty
-+
-+What:		/sys/class/leds/<led>/mode
-+Date:		January 2023
-+KernelVersion:	6.3
-+Description:
-+		Specifies the operating to trigger the LED.
-+		The following operating modes are supported:
-+		TD/RD: Flash LED on data transmission (default)
-+		CTS:   DCE Ready to accept data from the DTE.
-+		       LED on if line is high.
-+		DSR:   DCE is ready to receive and send data.
-+		       LED on if line is high.
-+		CAR:   DCE is receiving a carrier from a remote DTE.
-+		       LED on if line is high.
-+		RNG:   DCE has detected an incoming ring signal.
-+		       LED on if line is high.
-diff --git a/drivers/leds/trigger/ledtrig-tty.c b/drivers/leds/trigger/le=
-dtrig-tty.c
-index f62db7e520b5..152b3020998e 100644
---- a/drivers/leds/trigger/ledtrig-tty.c
-+++ b/drivers/leds/trigger/ledtrig-tty.c
-@@ -7,6 +7,14 @@
- #include <linux/tty.h>
- #include <uapi/linux/serial.h>
-=20
-+enum tty_led_mode {
-+	TTY_LED_CNT,
-+	TTY_LED_CTS,
-+	TTY_LED_DSR,
-+	TTY_LED_CAR,
-+	TTY_LED_RNG,
-+};
-+
- struct ledtrig_tty_data {
- 	struct led_classdev *led_cdev;
- 	struct delayed_work dwork;
-@@ -14,6 +22,15 @@ struct ledtrig_tty_data {
- 	const char *ttyname;
- 	struct tty_struct *tty;
- 	int rx, tx;
-+	unsigned int mode;
-+};
-+
-+static const char * const mode[] =3D {
-+	[TTY_LED_CNT] =3D "TD/RD", // Trasmit Data / Receive Data
-+	[TTY_LED_CTS] =3D "CTS", // CTS Clear To Send
-+	[TTY_LED_DSR] =3D "DSR", // DSR Data Set Ready
-+	[TTY_LED_CAR] =3D "CAR", // CAR Data Carrier Detect (DCD)
-+	[TTY_LED_RNG] =3D "RNG", // RNG Ring Indicator (RI)
- };
-=20
- static void ledtrig_tty_restart(struct ledtrig_tty_data *trigger_data)
-@@ -21,6 +38,74 @@ static void ledtrig_tty_restart(struct ledtrig_tty_dat=
-a *trigger_data)
- 	schedule_delayed_work(&trigger_data->dwork, 0);
- }
-=20
-+static ssize_t mode_show(struct device *dev,
-+			 struct device_attribute *attr, char *buf)
-+{
-+	struct ledtrig_tty_data *trigger_data =3D led_trigger_get_drvdata(dev);
-+	enum tty_led_mode tty_mode;
-+
-+	mutex_lock(&trigger_data->mutex);
-+	tty_mode =3D trigger_data->mode;
-+	mutex_unlock(&trigger_data->mutex);
-+
-+	switch (tty_mode) {
-+	case TTY_LED_CTS:
-+		return sprintf(buf, "%s [%s] %s %s %s\n", mode[TTY_LED_CNT],
-+				mode[TTY_LED_CTS], mode[TTY_LED_DSR],
-+				mode[TTY_LED_CAR], mode[TTY_LED_RNG]);
-+	case TTY_LED_DSR:
-+		return sprintf(buf, "%s %s [%s] %s %s\n", mode[TTY_LED_CNT],
-+				mode[TTY_LED_CTS], mode[TTY_LED_DSR],
-+				mode[TTY_LED_CAR], mode[TTY_LED_RNG]);
-+	case TTY_LED_CAR:
-+		return sprintf(buf, "%s %s %s [%s] %s\n", mode[TTY_LED_CNT],
-+				mode[TTY_LED_CTS], mode[TTY_LED_DSR],
-+				mode[TTY_LED_CAR], mode[TTY_LED_RNG]);
-+	case TTY_LED_RNG:
-+		return sprintf(buf, "%s %s %s %s [%s]\n", mode[TTY_LED_CNT],
-+				mode[TTY_LED_CTS], mode[TTY_LED_DSR],
-+				mode[TTY_LED_CAR], mode[TTY_LED_RNG]);
-+	case TTY_LED_CNT:
-+	default:
-+		return sprintf(buf, "[%s] %s %s %s %s\n", mode[TTY_LED_CNT],
-+				mode[TTY_LED_CTS], mode[TTY_LED_DSR],
-+				mode[TTY_LED_CAR], mode[TTY_LED_RNG]);
-+	}
-+}
-+
-+static ssize_t mode_store(struct device *dev,
-+			  struct device_attribute *attr, const char *buf,
-+			  size_t size)
-+{
-+	struct ledtrig_tty_data *trigger_data =3D led_trigger_get_drvdata(dev);
-+	ssize_t ret =3D size;
-+	enum tty_led_mode tty_mode;
-+
-+	/* Check for new line in string*/
-+	if (size > 0 && buf[size - 1] =3D=3D '\n')
-+		size -=3D 1;
-+
-+	if (strncmp(buf, mode[TTY_LED_CTS], size) =3D=3D 0)
-+		tty_mode =3D TTY_LED_CTS;
-+	else if (strncmp(buf, mode[TTY_LED_DSR], size) =3D=3D 0)
-+		tty_mode =3D TTY_LED_DSR;
-+	else if (strncmp(buf, mode[TTY_LED_CAR], size) =3D=3D 0)
-+		tty_mode =3D TTY_LED_CAR;
-+	else if (strncmp(buf, mode[TTY_LED_RNG], size) =3D=3D 0)
-+		tty_mode =3D TTY_LED_RNG;
-+	else if (strncmp(buf, mode[TTY_LED_CNT], size) =3D=3D 0)
-+		tty_mode =3D TTY_LED_CNT;
-+	else
-+		return -EINVAL;
-+
-+	mutex_lock(&trigger_data->mutex);
-+	trigger_data->mode =3D tty_mode;
-+	mutex_unlock(&trigger_data->mutex);
-+
-+	return ret;
-+}
-+static DEVICE_ATTR_RW(mode);
-+
- static ssize_t ttyname_show(struct device *dev,
- 			    struct device_attribute *attr, char *buf)
- {
-@@ -76,6 +161,18 @@ static ssize_t ttyname_store(struct device *dev,
- }
- static DEVICE_ATTR_RW(ttyname);
-=20
-+static void ledtrig_tty_flags(struct ledtrig_tty_data *trigger_data,
-+		unsigned int flag)
-+{
-+	unsigned int status;
-+
-+	status =3D tty_get_mget(trigger_data->tty);
-+	if (status & flag)
-+		led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
-+	else
-+		led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
-+}
-+
- static void ledtrig_tty_work(struct work_struct *work)
- {
- 	struct ledtrig_tty_data *trigger_data =3D
-@@ -113,21 +210,38 @@ static void ledtrig_tty_work(struct work_struct *wo=
-rk)
- 		trigger_data->tty =3D tty;
- 	}
-=20
--	ret =3D tty_get_icount(trigger_data->tty, &icount);
--	if (ret) {
--		dev_info(trigger_data->tty->dev, "Failed to get icount, stopped pollin=
-g\n");
--		mutex_unlock(&trigger_data->mutex);
--		return;
--	}
--
--	if (icount.rx !=3D trigger_data->rx ||
--	    icount.tx !=3D trigger_data->tx) {
--		led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
--
--		trigger_data->rx =3D icount.rx;
--		trigger_data->tx =3D icount.tx;
--	} else {
--		led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
-+	switch (trigger_data->mode) {
-+	case TTY_LED_CTS:
-+		ledtrig_tty_flags(trigger_data, TIOCM_CTS);
-+		break;
-+	case TTY_LED_DSR:
-+		ledtrig_tty_flags(trigger_data, TIOCM_DSR);
-+		break;
-+	case TTY_LED_CAR:
-+		ledtrig_tty_flags(trigger_data, TIOCM_CAR);
-+		break;
-+	case TTY_LED_RNG:
-+		ledtrig_tty_flags(trigger_data, TIOCM_RNG);
-+		break;
-+	case TTY_LED_CNT:
-+	default:
-+		ret =3D tty_get_icount(trigger_data->tty, &icount);
-+		if (ret) {
-+			dev_info(trigger_data->tty->dev, "Failed to get icount, stopped polli=
-ng\n");
-+			mutex_unlock(&trigger_data->mutex);
-+			return;
-+		}
-+
-+		if (icount.rx !=3D trigger_data->rx ||
-+		    icount.tx !=3D trigger_data->tx) {
-+			led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
-+
-+			trigger_data->rx =3D icount.rx;
-+			trigger_data->tx =3D icount.tx;
-+		} else {
-+			led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
-+		}
-+		break;
- 	}
-=20
- out:
-@@ -137,6 +251,7 @@ static void ledtrig_tty_work(struct work_struct *work=
-)
-=20
- static struct attribute *ledtrig_tty_attrs[] =3D {
- 	&dev_attr_ttyname.attr,
-+	&dev_attr_mode.attr,
- 	NULL
- };
- ATTRIBUTE_GROUPS(ledtrig_tty);
-@@ -149,6 +264,9 @@ static int ledtrig_tty_activate(struct led_classdev *=
-led_cdev)
- 	if (!trigger_data)
- 		return -ENOMEM;
-=20
-+	/* set default mode */
-+	trigger_data->mode =3D TTY_LED_CNT;
-+
- 	led_set_trigger_data(led_cdev, trigger_data);
-=20
- 	INIT_DELAYED_WORK(&trigger_data->dwork, ledtrig_tty_work);
---=20
-2.30.2
+for board in variant1 variant2 variant3
+   k3-am625-${board}.dts (assume k3-am6254-${board}.dts)
+   k3-am623-${board}.dts (assume k3-am6234-${board}.dts)
 
+And then fixup num CPUs from U-Boot as per SoC detection as long as
+board remains **exactly same** as super set.
+
+This will limit .dts files to 6. Also limits bootloader's role to just
+disabling CPU cores instead of fiddling around with too many non
+transparent DT fixups.
+
+Nishanth: feel free to chime in if you have different opinion.
+
+
+> 
+> For example we do have these dts boards file here
+> 
+> arch/arm64/boot/dts/freescale/imx8mm-verdin-*.dts
+> 
+> and the FDT is patched in U-Boot in
+> https://source.denx.de/u-boot/u-boot/-/blob/master/arch/arm/mach-imx/imx8m/soc.c#L1245
+> 
+> with the this approach we have 4 dts files instead of the 16 if we would
+> use the exact SOC SKU variant [0].
+> 
+> Francesco
+> 
+> [0] https://www.toradex.com/computer-on-modules/verdin-arm-family/nxp-imx-8m-mini-nano
+> 
+
+
+Regards
+Vignesh
