@@ -2,125 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 317AE69520B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D68E9695213
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:42:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjBMUjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 15:39:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
+        id S230036AbjBMUmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 15:42:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBMUja (ORCPT
+        with ESMTP id S230144AbjBMUm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 15:39:30 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622671284B;
-        Mon, 13 Feb 2023 12:39:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676320769; x=1707856769;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=89B8F9htL6Qei6aB89FjZiKtmN09XvKCxECHkIfzD7U=;
-  b=IVaapr+CmWP5I+LrvCa71OigVxsAwRzBW9xsu3+x3IUhIW/U/zGCpcat
-   PSYSPDvB7n5m4xMlurj9Ut8vEbv9THrQgONulA/zUiJ5fGcKR4sO2UrIU
-   7YC9sGBBprrVFnmgK/3kXgMhvvILqBhXa7OVLc2FzxbjiwtcmRISUVzuR
-   ZYvUeRmj7Ykv8eU14QlL+/XRz2H9q5QGfLaM2ZejnXtrYSdQnElwcaQOD
-   gRP6lAZ+jMngfbaL301cwbfS373usDHSEMytc4aERmXyr1yk7MlJ1XRYf
-   m9ysHqYhJVvD5ztZmJwt/vlyrsxa/6VPrraIu0qkSDlaWcBdbhF0c1rRV
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="358401414"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="358401414"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 12:39:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="914470130"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="914470130"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 13 Feb 2023 12:39:27 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id D92F51A6; Mon, 13 Feb 2023 22:40:06 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
-Subject: [PATCH v2 1/1] Documentation: firmware-guide: gpio-properties: Clarify Explicit and Implicit
-Date:   Mon, 13 Feb 2023 22:40:05 +0200
-Message-Id: <20230213204005.55483-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        Mon, 13 Feb 2023 15:42:26 -0500
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752C818B02;
+        Mon, 13 Feb 2023 12:42:25 -0800 (PST)
+Received: from [192.168.1.103] (178.176.72.240) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Mon, 13 Feb
+ 2023 23:42:16 +0300
+Subject: Re: [PATCH 11/12] pata_parport: remove obsolete changelogs
+To:     Ondrej Zary <linux@zary.sk>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+CC:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Tim Waugh <tim@cyberelk.net>, <linux-block@vger.kernel.org>,
+        <linux-parport@lists.infradead.org>, <linux-ide@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230211144232.15138-1-linux@zary.sk>
+ <20230211144232.15138-12-linux@zary.sk>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <8e5484a1-5ed1-3f52-218f-59d75ded7f52@omp.ru>
+Date:   Mon, 13 Feb 2023 23:42:17 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230211144232.15138-12-linux@zary.sk>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.72.240]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 02/13/2023 20:28:43
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 175483 [Feb 13 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 504 504 dc137e1f9c062eb6c0671e7d509ab442ae395562
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.72.240 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.72.240
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 02/13/2023 20:31:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 2/13/2023 6:59:00 PM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clarify the Explicit and Implicit meanings in the table of Pull Bias.
+On 2/11/23 5:42 PM, Ondrej Zary wrote:
 
-While at it, distinguish pull bias keywords used in ACPI by using bold
-font in the table of the respective terms.
+> Remove obsolete changelogs from protocol drivers.
+> 
+> Signed-off-by: Ondrej Zary <linux@zary.sk>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: fixed formatting issues
- .../firmware-guide/acpi/gpio-properties.rst   | 35 +++++++++++++------
- 1 file changed, 24 insertions(+), 11 deletions(-)
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-diff --git a/Documentation/firmware-guide/acpi/gpio-properties.rst b/Documentation/firmware-guide/acpi/gpio-properties.rst
-index eaec732cc77c..db0c0b1f3700 100644
---- a/Documentation/firmware-guide/acpi/gpio-properties.rst
-+++ b/Documentation/firmware-guide/acpi/gpio-properties.rst
-@@ -67,17 +67,30 @@ state of the output pin which driver should use during its initialization.
- Linux tries to use common sense here and derives the state from the bias
- and polarity settings. The table below shows the expectations:
- 
--=========  =============  ==============
--Pull Bias     Polarity     Requested...
--=========  =============  ==============
--Implicit     x            AS IS (assumed firmware configured for us)
--Explicit     x (no _DSD)  as Pull Bias (Up == High, Down == Low),
--                          assuming non-active (Polarity = !Pull Bias)
--Down         Low          as low, assuming active
--Down         High         as low, assuming non-active
--Up           Low          as high, assuming non-active
--Up           High         as high, assuming active
--=========  =============  ==============
-++-------------+-------------+-----------------------------------------------+
-+| Pull Bias   | Polarity    | Requested...                                  |
-++=============+=============+===============================================+
-+| Implicit                                                                  |
-++-------------+-------------+-----------------------------------------------+
-+| **Default** | x           | AS IS (assumed firmware configured it for us) |
-++-------------+-------------+-----------------------------------------------+
-+| Explicit                                                                  |
-++-------------+-------------+-----------------------------------------------+
-+| **None**    | x           | AS IS (assumed firmware configured it for us) |
-+|             |             | with no Pull Bias                             |
-++-------------+-------------+-----------------------------------------------+
-+| **Up**      | x (no _DSD) |                                               |
-+|             +-------------+ as high, assuming non-active                  |
-+|             | Low         |                                               |
-+|             +-------------+-----------------------------------------------+
-+|             | High        | as high, assuming active                      |
-++-------------+-------------+-----------------------------------------------+
-+| **Down**    | x (no _DSD) |                                               |
-+|             +-------------+ as low, assuming non-active                   |
-+|             | High        |                                               |
-+|             +-------------+-----------------------------------------------+
-+|             | Low         | as low, assuming active                       |
-++-------------+-------------+-----------------------------------------------+
- 
- That said, for our above example the both GPIOs, since the bias setting
- is explicit and _DSD is present, will be treated as active with a high
--- 
-2.39.1
+[...]
 
+MBR, Sergey
