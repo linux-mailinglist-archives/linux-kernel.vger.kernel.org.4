@@ -2,168 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED9D693FE9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:46:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB830693FEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbjBMIqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 03:46:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50480 "EHLO
+        id S230105AbjBMIq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 03:46:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbjBMIqO (ORCPT
+        with ESMTP id S229561AbjBMIqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 03:46:14 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D20A5C0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 00:46:12 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id e19so1208352edz.13
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 00:46:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aIgYnkRqE95yz5AU0J8xpkq6tSZZZ239ZiNg9NKJsOQ=;
-        b=edUWzbfhupqK2ITIOdrgOh3txyi1/YLjjJ63x2GD+0nTSY3mmoFh1yeuEIxJfET/nT
-         KU4pHK3XPgwLKhVHfdjvgZBHHOnNfWXnyf4Omzo250nvN+wnsNnJlWgki3WFMxjXHKZX
-         cslGK8Iohax64kLq36pMovjcVdjxmZVWicTA3WY/wcjTFodFjmt7epA9pYCWVnj3lxsr
-         fyzfR/eoxyvoRdvlw2SdqagYD2L9tgVglLN8zLzhZyxThupIMcArR9Ah3pTXy4Hkt2An
-         ugjJjgXVFBaKozxDQnF/Ty5urjJa4NGPIJwHXXPOIJjT4MlXdzDttAn//n/0hQCRvXVR
-         Kmng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=aIgYnkRqE95yz5AU0J8xpkq6tSZZZ239ZiNg9NKJsOQ=;
-        b=OYDq4+/v4CSnnKmS2PbomeTT1a9EkSySoiBcTd2KPuwKj2vW6tdCcQPyJNCIQ3U1aX
-         +NvW4DFQhuGA3aBBl9YQXXn8RHQe9YBm4mdvrPtRHKl3mkibUGZsIGnpWEfzqwENJvIj
-         MwhlLKebUPqhm2Td/bQQuS7qVbrlg2jGOmVIaQdLPcjA8F9wt3hsJoefG+74Djs3cV7R
-         QpaFNtB4uCAYKkyU09fJQGBwQPFWRJajbje/BM6ElhWEhr+MN3TTgSboBDJHwwiXZoEP
-         +r5R8PX2A++7uYkR9f1o2JrvFFVfh/h6VdZ2atzFLNCNHf4Yeqs2wNBXwLzzt5eFKG7g
-         vxyA==
-X-Gm-Message-State: AO0yUKVzYTc+v30dfa7ODKBnZz03LhxbQE4obIacpXXL2WtTTeIhXY95
-        202OopaxEFBuAHz/jfCFUiNErRuJoxnoFGOiS4M=
-X-Google-Smtp-Source: AK7set/moXJc7VDWLXdWvatj0NCmR7myiege10enZj6hGFtwtxlFvjaj+UElAuEchNhWUST4Aadqow==
-X-Received: by 2002:a50:c048:0:b0:4ac:b5db:f3b3 with SMTP id u8-20020a50c048000000b004acb5dbf3b3mr6981942edd.18.1676277971578;
-        Mon, 13 Feb 2023 00:46:11 -0800 (PST)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id l6-20020a50d6c6000000b004ab0e9e396bsm6285931edj.87.2023.02.13.00.46.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 00:46:11 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 13 Feb 2023 09:46:11 +0100
-Message-Id: <CQHAY4Z0W4HZ.18W214TYCYNUK@otso>
-Cc:     <tglx@linutronix.de>, <bjorn.andersson@linaro.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH 3/3] genirq: Check for trigger type mismatch in
- __setup_irq()
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Luca Weiss" <luca.weiss@fairphone.com>,
-        "Marc Zyngier" <maz@kernel.org>,
-        "Manivannan Sadhasivam" <manivannan.sadhasivam@linaro.org>
-X-Mailer: aerc 0.14.0
-References: <20220530080842.37024-1-manivannan.sadhasivam@linaro.org>
- <20220530080842.37024-4-manivannan.sadhasivam@linaro.org>
- <8735gi5g7s.wl-maz@kernel.org> <CO9EJJ4E661K.21S3LVYWH9HMM@otso>
-In-Reply-To: <CO9EJJ4E661K.21S3LVYWH9HMM@otso>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 13 Feb 2023 03:46:54 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416D6E38E;
+        Mon, 13 Feb 2023 00:46:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676278013; x=1707814013;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=hF+DxzbjbhKvEg/0pJMJc8Z+u7gnh4hyoeWzVaXXI2c=;
+  b=HdEvOVaM31Mm91krP98lQhpq9aLZZ87UoiPdFbtoWSgP+fR1q3GsuCLj
+   c//8dNoFckmq1OciU9JN9jyvGq30K7NLL21AaDNZGaFEduILCS6Ucorl8
+   UMoOODxioMGpm5QEpIKZLZw+Pw929mWdQol91qYA4+4GVu0xbRmpSpMq/
+   /RLwJcP8ybUPcluVMXaIJY0o1iebi4TKsP6modvElodT6K5lvNxT4Fr3N
+   RUhOLGp61aEmFhIRmpifZcy3pUp7xxm7ZE/EBiMoykrgNmWVuZTqhfYJJ
+   RYdx13m/y8WR7qXEP0JCkveuG2EPHaYy1XKpTyozcL8Kv/Q9wqyYCglwF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="328550186"
+X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
+   d="scan'208";a="328550186"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 00:46:52 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="618578446"
+X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
+   d="scan'208";a="618578446"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.249.169.207]) ([10.249.169.207])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 00:46:46 -0800
+Message-ID: <3da4035b-da17-94dc-a641-224676025285@linux.intel.com>
+Date:   Mon, 13 Feb 2023 16:46:44 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Cc:     baolu.lu@linux.intel.com, cohuck@redhat.com, eric.auger@redhat.com,
+        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/6] iommu: Add new iommu op to get iommu hardware
+ information
+Content-Language: en-US
+To:     Binbin Wu <binbin.wu@linux.intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
+        kevin.tian@intel.com, robin.murphy@arm.com
+References: <20230209041642.9346-1-yi.l.liu@intel.com>
+ <20230209041642.9346-2-yi.l.liu@intel.com>
+ <aa9ee0db-c9d9-9b3f-8f63-cbc76bb3ccdd@linux.intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <aa9ee0db-c9d9-9b3f-8f63-cbc76bb3ccdd@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri Nov 11, 2022 at 11:41 AM CET, Luca Weiss wrote:
-> Hi Marc,
->
-> On Mon Jun 6, 2022 at 10:49 AM CEST, Marc Zyngier wrote:
-> > On Mon, 30 May 2022 09:08:42 +0100,
-> > Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org> wrote:
-> > >=20
-> > > Currently, if the trigger type defined by the platform like DT does n=
-ot
-> > > match the driver requested trigger type, the below warning is shown
-> > > during platform_get_irq() but only during the second time of the driv=
-e
-> > > probe (due to probe deferral or module unload/load).
-> > >=20
-> > > irq: type mismatch, failed to map hwirq-9 for interrupt-controller@b2=
-20000!
-> > >=20
-> > > Consider a typical usecase of requesting an IRQ in a driver:
-> > >=20
-> > > ```
-> > > 	/* Assume DT has set the trigger type to IRQF_TYPE_LEVEL_HIGH */
-> > >=20
-> > > 	q6v5->wdog_irq =3D platform_get_irq_byname(pdev, "wdog");
-> > > 	if (q6v5->wdog_irq <=3D 0)
-> > > 		return q6v5->wdog_irq;
-> > >=20
-> > > 	ret =3D devm_request_threaded_irq(&pdev->dev, q6v5->wdog_irq,
-> > > 					NULL, q6v5_wdog_interrupt,
-> > > 					IRQF_TRIGGER_RISING | IRQF_ONESHOT,
-> > > 					"q6v5 wdog", q6v5);
-> > > 	if (ret) {
-> > > 		dev_err(&pdev->dev, "failed to acquire wdog IRQ\n");
-> > > 		return ret;
-> > > 	}
-> > > ```
-> > >=20
-> > > For the first time probe of a driver, platform_get_irq_byname() does =
-not
-> > > return an error and it sets the platform requested trigger type. Then=
-,
-> > > request_irq() also does not check for the trigger type mismatch and s=
-ets
-> > > the driver requested trigger type. Later if the driver gets probed ag=
-ain,
-> > > platform_get_irq() throws the "type mismatch" warning and fails.
-> > >=20
-> > > Ideally, request_irq() should throw the error during the first time i=
-tself,
-> > > when it detects the trigger type mismatch. So let's add a check in
-> > > __setup_irq() for checking the trigger type mismatch.
-> >
-> > No, that's wrong. The whole point is to be able to *override* the
-> > default that is exposed by the device tree or ACPI. We have countless
-> > examples of that, and they cannot be broken.
-> >
-> > If the issue exists after an unload, then it is a unload time that the
-> > previous behaviour should be restored.
->
-> So you're saying something like that the drivers where this issue
-> appears don't free the irq properly? I've seen a very similar issue now
-> on qcom-sm6350 platform with dwc3-qcom and qcom_q6v5_pas drivers.
->
-> Temporarily I've adjusted dts to match the IRQ flags requested in the
-> driver to avoid these "failed to map hwirq-" errors. I'd be happy to fix
-> those drivers (if they should be) but I need some pointers here what
-> needs to be done as from my understanding if an irq is requested with
-> devm_request_threaded_irq (e.g. dwc3-qcom.c) then it should be freed
-> automatically on EPROBE_DEFER because of devm?
->
-> All commits in mainline that mention "failed to map hwirq" seem to just
-> remove the hardcoded IRQ type from the driver instead.
+On 2023/2/13 10:36, Binbin Wu wrote:
+> 
+> On 2/9/2023 12:16 PM, Yi Liu wrote:
+>> From: Lu Baolu <baolu.lu@linux.intel.com>
+>>
+>> Introduce a new iommu op get
+> 
+> get -> to get
+> 
+> 
+>> the IOMMU hardware capabilities for iommufd.
+>> This information will be used by any vIOMMU driver which is owned by
+>> userspace.
+>>
+>> This op chooses to make the special parameters opaque to the core. This
+>> suits the current usage model where accessing any of the IOMMU device
+>> special parameters does require a userspace driver that matches the 
+>> kernel
+>> driver. If a need for common parameters, implemented similarly by several
+>> drivers, arises then there is room in the design to grow a generic 
+>> parameter
+>> set as well. No warpper
+> 
+> warpper -> wrapper
 
-I'm still interested in a way to fix this since I'm carrying a patch in
-my own tree to adjust the dts. Please let me know how to proceed here.
+Thanks, will update.
 
-Regards
-Luca
+> 
+>>   API is added as it is supposed to be used by
+>> iommufd only.
+>>
+>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+>> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+>> ---
+>>   include/linux/iommu.h        | 8 ++++++++
+>>   include/uapi/linux/iommufd.h | 6 ++++++
+>>   2 files changed, 14 insertions(+)
+>>
+>> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+>> index cb586d054c57..97b398d19fd2 100644
+>> --- a/include/linux/iommu.h
+>> +++ b/include/linux/iommu.h
+>> @@ -15,6 +15,7 @@
+>>   #include <linux/of.h>
+>>   #include <linux/ioasid.h>
+>>   #include <uapi/linux/iommu.h>
+>> +#include <uapi/linux/iommufd.h>
+>>   #define IOMMU_READ    (1 << 0)
+>>   #define IOMMU_WRITE    (1 << 1)
+>> @@ -223,6 +224,11 @@ struct iommu_iotlb_gather {
+>>   /**
+>>    * struct iommu_ops - iommu ops and capabilities
+>>    * @capable: check capability
+>> + * @hw_info: IOMMU hardware capabilities. The type of the returned 
+>> data is
+>> + *           defined in include/uapi/linux/iommufd.h. The data buffer is
+>> + *           allocated in the IOMMU driver and the caller should free it
+>> + *           after use. Return the data buffer if success, or ERR_PTR on
+>> + *          failure.
+>>    * @domain_alloc: allocate iommu domain
+>>    * @probe_device: Add device to iommu driver handling
+>>    * @release_device: Remove device from iommu driver handling
+>> @@ -252,6 +258,7 @@ struct iommu_iotlb_gather {
+>>    */
+>>   struct iommu_ops {
+>>       bool (*capable)(struct device *dev, enum iommu_cap);
+>> +    void *(*hw_info)(struct device *dev, u32 *length);
+>>       /* Domain allocation and freeing by the iommu driver */
+>>       struct iommu_domain *(*domain_alloc)(unsigned iommu_domain_type);
+>> @@ -280,6 +287,7 @@ struct iommu_ops {
+>>       void (*remove_dev_pasid)(struct device *dev, ioasid_t pasid);
+>>       const struct iommu_domain_ops *default_domain_ops;
+>> +    enum iommu_device_data_type driver_type;
+> 
+> 
+> How to understand the name "iommu_device_data_type"?
 
->
-> Regards
-> Luca
->
-> >
-> > Thanks,
-> >
-> > 	M.
-> >
-> > --=20
-> > Without deviation from the norm, progress is not possible.
+This is to tell userspace which type of IOMMU the returned information
+comes from, Intel VT-d, ARM or others...
 
+> Is it just refer to the driver types or it has a more generic meaning?
+
+IOMMU driver sets this field to distinguish different IOMMU hardware.
+
+Best regards,
+baolu
