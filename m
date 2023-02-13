@@ -2,210 +2,520 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA6C694ECA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:06:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B767694F2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:24:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjBMSG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:06:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51652 "EHLO
+        id S229775AbjBMSYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:24:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjBMSG0 (ORCPT
+        with ESMTP id S230519AbjBMSYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:06:26 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E0E72AE
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:05:56 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id be8so14327797plb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:05:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gp01G0BnFM3UtiZCCxzyTfWZR8Wx0j9sIGOAAei1oMU=;
-        b=mlNWBi4qWOmt9CWXPhLTyfsFtxOYE4aUhkT7NmX8aiwyLhuI/5LKhxAUJ+I+/KaNuP
-         nm/EYaqSF3u/oIgBNxcS2Y8oc3b8NS2fanszcj32o2kE1mBcfiYKKqyb0ZmNadik5/50
-         JpRAWTdNsaTje/7/HECRCwtzdORJvUq134+BFS42xlwkLL+yDQ1bTqdXgBa80CSOtjEw
-         KAlN5Et1DQM6eIygJc08jb8CMILZu+XH6wnPNDuZrHuZPCzrOCi6PkGz6iAq0PMF/Cam
-         cPP2Lro0A1zpfoN9WgaUUSvM/5NdZvYArlAGr577kURNoBwrG6UCrRLt5oz3/LdUe2Nt
-         aLLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gp01G0BnFM3UtiZCCxzyTfWZR8Wx0j9sIGOAAei1oMU=;
-        b=14Jhf92M8egTmCBWsxkvCh/ivB63vsP/0GvjW7AOfStA3FqYkJDYRdDtI8ibsgcCan
-         JOCzlTzlQI7IavUqyXmDoqWke43PhovznF6pHEcqMcQaRnjQ5lKhqXkcvznq7V2pQZC6
-         /g8I19NQhAQNnbno04pqL+5SydNhFFODyT4eKw9s/k2jVjiJrFQSx0EtXTT3KjvCEB73
-         tNk/XYmBbsf0kpFvK8vx7WjoQaxUqPD3dYnKQgsyEcG05qbeEdTqlBUhTcjBj4WOldgb
-         jM9FP5doZs0izYct+28qUk3Jp1eh0oaTNHPtZxhYq8xNZeiZlxrtQGvsYL2bO7RSgKSA
-         EiKA==
-X-Gm-Message-State: AO0yUKVL5GuPeLDtquuyGQqX30ljhGNUOu3n/SU/WwDd1fKvaQ1NRoz7
-        YnPW8oTLYFiFVU8oLIGB7DQwXA==
-X-Google-Smtp-Source: AK7set+Oe+Z/pGux9QGelWq+eQYgY04H3vqJ9vxdOS+0Ac1mT841bzismegHoIlBb0yW8bwOsbUPrw==
-X-Received: by 2002:a17:902:e193:b0:19a:9890:eac6 with SMTP id y19-20020a170902e19300b0019a9890eac6mr4169728pla.24.1676311501634;
-        Mon, 13 Feb 2023 10:05:01 -0800 (PST)
-Received: from p14s ([2604:3d09:148c:c800:8b5:7925:cf2a:8bac])
-        by smtp.gmail.com with ESMTPSA id k19-20020a170902761300b0019a87ede846sm4435273pll.285.2023.02.13.10.05.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 10:05:01 -0800 (PST)
-Date:   Mon, 13 Feb 2023 11:04:58 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "andersson@kernel.org" <andersson@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "arnaud.pouliquen@foss.st.com" <arnaud.pouliquen@foss.st.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2 5/6] remoteproc: imx_rproc: set Cortex-M stack/pc to
- TCML
-Message-ID: <20230213180458.GB310433@p14s>
-References: <20230127092246.1470865-1-peng.fan@oss.nxp.com>
- <20230127092246.1470865-6-peng.fan@oss.nxp.com>
- <20230202215629.GC1147631@p14s>
- <DU0PR04MB9417620B668E43118933821388D79@DU0PR04MB9417.eurprd04.prod.outlook.com>
+        Mon, 13 Feb 2023 13:24:50 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6141702
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:24:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676312688; x=1707848688;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=RXnL+HngXrp/cyWpmOPHoDtZ6ssV4/DG94YKJsp0gME=;
+  b=iZM9VxIDWjxbfUKVg9XxIpg6j/qa5GmfjNU9vDFKvyLbGujPu0RZ4e7i
+   JDRk8HKtel+wQgNZp/uHXspOVmpr/7cSfblQ0FfehjkwPR4pixm3RYzBa
+   Tuwpoc84CFW+nzi+yrinDp1HIL5K9cYjTCusuXESTcQz0v20DYxjs6mNY
+   QRPiUeXVljUzZ4rz9FcwF/lVlLe7PNhVyXFaSoHFdI2bDgJ6fJ7lQU+Tk
+   7c44pKu3bBt1Kkq6vg97UNSPm6WkgPlDqoC6C1MlssZypMA54ZVcnaZsj
+   PIyHjG8SgAVKaqXoLCU9iJ4Qs6hT8YuyA73DQV1jQj/DeZb/oSkRNMZlE
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="328664059"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="328664059"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 10:24:36 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="701369279"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="701369279"
+Received: from eatoledo-mobl.amr.corp.intel.com (HELO [10.212.18.132]) ([10.212.18.132])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 10:24:34 -0800
+Message-ID: <a3a75ead-5430-ae32-a6ae-78314bc637f1@linux.intel.com>
+Date:   Mon, 13 Feb 2023 12:05:00 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DU0PR04MB9417620B668E43118933821388D79@DU0PR04MB9417.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH V2 2/8] soundwire: amd: Add support for AMD Manager driver
+Content-Language: en-US
+To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>, vkoul@kernel.org
+Cc:     amadeuszx.slawinski@linux.intel.com, Mario.Limonciello@amd.com,
+        Sunil-kumar.Dommati@amd.com, Basavaraj.Hiregoudar@amd.com,
+        Mastan.Katragadda@amd.com, Arungopal.kondaveeti@amd.com,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:SOUNDWIRE SUBSYSTEM" <alsa-devel@alsa-project.org>
+References: <20230213094031.2231058-1-Vijendar.Mukunda@amd.com>
+ <20230213094031.2231058-3-Vijendar.Mukunda@amd.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230213094031.2231058-3-Vijendar.Mukunda@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 12:04:27AM +0000, Peng Fan wrote:
-> > Subject: Re: [PATCH V2 5/6] remoteproc: imx_rproc: set Cortex-M stack/pc
-> > to TCML
-> > 
-> > On Fri, Jan 27, 2023 at 05:22:45PM +0800, Peng Fan (OSS) wrote:
-> > > From: Peng Fan <peng.fan@nxp.com>
-> > >
-> > > The i.MX8M Cortex-M core not has ROM. It has a requirement is the
-> > > stack, pc value should be set in address 0 and 4 from the view of
-> > > itself. From Cortex-A core view, the region is at TCML start address.
-> > >
-> > > The stack and pc value are the first two words stored in section
-> > > ".interrupts" of the firmware, and the section is the first section in
-> > > the firmware.
-> > >
-> > > When the firmware is built to run in TCML, there is no issue, because
-> > > when copying elf segments, the first two words are copied to TCML also.
-> > >
-> > > However when the firmware is built ro run in DDR, the first two words
-> > > are not copied to TCML start address.
-> > >
-> > > This patch is to find the ".interrupts" section, read out the first
-> > > two words and write to TCML start address at offset 0 and 4.
-> > >
-> > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > > ---
-> > >  drivers/remoteproc/imx_rproc.c | 37
-> > > +++++++++++++++++++++++++++++++++-
-> > >  1 file changed, 36 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/remoteproc/imx_rproc.c
-> > > b/drivers/remoteproc/imx_rproc.c index 295e0e0e869a..f5ee0c9bb09d
-> > > 100644
-> > > --- a/drivers/remoteproc/imx_rproc.c
-> > > +++ b/drivers/remoteproc/imx_rproc.c
-> > > @@ -7,6 +7,7 @@
-> > >  #include <linux/arm-smccc.h>
-> > >  #include <linux/clk.h>
-> > >  #include <linux/err.h>
-> > > +#include <linux/firmware.h>
-> > >  #include <linux/firmware/imx/sci.h>
-> > >  #include <linux/interrupt.h>
-> > >  #include <linux/kernel.h>
-> > > @@ -23,6 +24,7 @@
-> > >  #include <linux/workqueue.h>
-> > >
-> > >  #include "imx_rproc.h"
-> > > +#include "remoteproc_elf_helpers.h"
-> > >  #include "remoteproc_internal.h"
-> > >
-> > >  #define IMX7D_SRC_SCR			0x0C
-> > > @@ -634,6 +636,39 @@ static struct resource_table
-> > *imx_rproc_get_loaded_rsc_table(struct rproc *rproc
-> > >  	return (struct resource_table __force *)priv->rsc_table;  }
-> > >
-> > > +static u64 imx_rproc_get_boot_addr(struct rproc *rproc, const struct
-> > > +firmware *fw) {
-> > > +	struct imx_rproc *priv = rproc->priv;
-> > > +	const u8 *elf_data = (void *)fw->data;
-> > > +	u8 class = fw_elf_get_class(fw);
-> > > +	u64 bootaddr = rproc_elf_get_boot_addr(rproc, fw);
-> > > +	const void *shdr;
-> > > +	void __iomem *va;
-> > > +	u64 sh_addr, offset;
-> > > +
-> > > +	if (priv->dcfg->devtype == IMX_RPROC_IMX8M) {
-> > > +		/*
-> > > +		 * i.MX8M Cortex-M requires [stack, pc] be put in address
-> > > +		 * [0, 4], so the da address is 0, size is 8 words.
-> > > +		 */
-> > > +		va = (__force void __iomem *)rproc_da_to_va(rproc, 0, 8,
-> > NULL);
-> > > +		shdr = rproc_elf_find_shdr(rproc, fw, ".interrupts");
-> > > +		if (!shdr || !va)
-> > > +			return bootaddr;
-> > > +		sh_addr = elf_shdr_get_sh_addr(class, shdr);
-> > 
-> > This isn't used - why is it still there?
-> 
-> will drop it.
-> 
-> > 
-> > > +		offset = elf_shdr_get_sh_offset(class, shdr);
-> > > +
-> > > +		/*
-> > > +		 * Write stack, pc to TCML start address. The TCML region
-> > > +		 * is marked with ATT_IOMEM, so use writel.
-> > > +		 */
-> > > +		writel(*(u32 *)(elf_data + offset), va);
-> > > +		writel(*(u32 *)(elf_data + offset + 4), va + 4);
-> > 
-> > Here you are writing 2 words at address 0x0 and 2 words at address 0x4.
-> > Why are you saying the size is 8 words in the comment above?
-> 
-> Typo. I should mean 8 bytes.
->
 
-How can I trust the code in this patchset when the "typo" is so obvious and
-found in the comment above and 4 times in the changelog? 
+> +static void amd_enable_sdw_pads(struct amd_sdw_manager *amd_manager)
+> +{
+> +	u32 sw_pad_pulldown_val;
+> +	u32 val = 0;
 
-> Thanks,
-> Peng.
-> 
-> > 
-> > > +	}
-> > > +
-> > > +	return bootaddr;
-> > > +}
-> > > +
-> > >  static const struct rproc_ops imx_rproc_ops = {
-> > >  	.prepare	= imx_rproc_prepare,
-> > >  	.attach		= imx_rproc_attach,
-> > > @@ -647,7 +682,7 @@ static const struct rproc_ops imx_rproc_ops = {
-> > >  	.find_loaded_rsc_table = rproc_elf_find_loaded_rsc_table,
-> > >  	.get_loaded_rsc_table = imx_rproc_get_loaded_rsc_table,
-> > >  	.sanity_check	= rproc_elf_sanity_check,
-> > > -	.get_boot_addr	= rproc_elf_get_boot_addr,
-> > > +	.get_boot_addr	= imx_rproc_get_boot_addr,
-> > >  };
-> > >
-> > >  static int imx_rproc_addr_init(struct imx_rproc *priv,
-> > > --
-> > > 2.37.1
-> > >
+useless init
+
+> +
+> +	mutex_lock(amd_manager->sdw_lock);
+> +	val = acp_reg_readl(amd_manager->acp_mmio + ACP_SW_PAD_KEEPER_EN);
+> +	val |= amd_manager->reg_mask->sw_pad_enable_mask;
+> +	acp_reg_writel(val, amd_manager->acp_mmio + ACP_SW_PAD_KEEPER_EN);
+> +	usleep_range(1000, 1500);
+> +
+> +	sw_pad_pulldown_val = acp_reg_readl(amd_manager->acp_mmio + ACP_PAD_PULLDOWN_CTRL);
+> +	sw_pad_pulldown_val &= amd_manager->reg_mask->sw_pad_pulldown_mask;
+> +	acp_reg_writel(sw_pad_pulldown_val, amd_manager->acp_mmio + ACP_PAD_PULLDOWN_CTRL);
+> +	mutex_unlock(amd_manager->sdw_lock);
+> +}
+> +
+> +static int amd_init_sdw_manager(struct amd_sdw_manager *amd_manager)
+> +{
+> +	u32 val = 0;
+
+useless init
+
+> +	u32 timeout = 0;
+> +	u32 retry_count = 0;
+> +
+> +	acp_reg_writel(AMD_SDW_ENABLE, amd_manager->mmio + ACP_SW_EN);
+> +	do {
+> +		val = acp_reg_readl(amd_manager->mmio + ACP_SW_EN_STATUS);
+> +		if (val)
+> +			break;
+> +		usleep_range(10, 50);
+> +	} while (retry_count++ < AMD_SDW_STAT_MAX_RETRY_COUNT);
+> +
+> +	if (retry_count > AMD_SDW_STAT_MAX_RETRY_COUNT)
+> +		return -ETIMEDOUT;
+> +
+> +	/* Soundwire manager bus reset */
+> +	acp_reg_writel(AMD_SDW_BUS_RESET_REQ, amd_manager->mmio + ACP_SW_BUS_RESET_CTRL);
+> +	val = acp_reg_readl(amd_manager->mmio + ACP_SW_BUS_RESET_CTRL);
+> +	while (!(val & AMD_SDW_BUS_RESET_DONE)) {
+> +		val = acp_reg_readl(amd_manager->mmio + ACP_SW_BUS_RESET_CTRL);
+> +		if (timeout > AMD_DELAY_LOOP_ITERATION)
+> +			break;
+> +		usleep_range(1, 5);
+> +		timeout++;
+> +	}
+> +	if (timeout == AMD_DELAY_LOOP_ITERATION)
+> +		return -ETIMEDOUT;
+> +	timeout = 0;
+> +	acp_reg_writel(AMD_SDW_BUS_RESET_CLEAR_REQ, amd_manager->mmio + ACP_SW_BUS_RESET_CTRL);
+> +	val = acp_reg_readl(amd_manager->mmio + ACP_SW_BUS_RESET_CTRL);
+> +	while (val) {
+> +		val = acp_reg_readl(amd_manager->mmio + ACP_SW_BUS_RESET_CTRL);
+> +		if (timeout > AMD_DELAY_LOOP_ITERATION)
+> +			break;
+> +		usleep_range(1, 5);
+> +		timeout++;
+> +	}
+> +	if (timeout == AMD_DELAY_LOOP_ITERATION) {
+> +		dev_err(amd_manager->dev, "Failed to reset Soundwire manager instance%d\n",
+> +			amd_manager->instance);
+> +		return -ETIMEDOUT;
+> +	}
+> +	retry_count = 0;
+> +	acp_reg_writel(AMD_SDW_DISABLE, amd_manager->mmio + ACP_SW_EN);
+> +	do {
+> +		val = acp_reg_readl(amd_manager->mmio + ACP_SW_EN_STATUS);
+> +		if (!val)
+> +			break;
+> +		usleep_range(10, 50);
+> +	} while (retry_count++ < AMD_SDW_STAT_MAX_RETRY_COUNT);
+> +
+> +	if (retry_count > AMD_SDW_STAT_MAX_RETRY_COUNT)
+> +		return -ETIMEDOUT;
+> +	return 0;
+> +}
+> +
+> +static int amd_enable_sdw_manager(struct amd_sdw_manager *amd_manager)
+> +{
+> +	u32 val = 0;
+
+useless init
+
+> +	u32 retry_count = 0;
+> +
+> +	acp_reg_writel(AMD_SDW_ENABLE, amd_manager->mmio + ACP_SW_EN);
+> +	do {
+> +		val = acp_reg_readl(amd_manager->mmio + ACP_SW_EN_STATUS);
+> +		if (val)
+> +			break;
+> +		usleep_range(10, 50);
+> +	} while (retry_count++ < AMD_SDW_STAT_MAX_RETRY_COUNT);
+> +
+> +	if (retry_count > AMD_SDW_STAT_MAX_RETRY_COUNT)
+> +		return -ETIMEDOUT;
+> +	return 0;
+> +}
+> +
+> +static int amd_disable_sdw_manager(struct amd_sdw_manager *amd_manager)
+> +{
+> +	u32 val = 0;
+
+useless init
+
+> +	u32 retry_count = 0;
+> +
+> +	acp_reg_writel(AMD_SDW_DISABLE, amd_manager->mmio + ACP_SW_EN);
+> +	/*
+> +	 * After invoking manager disable sequence, check whether
+> +	 * manager has executed clock stop sequence. In this case,
+> +	 * manager should ignore checking enable status register.
+> +	 */
+> +	val = acp_reg_readl(amd_manager->mmio + ACP_SW_CLK_RESUME_CTRL);
+> +	if (val)
+> +		return 0;
+> +
+> +	do {
+> +		val = acp_reg_readl(amd_manager->mmio + ACP_SW_EN_STATUS);
+> +		if (!val)
+> +			break;
+> +		usleep_range(10, 50);
+> +	} while (retry_count++ < AMD_SDW_STAT_MAX_RETRY_COUNT);
+> +
+> +	if (retry_count > AMD_SDW_STAT_MAX_RETRY_COUNT)
+> +		return -ETIMEDOUT;
+> +	return 0;
+> +}
+> +
+> +static void amd_enable_sdw_interrupts(struct amd_sdw_manager *amd_manager)
+> +{
+> +	struct sdw_manager_reg_mask *reg_mask = amd_manager->reg_mask;
+> +	u32 val;
+> +
+> +	mutex_lock(amd_manager->sdw_lock);
+> +	val = acp_reg_readl(amd_manager->acp_mmio + ACP_EXTERNAL_INTR_CNTL(amd_manager->instance));
+> +	val |= reg_mask->acp_sdw_intr_mask;
+> +	acp_reg_writel(val, amd_manager->acp_mmio + ACP_EXTERNAL_INTR_CNTL(amd_manager->instance));
+> +	val = acp_reg_readl(amd_manager->acp_mmio + ACP_EXTERNAL_INTR_CNTL(amd_manager->instance));
+> +	mutex_unlock(amd_manager->sdw_lock);
+> +	dev_dbg(amd_manager->dev, "%s: acp_ext_intr_ctrl[0x%x]:0x%x\n", __func__,
+> +		ACP_EXTERNAL_INTR_CNTL(amd_manager->instance), val);
+> +	val = acp_reg_readl(amd_manager->acp_mmio + ACP_EXTERNAL_INTR_STAT(amd_manager->instance));
+> +	if (val)
+> +		acp_reg_writel(val, amd_manager->acp_mmio +
+> +			       ACP_EXTERNAL_INTR_STAT(amd_manager->instance));
+> +
+> +	acp_reg_writel(AMD_SDW_IRQ_MASK_0TO7, amd_manager->mmio +
+> +		       ACP_SW_STATE_CHANGE_STATUS_MASK_0TO7);
+> +	acp_reg_writel(AMD_SDW_IRQ_MASK_8TO11, amd_manager->mmio +
+> +		       ACP_SW_STATE_CHANGE_STATUS_MASK_8TO11);
+> +	acp_reg_writel(AMD_SDW_IRQ_ERROR_MASK, amd_manager->mmio + ACP_SW_ERROR_INTR_MASK);
+> +}
+> +
+> +static void amd_disable_sdw_interrupts(struct amd_sdw_manager *amd_manager)
+> +{
+> +	struct sdw_manager_reg_mask *reg_mask = amd_manager->reg_mask;
+> +	u32 val;
+> +
+> +	mutex_lock(amd_manager->sdw_lock);
+> +	val = acp_reg_readl(amd_manager->acp_mmio + ACP_EXTERNAL_INTR_CNTL(amd_manager->instance));
+> +	val &= ~reg_mask->acp_sdw_intr_mask;
+> +	acp_reg_writel(val, amd_manager->acp_mmio + ACP_EXTERNAL_INTR_CNTL(amd_manager->instance));
+> +	mutex_unlock(amd_manager->sdw_lock);
+> +
+> +	acp_reg_writel(0x00, amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_MASK_0TO7);
+> +	acp_reg_writel(0x00, amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_MASK_8TO11);
+> +	acp_reg_writel(0x00, amd_manager->mmio + ACP_SW_ERROR_INTR_MASK);
+> +}
+> +
+> +static void amd_sdw_set_frameshape(struct amd_sdw_manager *amd_manager)
+> +{
+> +	u32 frame_size;
+> +
+> +	frame_size = (amd_manager->rows_index << 3) | amd_manager->cols_index;
+> +	acp_reg_writel(frame_size, amd_manager->mmio + ACP_SW_FRAMESIZE);
+> +}
+> +
+> +static void amd_sdw_ctl_word_prep(u32 *low_word, u32 *high_word, u32 cmd_type,
+> +				  struct sdw_msg *msg, int cmd_offset)
+> +{
+> +	u32 low_data = 0, high_data = 0;
+
+init for high_data is useless
+
+> +	u16 addr;
+> +	u8 addr_high, addr_low;
+> +	u8 data = 0;
+> +
+> +	addr = msg->addr + cmd_offset;
+> +	addr_high = (addr & 0xFF00) >> 8;
+> +	addr_low = addr & 0xFF;
+> +
+> +	if (cmd_type == AMD_SDW_CMD_WRITE)
+> +		data = msg->buf[cmd_offset];
+> +
+> +	high_data = FIELD_PREP(AMD_SDW_MCP_CMD_DEV_ADDR, msg->dev_num);
+> +	high_data |= FIELD_PREP(AMD_SDW_MCP_CMD_COMMAND, cmd_type);
+> +	high_data |= FIELD_PREP(AMD_SDW_MCP_CMD_REG_ADDR_HIGH, addr_high);
+> +	low_data |= FIELD_PREP(AMD_SDW_MCP_CMD_REG_ADDR_LOW, addr_low);
+> +	low_data |= FIELD_PREP(AMD_SDW_MCP_CMD_REG_DATA, data);
+> +
+> +	*high_word = high_data;
+> +	*low_word = low_data;
+> +}
+> +
+> +static u64 amd_sdw_send_cmd_get_resp(struct amd_sdw_manager *amd_manager, u32 lword, u32 uword)
+> +{
+> +	u64 resp = 0;
+
+useless init
+
+> +	u32 resp_lower, resp_high;
+> +	u32 sts = 0;
+
+useless init
+
+> +	u32 timeout = 0;
+> +
+> +	sts = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_CMD_STS);
+> +	while (sts & AMD_SDW_IMM_CMD_BUSY) {
+> +		sts = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_CMD_STS);
+> +		if (timeout > AMD_SDW_RETRY_COUNT) {
+> +			dev_err(amd_manager->dev, "SDW%x previous cmd status clear failed\n",
+> +				amd_manager->instance);
+> +			return -ETIMEDOUT;
+> +		}
+> +		timeout++;
+> +	}
+> +
+> +	timeout = 0;
+> +	if (sts & AMD_SDW_IMM_RES_VALID) {
+> +		dev_err(amd_manager->dev, "SDW%x manager is in bad state\n", amd_manager->instance);
+> +		acp_reg_writel(0x00, amd_manager->mmio + ACP_SW_IMM_CMD_STS);
+> +	}
+> +	acp_reg_writel(uword, amd_manager->mmio + ACP_SW_IMM_CMD_UPPER_WORD);
+> +	acp_reg_writel(lword, amd_manager->mmio + ACP_SW_IMM_CMD_LOWER_QWORD);
+> +
+> +	sts = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_CMD_STS);
+> +	while (!(sts & AMD_SDW_IMM_RES_VALID)) {
+> +		sts = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_CMD_STS);
+> +		if (timeout > AMD_SDW_RETRY_COUNT) {
+> +			dev_err(amd_manager->dev, "SDW%x cmd response timeout occurred\n",
+> +				amd_manager->instance);
+> +			return -ETIMEDOUT;
+> +		}
+> +		timeout++;
+> +	}
+> +	resp_high = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_RESP_UPPER_WORD);
+> +	resp_lower = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_RESP_LOWER_QWORD);
+> +	timeout = 0;
+> +	acp_reg_writel(AMD_SDW_IMM_RES_VALID, amd_manager->mmio + ACP_SW_IMM_CMD_STS);
+> +	while ((sts & AMD_SDW_IMM_RES_VALID)) {
+> +		sts = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_CMD_STS);
+> +		if (timeout > AMD_SDW_RETRY_COUNT) {
+> +			dev_err(amd_manager->dev, "SDW%x cmd status retry failed\n",
+> +				amd_manager->instance);
+> +			return -ETIMEDOUT;
+> +		}
+> +		timeout++;
+> +	}
+> +	resp = resp_high;
+> +	resp = (resp << 32) | resp_lower;
+> +	return resp;
+> +}
+
+> +static unsigned int _amd_sdw_xfer_msg(struct amd_sdw_manager *amd_manager, struct sdw_msg *msg,
+> +				      int cmd, int cmd_offset)
+> +{
+> +	u64 response = 0;
+
+useless init
+
+> +	u32 uword = 0, lword = 0;
+> +
+> +	amd_sdw_ctl_word_prep(&lword, &uword, cmd, msg, cmd_offset);
+> +	response = amd_sdw_send_cmd_get_resp(amd_manager, lword, uword);
+> +	return amd_sdw_fill_msg_resp(amd_manager, msg, response, cmd_offset);
+> +}
+> +
+> +static enum sdw_command_response amd_sdw_xfer_msg(struct sdw_bus *bus, struct sdw_msg *msg)
+> +{
+> +	struct amd_sdw_manager *amd_manager = to_amd_sdw(bus);
+> +	int ret, i;
+> +	int cmd = 0;
+> +
+> +	ret = amd_prep_msg(amd_manager, msg, &cmd);
+> +	if (ret)
+> +		return SDW_CMD_FAIL_OTHER;
+> +	for (i = 0; i < msg->len; i++) {
+> +		ret = _amd_sdw_xfer_msg(amd_manager, msg, cmd, i);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +	return SDW_CMD_OK;
+> +}
+> +
+> +static u32 amd_sdw_read_ping_status(struct sdw_bus *bus)
+> +{
+> +	struct amd_sdw_manager *amd_manager = to_amd_sdw(bus);
+> +	u64 response;
+> +	u32 slave_stat = 0;
+
+useless init
+
+> +
+> +	response = amd_sdw_send_cmd_get_resp(amd_manager, 0, 0);
+> +	/* slave status from ping response*/
+> +	slave_stat = FIELD_GET(AMD_SDW_MCP_SLAVE_STAT_0_3, response);
+> +	slave_stat |= FIELD_GET(AMD_SDW_MCP_SLAVE_STAT_4_11, response) << 8;
+> +	dev_dbg(amd_manager->dev, "%s: slave_stat:0x%x\n", __func__, slave_stat);
+> +	return slave_stat;
+> +}
+
+> +static void amd_sdw_probe_work(struct work_struct *work)
+> +{
+> +	struct amd_sdw_manager *amd_manager = container_of(work, struct amd_sdw_manager,
+> +							   probe_work);
+> +	struct sdw_master_prop *prop;
+> +	int ret;
+> +
+> +	prop = &amd_manager->bus.prop;
+> +	if (!prop->hw_disabled) {
+> +		amd_enable_sdw_pads(amd_manager);
+> +		ret = amd_init_sdw_manager(amd_manager);
+> +		if (ret)
+> +			return;
+> +		amd_enable_sdw_interrupts(amd_manager);
+> +		ret = amd_enable_sdw_manager(amd_manager);
+> +		if (ret)
+> +			return;
+> +		amd_sdw_set_frameshape(amd_manager);
+> +	}
+> +}
+
+There should be an explanation as to why you need a workqueue to
+complete the probe.
+
+> +
+> +static int amd_sdw_manager_probe(struct platform_device *pdev)
+> +{
+> +	const struct acp_sdw_pdata *pdata = pdev->dev.platform_data;
+> +	struct resource *res;
+> +	struct device *dev = &pdev->dev;
+> +	struct sdw_master_prop *prop;
+> +	struct sdw_bus_params *params;
+> +	struct amd_sdw_manager *amd_manager;
+> +	int ret;
+> +
+> +	if (!pdev->dev.platform_data) {
+> +		dev_err(dev, "platform_data not retrieved\n");
+> +		return -ENODEV;
+> +	}
+> +	amd_manager = devm_kzalloc(dev, sizeof(struct amd_sdw_manager), GFP_KERNEL);
+> +	if (!amd_manager)
+> +		return -ENOMEM;
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (!res)
+> +		return -ENOMEM;
+> +	amd_manager->acp_mmio = devm_ioremap(dev, res->start, resource_size(res));
+> +	if (IS_ERR(amd_manager->mmio)) {
+> +		dev_err(dev, "mmio not found\n");
+> +		return PTR_ERR(amd_manager->mmio);
+> +	}
+> +	amd_manager->instance = pdata->instance;
+> +	amd_manager->mmio = amd_manager->acp_mmio +
+> +			    (amd_manager->instance * SDW_MANAGER_REG_OFFSET);
+> +	amd_manager->sdw_lock = pdata->sdw_lock;
+> +	amd_manager->cols_index = sdw_find_col_index(AMD_SDW_DEFAULT_COLUMNS);
+> +	amd_manager->rows_index = sdw_find_row_index(AMD_SDW_DEFAULT_ROWS);
+> +	amd_manager->dev = dev;
+> +	amd_manager->bus.ops = &amd_sdw_ops;
+> +	amd_manager->bus.port_ops = &amd_sdw_port_ops;
+> +	amd_manager->bus.compute_params = &amd_sdw_compute_params;
+> +	amd_manager->bus.clk_stop_timeout = 200;
+> +	amd_manager->bus.link_id = amd_manager->instance;
+> +	switch (amd_manager->instance) {
+> +	case ACP_SDW0:
+> +		amd_manager->num_dout_ports = AMD_SDW0_MAX_TX_PORTS;
+> +		amd_manager->num_din_ports = AMD_SDW0_MAX_RX_PORTS;
+> +		break;
+> +	case ACP_SDW1:
+> +		amd_manager->num_dout_ports = AMD_SDW1_MAX_TX_PORTS;
+> +		amd_manager->num_din_ports = AMD_SDW1_MAX_RX_PORTS;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +	amd_manager->reg_mask = &sdw_manager_reg_mask_array[amd_manager->instance];
+> +	params = &amd_manager->bus.params;
+> +	params->max_dr_freq = AMD_SDW_DEFAULT_CLK_FREQ * 2;
+> +	params->curr_dr_freq = AMD_SDW_DEFAULT_CLK_FREQ * 2;
+> +	params->col = AMD_SDW_DEFAULT_COLUMNS;
+> +	params->row = AMD_SDW_DEFAULT_ROWS;
+> +	prop = &amd_manager->bus.prop;
+> +	prop->clk_freq = &amd_sdw_freq_tbl[0];
+> +	prop->mclk_freq = AMD_SDW_BUS_BASE_FREQ;
+> +
+> +	ret = sdw_bus_master_add(&amd_manager->bus, dev, dev->fwnode);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to register Soundwire manager(%d)\n", ret);
+> +		return ret;
+> +	}
+> +	dev_set_drvdata(dev, amd_manager);
+> +	INIT_WORK(&amd_manager->probe_work, amd_sdw_probe_work);
+> +	schedule_work(&amd_manager->probe_work);
+> +	return 0;
+> +}
+> +
+> +static int amd_sdw_manager_remove(struct platform_device *pdev)
+> +{
+> +	struct amd_sdw_manager *amd_manager = dev_get_drvdata(&pdev->dev);
+> +	int ret;
+> +
+> +	if (!amd_manager)
+> +		return -ENODEV;
+
+is this possible? From the code just above wioth dev_set_drvdata() it
+seems there's no error code, so the remove can blindly use the pointer.
+
+> +	cancel_work_sync(&amd_manager->probe_work);
+> +	amd_disable_sdw_interrupts(amd_manager);
+> +	sdw_bus_master_delete(&amd_manager->bus);
+> +	ret = amd_disable_sdw_manager(amd_manager);
+> +	return ret;
+
+return amd_disable_sdw_manager(amd_manager); ?
+
+> +}
+> +
+> +static struct platform_driver amd_sdw_driver = {
+> +	.probe	= &amd_sdw_manager_probe,
+> +	.remove = &amd_sdw_manager_remove,
+> +	.driver = {
+> +		.name	= "amd_sdw_manager",
+> +	}
+> +};
+> +module_platform_driver(amd_sdw_driver);
+
+> +struct acp_sdw_pdata {
+> +	u16 instance;
+> +	/* mutex to protect acp common register access */
+> +	struct mutex *sdw_lock;
+
+may be acp_sdw_lock then? sdw_lock sounds very generic and confusing IMHO.
+
+> +};
