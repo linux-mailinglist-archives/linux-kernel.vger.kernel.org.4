@@ -2,78 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D90F6694694
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:08:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6BBB694698
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 14:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjBMNIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 08:08:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
+        id S230021AbjBMNJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 08:09:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbjBMNIM (ORCPT
+        with ESMTP id S230015AbjBMNJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 08:08:12 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33869EC0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:08:10 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id bt8so6980421edb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 05:08:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7Q3sX6YTXGYHIP374Q+pFww/SYTQVJ2mqj5WKR3Qc1U=;
-        b=VEMOJGZfRFhuyLg7lJH20ccxW+3/EDrb6KjPSTVbZxOKL1kd997eEqZB5NHItDQ2JR
-         NN47Tkm3z2hNxasjOfQMk65BF0iizc98TKQyBmFp+qUwy/HiqXNnucaPV/AcdmEyGM38
-         RnxAhSxpCGTz0tZvqez6uLz0fCRoqP0fgTTwshyV9zdlSDdjqA4Ohth5OcH+V2sN2/Z0
-         PUuT21Dgl7lRwNvI7MAH5feEHcrK6YCJCmTBAY0uAlXV+jZdj+Mx4DsstF7oHibAi0gk
-         63zQ/HcNkHFbDJLGpoI9xVLpU9ZEXhHs/qWCoFi5Sj5P53I6cYpG4JxAj3bhfnwkbRTB
-         /1bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7Q3sX6YTXGYHIP374Q+pFww/SYTQVJ2mqj5WKR3Qc1U=;
-        b=c2lQaad2WytIOZNbGgcG/ktP1OBCAg80dt6Ht5jJCQfRWFn1pt2L+QUgXUC8awqs22
-         K8DoaqYp0OblFF/dHyoNNNHId3+LUlKJqhRsLf58Bx6YjYXBMbELB1UdEx6lfxv38IZ3
-         EfZYYL11linQ+xsGkApv/48dFOKbAAD12h+Q1y4RhamVr7o1XXioEafbR/IUd2dzgNca
-         z7alo5zsnho5/fkpO4oG7tiRj0+hYsAZnFlY5X00Ezgp8hvCvrWCPebsOz3UCd8pd5fP
-         ZeVPE02ab5TwWWmL0jzXWJQfOp2he47Q5wul1jGS20jOgO3IpVvv4A4Ki2VXSTIeyhP/
-         TFfw==
-X-Gm-Message-State: AO0yUKWuKodQB8Y1xyTJu5sh4jByDY26hD6p3cqITW+0ETCvgevqFCjC
-        482fhC8CiDRmU/y5EYsLfRtKVA==
-X-Google-Smtp-Source: AK7set/xOReg3Jv9h+mSg2lzbM42BxhGyvLmh709X7k41xmwqbg4WQH+BhC2ybGthkhKvGgEut2gDA==
-X-Received: by 2002:a50:a44d:0:b0:4aa:b7ac:e0d2 with SMTP id v13-20020a50a44d000000b004aab7ace0d2mr22992579edb.19.1676293689394;
-        Mon, 13 Feb 2023 05:08:09 -0800 (PST)
-Received: from [172.16.220.87] (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id f22-20020a50a6d6000000b004acc6cbc451sm1616515edc.36.2023.02.13.05.08.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 05:08:09 -0800 (PST)
-From:   Luca Weiss <luca.weiss@fairphone.com>
-X-Google-Original-From: Luca Weiss <luca@z3ntu.xyz>
-Date:   Mon, 13 Feb 2023 14:08:07 +0100
-Subject: [PATCH v2 2/2] arm64: dts: qcom: sm6350: add power domain to camcc
+        Mon, 13 Feb 2023 08:09:07 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86A19004;
+        Mon, 13 Feb 2023 05:09:03 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id BCBCB24E154;
+        Mon, 13 Feb 2023 21:08:47 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 13 Feb
+ 2023 21:08:47 +0800
+Received: from [192.168.125.74] (183.27.97.168) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 13 Feb
+ 2023 21:08:46 +0800
+Message-ID: <7152f39a-5220-63a0-3e13-ef165b0ab0c1@starfivetech.com>
+Date:   Mon, 13 Feb 2023 21:08:46 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230213-sm6350-camcc-runtime_pm-v2-2-60a507bf3e68@z3ntu.xyz>
-References: <20230213-sm6350-camcc-runtime_pm-v2-0-60a507bf3e68@z3ntu.xyz>
-In-Reply-To: <20230213-sm6350-camcc-runtime_pm-v2-0-60a507bf3e68@z3ntu.xyz>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v1 2/3] dma: dw-axi-dmac: Add support for StarFive DMA
+Content-Language: en-US
+To:     Vinod Koul <vkoul@kernel.org>
+CC:     <linux-riscv@lists.infradead.org>, <dmaengine@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        <linux-kernel@vger.kernel.org>
+References: <20230206113811.23133-1-walker.chen@starfivetech.com>
+ <20230206113811.23133-3-walker.chen@starfivetech.com>
+ <Y+YHa7jVpTs9Qg73@matsya>
+From:   Walker Chen <walker.chen@starfivetech.com>
+In-Reply-To: <Y+YHa7jVpTs9Qg73@matsya>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.168]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,28 +62,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the CX power domain to the camcc node so the power domain gets
-marked as in-use when camcc is used.
+On 2023/2/10 16:59, Vinod Koul wrote:
+> On 06-02-23, 19:38, Walker Chen wrote:
+>> Adding DMA reset operation in device probe, and using different
+>> registers according to the hardware handshake number.
+> 
+> subsystem tag is dmaengine: xxx
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
- arch/arm64/boot/dts/qcom/sm6350.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+OK, the tag will be changed to dmaengine.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-index 1e1d366c92c1..62d6dcd8d1fe 100644
---- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-@@ -1507,6 +1507,8 @@ camcc: clock-controller@ad00000 {
- 			compatible = "qcom,sm6350-camcc";
- 			reg = <0 0x0ad00000 0 0x16000>;
- 			clocks = <&rpmhcc RPMH_CXO_CLK>;
-+			power-domains = <&rpmhpd SM6350_CX>;
-+			required-opps = <&rpmhpd_opp_low_svs>;
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
- 			#power-domain-cells = <1>;
+> 
+>> 
+>> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
+>> ---
+>>  .../dma/dw-axi-dmac/dw-axi-dmac-platform.c    | 25 ++++++++++++++++---
+>>  drivers/dma/dw-axi-dmac/dw-axi-dmac.h         |  3 +++
+>>  2 files changed, 24 insertions(+), 4 deletions(-)
+>> 
+>> diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+>> index a183d93bd7e2..3581810033d2 100644
+>> --- a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+>> +++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
+>> @@ -25,6 +25,7 @@
+>>  #include <linux/platform_device.h>
+>>  #include <linux/pm_runtime.h>
+>>  #include <linux/property.h>
+>> +#include <linux/reset.h>
+>>  #include <linux/slab.h>
+>>  #include <linux/types.h>
+>>  
+>> @@ -86,7 +87,8 @@ static inline void axi_chan_config_write(struct axi_dma_chan *chan,
+>>  
+>>  	cfg_lo = (config->dst_multblk_type << CH_CFG_L_DST_MULTBLK_TYPE_POS |
+>>  		  config->src_multblk_type << CH_CFG_L_SRC_MULTBLK_TYPE_POS);
+>> -	if (chan->chip->dw->hdata->reg_map_8_channels) {
+>> +	if (chan->chip->dw->hdata->reg_map_8_channels &&
+>> +	    !chan->chip->dw->hdata->use_cfg2) {
+> 
+> what about older/other platforms that dont have use_cfg2?
 
--- 
-2.39.1
+The use_cfg2 variable's default value is false, the original logic will not be affected.
+Rob herring gave a suggestion that it is assigned according to compatible string, like that:
+if (of_device_is_compatible(node, "starfive,jh7110-axi-dma")) {
+	...
+	chip->dw->hdata->use_cfg2 = true;
+}
+
+> 
+>>  		cfg_hi = config->tt_fc << CH_CFG_H_TT_FC_POS |
+>>  			 config->hs_sel_src << CH_CFG_H_HS_SEL_SRC_POS |
+>>  			 config->hs_sel_dst << CH_CFG_H_HS_SEL_DST_POS |
+>> @@ -541,8 +543,6 @@ static void dw_axi_dma_set_hw_channel(struct axi_dma_chan *chan, bool set)
+>>  			(chan->id * DMA_APB_HS_SEL_BIT_SIZE));
+>>  	reg_value |= (val << (chan->id * DMA_APB_HS_SEL_BIT_SIZE));
+>>  	lo_hi_writeq(reg_value, chip->apb_regs + DMAC_APB_HW_HS_SEL_0);
+>> -
+>> -	return;
+>>  }
+>>  
+
+Thanks
+
+Best regards,
+Walker
 
