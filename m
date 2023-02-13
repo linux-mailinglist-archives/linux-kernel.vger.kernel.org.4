@@ -2,75 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C04694C39
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:17:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F690694C3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:17:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbjBMQRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 11:17:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34286 "EHLO
+        id S230202AbjBMQRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 11:17:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbjBMQRB (ORCPT
+        with ESMTP id S229622AbjBMQRW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 11:17:01 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A571ADEA
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:17:00 -0800 (PST)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 723428562B;
-        Mon, 13 Feb 2023 17:16:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1676305019;
-        bh=BKIo3Vf9dIwGtqVPAbNt3QosdZas/pJkFbDSPtQs+Ts=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cNu9EQj0BaWbFPcvqPFd+eJZTyFzPN3zeql2lO/cE1ORMudStIF/hlEgbh5zEJ4+X
-         qRG4qNAHa8ZF+YizOXHBmqoguoDnw0OY/83O/7z35Wts3r2vay3RbvK1PoJCAzItUk
-         PRaabjigJDy0LyslBam3aBpRhHGi25eJVVlbGQhobSpVD7M7nDeEC0x6P0+ja/uf/M
-         MGTlkSt5oHc54IPcoC1Njvz/w4R2IWwt0uc+qp2fSBwf06NbBo9+Qcptx2z36vf6k9
-         OiF1fuRymhalHczslSyvCFX2L4jn2P38lIYGrKjhRjjY3f1ey5twmiJ7sYfnEtW3K1
-         iHc4SPpQE4sTw==
-Message-ID: <ee7d0f98-3ae9-7e66-785e-65c9e11a7232@denx.de>
-Date:   Mon, 13 Feb 2023 17:16:57 +0100
+        Mon, 13 Feb 2023 11:17:22 -0500
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D5C1C32E;
+        Mon, 13 Feb 2023 08:17:21 -0800 (PST)
+Received: by mail-ej1-f43.google.com with SMTP id qw12so33225240ejc.2;
+        Mon, 13 Feb 2023 08:17:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gA7h1JSNBcO0xfSrGGH4n2jGYQo5+0WYhkIEf3BTaPE=;
+        b=vQdEookd74o0Oj+FkZdnqrVl9Iob/E6MA7S6BwF4sJhvVLr0eeBlZW2lzVefOL3jsw
+         f8V45N28rdxQHlbN+Toganqn8pTnAOkeY4trzUSwCnt862B8n/yq4Q/ayLoMtRfD/u3W
+         8MzsqIz8mHdJgZ/9Tyi1PIQxJNx2wMi3hYItLpXmyqQp9lVr39pXernylOy7Y6Qa1a6p
+         EMkSv9PreSu2efKBJmrpf/BHpQssBPy3axsCK/41XRYagPHTZAVOQAUw+3RcnOMpSVrz
+         Cbl3XQQdUUwbHIEor4rWrTOLbRejN25fkRsYl3GyftrnarP7FAiXBSuXKQEtV3lzs98c
+         eFNw==
+X-Gm-Message-State: AO0yUKWYgXetV3ViftFxIHFOuM9JWa3tXTEr2ANFIHiMK/wQr3+4kKIj
+        uhjNeLKJ77qDTZ1ABW90buv4tXfd8oh5dWsWfa7xhJ2z
+X-Google-Smtp-Source: AK7set9m0TVaY/mpY+cgnB2X1s/XFPAFuhHBOoEdnJEM9/v05ffr0h0mhjf03IDpINLVbdC1gQwzgy0i3urpG05QAYg=
+X-Received: by 2002:a17:906:e28b:b0:8ad:731:592d with SMTP id
+ gg11-20020a170906e28b00b008ad0731592dmr4833517ejb.5.1676305040534; Mon, 13
+ Feb 2023 08:17:20 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 3/6] Revert "regulator: pca9450: Add SD_VSEL GPIO for
- LDO5"
-Content-Language: en-US
-To:     Frieder Schrempf <frieder@fris.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Cc:     Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Per-Daniel Olsson <perdo@axis.com>,
-        Rickard x Andersson <rickaran@axis.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-References: <20230213155833.1644366-1-frieder@fris.de>
- <20230213155833.1644366-4-frieder@fris.de>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <20230213155833.1644366-4-frieder@fris.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230125113418.455089-1-krzysztof.kozlowski@linaro.org>
+ <Y9L5VFPdDnsiCluu@fedora> <Y+JWd6NfhH0sAlim@fedora> <CAJZ5v0i4t=z2nSP5TraKNcqrSgFT7TgxNJnF0JT6CsrCVOS2_Q@mail.gmail.com>
+In-Reply-To: <CAJZ5v0i4t=z2nSP5TraKNcqrSgFT7TgxNJnF0JT6CsrCVOS2_Q@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 13 Feb 2023 17:17:09 +0100
+Message-ID: <CAJZ5v0gjm35J1VFY7T-mhZkdbiKJqiGwaR4ZXmhDYe7Xp19YYA@mail.gmail.com>
+Subject: Re: [PATCH v4] cpuidle: psci: Do not suspend topology CPUs on PREEMPT_RT
+To:     Adrien Thierry <athierry@redhat.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/13/23 16:58, Frieder Schrempf wrote:
-> From: Frieder Schrempf <frieder.schrempf@kontron.de>
-> 
-> This reverts commit 8c67a11bae889f51fe5054364c3c789dfae3ad73.
-> 
-> It turns out that all boards using the PCA9450 actually have the
-> SD_VSEL input conencted to the VSELECT signal of the SoCs SD/MMC
+On Thu, Feb 9, 2023 at 6:08 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Tue, Feb 7, 2023 at 2:47 PM Adrien Thierry <athierry@redhat.com> wrote:
+> >
+> > Is there still something preventing this patch from being picked up?
+>
+> Well, I've been waiting for Daniel to do that.  Or should I pick it up
+> directly?  Daniel?
 
-'connected' , typo .
-
-btw would it make sense to squash 3..5 patches into a single patch ?
+Allright, applied as 6.3 material now, thanks!
