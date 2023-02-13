@@ -2,140 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3797369511E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF31695120
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:55:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbjBMTyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 14:54:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58890 "EHLO
+        id S231462AbjBMTzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 14:55:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjBMTyo (ORCPT
+        with ESMTP id S229632AbjBMTzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 14:54:44 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14E1CC2D
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 11:54:42 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id l21-20020a05600c1d1500b003dfe462b7e4so12337wms.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 11:54:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2vuBCjWyLhGKyLiFDDfTVVh49Ihox9xK/vm4ucik5GY=;
-        b=feqFLvqEzftNYjlODppR0WRBKw3g1FCtY/whK+Z3O28dNUO/VHio73S3Ki/BGO/11A
-         e6oHDVP+h9gPE/YBO9/XlKuoTcEPwo/iL0VzAiMU4sS6w1MpODYv/QXutZqfnNjMbQ74
-         Qs1MgTdufkacL77v+5umKIj2XSzc4GH8Fghu8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2vuBCjWyLhGKyLiFDDfTVVh49Ihox9xK/vm4ucik5GY=;
-        b=sw9ehr0DSknekvUjw22hUNJi5djEqzIoVtGQvfCYy7Sn+QSF3tGfd4UBfEpVJ16hWR
-         9WAe+37WmoBnRsl++2+1NmVsWltctruIX4AEVrZUTRVDOk79TWHrWEEizFwNfQ8tJ2u6
-         SjHkPu/hgYsduPMJkEMmj50McwmjTgx8Uwdg8nbUn4nVh8yCFeNiJ+aWtdKVIBHZXIp6
-         b6H/62hJRQHU6YTFIys3WieYly9LkA4ReYW4a3XzaDNFuDndQBhg9tQZZ1eKDxpJfkbY
-         uZvG2d7SPeG2SDG5iUMKNBbhUz7Uwoars9XGszunHO0x+E+R32Rzak1nSQZOwyVL9HWq
-         BtCw==
-X-Gm-Message-State: AO0yUKXxaanNpTacHX3WbXlIZQ2s9Hfc5oc42ktLT5UjNPPm/MJrPImd
-        wsUzr4sBguUDrCPalNMUEfEt+uKCEBVoCb/QPms=
-X-Google-Smtp-Source: AK7set9ZA+9Q2t78VqJmKX29CybT8JBGoOBLFcoieKoPWEuhA4XClScc2KupU9+ldYjT2boVmrdvJw==
-X-Received: by 2002:a05:600c:4f8e:b0:3df:f2a5:49e0 with SMTP id n14-20020a05600c4f8e00b003dff2a549e0mr22275258wmq.40.1676318081022;
-        Mon, 13 Feb 2023 11:54:41 -0800 (PST)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
-        by smtp.gmail.com with ESMTPSA id a1-20020a05600c348100b003db0ee277b2sm18311839wmq.5.2023.02.13.11.54.40
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 11:54:40 -0800 (PST)
-Received: by mail-ed1-f41.google.com with SMTP id c1so10734872edt.4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 11:54:40 -0800 (PST)
-X-Received: by 2002:a50:aa88:0:b0:4ac:c720:207c with SMTP id
- q8-20020a50aa88000000b004acc720207cmr2076999edc.5.1676318080138; Mon, 13 Feb
- 2023 11:54:40 -0800 (PST)
+        Mon, 13 Feb 2023 14:55:07 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DB81C7DF;
+        Mon, 13 Feb 2023 11:55:07 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DINdVP021583;
+        Mon, 13 Feb 2023 19:54:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=ulLtmbNHAigUqXTTpYYke6cTZ9vdBlwYUqwfrLvZwZ4=;
+ b=qFf4gaCM581cejP0lnFgRp3pttF1EH2fdU3qil1jhDpPTTCkidorOwPxOP6PkpyHRyiD
+ CDlgfWKiohImSxQxN68lWwVOLibf1d1v8qxlt67NLD2Q/DHRr5phfxBHefbjda1eZeEC
+ a4Q8pn5kn0nmmub+KGLQKsZnbx82Rer9pawN+aCiyFy7/ygD7h9zzV52Bc/l9A+XZ5ss
+ kETTmOjSVTATigsrYuAVXlwEodlWztZKRjyDfRtE2A3Z24Cu0tSiCjioknLxSw56R11H
+ Vw1ZQC55Jl19aq9T+zlfrJ3RrZrnCYF8DvJwaRJVMWtI+MxdRKlh+h39rMvGTfZe6UHr Xg== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nqtethxfx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 19:54:59 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31D7uPeC006567;
+        Mon, 13 Feb 2023 19:54:57 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3np2n6a9kr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 19:54:57 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31DJstu351118436
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Feb 2023 19:54:55 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 35F4220043;
+        Mon, 13 Feb 2023 19:54:55 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8D48B20040;
+        Mon, 13 Feb 2023 19:54:53 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.20.198])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Mon, 13 Feb 2023 19:54:53 +0000 (GMT)
+Date:   Tue, 14 Feb 2023 01:24:50 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, jack@suse.cz,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 16/21] ext4: remove unnecessary exit_meta_group_info tag
+Message-ID: <Y+qVio3p82yuNb5d@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <20230209194825.511043-1-shikemeng@huaweicloud.com>
+ <20230209194825.511043-17-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
-References: <20230213010020.1813-1-michael.christie@oracle.com> <20230213010020.1813-5-michael.christie@oracle.com>
-In-Reply-To: <20230213010020.1813-5-michael.christie@oracle.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 13 Feb 2023 11:54:23 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wj0oA0VV77eAgMYFSJm7SBQ15vDLFjcFnNvWrbCRXXSpA@mail.gmail.com>
-Message-ID: <CAHk-=wj0oA0VV77eAgMYFSJm7SBQ15vDLFjcFnNvWrbCRXXSpA@mail.gmail.com>
-Subject: Re: [PATCH 4/5] kernel: Prepare set_kthread_struct to be used for setup_thread_fn
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     brauner@kernel.org, ebiederm@xmission.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230209194825.511043-17-shikemeng@huaweicloud.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 7JLeLkfT5KCikchkAIadJSI4vNl8ZnD9
+X-Proofpoint-ORIG-GUID: 7JLeLkfT5KCikchkAIadJSI4vNl8ZnD9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-13_12,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ mlxscore=0 suspectscore=0 spamscore=0 malwarescore=0 impostorscore=0
+ adultscore=0 priorityscore=1501 mlxlogscore=999 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302130171
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 5:00 PM Mike Christie
-<michael.christie@oracle.com> wrote:
->
-> This preps set_kthread_struct to be used for a setup_thread_fn callback
-> by having it set the task's comm and also returning an int instead of a
-> bool.
+On Fri, Feb 10, 2023 at 03:48:20AM +0800, Kemeng Shi wrote:
+> We goto exit_meta_group_info only to return -ENOMEM. Return -ENOMEM
+> directly instead of goto to remove this unnecessary tag.
+> 
+> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+> ---
+>  fs/ext4/mballoc.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index c684758d6dbb..289dcd81dd5a 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -3069,7 +3069,7 @@ int ext4_mb_add_groupinfo(struct super_block *sb, ext4_group_t group,
+>  		if (meta_group_info == NULL) {
+>  			ext4_msg(sb, KERN_ERR, "can't allocate mem "
+>  				 "for a buddy group");
+> -			goto exit_meta_group_info;
+> +			return -ENOMEM;
+>  		}
+>  		rcu_read_lock();
+>  		rcu_dereference(sbi->s_group_info)[idx] = meta_group_info;
+> @@ -3123,7 +3123,6 @@ int ext4_mb_add_groupinfo(struct super_block *sb, ext4_group_t group,
+>  		group_info[idx] = NULL;
+>  		rcu_read_unlock();
+>  	}
+> -exit_meta_group_info:
+>  	return -ENOMEM;
+>  } /* ext4_mb_add_groupinfo */
+>  
+> -- 
+> 2.30.0
+> 
+Looks good. Feel free to add:
 
-Ok, so I like the concept, but this patch is just too ugly for words,
-and very very confused.
-
-Now, some of it is pre-exisging nasty code just moved around:
-
-> +       mutex_lock(&create->name_mutex);
-> +       if (!create->name_args) {
-> +               mutex_unlock(&create->name_mutex);
-> +               return -EINTR;
-> +       }
-> +
-> +       va_copy(name_args, *create->name_args);
-> +       len = vsnprintf(tsk->comm, TASK_COMM_LEN, create->name_fmt, name_args);
-> +       va_end(name_args);
-> +       if (len >= TASK_COMM_LEN) {
-> +               /* leave it truncated when out of memory. */
-> +               kthread->full_name = kvasprintf(GFP_KERNEL, create->name_fmt,
-> +                                               *create->name_args);
-> +       }
-> +       mutex_unlock(&create->name_mutex);
-
-The *whole* point of my suggestion was to stop having silly pointless
-locking on the name, because this all should be local to that one
-thread creation, so that "name_mutex" kind of makes this all
-pointless,
-
-But what the heck is this:
-
-> +       mutex_init(&create->name_mutex);
-> +       create->name_fmt = namefmt;
-> +       va_copy(name_args, args);
-> +       create->name_args = &name_args;
-
-That's just crazy talk.
-
-Please just create the name once.
-
-And please don't think that just because it was using a "va_list", you
-need to keep it in that format.
-
-Just make it create the name in __kthread_create_on_node() and be done
-with it. That code already does a
-
-        struct kthread_create_info *create = kmalloc(sizeof(*create), ..
-
-and you can just make a sufficiently large buffer there. Don't worry
-about "kthread->fuil_name" being huge, it should just be bigger than
-16. Make it be 32 or something. Nobody wants a larger "full name"
-anyway.
-
-No name_mutex, no va_list that is bigger than the buffer we'd need for
-the name anyway. Just "create the name once".
-
-IOW, this patch is just being much too complicated for no good reason.
-The point was to make it _simpler_ to do thread setup, not more
-complicated.
-
-        Linus
+Reviewed-by: Ojaswin Mujoo <ojaswin@linux.ibm.com> 
