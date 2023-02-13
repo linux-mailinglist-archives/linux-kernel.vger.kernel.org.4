@@ -2,166 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8987A694FCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A14694FF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjBMSvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:51:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
+        id S230211AbjBMSxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:53:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjBMSup (ORCPT
+        with ESMTP id S229704AbjBMSxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:50:45 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2ACC1CF77
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:50:32 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id w5so14453155plg.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:50:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q/XMzJ+L5J3d0/+ssV6BRnN4NRVloomzU3VBGcZ4wik=;
-        b=KhdeTFjVn62yGlGeO0UlCLlRdy1lL4f/HH3KtvyPQpZqb9ysc8seDOZ1COaU9pQLaw
-         0V/kx7cErOHN3vSLcUnQQDn9VbyuFlIE8yXGWRDRtLrBOfi12uuMPsxC6PK+74DZVVIP
-         DMkvz045TEEEjSce4O5n7Q0B/fxDkCEAiAnYOSfozdMEwmmavyAzPUhD/Az38oRMutdQ
-         R5oH2Km/4OmUpiLfQGTPA+K9dn8A07kaKUbQzkIdbYrudeXttcEwB2kL7APHbMtVxI0T
-         zU+845c6U01o0HU7Ffqi8vt2wR2c9SgtPHjG3viTxYFuUGWIRGsAsipHG+OVu6vVgAxu
-         HK8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=q/XMzJ+L5J3d0/+ssV6BRnN4NRVloomzU3VBGcZ4wik=;
-        b=MXlr6+L0+KZEc1Vfy1dtBsQQso7Vn3P99xjZjQUea0i1mY7SX1+9OopyzBmwncg+IF
-         SJCGGN0/nZSb82ownebhc5Qdz93YfduxL+aYlwUD+dDLEVOZ7rAM7gcihNaXpRrPwHWs
-         5/fSxSMZOAZ+jOYovLZ9uhofZI3slZeDDSHOFfuRNktxYnwOrw1PdSQfbYOq5s78xZYX
-         QRp92e7F/mQRrvvxZrS0JKVowz9l0O0e2s/K3eMhfMmMAJmt9qEuPYDSXyFX1T4kng/Q
-         6YCvrMJHC4OdgR/SjbKeRxEIpTnImCdnqoa33ADU+LfF0PhjRJ9+wyDWO3oFh3sAn63Z
-         gnCQ==
-X-Gm-Message-State: AO0yUKVXbBcivglllov6FeF927zb+FUgDifpR6VJqAFpXm5LG0SAnDB0
-        ij6lHGgDxZHZeYQTZX/rOWU=
-X-Google-Smtp-Source: AK7set+4RFdyqlfahmB2Q1NGruBzWd4fNQlD/W8SOBCur3GY6BNMQt39wOUauyvDbHLcpi29ucc71Q==
-X-Received: by 2002:a17:902:cacb:b0:19a:b427:230a with SMTP id y11-20020a170902cacb00b0019ab427230amr503834pld.63.1676314232143;
-        Mon, 13 Feb 2023 10:50:32 -0800 (PST)
-Received: from f37.eng.vmware.com ([66.170.99.1])
-        by smtp.googlemail.com with ESMTPSA id p14-20020a170902a40e00b00198f256a192sm8535036plq.171.2023.02.13.10.50.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 10:50:31 -0800 (PST)
-From:   Shreenidhi Shedi <yesshedi@gmail.com>
-X-Google-Original-From: Shreenidhi Shedi <sshedi@vmware.com>
-To:     dhowells@redhat.com, dwmw2@infradead.org,
-        gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, Shreenidhi Shedi <sshedi@vmware.com>
-Subject: [PATCH v2 6/6] sign-file: improve help message
-Date:   Tue, 14 Feb 2023 00:20:19 +0530
-Message-Id: <20230213185019.56902-7-sshedi@vmware.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230213185019.56902-1-sshedi@vmware.com>
-References: <20230213185019.56902-1-sshedi@vmware.com>
+        Mon, 13 Feb 2023 13:53:22 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE4F12849;
+        Mon, 13 Feb 2023 10:53:19 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DIlahB008363;
+        Mon, 13 Feb 2023 18:53:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=ZcPZD8e4wxh+7dBC+CQ0oeJCKLJZAAih0oiGJ9JG4xY=;
+ b=pjg+nOuMxZgQEVn0j1UXs9NDI1mFENqCqEa97FAFwN/OYSKNHW9MCzs5mnu96Yrh6Jt/
+ DVgZenaNHXJNuY39bBrTpA2+IQXOmAYqNuSGY8W5xgjWDNE+Wi01Zcf4hzV0nWOYEVA5
+ WH62VS6/avtw2OakB+LXZ+PJZ7ZNpIRSvQjeiUZE3IzWC4LhdQ7vla0PN91K9jGA0wNR
+ MW3Nd2EpG2w8OFosQwyalvQYC8jI6XJ5zcLscS2cZis2JbqAR84pz2+/djrl0+jxRfKn
+ jaUER+AXNNp7MiM8Y6EhpKpl1dEbt/47Tkz7ecQnF1qdzczvdb5ajBlwqgxYMNpgcx9P 1w== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nqtsur0d0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 18:53:15 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31DIrEeF006970
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 18:53:14 GMT
+Received: from hu-molvera-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 13 Feb 2023 10:53:13 -0800
+From:   Melody Olvera <quic_molvera@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>
+CC:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
+Subject: [PATCH 0/9] remoteproc: qcom_q6v5_pas: Add support for QDU1000/QRU1000 mpss
+Date:   Mon, 13 Feb 2023 10:52:09 -0800
+Message-ID: <20230213185218.166520-1-quic_molvera@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: tbMqf4JVd_5G7q6BvI5oBw8TTMmCrsHw
+X-Proofpoint-ORIG-GUID: tbMqf4JVd_5G7q6BvI5oBw8TTMmCrsHw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-13_12,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 malwarescore=0 mlxlogscore=973 phishscore=0
+ lowpriorityscore=0 bulkscore=0 mlxscore=0 adultscore=0 impostorscore=0
+ suspectscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2302130165
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a proper help message with examples on how to use this tool.
+This patchset adds support for the mpss found in the QDU1000 and QRU1000
+SoCs. 
 
-Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
----
- scripts/sign-file.c | 49 ++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 40 insertions(+), 9 deletions(-)
+The mpss boot process now supports late attach for an already running
+mpss. For this, it uses an RMB register space to perform a handshake
+with the mpss for the late attach process. This is implemented in the
+patches below. The patches also address issues with split binary
+detection to support loading of split binaries more robustly.
 
-diff --git a/scripts/sign-file.c b/scripts/sign-file.c
-index 0729d8df5660..d9499ea5c8cc 100644
---- a/scripts/sign-file.c
-+++ b/scripts/sign-file.c
-@@ -74,13 +74,44 @@ struct module_signature {
- static const char magic_number[] = "~Module signature appended~\n";
- 
- static __attribute__((noreturn))
--void format(void)
-+void print_usage(int retval)
- {
--	fprintf(stderr,
--		"Usage: scripts/sign-file [-dp] <hash algo> <key> <x509> <module> [<dest>]\n");
--	fprintf(stderr,
--		"       scripts/sign-file -s <raw sig> <hash algo> <x509> <module> [<dest>]\n");
--	exit(2);
-+	fprintf(stderr, "Usage: scripts/sign-file [OPTIONS]... [MODULE]...\n");
-+	fprintf(stderr, "Available options:\n");
-+	fprintf(stderr, "-h, --help		Print this help message and exit\n");
-+
-+	fprintf(stderr, "\nOptional args:\n");
-+	fprintf(stderr, "-s, --savesig		Save signature\n");
-+	fprintf(stderr, "-o, --signonly		Sign only\n");
-+	fprintf(stderr, "-b, --bulksign		Sign modules in bulk\n");
-+	fprintf(stderr, "-l, --replaceorig	Replace original\n");
-+#ifndef USE_PKCS7
-+	fprintf(stderr, "-k, --usekeyid		Use key ID\n");
-+#endif
-+	fprintf(stderr, "-r, --rawsig <sig>	Raw signature\n");
-+	fprintf(stderr, "-d, --dest <dest>	Destination path ");
-+	fprintf(stderr, "(Exclusive with bulk option)\n");
-+
-+	fprintf(stderr, "\nMandatory args:\n");
-+	fprintf(stderr, "-p, --privkey <key>	Private key\n");
-+	fprintf(stderr, "-a, --hashalgo <alg>	Hash algorithm\n");
-+	fprintf(stderr, "-x, --x509 <x509>	X509\n");
-+
-+	fprintf(stderr, "\nExamples:\n");
-+
-+	fprintf(stderr, "\nRegular signing:\n");
-+	fprintf(stderr, "scripts/sign-file -a sha512 -p certs/signing_key.pem ");
-+	fprintf(stderr, "-x certs/signing_key.x509 <module>\n");
-+
-+	fprintf(stderr, "\nSigning with destination path:\n");
-+	fprintf(stderr, "scripts/sign-file -a sha512 -p certs/signing_key.pem ");
-+	fprintf(stderr, "-x certs/signing_key.x509 <module> -d <path>\n");
-+
-+	fprintf(stderr, "\nSigning modules in bulk:\n");
-+	fprintf(stderr, "scripts/sign-file -a sha512 -p certs/signing_key.pem ");
-+	fprintf(stderr, "-x certs/signing_key.x509 -b <module1> <module2> ...\n");
-+
-+	exit(retval);
- }
- 
- static void display_openssl_errors(int l)
-@@ -264,7 +295,7 @@ static void parse_args(int argc, char **argv, struct cmd_opts *opts)
- #endif
- 		switch (opt) {
- 		case 'h':
--			format();
-+			print_usage(0);
- 			break;
- 
- 		case 'r':
-@@ -315,7 +346,7 @@ static void parse_args(int argc, char **argv, struct cmd_opts *opts)
- 			break;
- 
- 		default:
--			format();
-+			print_usage(2);
- 			break;
- 		}
- 	} while (opt != -1);
-@@ -355,7 +386,7 @@ int sign_file(int argc, char **argv, struct cmd_opts *opts)
- #endif
- 
- 	if ((bulk_sign && dest_name) || (!bulk_sign && argc != 1))
--		format();
-+		print_usage(2);
- 
- 	if (dest_name && strcmp(argv[0], dest_name)) {
- 		replace_orig = false;
+Gokul Krishna Krishnakumar (1):
+  soc: qcom: mdt_loader: Enhance split binary detection
+
+Melody Olvera (8):
+  dt-bindings: firmware: qcom,scm: Update QDU1000/QRU1000 compatible
+  dt-bindings: mailbox: qcom-ipcc: Add compatible for QDU1000/QRU1000
+  dt-bindings: soc: qcom: aoss: Document power-domain-cells for aoss
+  dt-bindings: soc: qcom: aoss: Document QDU1000/QRU1000 compatible
+  dt-bindings: remoteproc: mpss: Document QDU1000/QRU1000 mpss devices
+  remoteproc: qcom: q6v5: Add support for q6 rmb registers
+  remoteproc: qcom_q6v5_pas: Add support to attach a DSP
+  remoteproc: qcom_q6v5_pas: Add QDU1000/QRU1000 mpss compatible & data
+
+ .../bindings/firmware/qcom,scm.yaml           |   1 +
+ .../bindings/mailbox/qcom-ipcc.yaml           |   1 +
+ .../bindings/remoteproc/qcom,qdu1000-pas.yaml | 127 ++++++++++++++++++
+ .../bindings/soc/qcom/qcom,aoss-qmp.yaml      |   5 +
+ drivers/remoteproc/qcom_q6v5.c                |   9 ++
+ drivers/remoteproc/qcom_q6v5.h                |   8 ++
+ drivers/remoteproc/qcom_q6v5_pas.c            | 126 ++++++++++++++++-
+ drivers/soc/qcom/mdt_loader.c                 |  64 +++++----
+ 8 files changed, 311 insertions(+), 30 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,qdu1000-pas.yaml
+
+
+base-commit: 09e41676e35ab06e4bce8870ea3bf1f191c3cb90
 -- 
-2.39.1
+2.25.1
 
