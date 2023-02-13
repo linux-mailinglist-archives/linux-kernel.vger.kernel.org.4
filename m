@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE982694FC3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF7E694FC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:48:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbjBMStC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:49:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42388 "EHLO
+        id S229773AbjBMSs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:48:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbjBMSsg (ORCPT
+        with ESMTP id S229810AbjBMSsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Feb 2023 13:48:36 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B665C1CAEC;
-        Mon, 13 Feb 2023 10:48:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18951CAE9;
+        Mon, 13 Feb 2023 10:48:34 -0800 (PST)
 Date:   Mon, 13 Feb 2023 18:48:33 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1676314114;
+        s=2020; t=1676314113;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=eS/JiuuqtXiw1NTI+j2SyVN5tbmyJPF5sj86ctZ/cyU=;
-        b=AFo2V4uVrT+j5jBY2rM373rmvEJZF41ubniCbrjWi/FjPbYfZmqqjjoufV3gl0BuC/YQwo
-        2BVC6YQUrowfn3QJPxwCp+TtL2nziY/xhs8VeH86+cHlMTunOAT2Xegr+xIgsJrGfoWZH3
-        TTkSdlW8qKyywQokoerD/ERGWX9FvVXp1wZxXt1D95ZfpkmU0v0Y3uhaZmkALB71Ztrr9L
-        QLwSeGtqu9mxKjBQirW/AxNg1sfBjcsz3m7dlD5mK6fP6rSV2yCQ9sWPiCTF0sEncsKqi7
-        RJIEsahWs/KrwkSBRs3heu6vHzVlULGbvyZUlNB10zD4NUTcAdQoRCWVnhe9Jg==
+        bh=9gBKdjlSTAABDh+Tqq2iFzBMT5CiqULyiZe+8Xzhd+4=;
+        b=h9iUCx9rOkdwGAVmkVWAoYPw1ZpOjodJdnCQFGNV5AabEI03uQ8eQvbAEJybquYjT8uxWy
+        YqeYrLAJIu8xAUY8OHvYSh+pog036AmZgcRAYE4KCJOWyLchfZXspGSQ1YsS/pHauFM70K
+        MBU4NiEUZtGfCIIwJte+dYVnBCwdkIVH4jNCmPQK2+WVp/sCl7Dx5xVTc2KAcbEEzl5I7h
+        71neGWFJYdYAIQjWkcDV8LRJpK1aNvjmuWPB3CwQrCsqcuv2Z1GhEce/tmXpiBEyWPHQ0T
+        P+FHcr0rvUvGTiUXwdrlXnKFFkFs7rXi0TxXBY9LujchOh8/Nqk0iCL2qZ8oCw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1676314114;
+        s=2020e; t=1676314113;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=eS/JiuuqtXiw1NTI+j2SyVN5tbmyJPF5sj86ctZ/cyU=;
-        b=jJAkY8Y0CSamjw/YqEiALEVwZ0VWHBz4eHkB/BfgerYoOdJ6WHY3UWk4/Xl4CSLi1MKMPj
-        KS30a1S0umhDq3Cw==
+        bh=9gBKdjlSTAABDh+Tqq2iFzBMT5CiqULyiZe+8Xzhd+4=;
+        b=bRGzLeX8RE58rGsyMOcpK3X5J8WzvYB7lv727skzMNZ+4C4+UHUHNhKOhRLYlfSy1UwRDs
+        jGPWStpeM5UjyiAg==
 From:   "tip-bot2 for Paul E. McKenney" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] clocksource: Loosen clocksource watchdog constraints
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>, x86@kernel.org,
+Subject: [tip: timers/core] clocksource: Improve "skew is too large" messages
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Feng Tang <feng.tang@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <167631411389.4906.18096787596269259442.tip-bot2@tip-bot2>
+Message-ID: <167631411316.4906.13551838694214324654.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,100 +63,64 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     c37e85c135cead4256dc8860073c468d8925c3df
-Gitweb:        https://git.kernel.org/tip/c37e85c135cead4256dc8860073c468d892=
-5c3df
+Commit-ID:     dd029269947a32047b8ce1f8513b0b3b13f0df32
+Gitweb:        https://git.kernel.org/tip/dd029269947a32047b8ce1f8513b0b3b13f0df32
 Author:        Paul E. McKenney <paulmck@kernel.org>
-AuthorDate:    Tue, 06 Dec 2022 19:36:10 -08:00
+AuthorDate:    Tue, 13 Dec 2022 16:42:15 -08:00
 Committer:     Paul E. McKenney <paulmck@kernel.org>
-CommitterDate: Tue, 03 Jan 2023 20:43:45 -08:00
+CommitterDate: Thu, 05 Jan 2023 12:33:11 -08:00
 
-clocksource: Loosen clocksource watchdog constraints
+clocksource: Improve "skew is too large" messages
 
-Currently, MAX_SKEW_USEC is set to 100 microseconds, which has worked
-reasonably well.  However, NTP is willing to tolerate 500 microseconds
-of skew per second, and a clocksource that is good enough for NTP should
-be good enough for the clocksource watchdog.  The watchdog's skew is
-controlled by MAX_SKEW_USEC and the CLOCKSOURCE_WATCHDOG_MAX_SKEW_US
-Kconfig option.  However, these values are doubled before being associated
-with a clocksource's ->uncertainty_margin, and the ->uncertainty_margin
-values of the pair of clocksource's being compared are summed before
-checking against the skew.
+When clocksource_watchdog() detects excessive clocksource skew compared
+to the watchdog clocksource, it marks the clocksource under test as
+unstable and prints several lines worth of message.  But that message
+is unclear to anyone unfamiliar with the code:
 
-Therefore, set both MAX_SKEW_USEC and the default for the
-CLOCKSOURCE_WATCHDOG_MAX_SKEW_US Kconfig option to 125 microseconds of
-skew per second, resulting in 500 microseconds of skew per second in
-the clocksource watchdog's skew comparison.
+clocksource: timekeeping watchdog on CPU2: Marking clocksource 'wdtest-ktime' as unstable because the skew is too large:
+clocksource:                       'kvm-clock' wd_nsec: 400744390 wd_now: 612625c2c wd_last: 5fa7f7c66 mask: ffffffffffffffff
+clocksource:                       'wdtest-ktime' cs_nsec: 600744034 cs_now: 173081397a292d4f cs_last: 17308139565a8ced mask: ffffffffffffffff
+clocksource:                       'kvm-clock' (not 'wdtest-ktime') is current clocksource.
 
-Suggested-by Rik van Riel <riel@surriel.com>
+Therefore, add the following line near the end of that message:
+
+Clocksource 'wdtest-ktime' skewed 199999644 ns (199 ms) over watchdog 'kvm-clock' interval of 400744390 ns (400 ms)
+
+This new line clearly indicates the amount of skew between the two
+clocksources, along with the duration of the time interval over which
+the skew occurred, both in nanoseconds and milliseconds.
+
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Cc: John Stultz <jstultz@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Feng Tang <feng.tang@intel.com>
 ---
- kernel/time/Kconfig       |  6 +++++-
- kernel/time/clocksource.c | 15 +++++++++------
- 2 files changed, 14 insertions(+), 7 deletions(-)
+ kernel/time/clocksource.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/kernel/time/Kconfig b/kernel/time/Kconfig
-index a41753b..bae8f11 100644
---- a/kernel/time/Kconfig
-+++ b/kernel/time/Kconfig
-@@ -200,10 +200,14 @@ config CLOCKSOURCE_WATCHDOG_MAX_SKEW_US
- 	int "Clocksource watchdog maximum allowable skew (in =CE=BCs)"
- 	depends on CLOCKSOURCE_WATCHDOG
- 	range 50 1000
--	default 100
-+	default 125
- 	help
- 	  Specify the maximum amount of allowable watchdog skew in
- 	  microseconds before reporting the clocksource to be unstable.
-+	  The default is based on a half-second clocksource watchdog
-+	  interval and NTP's maximum frequency drift of 500 parts
-+	  per million.	If the clocksource is good enough for NTP,
-+	  it is good enough for the clocksource watchdog!
-=20
- endmenu
- endif
 diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
-index 4a2c3bb..a3d19f6 100644
+index b599149..fc486cd 100644
 --- a/kernel/time/clocksource.c
 +++ b/kernel/time/clocksource.c
-@@ -96,6 +96,11 @@ static int finished_booting;
- static u64 suspend_start;
-=20
- /*
-+ * Interval: 0.5sec.
-+ */
-+#define WATCHDOG_INTERVAL (HZ >> 1)
+@@ -446,12 +446,20 @@ static void clocksource_watchdog(struct timer_list *unused)
+ 		/* Check the deviation from the watchdog clocksource. */
+ 		md = cs->uncertainty_margin + watchdog->uncertainty_margin;
+ 		if (abs(cs_nsec - wd_nsec) > md) {
++			u64 cs_wd_msec;
++			u64 wd_msec;
++			u32 wd_rem;
 +
-+/*
-  * Threshold: 0.0312s, when doubled: 0.0625s.
-  * Also a default for cs->uncertainty_margin when registering clocks.
-  */
-@@ -106,11 +111,14 @@ static u64 suspend_start;
-  * clocksource surrounding a read of the clocksource being validated.
-  * This delay could be due to SMIs, NMIs, or to VCPU preemptions.  Used as
-  * a lower bound for cs->uncertainty_margin values when registering clocks.
-+ *
-+ * The default of 500 parts per million is based on NTP's limits.
-+ * If a clocksource is good enough for NTP, it is good enough for us!
-  */
- #ifdef CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US
- #define MAX_SKEW_USEC	CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US
- #else
--#define MAX_SKEW_USEC	100
-+#define MAX_SKEW_USEC	(125 * WATCHDOG_INTERVAL / HZ)
- #endif
-=20
- #define WATCHDOG_MAX_SKEW (MAX_SKEW_USEC * NSEC_PER_USEC)
-@@ -140,11 +148,6 @@ static inline void clocksource_watchdog_unlock(unsigned =
-long *flags)
- static int clocksource_watchdog_kthread(void *data);
- static void __clocksource_change_rating(struct clocksource *cs, int rating);
-=20
--/*
-- * Interval: 0.5sec.
-- */
--#define WATCHDOG_INTERVAL (HZ >> 1)
--
- static void clocksource_watchdog_work(struct work_struct *work)
- {
- 	/*
+ 			pr_warn("timekeeping watchdog on CPU%d: Marking clocksource '%s' as unstable because the skew is too large:\n",
+ 				smp_processor_id(), cs->name);
+ 			pr_warn("                      '%s' wd_nsec: %lld wd_now: %llx wd_last: %llx mask: %llx\n",
+ 				watchdog->name, wd_nsec, wdnow, wdlast, watchdog->mask);
+ 			pr_warn("                      '%s' cs_nsec: %lld cs_now: %llx cs_last: %llx mask: %llx\n",
+ 				cs->name, cs_nsec, csnow, cslast, cs->mask);
++			cs_wd_msec = div_u64_rem(cs_nsec - wd_nsec, 1000U * 1000U, &wd_rem);
++			wd_msec = div_u64_rem(wd_nsec, 1000U * 1000U, &wd_rem);
++			pr_warn("                      Clocksource '%s' skewed %lld ns (%lld ms) over watchdog '%s' interval of %lld ns (%lld ms)\n",
++				cs->name, cs_nsec - wd_nsec, cs_wd_msec, watchdog->name, wd_nsec, wd_msec);
+ 			if (curr_clocksource == cs)
+ 				pr_warn("                      '%s' is current clocksource.\n", cs->name);
+ 			else if (curr_clocksource)
