@@ -2,115 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5478694377
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:50:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ACF4694378
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:51:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjBMKul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 05:50:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
+        id S229978AbjBMKvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 05:51:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbjBMKuj (ORCPT
+        with ESMTP id S229596AbjBMKvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 05:50:39 -0500
-Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6435B26B7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:50:38 -0800 (PST)
-Received: by mail-io1-f77.google.com with SMTP id d73-20020a6bb44c000000b0072805fbd06aso8163059iof.17
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:50:38 -0800 (PST)
+        Mon, 13 Feb 2023 05:51:20 -0500
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656A94224
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:51:19 -0800 (PST)
+Received: by mail-qv1-xf2e.google.com with SMTP id j5so5855849qvi.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:51:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1676285478;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NbmEomTaEbL/xC6kHsB9GRdSNVZ6oy/K3P7XpBsOsQw=;
+        b=Qfe34OpPJdqTxxheZAVWzG8hWYbDS7zTDrM618tSIUis2UcJnDYkkChsVhZvEIZzuW
+         qKY/x4i+Z92+RZAWyfefxOppIk7v8myMg1XmGgtRXVsxjyXKSGg1yN0+2KUmhbfAzfFU
+         O1iBAkH+LAfEpI6qa0XJbG2j6/gx5RZmn3BQazHSV29XjAFQHh7uah8TzWi1vF5lCBzi
+         3Svf4GePsL9xDFrix2gTpfdZ4KlO35MumO2xQC6ExNr1l0lPiLmBP1alVKXJR6/737hd
+         cbSgfAWx40buLC+Q1zIWwhKQ8A3uy99gzKJ8fSURqs2sFj2wj/4oWc5NU0Y+0vTEg6AW
+         j/TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=imWoWn1wOb/vHQ2rwIhB6EiQHzFH9YLuSzF5fLaP5a8=;
-        b=QNNFwj6xHKyrtPzK2ktm5eAwsFK4g30XIo8YlDp6g+XmWG4HffGH+VQXLsr5KTTCAf
-         khi1D4RPvybNUm3JAAFHwuRNxKrAIqRWb4DREdvKLqQjN7/0vcbackpdeji0hhoFpzis
-         1wlP9NPWGF8c1Bb7oTY984Dqu6Ovucey1xO4FIjVxuLVsTSuB82rb4W5LfxVD37joFQP
-         Xk5R3TOguF6Q/opc1ZDf+FTjeCV+7KP75yVXaX76LdB4SM1P9dLLBrqX/uIwjLF5mbME
-         2cPGvf8ZNXgkD48wC3ybbg128/QxRptlREK3l1PlP434cddbUFcnLE6dE+oT/uN2hHXU
-         vKJg==
-X-Gm-Message-State: AO0yUKWYUKH7UTvUBISm0rIkhH6ZtMIA9KXZclmdGdEBvWFfg6zAGRmI
-        MZJAQIVJ04F4b9+LxpqCjE3kOuoJD0KYMo9+pOqviXj+DTmi
-X-Google-Smtp-Source: AK7set/WN+UOLOs4DAALUK/amyT8Wo5FY+PLHjMTrHUAcbxEpBKP6hQ4Cs3EKhHICCncrcOqnn41I/NywnTL42T1vEEuHy46ZJn5
+        d=1e100.net; s=20210112; t=1676285478;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NbmEomTaEbL/xC6kHsB9GRdSNVZ6oy/K3P7XpBsOsQw=;
+        b=Rnq+QA5cllIoo8MAteLxSkydBrXqtWAhWLT1FEctUORax6KM6kTSoxA8NtgVrDY46+
+         sdIfNzGbTlVA5MIf9TdRHpm7gIMZSuvCsQpWs38HHX1jWmVkBNdpFBdk450H3LYLg3BM
+         j2Pc1V8QIDF7npHvL8Dd8MIZuMDg1BWEOuFaoXGZcOL7+EgXtQtXkwnK1qNPTs/T0PaV
+         0MzXs7Dv+V7oy+haVdrN3bDJLxwm400/778tc5PuayHQzKt56RFeHKPSja02oRhd0h6J
+         lx1dp87Ow1VEGW4Rpl6UjrePSDDWnQlOIJ+XbpTN6/nTAXz+EQBgAzbpJZEEfdBq1xIA
+         MjKw==
+X-Gm-Message-State: AO0yUKUZpxTYwuexGlmt5fCKM2S92u78eor5QRZPMIzDUaLb6/znzQRb
+        I5xsPOejqxhxrtIhQngV1BXD4c0PYO8Nv6SVqHk=
+X-Google-Smtp-Source: AK7set9SReYJqmMdKTDQFgJEcWjeR1sx/YfgC5s6Ww86yAmuCIS58tUOaZABW7mWYblo8kSArbUvZZav8S6TxWH2xzs=
+X-Received: by 2002:a0c:cb8f:0:b0:56e:a7f9:2e2a with SMTP id
+ p15-20020a0ccb8f000000b0056ea7f92e2amr270269qvk.80.1676285478540; Mon, 13 Feb
+ 2023 02:51:18 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a02:c8da:0:b0:3c4:aa6f:6de3 with SMTP id
- q26-20020a02c8da000000b003c4aa6f6de3mr3784746jao.136.1676285437668; Mon, 13
- Feb 2023 02:50:37 -0800 (PST)
-Date:   Mon, 13 Feb 2023 02:50:37 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000df2c105f4929eb5@google.com>
-Subject: [syzbot] KMSAN: kernel-infoleak in iommufd_vfio_ioctl
-From:   syzbot <syzbot+cb1e0978f6bf46b83a58@syzkaller.appspotmail.com>
-To:     glider@google.com, iommu@lists.linux.dev, jgg@ziepe.ca,
-        joro@8bytes.org, kevin.tian@intel.com,
-        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
-        syzkaller-bugs@googlegroups.com, will@kernel.org
+Received: by 2002:a0c:e6ea:0:b0:56c:2207:1ed4 with HTTP; Mon, 13 Feb 2023
+ 02:51:17 -0800 (PST)
+Reply-To: ahesterann@gmail.com
+From:   Ann Hester <viktormyasn54@gmail.com>
+Date:   Mon, 13 Feb 2023 02:51:17 -0800
+Message-ID: <CAH5q5bsC=etNj-ZsUQcF7ZHs3LLXX+qMyRmDnBRzh8m5nkxzzg@mail.gmail.com>
+Subject: URGENT
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+-- 
+Hello ,
 
-syzbot found the following issue on:
+I am Ann Hester from Germany but working with a non governmental
+organization here in Lome Togo which am one of the founders.
 
-HEAD commit:    8c89ecf5c13b kmsan: silence -Wmissing-prototypes warnings
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=1592ac0b480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=91d3152219aa6b45
-dashboard link: https://syzkaller.appspot.com/bug?extid=cb1e0978f6bf46b83a58
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+Please i have a proposal I would  like  to offer you that will benefit
+u hugely, if you are interested, kindly get back to me for more
+extensive conversation.
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c9d1327adc33/disk-8c89ecf5.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/8a07e8c41800/vmlinux-8c89ecf5.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/fe36dc6c869b/bzImage-8c89ecf5.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cb1e0978f6bf46b83a58@syzkaller.appspotmail.com
-
-=====================================================
-BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:121 [inline]
-BUG: KMSAN: kernel-infoleak in _copy_to_user+0x1c5/0x270 lib/usercopy.c:33
- instrument_copy_to_user include/linux/instrumented.h:121 [inline]
- _copy_to_user+0x1c5/0x270 lib/usercopy.c:33
- copy_to_user include/linux/uaccess.h:169 [inline]
- iommufd_vfio_iommu_get_info drivers/iommu/iommufd/vfio_compat.c:437 [inline]
- iommufd_vfio_ioctl+0x1e57/0x2330 drivers/iommu/iommufd/vfio_compat.c:462
- iommufd_fops_ioctl+0x254/0xb10 drivers/iommu/iommufd/main.c:315
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0x2dd/0x4b0 fs/ioctl.c:856
- __x64_sys_ioctl+0xdc/0x120 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Local variable info.i created at:
- iommufd_vfio_iommu_get_info drivers/iommu/iommufd/vfio_compat.c:384 [inline]
- iommufd_vfio_ioctl+0x423/0x2330 drivers/iommu/iommufd/vfio_compat.c:462
- iommufd_fops_ioctl+0x254/0xb10 drivers/iommu/iommufd/main.c:315
-
-Bytes 20-23 of 24 are uninitialized
-Memory access of size 24 starts at ffff8880ab237cb0
-Data copied to user address 0000000020000000
-
-CPU: 0 PID: 7156 Comm: syz-executor.5 Not tainted 6.2.0-rc7-syzkaller-80760-g8c89ecf5c13b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-=====================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+ Thanks for your cooperation as I await a response from you.
