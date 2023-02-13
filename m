@@ -2,78 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B50F6693F6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:19:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC6B693F6B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:19:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbjBMITH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 03:19:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
+        id S229854AbjBMITJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 03:19:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbjBMITC (ORCPT
+        with ESMTP id S229584AbjBMITD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 03:19:02 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71BBCDC3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 00:18:56 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id d13-20020a17090ad3cd00b0023127b2d602so11399376pjw.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 00:18:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0F9S1wNTZyJxIrouvIcef18H8doxrRN6lrNngjyJbB4=;
-        b=PUTud1UhAhxH9pliu/gU/vijb4ZPFF6khADtQyuTDBdErHOVDHBJfumeoFfjND0Uq/
-         hdA4cYcEima7/cLeaQuR+FDX+9zwhVfBsBqx0tHBGwYmtCl61Z1dfOR430gt8TFf075E
-         v7rZeBmFs/5XbAoCXInmqzZqVhGyjSXci4m47sWT+2LuGUWdLiGk5J/syANXX08TxjLF
-         KDxMIoHwqNNzAIgNhDipvHS/cQARUQVKYs6MjJuMze8sCdFzjb+pzb6PpyeR09Z2iEU0
-         FILD9XTxG5Ka5C3SRtvC7Amyt3splr1IFe9shhGTHK3dAkG4A50j4nX0wgrbiYx+TKg3
-         Zxpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0F9S1wNTZyJxIrouvIcef18H8doxrRN6lrNngjyJbB4=;
-        b=blRbtgZccjFhwhPBDcyvyBXQzXKAo5y0VDjHZaccgYZ7xTKuKRtnF4zQWt8MFKFAMz
-         iLDQ978xdsGGnq7/mC74WuhL5syexHvJpaBuC+UbyjmD7yVqfvwW0aTkbcyI7U29BsF6
-         kBZlb/WPBCF1CuwuYaBGmHj9LECIoEIpe7g3tSCC5MwdM01XjljVEFgHQyDgtEvXCyUk
-         Drr3w436uDEQP21m3mOI4kLe2C98Z2Mz+soP5gJPZhUVetRUCsDuwOWR0zxV0rQjrQyB
-         TagpTbONQdDXZPojw0w+WB67gM9r0oy4GG4BFlEtbF0bMbIu5L4gB779K/gotgUGaSRX
-         QrXA==
-X-Gm-Message-State: AO0yUKXf/uMUJyEvKbq12TBOewpKGaZgh+p9WUHj3t9xupVCaD7HAGaX
-        M01L+uGbKLzYkkWlYbthWe1lDUzCQtoZKZlk8X+sKg==
-X-Google-Smtp-Source: AK7set94esnAmiFUzb5PBrIHOwtNtLfJWgckJsxpllK6HZZVN2EOz0ZQFXeQxhLkyaitmLKBJpmSBA==
-X-Received: by 2002:a17:902:f68a:b0:198:f160:59a6 with SMTP id l10-20020a170902f68a00b00198f16059a6mr15486517plg.21.1676276336175;
-        Mon, 13 Feb 2023 00:18:56 -0800 (PST)
-Received: from leoy-yangtze.lan (211-75-219-203.hinet-ip.hinet.net. [211.75.219.203])
-        by smtp.gmail.com with ESMTPSA id v22-20020a170902e8d600b001949f21e1d2sm3979480plg.308.2023.02.13.00.18.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 00:18:55 -0800 (PST)
-Date:   Mon, 13 Feb 2023 16:18:50 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Joe Mario <jmario@redhat.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>
-Subject: Re: [PATCH] perf c2c: Add report option to show false sharing in
- adjacent cachelines
-Message-ID: <Y+nyakPnVDpVjn24@leoy-yangtze.lan>
-References: <20230213031733.236485-1-feng.tang@intel.com>
+        Mon, 13 Feb 2023 03:19:03 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA27DBD8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 00:19:01 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B951E33A08;
+        Mon, 13 Feb 2023 08:18:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676276339; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dVnZ7esjSavwyVx5aDMl7nXGYzgJrmRgZ8E0mkjqaU0=;
+        b=pjQXaTSOIZXki8TtiDkPMi9Gk5NmWNQjKOkvzxK1OCRCDZJeWdqX8lGw+QLuv+mQh4rohh
+        DnA6QzbqqfEYgk/sogw1vZomO5CKFlcKoS4ZJt7jEdYVxh/32S9L4dBOFBDZKGB6yoNFPe
+        XYWMCV+zIc6Wz/rsEyI6AF0qJniYb+E=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 87541138E6;
+        Mon, 13 Feb 2023 08:18:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id X0SOH3Py6WP3NQAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 13 Feb 2023 08:18:59 +0000
+Message-ID: <a045836e-25c1-3d9b-b3fa-a212f0432cda@suse.com>
+Date:   Mon, 13 Feb 2023 09:18:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230213031733.236485-1-feng.tang@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] xen: Allow platform PCI interrupt to be shared
+Content-Language: en-US
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        xen-devel <xen-devel@lists.xenproject.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Paul Durrant <paul@xen.org>
+References: <f9a29a68d05668a3636dd09acd94d970269eaec6.camel@infradead.org>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <f9a29a68d05668a3636dd09acd94d970269eaec6.camel@infradead.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------XjEXuqBs0m1ktJEb7SXwGXVm"
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,264 +66,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 11:17:33AM +0800, Feng Tang wrote:
-> Many platforms have feature of adjacent cachelines prefetch, when it
-> is enabled, for data in RAM of 2 cachelines (2N and 2N+1) granularity,
-> if one is fetched to cache, the other one could likely be fetched too,
-> which sort of extends the cacheline size to double, thus the false
-> sharing could happens in adjacent cachelines.
-> 
-> 0Day has captured performance changed related with this [1], and some
-> commercial software explicitly makes its hot global variables 128 bytes
-> aligned (2 cache lines) to avoid this kind of extended false sharing.
-> 
-> So add an option "-a" or "--double-cl" for c2c report to show false
-> sharing in double cache line granularity, which acts just like the
-> cacheline size is doubled. There is no change to c2c record. The
-> hardware HITM events are still per cacheline. The option just changes
-> the granularity of how events are grouped and displayed.
-> 
-> In the c2c report below (will-it-scale's pagefault2 case on old kernel):
-> 
->   ----------------------------------------------------------------------
->      26       31        2        0        0        0  0xffff888103ec6000
->   ----------------------------------------------------------------------
->    35.48%   50.00%    0.00%    0.00%    0.00%   0x10     0       1  0xffffffff8133148b      1153        66       971     3748        74  [k] get_mem_cgroup_from_mm
->     6.45%    0.00%    0.00%    0.00%    0.00%   0x10     0       1  0xffffffff813396e4       570         0      1531      879        75  [k] mem_cgroup_charge
->    25.81%   50.00%    0.00%    0.00%    0.00%   0x54     0       1  0xffffffff81331472       949        70       593     3359        74  [k] get_mem_cgroup_from_mm
->    19.35%    0.00%    0.00%    0.00%    0.00%   0x54     0       1  0xffffffff81339686      1352         0      1073     1022        74  [k] mem_cgroup_charge
->     9.68%    0.00%    0.00%    0.00%    0.00%   0x54     0       1  0xffffffff813396d6      1401         0       863      768        74  [k] mem_cgroup_charge
->     3.23%    0.00%    0.00%    0.00%    0.00%   0x54     0       1  0xffffffff81333106       618         0       804       11         9  [k] uncharge_batch
-> 
-> The offset 0x10 and 0x54 used to displayed in 2 groups, and now they
-> are listed together to give users a hint.
-> 
-> [1]. https://lore.kernel.org/lkml/20201102091543.GM31092@shao2-debian/
-> 
-> Signed-off-by: Feng Tang <feng.tang@intel.com>
-> Reviewed-by: Andi Kleen <ak@linux.intel.com>
-> ---
->  tools/perf/Documentation/perf-c2c.txt |  6 ++++++
->  tools/perf/builtin-c2c.c              | 22 +++++++++++++---------
->  tools/perf/util/cacheline.h           | 25 ++++++++++++++++++++-----
->  tools/perf/util/sort.c                | 13 ++++++++++---
->  tools/perf/util/sort.h                |  1 +
->  5 files changed, 50 insertions(+), 17 deletions(-)
-> 
-> diff --git a/tools/perf/Documentation/perf-c2c.txt b/tools/perf/Documentation/perf-c2c.txt
-> index 5c5eb2def83e..a8e1e40d270e 100644
-> --- a/tools/perf/Documentation/perf-c2c.txt
-> +++ b/tools/perf/Documentation/perf-c2c.txt
-> @@ -126,6 +126,12 @@ REPORT OPTIONS
->  	The known limitations include exception handing such as
->  	setjmp/longjmp will have calls/returns not match.
->  
-> +-a::
-> +--double-cl::
-> +	Group HITM events in double cacheline granularity. Some architecture
-> +	has Adjacent Cacheline Prefetch feature, which behaves like the
-> +	cachline size is doubled.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------XjEXuqBs0m1ktJEb7SXwGXVm
+Content-Type: multipart/mixed; boundary="------------sc7du0J3EGAH8GCtz6wUalHX";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: David Woodhouse <dwmw2@infradead.org>,
+ Stefano Stabellini <sstabellini@kernel.org>,
+ xen-devel <xen-devel@lists.xenproject.org>, linux-kernel@vger.kernel.org,
+ Thomas Gleixner <tglx@linutronix.de>, Paul Durrant <paul@xen.org>
+Message-ID: <a045836e-25c1-3d9b-b3fa-a212f0432cda@suse.com>
+Subject: Re: [PATCH] xen: Allow platform PCI interrupt to be shared
+References: <f9a29a68d05668a3636dd09acd94d970269eaec6.camel@infradead.org>
+In-Reply-To: <f9a29a68d05668a3636dd09acd94d970269eaec6.camel@infradead.org>
 
-Sorry I gave my review tags too quick...
+--------------sc7du0J3EGAH8GCtz6wUalHX
+Content-Type: multipart/mixed; boundary="------------TeW6mhYtv2gyTu4GdSJwXTix"
 
-Just found several typos, please fix it.
+--------------TeW6mhYtv2gyTu4GdSJwXTix
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-s/Some architecture has/Some architectures have
+T24gMTguMDEuMjMgMTM6MjIsIERhdmlkIFdvb2Rob3VzZSB3cm90ZToNCj4gRnJvbTogRGF2
+aWQgV29vZGhvdXNlIDxkd213QGFtYXpvbi5jby51az4NCj4gDQo+IFdoZW4gd2UgZG9uJ3Qg
+dXNlIHRoZSBwZXItQ1BVIHZlY3RvciBjYWxsYmFjaywgd2UgYXNrIFhlbiB0byBkZWxpdmVy
+IGV2ZW50DQo+IGNoYW5uZWwgaW50ZXJydXB0cyBhcyBJTlR4IG9uIHRoZSBQQ0kgcGxhdGZv
+cm0gZGV2aWNlLiBBcyBzdWNoLCBpdCBjYW4gYmUNCj4gc2hhcmVkIHdpdGggSU5UeCBvbiBv
+dGhlciBQQ0kgZGV2aWNlcy4NCj4gDQo+IFNldCBJUlFGX1NIQVJFRCwgYW5kIG1ha2UgaXQg
+cmV0dXJuIElSUV9IQU5ETEVEIG9yIElSUV9OT05FIGFjY29yZGluZyB0bw0KPiB3aGV0aGVy
+IHRoZSBldnRjaG5fdXBjYWxsX3BlbmRpbmcgZmxhZyB3YXMgYWN0dWFsbHkgc2V0LiBOb3cg
+SSBjYW4gc2hhcmUNCj4gdGhlIGludGVycnVwdDoNCj4gDQo+ICAgMTE6ICAgICAgICAgODIg
+ICAgICAgICAgMCAgIElPLUFQSUMgIDExLWZhc3Rlb2kgICB4ZW4tcGxhdGZvcm0tcGNpLCBl
+bnM0DQo+IA0KPiBEcm9wIHRoZSBJUlFGX1RSSUdHRVJfUklTSU5HLiBJdCBoYXMgbm8gZWZm
+ZWN0IHdoZW4gdGhlIElSUSBpcyBzaGFyZWQsDQo+IGFuZCBiZXNpZGVzLCB0aGUgb25seSBl
+ZmZlY3QgaXQgd2FzIGhhdmluZyBldmVuIGJlZm9yZWhhbmQgd2FzIHRvIHRyaWdnZXINCj4g
+YSBkZWJ1ZyBtZXNzYWdlIGluIGJvdGggSS9PQVBJQyBhbmQgbGVnYWN5IFBJQyBjYXNlczoN
+Cj4gDQo+IFsgICAgMC45MTU0NDFdIGdlbmlycTogTm8gc2V0X3R5cGUgZnVuY3Rpb24gZm9y
+IElSUSAxMSAoSU8tQVBJQykNCj4gWyAgICAwLjk1MTkzOV0gZ2VuaXJxOiBObyBzZXRfdHlw
+ZSBmdW5jdGlvbiBmb3IgSVJRIDExIChYVC1QSUMpDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBE
+YXZpZCBXb29kaG91c2UgPGR3bXdAYW1hem9uLmNvLnVrPg0KDQpQdXNoZWQgdG86IHhlbi90
+aXAuZ2l0IGZvci1saW51cy02LjMNCg0KDQpKdWVyZ2VuDQoNCg==
+--------------TeW6mhYtv2gyTu4GdSJwXTix
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-This is just literal fixing, except x86, I don't know if any other
-architecture has Adjacent Cacheline Prefetch feature :)
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-s/cachline/cacheline
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-> +
->  C2C RECORD
->  ----------
->  The perf c2c record command setup options related to HITM cacheline analysis
-> diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
-> index 52d94c7dd836..7d495db7e5a2 100644
-> --- a/tools/perf/builtin-c2c.c
-> +++ b/tools/perf/builtin-c2c.c
-> @@ -524,7 +524,7 @@ static int dcacheline_entry(struct perf_hpp_fmt *fmt, struct perf_hpp *hpp,
->  	char buf[20];
->  
->  	if (he->mem_info)
-> -		addr = cl_address(he->mem_info->daddr.addr);
-> +		addr = cl_address(he->mem_info->daddr.addr, chk_double_cl);
->  
->  	return scnprintf(hpp->buf, hpp->size, "%*s", width, HEX_STR(buf, addr));
->  }
-> @@ -562,7 +562,7 @@ static int offset_entry(struct perf_hpp_fmt *fmt, struct perf_hpp *hpp,
->  	char buf[20];
->  
->  	if (he->mem_info)
-> -		addr = cl_offset(he->mem_info->daddr.al_addr);
-> +		addr = cl_offset(he->mem_info->daddr.al_addr, chk_double_cl);
->  
->  	return scnprintf(hpp->buf, hpp->size, "%*s", width, HEX_STR(buf, addr));
->  }
-> @@ -574,9 +574,10 @@ offset_cmp(struct perf_hpp_fmt *fmt __maybe_unused,
->  	uint64_t l = 0, r = 0;
->  
->  	if (left->mem_info)
-> -		l = cl_offset(left->mem_info->daddr.addr);
-> +		l = cl_offset(left->mem_info->daddr.addr, chk_double_cl);
-> +
->  	if (right->mem_info)
-> -		r = cl_offset(right->mem_info->daddr.addr);
-> +		r = cl_offset(right->mem_info->daddr.addr, chk_double_cl);
->  
->  	return (int64_t)(r - l);
->  }
-> @@ -2590,7 +2591,7 @@ perf_c2c_cacheline_browser__title(struct hist_browser *browser,
->  	he = cl_browser->he;
->  
->  	if (he->mem_info)
-> -		addr = cl_address(he->mem_info->daddr.addr);
-> +		addr = cl_address(he->mem_info->daddr.addr, chk_double_cl);
->  
->  	scnprintf(bf, size, "Cacheline 0x%lx", addr);
->  	return 0;
-> @@ -2788,15 +2789,16 @@ static int ui_quirks(void)
->  	if (!c2c.use_stdio) {
->  		dim_offset.width  = 5;
->  		dim_offset.header = header_offset_tui;
-> -		nodestr = "CL";
-> +		nodestr = chk_double_cl ? "Double-CL" : "CL";
->  	}
->  
->  	dim_percent_costly_snoop.header = percent_costly_snoop_header[c2c.display];
->  
->  	/* Fix the zero line for dcacheline column. */
-> -	buf = fill_line("Cacheline", dim_dcacheline.width +
-> -				     dim_dcacheline_node.width +
-> -				     dim_dcacheline_count.width + 4);
-> +	buf = fill_line(chk_double_cl ? "Double-Cacheline" : "Cacheline",
-> +				dim_dcacheline.width +
-> +				dim_dcacheline_node.width +
-> +				dim_dcacheline_count.width + 4);
->  	if (!buf)
->  		return -ENOMEM;
->  
-> @@ -3037,6 +3039,8 @@ static int perf_c2c__report(int argc, const char **argv)
->  	OPT_BOOLEAN('f', "force", &symbol_conf.force, "don't complain, do it"),
->  	OPT_BOOLEAN(0, "stitch-lbr", &c2c.stitch_lbr,
->  		    "Enable LBR callgraph stitching approach"),
-> +	OPT_BOOLEAN('a', "double-cl", &chk_double_cl,
-> +		    "Check adjacent cachline false sharing"),
+--------------TeW6mhYtv2gyTu4GdSJwXTix--
 
-I personally think the word "Detect" is better than "Check".
+--------------sc7du0J3EGAH8GCtz6wUalHX--
 
-s/cachline/cacheline
+--------------XjEXuqBs0m1ktJEb7SXwGXVm
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
->  	OPT_PARENT(c2c_options),
->  	OPT_END()
->  	};
-> diff --git a/tools/perf/util/cacheline.h b/tools/perf/util/cacheline.h
-> index dec8c0fb1f4a..630d16731b4f 100644
-> --- a/tools/perf/util/cacheline.h
-> +++ b/tools/perf/util/cacheline.h
-> @@ -6,16 +6,31 @@
->  
->  int __pure cacheline_size(void);
->  
-> -static inline u64 cl_address(u64 address)
-> +
-> +/*
-> + * Some architecture has 'Adjacent Cacheline Prefetch' feature,
+-----BEGIN PGP SIGNATURE-----
 
-s/Some architecture has/Some architectures have
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPp8nMFAwAAAAAACgkQsN6d1ii/Ey9Q
+XQgAkeN5Ytwitra2Jv+KFtnD/SZfWvMnS6Gq0ml4iVdxUwKen+2jpZmczoCovziPt7hzUJSl9JiU
+TVTOrNG4mqPgHnhODHjRLI4dGpzM1evLusKbS5fMODi6HPQAzKQ5R/qp7y2NQQKnVhn7z3S8bXzb
+j7jO+P0f5n6FwR080IoGNmdMoB2d9LUYuQGu5wyrFP1qZ85fA1dTtrQaNugHF8fjEnk+jcMYw+re
+mxeWKANCdL1u20egHPZH30P4wZHvSLKzNGwH3Ep4/f+f8Oadm5p9ECc3MRlJ6bjrlRiq0c1yVczD
+UAZGCqpKexhEM7kWWq1PjAwow8xgHyuL6e29ENcVvQ==
+=zttk
+-----END PGP SIGNATURE-----
 
-> + * which performs like the cacheline size being doubled.
-> + */
-> +static inline u64 cl_address(u64 address, bool double_cl)
->  {
-> +	u64 size = cacheline_size();
-> +
-> +	if (double_cl)
-> +		size *= 2;
-> +
->  	/* return the cacheline of the address */
-> -	return (address & ~(cacheline_size() - 1));
-> +	return (address & ~(size - 1));
->  }
->  
-> -static inline u64 cl_offset(u64 address)
-> +static inline u64 cl_offset(u64 address, bool double_cl)
->  {
-> -	/* return the cacheline of the address */
-> -	return (address & (cacheline_size() - 1));
-> +	u64 size = cacheline_size();
-> +
-> +	if (double_cl)
-> +		size *= 2;
-> +
-> +	/* return the offset inside cachline */
-
-s/cachline/cacheline
-
-> +	return (address & (size - 1));
->  }
->  
->  #endif // PERF_CACHELINE_H
-> diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
-> index e188f74698dd..148b28f0a7e2 100644
-> --- a/tools/perf/util/sort.c
-> +++ b/tools/perf/util/sort.c
-> @@ -52,6 +52,13 @@ enum sort_mode	sort__mode = SORT_MODE__NORMAL;
->  static const char *const dynamic_headers[] = {"local_ins_lat", "ins_lat", "local_p_stage_cyc", "p_stage_cyc"};
->  static const char *const arch_specific_sort_keys[] = {"local_p_stage_cyc", "p_stage_cyc"};
->  
-> +/*
-> + * Some architecture has Adjacent Cacheline Prefetch feature, which behaves
-> + * like the cachline size is doubled. Enable this flag to check things in
-
-s/Some architecture has/Some architectures have
-s/cachline/cacheline
-
-With these typo fixes, you could add my reviewed and tested tags.
-
-Thanks,
-Leo
-
-> + * double cacheline granularity.
-> + */
-> +bool chk_double_cl;
-> +
->  /*
->   * Replaces all occurrences of a char used with the:
->   *
-> @@ -1499,8 +1506,8 @@ sort__dcacheline_cmp(struct hist_entry *left, struct hist_entry *right)
->  
->  addr:
->  	/* al_addr does all the right addr - start + offset calculations */
-> -	l = cl_address(left->mem_info->daddr.al_addr);
-> -	r = cl_address(right->mem_info->daddr.al_addr);
-> +	l = cl_address(left->mem_info->daddr.al_addr, chk_double_cl);
-> +	r = cl_address(right->mem_info->daddr.al_addr, chk_double_cl);
->  
->  	if (l > r) return -1;
->  	if (l < r) return 1;
-> @@ -1519,7 +1526,7 @@ static int hist_entry__dcacheline_snprintf(struct hist_entry *he, char *bf,
->  	if (he->mem_info) {
->  		struct map *map = he->mem_info->daddr.ms.map;
->  
-> -		addr = cl_address(he->mem_info->daddr.al_addr);
-> +		addr = cl_address(he->mem_info->daddr.al_addr, chk_double_cl);
->  		ms = &he->mem_info->daddr.ms;
->  
->  		/* print [s] for shared data mmaps */
-> diff --git a/tools/perf/util/sort.h b/tools/perf/util/sort.h
-> index 921715e6aec4..04f0a6dc7381 100644
-> --- a/tools/perf/util/sort.h
-> +++ b/tools/perf/util/sort.h
-> @@ -35,6 +35,7 @@ extern struct sort_entry sort_sym_from;
->  extern struct sort_entry sort_sym_to;
->  extern struct sort_entry sort_srcline;
->  extern const char default_mem_sort_order[];
-> +extern bool chk_double_cl;
->  
->  struct res_sample {
->  	u64 time;
-> -- 
-> 2.30.2
-> 
+--------------XjEXuqBs0m1ktJEb7SXwGXVm--
