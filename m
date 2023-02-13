@@ -2,965 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36D5694C7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB6C694C80
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbjBMQXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 11:23:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
+        id S230458AbjBMQXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 11:23:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbjBMQWx (ORCPT
+        with ESMTP id S230305AbjBMQWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 11:22:53 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9831E2BE
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:22:39 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id h4so1976768ile.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:22:39 -0800 (PST)
+        Mon, 13 Feb 2023 11:22:54 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 896CB1E2A2;
+        Mon, 13 Feb 2023 08:22:44 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DF43Nm028366;
+        Mon, 13 Feb 2023 16:22:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=FDaTDQg1rW+LlgrMINWC28sg8HDQb4nJuGCyPqDRVOU=;
+ b=EoIcTlieiokfMGyczBh3nX1a1mmH1pgJ0AbhDcYgsCBxuPXNuPF0RPaJ4vkNErvkKffI
+ IZc37UEIGVzgzxvGyhrHhYDM2XZlOUqUPAz43tG96EEPBuQ5MnNXXMiyu/m6M7ZsSWSz
+ q89FXmAxML4O2FxmVB0fp0E+2CjiH1h0dozikg253fxFJqT5X46somrxhI9ChLeo3nFm
+ nvEz0XVfmK7Uooerf6aDeFf6imlvhg69TI47jba+VTIBqv4G6CaL/ONGKTcbhs6jjN7z
+ ug1b/RnVRW4Aju/HhzGiD8XIw4Ux4caG2Lj6eAaI1EwpC57rwFXjMdvhFnwdM4GRCWdo TQ== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np3jtu5n4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Feb 2023 16:22:41 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31DFFfk9011554;
+        Mon, 13 Feb 2023 16:22:40 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2171.outbound.protection.outlook.com [104.47.57.171])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3np1f4bcxa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Feb 2023 16:22:40 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QvkiyiwX6jl9cFeb4YljQlvozNQa2FQE+SEr8vMM3DwbWB9YyWWwlmlu1k3hcbsotTzllW7P0JRkRMwa8mUzDtUecT+PBrSGMKv2W/KWHEIszPLMOgLWz+0+sdqzMq5WuYcmyXVzRJL7goEo80TBLQyx0IlPQKxq3xmpef8jggmy703qr4d/Sr8/qzOiKWvIg2YYnSdxlAwFzd92ndQpjcD52CcRAl/rMt7Ei5Ac2liYn5ky9Rkjazm1vGzHNt1SMboxpPMAkgo8cx76le/EZwQjlRv+lxkzjdGgSrdyPs7q5q+aa+HcgXgt5mU3u3ocMCrpE3bsYGtKdbjj68jpBg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FDaTDQg1rW+LlgrMINWC28sg8HDQb4nJuGCyPqDRVOU=;
+ b=MtImgdqMIlaLV0EnOueRyFZsNN9icm3808EvbHItJbE5CW+Aej13BkzWFpObjX2MArrS5/zt0Vo+AzUUIzE4XeNGO+BzFlrSJtXub3LoIYHI6rJQ8/RfOjP1LUcDpif7rDveE1TNsuxfw9aYpRFHs7+oH7or/bLWFVUMnsjlJkwy335NwweU0zRWVP9LCzaydKFoWht/cmcZwfbsKakz+9VG/GDDro21CZis/3+N1nVdlWa5nBoHUu7nQVg1/VWBrFd5koHtbn9q0j/KUy/gErxmp4tyhQcn0nAJm36xZQxalqVHkdfcqbszwNJUcAKXOfzCgj7GQ5MgXg5MYF6vtg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T02k0sZvGTc2Ga3VgHJTCOmo+PnWR/qywvn7NZcCawI=;
-        b=kILuKtT2z1D+vp+SYv2To3HxDijOJmfdgIccyz18Ks7pz42LjsJUZ+V5RKp58i0Cpo
-         kW9nskmREzbNXkcd1S+044ViUglZZf2vMTUoiZT+Hps8/jgs1aUMrFHCKHiv/83Kn4l3
-         ac2+UcADzKrjzKn+EWX1iLpL+vZn3fpI36YEN7inaIe8zIp0Aew4xP+f0wSSCWt/v2RJ
-         7Thz4OmU+sgIOd08jRAciNQQp+MzzW6fIW0/rW9m/IMULSawcG6lVpmHvzYi8mBAh5A1
-         PnaQtNx0dDOx4QFMD4tstqApm+BLACHjSY3JLLepy7wX3Az8jYKm3xjMrfR6NgiiJhsa
-         /z4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T02k0sZvGTc2Ga3VgHJTCOmo+PnWR/qywvn7NZcCawI=;
-        b=YFb+7jFllafrbI9N0f8jBq4usEWrpvz+Om6kAYq0x4sU+6zyHuDXATL6DO7caRx2Po
-         Xq5wWH2Q1oLqgLpjb4gJx2hW2rF+8u/f7FdO3jZyHdwPrKpd2ZAZ6+hRT1cAaZ6RNnHX
-         tR6Nw4Ssa43xIoJ4atV9vPkGT71Fai/ROi7DMqAzNUdYQXjSk6F+bZnM3vEbmPNwr0r6
-         IS8CIurxtTh94q0pupFqKYzX0gLvdavI9Apj5ZzUjgNmFqmyTZM8pid31nnYQcB/VWqM
-         gvtA5RyZRY4F+3fVifuXYbgG8TdU2723KY09FSZ6lZIFdTHOCnfYWXGnKiGdAVgarCjP
-         ZIqw==
-X-Gm-Message-State: AO0yUKV87xL1btlOlfX6mMzNDJhZsvH1CwWYFJ71f4aiEQUxytW6g2mq
-        0pnbfpXnuwmVb//jqn+i1JgDKQ==
-X-Google-Smtp-Source: AK7set8sKA/0lOYyOc9z/2rVfD0Ym3HegyR8rXO1P7W1fvHjsiQ8aYJn8T/BwHPXeFaqCFPHAI3GbQ==
-X-Received: by 2002:a05:6e02:1d9b:b0:313:8ab0:1600 with SMTP id h27-20020a056e021d9b00b003138ab01600mr28032912ila.24.1676305359374;
-        Mon, 13 Feb 2023 08:22:39 -0800 (PST)
-Received: from presto.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id x17-20020a92dc51000000b00313cbba0455sm1457831ilq.8.2023.02.13.08.22.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 08:22:39 -0800 (PST)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
-        andersson@kernel.org, quic_cpratapa@quicinc.com,
-        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
-        quic_subashab@quicinc.com, elder@kernel.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 6/6] net: ipa: define fields for remaining GSI registers
-Date:   Mon, 13 Feb 2023 10:22:29 -0600
-Message-Id: <20230213162229.604438-7-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230213162229.604438-1-elder@linaro.org>
-References: <20230213162229.604438-1-elder@linaro.org>
-MIME-Version: 1.0
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FDaTDQg1rW+LlgrMINWC28sg8HDQb4nJuGCyPqDRVOU=;
+ b=WzwGSkC4cOMaNF7I3v9Y+YxzcYzCy+VvKzHhkJMLhbpiyvbKZQbRvLb0x0RrfQ46i7tBiwvE7GRczUeQuTbhp+6AQisKxKTi3kxXp46N4ozHSxHg+Anjgf1o26hTmvQyQUETPI2FCk1uvqo8tUnbED244USOuusZryy2pgq7dxE=
+Received: from DM5PR10MB1466.namprd10.prod.outlook.com (2603:10b6:3:b::7) by
+ DS0PR10MB7400.namprd10.prod.outlook.com (2603:10b6:8:138::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6111.9; Mon, 13 Feb 2023 16:22:39 +0000
+Received: from DM5PR10MB1466.namprd10.prod.outlook.com
+ ([fe80::c888:aca:1eb9:ca4f]) by DM5PR10MB1466.namprd10.prod.outlook.com
+ ([fe80::c888:aca:1eb9:ca4f%5]) with mapi id 15.20.6111.010; Mon, 13 Feb 2023
+ 16:22:38 +0000
+Message-ID: <2fea4b28-e441-6c77-5bb6-97428c19179f@oracle.com>
+Date:   Mon, 13 Feb 2023 10:22:37 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH] scsi: target: iscsi: set memalloc_noio with loopback
+ network connections
+To:     Maurizio Lombardi <mlombard@redhat.com>,
+        David Jeffery <djeffery@redhat.com>
+Cc:     target-devel@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Laurence Oberman <loberman@redhat.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230208200957.14073-1-djeffery@redhat.com>
+ <CAFL455kEoLQF+vc2MGmtLdrQ-=U+HJzqgknZmM54iCPJD1p_mA@mail.gmail.com>
+Content-Language: en-US
+From:   Mike Christie <michael.christie@oracle.com>
+In-Reply-To: <CAFL455kEoLQF+vc2MGmtLdrQ-=U+HJzqgknZmM54iCPJD1p_mA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: DM6PR13CA0062.namprd13.prod.outlook.com
+ (2603:10b6:5:134::39) To DM5PR10MB1466.namprd10.prod.outlook.com
+ (2603:10b6:3:b::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM5PR10MB1466:EE_|DS0PR10MB7400:EE_
+X-MS-Office365-Filtering-Correlation-Id: a44d79cb-0337-452e-3009-08db0dde8610
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 96XlKD0u8MdR/KB51lALnTtrduJCsowMjBtK1Zwp7wf8Mw53Bi3nhcS1+lvN7a7L5SLNwWzMBGYfA/FyPtmS1ml1/OyNFZb7ej7Xvrz13ZegiEHVqT12Zu2QtGwo3WtOJ6xsRrtS1QI4PyHpKaw8O6I4N+QUboN6pBdw+MXAabpZt0jB9YZY5RlIYvGUE7QGkuGsSCuOOpM3wa13UnVPrmebuEu8JYFe1mMlpIW9Kl03r/KQRgr0XA6PV/neXPSHZTQBXVNQqLPzHzaT0RraBT42jbFssVLqw930El2MNy8QmKaK9ZuNRj5/Q/RRBawQgZzXBU9mDzolrDWaTmFNlIkCLXqWUGlVsAO3CrR9UtGWtAyuxkhs7UnKmqdY+ZA8U8J/aiFAOm1C3SHFpv0QMO/JlhaG58fqEcv9Ncyx2wAR3j6vFHEhDFE0F6N3uvL1f94yH3+PE5yw9lkpDbQTEGgfKI8jrKfrm567A8xYE94Hw1A62zpBTy90khVjCfMyprjQj9dfaIxgJ8oiVeLPpX8hTEErxpJozERKvX/ubj8qJ3dWKMMQL1zJSnm2zEUGObVqv6Q5JRcEJMpZnN1s9xL+6+wdUZzErgvx1F81K4oia45wOguICKNlN2xKWnFVK+NAbssQpOwDVLWWciGooUZP2d2mw1mzdYnvmGcAMewHbCDnC8QdX202LoFLlEEENBFSwEjqhK2dbgq/8bG+/NPHhGiD0dpqPbZkeldbPWM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(346002)(366004)(39860400002)(136003)(396003)(451199018)(31686004)(83380400001)(31696002)(86362001)(36756003)(4326008)(66556008)(8676002)(66946007)(38100700002)(2616005)(66476007)(66574015)(6506007)(54906003)(26005)(186003)(478600001)(6486002)(110136005)(53546011)(8936002)(5660300002)(316002)(6512007)(2906002)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?emZTaGc2MU9TOXJaUmpyL0Z3NENDc3RRbDJ5MFhmcVp0QlAwNm1GbHltWTZQ?=
+ =?utf-8?B?UkFkL1NMbkpJd0p3dVgwajYvajBydldWUjYwVHkzV2VxbUlMSDVWMlhiSmJw?=
+ =?utf-8?B?L29Ga245VWNyTEgyQ2lMSGY1dEpFRElkNU0yVVBmOWw4L3NqdHhYNERYMlJC?=
+ =?utf-8?B?aGp4MEtqeVhSaW5vamkrSVRkVnFiRTdIUk1xLy82d3d4U1Q5QzJ5azc1Yzhl?=
+ =?utf-8?B?WTZkRzFTQUVMN0k5MHF2YXl5d1I5OE5KT1U2N3FLTlJhVHpzK2t4OHdiTmho?=
+ =?utf-8?B?OENrUmYzbS90QWlkZzNieXdMOE1oRC84eSszVE9sVnJaU0oxb3ZTUy8waWpw?=
+ =?utf-8?B?Lys3bEh0Y283NjVGbkdNRHdPT3Y0Wk1QZ1JYRGFvNHEzOWE4TGIybW9jZkZL?=
+ =?utf-8?B?UEdmdXYyZTJvRDJpVmtKb1JxNnZuL2J2cE5obzAwRTNwR2hzR0ltT1ZIQlph?=
+ =?utf-8?B?VzJFUmdHSUFlVm9sN01tS1lIYWNWc3VoSTdrOTBwdlB5dzhOODZFbUxkWDNo?=
+ =?utf-8?B?WEE0allRc3Z5MkV3QW5TbjQwanQwRnl5NlpaaVlZVGtZeW1BdnZCd2xnMGxF?=
+ =?utf-8?B?TUZIVWRmUTFsL1hOdVFaZnNRRkUyOFdBUnFYcmhkdnluSWIwMjJiY3JGUWpO?=
+ =?utf-8?B?WXVuMUVWV09BYkNvVXp3K0cxVG9UMXdXcEtERzVqMiswUnQ5UlRLWDI3YlBu?=
+ =?utf-8?B?bEFtLy9PN3lncWYwaDY1c2JWMnk1RnBMbnhXb3JHNEVJMXdWeWsvT2FUUUl0?=
+ =?utf-8?B?YmZLa3RLTGxDZFVhY3dxbzVuWllwcnpiUEVScnVnNG5KM1RocTd0MlB6QXVE?=
+ =?utf-8?B?Y1h3bW5yTVNNMk4ydEFGcitGSFJ2K3k1ZzYybE14aDl1L0NtemQ5MHViMEF3?=
+ =?utf-8?B?ZXVoMGtOcERvR3NZUGgzY2w0UWdqYUF4N3R1Q1NETlRWVnRUSUVNdmVrRmMr?=
+ =?utf-8?B?WVhJWXlMWWw0eldPYW9SbTdaeDhHYXdacmloOXZxdnpGY3F0OGdaU3dHSnFw?=
+ =?utf-8?B?dFFRN3RleHJlRFdxY2ZLMzZZelpkRG93UzIrbFduQjlacWxEQ0lNVUpXRXlH?=
+ =?utf-8?B?VmtxajJjMDRHSyswZDJuRFV1Y3pBUmdjdUE4UVY3SE55U0NhY3FhYWFYbmpI?=
+ =?utf-8?B?Ly94c2tRcGxBclVIVklNQzhMQ3pVWkRYSTlIU0labFlzdEhKcW1qTmpiMThw?=
+ =?utf-8?B?b0JoS0VkejEyMURmK3I4OXJ2ZUdzQmpQS0hOQWw1Uk1TZS93TVl1UmN0bW5h?=
+ =?utf-8?B?UVExbS9Yb0JYNm9rRVFoSXdLRHhOWEhlQnF6WGZjZDhEWXIxTDZCeUlyS3Y1?=
+ =?utf-8?B?OG9FekFxT0c1czc4RWZWTlIzMk5vOE1aZ1RxYTBMWVFhYUp1MHR6clBuSG1v?=
+ =?utf-8?B?eThZWkw1VU9scEtaTCtDS3B3RjBRYVdWQzJYbkptWlVhTWRJUEU1azdIT1pD?=
+ =?utf-8?B?RVdBQzBsODN3eklBQ1BnUVJpc2UvU1NzVC9rTEsyYkRPbTNncWs4bWNjampQ?=
+ =?utf-8?B?c0trY1JiU0VJNkJqTXllMzB6RjA2ZG1tUS8zL3dCdEZabnozZlhDQk5zc1Ar?=
+ =?utf-8?B?OUdzL1k5dmo2ZG1IOWU4K2RRSnRNck1MMVlEdldjZWdtMC9nRzBVNHZ0TG8x?=
+ =?utf-8?B?eDdKMzNRYkxhVUpUVkRXTVYvakNRSWJwcVUyV2RCcEdrSFRpNFluSlc1d0lB?=
+ =?utf-8?B?TE5WcVd1a1RvTFpmM09qNDlhMjhQYityWUxWUTNKMFVWaW44NUpmSFRPVTFs?=
+ =?utf-8?B?clFUMUlyTWQ4aHRRRWRRT0hSR3pxNnJXVDZHVWhwS3dxaXZ2dWRLaEVDejNv?=
+ =?utf-8?B?cUZnNi9PRDF3K1BuNC8xYU9YN1pkc3IrMHl0TCtQUWZ5R3NETHlqQnluR1pQ?=
+ =?utf-8?B?WE0vb1JmRytZbW95b2syMkNPQms2Zzc2Z0pDS2FtbXVSdVVsR0RWL2QvRFN6?=
+ =?utf-8?B?S2tsODlsL0ZLSXhoaHdTTWJEMzZSYjNiTUgyU205azZNWXVneE12RVQzQkFK?=
+ =?utf-8?B?anhMOCtwMjZVNHFIV0dUUUdWSk9iNHlCSG1PbEh4Ni9KV3ZLOHdnSEhZWVYz?=
+ =?utf-8?B?anladW9hb08yTGRQNjN0SGR5T2JYcXVZM2pYb3cyZU93NjVRcHIyMm5IeWpT?=
+ =?utf-8?B?M2cwZ3RlL1FTZklZL1VlajNuT1l6a244NjVFczY2U2hseFBlaGJ2QkxTRHZw?=
+ =?utf-8?B?aVE9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 4qnaBjMzIEY5sPfE2jroZqnMkFx/3NyfNkJEYXci4OSmjt5ci4Yi2mYo2bzrILpGxvtxKgDHHPjE8RKVBQ8q130vK/oX7n0JRfZElW/s1XQp60Loi2xiCcVYx2yz4GhUoyeLvR8p6W/OkOx9PFHI7uilAzZ4M3XWGAtVRxQpaCeiTq2/CU6QzRTcghG5aYo9YsrTuitJju3y+L9BdFvqWTj6FgJZlho0lc0bQe+JxTNsWucqAiXeb/szBo9EBy/4gwKXArVmOJu3N0JGflueTWb3fR6rgTa5VKdDzRACG75Wys/kE/TLppMtw0uGp0VIU+92rMcdo0cCsn5Y4xtXGf5UChCPVqlRdecq51jw2KQFWXq1o/nZ01Dj8BIArkp8rLh+OflV4xQrocMo3Y3gON1ccHa0raFWEhki/zRZm7AuO3goeK25IjwalXZ+8sbURnV2nXvxaWQqEx7IWuQI4/i4AMJX78soCZFsQUPZi8nj9iX0hLrgNt38yuV4ENZbQ1RGjkkuemgEbMQXaMEm7VAKiLeajCRb9lP9Q3JK41xZwKSfrDN4DzM93zlMN0Ex/sBDEdcpy8nNu0wrJb8mV6tyqPHTdqCltof6zAcS8Fzv/2A5B62AlkWJDuJCw7P392x6So3yGMfOFQoygcLXw30zRUDG2iOzypN3x8bX3v1sbcUAfRNxbYvn2i4jcHz+uZGghsVHD4vWfigj6M80lDZvA/dG2p6VsG0SUtv4FTiHgJtZbo9BarGfwjNn3aJXHDkqpQFBAw/Umfg9qrbxcL+7sz1dF43M8wsL1eMU8Ik=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a44d79cb-0337-452e-3009-08db0dde8610
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR10MB1466.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2023 16:22:38.8040
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vUolyhuxv1VchSkuhamsSakpLOPKAdiBEHeav+GBNopTw/BYe5ptGDc8Sur9crYHOHOq42KOX43SeUXEEHvzDA5rFWNfrscMbaNk41o7WTA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB7400
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-13_11,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0
+ suspectscore=0 mlxscore=0 spamscore=0 mlxlogscore=999 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302130148
+X-Proofpoint-ORIG-GUID: 7BZDSNG9MPvZyd1rEYFEDprrZgrGxeMA
+X-Proofpoint-GUID: 7BZDSNG9MPvZyd1rEYFEDprrZgrGxeMA
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Define field IDs for the remaining GSI registers, and populate the
-register definition files accordingly.  Use the reg_*() functions to
-access field values for those regiters, and get rid of the previous
-field definition constants.
+On 2/13/23 5:59 AM, Maurizio Lombardi wrote:
+> st 8. 2. 2023 v 21:10 odesílatel David Jeffery <djeffery@redhat.com> napsal:
+>>
+>>
+>> +       /*
+>> +        * If the iscsi connection is over a loopback device from using
+>> +        * iscsi and iscsit on the same system, we need to set memalloc_noio to
+>> +        * prevent memory allocation deadlocks between target and initiator.
+>> +        */
+>> +       rcu_read_lock();
+>> +       dst = rcu_dereference(conn->sock->sk->sk_dst_cache);
+>> +       if (dst && dst->dev && dst->dev->flags & IFF_LOOPBACK)
+>> +               loopback = true;
+>> +       rcu_read_unlock();
+> 
+> Hi Mike,
+> I tested it, it works. The customer also confirmed that it fixes the
+> deadlock on his setup.
 
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/net/ipa/gsi.c                | 47 +++++++++--------
- drivers/net/ipa/gsi_reg.h            | 78 ++++++++++++++++------------
- drivers/net/ipa/reg/gsi_reg-v3.1.c   | 59 ++++++++++++++++++---
- drivers/net/ipa/reg/gsi_reg-v3.5.1.c | 70 ++++++++++++++++++++++---
- drivers/net/ipa/reg/gsi_reg-v4.0.c   | 74 +++++++++++++++++++++++---
- drivers/net/ipa/reg/gsi_reg-v4.11.c  | 76 ++++++++++++++++++++++++---
- drivers/net/ipa/reg/gsi_reg-v4.5.c   | 75 +++++++++++++++++++++++---
- drivers/net/ipa/reg/gsi_reg-v4.9.c   | 75 +++++++++++++++++++++++---
- 8 files changed, 452 insertions(+), 102 deletions(-)
+You never responded about why/how it's used in production. Is it some sort
+of clustering or container or what?
 
-diff --git a/drivers/net/ipa/gsi.c b/drivers/net/ipa/gsi.c
-index 7c4e458364236..f44d2d843de12 100644
---- a/drivers/net/ipa/gsi.c
-+++ b/drivers/net/ipa/gsi.c
-@@ -431,8 +431,8 @@ static void gsi_evt_ring_command(struct gsi *gsi, u32 evt_ring_id,
- 	gsi_irq_ev_ctrl_enable(gsi, evt_ring_id);
- 
- 	reg = gsi_reg(gsi, EV_CH_CMD);
--	val = u32_encode_bits(evt_ring_id, EV_CHID_FMASK);
--	val |= u32_encode_bits(opcode, EV_OPCODE_FMASK);
-+	val = reg_encode(reg, EV_CHID, evt_ring_id);
-+	val |= reg_encode(reg, EV_OPCODE, opcode);
- 
- 	timeout = !gsi_command(gsi, reg_offset(reg), val);
- 
-@@ -548,8 +548,8 @@ gsi_channel_command(struct gsi_channel *channel, enum gsi_ch_cmd_opcode opcode)
- 	gsi_irq_ch_ctrl_enable(gsi, channel_id);
- 
- 	reg = gsi_reg(gsi, CH_CMD);
--	val = u32_encode_bits(channel_id, CH_CHID_FMASK);
--	val |= u32_encode_bits(opcode, CH_OPCODE_FMASK);
-+	val = reg_encode(reg, CH_CHID, channel_id);
-+	val |= reg_encode(reg, CH_OPCODE, opcode);
- 
- 	timeout = !gsi_command(gsi, reg_offset(reg), val);
- 
-@@ -1220,28 +1220,29 @@ gsi_isr_glob_evt_err(struct gsi *gsi, u32 err_ee, u32 evt_ring_id, u32 code)
- /* Global error interrupt handler */
- static void gsi_isr_glob_err(struct gsi *gsi)
- {
-+	const struct reg *log_reg;
-+	const struct reg *clr_reg;
- 	enum gsi_err_type type;
- 	enum gsi_err_code code;
--	const struct reg *reg;
- 	u32 offset;
- 	u32 which;
- 	u32 val;
- 	u32 ee;
- 
- 	/* Get the logged error, then reinitialize the log */
--	reg = gsi_reg(gsi, ERROR_LOG);
--	offset = reg_offset(reg);
-+	log_reg = gsi_reg(gsi, ERROR_LOG);
-+	offset = reg_offset(log_reg);
- 	val = ioread32(gsi->virt + offset);
- 	iowrite32(0, gsi->virt + offset);
- 
--	reg = gsi_reg(gsi, ERROR_LOG_CLR);
--	iowrite32(~0, gsi->virt + reg_offset(reg));
-+	clr_reg = gsi_reg(gsi, ERROR_LOG_CLR);
-+	iowrite32(~0, gsi->virt + reg_offset(clr_reg));
- 
- 	/* Parse the error value */
--	ee = u32_get_bits(val, ERR_EE_FMASK);
--	type = u32_get_bits(val, ERR_TYPE_FMASK);
--	which = u32_get_bits(val, ERR_VIRT_IDX_FMASK);
--	code = u32_get_bits(val, ERR_CODE_FMASK);
-+	ee = reg_decode(log_reg, ERR_EE, val);
-+	type = reg_decode(log_reg, ERR_TYPE, val);
-+	which = reg_decode(log_reg, ERR_VIRT_IDX, val);
-+	code = reg_decode(log_reg, ERR_CODE, val);
- 
- 	if (type == GSI_ERR_TYPE_CHAN)
- 		gsi_isr_glob_chan_err(gsi, ee, which, code);
-@@ -1279,7 +1280,7 @@ static void gsi_isr_gp_int1(struct gsi *gsi)
- 	 */
- 	reg = gsi_reg(gsi, CNTXT_SCRATCH_0);
- 	val = ioread32(gsi->virt + reg_offset(reg));
--	result = u32_get_bits(val, GENERIC_EE_RESULT_FMASK);
-+	result = reg_decode(reg, GENERIC_EE_RESULT, val);
- 
- 	switch (result) {
- 	case GENERIC_EE_SUCCESS:
-@@ -1801,16 +1802,16 @@ static int gsi_generic_command(struct gsi *gsi, u32 channel_id,
- 	offset = reg_offset(reg);
- 	val = ioread32(gsi->virt + offset);
- 
--	val &= ~GENERIC_EE_RESULT_FMASK;
-+	val &= ~reg_fmask(reg, GENERIC_EE_RESULT);
- 	iowrite32(val, gsi->virt + offset);
- 
- 	/* Now issue the command */
- 	reg = gsi_reg(gsi, GENERIC_CMD);
--	val = u32_encode_bits(opcode, GENERIC_OPCODE_FMASK);
--	val |= u32_encode_bits(channel_id, GENERIC_CHID_FMASK);
--	val |= u32_encode_bits(GSI_EE_MODEM, GENERIC_EE_FMASK);
-+	val = reg_encode(reg, GENERIC_OPCODE, opcode);
-+	val |= reg_encode(reg, GENERIC_CHID, channel_id);
-+	val |= reg_encode(reg, GENERIC_EE, GSI_EE_MODEM);
- 	if (gsi->version >= IPA_VERSION_4_11)
--		val |= u32_encode_bits(params, GENERIC_PARAMS_FMASK);
-+		val |= reg_encode(reg, GENERIC_PARAMS, params);
- 
- 	timeout = !gsi_command(gsi, reg_offset(reg), val);
- 
-@@ -1978,7 +1979,7 @@ static int gsi_irq_setup(struct gsi *gsi)
- 
- 	/* Writing 1 indicates IRQ interrupts; 0 would be MSI */
- 	reg = gsi_reg(gsi, CNTXT_INTSET);
--	iowrite32(1, gsi->virt + reg_offset(reg));
-+	iowrite32(reg_bit(reg, INTYPE), gsi->virt + reg_offset(reg));
- 
- 	/* Disable all interrupt types */
- 	gsi_irq_type_update(gsi, 0);
-@@ -2040,7 +2041,7 @@ static int gsi_ring_setup(struct gsi *gsi)
- 	reg = gsi_reg(gsi, HW_PARAM_2);
- 	val = ioread32(gsi->virt + reg_offset(reg));
- 
--	count = u32_get_bits(val, NUM_CH_PER_EE_FMASK);
-+	count = reg_decode(reg, NUM_CH_PER_EE, val);
- 	if (!count) {
- 		dev_err(dev, "GSI reports zero channels supported\n");
- 		return -EINVAL;
-@@ -2052,7 +2053,7 @@ static int gsi_ring_setup(struct gsi *gsi)
- 	}
- 	gsi->channel_count = count;
- 
--	count = u32_get_bits(val, NUM_EV_PER_EE_FMASK);
-+	count = reg_decode(reg, NUM_EV_PER_EE, val);
- 	if (!count) {
- 		dev_err(dev, "GSI reports zero event rings supported\n");
- 		return -EINVAL;
-@@ -2078,7 +2079,7 @@ int gsi_setup(struct gsi *gsi)
- 	/* Here is where we first touch the GSI hardware */
- 	reg = gsi_reg(gsi, GSI_STATUS);
- 	val = ioread32(gsi->virt + reg_offset(reg));
--	if (!(val & ENABLED_FMASK)) {
-+	if (!(val & reg_bit(reg, ENABLED))) {
- 		dev_err(gsi->dev, "GSI has not been enabled\n");
- 		return -EIO;
- 	}
-diff --git a/drivers/net/ipa/gsi_reg.h b/drivers/net/ipa/gsi_reg.h
-index 780eac742a9d8..5eda4def7ac40 100644
---- a/drivers/net/ipa/gsi_reg.h
-+++ b/drivers/net/ipa/gsi_reg.h
-@@ -163,11 +163,15 @@ enum gsi_reg_ch_c_ev_ch_e_cntxt_8_field_id {
- };
- 
- /* GSI_STATUS register */
--#define ENABLED_FMASK			GENMASK(0, 0)
-+enum gsi_reg_gsi_status_field_id {
-+	ENABLED,
-+};
- 
- /* CH_CMD register */
--#define CH_CHID_FMASK			GENMASK(7, 0)
--#define CH_OPCODE_FMASK			GENMASK(31, 24)
-+enum gsi_reg_gsi_ch_cmd_field_id {
-+	CH_CHID,
-+	CH_OPCODE,
-+};
- 
- /** enum gsi_ch_cmd_opcode - CH_OPCODE field values in CH_CMD */
- enum gsi_ch_cmd_opcode {
-@@ -180,8 +184,10 @@ enum gsi_ch_cmd_opcode {
- };
- 
- /* EV_CH_CMD register */
--#define EV_CHID_FMASK			GENMASK(7, 0)
--#define EV_OPCODE_FMASK			GENMASK(31, 24)
-+enum gsi_ev_ch_cmd_field_id {
-+	EV_CHID,
-+	EV_OPCODE,
-+};
- 
- /** enum gsi_evt_cmd_opcode - EV_OPCODE field values in EV_CH_CMD */
- enum gsi_evt_cmd_opcode {
-@@ -191,10 +197,12 @@ enum gsi_evt_cmd_opcode {
- };
- 
- /* GENERIC_CMD register */
--#define GENERIC_OPCODE_FMASK		GENMASK(4, 0)
--#define GENERIC_CHID_FMASK		GENMASK(9, 5)
--#define GENERIC_EE_FMASK		GENMASK(13, 10)
--#define GENERIC_PARAMS_FMASK		GENMASK(31, 24)	/* IPA v4.11+ */
-+enum gsi_generic_cmd_field_id {
-+	GENERIC_OPCODE,
-+	GENERIC_CHID,
-+	GENERIC_EE,
-+	GENERIC_PARAMS,					/* IPA v4.11+ */
-+};
- 
- /** enum gsi_generic_cmd_opcode - GENERIC_OPCODE field values in GENERIC_CMD */
- enum gsi_generic_cmd_opcode {
-@@ -206,19 +214,19 @@ enum gsi_generic_cmd_opcode {
- };
- 
- /* HW_PARAM_2 register */				/* IPA v3.5.1+ */
--#define IRAM_SIZE_FMASK			GENMASK(2, 0)
--#define NUM_CH_PER_EE_FMASK		GENMASK(7, 3)
--#define NUM_EV_PER_EE_FMASK		GENMASK(12, 8)
--#define GSI_CH_PEND_TRANSLATE_FMASK	GENMASK(13, 13)
--#define GSI_CH_FULL_LOGIC_FMASK		GENMASK(14, 14)
--/* Fields below are present for IPA v4.0 and above */
--#define GSI_USE_SDMA_FMASK		GENMASK(15, 15)
--#define GSI_SDMA_N_INT_FMASK		GENMASK(18, 16)
--#define GSI_SDMA_MAX_BURST_FMASK	GENMASK(26, 19)
--#define GSI_SDMA_N_IOVEC_FMASK		GENMASK(29, 27)
--/* Fields below are present for IPA v4.2 and above */
--#define GSI_USE_RD_WR_ENG_FMASK		GENMASK(30, 30)
--#define GSI_USE_INTER_EE_FMASK		GENMASK(31, 31)
-+enum gsi_hw_param_2_field_id {
-+	IRAM_SIZE,
-+	NUM_CH_PER_EE,
-+	NUM_EV_PER_EE,
-+	GSI_CH_PEND_TRANSLATE,
-+	GSI_CH_FULL_LOGIC,
-+	GSI_USE_SDMA,					/* IPA v4.0+ */
-+	GSI_SDMA_N_INT,					/* IPA v4.0+ */
-+	GSI_SDMA_MAX_BURST,				/* IPA v4.0+ */
-+	GSI_SDMA_N_IOVEC,				/* IPA v4.0+ */
-+	GSI_USE_RD_WR_ENG,				/* IPA v4.2+ */
-+	GSI_USE_INTER_EE,				/* IPA v4.2+ */
-+};
- 
- /** enum gsi_iram_size - IRAM_SIZE field values in HW_PARAM_2 */
- enum gsi_iram_size {
-@@ -272,16 +280,20 @@ enum gsi_general_irq_id {
- };
- 
- /* CNTXT_INTSET register */
--#define INTYPE_FMASK			GENMASK(0, 0)
-+enum gsi_cntxt_intset_field_id {
-+	INTYPE,
-+};
- 
- /* ERROR_LOG register */
--#define ERR_ARG3_FMASK			GENMASK(3, 0)
--#define ERR_ARG2_FMASK			GENMASK(7, 4)
--#define ERR_ARG1_FMASK			GENMASK(11, 8)
--#define ERR_CODE_FMASK			GENMASK(15, 12)
--#define ERR_VIRT_IDX_FMASK		GENMASK(23, 19)
--#define ERR_TYPE_FMASK			GENMASK(27, 24)
--#define ERR_EE_FMASK			GENMASK(31, 28)
-+enum gsi_error_log_field_id {
-+	ERR_ARG3,
-+	ERR_ARG2,
-+	ERR_ARG1,
-+	ERR_CODE,
-+	ERR_VIRT_IDX,
-+	ERR_TYPE,
-+	ERR_EE,
-+};
- 
- /** enum gsi_err_code - ERR_CODE field values in EE_ERR_LOG */
- enum gsi_err_code {
-@@ -303,8 +315,10 @@ enum gsi_err_type {
- };
- 
- /* CNTXT_SCRATCH_0 register */
--#define INTER_EE_RESULT_FMASK		GENMASK(2, 0)
--#define GENERIC_EE_RESULT_FMASK		GENMASK(7, 5)
-+enum gsi_cntxt_scratch_0_field_id {
-+	INTER_EE_RESULT,
-+	GENERIC_EE_RESULT,
-+};
- 
- /** enum gsi_generic_ee_result - GENERIC_EE_RESULT field values in SCRATCH_0 */
- enum gsi_generic_ee_result {
-diff --git a/drivers/net/ipa/reg/gsi_reg-v3.1.c b/drivers/net/ipa/reg/gsi_reg-v3.1.c
-index 36595b21dff7b..651c8a7ed6116 100644
---- a/drivers/net/ipa/reg/gsi_reg-v3.1.c
-+++ b/drivers/net/ipa/reg/gsi_reg-v3.1.c
-@@ -55,7 +55,18 @@ static const u32 reg_ch_c_qos_fmask[] = {
- 
- REG_STRIDE_FIELDS(CH_C_QOS, ch_c_qos, 0x0001c05c + 0x4000 * GSI_EE_AP, 0x80);
- 
--REG(ERROR_LOG, error_log, 0x0001f200 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_error_log_fmask[] = {
-+	[ERR_ARG3]					= GENMASK(3, 0),
-+	[ERR_ARG2]					= GENMASK(7, 4),
-+	[ERR_ARG1]					= GENMASK(11, 8),
-+	[ERR_CODE]					= GENMASK(15, 12),
-+						/* Bits 16-18 reserved */
-+	[ERR_VIRT_IDX]					= GENMASK(23, 19),
-+	[ERR_TYPE]					= GENMASK(27, 24),
-+	[ERR_EE]					= GENMASK(31, 28),
-+};
-+
-+REG_FIELDS(ERROR_LOG, error_log, 0x0001f200 + 0x4000 * GSI_EE_AP);
- 
- REG(ERROR_LOG_CLR, error_log_clr, 0x0001f210 + 0x4000 * GSI_EE_AP);
- 
-@@ -132,13 +143,35 @@ REG_STRIDE(CH_C_DOORBELL_0, ch_c_doorbell_0,
- REG_STRIDE(EV_CH_E_DOORBELL_0, ev_ch_e_doorbell_0,
- 	   0x0001e100 + 0x4000 * GSI_EE_AP, 0x08);
- 
--REG(GSI_STATUS, gsi_status, 0x0001f000 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_gsi_status_fmask[] = {
-+	[ENABLED]					= BIT(0),
-+						/* Bits 1-31 reserved */
-+};
- 
--REG(CH_CMD, ch_cmd, 0x0001f008 + 0x4000 * GSI_EE_AP);
-+REG_FIELDS(GSI_STATUS, gsi_status, 0x0001f000 + 0x4000 * GSI_EE_AP);
- 
--REG(EV_CH_CMD, ev_ch_cmd, 0x0001f010 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_ch_cmd_fmask[] = {
-+	[CH_CHID]					= GENMASK(7, 0),
-+	[CH_OPCODE]					= GENMASK(31, 24),
-+};
- 
--REG(GENERIC_CMD, generic_cmd, 0x0001f018 + 0x4000 * GSI_EE_AP);
-+REG_FIELDS(CH_CMD, ch_cmd, 0x0001f008 + 0x4000 * GSI_EE_AP);
-+
-+static const u32 reg_ev_ch_cmd_fmask[] = {
-+	[EV_CHID]					= GENMASK(7, 0),
-+	[EV_OPCODE]					= GENMASK(31, 24),
-+};
-+
-+REG_FIELDS(EV_CH_CMD, ev_ch_cmd, 0x0001f010 + 0x4000 * GSI_EE_AP);
-+
-+static const u32 reg_generic_cmd_fmask[] = {
-+	[GENERIC_OPCODE]				= GENMASK(4, 0),
-+	[GENERIC_CHID]					= GENMASK(9, 5),
-+	[GENERIC_EE]					= GENMASK(13, 10),
-+						/* Bits 14-31 reserved */
-+};
-+
-+REG_FIELDS(GENERIC_CMD, generic_cmd, 0x0001f018 + 0x4000 * GSI_EE_AP);
- 
- REG(CNTXT_TYPE_IRQ, cntxt_type_irq, 0x0001f080 + 0x4000 * GSI_EE_AP);
- 
-@@ -180,9 +213,21 @@ REG(CNTXT_GSI_IRQ_EN, cntxt_gsi_irq_en, 0x0001f120 + 0x4000 * GSI_EE_AP);
- 
- REG(CNTXT_GSI_IRQ_CLR, cntxt_gsi_irq_clr, 0x0001f128 + 0x4000 * GSI_EE_AP);
- 
--REG(CNTXT_INTSET, cntxt_intset, 0x0001f180 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_cntxt_intset_fmask[] = {
-+	[INTYPE]					= BIT(0)
-+						/* Bits 1-31 reserved */
-+};
- 
--REG(CNTXT_SCRATCH_0, cntxt_scratch_0, 0x0001f400 + 0x4000 * GSI_EE_AP);
-+REG_FIELDS(CNTXT_INTSET, cntxt_intset, 0x0001f180 + 0x4000 * GSI_EE_AP);
-+
-+static const u32 reg_cntxt_scratch_0_fmask[] = {
-+	[INTER_EE_RESULT]				= GENMASK(2, 0),
-+						/* Bits 3-4 reserved */
-+	[GENERIC_EE_RESULT]				= GENMASK(7, 5),
-+						/* Bits 8-31 reserved */
-+};
-+
-+REG_FIELDS(CNTXT_SCRATCH_0, cntxt_scratch_0, 0x0001f400 + 0x4000 * GSI_EE_AP);
- 
- static const struct reg *reg_array[] = {
- 	[INTER_EE_SRC_CH_IRQ_MSK]	= &reg_inter_ee_src_ch_irq_msk,
-diff --git a/drivers/net/ipa/reg/gsi_reg-v3.5.1.c b/drivers/net/ipa/reg/gsi_reg-v3.5.1.c
-index a30bfbfa6c1fd..0b39f8374ec17 100644
---- a/drivers/net/ipa/reg/gsi_reg-v3.5.1.c
-+++ b/drivers/net/ipa/reg/gsi_reg-v3.5.1.c
-@@ -55,7 +55,18 @@ static const u32 reg_ch_c_qos_fmask[] = {
- 
- REG_STRIDE_FIELDS(CH_C_QOS, ch_c_qos, 0x0001c05c + 0x4000 * GSI_EE_AP, 0x80);
- 
--REG(ERROR_LOG, error_log, 0x0001f200 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_error_log_fmask[] = {
-+	[ERR_ARG3]					= GENMASK(3, 0),
-+	[ERR_ARG2]					= GENMASK(7, 4),
-+	[ERR_ARG1]					= GENMASK(11, 8),
-+	[ERR_CODE]					= GENMASK(15, 12),
-+						/* Bits 16-18 reserved */
-+	[ERR_VIRT_IDX]					= GENMASK(23, 19),
-+	[ERR_TYPE]					= GENMASK(27, 24),
-+	[ERR_EE]					= GENMASK(31, 28),
-+};
-+
-+REG_FIELDS(ERROR_LOG, error_log, 0x0001f200 + 0x4000 * GSI_EE_AP);
- 
- REG(ERROR_LOG_CLR, error_log_clr, 0x0001f210 + 0x4000 * GSI_EE_AP);
- 
-@@ -132,15 +143,46 @@ REG_STRIDE(CH_C_DOORBELL_0, ch_c_doorbell_0,
- REG_STRIDE(EV_CH_E_DOORBELL_0, ev_ch_e_doorbell_0,
- 	   0x0001e100 + 0x4000 * GSI_EE_AP, 0x08);
- 
--REG(GSI_STATUS, gsi_status, 0x0001f000 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_gsi_status_fmask[] = {
-+	[ENABLED]					= BIT(0),
-+						/* Bits 1-31 reserved */
-+};
- 
--REG(CH_CMD, ch_cmd, 0x0001f008 + 0x4000 * GSI_EE_AP);
-+REG_FIELDS(GSI_STATUS, gsi_status, 0x0001f000 + 0x4000 * GSI_EE_AP);
- 
--REG(EV_CH_CMD, ev_ch_cmd, 0x0001f010 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_ch_cmd_fmask[] = {
-+	[CH_CHID]					= GENMASK(7, 0),
-+	[CH_OPCODE]					= GENMASK(31, 24),
-+};
- 
--REG(GENERIC_CMD, generic_cmd, 0x0001f018 + 0x4000 * GSI_EE_AP);
-+REG_FIELDS(CH_CMD, ch_cmd, 0x0001f008 + 0x4000 * GSI_EE_AP);
- 
--REG(HW_PARAM_2, hw_param_2, 0x0001f040 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_ev_ch_cmd_fmask[] = {
-+	[EV_CHID]					= GENMASK(7, 0),
-+	[EV_OPCODE]					= GENMASK(31, 24),
-+};
-+
-+REG_FIELDS(EV_CH_CMD, ev_ch_cmd, 0x0001f010 + 0x4000 * GSI_EE_AP);
-+
-+static const u32 reg_generic_cmd_fmask[] = {
-+	[GENERIC_OPCODE]				= GENMASK(4, 0),
-+	[GENERIC_CHID]					= GENMASK(9, 5),
-+	[GENERIC_EE]					= GENMASK(13, 10),
-+						/* Bits 14-31 reserved */
-+};
-+
-+REG_FIELDS(GENERIC_CMD, generic_cmd, 0x0001f018 + 0x4000 * GSI_EE_AP);
-+
-+static const u32 reg_hw_param_2_fmask[] = {
-+	[IRAM_SIZE]					= GENMASK(2, 0),
-+	[NUM_CH_PER_EE]					= GENMASK(7, 3),
-+	[NUM_EV_PER_EE]					= GENMASK(12, 8),
-+	[GSI_CH_PEND_TRANSLATE]				= BIT(13),
-+	[GSI_CH_FULL_LOGIC]				= BIT(14),
-+						/* Bits 15-31 reserved */
-+};
-+
-+REG_FIELDS(HW_PARAM_2, hw_param_2, 0x0001f040 + 0x4000 * GSI_EE_AP);
- 
- REG(CNTXT_TYPE_IRQ, cntxt_type_irq, 0x0001f080 + 0x4000 * GSI_EE_AP);
- 
-@@ -182,9 +224,21 @@ REG(CNTXT_GSI_IRQ_EN, cntxt_gsi_irq_en, 0x0001f120 + 0x4000 * GSI_EE_AP);
- 
- REG(CNTXT_GSI_IRQ_CLR, cntxt_gsi_irq_clr, 0x0001f128 + 0x4000 * GSI_EE_AP);
- 
--REG(CNTXT_INTSET, cntxt_intset, 0x0001f180 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_cntxt_intset_fmask[] = {
-+	[INTYPE]					= BIT(0)
-+						/* Bits 1-31 reserved */
-+};
- 
--REG(CNTXT_SCRATCH_0, cntxt_scratch_0, 0x0001f400 + 0x4000 * GSI_EE_AP);
-+REG_FIELDS(CNTXT_INTSET, cntxt_intset, 0x0001f180 + 0x4000 * GSI_EE_AP);
-+
-+static const u32 reg_cntxt_scratch_0_fmask[] = {
-+	[INTER_EE_RESULT]				= GENMASK(2, 0),
-+						/* Bits 3-4 reserved */
-+	[GENERIC_EE_RESULT]				= GENMASK(7, 5),
-+						/* Bits 8-31 reserved */
-+};
-+
-+REG_FIELDS(CNTXT_SCRATCH_0, cntxt_scratch_0, 0x0001f400 + 0x4000 * GSI_EE_AP);
- 
- static const struct reg *reg_array[] = {
- 	[INTER_EE_SRC_CH_IRQ_MSK]	= &reg_inter_ee_src_ch_irq_msk,
-diff --git a/drivers/net/ipa/reg/gsi_reg-v4.0.c b/drivers/net/ipa/reg/gsi_reg-v4.0.c
-index c0042fb9e760f..5a979ef4caad3 100644
---- a/drivers/net/ipa/reg/gsi_reg-v4.0.c
-+++ b/drivers/net/ipa/reg/gsi_reg-v4.0.c
-@@ -56,7 +56,18 @@ static const u32 reg_ch_c_qos_fmask[] = {
- 
- REG_STRIDE_FIELDS(CH_C_QOS, ch_c_qos, 0x0001c05c + 0x4000 * GSI_EE_AP, 0x80);
- 
--REG(ERROR_LOG, error_log, 0x0001f200 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_error_log_fmask[] = {
-+	[ERR_ARG3]					= GENMASK(3, 0),
-+	[ERR_ARG2]					= GENMASK(7, 4),
-+	[ERR_ARG1]					= GENMASK(11, 8),
-+	[ERR_CODE]					= GENMASK(15, 12),
-+						/* Bits 16-18 reserved */
-+	[ERR_VIRT_IDX]					= GENMASK(23, 19),
-+	[ERR_TYPE]					= GENMASK(27, 24),
-+	[ERR_EE]					= GENMASK(31, 28),
-+};
-+
-+REG_FIELDS(ERROR_LOG, error_log, 0x0001f200 + 0x4000 * GSI_EE_AP);
- 
- REG(ERROR_LOG_CLR, error_log_clr, 0x0001f210 + 0x4000 * GSI_EE_AP);
- 
-@@ -133,15 +144,50 @@ REG_STRIDE(CH_C_DOORBELL_0, ch_c_doorbell_0,
- REG_STRIDE(EV_CH_E_DOORBELL_0, ev_ch_e_doorbell_0,
- 	   0x0001e100 + 0x4000 * GSI_EE_AP, 0x08);
- 
--REG(GSI_STATUS, gsi_status, 0x0001f000 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_gsi_status_fmask[] = {
-+	[ENABLED]					= BIT(0),
-+						/* Bits 1-31 reserved */
-+};
- 
--REG(CH_CMD, ch_cmd, 0x0001f008 + 0x4000 * GSI_EE_AP);
-+REG_FIELDS(GSI_STATUS, gsi_status, 0x0001f000 + 0x4000 * GSI_EE_AP);
- 
--REG(EV_CH_CMD, ev_ch_cmd, 0x0001f010 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_ch_cmd_fmask[] = {
-+	[CH_CHID]					= GENMASK(7, 0),
-+	[CH_OPCODE]					= GENMASK(31, 24),
-+};
- 
--REG(GENERIC_CMD, generic_cmd, 0x0001f018 + 0x4000 * GSI_EE_AP);
-+REG_FIELDS(CH_CMD, ch_cmd, 0x0001f008 + 0x4000 * GSI_EE_AP);
- 
--REG(HW_PARAM_2, hw_param_2, 0x0001f040 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_ev_ch_cmd_fmask[] = {
-+	[EV_CHID]					= GENMASK(7, 0),
-+	[EV_OPCODE]					= GENMASK(31, 24),
-+};
-+
-+REG_FIELDS(EV_CH_CMD, ev_ch_cmd, 0x0001f010 + 0x4000 * GSI_EE_AP);
-+
-+static const u32 reg_generic_cmd_fmask[] = {
-+	[GENERIC_OPCODE]				= GENMASK(4, 0),
-+	[GENERIC_CHID]					= GENMASK(9, 5),
-+	[GENERIC_EE]					= GENMASK(13, 10),
-+						/* Bits 14-31 reserved */
-+};
-+
-+REG_FIELDS(GENERIC_CMD, generic_cmd, 0x0001f018 + 0x4000 * GSI_EE_AP);
-+
-+static const u32 reg_hw_param_2_fmask[] = {
-+	[IRAM_SIZE]					= GENMASK(2, 0),
-+	[NUM_CH_PER_EE]					= GENMASK(7, 3),
-+	[NUM_EV_PER_EE]					= GENMASK(12, 8),
-+	[GSI_CH_PEND_TRANSLATE]				= BIT(13),
-+	[GSI_CH_FULL_LOGIC]				= BIT(14),
-+	[GSI_USE_SDMA]					= BIT(15),
-+	[GSI_SDMA_N_INT]				= GENMASK(18, 16),
-+	[GSI_SDMA_MAX_BURST]				= GENMASK(26, 19),
-+	[GSI_SDMA_N_IOVEC]				= GENMASK(29, 27),
-+						/* Bits 30-31 reserved */
-+};
-+
-+REG_FIELDS(HW_PARAM_2, hw_param_2, 0x0001f040 + 0x4000 * GSI_EE_AP);
- 
- REG(CNTXT_TYPE_IRQ, cntxt_type_irq, 0x0001f080 + 0x4000 * GSI_EE_AP);
- 
-@@ -183,9 +229,21 @@ REG(CNTXT_GSI_IRQ_EN, cntxt_gsi_irq_en, 0x0001f120 + 0x4000 * GSI_EE_AP);
- 
- REG(CNTXT_GSI_IRQ_CLR, cntxt_gsi_irq_clr, 0x0001f128 + 0x4000 * GSI_EE_AP);
- 
--REG(CNTXT_INTSET, cntxt_intset, 0x0001f180 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_cntxt_intset_fmask[] = {
-+	[INTYPE]					= BIT(0)
-+						/* Bits 1-31 reserved */
-+};
- 
--REG(CNTXT_SCRATCH_0, cntxt_scratch_0, 0x0001f400 + 0x4000 * GSI_EE_AP);
-+REG_FIELDS(CNTXT_INTSET, cntxt_intset, 0x0001f180 + 0x4000 * GSI_EE_AP);
-+
-+static const u32 reg_cntxt_scratch_0_fmask[] = {
-+	[INTER_EE_RESULT]				= GENMASK(2, 0),
-+						/* Bits 3-4 reserved */
-+	[GENERIC_EE_RESULT]				= GENMASK(7, 5),
-+						/* Bits 8-31 reserved */
-+};
-+
-+REG_FIELDS(CNTXT_SCRATCH_0, cntxt_scratch_0, 0x0001f400 + 0x4000 * GSI_EE_AP);
- 
- static const struct reg *reg_array[] = {
- 	[INTER_EE_SRC_CH_IRQ_MSK]	= &reg_inter_ee_src_ch_irq_msk,
-diff --git a/drivers/net/ipa/reg/gsi_reg-v4.11.c b/drivers/net/ipa/reg/gsi_reg-v4.11.c
-index 4d8c4a9c9deb2..d975973306598 100644
---- a/drivers/net/ipa/reg/gsi_reg-v4.11.c
-+++ b/drivers/net/ipa/reg/gsi_reg-v4.11.c
-@@ -59,7 +59,18 @@ static const u32 reg_ch_c_qos_fmask[] = {
- 
- REG_STRIDE_FIELDS(CH_C_QOS, ch_c_qos, 0x0001c05c + 0x4000 * GSI_EE_AP, 0x80);
- 
--REG(ERROR_LOG, error_log, 0x0001f200 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_error_log_fmask[] = {
-+	[ERR_ARG3]					= GENMASK(3, 0),
-+	[ERR_ARG2]					= GENMASK(7, 4),
-+	[ERR_ARG1]					= GENMASK(11, 8),
-+	[ERR_CODE]					= GENMASK(15, 12),
-+						/* Bits 16-18 reserved */
-+	[ERR_VIRT_IDX]					= GENMASK(23, 19),
-+	[ERR_TYPE]					= GENMASK(27, 24),
-+	[ERR_EE]					= GENMASK(31, 28),
-+};
-+
-+REG_FIELDS(ERROR_LOG, error_log, 0x0001f200 + 0x4000 * GSI_EE_AP);
- 
- REG(ERROR_LOG_CLR, error_log_clr, 0x0001f210 + 0x4000 * GSI_EE_AP);
- 
-@@ -136,15 +147,52 @@ REG_STRIDE(CH_C_DOORBELL_0, ch_c_doorbell_0,
- REG_STRIDE(EV_CH_E_DOORBELL_0, ev_ch_e_doorbell_0,
- 	   0x0001e100 + 0x4000 * GSI_EE_AP, 0x08);
- 
--REG(GSI_STATUS, gsi_status, 0x0001f000 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_gsi_status_fmask[] = {
-+	[ENABLED]					= BIT(0),
-+						/* Bits 1-31 reserved */
-+};
- 
--REG(CH_CMD, ch_cmd, 0x0001f008 + 0x4000 * GSI_EE_AP);
-+REG_FIELDS(GSI_STATUS, gsi_status, 0x0001f000 + 0x4000 * GSI_EE_AP);
- 
--REG(EV_CH_CMD, ev_ch_cmd, 0x0001f010 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_ch_cmd_fmask[] = {
-+	[CH_CHID]					= GENMASK(7, 0),
-+	[CH_OPCODE]					= GENMASK(31, 24),
-+};
- 
--REG(GENERIC_CMD, generic_cmd, 0x0001f018 + 0x4000 * GSI_EE_AP);
-+REG_FIELDS(CH_CMD, ch_cmd, 0x0001f008 + 0x4000 * GSI_EE_AP);
- 
--REG(HW_PARAM_2, hw_param_2, 0x0001f040 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_ev_ch_cmd_fmask[] = {
-+	[EV_CHID]					= GENMASK(7, 0),
-+	[EV_OPCODE]					= GENMASK(31, 24),
-+};
-+
-+REG_FIELDS(EV_CH_CMD, ev_ch_cmd, 0x0001f010 + 0x4000 * GSI_EE_AP);
-+
-+static const u32 reg_generic_cmd_fmask[] = {
-+	[GENERIC_OPCODE]				= GENMASK(4, 0),
-+	[GENERIC_CHID]					= GENMASK(9, 5),
-+	[GENERIC_EE]					= GENMASK(13, 10),
-+						/* Bits 14-23 reserved */
-+	[GENERIC_PARAMS]				= GENMASK(31, 24),
-+};
-+
-+REG_FIELDS(GENERIC_CMD, generic_cmd, 0x0001f018 + 0x4000 * GSI_EE_AP);
-+
-+static const u32 reg_hw_param_2_fmask[] = {
-+	[IRAM_SIZE]					= GENMASK(2, 0),
-+	[NUM_CH_PER_EE]					= GENMASK(7, 3),
-+	[NUM_EV_PER_EE]					= GENMASK(12, 8),
-+	[GSI_CH_PEND_TRANSLATE]				= BIT(13),
-+	[GSI_CH_FULL_LOGIC]				= BIT(14),
-+	[GSI_USE_SDMA]					= BIT(15),
-+	[GSI_SDMA_N_INT]				= GENMASK(18, 16),
-+	[GSI_SDMA_MAX_BURST]				= GENMASK(26, 19),
-+	[GSI_SDMA_N_IOVEC]				= GENMASK(29, 27),
-+	[GSI_USE_RD_WR_ENG]				= BIT(30),
-+	[GSI_USE_INTER_EE]				= BIT(31),
-+};
-+
-+REG_FIELDS(HW_PARAM_2, hw_param_2, 0x0001f040 + 0x4000 * GSI_EE_AP);
- 
- REG(CNTXT_TYPE_IRQ, cntxt_type_irq, 0x0001f080 + 0x4000 * GSI_EE_AP);
- 
-@@ -186,9 +234,21 @@ REG(CNTXT_GSI_IRQ_EN, cntxt_gsi_irq_en, 0x0001f120 + 0x4000 * GSI_EE_AP);
- 
- REG(CNTXT_GSI_IRQ_CLR, cntxt_gsi_irq_clr, 0x0001f128 + 0x4000 * GSI_EE_AP);
- 
--REG(CNTXT_INTSET, cntxt_intset, 0x0001f180 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_cntxt_intset_fmask[] = {
-+	[INTYPE]					= BIT(0)
-+						/* Bits 1-31 reserved */
-+};
- 
--REG(CNTXT_SCRATCH_0, cntxt_scratch_0, 0x0001f400 + 0x4000 * GSI_EE_AP);
-+REG_FIELDS(CNTXT_INTSET, cntxt_intset, 0x0001f180 + 0x4000 * GSI_EE_AP);
-+
-+static const u32 reg_cntxt_scratch_0_fmask[] = {
-+	[INTER_EE_RESULT]				= GENMASK(2, 0),
-+						/* Bits 3-4 reserved */
-+	[GENERIC_EE_RESULT]				= GENMASK(7, 5),
-+						/* Bits 8-31 reserved */
-+};
-+
-+REG_FIELDS(CNTXT_SCRATCH_0, cntxt_scratch_0, 0x0001f400 + 0x4000 * GSI_EE_AP);
- 
- static const struct reg *reg_array[] = {
- 	[INTER_EE_SRC_CH_IRQ_MSK]	= &reg_inter_ee_src_ch_irq_msk,
-diff --git a/drivers/net/ipa/reg/gsi_reg-v4.5.c b/drivers/net/ipa/reg/gsi_reg-v4.5.c
-index ace13fb2d5d2b..13c66b29840ee 100644
---- a/drivers/net/ipa/reg/gsi_reg-v4.5.c
-+++ b/drivers/net/ipa/reg/gsi_reg-v4.5.c
-@@ -58,7 +58,18 @@ static const u32 reg_ch_c_qos_fmask[] = {
- 
- REG_STRIDE_FIELDS(CH_C_QOS, ch_c_qos, 0x0001c05c + 0x4000 * GSI_EE_AP, 0x80);
- 
--REG(ERROR_LOG, error_log, 0x0001f200 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_error_log_fmask[] = {
-+	[ERR_ARG3]					= GENMASK(3, 0),
-+	[ERR_ARG2]					= GENMASK(7, 4),
-+	[ERR_ARG1]					= GENMASK(11, 8),
-+	[ERR_CODE]					= GENMASK(15, 12),
-+						/* Bits 16-18 reserved */
-+	[ERR_VIRT_IDX]					= GENMASK(23, 19),
-+	[ERR_TYPE]					= GENMASK(27, 24),
-+	[ERR_EE]					= GENMASK(31, 28),
-+};
-+
-+REG_FIELDS(ERROR_LOG, error_log, 0x0001f200 + 0x4000 * GSI_EE_AP);
- 
- REG(ERROR_LOG_CLR, error_log_clr, 0x0001f210 + 0x4000 * GSI_EE_AP);
- 
-@@ -135,15 +146,51 @@ REG_STRIDE(CH_C_DOORBELL_0, ch_c_doorbell_0,
- REG_STRIDE(EV_CH_E_DOORBELL_0, ev_ch_e_doorbell_0,
- 	   0x0001e100 + 0x4000 * GSI_EE_AP, 0x08);
- 
--REG(GSI_STATUS, gsi_status, 0x0001f000 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_gsi_status_fmask[] = {
-+	[ENABLED]					= BIT(0),
-+						/* Bits 1-31 reserved */
-+};
- 
--REG(CH_CMD, ch_cmd, 0x0001f008 + 0x4000 * GSI_EE_AP);
-+REG_FIELDS(GSI_STATUS, gsi_status, 0x0001f000 + 0x4000 * GSI_EE_AP);
- 
--REG(EV_CH_CMD, ev_ch_cmd, 0x0001f010 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_ch_cmd_fmask[] = {
-+	[CH_CHID]					= GENMASK(7, 0),
-+	[CH_OPCODE]					= GENMASK(31, 24),
-+};
- 
--REG(GENERIC_CMD, generic_cmd, 0x0001f018 + 0x4000 * GSI_EE_AP);
-+REG_FIELDS(CH_CMD, ch_cmd, 0x0001f008 + 0x4000 * GSI_EE_AP);
- 
--REG(HW_PARAM_2, hw_param_2, 0x0001f040 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_ev_ch_cmd_fmask[] = {
-+	[EV_CHID]					= GENMASK(7, 0),
-+	[EV_OPCODE]					= GENMASK(31, 24),
-+};
-+
-+REG_FIELDS(EV_CH_CMD, ev_ch_cmd, 0x0001f010 + 0x4000 * GSI_EE_AP);
-+
-+static const u32 reg_generic_cmd_fmask[] = {
-+	[GENERIC_OPCODE]				= GENMASK(4, 0),
-+	[GENERIC_CHID]					= GENMASK(9, 5),
-+	[GENERIC_EE]					= GENMASK(13, 10),
-+						/* Bits 14-31 reserved */
-+};
-+
-+REG_FIELDS(GENERIC_CMD, generic_cmd, 0x0001f018 + 0x4000 * GSI_EE_AP);
-+
-+static const u32 reg_hw_param_2_fmask[] = {
-+	[IRAM_SIZE]					= GENMASK(2, 0),
-+	[NUM_CH_PER_EE]					= GENMASK(7, 3),
-+	[NUM_EV_PER_EE]					= GENMASK(12, 8),
-+	[GSI_CH_PEND_TRANSLATE]				= BIT(13),
-+	[GSI_CH_FULL_LOGIC]				= BIT(14),
-+	[GSI_USE_SDMA]					= BIT(15),
-+	[GSI_SDMA_N_INT]				= GENMASK(18, 16),
-+	[GSI_SDMA_MAX_BURST]				= GENMASK(26, 19),
-+	[GSI_SDMA_N_IOVEC]				= GENMASK(29, 27),
-+	[GSI_USE_RD_WR_ENG]				= BIT(30),
-+	[GSI_USE_INTER_EE]				= BIT(31),
-+};
-+
-+REG_FIELDS(HW_PARAM_2, hw_param_2, 0x0001f040 + 0x4000 * GSI_EE_AP);
- 
- REG(CNTXT_TYPE_IRQ, cntxt_type_irq, 0x0001f080 + 0x4000 * GSI_EE_AP);
- 
-@@ -185,9 +232,21 @@ REG(CNTXT_GSI_IRQ_EN, cntxt_gsi_irq_en, 0x0001f120 + 0x4000 * GSI_EE_AP);
- 
- REG(CNTXT_GSI_IRQ_CLR, cntxt_gsi_irq_clr, 0x0001f128 + 0x4000 * GSI_EE_AP);
- 
--REG(CNTXT_INTSET, cntxt_intset, 0x0001f180 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_cntxt_intset_fmask[] = {
-+	[INTYPE]					= BIT(0)
-+						/* Bits 1-31 reserved */
-+};
- 
--REG(CNTXT_SCRATCH_0, cntxt_scratch_0, 0x0001f400 + 0x4000 * GSI_EE_AP);
-+REG_FIELDS(CNTXT_INTSET, cntxt_intset, 0x0001f180 + 0x4000 * GSI_EE_AP);
-+
-+static const u32 reg_cntxt_scratch_0_fmask[] = {
-+	[INTER_EE_RESULT]				= GENMASK(2, 0),
-+						/* Bits 3-4 reserved */
-+	[GENERIC_EE_RESULT]				= GENMASK(7, 5),
-+						/* Bits 8-31 reserved */
-+};
-+
-+REG_FIELDS(CNTXT_SCRATCH_0, cntxt_scratch_0, 0x0001f400 + 0x4000 * GSI_EE_AP);
- 
- static const struct reg *reg_array[] = {
- 	[INTER_EE_SRC_CH_IRQ_MSK]	= &reg_inter_ee_src_ch_irq_msk,
-diff --git a/drivers/net/ipa/reg/gsi_reg-v4.9.c b/drivers/net/ipa/reg/gsi_reg-v4.9.c
-index 5d6670993fa83..a7d5732b72e90 100644
---- a/drivers/net/ipa/reg/gsi_reg-v4.9.c
-+++ b/drivers/net/ipa/reg/gsi_reg-v4.9.c
-@@ -59,7 +59,18 @@ static const u32 reg_ch_c_qos_fmask[] = {
- 
- REG_STRIDE_FIELDS(CH_C_QOS, ch_c_qos, 0x0001c05c + 0x4000 * GSI_EE_AP, 0x80);
- 
--REG(ERROR_LOG, error_log, 0x0001f200 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_error_log_fmask[] = {
-+	[ERR_ARG3]					= GENMASK(3, 0),
-+	[ERR_ARG2]					= GENMASK(7, 4),
-+	[ERR_ARG1]					= GENMASK(11, 8),
-+	[ERR_CODE]					= GENMASK(15, 12),
-+						/* Bits 16-18 reserved */
-+	[ERR_VIRT_IDX]					= GENMASK(23, 19),
-+	[ERR_TYPE]					= GENMASK(27, 24),
-+	[ERR_EE]					= GENMASK(31, 28),
-+};
-+
-+REG_FIELDS(ERROR_LOG, error_log, 0x0001f200 + 0x4000 * GSI_EE_AP);
- 
- REG(ERROR_LOG_CLR, error_log_clr, 0x0001f210 + 0x4000 * GSI_EE_AP);
- 
-@@ -136,15 +147,51 @@ REG_STRIDE(CH_C_DOORBELL_0, ch_c_doorbell_0,
- REG_STRIDE(EV_CH_E_DOORBELL_0, ev_ch_e_doorbell_0,
- 	   0x0001e100 + 0x4000 * GSI_EE_AP, 0x08);
- 
--REG(GSI_STATUS, gsi_status, 0x0001f000 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_gsi_status_fmask[] = {
-+	[ENABLED]					= BIT(0),
-+						/* Bits 1-31 reserved */
-+};
- 
--REG(CH_CMD, ch_cmd, 0x0001f008 + 0x4000 * GSI_EE_AP);
-+REG_FIELDS(GSI_STATUS, gsi_status, 0x0001f000 + 0x4000 * GSI_EE_AP);
- 
--REG(EV_CH_CMD, ev_ch_cmd, 0x0001f010 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_ch_cmd_fmask[] = {
-+	[CH_CHID]					= GENMASK(7, 0),
-+	[CH_OPCODE]					= GENMASK(31, 24),
-+};
- 
--REG(GENERIC_CMD, generic_cmd, 0x0001f018 + 0x4000 * GSI_EE_AP);
-+REG_FIELDS(CH_CMD, ch_cmd, 0x0001f008 + 0x4000 * GSI_EE_AP);
- 
--REG(HW_PARAM_2, hw_param_2, 0x0001f040 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_ev_ch_cmd_fmask[] = {
-+	[EV_CHID]					= GENMASK(7, 0),
-+	[EV_OPCODE]					= GENMASK(31, 24),
-+};
-+
-+REG_FIELDS(EV_CH_CMD, ev_ch_cmd, 0x0001f010 + 0x4000 * GSI_EE_AP);
-+
-+static const u32 reg_generic_cmd_fmask[] = {
-+	[GENERIC_OPCODE]				= GENMASK(4, 0),
-+	[GENERIC_CHID]					= GENMASK(9, 5),
-+	[GENERIC_EE]					= GENMASK(13, 10),
-+						/* Bits 14-31 reserved */
-+};
-+
-+REG_FIELDS(GENERIC_CMD, generic_cmd, 0x0001f018 + 0x4000 * GSI_EE_AP);
-+
-+static const u32 reg_hw_param_2_fmask[] = {
-+	[IRAM_SIZE]					= GENMASK(2, 0),
-+	[NUM_CH_PER_EE]					= GENMASK(7, 3),
-+	[NUM_EV_PER_EE]					= GENMASK(12, 8),
-+	[GSI_CH_PEND_TRANSLATE]				= BIT(13),
-+	[GSI_CH_FULL_LOGIC]				= BIT(14),
-+	[GSI_USE_SDMA]					= BIT(15),
-+	[GSI_SDMA_N_INT]				= GENMASK(18, 16),
-+	[GSI_SDMA_MAX_BURST]				= GENMASK(26, 19),
-+	[GSI_SDMA_N_IOVEC]				= GENMASK(29, 27),
-+	[GSI_USE_RD_WR_ENG]				= BIT(30),
-+	[GSI_USE_INTER_EE]				= BIT(31),
-+};
-+
-+REG_FIELDS(HW_PARAM_2, hw_param_2, 0x0001f040 + 0x4000 * GSI_EE_AP);
- 
- REG(CNTXT_TYPE_IRQ, cntxt_type_irq, 0x0001f080 + 0x4000 * GSI_EE_AP);
- 
-@@ -186,9 +233,21 @@ REG(CNTXT_GSI_IRQ_EN, cntxt_gsi_irq_en, 0x0001f120 + 0x4000 * GSI_EE_AP);
- 
- REG(CNTXT_GSI_IRQ_CLR, cntxt_gsi_irq_clr, 0x0001f128 + 0x4000 * GSI_EE_AP);
- 
--REG(CNTXT_INTSET, cntxt_intset, 0x0001f180 + 0x4000 * GSI_EE_AP);
-+static const u32 reg_cntxt_intset_fmask[] = {
-+	[INTYPE]					= BIT(0)
-+						/* Bits 1-31 reserved */
-+};
- 
--REG(CNTXT_SCRATCH_0, cntxt_scratch_0, 0x0001f400 + 0x4000 * GSI_EE_AP);
-+REG_FIELDS(CNTXT_INTSET, cntxt_intset, 0x0001f180 + 0x4000 * GSI_EE_AP);
-+
-+static const u32 reg_cntxt_scratch_0_fmask[] = {
-+	[INTER_EE_RESULT]				= GENMASK(2, 0),
-+						/* Bits 3-4 reserved */
-+	[GENERIC_EE_RESULT]				= GENMASK(7, 5),
-+						/* Bits 8-31 reserved */
-+};
-+
-+REG_FIELDS(CNTXT_SCRATCH_0, cntxt_scratch_0, 0x0001f400 + 0x4000 * GSI_EE_AP);
- 
- static const struct reg *reg_array[] = {
- 	[INTER_EE_SRC_CH_IRQ_MSK]	= &reg_inter_ee_src_ch_irq_msk,
--- 
-2.34.1
-
+The login related code can still swing back on you if it's run for a relogin.
+It would happen if we overqueue and a nop timesout because the iscsi recv thread
+is waiting for backend resources like a request/queue slot, or if management tools
+disable/enable the tpgt for reconfigs, etc.
