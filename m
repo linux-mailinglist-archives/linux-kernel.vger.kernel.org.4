@@ -2,149 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A76694BE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:59:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E659694BF7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbjBMP7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:59:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48384 "EHLO
+        id S231360AbjBMQDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 11:03:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbjBMP7N (ORCPT
+        with ESMTP id S229798AbjBMQDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:59:13 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1DD3170B;
-        Mon, 13 Feb 2023 07:59:11 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 840444B3;
-        Mon, 13 Feb 2023 07:59:53 -0800 (PST)
-Received: from [10.57.13.51] (unknown [10.57.13.51])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9CC353F703;
-        Mon, 13 Feb 2023 07:59:07 -0800 (PST)
-Message-ID: <748a6bcf-ec16-0870-8e33-bc29ab311211@arm.com>
-Date:   Mon, 13 Feb 2023 15:59:05 +0000
+        Mon, 13 Feb 2023 11:03:11 -0500
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110C81C32E;
+        Mon, 13 Feb 2023 08:03:10 -0800 (PST)
+Received: by mail-ej1-f47.google.com with SMTP id jg8so33084295ejc.6;
+        Mon, 13 Feb 2023 08:03:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tIYbWRKiVNoa7/EuTrE22y6ppQgPNllhOKadHyKY/90=;
+        b=lsKAlJb5xsO3ioRWwtXmRTD+TU8PnThwqNlMUgL9t5feSPcxbQ2Y6LE/DA0jqYyXAn
+         JYo9rqNQuZ9WMSWADelCx03+I8sqPCcb7zh5ijQbfqOb7AwJax+qFoSkLDABwC92MI1M
+         SB56CrLuQxxDLNxR1vkYQ5IinWBHH0X2rthb1SRzw3epXltOpaYRsBluKqqDfYwPS2xI
+         d7xziETlqwgZ3RmRpgGvhxVJPwwlFOInLTIlCqGIpr0gamORVq8iGxV/goXfayCSe5w5
+         8t/oL+CoRHKNQUSltgMWRxplTw/WWwZ6RnZ4Uhe0Pzs9lBpRQtN32hCJ6vzjMsSs9kag
+         yQww==
+X-Gm-Message-State: AO0yUKVibE8ox63WiX/Nsi/oIGVZcCRtj66tnqzi47T+y3ddQKOsEYyx
+        eGw1EIPEeq9rwtccdmzeSgw4hbXCfBJtOHkA1e6Wjs+Q
+X-Google-Smtp-Source: AK7set92Iou7Ljt6rtlOYRoZOVjTEwOKtb5y9wb2NtJPJlmVkPSs6KeZCqBsBgsflbdwqZvcHEV32IAPqcOws8pLlxU=
+X-Received: by 2002:a17:906:3659:b0:8ae:e92e:eab7 with SMTP id
+ r25-20020a170906365900b008aee92eeab7mr4681821ejb.4.1676304188428; Mon, 13 Feb
+ 2023 08:03:08 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 04/28] arm64: RME: Check for RME support at KVM init
-Content-Language: en-GB
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Joey Gouly <joey.gouly@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Christoffer Dall <christoffer.dall@arm.com>,
-        Fuad Tabba <tabba@google.com>, linux-coco@lists.linux.dev
-References: <20230127112248.136810-1-suzuki.poulose@arm.com>
- <20230127112932.38045-1-steven.price@arm.com>
- <20230127112932.38045-5-steven.price@arm.com>
- <20230213174846.00003fad@gmail.com>
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <20230213174846.00003fad@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230211031710.277459-1-rui.zhang@intel.com>
+In-Reply-To: <20230211031710.277459-1-rui.zhang@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 13 Feb 2023 17:02:57 +0100
+Message-ID: <CAJZ5v0iXfXVDfxjjA+iy4eThsHFTuv=8RvKCrmtWHrwLmrMy9g@mail.gmail.com>
+Subject: Re: [PATCH V2] powercap/intel_rapl: Fix handling for large time window
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
+        daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org,
+        srinivas.pandruvada@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/02/2023 15:48, Zhi Wang wrote:
-> On Fri, 27 Jan 2023 11:29:08 +0000
-> Steven Price <steven.price@arm.com> wrote:
-> 
->> Query the RMI version number and check if it is a compatible version. A
->> static key is also provided to signal that a supported RMM is available.
->>
->> Functions are provided to query if a VM or VCPU is a realm (or rec)
->> which currently will always return false.
->>
->> Signed-off-by: Steven Price <steven.price@arm.com>
->> ---
->>  arch/arm64/include/asm/kvm_emulate.h | 17 ++++++++++
->>  arch/arm64/include/asm/kvm_host.h    |  4 +++
->>  arch/arm64/include/asm/kvm_rme.h     | 22 +++++++++++++
->>  arch/arm64/include/asm/virt.h        |  1 +
->>  arch/arm64/kvm/Makefile              |  3 +-
->>  arch/arm64/kvm/arm.c                 |  8 +++++
->>  arch/arm64/kvm/rme.c                 | 49 ++++++++++++++++++++++++++++
->>  7 files changed, 103 insertions(+), 1 deletion(-)
->>  create mode 100644 arch/arm64/include/asm/kvm_rme.h
->>  create mode 100644 arch/arm64/kvm/rme.c
->>
->> diff --git a/arch/arm64/include/asm/kvm_emulate.h b/arch/arm64/include/asm/kvm_emulate.h
->> index 9bdba47f7e14..5a2b7229e83f 100644
->> --- a/arch/arm64/include/asm/kvm_emulate.h
->> +++ b/arch/arm64/include/asm/kvm_emulate.h
->> @@ -490,4 +490,21 @@ static inline bool vcpu_has_feature(struct kvm_vcpu *vcpu, int feature)
->>  	return test_bit(feature, vcpu->arch.features);
->>  }
->>  
->> +static inline bool kvm_is_realm(struct kvm *kvm)
->> +{
->> +	if (static_branch_unlikely(&kvm_rme_is_available))
->> +		return kvm->arch.is_realm;
->> +	return false;
->> +}
->> +
->> +static inline enum realm_state kvm_realm_state(struct kvm *kvm)
->> +{
->> +	return READ_ONCE(kvm->arch.realm.state);
->> +}
->> +
->> +static inline bool vcpu_is_rec(struct kvm_vcpu *vcpu)
->> +{
->> +	return false;
->> +}
->> +
->>  #endif /* __ARM64_KVM_EMULATE_H__ */
->> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
->> index 35a159d131b5..04347c3a8c6b 100644
->> --- a/arch/arm64/include/asm/kvm_host.h
->> +++ b/arch/arm64/include/asm/kvm_host.h
->> @@ -26,6 +26,7 @@
->>  #include <asm/fpsimd.h>
->>  #include <asm/kvm.h>
->>  #include <asm/kvm_asm.h>
->> +#include <asm/kvm_rme.h>
->>  
->>  #define __KVM_HAVE_ARCH_INTC_INITIALIZED
->>  
->> @@ -240,6 +241,9 @@ struct kvm_arch {
->>  	 * the associated pKVM instance in the hypervisor.
->>  	 */
->>  	struct kvm_protected_vm pkvm;
->> +
->> +	bool is_realm;
->                ^
-> It would be better to put more comments which really helps on the review.
+On Sat, Feb 11, 2023 at 4:17 AM Zhang Rui <rui.zhang@intel.com> wrote:
+>
+> When setting the power limit time window, software updates the 'y' bits
+> and 'f' bits in the power limit register, and the value hardware takes
+> follows the formula below
+>
+>         Time window = 2 ^ y * (1 + f / 4) * Time_Unit
+>
+> When handling large time window input from userspace, using left
+> shifting breaks in two cases,
+> 1. when ilog2(value) is bigger than 31, in expression "1 << y", left
+>    shifting by more than 31 bits has undefined behavior. This breaks
+>    'y'. For example, on an Alderlake platform, "1 << 32" returns 1.
+> 2. when ilog2(value) equals 31, "1 << 31" returns negative value
+>    because '1' is recognized as signed int. And this breaks 'f'.
+>
+> Given that 'y' has 5 bits and hardware can never take a value larger
+> than 31, fix the first problem by clamp the time window to the maximum
+> possible value that the hardware can take.
+>
+> Fix the second problem by using unsigned bit left shift.
+>
+> Note that hardware has its own maximum time window limitation, which
+> may be lower than the time window value retrieved from the power limit
+> register. When this happens, hardware clamps the input to its maximum
+> time window limitation. That is why a software clamp is preferred to
+> handle the problem on hand.
+>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> ---
+> Change since V1:
+> 1. drop pr_warn message for bogus userspace input.
+> 2. Add a comment when handling the large exponent.
+> ---
+>  drivers/powercap/intel_rapl_common.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+> index 26d00b1853b4..69526d21699d 100644
+> --- a/drivers/powercap/intel_rapl_common.c
+> +++ b/drivers/powercap/intel_rapl_common.c
+> @@ -999,7 +999,15 @@ static u64 rapl_compute_time_window_core(struct rapl_package *rp, u64 value,
+>
+>                 do_div(value, rp->time_unit);
+>                 y = ilog2(value);
+> -               f = div64_u64(4 * (value - (1 << y)), 1 << y);
+> +
+> +               /*
+> +                * The target hardware field has 7 bits, return all ones if
+> +                * the exponent is too large.
+> +                */
+> +               if (y > 0x1f)
+> +                       return 0x7f;
+> +
+> +               f = div64_u64(4 * (value - (1ULL << y)), 1ULL << y);
+>                 value = (y & 0x1f) | ((f & 0x3) << 5);
+>         }
+>         return value;
+> --
 
-Thanks for the feedback - I had thought "is realm" was fairly
-self-documenting, but perhaps I've just spent too much time with this code.
-
-> I was looking for the user of this memeber to see when it is set. It seems
-> it is not in this patch. It would have been nice to have a quick answer from the
-> comments.
-
-The usage is in the kvm_is_realm() function which is used in several of
-the later patches as a way to detect this kvm guest is a realm guest.
-
-I think the main issue is that I've got the patches in the wrong other.
-Patch 7 "arm64: kvm: Allow passing machine type in KVM creation" should
-probably be before this one, then I could add the assignment of is_realm
-into this patch (potentially splitting out the is_realm parts into
-another patch).
-
-Thanks,
-
-Steve
-
+Applied as 6.3 material with a minor adjustment of the new comment, thanks!
