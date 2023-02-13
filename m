@@ -2,100 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05DDB69530A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA95695310
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:32:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbjBMV3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 16:29:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
+        id S230314AbjBMVb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 16:31:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbjBMV3h (ORCPT
+        with ESMTP id S230293AbjBMVb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 16:29:37 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BAD20D19
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:29:34 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id sb24so11259816ejb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:29:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pjFd6eQHGjjXlgB6ck7U8JqdjsspIM0KobnohlKdjVc=;
-        b=OeLT+m1p9SztNidp6k9lL2bSH8EzM9THBHI78j8SDN5zIAckTW7y5PJRqOoktAsiTa
-         D2/1dV300OW/pG/PidYtWMuoG99ZP7c/vYFjJD15yf81DZWzDG7Uh9O0eDUBho/lbSVd
-         yECccjrxcRQDkyLrOr5RaTUU+g651eAKymc0NoUk9una5yaXLs7RcUmS9Ug8CC6x/2Qa
-         4K6f3Fw7MapsMZafAJjTNRNtjb6eiqsCrPeJYED2bc3+/QisROmhr22sApObkNNuxkha
-         TtCtiFamaIO0Gde1phwcsdikVO3CiEzwT9Ef0bPmtcT4UYRuF9UAkv7vpZx0wih5DbtV
-         H3bw==
+        Mon, 13 Feb 2023 16:31:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE2D211DF
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:31:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676323872;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=S8Jx6cSFIcaW45Hs8sr354ULKB9oTW16m++fk2w9xe0=;
+        b=KuD8GqTvpVranlU5etaswDSwFLMK+9dnUCc4gqfrdbVsMPGiqtZugEFrHqrZtpuY0urvkZ
+        fZEP/FdoTYH41qpzEr6w2olSXBrU4k8GE6MF2tNu8vbIM4FHywNHLSbyLMuWp4kfBnqDlP
+        bl+3U8ZF2HiVbYkCWe05Hl+ht1kXaYM=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-297-vLt1leYdPZ-aqfjuYa4SIQ-1; Mon, 13 Feb 2023 16:31:11 -0500
+X-MC-Unique: vLt1leYdPZ-aqfjuYa4SIQ-1
+Received: by mail-oo1-f69.google.com with SMTP id r8-20020a4aa2c8000000b005174e40d6f3so4868182ool.17
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:31:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pjFd6eQHGjjXlgB6ck7U8JqdjsspIM0KobnohlKdjVc=;
-        b=L+zfHWyDihgswCU5Y52OWz2r1Fx3TG81T2eahaZ+Btoz7FsmQ+tGRCMXMElapUYJFb
-         1tpTp/74SkbCzpA7IovSOE6vNDnDXXiMLfLxpwBOqJtgJXhq7w7Nzum+Pq+JDsVpLLp6
-         BxSKXj6ZXB6+QHQvFo/CQUjoVjriA3ycsT1bFdTbFVpAHLTp692aFA5/MZ0NOP9MWIf2
-         GtyWd7O5nllWESvKwZEt7Bo+od8WlnRlXi0C/t9LbxvlXDa3dWOts0aGJmuylFWkHEEA
-         gmjq9I4boWI85SFgdYtPFeHQKZGk7HqAW4VRUSXxc4WF4BjGI8syCOSGPxKRKvhQqROs
-         teyQ==
-X-Gm-Message-State: AO0yUKUp6ym7q3k3Z7BYgAERQvcbT/6Wk9+oo4eaIzqctbU9ezBu3rtv
-        cW3v9xweNyeT8dSfhDvaXM+B7g==
-X-Google-Smtp-Source: AK7set+icLqNrnDmLD3M5E5tWB/6wEHU+fexYbodEstBYLc2hkKeFHcn/dIQ7yzHG26g1MwlCxvPCQ==
-X-Received: by 2002:a17:906:4e91:b0:8ae:d3c9:1db7 with SMTP id v17-20020a1709064e9100b008aed3c91db7mr338746eju.73.1676323772878;
-        Mon, 13 Feb 2023 13:29:32 -0800 (PST)
-Received: from localhost.localdomain (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id i16-20020a170906699000b00883410a786csm7293225ejr.207.2023.02.13.13.29.31
+        bh=S8Jx6cSFIcaW45Hs8sr354ULKB9oTW16m++fk2w9xe0=;
+        b=aFmIG++T1dAO9+OgvOsOQQAdjG+90gyYEA38CZd58KM/i6+NAqemBwI+7BsZmFYejb
+         5CDcr+ExUcLPEvZtHQZ9GWMoJ9eFSUi4GQyzWCLnnSM9sggpmfzGpM971kA4zVAjxOMz
+         zXePBswG7qgJSCeCNxg14K9lP/I4X0n2JffODIdb97ThvaoZQ126lhDpxLgOjgQ+aICI
+         XeC9TPxRCWMQt5VtA/qqVuhQqaAcMI2MB7A+kpKoHBEqpMEDsuzIH0RnspOiETnn7Koj
+         QVH3t36GiWAIOAw9HTco2lY4k6y6wzn/WKTLhDmlAJ+hspvP+gZ7EoyC+cjsCejVhDNJ
+         Jq9w==
+X-Gm-Message-State: AO0yUKXYljq78xNFQYPo4tWXdZzlDGyCkAXeRWRdxSIhAr7TVpwIQdnh
+        gI53t0nTUFFsbzU8A+PzDlGeggi2ndRX1vGzZBCmIqmNj72uicKZW0hflHoPGQNYoAW6QwuKMcc
+        Jkyy/WUdMtj/GjGIRrVRnP/Fq
+X-Received: by 2002:a05:6871:54f:b0:163:8b58:ab23 with SMTP id t15-20020a056871054f00b001638b58ab23mr15125906oal.35.1676323870511;
+        Mon, 13 Feb 2023 13:31:10 -0800 (PST)
+X-Google-Smtp-Source: AK7set8UBE4VIVd2o9PdNKsl3q4pn7Mu5YmJ8E0oL9yKlg3DnN3+1x4FKFROitPge1Hvry3cpiLsIQ==
+X-Received: by 2002:a05:6871:54f:b0:163:8b58:ab23 with SMTP id t15-20020a056871054f00b001638b58ab23mr15125883oal.35.1676323870229;
+        Mon, 13 Feb 2023 13:31:10 -0800 (PST)
+Received: from halaney-x13s.redhat.com ([2600:1700:1ff0:d0e0::21])
+        by smtp.gmail.com with ESMTPSA id xl6-20020a0568709f0600b00163263f84dasm5169880oab.12.2023.02.13.13.31.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 13:29:32 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: pmk8350: Use the correct PON compatible
-Date:   Mon, 13 Feb 2023 22:29:30 +0100
-Message-Id: <20230213212930.2115182-1-konrad.dybcio@linaro.org>
+        Mon, 13 Feb 2023 13:31:09 -0800 (PST)
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     devicetree@vger.kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, alexandre.torgue@foss.st.com,
+        peppe.cavallaro@st.com, joabreu@synopsys.com, mripard@kernel.org,
+        shenwei.wang@nxp.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Andrew Halaney <ahalaney@redhat.com>
+Subject: [PATCH 1/2] dt-bindings: net: snps,dwmac: Fix snps,reset-delays-us dependency
+Date:   Mon, 13 Feb 2023 15:31:03 -0600
+Message-Id: <20230213213104.78443-1-ahalaney@redhat.com>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A special compatible was introduced for PMK8350 both in the driver and
-the bindings to facilitate for 2 base registers (PBS & HLOS). Use it.
+The schema had snps,reset-delay-us as dependent on snps,reset-gpio. The
+actual property is called snps,reset-delays-us, so fix this to catch any
+devicetree defining snsps,reset-delays-us without snps,reset-gpio.
 
-Fixes: b2de43136058 ("arm64: dts: qcom: pmk8350: Add peripherals for pmk8350")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Fixes: 7db3545aef5f ("dt-bindings: net: stmmac: Convert the binding to a schemas")
+Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
 ---
- arch/arm64/boot/dts/qcom/pmk8350.dtsi | 2 +-
+ Documentation/devicetree/bindings/net/snps,dwmac.yaml | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/pmk8350.dtsi b/arch/arm64/boot/dts/qcom/pmk8350.dtsi
-index 32f5e6af8c11..f26fb7d32faf 100644
---- a/arch/arm64/boot/dts/qcom/pmk8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pmk8350.dtsi
-@@ -21,7 +21,7 @@ pmk8350: pmic@PMK8350_SID {
- 		#size-cells = <0>;
+diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+index e88a86623fce..16b7d2904696 100644
+--- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
++++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+@@ -552,7 +552,7 @@ required:
  
- 		pmk8350_pon: pon@1300 {
--			compatible = "qcom,pm8998-pon";
-+			compatible = "qcom,pmk8350-pon";
- 			reg = <0x1300>, <0x800>;
- 			reg-names = "hlos", "pbs";
+ dependencies:
+   snps,reset-active-low: ["snps,reset-gpio"]
+-  snps,reset-delay-us: ["snps,reset-gpio"]
++  snps,reset-delays-us: ["snps,reset-gpio"]
  
+ allOf:
+   - $ref: "ethernet-controller.yaml#"
 -- 
 2.39.1
 
