@@ -2,126 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D73B4693EC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 08:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA40693ECC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 08:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbjBMHMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 02:12:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58144 "EHLO
+        id S229754AbjBMHMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 02:12:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjBMHMM (ORCPT
+        with ESMTP id S229561AbjBMHMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 02:12:12 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA22C14F
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 23:12:10 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id k8-20020a05600c1c8800b003dc57ea0dfeso10567310wms.0
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 23:12:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=aw4PcE7AXZGFYnNiks7LnHK1opJ2bmin378kSJGcwKg=;
-        b=S/FJ6VGvt+lfzn6AJsBdcBAgkbjqojoYMV3M1+2x0McgXrazwaYlQnKeBfn+0iNIwy
-         SP7YJyzh4EnexS+uX17fU5D37GQy6x390cnBx0HGlC+IEwHOjt8a3TOe+TUxHV8GMPUw
-         Q0YEK03dL13JBGHE1yxLjFu4q4xK5IyEnGKz2SdtuDzgslHs64/k97aB0iImtu+TUojd
-         44Pm8sWj6Bn9YepL4YFT5Us7LO+DUr5VAZF9hMUjZCJbKgQ7u6wS02EbBlziZYM2/vMg
-         dX5Edc8av6whjKrPagth0ty4s+O4zPCVx0EfdszbHo6r5baPEoITxD84MLvNgg+QC3e1
-         lsZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aw4PcE7AXZGFYnNiks7LnHK1opJ2bmin378kSJGcwKg=;
-        b=bOXJaODc8+C50rfQXV1FoU+1MQykiF4jVFFoLham4cTXfy0qJqQwYrtUvo7aUBWK33
-         kNdSg1APXWxN3YoAmblxPRIKXppxH1YFHyQrdto2KCP44+CK2izfcowkCw9u+b+xiaE4
-         erT0ehJ66M7Io7HS2KUm7erS3IsAz2qd19LpYJMrMdYNT8+9Cslg4gjcEeNhSbOLNPgf
-         ylHwWm2C7qQXhgVDJukSQxDrcPHRwQvetcSE+bhuj7ir35axm/pqvtdOUSbxlldyDjQj
-         xV4ysTBwDTkrC//AsCU3FBfRzojNiHfiJmXfXlzj1jQY6mqiUr8M3glGphT5k1LyUzo1
-         15gw==
-X-Gm-Message-State: AO0yUKXXQmjUN4y2dY0ZvcNLAFQXXsjTPNdhPBFVKbCKK41FtIVw1yb/
-        DVvO/pGk73DOFRp5hpIDmdg=
-X-Google-Smtp-Source: AK7set/pIhC9eIY8sTKlhzTdbtPE5LOB62qafN3fdglVAE3eLNnHyhoea9waTlBORtYBTS1ktbQypA==
-X-Received: by 2002:a05:600c:9a2:b0:3dd:393c:20b5 with SMTP id w34-20020a05600c09a200b003dd393c20b5mr18400124wmp.35.1676272329430;
-        Sun, 12 Feb 2023 23:12:09 -0800 (PST)
-Received: from giga-mm.home ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id j23-20020a05600c1c1700b003daf681d05dsm13841463wms.26.2023.02.12.23.12.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Feb 2023 23:12:08 -0800 (PST)
-Message-ID: <78b980a9e913cb6d98fd7f99218ccb815926c9f3.camel@gmail.com>
-Subject: Re: [PATCH] driver: core: Prevent NULL pointer dereference in
- device name functions
-From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 13 Feb 2023 08:12:08 +0100
-In-Reply-To: <Y+nhnauiUDspXwNM@kroah.com>
-References: <20230212220441.258258-1-alexander.sverdlin@gmail.com>
-         <Y+nhnauiUDspXwNM@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 
+        Mon, 13 Feb 2023 02:12:46 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876D0C172
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 23:12:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676272365; x=1707808365;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=oDApUliXcaJviTBYjIi5M5cuBczUHP+iwTF6Q32uhFk=;
+  b=hHeHsC+nhrraboR161YvhnRvXXPl4oCpWWe4Ws9ZCRRFTyazc3bJr6kN
+   WVF3L6WrM4b2SkFEEHXRkS0p4Jy3K2z6vgtvN4lgIteekADGu9hu3XMtO
+   jFXi8fX8AquXHDAyo+5gf7Rg7HbcIVY9ygvVv5blGcpX+5ebrgz5XNoPe
+   bckwZ8mVX1CFTSFtbJ8UyVsgyJDFV5KhVECxRW3Ft2/cWcF1WN0v5b4gu
+   0S6t5mBMOATvxQHJTK1mByz86+49Rkfv1k9cDN7PewJQAdlcgE2YPh1km
+   MDDOJfzj45Ksnk+sYQN5T45LTi+MG7hBwX10SowrT59PIlbQFb5IxYqV4
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="332134584"
+X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
+   d="scan'208";a="332134584"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 23:12:45 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="997597947"
+X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
+   d="scan'208";a="997597947"
+Received: from joe-255.igk.intel.com (HELO localhost) ([10.91.220.57])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 23:12:43 -0800
+Date:   Mon, 13 Feb 2023 08:12:41 +0100
+From:   Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     ogabbay@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        kelbaz@habana.ai, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] habanalabs: change unused extern decl of hdev to forward
+ decl of hl_device
+Message-ID: <20230213071241.GA2799422@linux.intel.com>
+References: <20230208155450.1941608-1-trix@redhat.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230208155450.1941608-1-trix@redhat.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Wed, Feb 08, 2023 at 07:54:50AM -0800, Tom Rix wrote:
+> Building with clang W=2 has several similar warnings
+> drivers/accel/habanalabs/common/decoder.c:46:51: error: declaration shadows a variable in the global scope [-Werror,-Wshadow]
+> static void dec_error_intr_work(struct hl_device *hdev, u32 base_addr, u32 core_id)
+>                                                   ^
+> drivers/accel/habanalabs/common/security.h:13:26: note: previous declaration is here
+> extern struct hl_device *hdev;
+>                          ^
+> 
+> There is no global definition of hdev, so the extern is not needed.
+> Searched with
+> grep -r '^struct' . | grep hl_dev
+> 
+> Change to an forward decl to resolve these issues
+> drivers/accel/habanalabs/common/mmu/../security.h:133:40: error: ‘struct hl_device’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+>   133 |         bool (*skip_block_hook)(struct hl_device *hdev,
+>       |                                        ^~~~~~~~~
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
 
-On Mon, 2023-02-13 at 08:07 +0100, Greg Kroah-Hartman wrote:
-> > Prevent similar scenarios:
-> >=20
-> > Unable to handle kernel NULL pointer dereference at virtual address 000=
-00038
-> > ...
-> > PC is at dev_driver_string+0x0/0x38
->=20
-> How did this "scenario" happen?=C2=A0 What in-tree code caused this?
->=20
-
-such in-tree code is not known to me, I stubled upon this putting dev_info(=
-)
-all over the code in the platform we currently convert to DT (cirrus ep93xx=
-).
-
-> > Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-> > ---
-> > =C2=A0 drivers/base/core.c=C2=A0=C2=A0=C2=A0 | 3 +++
-> > =C2=A0 include/linux/device.h | 5 +++++
-> > =C2=A0 2 files changed, 8 insertions(+)
-> >=20
-> > diff --git a/drivers/base/core.c b/drivers/base/core.c
-> > index a3e14143ec0c..4ff2ddea7c9b 100644
-> > --- a/drivers/base/core.c
-> > +++ b/drivers/base/core.c
-> > @@ -2174,6 +2174,9 @@ const char *dev_driver_string(const struct device=
- *dev)
-> > =C2=A0 {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct device_driver *d=
-rv;
-> > =C2=A0=20
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!dev)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0return "<null>";
-> > +
->=20
-> None of these functions should be called with a NULL pointer as the
-> reference should have been properly gotten on them before calling these
-> functions.=C2=A0 So let's fix up the callers please, something is really
-> wrong with them.=C2=A0 Again, what in-tree code is causing this to happen=
-?
-
-Thanks for the explanation!
-
---=20
-Alexander Sverdlin.
-
+> ---
+>  drivers/accel/habanalabs/common/security.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/accel/habanalabs/common/security.h b/drivers/accel/habanalabs/common/security.h
+> index 234b4a6ed8bc..d7a3b3e82ea4 100644
+> --- a/drivers/accel/habanalabs/common/security.h
+> +++ b/drivers/accel/habanalabs/common/security.h
+> @@ -10,7 +10,7 @@
+>  
+>  #include <linux/io-64-nonatomic-lo-hi.h>
+>  
+> -extern struct hl_device *hdev;
+> +struct hl_device;
+>  
+>  /* special blocks */
+>  #define HL_MAX_NUM_OF_GLBL_ERR_CAUSE		10
+> -- 
+> 2.26.3
+> 
