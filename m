@@ -2,183 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DAD7694E65
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 647BA694E67
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 18:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjBMRuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 12:50:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
+        id S230355AbjBMRu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 12:50:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjBMRuN (ORCPT
+        with ESMTP id S230204AbjBMRuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 12:50:13 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F8C1F904;
-        Mon, 13 Feb 2023 09:50:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676310607; x=1707846607;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rEHS2mWzrw0ECvJoqmlHM2NjnN/5dSahkcXiLiVfmY4=;
-  b=GkMqzjQM4cyxaSmcnGd3WVRf7C8QJaAGK2tBuoeUiDdXf4XaRL6c7G+M
-   rU6GW7J3uu9gBbmc3WGsH2ilhOgOVgYihm+g4fcF+SYZHgeZFZsQGuvvR
-   vudrE7WQHxOinoDoJu+O7+PRS7sgjMMFzpMaTePbXHkf3Ajdgqe3lQPSy
-   5O5yDM05LSfVrxHZZN1GlehfS2A35MMk3aEJE3WqH4EPU2Y+w/Szbuv5f
-   /GA6fC1gwpp2vu25qNDdl/v0ad5BbQj1GrJV7406fWz+baCxAENJWNrUU
-   Bpd+na2nYV/ophxAz1nVVP/24LeoNjkxB8gnV4kez87AZSe/8brxY90p9
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="333086275"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="333086275"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 09:50:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="737597774"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="737597774"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Feb 2023 09:50:04 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pRcxm-006TRX-1P;
-        Mon, 13 Feb 2023 19:50:02 +0200
-Date:   Mon, 13 Feb 2023 19:50:02 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Raul Rangel <rrangel@chromium.org>
-Cc:     Werner Sembach <wse@tuxedocomputers.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
-        brgl@bgdev.pl, linux-gpio@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: Re: [PATCH] gpiolib: acpi: Add a ignore wakeup quirk for Clevo NH5xAx
-Message-ID: <Y+p4Sq/WnZ4jAp+F@smile.fi.intel.com>
-References: <20230210164636.628462-1-wse@tuxedocomputers.com>
- <Y+Z5OSa6hepQBOyc@smile.fi.intel.com>
- <029b8d80-db28-cdb2-5c39-334be6968fad@tuxedocomputers.com>
- <Y+owDqifuU9nf+1i@smile.fi.intel.com>
- <86db79fa-5efb-caad-3310-60928907cc58@amd.com>
- <Y+pLLzLDotZQLpdA@smile.fi.intel.com>
- <97026dc5-e92e-62fe-43ae-33533125d900@tuxedocomputers.com>
- <CAHQZ30Cs+kp82coR10Wat7q3S_8+pFf=5=44kMEMcjBOjmn=6A@mail.gmail.com>
+        Mon, 13 Feb 2023 12:50:17 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C561F933
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:50:09 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id oa11-20020a17090b1bcb00b002341a2656e5so1462004pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 09:50:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=M8NVw51hJujJ9w6ww4tXYpEn/8Vq7ox+Z1FASgY/bLU=;
+        b=Bd5fqu4Y/EyTummo2fVWma8W7zSH94KPXwjC+My/qv4w4lRqc2bTM0aeCnwo6RxXqx
+         Qr+kuCxm+ap5+tWeT8OpIKQQTipytFb7/VmEUWg7rfnNZKpqDqQEHV5nGn8XO1FGTIk+
+         Nv4k3G3cJKiR3Q7ObE4YCnakTxt7A81IvBvGWk1/KSvFfHtxEp6CPMyvhBkOKyOuYFvK
+         lTno7aCndNECZC+kSDNG8MR1VstW/BurZNGlpBM46+040Vmc0bbLtTufBBF0wZGWZc+x
+         zD2cd1bgxeINi8EXEJNHjiAb5HnZPX/jb5phCXk8ACCb2hEiYZweiC4Kbi2OEhcQmVTc
+         i1ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M8NVw51hJujJ9w6ww4tXYpEn/8Vq7ox+Z1FASgY/bLU=;
+        b=PaURErGfWrDkpsEG6WIeHcB6RmYe6SLfK4WOcYUzIVNSl/uBxLHo+zg0molmgoHs4N
+         kpYNomAwxxUrTgbEc31JHP/nibEMV7/fRrGzuJxs4WH2gr4R9eBwqCU/N+M7Tr3SX1pv
+         jJYP5FfBuCsu/KSvYRGMlFTzqCVzg+l+WUDc4z5hL++96tVV28G5iEZk1RRjecNAcLin
+         oUQURs4Hf7//6uZhJ+GRs0kirE+BsrQmWvLm9iO6sWcNSHmdzjxcsGeRfdN1vXqEbQVD
+         mBnHrPtXVQ9/RDhn0B9zWw1X2braxQNjrkDX7HFdZjDxip7tkV7elkSIUZQe7OT4qKkd
+         K5JA==
+X-Gm-Message-State: AO0yUKVT4hWMgWBNK/6aCJRzlFzDnNyV4EzpdZjcu28phuqvWBaDoK9o
+        rOm6dpbzgQayFOUAShUpUc2g+w==
+X-Google-Smtp-Source: AK7set9lsbgjl5TgXfCPbU1vvfIDzkRjBJr9zNN0yZX/rOiaR87z3+Pi1tvaUwDAPm+VBgOq2lq3rA==
+X-Received: by 2002:a17:90b:4a0b:b0:233:9fff:888e with SMTP id kk11-20020a17090b4a0b00b002339fff888emr13858074pjb.39.1676310609341;
+        Mon, 13 Feb 2023 09:50:09 -0800 (PST)
+Received: from p14s ([2604:3d09:148c:c800:8b5:7925:cf2a:8bac])
+        by smtp.gmail.com with ESMTPSA id i61-20020a17090a3dc300b00231224439c1sm4290656pjc.27.2023.02.13.09.50.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 09:50:08 -0800 (PST)
+Date:   Mon, 13 Feb 2023 10:50:06 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Iuliana Prodan <iuliana.prodan@nxp.com>
+Cc:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "andersson@kernel.org" <andersson@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "arnaud.pouliquen@foss.st.com" <arnaud.pouliquen@foss.st.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V3 0/6] remoteproc: imx_rproc: support firmware in DDR
+Message-ID: <20230213175006.GA310433@p14s>
+References: <20230209063816.2782206-1-peng.fan@oss.nxp.com>
+ <2c4997fa-973c-dee4-9b26-6b38a1ca4540@nxp.com>
+ <DU0PR04MB9417A9B81B86FAC0A477063D88DC9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <73d34c86-7c31-6530-0915-aa470af5d9ca@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHQZ30Cs+kp82coR10Wat7q3S_8+pFf=5=44kMEMcjBOjmn=6A@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <73d34c86-7c31-6530-0915-aa470af5d9ca@nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 10:20:41AM -0700, Raul Rangel wrote:
-> On Mon, Feb 13, 2023 at 7:47 AM Werner Sembach <wse@tuxedocomputers.com> wrote:
-> > Am 13.02.23 um 15:37 schrieb Andy Shevchenko:
-> > > On Mon, Feb 13, 2023 at 07:20:48AM -0600, Mario Limonciello wrote:
-> > >> On 2/13/23 06:41, Andy Shevchenko wrote:
-> > >>> On Mon, Feb 13, 2023 at 12:30:08PM +0100, Werner Sembach wrote:
-> > >>>> Am 10.02.23 um 18:04 schrieb Andy Shevchenko:
-> > >>>>> On Fri, Feb 10, 2023 at 05:46:36PM +0100, Werner Sembach wrote:
-> > >>>>>> commit 1796f808e4bb ("HID: i2c-hid: acpi: Stop setting wakeup_capable")
-> > >>>>>> changed the policy such that I2C touchpads may be able to wake up the
-> > >>>>>> system by default if the system is configured as such.
-> > >>>>>>
-> > >>>>>> However on Clevo NH5xAx/TUXEDO XA15 Gen10 there is a mistake in the ACPI
-> > >>>>>> tables that the TP_ATTN# signal connected to GPIO 10 is configured as
-> > >>>>>> ActiveLow and level triggered but connected to a pull up.
-> > >>>>> I'm not sure I understand the issue here. From what you say here it seems
-> > >>>>> correct ACPI description.
-> > >>>> TBH I copied the commit description from https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4cb786180dfb5258ff3111181b5e4ecb1d4a297b
-> > >>>> which is for a different device having the exact same problem.
-> > >>> Yeah, and I reviewed that and seems paid no attention to this detail.
-> > >>>
-> > >>> So, ActiveLow + PullUp is the _right_ thing to do in ACPI.
-> > >>> The problem seems somewhere else.
-> > >>>
-> > >>> Mario, can we have an access to the schematics of the affected pin to
-> > >>> understand better what's going on?
-> > >>>
-> > >>> Or is that description missing some crucial detail?
-> >
-> > Schematics for the NH5xAx can also be found on this unofficial clevo mirror
-> > (service manuals, scroll to end for schematics):
-> >
-> > http://repo.palkeo.com/clevo-mirror/NH5xACx_AFx_ADx/NH50AC.zip
-> >
-> > http://repo.palkeo.com/clevo-mirror/NH5xACx_AFx_ADx/NH50AF1.zip
-> >
-> > User: repo
-> >
-> > PW: repo
-> >
-> > >> The schematics were shared by the reporter for the original issue which is
-> > >> how we reached the conclusion there was a mistake.
-> > >>
-> > >> As they're both Clevo designs it's certainly possible they have the same
-> > >> mistake in two systems.
+On Mon, Feb 13, 2023 at 12:15:59PM +0200, Iuliana Prodan wrote:
+> On 2/12/2023 9:43 AM, Peng Fan wrote:
+> > Hi Iuliana,
+> > 
+> > > Subject: Re: [PATCH V3 0/6] remoteproc: imx_rproc: support firmware in
+> > > DDR
+> > > 
+> > > 
+> > > On 2/9/2023 8:38 AM, Peng Fan (OSS) wrote:
+> > > > From: Peng Fan <peng.fan@nxp.com>
+> > > > 
+> > > > V3:
+> > > > 
+> > > >    Daniel, Iuliana
+> > > > 
+> > > >      Please help review this patchset per Mathieu's comments.
+> > > > 
+> > > >    Thanks,
+> > > >    Peng.
+> > > > 
+> > > >    Move patch 3 in v2 to 1st patch in v3 and add Fixes tag Per Daniel
+> > > >    IMX_RPROC_ANY in patch 3 Per Mathieu
+> > > >    Update comment and commit log in patch 5, 6.
+> > > > 
+> > > >    NXP SDK provides ".interrupts" section, but I am not sure how others
+> > > >    build the firmware. So I still keep patch 6 as v2, return bootaddr
+> > > >    if there is no ".interrupts" section.
+> > > > 
+> > > > V2:
+> > > >    patch 4 is introduced for sparse check warning fix
+> > > > 
+> > > > This pachset is to support i.MX8M and i.MX93 Cortex-M core firmware
+> > > > could be in DDR, not just the default TCM.
+> > > > 
+> > > > i.MX8M needs stack/pc value be stored in TCML entry address[0,4], the
+> > > > initial value could be got from firmware first section ".interrupts".
+> > > > i.MX93 is a bit different, it just needs the address of .interrupts
+> > > > section. NXP SDK always has .interrupts section.
+> > > > 
+> > > > So first we need find the .interrupts section from firmware, so patch
+> > > > 1 is to reuse the code of find_table to introduce a new API
+> > > > rproc_elf_find_shdr to find shdr, the it could reused by i.MX driver.
+> > > > 
+> > > > Patch 2 is introduce devtype for i.MX8M/93
+> > > > 
+> > > > Although patch 3 is correct the mapping, but this area was never used
+> > > > by NXP SW team, we directly use the DDR region, not the alias region.
+> > > > Since this patchset is first to support firmware in DDR, mark this
+> > > > patch as a fix does not make much sense.
+> > > > 
+> > > > patch 4 and 5 is support i.MX8M/93 firmware in DDR with parsing
+> > > > .interrupts section. Detailed information in each patch commit message.
+> > > > 
+> > > > Patches were tested on i.MX8MQ-EVK i.MX8MP-EVK i.MX93-11x11-EVK
+> > > If one can build their firmware as they want, then the .interrupt section can
+> > > also be called differently.
+> > > I don't think is a good idea to base all your implementation on this
+> > > assumption.
+> > > 
+> > > It's clear there's a limitation when linking firmware in DDR, so this should be
+> > > well documented so one can compile their firmware and put the needed
+> > > section (interrupt as we call it in NXP SDK) always in TCML - independently
+> > > where the other section go.
+> > Ok, so .interrupt section should be a must in elf file if I understand correctly.
+> > 
+> > I could add a check in V4 that if .interrupt section is not there, driver will report
+> > failure.
+> > 
+> > How do you think?
 > 
-> > > Thank you!
-> > > I have looked at the schematics and read discussion.
-> > >
-> > > So, the conclusion that this is a BIOS bug is incorrect in my opinion.
-> > > The problem is either in the PMIC/EC firmware that shouldn't shut down 3.3VS
-> > > signal for a while or on the PCB level, so that pull up should be connected
-> > > to another power source that stays on.
-> > >
-> > > This means the description on the initial patch with the same issue is
-> > > incorrect.
-> > >
-> > > Do we know the power sequence on the suspend to see which and how on the
-> > > time line the power sources are off/on?
+> Peng, I stand by my opinion that the limitation of linking firmware in DDR
+> should be documented in an Application Note, or maybe there are other
+> documents where how to use imx_rproc is explained.
 > 
-> If you look at the load switch for 3.3VS, its EN2 pin is connected to
-> SUSB#_EN which is connected to SUSB# which is connected to
-> AND(SUSB#_PCH -> SLP_S3_L, PM_SLP_S0 -> S0A3_GPIO). So there is no
-> PMIC/EC firmware that is incharge of this. I guess I'm not quite sure
-> how they have S0A3_GPIO configured, so maybe I have an invert wrong.
+> The implementation based on the .interrupt section is not robust.
+> Maybe a user linked his firmware correctly in TCML, but the section is not
+> called .interrupt so the firmware loading will work.
 > 
-> The EC does control DD_ON which controls the 3.3V and 5V rails.
+> So, instead of using the section name, you should use the address.
 
-On page 6 of the schematics I see the U7 that forms SUSB# from SUSB#_APU
-(which corresponds to what you said) _and_ EC_EN, which is GPIO from IT5570,
-which is EC.
+Can you be more specific on the above?
 
-Are you using different schematics? I'm using the one from FDO bug report.
+> 
+> First, check whether there is a section linked to TCML.
+> If there is none, check for section name - as you did.
+> If there is no section called .interrupt, give an error message.
 
-> > >>>>>> As soon as the
-> > >>>>>> system suspends the touchpad loses power and then the system wakes up.
-> > >>>>>>
-> > >>>>>> To avoid this problem, introduce a quirk for this model that will prevent
-> > >>>>>> the wakeup capability for being set for GPIO 10.
-> > >>>>> I'm not against fixing this, but wouldn't be better to actually target the root
-> > >>>>> cause and have a different quirk? Or is it me who didn't get what is the root
-> > >>>>> cause?
-> > >>>>>
-> > >>>> I missed to reference the original discussion while copying the description:
-> > >>>> https://gitlab.freedesktop.org/drm/amd/-/issues/1722#note_1720627 (Note that
-> > >>>> it's a somewhat convoluted issue spanning multiple bugs when you scroll up
-> > >>>> from that particular linked comment, which are however irrelevant for this
-> > >>>> patch)
-> > >>>>
-> > >>>> I'm not deep into how ACPI defined IRQ work so maybe not a good idea for me
-> > >>>> summing it up, as I might have misunderstood parts of it ^^
-> > >>> The GpioIo() and GpioInt() resources have gaps in them, due to this some
-> > >>> additional information is required or some heuristics is used to deduct
-> > >>> the settings.
-> > >>>
-> > >>> All this is described in
-> > >>> https://www.kernel.org/doc/html/latest/firmware-guide/acpi/gpio-properties.html
-> > >>>
-> > >>>> I added the other ones from there to the cc.
-> > >>> Thank you.
+We have two ways of booting, one that puts the firmware image in the TCML and
+another in RAM.  Based on the processor type, the first 8 bytes of the TCML need
+to include the address for the stack and PC value.
 
--- 
-With Best Regards,
-Andy Shevchenko
+I think the first thing to do is have two different firmware images, one for
+i.MX8M and another one for i.MX93.  That should greatly simplify things.
 
+Second, there should always be a segment that adds the right information to the
+TMCL.  That segment doesn't need a name, it simply have to be part of the
+segments that are copied to memory (any kind of memory) so that function
+rproc_elf_load_segments() can do its job. 
 
+That pushes the complexity to the tool that generates the firmware image,
+exactly where it should be.
+
+This is how I think we should solve this problem based on the very limited
+information provided with this patchset.  Please let me know if I missed
+something and we'll go from there.    
+
+> 
+> For all the above options please add comments in code, explaining each step.
+> 
