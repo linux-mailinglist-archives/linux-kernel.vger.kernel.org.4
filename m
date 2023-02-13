@@ -2,200 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3500693E57
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 07:31:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF81A693E5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 07:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjBMGbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 01:31:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
+        id S229819AbjBMGff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 01:35:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjBMGbx (ORCPT
+        with ESMTP id S229560AbjBMGfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 01:31:53 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE08E042
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 22:31:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676269912; x=1707805912;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=tico6HTkgBXy26etUgH3HgWqEVLIHc9gyZPN+ynMOls=;
-  b=XJT04FD2nvbdJrNjVRSNgNskKj3glHCn4oMnx04Lkg2K3CnvciPuQtO4
-   J3fuAA66xMGLCc3tUTjogNADHEqWQFf+iPJtlOfZZDvnIr3pbiZJBpr6a
-   0q9pL8HqlfiMGeMDt9NOx5e//yMMTCs93Nv9LdUoWLt/W6+Z7R1l5cEGx
-   QQu3/wjH1QdH5oGHFBV57Xmjiw/n1AcDMTFw0qD1DnKxLAJlcIQ9a6HV6
-   j0M3uy5AxggucQ9nDL2jYhhwvXNHtzje8ZXee4Mm8AkIx8kEgDdLy0hLR
-   CNjNGvQdRfpbxI6zl9fiuGEVB0PNtQPc6Zwsyv+Xl3eUQDmGkmV2hhM7B
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="329449574"
-X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
-   d="scan'208";a="329449574"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 22:31:51 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="757454965"
-X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
-   d="scan'208";a="757454965"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 22:31:48 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Bharata B Rao <bharata@amd.com>
-Cc:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <mgorman@suse.de>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <akpm@linux-foundation.org>, <luto@kernel.org>,
-        <tglx@linutronix.de>, <yue.li@memverge.com>,
-        <Ravikumar.Bangoria@amd.com>
-Subject: Re: [RFC PATCH 0/5] Memory access profiler(IBS) driven NUMA balancing
-References: <20230208073533.715-1-bharata@amd.com>
-        <878rh2b5zt.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <72b6ec8b-f141-3807-d7f2-f853b0f0b76c@amd.com>
-Date:   Mon, 13 Feb 2023 14:30:53 +0800
-In-Reply-To: <72b6ec8b-f141-3807-d7f2-f853b0f0b76c@amd.com> (Bharata B. Rao's
-        message of "Mon, 13 Feb 2023 11:22:12 +0530")
-Message-ID: <87zg9i9iw2.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 13 Feb 2023 01:35:33 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB4F6580
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 22:35:32 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5C06020705;
+        Mon, 13 Feb 2023 06:35:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676270130; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aUrX0EWkevj8gsrhHYpQQyzTkJQeN/b60WkhZ8cMU/U=;
+        b=MwvbgI8U4KB/xo0CvRWWovNU+qm00zD+2Du1rhDmOqY9hIIefsi+797HfFbPgJdwXXczJ6
+        kw8Aefb5oVRVY+J2S2RCll6G/M6mF2F/AbU+I/XOFzdbvXxUuRdArHI/StFAH/e74/eUel
+        5EMSylh+9qJb2Q2HqzKH+dEbF0cQBtM=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 04C591391B;
+        Mon, 13 Feb 2023 06:35:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id u231OjHa6WMTCAAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 13 Feb 2023 06:35:29 +0000
+Message-ID: <936b5e37-0009-45c0-e4d2-899741c5f639@suse.com>
+Date:   Mon, 13 Feb 2023 07:35:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Cc:     "lists@nerdbynature.de" <lists@nerdbynature.de>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <20230209072220.6836-1-jgross@suse.com>
+ <20230209072220.6836-8-jgross@suse.com>
+ <BYAPR21MB16882DD5A99CB365F2BD22A6D7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
+From:   Juergen Gross <jgross@suse.com>
+Subject: Re: [PATCH v2 7/8] x86/mm: only check uniform after calling
+ mtrr_type_lookup()
+In-Reply-To: <BYAPR21MB16882DD5A99CB365F2BD22A6D7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------SnHQG24TiTPbQ0OwK0aMVDVD"
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bharata B Rao <bharata@amd.com> writes:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------SnHQG24TiTPbQ0OwK0aMVDVD
+Content-Type: multipart/mixed; boundary="------------0KbDGPVZv90xWDGaFzHgGpMY";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "x86@kernel.org" <x86@kernel.org>
+Cc: "lists@nerdbynature.de" <lists@nerdbynature.de>,
+ "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski
+ <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <936b5e37-0009-45c0-e4d2-899741c5f639@suse.com>
+Subject: Re: [PATCH v2 7/8] x86/mm: only check uniform after calling
+ mtrr_type_lookup()
+References: <20230209072220.6836-1-jgross@suse.com>
+ <20230209072220.6836-8-jgross@suse.com>
+ <BYAPR21MB16882DD5A99CB365F2BD22A6D7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
+In-Reply-To: <BYAPR21MB16882DD5A99CB365F2BD22A6D7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
 
-> On 2/13/2023 8:56 AM, Huang, Ying wrote:
->> Bharata B Rao <bharata@amd.com> writes:
->> 
->>> Hi,
->>>
->>> Some hardware platforms can provide information about memory accesses
->>> that can be used to do optimal page and task placement on NUMA
->>> systems. AMD processors have a hardware facility called Instruction-
->>> Based Sampling (IBS) that can be used to gather specific metrics
->>> related to instruction fetch and execution activity. This facility
->>> can be used to perform memory access profiling based on statistical
->>> sampling.
->>>
->>> This RFC is a proof-of-concept implementation where the access
->>> information obtained from the hardware is used to drive NUMA balancing.
->>> With this it is no longer necessary to scan the address space and
->>> introduce NUMA hint faults to build task-to-page association. Hence
->>> the approach taken here is to replace the address space scanning plus
->>> hint faults with the access information provided by the hardware.
->> 
->> You method can avoid the address space scanning, but cannot avoid memory
->> access fault in fact.  PMU will raise NMI and then task_work to process
->> the sampled memory accesses.  The overhead depends on the frequency of
->> the memory access sampling.  Please measure the overhead of your method
->> in details.
->
-> Yes, the address space scanning is avoided. I will measure the overhead
-> of hint fault vs NMI handling path. The actual processing of the access
-> from task_work context is pretty much similar to the stats processing
-> from hint faults. As you note the overhead depends on the frequency of
-> sampling. In this current approach, the sampling period is per-task
-> and it varies based on the same logic that NUMA balancing uses to
-> vary the scan period.
->
->> 
->>> The access samples obtained from hardware are fed to NUMA balancing
->>> as fault-equivalents. The rest of the NUMA balancing logic that
->>> collects/aggregates the shared/private/local/remote faults and does
->>> pages/task migrations based on the faults is retained except that
->>> accesses replace faults.
->>>
->>> This early implementation is an attempt to get a working solution
->>> only and as such a lot of TODOs exist:
->>>
->>> - Perf uses IBS and we are using the same IBS for access profiling here.
->>>   There needs to be a proper way to make the use mutually exclusive.
->>> - Is tying this up with NUMA balancing a reasonable approach or
->>>   should we look at a completely new approach?
->>> - When accesses replace faults in NUMA balancing, a few things have
->>>   to be tuned differently. All such decision points need to be
->>>   identified and appropriate tuning needs to be done.
->>> - Hardware provided access information could be very useful for driving
->>>   hot page promotion in tiered memory systems. Need to check if this
->>>   requires different tuning/heuristics apart from what NUMA balancing
->>>   already does.
->>> - Some of the values used to program the IBS counters like the sampling
->>>   period etc may not be the optimal or ideal values. The sample period
->>>   adjustment follows the same logic as scan period modification which
->>>   may not be ideal. More experimentation is required to fine-tune all
->>>   these aspects.
->>> - Currently I am acting (i,e., attempt to migrate a page) on each sampled
->>>   access. Need to check if it makes sense to delay it and do batched page
->>>   migration.
->> 
->> You current implementation is tied with AMD IBS.  You will need a
->> architecture/vendor independent framework for upstreaming.
->
-> I have tried to keep it vendor and arch neutral as far
-> as possible, will re-look into this of course to make the
-> interfaces more robust and useful.
->
-> I have defined a static key (hw_access_hints=false) which will be
-> set only by the platform driver when it detects the hardware
-> capability to provide memory access information. NUMA balancing
-> code skips the address space scanning when it sees this capability.
-> The platform driver (access fault handler) will call into the NUMA
-> balancing API with linear and physical address information of the
-> accessed sample. Hence any equivalent hardware functionality could
-> plug into this scheme in its current form. There are checks for this
-> static key in the NUMA balancing logic at a few points to decide if
-> it should work based on access faults or hint faults.
->
->> 
->> BTW: can IBS sampling memory writing too?  Or just memory reading?
->
-> IBS can tag both store and load operations.
+--------------0KbDGPVZv90xWDGaFzHgGpMY
+Content-Type: multipart/mixed; boundary="------------Z4z0Rso2yBcxS7NmuBkPu6hy"
 
-Thanks for your information!
+--------------Z4z0Rso2yBcxS7NmuBkPu6hy
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
->> 
->>> This RFC is mainly about showing how hardware provided access
->>> information could be used for NUMA balancing but I have run a
->>> few basic benchmarks from mmtests to check if this is any severe
->>> regression/overhead to any of those. Some benchmarks show some
->>> improvement, some show no significant change and a few regress.
->>> I am hopeful that with more appropriate tuning there is scope for
->>> futher improvement here especially for workloads for which NUMA
->>> matters.
->> 
->> What's your expected improvement of the PMU based NUMA balancing?  It
->> should come from reduced overhead?  higher accuracy?  Quicker response?
->> I think that it may be better to prove that with appropriate statistics
->> for at least one workload.
->
-> Just to clarify, unlike PEBS, IBS works independently of PMU.
+T24gMTMuMDIuMjMgMDI6MDgsIE1pY2hhZWwgS2VsbGV5IChMSU5VWCkgd3JvdGU6DQo+IEZy
+b206IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4gU2VudDogV2VkbmVzZGF5LCBG
+ZWJydWFyeSA4LCAyMDIzIDExOjIyIFBNDQo+Pg0KPj4gVG9kYXkgcHVkX3NldF9odWdlKCkg
+YW5kIHBtZF9zZXRfaHVnZSgpIHRlc3QgZm9yIHRoZSBNVFJSIHR5cGUgdG8gYmUNCj4+IFdC
+IG9yIElOVkFMSUQgYWZ0ZXIgY2FsbGluZyBtdHJyX3R5cGVfbG9va3VwKCkuIFRob3NlIHRl
+c3RzIGNhbiBiZQ0KPj4gZHJvcHBlZCwgYXMgdGhlIG9ubHkgcmVhc29uIHRvIG5vdCB1c2Ug
+YSBsYXJnZSBtYXBwaW5nIHdvdWxkIGJlDQo+PiB1bmlmb3JtIGJlaW5nIDAuIEFueSBNVFJS
+IHR5cGUgY2FuIGJlIGFjY2VwdGVkIGFzIGxvbmcgYXMgaXQgYXBwbGllcw0KPj4gdG8gdGhl
+IHdob2xlIG1lbW9yeSByYW5nZSBjb3ZlcmVkIGJ5IHRoZSBtYXBwaW5nLCBhcyB0aGUgYWx0
+ZXJuYXRpdmUNCj4+IHdvdWxkIG9ubHkgYmUgdG8gbWFwIHRoZSBzYW1lIHJlZ2lvbiB3aXRo
+IHNtYWxsZXIgcGFnZXMgaW5zdGVhZCB1c2luZw0KPj4gdGhlIHNhbWUgUEFUIHR5cGUgYXMg
+Zm9yIHRoZSBsYXJnZSBtYXBwaW5nLg0KPj4NCj4+IFN1Z2dlc3RlZC1ieTogTGludXMgVG9y
+dmFsZHMgPHRvcnZhbGRzQGxpbnV4LWZvdW5kYXRpb24ub3JnPg0KPj4gU2lnbmVkLW9mZi1i
+eTogSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuY29tPg0KPj4gLS0tDQo+PiAgIGFyY2gv
+eDg2L21tL3BndGFibGUuYyB8IDYgKystLS0tDQo+PiAgIDEgZmlsZSBjaGFuZ2VkLCAyIGlu
+c2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2FyY2gv
+eDg2L21tL3BndGFibGUuYyBiL2FyY2gveDg2L21tL3BndGFibGUuYw0KPj4gaW5kZXggZTRm
+NDk5ZWIwZjI5Li43YjljNTQ0M2QxNzYgMTAwNjQ0DQo+PiAtLS0gYS9hcmNoL3g4Ni9tbS9w
+Z3RhYmxlLmMNCj4+ICsrKyBiL2FyY2gveDg2L21tL3BndGFibGUuYw0KPj4gQEAgLTcyMSw4
+ICs3MjEsNyBAQCBpbnQgcHVkX3NldF9odWdlKHB1ZF90ICpwdWQsIHBoeXNfYWRkcl90IGFk
+ZHIsIHBncHJvdF90IHByb3QpDQo+PiAgIAl1OCBtdHJyLCB1bmlmb3JtOw0KPj4NCj4+ICAg
+CW10cnIgPSBtdHJyX3R5cGVfbG9va3VwKGFkZHIsIGFkZHIgKyBQVURfU0laRSwgJnVuaWZv
+cm0pOw0KPj4gLQlpZiAoKG10cnIgIT0gTVRSUl9UWVBFX0lOVkFMSUQpICYmICghdW5pZm9y
+bSkgJiYNCj4+IC0JICAgIChtdHJyICE9IE1UUlJfVFlQRV9XUkJBQ0spKQ0KPj4gKwlpZiAo
+IXVuaWZvcm0pDQo+PiAgIAkJcmV0dXJuIDA7DQo+Pg0KPj4gICAJLyogQmFpbCBvdXQgaWYg
+d2UgYXJlIHdlIG9uIGEgcG9wdWxhdGVkIG5vbi1sZWFmIGVudHJ5OiAqLw0KPj4gQEAgLTc0
+OCw4ICs3NDcsNyBAQCBpbnQgcG1kX3NldF9odWdlKHBtZF90ICpwbWQsIHBoeXNfYWRkcl90
+IGFkZHIsIHBncHJvdF90IHByb3QpDQo+PiAgIAl1OCBtdHJyLCB1bmlmb3JtOw0KPj4NCj4+
+ICAgCW10cnIgPSBtdHJyX3R5cGVfbG9va3VwKGFkZHIsIGFkZHIgKyBQTURfU0laRSwgJnVu
+aWZvcm0pOw0KPj4gLQlpZiAoKG10cnIgIT0gTVRSUl9UWVBFX0lOVkFMSUQpICYmICghdW5p
+Zm9ybSkgJiYNCj4+IC0JICAgIChtdHJyICE9IE1UUlJfVFlQRV9XUkJBQ0spKSB7DQo+PiAr
+CWlmICghdW5pZm9ybSkgew0KPj4gICAJCXByX3dhcm5fb25jZSgiJXM6IENhbm5vdCBzYXRp
+c2Z5IFttZW0gJSMwMTBsbHgtJSMwMTBsbHhdIHdpdGggYSBodWdlLXBhZ2UgbWFwcGluZyBk
+dWUgdG8gTVRSUiBvdmVycmlkZS5cbiIsDQo+PiAgIAkJCSAgICAgX19mdW5jX18sIGFkZHIs
+IGFkZHIgKyBQTURfU0laRSk7DQo+IA0KPiBJJ20gc2VlaW5nIHRoaXMgd2FybmluZyB0cmln
+Z2VyIGluIGEgbm9ybWFsIEh5cGVyLVYgZ3Vlc3QgKGkuZS4sICpub3QqIGFuDQo+IFNFVi1T
+TlAgQ29uZmlkZW50aWFsIFZNKS4gIFRoZSBvcmlnaW5hbCBmaWx0ZXJpbmcgaGVyZSBiYXNl
+ZCBvbg0KPiBNVFJSX1RZUEVfV1JCQUNLIGFwcGVhcnMgdG8gYmUgaGlkaW5nIGEgYnVnIGlu
+IG10cnJfdHlwZV9sb29rdXBfdmFyaWFibGUoKQ0KPiB3aGVyZSBpdCBpbmNvcnJlY3RseSB0
+aGlua3MgYW4gYWRkcmVzcyByYW5nZSBtYXRjaGVzIHR3byBkaWZmZXJlbnQgdmFyaWFibGUN
+Cj4gTVRSUnMsIGFuZCBoZW5jZSBjbGVhcnMgInVuaWZvcm0iLg0KPiANCj4gSGVyZSBhcmUg
+dGhlIHZhcmlhYmxlIE1UUlJzIGluIHRoZSBub3JtYWwgSHlwZXItViBndWVzdCB3aXRoIDMy
+IEdpQnl0ZXMNCj4gb2YgbWVtb3J5Og0KPiANCj4gWyAgICAwLjA0MzU5Ml0gTVRSUiB2YXJp
+YWJsZSByYW5nZXMgZW5hYmxlZDoNCj4gWyAgICAwLjA0ODMwOF0gICAwIGJhc2UgMDAwMDAw
+MDAwMDAwIG1hc2sgRkZGRjAwMDAwMDAwIHdyaXRlLWJhY2sNCj4gWyAgICAwLjA1NzQ1MF0g
+ICAxIGJhc2UgMDAwMTAwMDAwMDAwIG1hc2sgRkZGMDAwMDAwMDAwIHdyaXRlLWJhY2sNCj4g
+WyAgICAwLjA2Mzk3Ml0gICAyIGRpc2FibGVkDQo+IFsgICAgMC4wNjY3NTVdICAgMyBkaXNh
+YmxlZA0KPiBbICAgIDAuMDcwMDI0XSAgIDQgZGlzYWJsZWQNCj4gWyAgICAwLjA3Mjg1Nl0g
+ICA1IGRpc2FibGVkDQo+IFsgICAgMC4wNzYxMTJdICAgNiBkaXNhYmxlZA0KPiBbICAgIDAu
+MDc4NzYwXSAgIDcgZGlzYWJsZWQNCj4gDQo+IFZhcmlhYmxlIE1UUlIgIzAgY292ZXJzIGFk
+ZHJlc3NlcyB1cCB0byA0IEdpQnl0ZSwgd2hpbGUgIzEgY292ZXJzDQo+IDQgR2lCeXRlIHRv
+IDY0IEdpQnl0ZS4gICBCdXQgaW4gbXRycl90eXBlX2xvb2t1cF92YXJpYWJsZSgpLCBhZGRy
+ZXNzDQo+IHJhbmdlIDB4RjgwMDAwMDAgdG8gMHhGODFGRkZGRiBpcyBtYXRjaGluZyBib3Ro
+IE1UUlJzLCB3aGVuIGl0DQo+IHNob3VsZCBiZSBtYXRjaGluZyBqdXN0ICMwLg0KPiANCj4g
+VGhlIHByb2JsZW0gbG9va3MgdG8gYmUgdGhpcyBjb2RlIGluIG10cnJfdHlwZV9sb29rdXBf
+dmFyaWFibGUoKToNCj4gDQo+ICAgICAgICAgICAgICAgIGlmICgoc3RhcnQgJiBtYXNrKSAh
+PSAoYmFzZSAmIG1hc2spKQ0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgY29udGludWU7
+DQo+IA0KPiBJZiB0aGUgbWFzayBiaXRzIG9mIHN0YXJ0IGFuZCBiYXNlIGFyZSBkaWZmZXJl
+bnQsIHRoZW4gdGhlDQo+IE1UUlIgZG9lc24ndCBtYXRjaCwgYW5kIHRoZSBjb250aW51ZSBz
+dGF0ZW1lbnQgc2hvdWxkIGJlDQo+IGV4ZWN1dGVkLiAgVGhhdCdzIGNvcnJlY3QuICBCdXQg
+aWYgdGhlIG1hc2sgYml0cyBhcmUgdGhlIHNhbWUsDQo+IHRoYXQncyBub3Qgc3VmZmljaWVu
+dCBmb3IgdGhlIE1UUlIgdG8gbWF0Y2guICBJZiB0aGUgZW5kDQo+IGFkZHJlc3MgaXMgbGVz
+cyB0aGFuIGJhc2UsIHRoZSBNVFJSIGRvZXNuJ3QgbWF0Y2gsIGFuZA0KPiB0aGUgY29udGlu
+dWUgc3RhdGVtZW50IHNob3VsZCBzdGlsbCBiZSBleGVjdXRlZCwgd2hpY2gNCj4gaXNuJ3Qg
+aGFwcGVuaW5nLg0KPiANCj4gQnV0IHNvbWVib2R5IHBsZWFzZSBjaGVjayBteSB0aGlua2lu
+Zy4gOi0pDQoNCkkgZG9uJ3Qgc2VlIGEgZmxhdyBpbiB5b3VyIHJlYXNvbmluZy4NCg0KUmlj
+ayBtZW50aW9uZWQgYSBwcm9ibGVtIHdpdGggdGhpcyBwYXRjaCBpbiBhIEtWTSBndWVzdC4g
+SSdsbCB0cnkgdG8NCnJlcHJvZHVjZSBoaXMgc2V0dXAgZm9yIGNoZWNraW5nIHdoZXRoZXIg
+Zml4aW5nIG10cnJfdHlwZV9sb29rdXBfdmFyaWFibGUoKQ0KaXMgZW5vdWdoLCBvciBpZiB3
+ZSBuZWVkIHRvIGtlZXAgdGhlIHRlc3RzIGZvciBXQiBpbiB0aGlzIHBhdGNoLg0KDQoNCkp1
+ZXJnZW4NCg==
+--------------Z4z0Rso2yBcxS7NmuBkPu6hy
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-Good to known this, Thanks!
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-> I believe the improvement will come from reduced overhead due to
-> sampling of relevant accesses only.
->
-> I have a microbenchmark where two sets of threads bound to two 
-> NUMA nodes access the two different halves of memory which is
-> initially allocated on the 1st node.
->
-> On a two node Zen4 system, with 64 threads in each set accessing
-> 8G of memory each from the initial allocation of 16G, I see that
-> IBS driven NUMA balancing (i,e., this patchset) takes 50% less time
-> to complete a fixed number of memory accesses. This could well
-> be the best case and real workloads/benchmarks may not get this much
-> uplift, but it does show the potential gain to be had.
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-Can you find a way to show the overhead of the original implementation
-and your method?  Then we can compare between them?  Because you think
-the improvement comes from the reduced overhead.
+--------------Z4z0Rso2yBcxS7NmuBkPu6hy--
 
-I also have interest in the pages migration throughput per second during
-the test, because I suspect your method can migrate pages faster.
+--------------0KbDGPVZv90xWDGaFzHgGpMY--
 
-Best Regards,
-Huang, Ying
+--------------SnHQG24TiTPbQ0OwK0aMVDVD
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPp2jEFAwAAAAAACgkQsN6d1ii/Ey/7
+7gf+Kmv0dNutyYoVRjfOCK6qSsZLb1eWddmgpshbgvTjKZo83VKsfDsWNLKXQ1pJuaZtTDV7dKRP
+YYHc4wBrkS5BrjBQU3EyiPpxZ10VEUV7sF9mA/C5w34h2/05CN2BOXBGjfv77jLXJ0u1cSmFG37P
+TeEfESM2QOFSpnZSBN8ygcBTg4/dD44Cjubg19+wSmBMDSflBoKgBG3FMgUPZeRf/PuyAFQB72/U
+U3uXgaxusREEIfTkCuxp3SqL+dDAVy4Ca3Wi/R8H9KNg8MGiZ/ssxOT0Py/qqy7yYE4n/5l9bx/J
+Y5pzfaLNa+pWBbfCdGzcia0j4WV1NaJaD2CNflmnCg==
+=bloS
+-----END PGP SIGNATURE-----
+
+--------------SnHQG24TiTPbQ0OwK0aMVDVD--
