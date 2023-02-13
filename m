@@ -2,185 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75CE9693F78
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:20:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F89C693F7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 09:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjBMIUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 03:20:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
+        id S229852AbjBMIVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 03:21:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbjBMIUr (ORCPT
+        with ESMTP id S229758AbjBMIVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 03:20:47 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506CD126D8;
-        Mon, 13 Feb 2023 00:20:31 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 1A2BE37706;
-        Mon, 13 Feb 2023 08:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1676276423; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=T67QN63umXnc0fRsL1qO+KXl0rONIm141v5QsXiqc7U=;
-        b=nIZERco8BTO8Q9GkwypnEoUodoHwrDRZ6gVAHupOktjw74RpgcU3SdsiVBy8zC1nCXIOpV
-        RNTMh5kE5zg8GlrELal5E9+o2kSFYYG9AJlort/DtAHv9MjyB3sfVyvWJ/jvt05uQa3Mw2
-        ygeiym/agAdWVhgk22j2m/6qu2gh3n8=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E345F138E6;
-        Mon, 13 Feb 2023 08:20:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id x741Nsby6WPDNgAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 13 Feb 2023 08:20:22 +0000
-Message-ID: <589edfa4-ae52-49dd-08b2-25ffb506084a@suse.com>
-Date:   Mon, 13 Feb 2023 09:20:22 +0100
+        Mon, 13 Feb 2023 03:21:47 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9A5CA1F;
+        Mon, 13 Feb 2023 00:21:46 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id g18so12931932qtb.6;
+        Mon, 13 Feb 2023 00:21:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SV07xYdDklkuzdL5Z08+pIir+ky3HbZtGe5XwggEBHU=;
+        b=WMBZSy4WJMXN788KWoT29tcP/HB76TvoadjQ9xlNoBsa8VpJILF5pc6uyqONokOfVm
+         beMFkoCaQnzE/MUpnSoPdWMAnSjw2OlEygZgU0MgGIsPMBpD1Vp9C1au57QjrwfTYyOT
+         2pCpVQt+d9yOEDyea4oUgtextXm/B3XbZnxJdfGOL0G+4jMu12pO833hIwVdG947tUDA
+         YhsFDIX8xhpU5OONuGrS4dyYTM51hq0MhX7UOQ1pQnpO49vu1A/fthM8e5XKvbShC+9Z
+         MCvJ2dmItot4Q9EtPWXZDgFGH7wnZlE0uS9sWjDMkAemX8KeTEFLxWd2KpkDGulLi+Xg
+         jBlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SV07xYdDklkuzdL5Z08+pIir+ky3HbZtGe5XwggEBHU=;
+        b=DzsQ4fOCrf2U34Hc1y0PjWgQSOTZMYzK9y0aFh727Cv8XR6QZWHAUWq2M6uIQuzkOe
+         yosvrbbtlFpRTRkzUpLZIM1cdz2LEqDuDneFA2+bCUAcl7nIHkiNWGnKaZ7daYPU1WXJ
+         TtfetAUtflaVRxu8BQhm0USbSaanMcshifJiWkWMFzw2HrxzctNFLIjFpS2t9YHfOwlL
+         M0GM3mFcBBl12u62pmcjYakHQRPjaH8yB/XRXY4mRGCIb3dnw4JOKHSfAsd23fSJiZko
+         HVgsoR7y7iVqfGQvwL6bnHcn+c/YzJLtceJvmTX8r+0uMFwadYTNHQHWxbasq7bEguAo
+         2iKw==
+X-Gm-Message-State: AO0yUKU2qa/JuLHVX1+RH2o0vC/8twiYwxuaOdGfSCO7nMlHJv/bvILf
+        B6DZBzDoYhwYUuqFV5SVX46NyZk/8JniAlyESajo8wGvA20=
+X-Google-Smtp-Source: AK7set8iEspafJIcB6kRGu7OFKyB/hfLkFaU0T0JGToJsS5AsEbKMKVm/TQGBWBBHnpPxs8iuSWRNFZytYYNFD66iU0=
+X-Received: by 2002:a05:622a:11ca:b0:3b9:b35f:b4b4 with SMTP id
+ n10-20020a05622a11ca00b003b9b35fb4b4mr4031279qtk.143.1676276505345; Mon, 13
+ Feb 2023 00:21:45 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH][next] xen: Replace one-element array with flexible-array
- member
-Content-Language: en-US
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <Y9xjN6Wa3VslgXeX@work>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <Y9xjN6Wa3VslgXeX@work>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------mUBn580fjrlxklzUomy0ToCm"
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221021073025.18831-1-wenchao.chen666@gmail.com>
+ <22499ab9-340d-7059-b3ff-45342b0810cf@intel.com> <CA+Da2qyx7McYStMysPdK-DV9qiOnb9rvXYqqugxsbVgqqX59VQ@mail.gmail.com>
+ <CAPDyKFq8JXO6q+_JFhSGWoVfSUEtowUX85kJpsVMa0jmEEjOiQ@mail.gmail.com>
+ <CAPDyKFqg5GuJ=ChPgtVPnhJiNT3=XHXR_q3vwLUFj4ZXoQK5-A@mail.gmail.com> <CAPDyKFrtF32AvBKCbMESP7oFT2aBhbce0KA2zzXq+szQnShbww@mail.gmail.com>
+In-Reply-To: <CAPDyKFrtF32AvBKCbMESP7oFT2aBhbce0KA2zzXq+szQnShbww@mail.gmail.com>
+From:   Wenchao Chen <wenchao.chen666@gmail.com>
+Date:   Mon, 13 Feb 2023 16:21:34 +0800
+Message-ID: <CA+Da2qzwKf6Nbz7YFj6i1Kj_3H8XKreapOHTBo+snNzMg2eW+g@mail.gmail.com>
+Subject: Re: [PATCH V2 0/2] mmc: block: Support Host to control FUA
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>, orsonzhai@gmail.com,
+        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+        axboe@kernel.dk, avri.altman@wdc.com, kch@nvidia.com,
+        CLoehle@hyperstone.com, vincent.whitchurch@axis.com,
+        bigeasy@linutronix.de, s.shtylyov@omp.ru,
+        michael@allwinnertech.com, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, megoo.tang@gmail.com,
+        lzx.stg@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------mUBn580fjrlxklzUomy0ToCm
-Content-Type: multipart/mixed; boundary="------------MEG0JBht7zMjbG92DYZ0qhxr";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Stefano Stabellini <sstabellini@kernel.org>,
- Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Cc: xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org
-Message-ID: <589edfa4-ae52-49dd-08b2-25ffb506084a@suse.com>
-Subject: Re: [PATCH][next] xen: Replace one-element array with flexible-array
- member
-References: <Y9xjN6Wa3VslgXeX@work>
-In-Reply-To: <Y9xjN6Wa3VslgXeX@work>
+On Thu, Feb 9, 2023 at 10:51 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> On Fri, 11 Nov 2022 at 13:04, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > [...]
+> >
+> > > >
+> > > > Considering the data integrity, we did a random power-down test, and
+> > > > the experimental results were good.
+> > > >
+> > > > FUA can only reduce data loss under abnormal conditions, but cannot
+> > > > prevent data loss under abnormal conditions.
+> > > >
+> > > > I think there should be a balance between FUA and NO FUA, but
+> > > > filesystems seem to favor FUA.
+> > > >
+> > > > FUA brings a drop in random write performance. If enough tests are
+> > > > done, NO FUA is acceptable.
+> > >
+> > > Testing this isn't entirely easy. It requires you to hook up
+> > > electrical switches to allow you to automate the powering on/off of
+> > > the platform(s). Then at each cycle, really make sure to stress test
+> > > the data integrity of the flash memory. Is that what the tests did -
+> > > or can you elaborate a bit on what was really tested?
+> > >
+> > > In any case, the performance impact boils down to how each eMMC/SD
+> > > card internally manages reliable writes vs regular writes. Some
+> > > vendors may treat them very similarly, while others do not.
+> > >
+> > > That said, trying to disable REQ_FUA from an mmc host driver is the
+> > > wrong approach, as also pointed out by Adrian above. These types of
+> > > decisions belong solely in the mmc core layer.
+> > >
+> > > Instead of what the $subject series proposes, I would rather suggest
+> > > we discuss (and test) whether it could make sense to disable REQ_FUA -
+> > > *if* the eMMC/SD card supports a write-back-cache (REQ_OP_FLUSH) too.
+> > > Hence, the mmc core could then announce only REQ_OP_FLUSH.
+> > >
+> >
+> > Below is a simple patch that does the above. We may not want to enable
+> > this for *all* eMMC/SD cards, but it works fine for testing and to
+> > continue the discussions here.
+> >
+> >
+> > From: Ulf Hansson <ulf.hansson@linaro.org>
+> > Date: Fri, 11 Nov 2022 12:48:02 +0100
+> > Subject: [PATCH] mmc: core: Disable REQ_FUA if the card supports an internal
+> >  cache
+> >
+> > !!!! This is not for merge, but only for test and discussions!!!
+> >
+> > It has been reported that REQ_FUA can be costly on some eMMC devices. A
+> > potential option that could mitigate this problem, is to rely solely on
+> > REQ_OP_FLUSH instead, but that requires the eMMC/SD to support an internal
+> > cache. This is an attempt to try this out to see how it behaves.
+> >
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> >  drivers/mmc/core/block.c | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+> > index db6d8a099910..197e9f6cdaad 100644
+> > --- a/drivers/mmc/core/block.c
+> > +++ b/drivers/mmc/core/block.c
+> > @@ -2494,15 +2494,15 @@ static struct mmc_blk_data
+> > *mmc_blk_alloc_req(struct mmc_card *card,
+> >                         md->flags |= MMC_BLK_CMD23;
+> >         }
+> >
+> > -       if (md->flags & MMC_BLK_CMD23 &&
+> > -           ((card->ext_csd.rel_param & EXT_CSD_WR_REL_PARAM_EN) ||
+> > -            card->ext_csd.rel_sectors)) {
+> > +       if (mmc_cache_enabled(card->host)) {
+> > +               cache_enabled  = true;
+> > +       } else if (md->flags & MMC_BLK_CMD23 &&
+> > +                 (card->ext_csd.rel_param & EXT_CSD_WR_REL_PARAM_EN ||
+> > +                  card->ext_csd.rel_sectors)) {
+> >                 md->flags |= MMC_BLK_REL_WR;
+> >                 fua_enabled = true;
+> >                 cache_enabled = true;
+> >         }
+> > -       if (mmc_cache_enabled(card->host))
+> > -               cache_enabled  = true;
+> >
+> >         blk_queue_write_cache(md->queue.queue, cache_enabled, fua_enabled);
+> >
+> > --
+> > 2.34.1
+>
+> Wenchao,
+>
+> Did you manage to try the above patch to see if that could improve the
+> situation?
+>
 
---------------MEG0JBht7zMjbG92DYZ0qhxr
-Content-Type: multipart/mixed; boundary="------------ZuHhLaWGSyu994BrV7gofsrQ"
+Hi Uffe,
+Yes, it can solve my problem. Thank you very much.
 
---------------ZuHhLaWGSyu994BrV7gofsrQ
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-
-T24gMDMuMDIuMjMgMDI6MjgsIEd1c3Rhdm8gQS4gUi4gU2lsdmEgd3JvdGU6DQo+IE9uZS1l
-bGVtZW50IGFycmF5cyBhcmUgZGVwcmVjYXRlZCwgYW5kIHdlIGFyZSByZXBsYWNpbmcgdGhl
-bSB3aXRoIGZsZXhpYmxlDQo+IGFycmF5IG1lbWJlcnMgaW5zdGVhZC4gU28sIHJlcGxhY2Ug
-b25lLWVsZW1lbnQgYXJyYXkgd2l0aCBmbGV4aWJsZS1hcnJheQ0KPiBtZW1iZXIgaW4gc3Ry
-dWN0IHhlbl9wYWdlX2RpcmVjdG9yeS4NCj4gDQo+IFRoaXMgaGVscHMgd2l0aCB0aGUgb25n
-b2luZyBlZmZvcnRzIHRvIHRpZ2h0ZW4gdGhlIEZPUlRJRllfU09VUkNFDQo+IHJvdXRpbmVz
-IG9uIG1lbWNweSgpIGFuZCBoZWxwIHVzIG1ha2UgcHJvZ3Jlc3MgdG93YXJkcyBnbG9iYWxs
-eQ0KPiBlbmFibGluZyAtZnN0cmljdC1mbGV4LWFycmF5cz0zIFsxXS4NCj4gDQo+IFRoaXMg
-cmVzdWx0cyBpbiBubyBkaWZmZXJlbmNlcyBpbiBiaW5hcnkgb3V0cHV0Lg0KPiANCj4gTGlu
-azogaHR0cHM6Ly9naXRodWIuY29tL0tTUFAvbGludXgvaXNzdWVzLzc5DQo+IExpbms6IGh0
-dHBzOi8vZ2l0aHViLmNvbS9LU1BQL2xpbnV4L2lzc3Vlcy8yNTUNCj4gTGluazogaHR0cHM6
-Ly9nY2MuZ251Lm9yZy9waXBlcm1haWwvZ2NjLXBhdGNoZXMvMjAyMi1PY3RvYmVyLzYwMjkw
-Mi5odG1sIFsxXQ0KPiBTaWduZWQtb2ZmLWJ5OiBHdXN0YXZvIEEuIFIuIFNpbHZhIDxndXN0
-YXZvYXJzQGtlcm5lbC5vcmc+DQoNClB1c2hlZC10bzogeGVuL3RpcC5naXQgZm9yLWxpbnVz
-LTYuMw0KDQoNCkp1ZXJnZW4NCg0K
---------------ZuHhLaWGSyu994BrV7gofsrQ
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------ZuHhLaWGSyu994BrV7gofsrQ--
-
---------------MEG0JBht7zMjbG92DYZ0qhxr--
-
---------------mUBn580fjrlxklzUomy0ToCm
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPp8sYFAwAAAAAACgkQsN6d1ii/Ey+z
-iggAlU6pTFIxYTeG+qBwseJU8IrA0YQD3rA/JBTv+2jARNlwIGkEwuZL5sAy6zYiIbGT6hADym+u
-WfKfojYMs2mEmylJBPQCgDWpW9K2924G7btecf3T5DPdqAeR9VkMMg2Y1eLPZ23xZA0Hc9xIreP8
-5pRH3T966LJOXzn5J4nDCrU8fwSgUhIKmeSNw5kToVTkJKpdFmjd0zfO94ymQmMGEm0n8m184iUk
-4O1SjtrSWG07d8UOqIvHlZpfGnabh6jY5h01oUS/i8DVqI76YT4/HBl/ze7I2T+zaUE1n7yuj8go
-6JpL9C/kOGxzovfKVvw7WbdEUt2YOMSVNBEiJrVYkw==
-=6d2w
------END PGP SIGNATURE-----
-
---------------mUBn580fjrlxklzUomy0ToCm--
+> Kind regards
+> Uffe
