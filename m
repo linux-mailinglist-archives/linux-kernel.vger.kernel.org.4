@@ -2,152 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A9669483D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:38:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE2C694837
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbjBMOim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 09:38:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
+        id S229887AbjBMOiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 09:38:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230318AbjBMOib (ORCPT
+        with ESMTP id S229655AbjBMOiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 09:38:31 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464631BAFD;
-        Mon, 13 Feb 2023 06:38:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676299105; x=1707835105;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7XoZrHzVwE2zyKzwKNugTFygMtiMpXySNVGRuWXd27Q=;
-  b=mSql/uNftaZLdzx86j3eAlK26k5xf04N8Xk1SPFHIXfBEZLHf84M2yjC
-   O+9Y8OA+Muz5tbv1dO7rtdeuHjZfJW8eNYr8MqcCh03hoTxlVrkg4IGaA
-   R8jpvZ4pAKm6h6VwohwkOVUt1J4jWJYdJqLp3kbKkRn8TzcWXfCS9tTiq
-   kwDAg7M9r6EBtNFcYdac6C+VnN+JtIX3KHYHceGSSsKnGUobPTCbPQMJ9
-   CzJZdsvEdsySAbqBMc1eVXZw9EeY1PUQj4pzUb0jAqGL1JUUqHg4d8ABO
-   GGImxIXsSpiRlJhm7JgDoVCSPSY/w3ZLXKgs7F1yi0DD20DTKuB5yryaY
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="310533978"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="310533978"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 06:37:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="777866154"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="777866154"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 13 Feb 2023 06:37:38 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pRZxY-006PMl-15;
-        Mon, 13 Feb 2023 16:37:36 +0200
-Date:   Mon, 13 Feb 2023 16:37:35 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Werner Sembach <wse@tuxedocomputers.com>,
-        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
-        brgl@bgdev.pl, linux-gpio@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Raul E Rangel <rrangel@chromium.org>
-Subject: Re: [PATCH] gpiolib: acpi: Add a ignore wakeup quirk for Clevo NH5xAx
-Message-ID: <Y+pLLzLDotZQLpdA@smile.fi.intel.com>
-References: <20230210164636.628462-1-wse@tuxedocomputers.com>
- <Y+Z5OSa6hepQBOyc@smile.fi.intel.com>
- <029b8d80-db28-cdb2-5c39-334be6968fad@tuxedocomputers.com>
- <Y+owDqifuU9nf+1i@smile.fi.intel.com>
- <86db79fa-5efb-caad-3310-60928907cc58@amd.com>
+        Mon, 13 Feb 2023 09:38:14 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27717974A
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:37:57 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id 24so8236143pgt.7
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:37:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=v46IGf7aK9w6Ujjdk9pH0Sd2OlQiZacAgD2cBvk1jT0=;
+        b=SzFpKuzH1Wg1EhWOGZPaNWQd2POITNEL5ZP8sLHp25iK+Mn6828HZ6U13HeQCN93Sx
+         +0ZNI0ubnqjUSBiqLTF8TSzT8ESdFmVXQ0TpJZ3Qm5ltt+EMXxjri/+uueQF1nGjGMA4
+         stDvus1Ojiffvsbq+nnE/UFkipL/riZobKSSy4IW/WVEusJyPLHO1nE6z5Bpy4fnOsgP
+         kJ51zGJGuGpgfXmSA8YquHUgckB/TBqhkvuuQyNOeijvGHmV19pXSOA3v2MlP7wD95ls
+         UEl9GtUVFINyfXgxkowUI5R/zjVUa2yd5uwaFVOYIaNuZiIogxSqqpN2//Dbkl2WDX51
+         yzPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v46IGf7aK9w6Ujjdk9pH0Sd2OlQiZacAgD2cBvk1jT0=;
+        b=4zAKATGEM8/SJVBj0vGd22d/iO4jRzDo21+PuGuykTiZBS5Pp2OnlaCTqCtnC77gT/
+         fv+qoyMw91A3QBoChBqrJNFVsYlsaqG+1QF4Vm9owvJZqMGcVfG+LgN6Z31PlRCrNfKk
+         ihtfSH1FQzDQDixLlaJRIcduAMS7Lg9WjzK42UbuHqy/5arQvFvhRHDHqGgazY28VluQ
+         VhVWjwCC3jEX+evoA2oXjOpheYUg/94szT9cb/HxPxiCl7GyPvNw8LpMmxbmOrMlncAQ
+         ZTsMtoHpWOzBMtV1aePu4LrAV3RHzsmMYVVA/t/la+3er73DYG+1bQA9sBOpofSb8LxD
+         1kDg==
+X-Gm-Message-State: AO0yUKU8thoX4bFBsPlIThhUz2rmGaHZt5doXEFZfE4fWlO9/Me8oxt2
+        4PB0pxgbc+9P0cypU5IhUmuilg==
+X-Google-Smtp-Source: AK7set/DKESMToA1CvFzD8s7hPzM1C6fYF5uRXkJ8n+Af4LEgHbtdNDBVTegNt3NTjuOhT2mPBEStg==
+X-Received: by 2002:a62:4ec3:0:b0:5a8:c40e:891c with SMTP id c186-20020a624ec3000000b005a8c40e891cmr1406360pfb.31.1676299076568;
+        Mon, 13 Feb 2023 06:37:56 -0800 (PST)
+Received: from debug.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id t13-20020a62ea0d000000b0057fec210d33sm8028139pfh.152.2023.02.13.06.37.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 06:37:56 -0800 (PST)
+Date:   Mon, 13 Feb 2023 06:37:54 -0800
+From:   Deepak Gupta <debug@rivosinc.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Subject: Re: [PATCH v1 RFC Zisslpcfi 11/20] mmu: maybe_mkwrite updated to
+ manufacture shadow stack PTEs
+Message-ID: <20230213143754.GC3943238@debug.ba.rivosinc.com>
+References: <20230213045351.3945824-1-debug@rivosinc.com>
+ <20230213045351.3945824-12-debug@rivosinc.com>
+ <2d6eefb8-c7c5-7d32-9a75-ae716f828cd9@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <86db79fa-5efb-caad-3310-60928907cc58@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2d6eefb8-c7c5-7d32-9a75-ae716f828cd9@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 07:20:48AM -0600, Mario Limonciello wrote:
-> On 2/13/23 06:41, Andy Shevchenko wrote:
-> > On Mon, Feb 13, 2023 at 12:30:08PM +0100, Werner Sembach wrote:
-> > > Am 10.02.23 um 18:04 schrieb Andy Shevchenko:
-> > > > On Fri, Feb 10, 2023 at 05:46:36PM +0100, Werner Sembach wrote:
-> > > > > commit 1796f808e4bb ("HID: i2c-hid: acpi: Stop setting wakeup_capable")
-> > > > > changed the policy such that I2C touchpads may be able to wake up the
-> > > > > system by default if the system is configured as such.
-> > > > > 
-> > > > > However on Clevo NH5xAx/TUXEDO XA15 Gen10 there is a mistake in the ACPI
-> > > > > tables that the TP_ATTN# signal connected to GPIO 10 is configured as
-> > > > > ActiveLow and level triggered but connected to a pull up.
-> > > > I'm not sure I understand the issue here. From what you say here it seems
-> > > > correct ACPI description.
-> > > TBH I copied the commit description from https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4cb786180dfb5258ff3111181b5e4ecb1d4a297b
-> > > which is for a different device having the exact same problem.
-> > Yeah, and I reviewed that and seems paid no attention to this detail.
-> > 
-> > So, ActiveLow + PullUp is the _right_ thing to do in ACPI.
-> > The problem seems somewhere else.
-> > 
-> > Mario, can we have an access to the schematics of the affected pin to
-> > understand better what's going on?
-> > 
-> > Or is that description missing some crucial detail?
-> 
-> The schematics were shared by the reporter for the original issue which is
-> how we reached the conclusion there was a mistake.
-> 
-> As they're both Clevo designs it's certainly possible they have the same
-> mistake in two systems.
+On Mon, Feb 13, 2023 at 01:05:16PM +0100, David Hildenbrand wrote:
+>On 13.02.23 05:53, Deepak Gupta wrote:
+>>maybe_mkwrite creates PTEs with WRITE encodings for underlying arch if
+>>VM_WRITE is turned on in vma->vm_flags. Shadow stack memory is a write-
+>>able memory except it can only be written by certain specific
+>>instructions. This patch allows maybe_mkwrite to create shadow stack PTEs
+>>if vma is shadow stack VMA. Each arch can define which combination of VMA
+>>flags means a shadow stack.
+>>
+>>Additionally pte_mkshdwstk must be provided by arch specific PTE
+>>construction headers to create shadow stack PTEs. (in arch specific
+>>pgtable.h).
+>>
+>>This patch provides dummy/stub pte_mkshdwstk if CONFIG_USER_SHADOW_STACK
+>>is not selected.
+>>
+>>Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+>>---
+>>  include/linux/mm.h      | 23 +++++++++++++++++++++--
+>>  include/linux/pgtable.h |  4 ++++
+>>  2 files changed, 25 insertions(+), 2 deletions(-)
+>>
+>>diff --git a/include/linux/mm.h b/include/linux/mm.h
+>>index 8f857163ac89..a7705bc49bfe 100644
+>>--- a/include/linux/mm.h
+>>+++ b/include/linux/mm.h
+>>@@ -1093,6 +1093,21 @@ static inline unsigned long thp_size(struct page *page)
+>>  void free_compound_page(struct page *page);
+>>  #ifdef CONFIG_MMU
+>>+
+>>+#ifdef CONFIG_USER_SHADOW_STACK
+>>+bool arch_is_shadow_stack_vma(struct vm_area_struct *vma);
+>>+#endif
+>>+
+>>+static inline bool
+>>+is_shadow_stack_vma(struct vm_area_struct *vma)
+>>+{
+>>+#ifdef CONFIG_USER_SHADOW_STACK
+>>+	return arch_is_shadow_stack_vma(vma);
+>>+#else
+>>+	return false;
+>>+#endif
+>>+}
+>>+
+>>  /*
+>>   * Do pte_mkwrite, but only if the vma says VM_WRITE.  We do this when
+>>   * servicing faults for write access.  In the normal case, do always want
+>>@@ -1101,8 +1116,12 @@ void free_compound_page(struct page *page);
+>>   */
+>>  static inline pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
+>>  {
+>>-	if (likely(vma->vm_flags & VM_WRITE))
+>>-		pte = pte_mkwrite(pte);
+>>+	if (likely(vma->vm_flags & VM_WRITE)) {
+>>+		if (unlikely(is_shadow_stack_vma(vma)))
+>>+			pte = pte_mkshdwstk(pte);
+>>+		else
+>>+			pte = pte_mkwrite(pte);
+>>+	}
+>>  	return pte;
+>
+>Exactly what we are trying to avoid in the x86 approach right now. 
+>Please see the x86 series on details, we shouldn't try reinventing the 
+>wheel but finding a core-mm approach that fits multiple architectures.
+>
+>https://lkml.kernel.org/r/20230119212317.8324-1-rick.p.edgecombe@intel.com
 
-Thank you!
-I have looked at the schematics and read discussion.
+Thanks David for comment here. I looked at x86 approach. This patch
+actually written in a way which is not re-inventing wheel and is following
+a core-mm approach that fits multiple architectures.
 
-So, the conclusion that this is a BIOS bug is incorrect in my opinion.
-The problem is either in the PMIC/EC firmware that shouldn't shut down 3.3VS
-signal for a while or on the PCB level, so that pull up should be connected
-to another power source that stays on.
+Change above checks `is_shadow_stack_vma` and if it returns true then only
+it manufactures shadow stack pte else it'll make a regular writeable mapping.
 
-This means the description on the initial patch with the same issue is
-incorrect.
+Now if we look at `is_shadow_stack_vma` implementation, it returns false if
+`CONFIG_USER_SHADOW_STACK` is not defined. If `CONFIG_USER_SHADOW_STACK is
+defined then it calls `arch_is_shadow_stack_vma` which should be implemented
+by arch specific code. This allows each architecture to define their own vma
+flag encodings for shadow stack (riscv chooses presence of only `VM_WRITE`
+which is analogous to choosen PTE encodings on riscv W=1,R=0,X=0)
 
-Do we know the power sequence on the suspend to see which and how on the
-time line the power sources are off/on?
+Additionally pte_mkshdwstk will be nop if not implemented by architecture.
 
-> > > > > As soon as the
-> > > > > system suspends the touchpad loses power and then the system wakes up.
-> > > > > 
-> > > > > To avoid this problem, introduce a quirk for this model that will prevent
-> > > > > the wakeup capability for being set for GPIO 10.
-> > > > I'm not against fixing this, but wouldn't be better to actually target the root
-> > > > cause and have a different quirk? Or is it me who didn't get what is the root
-> > > > cause?
-> > > > 
-> > > I missed to reference the original discussion while copying the description:
-> > > https://gitlab.freedesktop.org/drm/amd/-/issues/1722#note_1720627 (Note that
-> > > it's a somewhat convoluted issue spanning multiple bugs when you scroll up
-> > > from that particular linked comment, which are however irrelevant for this
-> > > patch)
-> > > 
-> > > I'm not deep into how ACPI defined IRQ work so maybe not a good idea for me
-> > > summing it up, as I might have misunderstood parts of it ^^
-> > The GpioIo() and GpioInt() resources have gaps in them, due to this some
-> > additional information is required or some heuristics is used to deduct
-> > the settings.
-> > 
-> > All this is described in
-> > https://www.kernel.org/doc/html/latest/firmware-guide/acpi/gpio-properties.html
-> > 
-> > > I added the other ones from there to the cc.
-> > Thank you.
+Let me know if this make sense. If I am missing something here, let me know.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+>
+>-- 
+>Thanks,
+>
+>David / dhildenb
+>
