@@ -2,248 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 275CF694D20
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:45:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F43D694D18
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbjBMQo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 11:44:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37382 "EHLO
+        id S230290AbjBMQnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 11:43:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjBMQo4 (ORCPT
+        with ESMTP id S229484AbjBMQnK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 11:44:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B925D11E97
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:44:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676306644;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=p2uiqF8o9JdkRigcIZc+ZpBFYKuDDGtLRLHIO1Ia0Y4=;
-        b=f9wQrazWuxSCosQEWnXVTEl2G4Nf6xmJQX0Hl5W1rOe4w9z8QAWJOq8h7s76sQqiOKxZbK
-        HIPfA9HScNkKgcTz+djJgXnSkrPy1R+08oaIN50n6v2MyJf7b+LFKaJ6Bg8Jg6LZgN0i7/
-        NjjWRB0SFfllOHzGhx9ro834o6Z7CD0=
-Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com
- [209.85.221.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-76-LMIOd2lMOOCjZEgzJLQsyg-1; Mon, 13 Feb 2023 11:44:03 -0500
-X-MC-Unique: LMIOd2lMOOCjZEgzJLQsyg-1
-Received: by mail-vk1-f197.google.com with SMTP id q82-20020a1f5c55000000b004018c246a7bso984056vkb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:44:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p2uiqF8o9JdkRigcIZc+ZpBFYKuDDGtLRLHIO1Ia0Y4=;
-        b=YsvbY8jhvC0JrHlM8b9bcNhEqaUGhV0HOmvxzsmC+1i4UJ5WHJTni3nb+C+RTWASAW
-         /boF/hq6fUEUVA6YPc3jtvC7Sq8rL1VdQ5iYU3BMfrurTa9RvU4nkuW5aopyn15vZtjp
-         czK7FW3g39EF/be8JUKq0wxRFG+D91bOUaYQNkUuksbhVYUXEu20YCu3cFABwpqCCbdn
-         J2PeW+8yNNCMjy3bpvaWpJ9IAVOc7EjgAb7vVsLNWRHaKP4ynlVxRoLV2lrsDsMlRZHe
-         BT9/EwPzG1Dpq21zKfwbbBEdBhtSW7aaBlYlQyO2qzaXGPgbI4MYs0fzrpR2TPJN5X44
-         Afww==
-X-Gm-Message-State: AO0yUKVZpnTiBjNgbtvenY4iYfj1kKgjo/3m8qIJkS96pFf2lK/yKee3
-        nGl1KAkPnDj10rp95Cxt55ZMIdvX24s+jHR5ChNo+2QH405euIVcRalUOVq0HgPHrbJMDDAaXPN
-        gfs2PBlgbV361feQ/adz8L6gkihL+pZ++urprfMNJ
-X-Received: by 2002:ab0:7702:0:b0:68a:c03f:8bcf with SMTP id z2-20020ab07702000000b0068ac03f8bcfmr39141uaq.15.1676306642680;
-        Mon, 13 Feb 2023 08:44:02 -0800 (PST)
-X-Google-Smtp-Source: AK7set/2c7YX+hhz2VLCQjUBSZHXtNzsjxLvz6cXa3Ns67kjAfZIDy8YGKX0capXm6mvrk9bs5TUZ2nXBNYO6+cBCdk=
-X-Received: by 2002:ab0:7702:0:b0:68a:c03f:8bcf with SMTP id
- z2-20020ab07702000000b0068ac03f8bcfmr39135uaq.15.1676306642375; Mon, 13 Feb
- 2023 08:44:02 -0800 (PST)
+        Mon, 13 Feb 2023 11:43:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09AA7EF9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:43:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F769B815E5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 16:43:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D684EC433EF;
+        Mon, 13 Feb 2023 16:43:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676306585;
+        bh=lcQssz5GZvB6lYAVKB7ugyDljl7BQcwCEzuevcbonTY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OzgVhKRfyGoz4Zfey6vqxxM9aRUL4x4C/h4BUyTyDsvaRJeMECtI/h1K9FWbLo2ML
+         JSVzfvATdPStl15wXipIdDYIrELrj16/1DbROSaHQ2LZi9TPAB9pMZH8KtvYlsy2d7
+         4TC9VQwv2YTPjtFyr1ZRVqXb45JPva5xgovjOFTAYA9Sp72j4fLyXnlYCfbiHTnHjk
+         PeUbbiMW2EnZERh7OyOPJMV4O6NwqQqOeaWo8HJucppV/luKW/Gk4+HDpQd3MakSe2
+         HCmT5OdV+Ew+Csmq29ZceqaI0S5SsrQURzon/3nkB+PWsLsJ2KQ2aSHJhI3qCcRDX7
+         2tiaP8k4tVa8g==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pRbvo-0004Z9-Fc; Mon, 13 Feb 2023 17:43:57 +0100
+Date:   Mon, 13 Feb 2023 17:43:56 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     will@kernel.org, joro@8bytes.org, robin.murphy@arm.com,
+        andersson@kernel.org, johan+linaro@kernel.org, steev@kali.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iommu/arm-smmu-qcom: Rework the logic finding the bypass
+ quirk
+Message-ID: <Y+pozM9iTbQcx6cl@hovoldconsulting.com>
+References: <20230201082500.61656-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-References: <20230212063813.27622-1-marcan@marcan.st> <20230212063813.27622-2-marcan@marcan.st>
-In-Reply-To: <20230212063813.27622-2-marcan@marcan.st>
-From:   Eric Curtin <ecurtin@redhat.com>
-Date:   Mon, 13 Feb 2023 16:43:46 +0000
-Message-ID: <CAOgh=Fz_ma1t6H_p2XQRpq81=4q7MjZuht_f2gA6V=-LmRhufg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/4] wifi: brcmfmac: Rename Cypress 89459 to BCM4355
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Prutskov <alep@cypress.com>,
-        Ian Lin <ian.lin@infineon.com>,
-        Joseph chuang <jiac@cypress.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Aditya Garg <gargaditya08@live.com>,
-        Jonas Gorski <jonas.gorski@gmail.com>, asahi@lists.linux.dev,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Arend van Spriel <arend.vanspriel@broadcom.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230201082500.61656-1-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 12 Feb 2023 at 06:46, Hector Martin <marcan@marcan.st> wrote:
->
-> The commit that introduced support for this chip incorrectly claimed it
-> is a Cypress-specific part, while in actuality it is just a variant of
-> BCM4355 silicon (as evidenced by the chip ID).
->
-> The relationship between Cypress products and Broadcom products isn't
-> entirely clear but given what little information is available and prior
-> art in the driver, it seems the convention should be that originally
-> Broadcom parts should retain the Broadcom name.
->
-> Thus, rename the relevant constants and firmware file. Also rename the
-> specific 89459 PCIe ID to BCM43596, which seems to be the original
-> subvariant name for this PCI ID (as defined in the out-of-tree bcmdhd
-> driver).
->
-> Since Cypress added this part and will presumably be providing its
-> supported firmware, we keep the CYW designation for this device.
->
-> We also drop the RAW device ID in this commit. We don't do this for the
-> other chips since apparently some devices with them exist in the wild,
-> but there is already a 4355 entry with the Broadcom subvendor and WCC
-> firmware vendor, so adding a generic fallback to Cypress seems
-> redundant (no reason why a device would have the raw device ID *and* an
-> explicitly programmed subvendor).
->
-> Fixes: dce45ded7619 ("brcmfmac: Support 89459 pcie")
-> Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+On Wed, Feb 01, 2023 at 01:55:00PM +0530, Manivannan Sadhasivam wrote:
+> The logic used to find the quirky firmware that intercepts the writes to
+> S2CR register to replace bypass type streams with a fault, and ignore the
+> fault type, is not working with the firmware on newer SoCs like SC8280XP.
+> 
+> The current logic uses the last stream mapping group (num_mapping_groups
+> - 1) as an index for finding quirky firmware. But on SC8280XP, this
+> logic is not working as the number of stream mapping groups reported by
+> the SMMU (163 as on the SC8280XP-CRD device) is not valid for some reason.
 
-Reviewed-by: Eric Curtin <ecurtin@redhat.com>
+NUMSMRG read back as 162 here, both on my CRD and X13s. Was '163' a typo
+or a real difference?
 
-Is mise le meas/Regards,
+> So the current logic that checks the (163-1) S2CR entry fails to detect
+> the quirky firmware on these devices and triggers invalid context fault
+> for bypass streams.
+> 
+> To fix this issue, rework the logic to find the first non-valid (free)
+> stream mapping register group (SMR) and use that index to access S2CR
+> for detecting the bypass quirk.
 
-Eric Curtin
+So while this works for the quirk detection, shouldn't we also do
+something about that bogus NUMSMRG value? At least cap it at 128, which
+appears to be the maximum according to the specification, for example,
+by clearing bit 7 when any of the lower bits are set?
 
+That would give us 35 (or 36) groups and working quirk detection with
+just the following smaller patch:
+
+diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+index 2ff7a72cf377..0f564a86c352 100644
+--- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
++++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+@@ -1744,6 +1744,12 @@ static int arm_smmu_device_cfg_probe(struct arm_smmu_device *smmu)
+                        return -ENODEV;
+                }
+ 
++               if (size > 0x80) {
++                       dev_warn(smmu->dev,
++                                "invalid number of SMR groups, clearing bit 7\n");
++                       size -= 0x80;
++               }
++
+                /* Zero-initialised to mark as invalid */
+                smmu->smrs = devm_kcalloc(smmu->dev, size, sizeof(*smmu->smrs),
+                                          GFP_KERNEL);
+
+I also verified that using index 127 (group 128) for the quirk detection
+works on my CRD, while the invalid index 128 fails (as do index 161
+which would currently be used).
+
+> This also warrants a change in variable name from last_s2cr to free_s2cr.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
->  drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c    | 5 ++---
->  drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c    | 7 +++----
->  .../net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h  | 5 ++---
->  3 files changed, 7 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
-> index 121893bbaa1d..3e42c2bd0d9a 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
-> @@ -726,6 +726,7 @@ static u32 brcmf_chip_tcm_rambase(struct brcmf_chip_priv *ci)
->         case BRCM_CC_43664_CHIP_ID:
->         case BRCM_CC_43666_CHIP_ID:
->                 return 0x200000;
-> +       case BRCM_CC_4355_CHIP_ID:
->         case BRCM_CC_4359_CHIP_ID:
->                 return (ci->pub.chiprev < 9) ? 0x180000 : 0x160000;
->         case BRCM_CC_4364_CHIP_ID:
-> @@ -735,8 +736,6 @@ static u32 brcmf_chip_tcm_rambase(struct brcmf_chip_priv *ci)
->                 return 0x170000;
->         case BRCM_CC_4378_CHIP_ID:
->                 return 0x352000;
-> -       case CY_CC_89459_CHIP_ID:
-> -               return ((ci->pub.chiprev < 9) ? 0x180000 : 0x160000);
->         default:
->                 brcmf_err("unknown chip: %s\n", ci->pub.name);
->                 break;
-> @@ -1426,8 +1425,8 @@ bool brcmf_chip_sr_capable(struct brcmf_chip *pub)
->                 addr = CORE_CC_REG(base, sr_control1);
->                 reg = chip->ops->read32(chip->ctx, addr);
->                 return reg != 0;
-> +       case BRCM_CC_4355_CHIP_ID:
->         case CY_CC_4373_CHIP_ID:
-> -       case CY_CC_89459_CHIP_ID:
->                 /* explicitly check SR engine enable bit */
->                 addr = CORE_CC_REG(base, sr_control0);
->                 reg = chip->ops->read32(chip->ctx, addr);
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-> index ae57a9a3ab05..96608174a123 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-> @@ -51,6 +51,7 @@ enum brcmf_pcie_state {
->  BRCMF_FW_DEF(43602, "brcmfmac43602-pcie");
->  BRCMF_FW_DEF(4350, "brcmfmac4350-pcie");
->  BRCMF_FW_DEF(4350C, "brcmfmac4350c2-pcie");
-> +BRCMF_FW_CLM_DEF(4355, "brcmfmac4355-pcie");
->  BRCMF_FW_CLM_DEF(4356, "brcmfmac4356-pcie");
->  BRCMF_FW_CLM_DEF(43570, "brcmfmac43570-pcie");
->  BRCMF_FW_DEF(4358, "brcmfmac4358-pcie");
-> @@ -62,7 +63,6 @@ BRCMF_FW_DEF(4366B, "brcmfmac4366b-pcie");
->  BRCMF_FW_DEF(4366C, "brcmfmac4366c-pcie");
->  BRCMF_FW_DEF(4371, "brcmfmac4371-pcie");
->  BRCMF_FW_CLM_DEF(4378B1, "brcmfmac4378b1-pcie");
-> -BRCMF_FW_DEF(4355, "brcmfmac89459-pcie");
->
->  /* firmware config files */
->  MODULE_FIRMWARE(BRCMF_FW_DEFAULT_PATH "brcmfmac*-pcie.txt");
-> @@ -78,6 +78,7 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
->         BRCMF_FW_ENTRY(BRCM_CC_4350_CHIP_ID, 0x000000FF, 4350C),
->         BRCMF_FW_ENTRY(BRCM_CC_4350_CHIP_ID, 0xFFFFFF00, 4350),
->         BRCMF_FW_ENTRY(BRCM_CC_43525_CHIP_ID, 0xFFFFFFF0, 4365C),
-> +       BRCMF_FW_ENTRY(BRCM_CC_4355_CHIP_ID, 0xFFFFFFFF, 4355),
->         BRCMF_FW_ENTRY(BRCM_CC_4356_CHIP_ID, 0xFFFFFFFF, 4356),
->         BRCMF_FW_ENTRY(BRCM_CC_43567_CHIP_ID, 0xFFFFFFFF, 43570),
->         BRCMF_FW_ENTRY(BRCM_CC_43569_CHIP_ID, 0xFFFFFFFF, 43570),
-> @@ -93,7 +94,6 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
->         BRCMF_FW_ENTRY(BRCM_CC_43666_CHIP_ID, 0xFFFFFFF0, 4366C),
->         BRCMF_FW_ENTRY(BRCM_CC_4371_CHIP_ID, 0xFFFFFFFF, 4371),
->         BRCMF_FW_ENTRY(BRCM_CC_4378_CHIP_ID, 0xFFFFFFFF, 4378B1), /* revision ID 3 */
-> -       BRCMF_FW_ENTRY(CY_CC_89459_CHIP_ID, 0xFFFFFFFF, 4355),
->  };
->
->  #define BRCMF_PCIE_FW_UP_TIMEOUT               5000 /* msec */
-> @@ -2609,9 +2609,8 @@ static const struct pci_device_id brcmf_pcie_devid_table[] = {
->         BRCMF_PCIE_DEVICE(BRCM_PCIE_4366_2G_DEVICE_ID, BCA),
->         BRCMF_PCIE_DEVICE(BRCM_PCIE_4366_5G_DEVICE_ID, BCA),
->         BRCMF_PCIE_DEVICE(BRCM_PCIE_4371_DEVICE_ID, WCC),
-> +       BRCMF_PCIE_DEVICE(BRCM_PCIE_43596_DEVICE_ID, CYW),
->         BRCMF_PCIE_DEVICE(BRCM_PCIE_4378_DEVICE_ID, WCC),
-> -       BRCMF_PCIE_DEVICE(CY_PCIE_89459_DEVICE_ID, CYW),
-> -       BRCMF_PCIE_DEVICE(CY_PCIE_89459_RAW_DEVICE_ID, CYW),
->         { /* end: all zeroes */ }
->  };
->
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
-> index f4939cf62767..28b6cf8ff286 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
-> +++ b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
-> @@ -37,6 +37,7 @@
->  #define BRCM_CC_4350_CHIP_ID           0x4350
->  #define BRCM_CC_43525_CHIP_ID          43525
->  #define BRCM_CC_4354_CHIP_ID           0x4354
-> +#define BRCM_CC_4355_CHIP_ID           0x4355
->  #define BRCM_CC_4356_CHIP_ID           0x4356
->  #define BRCM_CC_43566_CHIP_ID          43566
->  #define BRCM_CC_43567_CHIP_ID          43567
-> @@ -56,7 +57,6 @@
->  #define CY_CC_43012_CHIP_ID            43012
->  #define CY_CC_43439_CHIP_ID            43439
->  #define CY_CC_43752_CHIP_ID            43752
-> -#define CY_CC_89459_CHIP_ID            0x4355
->
->  /* USB Device IDs */
->  #define BRCM_USB_43143_DEVICE_ID       0xbd1e
-> @@ -90,9 +90,8 @@
->  #define BRCM_PCIE_4366_2G_DEVICE_ID    0x43c4
->  #define BRCM_PCIE_4366_5G_DEVICE_ID    0x43c5
->  #define BRCM_PCIE_4371_DEVICE_ID       0x440d
-> +#define BRCM_PCIE_43596_DEVICE_ID      0x4415
->  #define BRCM_PCIE_4378_DEVICE_ID       0x4425
-> -#define CY_PCIE_89459_DEVICE_ID         0x4415
-> -#define CY_PCIE_89459_RAW_DEVICE_ID     0x4355
->
->  /* brcmsmac IDs */
->  #define BCM4313_D11N2G_ID      0x4727  /* 4313 802.11n 2.4G device */
-> --
-> 2.35.1
->
->
+>  drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 24 +++++++++++++++++-----
+>  1 file changed, 19 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> index 78fc0e1bf215..4104f81b8d8f 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> @@ -267,23 +267,37 @@ static int qcom_smmu_init_context(struct arm_smmu_domain *smmu_domain,
+>  
+>  static int qcom_smmu_cfg_probe(struct arm_smmu_device *smmu)
+>  {
+> -	unsigned int last_s2cr = ARM_SMMU_GR0_S2CR(smmu->num_mapping_groups - 1);
+>  	struct qcom_smmu *qsmmu = to_qcom_smmu(smmu);
+> +	u32 free_s2cr;
+>  	u32 reg;
+>  	u32 smr;
+>  	int i;
+>  
+> +	/*
+> +	 * Find the first non-valid (free) stream mapping register group and
+> +	 * use that index to access S2CR for detecting the bypass quirk.
+> +	 */
+> +	for (i = 0; i < smmu->num_mapping_groups; i++) {
+> +		smr = arm_smmu_gr0_read(smmu, ARM_SMMU_GR0_SMR(i));
+> +
+> +		if (!FIELD_GET(ARM_SMMU_SMR_VALID, smr))
+> +			break;
+> +	}
+> +
+> +	free_s2cr = ARM_SMMU_GR0_S2CR(i);
 
+In the unlikely event that there is no free group this would access an
+invalid index.
+
+> +
+>  	/*
+>  	 * With some firmware versions writes to S2CR of type FAULT are
+>  	 * ignored, and writing BYPASS will end up written as FAULT in the
+> -	 * register. Perform a write to S2CR to detect if this is the case and
+> -	 * if so reserve a context bank to emulate bypass streams.
+> +	 * register. Perform a write to the first free S2CR to detect if
+> +	 * this is the case and if so reserve a context bank to emulate
+> +	 * bypass streams.
+>  	 */
+>  	reg = FIELD_PREP(ARM_SMMU_S2CR_TYPE, S2CR_TYPE_BYPASS) |
+>  	      FIELD_PREP(ARM_SMMU_S2CR_CBNDX, 0xff) |
+>  	      FIELD_PREP(ARM_SMMU_S2CR_PRIVCFG, S2CR_PRIVCFG_DEFAULT);
+> -	arm_smmu_gr0_write(smmu, last_s2cr, reg);
+> -	reg = arm_smmu_gr0_read(smmu, last_s2cr);
+> +	arm_smmu_gr0_write(smmu, free_s2cr, reg);
+> +	reg = arm_smmu_gr0_read(smmu, free_s2cr);
+>  	if (FIELD_GET(ARM_SMMU_S2CR_TYPE, reg) != S2CR_TYPE_BYPASS) {
+>  		qsmmu->bypass_quirk = true;
+>  		qsmmu->bypass_cbndx = smmu->num_context_banks - 1;
+
+Johan
