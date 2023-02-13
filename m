@@ -2,156 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 305D369516F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:11:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0D56695171
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjBMULN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 15:11:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
+        id S230135AbjBMULy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 15:11:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbjBMULL (ORCPT
+        with ESMTP id S229795AbjBMULw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 15:11:11 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8339021941;
-        Mon, 13 Feb 2023 12:11:05 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DIiMJO000858;
-        Mon, 13 Feb 2023 20:10:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=Q80EsKNrY1PRjZiuPkpqIzvM00rfSjdnNFvDvLyvpSs=;
- b=buAAea+lmAQtA9qasHnhCW29H8jIHYoQJf1q27VglYeRujX2TCjjeCxewXr3dbS5I5xw
- Ihe8Bgn8yJAPmAMI5z67MRHvuIvBsMiYO3HsfU43UPSt0O/kTcjXlbUbHOaFFqI2CUH5
- L+LDC09fN9qVqoNqJRYFytMq7jqJtWh8vOljAjXRY26Yoc0yV2AGctO3tPRzrw0370XF
- ctial/DIqpNqRKeR/CoPgL8OOYhJSpl/U279xvabig+P+MHEPDbkKU5aAAoOKR3PRj1e
- IHnsyYkbh7apsvya4rv9Vh9urnVJ8MM9uO99sZtoS2QMsNe+zFVifACZ9x/b4tY0suiO qw== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nqtr51qm9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Feb 2023 20:10:56 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31DCxTBw017665;
-        Mon, 13 Feb 2023 20:10:54 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3np2n6k335-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Feb 2023 20:10:54 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31DKAqb837486986
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Feb 2023 20:10:52 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E8EAF20043;
-        Mon, 13 Feb 2023 20:10:51 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5415E20040;
-        Mon, 13 Feb 2023 20:10:50 +0000 (GMT)
-Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.20.198])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon, 13 Feb 2023 20:10:50 +0000 (GMT)
-Date:   Tue, 14 Feb 2023 01:40:47 +0530
-From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
-To:     Kemeng Shi <shikemeng@huaweicloud.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, jack@suse.cz,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 19/21] ext4: remove repeat assignment to ac_f_ex
-Message-ID: <Y+qZR8ayTYSch9KT@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-References: <20230209194825.511043-1-shikemeng@huaweicloud.com>
- <20230209194825.511043-20-shikemeng@huaweicloud.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230209194825.511043-20-shikemeng@huaweicloud.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: IOgL5Ho9j3HbcSqfCh7EdaO6no7HMOYi
-X-Proofpoint-ORIG-GUID: IOgL5Ho9j3HbcSqfCh7EdaO6no7HMOYi
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 13 Feb 2023 15:11:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D501DBB7
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 12:11:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E456B818F3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 20:11:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB9AEC433EF;
+        Mon, 13 Feb 2023 20:11:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676319109;
+        bh=9oZMVZc/cjZdjrcEFtK1JANj3YKKlKlIOrXTrMKj+ro=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=atBQ7PigSkCw58dzAUHR3gpHW1byk9HniEIYzvmrEnt7yC0q0lymrpPwINcVX9Scv
+         9WlXRKAm7aPtUjPC8Xm1lR2z0evlow6I435GQ0+tUQ0DGrH2e3RcuWnQnmTTKp3EIv
+         0dkcrJTGzP4lg5xgY52QgXOUVC5+tAOIrk+Yvh+Mdfn9ARBv4fIG50T9QpWo7DNpux
+         rqGbJ4Vj4wKxKS/8Th7jDfzSU15iL4qZVcek9zCYlXykAm65jSA72gmQCyROn+3gSw
+         PE62dwf/Z0B87UIzwksPnjoCdy1yKUqsP9R075zXQlpek65p5Jc/DsnDTtwTAZopkx
+         i70tWJQiNe7Bg==
+Received: by pali.im (Postfix)
+        id ECEFE687; Mon, 13 Feb 2023 21:11:45 +0100 (CET)
+Date:   Mon, 13 Feb 2023 21:11:45 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Scott Wood <oss@buserror.net>, Sinan Akman <sinan@writeme.com>,
+        Martin Kennedy <hurricos@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/8] powerpc/85xx: p2020: Create one unified machine
+ description
+Message-ID: <20230213201145.72uzxbghabuyugbu@pali>
+References: <20221224211425.14983-1-pali@kernel.org>
+ <20230122111631.dgw5uwtfjsqack57@pali>
+ <22db0b5a-1b7f-a94b-1092-a314d57dedf5@csgroup.eu>
+ <20230123200922.scnwgne3dsip24lg@pali>
+ <20230209001507.nc2njllc32pjp2az@pali>
+ <ceb80ec7-57cc-ba39-88f9-72fc8fa67930@csgroup.eu>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-13_12,2023-02-13_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- spamscore=0 mlxlogscore=856 suspectscore=0 phishscore=0 lowpriorityscore=0
- impostorscore=0 priorityscore=1501 clxscore=1015 mlxscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302130176
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ceb80ec7-57cc-ba39-88f9-72fc8fa67930@csgroup.eu>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 03:48:23AM +0800, Kemeng Shi wrote:
-> Call trace to assign ac_f_ex:
-> ext4_mb_use_best_found
-> 	ac->ac_f_ex = ac->ac_b_ex;
-> 	ext4_mb_new_preallocation
-> 		ext4_mb_new_group_pa
-> 			ac->ac_f_ex = ac->ac_b_ex;
-> 		ext4_mb_new_inode_pa
-> 			ac->ac_f_ex = ac->ac_b_ex;
+On Monday 13 February 2023 19:58:15 Christophe Leroy wrote:
+> Le 09/02/2023 à 01:15, Pali Rohár a écrit :
+> >>
+> >> This patch moves all p2020 boards from mpc85xx_rdb.c and mpc85xx_ds.c
+> >> files into new p2020.c file, and plus it copies all helper functions
+> >> which p2020 boards requires. This patch does not introduce any new code
+> >> or functional change. It should be really plain copy/move.
 > 
-> Actually allocated blocks is already stored in ac_f_ex in
-> ext4_mb_use_best_found, so there is no need to assign ac_f_ex
-> in ext4_mb_new_group_pa and ext4_mb_new_inode_pa.
-> Just remove repeat assignment to ac_f_ex in ext4_mb_new_group_pa
-> and ext4_mb_new_inode_pa.
+> Yes after looking into it in more details, it is exactly that. You 
+> copied all helper functions but this is not said in the commit message.
+> I think it should be said, and more important it should be explained why.
+> Because this is exactly what I was not understanding, why I couldn't see 
+> all moved functions: just because many of them were not moved but copied.
 > 
-> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
-> ---
->  fs/ext4/mballoc.c | 8 --------
->  1 file changed, 8 deletions(-)
+> In the two first pages you made some function static, and then you 
+> duplicated it. Why ? Why not keep it global and just use it from one 
+> place to the other ?
 > 
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index 7d6991af50d8..dec716f331ac 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -4635,10 +4635,6 @@ ext4_mb_new_inode_pa(struct ext4_allocation_context *ac)
->  		BUG_ON(ac->ac_o_ex.fe_len > ac->ac_b_ex.fe_len);
->  	}
->  
-> -	/* preallocation can change ac_b_ex, thus we store actually
-> -	 * allocated blocks for history */
-> -	ac->ac_f_ex = ac->ac_b_ex;
-> -
-Alright, so we should note that the ac_b_ex being assigned to ac_f_ex
-here can differ from the last allocation of ac_f_ex in
-ext4_mb_use_best_found() in the case that bex_len < gex_len and we enter
-the PA window adjustment if condition that is just above this line.
-
-In such a case, we should maybe see which of the bex do we actually want
-to store in fex. IMO, this patch does the right thing as the allocation
-in ext4_mb_use_best_found() gives us an idea of how much the allocator
-was exactly able to allocate before other PA related logics start making
-changes to the best ex. Further, following the discussion here [1], we
-might end up rewriting the PA window adjustment logic in future, and
-that could also change the length of ac_b_ex, which we would not want to
-reflect in ac_f_ex (again since i see ac_f_ex as the record of actual ex
-that allocator was able to find).
-
-So this patch looks like the right thing to do for me. Feel free to add:
-
-Reviewed-by: Ojaswin Mujoo <ojaswin@linux.ibm.com> 
-
-[1]
-https://lore.kernel.org/linux-ext4/Y+OGkVvzPN0RMv0O@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com/
->  	pa->pa_lstart = ac->ac_b_ex.fe_logical;
->  	pa->pa_pstart = ext4_grp_offs_to_block(sb, &ac->ac_b_ex);
->  	pa->pa_len = ac->ac_b_ex.fe_len;
-> @@ -4689,10 +4685,6 @@ ext4_mb_new_group_pa(struct ext4_allocation_context *ac)
->  
->  	pa = ac->ac_pa;
->  
-> -	/* preallocation can change ac_b_ex, thus we store actually
-> -	 * allocated blocks for history */
-> -	ac->ac_f_ex = ac->ac_b_ex;
-> -
->  	pa->pa_pstart = ext4_grp_offs_to_block(sb, &ac->ac_b_ex);
->  	pa->pa_lstart = pa->pa_pstart;
->  	pa->pa_len = ac->ac_b_ex.fe_len;
-> -- 
-> 2.30.0
+> Because after patch 3 we have:
 > 
+> arch/powerpc/platforms/85xx/mpc85xx_rdb.c:static void __init 
+> mpc85xx_rdb_pic_init(void)
+> arch/powerpc/platforms/85xx/p2020.c:static void __init 
+> mpc85xx_rdb_pic_init(void)
+> 
+> arch/powerpc/platforms/85xx/mpc85xx_ds.c:static void __init 
+> mpc85xx_ds_pic_init(void)
+> arch/powerpc/platforms/85xx/p2020.c:static void __init 
+> mpc85xx_ds_pic_init(void)
+> 
+> Why not just drop patches 1 and 2 and keep those two functions and all 
+> the other common functions like mpc85xx_8259_cascade() 
+> mpc85xx_ds_uli_init() and a lot more  in a separate common file ?
+> 
+> Christophe
+
+After applying all patches there is no mpc85xx_rdb_pic_init() /
+mpc85xx_ds_pic_init() function in p2020.c file. There is
+p2020_pic_init() in p2020.c but it is slightly different than previous
+two functions.
+
+Maybe it could be possible to create one function mpc85xx_pic_init() as
+unification of previous 3 functions, but such change would be needed to
+test on lot of mpc85xx boards, which would be affected by such change.
+And I do not have them for testing. I have only P2020.
+
+So I wrote *_pic_init() function which is p2020 specific, like already
+existing ds and rdb specific functions in their own source files.
