@@ -2,160 +2,375 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C708069463C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:47:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 639A7694640
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbjBMMrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 07:47:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32792 "EHLO
+        id S230013AbjBMMrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 07:47:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231283AbjBMMrQ (ORCPT
+        with ESMTP id S231126AbjBMMrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 07:47:16 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2063.outbound.protection.outlook.com [40.107.20.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65C819694;
-        Mon, 13 Feb 2023 04:47:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GLyEnYyO0NFwd8lBxhbT4eS6X808N8z4iAzAKW07nfXgUoMQobULmD/OVOns1J97AtP7sI7w7I7kd9fIW/mSq3XToEN+lJgtbUsYA9ZqA+0av4j3xjBII/OSpJVEQlxBCGSOGoElM0eo/tP+KBgCz01PoaU1f1QqnwF91ROAR8V36Ow9Qo8z5YRgk9j3WLjCVipLSEYhNIbmzCT7SCEWEECwuzPRqF4qhnnyk55FBa4Y9Kpi0XYBRFGRc/IdSwEFcPO8HX5Y8QcdW8OEBMa1RhgDv2ulMPHj+2LpV76Y/qWTYtj9KRqdAFBWYVpHSU3QEXbDNgOdY0FQH0Y7ew30Aw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zGLAf8iJMoQE67TAqFNgpab5P60ExU+ESL/3P3+kgJc=;
- b=Z3f+TkcqmrJeP/qEF2Mziy1VwaNZV3ba7zT+lokR2ISsqVBXMr5Xc3PNt43QOWhBDYVZdohKCYdtPtjodLIj4vA/NUAOkYh6/XPIitz3i6+kOKdZF6kLirvVFAJNnti+S1IIHr3RiqySx8Aa/AmLtz6xvFG7JU6hXu9cU0bKPsO0BeJKyuVdgHZZwkrLeqeEveegbhi4r5GiPzF+daON7ZcRSuI+5f1WLIHRG3chkIWChlSrCWC3LE1vHaOAAI6KfaR5f3ugb7U1Nf9YNHkVrMi5lExlpPRBkOwIpIADKQUvn/WSKfwNgOj00193tbjjMg8w9ChigJsu3oakB9OTOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zGLAf8iJMoQE67TAqFNgpab5P60ExU+ESL/3P3+kgJc=;
- b=R3F8r/H+s/Utw+hh3Mrv0u7VtxjliUWzWChFsn5S349CNFnY/iR27tbFlGdJ0Cg8QjXBgGQ1Z+uJw7mMaytOdtiLQrNUIsneihh7pkSo2R1mNwV5U6FbWrM0dDP729dp55ZmGt2m0XvRLwMXZhgyck0PGRU0DBfHIRcUvo3DKeg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by VE1PR04MB7245.eurprd04.prod.outlook.com (2603:10a6:800:1b1::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Mon, 13 Feb
- 2023 12:47:01 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::f55a:cf12:da08:6d2a]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::f55a:cf12:da08:6d2a%3]) with mapi id 15.20.6086.022; Mon, 13 Feb 2023
- 12:47:01 +0000
-Message-ID: <292dfc99-b625-9ae1-408d-b38448552341@oss.nxp.com>
-Date:   Mon, 13 Feb 2023 20:46:50 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH] clk: imx: set imx_clk_gpr_mux_ops storage-class-specifier
- to static
-Content-Language: en-US
-To:     Tom Rix <trix@redhat.com>, abelvesa@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com
-Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Mon, 13 Feb 2023 07:47:45 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965D11ABED
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:47:43 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id r2so12069434wrv.7
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:47:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eLcFHEy4OAQ/LfPqJOYEZwVyv3uhgcnS0r7pBqHMjn4=;
+        b=kIVvxJJLExyr30QkBpe6ke48ysBtCQfmTzZImzK8g8CAqPha7OggKxgppcE8uk10rs
+         ro6PiimmQ1dfQlgLR+IVWal9UySbJLFC1jReTPX0m0goSFEOTvD4hgbU9tdUgVXDhGFN
+         SPi2Ng3xuDZrE/ierPav8/KyVvJ3xoIThP66eAiWKTa9yLVZtling22BJsnWgS5SQkzf
+         JGHWRWWAfqScbXGWj03qNohaM8xDnh6Excd+trmxBDe5GfbRAS+QEC4NgPF34pmob3rM
+         267TNZTQ6XJbUxGr5FMYtmcyd4wzV8766sTWYSefUXPk3z3GCwJR/lKS/rAM9kq48IiS
+         A1iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eLcFHEy4OAQ/LfPqJOYEZwVyv3uhgcnS0r7pBqHMjn4=;
+        b=pfyyAf2hfDt/jZ52ar4tk2MB/SwcnXiZxA8hSxkF9f0jhPkdCEPZ9ebl2+/2+i4KbF
+         ZFTOnJZGxQ1c47YdU5mlYr/ftVyKgxki/c6fxU6dpJW9eVeXz+i1CC98nVpEU1nocitp
+         V/+WUJlqrwpibk+0QLyU9XiJCiQX/MBXl19Ghx7kHwIt3Ap+Qf3+HELJYzVimpcs88wK
+         NxZet3W1CExVj3CNcRT/42Co7Jb21qPCrpRGIOKZUTdiu7miVuPCnnDF1aG3/ICFxECY
+         yOvCC2lpGL4zVWFPvmtDVvFYMpka050MMvVYKteVzp0dS8wk6dMJ3m6hEWs9BdtKrwF2
+         LR9g==
+X-Gm-Message-State: AO0yUKXhW3HbB2RaDpzYEVUVOod0UWjaZoMpYmm3GZmfvzNrMOTNKLtO
+        ytrlnNrD7QLXSJx3Xkz4SJtnLA==
+X-Google-Smtp-Source: AK7set/aQUal0zYqJ5uAzBmBkGz32U5mbohd3AC2v9m2jIBFo9prWb+fNeR0h3axJDHohOmUbMDxiQ==
+X-Received: by 2002:a5d:4ed0:0:b0:2c5:55a1:4b2 with SMTP id s16-20020a5d4ed0000000b002c555a104b2mr3227592wrv.49.1676292462131;
+        Mon, 13 Feb 2023 04:47:42 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id a12-20020a5d508c000000b002c55ec7f661sm1119502wrt.5.2023.02.13.04.47.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 04:47:41 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230205030138.1723614-1-trix@redhat.com>
-From:   Peng Fan <peng.fan@oss.nxp.com>
-In-Reply-To: <20230205030138.1723614-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2P153CA0009.APCP153.PROD.OUTLOOK.COM
- (2603:1096:4:140::18) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] media: dt-bindings: samsung,s5c73m3: convert to dtschema
+Date:   Mon, 13 Feb 2023 13:47:39 +0100
+Message-Id: <20230213124739.34579-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|VE1PR04MB7245:EE_
-X-MS-Office365-Filtering-Correlation-Id: f91bcf4d-68a4-468d-088c-08db0dc066bf
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dTGoZwqNj6ruMEyOo0Uu9XnhzXxWNUh2OPiZD+5RfxVX6nJUMhru1HJJr8KNh7+FkTWGJ77omN+wXCH5eVVCMYOW4wfajbEOILVKCwFs2F+i1AAzfjNeaW+U3C0urROuamA8ED5xP1jZlMPBK2ympX4CG+kXpLBKnfUlkedTeAEGiQpM/i7hbQ6bMhVvbb5DfimX7tbVSKoEdhHE1hr3wX4Qp1vB1naEWCRLJ98LJuCDA/nG5xnosmghf5bAWcYEL70T+0CH8ShGF3CUUqpiuwHEQkkctQ2PvWbHcfsRVJluow64NSN1V0986dhX7RdB1HAqLxVK88Y6DarAfu36ME0genTKdtVwbFyiQeNN0XIVJjqQP2g0AXn4BqDRG99bNqH3TdID65RgfaVI3KYmD7S+RJ/FskJWP8/QXZVmHFHwoHWU9uNoC6xryOgXNdZfArygWlmAR31HHbUu4VDBGGJ9NIudrr53YxNh+RKtQoxVJXIYzNifJyFdiAzP2IWXrVTRmqEqCs7D4jUU2sP6mWJJavM7J7ldi3XhL+Qj5oGTeUfAGBsqQDp7+1t+FkeDNh81f22x/g23hVQ19uq8tT9kU5EaC5kJfx6h1roHSWCTpbveDlTsNYK+VA1kVEmgd8+ymB9zAzy9qhC2NfF1mhZMSIjNm+kyG5MSI+h/f8LyXSW7E3DyF1IrC+aJGHx8DjIcEdMGpZqsdY0UVdx9daO+y7g0iUfpF5Zk0epoYkE6rnN0ATvApEcFvp8IsvbLajS/4HP00rWWXRVyp8OC3A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(376002)(39860400002)(396003)(366004)(451199018)(31686004)(86362001)(31696002)(2906002)(7416002)(5660300002)(8936002)(44832011)(41300700001)(38350700002)(38100700002)(83380400001)(52116002)(6486002)(478600001)(8676002)(6512007)(26005)(186003)(4326008)(316002)(66476007)(66556008)(2616005)(6506007)(53546011)(6666004)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SlU5TVpacEM3M1l2aDRERnRIRzdiNlU2a1pzTHZrOGhmZ0JQRmVaWXlobmw2?=
- =?utf-8?B?ei9JdHB1dFpuM0NURlRHVDk3b0xBZmJBeVRUeU1peXFFRWEySmVuc1pXbEhX?=
- =?utf-8?B?aFFoVURxZ2w1RXowekZLeXFSN0RxT0xaaVNJTUVCYnVheE0vUlJ6NEVSTHBH?=
- =?utf-8?B?RHQyWUVSd0lSeGJEakZDM0p1Y1MrazlBSG1SR1BnL3VnTFF2RUwxR1FKd3oy?=
- =?utf-8?B?WDB5Tllkd21jVVVRT2VIL2RGdE8vWC9zOEJ5NStESEFKYjIzZGhiOXVpeS9O?=
- =?utf-8?B?a3JMQm1INENwaGxRWkNDaVgwMnJuOG1YZXlLUVg2UHY1cGtvV1hQUmwxZnZq?=
- =?utf-8?B?Vmp6UStQUkV2YzFBL3BMd2t2QnBZemU2OXBUeWpRZzJPaHllRW15ZWFXTFBp?=
- =?utf-8?B?V3BQQnhVeWdlZmtzSWpvd1lwcFI3anJEWGIrK0lMYXhJWFpsRGNyRi9OcVNa?=
- =?utf-8?B?eVNNcUZjOFFDSTJMK09JM2J4c0N1SVViemw1MUdvVjJtVTlFaFpIUm5HWWY0?=
- =?utf-8?B?bUVjdGhkTnFvOEtTN01OS2hvTFFrRjNTNmRoRzhyWHMveUFHRWRWdGovNGlB?=
- =?utf-8?B?Y3hSWHhxYWJHZy96TG84QjR2S1lsaFVSdVE0UnlzSEZrVlFtNlAyUDAwcXJU?=
- =?utf-8?B?UHgrbHY0ZmNwY21IbjV4T1BGTXpib1hLdmVGaWUxbkFnVUMyUS81Z0dYcDFw?=
- =?utf-8?B?Z0ZYdW83K3pUbElSeFpVZ2RVaE1hN3RLSy9Tei8zUVBVRzB5Y0FBWm93OFJj?=
- =?utf-8?B?YmYyRTNXTnZLMTRzVkEvelhFcFZzSXhIVldvZEZXd2RDcDluRnNYWkNwOXdM?=
- =?utf-8?B?RXhHMXJtVmpLamlEQTRsZmpGN1lvd2dPNWJJSy9sVURGTEdmbFRXUnczd0Ry?=
- =?utf-8?B?UUlOS25qSVcwcGJMTTBlQ3BGQ0JzT2lOV2dud2JNdGwrbmFqdzMxbkp2U1Rp?=
- =?utf-8?B?Vyt1VG1vVVZDQzNLZkVsSG5EdExlWUY3Mm5GQ3A3cHMzM3BnOStYTlE2alRT?=
- =?utf-8?B?ZElXL1Z3QWJhbk44QmJRSmdvalhaZHFaWi9YOWxjbFZDbGRVV1lUWEl6U2Qv?=
- =?utf-8?B?b3E3MExUSlBlZWtHaE5MR0lHZy9kSE5MUFp6ZVZwZGtjR1J4TTV3NHF5MEpM?=
- =?utf-8?B?UUJQY01TdVdSUGgzV0pYNkRoZzZySTd0bWUvd3pyWmpxQkVUb0hHV1hkQWd2?=
- =?utf-8?B?SUh3aldNb29IMlV5WC9CMms0REFXSDZwUjkrd1lEZ0Via0RKYWR1aktEUlRS?=
- =?utf-8?B?M2ptejhiT0xRSERzVUZEZkpmL3V3QVcwTzJ2bmd5TEVtQk1UTFYzR1Q5dHdk?=
- =?utf-8?B?ck04UCsxaWJQNWNZWVNjV0lvSEQrT00yR3RxQThOd1FKZlREMTExQTdtbUIy?=
- =?utf-8?B?YkthN25TQnJtZ3NKaXlGUUhNc0N5d1VXTGljODVtSnNEZDVLMkxheGs4UkIr?=
- =?utf-8?B?L1haUjRLQ0hLNWpHaFBMalV3Z2ppYlJXOXNEVmdrWHQxUG1SQ3RHSzlINkZK?=
- =?utf-8?B?QkRLdDR1VWk0UmdrWTh3bkM2eFN2VEx5V0FWT2V3Sk53eDVxSmErTC9JSlI5?=
- =?utf-8?B?QTJiMzlTd2QyS1JKRUo0TElDb2xwN0s1NVkrQTBZRXorRWd2YldrS1ZTZXFi?=
- =?utf-8?B?Ti93VnJvYkVHZS9leGpUbkNRaDJKV3RZbnZBcmp6UDZuaHlxNExqR3NsVEpp?=
- =?utf-8?B?VXF6S3lycDNhNU1XZUVJNk14N200eXhkN2k2WU9CZVh6WUFibytlTnN3S29R?=
- =?utf-8?B?TW9VMTR1ZUJRM2N5L0EyVDdSMnRVSGtyTmR2SnRzRjFFN3cvalRNSTAvdW85?=
- =?utf-8?B?NmJha1ZCR3VBaUxETk1ucjRZZi9PTk9vZTBhU2VseUtTZC80TXdzaUhsS2Nt?=
- =?utf-8?B?LzhsY283a3dYV212WDR0V0tiVm1hZ3ZzSkVkRUttSWhrV1pVN3Aza0VzSzBM?=
- =?utf-8?B?S1B4aFg5VEZybHlOVFc4RDhFR1REMm5xQjJLVEtaQnlwTkNJUm43Y1N4SEZL?=
- =?utf-8?B?dmpJQXNhQTU3NGlncjZDR0RSemtVZllCRDhyMXNnd3RtaGY0ZDU1SHVYYTk4?=
- =?utf-8?B?L1FPSDBBWWhQSVlZWFFSYTkydUZyT0FzQ2VrV3U2OG51MTV3S016bmQrSXpl?=
- =?utf-8?Q?pATkiZn/v5+KgbuD09YUooOH/?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f91bcf4d-68a4-468d-088c-08db0dc066bf
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2023 12:47:01.4859
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0o0ObjRfICUgYNy83X9fqQpxMZh8zJSlRZO4mfSIieZ77M0i2J17mqwRSJi8CL+igTrzNuKsb0HHtzLpSI6Omg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7245
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Convert the Samsung S5C73M3 8Mp camera ISP bindings to DT schema.
 
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../bindings/media/samsung,s5c73m3.yaml       | 165 ++++++++++++++++++
+ .../bindings/media/samsung-s5c73m3.txt        |  97 ----------
+ MAINTAINERS                                   |   1 +
+ 3 files changed, 166 insertions(+), 97 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/samsung,s5c73m3.yaml
+ delete mode 100644 Documentation/devicetree/bindings/media/samsung-s5c73m3.txt
 
-On 2/5/2023 11:01 AM, Tom Rix wrote:
-> smatch reports
-> drivers/clk/imx/clk-gpr-mux.c:73:22: warning: symbol 'imx_clk_gpr_mux_ops' was not declared. Should it be static?
-> 
-> imx_clk_gpr_mux_ops is only used in clk-gpr-mux.c, so it should be static.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+diff --git a/Documentation/devicetree/bindings/media/samsung,s5c73m3.yaml b/Documentation/devicetree/bindings/media/samsung,s5c73m3.yaml
+new file mode 100644
+index 000000000000..1b75390fdaac
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/samsung,s5c73m3.yaml
+@@ -0,0 +1,165 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/samsung,s5c73m3.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Samsung S5C73M3 8Mp camera ISP
++
++maintainers:
++  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
++  - Sylwester Nawrocki <s.nawrocki@samsung.com>
++
++description:
++  The S5C73M3 camera ISP supports MIPI CSI-2 and parallel (ITU-R BT.656)
++  video data busses. The I2C bus is the main control bus and additionally the
++  SPI bus is used, mostly for transferring the firmware to and from the
++  device. Two slave device nodes corresponding to these control bus
++  interfaces are required and should be placed under respective bus
++  controller nodes.
++
++properties:
++  compatible:
++    const: samsung,s5c73m3
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: cis_extclk
++
++  clock-frequency:
++    default: 24000000
++    description: cis_extclk clock frequency.
++
++  standby-gpios:
++    maxItems: 1
++    description: STANDBY pin.
++
++  vdda-supply:
++    description: Analog power supply (1.2V).
++
++  vdd-af-supply:
++    description: lens power supply (2.8V).
++
++  vddio-cis-supply:
++    description: CIS I/O power supply (1.2V to 1.8V).
++
++  vddio-host-supply:
++    description: Host I/O power supply (1.8V to 2.8V).
++
++  vdd-int-supply:
++    description: Digital power supply (1.2V).
++
++  vdd-reg-supply:
++    description: Regulator input power supply (2.8V).
++
++  xshutdown-gpios:
++    maxItems: 1
++    description: XSHUTDOWN pin.
++
++  port:
++    $ref: /schemas/graph.yaml#/$defs/port-base
++    additionalProperties: false
++
++    properties:
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          data-lanes:
++            items:
++              - const: 1
++              - const: 2
++              - const: 3
++              - const: 4
++
++required:
++  - compatible
++  - reg
++
++allOf:
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
++  - if:
++      required:
++        - spi-max-frequency
++    then:
++      properties:
++        # The SPI node is simplified firmware-transfer interface only
++        clocks: false
++        clock-names: false
++        standby-gpios: false
++        vdda-supply: false
++        vdd-af-supply: false
++        vddio-cis-supply: false
++        vddio-host-supply: false
++        vdd-int-supply: false
++        vdd-reg-supply: false
++        xshutdown-gpios: false
++        port: false
++    else:
++      required:
++        - clocks
++        - clock-names
++        - standby-gpios
++        - vdda-supply
++        - vdd-af-supply
++        - vddio-cis-supply
++        - vddio-host-supply
++        - vdd-int-supply
++        - vdd-reg-supply
++        - xshutdown-gpios
++        - port
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        image-sensor@3c {
++            compatible = "samsung,s5c73m3";
++            reg = <0x3c>;
++            clock-frequency = <24000000>;
++            clocks = <&camera 0>;
++            clock-names = "cis_extclk";
++            standby-gpios = <&gpm0 6 GPIO_ACTIVE_LOW>;
++            vdda-supply = <&cam_vdda_reg>;
++            vdd-af-supply = <&cam_af_reg>;
++            vddio-cis-supply = <&ldo9_reg>;
++            vddio-host-supply = <&ldo18_reg>;
++            vdd-int-supply = <&buck9_reg>;
++            vdd-reg-supply = <&cam_io_reg>;
++            xshutdown-gpios = <&gpf1 3 GPIO_ACTIVE_LOW>; /* ISP_RESET */
++
++            port {
++                s5c73m3_ep: endpoint {
++                    remote-endpoint = <&csis0_ep>;
++                    data-lanes = <1 2 3 4>;
++                };
++            };
++        };
++    };
++
++    spi {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        image-sensor@0 {
++            compatible = "samsung,s5c73m3";
++            reg = <0>;
++            spi-max-frequency = <50000000>;
++            controller-data {
++                samsung,spi-feedback-delay = <2>;
++            };
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/media/samsung-s5c73m3.txt b/Documentation/devicetree/bindings/media/samsung-s5c73m3.txt
+deleted file mode 100644
+index f0ea9adad442..000000000000
+--- a/Documentation/devicetree/bindings/media/samsung-s5c73m3.txt
++++ /dev/null
+@@ -1,97 +0,0 @@
+-Samsung S5C73M3 8Mp camera ISP
+-------------------------------
+-
+-The S5C73M3 camera ISP supports MIPI CSI-2 and parallel (ITU-R BT.656) video
+-data busses. The I2C bus is the main control bus and additionally the SPI bus
+-is used, mostly for transferring the firmware to and from the device. Two
+-slave device nodes corresponding to these control bus interfaces are required
+-and should be placed under respective bus controller nodes.
+-
+-I2C slave device node
+----------------------
+-
+-Required properties:
+-
+-- compatible	    : "samsung,s5c73m3";
+-- reg		    : I2C slave address of the sensor;
+-- vdd-int-supply    : digital power supply (1.2V);
+-- vdda-supply	    : analog power supply (1.2V);
+-- vdd-reg-supply    : regulator input power supply (2.8V);
+-- vddio-host-supply : host I/O power supply (1.8V to 2.8V);
+-- vddio-cis-supply  : CIS I/O power supply (1.2V to 1.8V);
+-- vdd-af-supply     : lens power supply (2.8V);
+-- xshutdown-gpios   : specifier of GPIO connected to the XSHUTDOWN pin;
+-- standby-gpios     : specifier of GPIO connected to the STANDBY pin;
+-- clocks	    : should contain list of phandle and clock specifier pairs
+-		      according to common clock bindings for the clocks described
+-		      in the clock-names property;
+-- clock-names	    : should contain "cis_extclk" entry for the CIS_EXTCLK clock;
+-
+-Optional properties:
+-
+-- clock-frequency   : the frequency at which the "cis_extclk" clock should be
+-		      configured to operate, in Hz; if this property is not
+-		      specified default 24 MHz value will be used.
+-
+-The common video interfaces bindings (see video-interfaces.txt) should be used
+-to specify link from the S5C73M3 to an external image data receiver. The S5C73M3
+-device node should contain one 'port' child node with an 'endpoint' subnode for
+-this purpose. The data link from a raw image sensor to the S5C73M3 can be
+-similarly specified, but it is optional since the S5C73M3 ISP and a raw image
+-sensor are usually inseparable and form a hybrid module.
+-
+-Following properties are valid for the endpoint node(s):
+-
+-endpoint subnode
+-----------------
+-
+-- data-lanes : (optional) specifies MIPI CSI-2 data lanes as covered in
+-  video-interfaces.txt. This sensor doesn't support data lane remapping
+-  and physical lane indexes in subsequent elements of the array should
+-  be only consecutive ascending values.
+-
+-SPI device node
+----------------
+-
+-Required properties:
+-
+-- compatible	    : "samsung,s5c73m3";
+-
+-For more details see description of the SPI busses bindings
+-(../spi/spi-bus.txt) and bindings of a specific bus controller.
+-
+-Example:
+-
+-i2c@138a000000 {
+-	...
+-	s5c73m3@3c {
+-		compatible = "samsung,s5c73m3";
+-		reg = <0x3c>;
+-		vdd-int-supply = <&buck9_reg>;
+-		vdda-supply = <&ldo17_reg>;
+-		vdd-reg-supply = <&cam_io_reg>;
+-		vddio-host-supply = <&ldo18_reg>;
+-		vddio-cis-supply = <&ldo9_reg>;
+-		vdd-af-supply = <&cam_af_reg>;
+-		clock-frequency = <24000000>;
+-		clocks = <&clk 0>;
+-		clock-names = "cis_extclk";
+-		xshutdown-gpios = <&gpf1 3 1>;
+-		standby-gpios = <&gpm0 1 1>;
+-		port {
+-			s5c73m3_ep: endpoint {
+-				remote-endpoint = <&csis0_ep>;
+-				data-lanes = <1 2 3 4>;
+-			};
+-		};
+-	};
+-};
+-
+-spi@1392000 {
+-	...
+-	s5c73m3_spi: s5c73m3@0 {
+-		compatible = "samsung,s5c73m3";
+-		reg = <0>;
+-		...
+-	};
+-};
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d9b9a95d2ce2..4cbe823f3545 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -18449,6 +18449,7 @@ M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
+ M:	Andrzej Hajda <andrzej.hajda@intel.com>
+ L:	linux-media@vger.kernel.org
+ S:	Supported
++F:	Documentation/devicetree/bindings/media/samsung,s5c73m3.yaml
+ F:	drivers/media/i2c/s5c73m3/*
+ 
+ SAMSUNG S5K5BAF CAMERA DRIVER
+-- 
+2.34.1
 
-Reviewed-by: Peng Fan <peng.fan@nxp.com>
-
-> ---
->   drivers/clk/imx/clk-gpr-mux.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/imx/clk-gpr-mux.c b/drivers/clk/imx/clk-gpr-mux.c
-> index 47a3e3cdcc82..c8d6090f15d6 100644
-> --- a/drivers/clk/imx/clk-gpr-mux.c
-> +++ b/drivers/clk/imx/clk-gpr-mux.c
-> @@ -70,7 +70,7 @@ static int imx_clk_gpr_mux_determine_rate(struct clk_hw *hw,
->   	return clk_mux_determine_rate_flags(hw, req, 0);
->   }
->   
-> -const struct clk_ops imx_clk_gpr_mux_ops = {
-> +static const struct clk_ops imx_clk_gpr_mux_ops = {
->   	.get_parent = imx_clk_gpr_mux_get_parent,
->   	.set_parent = imx_clk_gpr_mux_set_parent,
->   	.determine_rate = imx_clk_gpr_mux_determine_rate,
