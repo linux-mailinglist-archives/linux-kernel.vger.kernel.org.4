@@ -2,153 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2416942F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD3C6942FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjBMKfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 05:35:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        id S229700AbjBMKfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 05:35:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbjBMKex (ORCPT
+        with ESMTP id S230245AbjBMKfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 05:34:53 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E648E13D45;
-        Mon, 13 Feb 2023 02:34:44 -0800 (PST)
-Received: from vm02.corp.microsoft.com (unknown [167.220.196.155])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 486C320C8B73;
-        Mon, 13 Feb 2023 02:34:41 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 486C320C8B73
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1676284483;
-        bh=6FyEHphcQFflUo9SuGkOPqnwYofGYMYNDEnJFWuN+p0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FrMtkOd1CwfJf6LnPWUPPAiIA/JLvDKepzvuSXnElFQf1wYGNOFFmuMspWyESh3Md
-         aJLVDcle7HBxTnPfNRoYPGKaVNnL88xdlXEjAK5/ykffTPAhXyzFElVB5aY7r555K/
-         viRumx21ZR9f6C0rDLrVFD5enchU+7MAlgkeY4S8=
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-hyperv@vger.kernel.org,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: [RFC PATCH v2 7/7] x86/fault: Handle RMP faults with 0 address when nested
-Date:   Mon, 13 Feb 2023 10:34:02 +0000
-Message-Id: <20230213103402.1189285-8-jpiotrowski@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230213103402.1189285-1-jpiotrowski@linux.microsoft.com>
-References: <20230213103402.1189285-1-jpiotrowski@linux.microsoft.com>
+        Mon, 13 Feb 2023 05:35:34 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF57212860
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:35:10 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id z5so1597739iow.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:35:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rg9iAwFg7IOMEVpt1NVV6rIqsGDrzeIrKjlgE6x+x4o=;
+        b=q+UOAYFClqtFajfl3PJDBMhfQHHVUWm2EdZfa0l8S60abdy6vsCoDt/EuOnoJ+tz3W
+         t68NgeaUoHkuPhrW9gUqPoAm7w1DHXviGFOnmfvCIMD5WXdBstyQclltReStd1qa++Ov
+         MiIYreizFvHngeQCxqaASlKXrVAmPqgV1q8uN+KhzbhFMOcarTNm9mBWxKl5UbOyTEKQ
+         qrIebhWB9Fc8MCJU+ANSZ5NlDJs2x5e20fizkMQFixGwE45JnEDOH+P7rv3vWN198u6s
+         BLROXrgaR3jDcFGPMUYm9mj9cgYXQgZOp0Q62iSJlNOZOHNgX0AsXAYXpcLNsqiNzziK
+         eZLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rg9iAwFg7IOMEVpt1NVV6rIqsGDrzeIrKjlgE6x+x4o=;
+        b=FCg2BBem6Ca5NGlx9sm1INzirA8wbt7lb8oqzQ+i+76YsSvzokKPfTZ7yPjMgSAY24
+         CRFEmKFMeNirE6ZlUwX86E7hev1b7RK0q8WstyNKxk191ISBOcaux9sf/WhusIoSkVl1
+         Yby9Pl7Sm/tK/K0f2rGsrjkGZ677ytOMu0mYuJOQ7OcCk2wJxLt2MhpCTVs3fDYJs8R3
+         SePMxZSf/789lcVBIv28tr9WIC0ylLpNeZATpeJ3B2EsqUxsJiPQFXK+Z/uHAVLn9L4N
+         mz9MJKVtupDWel5n4F39w/urUK+XPnNQzCo9UXZpRC5yKy9UCBRXCJmnl1QcgsoYyVtx
+         VZ8Q==
+X-Gm-Message-State: AO0yUKUNDcUIsD/HoHk8cTmWHo/9mjnzL6t8zpv8L8T6ArvGNOSdgLnZ
+        LTHahOQXxXulDr3LboSJhehkfdDOn3tD/74yPFP8WA==
+X-Google-Smtp-Source: AK7set9nUuh5E8gAYl8p0P/dG5mkhLqkGD0gKRsR5eXUx8exoJEwox3s1PbVBolGecOWwQFPfBvex+UpQNPq/axhsS8=
+X-Received: by 2002:a05:6602:3155:b0:732:9e46:de04 with SMTP id
+ m21-20020a056602315500b007329e46de04mr11808742ioy.65.1676284509903; Mon, 13
+ Feb 2023 02:35:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1676063693.git.andreyknvl@google.com> <f166dd6f3cb2378aea78600714393dd568c33ee9.1676063693.git.andreyknvl@google.com>
+In-Reply-To: <f166dd6f3cb2378aea78600714393dd568c33ee9.1676063693.git.andreyknvl@google.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 13 Feb 2023 11:34:29 +0100
+Message-ID: <CAG_fn=XsJAZK1bPP7KXtTOk_cZhxc6TwWZksB8w77Dfhpy4hQQ@mail.gmail.com>
+Subject: Re: [PATCH v2 08/18] lib/stackdepot: rename hash table constants and variables
+To:     andrey.konovalov@linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        Evgenii Stepanov <eugenis@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When using SNP, accessing an encrypted guest page from the host triggers
-an RMP fault. The page fault handling code can currently handle this by
-looking up the corresponding rmp entry. If the same operation happens
-when using nested virtualization, the L0 hypervisor sees a #NPF but the
-CPU does not provide the address of the fault if the CPU was running at
-L1 at the time of the fault.
-
-This happens on Hyper-V when using nested SNP guests. Hyper-V has no
-choice but to use a placeholder address (0) when injecting the page
-fault to L1. We need to handle this, and the only sane thing to do is to
-forward a SIGBUS to the task.
-
-One path where this happens is when the SNP guest issues a
-KVM_HC_CLOCK_PAIRING hypercall, which leads to KVM calling
-kvm_write_guest() on a guest supplied address. This results in the
-following backtrace:
-
-  [  191.862660]  exc_page_fault+0x71/0x170
-  [  191.862664]  asm_exc_page_fault+0x2c/0x40
-  [  191.862666] RIP: 0010:copy_user_enhanced_fast_string+0xa/0x40
-  ...
-  [  191.862677]  ? __kvm_write_guest_page+0x6e/0xa0 [kvm]
-  [  191.862700]  kvm_write_guest_page+0x52/0xc0 [kvm]
-  [  191.862788]  kvm_write_guest+0x44/0x80 [kvm]
-  [  191.862807]  kvm_emulate_hypercall+0x1ca/0x5a0 [kvm]
-  [  191.862830]  ? kvm_emulate_monitor+0x40/0x40 [kvm]
-  [  191.862849]  svm_invoke_exit_handler+0x74/0x180 [kvm_amd]
-  [  191.862854]  sev_handle_vmgexit+0xf42/0x17f0 [kvm_amd]
-  [  191.862858]  ? __this_cpu_preempt_check+0x13/0x20
-  [  191.862860]  ? sev_post_map_gfn+0xf0/0xf0 [kvm_amd]
-  [  191.862863]  svm_invoke_exit_handler+0x74/0x180 [kvm_amd]
-  [  191.862866]  svm_handle_exit+0xb5/0x2b0 [kvm_amd]
-  [  191.862869]  kvm_arch_vcpu_ioctl_run+0x12a8/0x1aa0 [kvm]
-  [  191.862891]  kvm_vcpu_ioctl+0x24f/0x6d0 [kvm]
-  [  191.862910]  ? kvm_vm_ioctl_irq_line+0x27/0x40 [kvm]
-  [  191.862929]  ? _copy_to_user+0x25/0x30
-  [  191.862932]  ? kvm_vm_ioctl+0x291/0xea0 [kvm]
-  [  191.862951]  ? kvm_vm_ioctl+0x291/0xea0 [kvm]
-  [  191.862970]  ? __fget_light+0xc5/0x100
-  [  191.862972]  __x64_sys_ioctl+0x91/0xc0
-  [  191.862975]  do_syscall_64+0x5c/0x80
-  [  191.862976]  ? exit_to_user_mode_prepare+0x53/0x240
-  [  191.862978]  ? syscall_exit_to_user_mode+0x17/0x40
-  [  191.862980]  ? do_syscall_64+0x69/0x80
-  [  191.862981]  ? do_syscall_64+0x69/0x80
-  [  191.862982]  ? syscall_exit_to_user_mode+0x17/0x40
-  [  191.862983]  ? do_syscall_64+0x69/0x80
-  [  191.862984]  ? syscall_exit_to_user_mode+0x17/0x40
-  [  191.862985]  ? do_syscall_64+0x69/0x80
-  [  191.862986]  ? do_syscall_64+0x69/0x80
-  [  191.862987]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-Without this fix the handler returns without doing anything and the
-result is a soft-lockup of the CPU.
-
-Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
----
- arch/x86/mm/fault.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
-
-diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index f2b16dcfbd9a..8706fd34f3a9 100644
---- a/arch/x86/mm/fault.c
-+++ b/arch/x86/mm/fault.c
-@@ -34,6 +34,7 @@
- #include <asm/vdso.h>			/* fixup_vdso_exception()	*/
- #include <asm/irq_stack.h>
- #include <asm/sev.h>			/* snp_lookup_rmpentry()	*/
-+#include <asm/hypervisor.h>		/* hypervisor_is_type()		*/
- 
- #define CREATE_TRACE_POINTS
- #include <asm/trace/exceptions.h>
-@@ -1282,6 +1283,18 @@ static int handle_user_rmp_page_fault(struct pt_regs *regs, unsigned long error_
- 	pte_t *pte;
- 	u64 pfn;
- 
-+	/*
-+	 * When an rmp fault occurs while not inside the SNP guest, the L0
-+	 * hypervisor sees a NPF and does not have access to the address that
-+	 * caused the fault to forward to L1 hypervisor. Hyper-V places a 0 in
-+	 * the PF as a placeholder. SIGBUS the task since there's nothing
-+	 * better that we can do.
-+	 */
-+	if (!address && hypervisor_is_type(X86_HYPER_MS_HYPERV)) {
-+		do_sigbus(regs, error_code, address, VM_FAULT_SIGBUS);
-+		return 1;
-+	}
-+
- 	pgd = __va(read_cr3_pa());
- 	pgd += pgd_index(address);
- 
--- 
-2.25.1
-
+On Fri, Feb 10, 2023 at 10:17 PM <andrey.konovalov@linux.dev> wrote:
+>
+> From: Andrey Konovalov <andreyknvl@google.com>
+>
+> Give more meaningful names to hash table-related constants and variables:
+>
+> 1. Rename STACK_HASH_SCALE to STACK_HASH_TABLE_SCALE to point out that it
+>    is related to scaling the hash table.
+>
+> 2. Rename STACK_HASH_ORDER_MIN/MAX to STACK_BUCKET_NUMBER_ORDER_MIN/MAX
+>    to point out that it is related to the number of hash table buckets.
+>
+> 3. Rename stack_hash_order to stack_bucket_number_order for the same
+>    reason as #2.
+>
+> No functional changes.
+>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>
