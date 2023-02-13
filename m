@@ -2,169 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE1C7693B5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 01:33:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E1C693B5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 01:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbjBMAdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 19:33:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55980 "EHLO
+        id S229520AbjBMAdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 19:33:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBMAdQ (ORCPT
+        with ESMTP id S229632AbjBMAdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 19:33:16 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E884CEFB6;
-        Sun, 12 Feb 2023 16:33:13 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 31D0VlOI2012081, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 31D0VlOI2012081
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Mon, 13 Feb 2023 08:31:47 +0800
-Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.9; Mon, 13 Feb 2023 08:31:49 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 13 Feb 2023 08:31:48 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Mon, 13 Feb 2023 08:31:48 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Hector Martin <marcan@marcan.st>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-CC:     Alexander Prutskov <alep@cypress.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
-        Wright Feng <wright.feng@cypress.com>,
-        Ian Lin <ian.lin@infineon.com>,
-        Soontak Lee <soontak.lee@cypress.com>,
-        Joseph chuang <jiac@cypress.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Aditya Garg <gargaditya08@live.com>,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        "asahi@lists.linux.dev" <asahi@lists.linux.dev>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Arend van Spriel" <arend.vanspriel@broadcom.com>
-Subject: RE: [PATCH v3 1/4] wifi: brcmfmac: Rename Cypress 89459 to BCM4355
-Thread-Topic: [PATCH v3 1/4] wifi: brcmfmac: Rename Cypress 89459 to BCM4355
-Thread-Index: AQHZPPqASPo0Y2xlw0ybs7L5iADUua7Hh+hggAF5swCAAweG8A==
-Date:   Mon, 13 Feb 2023 00:31:48 +0000
-Message-ID: <b7c79a4f35e147ad9b8da5d2409b1e7c@realtek.com>
-References: <20230210025009.21873-1-marcan@marcan.st>
- <20230210025009.21873-2-marcan@marcan.st>
- <0cd45af5812345878faf0dc8fa6b0963@realtek.com>
- <624c0a20-f4e6-14a5-02a2-eaf7b36e9331@marcan.st>
-In-Reply-To: <624c0a20-f4e6-14a5-02a2-eaf7b36e9331@marcan.st>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIzLzIvMTIg5LiL5Y2IIDEwOjAwOjAw?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Sun, 12 Feb 2023 19:33:51 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3A0F745;
+        Sun, 12 Feb 2023 16:33:39 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PFQLT5X9Kz4x81;
+        Mon, 13 Feb 2023 11:33:37 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1676248418;
+        bh=M45M70mLI0IbHL2Z9TjHIaAPXGjHd6MSyzTuOfO8lk0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OHSm6VG0Z4y4ZlWioEyQ7dz4c1G+DQHA0JroNzmqHr/bFr9dgkPA3qDjzbwQMiUHH
+         s6beMAVQwMfRbIWVj+3d1jb9oOmFajXIIyfKZgDChlTSQ8Dhqt3qrstnlJVgRLdFZe
+         PcRg7WHVX9BCkzokv1/UZBo4gFLZ1ZkoueK7cey1X2QDcMcusWiTqNrsk2areWiJuy
+         3XxQrHoHfXMGKg6YtDdnQ4536rFnxr5FENBU32tzX8YwWaVVW03lcSIB4Z/c3oWfKH
+         gkD163j74VXdKGezJt3Gs6aqeqHCAEJ7et2r3Q8f+H71R65YGOWKzn4Mex0NoBeiKD
+         R5H13O3O2nu8A==
+Date:   Mon, 13 Feb 2023 11:33:36 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Qian Yingjin <qian@ddn.com>
+Subject: linux-next: manual merge of the block tree with the mm-hotfixes
+ tree
+Message-ID: <20230213113336.7867ec39@canb.auug.org.au>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/BlFzpBK2_o2ZQx00MSjfy0S";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogSGVjdG9yIE1hcnRpbiA8
-bWFyY2FuQG1hcmNhbi5zdD4NCj4gU2VudDogU2F0dXJkYXksIEZlYnJ1YXJ5IDExLCAyMDIzIDY6
-MDkgUE0NCj4gVG86IFBpbmctS2UgU2hpaCA8cGtzaGloQHJlYWx0ZWsuY29tPjsgQXJlbmQgdmFu
-IFNwcmllbCA8YXNwcmllbEBnbWFpbC5jb20+OyBGcmFua3kgTGluDQo+IDxmcmFua3kubGluQGJy
-b2FkY29tLmNvbT47IEhhbnRlIE1ldWxlbWFuIDxoYW50ZS5tZXVsZW1hbkBicm9hZGNvbS5jb20+
-OyBLYWxsZSBWYWxvIDxrdmFsb0BrZXJuZWwub3JnPjsNCj4gRGF2aWQgUy4gTWlsbGVyIDxkYXZl
-bUBkYXZlbWxvZnQubmV0PjsgRXJpYyBEdW1hemV0IDxlZHVtYXpldEBnb29nbGUuY29tPjsgSmFr
-dWIgS2ljaW5za2kNCj4gPGt1YmFAa2VybmVsLm9yZz47IFBhb2xvIEFiZW5pIDxwYWJlbmlAcmVk
-aGF0LmNvbT4NCj4gQ2M6IEFsZXhhbmRlciBQcnV0c2tvdiA8YWxlcEBjeXByZXNzLmNvbT47IENo
-aS1Ic2llbiBMaW4gPGNoaS1oc2llbi5saW5AY3lwcmVzcy5jb20+OyBXcmlnaHQgRmVuZw0KPiA8
-d3JpZ2h0LmZlbmdAY3lwcmVzcy5jb20+OyBJYW4gTGluIDxpYW4ubGluQGluZmluZW9uLmNvbT47
-IFNvb250YWsgTGVlIDxzb29udGFrLmxlZUBjeXByZXNzLmNvbT47IEpvc2VwaA0KPiBjaHVhbmcg
-PGppYWNAY3lwcmVzcy5jb20+OyBTdmVuIFBldGVyIDxzdmVuQHN2ZW5wZXRlci5kZXY+OyBBbHlz
-c2EgUm9zZW56d2VpZyA8YWx5c3NhQHJvc2VuendlaWcuaW8+Ow0KPiBBZGl0eWEgR2FyZyA8Z2Fy
-Z2FkaXR5YTA4QGxpdmUuY29tPjsgSm9uYXMgR29yc2tpIDxqb25hcy5nb3Jza2lAZ21haWwuY29t
-PjsgYXNhaGlAbGlzdHMubGludXguZGV2Ow0KPiBsaW51eC13aXJlbGVzc0B2Z2VyLmtlcm5lbC5v
-cmc7IGJyY204MDIxMS1kZXYtbGlzdC5wZGxAYnJvYWRjb20uY29tOyBTSEEtY3lmbWFjLWRldi1s
-aXN0QGluZmluZW9uLmNvbTsNCj4gbmV0ZGV2QHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVs
-QHZnZXIua2VybmVsLm9yZzsgQXJlbmQgdmFuIFNwcmllbCA8YXJlbmQudmFuc3ByaWVsQGJyb2Fk
-Y29tLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2MyAxLzRdIHdpZmk6IGJyY21mbWFjOiBS
-ZW5hbWUgQ3lwcmVzcyA4OTQ1OSB0byBCQ000MzU1DQo+IA0KPiBPbiAxMC8wMi8yMDIzIDEyLjQy
-LCBQaW5nLUtlIFNoaWggd3JvdGU6DQo+ID4NCj4gPg0KPiA+PiAtLS0tLU9yaWdpbmFsIE1lc3Nh
-Z2UtLS0tLQ0KPiA+PiBGcm9tOiBIZWN0b3IgTWFydGluIDxtYXJjYW5AbWFyY2FuLnN0Pg0KPiA+
-PiBTZW50OiBGcmlkYXksIEZlYnJ1YXJ5IDEwLCAyMDIzIDEwOjUwIEFNDQo+ID4+IFRvOiBBcmVu
-ZCB2YW4gU3ByaWVsIDxhc3ByaWVsQGdtYWlsLmNvbT47IEZyYW5reSBMaW4gPGZyYW5reS5saW5A
-YnJvYWRjb20uY29tPjsgSGFudGUgTWV1bGVtYW4NCj4gPj4gPGhhbnRlLm1ldWxlbWFuQGJyb2Fk
-Y29tLmNvbT47IEthbGxlIFZhbG8gPGt2YWxvQGtlcm5lbC5vcmc+OyBEYXZpZCBTLiBNaWxsZXIg
-PGRhdmVtQGRhdmVtbG9mdC5uZXQ+Ow0KPiBFcmljDQo+ID4+IER1bWF6ZXQgPGVkdW1hemV0QGdv
-b2dsZS5jb20+OyBKYWt1YiBLaWNpbnNraSA8a3ViYUBrZXJuZWwub3JnPjsgUGFvbG8gQWJlbmkg
-PHBhYmVuaUByZWRoYXQuY29tPg0KPiA+PiBDYzogQWxleGFuZGVyIFBydXRza292IDxhbGVwQGN5
-cHJlc3MuY29tPjsgQ2hpLUhzaWVuIExpbiA8Y2hpLWhzaWVuLmxpbkBjeXByZXNzLmNvbT47IFdy
-aWdodCBGZW5nDQo+ID4+IDx3cmlnaHQuZmVuZ0BjeXByZXNzLmNvbT47IElhbiBMaW4gPGlhbi5s
-aW5AaW5maW5lb24uY29tPjsgU29vbnRhayBMZWUgPHNvb250YWsubGVlQGN5cHJlc3MuY29tPjsN
-Cj4gSm9zZXBoDQo+ID4+IGNodWFuZyA8amlhY0BjeXByZXNzLmNvbT47IFN2ZW4gUGV0ZXIgPHN2
-ZW5Ac3ZlbnBldGVyLmRldj47IEFseXNzYSBSb3Nlbnp3ZWlnIDxhbHlzc2FAcm9zZW56d2VpZy5p
-bz47DQo+ID4+IEFkaXR5YSBHYXJnIDxnYXJnYWRpdHlhMDhAbGl2ZS5jb20+OyBKb25hcyBHb3Jz
-a2kgPGpvbmFzLmdvcnNraUBnbWFpbC5jb20+OyBhc2FoaUBsaXN0cy5saW51eC5kZXY7DQo+ID4+
-IGxpbnV4LXdpcmVsZXNzQHZnZXIua2VybmVsLm9yZzsgYnJjbTgwMjExLWRldi1saXN0LnBkbEBi
-cm9hZGNvbS5jb207DQo+IFNIQS1jeWZtYWMtZGV2LWxpc3RAaW5maW5lb24uY29tOw0KPiA+PiBu
-ZXRkZXZAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBIZWN0
-b3IgTWFydGluIDxtYXJjYW5AbWFyY2FuLnN0PjsgQXJlbmQgdmFuDQo+IFNwcmllbA0KPiA+PiA8
-YXJlbmQudmFuc3ByaWVsQGJyb2FkY29tLmNvbT4NCj4gPj4gU3ViamVjdDogW1BBVENIIHYzIDEv
-NF0gd2lmaTogYnJjbWZtYWM6IFJlbmFtZSBDeXByZXNzIDg5NDU5IHRvIEJDTTQzNTUNCj4gPj4N
-Cj4gPj4gVGhlIGNvbW1pdCB0aGF0IGludHJvZHVjZWQgc3VwcG9ydCBmb3IgdGhpcyBjaGlwIGlu
-Y29ycmVjdGx5IGNsYWltZWQgaXQNCj4gPj4gaXMgYSBDeXByZXNzLXNwZWNpZmljIHBhcnQsIHdo
-aWxlIGluIGFjdHVhbGl0eSBpdCBpcyBqdXN0IGEgdmFyaWFudCBvZg0KPiA+PiBCQ000MzU1IHNp
-bGljb24gKGFzIGV2aWRlbmNlZCBieSB0aGUgY2hpcCBJRCkuDQo+ID4+DQo+ID4+IFRoZSByZWxh
-dGlvbnNoaXAgYmV0d2VlbiBDeXByZXNzIHByb2R1Y3RzIGFuZCBCcm9hZGNvbSBwcm9kdWN0cyBp
-c24ndA0KPiA+PiBlbnRpcmVseSBjbGVhciBidXQgZ2l2ZW4gd2hhdCBsaXR0bGUgaW5mb3JtYXRp
-b24gaXMgYXZhaWxhYmxlIGFuZCBwcmlvcg0KPiA+PiBhcnQgaW4gdGhlIGRyaXZlciwgaXQgc2Vl
-bXMgdGhlIGNvbnZlbnRpb24gc2hvdWxkIGJlIHRoYXQgb3JpZ2luYWxseQ0KPiA+PiBCcm9hZGNv
-bSBwYXJ0cyBzaG91bGQgcmV0YWluIHRoZSBCcm9hZGNvbSBuYW1lLg0KPiA+Pg0KPiA+PiBUaHVz
-LCByZW5hbWUgdGhlIHJlbGV2YW50IGNvbnN0YW50cyBhbmQgZmlybXdhcmUgZmlsZS4gQWxzbyBy
-ZW5hbWUgdGhlDQo+ID4+IHNwZWNpZmljIDg5NDU5IFBDSWUgSUQgdG8gQkNNNDM1OTYsIHdoaWNo
-IHNlZW1zIHRvIGJlIHRoZSBvcmlnaW5hbA0KPiA+PiBzdWJ2YXJpYW50IG5hbWUgZm9yIHRoaXMg
-UENJIElEIChhcyBkZWZpbmVkIGluIHRoZSBvdXQtb2YtdHJlZSBiY21kaGQNCj4gPj4gZHJpdmVy
-KS4NCj4gPj4NCj4gPj4gdjI6IFNpbmNlIEN5cHJlc3MgYWRkZWQgdGhpcyBwYXJ0IGFuZCB3aWxs
-IHByZXN1bWFibHkgYmUgcHJvdmlkaW5nDQo+ID4+IGl0cyBzdXBwb3J0ZWQgZmlybXdhcmUsIHdl
-IGtlZXAgdGhlIENZVyBkZXNpZ25hdGlvbiBmb3IgdGhpcyBkZXZpY2UuDQo+ID4+DQo+ID4+IHYz
-OiBEcm9wIHRoZSBSQVcgZGV2aWNlIElEIGluIHRoaXMgY29tbWl0LiBXZSBkb24ndCBkbyB0aGlz
-IGZvciB0aGUNCj4gPj4gb3RoZXIgY2hpcHMgc2luY2UgYXBwYXJlbnRseSBzb21lIGRldmljZXMg
-d2l0aCB0aGVtIGV4aXN0IGluIHRoZSB3aWxkLA0KPiA+PiBidXQgdGhlcmUgaXMgYWxyZWFkeSBh
-IDQzNTUgZW50cnkgd2l0aCB0aGUgQnJvYWRjb20gc3VidmVuZG9yIGFuZCBXQ0MNCj4gPj4gZmly
-bXdhcmUgdmVuZG9yLCBzbyBhZGRpbmcgYSBnZW5lcmljIGZhbGxiYWNrIHRvIEN5cHJlc3Mgc2Vl
-bXMNCj4gPj4gcmVkdW5kYW50IChubyByZWFzb24gd2h5IGEgZGV2aWNlIHdvdWxkIGhhdmUgdGhl
-IHJhdyBkZXZpY2UgSUQgKmFuZCogYW4NCj4gPj4gZXhwbGljaXRseSBwcm9ncmFtbWVkIHN1YnZl
-bmRvcikuDQo+ID4NCj4gPiBEbyB5b3UgcmVhbGx5IHdhbnQgdG8gYWRkIGNoYW5nZXMgb2YgdjIg
-YW5kIHYzIHRvIGNvbW1pdCBtZXNzYWdlPyBPciwNCj4gPiBqdXN0IHdhbnQgdG8gbGV0IHJldmll
-d2VycyBrbm93IHRoYXQ/IElmIGxhdHRlciBvbmUgaXMgd2hhdCB5b3Ugd2FudCwNCj4gPiBtb3Zl
-IHRoZW0gYWZ0ZXIgcy1vLWIgd2l0aCBkZWxpbWl0ZXIgLS0tDQo+IA0KPiBCb3RoOyBJIHRob3Vn
-aHQgdGhvc2UgdGhpbmdzIHdlcmUgd29ydGggbWVudGlvbmluZyBpbiB0aGUgY29tbWl0IG1lc3Nh
-Z2UNCj4gYXMgaXQgc3RhbmRzIG9uIGl0cyBvd24sIGFuZCBsZWZ0IHRoZSB2ZXJzaW9uIHRhZ3Mg
-aW4gc28gcmV2aWV3ZXJzIGtub3cNCj4gd2hlbiB0aGV5IHdlcmUgaW50cm9kdWNlZC4NCj4gDQoN
-CldpdGggdGhpcyByZXBseSwgaXQgaXMgY2xlYXIgdGhhdCB5b3UgZGlkIHRob3NlIGludGVudGlv
-bmFsbHksIG5vdCBmb3Jnb3QNCnNvbWV0aGluZywgc28gdGhpbmdzIGFyZSBjbGVhciB0byBtZS4g
-VGhlIGZ1cnRoZXIgZGlzY3Vzc2lvbiBpbiBkaWZmZXJlbnQNCmFzcGVjdHMgb2YgdmlldyBpbiB0
-aHJlYWQgYXJlIGFsc28gaGVscGZ1bCBmb3IgbWUgdG8gZ2V0IG11Y2guDQoNClBpbmctS2UNCg0K
+--Sig_/BlFzpBK2_o2ZQx00MSjfy0S
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+Today's linux-next merge of the block tree got a conflict in:
+
+  mm/filemap.c
+
+between commit:
+
+  cfecbdbbbd86 ("mm/filemap: fix page end in filemap_get_read_batch")
+
+from the mm-hotfixes tree and commit:
+
+  cd119d2fa647 ("mm: Pass info, not iter, into filemap_get_pages() and unst=
+atic it")
+
+from the block tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc mm/filemap.c
+index 0e20a8d6dd93,6970be64a3e0..000000000000
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@@ -2588,8 -2591,7 +2591,8 @@@ int filemap_get_pages(struct kiocb *ioc
+  	struct folio *folio;
+  	int err =3D 0;
+ =20
+ +	/* "last_index" is the index of the page beyond the end of the read */
+- 	last_index =3D DIV_ROUND_UP(iocb->ki_pos + iter->count, PAGE_SIZE);
++ 	last_index =3D DIV_ROUND_UP(iocb->ki_pos + count, PAGE_SIZE);
+  retry:
+  	if (fatal_signal_pending(current))
+  		return -EINTR;
+
+--Sig_/BlFzpBK2_o2ZQx00MSjfy0S
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPphWAACgkQAVBC80lX
+0GzGrQf/cSAWIGtRBqznq/wzb2MI/QlqN+lpC/l2Gc+NHXKa8+48noPwy779LQ/Q
+teGsFq9ZseW20SY0UTpHD06caez1S2Al/ejPnuCNPaD3S0oekk2NFubyfWsCElMq
+0aog0CugZDRLdOF/THmeOHGABHjj6rUXkjbmcHPo5v0Pm7D5y9NysBX8aHRkXukr
+Y7KiNgWzsyiYyxOWHpgI2Ycy23BG0HHPu76+i7Awleucg1z0Xa8cyaQw4KG7w2Wx
+GMIrKTumuay49rp88T3xcFfwV1ZgyRjtkruVdfKtd/P3kx50Byd574fM7lc6c7nm
+GbLTK/DpqaUcC8kMSgkDIRTj2ikqPg==
+=mNzI
+-----END PGP SIGNATURE-----
+
+--Sig_/BlFzpBK2_o2ZQx00MSjfy0S--
