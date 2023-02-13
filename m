@@ -2,433 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 248D0694CFF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2931D694CE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:31:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbjBMQdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 11:33:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58648 "EHLO
+        id S230202AbjBMQbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 11:31:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjBMQdu (ORCPT
+        with ESMTP id S230047AbjBMQbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 11:33:50 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3EA1F4A3;
-        Mon, 13 Feb 2023 08:33:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676306002; x=1707842002;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=K70/T+wE2r0Y++L1JrzfkWNSLpgyO9Tcw3Cd5r1RiCE=;
-  b=VMHEOkAkapeZI4WbeFarquPpGg+06waaFSPxWVTvevyXa5b5O0HxB0Bf
-   SoyL+VM0TdFVCkgsLpIaPvcBuUfKO/6SqVrpxNVCd9K4Pg/Ldfo/KA5I8
-   hn9h192SVklqoAKz27bst+0gotelTwMjOMw42IK1vbhqo9GSt7qr/0/4A
-   odhjhhvPbEGeLPM7dSUwJmFNbic3OuxNPhuHFtwQ6gDEiEUW7Is/ykf1H
-   W0Fq/JklgevSFh1bP5zUPB4wUdPsb5yah3dwO/24Q61Vh0HpcCJPuuk67
-   KXCW9feV9KTdccGRsxNj7ZiHLKU3MvzFECJoTwzKxBIlJ+PvRzSMFCt2N
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="311290431"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="311290431"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 08:32:46 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="701327157"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="701327157"
-Received: from hdevries-mobl.ger.corp.intel.com ([10.249.36.140])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 08:32:39 -0800
-Date:   Mon, 13 Feb 2023 18:32:36 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Neeraj sanjay kale <neeraj.sanjaykale@nxp.com>
-cc:     "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "marcel@holtmann.org" <marcel@holtmann.org>,
-        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
-        "luiz.dentz@gmail.com" <luiz.dentz@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Amitkumar Karwar <amitkumar.karwar@nxp.com>,
-        Rohit Fule <rohit.fule@nxp.com>,
-        Sherry Sun <sherry.sun@nxp.com>
-Subject: Re: [PATCH v1 3/3] Bluetooth: NXP: Add protocol support for NXP
- Bluetooth chipsets
-In-Reply-To: <AM9PR04MB8603E350AC2E06CB788909C0E7DD9@AM9PR04MB8603.eurprd04.prod.outlook.com>
-Message-ID: <ad1fc5d4-6d44-4982-71f9-6721aa8914d2@linux.intel.com>
-References: <20230124174714.2775680-1-neeraj.sanjaykale@nxp.com> <20230124174714.2775680-4-neeraj.sanjaykale@nxp.com> <bd10dd58-35ff-e0e2-5ac4-97df1f6a30a8@linux.intel.com> <AM9PR04MB8603E350AC2E06CB788909C0E7DD9@AM9PR04MB8603.eurprd04.prod.outlook.com>
+        Mon, 13 Feb 2023 11:31:46 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9041DBA0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:31:38 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id bk16so12846315wrb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:31:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=grsecurity.net; s=grsec;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KeERnmdF2+s9ODJ9a6V5Rn9dBXMjzRzsHWfACjpeGRk=;
+        b=u8fRa19NrK7Q1oUhx33VIZAKdUntjGIgf5rram8YOJh41RyKxz5/x8Jq+BNmA1fmtB
+         ZKxy062/BDKQVUmlBJNyOalC7O3lWhDcHWFo6+DQl6Uy762Nj3Ro1dSbhK0In4+NuIpa
+         aT4DbrTDBykiSmkL3W1dodT+Kj2QN1zQADxveHJktEtdjty471zNSxbVJ3nHxy3rwdSE
+         Taze7V8MqEpUy18G5EX4v1hMdtWNdW2qq2KeKP85Z/pb4hx7XtIMQRL8fRimj9pLzyEu
+         cHrayMkz9EY2931prdAdvOpoWJ3rVse3liexfbQhwlCz5bPV8QeP9lKaRF+qGZMqkjFw
+         ho6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KeERnmdF2+s9ODJ9a6V5Rn9dBXMjzRzsHWfACjpeGRk=;
+        b=frrTk3O+IOHmuSBjkyo758kC08Z/XoaXgMFStbqnmCrF5ngYK8K1FR1FInZNgbAYWK
+         crqWQOe66rYBoVPQ4rdkbuJBRzxRNUzvogmMirehco34Y+HuIi361XIvO5XWmWZeV7Zq
+         voVQSIztb/t3Bh2Kzz8psUfz6QKgpvJKk50obnxS6iIN2z8yUTb/Wghd36lCxSTYApJw
+         b8dfcX7I9eAxIwqvLqmwMcSOtuZqE0FFY7Njj2WhAEQGREUu4lnCTajufP12pRJSWrHi
+         uf40wTcJLbF75GhH6W4UfYd+2LJbuDUWJ1KDW7n9zNvBBCTMn8PLXWKE5n3x62wIf4I0
+         MEqg==
+X-Gm-Message-State: AO0yUKXNemkfTx9qJPEm9C+5lqLuoKvZl23UPnhz0XpVyUZRYVsVa8pP
+        dNffdLcU7F77k2FZtp/c512VJr3E6bi1+OL+
+X-Google-Smtp-Source: AK7set9TmjES6zIKxCUaXDaE/A9p/5EeNQngd5y7g75fyMykh2lCuLzZmf40RpiHHjyIu3fQUAYfhg==
+X-Received: by 2002:adf:fec7:0:b0:2c5:4cf1:a57b with SMTP id q7-20020adffec7000000b002c54cf1a57bmr8792783wrs.35.1676305897545;
+        Mon, 13 Feb 2023 08:31:37 -0800 (PST)
+Received: from nuc.fritz.box (p200300f6af2efd00225e3e97da45b943.dip0.t-ipconnect.de. [2003:f6:af2e:fd00:225e:3e97:da45:b943])
+        by smtp.gmail.com with ESMTPSA id s7-20020a5d5107000000b002c556a4f1casm3877993wrt.42.2023.02.13.08.31.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 08:31:37 -0800 (PST)
+From:   Mathias Krause <minipli@grsecurity.net>
+To:     kvm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Mathias Krause <minipli@grsecurity.net>
+Subject: [PATCH 0/5] KVM: Put struct kvm_vcpu on a diet
+Date:   Mon, 13 Feb 2023 17:33:46 +0100
+Message-Id: <20230213163351.30704-1-minipli@grsecurity.net>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1018622996-1676305871=:1712"
-Content-ID: <ad2d565a-4c1b-2eb9-5f77-3cd070a3f21a@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Relayout members of struct kvm_vcpu and embedded structs to reduce its
+memory footprint. Not that it makes sense from a memory usage point of
+view (given how few of such objects get allocated), but this series
+achieves to make it consume two cachelines less, which should provide a
+micro-architectural net win. However, I wasn't able to see a noticeable
+difference running benchmarks within a guest VM -- the VMEXIT costs are
+likely still high enough to mask any gains. Pointers to other benchmark
+tools / tests are highly appreciated!
 
---8323329-1018622996-1676305871=:1712
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <2c6ecd2-a9c-a11e-73f8-e8d5518a2ffe@linux.intel.com>
+I made sure that the mutex and spinlocks still stick to their own
+disjoint cachelines, so this series shouldn't cause any regression in
+that regard.
 
-On Mon, 13 Feb 2023, Neeraj sanjay kale wrote:
+Below is the high level pahole(1) diff. Most significant is the overall
+size change from 6688 to 6560 bytes, i.e. -128 bytes.
 
-> Hi Ilpo,
-> 
-> Thank you for your review comments and sorry for the delay in replying to some of your queries.
+--- kvm_vcpu.before	2023-02-13 14:13:49.919952154 +0100
++++ kvm_vcpu.after	2023-02-13 14:13:53.559952140 +0100
+@@ -6,78 +6,60 @@
+ 	int                        vcpu_idx;             /*    40     4 */
+ 	int                        ____srcu_idx;         /*    44     4 */
+ 	int                        mode;                 /*    48     4 */
+-
+-	/* XXX 4 bytes hole, try to pack */
+-
++	unsigned int               guest_debug;          /*    52     4 */
+ 	u64                        requests;             /*    56     8 */
+ 	/* --- cacheline 1 boundary (64 bytes) --- */
+-	long unsigned int          guest_debug;          /*    64     8 */
+-	struct mutex               mutex;                /*    72    32 */
+-	struct kvm_run *           run;                  /*   104     8 */
+-	struct rcuwait             wait;                 /*   112     8 */
+-	struct pid *               pid;                  /*   120     8 */
++	struct mutex               mutex;                /*    64    32 */
++	struct kvm_run *           run;                  /*    96     8 */
++	struct rcuwait             wait;                 /*   104     8 */
++	struct pid *               pid;                  /*   112     8 */
++	sigset_t                   sigset;               /*   120     8 */
+ 	/* --- cacheline 2 boundary (128 bytes) --- */
+ 	int                        sigset_active;        /*   128     4 */
+-
+-	/* XXX 4 bytes hole, try to pack */
+-
+-	sigset_t                   sigset;               /*   136     8 */
+-	unsigned int               halt_poll_ns;         /*   144     4 */
+-	bool                       valid_wakeup;         /*   148     1 */
++	unsigned int               halt_poll_ns;         /*   132     4 */
++	bool                       valid_wakeup;         /*   136     1 */
+ 
+ 	/* XXX 3 bytes hole, try to pack */
+ 
+-	int                        mmio_needed;          /*   152     4 */
+-	int                        mmio_read_completed;  /*   156     4 */
+-	int                        mmio_is_write;        /*   160     4 */
+-	int                        mmio_cur_fragment;    /*   164     4 */
+-	int                        mmio_nr_fragments;    /*   168     4 */
+-
+-	/* XXX 4 bytes hole, try to pack */
+-
+-	struct kvm_mmio_fragment   mmio_fragments[2];    /*   176    48 */
+-	/* --- cacheline 3 boundary (192 bytes) was 32 bytes ago --- */
++	int                        mmio_needed;          /*   140     4 */
++	int                        mmio_read_completed;  /*   144     4 */
++	int                        mmio_is_write;        /*   148     4 */
++	int                        mmio_cur_fragment;    /*   152     4 */
++	int                        mmio_nr_fragments;    /*   156     4 */
++	struct kvm_mmio_fragment   mmio_fragments[2];    /*   160    48 */
++	/* --- cacheline 3 boundary (192 bytes) was 16 bytes ago --- */
+ 	struct {
+-		u32                queued;               /*   224     4 */
+-
+-		/* XXX 4 bytes hole, try to pack */
+-
+-		struct list_head   queue;                /*   232    16 */
+-		struct list_head   done;                 /*   248    16 */
+-		/* --- cacheline 4 boundary (256 bytes) was 8 bytes ago --- */
+-		spinlock_t         lock;                 /*   264     4 */
+-	} async_pf;                                      /*   224    48 */
+-
+-	/* XXX last struct has 4 bytes of padding */
+-
++		struct list_head   queue;                /*   208    16 */
++		struct list_head   done;                 /*   224    16 */
++		spinlock_t         lock;                 /*   240     4 */
++		u32                queued;               /*   244     4 */
++	} async_pf;                                      /*   208    40 */
+ 	struct {
+-		bool               in_spin_loop;         /*   272     1 */
+-		bool               dy_eligible;          /*   273     1 */
+-	} spin_loop;                                     /*   272     2 */
+-	bool                       preempted;            /*   274     1 */
+-	bool                       ready;                /*   275     1 */
++		bool               in_spin_loop;         /*   248     1 */
++		bool               dy_eligible;          /*   249     1 */
++	} spin_loop;                                     /*   248     2 */
++	bool                       preempted;            /*   250     1 */
++	bool                       ready;                /*   251     1 */
+ 
+ 	/* XXX 4 bytes hole, try to pack */
+ 
+-	struct kvm_vcpu_arch       arch __attribute__((__aligned__(8))); /*   280  5208 */
+-
+-	/* XXX last struct has 6 bytes of padding */
+-
+-	/* --- cacheline 85 boundary (5440 bytes) was 48 bytes ago --- */
+-	struct kvm_vcpu_stat       stat;                 /*  5488  1104 */
+-	/* --- cacheline 103 boundary (6592 bytes) --- */
+-	char                       stats_id[48];         /*  6592    48 */
+-	struct kvm_dirty_ring      dirty_ring;           /*  6640    32 */
++	/* --- cacheline 4 boundary (256 bytes) --- */
++	struct kvm_vcpu_arch       arch __attribute__((__aligned__(8))); /*   256  5104 */
++	/* --- cacheline 83 boundary (5312 bytes) was 48 bytes ago --- */
++	struct kvm_vcpu_stat       stat;                 /*  5360  1104 */
++	/* --- cacheline 101 boundary (6464 bytes) --- */
++	char                       stats_id[48];         /*  6464    48 */
++	struct kvm_dirty_ring      dirty_ring;           /*  6512    32 */
+ 
+ 	/* XXX last struct has 4 bytes of padding */
+ 
+-	/* --- cacheline 104 boundary (6656 bytes) was 16 bytes ago --- */
+-	struct kvm_memory_slot *   last_used_slot;       /*  6672     8 */
+-	u64                        last_used_slot_gen;   /*  6680     8 */
+-
+-	/* size: 6688, cachelines: 105, members: 33 */
+-	/* sum members: 6669, holes: 5, sum holes: 19 */
+-	/* paddings: 3, sum paddings: 14 */
++	/* --- cacheline 102 boundary (6528 bytes) was 16 bytes ago --- */
++	struct kvm_memory_slot *   last_used_slot;       /*  6544     8 */
++	u64                        last_used_slot_gen;   /*  6552     8 */
++
++	/* size: 6560, cachelines: 103, members: 33 */
++	/* sum members: 6553, holes: 2, sum holes: 7 */
++	/* paddings: 1, sum paddings: 4 */
+ 	/* forced alignments: 1, forced holes: 1, sum forced holes: 4 */
+ 	/* last cacheline: 32 bytes */
+ } __attribute__((__aligned__(8)));
 
-I made some additional comments against v2 and I meant those ones were not 
-addressed, the ones I made for v1 you've addressed I think.
+
+There are still holes left, i.e. still room for squeezing out a few more
+bytes. But I didn't want to destroy the grouping of members nor sprinkle
+random structs with __packed just for that. That said, we might still
+want to do it to save yet another cacheline (only 32 more bytes to go).
+
+Code wise it seems to save a few instructions as well, likely because of
+patch 2, simplifying some of the struct kvm_queued_exception users:
+
+$ size kvm-6.2-rc5{,+patch}/arch/x86/kvm/kvm.ko
+   text    data     bss     dec     hex filename
+ 806277  129095    1168  936540   e4a5c kvm-6.2-rc5/arch/x86/kvm/kvm.ko
+ 806026  129063    1168  936257   e4941 kvm-6.2-rc5+patch/arch/x86/kvm/kvm.ko
+
+$ bloat-o-meter kvm-6.2-rc5{,+patch}/arch/x86/kvm/kvm.ko
+add/remove: 0/2 grow/shrink: 7/11 up/down: 102/-340 (-238)
+Function                                     old     new   delta
+kvm_vcpu_ioctl_x86_set_vcpu_events           664     707     +43
+kvm_multiple_exception                       581     613     +32
+kvm_inject_exception                         153     161      +8
+kvm_vcpu_ioctl_x86_get_vcpu_events           510     517      +7
+__UNIQUE_ID_vermagic166                       67      73      +6
+kvm_inject_page_fault                        108     113      +5
+kvm_mmu_x86_module_init                      174     175      +1
+kvm_vcpu_ready_for_interrupt_injection       134     131      -3
+kvm_vcpu_ioctl                              1717    1714      -3
+kvm_vcpu_compat_ioctl                        274     271      -3
+kvm_sigset_activate                           53      50      -3
+kvm_can_do_async_pf                          150     147      -3
+kvm_mtrr_get_msr                             290     286      -4
+kvm_deliver_exception_payload                139     135      -4
+kvm_arch_vcpu_ioctl_set_guest_debug          662     657      -5
+x86_emulate_instruction                     1952    1945      -7
+kvm_vcpu_reset                              1382    1375      -7
+__pfx_kvm_deliver_exception_payload.part      16       -     -16
+kvm_deliver_exception_payload.part           122       -    -122
+kvm_arch_vcpu_ioctl_run                     7782    7622    -160
+Total: Before=635427, After=635189, chg -0.04%
+
+
+Please apply!
+
+Thanks,
+
+Mathias Krause (5):
+  KVM: x86: Shrink struct kvm_pmu
+  KVM: x86: Shrink struct kvm_queued_exception
+  KVM: Shrink struct kvm_mmu_memory_cache
+  KVM: x86: Shrink struct kvm_vcpu_arch
+  KVM: Shrink struct kvm_vcpu
+
+ arch/x86/include/asm/kvm_host.h | 30 +++++++++++++++---------------
+ include/linux/kvm_host.h        |  6 +++---
+ include/linux/kvm_types.h       |  2 +-
+ 3 files changed, 19 insertions(+), 19 deletions(-)
 
 -- 
- i.
+2.39.1
 
-> 
-> > From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > Sent: Wednesday, January 25, 2023 4:53 PM
-> > To: Neeraj sanjay kale <neeraj.sanjaykale@nxp.com>
-> > Cc: davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
-> > pabeni@redhat.com; robh+dt@kernel.org;
-> > krzysztof.kozlowski+dt@linaro.org; marcel@holtmann.org;
-> > johan.hedberg@gmail.com; luiz.dentz@gmail.com; Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org>; Jiri Slaby <jirislaby@kernel.org>; Netdev
-> > <netdev@vger.kernel.org>; devicetree@vger.kernel.org; LKML <linux-
-> > kernel@vger.kernel.org>; linux-bluetooth@vger.kernel.org; linux-serial
-> > <linux-serial@vger.kernel.org>; Amitkumar Karwar
-> > <amitkumar.karwar@nxp.com>; Rohit Fule <rohit.fule@nxp.com>; Sherry
-> > Sun <sherry.sun@nxp.com>
-> > Subject: Re: [PATCH v1 3/3] Bluetooth: NXP: Add protocol support for
-> > NXP Bluetooth chipsets
-> > 
-> > > This adds a driver based on serdev driver for the NXP BT serial
-> > > protocol based on running H:4, which can enable the built-in
-> > > Bluetooth device inside a generic NXP BT chip.
-> > >
-> > > This driver has Power Save feature that will put the chip into
-> > > sleep state whenever there is no activity for 2000ms, and will
-> > > be woken up when any activity is to be initiated.
-> > >
-> > > This driver enables the power save feature by default by sending
-> > > the vendor specific commands to the chip during setup.
-> > >
-> > > During setup, the driver is capable of reading the bootloader
-> > > signature unique to every chip, and downloading corresponding
-> > > FW file defined in a user-space config file. The firmware file
-> > > name can be defined in DTS file as well, in which case the
-> > > user-space config file will be ignored.
-> > >
-> > > Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-> > > ---
-> > >  MAINTAINERS                |    7 +
-> > >  drivers/bluetooth/Kconfig  |   11 +
-> > >  drivers/bluetooth/Makefile |    1 +
-> > >  drivers/bluetooth/btnxp.c  | 1337
-> > ++++++++++++++++++++++++++++++++++++
-> > >  drivers/bluetooth/btnxp.h  |  230 +++++++
-> > >  5 files changed, 1586 insertions(+)
-> > >  create mode 100644 drivers/bluetooth/btnxp.c
-> > >  create mode 100644 drivers/bluetooth/btnxp.h
-> > >
-> > > +static int ps_init_work(struct hci_dev *hdev)
-> > > +{
-> > > +     struct ps_data *psdata = kzalloc(sizeof(*psdata), GFP_KERNEL);
-> > > +     struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-> > > +
-> > > +     if (!psdata) {
-> > > +             BT_ERR("Can't allocate control structure for Power Save feature");
-> > > +             return -ENOMEM;
-> > > +     }
-> > > +     nxpdev->psdata = psdata;
-> > > +
-> > > +     memset(psdata, 0, sizeof(*psdata));
-> > 
-> > Why memset to zero kzalloc'ed mem?
-> I have removed all memset calls after kzalloc.
-> > 
-> 
-> 
-> 
-> > > +static int send_ps_cmd(struct hci_dev *hdev, void *data)
-> > > +{
-> > > +     struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-> > > +     struct ps_data *psdata = nxpdev->psdata;
-> > > +     u8 pcmd;
-> > > +     struct sk_buff *skb;
-> > > +     u8 *status;
-> > > +
-> > > +     if (psdata->ps_mode ==  PS_MODE_ENABLE)
-> > > +             pcmd = BT_PS_ENABLE;
-> > > +     else
-> > > +             pcmd = BT_PS_DISABLE;
-> > > +
-> > > +     psdata->driver_sent_cmd = true; /* set flag to prevent re-sending
-> > command in nxp_enqueue */
-> > > +     skb = __hci_cmd_sync(hdev, HCI_NXP_AUTO_SLEEP_MODE, 1, &pcmd,
-> > HCI_CMD_TIMEOUT);
-> > > +     psdata->driver_sent_cmd = false;
-> > 
-> > A helper for these 3 lines?
-> Added a new function where ever setting psdata->driver_sent_cmd and __hci_cmd_sync() is needed.
-> 
-> 
-> 
-> > 
-> > Do you need to free the skb?
-> Yes. Freed skb's where ever it needs to be freed in v2 and v3 patches.
-> 
-> 
-> 
-> > > +     for (i = 0; i < map_table_size; i++) {
-> > 
-> > Isn't this just ARRAY_SIZE(chip_id_name_table)? use it directly here,
-> > no need for the extra variable?
-> > 
-> > > +             if (!strcmp(chip_id_name_table[i].chip_name, name_str))
-> > > +                     return chip_id_name_table[i].chip_id;
-> > > +     }
-> > > +
-> > > +     return 0;  /* invalid name_str */
-> > 
-> > Put such comment preferrably to function's comment if you want to note
-> > things like this or create a properly named define for it.
-> I have slightly changed the way FW Download behaves, and removed this function.
-> 
-> 
-> 
-> > strncpy(fw_mod_params[param_index].fw_name,
-> > > +                                                     value, MAX_FW_FILE_NAME_LEN);
-> > > +                                     } else if (!strcmp(label, OPER_SPEED_TAG)) {
-> > > +                                             ret = kstrtouint(value, 10,
-> > > +                                             &fw_mod_params[param_index].oper_speed);
-> > > +                                     } else if (!strcmp(label, FW_DL_PRI_BAUDRATE_TAG))
-> > {
-> > > +                                             ret = kstrtouint(value, 10,
-> > > +
-> > &fw_mod_params[param_index].fw_dnld_pri_baudrate);
-> > > +                                     } else if (!strcmp(label, FW_DL_SEC_BAUDRATE_TAG))
-> > {
-> > > +                                             ret = kstrtouint(value, 10,
-> > > +
-> > &fw_mod_params[param_index].fw_dnld_sec_baudrate);
-> > > +                                     } else if (!strcmp(label, FW_INIT_BAUDRATE)) {
-> > > +                                             ret = kstrtouint(value, 10,
-> > > +
-> > &fw_mod_params[param_index].fw_init_baudrate);
-> > > +                                     } else {
-> > > +                                             BT_ERR("Unknown tag: %s", label);
-> > > +                                             ret = -1;
-> > > +                                             goto err;
-> > > +                                     }
-> > 
-> > Your indent is way too deep here, refactor the line processing into
-> > another function to make it readable?
-> > 
-> > Wouldn't something like sscanf() make it a bit simpler?
-> 
-> Created a new function to handle updating this data and used sscanf().
-> 
-> 
-> 
-> > > +             } else {
-> > > +                     *dptr = sptr[i];
-> > > +                     dptr++;
-> > 
-> > What prevents dptr becoming larger than the size allocated for line?
-> Used array index method instead of dptr pointer to fill the line. Added check for index.
-> 
-> > > +static bool nxp_fw_change_baudrate(struct hci_dev *hdev, u16 req_len)
-> > > +{
-> > > +     struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-> > > +     static u8 nxp_cmd5_header[HDR_LEN] = {
-> > 
-> > It would be good to prefix HDR_LEN with something to make it more specific
-> > to this use case.
-> We need this HDR_LEN macro while sending cmd7 as well. Hence kept this unchanged.
-> 
-> > 
-> > > +                                                     0x05, 0x00, 0x00, 0x00,
-> > > +                                                     0x00, 0x00, 0x00, 0x00,
-> > > +                                                     0x2c, 0x00, 0x00, 0x00,
-> > > +                                                     0x77, 0xdb, 0xfd, 0xe0};
-> > > +     static u8 uart_config[60] = {0};
-> > 
-> > Is this some structure actually? You seem to be filling it always with
-> > the same stuff in same order?
-> > 
-> > You probably need to handle byte-order properly too.
-> Handled cmd5 and cmd7 in a proper way using structures and handled byte-ordering.
-> 
-> > > +static u32 nxp_get_data_len(const u8 *buf)
-> > > +{
-> > > +     return (buf[8] | (buf[9] << 8));
-> > 
-> > Custom byte-order func? Use std ones instead.
-> Resolved in v2 patch.
-> 
-> > > +     if (nxpdev->fw_dnld_sec_baudrate != nxpdev->current_baudrate) {
-> > > +             if (!timeout_changed) {
-> > > +                     nxp_send_ack(NXP_ACK_V1, hdev);
-> > > +                     timeout_changed = nxp_fw_change_timeout(hdev, req->len);
-> > 
-> > You never test if there was enough data? If there isn't req will be NULL
-> > which you don't check before dereferencing req->len.
-> Added check for req before dereferencing it.
-> 
-> 
-> > > +             if (req->len & 0x01) {
-> > > +                     /* The CRC did not match at the other end.
-> > > +                      * That's why the request to re-send.
-> > > +                      * Simply send the same bytes again.
-> > > +                      */
-> > > +                     requested_len = nxpdev->fw_sent_bytes;
-> > > +                     BT_ERR("CRC error. Resend %d bytes of FW.", requested_len);
-> > > +             } else {
-> > > +                     /* Increment offset by number of previous successfully sent
-> > bytes */
-> > > +                     nxpdev->fw_dnld_offset += nxpdev->fw_sent_bytes;
-> > > +                     requested_len = req->len;
-> > > +             }
-> > > +
-> > > +             /* The FW bin file is made up of many blocks of
-> > > +              * 16 byte header and payload data chunks. If the
-> > > +              * FW has requested a header, read the payload length
-> > > +              * info from the header, and then send the header.
-> > > +              * In the next iteration, the FW should request the
-> > > +              * payload data chunk, which should be equal to the
-> > > +              * payload length read from header. If there is a
-> > > +              * mismatch, clearly the driver and FW are out of sync,
-> > > +              * and we need to re-send the previous header again.
-> > > +              */
-> > > +             if (requested_len == expected_len) {
-> > > +                     if (requested_len == HDR_LEN)
-> > > +                             expected_len = nxp_get_data_len(nxpdev->fw->data +
-> > > +                                                                     nxpdev->fw_dnld_offset);
-> > > +                     else
-> > > +                             expected_len = HDR_LEN;
-> > 
-> > How can you ever end up into this else branch? Why assign expected_len
-> > here?
-> There are 2 scenarios where requested_len == expected_len.
-> One, where requested_len is 16, which means a header was requested.
-> Another, where requested_len is not 16, which means payload was requested.
-> 
-> So if header was requested, we calculate the payload length which should be equal to requested_len in next iteration.
-> Similarly, if payload was requested, then in the next iteration the FW should request for a 16 bit header.
-> The expected_len is expected to toggle between 2 values: 16 and (e.g.) 2048.
-> 
-> > 
-> > > +             } else {
-> > > +                     if (requested_len == HDR_LEN) {
-> > 
-> > Never true.
-> Ideally we should not end up in this else part, but there are various customers and module vendors who use NXP chipsets within their products, which are already out in the market. Whenever the driver sends the cmd5 and cmd7 packets, we sometimes observe this scenario where the FW requests 16 bit header in 2 consecutive iterations, and we need to be sure that we re-send the 16 bit header, and not the 16 bit payload. 
-> This happens when the chip updates it's baudrate while receiving the 1st header, and discards it due to CRC mismatch, and requests the header again.
-> 
-> >
-> > > +                             /* FW download out of sync. Send previous chunk again> */
-> > > +                            nxpdev->fw_dnld_offset -= nxpdev->fw_sent_bytes;
-> > > +                             expected_len = HDR_LEN;> > +                     }
-> > > +            }
-> > > +
-> 
-> > > +static int nxp_recv_fw_req_v3(struct hci_dev *hdev, struct sk_buff *skb)
-> > > +{
-> > > +     struct V3_DATA_REQ *req = skb_pull_data(skb, sizeof(struct
-> > V3_DATA_REQ));
-> > > +     struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-> > > +     static bool timeout_changed;
-> > > +     static bool baudrate_changed;
-> > > +
-> > > +     if (!req || !nxpdev || !strlen(nxpdev->fw_name) || !nxpdev->fw->data)
-> > > +             return 0;
-> > 
-> > Who is expected to free the skb? These functions or one of the callers?
-> > (Which one? I lost track of the callchain and error passing too).
-> Added kfree_skb() in the called functions.
-> 
-> 
-> > > +                     strncpy(nxpdev->fw_name, fw_path,
-> > MAX_FW_FILE_NAME_LEN);
-> > > +                     strncpy(nxpdev->fw_name + strlen(fw_path), fw_name_dt,
-> > > +                                     MAX_FW_FILE_NAME_LEN);
-> > 
-> > How can this second one be correct if you use +strlen(fw_path) for the
-> > pointer. Why not use snprintf()?
-> Replaced strncpy with snprintfs()
-> 
-> 
-> 
-> > > +static int nxp_enqueue(struct hci_dev *hdev, struct sk_buff *skb)
-> > > +{
-> > > +     struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-> > > +     struct ps_data *psdata = nxpdev->psdata;
-> > > +     struct hci_command_hdr *hdr;
-> > > +     u8 *param;
-> > > +
-> > > +     /* if commands are received from user space (e.g. hcitool), update
-> > > +      * driver flags accordingly and ask driver to re-send the command
-> > > +      */
-> > > +     if (bt_cb(skb)->pkt_type == HCI_COMMAND_PKT && !psdata-
-> > >driver_sent_cmd) {
-> > 
-> > Should you need to check psdata for NULL before dereferencing it?
-> Added checks for psdata before dereferencing it.
-> 
-> 
-> > > +/* Bluetooth vendor command : Sleep mode */
-> > > +#define HCI_NXP_AUTO_SLEEP_MODE      0xFC23
-> > 
-> > Try to change all hex letters to lowercase.
-> Changed all hex letters to lowercase.
-> 
-> > > +struct V1_DATA_REQ {
-> > > +     u16 len;
-> > > +     u16 len_comp;
-> > > +} __packed;
-> > > +
-> > > +struct V3_DATA_REQ {
-> > > +     u16 len;
-> > > +     u32 offset;
-> > > +     u16 error;
-> > > +     u8 crc;
-> > > +} __packed;
-> > > +
-> > > +struct V3_START_IND {
-> > > +     u16 chip_id;
-> > > +     u8 loader_ver;
-> > > +     u8 crc;
-> > > +} __packed;
-> > 
-> > Struct names should be lowercased. Multibyte fields need to specify
-> > byte-order?
-> Resolved.
-> 
-> > > +
-> > > +#define SWAPL(x) ((((x) >> 24) & 0xff) \
-> > > +                              | (((x) >> 8) & 0xff00) \
-> > > +                              | (((x) << 8) & 0xff0000L) \
-> > > +                              | (((x) << 24) & 0xff000000L))
-> > 
-> > Perhaps something existing under include/ could do swap for you?
-> Added call to a standard swab32() function.
-> 
-> > --
-> >  i.
-> 
-> Please review the V3 patch and let me know if you have any suggestions or comments.
---8323329-1018622996-1676305871=:1712--
