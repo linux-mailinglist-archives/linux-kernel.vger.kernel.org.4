@@ -2,140 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D88694252
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:09:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 614F3694253
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 11:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbjBMKJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 05:09:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44658 "EHLO
+        id S230183AbjBMKJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 05:09:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjBMKJP (ORCPT
+        with ESMTP id S229561AbjBMKJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Feb 2023 05:09:15 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF8017145;
-        Mon, 13 Feb 2023 02:08:50 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 7853124E238;
-        Mon, 13 Feb 2023 18:08:42 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 13 Feb
- 2023 18:08:42 +0800
-Received: from [192.168.125.74] (183.27.97.168) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 13 Feb
- 2023 18:08:41 +0800
-Message-ID: <9f8c3242-762c-96a3-ad5b-e71e2321e7bf@starfivetech.com>
-Date:   Mon, 13 Feb 2023 18:08:40 +0800
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B04913D6D
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 02:08:53 -0800 (PST)
+Received: from [192.168.2.90] (109-252-117-89.nat.spd-mgts.ru [109.252.117.89])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 40A18660210A;
+        Mon, 13 Feb 2023 10:08:45 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676282926;
+        bh=YPLHnkQNpca9VTtsx1eIso2TqXYEdu5z+uATtJlB3do=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=S/bLB7DxztJqMO/z9ugNy+ayGKeJ7MpT+9XXHYEGiGoyVMbCQPWqha6ixtSnH/AI4
+         KuKOTfcuvxYCDGhj6xjUGELBDn6ihQeLC8r1id6YKaP+CJ//FV1NssKiXHKqHEYwjS
+         CaRRPi91KohlMYE633TN/yUQivREzL4fFM/sZIVuNfzdV1l8Zdhy/gyA0TACwJMPo7
+         mzrrn0iUZkKoaMUyv4+2PWXmkrUxbDSi1ItVeEpvzYa7Hk0bBc8IixZF8wlsZHeOKT
+         wceVAGo1QhmLFqG1wXVo0zCS+Qf5jdkjiv6I7rd7YE0V9g3K0oAlaBQA+3eEKE6E1X
+         aymFj4Lo1GehA==
+Message-ID: <831e7daf-48ae-cea8-a5d2-3786317b3b65@collabora.com>
+Date:   Mon, 13 Feb 2023 13:08:42 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v1 1/3] dt-bindings: dma: snps,dw-axi-dmac: Update resets
- and add snps,num-hs-if
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] drm/edid: Add Vive Pro 2 to non-desktop list
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     <linux-riscv@lists.infradead.org>, <dmaengine@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        <linux-kernel@vger.kernel.org>
-References: <20230206113811.23133-1-walker.chen@starfivetech.com>
- <20230206113811.23133-2-walker.chen@starfivetech.com>
- <20230207205800.GA4140140-robh@kernel.org>
-From:   Walker Chen <walker.chen@starfivetech.com>
-In-Reply-To: <20230207205800.GA4140140-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Yaroslav Bolyukin <iam@lach.pw>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Cc:     David Airlie <airlied@linux.ie>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+References: <20220118170037.14584-1-iam@lach.pw>
+ <5d5a8183-aebc-6660-9cbc-03950f9b14b8@collabora.com>
+ <87v8k5vqg6.fsf@intel.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <87v8k5vqg6.fsf@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.97.168]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/8 4:58, Rob Herring wrote:
-> On Mon, Feb 06, 2023 at 07:38:09PM +0800, Walker Chen wrote:
->> Add two reset items and properties 'snps,num-hs-if'.
->> The DMA controller needs to be reset before being used in JH7110 SoC.
->> Another difference from the original version is that the hardware
->> handshake number of DMA can be up to 56 while the number in original
->> version is less than 16, and different registers are selected according
->> to this.
->> 
->> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
->> ---
->>  .../bindings/dma/snps,dw-axi-dmac.yaml          | 17 ++++++++++++++++-
->>  1 file changed, 16 insertions(+), 1 deletion(-)
->> 
->> diff --git a/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml b/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
->> index 67aa7bb6d36a..1a8d8c20e254 100644
->> --- a/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
->> +++ b/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
->> @@ -9,6 +9,7 @@ title: Synopsys DesignWare AXI DMA Controller
->>  maintainers:
->>    - Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
->>    - Jee Heng Sia <jee.heng.sia@intel.com>
->> +  - Walker Chen <walker.chen@starfivetech.com>
->>  
->>  description:
->>    Synopsys DesignWare AXI DMA Controller DT Binding
->> @@ -21,6 +22,7 @@ properties:
->>      enum:
->>        - snps,axi-dma-1.01a
->>        - intel,kmb-axi-dma
->> +      - starfive,axi-dma
+On 2/13/23 12:56, Jani Nikula wrote:
+> On Sun, 12 Feb 2023, Dmitry Osipenko <dmitry.osipenko@collabora.com> wrote:
+>> Hi,
+>>
+>> On 1/18/22 20:00, Yaroslav Bolyukin wrote:
+>>
+>> Add a brief commit message, describing a user-visible effect of this
+>> patch. Tell that this change prevents exposing headset as a regular
+>> display to the system, while it will work with SteamVR.
+>>
+>>> Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
+>>> ---
+>>>  drivers/gpu/drm/drm_edid.c | 3 ++-
+>>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
+>>> index 12893e7be..fdb8f0a6f 100644
+>>> --- a/drivers/gpu/drm/drm_edid.c
+>>> +++ b/drivers/gpu/drm/drm_edid.c
+>>> @@ -200,9 +200,10 @@ static const struct edid_quirk {
+>>>  	EDID_QUIRK('V', 'L', 'V', 0x91be, EDID_QUIRK_NON_DESKTOP),
+>>>  	EDID_QUIRK('V', 'L', 'V', 0x91bf, EDID_QUIRK_NON_DESKTOP),
+>>>  
+>>> -	/* HTC Vive and Vive Pro VR Headsets */
+>>> +	/* HTC Vive, Vive Pro and Vive Pro 2 VR Headsets */
+>>
+>> Nit: I'd keep the original comment, or change it to a generic "HTC VR
+>> Headsets" to prevent further comment changes
+>>
+>>>  	EDID_QUIRK('H', 'V', 'R', 0xaa01, EDID_QUIRK_NON_DESKTOP),
+>>>  	EDID_QUIRK('H', 'V', 'R', 0xaa02, EDID_QUIRK_NON_DESKTOP),
+>>> +	EDID_QUIRK('H', 'V', 'R', 0xaa04, EDID_QUIRK_NON_DESKTOP),
+>>>  
+>>>  	/* Oculus Rift DK1, DK2, CV1 and Rift S VR Headsets */
+>>>  	EDID_QUIRK('O', 'V', 'R', 0x0001, EDID_QUIRK_NON_DESKTOP),
+>>>
+>>> base-commit: 99613159ad749543621da8238acf1a122880144e
+>>
+>> Please send the v2 patch with the added EDID for Cosmos VR and the
+>> addressed comments. Thanks!
 > 
-> This should be SoC specific.
+> Yeah, we'll need to EDID to check that it doesn't have the Microsoft
+> VSDB to indicate non-desktop. See 2869f599c0d8 ("drm/edid: support
+> Microsoft extension for HMDs and specialized monitors").
 
-Well, so this should be 'starfive,jh7110-axi-dma'.
+Do you mean to skip using the EDID_QUIRK_NON_DESKTOP if MS VSDB entry
+presents in the EDID?
 
-> 
->>  
->>    reg:
->>      minItems: 1
->> @@ -59,7 +61,12 @@ properties:
->>      maximum: 8
->>  
->>    resets:
->> -    maxItems: 1
->> +    maxItems: 2
->> +
->> +  reset-names:
->> +    items:
->> +      - const: axi-rst
->> +      - const: ahb-rst
-> 
-> '-rst' is redundant.
+These HTC EDIDs don't have MS VSDB, otherwise the quirk wouldn't be needed.
 
-Okay, will be drop '-rst' in next version.
-
-> 
->>  
->>    snps,dma-masters:
->>      description: |
->> @@ -74,6 +81,14 @@ properties:
->>      $ref: /schemas/types.yaml#/definitions/uint32
->>      enum: [0, 1, 2, 3, 4, 5, 6]
->>  
->> +  snps,num-hs-if:
->> +    description: |
->> +      The number of hardware handshake. If it is more than 16,
->> +      CHx_CFG2 is used to configure the DMA transfer instead of CHx_CFG.
-> 
-> Can't you infer this from the compatible string?
-
-Yeah, maybe this is also feasible from the compatible string.
-Thanks.
-
+-- 
 Best regards,
-Walker
+Dmitry
+
