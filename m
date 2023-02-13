@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD7969415E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBFF069415F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:37:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbjBMJhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 04:37:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
+        id S230326AbjBMJhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 04:37:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjBMJhJ (ORCPT
+        with ESMTP id S229772AbjBMJhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Feb 2023 04:37:09 -0500
-Received: from out28-73.mail.aliyun.com (out28-73.mail.aliyun.com [115.124.28.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67E19009
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:36:59 -0800 (PST)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.09901703|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0186795-0.00496536-0.976355;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047205;MF=wangweidong.a@awinic.com;NM=1;PH=DS;RN=21;RT=21;SR=0;TI=SMTPD_---.RKjcWil_1676281013;
-Received: from ubuntu-VirtualBox..(mailfrom:wangweidong.a@awinic.com fp:SMTPD_---.RKjcWil_1676281013)
+Received: from out28-51.mail.aliyun.com (out28-51.mail.aliyun.com [115.124.28.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB76B761
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:37:01 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1599715|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00673938-0.000857743-0.992403;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047188;MF=wangweidong.a@awinic.com;NM=1;PH=DS;RN=21;RT=21;SR=0;TI=SMTPD_---.RKjcWmU_1676281015;
+Received: from ubuntu-VirtualBox..(mailfrom:wangweidong.a@awinic.com fp:SMTPD_---.RKjcWmU_1676281015)
           by smtp.aliyun-inc.com;
-          Mon, 13 Feb 2023 17:36:55 +0800
+          Mon, 13 Feb 2023 17:36:56 +0800
 From:   wangweidong.a@awinic.com
 To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
         tiwai@suse.com, krzysztof.kozlowski@linaro.org,
@@ -30,9 +30,9 @@ To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
         linux-kernel@vger.kernel.org
 Cc:     wangweidong.a@awinic.com, liweilei@awinic.com, zhaolei@awinic.com,
         yijiangtao@awinic.com
-Subject: [PATCH 1/3][next] ASoC: codecs: Fixed a spelling error in the function name
-Date:   Mon, 13 Feb 2023 17:36:47 +0800
-Message-Id: <20230213093649.22928-2-wangweidong.a@awinic.com>
+Subject: [PATCH 2/3][next] ASoC: codecs: Modify the log print statement
+Date:   Mon, 13 Feb 2023 17:36:48 +0800
+Message-Id: <20230213093649.22928-3-wangweidong.a@awinic.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230213093649.22928-1-wangweidong.a@awinic.com>
 References: <20230213093649.22928-1-wangweidong.a@awinic.com>
@@ -49,36 +49,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Weidong Wang <wangweidong.a@awinic.com>
 
-Change the function name aw88395_plack_event to aw88395_playback_event
+Change hdrlen to hdr_len
 
 Signed-off-by: Ben Yi <yijiangtao@awinic.com>
 Signed-off-by: Weidong Wang <wangweidong.a@awinic.com>
 ---
- sound/soc/codecs/aw88395/aw88395.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sound/soc/codecs/aw88395/aw88395_lib.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/aw88395/aw88395.c b/sound/soc/codecs/aw88395/aw88395.c
-index 16ca7ac5ad28..afdce6b7fa26 100644
---- a/sound/soc/codecs/aw88395/aw88395.c
-+++ b/sound/soc/codecs/aw88395/aw88395.c
-@@ -363,7 +363,7 @@ static const struct snd_kcontrol_new aw88395_controls[] = {
- 		aw88395_profile_get, aw88395_profile_set),
- };
+diff --git a/sound/soc/codecs/aw88395/aw88395_lib.c b/sound/soc/codecs/aw88395/aw88395_lib.c
+index d7c31a202adc..05bcf49da857 100644
+--- a/sound/soc/codecs/aw88395/aw88395_lib.c
++++ b/sound/soc/codecs/aw88395/aw88395_lib.c
+@@ -932,7 +932,7 @@ static int aw_dev_check_cfg_by_hdr(struct aw_device *aw_dev, struct aw_container
  
--static int aw88395_plack_event(struct snd_soc_dapm_widget *w,
-+static int aw88395_playback_event(struct snd_soc_dapm_widget *w,
- 				struct snd_kcontrol *k, int event)
- {
- 	struct snd_soc_component *component = snd_soc_dapm_to_component(w->dapm);
-@@ -388,7 +388,7 @@ static int aw88395_plack_event(struct snd_soc_dapm_widget *w,
- static const struct snd_soc_dapm_widget aw88395_dapm_widgets[] = {
- 	 /* playback */
- 	SND_SOC_DAPM_AIF_IN_E("AIF_RX", "Speaker_Playback", 0, 0, 0, 0,
--					aw88395_plack_event,
-+					aw88395_playback_event,
- 					SND_SOC_DAPM_PRE_PMU | SND_SOC_DAPM_POST_PMD),
- 	SND_SOC_DAPM_OUTPUT("DAC Output"),
- 
+ 	hdr_ddt_len = cfg_hdr->hdr_offset + cfg_hdr->ddt_size;
+ 	if (hdr_ddt_len > aw_cfg->len) {
+-		dev_err(aw_dev->dev, "hdrlen with ddt_len [%d] overflow file size[%d]",
++		dev_err(aw_dev->dev, "hdr_len with ddt_len [%d] overflow file size[%d]",
+ 		cfg_hdr->hdr_offset, aw_cfg->len);
+ 		return -EINVAL;
+ 	}
 -- 
 2.39.1
 
