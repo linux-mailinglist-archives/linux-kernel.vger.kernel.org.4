@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 160226952EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:19:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9334A6952ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:19:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbjBMVTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 16:19:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41912 "EHLO
+        id S230264AbjBMVTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 16:19:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbjBMVS7 (ORCPT
+        with ESMTP id S230245AbjBMVTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 16:18:59 -0500
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2042.outbound.protection.outlook.com [40.107.101.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856321E5F6;
-        Mon, 13 Feb 2023 13:18:57 -0800 (PST)
+        Mon, 13 Feb 2023 16:19:05 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2087.outbound.protection.outlook.com [40.107.223.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941931EFEC;
+        Mon, 13 Feb 2023 13:19:00 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ng2FLe8zDxKYbysHELtcGaUi6SEusHcXbnDuARemcLqYNHKEMKheNcWWZkucENztwri0q+szUu0bK9lAly3Dfmk25RGSUdNiN2Iw2kddhXTIdfJxy1ZSbnXerUZcbUbKMiYGcaRntY4Hh/W6WPNBMlRIbm7qZLQrfIIgvjroDbkEzdWe99Vkwo+H9l/EG6AJHKc2nVrxZIxMT1JO5DoHQ8QwjC8C4dX4vSutEHmsdU7BaBu5aozbvLa5JVdKMPmiEyTLxgZQ6ObUZofvAPQPluliiDtWyZO9XBnwPQ+jMp+8e8mDs0KAyDBBMgmCh7ceOUtEGB1bnnhiwuAHozHbkw==
+ b=Ut2TRBBJ1x8biSwS4XfxDGJnEG5b1GHBLwnfVBHovI0Y/qCiGvjxmsYecJ3jKqoorPPYls6B4YN4nQthwj+ZLrZ44YnWxaQb+TXzx1cNVdsPBtGxjpxG1TopJOvDVdRepu3Ms4ULtIXlUIzjkVGmRB2iTuvFwyxUM133ilhvFb32HxRmZC2Wl82+t9Z6V4j2DWQQgCbaCVEXDFdMOcsA/kUc3iLeaMdYKhfd7pA1ItqxgzZVSViIAeTCKknW8dYDlMBARhD3hZXZD4HmWPzDQZvR/vAQVCO/bLKTGNDVkgLWIe4UfWpMI82HuRXGu77GizZt+VuxTHIbBD38vxf3Iw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mUxTS014iYqypWgDAL3HNgFUleD8BPDybE4UOEA7RnM=;
- b=SOnlfSQNOmEGLfUyXFLIK7oe2KgN0AFo9/n//tEbViZW82rEAeQbeV7MbzoD/YEJTVhrWIrWi9GjjUvYHMdHrsMkVB6Zzmx6sfzk0uX+hQlM7otMxVP5E6vq2BUpAiMw6+oJHoFormYv/K1oN8vfk73uo6DBoOXHTQnuI7PXk0VukS33VcWRWOfMwzQ+iV9WupcgheeO4G4Nhots20JjqhpGr4UmWrxK+ApBkQojC1czawj7rX2bj2HmAlIc4u5j6cHTrFS2HU0QD/ZW43HGuz/6oQS+D+Qnb7AF2HYiPn9V5222w4saH8sJYb2DVmCImZa6MZRfr5+e8VaGQzYJAw==
+ bh=U730ZNKaXlQrp/qwV/UMY6SyptWLyLa942t+MsaPtws=;
+ b=Y5Dkw5nWvhZuDIdFWWJWSM7PsCUxN/o0x+NPClKv/6cJbIc+k9WucNSs2KutY/GAJ1qPl0b7HySsnqBVMzZs35G7Jaw4C2xuzooBT+g+/jmWbHxfeJjck0PGppPsEdyZt6uvksKz/i03zrHlTnvhPSJZLUjv/DAeSXKwS/nXBstIDVRfrED5/5m/Qyp+Sv8xQhGA8d084NUBLfkPwUs8ZvWbEpsGMPm8pqRr3+bnTufYk827wPUAdXe4dd8w7jNNg5w9GivUMlKC3gtnCGzoTzCIL/geIu6vLFuEJwivE8s/M2LVkSzvHapphmYOxHBa5zLeh/R+QVMguvRcJJXjTA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mUxTS014iYqypWgDAL3HNgFUleD8BPDybE4UOEA7RnM=;
- b=3AlhwlBttIQEetDvU3xse3Ll7uquDxP+oWCV+3x8Ao/pZ03+TMs6o8PqUx2VRKZqEY538j/bDbHY4vMvMOAqdnyFVr18dcIDhKFyYJIP7SLxO6EDxFZFqAuxpJyameF2hSV7+983uohtwKdr3yiskqSLMN4NR0OmYDUexhcPwMY=
-Received: from CY5PR17CA0056.namprd17.prod.outlook.com (2603:10b6:930:12::10)
- by PH0PR12MB7470.namprd12.prod.outlook.com (2603:10b6:510:1e9::20) with
+ bh=U730ZNKaXlQrp/qwV/UMY6SyptWLyLa942t+MsaPtws=;
+ b=mTyBkEOiiQnOFobZRvXtCI2STP5Q0nz3rU7gCaKoFVoemd5BhsUSrJoGdGEajAP/1mZzLtwTZsRYe2Cq7ULDXRASVTHvNkkxZs6XDxQEUmVAA5tq8DXiHRTXciq1nCYRpFEGX+hJVbsuRc7RdUbY65MxAWr3qYlc37u4FTmbz5I=
+Received: from BN9PR03CA0846.namprd03.prod.outlook.com (2603:10b6:408:13d::11)
+ by LV2PR12MB5967.namprd12.prod.outlook.com (2603:10b6:408:170::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Mon, 13 Feb
- 2023 21:18:53 +0000
-Received: from CY4PEPF0000C97F.namprd02.prod.outlook.com
- (2603:10b6:930:12:cafe::80) by CY5PR17CA0056.outlook.office365.com
- (2603:10b6:930:12::10) with Microsoft SMTP Server (version=TLS1_2,
+ 2023 21:18:54 +0000
+Received: from BN8NAM11FT012.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:13d:cafe::dc) by BN9PR03CA0846.outlook.office365.com
+ (2603:10b6:408:13d::11) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24 via Frontend
- Transport; Mon, 13 Feb 2023 21:18:52 +0000
+ Transport; Mon, 13 Feb 2023 21:18:54 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000C97F.mail.protection.outlook.com (10.167.241.197) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6111.9 via Frontend Transport; Mon, 13 Feb 2023 21:18:52 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ BN8NAM11FT012.mail.protection.outlook.com (10.13.177.55) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6086.24 via Frontend Transport; Mon, 13 Feb 2023 21:18:54 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 13 Feb
  2023 15:18:52 -0600
 Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
  (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 13 Feb
- 2023 15:18:51 -0600
+ 2023 15:18:52 -0600
 Received: from xsjtanmays50.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
  Transport; Mon, 13 Feb 2023 15:18:51 -0600
@@ -69,9 +69,9 @@ CC:     <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-remoteproc@vger.kernel.org>,
         Tanmay Shah <tanmay.shah@amd.com>
-Subject: [PATCH v3 1/3] drivers: mailbox: zynqmp: handle multiple child nodes
-Date:   Mon, 13 Feb 2023 13:18:24 -0800
-Message-ID: <20230213211825.3507034-2-tanmay.shah@amd.com>
+Subject: [PATCH v3 2/3] drivers: remoteproc: xilinx: fix carveout names
+Date:   Mon, 13 Feb 2023 13:18:25 -0800
+Message-ID: <20230213211825.3507034-3-tanmay.shah@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230213211825.3507034-1-tanmay.shah@amd.com>
 References: <20230213211825.3507034-1-tanmay.shah@amd.com>
@@ -80,23 +80,23 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000C97F:EE_|PH0PR12MB7470:EE_
-X-MS-Office365-Filtering-Correlation-Id: a4a89218-4513-4ab1-047d-08db0e07e83d
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT012:EE_|LV2PR12MB5967:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7a28862a-be09-4d4a-efa8-08db0e07e935
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SM335i4OP2OwEcx+rlCTqIwsuX6Y8dEGqbjPB9XVkV2/mdXmGBz5A2dHhX6ySwYWwc4Lplk14fAhVxJJXAs0xZcT/qNN2CsTrEHeAw+WVPwK65ZhdGdEoZ7Bu2lFWnoeCeh+NazZF04RAUte4eXinysgM7iEKofrsZXRJUI2DoZRUHalfC7L8qa7piN9iTcWUXspNnQsCJgkyPn6sshWO7I9Z+Aq3EmELoZHUzZMfAcpEZI5PD7/AtqSdPVdS+0QxyqldSaak4QAPpbdda8jCaeoYLamGLLKy0Op5Kh0ancH+vhD+Qnpu6rG6+iXllKu+4OhEASvCQdf2tkBrhEM5g/4j8eIJDwwgAMO8ippGERcjY+fRCnR7V+1XtzFeru4P+J278Rs84Z9U4J108ctLtQuy/lIuaUOlnUy6VPYE97Iv/JHkOVJBPh0jpR9GLHrjXwYo5xUt15p5QJNmVdk8qkYavF1bzkF4XqyPEZnwXhwMmaZRpLXWoKqp4NxIpBWw6YifPhEEMtrTBI0RaQXwoWryYsWvScEJRzckOpJB9AbdS8QUoJreBWcjMKkth+eKyFWkvIhxojIYt6jW1jzZaasM90sreeyTFeilpoGUVN9uaNdPXOeOvUJUjt3SFA20WlHC8BzOdHtyYA6T+1RoRZhOdD4ZTCX+ow1ogb3IomvW0KACXgP4VVnnRdg+ZUxMuSn/QlZteomZVaxgefUyKmkjWy3D1MCcI1J0sV96U3j4eE1/ai7ND4zHob9vjb5AopTMhRskEUIaX0Qhep9hg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(346002)(376002)(39860400002)(451199018)(36840700001)(46966006)(40470700004)(36756003)(5660300002)(2906002)(15650500001)(44832011)(83380400001)(47076005)(426003)(26005)(186003)(336012)(356005)(2616005)(36860700001)(82740400003)(81166007)(70586007)(70206006)(4326008)(8936002)(54906003)(316002)(8676002)(6636002)(41300700001)(6666004)(478600001)(40460700003)(40480700001)(1076003)(86362001)(82310400005)(110136005)(966005)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: XOuWHyn9URXpbjxobJAxm2TNOl6tlWUqVQyx0lzHlALG1KngE0MBnSXSG4X4808Ex9HBAKQcFVacvvjNNZG9/eElyPFSHyv/YM4mWzi4FPEmBG8T8xggexWW/E3zGCdVJTEkre3gZ0uHN5ZzROumlbokC6YsO/jmyubu98wFOyHkgnMiv1b1UmTIiQ84BO6ZfYcm5ZCVJ8mbPQKFB2smSqQlgQ061unCZqjT2jliJi8WYOYYax4iHC5wVb/uRTfk7qOeGLFIDo8rM1lGwICU660WB2xHInN+4frL0xbghF/5OdIxFGTFhQTQOvhWh19jTjJca4MJ9XGZzgHSF+dKsnr4MEEpQEOXc2fmlBTPdISB7C1fMFVXNV5LCLN3FYVfL86isY5Cw7vmmo+uyaeD7r/Sp3PsM/KMSRHwkB4IriYusVYwd5EARf51RtM6dCnj6Aa/23BlUoka7h5fphpjJ2hb5L2MapPkUBFjlr2YmR9bvHCdjoL56shoaxHRUnSE0tXODbEXGwa/y3ViBUyeoMeH1q5PgPg1pbqriYk85k5nmWQrUvn/dJA1+TK8dvR1vGavRSoHrvvFet/PynJ7e9KnjiS2CSGEbMWz6wV82ckAkmYeVUkOShMlWCViaKQJDXvLmhz4QtPoLXFXyckQ+jnUkSelK93NABTnHcJPyK7wIZV3SIxFxAaPuDvpsjK2ZdTRwkP1c8M6RC+xA+ghbHd1nYeWw5+vh8hpRZfjhLlz2M+8JFe1angiJWG6PzY4CYs8D2RnHOzjot4koUb5aQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(39860400002)(376002)(396003)(451199018)(40470700004)(36840700001)(46966006)(186003)(26005)(6666004)(478600001)(336012)(966005)(70586007)(70206006)(4326008)(8676002)(2616005)(54906003)(6636002)(1076003)(316002)(110136005)(83380400001)(5660300002)(41300700001)(44832011)(8936002)(36860700001)(82740400003)(2906002)(356005)(81166007)(86362001)(36756003)(82310400005)(426003)(47076005)(40460700003)(40480700001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2023 21:18:52.5836
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2023 21:18:54.2930
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a4a89218-4513-4ab1-047d-08db0e07e83d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7a28862a-be09-4d4a-efa8-08db0e07e935
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C97F.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT012.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7470
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5967
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -107,89 +107,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As of now only one child node is handled by zynqmp-ipi
-mailbox driver. Upon introducing remoteproc r5 core mailbox
-nodes, found few enhancements in Xilinx zynqmp mailbox driver
-as following:
+If the unit address is appended to node name of memory-region,
+then adding rproc carveouts fails as node name and unit-address
+both are passed as carveout name (i.e. vdev0vring0@xxxxxxxx). However,
+only node name is expected by remoteproc framework. This patch moves
+memory-region node parsing from driver probe to prepare and
+only passes node-name and not unit-address
 
-- fix mailbox child node counts
-  If child mailbox node status is disabled it causes
-  crash in interrupt handler. Fix this by assigning
-  only available child node during driver probe.
-
-- fix typo in IPI documentation %s/12/32/
-  Xilinx IPI message buffers allows 32-byte data transfer.
-  Fix documentation that says 12 bytes
-
-- fix bug in zynqmp-ipi isr handling
-  Multiple IPI channels are mapped to same interrupt handler.
-  Current isr implementation handles only one channel per isr.
-  Fix this behavior by checking isr status bit of all child
-  mailbox nodes.
-
-Fixes: 4981b82ba2ff ("mailbox: ZynqMP IPI mailbox controller")
+Fixes: 6b291e8020a8 ("drivers: remoteproc: Add Xilinx r5 remoteproc driver")
 Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
 ---
 
 Changelog:
   - This is first version of this change, however posting as part of the series
-    that has version v3.
+    that has version v3. The v2 of the series could be found at following link.
 
 v2: https://lore.kernel.org/all/20230126213154.1707300-1-tanmay.shah@amd.com/
 
- drivers/mailbox/zynqmp-ipi-mailbox.c       | 8 ++++----
- include/linux/mailbox/zynqmp-ipi-message.h | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ drivers/remoteproc/xlnx_r5_remoteproc.c | 87 ++++++-------------------
+ 1 file changed, 20 insertions(+), 67 deletions(-)
 
-diff --git a/drivers/mailbox/zynqmp-ipi-mailbox.c b/drivers/mailbox/zynqmp-ipi-mailbox.c
-index 12e004ff1a14..b1498f6f06e1 100644
---- a/drivers/mailbox/zynqmp-ipi-mailbox.c
-+++ b/drivers/mailbox/zynqmp-ipi-mailbox.c
-@@ -152,7 +152,7 @@ static irqreturn_t zynqmp_ipi_interrupt(int irq, void *data)
- 	struct zynqmp_ipi_message *msg;
- 	u64 arg0, arg3;
- 	struct arm_smccc_res res;
--	int ret, i;
-+	int ret, i, status = IRQ_NONE;
+diff --git a/drivers/remoteproc/xlnx_r5_remoteproc.c b/drivers/remoteproc/xlnx_r5_remoteproc.c
+index 2db57d394155..81af2dea56c2 100644
+--- a/drivers/remoteproc/xlnx_r5_remoteproc.c
++++ b/drivers/remoteproc/xlnx_r5_remoteproc.c
+@@ -61,8 +61,6 @@ static const struct mem_bank_data zynqmp_tcm_banks[] = {
+  * @np: device node of RPU instance
+  * @tcm_bank_count: number TCM banks accessible to this RPU
+  * @tcm_banks: array of each TCM bank data
+- * @rmem_count: Number of reserved mem regions
+- * @rmem: reserved memory region nodes from device tree
+  * @rproc: rproc handle
+  * @pm_domain_id: RPU CPU power domain id
+  */
+@@ -71,8 +69,6 @@ struct zynqmp_r5_core {
+ 	struct device_node *np;
+ 	int tcm_bank_count;
+ 	struct mem_bank_data **tcm_banks;
+-	int rmem_count;
+-	struct reserved_mem **rmem;
+ 	struct rproc *rproc;
+ 	u32 pm_domain_id;
+ };
+@@ -239,21 +235,31 @@ static int add_mem_regions_carveout(struct rproc *rproc)
+ {
+ 	struct rproc_mem_entry *rproc_mem;
+ 	struct zynqmp_r5_core *r5_core;
++	struct device_node *rmem_np;
+ 	struct reserved_mem *rmem;
+ 	int i, num_mem_regions;
  
- 	(void)irq;
- 	arg0 = SMC_IPI_MAILBOX_STATUS_ENQUIRY;
-@@ -170,11 +170,11 @@ static irqreturn_t zynqmp_ipi_interrupt(int irq, void *data)
- 				memcpy_fromio(msg->data, mchan->req_buf,
- 					      msg->len);
- 				mbox_chan_received_data(chan, (void *)msg);
--				return IRQ_HANDLED;
-+				status = IRQ_HANDLED;
- 			}
+ 	r5_core = (struct zynqmp_r5_core *)rproc->priv;
+-	num_mem_regions = r5_core->rmem_count;
++
++	num_mem_regions = of_property_count_elems_of_size(r5_core->np, "memory-region",
++							  sizeof(phandle));
+ 
+ 	for (i = 0; i < num_mem_regions; i++) {
+-		rmem = r5_core->rmem[i];
+ 
+-		if (!strncmp(rmem->name, "vdev0buffer", strlen("vdev0buffer"))) {
++		rmem_np = of_parse_phandle(r5_core->np, "memory-region", i);
++
++		rmem = of_reserved_mem_lookup(rmem_np);
++		if (!rmem) {
++			of_node_put(rmem_np);
++			return -EINVAL;
++		}
++
++		if (!strcmp(rmem_np->name, "vdev0buffer")) {
+ 			/* Init reserved memory for vdev buffer */
+ 			rproc_mem = rproc_of_resm_mem_entry_init(&rproc->dev, i,
+ 								 rmem->size,
+ 								 rmem->base,
+-								 rmem->name);
++								 rmem_np->name);
+ 		} else {
+ 			/* Register associated reserved memory regions */
+ 			rproc_mem = rproc_mem_entry_init(&rproc->dev, NULL,
+@@ -261,16 +267,20 @@ static int add_mem_regions_carveout(struct rproc *rproc)
+ 							 rmem->size, rmem->base,
+ 							 zynqmp_r5_mem_region_map,
+ 							 zynqmp_r5_mem_region_unmap,
+-							 rmem->name);
++							 rmem_np->name);
  		}
+ 
+-		if (!rproc_mem)
++		if (!rproc_mem) {
++			of_node_put(rmem_np);
+ 			return -ENOMEM;
++		}
+ 
+ 		rproc_add_carveout(rproc, rproc_mem);
+ 
+ 		dev_dbg(&rproc->dev, "reserved mem carveout %s addr=%llx, size=0x%llx",
+ 			rmem->name, rmem->base, rmem->size);
++
++		of_node_put(rmem_np);
  	}
--	return IRQ_NONE;
-+	return status;
+ 
+ 	return 0;
+@@ -726,59 +736,6 @@ static int zynqmp_r5_get_tcm_node(struct zynqmp_r5_cluster *cluster)
+ 	return 0;
  }
  
- /**
-@@ -634,7 +634,7 @@ static int zynqmp_ipi_probe(struct platform_device *pdev)
- 	struct zynqmp_ipi_mbox *mbox;
- 	int num_mboxes, ret = -EINVAL;
+-/**
+- * zynqmp_r5_get_mem_region_node()
+- * parse memory-region property and get reserved mem regions
+- *
+- * @r5_core: pointer to zynqmp_r5_core type object
+- *
+- * Return: 0 for success and error code for failure.
+- */
+-static int zynqmp_r5_get_mem_region_node(struct zynqmp_r5_core *r5_core)
+-{
+-	struct device_node *np, *rmem_np;
+-	struct reserved_mem **rmem;
+-	int res_mem_count, i;
+-	struct device *dev;
+-
+-	dev = r5_core->dev;
+-	np = r5_core->np;
+-
+-	res_mem_count = of_property_count_elems_of_size(np, "memory-region",
+-							sizeof(phandle));
+-	if (res_mem_count <= 0) {
+-		dev_warn(dev, "failed to get memory-region property %d\n",
+-			 res_mem_count);
+-		return 0;
+-	}
+-
+-	rmem = devm_kcalloc(dev, res_mem_count,
+-			    sizeof(struct reserved_mem *), GFP_KERNEL);
+-	if (!rmem)
+-		return -ENOMEM;
+-
+-	for (i = 0; i < res_mem_count; i++) {
+-		rmem_np = of_parse_phandle(np, "memory-region", i);
+-		if (!rmem_np)
+-			goto release_rmem;
+-
+-		rmem[i] = of_reserved_mem_lookup(rmem_np);
+-		if (!rmem[i]) {
+-			of_node_put(rmem_np);
+-			goto release_rmem;
+-		}
+-
+-		of_node_put(rmem_np);
+-	}
+-
+-	r5_core->rmem_count = res_mem_count;
+-	r5_core->rmem = rmem;
+-	return 0;
+-
+-release_rmem:
+-	return -EINVAL;
+-}
+-
+ /*
+  * zynqmp_r5_core_init()
+  * Create and initialize zynqmp_r5_core type object
+@@ -806,10 +763,6 @@ static int zynqmp_r5_core_init(struct zynqmp_r5_cluster *cluster,
+ 	for (i = 0; i < cluster->core_count; i++) {
+ 		r5_core = cluster->r5_cores[i];
  
--	num_mboxes = of_get_child_count(np);
-+	num_mboxes = of_get_available_child_count(np);
- 	pdata = devm_kzalloc(dev, sizeof(*pdata) + (num_mboxes * sizeof(*mbox)),
- 			     GFP_KERNEL);
- 	if (!pdata)
-diff --git a/include/linux/mailbox/zynqmp-ipi-message.h b/include/linux/mailbox/zynqmp-ipi-message.h
-index 35ce84c8ca02..31d8046d945e 100644
---- a/include/linux/mailbox/zynqmp-ipi-message.h
-+++ b/include/linux/mailbox/zynqmp-ipi-message.h
-@@ -9,7 +9,7 @@
-  * @data: message payload
-  *
-  * This is the structure for data used in mbox_send_message
-- * the maximum length of data buffer is fixed to 12 bytes.
-+ * the maximum length of data buffer is fixed to 32 bytes.
-  * Client is supposed to be aware of this.
-  */
- struct zynqmp_ipi_message {
+-		ret = zynqmp_r5_get_mem_region_node(r5_core);
+-		if (ret)
+-			dev_warn(dev, "memory-region prop failed %d\n", ret);
+-
+ 		/* Initialize r5 cores with power-domains parsed from dts */
+ 		ret = of_property_read_u32_index(r5_core->np, "power-domains",
+ 						 1, &r5_core->pm_domain_id);
 -- 
 2.25.1
 
