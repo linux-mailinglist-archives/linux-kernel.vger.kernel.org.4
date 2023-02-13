@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3176953CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 23:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FEB6953CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 23:21:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbjBMWVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 17:21:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60974 "EHLO
+        id S230456AbjBMWVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 17:21:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjBMWVS (ORCPT
+        with ESMTP id S230134AbjBMWVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 17:21:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5644D20050;
-        Mon, 13 Feb 2023 14:21:10 -0800 (PST)
+        Mon, 13 Feb 2023 17:21:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC3920042;
+        Mon, 13 Feb 2023 14:21:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E219561331;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C8CAB8198E;
+        Mon, 13 Feb 2023 22:21:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 890DAC433A4;
         Mon, 13 Feb 2023 22:21:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8062C433D2;
-        Mon, 13 Feb 2023 22:21:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676326869;
-        bh=f2ENSUiXRUtFx9/iUYwFRlI5SkOEtx6rruzrqRLpQCg=;
+        s=k20201202; t=1676326870;
+        bh=uPpOp2N58RQPlHMhSStXpoHLm5GlicGnX0KefJR66VU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WDoj5RVBkAZzbnIlYx+Z3d9jKXmxzP59nUQAmJr7Dwz2N4z4lfyFHBOHxUB3WWO85
-         alimk1lg/cfxavyWAA/E/+LCLgrBXkdTu8OqQF6DXiXDv9VP2MjOyZu3epOj5Rktya
-         ZqAYVUM0t0Tq8wurqpVa6YcJzPxU2UEPU9Xyccatt6B/mMpJxAtV3+zVg/6KOYwuas
-         iS/MkzwkLofD5Y9doZjSkncrRzIOxo2X2KV5rmEWyNAy/wH6wUC64YV0LslW1BIPvv
-         T/Nn0tzsnCQN2YqDZPpLAH9kOmBFMG2amDLTJ0yUUrXW0xGm3jSnlqf5o/3PdCqabY
-         JfGI/plow1HPQ==
+        b=BL+S2Ey7BqtCqiBDhEvfEX1QnxPwbWMygknQCciYrXcDoT0KnvzszOGeiEVPauekT
+         y2Z5maDX6iIh8xAvJVxAqN29csv2WF6Hhsf3ltHJWHHaRc9b0uuuxqFOTO3uKSmwpv
+         Qy6Ib4jQ098hIg7qqXp1TYE1DrqSTJDLmpZ/eg9s/d96yCQCE29GC6gvvFy5otudcM
+         0IjpN48IKVREKVa9mYpCME6sEOflam6BGJAGk6xWGuzGWIvDgHmGMym8bm3TjqISew
+         gZQuP+58lx+uypbRIWcNFOs0I27ey4BR9MFWi040y0eG1KvPmUkk7PvuhN24ILETqK
+         365e2W60NCJaQ==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Patrick Wildt <patrick@blueri.se>,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp-pmics: Specify interrupt parent explicitly
-Date:   Mon, 13 Feb 2023 14:23:05 -0800
-Message-Id: <167632698311.557014.4879316622036717594.b4-ty@kernel.org>
+To:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: qcom: sm8550: remove invalid interconnect property from cryptobam
+Date:   Mon, 13 Feb 2023 14:23:06 -0800
+Message-Id: <167632698311.557014.9648200229884885250.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230213090118.11527-1-manivannan.sadhasivam@linaro.org>
-References: <20230213090118.11527-1-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20230209-topic-sm8550-upstream-cryptobam-remove-interconnect-v1-1-84587c7bad0f@linaro.org>
+References: <20230209-topic-sm8550-upstream-cryptobam-remove-interconnect-v1-1-84587c7bad0f@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,27 +58,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Feb 2023 14:31:18 +0530, Manivannan Sadhasivam wrote:
-> Nodes like pwrkey, resin, iadc, adc-tm, temp-alarm which are the grand
-> children of spmi_bus node represent the interrupt generating devices but
-> don't have "interrupt-parent" property.
+On Thu, 09 Feb 2023 09:44:43 +0100, Neil Armstrong wrote:
+> The interconnect property is already present in the qce node, which
+> is the consumer of the cryptobam, so no need for an interconnect property
+> as documented by the bindings.
 > 
-> As per the devicetree spec v0.3, section 2.4:
 > 
-> "The physical wiring of an interrupt source to an interrupt controller is
-> represented in the devicetree with the interrupt-parent property. Nodes
-> that represent interrupt-generating devices contain an interrupt-parent
-> property which has a phandle value that points to the device to which the
-> device’s interrupts are routed, typically an interrupt controller. If an
-> interrupt-generating device does not have an interrupt-parent property,
-> its interrupt parent is assumed to be its devicetree parent."
-> 
-> [...]
 
 Applied, thanks!
 
-[1/1] arm64: dts: qcom: sc8280xp-pmics: Specify interrupt parent explicitly
-      commit: 2d5cab9232ba6bac734186f3e74fb106793bc738
+[1/1] arm64: dts: qcom: sm8550: remove invalid interconnect property from cryptobam
+      commit: 26e95ff8a912fd787a65ae1ae4cc4684f5f84fce
 
 Best regards,
 -- 
