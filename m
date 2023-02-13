@@ -2,106 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D0D693BB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 02:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0042C693BB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 02:23:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbjBMBWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 20:22:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47394 "EHLO
+        id S229745AbjBMBXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 20:23:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjBMBWS (ORCPT
+        with ESMTP id S229533AbjBMBXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 20:22:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22514E059
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 17:22:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF6E160DFD
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:22:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1813FC4339E
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:22:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676251337;
-        bh=wlM+Ecx2iuslNVdjwg8XLBf+mOAcdUJmrmZhSBMapRg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QPSLrbIYqsxHLJMAdSXZCTc09YpOfAMoiZq7cBEwVVRpYGG139APGI5ka02DBtxlE
-         k2aMmI4mTZh1RGfs9l+UgTG7lObep+Zy+1KNAFeKX65yXQqRXNn1bgTYpEHQ7XgY1W
-         0acK1gTTA7+uETwee7rss+sX9UmM7QWgSWNIXJlp6Mfs+5qdOkJqv5z3eKSD2dWUbU
-         jEqA4ADqEDbODAl3s6BmLy5o+uwoSiEPYuI35XmMoOCGyyaAegd5O/4BluGhUIuIop
-         g+bD0TqViVsP8JxSvJuwQcakvv8lm7WKc1hTo1/e4i2SnxAbUojjA4iyIU1BF01DZz
-         Tk8A+fm7vROjw==
-Received: by mail-ed1-f50.google.com with SMTP id p12so3746771edc.0
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 17:22:16 -0800 (PST)
-X-Gm-Message-State: AO0yUKX7p42uJgglYpXS3qWpWQ34X6UNGg5rXIPiwvdjlS5Hisa0p6YN
-        NgCsWKhBNB9UZidKPzuQymCcQYhGJK6TyKGPpuI=
-X-Google-Smtp-Source: AK7set9Wnap2DtVffUeW5OU2ClIoBIQPsGGx1U3RdhWtx5jT/9yWwTz7INrdhOyrr63SToh1bowg5JYi5JFRN152pwc=
-X-Received: by 2002:a50:955e:0:b0:4ab:4676:f927 with SMTP id
- v30-20020a50955e000000b004ab4676f927mr3100715eda.7.1676251335341; Sun, 12 Feb
- 2023 17:22:15 -0800 (PST)
+        Sun, 12 Feb 2023 20:23:36 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id CE847EB4E
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 17:23:34 -0800 (PST)
+Received: (qmail 891888 invoked by uid 1000); 12 Feb 2023 20:23:34 -0500
+Date:   Sun, 12 Feb 2023 20:23:34 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Coly Li <colyli@suse.de>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
+ with unique class keys
+Message-ID: <Y+mRFUws3dOpU8qS@rowland.harvard.edu>
+References: <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
+ <Y+gjuqJ5RFxwLmht@moria.home.lan>
+ <Y+hRurRwm//1+IcK@rowland.harvard.edu>
+ <Y+hTEtCKPuO0zGIt@moria.home.lan>
+ <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
+ <Y+hYn6uzIUBaxDdV@moria.home.lan>
+ <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
+ <Y+k6ehYLWa0cmbvb@moria.home.lan>
+ <Y+lJxCLpwMGuq0sP@rowland.harvard.edu>
+ <Y+lROV3Ii+WbmZCh@moria.home.lan>
 MIME-Version: 1.0
-References: <20230212021534.59121-1-samuel@sholland.org> <20230212021534.59121-2-samuel@sholland.org>
-In-Reply-To: <20230212021534.59121-2-samuel@sholland.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 13 Feb 2023 09:22:03 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR18Wp=o_NfMYgLp5ncyg=_nmpAybknUZkC1nkou8KYcg@mail.gmail.com>
-Message-ID: <CAJF2gTR18Wp=o_NfMYgLp5ncyg=_nmpAybknUZkC1nkou8KYcg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] riscv: Fix early alternative patching
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Christoph Muellner <christoph.muellner@vrull.eu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+lROV3Ii+WbmZCh@moria.home.lan>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 10:15 AM Samuel Holland <samuel@sholland.org> wrote:
->
-> Now that the text to patch is located using a relative offset from the
-> alternative entry, the text address should be computed without applying
-> the kernel mapping offset, both before and after VM setup.
->
-> Fixes: 8d23e94a4433 ("riscv: switch to relative alternative entries")
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
->
->  arch/riscv/errata/thead/errata.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-> index c0bea5c94128..1dd90a5f86f0 100644
-> --- a/arch/riscv/errata/thead/errata.c
-> +++ b/arch/riscv/errata/thead/errata.c
-> @@ -102,9 +102,7 @@ void __init_or_module thead_errata_patch_func(struct alt_entry *begin, struct al
->
->                         /* On vm-alternatives, the mmu isn't running yet */
->                         if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-> -                               memcpy((void *)__pa_symbol(oldptr),
-> -                                      (void *)__pa_symbol(altptr),
-> -                                      alt->alt_len);
-> +                               memcpy(oldptr, altptr, alt->alt_len);
->                         else
->                                 patch_text_nosync(oldptr, altptr, alt->alt_len);
->                 }
-> --
-> 2.37.4
->
-Reviewed-by: Guo Ren <guoren@kernel.org>
+On Sun, Feb 12, 2023 at 03:51:05PM -0500, Kent Overstreet wrote:
+> On Sun, Feb 12, 2023 at 03:19:16PM -0500, Alan Stern wrote:
+> > I'll revise the patch to use the device's name for the class.  While it 
+> > may not be globally unique, it should be sufficiently specific.
+> > 
+> > (Device names are often set after the device is initialized.  Does 
+> > lockdep mind if a lock_class_key's name is changed after it has been 
+> > registered?)
+> 
+> The device name should _not_ be something dynamic, it should be
+> something easily tied back to a source code location - i.e. related to
+> the driver name, not the device name.
+> 
+> That's how people read and use lockdep reports!
+> 
+> Do it exactly the same way mutex_init() does it, just lift it up a level
+> to a wrapper around device_initialize() - stringify the pointer to the
+> mutex (embedded in struct device, embedded in what-have-you driver code)
+> and use that.
 
--- 
-Best Regards
- Guo Ren
+I really don't think that's a good idea here.  When you've got a bus 
+containing multiple devices, typically all those device structures are 
+created by the same line of code.  So knowing the source code location 
+won't tell you _which_ device structure is involved in the locking 
+cycle or what driver it's using.  By contrast, knowing the device name 
+would.
+
+Furthermore, to the extent that the device's name identifies what kind 
+of device it is, the name would tell you what where the structure was 
+created and which driver it is using.
+
+For example, knowing that a struct device was initialized in line 2104 
+of drivers/usb/core/message.c tells you only that the device is a USB 
+interface.  It doesn't tell you which USB interface.  But knowing that 
+the device's name is 1-7:1.1 not only tells me that the device is a USB 
+interface, it also allows me to do:
+
+$ ls -l /sys/bus/usb/devices/1-7:1.1/driver
+lrwxrwxrwx. 1 root root 0 Feb 12 19:56 /sys/bus/usb/devices/1-7:1.1/driver -> ../../../../../../bus/usb/drivers/usbhid/
+
+telling me that the device is some sort of HID device.  Probably my 
+laptop's touchpad (which could easily be verified).  Even without direct 
+interaction with the system, searching through the kernel log would give 
+me this information.
+
+> > At this stage, converting would be most impractical.  And I don't think 
+> > it's really needed.
+> 
+> They do make you deal with lock restarts; unwinding typical stateful
+> kernel code is not necessarily super practical :)
+> 
+> Anyways, it sounds like the lockdep-class-per-driver approach will get
+> you more information, that's certainly a reasonable approach for now.
+
+Thanks for the review and suggestions.
+
+Alan Stern
