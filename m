@@ -2,70 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C66E56943C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DED4E6943C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjBMLE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 06:04:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
+        id S230157AbjBMLEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 06:04:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbjBMLER (ORCPT
+        with ESMTP id S229598AbjBMLEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 06:04:17 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33314691
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:04:14 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id bl9so4321572iob.7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:04:14 -0800 (PST)
+        Mon, 13 Feb 2023 06:04:13 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC584691;
+        Mon, 13 Feb 2023 03:04:04 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id bg5-20020a05600c3c8500b003e00c739ce4so8684735wmb.5;
+        Mon, 13 Feb 2023 03:04:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NYx2AyPU7S06WvalHgphXS88wTsCd0bUzbIYrlIqVZc=;
-        b=j4ZA5Qa3HBuJDnuS3BIhYWxTSQ0G8BigeWlM/UGuXFspIEHa/EhA4sD2fdEK3SxEVO
-         3CjQI6d+pShg6Ai0+dEDidMiB2gOdAUThhaULzgv26CNcZByKNJ6FlnbNi/vMRcBJUAA
-         boECQ5jgiZghhC+otn3eCIkTTl7ROgQAnXTQFWxZD3mi0MHc5rFPyj4wdTvKAa6Pm5Ml
-         1gMN4iXV5sE/I19Os9vulAX6dZM6Xj7H4Iz7rq/Rw57sOwBOEshJeE9EgkG+meRKHz84
-         LEZhaEo3yvxRjrh/r1Ve5cQzBBRfn6AnFNmhpMY+WMJwIMR3LDbSrUexjnVg7yRXBU99
-         kVeA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kir9kI70OwVh4537TiH5wl8iuSbkpWMjHOA2BO/ND5k=;
+        b=b7IPcyYuYihUv3j2jJk9iFsuIZcvMW9nCCzI+rgUsDMrWTM8jgRydKNB0qLWsHcqI2
+         bWAVVoSWAyM+n7AT91/odFePzvKFkkm2t0PccwIZ/8nYisVhhBUcsniTIkkJScc+o3w5
+         qO9FfQF+sgkj6wrZfJkGxekqC+e1L695nyJPv/sk2+RWXa5196g+DlNTR/UJSBAbSf2Z
+         n3q3i3n69bnqXLxdWbyzTr/3EE15BA0crpA5GMqKZsA16wsppMsFE4RtxSh30TSF04Ys
+         UEE8TZuPlQukpqD7o0sgAysQ65mXCet2HwxzyRF7RPmmtZzXoF6zC2vWaf11Lo3Ya8bJ
+         Fs2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NYx2AyPU7S06WvalHgphXS88wTsCd0bUzbIYrlIqVZc=;
-        b=3CATENgVzHCQSidSHhg7voV3nh+g9QQFOvWLboSJ6vqAkjIfgW2FpcYhcYvn16cFeR
-         whlNNyc3aDlUa2GTIU1wLUa2OM7UShx4prK7V8Jo9NCXnx28ZOfBp/7rX9EE18cPSXXi
-         aDcBZQk6yfwu/BnH1ThCxEvsK8ooYbdeJtOM4UjArkzzX+TnBlJrZFE3H9JZvNOcI0A6
-         vceUqCSf0R5Afnht22HVsMbc/6g1hmDBlrAIJPkc0YsAbzvmiyP4Jn1jUVwnfYQ17ny/
-         iVkWC+1rX5/3Ko4rFdZ6N9qusfnU59ylr7EQuQfHlMiqmGXJhJDF0QnPfAnv0W9fnFOO
-         tzQw==
-X-Gm-Message-State: AO0yUKW4rLZUX/zqffLYx+583EQ0mXD/P8pwYTNPPvejsCKG7z+pEFUA
-        seO+bHBghoq2twoBV3y+2Bk4wyekQxEV9+RG4H8HIA==
-X-Google-Smtp-Source: AK7set8Qh/DGdvxd4bpiG1wb/ltPuFD5pb3Sk4w8im377pG5vnagqX8FCB4QXIOQ6F2/ypfqFqOt4n5FPKT92cng2mk=
-X-Received: by 2002:a02:a794:0:b0:3ad:3cae:6378 with SMTP id
- e20-20020a02a794000000b003ad3cae6378mr12249003jaj.16.1676286254268; Mon, 13
- Feb 2023 03:04:14 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Kir9kI70OwVh4537TiH5wl8iuSbkpWMjHOA2BO/ND5k=;
+        b=xheKH+vyDCz0u6J2qEDoTgQmknWB8wQ4CBlFZncPSZJaddCUmtEIC+FWlNUREZLGxf
+         +Iir4DDHYAShkbRIpKKsMXHggQAIhEIzmYTHa4E350SbgTyUx93kLdY7/ljiwUzpMlEr
+         ior1KTSSTuSLKRUwJEO4kI5kUZHWqkcomjkOFTHpknWmQY0n0ueC6tRAV09kIAqBdETE
+         X0qBpXp6S9e3FUPKu2uKXeVG2q5Ck329mKpk4cc+dqj0nogIum5K1oFSy65671fX2irt
+         wNKmTgCHcx2HGk68lIVUK33n+vCPZIavpih8By9MctV3PbDX184X7JOD6L7VcsuRpKIh
+         sENQ==
+X-Gm-Message-State: AO0yUKVI/TrzOaJ+Z2ErFJdOP5aw/V7HMceVzb5/a0DSZDQEheIDhze8
+        eAGglcOZ7xTIDcDiP0TbLKU=
+X-Google-Smtp-Source: AK7set+XpckXC5WQLDxtS4BgGrLb+Xs0kyQsFLAQqOt3QndF8NQLy5QwJTjIZvnxmTae4uUBm4Lf5w==
+X-Received: by 2002:a05:600c:16d4:b0:3e0:fad:675a with SMTP id l20-20020a05600c16d400b003e00fad675amr17847944wmn.38.1676286242856;
+        Mon, 13 Feb 2023 03:04:02 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id i20-20020a1c5414000000b003dc53217e07sm13895822wmb.16.2023.02.13.03.04.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 03:04:02 -0800 (PST)
+Date:   Mon, 13 Feb 2023 14:03:58 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Steen Hegelund <steen.hegelund@microchip.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, UNGLinuxDriver@microchip.com,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Casper Andersson <casper.casan@gmail.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        Nathan Huckleberry <nhuck@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Daniel Machon <daniel.machon@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH net-next 10/10] net: microchip: sparx5: Add TC vlan
+ action support for the ES0 VCAP
+Message-ID: <Y+oZHpMpW6ODQQpY@kadam>
+References: <20230213092426.1331379-1-steen.hegelund@microchip.com>
+ <20230213092426.1331379-11-steen.hegelund@microchip.com>
 MIME-Version: 1.0
-References: <cover.1676063693.git.andreyknvl@google.com> <f80b02951364e6b40deda965b4003de0cd1a532d.1676063693.git.andreyknvl@google.com>
-In-Reply-To: <f80b02951364e6b40deda965b4003de0cd1a532d.1676063693.git.andreyknvl@google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 13 Feb 2023 12:03:35 +0100
-Message-ID: <CAG_fn=VbGHm7WFqvauZ6-RnjUuk6pZQb0Ac61bKshQSRDujv6Q@mail.gmail.com>
-Subject: Re: [PATCH v2 13/18] lib/stackdepot: annotate depot_init_pool and depot_alloc_stack
-To:     andrey.konovalov@linux.dev
-Cc:     Marco Elver <elver@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        Evgenii Stepanov <eugenis@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230213092426.1331379-11-steen.hegelund@microchip.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,18 +86,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 10:18 PM <andrey.konovalov@linux.dev> wrote:
->
-> From: Andrey Konovalov <andreyknvl@google.com>
->
-> Clean up the exisiting comments and add new ones to depot_init_pool and
-> depot_alloc_stack.
->
-> As a part of the clean-up, remove mentions of which variable is accessed
-> by smp_store_release and smp_load_acquire: it is clear as is from the
-> code.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
+On Mon, Feb 13, 2023 at 10:24:26AM +0100, Steen Hegelund wrote:
+> +static int sparx5_tc_action_vlan_modify(struct vcap_admin *admin,
+> +					struct vcap_rule *vrule,
+> +					struct flow_cls_offload *fco,
+> +					struct flow_action_entry *act,
+> +					u16 tpid)
+> +{
+> +	int err = 0;
+> +
+> +	switch (admin->vtype) {
+> +	case VCAP_TYPE_ES0:
+> +		err = vcap_rule_add_action_u32(vrule,
+> +					       VCAP_AF_PUSH_OUTER_TAG,
+> +					       SPX5_OTAG_TAG_A);
 
-Thanks for the cleanup!
+This err assignment is never used.
+
+> +		break;
+> +	default:
+> +		NL_SET_ERR_MSG_MOD(fco->common.extack,
+> +				   "VLAN modify action not supported in this VCAP");
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	switch (tpid) {
+> +	case ETH_P_8021Q:
+> +		err = vcap_rule_add_action_u32(vrule,
+> +					       VCAP_AF_TAG_A_TPID_SEL,
+> +					       SPX5_TPID_A_8100);
+> +		break;
+> +	case ETH_P_8021AD:
+> +		err = vcap_rule_add_action_u32(vrule,
+> +					       VCAP_AF_TAG_A_TPID_SEL,
+> +					       SPX5_TPID_A_88A8);
+> +		break;
+> +	default:
+> +		NL_SET_ERR_MSG_MOD(fco->common.extack,
+> +				   "Invalid vlan proto");
+> +		err = -EINVAL;
+> +	}
+> +	if (err)
+> +		return err;
+> +
+> +	err = vcap_rule_add_action_u32(vrule,
+> +				       VCAP_AF_TAG_A_VID_SEL,
+> +				       SPX5_VID_A_VAL);
+> +	if (err)
+> +		return err;
+
+regards,
+dan carpenter
+
