@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D67BB6950B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:31:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3C26950BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:31:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbjBMTba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 14:31:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
+        id S231308AbjBMTbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 14:31:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBMTb2 (ORCPT
+        with ESMTP id S231233AbjBMTb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 14:31:28 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FEE272C;
-        Mon, 13 Feb 2023 11:31:27 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DIffsL027070;
-        Mon, 13 Feb 2023 19:31:22 GMT
+        Mon, 13 Feb 2023 14:31:29 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C42A4EE7;
+        Mon, 13 Feb 2023 11:31:28 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DDKf7I013627;
+        Mon, 13 Feb 2023 19:31:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=iKFu+nmfvMXaR2s9ABZhifpl1tABmCamoa5lPYvIZmA=;
- b=C1uWfr7pIPRWCL19X1nVEWIadwuu3o7XHlE8/HFvE0kzhZANVRRG+Z1dGlVRGvAqCjSJ
- iTwJcIHc3r5YeZ/y+8B+1XbK6gqiWJe3X3E2RunRnPvs28JID3DNOsQGjcpTuwilj8iG
- R+pXRwax2ybCX+TGtqkhXdybc3Q2YL5lWLMs+C22SC0ZxNCQqwYEEismmH79R3jNvCC2
- kEP5dHNVFyYm8QQGKSf7TWmRSbPH2/hz77ouuj2G/bCy6IyfjTCt039i2zEcskaABbpu
- /Zy/8xi80FbpWDYxf7PiFk9EbBwipDjCZnF2Bhf3Bg9wynrLREl8Syj77moX1vO6eJge lg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np0qpw1q9-1
+ bh=Uu+Uaru/n1R23W7Sf0QrmaftuKf35wtVaETABra1OS4=;
+ b=RTB82F4QALMuvvQnzbZjMMadQ3uAhHYSKEOBkGzXUDRda7LO054SsnYRsVcXFwAAc1SS
+ slkluH6FpnZaHf9yX5+vO6ZZpslWAAzadNichqQnFIUvEsGLz8IqL888aLvTjeCAOHA6
+ IeBKlk5gAbFJXhwffrNhpizOCE8TRfXMUpCFGIAjLNVg109H5GhpcSKwSMQlCLMQvnhF
+ tsTErQn1uN345hz/FGrpjLjw+0zOhBmCSaIaajg2TMivuLUx7Mn+baq5aF9mICHq+GFe
+ AMjCNU0ZNdulb/wlghGe0zGjMDyCQQzITtiAQRM48tHqFO7Of+O+Syuo0KrnxNaaE2mM 3g== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np3dew46h-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Feb 2023 19:31:22 +0000
-Received: from pps.filterd (NALASPPMTA02.qualcomm.com [127.0.0.1])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 31DJSr22023923;
-        Mon, 13 Feb 2023 19:31:21 GMT
+        Mon, 13 Feb 2023 19:31:23 +0000
+Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 31DJVLwG003259;
+        Mon, 13 Feb 2023 19:31:22 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA02.qualcomm.com (PPS) with ESMTP id 3np43mb473-1;
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTP id 3np43m348r-1;
         Mon, 13 Feb 2023 19:31:21 +0000
-Received: from NALASPPMTA02.qualcomm.com (NALASPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31DJVL9O026806;
+Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31DJVLcO003249;
         Mon, 13 Feb 2023 19:31:21 GMT
 Received: from hu-devc-lv-c.qualcomm.com (hu-eserrao-lv.qualcomm.com [10.47.235.164])
-        by NALASPPMTA02.qualcomm.com (PPS) with ESMTP id 31DJVLMp026804;
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTP id 31DJVLM0003244;
         Mon, 13 Feb 2023 19:31:21 +0000
 Received: by hu-devc-lv-c.qualcomm.com (Postfix, from userid 464172)
-        id 8C39A20E2A; Mon, 13 Feb 2023 11:31:21 -0800 (PST)
+        id 8E0DC20E4C; Mon, 13 Feb 2023 11:31:21 -0800 (PST)
 From:   Elson Roy Serrao <quic_eserrao@quicinc.com>
 To:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
         balbi@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
         Elson Roy Serrao <quic_eserrao@quicinc.com>
-Subject: [PATCH v4 1/5] usb: gadget: Properly configure the device for remote wakeup
-Date:   Mon, 13 Feb 2023 11:31:12 -0800
-Message-Id: <1676316676-28377-2-git-send-email-quic_eserrao@quicinc.com>
+Subject: [PATCH v4 2/5] usb: dwc3: Add remote wakeup handling
+Date:   Mon, 13 Feb 2023 11:31:13 -0800
+Message-Id: <1676316676-28377-3-git-send-email-quic_eserrao@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1676316676-28377-1-git-send-email-quic_eserrao@quicinc.com>
 References: <1676316676-28377-1-git-send-email-quic_eserrao@quicinc.com>
@@ -60,206 +60,274 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 8voTCZGXCiUHOrgfVr6wZQm9pErV6HaY
-X-Proofpoint-ORIG-GUID: 8voTCZGXCiUHOrgfVr6wZQm9pErV6HaY
+X-Proofpoint-GUID: ZDkcqx3Q5EcoLTYTv95x48cv-ylOyEeT
+X-Proofpoint-ORIG-GUID: ZDkcqx3Q5EcoLTYTv95x48cv-ylOyEeT
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
  definitions=2023-02-13_12,2023-02-13_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- malwarescore=0 phishscore=0 adultscore=0 suspectscore=0 spamscore=0
- lowpriorityscore=0 clxscore=1015 bulkscore=0 mlxlogscore=739
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ clxscore=1015 adultscore=0 mlxlogscore=956 malwarescore=0 phishscore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2302130170
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The wakeup bit in the bmAttributes field indicates whether the device
-is configured for remote wakeup. But this field should be allowed to
-set only if the UDC supports such wakeup mechanism. So configure this
-field based on UDC capability. Also inform the UDC whether the device
-is configured for remote wakeup by implementing a gadget op.
+An usb device can initate a remote wakeup and bring the link out of
+suspend as dictated by the DEVICE_REMOTE_WAKEUP feature selector.
+Add support to handle this packet and set the remote wakeup capability.
+
+Some hosts may take longer time to initiate the resume signaling after
+device triggers a remote wakeup. So add async support to the wakeup API
+by enabling link status change events.
 
 Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
 ---
- drivers/usb/gadget/composite.c | 18 ++++++++++++++++++
- drivers/usb/gadget/configfs.c  |  3 +++
- drivers/usb/gadget/udc/core.c  | 27 +++++++++++++++++++++++++++
- drivers/usb/gadget/udc/trace.h |  5 +++++
- include/linux/usb/composite.h  |  2 ++
- include/linux/usb/gadget.h     |  8 ++++++++
- 6 files changed, 63 insertions(+)
+ drivers/usb/dwc3/core.h   |  2 ++
+ drivers/usb/dwc3/ep0.c    |  4 +++
+ drivers/usb/dwc3/gadget.c | 74 +++++++++++++++++++++++++++++++++++++++++++----
+ 3 files changed, 74 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index fa7dd6c..a37a8f4 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -513,6 +513,19 @@ static u8 encode_bMaxPower(enum usb_device_speed speed,
- 		return min(val, 900U) / 8;
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 582ebd9..cc78236 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -1110,6 +1110,7 @@ struct dwc3_scratchpad_array {
+  *	3	- Reserved
+  * @dis_metastability_quirk: set to disable metastability quirk.
+  * @dis_split_quirk: set to disable split boundary.
++ * @wakeup_configured: set if the device is configured for remote wakeup.
+  * @imod_interval: set the interrupt moderation interval in 250ns
+  *			increments or 0 to disable.
+  * @max_cfg_eps: current max number of IN eps used across all USB configs.
+@@ -1327,6 +1328,7 @@ struct dwc3 {
+ 
+ 	unsigned		dis_split_quirk:1;
+ 	unsigned		async_callbacks:1;
++	unsigned		wakeup_configured:1;
+ 
+ 	u16			imod_interval;
+ 
+diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+index 61de693..f90fa55 100644
+--- a/drivers/usb/dwc3/ep0.c
++++ b/drivers/usb/dwc3/ep0.c
+@@ -356,6 +356,9 @@ static int dwc3_ep0_handle_status(struct dwc3 *dwc,
+ 				usb_status |= 1 << USB_DEV_STAT_U1_ENABLED;
+ 			if (reg & DWC3_DCTL_INITU2ENA)
+ 				usb_status |= 1 << USB_DEV_STAT_U2_ENABLED;
++		} else {
++			usb_status |= dwc->gadget->wakeup_armed <<
++					USB_DEVICE_REMOTE_WAKEUP;
+ 		}
+ 
+ 		break;
+@@ -476,6 +479,7 @@ static int dwc3_ep0_handle_device(struct dwc3 *dwc,
+ 
+ 	switch (wValue) {
+ 	case USB_DEVICE_REMOTE_WAKEUP:
++		dwc->gadget->wakeup_armed = set;
+ 		break;
+ 	/*
+ 	 * 9.4.1 says only for SS, in AddressState only for
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 3c63fa9..b7fef5d 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -258,7 +258,7 @@ int dwc3_send_gadget_generic_command(struct dwc3 *dwc, unsigned int cmd,
+ 	return ret;
  }
  
-+void check_remote_wakeup_config(struct usb_gadget *g,
-+				struct usb_configuration *c)
-+{
-+	if (USB_CONFIG_ATT_WAKEUP & c->bmAttributes) {
-+		/* Reset the rw bit if gadget is not capable of it */
-+		if (!g->wakeup_capable && g->ops->set_remote_wakeup) {
-+			WARN(c->cdev, "Clearing wakeup bit for config c.%d\n",
-+			     c->bConfigurationValue);
-+			c->bmAttributes &= ~USB_CONFIG_ATT_WAKEUP;
-+		}
-+	}
-+}
-+
- static int config_buf(struct usb_configuration *config,
- 		enum usb_device_speed speed, void *buf, u8 type)
- {
-@@ -1000,6 +1013,11 @@ static int set_config(struct usb_composite_dev *cdev,
- 	else
- 		usb_gadget_clear_selfpowered(gadget);
- 
-+	if (USB_CONFIG_ATT_WAKEUP & c->bmAttributes)
-+		usb_gadget_set_remote_wakeup(gadget, 1);
-+	else
-+		usb_gadget_set_remote_wakeup(gadget, 0);
-+
- 	usb_gadget_vbus_draw(gadget, power);
- 	if (result >= 0 && cdev->delayed_status)
- 		result = USB_GADGET_DELAYED_STATUS;
-diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-index b9f1136..4c639e9 100644
---- a/drivers/usb/gadget/configfs.c
-+++ b/drivers/usb/gadget/configfs.c
-@@ -1761,6 +1761,9 @@ static int configfs_composite_bind(struct usb_gadget *gadget,
- 		if (gadget_is_otg(gadget))
- 			c->descriptors = otg_desc;
- 
-+		/* Properly configure the bmAttributes wakeup bit */
-+		check_remote_wakeup_config(gadget, c);
-+
- 		cfg = container_of(c, struct config_usb_cfg, c);
- 		if (!list_empty(&cfg->string_list)) {
- 			i = 0;
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 23b0629..3dcbba7 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -514,6 +514,33 @@ int usb_gadget_wakeup(struct usb_gadget *gadget)
- EXPORT_SYMBOL_GPL(usb_gadget_wakeup);
+-static int __dwc3_gadget_wakeup(struct dwc3 *dwc);
++static int __dwc3_gadget_wakeup(struct dwc3 *dwc, bool async);
  
  /**
-+ * usb_gadget_set_remote_wakeup - configures the device remote wakeup feature.
-+ * @gadget:the device being configured for remote wakeup
-+ * @set:value to be configured.
-+ *
-+ * set to one to enable remote wakeup feature and zero to disable it.
-+ *
-+ * returns zero on success, else negative errno.
-+ */
-+int usb_gadget_set_remote_wakeup(struct usb_gadget *gadget, int set)
+  * dwc3_send_gadget_ep_cmd - issue an endpoint command
+@@ -325,7 +325,7 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
+ 
+ 			fallthrough;
+ 		case DWC3_LINK_STATE_U3:
+-			ret = __dwc3_gadget_wakeup(dwc);
++			ret = __dwc3_gadget_wakeup(dwc, false);
+ 			dev_WARN_ONCE(dwc->dev, ret, "wakeup failed --> %d\n",
+ 					ret);
+ 			break;
+@@ -2269,6 +2269,22 @@ static const struct usb_ep_ops dwc3_gadget_ep_ops = {
+ 
+ /* -------------------------------------------------------------------------- */
+ 
++static void dwc3_gadget_enable_linksts_evts(struct dwc3 *dwc, bool set)
 +{
-+	int ret = 0;
++	u32 reg;
 +
-+	if (!gadget->ops->set_remote_wakeup) {
-+		ret = -EOPNOTSUPP;
-+		goto out;
++	if (DWC3_VER_IS_PRIOR(DWC3, 250A))
++		return;
++
++	reg = dwc3_readl(dwc->regs, DWC3_DEVTEN);
++	if (set)
++		reg |= DWC3_DEVTEN_ULSTCNGEN;
++	else
++		reg &= ~DWC3_DEVTEN_ULSTCNGEN;
++
++	dwc3_writel(dwc->regs, DWC3_DEVTEN, reg);
++}
++
+ static int dwc3_gadget_get_frame(struct usb_gadget *g)
+ {
+ 	struct dwc3		*dwc = gadget_to_dwc(g);
+@@ -2276,7 +2292,7 @@ static int dwc3_gadget_get_frame(struct usb_gadget *g)
+ 	return __dwc3_gadget_get_frame(dwc);
+ }
+ 
+-static int __dwc3_gadget_wakeup(struct dwc3 *dwc)
++static int __dwc3_gadget_wakeup(struct dwc3 *dwc, bool async)
+ {
+ 	int			retries;
+ 
+@@ -2307,9 +2323,13 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc)
+ 		return -EINVAL;
+ 	}
+ 
++	if (async)
++		dwc3_gadget_enable_linksts_evts(dwc, true);
++
+ 	ret = dwc3_gadget_set_link_state(dwc, DWC3_LINK_STATE_RECOV);
+ 	if (ret < 0) {
+ 		dev_err(dwc->dev, "failed to put link in Recovery\n");
++		dwc3_gadget_enable_linksts_evts(dwc, false);
+ 		return ret;
+ 	}
+ 
+@@ -2321,6 +2341,13 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc)
+ 		dwc3_writel(dwc->regs, DWC3_DCTL, reg);
+ 	}
+ 
++	/*
++	 * Since link status change events are enabled we will receive
++	 * an U0 event when wakeup is successful. So bail out.
++	 */
++	if (async)
++		return 0;
++
+ 	/* poll until Link State changes to ON */
+ 	retries = 20000;
+ 
+@@ -2346,13 +2373,36 @@ static int dwc3_gadget_wakeup(struct usb_gadget *g)
+ 	unsigned long		flags;
+ 	int			ret;
+ 
++	if (!dwc->wakeup_configured) {
++		dev_err(dwc->dev, "remote wakeup not configured\n");
++		return -EINVAL;
 +	}
 +
-+	ret = gadget->ops->set_remote_wakeup(gadget, set);
+ 	spin_lock_irqsave(&dwc->lock, flags);
+-	ret = __dwc3_gadget_wakeup(dwc);
++	if (!dwc->gadget->wakeup_armed) {
++		dev_err(dwc->dev, "not armed for remote wakeup\n");
++		spin_unlock_irqrestore(&dwc->lock, flags);
++		return -EINVAL;
++	}
++	ret = __dwc3_gadget_wakeup(dwc, true);
 +
-+out:
-+	trace_usb_gadget_set_remote_wakeup(gadget, ret);
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
+ 	return ret;
+ }
+ 
++static int dwc3_gadget_set_remote_wakeup(struct usb_gadget *g, int set)
++{
++	struct dwc3		*dwc = gadget_to_dwc(g);
++	unsigned long		flags;
 +
-+	return ret;
++	spin_lock_irqsave(&dwc->lock, flags);
++	dwc->wakeup_configured = !!set;
++	spin_unlock_irqrestore(&dwc->lock, flags);
++
++	return 0;
 +}
-+EXPORT_SYMBOL_GPL(usb_gadget_set_remote_wakeup);
 +
-+/**
-  * usb_gadget_set_selfpowered - sets the device selfpowered feature.
-  * @gadget:the device being declared as self-powered
-  *
-diff --git a/drivers/usb/gadget/udc/trace.h b/drivers/usb/gadget/udc/trace.h
-index abdbcb1..a5ed26f 100644
---- a/drivers/usb/gadget/udc/trace.h
-+++ b/drivers/usb/gadget/udc/trace.h
-@@ -91,6 +91,11 @@ DEFINE_EVENT(udc_log_gadget, usb_gadget_wakeup,
- 	TP_ARGS(g, ret)
- );
+ static int dwc3_gadget_set_selfpowered(struct usb_gadget *g,
+ 		int is_selfpowered)
+ {
+@@ -2978,6 +3028,7 @@ static void dwc3_gadget_async_callbacks(struct usb_gadget *g, bool enable)
+ static const struct usb_gadget_ops dwc3_gadget_ops = {
+ 	.get_frame		= dwc3_gadget_get_frame,
+ 	.wakeup			= dwc3_gadget_wakeup,
++	.set_remote_wakeup	= dwc3_gadget_set_remote_wakeup,
+ 	.set_selfpowered	= dwc3_gadget_set_selfpowered,
+ 	.pullup			= dwc3_gadget_pullup,
+ 	.udc_start		= dwc3_gadget_start,
+@@ -3819,6 +3870,8 @@ static void dwc3_gadget_disconnect_interrupt(struct dwc3 *dwc)
  
-+DEFINE_EVENT(udc_log_gadget, usb_gadget_set_remote_wakeup,
-+	TP_PROTO(struct usb_gadget *g, int ret),
-+	TP_ARGS(g, ret)
-+);
+ 	dwc->gadget->speed = USB_SPEED_UNKNOWN;
+ 	dwc->setup_packet_pending = false;
++	dwc->gadget->wakeup_armed = false;
++	dwc3_gadget_enable_linksts_evts(dwc, false);
+ 	usb_gadget_set_state(dwc->gadget, USB_STATE_NOTATTACHED);
+ 
+ 	if (dwc->ep0state != EP0_SETUP_PHASE) {
+@@ -3912,6 +3965,8 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
+ 	reg &= ~DWC3_DCTL_TSTCTRL_MASK;
+ 	dwc3_gadget_dctl_write_safe(dwc, reg);
+ 	dwc->test_mode = false;
++	dwc->gadget->wakeup_armed = false;
++	dwc3_gadget_enable_linksts_evts(dwc, false);
+ 	dwc3_clear_stall_all_ep(dwc);
+ 
+ 	/* Reset device address to zero */
+@@ -4064,7 +4119,7 @@ static void dwc3_gadget_conndone_interrupt(struct dwc3 *dwc)
+ 	 */
+ }
+ 
+-static void dwc3_gadget_wakeup_interrupt(struct dwc3 *dwc)
++static void dwc3_gadget_wakeup_interrupt(struct dwc3 *dwc, unsigned int evtinfo)
+ {
+ 	/*
+ 	 * TODO take core out of low power mode when that's
+@@ -4076,6 +4131,8 @@ static void dwc3_gadget_wakeup_interrupt(struct dwc3 *dwc)
+ 		dwc->gadget_driver->resume(dwc->gadget);
+ 		spin_lock(&dwc->lock);
+ 	}
 +
- DEFINE_EVENT(udc_log_gadget, usb_gadget_set_selfpowered,
- 	TP_PROTO(struct usb_gadget *g, int ret),
- 	TP_ARGS(g, ret)
-diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
-index 608dc96..d949e91 100644
---- a/include/linux/usb/composite.h
-+++ b/include/linux/usb/composite.h
-@@ -413,6 +413,8 @@ extern int composite_dev_prepare(struct usb_composite_driver *composite,
- extern int composite_os_desc_req_prepare(struct usb_composite_dev *cdev,
- 					 struct usb_ep *ep0);
- void composite_dev_cleanup(struct usb_composite_dev *cdev);
-+void check_remote_wakeup_config(struct usb_gadget *g,
-+				struct usb_configuration *c);
++	dwc->link_state = evtinfo & DWC3_LINK_STATE_MASK;
+ }
  
- static inline struct usb_composite_driver *to_cdriver(
- 		struct usb_gadget_driver *gdrv)
-diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
-index 00750f7..1d79612 100644
---- a/include/linux/usb/gadget.h
-+++ b/include/linux/usb/gadget.h
-@@ -310,6 +310,7 @@ struct usb_udc;
- struct usb_gadget_ops {
- 	int	(*get_frame)(struct usb_gadget *);
- 	int	(*wakeup)(struct usb_gadget *);
-+	int	(*set_remote_wakeup)(struct usb_gadget *, int set);
- 	int	(*set_selfpowered) (struct usb_gadget *, int is_selfpowered);
- 	int	(*vbus_session) (struct usb_gadget *, int is_active);
- 	int	(*vbus_draw) (struct usb_gadget *, unsigned mA);
-@@ -384,6 +385,8 @@ struct usb_gadget_ops {
-  * @connected: True if gadget is connected.
-  * @lpm_capable: If the gadget max_speed is FULL or HIGH, this flag
-  *	indicates that it supports LPM as per the LPM ECN & errata.
-+ * @wakeup_capable: True if gadget is capable of sending remote wakeup.
-+ * @wakeup_armed: True if gadget is armed by the host for remote wakeup.
-  * @irq: the interrupt number for device controller.
-  * @id_number: a unique ID number for ensuring that gadget names are distinct
-  *
-@@ -445,6 +448,8 @@ struct usb_gadget {
- 	unsigned			deactivated:1;
- 	unsigned			connected:1;
- 	unsigned			lpm_capable:1;
-+	unsigned			wakeup_capable:1;
-+	unsigned			wakeup_armed:1;
- 	int				irq;
- 	int				id_number;
- };
-@@ -601,6 +606,7 @@ static inline int gadget_is_otg(struct usb_gadget *g)
- #if IS_ENABLED(CONFIG_USB_GADGET)
- int usb_gadget_frame_number(struct usb_gadget *gadget);
- int usb_gadget_wakeup(struct usb_gadget *gadget);
-+int usb_gadget_set_remote_wakeup(struct usb_gadget *gadget, int set);
- int usb_gadget_set_selfpowered(struct usb_gadget *gadget);
- int usb_gadget_clear_selfpowered(struct usb_gadget *gadget);
- int usb_gadget_vbus_connect(struct usb_gadget *gadget);
-@@ -616,6 +622,8 @@ static inline int usb_gadget_frame_number(struct usb_gadget *gadget)
- { return 0; }
- static inline int usb_gadget_wakeup(struct usb_gadget *gadget)
- { return 0; }
-+static inline int usb_gadget_set_remote_wakeup(struct usb_gadget *gadget, int set)
-+{ return 0; }
- static inline int usb_gadget_set_selfpowered(struct usb_gadget *gadget)
- { return 0; }
- static inline int usb_gadget_clear_selfpowered(struct usb_gadget *gadget)
+ static void dwc3_gadget_linksts_change_interrupt(struct dwc3 *dwc,
+@@ -4157,6 +4214,10 @@ static void dwc3_gadget_linksts_change_interrupt(struct dwc3 *dwc,
+ 	}
+ 
+ 	switch (next) {
++	case DWC3_LINK_STATE_U0:
++		dwc3_gadget_enable_linksts_evts(dwc, false);
++		dwc3_resume_gadget(dwc);
++		break;
+ 	case DWC3_LINK_STATE_U1:
+ 		if (dwc->speed == USB_SPEED_SUPER)
+ 			dwc3_suspend_gadget(dwc);
+@@ -4225,7 +4286,7 @@ static void dwc3_gadget_interrupt(struct dwc3 *dwc,
+ 		dwc3_gadget_conndone_interrupt(dwc);
+ 		break;
+ 	case DWC3_DEVICE_EVENT_WAKEUP:
+-		dwc3_gadget_wakeup_interrupt(dwc);
++		dwc3_gadget_wakeup_interrupt(dwc, event->event_info);
+ 		break;
+ 	case DWC3_DEVICE_EVENT_HIBER_REQ:
+ 		if (dev_WARN_ONCE(dwc->dev, !dwc->has_hibernation,
+@@ -4485,6 +4546,7 @@ int dwc3_gadget_init(struct dwc3 *dwc)
+ 	dwc->gadget->sg_supported	= true;
+ 	dwc->gadget->name		= "dwc3-gadget";
+ 	dwc->gadget->lpm_capable	= !dwc->usb2_gadget_lpm_disable;
++	dwc->gadget->wakeup_capable	= true;
+ 
+ 	/*
+ 	 * FIXME We might be setting max_speed to <SUPER, however versions
 -- 
 2.7.4
 
