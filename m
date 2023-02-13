@@ -2,99 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A3F69457E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C4069456D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:11:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjBMMMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 07:12:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
+        id S231341AbjBMMLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 07:11:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbjBMMLO (ORCPT
+        with ESMTP id S231293AbjBMMKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 07:11:14 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC121A66D
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:10:43 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id qw12so31328585ejc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:10:43 -0800 (PST)
+        Mon, 13 Feb 2023 07:10:43 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FAB3C08
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:10:28 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id n33so2533925wms.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:10:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7JwitY1QgTn2wW32f2EWY7DiZlNcao6/ffQYXSOSkgM=;
-        b=hGvnAsUOiAo8e5XcrV48vO8k565QbdVnV75roqlQVSvdFxJxTvTQOQLz7BHO+B50vI
-         RHkrT0HDr85tVr/1L45VwNonktRigwIYL59ygol+VfkoyhnTD3w+yeCZvhD1uJ2e9f8w
-         tysowusaNeRWUdr8mApnOVAULocSOn8iC4/f6Cuam+6iF2e+PzlmhVKBbKgL5UpxGKPT
-         MTS0nHr2WnEN0UYLdk/Z3GYU+gngVviUfGLxq07nCwYVeQvoX4Ud5rZMOHzNxXb6aNkF
-         nfUgNsL/YYHBQL8oRZCWZmPJrliqhgNkZkXvhlouoPRdaNiVvE2Y3so3NEUGqcA/5cBR
-         LrYQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9MaV0V+7vWugnBV1ToolFUuuNSy4tV5osQNFJ4N+ljw=;
+        b=PSq69g92d9LKqQNBdzaFMIQ7WRDNvGmXjHLTpbtOKyT2QNfe95h38EVbbFa2G7UcLy
+         zDV/EnTJamYgnLq5t2KbZbVASQKaOmVvWl7MKSQaZ4NgWBpCpDh1unROKzC/rXmx84mx
+         /lM82PfGy7AvlhpdvQpFZIg2rLTuo0MLHwI6aI08XH94aIKVl6maSc0h4F+bsxoAeyE/
+         NdQ4W8G0uUvEgEWOFdqxXDT+4RzkO4PAlleJ/PD0fsj3fQ6bRnCx4GiYBbU2poycHkyc
+         mSzLgbc/xrj83O52tTAIYVsvS/p+Eb5fUubGXsy+2igGi/Uz1SAoiZgTU8NVeEBFuRrC
+         7LqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7JwitY1QgTn2wW32f2EWY7DiZlNcao6/ffQYXSOSkgM=;
-        b=7l6cikiZNL47zwCTx39Q7ZZUPiVvYtiRQzl7CcX2U5edvXUxzJ9vjcRiG4k2UY5F8I
-         cy0FtdnUxzA2M2ZV3XmAptYJvaRXyX60M5RfqNDx1q2h61sRH1P3KVsaYAjlD+G+FI/N
-         9Pqtdr2dXbkZ+9kTPebk5Y7G1Gyklis8CwBqtqBTrbINVkeMgK7Dn8+S5fEt+5rDy6qK
-         e0MpBDwUii1xYWLFUneGRddb3iDmErVdRy0bhE6bgxgKWvRD0IUPfP9OxcgfVJeSTHwa
-         Pva6nSQaRFi1E0lrFuEWZR2WLWmZVG0tKc601RdFv10z+NYvLRLRnxVYicu4Dm3cJEdE
-         z2gg==
-X-Gm-Message-State: AO0yUKUcVhMztPI5wtzgzhZ+uIq3Y1avdmiFHF6p+7492Q1DYftV9jv/
-        Jnj+veVkgFsg09sddLFkCoKCbA==
-X-Google-Smtp-Source: AK7set+6SrDx4uI0vo7NNZ4t0XgIX4cAV1njud9Qx+eGFNMTsJqmUI6+eio5NQ41tcqkR3g//ppAiQ==
-X-Received: by 2002:a17:907:9a0d:b0:8af:3fcc:2b05 with SMTP id kr13-20020a1709079a0d00b008af3fcc2b05mr14287763ejc.12.1676290240723;
-        Mon, 13 Feb 2023 04:10:40 -0800 (PST)
-Received: from localhost.localdomain (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id dt19-20020a170906b79300b0088ed7de4821sm6651586ejb.158.2023.02.13.04.10.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 04:10:40 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9MaV0V+7vWugnBV1ToolFUuuNSy4tV5osQNFJ4N+ljw=;
+        b=vdWKlVpTQ7Z0Jgg/otALnPl+JG1DDv7QKyfPRWHIQ6PL9ku7QGzauzf4jyz5AJXI4y
+         tz20rG6bX5RTXjpL58Ak1p0MtRivmEA/olrHEciY5OLTA8H2TTvjxXNwrWDoy7il7KqH
+         +pJb35xqyHLaaBq73F3EwuDXZeqBey9bZUENNHKXdRxsncdK7tZFCP2SnwQOyTqwvUmE
+         ZxXNe1SwRw/oWqFboSUh2CJ5vfMxTLyu2V6WggtRuMIRbnwvDD0VkODDn/FMlCIw7Scq
+         MDWmdPsggzzm5GrtagE6Zrrl38w/Ay3bet/WMZ2DeLx7l9vzZgPpFwChX2wk7dSN9dwN
+         D/8g==
+X-Gm-Message-State: AO0yUKWMH/kVursOssF1mWSFQZYAO8LRhulbeyptyPt/1TX3gbnhBfOv
+        9t8A+tDrUSdKUxQA/VyD0wA8Jg==
+X-Google-Smtp-Source: AK7set8bQ8INp/EJISlse7CDCP/1ExXeTUzaodeinMKBFLAToTqtqUVeMmw/ZfxSvpikfwKgdgrKsg==
+X-Received: by 2002:a05:600c:a295:b0:3dd:1bcc:eb17 with SMTP id hu21-20020a05600ca29500b003dd1bcceb17mr18735513wmb.28.1676290224741;
+        Mon, 13 Feb 2023 04:10:24 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id c15-20020adffb4f000000b002c5441dae62sm9119007wrs.17.2023.02.13.04.10.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 04:10:24 -0800 (PST)
+Message-ID: <dfb765a1-a2bd-c5e3-344a-b368fad6d8de@linaro.org>
+Date:   Mon, 13 Feb 2023 13:10:23 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 02/17] dt-bindings: arm: apple: apple,pmgr: Add t8112-pmgr
+ compatible
+Content-Language: en-US
+To:     Janne Grunau <j@jannau.net>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 9/9] arm64: dts: qcom: sm6115: Use the correct DSI compatible
-Date:   Mon, 13 Feb 2023 13:10:12 +0100
-Message-Id: <20230213121012.1768296-10-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230213121012.1768296-1-konrad.dybcio@linaro.org>
-References: <20230213121012.1768296-1-konrad.dybcio@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mark Kettenis <kettenis@openbsd.org>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230202-asahi-t8112-dt-v1-0-cb5442d1c229@jannau.net>
+ <20230202-asahi-t8112-dt-v1-2-cb5442d1c229@jannau.net>
+ <5ebf96d9-689a-f915-29b8-31af891fc63f@linaro.org>
+ <20230213115741.GA17933@jannau.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230213115741.GA17933@jannau.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the non-deprecated, SoC-specific DSI compatible.
+On 13/02/2023 12:57, Janne Grunau wrote:
+> On 2023-02-13 12:10:36 +0100, Krzysztof Kozlowski wrote:
+>> On 12/02/2023 16:41, Janne Grunau wrote:
+>>> The block on Apple M2 SoCs is compatible with the existing driver so
+>>> just add its per-SoC compatible.
+>>>
+>>> Signed-off-by: Janne Grunau <j@jannau.net>
+>>>
+>>> ---
+>>> This trivial dt-bindings update should be merged through the asahi-soc
+>>> tree to ensure validation of the Apple M2 (t8112) devicetrees in this
+>>> series.
+>>
+>> No, the bindings go via subsystem. Just because you want to validate
+>> something is not really a reason - you can validate on next. Don't
+>> create special rules for Asahi... or rather - why Asahi is special than
+>> everyone else?
+> 
+> We did that 2 or 3 times in the past without commnts that it is not 
+> desired so I wasn't aware that this would be special handling.
+> 
+> Merging binding and devicetree updates together looks to me like the 
+> most sensible option since dtbs validation is the only testable 
+> dependecy of dt binding updates.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+But it is not the recommended practice. Bindings were always going with
+drivers and this was said by Rob multiple times.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index bff067ed2e94..15811be82acc 100644
---- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -1447,7 +1447,7 @@ opp-384000000 {
- 			};
- 
- 			mdss_dsi0: dsi@5e94000 {
--				compatible = "qcom,dsi-ctrl-6g-qcm2290";
-+				compatible = "qcom,sm6115-dsi-ctrl", "qcom,mdss-dsi-ctrl";
- 				reg = <0x0 0x05e94000 0x0 0x400>;
- 				reg-names = "dsi_ctrl";
- 
--- 
-2.39.1
+For sure if there is no driver update at all or subsystem maintainer is
+not responsive, bindings were picked up by SoC folks, but it's rather
+fallback, not the main path.
+
+> Keeping them together ensures the dtbs validate without delaying 
+> devicetree changes by one kernel release after the dt-bindings change 
+> was merged.
+
+dtbs will validate on next and in next release the same way if bindings
+go via subsystem. I don't see the benefit nor any difference for
+validation. What type of delay? Why would you ever need it?
+
+> I suppose it works out most of the time if the merge request is sent 
+> only if it validates in next. That still depends on the merge order in 
+> the merge window but -rc1 should be fine.
+
+There is no requirement of dtbs_check for bisectability. Bindings are
+separate (also exported to other users), thus it is expected to have
+here async.
+
+> 
+> I'll consider devicetree validation as eventually valid from now on and 
+> not care too much about it.
+
+Everything will validate once reaches next as well...
+
+Best regards,
+Krzysztof
 
