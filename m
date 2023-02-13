@@ -2,115 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 025C06952A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:04:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DEA69529A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:03:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbjBMVET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 16:04:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56368 "EHLO
+        id S229658AbjBMVDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 16:03:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbjBMVEK (ORCPT
+        with ESMTP id S229922AbjBMVDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 16:04:10 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6494221A2B
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:03:46 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id z8-20020a170902834800b001990ad8de5bso7976224pln.10
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:03:46 -0800 (PST)
+        Mon, 13 Feb 2023 16:03:38 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DD81B55E
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:03:36 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id jg8so35085487ejc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:03:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7d5Y9CwOq9CkLMA/pzajcIbcjKDJQOL+VAkXtqdrmoQ=;
-        b=dQUCK+3atvzjAYnG6diZ749RR4YR1PjBljouKrQXGQ1jhV0ZMQ0ytCKw7uOSonFRaP
-         scXi1sRg6thyg+6ldgeP5rzi78mly8cke/IMPcv9qWsCtpOkSQei4quBvfLN0HLs9nEs
-         /BBALLqR863Yln2NaRRgr5ICFSTE9rTDtvre6So1yrA+4VNsqUk9ZKHgwWuy+OyZtWzn
-         P8BsBL7dEEdGxwpYn7K5WCYExVUhArxceaJ4ezy6fl4U0cpWAIeOrLHgqxur/GBlTtTA
-         rpd9IbIG6/bOTywsMcSUTtw1ZK755V/zzQerNorhGLQEMnakuOQi3Sq2//FiRgIpaU4B
-         CCtg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Iji4WhAMH0Xmn8u5RXywgde50zqMluNVEZrLkL99lQI=;
+        b=JWIN7BjsMXeTBrob8om/pfjSkeFrv+OedJ5dsaZOpjKajckRr4pYijEPUOh070ZigC
+         KInhWm1zvQwCGNpCMrTjDMPtDtECn6wqMX5871O8oGpM2MH0PGAXPbZi1RNRu3swc9cx
+         8I9SWsSiKn7Ti8EqELbAh851FFr32n4WO2mmni8krG8q6IEZ81gHfvrfQHiw38w2anUy
+         dtuBqtlfO9uttQfMgx2NGQwSbi/206bSWijTfqUcBvFuINiw7hEcXUFnpryMz518HrFo
+         iP6BMq+kymDiN/qfp37dQ9SLTUJk5hK8w9qwAVkrah9UlluxY9F3datvervED7NKKqou
+         OPpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7d5Y9CwOq9CkLMA/pzajcIbcjKDJQOL+VAkXtqdrmoQ=;
-        b=k0+7lEPBg9gywaBthATU2MjFvNsWVI1kifrokxzPh8Yqr1P/F66xVRmpnrIuXB6iG8
-         kfY/Ax/fKyWN9uHkXso2FIg0IsYJYTSnGb/I4Wt+n54D8vYrEh58cGbtGyZkZZZyJPiv
-         yWiuXeziTvvphZSHtSyQexYwPaIBwnQwMFLvypMF9Y6IdQQIO23rcH5lWc60Y5ZbPcxm
-         s8TvMcZVgZlUNoVspj3M0BKivwIAhfS52dxuvtBGl1Y0b+s6SyFCwARaX4C+tb8cfMHB
-         0yEKgxGzZ1XI4Lu+bezCB1udYJQzmoMTS1w37zs/0kwH03lhEqraGWYGojBqdZl5n5yu
-         tKkw==
-X-Gm-Message-State: AO0yUKXSHQw3E60agVnlj9L7/8P8lxQklVHv4yAXXFE16q+uDAourKfN
-        4e+YVxdpx9UjWMEbJ8fIurv+0v48BzH7390=
-X-Google-Smtp-Source: AK7set/acRsddQkT9b91dxC7gpzYx4jToPjVSTJJ/eAZPdxerL9ylmXMUS+Raxg5ZILhlWxD65DXjP3BZXzpS2Y=
-X-Received: from zaidcloud.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5325])
- (user=zalbassam job=sendgmr) by 2002:a17:90a:7d13:b0:230:eeba:2176 with SMTP
- id g19-20020a17090a7d1300b00230eeba2176mr4399859pjl.56.1676322225854; Mon, 13
- Feb 2023 13:03:45 -0800 (PST)
-Date:   Mon, 13 Feb 2023 16:03:19 -0500
-In-Reply-To: <20230213210319.1075872-1-zalbassam@google.com>
-Mime-Version: 1.0
-References: <20230213210319.1075872-1-zalbassam@google.com>
-X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
-Message-ID: <20230213210319.1075872-9-zalbassam@google.com>
-Subject: [PATCH v3 8/8] ARM: mach-virt: Select PMUv3 driver by default
-From:   Zaid Al-Bassam <zalbassam@google.com>
-To:     Jesus Sanchez-Palencia <jesussanp@google.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Iji4WhAMH0Xmn8u5RXywgde50zqMluNVEZrLkL99lQI=;
+        b=VbcVxyvLSEX/3tLzAlYAQ5z/121glNYj+D84zDo4momfWm4r8kR6qw0+gQUJ/6T7L5
+         cvDzrAsFIF3TyEsKtSBj5UgL9Dku6itj0yuOJCN7e0BySL64Y9RTDU6elafP1o2qV1zt
+         nx+vaudUXQhX+tQpoY3ZdJMo+5utUABb6cAHC/1Bpw5foqQrEipnULkfko21bAwk60U8
+         dg31zvKrdkfGnowkoJHlpNZFdg04BRab9a+QT/bOhMeGQ1YCDlB28HsNNDMOafLVJudC
+         LEcMSrruVKQmnGmHHe/Ql/pbIH3Mbj1BYZEXE38eVSAuOhvd1TNHEgoSMwvhb7HTNoT3
+         EFsA==
+X-Gm-Message-State: AO0yUKWSgDvhCgNWNgrma96nGh+XywdSZEKKptDl56wFO4PffoEw45ZW
+        APFHrlVoAl/OENZtbBtExeJhtQ==
+X-Google-Smtp-Source: AK7set+bxnF/WKv8MHWQwYSGBhSYvo1XxGDGWMal/mZfydY/KsKfbm821kTrLrJcoqpSqj3N57ZDQQ==
+X-Received: by 2002:a17:907:3f91:b0:8aa:9841:5e29 with SMTP id hr17-20020a1709073f9100b008aa98415e29mr326126ejc.77.1676322214542;
+        Mon, 13 Feb 2023 13:03:34 -0800 (PST)
+Received: from localhost.localdomain (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
+        by smtp.gmail.com with ESMTPSA id n24-20020a170906379800b008af2c131d4csm7282148ejc.5.2023.02.13.13.03.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 13:03:34 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu
-Cc:     Marc Zyngier <marc.zyngier@arm.com>,
-        Zaid Al-Bassam <zalbassam@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: msm8998: Fix stm-stimulus-base reg name
+Date:   Mon, 13 Feb 2023 22:03:31 +0100
+Message-Id: <20230213210331.2106877-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Zyngier <marc.zyngier@arm.com>
+The name stm-data-base comes from ancient (msm-3.10 or older)
+downstream kernels. Upstream uses stm-stimulus-base instead. Fix it.
 
-Since 32bit guests are not unlikely to run on an ARMv8 host,
-let's select the PMUv3 driver, which allows the PMU to be used
-on such systems.
-
-Signed-off-by: Marc Zyngier <marc.zyngier@arm.com>
-Signed-off-by: Zaid Al-Bassam <zalbassam@google.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
+Fixes: 783abfa2249a ("arm64: dts: qcom: msm8998: Add Coresight support")
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Not tested on hw.
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 137f89ad05211..3802997fb36e6 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -400,6 +400,7 @@ config ARCH_VIRT
- 	select ARM_GIC_V3
- 	select ARM_GIC_V3_ITS if PCI
- 	select ARM_PSCI
-+	select ARM_PMUV3 if PERF_EVENTS
- 	select HAVE_ARM_ARCH_TIMER
+ arch/arm64/boot/dts/qcom/msm8998.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+index 76b65732d8d8..9f94351f7460 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+@@ -2547,7 +2547,7 @@ stm: stm@6002000 {
+ 			compatible = "arm,coresight-stm", "arm,primecell";
+ 			reg = <0x06002000 0x1000>,
+ 			      <0x16280000 0x180000>;
+-			reg-names = "stm-base", "stm-data-base";
++			reg-names = "stm-base", "stm-stimulus-base";
+ 			status = "disabled";
  
- config ARCH_AIROHA
+ 			clocks = <&rpmcc RPM_SMD_QDSS_CLK>, <&rpmcc RPM_SMD_QDSS_A_CLK>;
 -- 
-2.39.1.581.gbfd45094c4-goog
+2.39.1
 
