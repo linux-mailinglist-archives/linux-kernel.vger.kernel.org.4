@@ -2,386 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA8B693BF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 02:56:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A6C693BFB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 02:57:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjBMB4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 20:56:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58676 "EHLO
+        id S229484AbjBMB5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 20:57:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBMB4W (ORCPT
+        with ESMTP id S229457AbjBMB5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 20:56:22 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58021EF97;
-        Sun, 12 Feb 2023 17:56:21 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 3339A32004E7;
-        Sun, 12 Feb 2023 20:56:20 -0500 (EST)
-Received: from imap50 ([10.202.2.100])
-  by compute6.internal (MEProxy); Sun, 12 Feb 2023 20:56:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1676253379; x=1676339779; bh=zLpLD80M2L
-        vq4/USAIGcEVrxzFXr/oAqqJkxrCE4o+Q=; b=cG+u8oZxu5Ep2TiLfexaGZqSy4
-        zfP+QEUhp69nQYyp/y1HnNfO3u/QwZd8xyyjnpXp063xrupqIzwOkaav83HEhfOe
-        YtaKXzYQw8sMUNeFQNzpMJ8E2WrjCOG9cc0IcO4RVSLPAr86XR890m+qenkCsUQs
-        f50xgqp/LHGE0PndAHBISYh+ANXCfoRfybM+RA8fHhVW35WrfefhPme1jn/cDdV0
-        xLnJq0yjZ+lW0Y+1L7S2DsT7LHoS5jIqA2oF5EfElfeE1kgXcTboifZ10FZniPnW
-        B+1Mu8xDSuAlchRgASVWFnID1d1AhLHyuUALEpG3JtuhqdzTAgiIQZY35TjA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1676253379; x=1676339779; bh=zLpLD80M2Lvq4/USAIGcEVrxzFXr
-        /oAqqJkxrCE4o+Q=; b=hRffhh10X3E6fuvaKZF+e8BYvrg3Eztwy53wiPNT1UL3
-        HD14AODuWO1o+ABr9b9duOVW6OD0jnBcQER8lQgk1cYqb9CunJD1IsKJStXcc1P+
-        Fc8kstnU+IcOtI/Crvn571Exv7hsYxROiloyoJZlSW26mGF9iuLoIhDWfWO0FEQV
-        YoCqs1Hvcfu4w0HYc5MMbDfy5eiibKvG/hhOCPgzVlHek/qPRG673NAgboEGTpIZ
-        eaaVfqhC/QSZHbZ0b2gHBvi8wC9x9JbQ3TUNrc++7pBIMscD834mzMKP2viCwoU9
-        5+VDMeXz8iNje566aTxgH9B9h92ZfINNoTXmvTwLXQ==
-X-ME-Sender: <xms:w5jpY0_06DPd-p6LHFlsy348pxwSw37j94riTMv05SJBdu4QDwk3zQ>
-    <xme:w5jpY8sbeWgmFePn5cxHGmohcKD1J-5BESJokoPq3YmDzTfPJWWJOhPof2cP2QFoy
-    J7rirzPspAFaD-pPg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeitddggedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
-    ughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucggtf
-    frrghtthgvrhhnpeekvdekjeekgfejudffteetgeejkeetteduvedtffdtledutdfhheev
-    feetkeeiteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegrnhgurhgvfiesrghjrdhiugdrrghu
-X-ME-Proxy: <xmx:w5jpY6CPDestTPsrbNAvivcxn2EazOjpLQwwYYCFM4pBM0ombMPT3Q>
-    <xmx:w5jpY0dTM7C-wgX8EI4YY6x4eDXC7kwNLGa8RGLF-Z51ekzy8aWgSQ>
-    <xmx:w5jpY5MDZLYXfRXEfzStgpI_BVpdAPl0Noc_XUuV1KydNTHC49y4Hw>
-    <xmx:w5jpY8cuXSN_euPXt8uJbIYM_EcXzm_-OYelzESUV_EG3vdRpwjebA>
-Feedback-ID: idfb84289:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 201031700089; Sun, 12 Feb 2023 20:56:19 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
-Mime-Version: 1.0
-Message-Id: <12424bbd-cd3c-4d96-a7d8-1c83241b845f@app.fastmail.com>
-In-Reply-To: <20230210103829.74470-2-jordan.chang@ufispace.com>
-References: <20230210103829.74470-1-jordan.chang@ufispace.com>
- <20230210103829.74470-2-jordan.chang@ufispace.com>
-Date:   Mon, 13 Feb 2023 12:25:57 +1030
-From:   "Andrew Jeffery" <andrew@aj.id.au>
-To:     "Jordan Chang" <jordan.chang@ufispace.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Joel Stanley" <joel@jms.id.au>, "Rob Herring" <robh+dt@kernel.org>
-Cc:     jay.tc.lin@ufispace.com, eason.ys.huang@ufispace.com
-Subject: Re: [PATCH v4 1/1] ARM: dts: aspeed: Add device tree for Ufispace NCPLite BMC
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 12 Feb 2023 20:57:33 -0500
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2114.outbound.protection.outlook.com [40.107.215.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC4FEF93;
+        Sun, 12 Feb 2023 17:57:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QSK7KYU2E5B7ip+4jqWWDxkd9vUNCj8t7DXBbR+x0lABJMrp1fXkGccoaHRKxauWFtHrG3H3qMBB25IJ0VlVkYI2nDbh94YBemmVm74tip43yfTVQyexcaDKfwTN3IGaO54FlcH5bynRvh0kxiavHf+wCi/HchXfgsN7A+IPLVhzQH8Zdqm4bYEFGrAXFmah78pZqY1PcA0Q7qlGjzr2ppCwpias7E0DNiGHljGZyZTu9XtrVqMFYs6zO+MDe1IeZAT4pz+Dtt3Pqrs8J+MYwAa/qeEg/x0ztCQNB8bnK8oaOknKY8siX8wSGl1a29AQeSbRMB8S9qxmQ1SKRQPUYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/30rMzC427EyOJhGSW7RT2MH2AsJZi6wieJuHcBc5a8=;
+ b=VPV2zvSnh6lmdUFVegMSnoFMaBZhZzMk6G0uiY/2L7G0j5uIlzvgCmE8xVaOa7h3+vElHb5+zCka8wDIfZQgk2OQCi05+UE731FhRWQQKZ0cSiAQCeZGbMtybenPUwwrKmuKhU1IOyYl8qZLV2NltCl9NJHDXQrhqUlxhuzzG0L9B/4W+pYLqOpmg70OWsDErqz1lofDKZPvYBT3mGVBR2D5CGHqrzeqlyxSFpcl+eqVZ+wtwg97yw2QSzC6fAi34xNtNp4rAw9gkSsBvbtyKxfoXPUvmZgJSxKNThMEo79Z0k28nMCr5uG0q0/C/VRfL6NOQjbSQpn0x8nGFipHKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/30rMzC427EyOJhGSW7RT2MH2AsJZi6wieJuHcBc5a8=;
+ b=gbwwjbfuNGxIX1OzT0bpkQ3ix1fqSSGp57903aVuvPS9z/ATkStus8NfEJA6BZJjnrHqMeN0j5nN8QTZZ4AR5ekJZb1LanZxn1pxq2MiHwRSD3J7n/Cu6mOzyvYI3Mp7jLAmu5kPKPPZIe4uUueWr9kuq9KRVwyiatMlvpg2zM8zeBqJZt/FQk93/ArSFJcXswScMXeViqII8h0fYt+hGXDiqAlfH4OpwbccyaN9PiJcUXPsUkGjCEHthuj++d51hQvssGbZFw86cE0tM22E7DvJDy+2bjkUIub34e9cSP1vAE/iYIroCbhmC/S4h+pYM4PNS5xCRupaL4+ngk4k/w==
+Received: from KL1PR0601MB3781.apcprd06.prod.outlook.com
+ (2603:1096:820:11::14) by TY0PR06MB4982.apcprd06.prod.outlook.com
+ (2603:1096:400:1ae::5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.8; Mon, 13 Feb
+ 2023 01:57:21 +0000
+Received: from KL1PR0601MB3781.apcprd06.prod.outlook.com
+ ([fe80::2cd0:fdbf:62e0:8eaa]) by KL1PR0601MB3781.apcprd06.prod.outlook.com
+ ([fe80::2cd0:fdbf:62e0:8eaa%4]) with mapi id 15.20.6111.010; Mon, 13 Feb 2023
+ 01:57:21 +0000
+From:   ChiaWei Wang <chiawei_wang@aspeedtech.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
+Subject: RE: [PATCH 1/4] dt-bindings: aspeed: Add UART controller
+Thread-Topic: [PATCH 1/4] dt-bindings: aspeed: Add UART controller
+Thread-Index: AQHZPSFcEcSQ+pRfl0eZpwMLVeoGZq7H5ViAgAQ7dPA=
+Date:   Mon, 13 Feb 2023 01:57:21 +0000
+Message-ID: <KL1PR0601MB3781A9E9E209F2E94CE2F08D91DD9@KL1PR0601MB3781.apcprd06.prod.outlook.com>
+References: <20230210072643.2772-1-chiawei_wang@aspeedtech.com>
+ <20230210072643.2772-2-chiawei_wang@aspeedtech.com>
+ <2d0d1866-95f9-942d-57e0-06a5ed17d35d@linaro.org>
+In-Reply-To: <2d0d1866-95f9-942d-57e0-06a5ed17d35d@linaro.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: KL1PR0601MB3781:EE_|TY0PR06MB4982:EE_
+x-ms-office365-filtering-correlation-id: c70bede0-b75d-41d5-e757-08db0d65a501
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: XCYlqp5yEXkTIzrjT91aiaET46iCzGvZ4lnUNM14ZQa4FoWWUKRPn1YEnVX3XaMol3SWjj8BCwDk45xfL3g05lu5mPpBnR8LwBGDgrvrFicLkbao8j9T0KLeck9NHp/ThLIO+YtirKYnrNbWAPbPwmgFsHE0tc/uIYW8XjmR9wXn7BniF51p8qirIQEOHYxBHHKDzJHG7V3BdHkW9vU2rKsZTL618sGg2yhddwq71UF2Ml+Y02ZQQi+ae+yGOrmWcHRqtZP1a1vGc6z/g4GiU5QhpH28YoqxC9+m3pGExsdHJbmIF8hvWIco7EeeBbIqcWZDoGwHAo1nO6Wd09fyX5lb+Acv3RFsHFs5ZNKmI5zZR+rnO6NBvhgBQ8EtWeAlpZvOFjOokBb1wmgcn3cKd8x7be3draEtknRmGxxqKfBsMwDun640SMGm3O1Kra/TlLNnQ2CSU68b0Tvyk1ziYgOR671Yq9eRYkG08OwUxuF7o4WV68Mw9XlXmO7TxrXgffN1fwepDzZbmpKGZckwFoRDleDz+C4glsDPwMOoFGD7UPpeC/kvDCv/6dtOhgpfJvSdYjUJwcatXkjYE6i0ICqZjj1DYLdp/859UaPoZ8T6h+9f2tqdxiInGNtckzXCSmwBcXUOROhLLOJiMgzbFenLjDLMNcdiNG9Bs8AP6I/tl2wzG1l+8QrgW9zYISqYVWiiTGEpW6yZE5ubcQ/oC/XoU76likg0scRqGoqqtAe+5Ii93k/FtoCe/8416fvpRpd0ZAynhhopJodAkyd8t/JWHHJp9aid5cBZDtjgjCE=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR0601MB3781.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(346002)(136003)(39840400004)(376002)(396003)(451199018)(83380400001)(38070700005)(921005)(38100700002)(55016003)(122000001)(64756008)(5660300002)(41300700001)(8676002)(52536014)(6506007)(9686003)(66946007)(53546011)(66446008)(66476007)(66556008)(76116006)(7416002)(2906002)(966005)(316002)(110136005)(8936002)(7696005)(86362001)(33656002)(71200400001)(26005)(186003)(478600001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Yy9NNjFSV2ZrOVVZRnBEeEtXWkpkK2hjcy9WeHpNWjlBTDY2enUyb2hSekZU?=
+ =?utf-8?B?Q1FCckxXRmlIYTdEK2tpU1NCNWFSSDJXSm9NTGdNbndVOXRGc1ZBZ3pKdmVF?=
+ =?utf-8?B?YXdNY3U1a2RXN2ZqeG1aengyTE1uZkJMSmxrVUpoa0JDUFRIaGJsYTJLdXhs?=
+ =?utf-8?B?K3pTSm03dFRJa0YvNmdwcytrWUNrdmprN0pFMVV2Vm83VHg1aXB6UzVxSTRu?=
+ =?utf-8?B?UmhwYmQxWDZhWVRQTFpTVWxmOHp3VkJ0RUZtNmx4VWVUd2FNbUduSnIzWEdt?=
+ =?utf-8?B?aWNrR0JWdFZZdEZ1WmEzeHhUZmNyVVdVWjhBZXc0b0tnOFI3Q1JWRVBRQkJP?=
+ =?utf-8?B?OWlkeHZsak1Qb2llZ0s3Y0c4MHh2ZitOSndGRWtGdmR5c0UxUnpOdzhqVjNX?=
+ =?utf-8?B?MWp4UmZvS3VEUllSNDBGbkZibmtHd0VsWVBVOWE1dmJ2cm1kK3VZRTdaYThq?=
+ =?utf-8?B?Qy84eWwwc1J5bTlpSHBGWVdMU1ppTVMxb3ZtdmIxN3RXTUpuSENZVFpCTThz?=
+ =?utf-8?B?a0grMnl3U1ZIRmpTRjFEdHIzTFhCRk1ZNXhrRHBzLzN3dUFjdnRhMExvOVZt?=
+ =?utf-8?B?eHhMRzBkRG90T2FPM3VRdldMVmNLdzIraDJROFYvZk5XMjByd1ZxS1N6M1R1?=
+ =?utf-8?B?V0NOWnJ1R09Sblc5OGFrdlhuRDNPWnlCL2NBQnZ4YUVZN21sNVNWU3Mram9O?=
+ =?utf-8?B?M0ZuZ1c5NmVLbUdGMnJaU1ZkZjJjang0RUxIU2wwQ3l3dEpaSDJKTDVvOVEz?=
+ =?utf-8?B?KytDOGR5bC9FRzE0MXlQdXhDZUhUY2k3a29jY2h1akRqR0J5U253aVlGZlBv?=
+ =?utf-8?B?M2xMUFVhMmxZWmthNHU2YmpvNXhYNjFuenNPb2JRSkNvNjZnOS9CeXd4K1VE?=
+ =?utf-8?B?bCtwaHArMVp6N29HZjc2VjFWZG8xUkMraEV4NmVHUmc0MGlNL29xTkxLY0xY?=
+ =?utf-8?B?UG5lcFBjN1ZzeDdFbUpOeWtJY2hQMUhkbDlFOFNzQ3ZMelJQUFhaSkN4OXJj?=
+ =?utf-8?B?S2pmc1kxMTlPUEM0VEpHZTVaNlUzK3Jnb1hkMDhxUFhFRmV2QWVKN2d4cEhS?=
+ =?utf-8?B?SVdTMTZLTkRQZ01DZ2F3WXNwaVRZMUFuMGszTU5UTU9iQXVIREtIcGkwaEVs?=
+ =?utf-8?B?TjZpdkFVNGlVNWQxZXRTeE9wSzdKOHltYnBHdGQxOS92ck8wRDY3dVRoUmJi?=
+ =?utf-8?B?MW83QmVha2ZFVDBKZTFDbHM3RFVCdWNrUUdQa045MjVjaUF2cWJzYXZDa0tX?=
+ =?utf-8?B?OGZWVGtLQmdjaCtjVmlIb21HYUV6bGNpQWNjSjhOL3k2QnJ6b250OTA5WFpu?=
+ =?utf-8?B?bjlVeThwUFRYeGp4VUszb0M2TCtFdWsxdnBZSVNjVUZOQlhpeStZSnZCbDVu?=
+ =?utf-8?B?TUxkUTF0UjlwTTEwcXlycE9ZOUl4WnJIVDI2NTF3QjdpRUFjVGVWVVdSbWpE?=
+ =?utf-8?B?U3NpNTg2ZXhFRUo3OElTTUdiMWk5UlNWaUVSVnowaWd2QlpOaXVkSGtQY0Nv?=
+ =?utf-8?B?OWR4dzVTTVVHL29sMmZCU3U3WmRFMGMzSW5hOGh6MUMzV1Avb04xZjJtVGVW?=
+ =?utf-8?B?VnBqbURJOGhtQjRXZ0dMMzRQcnBVYUZJT0tlM0cyYlU4eFBaMk9KS0k4c2Rk?=
+ =?utf-8?B?Mi9Ea2JrMUY2SVhlSTVwRGsxQm5GUkxlT2RrYjhZWm83NnV1emJhRkVXRGRs?=
+ =?utf-8?B?ODNWeUplTmtPb1psaTk5RitBOEJIQmVHd21zQm1JaGRkc3RFUEkzMytvOVdX?=
+ =?utf-8?B?M1ZGOFIvRW8xREVueFYwSUFCUUlCd1pYc2FURCtVR1BWa0V2SDZRZFhNT2x6?=
+ =?utf-8?B?aVBJanZFbnlMbVNKK1B2NXllN0QxMkZWLyttMC9qYkMyOFVVYy96TGY2MGhn?=
+ =?utf-8?B?dVEyTzBXVVpmdUI1dExzTmhRMk5jc2ZPSjg0blVUMDZXOHRYVEdXLzdLYXpG?=
+ =?utf-8?B?TThna1FYR2hBWjZPdTV1SEovQjRqSWtlY2xJR1pwaG5CNXlacmNFZkpteHBN?=
+ =?utf-8?B?eWVqdzExVjNHQTB2bSswb3dkeTVaK2J1NWZPWGdDTVdtdlhDbkk0eHJDVzhi?=
+ =?utf-8?B?TUxBU2c5NzhMVG9yL0Q5RzkweGs5TkF2VlViNWhLYWZ0T3ZxSzM5MmVxZHJw?=
+ =?utf-8?B?Q2RTVFBMZEJBaHZkYzhveXlFcU5OQUhLdmVvWUxjK0lQc0RmWGttQzFmWGJj?=
+ =?utf-8?B?bVE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR0601MB3781.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c70bede0-b75d-41d5-e757-08db0d65a501
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Feb 2023 01:57:21.3968
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Xbj3R857i98ZC2QH8LqnH5ZMUex9oHgcixzHv2UiR+a8ot9dXgO80dSVHE8m+2OGKy0Uai8u4o4fHP9aYLxAFUP8/emN0dLr5/+ZbugJKPw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB4982
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Fri, 10 Feb 2023, at 21:08, Jordan Chang wrote:
-> Add initial version of device tree for Ufispace NCPLite platform
-> which is equipped with AST2600-based BMC.
->
-> Signed-off-by: Jordan Chang <jordan.chang@ufispace.com>
-> ---
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../boot/dts/aspeed-bmc-ufispace-ncplite.dts  | 359 ++++++++++++++++++
->  2 files changed, 360 insertions(+)
->  create mode 100644 arch/arm/boot/dts/aspeed-bmc-ufispace-ncplite.dts
->
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 2ee9c043218b..d26e0651e805 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1626,6 +1626,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
->  	aspeed-bmc-inventec-transformers.dtb \
->  	aspeed-bmc-tyan-s7106.dtb \
->  	aspeed-bmc-tyan-s8036.dtb \
-> +	aspeed-bmc-ufispace-ncplite.dtb \
->  	aspeed-bmc-vegman-n110.dtb \
->  	aspeed-bmc-vegman-rx20.dtb \
->  	aspeed-bmc-vegman-sx20.dtb
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-ufispace-ncplite.dts 
-> b/arch/arm/boot/dts/aspeed-bmc-ufispace-ncplite.dts
-> new file mode 100644
-> index 000000000000..a3853bdcae9d
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/aspeed-bmc-ufispace-ncplite.dts
-> @@ -0,0 +1,359 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +// Copyright (c) 2022 Ufispace Co., Ltd.
-> +/dts-v1/;
-> +
-> +#include "aspeed-g6.dtsi"
-> +#include <dt-bindings/i2c/i2c.h>
-> +#include <dt-bindings/gpio/aspeed-gpio.h>
-> +
-> +/ {
-> +	model = "Ufispace NCPLite BMC";
-> +	compatible = "ufispace,ncplite-bmc", "aspeed,ast2600";
-> +
-> +	aliases {
-> +		serial4 = &uart5;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = &uart5;
-> +	};
-> +
-> +	memory@80000000 {
-> +		device_type = "memory";
-> +		reg = <0x80000000 0x80000000>;
-> +	};
-> +
-> +	iio-hwmon {
-> +		compatible = "iio-hwmon";
-> +		io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
-> +			      <&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
-> +			      <&adc1 0>, <&adc1 1>, <&adc1 2>, <&adc1 3>,
-> +			      <&adc1 4>, <&adc1 5>, <&adc1 6>, <&adc1 7>;
-> +	};
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +
-> +		event-fan-alert {
-> +			label = "fan-alert";
-> +			gpios = <&gpio0 ASPEED_GPIO(M, 2) GPIO_ACTIVE_LOW>;
-> +			linux,code = <ASPEED_GPIO(M, 2)>;
-> +		};
-> +
-> +		event-allpwr-good {
-> +			label = "allpwr-good";
-> +			gpios = <&gpio0 ASPEED_GPIO(V, 4) GPIO_ACTIVE_HIGH>;
-> +			linux,code = <ASPEED_GPIO(V, 4)>;
-> +		};
-> +
-> +		event-psu0-alert {
-> +			label = "psu0-alert";
-> +			gpios = <&gpio0 ASPEED_GPIO(V, 1) GPIO_ACTIVE_LOW>;
-> +			linux,code = <ASPEED_GPIO(V, 1)>;
-> +		};
-> +
-> +		event-psu1-alert {
-> +			label = "psu1-alert";
-> +			gpios = <&gpio0 ASPEED_GPIO(V, 2) GPIO_ACTIVE_LOW>;
-> +			linux,code = <ASPEED_GPIO(V, 2)>;
-> +		};
-> +
-> +		event-thermal-alert {
-> +			label = "thermal-alert";
-> +			gpios = <&gpio0 ASPEED_GPIO(P, 2) GPIO_ACTIVE_LOW>;
-> +			linux,code = <ASPEED_GPIO(P, 2)>;
-> +		};
-> +
-> +		event-cpu-caterr {
-> +			label = "cpu-caterr";
-> +			gpios = <&gpio0 ASPEED_GPIO(N, 3) GPIO_ACTIVE_LOW>;
-> +			linux,code = <ASPEED_GPIO(N, 3)>;
-> +		};
-> +
-> +		event-cpu-thermtrip {
-> +			label = "cpu-thermtrip";
-> +			gpios = <&gpio0 ASPEED_GPIO(V, 5) GPIO_ACTIVE_LOW>;
-> +			linux,code = <ASPEED_GPIO(V, 5)>;
-> +		};
-> +
-> +		event-psu0-presence {
-> +			label = "psu0-presence";
-> +			gpios = <&gpio0 ASPEED_GPIO(F, 6) GPIO_ACTIVE_LOW>;
-> +			linux,code = <ASPEED_GPIO(F, 6)>;
-> +		};
-> +
-> +		event-psu1-presence {
-> +			label = "psu1-presence";
-> +			gpios = <&gpio0 ASPEED_GPIO(F, 7) GPIO_ACTIVE_LOW>;
-> +			linux,code = <ASPEED_GPIO(F, 7)>;
-> +		};
-> +
-> +		event-psu0-power-ok {
-> +			label = "psu0-power-ok";
-> +			gpios = <&gpio0 ASPEED_GPIO(M, 4) GPIO_ACTIVE_HIGH>;
-> +			linux,code = <ASPEED_GPIO(M, 4)>;
-> +		};
-> +
-> +		event-psu1-power-ok {
-> +			label = "psu1-power-ok";
-> +			gpios = <&gpio0 ASPEED_GPIO(M, 5) GPIO_ACTIVE_HIGH>;
-> +			linux,code = <ASPEED_GPIO(M, 5)>;
-> +		};
-> +	};
-> +
-> +	gpio-keys-polled {
-> +		compatible = "gpio-keys-polled";
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +		poll-interval = <1000>;
-> +
-> +		event-fan0-presence {
-> +			label = "fan0-presence";
-> +			gpios = <&fan_ioexp 2 GPIO_ACTIVE_LOW>;
-> +			linux,code = <2>;
-> +		};
-> +
-> +		event-fan1-presence {
-> +			label = "fan1-presence";
-> +			gpios = <&fan_ioexp 6 GPIO_ACTIVE_LOW>;
-> +			linux,code = <6>;
-> +		};
-> +
-> +		event-fan2-presence {
-> +			label = "fan2-presence";
-> +			gpios = <&fan_ioexp 10 GPIO_ACTIVE_LOW>;
-> +			linux,code = <10>;
-> +		};
-> +
-> +		event-fan3-presence {
-> +			label = "fan3-presence";
-> +			gpios = <&fan_ioexp 14 GPIO_ACTIVE_LOW>;
-> +			linux,code = <14>;
-> +		};
-> +	};
-> +};
-> +
-> +&mac2 {
-> +	status = "okay";
-> +	use-ncsi;
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_rmii3_default>;
-> +	clocks = <&syscon ASPEED_CLK_GATE_MAC3CLK>,
-> +		 <&syscon ASPEED_CLK_MAC3RCLK>;
-> +	clock-names = "MACCLK", "RCLK";
-> +};
-> +
-> +&fmc {
-> +	status = "okay";
-> +	flash@0 {
-> +		status = "okay";
-> +		m25p,fast-read;
-> +		label = "bmc";
-> +		spi-max-frequency = <50000000>;
-> +#include "openbmc-flash-layout-64.dtsi"
-> +	};
-> +
-> +	flash@1 {
-> +		status = "okay";
-> +		m25p,fast-read;
-> +		label = "alt-bmc";
-> +		spi-max-frequency = <50000000>;
-> +#include "openbmc-flash-layout-64-alt.dtsi"
-> +	};
-> +};
-> +
-> +&uart1 {
-> +	status = "okay";
-> +};
-> +
-> +&uart4 {
-> +	status = "okay";
-> +};
-> +
-> +&uart5 {
-> +	status = "okay";
-> +};
-> +
-> +&kcs3 {
-> +	status = "okay";
-> +	aspeed,lpc-io-reg = <0xca2>;
-> +};
-> +
-> +&lpc_reset {
-> +	status = "okay";
-> +};
-> +
-> +&lpc_ctrl {
-> +	status = "okay";
-> +};
-> +
-> +&uart_routing {
-> +	status = "okay";
-> +};
-> +
-> +&wdt1 {
-> +	status = "okay";
-> +};
-> +
-> +&wdt2 {
-> +	status = "okay";
-> +};
-> +
-> +&peci0 {
-> +	status = "okay";
-> +};
-> +
-> +&udc {
-> +	status = "okay";
-> +};
-> +
-> +&adc0 {
-> +	vref = <2500>;
-> +	status = "okay";
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
-> +		&pinctrl_adc2_default &pinctrl_adc3_default
-> +		&pinctrl_adc4_default &pinctrl_adc5_default
-> +		&pinctrl_adc6_default &pinctrl_adc7_default>;
-> +};
-> +
-> +&adc1 {
-> +	vref = <2500>;
-> +	status = "okay";
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc9_default
-> +		&pinctrl_adc10_default &pinctrl_adc11_default
-> +		&pinctrl_adc12_default &pinctrl_adc13_default
-> +		&pinctrl_adc14_default &pinctrl_adc15_default>;
-> +};
-> +
-> +&i2c0 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c1 {
-> +	status = "okay";
-> +
-> +	temperature-sensor@48 {
-> +		compatible = "national,lm75";
-> +		reg = <0x48>;
-> +	};
-> +
-> +	temperature-sensor@49 {
-> +		compatible = "national,lm75";
-> +		reg = <0x49>;
-> +	};
-> +
-> +	temperature-sensor@4c {
-> +		compatible = "national,lm86";
-> +		reg = <0x4c>;
-> +	};
-> +};
-> +
-> +&i2c2 {
-> +	status = "okay";
-> +
-> +	temperature-sensor@4f {
-> +		cpmpatible = "national,lm75";
-
-s/cpmp/comp/
-
-Otherwise:
-
-Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
+PiBGcm9tOiBLcnp5c3p0b2YgS296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5v
+cmc+DQo+IFNlbnQ6IEZyaWRheSwgRmVicnVhcnkgMTAsIDIwMjMgNToxMyBQTQ0KPiANCj4gT24g
+MTAvMDIvMjAyMyAwODoyNiwgQ2hpYS1XZWkgV2FuZyB3cm90ZToNCj4gPiBBZGQgZHQtYmluZGlu
+Z3MgZm9yIEFzcGVlZCBVQVJUIGNvbnRyb2xsZXIuDQo+IA0KPiBEZXNjcmliZSB0aGUgaGFyZHdh
+cmUuIFdoYXQncyB0aGUgZGlmZmVyZW5jZSBhZ2FpbnN0IGV4aXN0aW5nIEFzcGVlZCBVQVJUDQo+
+IHVzZWQgZXZlcnl3aGVyZT8NCg0KVGhlIGRlc2NyaXB0aW9uIHdpbGwgYmUgcmV2aXNlZCB0byBl
+eHBsYWluIG1vcmUgZm9yIFVBUlQgYW5kIFZpcnR1YWwgVUFSVCBjb250cm9sbGVycy4NCg0KPiAN
+Cj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IENoaWEtV2VpIFdhbmcgPGNoaWF3ZWlfd2FuZ0Bhc3Bl
+ZWR0ZWNoLmNvbT4NCj4gPiAtLS0NCj4gPiAgLi4uL2JpbmRpbmdzL3NlcmlhbC9hc3BlZWQsdWFy
+dC55YW1sICAgICAgICAgIHwgODENCj4gKysrKysrKysrKysrKysrKysrKw0KPiA+ICAxIGZpbGUg
+Y2hhbmdlZCwgODEgaW5zZXJ0aW9ucygrKQ0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQNCj4gPiBE
+b2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvc2VyaWFsL2FzcGVlZCx1YXJ0LnlhbWwN
+Cj4gDQo+IEZpbGVuYW1lOiBhc3BlZWQsYXN0MjYwMC11YXJ0LnlhbWwNCj4gKHVubGVzcyB5b3Ug
+YXJlIGFkZGluZyBoZXJlIG1vcmUgY29tcGF0aWJsZXMsIGJ1dCB5b3VyIGNvbnN0IHN1Z2dlc3Rz
+IHRoYXQgaXQncw0KPiBub3QgZ29pbmcgdG8gaGFwcGVuKQ0KPiANCj4gPg0KPiA+IGRpZmYgLS1n
+aXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvc2VyaWFsL2FzcGVlZCx1YXJ0
+LnlhbWwNCj4gPiBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9zZXJpYWwvYXNw
+ZWVkLHVhcnQueWFtbA0KPiA+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+ID4gaW5kZXggMDAwMDAw
+MDAwMDAwLi4xMGM0NTdkNmE3MmUNCj4gPiAtLS0gL2Rldi9udWxsDQo+ID4gKysrIGIvRG9jdW1l
+bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3NlcmlhbC9hc3BlZWQsdWFydC55YW1sDQo+ID4g
+QEAgLTAsMCArMSw4MSBAQA0KPiA+ICsjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiAoR1BMLTIu
+MC1vbmx5IE9SIEJTRC0yLUNsYXVzZSkgJVlBTUwgMS4yDQo+ID4gKy0tLQ0KPiA+ICskaWQ6IGh0
+dHA6Ly9kZXZpY2V0cmVlLm9yZy9zY2hlbWFzL3NlcmlhbC9hc3BlZWQsdWFydC55YW1sIw0KPiA+
+ICskc2NoZW1hOiBodHRwOi8vZGV2aWNldHJlZS5vcmcvbWV0YS1zY2hlbWFzL2NvcmUueWFtbCMN
+Cj4gPiArDQo+ID4gK3RpdGxlOiBBc3BlZWQgVW5pdmVyc2FsIEFzeW5jaHJvbm91cyBSZWNlaXZl
+ci9UcmFuc21pdHRlcg0KPiANCj4gVGhpcyB0aXRsZSBtYXRjaGVzIG90aGVyIEFzcGVlZCBVQVJU
+cywgc28gYXJlbid0IHlvdSBkdXBsaWNhdGluZyBiaW5kaW5ncz8NCj4gDQo+ID4gKw0KPiA+ICtt
+YWludGFpbmVyczoNCj4gPiArICAtIENoaWEtV2VpIFdhbmcgPGNoaWF3ZWlfd2FuZ0Bhc3BlZWR0
+ZWNoLmNvbT4NCj4gPiArDQo+ID4gK2FsbE9mOg0KPiA+ICsgIC0gJHJlZjogc2VyaWFsLnlhbWwj
+DQo+ID4gKw0KPiA+ICtkZXNjcmlwdGlvbjogfA0KPiA+ICsgIFRoZSBBc3BlZWQgVUFSVCBpcyBi
+YXNlZCBvbiB0aGUgYmFzaWMgODI1MCBVQVJUIGFuZCBjb21wYXRpYmxlDQo+ID4gKyAgd2l0aCAx
+NjU1MEEsIHdpdGggc3VwcG9ydCBmb3IgRE1BDQo+ID4gKw0KPiA+ICtwcm9wZXJ0aWVzOg0KPiA+
+ICsgIGNvbXBhdGlibGU6DQo+ID4gKyAgICBjb25zdDogYXNwZWVkLGFzdDI2MDAtdWFydA0KPiA+
+ICsNCj4gPiArICByZWc6DQo+ID4gKyAgICBkZXNjcmlwdGlvbjogVGhlIGJhc2UgYWRkcmVzcyBv
+ZiB0aGUgVUFSVCByZWdpc3RlciBiYW5rDQo+IA0KPiBEcm9wIGRlc2NyaXB0aW9uDQoNCldpbGwg
+cmV2aXNlIGFzIHN1Z2dlc3RlZC4NCg0KPiANCj4gPiArICAgIG1heEl0ZW1zOiAxDQo+ID4gKw0K
+PiA+ICsgIGNsb2NrczoNCj4gPiArICAgIGRlc2NyaXB0aW9uOiBUaGUgY2xvY2sgdGhlIGJhdWRy
+YXRlIGlzIGRlcml2ZWQgZnJvbQ0KPiA+ICsgICAgbWF4SXRlbXM6IDENCj4gPiArDQo+ID4gKyAg
+aW50ZXJydXB0czoNCj4gPiArICAgIGRlc2NyaXB0aW9uOiBUaGUgSVJRIG51bWJlciBvZiB0aGUg
+ZGV2aWNlDQo+IA0KPiBEcm9wIGRlc2NyaXB0aW9uDQoNCldpbGwgcmV2aXNlIGFzIHN1Z2dlc3Rl
+ZC4NCg0KPiANCj4gPiArICAgIG1heEl0ZW1zOiAxDQo+ID4gKw0KPiA+ICsgIGRtYS1tb2RlOg0K
+PiA+ICsgICAgdHlwZTogYm9vbGVhbg0KPiA+ICsgICAgZGVzY3JpcHRpb246IEVuYWJsZSBETUEN
+Cj4gDQo+IERyb3AgcHJvcGVydHkuIERNQSBpcyBlbmFibGVkIG9uIHByZXNlbmNlIG9mIGRtYXMu
+DQo+IA0KPiA+ICsNCj4gPiArICBkbWEtY2hhbm5lbDoNCj4gPiArICAgICRyZWY6IC9zY2hlbWFz
+L3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL3VpbnQzMg0KPiA+ICsgICAgZGVzY3JpcHRpb246IFRo
+ZSBjaGFubmVsIG51bWJlciB0byBiZSB1c2VkIGluIHRoZSBETUEgZW5naW5lDQo+IA0KPiBUaGF0
+J3Mgbm90IGEgY29ycmVjdCBETUEgcHJvcGVydHkuIGRtYXMgYW5kIGRtYS1uYW1lcyBnaXQgZ3Jl
+cCBkbWEgLS0NCj4gRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzLw0KPiANCj4gDQo+
+ID4gKw0KPiA+ICsgIHZpcnR1YWw6DQo+ID4gKyAgICB0eXBlOiBib29sZWFuDQo+ID4gKyAgICBk
+ZXNjcmlwdGlvbjogSW5kaWNhdGUgdmlydHVhbCBVQVJUDQo+IA0KPiBWaXJ0dWFsIG1lYW5zIG5v
+dCBleGlzdGluZyBpbiByZWFsIHdvcmxkPyBXZSBkbyBub3QgZGVzY3JpYmUgaW4gRFRTDQo+IG5v
+bi1leGlzdGluZyBkZXZpY2VzLiBEcm9wIGVudGlyZSBwcm9wZXJ0eS4NCg0KVGhlIHZpcnR1YWwg
+cHJvcGVydHkgaW5kaWNhdGVzIGl0IGlzIGEgVmlydHVhbCBVQVJUIGRldmljZS4NClZVQVJUIG9m
+IEFzcGVlZCBTb0MgaXMgYWN0dWFsbHkgYSBGSUZPIGV4cG9zZWQgaW4gdGhlIDE2NTUwQSBVQVJU
+IGludGVyZmFjZS4NClRoZSBvbmUgaGVhZCBvZiB0aGUgRklGTyBpcyBleHBvc2VkIHRvIEhvc3Qg
+dmlhIGVTUEkvTFBDIGFuZCB0aGUgb3RoZXIgb25lIGlzIGZvciBCTUMuDQpUaGVyZSBpcyBubyBw
+aHlzaWNhbCBzZXJpYWwgbGluayBiZXR3ZWVuIEhvc3QgYW5kIEJNQy4gQW5kIHRodXMgbmFtZWQg
+YXMgVmlydHVhbCBVQVJULg0KDQo+IA0KPiA+ICsNCj4gPiArICBzaXJxOg0KPiA+ICsgICAgJHJl
+ZjogL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvdWludDMyDQo+ID4gKyAgICBkZXNj
+cmlwdGlvbjogVGhlIHNlcmlhbCBJUlEgbnVtYmVyIG9uIExQQyBidXMgaW50ZXJmYWNlDQo+IA0K
+PiBEcm9wIGVudGlyZSBwcm9wZXJ0eS4NCg0KTWFuZGF0b3J5IGZvciBWaXJ0dWFsIFVBUlQNCg0K
+PiANCj4gPiArDQo+ID4gKyAgc2lycS1wb2xhcml0eToNCj4gPiArICAgICRyZWY6IC9zY2hlbWFz
+L3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL3VpbnQzMg0KPiA+ICsgICAgZGVzY3JpcHRpb246IFRo
+ZSBzZXJpYWwgSVJRIHBvbGFyaXR5IG9uIExQQyBidXMgaW50ZXJmYWNlDQo+IA0KPiBEcm9wIGVu
+dGlyZSBwcm9wZXJ0eS4NCg0KTWFuZGF0b3J5IGZvciBWaXJ0dWFsIFVBUlQNCg0KPiANCj4gPiAr
+DQo+ID4gKyAgcGluY3RybC0wOiB0cnVlDQo+ID4gKw0KPiA+ICsgIHBpbmN0cmxfbmFtZXM6DQo+
+ID4gKyAgICBjb25zdDogZGVmYXVsdA0KPiANCj4gDQo+IERyb3AgYm90aCwgeW91IGRvIG5vIG5v
+dCBuZWVkIHRoZW0uDQoNCldpbGwgcmV2aXNlIGFzIHN1Z2dlc3RlZA0KDQo+IA0KPiA+ICsNCj4g
+PiArcmVxdWlyZWQ6DQo+ID4gKyAgLSBjb21wYXRpYmxlDQo+ID4gKyAgLSByZWcNCj4gPiArICAt
+IGNsb2Nrcw0KPiA+ICsgIC0gaW50ZXJydXB0cw0KPiA+ICsNCj4gPiArdW5ldmFsdWF0ZWRQcm9w
+ZXJ0aWVzOiBmYWxzZQ0KPiA+ICsNCg0KUmVnYXJkcywNCkNoaWF3ZWkNCg0K
