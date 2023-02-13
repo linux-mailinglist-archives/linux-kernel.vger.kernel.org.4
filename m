@@ -2,120 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0580694BDC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD15D694BE4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231256AbjBMP5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:57:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
+        id S231277AbjBMP7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:59:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbjBMP5g (ORCPT
+        with ESMTP id S231301AbjBMP7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:57:36 -0500
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC525257;
-        Mon, 13 Feb 2023 07:57:32 -0800 (PST)
-Received: by mail-ej1-f50.google.com with SMTP id lf10so1162411ejc.5;
-        Mon, 13 Feb 2023 07:57:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BIJSf+XurZOqyGE9DpYNL1/ZnZBKhqx/Senz95QUCN0=;
-        b=iGLMZMyxUBXGNVlVyKcRemypb5ZZu+OLWCuj7vGdqqkkVyVwPZ7DApBGwHY4Pmgtkr
-         fJegBEXfOvtu4GxryqtwNjzrT1LT7SA08s+nmWjZlhTcRKpeK5VkBQ4YvJglIghQy7e1
-         cmxmyfXogkNXdXaWanzh/WvbBrwjW9V0SyEQahqe92hEVUVOW3rHCdNa0JfiwgZak8ie
-         iWJEoKpYGqcydBlm+vNyGL4a74L18ycvOsW2TBCic6yevn0HgghnO6/+4g0lk6WQCsqR
-         J7FuVmN1VPJ2NXnS/INRwNH9ZAzuDabmA65jOlgTrCb4KrURe7wX943GFmOvRd4PJ/46
-         w9fw==
-X-Gm-Message-State: AO0yUKWJypBb5SExelvlJcdAjNVAZzf4gyleOe+xMOJ7JdfPAStbJs7C
-        bqetlyf0A9/vwrClRrCTocg1SrIBEU7l4WYTwHPYrcJf
-X-Google-Smtp-Source: AK7set/2IathRSVeenCIyaFzAMkA1ZRmj0wTGBJA1DncV9DfybKYoybegkxtrfmtSsBwu4yJOs8WqH9DjjEK9dclBSw=
-X-Received: by 2002:a17:906:c1ca:b0:877:747d:1108 with SMTP id
- bw10-20020a170906c1ca00b00877747d1108mr4833400ejb.5.1676303851052; Mon, 13
- Feb 2023 07:57:31 -0800 (PST)
+        Mon, 13 Feb 2023 10:59:46 -0500
+Received: from mail.fris.de (mail.fris.de [IPv6:2a01:4f8:c2c:390b::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE53170B;
+        Mon, 13 Feb 2023 07:59:43 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A84AEBFC15;
+        Mon, 13 Feb 2023 16:59:36 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
+        t=1676303980; h=from:subject:date:message-id:to:cc:mime-version:
+         content-transfer-encoding; bh=H8jzCZUhCtm5be52x1tFFTW+Htqs/PGXpKjaIEzFfgs=;
+        b=hHnUSNftOPAG/xJMZJXg607t9+vY0bi8+IioY24lRX0czh3zByE24OfsszZGThhCcGJb04
+        tLziZKD8AdAz3v2JXXgrNU/O6uiXh2RCw56xo36GF3Cj+WqseO1ond4bKQ66NTLgvi3G0P
+        1XLDTWymhZ8t1Df/N4EZiBvkaFuNUygVvNaIV1XFzL+zI6xWZW8e7t5z3Oi5arRMQ08eBe
+        0CtaIA+1/H+NE/wY8eheQ45CungBXcLj7IRVybg4eEDcceydEN48km05zV5b8seLd+jszg
+        hrnYP+ZAuRwbAxq3+SztfiQ2pSl7EjsirhbA8MvqAU50XL92uAoERPBThXMpcg==
+From:   Frieder Schrempf <frieder@fris.de>
+To:     devicetree@vger.kernel.org,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Robin Gong <yibin.gong@nxp.com>
+Cc:     Marek Vasut <marex@denx.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: [PATCH 0/6] Use correct LDO5 control registers for PCA9450
+Date:   Mon, 13 Feb 2023 16:58:18 +0100
+Message-Id: <20230213155833.1644366-1-frieder@fris.de>
 MIME-Version: 1.0
-References: <20230213132048.2612961-1-rf@opensource.cirrus.com>
- <CAJZ5v0hE7u_rTEn1KRFhE55Y3MHS_Le4rAbFPmR+0r+Eg=3K9Q@mail.gmail.com> <1294e968-d03e-ee4a-e1c1-d9293b813c63@opensource.cirrus.com>
-In-Reply-To: <1294e968-d03e-ee4a-e1c1-d9293b813c63@opensource.cirrus.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 13 Feb 2023 16:57:19 +0100
-Message-ID: <CAJZ5v0jMbRNPuPOmDNYCvpj+R9DS+x1FPUegi8NESgi1xT_hig@mail.gmail.com>
-Subject: Re: [PATCH] PM: Add EXPORT macros for exporting PM functions
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, pavel@ucw.cz,
-        len.brown@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 4:50 PM Richard Fitzgerald
-<rf@opensource.cirrus.com> wrote:
->
-> On 13/02/2023 15:43, Rafael J. Wysocki wrote:
-> > On Mon, Feb 13, 2023 at 2:20 PM Richard Fitzgerald
-> > <rf@opensource.cirrus.com> wrote:
-> >>
-> >> Add a set of macros for exporting functions only if CONFIG_PM
-> >> is enabled.
-> >>
-> >> The naming follows the style of the standard EXPORT_SYMBOL_*()
-> >> macros that they replace.
-> >>
-> >> Sometimes a module wants to export PM functions directly to other
-> >> drivers, not a complete struct dev_pm_ops. A typical example is
-> >> where a core library exports the generic (shared) implementation
-> >> and calling code wraps one or more of these in custom code.
-> >>
-> >> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-> >> ---
-> >>   include/linux/pm.h | 8 ++++++++
-> >>   1 file changed, 8 insertions(+)
-> >>
-> >> diff --git a/include/linux/pm.h b/include/linux/pm.h
-> >> index 93cd34f00822..21618f7087f8 100644
-> >> --- a/include/linux/pm.h
-> >> +++ b/include/linux/pm.h
-> >> @@ -379,9 +379,17 @@ const struct dev_pm_ops name = { \
-> >>          const struct dev_pm_ops name;                                   \
-> >>          __EXPORT_SYMBOL(name, sec, ns);                                 \
-> >>          const struct dev_pm_ops name
-> >> +#define EXPORT_PM_FN(name)             EXPORT_SYMBOL(name)
-> >> +#define EXPORT_PM_FN_GPL(name)         EXPORT_SYMBOL_GPL(name)
-> >> +#define EXPORT_PM_FN_NS(name, ns)      EXPORT_SYMBOL_NS(name, ns)
-> >> +#define EXPORT_PM_FN_NS_GPL(name, ns)  EXPORT_SYMBOL_NS_GPL(name, ns)
-> >
-> > Why are the non-GPL variants needed?
-> >
->
-> I did all four because there are all four variants of EXPORT_DEV_PM_OPS.
-> Why are the non-GPL variants of EXPORT_DEV_PM_OPS needed?
+From: Frieder Schrempf <frieder.schrempf@kontron.de>
 
-They aren't or at least they should not be needed in the mainline.
+This patchset fixes the control of the LDO5 regulator by providing an
+option for letting the driver know which of the two possible control
+registers is currently in use by the hardware.
 
-> I can remove the non-GPL variants of my macros.
+It also fixes the enable register for LDO5 to use PCA9450_REG_LDO5CTRL_L
+as specified by the datasheet.
 
-Yes, please!
+The last patch makes use of the fix by adjusting the devicetree for
+the Kontron i.MX8MM boards.
 
-> >>   #else
-> >>   #define _EXPORT_DEV_PM_OPS(name, sec, ns)                              \
-> >>          static __maybe_unused const struct dev_pm_ops __static_##name
-> >> +#define EXPORT_PM_FN(name)
-> >> +#define EXPORT_PM_FN_GPL(name)
-> >> +#define EXPORT_PM_FN_NS(name, ns)
-> >> +#define EXPORT_PM_FN_NS_GPL(name, ns)
-> >>   #endif
-> >>
-> >>   #define EXPORT_DEV_PM_OPS(name) _EXPORT_DEV_PM_OPS(name, "", "")
-> >> --
-> >> 2.30.2
-> >>
+In Linux this currently doesn't fix any functional issues, but in
+U-Boot similar changes are needed in order to fix SD card access.
+See the following thread for more information:
+
+https://lists.denx.de/pipermail/u-boot/2023-January/506103.html
+
+Frieder Schrempf (6):
+  dt-bindings: regulator: pca9450: Document new usage of sd-vsel-gpios
+  regulator: pca9450: Fix enable register for LDO5
+  Revert "regulator: pca9450: Add SD_VSEL GPIO for LDO5"
+  regulator: Add operation to let drivers select vsel register
+  regulator: pca9450: Fix control register for LDO5
+  arm64: dts: imx8mm-kontron: Add support for reading SD_VSEL signal
+
+ .../regulator/nxp,pca9450-regulator.yaml      | 23 ++++++---
+ .../dts/freescale/imx8mm-kontron-bl-osm-s.dts |  6 +--
+ .../boot/dts/freescale/imx8mm-kontron-bl.dts  |  6 +--
+ .../dts/freescale/imx8mm-kontron-osm-s.dtsi   |  1 +
+ .../boot/dts/freescale/imx8mm-kontron-sl.dtsi |  1 +
+ drivers/regulator/helpers.c                   | 16 ++++++-
+ drivers/regulator/pca9450-regulator.c         | 47 ++++++++++++++-----
+ include/linux/regulator/driver.h              |  5 ++
+ 8 files changed, 79 insertions(+), 26 deletions(-)
+
+-- 
+2.39.1
+
