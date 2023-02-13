@@ -2,92 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48BD469515F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A630695165
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjBMUHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 15:07:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
+        id S230018AbjBMUJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 15:09:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbjBMUHW (ORCPT
+        with ESMTP id S229615AbjBMUJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 15:07:22 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4B01E1FE
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 12:07:21 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id bg2so3720723pjb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 12:07:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7hiw45ltvpY/7ML6LM+IxRW/koSE15OxDQ83L5S1mw8=;
-        b=nzKX+9e9U5sWB0Yrn4wYgD7cSAfhSs9Q6u8uIPdIVyqSk9aQ3itsbJ8YQZ16EsiucL
-         z+lpmX8Rj+iYCxjsyhdrMCNMF4A+AdqbdgkOtWWYtCYvBTSfYaejZ/+XG6L/xEQFPJu4
-         S2E4VIto+8UvTM5Org7d3gsoUewpCnPNyWgefW6MszzyOz95ebFtifssi5ElmXzDhTJq
-         cB42eanVaEyID4tKlrQoe/Z2o1XTKsMAIFu/POZ/GRghb3hca7O3GiVpevaA8OJX25i6
-         XTbWUXLQfAgpaHZD1/gFqZIIiXCpMVm2Rn1OYtUbeNT0bNKbv5iTCslPYKkcapKimOoC
-         1z0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7hiw45ltvpY/7ML6LM+IxRW/koSE15OxDQ83L5S1mw8=;
-        b=JPYuE1s1hG8S8ite01tcKICPhZC1vhEnR6IFbuo6Rg07ajBnXSHN/FNJEFBiqLQxz9
-         fHe/70RZk1Fwa6JctjMHY1W1HxfVqYtuvl+RF1/mHO4y1Rn/I3Srk8h/53cSOqZSn2q0
-         bBssRET54kWg8SkX7jQBEnuub/gxgCU73qNkNVhLyqaQoSS8k/E8ONumHb/Rdt1OAIFX
-         hWmSeiqOlX8eejxV77nb+BiSvpAN9RVXv2aatrSylcga+dudJtaYr/9bbIH7RKWoE2WY
-         dR0yKtDqKD/L9I/wGjUX+qq6u+O5DVt1mWzGdHk0RYgldI4NKcdlo4et7jQwbbilZtK7
-         MX4g==
-X-Gm-Message-State: AO0yUKXilkb6NY9nCuSo2l2S/CuMP3yCLzvU2DI+BWG6/vJ/vejbrCOx
-        TIrOG9J338WD8nRQ0OzrxgCqPzDVUTZFSKTd0DU=
-X-Google-Smtp-Source: AK7set+zBH7R/t8F8d5i8HeInR9uwLS0bM9n6S+OacY7EFetFl6bMeKJimvebjvRmWPFgqzqAqZz9Q==
-X-Received: by 2002:a17:902:d4c3:b0:19a:621d:cad with SMTP id o3-20020a170902d4c300b0019a621d0cadmr141889plg.18.1676318840747;
-        Mon, 13 Feb 2023 12:07:20 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id s17-20020a170902c65100b0019309be03e7sm8600978pls.66.2023.02.13.12.07.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 12:07:20 -0800 (PST)
-Date:   Mon, 13 Feb 2023 20:07:16 +0000
-From:   Carlos Llamas <cmllamas@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Jialu Xu <xujialu@vimux.org>
-Cc:     linux-kernel@vger.kernel.org, Jialu Xu <xujialu@vimux.org>
-Subject: libpcre2 breaks COMPILED_SOURCE=1 tags
-Message-ID: <Y+qYdA7OpRX16Lwf@google.com>
+        Mon, 13 Feb 2023 15:09:00 -0500
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B60A1CF65;
+        Mon, 13 Feb 2023 12:08:58 -0800 (PST)
+Received: from [192.168.1.103] (178.176.72.240) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Mon, 13 Feb
+ 2023 23:08:48 +0300
+Subject: Re: [PATCH 05/12] pata_parport: remove typedef struct PIA
+To:     Ondrej Zary <linux@zary.sk>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+CC:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Tim Waugh <tim@cyberelk.net>, <linux-block@vger.kernel.org>,
+        <linux-parport@lists.infradead.org>, <linux-ide@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230211144232.15138-1-linux@zary.sk>
+ <20230211144232.15138-6-linux@zary.sk>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <cab6cec4-1a3a-ed15-ddd1-8b51def4f53e@omp.ru>
+Date:   Mon, 13 Feb 2023 23:08:48 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230211144232.15138-6-linux@zary.sk>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.72.240]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 02/13/2023 19:50:32
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 175483 [Feb 13 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 504 504 dc137e1f9c062eb6c0671e7d509ab442ae395562
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.72.240 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.72.240 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.72.240
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 02/13/2023 19:52:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 2/13/2023 6:59:00 PM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Newer versions of libpre2 have dropped default support for \K in
-lookarounds. Unfortunately, scripts/tags.sh relies on this option to
-collect all the _compiled_ sources. This is the error:
+On 2/11/23 5:42 PM, Ondrej Zary wrote:
 
-  $ make COMPILED_SOURCE=1 tags
-    GEN     tags
-  grep: \K is not allowed in lookarounds (but see PCRE2_EXTRA_ALLOW_LOOKAROUND_BSK)
+> Remove typedef struct PIA and use struct pi_adapter directly.
 
-It seems there isn't an official maintainer for this script and I can't
-quite understand the regex used for the query. Does anyone have a good
-alternative for this? The regex pattern was introduced in commit
-4f491bb6ea2a ("scripts/tags.sh: collect compiled source precisely").
+   Prolly worth mentioning that you drop the spaces in the parameter lists
+while at it...
 
-The previous form of all_compiled_sources() seems to work for me and I'm
-guessing it wasn't efficient enough? I can't find much info about the
-switch to find/grep either. I believe the initial thread is this:
-https://lore.kernel.org/all/20200423103801.GA3730892@kroah.com/
+> Signed-off-by: Ondrej Zary <linux@zary.sk>
 
---
-Carlos Llamas
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+
+   Had some comments tho...
+
+[...]
+> diff --git a/drivers/ata/pata_parport/fit2.c b/drivers/ata/pata_parport/fit2.c
+> index 28de8e4e41c3..020c93dea362 100644
+> --- a/drivers/ata/pata_parport/fit2.c
+> +++ b/drivers/ata/pata_parport/fit2.c
+> @@ -37,13 +37,13 @@ devices.
+>  
+>  */
+>  
+> -static void  fit2_write_regr( PIA *pi, int cont, int regr, int val)
+> +static void  fit2_write_regr(struct pi_adapter *pi, int cont, int regr, int val)
+
+   Could also kill an extra space after *void*...
+
+[...]
+> diff --git a/drivers/ata/pata_parport/fit3.c b/drivers/ata/pata_parport/fit3.c
+> index 0366f3123508..03f314ad5ee7 100644
+> --- a/drivers/ata/pata_parport/fit3.c
+> +++ b/drivers/ata/pata_parport/fit3.c
+> @@ -39,7 +39,7 @@
+>  
+>  */
+>  
+> -static void  fit3_write_regr( PIA *pi, int cont, int regr, int val)
+> +static void  fit3_write_regr(struct pi_adapter *pi, int cont, int regr, int val)
+
+   Here as well...
+
+[...]
+> diff --git a/drivers/ata/pata_parport/kbic.c b/drivers/ata/pata_parport/kbic.c
+> index 9a99b9e35d41..e065f8367716 100644
+> --- a/drivers/ata/pata_parport/kbic.c
+> +++ b/drivers/ata/pata_parport/kbic.c
+[...]
+> @@ -72,7 +72,7 @@ static int kbic_read_regr( PIA *pi, int cont, int regr )
+>  	return -1;
+>  }       
+>  
+> -static void  kbic_write_regr( PIA *pi, int cont, int regr, int val)
+> +static void  kbic_write_regr(struct pi_adapter *pi, int cont, int regr, int val)
+
+   And here...
+
+[...]
+> diff --git a/drivers/ata/pata_parport/ktti.c b/drivers/ata/pata_parport/ktti.c
+> index d87eb3c139bc..bddd13b4801f 100644
+> --- a/drivers/ata/pata_parport/ktti.c
+> +++ b/drivers/ata/pata_parport/ktti.c
+> @@ -29,7 +29,7 @@
+>  
+>  static int  cont_map[2] = { 0x10, 0x08 };
+>  
+> -static void  ktti_write_regr( PIA *pi, int cont, int regr, int val)
+> +static void  ktti_write_regr(struct pi_adapter *pi, int cont, int regr, int val)
+
+   And here...
+
+[...] 
+
+MBR, Sergey
