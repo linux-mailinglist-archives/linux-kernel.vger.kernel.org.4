@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698A6694830
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0436D694833
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 15:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjBMOf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 09:35:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54682 "EHLO
+        id S229683AbjBMOgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 09:36:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbjBMOfr (ORCPT
+        with ESMTP id S230175AbjBMOfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Feb 2023 09:35:47 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295DA1A669
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E1E1C319
         for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:35:42 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id p26so32297944ejx.13
+Received: by mail-ej1-x62c.google.com with SMTP id lu11so32398670ejb.3
         for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 06:35:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9+TFy9ylMOJMNpXCHqHBb00FBDo0eIJdb97gjM6cvUQ=;
-        b=oSl3wTsPf7jQ2ZMhh2VN5SZrFK5wPmv1UOza/dQXd2CBXloCWFKaovy06+f1I8vSPN
-         0kz4yda5IDQYBL5sdmUm0KnQaWRmojrZsVquR7+1f+etD5zQgqUHQcdJSWdylzfqEFII
-         +eukb+Vk2XeJ+ITIEGbc/+1T85UpKOiJUv7/GmsP3LMgknTVh0ROgYqbAKtDhPMMMR12
-         PJR46P4ULG1Gp0Cg1H3aLdG7vR0wPo64C2uTwGfqAgoapzh0DNu2hxuPPlGDMyKinlqR
-         EMF6YUwAShs9WNkuSdRJeHWa97ztUivhHu5pyDdjc9ERTjZy2O6oUw0e2gvlhcjqYA9o
-         K3xQ==
+        bh=gUsrpJKvpOf/IejcS66CIVhN9ZDPD+2AL77vlAldsrA=;
+        b=Z2R6EuNZyLJZIv3xxNXXQZL+bZFW94Xg1z1H9fNFPCgBUePtA1H3YLxqOXP0BE5Hpe
+         aBKLq+BQ7YPBNnxycsZojYdiXPtuPCZ2rYidA6VBqAjvOipTQRTTETmjnsSjkao87X9/
+         OQQMDKjFxuwlh5n+zmA86n2IKMJ5Qdid/qV1AV8IwJzVI2pDcPvESWo/FoPHh0Y3GCZz
+         hcEKn77EFEenguCdgFKDK3ajAonjlzktneNVvNFxMU3j4PDxFIRb1oexL7O21YXgoFCv
+         GssGi25duNt9sEinxtCTufXzjynXN1EWxjwAuydCswf9aj9rRxw9PD+ziyEhxCxid2O+
+         JPGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9+TFy9ylMOJMNpXCHqHBb00FBDo0eIJdb97gjM6cvUQ=;
-        b=J9lb9YXW+VZqx+8b8QOHOevXnYgZYzOkl+PW35Mw9UKzHchxkbTCEqIbD6lYcQ7dLT
-         CvqFHamvMuv3tueyfVe5fRyoQckHwkyxyfNks5MuzHxnm8DlMn15UzYXbWzK+AllRYfR
-         z5CDUkS/i9OYvFRvrhIQo5ekTGpI+ds2kiROvD/hB3NMcv6jgM+enL4aAAF7DMmhsACi
-         9uRJREJiMwYXTOxJHEe/VIUGhakXP11QO3ynDVVP3LbSz+Dd3SGbDnADSXaNHx98P/nE
-         Jb0TSe3ng3NbcDUBoANTQJC4QWX9tb2j/S+SDeA4rogIPkQXk0E1runSkt5uIAh9N7yb
-         UZBQ==
-X-Gm-Message-State: AO0yUKW3k0bTiTfgdvGMRdH2SPAfh8LU4GT62zCD/uaCW5ATw/cpWPJF
-        aNYAX7RdzMOMtQBMXPQ0kS2gDaQ5WvXoIsE/
-X-Google-Smtp-Source: AK7set+D1lsnfQL8iUtKVPLdKyCR7sE+sA6s0MGcw9ZPbWMNf0Zqd0tcbNoftsAbG9pFANE3IkVdCw==
-X-Received: by 2002:a17:906:310e:b0:878:702e:9dff with SMTP id 14-20020a170906310e00b00878702e9dffmr24484782ejx.41.1676298940633;
-        Mon, 13 Feb 2023 06:35:40 -0800 (PST)
+        bh=gUsrpJKvpOf/IejcS66CIVhN9ZDPD+2AL77vlAldsrA=;
+        b=CrCQ120ucWB/j4SaeJDp5e8DCnZ173DyDmUcYJH+y9US2d/HHOTMxPlMWKJWrg1GuF
+         NpVkcgbckfqxta9WXGO+3xCmUtcoLQYV/yuy10JdG5zFNnM0MNzBnicvf3R7WMGgXkER
+         9PmswP7Z/HqfAccG2y+0lNTYojF1IufEu5QxDbnJVB2rnZxw6K+TdAeX40JfxxPFHlpL
+         bd5LEeDGjvPbB9UWq2zuzkww/MOWAxknG45cf6SfugNDyDxU178PCQ/7yY2Kr5y2JeRm
+         bWbEz3aTPltj/y3mMQqKigrVffH+BUcZB+vz6VstBQa7vixOtCCz/WTB6dLKOrik23zO
+         oQNw==
+X-Gm-Message-State: AO0yUKVVs6OLe/LUEyHjeOw7jPxCse1FUXroOkRx61xENGn9+DPhV1hY
+        x/R5nZQBeuR9PVbzJdbGselOPg==
+X-Google-Smtp-Source: AK7set/aabLaQoO1OcVlrAFrhTyyHeVN49VrQuy4tkoEGM6wjOBV75Cvjsbmbv49KeJu1QPZDQRqfA==
+X-Received: by 2002:a17:906:1d14:b0:88c:a43d:81bc with SMTP id n20-20020a1709061d1400b0088ca43d81bcmr22744167ejh.58.1676298941949;
+        Mon, 13 Feb 2023 06:35:41 -0800 (PST)
 Received: from localhost.localdomain (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id uz6-20020a170907118600b0088a2397cb2csm6927186ejb.143.2023.02.13.06.35.39
+        by smtp.gmail.com with ESMTPSA id uz6-20020a170907118600b0088a2397cb2csm6927186ejb.143.2023.02.13.06.35.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 06:35:40 -0800 (PST)
+        Mon, 13 Feb 2023 06:35:41 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org
 Cc:     marijn.suijten@somainline.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/9] soc: qcom: rpmpd: Add parent PD support
-Date:   Mon, 13 Feb 2023 15:35:22 +0100
-Message-Id: <20230213143524.1943754-8-konrad.dybcio@linaro.org>
+Subject: [PATCH v2 8/9] soc: qcom: rpmpd: Hook up VDDMX as parent of SM6375 VDDGX
+Date:   Mon, 13 Feb 2023 15:35:23 +0100
+Message-Id: <20230213143524.1943754-9-konrad.dybcio@linaro.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230213143524.1943754-1-konrad.dybcio@linaro.org>
 References: <20230213143524.1943754-1-konrad.dybcio@linaro.org>
@@ -73,44 +74,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some cases (like with the GPU core clock on GMU-less SoCs) it's
-required that we scale more than one voltage domain. This can be achieved
-by linking them in a parent-child relationship. Add support for specifying
-a parent PD, similarly to what has been done in the RPMhPD driver.
+The GPU core clock requires that both VDDGX and VDDMX domains are scaled
+at the same rate at the same time (well, MX just before GX but you get
+the idea). Set MX as parent of GX to take care of that.
 
+Suggested-by: Bjorn Andersson <andersson@kernel.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/soc/qcom/rpmpd.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/soc/qcom/rpmpd.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/soc/qcom/rpmpd.c b/drivers/soc/qcom/rpmpd.c
-index 946630d82b3d..2027c820caa7 100644
+index 2027c820caa7..2669c9210754 100644
 --- a/drivers/soc/qcom/rpmpd.c
 +++ b/drivers/soc/qcom/rpmpd.c
-@@ -48,6 +48,7 @@ struct rpmpd_req {
+@@ -216,11 +216,13 @@ static struct rpmpd gfx_s2b_vfc = {
+ 	.key = KEY_FLOOR_CORNER,
+ };
  
- struct rpmpd {
- 	struct generic_pm_domain pd;
-+	struct generic_pm_domain *parent;
- 	struct rpmpd *peer;
- 	const bool active_only;
- 	unsigned int corner;
-@@ -969,6 +970,15 @@ static int rpmpd_probe(struct platform_device *pdev)
- 		data->domains[i] = &rpmpds[i]->pd;
- 	}
- 
-+	/* Add subdomains */
-+	for (i = 0; i < num; i++) {
-+		if (!rpmpds[i])
-+			continue;
-+
-+		if (rpmpds[i]->parent)
-+			pm_genpd_add_subdomain(rpmpds[i]->parent, &rpmpds[i]->pd);
-+	}
-+
- 	return of_genpd_add_provider_onecell(pdev->dev.of_node, data);
- }
- 
++static struct rpmpd mx_rwmx0_lvl;
+ static struct rpmpd gx_rwgx0_lvl_ao;
+ static struct rpmpd gx_rwgx0_lvl = {
+ 	.pd = { .name = "gx", },
+ 	.peer = &gx_rwgx0_lvl_ao,
+ 	.res_type = RPMPD_RWGX,
++	.parent = &mx_rwmx0_lvl.pd,
+ 	.res_id = 0,
+ 	.key = KEY_LEVEL,
+ };
+@@ -228,6 +230,7 @@ static struct rpmpd gx_rwgx0_lvl = {
+ static struct rpmpd gx_rwgx0_lvl_ao = {
+ 	.pd = { .name = "gx_ao", },
+ 	.peer = &gx_rwgx0_lvl,
++	.parent = &mx_rwmx0_lvl.pd,
+ 	.active_only = true,
+ 	.res_type = RPMPD_RWGX,
+ 	.res_id = 0,
 -- 
 2.39.1
 
