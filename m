@@ -2,104 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FDAE69408B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA55694093
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:16:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbjBMJPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 04:15:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
+        id S230262AbjBMJQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 04:16:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbjBMJPl (ORCPT
+        with ESMTP id S229878AbjBMJQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 04:15:41 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B3FB467
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:15:39 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id u8so4907395ilq.13
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:15:39 -0800 (PST)
+        Mon, 13 Feb 2023 04:16:10 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE93B472
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:16:08 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id he5so389606wmb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 01:16:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=pKOvhHJRhphSbPBn3so0B0jvZpigwezTNOs/N/XEZ5E=;
-        b=NpOzWZNs52fgyDSK1zxl40/0Dx5n4NeCWXkovOvBUzksGQJuoq6r+M0XwUjPUjuDCp
-         qWok95Yjwl+m/Az8N2txe+NGa8UJQ6w1D6ZUcOP4ToksLnuXERCRpsxGDlakBAYJgh6s
-         Rp0BvUGfcnhQRb2j1HZf4p2P+Tc9Tyj2zYD8AF0KHCWuG4UTkJZvIrnK8l0t7ReoHwxe
-         gMnovtxvi8PQmQGD+//6EPW8YdgUNjFdr7vDNlcPbgQzvPQsmrjqn8yHZDpr8z9JPCCT
-         piLyeX8Z32ssmSc7mGqQMUdIvdh2+8LlEAOh+/IbJa8x2mxYyZRF2KJ1LQgWht5qXNGF
-         6h9g==
+        bh=9xp1f1ClZNE5cUv+RX5qXmus2twTBsJN6syezVKx0s8=;
+        b=gcbQXNr/KgUkr+MrCgtpoSl9reVna7vb/KY4TcMjsqFt/uWfsOL+8VIv2kZFKAXN3/
+         ZlZlTHynJeVoKi68H0wu5ITc4AO/Svn+DI0Es9LPe2rscNPaP/gisgAKc8I+Y+u8yXjp
+         Bspc3cmrubzquX7CXdLtwyJ36ToCCRha9jnQN/HgwLMD2rdvGoo76c4x/5fdIgdxzMVZ
+         agjQizRF6fEz5wXSvW7YyH52Af9NHdREcYdF1yY9oetUI9EYS1DwuBeoHq6u096lZIuG
+         uuk9dzCc/ScvyP0EZ3P42OtXomXJ+H9aqR9LQph/KmjT0mV12bWmrR5YaGgn2GT6PE4i
+         QQTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pKOvhHJRhphSbPBn3so0B0jvZpigwezTNOs/N/XEZ5E=;
-        b=KzZnI58fZL+qPaUij0gxZi5JbSMZ9Zis1DE6vovvqwe/pBnVrVNWo0u9uGoT0LBXXB
-         xWLXAvfvxHTaj61dyJ7as9qPvPn7ZWrAAuYo910DBsjZh5niIl0n5AUEUnSTs4DpvoQU
-         Pk5Ady+Trfo4zwYrP6tu54ZbNwQ+lOHzkwM2fTVQbARA17d3MHIVrCoZajPUFudbmWQp
-         jKy0QQu5/GcQNZc9mc3cS6k5Vcyo8Ab9WmEtdZA+GhdCxD9NmrLAHiGmZzeL9RMKqkoP
-         a/gwqgf1lfD2NrXXxRFSclz/St53jsIiImLaWizpmZ9wAwiMNqSInj0dEFHmefGoRBWs
-         8YYA==
-X-Gm-Message-State: AO0yUKW0OEQqkNtE9GmojInw/u80J4DG8mcRcXz7csbMk0ZHQALVqd92
-        iNssttxL6cSH9fMmMQ0Zn4FBrw==
-X-Google-Smtp-Source: AK7set8THxgVNnrm5T7fH0oGDH5+xMK5o9ph9mqDpQvxPFgROHNMVHH7uqtLR54GHK9o5hhn791ktQ==
-X-Received: by 2002:a05:6e02:156b:b0:315:2a3f:5a1d with SMTP id k11-20020a056e02156b00b003152a3f5a1dmr10081627ilu.30.1676279738433;
-        Mon, 13 Feb 2023 01:15:38 -0800 (PST)
-Received: from ?IPV6:2a0e:41a:894f:0:2487:f87c:fb5b:9046? ([2a0e:41a:894f:0:2487:f87c:fb5b:9046])
-        by smtp.gmail.com with ESMTPSA id q11-20020a92050b000000b0030c68d38255sm3639612ile.38.2023.02.13.01.15.36
+        bh=9xp1f1ClZNE5cUv+RX5qXmus2twTBsJN6syezVKx0s8=;
+        b=dq5QntBKgMe/yvZ0ntaxQx1Tkge/C+T8T8QnryZcEA2sC50L7uLwFGKjvOkr3RytTH
+         7fiaAOEbjH0NYx6s7dDu5jUHFbT+Md6+xIuOi/1YbbtGBoDdbL6xVwVM8cia67y/GtNg
+         oYuiwCngnPMns+CE+QI6yp2dhfsffsD4+/Z5zSN7tCB8WAHQ2CN+GJbvxLW5bQCgzXDU
+         1NEi1+djmI5uugkACO/z/mtKMHF/csoi4eKgZ6Zc8J1CqBDpZxRjfCo1nAfAZ6I+HGYL
+         /ndCwPzb7IduTmDs1UdkgPXM1woxn+euX1RL6zRppSrYI3xO3eNsOfWkOjlDLuLG9p75
+         zZ+w==
+X-Gm-Message-State: AO0yUKXqfz6hqXjQaFx3a3oRVKKv3X2MPIwyAy5bwMd/w7Z1ayys/wmy
+        BUqGfE4oAQWRFm3tydNODkiAdw==
+X-Google-Smtp-Source: AK7set+GGl89xH8tiPOhMxaLDcaC7fVDbIk2ilrwvdd78yp4famGjU6z+o38lQ5t4v7j0eO3JvzD1w==
+X-Received: by 2002:a05:600c:340a:b0:3dc:45a7:2b8a with SMTP id y10-20020a05600c340a00b003dc45a72b8amr18539198wmp.10.1676279767343;
+        Mon, 13 Feb 2023 01:16:07 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id k7-20020a05600c080700b003daf672a616sm12678568wmp.22.2023.02.13.01.16.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 01:15:37 -0800 (PST)
-Message-ID: <447fa1c7-4992-838f-b5cd-91245deae188@baylibre.com>
-Date:   Mon, 13 Feb 2023 10:15:35 +0100
+        Mon, 13 Feb 2023 01:16:06 -0800 (PST)
+Message-ID: <25572962-32ad-3175-e4b2-1d13eba45126@linaro.org>
+Date:   Mon, 13 Feb 2023 10:16:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH] drm/meson/meson_venc: Relax the supported mode checks
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v5 03/12] dt-bindings: arm: mediatek: sgmiisys: Convert to
+ DT schema
 Content-Language: en-US
-To:     Da Xue <da@lessconfused.com>
-Cc:     Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        dri-devel@lists.freedesktop.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20230210-relax_dmt_limits-v1-0-a1474624d530@baylibre.com>
- <CACdvmAgKrRMdX+R0nScGwazq7C=f=B_k-2w-ONk_iCyM_XAnSA@mail.gmail.com>
-From:   Carlo Caione <ccaione@baylibre.com>
-In-Reply-To: <CACdvmAgKrRMdX+R0nScGwazq7C=f=B_k-2w-ONk_iCyM_XAnSA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Daniel Golle <daniel@makrotopia.org>, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
+        =?UTF-8?Q?Bj=c3=b8rn_Mork?= <bjorn@mork.no>
+References: <cover.1676128246.git.daniel@makrotopia.org>
+ <6ea4483df9720a209462bd163d7f7e406d14053c.1676128246.git.daniel@makrotopia.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <6ea4483df9720a209462bd163d7f7e406d14053c.1676128246.git.daniel@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/02/2023 08:09, Da Xue wrote:
-
->     -       if (mode->hdisplay < 640 || mode->hdisplay > 1920)
->     +       if (mode->hdisplay < 480 || mode->hdisplay > 1920)
->                      return MODE_BAD_HVALUE;
+On 11/02/2023 17:02, Daniel Golle wrote:
+> Convert mediatek,sgmiiisys bindings to DT schema format.
+> Add maintainer Matthias Brugger, no maintainers were listed in the
+> original documentation.
+> As this node is also referenced by the Ethernet controller and used
+> as SGMII PCS add this fact to the description.
 > 
->     -       if (mode->vdisplay < 480 || mode->vdisplay > 1200)
->     +       if (mode->vdisplay < 480 || mode->vdisplay > 1920)
->                      return MODE_BAD_VVALUE;
-> 
-> Should these be lowered to 400 instead of 480?
+Thank you for your patch. There is something to discuss/improve.
 
-If you want to support 400x1280 then we need to tweak mode->hdisplay as 
-well.
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.yaml
+> new file mode 100644
+> index 000000000000..99ceb08ad7c0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.yaml
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,sgmiisys.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 
-I'll push a v2.
+Drop quotes from both.
 
--- 
-Carlo Caione
+> +
+> +title: MediaTek SGMIISYS Controller
+> +
+> +maintainers:
+> +  - Matthias Brugger <matthias.bgg@gmail.com>
+> +
+> +description:
+> +  The MediaTek SGMIISYS controller provides SGMII related clocks to the system
+> +  and is used by the Ethernet controller as SGMII PCS.
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^syscon@[0-9a-f]+$"
+
+Drop nodename, we do not require it per binding.
+
+> +
+> +  compatible:
+> +    oneOf:
+
+Drop oneOf, unless you plan to use it soon?
+
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt7622-sgmiisys
+> +              - mediatek,mt7629-sgmiisys
+> +              - mediatek,mt7986-sgmiisys_0
+> +              - mediatek,mt7986-sgmiisys_1
+> +          - const: syscon
+> +
+
+
+Best regards,
+Krzysztof
 
