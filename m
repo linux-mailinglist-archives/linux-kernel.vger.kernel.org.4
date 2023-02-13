@@ -2,140 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F061B694655
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:51:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A84669465A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:52:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbjBMMv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 07:51:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36778 "EHLO
+        id S229747AbjBMMwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 07:52:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjBMMvz (ORCPT
+        with ESMTP id S230516AbjBMMws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 07:51:55 -0500
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BDE40C2;
-        Mon, 13 Feb 2023 04:51:52 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PFkk84Rxjz4f3jHY;
-        Mon, 13 Feb 2023 20:51:44 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-        by APP4 (Coremail) with SMTP id gCh0CgD3qa1dMupjSMMuDg--.19493S2;
-        Mon, 13 Feb 2023 20:51:45 +0800 (CST)
-Subject: Re: [PATCH] blk-ioprio: Introduce promote-to-rt policy
-To:     Jan Kara <jack@suse.cz>, Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        cgroups@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, houtao1@huawei.com
-References: <20230201045227.2203123-1-houtao@huaweicloud.com>
- <8c068af3-7199-11cf-5c69-a523c7c22d9a@acm.org>
- <4f7dcb3e-2d5a-cae3-0e1c-a82bcc3d2217@huaweicloud.com>
- <b6b3c498-e90b-7d1f-6ad5-a31334e433ae@acm.org>
- <beb7782e-72a4-c350-3750-23a767c88753@huaweicloud.com>
- <aedc240d-7c9e-248a-52d2-c9775f3e8ca1@acm.org>
- <20230208134345.77bdep3kzp52haxu@quack3>
- <7fcd4c38-ccbe-6411-e424-a57595ad9c0b@acm.org>
- <20230209085603.dzqfcc3pp4hacqlz@quack3>
- <55a065e7-7d86-d58f-15ba-c631a427843e@acm.org>
- <20230210101244.zsmtmsoo4xjx7suj@quack3>
-From:   Hou Tao <houtao@huaweicloud.com>
-Message-ID: <48620099-0311-e752-ba3b-cbb4351cf81e@huaweicloud.com>
-Date:   Mon, 13 Feb 2023 20:51:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 13 Feb 2023 07:52:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3126194
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:51:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676292717;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FoPnuk0eTFB4lwFXHE/o6JfLheTxlR2V4EZJdMaA1oA=;
+        b=Ph1RzAIWk+tlTveaI7gjPxT1R7XrN9fBtKKLCJ/D1BVCvzAaPki8R0MXnURYdGUOkuhHqx
+        NZqL7vJfUzgiS4W428dsaaTwG+PtL3ocdGocRQsXmwzChKrdMWK4pg9VlivGSjUQFVz07o
+        Ei2jltpk2hcToETKnPye3Vvi5qssgF8=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-219-hkIYnPwbNhGx6MYcfQU_uA-1; Mon, 13 Feb 2023 07:51:56 -0500
+X-MC-Unique: hkIYnPwbNhGx6MYcfQU_uA-1
+Received: by mail-wm1-f69.google.com with SMTP id bi16-20020a05600c3d9000b003dfeeaa8143so6104467wmb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:51:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FoPnuk0eTFB4lwFXHE/o6JfLheTxlR2V4EZJdMaA1oA=;
+        b=Ehbka1wtFtzwJlOSS+ozirQIdqeCUPaVTv34oLrzOx/4tHA3XtyEA2sGfn4416y9l8
+         8MtbQOUh/Gk+UCf4s3zdKI46dgWa9mfUBcckuxL1YTOFfUkMGxx1k/Zte0fHkxYZ4a/q
+         0Heu0IioL/cNCYtaA8UgcZUetdCEQSlSchHlkhVFteDYpbvTQ+LrUq7MMbOFuaJ3+lY3
+         9nThkjyze/L1HiDTtYSNBv80hBHodIyBtaMqbgrh7r8S1v5PPMJmcb7oATVxQaheS2Xr
+         xwHWVcQ8eF1CuNmLvhGtWvaHTFnIUj9y1KLDgO7xtf6kceXCd1Lb09Oap2q/WXYEI+ku
+         +JDw==
+X-Gm-Message-State: AO0yUKUZhg/wN42fJ090G5427nW2JqDub+eKN6/BtwzxDPQR/qQ0gYL+
+        9muRYSPA9O8q6ndZVqMp645Hw2JNFACyhiKMsjp/afGM9YmP0E9VvY+7dDagj9yuUbl2jhAXB9X
+        7ZKH3OSHE+5vMGz0FbtcbjYqf
+X-Received: by 2002:adf:e742:0:b0:2c5:53e4:9e53 with SMTP id c2-20020adfe742000000b002c553e49e53mr3751432wrn.65.1676292715361;
+        Mon, 13 Feb 2023 04:51:55 -0800 (PST)
+X-Google-Smtp-Source: AK7set9smxW49CA0m4KiNwy7Slmijw2D6DfBOMZPymcaM4Suz+DpSuVvrTmBdSFDQlPUXY9CdP98hw==
+X-Received: by 2002:adf:e742:0:b0:2c5:53e4:9e53 with SMTP id c2-20020adfe742000000b002c553e49e53mr3751415wrn.65.1676292715100;
+        Mon, 13 Feb 2023 04:51:55 -0800 (PST)
+Received: from ?IPV6:2003:cb:c705:6d00:5870:9639:1c17:8162? (p200300cbc7056d00587096391c178162.dip0.t-ipconnect.de. [2003:cb:c705:6d00:5870:9639:1c17:8162])
+        by smtp.gmail.com with ESMTPSA id z5-20020a5d4c85000000b002c54d57e846sm6436559wrs.96.2023.02.13.04.51.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 04:51:54 -0800 (PST)
+Message-ID: <f04b674d-93ce-7c83-601b-1badd9bde3d7@redhat.com>
+Date:   Mon, 13 Feb 2023 13:51:53 +0100
 MIME-Version: 1.0
-In-Reply-To: <20230210101244.zsmtmsoo4xjx7suj@quack3>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
 Content-Language: en-US
-X-CM-TRANSID: gCh0CgD3qa1dMupjSMMuDg--.19493S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWF43Ww1DtF4xtryUCw4UJwb_yoW5CF18pF
-        WxJFWqkFW8Xw1xA3WDt3WvqrWFg3s7Ja1UJrs8XFWjkFn8JF93XF4IkFWF9F17ArZ5WrnI
-        y393J34j9Fy3ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
-        6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UWE__UUUUU=
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     yang.yang29@zte.com.cn
+Cc:     akpm@linux-foundation.org, imbrenda@linux.ibm.com,
+        jiang.xuexin@zte.com.cn, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com,
+        xu.xin16@zte.com.cn
+References: <202302041443080696983@zte.com.cn>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v5 1/6] ksm: abstract the function
+ try_to_get_old_rmap_item
+In-Reply-To: <202302041443080696983@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jan,
+On 04.02.23 07:43, yang.yang29@zte.com.cn wrote:
+> Thanks for these suggestions, we will take them into patch v6.
 
-On 2/10/2023 6:12 PM, Jan Kara wrote:
-> On Thu 09-02-23 11:09:33, Bart Van Assche wrote:
->> On 2/9/23 00:56, Jan Kara wrote:
->>> On Wed 08-02-23 09:53:41, Bart Van Assche wrote:
->>>> The test results I shared some time ago show that IOPRIO_CLASS_NONE was the
->>>> default I/O priority two years ago (see also https://lore.kernel.org/linux-block/20210927220328.1410161-5-bvanassche@acm.org/).
->>>> The none-to-rt policy increases the priority of bio's that have not been
->>>> assigned an I/O priority to RT. Does this answer your question?
->>> Not quite. I know that historically we didn't set bio I/O priority in some
->>> paths (but we did set it in other paths such as some (but not all) direct
->>> IO implementations). But that was exactly a mess because how none-to-rt
->>> actually behaved depended on the exact details of the kernel internal IO
->>> path.  So my question is: Was none-to-rt actually just a misnomer and the
->>> intended behavior was "always override to RT"? Or what was exactly the
->>> expectation around when IO priority is not set and should be overridden?
->>>
->>> How should it interact with AIO submissions with IOCB_FLAG_IOPRIO? How
->>> should it interact with task having its IO priority modified with
->>> ioprio_set(2)? And what if task has its normal scheduling priority modified
->>> but that translates into different IO priority (which happens in
->>> __get_task_ioprio())?
->>>
->>> So I think that none-to-rt is just poorly defined and if we can just get
->>> rid of it (or redefine to promote-to-rt), that would be good. But maybe I'm
->>> missing some intended usecase...
->> Hi Jan,
->>
->> We have no plans to use the ioprio_set() system call since it only affects
->> foreground I/O and not page cache writeback.
->>
->> While Android supports io_uring, there are no plans to support libaio in the
->> Android C library (Bionic).
->>
->> Regarding __get_task_ioprio(), I haven't found any code in that function
->> that derives an I/O priority from the scheduling priority. Did I perhaps
->> overlook something?
-> This condition in __get_task_ioprio():
->
->         if (IOPRIO_PRIO_CLASS(prio) == IOPRIO_CLASS_NONE)
->                 prio = IOPRIO_PRIO_VALUE(task_nice_ioclass(p),
->                                          task_nice_ioprio(p));
->
-> sets task's IO priority based on scheduling priority.
->
->> Until recently "none-to-rt" meant "if no I/O priority has been assigned to a
->> task, use IOPRIO_CLASS_RT". Promoting the I/O priority to IOPRIO_CLASS_RT
->> works for us. I'm fine with changing the meaning of "none-to-rt" into
->> promoting the I/O priority class to RT. Introducing "promote-to-rt" as a
->> synonym of "none-to-rt" is also fine with me.
-> OK, so it seems we are all in agreement here that "none-to-rt" behavior is
-> not really needed. Hou, can you perhaps update your patches and the
-> documentation to make "none-to-rt" just an alias for "promote-to-rt"?
-> Thanks!
-Should I keep "none-to-rt" and make it work just like "promote-to-rt" or should
-I just remove "none-to-rt" and add "promote-to-rt" ? I think the latter will be
-more appropriate.
->
-> 								Honza
+Please don't remove all context from your replies. Makes it really hard 
+to follow-up :)
+
+Further, there seems to be an issue with threading and your mails. For 
+example, your cover letter [1] does not link the other patches like [2], 
+for example, because the patches don't have "in-reply-to:" tags. Try 
+using "git send-email", that should take care of threading automatically.
+
+
+[1] https://lore.kernel.org/all/202302100915227721315@zte.com.cn/
+[2] https://lore.kernel.org/all/202302100916423431376@zte.com.cn/
+
+-- 
+Thanks,
+
+David / dhildenb
 
