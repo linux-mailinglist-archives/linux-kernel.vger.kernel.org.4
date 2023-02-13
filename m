@@ -2,116 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F73B695123
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:56:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D40B8695126
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbjBMT42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 14:56:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
+        id S230384AbjBMT5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 14:57:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjBMT40 (ORCPT
+        with ESMTP id S229522AbjBMT5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 14:56:26 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D788C1CAD3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 11:56:25 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pRevy-0005N8-Qi; Mon, 13 Feb 2023 20:56:18 +0100
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pRevx-0002IA-Kb; Mon, 13 Feb 2023 20:56:17 +0100
-Date:   Mon, 13 Feb 2023 20:56:17 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Marek Vasut <marex@denx.de>
-Cc:     Frieder Schrempf <frieder@fris.de>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Heiko Thiery <heiko.thiery@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>
-Subject: Re: [PATCH 6/6] arm64: dts: imx8mm-kontron: Add support for reading
- SD_VSEL signal
-Message-ID: <20230213195617.xndagbarc3k5kegr@pengutronix.de>
-References: <20230213155833.1644366-1-frieder@fris.de>
- <20230213155833.1644366-7-frieder@fris.de>
- <20230213161548.ucaqpza65byyqvfo@pengutronix.de>
- <eef49a1c-4dc3-7517-c760-ecc20704f943@denx.de>
+        Mon, 13 Feb 2023 14:57:04 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB5B1CACF;
+        Mon, 13 Feb 2023 11:57:01 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DINkIY021740;
+        Mon, 13 Feb 2023 19:56:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=HerWC2ET+A8WuGrlKlgGoJcGkj0yLS1SYi5bhbzZ4+I=;
+ b=bcIJVfQ7tQz3L0CQUeu8PHczynK7ct7VSoZjk4ox3C555R5uLLw/UGLbZV3yc3MWpRsH
+ EIllI8ZpLtcKPKgcIEZOIf0do6YNS2vV2198A7qZP0SfN6G8WBONzyPrZpT+SrGio2aN
+ 89QFBvujtp7f7fmnwxMBZmtwaeHo5KbVFwo6Pbjijj0J9qWY1HXYkepQo7WLbf/yaq5d
+ ueqEYAs69s5vq6ELTXqhlFewcqmrPugPCJUFzpcJ+PLwXbu6h80QE5x6gOu+9IONQJhy
+ TX74cLy9g3tDpW4a8GNMvZhceVFfEdW4ZDRZNxmUKRUGEXKCQXdDMOAAsC5IgUUdF5x/ Pg== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nqtetj00c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 19:56:53 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31DCJ7Hc031329;
+        Mon, 13 Feb 2023 19:56:52 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3np29fk3ny-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 19:56:52 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31DJunSh48890320
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Feb 2023 19:56:49 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C04D820043;
+        Mon, 13 Feb 2023 19:56:49 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2331D20040;
+        Mon, 13 Feb 2023 19:56:48 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.20.198])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Mon, 13 Feb 2023 19:56:47 +0000 (GMT)
+Date:   Tue, 14 Feb 2023 01:26:45 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, jack@suse.cz,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 17/21] ext4: remove unnecessary count2 in
+ ext4_free_data_in_buddy
+Message-ID: <Y+qV/TF4PJdI3oh/@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <20230209194825.511043-1-shikemeng@huaweicloud.com>
+ <20230209194825.511043-18-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <eef49a1c-4dc3-7517-c760-ecc20704f943@denx.de>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230209194825.511043-18-shikemeng@huaweicloud.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: RrrqGD5Dyl2D0uawNOPqV951cxWpWQ1k
+X-Proofpoint-ORIG-GUID: RrrqGD5Dyl2D0uawNOPqV951cxWpWQ1k
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-13_12,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ mlxscore=0 suspectscore=0 spamscore=0 malwarescore=0 impostorscore=0
+ adultscore=0 priorityscore=1501 mlxlogscore=999 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302130171
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marek, Frieder,
-
-On 23-02-13, Marek Vasut wrote:
-> On 2/13/23 17:15, Marco Felsch wrote:
+On Fri, Feb 10, 2023 at 03:48:21AM +0800, Kemeng Shi wrote:
+> count2 is always 1 in mb_debug, just remove unnecessary count2.
 > 
-> [...]
+> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+> ---
+>  fs/ext4/mballoc.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
-> > > @@ -347,7 +347,7 @@ MX8MM_IOMUXC_SD2_DATA1_USDHC2_DATA1		0x1d6
-> > >   			MX8MM_IOMUXC_SD2_DATA2_USDHC2_DATA2		0x1d6
-> > >   			MX8MM_IOMUXC_SD2_DATA3_USDHC2_DATA3		0x1d6
-> > >   			MX8MM_IOMUXC_SD2_CD_B_GPIO2_IO12		0x019
-> > > -			MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT		0x1d0
-> > > +			MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT		0x400001d0
-> > 
-> > The VSELECT pin should be driven by the (u)sdhc core...
-> > 
-> > >   		>;
-> > >   	};
-> > >   };
-> > > diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
-> > > index 5172883717d1..90daaf54e704 100644
-> > > --- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
-> > > +++ b/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
-> > > @@ -196,6 +196,7 @@ reg_nvcc_sd: LDO5 {
-> > >   				regulator-name = "NVCC_SD (LDO5)";
-> > >   				regulator-min-microvolt = <1800000>;
-> > >   				regulator-max-microvolt = <3300000>;
-> > > +				sd-vsel-gpios = <&gpio1 4 GPIO_ACTIVE_HIGH>;
-> > 
-> > and by using the sd-vsel-gpios property the IOMUXC_GPIO1_IO04 have to be
-> > muxed as GPIO, which is not the case. So I think that u-boot have a bug
-> > within the (u)sdhc core.
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index 289dcd81dd5a..f9fc461b633f 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -3590,7 +3590,7 @@ static void ext4_free_data_in_buddy(struct super_block *sb,
+>  {
+>  	struct ext4_buddy e4b;
+>  	struct ext4_group_info *db;
+> -	int err, count = 0, count2 = 0;
+> +	int err, count = 0;
+>  
+>  	mb_debug(sb, "gonna free %u blocks in group %u (0x%p):",
+>  		 entry->efd_count, entry->efd_group, entry);
+> @@ -3606,7 +3606,6 @@ static void ext4_free_data_in_buddy(struct super_block *sb,
+>  	db = e4b.bd_info;
+>  	/* there are blocks to put in buddy to make them really free */
+>  	count += entry->efd_count;
+> -	count2++;
+>  	ext4_lock_group(sb, entry->efd_group);
+>  	/* Take it out of per group rb tree */
+>  	rb_erase(&entry->efd_node, &(db->bb_free_root));
+> @@ -3631,8 +3630,7 @@ static void ext4_free_data_in_buddy(struct super_block *sb,
+>  	ext4_unlock_group(sb, entry->efd_group);
+>  	ext4_mb_unload_buddy(&e4b);
+>  
+> -	mb_debug(sb, "freed %d blocks in %d structures\n", count,
+> -		 count2);
+> +	mb_debug(sb, "freed %d blocks in 1 structures\n", count);
+>  }
+>  
+>  /*
+> -- 
+> 2.30.0
 > 
-> The trick here is that the VSELECT is operated by the usdhc block as a
-> function pin, but the PMIC driver can read the current state of the VSELECT
-> pin by reading out the GPIO block SR register. Since the IOMUX SION bit is
-> set on the VSELECT pin, the state of the pin is reflected in the GPIO block
-> SR register even if the pin is muxed as function pin.
-> 
+If we always have 1 in the debug message, maybe we can change "structures"
+to "structure". Other than that, feel free to add:
 
-Thanks for this explanation :) Why does the regulator driver need to
-know the current state of this pin? Since the voltage switching requires
-some cmd's before the actual voltage level switch. So this must be
-handled within the core.
-
-Also after checking the driver, adding the sd-vsel-gpios will request
-the specified gpio as output-high. Out of curiosity, what's the bug you
-triggering within U-Boot?
-
-Regards,
-  Marco
+Reviewed-by: Ojaswin Mujoo <ojaswin@linux.ibm.com> 
