@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC677694C21
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66313694C25
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:14:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjBMQNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 11:13:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
+        id S230047AbjBMQOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 11:14:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbjBMQNm (ORCPT
+        with ESMTP id S229598AbjBMQOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 11:13:42 -0500
+        Mon, 13 Feb 2023 11:14:39 -0500
 Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67EBD1ADD4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:13:35 -0800 (PST)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-16a7f5b6882so15683185fac.10
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:13:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48A030CA
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:14:38 -0800 (PST)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-169ba826189so15750064fac.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:14:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HOydk6f84zeK5t+nIiZ1wDb4AVF47DPeadPPFSHvPJc=;
-        b=HC0mIP+w3RPfsCmj0wmS+ImFgNYE3XYFw5PVe53+TRWvZSAjbl9vb9taNnzbmcwhDS
-         E8kfabCq1CWjn58/nwd/32SJPsKfMsTNGimZ4rNY/GlTDcIWtcop0Sv9gToNamMaCjUH
-         xGkbrGJHMxKP6YGuRNTHdz1IcmHrSROTpmkTDQbyQubc47WJe/TpQ0nBdbdn2sR67obA
-         zEuspuxtvx4lcR/6swPWZ/VButDBCRWaUSFSWOZ+zflPgd/kDWXtByjHBf7AzGrIUyCB
-         xvQhAjytrT0L7RNKJGk7y9IGq9q5BQWBsBPl55ZOuyw4Cq4sd7u6u6QaYLdmN2Htu8Ag
-         Dg8A==
+        bh=0+daSh/Z6FdPjI606HSEb8Krfq5/w7DOEju6X6glUWc=;
+        b=ea7Smiuhu4d9oZABwxVM0NTMtLIFiHVnmKQaOfsLt5w2uJyoLJLiGtgMDAG0CqSZ7w
+         IDUJhB6w0bzXVBybdy1JpA53L+suWpiS4Jd2nWiTyO8pE+BBI3H72nfRyN2ubU5xcGtq
+         K/QYzK0RT51rA99IjrWZdCwSwUbCVJRgy3Kl6/umR7eVyzlwL3ssegn8EZ1yLHaAOusk
+         S4R0Nwx6IUfBX8j6ZVoiZbmIG1J+Sr3b1iBrcRV3qK3Hx4mzzvO1zDD3yn/Llqst9Fw5
+         UjnN/1atOusuH2DZoDWeQd3VCb3m3d3MP4WKsuHOJwm6EIa3o78vq1AVJbzcL5jyYZBX
+         9iHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HOydk6f84zeK5t+nIiZ1wDb4AVF47DPeadPPFSHvPJc=;
-        b=iViP1Dz8aIEhw+CnNxem12zl5f7YFvew6X3wabp4qhOs2fTyNuXf9J3c2gwpsjUv0L
-         GtDfDo0u1PPQFI1CzC8qoaA51T4Gvrda7HKfXvZYEm7pJbUqx9LogcR0jBBhqXzkGppW
-         8dWcFjGEH5SwGaooC64N0PsecAOvpCU+iWkxkS+BwbW8+/hCE3yU/p9+BuBZgDY4pzB5
-         VpfQdvipZtMpQqvrvF+IGITKNzG+kZyf77YvAmKaM6E1lxOR2W7tzR7cP3IaQSmFe3rp
-         X/hbfaqovarR3RHsCUQAXyM0EP/qnCGfYU7GwWIkN8Ezv9TlZ8TSv0mBbhZM0+8ivDcm
-         sJLg==
-X-Gm-Message-State: AO0yUKWMsUh0S91EdhqVrjSjLLpzj3pMiCOCTBYDJS9+fsPL8NATl7dd
-        EsYizMFuKuK4HSkcaRsXYcYfVVHImr1U1rmr7o3LweUm
-X-Google-Smtp-Source: AK7set/+1BMz88y4VQ6Euwne6f3OxLMLtGXYlj3boy9L2t2Ld3F0bsO6hDBA9bIjQfHtI3wcFCTsVFD8Uf3x7wTeTiw=
+        bh=0+daSh/Z6FdPjI606HSEb8Krfq5/w7DOEju6X6glUWc=;
+        b=cFGH0qQc4DqLcTKj0CmJ4CoCjlIgGa0EMXNrS0EKpOga1gcux7V6IDMCFPVGtjoVVe
+         rHXHk5BGzuvs9EOoPUX8qvtgZVTjV/SR+N6t304F9sJWWDmx4hxC8q10CeNlCMwhVSrW
+         iO6gg7t++3TaTFPGK6thzP0EUyXpR87TSUX7nBKGIuT62qrNsCrotU/kWuIMyM4YW3V9
+         2zgfW/86L6Mjhtq/i7VooYHQ+7Du+lx5ib5AOWYxg3QKnDTfT0denzV1U/pTkLFlp9U1
+         O2474RluRlegPtvCH+CfZfONfhkwbeJZgF9TD7CujhaoJVbDW7szmCRp49VP2lmLP5Kg
+         ch+w==
+X-Gm-Message-State: AO0yUKXLTp7Srp4uVVIxR/CbHgvFoorG/tfDI3eB6LRomS93FpPpuXRE
+        TyeJxShHTLcH4pxC68fVUC4eLZif2Fj+Kxrzur8=
+X-Google-Smtp-Source: AK7set97WCzJ4Aa7TmQ1GCX0WG33oXuc2vcHSz1xIZ92ltEtafFhAodhFKGmdvH9ZrEk40q3d6gB/FepHwjoZ9XNELQ=
 X-Received: by 2002:a05:6870:13d1:b0:163:a303:fe2f with SMTP id
- 17-20020a05687013d100b00163a303fe2fmr2647166oat.96.1676304814031; Mon, 13 Feb
- 2023 08:13:34 -0800 (PST)
+ 17-20020a05687013d100b00163a303fe2fmr2647493oat.96.1676304876804; Mon, 13 Feb
+ 2023 08:14:36 -0800 (PST)
 MIME-Version: 1.0
-References: <20230210005859.397-1-yang.lee@linux.alibaba.com>
-In-Reply-To: <20230210005859.397-1-yang.lee@linux.alibaba.com>
+References: <20230210010558.10621-1-yang.lee@linux.alibaba.com>
+In-Reply-To: <20230210010558.10621-1-yang.lee@linux.alibaba.com>
 From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 13 Feb 2023 11:13:22 -0500
-Message-ID: <CADnq5_OCRemgZTS3R7soFcsnUqgf+sewJ4GM42jkTBDyrKXyLg@mail.gmail.com>
-Subject: Re: [PATCH -next] drm/amd/display: Simplify bool conversion
+Date:   Mon, 13 Feb 2023 11:14:25 -0500
+Message-ID: <CADnq5_OR9QN7yXhEF2SJ4oRtX3uLtwCT6WCWTcNj0ibj7Azptw@mail.gmail.com>
+Subject: Re: [PATCH -next] drm/amd/display: clean up some inconsistent indentings
 To:     Yang Li <yang.lee@linux.alibaba.com>
 Cc:     alexander.deucher@amd.com, sunpeng.li@amd.com, Xinhui.Pan@amd.com,
         Rodrigo.Siqueira@amd.com, linux-kernel@vger.kernel.org,
@@ -70,32 +70,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks.
+Applied.  Thanks!
 
-On Thu, Feb 9, 2023 at 7:59 PM Yang Li <yang.lee@linux.alibaba.com> wrote:
+On Thu, Feb 9, 2023 at 8:06 PM Yang Li <yang.lee@linux.alibaba.com> wrote:
 >
-> ./drivers/gpu/drm/amd/display/dc/link/protocols/link_dp_capability.c:1610:68-73: WARNING: conversion to bool not needed here
+> drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_factory.c:145 get_ddc_line() warn: inconsistent indenting
+> drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_factory.c:201 dc_link_construct_phy() warn: inconsistent indenting
 >
 > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4025
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4026
 > Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 > ---
->  .../gpu/drm/amd/display/dc/link/protocols/link_dp_capability.c  | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/gpu/drm/amd/display/dc/link/link_factory.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 >
-> diff --git a/drivers/gpu/drm/amd/display/dc/link/protocols/link_dp_capability.c b/drivers/gpu/drm/amd/display/dc/link/protocols/link_dp_capability.c
-> index 24d356ebd7a9..cb38afde3fc8 100644
-> --- a/drivers/gpu/drm/amd/display/dc/link/protocols/link_dp_capability.c
-> +++ b/drivers/gpu/drm/amd/display/dc/link/protocols/link_dp_capability.c
-> @@ -1607,7 +1607,7 @@ static bool retrieve_link_cap(struct dc_link *link)
->                         dpcd_data[DP_TRAINING_AUX_RD_INTERVAL];
+> diff --git a/drivers/gpu/drm/amd/display/dc/link/link_factory.c b/drivers/gpu/drm/amd/display/dc/link/link_factory.c
+> index 13a766273755..23f668d90460 100644
+> --- a/drivers/gpu/drm/amd/display/dc/link/link_factory.c
+> +++ b/drivers/gpu/drm/amd/display/dc/link/link_factory.c
+> @@ -142,7 +142,7 @@ static enum channel_id get_ddc_line(struct dc_link *link)
+>         struct ddc *ddc;
+>         enum channel_id channel;
 >
->                 link->dpcd_caps.ext_receiver_cap_field_present =
-> -                               aux_rd_interval.bits.EXT_RECEIVER_CAP_FIELD_PRESENT == 1 ? true:false;
-> +                               aux_rd_interval.bits.EXT_RECEIVER_CAP_FIELD_PRESENT == 1;
+> -               channel = CHANNEL_ID_UNKNOWN;
+> +       channel = CHANNEL_ID_UNKNOWN;
 >
->                 if (aux_rd_interval.bits.EXT_RECEIVER_CAP_FIELD_PRESENT == 1) {
->                         uint8_t ext_cap_data[16];
+>         ddc = get_ddc_pin(link->ddc);
+>
+> @@ -196,8 +196,8 @@ static bool dc_link_construct_phy(struct dc_link *link,
+>
+>         DC_LOGGER_INIT(dc_ctx->logger);
+>
+> -               link->irq_source_hpd = DC_IRQ_SOURCE_INVALID;
+> -               link->irq_source_hpd_rx = DC_IRQ_SOURCE_INVALID;
+> +       link->irq_source_hpd = DC_IRQ_SOURCE_INVALID;
+> +       link->irq_source_hpd_rx = DC_IRQ_SOURCE_INVALID;
+>         link->link_status.dpcd_caps = &link->dpcd_caps;
+>
+>         link->dc = init_params->dc;
 > --
 > 2.20.1.7.g153144c
 >
