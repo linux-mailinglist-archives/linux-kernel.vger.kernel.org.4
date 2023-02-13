@@ -2,104 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8D6693D56
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 05:15:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A52693D5D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 05:18:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbjBMEPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 23:15:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
+        id S229545AbjBMESb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 23:18:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjBMEPq (ORCPT
+        with ESMTP id S229436AbjBMES2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 23:15:46 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182B8E398;
-        Sun, 12 Feb 2023 20:15:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=b2TQAFC9pQ+rFyre5LGzTHnEk3iqoypnovZvNJTJtgQ=; b=tt2oG+eQWgWsZl+xyvKM8MNAxj
-        VxZJMIDE6T3wn23KcFzBD2dZVlX3BTABLB+4WrBlgaRzb3rdD0dpboH8TYGeHiU2lhtkx0SY/WCcj
-        VhcGdaq6k7QC+QmoafepvH76tngi5sLd4M6iRNNfvtbh+M4hWKo2F0oiYBxHhCmZpoP96sDZckkqe
-        4rCFVUvZxuSw6zPA3AawRwJAmUfXZGtOjvS+FeTbxlsP+G62MvLGcSAOz7CP+XxzONhy4JAMFoBRR
-        jvA6VS63YbZlktpuhP/73IAV4Q+eSz38jmc2cOuzML+Nsu040MaMbXOdEQpag8pVY5K81qU/j/v2E
-        fW58fEIA==;
-Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pRQFh-00D56G-7X; Mon, 13 Feb 2023 04:15:41 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Peter Rosin <peda@axentia.se>
-Subject: [PATCH 3/3] rtc: mt6397: select IRQ_DOMAIN instead of depending on it
-Date:   Sun, 12 Feb 2023 20:15:35 -0800
-Message-Id: <20230213041535.12083-4-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230213041535.12083-1-rdunlap@infradead.org>
-References: <20230213041535.12083-1-rdunlap@infradead.org>
+        Sun, 12 Feb 2023 23:18:28 -0500
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2135.outbound.protection.outlook.com [40.107.117.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E128CA27B;
+        Sun, 12 Feb 2023 20:18:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fEsAW0IE10zgSSyn/mTn7XXko2FsqN8LdkNtCiPJkim0bGmDKvU7SHlcMWqm0CfvopBci6jqtYNarF3Piu4V9ZO0Xnq3eQLk2ggujvtwAFZqxj/w0EFAlQ3c2x0aXhhfYxHDO22YPgmTSTqZG+45A6iivn+j4nOxBAMCqvIAnkmOdIn6SlRoY6FqEbH3HfvMoUKhysAyo6Fo5sz77oWZ2gqvNS28AeA+CVpw/R9OZtvYOOgsZCTbtLZHbDCFaP1ShFIx4VDCGYIttdD0S4lBFyUJQmuVAE3Ca39Hrj4ar+HhKSbBXhUsp3XUxH6+sL2OU1mcPHzeWZ6u9pm7IkBgZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PTF1iGJu2WouPVL9FLuBlkzln2U5RtwyIBw9r1Upmhk=;
+ b=mx5U2Lfiks1BSkP0UhwPWn29KzIv85G0bz5aB2sD+1juScN713CWXlR0trZVuii7fTmFxluDDaGPGIfPFOEBozg8A8YJQx0k3y+KdOJPXxbHJHIMuVSBlQOrMH6r3lJdV0hSorIrAY/UCYk32/UCx1ofhXtR0pdOWSW8xF2MIZxg/PIo+EBSzNeMzj+jYN5/xD5EwEU8qs71wf12IzCimeoetDUkViSqem+PWAovk4l3Rk6k33HAAOsUDjOoXtORBweGVKPywrphXOjn+WxBA/p90xWA847csLwXPMXFNMSz7huo2l2SgV1mpN0UZE94ZM1O4Vx3YF0CUw4A5z2FsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PTF1iGJu2WouPVL9FLuBlkzln2U5RtwyIBw9r1Upmhk=;
+ b=TdPSrP48533SF9MseTgxElwBnY49YbtbXHmLOUa8dk7MjARUmBZrQmWN4rGhYAbIag+bKLCb8CFOJNlUyn767oRiDr9AWWsRUAZ/C7in3bM43Y00rzETLlIhMK1Mmgk2ltOY/EH+5TtG4UBOSQ0sd+UPa3FvCXmrCC15sHik0A5VLVRMazLyKw2NR9AcbEcghcsPBq+wAwNrYK6kc+EuNsx8vDg59zX5DuFTN0wpiGQDHl8cmyRnpxf1oVUK9UsaVLnfre5wC3Dl/8hP307SHxNUAJokyQMjSKC/mIwx1IDK7zKItYzgvslvw5+Y09ZuqU6o1B6XvnDTDUJZYzGf6g==
+Received: from KL1PR0601MB3781.apcprd06.prod.outlook.com
+ (2603:1096:820:11::14) by TY0PR06MB5563.apcprd06.prod.outlook.com
+ (2603:1096:400:328::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.6; Mon, 13 Feb
+ 2023 04:18:17 +0000
+Received: from KL1PR0601MB3781.apcprd06.prod.outlook.com
+ ([fe80::2cd0:fdbf:62e0:8eaa]) by KL1PR0601MB3781.apcprd06.prod.outlook.com
+ ([fe80::2cd0:fdbf:62e0:8eaa%4]) with mapi id 15.20.6111.010; Mon, 13 Feb 2023
+ 04:18:16 +0000
+From:   ChiaWei Wang <chiawei_wang@aspeedtech.com>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
+Subject: RE: [PATCH 3/4] serial: 8250: Add Aspeed UART driver
+Thread-Topic: [PATCH 3/4] serial: 8250: Add Aspeed UART driver
+Thread-Index: AQHZPSGHc2FuUfvkK0yq1ehxne+sqq7H/IaAgARD7DA=
+Date:   Mon, 13 Feb 2023 04:18:16 +0000
+Message-ID: <KL1PR0601MB3781ABE9B28372C88E62946491DD9@KL1PR0601MB3781.apcprd06.prod.outlook.com>
+References: <20230210072643.2772-1-chiawei_wang@aspeedtech.com>
+ <20230210072643.2772-4-chiawei_wang@aspeedtech.com>
+ <34e3729f-9266-3606-9f11-33222f50e753@molgen.mpg.de>
+In-Reply-To: <34e3729f-9266-3606-9f11-33222f50e753@molgen.mpg.de>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: KL1PR0601MB3781:EE_|TY0PR06MB5563:EE_
+x-ms-office365-filtering-correlation-id: 9c7f0aa1-0f18-4597-dc6e-08db0d7954db
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 5hZDOetv4ceWl7DAvNoRaW9EAhz37v+u9xWXdMMjxVtNaXel4Iau6i/G1GIgHUEUc7GdUKQBg4/k8XNB/Wb8R0uLK0AOmnjslpEYvkxjzPdNXMnVRP3tPVydsRUOOwr8lbdaP2igeRT2j6ZLT/kcIZLf1/jA09cq99vJjfZzfpiAQuN7OqzJQA1ls3IjwlHBOVt8QM+eC52q+kDqaL8Xs81MRWzdL6pnUJbG5IesAcNEiPhyZObxw0ehTAUrIEoOGLcNIDzUD4PHst0/CJUYWmGzuIvmvbGq9OaS0XI9d8SMq5FsREVT/oLMbxaMDEC/CnwcnZDxfrsffhoGHUtNdyQ9qainoKm5wWnsASuriCzK84ZlptYyrY6JU+O/Ak6HAUsJ7ZC+RguAY+kTY2Zff0FPz4yjYi6qtPwgFx8vxcpKE3GtFyD+OPom75hoDZuaXZKgqK2wjlJo0arErHNKtz0S5W97fp17Fhyw2YNUM9wC4qqK4e+1tjQns6Utb5DYWFrCxJZ276Pa2MrNXSU2c/90y1skZ3nB36uyvWFEgdzvF/rofoU78Yg6UmZRqsstYDx6HFavqAE/V4AjGTNI0wqJYfE/x8e/uhu7M7Sx2aVsUHJE2g3Mbn2WLNOdnW5szhTaLSiJ8hcKJRVia6limqvD7/macAbC0X8KVkEuWh/YwNbxsRyoM0j1qIf79nXk+G3kf0OwqNs4Gw/Tp3zCGQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR0601MB3781.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(376002)(39840400004)(396003)(346002)(366004)(451199018)(33656002)(38070700005)(122000001)(38100700002)(316002)(86362001)(26005)(186003)(6506007)(71200400001)(9686003)(7696005)(478600001)(83380400001)(8936002)(7416002)(2906002)(41300700001)(5660300002)(66476007)(52536014)(54906003)(64756008)(4326008)(6916009)(66446008)(8676002)(66946007)(55016003)(76116006)(66556008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RnRoc1h0OTVKVHRoVkY4eHBJWlZSb2tFZ05GZXc4NlFzUEN6d2RBWnlTSlE3?=
+ =?utf-8?B?VmtxakN4WG1vQVBua08xM0ZkNkcyM1h6UE0vTzBJYmVrcFZ6SGFLZFBuQzlt?=
+ =?utf-8?B?eFdpMnk3YnRVNVQzQU9NejJYRjFVWXB4U1lrTEhvQW9sV3UvdUtYN0Z0L05B?=
+ =?utf-8?B?VnNpcHppS0dXR3gzYjJuak5vYm1IV0tuallUbUhDREx4N3BqYkZvV0NMSlNm?=
+ =?utf-8?B?M2o4aXFYNTlRdkZNUjVFNkVxcjQyaUdyUm1CclRjUzVnR1dsNjYrOG1WSkpX?=
+ =?utf-8?B?U2lXNGRTMlJLcVBQeHhLR3Y4M1ZwOHNOZXE1MGhybTVXQ1orSnAvRXVvMDRN?=
+ =?utf-8?B?T3NsdVdEV3F6QmZXVld4NTM0L0VONXlIY1plNytVdnA2dFp3ZVdIVGxEM1o0?=
+ =?utf-8?B?NGZUbWg1N1kzZFh4d3h5aGFqSitaZzM5K21aYmdOOEplZXhYVDh2bUdIN0NJ?=
+ =?utf-8?B?UlU2YXpvbDAxOERCYnRCbjVENjdIY1RjWFVmZXoydzM3ZmkyOEJCK2d3RDQ5?=
+ =?utf-8?B?US9OZ3prR3FXSXFJQ3dyWUZSUGVLaTVjR2wvY2xrTlhpMFNqS3RuZGZpVTlx?=
+ =?utf-8?B?NHkvV0p3RDVrZ25Pcy9rL3pvNEZ2YVl2Q3VORTNMaGZYMEZqbWpDYjZoVC9y?=
+ =?utf-8?B?U0dDS0pKOVJjSWt6dkpZV2I4T0dQeGVsajdLemVodSt4SlVicmpNcmRaVFg5?=
+ =?utf-8?B?bmtoSzMyVjQ0M3M3K1ZYUmdCTnNBM29rVDNCYldJQ21NU3AvUzA3aUpWRjdR?=
+ =?utf-8?B?b09FNDdzZ1g1QS9GcUlUQmdabWJOMjVmZHZjeUhxUndFV1VKU2JZaHRvN0NE?=
+ =?utf-8?B?b3ZZUE9lNm5IRjRKRmNDcW03MVlFNnFMK0R3Sko3SnZSaGRCb3RxUmJDUG11?=
+ =?utf-8?B?cEF0MU5WWk1WcDRrcUJyWU5vOUdoOGZxZFhNS1haVzlCdzF3OUd1VjlLbi9Q?=
+ =?utf-8?B?OXdnNU1SWU9MMnhqSlJmajlHK05lZmJTcFBVdGZGSUtsZndNRWRHVW5kU3hZ?=
+ =?utf-8?B?VS83R0VDN3NsZ0pBNFl5MDNJTkxiai9wYW9oamZLeGh5aWRiL1A1YW1XOGkx?=
+ =?utf-8?B?QzlsNVlsRncxWmJiNHRIdktWQjJiTy9sWitJaG8weG9Ed0Q1a0t3Rnk4VTIx?=
+ =?utf-8?B?di94VVd3M3QvSTVNUkwzemlBV0VtTURHYjBNOUlNUXV0WUhpMnhrRXJMdklT?=
+ =?utf-8?B?bnN5cUVXaTJkU0NPRGdMMG9nV2pOdnpxcmNJcnJlNjkybjI3OVFib0tKYksw?=
+ =?utf-8?B?N01ncWpCa0tESDVZMStNT0xEblZaTW9QYVRHM2VURDlmQkphVkQ5YjBwTVZN?=
+ =?utf-8?B?SXBVc1ZTNk8ycWRwNHByNnZ6eGE1aEh4ZDl0TE1mSm94ZHFqNWIyV2tTUXdv?=
+ =?utf-8?B?REJRY1NaSXhDb3NWRlhnc0owSkkwcWg1Z0dVaks0SXNzMSttdXVnMysrQ0VI?=
+ =?utf-8?B?WTUzYjViSS9QNUFoSGZPeXlOcmxaMFhQR1dkQ0FMWi92RERzOU9MQU56eWZI?=
+ =?utf-8?B?MHVSRk5VOUhLR2lnOFVEalF0aElEQk1NMWowTll0TU9uM3NpdVJkdlRwZEpP?=
+ =?utf-8?B?ZjF0T3JGcG1oMWFwUEdPcmZBZ3VaK011ZXY2Wi84SDQ4cEdBZ2w0SVAzNHps?=
+ =?utf-8?B?L3IrazNucUpHQ1ltUUNBSURIbGtrVGErcEdRa203eXF2RVBWYkxmNG9DSW1k?=
+ =?utf-8?B?K2ovM0gvak9YcWNVZVR2dU1NeWh6OElCenZaNnV6dTJVc241SkJsN3lBNVZD?=
+ =?utf-8?B?QjdsR0paWkVEek5GRWExZlBaNUVhTlo4dTczY2RDZkFiTkcrN1F3bmlOOU5Z?=
+ =?utf-8?B?UFp0RE5wQnRtZzZNTTdKR0N4ajBaU0N5UVc4ZlJnRlZWRGJrMHg0VmM4QUlq?=
+ =?utf-8?B?WHZoQlJtaVpScXJPTGd0bEhPZXg5UHN2YVJKRjJSdjBjNUt3OWJ1amx5d2Qw?=
+ =?utf-8?B?RXpNSlJydnZscWpXSmkxcXlDdDB4L2V4OFBaN3JVcVlSNEM4L01VSnpKcGp5?=
+ =?utf-8?B?N3JBVUJwRVJXSGpKOFphUFg5KzNYbDFKaXZhWG5sT0E3RXo3cHFlZVY3QnUw?=
+ =?utf-8?B?U1lNUzV3YzhGZHBsNjdKSTFLMElEazVXWk8ySjgvbmpVMzIweHQyb2JDdUZx?=
+ =?utf-8?B?b2ZWOHN1SjdrMHlES2kyQmpjZW5KR0VQakhkcnJkUldVSEpJektjdlhFc25k?=
+ =?utf-8?B?Qnc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR0601MB3781.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9c7f0aa1-0f18-4597-dc6e-08db0d7954db
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Feb 2023 04:18:16.8643
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wOzl+hRsg34oKgnucDPDz7FPTVp5fZ1FyZKbaNPhCHYBYEZoB6AZnf/u5tgxUp8T/jR4WlD+2kHYJfeTaKuC+FgOp5+wcqzyybIasSBDySQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5563
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IRQ_DOMAIN is a hidden (not user visible) symbol. Users cannot set
-it directly thru "make *config", so drivers should select it instead
-of depending on it if they need it.
-Relying on it being set for a dependency is risky.
-
-Consistently using "select" or "depends on" can also help reduce
-Kconfig circular dependency issues.
-
-Therefore, change the use of "depends on" for IRQ_DOMAIN to
-"select" for RTC_DRV_MT6397.
-
-Fixes: 04d3ba70a3c9 ("rtc: mt6397: add IRQ domain dependency")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Eddie Huang <eddie.huang@mediatek.com>
-Cc: Sean Wang <sean.wang@mediatek.com>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-mediatek@lists.infradead.org
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-rtc@vger.kernel.org
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Peter Rosin <peda@axentia.se>
----
-I have a similar patch (should be a series) for REGMAP.
-
- drivers/rtc/Kconfig |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff -- a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -1814,7 +1814,8 @@ config RTC_DRV_MT2712
- 
- config RTC_DRV_MT6397
- 	tristate "MediaTek PMIC based RTC"
--	depends on MFD_MT6397 || (COMPILE_TEST && IRQ_DOMAIN)
-+	depends on MFD_MT6397 || COMPILE_TEST
-+	select IRQ_DOMAIN
- 	help
- 	  This selects the MediaTek(R) RTC driver. RTC is part of MediaTek
- 	  MT6397 PMIC. You should enable MT6397 PMIC MFD before select
+PiBGcm9tOiBQYXVsIE1lbnplbCA8cG1lbnplbEBtb2xnZW4ubXBnLmRlPg0KPiBTZW50OiBGcmlk
+YXksIEZlYnJ1YXJ5IDEwLCAyMDIzIDY6MzUgUE0NCj4gDQo+IERlYXIgQ2hpYS1XZWksDQo+IA0K
+PiANCj4gVGhhbmsgeW91IGZvciB5b3VyIHBhdGNoLg0KPiANCj4gQW0gMTAuMDIuMjMgdW0gMDg6
+MjYgc2NocmllYiBDaGlhLVdlaSBXYW5nOg0KPiA+IEFkZCB0aGUgZHJpdmVyIGZvciBBc3BlZWQg
+VUFSVC9WVUFSVCBkZXZpY2VzLCB3aGljaCBhcmUgMTY1NTBBDQo+ID4gY29tcGF0aWJsZS4gSXQg
+aXMgYW4gd3JhcHBlciB0byBjb3ZlciB0aGUgZ2VuZXJpYyAxNjU1MEEgb3BlcmF0aW9uDQo+IA0K
+PiBhIHdyYXBwZXINCj4gDQo+ID4gd2hpbGUgZXhldGVuZGluZyBETUEgZmVhdHVyZSBmb3IgdGhl
+IGRldmljZXMuDQo+IA0KPiBleHRlbmRpbmcNCj4gDQo+IElzIHRoaXMgZm9yIGFsbCBBU1BFRUQg
+ZGV2aWNlcyBvciBvbmx5IGN1cnJlbnQgb25lcz8NCg0KVGhlcmUgaXMgbWFqb3IgZGVzaWduIGNo
+YW5nZSBvZiBVRE1BLg0KVGhlcmVmb3JlLCB0aGlzIHBhdGNoIGlzIGZvciBBU1QyNjAwIG9ubHku
+DQoNCj4gDQo+IEhvdyBkaWQgeW91IHRlc3QgdGhpcz8gV2hhdCBpcyB0aGUgbWF4aW11bSB0cmFu
+c2ZlciBzcGVlZD8NCg0KWWVzLg0KSSBjYW4ndCByZW1lbWJlciB0aGUgcHJlY2lzZSBkYXRhLiBU
+aGUgZXhwZXJpbWVudCB3YXMgZG9uZSBsaWtlIDIgeWVhcnMgYWdvLg0KQnV0IGl0IHNob3VsZCBi
+ZSBhYm92ZSAyTUIvcw0KDQo+IA0KPiBUaGVyZSBhcmUgb3RoZXIgc2VyaWFsIGRyaXZlcnMgYWxz
+byBzdXBwb3J0aW5nIERNQSwgYW5kIHRob3NlIHNlZW0gdG8gdXNlDQo+IERNQWVuZ2luZT8NCj4g
+DQo+ICAgICAgJCBnaXQgZ3JlcCBkbWFlbmdpbmUgZHJpdmVycy90dHkvc2VyaWFsLzgyNTAvDQo+
+IA0KDQpZZXMuDQpUaGUgVURNQSBkZXNpZ24gaXMgZGVkaWNhdGVkIHRvLCBhbmQgdGlnaHRseSBj
+b3VwbGVkIHdpdGggZWFjaCBVQVJUL1ZVQVJUIGRldmljZXMuDQpBbmQgVURNQSBkb2VzIG5vdCBz
+dXBwb3J0IGNvbW1vbiBETUEgY29udHJvbCBzdWNoIGFzIHN1c3BlbmQvcmVzdW1lLg0KDQpXZSBm
+b3VuZCBjZXJ0YWluIGRpc2N1c3Npb25zIGluIHRoZSBvbGQgbWFpbGluZyBsaXN0IHNheWluZyB0
+aGF0IGlmIGEgRE1BIGNvbnRyb2xsZXIgaXMgbm90IGZ1bGx5IGZpdCBpbnRvIHRoZSBETUFFbmdp
+bmUgc3Vic3lzdGVtLA0KcGxhY2luZyB0aGUgaW1wbGVtZW50YXRpb24gaW4gdGhlIHNvYyBmb2xk
+ZXIgbWlnaHQgYmUgYW4gb3B0aW9uLg0KDQpSZWdhcmRzLA0KQ2hpYXdlaQ0K
