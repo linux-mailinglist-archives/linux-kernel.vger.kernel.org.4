@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A83695017
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:58:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C111F695018
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbjBMS6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:58:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56216 "EHLO
+        id S230480AbjBMS6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:58:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjBMS5v (ORCPT
+        with ESMTP id S230343AbjBMS5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:57:51 -0500
+        Mon, 13 Feb 2023 13:57:53 -0500
 Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97482212F;
-        Mon, 13 Feb 2023 10:57:48 -0800 (PST)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-16a7f5b6882so16261904fac.10;
-        Mon, 13 Feb 2023 10:57:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C970E76A9;
+        Mon, 13 Feb 2023 10:57:49 -0800 (PST)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-15fe106c7c7so16264809fac.8;
+        Mon, 13 Feb 2023 10:57:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=70NV1ToQYw50ymKhliFnw04sCbSTdpnLCftKunJ8RHg=;
-        b=g9sh5Qacww+llc+gZ856ZATND/GgMxZmJwDrrtBnaKgEjkHC9HhL54iHcxadntNZe4
-         GRl3VCNHl6m76J0dEebp8wkYjxq796dfRE1az472jTwiWwcTUY4buwcCj59n1ZADxf+y
-         sD+qVetPtACRyLrtREXLIhnjO7Gzk9Rj1ikXBkJL3KKhhoTsvjJIBZYcPqAasR/IJAyP
-         5mA3P7Eiv4/c8Ty1/S9VKNG/i9nR+9zMfnPyqgGcKqu9cugjiItlBaBVKDQ6xUYwisVK
-         8tou11iSWFraZ1qBqqshAHKBu0RrdFVSbESIIuDSCWumnjWUuajZz5ZXiVQwQQjVEO9Y
-         GD+Q==
+        bh=ZhoQvg3BMaFTkvvFqgv6WpxCoYJyC9DRYUszslZVGiQ=;
+        b=FXWPwOo/Ee+i5OIz6j2njqn0ZzUk6+WwUfHqMu0bXnatgSmwQmHnG+Iqvs4fG8bE2l
+         qn3stmEtWIHTu7T53g0gyk86US2YfreUbGwa6bH6cqO4zTtCFZMf1THvRYLwSNe0sGI0
+         CF1t/wP24ReLd6zmr/VQsWnppeI1WgQ5A9ZCh7+M+ZkaeMk3A7eWDK0+w8kPFYi1rxfW
+         G5GVxZnhOrqahcj6G3zNy329jhG3W2RQqqlyVGLSwymtjNRBuAfpyE7/9tAUlPoOFi3s
+         WLDmHZCWop11hftaciL9juMEqbn0z7lf8dtpDQdmQJpjSc9S0fOF03rya70VD/iK6M70
+         2yPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=70NV1ToQYw50ymKhliFnw04sCbSTdpnLCftKunJ8RHg=;
-        b=UEX4beqUh/ySTAoGzvytlBfO/za9kg0fsjApiox0RbOf5ckMCPBblU8g5ReqfgPMIR
-         FFM9BbYq5TlVP/k6U2nGkWwkHolvoM+pG4hpL306dNoH93F6lS6aRI+orsvDWSFmljhY
-         ZexHPyfa+ydsU48vJVOrxQ6sVIBdNi8yLewv0QD5P5EUoShS6ZXpld1ZGMOwlZryG5CZ
-         TNL6rERpenGAW0AlqvjkpIp6l4VdIGs/xRq3+fNXlxFmXJetQRUv4ik1Q42/xlPYfmRZ
-         3zOQVpR+58oPaFSvGYH3HU0K+fuF7eDzjF2rZ8QoW12jJS6sGPjoKvx7JiLcKNw8IU2o
-         AA3w==
-X-Gm-Message-State: AO0yUKXNJHIg6tMcoiiOL4tVoEA3XkSTKg5OMh8NmZygcD7U+6YKiIDL
-        N+1ZumBle1v6Bf5zIltpoqc=
-X-Google-Smtp-Source: AK7set+cvl5+hpmINRUSDSryaTu8+KC6HXmo+LEi3o7wg74EiR7EvbaCqJUXMaN5mxLyhJKZxk7/2Q==
-X-Received: by 2002:a05:6870:c68c:b0:16d:bbce:29d6 with SMTP id cv12-20020a056870c68c00b0016dbbce29d6mr6703085oab.25.1676314668277;
-        Mon, 13 Feb 2023 10:57:48 -0800 (PST)
+        bh=ZhoQvg3BMaFTkvvFqgv6WpxCoYJyC9DRYUszslZVGiQ=;
+        b=CZcFdh5JkOC3GZgEFLJlE20W00bKIbVf3E+SxIQvfPoLzZofZjwBgG+gyGPvl+Nm62
+         Wl6UynFs3Bq2nEf6b8gRwzFm3tOPYO7l7ZbyGRgH0n4ga6Qlgw1qegCqX7x8wYOmyEeP
+         k6Oooi9XgsB3VMUnzP0OF1pkDLDgjtEHjRaXlHVo7A2nVZvgnNjUJCoVkM0R5zwW72wB
+         l22cAocXvacTmsTJRKILuPXDgdtrRgcaep/U+rLs7L3hmyChIBjXOgDeWNbl9uE/uVXx
+         OmuGPva6lnrwR5FwmedlBPoCjhF1qLFnRwmR0GO1o4HtOOlHkk2IwWHlJfJRRZK756mk
+         kTNg==
+X-Gm-Message-State: AO0yUKVxeM47QUOMsSootrUMgYacor/shmOu4/FBj6XKnhHxHsTXhwKt
+        0m+ut4R92biqJK9jpHSx2n0=
+X-Google-Smtp-Source: AK7set+1cl1yGPyo8AOt32fCulUchZRPgSXW1CwXhWaBm9Rb86rE1dMKAg/PhygRr/6/KzL0rwE1vQ==
+X-Received: by 2002:a05:6870:d69d:b0:16a:c8ed:f405 with SMTP id z29-20020a056870d69d00b0016ac8edf405mr8255809oap.52.1676314669212;
+        Mon, 13 Feb 2023 10:57:49 -0800 (PST)
 Received: from xps8900.attlocal.net ([2600:1700:2442:6db0:5829:dabf:a50e:e9f2])
-        by smtp.gmail.com with ESMTPSA id ef15-20020a0568701a8f00b0016df97ab05bsm1654958oab.31.2023.02.13.10.57.47
+        by smtp.gmail.com with ESMTPSA id ef15-20020a0568701a8f00b0016df97ab05bsm1654958oab.31.2023.02.13.10.57.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 10:57:47 -0800 (PST)
+        Mon, 13 Feb 2023 10:57:48 -0800 (PST)
 From:   Frank Rowand <frowand.list@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 6/7] of: add consistency check to of_node_release()
-Date:   Mon, 13 Feb 2023 12:57:01 -0600
-Message-Id: <20230213185702.395776-7-frowand.list@gmail.com>
+Subject: [PATCH 7/7] of: dynamic: add lifecycle docbook info to node creation functions
+Date:   Mon, 13 Feb 2023 12:57:02 -0600
+Message-Id: <20230213185702.395776-8-frowand.list@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230213185702.395776-1-frowand.list@gmail.com>
 References: <20230213185702.395776-1-frowand.list@gmail.com>
@@ -71,31 +71,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an additional consistency check to of_node_release(), which is
-called when the reference count of a devicetree node is decremented
-to zero.  The node's children should have been deleted before the
-node is deleted so check that no children exist.
+The existing docbook comments for the functions related to creating
+a devicetree node do not explain the reference count of a newly
+created node, how decrementing the reference count to zero will
+free the associated memory, and the caller's responsibility to
+call of_node_put() on the node.  Explain what happens when the
+reference count is decremented to zero.
 
 Signed-off-by: Frank Rowand <frowand.list@gmail.com>
 ---
- drivers/of/dynamic.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/of/dynamic.c |  3 ++-
+ include/linux/of.h   | 11 +++++++++++
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
-index dbcbc41f3465..657a65006056 100644
+index 657a65006056..12aa99018969 100644
 --- a/drivers/of/dynamic.c
 +++ b/drivers/of/dynamic.c
-@@ -377,6 +377,10 @@ void of_node_release(struct kobject *kobj)
- 			       __func__, node);
- 	}
+@@ -443,7 +443,8 @@ struct property *__of_prop_dup(const struct property *prop, gfp_t allocflags)
+  * another node.  The node data are dynamically allocated and all the node
+  * flags have the OF_DYNAMIC & OF_DETACHED bits set.
+  *
+- * Return: The newly allocated node or NULL on out of memory error.
++ * Return: The newly allocated node or NULL on out of memory error.  Use
++ * of_node_put() on it when done to free the memory allocated for it.
+  */
+ struct device_node *__of_node_dup(const struct device_node *np,
+ 				  const char *full_name)
+diff --git a/include/linux/of.h b/include/linux/of.h
+index 8b9f94386dc3..e20a08c8a8c8 100644
+--- a/include/linux/of.h
++++ b/include/linux/of.h
+@@ -100,6 +100,17 @@ struct of_reconfig_data {
+ 	struct property		*old_prop;
+ };
  
-+	if (node->child)
-+		pr_err("ERROR: %s() unexpected children for %pOF/%s\n",
-+			__func__, node->parent, node->full_name);
-+
- 	property_list_free(node->properties);
- 	property_list_free(node->deadprops);
- 	fwnode_links_purge(of_fwnode_handle(node));
++/**
++ * of_node_init - initialize a devicetree node
++ * @node: Pointer to device node that has been created by kzalloc()
++ * @phandle_name: Name of property holding a phandle value
++ *
++ * On return the device_node refcount is set to one.  Use of_node_put()
++ * on @node when done to free the memory allocated for it.  If the node
++ * is NOT a dynamic node the memory will not be freed. The decision of
++ * whether to free the memory will be done by node->release(), which is
++ * of_node_release().
++ */
+ /* initialize a node */
+ extern struct kobj_type of_node_ktype;
+ extern const struct fwnode_operations of_fwnode_ops;
 -- 
 Frank Rowand <frowand.list@gmail.com>
 
