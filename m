@@ -2,228 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CAE9695364
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D43695369
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 22:52:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbjBMVvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 16:51:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41142 "EHLO
+        id S230157AbjBMVwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 16:52:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjBMVvG (ORCPT
+        with ESMTP id S229686AbjBMVwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 16:51:06 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B421717B
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:51:00 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Mon, 13 Feb 2023 16:52:54 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA326185
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 13:52:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=dAIoj3yLDoCA6OEqzK/oW7tr31FDz8nemZmjFZA+QIA=; b=c7hV1slied1adFVdEAkB+sNmqT
+        Q09QA17SU1k1h6kO3Gj01tJvXWnm2ujvFo93Kx6E3VJtKrh0A2kB+J8kuiSpfMIoJQTTQME+63Avn
+        qJGHWMTWdOnB95vORxFhxc5tIE7M3G9OMCapW8DdapZ9TRnqmKIXkzFozUVR5gFNn4Zk58dHrqrdj
+        qwyfDcGPH943apg8fAG1ecFFLQM2YM2baPfPQZDz5tkYu5yXjzMZc4Pjey6DjExk+9WcZXwFYSXuT
+        4fzIBjZJTIVSKUfW2mqLgk8HdMug7b00PhcT0OmbapitM7cYld0fcIDupqLquqpp2d+PXUHzXadnA
+        TJuFtuDw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pRgjm-009TBt-09;
+        Mon, 13 Feb 2023 21:51:51 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3182B22459;
-        Mon, 13 Feb 2023 21:50:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1676325059; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c9NOANQ/j8mNxhV9ZOxgGkAaTG41rz166SP38LuJvG8=;
-        b=p8yCJdA2kUyyStWh6301z3L5TcuBh46826gh6pyFNhpJCOMq53RWt6BWkaaHzTxaaaIQQi
-        Gsl2nVC1GLXoGNIczT3In/BY2gs+WKu+ljqvO2bNw+xxVYuhSaFAUB0W7okkDV1TGp3OA6
-        SaMyTWYXmHHU1rEuUXcF1yWpvJAY5po=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1676325059;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c9NOANQ/j8mNxhV9ZOxgGkAaTG41rz166SP38LuJvG8=;
-        b=sJFwGlTSNQQ+CHBYXXx4U8vPYoSb2kzWSjZFgnMarp1+h6TuLEJDrAvIvilNhHcRXKE2/X
-        MFYzMK+xk7EHmcAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E225B138E6;
-        Mon, 13 Feb 2023 21:50:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id RJZiNsKw6mO2VgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 13 Feb 2023 21:50:58 +0000
-Message-ID: <bddb8cd0-398b-bd57-5d19-7b046db6c0ea@suse.cz>
-Date:   Mon, 13 Feb 2023 22:50:57 +0100
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0912430030F;
+        Mon, 13 Feb 2023 22:52:30 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id DFDC520D18CCA; Mon, 13 Feb 2023 22:52:29 +0100 (CET)
+Date:   Mon, 13 Feb 2023 22:52:29 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
+        Hillf Danton <hdanton@sina.com>,
+        Mukesh Ojha <quic_mojha@quicinc.com>,
+        Ting11 Wang =?utf-8?B?546L5am3?= <wangting11@xiaomi.com>
+Subject: Re: [PATCH v7 4/4] locking/rwsem: Enable direct rwsem lock handoff
+Message-ID: <Y+qxHXwXSsIZnVtH@hirez.programming.kicks-ass.net>
+References: <20230126003628.365092-1-longman@redhat.com>
+ <20230126003628.365092-5-longman@redhat.com>
+ <Y+otv+QGyMpHAFO1@hirez.programming.kicks-ass.net>
+ <19c54f55-3b27-6777-e42c-8d7b25b6f2b5@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 4/4] mm, compaction: Finish pageblocks on complete
- migration failure
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Pedro Falcato <pedro.falcato@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Chuyi Zhou <zhouchuyi@bytedance.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230125134434.18017-1-mgorman@techsingularity.net>
- <20230125134434.18017-5-mgorman@techsingularity.net>
- <a55cf026-a2f9-ef01-9a4c-398693e048ea@suse.cz>
-In-Reply-To: <a55cf026-a2f9-ef01-9a4c-398693e048ea@suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <19c54f55-3b27-6777-e42c-8d7b25b6f2b5@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/7/23 18:42, Vlastimil Babka wrote:
-> On 1/25/23 14:44, Mel Gorman wrote:
->> Commit 7efc3b726103 ("mm/compaction: fix set skip in
->> fast_find_migrateblock") address an issue where a pageblock selected
->> by fast_find_migrateblock() was ignored. Unfortunately, the same fix
->> resulted in numerous reports of khugepaged or kcompactd stalling for
->> long periods of time or consuming 100% of CPU.
->>
->> Tracing showed that there was a lot of rescanning between a small subset
->> of pageblocks because the conditions for marking the block skip are not
->> met. The scan is not reaching the end of the pageblock because enough
->> pages were isolated but none were migrated successfully. Eventually it
->> circles back to the same block.
->>
->> Pageblock skip tracking tries to minimise both latency and excessive
->> scanning but tracking exactly when a block is fully scanned requires an
->> excessive amount of state. This patch forcibly rescans a pageblock when
->> all isolated pages fail to migrate even though it could be for transient
->> reasons such as page writeback or page dirty. This will sometimes migrate
->> too many pages but pageblocks will be marked skip and forward progress
->> will be made.
->>
->> "Usemen" from the mmtests configuration
->> workload-usemem-stress-numa-compact was used to stress compaction.
->> The compaction trace events were recorded using a 6.2-rc5 kernel that
->> includes commit 7efc3b726103 and count of unique ranges were measured. The
->> top 5 ranges were
->>
->>    3076 range=(0x10ca00-0x10cc00)
->>    3076 range=(0x110a00-0x110c00)
->>    3098 range=(0x13b600-0x13b800)
->>    3104 range=(0x141c00-0x141e00)
->>   11424 range=(0x11b600-0x11b800)
->>
->> While this workload is very different than what the bugs reported,
->> the pattern of the same subset of blocks being repeatedly scanned is
->> observed. At one point, *only* the range range=(0x11b600 ~ 0x11b800)
->> was scanned for 2 seconds. 14 seconds passed between the first
->> migration-related event and the last.
->>
->> With the series applied including this patch, the top 5 ranges were
->>
->>       1 range=(0x11607e-0x116200)
->>       1 range=(0x116200-0x116278)
->>       1 range=(0x116278-0x116400)
->>       1 range=(0x116400-0x116424)
->>       1 range=(0x116424-0x116600)
->>
->> Only unique ranges were scanned and the time between the first
->> migration-related event was 0.11 milliseconds.
->>
->> Fixes: 7efc3b726103 ("mm/compaction: fix set skip in fast_find_migrateblock")
->> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+On Mon, Feb 13, 2023 at 12:14:59PM -0500, Waiman Long wrote:
+
+> > I am once again confused...
+> > 
+> > *WHY* are you changing the writer wake-up path? The comments added here
+> > don't clarify anything.
+> > 
+> > If we set handoff, we terminate/disallow the spinning/stealing. The
+> > direct consequence is that the slowpath/wait-list becomes the only way
+> > forward.
+> Yes, that is true.
+> > 
+> > Since we don't take wait_lock on up, we fundamentally have a race
+> > condition. But *WHY* do you insist on handling that in rwsem_wake()?
+> > Delaying all that until rwsem_try_write_lock()? Doing so would render
+> > pretty much all of the above pointless, no?
 > 
-> While this seems like it will mostly prevent the issue at hand (I think
-> kcompactd is still a hazard, see below), I'm not super happy about some of
-> the implementation details.
+> There is an advantage in doing the handover earlier, if possible. A reader
+> that comes in between can spoils the takeover of the rwsem in
 
-For the record, after some discussion with Mel, my concerns are not a blocker
-and the series can proceed from mm-stable to 6.3.
+How ?!? since all the stealing and spinning is out, the wait-list reigns
+supreme. A new reader will queue.
 
-> 1. it modifies code that was meant to quickly skip an order-aligned block
-> where a page migration failed during MIGRATE_ASYNC direct compaction, as
-> it's very unlikely to sucessfully form a free page of that order in that
-> block. Now instead it will finish the whole pageblock in that case, which
-> could be lots of useless work and thus exactly the opposite of what we
-> wanted for MIGRATE_ASYNC direct compaction.
+Are you worried about the spurious elevation of ->count due to that
+uncondition increment on down_read() ? This is always going to be the
+case.
 
-There are both advantages and disadvantages to this so not clear win or lose.
+> rwsem_try_write_lock() and cause it to sleep again. Since we will have to
+> take the wait lock anyway in rwsem_wake(), there isn't much additional cost
+> to do some additional check.
 
-> 2. The conditions "cc->direct_compaction" and "(cc->mode < MIGRATE_SYNC)"
-> seem a bit hazardous. I think we can have a compaction where these are not
-> true, and yet it uses fast_find_migrateblock() and thus can exhibit the bug
-> but won't be forced to rescan?
-> AFAICS kcompactd_do_work()
-> - is MIGRATE_SYNC_LIGHT
-> - has ignore_skip_hint = false
-> - has direct_compaction = false
+There is a complexity cost -- and so far I've not seen a single line of
+justification for the added complexity.
+
+> Note that the kernel test robot had detected a 19.3% improvement of
+> will-it-scale.per_thread_ops [1] due to this commit. That indicates this
+> commit is good to have. I am planning to update the commit log to include
+> that information as well as additional reasoning as discussed here.
+
+Seen that; but who's saying a simpler implementation will not also have
+those gains. And if not, then we have a clear separation into
+functionality and optimization and justifications for it.
+
+But now, we have neither. I'm not saying the patch is wrong -- I'm
+saying it is needlessly complicated without justification.
+
+All this stuff is hard enough -- we should really try to keep is as
+simple as possible, having two distinct ways to wake up a writer is not
+'as simple as possible'.
+
+> > After all, rwsem_mark_wake() already wakes the writer if it is first,
+> > no? Why invent yet another special way to wake up the writer.
+> As I said before, waking up the writer does not mean it can always get the
+> rwsem on the first rwsem_try_write_lock(). Doing early handoff in
+> rwsem_wake() can remove that ambiguity.
+
+But what if it is rwsem_down_read_slowpath() that drops ->count to 0 and
+does rwsem_mark_wake() and misses your fancy new path?
+
+That is, I'm thinking there's an argument to be had that rwsem_wake() is
+fundamentally the wrong place to do anything.
+
+OTOH, you are right in that rwsem_mark_wake() is in a special position;
+it *KNOWS* the reader count has hit 0 and can ignore future spurious
+increments because by knowing it was 0 it knows they *WILL* fail and
+queue (provided WAITERS||HANDOFF) -- but I've not seen you
+articulate this point.
+
+(note how rwsem_cond_wake_waiter() relies on exactly this to select
+WAKE_ANY)
+
+You are also right in that having these different means of waking
+readers and writers is 'confusing'.
+
+But you failed to take things to their natural conclusion -- change the
+way we do writer wakeups, all writer wakeups.
+
+So change rwsem_mark_wake()'s writer wakeup and
+rwsem_down_write_slowpath() to always so that waiter->task thing that
+the readers already do.
+
+It means putting all the logic for waking writers into
+rwsem_mark_wake(), but then we can make full use of this 'we hit zero
+future readers are temporary noise'. Althought I suspect you might need
+to pass count into it, so we can observe the flags at the time 0 was
+observed.
+
+Is all that making sense? -- it has been a long day :-)
+
+> > Also; and I asked this last time around; why do we care about the
+> > handoff to writer *at*all* ? It is the readers that set HANDOFF.
 > 
-> so AFAICS it will use fast_find_migrateblock() and not bail out in one of
-> the preconditions. But the cc->direct_compaction condition here won't apply.
+> HANDOFF can happen for both readers and writers. Handoff to writer is
+> actually more important than to readers.
 
-This is only a concern once we attempt to un-revert 7efc3b726103 again so
-only necessary to be addressed as part of future series leading to the un-revert.
-
-> So it might be better to leave the current "skip the rest of block" check
-> alone, and add a separate check for the finish_pageblock rescan that will
-> not miss some cases where it should apply - maybe it could check for a
-> complete migration failure specifically as well?
->> ---
->>  mm/compaction.c | 30 ++++++++++++++++++++++--------
->>  1 file changed, 22 insertions(+), 8 deletions(-)
->>
->> diff --git a/mm/compaction.c b/mm/compaction.c
->> index 4b3a0238879c..937ec2f05f2c 100644
->> --- a/mm/compaction.c
->> +++ b/mm/compaction.c
->> @@ -2394,6 +2394,7 @@ compact_zone(struct compact_control *cc, struct capture_control *capc)
->>  			cc->finish_pageblock = true;
->>  		}
->>  
->> +rescan:
->>  		switch (isolate_migratepages(cc)) {
->>  		case ISOLATE_ABORT:
->>  			ret = COMPACT_CONTENDED;
->> @@ -2436,15 +2437,28 @@ compact_zone(struct compact_control *cc, struct capture_control *capc)
->>  				goto out;
->>  			}
->>  			/*
->> -			 * We failed to migrate at least one page in the current
->> -			 * order-aligned block, so skip the rest of it.
->> +			 * If an ASYNC or SYNC_LIGHT fails to migrate a page
->> +			 * within the current order-aligned block, scan the
->> +			 * remainder of the pageblock. This will mark the
->> +			 * pageblock "skip" to avoid rescanning in the near
->> +			 * future. This will isolate more pages than necessary
->> +			 * for the request but avoid loops due to
->> +			 * fast_find_migrateblock revisiting blocks that were
->> +			 * recently partially scanned.
->>  			 */
->> -			if (cc->direct_compaction &&
->> -						(cc->mode == MIGRATE_ASYNC)) {
->> -				cc->migrate_pfn = block_end_pfn(
->> -						cc->migrate_pfn - 1, cc->order);
->> -				/* Draining pcplists is useless in this case */
->> -				last_migrated_pfn = 0;
->> +			if (cc->direct_compaction && !cc->finish_pageblock &&
->> +						(cc->mode < MIGRATE_SYNC)) {
->> +				cc->finish_pageblock = true;
->> +
->> +				/*
->> +				 * Draining pcplists does not help THP if
->> +				 * any page failed to migrate. Even after
->> +				 * drain, the pageblock will not be free.
->> +				 */
->> +				if (cc->order == COMPACTION_HPAGE_ORDER)
->> +					last_migrated_pfn = 0;
->> +
->> +				goto rescan;
->>  			}
->>  		}
->>  
-> 
-> 
+Hmm, clearly I missed something. This is rwsem_try_write_lock() setting
+it, right?
