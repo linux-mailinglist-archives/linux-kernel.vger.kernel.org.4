@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A21694F8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DB0694F91
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbjBMSj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33414 "EHLO
+        id S230321AbjBMSlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:41:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbjBMSjZ (ORCPT
+        with ESMTP id S229614AbjBMSlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:39:25 -0500
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E73719F2E;
-        Mon, 13 Feb 2023 10:39:23 -0800 (PST)
-Received: by mail-ej1-f43.google.com with SMTP id dr8so34094242ejc.12;
-        Mon, 13 Feb 2023 10:39:23 -0800 (PST)
+        Mon, 13 Feb 2023 13:41:04 -0500
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86B1F1;
+        Mon, 13 Feb 2023 10:41:03 -0800 (PST)
+Received: by mail-ed1-f50.google.com with SMTP id u21so14273878edv.3;
+        Mon, 13 Feb 2023 10:41:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7li/ul6pp/uWHNLdUqV/9jTzsiuOuUrKYSojvY49UB8=;
-        b=XthNKfg2iXBrAcQh3Mf2m0iMsTdkYZ0NTWxQ52s+MRYxX8nUpUdN+439Rex93io+3u
-         zVkc/Q57rwScaAKgyCS85Nl9s2HXuw9XJTBchtvXWHGB9tlo/mDSzRZA05V3pFTYpQCH
-         0vseYgdxF8AZ10529mTni9Nd2ZpSRbB2ks/MLdfoeztRPcPioGEy9CmXkB9FxMQgmKZn
-         vR58jaACPInf6j4bgCJPVLakKlCQtnEVD5jlBLquYEmNKw1jDARhEJOBNmRzsBpo5OzN
-         Q8Ad15dDOTyv2E6e5Qy5hShYMeLciJYhATbfJzFdRNWAxG4v/Mp0rDmglj8Y1aEWufO2
-         uwpQ==
-X-Gm-Message-State: AO0yUKXNhIzzLC+akKAk2wHvure0WVZQOoJmRsoYelDsPoqoFALy/3oX
-        iDucQi9yxJHgrRA4PKBJH/KGYCxKeQC2acdd5Vc=
-X-Google-Smtp-Source: AK7set/Bx9GvK5ypcB4OaIXNKHDtwDvKGrleR9Mtkgba/WjL3GlxRH1QJY0JF9smkqhSHPI5ksJeAPBAFpqa0gOo9DA=
-X-Received: by 2002:a17:906:8805:b0:878:6169:71a6 with SMTP id
- zh5-20020a170906880500b00878616971a6mr5327073ejb.5.1676313561831; Mon, 13 Feb
- 2023 10:39:21 -0800 (PST)
+        bh=CDtFU2Jc95gLjieOysLnzEfFJTUgaL6A5DtFJMyaKWg=;
+        b=xKOSdwHMWp6I/hRgP0t4YbcDhYfBNPaY8S0ONY6S67h2cAdvBwbhBjrBIjWukXeXyw
+         tnf/MdTg1dIHfRlfUykhKwrDpur2iBm24nPL2ywZeOJO5aIf/a1plReU0e1zA4Jejs6v
+         3FlaD6pD4vAyityca3+5lmAIgTjRjVq9oGHfqmjLLCknS9/gOlIe/1Q1HKgxDOPWeG0h
+         MW5xzYALM0KFFEGixPMJuXe9DaPgaLseUGRvOT39nnq4DbVyTQwSbSf5H15qPKgmKP5n
+         9kKx3YlHvq+nX4QkApFoh6i+Qhg33pQm9ATQPsXVbkw7PMfSi+TQKkDABJARsa3i8cmf
+         mIDA==
+X-Gm-Message-State: AO0yUKXdXlqTe4wMmE3aG9iGutjhXYfgqzoUaV9jAeLvQebR2bE0Vt88
+        tntJRL5B4XPl+j1hbKoGkkRXm9BsHV5J/IrfVmg=
+X-Google-Smtp-Source: AK7set9c7MrFAu9f5jlejY00/6IQgCiFdmwotU5SX7kkOfHGG0KHlQp9HH4RhJUJiR5WCISRbhRFTSlDhAMhz5lGcPE=
+X-Received: by 2002:a50:baab:0:b0:4ac:cdd9:1c97 with SMTP id
+ x40-20020a50baab000000b004accdd91c97mr1386918ede.6.1676313662522; Mon, 13 Feb
+ 2023 10:41:02 -0800 (PST)
 MIME-Version: 1.0
-References: <20230213132812.38646-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230213132812.38646-1-andriy.shevchenko@linux.intel.com>
+References: <1676021646-2619-1-git-send-email-ssengar@linux.microsoft.com> <1676021646-2619-3-git-send-email-ssengar@linux.microsoft.com>
+In-Reply-To: <1676021646-2619-3-git-send-email-ssengar@linux.microsoft.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 13 Feb 2023 19:39:10 +0100
-Message-ID: <CAJZ5v0jkMez3_7rRqgyvbB9ik55fRxsU6yoLBZ-gVP7djwntmA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] Documentation: firmware-guide: gpio-properties:
- Clarify Explicit and Implicit
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 13 Feb 2023 19:40:51 +0100
+Message-ID: <CAJZ5v0ivddzCoYFd4TauH3G83KxCWQK1NZSvn25oWt_iy0LOfQ@mail.gmail.com>
+Subject: Re: [PATCH v6 2/5] ACPI: bus: Add stub acpi_sleep_state_supported()
+ in non-ACPI cases
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, daniel.lezcano@linaro.org, tglx@linutronix.de,
+        virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+        dphadke@linux.microsoft.com, lenb@kernel.org, rafael@kernel.org,
+        linux-acpi@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -62,55 +63,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 2:27 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Fri, Feb 10, 2023 at 10:34 AM Saurabh Sengar
+<ssengar@linux.microsoft.com> wrote:
 >
-> Clarify the Explicit and Implicit meanings in the table of Pull Bias.
+> acpi_sleep_state_supported() is defined only when CONFIG_ACPI=y. The
+> function is in acpi_bus.h, and acpi_bus.h can only be used in
+> CONFIG_ACPI=y cases. Add the stub function to linux/acpi.h to make
+> compilation successful for !CONFIG_ACPI cases.
 >
-> While at it, distinguish pull bias keywords used in ACPI by using bold
-> font in the table of the respective terms.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  .../firmware-guide/acpi/gpio-properties.rst   | 25 +++++++++++--------
->  1 file changed, 14 insertions(+), 11 deletions(-)
->
-> diff --git a/Documentation/firmware-guide/acpi/gpio-properties.rst b/Documentation/firmware-guide/acpi/gpio-properties.rst
-> index eaec732cc77c..ae87aa64cb7b 100644
-> --- a/Documentation/firmware-guide/acpi/gpio-properties.rst
-> +++ b/Documentation/firmware-guide/acpi/gpio-properties.rst
-> @@ -67,17 +67,20 @@ state of the output pin which driver should use during its initialization.
->  Linux tries to use common sense here and derives the state from the bias
->  and polarity settings. The table below shows the expectations:
->
-> -=========  =============  ==============
-> -Pull Bias     Polarity     Requested...
-> -=========  =============  ==============
-> -Implicit     x            AS IS (assumed firmware configured for us)
-> -Explicit     x (no _DSD)  as Pull Bias (Up == High, Down == Low),
-> -                          assuming non-active (Polarity = !Pull Bias)
-> -Down         Low          as low, assuming active
-> -Down         High         as low, assuming non-active
-> -Up           Low          as high, assuming non-active
-> -Up           High         as high, assuming active
-> -=========  =============  ==============
-> +=========          =============  ==============
-> +Pull Bias             Polarity     Requested...
-> +=========          =============  ==============
-> +Implicit             x            AS IS (assumed firmware configured it for us)
-> +(**Default**)
-> +Explicit             x (no _DSD)  as Pull Bias (**Up** == high, **Down** == low),
-> +(**Up**, **Down**,                assuming non-active (Polarity = !Pull Bias);
-> + **None**)                        or AS IS (assumed firmware configured it for us)
-> +                                  with no Pull Bias
-> +**Down**             Low          as low, assuming active
-> +**Down**             High         as low, assuming non-active
-> +**Up**               Low          as high, assuming non-active
-> +**Up**               High         as high, assuming active
-> +=========          =============  ==============
->
->  That said, for our above example the both GPIOs, since the bias setting
->  is explicit and _DSD is present, will be treated as active with a high
-> --
+> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
 
-Applied as 6.3 material, thanks!
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+and please feel free to toute this patch whichever way is convenient.
+
+Thanks!
+
+> ---
+>  include/linux/acpi.h | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> index efff750f326d..d331f76b0c19 100644
+> --- a/include/linux/acpi.h
+> +++ b/include/linux/acpi.h
+> @@ -1075,6 +1075,11 @@ static inline u32 acpi_osc_ctx_get_cxl_control(struct acpi_osc_context *context)
+>         return 0;
+>  }
+>
+> +static inline bool acpi_sleep_state_supported(u8 sleep_state)
+> +{
+> +       return false;
+> +}
+> +
+>  #endif /* !CONFIG_ACPI */
+>
+>  #ifdef CONFIG_ACPI_HOTPLUG_IOAPIC
+> --
+> 2.34.1
+>
