@@ -2,116 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DEB269461F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F66694619
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 13:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbjBMMpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 07:45:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
+        id S230417AbjBMMoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 07:44:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbjBMMo7 (ORCPT
+        with ESMTP id S230050AbjBMMof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 07:44:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BED386B3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:44:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676292251;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=h7vg5iaYjOoIBam3xF82k+EYYGMy8Wvvw+bIbFfOSKw=;
-        b=U4SKkEno+oDqKg29CPEQcA3JvFI+XdePlvA4iICow1+FgXceGH5x++avZ8HFOiGZcUywif
-        4VPimrWnqiUD3V8KBIPz1zE9M2DkzQYrUK7S4EOlCVpumaOmt6FzNg6eo9qHCmpAPaqZXg
-        om7nY/+2Wca0osL75Cb7Usl2e9YlKgs=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-392-ouPqVNdjP6GZ4oIUoEk56Q-1; Mon, 13 Feb 2023 07:44:10 -0500
-X-MC-Unique: ouPqVNdjP6GZ4oIUoEk56Q-1
-Received: by mail-wm1-f70.google.com with SMTP id n4-20020a05600c3b8400b003dfe223de49so9094229wms.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:44:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h7vg5iaYjOoIBam3xF82k+EYYGMy8Wvvw+bIbFfOSKw=;
-        b=w+YyYf0XOkUgxVcqdXyi6Znuye40OUz9gVcjowxNAHRZKdAgyifUyWsdZSNmPNFgn1
-         HhlLkZJm6/QaU9q764rYy+3gCMH2p+d12U3idwQF3p3inwPIvI4khOkAL+hYwfpXsZPu
-         86UujlMVyulw2ONQP+I0j/73U4cDFGbqnrx4MfBFdYkNV0c7EfjU/1EIYT4KFtAGXuBJ
-         k1tKMd+GsmbZtP69fQ/MXSdRK0BcIHhgJAlqPRSvRaPnhJcJjpQIEnQK4vi/xjs0b6QA
-         L6mKNNAPOZyyJryJQEUZlO8nvznVsV68Ln2tggoVJU9tkikVW0a9IuXIkDAUshMOYnNo
-         tkpQ==
-X-Gm-Message-State: AO0yUKUcSY/jm2FeJws64+0XwsPesw3h2GL+59WZIYHrMXnUiNHktTBi
-        FM9NrATDwBhZygY9U3evt2YpoxJoCz1YbfSdPjZskpXCVrBGU2jlZgj3mAzCqIzAL3keMfpO/Ly
-        pH3h+MajhSqP0oe25ix4afjjw
-X-Received: by 2002:a05:600c:1613:b0:3df:b5ae:5289 with SMTP id m19-20020a05600c161300b003dfb5ae5289mr18594403wmn.8.1676292249238;
-        Mon, 13 Feb 2023 04:44:09 -0800 (PST)
-X-Google-Smtp-Source: AK7set+YJ2O1ngBYEox9oF0U4TUiYdr2lsBCupEzqgvsMKdz9Anb/xs4M+tWqUfy/BO1NLh2F+Gabg==
-X-Received: by 2002:a05:600c:1613:b0:3df:b5ae:5289 with SMTP id m19-20020a05600c161300b003dfb5ae5289mr18594388wmn.8.1676292248958;
-        Mon, 13 Feb 2023 04:44:08 -0800 (PST)
-Received: from ?IPV6:2003:cb:c705:6d00:5870:9639:1c17:8162? (p200300cbc7056d00587096391c178162.dip0.t-ipconnect.de. [2003:cb:c705:6d00:5870:9639:1c17:8162])
-        by smtp.gmail.com with ESMTPSA id q3-20020a1ce903000000b003dfdeb57027sm16905905wmc.38.2023.02.13.04.44.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 04:44:08 -0800 (PST)
-Message-ID: <ca0ada59-e1a4-dd74-1a52-233c77b3ad4e@redhat.com>
-Date:   Mon, 13 Feb 2023 13:44:07 +0100
+        Mon, 13 Feb 2023 07:44:35 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 790BD5FE6
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 04:44:34 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C703C4B3;
+        Mon, 13 Feb 2023 04:45:16 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BBAE83F703;
+        Mon, 13 Feb 2023 04:44:29 -0800 (PST)
+Message-ID: <f8a75f47-0f7e-14cc-adf4-2854e235b26e@arm.com>
+Date:   Mon, 13 Feb 2023 13:44:20 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 2/6] ksm: support unsharing zero pages placed by KSM
-To:     yang.yang29@zte.com.cn
-Cc:     akpm@linux-foundation.org, imbrenda@linux.ibm.com,
-        jiang.xuexin@zte.com.cn, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com,
-        xu.xin16@zte.com.cn
-References: <202302041418359766772@zte.com.cn>
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 07/10] sched/fair: Do not even the number of busy CPUs
+ via asym_packing
 Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <202302041418359766772@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+References: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com>
+ <20230207045838.11243-8-ricardo.neri-calderon@linux.intel.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20230207045838.11243-8-ricardo.neri-calderon@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04.02.23 07:18, yang.yang29@zte.com.cn wrote:
+On 07/02/2023 05:58, Ricardo Neri wrote:
 
-[sorry, was on vacation last week]
+[...]
 
->> Why use flags if they both conditions are mutually exclusive?
-> 
-> Just to make the return value of break_ksm_pmd_entry() more expressive and
-> understandable. because break_ksm_pmd_entry have three types of returned
-> values (0, 1, 2).
+> @@ -9269,33 +9264,11 @@ static bool asym_smt_can_pull_tasks(int dst_cpu, struct sd_lb_stats *sds,
+>  				    struct sched_group *sg)
+>  {
+>  #ifdef CONFIG_SCHED_SMT
+> -	bool local_is_smt;
+>  	int sg_busy_cpus;
+>  
+> -	local_is_smt = sds->local->flags & SD_SHARE_CPUCAPACITY;
+>  	sg_busy_cpus = sgs->group_weight - sgs->idle_cpus;
+>  
+> -	if (!local_is_smt) {
+> -		/*
+> -		 * If we are here, @dst_cpu is idle and does not have SMT
+> -		 * siblings. Pull tasks if candidate group has two or more
+> -		 * busy CPUs.
+> -		 */
+> -		if (sg_busy_cpus >= 2) /* implies sg_is_smt */
+> -			return true;
+> -
+> -		/*
+> -		 * @dst_cpu does not have SMT siblings. @sg may have SMT
+> -		 * siblings and only one is busy. In such case, @dst_cpu
+> -		 * can help if it has higher priority and is idle (i.e.,
+> -		 * it has no running tasks).
+> -		 */
+> -		return sched_asym_prefer(dst_cpu, sg->asym_prefer_cpu);
+> -	}
+> -
+>  	/*
+> -	 * @dst_cpu has SMT siblings and are also idle.
+> -	 *
+>  	 * If the difference in the number of busy CPUs is two or more, let
+>  	 * find_busiest_group() take care of it. We only care if @sg has
+>  	 * exactly one busy CPU. This covers SMT and non-SMT sched groups.
 
-It adds confusion. Just simplify it please.
+Can't this be made lighter by removing asym_smt_can_pull_tasks() and
+putting the logic to exclude the call to sched_asym_prefer() into
+sched_asym() directly?
+Not sure if we need the CONFIG_SCHED_SMT since it's all guarded by
+`flags & SD_SHARE_CPUCAPACITY` already, which is only set under.
+CONFIG_SCHED_SMT.
 
-> 
->> MADV_UNMERGEABLE -> unmerge_ksm_pages() will never unshare the shared
->> zeropage? I thought the patch description mentions that that is one of
->> the goals?
-> 
-> No, MADV_UNMERGEABLE will trigger KSM to unshare the shared zeropages in the
-> context of "get_next_rmap_item() -> unshare_zero_pages(), but not directly in the
-> context of " madvise()-> unmerge_ksm_pages() ". The reason for this is to avoid
-> increasing long delays of madvise() calling on unsharing zero pages.
-> 
+static inline bool
+sched_asym(struct lb_env *env, struct sd_lb_stats *sds,
+           struct sg_lb_stats *sgs, struct sched_group *group)
+{
+        bool local_is_smt = sds->local->flags & SD_SHARE_CPUCAPACITY;
 
-Why do we care and make this case special?
+        if (local_is_smt && !is_core_idle(env->dst_cpu))
+                return false;
 
--- 
-Thanks,
+        if ((local_is_smt || group->flags & SD_SHARE_CPUCAPACITY)) {
+                int sg_busy_cpus = sgs->group_weight - sgs->idle_cpus;
 
-David / dhildenb
+                if (sg_busy_cpus != 1)
+                        return false;
+        }
+
+        return sched_asym_prefer(env->dst_cpu, group->asym_prefer_cpu);
+}
+
+[...]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
