@@ -2,115 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18E97693EA0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 08:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9572B693EAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 08:07:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjBMHF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 02:05:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
+        id S229783AbjBMHG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 02:06:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjBMHFY (ORCPT
+        with ESMTP id S229543AbjBMHG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 02:05:24 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1860C147;
-        Sun, 12 Feb 2023 23:05:23 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 36FB732002FB;
-        Mon, 13 Feb 2023 02:05:22 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 13 Feb 2023 02:05:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1676271921; x=1676358321; bh=DBQVAebrmI
-        WqlhZBhjundCNnAZEyy9IeLdHeIoP2zeg=; b=XgxmjIgd/jTQJtiYkdG5myJwk9
-        6R5wRp+yTL79kdAj1RAfi5jto+Qi44ilhcJTf/FQsDT6/ZpfP/rGJUrt8BIONBTB
-        yHZW4YCoASiVrHCG+xwugvORHurnqqt42ZBtdZnh7g4FAytRstSq2DxL3ZIU9ZBc
-        cZ+SQkXWuxoMybRvhK5LkpxqZ7RuELLMotRgP3QQwSQcsQPjHwj59rSVknP5O8qK
-        Z1N7Z47w9k4U0Csl1MkV3grSlph+qAPWHd2B47s92XCwku2Q1aMD1U7/v/mFiXlH
-        K+uuQo4gi1ywK5nqrBgrAzU9+C+YTpQ4dGPXBg9weJ0K+1qRxE6sUDQ2meeA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1676271921; x=1676358321; bh=DBQVAebrmIWqlhZBhjundCNnAZEy
-        y9IeLdHeIoP2zeg=; b=pVQIOmIB+Dx7O3NbOj4r4jzWDo68I6L6Hl7vI/lfGvIt
-        WQpal4QZXv542k48sjP6yyz7a/bKizVHlpOT8OHoMBXQngBtxQzIdJZ3Qozk3z/B
-        TMavyep7v187Nv5Tg/2SiPwtDuu48ceOSKHPtJ55iF6wGM2usY4Kf0JEVLmQoUAt
-        Jrrjk6K1TcynfAMahK0jlXhrTeYAeNyouBO8frOmWbWIPesr5Hgbg75SNaQMTPz6
-        rHYDKQQx3Ba3U+/Fkb/OGlnIi/urJt6SazHWF3/yocf4xK/w5HuxJphPUm0tVH94
-        jInh74KIEl9OeSOS6a3Sdx26hg3FJ9MxAygKecbz+g==
-X-ME-Sender: <xms:MeHpY2FdF_FSe8PdPNu3CXYCQrL5Kne5WK-aSlnPWxRXTbgM5IP8-g>
-    <xme:MeHpY3UEOiAxNx7wTd-kZQ4ubK9L8IJNnAdPhGEPKSvVs5bBKedBk40tifziyJFyK
-    wMEQp5l2oUSPw>
-X-ME-Received: <xmr:MeHpYwJc8WHDBGJ95IEzKgvuk8twKP_RrFGphn6ci3TmM2u6TTg_jiwify540_1-6-C9cD7VwilhB3qHm0XQQnX7dx7EWS-O4dVb2A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeitddguddtudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
-    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:MeHpYwFlKV-OEhf62ZiJVfem7_bWuVVT7659wDEyOhrVbxw2z6IhHQ>
-    <xmx:MeHpY8Wrjuzw3kahjZvWEkf9WG23NwXWr7UFqM1T4P8jnGJi6hYpMA>
-    <xmx:MeHpYzO9lJeXY45-23pCUAtIQmC2pHcv-ap5XizVaTNIGqX4Km43tg>
-    <xmx:MeHpY9v7om47ElUe0dt5GOBluu2Mpd6A6u5ij3w9mMyis0NcQrKRUA>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 13 Feb 2023 02:05:20 -0500 (EST)
-Date:   Mon, 13 Feb 2023 08:05:18 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Christian Gromm <christian.gromm@microchip.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
-Subject: Re: linux-next: manual merge of the staging tree with the v4l-dvb
- tree
-Message-ID: <Y+nhLqlblKqae87H@kroah.com>
-References: <20230213131318.2fdaf4fa@canb.auug.org.au>
+        Mon, 13 Feb 2023 02:06:57 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA1DC14F;
+        Sun, 12 Feb 2023 23:06:55 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31D5H9DB023820;
+        Mon, 13 Feb 2023 07:06:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=qWEsjfSLm20NR7cgu39EiHHZE+a5Ptdfs1rUWc2ZQGs=;
+ b=tLxoYTtm1xfLzpt/C33zO1FF85kivIj0Z9X5/mCqOYOgU9m6d9b6sEVTcm0SlNRL+kDn
+ ntL0JZyUbSEUGTWk/6HejMzx51SD0u5Tw6VhjzjSbU9LEe7IsgGN/oaC3bmNVZyBC/yW
+ LuuGzg3RRQYNJBBNZbGVOBrXbD5Dd/iE1jUUTkIfH1WlNjTh28q7FHiXJYdsS38HViTC
+ lORwdP4g43JGs2BHIbNKJZybFav70nmJNK9a2O1fg73lnCBxncus5A66SO7qO6bfgLe8
+ E//BMGV/JabSob/ZfaLoUneyjKgsPPGnDwsIQI4vzmBJtm5MUGVv0yoS8AN+ldBn599U Wg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nq4ftb4jp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 07:06:44 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31D6w7er003800;
+        Mon, 13 Feb 2023 07:06:44 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nq4ftb4hv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 07:06:44 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31CIH0qt017758;
+        Mon, 13 Feb 2023 07:06:42 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3np2n6j8mw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 07:06:42 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31D76ds015860402
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Feb 2023 07:06:39 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A21D72004D;
+        Mon, 13 Feb 2023 07:06:39 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 28DF920040;
+        Mon, 13 Feb 2023 07:06:39 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 13 Feb 2023 07:06:39 +0000 (GMT)
+Received: from [10.61.2.128] (haven.au.ibm.com [9.192.254.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 3E80C60418;
+        Mon, 13 Feb 2023 18:06:37 +1100 (AEDT)
+Message-ID: <6a7d93a51d19e0cec28b2169d1ab0262148ff717.camel@linux.ibm.com>
+Subject: Re: [PATCH v6 24/26] powerpc/pseries: Implement secvars for dynamic
+ secure boot
+From:   Andrew Donnellan <ajd@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
+        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
+        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
+Date:   Mon, 13 Feb 2023 18:06:36 +1100
+In-Reply-To: <f35e9ba1-5fdb-4cfa-5b41-cc55307dcd45@linux.ibm.com>
+References: <20230210080401.345462-1-ajd@linux.ibm.com>
+         <20230210080401.345462-25-ajd@linux.ibm.com>
+         <f35e9ba1-5fdb-4cfa-5b41-cc55307dcd45@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230213131318.2fdaf4fa@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: poTtsvcm-YPlY9HrCe3JDzzg6sEAZ6bL
+X-Proofpoint-ORIG-GUID: f0dY8lXzRFscAF21b2e9zPbht2vgGy0s
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-13_02,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ clxscore=1015 phishscore=0 impostorscore=0 suspectscore=0
+ priorityscore=1501 mlxlogscore=820 spamscore=0 malwarescore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302130063
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 01:13:18PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the staging tree got a conflict in:
-> 
->   MAINTAINERS
-> 
-> between commit:
-> 
->   ba47652ba655 ("media: meye: remove this deprecated driver")
-> 
-> from the v4l-dvb tree and commit:
-> 
->   eec8ccab1b57 ("most: add maintainer entry")
-> 
-> from the staging tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+On Fri, 2023-02-10 at 16:23 -0500, Stefan Berger wrote:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0memcpy(&flags, data, sizeof(=
+flags));
+>=20
+> conversion from bytestream to integer: I think in this case it would
+> be better to use
+>=20
+> flags =3D cpu_to_be64p((__u64*)data);
+>=20
+> so that the flags always in hypervisor/big endian format
 
-Fix up looks good, thanks!
+Thanks for catching this - it turns out we weren't properly testing the
+one flag that exists (append vs replace) in our test script, so I
+didn't notice this.
 
-greg k-h
+--=20
+Andrew Donnellan    OzLabs, ADL Canberra
+ajd@linux.ibm.com   IBM Australia Limited
