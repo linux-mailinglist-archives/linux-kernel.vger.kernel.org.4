@@ -2,118 +2,428 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79FB5693DE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 06:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8EA8693DE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 06:29:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjBMF1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 00:27:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40214 "EHLO
+        id S229832AbjBMF3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 00:29:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjBMF1n (ORCPT
+        with ESMTP id S229612AbjBMF27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 00:27:43 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE310EB5A
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 21:27:42 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id o36so7910590wms.1
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 21:27:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=d0i8yyIm+gGF9ZBg2Jv4kyt1WO1dq4pAI/4blUIxBss=;
-        b=FwrbHQrd1rLSIbDm6SzojQjzwesCLRr61Pm5udUaORLjg6Oa4zW5UDChv0XHXhp2QN
-         KWgDvHbORXtH90Ot9w7C1DY0827qQxUfiE3lvEn1MLP5f2/zz4+gHiS1aFaVozW/OOOd
-         S83r+Dz7IMyHbCyfa2bJ7xIWq2cXizWEoPSH4EuKT81hBobeTZcKQew5J8S2BwSSCSCH
-         Y1C5XQfymXwu2Z3wf2EZ7JakkH6mpm6mIh9CwB8LhN5IJ4NgNbH0Ma8tWt4RjTX5dsUV
-         FNA14mZW5+YI3ynIAfGCz8hTnvryEKigZdXhuUIwZWIYI9mEzlfTpxytUIOqzoJzD+dq
-         SHNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d0i8yyIm+gGF9ZBg2Jv4kyt1WO1dq4pAI/4blUIxBss=;
-        b=xyOcD0SnW9Xcb5xCRPAgNiZFUzvLV9o+nPNLS/6OyKUCUZ3gA7vH59/c2ZUKRgcoSN
-         jWVe0+PouG1T1pyzpVD+vL693awHAga4UA3sxol39BZi+QZenip2o04wTd/5WiK60DFf
-         w4kKPjjJOn2AiBbXvU3yIL8BqmxefJJuc2Sm3agE+u+F9mYhNMyUTuI4JVC5U9aBXAB1
-         rHYTIGKXN82jpG5Vf9caMkeciQhf9ARAAdQ5UQtkkVp3uoRxNhp3qtio3xx/F1Q1cq9v
-         CxflP8YfogCG3OVxQBLFeadqaiNEkiXTH95Eyz88iwGLiNrNKFzWVDvgVQd+X8k9v4VV
-         lwWg==
-X-Gm-Message-State: AO0yUKVC7OL5lozB/0bVLBpm1Qpf0HUcQ3XXwWSi/OkN3GXBCBvuMzH2
-        F1diR5QSqwuDfYVlTS7WLTs=
-X-Google-Smtp-Source: AK7set+B6jDm2d1ZqDtLGONP9jZueVno76liDBoh/Hm6c2bxVtjLXpZIiQHTXG9nMYbtx1h6KC6yYQ==
-X-Received: by 2002:a05:600c:a295:b0:3dd:1bcc:eb17 with SMTP id hu21-20020a05600ca29500b003dd1bcceb17mr17970915wmb.28.1676266061450;
-        Sun, 12 Feb 2023 21:27:41 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id n22-20020a05600c4f9600b003dcc82ce53fsm13960099wmq.38.2023.02.12.21.27.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Feb 2023 21:27:40 -0800 (PST)
-Date:   Mon, 13 Feb 2023 08:27:37 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Martin Kaiser <martin@kaiser.cx>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Revert "staging: r8188eu: simplify rtw_get_ff_hwaddr"
-Message-ID: <Y+nKSc6fPf4E1Y2S@kadam>
-References: <20230211183205.426820-1-martin@kaiser.cx>
+        Mon, 13 Feb 2023 00:28:59 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3D21BC
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 21:28:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676266137; x=1707802137;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RUQMeqsO6DZNKCd9iPnV70FSMcN+IXmCZMUJT/5bYUA=;
+  b=Baz9SlbSD1XnI47JG3M85vaES9ezUKT2OWjtiuZSxpQeLpatXkgHdqct
+   FLTNuyQlrLxP4Wsghw9L4/JGMKm/TlsyfL+9M23h5n3mfvyn3VRNU/x1h
+   Z2Phqudscx1YPre5GkOsfA4elTKaFwFPK6CHc9kLsZaGCyoaG6HKqU7oi
+   Vx8GGjeiXNlJfNAmgp1Fb/PMKRes2+mbDPiK+STzdvuvZkWpIYAhdUibZ
+   TUJnz2x0PCizxz96IO6ViBaDjgF/rvvBZBtxawUPmyI0m2470oXKotcpw
+   tsLm+hJg3QbBSzSMGkGbhnq9kH6zx6MUWvyNcNDbWBGDL0paQwt7Ka5IF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="330820842"
+X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
+   d="scan'208";a="330820842"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2023 21:28:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="914183654"
+X-IronPort-AV: E=Sophos;i="5.97,293,1669104000"; 
+   d="scan'208";a="914183654"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 12 Feb 2023 21:28:08 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pRRNn-0007a5-1a;
+        Mon, 13 Feb 2023 05:28:07 +0000
+Date:   Mon, 13 Feb 2023 13:28:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mike Christie <michael.christie@oracle.com>, brauner@kernel.org,
+        ebiederm@xmission.com, torvalds@linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Mike Christie <michael.christie@oracle.com>
+Subject: Re: [PATCH 1/5] kernel: Move kernel_clone_args's fn to new struct
+Message-ID: <202302131343.whX9lCGw-lkp@intel.com>
+References: <20230213010020.1813-2-michael.christie@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230211183205.426820-1-martin@kaiser.cx>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230213010020.1813-2-michael.christie@oracle.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 11, 2023 at 07:32:05PM +0100, Martin Kaiser wrote:
-> This reverts commit fd48124e09825797bdc8ff0120f2401030c618ee.
-> 
-> The cleanup in this commit removes the qsel to addr mappings in
-> rtw_get_ff_hwaddr. The underlying assumption is that rtw_write_port
-> uses its addr parameter only for the high_queue check.
-> 
-> This is obviously incorrect as rtw_write_port calls
-> ffaddr2pipehdl(pdvobj, addr);
-> where addr is mapped to a usb bulk endpoint.
-> 
-> Unfortunately, testing did not show any problems. The Edimax V2 on which I
-> tested has two bulk out endpoints. I guess that with the incorrect patch,
-> addr could only be 0 (no high queue) or 6 (high queue), both of which were
-> mapped to the first bulk out endpoint. Data transfers did still work...
-> 
-> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
-> ---
-> 
-> Hello Greg,
-> 
-> sorry for introducing a regression in commit fd48124e0982 ("staging:
-> r8188eu: simplify rtw_get_ff_hwaddr").
-> 
-> Could you take this revert before the 6.3 pull request?
-> 
-> Thanks,
-> Martin
-> 
+Hi Mike,
 
-I feel like the ancient `git revert` script is not at all in line with
-current standards and sets people up for failure.  This one at least
-has a commit message.  But
-1) The subject doesn't have a correct patch prefix.
-2) "commit fd48124e09825797bdc8ff0120f2401030c618ee" is not human
-   readable or how we describe commits these days with a 12 char hash.
-3) There is no fixes tag.
+I love your patch! Yet something to improve:
 
-regards,
-dan carpenter
+[auto build test ERROR on tip/sched/core]
+[also build test ERROR on linus/master v6.2-rc8]
+[cannot apply to next-20230210]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mike-Christie/kernel-Move-kernel_clone_args-s-fn-to-new-struct/20230213-090304
+patch link:    https://lore.kernel.org/r/20230213010020.1813-2-michael.christie%40oracle.com
+patch subject: [PATCH 1/5] kernel: Move kernel_clone_args's fn to new struct
+config: csky-buildonly-randconfig-r004-20230212 (https://download.01.org/0day-ci/archive/20230213/202302131343.whX9lCGw-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/3eb77c0672cdc93fa577d5feb91b79f272d883b7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mike-Christie/kernel-Move-kernel_clone_args-s-fn-to-new-struct/20230213-090304
+        git checkout 3eb77c0672cdc93fa577d5feb91b79f272d883b7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=csky olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash fs/ kernel/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302131343.whX9lCGw-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from include/linux/huge_mm.h:8,
+                    from include/linux/mm.h:740,
+                    from fs/open.c:9:
+>> include/linux/sched/task.h:99:14: error: conflicting types for 'kernel_thread'; have 'pid_t(struct kernel_clone_fns *, void *, long unsigned int)' {aka 'int(struct kernel_clone_fns *, void *, long unsigned int)'}
+      99 | extern pid_t kernel_thread(struct kernel_clone_fns *fns, void *fn_arg,
+         |              ^~~~~~~~~~~~~
+   In file included from arch/csky/include/asm/thread_info.h:10,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/csky/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:56,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:7,
+                    from include/linux/mm.h:7:
+   arch/csky/include/asm/processor.h:75:12: note: previous declaration of 'kernel_thread' with type 'int(int (*)(void *), void *, long unsigned int)'
+      75 | extern int kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
+         |            ^~~~~~~~~~~~~
+--
+   In file included from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from include/linux/huge_mm.h:8,
+                    from include/linux/mm.h:740,
+                    from fs/pipe.c:8:
+>> include/linux/sched/task.h:99:14: error: conflicting types for 'kernel_thread'; have 'pid_t(struct kernel_clone_fns *, void *, long unsigned int)' {aka 'int(struct kernel_clone_fns *, void *, long unsigned int)'}
+      99 | extern pid_t kernel_thread(struct kernel_clone_fns *fns, void *fn_arg,
+         |              ^~~~~~~~~~~~~
+   In file included from arch/csky/include/asm/thread_info.h:10,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/csky/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:56,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:7,
+                    from include/linux/mm.h:7:
+   arch/csky/include/asm/processor.h:75:12: note: previous declaration of 'kernel_thread' with type 'int(int (*)(void *), void *, long unsigned int)'
+      75 | extern int kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
+         |            ^~~~~~~~~~~~~
+   fs/pipe.c:757:15: warning: no previous prototype for 'account_pipe_buffers' [-Wmissing-prototypes]
+     757 | unsigned long account_pipe_buffers(struct user_struct *user,
+         |               ^~~~~~~~~~~~~~~~~~~~
+   fs/pipe.c:763:6: warning: no previous prototype for 'too_many_pipe_buffers_soft' [-Wmissing-prototypes]
+     763 | bool too_many_pipe_buffers_soft(unsigned long user_bufs)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/pipe.c:770:6: warning: no previous prototype for 'too_many_pipe_buffers_hard' [-Wmissing-prototypes]
+     770 | bool too_many_pipe_buffers_hard(unsigned long user_bufs)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/pipe.c:777:6: warning: no previous prototype for 'pipe_is_unprivileged_user' [-Wmissing-prototypes]
+     777 | bool pipe_is_unprivileged_user(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/pipe.c:1253:5: warning: no previous prototype for 'pipe_resize_ring' [-Wmissing-prototypes]
+    1253 | int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots)
+         |     ^~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from include/uapi/linux/aio_abi.h:31,
+                    from include/linux/syscalls.h:77,
+                    from fs/d_path.c:2:
+>> include/linux/sched/task.h:99:14: error: conflicting types for 'kernel_thread'; have 'pid_t(struct kernel_clone_fns *, void *, long unsigned int)' {aka 'int(struct kernel_clone_fns *, void *, long unsigned int)'}
+      99 | extern pid_t kernel_thread(struct kernel_clone_fns *fns, void *fn_arg,
+         |              ^~~~~~~~~~~~~
+   In file included from arch/csky/include/asm/thread_info.h:10,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/csky/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:56,
+                    from include/linux/wait.h:9,
+                    from include/linux/wait_bit.h:8,
+                    from include/linux/fs.h:6:
+   arch/csky/include/asm/processor.h:75:12: note: previous declaration of 'kernel_thread' with type 'int(int (*)(void *), void *, long unsigned int)'
+      75 | extern int kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
+         |            ^~~~~~~~~~~~~
+   fs/d_path.c:317:7: warning: no previous prototype for 'simple_dname' [-Wmissing-prototypes]
+     317 | char *simple_dname(struct dentry *dentry, char *buffer, int buflen)
+         |       ^~~~~~~~~~~~
+--
+   In file included from kernel/fork.c:23:
+>> include/linux/sched/task.h:99:14: error: conflicting types for 'kernel_thread'; have 'pid_t(struct kernel_clone_fns *, void *, long unsigned int)' {aka 'int(struct kernel_clone_fns *, void *, long unsigned int)'}
+      99 | extern pid_t kernel_thread(struct kernel_clone_fns *fns, void *fn_arg,
+         |              ^~~~~~~~~~~~~
+   In file included from arch/csky/include/asm/thread_info.h:10,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/csky/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:56,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:7,
+                    from include/linux/slab.h:15,
+                    from kernel/fork.c:16:
+   arch/csky/include/asm/processor.h:75:12: note: previous declaration of 'kernel_thread' with type 'int(int (*)(void *), void *, long unsigned int)'
+      75 | extern int kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
+         |            ^~~~~~~~~~~~~
+   kernel/fork.c:162:13: warning: no previous prototype for 'arch_release_task_struct' [-Wmissing-prototypes]
+     162 | void __weak arch_release_task_struct(struct task_struct *tsk)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/fork.c:862:20: warning: no previous prototype for 'arch_task_cache_init' [-Wmissing-prototypes]
+     862 | void __init __weak arch_task_cache_init(void) { }
+         |                    ^~~~~~~~~~~~~~~~~~~~
+   kernel/fork.c:957:12: warning: no previous prototype for 'arch_dup_task_struct' [-Wmissing-prototypes]
+     957 | int __weak arch_dup_task_struct(struct task_struct *dst,
+         |            ^~~~~~~~~~~~~~~~~~~~
+>> kernel/fork.c:2740:7: error: conflicting types for 'kernel_thread'; have 'pid_t(struct kernel_clone_fns *, void *, long unsigned int)' {aka 'int(struct kernel_clone_fns *, void *, long unsigned int)'}
+    2740 | pid_t kernel_thread(struct kernel_clone_fns *fns, void *fn_arg,
+         |       ^~~~~~~~~~~~~
+   arch/csky/include/asm/processor.h:75:12: note: previous declaration of 'kernel_thread' with type 'int(int (*)(void *), void *, long unsigned int)'
+      75 | extern int kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
+         |            ^~~~~~~~~~~~~
+--
+   In file included from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from include/linux/huge_mm.h:8,
+                    from include/linux/mm.h:740,
+                    from include/linux/kallsyms.h:13,
+                    from include/linux/ftrace.h:13,
+                    from include/linux/kprobes.h:28,
+                    from include/linux/kgdb.h:19,
+                    from kernel/panic.c:15:
+>> include/linux/sched/task.h:99:14: error: conflicting types for 'kernel_thread'; have 'pid_t(struct kernel_clone_fns *, void *, long unsigned int)' {aka 'int(struct kernel_clone_fns *, void *, long unsigned int)'}
+      99 | extern pid_t kernel_thread(struct kernel_clone_fns *fns, void *fn_arg,
+         |              ^~~~~~~~~~~~~
+   In file included from arch/csky/include/asm/thread_info.h:10,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/csky/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/percpu.h:6,
+                    from include/linux/context_tracking_state.h:5,
+                    from include/linux/hardirq.h:5,
+                    from include/linux/interrupt.h:11,
+                    from kernel/panic.c:14:
+   arch/csky/include/asm/processor.h:75:12: note: previous declaration of 'kernel_thread' with type 'int(int (*)(void *), void *, long unsigned int)'
+      75 | extern int kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
+         |            ^~~~~~~~~~~~~
+   kernel/panic.c: In function '__warn':
+   kernel/panic.c:658:17: warning: function '__warn' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+     658 |                 vprintk(args->fmt, args->args);
+         |                 ^~~~~~~
+--
+   In file included from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from include/linux/huge_mm.h:8,
+                    from include/linux/mm.h:740,
+                    from kernel/exit.c:8:
+>> include/linux/sched/task.h:99:14: error: conflicting types for 'kernel_thread'; have 'pid_t(struct kernel_clone_fns *, void *, long unsigned int)' {aka 'int(struct kernel_clone_fns *, void *, long unsigned int)'}
+      99 | extern pid_t kernel_thread(struct kernel_clone_fns *fns, void *fn_arg,
+         |              ^~~~~~~~~~~~~
+   In file included from arch/csky/include/asm/thread_info.h:10,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/csky/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:56,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:7,
+                    from include/linux/mm.h:7:
+   arch/csky/include/asm/processor.h:75:12: note: previous declaration of 'kernel_thread' with type 'int(int (*)(void *), void *, long unsigned int)'
+      75 | extern int kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
+         |            ^~~~~~~~~~~~~
+   kernel/exit.c:1908:13: warning: no previous prototype for 'abort' [-Wmissing-prototypes]
+    1908 | __weak void abort(void)
+         |             ^~~~~
+--
+   In file included from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from include/linux/huge_mm.h:8,
+                    from include/linux/mm.h:740,
+                    from include/linux/kallsyms.h:13,
+                    from kernel/kallsyms.c:15:
+>> include/linux/sched/task.h:99:14: error: conflicting types for 'kernel_thread'; have 'pid_t(struct kernel_clone_fns *, void *, long unsigned int)' {aka 'int(struct kernel_clone_fns *, void *, long unsigned int)'}
+      99 | extern pid_t kernel_thread(struct kernel_clone_fns *fns, void *fn_arg,
+         |              ^~~~~~~~~~~~~
+   In file included from arch/csky/include/asm/thread_info.h:10,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/csky/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:56,
+                    from include/linux/kref.h:16,
+                    from include/linux/mm_types.h:8,
+                    from include/linux/buildid.h:5,
+                    from include/linux/kallsyms.h:10:
+   arch/csky/include/asm/processor.h:75:12: note: previous declaration of 'kernel_thread' with type 'int(int (*)(void *), void *, long unsigned int)'
+      75 | extern int kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
+         |            ^~~~~~~~~~~~~
+   kernel/kallsyms.c:663:12: warning: no previous prototype for 'arch_get_kallsym' [-Wmissing-prototypes]
+     663 | int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+         |            ^~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from include/linux/huge_mm.h:8,
+                    from include/linux/mm.h:740,
+                    from include/linux/kallsyms.h:13,
+                    from include/linux/ftrace.h:13,
+                    from include/linux/kprobes.h:28,
+                    from kernel/kprobes.c:23:
+>> include/linux/sched/task.h:99:14: error: conflicting types for 'kernel_thread'; have 'pid_t(struct kernel_clone_fns *, void *, long unsigned int)' {aka 'int(struct kernel_clone_fns *, void *, long unsigned int)'}
+      99 | extern pid_t kernel_thread(struct kernel_clone_fns *fns, void *fn_arg,
+         |              ^~~~~~~~~~~~~
+   In file included from arch/csky/include/asm/thread_info.h:10,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/current.h:5,
+                    from ./arch/csky/include/generated/asm/current.h:1,
+                    from include/linux/mutex.h:14,
+                    from include/linux/notifier.h:14,
+                    from include/linux/kprobes.h:21:
+   arch/csky/include/asm/processor.h:75:12: note: previous declaration of 'kernel_thread' with type 'int(int (*)(void *), void *, long unsigned int)'
+      75 | extern int kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
+         |            ^~~~~~~~~~~~~
+   kernel/kprobes.c:1856:12: warning: no previous prototype for 'kprobe_exceptions_notify' [-Wmissing-prototypes]
+    1856 | int __weak kprobe_exceptions_notify(struct notifier_block *self,
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from include/linux/huge_mm.h:8,
+                    from include/linux/mm.h:740,
+                    from kernel/iomem.c:5:
+>> include/linux/sched/task.h:99:14: error: conflicting types for 'kernel_thread'; have 'pid_t(struct kernel_clone_fns *, void *, long unsigned int)' {aka 'int(struct kernel_clone_fns *, void *, long unsigned int)'}
+      99 | extern pid_t kernel_thread(struct kernel_clone_fns *fns, void *fn_arg,
+         |              ^~~~~~~~~~~~~
+   In file included from arch/csky/include/asm/thread_info.h:10,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/current.h:5,
+                    from ./arch/csky/include/generated/asm/current.h:1,
+                    from include/linux/sched.h:12,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from kernel/iomem.c:2:
+   arch/csky/include/asm/processor.h:75:12: note: previous declaration of 'kernel_thread' with type 'int(int (*)(void *), void *, long unsigned int)'
+      75 | extern int kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
+         |            ^~~~~~~~~~~~~
+   kernel/iomem.c:9:22: warning: no previous prototype for 'ioremap_cache' [-Wmissing-prototypes]
+       9 | __weak void __iomem *ioremap_cache(resource_size_t offset, unsigned long size)
+         |                      ^~~~~~~~~~~~~
+--
+   In file included from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from fs/proc/meminfo.c:2:
+>> include/linux/sched/task.h:99:14: error: conflicting types for 'kernel_thread'; have 'pid_t(struct kernel_clone_fns *, void *, long unsigned int)' {aka 'int(struct kernel_clone_fns *, void *, long unsigned int)'}
+      99 | extern pid_t kernel_thread(struct kernel_clone_fns *fns, void *fn_arg,
+         |              ^~~~~~~~~~~~~
+   In file included from arch/csky/include/asm/thread_info.h:10,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/csky/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:56,
+                    from include/linux/wait.h:9,
+                    from include/linux/wait_bit.h:8,
+                    from include/linux/fs.h:6:
+   arch/csky/include/asm/processor.h:75:12: note: previous declaration of 'kernel_thread' with type 'int(int (*)(void *), void *, long unsigned int)'
+      75 | extern int kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
+         |            ^~~~~~~~~~~~~
+   fs/proc/meminfo.c:22:28: warning: no previous prototype for 'arch_report_meminfo' [-Wmissing-prototypes]
+      22 | void __attribute__((weak)) arch_report_meminfo(struct seq_file *m)
+         |                            ^~~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from include/linux/debugfs.h:15,
+                    from kernel/locking/lock_events.c:19:
+>> include/linux/sched/task.h:99:14: error: conflicting types for 'kernel_thread'; have 'pid_t(struct kernel_clone_fns *, void *, long unsigned int)' {aka 'int(struct kernel_clone_fns *, void *, long unsigned int)'}
+      99 | extern pid_t kernel_thread(struct kernel_clone_fns *fns, void *fn_arg,
+         |              ^~~~~~~~~~~~~
+   In file included from arch/csky/include/asm/thread_info.h:10,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/csky/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:56,
+                    from include/linux/wait.h:9,
+                    from include/linux/wait_bit.h:8,
+                    from include/linux/fs.h:6:
+   arch/csky/include/asm/processor.h:75:12: note: previous declaration of 'kernel_thread' with type 'int(int (*)(void *), void *, long unsigned int)'
+      75 | extern int kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
+         |            ^~~~~~~~~~~~~
+   kernel/locking/lock_events.c:61:16: warning: no previous prototype for 'lockevent_read' [-Wmissing-prototypes]
+      61 | ssize_t __weak lockevent_read(struct file *file, char __user *user_buf,
+         |                ^~~~~~~~~~~~~~
+..
 
 
+vim +99 include/linux/sched/task.h
+
+    94	
+    95	extern pid_t kernel_clone(struct kernel_clone_args *kargs);
+    96	struct task_struct *create_io_thread(struct kernel_clone_fns *fns, void *fn_arg,
+    97					     int node);
+    98	struct task_struct *fork_idle(int);
+  > 99	extern pid_t kernel_thread(struct kernel_clone_fns *fns, void *fn_arg,
+   100				   unsigned long flags);
+   101	extern pid_t user_mode_thread(int (*fn)(void *), void *arg, unsigned long flags);
+   102	extern long kernel_wait4(pid_t, int __user *, int, struct rusage *);
+   103	int kernel_wait(pid_t pid, int *stat);
+   104	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
