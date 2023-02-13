@@ -2,75 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7FD6950C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:37:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F616950FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjBMThx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 14:37:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
+        id S231388AbjBMTs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 14:48:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbjBMThu (ORCPT
+        with ESMTP id S231374AbjBMTs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 14:37:50 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CBD2722
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 11:37:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676317069; x=1707853069;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4yuMrxSozOviRS8funTjR25MXp+HMcPbifIVi7/PCyI=;
-  b=ibeme3fS4jK8lIrVMnFG4i2pLfjbpUJR0+Hh8wxZabLvmifI8qtRcYyQ
-   KeX9Wp4cH+LiUk53+ZxO3FuF/dnCnLI/7DXDjsWSA9fr0c/TDtbFAMLaP
-   oSf47mlcaC5csuHXxhxJpR6G98xsTg44fFvCHZ1dFjTsgTfHlXRdXe8Dv
-   oGDXYXmw2fQvBGdfmWrGyxETGQSnfcGXlveEiKMDkXsrl8jDCzWxX0ArK
-   pSBue0IaOkRfOMxfPcR8QxBknKaR0yGf3vBMLct/uWKj7JZ8bYSaPY74X
-   wMTmk/9oRNU5CfJYrYtmVajw/8C61yKvQQMJWtmS4AEbSTdKtYe2XnW53
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="319005700"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="319005700"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 11:37:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="732608348"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="732608348"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga008.fm.intel.com with ESMTP; 13 Feb 2023 11:37:48 -0800
-Date:   Mon, 13 Feb 2023 11:47:40 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v3 07/10] sched/fair: Do not even the number of busy CPUs
- via asym_packing
-Message-ID: <20230213194740.GA6164@ranerica-svr.sc.intel.com>
-References: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com>
- <20230207045838.11243-8-ricardo.neri-calderon@linux.intel.com>
- <f8a75f47-0f7e-14cc-adf4-2854e235b26e@arm.com>
+        Mon, 13 Feb 2023 14:48:26 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AF44C1A;
+        Mon, 13 Feb 2023 11:48:25 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DINf3C021619;
+        Mon, 13 Feb 2023 19:48:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=d1tFLPXrbNvvWu9cPufctBsOFiSwOguAEb7uyG/PgBA=;
+ b=apXchMhpK16CAiNOeGsz5ClGhuzNhuRhosf6LOzzwYyR20IqLOCTqhpV5W0OmTmHKtLC
+ M+c5NXMD2Wk7us59U1n5virOzbO7UGoxFHdAU3/+iP4MW8H3gtPBwIk0er/Y4xaw9S5m
+ CeSIFXgKM7eB/oQSX7SYGNDIgEt78RDeg0rFpywrjc+fVvlb3A8Oe1Ayqa/McAsZtyZn
+ b5VcTYgVhOYVShDI+pDwG9oeYTSlwAuZBh6Yw2nH30vClWk6e6d2vjjicaO7/1gasM8g
+ DgdCcdBLk2JV82ZojuC8W11iQBkXgvu5gJ1vNmpgmFIyy2v0aSEJljqr7BH27dawg74w 4A== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nqtethth0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 19:48:12 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31DJhMOV028289;
+        Mon, 13 Feb 2023 19:48:10 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3np2n6a9gk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 19:48:10 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31DJm8qF49545542
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Feb 2023 19:48:08 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4C9B220043;
+        Mon, 13 Feb 2023 19:48:08 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B43A320040;
+        Mon, 13 Feb 2023 19:48:06 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.20.198])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Mon, 13 Feb 2023 19:48:06 +0000 (GMT)
+Date:   Tue, 14 Feb 2023 01:18:03 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, jack@suse.cz,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/21] ext4: Remove unnecessary release when memory
+ allocation failed in ext4_mb_init_cache
+Message-ID: <Y+qT83KMcIgkKjiB@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <20230209194825.511043-1-shikemeng@huaweicloud.com>
+ <20230209194825.511043-11-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f8a75f47-0f7e-14cc-adf4-2854e235b26e@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+In-Reply-To: <20230209194825.511043-11-shikemeng@huaweicloud.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: BsWrfuTIEM6w21C60u2ukSaXUgAYWXzX
+X-Proofpoint-ORIG-GUID: BsWrfuTIEM6w21C60u2ukSaXUgAYWXzX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-13_12,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ mlxscore=0 suspectscore=0 spamscore=0 malwarescore=0 impostorscore=0
+ adultscore=0 priorityscore=1501 mlxlogscore=999 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302130171
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,76 +84,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 01:44:20PM +0100, Dietmar Eggemann wrote:
-> On 07/02/2023 05:58, Ricardo Neri wrote:
+On Fri, Feb 10, 2023 at 03:48:14AM +0800, Kemeng Shi wrote:
+> If we alloc array of buffer_head failed, there is no resource need to be
+> freed and we can simpily return error.
 > 
-> [...]
+> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+> ---
+>  fs/ext4/mballoc.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
-> > @@ -9269,33 +9264,11 @@ static bool asym_smt_can_pull_tasks(int dst_cpu, struct sd_lb_stats *sds,
-> >  				    struct sched_group *sg)
-> >  {
-> >  #ifdef CONFIG_SCHED_SMT
-> > -	bool local_is_smt;
-> >  	int sg_busy_cpus;
-> >  
-> > -	local_is_smt = sds->local->flags & SD_SHARE_CPUCAPACITY;
-> >  	sg_busy_cpus = sgs->group_weight - sgs->idle_cpus;
-> >  
-> > -	if (!local_is_smt) {
-> > -		/*
-> > -		 * If we are here, @dst_cpu is idle and does not have SMT
-> > -		 * siblings. Pull tasks if candidate group has two or more
-> > -		 * busy CPUs.
-> > -		 */
-> > -		if (sg_busy_cpus >= 2) /* implies sg_is_smt */
-> > -			return true;
-> > -
-> > -		/*
-> > -		 * @dst_cpu does not have SMT siblings. @sg may have SMT
-> > -		 * siblings and only one is busy. In such case, @dst_cpu
-> > -		 * can help if it has higher priority and is idle (i.e.,
-> > -		 * it has no running tasks).
-> > -		 */
-> > -		return sched_asym_prefer(dst_cpu, sg->asym_prefer_cpu);
-> > -	}
-> > -
-> >  	/*
-> > -	 * @dst_cpu has SMT siblings and are also idle.
-> > -	 *
-> >  	 * If the difference in the number of busy CPUs is two or more, let
-> >  	 * find_busiest_group() take care of it. We only care if @sg has
-> >  	 * exactly one busy CPU. This covers SMT and non-SMT sched groups.
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index ad9e3b7d3198..15fc7105becc 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -1168,10 +1168,8 @@ static int ext4_mb_init_cache(struct page *page, char *incore, gfp_t gfp)
+>  	if (groups_per_page > 1) {
+>  		i = sizeof(struct buffer_head *) * groups_per_page;
+>  		bh = kzalloc(i, gfp);
+> -		if (bh == NULL) {
+> -			err = -ENOMEM;
+> -			goto out;
+> -		}
+> +		if (bh == NULL)
+> +			return -ENOMEM;
+>  	} else
+>  		bh = &bhs;
+>  
+> -- 
+> 2.30.0
 > 
-> Can't this be made lighter by removing asym_smt_can_pull_tasks() and
-> putting the logic to exclude the call to sched_asym_prefer() into
-> sched_asym() directly?
+Feel free to add:
 
-Yes, you are right. asym_smt_can_pull_tasks() was simplified significantly.
-I'll take your suggestion.
-
-> Not sure if we need the CONFIG_SCHED_SMT since it's all guarded by
-> `flags & SD_SHARE_CPUCAPACITY` already, which is only set under.
-> CONFIG_SCHED_SMT.
-
-Yes, asym_smt_can_pull_tasks() now cares for a very specific case, which
-only happens with CONFIG_SCHED_SMT. I'll remove the !CONFIG_SCHED_SMT part.
-> 
-> static inline bool
-> sched_asym(struct lb_env *env, struct sd_lb_stats *sds,
->            struct sg_lb_stats *sgs, struct sched_group *group)
-> {
->         bool local_is_smt = sds->local->flags & SD_SHARE_CPUCAPACITY;
-> 
->         if (local_is_smt && !is_core_idle(env->dst_cpu))
->                 return false;
-> 
->         if ((local_is_smt || group->flags & SD_SHARE_CPUCAPACITY)) {
->                 int sg_busy_cpus = sgs->group_weight - sgs->idle_cpus;
-> 
->                 if (sg_busy_cpus != 1)
->                         return false;
->         }
-> 
->         return sched_asym_prefer(env->dst_cpu, group->asym_prefer_cpu);
-
-I'll take your suggestion. Thanks!
+Reviewed-by: Ojaswin Mujoo <ojaswin@linux.ibm.com> 
