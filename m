@@ -2,88 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F59694F83
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2068694EE3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:09:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjBMShK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:37:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
+        id S230462AbjBMSJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:09:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjBMShJ (ORCPT
+        with ESMTP id S230497AbjBMSJg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:37:09 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB4B15570;
-        Mon, 13 Feb 2023 10:37:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=7rfb4I3SxniaE1BlvZfDy4F1q3ALKqu8B/i5PxxV7GU=; b=gjmLet4xuyx7JQv5J6gqeg04hD
-        6pp7/x4ur4SgpbaO8UzNWitegetwXzcI96bhip3jKSxej8VbmxH/rBS+/uP7e6Cb0cAVB5bayVhSk
-        gBOyKrh0RZLciswjXp4e8gKvG3CQsAa3xAqsiGb4eiESv8LMfufySYs65sv6beK8+MIA=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pRdEX-004rzX-En; Mon, 13 Feb 2023 19:07:21 +0100
-Date:   Mon, 13 Feb 2023 19:07:21 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     wei.fang@nxp.com, shenwei.wang@nxp.com, xiaoning.wang@nxp.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, simon.horman@corigine.com,
-        netdev@vger.kernel.org, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 net-next] net: fec: add CBS offload support
-Message-ID: <Y+p8WZCPKhp4/RIH@lunn.ch>
-References: <20230213092912.2314029-1-wei.fang@nxp.com>
- <ed27795a-f81f-a913-8275-b6f516b4f384@intel.com>
- <Y+pjl3vzi7TQcLKm@lunn.ch>
- <8b25bd1f-4265-33ea-bdb9-bc700eff0b0e@intel.com>
+        Mon, 13 Feb 2023 13:09:36 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B053C2D;
+        Mon, 13 Feb 2023 10:09:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676311758; x=1707847758;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=G5AV2pkXDQoTS6YCv9ce9+5JFgN9La2hpC0dnMFOo9o=;
+  b=gT+wtp6M6kV/Yyf3QTkDS8xJBxZ57EXxp4E9GdpIBnQxUqqlgPQSnyY6
+   kff2ADZbPOJHUKJgsnzyqYhyAnzKKJy7dqcLdfCN9QK66s8CQynDBWJOY
+   w/qJDi4iFuItQqdXlu7OU5DY0TRqnMzl5IlfFKLLsVUkj8b/1aRcg/kdQ
+   8xVSf2Yf2QG4vGVw/fHl8UlaP5ib2/HB9xW1QAt8pF+DKZ0B+cBuwFhpi
+   l3xKuWXKwLuMQ+7EcCa9hPLdFFOAY2RSqLQIrtr8jQhYjFIM3OM9BfMTf
+   h6tFn5iKeZ3YCSe+1oVXuiZ2m/OHXmflazjvWtH1/MOLCGaQ1UQ0NCNnJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="395567986"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="395567986"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 10:07:32 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="842854085"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="842854085"
+Received: from mlswanso-mobl.amr.corp.intel.com (HELO [10.251.26.232]) ([10.251.26.232])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 10:07:30 -0800
+Message-ID: <2d9172c5-e1e7-bf94-c52b-0e9bc5b5b319@intel.com>
+Date:   Mon, 13 Feb 2023 10:07:30 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8b25bd1f-4265-33ea-bdb9-bc700eff0b0e@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v9 07/18] x86/virt/tdx: Do TDX module per-cpu
+ initialization
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, peterz@infradead.org, tglx@linutronix.de,
+        seanjc@google.com, pbonzini@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
+        ying.huang@intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, david@redhat.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+References: <cover.1676286526.git.kai.huang@intel.com>
+ <557c526a1190903d11d67c4e2c76e01f67f6eb15.1676286526.git.kai.huang@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <557c526a1190903d11d67c4e2c76e01f67f6eb15.1676286526.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 06:44:05PM +0100, Alexander Lobakin wrote:
-> From: Andrew Lunn <andrew@lunn.ch>
-> Date: Mon, 13 Feb 2023 17:21:43 +0100
-> 
-> >>> +	if (!speed) {
-> >>> +		netdev_err(ndev, "Link speed is 0!\n");
-> >>
-> >> ??? Is this possible? If so, why is it checked only here and why can it
-> >> be possible?
-> > 
-> > The obvious way this happens is that there is no link partner, so
-> > auto-neg has not completed yet. The link speed is unknown.
-> 
-> Sure, but why treat it an error path then?
+On 2/13/23 03:59, Kai Huang wrote:
+> @@ -247,8 +395,17 @@ int tdx_enable(void)
+>  		ret = __tdx_enable();
+>  		break;
+>  	case TDX_MODULE_INITIALIZED:
+> -		/* Already initialized, great, tell the caller. */
+> -		ret = 0;
+> +		/*
+> +		 * The previous call of __tdx_enable() may only have
+> +		 * initialized part of present cpus during module
+> +		 * initialization, and new cpus may have become online
+> +		 * since then.
+> +		 *
+> +		 * To make sure all online cpus are TDX-runnable, always
+> +		 * do per-cpu initialization for all online cpus here
+> +		 * even the module has been initialized.
+> +		 */
+> +		ret = __tdx_enable_online_cpus();
 
-You need to treat is somehow. I would actually disagree with
-netdev_err(), netdev_dbg() seems more appropriate. But if you don't
-know the link speed, you cannot program the scheduler.
+I'm missing something here.  CPUs get initialized through either:
 
-This also comes back to my question about what should happen with a TC
-configuration which works fine for 1000BaseT, but will not work for
-10BaseT. Should the driver accept it only if the current link speed is
-sufficient? Should it always accept it, and not program it into the
-hardware if the current link speed does not support it?
+ 1. __tdx_enable(), for the CPUs around at the time
+ 2. tdx_cpu_online(), for hotplugged CPUs after __tdx_enable()
 
-Since we are talking about hardware acceleration here, what does the
-pure software version do? Ideally we want the accelerated version to
-do the same as the software version.
-
-Wei, please disable all clever stuff in the hardware, setup a pure
-software qdisc and a 10BaseT link. Oversubscribe the link and see what
-happens. Does other traffic get starved?
-
-	Andrew
+But, this is a third class.  CPUs that came online after #1, but which
+got missed by #2.  How can that happen?
