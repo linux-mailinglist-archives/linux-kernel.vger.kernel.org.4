@@ -2,79 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A71F694F62
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:31:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BAA0694F66
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:32:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbjBMSbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:31:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53946 "EHLO
+        id S230256AbjBMSb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:31:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbjBMSbl (ORCPT
+        with ESMTP id S230077AbjBMSb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:31:41 -0500
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9937134
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:31:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=JEB0EJq2leh0gUBfjQUrqieo+tocTy4r9EskxVl3TJk=; b=v/WrSIiHkt8HFZK/Uitv7d0L8c
-        A6MxJ600yRPTT+PIZ9BuPayUCfNgdDd/U+IiIgpvdt+01AL7uPEBptf2d2INzyZpqNuGgIEMKxj+G
-        qPkLwMbZ2YaEm7M8PDdKntzcz1yFlgsJCytgn9yIt3rPe8ss+7uCi5ZckspOr+vsVSTqLzPzafazk
-        GQXuqXXWH7OmZ0iaM0eJ38jaFAzOavQhQpE8QhOSXHLnqm6kCcdsq5U77J4tsybXhKy4ZdAZLKKMB
-        OcITCkUeay+VX4s87/ro/POcBwftDDii0HGaRejY8+wB4xNEmBkKoeMIIByQWqk677MSf/FJ0G62r
-        GyWsqVypjqaCw4qy6W+UZAfGlum6fMHk1EEUP90pRKm4HrgNWuinAYnJMXJ6pUr07tZl0xzh9Uo66
-        4TIor1+8H++ssQ7Ff2MN4NQrfzoFx7KXF5gBuDVnc1kQQf58ISViI4uttcKJaKy/Tikfv3Wx9momB
-        XYBxvxJuHl601yvXKIHpu/F2MadZOVjf5ndgF1s0YCD+IuBzmXamxb9u6jw1DHmMCpvTwhudjvQ9t
-        zH+0j5ZLfostuOMwCjekz1KT0qVWq9c8/2k9QOXKc1ykV+OOvVhVoWVBK7w4L+ZDp5yXcMRCgdVlY
-        tSAIIH+623oEbW2y/qIeh8uC7e0N2ambwTxvVvmds=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     v9fs-developer@lists.sourceforge.net,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Dominique Martinet <asmadeus@codewreck.org>
-Cc:     Latchesar Ionkov <lucho@ionkov.net>, linux-kernel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Dominique Martinet <asmadeus@codewreck.org>
-Subject: Re: [PATCH 0/5] Take 3 at async RPCs and no longer looping forever on signals
-Date:   Mon, 13 Feb 2023 19:26:54 +0100
-Message-ID: <4256068.OCvV93pMlr@silver>
-In-Reply-To: <20230211075023.137253-1-asmadeus@codewreck.org>
-References: <20230211075023.137253-1-asmadeus@codewreck.org>
+        Mon, 13 Feb 2023 13:31:56 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3801C5BE
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:31:52 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id b9so5372464ila.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:31:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1676313111;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YhELXdf05zY7CUQbBTvzj+Gb4RqQa3WJ6RXbjMshAvY=;
+        b=NZV5uVS4lxJPp6p+1qBjsjYANGdxCjU7BFs2Bw5/LGTp+ssG20JBv/nuomJtaEkAar
+         kWcxozx9PDBw6h5DQipSxnERGEJfQHqgMPDd7uF3YZdckcLeIE/Rq8wnigt9JVrWqJxr
+         s9zdbhYDTE49SrvplNgADwzRqwTIFnNNmGRr4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676313111;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YhELXdf05zY7CUQbBTvzj+Gb4RqQa3WJ6RXbjMshAvY=;
+        b=Tw+5usSDZtZELok//mCaY4ilPy/WLwFnMspdGJphUd6w5UyUbKHU1QeVd6pvC1ewpB
+         HzFEVkncx6YfKJZv3ULXeEr0Wn33xH+5/oPftGmG1nzyjh+IEitx/9HDhQWzuNzGEJMh
+         nSbuMhFATMshQ3QZFjTGO/Oor2Ag+imxyQNVC0Pcg96CxxKlTzukmbTZvbcTyepc+FYV
+         Ht5tcYWJa9XYiuLos2Q1FSXYtJo+Naxudr2KVzC3IKStzUNnFE5UoV31sjt2Np0z5lNk
+         Af0szKaQOaL/hOgoEsQ9HhbePnipH05Hf7NTrUdW9L7LKxSxTUMQsRcPvZIG96420gr1
+         zSRg==
+X-Gm-Message-State: AO0yUKVs4oG/fZRECBvgKK0GCMbAA0Ixd9Ky9B+29jIZunfeuuyjCRpK
+        ir+oWW3Z6irABBcHYh/9oRR2Kw==
+X-Google-Smtp-Source: AK7set8mpQPw2+GHtj5ZOfErydEdxIXuNq2fH1Iph/NA7mZTRndHLsb8zko5n9EIpwjE1fYaXs0icQ==
+X-Received: by 2002:a92:d7c4:0:b0:313:fb1b:2f86 with SMTP id g4-20020a92d7c4000000b00313fb1b2f86mr14498260ilq.0.1676313111559;
+        Mon, 13 Feb 2023 10:31:51 -0800 (PST)
+Received: from shuah-tx13.internal ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id t25-20020a02ccb9000000b0036cc14af7adsm4148662jap.149.2023.02.13.10.31.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 10:31:50 -0800 (PST)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     shuah@kernel.org, brauner@kernel.org, sforshee@kernel.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/mount_setattr: fix redefine struct mount_attr build error
+Date:   Mon, 13 Feb 2023 11:31:49 -0700
+Message-Id: <20230213183149.231779-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Saturday, February 11, 2023 8:50:18 AM CET Dominique Martinet wrote:
-> I've been working on async RPCs for a while and never had time to debug
-> the last issues this had, but by limiting the async clunks to failures
-> the impact is drastically smaller and I've not been able to reproduce
-> any more bug so far.
-> 
-> This will require some more testing and I'm tempted to say this is not
-> worth rushing this into the merge window next week-ish; the new problem
-> Jens reported with task_work isn't really new and I'd rather get this
-> right than rush new bugs in given the sour experience I've had with this
-> patch series... Hopefully it'll get in this time.
-> With that in mind I plan to take the patches in to my -next branch after
-> the merge window, so this has time to get reviewed first.
-> 
-> I'd like to measure impact on performance as well, but really spent way
-> more time on this than I already have, so that'll have to wait a bit.
+Fix the following build error due to redefining struct mount_attr by
+removing duplicate define from mount_setattr_test.c
 
-I have not observed performance degradation, nor any (new) errors. So for
-this entire series:
+gcc -g -isystem .../tools/testing/selftests/../../../usr/include -Wall -O2 -pthread     mount_setattr_test.c  -o .../tools/testing/selftests/mount_setattr/mount_setattr_test
+mount_setattr_test.c:107:8: error: redefinition of ‘struct mount_attr’
+  107 | struct mount_attr {
+      |        ^~~~~~~~~~
+In file included from /usr/include/x86_64-linux-gnu/sys/mount.h:32,
+                 from mount_setattr_test.c:10:
+.../usr/include/linux/mount.h:129:8: note: originally defined here
+  129 | struct mount_attr {
+      |        ^~~~~~~~~~
+make: *** [../lib.mk:145: .../tools/testing/selftests/mount_setattr/mount_setattr_test] Error 1
 
-Tested-by: Christian Schoenebeck <linux_oss@crudebyte.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ tools/testing/selftests/mount_setattr/mount_setattr_test.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-
+diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+index 8c5fea68ae67..582669ca38e9 100644
+--- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
++++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
+@@ -103,13 +103,6 @@
+ 	#else
+ 		#define __NR_mount_setattr 442
+ 	#endif
+-
+-struct mount_attr {
+-	__u64 attr_set;
+-	__u64 attr_clr;
+-	__u64 propagation;
+-	__u64 userns_fd;
+-};
+ #endif
+ 
+ #ifndef __NR_open_tree
+-- 
+2.37.2
 
