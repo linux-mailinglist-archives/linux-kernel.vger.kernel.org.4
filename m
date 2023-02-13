@@ -2,112 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7164694EFD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3A3694F2D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:24:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbjBMSN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:13:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
+        id S230237AbjBMSY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:24:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjBMSNy (ORCPT
+        with ESMTP id S229867AbjBMSYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:13:54 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026E111D
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:13:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1676311991; bh=SAwHxQ/gSzx3tIPkoaBgffqQPABlaFMW+rxGRpZZdtU=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=WOxJY9doUQun7DHJGdNqL2N6NZJXqvNK6kLIo0oOCOiHGxZImLdYGtpTh9c8XIrrr
-         n3yBFPgJ/Qu1a2FXUAAlYspClGxVF0c1w9KaTzj0AicJo2B74IVPEw1cSN17aydPR/
-         8bTTt6oxQD/oTe6R/4QJoArYmV18fuCN6aCDPnX4=
-Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Mon, 13 Feb 2023 19:13:10 +0100 (CET)
-X-EA-Auth: mVOtM26hiXOBErT5zUvL2AUpwMZen8W1yzH2o2fU8H6i/YJLJZUYw/Hgyue7COmu2GQyHjdRlMk9Tu+oYwHqJ9yq0UfBQuWD
-Date:   Mon, 13 Feb 2023 23:43:03 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH] ASoC: imx-pcm-rpmsg: Remove unused variable
-Message-ID: <Y+p9r5y9DPSJkPVf@ubun2204.myguest.virtualbox.org>
+        Mon, 13 Feb 2023 13:24:51 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B70A1711
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:24:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676312690; x=1707848690;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7YaAWm/KKRyxxvUTQf+fqxSN7Zv8wytNiNs/ZTuD2/E=;
+  b=DKTJQj1/O2vfbRTpk5Ss6Nl/KPah0pfgtkTxrWTAchDRuVZqnZJvwmes
+   NL1FJuRCHVfYeeQm9C4W0Sj3L6bTPCl+9FxRtQeS780WU0M5DyyBLZG58
+   d/P8kSRwm5RUxCI2LLvV+Fx6zZFQglUz5xijowE74q8eGU3CiD+u5HqZl
+   V8fc6xRJu6L3AV5d3JYDJWZwH3TFNzZt1iW2TpnRSOx4Ou1IpFrbCPrCL
+   4KIipwmbjyxGU++Ba9APuBFFYgrQWNA6p3wVaHkifbxFo8ovW3jmefqRs
+   SQWOjG+/tNgZRPjHUuFOaPvdaoLVc2UvUc0J1VCgQjDC98PJ/0DJAodhu
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="328664071"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="328664071"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 10:24:39 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="701369311"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="701369311"
+Received: from eatoledo-mobl.amr.corp.intel.com (HELO [10.212.18.132]) ([10.212.18.132])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 10:24:38 -0800
+Message-ID: <9505941e-73a1-249b-08c2-83b86e7ef5c6@linux.intel.com>
+Date:   Mon, 13 Feb 2023 12:15:44 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH V2 5/8] soundwire: amd: add soundwire manager interrupt
+ handling
+Content-Language: en-US
+To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>, vkoul@kernel.org
+Cc:     amadeuszx.slawinski@linux.intel.com, Mario.Limonciello@amd.com,
+        Sunil-kumar.Dommati@amd.com, Basavaraj.Hiregoudar@amd.com,
+        Mastan.Katragadda@amd.com, Arungopal.kondaveeti@amd.com,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        "moderated list:SOUNDWIRE SUBSYSTEM" <alsa-devel@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230213094031.2231058-1-Vijendar.Mukunda@amd.com>
+ <20230213094031.2231058-6-Vijendar.Mukunda@amd.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230213094031.2231058-6-Vijendar.Mukunda@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable ret is initialed but is never modified or used except for
-returning the initial value 0. The value can be directly returned
-instead and the variable definition can be dropped.
-Issue identified using returnvar.cocci Coccinelle semantic patch.
-
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- sound/soc/fsl/imx-pcm-rpmsg.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/sound/soc/fsl/imx-pcm-rpmsg.c b/sound/soc/fsl/imx-pcm-rpmsg.c
-index 2f310994f7ee..6614b3447649 100644
---- a/sound/soc/fsl/imx-pcm-rpmsg.c
-+++ b/sound/soc/fsl/imx-pcm-rpmsg.c
-@@ -140,7 +140,6 @@ static int imx_rpmsg_pcm_hw_params(struct snd_soc_component *component,
- {
- 	struct rpmsg_info *info = dev_get_drvdata(component->dev);
- 	struct rpmsg_msg *msg;
--	int ret = 0;
- 
- 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
- 		msg = &info->msg[TX_HW_PARAM];
-@@ -184,7 +183,7 @@ static int imx_rpmsg_pcm_hw_params(struct snd_soc_component *component,
- 
- 	info->send_message(msg, info);
- 
--	return ret;
-+	return 0;
- }
- 
- static snd_pcm_uframes_t imx_rpmsg_pcm_pointer(struct snd_soc_component *component,
-@@ -282,7 +281,6 @@ static int imx_rpmsg_pcm_close(struct snd_soc_component *component,
- 	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
- 	struct rpmsg_info *info = dev_get_drvdata(component->dev);
- 	struct rpmsg_msg *msg;
--	int ret = 0;
- 
- 	/* Flush work in workqueue to make TX_CLOSE is the last message */
- 	flush_workqueue(info->rpmsg_wq);
-@@ -305,7 +303,7 @@ static int imx_rpmsg_pcm_close(struct snd_soc_component *component,
- 		dev_warn(rtd->dev, "Msg is dropped!, number is %d\n",
- 			 info->msg_drop_count[substream->stream]);
- 
--	return ret;
-+	return 0;
- }
- 
- static int imx_rpmsg_pcm_prepare(struct snd_soc_component *component,
--- 
-2.34.1
 
 
+On 2/13/23 03:40, Vijendar Mukunda wrote:
+> Add support for handling soundwire manager interrupts.
 
+Try using the MIPI spelling: SoundWire
+
+> 
+> Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+> Signed-off-by: Mastan Katragadda <Mastan.Katragadda@amd.com>
+> ---
+>  drivers/soundwire/amd_manager.c   | 132 ++++++++++++++++++++++++++++++
+>  drivers/soundwire/amd_manager.h   |   1 +
+>  include/linux/soundwire/sdw_amd.h |   7 ++
+>  3 files changed, 140 insertions(+)
+> 
+> diff --git a/drivers/soundwire/amd_manager.c b/drivers/soundwire/amd_manager.c
+> index 14c88b80ab6d..87f9a987d93a 100644
+> --- a/drivers/soundwire/amd_manager.c
+> +++ b/drivers/soundwire/amd_manager.c
+> @@ -417,6 +417,47 @@ static enum sdw_command_response amd_sdw_xfer_msg(struct sdw_bus *bus, struct sd
+>  	return SDW_CMD_OK;
+>  }
+>  
+> +static void amd_sdw_process_ping_status(u64 response, struct amd_sdw_manager *amd_manager)
+> +{
+> +	u64 slave_stat = 0;
+
+useless init
+
+> +	u32 val = 0;
+
+useless init
+
+> +	u16 dev_index;
+> +
+> +	/* slave status response*/
+
+response */
+
+> +	slave_stat = FIELD_GET(AMD_SDW_MCP_SLAVE_STAT_0_3, response);
+> +	slave_stat |= FIELD_GET(AMD_SDW_MCP_SLAVE_STAT_4_11, response) << 8;
+> +
+> +	dev_dbg(amd_manager->dev, "%s: slave_stat:0x%llx\n", __func__, slave_stat);
+
+newline?
+
+> +	for (dev_index = 0; dev_index <= SDW_MAX_DEVICES; ++dev_index) {
+> +		val = (slave_stat >> (dev_index * 2)) & AMD_SDW_MCP_SLAVE_STATUS_MASK;
+> +		dev_dbg(amd_manager->dev, "%s val:0x%x\n", __func__, val);
+
+you don't need __func__ in dev_dbg() logs, they can be added e.g. with
+the option dyndbg=+pmf
+
+> +		switch (val) {
+> +		case SDW_SLAVE_ATTACHED:
+> +			amd_manager->status[dev_index] = SDW_SLAVE_ATTACHED;
+> +			break;
+> +		case SDW_SLAVE_UNATTACHED:
+> +			amd_manager->status[dev_index] = SDW_SLAVE_UNATTACHED;
+> +			break;
+> +		case SDW_SLAVE_ALERT:
+> +			amd_manager->status[dev_index] = SDW_SLAVE_ALERT;
+> +			break;
+> +		default:
+> +			amd_manager->status[dev_index] = SDW_SLAVE_RESERVED;
+> +			break;
+> +		}
+> +	}
+> +}
+> +
+> +static void amd_sdw_read_and_process_ping_status(struct amd_sdw_manager *amd_manager)
+> +{
+> +	u64 response = 0;
+
+useless init
+
+> +
+> +	mutex_lock(&amd_manager->bus.msg_lock);
+> +	response = amd_sdw_send_cmd_get_resp(amd_manager, 0, 0);
+> +	mutex_unlock(&amd_manager->bus.msg_lock);
+> +	amd_sdw_process_ping_status(response, amd_manager);
+> +}
+> +
+>  static u32 amd_sdw_read_ping_status(struct sdw_bus *bus)
+>  {
+>  	struct amd_sdw_manager *amd_manager = to_amd_sdw(bus);
+> @@ -817,6 +858,95 @@ static int amd_sdw_register_dais(struct amd_sdw_manager *amd_manager)
+>  					       dais, num_dais);
+>  }
+>  
+> +static void amd_sdw_update_slave_status_work(struct work_struct *work)
+> +{
+> +	struct amd_sdw_manager *amd_manager =
+> +		container_of(work, struct amd_sdw_manager, amd_sdw_work);
+> +	int retry_count = 0;
+> +
+> +	if (amd_manager->status[0] == SDW_SLAVE_ATTACHED) {
+> +		acp_reg_writel(0, amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_MASK_0TO7);
+> +		acp_reg_writel(0, amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_MASK_8TO11);
+> +	}
+> +
+> +update_status:
+> +	sdw_handle_slave_status(&amd_manager->bus, amd_manager->status);
+> +	if (amd_manager->status[0] == SDW_SLAVE_ATTACHED) {
+> +		if (retry_count++ < SDW_MAX_DEVICES) {
+> +			acp_reg_writel(AMD_SDW_IRQ_MASK_0TO7, amd_manager->mmio +
+> +				       ACP_SW_STATE_CHANGE_STATUS_MASK_0TO7);
+> +			acp_reg_writel(AMD_SDW_IRQ_MASK_8TO11,
+> +				       amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_MASK_8TO11);
+> +			amd_sdw_read_and_process_ping_status(amd_manager);
+> +			goto update_status;
+> +		} else {
+> +			dev_err_ratelimited(amd_manager->dev,
+> +					    "Device0 detected after %d iterations\n",
+> +					    retry_count);
+> +		}
+> +	}
+
+this seems rather inspired by the Cadence code, but is there really a
+case where you need to re-check for devices? In the Cadence case, this
+was added because we have a logical OR and new devices would not be handled.
+> +}
+> +
+> +static void amd_sdw_update_slave_status(u32 status_change_0to7, u32 status_change_8to11,
+> +					struct amd_sdw_manager *amd_manager)
+> +{
+> +	u64 slave_stat = 0;
+
+useless init
+
+> +	u32 val = 0;
+
+useless init
+
+> +	int dev_index;
+> +
+> +	if (status_change_0to7 == AMD_SDW_SLAVE_0_ATTACHED)
+> +		memset(amd_manager->status, 0, sizeof(amd_manager->status));
+> +	slave_stat = status_change_0to7;
+> +	slave_stat |= FIELD_GET(AMD_SDW_MCP_SLAVE_STATUS_8TO_11, status_change_8to11) << 32;
+> +	dev_dbg(amd_manager->dev, "%s: status_change_0to7:0x%x status_change_8to11:0x%x\n",
+> +		__func__, status_change_0to7, status_change_8to11);
+> +	if (slave_stat) {
+> +		for (dev_index = 0; dev_index <= SDW_MAX_DEVICES; ++dev_index) {
+> +			if (slave_stat & AMD_SDW_MCP_SLAVE_STATUS_VALID_MASK(dev_index)) {
+> +				val = (slave_stat >> AMD_SDW_MCP_SLAVE_STAT_SHIFT_MASK(dev_index)) &
+> +				      AMD_SDW_MCP_SLAVE_STATUS_MASK;
+> +				switch (val) {
+> +				case SDW_SLAVE_ATTACHED:
+> +					amd_manager->status[dev_index] = SDW_SLAVE_ATTACHED;
+> +					break;
+> +				case SDW_SLAVE_UNATTACHED:
+> +					amd_manager->status[dev_index] = SDW_SLAVE_UNATTACHED;
+> +					break;
+> +				case SDW_SLAVE_ALERT:
+> +					amd_manager->status[dev_index] = SDW_SLAVE_ALERT;
+> +					break;
+> +				default:
+> +					amd_manager->status[dev_index] = SDW_SLAVE_RESERVED;
+> +					break;
+> +				}
+
+the code seems identical to that in amd_sdw_process_ping_status(), is
+there a need for a helper function?
+
+> +			}
+> +		}
+> +	}
+> +}
+> +
+> +static void amd_sdw_irq_thread(struct work_struct *work)
+> +{
+> +	struct amd_sdw_manager *amd_manager =
+> +			container_of(work, struct amd_sdw_manager, amd_sdw_irq_thread);
+> +	u32 status_change_8to11;
+> +	u32 status_change_0to7;
+> +
+> +	status_change_8to11 = acp_reg_readl(amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_8TO11);
+> +	status_change_0to7 = acp_reg_readl(amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_0TO7);
+> +	dev_dbg(amd_manager->dev, "%s [SDW%d] SDW INT: 0to7=0x%x, 8to11=0x%x\n",
+> +		__func__, amd_manager->instance, status_change_0to7, status_change_8to11);
+
+remove __func__
+
+> +	if (status_change_8to11 & AMD_SDW_PREQ_INTR_STAT) {
+> +		amd_sdw_read_and_process_ping_status(amd_manager);
+> +	} else {
+> +		/* Check for the updated status on peripheral device */
+> +		amd_sdw_update_slave_status(status_change_0to7, status_change_8to11, amd_manager);
+> +	}
+> +	if (status_change_8to11 || status_change_0to7)
+> +		schedule_work(&amd_manager->amd_sdw_work);
+> +	acp_reg_writel(0x00, amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_8TO11);
+> +	acp_reg_writel(0x00, amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_0TO7);
+> +}
