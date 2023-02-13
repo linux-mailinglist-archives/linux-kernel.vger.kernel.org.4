@@ -2,95 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8063F69526F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42CF169527D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 21:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjBMU5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 15:57:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48042 "EHLO
+        id S230129AbjBMU7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 15:59:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbjBMU5l (ORCPT
+        with ESMTP id S229984AbjBMU7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 15:57:41 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA0020061;
-        Mon, 13 Feb 2023 12:57:40 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 13 Feb 2023 15:59:34 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844FF3AB0;
+        Mon, 13 Feb 2023 12:59:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PFxVp0SD0z4x5Z;
-        Tue, 14 Feb 2023 07:57:38 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676321858;
-        bh=C3RNZcFiDvSw2/ayVHel/Pib4DfjS8AsnovyQ6/wILA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cjG6NAkpj0Iwqr2AoTwfmUIkOsN8glKWKZcTLjyBbA0W/dlgO+b11+IDHk1kWs7fG
-         UWm6lRT0rFkqLaepqy9RwU6weV77QvZ+go1IEP4mtGmqb0I7N8byG+69jsxv1ASIgN
-         xfKmcLkWSOmor452yOHJEweNPCgajswklXslt+WxXBSQzb2h9ESFvKzLge+tRWHERq
-         JsAw63Bb549H8UXaG9lZQ9+QPGnQbVQEY2x9ThpF9d8+l60iKhnEAwua4JzDPlNhOI
-         yfkxtBsDbdpYHFCQfzyK3O6ypCMKnGtYGbrnMD1ewWhi7ge3Bee9b7k91qXacLpFpv
-         2fVdF8wACGLOw==
-Date:   Tue, 14 Feb 2023 07:57:37 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Olof Johansson <olof@lixom.net>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the arm-soc
- tree
-Message-ID: <20230214075737.3de2f333@canb.auug.org.au>
-In-Reply-To: <20230214075542.0cf88eba@canb.auug.org.au>
-References: <20230214075542.0cf88eba@canb.auug.org.au>
+        by sin.source.kernel.org (Postfix) with ESMTPS id D23F4CE1D28;
+        Mon, 13 Feb 2023 20:59:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 474F6C4339E;
+        Mon, 13 Feb 2023 20:59:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676321969;
+        bh=97GwXdgmJT1YSQKnlPR0dKRkb1n6yw9H6kKAtR7Zvck=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=dBtH4iD/rGftLfB+4Ugxh2h3cMKp2Fu7YvesX60QZz+GqO3y8jmSac3OesOb3DDho
+         dVBJTW012BvMmyb04Mhw5UpqXcXuMsXLoMdZocFTgbXClr3jYMywTJG36otcYlsV/E
+         1ZEEYIG0hx6YUu9Y9BVtmM9p04OQjZ/jo6Kgb4yFsFYIyq1k3e20tAIrhMAVGRwvBc
+         Cw0kDAZ6iCo+Ae+udNLzHNYH+2hq1vA2Kb9hFvQsFHxVQ8B5tDsFsT+ZdP+5aKmVWk
+         bu4E93TOwu3vrUz9fCkdXJ5CdySntwH3NJzlX1IVE0CmT/7gfGk3Q9noAe5MuwbrWe
+         KJCzv7ALApIBQ==
+Date:   Mon, 13 Feb 2023 14:59:27 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     Sergey.Semin@baikalelectronics.ru,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] dmaengine: dw-edma: Add support for native HDMA
+Message-ID: <20230213205927.GA2930625@bhelgaas>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/R6rIFBMq4x/jzOTIS/MiXxJ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230213132411.65524-4-cai.huoqing@linux.dev>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/R6rIFBMq4x/jzOTIS/MiXxJ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Feb 13, 2023 at 09:24:08PM +0800, Cai Huoqing wrote:
+> From: Cai huoqing <cai.huoqing@linux.dev>
+> 
+> Add support for HDMA NATIVE, as long the IP design has set
+> the compatible register map parameter-HDMA_NATIVE,
+> which allows compatibility for native HDMA register configuration.
 
-Hi all,
+Rewrap to fill 75 columns.  Also applies below.
 
-On Tue, 14 Feb 2023 07:55:42 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Commits
->=20
->   51d0bdb1f7f9 ("char/agp: introduce asm-generic/agp.h")
->   690422657cbf ("char/agp: consolidate {alloc,free}_gatt_pages()")
->=20
-> are missing a Signed-off-by from their committer.
+> The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
+> And the native HDMA registers are different from eDMA,
+> so this patch add support for HDMA NATIVE mode.
+> 
+> HDMA write and read channels operate independently to maximize
+> the performance of the HDMA read and write data transfer over
+> the link When you configure the HDMA with multiple read channels,
+> then it uses a round robin (RR) arbitration scheme to select
+> the next read channel to be serviced.
+> The same applies when you have multiple write channels.
 
-That is in the asm-generic tree, sorry.
+Wrap into a single paragraph or add a blank line if you want the last
+sentence to be a new paragraph.
 
---=20
-Cheers,
-Stephen Rothwell
+> The native HDMA driver also supports a maximum of 16 independent
+> channels (8 write + 8 read), which can run simultaneously.
+> Both SAR (Source Address Register) and DAR (Destination Address Register)
+> are alignmented to byte.
 
---Sig_/R6rIFBMq4x/jzOTIS/MiXxJ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+s/alignmented/aligned/
 
------BEGIN PGP SIGNATURE-----
+> +	u32 watermark_en;			/* 0x0030 */
+> +	u32	control1;			/* 0x0034 */
+> +	u32	func_num;			/* 0x0038 */
+> +	u32	qos;				/* 0x003c */
+> +	u32	reserved;			/* 0x0040..0x007c */
+> +	u32 ch_stat;				/* 0x0080 */
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPqpEEACgkQAVBC80lX
-0GzaHgf8CfR8ZADqhNwP5dBDXG6jK9b9KS2T0J1oleRpyaK8K1jQ1YsP+azthb2s
-6gbswOxGecMNsDwWcQ3mQVSQUYbS5VIYrCsyyI9Z6u8JIp/BBBu9DZDg10zSbFN/
-WDWpibwW9Oefh/u+UMMu8wPY34qb/ADHWLoppm4YAz+FsZ7z6v14aY2J9G3YfgZH
-FOiStZNgkfsX1wT2saoKAgWBTxkAcqBSBut1h5Rdv80sdmN95w7eId+XikeZUVkH
-BtjJtedTHfUPY7GRnd8CBq8TANnYQu5VGGE4TTfsV9EYHwlmZ5pT8kj8nrFjmB5z
-BP1mDHCnzUSYQ1cSaASNEqDYrp7ttA==
-=q0ns
------END PGP SIGNATURE-----
+Weird indentation of control1, func_num, etc.  Is that meaningful or a
+mistake?
 
---Sig_/R6rIFBMq4x/jzOTIS/MiXxJ--
+> +	union {
+> +		u64 reg;			/* 0x00a0..0x00a4 */
+> +		struct {
+> +			u32 lsb;		/* 0x00a0 */
+> +			u32 msb;		/* 0x00a4 */
+> +		};
+> +	} msi_abort;
+> +	u32	msi_msgdata;			/* 0x00a8 */
+
+Again here.
+
+Bjorn
