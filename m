@@ -2,152 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5CA6943BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD2C6943C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 12:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjBMLDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 06:03:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40866 "EHLO
+        id S230021AbjBMLDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 06:03:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjBMLDM (ORCPT
+        with ESMTP id S230096AbjBMLDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 06:03:12 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCAA4ED0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:03:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=skcAT8cZav6/mztULim5OvFOZbyH89Dt6Bwu5XbpglI=; b=U9J3X3vFmprbFLgXyleVBB1VP8
-        XzpdR9gXrEXwh3UthvVXaPB/ixdFGEakDi03CGQoVMZ+4r7RQKcKsBO3ynxNnOdkqi+YMZitJKUQg
-        vGrWXZLPIS84dYYNI/SL+CMZcG/gvoZfzeeJFA0n7tY5TBkITirG9CPoEw0wMbnApNWU3aF4xxLmP
-        uYWl4ENxfsy4ekcN28cJjunLgvMP4d1fFXzpjNiq+bqjOSi5aqySzemzvHoVDRGL2I6dTgZN8AMyH
-        a5CayMSpXzkhHtwXHY5FVYXzXq3GDAuYHsoG+lykbIhwHgsm6m4oPW9DxpFKkAVOczSLfOr7UXj5o
-        WZZBqPOA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pRWbm-005g1m-QJ; Mon, 13 Feb 2023 11:02:55 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E6A2E30020C;
-        Mon, 13 Feb 2023 12:02:53 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id CFAF021BD1F77; Mon, 13 Feb 2023 12:02:53 +0100 (CET)
-Date:   Mon, 13 Feb 2023 12:02:53 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Ingo Molnar <mingo@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v3] locking/lockdep: add debug_show_all_lock_holders()
-Message-ID: <Y+oY3Xd43nNnkDSB@hirez.programming.kicks-ass.net>
-References: <ed17797b-e732-0dd0-2b4e-dc293653c0ac@I-love.SAKURA.ne.jp>
+        Mon, 13 Feb 2023 06:03:20 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C392126FA
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:03:16 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id az4-20020a05600c600400b003dff767a1f1so8698354wmb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 03:03:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=tHAxmSnCLm2NgMlRnfLJnGtOO2fga/60NcX7zQbcUh8=;
+        b=KfF7fBNilKnMZqgcE6V8XPcUiYk09Hm4sT39lg6RRFTIBSwdml42IIrUDwc7iTTsYu
+         Cr/8MWtZVhejzfRlpN02l90KG0ATpCEUmbEMSJwNoivP8iQnAE+dMMGoc1YaC1YdhD37
+         42s36Ol1/6uT4sNd/fspFVsvaXcpylPEzYv+mHOphQJtVsegpEoznNDDAqHbKoMBxWUY
+         15xx/4FLu6A5xVNS08tRP/QR+NgsfvL7U0gDDThpUB3A8ek7o7d/ZHXxnInf4GQa+1qV
+         RzIbekNUAS7s503q0UzLiLP6Fss2RbYuKvxIzo/EGLbGDHIOd6o/LXLO9yevI32SJNyl
+         F3GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tHAxmSnCLm2NgMlRnfLJnGtOO2fga/60NcX7zQbcUh8=;
+        b=btg3XS4e8cGdt2QvCCEP91PWaGan+Z8y8vsxLn9sHWJBNBZHEMbkE40HvnbPgzz3eU
+         RxhT7DWMEbIiqhvWgPwUh9AVGr7nMflTx40JgXbRHH2XUw25wAPV2OajKKUD+DkHuoy9
+         9mi7iLcuPB2n1vdF4MAT95fXJP50k+cdnL5e5Zb+JnnEPP72DguGxFZ7a+yw1rm62Vbi
+         J2s34VTiqdLiaRsrZOur4zSyzhgnvsj/p4xSdGD/XHpgJmGm9bzfb1WgPsIFQ52ZbO5/
+         AfwGrLi4cUidsrdc+lnr4QXcYhHzxHqm+O3EJRMYWxQo5p5CG2RrzD7fXtci02sq1pTv
+         ha6g==
+X-Gm-Message-State: AO0yUKWpRUSmic1NRGpgzB/bQ5vsfeZEIzBRtRQyT8Wxp0SNctgc3kAe
+        axfmoEgXm2K3EnUF2HSr18AoYQ==
+X-Google-Smtp-Source: AK7set8BpKWzPhhIpgB4loHWn1A3+YVw2UfajMQoSDwIsHKfg2wAshtqeb5KaWuSutw8xR73pFyMOA==
+X-Received: by 2002:a05:600c:3d98:b0:3e1:e149:b67b with SMTP id bi24-20020a05600c3d9800b003e1e149b67bmr5445197wmb.18.1676286194624;
+        Mon, 13 Feb 2023 03:03:14 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:6e1e:131f:8bc1:aad8? ([2a01:e0a:982:cbb0:6e1e:131f:8bc1:aad8])
+        by smtp.gmail.com with ESMTPSA id q3-20020a1ce903000000b003dfdeb57027sm16654252wmc.38.2023.02.13.03.03.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 03:03:14 -0800 (PST)
+Message-ID: <039e9f93-5b97-bb5e-e3c0-b8bf2c52a2a3@linaro.org>
+Date:   Mon, 13 Feb 2023 12:03:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ed17797b-e732-0dd0-2b4e-dc293653c0ac@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 6/6] dt-bindings: soc: amlogic: update sysctrl
+ clock-controller subnode type
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20230209-b4-amlogic-bindings-convert-take2-v1-0-c4fe9049def9@linaro.org>
+ <20230209-b4-amlogic-bindings-convert-take2-v1-6-c4fe9049def9@linaro.org>
+ <f18230c9-7c9b-9e59-993f-24d40b74ba9d@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <f18230c9-7c9b-9e59-993f-24d40b74ba9d@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 10:59:50PM +0900, Tetsuo Handa wrote:
-> Currently, check_hung_uninterruptible_tasks() reports details of locks
-> held in the system. Also, lockdep_print_held_locks() does not report
-> details of locks held by a thread if that thread is in TASK_RUNNING state.
-> Several years of experience of debugging without vmcore tells me that
-> these limitations have been a barrier for understanding what went wrong
-> in syzbot's "INFO: task hung in" reports.
+Hi,
+
+On 13/02/2023 12:00, Krzysztof Kozlowski wrote:
+> On 09/02/2023 14:41, Neil Armstrong wrote:
+>> Since the clock controllers are now documented define the right ref
+>> for the clock-controller subnodes and fill up the example node.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+>>   .../soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml         | 15 ++++++++++++++-
+>>   1 file changed, 14 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml b/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml
+>> index 672eabd90c09..57eae355f1b9 100644
+>> --- a/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml
+>> +++ b/Documentation/devicetree/bindings/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml
+>> @@ -43,6 +43,10 @@ allOf:
+>>               - amlogic,meson-gx-hhi-sysctrl
+>>               - amlogic,meson-axg-hhi-sysctrl
+>>       then:
+>> +      properties:
+>> +        clock-controller:
+>> +          $ref: /schemas/clock/amlogic,gxbb-clkc.yaml#
 > 
-> I initially thought that the cause of "INFO: task hung in" reports is
-> due to over-stressing. But I understood that over-stressing is unlikely.
-> I now consider that there likely is a deadlock/livelock bug where lockdep
-> cannot report as a deadlock when "INFO: task hung in" is reported.
+> You just added this binding. I don't understand the split.
+
+It's a chicken and egg problem, the clock controller bindings (patches 4 & 6)
+I've added the system-controller top node in the DT example, but this
+example won't be valid until I add the system-controller bindings.
+
+To solve this, I add it in 2 steps, but if it's an *real* issue I can remove
+the top system-controller nodes in the clock controller bindings and add them
+later on and add the sysctrl bindings in one step.
+
+Neil
+
 > 
-> A typical case is that thread-1 is waiting for something to happen (e.g.
-> wait_event_*()) with a lock held. When thread-2 tries to hold that lock
-> using e.g. mutex_lock(), check_hung_uninterruptible_tasks() reports that
-> thread-2 is hung and thread-1 is holding a lock which thread-2 is trying
-> to hold. But currently check_hung_uninterruptible_tasks() cannot report
-> the exact location of thread-1 which gives us an important hint for
-> understanding why thread-1 is holding that lock for so long period.
+>> +
+>>         required:
+>>           - power-controller
+>>   
+>> @@ -53,6 +57,10 @@ allOf:
+>>               - amlogic,meson-gx-ao-sysctrl
+>>               - amlogic,meson-axg-ao-sysctrl
+>>       then:
+>> +      properties:
+>> +        clock-controller:
+>> +          $ref: /schemas/clock/amlogic,gxbb-aoclkc.yaml#
+>> +
+>>         required:
+>>           - pinctrl
+>>   
+>> @@ -81,7 +89,12 @@ examples:
+>>           compatible = "amlogic,meson-gx-hhi-sysctrl", "simple-mfd", "syscon";
+>>           reg = <0 0x400>;
+>>   
+>> -        clock-controller { };
+>> +        clock-controller {
+>> +            compatible = "amlogic,gxbb-clkc";
+>> +            #clock-cells = <1>;
+>> +            clocks = <&xtal>;
+>> +            clock-names = "xtal";
 > 
-> When check_hung_uninterruptible_tasks() reports a thread waiting for a
-> lock, it is important to report backtrace of threads which already held
-> that lock. Therefore, allow check_hung_uninterruptible_tasks() to report
-> the exact location of threads which is holding any lock.
 > 
-> debug_show_all_lock_holders() skips current thread if the caller is
-> holding no lock, for reporting RCU lock taken inside that function is
-> generally useless.
-
-> diff --git a/kernel/hung_task.c b/kernel/hung_task.c
-> index c71889f3f3fc..5fba784258b7 100644
-> --- a/kernel/hung_task.c
-> +++ b/kernel/hung_task.c
-> @@ -213,7 +213,7 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
->   unlock:
->  	rcu_read_unlock();
->  	if (hung_task_show_lock)
-> -		debug_show_all_locks();
-> +		debug_show_all_lock_holders();
->  
->  	if (hung_task_show_all_bt) {
->  		hung_task_show_all_bt = false;
-
-This being the hung-task detector, which is mostly about sleeping locks.
-
-> diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-> index e3375bc40dad..d9394de09b79 100644
-> --- a/kernel/locking/lockdep.c
-> +++ b/kernel/locking/lockdep.c
-> @@ -32,6 +32,7 @@
->  #include <linux/sched/clock.h>
->  #include <linux/sched/task.h>
->  #include <linux/sched/mm.h>
-> +#include <linux/sched/debug.h>
->  #include <linux/delay.h>
->  #include <linux/module.h>
->  #include <linux/proc_fs.h>
-> @@ -6511,6 +6512,33 @@ void debug_show_all_locks(void)
->  	pr_warn("=============================================\n\n");
->  }
->  EXPORT_SYMBOL_GPL(debug_show_all_locks);
-> +
-> +void debug_show_all_lock_holders(void)
-> +{
-> +	struct task_struct *g, *p;
-> +
-> +	if (unlikely(!debug_locks)) {
-> +		pr_warn("INFO: lockdep is turned off.\n");
-> +		return;
-> +	}
-> +	pr_warn("\nShowing all threads with locks held in the system:\n");
-> +
-> +	rcu_read_lock();
-> +	for_each_process_thread(g, p) {
-> +		if (!p->lockdep_depth)
-> +			continue;
-> +		if (p == current && p->lockdep_depth == 1)
-> +			continue;
-> +		sched_show_task(p);
-
-And sched_show_task() being an utter piece of crap that will basically
-print garbage for anything that's running (it doesn't have much
-options).
-
-Should we try and do better? dump_cpu_task() prefers
-trigger_single_cpu_backtrace(), which sends an interrupt in order to get
-active registers for the CPU.
+> Best regards,
+> Krzysztof
+> 
 
