@@ -2,82 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F1B694D1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 275CF694D20
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 17:45:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbjBMQno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 11:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36818 "EHLO
+        id S231216AbjBMQo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 11:44:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjBMQnn (ORCPT
+        with ESMTP id S229576AbjBMQo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 11:43:43 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC807EF9;
-        Mon, 13 Feb 2023 08:43:41 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id j4so4654117iog.8;
-        Mon, 13 Feb 2023 08:43:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z/cV7+uN5DOlTqY06NHqC0N/yUfZmJu1nhPWEtUUSQU=;
-        b=R9/tuAfwfNdxMtocyIKsCn3o6dgkMH//wp6vIGcTnj+dT9S+haQq5JDRlzdbSPeOlY
-         OvsKg3cu410tPtU+IXwHMEJ+mNrS0gQvP4cLfJ3Y9GPorH9X5Np0eZf7K4jhzujERVJp
-         fwPjnKcg9B7NEHR8R6ZQnCu+nM9hVuDBdRZXIs/FBLRUS7sBKBSFbiXr4bYVT8svM8yp
-         sm1JQQf8Xk0a8qyuIMQSBDSmKS6aDjzbeRlKAwLcQ/28s4Q7f2pRb/9t8/2zE5iMDKZ+
-         4lRUHxKRKQalHQgkNUCD1dtu1+EvKYsSgYcIlsX0tX2KNfSiKSCVFAwSZsp/tdbKQUdU
-         DWSQ==
+        Mon, 13 Feb 2023 11:44:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B925D11E97
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:44:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676306644;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=p2uiqF8o9JdkRigcIZc+ZpBFYKuDDGtLRLHIO1Ia0Y4=;
+        b=f9wQrazWuxSCosQEWnXVTEl2G4Nf6xmJQX0Hl5W1rOe4w9z8QAWJOq8h7s76sQqiOKxZbK
+        HIPfA9HScNkKgcTz+djJgXnSkrPy1R+08oaIN50n6v2MyJf7b+LFKaJ6Bg8Jg6LZgN0i7/
+        NjjWRB0SFfllOHzGhx9ro834o6Z7CD0=
+Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com
+ [209.85.221.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-76-LMIOd2lMOOCjZEgzJLQsyg-1; Mon, 13 Feb 2023 11:44:03 -0500
+X-MC-Unique: LMIOd2lMOOCjZEgzJLQsyg-1
+Received: by mail-vk1-f197.google.com with SMTP id q82-20020a1f5c55000000b004018c246a7bso984056vkb.10
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 08:44:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z/cV7+uN5DOlTqY06NHqC0N/yUfZmJu1nhPWEtUUSQU=;
-        b=E6tl2gPlnqqUMa93b2fArZkDMFmZ7lbUytdjtoSaDifXeE1KESeEPSIPUSTC3kT0mS
-         kPBDWrlAnE2UstXvtwyz9fRnG1zflZQCzWWf4v3Roe0SuxGZ7GQ/xZl534HGlrtCYfCT
-         IOAqvmIRokCzkciSoTYFuZ87GrlRCAIhP87bifW/ZFRuUzvtVir8Z5KV6VfetcLgih3x
-         6khQSpiyNYV+Wl2e29/gwgDtcM/Kic9nUOakkSSJlZ7IScLnLOkpXF4kd1szwG3kmc+S
-         wbpMVAL/Cx4HF2w+7DbovKomdLYxflnG4bWHEfV3xkzUlkVNUBYk0B8MEgrFBbQoqvJg
-         qdlw==
-X-Gm-Message-State: AO0yUKVkjDNFw4jVmm1cSkDSHHKxCogAmu+w7Pw5QwKadXDOqQ1HQR8R
-        PEFM2HLCBg+O4tfvBauWsNc=
-X-Google-Smtp-Source: AK7set92g8u0mkrant/iz85vjRdrLOyeBFys9VLdxblB3o4cFam52zSGpnDTFrnTCoRhCqiJWPXbow==
-X-Received: by 2002:a05:6602:3429:b0:73a:6c75:5a85 with SMTP id n41-20020a056602342900b0073a6c755a85mr11375804ioz.0.1676306621158;
-        Mon, 13 Feb 2023 08:43:41 -0800 (PST)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id h18-20020a02c732000000b00363d6918540sm4033880jao.171.2023.02.13.08.43.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 08:43:40 -0800 (PST)
-Date:   Mon, 13 Feb 2023 18:43:34 +0200
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Steven Price <steven.price@arm.com>
-Cc:     kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Joey Gouly <joey.gouly@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Christoffer Dall <christoffer.dall@arm.com>,
-        Fuad Tabba <tabba@google.com>, linux-coco@lists.linux.dev
-Subject: Re: [RFC PATCH 03/28] arm64: RME: Add wrappers for RMI calls
-Message-ID: <20230213184334.00007111@gmail.com>
-In-Reply-To: <20230127112932.38045-4-steven.price@arm.com>
-References: <20230127112248.136810-1-suzuki.poulose@arm.com>
-        <20230127112932.38045-1-steven.price@arm.com>
-        <20230127112932.38045-4-steven.price@arm.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p2uiqF8o9JdkRigcIZc+ZpBFYKuDDGtLRLHIO1Ia0Y4=;
+        b=YsvbY8jhvC0JrHlM8b9bcNhEqaUGhV0HOmvxzsmC+1i4UJ5WHJTni3nb+C+RTWASAW
+         /boF/hq6fUEUVA6YPc3jtvC7Sq8rL1VdQ5iYU3BMfrurTa9RvU4nkuW5aopyn15vZtjp
+         czK7FW3g39EF/be8JUKq0wxRFG+D91bOUaYQNkUuksbhVYUXEu20YCu3cFABwpqCCbdn
+         J2PeW+8yNNCMjy3bpvaWpJ9IAVOc7EjgAb7vVsLNWRHaKP4ynlVxRoLV2lrsDsMlRZHe
+         BT9/EwPzG1Dpq21zKfwbbBEdBhtSW7aaBlYlQyO2qzaXGPgbI4MYs0fzrpR2TPJN5X44
+         Afww==
+X-Gm-Message-State: AO0yUKVZpnTiBjNgbtvenY4iYfj1kKgjo/3m8qIJkS96pFf2lK/yKee3
+        nGl1KAkPnDj10rp95Cxt55ZMIdvX24s+jHR5ChNo+2QH405euIVcRalUOVq0HgPHrbJMDDAaXPN
+        gfs2PBlgbV361feQ/adz8L6gkihL+pZ++urprfMNJ
+X-Received: by 2002:ab0:7702:0:b0:68a:c03f:8bcf with SMTP id z2-20020ab07702000000b0068ac03f8bcfmr39141uaq.15.1676306642680;
+        Mon, 13 Feb 2023 08:44:02 -0800 (PST)
+X-Google-Smtp-Source: AK7set/2c7YX+hhz2VLCQjUBSZHXtNzsjxLvz6cXa3Ns67kjAfZIDy8YGKX0capXm6mvrk9bs5TUZ2nXBNYO6+cBCdk=
+X-Received: by 2002:ab0:7702:0:b0:68a:c03f:8bcf with SMTP id
+ z2-20020ab07702000000b0068ac03f8bcfmr39135uaq.15.1676306642375; Mon, 13 Feb
+ 2023 08:44:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230212063813.27622-1-marcan@marcan.st> <20230212063813.27622-2-marcan@marcan.st>
+In-Reply-To: <20230212063813.27622-2-marcan@marcan.st>
+From:   Eric Curtin <ecurtin@redhat.com>
+Date:   Mon, 13 Feb 2023 16:43:46 +0000
+Message-ID: <CAOgh=Fz_ma1t6H_p2XQRpq81=4q7MjZuht_f2gA6V=-LmRhufg@mail.gmail.com>
+Subject: Re: [PATCH v4 1/4] wifi: brcmfmac: Rename Cypress 89459 to BCM4355
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Prutskov <alep@cypress.com>,
+        Ian Lin <ian.lin@infineon.com>,
+        Joseph chuang <jiac@cypress.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Aditya Garg <gargaditya08@live.com>,
+        Jonas Gorski <jonas.gorski@gmail.com>, asahi@lists.linux.dev,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Arend van Spriel <arend.vanspriel@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,286 +91,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 Jan 2023 11:29:07 +0000
-Steven Price <steven.price@arm.com> wrote:
+On Sun, 12 Feb 2023 at 06:46, Hector Martin <marcan@marcan.st> wrote:
+>
+> The commit that introduced support for this chip incorrectly claimed it
+> is a Cypress-specific part, while in actuality it is just a variant of
+> BCM4355 silicon (as evidenced by the chip ID).
+>
+> The relationship between Cypress products and Broadcom products isn't
+> entirely clear but given what little information is available and prior
+> art in the driver, it seems the convention should be that originally
+> Broadcom parts should retain the Broadcom name.
+>
+> Thus, rename the relevant constants and firmware file. Also rename the
+> specific 89459 PCIe ID to BCM43596, which seems to be the original
+> subvariant name for this PCI ID (as defined in the out-of-tree bcmdhd
+> driver).
+>
+> Since Cypress added this part and will presumably be providing its
+> supported firmware, we keep the CYW designation for this device.
+>
+> We also drop the RAW device ID in this commit. We don't do this for the
+> other chips since apparently some devices with them exist in the wild,
+> but there is already a 4355 entry with the Broadcom subvendor and WCC
+> firmware vendor, so adding a generic fallback to Cypress seems
+> redundant (no reason why a device would have the raw device ID *and* an
+> explicitly programmed subvendor).
+>
+> Fixes: dce45ded7619 ("brcmfmac: Support 89459 pcie")
+> Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 
-> The wrappers make the call sites easier to read and deal with the
-> boiler plate of handling the error codes from the RMM.
-> 
-> Signed-off-by: Steven Price <steven.price@arm.com>
+Reviewed-by: Eric Curtin <ecurtin@redhat.com>
+
+Is mise le meas/Regards,
+
+Eric Curtin
+
 > ---
->  arch/arm64/include/asm/rmi_cmds.h | 259 ++++++++++++++++++++++++++++++
->  1 file changed, 259 insertions(+)
->  create mode 100644 arch/arm64/include/asm/rmi_cmds.h
-> 
-> diff --git a/arch/arm64/include/asm/rmi_cmds.h b/arch/arm64/include/asm/rmi_cmds.h
-> new file mode 100644
-> index 000000000000..d5468ee46f35
-> --- /dev/null
-> +++ b/arch/arm64/include/asm/rmi_cmds.h
-> @@ -0,0 +1,259 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2023 ARM Ltd.
-> + */
-> +
-> +#ifndef __ASM_RMI_CMDS_H
-> +#define __ASM_RMI_CMDS_H
-> +
-> +#include <linux/arm-smccc.h>
-> +
-> +#include <asm/rmi_smc.h>
-> +
-> +struct rtt_entry {
-> +	unsigned long walk_level;
-> +	unsigned long desc;
-> +	int state;
-> +	bool ripas;
-> +};
-> +
-
-It would be nice to have some information of the follwoing wrappers. E.g.
-meaning of the return value. They will be quite helpful in the later patch
-review.
-
-> +static inline int rmi_data_create(unsigned long data, unsigned long rd,
-> +				  unsigned long map_addr, unsigned long src,
-> +				  unsigned long flags)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_DATA_CREATE, data, rd, map_addr, src,
-> +			     flags, &res);
-> +
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_data_create_unknown(unsigned long data,
-> +					  unsigned long rd,
-> +					  unsigned long map_addr)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_DATA_CREATE_UNKNOWN, data, rd, map_addr,
-> +			     &res);
-> +
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_data_destroy(unsigned long rd, unsigned long map_addr)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_DATA_DESTROY, rd, map_addr, &res);
-> +
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_features(unsigned long index, unsigned long *out)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_FEATURES, index, &res);
-> +
-> +	*out = res.a1;
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_granule_delegate(unsigned long phys)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_GRANULE_DELEGATE, phys, &res);
-> +
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_granule_undelegate(unsigned long phys)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_GRANULE_UNDELEGATE, phys, &res);
-> +
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_psci_complete(unsigned long calling_rec,
-> +				    unsigned long target_rec)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_PSCI_COMPLETE, calling_rec, target_rec,
-> +			     &res);
-> +
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_realm_activate(unsigned long rd)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_REALM_ACTIVATE, rd, &res);
-> +
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_realm_create(unsigned long rd, unsigned long params_ptr)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_REALM_CREATE, rd, params_ptr, &res);
-> +
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_realm_destroy(unsigned long rd)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_REALM_DESTROY, rd, &res);
-> +
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_rec_aux_count(unsigned long rd, unsigned long *aux_count)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_REC_AUX_COUNT, rd, &res);
-> +
-> +	*aux_count = res.a1;
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_rec_create(unsigned long rec, unsigned long rd,
-> +				 unsigned long params_ptr)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_REC_CREATE, rec, rd, params_ptr, &res);
-> +
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_rec_destroy(unsigned long rec)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_REC_DESTROY, rec, &res);
-> +
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_rec_enter(unsigned long rec, unsigned long run_ptr)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_REC_ENTER, rec, run_ptr, &res);
-> +
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_rtt_create(unsigned long rtt, unsigned long rd,
-> +				 unsigned long map_addr, unsigned long level)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_RTT_CREATE, rtt, rd, map_addr, level,
-> +			     &res);
-> +
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_rtt_destroy(unsigned long rtt, unsigned long rd,
-> +				  unsigned long map_addr, unsigned long level)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_RTT_DESTROY, rtt, rd, map_addr, level,
-> +			     &res);
-> +
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_rtt_fold(unsigned long rtt, unsigned long rd,
-> +			       unsigned long map_addr, unsigned long level)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_RTT_FOLD, rtt, rd, map_addr, level, &res);
-> +
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_rtt_init_ripas(unsigned long rd, unsigned long map_addr,
-> +				     unsigned long level)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_RTT_INIT_RIPAS, rd, map_addr, level, &res);
-> +
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_rtt_map_unprotected(unsigned long rd,
-> +					  unsigned long map_addr,
-> +					  unsigned long level,
-> +					  unsigned long desc)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_RTT_MAP_UNPROTECTED, rd, map_addr, level,
-> +			     desc, &res);
-> +
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_rtt_read_entry(unsigned long rd, unsigned long map_addr,
-> +				     unsigned long level, struct rtt_entry *rtt)
-> +{
-> +	struct arm_smccc_1_2_regs regs = {
-> +		SMC_RMI_RTT_READ_ENTRY,
-> +		rd, map_addr, level
-> +	};
-> +
-> +	arm_smccc_1_2_smc(&regs, &regs);
-> +
-> +	rtt->walk_level = regs.a1;
-> +	rtt->state = regs.a2 & 0xFF;
-> +	rtt->desc = regs.a3;
-> +	rtt->ripas = regs.a4 & 1;
-> +
-> +	return regs.a0;
-> +}
-> +
-> +static inline int rmi_rtt_set_ripas(unsigned long rd, unsigned long rec,
-> +				    unsigned long map_addr, unsigned long level,
-> +				    unsigned long ripas)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_RTT_SET_RIPAS, rd, rec, map_addr, level,
-> +			     ripas, &res);
-> +
-> +	return res.a0;
-> +}
-> +
-> +static inline int rmi_rtt_unmap_unprotected(unsigned long rd,
-> +					    unsigned long map_addr,
-> +					    unsigned long level)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	arm_smccc_1_1_invoke(SMC_RMI_RTT_UNMAP_UNPROTECTED, rd, map_addr,
-> +			     level, &res);
-> +
-> +	return res.a0;
-> +}
-> +
-> +static inline phys_addr_t rmi_rtt_get_phys(struct rtt_entry *rtt)
-> +{
-> +	return rtt->desc & GENMASK(47, 12);
-> +}
-> +
-> +#endif
+>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c    | 5 ++---
+>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c    | 7 +++----
+>  .../net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h  | 5 ++---
+>  3 files changed, 7 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
+> index 121893bbaa1d..3e42c2bd0d9a 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
+> @@ -726,6 +726,7 @@ static u32 brcmf_chip_tcm_rambase(struct brcmf_chip_priv *ci)
+>         case BRCM_CC_43664_CHIP_ID:
+>         case BRCM_CC_43666_CHIP_ID:
+>                 return 0x200000;
+> +       case BRCM_CC_4355_CHIP_ID:
+>         case BRCM_CC_4359_CHIP_ID:
+>                 return (ci->pub.chiprev < 9) ? 0x180000 : 0x160000;
+>         case BRCM_CC_4364_CHIP_ID:
+> @@ -735,8 +736,6 @@ static u32 brcmf_chip_tcm_rambase(struct brcmf_chip_priv *ci)
+>                 return 0x170000;
+>         case BRCM_CC_4378_CHIP_ID:
+>                 return 0x352000;
+> -       case CY_CC_89459_CHIP_ID:
+> -               return ((ci->pub.chiprev < 9) ? 0x180000 : 0x160000);
+>         default:
+>                 brcmf_err("unknown chip: %s\n", ci->pub.name);
+>                 break;
+> @@ -1426,8 +1425,8 @@ bool brcmf_chip_sr_capable(struct brcmf_chip *pub)
+>                 addr = CORE_CC_REG(base, sr_control1);
+>                 reg = chip->ops->read32(chip->ctx, addr);
+>                 return reg != 0;
+> +       case BRCM_CC_4355_CHIP_ID:
+>         case CY_CC_4373_CHIP_ID:
+> -       case CY_CC_89459_CHIP_ID:
+>                 /* explicitly check SR engine enable bit */
+>                 addr = CORE_CC_REG(base, sr_control0);
+>                 reg = chip->ops->read32(chip->ctx, addr);
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> index ae57a9a3ab05..96608174a123 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> @@ -51,6 +51,7 @@ enum brcmf_pcie_state {
+>  BRCMF_FW_DEF(43602, "brcmfmac43602-pcie");
+>  BRCMF_FW_DEF(4350, "brcmfmac4350-pcie");
+>  BRCMF_FW_DEF(4350C, "brcmfmac4350c2-pcie");
+> +BRCMF_FW_CLM_DEF(4355, "brcmfmac4355-pcie");
+>  BRCMF_FW_CLM_DEF(4356, "brcmfmac4356-pcie");
+>  BRCMF_FW_CLM_DEF(43570, "brcmfmac43570-pcie");
+>  BRCMF_FW_DEF(4358, "brcmfmac4358-pcie");
+> @@ -62,7 +63,6 @@ BRCMF_FW_DEF(4366B, "brcmfmac4366b-pcie");
+>  BRCMF_FW_DEF(4366C, "brcmfmac4366c-pcie");
+>  BRCMF_FW_DEF(4371, "brcmfmac4371-pcie");
+>  BRCMF_FW_CLM_DEF(4378B1, "brcmfmac4378b1-pcie");
+> -BRCMF_FW_DEF(4355, "brcmfmac89459-pcie");
+>
+>  /* firmware config files */
+>  MODULE_FIRMWARE(BRCMF_FW_DEFAULT_PATH "brcmfmac*-pcie.txt");
+> @@ -78,6 +78,7 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
+>         BRCMF_FW_ENTRY(BRCM_CC_4350_CHIP_ID, 0x000000FF, 4350C),
+>         BRCMF_FW_ENTRY(BRCM_CC_4350_CHIP_ID, 0xFFFFFF00, 4350),
+>         BRCMF_FW_ENTRY(BRCM_CC_43525_CHIP_ID, 0xFFFFFFF0, 4365C),
+> +       BRCMF_FW_ENTRY(BRCM_CC_4355_CHIP_ID, 0xFFFFFFFF, 4355),
+>         BRCMF_FW_ENTRY(BRCM_CC_4356_CHIP_ID, 0xFFFFFFFF, 4356),
+>         BRCMF_FW_ENTRY(BRCM_CC_43567_CHIP_ID, 0xFFFFFFFF, 43570),
+>         BRCMF_FW_ENTRY(BRCM_CC_43569_CHIP_ID, 0xFFFFFFFF, 43570),
+> @@ -93,7 +94,6 @@ static const struct brcmf_firmware_mapping brcmf_pcie_fwnames[] = {
+>         BRCMF_FW_ENTRY(BRCM_CC_43666_CHIP_ID, 0xFFFFFFF0, 4366C),
+>         BRCMF_FW_ENTRY(BRCM_CC_4371_CHIP_ID, 0xFFFFFFFF, 4371),
+>         BRCMF_FW_ENTRY(BRCM_CC_4378_CHIP_ID, 0xFFFFFFFF, 4378B1), /* revision ID 3 */
+> -       BRCMF_FW_ENTRY(CY_CC_89459_CHIP_ID, 0xFFFFFFFF, 4355),
+>  };
+>
+>  #define BRCMF_PCIE_FW_UP_TIMEOUT               5000 /* msec */
+> @@ -2609,9 +2609,8 @@ static const struct pci_device_id brcmf_pcie_devid_table[] = {
+>         BRCMF_PCIE_DEVICE(BRCM_PCIE_4366_2G_DEVICE_ID, BCA),
+>         BRCMF_PCIE_DEVICE(BRCM_PCIE_4366_5G_DEVICE_ID, BCA),
+>         BRCMF_PCIE_DEVICE(BRCM_PCIE_4371_DEVICE_ID, WCC),
+> +       BRCMF_PCIE_DEVICE(BRCM_PCIE_43596_DEVICE_ID, CYW),
+>         BRCMF_PCIE_DEVICE(BRCM_PCIE_4378_DEVICE_ID, WCC),
+> -       BRCMF_PCIE_DEVICE(CY_PCIE_89459_DEVICE_ID, CYW),
+> -       BRCMF_PCIE_DEVICE(CY_PCIE_89459_RAW_DEVICE_ID, CYW),
+>         { /* end: all zeroes */ }
+>  };
+>
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
+> index f4939cf62767..28b6cf8ff286 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
+> +++ b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
+> @@ -37,6 +37,7 @@
+>  #define BRCM_CC_4350_CHIP_ID           0x4350
+>  #define BRCM_CC_43525_CHIP_ID          43525
+>  #define BRCM_CC_4354_CHIP_ID           0x4354
+> +#define BRCM_CC_4355_CHIP_ID           0x4355
+>  #define BRCM_CC_4356_CHIP_ID           0x4356
+>  #define BRCM_CC_43566_CHIP_ID          43566
+>  #define BRCM_CC_43567_CHIP_ID          43567
+> @@ -56,7 +57,6 @@
+>  #define CY_CC_43012_CHIP_ID            43012
+>  #define CY_CC_43439_CHIP_ID            43439
+>  #define CY_CC_43752_CHIP_ID            43752
+> -#define CY_CC_89459_CHIP_ID            0x4355
+>
+>  /* USB Device IDs */
+>  #define BRCM_USB_43143_DEVICE_ID       0xbd1e
+> @@ -90,9 +90,8 @@
+>  #define BRCM_PCIE_4366_2G_DEVICE_ID    0x43c4
+>  #define BRCM_PCIE_4366_5G_DEVICE_ID    0x43c5
+>  #define BRCM_PCIE_4371_DEVICE_ID       0x440d
+> +#define BRCM_PCIE_43596_DEVICE_ID      0x4415
+>  #define BRCM_PCIE_4378_DEVICE_ID       0x4425
+> -#define CY_PCIE_89459_DEVICE_ID         0x4415
+> -#define CY_PCIE_89459_RAW_DEVICE_ID     0x4355
+>
+>  /* brcmsmac IDs */
+>  #define BCM4313_D11N2G_ID      0x4727  /* 4313 802.11n 2.4G device */
+> --
+> 2.35.1
+>
+>
 
