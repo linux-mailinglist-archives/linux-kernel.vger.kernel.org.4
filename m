@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF49F693E41
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 07:27:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C21B693E44
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 07:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjBMG1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 01:27:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S229712AbjBMG2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 01:28:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjBMG13 (ORCPT
+        with ESMTP id S229552AbjBMG2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 01:27:29 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E06E39F
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 22:27:28 -0800 (PST)
+        Mon, 13 Feb 2023 01:28:23 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABEADBF3;
+        Sun, 12 Feb 2023 22:28:22 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 590E95D8C3;
-        Mon, 13 Feb 2023 06:27:27 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CC72E5D55F;
+        Mon, 13 Feb 2023 06:28:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1676269647; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1676269700; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=aPL+vaVzX1H6jys+GZ/CFQzZsZFmg1G/CNrZGYV5GNQ=;
-        b=ann0v8rQ/ApQX2b+Ylc6RvBYR9nmiBXLBe2GSQqMdgUkdu63KesgNeoqM/qM9gMrigSTK0
-        UHrcQPw5kF5tMyhXxZVjNFio23WMJlnFKBe77qL2lHF91skpOV5LCMxHN3r5ix0gy2r9fK
-        vxlKEu3/k9MGNL7FW3O3ZUXBIxHq0FY=
+        bh=sETX0ikXPsCWRx8hcdFRpKcfWChxGPPrO0PQTEy6sH0=;
+        b=szTBSMRdtdAskfJ+9mrVdXpdJdgD9ghRvZte0PhdLUACNpqvqXYNNc0fUipAvl8TmBfhLT
+        lEpnfB0QJApv1+WkWYu6UsPg378V+5O1WZq1wojOJ+PQ/y/zdZnXJGxkSbXk0h4R7y0VCr
+        f6KJijO30SHKdg8Y5ovJD3nNzfxwGwo=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0C94F1391B;
-        Mon, 13 Feb 2023 06:27:27 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6046E1391B;
+        Mon, 13 Feb 2023 06:28:20 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id x6iFAU/Y6WMXBQAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 13 Feb 2023 06:27:27 +0000
-Message-ID: <b568c7e0-553c-4747-32c2-d2a25309f2d4@suse.com>
-Date:   Mon, 13 Feb 2023 07:27:26 +0100
+        id FYwOFoTY6WNmBQAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 13 Feb 2023 06:28:20 +0000
+Message-ID: <41ce06c9-df2e-3348-f5bc-ae5925adaa2a@suse.com>
+Date:   Mon, 13 Feb 2023 07:28:19 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
- defined MTRRs
+Subject: Re: [PATCH v2 3/8] x86/hyperv: set MTRR state when running as SEV-SNP
+ Hyper-V guest
 Content-Language: en-US
 To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
 Cc:     "lists@nerdbynature.de" <lists@nerdbynature.de>,
         "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>
 References: <20230209072220.6836-1-jgross@suse.com>
- <20230209072220.6836-3-jgross@suse.com>
- <BYAPR21MB168857905915E00B29BAFC7ED7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <20230209072220.6836-4-jgross@suse.com>
+ <BYAPR21MB1688C2A893BA9D2A14D729DFD7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
 From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <BYAPR21MB168857905915E00B29BAFC7ED7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
+In-Reply-To: <BYAPR21MB1688C2A893BA9D2A14D729DFD7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
 Content-Type: multipart/signed; micalg=pgp-sha256;
  protocol="application/pgp-signature";
- boundary="------------ytCMa8DuorXCqrSOTuKcUpAv"
+ boundary="------------j6hy8BDP0jRbkBvVTKuRu7Si"
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -74,77 +78,72 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------ytCMa8DuorXCqrSOTuKcUpAv
-Content-Type: multipart/mixed; boundary="------------yn2Qx4Q01xzWKT7SuWDxeNhU";
+--------------j6hy8BDP0jRbkBvVTKuRu7Si
+Content-Type: multipart/mixed; boundary="------------8OmGzH5fFTEECazp0q0VVbzh";
  protected-headers="v1"
 From: Juergen Gross <jgross@suse.com>
 To: "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "x86@kernel.org" <x86@kernel.org>
+ "x86@kernel.org" <x86@kernel.org>,
+ "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
 Cc: "lists@nerdbynature.de" <lists@nerdbynature.de>,
  "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+ KY Srinivasan <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>,
+ Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
  Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
  Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
  "H. Peter Anvin" <hpa@zytor.com>
-Message-ID: <b568c7e0-553c-4747-32c2-d2a25309f2d4@suse.com>
-Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
- defined MTRRs
+Message-ID: <41ce06c9-df2e-3348-f5bc-ae5925adaa2a@suse.com>
+Subject: Re: [PATCH v2 3/8] x86/hyperv: set MTRR state when running as SEV-SNP
+ Hyper-V guest
 References: <20230209072220.6836-1-jgross@suse.com>
- <20230209072220.6836-3-jgross@suse.com>
- <BYAPR21MB168857905915E00B29BAFC7ED7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
-In-Reply-To: <BYAPR21MB168857905915E00B29BAFC7ED7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <20230209072220.6836-4-jgross@suse.com>
+ <BYAPR21MB1688C2A893BA9D2A14D729DFD7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
+In-Reply-To: <BYAPR21MB1688C2A893BA9D2A14D729DFD7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
 
---------------yn2Qx4Q01xzWKT7SuWDxeNhU
-Content-Type: multipart/mixed; boundary="------------rn3w2ivt7ensmUBtxZ2PwmYW"
+--------------8OmGzH5fFTEECazp0q0VVbzh
+Content-Type: multipart/mixed; boundary="------------yt0MkDa4rcsx94tvgyi0k729"
 
---------------rn3w2ivt7ensmUBtxZ2PwmYW
+--------------yt0MkDa4rcsx94tvgyi0k729
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: base64
 
 T24gMTMuMDIuMjMgMDI6MDcsIE1pY2hhZWwgS2VsbGV5IChMSU5VWCkgd3JvdGU6DQo+IEZy
 b206IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4gU2VudDogV2VkbmVzZGF5LCBG
-ZWJydWFyeSA4LCAyMDIzIDExOjIyIFBNDQo+Pg0KPj4gV2hlbiBydW5uaW5nIHZpcnR1YWxp
-emVkLCBNVFJSIGFjY2VzcyBjYW4gYmUgcmVkdWNlZCAoZS5nLiBpbiBYZW4gUFYNCj4+IGd1
-ZXN0cyBvciB3aGVuIHJ1bm5pbmcgYXMgYSBTRVYtU05QIGd1ZXN0IHVuZGVyIEh5cGVyLVYp
-LiBUeXBpY2FsbHkNCj4+IHRoZSBoeXBlcnZpc29yIHdpbGwgcmVzZXQgdGhlIE1UUlIgZmVh
-dHVyZSBpbiBjcHVpZCBkYXRhLCByZXN1bHRpbmcNCj4+IGluIG5vIE1UUlIgbWVtb3J5IHR5
-cGUgaW5mb3JtYXRpb24gYmVpbmcgYXZhaWxhYmxlIGZvciB0aGUga2VybmVsLg0KPj4NCj4+
-IFRoaXMgaGFzIHR1cm5lZCBvdXQgdG8gcmVzdWx0IGluIHByb2JsZW1zOg0KPj4NCj4+IC0g
-SHlwZXItViBTRVYtU05QIGd1ZXN0cyB1c2luZyB1bmNhY2hlZCBtYXBwaW5ncyB3aGVyZSB0
-aGV5IHNob3VsZG4ndA0KPj4gLSBYZW4gUFYgZG9tMCBtYXBwaW5nIG1lbW9yeSBhcyBXQiB3
-aGljaCBzaG91bGQgYmUgVUMtIGluc3RlYWQNCj4+DQo+PiBTb2x2ZSB0aG9zZSBwcm9ibGVt
-cyBieSBzdXBwb3J0aW5nIHRvIHNldCBhIGZpeGVkIE1UUlIgc3RhdGUsDQo+PiBvdmVyd3Jp
-dGluZyB0aGUgZW1wdHkgc3RhdGUgdXNlZCB0b2RheS4gSW4gY2FzZSBzdWNoIGEgc3RhdGUg
-aGFzIGJlZW4NCj4+IHNldCwgZG9uJ3QgY2FsbCBnZXRfbXRycl9zdGF0ZSgpIGluIG10cnJf
-YnBfaW5pdCgpLiBUaGUgc2V0IHN0YXRlDQo+PiB3aWxsIG9ubHkgYmUgdXNlZCBieSBtdHJy
-X3R5cGVfbG9va3VwKCksIGFzIGluIGFsbCBvdGhlciBjYXNlcw0KPj4gbXRycl9lbmFibGVk
-KCkgaXMgYmVpbmcgY2hlY2tlZCwgd2hpY2ggd2lsbCByZXR1cm4gZmFsc2UuIEFjY2VwdCB0
-aGUNCj4+IG92ZXJ3cml0ZSBjYWxsIG9ubHkgaW4gY2FzZSBvZiBNVFJScyBiZWluZyBkaXNh
-YmxlZCBpbiBjcHVpZC4NCj4+DQo+PiBTaWduZWQtb2ZmLWJ5OiBKdWVyZ2VuIEdyb3NzIDxq
-Z3Jvc3NAc3VzZS5jb20+DQo+PiAtLS0NCj4+IFYyOg0KPj4gLSBuZXcgcGF0Y2gNCj4+IC0t
-LQ0KPj4gICBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9tdHJyLmggICAgICAgIHwgIDIgKysNCj4+
-ICAgYXJjaC94ODYva2VybmVsL2NwdS9tdHJyL2dlbmVyaWMuYyB8IDM4ICsrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKw0KPj4gICBhcmNoL3g4Ni9rZXJuZWwvY3B1L210cnIvbXRy
-ci5jICAgIHwgIDkgKysrKysrKw0KPj4gICAzIGZpbGVzIGNoYW5nZWQsIDQ5IGluc2VydGlv
-bnMoKykNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYvaW5jbHVkZS9hc20vbXRyci5o
-IGIvYXJjaC94ODYvaW5jbHVkZS9hc20vbXRyci5oDQo+PiBpbmRleCBmMGVlYWY2ZTVmNWYu
-LjBiOGY1MWQ2ODNkYyAxMDA2NDQNCj4+IC0tLSBhL2FyY2gveDg2L2luY2x1ZGUvYXNtL210
-cnIuaA0KPj4gKysrIGIvYXJjaC94ODYvaW5jbHVkZS9hc20vbXRyci5oDQo+PiBAQCAtMzEs
-NiArMzEsOCBAQA0KPj4gICAgKi8NCj4+ICAgIyBpZmRlZiBDT05GSUdfTVRSUg0KPj4gICB2
-b2lkIG10cnJfYnBfaW5pdCh2b2lkKTsNCj4+ICt2b2lkIG10cnJfb3ZlcndyaXRlX3N0YXRl
-KHN0cnVjdCBtdHJyX3Zhcl9yYW5nZSAqdmFyLCB1bnNpZ25lZCBpbnQgbnVtX3ZhciwNCj4+
-ICsJCQkgIG10cnJfdHlwZSAqZml4ZWQsIG10cnJfdHlwZSBkZWZfdHlwZSk7DQo+IA0KPiBD
-b3VsZCB5b3UgYWRkIGEgc3R1YiBmb3IgdGhlICFDT05GSUdfTVRSUiBjYXNlPyAgVGhlbiB0
-aGUNCj4gI2lmZGVmIENPTkZJR19NVFJSIGNvdWxkIGJlIHJlbW92ZWQgaW4gUGF0Y2ggMyBv
-ZiB0aGlzIHNlcmllcy4NCg0KSSB3YXMgb24gdGhlIGVkZ2Ugd2hldGhlciB0byBhZGQgYSBz
-dHViLiBUaGUgWGVuIHVzZSBjYXNlIHN0cm9uZ2x5DQpzdWdnZXN0cyB0aGF0IHRoZSBjb2Rl
-IHdhbnRzIHRvIGJlIGluc2lkZSBhbiAjaWZkZWYsIHdoaWxlIHRoZSBIeXBlci1WDQpjYXNl
-IGlzIHNvIHNpbXBsZSwgdGhhdCBpdCB3b3VsZCBiZW5lZml0IGZyb20gdGhlIHN0dWIuIEFz
-IHRoZXJlIHdhcw0KYW5vdGhlciAjaWZkZWYganVzdCBhYm92ZSB0aGUgYWRkZWQgY29kZSBp
-biBtc2h5cGVydi5jIEkgYmVsaWV2ZWQgaXQNCndvdWxkIGJlIGZpbmUgd2l0aG91dCBhIHN0
-dWIuIEFzIHlvdSBzZWVtIHRvIGxpa2UgaXQgYmV0dGVyIHdpdGggdGhlDQpzdHViLCBJIGNh
-biBhZGQgaXQuDQoNCg0KSnVlcmdlbg0K
---------------rn3w2ivt7ensmUBtxZ2PwmYW
+ZWJydWFyeSA4LCAyMDIzIDExOjIyIFBNDQo+Pg0KPj4gSW4gb3JkZXIgdG8gYXZvaWQgbWFw
+cGluZ3MgdXNpbmcgdGhlIFVDLSBjYWNoZSBhdHRyaWJ1dGUsIHNldCB0aGUNCj4+IE1UUlIg
+c3RhdGUgdG8gdXNlIFdCIGNhY2hpbmcgYXMgdGhlIGRlZmF1bHQuDQo+Pg0KPj4gVGhpcyBp
+cyBuZWVkZWQgaW4gb3JkZXIgdG8gY29wZSB3aXRoIHRoZSBmYWN0IHRoYXQgUEFUIGlzIGVu
+YWJsZWQsDQo+PiB3aGlsZSBNVFJScyBhcmUgZGlzYWJsZWQgYnkgdGhlIGh5cGVydmlzb3Iu
+DQo+Pg0KPj4gRml4ZXM6IDkwYjkyNmU2OGY1MCAoIng4Ni9wYXQ6IEZpeCBwYXRfeF9tdHJy
+X3R5cGUoKSBmb3IgTVRSUiBkaXNhYmxlZCBjYXNlIikNCj4+IFNpZ25lZC1vZmYtYnk6IEp1
+ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4NCj4+IC0tLQ0KPj4gVjI6DQo+PiAtIG5l
+dyBwYXRjaA0KPj4gLS0tDQo+PiAgIGFyY2gveDg2L2tlcm5lbC9jcHUvbXNoeXBlcnYuYyB8
+IDggKysrKysrKysNCj4+ICAgMSBmaWxlIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKQ0KPj4N
+Cj4+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L21zaHlwZXJ2LmMgYi9hcmNo
+L3g4Ni9rZXJuZWwvY3B1L21zaHlwZXJ2LmMNCj4+IGluZGV4IDQ2NjY4ZTI1NTQyMS4uNTFl
+NDdkYzBlOTg3IDEwMDY0NA0KPj4gLS0tIGEvYXJjaC94ODYva2VybmVsL2NwdS9tc2h5cGVy
+di5jDQo+PiArKysgYi9hcmNoL3g4Ni9rZXJuZWwvY3B1L21zaHlwZXJ2LmMNCj4+IEBAIC0z
+NCw2ICszNCw3IEBADQo+PiAgICNpbmNsdWRlIDxjbG9ja3NvdXJjZS9oeXBlcnZfdGltZXIu
+aD4NCj4+ICAgI2luY2x1ZGUgPGFzbS9udW1hLmg+DQo+PiAgICNpbmNsdWRlIDxhc20vY29j
+by5oPg0KPj4gKyNpbmNsdWRlIDxhc20vbXRyci5oPg0KPj4NCj4+ICAgLyogSXMgTGludXgg
+cnVubmluZyBhcyB0aGUgcm9vdCBwYXJ0aXRpb24/ICovDQo+PiAgIGJvb2wgaHZfcm9vdF9w
+YXJ0aXRpb247DQo+PiBAQCAtMzM1LDYgKzMzNiwxMyBAQCBzdGF0aWMgdm9pZCBfX2luaXQg
+bXNfaHlwZXJ2X2luaXRfcGxhdGZvcm0odm9pZCkNCj4+ICAgCQkJc3RhdGljX2JyYW5jaF9l
+bmFibGUoJmlzb2xhdGlvbl90eXBlX3NucCk7DQo+PiAgICNpZmRlZiBDT05GSUdfU1dJT1RM
+Qg0KPj4gICAJCQlzd2lvdGxiX3VuZW5jcnlwdGVkX2Jhc2UgPSBtc19oeXBlcnYuc2hhcmVk
+X2dwYV9ib3VuZGFyeTsNCj4+ICsjZW5kaWYNCj4gDQo+IFVuZm9ydHVuYXRlbHksIEh5cGVy
+LVYgZG9lcyBub3QgZmlsdGVyIG91dCB0aGUgTVRSUiBmbGFnIGZyb20gdGhlDQo+IENQVUlE
+IGxlYWYsIHNvIHRoaXMgY29kZSBhbHNvIG5lZWRzDQo+IA0KPiAJCQlzZXR1cF9jbGVhcl9j
+cHVfY2FwKFg4Nl9GRUFUVVJFX01UUlIpOw0KPiANCj4gYmVmb3JlIGNhbGxpbmcgbXRycl9v
+dmVyd3JpdGVfc3RhdGUoKS4gIEkndmUgZ290IGEgYnVnIGZpbGVkIGZvciB0aGUNCj4gSHlw
+ZXItViB0ZWFtIHRvIGZpeCB0aGUgZmxhZywgYnV0IGNsZWFyaW5nIHRoZSBmZWF0dXJlIGhl
+cmUgc29sdmVzIHRoZQ0KPiBwcm9ibGVtIHJlZ2FyZGxlc3MuDQoNCk9rYXksIHdpbGwgYWRk
+IGl0Lg0KDQo+IA0KPj4gKyNpZmRlZiBDT05GSUdfTVRSUg0KPiANCj4gSG9wZWZ1bGx5IHRo
+aXMgI2lmZGVmIGNhbiBnbyBhd2F5LCBwZXIgbXkgY29tbWVudCBpbiBQYXRjaCAyIG9mDQo+
+IHRoZSBzZXJpZXMuDQoNCkFzIHNhaWQgYWxyZWFkeSwgZmluZSB3aXRoIG1lLg0KDQoNCkp1
+ZXJnZW4NCg==
+--------------yt0MkDa4rcsx94tvgyi0k729
 Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
 Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
 Content-Description: OpenPGP public key
@@ -202,24 +201,24 @@ jR/i1DG86lem3iBDXzXsZDn8R38=3D
 =3D2wuH
 -----END PGP PUBLIC KEY BLOCK-----
 
---------------rn3w2ivt7ensmUBtxZ2PwmYW--
+--------------yt0MkDa4rcsx94tvgyi0k729--
 
---------------yn2Qx4Q01xzWKT7SuWDxeNhU--
+--------------8OmGzH5fFTEECazp0q0VVbzh--
 
---------------ytCMa8DuorXCqrSOTuKcUpAv
+--------------j6hy8BDP0jRbkBvVTKuRu7Si
 Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPp2E4FAwAAAAAACgkQsN6d1ii/Ey9j
-twgAgHOMwoaAR1L9uMkHjO1h/fzM0DoBXmo0dbRDaHI8MTFgNH52SjPSJ1DPaxe1G8D+5fviA2eN
-scdDyZHPcuhuEWrFolPyqcglPPlKGeQAqGQlSEXTc34ftSpcijZ7NEAM6XeyxS7h6v4F/2xGWErh
-YiJmkXMvUMePxRoxhXMviDdPBC+iFlLw1Xaa8jsst/fDS9ffUgKf7ABN6NWLSjnWRfIwaruvG1mm
-yasYtJ2Yf4vdHe/USgeStkpMOtYMOsWLt2sYe4Tx7ouiq6l7mZtgR1exvaggsRL96F7LMrSN7eqH
-OZYC7oKqOoOK7tjGiFiElXRSKDdF/VW9G50H1Njw6g==
-=rJwk
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPp2IMFAwAAAAAACgkQsN6d1ii/Ey/E
+1Af/VGzydMZsFR52sciEWzeRZFrl9MAkMDXh+IcAee11JNt2fjNdGQwYRTLqkNUPiS6VR5JkryX0
+VUf+d2EquETpLbO0hZYnUmF2uw80SLSnMigH+dwo2Td9gFkludfPJqEDVTsZ8J4HnKsCLuPXqzAD
+4yKYnTdDvcq9uSqv3P3rzft07XEVRzFR0EY8qEyug97rG0qIQGV460TcdzANwQzMm5rkDaesxSKV
+CIWhRLJg7sbzzEy5IqVeHcVfcYkKVh1oRQxbk0NOyy1XM8HA1CP2Pg6Ulm4+j3tHE3h35YpScbto
+TE8zD9Vi+TLYJmj5JsfdBcfvNEWXHs0Ob+R3E2JIpw==
+=FpFh
 -----END PGP SIGNATURE-----
 
---------------ytCMa8DuorXCqrSOTuKcUpAv--
+--------------j6hy8BDP0jRbkBvVTKuRu7Si--
