@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 112FF693DA0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 05:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D262E693DA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 05:55:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbjBMEzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 23:55:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51982 "EHLO
+        id S230040AbjBMEzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 23:55:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbjBMEy5 (ORCPT
+        with ESMTP id S229814AbjBMEzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 23:54:57 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803DB12075
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 20:54:32 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id w5so12280535plg.8
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 20:54:32 -0800 (PST)
+        Sun, 12 Feb 2023 23:55:09 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673B41258A
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 20:54:36 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id w20-20020a17090a8a1400b00233d7314c1cso3099188pjn.5
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 20:54:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9sWo6wCd+6s/qv8qKQzFAIRIpzM1RXjpCLCKpSqwk7c=;
-        b=wt3q+VJD6Cp/b63Im6YhKcHv2i1AyapK9Tkrv/Lhww4i7czsTc+eUGnKJic8SCla3/
-         PZeWAHDzQcpwxfG87wj9siHJ53pcxmGJj0Al/qZsMz4b8wLG4BExSAIQ4Nh0yVWI8eA1
-         mdxKCUjoG1enCDnovmujulzh9ivudh8B7fewqOfdwU/ZGjXrEe0tnW65F6JP3I73DJ0O
-         2pC+POBx+yCDZm97cI3uisSvoGWjp5y005oxdW98wIerdHNjp+Fv0zqfuea3nWldQhEm
-         4GleUJiZnFqHyNc5rExalqnFx+zUnW254K9Y/BfKidu8I/uoOfcdaSt+6r9FSxD1x7yu
-         usKA==
+        bh=3kFxia6anvFekuQwjCC0QPCBdBTnfubmGffGfTpNbSM=;
+        b=Afh0xW9utFfUPrEQU4hWTDRSLlXwhIpd8cKrKCCTb090OxZcC7+dw1lGI4WLigSRcR
+         SlTrKyg46yjgyducZFlnzNgMFLW5ERNIE51qDZs52oKKqKeicOr0GQ+2vSpH+tMZHU2f
+         xYrN3xaSDbe059vhC8YmE0Mo0lm4LvpwwnWJlS9G0hlCENclXKagmo2zWcBcb/mdENgY
+         1gAOJIewodgaQQlqmUK6bvaKGXX2/aGrqMFG9OmQDkZFfYSfsjHFpOrGmHNtyqkqNXHp
+         spSkkxoNxWE3KUzm1/n3/sYW083aXMKfQdw4fAAEkBpyepXmSDGgPYoR/nS0jY3uaDuw
+         o80A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9sWo6wCd+6s/qv8qKQzFAIRIpzM1RXjpCLCKpSqwk7c=;
-        b=ExZZu32YbwV/8h9JtlyYceJ7uYhpMhk4nLvtbOYFcF5i5NHcWqywjy/z0P+wnJigkO
-         gI2NBAwl5JaxHxSPoXKoW7d2JEOZ2ZllJGO/QtvM4CTJE21TMnJLthb/OqmIsbNoPUin
-         rV2r5oYzk2wgh3bgsdLfPhuNeTjRWAKDhl68kvXcJfRmLIl3CGPZ/BAfOonKDZR0WWiV
-         QqWv7AFrcL32Ikgi95Uioa+609NmshCbNBH/4q1EbJJ1FupwZm3ME81Y/4covch788qB
-         mbq295PrsddDBzDF6Y7iOX1HMDUgajcxbWDqiFnnKXxeKmSem6evloZVfs0OeEy5xbjH
-         ZSrw==
-X-Gm-Message-State: AO0yUKWhjPkT+E7UTfuCvflheVpc5MFI2Z7ipuNJUuEUVg8hZo/zYMxE
-        xzt54mUkBH6/GMkUIhnOImmrz+KUk5MNbD7G
-X-Google-Smtp-Source: AK7set/We3gZfKBWsBui9LQ+h2dQamScS+mnmA55bftJ1qX9qQdJsEmqonYKb0jOGqlzZmSqaU7JgA==
-X-Received: by 2002:a17:903:124b:b0:19a:9406:b234 with SMTP id u11-20020a170903124b00b0019a9406b234mr5720720plh.45.1676264065599;
-        Sun, 12 Feb 2023 20:54:25 -0800 (PST)
+        bh=3kFxia6anvFekuQwjCC0QPCBdBTnfubmGffGfTpNbSM=;
+        b=HjELvOLvvmCruCvG9BwYML0DEwZ2KHzJMcsvSNGJ5KndrssaDcddsLyVkK75Ntb27t
+         1IW3wb3PQQQMjZ/y58dS3whZ2p7SIBqjcp+O60Gqeag6qg1k6DjalCC1lfbpnvHgVT38
+         R9oNY+gKT/+l59lGovEw8aCzMTR7RBPQJyFun4I9vJAXb+wBSb/IVqmFArAzE+440xPJ
+         Q15/4fByaEg3HfaOmh/t7I+EJV6mXzvVQr63oOM9QaxRXgJMAbrY05HhueGp0eycr0Gx
+         ETpW4Ac6Gsl6UI4iY3PkYS0sdSpKnYa76VYNeRbPmngLlM5w9ll5zF9zfvLpVlINSuvo
+         TbDQ==
+X-Gm-Message-State: AO0yUKVMIU5qzbvvnSkPcnHS2Yud/NNQ+rNlyjqm79Vh66EQtWm3FKWU
+        +7LiDSa13Zb23W4xjR2jajp7Sz7YO/fsgxc2
+X-Google-Smtp-Source: AK7set9VuKBu8EY+mqmdMSQsVnXb77Y1JO5W24ZyHIbOWCePXvCVZrSZJKZ86C/lIOIyZdIFSrBmVw==
+X-Received: by 2002:a17:902:f64f:b0:198:adc4:229f with SMTP id m15-20020a170902f64f00b00198adc4229fmr16162307plg.26.1676264066962;
+        Sun, 12 Feb 2023 20:54:26 -0800 (PST)
 Received: from debug.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id e5-20020a170902784500b00189e7cb8b89sm7078303pln.127.2023.02.12.20.54.24
+        by smtp.gmail.com with ESMTPSA id e5-20020a170902784500b00189e7cb8b89sm7078303pln.127.2023.02.12.20.54.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Feb 2023 20:54:25 -0800 (PST)
+        Sun, 12 Feb 2023 20:54:26 -0800 (PST)
 From:   Deepak Gupta <debug@rivosinc.com>
 To:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>
 Cc:     Deepak Gupta <debug@rivosinc.com>
-Subject: [PATCH v1 RFC Zisslpcfi 16/20] riscv: Implements sslp prctls
-Date:   Sun, 12 Feb 2023 20:53:45 -0800
-Message-Id: <20230213045351.3945824-17-debug@rivosinc.com>
+Subject: [PATCH v1 RFC Zisslpcfi 17/20] riscv ucontext: adding shadow stack pointer field in ucontext
+Date:   Sun, 12 Feb 2023 20:53:46 -0800
+Message-Id: <20230213045351.3945824-18-debug@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230213045351.3945824-1-debug@rivosinc.com>
 References: <20230213045351.3945824-1-debug@rivosinc.com>
@@ -73,128 +73,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-New prctls are PR_GET_SHADOW_STACK_STATUS/PR_SET_SHADOW_STACK_STATUS and
-PR_GET_INDIRECT_BR_LP_STATUS/PR_SET_INDIRECT_BR_LP_STATUS are implemented
-on riscv in this patch.
+Shadow stack needs to be saved and restored on signal delivery and
+signal return.
+
+ucontext structure on riscv has existing large padding for possible
+future extension of uc_sigmask. This patch steals XLEN/8 bytes from
+padding to keep structure size and offset of existing member fields
+same.
 
 Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 ---
- arch/riscv/include/asm/processor.h |  4 +-
- arch/riscv/kernel/process.c        | 88 +++++++++++++++++++++++++++++-
- 2 files changed, 90 insertions(+), 2 deletions(-)
+ arch/riscv/include/uapi/asm/ucontext.h | 32 +++++++++++++++++++++++---
+ 1 file changed, 29 insertions(+), 3 deletions(-)
 
-diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
-index 39c36f739ebb..c088584580b4 100644
---- a/arch/riscv/include/asm/processor.h
-+++ b/arch/riscv/include/asm/processor.h
-@@ -46,7 +46,9 @@ struct cfi_status {
- 	unsigned int ufcfi_en : 1; /* Enable for forward cfi. Note that ELP goes in sstatus */
- 	unsigned int ubcfi_en : 1; /* Enable for backward cfi. */
- 	unsigned int audit_mode : 1;
--	unsigned int rsvd1 : 29;
-+	unsigned int ufcfi_locked : 1;
-+	unsigned int ubcfi_locked : 1;
-+	unsigned int rsvd1 : 27;
- 	unsigned int lp_label; /* saved label value (25bit) */
- 	long user_shdw_stk; /* Current user shadow stack pointer */
- 	long shdw_stk_base; /* Base address of shadow stack */
-diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-index bfd8511914d9..1218ed4fd29f 100644
---- a/arch/riscv/kernel/process.c
-+++ b/arch/riscv/kernel/process.c
-@@ -257,4 +257,90 @@ int arch_elf_setup_cfi_state(const struct arch_elf_state *state)
- 
- 	return ret;
- }
--#endif
-\ No newline at end of file
-+#endif
-+
+diff --git a/arch/riscv/include/uapi/asm/ucontext.h b/arch/riscv/include/uapi/asm/ucontext.h
+index 516bd0bb0da5..72303e5618a1 100644
+--- a/arch/riscv/include/uapi/asm/ucontext.h
++++ b/arch/riscv/include/uapi/asm/ucontext.h
+@@ -21,9 +21,12 @@ struct ucontext {
+ 	 * at the end of this structure and explicitly state it can be
+ 	 * expanded, so we didn't want to box ourselves in here.
+ 	 */
+-	__u8		  __unused[1024 / 8 - sizeof(sigset_t)];
+-	/*
+-	 * We can't put uc_sigmask at the end of this structure because we need
++	__u8		  __unused[1024 / 8 - sizeof(sigset_t)
 +#ifdef CONFIG_USER_SHADOW_STACK
-+int arch_get_shadow_stack_status(struct task_struct *t, unsigned long __user *status)
-+{
-+	unsigned long bcfi_status = 0;
-+	struct thread_info *info = NULL;
-+
-+	if (!arch_supports_shadow_stack())
-+		return -EINVAL;
-+
-+	info = current_thread_info();
-+	bcfi_status |= info->user_cfi_state.ubcfi_locked ? (1UL << 0) : 0;
-+	bcfi_status |= info->user_cfi_state.ubcfi_en ? ((1UL << 1) |
-+		       (info->user_cfi_state.user_shdw_stk)) : 0;
-+
-+	return copy_to_user(status, &bcfi_status, sizeof(bcfi_status)) ? -EFAULT : 0;
-+}
-+
-+int arch_set_shadow_stack_status(struct task_struct *t, unsigned long __user *status)
-+{
-+	unsigned long bcfi_status = 0;
-+	struct thread_info *info = NULL;
-+	unsigned long shdw_stk = 0;
-+
-+	if (!arch_supports_shadow_stack())
-+		return -EINVAL;
-+
-+	info = current_thread_info();
-+	/* bcfi status is locked and further can't be modified by user */
-+	if (info->user_cfi_state.ubcfi_locked)
-+		return -EINVAL;
-+
-+	if (copy_from_user(&bcfi_status, status, sizeof(bcfi_status)))
-+		return -EFAULT;
-+	/* clear two least significant bits. Always assume min 4 byte alignment */
-+	shdw_stk = (long) (bcfi_status & (~3));
-+
-+	if (shdw_stk >= TASK_SIZE)
-+		return -EINVAL;
-+
-+	info->user_cfi_state.ubcfi_en = (bcfi_status & (1UL << 1)) ? 1 : 0;
-+	info->user_cfi_state.ubcfi_locked = (bcfi_status & (1UL << 0)) ? 1 : 0;
-+	info->user_cfi_state.user_shdw_stk = (long) shdw_stk;
-+
-+	return 0;
-+}
++				   - sizeof(unsigned long)
 +#endif
++				  ];
++	/* We can't put uc_sigmask at the end of this structure because we need
+ 	 * to be able to expand sigcontext in the future.  For example, the
+ 	 * vector ISA extension will almost certainly add ISA state.  We want
+ 	 * to ensure all user-visible ISA state can be saved and restored via a
+@@ -31,7 +34,30 @@ struct ucontext {
+ 	 * infinite extensibility.  Since we know this will be extended and we
+ 	 * assume sigset_t won't be extended an extreme amount, we're
+ 	 * prioritizing this.
++	 */				  
 +
-+#ifdef CONFIG_USER_INDIRECT_BR_LP
-+int arch_get_indir_br_lp_status(struct task_struct *t, unsigned long __user *status)
-+{
-+	unsigned long fcfi_status = 0;
-+	struct thread_info *info = NULL;
-+
-+	if (!arch_supports_indirect_br_lp_instr())
-+		return -EINVAL;
-+
-+	info = current_thread_info();
-+	fcfi_status |= info->user_cfi_state.ufcfi_locked ? (1UL << 0) : 0;
-+	fcfi_status |= info->user_cfi_state.ufcfi_en ? (1UL << 1) : 0;
-+
-+	return copy_to_user(status, &fcfi_status, sizeof(fcfi_status)) ? -EFAULT : 0;
-+}
-+
-+int arch_set_indir_br_lp_status(struct task_struct *t, unsigned long __user *status)
-+{
-+	unsigned long fcfi_status = 0;
-+	struct thread_info *info = NULL;
-+
-+	if (!arch_supports_indirect_br_lp_instr())
-+		return -EINVAL;
-+
-+	info = current_thread_info();
-+	/* bcfi status is locked and further can't be modified by user */
-+	if (info->user_cfi_state.ufcfi_locked)
-+		return -EINVAL;
-+
-+	if (copy_from_user(&fcfi_status, status, sizeof(fcfi_status)))
-+		return -EFAULT;
-+
-+	info->user_cfi_state.ufcfi_en = (fcfi_status & (1UL << 1)) ? 1 : 0;
-+	info->user_cfi_state.ufcfi_locked = (fcfi_status & (1UL << 0)) ? 1 : 0;
-+
-+	return 0;
-+}
++	/*
++	 * Zisslpcfi will need state in ucontext to save and restore across
++	 * makecontext/setcontext. Such one state is shadow stack pointer. We may need
++	 * to save label (of the target function) as well (but that's to be decided).
++	 * Stealing 8 (64bit) / 4 (32bit) bytes from padding (__unused) reserved
++	 * for expanding sigset_t. We could've expanded the size of ucontext. But
++	 * shadow stack is something which by default would be enabled via ELF.
++	 * ucontext expansion makes more sense for situations like vector where
++	 * app is willingly opting in to get special functionality. Opt-in allows
++	 * for enlightening in ucontext restore. Second reason is shadow stack
++	 * doesn't need a lot of state and only shadow stack pointer. Tax on
++	 * ecosystem due to a small size change (8 bytes) of ucontext is more than
++	 * simply keeping the size same and shoving the ss pointer in here. Please
++	 * note that shadow stack pointer is pointing to a shadow stack address.
++	 * Shadow stack address has shadow stack restore token using which shadow
++	 * stack should be restored.
++	 * Please note that we're keeping uc_ss_ptr at that this location so that
++	 * every other offsets are same and thus works for compatibility.
+ 	 */
++#ifdef CONFIG_USER_SHADOW_STACK
++	unsigned long uc_ss_ptr;
 +#endif
+ 	struct sigcontext uc_mcontext;
+ };
+ 
 -- 
 2.25.1
 
