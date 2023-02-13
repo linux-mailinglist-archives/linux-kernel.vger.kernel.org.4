@@ -2,129 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722CE693B9C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 02:08:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F42C693B9E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 02:08:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjBMBIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 20:08:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39836 "EHLO
+        id S229714AbjBMBIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 20:08:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjBMBIC (ORCPT
+        with ESMTP id S229709AbjBMBIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 20:08:02 -0500
-Received: from BN3PR00CU001-vft-obe.outbound.protection.outlook.com (mail-eastus2azon11020023.outbound.protection.outlook.com [52.101.56.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548E7BDFC;
-        Sun, 12 Feb 2023 17:08:01 -0800 (PST)
+        Sun, 12 Feb 2023 20:08:20 -0500
+Received: from BN3PR00CU001-vft-obe.outbound.protection.outlook.com (mail-eastus2azon11020027.outbound.protection.outlook.com [52.101.56.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A371510258
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 17:08:11 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IT0hcXImrMJu5x6HKwOTUmw3EoEWSa4xbCXHHSfX/bfMNN0V/AKFan36OL2S9J++Zdx+Vr6pnnyy2VlAls0Pm0Cjb8gQvAGznVngwRiuhrY09jLuAJOYFrdpK6P+p6WIQ2v9wv6sj6tk/o59iIwyIojqPTf7PMVOT2LJm153hiobdWx3vOE4eee5fMDCP97KrQXPgsWsdyrj148KVA0B9NRNWuVkI82ccuLMjDFnQ3iVhrYXGWyKMXsmkJJtaCDbcefojnp2LpiaeKQ6gTDd871BTz3gHwrYRfuAuzrwTCVpYWV0aeZbQs6tZ3i/F/iJhBuV/1sDpmzLkm3rJgAcsg==
+ b=dS08I1Q1n0PTmVKv22KyRpB88tdwKg1zhN9WXfSq/JtB2eGxFHGmltPTaAG7zKZl8i8SEXh3zPuFR7cWLsRMl2kxWEac4tlxrQewDCzt7ZnCXBhGn0mjtrU1BnbwuHLv2ZKgFQbg1cKYMSEVy9RikBX/TQRRu+T8tjrTnAGGK19TTmOQOnwEgt5QhHtZWd/enmP9GRNHhIlK4dLgDnjubAWnlXgzeHcgvUe/3su7+eiIQIp0IMSL9Xu7ZyXyhp1OQlirb/VTLGUCxQQtzGi1iOFiPmyBjtP0/qKcC2V3A2e3mdu45VgrOw86yTIMTNcNI9Vt/jhqFA/r3cQ3XiJcJA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9IkEGW8iBV0K7SqHTTwFcjxBYM9KFY7VJOU7II/nDVY=;
- b=W28Rk+KfigIvGvUWOt2ZDjuZaOl7IAOjHM5zBIqtgqVaaQw4L3dn3PsKKpvDemT9uqMWS6pVn7YcsfZjqb9ScABSnA8mu/Z3/xqz49eWYtlnBncohFU2e41MgaiEe9G2+VFwAI3PknGiVQ5HV/MZ5I1O8wdByllh4FrDV7em2xXtzZMpOH+sJ3Ys2mDBHZng1wrCBVA5pp0A595V5V+QcN5i6tW/Zn4dfMsquGYJ8s0ctkXhxACAeIN58SDam7JYsbN5EZMvWIW/YH8o6bVMLsZfNbvBfoLVuj8uVTiuvfI0CUykNMdneOglyZ0o0cTL45Ssc9WHVNcMWK1hGuzDIw==
+ bh=X2OCTrh7tMgV42mXYKjHw36Ki+GNiwMV8tzuh3lEpGg=;
+ b=F+C2KRelDOS77NqkiQGqJiWfOouX9k+B6mRl7iiB34K8hZFluRqRl2+hwWVOM58OUWepBuEZkF5DVJwSNp/KuiFyHBKsrri7BptzGxjCw1whLdrYpeI3Muyq3r0y+7h3H+JZj3Uj7o344sarWQBmv9yJzPGLpSW8khmCiVlTVwNLWUSQOwp2xHELt/yCENIlNkFRq/n+jD4+yT7aHSVXPyMH0dju3TKStWrCmnGkyueOzFvP2zttucNmS2DHxha1UI/cagbbJWQpgwTktE1OmmGadL33l8dGarbS93PeUoNcdRFQ31pQM6n7IP4pztIbQSL6RexRh+gHoUuu+RQfBQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microsoft.com; dmarc=pass action=none
  header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9IkEGW8iBV0K7SqHTTwFcjxBYM9KFY7VJOU7II/nDVY=;
- b=I/Fstmj0gyzDKxGc/3eu7A2GtjqWiBFyBl/mjihBvTmvOfp2mZ/3ZsvCY0yvrCyJ2AIb+CFqDrUJvGE4BjXDArBL2bBSh2O9CGN0snw+C1NJRVztUA0a2wEZQ53AIEDjjQ4prllQFeYy6Q8e2B3IVwrj5LOV6FHLe8eLoqbVGMs=
+ bh=X2OCTrh7tMgV42mXYKjHw36Ki+GNiwMV8tzuh3lEpGg=;
+ b=YNT1Lctcp1aCp3mCnCJmmfDuDdlwYHk9K+TOzyhDF7ueqdi+8UwXvqJ89ETBiAn4HKIspngMEYcPslaOofhlfp9bMa5e/f5ld9ozOWL76Opb9771zXycNyrnqWwnVPbRuZA+7CrvOUryGM26HYoMTcybQLXjmWCYR1H5Dm4jhsM=
 Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
  by DS7PR21MB3430.namprd21.prod.outlook.com (2603:10b6:8:91::5) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6134.0; Mon, 13 Feb 2023 01:07:59 +0000
+ 15.20.6134.0; Mon, 13 Feb 2023 01:08:08 +0000
 Received: from BYAPR21MB1688.namprd21.prod.outlook.com
  ([fe80::55a1:c339:a0fb:6bbf]) by BYAPR21MB1688.namprd21.prod.outlook.com
  ([fe80::55a1:c339:a0fb:6bbf%8]) with mapi id 15.20.6111.007; Mon, 13 Feb 2023
- 01:07:58 +0000
+ 01:08:08 +0000
 From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
 To:     Juergen Gross <jgross@suse.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+        "x86@kernel.org" <x86@kernel.org>
 CC:     "lists@nerdbynature.de" <lists@nerdbynature.de>,
         "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>
-Subject: RE: [PATCH v2 3/8] x86/hyperv: set MTRR state when running as SEV-SNP
- Hyper-V guest
-Thread-Topic: [PATCH v2 3/8] x86/hyperv: set MTRR state when running as
- SEV-SNP Hyper-V guest
-Thread-Index: AQHZPFdQNE/TrMPJsEmD9dWJHuYRFq7Luw0g
-Date:   Mon, 13 Feb 2023 01:07:58 +0000
-Message-ID: <BYAPR21MB1688C2A893BA9D2A14D729DFD7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
+Subject: RE: [PATCH v2 7/8] x86/mm: only check uniform after calling
+ mtrr_type_lookup()
+Thread-Topic: [PATCH v2 7/8] x86/mm: only check uniform after calling
+ mtrr_type_lookup()
+Thread-Index: AQHZPFdbFxstpbOX7kmH7AmnajmUt67LvPoA
+Date:   Mon, 13 Feb 2023 01:08:08 +0000
+Message-ID: <BYAPR21MB16882DD5A99CB365F2BD22A6D7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
 References: <20230209072220.6836-1-jgross@suse.com>
- <20230209072220.6836-4-jgross@suse.com>
-In-Reply-To: <20230209072220.6836-4-jgross@suse.com>
+ <20230209072220.6836-8-jgross@suse.com>
+In-Reply-To: <20230209072220.6836-8-jgross@suse.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=c0565a9b-4d67-4555-8284-7c9677033055;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-02-12T19:40:31Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=e8680456-7e4d-460b-88fc-043963a311ef;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-02-12T19:47:24Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=microsoft.com;
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|DS7PR21MB3430:EE_
-x-ms-office365-filtering-correlation-id: 7bdf40ab-40cb-45ec-d3fa-08db0d5ebf38
+x-ms-office365-filtering-correlation-id: 9cfd1db8-30a0-47f1-a0e0-08db0d5ec4bc
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: V6NrOxBLWe0tKdw3SaRO7Z+xuf4EGj3nWGs1/df/u7Ls2rglqduXrWZatS8AlqrrgyfFtgaIuCwUAsaH4GOk6QWNIc9VthqA9Iwo2nVXNEVOH8+P31cxxFh0MPGF9OL+SOXQyilrZ0neViyU6qCbtODJjh8p8ojFL8xS/InH7taBjZTN5HoGLPimAv4EN4Mc8Y6qqPrim89Ps7dVKUTN1CnKIpZIerQrSK3VUhMpyFjZgWjc/PaaxddI2rmyG03Cmqpv7Y7N6CHEnpC0fLJHmIbf8DmK2pcVyNo1JkYGbaU52XI7UrGP+2Sox5bF4jjoCS5qUCPte+k7sOJ/i/lRoXYFAa/Tt6gJjr/IWv0c6irVd+4Y3H63bRi7isyrYhFeWy/y4J66H0nsTTAjOF6FxZeJYaZ8yjGhT8rXqzzZNlaNQ/vQOSLUtWoTaADy7BBMMrwS56UH+oDEgAd3dbyfbpxoMeNulfpc7P/2XFVCNMjB395i4jDuOwjsVvaILcZttXE2KA58QiUTXJrW0aFKP0jbAACN+cR29tElS3PmtCkL2EIKjp+EXUJuYFtPLpIeLMRVbL8bM+ELfBuvO7gvheDR0+oYxwQQebAqDGRYVTJ31SewXSH9sP3DtLsRnn/BqQbJ6XcAsBnJ0wpkangDT/MaFmfHr2CoiuExX3DvIpkx1+8XuaMChsdlj4/lsrycVv0JhotlxtatE89zb4kAa9eaLzmPPj9v0ohtQokEh7Vt67T3CINTHsNBR4+yRh2e
+x-microsoft-antispam-message-info: 3RTZmMfPGDg9vEz5QhVkJI4DC7XLykzEAPOn0oQFJ8CVN08Wmi2Js6+uCX1j8UDrIXBygbTJPYfQfuK6aUlPqkmUZAc0g081OX3YanAgYtCauDKlGbv/zOvMrRI/gwFzXjVn/1P+g0pWaHPI3D1D1lJknzblavZ1s5EQshQvgIcsFbOKyEgQ7Xd4zMiJm9xsIVKF8lbES6hzYRnnqDU/u7xDQw2RfMSosWnHmq1iLoR2e3IRmyj7ADCif5qFnjtmBs63X1w1yBTgaEFz/6qZhxfiJmvteFxpWXcJpLTVsXmmRA6w2oagZOHgivhpMDvJmtjv5Ep2BRMS6+/7/yxN2DXYqYS9vJ+oNt7uuUVf/kpcUi4ATXhDpcHtre0eBOlDAJLirdC0XmVjYZrdwH1qWPGvlW7b00ps6ARhSwCJm8NE7SyLiTUA4rOH08O5l2hWI88btdizes8Lw3dXLMYFaDH4Tn+n9Eer9bsAXIToZJgwa2arz0M+gAK6b8AsylO+S2ro8qeGUTS+tk7Ob8KBs2/U8Q+x8ilgy3cE6ttfHlLR4uTs+8UXpzNq46LZWFLDTTX27NusYudBwkDcI9qLEXfAuvuQfU0DNQRJfdtdiQKVP290RoDdcFBIFleYPp//OrI5Kw3AfAaAGHPOURMCjCLVQG4UE8fvWRLP+bdofZgBfdhjbimTHMg112Y9ZzJJoU6PAvErbkb99J1GD+kesbVSFmQds/2GzkjuR2UwO1Od8m+tFzKCOvDfhtIvdBMw
 x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(376002)(346002)(39860400002)(366004)(451199018)(52536014)(38100700002)(38070700005)(82960400001)(82950400001)(122000001)(33656002)(86362001)(83380400001)(186003)(9686003)(6506007)(71200400001)(110136005)(2906002)(8990500004)(10290500003)(478600001)(4326008)(66476007)(64756008)(66446008)(76116006)(7696005)(8676002)(66946007)(66556008)(7416002)(5660300002)(41300700001)(8936002)(54906003)(316002)(55016003);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?IaF6FfWajpQxgu6WJEjuhVi3Ud5bbSp6VmoCDLQUJpaRyZWKsvtUB083GRh+?=
- =?us-ascii?Q?yiTO1zV+DI+XUb08uqy55EOVskGu6AAljfBR8H7j1y+iMuU85h0qny1k84XV?=
- =?us-ascii?Q?LfRJahNySArSju9B+iNYcF76XNqhzplpwIJXvJIISZqJ/YdiLWYh28keFw46?=
- =?us-ascii?Q?WnC7TZgz8FpJ64EQpIgoSNEqhgqNp6g08OK8iC+VqU6CrPncmF3Z1vLGar+j?=
- =?us-ascii?Q?BzXHyBl2fGbMfq3ai96yM9pFzoqeVZOoYcBw9AWnwXSSxxdL/0lbcyIUtkOM?=
- =?us-ascii?Q?g77KbR72vUQO5XK1+Pn69gKvQUcxX3EdvkshNciTBU3Az+3MX067H4qc6FtM?=
- =?us-ascii?Q?S/f0xia3nEkMF+r8KJB0wpa0Kbtgu7mYBLZ1BO3CcSi20y6l/ZTMqe7Roien?=
- =?us-ascii?Q?Hw22i7tcay6nE2HGr9XPpOPDJZ8ejsL0tYuEgutCFmUV8jqUj++fY3Kj+KwX?=
- =?us-ascii?Q?sbMlfLbonYKlFO9Nhl0GIjAKxCOpoqR1p4Zft+l4SIhloROgy4FbDgcw+Owj?=
- =?us-ascii?Q?ope1XW8i259aC2/wW/+RoaFF+AO+dDjzfsOvM9JhnPOOQ5QUhRkRf+cIiN+K?=
- =?us-ascii?Q?BhYI47VBNYIS34n7ehwZvHgN13qrDSeAornApgUlQFM3UgDlVo+mgtzQRUkW?=
- =?us-ascii?Q?Vnm4H54hXJqw+e0g6XbqPoD/2B7Fs/UVUrUG5paBWnTuGED/vGzJ6r5Y3Q9G?=
- =?us-ascii?Q?EXF8iEjfgHGgjZglMKHQRPIZU7tnGhLRAhVyzx4hwOkY7ILF/ZcUCzG0/D4L?=
- =?us-ascii?Q?fzj2/KyHTzN5PCpXpPqDJIpcI28K+exgertqJftqZ+mx4fc90TczpTcsTfvU?=
- =?us-ascii?Q?UcNDy+ecj1bSV7tIm6r9F3xfhHdm/7KDq8VENFvHl/zm5IyfP8549BhHKzR/?=
- =?us-ascii?Q?nNVRRjugkKIpNGzQt5uViEK03ecVHmkekGvubS82xIaazVtgUvcwgx/IrF8R?=
- =?us-ascii?Q?bqwGiZmncHW8r0ky4YRsES1BwTuoC3QPqReGnghahOu0xT8Rxnz9TH48dNJG?=
- =?us-ascii?Q?PF/yUen55i0+wIs+KSMnk/CznSUynsH2TR8oQ2wt3HPHFaJ/gLhVdDdGgz7C?=
- =?us-ascii?Q?Etyc+Y0AtwK89pgc7+HViQHPl4JK/Nti0ZYJ0T0xmg/fNz8QExFjwVgPAvgI?=
- =?us-ascii?Q?EEbIgUVMJ0AYHVXR9I0AJzY5WDVqmuIfOGQvLZrKDulYH/OQzsCqTjdRmbOr?=
- =?us-ascii?Q?w3sF09fL0zLToVyrNkOxvD6EJG8M9bHq0TTQrez8TWqTRQPFSOyRGivyy/pg?=
- =?us-ascii?Q?2CZBLQ5zGIKUI4qBILIwm6Gu0Zoq1TH56cVIiOQpqchMKvQCsipafFULbD4o?=
- =?us-ascii?Q?4dfjhER3SG3gWdXBpaSJqqwF5T4FuEmMUzC44N6Y/3vv6bVZ95mAvGZfTpyq?=
- =?us-ascii?Q?+JYcpwBmlZPwtbv4xvLBiz+kFxCo4tKJYUfiiN/iSOOA1XU4LZHQhcabZ1Jt?=
- =?us-ascii?Q?o3z8ava4mfloyJTeoPasAMUXwVlovJBYtG+QQWoiQw5rIG6g+gb2cHcnuumc?=
- =?us-ascii?Q?z6XR0DEbvUVsxHA6MysiySX79FWpjjqFsx3mghvopLmkF/xQY8ZJBBXQNLZQ?=
- =?us-ascii?Q?TKDL3M1ZEbJ75MpiPIkuCbh/E+JgGPsgb80sdyzONftgNCO6ufiUgcv5EVJv?=
- =?us-ascii?Q?vHX6TWa1VhbAbz+3ObaqFEJIbV6yMJVW1YFwNLx+gLerAiycMrppPHd/GZYO?=
- =?us-ascii?Q?dbbsbw=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?+tN93lL1wOn9el9xHHthsSKxmFGxAS04vLLS0tgnhKvP5bReNG3Q9g+eXq+6?=
+ =?us-ascii?Q?tDrB5cn1zLRmQDBI84/+PA+v6Pam9WhwbMH88BOZm131ES91oTisB6ewlndN?=
+ =?us-ascii?Q?icjjDcvCNamIfQ/e6AzOOdy8dBeOGi6Y0T3RE/sJHdQX8rH4AuTdzX2mQq3I?=
+ =?us-ascii?Q?IPnq0Yc6bkIa/WaNAhuz13RINp70sMbN8JS/oh6M35NBBiO9KnRVKDdXiZAw?=
+ =?us-ascii?Q?S4W4Le/ZZ3Sjj9sfd4JFhuKiL1hD75aSHYIvUdIhFlwtLlgfIjOVjKHwIoKD?=
+ =?us-ascii?Q?AgDlMsTB/02F6oD++8MZZjesJhFCdx02bWKyMEXjcZmfFZ65COj3/X8lUlPI?=
+ =?us-ascii?Q?Q1MSFJxtafj6Zf50imS2ygeh/XVoeeIC387x4h3GXUjdMiBjqHyvRG3wDiFL?=
+ =?us-ascii?Q?22gkTKziPx+f3YkxGv099WCzO5kLdHW5T7YG5Ar+798YzW9IHMwykrA2YEuw?=
+ =?us-ascii?Q?v/fHTv55mTllPzYpaaKd4/trOa4fSJiAq1yRLaq/5GrQYdDqFo42FiGBnBgv?=
+ =?us-ascii?Q?RT3ZcnjE9NFnCBzv899zSZU4V/UqyZBM8IwVFStqy8A3Dtuy/1RC7sDSQBJx?=
+ =?us-ascii?Q?cWsfGa2WYFloZQJ1wFXGpMBotpYr8zm31Q5BxnOkxkP6lrntGY/1ZIvFVPah?=
+ =?us-ascii?Q?JbKq1yOBMmfbi9WTacGRUGSGhjCPWHSfy4MUhNTWlQmnrwdSmUjlJ+XKcDp0?=
+ =?us-ascii?Q?tlJN2FFU8iCHy/4ANZrVhb2aJ15xoM1QLfzt6odS/WkG+w726U9N+xHWcNpE?=
+ =?us-ascii?Q?4MHOLzvpyJ9LyczP9R1e8X5MuI3/tWo5hinZR78YZK0l66eh5cgosnu2v2jF?=
+ =?us-ascii?Q?I/fUit7OQPrSx2HB1iwNNKnnoO1Rel6WC8lCXwmU6JHtbi14tT//0HL35L4V?=
+ =?us-ascii?Q?bUwNgN1bDcl2aQtrwKtXLxqHRUuegT/UKntKTg1RzERBOAy5lIzzDcFxig6H?=
+ =?us-ascii?Q?T4BQYJfQCyXuHlxHaOqTQrlWup9F6fBTJgk/LGJzBSqIkdT0BKS0jZbUM88e?=
+ =?us-ascii?Q?YgPGpWKckvgGaL8PzCHDdK3W2anFtlsM1S9eLGc9B2Tt6ois5/GTsQZ/aDtU?=
+ =?us-ascii?Q?nlLsF0q76X3ZNpHaeo6Uz7u7u8tAqamvmOGSAUNaS/pXngFevIbwsbbbsvaq?=
+ =?us-ascii?Q?pIQ/CD0e1OFmhcRjCjQ6JRo7a14FZnPUc2GGCTQBht9fdVMrQOIlM2hqt1B5?=
+ =?us-ascii?Q?d4BQEmMFnqwOU15Nef2J0BlpWBGsxIKFN2wPdsj/+kWHcLen2i/AwdabgUqN?=
+ =?us-ascii?Q?ANzcTBKOIfFU3nAr/LVFu4WXZkP+CdfK9e1d8THbuKpyxRzHMQB4BUP1SN6+?=
+ =?us-ascii?Q?p0oqP/qAFJS9kdmyDfJ9xv3p2UN8bkxWTkaAZdDaPG5VSph5C+ESSuysOm+l?=
+ =?us-ascii?Q?SwqSK+0ZIQ0Z0vUZnSsMib7jBmA/j/PZYuiUhdltTFb0U0wQf00O6urMDdG4?=
+ =?us-ascii?Q?E1RT+HfT8NxlziR9P6QNZ2BtiOE9iu1mV/6iwM2vvOuX51sWIormvdIComBs?=
+ =?us-ascii?Q?qPfkTAw0jJQRpSFdDTRcdM3xyRfzKcPoSV8UJfxOqviLmbYY62LOxx2r230J?=
+ =?us-ascii?Q?+Zcz4rZ3k4XRcY4ft1zQDI5T5AaYdZz3+Ev6+UQQxZaFo9pyzUsY2aRO2q6m?=
+ =?us-ascii?Q?597fa+JDNnhgGOUnGgwNIsiSbrJ3X90YG9ikjWdvTm8ycDFlfL5Np802wzPA?=
+ =?us-ascii?Q?eJa0nA=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: microsoft.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7bdf40ab-40cb-45ec-d3fa-08db0d5ebf38
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Feb 2023 01:07:58.8847
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9cfd1db8-30a0-47f1-a0e0-08db0d5ec4bc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Feb 2023 01:08:08.1371
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: s7MONIniL7v7IMrjcP3ibc0dcRM86SrUxn66sdX/DhGLgIT8AJ2LaDV0wJsOQD53hQpoADWuM1bJ/1BXV5QiGWPvo2q4OwuFvRUN7Nq8QJg=
+X-MS-Exchange-CrossTenant-userprincipalname: 4Qw1E9PZxNLnkuFdgVEXZ5/u8mmcPmjk1r6Lvn0WxRMBLRxfkZAX3S1eBQr2dNPu4AxdJ3fJ4GcFXQlx4VumX5Ueh1QeC9amzgL33TEBqaM=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR21MB3430
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -133,66 +131,85 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Juergen Gross <jgross@suse.com> Sent: Wednesday, February 8, 2023 11:=
 22 PM
+>
+> Today pud_set_huge() and pmd_set_huge() test for the MTRR type to be
+> WB or INVALID after calling mtrr_type_lookup(). Those tests can be
+> dropped, as the only reason to not use a large mapping would be
+> uniform being 0. Any MTRR type can be accepted as long as it applies
+> to the whole memory range covered by the mapping, as the alternative
+> would only be to map the same region with smaller pages instead using
+> the same PAT type as for the large mapping.
 >=20
-> In order to avoid mappings using the UC- cache attribute, set the
-> MTRR state to use WB caching as the default.
->=20
-> This is needed in order to cope with the fact that PAT is enabled,
-> while MTRRs are disabled by the hypervisor.
->=20
-> Fixes: 90b926e68f50 ("x86/pat: Fix pat_x_mtrr_type() for MTRR disabled ca=
-se")
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
 > Signed-off-by: Juergen Gross <jgross@suse.com>
 > ---
-> V2:
-> - new patch
-> ---
->  arch/x86/kernel/cpu/mshyperv.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  arch/x86/mm/pgtable.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 >=20
-> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyper=
-v.c
-> index 46668e255421..51e47dc0e987 100644
-> --- a/arch/x86/kernel/cpu/mshyperv.c
-> +++ b/arch/x86/kernel/cpu/mshyperv.c
-> @@ -34,6 +34,7 @@
->  #include <clocksource/hyperv_timer.h>
->  #include <asm/numa.h>
->  #include <asm/coco.h>
-> +#include <asm/mtrr.h>
+> diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
+> index e4f499eb0f29..7b9c5443d176 100644
+> --- a/arch/x86/mm/pgtable.c
+> +++ b/arch/x86/mm/pgtable.c
+> @@ -721,8 +721,7 @@ int pud_set_huge(pud_t *pud, phys_addr_t addr, pgprot=
+_t prot)
+>  	u8 mtrr, uniform;
 >=20
->  /* Is Linux running as the root partition? */
->  bool hv_root_partition;
-> @@ -335,6 +336,13 @@ static void __init ms_hyperv_init_platform(void)
->  			static_branch_enable(&isolation_type_snp);
->  #ifdef CONFIG_SWIOTLB
->  			swiotlb_unencrypted_base =3D ms_hyperv.shared_gpa_boundary;
-> +#endif
+>  	mtrr =3D mtrr_type_lookup(addr, addr + PUD_SIZE, &uniform);
+> -	if ((mtrr !=3D MTRR_TYPE_INVALID) && (!uniform) &&
+> -	    (mtrr !=3D MTRR_TYPE_WRBACK))
+> +	if (!uniform)
+>  		return 0;
+>=20
+>  	/* Bail out if we are we on a populated non-leaf entry: */
+> @@ -748,8 +747,7 @@ int pmd_set_huge(pmd_t *pmd, phys_addr_t addr, pgprot=
+_t prot)
+>  	u8 mtrr, uniform;
+>=20
+>  	mtrr =3D mtrr_type_lookup(addr, addr + PMD_SIZE, &uniform);
+> -	if ((mtrr !=3D MTRR_TYPE_INVALID) && (!uniform) &&
+> -	    (mtrr !=3D MTRR_TYPE_WRBACK)) {
+> +	if (!uniform) {
+>  		pr_warn_once("%s: Cannot satisfy [mem %#010llx-%#010llx] with a huge-p=
+age mapping due to MTRR override.\n",
+>  			     __func__, addr, addr + PMD_SIZE);
 
-Unfortunately, Hyper-V does not filter out the MTRR flag from the
-CPUID leaf, so this code also needs=20
+I'm seeing this warning trigger in a normal Hyper-V guest (i.e., *not* an
+SEV-SNP Confidential VM).  The original filtering here based on
+MTRR_TYPE_WRBACK appears to be hiding a bug in mtrr_type_lookup_variable()
+where it incorrectly thinks an address range matches two different variable
+MTRRs, and hence clears "uniform".
 
-			setup_clear_cpu_cap(X86_FEATURE_MTRR);
+Here are the variable MTRRs in the normal Hyper-V guest with 32 GiBytes
+of memory:
 
-before calling mtrr_overwrite_state().  I've got a bug filed for the
-Hyper-V team to fix the flag, but clearing the feature here solves the
-problem regardless.
+[    0.043592] MTRR variable ranges enabled:
+[    0.048308]   0 base 000000000000 mask FFFF00000000 write-back
+[    0.057450]   1 base 000100000000 mask FFF000000000 write-back
+[    0.063972]   2 disabled
+[    0.066755]   3 disabled
+[    0.070024]   4 disabled
+[    0.072856]   5 disabled
+[    0.076112]   6 disabled
+[    0.078760]   7 disabled
 
-> +#ifdef CONFIG_MTRR
+Variable MTRR #0 covers addresses up to 4 GiByte, while #1 covers
+4 GiByte to 64 GiByte.   But in mtrr_type_lookup_variable(), address
+range 0xF8000000 to 0xF81FFFFF is matching both MTRRs, when it
+should be matching just #0.
 
-Hopefully this #ifdef can go away, per my comment in Patch 2 of
-the series.
+The problem looks to be this code in mtrr_type_lookup_variable():
+
+              if ((start & mask) !=3D (base & mask))
+                        continue;
+
+If the mask bits of start and base are different, then the
+MTRR doesn't match, and the continue statement should be
+executed.  That's correct.  But if the mask bits are the same,
+that's not sufficient for the MTRR to match.  If the end
+address is less than base, the MTRR doesn't match, and
+the continue statement should still be executed, which
+isn't happening.
+
+But somebody please check my thinking. :-)
 
 Michael
-
-> +			/*
-> +			 * Set WB as the default cache mode in case MTRRs are
-> +			 * disabled by the hypervisor.
-> +			 */
-> +			mtrr_overwrite_state(NULL, 0, NULL, MTRR_TYPE_WRBACK);
->  #endif
->  		}
->  		/* Isolation VMs are unenlightened SEV-based VMs, thus this check: */
-> --
-> 2.35.3
-
