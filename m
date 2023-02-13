@@ -2,126 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71BE695398
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 23:08:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7F969539A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 23:08:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbjBMWIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 17:08:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
+        id S229934AbjBMWIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 17:08:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjBMWIP (ORCPT
+        with ESMTP id S229570AbjBMWIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 17:08:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4892CA273;
-        Mon, 13 Feb 2023 14:08:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D82E361307;
-        Mon, 13 Feb 2023 22:08:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B5C3C433D2;
-        Mon, 13 Feb 2023 22:08:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1676326093;
-        bh=i9TwxVSkwgF61NSvkuQGhtwSNYbYXtVRB5snHY42JT4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=m9f+uxmpllO3COwWCrYPSMgMAkOTiYOR89B3+p6yWZZ7W/ezpY7EyU3BvxZBIEzz6
-         zvc/sstoItjneWiws7N6TS5dKetP4vC/BxAIWueDpoZB1R3oVqdrTeJc3023TYMlKq
-         iDHA4XVpoBjX1bn/GTsd0dau5UjColuD86z84dVc=
-Date:   Mon, 13 Feb 2023 14:08:12 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-mm@kvack.org, mm-commits@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hotfixes for 6.2
-Message-Id: <20230213140812.db63c7146ebc396691594b73@linux-foundation.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 13 Feb 2023 17:08:42 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D644A273;
+        Mon, 13 Feb 2023 14:08:41 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id o8so12682068pls.11;
+        Mon, 13 Feb 2023 14:08:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=W+gcSvHvU6UymGoZz45RAwy5Vsnkl1I3eLa4JIYkdC4=;
+        b=lEikct9bSEZRL11bxmcmWgyEywCcGKveo64ho6fIWJG8NSTP5wcH7GvgHp1wAEmMUy
+         vSrLKxvxE4kKk7FEs8gSeRag25/sE0MACEQV7j0ZPCRO0QiP2SDeKM1xtGHMqa025zNX
+         A++qjmrJyeCPNnrP4RXT/0oowwJSXKKkhqk+PVL+GNjCZ51iOWpvfpOLUGM/iHboHqbE
+         h8c+r14XS7eNR9LJZpTfJVREzt3XqEVA5kFw5/2d3oJxfFKD0N0e9ondMjCDBpag7bg6
+         oNOQZIEzDRTA1oeRoud8pc7mSs4VTCoU3mVBi6iYIbLc+BW1V0kOv6fZBjdQQuzLMIcq
+         MDPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W+gcSvHvU6UymGoZz45RAwy5Vsnkl1I3eLa4JIYkdC4=;
+        b=2+XCCYFAnanYehG5ynjhYbqanOHyPxAWT6DhGLMCUO+2K+6hqgjxvDrjP34/jSk626
+         WhcmULk6i5tYnXLLmOnc3dKT4pH80NbhmwhDCYsUpZ1t4R1/EGbSsKQqbd57Qdnu2Eb2
+         qmXlhLGQgOSEHp5Qelq2sKLX1Vtw0/b0PDRA6vq0CXrC+apafW1/6mApun3tCAFWHD+P
+         nu7CILOQ29V6l2BNCCZE2jin32ymRitjnZNJO6PASuhCaabpLtlySd9X1K8f6X/dSkuA
+         Uwe6EqOqanqOU6y12c54k2E/ge75iNXnx2zolMnS85usyVpVYT8dSx4z2Fud1pOdiTcQ
+         kMxA==
+X-Gm-Message-State: AO0yUKUC290ayDYKUPMd+OxjuPJJfISXdCbPhaZzh77MLAHuwdd9KiLX
+        CUWd6tC2CzqIu5uPBkqHBM2fc8W2JF/T5jWpqxk=
+X-Google-Smtp-Source: AK7set9Z2gYHrqDUdqHRUENE74lt4pZiEBYUjRjGkGBfT6LexXDlA2xYO1tTf2N2OJbM4tRXoeN26UVw5Z3iwSWTaUo=
+X-Received: by 2002:a17:90a:656:b0:230:8c47:fbd7 with SMTP id
+ q22-20020a17090a065600b002308c47fbd7mr4487345pje.102.1676326121038; Mon, 13
+ Feb 2023 14:08:41 -0800 (PST)
+MIME-Version: 1.0
+References: <20230213144732.336342050@linuxfoundation.org>
+In-Reply-To: <20230213144732.336342050@linuxfoundation.org>
+From:   Allen Pais <stable.kernel.dev@gmail.com>
+Date:   Mon, 13 Feb 2023 14:08:30 -0800
+Message-ID: <CAJq+SaCcXmFn-qRPgVUgLc_omG0EgZctOQ9e6DxkWAm4Uz7OkA@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/67] 5.15.94-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> This is the start of the stable review cycle for the 5.15.94 release.
+> There are 67 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 15 Feb 2023 14:46:51 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.94-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
 
-Linus, please merge this batch of fixes, thanks.
+Compiled and booted on my x86_64 and ARM64 test systems. No errors or
+regressions.
 
+Tested-by: Allen Pais <apais@linux.microsoft.com>
 
-The following changes since commit ac86f547ca1002aec2ef66b9e64d03f45bbbfbb9:
-
-  mm: memcg: fix NULL pointer in mem_cgroup_track_foreign_dirty_slowpath() (2023-01-31 16:44:10 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-hotfixes-stable-2023-02-13-13-50
-
-for you to fetch changes up to ce4d9a1ea35ac5429e822c4106cb2859d5c71f3e:
-
-  of: reserved_mem: Have kmemleak ignore dynamically allocated reserved mem (2023-02-09 15:56:51 -0800)
-
-----------------------------------------------------------------
-12 hotfixes, mostly against mm/.  Five of these fixes are cc:stable.
-
-----------------------------------------------------------------
-Alexander Mikhalitsyn (1):
-      mailmap: add entry for Alexander Mikhalitsyn
-
-Andrew Morton (1):
-      revert "squashfs: harden sanity check in squashfs_read_xattr_id_table"
-
-Arnd Bergmann (1):
-      mm: extend max struct page size for kmsan
-
-Christophe Leroy (1):
-      kasan: fix Oops due to missing calls to kasan_arch_is_ready()
-
-Isaac J. Manjarres (1):
-      of: reserved_mem: Have kmemleak ignore dynamically allocated reserved mem
-
-Jeff Xie (1):
-      scripts/gdb: fix 'lx-current' for x86
-
-Kefeng Wang (1):
-      mm: hwpoison: support recovery from ksm_might_need_to_copy()
-
-Kuan-Ying Lee (1):
-      mm/gup: add folio to list when folio_isolate_lru() succeed
-
-Li Lingfeng (1):
-      lib: parser: optimize match_NUMBER apis to use local array
-
-Qi Zheng (1):
-      mm: shrinkers: fix deadlock in shrinker debugfs
-
-Seth Jenkins (1):
-      aio: fix mremap after fork null-deref
-
-Shiyang Ruan (1):
-      fsdax: dax_unshare_iter() should return a valid length
-
- .mailmap                     |  2 ++
- drivers/of/of_reserved_mem.c |  3 ++-
- fs/aio.c                     |  4 ++++
- fs/dax.c                     |  5 +++--
- fs/squashfs/xattr_id.c       |  2 +-
- include/linux/mm.h           | 12 +++++++++---
- include/linux/shrinker.h     |  5 +++--
- lib/parser.c                 | 39 ++++++++++++++++++++-------------------
- mm/gup.c                     |  2 +-
- mm/kasan/common.c            |  3 +++
- mm/kasan/generic.c           |  7 ++++++-
- mm/kasan/shadow.c            | 12 ++++++++++++
- mm/ksm.c                     |  7 +++++--
- mm/memory.c                  |  3 +++
- mm/shrinker_debug.c          | 13 ++++++++-----
- mm/swapfile.c                | 20 ++++++++++++++------
- mm/vmscan.c                  |  6 +++++-
- scripts/gdb/linux/cpus.py    |  2 +-
- 18 files changed, 102 insertions(+), 45 deletions(-)
-
+Thanks.
