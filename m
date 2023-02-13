@@ -2,120 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF31695120
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1DB4695128
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231462AbjBMTzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 14:55:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
+        id S229522AbjBMT5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 14:57:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjBMTzH (ORCPT
+        with ESMTP id S230332AbjBMT5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 14:55:07 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DB81C7DF;
-        Mon, 13 Feb 2023 11:55:07 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DINdVP021583;
-        Mon, 13 Feb 2023 19:54:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=ulLtmbNHAigUqXTTpYYke6cTZ9vdBlwYUqwfrLvZwZ4=;
- b=qFf4gaCM581cejP0lnFgRp3pttF1EH2fdU3qil1jhDpPTTCkidorOwPxOP6PkpyHRyiD
- CDlgfWKiohImSxQxN68lWwVOLibf1d1v8qxlt67NLD2Q/DHRr5phfxBHefbjda1eZeEC
- a4Q8pn5kn0nmmub+KGLQKsZnbx82Rer9pawN+aCiyFy7/ygD7h9zzV52Bc/l9A+XZ5ss
- kETTmOjSVTATigsrYuAVXlwEodlWztZKRjyDfRtE2A3Z24Cu0tSiCjioknLxSw56R11H
- Vw1ZQC55Jl19aq9T+zlfrJ3RrZrnCYF8DvJwaRJVMWtI+MxdRKlh+h39rMvGTfZe6UHr Xg== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nqtethxfx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Feb 2023 19:54:59 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31D7uPeC006567;
-        Mon, 13 Feb 2023 19:54:57 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3np2n6a9kr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Feb 2023 19:54:57 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31DJstu351118436
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Feb 2023 19:54:55 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 35F4220043;
-        Mon, 13 Feb 2023 19:54:55 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8D48B20040;
-        Mon, 13 Feb 2023 19:54:53 +0000 (GMT)
-Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.20.198])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon, 13 Feb 2023 19:54:53 +0000 (GMT)
-Date:   Tue, 14 Feb 2023 01:24:50 +0530
-From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
-To:     Kemeng Shi <shikemeng@huaweicloud.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, jack@suse.cz,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 16/21] ext4: remove unnecessary exit_meta_group_info tag
-Message-ID: <Y+qVio3p82yuNb5d@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-References: <20230209194825.511043-1-shikemeng@huaweicloud.com>
- <20230209194825.511043-17-shikemeng@huaweicloud.com>
+        Mon, 13 Feb 2023 14:57:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393E51C7FA
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 11:56:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676318181;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BJSyCURZo4zjKZjqklQ7P1Wkqqa8CZURFqDl8CtDysY=;
+        b=MFPcpHsA4cpPbZWIWgPem+sgSpyCbHZ76GwRyKf436Tg7WmiGkd8+wxgaJgjTP5lFUAKdM
+        B2WdGfPwxcMYGgL96N7FvAi/aQk8ivwXAq51kevE1ry83+t+ieXdcHluDHyi/jQUsPPKQU
+        +V895WR9jkx3C9ys5TPSTVKdzI6UaXI=
+Received: from mail-vs1-f72.google.com (mail-vs1-f72.google.com
+ [209.85.217.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-128-Dop0iW5AMu6FgAQCaEaq4w-1; Mon, 13 Feb 2023 14:56:20 -0500
+X-MC-Unique: Dop0iW5AMu6FgAQCaEaq4w-1
+Received: by mail-vs1-f72.google.com with SMTP id f2-20020a67e082000000b0040682163230so2963585vsl.10
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 11:56:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BJSyCURZo4zjKZjqklQ7P1Wkqqa8CZURFqDl8CtDysY=;
+        b=wEXVuDPTYTPiOxMsgxxi1r1lgU7KF+vWecx2C872hIRaT0U53M4yOJvFk7HBZNI8fk
+         eJ8wJmOEf5lsz5Vmpoprdji9Y4F3Y837gbubmNbgnooScPxE5jggp0nkN58JV2lP5BlH
+         lCIP6WmFTqac4er0Gp7UT4diVKpLSV0D1ctvrurti5Fb6EJPpIhWo57pG5sr7XMsF7N9
+         l8+zcNCB18nojE6Eh8soF8e+8yaYuo5xZTB6RE3rf0hb7fcZfbxrANt1nRa8SDSxr+br
+         mXJmOMz2YqUDdoU1AcAmn7BEb7ok5BF3dSBhIeVis2wfxpoUagzNuu5LVMSLSPi/XYh9
+         fiMg==
+X-Gm-Message-State: AO0yUKV7ajrvJBVV7nmtpzXozg31s4aZ222Pjlwmt9ItnjVhQA5qdYFr
+        4MuF7sTYKxGmToGIC7uTqhFtgSUoejiyjM/17LhWM8cYiWlSsTwcmxl/hS027H6pmdDV6q5LcQC
+        1wdqBCXz43oype7oDMnHU7fRbeBW9vzgKEjaNxXBq
+X-Received: by 2002:ab0:6957:0:b0:68a:67ef:4b6d with SMTP id c23-20020ab06957000000b0068a67ef4b6dmr880876uas.20.1676318179601;
+        Mon, 13 Feb 2023 11:56:19 -0800 (PST)
+X-Google-Smtp-Source: AK7set8axWCufvKXEi39RlcLeywpkZYfwLG7FADc7b/CNFdC/+kTa0YKM/S3LCGLz/Umdv220hl4bINXVESf+7aWbrY=
+X-Received: by 2002:ab0:6957:0:b0:68a:67ef:4b6d with SMTP id
+ c23-20020ab06957000000b0068a67ef4b6dmr880873uas.20.1676318179381; Mon, 13 Feb
+ 2023 11:56:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230209194825.511043-17-shikemeng@huaweicloud.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 7JLeLkfT5KCikchkAIadJSI4vNl8ZnD9
-X-Proofpoint-ORIG-GUID: 7JLeLkfT5KCikchkAIadJSI4vNl8ZnD9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-13_12,2023-02-13_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- mlxscore=0 suspectscore=0 spamscore=0 malwarescore=0 impostorscore=0
- adultscore=0 priorityscore=1501 mlxlogscore=999 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302130171
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <43980946-7bbf-dcef-7e40-af904c456250@linux.microsoft.com>
+ <Y+p1j7tYT+16MX6B@google.com> <35ff8f48-2677-78ea-b5f3-329c75ce65c9@redhat.com>
+ <Y+qLe42h9ZPRINrG@google.com>
+In-Reply-To: <Y+qLe42h9ZPRINrG@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Date:   Mon, 13 Feb 2023 20:56:08 +0100
+Message-ID: <CABgObfaZQOvt6v0yGz3MR7FBU7DcrTTGmS6M8RWCX0uy6WML1Q@mail.gmail.com>
+Subject: Re: "KVM: x86/mmu: Overhaul TDP MMU zapping and flushing" breaks SVM
+ on Hyper-V
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tianyu Lan <ltykernel@gmail.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 03:48:20AM +0800, Kemeng Shi wrote:
-> We goto exit_meta_group_info only to return -ENOMEM. Return -ENOMEM
-> directly instead of goto to remove this unnecessary tag.
-> 
-> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
-> ---
->  fs/ext4/mballoc.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index c684758d6dbb..289dcd81dd5a 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -3069,7 +3069,7 @@ int ext4_mb_add_groupinfo(struct super_block *sb, ext4_group_t group,
->  		if (meta_group_info == NULL) {
->  			ext4_msg(sb, KERN_ERR, "can't allocate mem "
->  				 "for a buddy group");
-> -			goto exit_meta_group_info;
-> +			return -ENOMEM;
->  		}
->  		rcu_read_lock();
->  		rcu_dereference(sbi->s_group_info)[idx] = meta_group_info;
-> @@ -3123,7 +3123,6 @@ int ext4_mb_add_groupinfo(struct super_block *sb, ext4_group_t group,
->  		group_info[idx] = NULL;
->  		rcu_read_unlock();
->  	}
-> -exit_meta_group_info:
->  	return -ENOMEM;
->  } /* ext4_mb_add_groupinfo */
->  
-> -- 
-> 2.30.0
-> 
-Looks good. Feel free to add:
+On Mon, Feb 13, 2023 at 8:12 PM Sean Christopherson <seanjc@google.com> wrote:
+> > My reading of the spec[1] is that HV_X64_NESTED_ENLIGHTENED_TLB will cause
+> > svm_flush_tlb_current to behave (in Intel parlance) as an INVVPID rather
+> > than an INVEPT.
+>
+> Oh!  Good catch!  Yeah, that'll be a problem.
+>
+> > So svm_flush_tlb_current has to be changed to also add a
+> > call to HvCallFlushGuestPhysicalAddressSpace.  I'm not sure if that's a good
+> > idea though.
+>
+> That's not strictly necessary, e.g. flushes from kvm_invalidate_pcid() and
+> kvm_post_set_cr4() don't need to effect a full flush.  I believe the virtual
+> address flush is also sufficient for avic_activate_vmcb().  Nested (from KVM's
+> perspective, i.e. running L3) can just be mutually exclusive with
+> HV_X64_NESTED_ENLIGHTENED_TLB.
+>
+> That just leaves kvm_mmu_new_pgd()'s force_flush_and_sync_on_reuse and the
+> aforementioned kvm_mmu_load().
+>
+> That said, the above cases where a virtual address flush is sufficient are
+> rare operations when using NPT, so adding a new KVM_REQ_TLB_FLUSH_ROOT or
+> whatever probably isn't worth doing.
+>
+> > First, that's a TLB shootdown rather than just a local thing;
+> > flush_tlb_current is supposed to be relatively cheap, and there would be a
+> > lot of them because of the unconditional calls to
+> > nested_svm_transition_tlb_flush on vmentry/vmexit.
+>
+> This isn't a nested scenario for KVM though.
 
-Reviewed-by: Ojaswin Mujoo <ojaswin@linux.ibm.com> 
+Yes, but svm_flush_tlb_current() *is* also used in nested scenarios so
+it's like you said below---you would have to disable enlightened TLB
+when EFER.SVME=1 or something like that.
+
+> > Depending on the performance results of adding the hypercall to
+> > svm_flush_tlb_current, the fix could indeed be to just disable usage of
+> > HV_X64_NESTED_ENLIGHTENED_TLB.
+>
+> Minus making nested SVM (L3) mutually exclusive, I believe this will do the trick:
+>
+> +       /* blah blah blah */
+> +       hv_flush_tlb_current(vcpu);
+> +
+
+Yes, it's either this or disabling the feature.
+
+Paolo
+
