@@ -2,179 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B22693E52
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 07:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E13693E40
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 07:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjBMG25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 01:28:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
+        id S229612AbjBMG1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 01:27:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjBMG2p (ORCPT
+        with ESMTP id S229477AbjBMG1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 01:28:45 -0500
-Received: from esa10.hc1455-7.c3s2.iphmx.com (esa10.hc1455-7.c3s2.iphmx.com [139.138.36.225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417C411670;
-        Sun, 12 Feb 2023 22:28:37 -0800 (PST)
-X-IronPort-AV: E=McAfee;i="6500,9779,10619"; a="94158594"
-X-IronPort-AV: E=Sophos;i="5.97,293,1669042800"; 
-   d="scan'208";a="94158594"
-Received: from unknown (HELO yto-r3.gw.nic.fujitsu.com) ([218.44.52.219])
-  by esa10.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 15:28:34 +0900
-Received: from yto-m1.gw.nic.fujitsu.com (yto-nat-yto-m1.gw.nic.fujitsu.com [192.168.83.64])
-        by yto-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 70FB1C3F8B;
-        Mon, 13 Feb 2023 15:28:32 +0900 (JST)
-Received: from yto-om1.fujitsu.com (yto-om1.o.css.fujitsu.com [10.128.89.162])
-        by yto-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id BDC49CFBA3;
-        Mon, 13 Feb 2023 15:28:31 +0900 (JST)
-Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by yto-om1.fujitsu.com (Postfix) with ESMTP id 9711C404AF8A3;
-        Mon, 13 Feb 2023 15:28:31 +0900 (JST)
-From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-To:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tan.shaopeng@jp.fujitsu.com
-Subject: [PATCH v7 6/6] selftests/resctrl: Remove duplicate codes that clear each test result file
-Date:   Mon, 13 Feb 2023 15:24:28 +0900
-Message-Id: <20230213062428.1721572-7-tan.shaopeng@jp.fujitsu.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20230213062428.1721572-1-tan.shaopeng@jp.fujitsu.com>
-References: <20230213062428.1721572-1-tan.shaopeng@jp.fujitsu.com>
+        Mon, 13 Feb 2023 01:27:03 -0500
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E09B476;
+        Sun, 12 Feb 2023 22:27:02 -0800 (PST)
+Received: by mail-pj1-x1041.google.com with SMTP id r9-20020a17090a2e8900b00233ba727724so4941036pjd.1;
+        Sun, 12 Feb 2023 22:27:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=e5ZtF2KqwWRhAKLuTZEMSSTu2+eVtRmd9Zd1nxNogWI=;
+        b=ljzjL29mBMyAM3qrAdg8Bl0nAlOaIyy3rfXCgoA7S6PLtniN+7gW3TsXNSD8A5E92C
+         GgWfsabQmZMAC6rAbN/MTa6iClJ/4a/2U+88wesTVK9wRoTwu1CtsDKwYfyZheBZY2pU
+         m18RL1alkG1zrzPpf3JXQVlxv4djGO2vQgk8SpR9fb7UmSJBjPbu5mK7xkKslG4i90TD
+         9btIkTBJv6eXBRjMphTTrzP8zoUl3CvmcIuI8ChwWaq/qKT1DUhnUqi43bQmCO4nWjLK
+         pGjy0m4RdXShnNjBBqWDjVcPPMz+Gw+dIwSKH5O2taMMIogNLBMWdA9n48zLhEMBtqLQ
+         xeHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e5ZtF2KqwWRhAKLuTZEMSSTu2+eVtRmd9Zd1nxNogWI=;
+        b=6HMmmNRnJEU6VkAlXxxjdxcE5+xOr9kARoRDZB0K+Qnv9UHGO0ij+jV+wI/DBItdRh
+         utIRd2yrwMJYNh3pX4PPUzNMsP7IuxUfuy+6qLpH4Z15ldw3xGHHC4FuDpdSz9qJqD7w
+         Frr/izGjYqU5liKIQ2aCPkhQ3BDpr274RhNXO0/ObkNZhWQiRU7fjoVjWOhrvOSGnZfo
+         Fv6w0m1cGlAGLi70dMb1RUOVNX6jj2ZimjsPH51xiU9Ao1DQFyJ8yJqZgA8nEu7B/QuS
+         5o5kR1SBtgPoEAFwZnPlKgUWMy7lFeuEnHUZMLnlpNPnMVtFikn5kuKLiJAq8RCUf4R0
+         qP6Q==
+X-Gm-Message-State: AO0yUKXIgpP7wTlWbHItd17waTGlohz+ffZbHRyeY371kZPJc/5nZRLP
+        ODbycaDyK5u6/ErAphtKYXx3Kdq/A7B0ng==
+X-Google-Smtp-Source: AK7set/EgU3fIuA4nWHFdGB8/cgKYXFkQWSE//uU+pD1VoQqOnX6Htxy2o+EkwbE7Lk1Uvr5oFuP7g==
+X-Received: by 2002:a17:902:ecc2:b0:19a:968d:2713 with SMTP id a2-20020a170902ecc200b0019a968d2713mr4842072plh.48.1676269622404;
+        Sun, 12 Feb 2023 22:27:02 -0800 (PST)
+Received: from localhost.localdomain ([103.135.103.93])
+        by smtp.gmail.com with ESMTPSA id 17-20020a170902c15100b0019a70a85e8fsm5407466plj.220.2023.02.12.22.26.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Feb 2023 22:27:02 -0800 (PST)
+From:   Genjian <zhanggenjian123@gmail.com>
+X-Google-Original-From: Genjian <zhanggenjian@kylinos.cn>
+To:     paulburton@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Genjian Zhang <zhanggenjian@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: [PATCH] MIPS: dts: Boston: Fix dtc 'pci_device_reg' warning
+Date:   Mon, 13 Feb 2023 14:24:51 +0800
+Message-Id: <20230213062451.1688755-1-zhanggenjian@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before exiting each test function(run_cmt/cat/mbm/mba_test()),
-test results("ok","not ok") are printed by ksft_test_result() and then
-temporary result files are cleaned by function
-cmt/cat/mbm/mba_test_cleanup().
-However, before running ksft_test_result(),
-function cmt/cat/mbm/mba_test_cleanup()
-has been run in each test function as follows:
-  cmt_resctrl_val()
-  cat_perf_miss_val()
-  mba_schemata_change()
-  mbm_bw_change()
+From: Genjian Zhang <zhanggenjian@kylinos.cn>
 
-Remove duplicate codes that clear each test result file,
-while ensuring cleanup properly even when errors occur in each test.
+dtbs_check currently complains that:
+arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg):
+/pci@14000000/pci2_root@0,0,0: PCI unit address format error,
+expected "0,0"
+The unit-address format should be '<device>,<function>'.
+Fix the unit-address accordingly.
 
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
 ---
- tools/testing/selftests/resctrl/cmt_test.c      | 7 +++----
- tools/testing/selftests/resctrl/mba_test.c      | 7 +++----
- tools/testing/selftests/resctrl/mbm_test.c      | 7 +++----
- tools/testing/selftests/resctrl/resctrl_tests.c | 4 ----
- 4 files changed, 9 insertions(+), 16 deletions(-)
+ arch/mips/boot/dts/img/boston.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index 8968e36db99d..617ee95d272d 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -133,13 +133,12 @@ int cmt_resctrl_val(int cpu_no, int n, char **benchmark_cmd)
+diff --git a/arch/mips/boot/dts/img/boston.dts b/arch/mips/boot/dts/img/boston.dts
+index 84328afa3a55..72f7605d2e31 100644
+--- a/arch/mips/boot/dts/img/boston.dts
++++ b/arch/mips/boot/dts/img/boston.dts
+@@ -125,7 +125,7 @@ pci2_intc: interrupt-controller {
+ 			#interrupt-cells = <1>;
+ 		};
  
- 	ret = resctrl_val(benchmark_cmd, &param);
- 	if (ret)
--		return ret;
-+		goto out;
+-		pci2_root@0,0,0 {
++		pci2_root@0,0 {
+ 			compatible = "pci10ee,7021";
+ 			reg = <0x00000000 0 0 0 0>;
  
- 	ret = check_results(&param, n);
--	if (ret)
--		return ret;
- 
-+out:
- 	cmt_test_cleanup();
- 
--	return 0;
-+	return ret;
- }
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index e3a473976d74..b948938a3b4d 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -160,13 +160,12 @@ int mba_schemata_change(int cpu_no, char *bw_report, char **benchmark_cmd)
- 
- 	ret = resctrl_val(benchmark_cmd, &param);
- 	if (ret)
--		return ret;
-+		goto out;
- 
- 	ret = check_results();
--	if (ret)
--		return ret;
- 
-+out:
- 	mba_test_cleanup();
- 
--	return 0;
-+	return ret;
- }
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 6d550f012829..040ca1f9c173 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -134,13 +134,12 @@ int mbm_bw_change(int span, int cpu_no, char *bw_report, char **benchmark_cmd)
- 
- 	ret = resctrl_val(benchmark_cmd, &param);
- 	if (ret)
--		return ret;
-+		goto out;
- 
- 	ret = check_results(span);
--	if (ret)
--		return ret;
- 
-+out:
- 	mbm_test_cleanup();
- 
--	return 0;
-+	return ret;
- }
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index df0d8d8526fc..8732cf736528 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -88,7 +88,6 @@ static void run_mbm_test(bool has_ben, char **benchmark_cmd, int span,
- 	ksft_test_result(!res, "MBM: bw change\n");
- 	if ((get_vendor() == ARCH_INTEL) && res)
- 		ksft_print_msg("Intel MBM may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
--	mbm_test_cleanup();
- }
- 
- static void run_mba_test(bool has_ben, char **benchmark_cmd, int span,
-@@ -107,7 +106,6 @@ static void run_mba_test(bool has_ben, char **benchmark_cmd, int span,
- 		sprintf(benchmark_cmd[1], "%d", span);
- 	res = mba_schemata_change(cpu_no, bw_report, benchmark_cmd);
- 	ksft_test_result(!res, "MBA: schemata change\n");
--	mba_test_cleanup();
- }
- 
- static void run_cmt_test(bool has_ben, char **benchmark_cmd, int cpu_no)
-@@ -126,7 +124,6 @@ static void run_cmt_test(bool has_ben, char **benchmark_cmd, int cpu_no)
- 	ksft_test_result(!res, "CMT: test\n");
- 	if ((get_vendor() == ARCH_INTEL) && res)
- 		ksft_print_msg("Intel CMT may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
--	cmt_test_cleanup();
- }
- 
- static void run_cat_test(int cpu_no, int no_of_bits)
-@@ -142,7 +139,6 @@ static void run_cat_test(int cpu_no, int no_of_bits)
- 
- 	res = cat_perf_miss_val(cpu_no, no_of_bits, "L3");
- 	ksft_test_result(!res, "CAT: test\n");
--	cat_test_cleanup();
- }
- 
- int main(int argc, char **argv)
 -- 
-2.27.0
+2.25.1
 
