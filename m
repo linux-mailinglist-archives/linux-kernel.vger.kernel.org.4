@@ -2,255 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF81A693E5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 07:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A76693E5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 07:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjBMGff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 01:35:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39472 "EHLO
+        id S229812AbjBMGgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 01:36:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjBMGfd (ORCPT
+        with ESMTP id S229557AbjBMGgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 01:35:33 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB4F6580
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 22:35:32 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5C06020705;
-        Mon, 13 Feb 2023 06:35:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1676270130; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aUrX0EWkevj8gsrhHYpQQyzTkJQeN/b60WkhZ8cMU/U=;
-        b=MwvbgI8U4KB/xo0CvRWWovNU+qm00zD+2Du1rhDmOqY9hIIefsi+797HfFbPgJdwXXczJ6
-        kw8Aefb5oVRVY+J2S2RCll6G/M6mF2F/AbU+I/XOFzdbvXxUuRdArHI/StFAH/e74/eUel
-        5EMSylh+9qJb2Q2HqzKH+dEbF0cQBtM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 04C591391B;
-        Mon, 13 Feb 2023 06:35:29 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id u231OjHa6WMTCAAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 13 Feb 2023 06:35:29 +0000
-Message-ID: <936b5e37-0009-45c0-e4d2-899741c5f639@suse.com>
-Date:   Mon, 13 Feb 2023 07:35:29 +0100
+        Mon, 13 Feb 2023 01:36:10 -0500
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B86A6580
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 22:36:08 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R851e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=guorui.yu@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VbVSMVz_1676270164;
+Received: from localhost(mailfrom:GuoRui.Yu@linux.alibaba.com fp:SMTPD_---0VbVSMVz_1676270164)
+          by smtp.aliyun-inc.com;
+          Mon, 13 Feb 2023 14:36:05 +0800
+From:   "GuoRui.Yu" <GuoRui.Yu@linux.alibaba.com>
+To:     hch@lst.de, m.szyprowski@samsung.com
+Cc:     robin.murphy@arm.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, GuoRui.Yu@linux.alibaba.com,
+        xiaokang.hxk@alibaba-inc.com
+Subject: [PATCH] swiotlb: fix the deadlock in swiotlb_do_find_slots
+Date:   Mon, 13 Feb 2023 14:36:04 +0800
+Message-Id: <20230213063604.127526-1-GuoRui.Yu@linux.alibaba.com>
+X-Mailer: git-send-email 2.29.2.540.g3cf59784d4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Cc:     "lists@nerdbynature.de" <lists@nerdbynature.de>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <20230209072220.6836-1-jgross@suse.com>
- <20230209072220.6836-8-jgross@suse.com>
- <BYAPR21MB16882DD5A99CB365F2BD22A6D7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
-From:   Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH v2 7/8] x86/mm: only check uniform after calling
- mtrr_type_lookup()
-In-Reply-To: <BYAPR21MB16882DD5A99CB365F2BD22A6D7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------SnHQG24TiTPbQ0OwK0aMVDVD"
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------SnHQG24TiTPbQ0OwK0aMVDVD
-Content-Type: multipart/mixed; boundary="------------0KbDGPVZv90xWDGaFzHgGpMY";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "x86@kernel.org" <x86@kernel.org>
-Cc: "lists@nerdbynature.de" <lists@nerdbynature.de>,
- "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
- Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski
- <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>
-Message-ID: <936b5e37-0009-45c0-e4d2-899741c5f639@suse.com>
-Subject: Re: [PATCH v2 7/8] x86/mm: only check uniform after calling
- mtrr_type_lookup()
-References: <20230209072220.6836-1-jgross@suse.com>
- <20230209072220.6836-8-jgross@suse.com>
- <BYAPR21MB16882DD5A99CB365F2BD22A6D7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
-In-Reply-To: <BYAPR21MB16882DD5A99CB365F2BD22A6D7DD9@BYAPR21MB1688.namprd21.prod.outlook.com>
+From: Guorui Yu <GuoRui.Yu@linux.alibaba.com>
 
---------------0KbDGPVZv90xWDGaFzHgGpMY
-Content-Type: multipart/mixed; boundary="------------Z4z0Rso2yBcxS7NmuBkPu6hy"
+In general, if swiotlb is sufficient, the logic of index =
+wrap_area_index(mem, index + 1) is fine, it will quickly take a slot and
+release the area->lock; But if swiotlb is insufficient and the device
+has min_align_mask requirements, such as NVME, we may not be able to
+satisfy index == wrap and exit the loop properly. In this case, other
+kernel threads will not be able to acquire the area->lock and release
+the slot, resulting in a deadlock.
 
---------------Z4z0Rso2yBcxS7NmuBkPu6hy
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+The current implementation of wrap_area_index does not involve a modulo
+operation, so adjusting the wrap to ensure the loop ends is not trivial.
+Introduce the index_nowrap variable to record the number of loops and
+exit the loop after completing the traversal.
 
-T24gMTMuMDIuMjMgMDI6MDgsIE1pY2hhZWwgS2VsbGV5IChMSU5VWCkgd3JvdGU6DQo+IEZy
-b206IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4gU2VudDogV2VkbmVzZGF5LCBG
-ZWJydWFyeSA4LCAyMDIzIDExOjIyIFBNDQo+Pg0KPj4gVG9kYXkgcHVkX3NldF9odWdlKCkg
-YW5kIHBtZF9zZXRfaHVnZSgpIHRlc3QgZm9yIHRoZSBNVFJSIHR5cGUgdG8gYmUNCj4+IFdC
-IG9yIElOVkFMSUQgYWZ0ZXIgY2FsbGluZyBtdHJyX3R5cGVfbG9va3VwKCkuIFRob3NlIHRl
-c3RzIGNhbiBiZQ0KPj4gZHJvcHBlZCwgYXMgdGhlIG9ubHkgcmVhc29uIHRvIG5vdCB1c2Ug
-YSBsYXJnZSBtYXBwaW5nIHdvdWxkIGJlDQo+PiB1bmlmb3JtIGJlaW5nIDAuIEFueSBNVFJS
-IHR5cGUgY2FuIGJlIGFjY2VwdGVkIGFzIGxvbmcgYXMgaXQgYXBwbGllcw0KPj4gdG8gdGhl
-IHdob2xlIG1lbW9yeSByYW5nZSBjb3ZlcmVkIGJ5IHRoZSBtYXBwaW5nLCBhcyB0aGUgYWx0
-ZXJuYXRpdmUNCj4+IHdvdWxkIG9ubHkgYmUgdG8gbWFwIHRoZSBzYW1lIHJlZ2lvbiB3aXRo
-IHNtYWxsZXIgcGFnZXMgaW5zdGVhZCB1c2luZw0KPj4gdGhlIHNhbWUgUEFUIHR5cGUgYXMg
-Zm9yIHRoZSBsYXJnZSBtYXBwaW5nLg0KPj4NCj4+IFN1Z2dlc3RlZC1ieTogTGludXMgVG9y
-dmFsZHMgPHRvcnZhbGRzQGxpbnV4LWZvdW5kYXRpb24ub3JnPg0KPj4gU2lnbmVkLW9mZi1i
-eTogSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuY29tPg0KPj4gLS0tDQo+PiAgIGFyY2gv
-eDg2L21tL3BndGFibGUuYyB8IDYgKystLS0tDQo+PiAgIDEgZmlsZSBjaGFuZ2VkLCAyIGlu
-c2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2FyY2gv
-eDg2L21tL3BndGFibGUuYyBiL2FyY2gveDg2L21tL3BndGFibGUuYw0KPj4gaW5kZXggZTRm
-NDk5ZWIwZjI5Li43YjljNTQ0M2QxNzYgMTAwNjQ0DQo+PiAtLS0gYS9hcmNoL3g4Ni9tbS9w
-Z3RhYmxlLmMNCj4+ICsrKyBiL2FyY2gveDg2L21tL3BndGFibGUuYw0KPj4gQEAgLTcyMSw4
-ICs3MjEsNyBAQCBpbnQgcHVkX3NldF9odWdlKHB1ZF90ICpwdWQsIHBoeXNfYWRkcl90IGFk
-ZHIsIHBncHJvdF90IHByb3QpDQo+PiAgIAl1OCBtdHJyLCB1bmlmb3JtOw0KPj4NCj4+ICAg
-CW10cnIgPSBtdHJyX3R5cGVfbG9va3VwKGFkZHIsIGFkZHIgKyBQVURfU0laRSwgJnVuaWZv
-cm0pOw0KPj4gLQlpZiAoKG10cnIgIT0gTVRSUl9UWVBFX0lOVkFMSUQpICYmICghdW5pZm9y
-bSkgJiYNCj4+IC0JICAgIChtdHJyICE9IE1UUlJfVFlQRV9XUkJBQ0spKQ0KPj4gKwlpZiAo
-IXVuaWZvcm0pDQo+PiAgIAkJcmV0dXJuIDA7DQo+Pg0KPj4gICAJLyogQmFpbCBvdXQgaWYg
-d2UgYXJlIHdlIG9uIGEgcG9wdWxhdGVkIG5vbi1sZWFmIGVudHJ5OiAqLw0KPj4gQEAgLTc0
-OCw4ICs3NDcsNyBAQCBpbnQgcG1kX3NldF9odWdlKHBtZF90ICpwbWQsIHBoeXNfYWRkcl90
-IGFkZHIsIHBncHJvdF90IHByb3QpDQo+PiAgIAl1OCBtdHJyLCB1bmlmb3JtOw0KPj4NCj4+
-ICAgCW10cnIgPSBtdHJyX3R5cGVfbG9va3VwKGFkZHIsIGFkZHIgKyBQTURfU0laRSwgJnVu
-aWZvcm0pOw0KPj4gLQlpZiAoKG10cnIgIT0gTVRSUl9UWVBFX0lOVkFMSUQpICYmICghdW5p
-Zm9ybSkgJiYNCj4+IC0JICAgIChtdHJyICE9IE1UUlJfVFlQRV9XUkJBQ0spKSB7DQo+PiAr
-CWlmICghdW5pZm9ybSkgew0KPj4gICAJCXByX3dhcm5fb25jZSgiJXM6IENhbm5vdCBzYXRp
-c2Z5IFttZW0gJSMwMTBsbHgtJSMwMTBsbHhdIHdpdGggYSBodWdlLXBhZ2UgbWFwcGluZyBk
-dWUgdG8gTVRSUiBvdmVycmlkZS5cbiIsDQo+PiAgIAkJCSAgICAgX19mdW5jX18sIGFkZHIs
-IGFkZHIgKyBQTURfU0laRSk7DQo+IA0KPiBJJ20gc2VlaW5nIHRoaXMgd2FybmluZyB0cmln
-Z2VyIGluIGEgbm9ybWFsIEh5cGVyLVYgZ3Vlc3QgKGkuZS4sICpub3QqIGFuDQo+IFNFVi1T
-TlAgQ29uZmlkZW50aWFsIFZNKS4gIFRoZSBvcmlnaW5hbCBmaWx0ZXJpbmcgaGVyZSBiYXNl
-ZCBvbg0KPiBNVFJSX1RZUEVfV1JCQUNLIGFwcGVhcnMgdG8gYmUgaGlkaW5nIGEgYnVnIGlu
-IG10cnJfdHlwZV9sb29rdXBfdmFyaWFibGUoKQ0KPiB3aGVyZSBpdCBpbmNvcnJlY3RseSB0
-aGlua3MgYW4gYWRkcmVzcyByYW5nZSBtYXRjaGVzIHR3byBkaWZmZXJlbnQgdmFyaWFibGUN
-Cj4gTVRSUnMsIGFuZCBoZW5jZSBjbGVhcnMgInVuaWZvcm0iLg0KPiANCj4gSGVyZSBhcmUg
-dGhlIHZhcmlhYmxlIE1UUlJzIGluIHRoZSBub3JtYWwgSHlwZXItViBndWVzdCB3aXRoIDMy
-IEdpQnl0ZXMNCj4gb2YgbWVtb3J5Og0KPiANCj4gWyAgICAwLjA0MzU5Ml0gTVRSUiB2YXJp
-YWJsZSByYW5nZXMgZW5hYmxlZDoNCj4gWyAgICAwLjA0ODMwOF0gICAwIGJhc2UgMDAwMDAw
-MDAwMDAwIG1hc2sgRkZGRjAwMDAwMDAwIHdyaXRlLWJhY2sNCj4gWyAgICAwLjA1NzQ1MF0g
-ICAxIGJhc2UgMDAwMTAwMDAwMDAwIG1hc2sgRkZGMDAwMDAwMDAwIHdyaXRlLWJhY2sNCj4g
-WyAgICAwLjA2Mzk3Ml0gICAyIGRpc2FibGVkDQo+IFsgICAgMC4wNjY3NTVdICAgMyBkaXNh
-YmxlZA0KPiBbICAgIDAuMDcwMDI0XSAgIDQgZGlzYWJsZWQNCj4gWyAgICAwLjA3Mjg1Nl0g
-ICA1IGRpc2FibGVkDQo+IFsgICAgMC4wNzYxMTJdICAgNiBkaXNhYmxlZA0KPiBbICAgIDAu
-MDc4NzYwXSAgIDcgZGlzYWJsZWQNCj4gDQo+IFZhcmlhYmxlIE1UUlIgIzAgY292ZXJzIGFk
-ZHJlc3NlcyB1cCB0byA0IEdpQnl0ZSwgd2hpbGUgIzEgY292ZXJzDQo+IDQgR2lCeXRlIHRv
-IDY0IEdpQnl0ZS4gICBCdXQgaW4gbXRycl90eXBlX2xvb2t1cF92YXJpYWJsZSgpLCBhZGRy
-ZXNzDQo+IHJhbmdlIDB4RjgwMDAwMDAgdG8gMHhGODFGRkZGRiBpcyBtYXRjaGluZyBib3Ro
-IE1UUlJzLCB3aGVuIGl0DQo+IHNob3VsZCBiZSBtYXRjaGluZyBqdXN0ICMwLg0KPiANCj4g
-VGhlIHByb2JsZW0gbG9va3MgdG8gYmUgdGhpcyBjb2RlIGluIG10cnJfdHlwZV9sb29rdXBf
-dmFyaWFibGUoKToNCj4gDQo+ICAgICAgICAgICAgICAgIGlmICgoc3RhcnQgJiBtYXNrKSAh
-PSAoYmFzZSAmIG1hc2spKQ0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgY29udGludWU7
-DQo+IA0KPiBJZiB0aGUgbWFzayBiaXRzIG9mIHN0YXJ0IGFuZCBiYXNlIGFyZSBkaWZmZXJl
-bnQsIHRoZW4gdGhlDQo+IE1UUlIgZG9lc24ndCBtYXRjaCwgYW5kIHRoZSBjb250aW51ZSBz
-dGF0ZW1lbnQgc2hvdWxkIGJlDQo+IGV4ZWN1dGVkLiAgVGhhdCdzIGNvcnJlY3QuICBCdXQg
-aWYgdGhlIG1hc2sgYml0cyBhcmUgdGhlIHNhbWUsDQo+IHRoYXQncyBub3Qgc3VmZmljaWVu
-dCBmb3IgdGhlIE1UUlIgdG8gbWF0Y2guICBJZiB0aGUgZW5kDQo+IGFkZHJlc3MgaXMgbGVz
-cyB0aGFuIGJhc2UsIHRoZSBNVFJSIGRvZXNuJ3QgbWF0Y2gsIGFuZA0KPiB0aGUgY29udGlu
-dWUgc3RhdGVtZW50IHNob3VsZCBzdGlsbCBiZSBleGVjdXRlZCwgd2hpY2gNCj4gaXNuJ3Qg
-aGFwcGVuaW5nLg0KPiANCj4gQnV0IHNvbWVib2R5IHBsZWFzZSBjaGVjayBteSB0aGlua2lu
-Zy4gOi0pDQoNCkkgZG9uJ3Qgc2VlIGEgZmxhdyBpbiB5b3VyIHJlYXNvbmluZy4NCg0KUmlj
-ayBtZW50aW9uZWQgYSBwcm9ibGVtIHdpdGggdGhpcyBwYXRjaCBpbiBhIEtWTSBndWVzdC4g
-SSdsbCB0cnkgdG8NCnJlcHJvZHVjZSBoaXMgc2V0dXAgZm9yIGNoZWNraW5nIHdoZXRoZXIg
-Zml4aW5nIG10cnJfdHlwZV9sb29rdXBfdmFyaWFibGUoKQ0KaXMgZW5vdWdoLCBvciBpZiB3
-ZSBuZWVkIHRvIGtlZXAgdGhlIHRlc3RzIGZvciBXQiBpbiB0aGlzIHBhdGNoLg0KDQoNCkp1
-ZXJnZW4NCg==
---------------Z4z0Rso2yBcxS7NmuBkPu6hy
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Backtraces:
+[10199.924391] RIP: 0010:swiotlb_do_find_slots+0x1fe/0x3e0
+[10199.924403] Call Trace:
+[10199.924404]  <TASK>
+[10199.924405]  swiotlb_tbl_map_single+0xec/0x1f0
+[10199.924407]  swiotlb_map+0x5c/0x260
+[10199.924409]  ? nvme_pci_setup_prps+0x1ed/0x340
+[10199.924411]  dma_direct_map_page+0x12e/0x1c0
+[10199.924413]  nvme_map_data+0x304/0x370
+[10199.924415]  nvme_prep_rq.part.0+0x31/0x120
+[10199.924417]  nvme_queue_rq+0x77/0x1f0
+[10199.924420]  blk_mq_dispatch_rq_list+0x17e/0x670
+[10199.924422]  __blk_mq_sched_dispatch_requests+0x129/0x140
+[10199.924424]  blk_mq_sched_dispatch_requests+0x34/0x60
+[10199.924426]  __blk_mq_run_hw_queue+0x91/0xb0
+[10199.924428]  process_one_work+0x1df/0x3b0
+[10199.924430]  worker_thread+0x49/0x2e0
+[10199.924432]  ? rescuer_thread+0x390/0x390
+[10199.924433]  kthread+0xe5/0x110
+[10199.924435]  ? kthread_complete_and_exit+0x20/0x20
+[10199.924436]  ret_from_fork+0x1f/0x30
+[10199.924439]  </TASK>
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+Fixes: 1f221a0d0dbf ("swiotlb: respect min_align_mask")
+Signed-off-by: Guorui Yu <GuoRui.Yu@linux.alibaba.com>
+Signed-off-by: Xiaokang Hu <xiaokang.hxk@alibaba-inc.com>
+---
+ kernel/dma/swiotlb.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+index a34c38bbe28f..935858f16cfd 100644
+--- a/kernel/dma/swiotlb.c
++++ b/kernel/dma/swiotlb.c
+@@ -632,7 +632,7 @@ static int swiotlb_do_find_slots(struct device *dev, int area_index,
+ 	unsigned int iotlb_align_mask =
+ 		dma_get_min_align_mask(dev) & ~(IO_TLB_SIZE - 1);
+ 	unsigned int nslots = nr_slots(alloc_size), stride;
+-	unsigned int index, wrap, count = 0, i;
++	unsigned int index, index_nowrap, wrap, count = 0, i;
+ 	unsigned int offset = swiotlb_align_offset(dev, orig_addr);
+ 	unsigned long flags;
+ 	unsigned int slot_base;
+@@ -665,6 +665,7 @@ static int swiotlb_do_find_slots(struct device *dev, int area_index,
+ 		    (slot_addr(tbl_dma_addr, slot_index) &
+ 		     iotlb_align_mask) != (orig_addr & iotlb_align_mask)) {
+ 			index = wrap_area_index(mem, index + 1);
++			index_nowrap += 1;
+ 			continue;
+ 		}
+ 
+@@ -680,7 +681,8 @@ static int swiotlb_do_find_slots(struct device *dev, int area_index,
+ 				goto found;
+ 		}
+ 		index = wrap_area_index(mem, index + stride);
+-	} while (index != wrap);
++		index_nowrap += stride;
++	} while (index_nowrap < wrap + mem->area_nslabs);
+ 
+ not_found:
+ 	spin_unlock_irqrestore(&area->lock, flags);
+-- 
+2.31.1
 
---------------Z4z0Rso2yBcxS7NmuBkPu6hy--
-
---------------0KbDGPVZv90xWDGaFzHgGpMY--
-
---------------SnHQG24TiTPbQ0OwK0aMVDVD
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPp2jEFAwAAAAAACgkQsN6d1ii/Ey/7
-7gf+Kmv0dNutyYoVRjfOCK6qSsZLb1eWddmgpshbgvTjKZo83VKsfDsWNLKXQ1pJuaZtTDV7dKRP
-YYHc4wBrkS5BrjBQU3EyiPpxZ10VEUV7sF9mA/C5w34h2/05CN2BOXBGjfv77jLXJ0u1cSmFG37P
-TeEfESM2QOFSpnZSBN8ygcBTg4/dD44Cjubg19+wSmBMDSflBoKgBG3FMgUPZeRf/PuyAFQB72/U
-U3uXgaxusREEIfTkCuxp3SqL+dDAVy4Ca3Wi/R8H9KNg8MGiZ/ssxOT0Py/qqy7yYE4n/5l9bx/J
-Y5pzfaLNa+pWBbfCdGzcia0j4WV1NaJaD2CNflmnCg==
-=bloS
------END PGP SIGNATURE-----
-
---------------SnHQG24TiTPbQ0OwK0aMVDVD--
