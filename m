@@ -2,68 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C9A3694A5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:08:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEFE4694A60
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:09:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbjBMPIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:08:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44576 "EHLO
+        id S231467AbjBMPJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231467AbjBMPI0 (ORCPT
+        with ESMTP id S229680AbjBMPJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:08:26 -0500
-Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A351BD4;
-        Mon, 13 Feb 2023 07:08:25 -0800 (PST)
-Received: by soltyk.jannau.net (Postfix, from userid 1000)
-        id E16F326F77F; Mon, 13 Feb 2023 16:08:23 +0100 (CET)
-Date:   Mon, 13 Feb 2023 16:08:23 +0100
-From:   Janne Grunau <j@jannau.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Kettenis <kettenis@openbsd.org>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 17/17] arm64: dts: apple: t8112: Initial t8112 (M2)
- device trees
-Message-ID: <20230213150823.GF17933@jannau.net>
-References: <20230202-asahi-t8112-dt-v1-0-cb5442d1c229@jannau.net>
- <20230202-asahi-t8112-dt-v1-17-cb5442d1c229@jannau.net>
- <1ea2107a-bb86-8c22-0bbc-82c453ab08ce@linaro.org>
- <20230213140113.GE17933@jannau.net>
- <16804864-dce2-d68c-ce81-b6fdeb20a527@linaro.org>
+        Mon, 13 Feb 2023 10:09:06 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDAC1BD4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:09:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id F11ADCE0E93
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 15:09:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 414AFC433D2;
+        Mon, 13 Feb 2023 15:08:49 +0000 (UTC)
+Date:   Mon, 13 Feb 2023 10:08:36 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yafang Shao <laoar.shao@gmail.com>
+Subject: [GIT PULL] tracing: Make trace_define_field_ext() static
+Message-ID: <20230213100836.33d2b0b0@rorschach.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <16804864-dce2-d68c-ce81-b6fdeb20a527@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-13 15:36:33 +0100, Krzysztof Kozlowski wrote:
-> On 13/02/2023 15:01, Janne Grunau wrote:
-> >>> +
-> >>> +		pmgr: power-management@23b700000 {
-> >>> +			compatible = "apple,t8112-pmgr", "apple,pmgr", "syscon", "simple-mfd";
-> >>
-> >> Why this is simple-mfd?
-> > 
-> > I suppose because the syscon device is not limited to power domain 
-> > controls. The dt-bindings in arm/apple/apple,pmgr.yaml specify those 
-> > compatibles. See the original discussion in:
-> > 
-> > https://lore.kernel.org/linux-devicetree/57991dac-196e-a76d-831a-d4ac166bfe29@marcan.st/  
-> 
-> This did not answer my concerns. There are no children here.
 
-The child nodes are in t8112-pmgr.dtsi
+Linus,
 
-Janne
+tracing: Make trace_define_field_ext() static
+
+Just after the fix to TASK_COMM_LEN not converted to its value in
+trace_events was pulled, the kernel test robot reported that the helper
+function trace_define_field_ext() added to that change was only used in
+the file it was defined in but was not declared static. Make it a local
+function.
+
+
+Please pull the latest trace-v6.2-rc7-2 tree, which can be found at:
+
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
+trace-v6.2-rc7-2
+
+Tag SHA1: 3883ec09ec4e45286f3c09d4a88dbde8b328573c
+Head SHA1: 70b5339caf847b8b6097b6dfab0c5a99b40713c8
+
+
+Steven Rostedt (Google) (1):
+      tracing: Make trace_define_field_ext() static
+
+----
+ kernel/trace/trace_events.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+---------------------------
+commit 70b5339caf847b8b6097b6dfab0c5a99b40713c8
+Author: Steven Rostedt (Google) <rostedt@goodmis.org>
+Date:   Sun Feb 12 20:11:42 2023 -0500
+
+    tracing: Make trace_define_field_ext() static
+    
+    trace_define_field_ext() is not used outside of trace_events.c, it should
+    be static.
+    
+    Link: https://lore.kernel.org/oe-kbuild-all/202302130750.679RaRog-lkp@intel.com/
+    
+    Fixes: b6c7abd1c28a ("tracing: Fix TASK_COMM_LEN in trace event format file")
+    Reported-by: Reported-by: kernel test robot <lkp@intel.com>
+    Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
+index 6a4696719297..6a942fa275c7 100644
+--- a/kernel/trace/trace_events.c
++++ b/kernel/trace/trace_events.c
+@@ -155,7 +155,7 @@ int trace_define_field(struct trace_event_call *call, const char *type,
+ }
+ EXPORT_SYMBOL_GPL(trace_define_field);
+ 
+-int trace_define_field_ext(struct trace_event_call *call, const char *type,
++static int trace_define_field_ext(struct trace_event_call *call, const char *type,
+ 		       const char *name, int offset, int size, int is_signed,
+ 		       int filter_type, int len)
+ {
