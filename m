@@ -2,173 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0098695033
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:01:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54850695040
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 20:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbjBMTBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 14:01:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33198 "EHLO
+        id S229805AbjBMTCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 14:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbjBMTBM (ORCPT
+        with ESMTP id S230287AbjBMTCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 14:01:12 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F76227BB;
-        Mon, 13 Feb 2023 11:00:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676314848; x=1707850848;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=R+iA5BS2TkSkUCsNMPzfBW40wFfBe6l/3PJOP3fCLvU=;
-  b=XN0dc/uYkSl4YZnqt89Cdq19hfBHSbKi6WOszb342WCXC385JwdMEoMH
-   3AIJFW/HNR5b6dGuRRUheyKJxyaQrHfDa/yVNUB7/d5GATXwqHSKMhuIO
-   /curoyQWDq5SG0tBi/eltJOwGIy8QQ3mO0ZEYMTtwlNQMHvAFqmkks5FP
-   hlb0IjyUFWO7fQgPsuG9+4QXQTJ0Ej9wHBFwrOcf340nIGP3Nsf8MxWDe
-   MANO/uSIwElGj8GufqgvXuCMAem61DoW3/0q07vTbDzLosH+zoMIjpvKX
-   qEo7ClN8ES1cwtq+rg/bkJPiUCIGc0nqd/7lFIN7HddB0nYq00QwEZxvL
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="333105867"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="333105867"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 11:00:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="699251964"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="699251964"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 13 Feb 2023 11:00:36 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pRe42-006VMZ-25;
-        Mon, 13 Feb 2023 21:00:34 +0200
-Date:   Mon, 13 Feb 2023 21:00:34 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Raul Rangel <rrangel@chromium.org>
-Cc:     Werner Sembach <wse@tuxedocomputers.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        mika.westerberg@linux.intel.com, linus.walleij@linaro.org,
-        brgl@bgdev.pl, linux-gpio@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: Re: [PATCH] gpiolib: acpi: Add a ignore wakeup quirk for Clevo NH5xAx
-Message-ID: <Y+qI0k02glYw7Wsb@smile.fi.intel.com>
-References: <Y+owDqifuU9nf+1i@smile.fi.intel.com>
- <86db79fa-5efb-caad-3310-60928907cc58@amd.com>
- <Y+pLLzLDotZQLpdA@smile.fi.intel.com>
- <97026dc5-e92e-62fe-43ae-33533125d900@tuxedocomputers.com>
- <CAHQZ30Cs+kp82coR10Wat7q3S_8+pFf=5=44kMEMcjBOjmn=6A@mail.gmail.com>
- <Y+p4Sq/WnZ4jAp+F@smile.fi.intel.com>
- <Y+p6I379g+V4vpIc@smile.fi.intel.com>
- <Y+p6mY+w9POvkBzC@smile.fi.intel.com>
- <Y+p68FfTYpUP7B1F@smile.fi.intel.com>
- <CAHQZ30DaNjAREK3TXKtKC-G31NXi1tFTLmRRf8c-Ck1tg4e-YA@mail.gmail.com>
+        Mon, 13 Feb 2023 14:02:33 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5706823114;
+        Mon, 13 Feb 2023 11:01:47 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DFM7XC027382;
+        Mon, 13 Feb 2023 19:01:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=dQYWhXzT07LYVq0/if5nn8gaE/tTE5zoUmYBBa/F2V4=;
+ b=bZrMZjbwO6ZGmnbkAlmDKmbStCKu8hDdrEpFYAGiT6xn759oEXJWnzMNByj0L05Cj0ug
+ TyOksWz3o25Yf7DwmCPOnlN6HBH6VRUzATRpjdFbhzlYgpUVrIbagcMg8pybeb19T8hT
+ DdyEm2ZuruBLYs0qyjMPjV9lYCW3oeSh3w1nPw81kXrh/n026VQTxVKfyjZyvWrpCT3D
+ hGZL0cFwM6ISWZI0/ALcsMBASsbybTWItCYYixO5nwFSRpQwW6s/4oc4ekKRybQmMNMo
+ C5sXAfknBBmm/kdHuJkP9/2tnx7YyhJMU7oCvdvEzxi+KelZPB7IMrVX3oxxDT6y8+s0 AQ== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3npmvrknqu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 19:01:42 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31DJ1e9r008124
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Feb 2023 19:01:40 GMT
+Received: from hu-molvera-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 13 Feb 2023 11:01:40 -0800
+From:   Melody Olvera <quic_molvera@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/3] arm64: dts: qcom: Add mpss support to QDU1000/QRU1000 SoCs
+Date:   Mon, 13 Feb 2023 11:01:19 -0800
+Message-ID: <20230213190122.178501-1-quic_molvera@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHQZ30DaNjAREK3TXKtKC-G31NXi1tFTLmRRf8c-Ck1tg4e-YA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: OrZd8jJjKyJEBOCoiLJ2_Hf0m_yVVhre
+X-Proofpoint-GUID: OrZd8jJjKyJEBOCoiLJ2_Hf0m_yVVhre
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-13_12,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 mlxscore=0 impostorscore=0 mlxlogscore=451 suspectscore=0
+ adultscore=0 malwarescore=0 spamscore=0 clxscore=1015 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302130167
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 11:20:40AM -0700, Raul Rangel wrote:
-> On Mon, Feb 13, 2023 at 11:01 AM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > On Mon, Feb 13, 2023 at 07:59:53PM +0200, Andy Shevchenko wrote:
-> > > On Mon, Feb 13, 2023 at 07:57:55PM +0200, Andy Shevchenko wrote:
-> > > > On Mon, Feb 13, 2023 at 07:50:02PM +0200, Andy Shevchenko wrote:
-> > > > > On Mon, Feb 13, 2023 at 10:20:41AM -0700, Raul Rangel wrote:
-> > > > > > On Mon, Feb 13, 2023 at 7:47 AM Werner Sembach <wse@tuxedocomputers.com> wrote:
-> > > > > > > Am 13.02.23 um 15:37 schrieb Andy Shevchenko:
+This adds support for the mpss found in the QDU1000 and QRU1000 SoCs.
+It needs an RMB register space to be specified to enable a handshake
+with the mpss to late attach the device. The firmware file paths are
+also added in the IDP board DTs.
 
-...
+This patch set depends on the bindings from [1].
 
-> > > > > > > Schematics for the NH5xAx can also be found on this unofficial clevo mirror
-> > > > > > > (service manuals, scroll to end for schematics):
-> > > > > > >
-> > > > > > > http://repo.palkeo.com/clevo-mirror/NH5xACx_AFx_ADx/NH50AC.zip
-> > > > > > >
-> > > > > > > http://repo.palkeo.com/clevo-mirror/NH5xACx_AFx_ADx/NH50AF1.zip
-> > > > > > >
-> > > > > > > User: repo
-> > > > > > >
-> > > > > > > PW: repo
-> > > > > > >
-> > > > > > > >> The schematics were shared by the reporter for the original issue which is
-> > > > > > > >> how we reached the conclusion there was a mistake.
-> > > > > > > >>
-> > > > > > > >> As they're both Clevo designs it's certainly possible they have the same
-> > > > > > > >> mistake in two systems.
-> > > > > >
-> > > > > > > > Thank you!
-> > > > > > > > I have looked at the schematics and read discussion.
-> > > > > > > >
-> > > > > > > > So, the conclusion that this is a BIOS bug is incorrect in my opinion.
-> > > > > > > > The problem is either in the PMIC/EC firmware that shouldn't shut down 3.3VS
-> > > > > > > > signal for a while or on the PCB level, so that pull up should be connected
-> > > > > > > > to another power source that stays on.
-> > > > > > > >
-> > > > > > > > This means the description on the initial patch with the same issue is
-> > > > > > > > incorrect.
-> > > > > > > >
-> > > > > > > > Do we know the power sequence on the suspend to see which and how on the
-> > > > > > > > time line the power sources are off/on?
-> > > > > >
-> > > > > > If you look at the load switch for 3.3VS, its EN2 pin is connected to
-> > > > > > SUSB#_EN which is connected to SUSB# which is connected to
-> > > > > > AND(SUSB#_PCH -> SLP_S3_L, PM_SLP_S0 -> S0A3_GPIO). So there is no
-> > > > > > PMIC/EC firmware that is incharge of this. I guess I'm not quite sure
-> > > > > > how they have S0A3_GPIO configured, so maybe I have an invert wrong.
-> > > > > >
-> > > > > > The EC does control DD_ON which controls the 3.3V and 5V rails.
-> > > > >
-> > > > > On page 6 of the schematics I see the U7 that forms SUSB# from SUSB#_APU
-> > > > > (which corresponds to what you said) _and_ EC_EN, which is GPIO from IT5570,
-> > > > > which is EC.
-> > > > >
-> > > > > Are you using different schematics? I'm using the one from FDO bug report.
-> > > >
-> > > > Just checked this one:
-> > > > http://repo.palkeo.com/clevo-mirror/NH5xACx_AFx_ADx/NH50AC.zip
-> > > >
-> > > > Also uses EC (SUSB_EC#).
-> >
-> > Sorry, this has to be read as SUSBC_EC#.
-> 
-> It looks like SUSBC_EC# has to stay high during S3/S0i3 otherwise it's
-> going to shut down the S5 power domain. So I'm guessing U7 is there to
-> prevent the S3 domain from being powered on while the S5 domain is
-> powered off.
-> 
-> Sheet 59 of 73 VDDCR_SOC_S5, VDDCR_ALW seems to have a helpful table
-> that describes all the power states. I'm confused where SLP_SUS# comes
-> from though. I'm also not sure about S5_MUX_CTRL since that seems to
-> be connected to a testpoint.
+[1] https://lore.kernel.org/all/20230213185218.166520-1-quic_molvera@quicinc.com/
 
-I see, thanks for looking into this.
+Melody Olvera (3):
+  arm64: dts: qcom: qdu1000: Add IPCC, MPSS, AOSS nodes
+  arm64: dts: qcom: qdu1000-idp: Enable mpss
+  arm64: dts: qcom: qru1000-idp: Enable mpss
 
-So, if EC has no business with this, whose responsibility to assert that
-signal? I'm trying to get if it's PCB issue (wrong power rail for pull up)
-or something else.
+ arch/arm64/boot/dts/qcom/qdu1000-idp.dts |   6 ++
+ arch/arm64/boot/dts/qcom/qdu1000.dtsi    | 105 +++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/qru1000-idp.dts |   6 ++
+ 3 files changed, 117 insertions(+)
 
-Btw, is anybody can actually boot Windows and check the signals of the pin on a
-time line in comparison to Linux to see if the behaviour of them is the same?
-(If Windows and Linux got the same timeline of the signals it would mean that
- the issue in the Linux kernel.)
 
-> > > So this all makes me thing that either EC firmware is buggy or we have ACPI EC
-> > > code in the kernel to fix.
-
+base-commit: 09e41676e35ab06e4bce8870ea3bf1f191c3cb90
+prerequisite-patch-id: ddc43db334e06b6938219e12964a5e943641126d
+prerequisite-patch-id: dfbe05633d84289f35047a32502984b00112d4fd
+prerequisite-patch-id: 6a55ae4bd86e2565d8362579ce5f09a14e93e422
+prerequisite-patch-id: 7c8c18aef7f693eb0749ee9f296bfb59ca202eb7
+prerequisite-patch-id: 8d4a7aa9e2af4659f7f820058e90ed985410deed
+prerequisite-patch-id: 3a012cc3a5b28208ecf23b2a1b5a0310d15aa4ac
+prerequisite-patch-id: ad32654fa37f8c5fb00162d093b577f81a511bd0
+prerequisite-patch-id: d699495a3b22bb97c9d114024a82a9fadcc40082
+prerequisite-patch-id: 819b2fb10cd0322fe815ac9ab3ffbaac7c51ad71
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
