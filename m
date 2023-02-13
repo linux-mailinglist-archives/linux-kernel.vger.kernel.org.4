@@ -2,81 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10196949E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DCF6949EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 16:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbjBMPC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 10:02:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
+        id S231381AbjBMPDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 10:03:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231328AbjBMPCq (ORCPT
+        with ESMTP id S231339AbjBMPDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:02:46 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C781DBA7;
-        Mon, 13 Feb 2023 07:02:21 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Mon, 13 Feb 2023 10:03:10 -0500
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93C98A76
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 07:02:51 -0800 (PST)
+Received: from SoMainline.org (D57D4C6E.static.ziggozakelijk.nl [213.125.76.110])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EE97266020A2;
-        Mon, 13 Feb 2023 15:01:58 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676300520;
-        bh=+w0aem4WAGne/rGW4BjKK8/fKzHBZe5eP0S7UQQNzX8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hbLORnwlQTtd/bxhJhZNFax8lKY9gQXhKl+/fIWw5wGgB9bCvbkZENT8IZgbywbz0
-         7U3d9t3GKBzKpM39j5p6Hm4wbuoKIuDN+na16zhF6nlmD9ETiGQimhWElYGOdda9/S
-         kLfgf4RfamxXTSh6FiFGex559lD1CmyQaEJ/SlmrCAv4DtiAB0jRTDltIV2229JT8L
-         nfomkJ5nFAe+OMY3b0nzvVJSMSzIWKcONbxmkMLzbrN0Ct+JBxwF0n4DX3WL9a4jAj
-         KUTlc4+Rbu7VFn74LiR7ilY9TNcLLuo2biUnXzGTz34wnZXYjfqZTUVp6/DvbLFSh4
-         Zfv60OCSYye/w==
-Message-ID: <6bf297ce-43f0-d8e6-a99c-0b92afe43dd7@collabora.com>
-Date:   Mon, 13 Feb 2023 16:01:56 +0100
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id D91E01F55E;
+        Mon, 13 Feb 2023 16:02:27 +0100 (CET)
+Date:   Mon, 13 Feb 2023 16:02:26 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Robert Foss <rfoss@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/10] drm/msm/dpu: Allow variable SSPP/INTF_BLK size
+Message-ID: <20230213150226.du27ocydnyrkvuin@SoMainline.org>
+References: <20230211122656.1479141-1-konrad.dybcio@linaro.org>
+ <20230211122656.1479141-6-konrad.dybcio@linaro.org>
+ <20230213111220.ietr4aro6xu4emtu@SoMainline.org>
+ <e6653ceb-bce1-9552-019d-278f455ba8a5@linaro.org>
+ <20230213143148.qvyagudd3qm5jgwd@SoMainline.org>
+ <e3c1a048-a9e1-53fa-5a19-cba62e8b1580@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v7 3/3] phy: mediatek: add support for phy-mtk-hdmi-mt8195
-Content-Language: en-US
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, CK Hu <ck.hu@mediatek.com>,
-        Jitao shi <jitao.shi@mediatek.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        mac.shen@mediatek.com, stuart.lee@mediatek.com
-References: <20220919-v7-0-b5b58c5ccc07@baylibre.com>
- <20220919-v7-3-b5b58c5ccc07@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220919-v7-3-b5b58c5ccc07@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e3c1a048-a9e1-53fa-5a19-cba62e8b1580@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 13/02/23 12:33, Guillaume Ranquet ha scritto:
-> Add support for the mediatek hdmi phy on MT8195 SoC
+On 2023-02-13 16:40:56, Dmitry Baryshkov wrote:
+> On 13/02/2023 16:31, Marijn Suijten wrote:
+> > On 2023-02-13 13:38:33, Dmitry Baryshkov wrote:
+> >> On 13/02/2023 13:12, Marijn Suijten wrote:
+> >>> On 2023-02-11 13:26:51, Konrad Dybcio wrote:
+> >>>> These blocks are of variable length on different SoCs. Set the
+> >>>> correct values where I was able to retrieve it from downstream
+> >>>> DTs and leave the old defaults (0x1c8 for sspp and 0x280 for
+> >>>> intf) otherwise.
+> >>>>
+> >>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> >>>> ---
+> >>>>    .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 242 +++++++++---------
+> >>>>    1 file changed, 121 insertions(+), 121 deletions(-)
+> >>>>
+> >>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> >>>> index 802050118345..d9ef1e133c1e 100644
+> >>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> >>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> >>> [..]
+> >>>> @@ -1848,10 +1848,10 @@ static struct dpu_dsc_cfg sm8150_dsc[] = {
+> >>>>    /*************************************************************
+> >>>>     * INTF sub blocks config
+> >>>>     *************************************************************/
+> >>>> -#define INTF_BLK(_name, _id, _base, _type, _ctrl_id, _progfetch, _features, _reg, _underrun_bit, _vsync_bit) \
+> >>>> +#define INTF_BLK(_name, _id, _base, _len, _type, _ctrl_id, _progfetch, _features, _reg, _underrun_bit, _vsync_bit) \
+> >>>
+> >>> Dmitry and I discussed in #freedreno to instead add the INTF_BLK_DSI_TE
+> >>> macro that accounts for the INTF TE registers using this higher register
+> >>> area, as well as an extended signature to configure extra interrupts.
+> >>
+> >> Yes, that's still the plan. It's slightly painful that we are touching
+> >> this are simultaneously.
+> > 
+> > Should we (Konrad) then drop this patch as there's no need to add these
+> > (mostly RAZ/WI) registers to the dump until my INTF TE series starts
+> > using them?  That'll make rebasing easier on everyone too.
 > 
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> RAZ/WI is for not present registers (read-as-zero/write-ignore). I think 
+> that the growing register space is getting populated with registers 
+> (which we have been ignoring up to now).
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+They are, but not until my INTF TE series lands; hence again the request
+to drop this patch until that happens?
 
-
+- Marijn
