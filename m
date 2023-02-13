@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB866941F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:51:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 976D66941F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 10:51:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbjBMJvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 04:51:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60480 "EHLO
+        id S230428AbjBMJvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 04:51:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjBMJvO (ORCPT
+        with ESMTP id S230094AbjBMJvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 04:51:14 -0500
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2055.outbound.protection.outlook.com [40.107.15.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D9D40E2;
-        Mon, 13 Feb 2023 01:51:12 -0800 (PST)
+        Mon, 13 Feb 2023 04:51:16 -0500
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2065.outbound.protection.outlook.com [40.107.20.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0966093D5;
+        Mon, 13 Feb 2023 01:51:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lnIcQKpn7T3xWt+hRcVnLgoi4APr4720xJYApFbi2Ns=;
- b=NOy/yveSPRqlKIKTCVbOwcj2iwvqF9KI/kkJQ6XE83yD4tIz/t3EgnWm7ViqLHaQZPLSmQiPu7XD0zJ5Irt9TOb8rOr7CPbpvL/zfNcUeUjOqy5J6GRRtpXp0n8jgKzvTgbDcwBORNUjHqTHmzjSOpGhfqPOCaWAKUrm4oP5LWU=
-Received: from FR2P281CA0039.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:92::10)
- by VE1PR08MB5840.eurprd08.prod.outlook.com (2603:10a6:800:1b2::14) with
+ bh=PcKu++/WYRCaRYaG4luksm9gfDkx9bsPHBqlL6UlHzo=;
+ b=u2cvK2JNeR+i7vptKcfBWvk08e2RVJKQWLEubcBZOuoZc/C2ywgj4mOYotf1GY4j2amVv/mWzRtN6b0U/o5Bz19axPpOfByKi0h7IO73fPwT+wcKOAAqLx+JuT2hEXyxFop5upewY9KYMXVbm/QETtQu7w9pLDpzS8+0MV0KrRE=
+Received: from OS6P279CA0142.NORP279.PROD.OUTLOOK.COM (2603:10a6:e10:3a::16)
+ by GV1PR08MB7826.eurprd08.prod.outlook.com (2603:10a6:150:5a::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Mon, 13 Feb
- 2023 09:51:08 +0000
-Received: from VI1EUR04FT013.eop-eur04.prod.protection.outlook.com
- (2603:10a6:d10:92:cafe::5) by FR2P281CA0039.outlook.office365.com
- (2603:10a6:d10:92::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.9 via Frontend
- Transport; Mon, 13 Feb 2023 09:51:08 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.23; Mon, 13 Feb
+ 2023 09:51:10 +0000
+Received: from HE1EUR04FT029.eop-eur04.prod.protection.outlook.com
+ (2603:10a6:e10:3a:cafe::3c) by OS6P279CA0142.outlook.office365.com
+ (2603:10a6:e10:3a::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24 via Frontend
+ Transport; Mon, 13 Feb 2023 09:51:10 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 13.74.137.176)
  smtp.mailfrom=wolfvision.net; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=wolfvision.net;
@@ -38,17 +38,17 @@ Received-SPF: Pass (protection.outlook.com: domain of wolfvision.net
  receiver=protection.outlook.com; client-ip=13.74.137.176;
  helo=eu21-emailsignatures-cloud.codetwo.com; pr=C
 Received: from eu21-emailsignatures-cloud.codetwo.com (13.74.137.176) by
- VI1EUR04FT013.mail.protection.outlook.com (10.152.28.175) with Microsoft SMTP
+ HE1EUR04FT029.mail.protection.outlook.com (10.152.27.32) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6086.24 via Frontend Transport; Mon, 13 Feb 2023 09:51:07 +0000
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (104.47.13.59) by eu21-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via SMTP; Mon, 13 Feb 2023 09:51:06 +0000
+ 15.20.6086.24 via Frontend Transport; Mon, 13 Feb 2023 09:51:09 +0000
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (104.47.13.59) by eu21-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via SMTP; Mon, 13 Feb 2023 09:51:07 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U6xcSR88LZGbib+fyVe9oK2ORyocb8u/aOA43l2MSU7m1aqCqekxKgxyfndA1z7P2GRJf/+ghZFwuTtVve/bMQ8Bbe9ekmf1drZIPS3RAya1xmDoQFBOoxOCImDP6qQoWYmnSX2enauBzmg2Dcy78Ky7cXAAn4p8Ji2D1vi2IQcMi8QHRkkubIds2tQ8Yj681AFKNKOzT9E7RreaubPynX8Fyhk+FV6BqvMCc9yPW+8LsjqcLRggXMzeakQufENvkFNd2TWsklmTTD2nGRSC+qqiBp5YEEv90GqYttaiJ5mf6nkEsB9u+fJQXxWi/L9Vxd0yNx8QSGiWrv2/3Fu2Ww==
+ b=U0jSBs6ZhiP4WolN4/weRM40WNrfMRjk/8cuJTIjkIqQRgiXvpqsIOAeG1hmX14acJxnPwr9XmMnr7UkHXL5nMKXM4bY5Fr0ytZc/3BQlmB/hsqOOIkkRmPSRrexMOpFCye0r7PBt5MJjFH4H2R9ktoHQpr5QcSP8J1u7irII2AlyEVzo7GqmmhiYYiFxOtrDz7UQpRkhsuOCTRgdGaAoYEizruqWrnJ13xZKLU76V0eJBE5OuVXqdSTc05uBekc2U1kMrnxCMw5m2AQn789TGaBQPPNPEYuk0gUq8Y/pd8/KloA4ILs9iA/jkkmdY6WRZNEcgav3PzMpw/XRB6LOQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JLRTZLFoYTJIeoMBTdl40eFAMVBHUNlsT37eQizWmPg=;
- b=Tyo+Y/KvtdcmjuAPeRbDpRHwoSpKHKoQ/NWDtVj2t6Gc4UPeOUbDQgzDXfmKax05nBH2K4Yb6w/7R+lsy6cv6Lo+tqpJ+gQQRYuNUpZ972ScCZHmTGDGcTn0fFnw1V5OdC8wg1B8ZAfogs13QbC5vdpHd6n6fPoyZa3ni5HVzQLOe3rNF1llfr+kvcq9/sIffvOL5fH7/HHPZiG5haX374zBeGFgzNp0Zn8JMwF6tTfH/02Yw12Najyj1IjsNGQLc0i30o5Twssi0OItd4SEOUzFPSlxLqIc0VHJEfTQmFZbK9Tp+lua+VDWboPtPnV6WzRoKgeLvqDQG3/nNrfQ5A==
+ bh=pZxtbqk2CgOuhrQEZS6c3ZhurL42v7Q/2zIJ4SReGgU=;
+ b=oAJDgZTtqRtgTjd3GfNb6cKL+ayOWt8hVzCppeBh+pfllPCYvHF4wF2RuH26xCOFChYl8ensenBi2Imgd7dFfBv9ntZxdGGS9elCcrXBRaPonCxjuTaRyDwf9zbof6FjWsVVpV4ifniKNJM4rvKaRz00l60X9AHCSAeqPlPkfhne+1a06LB+JwacuGVp5ujMlHWeohZrZXZMMaEKdyXR5qLqBUUit7rTzQA8DTXQP3ocEl/Ab3CZmb/mx/aIUwsbXXErdmmczhITXUlNr2P3/PSD0PQzHiisX1jMumQsFzm2p0eTPgaYPb3pH1lnV3Imtz0qBK4liVI0KrgKE9bSlQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wolfvision.net; dmarc=pass action=none
  header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
@@ -58,11 +58,11 @@ Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
  by AM9PR08MB6289.eurprd08.prod.outlook.com (2603:10a6:20b:2d7::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Mon, 13 Feb
- 2023 09:51:03 +0000
+ 2023 09:51:04 +0000
 Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
  ([fe80::93ad:a231:e2ea:d1b1]) by VE1PR08MB4974.eurprd08.prod.outlook.com
  ([fe80::93ad:a231:e2ea:d1b1%5]) with mapi id 15.20.6086.023; Mon, 13 Feb 2023
- 09:51:03 +0000
+ 09:51:04 +0000
 From:   Javier Carrasco <javier.carrasco@wolfvision.net>
 To:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
@@ -72,136 +72,103 @@ CC:     Alessandro Zummo <a.zummo@towertech.it>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Michael Riesch <michael.riesch@wolfvision.net>,
         Javier Carrasco <javier.carrasco@wolfvision.net>
-Subject: [PATCH 1/2] rtc: pcf85363: add support for the quartz-load-femtofarads property
-Date:   Mon, 13 Feb 2023 10:50:17 +0100
-Message-ID: <20230213095018.2255225-2-javier.carrasco@wolfvision.net>
+Subject: [PATCH 2/2] dt-bindings: rtc: nxp,pcf8563: add quartz-load-femtofarads for pcf85263 and pcf85363
+Date:   Mon, 13 Feb 2023 10:50:18 +0100
+Message-ID: <20230213095018.2255225-3-javier.carrasco@wolfvision.net>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230213095018.2255225-1-javier.carrasco@wolfvision.net>
 References: <20230213095018.2255225-1-javier.carrasco@wolfvision.net>
- <12dc51e4-622e-4a26-8bde-2795d77ce36e.e0c24246-04d4-485f-8d5f-1cc8fbefd095.f44d6731-6fc0-4ea1-bc6d-c08581fb532e@emailsignatures365.codetwo.com>
+ <12dc51e4-622e-4a26-8bde-2795d77ce36e.e0c24246-04d4-485f-8d5f-1cc8fbefd095.f8cc75cd-465e-4339-8415-7d994963b841@emailsignatures365.codetwo.com>
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain
 X-ClientProxiedBy: VI1PR0801CA0088.eurprd08.prod.outlook.com
  (2603:10a6:800:7d::32) To VE1PR08MB4974.eurprd08.prod.outlook.com
  (2603:10a6:803:111::15)
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|AM9PR08MB6289:EE_|VI1EUR04FT013:EE_|VE1PR08MB5840:EE_
-X-MS-Office365-Filtering-Correlation-Id: cc2df714-1362-4494-35d9-08db0da7d494
+X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|AM9PR08MB6289:EE_|HE1EUR04FT029:EE_|GV1PR08MB7826:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3a8240c3-80e3-4bd2-6c1c-08db0da7d5ba
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: motqge3XEMZPltmqWCCippfHVzbRQLn6VOIQu5gZUHOWIxIc1ObkObf7dAjuCltX1HaN0LEAgnfmdoHT9Y/AfD9YNUc8yXSeYrRCpe9fTjeBj70P23vRum3fGsO+xSiJVshelKdO/V+yo9lcNRfVdMQOpD0NHoEt2tlL4ljEPvX8JLmEM8dw0o53YLd7GTLA6kEL4mc4xGQsXuCnkV00JECEEU5x802VtgtyzktZKRaPRUghTRvndDZgrH+xY/PZy/66gYK9RQO8eFDsf6HYeepfbcqtr46wKqfhJMzk4e8nGp3SEXysHit8w4VDzM6ZUGLPahCE5r8l61G0rGYJkrWXtravNMSwFnHYUSKeQlptjInHhWoXme+mRLYKI0KMcVb1215KZSmW+KZ2X4tTGGpsdjrDvk+eudQjhkiZawfSES4uOh3QX98zAxMa689cCPFvXNPPwa/OpJEdE978PQoo5h6i6jciA1w30SnHmDIYNt4PpWZrMMSEQHeh3bOCBTVYV3B4yXmVDXFl0NfzWcTRllhZOlyroVLN+Z53Wl1afiAIky23KrKM3D7fev/qriXwglwYAHgw7NpE95ueBIIDYRcE9G4h0kyoz+A0tGkIYTon1drUgc7SPDDTjo+bikbyoGz+Jdun5gVMrLfhsSCu02wi4OBtKF5EnrYxSb7IxDNMmwDQPfjC+lxJcguAe053IGJ7t6lvDsWRi5XrEA==
+X-Microsoft-Antispam-Message-Info-Original: FZJnrMX4EDTuTmTRSFOVd6mLUGqWigzfm+ox+gbeATK67JM4KDGfflOEKl4IhzBXr0glWIyvVv3TTGvozwhUEY1moDZBz444qZ+1w1QyLiD6p7viT6uvuL2GUkBnUiLm/REky5LKLL9QBzpsRJTuwuXrzhPAh3Dzab9SEGufNvkv32eExTp6P24IWJb1QlQu4bk30WA7XSUFm2YRDerwglXbKPCBukyLA9hm9PJeGB8jw1FdrdrD3UX1YHsEM3DtrYqzcqAOZbYUwebBVxBQrO4XzehNDf9e3fkoyidzlqfSBaEGASrCxQnz81hA1TsFhCVbdqGyGCsXRASa20U6DzVDQPOW4+FIGD8RXziCLWy+xHD8+4IcaYs68j0fy3jcVczWvWBlpL9nCHj0Ch+l+gyafVknTn0JlARkFvsn1BjyOfTuRmVEN4Bzn1jnnftiMYszT4ES4pNBWH7/X2UmfT7tkxuE5s0jNqAE23uDO/qtN7NYBD0oSxpxmXI7Rl+jDBi1cqOEDEWDSS20tVpf/8CcWuOeDotwKBO/aPWvxAplT3ewmMG8/9I7Hq7sHe+rSNjiCjGGbe8ilaXcff5i39BkJnPEN0QXgkVDHPOonFhAd1UNnmnJgZnxlZ45nxStLxzrHdt1Vz8b4HRwK/FJAuJuk0dNn4sMTlbcgD6oa6rtqtB2I6iE94nhjpCpFybR6FYvgZmvm7jQKvMZfVxQ7w==
 X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39850400004)(136003)(396003)(366004)(376002)(346002)(451199018)(36756003)(44832011)(2906002)(5660300002)(6512007)(83380400001)(26005)(186003)(2616005)(38350700002)(66946007)(38100700002)(4326008)(8676002)(54906003)(316002)(66556008)(8936002)(66476007)(41300700001)(6666004)(478600001)(107886003)(1076003)(86362001)(6506007)(52116002)(6486002);DIR:OUT;SFP:1101;
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR08MB6289
-X-CodeTwo-MessageID: 45814cf8-41e0-48ff-846d-3029de24e825.20230213095106@eu21-emailsignatures-cloud.codetwo.com
+X-CodeTwo-MessageID: 05539efd-bca4-460c-ad45-8556d7e6f79b.20230213095107@eu21-emailsignatures-cloud.codetwo.com
 X-CodeTwoProcessed: true
 X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: VI1EUR04FT013.eop-eur04.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: HE1EUR04FT029.eop-eur04.prod.protection.outlook.com
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 787155e9-60ee-4f1c-d370-08db0da7d191
+X-MS-Office365-Filtering-Correlation-Id-Prvs: ef8a78a4-c8b3-4cc3-7d84-08db0da7d1ff
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: W+gFb4pc/hifMbKYtm2YiiSrKcq9awdDthE91tCdozHnBGh49aQIYmUTYUJuKAcQXuAyP3DxRKsC80SPsfpN5ksPUtl3D/3sBRK4IuuFd33Cq6A42nBtKDVYZO7FlR5I89ThklvP7l8IEF4XtstBSuy1r4CdNhAJHy5n5ACw/xi+Z+ycqy5rhhA+aWgk1uu6ZSE5SxZyJhqqnuLbIHOax3jGR7Fg1YhyM+no42h6MLPHKA58V+KK16YQHgRX7GRenbvxjpH5vMmPtWamphp0sbNOywTYz9rnC7PVNU/7lL98o8IND2iQToSVZrqH+t2jftOAx08PUx6e4uGcCO6i5LCMoMt66XXlfCrH28MkXFXU0PXSh0wejqkPv2S4+/o955kbcmGPZT3cwIn5EskQzYGfycw2Dc/x/bV4VNCS+K1fxHK26alSUbpkVmW7L+26wNJ1ozmCE9DUsTEJQZbS9pq/Gt9ShDqqX2123DxYlAOmmJcbwNQHTYaxSfWWk2ZoPjrEdUNMyAt/5Nm229Auj0r3mdngODSel0YuAYp7Czz8sgRc0u3kizbEpN0aszY1ngWGnOyPazIQKhmS512Z1dDj/kR2Q76nSBx+g08P76LBp1pMiyIfRjy+OvwFNU3xcgOr38YNryPmIt/2aZ9w+dTn0JxHOjG4SdQia5VPD85gBotH2BZoPnczXq7332v7GiT0IHqosa7mdrNn3WpPxg==
-X-Forefront-Antispam-Report: CIP:13.74.137.176;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:eu21-emailsignatures-cloud.codetwo.com;PTR:eu21-emailsignatures-cloud.codetwo.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(136003)(39830400003)(396003)(451199018)(46966006)(36840700001)(86362001)(36756003)(82310400005)(2906002)(5660300002)(8936002)(44832011)(41300700001)(36860700001)(7636003)(7596003)(83380400001)(356005)(6486002)(478600001)(8676002)(6512007)(186003)(26005)(40480700001)(4326008)(107886003)(316002)(336012)(2616005)(70586007)(54906003)(70206006)(6666004)(6506007)(1076003)(47076005);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: /8ZDKTdzyskfeGHWqFeCdKODx5+rvvTCEbvK12kZwKLfU6/slqDv9FhQGU3rm5kD+M4bwr1uI71mhOhStUYxOR72yo8EHkHFGx+szYxAvDoRSU1YXqf+2Am5kb3I0VFrapUT4xoEpQr1yfzprVZtDr3nBJ9SNaW/I2Gw729i/Zy5UhVUg/jr6AR/6X5fV5VcA/ddnm5wfRrIJ9nkwcPLDOPK0GWVEvazI0jN11mCVizVKMkp8mRCacaWnUITQM6kwZdbmkLW0gazzkwmZTQnZXqs+cdnjOv9fagXUHzSfVc9pTC90dS6auyttzes1SV4X/iGQGvzZTCeZG9j1MBOzDwJsEAJuMq121u3u4/QVCRhTdPtb28lUptbjVx3PwWYVTtZppS1A8WYYBAFuHsRD47IxMJ5nsTv5xbot4GxFOcIlBVpqVF2vILidFgAvo1QIlNgkNW+0xxIzCV5du31UZ1XhCgfegLAb+BYQkMv+gORFzEudqsE3eNvkSthPGgJjZFbia9DYk7JaBD+FSUSAf8+WhBSy6UiZgzyT8YZhx6sMWTmROmq3KMPR9kYXQd/KRq/iDFHiihFNd70im7n9AWzMsel5pDHPP1MF8NnyPQR4d1ctxuOYDadoigIS3sIVwMMLYDvLfnZG4yL7sYE+OW9FdsOU78kdhkwKQCb0hQtC8HeO1rrTnnpC8YVHgTAdjB/nc4V3QPZYWepHorMxw==
+X-Forefront-Antispam-Report: CIP:13.74.137.176;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:eu21-emailsignatures-cloud.codetwo.com;PTR:eu21-emailsignatures-cloud.codetwo.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(376002)(136003)(39850400004)(451199018)(46966006)(36840700001)(186003)(2906002)(6512007)(26005)(356005)(478600001)(86362001)(82740400003)(6506007)(1076003)(2616005)(5660300002)(7636003)(7596003)(44832011)(107886003)(36860700001)(6666004)(8936002)(41300700001)(316002)(6486002)(336012)(82310400005)(8676002)(70206006)(36756003)(70586007)(4326008)(83380400001)(40480700001)(47076005)(54906003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2023 09:51:07.7271
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2023 09:51:09.5146
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc2df714-1362-4494-35d9-08db0da7d494
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a8240c3-80e3-4bd2-6c1c-08db0da7d5ba
 X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e94ec9da-9183-471e-83b3-51baa8eb804f;Ip=[13.74.137.176];Helo=[eu21-emailsignatures-cloud.codetwo.com]
-X-MS-Exchange-CrossTenant-AuthSource: VI1EUR04FT013.eop-eur04.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: HE1EUR04FT029.eop-eur04.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR08MB5840
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR08MB7826
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The quartz oscillator load capacitance of the PCF85263 and PCF85363 can
-be adjusted to 6 pF, 7 pF (default) and 12.5 pF with the CL[1:0] bits in
-the oscillator control register (address 25h).
+These RTCs are handled by the pcf85363 device driver, which now supports
+the quartz-load-femtofarads property.
 
 Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
 ---
- drivers/rtc/rtc-pcf85363.c | 37 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 36 insertions(+), 1 deletion(-)
+ .../devicetree/bindings/rtc/nxp,pcf8563.yaml  | 20 ++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/rtc/rtc-pcf85363.c b/drivers/rtc/rtc-pcf85363.c
-index c05b722f0060..941f9264cf0a 100644
---- a/drivers/rtc/rtc-pcf85363.c
-+++ b/drivers/rtc/rtc-pcf85363.c
-@@ -101,6 +101,10 @@
- #define PIN_IO_INTA_OUT	2
- #define PIN_IO_INTA_HIZ	3
+diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf8563.yaml b/Docum=
+entation/devicetree/bindings/rtc/nxp,pcf8563.yaml
+index a98b72752349..aac7f7565ba7 100644
+--- a/Documentation/devicetree/bindings/rtc/nxp,pcf8563.yaml
++++ b/Documentation/devicetree/bindings/rtc/nxp,pcf8563.yaml
+@@ -9,9 +9,6 @@ title: Philips PCF8563/Epson RTC8564 Real Time Clock
+ maintainers:
+   - Alexandre Belloni <alexandre.belloni@bootlin.com>
 =20
-+#define OSC_CAP_SEL	GENMASK(1, 0)
-+#define OSC_CAP_6000	0x01
-+#define OSC_CAP_12500	0x02
-+
- #define STOP_EN_STOP	BIT(0)
+-allOf:
+-  - $ref: rtc.yaml#
+-
+ properties:
+   compatible:
+     enum:
+@@ -37,6 +34,23 @@ properties:
+   start-year: true
+   wakeup-source: true
 =20
- #define RESET_CPR	0xa4
-@@ -117,6 +121,32 @@ struct pcf85x63_config {
- 	unsigned int num_nvram;
- };
-=20
-+static int pcf85363_load_capacitance(struct pcf85363 *pcf85363, struct dev=
-ice_node *node)
-+{
-+	u32 load =3D 7000;
-+	u8 value =3D 0;
++allOf:
++  - $ref: rtc.yaml#
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - nxp,pcf85263
++              - nxp,pcf85363
++    then:
++      properties:
++        quartz-load-femtofarads:
++          description:
++            The capacitive load of the quartz(x-tal).
++          enum: [6000, 7000, 12500]
++          default: 7000
 +
-+	of_property_read_u32(node, "quartz-load-femtofarads", &load);
-+
-+	switch (load) {
-+	default:
-+		dev_warn(&pcf85363->rtc->dev, "Unknown quartz-load-femtofarads value: %d=
-. Assuming 7000",
-+			 load);
-+		fallthrough;
-+	case 7000:
-+		break;
-+	case 6000:
-+		value |=3D OSC_CAP_6000;
-+		break;
-+	case 12500:
-+		value |=3D OSC_CAP_12500;
-+		break;
-+	}
-+
-+	return regmap_update_bits(pcf85363->regmap, CTRL_OSCILLATOR,
-+				  OSC_CAP_SEL, value);
-+}
-+
- static int pcf85363_rtc_read_time(struct device *dev, struct rtc_time *tm)
- {
- 	struct pcf85363 *pcf85363 =3D dev_get_drvdata(dev);
-@@ -372,7 +402,7 @@ static int pcf85363_probe(struct i2c_client *client)
- 			.reg_write =3D pcf85363_nvram_write,
- 		},
- 	};
--	int ret, i;
-+	int ret, i, err;
-=20
- 	if (data)
- 		config =3D data;
-@@ -394,6 +424,11 @@ static int pcf85363_probe(struct i2c_client *client)
- 	if (IS_ERR(pcf85363->rtc))
- 		return PTR_ERR(pcf85363->rtc);
-=20
-+	err =3D pcf85363_load_capacitance(pcf85363, client->dev.of_node);
-+	if (err < 0)
-+		dev_warn(&client->dev, "failed to set xtal load capacitance: %d",
-+			 err);
-+
- 	pcf85363->rtc->ops =3D &rtc_ops;
- 	pcf85363->rtc->range_min =3D RTC_TIMESTAMP_BEGIN_2000;
- 	pcf85363->rtc->range_max =3D RTC_TIMESTAMP_END_2099;
+ required:
+   - compatible
+   - reg
 --=20
 2.37.2
 
