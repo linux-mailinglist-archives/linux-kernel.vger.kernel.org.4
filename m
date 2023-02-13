@@ -2,175 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7279D693D94
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 05:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C78FB693D96
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 05:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbjBMEyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Feb 2023 23:54:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51216 "EHLO
+        id S229829AbjBMEyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Feb 2023 23:54:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbjBMEyO (ORCPT
+        with ESMTP id S229814AbjBMEy0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Feb 2023 23:54:14 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E84BE06C
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 20:54:11 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so10977705pjb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 20:54:11 -0800 (PST)
+        Sun, 12 Feb 2023 23:54:26 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7CB10ABE
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 20:54:13 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id r8so12328259pls.2
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Feb 2023 20:54:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NtGFk1nMQnbVrTZQtdZEMWvYWxpeM1anGce2t/6Js4o=;
-        b=XnLJLE7Snc5+Dado4616bI2S9bt5BoOzPfFJwGy4sODs4id84UZRmeTgvHINl309vQ
-         14Su83K/zKRWWRUylX+LvkRt46rw/1NmQPiL7ZTYRBArkznoYvQmmpzl5Z1rM4XkHXqf
-         rBcFShV4hBPXc5uzWruqviGPXly8kLMjn2buoQyVJ78MB0g/unbDmmax/ZZW+MA5RiWQ
-         ogB0M9oUzUW0WJhaa+KIDOkbwCoO/Z1xc2lVmLfl1RBXdxIvi47/x8V3ynUmXwT9kABH
-         Wq7UQVpnuXOK+7FT7G8jAwG2P+Mvs0HLCPCDYEFwFUpPExstyaOaxnJUASc2Rtwb889R
-         YtNA==
+        bh=oP4wZ0K6nVayFSsIwI2M/qbAeCayW2BZaB6BdNSazd0=;
+        b=kQCkDlkhAa4XVmRG1hxXFbpWGlXPMBYAGXgy0L0uPsR9g5pVZDofnEGhHEJYmp4t70
+         GThKDRHlZLQeCmf3sShq+tYAdJikORjaEoHzhV8XPsEC3fuBeKmrypEuXS7bnM4Hr1Mu
+         ejAuWJdj4rylP7L48un2eYEoyEM3T/HgHUJ+XVCnMOro/vM0ja9j4XcrCb2wVTAb2ykU
+         VVkETKJNdrlyLnPFCjstqmRxjQbAorY6hbHg6u7JiS4XZd2HNWZ+rc/s5B7cfxPqGP5E
+         y7sCTgg87DvCTzj8NBBDe3V2Zk1icq2em5kbBEcbVFNjlxLiW6d6zxFc1ZAJ17l5bZV5
+         /rrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NtGFk1nMQnbVrTZQtdZEMWvYWxpeM1anGce2t/6Js4o=;
-        b=q0nywThvYoWuXcw2OUe6OOto0VsmBicTRFyzkpfuc0BnPDD3DuD5S0AC4YTKHmSR5J
-         l6qLHpQzCL1etsnrLbWigfdhXt/F214rt4Wpnz5gke+y5jWhbNVQmyzMqqMhg6+uRFf4
-         FXZvRvMTWIbnwr2HdRSXEcSPoumS6Rszpr+Hzs/Yy9CwHcSEzNqQgW9c9NHKNBwPEnEw
-         Fi3VHXXMD4NvuEmABV7HRLVDHoLF7RWzMNoSLTRo14++FunVth6b+XE+1O4GvyUri4TJ
-         w+/JqUNri75U/CST5hTFL6LoM/HbppXMXj5PHM+JYxFjEGopti8qsJ3q0ZegFEsy2GLK
-         b8eg==
-X-Gm-Message-State: AO0yUKWNmHQ9WPOP7aSJTGNA/57d4TZK2BPNkp9B+3K28vgfimzpDSWB
-        Gj/+X4W/8wbGQeyawx37N4h8+HnWhEBisXTB
-X-Google-Smtp-Source: AK7set8VQlMzUrEmfd8Da16vinMvIuF6MGR4zXdfBxivo1pKWlmTbhvBvyR/CFhAZRsTG7lVovToSw==
-X-Received: by 2002:a17:902:e545:b0:199:60:b9c8 with SMTP id n5-20020a170902e54500b001990060b9c8mr29757414plf.45.1676264050773;
-        Sun, 12 Feb 2023 20:54:10 -0800 (PST)
+        bh=oP4wZ0K6nVayFSsIwI2M/qbAeCayW2BZaB6BdNSazd0=;
+        b=i080UbwPAEig8D8zShLUOIUP2xS9NbJMj3L2lIz0THLouULhxAkP6h3KVb+qrzjzPh
+         /lZTonafhu7PMEAjPoc6b95tshRepMYGLxn6cnb+FgR/xaEmlmA9MIHkA41D79ZUEsx1
+         /cMo12zGiLsV5DM4ayjRFYxju0AiqBgE4+SJ+ipXK0n0A+k4FZCjet7MH5laF0uvOuQ4
+         dQeB8FnKjhr28cbnavMIpVc5PJloOTNgIwf+u1AT/9xd2oL8Y2Eoud/eTA38fDcQcgDy
+         V/Xl/cQGrqm2dx4ik6dK2aUQxkSbUG5wrG1RmRinhuxdBrvqPmkX9BNaJqbHJb4NrL6L
+         Vhhw==
+X-Gm-Message-State: AO0yUKXmsDwF4OB/SdEYa9f8v9ZVKIAie+KcMfdeSk+kImI/MG8ViwEP
+        EGZSbZ3kHpcFjKc3YBwuMvM4vmRE+6G4Pt5b
+X-Google-Smtp-Source: AK7set/Y/udvpjSPyiRHvzVVe58rgU9SM3O2saFl6KwR15sjL2H2TEzdTJbI8CgO0QDxGQ+4+3WsRQ==
+X-Received: by 2002:a17:902:ce86:b0:19a:9580:750 with SMTP id f6-20020a170902ce8600b0019a95800750mr5863992plg.16.1676264052424;
+        Sun, 12 Feb 2023 20:54:12 -0800 (PST)
 Received: from debug.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id e5-20020a170902784500b00189e7cb8b89sm7078303pln.127.2023.02.12.20.54.09
+        by smtp.gmail.com with ESMTPSA id e5-20020a170902784500b00189e7cb8b89sm7078303pln.127.2023.02.12.20.54.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Feb 2023 20:54:10 -0800 (PST)
+        Sun, 12 Feb 2023 20:54:12 -0800 (PST)
 From:   Deepak Gupta <debug@rivosinc.com>
 To:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>
-Cc:     Deepak Gupta <debug@rivosinc.com>
-Subject: [PATCH v1 RFC Zisslpcfi 06/20] riscv: Implementing "PROT_SHADOWSTACK" on riscv
-Date:   Sun, 12 Feb 2023 20:53:35 -0800
-Message-Id: <20230213045351.3945824-7-debug@rivosinc.com>
+Cc:     Deepak Gupta <debug@rivosinc.com>, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH v1 RFC Zisslpcfi 07/20] elf: ELF header parsing in GNU property for cfi state
+Date:   Sun, 12 Feb 2023 20:53:36 -0800
+Message-Id: <20230213045351.3945824-8-debug@rivosinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230213045351.3945824-1-debug@rivosinc.com>
 References: <20230213045351.3945824-1-debug@rivosinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchimplements new mmap protection flag "PROT_SHADOWSTACK" on riscv
+Binaries enabled with support for control-flow integrity will have new
+instructions that may fault on cpus which dont implement cfi mechanisms.
+This change adds
 
-Zisslpcfi extension on riscv uses R=0, W=1, X=0 as shadow stack PTE
-encoding. This encoding is reserved if Zisslpcfi is not implemented or
-backward cfi is not enabled for the respective mode.
+ - stub for setting up cfi state when loading a binary. Architecture
+   specific implementation can choose to implement this stub and setup
+   cfi state for program.
+ - define riscv ELF flag marker for forward cfi and backward cfi in
+   uapi/linux/elf.h
 
 Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 ---
- arch/riscv/include/asm/mman.h    | 19 +++++++++++++++++++
- arch/riscv/include/asm/pgtable.h |  1 +
- arch/riscv/kernel/sys_riscv.c    | 22 ++++++++++++++++++++++
- arch/riscv/mm/init.c             |  2 +-
- 4 files changed, 43 insertions(+), 1 deletion(-)
- create mode 100644 arch/riscv/include/asm/mman.h
+ fs/binfmt_elf.c          | 5 +++++
+ include/linux/elf.h      | 8 ++++++++
+ include/uapi/linux/elf.h | 6 ++++++
+ 3 files changed, 19 insertions(+)
 
-diff --git a/arch/riscv/include/asm/mman.h b/arch/riscv/include/asm/mman.h
-new file mode 100644
-index 000000000000..9c8499294a60
---- /dev/null
-+++ b/arch/riscv/include/asm/mman.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __ASM_MMAN_H__
-+#define __ASM_MMAN_H__
-+
-+#include <linux/compiler.h>
-+#include <linux/types.h>
-+#include <uapi/asm/mman.h>
-+
-+static inline unsigned long arch_calc_vm_prot_bits(unsigned long prot,
-+	unsigned long pkey __always_unused)
-+{
-+	unsigned long ret = 0;
-+
-+	ret = (prot & PROT_SHADOWSTACK)?VM_WRITE:0;
-+	return ret;
-+}
-+#define arch_calc_vm_prot_bits(prot, pkey) arch_calc_vm_prot_bits(prot, pkey)
-+
-+#endif /* ! __ASM_MMAN_H__ */
-diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-index 4eba9a98d0e3..74dbe122f2fa 100644
---- a/arch/riscv/include/asm/pgtable.h
-+++ b/arch/riscv/include/asm/pgtable.h
-@@ -159,6 +159,7 @@ extern struct pt_alloc_ops pt_ops __initdata;
- #define PAGE_READ_EXEC		__pgprot(_PAGE_BASE | _PAGE_READ | _PAGE_EXEC)
- #define PAGE_WRITE_EXEC		__pgprot(_PAGE_BASE | _PAGE_READ |	\
- 					 _PAGE_EXEC | _PAGE_WRITE)
-+#define PAGE_SHADOWSTACK       __pgprot(_PAGE_BASE | _PAGE_WRITE)
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index 9a780fafc539..bb431052eb01 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -1277,6 +1277,11 @@ static int load_elf_binary(struct linux_binprm *bprm)
  
- #define PAGE_COPY		PAGE_READ
- #define PAGE_COPY_EXEC		PAGE_EXEC
-diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
-index 5d3f2fbeb33c..c3cf6b94c710 100644
---- a/arch/riscv/kernel/sys_riscv.c
-+++ b/arch/riscv/kernel/sys_riscv.c
-@@ -18,6 +18,28 @@ static long riscv_sys_mmap(unsigned long addr, unsigned long len,
- 	if (unlikely(offset & (~PAGE_MASK >> page_shift_offset)))
- 		return -EINVAL;
+ 	set_binfmt(&elf_format);
  
-+	/*
-+	 * If only PROT_WRITE is specified then extend that to PROT_READ
-+	 * protection_map[VM_WRITE] is now going to select shadow stack encodings.
-+	 * So specifying PROT_WRITE actually should select protection_map [VM_WRITE | VM_READ]
-+	 * If user wants to create shadow stack then they should specify PROT_SHADOWSTACK
-+	 * protection
-+	 */
-+	if (unlikely((prot & PROT_WRITE) && !(prot & PROT_READ)))
-+		prot |= PROT_READ;
-+
-+	/*
-+	 * PROT_SHADOWSTACK is new protection flag. If specified with other like PROT_WRITE or
-+	 * PROT_READ PROT_SHADOWSTACK takes precedence. We can do either of following
-+	 *   - ensure no other protection flags are specified along with it and return EINVAL
-+	 *   OR
-+	 *   - ensure we clear other protection flags.
-+	 * Choosing to follow former, if any other bit is set in prot, we return EINVAL
-+	 * Other architectures can treat different combinations for PROT_SHADOWSTACK
-+	 */
-+	if (unlikely((prot & PROT_SHADOWSTACK) && (prot & ~PROT_SHADOWSTACK)))
-+		return -EINVAL;
-+
- 	return ksys_mmap_pgoff(addr, len, prot, flags, fd,
- 			       offset >> (PAGE_SHIFT - page_shift_offset));
++#if defined(CONFIG_USER_SHADOW_STACK) || defined(CONFIG_USER_INDIRECT_BR_LP)
++	retval = arch_elf_setup_cfi_state(&arch_state);
++	if (retval < 0)
++		goto out;
++#endif
+ #ifdef ARCH_HAS_SETUP_ADDITIONAL_PAGES
+ 	retval = ARCH_SETUP_ADDITIONAL_PAGES(bprm, elf_ex, !!interpreter);
+ 	if (retval < 0)
+diff --git a/include/linux/elf.h b/include/linux/elf.h
+index c9a46c4e183b..106d28f065aa 100644
+--- a/include/linux/elf.h
++++ b/include/linux/elf.h
+@@ -109,4 +109,12 @@ static inline int arch_elf_adjust_prot(int prot,
  }
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 478d6763a01a..ba8138c90450 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -294,7 +294,7 @@ static pmd_t __maybe_unused early_dtb_pmd[PTRS_PER_PMD] __initdata __aligned(PAG
- static const pgprot_t protection_map[16] = {
- 	[VM_NONE]					= PAGE_NONE,
- 	[VM_READ]					= PAGE_READ,
--	[VM_WRITE]					= PAGE_COPY,
-+	[VM_WRITE]					= PAGE_SHADOWSTACK,
- 	[VM_WRITE | VM_READ]				= PAGE_COPY,
- 	[VM_EXEC]					= PAGE_EXEC,
- 	[VM_EXEC | VM_READ]				= PAGE_READ_EXEC,
+ #endif
+ 
++#if defined(CONFIG_USER_SHADOW_STACK) || defined(CONFIG_USER_INDIRECT_BR_LP)
++extern int arch_elf_setup_cfi_state(const struct arch_elf_state *state);
++#else
++static inline int arch_elf_setup_cfi_state(const struct arch_elf_state *state)
++{
++	return 0;
++}
++#endif
+ #endif /* _LINUX_ELF_H */
+diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+index 4c6a8fa5e7ed..1cbd332061dc 100644
+--- a/include/uapi/linux/elf.h
++++ b/include/uapi/linux/elf.h
+@@ -468,4 +468,10 @@ typedef struct elf64_note {
+ /* Bits for GNU_PROPERTY_AARCH64_FEATURE_1_BTI */
+ #define GNU_PROPERTY_AARCH64_FEATURE_1_BTI	(1U << 0)
+ 
++/* .note.gnu.property types for RISCV: */
++/* Bits for GNU_PROPERTY_RISCV_FEATURE_1_FCFI/BCFI */
++#define GNU_PROPERTY_RISCV_FEATURE_1_AND  0xc0000000
++#define GNU_PROPERTY_RISCV_FEATURE_1_FCFI (1u << 0)
++#define GNU_PROPERTY_RISCV_FEATURE_1_BCFI (1u << 1)
++
+ #endif /* _UAPI_LINUX_ELF_H */
 -- 
 2.25.1
 
