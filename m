@@ -2,132 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52873694F54
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D9A694F5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Feb 2023 19:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbjBMS1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 13:27:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
+        id S231371AbjBMS22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 13:28:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbjBMS03 (ORCPT
+        with ESMTP id S231361AbjBMS2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 13:26:29 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38586F1;
-        Mon, 13 Feb 2023 10:26:28 -0800 (PST)
-Date:   Mon, 13 Feb 2023 18:26:25 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1676312785;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
+        Mon, 13 Feb 2023 13:28:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A5120D37
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:26:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676312806;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zBhCRTh8osu7xSxgDbCZKBz8vh3/bGHBs81Gav2hZ2w=;
-        b=f9C7H+9uFWfaEFbMdrA64RhrmSH9ZRv3dckMTM263JBuSLTwtCFikmaQuRFUF5QxbZwFRu
-        GtxnEPDWKCu6QOUgwgMyqtHmJTbhJB0Z63EmmUGTr4pj05C032Z90MXzXQ9eO4qOzC5nE1
-        cA75Z4+JEPfqpJGL3C750xObESa3eOmw95Q1BhvPKex6xiOuC+DFTU1dKdZei5thxfv6hY
-        WFfN3O3l9Yl+FjNil/ww8On9Wn8y6ZQ6SBhvo9I+MN3IVLY1y/QIlRUjbTJcDwRIASRB+x
-        4cI1Tzk8bsDN9iNHw+Am4MmJsSxIYZgZg2Zoyurd+Ujj/b8ryzbvUU4BDOa+ZQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1676312785;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zBhCRTh8osu7xSxgDbCZKBz8vh3/bGHBs81Gav2hZ2w=;
-        b=KrO/9O3uNW1aYZ63NPoJ26Ha4f2f6UpHYm/sigW2yMyeJ/7AWpnKXtp/EgBC+VfrzywTFh
-        KLyifKKLtpfkivDA==
-From:   "tip-bot2 for Conor Dooley" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] RISC-V: time: initialize hrtimer based broadcast
- clock event device
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Daniel Lezcano <daniel.lezcano@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230103141102.772228-2-apatel@ventanamicro.com>
-References: <20230103141102.772228-2-apatel@ventanamicro.com>
+        bh=Dqas7IKcHMmrzpHpfZ+GZZhhDLN7yPHWj+wWiYjQmUI=;
+        b=UiH0YkJ09B1Cokvr+q0BSCfcrIgdAoF6SPZ3b1qKhjb2ehn2+C0mL3sVtOpF4jPz8DM91N
+        J0y9CoVJONmcCFMX8n50Mi00xsRAZca3buW474dxhRAU+s0Ku0n/SKSzR91heKJdwLsDBz
+        pNupMOWhX1yWXIg9DsLHG4Y7EQuEGm4=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-483-V2-1LpDpMXakFUM-hYWlRQ-1; Mon, 13 Feb 2023 13:26:44 -0500
+X-MC-Unique: V2-1LpDpMXakFUM-hYWlRQ-1
+Received: by mail-ej1-f72.google.com with SMTP id 21-20020a170906225500b0088b953a6df6so8180451ejr.20
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 10:26:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dqas7IKcHMmrzpHpfZ+GZZhhDLN7yPHWj+wWiYjQmUI=;
+        b=LDuj/Gq+uGuhZic+3algO68Hbx42YbqUuWhZTjj9tL/oZuybl2u1FUtVgK/LJfMXIP
+         d6DZLo8iVENAhNdkmIurOya4lefrux3RkRTZUnG+eDP+jFr5WzragWYDNPJs0cJ+LkaS
+         9COH8J7gMFwcczje8+zAs/ST2cILe/j40/g3zWqPZX7LvfVPKw19DIWJI/xOInaGc3qp
+         XxY8J9nnLFbmRYpsxNAPLhfcupTw1lNOxBaJ4ycqe5Oc+SF4hZANunXhOQuDbNgb7Ayd
+         vy9S0nXXzmBr33gP3B2OCRdfObfPg3eia40bF1siN4rd06kQ4l4dKE4oJHjF+LS3TB04
+         ywdg==
+X-Gm-Message-State: AO0yUKUe9e6X/6nZV3rNeUBOBEWwO/ii/qdcqVTHnRTDR4vOKYOpDHOr
+        LrItIstYQrI5JSfqNO06LV2QAUBFF4ZGEcABmrD397NGONEUAi68p4n85FIn0BUyCgzIFqaKfL3
+        5r8zgdtPyGg3swmc4VURHdO4x
+X-Received: by 2002:a17:906:a189:b0:87b:db62:d659 with SMTP id s9-20020a170906a18900b0087bdb62d659mr26218827ejy.19.1676312803543;
+        Mon, 13 Feb 2023 10:26:43 -0800 (PST)
+X-Google-Smtp-Source: AK7set9LoCpz6wnVKg9S4xNaMygS8ScsWULBPzti431vOcsLeANKUzyaytVJAQm/dkWpkzg4ZDf8fQ==
+X-Received: by 2002:a17:906:a189:b0:87b:db62:d659 with SMTP id s9-20020a170906a18900b0087bdb62d659mr26218814ejy.19.1676312803382;
+        Mon, 13 Feb 2023 10:26:43 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id h14-20020a17090634ce00b00877e1bb54b0sm7128313ejb.53.2023.02.13.10.26.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 10:26:42 -0800 (PST)
+Message-ID: <ad3c51a3-f46e-c559-7ad8-573564f63875@redhat.com>
+Date:   Mon, 13 Feb 2023 19:26:41 +0100
 MIME-Version: 1.0
-Message-ID: <167631278533.4906.4080664832019272480.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tianyu Lan <ltykernel@gmail.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+References: <43980946-7bbf-dcef-7e40-af904c456250@linux.microsoft.com>
+ <Y+aQyFJt9Tn2PJnC@google.com>
+ <9a046de1-8085-3df4-94cd-39bb893c8c9a@linux.microsoft.com>
+ <88a89319-a71e-fa90-0dbb-00cf8a549380@redhat.com>
+ <21b1ee26-dfd4-923d-72da-d8ded3dd819c@linux.microsoft.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: "KVM: x86/mmu: Overhaul TDP MMU zapping and flushing" breaks SVM
+ on Hyper-V
+In-Reply-To: <21b1ee26-dfd4-923d-72da-d8ded3dd819c@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the timers/core branch of tip:
+On 2/13/23 19:05, Jeremi Piotrowski wrote:
+> So I looked at the ftrace (all kvm&kvmmu events + hyperv_nested_*
+> events) I see the following: With tdp_mmu=0: kvm_exit sequence of
+> kvm_mmu_prepare_zap_page hyperv_nested_flush_guest_mapping (always
+> follows every sequence of kvm_mmu_prepare_zap_page) kvm_entry
+> 
+> With tdp_mmu=1 I see: kvm_mmu_prepare_zap_page and
+> kvm_tdp_mmu_spte_changed events from a kworker context, but they are
+> not followed by hyperv_nested_flush_guest_mapping. The only
+> hyperv_nested_flush_guest_mapping events I see happen from the qemu
+> process context.
+> 
+> Also the number of flush hypercalls is significantly lower: a 7second
+> sequence through OVMF with tdp_mmu=0 produces ~270 flush hypercalls.
+> In the traces with tdp_mmu=1 I now see max 3.
+> 
+> So this might be easier to diagnose than I thought: the
+> HvCallFlushGuestPhysicalAddressSpace calls are missing now.
 
-Commit-ID:     8b3b8fbb4896984b5564789a42240e4b3caddb61
-Gitweb:        https://git.kernel.org/tip/8b3b8fbb4896984b5564789a42240e4b3caddb61
-Author:        Conor Dooley <conor.dooley@microchip.com>
-AuthorDate:    Tue, 03 Jan 2023 19:41:00 +05:30
-Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CommitterDate: Mon, 13 Feb 2023 13:10:16 +01:00
+Can you check if KVM is reusing a nCR3 value?
 
-RISC-V: time: initialize hrtimer based broadcast clock event device
+If so, perhaps you can just add 
+hyperv_flush_guest_mapping(__pa(root->spt), NULL) after 
+kvm_tdp_mmu_get_vcpu_root_hpa's call to tdp_mmu_alloc_sp()?
 
-Similarly to commit 022eb8ae8b5e ("ARM: 8938/1: kernel: initialize
-broadcast hrtimer based clock event device"), RISC-V needs to initiate
-hrtimer based broadcast clock event device before C3STOP can be used.
-Otherwise, the introduction of C3STOP for the RISC-V arch timer in
-commit 232ccac1bd9b ("clocksource/drivers/riscv: Events are stopped
-during CPU suspend") leaves us without any broadcast timer registered.
-This prevents the kernel from entering oneshot mode, which breaks timer
-behaviour, for example clock_nanosleep().
+Paolo
 
-A test app that sleeps each cpu for 6, 5, 4, 3 ms respectively, HZ=250
-& C3STOP enabled, the sleep times are rounded up to the next jiffy:
-== CPU: 1 ==      == CPU: 2 ==      == CPU: 3 ==      == CPU: 4 ==
-Mean: 7.974992    Mean: 7.976534    Mean: 7.962591    Mean: 3.952179
-Std Dev: 0.154374 Std Dev: 0.156082 Std Dev: 0.171018 Std Dev: 0.076193
-Hi: 9.472000      Hi: 10.495000     Hi: 8.864000      Hi: 4.736000
-Lo: 6.087000      Lo: 6.380000      Lo: 4.872000      Lo: 3.403000
-Samples: 521      Samples: 521      Samples: 521      Samples: 521
-
-Link: https://lore.kernel.org/linux-riscv/YzYTNQRxLr7Q9JR0@spud/
-Fixes: 232ccac1bd9b ("clocksource/drivers/riscv: Events are stopped during CPU suspend")
-Suggested-by: Samuel Holland <samuel@sholland.org>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-Reviewed-by: Samuel Holland <samuel@sholland.org>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-Link: https://lore.kernel.org/r/20230103141102.772228-2-apatel@ventanamicro.com
-Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
----
- arch/riscv/kernel/time.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/riscv/kernel/time.c b/arch/riscv/kernel/time.c
-index 8217b0f..1cf21db 100644
---- a/arch/riscv/kernel/time.c
-+++ b/arch/riscv/kernel/time.c
-@@ -5,6 +5,7 @@
-  */
- 
- #include <linux/of_clk.h>
-+#include <linux/clockchips.h>
- #include <linux/clocksource.h>
- #include <linux/delay.h>
- #include <asm/sbi.h>
-@@ -29,6 +30,8 @@ void __init time_init(void)
- 
- 	of_clk_init(NULL);
- 	timer_probe();
-+
-+	tick_setup_hrtimer_broadcast();
- }
- 
- void clocksource_arch_init(struct clocksource *cs)
