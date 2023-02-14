@@ -2,133 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B79EF696349
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:16:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAEF769634F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:18:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbjBNMQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 07:16:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
+        id S231680AbjBNMS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 07:18:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjBNMQK (ORCPT
+        with ESMTP id S229933AbjBNMSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 07:16:10 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45966211D
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:16:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676376969; x=1707912969;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xUofCmzcrew67KOIwL4w5cHjueDItJEzbBSY2HQSdDU=;
-  b=WdCWWfYIzJa/UufK3rUgUYtnt/PulGmUKuqb8gBYKOi17eR1qPBE2KlG
-   U04oR5L8sR7678vWWj2waHP2Yi9ik/g0PY8/tKDInojWg8p7kRMuMHQNf
-   FaU88KmOFNkzU1nhe8FFZ0N1kZYBnW0nrphsuigYquF9UHu3faqO66bbW
-   8f90SomIa4XU/ZGcdvO81CbQTCqa6jrOyktdshI56bDMoT6MjpzhW2VxD
-   f55Q0BXwIw84X8p4iHmqQWHjAuEvnuRA5v54BUhNM0KP1MWnPmr6RHOoi
-   136vmPE6unbzblKR4umX1Irppw2FFGPrK2WEb7Pjk/QfgaEpTLAnBKlX8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="328857497"
-X-IronPort-AV: E=Sophos;i="5.97,296,1669104000"; 
-   d="scan'208";a="328857497"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 04:16:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="998056949"
-X-IronPort-AV: E=Sophos;i="5.97,296,1669104000"; 
-   d="scan'208";a="998056949"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Feb 2023 04:16:07 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pRuEB-0008Tx-0i;
-        Tue, 14 Feb 2023 12:16:07 +0000
-Date:   Tue, 14 Feb 2023 20:15:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: io_uring/io_uring.c:2932:40: error: variable 'prev' set but not used
-Message-ID: <202302142034.cidUt6CO-lkp@intel.com>
+        Tue, 14 Feb 2023 07:18:52 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E252725E22
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:18:50 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id ct17so4437941pfb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:18:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1676377130;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VGtzT5YWXxWjNNkuQ9gWwOTNnsMeD7tw5byiprIN4cQ=;
+        b=lwoL8JOmxVzeal8ZcwYU935i9/fofLq9Am0W6fI8zNqQ94gq7zAbu8Va1ZFsC4oLIq
+         AC7WBoIZv/j9l4obVOpMMlcOQxvmnv/RQ0I1dmLKLSK09ezQb79xs5gmxEjXuRkR53Hz
+         v//LJWA9dsCV/N2bAMLRlAbLkyJjDcEOajJUmEIN7V22awKABDhw5LppYUBf4m24K2vF
+         YlRTTtbEl3gktFEthxpYzswVFjfe755pPUV9D3cqZnR8y/JZSEauVzIQKMC6M3jTv1Bt
+         fuYakdUh8z1bwAi3QW1R2fuUpF1Ny+rop6VvVq4ccPEIg+v6OzjwQxy81XxrMIklJpvv
+         53Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1676377130;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VGtzT5YWXxWjNNkuQ9gWwOTNnsMeD7tw5byiprIN4cQ=;
+        b=IdivuKYiZh75Q9tfSltbfvetLQQTghKFgau18je4LrsyXFGX876AyZF4c7lkj6hRc0
+         8wDXjZQm177/tSbEHD4KQ2OiHK/So1pJLac5Qldgsll2lEVRo1iEFKy6BCERRwlBG05g
+         ukaj7WGmJDht8IC6x+22h76mIXGwR6cq/nWCA5beKFSF6QAa2Q3oFuf3eq11zM9/h6P/
+         Dtvu52kuvA8OYGRjJxTEIvy7p8x5rNRPb6hALg32fzjFlY04VMn7lsj47ZFph/gaE124
+         5iXuh1MSpm879IZsPKmwrgppSkHaldFJ2XVSFy6DL6G5ZMpRZK6hI5UOkQ64LKM7geZk
+         wSCw==
+X-Gm-Message-State: AO0yUKUuRv3l1EtwIbHfg4vEuKf63SQTGTw2lX/SCKEQqp4onmOh8XSQ
+        05MJ7FWZ3cY9WOLy9xXMkhSbYK0utmCIJotMjdo19g==
+X-Google-Smtp-Source: AK7set+8WtbFOF8a0OL3em7goljF7W2Nln+84rBr3Y0jpvBFfiTJImlY4BKDpILrWAIOgO0OoF8iFTeSqsXX21Wgwg0=
+X-Received: by 2002:a62:1784:0:b0:5a8:bdd1:6c53 with SMTP id
+ 126-20020a621784000000b005a8bdd16c53mr442860pfx.9.1676377130386; Tue, 14 Feb
+ 2023 04:18:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <f57ad0f8fdf663465bca74467c344dfa305a3199.1675305696.git.limings@nvidia.com>
+In-Reply-To: <f57ad0f8fdf663465bca74467c344dfa305a3199.1675305696.git.limings@nvidia.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 14 Feb 2023 13:18:14 +0100
+Message-ID: <CAPDyKFqiUqufOPaezZH4bQrxwD-7kQ6fQp4Ypf0by72Z7i4d9Q@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] mmc: sdhci-of-dwcmshc: add the missing device
+ table IDs for acpi
+To:     Liming Sun <limings@nvidia.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        David Thompson <davthompson@nvidia.com>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jens,
+On Thu, 2 Feb 2023 at 16:29, Liming Sun <limings@nvidia.com> wrote:
+>
+> This commit adds the missing MODULE_DEVICE_TABLE for acpi, or else
+> it won't be loaded automatically when compiled as a kernel module.
+>
+> Reviewed-by: David Thompson <davthompson@nvidia.com>
+> Signed-off-by: Liming Sun <limings@nvidia.com>
 
-First bad commit (maybe != root cause):
+Applied for next, thanks!
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f6feea56f66d34259c4222fa02e8171c4f2673d1
-commit: ed29b0b4fd835b058ddd151c49d021e28d631ee6 io_uring: move to separate directory
-date:   7 months ago
-config: x86_64-sof-customedconfig-edison-defconfig (https://download.01.org/0day-ci/archive/20230214/202302142034.cidUt6CO-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ed29b0b4fd835b058ddd151c49d021e28d631ee6
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout ed29b0b4fd835b058ddd151c49d021e28d631ee6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302142034.cidUt6CO-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   io_uring/io_uring.c: In function '__io_submit_flush_completions':
->> io_uring/io_uring.c:2932:40: error: variable 'prev' set but not used [-Werror=unused-but-set-variable]
-    2932 |         struct io_wq_work_node *node, *prev;
-         |                                        ^~~~
-   cc1: all warnings being treated as errors
+Kind regards
+Uffe
 
 
-vim +/prev +2932 io_uring/io_uring.c
-
-7a743e225b2a9d fs/io_uring.c Pavel Begunkov 2020-03-03  2928  
-c450178d9be9dc fs/io_uring.c Pavel Begunkov 2021-09-08  2929  static void __io_submit_flush_completions(struct io_ring_ctx *ctx)
-a141dd896f544d fs/io_uring.c Jens Axboe     2021-08-12  2930  	__must_hold(&ctx->uring_lock)
-905c172f32c56f fs/io_uring.c Pavel Begunkov 2021-02-10  2931  {
-6f33b0bc4ea43f fs/io_uring.c Pavel Begunkov 2021-09-24 @2932  	struct io_wq_work_node *node, *prev;
-cd0ca2e048dc0d fs/io_uring.c Pavel Begunkov 2021-08-09  2933  	struct io_submit_state *state = &ctx->submit_state;
-905c172f32c56f fs/io_uring.c Pavel Begunkov 2021-02-10  2934  
-3d4aeb9f98058c fs/io_uring.c Pavel Begunkov 2021-11-10  2935  	if (state->flush_cqes) {
-79ebeaee8a21a0 fs/io_uring.c Jens Axboe     2021-08-10  2936  		spin_lock(&ctx->completion_lock);
-6f33b0bc4ea43f fs/io_uring.c Pavel Begunkov 2021-09-24  2937  		wq_list_for_each(node, prev, &state->compl_reqs) {
-6f33b0bc4ea43f fs/io_uring.c Pavel Begunkov 2021-09-24  2938  			struct io_kiocb *req = container_of(node, struct io_kiocb,
-6f33b0bc4ea43f fs/io_uring.c Pavel Begunkov 2021-09-24  2939  						    comp_list);
-5182ed2e332e8e fs/io_uring.c Pavel Begunkov 2021-06-26  2940  
-f43de1f88841d5 fs/io_uring.c Pavel Begunkov 2022-06-15  2941  			if (!(req->flags & REQ_F_CQE_SKIP))
-91ef75a7db0d08 fs/io_uring.c Pavel Begunkov 2022-06-15  2942  				__io_fill_cqe_req(ctx, req);
-905c172f32c56f fs/io_uring.c Pavel Begunkov 2021-02-10  2943  		}
-3d4aeb9f98058c fs/io_uring.c Pavel Begunkov 2021-11-10  2944  
-905c172f32c56f fs/io_uring.c Pavel Begunkov 2021-02-10  2945  		io_commit_cqring(ctx);
-79ebeaee8a21a0 fs/io_uring.c Jens Axboe     2021-08-10  2946  		spin_unlock(&ctx->completion_lock);
-905c172f32c56f fs/io_uring.c Pavel Begunkov 2021-02-10  2947  		io_cqring_ev_posted(ctx);
-3d4aeb9f98058c fs/io_uring.c Pavel Begunkov 2021-11-10  2948  		state->flush_cqes = false;
-3d4aeb9f98058c fs/io_uring.c Pavel Begunkov 2021-11-10  2949  	}
-5182ed2e332e8e fs/io_uring.c Pavel Begunkov 2021-06-26  2950  
-1cce17aca621c3 fs/io_uring.c Pavel Begunkov 2021-09-24  2951  	io_free_batch_list(ctx, state->compl_reqs.first);
-6f33b0bc4ea43f fs/io_uring.c Pavel Begunkov 2021-09-24  2952  	INIT_WQ_LIST(&state->compl_reqs);
-7a743e225b2a9d fs/io_uring.c Pavel Begunkov 2020-03-03  2953  }
-7a743e225b2a9d fs/io_uring.c Pavel Begunkov 2020-03-03  2954  
-
-:::::: The code at line 2932 was first introduced by commit
-:::::: 6f33b0bc4ea43f5c5ce7b7c9ab66051f80837862 io_uring: use slist for completion batching
-
-:::::: TO: Pavel Begunkov <asml.silence@gmail.com>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> ---
+>  drivers/mmc/host/sdhci-of-dwcmshc.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
+> index 49338670c89f..eddaed07755a 100644
+> --- a/drivers/mmc/host/sdhci-of-dwcmshc.c
+> +++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
+> @@ -446,6 +446,7 @@ static const struct acpi_device_id sdhci_dwcmshc_acpi_ids[] = {
+>         },
+>         {}
+>  };
+> +MODULE_DEVICE_TABLE(acpi, sdhci_dwcmshc_acpi_ids);
+>  #endif
+>
+>  static int dwcmshc_probe(struct platform_device *pdev)
+> --
+> 2.30.1
+>
