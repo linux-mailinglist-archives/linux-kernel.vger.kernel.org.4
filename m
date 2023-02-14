@@ -2,84 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30ED2696DAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 20:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F5B696DB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 20:18:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231777AbjBNTRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 14:17:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
+        id S231935AbjBNTSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 14:18:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjBNTRh (ORCPT
+        with ESMTP id S229460AbjBNTSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 14:17:37 -0500
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1FA265BD;
-        Tue, 14 Feb 2023 11:17:36 -0800 (PST)
-Received: by mail-oi1-f181.google.com with SMTP id s17so13805997ois.10;
-        Tue, 14 Feb 2023 11:17:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oBiuz+SQFFy7EarOUH8jPMtqn/udQfeZ8u8wFfmsPVM=;
-        b=gSWgfwFdELnEw7bQsfNPAk3P8pQ9MnQjov0eUaTgD2mMlAlSswZapwncQy1J+Jv4z9
-         DGrvj9vKvutSSCM9OSyT62dCSqWbgaaRtlokpFF/lC7z0s3QZg0QQwSBhQOy1hlJIFz3
-         KRiZumcbKRZ3X6b8E7tyOFuzWZLOrTv/VNsM+PtFOemHVdw9gKigksxyn8FkZXUk1WEz
-         9OAyjybqhmr/Qu2bpq9cwfU+NKnHIKNYQywJRdimSQbQHkhzdl4hJig4ktOwVN5FoDcY
-         CRDRrvT9Hz2WZsekAcpmOa8YGVfI8dtMXe+2YQ2jqFk8L9PK0F3JxVDrvpAqXd8groce
-         81Gg==
-X-Gm-Message-State: AO0yUKUOmKRtqGClhRBR1MZMwrAgGK0xi7OG8jgJ8CpZ5HZtSSu2gm3V
-        BGMSiU/4SUtHpbQtwxza/w==
-X-Google-Smtp-Source: AK7set+b/crO2+7WEplkyi1t0w5Ow224TFItHaiR6M4GdAoGOXaK41xu+4QCl0q9hxEbhrgIJuyluw==
-X-Received: by 2002:a05:6808:8c8:b0:37a:f9a1:5cfa with SMTP id k8-20020a05680808c800b0037af9a15cfamr1798718oij.58.1676402256107;
-        Tue, 14 Feb 2023 11:17:36 -0800 (PST)
-Received: from robh_at_kernel.org (c-67-162-147-231.hsd1.co.comcast.net. [67.162.147.231])
-        by smtp.gmail.com with ESMTPSA id o127-20020acabe85000000b0035c21f1a570sm1253373oif.6.2023.02.14.11.17.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 11:17:35 -0800 (PST)
-Received: (nullmailer pid 26358 invoked by uid 1000);
-        Tue, 14 Feb 2023 19:17:34 -0000
-Date:   Tue, 14 Feb 2023 13:17:34 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Shradha Todi <shradha.t@samsung.com>
-Cc:     lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com,
-        krzysztof.kozlowski+dt@linaro.org, alim.akhtar@samsung.com,
-        jingoohan1@gmail.com, Sergey.Semin@baikalelectronics.ru,
-        lukas.bulwahn@gmail.com, hongxing.zhu@nxp.com, tglx@linutronix.de,
-        m.szyprowski@samsung.com, jh80.chung@samsung.co,
-        pankaj.dubey@samsung.com, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/16] dt-bindings: PCI: Add phy-names as required
- property
-Message-ID: <20230214191734.GA23567-robh@kernel.org>
-References: <20230214121333.1837-1-shradha.t@samsung.com>
- <CGME20230214121444epcas5p16c5f7665fc9dee78cd427d976114e4f1@epcas5p1.samsung.com>
- <20230214121333.1837-11-shradha.t@samsung.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214121333.1837-11-shradha.t@samsung.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Tue, 14 Feb 2023 14:18:44 -0500
+Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C4F14217;
+        Tue, 14 Feb 2023 11:18:41 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
+        t=1676402318; bh=M5syd+xL2311kuoN57mCyNpR+LmxBuxfBcXd2LTsyvY=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To;
+        b=slqm7+oAI5AgPImuHdj7RJoie1ti4TrUhgx4bs+nyxjqoZHA31ItnK0N3bzKOg2cL
+         J7yWQtIRXOIM+UBkLt7nqXFD+Ex84AHRDOeu/PSXtwfRb//QYCzOehHpp9dsKzSwvk
+         b2wgHhyl9Z2sAX9FKFAuO85DNSdy0Y8RV0QM+m0w=
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [RFC PATCH] dt-bindings: dma: apple,sio: Add schema
+From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
+In-Reply-To: <167638945429.3790.16067227881981242831.robh@kernel.org>
+Date:   Tue, 14 Feb 2023 20:18:36 +0100
+Cc:     Janne Grunau <j@jannau.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Hector Martin <marcan@marcan.st>, devicetree@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>, Sven Peter <sven@svenpeter.dev>,
+        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <6B75F1A1-E2DE-40D5-AA79-A764C65D8AD2@cutebit.org>
+References: <20230214141053.92731-1-povik+lin@cutebit.org>
+ <167638945429.3790.16067227881981242831.robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 05:43:27PM +0530, Shradha Todi wrote:
-> To replace devm_of_phy_get with devm_phy_get to get the
-> PHY pointer using non DT version, we need to add phy-names
-> property in DT and make it a required property with const
-> value.
 
-Also an ABI break.
+> On 14. 2. 2023, at 17:12, Rob Herring <robh@kernel.org> wrote:
+> On Tue, 14 Feb 2023 15:10:53 +0100, Martin Povi=C5=A1er wrote:
+>> Describe the SIO coprocessor which serves as pretend DMA controller =
+on
+>> recent Apple platforms.
+>>=20
+>> Signed-off-by: Martin Povi=C5=A1er <povik+lin@cutebit.org>
+>> ---
+>>=20
+>> Since the schema mentions a loader preparing the binding =
+appropriately,
+>> here's a PR with the relevant (WIP) loader code, if anyone wants to =
+look:
+>> https://github.com/AsahiLinux/m1n1/pull/286
+>>=20
+>> .../devicetree/bindings/dma/apple,sio.yaml    | 129 =
+++++++++++++++++++
+>> 1 file changed, 129 insertions(+)
+>> create mode 100644 =
+Documentation/devicetree/bindings/dma/apple,sio.yaml
+>>=20
+>=20
+> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m =
+dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>=20
+> yamllint warnings/errors:
+>=20
+> dtschema/dtc warnings/errors:
+> =
+Documentation/devicetree/bindings/dma/apple,sio.example.dts:24.35-27.11: =
+Warning (node_name_vs_property_name): /example-0/interrupt-controller: =
+node name and property name conflict
 
-And unnecessary. You don't need a name with a single entry. Pretty sure 
-I fixed that for phy_get at some point.
+I saw the warning, but since I had copied that part of the example from
+apple,admac.yaml I didn=E2=80=99t make much of it. Now that I look at it =
+again,
+the example in apple,admac doesn=E2=80=99t raise the same warning, how =
+come?
 
-Rob
+This is just a curiosity since we don=E2=80=99t need the aic node in the =
+example
+anyway (unlike in apple,admac where it=E2=80=99s needed because of empty =
+entries
+in interrupts-extended).
+
+Martin
+
