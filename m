@@ -2,72 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E3C6956C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 03:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B0E6956C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 03:39:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231384AbjBNCiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 21:38:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
+        id S230370AbjBNCjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 21:39:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjBNCiM (ORCPT
+        with ESMTP id S229462AbjBNCjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 21:38:12 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF9617179;
-        Mon, 13 Feb 2023 18:38:09 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id D5BC224E2F8;
-        Tue, 14 Feb 2023 10:38:00 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 14 Feb
- 2023 10:38:00 +0800
-Received: from [192.168.125.110] (183.27.97.168) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 14 Feb
- 2023 10:37:59 +0800
-Message-ID: <6a5ced8a-e230-a520-f05f-9972ea77f17b@starfivetech.com>
-Date:   Tue, 14 Feb 2023 10:37:58 +0800
+        Mon, 13 Feb 2023 21:39:21 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A4D126FF
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 18:38:55 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id a3so2734108ejb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 18:38:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9roXr1MNKieEkfDYKCLMeMwvOQh6WqRC1DycfOcxMew=;
+        b=xN5cF6A+pG2cWMwdWRCz9BTn9dBJYTD1UcD65+Kr0rOKbQptVJAAc9fgkH8JluA0pE
+         86/gWvRbJumAGY8BoL281ZzqJar4ThVkARPWxED17QOoo1bl4a0h6viFMuElBg6QJ8SS
+         HeYVdcARPq+M0+fHp2PKVNj4YBNkrETmNXem0KWM1d/AZj+b2vFM/4s5EUWxUmB8b+kA
+         ufq4HXkXxQIVVbyh65lZ8TSMB5MT7mBDWR8U3856OOlyTwPtaZr/6iEmmJXCPakHscsN
+         a/RYaaL3FKWnJgV+hfO9FZOh+ppvh/X9pMR2KLgE5kdoGjrJIdSEZagpLI1TlW4L3SEP
+         IS7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9roXr1MNKieEkfDYKCLMeMwvOQh6WqRC1DycfOcxMew=;
+        b=cZj0Ur/EOUmhpVBUuMldsPev16/vabhKKawbvCI8wpjZh3pPNjlNxJ+zIdXiNNO9dQ
+         tkRN/yFFcbuqUvwNTqstNQFpSz6HQkzl5he/YcLmD4fb/gbOVdnVw/nhrIq4y1cPe0ti
+         ZHb5vK9x+kyc2nXRl6kT8IO1gou8njdiRFu40K/mStRE7L79SPUpHoXzr4/F7zxGyomR
+         /pBIRsGtF39X8uYLaF5at9b2es2p6IKpM1rFwdg5gAZKBVRhRkl0Qv2HWM4cWAwllmn6
+         9BY26uy3F2K++MGUEkl+dEZ7lGVo9KqRVniIbm/QPEheA0hs2HGoo+HFuYEJI15l90fJ
+         JlJQ==
+X-Gm-Message-State: AO0yUKXGeqqfIM7mKl22j2O96KA/WnVEkZXKC3J6mXxGEdbjSZ2FEPKD
+        bCvJ7PIrjolKa9T4jOJq9htUlMs0gb09eqO5uQrJtPpYy1vx
+X-Google-Smtp-Source: AK7set8emikUsd58cC7yseAKI8EJoyfzeKk4rky+xvAbB46z+TZOwyovOcrIQN8yjgqTBuXlEYomyLUOZJMvBlQZd7k=
+X-Received: by 2002:a17:906:2b4b:b0:8a6:5720:9104 with SMTP id
+ b11-20020a1709062b4b00b008a657209104mr546257ejg.1.1676342333755; Mon, 13 Feb
+ 2023 18:38:53 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v3 6/7] riscv: dts: starfive: Add initial StarFive JH7110
- device tree
-Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>
-CC:     Conor Dooley <conor@kernel.org>, <linux-riscv@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221220011247.35560-1-hal.feng@starfivetech.com>
- <20221220011247.35560-7-hal.feng@starfivetech.com> <Y6zHy9oL4xzl+6Rd@spud>
- <c507e0b2-5ca3-cffe-55d2-873ed8c24e3d@starfivetech.com>
- <Y9og8Q2UnJ452KH/@wendy>
- <df6755ed-a358-ea01-d89e-f3c004b9c297@starfivetech.com>
- <Y9wR7Up+iObw5qoE@spud> <Y+TU98PLIvtkD8/R@wendy>
- <e1d2646e-b5de-298e-bb91-19ad12fd31af@starfivetech.com>
- <Y+oL6l5LzUyAzOgC@wendy>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <Y+oL6l5LzUyAzOgC@wendy>
+References: <20221205084127.535-1-xieyongji@bytedance.com> <20221205084127.535-2-xieyongji@bytedance.com>
+ <20221219023253-mutt-send-email-mst@kernel.org> <CACycT3utDJFZtWzqCUXJaqRjkCXPMTAi+VJd3g6dw25vWqaduw@mail.gmail.com>
+ <20230127032039-mutt-send-email-mst@kernel.org> <CACycT3u=vULuZ9-ZakBjxmbu88iUb+xB2mHJUnHA_8SuUV7H4w@mail.gmail.com>
+ <20230213065116-mutt-send-email-mst@kernel.org> <CACycT3uY1dfP=5d1go+POh7-J1tUMW+9RXi92KtcFJYMzq-bOQ@mail.gmail.com>
+ <87a61htn0n.ffs@tglx>
+In-Reply-To: <87a61htn0n.ffs@tglx>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Tue, 14 Feb 2023 10:38:42 +0800
+Message-ID: <CACycT3u9PmX47vOviVvXAx-ihG450i8y=uC8KZX3sRh9ywHF-w@mail.gmail.com>
+Subject: Re: [PATCH v2 01/11] genirq/affinity:: Export irq_create_affinity_masks()
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.97.168]
-X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,52 +73,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Feb 2023 10:07:38 +0000, Conor Dooley wrote:
-> On Mon, Feb 13, 2023 at 05:41:02PM +0800, Hal Feng wrote:
->> On Thu, 9 Feb 2023 11:11:51 +0000, Conor Dooley wrote:
->> > On Thu, Feb 02, 2023 at 07:41:33PM +0000, Conor Dooley wrote:
->> >> On Fri, Feb 03, 2023 at 02:56:41AM +0800, Hal Feng wrote:
->> >> > On Wed, 1 Feb 2023 08:21:05 +0000, Conor Dooley wrote:
->> >> > > On Wed, Feb 01, 2023 at 03:21:48PM +0800, Hal Feng wrote:
->> >> > >> On Wed, 28 Dec 2022 22:48:43 +0000, Conor Dooley wrote:
->> >> > >> > On Tue, Dec 20, 2022 at 09:12:46AM +0800, Hal Feng wrote:
->> > 
->> >> FWIW, the deadline for getting material in for v6.3 has already passed,
->> >> so you can send the next version of this series without waiting for
->> >> clarification on the compatibles & ISA string. We should have plenty of
->> >> time to get those fixed up before the series gets applied.
->> > 
->> > Also, as it looks like the pinctrl driver is going to land in time for
->> > v6.3, that leaves just this series and the clock driver required for
->> > base support.
->> > 
->> > In the original submission, you sent the clock driver and dt in the same
->> > series & I think it might make the process a bit faster if you sent them
->> > both together for the next version again.
->> > 
->> > That way, both the drivers and dts can go together as their have an
->> > inter dependence.
->> > 
->> > That's my opinion anyway, will make trying to sequence things between
->> > trees easier.
->> 
->> Good idea. But how can I write the change log if we do so? Will it make
->> the history confused? Thanks.
-> 
-> I'm not sure what you mean w.r.t. history.
-> Both series are on V3 I think, so just make the next version v4 title it
-> something like "Basic clock, reset & dt support..."
-> For the changelogs, just mention you merged the two series again in
-> the cover letter & add the changelogs that you would have made for each
-> series to the cover as a single changelog.
-> Say somewhere in the cover that I suggested merging the series together
-> so that they could go via the same tree as the dt-binding headers are
-> required by both driver & devicetree.
+On Tue, Feb 14, 2023 at 2:54 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> On Mon, Feb 13 2023 at 22:50, Yongji Xie wrote:
+> > On Mon, Feb 13, 2023 at 8:00 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > I can try to split irq_create_affinity_masks() into a common part and
+> > an irq specific part, and move the common part to a common dir such as
+> > /lib and export it. Then we can use the common part to build a new API
+> > for usage.
+>
+>   https://lore.kernel.org/all/20221227022905.352674-1-ming.lei@redhat.com/
+>
 
-OK, I see. I will merge the clock patch series [1] and this DT patch
-series in v4. Thanks for your suggestions.
+Thanks for the kind reminder! I will rebase my patchset on it.
 
-[1] https://lore.kernel.org/all/20221220005054.34518-1-hal.feng@starfivetech.com/
-
-Best regards,
-Hal
+Thanks,
+Yongji
