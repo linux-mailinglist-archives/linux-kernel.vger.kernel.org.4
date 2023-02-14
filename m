@@ -2,135 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA078695E56
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:09:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7264695E71
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231971AbjBNJJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 04:09:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38826 "EHLO
+        id S232312AbjBNJK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 04:10:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231873AbjBNJJU (ORCPT
+        with ESMTP id S231921AbjBNJJg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 04:09:20 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C0E241FB
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:08:21 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id o18so14896900wrj.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:08:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dJq3RRMzf3lbuS5bgQVc8NQ+nEsYjE4jNGYbXmQQw78=;
-        b=Wsp4Zlb8V2Jx4m9+tXkDNgf5Lxau03xHaG+6WGxc+G8HrcJltAE2Px1QSC5XUlVOpz
-         2Ng4jqNhjAJ4QJFwe7IYqEDhVP83rKHt0zthGOU/F+j+7d3lCfNC+HaTRTHh98F2fr7Y
-         I1aHMaHeLfbmf2lAE+TKEJNN/s8peiJT6bIUpf+6MkHhRn0aKlK4U+gulZSfiKfbW+Eu
-         wBNce34+0fI2Gh7tFdgEA0vsetKVHpBVYQ4d3RHWTRqruuVixLinnhKVyILNuRuoZPxH
-         SlDA849VfSADVOOeo3f3/Yud1fZ/0yd8ncI6fO9i/ywnDuaYO8zFs36ALYL690/jjvZv
-         Clag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dJq3RRMzf3lbuS5bgQVc8NQ+nEsYjE4jNGYbXmQQw78=;
-        b=VcdYnrk6KwG3VWBRwTDVXCBIH9KfC+44pXM+ZD4zFAD0nSnSWrkAMG+rtRluIVVjRw
-         oHixhTK48xWuCoihrXohzsWZGBNlRA7HG/1MEPGNtQtNAoDpX1MelSDSkg7pR1/R0lyW
-         QcSNGRVTxkiAi+gUQMeRWdLk0wqFg9B2RI7XwhH5bBFM/KM3CDhs8jhavUOnRQAkdP2U
-         TxejPMl87m/+WaeckmapyMjWXpXJKmIaTryVsf+uE3xu5nAtxNtU1F21mHU74mL9V7MJ
-         tJrqVnaiFyoNjsabs2+QTlGArVmB0hXQJBS8W44pqmNqG44Lsm/gQtDCZ0xDwMQ0oA6y
-         I/Eg==
-X-Gm-Message-State: AO0yUKVFLKpS0ur9ofIy8NPvhf1/JGTXIoNH1cUxLSdkRPFCVEsFGx72
-        0XV589Tlz7AT/YSP56rH/AWC4A==
-X-Google-Smtp-Source: AK7set9xlomseTD4h4a83sLRQq4DtapmagaqXlgE7UNo4UXcLklpQodFpnducrj9Vfa/kRz/NDHZaQ==
-X-Received: by 2002:a5d:4e01:0:b0:2c5:5a68:958 with SMTP id p1-20020a5d4e01000000b002c55a680958mr1356559wrt.33.1676365699836;
-        Tue, 14 Feb 2023 01:08:19 -0800 (PST)
-Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id n13-20020a05600c3b8d00b003dc434900e1sm17810977wms.34.2023.02.14.01.08.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 01:08:19 -0800 (PST)
-Message-ID: <f327ff48-cd50-4caa-1bea-f9906994e998@linaro.org>
-Date:   Tue, 14 Feb 2023 10:08:15 +0100
+        Tue, 14 Feb 2023 04:09:36 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822F223D8D;
+        Tue, 14 Feb 2023 01:08:41 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 6110B41EF0;
+        Tue, 14 Feb 2023 09:08:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1676365719; bh=sXctWKw0c/PmrHsXFJH3m9VOhMRLi/XPipzQrk3zinA=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=ChtawK16CjuYKY74B5JyBTZ/4YMzEtTD5S6ljWIxbb+74vjPQfVijax6j6VDYV43v
+         LMoAYNQjNBBjzC2J+pMHIGB6daF6MMwF9zOh1te1cWpdnU7TcHXb35ZEuECpo5a4TK
+         Vag6SiMgO8GZtbsKibs1EhyPceZvjSEOKfCpbewtclfbvFpenEihAXojXY8oI6ZJkp
+         Gmwg4mMNjnzDLU0AquSZyD4tb1zxGfrKfV9JNNSwkm/lttB97sj/QPyiGJKUzqTMZ9
+         yItGfPRyBdy96AL7vCEizVMvAJebVZr9myZN5iiefCaSi0OWYiIThtcNdJRSJfvmOK
+         up1Y8YqwobhJA==
+Message-ID: <a9281140-8b9d-41ca-bc2d-3c2d2e78259e@marcan.st>
+Date:   Tue, 14 Feb 2023 18:08:32 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [PATCH v3 08/24] parisc: Remove COMMAND_LINE_SIZE from uapi
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
 Content-Language: en-US
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>
-References: <20230214074925.228106-1-alexghiti@rivosinc.com>
- <20230214074925.228106-9-alexghiti@rivosinc.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230214074925.228106-9-alexghiti@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Julian Calaby <julian.calaby@gmail.com>,
+        Arend van Spriel <aspriel@gmail.com>
+Cc:     Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        asahi@lists.linux.dev, linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230214080034.3828-1-marcan@marcan.st>
+ <20230214080034.3828-3-marcan@marcan.st>
+ <CAGRGNgV6YMhBa1bdkf_EQ0Z+nwbfhJkKcTxtc=ukWVMWtvQ2PA@mail.gmail.com>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH 2/2] brcmfmac: pcie: Provide a buffer of random bytes to
+ the device
+In-Reply-To: <CAGRGNgV6YMhBa1bdkf_EQ0Z+nwbfhJkKcTxtc=ukWVMWtvQ2PA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/2/23 08:49, Alexandre Ghiti wrote:
-> From: Palmer Dabbelt <palmer@rivosinc.com>
+On 14/02/2023 18.00, Julian Calaby wrote:
+> Hi Arend,
 > 
-> As far as I can tell this is not used by userspace and thus should not
-> be part of the user-visible API.
+> On Tue, Feb 14, 2023 at 7:04 PM Hector Martin <marcan@marcan.st> wrote:
+>>
+>> Newer Apple firmwares on chipsets without a hardware RNG require the
+>> host to provide a buffer of 256 random bytes to the device on
+>> initialization. This buffer is present immediately before NVRAM,
+>> suffixed by a footer containing a magic number and the buffer length.
+>>
+>> This won't affect chips/firmwares that do not use this feature, so do it
+>> unconditionally for all Apple platforms (those with an Apple OTP).
 > 
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> ---
->   arch/parisc/include/asm/setup.h      | 7 +++++++
->   arch/parisc/include/uapi/asm/setup.h | 2 --
->   2 files changed, 7 insertions(+), 2 deletions(-)
->   create mode 100644 arch/parisc/include/asm/setup.h
+> Following on from the conversation a year ago, is there a way to
+> detect chipsets that need these random bytes? While I'm sure Apple is
+> doing their own special thing for special Apple reasons, it seems
+> relatively sensible to omit a RNG on lower-cost chipsets, so would
+> other chipsets need it?
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+I think we could include a list of chips known not to have the RNG (I
+think it's only the ones shipped on T2 machines). The main issue is I
+don't have access to those machines so it's hard for me to test exactly
+which ones need it. IIRC Apple's driver unconditionally provides the
+randomness. I could at least test the newer chips on AS platforms and
+figure out if they need it to exclude them... but then again, all I can
+do is test whether they work without the blob, but they might still want
+it (and simply become less secure without it).
 
+So I guess the answer is "maybe, I don't know, and it's kind of hard to
+know for sure"... the joys of reverse engineering hardware without
+vendor documentation.
+
+If you mean whether other chips with non-apple firmware can use this, I
+have no idea. That's probably something for Arend to answer. My gut
+feeling is Apple added this as part of a hardening mechanism and
+non-Apple firmware does not use it (and Broadcom then probably started
+shipping chips with a hardware RNG and firmware that uses it directly
+across all vendors), in which case the answer is no.
+
+- Hector
