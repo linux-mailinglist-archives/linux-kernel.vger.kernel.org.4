@@ -2,100 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C26E46963FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5599696405
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbjBNMzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 07:55:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40166 "EHLO
+        id S232245AbjBNM5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 07:57:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232429AbjBNMzN (ORCPT
+        with ESMTP id S229880AbjBNM5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 07:55:13 -0500
-Received: from srv6.fidu.org (srv6.fidu.org [159.69.62.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9301E281;
-        Tue, 14 Feb 2023 04:55:11 -0800 (PST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by srv6.fidu.org (Postfix) with ESMTP id 690DEC800A8;
-        Tue, 14 Feb 2023 13:55:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        tuxedocomputers.com; h=content-transfer-encoding:mime-version
-        :x-mailer:message-id:date:date:subject:subject:from:from; s=
-        default; t=1676379309; x=1678193710; bh=SZ3JpAIAamrFg0UvuE40sNPe
-        gpvCzKxsTxHaQgrdslc=; b=RMYZnuoCFFX/NlVgoiljhOeS0PPUkpxJPkTJ6JvS
-        1BN6Ucpdkfrv0u5Cf+j7bPP62x0bQ7i5NwqElEsDEbB1LEu2GamZ1NPSgCRGcaaA
-        HNVUEPdDqc5Of27N9LVBEeHyhFeYnzUPjGG31ZXl/u3N9vsNA1PWYmgcqbT9UaeL
-        qdM=
-X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
-Received: from srv6.fidu.org ([127.0.0.1])
-        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10026)
-        with LMTP id rYZPgirX7MV1; Tue, 14 Feb 2023 13:55:09 +0100 (CET)
-Received: from wsembach-tuxedo.fritz.box (host-212-18-30-247.customer.m-online.net [212.18.30.247])
-        (Authenticated sender: wse@tuxedocomputers.com)
-        by srv6.fidu.org (Postfix) with ESMTPA id D1C07C800A7;
-        Tue, 14 Feb 2023 13:55:08 +0100 (CET)
-From:   Werner Sembach <wse@tuxedocomputers.com>
-To:     mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mario.limonciello@amd.com,
-        alexander.deucher@amd.com
-Subject: [PATCH v2] gpiolib: acpi: Add a ignore wakeup quirk for Clevo NH5xAx
-Date:   Tue, 14 Feb 2023 13:55:06 +0100
-Message-Id: <20230214125506.10358-1-wse@tuxedocomputers.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 14 Feb 2023 07:57:09 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3239C1E5F2;
+        Tue, 14 Feb 2023 04:57:08 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id f16-20020a17090a9b1000b0023058bbd7b2so15395942pjp.0;
+        Tue, 14 Feb 2023 04:57:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LvbvVZeDxlmyQ+MKMrDf7Zww7VWZ6K77IBbIyuFkUUM=;
+        b=WJdnIzCNdsEVhQsGHsWOO7yTWXr+pWI+PtbYUorKW2BchHqmwSwOGYAdoPufsKo0lJ
+         bXDPWjxdhH0QnGSePHf16V7IoRXQeuhXlPcWmkxu8rZSjSr3Sh7jD3eqfhHEY8D454AL
+         h9BqNX+KCkb4XJj5QiYoEyv/SXP+BeQ/BY4l0AmplspY3uh+sSGXDRYM23x/cN3z17v4
+         7mVXCjohMU5LW8N+7VSWMBw+LVgUYmGtE+fRcUV+X7h/ZuXCVclocMVqOgQVU0PU1ZT/
+         Iaxkx1YKf72wvTPUawYrrDuiNA9tC+Rro4eK9+FeLt6f2iRUNM5NC3UOCLKbbbVT0kzB
+         CWuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LvbvVZeDxlmyQ+MKMrDf7Zww7VWZ6K77IBbIyuFkUUM=;
+        b=joZ7j/tpT4Wha/UKCwdLWb4k/B862CaaE4FdS+JYcMOEexjFW0ZHkGUERxW63pFDMM
+         WPKBNdDjGeC7v6zN763fp2W0N2nGJ7qUmDrrFFQ1dsOJGw9b46OQyzPAnNXz+DCljPk9
+         5NohWkTgKgSO49Ln9SSShEja4av6vERPwEQ6LQ3QqUv+fLho4uysL4OQj5crQSaMkMzP
+         ZqeLMffMEWrtAKyCKgerOOFb62GqHTbHfsCTKIAP10euu/d1kAr8QP2g2iAeJeAzyFof
+         /cMWuHifpASw7txLqKJ8rxp/Rp3sSGdP2xOPugTYGJ9Kl24xifycCCmL3O3/ZWU1pwLM
+         IdzA==
+X-Gm-Message-State: AO0yUKWRO8NPifYCN7GYzhaVisuCTV8HzhVTJOEa/kez0BeTp1sD8xcZ
+        qRwEHSVNWMhogp5HsPdMbsOh9vlJkQM1up7KBkE=
+X-Google-Smtp-Source: AK7set8VxH7lwiKYZQHjj1alCNiwWZsomKyHPncWio7rYDiPFQWyD3jSnBu7216hvtJHxDxHzVWwlnilO9YoLshnmQM=
+X-Received: by 2002:a17:90a:d486:b0:233:c720:e6d5 with SMTP id
+ s6-20020a17090ad48600b00233c720e6d5mr2292500pju.94.1676379427739; Tue, 14 Feb
+ 2023 04:57:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230214074925.228106-1-alexghiti@rivosinc.com> <20230214074925.228106-12-alexghiti@rivosinc.com>
+In-Reply-To: <20230214074925.228106-12-alexghiti@rivosinc.com>
+From:   Max Filippov <jcmvbkbc@gmail.com>
+Date:   Tue, 14 Feb 2023 04:56:56 -0800
+Message-ID: <CAMo8BfJ_RF2C7EkZJusFuVPh0-7zpgNaj1pDf079CSKzRBrQjg@mail.gmail.com>
+Subject: Re: [PATCH v3 11/24] xtensa: Remove COMMAND_LINE_SIZE from uapi
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 1796f808e4bb ("HID: i2c-hid: acpi: Stop setting wakeup_capable")
-changed the policy such that I2C touchpads may be able to wake up the
-system by default if the system is configured as such.
+On Tue, Feb 14, 2023 at 12:01 AM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
+>
+> From: Palmer Dabbelt <palmer@rivosinc.com>
+>
+> As far as I can tell this is not used by userspace and thus should not
+> be part of the user-visible API.
+>
+> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> ---
+>  arch/xtensa/include/asm/setup.h      | 17 +++++++++++++++++
+>  arch/xtensa/include/uapi/asm/setup.h |  2 --
+>  2 files changed, 17 insertions(+), 2 deletions(-)
+>  create mode 100644 arch/xtensa/include/asm/setup.h
 
-However for some devices there is a bug, that is causing the touchpad to
-instantly wake up the device again once it gets deactivated. The root cause
-is still under investigation:
-https://lore.kernel.org/linux-acpi/2d983050-f844-6c5e-8ae9-9f87ac68dfdd@tuxedocomputers.com/T/#mb2e738787f6b6208d17b92aa6e72d4de846d4e4d
+Acked-by: Max Filippov <jcmvbkbc@gmail.com>
 
-To workaround this problem for the time being, introduce a quirk for this
-model that will prevent the wakeup capability for being set for GPIO 10.
-
-Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-Cc: <stable@vger.kernel.org> # v6.1+
----
- drivers/gpio/gpiolib-acpi.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
-index e2ab4d5253bea..82e8e43582eba 100644
---- a/drivers/gpio/gpiolib-acpi.c
-+++ b/drivers/gpio/gpiolib-acpi.c
-@@ -1612,6 +1612,18 @@ static const struct dmi_system_id gpiolib_acpi_quirks[] __initconst = {
- 			.ignore_wake = "ELAN0415:00@9",
- 		},
- 	},
-+	{
-+		/*
-+		 * Spurious wakeups from TP_ATTN# pin
-+		 * Found in BIOS 1.7.7
-+		 */
-+		.matches = {
-+			DMI_MATCH(DMI_BOARD_NAME, "NH5xAx"),
-+		},
-+		.driver_data = &(struct acpi_gpiolib_dmi_quirk) {
-+			.ignore_wake = "SYNA1202:00@16",
-+		},
-+	},
- 	{} /* Terminating entry */
- };
- 
 -- 
-2.34.1
-
+Thanks.
+-- Max
