@@ -2,223 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C4696965B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:02:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 282B86965B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233175AbjBNOCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 09:02:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
+        id S231920AbjBNOEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 09:04:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233135AbjBNOBq (ORCPT
+        with ESMTP id S231608AbjBNOEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 09:01:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB4326CE8;
-        Tue, 14 Feb 2023 06:01:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 14 Feb 2023 09:04:45 -0500
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F6517CCB
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 06:04:43 -0800 (PST)
+Received: from andch-XPS-15-9520.. (1-163-107-120.dynamic-ip.hinet.net [1.163.107.120])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CF47FB81DAF;
-        Tue, 14 Feb 2023 14:01:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA14DC4339E;
-        Tue, 14 Feb 2023 14:01:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676383287;
-        bh=342zi7MEWsj7/lDCSvCJ+labpXMYUi8EQs0i5hRM0Dk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=mmfQLdVx91NQE6lB5dtbHDXa9bcKcIDXg4ijH/ZbJ7h/71Y81AZzfLw0Z1OeDh0qR
-         60tfJCrqA+Bv6CD0AxuFUxazB9AfKrqBICDDFXZbUs/1+5SQ3Z3/cPaIPaZ6KjN1kN
-         LPXnPLwgacBoI3+E4VqTXEyHsjsXXNowqKU0Ika4=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        linux-alpha@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org
-Subject: [PATCH] dma-mapping: no need to pass a bus_type into get_arch_dma_ops()
-Date:   Tue, 14 Feb 2023 15:01:21 +0100
-Message-Id: <20230214140121.131859-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.1
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 63B83416DC;
+        Tue, 14 Feb 2023 14:04:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1676383482;
+        bh=3vW/TOuUOyoNxoCl0gdvqpkN36BLIBSGjQTU1hx8s50=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=TT+o/OhlyZCq/jifuByjYCYW5TZZAKIrvmG9+WPwyIKq0JycZxUZAFKmMT9IMtZL6
+         uEnT5smQ3W4HOl1L+ay+ud1URILoVtfNBjCDV7ejVTTLWmmsuct5KAphEsGUggm7It
+         Bdggieu4JM8lV5XxxIyUrN8AiuuLxKL6Q1qZmM8oCzN/2mLU4GiiZjgVyDSPIz7GNX
+         1k+Sv+lz+jPbFhlvH6C6jReJYFxIcPpg3gxtlNMlou8zrt9mYXM7W1YBOYdeGYu6/l
+         K7Oya70M5t4j8BBcmmk6HT4FRrdtwIB/+vIow/44Ie08sqYtD2IuMABixsuJhdhObG
+         2b3n5YiQ+f2TQ==
+From:   Andy Chi <andy.chi@canonical.com>
+Cc:     andy.chi@canonical.com, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Tim Crawford <tcrawford@system76.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        Meng Tang <tangmeng@uniontech.com>,
+        Philipp Jungkamp <p.jungkamp@gmx.net>,
+        =?UTF-8?q?Kacper=20Michaj=C5=82ow?= <kasper93@gmail.com>,
+        Gabriele Mazzotta <gabriele.mzt@gmail.com>,
+        Yuchi Yang <yangyuchi66@gmail.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] ALSA: hda/realtek: Enable mute/micmute LEDs and speaker support for HP Laptops
+Date:   Tue, 14 Feb 2023 22:04:31 +0800
+Message-Id: <20230214140432.39654-1-andy.chi@canonical.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <87sff88p2c.wl-tiwai@suse.de>
+References: <87sff88p2c.wl-tiwai@suse.de>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5743; i=gregkh@linuxfoundation.org; h=from:subject; bh=342zi7MEWsj7/lDCSvCJ+labpXMYUi8EQs0i5hRM0Dk=; b=owGbwMvMwCRo6H6F97bub03G02pJDMmvpxjwVfOYxDPv/u1hVin4IpN32rO65gh5806rrx+sJS5V TjnZEcvCIMjEICumyPJlG8/R/RWHFL0MbU/DzGFlAhnCwMUpABN5UcewYO9NztTkbdkal2eFvxd49k nd7PjBOwwLdq3/Yfh1S4EE95rJmQ5By5dsvrl5OQA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The get_arch_dma_ops() arch-specific function never does anything with
-the struct bus_type that is passed into it, so remove it entirely as it
-is not needed.
+On HP Laptops, requires the ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED quirk to
+make its audio LEDs and speaker work.
 
-Cc: Richard Henderson <richard.henderson@linaro.org>
-Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-Cc: Matt Turner <mattst88@gmail.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Helge Deller <deller@gmx.de>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
-Cc: linux-alpha@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-ia64@vger.kernel.org
-Cc: linux-mips@vger.kernel.org
-Cc: linux-parisc@vger.kernel.org
-Cc: sparclinux@vger.kernel.org
-Cc: iommu@lists.linux.dev
-Cc: linux-arch@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Andy Chi <andy.chi@canonical.com>
+
+v3: mentioned that this quirk also fix speaker in commit message
 ---
-Note: Unless someone objects, I would like to take this through the
-driver-core tree, as further bus_type cleanups depend on it, and it's
-stand-alone from everyone else's tree at the moment from what I can
-determine.
+ sound/pci/hda/patch_realtek.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- arch/alpha/include/asm/dma-mapping.h  | 2 +-
- arch/ia64/include/asm/dma-mapping.h   | 2 +-
- arch/mips/include/asm/dma-mapping.h   | 2 +-
- arch/parisc/include/asm/dma-mapping.h | 2 +-
- arch/sparc/include/asm/dma-mapping.h  | 2 +-
- arch/x86/include/asm/dma-mapping.h    | 2 +-
- include/asm-generic/dma-mapping.h     | 2 +-
- include/linux/dma-map-ops.h           | 2 +-
- 8 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/arch/alpha/include/asm/dma-mapping.h b/arch/alpha/include/asm/dma-mapping.h
-index 0ee6a5c99b16..6ce7e2041685 100644
---- a/arch/alpha/include/asm/dma-mapping.h
-+++ b/arch/alpha/include/asm/dma-mapping.h
-@@ -4,7 +4,7 @@
- 
- extern const struct dma_map_ops alpha_pci_ops;
- 
--static inline const struct dma_map_ops *get_arch_dma_ops(struct bus_type *bus)
-+static inline const struct dma_map_ops *get_arch_dma_ops(void)
- {
- #ifdef CONFIG_ALPHA_JENSEN
- 	return NULL;
-diff --git a/arch/ia64/include/asm/dma-mapping.h b/arch/ia64/include/asm/dma-mapping.h
-index a5d9d788eede..af6fa8e1597c 100644
---- a/arch/ia64/include/asm/dma-mapping.h
-+++ b/arch/ia64/include/asm/dma-mapping.h
-@@ -8,7 +8,7 @@
-  */
- extern const struct dma_map_ops *dma_ops;
- 
--static inline const struct dma_map_ops *get_arch_dma_ops(struct bus_type *bus)
-+static inline const struct dma_map_ops *get_arch_dma_ops(void)
- {
- 	return dma_ops;
- }
-diff --git a/arch/mips/include/asm/dma-mapping.h b/arch/mips/include/asm/dma-mapping.h
-index 34de7b17b41b..0fee561ac796 100644
---- a/arch/mips/include/asm/dma-mapping.h
-+++ b/arch/mips/include/asm/dma-mapping.h
-@@ -6,7 +6,7 @@
- 
- extern const struct dma_map_ops jazz_dma_ops;
- 
--static inline const struct dma_map_ops *get_arch_dma_ops(struct bus_type *bus)
-+static inline const struct dma_map_ops *get_arch_dma_ops(void)
- {
- #if defined(CONFIG_MACH_JAZZ)
- 	return &jazz_dma_ops;
-diff --git a/arch/parisc/include/asm/dma-mapping.h b/arch/parisc/include/asm/dma-mapping.h
-index d5bd94247371..635665004fe6 100644
---- a/arch/parisc/include/asm/dma-mapping.h
-+++ b/arch/parisc/include/asm/dma-mapping.h
-@@ -21,7 +21,7 @@
- 
- extern const struct dma_map_ops *hppa_dma_ops;
- 
--static inline const struct dma_map_ops *get_arch_dma_ops(struct bus_type *bus)
-+static inline const struct dma_map_ops *get_arch_dma_ops(void)
- {
- 	return hppa_dma_ops;
- }
-diff --git a/arch/sparc/include/asm/dma-mapping.h b/arch/sparc/include/asm/dma-mapping.h
-index 2f051343612e..55c12fc2ba63 100644
---- a/arch/sparc/include/asm/dma-mapping.h
-+++ b/arch/sparc/include/asm/dma-mapping.h
-@@ -4,7 +4,7 @@
- 
- extern const struct dma_map_ops *dma_ops;
- 
--static inline const struct dma_map_ops *get_arch_dma_ops(struct bus_type *bus)
-+static inline const struct dma_map_ops *get_arch_dma_ops(void)
- {
- 	/* sparc32 uses per-device dma_ops */
- 	return IS_ENABLED(CONFIG_SPARC64) ? dma_ops : NULL;
-diff --git a/arch/x86/include/asm/dma-mapping.h b/arch/x86/include/asm/dma-mapping.h
-index 1c66708e3062..d1dac96ee30b 100644
---- a/arch/x86/include/asm/dma-mapping.h
-+++ b/arch/x86/include/asm/dma-mapping.h
-@@ -4,7 +4,7 @@
- 
- extern const struct dma_map_ops *dma_ops;
- 
--static inline const struct dma_map_ops *get_arch_dma_ops(struct bus_type *bus)
-+static inline const struct dma_map_ops *get_arch_dma_ops(void)
- {
- 	return dma_ops;
- }
-diff --git a/include/asm-generic/dma-mapping.h b/include/asm-generic/dma-mapping.h
-index c13f46109e88..46a0016efd81 100644
---- a/include/asm-generic/dma-mapping.h
-+++ b/include/asm-generic/dma-mapping.h
-@@ -2,7 +2,7 @@
- #ifndef _ASM_GENERIC_DMA_MAPPING_H
- #define _ASM_GENERIC_DMA_MAPPING_H
- 
--static inline const struct dma_map_ops *get_arch_dma_ops(struct bus_type *bus)
-+static inline const struct dma_map_ops *get_arch_dma_ops(void)
- {
- 	return NULL;
- }
-diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
-index d678afeb8a13..41bf4bdb117a 100644
---- a/include/linux/dma-map-ops.h
-+++ b/include/linux/dma-map-ops.h
-@@ -90,7 +90,7 @@ static inline const struct dma_map_ops *get_dma_ops(struct device *dev)
- {
- 	if (dev->dma_ops)
- 		return dev->dma_ops;
--	return get_arch_dma_ops(dev->bus);
-+	return get_arch_dma_ops();
- }
- 
- static inline void set_dma_ops(struct device *dev,
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 7b9fb38ff732..e2cd5456f2a6 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9432,6 +9432,12 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	 SND_PCI_QUIRK(0x103c, 0x8abb, "HP ZBook Firefly 14 G9", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8ad1, "HP EliteBook 840 14 inch G9 Notebook PC", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8ad2, "HP EliteBook 860 16 inch G9 Notebook PC", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8b42, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8b43, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8b44, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8b45, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8b46, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8b47, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b5d, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x103c, 0x8b5e, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x103c, 0x8b7a, "HP", ALC236_FIXUP_HP_GPIO_LED),
 -- 
-2.39.1
+2.34.1
 
