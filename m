@@ -2,147 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CA9696D10
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8C6696D11
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232681AbjBNShP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 13:37:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34036 "EHLO
+        id S232735AbjBNSiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 13:38:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbjBNShN (ORCPT
+        with ESMTP id S229686AbjBNSiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 13:37:13 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2060.outbound.protection.outlook.com [40.107.244.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706201F924;
-        Tue, 14 Feb 2023 10:37:12 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e76GOVDVrwck+QqfT+F91cwCLZAnhA+J1MiATbawaf7WRCa/ktLYeOZkF3zFoQwou0tjvhyFHtWLs9RPJe9XPTEuBU0Ftb2JzOvgeggSk+KqvrQPe75NPgI3p77uyAYyHYHG/kLLNHeTdjSNA8CqY/AFbt/ebdGr9d1Qzyaarvy0kGb+qZduxA/QUell8uiizlGViazg7ZHqHJue5UYhUy2GQd2cHBiyX4uBS5CNsyX6X8KM3VysRz0ZbCKGmQ2zbLj/QJ/r6xx4W6fDF3mu9LLCgoeDGEZWoU36Ov9TKBc65vuYxU4YzU343fKlWQMCS9k2DgOkxva6/h06CD9Pgw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4S4OHTMP2JYEUWEmdmIsWjBZa01f3Ih5UlK/HIXNOkg=;
- b=UMhwxug3E7X4CWGcc6pmJcvwLZSNtXISTCa94dYbCSV34dHSvS3ocMhCLLuiL6lGfDeCmzXZJ8ueq/gq+2H4yMlskkHYP8DTJ2IjFHGUTqFpkUEkQsPUVwIoJWKuMyDjfmDn9CH3sO7InjV+hAb8+F8lE6sXMGY5nui0wNYvRhFHVQNBZGzPdjxVRDcuW+xWfrKkbOm40E2DYgozEpc0RWiakaELDD//n6ols9To0Zajg50Oo1kWNyjl3dVUamokv3LKn9nylORhP1p0wGq4H6qpolMyZ/uzlF+rO0tbFRt0ssclKn+23yx5Bl5iPT/eb4I3iwhp+0LtnCJx0vjhtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4S4OHTMP2JYEUWEmdmIsWjBZa01f3Ih5UlK/HIXNOkg=;
- b=EAPFaNJALH/Aa6dPmi5Go+gfNkTy/zHGz8/yhoJABIFX9Z5028g1VtVLMB9pgYnWDiryM+nKa5pxaeQdEMcFeFAav2MX+SyL+tCy5q/s5hFkkgdZBNZoY5+Az66yqcxbILqy+3zajXgYXHM6ldRcjNF8g3Oq3sAzn/6gQjhx+1dTtSePSSOUQpcihPyikLvP2xAQNTgL9U/5CZTAbPb0rPJ8jCUScWFICqpfKq1rnOsVQuh+zB9OSwf2Uc3C8bzC+8TE8rlsJcJRSw0Hy48Mbqre2XAkMOLYFKWjPovZ7wUMVsF7FEXlowysMsp/ct24sNp4ckEHbESi3USeT2as4Q==
-Received: from BN9PR03CA0660.namprd03.prod.outlook.com (2603:10b6:408:13b::35)
- by BL1PR12MB5318.namprd12.prod.outlook.com (2603:10b6:208:31d::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Tue, 14 Feb
- 2023 18:37:10 +0000
-Received: from BN8NAM11FT033.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:13b:cafe::ee) by BN9PR03CA0660.outlook.office365.com
- (2603:10b6:408:13b::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26 via Frontend
- Transport; Tue, 14 Feb 2023 18:37:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- BN8NAM11FT033.mail.protection.outlook.com (10.13.177.149) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6111.10 via Frontend Transport; Tue, 14 Feb 2023 18:37:09 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 14 Feb
- 2023 10:37:00 -0800
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 14 Feb 2023 10:36:59 -0800
-Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Tue, 14 Feb 2023 10:36:59 -0800
-Date:   Tue, 14 Feb 2023 10:36:57 -0800
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Yi Liu <yi.l.liu@intel.com>
-CC:     <joro@8bytes.org>, <alex.williamson@redhat.com>, <jgg@nvidia.com>,
-        <kevin.tian@intel.com>, <robin.murphy@arm.com>,
-        <cohuck@redhat.com>, <eric.auger@redhat.com>,
-        <kvm@vger.kernel.org>, <mjrosato@linux.ibm.com>,
-        <chao.p.peng@linux.intel.com>, <yi.y.sun@linux.intel.com>,
-        <peterx@redhat.com>, <jasowang@redhat.com>,
-        <shameerali.kolothum.thodi@huawei.com>, <lulu@redhat.com>,
-        <suravee.suthikulpanit@amd.com>, <iommu@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH 14/17] iommufd/selftest: Add
- IOMMU_TEST_OP_MOCK_DOMAIN_REPLACE test op
-Message-ID: <Y+vUycZDiddxfSO+@Asurada-Nvidia>
-References: <20230209043153.14964-1-yi.l.liu@intel.com>
- <20230209043153.14964-15-yi.l.liu@intel.com>
+        Tue, 14 Feb 2023 13:38:01 -0500
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF1621A13
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 10:38:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1676399880; x=1707935880;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=PqlyFJZV286hXh8z0W5ItxrQqsNBYD/TcX64vV41qwo=;
+  b=MliDekUz+ZdeATEPQT8NJDUHbna+B69ikWV5RGAhTY5aANClnTABQcSO
+   8EOTvAyus4IZc5EBq6I5l3OhxuSt6q9RD2WqBnF6tlS0MnJT39yCLZkN2
+   hT+oYmlYqRpSh4hKNLyF/BNITuUUXmETiAaQZ3C/UdiZehLm9bxXG2dIE
+   g=;
+X-IronPort-AV: E=Sophos;i="5.97,297,1669075200"; 
+   d="scan'208";a="298628991"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-dc7c3f8b.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 18:37:58 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2c-m6i4x-dc7c3f8b.us-west-2.amazon.com (Postfix) with ESMTPS id BA2FDA2E89;
+        Tue, 14 Feb 2023 18:37:57 +0000 (UTC)
+Received: from EX19D010UWA004.ant.amazon.com (10.13.138.204) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Tue, 14 Feb 2023 18:37:57 +0000
+Received: from u9aa42af9e4c55a.ant.amazon.com (10.43.161.198) by
+ EX19D010UWA004.ant.amazon.com (10.13.138.204) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.24; Tue, 14 Feb 2023 18:37:56 +0000
+From:   Munehisa Kamata <kamatam@amazon.com>
+To:     <surenb@google.com>
+CC:     <ebiggers@kernel.org>, <hannes@cmpxchg.org>, <hdanton@sina.com>,
+        <kamatam@amazon.com>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <mengcc@amazon.com>
+Subject: Re: [PATCH v2] sched/psi: fix use-after-free in ep_remove_wait_queue()
+Date:   Tue, 14 Feb 2023 10:37:45 -0800
+Message-ID: <20230214183745.3958175-1-kamatam@amazon.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAJuCfpGiktjjPZYPp8LNtbmvYhkxh_icEWXOVgsq9qeq+w6s+g@mail.gmail.com>
+References: <CAJuCfpGiktjjPZYPp8LNtbmvYhkxh_icEWXOVgsq9qeq+w6s+g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230209043153.14964-15-yi.l.liu@intel.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT033:EE_|BL1PR12MB5318:EE_
-X-MS-Office365-Filtering-Correlation-Id: ffd6ea8d-13f0-43d3-9ffd-08db0eba7b7e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hcGIiBPfXr7m84X7qT6O3yZ2hYycfeiohbz9z121t1DC8a92+qcIkiYskVhKNs74BGIz2xXOwkgsEHqWqFjqBYA6+SK4PRhA427ob9jDjSvw5FnmKvhfkAKatRbxPxzUzhOzkB+JLEQtUDzmFC43GpYdW84nRDQDJ1JwnvVDAuf81YX9Uz46kfE1qi10ptb31n1kZILtYGXccSeRdUERpsTTKNdg2kyvaUMC0iqBd30gXuG17zU3UPqvdAfoSp40WndBL6H6TPqbg1EvRSLd6z9yXcjnZDQTjEsFlj+1TKE03cKWtcBT3qxxov64ofEGxSEAA7vt/IAjPtatQ4JOLvTD8mDcFRgEwFIQRb73lKyEEmwBxmNYsDjYRQ0gdgTRX/E3hJDmRMglKGV8CAETbJTIF2XuMmeKfWWlsb/B0qX09F/MkyeAO0Ikre1Waj/rKTAqsYUWOKnbtldZmMDzMlCuhsWtKkorJGzkNm+l9EnjeSQl4LL6KeebH6i+e1KIJWLueth1M5TdtSuaUP0ErBBSWe+kqjYWiQD07yo32aK1VNTIEMyaeNpM163CdjGtutbIw5gkuBOeLUJ4fXAqImcbryDw7+r4g7nWJVj7mpjkZkTREGPW5mXYTQ90aqi49KHYowqqsdy2JCspBn/SzTwABhtc/ab9VqaOBrt75CEvoLg4/cfHGS/mShmbVuPykpB3TZiPk+E9Uv91emNmDsvQ4+Zsul+edia/y+0EFRifBXJVM4Qobc3hOD+dlv29
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(346002)(136003)(39860400002)(451199018)(46966006)(36840700001)(40470700004)(82310400005)(40460700003)(9686003)(478600001)(55016003)(26005)(40480700001)(41300700001)(7636003)(6916009)(70206006)(186003)(70586007)(8676002)(356005)(316002)(8936002)(4326008)(86362001)(82740400003)(47076005)(83380400001)(36860700001)(426003)(54906003)(33716001)(5660300002)(7416002)(2906002)(336012);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2023 18:37:09.9628
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ffd6ea8d-13f0-43d3-9ffd-08db0eba7b7e
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT033.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5318
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.161.198]
+X-ClientProxiedBy: EX13D36UWA002.ant.amazon.com (10.43.160.24) To
+ EX19D010UWA004.ant.amazon.com (10.13.138.204)
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 08:31:50PM -0800, Yi Liu wrote:
-> From: Nicolin Chen <nicolinc@nvidia.com>
+On Tue, 2023-02-14 17:10:58 +0000, Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> Thanks!
+> Overall LGTM, just a couple of nits (simplifications):
 > 
-> This allows to detach/attach the mock_dev to a specified domain/hwpt.
+> On Mon, Feb 13, 2023 at 11:04 PM Munehisa Kamata <kamatam@amazon.com> wrote:
+> >
+> > If a non-root cgroup gets removed when there is a thread that registered
+> > trigger and is polling on a pressure file within the cgroup, the polling
+> > waitqueue gets freed without clearing the queue and reference in the
+> > following path.
 > 
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
-> ---
->  drivers/iommu/iommufd/device.c       |  1 -
->  drivers/iommu/iommufd/iommufd_test.h |  5 +++
->  drivers/iommu/iommufd/selftest.c     | 54 ++++++++++++++++++++++++++++
->  3 files changed, 59 insertions(+), 1 deletion(-)
+> Let's remove "without clearing the queue and reference" in the above
+> sentence. The next section explains why this is problematic, therefore
+> mentioning that here is unnecessary IMHO.
+ 
+Applied in v3.
+
+> >
+> >  do_rmdir
+> >    cgroup_rmdir
+> >      kernfs_drain_open_files
+> >        cgroup_file_release
+> >          cgroup_pressure_release
+> >            psi_trigger_destroy
+> >
+> > However, the polling thread can keep having the last reference to the
+> > pressure file that is tied to the freed waitqueue until explicit close or
+> > exit later.
 > 
-> diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-> index 826441c6005d..bf803975062c 100644
-> --- a/drivers/iommu/iommufd/device.c
-> +++ b/drivers/iommu/iommufd/device.c
-> @@ -964,7 +964,6 @@ EXPORT_SYMBOL_NS_GPL(iommufd_access_rw, IOMMUFD);
->   * Creating a real iommufd_device is too hard, bypass creating a iommufd_device
->   * and go directly to attaching a domain.
->   */
-> -
->  int iommufd_device_selftest_attach(struct iommufd_ctx *ictx,
->                                    struct iommufd_hw_pagetable *hwpt)
->  {
+> Suggest replacing: However, the polling thread still has a reference
+> to the pressure file it is polling and will access the freed waitqueue
+> when file is closed or upon exit:
 
-Just found last night that I forgot to drop this line removal.
+Applied in v3.
 
-Let's fix it in v2 :)
+> >
+> >  fput
+> >    ep_eventpoll_release
+> >      ep_free
+> >        ep_remove_wait_queue
+> >          remove_wait_queue
+> >
+> > Then, the thread accesses to the already-freed waitqueue when dropping the
+> > reference and results in use-after-free as pasted below.
+> 
+> Suggest replacing: This results is use-after-free as pasted below.
 
-Thanks
-Nic
+Applied in v3.
+
+> >
+> > The fundamental problem here is that the lifetime of the waitqueue is not
+> > tied to the file's real lifetime as shown above.
+> 
+> The fundamental problem here is that cgroup_file_release() (and
+> consequently waitqueue's lifetime) is not tied to the file's real
+> lifetime.
+
+Applied in v3 as well.
+
+> > Using wake_up_pollfree()
+> > here might be less than ideal, but it also is not fully contradicting the
+> > comment at commit 42288cb44c4b ("wait: add wake_up_pollfree()") since the
+> > waitqueue's lifetime is not tied to file's one and can be considered as
+> > another special case. While this would be fixable by somehow making
+> > cgroup_file_release() be tied to the fput(), it would require sizable
+> > refactoring at cgroups or higher layer which might be more justifiable if
+> > we identify more cases like this.
+> >
+> >  BUG: KASAN: use-after-free in _raw_spin_lock_irqsave+0x60/0xc0
+> >  Write of size 4 at addr ffff88810e625328 by task a.out/4404
+> >
+> >  CPU: 19 PID: 4404 Comm: a.out Not tainted 6.2.0-rc6 #38
+> >  Hardware name: Amazon EC2 c5a.8xlarge/, BIOS 1.0 10/16/2017
+> >  Call Trace:
+> >  <TASK>
+> >  dump_stack_lvl+0x73/0xa0
+> >  print_report+0x16c/0x4e0
+> >  ? _printk+0x59/0x80
+> >  ? __virt_addr_valid+0xb8/0x130
+> >  ? _raw_spin_lock_irqsave+0x60/0xc0
+> >  kasan_report+0xc3/0xf0
+> >  ? _raw_spin_lock_irqsave+0x60/0xc0
+> >  kasan_check_range+0x2d2/0x310
+> >  _raw_spin_lock_irqsave+0x60/0xc0
+> >  remove_wait_queue+0x1a/0xa0
+> >  ep_free+0x12c/0x170
+> >  ep_eventpoll_release+0x26/0x30
+> >  __fput+0x202/0x400
+> >  task_work_run+0x11d/0x170
+> >  do_exit+0x495/0x1130
+> >  ? update_cfs_rq_load_avg+0x2c2/0x2e0
+> >  do_group_exit+0x100/0x100
+> >  get_signal+0xd67/0xde0
+> >  ? finish_task_switch+0x15f/0x3a0
+> >  arch_do_signal_or_restart+0x2a/0x2b0
+> >  exit_to_user_mode_prepare+0x94/0x100
+> >  syscall_exit_to_user_mode+0x20/0x40
+> >  do_syscall_64+0x52/0x90
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> >  RIP: 0033:0x7f8e392bfb91
+> >  Code: Unable to access opcode bytes at 0x7f8e392bfb67.
+> >  RSP: 002b:00007fff261e08d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000022
+> >  RAX: fffffffffffffdfe RBX: 0000000000000000 RCX: 00007f8e392bfb91
+> >  RDX: 0000000000000001 RSI: 00007fff261e08e8 RDI: 0000000000000004
+> >  RBP: 00007fff261e0920 R08: 0000000000400780 R09: 00007f8e3960f240
+> >  R10: 00000000000003df R11: 0000000000000246 R12: 00000000004005a0
+> >  R13: 00007fff261e0a00 R14: 0000000000000000 R15: 0000000000000000
+> >  </TASK>
+> >
+> >  Allocated by task 4404:
+> >  kasan_set_track+0x3d/0x60
+> >  __kasan_kmalloc+0x85/0x90
+> >  psi_trigger_create+0x113/0x3e0
+> >  pressure_write+0x146/0x2e0
+> >  cgroup_file_write+0x11c/0x250
+> >  kernfs_fop_write_iter+0x186/0x220
+> >  vfs_write+0x3d8/0x5c0
+> >  ksys_write+0x90/0x110
+> >  do_syscall_64+0x43/0x90
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> >
+> >  Freed by task 4407:
+> >  kasan_set_track+0x3d/0x60
+> >  kasan_save_free_info+0x27/0x40
+> >  ____kasan_slab_free+0x11d/0x170
+> >  slab_free_freelist_hook+0x87/0x150
+> >  __kmem_cache_free+0xcb/0x180
+> >  psi_trigger_destroy+0x2e8/0x310
+> >  cgroup_file_release+0x4f/0xb0
+> >  kernfs_drain_open_files+0x165/0x1f0
+> >  kernfs_drain+0x162/0x1a0
+> >  __kernfs_remove+0x1fb/0x310
+> >  kernfs_remove_by_name_ns+0x95/0xe0
+> >  cgroup_addrm_files+0x67f/0x700
+> >  cgroup_destroy_locked+0x283/0x3c0
+> >  cgroup_rmdir+0x29/0x100
+> >  kernfs_iop_rmdir+0xd1/0x140
+> >  vfs_rmdir+0xfe/0x240
+> >  do_rmdir+0x13d/0x280
+> >  __x64_sys_rmdir+0x2c/0x30
+> >  do_syscall_64+0x43/0x90
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> >
+> > v2: updated commit message
+> >
+> > Link: https://lore.kernel.org/lkml/20230106224859.4123476-1-kamatam@amazon.com/
+> > Fixes: 0e94682b73bf ("psi: introduce psi monitor")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
+> > Signed-off-by: Mengchi Cheng <mengcc@amazon.com>
+> > ---
+> >  kernel/sched/psi.c | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> > index 8ac8b81bfee6..6e66c15f6450 100644
+> > --- a/kernel/sched/psi.c
+> > +++ b/kernel/sched/psi.c
+> > @@ -1343,10 +1343,11 @@ void psi_trigger_destroy(struct psi_trigger *t)
+> >
+> >         group = t->group;
+> >         /*
+> > -        * Wakeup waiters to stop polling. Can happen if cgroup is deleted
+> > -        * from under a polling process.
+> > +        * Wakeup waiters to stop polling and clear the queue to prevent it from
+> > +        * being accessed later. Can happen if cgroup is deleted from under a
+> > +        * polling process otherwise.
+> 
+> This "otherwise" at the end seems extra. Was there a continuation of
+> this comment which was removed without removing this "otherwise" ?
+ 
+Removed it in v3. The subject of the original sentense was a bit unclear to
+me and I think I tried to have a simplified version of  "[Otherwise an
+unexpected free of the queue] can happen if ... " there.
+
+Thanks for all the suggestions.
+
+
+Regards,
+Munehisa
+
+> >          */
+> > -       wake_up_interruptible(&t->event_wait);
+> > +       wake_up_pollfree(&t->event_wait);
+> >
+> >         mutex_lock(&group->trigger_lock);
+> >
+> > --
+> > 2.38.1
+> >
+> 
