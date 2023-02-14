@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20CD36957B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 05:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C979F6957BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 05:11:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbjBNEKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 23:10:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45250 "EHLO
+        id S231536AbjBNELi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 23:11:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjBNEKT (ORCPT
+        with ESMTP id S231309AbjBNELf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 23:10:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2272B17CE4;
-        Mon, 13 Feb 2023 20:10:18 -0800 (PST)
+        Mon, 13 Feb 2023 23:11:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5032B17CE4;
+        Mon, 13 Feb 2023 20:11:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD8FB61411;
-        Tue, 14 Feb 2023 04:10:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0A04FC433EF;
-        Tue, 14 Feb 2023 04:10:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E18656137F;
+        Tue, 14 Feb 2023 04:11:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF508C433D2;
+        Tue, 14 Feb 2023 04:11:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676347817;
-        bh=6YgtRESLJOJZw+w5fV3y/DLtb3rrTBK9V/y4YdS0XvU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=TOftPHmCxZzmJE/bfGv8jV5niigTTok3GmcLCpoZLhsswswNj23ryqEDG6VQItFeB
-         X3DRZiUNZwo+JjUxlf/nSFEYi67lzDdImNFQwh6Sooc3Gt3qoQFN7KVl4VyBCJVOuz
-         Pv4vZleM1HUbegZB/TCy9eEs70NwZzcce9oG22r5VEjHrT4p8IMLOIg7m9b49U8qz1
-         S7vQeoShHi/R9N1Zbl8cw5jfv0h0Lo9jIi0rd7onPn0vZaCK2hg3V+rDFKDlPe1MKp
-         eu1oJWsAba58nYwjvpkoJDVjIILEH5JhKo/1igFkv0+05Nd0K6yUZ0Y5w+opCf1Dec
-         pe07R5iuOjoqQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DDDA6E270C2;
-        Tue, 14 Feb 2023 04:10:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1676347893;
+        bh=llJZR7pK98/emAvHoO6xCRuI8lj7T3XJRXFwIvfYO9Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=W0QU6Meho9pQJ8b8exCiXRy6k20TLCCCZOT3xwU1SC/WBE2Dy8+ZNJz0EG0w3FvAr
+         d/p71BdHJBcsl+V14RK0zxshK4SNWDjPM7SnA2C5c7XfFWOe5hKeoWyd8Qzua+Ui9+
+         1fGH1WVRkOZ1K5uPR9fXyUBI9D4zyU+goEdGC35VYv52KT+kYNCklVav6JpVGsJUXU
+         c6Xj0nd9/yqVgkkVgODVfcj0SGBwPOosODiy9rMM4VMdQRHfQJbvQIhcOClxfkpOY3
+         ACkguakfAMrFsgqo+ijiyNbCHl9bLMVbMovPnaIH7oooT9VUaciW/dX4zL57aTeP1o
+         iE82zjFxCJWng==
+Date:   Mon, 13 Feb 2023 20:11:31 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <linux@weissschuh.net>
+Cc:     Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org
+Subject: Re: [PATCH 0/3] net: make kobj_type structures constant
+Message-ID: <20230213201131.7ed238f9@kernel.org>
+In-Reply-To: <20230211-kobj_type-net-v1-0-e3bdaa5d8a78@weissschuh.net>
+References: <20230211-kobj_type-net-v1-0-e3bdaa5d8a78@weissschuh.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: stmmac: fix order of dwmac5 FlexPPS parametrization
- sequence
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167634781689.18399.674406359781053459.git-patchwork-notify@kernel.org>
-Date:   Tue, 14 Feb 2023 04:10:16 +0000
-References: <20230210143937.3427483-1-j.zink@pengutronix.de>
-In-Reply-To: <20230210143937.3427483-1-j.zink@pengutronix.de>
-To:     Johannes Zink <j.zink@pengutronix.de>
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
-        kernel@pengutronix.de
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,31 +62,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Sat, 11 Feb 2023 03:32:28 +0000 Thomas Wei=C3=9Fschuh wrote:
+> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+> the driver core allows the usage of const struct kobj_type.
+>=20
+> Take advantage of this to constify the structure definitions to prevent
+> modification at runtime.
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri, 10 Feb 2023 15:39:37 +0100 you wrote:
-> So far changing the period by just setting new period values while
-> running did not work.
-> 
-> The order as indicated by the publicly available reference manual of the i.MX8MP [1]
-> indicates a sequence:
-> 
->  * initiate the programming sequence
->  * set the values for PPS period and start time
->  * start the pulse train generation.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net] net: stmmac: fix order of dwmac5 FlexPPS parametrization sequence
-    https://git.kernel.org/netdev/net/c/4562c65ec852
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Could you resend just the first two with [PATCH net-next] in the
+subject? Patch 3 needs to go to a different tree.
