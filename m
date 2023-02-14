@@ -2,118 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D09696AAA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9DCB696AAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232894AbjBNRBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 12:01:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53776 "EHLO
+        id S230119AbjBNRBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 12:01:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232935AbjBNRA0 (ORCPT
+        with ESMTP id S229506AbjBNRAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 12:00:26 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241DC2BEFD;
-        Tue, 14 Feb 2023 08:59:58 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 78CFD5C01E0;
-        Tue, 14 Feb 2023 11:59:54 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 14 Feb 2023 11:59:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1676393994; x=1676480394; bh=itiioYCmHP
-        T8YbkX40p6dVrOELRD6qyPUbf/4SXvrbM=; b=oNRSaCOA4ItdRjYLsKmpF2SgaM
-        j0z6EpxHi+BVF4s9SvfX6gdaHXErwxKMsUCZ+mKdZK1zrOajeZ80qebKWeMBGno2
-        S66UESOr2lfeQoJcmS0dIjKCo1WV2mvb7hAsy+iA9TqbOF3sLLv7+rd5DWjYwJ/4
-        DarN89Ha/QzgnNCHOvwnxTNuUFf8Tb1FL4goqTLJ+II7zgr1g8ZvKcM8sDC79TD+
-        +8gMQdtZ1HoQ6otc5xfpb+bZcRc0BDo8fh3kA3oqllM2CLlnCn6To4/6+b0t36t6
-        F1hiDl3bOFl7N+zjb+hNiaOKIsy0IeZPnhUXebudpj9e5b1/mUDIIrK2TzQQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1676393994; x=1676480394; bh=itiioYCmHPT8YbkX40p6dVrOELRD
-        6qyPUbf/4SXvrbM=; b=P3m1Qy+Qis2uohPsSIDpsxVLXT/fDbpDD5EIrMyi8QSK
-        MsW9YBgDXglZQme0WfP4+Tu9mr/p7bkWQ99oTDGKUKb9vV8lLSA6ON6rznauu0CM
-        1Jq4z/Io2CP9NDq+dKops2Anp05aG5OaPNebibrOXRBWyPmH5jmjSpfvP2R0v3L7
-        LM6+8s4HagwmyDdWYiD+6lkG9aW68B1X/qZgqNG6/Gfmy4zpmsu7uHnD4Y6GFZbl
-        +OszX0+pAtuJ2hxS7RSW5VbAnjYcm7TKEeY+WgIkpJEjvnqINnaKIahz6IV/GjK8
-        jFt1TKutfE2uzIRSsV4CF/yd4skrN1HfrPNjxxegnA==
-X-ME-Sender: <xms:Cb7rY083WXpsYPisC2W8ZaWTP9839EERR9dTHJl7W9t_aRU_n28n4A>
-    <xme:Cb7rY8uidwamo1IRj--IsJzi5d8c6vR5l8MvHc8bwsoXhOiedtTLi3e5z3MhdKBjU
-    -rVoR46h9lA0Q>
-X-ME-Received: <xmr:Cb7rY6AKt1GVfseb5r1cQL0IdGk4fsvWIpX9rLr9X4T6-U3EQvgDGlKvW3YSwSl0CNzAT55_wJ4zDw12tglS6_ZobJxk3EGfM0gD9A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeifedgkeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:Cb7rY0ey3g7NQf7LemxVdh5BXzP3B9JOjwKjUBervIpLCCB_GpE5-A>
-    <xmx:Cb7rY5N2tZBEkcX0gFgJDLGIgc_v9wzTq-oQZ5L3OBu8WtFDwCSyJA>
-    <xmx:Cb7rY-kqNvBUpOIrMdwoiz1R0eXG3WXuc10EdrykIRA4SjK6qxy_7Q>
-    <xmx:Cr7rYyjbvTX0IQUho4Cyl8roekojJwGG8aWAEQxqoW8LxCzoNMKVCQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 14 Feb 2023 11:59:53 -0500 (EST)
-Date:   Tue, 14 Feb 2023 17:59:51 +0100
-From:   Greg KH <greg@kroah.com>
-To:     "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the driver-core tree
-Message-ID: <Y+u+B/yi51JB26If@kroah.com>
-References: <20230214125700.606a89d7@canb.auug.org.au>
- <Y+suRQBtzCWx+mjo@kroah.com>
- <eade11f9-22a2-1e7b-93da-d52b63cf9a5f@intel.com>
+        Tue, 14 Feb 2023 12:00:39 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD102E0FB
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:00:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676394009; x=1707930009;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=6w3IpCDuPLIKFZtnviHXY23jwRbMSUMPP4Yq37TxIVk=;
+  b=aAMpidOvYI0HG6sBYc+sPMJcZDxW+FqBS6Bsr85TxhAwsH7ARqrD//zy
+   WI10QC95bXYfMLISgBQL3CFQkno/cnQT8ijiI3AtQ6PY2rjPBSiBcPRVO
+   RyoEwJisOc0TCHEoMqLORRu/pTsn2F5/WXyQwNX185NmaJbMkcB/Zh54a
+   xFSSbsmpd19r520Zdb1l3lqgPkRMUGD77CiVNtq349tundrJSR9YfmDEu
+   yjEJeQ6AqDfm5gj1P3fYrocVOySbwTmTRyj7NBqTQ/I+RRKC1+yk3Dc7r
+   jUZ1yrEzUpSBoBvjZAyVQw82YePRbyx7iusPd8BMxOrgEpBki+oYbtZW6
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="311568030"
+X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
+   d="scan'208";a="311568030"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 09:00:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="646821521"
+X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
+   d="scan'208";a="646821521"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga006.jf.intel.com with ESMTP; 14 Feb 2023 09:00:07 -0800
+Received: from [10.251.7.65] (kliang2-mobl1.ccr.corp.intel.com [10.251.7.65])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 3C868580B9E;
+        Tue, 14 Feb 2023 09:00:06 -0800 (PST)
+Message-ID: <0df181b9-fb34-78e8-1376-65d45f7f938f@linux.intel.com>
+Date:   Tue, 14 Feb 2023 12:00:04 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eade11f9-22a2-1e7b-93da-d52b63cf9a5f@intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH V2 2/9] perf: Extend ABI to support post-processing
+ monotonic raw conversion
+Content-Language: en-US
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+To:     John Stultz <jstultz@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, peterz@infradead.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org, sboyd@kernel.org,
+        eranian@google.com, namhyung@kernel.org, ak@linux.intel.com,
+        adrian.hunter@intel.com
+References: <20230213190754.1836051-1-kan.liang@linux.intel.com>
+ <20230213190754.1836051-3-kan.liang@linux.intel.com>
+ <CANDhNCqVcrZHGW4QJBD8_hZehmRpnNAsGFsmwsxBZNm3wpFZpQ@mail.gmail.com>
+ <e306e2ea-dea5-0eab-9eae-f9ea5fe7d52e@linux.intel.com>
+ <CANDhNCq1b-7C=cox6ufC3Kxycu87qPzDHtJH_5jwPmPjjig5ww@mail.gmail.com>
+ <6898b1c8-9dbf-67ce-46e6-15d5307ced25@linux.intel.com>
+In-Reply-To: <6898b1c8-9dbf-67ce-46e6-15d5307ced25@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 05:47:16PM +0100, Wysocki, Rafael J wrote:
+
+
+On 2023-02-14 9:51 a.m., Liang, Kan wrote:
 > 
-> On 2/14/2023 7:46 AM, Greg KH wrote:
-> > On Tue, Feb 14, 2023 at 12:57:00PM +1100, Stephen Rothwell wrote:
-> > > Hi all,
-> > > 
-> > > The following commit is also in the pm tree as a different commit (but
-> > > the same patch):
-> > > 
-> > >    a0bc3f78d0ff ("kernel/power/energy_model.c: fix memory leak with using debugfs_lookup()")
-> > > 
-> > > This is commit
-> > > 
-> > >    a0e8c13ccd6a ("PM: EM: fix memory leak with using debugfs_lookup()")
-> > > 
-> > > in the pm tree.
-> > That will be fine, thanks for the warning.
 > 
-> I can drop the EM change, though, if you are going to carry it.
+> On 2023-02-13 5:22 p.m., John Stultz wrote:
+>> On Mon, Feb 13, 2023 at 1:40 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
+>>> On 2023-02-13 2:37 p.m., John Stultz wrote:
+>>>> On Mon, Feb 13, 2023 at 11:08 AM <kan.liang@linux.intel.com> wrote:
+>>>>>
+>>>>> From: Kan Liang <kan.liang@linux.intel.com>
+>>>>>
+>>>>> The monotonic raw clock is not affected by NTP/PTP correction. The
+>>>>> calculation of the monotonic raw clock can be done in the
+>>>>> post-processing, which can reduce the kernel overhead.
+>>>>>
+>>>>> Add hw_time in the struct perf_event_attr to tell the kernel dump the
+>>>>> raw HW time to user space. The perf tool will calculate the HW time
+>>>>> in post-processing.
+>>>>> Currently, only supports the monotonic raw conversion.
+>>>>> Only dump the raw HW time with PERF_RECORD_SAMPLE, because the accurate
+>>>>> HW time can only be provided in a sample by HW. For other type of
+>>>>> records, the user requested clock should be returned as usual. Nothing
+>>>>> is changed.
+>>>>>
+>>>>> Add perf_event_mmap_page::cap_user_time_mono_raw ABI to dump the
+>>>>> conversion information. The cap_user_time_mono_raw also indicates
+>>>>> whether the monotonic raw conversion information is available.
+>>>>> If yes, the clock monotonic raw can be calculated as
+>>>>> mono_raw = base + ((cyc - last) * mult + nsec) >> shift
+>>>>
+>>>> Again, I appreciate you reworking and resending this series out, I
+>>>> know it took some effort.
+>>>>
+>>>> But oof, I'd really like to make sure we're not exporting timekeeping
+>>>> internals to userland.
+>>>>
+>>>> I think Thomas' suggestion of doing the timestamp conversion in
+>>>> post-processing was more about interpolating collected system times
+>>>> with the counter (tsc) values captured.
+>>>>
+>>>
+>>> Thomas, could you please clarify your suggestion regarding "the relevant
+>>> conversion information" provided by the kernel?
+>>> https://lore.kernel.org/lkml/87ilgsgl5f.ffs@tglx/
+>>>
+>>> Is it only the interpolation information or the entire conversion
+>>> information (Mult, shift etc.)?
+>>>
+>>> If it's only the interpolation information, the user space will be lack
+>>> of information to handle all the cases. If I understand John's comments
+>>> correctly, it could also bring some interpolation error which can only
+>>> be addressed by the mult/shift conversion.
+>>
+> 
+> 
+> Thanks for the details John.
+> 
+>> "Only" is maybe too strong a word. I think having the driver use
+>> kernel timekeeping accessors to CLOCK_MONONOTONIC_RAW time with
+>> counter values will minimize the error.
+>>
+> 
+> The key motivation of using the TSC in the PEBS record is to get an
+> accurate timestamp of each record. We definitely want the conversion has
+> minimized error.
+> 
+> 
+>> But again, it's not yet established that any interpolation error using
+>> existing interfaces is great enough to be problematic here.
+>>
+>> The interpoloation is pretty easy to do:
+>>
+>> do {
+>>     start= readtsc();
+>>     clock_gett(CLOCK_MONOTONIC_RAW, &ts);
+>>     end = readtsc();
+>>     delta = end-start;
+>> } while (delta  > THRESHOLD)   // make sure the reads were not preempted
+>> mid = start + (delta +(delta/2))/2; //round-closest
+>>
+> 
+> How to choose the THRESHOLD? It seems the THRESHOLD value also impacts
+> the accuracy.
+> 
+> 
+>> and be able to get you a fairly close matching of TSC to
+>> CLOCK_MONOTONIC_RAW value.
+>>
+>> Once you have that mapping you can take a few samples and establish
+>> the linear function.
+>>
+>> But that will have some error, so quantifying that error helps
+>> establish why being able to get an atomic mapping of TSC ->
+>> CLOCK_MONOTONIC_RAW would help.
+>>
+>> So I really don't think we need to expose the kernel internal values
+>> to userland, but I'm willing to guess the atomic mapping (which the
+>> driver will have access to, not userland) may be helpful for the fine
+>> granularity you want in the trace.
+>>
+> 
+> If I understand correctly, the idea is to let the user space tool run
+> the above interpoloation algorithm several times to 'guess' the atomic
+> mapping. Using the mapping information to covert the TSC from the PEBS
+> record. Is my understanding correct?
+> 
+> If so, to be honest, I doubt we can get the accuracy we want.
+> 
 
-When one branch adds it, and another adds and then removes it, and then
-the two branches are merged, what is the result?  The patch added, or
-removed?
+I implemented a simple test to evaluate the error.
 
-It's safer to just leave this as a duplicate, I know git can handle that
-just fine.
+I collected TSC -> CLOCK_MONOTONIC_RAW mapping using the above algorithm
+at the start and end of perf cmd.
+	MONO_RAW	TSC
+start	89553516545645	223619715214239
+end	89562251233830	223641517000376
 
-thanks,
+Here is what I get via mult/shift conversion from this patch.
+	MONO_RAW	TSC
+PEBS	89555942691466	223625770878571
 
-greg k-h
+Then I use the time information from start and end to create a linear
+function and 'guess' the MONO_RAW of PEBS from the TSC. I get
+89555942692721.
+There is a 1255 ns difference.
+I tried several different PEBS records. The error is ~1000ns.
+I think it should be an observable error.
+
+Thanks,
+Kan
+
