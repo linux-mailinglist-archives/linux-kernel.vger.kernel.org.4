@@ -2,96 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03AE3696C64
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:07:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 722A6696C6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233277AbjBNSHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 13:07:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
+        id S233343AbjBNSIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 13:08:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233280AbjBNSHs (ORCPT
+        with ESMTP id S233326AbjBNSIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 13:07:48 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4402FCF8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 10:07:30 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4fa63c84621so170049087b3.20
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 10:07:30 -0800 (PST)
+        Tue, 14 Feb 2023 13:08:04 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8072722;
+        Tue, 14 Feb 2023 10:07:49 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id n25-20020a9d7119000000b0068bd8c1e836so4898091otj.3;
+        Tue, 14 Feb 2023 10:07:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wX05IVkHj3QBCA1mIon81shk3MJEJQ/4hz193u4oHCc=;
-        b=Dt+QCXEL/j2OVlYZG+8qwoo88m8d8gSqPp1DJoQ+IGJpPuoZGZ7SYYDdYB8+yJ3eDl
-         jeP6IZHDHerpXSU/A3lwaLOqhRFKoFsgEci4P2KArqSNVmooBA2C7+kM9EYWXXJTyLae
-         Xg1dZ+EziJ8yGcFploTgi9FMPrPslHsMYXReHQVo9CBAaIj0P6zc7wVMCM6iWLSQwSfv
-         rIpX9OdI9ocknhGSMghX+77PCRzZY4cpQYWxW05GrdrgU5xkG+PmVmF6RvgPoyIDvsRh
-         kG8ONtGxcufDvuzLkSW/HaWjLqmZO3eUfiS87W6x7qkvY49eByyFST1j571DlgUotIiS
-         /nZw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=h4OOqypcztMGdRZMWdYWIa8wO6PV1EB/xigL2lXgd6c=;
+        b=TH83SksMB4qG/bSenItHJFZ5leEGwcp0TZYW/00oaEIdnzmacod2Q7ODIwP1T/PjuL
+         84KTWNa7rjbqdg+1cMpCnwwueIqosK0qxjeO7/oeXcyh7gfLCkqpISllCXWPMw4C2hQN
+         IhbeF2bdDvjtxi8rVuLOqyBPsr9S1VmF43kfHzE/SCLT1rS9Qk/IzDzSNaDR9ACMHefD
+         RJoIf3Hd+suzqERiO4EqR07iIQOlks7cKk3lQcbjMubgSYgyQWwSBhVaDDAZJWH7989a
+         VBV+FxjV271ytZLfA5kbhGA/zOGwBacjV8cB6Z/XHuqK7Yh+QnufazgnmscHSxXKbBmw
+         D2Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wX05IVkHj3QBCA1mIon81shk3MJEJQ/4hz193u4oHCc=;
-        b=zHHrlX2X28uUeUGR5XYZEouCRWjrVUeLA1v7NAAxax6VDIAkyVl+1NW9Dc8p6GphFz
-         BvuguBVYdIB7nVRCKDhmmrf1J1wEgiO6Z+ceKz+ALYQ3xdq50jwjo5pzb8peUJOq4Dsf
-         YTIurGTANu0fPYuem215jj/SxyWqLjXVIykEg/36XYv8pujaFIS+RJluO/5jxhfLRAvj
-         rc5Po52H0wm0f1ImJVGCACYdhfkKxhE26xcmY7Cn6A29FBnVe9M5mg8/oahaGgqFxMBK
-         sesp7DwXEUTILPhdcxQdBlp9FZAlWzfEBk9+GAU4dn65wLHVEy3yRbmC8m17Cfgr0XPO
-         sfWQ==
-X-Gm-Message-State: AO0yUKVrVc/mGpD99S39YSCedzN1vKTqM3S2+zitTWr1pjDT/x1r4Nn8
-        /uDy1m31OpIFYdqFR2W3/Q101pxQvYg=
-X-Google-Smtp-Source: AK7set+EI7pNBbm5Gukj5zYQbLZVnpf4V0D4zMPyPaLWe/aBZALXoW94wxCwwjPKImE/Ubi3qEmpRmHjMf0=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:dd0a:0:b0:52a:9490:4f66 with SMTP id
- e10-20020a81dd0a000000b0052a94904f66mr350779ywn.56.1676398049608; Tue, 14 Feb
- 2023 10:07:29 -0800 (PST)
-Date:   Tue, 14 Feb 2023 10:07:28 -0800
-In-Reply-To: <20230213235343.GC4175971@ls.amr.corp.intel.com>
-Mime-Version: 1.0
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-3-chao.p.peng@linux.intel.com> <20230209072529.GB4175971@ls.amr.corp.intel.com>
- <Y+WRUriIoan/XChx@google.com> <20230213235343.GC4175971@ls.amr.corp.intel.com>
-Message-ID: <Y+vN4L3N6f3fFlgA@google.com>
-Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
-From:   Sean Christopherson <seanjc@google.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h4OOqypcztMGdRZMWdYWIa8wO6PV1EB/xigL2lXgd6c=;
+        b=eGhSpdsWwVT+B1uksVCwj3mbwahX1GNryWTnZeSBq9nFW8Tu0604LRnMmHjhJwzJob
+         nYe759vDChlOA/tM/ckd/8RzSDg1ss70z0AciIjw1UZscZTJAB6qXvITpuZC1oRyVIlz
+         SAteD/EdLEJWR/R1Dj8pgdSPnhqYIzW++FJmYF8u+Zhzez6ubvDlnRsXmlzPFKDAclh7
+         uxM7gC5slUn32+Rpe903P8ICFn9UadbttpZLAi2X+vsPjtppd23fID9DGdeM29Y4n5Z4
+         yTArQKA0HoyEd6xpKpCZ7kAs2JahGH7QfiI3NXUsSq9Dhngye5tfTXzXDzenyjl9sQ38
+         2CGA==
+X-Gm-Message-State: AO0yUKUhJeN1utjt+EwPJveoI2dpm7FseiB9vRcNx0MrfO9XTVvH+8B2
+        mHEwRJTlfdAnyOG9oPUQKmU=
+X-Google-Smtp-Source: AK7set+EvvMCmu2Iz3by706vIrjihoJBYEIp3M/kj7rOLONkNS4XfgbyPMUg/wq8oznsjQECnnKZ4Q==
+X-Received: by 2002:a9d:7e8d:0:b0:68d:3d9b:fb10 with SMTP id m13-20020a9d7e8d000000b0068d3d9bfb10mr1470704otp.11.1676398068482;
+        Tue, 14 Feb 2023 10:07:48 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id dj6-20020a0568303a8600b0068d542f630fsm6553081otb.76.2023.02.14.10.07.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 10:07:47 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <8c06157f-a482-a7f7-8218-863db3dfe268@roeck-us.net>
+Date:   Tue, 14 Feb 2023 10:07:45 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 5.10 000/134] 5.10.168-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230214172549.450713187@linuxfoundation.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230214172549.450713187@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,61 +83,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023, Isaku Yamahata wrote:
-> On Fri, Feb 10, 2023 at 12:35:30AM +0000,
-> Sean Christopherson <seanjc@google.com> wrote:
+On 2/14/23 09:41, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.168 release.
+> There are 134 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> > On Wed, Feb 08, 2023, Isaku Yamahata wrote:
-> > > On Fri, Dec 02, 2022 at 02:13:40PM +0800,
-> > > Chao Peng <chao.p.peng@linux.intel.com> wrote:
-> > > 
-> > > > +static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
-> > > > +					   struct kvm_memory_attributes *attrs)
-> > > > +{
-> > > > +	gfn_t start, end;
-> > > > +	unsigned long i;
-> > > > +	void *entry;
-> > > > +	u64 supported_attrs = kvm_supported_mem_attributes(kvm);
-> > > > +
-> > > > +	/* flags is currently not used. */
-> > > > +	if (attrs->flags)
-> > > > +		return -EINVAL;
-> > > > +	if (attrs->attributes & ~supported_attrs)
-> > > > +		return -EINVAL;
-> > > > +	if (attrs->size == 0 || attrs->address + attrs->size < attrs->address)
-> > > > +		return -EINVAL;
-> > > > +	if (!PAGE_ALIGNED(attrs->address) || !PAGE_ALIGNED(attrs->size))
-> > > > +		return -EINVAL;
-> > > > +
-> > > > +	start = attrs->address >> PAGE_SHIFT;
-> > > > +	end = (attrs->address + attrs->size - 1 + PAGE_SIZE) >> PAGE_SHIFT;
-> > > > +
-> > > > +	entry = attrs->attributes ? xa_mk_value(attrs->attributes) : NULL;
-> > > > +
-> > > > +	mutex_lock(&kvm->lock);
-> > > > +	for (i = start; i < end; i++)
-> > > > +		if (xa_err(xa_store(&kvm->mem_attr_array, i, entry,
-> > > > +				    GFP_KERNEL_ACCOUNT)))
-> > > > +			break;
-> > > > +	mutex_unlock(&kvm->lock);
-> > > > +
-> > > > +	attrs->address = i << PAGE_SHIFT;
-> > > > +	attrs->size = (end - i) << PAGE_SHIFT;
-> > > > +
-> > > > +	return 0;
-> > > > +}
-> > > > +#endif /* CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES */
-> > > > +
-> > > 
-> > > If memslot isn't private, it should return error if private attribute is set.
-> > 
-> > Why?  I'd rather keep the two things separate.  If we enforce this sort of thing
-> > at KVM_SET_MEMORY_ATTRIBUTES, then we also have to enforce it at
-> > KVM_SET_USER_MEMORY_REGION.
+> Responses should be made by Thu, 16 Feb 2023 17:25:19 +0000.
+> Anything received after that time might be too late.
 > 
-> For device assignment via shared GPA, non-private memory slot needs to be
-> allowed.
 
-That doesn't say anything about why setting attributes needs to poke into the
-memslot.  The page fault path already kicks out to userspace if there's a
-discrepancy between the attributes and the memslot, why is that insufficient?
+Still observed for ppc:ppc32_allmodconfig:
+
+In file included from arch/powerpc/net/bpf_jit_comp.c:16:
+arch/powerpc/net/bpf_jit32.h:131:8: error: redefinition of 'struct codegen_context'
+   131 | struct codegen_context {
+       |        ^~~~~~~~~~~~~~~
+In file included from arch/powerpc/net/bpf_jit32.h:13,
+                  from arch/powerpc/net/bpf_jit_comp.c:16:
+arch/powerpc/net/bpf_jit.h:124:8: note: originally defined here
+   124 | struct codegen_context {
+       |        ^~~~~~~~~~~~~~~
+arch/powerpc/net/bpf_jit_comp.c:18:20: error: redefinition of 'bpf_flush_icache'
+    18 | static inline void bpf_flush_icache(void *start, void *end)
+       |                    ^~~~~~~~~~~~~~~~
+In file included from arch/powerpc/net/bpf_jit32.h:13,
+                  from arch/powerpc/net/bpf_jit_comp.c:16:
+arch/powerpc/net/bpf_jit.h:139:20: note: previous definition of 'bpf_flush_icache' with type 'void(void *, void *)'
+   139 | static inline void bpf_flush_icache(void *start, void *end)
+       |                    ^~~~~~~~~~~~~~~~
+
+Guenter
+
