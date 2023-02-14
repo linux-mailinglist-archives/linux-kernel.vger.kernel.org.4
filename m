@@ -2,66 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC59696B2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BCC0696B3B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233169AbjBNRQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 12:16:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42142 "EHLO
+        id S232965AbjBNRSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 12:18:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231877AbjBNRPa (ORCPT
+        with ESMTP id S232851AbjBNRRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 12:15:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3492ED50
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:14:37 -0800 (PST)
+        Tue, 14 Feb 2023 12:17:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC7E30290
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:15:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676394877;
+        s=mimecast20190719; t=1676394914;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7RYncx3d2QCFno76YxQ26A3gARIW2WsBk/g5n5z32ew=;
-        b=MHzV3ri0QY4HLx0TnzO7rM++fakyjk5QuQ43/dvi82B2kjvKbS2jUrA7E9wdXo7/eu9An5
-        i4YImwlJnQyIMk8LNFbtwwZvoYekfRSWzNgMA8EYdChZ2GRPBQfkTJmySdAKb3x8dhVUb+
-        Se37SU7jqbtlTOTMzBvYiFyewCklTcI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-528-53yWEtX-Pm2chQYNZopvZA-1; Tue, 14 Feb 2023 12:14:33 -0500
-X-MC-Unique: 53yWEtX-Pm2chQYNZopvZA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C77ED38123AE;
-        Tue, 14 Feb 2023 17:14:32 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D47AE18EC2;
-        Tue, 14 Feb 2023 17:14:30 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v14 17/17] block: convert bio_map_user_iov to use iov_iter_extract_pages
-Date:   Tue, 14 Feb 2023 17:13:30 +0000
-Message-Id: <20230214171330.2722188-18-dhowells@redhat.com>
-In-Reply-To: <20230214171330.2722188-1-dhowells@redhat.com>
-References: <20230214171330.2722188-1-dhowells@redhat.com>
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jeEdpXATs9xAq3Ic1YKNwPFKV8iOmXM6rM7COSxPs48=;
+        b=HtzaoAANvJr4jSycO9kp26VV6zBSRLhULVDr9y92JQmhC2aE5vkU/oQWkZCwEarJlJFaFg
+        TUFKABmhuxK+Zm6wbYvphbX55NP8kwWpGzj+B+7rTt0aSN57kB6xV3Y/Sy9ZvgcanMDhoE
+        Dh9yKXoJl0ACGAyN3n9ifmL5W2kdtHw=
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
+ [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-317-NC4FNSi6MTeg_hg8ncVcPw-1; Tue, 14 Feb 2023 12:15:11 -0500
+X-MC-Unique: NC4FNSi6MTeg_hg8ncVcPw-1
+Received: by mail-ot1-f69.google.com with SMTP id w9-20020a9d5a89000000b0068bc6c8621eso8079408oth.9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:15:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jeEdpXATs9xAq3Ic1YKNwPFKV8iOmXM6rM7COSxPs48=;
+        b=1yHPLo3O+/TZe7XIhSbggGzKyHRdg0Shht5+tuaxCVNkNZF5iWN7GI4UVzzJfQnMbi
+         KgV2gZXBfmpanMNC/ocYMAB5BQwT0MsbRRjMyYwtLC1Q6ciLPsjUsOsZQNTAdzg+we76
+         PxXpKvKiVlgT41oCeMq8yJqCBLUDTUPLfqTWtXhVDx8Sn5nrPpMnpdXcbDB79ypZHW0+
+         Fl18bkIpQLs+sFBris4lOkaE87XjdvJi37ZVaGNBckp2wGyuFWlkjuHqI5txQ5Xn3eGQ
+         lBN4wNKrpBtLm4GK0cr3jFsOHI4SnpTfUliQ80sxVNKbSYG3YskfydHJaKXd8Ggf+/xD
+         sQMw==
+X-Gm-Message-State: AO0yUKUZD3z7AMVsmkLLR7G6NZnN31eBWVbG6otPkvymSGQ+J4N18aaj
+        1i78WgA+Jn5slsxvAg7bpXizLaP3jnUp6Y4vNFrzPnNszKip1udXaX8sWMWGvdrjwH5pjESj2ae
+        10QzS4stw5rgFZlbosn8/T9DZ
+X-Received: by 2002:a54:4511:0:b0:364:eafd:2697 with SMTP id l17-20020a544511000000b00364eafd2697mr1473592oil.58.1676394910599;
+        Tue, 14 Feb 2023 09:15:10 -0800 (PST)
+X-Google-Smtp-Source: AK7set8ckzBSvYvKffHSR9kx+MhjoJN8bdYl7WQAW88sdJYAf1ZjAuXtQj8VAA9ciHNcY8zcaNqPDA==
+X-Received: by 2002:a54:4511:0:b0:364:eafd:2697 with SMTP id l17-20020a544511000000b00364eafd2697mr1473585oil.58.1676394910338;
+        Tue, 14 Feb 2023 09:15:10 -0800 (PST)
+Received: from halaney-x13s.redhat.com ([2600:1700:1ff0:d0e0::21])
+        by smtp.gmail.com with ESMTPSA id h18-20020a9d6a52000000b00688449397d3sm6581786otn.15.2023.02.14.09.15.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 09:15:09 -0800 (PST)
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     devicetree@vger.kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, alexandre.torgue@foss.st.com,
+        peppe.cavallaro@st.com, joabreu@synopsys.com, mripard@kernel.org,
+        shenwei.wang@nxp.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Andrew Halaney <ahalaney@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/2] dt-bindings: net: snps,dwmac: Fix snps,reset-delays-us dependency
+Date:   Tue, 14 Feb 2023 11:15:04 -0600
+Message-Id: <20230214171505.224602-1-ahalaney@redhat.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,97 +84,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This will pin pages or leave them unaltered rather than getting a ref on
-them as appropriate to the iterator.
+The schema had snps,reset-delay-us as dependent on snps,reset-gpio. The
+actual property is called snps,reset-delays-us, so fix this to catch any
+devicetree defining snsps,reset-delays-us without snps,reset-gpio.
 
-The pages need to be pinned for DIO rather than having refs taken on them
-to prevent VM copy-on-write from malfunctioning during a concurrent fork()
-(the result of the I/O could otherwise end up being visible to/affected by
-the child process).
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Jan Kara <jack@suse.cz>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: Logan Gunthorpe <logang@deltatee.com>
-cc: linux-block@vger.kernel.org
+Fixes: 7db3545aef5f ("dt-bindings: net: stmmac: Convert the binding to a schemas")
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
 ---
 
-Notes:
-    ver #10)
-     - Drop bio_set_cleanup_mode(), open coding it instead.
-    
-    ver #8)
-     - Split the patch up a bit [hch].
-     - We should only be using pinned/non-pinned pages and not ref'd pages,
-       so adjust the comments appropriately.
-    
-    ver #7)
-     - Don't treat BIO_PAGE_REFFED/PINNED as being the same as FOLL_GET/PIN.
-    
-    ver #5)
-     - Transcribe the FOLL_* flags returned by iov_iter_extract_pages() to
-       BIO_* flags and got rid of bi_cleanup_mode.
-     - Replaced BIO_NO_PAGE_REF to BIO_PAGE_REFFED in the preceding patch.
+Changes since v1:
+    * collected Krzysztof's review
 
- block/blk-map.c | 23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
+ Documentation/devicetree/bindings/net/snps,dwmac.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/block/blk-map.c b/block/blk-map.c
-index f1f70b50388d..0f1593e144da 100644
---- a/block/blk-map.c
-+++ b/block/blk-map.c
-@@ -281,22 +281,21 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
+diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+index e88a86623fce..16b7d2904696 100644
+--- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
++++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+@@ -552,7 +552,7 @@ required:
  
- 	if (blk_queue_pci_p2pdma(rq->q))
- 		extraction_flags |= ITER_ALLOW_P2PDMA;
-+	if (iov_iter_extract_will_pin(iter))
-+		bio_set_flag(bio, BIO_PAGE_PINNED);
+ dependencies:
+   snps,reset-active-low: ["snps,reset-gpio"]
+-  snps,reset-delay-us: ["snps,reset-gpio"]
++  snps,reset-delays-us: ["snps,reset-gpio"]
  
--	bio_set_flag(bio, BIO_PAGE_REFFED);
- 	while (iov_iter_count(iter)) {
--		struct page **pages, *stack_pages[UIO_FASTIOV];
-+		struct page *stack_pages[UIO_FASTIOV];
-+		struct page **pages = stack_pages;
- 		ssize_t bytes;
- 		size_t offs;
- 		int npages;
- 
--		if (nr_vecs <= ARRAY_SIZE(stack_pages)) {
--			pages = stack_pages;
--			bytes = iov_iter_get_pages(iter, pages, LONG_MAX,
--						   nr_vecs, &offs, extraction_flags);
--		} else {
--			bytes = iov_iter_get_pages_alloc(iter, &pages,
--						LONG_MAX, &offs, extraction_flags);
--		}
-+		if (nr_vecs > ARRAY_SIZE(stack_pages))
-+			pages = NULL;
-+
-+		bytes = iov_iter_extract_pages(iter, &pages, LONG_MAX,
-+					       nr_vecs, extraction_flags, &offs);
- 		if (unlikely(bytes <= 0)) {
- 			ret = bytes ? bytes : -EFAULT;
- 			goto out_unmap;
-@@ -318,7 +317,7 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 				if (!bio_add_hw_page(rq->q, bio, page, n, offs,
- 						     max_sectors, &same_page)) {
- 					if (same_page)
--						put_page(page);
-+						bio_release_page(bio, page);
- 					break;
- 				}
- 
-@@ -330,7 +329,7 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 		 * release the pages we didn't map into the bio, if any
- 		 */
- 		while (j < npages)
--			put_page(pages[j++]);
-+			bio_release_page(bio, pages[j++]);
- 		if (pages != stack_pages)
- 			kvfree(pages);
- 		/* couldn't stuff something into bio? */
+ allOf:
+   - $ref: "ethernet-controller.yaml#"
+-- 
+2.39.1
 
