@@ -2,157 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DAE36970D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 23:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5EB96970DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 23:47:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbjBNWoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 17:44:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
+        id S232119AbjBNWrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 17:47:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjBNWoU (ORCPT
+        with ESMTP id S231876AbjBNWrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 17:44:20 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E0A2CC64;
-        Tue, 14 Feb 2023 14:44:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676414659; x=1707950659;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=wnjHJ+xXN/K/bA8pWQ+x7aZWqgTFwCjvKWiJFMNRCGY=;
-  b=jpgtykBfL2HAT9Fs2G/qkPpue80GhhPGKjwzW0pr0NG/2ae5KOV5uTlI
-   vL/pBFuRhp3F8u+szHa/8ZEU69onDHE2ZdNSRRKiUdUHgSpLY5NEENJE/
-   GL0fqr/2GJbCu9lVB0WXAw4tc+QlSSrEeZ86Ql89DqzDT1hWyn27Nr/mT
-   STF1z7+/iQc5wHZaz30WMChJ2ydiMGAmknbzpOGUbiDH/SbJonSZw6kVK
-   o2a+DfeNDHUET7lx2VdQWWTw/a7FwufhYA5JfOKcvPm+dRZjb0L6KENqY
-   ohrAPOxmK2loThgpqk6TjHzZPnvYVEla94VdYGbZ3vmbhYku8dAXlJKX4
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="393691061"
-X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
-   d="scan'208";a="393691061"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 14:44:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="998235562"
-X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
-   d="scan'208";a="998235562"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Feb 2023 14:44:18 -0800
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 14 Feb 2023 14:44:18 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 14 Feb 2023 14:44:18 -0800
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.175)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 14 Feb 2023 14:44:18 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DAm0gcQ9vENW6IVx2tmfZXfjPWTX+QloF7hA6hfiLcGR0D92iCdUAmhL72NEOSP/hGhj2qu8ppa9aQGvv/3a8VyrpscKJuX/fwoAOp7QuiG90SFWuIGldc/NsXDcwRuvN3F24NP5MwNBdxBu2bsIP9IjMaTJw8vUptsHnH5fzf3Kk1B711Qji0LPSbKTh6uydE83zbHJa+NE0/TqU1+J6+xqGnz8ezV7lnNZjf52RvrpF2DKLyiC0ufJIEPry/Nd+YnUKgpmSvy/nCxNh6l9ZRMiS7el72cswT6QQhAWbwXPtXIUbNCfGMIPl211LGD14PoT4GfFrvfyKoP2P/jhbg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dbegYOKnGmovOXxjhXMQTkATp9SLB6qdGF1trm1csl0=;
- b=HY/DGI8CfUZqyF6ZpOHOldbgUzy6ZSpyY/3jVlWeQGEjOYBEMCp8iaiRr8wtnn+lHkVmUxOKUwCXax+Z+RxAgWfBnEI8eBjssz4tbIYQO+eZgoYMbUFeqR87mRgWYChhDzckbL0aFWGjxGjdPNNQsYX4sc/g2Y3qtUiHVO997rO2J8vypAskawn9zZ722skGZ5vSAvA8OYaBzSmoB2JEJXF/mX/PiDfz0z7oXbSHrOqXeXSkiJNFpYPsUOfJsjWNZ8M91gfafGzVbIn+yGEBzbX9I3epWV6GkRX9yNlqnrNRnxuPIW5slmAzvdaPURclLOlhqIHqwoU2EK5oFc/96Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
- by DS0PR11MB6350.namprd11.prod.outlook.com (2603:10b6:8:cd::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6086.24; Tue, 14 Feb 2023 22:44:15 +0000
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::d651:ac39:526d:604f]) by CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::d651:ac39:526d:604f%12]) with mapi id 15.20.6086.024; Tue, 14 Feb
- 2023 22:44:15 +0000
-Message-ID: <9b5972a2-63a9-6e2e-78aa-55ac112ef9ad@intel.com>
-Date:   Tue, 14 Feb 2023 14:44:11 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.2
-Subject: Re: [PATCH] PCI: Fix build error when CONFIG_PCI_MSI disabled
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     <bhelgaas@google.com>, <nathan@kernel.org>,
-        <ndesaulniers@google.com>, <trix@redhat.com>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>, <tglx@linutronix.de>,
-        <kevin.tian@intel.com>, <darwi@linutronix.de>
-References: <20230214222400.GA3089902@bhelgaas>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20230214222400.GA3089902@bhelgaas>
+        Tue, 14 Feb 2023 17:47:47 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DBA2ED76
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 14:47:45 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id k15-20020a5b0a0f000000b007eba3f8e3baso17126318ybq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 14:47:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=7+nx9pODZOTWbI9VVP6a6RYSRYbkJiAoYYb8AY41dxI=;
+        b=ajIEj2qZmmPupRqqyAv+Ana2yWM1Y0+/kYOEOJFN6MuJ9BexzCm7aSfkRJ9JmF5tCK
+         qcBjQ8CLJDBTsclSp6/nOLSmsXzDUeN3dQw0ADOgs4rLLipUJDO4qY7WUW1wG76ycTdK
+         fGYnzxpXe81CXv7gaJFCiIU8MWI4bVoDhuMPwXXAtxrjvDMhAqpibq7hPbCByYWBis+O
+         d2fjQCu68VX3ApUNV4qGg+J7FdAze2jKFkWPvfDQpSMWxAzouXQgxun/3IaKyzrYLuNJ
+         j+aZxQfLJIlfhwZ7VmEE6ic1O5wtvAwouqdSYreKs4P43CceIqN1kf47YuuV64RIUeHK
+         nG3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7+nx9pODZOTWbI9VVP6a6RYSRYbkJiAoYYb8AY41dxI=;
+        b=PBM9nUpiizzuuGMGvoAVkgCFqgKkarNrpg8od3leJLc4a9n8Q3DMyHw2izb0W9ItKT
+         i9fq4TamRlJpWS8wfUYyYgAxuPvLrJoxE/H/F86uTimBU06KfZ0J8RGUyMjnKJEZSm1u
+         BSnI3KadTgDGRJRGDJQCC7nNAxrm/kHZYrl72x7mn2vGioNBIddBEjYoMfl3KMlTQ7O9
+         vQMtGHY5+flGLUgoJszunROoKEdmLa0kEUntOwjMn7adzoHUBwwAwQTViwg/WFCWjMmr
+         Ezn9+84SC91eE3uQlfnzhoWXPhp4lEXsFBZ2rGKWI3p9yJ9zibHzNhpuI4Kil5RcMR3H
+         GJww==
+X-Gm-Message-State: AO0yUKWUxZB0AxjDtKDNNp1p0vfbNoea2K4laCwGD3xNmZwOqiqpcp8T
+        bx7OlUSdhH4vOROKdADzy6mibMCoG1GTDw==
+X-Google-Smtp-Source: AK7set8wgrXoTNrGGFMekxOtm0ElqK2h8Agj3VZGnzS0Ft76YC/6LCFJQLi75hzTelxCVEpL3UCkhAagH9kJdA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a25:e311:0:b0:92f:a9c3:a591 with SMTP id
+ z17-20020a25e311000000b0092fa9c3a591mr32461ybd.8.1676414864929; Tue, 14 Feb
+ 2023 14:47:44 -0800 (PST)
+Date:   Wed, 15 Feb 2023 06:47:35 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
+Message-ID: <20230214224735.264894-1-davidgow@google.com>
+Subject: [PATCH] rust: kernel: Mark rust_fmt_argument as extern "C"
+From:   David Gow <davidgow@google.com>
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        "=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>
+Cc:     David Gow <davidgow@google.com>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR06CA0052.namprd06.prod.outlook.com
- (2603:10b6:a03:14b::29) To CY4PR11MB1862.namprd11.prod.outlook.com
- (2603:10b6:903:124::18)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|DS0PR11MB6350:EE_
-X-MS-Office365-Filtering-Correlation-Id: c8e39bda-7bdc-478f-6e09-08db0edcff95
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PbVLUzZBar/SXMDyv4HRLggOJyRAo6E4FbX1q5mUwdMfEIP4KMUjzOrMeSsM7PoJoqRBsrT9tz72NZLnEAir1T+pcGDymtSQz+Gi5WYdUpOwiXQiz9hKv/d2pFFaw9RvXOTbE8QZC4vY9UOqhPKgz4K5S/d1FCfuhk9c84iLQcAZenF1zAUMbxhiOXWu1oeJlEBiDu/LqJYzoOfGTtLcMLl05D38Diex3G2sw2IoTXj00ofBrbWTMUo42Ryk/BByilfRcpXyPdo7vHoFXIIQnbVr9/rlfZ86hC6tgut5H7BZ+CVjnBMkgwBrLIjDyIa3VCyZ4I1bbqS6auYZuPtjilhtaLSaTySFd+sOYYXsqXPIRw515y380hDX/Shs7eumaGHUnWwdwkwJeBh167DuBnSLGkSX/Ncn0ywOq8+3HAPUeq5QUMGYSlZ+AFIPClbGbcxHLPJaYfpxcByr1I0/jJ1dD9v40ovEZMxVOIDEf5Zy/CkKOAOUf+hDGVm8yJ8qILDR0RdUutccdkMBSEO5KtYL0qXtoxQf5NTmOQ43WlvyYtBzf6JhM/sp3MOBwNgG47E2LGFvGEpS49Hbbi9m943isr1hPulbHV+6R/S9Sxh6j3hfHSbTVugtaeeCWWcufCTz094BvkwBGiskwknIEZ0YDdb4l1AaN0FHhfJNRr8bViX3S6TWHRjnk6KyEqMznBfi3L05g3+zt7Pca2v5W3JBQii63QdOP6srN7/t4I4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(346002)(39860400002)(366004)(376002)(396003)(451199018)(31686004)(36756003)(8676002)(4326008)(66946007)(316002)(31696002)(86362001)(6506007)(26005)(6512007)(186003)(53546011)(38100700002)(44832011)(41300700001)(6916009)(4744005)(7416002)(2616005)(6486002)(478600001)(2906002)(83380400001)(6666004)(8936002)(82960400001)(66556008)(66476007)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MkVuN2FwaldSdDRuSkRIYWo2QUV0akhneXhOUkVvdXpIVFRuY2Y2Wk1HazRi?=
- =?utf-8?B?VkYyZDN0bURja1Y2RDRnZDRMaGpadVJDd0JuVk4wWWluV1l2SmtmQlFSbHZX?=
- =?utf-8?B?cEpCcVByY282Ly80OVNXSGxoOVphMVR0a1lnaWR4YXdPRGlySGpaWGdieEVC?=
- =?utf-8?B?eEhXMnFVUmRxcVN5WW5SUGNtbFVWOTltZ2daWi9xc2NsQTYvYllQdTV1ZG95?=
- =?utf-8?B?TXY0U2M4UnBtNU9KTHAwQjczV2d0RkxSNkxvNzhsZ1VlejFtemVRSUVPc2k5?=
- =?utf-8?B?MWQ2RWEwR0YxYllwclVKd09XTDQ2R21MenR0M2RkTktrZVo2c01QeU9yVUEr?=
- =?utf-8?B?endreGhrbVY1ZWhpR09TOHZlblV0WlFiNXBQNjR1SklCejJScTl1UngyUCtk?=
- =?utf-8?B?d2dlYUlHR0Fab0txMWZVOGxxMDlLK1N5RU1FVWZ4Zjk1RUJQL0ViS081c3A2?=
- =?utf-8?B?dHlUU25OdkdlWWk0S21NeWwwUDB2R1ZKT3dORXZCTzd4MGNKektZVDQ2M2hK?=
- =?utf-8?B?enN6bzR4cEcyNTYxZk1DbEpUbHozOHNUM3RjakYzK3NmaC8vZ0ZPbzVodUNB?=
- =?utf-8?B?em04OEpOTFpxUWZRbGF0U1lkK3lNMG91VGh6dVNpMktDQzl6ak9RTFdtY1Y0?=
- =?utf-8?B?eEdiTENFQ1o5MkxZWW5vZEVmY2ZIOWV0cEpIQVU5SE1zbklocnM5OTlnaDJ2?=
- =?utf-8?B?cWdiWFFCSHNuUEJmeG8vdVgvMlllNE5XeTl3VUNxU1dKbElXQnJlcW84RURv?=
- =?utf-8?B?cWZZc1lxK09zNXBZN2RuR0R4NDc3YlNjaWF2Y3hKb2EwSFdhV1NPYWNCOHdv?=
- =?utf-8?B?cjR2TUNqU290aGRacWR6YnZuSlFSeXFKSkkrL3YzaVQ5UXBNdjVVZjZrRG9r?=
- =?utf-8?B?SytzZU9kQXlOYzBlVUgvOFdTUG03T0tkVTJmTGkvSmQvY0Zra1UzRDluTjV0?=
- =?utf-8?B?QlVoUDRSYVYxVUFhNytQOUFxWnN5R2dscU9uaDFGWVFRZkJ6N1M0MVJvZkFk?=
- =?utf-8?B?a1pvR2ZJK01qTG4xL1NmUTJSS0NnN0FHaWxQeEUxRFR3Y3pjeTlxOUpzMWhp?=
- =?utf-8?B?T3BoTHpFT1ZGZlB4YmIvRnVVN2pGc0k2Nzlwek02VHhtZmlqQlIvcnFNcjZw?=
- =?utf-8?B?L3BTK0lIZHFEdnhvK1dJSjBGMnFWaTgwc0R5UDAyM01oWG9sSkkya0oramFp?=
- =?utf-8?B?YmFreUZNUWljSEhIL3Rzb0xwbFQ3QnozdVFaOWowSmtWWnBtRlU2K3I2bThN?=
- =?utf-8?B?NjdqcHVXalhEOWwyTWE2YVJzODFSbDRKMy9YMjJoSGc2cmJtRGZIQmpwUGlo?=
- =?utf-8?B?NksvRVdrMk5jSjJGMCtPL0pyMVh1c0NZZnVjUEVneWVwZVl1WlJ1Tk0vZ0Z0?=
- =?utf-8?B?SEpVdzJZTVhmUjJNWi9nUWFCaWpDTmpkRW8zQzNWbWtkUThvaGttbTFDWkJ2?=
- =?utf-8?B?bmtBdjRJMnd1eWlaajV3MFp3N3JWK2VPdXhGcWIrM0QvNEpCb1BOZVVEZ1Rj?=
- =?utf-8?B?amMzS1ZHVmZZODUzVmc4dDEzUzJySW85dXVNb0ZBOFdvbDNpMHQvQjN5YmtZ?=
- =?utf-8?B?eVpSRkx4WDMyNWZrZVJtRkNNQkVITlFQMmdFNTJoSUxOUXhaWDVzZUZBM0lW?=
- =?utf-8?B?dlhhbXViUkNmUlBoaXo1aGhpRW1Qcm1qL1BmUnUxMFJ0NHRucFhjZERRUThl?=
- =?utf-8?B?ckN5R3FkanNFM2lKenpUMEJ0eVg1ckllOWNabDdrdkVkZEtzWnhsRURzRjZV?=
- =?utf-8?B?dHVNU21JN1NLQy81eENMWnJ6L1hMMElSdTdpUTFUaFFiSEhrandPSERHTjdu?=
- =?utf-8?B?N3JocTdtRWtzdUVkOXp0aWZOTDhqSk1QY2k4MjJ2Q29TampNOXJIZFJ6YVF1?=
- =?utf-8?B?RzAyVHcrZ04zYndZaCtjN2kybjc1aE9Oc3kzeStDMjlVdGNQbzVhMzdHeGFj?=
- =?utf-8?B?azNGWDNsVEZOWDVUcWVPWWpMcHgrNXdrdHVHTjB0SCt2ays0ZTQwRFpuTFBQ?=
- =?utf-8?B?bGtYZzlpaWg0MzNiV1o0a0ZQY3lPc1NqbCttYmYxSS9nbkFrOXYxTmd1U2Ru?=
- =?utf-8?B?MUJ2NmN0TUxvcDUzckF0WjlDTm94QzhYZG1PYmlmdVhFNzVQc3c2UllpOGs0?=
- =?utf-8?B?MStPRVpjSENCNGtwT296ZVZKbkpHak02UG5XazFxMlFGQzY2L09Ha1JWcTMz?=
- =?utf-8?B?eXc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c8e39bda-7bdc-478f-6e09-08db0edcff95
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2023 22:44:14.8665
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ATg5iVfsYGr7A1rMWk8UJZhGiNU5qbUsGrskmt80QUHEBtAZVXUcuOLslg5K7HlDAgsscgkENurWImXx5JvFvzlPR72//OyRhwpINsqT0EE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB6350
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -160,31 +70,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+The rust_fmt_argument function is called from printk() to handle the %pA
+format specifier.
 
-On 2/14/2023 2:24 PM, Bjorn Helgaas wrote:
+Since it's called from C, we should mark it extern "C" to make sure it's
+ABI compatible.
 
-> I think this should have a "Fixes:" tag to connect it with the commit
-> that added pci_msix_alloc_irq_at() and pci_msix_free_irq().
-> 
+Cc: stable@vger.kernel.org
+Fixes: 247b365dc8dc ("rust: add `kernel` crate")
+Signed-off-by: David Gow <davidgow@google.com>
+---
 
-Thank you. I was not sure if a Fixes tag was needed since it does not
-fix an existing issue but instead prevents a future issue.
+See discussion in:
+https://github.com/Rust-for-Linux/linux/pull/967
+and
+https://github.com/Rust-for-Linux/linux/pull/966
 
-> Looks like 34026364df8e ("PCI/MSI: Provide post-enable dynamic
-> allocation interfaces for MSI-X").
-> 
+---
+ rust/kernel/print.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Correct.
-
-> Thomas merged 34026364df8e, so it would be best if he took the fixup
-> as well.
-
-Thomas did pick this up in tip's irq/urgent branch. While doing so he
-added the Fixes tag that you proposed and also improved the subject.
-
-Thank you very much
-
-Reinette
-
+diff --git a/rust/kernel/print.rs b/rust/kernel/print.rs
+index 30103325696d..ec457f0952fe 100644
+--- a/rust/kernel/print.rs
++++ b/rust/kernel/print.rs
+@@ -18,7 +18,7 @@ use crate::bindings;
+ 
+ // Called from `vsprintf` with format specifier `%pA`.
+ #[no_mangle]
+-unsafe fn rust_fmt_argument(buf: *mut c_char, end: *mut c_char, ptr: *const c_void) -> *mut c_char {
++unsafe extern "C" fn rust_fmt_argument(buf: *mut c_char, end: *mut c_char, ptr: *const c_void) -> *mut c_char {
+     use fmt::Write;
+     // SAFETY: The C contract guarantees that `buf` is valid if it's less than `end`.
+     let mut w = unsafe { RawFormatter::from_ptrs(buf.cast(), end.cast()) };
+-- 
+2.39.1.581.gbfd45094c4-goog
 
