@@ -2,113 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0CB2695DC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:58:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB0B695DC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:59:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232071AbjBNI6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 03:58:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60632 "EHLO
+        id S230158AbjBNI73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 03:59:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231768AbjBNI6t (ORCPT
+        with ESMTP id S231485AbjBNI7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 03:58:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7AB7126D8;
-        Tue, 14 Feb 2023 00:58:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A987614B5;
-        Tue, 14 Feb 2023 08:58:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52427C433EF;
-        Tue, 14 Feb 2023 08:58:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676365126;
-        bh=2Mx33+vREW0hBWChvR3fhbCd1ACURr0Cnsk5gvIAps8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MFW/w0XIdOIS1xNdLpuQS1+t4sw4dF5SJ4dUA1yOgIw+87cFeBAm1ycOmkgBbrkqD
-         Va2135tatjWfeTK3GAmD3M2I+BFrG7cYzuB4bWjAdMCC+WLDe0ElhDbboV0iaXjB+K
-         USC5sF/TgKzw5dYvLQ+vQoVpKl9fWJInENMtDnEY=
-Date:   Tue, 14 Feb 2023 09:58:44 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Elliot Berman <quic_eberman@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-remoteproc@vger.kernel.org
-Subject: Re: [PATCH] firmware: qcom_scm: Use fixed width src vm bitmap
-Message-ID: <Y+tNRPf0PGdShf5l@kroah.com>
-References: <20230213181832.3489174-1-quic_eberman@quicinc.com>
- <20230213214417.mtcpeultvynyls6s@ripper>
+        Tue, 14 Feb 2023 03:59:25 -0500
+Received: from smtp.smtpout.orange.fr (smtp-28.smtpout.orange.fr [80.12.242.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736CC23131
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:59:05 -0800 (PST)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id Rr9TpP4Ql5qOuRr9TpVthu; Tue, 14 Feb 2023 09:59:04 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 14 Feb 2023 09:59:04 +0100
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Lee Jones <lee@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] mfd: core: Reorder fields in 'struct mfd_cell' to save some memory
+Date:   Tue, 14 Feb 2023 09:58:59 +0100
+Message-Id: <bb631974888dfe1af593b6280cf30fb913d2d1a4.1676365116.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230213214417.mtcpeultvynyls6s@ripper>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 01:44:17PM -0800, Bjorn Andersson wrote:
-> On Mon, Feb 13, 2023 at 10:18:29AM -0800, Elliot Berman wrote:
-> > The maximum VMID for assign_mem is 63. Use a u64 to represent this
-> > bitmap instead of architecture-dependent "unsigned int" which varies in
-> > size on 32-bit and 64-bit platforms.
-> > 
-> > Acked-by: Kalle Valo <kvalo@kernel.org> (ath10k)
-> > Tested-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-> > Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> 
-> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
-> 
-> @Greg, would you mind taking this through your tree for v6.3, you
-> already have a related change in fastrpc.c in your tree...
+Group some variables based on their sizes to reduce hole and avoid padding.
+On x86_64, this shrinks the size from 144 to 128 bytes.
 
-I tried, but it doesn't apply to my char-misc tree at all:
+As an example:
 
-checking file drivers/firmware/qcom_scm.c
-Hunk #1 succeeded at 898 (offset -7 lines).
-Hunk #2 succeeded at 915 (offset -7 lines).
-Hunk #3 succeeded at 930 (offset -7 lines).
-checking file drivers/misc/fastrpc.c
-checking file drivers/net/wireless/ath/ath10k/qmi.c
-checking file drivers/remoteproc/qcom_q6v5_mss.c
-Hunk #1 succeeded at 227 (offset -8 lines).
-Hunk #2 succeeded at 404 (offset -10 lines).
-Hunk #3 succeeded at 939 with fuzz 1 (offset -28 lines).
-checking file drivers/remoteproc/qcom_q6v5_pas.c
-Hunk #1 FAILED at 94.
-1 out of 1 hunk FAILED
-checking file drivers/soc/qcom/rmtfs_mem.c
-Hunk #1 succeeded at 30 (offset -1 lines).
-can't find file to patch at input line 167
-Perhaps you used the wrong -p or --strip option?
-The text leading up to this was:
---------------------------
-|diff --git a/include/linux/firmware/qcom/qcom_scm.h
-b/include/linux/firmware/qcom/qcom_scm.h
-|index 1e449a5d7f5c..250ea4efb7cb 100644
-|--- a/include/linux/firmware/qcom/qcom_scm.h
-|+++ b/include/linux/firmware/qcom/qcom_scm.h
---------------------------
+$ size drivers/mfd/as3722.o (Before)
+   text	   data	    bss	    dec	    hex	filename
+   9441	    680	     16	  10137	   2799	drivers/mfd/as3722.o
 
-What tree is this patch made against?
+$ size drivers/mfd/as3722.o (After)
+   text	   data	    bss	    dec	    hex	filename
+   9345	    680	     16	  10041	   2739	drivers/mfd/as3722.o
 
-thanks,
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Using pahole
 
-greg k-h
+Before:
+======
+struct mfd_cell {
+	const char  *              name;                 /*     0     8 */
+	int                        id;                   /*     8     4 */
+	int                        level;                /*    12     4 */
+	int                        (*enable)(struct platform_device *); /*    16     8 */
+	int                        (*disable)(struct platform_device *); /*    24     8 */
+	int                        (*suspend)(struct platform_device *); /*    32     8 */
+	int                        (*resume)(struct platform_device *); /*    40     8 */
+	void *                     platform_data;        /*    48     8 */
+	size_t                     pdata_size;           /*    56     8 */
+	/* --- cacheline 1 boundary (64 bytes) --- */
+	const struct software_node  * swnode;            /*    64     8 */
+	const char  *              of_compatible;        /*    72     8 */
+	const u64                  of_reg;               /*    80     8 */
+	bool                       use_of_reg;           /*    88     1 */
+
+	/* XXX 7 bytes hole, try to pack */
+
+	const struct mfd_cell_acpi_match  * acpi_match;  /*    96     8 */
+	int                        num_resources;        /*   104     4 */
+
+	/* XXX 4 bytes hole, try to pack */
+
+	const struct resource  *   resources;            /*   112     8 */
+	bool                       ignore_resource_conflicts; /*   120     1 */
+	bool                       pm_runtime_no_callbacks; /*   121     1 */
+
+	/* XXX 6 bytes hole, try to pack */
+
+	/* --- cacheline 2 boundary (128 bytes) --- */
+	const char  * const *      parent_supplies;      /*   128     8 */
+	int                        num_parent_supplies;  /*   136     4 */
+
+	/* size: 144, cachelines: 3, members: 20 */
+	/* sum members: 123, holes: 3, sum holes: 17 */
+	/* padding: 4 */
+	/* last cacheline: 16 bytes */
+};
+
+
+After:
+=====
+struct mfd_cell {
+	const char  *              name;                 /*     0     8 */
+	int                        id;                   /*     8     4 */
+	int                        level;                /*    12     4 */
+	int                        (*enable)(struct platform_device *); /*    16     8 */
+	int                        (*disable)(struct platform_device *); /*    24     8 */
+	int                        (*suspend)(struct platform_device *); /*    32     8 */
+	int                        (*resume)(struct platform_device *); /*    40     8 */
+	void *                     platform_data;        /*    48     8 */
+	size_t                     pdata_size;           /*    56     8 */
+	/* --- cacheline 1 boundary (64 bytes) --- */
+	const struct mfd_cell_acpi_match  * acpi_match;  /*    64     8 */
+	const struct software_node  * swnode;            /*    72     8 */
+	const char  *              of_compatible;        /*    80     8 */
+	const u64                  of_reg;               /*    88     8 */
+	bool                       use_of_reg;           /*    96     1 */
+
+	/* XXX 3 bytes hole, try to pack */
+
+	int                        num_resources;        /*   100     4 */
+	const struct resource  *   resources;            /*   104     8 */
+	bool                       ignore_resource_conflicts; /*   112     1 */
+	bool                       pm_runtime_no_callbacks; /*   113     1 */
+
+	/* XXX 2 bytes hole, try to pack */
+
+	int                        num_parent_supplies;  /*   116     4 */
+	const char  * const *      parent_supplies;      /*   120     8 */
+
+	/* size: 128, cachelines: 2, members: 20 */
+	/* sum members: 123, holes: 2, sum holes: 5 */
+};
+---
+ include/linux/mfd/core.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/include/linux/mfd/core.h b/include/linux/mfd/core.h
+index 14ca7b471576..fc4a0e9fb3bb 100644
+--- a/include/linux/mfd/core.h
++++ b/include/linux/mfd/core.h
+@@ -78,6 +78,9 @@ struct mfd_cell {
+ 	void			*platform_data;
+ 	size_t			pdata_size;
+ 
++	/* Matches ACPI */
++	const struct mfd_cell_acpi_match	*acpi_match;
++
+ 	/* Software node for the device. */
+ 	const struct software_node *swnode;
+ 
+@@ -97,9 +100,6 @@ struct mfd_cell {
+ 	/* Set to 'true' to use 'of_reg' (above) - allows for of_reg=0 */
+ 	bool use_of_reg;
+ 
+-	/* Matches ACPI */
+-	const struct mfd_cell_acpi_match	*acpi_match;
+-
+ 	/*
+ 	 * These resources can be specified relative to the parent device.
+ 	 * For accessing hardware you should use resources from the platform dev
+@@ -119,8 +119,8 @@ struct mfd_cell {
+ 	/* A list of regulator supplies that should be mapped to the MFD
+ 	 * device rather than the child device when requested
+ 	 */
+-	const char * const	*parent_supplies;
+ 	int			num_parent_supplies;
++	const char * const	*parent_supplies;
+ };
+ 
+ /*
+-- 
+2.34.1
+
