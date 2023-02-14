@@ -2,134 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64811695F7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D34695F81
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:43:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232537AbjBNJmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 04:42:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
+        id S231923AbjBNJnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 04:43:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231880AbjBNJmO (ORCPT
+        with ESMTP id S231499AbjBNJnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 04:42:14 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F261F7EE6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:42:12 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id z13so10541601wmp.2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:42:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VU6LO+0m6Sq/cxRxnyqDta4QDFbKF1ERrN47QYF8Czk=;
-        b=koBIcODlJXdgon6LrxVlBGARsGHRjtBSRVwazVYTYq6QjQL22XFft4m2dA7T295uWr
-         P5L3TkHWsWlvajPy22Bj+quLaGxDC807d2BFOIicmur1wgQywLiSRdaQbRDaE3SfmKm8
-         oVNLxiDCA8BPXMtQSZUjolGRHGtESmR4yAIfxMd2McYwCyimci2stte7a48NKqNFl6Hd
-         Xe/v9o6NQvR8Mo5NTeXshhVVBrHHqJ6WJmihzVWbY3K6RXbOVHxWLg6eTtHxQZ+HXPtw
-         IMTlZAXPq3VCul8dwXKlF7jVh1rpB5Vujz3Wfi5aROO9gVKTCax7fMD8rnhhasSss805
-         p5Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VU6LO+0m6Sq/cxRxnyqDta4QDFbKF1ERrN47QYF8Czk=;
-        b=CCakQTOF63ofNTrHBJkRXchxzNe/GDdcuOil6hOoPpKW79yMbrFs5DzXOR4vxpxQ7Z
-         nrU49ZyzqNJVEygxNJ0oELZrUkQhlItwJJ1gHVHmgUg0deBEK0a8IAPekmaepTLDVrNI
-         PU4fsW2922DOOVq9+qViuZYo2bQtlLaLYOpiXPewaFj3g7BK5+WZMIWPTFaTAGgh2UBr
-         cGZ3cXo6JXYfAi4MiN6JQbBdibmFGXd795MyjxCMHE34qJi4iJtm4+QgEIIi7exNnT9Q
-         Cx2uOKHdyS7zJU05O7NwXhYV2+zz0gNtKuRsrNDlnLSLKl5I2+Seqh9CWL0WnrN2k1n4
-         hjuQ==
-X-Gm-Message-State: AO0yUKXe9CW/jp7GDaGzgbBarUB3XI4gFibm0raLBcFAGo+kHKL8n7Aq
-        28HkiKMUVZsYN7oaLXklXV3fng==
-X-Google-Smtp-Source: AK7set8IufNWT5xcp2rG6SyjIPJC0CuSYl2MR9XqtXFT9GD48F8sW4PuYPa2cw4QFd3AP3u8S11+Lw==
-X-Received: by 2002:a05:600c:4b1f:b0:3d9:f836:3728 with SMTP id i31-20020a05600c4b1f00b003d9f8363728mr1441681wmp.11.1676367731559;
-        Tue, 14 Feb 2023 01:42:11 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id k7-20020a05600c080700b003daf672a616sm15681706wmp.22.2023.02.14.01.42.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 01:42:11 -0800 (PST)
-Message-ID: <0c6dc673-7e11-eec5-ec2d-e00fb2060bf3@linaro.org>
-Date:   Tue, 14 Feb 2023 10:42:09 +0100
+        Tue, 14 Feb 2023 04:43:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82C4CA07
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:43:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 923D5B81CA5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:43:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5763EC433D2;
+        Tue, 14 Feb 2023 09:43:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676367795;
+        bh=JgiePJOXuSHNcYNssB2GnhcYmi8KQG3kSVOb03KPjqg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lWLSMcarZUjF2q75pRtslttXe5d9W5s3zjYdOqjCaqj+eqmveF8cULy4HEV49RCCG
+         NIjeJG3dK9R3fA2phdX8XYFjLoR0Z0AeE36wLTLOifLxBDgDQE5zQU23GuLHi4WLUg
+         ShXAinWiRKmrxlbBY2ppiw2bqayPQly7Njf3L9HjAQkI277kpiuFrEvuRYOyj4vF2M
+         G040hImP5Q+f0TSzFYzLIw/vWWCSgjxlqtRQOqXzTg1uuWbYmznA/r59UXP7HCy9z3
+         6ua4GpJyZFJ5XCqBtTrPdfVPFsxU5b/ETNi0fO0ej9BW3qYnYP1ILoo7teg8zGYxLE
+         mdn0T4MdlSmLQ==
+Date:   Tue, 14 Feb 2023 11:43:08 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Teng Hu <huteng.ht@bytedance.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <muchun.song@linux.dev>
+Subject: Re: [PATCH] mm: page_alloc: don't allocate page from memoryless nodes
+Message-ID: <Y+tXrK/g1Nrd/q1h@kernel.org>
+References: <20230212110305.93670-1-zhengqi.arch@bytedance.com>
+ <2484666e-e78e-549d-e075-b2c39d460d71@suse.cz>
+ <85af4ada-96c8-1f99-90fa-9b6d63d0016e@bytedance.com>
+ <c6908bd0-5f76-47eb-2b77-ce8f7bf9fbff@suse.cz>
+ <eefc40e5-a14b-22c5-3480-6786afa1c8f4@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] dt-bindings: ata: Add UniPhier controller binding
-Content-Language: en-US
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     linux-ide@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230213045432.32614-1-hayashi.kunihiko@socionext.com>
- <2d76ec86-6580-28b0-0f80-a5c497f8cef7@linaro.org>
- <ed864d57-0de3-a169-ebde-628eb84b8a21@socionext.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ed864d57-0de3-a169-ebde-628eb84b8a21@socionext.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eefc40e5-a14b-22c5-3480-6786afa1c8f4@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2023 10:33, Kunihiko Hayashi wrote:
-> Hi Krzysztof,
+On Tue, Feb 14, 2023 at 10:17:03AM +0100, David Hildenbrand wrote:
+> On 14.02.23 09:42, Vlastimil Babka wrote:
+> > On 2/13/23 12:00, Qi Zheng wrote:
+> > > 
+> > > 
+> > > On 2023/2/13 16:47, Vlastimil Babka wrote:
+> > > > On 2/12/23 12:03, Qi Zheng wrote:
+> > > > > In x86, numa_register_memblks() is only interested in
+> > > > > those nodes which have enough memory, so it skips over
+> > > > > all nodes with memory below NODE_MIN_SIZE (treated as
+> > > > > a memoryless node). Later on, we will initialize these
+> > > > > memoryless nodes (allocate pgdat in free_area_init()
+> > > > > and build zonelist etc), and will online these nodes
+> > > > > in init_cpu_to_node() and init_gi_nodes().
+> > > > > 
+> > > > > After boot, these memoryless nodes are in N_ONLINE
+> > > > > state but not in N_MEMORY state. But we can still allocate
+> > > > > pages from these memoryless nodes.
+> > > > > 
+> > > > > In SLUB, we only process nodes in the N_MEMORY state,
+> > > > > such as allocating their struct kmem_cache_node. So if
+> > > > > we allocate a page from the memoryless node above to
+> > > > > SLUB, the struct kmem_cache_node of the node corresponding
+> > > > > to this page is NULL, which will cause panic.
+> > > > > 
+> > > > > For example, if we use qemu to start a two numa node kernel,
+> > > > > one of the nodes has 2M memory (less than NODE_MIN_SIZE),
+> > > > > and the other node has 2G, then we will encounter the
+> > > > > following panic:
+> > > > > 
+> > > > > [    0.149844] BUG: kernel NULL pointer dereference, address: 0000000000000000
+> > > > > [    0.150783] #PF: supervisor write access in kernel mode
+> > > > > [    0.151488] #PF: error_code(0x0002) - not-present page
+> > > > > <...>
+> > > > > [    0.156056] RIP: 0010:_raw_spin_lock_irqsave+0x22/0x40
+> > > > > <...>
+> > > > > [    0.169781] Call Trace:
+> > > > > [    0.170159]  <TASK>
+> > > > > [    0.170448]  deactivate_slab+0x187/0x3c0
+> > > > > [    0.171031]  ? bootstrap+0x1b/0x10e
+> > > > > [    0.171559]  ? preempt_count_sub+0x9/0xa0
+> > > > > [    0.172145]  ? kmem_cache_alloc+0x12c/0x440
+> > > > > [    0.172735]  ? bootstrap+0x1b/0x10e
+> > > > > [    0.173236]  bootstrap+0x6b/0x10e
+> > > > > [    0.173720]  kmem_cache_init+0x10a/0x188
+> > > > > [    0.174240]  start_kernel+0x415/0x6ac
+> > > > > [    0.174738]  secondary_startup_64_no_verify+0xe0/0xeb
+> > > > > [    0.175417]  </TASK>
+> > > > > [    0.175713] Modules linked in:
+> > > > > [    0.176117] CR2: 0000000000000000
+> > > > > 
+> > > > > In addition, we can also encountered this panic in the actual
+> > > > > production environment. We set up a 2c2g container with two
+> > > > > numa nodes, and then reserved 128M for kdump, and then we
+> > > > > can encountered the above panic in the kdump kernel.
+> > > > > 
+> > > > > To fix it, we can filter memoryless nodes when allocating
+> > > > > pages.
+> > > > > 
+> > > > > Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> > > > > Reported-by: Teng Hu <huteng.ht@bytedance.com>
+> > > > 
+> > > > Well AFAIK the key mechanism to only allocate from "good" nodes is the
+> > > > zonelist, we shouldn't need to start putting extra checks like this. So it
+> > > > seems to me that the code building the zonelists should take the
+> > > > NODE_MIN_SIZE constraint in mind.
+> > > 
+> > > Indeed. How about the following patch:
+> > 
+> > +Cc also David, forgot earlier.
+> > 
+> > Looks good to me, at least.
+> > 
+> > > @@ -6382,8 +6378,11 @@ int find_next_best_node(int node, nodemask_t
+> > > *used_node_mask)
+> > >           int min_val = INT_MAX;
+> > >           int best_node = NUMA_NO_NODE;
+> > > 
+> > > -       /* Use the local node if we haven't already */
+> > > -       if (!node_isset(node, *used_node_mask)) {
+> > > +       /*
+> > > +        * Use the local node if we haven't already. But for memoryless
+> > > local
+> > > +        * node, we should skip it and fallback to other nodes.
+> > > +        */
+> > > +       if (!node_isset(node, *used_node_mask) && node_state(node,
+> > > N_MEMORY)) {
+> > >                   node_set(node, *used_node_mask);
+> > >                   return node;
+> > >           }
+> > > 
+> > > For memoryless node, we skip it and fallback to other nodes when
+> > > build its zonelists.
+> > > 
+> > > Say we have node0 and node1, and node0 is memoryless, then:
+> > > 
+> > > [    0.102400] Fallback order for Node 0: 1
+> > > [    0.102931] Fallback order for Node 1: 1
+> > > 
+> > > In this way, we will not allocate pages from memoryless node0.
+> > > 
 > 
-> On 2023/02/13 18:10, Krzysztof Kozlowski wrote:
->> On 13/02/2023 05:54, Kunihiko Hayashi wrote:
->>> Add UniPhier SATA controller compatible string to the platform binding.
->>> This controller needs maximum three reset controls.
->>>
->>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
->>> ---
->>>   .../devicetree/bindings/ata/ahci-platform.yaml  | 17 +++++++++++++++++
->>>   1 file changed, 17 insertions(+)
->>>
->>> Changes since v1:
->>> - Restrict resets property changes with compatible strings
->>> - Fix maxItems from two to three
->>>
->>> diff --git a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
->>> b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
->>> index 7dc2a2e8f598..25dd5ffaa517 100644
->>> --- a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
->>> +++ b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
->>> @@ -45,6 +45,9 @@ properties:
->>>                 - marvell,armada-8k-ahci
->>>                 - marvell,berlin2-ahci
->>>                 - marvell,berlin2q-ahci
->>> +              - socionext,uniphier-pro4-ahci
->>> +              - socionext,uniphier-pxs2-ahci
->>> +              - socionext,uniphier-pxs3-ahci
->>>             - const: generic-ahci
->>>         - enum:
->>
->> Top level is saying reset=1, so did you test your bindings?
+> In offline_pages(), we'll first build_all_zonelists() to then
+> node_states_clear_node()->node_clear_state(node, N_MEMORY);
 > 
-> Umm, I didn't see any errors on dt_binding_check, anyway I'll add
-> initial minItems:1 and maxItems:3 on top level first.
+> So at least on the offlining path, we wouldn't detect it properly yet I
+> assume, and build a zonelist that contains a now-memory-less node?
 
-You need to test also all DTS using these bindings. Yours and others.
-If you tested the DTS (with proper binding, not one which is basically
-noop):
+Another question is what happens if a new memory is plugged into a node
+that had < NODE_MIN_SIZE of memory and after hotplug it stops being
+"memoryless". 
 
-uniphier-pro4-ace.dtb: sata@65600000: resets: [[27, 12], [27, 28], [37,
-3]] is too long
+> -- 
+> Thanks,
+> 
+> David / dhildenb
+> 
 
-BTW, the patch has other errors - just look at the beginning of the
-file. I cannot see it here in the diff, but when you open the file you
-should notice it.
-
-Best regards,
-Krzysztof
-
+-- 
+Sincerely yours,
+Mike.
