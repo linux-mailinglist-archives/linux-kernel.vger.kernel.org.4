@@ -2,142 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FEF6962A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 12:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB586962AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 12:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232166AbjBNLtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 06:49:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
+        id S232265AbjBNLtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 06:49:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbjBNLtJ (ORCPT
+        with ESMTP id S229882AbjBNLtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 06:49:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B53C23858
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 03:48:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676375304;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=be80ZoWuaklp3ZzQGAhtuohVjBs8d2e/hxh/6X7AdKY=;
-        b=YBc63lmdx0jwCMbGZ7x9Urbn/3wFeugj1WGC/+Y297OvVdzOhL68QeBwQrKgy5y6sSffAu
-        47/7MqKJEjS18+1R2t6/OKz5QLtjMEsdbqGngr0RQcj9LHbOM95HO3Yd5NTnYwme/lYN0T
-        UuGBjeLPUPe6BNu2BLq3DM2V++54+M4=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-398-ZOUrCFdjPxajnyiHjFeFhg-1; Tue, 14 Feb 2023 06:48:22 -0500
-X-MC-Unique: ZOUrCFdjPxajnyiHjFeFhg-1
-Received: by mail-wm1-f71.google.com with SMTP id r14-20020a05600c35ce00b003e10bfcd160so8504423wmq.6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 03:48:22 -0800 (PST)
+        Tue, 14 Feb 2023 06:49:12 -0500
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D796323849;
+        Tue, 14 Feb 2023 03:49:10 -0800 (PST)
+Received: by mail-qv1-f42.google.com with SMTP id j5so8018560qvi.3;
+        Tue, 14 Feb 2023 03:49:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=be80ZoWuaklp3ZzQGAhtuohVjBs8d2e/hxh/6X7AdKY=;
-        b=Fevh9A0NgrNp1lI1imX5lhRomlJxu00rGWiWlQiNT9rEN7KlrB0Z29aMNbMS1AgIaN
-         kYN/aM39fuW+QyZfNEyG3ilthZ024N2Ete/VxDsEZk02G9P02mnS0OfMLavgZxuSrMYq
-         VVslsaPhrrXmCrn8OrrvSvOqYMv90Ysvu5c+uxdjriHTodXIOEnVuDqjplbhp4rf/Adk
-         7zjIu3p591hE4AhSi1VfvgMg6t5xjasoNCLXkPsVHicjcT4oXwZVnuFx3kkBowEAE0Vo
-         UzNmig17tvjr7E3/Jf//wWPl8JurWjqE6eYd5+U2rvnWolCljkSkRc+p4wON9sD6nVBj
-         t8EQ==
-X-Gm-Message-State: AO0yUKUnJphBNGeoOxQTVw6SOA7aCOKZOCcoP+Yd+QyemHx0YobHpqM9
-        1+B9YmGjEXxd/RuJfw1U4xT4Viy6755M5xpR9HaAv01U97VvfFaSPlfYUgST2LUS5eRmxRpedD4
-        Uiomxmjkcpe5HjsDUp9vk4o6Q
-X-Received: by 2002:a05:600c:2e87:b0:3dc:57e8:1d2f with SMTP id p7-20020a05600c2e8700b003dc57e81d2fmr1677309wmn.9.1676375301306;
-        Tue, 14 Feb 2023 03:48:21 -0800 (PST)
-X-Google-Smtp-Source: AK7set8XXhIQBpVYXdiJ+DtNnclCA+VVj5+4PdHf37RILLSy/PCu8jst2nXBwf2VYLoYVwBv4H2Lng==
-X-Received: by 2002:a05:600c:2e87:b0:3dc:57e8:1d2f with SMTP id p7-20020a05600c2e8700b003dc57e81d2fmr1677291wmn.9.1676375301063;
-        Tue, 14 Feb 2023 03:48:21 -0800 (PST)
-Received: from ?IPV6:2003:cb:c709:1700:969:8e2b:e8bb:46be? (p200300cbc709170009698e2be8bb46be.dip0.t-ipconnect.de. [2003:cb:c709:1700:969:8e2b:e8bb:46be])
-        by smtp.gmail.com with ESMTPSA id k12-20020a7bc40c000000b003dfe549da4fsm19625873wmi.18.2023.02.14.03.48.19
+        bh=w8o+V62iNadVynv0wmjLeHQllkaxUHndiQdcgv2rq9I=;
+        b=zlo7Nb2jOqAVZTLCKV5Vwy24nYm6ew3YY1tAWT9kpLVpRF3xrNZDuPTtpjgKVTsgzc
+         qN6cQc0cSXobhmhccnry5T1XfRy8UhgZzRoAvSNk/Sn4icFg3PnuhGBFnM/jfyH/I5Zb
+         PpPg8LwynNvc9FRTaotakNv69kRILUTFcQ+0H++KfthAPfFda7l/bA/MWsLI9gAw8bp5
+         DxlrTUlb64+J71q5Oc0mDf5YHVuiBsFWB2goDdfvYmdFLulKOTpv3UdeP7LMsz4Q5ihg
+         YLatTqCWzurzKMJ4OHYkwbGIkQNt0ta9UydA+Ij/uQFFfk73AVKNYxx7rINGaeYXUJWk
+         WxCQ==
+X-Gm-Message-State: AO0yUKWTHHU6MyHbVmIViP6+dxWk1ZHPjYojP834ST3QpVqMEDdTCQOW
+        Asl7BER0geQIBxPpbnzTT+KSWdJDZavrZ1Gk
+X-Google-Smtp-Source: AK7set+vnjtZpYChSQqPL/m2PDeo5t6vdFw9rHu/QMb60KkUwaf2rH18ypWUWGCDYrulFw4AVnw6/A==
+X-Received: by 2002:ad4:5dcb:0:b0:56e:a07b:f4db with SMTP id m11-20020ad45dcb000000b0056ea07bf4dbmr5071213qvh.24.1676375349736;
+        Tue, 14 Feb 2023 03:49:09 -0800 (PST)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id x188-20020a3795c5000000b00721299cfffesm11700756qkd.39.2023.02.14.03.49.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 03:48:20 -0800 (PST)
-Message-ID: <a7f8be91-32c1-bfbe-7e81-5b1e818ba01d@redhat.com>
-Date:   Tue, 14 Feb 2023 12:48:19 +0100
+        Tue, 14 Feb 2023 03:49:09 -0800 (PST)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-52f0001ff8eso103759237b3.4;
+        Tue, 14 Feb 2023 03:49:08 -0800 (PST)
+X-Received: by 2002:a81:4f11:0:b0:52f:972:e6a1 with SMTP id
+ d17-20020a814f11000000b0052f0972e6a1mr227619ywb.235.1676375348561; Tue, 14
+ Feb 2023 03:49:08 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] mm: page_alloc: don't allocate page from memoryless nodes
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Qi Zheng <zhengqi.arch@bytedance.com>,
-        Qi Zheng <arch0.zheng@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Teng Hu <huteng.ht@bytedance.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <muchun.song@linux.dev>
-References: <20230212110305.93670-1-zhengqi.arch@bytedance.com>
- <2484666e-e78e-549d-e075-b2c39d460d71@suse.cz>
- <85af4ada-96c8-1f99-90fa-9b6d63d0016e@bytedance.com>
- <c6908bd0-5f76-47eb-2b77-ce8f7bf9fbff@suse.cz>
- <eefc40e5-a14b-22c5-3480-6786afa1c8f4@redhat.com>
- <Y+tXrK/g1Nrd/q1h@kernel.org>
- <67240e55-af49-f20a-2b4b-b7d574cd910d@gmail.com>
- <22f0e262-982e-ea80-e52a-a3c924b31d58@redhat.com>
- <dbfbd982-27f3-0d72-49e0-d3dd5fe636a8@bytedance.com>
- <4386151c-0328-d207-9a71-933ef61817f9@redhat.com>
- <Y+t0Bhu7BCzH2Dp4@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Y+t0Bhu7BCzH2Dp4@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230130191152.182826-1-fabrizio.castro.jz@renesas.com> <24bac8be-c301-8efd-4392-e10db00d17f7@linaro.org>
+In-Reply-To: <24bac8be-c301-8efd-4392-e10db00d17f7@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 14 Feb 2023 12:48:57 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdW+RZ73iPJMk-omC4egqBMGPJFeMoUkvcowkO51rN2oGQ@mail.gmail.com>
+Message-ID: <CAMuHMdW+RZ73iPJMk-omC4egqBMGPJFeMoUkvcowkO51rN2oGQ@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: dts: renesas: v2mevk2: Add uSD card and eMMC support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.02.23 12:44, Mike Rapoport wrote:
-> (added x86 folks)
-> 
-> On Tue, Feb 14, 2023 at 12:29:42PM +0100, David Hildenbrand wrote:
->> On 14.02.23 12:26, Qi Zheng wrote:
->>> On 2023/2/14 19:22, David Hildenbrand wrote:
->>>>
->>>> TBH, this is the first time I hear of NODE_MIN_SIZE and it seems to be a
->>>> pretty x86 specific thing.
->>>>
->>>> Are we sure we want to get NODE_MIN_SIZE involved?
->>>
->>> Maybe add an arch_xxx() to handle it?
->>
->> I still haven't figured out what we want to achieve with NODE_MIN_SIZE at
->> all. It smells like an arch-specific hack looking at
->>
->> "Don't confuse VM with a node that doesn't have the minimum amount of
->> memory"
->>
->> Why shouldn't mm-core deal with that?
-> 
-> Well, a node with <4M RAM is not very useful and bears all the overhead of
-> an extra live node.
+On Thu, Feb 2, 2023 at 9:48 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> On 30/01/2023 20:11, Fabrizio Castro wrote:
+> > The RZ/V2M EVK comes with a slot for a uSD card, and an eMMC.
+> > Add support for the both of them.
+> >
+> > Please note that the pinctrl driver for RZ/V2M doesn't support
+> > interrupts yet, therefore the card detect pin has been connected
+> > to the SDHI IP directly in this patch.
+> > We'll connect the card detect pin to its corresponding GPIO when
+> > we'll have driver support for interrupts in the RZ/V2M pinctrl
+> > driver.
+> >
+> > Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > ---
+>
+> > +
+> > +
+>
+> Just one blank line
 
-And totally not with 4.1M, haha.
+Fixing...
 
-I really like the "Might fix boot" in the commit description.
+> >  &extal_clk {
+> >       clock-frequency = <48000000>;
+> >  };
+> > @@ -69,6 +118,26 @@ &i2c2 {
+> >  };
+> >
+> >  &pinctrl {
+> > +     emmc_pins: emmc {
+> > +             emmc_pins_data {
+>
+> No underscores in node names.
 
-> 
-> But, hey, why won't we just drop that '< NODE_MIN_SIZE' and let people with
-> weird HW configurations just live with this?
+... and renaming to "data" etc. while queuing in renesas-devel for v6.4.
 
+Gr{oetje,eeting}s,
 
-;)
+                        Geert
 
 -- 
-Thanks,
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-David / dhildenb
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
