@@ -2,100 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F50696DB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 20:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC39696DBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 20:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjBNTUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 14:20:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35494 "EHLO
+        id S231935AbjBNTVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 14:21:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231815AbjBNTUC (ORCPT
+        with ESMTP id S229460AbjBNTVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 14:20:02 -0500
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67ACE30DD;
-        Tue, 14 Feb 2023 11:20:01 -0800 (PST)
-Received: by mail-oi1-f170.google.com with SMTP id bj22so13839448oib.11;
-        Tue, 14 Feb 2023 11:20:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TijPrW01SusPeqgU93zj+PaZJEliWbkmIJHGZ7Gw5cU=;
-        b=lV0/EQYKJKaSFtlfCnc8DxzhypYFolmCVsfXkxlrwSbsbo7vWciGRBI24ExOpYdbV0
-         CZltz2uF/oZphFH37Ztv46Abz16S6oA6vI9JJHhg+H5XzKDkqNV8tpP5WlPys0/4TRKJ
-         AhLH5jNH0T7ImgmQ8BuYaKRU0mXSL8qVLk5FWtQvVz+X5TZViFL7+P8B42ePyyppDfbx
-         mP7ZXrSz7OeD6G/7dvAL4pRw5M71ZYvPa1Xj6Xhs+g3OASjl2uq+9bJVHfyxD+KHSEds
-         ENsQjlq8TsNnugyz1Vqzz6LehPhqzS54eWt1lm3dSSgBCLGbSH0cwvGp2SllpX+Otv2i
-         tSFA==
-X-Gm-Message-State: AO0yUKULm1bsDwGkl21KiKc6LaWxhGSe0oPTFmq2vuv5L/da3tYzJ6gi
-        NbBD7HmMvmJQ20T1ppxjCA==
-X-Google-Smtp-Source: AK7set8fynAn+e3iL12R+/VtBADDsvcxd4FgY3dUEG466kszj/Jl1DLq6tDpbjBnNxuG9Os1CQSfPQ==
-X-Received: by 2002:a05:6808:4285:b0:378:7234:bc46 with SMTP id dq5-20020a056808428500b003787234bc46mr1690381oib.44.1676402400689;
-        Tue, 14 Feb 2023 11:20:00 -0800 (PST)
-Received: from robh_at_kernel.org (c-67-162-147-231.hsd1.co.comcast.net. [67.162.147.231])
-        by smtp.gmail.com with ESMTPSA id b13-20020aca220d000000b0037d743b5cb7sm4318528oic.17.2023.02.14.11.19.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 11:20:00 -0800 (PST)
-Received: (nullmailer pid 29522 invoked by uid 1000);
-        Tue, 14 Feb 2023 19:19:59 -0000
-Date:   Tue, 14 Feb 2023 13:19:59 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     Janne Grunau <j@jannau.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hector Martin <marcan@marcan.st>, devicetree@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>, Sven Peter <sven@svenpeter.dev>,
-        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org
-Subject: Re: [RFC PATCH] dt-bindings: dma: apple,sio: Add schema
-Message-ID: <20230214191959.GA27025-robh@kernel.org>
-References: <20230214141053.92731-1-povik+lin@cutebit.org>
- <167638945429.3790.16067227881981242831.robh@kernel.org>
+        Tue, 14 Feb 2023 14:21:46 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8D1105;
+        Tue, 14 Feb 2023 11:21:44 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31E7hMd5031905;
+        Tue, 14 Feb 2023 19:21:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=rVFs+DSj0sFGO78OF5BmcVkZIkrjvvBZ8DIKrGxxl0E=;
+ b=R0ouuPFEO7u8Z7fqIgfHQ6JIDeIRP0c6Pj4IsC/PN9q7utFDPH5IaeUfsu/L0QH5KfgS
+ CtekIDoPWCmKDWAZcnr2vLkhIo2TiXsQ1ze+mkYLRPeUFo/bvc+bQyuFiWPyn3B26GZs
+ 6APBO2iUpl8lBYYz9HJ/hZrjRDXuY1IgKwKS6GBTU5Xt6ueCxE1iMBYHDK9QKoiomGVw
+ jkpszzbMzJsRMy6UFQEwwNImFJD257R4xmiKKMBK6EhpW1Ddf0svu9FKuFS5WcWXW2b/
+ K+kTh9Gi1bwCqdC1LZlDVWijCuJCprIvgY8EaVlxh+Lvwj1eqOWThfxOfoTYOy+65Dsl PA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nr4kpa02k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 19:21:33 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31EJLVO1018148
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 19:21:31 GMT
+Received: from hu-johmoo-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Tue, 14 Feb 2023 11:21:31 -0800
+From:   John Moon <quic_johmoo@quicinc.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Nicolas Schier" <nicolas@fjasle.eu>
+CC:     John Moon <quic_johmoo@quicinc.com>,
+        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Todd Kjos <tkjos@google.com>,
+        Matthias Maennich <maennich@google.com>,
+        Giuliano Procida <gprocida@google.com>,
+        Jordan Crouse <jorcrous@amazon.com>, <kernel-team@android.com>
+Subject: [PATCH 0/1] Validating UAPI backwards compatibility
+Date:   Tue, 14 Feb 2023 11:20:48 -0800
+Message-ID: <20230214192049.14726-1-quic_johmoo@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <167638945429.3790.16067227881981242831.robh@kernel.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: gvfb0zRubit0eBKj7q2WM4Vn0ctizjwJ
+X-Proofpoint-ORIG-GUID: gvfb0zRubit0eBKj7q2WM4Vn0ctizjwJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-14_13,2023-02-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ spamscore=0 priorityscore=1501 phishscore=0 bulkscore=0 clxscore=1011
+ impostorscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302140168
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 10:12:34AM -0600, Rob Herring wrote:
-> 
-> On Tue, 14 Feb 2023 15:10:53 +0100, Martin Povišer wrote:
-> > Describe the SIO coprocessor which serves as pretend DMA controller on
-> > recent Apple platforms.
-> > 
-> > Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
-> > ---
-> > 
-> > Since the schema mentions a loader preparing the binding appropriately,
-> > here's a PR with the relevant (WIP) loader code, if anyone wants to look:
-> > https://github.com/AsahiLinux/m1n1/pull/286
-> > 
-> >  .../devicetree/bindings/dma/apple,sio.yaml    | 129 ++++++++++++++++++
-> >  1 file changed, 129 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/dma/apple,sio.yaml
-> > 
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> Documentation/devicetree/bindings/dma/apple,sio.example.dts:24.35-27.11: Warning (node_name_vs_property_name): /example-0/interrupt-controller: node name and property name conflict
+Hi all,
 
-This is a quirk with how the examples are constructed. In any case, just 
-drop the 'interrupt-controller' node. No need to show providers in an 
-example.
+The kernel community has rigorously enforced a policy of backwards
+compatibility in its UAPI headers for a long time. This has allowed user
+applications to enjoy stability across kernel upgrades without
+recompiling.
 
-Rob
+In the vendor driver community (out-of-tree modules), there's been a
+lack of discipline when it comes to maintaining UAPI backwards
+compatibility. This has been a maintenance burden and limits our options
+for long-term support of older devices.
+
+Our goal is to add tooling for vendor driver developers because the
+upstream model of expert maintainer code review can be difficult to
+replicate in-house. Tools may help developers catch simple UAPI
+incompatibilities that could be easily overlooked by in-house review.
+
+We see in the kernel documentation:
+"Kernel headers are backwards compatible, but not forwards compatible.
+This means that a program built against a C library using older kernel
+headers should run on a newer kernel (although it may not have access
+to new features), but a program built against newer kernel headers may
+not work on an older kernel."[1]
+
+How does the kernel enforce this guarantee? We would be interested to
+learn about any tools or methods used by kernel developers to make sure
+the above statement remains true.
+
+Could the documentation on UAPI maintenance (from a developer's point of
+view) be expanded? Internally, we have a set of guidelines for our kernel
+developers regarding UAPI compatibility techniques. If there's interest
+in supplying a document on this topic with the kernel, we'd be happy to
+submit a draft detailing what we have so far as a jumping off point.
+
+Additionally, I've attached a shell script we've been using internally
+to validate changes to our UAPI headers are backwards compatible. The
+script uses libabigail's[2] tool abidiff[3] to compare a modified
+header's ABI before and after a patch is applied. If an existing UAPI is
+modified, the script exits non-zero. We use this script in our CI system
+to block changes that fail the check.
+
+Currently, the script works with gcc. It generates output like this when
+a backwards-incompatible change is made to a UAPI header:
+
+ !!! ABI differences detected in include/uapi/linux/acct.h (compared to
+ file at HEAD^1) !!!
+
+     [C] 'struct acct' changed:
+       type size changed from 512 to 544 (in bits)
+       1 data member insertion:
+         '__u32 new_val', at offset 512 (in bits) at acct.h:71:1
+
+ 0/1 UAPI header file changes are backwards compatible
+ UAPI header ABI check failed
+
+However, we have not had success with clang. It seems clang is more
+aggressive in optimizing dead code away (no matter which options we
+pass). Therefore, no ABI differences are found.
+
+We wanted to share with the community to receive feedback and any advice
+when it comes to tooling/policy surrounding this issue. Our hope is that
+the script will help all kernel UAPI authors (even those that haven't
+upstreamed yet) maintain good discipline and avoid breaking userspace.
+
+[1] Documentation/kbuild/headers_install.rst
+[2] https://sourceware.org/libabigail/manual/libabigail-overview.html
+[3] https://sourceware.org/libabigail/manual/abidiff.html
+
+P.S. While at Qualcomm, Jordan Crouse <jorcrous@amazon.com> authored the
+original version of the UAPI checker script. Thanks Jordan!
+
+
+John Moon (1):
+  check-uapi: Add UAPI check script
+
+ scripts/check-uapi.sh | 240 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 240 insertions(+)
+ create mode 100755 scripts/check-uapi.sh
+
+
+base-commit: 0983f6bf2bfc0789b51ddf7315f644ff4da50acb
+--
+2.17.1
+
