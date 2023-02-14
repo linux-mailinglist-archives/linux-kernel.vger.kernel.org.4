@@ -2,82 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC9E69700F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 22:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ACF1697014
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 22:51:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232442AbjBNVu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 16:50:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42270 "EHLO
+        id S229685AbjBNVvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 16:51:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232169AbjBNVu4 (ORCPT
+        with ESMTP id S230354AbjBNVvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 16:50:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBC024C89
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 13:50:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676411409;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vd2D3kh6MSl0+HEN6i6jUwW/5XgFEq3zA+v5AiLWsl0=;
-        b=V7pxAzQgwJ+X8C5by2YeivSQRiC3+4GjzUtmmbn4BXmb0raXg3FeA3aJBtPLanFX5sIySb
-        KbPUu6O5T3c79Ck81vmknWqv4LTfcfja/9Ev8UtkyUFvogEv8lPd4GGYQd1gxz3RodDn5y
-        YV4UXNGlMqkQbvmyOBHvRY3ShZD63yg=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-580-_l2VAFJ8PDSUyB2E3BgOKQ-1; Tue, 14 Feb 2023 16:50:07 -0500
-X-MC-Unique: _l2VAFJ8PDSUyB2E3BgOKQ-1
-Received: by mail-qv1-f71.google.com with SMTP id w2-20020a0cc702000000b0055c8ef137ddso9476576qvi.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 13:50:07 -0800 (PST)
+        Tue, 14 Feb 2023 16:51:07 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4401305E4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 13:51:04 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id t13-20020a056902018d00b0074747131938so17172794ybh.12
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 13:51:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VrgLkKrYUH3+BU0ozO5nBkWnsOlphXvzXFHB65nAJd8=;
+        b=Qay9NGY+kevbOhpcduj2lxzQEFadpk9SFQFC5/rXdXofLs8NttK/CIfoXhs3/rw/3n
+         Vl49iXVxwZJBdFcIsvmEvl4woJWIh/PEKJeFx1F8R7n36raTS6dU9ChEZ20cFXj2XEl+
+         uFls14nOLrDtGKC9fYuu08xrafCrSunlP0gV22d0ze3+Rd8M+6n0UAbxUdXoX5FGeYT0
+         CsICm7fVCo1u+7WOby0MsJphWSOwBfnVcq78xI3TiXzZjr6sychzLaS77OlPYYxxR7Mb
+         lZc/KrUYjyfoSnOAlJ01fR1vqNTPBjqUc1KjU8GfjkjNWfUzWa7nwI5CwvXerVfqyo+N
+         OyPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676411407;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vd2D3kh6MSl0+HEN6i6jUwW/5XgFEq3zA+v5AiLWsl0=;
-        b=qoc8og8llEQ5H983XAi6D67fFdCpC1ypFQqXFZa098xdOgyxbskuTzDDPza8L+aZ6t
-         LJZTAu1e1LO4ksH4mfHaSUmC2SALipbAShF7GyPpg/um5h6V3lsjuQBQgrqk4c+vVlQR
-         JSfNo4wPIs2R7GZfU6VlaKdfD6WJM53qwLinFbn/GIFGx0K4zcYB9giHcr96GrWZn7TT
-         zt+4AFT8s99OmGT9bdAmUfQzjmbJvykU9c/Oddqof5r+ZkDKeC2y/5ey8a+n7EZ7GtNW
-         0sdblD2TKVoxXbcIk5VAvBLiii32FRmMUA8Yed6uwAdoDrsRMgKJocC+I6FS73M2NQVa
-         OOVg==
-X-Gm-Message-State: AO0yUKWsIqM0jpTT7iEWks1odWQ30P+zNC/JRxWP2nitJoPI1vPxCNBu
-        WQCubsfICumZDw+TGSy5M4WoomUohWrux+ob4nK2OxmaJyNpYx0fVj5sOs8tWTOwuMdgx3KpPmZ
-        RyoXt/B20z2U2FGvN5AvBsaiQ
-X-Received: by 2002:a05:622a:118a:b0:39c:da22:47b8 with SMTP id m10-20020a05622a118a00b0039cda2247b8mr7708483qtk.1.1676411407338;
-        Tue, 14 Feb 2023 13:50:07 -0800 (PST)
-X-Google-Smtp-Source: AK7set9TMggUZoRSSsqv/6SNCp+qa0t1KSHcK3Ju4tKU9FTle9jkwRzB+AkKjTtCtUOeYnEc7sHTsQ==
-X-Received: by 2002:a05:622a:118a:b0:39c:da22:47b8 with SMTP id m10-20020a05622a118a00b0039cda2247b8mr7708439qtk.1.1676411406915;
-        Tue, 14 Feb 2023 13:50:06 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id z12-20020ac87cac000000b003b9bc00c2f1sm11692685qtv.94.2023.02.14.13.50.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 13:50:06 -0800 (PST)
-Date:   Tue, 14 Feb 2023 16:50:05 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Paul Gofman <pgofman@codeweavers.com>, david@redhat.com,
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VrgLkKrYUH3+BU0ozO5nBkWnsOlphXvzXFHB65nAJd8=;
+        b=jL3927vOdpcXdSjSWsRME6pxR49vxewQ9Oqx9AZSCdDyD7QA6QDXYwrOdVr7kWQm0C
+         j+MXBteSef9kXnvONXetP1RItL7nSI8mJNY+ASYdkvrbVpud9/3Y2ecuso0rdEMHZUxw
+         MZfS4fhQUYj2H1Qdxi0Mb3e8A8j+2WGbbEq+AIJfH5SmAyYZm3aI7RgHU/F98YIw1njC
+         jsBbbUfqf00Py9eiWAIB1PgI8DCyq26FNidyDqMexYgkFseKnb/0ESKzJ3fIeP9OYLRT
+         /jpy7L0SWlO5ErPqui1THHeXveHn/gIHYsIxITyWGDQW7wdkTrsR8h/9o+zMwTyyYR6L
+         aqTg==
+X-Gm-Message-State: AO0yUKUNp6IkRj5exJ15XkhvAQK0ZPgYPn39aP3f/Q4oAZK3a72s0Rae
+        XWOnFEBySIy043XPUHB52yv/6zXUx0XI34jMDPci
+X-Google-Smtp-Source: AK7set/UuWwz2D+btTN2iVANQS92vAVf1LCQRG6th9IPcVzzaqtIi31Q6ChM3iY+rl8IW8bGj44vP7BuxGgl1GRldWoW
+X-Received: from axel.svl.corp.google.com ([2620:15c:2d4:203:2483:e0be:d4cf:3b41])
+ (user=axelrasmussen job=sendgmr) by 2002:a05:6902:3c7:b0:8fe:5e0f:9712 with
+ SMTP id g7-20020a05690203c700b008fe5e0f9712mr1ybs.5.1676411463637; Tue, 14
+ Feb 2023 13:51:03 -0800 (PST)
+Date:   Tue, 14 Feb 2023 13:50:46 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
+Message-ID: <20230214215046.1187635-1-axelrasmussen@google.com>
+Subject: [PATCH] mm: userfaultfd: add UFFDIO_CONTINUE_MODE_WP to install WP PTEs
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <muchun.song@linux.dev>,
         Andrew Morton <akpm@linux-foundation.org>,
-        kernel@collabora.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mm/userfaultfd: Support WP on multiple VMAs
-Message-ID: <Y+wCDUpuDcSDSQAK@x1n>
-References: <20230213163124.2850816-1-usama.anjum@collabora.com>
- <Y+prUgFQqmytC/5M@x1n>
- <9f0278d7-54f1-960e-ffdf-eeb2572ff6d1@collabora.com>
- <Y+qnb/Ix8P5J3Kl4@x1n>
- <0549bd0e-85c4-1547-3eaa-16c8a8883837@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0549bd0e-85c4-1547-3eaa-16c8a8883837@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        Hugh Dickins <hughd@google.com>, Shuah Khan <shuah@kernel.org>,
+        Peter Xu <peterx@redhat.com>,
+        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        James Houghton <jthoughton@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,272 +75,343 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 01:49:50PM +0500, Muhammad Usama Anjum wrote:
-> On 2/14/23 2:11 AM, Peter Xu wrote:
-> > On Mon, Feb 13, 2023 at 10:50:39PM +0500, Muhammad Usama Anjum wrote:
-> >> On 2/13/23 9:54 PM, Peter Xu wrote:
-> >>> On Mon, Feb 13, 2023 at 09:31:23PM +0500, Muhammad Usama Anjum wrote:
-> >>>> mwriteprotect_range() errors out if [start, end) doesn't fall in one
-> >>>> VMA. We are facing a use case where multiple VMAs are present in one
-> >>>> range of interest. For example, the following pseudocode reproduces the
-> >>>> error which we are trying to fix:
-> >>>>
-> >>>> - Allocate memory of size 16 pages with PROT_NONE with mmap
-> >>>> - Register userfaultfd
-> >>>> - Change protection of the first half (1 to 8 pages) of memory to
-> >>>>   PROT_READ | PROT_WRITE. This breaks the memory area in two VMAs.
-> >>>> - Now UFFDIO_WRITEPROTECT_MODE_WP on the whole memory of 16 pages errors
-> >>>>   out.
-> >>>>
-> >>>> This is a simple use case where user may or may not know if the memory
-> >>>> area has been divided into multiple VMAs.
-> >>>>
-> >>>> Reported-by: Paul Gofman <pgofman@codeweavers.com>
-> >>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> >>>> ---
-> >>>> Changes since v1:
-> >>>> - Correct the start and ending values passed to uffd_wp_range()
-> >>>> ---
-> >>>>  mm/userfaultfd.c | 38 ++++++++++++++++++++++----------------
-> >>>>  1 file changed, 22 insertions(+), 16 deletions(-)
-> >>>>
-> >>>> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-> >>>> index 65ad172add27..bccea08005a8 100644
-> >>>> --- a/mm/userfaultfd.c
-> >>>> +++ b/mm/userfaultfd.c
-> >>>> @@ -738,9 +738,12 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
-> >>>>  			unsigned long len, bool enable_wp,
-> >>>>  			atomic_t *mmap_changing)
-> >>>>  {
-> >>>> +	unsigned long end = start + len;
-> >>>> +	unsigned long _start, _end;
-> >>>>  	struct vm_area_struct *dst_vma;
-> >>>>  	unsigned long page_mask;
-> >>>>  	int err;
-> >>>
-> >>> I think this needs to be initialized or it can return anything when range
-> >>> not mapped.
-> >> It is being initialized to -EAGAIN already. It is not visible in this patch.
-> > 
-> > I see, though -EAGAIN doesn't look suitable at all.  The old retcode for
-> > !vma case is -ENOENT, so I think we'd better keep using it if we want to
-> > have this patch.
-> I'll update in next version.
-> 
-> > 
-> >>
-> >>>
-> >>>> +	VMA_ITERATOR(vmi, dst_mm, start);
-> >>>>  
-> >>>>  	/*
-> >>>>  	 * Sanitize the command parameters:
-> >>>> @@ -762,26 +765,29 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
-> >>>>  	if (mmap_changing && atomic_read(mmap_changing))
-> >>>>  		goto out_unlock;
-> >>>>  
-> >>>> -	err = -ENOENT;
-> >>>> -	dst_vma = find_dst_vma(dst_mm, start, len);
-> >>>> +	for_each_vma_range(vmi, dst_vma, end) {
-> >>>> +		err = -ENOENT;
-> >>>>  
-> >>>> -	if (!dst_vma)
-> >>>> -		goto out_unlock;
-> >>>> -	if (!userfaultfd_wp(dst_vma))
-> >>>> -		goto out_unlock;
-> >>>> -	if (!vma_can_userfault(dst_vma, dst_vma->vm_flags))
-> >>>> -		goto out_unlock;
-> >>>> +		if (!dst_vma->vm_userfaultfd_ctx.ctx)
-> >>>> +			break;
-> >>>> +		if (!userfaultfd_wp(dst_vma))
-> >>>> +			break;
-> >>>> +		if (!vma_can_userfault(dst_vma, dst_vma->vm_flags))
-> >>>> +			break;
-> >>>>  
-> >>>> -	if (is_vm_hugetlb_page(dst_vma)) {
-> >>>> -		err = -EINVAL;
-> >>>> -		page_mask = vma_kernel_pagesize(dst_vma) - 1;
-> >>>> -		if ((start & page_mask) || (len & page_mask))
-> >>>> -			goto out_unlock;
-> >>>> -	}
-> >>>> +		if (is_vm_hugetlb_page(dst_vma)) {
-> >>>> +			err = -EINVAL;
-> >>>> +			page_mask = vma_kernel_pagesize(dst_vma) - 1;
-> >>>> +			if ((start & page_mask) || (len & page_mask))
-> >>>> +				break;
-> >>>> +		}
-> >>>>  
-> >>>> -	uffd_wp_range(dst_mm, dst_vma, start, len, enable_wp);
-> >>>> +		_start = (dst_vma->vm_start > start) ? dst_vma->vm_start : start;
-> >>>> +		_end = (dst_vma->vm_end < end) ? dst_vma->vm_end : end;
-> >>>>  
-> >>>> -	err = 0;
-> >>>> +		uffd_wp_range(dst_mm, dst_vma, _start, _end - _start, enable_wp);
-> >>>> +		err = 0;
-> >>>> +	}
-> >>>>  out_unlock:
-> >>>>  	mmap_read_unlock(dst_mm);
-> >>>>  	return err;
-> >>>
-> >>> This whole patch also changes the abi, so I'm worried whether there can be
-> >>> app that relies on the existing behavior.
-> >> Even if a app is dependent on it, this change would just don't return error
-> >> if there are multiple VMAs under the hood and handle them correctly. Most
-> >> apps wouldn't care about VMAs anyways. I don't know if there would be any
-> >> drastic behavior change, other than the behavior becoming nicer.
-> > 
-> > So this logic existed since the initial version of uffd-wp.  It has a good
-> > thing that it strictly checks everything and it makes sense since uffd-wp
-> > is per-vma attribute.  In short, the old code fails clearly.
-> > 
-> > While the new proposal is not: if -ENOENT we really have no idea what
-> > happened at all; some ranges can be wr-protected but we don't know where
-> > starts to go wrong.
-> The return error codes can be made to return in better way somewhat. The
-> return error codes shouldn't block a correct functionality enhancement patch.
-> 
-> > 
-> > Now I'm looking at the original problem..
-> > 
-> >  - Allocate memory of size 16 pages with PROT_NONE with mmap
-> >  - Register userfaultfd
-> >  - Change protection of the first half (1 to 8 pages) of memory to
-> >    PROT_READ | PROT_WRITE. This breaks the memory area in two VMAs.
-> >  - Now UFFDIO_WRITEPROTECT_MODE_WP on the whole memory of 16 pages errors
-> >    out.
-> > 
-> > Why the user app should wr-protect 16 pages at all?
-> Taking arguments from Paul here.
-> 
-> The app is free to insert guard pages inside the range (with PROT_NONE) and
-> change the protection of memory freely. Not sure why it is needed to
-> complicate things by denying any flexibility. We should never restrict what
-> is possible and what not. All of these different access attributes and
-> their any combination of interaction _must_ work without question. The
-> application should be free to change protection on any sub-range and it
-> shouldn't break the PAGE_IS_WRITTEN + UFFD_WRITE_PROTECT promise which
-> PAGEMAP_IOCTL (patches are in progress) and UFFD makes.
+UFFDIO_COPY already has UFFDIO_COPY_MODE_WP, so when installing a new
+PTE to resolve a missing fault, one can install a write-protected one.
+This is useful when using UFFDIO_REGISTER_MODE_{MISSING,WP} in
+combination.
 
-Because uffd-wp has a limitation on e.g. it cannot nest so far.  I'm fine
-with allowing mprotect() happening, but just to mention so far it cannot do
-"any combinations" yet.
+So, add an analogous UFFDIO_CONTINUE_MODE_WP, which does the same thing
+but for *minor* faults.
 
-> 
-> > 
-> > If so, uffd_wp_range() will be ran upon a PROT_NONE range which doesn't
-> > make sense at all, no matter whether the user is aware of vma concept or
-> > not...  because it's destined that it's a vain effort.
-> It is not a vain effort. The user want to watch/find the dirty pages of a
-> range while working with it: reserve and watch at once while Write
-> protecting or un-protecting as needed. There may be several different use
-> cases. Inserting guard pages to catch out of range access, map something
-> only when it is needed; unmap or PROT_NONE pages when they are set free in
-> the app etc.
+Rename "wp_copy" arguments to "wp_mode", since the mode now applies
+more widely than just to the copy operation.
 
-Fair enough.
+Update the selftest to do some very basic exercising of the new flag.
 
-> 
-> > 
-> > So IMHO it's the user app needs fixing here, not the interface?  I think
-> > it's the matter of whether the monitor is aware of mprotect() being
-> > invoked.
-> No. The common practice is to allocate a big memory chunk at once and have
-> own allocator over it (whether it is some specific allocator in a game or a
-> .net allocator with garbage collector). From the usage point of view it is
-> very limiting to demand constant memory attributes for the whole range.
-> 
-> That said, if we do have the way to do exactly what we want with reset
-> through pagemap fd and it is just UFFD ioctl will be working differently,
-> it is not a blocker of course, just weird api design.
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ fs/userfaultfd.c                         |  6 ++-
+ include/linux/userfaultfd_k.h            |  3 +-
+ include/uapi/linux/userfaultfd.h         |  7 ++++
+ mm/hugetlb.c                             |  6 +--
+ mm/shmem.c                               |  4 +-
+ mm/userfaultfd.c                         | 49 ++++++++++++++----------
+ tools/testing/selftests/vm/userfaultfd.c |  4 ++
+ 7 files changed, 51 insertions(+), 28 deletions(-)
 
-Do you mean you'll disable ENGAGE_WP && !GET in your other series?  Yes, if
-this will service your goal, it'll be perfect to remove that interface.
-
-> 
-> > 
-> > In short, I hope we're working on things that helps at least someone, and
-> > we should avoid working on things that does not have clear benefit yet.
-> > With the WP_ENGAGE new interface being proposed, I just didn't see any
-> > benefit of changing the current interface, especially if the change can
-> > bring uncertainties itself (e.g., should we fail upon !uffd-wp vmas, or
-> > should we skip?).
-> We can work on solving uncertainties in case of error conditions. Fail if
-> !uffd-wp vma comes.
-
-Let me try to double check with you here:
-
-I assume you want to skip any vma that is not mapped at all, as the loop
-already does so.  So it'll succeed if there're memory holes.
-
-You also want to explicitly fail if some vma is not registered with uffd-wp
-when walking the vma list, am I right?  IOW, the tracee _won't_ ever have a
-chance to unregister uffd-wp itself, right?
-
-> 
-> > 
-> >>
-> >>>
-> >>> Is this for the new pagemap effort?  Can this just be done in the new
-> >>> interface rather than changing the old?
-> >> We found this bug while working on pagemap patches. It is already being
-> >> handled in the new interface. We just thought that this use case can happen
-> >> pretty easily and unknowingly. So the support should be added.
-> > 
-> > Thanks.  My understanding is that it would have been reported if it
-> > affected any existing uffd-wp user.
-> I would consider the UFFD WP a recent functionality and it may not being
-> used in wide range of app scenarios.
-
-Yes I think so.
-
-Existing users should in most cases be applying the ioctl upon valid vmas
-somehow.  I think the chance is low that someone relies on the errcode to
-make other decisions, but I just cannot really tell because the user app
-can do many weird things.
-
-> 
-> > 
-> >>
-> >> Also mwriteprotect_range() gives a pretty straight forward way to WP or
-> >> un-WP a range. Async WP can be used in coordination with pagemap file
-> >> (PM_UFFD_WP flag in PTE) as well. There may be use cases for it. On another
-> >> note, I don't see any use cases of WP async and PM_UFFD_WP flag as
-> >> !PM_UFFD_WP flag doesn't give direct information if the page is written for
-> >> !present pages.
-> > 
-> > Currently we do maintain PM_UFFD_WP even for swap entries, so if it was
-> > written then I think we'll know even if the page was swapped out:
-> > 
-> > 	} else if (is_swap_pte(pte)) {
-> > 		if (pte_swp_uffd_wp(pte))
-> > 			flags |= PM_UFFD_WP;
-> > 		if (pte_marker_entry_uffd_wp(entry))
-> > 			flags |= PM_UFFD_WP;
-> > 
-> > So it's working?
-> > 
-> >>
-> >>>
-> >>> Side note: in your other pagemap series, you can optimize "WP_ENGAGE &&
-> >>> !GET" to not do generic pgtable walk at all, but use what it does in this
-> >>> patch for the initial round or wr-protect.
-> >> Yeah, it is implemented with some optimizations.
-> > 
-> > IIUC in your latest public version is not optimized, but I can check the
-> > new version when it comes.
-> I've some optimizations in next version keeping the code lines minimum. The
-> best optimization would be to add a page walk dedicated for this engaging
-> write-protect. I don't want to do that. Lets try to improve this patch in
-> how ever way possible. So that WP from UFFD ioctl can be used.
-
-If you want to do this there, I think it can be simply/mostly a copy-paste
-of this patch over there by looping over the vmas and apply the protections.
-
-I think it's fine to do it with ioctl(UFFDIO_WP), but I want to be crystal
-clear on what interface you're looking for before changing it, and let's
-define it properly.
-
-Thanks,
-
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index cc694846617a..545dc033eec8 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -1910,13 +1910,15 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
+ 	    uffdio_continue.range.start) {
+ 		goto out;
+ 	}
+-	if (uffdio_continue.mode & ~UFFDIO_CONTINUE_MODE_DONTWAKE)
++	if (uffdio_continue.mode & ~(UFFDIO_CONTINUE_MODE_DONTWAKE |
++				     UFFDIO_CONTINUE_MODE_WP))
+ 		goto out;
+ 
+ 	if (mmget_not_zero(ctx->mm)) {
+ 		ret = mcopy_continue(ctx->mm, uffdio_continue.range.start,
+ 				     uffdio_continue.range.len,
+-				     &ctx->mmap_changing);
++				     &ctx->mmap_changing,
++				     uffdio_continue.mode);
+ 		mmput(ctx->mm);
+ 	} else {
+ 		return -ESRCH;
+diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+index 9df0b9a762cc..a53aa56e78ad 100644
+--- a/include/linux/userfaultfd_k.h
++++ b/include/linux/userfaultfd_k.h
+@@ -69,7 +69,8 @@ extern ssize_t mfill_zeropage(struct mm_struct *dst_mm,
+ 			      unsigned long len,
+ 			      atomic_t *mmap_changing);
+ extern ssize_t mcopy_continue(struct mm_struct *dst_mm, unsigned long dst_start,
+-			      unsigned long len, atomic_t *mmap_changing);
++			      unsigned long len, atomic_t *mmap_changing,
++			      __u64 mode);
+ extern int mwriteprotect_range(struct mm_struct *dst_mm,
+ 			       unsigned long start, unsigned long len,
+ 			       bool enable_wp, atomic_t *mmap_changing);
+diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
+index 005e5e306266..14059a0861bf 100644
+--- a/include/uapi/linux/userfaultfd.h
++++ b/include/uapi/linux/userfaultfd.h
+@@ -297,6 +297,13 @@ struct uffdio_writeprotect {
+ struct uffdio_continue {
+ 	struct uffdio_range range;
+ #define UFFDIO_CONTINUE_MODE_DONTWAKE		((__u64)1<<0)
++	/*
++	 * UFFDIO_CONTINUE_MODE_WP will map the page write protected on
++	 * the fly.  UFFDIO_CONTINUE_MODE_WP is available only if the
++	 * write protected ioctl is implemented for the range
++	 * according to the uffdio_register.ioctls.
++	 */
++#define UFFDIO_CONTINUE_MODE_WP			((__u64)1<<1)
+ 	__u64 mode;
+ 
+ 	/*
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index bdbfeb6fb393..a1bd0b0c6c43 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -6169,7 +6169,7 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 			    unsigned long src_addr,
+ 			    enum mcopy_atomic_mode mode,
+ 			    struct page **pagep,
+-			    bool wp_copy)
++			    bool wp_mode)
+ {
+ 	bool is_continue = (mode == MCOPY_ATOMIC_CONTINUE);
+ 	struct hstate *h = hstate_vma(dst_vma);
+@@ -6306,7 +6306,7 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 	 * For either: (1) CONTINUE on a non-shared VMA, or (2) UFFDIO_COPY
+ 	 * with wp flag set, don't set pte write bit.
+ 	 */
+-	if (wp_copy || (is_continue && !vm_shared))
++	if (wp_mode || (is_continue && !vm_shared))
+ 		writable = 0;
+ 	else
+ 		writable = dst_vma->vm_flags & VM_WRITE;
+@@ -6321,7 +6321,7 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 	_dst_pte = huge_pte_mkdirty(_dst_pte);
+ 	_dst_pte = pte_mkyoung(_dst_pte);
+ 
+-	if (wp_copy)
++	if (wp_mode)
+ 		_dst_pte = huge_pte_mkuffd_wp(_dst_pte);
+ 
+ 	set_huge_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 0005ab2c29af..725e5d5d85ab 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -2402,7 +2402,7 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
+ 			   struct vm_area_struct *dst_vma,
+ 			   unsigned long dst_addr,
+ 			   unsigned long src_addr,
+-			   bool zeropage, bool wp_copy,
++			   bool zeropage, bool wp_mode,
+ 			   struct page **pagep)
+ {
+ 	struct inode *inode = file_inode(dst_vma->vm_file);
+@@ -2493,7 +2493,7 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
+ 		goto out_release;
+ 
+ 	ret = mfill_atomic_install_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+-				       &folio->page, true, wp_copy);
++				       &folio->page, true, wp_mode);
+ 	if (ret)
+ 		goto out_delete_from_cache;
+ 
+diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+index 0499907b6f1a..2ad4dcf72968 100644
+--- a/mm/userfaultfd.c
++++ b/mm/userfaultfd.c
+@@ -58,7 +58,7 @@ struct vm_area_struct *find_dst_vma(struct mm_struct *dst_mm,
+ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+ 			     struct vm_area_struct *dst_vma,
+ 			     unsigned long dst_addr, struct page *page,
+-			     bool newly_allocated, bool wp_copy)
++			     bool newly_allocated, bool wp_mode)
+ {
+ 	int ret;
+ 	pte_t _dst_pte, *dst_pte;
+@@ -79,7 +79,7 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+ 	 * Always mark a PTE as write-protected when needed, regardless of
+ 	 * VM_WRITE, which the user might change.
+ 	 */
+-	if (wp_copy) {
++	if (wp_mode) {
+ 		_dst_pte = pte_mkuffd_wp(_dst_pte);
+ 		writable = false;
+ 	}
+@@ -147,7 +147,7 @@ static int mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 			    unsigned long dst_addr,
+ 			    unsigned long src_addr,
+ 			    struct page **pagep,
+-			    bool wp_copy)
++			    bool wp_mode)
+ {
+ 	void *page_kaddr;
+ 	int ret;
+@@ -208,7 +208,7 @@ static int mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 		goto out_release;
+ 
+ 	ret = mfill_atomic_install_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+-				       page, true, wp_copy);
++				       page, true, wp_mode);
+ 	if (ret)
+ 		goto out_release;
+ out:
+@@ -258,7 +258,7 @@ static int mcontinue_atomic_pte(struct mm_struct *dst_mm,
+ 				pmd_t *dst_pmd,
+ 				struct vm_area_struct *dst_vma,
+ 				unsigned long dst_addr,
+-				bool wp_copy)
++				bool wp_mode)
+ {
+ 	struct inode *inode = file_inode(dst_vma->vm_file);
+ 	pgoff_t pgoff = linear_page_index(dst_vma, dst_addr);
+@@ -284,7 +284,7 @@ static int mcontinue_atomic_pte(struct mm_struct *dst_mm,
+ 	}
+ 
+ 	ret = mfill_atomic_install_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+-				       page, false, wp_copy);
++				       page, false, wp_mode);
+ 	if (ret)
+ 		goto out_release;
+ 
+@@ -330,7 +330,7 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+ 					      unsigned long src_start,
+ 					      unsigned long len,
+ 					      enum mcopy_atomic_mode mode,
+-					      bool wp_copy)
++					      bool wp_mode)
+ {
+ 	int vm_shared = dst_vma->vm_flags & VM_SHARED;
+ 	ssize_t err;
+@@ -427,7 +427,7 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+ 
+ 		err = hugetlb_mcopy_atomic_pte(dst_mm, dst_pte, dst_vma,
+ 					       dst_addr, src_addr, mode, &page,
+-					       wp_copy);
++					       wp_mode);
+ 
+ 		hugetlb_vma_unlock_read(dst_vma);
+ 		mutex_unlock(&hugetlb_fault_mutex_table[hash]);
+@@ -483,7 +483,7 @@ extern ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+ 				      unsigned long src_start,
+ 				      unsigned long len,
+ 				      enum mcopy_atomic_mode mode,
+-				      bool wp_copy);
++				      bool wp_mode);
+ #endif /* CONFIG_HUGETLB_PAGE */
+ 
+ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
+@@ -493,13 +493,13 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
+ 						unsigned long src_addr,
+ 						struct page **page,
+ 						enum mcopy_atomic_mode mode,
+-						bool wp_copy)
++						bool wp_mode)
+ {
+ 	ssize_t err;
+ 
+ 	if (mode == MCOPY_ATOMIC_CONTINUE) {
+ 		return mcontinue_atomic_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+-					    wp_copy);
++					    wp_mode);
+ 	}
+ 
+ 	/*
+@@ -516,7 +516,7 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
+ 		if (mode == MCOPY_ATOMIC_NORMAL)
+ 			err = mcopy_atomic_pte(dst_mm, dst_pmd, dst_vma,
+ 					       dst_addr, src_addr, page,
+-					       wp_copy);
++					       wp_mode);
+ 		else
+ 			err = mfill_zeropage_pte(dst_mm, dst_pmd,
+ 						 dst_vma, dst_addr);
+@@ -524,12 +524,21 @@ static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
+ 		err = shmem_mfill_atomic_pte(dst_mm, dst_pmd, dst_vma,
+ 					     dst_addr, src_addr,
+ 					     mode != MCOPY_ATOMIC_NORMAL,
+-					     wp_copy, page);
++					     wp_mode, page);
+ 	}
+ 
+ 	return err;
+ }
+ 
++static inline bool wp_mode_enabled(enum mcopy_atomic_mode mcopy_mode, __u64 mode)
++{
++	switch (mode) {
++	case MCOPY_ATOMIC_NORMAL: return mode & UFFDIO_COPY_MODE_WP;
++	case MCOPY_ATOMIC_CONTINUE: return mode & UFFDIO_CONTINUE_MODE_WP;
++	default: return false;
++	}
++}
++
+ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
+ 					      unsigned long dst_start,
+ 					      unsigned long src_start,
+@@ -544,7 +553,7 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
+ 	unsigned long src_addr, dst_addr;
+ 	long copied;
+ 	struct page *page;
+-	bool wp_copy;
++	bool wp_mode;
+ 
+ 	/*
+ 	 * Sanitize the command parameters:
+@@ -594,8 +603,8 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
+ 	 * validate 'mode' now that we know the dst_vma: don't allow
+ 	 * a wrprotect copy if the userfaultfd didn't register as WP.
+ 	 */
+-	wp_copy = mode & UFFDIO_COPY_MODE_WP;
+-	if (wp_copy && !(dst_vma->vm_flags & VM_UFFD_WP))
++	wp_mode = wp_mode_enabled(mcopy_mode, mode);
++	if (wp_mode && !(dst_vma->vm_flags & VM_UFFD_WP))
+ 		goto out_unlock;
+ 
+ 	/*
+@@ -604,7 +613,7 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
+ 	if (is_vm_hugetlb_page(dst_vma))
+ 		return  __mcopy_atomic_hugetlb(dst_mm, dst_vma, dst_start,
+ 					       src_start, len, mcopy_mode,
+-					       wp_copy);
++					       wp_mode);
+ 
+ 	if (!vma_is_anonymous(dst_vma) && !vma_is_shmem(dst_vma))
+ 		goto out_unlock;
+@@ -656,7 +665,7 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
+ 		BUG_ON(pmd_trans_huge(*dst_pmd));
+ 
+ 		err = mfill_atomic_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+-				       src_addr, &page, mcopy_mode, wp_copy);
++				       src_addr, &page, mcopy_mode, wp_mode);
+ 		cond_resched();
+ 
+ 		if (unlikely(err == -ENOENT)) {
+@@ -718,10 +727,10 @@ ssize_t mfill_zeropage(struct mm_struct *dst_mm, unsigned long start,
+ }
+ 
+ ssize_t mcopy_continue(struct mm_struct *dst_mm, unsigned long start,
+-		       unsigned long len, atomic_t *mmap_changing)
++		       unsigned long len, atomic_t *mmap_changing, __u64 mode)
+ {
+ 	return __mcopy_atomic(dst_mm, start, 0, len, MCOPY_ATOMIC_CONTINUE,
+-			      mmap_changing, 0);
++			      mmap_changing, mode);
+ }
+ 
+ void uffd_wp_range(struct mm_struct *dst_mm, struct vm_area_struct *dst_vma,
+diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+index 7f22844ed704..41c1f9abc481 100644
+--- a/tools/testing/selftests/vm/userfaultfd.c
++++ b/tools/testing/selftests/vm/userfaultfd.c
+@@ -585,6 +585,8 @@ static void continue_range(int ufd, __u64 start, __u64 len)
+ 	req.range.start = start;
+ 	req.range.len = len;
+ 	req.mode = 0;
++	if (test_uffdio_wp)
++		req.mode |= UFFDIO_CONTINUE_MODE_WP;
+ 
+ 	if (ioctl(ufd, UFFDIO_CONTINUE, &req))
+ 		err("UFFDIO_CONTINUE failed for address 0x%" PRIx64,
+@@ -1332,6 +1334,8 @@ static int userfaultfd_minor_test(void)
+ 	uffdio_register.range.start = (unsigned long)area_dst_alias;
+ 	uffdio_register.range.len = nr_pages * page_size;
+ 	uffdio_register.mode = UFFDIO_REGISTER_MODE_MINOR;
++	if (test_uffdio_wp)
++		uffdio_register.mode |= UFFDIO_REGISTER_MODE_WP;
+ 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
+ 		err("register failure");
+ 
 -- 
-Peter Xu
+2.39.1.581.gbfd45094c4-goog
 
