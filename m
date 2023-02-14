@@ -2,132 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 783A9696FD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 22:38:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E814E696FED
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 22:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232295AbjBNViv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 16:38:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
+        id S232119AbjBNVkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 16:40:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjBNViu (ORCPT
+        with ESMTP id S232458AbjBNVkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 16:38:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7665828D31
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 13:38:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B6CA618F5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 21:38:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65C8FC4339B;
-        Tue, 14 Feb 2023 21:38:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676410728;
-        bh=6jbhCugUXCS4XCdW63SXO4wmvPiA/c8ygiTvvYBz15w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PpGAwpRsBKElwLUHUGFBFZvMltk/e1tfCNqYocBpogklr9EhyLK6YgLZEDnUK5f9q
-         QLzJChn2wwaQzXjtqBo1ySt+YsLn8nLrF96ustKi0Q4ik3eusoA37QFmd1198YVvtk
-         7y7Ce4OysTBPGyLGb/AQ6Rkvq2kv/KAKKAl0Hu+HD2lQL57fQsH3KJRlGsZ5HsE9gz
-         anFPTbfyrPWRYrCdu8XZ4nzYQJ26EGcaChJTVVFwA+Wt4kGyM1U7BnKAOOVtgkLPKV
-         gVgFeTKV6/SfaBb87/q7EuzesfHEhCaifbTXK5r0EzRvTTLzw8EeI2HOe8bJHnerLc
-         KFIetAPy9oNLA==
-Date:   Tue, 14 Feb 2023 21:38:42 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Evan Green <evan@rivosinc.com>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>, vineetg@rivosinc.com,
-        heiko@sntech.de, slewis@rivosinc.com,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 1/6] RISC-V: Move struct riscv_cpuinfo to new header
-Message-ID: <Y+v/Yu/ELfzx954s@spud>
-References: <20230206201455.1790329-1-evan@rivosinc.com>
- <20230206201455.1790329-2-evan@rivosinc.com>
+        Tue, 14 Feb 2023 16:40:07 -0500
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B7828D31;
+        Tue, 14 Feb 2023 13:40:05 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id DD9E960003;
+        Tue, 14 Feb 2023 21:40:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1676410804;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UQzQSgnN9o1LOREIuibj1ZFyAx16UG7jYybKa3UpZ6Y=;
+        b=K6EdBLbg5UiHwV5SrxM16Ghhup6DyBZVdCMFUAfTPQb7dLjZypNRU0eL/dAwjL8aMzzk8H
+        XPQnEcJ6iPH0bIMyqGQBknC4J5+i6yHrz3HBHDH6n5A/mwQxRtU8pCSyt3I9jad5JlfFeK
+        2a9ZN7xBvYhlRW/xIikeMrt2gci4quq1IhFnQ09MpoDyEB0LEz10qkxF1yQOpyK4Y1bSL0
+        Pe/V0uMrrXEqO839CQak/T9bsuhCIRaD/posrw2jacdDLTgq05aCWdyp86EU3L42PUquOS
+        mh5Z+TChWJE7M1xrKaUBma6bEoNLrItaEyz2/b4i9EDB2hGwYUULhgBMs3JaYg==
+Date:   Tue, 14 Feb 2023 22:40:02 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+Subject: Re: [PATCH v3 1/2] drivers: rtc: add max313xx series rtc driver
+Message-ID: <Y+v/suob0EN1REX4@mail.local>
+References: <20221108122254.1185-1-Ibrahim.Tilki@analog.com>
+ <20221108122254.1185-2-Ibrahim.Tilki@analog.com>
+ <68ddb833-f38e-a05b-82c4-ce12330410a5@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="f5tYJzmdjbJLMszm"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230206201455.1790329-2-evan@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <68ddb833-f38e-a05b-82c4-ce12330410a5@alliedtelesis.co.nz>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 14/02/2023 20:28:05+0000, Chris Packham wrote:
+> Hi Ibrahim,
+> 
+> On 9/11/22 01:22, Ibrahim Tilki wrote:
+> > Adding support for Analog Devices MAX313XX series RTCs.
+> >
+> > Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> > Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+> > ---
+> >   drivers/rtc/Kconfig        |   11 +
+> >   drivers/rtc/Makefile       |    1 +
+> >   drivers/rtc/rtc-max313xx.c | 1070 ++++++++++++++++++++++++++++++++++++
+> >   3 files changed, 1082 insertions(+)
+> >   create mode 100644 drivers/rtc/rtc-max313xx.c
+> 
+> What is the current state of this work? I see there are some comments on 
+> this v3 iteration from late last year and I couldn't find any newer 
+> iteration on any mailing list. We've got some new hardware arriving soon 
+> that will have the MAX31331 RTC and I'm keen to see this patch series 
+> land. Is there anything I can do to help it along? I can't be very 
+> specific about when I'll see the new hardware (who can these days), the 
+> last update was "boards are due in March".
+> 
+> For the maintainers on the Cc list once the dust settles how would I get 
+> this supported in a LTS kernel (we're currently using the 5.15 series)? 
+> Or is totally out of the question because it's not just a new device id?
 
---f5tYJzmdjbJLMszm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This will not happen, you will have to update to the next LTS (which you
+should do anyway)
 
-On Mon, Feb 06, 2023 at 12:14:50PM -0800, Evan Green wrote:
-> In preparation for tracking and exposing microarchitectural details to
-> userspace (like whether or not unaligned accesses are fast), move the
-> riscv_cpuinfo struct out to its own new cpufeatures.h header. It will
-> need to be used by more than just cpu.c.
->=20
-> Signed-off-by: Evan Green <evan@rivosinc.com>
-> ---
->=20
-> (no changes since v1)
 
-Really? I don't recall seeing this patch in v1? ;)
-
->=20
->  arch/riscv/include/asm/cpufeature.h | 21 +++++++++++++++++++++
->  arch/riscv/kernel/cpu.c             |  8 ++------
->  2 files changed, 23 insertions(+), 6 deletions(-)
->  create mode 100644 arch/riscv/include/asm/cpufeature.h
->=20
-> diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include/asm=
-/cpufeature.h
-> new file mode 100644
-> index 000000000000..66c251d98290
-> --- /dev/null
-> +++ b/arch/riscv/include/asm/cpufeature.h
-> @@ -0,0 +1,21 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright 2022 Rivos, Inc
-> + */
-> +
-> +#ifndef _ASM_CPUFEATURE_H
-> +#define _ASM_CPUFEATURE_H
-> +
-> +/*
-> + * These are probed via a device_initcall(), via either the SBI or direc=
-tly
-> + * from the cooresponding CSRs.
-
-May as well fix the typo here while we are moving the code & a respin is
-required anyway.
-
-I'm sure we'll need this patch regardless of approach, so:
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-Cheers,
-Conor.
-
---f5tYJzmdjbJLMszm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+v/YgAKCRB4tDGHoIJi
-0tZUAP9alaj90UKMameldRPMqw+IPDy0llCUwKgwfXm1M4dLnwD9Fs25ZbsYQRWN
-myGAiC3u18dRkuCDk/kRsy20aoskSQU=
-=mKq5
------END PGP SIGNATURE-----
-
---f5tYJzmdjbJLMszm--
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
