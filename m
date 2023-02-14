@@ -2,238 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB426696317
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:07:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFB0C696316
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:07:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbjBNMHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 07:07:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
+        id S230087AbjBNMG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 07:06:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjBNMHQ (ORCPT
+        with ESMTP id S229864AbjBNMGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 07:07:16 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECE66EA6;
-        Tue, 14 Feb 2023 04:07:13 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31E8MA2x018253;
-        Tue, 14 Feb 2023 12:07:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=SRdv0mwY1mjW5CCdq+LWbNd2Y2xuZ8nNCpBpkpCRfC4=;
- b=bHDwmNZqAUKXonlnqLDL5cpq+CUCT+L2Ptr217SQUpYUYL6laVlrcNnIaIRZKxiSlqqW
- oz15yRXg7Z0eXqOOAeBeBaHu/gWzTLeYsJbIaJ3jnJy15CZY/RhsxIC0kJO/LRAW7hz8
- Nma3K/NlE/R86zQEevPYVpqiLSRivI+Io4MhzKzVKhXjBrRGn55dZOMhVzqMzdPr/TQx
- zxTZ/rN56Ry4m7PSljQ2fks+YDLTcJwVLr7OJ/dVLeR1BHOfvjyaZ9HPQxsyrp6VaaEc
- 7Q2XpBBpkD1/ut7XItwDbncE8aTScijjTiuiTVm5uLO8fNWpdKFQekH4QmlvSywmYvTD Mg== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nr6ps0he4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 12:07:04 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31EC744l022245
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 12:07:04 GMT
-Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 14 Feb 2023 04:07:01 -0800
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <zhengyejian1@huawei.com>,
-        <wanghai38@huawei.com>, Mukesh Ojha <quic_mojha@quicinc.com>
-Subject: [PATCH] ring-buffer: Handle race between rb_move_tail and rb_check_pages
-Date:   Tue, 14 Feb 2023 17:36:43 +0530
-Message-ID: <1676376403-16462-1-git-send-email-quic_mojha@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Tue, 14 Feb 2023 07:06:53 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4488C76A5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:06:51 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id k3so7769665wrv.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:06:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8dTuoqSN3nUDDHUnixCG2GlQIWQEKens+Uo3RsvB8jE=;
+        b=q9h33ThpgiMyYvC2n+ERo8vzFNnzZfEGcIoRHB+lMy8eyajiSNpr5wAiHMT0OjuOnj
+         ATvlfkUN1Igmqv7DCdml7Gqb26JIBMmp7B4/zvGIslPLMc2vLWVE5rwuygpoLkVuB6dB
+         Rh97wAQbE2l6ZIJLcbBtJfeNpHl5pJkzuMeyTNJVDsymwwxJpGqHFeucOxiPwedWUX8c
+         rR1on4AC+rI1SY+dtjoHrO/XtwcfqlMH5lQ4ZjSleA1bYhZ127dA8K4k/y2Jtdn7SDpA
+         6AdWOPVqXQhsFO9c2xSS35nQmSjhim3BvD3ts39iwEhcmsOM0yl5Pi/GCSmkh8ZCpuDl
+         IHNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8dTuoqSN3nUDDHUnixCG2GlQIWQEKens+Uo3RsvB8jE=;
+        b=5QQoZouHTZpHQBv1ea559TcgmZVU1Mn0OZxAlzDE3xEhLW0gHX9oftEGQ2FNykK24J
+         fSBdtDh6Sb8NmSHuEJPLXQMdp+iDIusAhfZdVxOQsi3W0DLMC45yEzXftUv09pTuVRMh
+         yyV1a81YsyTKzZK6Ki5jLsE8LT/4ReVvb8Yqy5lgcfRVwyEph088aUk2HqX1BAYS8Nvx
+         t/oMTuF8tYJkqJEARdpZjOiEiNliifk15Hd//lQfaeHULK+ruWw1g/3cR6hu3ZHMTNBl
+         AydcdoFAmLUFKG02BlUfL4Q3qdn/0C9FJEu8M5G54dzEQHqqjkS5wKCVg7zSk4IRmMtI
+         V1Xg==
+X-Gm-Message-State: AO0yUKXeLcNbwF5mMHpThZH0Bj9PQBzMwuSO2sQ99Sa4o64Ckwujkpbd
+        GOhLdt4Q/vk4wveUv20u4TYseA==
+X-Google-Smtp-Source: AK7set/yJWOH5/Bmi1HyNWbYN6j+KyNu4iEr6LIugfGebQGZt8mZBxo1n7ylPuqzgjj23iLLvZnBIA==
+X-Received: by 2002:a5d:4006:0:b0:2c5:4ccc:a770 with SMTP id n6-20020a5d4006000000b002c54ccca770mr2077419wrp.7.1676376409738;
+        Tue, 14 Feb 2023 04:06:49 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id q9-20020a5d6589000000b002c559405a1csm4632273wru.20.2023.02.14.04.06.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 04:06:49 -0800 (PST)
+Date:   Tue, 14 Feb 2023 14:06:47 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Eric Biggers <ebiggers@google.com>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [RFC PATCH 0/5] Add dedicated Qcom ICE driver
+Message-ID: <Y+t5V1Uu702JplW1@linaro.org>
+References: <20230214120253.1098426-1-abel.vesa@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: QhrLB9RCMbXZPuSs-i_ju3TxAF4X3P7P
-X-Proofpoint-GUID: QhrLB9RCMbXZPuSs-i_ju3TxAF4X3P7P
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-14_07,2023-02-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- impostorscore=0 adultscore=0 mlxlogscore=978 malwarescore=0
- priorityscore=1501 bulkscore=0 suspectscore=0 lowpriorityscore=0
- mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302140105
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230214120253.1098426-1-abel.vesa@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It seems a data race between ring_buffer writing and integrity check.
-That is, RB_FLAG of head_page is been updating, while at same time
-RB_FLAG was cleared when doing integrity check rb_check_pages():
+On 23-02-14 14:02:48, Abel Vesa wrote:
+> As both SDCC and UFS drivers use the ICE with duplicated implementation,
+> while none of the currently supported platforms make use concomitantly
+> of the ICE IP block, the new SM8550 allows both UFS and SDCC to do so.
+> In order to support such scenario, there is a need for a unified
+> implementation and a devicetree node to be shared between both types
+> of storage devices. So lets drop the duplicate implementation of the ICE
+> from both SDCC and UFS and make it a dedicated (soc) driver.
+> 
+> This RFC should be treated as work-in-progress. Initially, its goal is
+> to figure out what is the most agreeable implementation for both types
+> of storage. Note that currently, only one ICE instance is supported
+> (like the existing HW suggests) and it is laking refcounting and locking
+> of any sort. Also missing bindings schema file for now.
+> 
+> Any suggestions are welcome at this point, including the location of
+> such a new driver.
 
-  rb_check_pages()            rb_handle_head_page():
-  --------                    --------
-  rb_head_page_deactivate()
-                              rb_head_page_set_normal()
-  rb_head_page_activate()
+Forgot to mention here that I only managed to test the UFS on SM8450
+HDK. Though functionally nothing should be impacted, I intend to test
+the SDCC on SDM630 soon.
 
-We do intergrity test of the list to check if the list is corrupted and
-it is still worth doing it. So, let's refactor rb_check_pages() such that
-we no longer clear and set flag during the list sanity checking.
+The devicetree sdm630 patch is here for proof-of-concept, mainly.
 
-[1] and [2] are the test to reproduce and the crash report respectively.
-
-1:
-``` read_trace.sh
-  while true;
-  do
-    # the "trace" file is closed after read
-    head -1 /sys/kernel/tracing/trace > /dev/null
-  done
-```
-``` repro.sh
-  sysctl -w kernel.panic_on_warn=1
-  # function tracer will writing enough data into ring_buffer
-  echo function > /sys/kernel/tracing/current_tracer
-  ./read_trace.sh &
-  ./read_trace.sh &
-  ./read_trace.sh &
-  ./read_trace.sh &
-  ./read_trace.sh &
-  ./read_trace.sh &
-  ./read_trace.sh &
-  ./read_trace.sh &
-```
-
-2:
-------------[ cut here ]------------
-WARNING: CPU: 9 PID: 62 at kernel/trace/ring_buffer.c:2653
-rb_move_tail+0x450/0x470
-Modules linked in:
-CPU: 9 PID: 62 Comm: ksoftirqd/9 Tainted: G        W          6.2.0-rc6+
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
-RIP: 0010:rb_move_tail+0x450/0x470
-Code: ff ff 4c 89 c8 f0 4d 0f b1 02 48 89 c2 48 83 e2 fc 49 39 d0 75 24
-83 e0 03 83 f8 02 0f 84 e1 fb ff ff 48 8b 57 10 f0 ff 42 08 <0f> 0b 83
-f8 02 0f 84 ce fb ff ff e9 db
-RSP: 0018:ffffb5564089bd00 EFLAGS: 00000203
-RAX: 0000000000000000 RBX: ffff9db385a2bf81 RCX: ffffb5564089bd18
-RDX: ffff9db281110100 RSI: 0000000000000fe4 RDI: ffff9db380145400
-RBP: ffff9db385a2bf80 R08: ffff9db385a2bfc0 R09: ffff9db385a2bfc2
-R10: ffff9db385a6c000 R11: ffff9db385a2bf80 R12: 0000000000000000
-R13: 00000000000003e8 R14: ffff9db281110100 R15: ffffffffbb006108
-FS:  0000000000000000(0000) GS:ffff9db3bdcc0000(0000)
-knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005602323024c8 CR3: 0000000022e0c000 CR4: 00000000000006e0
-Call Trace:
- <TASK>
- ring_buffer_lock_reserve+0x136/0x360
- ? __do_softirq+0x287/0x2df
- ? __pfx_rcu_softirq_qs+0x10/0x10
- trace_function+0x21/0x110
- ? __pfx_rcu_softirq_qs+0x10/0x10
- ? __do_softirq+0x287/0x2df
- function_trace_call+0xf6/0x120
- 0xffffffffc038f097
- ? rcu_softirq_qs+0x5/0x140
- rcu_softirq_qs+0x5/0x140
- __do_softirq+0x287/0x2df
- run_ksoftirqd+0x2a/0x30
- smpboot_thread_fn+0x188/0x220
- ? __pfx_smpboot_thread_fn+0x10/0x10
- kthread+0xe7/0x110
- ? __pfx_kthread+0x10/0x10
- ret_from_fork+0x2c/0x50
- </TASK>
----[ end trace 0000000000000000 ]---
-
-[ crash report and test reproducer credit goes to Zheng Yejian]
-
-Reported-by: Zheng Yejian <zhengyejian1@huawei.com>
-Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
----
- kernel/trace/ring_buffer.c | 42 ++++++++++--------------------------------
- 1 file changed, 10 insertions(+), 32 deletions(-)
-
-diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index c366a0a..b641cab 100644
---- a/kernel/trace/ring_buffer.c
-+++ b/kernel/trace/ring_buffer.c
-@@ -1581,19 +1581,6 @@ static int rb_check_bpage(struct ring_buffer_per_cpu *cpu_buffer,
- }
- 
- /**
-- * rb_check_list - make sure a pointer to a list has the last bits zero
-- */
--static int rb_check_list(struct ring_buffer_per_cpu *cpu_buffer,
--			 struct list_head *list)
--{
--	if (RB_WARN_ON(cpu_buffer, rb_list_head(list->prev) != list->prev))
--		return 1;
--	if (RB_WARN_ON(cpu_buffer, rb_list_head(list->next) != list->next))
--		return 1;
--	return 0;
--}
--
--/**
-  * rb_check_pages - integrity check of buffer pages
-  * @cpu_buffer: CPU buffer with pages to test
-  *
-@@ -1602,36 +1589,27 @@ static int rb_check_list(struct ring_buffer_per_cpu *cpu_buffer,
-  */
- static int rb_check_pages(struct ring_buffer_per_cpu *cpu_buffer)
- {
--	struct list_head *head = cpu_buffer->pages;
--	struct buffer_page *bpage, *tmp;
-+	struct list_head *head = rb_list_head(cpu_buffer->pages);
-+	struct list_head *tmp;
- 
--	/* Reset the head page if it exists */
--	if (cpu_buffer->head_page)
--		rb_set_head_page(cpu_buffer);
--
--	rb_head_page_deactivate(cpu_buffer);
--
--	if (RB_WARN_ON(cpu_buffer, head->next->prev != head))
--		return -1;
--	if (RB_WARN_ON(cpu_buffer, head->prev->next != head))
-+	if (RB_WARN_ON(cpu_buffer,
-+			rb_list_head(rb_list_head(head->next)->prev) != head))
- 		return -1;
- 
--	if (rb_check_list(cpu_buffer, head))
-+	if (RB_WARN_ON(cpu_buffer,
-+			rb_list_head(rb_list_head(head->prev)->next) != head))
- 		return -1;
- 
--	list_for_each_entry_safe(bpage, tmp, head, list) {
-+	for (tmp = rb_list_head(head->next); tmp != head; tmp = rb_list_head(tmp->next)) {
- 		if (RB_WARN_ON(cpu_buffer,
--			       bpage->list.next->prev != &bpage->list))
-+				rb_list_head(rb_list_head(tmp->next)->prev) != tmp))
- 			return -1;
-+
- 		if (RB_WARN_ON(cpu_buffer,
--			       bpage->list.prev->next != &bpage->list))
--			return -1;
--		if (rb_check_list(cpu_buffer, &bpage->list))
-+				rb_list_head(rb_list_head(tmp->prev)->next) != tmp))
- 			return -1;
- 	}
- 
--	rb_head_page_activate(cpu_buffer);
--
- 	return 0;
- }
- 
--- 
-2.7.4
-
+> 
+> Abel Vesa (5):
+>   soc: qcom: Make the Qualcomm UFS/SDCC ICE a dedicated driver
+>   arm64: dts: qcom: sm8450: Add the Inline Crypto Engine node
+>   arm64: dts: qcom: sdm630: Add the Inline Crypto Engine node
+>   scsi: ufs: ufs-qcom: Switch to the new ICE API
+>   mmc: sdhci-msm: Switch to the new ICE API
+> 
+>  arch/arm64/boot/dts/qcom/sdm630.dtsi          |  18 +-
+>  arch/arm64/boot/dts/qcom/sm8450-hdk.dts       |   4 +
+>  arch/arm64/boot/dts/qcom/sm8450.dtsi          |  24 +-
+>  drivers/mmc/host/sdhci-msm.c                  | 252 ++----------------
+>  drivers/soc/qcom/Kconfig                      |  10 +
+>  drivers/soc/qcom/Makefile                     |   1 +
+>  .../ufs-qcom-ice.c => soc/qcom/qcom-ice.c}    | 247 +++++++++++------
+>  drivers/ufs/host/Kconfig                      |   1 -
+>  drivers/ufs/host/Makefile                     |   1 -
+>  drivers/ufs/host/ufs-qcom.c                   |  42 ++-
+>  drivers/ufs/host/ufs-qcom.h                   |  32 +--
+>  include/soc/qcom/ice.h                        |  61 +++++
+>  12 files changed, 326 insertions(+), 367 deletions(-)
+>  rename drivers/{ufs/host/ufs-qcom-ice.c => soc/qcom/qcom-ice.c} (50%)
+>  create mode 100644 include/soc/qcom/ice.h
+> 
+> -- 
+> 2.34.1
+> 
