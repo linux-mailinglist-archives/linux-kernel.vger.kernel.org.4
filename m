@@ -2,583 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C77695875
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 06:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5ABB695889
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 06:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjBNFZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 00:25:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54622 "EHLO
+        id S231552AbjBNFdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 00:33:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjBNFZl (ORCPT
+        with ESMTP id S231186AbjBNFds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 00:25:41 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2050.outbound.protection.outlook.com [40.107.95.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A25918B29
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 21:25:39 -0800 (PST)
+        Tue, 14 Feb 2023 00:33:48 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E856716AFA;
+        Mon, 13 Feb 2023 21:33:42 -0800 (PST)
+X-UUID: 1ee9119aac2911ed945fc101203acc17-20230214
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=5CLNVnLIJmqGnO7nRtEKzFceh1J2uVMphcfh3LLuNCc=;
+        b=QWazMzCZHp9DKqE2VSAzLfm83aPyT6XEaqf4FuvpMYwuA/lnuzOfNhuWF+Q+J6TJSPKj4WCfHoy5Yx+DkWYPj1A4IzDShrlruS8IqFRwjezXnX8nv5oig1bxRaI+DXgiUC+spZzlsy0GQPPbbXZcF0lkFKp5KFM56UhKbZHNjq0=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.19,REQID:89ae45d4-c9aa-4444-9c1c-88bbee9a1097,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-INFO: VERSION:1.1.19,REQID:89ae45d4-c9aa-4444-9c1c-88bbee9a1097,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+        elease,TS:-5
+X-CID-META: VersionHash:885ddb2,CLOUDID:cf1660f8-ff42-4fb0-b929-626456a83c14,B
+        ulkID:2302141333343H2WP2CF,BulkQuantity:0,Recheck:0,SF:38|17|19|102,TC:nil
+        ,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:
+        0,OSA:0,AV:0
+X-CID-BVR: 0
+X-UUID: 1ee9119aac2911ed945fc101203acc17-20230214
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 924590628; Tue, 14 Feb 2023 13:33:33 +0800
+Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 14 Feb 2023 13:33:31 +0800
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (172.21.101.239)
+ by mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Tue, 14 Feb 2023 13:33:31 +0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D3bWKheo8k/bfAhm2J0LHyZGVhKpEIuip1Ik3JagjSQxj6Rl/AYmbbyh1wb5crSGmMmXNHY1QYLMR0WxE5avntuSutahtG9kjfX7YIL+fzevJpq0Q+HcduIMkD+kpxHlrw5AYa+zPMo90LI8TbjDDUEN8c2OojJrTWT5XKDIWeAxG/kjVR5kF8TEBTvr/fLwEebtXEbSqZ1DVNvwrVXacbetXJBrftSBCre8UUZOEsXBgSPuzTxdMxhUSLuxKi0trm2Uzso0waoF6CeiaeAsI3ZjBzNvH9J4JVMXaBJp0z7xxgbSNp4T9fLAk1Ih5rLHUBlp6RLrAejxkKblw0wzJA==
+ b=A8y9sMP6VuO2cDCI6/7jkh6unO7BF74DICR3WPqDWbVLo9ZMzCPLPelhwB41Iz/8lVxylGzCEQ1NX6RKv9dtCzdPgdDcgVdiSGpUrQMnnbBk7aHeuNtEdWhO9XQkZrQTh6S3423ITmGGn3/H/l7OzvDDLdQan/6Xt7dQEUftIevJ4lXSuV/Lbt/J5HqvE6LCoT97uVh/hna2VHlMgTmeeB3tF7Wc6xV7wEtX6aF0nhH2teLE1Dp3GtlOvIAj0DeQwSDWvMDjHBsUqUtNX17LDwHyg6Yk1TXPHDZ4EoBxcp5jtX9bmevQSW2gw+8hz/1dKaUrnSRA7YWGFpZWgbt9+g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q6od+0QOySAblVXEIXtXOjlimQ8OmlEzfi0U0/5d6M4=;
- b=kTakj6Ape/jsX8mk8lTTiTFvd7QVGSaiNPOWeYjPVW4xQQTbwK47R5oFSNwLem2BID7DfIF2jmjrjgtm55/DOdDcw50EM0+mgZYLhUbKynqmfvZ+vpA6EDQCVq0SsRpiOuZvuiLq+ocIdSPSOgDOEF9RyMxoOv6218Wm1H3zyUcYszY8+k/5ad3zhNK9vIN2YQ5029xzNnM4hjy0g9YZ3Jax6mfTBtAmPrdc97fU+rLSqXSur/ML/czp+waRH1x9qY4VRYBXXmCE2G8qtiE1R1sEiUiLH7cFfXtYNNPXN5NXOxjFWZIe/ZFqxGeqGfr7eWw6kaGXtqIH57lzRDGzoQ==
+ bh=5CLNVnLIJmqGnO7nRtEKzFceh1J2uVMphcfh3LLuNCc=;
+ b=QlqPSHzDlrTjhL3NNQbl/HHs5apQleHqkMwKx+/UHcp+dm04BY78Gp/gMcbaf+Z0ul7AzK+k1fbeV3gCaFbwsXT5HChtvXlNbLmcErgpOIxusEZSWSA5i1GOtSXaLJwX6FgQWxmpKDvFa1qbGNJnIsdj4QP0MMFyQ6Q1LYIG/IPIQTrox8lpCOmWFYNdQKge6PLeVFWes+HjSFDSarRpuFLjD3qzT7pU+GsstVSVSTWc6jAk0hqkvWZfk9JfrwhiQBRWAVd8wLTT7iXmiXhgEW1Knx6PkdBlO5UPs//tFYAiv8SjesY1OT6jDBsfIxfX/5D9/G9FUJf8vyAuTyc1xA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q6od+0QOySAblVXEIXtXOjlimQ8OmlEzfi0U0/5d6M4=;
- b=k4ogF/vMRazoPwNbw6pdlww7Z21O6bq2Z7lv6cgPCOIQl0ZIfEYh9B4tyGIKNl7qKqcoC22lPmJ8wKr26Fxs4+xCae883jIr2EtTb4Nc2JEi8xmUbnUTOkdnWfmN9205jI5OyMG/uX/IHTbKu6BK4H2gnYg96mC8mz7xW1lo3eQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com (2603:10b6:5:21f::23)
- by PH7PR12MB6539.namprd12.prod.outlook.com (2603:10b6:510:1f0::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Tue, 14 Feb
- 2023 05:25:34 +0000
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::fc88:7080:445e:6866]) by DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::fc88:7080:445e:6866%8]) with mapi id 15.20.6086.024; Tue, 14 Feb 2023
- 05:25:34 +0000
-Message-ID: <7b5198f5-1894-5ab5-f84b-410cf102268d@amd.com>
-Date:   Tue, 14 Feb 2023 10:58:28 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH V2 2/8] soundwire: amd: Add support for AMD Manager driver
+ bh=5CLNVnLIJmqGnO7nRtEKzFceh1J2uVMphcfh3LLuNCc=;
+ b=XozmxNPlFoZ+B8heAM/qdwsENhx5fOHY2r/s6lM9++xI70kc+8JKDe60UupjtuYOOyl2E5DT9rbtLfFVAiG56aACmFA//1OhaCYpfSFwM81PiiNsBRKHxHQQFe18wAWTh6QIZZlwTMTCz6X3vzoz07/dRcKgbsGuW2t5kmjyt8w=
+Received: from SI2PR03MB5885.apcprd03.prod.outlook.com (2603:1096:4:142::7) by
+ PSAPR03MB5304.apcprd03.prod.outlook.com (2603:1096:301:42::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6086.24; Tue, 14 Feb 2023 05:33:29 +0000
+Received: from SI2PR03MB5885.apcprd03.prod.outlook.com
+ ([fe80::4e0a:24eb:3ed8:b49c]) by SI2PR03MB5885.apcprd03.prod.outlook.com
+ ([fe80::4e0a:24eb:3ed8:b49c%7]) with mapi id 15.20.6086.024; Tue, 14 Feb 2023
+ 05:33:28 +0000
+From:   =?utf-8?B?WW9uZyBXdSAo5ZC05YuHKQ==?= <Yong.Wu@mediatek.com>
+To:     "joro@8bytes.org" <joro@8bytes.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+CC:     "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?utf-8?B?WW91bGluIFBlaSAo6KO05Y+L5p6XKQ==?= 
+        <youlin.pei@mediatek.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        =?utf-8?B?QW5hbiBTdW4gKOWtmeWuieWuiSk=?= <Anan.Sun@mediatek.com>,
+        =?utf-8?B?TGlibyBLYW5nICjlurfliKnms6Ip?= <Libo.Kang@mediatek.com>,
+        "kyrie.wu@mediatek.corp-partner.google.com" 
+        <kyrie.wu@mediatek.corp-partner.google.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
+        =?utf-8?B?Q2hlbmdjaSBYdSAo6K645om/6LWQKQ==?= 
+        <Chengci.Xu@mediatek.com>,
+        =?utf-8?B?WXVuZmVpIERvbmcgKOiRo+S6kemjnik=?= 
+        <Yunfei.Dong@mediatek.com>,
+        =?utf-8?B?WUYgV2FuZyAo546L5LqR6aOeKQ==?= <YF.Wang@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        =?utf-8?B?TWluZ3l1YW4gTWEgKOmprOm4o+i/nCk=?= 
+        <Mingyuan.Ma@mediatek.com>, "will@kernel.org" <will@kernel.org>,
+        "nfraprado@collabora.com" <nfraprado@collabora.com>
+Subject: Re: [PATCH 07/10] iommu/mediatek: Add a gap for the iova regions
+Thread-Topic: [PATCH 07/10] iommu/mediatek: Add a gap for the iova regions
+Thread-Index: AQHZJxTOuH8NMp5lsEGAJuHBVALjHa6g0JcAgAEdKQA=
+Date:   Tue, 14 Feb 2023 05:33:28 +0000
+Message-ID: <35937e036d7d62f048b84c0f1ea6e98136e7ad5c.camel@mediatek.com>
+References: <20230113060133.9394-1-yong.wu@mediatek.com>
+         <20230113060133.9394-8-yong.wu@mediatek.com>
+         <1a9a09d5-58e2-badc-6d1c-fe2008c305f9@collabora.com>
+In-Reply-To: <1a9a09d5-58e2-badc-6d1c-fe2008c305f9@collabora.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        vkoul@kernel.org
-Cc:     amadeuszx.slawinski@linux.intel.com, Mario.Limonciello@amd.com,
-        Sunil-kumar.Dommati@amd.com, Basavaraj.Hiregoudar@amd.com,
-        Mastan.Katragadda@amd.com, Arungopal.kondaveeti@amd.com,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:SOUNDWIRE SUBSYSTEM" <alsa-devel@alsa-project.org>
-References: <20230213094031.2231058-1-Vijendar.Mukunda@amd.com>
- <20230213094031.2231058-3-Vijendar.Mukunda@amd.com>
- <a3a75ead-5430-ae32-a6ae-78314bc637f1@linux.intel.com>
-From:   "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
-In-Reply-To: <a3a75ead-5430-ae32-a6ae-78314bc637f1@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0017.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:25::22) To DM6PR12MB4123.namprd12.prod.outlook.com
- (2603:10b6:5:21f::23)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mediatek.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SI2PR03MB5885:EE_|PSAPR03MB5304:EE_
+x-ms-office365-filtering-correlation-id: 8735313c-0335-433e-7b83-08db0e4d0049
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: HTUAJWhM5lZppvjBgQwT0wiFn09lejDdjATY/3xFyipwiFx6ny897MuFL4KzbMBwgri7E/LtxAJUSwj/3QiFMp+ClW6p7jEc+FlPHdCBDByASL81Th65Y2x3JHJv0xwkkaXs7kHswuIz9BuQFOv73vzVMtjTHxQKq8CIbNRv0mRC8Pm+CkaX4SuTejWG+R89YwHx08sqUQTwf1vu9s86Medmz6HAOUAIJtO4amCHeNpxxsXk9+Nyqj1Uz0NocRlGhpqh2K1qMIpOKprONQRzHcaQcp8NJbb61IxiOaXYTfJRqq1t4C9FTKpU6ohvuA9SRNCSYd8y+bXvcCN2mMHnxWwzYA9Omz/sVUAf+PzmVDTgsf07Pr+sVRh0RoC+FvXCNc4qS1Qa5Bo8OQyQSsijwkhj85KmBXva8kDwgchmDgZCS8e8rod0W5nqcu1SfdM9NoP+gWJQniwTU5ZMj9vaVauXD3em22WbLQfxOC1FdIyFsx8YaCN7G04DiU70SFg8sJBZCoNHHW3bp7+n/5PKeM5RLgVuf0j3Dr3Z4U7liejAgAFmlKYLqX5bMrs3NDuwWTyuKKnFH7kpUa3cTGL7Ox2GZIHyhBVhhytZtjeJmikkPQhteh95vGoj53sjKO9OUVSfP6WQhRnKBm9XhekcFC2yXgC3gw0cE1M13fnsVJMbS0WWD8QYjp2sKEutYwUgnB/SPJh13g/QzSpvY+N8J1K5KfX2+tRUS9nxn4A3cg43bAXYAX0JWwgFnTaXsTzx2k/d+Wfq2VlVf/jnr27xeQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR03MB5885.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(366004)(346002)(376002)(39860400002)(451199018)(6486002)(2906002)(122000001)(86362001)(478600001)(71200400001)(2616005)(38100700002)(38070700005)(7416002)(5660300002)(8936002)(4326008)(66556008)(110136005)(8676002)(66446008)(66476007)(64756008)(83380400001)(54906003)(6506007)(41300700001)(66946007)(186003)(85182001)(316002)(36756003)(26005)(6512007)(76116006)(99106002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?c3lYNllidVU2WFRQVkIrZERmajlmUkxCeVExT0tNbGg0SkFNK3ROWWlScWdy?=
+ =?utf-8?B?SUhuYk5WSGFiQ01jR3F6c2xqQ0tMUDRDU2VQMG9xcmFDM201MXBnU01vdU43?=
+ =?utf-8?B?Snlhem5GL2ZRS0V5Sm1jOTJDN0dqUHhldmJZRHFIRWRsVElQRUx6bVF1N0h2?=
+ =?utf-8?B?ZjJ6RGE4Rk9nM244Y214NHd5czdwQjM4emk4Q0krRUtocGU4d0tVbVdFeGtz?=
+ =?utf-8?B?UU5aY0s1UzYweGtXYjV4M0RKU2RmalZhN1FHcFdTT3Q1dlFxNENlQ3BPM3NJ?=
+ =?utf-8?B?QnBNQ1Y4VE4ydGg0RVhHUWZCOXhrWSs3QTluUFpiSzlEUTNVbDB4V3J5ZTMy?=
+ =?utf-8?B?VXUxbjRvTTNsbUcwakphRnZnZW1seXFvenhQazNJbW1LSU9rMmwrSEF2RlBt?=
+ =?utf-8?B?YjFManNBei9JaCsyUjY3SkV6c0V6ODVZc2xBekpwbkp4Rk5VSzkxVXJiM3hC?=
+ =?utf-8?B?N2NWcVhpOXpSVjRZeGk1YnhlOXBBY295b1ZFb0REcWY2N1ZGVGF5RGR3alQ1?=
+ =?utf-8?B?ZVRrUGk3cXlpZ3dmcFpUaTA0THl0NTVneGxQaUdMNDYrVUNTNUxzaitjM0hS?=
+ =?utf-8?B?aDFoZnRjcU1ORE1KeC9rVGxWdWJGdzdmQVptVzV0U1BVYW5WZThuYlFFOFhH?=
+ =?utf-8?B?MkpGL2hGSEV3aFJhOGlDeWY2ZTVnaVBxWDdPNTAvdlFnYXgwdXVnQ1dPSW1I?=
+ =?utf-8?B?Tkt3OHgxR1BNeDdlczZMc3ZDbjZxWDc4SnpMazh2eS9WWmpweVNOOWV4RTdu?=
+ =?utf-8?B?N2gwajd2ZWdGd2xua2JCRHE4eHU5T0J5Mkx3ZlhPcU9Bek5OUVZWaWUrSG1w?=
+ =?utf-8?B?dFRlYVhOb3d2OSt1bUZSRmFRR2lVcGNWUmluc2t0eTR2YmV3VlRDZTg4NEY4?=
+ =?utf-8?B?bE81N0diNEY2QUpPd2ZIM2xIMzk2VmU5ZTR1QVZIRTEraHZlRWR2SW9SQlVD?=
+ =?utf-8?B?b0tJWERzKzM3dWg0UGx2WkJFRjEyZmQ2SWZEQUZ1YTU2Uklnc2NBOWZBZEhG?=
+ =?utf-8?B?SXRqVVJsSWhYQ05BWFAvZExJVlNzdU0wbVI4RlpQM1hXTVNFbFFYTStrb3Nm?=
+ =?utf-8?B?b2lzNWpiZWVJVjEwNXlKR0xCUkNybGUrQ01qcFIzRTRIS2ZMNmZCVi9DeU9W?=
+ =?utf-8?B?TUxwZnVYeTdnZExhdjJTckFmdjhGdDM5WEFpcUQyRzFPaHQ3WTBrbnJ5L2Y5?=
+ =?utf-8?B?b1hnSDkzYnhOQWZNdjV4eVFFL3d4MklIWVZVa2tNNkdUQ04zaTRTbUFKL0pB?=
+ =?utf-8?B?eDZvRVpuUjNWYkRGVCtrWGRQR2pVZnpkdlVNNzYzdGRQSnQzR2R6UkY1QXdD?=
+ =?utf-8?B?WjhQbFBrZ2hzeTMrSFZqZ2FBekV3c3VpTVVXVmFTd0ZCb0dkQmpXMEgvMkR1?=
+ =?utf-8?B?MnN6RjF5eTVhdVhGU3BnYWpSUFVyT0cwd0VlQjIzeS9BUENyY1ZJdnFvT2xl?=
+ =?utf-8?B?S3VsN1BpK0RrVGE2M1JzQncwQ0MzUVRyQXZ6VmhJNVh0QUtBb0FXcnBQUGlw?=
+ =?utf-8?B?ZEdqYjV5R3RWK3FnUkloTlIwNHNxbmY1bFJ3Tlh6bzJLd2t5OUhhc2JlRzBo?=
+ =?utf-8?B?UVMrcTJZb2JOeVJvR2ZaVTkzNXJtSkgrS1RVcWcyUDh5aU4wUU5UT3dtUysy?=
+ =?utf-8?B?cmV2elYyV1JIT2Mybk1KL0VSaEdqOHpkMGhHb1pUSkV3SFphMXZNZzU4Mm0x?=
+ =?utf-8?B?RXhOUktVaWhHWFFEWGM4ZUhpY2xGZWFnTTNXaE9DNVVnOUw4VnFoaDlCMWEz?=
+ =?utf-8?B?aDdoZC9zb3MvelBEMjJ6bjhqeW9ydkkrL3BZNk13TitIbVViNGlDalpGdk05?=
+ =?utf-8?B?b3dXOEJ3SzhZS0xRcFQxRGpNdXF5S1YrZWJLcVVMNFBwb3RkWDJzcmxraDBX?=
+ =?utf-8?B?UEhTN1NPdXYrUVpSMzcxbjhpVTc1YWV2M2RWaFJ6UmdoTTA3aWMrZkpMZWo1?=
+ =?utf-8?B?WGJOR0dGMkdZYXZvKzd1bnJRMWk1a05BOFd4VXNmbjNDbm1CcDV0VmJtUzlV?=
+ =?utf-8?B?cnZPdlNvdlhnVFBJNXhlSHZrYW5YeGNFa1lLMWlaVDViN0FpalVXbVp3YThB?=
+ =?utf-8?B?ZEF6cDlkRmNabkRKVnhpYUZUdUtYM1FtTXNDd2FuMm9ocVUydnBuYXBCQ1Nx?=
+ =?utf-8?B?ZERmc0RSSGNNUi93SUtXNnFBQjNWTm5PUTlraXhDMGZTaUpRK3N2Q0hFM2No?=
+ =?utf-8?B?QUE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7FE394A41C9BBE46ADD9FB2F202CAC05@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4123:EE_|PH7PR12MB6539:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3e30fb35-7198-49c5-f573-08db0e4be5c4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cq2NVF5XFrg/mpMjZPEOUgl1zMbW03RdnV7WKsxg2q0u4MokPWfaXM/IgDsxzRv2agMNdKROSs4gOtU5PhyFHMFQB6zp9EhaMij0T+02lLDBTLA1IKr2wtq2NKN6CKEUVHEFlmSnwayHeyYOWMvReAJTWJxBQVG5kVXojgRzu4jdth6wjZLwqQ/YJD+8BvLfh1wasRdTnWaQzDqrcBGJYMNdeivsCLEgsHnNbhtEmGu5CUg4ThQacP6+prMaX86nsxepV8a9c3tH37wrKXI2x2YTKXJ+3NsuXiGiqiHuimfQWO0oJ+0RfbmSKEB1wj25SYwysnE2iStxRd933o8+t9LHZ/4iIxDfeo6jHGuVEYBZXF0eSC8c9VNymal+6SZ5DNV5U8uAOsbHk691tKV3zXzxFYNX6h5q/JWl8NLXk6qgizahcscKVi/ciuy45WebbyP7VsK6RJTKHPud97bygZAogAZJCg1eM0NMrMN2s/3FV8MfDedpaguvDYvTmJlze6zyOPkVT5uElgc6JQx1jzBxIxHFSVabh2rIzSRLE/iA2hd2qb7GERJiUfRbsryMuPHqGshsUWzSGBpqYs5pyKcEQ+hMYp8nk1/DZhjuNgC5XpLDnXgAdqk7TuiU5YukHiIiZ1CcCBDtGu6RjAkERdx+jQ1Pgf8G7z7nyaLkA0tZp1rVNsN5n1ubZ0eHsYGzoi81qiOhy4CMA3uixFul2LZw9l2xRPAvHWSIeaX8R/I=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4123.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(396003)(346002)(376002)(39860400002)(451199018)(31686004)(54906003)(4326008)(66556008)(66476007)(41300700001)(8676002)(8936002)(316002)(5660300002)(66946007)(31696002)(38100700002)(86362001)(36756003)(53546011)(6512007)(26005)(186003)(6506007)(6666004)(30864003)(2906002)(6486002)(478600001)(2616005)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZnAzQ0ExalZOR0Rocm1jTzNQMFhwWDBOMXZqV2JvT0o0ZS9qajZUaWRhWWVj?=
- =?utf-8?B?U3ExazhtR3V1Y21vdytia3d0V3puYjhIdjcyVEpyRmxZRFg1TXZacWxmRzFp?=
- =?utf-8?B?cGFVK20vdjZkM2pGOWFta1VrU2JsdzlMSy92SStGZkZmZFBRTkdCZ3ZjTHVl?=
- =?utf-8?B?TGFNNWtXdmdLYjN0cEZ0dTNKL0VVMDVIdk9GdVJrZTk5TjhFL1I2Si8zQWpn?=
- =?utf-8?B?YUR3L0NhNDNTWW0yd1NCR0hIRUlNL00xN1Z1WWw2bDl3V1F4dVJhOE5QNTZQ?=
- =?utf-8?B?clF5STI5a0hXbk1pUDI4bUtxRGZnYmtlMTQzUWJ3Z0NUdHFuMitpN2lsUVF0?=
- =?utf-8?B?czFndEw3ZkIxU0ZqRyt1czNqdVJ2ZkV4akhGVHAybFpOZWtsazRjdFF4RDd0?=
- =?utf-8?B?bUlORWh1T0YxYUp6K3l5czl2TzJEU243Z2wvYlpwYVBWc1JQNXh6S0FCbG1K?=
- =?utf-8?B?d1dDSjc0cExOcFpOQm1zVE9XdkF2cXRtL1NzWE9uYTR1NmFuRTlZc0ttdVJR?=
- =?utf-8?B?ck92dUxjeTBaQnVDME8wcWZhaENTZmMzWmlvZEt5dHFzbDlmTG5FbFZ4SzU0?=
- =?utf-8?B?MDNLVmlabWN4NXpKelMzcXJmNHhHZE9yeTlvQ1h5Ky9naldSY0xBWkR4K1pD?=
- =?utf-8?B?N29FTXhOVm1ZRnhrdEZqRWtiZ0ZDRjFGRnFZYXM0ZEJSZFJyMFM0bDFJOWxa?=
- =?utf-8?B?SlFJa1RuUThid1dIRHFUSWNRREVZN0ZyVWxoYk8rL3dFQWJUTTZvT2VybExD?=
- =?utf-8?B?eVlMWU01KzhGbWgyRTZhYWcyd1pCY0lSb1JVbUtSK2E1WDdNSEFkblY4b0hE?=
- =?utf-8?B?Ty9Ma2g0cnJzbmlvdC9wM3hTdkh1YkpzUWNwS2p3V3NCUm1oQjZSWjYvdHBi?=
- =?utf-8?B?Q2VQODZrdjg4bXpzeFg1dk5oOWxyTFlZWURMTHo4THRTeTRGalZHa3VFNElW?=
- =?utf-8?B?VnpQK1JTV1V5VndVSWhidFZiUFVkdGNDK1VBMW9YVWhpaVVDQ3h3TmNjc0Mw?=
- =?utf-8?B?eHV1VHpBRFRXaGxuY1NncW1rWmErU3BtSGZJVTJwWCtUNysxRFdSSUYvQnBX?=
- =?utf-8?B?alp0ZWRmNVVhOFY3d0YySjZmc2J6UnlmaS9VRzBZVWFFVW5LNEpDb2RFM2cx?=
- =?utf-8?B?VDJrdmZQUGx4cjZnNXpIWW1pYmVwbm0yS1hkcE5FQktYSWRNWXl6dU9GSWN3?=
- =?utf-8?B?SzlJeHhUT0RpaTZtbDNsZ0NvQ3Y5YURnTGpvNXBudTZQTTN4bjBGQkxXUnBr?=
- =?utf-8?B?ZlNEOUdLRitkOTAyalh0dzMraDc4ZlYvcUtXaENXK0hZOEw4dU42TTgzZmFP?=
- =?utf-8?B?Z0RoUHlkVFVScUlsWkNwZTVUTzh0cU81ZFlNSWJWUG9NYXJBUEJNcE5jTkR6?=
- =?utf-8?B?OVhQYTAyR08vSUJYb0kzOTEvMnp4RWJad0ZPbGwwNHNwdnE1aEZCWnl4Q1NF?=
- =?utf-8?B?UzRrZXFqd3pEM2l1YktTS2twTWh4TTVpMk5yb2JwcC85ZjVrMmVpMVZtMkJi?=
- =?utf-8?B?Y0gxb1hjMkZyYUZHUEFmZUt2WkEvR2trWmNGRU9WWEdWa3p3TlhMaGlBQU8r?=
- =?utf-8?B?QUZhMWNLaEhwZ2IrQWRFMlIvRkVHNVIwTCszQkNPL3piSlVEbU95Q0pMTUN3?=
- =?utf-8?B?VW5CZUsrSHhmTUpYaHBjQWJ4NW14UU5EaEY0OEdzVjhKbzNzenBteGV0NE4x?=
- =?utf-8?B?NTBFaEJEcVdBSitrQXBnQ0U2NEVMamFjaENRd3p1RDVwSG9OR2hVaVlXYjhl?=
- =?utf-8?B?THdrT1R2cjVuUHRzcndzY0pYanRCanhvbGk2dmwwaXpMd2pqUFNPNjIvN3dQ?=
- =?utf-8?B?cTFBSVRUZjJYeE1WWkM1eGhYNU10QXZsTjFxQkZZemdzd1d0cFRxYy9ZN1BE?=
- =?utf-8?B?cldLWlZOWTN4RXA5d1VqTnQyVWJJcmR5KzRMTlQvU0J1NGJoYXBvT2VCbDdz?=
- =?utf-8?B?RHdmcjFFVUYxalduZStOTmpSMUxQVXJhV002SHdBRVpsSk1iM0FLOHZxeUhW?=
- =?utf-8?B?SkxNUlVqTEN4S1czV2tKOWVkTGNRS1dmWDU4eVYwVFBnbHJubXQ3MyttR0N4?=
- =?utf-8?B?ZnpuYkNCQ20xeElvc0R2cUNRUGRyNmtQUGZUNTEyRjNPVmhZUGE1bXY2cyt4?=
- =?utf-8?Q?GVeaKrjdyQicNZ+L25I9Ul2d7?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e30fb35-7198-49c5-f573-08db0e4be5c4
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4123.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2023 05:25:34.7032
+X-MS-Exchange-CrossTenant-AuthSource: SI2PR03MB5885.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8735313c-0335-433e-7b83-08db0e4d0049
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Feb 2023 05:33:28.2831
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +54nbvjIYDuZNzDZrBCgWbF8rq/A0A5ID7zI/qKoayapCcfCNkndO6LsrtiZs/JCQt7OBi3G0zqyqZ5qi4wB7g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6539
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XVPXx8RQ6OSHjqGY0jnWFV4dJU0SmEsItYAGangY0tfU3LQV9pLzJpvcQAUT+EUvbYvomTXzEtPq/PO5fdWa7A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR03MB5304
+X-MTK:  N
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/02/23 23:35, Pierre-Louis Bossart wrote:
->> +static void amd_enable_sdw_pads(struct amd_sdw_manager *amd_manager)
->> +{
->> +	u32 sw_pad_pulldown_val;
->> +	u32 val = 0;
-> useless init
-
-Will fix it.
->
->> +
->> +	mutex_lock(amd_manager->sdw_lock);
->> +	val = acp_reg_readl(amd_manager->acp_mmio + ACP_SW_PAD_KEEPER_EN);
->> +	val |= amd_manager->reg_mask->sw_pad_enable_mask;
->> +	acp_reg_writel(val, amd_manager->acp_mmio + ACP_SW_PAD_KEEPER_EN);
->> +	usleep_range(1000, 1500);
->> +
->> +	sw_pad_pulldown_val = acp_reg_readl(amd_manager->acp_mmio + ACP_PAD_PULLDOWN_CTRL);
->> +	sw_pad_pulldown_val &= amd_manager->reg_mask->sw_pad_pulldown_mask;
->> +	acp_reg_writel(sw_pad_pulldown_val, amd_manager->acp_mmio + ACP_PAD_PULLDOWN_CTRL);
->> +	mutex_unlock(amd_manager->sdw_lock);
->> +}
->> +
->> +static int amd_init_sdw_manager(struct amd_sdw_manager *amd_manager)
->> +{
->> +	u32 val = 0;
-> useless init
-Will fix it.
->
->> +	u32 timeout = 0;
->> +	u32 retry_count = 0;
->> +
->> +	acp_reg_writel(AMD_SDW_ENABLE, amd_manager->mmio + ACP_SW_EN);
->> +	do {
->> +		val = acp_reg_readl(amd_manager->mmio + ACP_SW_EN_STATUS);
->> +		if (val)
->> +			break;
->> +		usleep_range(10, 50);
->> +	} while (retry_count++ < AMD_SDW_STAT_MAX_RETRY_COUNT);
->> +
->> +	if (retry_count > AMD_SDW_STAT_MAX_RETRY_COUNT)
->> +		return -ETIMEDOUT;
->> +
->> +	/* Soundwire manager bus reset */
->> +	acp_reg_writel(AMD_SDW_BUS_RESET_REQ, amd_manager->mmio + ACP_SW_BUS_RESET_CTRL);
->> +	val = acp_reg_readl(amd_manager->mmio + ACP_SW_BUS_RESET_CTRL);
->> +	while (!(val & AMD_SDW_BUS_RESET_DONE)) {
->> +		val = acp_reg_readl(amd_manager->mmio + ACP_SW_BUS_RESET_CTRL);
->> +		if (timeout > AMD_DELAY_LOOP_ITERATION)
->> +			break;
->> +		usleep_range(1, 5);
->> +		timeout++;
->> +	}
->> +	if (timeout == AMD_DELAY_LOOP_ITERATION)
->> +		return -ETIMEDOUT;
->> +	timeout = 0;
->> +	acp_reg_writel(AMD_SDW_BUS_RESET_CLEAR_REQ, amd_manager->mmio + ACP_SW_BUS_RESET_CTRL);
->> +	val = acp_reg_readl(amd_manager->mmio + ACP_SW_BUS_RESET_CTRL);
->> +	while (val) {
->> +		val = acp_reg_readl(amd_manager->mmio + ACP_SW_BUS_RESET_CTRL);
->> +		if (timeout > AMD_DELAY_LOOP_ITERATION)
->> +			break;
->> +		usleep_range(1, 5);
->> +		timeout++;
->> +	}
->> +	if (timeout == AMD_DELAY_LOOP_ITERATION) {
->> +		dev_err(amd_manager->dev, "Failed to reset Soundwire manager instance%d\n",
->> +			amd_manager->instance);
->> +		return -ETIMEDOUT;
->> +	}
->> +	retry_count = 0;
->> +	acp_reg_writel(AMD_SDW_DISABLE, amd_manager->mmio + ACP_SW_EN);
->> +	do {
->> +		val = acp_reg_readl(amd_manager->mmio + ACP_SW_EN_STATUS);
->> +		if (!val)
->> +			break;
->> +		usleep_range(10, 50);
->> +	} while (retry_count++ < AMD_SDW_STAT_MAX_RETRY_COUNT);
->> +
->> +	if (retry_count > AMD_SDW_STAT_MAX_RETRY_COUNT)
->> +		return -ETIMEDOUT;
->> +	return 0;
->> +}
->> +
->> +static int amd_enable_sdw_manager(struct amd_sdw_manager *amd_manager)
->> +{
->> +	u32 val = 0;
-> useless init
-Will fix it.
->
->> +	u32 retry_count = 0;
->> +
->> +	acp_reg_writel(AMD_SDW_ENABLE, amd_manager->mmio + ACP_SW_EN);
->> +	do {
->> +		val = acp_reg_readl(amd_manager->mmio + ACP_SW_EN_STATUS);
->> +		if (val)
->> +			break;
->> +		usleep_range(10, 50);
->> +	} while (retry_count++ < AMD_SDW_STAT_MAX_RETRY_COUNT);
->> +
->> +	if (retry_count > AMD_SDW_STAT_MAX_RETRY_COUNT)
->> +		return -ETIMEDOUT;
->> +	return 0;
->> +}
->> +
->> +static int amd_disable_sdw_manager(struct amd_sdw_manager *amd_manager)
->> +{
->> +	u32 val = 0;
-> useless init
-Will fix it.
->> +	u32 retry_count = 0;
->> +
->> +	acp_reg_writel(AMD_SDW_DISABLE, amd_manager->mmio + ACP_SW_EN);
->> +	/*
->> +	 * After invoking manager disable sequence, check whether
->> +	 * manager has executed clock stop sequence. In this case,
->> +	 * manager should ignore checking enable status register.
->> +	 */
->> +	val = acp_reg_readl(amd_manager->mmio + ACP_SW_CLK_RESUME_CTRL);
->> +	if (val)
->> +		return 0;
->> +
->> +	do {
->> +		val = acp_reg_readl(amd_manager->mmio + ACP_SW_EN_STATUS);
->> +		if (!val)
->> +			break;
->> +		usleep_range(10, 50);
->> +	} while (retry_count++ < AMD_SDW_STAT_MAX_RETRY_COUNT);
->> +
->> +	if (retry_count > AMD_SDW_STAT_MAX_RETRY_COUNT)
->> +		return -ETIMEDOUT;
->> +	return 0;
->> +}
->> +
->> +static void amd_enable_sdw_interrupts(struct amd_sdw_manager *amd_manager)
->> +{
->> +	struct sdw_manager_reg_mask *reg_mask = amd_manager->reg_mask;
->> +	u32 val;
->> +
->> +	mutex_lock(amd_manager->sdw_lock);
->> +	val = acp_reg_readl(amd_manager->acp_mmio + ACP_EXTERNAL_INTR_CNTL(amd_manager->instance));
->> +	val |= reg_mask->acp_sdw_intr_mask;
->> +	acp_reg_writel(val, amd_manager->acp_mmio + ACP_EXTERNAL_INTR_CNTL(amd_manager->instance));
->> +	val = acp_reg_readl(amd_manager->acp_mmio + ACP_EXTERNAL_INTR_CNTL(amd_manager->instance));
->> +	mutex_unlock(amd_manager->sdw_lock);
->> +	dev_dbg(amd_manager->dev, "%s: acp_ext_intr_ctrl[0x%x]:0x%x\n", __func__,
->> +		ACP_EXTERNAL_INTR_CNTL(amd_manager->instance), val);
->> +	val = acp_reg_readl(amd_manager->acp_mmio + ACP_EXTERNAL_INTR_STAT(amd_manager->instance));
->> +	if (val)
->> +		acp_reg_writel(val, amd_manager->acp_mmio +
->> +			       ACP_EXTERNAL_INTR_STAT(amd_manager->instance));
->> +
->> +	acp_reg_writel(AMD_SDW_IRQ_MASK_0TO7, amd_manager->mmio +
->> +		       ACP_SW_STATE_CHANGE_STATUS_MASK_0TO7);
->> +	acp_reg_writel(AMD_SDW_IRQ_MASK_8TO11, amd_manager->mmio +
->> +		       ACP_SW_STATE_CHANGE_STATUS_MASK_8TO11);
->> +	acp_reg_writel(AMD_SDW_IRQ_ERROR_MASK, amd_manager->mmio + ACP_SW_ERROR_INTR_MASK);
->> +}
->> +
->> +static void amd_disable_sdw_interrupts(struct amd_sdw_manager *amd_manager)
->> +{
->> +	struct sdw_manager_reg_mask *reg_mask = amd_manager->reg_mask;
->> +	u32 val;
->> +
->> +	mutex_lock(amd_manager->sdw_lock);
->> +	val = acp_reg_readl(amd_manager->acp_mmio + ACP_EXTERNAL_INTR_CNTL(amd_manager->instance));
->> +	val &= ~reg_mask->acp_sdw_intr_mask;
->> +	acp_reg_writel(val, amd_manager->acp_mmio + ACP_EXTERNAL_INTR_CNTL(amd_manager->instance));
->> +	mutex_unlock(amd_manager->sdw_lock);
->> +
->> +	acp_reg_writel(0x00, amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_MASK_0TO7);
->> +	acp_reg_writel(0x00, amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_MASK_8TO11);
->> +	acp_reg_writel(0x00, amd_manager->mmio + ACP_SW_ERROR_INTR_MASK);
->> +}
->> +
->> +static void amd_sdw_set_frameshape(struct amd_sdw_manager *amd_manager)
->> +{
->> +	u32 frame_size;
->> +
->> +	frame_size = (amd_manager->rows_index << 3) | amd_manager->cols_index;
->> +	acp_reg_writel(frame_size, amd_manager->mmio + ACP_SW_FRAMESIZE);
->> +}
->> +
->> +static void amd_sdw_ctl_word_prep(u32 *low_word, u32 *high_word, u32 cmd_type,
->> +				  struct sdw_msg *msg, int cmd_offset)
->> +{
->> +	u32 low_data = 0, high_data = 0;
-> init for high_data is useless
-Will fix it.
->
->> +	u16 addr;
->> +	u8 addr_high, addr_low;
->> +	u8 data = 0;
->> +
->> +	addr = msg->addr + cmd_offset;
->> +	addr_high = (addr & 0xFF00) >> 8;
->> +	addr_low = addr & 0xFF;
->> +
->> +	if (cmd_type == AMD_SDW_CMD_WRITE)
->> +		data = msg->buf[cmd_offset];
->> +
->> +	high_data = FIELD_PREP(AMD_SDW_MCP_CMD_DEV_ADDR, msg->dev_num);
->> +	high_data |= FIELD_PREP(AMD_SDW_MCP_CMD_COMMAND, cmd_type);
->> +	high_data |= FIELD_PREP(AMD_SDW_MCP_CMD_REG_ADDR_HIGH, addr_high);
->> +	low_data |= FIELD_PREP(AMD_SDW_MCP_CMD_REG_ADDR_LOW, addr_low);
->> +	low_data |= FIELD_PREP(AMD_SDW_MCP_CMD_REG_DATA, data);
->> +
->> +	*high_word = high_data;
->> +	*low_word = low_data;
->> +}
->> +
->> +static u64 amd_sdw_send_cmd_get_resp(struct amd_sdw_manager *amd_manager, u32 lword, u32 uword)
->> +{
->> +	u64 resp = 0;
-> useless init
-Will fix it.
->
->> +	u32 resp_lower, resp_high;
->> +	u32 sts = 0;
-> useless init
-Will fix it.
->
->> +	u32 timeout = 0;
->> +
->> +	sts = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_CMD_STS);
->> +	while (sts & AMD_SDW_IMM_CMD_BUSY) {
->> +		sts = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_CMD_STS);
->> +		if (timeout > AMD_SDW_RETRY_COUNT) {
->> +			dev_err(amd_manager->dev, "SDW%x previous cmd status clear failed\n",
->> +				amd_manager->instance);
->> +			return -ETIMEDOUT;
->> +		}
->> +		timeout++;
->> +	}
->> +
->> +	timeout = 0;
->> +	if (sts & AMD_SDW_IMM_RES_VALID) {
->> +		dev_err(amd_manager->dev, "SDW%x manager is in bad state\n", amd_manager->instance);
->> +		acp_reg_writel(0x00, amd_manager->mmio + ACP_SW_IMM_CMD_STS);
->> +	}
->> +	acp_reg_writel(uword, amd_manager->mmio + ACP_SW_IMM_CMD_UPPER_WORD);
->> +	acp_reg_writel(lword, amd_manager->mmio + ACP_SW_IMM_CMD_LOWER_QWORD);
->> +
->> +	sts = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_CMD_STS);
->> +	while (!(sts & AMD_SDW_IMM_RES_VALID)) {
->> +		sts = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_CMD_STS);
->> +		if (timeout > AMD_SDW_RETRY_COUNT) {
->> +			dev_err(amd_manager->dev, "SDW%x cmd response timeout occurred\n",
->> +				amd_manager->instance);
->> +			return -ETIMEDOUT;
->> +		}
->> +		timeout++;
->> +	}
->> +	resp_high = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_RESP_UPPER_WORD);
->> +	resp_lower = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_RESP_LOWER_QWORD);
->> +	timeout = 0;
->> +	acp_reg_writel(AMD_SDW_IMM_RES_VALID, amd_manager->mmio + ACP_SW_IMM_CMD_STS);
->> +	while ((sts & AMD_SDW_IMM_RES_VALID)) {
->> +		sts = acp_reg_readl(amd_manager->mmio + ACP_SW_IMM_CMD_STS);
->> +		if (timeout > AMD_SDW_RETRY_COUNT) {
->> +			dev_err(amd_manager->dev, "SDW%x cmd status retry failed\n",
->> +				amd_manager->instance);
->> +			return -ETIMEDOUT;
->> +		}
->> +		timeout++;
->> +	}
->> +	resp = resp_high;
->> +	resp = (resp << 32) | resp_lower;
->> +	return resp;
->> +}
->> +static unsigned int _amd_sdw_xfer_msg(struct amd_sdw_manager *amd_manager, struct sdw_msg *msg,
->> +				      int cmd, int cmd_offset)
->> +{
->> +	u64 response = 0;
-> useless init
-Will fix it.
->
->> +	u32 uword = 0, lword = 0;
->> +
->> +	amd_sdw_ctl_word_prep(&lword, &uword, cmd, msg, cmd_offset);
->> +	response = amd_sdw_send_cmd_get_resp(amd_manager, lword, uword);
->> +	return amd_sdw_fill_msg_resp(amd_manager, msg, response, cmd_offset);
->> +}
->> +
->> +static enum sdw_command_response amd_sdw_xfer_msg(struct sdw_bus *bus, struct sdw_msg *msg)
->> +{
->> +	struct amd_sdw_manager *amd_manager = to_amd_sdw(bus);
->> +	int ret, i;
->> +	int cmd = 0;
->> +
->> +	ret = amd_prep_msg(amd_manager, msg, &cmd);
->> +	if (ret)
->> +		return SDW_CMD_FAIL_OTHER;
->> +	for (i = 0; i < msg->len; i++) {
->> +		ret = _amd_sdw_xfer_msg(amd_manager, msg, cmd, i);
->> +		if (ret)
->> +			return ret;
->> +	}
->> +	return SDW_CMD_OK;
->> +}
->> +
->> +static u32 amd_sdw_read_ping_status(struct sdw_bus *bus)
->> +{
->> +	struct amd_sdw_manager *amd_manager = to_amd_sdw(bus);
->> +	u64 response;
->> +	u32 slave_stat = 0;
-> useless init
-Will fix it.
->
->> +
->> +	response = amd_sdw_send_cmd_get_resp(amd_manager, 0, 0);
->> +	/* slave status from ping response*/
->> +	slave_stat = FIELD_GET(AMD_SDW_MCP_SLAVE_STAT_0_3, response);
->> +	slave_stat |= FIELD_GET(AMD_SDW_MCP_SLAVE_STAT_4_11, response) << 8;
->> +	dev_dbg(amd_manager->dev, "%s: slave_stat:0x%x\n", __func__, slave_stat);
->> +	return slave_stat;
->> +}
->> +static void amd_sdw_probe_work(struct work_struct *work)
->> +{
->> +	struct amd_sdw_manager *amd_manager = container_of(work, struct amd_sdw_manager,
->> +							   probe_work);
->> +	struct sdw_master_prop *prop;
->> +	int ret;
->> +
->> +	prop = &amd_manager->bus.prop;
->> +	if (!prop->hw_disabled) {
->> +		amd_enable_sdw_pads(amd_manager);
->> +		ret = amd_init_sdw_manager(amd_manager);
->> +		if (ret)
->> +			return;
->> +		amd_enable_sdw_interrupts(amd_manager);
->> +		ret = amd_enable_sdw_manager(amd_manager);
->> +		if (ret)
->> +			return;
->> +		amd_sdw_set_frameshape(amd_manager);
->> +	}
->> +}
-> There should be an explanation as to why you need a workqueue to
-> complete the probe.
-We want to separate the manager probe sequence and start up sequence.
-we will add the comment.
->
->> +
->> +static int amd_sdw_manager_probe(struct platform_device *pdev)
->> +{
->> +	const struct acp_sdw_pdata *pdata = pdev->dev.platform_data;
->> +	struct resource *res;
->> +	struct device *dev = &pdev->dev;
->> +	struct sdw_master_prop *prop;
->> +	struct sdw_bus_params *params;
->> +	struct amd_sdw_manager *amd_manager;
->> +	int ret;
->> +
->> +	if (!pdev->dev.platform_data) {
->> +		dev_err(dev, "platform_data not retrieved\n");
->> +		return -ENODEV;
->> +	}
->> +	amd_manager = devm_kzalloc(dev, sizeof(struct amd_sdw_manager), GFP_KERNEL);
->> +	if (!amd_manager)
->> +		return -ENOMEM;
->> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->> +	if (!res)
->> +		return -ENOMEM;
->> +	amd_manager->acp_mmio = devm_ioremap(dev, res->start, resource_size(res));
->> +	if (IS_ERR(amd_manager->mmio)) {
->> +		dev_err(dev, "mmio not found\n");
->> +		return PTR_ERR(amd_manager->mmio);
->> +	}
->> +	amd_manager->instance = pdata->instance;
->> +	amd_manager->mmio = amd_manager->acp_mmio +
->> +			    (amd_manager->instance * SDW_MANAGER_REG_OFFSET);
->> +	amd_manager->sdw_lock = pdata->sdw_lock;
->> +	amd_manager->cols_index = sdw_find_col_index(AMD_SDW_DEFAULT_COLUMNS);
->> +	amd_manager->rows_index = sdw_find_row_index(AMD_SDW_DEFAULT_ROWS);
->> +	amd_manager->dev = dev;
->> +	amd_manager->bus.ops = &amd_sdw_ops;
->> +	amd_manager->bus.port_ops = &amd_sdw_port_ops;
->> +	amd_manager->bus.compute_params = &amd_sdw_compute_params;
->> +	amd_manager->bus.clk_stop_timeout = 200;
->> +	amd_manager->bus.link_id = amd_manager->instance;
->> +	switch (amd_manager->instance) {
->> +	case ACP_SDW0:
->> +		amd_manager->num_dout_ports = AMD_SDW0_MAX_TX_PORTS;
->> +		amd_manager->num_din_ports = AMD_SDW0_MAX_RX_PORTS;
->> +		break;
->> +	case ACP_SDW1:
->> +		amd_manager->num_dout_ports = AMD_SDW1_MAX_TX_PORTS;
->> +		amd_manager->num_din_ports = AMD_SDW1_MAX_RX_PORTS;
->> +		break;
->> +	default:
->> +		return -EINVAL;
->> +	}
->> +	amd_manager->reg_mask = &sdw_manager_reg_mask_array[amd_manager->instance];
->> +	params = &amd_manager->bus.params;
->> +	params->max_dr_freq = AMD_SDW_DEFAULT_CLK_FREQ * 2;
->> +	params->curr_dr_freq = AMD_SDW_DEFAULT_CLK_FREQ * 2;
->> +	params->col = AMD_SDW_DEFAULT_COLUMNS;
->> +	params->row = AMD_SDW_DEFAULT_ROWS;
->> +	prop = &amd_manager->bus.prop;
->> +	prop->clk_freq = &amd_sdw_freq_tbl[0];
->> +	prop->mclk_freq = AMD_SDW_BUS_BASE_FREQ;
->> +
->> +	ret = sdw_bus_master_add(&amd_manager->bus, dev, dev->fwnode);
->> +	if (ret) {
->> +		dev_err(dev, "Failed to register Soundwire manager(%d)\n", ret);
->> +		return ret;
->> +	}
->> +	dev_set_drvdata(dev, amd_manager);
->> +	INIT_WORK(&amd_manager->probe_work, amd_sdw_probe_work);
->> +	schedule_work(&amd_manager->probe_work);
->> +	return 0;
->> +}
->> +
->> +static int amd_sdw_manager_remove(struct platform_device *pdev)
->> +{
->> +	struct amd_sdw_manager *amd_manager = dev_get_drvdata(&pdev->dev);
->> +	int ret;
->> +
->> +	if (!amd_manager)
->> +		return -ENODEV;
-> is this possible? From the code just above wioth dev_set_drvdata() it
-> seems there's no error code, so the remove can blindly use the pointer.
-yes i agree. will drop this check,
->
->> +	cancel_work_sync(&amd_manager->probe_work);
->> +	amd_disable_sdw_interrupts(amd_manager);
->> +	sdw_bus_master_delete(&amd_manager->bus);
->> +	ret = amd_disable_sdw_manager(amd_manager);
->> +	return ret;
-> return amd_disable_sdw_manager(amd_manager); ?
-Will fix it.
->
->> +}
->> +
->> +static struct platform_driver amd_sdw_driver = {
->> +	.probe	= &amd_sdw_manager_probe,
->> +	.remove = &amd_sdw_manager_remove,
->> +	.driver = {
->> +		.name	= "amd_sdw_manager",
->> +	}
->> +};
->> +module_platform_driver(amd_sdw_driver);
->> +struct acp_sdw_pdata {
->> +	u16 instance;
->> +	/* mutex to protect acp common register access */
->> +	struct mutex *sdw_lock;
-> may be acp_sdw_lock then? sdw_lock sounds very generic and confusing IMHO.
-Will rename it.
->
->> +};
-
+T24gTW9uLCAyMDIzLTAxLTE2IGF0IDEwOjQ2ICswMTAwLCBBbmdlbG9HaW9hY2NoaW5vIERlbCBS
+ZWdubyB3cm90ZToNCj4gSWwgMTMvMDEvMjMgMDc6MDEsIFlvbmcgV3UgaGEgc2NyaXR0bzoNCj4g
+PiBDdXJyZW5seSBtYXN0ZXJzIGNhbiBub3QgaW5kaWNhdGUgaXRzIHNwZWNpYWwgZG1hLXJhbmdl
+cy4gUHJlcGFyZQ0KPiA+IGZvciB2Y29kZWMuIHNvbWUgdmNvZGVjIGVuZCBhZGRyZXNzIGlzIGFk
+ZHJlc3MgKyBzaXplLCBpZiBvdXIgc2l6ZQ0KPiA+IGlzIDRHLCB0aGUgZW5kIGFkZHJlc3MgbWF5
+IGJlIDB4Ml8wMDAwXzAwMDAuIGFuZCB0aGUNCj4gPiByZWdpc3RlciBpcyB1MzIsIHRoZW4gaXQg
+bWF5IGdldCB6ZXJvLiB0aHVzIGFkZCBhIGdhcCg4TSkgZm9yDQo+ID4gYWxsIHRoZSByZWdpb25z
+Lg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IFlvbmcgV3UgPHlvbmcud3VAbWVkaWF0ZWsuY29t
+Pg0KPiANCj4gSSBkZWZpbml0ZWx5IGFncmVlIG9uIHRoZSBmYWN0IHRoYXQgd2UgZG8gKm5lZWQq
+IHRoaXMgc2VyaWVzLi4uIA0KDQpUaGFua3MgdmVyeSBtdWNoIGZvciB5b3VyIHJldmlldy4NCg0K
+PiBidXQgdGhpcyBwYXJ0aWN1bGFyIGNvbW1pdCBsb29rcyBsaWtlIGEgaGFjay4NCj4gDQo+IEkn
+bSBub3QgY29udmluY2VkOiBJIGhhdmUgYSBodW5jaCB0aGF0IHRoaXMgb25lIHdpbGwgc29vbmVy
+IG9yIGxhdGVyDQo+IGJhY2tmaXJlDQo+IG9uIHVzIGFuZCBicmVhayB0aGluZ3MgYWdhaW4uLi4g
+YXQgdGhlIHNhbWUgdGltZSwgSSdtIG5vdCBzdXJlIGhvdyB0bw0KPiBkbyB0aGlzDQo+IHByb3Bl
+cmx5IGF0IHRoaXMgcG9pbnQgKEkgZGlkbid0IGRvIGFueSByZXNlYXJjaCwgYW55d2F5KS4NCg0K
+SSBnb3QgYSByZWFsIHZjb2RlYyBpc3N1ZSBkZXNjcmliZWQgaW4gdGhlIGNvbW1pdCBtZXNzYWdl
+LiBBcyB5b3UgbWF5DQpzZWUgaW4gdGhlIHZjb2RlYydzIGR0LWJpbmRpbmcgZXhhbXBsZVsxLzEw
+XSBvciB0aGUgZHRzIG5vZGVbOS8xMF0sDQp0aGVpciBsZW5ndGggaXMgMHhmZmYwMDAwMCB0aGF0
+IG1lYW5zIHRoZXkgdXNlIDFNIGFzIHRoZSBnYXAuIFZjb2RlYw0KdXNlIHRoaXMgZm9yIGEgbG9u
+ZyB0aW1lLiBBZnRlciB0aGlzIHBhdGNoc2V0LCB0aGlzIHByb3BlcnR5IGlzIHVudXNlZCwNCnRo
+ZW4gSSBoYXZlIHRvIHRha2UgY2FyZSB0aGlzIGluIHRoZSBpb21tdSwgdGhlcmVmb3JlIHRoaXMg
+cGF0Y2ggaXMNCnJlcXVpcmVkLCBhbmQgSSBqdXN0IGdpdmUgYSBiaWdnZXIgZ2FwKDhNKSBoZXJl
+Lg0KDQo+IA0KPiBJZGVhcz8NCj4gDQo+IFJlZ2FyZHMsDQo+IEFuZ2Vsbw0KPiANCg==
