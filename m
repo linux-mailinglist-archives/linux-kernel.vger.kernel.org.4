@@ -2,125 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B03B0695526
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 01:05:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BAC2695529
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 01:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjBNAFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 19:05:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36158 "EHLO
+        id S229810AbjBNAGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 19:06:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjBNAF3 (ORCPT
+        with ESMTP id S229740AbjBNAGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 19:05:29 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B672A974E;
-        Mon, 13 Feb 2023 16:05:26 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 13 Feb 2023 19:06:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CEC974E;
+        Mon, 13 Feb 2023 16:06:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PG1gQ1N2Qz4x4q;
-        Tue, 14 Feb 2023 11:05:22 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676333122;
-        bh=CAzSLDb1dEbfnAtFmlA4dMrg04aRPe2Txx15eZN3dho=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Xr1i8k3oBTZ/5Pqc6KY0CKqYw6LZyBYLX+8RnitJYdvMsMhKlmR+wmfGruokDjLBN
-         oGjjRoJhBxkMd8+PcQTMrVLr7PeczeOph2t8tsl5YK4ES5jU8XnlW1Xl3BWmUnlbbR
-         n1bITYE1TZnxne270aV+7aveDBtrdId5ntM64X8n9DqIta0WCrue8HgTu5MyxY3g7Y
-         OmtkURPc8KQRwXFk/O8Tl13wPGIW/Hq034e46K/kBZYs34bEVFqcZ48IIL/e/JL0nM
-         qIjlm7XqUtVPBSxEksZtcJLWgHdz9ZiXgGmIXAKKgK/nHqqg/klhOj8lxYgCO9b3ki
-         LIEFydIxCmiQQ==
-Date:   Tue, 14 Feb 2023 11:05:21 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alasdair G Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Linux Crypto List <linux-crypto@vger.kernel.org>,
-        Heinz Mauelshagen <heinzm@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the device-mapper tree with the crypto
- tree
-Message-ID: <20230214110521.77685fbb@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5AEF5B815D7;
+        Tue, 14 Feb 2023 00:06:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DC84C433D2;
+        Tue, 14 Feb 2023 00:06:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676333197;
+        bh=7w+QCpSPJLTXIjjwLzAaojQaLQkv4JGlLYFaWApxh2Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=atX5FSy3oMqM0KJX4C9JKBaYToW3bt9BZfi4iTetnG8kgxG1NORadoz221vwE5XHR
+         VXyIxXQ26X2Xhpwf30nLLhfmhXLQPCYJ8LoSVKpJlU1iXN6UZVmAhM+IPOgswpbuZK
+         ttbnaBBayDQOLKM1/mBoP+bItXrsH/ZLt8ztlmSEGyJdFOA9D2bCoJPLFLFC/tco9G
+         j5/9RkiWU8Fe5GTDu2rdHQcIGj962P3YwhVIPm4N+9zpxT/fxwXunUSrjZb8RwkKXe
+         0p3NVE7Ob6NNeUoEDtZ/ZOrlnhFzEdsccpjZmK2ihBlfHxm17p9P2t0Kz8qUg5Uu1d
+         QGDYjtDmmIEmw==
+Date:   Mon, 13 Feb 2023 19:06:36 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     Sathvika Vasireddy <sv@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        kernel test robot <lkp@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        christophe.leroy@csgroup.eu, npiggin@gmail.com,
+        naveen.n.rao@linux.vnet.ibm.com, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH AUTOSEL 6.1 17/38] powerpc/85xx: Fix unannotated
+ intra-function call warning
+Message-ID: <Y+rQjJr2CyQhfIZN@sashalap>
+References: <20230209111459.1891941-1-sashal@kernel.org>
+ <20230209111459.1891941-17-sashal@kernel.org>
+ <288e133f-f740-6818-8125-8079217ab822@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/scfy7q3Wnh0HpAradU4zis/";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <288e133f-f740-6818-8125-8079217ab822@linux.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/scfy7q3Wnh0HpAradU4zis/
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Feb 10, 2023 at 04:55:54PM +0530, Sathvika Vasireddy wrote:
+>Hi Sasha,
+>
+>On 09/02/23 16:44, Sasha Levin wrote:
+>>From: Sathvika Vasireddy <sv@linux.ibm.com>
+>>
+>>[ Upstream commit 8afffce6aa3bddc940ac1909627ff1e772b6cbf1 ]
+>>
+>>objtool throws the following warning:
+>>   arch/powerpc/kernel/head_85xx.o: warning: objtool: .head.text+0x1a6c:
+>>   unannotated intra-function call
+>>
+>>Fix the warning by annotating KernelSPE symbol with SYM_FUNC_START_LOCAL
+>>and SYM_FUNC_END macros.
+>>
+>>Reported-by: kernel test robot <lkp@intel.com>
+>>Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
+>>Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+>>Link: https://lore.kernel.org/r/20230128124138.1066176-1-sv@linux.ibm.com
+>>Signed-off-by: Sasha Levin <sashal@kernel.org>
+>>---
+>>  arch/powerpc/kernel/head_85xx.S | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>>diff --git a/arch/powerpc/kernel/head_85xx.S b/arch/powerpc/kernel/head_85xx.S
+>>index 52c0ab416326a..d3939849f4550 100644
+>>--- a/arch/powerpc/kernel/head_85xx.S
+>>+++ b/arch/powerpc/kernel/head_85xx.S
+>>@@ -862,7 +862,7 @@ _GLOBAL(load_up_spe)
+>>   * SPE unavailable trap from kernel - print a message, but let
+>>   * the task use SPE in the kernel until it returns to user mode.
+>>   */
+>>-KernelSPE:
+>>+SYM_FUNC_START_LOCAL(KernelSPE)
+>>  	lwz	r3,_MSR(r1)
+>>  	oris	r3,r3,MSR_SPE@h
+>>  	stw	r3,_MSR(r1)	/* enable use of SPE after return */
+>>@@ -879,6 +879,7 @@ KernelSPE:
+>>  #endif
+>>  	.align	4,0
+>>+SYM_FUNC_END(KernelSPE)
+>>  #endif /* CONFIG_SPE */
+>>  /*
+>
+>Please drop this patch because objtool enablement patches for powerpc 
+>are not a part of kernel v6.1.
 
-Hi all,
+Ack, I'll drop this and the other one you've pointed out. Thanks!
 
-Today's linux-next merge of the device-mapper tree got a conflict in:
-
-  drivers/md/dm-integrity.c
-
-between commits:
-
-  96747228b725 ("dm: Add scaffolding to change completion function signatur=
-e")
-  dcfe653d7cd4 ("dm: Remove completion function scaffolding")
-
-from the crypto tree and commit:
-
-  ff65cea88e49 ("dm: add missing empty lines")
-
-from the device-mapper tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/md/dm-integrity.c
-index c58156deb2b1,16aa68988363..000000000000
---- a/drivers/md/dm-integrity.c
-+++ b/drivers/md/dm-integrity.c
-@@@ -955,9 -963,10 +963,10 @@@ static void xor_journal(struct dm_integ
-  	async_tx_issue_pending_all();
-  }
- =20
- -static void complete_journal_encrypt(struct crypto_async_request *req, in=
-t err)
- +static void complete_journal_encrypt(void *data, int err)
-  {
- -	struct journal_completion *comp =3D req->data;
- +	struct journal_completion *comp =3D data;
-+=20
-  	if (unlikely(err)) {
-  		if (likely(err =3D=3D -EINPROGRESS)) {
-  			complete(&comp->ic->crypto_backoff);
-
---Sig_/scfy7q3Wnh0HpAradU4zis/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPq0EEACgkQAVBC80lX
-0GyJhwf/b0C84ZSrgtO04M3b2so/ej0poAKhCwioIKKpMwf165A5pu5D4AF/mbwX
-VvXHgkosV7goOrTIycLxN4RX71qGQnAeSKWAW6XTFgkLG4XR6ZymruLj/wWdRPi3
-20WreD2Uo/CnncB6xnzntgm8wW45/xogBKEvW6A8KtDb05r6dHIeqJJgq7OGrVjX
-GJ72fHBbhqrbxtJ4hGtC1DAtGAFVSJ2vDxrImD1D7Sz/fv/dWzmHbbuIyccxT677
-rn7U2WZt2Cgi5SnMYqq6Pn0ysK329AT+dW0jWXxRM97fsMPTMW0agmjPHly1VXgc
-iPrrJqatYNak9beEtQ+Wnz9w0HB5uw==
-=7B8D
------END PGP SIGNATURE-----
-
---Sig_/scfy7q3Wnh0HpAradU4zis/--
+-- 
+Thanks,
+Sasha
