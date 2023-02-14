@@ -2,131 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1ADC695FC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD201695FC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:51:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjBNJv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 04:51:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
+        id S231969AbjBNJvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 04:51:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232176AbjBNJvC (ORCPT
+        with ESMTP id S231845AbjBNJvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 04:51:02 -0500
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B82C646;
-        Tue, 14 Feb 2023 01:50:44 -0800 (PST)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1442977d77dso18340010fac.6;
-        Tue, 14 Feb 2023 01:50:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xe8yVPzrMnIUl6apEVzc55u9ThbSlOHTJt+d/XNqBpQ=;
-        b=FoNlIGMEkbUto+SUjmjcd8L1dsx8fku+QXe8RDMZV0KOl13DFXKrlcDXbaqDmevAk7
-         y3dnOg2t62bxT+P4SmEIrZa19OwClG50D1Lc9B86ebEA+Y2cdcy9e3O+RjIn1roLZKfo
-         hFTgDhsQt7HPqa4DHB91uBpyhnEkiuFC3SMOVeleNR7sfWjpkjFWqSWvH66sCNSz15MZ
-         las0joADsaX1/wbx20f33H5pZRI8eIN29h64MWBbqR1WXs01d3c/xVJM+3mNgX1IpEHX
-         YHw5aDbNWbVuSL04pDo/3FbectVgXHbImLyrN5AWWbt3UsDo4oPE/3RFVs3+ln8cHqCb
-         1Piw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Xe8yVPzrMnIUl6apEVzc55u9ThbSlOHTJt+d/XNqBpQ=;
-        b=3bkB14UQHlViv1fsvGUVuRw9E+8d3TE24b+p021dpGjKdEmEj/44V8PdeT2shA1RmD
-         ZLaF7i+HBNTnIdPUlh8773p3a7jx1+3wp3YNaU9ZgSGePCir9WnuJndMst+syol0Asyw
-         TjcRZyCBm/MFGz0W7eMJoEqjz4QKaK1rMc+eX4syblMmOTAbb3Rr5YVTk3hoptwJA6/L
-         FPhhv/b2y1M3gbzRaoDBlKriHwNmKDSRCpeeKTak4J9yniErWDyuRKvSBGbYv38wtgvR
-         +RdDcuzF8l2lY+Kz8Myfe0nXmL9vBr4E+WBTFqkOv79wcR6RCmsHSF+jyZnXGPX10me3
-         0GIA==
-X-Gm-Message-State: AO0yUKWorA/NZMKjdBYXPV/mLoxrqmFn3IQ+rImo/AORsUi3pOIUV60f
-        3vNfsvFUebF31RgMwlNmM9687y/egbFFWqZTYRo=
-X-Google-Smtp-Source: AK7set8yA4TFrz9HOcyIs8LGc+zMAs4Po5lzbzpOpbhri3fyBOhpF1ltlVqWyx2vHsKD6paMBlECrXhIQB3mcSovaUg=
-X-Received: by 2002:a05:6870:9615:b0:169:fabf:b222 with SMTP id
- d21-20020a056870961500b00169fabfb222mr3832733oaq.83.1676368244005; Tue, 14
- Feb 2023 01:50:44 -0800 (PST)
-MIME-Version: 1.0
-References: <20230213200519.889503-1-sergio.paracuellos@gmail.com>
- <20230213200519.889503-4-sergio.paracuellos@gmail.com> <f105c7a8-8821-1e7b-af46-13a46971db63@linaro.org>
- <CAMhs-H_Cd9F+UWWe+dAA89r_huX_srtsgjh1qus93nGehQN1AQ@mail.gmail.com> <7f2e556c-ee11-fe4e-f4d6-94c761f976d0@linaro.org>
-In-Reply-To: <7f2e556c-ee11-fe4e-f4d6-94c761f976d0@linaro.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Tue, 14 Feb 2023 10:50:32 +0100
-Message-ID: <CAMhs-H8Ls2oTZ8LYguCdizNZN3cUC8kKA4e_L6BD3C3cFDP0tA@mail.gmail.com>
-Subject: Re: [PATCH v6 3/3] watchdog: mt7621-wdt: avoid ralink architecture
- dependent code
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 14 Feb 2023 04:51:25 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20156C646;
+        Tue, 14 Feb 2023 01:51:24 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CB94221B27;
+        Tue, 14 Feb 2023 09:51:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1676368282; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kmEsisc8HGG/itaYQyOu7jAb/bBfc0A0mU8rTWWYPkc=;
+        b=rp3cJ/B7qjS8tEc49d0gmLj52sE01hvL6rWlCCkLKPmqjnP4tZapwHW94/MgymWkiFcVvf
+        XHjJh/Qjzmig1YxtS+qCkI8L8K47PECirKW4RrmilcMyspQi/RPpycXVbVkY3CEHSkkjX7
+        voVxZx+EeMPdKlQcy32PdxH0+lOFGAE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1676368282;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kmEsisc8HGG/itaYQyOu7jAb/bBfc0A0mU8rTWWYPkc=;
+        b=3xFPESwrcOSa9PyDtSqAeNvNAyyyDzAxuvU/usupyHfsH//pHWSV1gTfFJ05McEPbyyHkS
+        hOdPRyDsLZmCHGAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C99AD13A21;
+        Tue, 14 Feb 2023 09:51:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id cDyvJZlZ62PmTwAAMHmgww
+        (envelope-from <colyli@suse.de>); Tue, 14 Feb 2023 09:51:21 +0000
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: [PATCH] bcache: make kobj_type structures constant
+From:   Coly Li <colyli@suse.de>
+In-Reply-To: <20230214-kobj_type-bcache-v1-1-cf00ead7bee7@weissschuh.net>
+Date:   Tue, 14 Feb 2023 17:51:09 +0800
+Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <125CA8D6-D3B7-42FB-83BE-DCA688F2ACAF@suse.de>
+References: <20230214-kobj_type-bcache-v1-1-cf00ead7bee7@weissschuh.net>
+To:     =?utf-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 10:33 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 14/02/2023 09:54, Sergio Paracuellos wrote:
-> >>>       return 0;
-> >>> @@ -143,6 +147,10 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
-> >>>       if (!drvdata)
-> >>>               return -ENOMEM;
-> >>>
-> >>> +     drvdata->sysc = syscon_regmap_lookup_by_compatible("mediatek,mt7621-sysc");
-> >>> +     if (IS_ERR(drvdata->sysc))
-> >>> +             return PTR_ERR(drvdata->sysc);
-> >>
-> >> This should be the backup/error path for original code using syscon
-> >> property. Looking up by compatible is really not portable/re-usable.
-> >
-> > I can change the code in the way you are pointing out here but...
-> > Why is it not re-usable? Compatible is not supposed to be changed
-> > since in other cases the DTB ABI will be broken. I am totally lost
-> > about what is an ABI breakage, then.
->
-> How do you use it on other platform?
 
-I see, thanks.
 
-So if I am understanding you correctly I have to maintain the
-'mediatek,sysctl' phandle and use it in the first instance and if it
-fails I have to use regmap_loopup_by_compatible() stuff, right?
-Something like:
+> 2023=E5=B9=B42=E6=9C=8814=E6=97=A5 11:13=EF=BC=8CThomas Wei=C3=9Fschuh =
+<linux@weissschuh.net> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+> the driver core allows the usage of const struct kobj_type.
+>=20
+> Take advantage of this to constify the structure definitions to =
+prevent
+> modification at runtime.
+>=20
 
-...
+How the const structure definition can prevent modification at run time?
 
-drvdata->sysc = syscon_regmap_lookup_by_phandle(np, "mediatek,sysctl");
-if (IS_ERR(drvdata->sysc)) {
-         drvdata->sysc =
-syscon_regmap_lookup_by_compatible("mediatek,mt7621-sysc");
-         if (IS_ERR(drvdata->sysc))
-              return PTR_ERR(drvdata->sysc);
-}
+Thanks.
 
-....
+Coly Li
 
-So in that case, we can add the new phandle to the bindings without
-any kind of ABI breakage and we can use old dtbs using new watchdog
-driver code.
 
-I really hope I finally understood this properly. Thanks for your
-patience, Krzysztof.
-
-Best regards,
-    Sergio Paracuellos
-
->
+> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+> ---
+> drivers/md/bcache/bcache.h | 10 +++++-----
+> drivers/md/bcache/sysfs.h  |  2 +-
+> 2 files changed, 6 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/md/bcache/bcache.h b/drivers/md/bcache/bcache.h
+> index aebb7ef10e63..a522f4f1f992 100644
+> --- a/drivers/md/bcache/bcache.h
+> +++ b/drivers/md/bcache/bcache.h
+> @@ -1004,11 +1004,11 @@ extern struct workqueue_struct *bch_flush_wq;
+> extern struct mutex bch_register_lock;
+> extern struct list_head bch_cache_sets;
+>=20
+> -extern struct kobj_type bch_cached_dev_ktype;
+> -extern struct kobj_type bch_flash_dev_ktype;
+> -extern struct kobj_type bch_cache_set_ktype;
+> -extern struct kobj_type bch_cache_set_internal_ktype;
+> -extern struct kobj_type bch_cache_ktype;
+> +extern const struct kobj_type bch_cached_dev_ktype;
+> +extern const struct kobj_type bch_flash_dev_ktype;
+> +extern const struct kobj_type bch_cache_set_ktype;
+> +extern const struct kobj_type bch_cache_set_internal_ktype;
+> +extern const struct kobj_type bch_cache_ktype;
+>=20
+> void bch_cached_dev_release(struct kobject *kobj);
+> void bch_flash_dev_release(struct kobject *kobj);
+> diff --git a/drivers/md/bcache/sysfs.h b/drivers/md/bcache/sysfs.h
+> index a2ff6447b699..65b8bd975ab1 100644
+> --- a/drivers/md/bcache/sysfs.h
+> +++ b/drivers/md/bcache/sysfs.h
+> @@ -3,7 +3,7 @@
+> #define _BCACHE_SYSFS_H_
+>=20
+> #define KTYPE(type) \
+> -struct kobj_type type ## _ktype =3D { \
+> +const struct kobj_type type ## _ktype =3D { \
+> .release =3D type ## _release, \
+> .sysfs_ops =3D &((const struct sysfs_ops) { \
+> .show =3D type ## _show, \
+>=20
+> ---
+> base-commit: f6feea56f66d34259c4222fa02e8171c4f2673d1
+> change-id: 20230214-kobj_type-bcache-6d2bd129b0fa
+>=20
 > Best regards,
-> Krzysztof
->
+> --=20
+> Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+>=20
+
