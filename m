@@ -2,76 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57596964B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 14:29:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB866964B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 14:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232761AbjBNN3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 08:29:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
+        id S232716AbjBNN2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 08:28:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232735AbjBNN3I (ORCPT
+        with ESMTP id S232295AbjBNN2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 08:29:08 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCEC25B8C;
-        Tue, 14 Feb 2023 05:29:01 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 14 Feb 2023 08:28:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47C5244B9;
+        Tue, 14 Feb 2023 05:28:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6A77A21F75;
-        Tue, 14 Feb 2023 13:29:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1676381340; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VhjPpKcebesguOG6Ou3hG3A4Vp+9D1RLYmGPf7f6hcw=;
-        b=id/NzceucG1QxBw5TALYJgC2/sT2BPspSmI7zJ/IcfJmOuo4Vfi8IP/qCI2mvdS8S4bodI
-        3WeaKeB6uOdBIDAB+idpedBEgl+Dgc3HKsaKHRPWS6T9ZzQA7QcjvYQOxhKmHWcjThrh4T
-        N56DvLLq/bIyoXLHF8IuhVy6J2w7fk4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1676381340;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VhjPpKcebesguOG6Ou3hG3A4Vp+9D1RLYmGPf7f6hcw=;
-        b=HxnuPzPY5VisQUj9CHjOif5DZ3Du4ydPvaXhMR68CQb7PzK3a1dgKIk12z0GOVue+UHs/A
-        WG8TnBaXG6Kon6Bw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B4C34138E3;
-        Tue, 14 Feb 2023 13:28:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id t4z5KJuM62MLNwAAMHmgww
-        (envelope-from <dkirjanov@suse.de>); Tue, 14 Feb 2023 13:28:59 +0000
-Message-ID: <13e8e0bb-b2a2-e138-75c0-54e61a5d679e@suse.de>
-Date:   Tue, 14 Feb 2023 16:27:27 +0300
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5488B61638;
+        Tue, 14 Feb 2023 13:28:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAE3FC433EF;
+        Tue, 14 Feb 2023 13:28:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676381325;
+        bh=R7CqfsQVNTbRXsOCtxZQme9R3utr37VbIF0emcmEE9I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=epaypN3m7eOIycqKKcNT8P5Ud8OucaQ9BqvzyUGBO6GviRpQ3tls/AXx6pCMi5SR/
+         QmsHNFOkTiwd4c2EB6hobIaB/TubYi71m8m+WX2v5TV08E++kW4GrtCLKdgsoWBeac
+         gtiykMHNlPrnTsPRYTsi9mzp+Nu6eHfUuqiGfZeMUlqRMjlSMdqI2A3aXbhKf3nzE3
+         SSEbjzIjdLlGkBSW3kSbQ4USrhEQhoSa44P96zs4nV1pDohnQ7VsjZ7i3MVcsASlJa
+         o57r1w2y0ESqROdBzMfSflmQSRo5hGqPDjFiCIjsEL6wSOwRUM+V9Paclse/3L+jnR
+         Zs/wou8z5nspg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Brian King <brking@us.ibm.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        James Bottomley <James.Bottomley@SteelEye.com>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        John Garry <john.g.garry@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] [v2] scsi: ipr: work around fortify-string warning
+Date:   Tue, 14 Feb 2023 14:28:08 +0100
+Message-Id: <20230214132831.2118392-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v4] Set ssid when authenticating
-Content-Language: en-US
-To:     Marc Bornand <dev.mbornand@systemb.ch>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-wireless@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
-        Yohan Prod'homme <kernel@zoddo.fr>, stable@vger.kernel.org
-References: <20230214132009.1011452-1-dev.mbornand@systemb.ch>
-From:   Denis Kirjanov <dkirjanov@suse.de>
-In-Reply-To: <20230214132009.1011452-1-dev.mbornand@systemb.ch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,79 +61,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Arnd Bergmann <arnd@arndb.de>
 
+The ipr_log_vpd_compact() function triggers a fortified memcpy() warning
+about a potential string overflow with all versions of clang:
 
-On 2/14/23 16:20, Marc Bornand wrote:
-> changes since v3:
-> - add missing NULL check
-> - add missing break
-> 
-> changes since v2:
-> - The code was tottaly rewritten based on the disscution of the
->   v2 patch.
-> - the ssid is set in __cfg80211_connect_result() and only if the ssid is
->   not already set.
-> - Do not add an other ssid reset path since it is already done in
->   __cfg80211_disconnected()
-> 
-> When a connexion was established without going through
-> NL80211_CMD_CONNECT, the ssid was never set in the wireless_dev struct.
-> Now we set it in __cfg80211_connect_result() when it is not already set.
+In file included from drivers/scsi/ipr.c:43:
+In file included from include/linux/string.h:254:
+include/linux/fortify-string.h:520:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+                        __write_overflow_field(p_size_field, size);
+                        ^
+include/linux/fortify-string.h:520:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+2 errors generated.
 
-A couple of small nits
+I don't see anything actually wrong with the function, but this is the
+only instance I can reproduce of the fortification going wrong in the
+kernel at the moment, so the easiest solution may be to rewrite the
+function into something that does not trigger the warning.
 
-> 
-> Reported-by: Yohan Prod'homme <kernel@zoddo.fr>
-> Fixes: 7b0a0e3c3a88260b6fcb017e49f198463aa62ed1
-Please add a test description to the fixes tag
+Instead of having a combined buffer for vendor/device/serial strings,
+use three separate local variables and just truncate the whitespace
+individually.
 
-> Cc: linux-wireless@vger.kernel.org
-> Cc: stable@vger.kernel.org
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216711
-> Signed-off-by: Marc Bornand <dev.mbornand@systemb.ch>
-> ---
->  net/wireless/sme.c | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
-> diff --git a/net/wireless/sme.c b/net/wireless/sme.c
-> index 4b5b6ee0fe01..b552d6c20a26 100644
-> --- a/net/wireless/sme.c
-> +++ b/net/wireless/sme.c
-> @@ -723,6 +723,7 @@ void __cfg80211_connect_result(struct net_device *dev,
->  			       bool wextev)
->  {
->  	struct wireless_dev *wdev = dev->ieee80211_ptr;
-> +	const struct element *ssid;
+Fixes: 8cf093e275d0 ("[SCSI] ipr: Improved dual adapter errors")
+Cc: Kees Cook <keescook@chromium.org>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+I did not try to bisect which commit introduced this behavior into
+the fortified memcpy(), the Fixes: commit is the one that introduced
+the ipr_log_vpd_compact() function but this predates the fortified
+string helpers.
 
-Please use reverse xmas tree
+v2 changes:
+- fix off-by-one error
+---
+ drivers/scsi/ipr.c | 41 +++++++++++++++++++++--------------------
+ 1 file changed, 21 insertions(+), 20 deletions(-)
 
->  	const struct element *country_elem = NULL;
->  	const u8 *country_data;
->  	u8 country_datalen;
-> @@ -883,6 +884,22 @@ void __cfg80211_connect_result(struct net_device *dev,
->  				   country_data, country_datalen);
->  	kfree(country_data);
-> 
-> +	if (wdev->u.client.ssid_len == 0) {
-> +		rcu_read_lock();
-> +		for_each_valid_link(cr, link) {
-> +			ssid = ieee80211_bss_get_elem(cr->links[link].bss,
-> +						      WLAN_EID_SSID);
-> +
-> +			if (!ssid || ssid->datalen == 0)
-> +				continue;
-> +
-> +			memcpy(wdev->u.client.ssid, ssid->data, ssid->datalen);
-> +			wdev->u.client.ssid_len = ssid->datalen;
-> +			break;
-> +		}
-> +		rcu_read_unlock();
-> +	}
-> +
->  	return;
->  out:
->  	for_each_valid_link(cr, link)
-> --
-> 2.39.1
-> 
-> 
+diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
+index 198d3f20d682..f1f61705ccd5 100644
+--- a/drivers/scsi/ipr.c
++++ b/drivers/scsi/ipr.c
+@@ -1516,23 +1516,22 @@ static void ipr_process_ccn(struct ipr_cmnd *ipr_cmd)
+ }
+ 
+ /**
+- * strip_and_pad_whitespace - Strip and pad trailing whitespace.
+- * @i:		index into buffer
+- * @buf:		string to modify
++ * strip_whitespace - Strip and pad trailing whitespace.
++ * @i:		size of buffer
++ * @buf:	string to modify
+  *
+- * This function will strip all trailing whitespace, pad the end
+- * of the string with a single space, and NULL terminate the string.
++ * This function will strip all trailing whitespace and
++ * NUL terminate the string.
+  *
+- * Return value:
+- * 	new length of string
+  **/
+-static int strip_and_pad_whitespace(int i, char *buf)
++static void strip_whitespace(int i, char *buf)
+ {
++	if (i < 1)
++		return;
++	i--;
+ 	while (i && buf[i] == ' ')
+ 		i--;
+-	buf[i+1] = ' ';
+-	buf[i+2] = '\0';
+-	return i + 2;
++	buf[i+1] = '\0';
+ }
+ 
+ /**
+@@ -1547,19 +1546,21 @@ static int strip_and_pad_whitespace(int i, char *buf)
+ static void ipr_log_vpd_compact(char *prefix, struct ipr_hostrcb *hostrcb,
+ 				struct ipr_vpd *vpd)
+ {
+-	char buffer[IPR_VENDOR_ID_LEN + IPR_PROD_ID_LEN + IPR_SERIAL_NUM_LEN + 3];
+-	int i = 0;
++	char vendor_id[IPR_VENDOR_ID_LEN + 1];
++	char product_id[IPR_PROD_ID_LEN + 1];
++	char sn[IPR_SERIAL_NUM_LEN + 1];
+ 
+-	memcpy(buffer, vpd->vpids.vendor_id, IPR_VENDOR_ID_LEN);
+-	i = strip_and_pad_whitespace(IPR_VENDOR_ID_LEN - 1, buffer);
++	memcpy(vendor_id, vpd->vpids.vendor_id, IPR_VENDOR_ID_LEN);
++	strip_whitespace(IPR_VENDOR_ID_LEN, vendor_id);
+ 
+-	memcpy(&buffer[i], vpd->vpids.product_id, IPR_PROD_ID_LEN);
+-	i = strip_and_pad_whitespace(i + IPR_PROD_ID_LEN - 1, buffer);
++	memcpy(product_id, vpd->vpids.product_id, IPR_PROD_ID_LEN);
++	strip_whitespace(IPR_PROD_ID_LEN, product_id);
+ 
+-	memcpy(&buffer[i], vpd->sn, IPR_SERIAL_NUM_LEN);
+-	buffer[IPR_SERIAL_NUM_LEN + i] = '\0';
++	memcpy(sn, vpd->sn, IPR_SERIAL_NUM_LEN);
++	strip_whitespace(IPR_SERIAL_NUM_LEN, sn);
+ 
+-	ipr_hcam_err(hostrcb, "%s VPID/SN: %s\n", prefix, buffer);
++	ipr_hcam_err(hostrcb, "%s VPID/SN: %s %s %s\n", prefix,
++		     vendor_id, product_id, sn);
+ }
+ 
+ /**
+-- 
+2.39.1
+
