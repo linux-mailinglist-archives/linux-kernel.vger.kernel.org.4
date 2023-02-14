@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27FA16963F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:55:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C26E46963FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232402AbjBNMzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 07:55:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
+        id S231629AbjBNMzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 07:55:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbjBNMzG (ORCPT
+        with ESMTP id S232429AbjBNMzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 07:55:06 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BF516AEE;
-        Tue, 14 Feb 2023 04:55:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=kd8Tkpw2geIhdESAwykD0ZVGRSJYIx/HqjzlFVd0yxI=;
-        t=1676379305; x=1677588905; b=AvZLEPFS1HaXLki/BsL9rF9Bz0YqwL+nEpxGjXtF10kXiAb
-        P6l/D203CuK1wazu06supRkAEtGAJGIAIHjVLEhZcBf57gA2lf3Vpd5uGO8d6UFp6hrftdX1VRmxm
-        bih2FB+6D2NWKe4JW1r+Y2i061jukE5IXEzbzYdPCRhqujQacLqJ81YGB/LXi28pdrz1JBbHSIqxA
-        0GmDfQ3+Y2pzMjSeNchBdlGzIbOCOpq+YwTXtEq6O7RLEyhLa+6wa1rGGwEZooJAqgU/AMcHbl0+1
-        ASBCzDOpQhND7NWt1XOXIX7sJqpSNzk6ZsJpCOJjGWYDo54L4har86AhyXlJaFeA==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1pRupY-00C91H-3B;
-        Tue, 14 Feb 2023 13:54:45 +0100
-Message-ID: <aef83367258771b3e71c6043f4cc0661473fd58b.camel@sipsolutions.net>
-Subject: Re: [PATCH v3] Set ssid when authenticating
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Marc Bornand <dev.mbornand@systemb.ch>,
-        linux-wireless@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
-        Yohan Prod'homme <kernel@zoddo.fr>, stable@vger.kernel.org
-Date:   Tue, 14 Feb 2023 13:54:43 +0100
-In-Reply-To: <20230213210521.1672392-1-dev.mbornand@systemb.ch>
-References: <20230213210521.1672392-1-dev.mbornand@systemb.ch>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Tue, 14 Feb 2023 07:55:13 -0500
+Received: from srv6.fidu.org (srv6.fidu.org [159.69.62.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9301E281;
+        Tue, 14 Feb 2023 04:55:11 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by srv6.fidu.org (Postfix) with ESMTP id 690DEC800A8;
+        Tue, 14 Feb 2023 13:55:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        tuxedocomputers.com; h=content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:date:subject:subject:from:from; s=
+        default; t=1676379309; x=1678193710; bh=SZ3JpAIAamrFg0UvuE40sNPe
+        gpvCzKxsTxHaQgrdslc=; b=RMYZnuoCFFX/NlVgoiljhOeS0PPUkpxJPkTJ6JvS
+        1BN6Ucpdkfrv0u5Cf+j7bPP62x0bQ7i5NwqElEsDEbB1LEu2GamZ1NPSgCRGcaaA
+        HNVUEPdDqc5Of27N9LVBEeHyhFeYnzUPjGG31ZXl/u3N9vsNA1PWYmgcqbT9UaeL
+        qdM=
+X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
+Received: from srv6.fidu.org ([127.0.0.1])
+        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10026)
+        with LMTP id rYZPgirX7MV1; Tue, 14 Feb 2023 13:55:09 +0100 (CET)
+Received: from wsembach-tuxedo.fritz.box (host-212-18-30-247.customer.m-online.net [212.18.30.247])
+        (Authenticated sender: wse@tuxedocomputers.com)
+        by srv6.fidu.org (Postfix) with ESMTPA id D1C07C800A7;
+        Tue, 14 Feb 2023 13:55:08 +0100 (CET)
+From:   Werner Sembach <wse@tuxedocomputers.com>
+To:     mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        linus.walleij@linaro.org, brgl@bgdev.pl,
+        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mario.limonciello@amd.com,
+        alexander.deucher@amd.com
+Subject: [PATCH v2] gpiolib: acpi: Add a ignore wakeup quirk for Clevo NH5xAx
+Date:   Tue, 14 Feb 2023 13:55:06 +0100
+Message-Id: <20230214125506.10358-1-wse@tuxedocomputers.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,75 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+commit 1796f808e4bb ("HID: i2c-hid: acpi: Stop setting wakeup_capable")
+changed the policy such that I2C touchpads may be able to wake up the
+system by default if the system is configured as such.
 
-Please provide a proper subject/commit message for this. The
-"authenticating" is no longer true anyway.
+However for some devices there is a bug, that is causing the touchpad to
+instantly wake up the device again once it gets deactivated. The root cause
+is still under investigation:
+https://lore.kernel.org/linux-acpi/2d983050-f844-6c5e-8ae9-9f87ac68dfdd@tuxedocomputers.com/T/#mb2e738787f6b6208d17b92aa6e72d4de846d4e4d
 
-See
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
-hes#commit_messages
+To workaround this problem for the time being, introduce a quirk for this
+model that will prevent the wakeup capability for being set for GPIO 10.
 
-On Mon, 2023-02-13 at 21:05 +0000, Marc Bornand wrote:
-> changes since v2:
-> - The code was tottaly rewritten based on the disscution of the
->   v2 patch.
-> - the ssid is set in __cfg80211_connect_result() and only if the ssid is
->   not already set.
-> - Do not add an other ssid reset path since it is already done in
->   __cfg80211_disconnected()
->=20
-> When a connexion was established without going through
+Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+Cc: <stable@vger.kernel.org> # v6.1+
+---
+ drivers/gpio/gpiolib-acpi.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-connection
+diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+index e2ab4d5253bea..82e8e43582eba 100644
+--- a/drivers/gpio/gpiolib-acpi.c
++++ b/drivers/gpio/gpiolib-acpi.c
+@@ -1612,6 +1612,18 @@ static const struct dmi_system_id gpiolib_acpi_quirks[] __initconst = {
+ 			.ignore_wake = "ELAN0415:00@9",
+ 		},
+ 	},
++	{
++		/*
++		 * Spurious wakeups from TP_ATTN# pin
++		 * Found in BIOS 1.7.7
++		 */
++		.matches = {
++			DMI_MATCH(DMI_BOARD_NAME, "NH5xAx"),
++		},
++		.driver_data = &(struct acpi_gpiolib_dmi_quirk) {
++			.ignore_wake = "SYNA1202:00@16",
++		},
++	},
+ 	{} /* Terminating entry */
+ };
+ 
+-- 
+2.34.1
 
-> NL80211_CMD_CONNECT, the ssid was never set in the wireless_dev struct.
-> Now we set it in __cfg80211_connect_result() when it is not already set.
->=20
-> Reported-by: Yohan Prod'homme <kernel@zoddo.fr>
-> Fixes: 7b0a0e3c3a88260b6fcb017e49f198463aa62ed1
-> Cc: linux-wireless@vger.kernel.org
-> Cc: stable@vger.kernel.org
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D216711
-> Signed-off-by: Marc Bornand <dev.mbornand@systemb.ch>
-> ---
->  net/wireless/sme.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->=20
-> diff --git a/net/wireless/sme.c b/net/wireless/sme.c
-> index 4b5b6ee0fe01..629d7b5f65c1 100644
-> --- a/net/wireless/sme.c
-> +++ b/net/wireless/sme.c
->=20
-> @@ -723,6 +723,7 @@ void __cfg80211_connect_result(struct net_device *dev=
-,
->  			       bool wextev)
->  {
->  	struct wireless_dev *wdev =3D dev->ieee80211_ptr;
-> +	const struct element *ssid;
->  	const struct element *country_elem =3D NULL;
->  	const u8 *country_data;
->  	u8 country_datalen;
-> @@ -883,6 +884,21 @@ void __cfg80211_connect_result(struct net_device *de=
-v,
->  				   country_data, country_datalen);
->  	kfree(country_data);
->=20
-> +	if (wdev->u.client.ssid_len =3D=3D 0) {
-> +		rcu_read_lock();
-> +		for_each_valid_link(cr, link) {
-> +			ssid =3D ieee80211_bss_get_elem(cr->links[link].bss,
-> +						      WLAN_EID_SSID);
-> +
-> +			if (ssid->datalen =3D=3D 0)
-
-need to check also that it exists
-
-> +				continue;
-> +
-> +			memcpy(wdev->u.client.ssid, ssid->data, ssid->datalen);
-> +			wdev->u.client.ssid_len =3D ssid->datalen;
-
-you can break here.
-
-johannes
