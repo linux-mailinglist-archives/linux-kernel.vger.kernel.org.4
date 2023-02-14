@@ -2,179 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7F7C696CDC
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:28:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91730696CE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:28:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbjBNS2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 13:28:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
+        id S232011AbjBNS2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 13:28:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjBNS17 (ORCPT
+        with ESMTP id S229826AbjBNS22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 13:27:59 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD64F2B62C
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 10:27:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676399278; x=1707935278;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=mG3iFmZSm2t1hjpNhfluGRFFUZZxyWrPFgo57emblz0=;
-  b=JXrXDIlqYFb1WSBB3r8k0R/KRgqUktSEKhrGUSr9T90dqtHalEnjksBj
-   CZZAQBUwjDNTSWUIYNJR8s2P7jfvBHbUtuOZ0vpsjOXStCGE2AaDXBUn1
-   +qJWHnetGupkuHsfuB50eEtrKejo4F0JRGcvdwHQ7o7RuN9uUR0GIGzk+
-   VS2Dlm2rab8tCIhjn5jNWfsmmIXW9zpY9Znpq96O2dXGeHhFtuMdZHPZF
-   FSlQcfBkAL2H/xpdEZFzEAbRm+qwTIup+wGfEkBezEerOmoGAfbLfUG99
-   23CdL2AC4PhtBwOzJn6eHHVTz57qdHxgSIPkOusKlwdIQuiQKMAJa34Iy
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="319263248"
-X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
-   d="scan'208";a="319263248"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 10:27:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="699623692"
-X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
-   d="scan'208";a="699623692"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga008.jf.intel.com with ESMTP; 14 Feb 2023 10:27:57 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 14 Feb 2023 10:27:57 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 14 Feb 2023 10:27:57 -0800
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.48) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 14 Feb 2023 10:27:56 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BpsManetv2B2w8wOSXPDhsQeLCwTzTmULCpm/mY2BPePCwjXJU5uQxmN70PpVAPKh4w4rORcE9WIvicZ599iJAIkxDYdSRmrZwDIqfbDIWIG68tqBiLVpnNpqtDspDvX+r72Bcj89jZp0tsCo6q+Ky1fJ38xkSkRmdUGgkONeuXRLJH4UhypkZCDGCMIVkYDh17CASj8uX/scNuKeUS8p9fZq/RzeO6cStFsW9yx8vj5OAuNV8qtdwGD6YS1bxEFRqdYSymvb7H5YgVvLU5T2KlG37cGc8WN3mmd1fDxNaslO3kZcAYM9vPqa7439RA4YBdw4LC2x7Zf/l0vjZlF5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mG3iFmZSm2t1hjpNhfluGRFFUZZxyWrPFgo57emblz0=;
- b=ml3qD2OAHpNQKCVlvn1QfPZC3x2eAiFWe2O/nPlrCojo9kmfuHHECWwt24E7Mzc1LPf1sSlJAOnGIDn07E1klWaWSMTm/a96h/YNmXI2T5q7ydZctvHbsZS/BqAUzqzt4yHJTbeC8Qj5peyOxVqN+Azq1DpSvFbJ8ORS7GWuCyoIkbJKoNHWuL76LBsIi4uQpauld0WTdEDd1OwZSAngeMeLbJTa+B/qDDfGjD1sMv8QxLRABeHN/thyVmCWnRswSKeQiz+rqee19SezWWo6sCoo0SFKhSmmLp50XspfDmQ0lcj+2JI2iqvX+UGMhWuHllCiweX8+GOprgp+GTziOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by MN6PR11MB8169.namprd11.prod.outlook.com (2603:10b6:208:47d::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.23; Tue, 14 Feb
- 2023 18:27:54 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::d41f:9f07:ed56:a536]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::d41f:9f07:ed56:a536%3]) with mapi id 15.20.6086.024; Tue, 14 Feb 2023
- 18:27:54 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "david@redhat.com" <david@redhat.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [PATCH v1 RFC Zisslpcfi 11/20] mmu: maybe_mkwrite updated to
- manufacture shadow stack PTEs
-Thread-Topic: [PATCH v1 RFC Zisslpcfi 11/20] mmu: maybe_mkwrite updated to
- manufacture shadow stack PTEs
-Thread-Index: AQHZQG1Y+xNKbdAzOE6ESasRXNtyCK7Owz+A
-Date:   Tue, 14 Feb 2023 18:27:54 +0000
-Message-ID: <cd9110241bf7d24137c306d83602a329412a1199.camel@intel.com>
-References: <20230213045351.3945824-1-debug@rivosinc.com>
-         <20230213045351.3945824-12-debug@rivosinc.com>
-         <2d6eefb8-c7c5-7d32-9a75-ae716f828cd9@redhat.com>
-         <20230213143754.GC3943238@debug.ba.rivosinc.com>
-         <7693247c-a55d-a375-3621-1b07115a9d99@redhat.com>
-         <20230213200109.GA4016181@debug.ba.rivosinc.com>
-         <4c9e7ddb-b303-688a-5fc6-be83ca1a8a2a@redhat.com>
-In-Reply-To: <4c9e7ddb-b303-688a-5fc6-be83ca1a8a2a@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|MN6PR11MB8169:EE_
-x-ms-office365-filtering-correlation-id: 06e09601-a816-4402-64db-08db0eb93033
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: udijy/MVMxv+w/VvcznG5rLN+r2F46ULadDmjuPmWxhefxvdUyxzr+pI7pDBoTDQ3adsGn6DhcoqNnyeqlsm51Z8WJSEKyJSM+BmUa9lrqwf2T31hARP1LE2cDOA7cRgQ5Ezyp1O5LPnfm3xtJYmx6akDiJh0BV2tVjbus+nmT8dogRcXgk7pcUJH3Qmu8/QBzJm1Ss7Zj86QgV/z84OL6SZG6JT4Mg4VT5Sm+VZuGZO0ko6CObHUudrOykwnA0AXglgIC4ZL9shrIXbBB1WrXdLK3KYYIlqM43TEgUY9z+/+0dr6TEOm07EfU7fv1r0V3mh/wFQvyvk3QWjo/oieR7Tg+k1BzFrlmmW+cV9bKlqPsNjq0ywZ4XmRvpJbbJmpqB6CxIJ/b5SMLM5kekjknrzBWZmsAn5icACrwdBx0J6OaBN2RgO/2vrJQ5FnGScy/DZOQnF6S55As3cvDoIF98XPyJB7kL0w06S3ebQyUPjnHEG/DIE6Q7a8k3/1ts3RgHDYKnAji1RYNfvMiEp4+KT+EAKb4mkJABeQqv/vtHmafVZSFDsaTBKfZdkX10lqy6OGqhcjCyIoMmp7q6+Py/eQyTzA39blkoMhFPOr0pubT5xrYiUTx6GjgjLhF8qrNMjtqu7u/iEi3jst+2ZEE4wh3U7/lC9JGJ7dEIX8f4N4+rFPaxqrR+ag9bPFsc1vxdHNpSOVG7xAw9eX/TLP+LZRomVa+/ogCgpQ5YmGEA=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(346002)(136003)(376002)(39860400002)(396003)(451199018)(4744005)(2906002)(26005)(2616005)(122000001)(36756003)(71200400001)(38100700002)(38070700005)(86362001)(82960400001)(76116006)(316002)(8936002)(54906003)(110136005)(5660300002)(66946007)(4326008)(66446008)(41300700001)(66476007)(6506007)(64756008)(8676002)(6512007)(186003)(66556008)(478600001)(6486002)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SWZ3b2F4c1NaZ0FaYmlYa1dIQlR4Tms4cHNPNlZMYTFaTHF6cDJHVVdsb2h2?=
- =?utf-8?B?YlpBSzAzUTdLSVlmMUM4S25Lb1JOVDlnYmtvMmVRZldpdVY0Z1IzVmtvdDVS?=
- =?utf-8?B?NEc2S3Vsd2pFb2ZodWc5YytxZTBUdVFnNG5YdG8xellmUlU0c0tDQzQvTXdE?=
- =?utf-8?B?NGJKOGFaWUdNUWtiVW9YWGpqTEs5bHRhWWp3c3kzWEdkSG1Mc3JBemhqMGxw?=
- =?utf-8?B?Rm5wRTAwMEZ0RjVuQ3YrakJzb2lCYTVjbHVjTUpDMVh0TW11K2RLcDZWMXFY?=
- =?utf-8?B?U0RsTVRUdGU0RFVybGFyNTJwWGUrS3MzbytZdHFUbnNNSXVDNXZRcU54SUJR?=
- =?utf-8?B?S2xxdUxQZzhnNmRiWGw5eDlJUEVaZHgwcmI2THFJUjdDL3U4cjZnbzhKT3Qy?=
- =?utf-8?B?dUFKNnNpcnh6WmJjQ1RHK2xQY1lFYzhJeEswalJiWXkxeUJCR3RhNnBQa3U2?=
- =?utf-8?B?M1BDeEp5aHdSbENYeWswa1NBSXZ6NjhuRjdvT2p0SmF3dEE3UG90aDNOMnRy?=
- =?utf-8?B?T0QrcWd1Mi9wZng5YVFzUEx4RnZtdmg4ZGJmekRkNzdhVmh3Tnk3amtWZ1FT?=
- =?utf-8?B?RnA5bjlkd0pRVHBXcmVOWU8xTUYzelNIM1BDalFhNjZrZ3FtSGh1a1VzZ1pk?=
- =?utf-8?B?OFY5bldNR3JlK2NIQi91cHFQamlxZ05aSzV4M0FPVnZlUnRJT0FoRWN5OGF0?=
- =?utf-8?B?QXliQ3U0YmdoaTdNWU53U3JYdXZDT3NxWHkzWE1TTnF4ZHVKWGNCTkd6d1RC?=
- =?utf-8?B?Y3c0eTEvT3RkeWJOUzIwNkJEY1VndHFEb0sxQVgyaEJmSU5xYjNZY0dIMUZL?=
- =?utf-8?B?WlNYZHkxQ3VWZk84ckJISGV3WFFLc0pneGltaloxYjlnMWwyTGlrT2EvNm5W?=
- =?utf-8?B?UjRXL0txRVdreEZWdmpvd2ZkaFR1cDlqMElBNVFDblV6aURTZ0UzYnY0T0Mx?=
- =?utf-8?B?R0ZjUGdRTC9VaVNPcDlTYkpzOGJyR1N3TE50NTloNlpoOUd3R3JnRThhWDNZ?=
- =?utf-8?B?SWZ2bzFFNDJhc21NZUQ5OWYzd2R6MFNyK2pnQnNUU0pMQ1JaQVVSbEoyVEdk?=
- =?utf-8?B?N3p4SUtFeHVxd3ltNDJpMnVhUFBGZkRFdjRNVENPZ2V0VFpIVWVDdkdBWXYz?=
- =?utf-8?B?UGJZdzMyWjhITnFjME5MQ0VsQlhGbUVTb203Q251cmFOSXNPd2VUVFo1bjhl?=
- =?utf-8?B?V2ZmSXZMeWlmTkRFYmk4TVQwQ1dWbHMyM0hTSVZWcDFkSVN6Mitad2xHVmhh?=
- =?utf-8?B?VU8xZU43MjJNNG16L1dZMTI0MUxncFEwejF1bngyaVlLMmFpM1F2MWRBa2ZF?=
- =?utf-8?B?blYrdUo2bE9zMU9FMTFHK2s4cjY5bmxXdWltNzVxNkJDbnN0VWs2V2NZZSto?=
- =?utf-8?B?S2lYN0djWEt0Zm9DVzNDTm9iR1A4QXhIUHI5bEIyS0NEd0NuNWVJZDIwSDht?=
- =?utf-8?B?aHhsQkJ0SjF0TVNoV3k4Slk2NE9sbmRsQ1hQY2FkTk5DYXpzWi9mbVFKL2M5?=
- =?utf-8?B?ci9IMHR3dE9PUVpsdGhMc0hBZXNXMmlmL2ZDeE4zN3VNL0VsWXczYUJmMHlS?=
- =?utf-8?B?dnJIams1QTZyYk05d2k0RnhaV3o2TVRIYkdPN2lja1dRVXB2VTl1UVN3dkZ0?=
- =?utf-8?B?dStRbDk1V05HaDV1Y2QxazF5MnJpMGMvYnhyRGVDdUhJOXZubnlpWFlKVGEw?=
- =?utf-8?B?RFJ0dVowb3FUWC9nc3NYaHZONUtIZmRTSC9IbGFFTzgxNzhCY1hDMFpKRkxk?=
- =?utf-8?B?M0VOSEczVUhzQ1lweTJOemZ0TGJIY2NXckpEclczdE5IUERJZDNMYWNpWEVV?=
- =?utf-8?B?Rno3Q2F4c2ZXUzI3K3g5dmxqRjUySnlwUVdPUk1RekJTd25sWmJpK1Q5clRB?=
- =?utf-8?B?ZzM5akw5R0RnbmNWODJ6ZC9tbkw3b3FoejgvTDJXKzY2RXRtSmxsbWx6K25N?=
- =?utf-8?B?aGdGS0JTNk4zQTd6UUt5M3dWbGN3MjgwTDgxTEZnR091Skl3QUZNa1pydEQ1?=
- =?utf-8?B?TTVtSlUrRTFvR1lDSFVYRkU4NXUvRjEzVkdEMm02K21BYVBXNHJBSEVrMkl5?=
- =?utf-8?B?ajZVTEU2RldZVzZGMG13SEJITFgxOTRab294REFmdXNjUnlwODNsWDBBTzFQ?=
- =?utf-8?B?RTdrV0RPQmIyeFh0K2FDYVJmSTZsM2c4VXR4UlJpdldERDk1bmE4eXZkblBM?=
- =?utf-8?Q?YNelRwZr5DXrsL1ysLaJZ7s=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <39B14D95F520D243ACB7EFED1211E7D0@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 14 Feb 2023 13:28:28 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D065D2E0FF
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 10:28:25 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id x4so19278382ybp.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 10:28:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UdxzyxyoPyCssWA+lUiskUgXmgtGBPJ4/eHZTNBQz1A=;
+        b=ZCH+1LZtKIjBnKmS6euxiAK9e8tFONwrfmzTzgiM0dFgAVP/9mezd3zqCmnAxPVa9f
+         2hqlRdLQe/s8ld+IF1TeCNOxMjT4mmjh7N7RxDv9ZvsKtzz3C+QAt9cFm+7iueek7v7a
+         tyLA/0PboOQufC64yeQc5Gdgdk1mYg4B5VyukppQAN4TPkP94PVc+sJSu08C4e9yf1IP
+         6k5tZ8FOmrcGA6Y91khe2LalOIh3pPt/n+OHpFd7p1NGYUrheCiyGDZsQ2GpyDbp3gwo
+         Gx874FXJ9uxeTgUJZOq4Fg7hIrWa/bjF7pKTU48K2o0rdop1Sl57nxnYBtPENuWGQN0K
+         djww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UdxzyxyoPyCssWA+lUiskUgXmgtGBPJ4/eHZTNBQz1A=;
+        b=DER05HkIaUJNmtR4xm3V/Ld3/AFpf8fYSMAbT34vVKvcECdoChOB7eyFWkF74gRaYB
+         ojuviDG4VBiVL+uyDBKGDerYAMOFvNGnmDe80BOpJw+cj8aTFVsZrOT9w/IqYrMqm/Qa
+         Y6eI7zYswouHKzdpBtfxH9iakt8Dkuzaihxk+V4HST6L8hH0g2eOOTvZFwqsAMTrEpfi
+         HeIn2FsCzzK4cauHFm5dyKH285OKd1KOd1JU5Wy/7KJq22qdj+6q1svOovAKUNK7O9lc
+         OuMmOknnaCel1pUbIDNJtCL/WYTHiC7xkTHY4GEexMEPrrx4H8DOmrCaWykX5iJ9WyZA
+         tF+A==
+X-Gm-Message-State: AO0yUKUXGkEDEAbth0QDIKTjhHbL2SYdSb+iT/wfpZlHXiy6EHPET9VO
+        jFG0/w8tK6MvfxPbqTozStHm2K1g3EEuKM5okRAuN11D1fBFdwvl
+X-Google-Smtp-Source: AK7set+Yx9XxAM3fn+locCK6teCTY90N9CbawLY/YYmMMse/pDppEHKMmxB2QWW8ZtLmVvVjUiAtz76ulzDEUaoygBs=
+X-Received: by 2002:a5b:8c:0:b0:8d5:5d9d:d087 with SMTP id b12-20020a5b008c000000b008d55d9dd087mr381288ybp.226.1676399304834;
+ Tue, 14 Feb 2023 10:28:24 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06e09601-a816-4402-64db-08db0eb93033
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Feb 2023 18:27:54.3001
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: O411nLZmAbeaNX14ejoXEGycm4YWis1gcMWs1Vw3uh35LSG6gghcS5jbeV6Nx9ERxPDMlloyMwyLXOgs31aDrenAGc9RhaDbzVB48hkYZf8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR11MB8169
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAJuCfpGiktjjPZYPp8LNtbmvYhkxh_icEWXOVgsq9qeq+w6s+g@mail.gmail.com>
+ <20230214181335.3946674-1-kamatam@amazon.com>
+In-Reply-To: <20230214181335.3946674-1-kamatam@amazon.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 14 Feb 2023 10:28:13 -0800
+Message-ID: <CAJuCfpFe+K4wHJzB-4JHr-5_2Scifx-WPwAi9SbBz5JAu5cmyQ@mail.gmail.com>
+Subject: Re: [PATCH v3] sched/psi: fix use-after-free in ep_remove_wait_queue()
+To:     Munehisa Kamata <kamatam@amazon.com>
+Cc:     ebiggers@kernel.org, hannes@cmpxchg.org, hdanton@sina.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        mengcc@amazon.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIzLTAyLTE0IGF0IDEzOjEwICswMTAwLCBEYXZpZCBIaWxkZW5icmFuZCB3cm90
-ZToNCj4gSSBhc3N1bWUgUmljayB3aWxsIGhhdmUgc29tZXRoaW5nIHRvIA0KPiBwbGF5IHdpdGgg
-c29vbmlzaCAoUmlnaHQsIFJpY2s/IDopICkuDQoNClllcywgRGVlcGFrIGFuZCBJIHdlcmUgZGlz
-Y3Vzc2luZyBvbiB0aGUgeDg2IHNlcmllcy4gSSBoYXZlbid0IGhlYXJkDQphbnl0aGluZyBmcm9t
-IDAtZGF5IGZvciBhIGZldyBkYXlzIHNvIGxvb2tpbmcgZ29vZC4gVGhlcmUgd2FzDQpkaXNjdXNz
-aW9uIGhhcHBlbmluZyB3aXRoIEJvcmlzIG9uIHRoZSBwdGVfbW9kaWZ5KCkgcGF0Y2gsIHNvIG1p
-Z2h0DQp3YWl0IGEgZGF5IG1vcmUgdG8gcG9zdCBhIG5ldyB2ZXJzaW9uLg0K
+On Tue, Feb 14, 2023 at 10:13 AM Munehisa Kamata <kamatam@amazon.com> wrote:
+>
+> If a non-root cgroup gets removed when there is a thread that registered
+> trigger and is polling on a pressure file within the cgroup, the polling
+> waitqueue gets freed in the following path.
+>
+>  do_rmdir
+>    cgroup_rmdir
+>      kernfs_drain_open_files
+>        cgroup_file_release
+>          cgroup_pressure_release
+>            psi_trigger_destroy
+>
+> However, the polling thread still has a reference to the pressure file and
+> will access the freed waitqueue when the file is closed or upon exit.
+>
+>  fput
+>    ep_eventpoll_release
+>      ep_free
+>        ep_remove_wait_queue
+>          remove_wait_queue
+>
+> This results in use-after-free as pasted below.
+>
+> The fundamental problem here is that cgroup_file_release() (and
+> consequently waitqueue's lifetime) is not tied to the file's real lifetime.
+> Using wake_up_pollfree() here might be less than ideal, but it also is not
+> fully contradicting the comment at commit 42288cb44c4b ("wait: add
+> wake_up_pollfree()") since the waitqueue's lifetime is not tied to file's
+> one and can be considered as another special case. While this would be
+> fixable by somehow making cgroup_file_release() be tied to the fput(), it
+> would require sizable refactoring at cgroups or higher layer which might be
+> more justifiable if we identify more cases like this.
+>
+>  BUG: KASAN: use-after-free in _raw_spin_lock_irqsave+0x60/0xc0
+>  Write of size 4 at addr ffff88810e625328 by task a.out/4404
+>
+>  CPU: 19 PID: 4404 Comm: a.out Not tainted 6.2.0-rc6 #38
+>  Hardware name: Amazon EC2 c5a.8xlarge/, BIOS 1.0 10/16/2017
+>  Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0x73/0xa0
+>  print_report+0x16c/0x4e0
+>  ? _printk+0x59/0x80
+>  ? __virt_addr_valid+0xb8/0x130
+>  ? _raw_spin_lock_irqsave+0x60/0xc0
+>  kasan_report+0xc3/0xf0
+>  ? _raw_spin_lock_irqsave+0x60/0xc0
+>  kasan_check_range+0x2d2/0x310
+>  _raw_spin_lock_irqsave+0x60/0xc0
+>  remove_wait_queue+0x1a/0xa0
+>  ep_free+0x12c/0x170
+>  ep_eventpoll_release+0x26/0x30
+>  __fput+0x202/0x400
+>  task_work_run+0x11d/0x170
+>  do_exit+0x495/0x1130
+>  ? update_cfs_rq_load_avg+0x2c2/0x2e0
+>  do_group_exit+0x100/0x100
+>  get_signal+0xd67/0xde0
+>  ? finish_task_switch+0x15f/0x3a0
+>  arch_do_signal_or_restart+0x2a/0x2b0
+>  exit_to_user_mode_prepare+0x94/0x100
+>  syscall_exit_to_user_mode+0x20/0x40
+>  do_syscall_64+0x52/0x90
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>  RIP: 0033:0x7f8e392bfb91
+>  Code: Unable to access opcode bytes at 0x7f8e392bfb67.
+>  RSP: 002b:00007fff261e08d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000022
+>  RAX: fffffffffffffdfe RBX: 0000000000000000 RCX: 00007f8e392bfb91
+>  RDX: 0000000000000001 RSI: 00007fff261e08e8 RDI: 0000000000000004
+>  RBP: 00007fff261e0920 R08: 0000000000400780 R09: 00007f8e3960f240
+>  R10: 00000000000003df R11: 0000000000000246 R12: 00000000004005a0
+>  R13: 00007fff261e0a00 R14: 0000000000000000 R15: 0000000000000000
+>  </TASK>
+>
+>  Allocated by task 4404:
+>  kasan_set_track+0x3d/0x60
+>  __kasan_kmalloc+0x85/0x90
+>  psi_trigger_create+0x113/0x3e0
+>  pressure_write+0x146/0x2e0
+>  cgroup_file_write+0x11c/0x250
+>  kernfs_fop_write_iter+0x186/0x220
+>  vfs_write+0x3d8/0x5c0
+>  ksys_write+0x90/0x110
+>  do_syscall_64+0x43/0x90
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+>  Freed by task 4407:
+>  kasan_set_track+0x3d/0x60
+>  kasan_save_free_info+0x27/0x40
+>  ____kasan_slab_free+0x11d/0x170
+>  slab_free_freelist_hook+0x87/0x150
+>  __kmem_cache_free+0xcb/0x180
+>  psi_trigger_destroy+0x2e8/0x310
+>  cgroup_file_release+0x4f/0xb0
+>  kernfs_drain_open_files+0x165/0x1f0
+>  kernfs_drain+0x162/0x1a0
+>  __kernfs_remove+0x1fb/0x310
+>  kernfs_remove_by_name_ns+0x95/0xe0
+>  cgroup_addrm_files+0x67f/0x700
+>  cgroup_destroy_locked+0x283/0x3c0
+>  cgroup_rmdir+0x29/0x100
+>  kernfs_iop_rmdir+0xd1/0x140
+>  vfs_rmdir+0xfe/0x240
+>  do_rmdir+0x13d/0x280
+>  __x64_sys_rmdir+0x2c/0x30
+>  do_syscall_64+0x43/0x90
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> v3: updated commit message and the comment in the code
+> v2: updated commit message
+>
+> Link: https://lore.kernel.org/lkml/20230106224859.4123476-1-kamatam@amazon.com/
+> Fixes: 0e94682b73bf ("psi: introduce psi monitor")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
+> Signed-off-by: Mengchi Cheng <mengcc@amazon.com>
+
+Acked-by: Suren Baghdasaryan <surenb@google.com>
+
+> ---
+>  kernel/sched/psi.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> index 8ac8b81bfee6..02e011cabe91 100644
+> --- a/kernel/sched/psi.c
+> +++ b/kernel/sched/psi.c
+> @@ -1343,10 +1343,11 @@ void psi_trigger_destroy(struct psi_trigger *t)
+>
+>         group = t->group;
+>         /*
+> -        * Wakeup waiters to stop polling. Can happen if cgroup is deleted
+> -        * from under a polling process.
+> +        * Wakeup waiters to stop polling and clear the queue to prevent it from
+> +        * being accessed later. Can happen if cgroup is deleted from under a
+> +        * polling process.
+>          */
+> -       wake_up_interruptible(&t->event_wait);
+> +       wake_up_pollfree(&t->event_wait);
+>
+>         mutex_lock(&group->trigger_lock);
+>
+> --
+> 2.38.1
+>
