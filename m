@@ -2,196 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896C969C5BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 07:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F02EA69C63A
+	for <lists+linux-kernel@lfdr.de>; Mon, 20 Feb 2023 09:02:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbjBTG6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 20 Feb 2023 01:58:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
+        id S230346AbjBTICU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 20 Feb 2023 03:02:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjBTG5x (ORCPT
+        with ESMTP id S229591AbjBTICS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 20 Feb 2023 01:57:53 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1CC82712;
-        Sun, 19 Feb 2023 22:57:50 -0800 (PST)
-Received: from loongson.cn (unknown [10.2.5.185])
-        by gateway (Coremail) with SMTP id _____8DxEwztGfNjRrUCAA--.65S3;
-        Mon, 20 Feb 2023 14:57:49 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.2.5.185])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax+73fGfNjFvk2AA--.34690S31;
-        Mon, 20 Feb 2023 14:57:47 +0800 (CST)
-From:   Tianrui Zhao <zhaotianrui@loongson.cn>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn
-Subject: [PATCH v2 29/29] LoongArch: KVM: Enable kvm config and add the makefile
-Date:   Mon, 20 Feb 2023 14:57:35 +0800
-Message-Id: <20230220065735.1282809-30-zhaotianrui@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
-References: <20230220065735.1282809-1-zhaotianrui@loongson.cn>
+        Mon, 20 Feb 2023 03:02:18 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A3DDBEB
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 00:02:15 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id d1-20020a17090a3b0100b00229ca6a4636so585484pjc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 20 Feb 2023 00:02:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=UqC7n3VH+n8GfMbsztpunswhFKvAkQPi/7k1PclfOTE=;
+        b=fc/UjfJhSG9oflX54j0F99s3aWyHaJUP/jPPSafE1crbwW0jTibHzfJvjFpWm6D08R
+         /upaC5fTSpTeAlqRfDeNSLYXtvP6EXeVxa3XzjRFSK8G6Dg2E/o/73l3C354eQdXg9IV
+         gBeTpAtU/utQkX9eluoFIoKpXX3kIehZMkjabFXMdpY+WTpbfK/2owD1t2QrYumMkxDH
+         hAlUGZhOIrL8lLupq4+9cn9mG5QxlPWBvoHqZhWpsxNcfipRO18So43iRsYibKT3MFcg
+         j1ue8MQ7r793kEFijwqT1J2uHxW6TvXh7BCcyzd7qn5fqw61FhINMxO+z0m4dnzMx7j7
+         zljg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UqC7n3VH+n8GfMbsztpunswhFKvAkQPi/7k1PclfOTE=;
+        b=wUMDz6f3ylfOGsc3xtTPoPv9naqvcZ99NjbI2aduuWmIgbE/k/ZJIimtBaXWX/4U9u
+         mttQ5r3mFfVfSpaBKHoEqKlX4y0oSH/bvkijnKJv+McSptA9XMSvJARbS/7FKdv6+s1w
+         6lBimfpruNivlfSwv28qD8Ktpzo7f/rYebTNZVgSlIPDWbUPjkDQRmi1r87m5wtl64Fx
+         rvAgfxb5+fe/BT1pqkbA+1M//KiLeFmSU3Y6h4V+ls4dFdZ6Pe2uFCeHDriWUZv4U06o
+         C/Vw9/K3L5MzFNbBMHIkSEOkkzFMVA+wXb9WNozJhD7vAi9rnyVEGLazOSCDdkQxSUCc
+         +XVQ==
+X-Gm-Message-State: AO0yUKWyJ+q5qob9P1Lp7mN4nzezIiam7JT+gxwQHCTLOQ03bwFb9uU3
+        Oe5nOuev26rRMM1YFAXxQUc=
+X-Google-Smtp-Source: AK7set+v3dazeFTPJLLPjemVnzrKsWM1UX7VdZAwzwYQHC4W8Z68fyS9jmWS3+VrkOixVEzC/Bks9g==
+X-Received: by 2002:a17:90b:4b0a:b0:233:d108:1c62 with SMTP id lx10-20020a17090b4b0a00b00233d1081c62mr382678pjb.32.1676880134883;
+        Mon, 20 Feb 2023 00:02:14 -0800 (PST)
+Received: from MBP ([68.74.118.125])
+        by smtp.gmail.com with ESMTPSA id bf18-20020a17090b0b1200b002341c0ff245sm185738pjb.19.2023.02.20.00.02.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Feb 2023 00:02:14 -0800 (PST)
+References: <20230127014137.4906-1-hdanton@sina.com>
+ <9d9b9652-c1ac-58e9-2eab-9256c17b1da2@I-love.SAKURA.ne.jp>
+ <7d1021f1-c88e-5a03-3b92-087f9be37491@I-love.SAKURA.ne.jp>
+ <Y9z76ZLe4On96xIN@hirez.programming.kicks-ass.net>
+ <Y9z+SerR8mlZYo16@hirez.programming.kicks-ass.net>
+ <6c47dbcf-2a17-6bb2-719b-841d851c603b@I-love.SAKURA.ne.jp>
+ <Y90ar35uKQoUrLEK@hirez.programming.kicks-ass.net>
+ <caa13441-5f95-b7d6-dd5d-1cf49e709714@I-love.SAKURA.ne.jp>
+ <Y+Eh9CFdTwwv+hot@bombadil.infradead.org>
+ <Y+pWzult7UDgoilC@hirez.programming.kicks-ass.net>
+User-agent: mu4e 1.8.10; emacs 29.0.60
+From:   Schspa Shi <schspa@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+6cd18e123583550cf469@syzkaller.appspotmail.com>,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: [syzbot] WARNING: locking bug in umh_complete
+Date:   Tue, 14 Feb 2023 10:31:58 +0800
+In-reply-to: <Y+pWzult7UDgoilC@hirez.programming.kicks-ass.net>
+Message-ID: <m21qmkahoj.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Ax+73fGfNjFvk2AA--.34690S31
-X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXFW3Ww4DWry3Cr48KFy7GFg_yoW5KF1DpF
-        s7Ar1kGr4xWFn3JrZ3t34kWrs8CFn7Kr47u3Waya48Cry7Z34kur1ktr9rXFyUA393JrW0
-        gr1rGa1agayUJw7anT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b4AFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4
-        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF
-        7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6x
-        kF7I0E14v26F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
-        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6c
-        x26rWlOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r12
-        6r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbV
-        WUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
-        IYx2IY67AKxVWDJVCq3wCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAI
-        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr1j6F4UJwCI42IY6I8E87Iv6x
-        kF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7xRiTKZJUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable loongarch kvm config and add the makefile to support build kvm
-module.
 
-Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
----
- arch/loongarch/Kbuild                      |  1 +
- arch/loongarch/Kconfig                     |  2 ++
- arch/loongarch/configs/loongson3_defconfig |  2 ++
- arch/loongarch/kvm/Kconfig                 | 38 ++++++++++++++++++++++
- arch/loongarch/kvm/Makefile                | 21 ++++++++++++
- 5 files changed, 64 insertions(+)
- create mode 100644 arch/loongarch/kvm/Kconfig
- create mode 100644 arch/loongarch/kvm/Makefile
+Peter Zijlstra <peterz@infradead.org> writes:
 
-diff --git a/arch/loongarch/Kbuild b/arch/loongarch/Kbuild
-index b01f5cdb2..40be8a169 100644
---- a/arch/loongarch/Kbuild
-+++ b/arch/loongarch/Kbuild
-@@ -2,6 +2,7 @@ obj-y += kernel/
- obj-y += mm/
- obj-y += net/
- obj-y += vdso/
-+obj-y += kvm/
- 
- # for cleaning
- subdir- += boot
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 9cc8b84f7..424ad9392 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -142,6 +142,7 @@ config LOONGARCH
- 	select USE_PERCPU_NUMA_NODE_ID
- 	select USER_STACKTRACE_SUPPORT
- 	select ZONE_DMA32
-+	select HAVE_KVM
- 
- config 32BIT
- 	bool
-@@ -541,3 +542,4 @@ source "drivers/acpi/Kconfig"
- endmenu
- 
- source "drivers/firmware/Kconfig"
-+source "arch/loongarch/kvm/Kconfig"
-diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
-index eb84cae64..9a6e31b43 100644
---- a/arch/loongarch/configs/loongson3_defconfig
-+++ b/arch/loongarch/configs/loongson3_defconfig
-@@ -62,6 +62,8 @@ CONFIG_EFI_ZBOOT=y
- CONFIG_EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER=y
- CONFIG_EFI_CAPSULE_LOADER=m
- CONFIG_EFI_TEST=m
-+CONFIG_VIRTUALIZATION=y
-+CONFIG_KVM=m
- CONFIG_MODULES=y
- CONFIG_MODULE_FORCE_LOAD=y
- CONFIG_MODULE_UNLOAD=y
-diff --git a/arch/loongarch/kvm/Kconfig b/arch/loongarch/kvm/Kconfig
-new file mode 100644
-index 000000000..8a999b4c0
---- /dev/null
-+++ b/arch/loongarch/kvm/Kconfig
-@@ -0,0 +1,38 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# KVM configuration
-+#
+> On Mon, Feb 06, 2023 at 07:51:16AM -0800, Luis Chamberlain wrote:
+>
+>> I think this seems to be the same issue that Schspa Shi reported / provided a
+>> fix sugggestion for [0]. This lead me to ask if:
+>> 
+>>   a) incorrect usage of completion on stack could be generic and;
+>>   b) if we should instead have an API helper for that?
+>> 
+>> Although he already implemented a suggestion for b) to answer a) we need
+>> some SmPL constructs yet to be written by Schspa. The reason I asked for
+>> b) is that if this is a regular pattern it begs for a) as this sort of
+>> issue could be prevalent in other places. So the status of Schspa's work
+>> was that he was going to work on the SmPL grammar to check how frequent
+>> this incorrect patern could be found.
+>
+> Do I read correctly, from you above alphabet-soup, that someone is
+> working on some static analysis for on-stack completions or something?
+>
+
+Yes, I was trying to do this.
+
+> If so, perhaps the simplest rule would to be ensure there is an
+> unconditional uninterruptible wait-for-completion() before going out of
+> scope.
+>
+> This latter can be spelled like wait_for_completion() or
+> wait_for_completion_state(TASK_UNINTERRUPTIBLE). More specifically,
+> TASK_INTERRUPTIBLE and TASK_WAKEKILL must not be set in the state mask
+> for the wait to be uninterruptible.
+>
+> If it cannot be proven, raise a warning and audit or somesuch.
+
+This is a good suggestion. I have written a SmPL patch to complete this
+check, and now I need to rule out the situation that the driver has
+added an additional lock to protect it.
+
+And I have found a lot of bad usage, should we consider adding a new
+helper API to simplify the fix this?
+
+Such as:
+
 +
-+source "virt/kvm/Kconfig"
++void complete_on_stack(struct completion **x)
++{
++       struct completion *comp = xchg(*x, NULL);
 +
-+menuconfig VIRTUALIZATION
-+	bool "Virtualization"
-+	help
-+	  Say Y here to get to see options for using your Linux host to run
-+	  other operating systems inside virtual machines (guests).
-+	  This option alone does not add any kernel code.
++       if (comp)
++               complete(comp);
++}
++EXPORT_SYMBOL(complete_on_stack);
 +
-+	  If you say N, all options in this submenu will be skipped and
-+	  disabled.
++int __sched wait_for_completion_state_on_stack(struct completion **x,
++                                       unsigned int state)
++{
++       struct completion *comp = *x;
++       int retval;
 +
-+if VIRTUALIZATION
++       retval = wait_for_completion_state(comp, state);
++       if (retval) {
++               if (xchg(*x, NULL))
++                       return retval;
 +
-+config KVM
-+	tristate "Kernel-based Virtual Machine (KVM) support"
-+	depends on HAVE_KVM
-+	select MMU_NOTIFIER
-+	select ANON_INODES
-+	select PREEMPT_NOTIFIERS
-+	select KVM_MMIO
-+	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
-+	select HAVE_KVM_VCPU_ASYNC_IOCTL
-+	select HAVE_KVM_EVENTFD
-+	select SRCU
-+	help
-+	  Support hosting virtualized guest machines using hardware
-+	  virtualization extensions. You will need a fairly processor
-+	  equipped with virtualization extensions.
++               /*
++                * complete_on_stack will call complete shortly.
++                */
++               wait_for_completion(comp);
++       }
 +
-+	  If unsure, say N.
-+
-+endif # VIRTUALIZATION
-diff --git a/arch/loongarch/kvm/Makefile b/arch/loongarch/kvm/Makefile
-new file mode 100644
-index 000000000..42e9dcc18
---- /dev/null
-+++ b/arch/loongarch/kvm/Makefile
-@@ -0,0 +1,21 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Makefile for LOONGARCH KVM support
-+#
-+
-+ccflags-y += -I $(srctree)/$(src)
-+
-+include $(srctree)/virt/kvm/Makefile.kvm
-+
-+obj-$(CONFIG_KVM) += kvm.o
-+
-+kvm-y += main.o
-+kvm-y += vm.o
-+kvm-y += vmid.o
-+kvm-y += tlb.o
-+kvm-y += mmu.o
-+kvm-y += vcpu.o
-+kvm-y += exit.o
-+kvm-y += interrupt.o
-+kvm-y += timer.o
-+kvm-y += switch.o
++       return retval;
++}
++EXPORT_SYMBOL(wait_for_completion_state_on_stack);
+
+Link: https://lore.kernel.org/all/20221115140233.21981-1-schspa@gmail.com/T/#mf6a41a7009bb47af1b15adf2b7b355e495f609c4
+
 -- 
-2.31.1
-
+BRs
+Schspa Shi
