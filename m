@@ -2,89 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AD9769579B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 04:50:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B6D6957A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 04:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231533AbjBNDuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 22:50:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38378 "EHLO
+        id S231523AbjBNDzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 22:55:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbjBNDuV (ORCPT
+        with ESMTP id S231260AbjBNDz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 22:50:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0C1A5FA;
-        Mon, 13 Feb 2023 19:50:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F2166140B;
-        Tue, 14 Feb 2023 03:50:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9000DC433A7;
-        Tue, 14 Feb 2023 03:50:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676346619;
-        bh=n9qOiH0RUbj9t+6MFTaBCd3iC12UZ0ekk/x0pMcHtYI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=TqugRf9U4rSu/UzbqTgMaSG1wAW12A2epaYg4QgsZsL1sq7lgqWoZn4qLetVgEFtP
-         isoR51XuN5rFekVkxVeLXDb1m0Y7rQ3vCsvQH5c1Hf39LPOEIF1/094Uf1tPBJENao
-         sWVN6V0bHS/hDPxhVrwZ5RY+rCY9KZn60gXU4l4eJclCNZhDbDdHoiQajL19jjXLO+
-         fase24yUkPLmrFzvvD7Fowc3rNi4frTp3ITainCRsGtYGty784OivbqkaB2XHxKaAw
-         UdSL/z8xcy4pUpnFxcK1Qp24HaD4Tn/0nbAKeBj0PV5MdvwjnS4w+XMFV4vrZrixOG
-         yHVvlwe2H1jhA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 74403C41677;
-        Tue, 14 Feb 2023 03:50:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 13 Feb 2023 22:55:29 -0500
+Received: from out-115.mta1.migadu.com (out-115.mta1.migadu.com [95.215.58.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFED16337
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 19:55:15 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1676346913;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HJDJP0j4+xdi6GbS1edJShWLKFMsTSqxJTsdV08hDs4=;
+        b=mu3+eYoDhYdn8rZZ4CmJCO1XTUQR92FiUzEDezyQFbJcxt8VsV5CYJYbOHyOGTC2hXMURR
+        G5HPzwWtYnn7V1aRlWxFsj4HtiHct2hOLXjuoYmuGW2I6XrSQOpg83cG+qo6cGReFZdqrR
+        yTXJZe/6cHJ0+XyNYn10ahZvdaT7Q3I=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: ethernet: mtk_wed: No need to clear memory
- after a dma_alloc_coherent() call
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167634661945.22468.7891071719271483314.git-patchwork-notify@kernel.org>
-Date:   Tue, 14 Feb 2023 03:50:19 +0000
-References: <d5acce7dd108887832c9719f62c7201b4c83b3fb.1676184599.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <d5acce7dd108887832c9719f62c7201b4c83b3fb.1676184599.git.christophe.jaillet@wanadoo.fr>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     nbd@nbd.name, john@phrozen.org, sean.wang@mediatek.com,
-        Mark-MC.Lee@mediatek.com, lorenzo@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] mm: memcontrol: rename memcg_kmem_enabled()
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <20230213192922.1146370-1-roman.gushchin@linux.dev>
+Date:   Tue, 14 Feb 2023 11:54:35 +0800
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Content-Transfer-Encoding: 7bit
+Message-Id: <BE9C605A-2719-4738-A084-067E780A7108@linux.dev>
+References: <20230213192922.1146370-1-roman.gushchin@linux.dev>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
 
-On Sun, 12 Feb 2023 07:51:51 +0100 you wrote:
-> dma_alloc_coherent() already clears the allocated memory, there is no need
-> to explicitly call memset().
+> On Feb 14, 2023, at 03:29, Roman Gushchin <roman.gushchin@linux.dev> wrote:
 > 
-> Moreover, it is likely that the size in the memset() is incorrect and
-> should be "size * sizeof(*ring->desc)".
+> Currently there are two kmem-related helper functions with a confusing
+> semantics: memcg_kmem_enabled() and mem_cgroup_kmem_disabled().
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> The problem is that an obvious expectation
+> memcg_kmem_enabled() == !mem_cgroup_kmem_disabled(),
+> can be false.
 > 
-> [...]
+> mem_cgroup_kmem_disabled() is similar to mem_cgroup_disabled(): it
+> returns true only if CONFIG_MEMCG_KMEM is not set or the kmem
+> accounting is disabled using a boot time kernel option
+> "cgroup.memory=nokmem". It never changes the value dynamically.
+> 
+> memcg_kmem_enabled() is different: it always returns false until
+> the first non-root memory cgroup will get online (assuming the kernel
+> memory accounting is enabled). It's goal is to improve the performance
+> on systems without the cgroupfs mounted/memory controller enabled or
+> on the systems with only the root memory cgroup.
+> 
+> To make things more obvious and avoid potential bugs, let's rename
+> memcg_kmem_enabled() to memcg_kmem_online().
+> 
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
 
-Here is the summary with links:
-  - [net-next] net: ethernet: mtk_wed: No need to clear memory after a dma_alloc_coherent() call
-    https://git.kernel.org/netdev/net-next/c/511b88fedab4
+It's more clear.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Acked-by: Muchun Song <songmuchun@bytedance.com>
 
+BTW, I also dislike the name of mem_cgroup_kmem_disabled, it is not
+harmonious with memcg_kmem_enabled since the prefix of one is "mem_cgroup",
+another is "memcg". Maybe we could make them more consistent. Anyway, it
+is not related to this patch.
 
+Thanks.
