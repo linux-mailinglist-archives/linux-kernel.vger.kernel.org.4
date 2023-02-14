@@ -2,56 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E346960C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 11:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA886960C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 11:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232470AbjBNKao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 05:30:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
+        id S232481AbjBNKbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 05:31:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232428AbjBNKam (ORCPT
+        with ESMTP id S229742AbjBNKbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 05:30:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F67241C9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 02:30:35 -0800 (PST)
+        Tue, 14 Feb 2023 05:31:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FA223871;
+        Tue, 14 Feb 2023 02:30:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC04B614F8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 10:30:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7E7BC433EF;
-        Tue, 14 Feb 2023 10:30:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8045761515;
+        Tue, 14 Feb 2023 10:30:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82987C433EF;
+        Tue, 14 Feb 2023 10:30:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676370634;
-        bh=9T6pAt8RK/wq+3Lfrzi3xrLApHJkjngyCRo3iZZ8lcM=;
+        s=k20201202; t=1676370657;
+        bh=QJBK9fHdKNNn92kOAjyh7kUpQvGURF1xEy3HVB5T/Dc=;
         h=From:To:Cc:Subject:Date:From;
-        b=FRujVgQdhII1Y1kLFdI49NShstvdPkwW9DJTqMSApgiaz2cPn7FjCjQsVcxy4228C
-         Y2iGvCNYWUAVz2GoYmvgW2/ja59ZwxyVnyZ/BZ5onLQ07n19oJvl9EMTfpbNRn2xgq
-         QEkw6+6Tsoyx5p198fWDYBUoQNdDInMJM93CtK3a8RafJ9ykweJIG58qK5MtdG6Xwh
-         U9+1ikY/FV6uI+wm1uM8FqSnEwksPW9wwkTs3CdLV2cNxbQXAybJXpU5dvxK+b++fE
-         KjkKPqFqmv32h6dHpqvqQmgppq5BrWQQ5lZ0JudInrsf0adg25t3Pl1T7cCZATr4/h
-         jIv3FSv/RYIZQ==
+        b=JKND1mVz0GMn70yw0aPGiB3Ta6kH+7ZpQQNnJ8enVN0JD6eyZ/59oLMx0Jh8YnJ7l
+         u5l3Zx9H9WXfBjK7r/JHtiOw/veDF4MhF4h/uPfEvHmb0SVSat3hR/bCYWR/B0+00X
+         lT3OvgGvcr/x/ax118lxVMXvEA6nTnAXCgRonN/9AuZu1KFO32fuSRu7gzzGP3PNlO
+         zF24WVGsOfq7oM13G6hTw38p96vjR7gV2IQXydK8Dd0maJzn7XUT3EOjPyT7ZGacXx
+         vpC37pv8MRmPzOL70eOL3iIw/VbD2294RGrLCP81SBCZHFHqjF3nmawqsjdh4OZPoD
+         easqmDgagv5Cw==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        kasan-dev@googlegroups.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vernon Yang <vernon2gm@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] [RFC] maple_tree: reduce stack usage with gcc-9 and earlier
-Date:   Tue, 14 Feb 2023 11:30:24 +0100
-Message-Id: <20230214103030.1051950-1-arnd@kernel.org>
+        Gregory Price <gregory.price@memverge.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>, nvdimm@lists.linux.dev,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dax: clx: add CXL_REGION dependency
+Date:   Tue, 14 Feb 2023 11:30:49 +0100
+Message-Id: <20230214103054.1082908-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,65 +59,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-gcc-10 changed the way inlining works to be less aggressive, but
-older versions run into an oversized stack frame warning whenever
-CONFIG_KASAN_STACK is enabled, as that forces variables from
-inlined callees to be non-overlapping:
+There is already a dependency on CXL_REGION, which depends on CXL_BUS,
+but since CXL_REGION is a 'bool' symbol, it's possible to configure
+DAX as built-in even though CXL itself is a loadable module:
 
-lib/maple_tree.c: In function 'mas_wr_bnode':
-lib/maple_tree.c:4320:1: error: the frame size of 1424 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+x86_64-linux-ld: drivers/dax/cxl.o: in function `cxl_dax_region_probe':
+cxl.c:(.text+0xb): undefined reference to `to_cxl_dax_region'
+x86_64-linux-ld: drivers/dax/cxl.o: in function `cxl_dax_region_driver_init':
+cxl.c:(.init.text+0x10): undefined reference to `__cxl_driver_register'
+x86_64-linux-ld: drivers/dax/cxl.o: in function `cxl_dax_region_driver_exit':
+cxl.c:(.exit.text+0x9): undefined reference to `cxl_driver_unregister'
 
-Change the annotations on mas_store_b_node() and mas_commit_b_node()
-to explicitly forbid inlining in this configuration, which is
-the same behavior that newer versions already have.
+Prevent this with another depndency on the tristate symbol.
 
-Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Cc: Alexander Potapenko <glider@google.com>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>
-Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc: kasan-dev@googlegroups.com
+Fixes: 09d09e04d2fc ("cxl/dax: Create dax devices for CXL RAM regions")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- lib/maple_tree.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/dax/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 5e9703189259..646297cae5d1 100644
---- a/lib/maple_tree.c
-+++ b/lib/maple_tree.c
-@@ -146,6 +146,13 @@ struct maple_subtree_state {
- 	struct maple_big_node *bn;
- };
+diff --git a/drivers/dax/Kconfig b/drivers/dax/Kconfig
+index 8c67a24592e3..a88744244149 100644
+--- a/drivers/dax/Kconfig
++++ b/drivers/dax/Kconfig
+@@ -46,7 +46,7 @@ config DEV_DAX_HMEM
  
-+#ifdef CONFIG_KASAN_STACK
-+/* Prevent mas_wr_bnode() from exceeding the stack frame limit */
-+#define noinline_for_kasan noinline_for_stack
-+#else
-+#define noinline_for_kasan inline
-+#endif
-+
- /* Functions */
- static inline struct maple_node *mt_alloc_one(gfp_t gfp)
- {
-@@ -2107,7 +2114,7 @@ static inline void mas_bulk_rebalance(struct ma_state *mas, unsigned char end,
-  *
-  * Return: The actual end of the data stored in @b_node
-  */
--static inline void mas_store_b_node(struct ma_wr_state *wr_mas,
-+static noinline_for_kasan void mas_store_b_node(struct ma_wr_state *wr_mas,
- 		struct maple_big_node *b_node, unsigned char offset_end)
- {
- 	unsigned char slot;
-@@ -3579,7 +3586,7 @@ static inline bool mas_reuse_node(struct ma_wr_state *wr_mas,
-  * @b_node: The maple big node
-  * @end: The end of the data.
-  */
--static inline int mas_commit_b_node(struct ma_wr_state *wr_mas,
-+static noinline_for_kasan int mas_commit_b_node(struct ma_wr_state *wr_mas,
- 			    struct maple_big_node *b_node, unsigned char end)
- {
- 	struct maple_node *node;
+ config DEV_DAX_CXL
+ 	tristate "CXL DAX: direct access to CXL RAM regions"
+-	depends on CXL_REGION && DEV_DAX
++	depends on CXL_BUS && CXL_REGION && DEV_DAX
+ 	default CXL_REGION && DEV_DAX
+ 	help
+ 	  CXL RAM regions are either mapped by platform-firmware
 -- 
 2.39.1
 
