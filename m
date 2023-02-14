@@ -2,73 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A92A696215
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 12:11:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBD286961ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 12:07:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232966AbjBNLLx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Feb 2023 06:11:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
+        id S232851AbjBNLHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 06:07:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbjBNLLf (ORCPT
+        with ESMTP id S232456AbjBNLGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 06:11:35 -0500
-X-Greylist: delayed 744 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Feb 2023 03:10:45 PST
-Received: from mail.distrito09d19.saludzona5.gob.ec (mail.distrito09d19.saludzona5.gob.ec [186.47.79.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7E228D3D
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 03:10:44 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.distrito09d19.saludzona5.gob.ec (Postfix) with ESMTP id 0BAAB85FDCBE7;
-        Tue, 14 Feb 2023 05:23:55 -0500 (-05)
-Received: from mail.distrito09d19.saludzona5.gob.ec ([127.0.0.1])
-        by localhost (mail.distrito09d19.saludzona5.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id XdZ46JIRkqfZ; Tue, 14 Feb 2023 05:23:53 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.distrito09d19.saludzona5.gob.ec (Postfix) with ESMTP id 6795886F67B3D;
-        Tue, 14 Feb 2023 05:23:26 -0500 (-05)
-X-Virus-Scanned: amavisd-new at distrito09d19.saludzona5.gob.ec
-Received: from mail.distrito09d19.saludzona5.gob.ec ([127.0.0.1])
-        by localhost (mail.distrito09d19.saludzona5.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id E4swuxvl4kvc; Tue, 14 Feb 2023 05:23:25 -0500 (-05)
-Received: from [23.146.243.45] (unknown [23.146.243.45])
-        by mail.distrito09d19.saludzona5.gob.ec (Postfix) with ESMTPSA id A805C86F7270E;
-        Tue, 14 Feb 2023 05:22:57 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        Tue, 14 Feb 2023 06:06:31 -0500
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C39028D08;
+        Tue, 14 Feb 2023 03:05:48 -0800 (PST)
+Received: from [127.0.0.1] (helo=localhost)
+        by relay.expurgate.net with smtp (Exim 4.92)
+        (envelope-from <prvs=9423e69038=fe@dev.tdt.de>)
+        id 1pRsrk-0008Ic-5R; Tue, 14 Feb 2023 11:48:52 +0100
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <fe@dev.tdt.de>)
+        id 1pRsrj-000LHd-CQ; Tue, 14 Feb 2023 11:48:51 +0100
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+        by securemail.tdt.de (Postfix) with ESMTP id 86A0D240049;
+        Tue, 14 Feb 2023 11:48:50 +0100 (CET)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+        by securemail.tdt.de (Postfix) with ESMTP id EEAA8240040;
+        Tue, 14 Feb 2023 11:48:49 +0100 (CET)
+Received: from mail.dev.tdt.de (localhost [IPv6:::1])
+        by mail.dev.tdt.de (Postfix) with ESMTP id 907A52B4BF;
+        Tue, 14 Feb 2023 11:48:49 +0100 (CET)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Se requiere respuesta urgente.
-To:     Recipients <maria.espinoza@distrito09d19.saludzona5.gob.ec>
-From:   "zimbra@" <maria.espinoza@distrito09d19.saludzona5.gob.ec>
-Date:   Tue, 14 Feb 2023 02:22:51 -0800
-Reply-To: webmasterzimbra1@gmail.com
-Message-Id: <20230214102257.A805C86F7270E@mail.distrito09d19.saludzona5.gob.ec>
-X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 14 Feb 2023 11:48:49 +0100
+From:   Florian Eckert <fe@dev.tdt.de>
+To:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org, pavel@ucw.cz,
+        lee@kernel.org, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, Eckert.Florian@googlemail.com
+Subject: Re: [PATCH 2/2] leds: trigger: ledtrig-tty: add additional modes
+In-Reply-To: <20230214101119.em547qt57swzylae@pengutronix.de>
+References: <20230213140638.620206-1-fe@dev.tdt.de>
+ <20230213140638.620206-3-fe@dev.tdt.de>
+ <20230214101119.em547qt57swzylae@pengutronix.de>
+Message-ID: <a969510df240fda32a5b57099c8f90a6@dev.tdt.de>
+X-Sender: fe@dev.tdt.de
+User-Agent: Roundcube Webmail/1.3.17
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-purgate-ID: 151534::1676371732-0E3ECD43-A35EFFCA/0/0
+X-purgate-type: clean
+X-purgate: clean
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Su cuenta no ha pasado por el proceso de verificación / actualización. Los titulares de cuentas deben actualizar sus cuentas dentro de los 5 días hábiles posteriores a la recepción de este aviso. El incumplimiento de este aviso dentro de la fecha límite puede no ser capaz de enviar o recibir todos los mensajes y el propietario correrá el riesgo de perder su cuenta.
+Hello Uwe,
 
-Confirme los detalles de la cuenta a continuación.
-_____________________________________
-1. Nombre y apellido:
-2. Correo electrónico completo en:
-3. Nombre de usuario:
-4. Contraseña:
-5. Vuelva a escribir la contraseña:
-_____________________________________
- 
-NOTA !!! Si no actualiza su cuenta, su cuenta se eliminará automáticamente de nuestro sistema.
- 
-Nos disculpamos por cualquier inconveniente causado.
- 
-Sinceramente
-Atención al cliente
-Equipo de soporte técnico de Zimbra.
- 
-Copyright © 2005-2023 Synacor, Inc. Todos los derechos reservados
+>> 
+>> TD/RD:	Flash LED on data transmission (default)
+>> CTS:	DCE Ready to accept data from the DTE.
+>> DSR:	DCE is ready to receive and send data.
+>> CAR:	DCE is receiving a carrier from a remote DTE.
+>> RNG:	DCE has detected an incoming ring signal.
+>> 
+>> The mode can be changed for example with the following command:
+>> echo "CTS" /sys/class/leds/<led>/mode
+> 
+> I wonder if the abstraction is better be done such that you can also
+> configure the mode to trigger on (for example) TD and RNG. Then you'd
+> need one property per signal and then something like the following 
+> would
+> be possible:
+> 
+> 	p=/sys/class/leds/<led>
+> 	echo 1 > $p/tx
+> 	echo 0 > $p/rx
+> 	echo 1 > $p/rng
+
+I thought about that before implementing this patch set, but then I 
+discarded it.
+Coding several states would then become confusing for someone who look 
+at the LED.
+I have now consciously decided that I want only display one state.
+
+> 
+> Best regards
+> Uwe
