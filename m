@@ -2,145 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EAB7695ADF
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:48:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D7B6695AF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:50:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjBNHsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 02:48:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
+        id S229914AbjBNHuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 02:50:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjBNHsD (ORCPT
+        with ESMTP id S229966AbjBNHuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 02:48:03 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1AE01C32D
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:48:01 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id r18so10333304wmq.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:48:01 -0800 (PST)
+        Tue, 14 Feb 2023 02:50:02 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9763E1E1D3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:49:59 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so10851076wms.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:49:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v9LBYoecALcKMnLalAfr6maJR0nbtDLWWltXeqYNnRQ=;
-        b=IlhY5d8bfT2GtFTzvc9TZ3Dmy0aKn8gG9uG2DaaOWibrPk5vh9mNu2/xizO1wOcXE5
-         YmDDkJsmZkeRX5UW31SJ5RbvTJoN5MJlOUYJAltfbqM72+QX2WY0Zfba95PktLhsPqmY
-         qfqqKVgaAE3iiBnIMKJyHhvHrwk+B7OrG/tFmytrou9l/kRutdW/cSeen0YogA0M6P6O
-         iThPvG9Grq3ewRJ/IX3Za1sApz50CtPSCt9q4pYzVOkot7GL3voQKjvU77/L3ECpVSM/
-         mYOVh6jErMyXNn4qsrrdHjYi82CSvur4MmjP3bRx6jN1iJmTQ0DaLYyu7UrnraxsdPnv
-         gzCA==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PqFq1+4gxxgib1u5xFvkwzAigtvwrfvrRhML7sgk2og=;
+        b=x2GCdJrJM+l90TcWJRpT5oqfHATv+1Z4ENWwSL8lO0FTmae9xEroV9kkTVhTQc2FUt
+         Wn/RFDJVx9pkx44t/X9uIZr4UZIW4vPiJZhfNUqKntvRiY++QPOeqnnGXN88q7BaejNG
+         LZpXU/mq11EKyRUGofsabIrnfYBVQY+9p7ToWhxcjXgaj4F/p/KdiW5L/FjvLGXwxufA
+         OolCtUrOJT0nutQmjpFFaM0ZI5SKBeMDY3DqtuP9gPzRFIb9Qu7nHkl0WDRYNsGJe+jH
+         VUQZ3nuUW04ZXCk3DYLj+fZ4gaM6Da+RW8nKFKvSwOFcBtwGK5gdPyPno7lgeBcoz3Wn
+         0K9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v9LBYoecALcKMnLalAfr6maJR0nbtDLWWltXeqYNnRQ=;
-        b=hPJRbCmFfpSSQANxkvJGpEpVNXLJ1JFGjcEgcEkzG8eaWqcgke98kemWShcb7EDIhs
-         8zXCUUExY98u3LoDqNvTRXt90JaMC6k0+gWaX+Pao2yhEshwOTE+VNvdmPBmMu1pmAnY
-         qPcMnMHwY8rZJsfu8XotxNPIAHYmxoURWtTLGzG9io/yJ0rUWQtNUfcNGCGl/U+RGQkN
-         HNbeOH+2y+jZexiBF34zt/exfewbLRoDGnkRlmqAhq90Ptd91pqDoQEymlMF2b+2DHML
-         jGpOwx/INCt4t/qQ43lH98E7MveNnFGaspNNOIDJbyxkLp95pim9hkAwNHp1Hhrzp7en
-         bu+A==
-X-Gm-Message-State: AO0yUKW0fM5qC+u3wfKCoOu9vctgQQ/qozHsZAMGO0WYtMNWs0Gn2FKE
-        0X7Ux2TJcqhBvkgD0mLkyaubYA==
-X-Google-Smtp-Source: AK7set/WcU9lIqJ4Po60aUXsXakm5IcLvtMq6WakgTIVlgI22GmN5OrN1R/DMwYP88rmSbfZrjIjwQ==
-X-Received: by 2002:a1c:f012:0:b0:3d9:f769:2115 with SMTP id a18-20020a1cf012000000b003d9f7692115mr1094919wmb.26.1676360880577;
-        Mon, 13 Feb 2023 23:48:00 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id i16-20020a05600c4b1000b003dc4fd6e624sm15658892wmp.19.2023.02.13.23.47.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 23:48:00 -0800 (PST)
-Message-ID: <e569e7e8-4d7f-1e69-5a4b-ee4c4f83d7ce@linaro.org>
-Date:   Tue, 14 Feb 2023 08:47:57 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PqFq1+4gxxgib1u5xFvkwzAigtvwrfvrRhML7sgk2og=;
+        b=XwI3eihVruBsV3eGFYLFs2gka1zvkZxzAAvsJMFqJNGd9H9eAABBv1ImsKHX/yPivq
+         1O+NOqQS34lAkgdHMmQWEtzaW73pjENxOpwQQLSQnhZ2FyztxB6R5r480tNwmmlsujCm
+         PkIqLEVriiB3DETSqKXGS0dWg5uyhuMdmum5MIt/3r8CGg1iNm6MqzoJNMiNyhpH9RO4
+         kW1wBVpRuNNlkxlTrJuiR9ib7WbaV+LvUXpfbV+MGMhhHCzv/irZU4UpzPbgo8KZOd4S
+         DWPRWip1l3nxj+3d0IqJ36YF8Mx2m8eUrAIEXR3znda7L5SlwKQ3Z1aJudVcDEEbxF9L
+         ohRA==
+X-Gm-Message-State: AO0yUKVMZigUlLNAWR971tfj9c8u9m2idh8ZkMpnL18vYjcTGBcOL7Ha
+        H5sC7QESUyCd3471jG1Gh+1QRQ==
+X-Google-Smtp-Source: AK7set+z/0zikHSyjJNAcM5BBv6YoI545t+rSZ9zLzt8QE7CgdhePtVTbmUNYt1JITwlvNYYlJV6Ww==
+X-Received: by 2002:a7b:cb44:0:b0:3dd:1b02:23b7 with SMTP id v4-20020a7bcb44000000b003dd1b0223b7mr1097505wmj.10.1676360998019;
+        Mon, 13 Feb 2023 23:49:58 -0800 (PST)
+Received: from alex-rivos.ba.rivosinc.com (lfbn-lyo-1-450-160.w2-7.abo.wanadoo.fr. [2.7.42.160])
+        by smtp.gmail.com with ESMTPSA id g10-20020a05600c4eca00b003dec22de1b1sm17724841wmq.10.2023.02.13.23.49.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 23:49:57 -0800 (PST)
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch@vger.kernel.org
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: [PATCH v3 00/24] Remove COMMAND_LINE_SIZE from uapi
+Date:   Tue, 14 Feb 2023 08:49:01 +0100
+Message-Id: <20230214074925.228106-1-alexghiti@rivosinc.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V3 2/5] arm64: dts: qcom: Add support for Crashdump
- collection on IPQ9574
-Content-Language: en-US
-To:     POOVENDHAN SELVARAJ <quic_poovendh@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        jassisinghbrar@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
-        robimarko@gmail.com, dmitry.baryshkov@linaro.org,
-        nfraprado@collabora.com, broonie@kernel.org,
-        quic_gurus@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_devipriy@quicinc.com
-References: <20230208053332.16537-1-quic_poovendh@quicinc.com>
- <20230208053332.16537-3-quic_poovendh@quicinc.com>
- <dbc93125-afd5-9ed9-7b45-0d79f728b4a5@linaro.org>
- <1a9ad881-7753-935a-ce7d-a2a79d34f16c@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1a9ad881-7753-935a-ce7d-a2a79d34f16c@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2023 05:11, POOVENDHAN SELVARAJ wrote:
-> 
-> On 2/8/2023 1:29 PM, Krzysztof Kozlowski wrote:
->> On 08/02/2023 06:33, Poovendhan Selvaraj wrote:
->>> Enable Crashdump collection in ipq9574
->>>
->>> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
->>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
->>> Co-developed-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
->>> Signed-off-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
->>> Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
->>> ---
->>>   Changes in V3:
->>> 	- No changes
->>>   arch/arm64/boot/dts/qcom/ipq9574.dtsi | 26 +++++++++++++++++++++++++-
->>>   1 file changed, 25 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->>> index 2b86ba17bb32..9c4523f50a57 100644
->>> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->>> @@ -81,6 +81,13 @@
->>>   		reg = <0x0 0x40000000 0x0 0x0>;
->>>   	};
->>>   
->>> +	firmware {
->>> +		scm {
->>> +			compatible = "qcom,scm-ipq9574", "qcom,scm";
->>> +			qcom,dload-mode = <&tcsr_boot_misc 0>;
->>> +		};
->>> +	};
->>> +
->>>   	pmu {
->>>   		compatible = "arm,cortex-a73-pmu";
->>>   		interrupts = <GIC_PPI 7 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
->>> @@ -95,11 +102,17 @@
->>>   		#address-cells = <2>;
->>>   		#size-cells = <2>;
->>>   		ranges;
->>> -
->> I don't think anything improved here - still unrelated change.
->>
->>
->> Best regards,
->> Krzysztof
-> 
-> Okay sure...next series will add required smem and download mode nodes 
-> in different patches.
+This all came up in the context of increasing COMMAND_LINE_SIZE in the
+RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
+maximum length of /proc/cmdline and userspace could staticly rely on
+that to be correct.
 
-I commented the diff - specific hunk - which is unrelated.
+Usually I wouldn't mess around with changing this sort of thing, but
+PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
+to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
+increasing, but they're from before the UAPI split so I'm not quite sure
+what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
+asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
+boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
+and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
+asm-generic/setup.h.").
 
-Best regards,
-Krzysztof
+It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
+part of the uapi to begin with, and userspace should be able to handle
+/proc/cmdline of whatever length it turns out to be.  I don't see any
+references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
+search, but that's not really enough to consider it unused on my end.
+
+The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE really
+shouldn't be part of uapi, so this now touches all the ports.  I've
+tried to split this all out and leave it bisectable, but I haven't
+tested it all that aggressively.
+
+Changes since v2 <https://lore.kernel.org/all/20221211061358.28035-1-palmer@rivosinc.com/>:
+* Fix sh, csky and ia64 builds, as reported by kernel test robot
+
+Changes since v1 <https://lore.kernel.org/all/20210423025545.313965-1-palmer@dabbelt.com/>:
+* Touches every arch.
+
+base-commit-tag: next-20230207
+
+Palmer Dabbelt (24):
+  alpha: Remove COMMAND_LINE_SIZE from uapi
+  arm64: Remove COMMAND_LINE_SIZE from uapi
+  arm: Remove COMMAND_LINE_SIZE from uapi
+  ia64: Remove COMMAND_LINE_SIZE from uapi
+  m68k: Remove COMMAND_LINE_SIZE from uapi
+  microblaze: Remove COMMAND_LINE_SIZE from uapi
+  mips: Remove COMMAND_LINE_SIZE from uapi
+  parisc: Remove COMMAND_LINE_SIZE from uapi
+  powerpc: Remove COMMAND_LINE_SIZE from uapi
+  sparc: Remove COMMAND_LINE_SIZE from uapi
+  xtensa: Remove COMMAND_LINE_SIZE from uapi
+  asm-generic: Remove COMMAND_LINE_SIZE from uapi
+  alpha: Remove empty <uapi/asm/setup.h>
+  arc: Remove empty <uapi/asm/setup.h>
+  m68k: Remove empty <uapi/asm/setup.h>
+  arm64: Remove empty <uapi/asm/setup.h>
+  microblaze: Remove empty <uapi/asm/setup.h>
+  sparc: Remove empty <uapi/asm/setup.h>
+  parisc: Remove empty <uapi/asm/setup.h>
+  x86: Remove empty <uapi/asm/setup.h>
+  xtensa: Remove empty <uapi/asm/setup.h>
+  powerpc: Remove empty <uapi/asm/setup.h>
+  mips: Remove empty <uapi/asm/setup.h>
+  s390: Remove empty <uapi/asm/setup.h>
+
+ .../admin-guide/kernel-parameters.rst         |  2 +-
+ arch/alpha/include/asm/setup.h                |  4 +--
+ arch/alpha/include/uapi/asm/setup.h           |  7 -----
+ arch/arc/include/asm/setup.h                  |  1 -
+ arch/arc/include/uapi/asm/setup.h             |  6 -----
+ arch/arm/include/asm/setup.h                  |  1 +
+ arch/arm/include/uapi/asm/setup.h             |  2 --
+ arch/arm64/include/asm/setup.h                |  3 ++-
+ arch/arm64/include/uapi/asm/setup.h           | 27 -------------------
+ arch/ia64/include/asm/setup.h                 | 10 +++++++
+ arch/ia64/include/uapi/asm/setup.h            |  6 ++---
+ arch/loongarch/include/asm/setup.h            |  2 +-
+ arch/m68k/include/asm/setup.h                 |  3 +--
+ arch/m68k/include/uapi/asm/setup.h            | 17 ------------
+ arch/microblaze/include/asm/setup.h           |  2 +-
+ arch/microblaze/include/uapi/asm/setup.h      | 20 --------------
+ arch/mips/include/asm/setup.h                 |  3 ++-
+ arch/mips/include/uapi/asm/setup.h            |  8 ------
+ arch/parisc/include/{uapi => }/asm/setup.h    |  0
+ arch/powerpc/include/asm/setup.h              |  2 +-
+ arch/powerpc/include/uapi/asm/setup.h         |  7 -----
+ arch/s390/include/asm/setup.h                 |  1 -
+ arch/s390/include/uapi/asm/setup.h            |  1 -
+ arch/sh/include/asm/setup.h                   |  2 +-
+ arch/sparc/include/asm/setup.h                |  6 ++++-
+ arch/sparc/include/uapi/asm/setup.h           | 16 -----------
+ arch/x86/include/asm/setup.h                  |  2 --
+ arch/x86/include/uapi/asm/setup.h             |  1 -
+ arch/xtensa/include/{uapi => }/asm/setup.h    |  0
+ include/asm-generic/Kbuild                    |  1 +
+ include/{uapi => }/asm-generic/setup.h        |  0
+ include/uapi/asm-generic/Kbuild               |  1 -
+ 32 files changed, 31 insertions(+), 133 deletions(-)
+ delete mode 100644 arch/alpha/include/uapi/asm/setup.h
+ delete mode 100644 arch/arc/include/uapi/asm/setup.h
+ delete mode 100644 arch/arm64/include/uapi/asm/setup.h
+ create mode 100644 arch/ia64/include/asm/setup.h
+ delete mode 100644 arch/m68k/include/uapi/asm/setup.h
+ delete mode 100644 arch/microblaze/include/uapi/asm/setup.h
+ delete mode 100644 arch/mips/include/uapi/asm/setup.h
+ rename arch/parisc/include/{uapi => }/asm/setup.h (100%)
+ delete mode 100644 arch/powerpc/include/uapi/asm/setup.h
+ delete mode 100644 arch/s390/include/uapi/asm/setup.h
+ delete mode 100644 arch/sparc/include/uapi/asm/setup.h
+ delete mode 100644 arch/x86/include/uapi/asm/setup.h
+ rename arch/xtensa/include/{uapi => }/asm/setup.h (100%)
+ rename include/{uapi => }/asm-generic/setup.h (100%)
+
+-- 
+2.37.2
 
