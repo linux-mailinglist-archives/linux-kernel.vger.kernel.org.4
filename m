@@ -2,160 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BCE9696EAD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 21:46:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECAF696EB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 21:50:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231812AbjBNUqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 15:46:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
+        id S229872AbjBNUuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 15:50:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjBNUqC (ORCPT
+        with ESMTP id S229518AbjBNUuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 15:46:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB4E25293;
-        Tue, 14 Feb 2023 12:46:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 49C73618C1;
-        Tue, 14 Feb 2023 20:46:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80545C433D2;
-        Tue, 14 Feb 2023 20:46:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676407560;
-        bh=nSGCvMOkVjv6R7oFAFpPRC17JDrtEfGiBOfnIbHMl/w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fkR703z4bcshjOnTM9mtac3lz9vPzZ5zxt/xpUrhiAV3kxq5sCnxtivXWe+Wy6zxW
-         ewBFksPJT4f/RoCzV0rn0Lf5tpUK2XmHmLokaNihmBBmM1bO2U4CZj7kdQzlm21V0W
-         PLRtSDkY8lfpzJXAfFaHEAeIBraZVnmzOyIP8Q+wee7oQgsaWyM9KYDuXG9ElvNct0
-         1GTDJF7Qh8lWmJ6Uop3KMLbb18XbP+GVT+E0PI0K9LV36PsgTtOWdi1IljvAr0l9t5
-         cOTTlF2Rheq4Vm73shLsZ8S/BWeXg4a0BdrvD0NRD7/6qdJ1v2/ICFwSXqapKPnuqG
-         zdtM+27gkeU3g==
-Date:   Tue, 14 Feb 2023 14:45:59 -0600
-From:   Seth Forshee <sforshee@kernel.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     shuah@kernel.org, brauner@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/mount_setattr: fix redefine struct mount_attr
- build error
-Message-ID: <Y+vzB1OTXr+zTCV7@do-x1extreme>
-References: <20230213183149.231779-1-skhan@linuxfoundation.org>
- <Y+rMtlvx31w7eWCA@do-x1extreme>
- <f536ecc2-1889-6df6-43d3-1a04dc8f1b14@linuxfoundation.org>
+        Tue, 14 Feb 2023 15:50:08 -0500
+Received: from mr85p00im-hyfv06011401.me.com (mr85p00im-hyfv06011401.me.com [17.58.23.191])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB44823859
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 12:50:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+        t=1676407806; bh=lu3iz8boaJE5hBM4PrvJdMVuK1QqN72tUsmqt9Hu/rY=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=H3cr8FVBF3lJbW3/8sQ88eAyp+QmM3qSZ4VkCu3WCFMy0g3wSyoVFR2FvzwftLFza
+         fcQfAZfy1NZjBXTHHlDr2j6P9xPAaLZ00Vni9skpON+fgFTEEbCyD5SKahenyq5E3K
+         yFEW4ZrQCmq7gA/xh0eFwtweOAJsHJHX3lHglKVSvzfu5GuVAuqQOAAZqHa9E8ViUT
+         Ill/cZ7GL2U1gNHVPIYod7XDRmEEV7XAkL+cedlB012tIOD/ezYDd063JUi8U2parF
+         ELyQbwORxh1uqmyZ1I1W6XzaArQt3aBijlnArCu34mFZXh6MleMPWgvruApPDh/MZ3
+         IgHcpq0w3NS7g==
+Received: from localhost (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
+        by mr85p00im-hyfv06011401.me.com (Postfix) with ESMTPSA id E038C357D231;
+        Tue, 14 Feb 2023 20:50:05 +0000 (UTC)
+From:   Alain Volmat <avolmat@me.com>
+To:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>
+Cc:     Alain Volmat <avolmat@me.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v3] dt-bindings: mailbox: sti-mailbox: convert to DT schema
+Date:   Tue, 14 Feb 2023 21:49:44 +0100
+Message-Id: <20230214204945.4215-1-avolmat@me.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <f536ecc2-1889-6df6-43d3-1a04dc8f1b14@linuxfoundation.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-GUID: -_KukQB_Mf3ClW8_I2YgINTJ_jkX0ZaC
+X-Proofpoint-ORIG-GUID: -_KukQB_Mf3ClW8_I2YgINTJ_jkX0ZaC
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.0.605.474.0000000_definitions?=
+ =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2020-01-23?=
+ =?UTF-8?Q?=5F02_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 adultscore=0 clxscore=1015
+ malwarescore=0 bulkscore=0 phishscore=0 suspectscore=0 mlxlogscore=999
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2302140180
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 10:10:00AM -0700, Shuah Khan wrote:
-> On 2/13/23 16:50, Seth Forshee wrote:
-> > On Mon, Feb 13, 2023 at 11:31:49AM -0700, Shuah Khan wrote:
-> > > Fix the following build error due to redefining struct mount_attr by
-> > > removing duplicate define from mount_setattr_test.c
-> > > 
-> > > gcc -g -isystem .../tools/testing/selftests/../../../usr/include -Wall -O2 -pthread     mount_setattr_test.c  -o .../tools/testing/selftests/mount_setattr/mount_setattr_test
-> > > mount_setattr_test.c:107:8: error: redefinition of ‘struct mount_attr’
-> > >    107 | struct mount_attr {
-> > >        |        ^~~~~~~~~~
-> > > In file included from /usr/include/x86_64-linux-gnu/sys/mount.h:32,
-> > >                   from mount_setattr_test.c:10:
-> > > .../usr/include/linux/mount.h:129:8: note: originally defined here
-> > >    129 | struct mount_attr {
-> > >        |        ^~~~~~~~~~
-> > > make: *** [../lib.mk:145: .../tools/testing/selftests/mount_setattr/mount_setattr_test] Error 1
-> > > 
-> > > Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> > > ---
-> > >   tools/testing/selftests/mount_setattr/mount_setattr_test.c | 7 -------
-> > >   1 file changed, 7 deletions(-)
-> > > 
-> > > diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-> > > index 8c5fea68ae67..582669ca38e9 100644
-> > > --- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-> > > +++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-> > > @@ -103,13 +103,6 @@
-> > >   	#else
-> > >   		#define __NR_mount_setattr 442
-> > >   	#endif
-> > > -
-> > > -struct mount_attr {
-> > > -	__u64 attr_set;
-> > > -	__u64 attr_clr;
-> > > -	__u64 propagation;
-> > > -	__u64 userns_fd;
-> > > -};
-> > >   #endif
-> > 
-> > The difficulty with this is that whether or not you need this definition
-> > depends on your system headers. My laptop doesn't have definitions for
-> > either __NR_mount_setattr or struct mount_attr, so for me the build
-> > works without this patch but fails with it.
-> > 
-> 
-> The header search looks up system headers followed by installed headers in
-> the repo (both in-tree and out-of-tree builds). kselftest builds do depend
-> on headers_install. Did you building after running headers_install?
+Convert the sti-mailbox.txt file into st,sti-mailbox.yaml
 
-I wasn't aware they depend on headers_install. Why doesn't
-Documentation/dev-tools/kselftest.rst mention this in the section that
-describes how to run tests?
+Signed-off-by: Alain Volmat <avolmat@me.com>
+---
+v3: remove quotes around $ref
+v2: update commit log
+    remove quotes around urls
+    add mbox-name $ref
+    remove mbox-name from required properties since not mandatory in the driver
+    fix IRQ type in example
 
-It seems what I really need to fix the build is to include
-linux/mount.h, which works for me with or without headers_install,
-because I have the struct in /usr/include/linux/mount.h. And I suppose
-the makefile should use KHDR_INCLUDES. So maybe the changes below should
-also be included.
+ .../bindings/mailbox/st,sti-mailbox.yaml      | 53 +++++++++++++++++++
+ .../bindings/mailbox/sti-mailbox.txt          | 51 ------------------
+ 2 files changed, 53 insertions(+), 51 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mailbox/st,sti-mailbox.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mailbox/sti-mailbox.txt
 
-However I know Christian has said that there are challenges with
-including the mount headers. He wrote this test, so I'd like to hear his
-thoughts about adding the include. He's on vacation this week though.
-
-> > I suppose we could fix this universally by using a different name for
-> > the struct in the test, e.g.:
-> > 
-> 
-> This is not a good way to for a couple of reasons. This masks any problems
-> due to incompatibility between these defines.
-
-Agreed that this isn't ideal.
-
-Thanks,
-Seth
-
-
-diff --git a/tools/testing/selftests/mount_setattr/Makefile b/tools/testing/selftests/mount_setattr/Makefile
-index 2250f7dcb81e..fde72df01b11 100644
---- a/tools/testing/selftests/mount_setattr/Makefile
-+++ b/tools/testing/selftests/mount_setattr/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- # Makefile for mount selftests.
--CFLAGS = -g -I../../../../usr/include/ -Wall -O2 -pthread
-+CFLAGS = -g $(KHDR_INCLUDES) -Wall -O2 -pthread
- 
- TEST_GEN_FILES += mount_setattr_test
- 
-diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-index 8c5fea68ae67..969647228817 100644
---- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-+++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-@@ -18,6 +18,7 @@
- #include <grp.h>
- #include <stdbool.h>
- #include <stdarg.h>
-+#include <linux/mount.h>
- 
- #include "../kselftest_harness.h"
- 
+diff --git a/Documentation/devicetree/bindings/mailbox/st,sti-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/st,sti-mailbox.yaml
+new file mode 100644
+index 000000000000..a023c28dff49
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mailbox/st,sti-mailbox.yaml
+@@ -0,0 +1,53 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mailbox/st,sti-mailbox.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: STMicroelectronics Mailbox Driver for STi platform
++
++description:
++  Each ST Mailbox IP currently consists of 4 instances of 32 channels.
++  Messages are passed between Application and Remote processors using
++  shared memory.
++
++maintainers:
++  - Patrice Chotard <patrice.chotard@foss.st.com>
++
++properties:
++  compatible:
++    const: st,stih407-mailbox
++
++  reg:
++    maxItems: 1
++
++  mbox-name:
++    $ref: /schemas/types.yaml#/definitions/string
++    description: name of the mailbox IP
++
++  interrupts:
++    description: the irq line for the RX mailbox
++    maxItems: 1
++
++  "#mbox-cells":
++    const: 2
++
++required:
++  - compatible
++  - reg
++  - "#mbox-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    mailbox0: mailbox@8f00000  {
++        compatible = "st,stih407-mailbox";
++        reg = <0x8f00000 0x1000>;
++        interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>;
++        #mbox-cells = <2>;
++        mbox-name = "a9";
++    };
++
++...
+diff --git a/Documentation/devicetree/bindings/mailbox/sti-mailbox.txt b/Documentation/devicetree/bindings/mailbox/sti-mailbox.txt
+deleted file mode 100644
+index 351f612673fc..000000000000
+--- a/Documentation/devicetree/bindings/mailbox/sti-mailbox.txt
++++ /dev/null
+@@ -1,51 +0,0 @@
+-ST Microelectronics Mailbox Driver
+-
+-Each ST Mailbox IP currently consists of 4 instances of 32 channels.  Messages
+-are passed between Application and Remote processors using shared memory.
+-
+-Controller
+-----------
+-
+-Required properties:
+-- compatible		: Should be "st,stih407-mailbox"
+-- reg			: Offset and length of the device's register set
+-- mbox-name		: Name of the mailbox
+-- #mbox-cells:		: Must be 2
+-			  <&phandle instance channel direction>
+-			    phandle   : Label name of controller
+-			    instance  : Instance number
+-			    channel   : Channel number
+-
+-Optional properties
+-- interrupts		: Contains the IRQ line for a Rx mailbox
+-
+-Example:
+-
+-mailbox0: mailbox@0  {
+-	compatible	= "st,stih407-mailbox";
+-	reg		= <0x08f00000 0x1000>;
+-	interrupts	= <GIC_SPI 1 IRQ_TYPE_NONE>;
+-	#mbox-cells	= <2>;
+-	mbox-name	= "a9";
+-};
+-
+-Client
+-------
+-
+-Required properties:
+-- compatible		: Many (See the client docs)
+-- reg			: Shared (between Application and Remote) memory address
+-- mboxes		: Standard property to specify a Mailbox (See ./mailbox.txt)
+-			  Cells must match 'mbox-cells' (See Controller docs above)
+-
+-Optional properties
+-- mbox-names		: Name given to channels seen in the 'mboxes' property.
+-
+-Example:
+-
+-mailbox_test {
+-	compatible	= "mailbox-test";
+-	reg		= <0x[shared_memory_address], [shared_memory_size]>;
+-	mboxes		= <&mailbox2 0 1>, <&mailbox0 2 1>;
+-	mbox-names	= "tx",	"rx";
+-};
+-- 
+2.34.1
 
