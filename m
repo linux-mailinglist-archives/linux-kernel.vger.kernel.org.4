@@ -2,58 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B37BD696C2D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:01:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C29B0696C31
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjBNSB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 13:01:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
+        id S233227AbjBNSCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 13:02:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233102AbjBNSBx (ORCPT
+        with ESMTP id S232948AbjBNSB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 13:01:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6768A2E0D4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 10:01:52 -0800 (PST)
+        Tue, 14 Feb 2023 13:01:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2322D175;
+        Tue, 14 Feb 2023 10:01:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0A230B81E96
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 18:01:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A228AC433D2;
-        Tue, 14 Feb 2023 18:01:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D277617EE;
+        Tue, 14 Feb 2023 18:01:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8762C433EF;
+        Tue, 14 Feb 2023 18:01:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676397709;
-        bh=34Nen5m82Ih5JAA2jFki5nFMtCWBQprb7z0xjZpbw0U=;
+        s=k20201202; t=1676397713;
+        bh=fJ9opWwlrNRE3PSWElmM+meCZDF25dlk2Afd6BfAL2k=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=eezYBiv1MXt1L3ERpQTVuTfDqimOqvfrVnfHMSV2RvSb3ibvEqO7EzXysP5n8m84G
-         ya7oY0ndAThsRPkTf7wX9T0qI+uAujdxE6moVP0Ajo+pSKsTQxyOzmqohKN25u484C
-         QoLmyjsRsGgJg78u+r421MWqMgvda4WeAaGICkWur1TO/e+cPzYu+HVmQv3gUzc3Tn
-         pLWg87hWWKuH0b5x2AKoXqhp8Ht9waSv4Xqb/5+OXHjBic2SUS4bW3je6QhOHqW81O
-         /wt65NCDWNtslA7eJQM2li/tnRqCfbJddhZYfIoGOv3sVFkDBVmyeuYnJB+IPmqMyP
-         +0iGgNc67K2CA==
+        b=fdtz39CWX0U3i8MMtBbziZwqaRekEbPj5ymk2mj6D5AqNK7pMYTSlVLvNbxb7YMPU
+         ytchlc+6EAsRuAuG5qQ89Xp8hoUtvEijMwMy0LB8wsAa2qtnR6O+8WT3OTaL5W4Gd8
+         hY0cJj1o4Xw0Lg4JTExwTbqWdrgXLgqCpcglMi/VlzbakHzo7mBWC0E5tj6gs3HDoT
+         FBvUavrcSsyIKymmbqZEc/8ISnN5xKu+byYtOSsloGkC6NjDwTYzH0ApsxtQ26ST+8
+         dke74q3JkrlIwt6jNsD+Fhz6eT6xOWqFZBtWL3SzOGmwKUBXM3PU3CkDj51YLndEBe
+         rUSsu+IsBHlrg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Oder Chiou <oder_chiou@realtek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     alsa-devel@alsa-project.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Judy Hsiao <judyhsiao@chromium.org>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230209012002.1.Ib4d6481f1d38a6e7b8c9e04913c02ca88c216cf6@changeid>
-References: <20230209012002.1.Ib4d6481f1d38a6e7b8c9e04913c02ca88c216cf6@changeid>
-Subject: Re: [PATCH] SoC: rt5682s: Disable jack detection interrupt during
- suspend
-Message-Id: <167639770737.3067697.4910964647967248815.b4-ty@kernel.org>
-Date:   Tue, 14 Feb 2023 18:01:47 +0000
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+In-Reply-To: <077ca39622c8870a3ea932298a9cec34f7a8295a.1676363976.git.christophe.jaillet@wanadoo.fr>
+References: <077ca39622c8870a3ea932298a9cec34f7a8295a.1676363976.git.christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] regmap: Reorder fields in 'struct regmap_bus' to save
+ some memory
+Message-Id: <167639771249.3067854.8958372042708188891.b4-ty@kernel.org>
+Date:   Tue, 14 Feb 2023 18:01:52 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,24 +54,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 09 Feb 2023 01:20:23 +0000, Matthias Kaehlcke wrote:
-> The rt5682s driver switches its regmap to cache-only when the
-> device suspends and back to regular mode on resume. When the
-> jack detect interrupt fires rt5682s_irq() schedules the jack
-> detect work. This can result in invalid reads from the regmap
-> in cache-only mode if the work runs before the device has
-> resumed:
+On Tue, 14 Feb 2023 09:40:14 +0100, Christophe JAILLET wrote:
+> Group some bool variables to reduce hole and avoid padding.
+> On x86_64, this shrinks the size from 136 to 128 bytes.
+> 
+> As an example:
+> 
+> $ size drivers/base/regmap/regmap-fsi.o (Before)
+>    text	   data	    bss	    dec	    hex	filename
+>    4837	    136	      0	   4973	   136d	drivers/base/regmap/regmap-fsi.o
 > 
 > [...]
 
 Applied to
 
-   broonie/sound.git for-next
+   broonie/regmap.git for-next
 
 Thanks!
 
-[1/1] SoC: rt5682s: Disable jack detection interrupt during suspend
-      commit: f7d00a9be147d9c6feeb19591b39f8102f70cc45
+[1/1] regmap: Reorder fields in 'struct regmap_bus' to save some memory
+      commit: 7464145862d606cf9835f24080341a397cbc0669
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
