@@ -2,178 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E21696324
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49188696326
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:11:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjBNMKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 07:10:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
+        id S231922AbjBNMLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 07:11:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbjBNMKG (ORCPT
+        with ESMTP id S230186AbjBNMLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 07:10:06 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21EF91042A;
-        Tue, 14 Feb 2023 04:10:04 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id r28so12818814oiw.3;
-        Tue, 14 Feb 2023 04:10:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=zUuZKXab9i7az47moFU039MmUADJp6ucdRHmu481T/c=;
-        b=fYqv9FY6EKKRQCgvj0E1n9iIpcXWx1txpnWUa7mflMtx7UUVkhqUGRg7QrYoj4rh+0
-         Xn40m2BqQtNsAim00kbuWr/EQWsxXejyZL46qfIwZsKcA0zA1uJRuqT9z3jyzP7qQyby
-         959gpbr8nPt022fwTFwZRo+NpTV6fPi7bLwkZO2lTpAAI1ofcMcNiF1kR2hj9DXntSL9
-         I9GRQDBoXsNJr+KYItsJgyOb5SaVa/rOG1kqlYx3gAXZRAhHVPx69AlU4Z6I0IP15yiM
-         zNWNqfYUbyJuKS2B0MQqLKaVjcqsgVbvG75kAVdYMEEDCFCr3aisRAiu9KOWyV8reMta
-         9j1Q==
+        Tue, 14 Feb 2023 07:11:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C5B241C5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:10:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676376610;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fQGAtPWY8hnlsJbVBZNAgZfYHm1taAI2QR5/9MhuMCw=;
+        b=jD3FYNPIHxTQyHz/6Lir9RnQ91fLI1TSQh+Ah7isz3SlnMo/ewDcEygiCzsn48M5Y2mHOb
+        qeVZI8dkm40ZiYPiNCRdx2rsVN55tn4h/+ahzkh0F2l9TEcQl+Jw5DF5kdUDBJQxOLojYc
+        jLj/yamqPfSnU6XvUHAHBSq7NatCXzA=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-442-AGe7PNqdNH2dXT6YojkYzQ-1; Tue, 14 Feb 2023 07:10:09 -0500
+X-MC-Unique: AGe7PNqdNH2dXT6YojkYzQ-1
+Received: by mail-wr1-f72.google.com with SMTP id o9-20020adfa109000000b002bfc062eaa8so3038763wro.20
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:10:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zUuZKXab9i7az47moFU039MmUADJp6ucdRHmu481T/c=;
-        b=2Pxs0tNFerdojj0vE6pN3W9M6kodNP7YU/FP2ye4S/V0u+qEDlxLlQl58fS8zvVTex
-         oOt1r1tN6oBploq5D2eGY2eOpHepEMPfJamjimtV5jfIQOVwx1iCSBKuG2rwBJSZ287d
-         4yE3EwEnpBGWi2+iZvSQJnl6Xkmom383gApSP0cDBnzNxtKzxgj5wT7hzl9lHWNbuBJR
-         knhC1nD6AFwhp10/8VO+OyWKv17L3HN0STHTG0pKzeAlEjqm5u+xu+Yv/6ychzcv6Gob
-         291HIjo5oNTgq6JBJ6VX3qYvGZ1IVjIpkPdLxRJpB6jxRKsE04WG5YWATAUvI+br/DGm
-         sZJg==
-X-Gm-Message-State: AO0yUKXc3R10lLVa09SCxMRI7snmnZ+2vVR0u81mfo3k7VV7YdAleg0O
-        YcpS2z19/FBAOGJscCCEkMU=
-X-Google-Smtp-Source: AK7set/82YvbvMs+kiwWvgpInCYzqt5Tp3wjqF7Nutt6jNFclwSOu3xYUiwgHI3jzW2XYAE+Dlnn8g==
-X-Received: by 2002:aca:2216:0:b0:378:516b:cc57 with SMTP id b22-20020aca2216000000b00378516bcc57mr1020444oic.25.1676376603374;
-        Tue, 14 Feb 2023 04:10:03 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w6-20020acadf06000000b0037b80fe0539sm6071489oig.42.2023.02.14.04.10.01
+        bh=fQGAtPWY8hnlsJbVBZNAgZfYHm1taAI2QR5/9MhuMCw=;
+        b=j/6BVNGKdpDYIf0wRBWOwR6jlzv+TevOW9CXLma6PDYt0bdZrkGXAw1MDNga35g9T5
+         ST6L/OSMcopLPPnpPmUYlKs5uJb8sPwojG9P8Qa3vgZZ5Wl5btkCMGwsrw9OJGyTXudE
+         sYkXKr69OPPDj3eeSdQ0b8H7NKqmDyjlStFjK9PPIU1MEkWjdCmiTaO0ql57+e/ME58N
+         MyXTGsjrvMwacAOAP0Ri6HJMq4D+ja8NsHf8L+VAmHz3ta6fjfUXVxBib7YhQJgV6Fcn
+         tk78u6mixjBIp4h7gJpIQ/S7nlqILole/Odb7aK5Jrqgaagd4+Qdr9wgMOyiLRez5nHY
+         2CDQ==
+X-Gm-Message-State: AO0yUKVYhj+SueB4+7qBS9TleJ9Zek+FnzTUvnoiteOQ2XaB8GEHfVoc
+        quHzw0+T5OEQ6/jUF1eyNFn3eZpA6LMbTEYVUNswtgJcorB3ZY40xkwkUGtolqO1z1lgmuIbDev
+        ftPQGzdhTzwMewOBXNbow23NWIw9AbQ==
+X-Received: by 2002:adf:fa12:0:b0:2c5:54fd:265e with SMTP id m18-20020adffa12000000b002c554fd265emr1682827wrr.70.1676376607937;
+        Tue, 14 Feb 2023 04:10:07 -0800 (PST)
+X-Google-Smtp-Source: AK7set/eKR65hGUw7zjA32D3rQxfs8/JgEu3cXxJDUUjr9KXAGFDOM4Uq2hNdzig/HmGGAGmmtSQFw==
+X-Received: by 2002:adf:fa12:0:b0:2c5:54fd:265e with SMTP id m18-20020adffa12000000b002c554fd265emr1682806wrr.70.1676376607604;
+        Tue, 14 Feb 2023 04:10:07 -0800 (PST)
+Received: from ?IPV6:2003:cb:c709:1700:969:8e2b:e8bb:46be? (p200300cbc709170009698e2be8bb46be.dip0.t-ipconnect.de. [2003:cb:c709:1700:969:8e2b:e8bb:46be])
+        by smtp.gmail.com with ESMTPSA id g9-20020a5d5409000000b002c558228b6dsm5509185wrv.12.2023.02.14.04.10.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 04:10:02 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <aa68fc8c-cfa1-902d-b95e-4fcbd3154f93@roeck-us.net>
-Date:   Tue, 14 Feb 2023 04:10:00 -0800
+        Tue, 14 Feb 2023 04:10:07 -0800 (PST)
+Message-ID: <4c9e7ddb-b303-688a-5fc6-be83ca1a8a2a@redhat.com>
+Date:   Tue, 14 Feb 2023 13:10:06 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 3/3] watchdog: mt7621-wdt: avoid ralink architecture
- dependent code
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v1 RFC Zisslpcfi 11/20] mmu: maybe_mkwrite updated to
+ manufacture shadow stack PTEs
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-watchdog@vger.kernel.org
-Cc:     wim@linux-watchdog.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-References: <20230213200519.889503-1-sergio.paracuellos@gmail.com>
- <20230213200519.889503-4-sergio.paracuellos@gmail.com>
- <f105c7a8-8821-1e7b-af46-13a46971db63@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <f105c7a8-8821-1e7b-af46-13a46971db63@linaro.org>
+To:     Deepak Gupta <debug@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+References: <20230213045351.3945824-1-debug@rivosinc.com>
+ <20230213045351.3945824-12-debug@rivosinc.com>
+ <2d6eefb8-c7c5-7d32-9a75-ae716f828cd9@redhat.com>
+ <20230213143754.GC3943238@debug.ba.rivosinc.com>
+ <7693247c-a55d-a375-3621-1b07115a9d99@redhat.com>
+ <20230213200109.GA4016181@debug.ba.rivosinc.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230213200109.GA4016181@debug.ba.rivosinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/23 00:31, Krzysztof Kozlowski wrote:
-> On 13/02/2023 21:05, Sergio Paracuellos wrote:
->> MT7621 SoC has a system controller node. Watchdog need to access to reset
->> status register. Ralink architecture and related driver are old and from
->> the beggining they are using some architecture dependent operations for
->> accessing this shared registers through 'asm/mach-ralink/ralink_regs.h'
->> header file. However this is not ideal from a driver perspective which can
->> just access to the system controller registers in an arch independent way
->> using regmap syscon APIs. Update Kconfig accordingly to select new added
->> dependencies and allow driver to be compile tested.
+On 13.02.23 21:01, Deepak Gupta wrote:
+> On Mon, Feb 13, 2023 at 03:56:22PM +0100, David Hildenbrand wrote:
+>> On 13.02.23 15:37, Deepak Gupta wrote:
+>>> On Mon, Feb 13, 2023 at 01:05:16PM +0100, David Hildenbrand wrote:
+>>>> On 13.02.23 05:53, Deepak Gupta wrote:
+>>>>> maybe_mkwrite creates PTEs with WRITE encodings for underlying arch if
+>>>>> VM_WRITE is turned on in vma->vm_flags. Shadow stack memory is a write-
+>>>>> able memory except it can only be written by certain specific
+>>>>> instructions. This patch allows maybe_mkwrite to create shadow stack PTEs
+>>>>> if vma is shadow stack VMA. Each arch can define which combination of VMA
+>>>>> flags means a shadow stack.
+>>>>>
+>>>>> Additionally pte_mkshdwstk must be provided by arch specific PTE
+>>>>> construction headers to create shadow stack PTEs. (in arch specific
+>>>>> pgtable.h).
+>>>>>
+>>>>> This patch provides dummy/stub pte_mkshdwstk if CONFIG_USER_SHADOW_STACK
+>>>>> is not selected.
+>>>>>
+>>>>> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+>>>>> ---
+>>>>>   include/linux/mm.h      | 23 +++++++++++++++++++++--
+>>>>>   include/linux/pgtable.h |  4 ++++
+>>>>>   2 files changed, 25 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/include/linux/mm.h b/include/linux/mm.h
+>>>>> index 8f857163ac89..a7705bc49bfe 100644
+>>>>> --- a/include/linux/mm.h
+>>>>> +++ b/include/linux/mm.h
+>>>>> @@ -1093,6 +1093,21 @@ static inline unsigned long thp_size(struct page *page)
+>>>>>   void free_compound_page(struct page *page);
+>>>>>   #ifdef CONFIG_MMU
+>>>>> +
+>>>>> +#ifdef CONFIG_USER_SHADOW_STACK
+>>>>> +bool arch_is_shadow_stack_vma(struct vm_area_struct *vma);
+>>>>> +#endif
+>>>>> +
+>>>>> +static inline bool
+>>>>> +is_shadow_stack_vma(struct vm_area_struct *vma)
+>>>>> +{
+>>>>> +#ifdef CONFIG_USER_SHADOW_STACK
+>>>>> +	return arch_is_shadow_stack_vma(vma);
+>>>>> +#else
+>>>>> +	return false;
+>>>>> +#endif
+>>>>> +}
+>>>>> +
+>>>>>   /*
+>>>>>    * Do pte_mkwrite, but only if the vma says VM_WRITE.  We do this when
+>>>>>    * servicing faults for write access.  In the normal case, do always want
+>>>>> @@ -1101,8 +1116,12 @@ void free_compound_page(struct page *page);
+>>>>>    */
+>>>>>   static inline pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
+>>>>>   {
+>>>>> -	if (likely(vma->vm_flags & VM_WRITE))
+>>>>> -		pte = pte_mkwrite(pte);
+>>>>> +	if (likely(vma->vm_flags & VM_WRITE)) {
+>>>>> +		if (unlikely(is_shadow_stack_vma(vma)))
+>>>>> +			pte = pte_mkshdwstk(pte);
+>>>>> +		else
+>>>>> +			pte = pte_mkwrite(pte);
+>>>>> +	}
+>>>>>   	return pte;
+>>>>
+>>>> Exactly what we are trying to avoid in the x86 approach right now.
+>>>> Please see the x86 series on details, we shouldn't try reinventing the
+>>>> wheel but finding a core-mm approach that fits multiple architectures.
+>>>>
+>>>> https://lkml.kernel.org/r/20230119212317.8324-1-rick.p.edgecombe@intel.com
+>>>
+>>> Thanks David for comment here. I looked at x86 approach. This patch
+>>> actually written in a way which is not re-inventing wheel and is following
+>>> a core-mm approach that fits multiple architectures.
+>>>
+>>> Change above checks `is_shadow_stack_vma` and if it returns true then only
+>>> it manufactures shadow stack pte else it'll make a regular writeable mapping.
+>>>
+>>> Now if we look at `is_shadow_stack_vma` implementation, it returns false if
+>>> `CONFIG_USER_SHADOW_STACK` is not defined. If `CONFIG_USER_SHADOW_STACK is
+>>> defined then it calls `arch_is_shadow_stack_vma` which should be implemented
+>>> by arch specific code. This allows each architecture to define their own vma
+>>> flag encodings for shadow stack (riscv chooses presence of only `VM_WRITE`
+>>> which is analogous to choosen PTE encodings on riscv W=1,R=0,X=0)
+>>>
+>>> Additionally pte_mkshdwstk will be nop if not implemented by architecture.
+>>>
+>>> Let me know if this make sense. If I am missing something here, let me know.
 >>
->> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
->> ---
->>   drivers/watchdog/Kconfig      |  4 +++-
->>   drivers/watchdog/mt7621_wdt.c | 18 +++++++++++++-----
->>   2 files changed, 16 insertions(+), 6 deletions(-)
+>> See the discussion in that thread. The idea is to pass a VMA to
+>> pte_mkwrite() and let it handle how to actually set it writable.
 >>
->> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
->> index b64bc49c7..cf752ad64 100644
->> --- a/drivers/watchdog/Kconfig
->> +++ b/drivers/watchdog/Kconfig
->> @@ -1865,7 +1865,9 @@ config GXP_WATCHDOG
->>   config MT7621_WDT
->>   	tristate "Mediatek SoC watchdog"
->>   	select WATCHDOG_CORE
->> -	depends on SOC_MT7620 || SOC_MT7621
->> +	select REGMAP_MMIO
->> +	select MFD_SYSCON
->> +	depends on SOC_MT7620 || SOC_MT7621 || COMPILE_TEST
->>   	help
->>   	  Hardware driver for the Mediatek/Ralink MT7621/8 SoC Watchdog Timer.
->>   
->> diff --git a/drivers/watchdog/mt7621_wdt.c b/drivers/watchdog/mt7621_wdt.c
->> index 40fb2c9ba..22e979bdd 100644
->> --- a/drivers/watchdog/mt7621_wdt.c
->> +++ b/drivers/watchdog/mt7621_wdt.c
->> @@ -15,8 +15,8 @@
->>   #include <linux/moduleparam.h>
->>   #include <linux/platform_device.h>
->>   #include <linux/mod_devicetable.h>
->> -
->> -#include <asm/mach-ralink/ralink_regs.h>
->> +#include <linux/mfd/syscon.h>
->> +#include <linux/regmap.h>
->>   
->>   #define SYSC_RSTSTAT			0x38
->>   #define WDT_RST_CAUSE			BIT(1)
->> @@ -34,6 +34,7 @@
->>   struct mt7621_wdt_data {
->>   	void __iomem *base;
->>   	struct reset_control *rst;
->> +	struct regmap *sysc;
->>   	struct watchdog_device wdt;
->>   };
->>   
->> @@ -104,9 +105,12 @@ static int mt7621_wdt_stop(struct watchdog_device *w)
->>   	return 0;
->>   }
->>   
->> -static int mt7621_wdt_bootcause(void)
->> +static int mt7621_wdt_bootcause(struct mt7621_wdt_data *d)
->>   {
->> -	if (rt_sysc_r32(SYSC_RSTSTAT) & WDT_RST_CAUSE)
->> +	u32 val;
->> +
->> +	regmap_read(d->sysc, SYSC_RSTSTAT, &val);
->> +	if (val & WDT_RST_CAUSE)
->>   		return WDIOF_CARDRESET;
->>   
->>   	return 0;
->> @@ -143,6 +147,10 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
->>   	if (!drvdata)
->>   		return -ENOMEM;
->>   
->> +	drvdata->sysc = syscon_regmap_lookup_by_compatible("mediatek,mt7621-sysc");
->> +	if (IS_ERR(drvdata->sysc))
->> +		return PTR_ERR(drvdata->sysc);
 > 
-> This should be the backup/error path for original code using syscon
-> property. Looking up by compatible is really not portable/re-usable.
+> Thanks. I see. Instances where `pte_mkwrite` is directly invoked by checking
+> VM_WRITE and thus instead of fixing all those instance, make pte_mkwrite itself
+> take vma flag or vma.
 > 
+> I'll revise.
 
-I really disagree here.
+Thanks, it would be great to discuss in the other threads what else you 
+would need to make it work for you. I assume Rick will have something to 
+play with soonish (Right, Rick? :) ).
 
-$ git grep syscon_regmap_lookup_by_compatible | wc
-      90     326    8940
+-- 
+Thanks,
 
-I have not yet reviewed this code, but I do not accept this argument against it.
-
-Guenter
+David / dhildenb
 
