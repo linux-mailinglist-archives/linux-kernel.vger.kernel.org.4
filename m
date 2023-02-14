@@ -2,171 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 552D4695EE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98950695EEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbjBNJY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 04:24:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
+        id S231793AbjBNJZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 04:25:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232155AbjBNJYp (ORCPT
+        with ESMTP id S231745AbjBNJZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 04:24:45 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28C3234C1
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:24:42 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id m2so16431613plg.4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:24:42 -0800 (PST)
+        Tue, 14 Feb 2023 04:25:01 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36A62311A
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:24:58 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id o18so14941662wrj.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:24:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+WyGz4drYxBOqHu4SSNz+B7tGEGQwEMtEjzc4Jc2DXs=;
-        b=KA8KCwF1f0mqz+2rs2pn9wU+FxvXyC0saLeDc1sM0rzXa99gl0I15eeDVL+33Z6el+
-         JaUywitl7XKOCJXBU+BcuGYA5us/U7o5hnpwKaRmb97IcAaFtLqchmF39SjMC2L4fqnt
-         s42isJyn/O1VdKMf2dfHHjSloJnCVG7yBTgiW/jMCQELG0UE49wp32mpD2w4X3Osy4My
-         xH4NNpLMbH9ELJzYxLu5pmxBBB8ccAYfHe3yGMBWsjHIK9DrJ9ZSTlhIKY9DzPzHIyjx
-         //iOMooOxucdmO/Rm8D002HuWtA4KtPPDK/Pkr+d/HXfCO3IJCfTJrpvblHvbyGOLggL
-         x8FQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u8KakO0m99ack6WtkcRo8QC9fAx9EZec2nxXq+nRpV8=;
+        b=XnkRv8qcJgXS8YBUYXFr3msPkyWSuAK7Xwx3teh9Q0AMx2x3w1TmzQ4QaN2BFQUsm2
+         dAkbt2lgSE8azsW+GIYDqBUszigYr4JXpwL9t55zGb6hko0SNNNZ0CU591nyIEh3hrkX
+         3sIMsRJkpU3r2i3rHqHbG4Ba9RLNQwldJxMnJ4zTPU5zV2FKlhLmnBdlOFyfBU0pZkRU
+         jY+tqaUlCNUw5VjcJTmsD0Q23FEDvYpHCnCEyD6Dt3vKHMFJi5gyj1vxWFtHYC2wfCTA
+         aaE3jNFLfHlnXZNOUbMo7pb+raS6UQBsEaAd91iI0L+vQCAayILyCKYkXNnfejlshzTz
+         iN7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+WyGz4drYxBOqHu4SSNz+B7tGEGQwEMtEjzc4Jc2DXs=;
-        b=7DYxm/fFkhgx/sSzgmEFd0cIiHEzzP7v4xAH/DvVobb1gzLa+gIsBAWLrniImbqHpJ
-         LwZr07thQNTrXKlC8/w9u71SNYjR4/qwhvO1TnzmfHNGzEX1z6eoX1KJAX2GcRxThQNM
-         o8KThzW0PjkZR2mo5Y9t6dTBGBYrYki3w3zaC/UjXY0PJ+qn3MQN1V9Keg3C9g2nD4dq
-         4P9G3hx3AvJIhSEUsp0DPpV7FENqFI5FXWERM643klv7kxwfziYhrLAedFkm2shTTzNB
-         UMpVNqqO27qnj3GnFk1FcJ+hEPlxTgKl1pyMCYkD422u6JZdjsdfggqt+4LxJ2vf9KO9
-         fe+g==
-X-Gm-Message-State: AO0yUKXmXHgtCWbtQj96qEqwsbQNimCFYI74pZrmqFsyr/GTFaJ2LAPl
-        Dj6uZ788PLlwuQ6ZrnVTc8E=
-X-Google-Smtp-Source: AK7set/ZshPAyv0gb3KzILqQ3tYbPhugCGNHOVcmKx8/Z7QmRaIUQKp9vbnsXE4pKHARKjs3jev4BA==
-X-Received: by 2002:a17:902:e1d2:b0:198:f1c4:dd59 with SMTP id t18-20020a170902e1d200b00198f1c4dd59mr1347848pla.14.1676366682315;
-        Tue, 14 Feb 2023 01:24:42 -0800 (PST)
-Received: from jacob-Ubuntu (126.224.215.218.sta.wbroadband.net.au. [218.215.224.126])
-        by smtp.gmail.com with ESMTPSA id iy1-20020a170903130100b0019a9436d2a0sm4764401plb.89.2023.02.14.01.24.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 01:24:41 -0800 (PST)
-Date:   Tue, 14 Feb 2023 20:24:36 +1100
-From:   Jacob Bai <jacob.bai.au@gmail.com>
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        error27@gmail.com
-Subject: Re: [PATCH] staging: pi433: change (struct pi433_tx_cfg)->bit_rate
- to be a u32
-Message-ID: <Y+tTVKWqiIZnySUz@jacob-Ubuntu>
-References: <Y+srSuTdGmzmXG1I@jacob-Ubuntu>
- <Y+s/HP+v7lx2SKRj@ubun2204.myguest.virtualbox.org>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u8KakO0m99ack6WtkcRo8QC9fAx9EZec2nxXq+nRpV8=;
+        b=S8wG/Muhzij+QqUcd5ScEozdm6/+qdEntT9OM1FEOFVYHUoVyUD6yPp9VQ+DUVfG2W
+         r944TVCeQzst9BjZ7LIuIny6Miw3GpeODkGDE08NtHOpHgiCFKAVtezFID4P4jnuDlw6
+         u1RI87WCGOWcDElw1cxuZBJDZW+qfTtHkz9rvtNZfSfdLjU3Omgz+UPaG4PdHL3dMYhW
+         R0Hz4E/Ilfymrw746wF5C171qsW2Ety6HHJ+BNuhNViJ1hTdgyJaiL8apHTqeGKpJ470
+         io0Qgjw6kf69t/82OYwpVf7iEQ5bbRC3kgZNRGgCMhLQb5ZZUOJh6YLRZUh3XO77MNbi
+         2JYw==
+X-Gm-Message-State: AO0yUKWJxtoLUzNjzJ15FtzjY5BZVshV98+tpIrde1GIm7mJy9BMxwRr
+        TIfOksMZEDhXoLG5RvUb7vRySg==
+X-Google-Smtp-Source: AK7set/D6I/qxlSfxlRbpbzUy5a6qP8a6fLo8xCBJzYuz2JnEbfY9w2P98SqeCbjjCL59H93Va0T8w==
+X-Received: by 2002:a5d:6352:0:b0:2c5:5308:859c with SMTP id b18-20020a5d6352000000b002c55308859cmr1628694wrw.18.1676366697533;
+        Tue, 14 Feb 2023 01:24:57 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id y16-20020adff6d0000000b002c55521903bsm5679255wrp.51.2023.02.14.01.24.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 01:24:57 -0800 (PST)
+Message-ID: <0a815e82-0c4b-cc94-7143-6fbbc2d62347@linaro.org>
+Date:   Tue, 14 Feb 2023 10:24:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+s/HP+v7lx2SKRj@ubun2204.myguest.virtualbox.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] dt-bindings: PCI: qcom: Fix msm8998-specific
+ compatible
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230214091202.2187321-1-konrad.dybcio@linaro.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230214091202.2187321-1-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 01:28:20PM +0530, Deepak R Varma wrote:
-> On Tue, Feb 14, 2023 at 05:33:46PM +1100, Jacob Bai wrote:
-> > Based on the TODO file and datasheet of pi433, the maximum bit rate for
-> > transmitter is 300kbps when modulation been set to FSK. Hence, the size
-> > should be u32 rather than u16.
+On 14/02/2023 10:12, Konrad Dybcio wrote:
+> In the commit mentioned in the fixes tag, everything went well except
+> the fallback and the specific compatible got swapped and the 8998 DTSI
+> began failing the dtbs check. Fix it.
 > 
-> Hi Jacob,
-> This change was already discussed recently. Please check the following link and
-> all the responses to this thread:
-> 
-> https://lore.kernel.org/all/Y9h42l%2F8EcPqn63x@combine-ThinkPad-S1-Yoga/
-> 
-> Thanks,
-> ./drv
-Thanks Deepak and Dan!
+> Fixes: f86fe08ef00f ("dt-bindings: PCI: qcom: Add MSM8998 specific compatible")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
 
-Regards,
-Jacob
-> 
-> > 
-> > Signed-off-by: Jacob Bai <jacob.bai.au@gmail.com>
-> > ---
-> >  drivers/staging/pi433/Documentation/pi433.txt | 3 ++-
-> >  drivers/staging/pi433/pi433_if.h              | 2 +-
-> >  drivers/staging/pi433/rf69.c                  | 4 ++--
-> >  drivers/staging/pi433/rf69.h                  | 2 +-
-> >  4 files changed, 6 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/staging/pi433/Documentation/pi433.txt b/drivers/staging/pi433/Documentation/pi433.txt
-> > index 4a0d34b4ad37..b34d8e9f6d53 100644
-> > --- a/drivers/staging/pi433/Documentation/pi433.txt
-> > +++ b/drivers/staging/pi433/Documentation/pi433.txt
-> > @@ -78,7 +78,8 @@ rf params:
-> >  		Allowed values: 433050000...434790000
-> >  	bit_rate
-> >  		bit rate used for transmission.
-> > -		Allowed values: #####
-> > +		Allowed values when FSK: 1200...300000
-> > +		Allowed values when OOK: 1200...32768
-> >  	dev_frequency
-> >  		frequency deviation in case of FSK.
-> >  		Allowed values: 600...500000
-> > diff --git a/drivers/staging/pi433/pi433_if.h b/drivers/staging/pi433/pi433_if.h
-> > index 25ee0b77a32c..1f8ffaf02d99 100644
-> > --- a/drivers/staging/pi433/pi433_if.h
-> > +++ b/drivers/staging/pi433/pi433_if.h
-> > @@ -51,7 +51,7 @@ enum option_on_off {
-> >  #define PI433_TX_CFG_IOCTL_NR	0
-> >  struct pi433_tx_cfg {
-> >  	__u32			frequency;
-> > -	__u16			bit_rate;
-> > +	__u32			bit_rate;
-> >  	__u32			dev_frequency;
-> >  	enum modulation		modulation;
-> >  	enum mod_shaping	mod_shaping;
-> > diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
-> > index 8c7fab6a46bb..0b90ca004dd6 100644
-> > --- a/drivers/staging/pi433/rf69.c
-> > +++ b/drivers/staging/pi433/rf69.c
-> > @@ -185,7 +185,7 @@ int rf69_set_modulation_shaping(struct spi_device *spi,
-> >  	}
-> >  }
-> >  
-> > -int rf69_set_bit_rate(struct spi_device *spi, u16 bit_rate)
-> > +int rf69_set_bit_rate(struct spi_device *spi, u32 bit_rate)
-> >  {
-> >  	int retval;
-> >  	u32 bit_rate_reg;
-> > @@ -201,7 +201,7 @@ int rf69_set_bit_rate(struct spi_device *spi, u16 bit_rate)
-> >  	}
-> >  
-> >  	// check input value
-> > -	if (bit_rate < 1200 || (mod == OOK && bit_rate > 32768)) {
-> > +	if (bit_rate < 1200 || bit_rate > 300000 || (mod == OOK && bit_rate > 32768)) {
-> >  		dev_dbg(&spi->dev, "setBitRate: illegal input param\n");
-> >  		return -EINVAL;
-> >  	}
-> > diff --git a/drivers/staging/pi433/rf69.h b/drivers/staging/pi433/rf69.h
-> > index 78fa0b8bab8b..46a1fb2d5329 100644
-> > --- a/drivers/staging/pi433/rf69.h
-> > +++ b/drivers/staging/pi433/rf69.h
-> > @@ -24,7 +24,7 @@ int rf69_set_data_mode(struct spi_device *spi, u8 data_mode);
-> >  int rf69_set_modulation(struct spi_device *spi, enum modulation modulation);
-> >  int rf69_set_modulation_shaping(struct spi_device *spi,
-> >  				enum mod_shaping mod_shaping);
-> > -int rf69_set_bit_rate(struct spi_device *spi, u16 bit_rate);
-> > +int rf69_set_bit_rate(struct spi_device *spi, u32 bit_rate);
-> >  int rf69_set_deviation(struct spi_device *spi, u32 deviation);
-> >  int rf69_set_frequency(struct spi_device *spi, u32 frequency);
-> >  int rf69_enable_amplifier(struct spi_device *spi, u8 amplifier_mask);
-> > -- 
-> > 2.34.1
-> > 
-> > 
-> 
-> 
+[bhelgaas: sort msm8996 before msm8998]
+yes... I love amends by maintainers.
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
