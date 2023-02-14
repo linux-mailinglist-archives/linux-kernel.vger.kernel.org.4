@@ -2,135 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3F5696C8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1656696C8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233396AbjBNSMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 13:12:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
+        id S233381AbjBNSN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 13:13:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233245AbjBNSMq (ORCPT
+        with ESMTP id S232930AbjBNSN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 13:12:46 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF30A8;
-        Tue, 14 Feb 2023 10:12:42 -0800 (PST)
-Received: from [192.168.1.90] (unknown [86.120.32.152])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 59EC86602174;
-        Tue, 14 Feb 2023 18:12:39 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676398360;
-        bh=0/EG0sklC8qUexXu0LYmfC2BO1OVBbV9Fcsg9x+88a4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=m0/HxerAwjPWxchWbVHrWiidbzPuqSL30laX0/Fa8a6CXl8+IjtWG74Eml/d7BIJk
-         dYi0I+FNt4t4GqhEcuAfI1Rqlb98CMZ+u2D179uTxp/UMogSEHpenrfYk2WwvYp5wS
-         V0DX/gTadp9vSNI0LWsr6pcFZR4JNCli1X1Da6QuYboYAEcSyxGtsWV/xSgjCa2yEp
-         Psph/A9m256McoWjzZ+sfoTNCnXcUyJ1wE/A+fqcC3YDNOQWdIuE+LlM0MikAV3Ocr
-         bspbDLgNKxznYOi4F0o5HMbPJkTXGdCtBVwhddBy0kbHHv3lhIUh3dnh3U3Syzr6bE
-         pvhOS/697MvLw==
-Message-ID: <fcfc3ede-6799-4dc2-d390-148370dfc5c8@collabora.com>
-Date:   Tue, 14 Feb 2023 20:12:36 +0200
+        Tue, 14 Feb 2023 13:13:58 -0500
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3852D35BC;
+        Tue, 14 Feb 2023 10:13:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1676398437; x=1707934437;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=KpJLTvDwxwPDI5vY/uvFn1t0bBhQaeTiyfndcZKpD3I=;
+  b=m/6fzUHPZwBwulbd4QEA9JmDSlXbAMOjtyu2CQSwD4GZIjmm81HbWBEA
+   W2BhpCqqtcFyEIP6/LanchEhuWeEOD+DuxjzA5fyAUKWLhjapIYY+MyKN
+   EFO50x3UBw69gxdbm89QaHAUbpqfMjsdTn7jqRKM1EOaL7S34NDDQ18ct
+   8=;
+X-IronPort-AV: E=Sophos;i="5.97,297,1669075200"; 
+   d="scan'208";a="1102374117"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-b1c0e1d0.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 18:13:54 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2c-m6i4x-b1c0e1d0.us-west-2.amazon.com (Postfix) with ESMTPS id 34C80822E3;
+        Tue, 14 Feb 2023 18:13:54 +0000 (UTC)
+Received: from EX19D010UWA004.ant.amazon.com (10.13.138.204) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Tue, 14 Feb 2023 18:13:53 +0000
+Received: from u9aa42af9e4c55a.ant.amazon.com (10.43.162.56) by
+ EX19D010UWA004.ant.amazon.com (10.13.138.204) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.24; Tue, 14 Feb 2023 18:13:52 +0000
+From:   Munehisa Kamata <kamatam@amazon.com>
+To:     <surenb@google.com>
+CC:     <ebiggers@kernel.org>, <hannes@cmpxchg.org>, <hdanton@sina.com>,
+        <kamatam@amazon.com>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <mengcc@amazon.com>, <stable@vger.kernel.org>
+Subject: [PATCH v3] sched/psi: fix use-after-free in ep_remove_wait_queue()
+Date:   Tue, 14 Feb 2023 10:13:35 -0800
+Message-ID: <20230214181335.3946674-1-kamatam@amazon.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAJuCfpGiktjjPZYPp8LNtbmvYhkxh_icEWXOVgsq9qeq+w6s+g@mail.gmail.com>
+References: <CAJuCfpGiktjjPZYPp8LNtbmvYhkxh_icEWXOVgsq9qeq+w6s+g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 08/12] net: stmmac: Add glue layer for StarFive JH7100 SoC
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
-References: <20230211031821.976408-1-cristian.ciocaltea@collabora.com>
- <20230211031821.976408-9-cristian.ciocaltea@collabora.com>
- <dbf26e3f-6a4f-cd15-c7d3-b0c1c482b83b@linaro.org>
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <dbf26e3f-6a4f-cd15-c7d3-b0c1c482b83b@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.162.56]
+X-ClientProxiedBy: EX13D40UWA004.ant.amazon.com (10.43.160.36) To
+ EX19D010UWA004.ant.amazon.com (10.13.138.204)
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/13/23 11:26, Krzysztof Kozlowski wrote:
-> On 11/02/2023 04:18, Cristian Ciocaltea wrote:
->> From: Emil Renner Berthing <kernel@esmil.dk>
->>
->> This adds a glue layer for the Synopsys DesignWare MAC IP core on the
->> StarFive JH7100 SoC.
->>
->> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
->> [drop references to JH7110, update JH7100 compatible string]
->> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
->> ---
->>   MAINTAINERS                                   |   1 +
->>   drivers/net/ethernet/stmicro/stmmac/Kconfig   |  12 ++
->>   drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
->>   .../ethernet/stmicro/stmmac/dwmac-starfive.c  | 155 ++++++++++++++++++
->>   4 files changed, 169 insertions(+)
->>   create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index d48468b81b94..defedaff6041 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -19820,6 +19820,7 @@ STARFIVE DWMAC GLUE LAYER
->>   M:	Emil Renner Berthing <kernel@esmil.dk>
->>   S:	Maintained
->>   F:	Documentation/devicetree/bindings/net/starfive,jh7100-dwmac.yaml
->> +F:	drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
->>   
->>   STARFIVE JH7100 CLOCK DRIVERS
->>   M:	Emil Renner Berthing <kernel@esmil.dk>
->> diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
->> index f77511fe4e87..2c81aa594291 100644
->> --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
->> +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
->> @@ -165,6 +165,18 @@ config DWMAC_SOCFPGA
->>   	  for the stmmac device driver. This driver is used for
->>   	  arria5 and cyclone5 FPGA SoCs.
->>   
->> +config DWMAC_STARFIVE
->> +	tristate "StarFive DWMAC support"
-> 
-> Bring only one driver.
-> 
-> https://lore.kernel.org/all/20230118061701.30047-6-yanhong.wang@starfivetech.com/
+If a non-root cgroup gets removed when there is a thread that registered
+trigger and is polling on a pressure file within the cgroup, the polling
+waitqueue gets freed in the following path.
 
-Already mentioned in the cover letter that we have this overlap (will be 
-merged into a single driver).
+ do_rmdir
+   cgroup_rmdir
+     kernfs_drain_open_files
+       cgroup_file_release
+         cgroup_pressure_release
+           psi_trigger_destroy
 
-Thanks,
-Cristian
+However, the polling thread still has a reference to the pressure file and
+will access the freed waitqueue when the file is closed or upon exit.
 
-> 
-> Best regards,
-> Krzysztof
-> 
-> 
+ fput
+   ep_eventpoll_release
+     ep_free
+       ep_remove_wait_queue
+         remove_wait_queue
+
+This results in use-after-free as pasted below.
+
+The fundamental problem here is that cgroup_file_release() (and
+consequently waitqueue's lifetime) is not tied to the file's real lifetime.
+Using wake_up_pollfree() here might be less than ideal, but it also is not
+fully contradicting the comment at commit 42288cb44c4b ("wait: add
+wake_up_pollfree()") since the waitqueue's lifetime is not tied to file's
+one and can be considered as another special case. While this would be
+fixable by somehow making cgroup_file_release() be tied to the fput(), it
+would require sizable refactoring at cgroups or higher layer which might be
+more justifiable if we identify more cases like this.
+
+ BUG: KASAN: use-after-free in _raw_spin_lock_irqsave+0x60/0xc0
+ Write of size 4 at addr ffff88810e625328 by task a.out/4404
+
+ CPU: 19 PID: 4404 Comm: a.out Not tainted 6.2.0-rc6 #38
+ Hardware name: Amazon EC2 c5a.8xlarge/, BIOS 1.0 10/16/2017
+ Call Trace:
+ <TASK>
+ dump_stack_lvl+0x73/0xa0
+ print_report+0x16c/0x4e0
+ ? _printk+0x59/0x80
+ ? __virt_addr_valid+0xb8/0x130
+ ? _raw_spin_lock_irqsave+0x60/0xc0
+ kasan_report+0xc3/0xf0
+ ? _raw_spin_lock_irqsave+0x60/0xc0
+ kasan_check_range+0x2d2/0x310
+ _raw_spin_lock_irqsave+0x60/0xc0
+ remove_wait_queue+0x1a/0xa0
+ ep_free+0x12c/0x170
+ ep_eventpoll_release+0x26/0x30
+ __fput+0x202/0x400
+ task_work_run+0x11d/0x170
+ do_exit+0x495/0x1130
+ ? update_cfs_rq_load_avg+0x2c2/0x2e0
+ do_group_exit+0x100/0x100
+ get_signal+0xd67/0xde0
+ ? finish_task_switch+0x15f/0x3a0
+ arch_do_signal_or_restart+0x2a/0x2b0
+ exit_to_user_mode_prepare+0x94/0x100
+ syscall_exit_to_user_mode+0x20/0x40
+ do_syscall_64+0x52/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+ RIP: 0033:0x7f8e392bfb91
+ Code: Unable to access opcode bytes at 0x7f8e392bfb67.
+ RSP: 002b:00007fff261e08d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000022
+ RAX: fffffffffffffdfe RBX: 0000000000000000 RCX: 00007f8e392bfb91
+ RDX: 0000000000000001 RSI: 00007fff261e08e8 RDI: 0000000000000004
+ RBP: 00007fff261e0920 R08: 0000000000400780 R09: 00007f8e3960f240
+ R10: 00000000000003df R11: 0000000000000246 R12: 00000000004005a0
+ R13: 00007fff261e0a00 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+ Allocated by task 4404:
+ kasan_set_track+0x3d/0x60
+ __kasan_kmalloc+0x85/0x90
+ psi_trigger_create+0x113/0x3e0
+ pressure_write+0x146/0x2e0
+ cgroup_file_write+0x11c/0x250
+ kernfs_fop_write_iter+0x186/0x220
+ vfs_write+0x3d8/0x5c0
+ ksys_write+0x90/0x110
+ do_syscall_64+0x43/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+ Freed by task 4407:
+ kasan_set_track+0x3d/0x60
+ kasan_save_free_info+0x27/0x40
+ ____kasan_slab_free+0x11d/0x170
+ slab_free_freelist_hook+0x87/0x150
+ __kmem_cache_free+0xcb/0x180
+ psi_trigger_destroy+0x2e8/0x310
+ cgroup_file_release+0x4f/0xb0
+ kernfs_drain_open_files+0x165/0x1f0
+ kernfs_drain+0x162/0x1a0
+ __kernfs_remove+0x1fb/0x310
+ kernfs_remove_by_name_ns+0x95/0xe0
+ cgroup_addrm_files+0x67f/0x700
+ cgroup_destroy_locked+0x283/0x3c0
+ cgroup_rmdir+0x29/0x100
+ kernfs_iop_rmdir+0xd1/0x140
+ vfs_rmdir+0xfe/0x240
+ do_rmdir+0x13d/0x280
+ __x64_sys_rmdir+0x2c/0x30
+ do_syscall_64+0x43/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+v3: updated commit message and the comment in the code
+v2: updated commit message
+
+Link: https://lore.kernel.org/lkml/20230106224859.4123476-1-kamatam@amazon.com/
+Fixes: 0e94682b73bf ("psi: introduce psi monitor")
+Cc: stable@vger.kernel.org
+Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
+Signed-off-by: Mengchi Cheng <mengcc@amazon.com>
+---
+ kernel/sched/psi.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index 8ac8b81bfee6..02e011cabe91 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -1343,10 +1343,11 @@ void psi_trigger_destroy(struct psi_trigger *t)
+ 
+ 	group = t->group;
+ 	/*
+-	 * Wakeup waiters to stop polling. Can happen if cgroup is deleted
+-	 * from under a polling process.
++	 * Wakeup waiters to stop polling and clear the queue to prevent it from
++	 * being accessed later. Can happen if cgroup is deleted from under a
++	 * polling process.
+ 	 */
+-	wake_up_interruptible(&t->event_wait);
++	wake_up_pollfree(&t->event_wait);
+ 
+ 	mutex_lock(&group->trigger_lock);
+ 
+-- 
+2.38.1
+
