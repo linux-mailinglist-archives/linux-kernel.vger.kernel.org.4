@@ -2,62 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF8F6959AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 100DA695A5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbjBNHH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 02:07:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49450 "EHLO
+        id S231979AbjBNHM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 02:12:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231794AbjBNHHW (ORCPT
+        with ESMTP id S231894AbjBNHMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 02:07:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857391E2B4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:06:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6F0A61462
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 07:06:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8235C433D2;
-        Tue, 14 Feb 2023 07:06:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676358414;
-        bh=hC3l/+y6uwVYPPTbvHEPM4NEa2wabflPEzAauRmEjpo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JmpVs+JIaoQcEJGCba93ZR2qqwHdiWTArQCcsbAl5PjTd7y8SCEa1cFynHpoJfHXN
-         biYVAYS76ozOdG2tWwerN4kg+786RUi5bjpr1IQg1C9QH1aICn/9YjXyLrZwhzfwE6
-         4ai6ZXc+0jZTYc0Wklk7w01al7uCB9aCXVQY3MCY=
-Date:   Tue, 14 Feb 2023 08:06:51 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Shreenidhi Shedi <yesshedi@gmail.com>
-Cc:     dhowells@redhat.com, dwmw2@infradead.org,
-        linux-kernel@vger.kernel.org, Shreenidhi Shedi <sshedi@vmware.com>
-Subject: Re: [PATCH v3 4/6] sign-file: cosmetic fix
-Message-ID: <Y+szC9rMhKu4s5Xa@kroah.com>
-References: <20230213190034.57097-1-sshedi@vmware.com>
- <20230213190034.57097-4-sshedi@vmware.com>
+        Tue, 14 Feb 2023 02:12:07 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB6622DDE;
+        Mon, 13 Feb 2023 23:08:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676358525; x=1707894525;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7mxrqjucLiuCXh3jkBMuGLi7BeMczW6z9ZSnKt52TSc=;
+  b=EhMyNz8ugA8EgruVcE7JAIGXHDuwwlGgcVV0TQNgww+Ny2bGkhtkEZi2
+   ZF+RMwqPLd2MAyTaWf67Tj8r6GQtZMj9n3+GhgitkP3I7l3QBGJlWA6Sq
+   ZcQtm6QGLWlcmC1RTYn43cz68qS10SSZ9W+rA9243GnTzAKBxKBIqj2xz
+   HO+d/IUZ6Pt7K2m405NFHLXXztNIQ5xbIX+RKNfrM9yvN7a7Jth81WHnV
+   FOoOeUy8nuH3fDP3wfB8y4VL7QqhmmWfpeRFHGObgquJxCxMG4qllWW/A
+   I8cmovKRDUdoWcxAeZPxCWDpTsZeFuiLeqg3tN4qBnHxB0YTwsTzxxyPU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="393499245"
+X-IronPort-AV: E=Sophos;i="5.97,296,1669104000"; 
+   d="scan'208";a="393499245"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 23:08:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="618939126"
+X-IronPort-AV: E=Sophos;i="5.97,296,1669104000"; 
+   d="scan'208";a="618939126"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 13 Feb 2023 23:07:59 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pRpPy-0008I9-1S;
+        Tue, 14 Feb 2023 07:07:58 +0000
+Date:   Tue, 14 Feb 2023 15:07:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     oe-kbuild-all@lists.linux.dev, Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: Re: [PATCH v1 22/24] LoongArch: KVM: Implement vcpu world switch
+Message-ID: <202302141408.1hBkpMAf-lkp@intel.com>
+References: <20230214025648.1898508-23-zhaotianrui@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230213190034.57097-4-sshedi@vmware.com>
+In-Reply-To: <20230214025648.1898508-23-zhaotianrui@loongson.cn>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 12:30:32AM +0530, Shreenidhi Shedi wrote:
-> In the previous patch for adding bulk modules support, this was not done
-> because it will add a lot to review in one patch.
+Hi Tianrui,
 
-This changelog text means nothing, what would you do if you were reading
-this and had to review it?
+Thank you for the patch! Perhaps something to improve:
 
-thanks,
+[auto build test WARNING on kvm/queue]
+[also build test WARNING on linus/master v6.2-rc8]
+[cannot apply to kvm/linux-next next-20230214]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-greg k-h
+url:    https://github.com/intel-lab-lkp/linux/commits/Tianrui-Zhao/LoongArch-KVM-Implement-kvm-module-related-interface/20230214-110506
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+patch link:    https://lore.kernel.org/r/20230214025648.1898508-23-zhaotianrui%40loongson.cn
+patch subject: [PATCH v1 22/24] LoongArch: KVM: Implement vcpu world switch
+config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20230214/202302141408.1hBkpMAf-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/1adfa2faabc606d0813446b2d2111e04aa3d2828
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Tianrui-Zhao/LoongArch-KVM-Implement-kvm-module-related-interface/20230214-110506
+        git checkout 1adfa2faabc606d0813446b2d2111e04aa3d2828
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch prepare
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302141408.1hBkpMAf-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   arch/loongarch/kernel/asm-offsets.c:17:6: warning: no previous prototype for 'output_ptreg_defines' [-Wmissing-prototypes]
+      17 | void output_ptreg_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~
+   arch/loongarch/kernel/asm-offsets.c:64:6: warning: no previous prototype for 'output_task_defines' [-Wmissing-prototypes]
+      64 | void output_task_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~
+   arch/loongarch/kernel/asm-offsets.c:79:6: warning: no previous prototype for 'output_thread_info_defines' [-Wmissing-prototypes]
+      79 | void output_thread_info_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/loongarch/kernel/asm-offsets.c:95:6: warning: no previous prototype for 'output_thread_defines' [-Wmissing-prototypes]
+      95 | void output_thread_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~
+   arch/loongarch/kernel/asm-offsets.c:138:6: warning: no previous prototype for 'output_thread_fpu_defines' [-Wmissing-prototypes]
+     138 | void output_thread_fpu_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/loongarch/kernel/asm-offsets.c:178:6: warning: no previous prototype for 'output_mm_defines' [-Wmissing-prototypes]
+     178 | void output_mm_defines(void)
+         |      ^~~~~~~~~~~~~~~~~
+   arch/loongarch/kernel/asm-offsets.c:210:6: warning: no previous prototype for 'output_sc_defines' [-Wmissing-prototypes]
+     210 | void output_sc_defines(void)
+         |      ^~~~~~~~~~~~~~~~~
+   arch/loongarch/kernel/asm-offsets.c:218:6: warning: no previous prototype for 'output_signal_defines' [-Wmissing-prototypes]
+     218 | void output_signal_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~
+   arch/loongarch/kernel/asm-offsets.c:256:6: warning: no previous prototype for 'output_smpboot_defines' [-Wmissing-prototypes]
+     256 | void output_smpboot_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~~
+   arch/loongarch/kernel/asm-offsets.c:266:6: warning: no previous prototype for 'output_pbe_defines' [-Wmissing-prototypes]
+     266 | void output_pbe_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~
+>> arch/loongarch/kernel/asm-offsets.c:277:6: warning: no previous prototype for 'output_kvm_defines' [-Wmissing-prototypes]
+     277 | void output_kvm_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~
+--
+   arch/loongarch/kernel/asm-offsets.c:17:6: warning: no previous prototype for 'output_ptreg_defines' [-Wmissing-prototypes]
+      17 | void output_ptreg_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~
+   arch/loongarch/kernel/asm-offsets.c:64:6: warning: no previous prototype for 'output_task_defines' [-Wmissing-prototypes]
+      64 | void output_task_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~
+   arch/loongarch/kernel/asm-offsets.c:79:6: warning: no previous prototype for 'output_thread_info_defines' [-Wmissing-prototypes]
+      79 | void output_thread_info_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/loongarch/kernel/asm-offsets.c:95:6: warning: no previous prototype for 'output_thread_defines' [-Wmissing-prototypes]
+      95 | void output_thread_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~
+   arch/loongarch/kernel/asm-offsets.c:138:6: warning: no previous prototype for 'output_thread_fpu_defines' [-Wmissing-prototypes]
+     138 | void output_thread_fpu_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/loongarch/kernel/asm-offsets.c:178:6: warning: no previous prototype for 'output_mm_defines' [-Wmissing-prototypes]
+     178 | void output_mm_defines(void)
+         |      ^~~~~~~~~~~~~~~~~
+   arch/loongarch/kernel/asm-offsets.c:210:6: warning: no previous prototype for 'output_sc_defines' [-Wmissing-prototypes]
+     210 | void output_sc_defines(void)
+         |      ^~~~~~~~~~~~~~~~~
+   arch/loongarch/kernel/asm-offsets.c:218:6: warning: no previous prototype for 'output_signal_defines' [-Wmissing-prototypes]
+     218 | void output_signal_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~
+   arch/loongarch/kernel/asm-offsets.c:256:6: warning: no previous prototype for 'output_smpboot_defines' [-Wmissing-prototypes]
+     256 | void output_smpboot_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~~
+   arch/loongarch/kernel/asm-offsets.c:266:6: warning: no previous prototype for 'output_pbe_defines' [-Wmissing-prototypes]
+     266 | void output_pbe_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~
+>> arch/loongarch/kernel/asm-offsets.c:277:6: warning: no previous prototype for 'output_kvm_defines' [-Wmissing-prototypes]
+     277 | void output_kvm_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~
+   <stdin>:569:2: warning: #warning syscall fstat not implemented [-Wcpp]
+
+
+vim +/output_kvm_defines +277 arch/loongarch/kernel/asm-offsets.c
+
+   217	
+ > 218	void output_signal_defines(void)
+   219	{
+   220		COMMENT("Linux signal numbers.");
+   221		DEFINE(_SIGHUP, SIGHUP);
+   222		DEFINE(_SIGINT, SIGINT);
+   223		DEFINE(_SIGQUIT, SIGQUIT);
+   224		DEFINE(_SIGILL, SIGILL);
+   225		DEFINE(_SIGTRAP, SIGTRAP);
+   226		DEFINE(_SIGIOT, SIGIOT);
+   227		DEFINE(_SIGABRT, SIGABRT);
+   228		DEFINE(_SIGFPE, SIGFPE);
+   229		DEFINE(_SIGKILL, SIGKILL);
+   230		DEFINE(_SIGBUS, SIGBUS);
+   231		DEFINE(_SIGSEGV, SIGSEGV);
+   232		DEFINE(_SIGSYS, SIGSYS);
+   233		DEFINE(_SIGPIPE, SIGPIPE);
+   234		DEFINE(_SIGALRM, SIGALRM);
+   235		DEFINE(_SIGTERM, SIGTERM);
+   236		DEFINE(_SIGUSR1, SIGUSR1);
+   237		DEFINE(_SIGUSR2, SIGUSR2);
+   238		DEFINE(_SIGCHLD, SIGCHLD);
+   239		DEFINE(_SIGPWR, SIGPWR);
+   240		DEFINE(_SIGWINCH, SIGWINCH);
+   241		DEFINE(_SIGURG, SIGURG);
+   242		DEFINE(_SIGIO, SIGIO);
+   243		DEFINE(_SIGSTOP, SIGSTOP);
+   244		DEFINE(_SIGTSTP, SIGTSTP);
+   245		DEFINE(_SIGCONT, SIGCONT);
+   246		DEFINE(_SIGTTIN, SIGTTIN);
+   247		DEFINE(_SIGTTOU, SIGTTOU);
+   248		DEFINE(_SIGVTALRM, SIGVTALRM);
+   249		DEFINE(_SIGPROF, SIGPROF);
+   250		DEFINE(_SIGXCPU, SIGXCPU);
+   251		DEFINE(_SIGXFSZ, SIGXFSZ);
+   252		BLANK();
+   253	}
+   254	
+   255	#ifdef CONFIG_SMP
+   256	void output_smpboot_defines(void)
+   257	{
+   258		COMMENT("Linux smp cpu boot offsets.");
+   259		OFFSET(CPU_BOOT_STACK, secondary_data, stack);
+   260		OFFSET(CPU_BOOT_TINFO, secondary_data, thread_info);
+   261		BLANK();
+   262	}
+   263	#endif
+   264	
+   265	#ifdef CONFIG_HIBERNATION
+   266	void output_pbe_defines(void)
+   267	{
+   268		COMMENT(" Linux struct pbe offsets. ");
+   269		OFFSET(PBE_ADDRESS, pbe, address);
+   270		OFFSET(PBE_ORIG_ADDRESS, pbe, orig_address);
+   271		OFFSET(PBE_NEXT, pbe, next);
+   272		DEFINE(PBE_SIZE, sizeof(struct pbe));
+   273		BLANK();
+   274	}
+   275	#endif
+   276	
+ > 277	void output_kvm_defines(void)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
