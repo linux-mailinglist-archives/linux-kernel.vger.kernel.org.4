@@ -2,77 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE97696A2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 113C4696A3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:48:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbjBNQr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 11:47:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38294 "EHLO
+        id S232517AbjBNQsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 11:48:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjBNQr1 (ORCPT
+        with ESMTP id S232482AbjBNQsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 11:47:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DBFC2D172
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:46:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676393167;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8OyJN/BcSYiP7KMSzBsYyGWwDmggivd16jpBIpILDug=;
-        b=hlhF81phVRVQjiyUgvm6lNsKL0S4jNkAjNkXOQPhGNmmAkO2b6FoqukApPcG72ml0+4Aev
-        zv7sWT5P29k/f66K0yrPCYKwQoDhW7nib+y9ycBjNRQu9+smKwt6i5yf4PvgIyPgecYeEx
-        tFVeEpXSOVcM761DUbMjkvASL4/eEH4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-669-oQfVN5AIPH6KRNJCn6GW5Q-1; Tue, 14 Feb 2023 11:46:04 -0500
-X-MC-Unique: oQfVN5AIPH6KRNJCn6GW5Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E3809100F901;
-        Tue, 14 Feb 2023 16:46:02 +0000 (UTC)
-Received: from redhat.com (unknown [10.33.36.149])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A2F902166B26;
-        Tue, 14 Feb 2023 16:45:59 +0000 (UTC)
-Date:   Tue, 14 Feb 2023 16:45:57 +0000
-From:   Daniel =?utf-8?B?UC4gQmVycmFuZ8Op?= <berrange@redhat.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     qemu-devel@nongnu.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
+        Tue, 14 Feb 2023 11:48:51 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98AD72A6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:48:46 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id v63-20020a254842000000b008f257b16d71so12606505yba.15
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:48:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/Hxjp2ClOG3rMfDYkCMiTSvIpfx2BaUm4/6bMcZvkdY=;
+        b=P0f2Sze4osOuatALcyTTazvf4cu6uyUC7sOCR+imJ/wKLFitOwfjaYxbvawviCLGEw
+         pJt4ETflYapcqu2/r/6g1hNohrME4c4o+ter1GbMKh3v7iyrnGfVq80ryzXs2QQp0Dw1
+         XDWia2HlARnDOk9ZhoM3BkkTXllxS3LedZIsSOw9YnBMAfPXGww/X1HTpOZ1T5+KRQLY
+         qXI5s/Snl0Lg9dZbw1BSOdIIWqwVNA+OhFjp25v7qhrROwc/FvJQ+PGr/a80St5ERMw/
+         Sh/ow7EztICoQmtn3sLOtxANjBvCbhk9ixHazPibw+mqAQuQaw/ZfGFNNIi6AJc/6LTb
+         BjIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/Hxjp2ClOG3rMfDYkCMiTSvIpfx2BaUm4/6bMcZvkdY=;
+        b=DdIPRSHLYlRVRfYK5PiN+deaKZ4OFtXD9U0VNykJZN/oztp7ZuzCvR+6yy5CoXq7Vr
+         zkQv92OuI2j3kPHwSvjYJbb7EIdZVk/fFRBAQZrcZmwhho805pKwNeMipWQjuHraYAA4
+         Vn7mByPQeTKbic0qg/US0nP1PlcrMXasqjp09WiXTE5X8yCK5rTfe30MGDd5VV9oFW5c
+         K1Y2W/YhKJq0HI3CpupPciNq8ildV0H0y9If8Lbb9GG/SkRBMLHKqGNyEhtHTvM+Izt4
+         3HkYoq35oZ/texZjMjV398lol02HwUfa/wO7wiaTW4ZyyglJxkkk7C0b/tpjOYpdhlD1
+         VFYA==
+X-Gm-Message-State: AO0yUKWsJyW8Zd1gdYxKT4nkov8d0v4QndkM+ALh5aIbA/walUriajTX
+        z3CXm2DowfVoN0S33E5QswJ3nAKMHjj/iCC2hv7YyfMM7rlkGdOJBEbn5+NWMbM3eHWd8ry2tVO
+        5RR/MxW2rwGMeQ23EeteW725H88zy3MW56flXSRUEJkxauFR75arfgeY93S5d+ZBJA59UWShNw4
+        W8mkuEvFo=
+X-Google-Smtp-Source: AK7set/UBtx/LRQeeiSXr/yZPQ+236pTsNLkXQ/Wp8nbBFktXXf98F7ifsK9PPltAxx8KHcmshr2YtQ0jsuIxMXqnw==
+X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
+ (user=dionnaglaze job=sendgmr) by 2002:a0d:dfc1:0:b0:52e:e814:44a3 with SMTP
+ id i184-20020a0ddfc1000000b0052ee81444a3mr331104ywe.505.1676393325910; Tue,
+ 14 Feb 2023 08:48:45 -0800 (PST)
+Date:   Tue, 14 Feb 2023 16:46:34 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.637.g21b0678d19-goog
+Message-ID: <20230214164638.1189804-1-dionnaglaze@google.com>
+Subject: [PATCH v15 0/4] Add throttling detection to sev-guest
+From:   Dionna Glaze <dionnaglaze@google.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Dionna Glaze <dionnaglaze@google.com>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Sergio Lopez <slp@redhat.com>,
-        Marcel Apfelbaum <marcel.apfelbaum@gmail.com>,
-        Eduardo Habkost <eduardo@habkost.net>
-Subject: Re: [PATCH RFC 7/7] Revert "hw/i386: pass RNG seed via setup_data
- entry"
-Message-ID: <Y+u6xd9aDmGjm9fg@redhat.com>
-Reply-To: Daniel =?utf-8?B?UC4gQmVycmFuZ8Op?= <berrange@redhat.com>
-References: <20230208211212.41951-1-mst@redhat.com>
- <20230208211212.41951-8-mst@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230208211212.41951-8-mst@redhat.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        Joerg Roedel <jroedel@suse.de>,
+        Peter Gonda <pgonda@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <Borislav.Petkov@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Venu Busireddy <venu.busireddy@oracle.com>,
+        Michael Roth <michael.roth@amd.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Michael Sterritt <sterritt@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,233 +80,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 04:12:56PM -0500, Michael S. Tsirkin wrote:
-> This reverts commit 67f7e426e53833a5db75b0d813e8d537b8a75bd2.
-> 
-> Fixes: 67f7e426e5 ("hw/i386: pass RNG seed via setup_data entry")
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> ---
->  include/hw/i386/pc.h  |  3 ---
->  include/hw/i386/x86.h |  3 +--
->  hw/i386/microvm.c     |  2 +-
->  hw/i386/pc.c          |  4 ++--
->  hw/i386/pc_piix.c     |  2 --
->  hw/i386/pc_q35.c      |  2 --
->  hw/i386/x86.c         | 26 ++++----------------------
->  7 files changed, 8 insertions(+), 34 deletions(-)
+The guest request synchronous API from SEV-SNP VMs to the host's security
+processor consumes a global resource. For this reason, AMD's docs
+recommend that the host implements a throttling mechanism. In order for
+the guest to know it's been throttled and should try its request again,
+we need some good-faith communication from the host that the request
+has been throttled.
 
-All the patches prior to this were clean reverts. This one though
-does not look clean, rather it looks like reverting a combination
-of 3 commits
+These patches work with the existing /dev/sev-guest ABI to detect a
+throttling code.
 
-commit ffe2d2382e5f1aae1abc4081af407905ef380311
-Author: Jason A. Donenfeld <Jason@zx2c4.com>
-Date:   Wed Sep 21 11:31:34 2022 +0200
+Changes from v14:
+  * Split double-buffering into its own patch.
+  * Changed cond_resched to schedule_timeout_killable.
+Changes from v13:
+  * Added double-buffering fix to the "Fixes" patch to address a secondary
+    concern of zero trust with respect to host access to intermediate
+    cryptographic computations in shared memory.
+  * Removed module parameters and rate limiting in favor of just
+    cond_resched.
+  * Removed possible infinite loop of retries by giving up with an erased
+    VMPCK and -ETIMEDOUT error after 60 seconds of retries.
+Changes from v12:
+  * Reordered fix patch to the beginning and kept it minimal.
+  * Changed documentation in same patch as the respective change to the
+    header.
+  * Changed exitinfo2 in dev_alert to print in hex.
+Changes from v11:
+  * Squashed all type changing patches into 1 that modifies both sev-guest
+    and x86/kernel/sev.c.
+  * Removed fw_err field from sev-guest command struct (renamed exitinfo2).
+Changes from v10:
+  * Added sev_guestreq_err_t typedef early in chain to change a signature
+    acress x86/sev and virt/coco/sev-guest in a single change. This makes
+    all patches build. I have 3 cleanup patches to change the type and
+    subsequently remove the typedef.
+  * Changed exitinfo2 initial undefined value back to 0xff since Thomas
+    indicated that a firmware error is only 16 bits.
+Changes from v9:
+  * Rebased on v6.2-rc3
+Changes from v8:
+  * Added documentation changes.
+  * Changed commit messages to use passive voice.
+  * Simplified control flow for __sev_platform_init_locked.
+Changes from v7:
+  * Replaced handle_guest_request arguments msg_ver and fw_err with a
+    pointer to the snp_guest_request_ioctl argument struct.
+Changes from v6:
+  * Rebased on the IV reuse fix patch
+  * renamed rate_hz to rate_s and fixed its MODULE_PARM_DESC to use the
+    correct variable name.
+  * Changed sleep_timeout_interrutible (not defined) to
+    schedule_timeout_interruptible.
+Changes from v5:
+  * Fixed commit prefix text
+  * Added all get_maintainers.pl folks to commits' Cc tags
+  * Changed SET_RET_NO_FW_CALL commit's metadata to show pgonda signs
+    off and is the author.
+Changes from v4:
+  * Clarified comment on SEV_RET_NO_FW_CALL
+  * Changed ratelimit loop to use sleep_timeout_interruptible
+Changes from v3:
+  * sev-guest ratelimits itself to one request twice a second.
+  * Fixed a type signature to use u64 instead of unsigned int
+  * Set *exitinfo2 unconditionally after the ghcb_hv_call.
+Changes from v2:
+  * Codified the non-firmware-call firmware error code as (u32)-1.
+  * Changed sev_issue_guest_request unsigned long *fw_err argument to
+    u64 *exitinfo2 to more accurately and type-safely describe the
+    value that it outputs.
+  * Changed sev_issue_guest_request to always set its exitinfo2
+    argument to either the non-firmware-call error code, the
+    EXIT_INFO_2 returned from the VMM if the request failed, or 0 on
+    success. This fixes a bug that returned uninitialized kernel stack
+    memory to the user when there is no error.
+  * Changed the throttle behavior to retry in the driver instead of
+    returning -EAGAIN, due to possible message sequence number reuse
+    on different message contents.
 
-    x86: re-enable rng seeding via SetupData
+Changes from v1:
+  * Changed throttle error code to 2
 
-commit 3824e25db1a84fadc50b88dfbe27047aa2f7f85d
-Author: Gerd Hoffmann <kraxel@redhat.com>
-Date:   Wed Aug 17 10:39:40 2022 +0200
+Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Joerg Roedel <jroedel@suse.de>
+Cc: Peter Gonda <pgonda@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <Borislav.Petkov@amd.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Venu Busireddy <venu.busireddy@oracle.com>
+Cc: Michael Roth <michael.roth@amd.com>
+Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc: Michael Sterritt <sterritt@google.com>
 
-    x86: disable rng seeding via setup_data
-    
-commit 67f7e426e53833a5db75b0d813e8d537b8a75bd2
-Author: Jason A. Donenfeld <Jason@zx2c4.com>
-Date:   Thu Jul 21 14:56:36 2022 +0200
+Dionna Glaze (3):
+  virt/coco/sev-guest: Add throttling awareness
+  virt/coco/sev-guest: Double-buffer messages
+  x86/sev: Change snp_guest_issue_request's fw_err
 
-    hw/i386: pass RNG seed via setup_data entry
-    
+Peter Gonda (1):
+  crypto: ccp - Name -1 return value as SEV_RET_NO_FW_CALL
 
+ Documentation/virt/coco/sev-guest.rst   |  21 +++--
+ arch/x86/include/asm/sev-common.h       |   3 -
+ arch/x86/include/asm/sev.h              |   4 +-
+ arch/x86/kernel/sev.c                   |  13 +--
+ drivers/crypto/ccp/sev-dev.c            |  22 ++++--
+ drivers/virt/coco/sev-guest/sev-guest.c | 100 +++++++++++++++++-------
+ include/uapi/linux/psp-sev.h            |   7 ++
+ include/uapi/linux/sev-guest.h          |  18 ++++-
+ 8 files changed, 132 insertions(+), 56 deletions(-)
 
-though, even taking the individual commits isn't a perfectly
-clean revert due to other unrelated changes in machine
-type versioning.
-
-I'm not too fussed if this last one isn't a clean revert,
-but lets just call out in the commit message that we're
-just manually resolving conflicts and skipping those
-two intermediate commits for simplicity.
-
-Assuming an improve commit message:
-
-  Reviewed-by: Daniel P. Berrangé <berrange@redhat.com>
-
-
-
-> 
-> diff --git a/include/hw/i386/pc.h b/include/hw/i386/pc.h
-> index 66e3d059ef..44b08554fa 100644
-> --- a/include/hw/i386/pc.h
-> +++ b/include/hw/i386/pc.h
-> @@ -127,9 +127,6 @@ struct PCMachineClass {
->  
->      /* create kvmclock device even when KVM PV features are not exposed */
->      bool kvmclock_create_always;
-> -
-> -    /* skip passing an rng seed for legacy machines */
-> -    bool legacy_no_rng_seed;
->  };
->  
->  #define TYPE_PC_MACHINE "generic-pc-machine"
-> diff --git a/include/hw/i386/x86.h b/include/hw/i386/x86.h
-> index 62fa5774f8..df82c5fd42 100644
-> --- a/include/hw/i386/x86.h
-> +++ b/include/hw/i386/x86.h
-> @@ -126,8 +126,7 @@ void x86_bios_rom_init(MachineState *ms, const char *default_firmware,
->  void x86_load_linux(X86MachineState *x86ms,
->                      FWCfgState *fw_cfg,
->                      int acpi_data_size,
-> -                    bool pvh_enabled,
-> -                    bool legacy_no_rng_seed);
-> +                    bool pvh_enabled);
->  
->  bool x86_machine_is_smm_enabled(const X86MachineState *x86ms);
->  bool x86_machine_is_acpi_enabled(const X86MachineState *x86ms);
-> diff --git a/hw/i386/microvm.c b/hw/i386/microvm.c
-> index 170a331e3f..b231ceda9a 100644
-> --- a/hw/i386/microvm.c
-> +++ b/hw/i386/microvm.c
-> @@ -330,7 +330,7 @@ static void microvm_memory_init(MicrovmMachineState *mms)
->      rom_set_fw(fw_cfg);
->  
->      if (machine->kernel_filename != NULL) {
-> -        x86_load_linux(x86ms, fw_cfg, 0, true, false);
-> +        x86_load_linux(x86ms, fw_cfg, 0, true);
->      }
->  
->      if (mms->option_roms) {
-> diff --git a/hw/i386/pc.c b/hw/i386/pc.c
-> index 6e592bd969..2c5f675ba4 100644
-> --- a/hw/i386/pc.c
-> +++ b/hw/i386/pc.c
-> @@ -804,7 +804,7 @@ void xen_load_linux(PCMachineState *pcms)
->      rom_set_fw(fw_cfg);
->  
->      x86_load_linux(x86ms, fw_cfg, pcmc->acpi_data_size,
-> -                   pcmc->pvh_enabled, pcmc->legacy_no_rng_seed);
-> +                   pcmc->pvh_enabled);
->      for (i = 0; i < nb_option_roms; i++) {
->          assert(!strcmp(option_rom[i].name, "linuxboot.bin") ||
->                 !strcmp(option_rom[i].name, "linuxboot_dma.bin") ||
-> @@ -1124,7 +1124,7 @@ void pc_memory_init(PCMachineState *pcms,
->  
->      if (linux_boot) {
->          x86_load_linux(x86ms, fw_cfg, pcmc->acpi_data_size,
-> -                       pcmc->pvh_enabled, pcmc->legacy_no_rng_seed);
-> +                       pcmc->pvh_enabled);
->      }
->  
->      for (i = 0; i < nb_option_roms; i++) {
-> diff --git a/hw/i386/pc_piix.c b/hw/i386/pc_piix.c
-> index df64dd8dcc..839bd65df5 100644
-> --- a/hw/i386/pc_piix.c
-> +++ b/hw/i386/pc_piix.c
-> @@ -476,9 +476,7 @@ DEFINE_I440FX_MACHINE(v7_2, "pc-i440fx-7.2", NULL,
->  
->  static void pc_i440fx_7_1_machine_options(MachineClass *m)
->  {
-> -    PCMachineClass *pcmc = PC_MACHINE_CLASS(m);
->      pc_i440fx_7_2_machine_options(m);
-> -    pcmc->legacy_no_rng_seed = true;
->      compat_props_add(m->compat_props, hw_compat_7_1, hw_compat_7_1_len);
->      compat_props_add(m->compat_props, pc_compat_7_1, pc_compat_7_1_len);
->  }
-> diff --git a/hw/i386/pc_q35.c b/hw/i386/pc_q35.c
-> index 66cd718b70..e6e3966262 100644
-> --- a/hw/i386/pc_q35.c
-> +++ b/hw/i386/pc_q35.c
-> @@ -395,9 +395,7 @@ DEFINE_Q35_MACHINE(v7_2, "pc-q35-7.2", NULL,
->  
->  static void pc_q35_7_1_machine_options(MachineClass *m)
->  {
-> -    PCMachineClass *pcmc = PC_MACHINE_CLASS(m);
->      pc_q35_7_2_machine_options(m);
-> -    pcmc->legacy_no_rng_seed = true;
->      compat_props_add(m->compat_props, hw_compat_7_1, hw_compat_7_1_len);
->      compat_props_add(m->compat_props, pc_compat_7_1, pc_compat_7_1_len);
->  }
-> diff --git a/hw/i386/x86.c b/hw/i386/x86.c
-> index 4831193c86..80be3032cc 100644
-> --- a/hw/i386/x86.c
-> +++ b/hw/i386/x86.c
-> @@ -26,7 +26,6 @@
->  #include "qemu/cutils.h"
->  #include "qemu/units.h"
->  #include "qemu/datadir.h"
-> -#include "qemu/guest-random.h"
->  #include "qapi/error.h"
->  #include "qapi/qmp/qerror.h"
->  #include "qapi/qapi-visit-common.h"
-> @@ -771,8 +770,7 @@ static bool load_elfboot(const char *kernel_filename,
->  void x86_load_linux(X86MachineState *x86ms,
->                      FWCfgState *fw_cfg,
->                      int acpi_data_size,
-> -                    bool pvh_enabled,
-> -                    bool legacy_no_rng_seed)
-> +                    bool pvh_enabled)
->  {
->      bool linuxboot_dma_enabled = X86_MACHINE_GET_CLASS(x86ms)->fwcfg_dma_enabled;
->      uint16_t protocol;
-> @@ -780,7 +778,7 @@ void x86_load_linux(X86MachineState *x86ms,
->      int dtb_size, setup_data_offset;
->      uint32_t initrd_max;
->      uint8_t header[8192], *setup, *kernel;
-> -    hwaddr real_addr, prot_addr, cmdline_addr, initrd_addr = 0, first_setup_data = 0;
-> +    hwaddr real_addr, prot_addr, cmdline_addr, initrd_addr = 0;
->      FILE *f;
->      char *vmode;
->      MachineState *machine = MACHINE(x86ms);
-> @@ -790,7 +788,6 @@ void x86_load_linux(X86MachineState *x86ms,
->      const char *dtb_filename = machine->dtb;
->      const char *kernel_cmdline = machine->kernel_cmdline;
->      SevKernelLoaderContext sev_load_ctx = {};
-> -    enum { RNG_SEED_LENGTH = 32 };
->  
->      /* Align to 16 bytes as a paranoia measure */
->      cmdline_size = (strlen(kernel_cmdline) + 16) & ~15;
-> @@ -1070,31 +1067,16 @@ void x86_load_linux(X86MachineState *x86ms,
->          kernel_size = setup_data_offset + sizeof(struct setup_data) + dtb_size;
->          kernel = g_realloc(kernel, kernel_size);
->  
-> +        stq_p(header + 0x250, prot_addr + setup_data_offset);
->  
->          setup_data = (struct setup_data *)(kernel + setup_data_offset);
-> -        setup_data->next = cpu_to_le64(first_setup_data);
-> -        first_setup_data = prot_addr + setup_data_offset;
-> +        setup_data->next = 0;
->          setup_data->type = cpu_to_le32(SETUP_DTB);
->          setup_data->len = cpu_to_le32(dtb_size);
->  
->          load_image_size(dtb_filename, setup_data->data, dtb_size);
->      }
->  
-> -    if (!legacy_no_rng_seed) {
-> -        setup_data_offset = QEMU_ALIGN_UP(kernel_size, 16);
-> -        kernel_size = setup_data_offset + sizeof(struct setup_data) + RNG_SEED_LENGTH;
-> -        kernel = g_realloc(kernel, kernel_size);
-> -        setup_data = (struct setup_data *)(kernel + setup_data_offset);
-> -        setup_data->next = cpu_to_le64(first_setup_data);
-> -        first_setup_data = prot_addr + setup_data_offset;
-> -        setup_data->type = cpu_to_le32(SETUP_RNG_SEED);
-> -        setup_data->len = cpu_to_le32(RNG_SEED_LENGTH);
-> -        qemu_guest_getrandom_nofail(setup_data->data, RNG_SEED_LENGTH);
-> -    }
-> -
-> -    /* Offset 0x250 is a pointer to the first setup_data link. */
-> -    stq_p(header + 0x250, first_setup_data);
-> -
->      /*
->       * If we're starting an encrypted VM, it will be OVMF based, which uses the
->       * efi stub for booting and doesn't require any values to be placed in the
-> -- 
-> MST
-> 
-
-With regards,
-Daniel
 -- 
-|: https://berrange.com      -o-    https://www.flickr.com/photos/dberrange :|
-|: https://libvirt.org         -o-            https://fstop138.berrange.com :|
-|: https://entangle-photo.org    -o-    https://www.instagram.com/dberrange :|
+2.39.1.637.g21b0678d19-goog
 
