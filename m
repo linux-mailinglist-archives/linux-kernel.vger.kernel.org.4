@@ -2,73 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 572AD696898
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 16:57:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA03D6968A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 16:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233217AbjBNP5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 10:57:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
+        id S233362AbjBNP6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 10:58:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233212AbjBNP51 (ORCPT
+        with ESMTP id S232979AbjBNP5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 10:57:27 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4F4279BF
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 07:57:23 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so11976445wms.1
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 07:57:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EVFIEvz89X8+njJ854cL83jhIhfm54rA1V6D66stgfk=;
-        b=xXFINKn04myxAsiwHti7QVRpKV8wSaHu9KqUKk9QHNlGAoJkoqlZq6PuQ7IwpfnH4u
-         VkcAIbPAXAY9us6juhgArimBxqfRYjmcCtQa7J9JK/EjSX54QzIBkQrTvgEICwfb474o
-         4MyLbEHUb9f597eA+1Xe0Wr0D1QH4KhnODQZEkYRh1WcrgVxuSllhQ/8jhgUwjZlazWi
-         GIB6b/JVnu13RdyCXQUKX7Di3lccVCfHeIqOBV6SwwGssADAkn9lMMtQpGAA+qUYs6Sw
-         yfoI6PV4V98JLLPsuL4ENIeD5fiBYHt5hU8JVAm29mVE9vC69oKXsL0qswk1k3v+GDCN
-         dLvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EVFIEvz89X8+njJ854cL83jhIhfm54rA1V6D66stgfk=;
-        b=UHKJwIb8CyM9aZShK8uG0rVFrRRlZ0aSoIbh7Z3H5kBPwmNiJ7G10EZSfOxYVG1JjS
-         s/YzQrOedWkMZcTf38Fy8oSfczzY0w6PNjVNXFzgTxQYIk/Q5ap4zeW5D2HKKDxD3Z2k
-         fsEhGjM5F5e51YrBcGd4iKe0p8ktKrYvqAflETOYJQctbR9JpUA8cQjQA9spIUfR+3+c
-         ME8cUyUpF26ciInfHTsxGEZV2b+DV+hFH4nO1snxuj7RfZLcEbSsLlwQEiTXZ8TwM1zD
-         yhODJQqjLwE2lyJ+2GXzr13P6QKcj5jRpkhnYJYbUlRy2FjO5ZAC01SdN/UITa3ZGtqe
-         sODw==
-X-Gm-Message-State: AO0yUKVTTluRJEoHAsAiY66TqlX91XQIzAohyhiExn5BLecdmm7l4O6W
-        T7YxxAKRvsezjLqzBvEjpTYRsg==
-X-Google-Smtp-Source: AK7set+ai6AJ3UF7a97IgvHmoRm72GgmhAvMUUlet2bfyo4Nve4URVkx/HcPojcZjOgBJOkm8w6tXw==
-X-Received: by 2002:a05:600c:1c17:b0:3dc:de85:5007 with SMTP id j23-20020a05600c1c1700b003dcde855007mr2480329wms.21.1676390242054;
-        Tue, 14 Feb 2023 07:57:22 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:6e4b:bef:7edd:1af1])
-        by smtp.gmail.com with ESMTPSA id x2-20020a1c7c02000000b003df30c94850sm20451924wmc.25.2023.02.14.07.57.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 07:57:21 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH 3/3] arm64: dts: qcom: sa8775p: add the GNSS high-speed UART for sa8775p-ride
-Date:   Tue, 14 Feb 2023 16:57:15 +0100
-Message-Id: <20230214155715.451130-4-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230214155715.451130-1-brgl@bgdev.pl>
-References: <20230214155715.451130-1-brgl@bgdev.pl>
+        Tue, 14 Feb 2023 10:57:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D4B27D52;
+        Tue, 14 Feb 2023 07:57:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC12C61744;
+        Tue, 14 Feb 2023 15:57:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 10B93C433D2;
+        Tue, 14 Feb 2023 15:57:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676390262;
+        bh=W8XkJNoaiihOtRWm+VY9HVS5fVLKZtL0zeEomIi3nCs=;
+        h=From:Subject:Date:To:Cc:Reply-To:From;
+        b=CDTX9AItrfb+4lVJwXQ+OrFDRUYWY7x0vmazF8sdMWoV/EwbXKkRa7dkDTql9rIP/
+         GMgFXsKfTE516pBd/6wCMjcRLpZj5ALRZFVJoLQipNbSmIGhxyT1R34QgpObzR4AE7
+         CEeCWOZQUbTrtjsn0XeexCMCOCO5yHbC1tpkOwDMw3gqmwkUP9pXLVXQ4cXnhNMcBx
+         L479J9proNQRNTvGkgOn/0/oNvC4MEEbqeMOmcCJvRl9mxupaa6XEPSRBurvM7+82a
+         FOhEC4Z1pqgituikztLpZDSB+PMOhXrzTPDrk5T7BWbord9l7a5lQ4YXsV1Tte0cpg
+         vlXFIgaQNpo1A==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by smtp.lore.kernel.org (Postfix) with ESMTP id F0337C61DA4;
+        Tue, 14 Feb 2023 15:57:41 +0000 (UTC)
+From:   Sasha Finkelstein via B4 Submission Endpoint 
+        <devnull+fnkl.kernel.gmail.com@kernel.org>
+Subject: [PATCH RESEND 2 v7 0/5] PWM and keyboard backlight driver for ARM
+ Macs
+Date:   Tue, 14 Feb 2023 16:57:22 +0100
+Message-Id: <20230214-fpwm-v7-0-fb0a6bfbd037@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGKv62MC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyzHUUlJIzE
+ vPSU3UzU4B8JSMDI2MDI0MT3bSC8lzdFIs0c7OkZIuUlGRDJaDSpMTiVN2kosS85AyQ4tzE4pL
+ UIpBEQVFqWmYF2PxopSDXYFc/FwUjpdjaWgAskuCreQAAAA==
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        - <asahi@lists.linux.dev>,
+        Sasha Finkelstein <fnkl.kernel@gmail.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sasha Finkelstein <7d578vix8hzw@opayq.net>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1676390260; l=1884;
+ i=fnkl.kernel@gmail.com; s=20230213; h=from:subject:message-id;
+ bh=W8XkJNoaiihOtRWm+VY9HVS5fVLKZtL0zeEomIi3nCs=;
+ b=NNzni8bsONdHN+vK075/ukK3vHLt6lXE29h50S9lr03r5LdR0Vz2QqGwkelViFa7HJbypuvD9
+ n7xtlxPq2dgCIwU7Y6oGOwsQpiAkHBT7vF5sRq3j/IVAG8gWA9cnby0
+X-Developer-Key: i=fnkl.kernel@gmail.com; a=ed25519;
+ pk=7LFSAJtxIWAs9LzCIyX0sSvCZy2wQTyEIu1zch6o804=
+X-Endpoint-Received: by B4 Submission Endpoint for fnkl.kernel@gmail.com/20230213 with auth_id=28
+X-Original-From: Sasha Finkelstein <fnkl.kernel@gmail.com>
+Reply-To: <fnkl.kernel@gmail.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,103 +81,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Hi,
 
-Add the serial port connected to the GNSS on sa8775p-ride.
+This is the second resend of the v7 of the patch series to add PWM and keyboard
+backlight driver for ARM macs. No significant changes this time.
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Changes in v1:
+Addressing the review comments.
+
+Changes in v2:
+Added the reviewed-by and acked-by tags.
+Addressing a review comment.
+
+Changes in v3 and v4:
+Addressing the review comments.
+
+Changes in v5:
+Added t600x device tree changes
+
+v1: https://www.spinics.net/lists/linux-pwm/msg19500.html
+v2: https://www.spinics.net/lists/linux-pwm/msg19562.html
+v3: https://www.spinics.net/lists/linux-pwm/msg19901.html
+v4: https://www.spinics.net/lists/linux-pwm/msg20093.html
+v5: https://www.spinics.net/lists/linux-pwm/msg20150.html
+v6: https://www.spinics.net/lists/linux-pwm/msg20190.html
+
 ---
- arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 34 +++++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sa8775p.dtsi     | 17 ++++++++++++
- 2 files changed, 51 insertions(+)
+Sasha Finkelstein (5):
+      dt-bindings: pwm: Add Apple PWM controller
+      pwm: Add Apple PWM controller
+      arm64: dts: apple: t8103: Add PWM controller
+      arm64: dts: apple: t600x: Add PWM controller
+      MAINTAINERS: Add entries for Apple PWM driver
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-index d01ca3a9ee37..9aee6e4c1ba1 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-@@ -13,6 +13,7 @@ / {
- 
- 	aliases {
- 		serial0 = &uart10;
-+		serial1 = &uart17;
- 		i2c18 = &i2c18;
- 		spi16 = &spi16;
- 	};
-@@ -66,6 +67,30 @@ qup_i2c18_default: qup-i2c18-state {
- 		drive-strength = <2>;
- 		bias-pull-up;
- 	};
-+
-+	qup_uart17_cts: qup-uart17-cts-state {
-+		pins = "gpio91";
-+		function = "qup2_se3";
-+		bias-disable;
-+	};
-+
-+	qup_uart17_rts: qup0_uart17_rts-state {
-+		pins = "gpio92";
-+		function = "qup2_se3";
-+		bias-pull-down;
-+	};
-+
-+	qup_uart17_tx: qup0_uart17_tx-state {
-+		pins = "gpio93";
-+		function = "qup2_se3";
-+		bias-pull-up;
-+	};
-+
-+	qup_uart17_rx: qup0_uart17_rx-state {
-+		pins = "gpio94";
-+		function = "qup2_se3";
-+		bias-pull-down;
-+	};
- };
- 
- &uart10 {
-@@ -75,6 +100,15 @@ &uart10 {
- 	status = "okay";
- };
- 
-+&uart17 {
-+	pinctrl-0 = <&qup_uart17_cts>,
-+		    <&qup_uart17_rts>,
-+		    <&qup_uart17_tx>,
-+		    <&qup_uart17_rx>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
- &xo_board_clk {
- 	clock-frequency = <38400000>;
- };
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-index 1abb545ff4f4..b009e1100c0a 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-@@ -524,6 +524,23 @@ &config_noc SLAVE_QUP_2 0>,
- 				status = "disabled";
- 			};
- 
-+			uart17: serial@88c000 {
-+				compatible = "qcom,geni-uart";
-+				reg = <0x0 0x88c000 0x0 0x4000>;
-+				interrupts-extended = <&intc GIC_SPI 585 IRQ_TYPE_LEVEL_HIGH>,
-+						      <&tlmm 94 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&gcc GCC_QUPV3_WRAP2_S3_CLK>;
-+				clock-names = "se";
-+				interconnects = <&clk_virt MASTER_QUP_CORE_2 0
-+						 &clk_virt SLAVE_QUP_CORE_2 0>,
-+						<&gem_noc MASTER_APPSS_PROC 0
-+						 &config_noc SLAVE_QUP_2 0>;
-+				interconnect-names = "qup-core",
-+						     "qup-config";
-+				power-domains = <&rpmhpd SA8775P_CX>;
-+				status = "disabled";
-+			};
-+
- 			i2c18: i2c@890000 {
- 				compatible = "qcom,geni-i2c";
- 				reg = <0x0 0x890000 0x0 0x4000>;
+ .../devicetree/bindings/pwm/apple,s5l-fpwm.yaml    |  51 +++++++
+ MAINTAINERS                                        |   2 +
+ arch/arm64/boot/dts/apple/t600x-die0.dtsi          |   9 ++
+ arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi     |  18 +++
+ arch/arm64/boot/dts/apple/t8103-j293.dts           |  17 +++
+ arch/arm64/boot/dts/apple/t8103-j313.dts           |  17 +++
+ arch/arm64/boot/dts/apple/t8103.dtsi               |   9 ++
+ drivers/pwm/Kconfig                                |  12 ++
+ drivers/pwm/Makefile                               |   1 +
+ drivers/pwm/pwm-apple.c                            | 159 +++++++++++++++++++++
+ 10 files changed, 295 insertions(+)
+---
+base-commit: ceaa837f96adb69c0df0397937cd74991d5d821a
+change-id: 20230214-fpwm-d8f76bc8ddc1
+
+Best regards,
 -- 
-2.37.2
+Sasha Finkelstein <fnkl.kernel@gmail.com>
 
