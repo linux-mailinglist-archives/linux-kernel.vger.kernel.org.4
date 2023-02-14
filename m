@@ -2,197 +2,315 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00AA696BD3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:36:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3129A696BDE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232550AbjBNRgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 12:36:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40272 "EHLO
+        id S231845AbjBNRkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 12:40:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232181AbjBNRgK (ORCPT
+        with ESMTP id S232234AbjBNRkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 12:36:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1977691;
-        Tue, 14 Feb 2023 09:35:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7D2CEB81E4A;
-        Tue, 14 Feb 2023 17:35:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19D7CC433D2;
-        Tue, 14 Feb 2023 17:35:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676396130;
-        bh=K1W1HGSXCSxK2eoAED25PPugOTUwn8WQ87nD6VmP/yQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZaaQrlK0npdqyxSvU7pyWMYMj2dzeRI8TeeCawqLypJpfl0AfXq7afSZPRBcxcsIx
-         2TFMnH/m1dl9mlrhApUP4yOkSOefS+sDsboFcaqB+m3pSRUsE9J7VET4R0IbIvByNs
-         a6nF5DpIXJOmR+E1ifdI5bdAbN7uhmJxMkEZ5Pn911QfV6egwmZ79ZWFotR+YSrPlA
-         9WZE9Czgiu7fl+n+MFHIQerIbDERz1SAvr6yCtx7gjswT0fbl2kpD5cnAzUW0dVi3v
-         3Mhxc2O/X+y4HITU4Sfu/GYxpzXBzr4ltQGUnT6Gp8qBbKl5mEFy7ao4AJzaRF8gJl
-         dyRq6EfkXYDCA==
-Date:   Tue, 14 Feb 2023 09:37:33 -0800
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Melody Olvera <quic_molvera@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Gokul Krishna Krishnakumar <quic_gokukris@quicinc.com>
-Subject: Re: [PATCH 6/9] soc: qcom: mdt_loader: Enhance split binary detection
-Message-ID: <20230214173733.ykgry7td33sbr3o5@ripper>
-References: <20230213185218.166520-1-quic_molvera@quicinc.com>
- <20230213185218.166520-7-quic_molvera@quicinc.com>
+        Tue, 14 Feb 2023 12:40:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC72222D7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:39:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676396367;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4QKLllZC1uEUOE2BdO7bzLxdbv09hiQiyoC40FRYKDo=;
+        b=eA9w+CMpT8mDhMRFM3sgpnbzyQYzY6gAmPhY5DFoks7eL6nFc2djF/n2MmCkPYoBY6ZZit
+        /wqASv2UFmNH4fsqmomGC3smxEsGj5X99vsNf6j5ir6RAFHd5qiT0qdE4kFX5c9C6LDGrP
+        goX5YwB/2bsuEIs817gVs7hKQNd11Hs=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-593-k-ZuYSD1PAKr8rHbqWmxHg-1; Tue, 14 Feb 2023 12:39:26 -0500
+X-MC-Unique: k-ZuYSD1PAKr8rHbqWmxHg-1
+Received: by mail-wm1-f71.google.com with SMTP id bi10-20020a05600c3d8a00b003dd1b5d2a36so520840wmb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:39:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4QKLllZC1uEUOE2BdO7bzLxdbv09hiQiyoC40FRYKDo=;
+        b=NOdJqP6HPz1RUs0c8gD7cq65IpEc+fEed/S+iLFp8+eChfXp4wjgFsFM74lls45DC9
+         qCuEEPcgxXQo1XDZJ1BNE+1fwvf7XJWfVp/xeoqx63JY4+1ALReu8lE/RcmKlMKFpyNu
+         R1IJTNgEq2BJixiNSiU6/Gk6L5R9Qj7c4s0ZD950TRKY1Qjh5VClArXY7QiHhZrQSYvO
+         ZSLiYafjA86zTZkALcZRKGawDmwHHZkWHxBxE94OnkwB534tasR4e6ZAwqp/ABxSQgk1
+         EUsx/K9+sClDA06Y0Je30XHXn3crs6yXBccLEBvp/MbgsYOHnqsROel5bG0zXIKjgBXK
+         ze4Q==
+X-Gm-Message-State: AO0yUKUxdUXsobZpXW2n1MvIhB5IRG8REliOjjAqp9SZTNVWBu6bbJep
+        r4nQ5NoJ7OUcN63cdnBULqZOC8AkLlRGRx3PyNmZVR84iOxy0PuLTbz97Aehyf1JIv5pn1D45Kv
+        5Ob36c4UNlE20rbeQPKhCkcY9
+X-Received: by 2002:a5d:6806:0:b0:2c4:57d3:396 with SMTP id w6-20020a5d6806000000b002c457d30396mr2716991wru.40.1676396364826;
+        Tue, 14 Feb 2023 09:39:24 -0800 (PST)
+X-Google-Smtp-Source: AK7set/r0DQ7+ma2F6crvNFnBEefDNPcQ1q0jtIdkDICXCjvMBFXmslFeTySfwfESBVH/z6uWOQnhg==
+X-Received: by 2002:a5d:6806:0:b0:2c4:57d3:396 with SMTP id w6-20020a5d6806000000b002c457d30396mr2716932wru.40.1676396364345;
+        Tue, 14 Feb 2023 09:39:24 -0800 (PST)
+Received: from [192.168.3.108] (p5b0c60e7.dip0.t-ipconnect.de. [91.12.96.231])
+        by smtp.gmail.com with ESMTPSA id u14-20020adff88e000000b002c56046a3b5sm3582125wrp.53.2023.02.14.09.39.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 09:39:23 -0800 (PST)
+Message-ID: <b1cada27-33b0-f53a-4059-07c54d9f1bc4@redhat.com>
+Date:   Tue, 14 Feb 2023 18:39:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230213185218.166520-7-quic_molvera@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Content-Language: en-US
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Chih-En Lin <shiyn.lin@gmail.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Nadav Amit <namit@vmware.com>, Barry Song <baohua@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Xu <peterx@redhat.com>, Vlastimil Babka <vbabka@suse.cz>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Hugh Dickins <hughd@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yu Zhao <yuzhao@google.com>, Juergen Gross <jgross@suse.com>,
+        Tong Tiangen <tongtiangen@huawei.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Li kunyu <kunyu@nfschina.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Gautam Menghani <gautammenghani201@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
+        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Barret Rhoden <brho@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Dinglan Peng <peng301@purdue.edu>,
+        Pedro Fonseca <pfonseca@purdue.edu>,
+        Jim Huang <jserv@ccns.ncku.edu.tw>,
+        Huichun Feng <foxhoundsk.tw@gmail.com>
+References: <20230207035139.272707-1-shiyn.lin@gmail.com>
+ <CA+CK2bBt0Gujv9BdhghVkbFRirAxCYXbpH-nquccPsKGnGwOBQ@mail.gmail.com>
+ <CANOhDtU3J8SUCzKtKvPPPrUHyo+LV5npNObHtYP_AK4W3LomDw@mail.gmail.com>
+ <CA+CK2bAWnzqKDTjBbxXOvURwr7nWmf8q-mzD1x-ztwbWVQBQKA@mail.gmail.com>
+ <Y+Z8ymNYc+vJMBx8@strix-laptop>
+ <62c44d12-933d-ee66-ef50-467cd8d30a58@redhat.com>
+ <CAHbLzkoYo3Fwz2H=GM3X+ao33NN2fc2qh6y_ir4A-RL0LvJaZA@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v4 00/14] Introduce Copy-On-Write to Page Table
+In-Reply-To: <CAHbLzkoYo3Fwz2H=GM3X+ao33NN2fc2qh6y_ir4A-RL0LvJaZA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 10:52:15AM -0800, Melody Olvera wrote:
-> From: Gokul Krishna Krishnakumar <quic_gokukris@quicinc.com>
+On 14.02.23 18:23, Yang Shi wrote:
+> On Tue, Feb 14, 2023 at 1:58 AM David Hildenbrand <david@redhat.com> wrote:
+>>
+>> On 10.02.23 18:20, Chih-En Lin wrote:
+>>> On Fri, Feb 10, 2023 at 11:21:16AM -0500, Pasha Tatashin wrote:
+>>>>>>> Currently, copy-on-write is only used for the mapped memory; the child
+>>>>>>> process still needs to copy the entire page table from the parent
+>>>>>>> process during forking. The parent process might take a lot of time and
+>>>>>>> memory to copy the page table when the parent has a big page table
+>>>>>>> allocated. For example, the memory usage of a process after forking with
+>>>>>>> 1 GB mapped memory is as follows:
+>>>>>>
+>>>>>> For some reason, I was not able to reproduce performance improvements
+>>>>>> with a simple fork() performance measurement program. The results that
+>>>>>> I saw are the following:
+>>>>>>
+>>>>>> Base:
+>>>>>> Fork latency per gigabyte: 0.004416 seconds
+>>>>>> Fork latency per gigabyte: 0.004382 seconds
+>>>>>> Fork latency per gigabyte: 0.004442 seconds
+>>>>>> COW kernel:
+>>>>>> Fork latency per gigabyte: 0.004524 seconds
+>>>>>> Fork latency per gigabyte: 0.004764 seconds
+>>>>>> Fork latency per gigabyte: 0.004547 seconds
+>>>>>>
+>>>>>> AMD EPYC 7B12 64-Core Processor
+>>>>>> Base:
+>>>>>> Fork latency per gigabyte: 0.003923 seconds
+>>>>>> Fork latency per gigabyte: 0.003909 seconds
+>>>>>> Fork latency per gigabyte: 0.003955 seconds
+>>>>>> COW kernel:
+>>>>>> Fork latency per gigabyte: 0.004221 seconds
+>>>>>> Fork latency per gigabyte: 0.003882 seconds
+>>>>>> Fork latency per gigabyte: 0.003854 seconds
+>>>>>>
+>>>>>> Given, that page table for child is not copied, I was expecting the
+>>>>>> performance to be better with COW kernel, and also not to depend on
+>>>>>> the size of the parent.
+>>>>>
+>>>>> Yes, the child won't duplicate the page table, but fork will still
+>>>>> traverse all the page table entries to do the accounting.
+>>>>> And, since this patch expends the COW to the PTE table level, it's not
+>>>>> the mapped page (page table entry) grained anymore, so we have to
+>>>>> guarantee that all the mapped page is available to do COW mapping in
+>>>>> the such page table.
+>>>>> This kind of checking also costs some time.
+>>>>> As a result, since the accounting and the checking, the COW PTE fork
+>>>>> still depends on the size of the parent so the improvement might not
+>>>>> be significant.
+>>>>
+>>>> The current version of the series does not provide any performance
+>>>> improvements for fork(). I would recommend removing claims from the
+>>>> cover letter about better fork() performance, as this may be
+>>>> misleading for those looking for a way to speed up forking. In my
+>>>
+>>>   From v3 to v4, I changed the implementation of the COW fork() part to do
+>>> the accounting and checking. At the time, I also removed most of the
+>>> descriptions about the better fork() performance. Maybe it's not enough
+>>> and still has some misleading. I will fix this in the next version.
+>>> Thanks.
+>>>
+>>>> case, I was looking to speed up Redis OSS, which relies on fork() to
+>>>> create consistent snapshots for driving replicates/backups. The O(N)
+>>>> per-page operation causes fork() to be slow, so I was hoping that this
+>>>> series, which does not duplicate the VA during fork(), would make the
+>>>> operation much quicker.
+>>>
+>>> Indeed, at first, I tried to avoid the O(N) per-page operation by
+>>> deferring the accounting and the swap stuff to the page fault. But,
+>>> as I mentioned, it's not suitable for the mainline.
+>>>
+>>> Honestly, for improving the fork(), I have an idea to skip the per-page
+>>> operation without breaking the logic. However, this will introduce the
+>>> complicated mechanism and may has the overhead for other features. It
+>>> might not be worth it. It's hard to strike a balance between the
+>>> over-complicated mechanism with (probably) better performance and data
+>>> consistency with the page status. So, I would focus on the safety and
+>>> stable approach at first.
+>>
+>> Yes, it is most probably possible, but complexity, robustness and
+>> maintainability have to be considered as well.
+>>
+>> Thanks for implementing this approach (only deduplication without other
+>> optimizations) and evaluating it accordingly. It's certainly "cleaner",
+>> such that we only have to mess with unsharing and not with other
+>> accounting/pinning/mapcount thingies. But it also highlights how
+>> intrusive even this basic deduplication approach already is -- and that
+>> most benefits of the original approach requires even more complexity on top.
+>>
+>> I am not quite sure if the benefit is worth the price (I am not to
+>> decide and I would like to hear other options).
+>>
+>> My quick thoughts after skimming over the core parts of this series
+>>
+>> (1) forgetting to break COW on a PTE in some pgtable walker feels quite
+>>       likely (meaning that it might be fairly error-prone) and forgetting
+>>       to break COW on a PTE table, accidentally modifying the shared
+>>       table.
+>> (2) break_cow_pte() can fail, which means that we can fail some
+>>       operations (possibly silently halfway through) now. For example,
+>>       looking at your change_pte_range() change, I suspect it's wrong.
+>> (3) handle_cow_pte_fault() looks quite complicated and needs quite some
+>>       double-checking: we temporarily clear the PMD, to reset it
+>>       afterwards. I am not sure if that is correct. For example, what
+>>       stops another page fault stumbling over that pmd_none() and
+>>       allocating an empty page table? Maybe there are some locking details
+>>       missing or they are very subtle such that we better document them. I
+>>      recall that THP played quite some tricks to make such cases work ...
+>>
+>>>
+>>>>> Actually, at the RFC v1 and v2, we proposed the version of skipping
+>>>>> those works, and we got a significant improvement. You can see the
+>>>>> number from RFC v2 cover letter [1]:
+>>>>> "In short, with 512 MB mapped memory, COW PTE decreases latency by 93%
+>>>>> for normal fork"
+>>>>
+>>>> I suspect the 93% improvement (when the mapcount was not updated) was
+>>>> only for VAs with 4K pages. With 2M mappings this series did not
+>>>> provide any benefit is this correct?
+>>>
+>>> Yes. In this case, the COW PTE performance is similar to the normal
+>>> fork().
+>>
+>>
+>> The thing with THP is, that during fork(), we always allocate a backup
+>> PTE table, to be able to PTE-map the THP whenever we have to. Otherwise
+>> we'd have to eventually fail some operations we don't want to fail --
+>> similar to the case where break_cow_pte() could fail now due to -ENOMEM
+>> although we really don't want to fail (e.g., change_pte_range() ).
+>>
+>> I always considered that wasteful, because in many scenarios, we'll
+>> never ever split a THP and possibly waste memory.
 > 
-> When booting with split binaries, it is possible that the
-> mdt loader misdetects if a binary is split and only loads
-> one of the segments, so enhance the detection of the split
-> binaries to ensure the entirety of the firmware is loaded.
+> When you say "split THP", do you mean split the compound page to base
+> pages? IIUC the backup PTE table page is used to guarantee the PMD
+> split (just convert pmd mapped THP to PTE-mapped but not split the
+> compound page) succeed. You may already notice there is no return
+> value for PMD split.
 
-Please describe in detail what it is that is being "misdetected", and
-why, so other users can correlate their experience to the changes in the
-git log and that reviewers doesn't have to guess what problem is being
-corrected.
+Yes, as I raised in my other reply.
 
+> 
+> The PMD split may be called quite often, for example, MADV_DONTNEED,
+> mbind, mlock, and even in memory reclamation context  (THP swap).
+
+Yes, but with a single MADV_DONTNEED call you cannot PTE-map more than 2 
+THP (all other overlapped THP will get zapped). Same with most other 
+operations.
+
+There are corner cases, though. I recall that s390x/kvm wants to break 
+all THP in a given VMA range. But that operation could safely fail if we 
+can't do that.
+
+Certainly needs some investigation, that's most probably why it hasn't 
+been done yet.
+
+> 
+>>
+>> Optimizing that for THP (e.g., don't always allocate backup THP, have
+>> some global allocation backup pool for splits + refill when
+>> close-to-empty) might provide similar fork() improvements, both in speed
+>> and memory consumption when it comes to anonymous memory.
+> 
+> It might work. But may be much more complicated than what you thought
+> when handling multiple parallel PMD splits.
+
+
+I consider the whole PTE-table linking to THPs complicated enough to 
+eventually replace it by something differently complicated that wastes 
+less memory ;)
+
+-- 
 Thanks,
-Bjorn
 
-> 
-> Signed-off-by: Gokul Krishna Krishnakumar <quic_gokukris@quicinc.com>
-> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
-> ---
->  drivers/soc/qcom/mdt_loader.c | 64 +++++++++++++++++++----------------
->  1 file changed, 35 insertions(+), 29 deletions(-)
-> 
-> diff --git a/drivers/soc/qcom/mdt_loader.c b/drivers/soc/qcom/mdt_loader.c
-> index 33dd8c315eb7..3aadce299c02 100644
-> --- a/drivers/soc/qcom/mdt_loader.c
-> +++ b/drivers/soc/qcom/mdt_loader.c
-> @@ -31,6 +31,26 @@ static bool mdt_phdr_valid(const struct elf32_phdr *phdr)
->  	return true;
->  }
->  
-> +static bool qcom_mdt_bins_are_split(const struct firmware *fw)
-> +{
-> +	const struct elf32_phdr *phdrs;
-> +	const struct elf32_hdr *ehdr;
-> +	uint64_t seg_start, seg_end;
-> +	int i;
-> +
-> +	ehdr = (struct elf32_hdr *)fw->data;
-> +	phdrs = (struct elf32_phdr *)(ehdr + 1);
-> +
-> +	for (i = 0; i < ehdr->e_phnum; i++) {
-> +		seg_start = phdrs[i].p_offset;
-> +		seg_end = phdrs[i].p_offset + phdrs[i].p_filesz;
-> +		if (seg_start > fw->size || seg_end > fw->size)
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
->  static ssize_t mdt_load_split_segment(void *ptr, const struct elf32_phdr *phdrs,
->  				      unsigned int segment, const char *fw_name,
->  				      struct device *dev)
-> @@ -167,23 +187,13 @@ void *qcom_mdt_read_metadata(const struct firmware *fw, size_t *data_len,
->  	/* Copy ELF header */
->  	memcpy(data, fw->data, ehdr_size);
->  
-> -	if (ehdr_size + hash_size == fw->size) {
-> -		/* Firmware is split and hash is packed following the ELF header */
-> -		hash_offset = phdrs[0].p_filesz;
-> -		memcpy(data + ehdr_size, fw->data + hash_offset, hash_size);
-> -	} else if (phdrs[hash_segment].p_offset + hash_size <= fw->size) {
-> -		/* Hash is in its own segment, but within the loaded file */
-> +
-> +	if (qcom_mdt_bins_are_split(fw)) {
-> +		ret = mdt_load_split_segment(data + ehdr_size, phdrs, hash_segment, fw_name, dev);
-> +	} else {
->  		hash_offset = phdrs[hash_segment].p_offset;
->  		memcpy(data + ehdr_size, fw->data + hash_offset, hash_size);
-> -	} else {
-> -		/* Hash is in its own segment, beyond the loaded file */
-> -		ret = mdt_load_split_segment(data + ehdr_size, phdrs, hash_segment, fw_name, dev);
-> -		if (ret) {
-> -			kfree(data);
-> -			return ERR_PTR(ret);
-> -		}
->  	}
-> -
->  	*data_len = ehdr_size + hash_size;
->  
->  	return data;
-> @@ -270,6 +280,7 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
->  	phys_addr_t min_addr = PHYS_ADDR_MAX;
->  	ssize_t offset;
->  	bool relocate = false;
-> +	bool is_split;
->  	void *ptr;
->  	int ret = 0;
->  	int i;
-> @@ -277,6 +288,7 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
->  	if (!fw || !mem_region || !mem_phys || !mem_size)
->  		return -EINVAL;
->  
-> +	is_split = qcom_mdt_bins_are_split(fw);
->  	ehdr = (struct elf32_hdr *)fw->data;
->  	phdrs = (struct elf32_phdr *)(ehdr + 1);
->  
-> @@ -330,22 +342,16 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
->  
->  		ptr = mem_region + offset;
->  
-> -		if (phdr->p_filesz && phdr->p_offset < fw->size &&
-> -		    phdr->p_offset + phdr->p_filesz <= fw->size) {
-> -			/* Firmware is large enough to be non-split */
-> -			if (phdr->p_offset + phdr->p_filesz > fw->size) {
-> -				dev_err(dev, "file %s segment %d would be truncated\n",
-> -					fw_name, i);
-> -				ret = -EINVAL;
-> -				break;
-> +		if (phdr->p_filesz) {
-> +			if (!is_split) {
-> +				/* Firmware is large enough to be non-split */
-> +				memcpy(ptr, fw->data + phdr->p_offset, phdr->p_filesz);
-> +			} else {
-> +				/* Firmware not large enough, load split-out segments */
-> +				ret = mdt_load_split_segment(ptr, phdrs, i, fw_name, dev);
-> +				if (ret)
-> +					break;
->  			}
-> -
-> -			memcpy(ptr, fw->data + phdr->p_offset, phdr->p_filesz);
-> -		} else if (phdr->p_filesz) {
-> -			/* Firmware not large enough, load split-out segments */
-> -			ret = mdt_load_split_segment(ptr, phdrs, i, fw_name, dev);
-> -			if (ret)
-> -				break;
->  		}
->  
->  		if (phdr->p_memsz > phdr->p_filesz)
-> -- 
-> 2.25.1
-> 
+David / dhildenb
+
