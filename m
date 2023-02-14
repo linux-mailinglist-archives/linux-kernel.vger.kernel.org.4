@@ -2,173 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A8E695D81
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84D3C695D8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232145AbjBNIuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 03:50:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
+        id S232080AbjBNIuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 03:50:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbjBNIuQ (ORCPT
+        with ESMTP id S232086AbjBNIus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 03:50:16 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0888E2331E;
-        Tue, 14 Feb 2023 00:50:10 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B3A221F37C;
-        Tue, 14 Feb 2023 08:50:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1676364608; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fgt1M4WVOfjuxhjUWkQ8zKMH0N3h69+3N1PY/RQYSso=;
-        b=LJno83LysU0JabzHaH661dd02/JbqhimY6SoOLZRFE3f4Cgy869WP8sBJLbDYzh6NcFInu
-        yqb0at8wHLEel6A1u6OMZg6IuLtpQ2MMchvlw/wuHUDiOXc7JoY/9FDDZDoo6JC7mvoydT
-        n3wzl2NEUheXadbBEu3WSH2a+cWHeIY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1676364608;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fgt1M4WVOfjuxhjUWkQ8zKMH0N3h69+3N1PY/RQYSso=;
-        b=2aerJwqEJW1i/msnr0E9a2cnUo+n+bRMAfXO6jjFmooeM0VK8Y9t9j8mvOiYqVVLVkvBLk
-        Cw3/wMWijTz65dDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A64C7138E3;
-        Tue, 14 Feb 2023 08:50:08 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fOGcKEBL62NqMwAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 14 Feb 2023 08:50:08 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 356C1A06D8; Tue, 14 Feb 2023 09:50:08 +0100 (CET)
-Date:   Tue, 14 Feb 2023 09:50:08 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org,
-        Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rookxu <brookxu.cn@gmail.com>,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Subject: Re: [PATCH v3 7/8] ext4: Use rbtrees to manage PAs instead of inode
- i_prealloc_list
-Message-ID: <20230214085008.gix3dvvyg7wcf3bz@quack3>
-References: <Y8Z413XTPMr//bln@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
- <20230117110335.7dtlq4catefgjrm3@quack3>
- <Y8jizbGg6l2WxJPF@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
- <20230127144312.3m3hmcufcvxxp6f4@quack3>
- <Y9zHkMx7w4Io0TTv@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
- <Y+OGkVvzPN0RMv0O@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
- <20230209105418.ucowiqnnptbpwone@quack3>
- <Y+UzQJRIJEiAr4Z4@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
- <20230210143753.ofh6wouk7vi7ygcl@quack3>
- <Y+p6URWLBPd6VUHD@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+        Tue, 14 Feb 2023 03:50:48 -0500
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12BA2366B;
+        Tue, 14 Feb 2023 00:50:35 -0800 (PST)
+Received: from [192.168.1.103] (31.173.87.80) by msexch01.omp.ru (10.188.4.12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 14 Feb
+ 2023 11:50:23 +0300
+Subject: Re: [PATCH v3 10/24] sparc: Remove COMMAND_LINE_SIZE from uapi
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-alpha@vger.kernel.org>,
+        <linux-snps-arc@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-ia64@vger.kernel.org>, <loongarch@lists.linux.dev>,
+        <linux-m68k@lists.linux-m68k.org>, <linux-mips@vger.kernel.org>,
+        <linux-parisc@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+        <linux-sh@vger.kernel.org>, <sparclinux@vger.kernel.org>,
+        <linux-xtensa@linux-xtensa.org>, <linux-arch@vger.kernel.org>
+CC:     Palmer Dabbelt <palmer@rivosinc.com>
+References: <20230214074925.228106-1-alexghiti@rivosinc.com>
+ <20230214074925.228106-11-alexghiti@rivosinc.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <017f0b40-8021-8b3b-24d2-c70661b6b292@omp.ru>
+Date:   Tue, 14 Feb 2023 11:50:23 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+p6URWLBPd6VUHD@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230214074925.228106-11-alexghiti@rivosinc.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [31.173.87.80]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 02/14/2023 08:31:15
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 175500 [Feb 14 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 504 504 dc137e1f9c062eb6c0671e7d509ab442ae395562
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.87.80 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.87.80 in (user) dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;omp.ru:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.87.80
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 02/14/2023 08:34:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 2/14/2023 6:26:00 AM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/14/23 10:49 AM, Alexandre Ghiti wrote:
 
-Hi Ojaswin!
-
-On Mon 13-02-23 23:28:41, Ojaswin Mujoo wrote:
-> On Fri, Feb 10, 2023 at 03:37:53PM +0100, Jan Kara wrote:
-> > > See my comments at the end for more info.
-> > > 
-> > > > 
-> > > > > Also, another thing I noticed is that after ext4_mb_normalize_request(),
-> > > > > sometimes the original range can also exceed the normalized goal range,
-> > > > > which is again was a bit surprising to me since my understanding was
-> > > > > that normalized range would always encompass the orignal range.
-> > > > 
-> > > > Well, isn't that because (part of) the requested original range is already
-> > > > preallocated? Or what causes the goal range to be shortened?
-> > > > 
-> > > Yes I think that pre existing PAs could be one of the cases.
-> > > 
-> > > Other than that, I'm also seeing some cases of sparse writes which can cause
-> > > ext4_mb_normalize_request() to result in having an original range that
-> > > overflows out of the goal range. For example, I observed these values just
-> > > after the if else if else conditions in the function, before we check if range
-> > > overlaps pre existing PAs:
-> > > 
-> > > orig_ex:2045/2055(len:10) normalized_range:0/2048, orig_isize:8417280
-> > > 
-> > > Basically, since isize is large and we are doing a sparse write, we end
-> > > up in the following if condition:
-> > > 
-> > > 	} else if (NRL_CHECK_SIZE(ac->ac_o_ex.fe_len,
-> > > 								(8<<20)>>bsbits, max, 8 * 1024)) {
-> > > 		start_off = ((loff_t)ac->ac_o_ex.fe_logical >> (23 - bsbits)) << 23;
-> > > 		size = 8 * 1024 * 1024;
-> > >  }
-> > > 
-> > > Resulting in normalized range less than original range.
-> > 
-> > I see.
-> > 
-> > > Now, in any case, once we get such an overflow, if we try to enter the PA
-> > > adjustment window in ext4_mb_new_inode_pa() function, we will again end
-> > > up with a best extent overflowing out of goal extent since we would try
-> > > to cover the original extent. 
-> > > 
-> > > So yeah, seems like there are 2 cases where we could result in
-> > > overlapping PAs:
-> > > 
-> > > 1. Due to off calculation in PA adjustment window, as we discussed.  2.
-> > > Due to original extent overflowing out of goal extent.
-> > > 
-> > > I think the 3 step solution you proposed works well to counter 1 but not
-> > > 2, so we probably need some more logic on top of your solution to take
-> > > care of that.  I'll think some more on how to fix this but I think this
-> > > will be as a separate patch.
-> > 
-> > Well, my algorithm will still result in preallocation being within the goal
-> > range AFAICS. In the example above we had:
-> > 
-> > Orig 2045/2055 Goal 0/2048
-> > 
-> > Suppose we found 200 blocks. So we try placing preallocation like:
-> > 
-> > 1848/2048, it covers the original starting block 2045 so we are fine and
-> > create preallocation 1848/2048. Nothing has overflown the goal window...
+> From: Palmer Dabbelt <palmer@rivosinc.com>
 > 
-> Ahh okay, I though you meant checking if we covered the complete
-> original range instead of just the original start. In that case we
-> should be good.
+> As far as I can tell this is not used by userspace and thus should not
+> be part of the user-visible API.
 > 
-> However, I still feel that the example where we unnecessarily end up with 
-> a lesser goal len than original len should not happen. Maybe in
-> ext4_mb_normalize_request(), instead of hardcording the goal lengths for
-> different i_sizes, we can select the next power of 2 greater than our
-> original length or some similar heuristic. What do you think?
+> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> ---
+>  arch/sparc/include/asm/setup.h      | 6 +++++-
+>  arch/sparc/include/uapi/asm/setup.h | 7 -------
+>  2 files changed, 5 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/sparc/include/asm/setup.h b/arch/sparc/include/asm/setup.h
+> index 72205684e51e..d1384ed92547 100644
+> --- a/arch/sparc/include/asm/setup.h
+> +++ b/arch/sparc/include/asm/setup.h
+> @@ -7,7 +7,11 @@
+>  
+>  #include <linux/interrupt.h>
+>  
+> -#include <uapi/asm/setup.h>
+> +#if defined(__sparc__) && defined(__arch64__)
 
-I agree that seems suboptimal but I'd leave tweaking this heuristic for a
-separate patchset. In this one I'd just fix the minimum to make ranges not
-overlap. The current heuristic makes sense as an anti-fragmentation measure
-when there's enough free space. We can tweak the goal window heuristic of
-mballoc but it would require some deeper thought and measurements, how it
-affects fragmentation for various workloads so it is not just about
-changing those several lines of code...
+   Mhm, I don't think these two can be #define'd simulaneously...
 
-								Honza
+> +# define COMMAND_LINE_SIZE 2048
+> +#else
+> +# define COMMAND_LINE_SIZE 256
+> +#endif
+>  
+>  extern char reboot_command[];
+>  
+> diff --git a/arch/sparc/include/uapi/asm/setup.h b/arch/sparc/include/uapi/asm/setup.h
+> index 3c208a4dd464..c3cf1b0d30b3 100644
+> --- a/arch/sparc/include/uapi/asm/setup.h
+> +++ b/arch/sparc/include/uapi/asm/setup.h
+> @@ -6,11 +6,4 @@
+>  #ifndef _UAPI_SPARC_SETUP_H
+>  #define _UAPI_SPARC_SETUP_H
+>  
+> -#if defined(__sparc__) && defined(__arch64__)
+> -# define COMMAND_LINE_SIZE 2048
+> -#else
+> -# define COMMAND_LINE_SIZE 256
+> -#endif
+> -
+> -
+>  #endif /* _UAPI_SPARC_SETUP_H */
 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+MBR, Sergey
