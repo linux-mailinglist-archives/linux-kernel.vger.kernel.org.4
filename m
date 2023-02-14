@@ -2,128 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB809695D36
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:40:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D341E695D42
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232088AbjBNIkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 03:40:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42192 "EHLO
+        id S231630AbjBNIkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 03:40:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232116AbjBNIk3 (ORCPT
+        with ESMTP id S232131AbjBNIkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 03:40:29 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758E6527C;
-        Tue, 14 Feb 2023 00:40:20 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31E85KMA016338;
-        Tue, 14 Feb 2023 08:39:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=3e4b4Rni1cp9StPkR6N/CJwkiYWDOKhSZUT/2WythB0=;
- b=GOxNWp3htVQrNUNLfrGizBR8RavJ37vmbHMTKXVP4gAM11PPtpkCuKZ9emGs3JRxX2fN
- J7bzzUYTvhrT4vKlgp8xlKf+ZnlSAt7jPCe+6Lr/9kIICZuGn84VgZ1LM529qplNKzWS
- 8L3a9akufoA+2uPo6TWe30dNvWgdWQ+fnNgE0TrcWcbq8Pn3U9YEL3sfBAuA2YnLkHVQ
- xxWdNg4IlKgT+kNwQcG863WQb02sgCPeIB3DAaKRry79R1xg12OSN0lpWHka3Q8pKZNX
- tJDoeoqAvLdZgfZTO8yIdFQLQJ/YpiLdqor9dHvTk/YWxWtyAdpGNmAZEqsf0DV6NlLk Dw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nr64t98tv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 08:39:25 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31E8cEhu031934;
-        Tue, 14 Feb 2023 08:39:24 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nr64t98sh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 08:39:23 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31E56Qaq029819;
-        Tue, 14 Feb 2023 08:39:20 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3np29fkrmj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 08:39:20 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31E8dGFU46661998
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Feb 2023 08:39:17 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CF2C420043;
-        Tue, 14 Feb 2023 08:39:16 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 48A4C20040;
-        Tue, 14 Feb 2023 08:39:15 +0000 (GMT)
-Received: from osiris (unknown [9.152.212.244])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Tue, 14 Feb 2023 08:39:15 +0000 (GMT)
-Date:   Tue, 14 Feb 2023 09:39:14 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH v3 24/24] s390: Remove empty <uapi/asm/setup.h>
-Message-ID: <Y+tIsha0koPDqKX+@osiris>
-References: <20230214074925.228106-1-alexghiti@rivosinc.com>
- <20230214074925.228106-25-alexghiti@rivosinc.com>
+        Tue, 14 Feb 2023 03:40:32 -0500
+Received: from smtp.smtpout.orange.fr (smtp-21.smtpout.orange.fr [80.12.242.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFE9C178
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:40:22 -0800 (PST)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id RqrMpTv93mwp8RqrMpArGj; Tue, 14 Feb 2023 09:40:20 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 14 Feb 2023 09:40:20 +0100
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] regmap: Reorder fields in 'struct regmap_bus' to save some memory
+Date:   Tue, 14 Feb 2023 09:40:14 +0100
+Message-Id: <077ca39622c8870a3ea932298a9cec34f7a8295a.1676363976.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214074925.228106-25-alexghiti@rivosinc.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GYJrqdQmitIYPLW_tVQtzRHinhbL2gUE
-X-Proofpoint-ORIG-GUID: 13oX7n54GA0vqeg0E0WiK11FJlvCETjS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-14_05,2023-02-13_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 mlxscore=0 mlxlogscore=628 adultscore=0 suspectscore=0
- clxscore=1011 phishscore=0 malwarescore=0 impostorscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302140067
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -131,14 +41,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 08:49:25AM +0100, Alexandre Ghiti wrote:
-> From: Palmer Dabbelt <palmer@rivosinc.com>
-> 
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> ---
->  arch/s390/include/asm/setup.h      | 1 -
->  arch/s390/include/uapi/asm/setup.h | 1 -
->  2 files changed, 2 deletions(-)
->  delete mode 100644 arch/s390/include/uapi/asm/setup.h
+Group some bool variables to reduce hole and avoid padding.
+On x86_64, this shrinks the size from 136 to 128 bytes.
 
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
+As an example:
+
+$ size drivers/base/regmap/regmap-fsi.o (Before)
+   text	   data	    bss	    dec	    hex	filename
+   4837	    136	      0	   4973	   136d	drivers/base/regmap/regmap-fsi.o
+
+$ size drivers/base/regmap/regmap-fsi.o (After)
+   text	   data	    bss	    dec	    hex	filename
+   4701	    136	      0	   4837	   12e5	drivers/base/regmap/regmap-fsi.o
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Using pahole
+
+Before:
+======
+struct regmap_bus {
+	bool                       fast_io;              /*     0     1 */
+
+	/* XXX 7 bytes hole, try to pack */
+
+	regmap_hw_write            write;                /*     8     8 */
+	regmap_hw_gather_write     gather_write;         /*    16     8 */
+	regmap_hw_async_write      async_write;          /*    24     8 */
+	regmap_hw_reg_write        reg_write;            /*    32     8 */
+	regmap_hw_reg_noinc_write  reg_noinc_write;      /*    40     8 */
+	regmap_hw_reg_update_bits  reg_update_bits;      /*    48     8 */
+	regmap_hw_read             read;                 /*    56     8 */
+	/* --- cacheline 1 boundary (64 bytes) --- */
+	regmap_hw_reg_read         reg_read;             /*    64     8 */
+	regmap_hw_reg_noinc_read   reg_noinc_read;       /*    72     8 */
+	regmap_hw_free_context     free_context;         /*    80     8 */
+	regmap_hw_async_alloc      async_alloc;          /*    88     8 */
+	u8                         read_flag_mask;       /*    96     1 */
+
+	/* XXX 3 bytes hole, try to pack */
+
+	enum regmap_endian         reg_format_endian_default; /*   100     4 */
+	enum regmap_endian         val_format_endian_default; /*   104     4 */
+
+	/* XXX 4 bytes hole, try to pack */
+
+	size_t                     max_raw_read;         /*   112     8 */
+	size_t                     max_raw_write;        /*   120     8 */
+	/* --- cacheline 2 boundary (128 bytes) --- */
+	bool                       free_on_exit;         /*   128     1 */
+
+	/* size: 136, cachelines: 3, members: 18 */
+	/* sum members: 115, holes: 3, sum holes: 14 */
+	/* padding: 7 */
+	/* last cacheline: 8 bytes */
+};
+
+
+After:
+=====
+struct regmap_bus {
+	bool                       fast_io;              /*     0     1 */
+	bool                       free_on_exit;         /*     1     1 */
+
+	/* XXX 6 bytes hole, try to pack */
+
+	regmap_hw_write            write;                /*     8     8 */
+	regmap_hw_gather_write     gather_write;         /*    16     8 */
+	regmap_hw_async_write      async_write;          /*    24     8 */
+	regmap_hw_reg_write        reg_write;            /*    32     8 */
+	regmap_hw_reg_noinc_write  reg_noinc_write;      /*    40     8 */
+	regmap_hw_reg_update_bits  reg_update_bits;      /*    48     8 */
+	regmap_hw_read             read;                 /*    56     8 */
+	/* --- cacheline 1 boundary (64 bytes) --- */
+	regmap_hw_reg_read         reg_read;             /*    64     8 */
+	regmap_hw_reg_noinc_read   reg_noinc_read;       /*    72     8 */
+	regmap_hw_free_context     free_context;         /*    80     8 */
+	regmap_hw_async_alloc      async_alloc;          /*    88     8 */
+	u8                         read_flag_mask;       /*    96     1 */
+
+	/* XXX 3 bytes hole, try to pack */
+
+	enum regmap_endian         reg_format_endian_default; /*   100     4 */
+	enum regmap_endian         val_format_endian_default; /*   104     4 */
+
+	/* XXX 4 bytes hole, try to pack */
+
+	size_t                     max_raw_read;         /*   112     8 */
+	size_t                     max_raw_write;        /*   120     8 */
+
+	/* size: 128, cachelines: 2, members: 18 */
+	/* sum members: 115, holes: 3, sum holes: 13 */
+};
+---
+ include/linux/regmap.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/regmap.h b/include/linux/regmap.h
+index 029b9e09d3ca..f26432dc02ef 100644
+--- a/include/linux/regmap.h
++++ b/include/linux/regmap.h
+@@ -520,6 +520,7 @@ typedef void (*regmap_hw_free_context)(void *context);
+  *	     to perform locking. This field is ignored if custom lock/unlock
+  *	     functions are used (see fields lock/unlock of
+  *	     struct regmap_config).
++ * @free_on_exit: kfree this on exit of regmap
+  * @write: Write operation.
+  * @gather_write: Write operation with split register/value, return -ENOTSUPP
+  *                if not implemented  on a given device.
+@@ -548,10 +549,10 @@ typedef void (*regmap_hw_free_context)(void *context);
+  *     DEFAULT, BIG is assumed.
+  * @max_raw_read: Max raw read size that can be used on the bus.
+  * @max_raw_write: Max raw write size that can be used on the bus.
+- * @free_on_exit: kfree this on exit of regmap
+  */
+ struct regmap_bus {
+ 	bool fast_io;
++	bool free_on_exit;
+ 	regmap_hw_write write;
+ 	regmap_hw_gather_write gather_write;
+ 	regmap_hw_async_write async_write;
+@@ -568,7 +569,6 @@ struct regmap_bus {
+ 	enum regmap_endian val_format_endian_default;
+ 	size_t max_raw_read;
+ 	size_t max_raw_write;
+-	bool free_on_exit;
+ };
+ 
+ /*
+-- 
+2.34.1
+
