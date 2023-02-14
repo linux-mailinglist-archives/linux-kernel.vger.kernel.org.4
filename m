@@ -2,107 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B745A695F49
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:33:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D27695F4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:33:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232294AbjBNJdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 04:33:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
+        id S232394AbjBNJd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 04:33:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232303AbjBNJdk (ORCPT
+        with ESMTP id S232424AbjBNJdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 04:33:40 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513626EB5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:33:33 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id by3so13626351wrb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:33:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cfs+Q3/NCe1EQO+5Ft904kfT2AxcjZbiWamdz5bJvaY=;
-        b=NBHd90XfEE+9tYmS2wB/jBXfk75s5nVkMimrJFGyXaOOIMZa0vkXAJOOHXF1u5XY9t
-         xplGnNakc/TE5VfShtEHgvbB8At5wt8XtDhR7SuH29r0Y7aMzwZPloOMait+35FZHqie
-         NYvksuYtcQdpbwfkMJ4o7bwaDzn2BZi9L9H6OQ9KmTRHLN/Oq26c1dD5rNv9ZEEbv2oX
-         I1plKNd8RdeKsdQXmlEtI6hsz0cq8Lh0+aFPmuEBE1LWPiXx7qgQbYC49AhIaJJZj+sQ
-         6BRubrd+kaochlSJDFS5OXlEnPM4V3JcargCwm5zMCrAq6ep0eOqWJcIPRi7r3D+NONd
-         hsrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cfs+Q3/NCe1EQO+5Ft904kfT2AxcjZbiWamdz5bJvaY=;
-        b=fMLVrvpuUqtdooWyBQZ3MdVgau1R25teS/DjcN+9eHivK/cZ6w4Hud6XhieMQ0J+hJ
-         I3B5SINwOLPDzGUYv6p3SDgYo9PvrzfRZuRvtxPBJGES6gutOwrgicjixvIjMH+IVeLk
-         yloNZiXqLg7rcv759Is9j83AEuKQofan8ARJ5Ux6s1i8cw9UjdXe6//NjRnwQRJc14Rg
-         wpODaeMB8Q/7oEu1jWyrPHdnjls/do241zNJPvouzoPwwnRw/0PQltk4lu25URo05ria
-         7MzVKUP35ZHfF9a4jDMBZFTQPPV5ihpaoFKPB5HJvp3cyR4aZY9HC1utWfq0VO3Oc+Oo
-         Uyqg==
-X-Gm-Message-State: AO0yUKW90GVoUvki+gIz5Wiq6ZFwPTNbyAz8xPFm0vxM0Vqqp8hJURaG
-        wtIOci2jCTFLA1ds1JvGqPhbvA==
-X-Google-Smtp-Source: AK7set+dVtdtCDNLgA5545ILg7PF/u84//tVlT2VUmHK0xnzko5rFmzjH7eBd7V/o9AYBTmJjQEE+g==
-X-Received: by 2002:adf:f8c6:0:b0:2bf:95d0:fa5d with SMTP id f6-20020adff8c6000000b002bf95d0fa5dmr2093230wrq.9.1676367211857;
-        Tue, 14 Feb 2023 01:33:31 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id n6-20020adffe06000000b002c559843748sm4162918wrr.10.2023.02.14.01.33.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 01:33:31 -0800 (PST)
-Message-ID: <7f2e556c-ee11-fe4e-f4d6-94c761f976d0@linaro.org>
-Date:   Tue, 14 Feb 2023 10:33:29 +0100
+        Tue, 14 Feb 2023 04:33:50 -0500
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AAFA023325;
+        Tue, 14 Feb 2023 01:33:46 -0800 (PST)
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 14 Feb 2023 18:33:45 +0900
+Received: from mail.mfilter.local (mail-arc01.css.socionext.com [10.213.46.36])
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 6E63A2058B4F;
+        Tue, 14 Feb 2023 18:33:45 +0900 (JST)
+Received: from kinkan2.css.socionext.com ([172.31.9.51]) by m-FILTER with ESMTP; Tue, 14 Feb 2023 18:33:45 +0900
+Received: from [10.212.158.247] (unknown [10.212.158.247])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id C15797367;
+        Tue, 14 Feb 2023 18:33:44 +0900 (JST)
+Message-ID: <ed864d57-0de3-a169-ebde-628eb84b8a21@socionext.com>
+Date:   Tue, 14 Feb 2023 18:33:44 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v6 3/3] watchdog: mt7621-wdt: avoid ralink architecture
- dependent code
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] dt-bindings: ata: Add UniPhier controller binding
 Content-Language: en-US
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-References: <20230213200519.889503-1-sergio.paracuellos@gmail.com>
- <20230213200519.889503-4-sergio.paracuellos@gmail.com>
- <f105c7a8-8821-1e7b-af46-13a46971db63@linaro.org>
- <CAMhs-H_Cd9F+UWWe+dAA89r_huX_srtsgjh1qus93nGehQN1AQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMhs-H_Cd9F+UWWe+dAA89r_huX_srtsgjh1qus93nGehQN1AQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-ide@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230213045432.32614-1-hayashi.kunihiko@socionext.com>
+ <2d76ec86-6580-28b0-0f80-a5c497f8cef7@linaro.org>
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+In-Reply-To: <2d76ec86-6580-28b0-0f80-a5c497f8cef7@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2023 09:54, Sergio Paracuellos wrote:
->>>       return 0;
->>> @@ -143,6 +147,10 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
->>>       if (!drvdata)
->>>               return -ENOMEM;
->>>
->>> +     drvdata->sysc = syscon_regmap_lookup_by_compatible("mediatek,mt7621-sysc");
->>> +     if (IS_ERR(drvdata->sysc))
->>> +             return PTR_ERR(drvdata->sysc);
+Hi Krzysztof,
+
+On 2023/02/13 18:10, Krzysztof Kozlowski wrote:
+> On 13/02/2023 05:54, Kunihiko Hayashi wrote:
+>> Add UniPhier SATA controller compatible string to the platform binding.
+>> This controller needs maximum three reset controls.
 >>
->> This should be the backup/error path for original code using syscon
->> property. Looking up by compatible is really not portable/re-usable.
+>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+>> ---
+>>   .../devicetree/bindings/ata/ahci-platform.yaml  | 17 +++++++++++++++++
+>>   1 file changed, 17 insertions(+)
+>>
+>> Changes since v1:
+>> - Restrict resets property changes with compatible strings
+>> - Fix maxItems from two to three
+>>
+>> diff --git a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
+>> b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
+>> index 7dc2a2e8f598..25dd5ffaa517 100644
+>> --- a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
+>> +++ b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
+>> @@ -45,6 +45,9 @@ properties:
+>>                 - marvell,armada-8k-ahci
+>>                 - marvell,berlin2-ahci
+>>                 - marvell,berlin2q-ahci
+>> +              - socionext,uniphier-pro4-ahci
+>> +              - socionext,uniphier-pxs2-ahci
+>> +              - socionext,uniphier-pxs3-ahci
+>>             - const: generic-ahci
+>>         - enum:
 > 
-> I can change the code in the way you are pointing out here but...
-> Why is it not re-usable? Compatible is not supposed to be changed
-> since in other cases the DTB ABI will be broken. I am totally lost
-> about what is an ABI breakage, then.
+> Top level is saying reset=1, so did you test your bindings?
 
-How do you use it on other platform?
+Umm, I didn't see any errors on dt_binding_check, anyway I'll add
+initial minItems:1 and maxItems:3 on top level first.
 
-Best regards,
-Krzysztof
+> 
+>>             - cavium,octeon-7130-ahci
+>> @@ -76,6 +79,20 @@ properties:
+>>     resets:
+>>       maxItems: 1
+>>
+>> +if:
+> Keep it in allOf like in example-schema. Will save you one re-indent
+> pretty soon...
 
+I see. I'll move if clause into allOf, and also move the original allOf.
+
+>> +  properties:
+>> +    compatible:
+>> +      contains:
+>> +        enum:
+>> +          - socionext,uniphier-pro4-ahci
+>> +          - socionext,uniphier-pxs2-ahci
+>> +          - socionext,uniphier-pxs3-ahci
+>> +then:
+>> +  properties:
+>> +    resets:
+>> +      minItems: 1
+>> +      maxItems: 3
+> 
+> And entire allOf goes to the place like in example-schema.
+
+I've got it. and I'll fix it (minItems:2).
+
+Thank you,
+
+---
+Best Regards
+Kunihiko Hayashi
