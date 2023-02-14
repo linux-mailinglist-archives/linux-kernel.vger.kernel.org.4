@@ -2,250 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C591B69620C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 12:10:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C62369620E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 12:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232609AbjBNLKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 06:10:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
+        id S232935AbjBNLLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 06:11:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233038AbjBNLKC (ORCPT
+        with ESMTP id S232923AbjBNLKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 06:10:02 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37AA29152;
-        Tue, 14 Feb 2023 03:09:07 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id v6so1190130ilc.10;
-        Tue, 14 Feb 2023 03:09:07 -0800 (PST)
+        Tue, 14 Feb 2023 06:10:54 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE912822F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 03:09:50 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id he5so2880960wmb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 03:09:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1676372921;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WGrMblQl+955iRmU6iG0PllpzKpANHBobzyPai6DG8o=;
-        b=haMj9w5pbQvjO8Vlxzzte9DDC9GpDeShCKTJCoYtJ+OokvKNKypbsKmjuLLjkhb7GI
-         oIcRY7jcdmwxXmnzN0+MzQ1sH2pURRuvnzP0zUwHvEt6ufqJPXFcegmf/2npxbq7T4fL
-         q7NXQrzUyADaD+NJOq6JnpbzNYUF+2dwEaR2NnjfZuZPWNy7Z8IcLPqCq9WGD7CrnUJF
-         eFzmTsbJV041Tx7tpuF2fszVznTzMudAHQgg6MpAS6p90O2Y8gX+GaSyzjMtIGwV29j4
-         6zorARjocSUqTcHRQUIbwxBcNNaN+sikxD1FshMm21y+yLOZoDiMJw5uk1keBQqNsUoR
-         pQdQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rhXsxnHv5iaD89+to6Yh1JylxbzmQTcip18+PxtXccs=;
+        b=P5ZBboA6fcsGEXMgChR7x9nAIa1TJztLLxT4QvJtfQn4cQpk3NizRvnrZT+mI5tPTH
+         VSL4CiWGQoJaP2HWgOBPEaHP2krfjJhkJoprJ5Ss/8s96oHssau6YwTXgA6y2sCbP5+k
+         q/q6zGC+wtXCOSy3E7y0YXw0qxUYRj3jrIsfRmJ0Oejmayjudv63TRGE9nAzs7vC18SB
+         9x70GTjGtRVwpniQUkgikSltfHO4a+bczK1h8wcDswna1gYys9zlZLsacqGpgrKu6SYO
+         zO0/Qk4iiCwEIVDyG2zDMBgsvr6JrFr1ic6wC6fQUXwLSIeGWCEQncvJYv4gNKhxdbDH
+         irfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676372921;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WGrMblQl+955iRmU6iG0PllpzKpANHBobzyPai6DG8o=;
-        b=474FM3AChaVFeJko0eQllI6+w42JEaOJeJTqslNzkMZU4ulHf0/qNHsqMJ9S3xLDPg
-         COQT+hXRq7aR2bAJZhkH8Eybo7X3Q7bIbcty8Bw4iuQiLyhfGU0mJXEDAbNvzwTZ29u/
-         13Jr9wNmlqCy07EoyLoXPcvmmokS/mNptmeFsYqw34vV4MPjjkjdQ6herumB+DBcyMqt
-         Ytbkps5HWAFYKYyt8dENo77MO5Vld1KbQteGkDQRfFtHKYnYYwIg0x1D20JDDbIyDF7F
-         GqFqEesOgMdNqBz0PA1HFFvhK2TuJrStIciDDxYIC4dF9ZBg2DCHNA1jeWKnupk4j7lo
-         rDoA==
-X-Gm-Message-State: AO0yUKU5j2Et1ZoI5pbWTSUdTUMMMKY99gmOEtgBlPJa81d2KHqohe50
-        rc/nQ6nU+LwHKju1J8De0CF8DSL0rvencYF0
-X-Google-Smtp-Source: AK7set8lreR90YGHkocJi+2Z7DJYf93rMLfY4KYkUTtHYUZ05AvDz1aQ58QpjMZXIjBdXjHwL0P1/w==
-X-Received: by 2002:a92:c007:0:b0:314:115d:afa2 with SMTP id q7-20020a92c007000000b00314115dafa2mr1468604ild.0.1676372921586;
-        Tue, 14 Feb 2023 03:08:41 -0800 (PST)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id x9-20020a02ac89000000b003a484df1652sm4463423jan.55.2023.02.14.03.08.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 03:08:41 -0800 (PST)
-Date:   Tue, 14 Feb 2023 13:08:36 +0200
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Mathias Krause <minipli@grsecurity.net>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v3 4/6] KVM: x86: Make use of kvm_read_cr*_bits() when
- testing bits
-Message-ID: <20230214130836.00005d2a@gmail.com>
-In-Reply-To: <4b4f845e-b92e-778c-db69-4d6fa9d64811@grsecurity.net>
-References: <20230201194604.11135-1-minipli@grsecurity.net>
-        <20230201194604.11135-5-minipli@grsecurity.net>
-        <20230207150535.00004453@gmail.com>
-        <4b4f845e-b92e-778c-db69-4d6fa9d64811@grsecurity.net>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rhXsxnHv5iaD89+to6Yh1JylxbzmQTcip18+PxtXccs=;
+        b=d3qw5BqJqkV0WKTUk7AayGmgrGwULFthYOLniawG6EK7C1YlDnnyoH7SGnUphArmYu
+         hGJHTlPFd0n0dt4EGHvIcili/Q9yZVE8CW5ol6ttsCNu62fnuT6JFonM8Q+uRiJrZvSh
+         CQAmeAt8w9AMAZ+004kBEGgOUOFDmhTt0j50+R0v9kn0hVlFxD5/wlCTNAseVbFmQoZQ
+         JSeCn9j6iV+qxRxRwduPpVweG/Aag0txpPunlOizloF1A/eAsLYIIudO2/VlbDW/nTYq
+         VD9CZQKGiNBxTzuzAj8aQb2oSz/R//95qfK5JpDITj6pQH4DUzM1o/6v6RgvNtP+6DX/
+         NUwA==
+X-Gm-Message-State: AO0yUKV3lJj2Afrv1EuOAyJnWC/v98a5w71itYDgkFCK9VMmBDgyKxcD
+        STow8d0Z+Y5XzWQ3wgMgKqFV4g==
+X-Google-Smtp-Source: AK7set96qzXr5H8bxyUu5JYyZMSP1zvFEAmfOjwu8U/m/YuxbSAbgxIVjLdWXIHt9DvPSm4uWgz1nQ==
+X-Received: by 2002:a05:600c:1c0d:b0:3cf:7197:e68a with SMTP id j13-20020a05600c1c0d00b003cf7197e68amr1726544wms.18.1676372954495;
+        Tue, 14 Feb 2023 03:09:14 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id az7-20020a05600c600700b003dfe659f9b1sm1857206wmb.3.2023.02.14.03.09.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 03:09:13 -0800 (PST)
+Message-ID: <9047654f-0d51-ba07-5440-7a6f55a8bc4e@linaro.org>
+Date:   Tue, 14 Feb 2023 12:09:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] clocksource/drivers/timer-mediatek: Make timer-mediatek
+ become loadable module
+Content-Language: en-US
+To:     =?UTF-8?B?V2FsdGVyIENoYW5nICjlvLXntq3lk7Ip?= 
+        <Walter.Chang@mediatek.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "jstultz@google.com" <jstultz@google.com>,
+        "macro@orcam.me.uk" <macro@orcam.me.uk>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        wsd_upstream <wsd_upstream@mediatek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?U3RhbmxleSBDaHUgKOacseWOn+mZnik=?= 
+        <stanley.chu@mediatek.com>,
+        =?UTF-8?B?RnJlZGR5IEhzaW4gKOi+m+aBkuixkCk=?= 
+        <Freddy.Hsin@mediatek.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        =?UTF-8?B?Q2h1bi1IdW5nIFd1ICjlt6vpp7/lro8p?= 
+        <Chun-hung.Wu@mediatek.com>
+References: <20230210100058.19861-1-walter.chang@mediatek.com>
+ <f2d66681-a7b6-2369-b9f7-f886f8ea6ae5@linaro.org>
+ <e533bd12816ec5f1184fcf138f644f7719def962.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e533bd12816ec5f1184fcf138f644f7719def962.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Feb 2023 10:11:30 +0100
-Mathias Krause <minipli@grsecurity.net> wrote:
+On 14/02/2023 12:06, Walter Chang (張維哲) wrote:
+> On Fri, 2023-02-10 at 11:07 +0100, Krzysztof Kozlowski wrote:
+>> On 10/02/2023 11:00, walter.chang@mediatek.com wrote:
+>>> From: Chun-Hung Wu <chun-hung.wu@mediatek.com>
+>>>
+>>> This patch makes the timer-mediatek driver which can
+>>
+>> Do not use "This commit/patch".
+>>
+> https://urldefense.com/v3/__https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst*L95__;Iw!!CTRNKA9wMg0ARbw!g1yigOO6iIpjlr82Ud0dn1yVP_1yqSfLWJ-1GFC7O88n7l7lrb9SlYAw5KHzA3339zyiV-s72Wn_OZrARjlaY0RMmdnOUyQ$ 
+>>  
+>>
+>>> register an always-on timer as tick_broadcast_device
+>>> on MediaTek SoCs become loadable module in GKI.
+>>
+>> Are you planning to answer other parts of that discussion? IOW, does
+>> the
+>> system boot fine? What's the impact of this being a module?
+>>
+>>>
+>>> This patch depends on the previous patch.
+>>>
+> https://lore.kernel.org/lkml/20230208094813.20874-1-walter.chang@mediatek.com/T/#t
+>>
+>> This does not belong to commit msg. What's the point of keeping it in
+>> commit history forever?
+>>
+>>>
+>>> Signed-off-by: Chun-Hung Wu <chun-hung.wu@mediatek.com>
+>>> ---
+>>>  drivers/clocksource/Kconfig          |  2 +-
+>>>  drivers/clocksource/timer-mediatek.c | 43
+>>> ++++++++++++++++++++++++++++
+>>>  2 files changed, 44 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/clocksource/Kconfig
+>>> b/drivers/clocksource/Kconfig
+>>> index 4469e7f555e9..41345827055b 100644
+>>> --- a/drivers/clocksource/Kconfig
+>>> +++ b/drivers/clocksource/Kconfig
+>>> @@ -472,7 +472,7 @@ config SYS_SUPPORTS_SH_CMT
+>>>  	bool
+>>>  
+>>>  config MTK_TIMER
+>>> -	bool "Mediatek timer driver" if COMPILE_TEST
+>>> +	tristate "Mediatek timer driver"
+>>>  	depends on HAS_IOMEM
+>>>  	select TIMER_OF
+>>>  	select CLKSRC_MMIO
+>>> diff --git a/drivers/clocksource/timer-mediatek.c
+>>> b/drivers/clocksource/timer-mediatek.c
+>>> index d5b29fd03ca2..806044ef391c 100644
+>>> --- a/drivers/clocksource/timer-mediatek.c
+>>> +++ b/drivers/clocksource/timer-mediatek.c
+>>> @@ -13,6 +13,9 @@
+>>>  #include <linux/clocksource.h>
+>>>  #include <linux/interrupt.h>
+>>>  #include <linux/irqreturn.h>
+>>> +#include <linux/module.h>
+>>> +#include <linux/of_device.h>
+>>> +#include <linux/platform_device.h>
+>>>  #include <linux/sched_clock.h>
+>>>  #include <linux/slab.h>
+>>>  #include "timer-of.h"
+>>> @@ -450,6 +453,46 @@ static int __init mtk_gpt_init(struct
+>>> device_node *node)
+>>>  
+>>>  	return 0;
+>>>  }
+>>> +
+>>> +#ifdef MODULE
+>>> +static int mtk_timer_probe(struct platform_device *pdev)
+>>> +{
+>>> +	int (*timer_init)(struct device_node *node);
+>>> +	struct device_node *np = pdev->dev.of_node;
+>>> +
+>>> +	timer_init = of_device_get_match_data(&pdev->dev);
+>>> +	return timer_init(np);
+>>> +}
+>>> +
+>>> +static const struct of_device_id mtk_timer_match_table[] = {
+>>> +	{
+>>> +		.compatible = "mediatek,mt6577-timer",
+>>> +		.data = mtk_gpt_init,
+>>> +	},
+>>> +	{
+>>> +		.compatible = "mediatek,mt6765-timer",
+>>> +		.data = mtk_syst_init,
+>>> +	},
+>>> +	{
+>>> +		.compatible = "mediatek,mt6795-systimer",
+>>> +		.data = mtk_cpux_init,
+>>> +	},
+>>> +	{}
+>>> +};
+>>> +
+>>> +static struct platform_driver mtk_timer_driver = {
+>>> +	.probe = mtk_timer_probe,
+>>> +	.driver = {
+>>> +		.name = "mtk-timer",
+>>> +		.of_match_table = mtk_timer_match_table,
+>>> +	},
+>>> +};
+>>> +MODULE_DESCRIPTION("MEDIATEK Module Timer driver");
+>>> +MODULE_LICENSE("GPL v2");
+>>
+>> I don't think you run checkpatch before sending... please do not use
+>> humans for review which is done by automatic tools.
+>>
+>>> +
+>>> +module_platform_driver(mtk_timer_driver);
+>>
+>> Follow coding convention like in very other driver, so this goes
+>> immediately after definition of driver structure.
+>>
+>>> +#else
+>>
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> 
+> Thanks for pointing out the mistake. I have fixed it and submitted 
+> patch v2, which merged the driver and export functions in the same
+> patch.
+> 
+> 
+> https://lore.kernel.org/lkml/20230214105412.5856-1-walter.chang@mediatek.com/T/#t
 
-> On 07.02.23 14:05, Zhi Wang wrote:
-> > On Wed,  1 Feb 2023 20:46:02 +0100
-> > Mathias Krause <minipli@grsecurity.net> wrote:
-> >   
-> >> Make use of the kvm_read_cr{0,4}_bits() helper functions when we only
-> >> want to know the state of certain bits instead of the whole register.
-> >>
-> >> This not only makes the intend cleaner, it also avoids a VMREAD in case  
->                            ~~~~~~
-> Oh, this should have been "intent". Will fix in v4, if there's a need for.
-> 
-> >> the tested bits aren't guest owned.  
-> >                     ^
-> > The patch comment is a little confusing. Not sure if I misunderstood here:  
-> 
-> Sorry, lets try to clarify.
-> 
-> > Check the code of kvm_read_cr0_bits
-> > 
-> > static inline ulong kvm_read_cr0_bits(struct kvm_vcpu *vcpu, ulong mask)
-> > {
-> >         ulong tmask = mask & KVM_POSSIBLE_CR0_GUEST_BITS;
-> >         if ((tmask & vcpu->arch.cr0_guest_owned_bits) &&
-> >             !kvm_register_is_available(vcpu, VCPU_EXREG_CR0))
-> >                 static_call(kvm_x86_cache_reg)(vcpu, VCPU_EXREG_CR0);
-> >         return vcpu->arch.cr0 & mask;
-> > }
-> > 
-> > I suppose the conditions that can avoids a VMREAD is to avoid the vmread in
-> > static_call(kvm_x86_cache_reg):  
-> 
-> Correct, that's what this patch is trying to do: It tries to avoid the
-> static_call(kvm_x86_cache_reg)(...) by making the compiler aware of the
-> actually used bits in 'mask'. If those don't intersect with the guest
-> owned bits, the first part of the condition wont be true and we simply
-> can make use of 'vcpu->arch.cr0'.
-> 
-> Maybe it gets clearer when looking at kvm_read_cr0() too which is just this:
-> 
-> static inline ulong kvm_read_cr0(struct kvm_vcpu *vcpu)
-> {
->     return kvm_read_cr0_bits(vcpu, ~0UL);
-> }
-> 
-> So the 'mask' passed to kvm_read_cr0_bits() will always include all
-> (possible) guest owned bits (KVM_POSSIBLE_CR0_GUEST_BITS & ~0UL ==
-> KVM_POSSIBLE_CR0_GUEST_BITS) and the compiler cannot do the optimization
-> mentioned above.
-> 
-> If we, however, use kvm_read_cr0_bits(..., MASK) directly instead of
-> using kvm_read_cr0() & MASK, it can, like for all bits not in
-> KVM_POSSIBLE_CR0_GUEST_BITS & vcpu->arch.cr0_guest_owned_bits.
-> 
-> > Conditions are not triggering vmread:
-> > 
-> > 1) The test bits are guest_owned_bits and cache register is available.
-> > 2) The test bits are *not* guest_owned bits.  
-> 
-> For case 1 the patch would make only a minor difference, by concluding
-> earlier that it can simply make use of vcpu->arch.cr0. But it's case 2
-> I'm after.
->
+My other questions are unanswered.
 
-Thanks for the explanation. Now I got it. 
- 
-> If you look up KVM_POSSIBLE_CR0_GUEST_BITS, which is the upper bound for
-> guest owned CR0 bits, you'll find before patch 6:
-> 
-> #define KVM_POSSIBLE_CR0_GUEST_BITS X86_CR0_TS
-> 
-> and after patch 6:
-> 
-> #define KVM_LAZY_CR0_GUEST_BITS     X86_CR0_WP
-> #define KVM_POSSIBLE_CR0_GUEST_BITS (X86_CR0_TS|KVM_LAZY_CR0_GUEST_BITS)
-> 
-> So the upper bound would be 'X86_CR0_TS|X86_CR0_WP'. Every bit outside
-> that set can directly be read from the 'vcpu' cached register value and
-> that's (mostly) the case for the users this patch is changing, see below.
-> 
-> > I agree that this makes the intend cleaner, but not sure the later statement
-> > is true in the patch comment. If the test bits are not guest owned, it will
-> > not reach static_call(kvm_x86_cache_reg).  
-> 
-> Correct, but that's no different from what I'm saying. My description
-> just set 'static_call(kvm_x86_cache_reg)' mentally equivalent to VMREAD,
-> which abstracts the static_call quite well, IMHO. But maybe I should
-> clarify that 'tested bits' means the bits used by the changed call side?
-> Though, I think that's rather obvious from the change itself. I can
-> factor in the caching aspect, though.
-> 
-> Maybe something like this?:
-> 
->     This not only makes the intent cleaner, it also avoids a potential
->     VMREAD in case the tested bits aren't guest owned.
-> 
-> I've added "potential" but left the remainder as is.
-> 
-> >>
-> >> Signed-off-by: Mathias Krause <minipli@grsecurity.net>
-> >> ---
-> >>  arch/x86/kvm/pmu.c     | 4 ++--
-> >>  arch/x86/kvm/vmx/vmx.c | 4 ++--
-> >>  2 files changed, 4 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-> >> index d939d3b84e6f..d9922277df67 100644
-> >> --- a/arch/x86/kvm/pmu.c
-> >> +++ b/arch/x86/kvm/pmu.c
-> >> @@ -439,9 +439,9 @@ int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned idx, u64 *data)
-> >>  	if (!pmc)
-> >>  		return 1;
-> >>  
-> >> -	if (!(kvm_read_cr4(vcpu) & X86_CR4_PCE) &&
-> >> +	if (!(kvm_read_cr4_bits(vcpu, X86_CR4_PCE)) &&  
-> 
-> X86_CR4_PCE & KVM_POSSIBLE_CR4_GUEST_BITS == X86_CR4_PCE, therefore can
-> only be optimized if X86_CR4_PCE would be dropped from
-> 'vcpu->arch.cr4_guest_owned_bits' as well. But AFAICS we don't do that.
-> So here you're right that this only clears up the intent, not the actual
-> behavior at runtime.
-> 
-> >>  	    (static_call(kvm_x86_get_cpl)(vcpu) != 0) &&
-> >> -	    (kvm_read_cr0(vcpu) & X86_CR0_PE))
-> >> +	    (kvm_read_cr0_bits(vcpu, X86_CR0_PE)))  
-> 
-> X86_CR0_PE & KVM_POSSIBLE_CR0_GUEST_BITS == 0, therefore this can be
-> optimized.
-> 
-> >>  		return 1;
-> >>  
-> >>  	*data = pmc_read_counter(pmc) & mask;
-> >> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> >> index c8198c8a9b55..d3b49e0b6c32 100644
-> >> --- a/arch/x86/kvm/vmx/vmx.c
-> >> +++ b/arch/x86/kvm/vmx/vmx.c
-> >> @@ -5487,7 +5487,7 @@ static int handle_cr(struct kvm_vcpu *vcpu)
-> >>  		break;
-> >>  	case 3: /* lmsw */
-> >>  		val = (exit_qualification >> LMSW_SOURCE_DATA_SHIFT) & 0x0f;
-> >> -		trace_kvm_cr_write(0, (kvm_read_cr0(vcpu) & ~0xful) | val);
-> >> +		trace_kvm_cr_write(0, (kvm_read_cr0_bits(vcpu, ~0xful) | val));  
-> 
-> ~0xful & KVM_POSSIBLE_CR0_GUEST_BITS is 0 prior to patch 6 and
-> X86_CR0_WP afterwards, therefore this might be optimized, depending on
-> the runtime setting of 'enable_lazy_cr0', possibly capping the guest
-> owned CR0 bits to exclude X86_CR0_WP again.
-> 
-> >>  		kvm_lmsw(vcpu, val);
-> >>  
-> >>  		return kvm_skip_emulated_instruction(vcpu);
-> >> @@ -7547,7 +7547,7 @@ static u8 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
-> >>  	if (!kvm_arch_has_noncoherent_dma(vcpu->kvm))
-> >>  		return (MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT) | VMX_EPT_IPAT_BIT;
-> >>  
-> >> -	if (kvm_read_cr0(vcpu) & X86_CR0_CD) {
-> >> +	if (kvm_read_cr0_bits(vcpu, X86_CR0_CD)) {  
-> 
-> X86_CR0_CD & KVM_POSSIBLE_CR0_GUEST_BITS == 0, therefore this can be
-> optimized as well.
-> 
-> >>  		if (kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_CD_NW_CLEARED))
-> >>  			cache = MTRR_TYPE_WRBACK;
-> >>  		else  
-> >   
-> 
-> Thanks,
-> Mathias
+Best regards,
+Krzysztof
 
