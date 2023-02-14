@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DF8695C7F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E9D695C99
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:14:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbjBNIMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 03:12:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48602 "EHLO
+        id S232041AbjBNIOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 03:14:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbjBNIMn (ORCPT
+        with ESMTP id S231991AbjBNIN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 03:12:43 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE6F13D58
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:12:41 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id bu23so14712420wrb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:12:41 -0800 (PST)
+        Tue, 14 Feb 2023 03:13:58 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2FC23644
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:13:46 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id y1so14747159wru.2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:13:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dWpoWTHF+daqxuKXm60VZYbfqB4+Spk5kTFrpLEIhE4=;
-        b=Veh/EHYixy/BVr2GrHtk30P5YOPi4EHeSNqoamBT39WTsSXejEs0UE30C93HqcRFbp
-         izPwCu8TUcJCCnqCQUAY76bJWXbwocobxnV2kZxn2xUtxnjsLvfB+9HbXWhAb+VvhxwT
-         ARoUqyHz4DGmfUVA+DxyMln0z753FAek0lIkRmiTL+glPB9eA2+4Y+LhwF4bY5+c6Fj7
-         K5SkuIZ/rdq4GcLIl9I10pHsVItae5lluUj0xTVWSi285VRJODP7+Dsb+9bCPUpOm4mh
-         jpS7KbvLNAtE7HUyXRC7hgyv9H7uPIhwNYJ1Tdh6UaI1eBiLIy+6gQu11e3k700HLthN
-         ofOA==
+        bh=ILvb9GZC9A1qdpzGm/54DVnwfbD0aC1FwyW+Sl0y38Q=;
+        b=HtbuTMWUF2tj2aKTYK1yNsXduQ6APGdApj66NPfUkn3SC1NZ+4Oj58Zu/Ak7xQrox+
+         8z5zWPuoQ5ax0ycvOIVDpPnca+IG5KAq9Xk8oRbw41qynenX8g1tvQQT5r4rKvCOaojV
+         jPfso1gpqC7Z2cfUbExhYvaj/RucrDNjdGgvnx2nHDhZua6x3HRkpIYUHnc/zza6sfUC
+         kBPr9thCBTCgRAhVcgvpLCi6AD2EkW7fcTsz6LD5+HaDqVwqa5sXnGFVtGPo6t/a8U6I
+         Q2odZ240T2bFaiqA//nkU3FLd617ZdCB0HnDd7oQI/LmDmHhFW14L+tmEZwlUNudYQxs
+         bOUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dWpoWTHF+daqxuKXm60VZYbfqB4+Spk5kTFrpLEIhE4=;
-        b=LmYuLTt0lY/fqu1QmTzx4qyFxOoiGQup8HqY7WYEwXFhoCO+Y0WEaQVk4L0tjMOl8n
-         6cGZDiyCCEAXutailH9rJ0WuD8gB9noL/ade3I6jHx0fBgOvNf2jVN6SKU9Ltj0gbrQl
-         IS487zbRuWFCPW916Ror6yrTrLI7sMpUVbbBUjLifsucQ1/89PlVxuugQKCu/0eymgH3
-         cEzFSbBHpif7eHU8sYH75Rn6tsbYBIDVSsFyqsiyCkXdXJ/sNB3daqbJHEhmvIJWmSYI
-         ZggVHaEpzeHVQT47JRK/W2MpVtarrXG3UbKRRRENop1fJJaXtSPDbr3BAaXsteDRKVQa
-         vGLg==
-X-Gm-Message-State: AO0yUKWIp+sH10P3spFneBiRXIAc4NNeIcCLu2OtL0j7hzA7bQuhcQkX
-        0o6IWoxjyjkqfvQJSnT10HazVw==
-X-Google-Smtp-Source: AK7set+d/Wk+5hZQ8NSPgK4Evsk6EpiRcuFavYqIB7p0C+RXb/iGs1hy6ywVSaUPMKt3GJQZyND31w==
-X-Received: by 2002:a05:6000:1b01:b0:2c3:f4bd:2582 with SMTP id f1-20020a0560001b0100b002c3f4bd2582mr1210111wrz.46.1676362360196;
-        Tue, 14 Feb 2023 00:12:40 -0800 (PST)
+        bh=ILvb9GZC9A1qdpzGm/54DVnwfbD0aC1FwyW+Sl0y38Q=;
+        b=bXSZgO/Q5nE2TvGuN6naQKb2MxcAEZJjgLlTGkbb5RZjnULCFc8N9PQIVkAE/jW1y+
+         Q8qN2IxuiJwjSNgB1qTVyXfQtgVS1xs2pT13oMrUrIEuw5OMWrEsGswN6cxWu3v9vU6W
+         AWIoLSClqylOJaaT2hFwpoWRtKZ5C7qPA7Ti6RLTEYFhLff3XaAR/Fm01mHlIJWXAy94
+         AWLU66VRP8RjNllgct1a2hSRiHhi7hXUmW61r+/KiecE8O1tv4yqzhAlvKpQbD2uLIzq
+         yJmvQoDrhMC5QIT0M/2MmBXV/nWEzwCsEeONS3B8Mu6VPMCQcJCKc37JSAv/xZXsm8v8
+         mQlQ==
+X-Gm-Message-State: AO0yUKXcSIVsU8Q2C0/6x0J9Y4IeMLRmJCE6HJDzDQ/r4gDRP78l4iUl
+        NkCfkFdSyRnUhVCnyBkzbGlTRA==
+X-Google-Smtp-Source: AK7set8Xvkgv0Fg7/M7LlqjhmFeN/2ODZt/2XmlHUFLIKmovZq5e0GuKsxxn5/ZWllMjfmn+05RkGQ==
+X-Received: by 2002:adf:f741:0:b0:2c4:872:e929 with SMTP id z1-20020adff741000000b002c40872e929mr1193948wrp.16.1676362425183;
+        Tue, 14 Feb 2023 00:13:45 -0800 (PST)
 Received: from alex-rivos.ba.rivosinc.com (lfbn-lyo-1-450-160.w2-7.abo.wanadoo.fr. [2.7.42.160])
-        by smtp.gmail.com with ESMTPSA id l4-20020adff484000000b002c569acab1esm120587wro.73.2023.02.14.00.12.35
+        by smtp.gmail.com with ESMTPSA id t15-20020a5d534f000000b002c55306f6edsm6397757wrv.54.2023.02.14.00.13.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 00:12:39 -0800 (PST)
+        Tue, 14 Feb 2023 00:13:44 -0800 (PST)
 From:   Alexandre Ghiti <alexghiti@rivosinc.com>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Richard Henderson <richard.henderson@linaro.org>,
@@ -96,9 +96,9 @@ To:     Jonathan Corbet <corbet@lwn.net>,
         sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
         linux-arch@vger.kernel.org
 Cc:     Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH v3 22/24] powerpc: Remove empty <uapi/asm/setup.h>
-Date:   Tue, 14 Feb 2023 08:49:23 +0100
-Message-Id: <20230214074925.228106-23-alexghiti@rivosinc.com>
+Subject: [PATCH v3 23/24] mips: Remove empty <uapi/asm/setup.h>
+Date:   Tue, 14 Feb 2023 08:49:24 +0100
+Message-Id: <20230214074925.228106-24-alexghiti@rivosinc.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230214074925.228106-1-alexghiti@rivosinc.com>
 References: <20230214074925.228106-1-alexghiti@rivosinc.com>
@@ -117,21 +117,21 @@ From: Palmer Dabbelt <palmer@rivosinc.com>
 
 Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
- arch/powerpc/include/uapi/asm/setup.h | 5 -----
+ arch/mips/include/uapi/asm/setup.h | 5 -----
  1 file changed, 5 deletions(-)
- delete mode 100644 arch/powerpc/include/uapi/asm/setup.h
+ delete mode 100644 arch/mips/include/uapi/asm/setup.h
 
-diff --git a/arch/powerpc/include/uapi/asm/setup.h b/arch/powerpc/include/uapi/asm/setup.h
+diff --git a/arch/mips/include/uapi/asm/setup.h b/arch/mips/include/uapi/asm/setup.h
 deleted file mode 100644
-index f2ca747aa45b..000000000000
---- a/arch/powerpc/include/uapi/asm/setup.h
+index 157c3c392fb4..000000000000
+--- a/arch/mips/include/uapi/asm/setup.h
 +++ /dev/null
 @@ -1,5 +0,0 @@
 -/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef _UAPI_ASM_POWERPC_SETUP_H
--#define _UAPI_ASM_POWERPC_SETUP_H
+-#ifndef _UAPI_MIPS_SETUP_H
+-#define _UAPI_MIPS_SETUP_H
 -
--#endif /* _UAPI_ASM_POWERPC_SETUP_H */
+-#endif /* _UAPI_MIPS_SETUP_H */
 -- 
 2.37.2
 
