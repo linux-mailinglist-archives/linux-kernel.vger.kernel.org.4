@@ -2,279 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1DF69570E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 04:03:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D72E4695711
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 04:05:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjBNDDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 22:03:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36862 "EHLO
+        id S230259AbjBNDFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 22:05:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjBNDD2 (ORCPT
+        with ESMTP id S229871AbjBNDFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 22:03:28 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0EEFBDEA;
-        Mon, 13 Feb 2023 19:02:57 -0800 (PST)
-Received: from loongson.cn (unknown [10.2.5.185])
-        by gateway (Coremail) with SMTP id _____8Cxidl2+Opjd1cAAA--.935S3;
-        Tue, 14 Feb 2023 10:56:54 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.2.5.185])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axeb1w+OpjmZwyAA--.28802S11;
-        Tue, 14 Feb 2023 10:56:53 +0800 (CST)
-From:   Tianrui Zhao <zhaotianrui@loongson.cn>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH v1 09/24] LoongArch: KVM: Implement vcpu load and vcpu put operations
-Date:   Tue, 14 Feb 2023 10:56:33 +0800
-Message-Id: <20230214025648.1898508-10-zhaotianrui@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230214025648.1898508-1-zhaotianrui@loongson.cn>
-References: <20230214025648.1898508-1-zhaotianrui@loongson.cn>
+        Mon, 13 Feb 2023 22:05:16 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241D1BDEA;
+        Mon, 13 Feb 2023 19:04:46 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id o13so13837163pjg.2;
+        Mon, 13 Feb 2023 19:04:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FDSS6wHw9ey9wN//WaBYBsKB8pK0RtnNk3ZwfF++dV8=;
+        b=bjhwSFd+U4KV/bzWiA3ZoQNrADpYg7eEZ/YV9sHK4AmcZDig1/wNYCop7CuTM+jxSZ
+         5IiD8iLdluBFtnl7Z8Rto3qK7XUgZG0Zz+TMQBX8N5fZDaLTPgYBVmL0PRKxOWDrvnag
+         OVuCyb/Qey90ifvHOfLGcSK85Y1oa6O8aihv1nM27EG+HjqR+J3486MkQcdccXIVXTXM
+         8UOJqHxa+jPzC1tspt84IgBBIKTSH5SxgvXqxkoWW0OkP9KSA3Da7F5E59hZOcA5e1hB
+         ZQo1ckxfg4Tw2OLhCQQ6FEXxcOlFlBTXxc+NUerMJq2RhmWktZTt1T1kvYp5KBX/V7ja
+         QbNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FDSS6wHw9ey9wN//WaBYBsKB8pK0RtnNk3ZwfF++dV8=;
+        b=kjs/os61MWMXC0jVGZCb/T57UqDgg41Zmu5g5MKm4NIvcFsMBygph+DU101AthzsIq
+         +6gW77CD6VCo3TL4SWPAZ2eTMb/aB1tj0+Qna0GrUwj4bnPcYiVno8GhfzeWD4KIeGXB
+         HWy5QSjfVjkzO99Je0vEF/xvwtol5+5LTv1kp736z9oExlKNkOHmPvTOBIj5uoiTuiGy
+         k+CeagDjMAZNNcVIyCVVjERwaKQKTydc7R/9JHrUPwa4qW0FwBfPBZqcWaUgmXbZW7e2
+         GXeBBvRqPa4qhI4ouV4hMr9GOvBUrxTNc31fj+2RAHYxYu1I7fPpGglhNg2SW2gHVsX/
+         pMvQ==
+X-Gm-Message-State: AO0yUKXJsc4t2kZ5xQm6Ie/w+Jq6ZY2SFydjjQm67k2EidMMg3LzaA+y
+        b3bd6R6lRFnfSaak84fCKiM=
+X-Google-Smtp-Source: AK7set8+8A4GdRfomRat52Sxyuo/pYMtcyROWiFqW34b7AF2S/3Nc6zunxbqUArZwbqJL9aC5IdkkQ==
+X-Received: by 2002:a17:90b:1c8e:b0:234:2579:e25c with SMTP id oo14-20020a17090b1c8e00b002342579e25cmr615273pjb.44.1676343862976;
+        Mon, 13 Feb 2023 19:04:22 -0800 (PST)
+Received: from debian.me (subs28-116-206-12-37.three.co.id. [116.206.12.37])
+        by smtp.gmail.com with ESMTPSA id cl14-20020a17090af68e00b00230ab56a1f3sm4327816pjb.51.2023.02.13.19.04.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 19:04:22 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id A5088105423; Tue, 14 Feb 2023 10:04:18 +0700 (WIB)
+Date:   Tue, 14 Feb 2023 10:04:18 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/114] 6.1.12-rc1 review
+Message-ID: <Y+r6Mhv6PS1EPELd@debian.me>
+References: <20230213144742.219399167@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axeb1w+OpjmZwyAA--.28802S11
-X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3JFWrXFW8XFWkAF18Xr43Jrb_yoW3uFykpr
-        1qgFW09rW7KasrtF15ArsFvr13WF4Sy34rJr47t3y2qrn8Z3s5ZF4IyFy7JFyFq3WxXF1I
-        y3s8C39avr4ktw7anT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bxxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4
-        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF
-        7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aV
-        CY1x0267AKxVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487
-        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VCjz48v1s
-        IEY20_WwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_
-        JF0_Jw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4
-        AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
-        r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6x
-        IIjxv20xvE14v26w1j6s0DMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE
-        42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8Jr0_Cr1UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvj4RKpBTUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="JMoLuklacFO66+7l"
+Content-Disposition: inline
+In-Reply-To: <20230213144742.219399167@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement loongarch vcpu load and vcpu put operations, including
-load csr value into hardware and save csr value into vcpu structure.
 
-Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
----
- arch/loongarch/kvm/vcpu.c | 192 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 192 insertions(+)
+--JMoLuklacFO66+7l
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/loongarch/kvm/vcpu.c b/arch/loongarch/kvm/vcpu.c
-index a4e825dd1..0228941ec 100644
---- a/arch/loongarch/kvm/vcpu.c
-+++ b/arch/loongarch/kvm/vcpu.c
-@@ -914,6 +914,198 @@ void kvm_arch_vcpu_destroy(struct kvm_vcpu *vcpu)
- 	}
- }
- 
-+static int _kvm_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
-+{
-+	struct kvm_context *context;
-+	struct loongarch_csrs *csr = vcpu->arch.csr;
-+	bool migrated, all;
-+
-+	/*
-+	 * Have we migrated to a different CPU?
-+	 * If so, any old guest TLB state may be stale.
-+	 */
-+	migrated = (vcpu->arch.last_sched_cpu != cpu);
-+
-+	/*
-+	 * Was this the last VCPU to run on this CPU?
-+	 * If not, any old guest state from this VCPU will have been clobbered.
-+	 */
-+	context = per_cpu_ptr(vcpu->kvm->arch.vmcs, cpu);
-+	all = migrated || (context->last_vcpu != vcpu);
-+	context->last_vcpu = vcpu;
-+
-+	/*
-+	 * Restore timer state regardless
-+	 */
-+	kvm_restore_timer(vcpu);
-+
-+	/* Control guest page CCA attribute */
-+	change_csr_gcfg(CSR_GCFG_MATC_MASK, CSR_GCFG_MATC_ROOT);
-+	/* Don't bother restoring registers multiple times unless necessary */
-+	if (!all)
-+		return 0;
-+
-+	write_csr_gcntc((ulong)vcpu->kvm->arch.time_offset);
-+	/*
-+	 * Restore guest CSR registers
-+	 */
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_CRMD);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_PRMD);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_EUEN);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_MISC);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_ECFG);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_ERA);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_BADV);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_BADI);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_EENTRY);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_TLBIDX);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_TLBEHI);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_TLBELO0);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_TLBELO1);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_ASID);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_PGDL);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_PGDH);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_PWCTL0);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_PWCTL1);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_STLBPGSIZE);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_RVACFG);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_CPUID);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_KS0);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_KS1);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_KS2);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_KS3);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_KS4);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_KS5);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_KS6);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_KS7);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_TMID);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_CNTC);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_TLBRENTRY);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_TLBRBADV);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_TLBRERA);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_TLBRSAVE);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_TLBRELO0);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_TLBRELO1);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_TLBREHI);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_TLBRPRMD);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_DMWIN0);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_DMWIN1);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_DMWIN2);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_DMWIN3);
-+	kvm_restore_hw_gcsr(csr, LOONGARCH_CSR_LLBCTL);
-+
-+	/* restore Root.Guestexcept from unused Guest guestexcept register */
-+	write_csr_gintc(csr->csrs[LOONGARCH_CSR_GINTC]);
-+
-+	/*
-+	 * We should clear linked load bit to break interrupted atomics. This
-+	 * prevents a SC on the next VCPU from succeeding by matching a LL on
-+	 * the previous VCPU.
-+	 */
-+	if (vcpu->kvm->created_vcpus > 1)
-+		set_gcsr_llbctl(CSR_LLBCTL_WCLLB);
-+
-+	return 0;
-+}
-+
-+void kvm_arch_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
-+{
-+	unsigned long flags;
-+
-+	local_irq_save(flags);
-+	vcpu->cpu = cpu;
-+	if (vcpu->arch.last_sched_cpu != cpu) {
-+		kvm_debug("[%d->%d]KVM VCPU[%d] switch\n",
-+				vcpu->arch.last_sched_cpu, cpu, vcpu->vcpu_id);
-+		/*
-+		 * Migrate the timer interrupt to the current CPU so that it
-+		 * always interrupts the guest and synchronously triggers a
-+		 * guest timer interrupt.
-+		 */
-+		kvm_migrate_count(vcpu);
-+	}
-+
-+	/* restore guest state to registers */
-+	_kvm_vcpu_load(vcpu, cpu);
-+	local_irq_restore(flags);
-+}
-+
-+static int _kvm_vcpu_put(struct kvm_vcpu *vcpu, int cpu)
-+{
-+	struct loongarch_csrs *csr = vcpu->arch.csr;
-+
-+	kvm_lose_fpu(vcpu);
-+
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_CRMD);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_PRMD);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_EUEN);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_MISC);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_ECFG);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_ERA);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_BADV);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_BADI);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_EENTRY);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_TLBIDX);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_TLBEHI);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_TLBELO0);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_TLBELO1);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_ASID);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_PGDL);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_PGDH);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_PGD);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_PWCTL0);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_PWCTL1);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_STLBPGSIZE);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_RVACFG);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_CPUID);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_PRCFG1);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_PRCFG2);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_PRCFG3);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_KS0);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_KS1);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_KS2);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_KS3);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_KS4);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_KS5);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_KS6);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_KS7);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_TMID);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_CNTC);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_LLBCTL);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_TLBRENTRY);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_TLBRBADV);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_TLBRERA);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_TLBRSAVE);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_TLBRELO0);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_TLBRELO1);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_TLBREHI);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_TLBRPRMD);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_DMWIN0);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_DMWIN1);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_DMWIN2);
-+	kvm_save_hw_gcsr(csr, LOONGARCH_CSR_DMWIN3);
-+
-+	/* save Root.Guestexcept in unused Guest guestexcept register */
-+	kvm_save_timer(vcpu);
-+	csr->csrs[LOONGARCH_CSR_GINTC] = read_csr_gintc();
-+	return 0;
-+}
-+
-+void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
-+{
-+	unsigned long flags;
-+	int cpu;
-+
-+	local_irq_save(flags);
-+	cpu = smp_processor_id();
-+	vcpu->arch.last_sched_cpu = cpu;
-+	vcpu->cpu = -1;
-+
-+	/* save guest state in registers */
-+	_kvm_vcpu_put(vcpu, cpu);
-+	local_irq_restore(flags);
-+}
-+
- int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
- {
- 	int r = -EINTR;
--- 
-2.31.1
+On Mon, Feb 13, 2023 at 03:47:15PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.12 release.
+> There are 114 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+=20
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
 
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--JMoLuklacFO66+7l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY+r6KQAKCRD2uYlJVVFO
+o9JqAP9m9IoW25yZ/rhfeSuiyGtKyh3KDcyBoqKWyI5lbtrtWQEAnDI0idIcoNtC
+Mod99G5KHML/9xFQPhJsntmDfxCuMQI=
+=RYbc
+-----END PGP SIGNATURE-----
+
+--JMoLuklacFO66+7l--
