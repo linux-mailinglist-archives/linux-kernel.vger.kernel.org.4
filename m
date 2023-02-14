@@ -2,107 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFBCB69674F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2897696751
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233274AbjBNOtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 09:49:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
+        id S233413AbjBNOtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 09:49:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232840AbjBNOs6 (ORCPT
+        with ESMTP id S232067AbjBNOtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 09:48:58 -0500
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F36E72A0;
-        Tue, 14 Feb 2023 06:48:57 -0800 (PST)
-Received: by mail-ej1-f43.google.com with SMTP id jg8so40721396ejc.6;
-        Tue, 14 Feb 2023 06:48:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dO9zQQMF7TMrx+/BjRM6rVVVA5NoHbBHzsXtZkm9yy4=;
-        b=OSGlNb+h0+nVYhvdM0Vu1lMHlReRtnSZwGibjvpDQJYa6mNn0slByHllx1RwhyeQFU
-         iGXPuBgFwbA7qj+GUHhTyNkedbrntfJRPrXpWn+aBJownzqHJfc6YKYtWtKfsQD7d5tm
-         ITZkTWUegoNpd91p8tQEWnajAc8YIE3jxf3OMm9g8nixjISYON44s8UIs3gR+OtXuTnX
-         gs5h70zGe6GrHE8UW/XQ2tJKBE5UXcRSj0axMtlQHxK6k+y5lpxoIvt7k64xiIR7J+8f
-         A/GQGJ1Xt+ySRQNFHGlpZiz9ILIWTnqfxNX6bBRewYrO7i31UYvc7qhHPwBYp/QoIpXq
-         FIhQ==
-X-Gm-Message-State: AO0yUKVaqx1Y520UVcHpoc1yqLNXUGYJW12pc1PxD9NSGB536gICmycz
-        QYwXqcF7Dec7MgTJhguU+yGBgBCGfe2A3rF26xE=
-X-Google-Smtp-Source: AK7set92OL3G8YnrRMKsCXin+A4QvxdoGU7T0cUEjR5WoCpPkZ1BCDK1WZNm/rg+4Uf/k3SHFHNQFN205jo6C8vMSnw=
-X-Received: by 2002:a17:907:10cf:b0:888:6294:a1fd with SMTP id
- rv15-20020a17090710cf00b008886294a1fdmr1430066ejb.2.1676386135992; Tue, 14
- Feb 2023 06:48:55 -0800 (PST)
+        Tue, 14 Feb 2023 09:49:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE44E3596
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 06:49:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 740C2616DE
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 14:49:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29094C433EF;
+        Tue, 14 Feb 2023 14:49:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676386178;
+        bh=Hd39Bbt/oIFR+/8DTIbIyGdhtSgpK09BMQP2qSeF5wE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DZJxfqNQQ/OoeSuk1eQEEjyH6Cqo2MBxfq0SV17uW6JhwUAtpzEfvOY91jGm792u4
+         R14eKWCigrKsnflRNPtIRVaSTlw7zWLEcpI2A6Vu2dLfDp1FzvAVsJb3xYBjxvutFW
+         9OnWoOxvq5SLJRfpOJW+7fOsdzGw2N84kOo6mortxsX0H1ksDQAk4zYpGjFZ2GcqRd
+         WBnufsdYW1D6F321srKZcqRsMijQvQBYv7E1AKFvvawpFUj2x75FuGSs35lSfWLwFD
+         Nhn886+35P5n/w9knYpy7OEgETvC9EDG1CDd6V5pD8kI/bDciuzSrsN4z5GptUGI8i
+         mf9dtmLbhgDug==
+Message-ID: <8d6471cf-75b1-14b2-7c4b-27c38dc0428b@kernel.org>
+Date:   Tue, 14 Feb 2023 22:49:34 +0800
 MIME-Version: 1.0
-References: <20230213213537.6121-1-mario.limonciello@amd.com> <20230213213537.6121-2-mario.limonciello@amd.com>
-In-Reply-To: <20230213213537.6121-2-mario.limonciello@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 14 Feb 2023 15:48:44 +0100
-Message-ID: <CAJZ5v0j0GYyrF33=7ginfhYMrNyD=EDUK0RuHHYkKJ2VZAQnsQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] ACPI: x86: Add more systems to quirk list for forcing StorageD3Enable
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org, dbilios@stdio.gr,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 1/2] erofs: update print symbols for various flags in
+ trace
+Content-Language: en-US
+To:     Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.org,
+        linux-erofs@lists.ozlabs.org, huyue2@coolpad.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20230209024825.17335-1-jefflexu@linux.alibaba.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230209024825.17335-1-jefflexu@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 10:35 PM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> commit 018d6711c26e4 ("ACPI: x86: Add a quirk for Dell Inspiron 14 2-in-1
-> for StorageD3Enable") introduced a quirk to allow a system with ambiguous
-> use of _ADR 0 to force StorageD3Enable.
->
-> It is reported that Vostro 5626 suffers same symptoms. Add this other
-> system to the list as well.
->
-> Suggested-by: dbilios@stdio.gr
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217003
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-
-Can you please combine these two patches into one?
-
-Or at least make the subjects differ?
-
+On 2023/2/9 10:48, Jingbo Xu wrote:
+> As new flags introduced, the corresponding print symbols for trace are
+> not added accordingly.  Add these missing print symbols for these flags.
+> 
+> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
 > ---
->  drivers/acpi/x86/utils.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/acpi/x86/utils.c b/drivers/acpi/x86/utils.c
-> index 3409ce6513afa..b1d24718f73d7 100644
-> --- a/drivers/acpi/x86/utils.c
-> +++ b/drivers/acpi/x86/utils.c
-> @@ -214,6 +214,7 @@ static const struct dmi_system_id force_storage_d3_dmi[] = {
->                  * but .NVME is needed to get StorageD3Enable node
->                  * https://bugzilla.kernel.org/show_bug.cgi?id=216440
->                  * https://bugzilla.kernel.org/show_bug.cgi?id=216773
-> +                * https://bugzilla.kernel.org/show_bug.cgi?id=217003
->                  */
->                 .matches = {
->                         DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> @@ -232,6 +233,12 @@ static const struct dmi_system_id force_storage_d3_dmi[] = {
->                         DMI_MATCH(DMI_PRODUCT_NAME, "Inspiron 16 5625"),
->                 }
->         },
-> +       {
-> +               .matches = {
-> +                       DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +                       DMI_MATCH(DMI_PRODUCT_NAME, "Vostro 5625"),
-> +               }
-> +       },
->         {}
->  };
->
-> --
-> 2.34.1
->
+> v3: print symbols for EROFS_GET_BLOCKS_RAW is deleted in patch 2
+
+Reviewed-by: Chao Yu <chao@kernel.org>
+
+Thanks,
