@@ -2,134 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB0C696316
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF36769631C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:08:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbjBNMG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 07:06:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34380 "EHLO
+        id S231644AbjBNMIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 07:08:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbjBNMGx (ORCPT
+        with ESMTP id S231295AbjBNMIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 07:06:53 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4488C76A5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:06:51 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id k3so7769665wrv.5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:06:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8dTuoqSN3nUDDHUnixCG2GlQIWQEKens+Uo3RsvB8jE=;
-        b=q9h33ThpgiMyYvC2n+ERo8vzFNnzZfEGcIoRHB+lMy8eyajiSNpr5wAiHMT0OjuOnj
-         ATvlfkUN1Igmqv7DCdml7Gqb26JIBMmp7B4/zvGIslPLMc2vLWVE5rwuygpoLkVuB6dB
-         Rh97wAQbE2l6ZIJLcbBtJfeNpHl5pJkzuMeyTNJVDsymwwxJpGqHFeucOxiPwedWUX8c
-         rR1on4AC+rI1SY+dtjoHrO/XtwcfqlMH5lQ4ZjSleA1bYhZ127dA8K4k/y2Jtdn7SDpA
-         6AdWOPVqXQhsFO9c2xSS35nQmSjhim3BvD3ts39iwEhcmsOM0yl5Pi/GCSmkh8ZCpuDl
-         IHNQ==
+        Tue, 14 Feb 2023 07:08:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A944211D
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:07:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676376467;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SnnGhci8G9bgg/cHSUev+SUa0D8kZiVN6LjQKlMVnJQ=;
+        b=aqip1uK3xcEtE30+Ke1O9umXz4LKNPig44Hd3zFWGFxbhKUURVnS39t9Y4QOeew8U/Ot/f
+        s+gkBTo7DcU6LsZ4odnzbHAZUi36iJ5tebmXCZVp7Ye3HQRZVLvqr2NE1zubiG5b42gwvd
+        UGEHbKYOB+OFZmk1u/lXN5DUcUGKrwg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-134-WE2jToyyPZisQzcBoMsOWw-1; Tue, 14 Feb 2023 07:07:43 -0500
+X-MC-Unique: WE2jToyyPZisQzcBoMsOWw-1
+Received: by mail-wm1-f69.google.com with SMTP id o2-20020a05600c510200b003dc51c95c6aso455521wms.0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:07:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8dTuoqSN3nUDDHUnixCG2GlQIWQEKens+Uo3RsvB8jE=;
-        b=5QQoZouHTZpHQBv1ea559TcgmZVU1Mn0OZxAlzDE3xEhLW0gHX9oftEGQ2FNykK24J
-         fSBdtDh6Sb8NmSHuEJPLXQMdp+iDIusAhfZdVxOQsi3W0DLMC45yEzXftUv09pTuVRMh
-         yyV1a81YsyTKzZK6Ki5jLsE8LT/4ReVvb8Yqy5lgcfRVwyEph088aUk2HqX1BAYS8Nvx
-         t/oMTuF8tYJkqJEARdpZjOiEiNliifk15Hd//lQfaeHULK+ruWw1g/3cR6hu3ZHMTNBl
-         AydcdoFAmLUFKG02BlUfL4Q3qdn/0C9FJEu8M5G54dzEQHqqjkS5wKCVg7zSk4IRmMtI
-         V1Xg==
-X-Gm-Message-State: AO0yUKXeLcNbwF5mMHpThZH0Bj9PQBzMwuSO2sQ99Sa4o64Ckwujkpbd
-        GOhLdt4Q/vk4wveUv20u4TYseA==
-X-Google-Smtp-Source: AK7set/yJWOH5/Bmi1HyNWbYN6j+KyNu4iEr6LIugfGebQGZt8mZBxo1n7ylPuqzgjj23iLLvZnBIA==
-X-Received: by 2002:a5d:4006:0:b0:2c5:4ccc:a770 with SMTP id n6-20020a5d4006000000b002c54ccca770mr2077419wrp.7.1676376409738;
-        Tue, 14 Feb 2023 04:06:49 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id q9-20020a5d6589000000b002c559405a1csm4632273wru.20.2023.02.14.04.06.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 04:06:49 -0800 (PST)
-Date:   Tue, 14 Feb 2023 14:06:47 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Eric Biggers <ebiggers@google.com>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [RFC PATCH 0/5] Add dedicated Qcom ICE driver
-Message-ID: <Y+t5V1Uu702JplW1@linaro.org>
-References: <20230214120253.1098426-1-abel.vesa@linaro.org>
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SnnGhci8G9bgg/cHSUev+SUa0D8kZiVN6LjQKlMVnJQ=;
+        b=JEKibyfEp2qoLVzT22wD4tb4kcRQjjLs6JVYFDQ+6RE7UGdeLpq+ZwTKHYNLbfZVfb
+         foO5T4PyU4hwXaDcrlsRK1jGm1UZWfdpaatlbTXlQurg12lWPo8qX9Zcz21+sqVu8cqs
+         W/KHHhMQ2KQhdvuhl0Hvj9lM9lPuwdqJrPDOLw2RPs5FKphw3+qDd3JfsGg/RBSHAseP
+         kLkbRQopOBs+4pyqCB7iRTZ//NltF7rK23hoCeGvQUoZ3xUVyFnqKAtpkfU+ZAISjcdp
+         +6VV/N1k/uTkSd4Is/fpXaPod2WLge32MXP7VqyE0VajIfTibeHB8wUrWdexAzmmCH9p
+         /xGQ==
+X-Gm-Message-State: AO0yUKWL/O7bf62NMPzPU2z+uLlvUzf6sb0PdE8zGKgsud0YRZa6iY/v
+        qX1CKrEW6JOMJ7F275Sy0VNBP2V7/BGjWhaKbUoWXPI6GAIbXLlpM34OPVIYTpgb4j9hhvDerD8
+        iYlqbLKU1J2r8OEyffMYcGlfP
+X-Received: by 2002:adf:e909:0:b0:2c4:71d:244c with SMTP id f9-20020adfe909000000b002c4071d244cmr1857465wrm.25.1676376461738;
+        Tue, 14 Feb 2023 04:07:41 -0800 (PST)
+X-Google-Smtp-Source: AK7set9JVRyPcksBjwU0iydRKtoaY2OusW9u5eIsJUAzolbLk6gP3ogyJcalxK/ei33Tej8x/threg==
+X-Received: by 2002:adf:e909:0:b0:2c4:71d:244c with SMTP id f9-20020adfe909000000b002c4071d244cmr1857443wrm.25.1676376461512;
+        Tue, 14 Feb 2023 04:07:41 -0800 (PST)
+Received: from ?IPV6:2003:cb:c709:1700:969:8e2b:e8bb:46be? (p200300cbc709170009698e2be8bb46be.dip0.t-ipconnect.de. [2003:cb:c709:1700:969:8e2b:e8bb:46be])
+        by smtp.gmail.com with ESMTPSA id h18-20020a5d4312000000b002c54d970fd8sm8754308wrq.36.2023.02.14.04.07.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 04:07:41 -0800 (PST)
+Message-ID: <7533a41d-4e43-cdcf-e5fd-ba10f53c9b3b@redhat.com>
+Date:   Tue, 14 Feb 2023 13:07:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214120253.1098426-1-abel.vesa@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] [RFC] maple_tree: reduce stack usage with gcc-9 and
+ earlier
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        kasan-dev@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vernon Yang <vernon2gm@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230214103030.1051950-1-arnd@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230214103030.1051950-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-02-14 14:02:48, Abel Vesa wrote:
-> As both SDCC and UFS drivers use the ICE with duplicated implementation,
-> while none of the currently supported platforms make use concomitantly
-> of the ICE IP block, the new SM8550 allows both UFS and SDCC to do so.
-> In order to support such scenario, there is a need for a unified
-> implementation and a devicetree node to be shared between both types
-> of storage devices. So lets drop the duplicate implementation of the ICE
-> from both SDCC and UFS and make it a dedicated (soc) driver.
+On 14.02.23 11:30, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> This RFC should be treated as work-in-progress. Initially, its goal is
-> to figure out what is the most agreeable implementation for both types
-> of storage. Note that currently, only one ICE instance is supported
-> (like the existing HW suggests) and it is laking refcounting and locking
-> of any sort. Also missing bindings schema file for now.
+> gcc-10 changed the way inlining works to be less aggressive, but
+> older versions run into an oversized stack frame warning whenever
+> CONFIG_KASAN_STACK is enabled, as that forces variables from
+> inlined callees to be non-overlapping:
 > 
-> Any suggestions are welcome at this point, including the location of
-> such a new driver.
+> lib/maple_tree.c: In function 'mas_wr_bnode':
+> lib/maple_tree.c:4320:1: error: the frame size of 1424 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+> 
+> Change the annotations on mas_store_b_node() and mas_commit_b_node()
+> to explicitly forbid inlining in this configuration, which is
+> the same behavior that newer versions already have.
+> 
+> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+> Cc: Alexander Potapenko <glider@google.com>
+> Cc: Andrey Konovalov <andreyknvl@gmail.com>
+> Cc: Dmitry Vyukov <dvyukov@google.com>
+> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> Cc: kasan-dev@googlegroups.com
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
 
-Forgot to mention here that I only managed to test the UFS on SM8450
-HDK. Though functionally nothing should be impacted, I intend to test
-the SDCC on SDM630 soon.
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-The devicetree sdm630 patch is here for proof-of-concept, mainly.
+-- 
+Thanks,
 
-> 
-> Abel Vesa (5):
->   soc: qcom: Make the Qualcomm UFS/SDCC ICE a dedicated driver
->   arm64: dts: qcom: sm8450: Add the Inline Crypto Engine node
->   arm64: dts: qcom: sdm630: Add the Inline Crypto Engine node
->   scsi: ufs: ufs-qcom: Switch to the new ICE API
->   mmc: sdhci-msm: Switch to the new ICE API
-> 
->  arch/arm64/boot/dts/qcom/sdm630.dtsi          |  18 +-
->  arch/arm64/boot/dts/qcom/sm8450-hdk.dts       |   4 +
->  arch/arm64/boot/dts/qcom/sm8450.dtsi          |  24 +-
->  drivers/mmc/host/sdhci-msm.c                  | 252 ++----------------
->  drivers/soc/qcom/Kconfig                      |  10 +
->  drivers/soc/qcom/Makefile                     |   1 +
->  .../ufs-qcom-ice.c => soc/qcom/qcom-ice.c}    | 247 +++++++++++------
->  drivers/ufs/host/Kconfig                      |   1 -
->  drivers/ufs/host/Makefile                     |   1 -
->  drivers/ufs/host/ufs-qcom.c                   |  42 ++-
->  drivers/ufs/host/ufs-qcom.h                   |  32 +--
->  include/soc/qcom/ice.h                        |  61 +++++
->  12 files changed, 326 insertions(+), 367 deletions(-)
->  rename drivers/{ufs/host/ufs-qcom-ice.c => soc/qcom/qcom-ice.c} (50%)
->  create mode 100644 include/soc/qcom/ice.h
-> 
-> -- 
-> 2.34.1
-> 
+David / dhildenb
+
