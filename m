@@ -2,156 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6307696D62
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C25696D60
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:52:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233148AbjBNSxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 13:53:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47430 "EHLO
+        id S233157AbjBNSw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 13:52:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233441AbjBNSxD (ORCPT
+        with ESMTP id S233378AbjBNSwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 13:53:03 -0500
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357F883FB
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 10:52:53 -0800 (PST)
-Received: by mail-qk1-x72b.google.com with SMTP id 135so6521246qkh.13
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 10:52:53 -0800 (PST)
+        Tue, 14 Feb 2023 13:52:54 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 896FC302A4;
+        Tue, 14 Feb 2023 10:52:40 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id nh19-20020a17090b365300b00233ceae8407so8759018pjb.3;
+        Tue, 14 Feb 2023 10:52:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OO7zbNPYsLgMAueQIKSxf/Kr+7+LgMABqvRk9SFj/Jk=;
-        b=Ayqx7xMhzV5E3CwlCICFqozMpZyqraoxxSDrfJbeU4C0r04jYtPH/VZOq0X/zQBJsJ
-         cVbztPVtJDwSojXI0guADhvaylJaR9jGSbH23VL3t09cdmzwhUo0nwC06tH7PF76ZLus
-         jqpi+aYN0gw3r6WUedmXi1qlDlrPobJp8gOLQ8ie/JXGOQyMcKJYRxioUrcuyne+A1+m
-         ElLjsTheSlhAOO07Q/QYhyqjGWG+R2KAHWkplQ6PoAuhVwZDs2P0n8FgFEBGIYUMJrU0
-         KiiD6TeOE5hvz+AJcqKz1zXpcYWKV+jStjOOeJLKWq4gm9Kb58M7hMV6ovXRG6OLSr4O
-         abhA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eGALdumedzj5vEn2J6uPvtN959aI7mKYbul3DxbZlL4=;
+        b=GxGxY/VVoZXbA/e+6YZKXcyDG96LtKIyKpAXn6sVNQMowXf9Y/rsmEVQ9RJngDfmdb
+         3ZWraiTJmNCBHmhVEkTDqIke/jKt2v/BkHFEzLLq9cHJmRrbM1Iy6IU9nDuH0gXbnblX
+         XVj54sJd3TPEk3Qwr3pfBj6FiRqXb/JreX1SH86uBGYxLIb6C66r3v2hRUDGT9FTc+So
+         1dztbjeNMTFP0JuXZzVqunB1yQMxj3n8/rKbFqvqur8gioRIjXInSQ9fAS0GOP08b4/Q
+         7oS9PXyXqTRMPlqy2NzMys01FH21wH/82Ud31RSM3T0zAA26qByGblq8D5rd8b98MO1w
+         uAAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OO7zbNPYsLgMAueQIKSxf/Kr+7+LgMABqvRk9SFj/Jk=;
-        b=7p+HNJpkNjMLb+oq1kIKgdZQrN731GYpr29ficAljuVStCq0LRhE/vZ0eLAGxn1GZz
-         S62iwKtogxpr/ON7NUSAq0a/fd9rgHpz2FmbCG/DpbNzg7b/jhN3HxozO1qx4UF/mLWz
-         35Kn7xIIOEnJhIy/mfuMB52wSq9lG4gJU2YMk8F2i5PujXTPUJqaGbG9aJ4MuGrw7Q4+
-         qPzMiY5dPp/I36r+pSuc/1MYEfBEn5fvxr6z3oF/2W6fF8AB3nyi3FU9soq4g/IwQSQE
-         o9aCYyEA4QqRTnd4gQ5tSBwk91Wr0uNlbg9GyKCSw1/e2+RBD49CSlCk0LqZKfGbnYrV
-         MYwg==
-X-Gm-Message-State: AO0yUKXpBnZxuWgHdT04jIXiD4pFjuB7ABdcRqi8xFhknWmDBkLN7aTZ
-        3ORo3o1CnERgmGtLHssBEvATvlaVj/zUKb4b7M02vg==
-X-Google-Smtp-Source: AK7set+wb66HZ+f0aMDWEe3NDhalPbeZXZ4gImsWcqepnaTG0T3+q5z7ICV7K81oQPd1lHtaiAHk1AS8WVD6fknRwZc=
-X-Received: by 2002:a05:620a:cc1:b0:720:6045:25ea with SMTP id
- b1-20020a05620a0cc100b00720604525eamr225052qkj.27.1676400772177; Tue, 14 Feb
- 2023 10:52:52 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eGALdumedzj5vEn2J6uPvtN959aI7mKYbul3DxbZlL4=;
+        b=LnyPUcbXiryUwT0SEa5CsgNA76Wg1IzDzS7M9kRyReSMQwuD2uitvL96vXSlU48p8K
+         G5ILhmo5PnJAbt/dgtWHGyRXhUCjTIUpSFIPUfBfo9dY5Iwm5FYl6WJh8P9RnF8sY0GI
+         npZQIDgGeMeq7UmMch7liS4/LGtKVvJLwWPq1kRkGZqQ9ZZkIfnbnF9t/Mi8gSCxEdRX
+         D7CLxYb1xWafv781jqFEADIReXVG5n++JgmvYAoK3X2zHdmfvQoLn4H7aNINJ8bYZ+LN
+         vWbZ5bh2pnmgorfE/KGG01ue+Z2HAvq9CbZ4dMFXeF3/i9uyuKG5yBmotxjLIfyh1MFf
+         Janw==
+X-Gm-Message-State: AO0yUKUxFoE58PMqqT2W8O3Telty1cEY+h+l1lYWq8YHrBD9Yyhc/ZW/
+        8XI1dKxo0uo1Ojy9F+qnn0A=
+X-Google-Smtp-Source: AK7set/NN5Mqq/S3cCp1vINmL+OJbGqBYnA/vxuU2c1uwc8zNhDxHLZrmkVL4jLeuk3qYr3nWKv8Gw==
+X-Received: by 2002:a05:6a20:8f05:b0:be:a604:c683 with SMTP id b5-20020a056a208f0500b000bea604c683mr3935807pzk.45.1676400760002;
+        Tue, 14 Feb 2023 10:52:40 -0800 (PST)
+Received: from kazuki-mac ([2400:4051:ea3:5910::19a])
+        by smtp.gmail.com with ESMTPSA id f18-20020aa78b12000000b0059312530b54sm10069849pfd.180.2023.02.14.10.52.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 10:52:39 -0800 (PST)
+From:   Kazuki <kazukih0205@gmail.com>
+X-Google-Original-From: Kazuki <kazuki@kazuki-mac>
+Date:   Wed, 15 Feb 2023 03:52:34 +0900
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        Janne Grunau <j@jannau.net>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v2 0/3] SPI core CS delay fixes and additions
+Message-ID: <20230214185234.uj63aovylzixs6xa@kazuki-mac>
+References: <20230113102309.18308-1-marcan@marcan.st>
+ <167362544665.163457.10878671229075890152.b4-ty@kernel.org>
 MIME-Version: 1.0
-References: <20230207035139.272707-1-shiyn.lin@gmail.com> <CA+CK2bBt0Gujv9BdhghVkbFRirAxCYXbpH-nquccPsKGnGwOBQ@mail.gmail.com>
- <CANOhDtU3J8SUCzKtKvPPPrUHyo+LV5npNObHtYP_AK4W3LomDw@mail.gmail.com>
- <CA+CK2bAWnzqKDTjBbxXOvURwr7nWmf8q-mzD1x-ztwbWVQBQKA@mail.gmail.com>
- <Y+Z8ymNYc+vJMBx8@strix-laptop> <62c44d12-933d-ee66-ef50-467cd8d30a58@redhat.com>
- <Y+uv3iTajGoOuNMO@strix-laptop> <CA+CK2bCKOONeipaYNQJSPTicej1DW0OWvw97r0TbG7oRtxVGnQ@mail.gmail.com>
- <Y+vV9YaiEIUQaW65@strix-laptop>
-In-Reply-To: <Y+vV9YaiEIUQaW65@strix-laptop>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Tue, 14 Feb 2023 13:52:16 -0500
-Message-ID: <CA+CK2bDYHT4m=we7jbLWxneZTnBt2wJd2Msw67V97c1nNq-KZQ@mail.gmail.com>
-Subject: Re: [PATCH v4 00/14] Introduce Copy-On-Write to Page Table
-To:     Chih-En Lin <shiyn.lin@gmail.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Nadav Amit <namit@vmware.com>, Barry Song <baohua@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Yang Shi <shy828301@gmail.com>, Peter Xu <peterx@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Hugh Dickins <hughd@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Yu Zhao <yuzhao@google.com>, Juergen Gross <jgross@suse.com>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Li kunyu <kunyu@nfschina.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Gautam Menghani <gautammenghani201@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Barret Rhoden <brho@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Dinglan Peng <peng301@purdue.edu>,
-        Pedro Fonseca <pfonseca@purdue.edu>,
-        Jim Huang <jserv@ccns.ncku.edu.tw>,
-        Huichun Feng <foxhoundsk.tw@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <167362544665.163457.10878671229075890152.b4-ty@kernel.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 1:42 PM Chih-En Lin <shiyn.lin@gmail.com> wrote:
->
-> On Tue, Feb 14, 2023 at 11:30:26AM -0500, Pasha Tatashin wrote:
-> > > > The thing with THP is, that during fork(), we always allocate a backup PTE
-> > > > table, to be able to PTE-map the THP whenever we have to. Otherwise we'd
-> > > > have to eventually fail some operations we don't want to fail -- similar to
-> > > > the case where break_cow_pte() could fail now due to -ENOMEM although we
-> > > > really don't want to fail (e.g., change_pte_range() ).
-> > > >
-> > > > I always considered that wasteful, because in many scenarios, we'll never
-> > > > ever split a THP and possibly waste memory.
-> > > >
-> > > > Optimizing that for THP (e.g., don't always allocate backup THP, have some
-> > > > global allocation backup pool for splits + refill when close-to-empty) might
-> > > > provide similar fork() improvements, both in speed and memory consumption
-> > > > when it comes to anonymous memory.
-> > >
-> > > When collapsing huge pages, do/can they reuse those PTEs for backup?
-> > > So, we don't have to allocate the PTE or maintain the pool.
-> >
-> > It might not work for all pages, as collapsing pages might have had
-> > holes in the user page table, and there were no PTE tables.
->
-> So if there have holes in the user page table, after we doing the
-> collapsing and then splitting. Do those holes be filled? Assume it is,
-> then, I think it's the reason why it's not work for all the pages.
->
-> But, after those operations, Will the user get the additional and
-> unexpected memory (which is from the huge page filling)?
+On Fri, Jan 13, 2023 at 03:57:26PM +0000, Mark Brown wrote:
+> On Fri, 13 Jan 2023 19:23:07 +0900, Hector Martin wrote:
+> > Commits f6c911f3308c ("spi: dt-bindings: Introduce
+> > spi-cs-setup-ns property") and 33a2fde5f77b ("spi: Introduce
+> > spi-cs-setup-ns property") introduced a new property to represent the
+> > CS setup delay in the device tree, but they have some issues:
+> > 
+> > - The property is only parsed as a 16-bit integer number of nanoseconds,
+> >   which limits the maximum value to ~65us. This is not a reasonable
+> >   upper limit, as some devices might need a lot more.
+> > - The property name is inconsistent with other delay properties, which
+> >   use a "*-delay-ns" naming scheme.
+> > - Only the setup delay is introduced, but not the related hold and
+> >   inactive delay times.
+> > 
+> > [...]
+> 
+> Applied to
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> 
+> Thanks!
+> 
+> [1/3] spi: Use a 32-bit DT property for spi-cs-setup-delay-ns
+>       commit: f276aacf5d2f7fb57e400db44c807ea3b9525fd6
+Hi,
 
-Yes, more memory is going to be allocated for a process in such THP
-collapse case. This is similar to madvise huge pages, and touching the
-first byte may allocate 2M.
+Shouldn't this be sent to 6.2 before the property becomes a stable ABI?
 
-Pasha
+Thanks,
+Kazuki
+>
