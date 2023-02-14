@@ -2,74 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A101696001
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:57:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F073E69600A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232387AbjBNJ5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 04:57:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36728 "EHLO
+        id S231948AbjBNJ7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 04:59:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232377AbjBNJ4p (ORCPT
+        with ESMTP id S232314AbjBNJ7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 04:56:45 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C82C23DAA
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:56:44 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso11089071wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:56:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6xhE/sXFT5zjoa+FEV4/IoGQyQyppBawXrc+EF70yD4=;
-        b=UmfRqpIDnQt+85LzpVkJK482ijjqzGSvYTMNQR6LpMTNHBk1HCBAiUwAK9njf0nnc7
-         E0BK2MjOcP400fhUBfbvHcbH+28pzyw6gPxbfU/xWilcavzGznfYg2GdTggd5UMVc9qg
-         QqfvrWTjorvLQ/dibRdZjCHQizRzpiIDV/7tdmHF41hQUIewTIkukYtjm153EY0HxSkH
-         5hrfX6gNVd4mTLwHOOKrTPh6bZCb/WAMTfyq+X0y/rYSGpRbtiYeME0XGft3Jmz/3k6c
-         5EsXb/yb/oMQjkMst5CAUMyUn/BUE4WOdVObB4aAOLa+qFv2x/pgdYIUZE1KB+Y3Os4k
-         Jp4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6xhE/sXFT5zjoa+FEV4/IoGQyQyppBawXrc+EF70yD4=;
-        b=sMDQdUocG+bscAYuelK8iqfmZdu7+czt/fQneP/YEQyjfM78SpZHtOPLk8QbjXL9MT
-         AyOiSwge6sfb0wrADddn/jQ87dJmtbXYGi/Dr4+Fl7P+3+5D4kYpVcEKlVg7vuNQyvXY
-         Mhh+XFEd8F9rQKChmye69rGlZBx+L1C/kqTtrbzM/kfhTA4ZmEC6WgrNWqkuim/wK2D7
-         ETsop72gAAHi71UVWka9PWV3Pel2YU84ouLbgHrAe6OWlXOfbZ5PFd49kYfsrlzwots4
-         9qn3czY5tPOoiOv7QtJ5l5jlW0S9gE442qsrbApnMZFm9Z6kRh+NLb/p9bqd/qQ3ahdR
-         bxig==
-X-Gm-Message-State: AO0yUKXunNWVf/46MlXiPzSosUaE6CCr0Pm4VZpzWaB7hYMzBTpw55uv
-        VfPfwkbV7P3ThbExlHP7c8Yukg==
-X-Google-Smtp-Source: AK7set9pX348V4vPhGbAyakzYHwkty9TII1zk/mV5abCHqQ3npK1d08AeZmkCT5+aFjYVTtU7Il+OQ==
-X-Received: by 2002:a05:600c:a29e:b0:3dc:4318:d00d with SMTP id hu30-20020a05600ca29e00b003dc4318d00dmr1587750wmb.11.1676368602867;
-        Tue, 14 Feb 2023 01:56:42 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id s21-20020a1cf215000000b003e001119927sm19237471wmc.24.2023.02.14.01.56.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 01:56:42 -0800 (PST)
-Message-ID: <34c4cd70-e6c2-86d8-3f7f-fda70718ae1e@linaro.org>
-Date:   Tue, 14 Feb 2023 10:56:40 +0100
+        Tue, 14 Feb 2023 04:59:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1B725B98;
+        Tue, 14 Feb 2023 01:58:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7BF96150D;
+        Tue, 14 Feb 2023 09:58:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C3C5C433D2;
+        Tue, 14 Feb 2023 09:58:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676368699;
+        bh=OU9XaxlzIQNm9uPoSElC+25TvF2PsT501YwBQ7EdhCU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZNIpNVUu5NKWJ2OPxfSC7tnHbL6lgxuXuwdPCP5gl5gWBFxbVTdAACSmagfVWjewx
+         O7m9GYOYk/+lrirlWzbu6Ro/o43n/tVE1Nr/c185YifxFrNyumd3rUbfeCrMmojOTM
+         JfuOyFlOb1riQJV7vPBx4NDF2QOuzQiaAGqXjHtc=
+Date:   Tue, 14 Feb 2023 10:58:11 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Tianrui Zhao <zhaotianrui@loongson.cn>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>, Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: Re: [PATCH v1 01/24] LoongArch: KVM: Implement kvm module related
+ interface
+Message-ID: <Y+tbMwXjA0hkiUJA@kroah.com>
+References: <20230214025648.1898508-1-zhaotianrui@loongson.cn>
+ <20230214025648.1898508-2-zhaotianrui@loongson.cn>
+ <Y+ssT+W27GxDRAAZ@kroah.com>
+ <6fd2ca5a-7243-0627-79e9-8c8bd840adc2@loongson.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/3] dt-bindings: power: qcom,rpmpd: Add SA8155P
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230214095435.2192153-1-konrad.dybcio@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230214095435.2192153-1-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6fd2ca5a-7243-0627-79e9-8c8bd840adc2@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,15 +58,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2023 10:54, Konrad Dybcio wrote:
-> Add a compatible for SA8155P platforms and relevant defines to the
-> include file.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On Tue, Feb 14, 2023 at 05:00:56PM +0800, Tianrui Zhao wrote:
+> > > +#define KVM_GET_CSRS		_IOWR(KVMIO, 0xc5, struct kvm_csrs)
+> > > +#define KVM_SET_CSRS		_IOW(KVMIO,  0xc6, struct kvm_csrs)
+> > Why does this arch need new ioctls?
+> We want to use this ioctl to access multiple csrs at one time. If without
+> this, we only access one csr.
 
+What is wrong with accessing only one csr at a time?  Isn't this what
+other architectures do?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> There is another function, can we use the KVM_GET/SET_MSRS to access our
+> csrs?
 
-Best regards,
-Krzysztof
+I do not know, that's up to the KVM developers to answer.
 
+thanks,
+
+greg k-h
