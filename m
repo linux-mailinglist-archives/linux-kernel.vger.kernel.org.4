@@ -2,102 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E68696430
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 14:05:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 453E9696435
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 14:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232568AbjBNNFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 08:05:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
+        id S232580AbjBNNGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 08:06:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjBNNFp (ORCPT
+        with ESMTP id S229938AbjBNNGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 08:05:45 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B0E923860;
-        Tue, 14 Feb 2023 05:05:43 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8Dx_5clh+tjbogAAA--.428S3;
-        Tue, 14 Feb 2023 21:05:41 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxzr4kh+tjU9syAA--.40049S3;
-        Tue, 14 Feb 2023 21:05:40 +0800 (CST)
-Message-ID: <c028b3bd-7f42-49d3-b811-fca680bf86ac@loongson.cn>
-Date:   Tue, 14 Feb 2023 21:05:40 +0800
+        Tue, 14 Feb 2023 08:06:10 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA6523C7F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 05:06:02 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id jg8so39886070ejc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 05:06:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UO1S8iW9/QAKVzEJhMRyzNECLihlHvjUObjxxMYI9O0=;
+        b=EHFPpiUbwjhpMXxUIF7LhqG6rIpi+UqGSBGeWDQmMdq/H/4cSj5dy+pWLbjn+5Q2PE
+         3Uu+8cgbrs8l1cedRkQIXA0oImCzK2Kua9ZjbNyB6hSMdCLJ6XuLOzwN/NXwmPLQ9Z/N
+         VnyvAkJeiLtHgPm9ccQpnGJhDezr7ST2P6LuY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UO1S8iW9/QAKVzEJhMRyzNECLihlHvjUObjxxMYI9O0=;
+        b=mnuswPP86qOsm8jrcygEpXZq4F9+2LF9YFVXw4AgjX8EMUWfTPqpxRBKD90ePJxOj9
+         w7ttffM3FpA8MmlipFIpJF9CmUtSjr005fdMeSBPXsdRRM+fX3VFSh33URtxthmRDyBd
+         EHtIIleeFrXJtEUQ1b9W86SqWsGyu7gjnvBBHQPvHoJJo4vfCZuBMCxL5O8xN27p+QD2
+         nLaprGRuUWhGuc3rMFPnJNEAKepp8LRX8vbpYHYgHotoKoGopMkaZqXfTJ+Z6qdGlZ8f
+         yZtRIa3p1GYMRbqXrulFIJ/LF/I1vCwbVd/5f+6wgSirUE9MmCezvuNJEbfSGWAa+hE0
+         AGtg==
+X-Gm-Message-State: AO0yUKU7LmfM4VRngltCPIXhrKYlkuOXbtvxjHzym/uomfM2tJDm9KSb
+        Kgcz+0Nze77EJEjPnfKC/dhkCu1xXctFShQUs7ixUJJbUrjfK78x
+X-Google-Smtp-Source: AK7set+I/XMXzZKvwt68Wb9MWG1DTRZ//RvsjWH1cHJPqXhfYhA6+T3VMQPi9934Peu7job2YIQNxIo0BpMeuOgtl80=
+X-Received: by 2002:a17:907:1ddc:b0:878:790b:b7fd with SMTP id
+ og28-20020a1709071ddc00b00878790bb7fdmr1259822ejc.14.1676379960856; Tue, 14
+ Feb 2023 05:06:00 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v1 01/24] LoongArch: KVM: Implement kvm module related
- interface
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tianrui Zhao <zhaotianrui@loongson.cn>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>
-References: <20230214025648.1898508-1-zhaotianrui@loongson.cn>
- <20230214025648.1898508-2-zhaotianrui@loongson.cn>
- <Y+ssT+W27GxDRAAZ@kroah.com>
- <6fd2ca5a-7243-0627-79e9-8c8bd840adc2@loongson.cn>
- <Y+tbMwXjA0hkiUJA@kroah.com>
-From:   maobibo <maobibo@loongson.cn>
-In-Reply-To: <Y+tbMwXjA0hkiUJA@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bxzr4kh+tjU9syAA--.40049S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7JFy8XFWUAFyfJF17CryDZFb_yoWfJFX_ur
-        s7Aa1Du3y8GFs3Kan0yF909FWxC3W5Ga40qrs8GFWS93s8Xa1xAFs7WrZ2vFn0ga1SyFs3
-        u3sYgFWUX39rXjkaLaAFLSUrUUUU0b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
-        87kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
-        xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWln4kS
-        14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv
-        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
-        AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE
-        7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
-        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jFApnUUUUU=
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230214083710.2547248-1-dhowells@redhat.com> <20230214083710.2547248-6-dhowells@redhat.com>
+In-Reply-To: <20230214083710.2547248-6-dhowells@redhat.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Tue, 14 Feb 2023 14:05:49 +0100
+Message-ID: <CAJfpegvjTL7X6KRZnFR6=reme63GiaACBZQ4RicvJ6B+-nLVKw@mail.gmail.com>
+Subject: Re: [PATCH v3 5/5] shmem, overlayfs, coda, tty, proc, kernfs, random:
+ Fix splice-read
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Daniel Golle <daniel@makrotopia.org>,
+        Guenter Roeck <groeck7@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jan Harkes <jaharkes@cs.cmu.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coda@cs.cmu.edu, codalist@coda.cs.cmu.edu,
+        linux-unionfs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 14 Feb 2023 at 09:38, David Howells <dhowells@redhat.com> wrote:
+>
+> The new filemap_splice_read() has an implicit expectation via
+> filemap_get_pages() that ->read_folio() exists if ->readahead() doesn't
+> fully populate the pagecache of the file it is reading from[1], potentially
+> leading to a jump to NULL if this doesn't exist.
+>
+> A filesystem or driver shouldn't suffer from this if:
+>
+>   - It doesn't set ->splice_read()
+>   - It implements ->read_folio()
+>   - It implements its own ->splice_read()
+>
+> Note that some filesystems set generic_file_splice_read() and
+> generic_file_read_iter() but don't set ->read_folio().  g_f_read_iter()
+> will fall back to filemap_read_iter() which looks like it should suffer
+> from the same issue.
+>
+> Certain drivers, can just use direct_splice_read() rather than
+> generic_file_splice_read() as that creates an output buffer and then just
+> calls their ->read_iter() function:
+>
+>   - random & urandom
+>   - tty
+>   - kernfs
+>   - proc
+>   - proc_namespace
+>
+> Stacked filesystems just need to pass the operation down a layer:
+>
+>   - coda
+>   - overlayfs
+>
+> And finally, there's shmem (used in tmpfs, ramfs, rootfs).  This needs its
+> own splice-read implementation, based on filemap_splice_read(), but able to
+> paste in zero_page when there's a page missing.
+>
+> Fixes: d9722a475711 ("splice: Do splice read from a buffered file without using ITER_PIPE")
 
+The fixed commit is not upstream.  In fact it seems to be on the same
+branch as this one. Please reorder the patches so that a Fixes tag is
+not needed.
 
-在 2023/2/14 17:58, Greg Kroah-Hartman 写道:
-> On Tue, Feb 14, 2023 at 05:00:56PM +0800, Tianrui Zhao wrote:
->>>> +#define KVM_GET_CSRS		_IOWR(KVMIO, 0xc5, struct kvm_csrs)
->>>> +#define KVM_SET_CSRS		_IOW(KVMIO,  0xc6, struct kvm_csrs)
->>> Why does this arch need new ioctls?
->> We want to use this ioctl to access multiple csrs at one time. If without
->> this, we only access one csr.
-> 
-> What is wrong with accessing only one csr at a time?  Isn't this what
-> other architectures do?
-It is ok to access CSR register once at a time, the other platforms do this
-except x86 platform. Only that I think that batch method is better such as
-KVM_GET/SET_MSRS ioctl cmds in x86. 
-
-Regards
-Bibo, Mao
-> 
->> There is another function, can we use the KVM_GET/SET_MSRS to access our
->> csrs?
-> 
-> I do not know, that's up to the KVM developers to answer.
-> 
-> thanks,
-> 
-> greg k-h
-
+Thanks,
+Miklos
