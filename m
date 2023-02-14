@@ -2,245 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A76D2695CE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F308B695CE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:27:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbjBNI0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 03:26:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33544 "EHLO
+        id S229771AbjBNI12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 03:27:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjBNI0v (ORCPT
+        with ESMTP id S229713AbjBNI1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 03:26:51 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC9B40E5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:26:49 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id s23so1039917vsj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:26:49 -0800 (PST)
+        Tue, 14 Feb 2023 03:27:24 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42D52724
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:27:23 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id bg5-20020a05600c3c8500b003e00c739ce4so10904654wmb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:27:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tGXSaHCOyaOCnpjYa4V9CEu2AkvGXvwVHSjPt+4qogw=;
-        b=XPYEe7G/FTp4FxGYqHj/dtIed22QmirPDPAju753f8FG+U8OkW2dXzI9RKNK1pcJSH
-         J0MZyweL+wVnLB5Sm/3INsPz8Skt/RAbvE2VXxBtn8ya+AmepnkFSB2mfWnJdXAAXIQ5
-         NrJqcS+MCQAIN9yMeBSrWvVmugMStxyrN3GvyN3kGbmk9HeKC71XYu1W5i0HMKksZM+D
-         58d9XzQ17MM8zVp1heVX595ynmTkVUlXNRW42j5ozlUO4SGFTbGgGIesyYrQpoOoAv+y
-         qANTUyb8HItxF2XC3ZIUEK7Mn3ixt2oTLcy8gxa+Li2G6gBjpG+Or392PQhJza5wvEdf
-         sHuw==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q3SNzD1D/+G7EoWbroYbrElrYQ8bt6MSn6iygZYJlsA=;
+        b=iaLkJwRNrJ7fg1h6X9TBxfMRyjoxwBSFuUWtN8RynawGcpGtOZpVZ9jgk0YaD2tvL4
+         yBCWhoXbvYoj95luW8olOSFw2WNPXFTX7L3KbrVlaBGYslSUXl0C7uufc4e6Xstf5TVk
+         v89l57dWaRaGbFshFENq7IQa8IFASuM5c96hEJnU/V+cBaNCEfdoWlymxE9L9yk5ZfuW
+         V88aG2NZ1UhDyElTiSDNY+bi2lMxOWmx7JIryFjB12cT1e0Rz8aVCjfpaalwa8xw0Sim
+         FXh2NdHlaUHjJ2IQ+8YfHeUhSi6P52V+4UkRutpYOQ70daEX/d9vTzrhRIhv1TYCZRQy
+         IY0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tGXSaHCOyaOCnpjYa4V9CEu2AkvGXvwVHSjPt+4qogw=;
-        b=Xqscl7Hdo9YolwMSS0a5vdw+WYKatWRx8k9HzGHIUnZQyiPpw9iPNylyEFH+C4eZkh
-         Cih5Osx+PbdhiC/zyASpNfvhYeCngiuij0mTq/iNIcyK66RMDj22ejUDJ+BtUauQte8M
-         kvMBUX28LbckyIkiJtEa5+711ftZqPyD+nsmOVfywaD328blInaMtlgSYHmV6JAfLOAq
-         7GJXIQM/35YX1sPGSL1VO559Nr0WtI3P3WukGZyxOnN1mI5JuROHtpEgm7a3qxJUsJ1l
-         XI/+CeSxTrUaTGguGz1rbDXN7Bl4d+MFTKhcPCBY6WDkM4rQchujnFd63BMk1E2PkLln
-         74DQ==
-X-Gm-Message-State: AO0yUKU+qwCuauRSiE3CxhH2H+Wgk88XhszXSSOcTqnLjofTcUw0OwwA
-        1x9hWT826CYD/NFQ1NHYXVY7A//M7/3nkmBfR4Y/cQ==
-X-Google-Smtp-Source: AK7set+0XHvRyXtDFgzucww00jiJ9CiTYvEPANkgFUfnvRP0R7kWGHQfI6w485Y1Pggr4fWsJDyDi1Bp6S9usdCUbDI=
-X-Received: by 2002:a67:dc83:0:b0:3f6:4d32:127b with SMTP id
- g3-20020a67dc83000000b003f64d32127bmr223128vsk.63.1676363208138; Tue, 14 Feb
- 2023 00:26:48 -0800 (PST)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q3SNzD1D/+G7EoWbroYbrElrYQ8bt6MSn6iygZYJlsA=;
+        b=25fUv0WHo0KCChBkWetMrNQEofyldI7buITVkBkKc3hDEUY8Ovo8V9nv/67euUtcBI
+         ba6AQ2NYEkXed5SOo+RrYJgcWXiOKJ/FZIDdCL621raGCK2sqqqCDWA1rza8eIxS7v+5
+         bNoz00m/9iDlbn4RRywI2cpiJfqjN3BqzJKZtOy9uxhsDW9TvZA9zfSoYdmaGDxARIp6
+         lgW7+r7MuCxXB8gLVwD9mv5V7QOtDa0987pFHZMs9UE/CrFiD5dL067OKPq0gtbk1ZPA
+         Esn0b3lRO3JCN0bB11nZVxixyiiP6jSKT+TBHTMfAlflXLTHS/S96IdJkjbnEeMi8quu
+         Fe0w==
+X-Gm-Message-State: AO0yUKVNNG1cIdg50J84TBz+3Gt7AFZFeSN8qcDwD3owW57G7x0Etcvi
+        8pkeXZWdEj4ZO6sCIT+2llg=
+X-Google-Smtp-Source: AK7set/PQGgEB4IJvIh0aW4sBsNUXDmoFU8fm/dDk4eB8lGJl3JfOc/5hiQKbUbK+BcjxlX/8ShgYA==
+X-Received: by 2002:a05:600c:a39e:b0:3dc:4c4f:6dc5 with SMTP id hn30-20020a05600ca39e00b003dc4c4f6dc5mr1302498wmb.9.1676363242267;
+        Tue, 14 Feb 2023 00:27:22 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id n22-20020a05600c4f9600b003dcc82ce53fsm18110172wmq.38.2023.02.14.00.27.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 00:27:21 -0800 (PST)
+Date:   Tue, 14 Feb 2023 11:27:18 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev,
+        "Haim, Dreyfuss" <haim.dreyfuss@intel.com>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Gregory Greenman <gregory.greenman@intel.com>
+Subject: drivers/net/wireless/intel/iwlwifi/mvm/d3.c:2789
+ iwl_mvm_resume_firmware() error: uninitialized symbol 'd3_status'.
+Message-ID: <202302140947.nQROevUz-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230213144732.336342050@linuxfoundation.org>
-In-Reply-To: <20230213144732.336342050@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 14 Feb 2023 13:56:37 +0530
-Message-ID: <CA+G9fYsrengkVDZnhjvq-XoTODVTTSgF-H-YUYxv_x0xiHnu2Q@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/67] 5.15.94-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Feb 2023 at 20:27, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.94 release.
-> There are 67 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 15 Feb 2023 14:46:51 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.94-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f6feea56f66d34259c4222fa02e8171c4f2673d1
+commit: b75dac847c9453d017d463a97e253416abf93d36 wifi: iwlwifi: mvm: trigger resume flow before wait for notifications
+config: x86_64-randconfig-m001-20230213 (https://download.01.org/0day-ci/archive/20230214/202302140947.nQROevUz-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Link: https://lore.kernel.org/r/202302140947.nQROevUz-lkp@intel.com/
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+smatch warnings:
+drivers/net/wireless/intel/iwlwifi/mvm/d3.c:2789 iwl_mvm_resume_firmware() error: uninitialized symbol 'd3_status'.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+vim +/d3_status +2789 drivers/net/wireless/intel/iwlwifi/mvm/d3.c
 
-## Build
-* kernel: 5.15.94-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: 2bf3e29e9db2a8b1c8bc73dab34b09b09991ad11
-* git describe: v5.15.93-68-g2bf3e29e9db2
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.93-68-g2bf3e29e9db2
+4da46a06d4430a Haim Dreyfuss  2022-09-06  2773  
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2774  static int iwl_mvm_resume_firmware(struct iwl_mvm *mvm, bool test)
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2775  {
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2776  	int ret;
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2777  	enum iwl_d3_status d3_status;
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2778  	struct iwl_host_cmd cmd = {
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2779  			.id = D0I3_END_CMD,
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2780  			.flags = CMD_WANT_SKB | CMD_SEND_IN_D3,
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2781  		};
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2782  	bool reset = fw_has_capa(&mvm->fw->ucode_capa,
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2783  				 IWL_UCODE_TLV_CAPA_CNSLDTD_D3_D0_IMG);
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2784  
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2785  	ret = iwl_trans_d3_resume(mvm->trans, &d3_status, test, !reset);
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2786  	if (ret)
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2787  		return ret;
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2788  
+b75dac847c9453 Haim, Dreyfuss 2022-09-06 @2789  	if (d3_status != IWL_D3_STATUS_ALIVE) {
 
-## Test Regressions (compared to v5.15.93)
+The iwl_trans_d3_resume() function does not initialize d3_status if
+trans->ops->d3_resume is NULL.
 
-## Metric Regressions (compared to v5.15.93)
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2790  		IWL_INFO(mvm, "Device was reset during suspend\n");
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2791  		return -ENOENT;
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2792  	}
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2793  
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2794  	/*
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2795  	 * We should trigger resume flow using command only for 22000 family
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2796  	 * AX210 and above don't need the command since they have
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2797  	 * the doorbell interrupt.
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2798  	 */
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2799  	if (mvm->trans->trans_cfg->device_family <= IWL_DEVICE_FAMILY_22000 &&
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2800  	    fw_has_capa(&mvm->fw->ucode_capa, IWL_UCODE_TLV_CAPA_D0I3_END_FIRST)) {
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2801  		ret = iwl_mvm_send_cmd(mvm, &cmd);
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2802  		if (ret < 0)
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2803  			IWL_ERR(mvm, "Failed to send D0I3_END_CMD first (%d)\n",
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2804  				ret);
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2805  	}
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2806  
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2807  	return ret;
+b75dac847c9453 Haim, Dreyfuss 2022-09-06  2808  }
 
-## Test Fixes (compared to v5.15.93)
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
 
-## Metric Fixes (compared to v5.15.93)
-
-## Test result summary
-total: 162222, pass: 135364, fail: 4592, skip: 21911, xfail: 355
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 149 total, 148 passed, 1 failed
-* arm64: 49 total, 47 passed, 2 failed
-* i386: 39 total, 35 passed, 4 failed
-* mips: 31 total, 29 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 34 total, 32 passed, 2 failed
-* riscv: 14 total, 14 passed, 0 failed
-* s390: 16 total, 14 passed, 2 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 42 total, 40 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
