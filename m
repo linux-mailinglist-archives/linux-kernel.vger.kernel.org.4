@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B54D26969B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:34:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AAB96969BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232151AbjBNQep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 11:34:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51108 "EHLO
+        id S231889AbjBNQfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 11:35:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbjBNQem (ORCPT
+        with ESMTP id S229826AbjBNQfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 11:34:42 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884EA222CB
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:34:01 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id a2so16285732wrd.6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:34:01 -0800 (PST)
+        Tue, 14 Feb 2023 11:35:14 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7751BAEE
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:34:34 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id a2so16287453wrd.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:34:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=aHCLH0BCYlrl7bOEbDY1pAuE8eh72PmVR3nJT0nQgwA=;
-        b=zDLVojkLYLUeqvXDyAEKunf5Z9Lbe4P84SBhZ8bMKfPfYbANsBangK5zJ27+jcJ+SH
-         4nXzIsiN/sYXg8iJMJxVcGQulmeT0X+aNQqO/MKiusIgaBrXJsvM5J72n9SFys7mdt61
-         Adk5mFO7ZVtROV3fgNo9m6t96I13J3U2oWbl8Ps4dQ1ZcXEsNUFr/pbvdlosgDh85iK6
-         0QzP8K/BHIWr64pF73/cDHv/Kl5sCH4AKBXfvt6/DpWgjColsCOvLZg4M1q+K9DSXpL/
-         V5hCYuIYcUJx3QVrCjMALp1wk2Lk4lo0dMkqCNzZUyRo58epZkOl6LC7H8FxAojt4WMw
-         T8GA==
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=sPPHKOJ8BbxBRItJGDJFEQbo+vowRlUP9MhQo5yyu6U=;
+        b=WndG3+R/WLWXsLCVrKYQq3f5S1JhiHK6YEppgJ2JzpKDs4+/5KzPfLFMJR69/cw4B/
+         uy5mrHDfLJW+EoGhAj45FPfDkVj8J5WMrjsmX1HTVd5wdtDwhBCreTdcnOBdhQI+9NL9
+         t0NyERmhK2jC8Epu4L2jDoM2EDK+8XnPf/fOp+SqLY8tZvGUyIxk3U9I7qkyXULUgRKs
+         3wEINpbftIWMs1L6WbSxUU1DPSu2owjFrzWcQjWxjxzpGFnm1LZxrabudv2dSdU1OPtf
+         ytvZRYN+70PSGLTR+tGjrVk3hgniIrKW859aLi5hJSQ8FKrRS4qimHXrHCab8zHTw+VH
+         HXFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aHCLH0BCYlrl7bOEbDY1pAuE8eh72PmVR3nJT0nQgwA=;
-        b=rXIgyliBNH+t+vWaA5ZqSawMrv0Cii1NIvBahXGaflDUP3JGYJfNxK2drM3zhYiguY
-         oFogKBmrnpomDAvGE+Wt8NnERpCnfnxvnOYljW+JgcTjdueyUVvSdNsL2DKdDxI7vKoD
-         2s/Ox9o8chJhCysr0m3gTLcvulIh2Yg1auNlZQ9wK2hekhAqtRdy63jJsl+WRu6ewkux
-         bMfvQIDtSbUN3L3XKkuyhWqfQzuhK458cdF7tFnQQMh0b0YLroC9lC/yV2nWsTzYMeCm
-         34llSh3AjMciVqohYRU516awwnh0gvwYhODofgScBEUBBlJb0NjQnsfga3iiNaJM74Ef
-         hc5w==
-X-Gm-Message-State: AO0yUKXA7Zc82NX+b1K3/VgBTB5ITEXaEcWVaF4Le7MNGdlCawPmRE0x
-        urFAxbMfTA7SzcF8rBvQakBX3g==
-X-Google-Smtp-Source: AK7set8BVXyabF5XV54Ry7iZuy+vqHXB4GdacOu290G1X0yyvSHNfmccuMjleImZLiN35w3E7xTZEQ==
-X-Received: by 2002:a5d:674d:0:b0:2c5:5d15:4e25 with SMTP id l13-20020a5d674d000000b002c55d154e25mr2512559wrw.16.1676392439813;
-        Tue, 14 Feb 2023 08:33:59 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sPPHKOJ8BbxBRItJGDJFEQbo+vowRlUP9MhQo5yyu6U=;
+        b=bkqS9Dy5qmJ2re2B/sZyzk7rVbFysTyKbpcAlgRSpX+42BR7Y6/gnK0O5eVkFW6BQy
+         FvEhEbjJZf7pZ9p5z125rhfcvonvnf7WkZe9hF/ECQxAv6BBJpZtZYIRF9AN5U7NLv/+
+         p+rAGd1NnbhSW4rgoCJFV0NiH2NKCu8QLvEeAPYocU/gdtiNn10VE583KRYIJyamsXtQ
+         TfDpaW0ka/GaGtCtSVCFzwsC+ZaC8Jlx5e84SF2uFdri1xWQvktfo4N48CRACZYsq3uc
+         GjtcRMey+QCnU+JJvEQaUp/vdmbJyPdvKrnRfRbf1fErEExUHPdIcmSZZT6qvrevYado
+         tDoQ==
+X-Gm-Message-State: AO0yUKWvaz08EVavy9Si63XN/f6mERPwEh4Zf24Fgpn5XTyZUCe32gae
+        5w04wrOgYzf8nwTTmAXTQVNNvQ==
+X-Google-Smtp-Source: AK7set9H2cOo3A5cs8oyFfTGJahxgcDiip0YMdeLybuqMzhVfp65ixaIXgXCNSuKOPJU7NTtVq8aUg==
+X-Received: by 2002:a5d:6ac5:0:b0:2c5:586b:f53d with SMTP id u5-20020a5d6ac5000000b002c5586bf53dmr2616133wrw.48.1676392472426;
+        Tue, 14 Feb 2023 08:34:32 -0800 (PST)
 Received: from ?IPV6:2a01:e0a:982:cbb0:4bc0:b2ae:1d81:afec? ([2a01:e0a:982:cbb0:4bc0:b2ae:1d81:afec])
-        by smtp.gmail.com with ESMTPSA id z15-20020adfe54f000000b002c5694aef92sm1343282wrm.21.2023.02.14.08.33.58
+        by smtp.gmail.com with ESMTPSA id b4-20020a5d4d84000000b002c5621263e3sm2451359wru.19.2023.02.14.08.34.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 08:33:59 -0800 (PST)
-Message-ID: <21479d70-9749-0268-cd4b-921b7a2380f8@linaro.org>
-Date:   Tue, 14 Feb 2023 17:33:58 +0100
+        Tue, 14 Feb 2023 08:34:31 -0800 (PST)
+Message-ID: <9841fd7d-861c-4b5c-51cf-7b8da53a06c9@linaro.org>
+Date:   Tue, 14 Feb 2023 17:34:30 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-From:   Neil Armstrong <neil.armstrong@linaro.org>
 Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v3] power: reset: add Odroid Go Ultra poweroff driver
+Subject: Re: [PATCH v4 00/12] The great interconnecification fixation
 Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-amlogic@lists.infradead.org
-References: <20230126-b4-odroid-go-ultra-poweroff-v3-1-0a7fd3d5c4b3@linaro.org>
- <20230213204249.nj5snnoezwobquon@mercury.elektranox.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
+        linux-pm@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>
+References: <20230214143720.2416762-1-konrad.dybcio@linaro.org>
+ <e4760caa-2904-7645-920d-cbd07daf657e@linaro.org>
+From:   Neil Armstrong <neil.armstrong@linaro.org>
 Organization: Linaro Developer Services
-In-Reply-To: <20230213204249.nj5snnoezwobquon@mercury.elektranox.org>
+In-Reply-To: <e4760caa-2904-7645-920d-cbd07daf657e@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,295 +80,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/02/2023 21:42, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Fri, Feb 10, 2023 at 11:03:36AM +0100, Neil Armstrong wrote:
->> The Hardkernel Odroid Go Ultra poweroff scheme requires requesting a poweroff
->> to its two PMICs in order, this represents the poweroff scheme needed to complete
->> a clean poweroff of the system.
->>
->> This implement this scheme by implementing a self registering driver to permit
->> using probe defer until both pmics are finally probed.
->>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->> Previous submission was at [1], but I converted it to an independent
->> platform device with device auto registration to permit waiting for
->> both the PMICs drivers to probe.
->>
->> [1] https://lore.kernel.org/all/20221031-b4-odroid-go-ultra-initial-v1-2-42e3dbea86d5@linaro.org/
->> ---
->> Changes in v3:
->> - Removed dependency with rk08
->> - Switched to storing struct device of pmics
->> - Fixed module init/exit
->> - Link to v2: https://lore.kernel.org/r/20230126-b4-odroid-go-ultra-poweroff-v2-1-a8c50866f4ac@linaro.org
->>
->> Changes in v2:
->> - Switched to devm_register_sys_off_handler()
->> - Link to v1: https://lore.kernel.org/r/20221031-b4-odroid-go-ultra-initial-v1-2-42e3dbea86d5@linaro.org
->> ---
->>   drivers/power/reset/Kconfig                    |   7 +
->>   drivers/power/reset/Makefile                   |   1 +
->>   drivers/power/reset/odroid-go-ultra-poweroff.c | 193 +++++++++++++++++++++++++
->>   3 files changed, 201 insertions(+)
->>
->> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
->> index a8c46ba5878f..a47ef7a9fc13 100644
->> --- a/drivers/power/reset/Kconfig
->> +++ b/drivers/power/reset/Kconfig
->> @@ -141,6 +141,13 @@ config POWER_RESET_OCELOT_RESET
->>   	help
->>   	  This driver supports restart for Microsemi Ocelot SoC and similar.
->>   
->> +config POWER_RESET_ODROID_GO_ULTRA_POWEROFF
->> +	bool "Odroid Go Ultra power-off driver"
->> +	depends on ARCH_MESON || COMPILE_TEST
->> +	depends on OF
->> +	help
->> +	  This driver supports Power off for Odroid Go Ultra device.
->> +
->>   config POWER_RESET_OXNAS
->>   	bool "OXNAS SoC restart driver"
->>   	depends on ARCH_OXNAS
->> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
->> index 0a39424fc558..d763e6735ee3 100644
->> --- a/drivers/power/reset/Makefile
->> +++ b/drivers/power/reset/Makefile
->> @@ -17,6 +17,7 @@ obj-$(CONFIG_POWER_RESET_MT6323) += mt6323-poweroff.o
->>   obj-$(CONFIG_POWER_RESET_OXNAS) += oxnas-restart.o
->>   obj-$(CONFIG_POWER_RESET_QCOM_PON) += qcom-pon.o
->>   obj-$(CONFIG_POWER_RESET_OCELOT_RESET) += ocelot-reset.o
->> +obj-$(CONFIG_POWER_RESET_ODROID_GO_ULTRA_POWEROFF) += odroid-go-ultra-poweroff.o
->>   obj-$(CONFIG_POWER_RESET_PIIX4_POWEROFF) += piix4-poweroff.o
->>   obj-$(CONFIG_POWER_RESET_LTC2952) += ltc2952-poweroff.o
->>   obj-$(CONFIG_POWER_RESET_QNAP) += qnap-poweroff.o
->> diff --git a/drivers/power/reset/odroid-go-ultra-poweroff.c b/drivers/power/reset/odroid-go-ultra-poweroff.c
->> new file mode 100644
->> index 000000000000..30a005088fbe
->> --- /dev/null
->> +++ b/drivers/power/reset/odroid-go-ultra-poweroff.c
->> @@ -0,0 +1,193 @@
->> +// SPDX-License-Identifier: GPL-2.0+
->> +/*
->> + * Copyright (c) 2023 Neil Armstrong <neil.armstrong@linaro.org>
->> + */
->> +#include <linux/kernel.h>
->> +#include <linux/init.h>
->> +#include <linux/of_platform.h>
->> +#include <linux/mfd/rk808.h>
->> +#include <linux/regmap.h>
->> +#include <linux/module.h>
->> +#include <linux/reboot.h>
->> +#include <linux/i2c.h>
->> +
->> +/*
->> + * The Odroid Go Ultra has 2 PMICs:
->> + * - RK818 (manages the battery and USB-C power supply)
->> + * - RK817
->> + * Both PMICs feeds power to the S922X SoC, so they must be powered-off in sequence.
->> + * Vendor does power-off the RK817 first, then the RK818 so here we follow this sequence.
->> + */
->> +
->> +struct odroid_go_ultra_poweroff_data {
->> +	struct device *dev;
->> +	struct device *rk817;
->> +	struct device *rk818;
->> +};
->> +
->> +static int odroid_go_ultra_poweroff_prepare(struct sys_off_data *data)
->> +{
->> +	struct odroid_go_ultra_poweroff_data *poweroff_data = data->cb_data;
->> +	struct regmap *rk817, *rk818;
->> +	int ret;
->> +
->> +	/* RK817 Regmap */
->> +	rk817 = dev_get_regmap(poweroff_data->rk817, NULL);
->> +	if (!rk817) {
->> +		dev_err(poweroff_data->dev, "failed to get rk817 regmap\n");
->> +		return notifier_from_errno(-EINVAL);
->> +	}
->> +
->> +	/* RK818 Regmap */
->> +	rk818 = dev_get_regmap(poweroff_data->rk818, NULL);
->> +	if (!rk818) {
->> +		dev_err(poweroff_data->dev, "failed to get rk818 regmap\n");
->> +		return notifier_from_errno(-EINVAL);
->> +	}
->> +
->> +	dev_info(poweroff_data->dev, "Setting PMICs for power off");
->> +
->> +	/* RK817 */
->> +	ret = regmap_update_bits(rk817, RK817_SYS_CFG(3), DEV_OFF, DEV_OFF);
->> +	if (ret) {
->> +		dev_err(poweroff_data->dev, "failed to poweroff rk817\n");
->> +		return notifier_from_errno(ret);
->> +	}
->> +
->> +	/* RK818 */
->> +	ret = regmap_update_bits(rk818, RK818_DEVCTRL_REG, DEV_OFF, DEV_OFF);
->> +	if (ret) {
->> +		dev_err(poweroff_data->dev, "failed to poweroff rk818\n");
->> +		return notifier_from_errno(ret);
->> +	}
->> +
->> +	return NOTIFY_OK;
->> +}
->> +
->> +static int odroid_go_ultra_poweroff_get_pmic_device(const char *compatible, struct device **pmic)
->> +{
->> +	struct device_node *pmic_node;
->> +	struct i2c_client *pmic_client;
->> +
->> +	pmic_node = of_find_compatible_node(NULL, NULL, compatible);
->> +	if (!pmic_node)
->> +		return -ENODEV;
->> +
->> +	pmic_client = of_find_i2c_device_by_node(pmic_node);
->> +	of_node_put(pmic_node);
->> +	if (!pmic_client)
->> +		return -EPROBE_DEFER;
->> +
->> +	*pmic = &pmic_client->dev;
->> +
->> +	return 0;
->> +}
->> +
->> +static int odroid_go_ultra_poweroff_probe(struct platform_device *pdev)
->> +{
->> +	struct odroid_go_ultra_poweroff_data *poweroff_data;
->> +	int ret;
->> +
->> +	poweroff_data = devm_kzalloc(&pdev->dev, sizeof(*poweroff_data), GFP_KERNEL);
->> +	if (!poweroff_data)
->> +		return -ENOMEM;
->> +
->> +	dev_set_drvdata(&pdev->dev, poweroff_data);
->> +
->> +	/* RK818 PMIC Device */
->> +	ret = odroid_go_ultra_poweroff_get_pmic_device("rockchip,rk818",
->> +						       &poweroff_data->rk818);
->> +	if (ret)
->> +		return dev_err_probe(&pdev->dev, ret, "failed to get rk818 mfd data\n");
->> +
->> +	/* RK817 PMIC Device */
->> +	ret = odroid_go_ultra_poweroff_get_pmic_device("rockchip,rk817",
->> +						       &poweroff_data->rk817);
->> +	if (ret) {
->> +		ret  = dev_err_probe(&pdev->dev, ret, "failed to get rk817 mfd data\n");
->> +		goto put_rk818_device;
->> +	}
->> +
->> +	/* Register as SYS_OFF_MODE_POWER_OFF_PREPARE because regmap_update_bits may sleep */
->> +	ret = devm_register_sys_off_handler(&pdev->dev,
->> +					    SYS_OFF_MODE_POWER_OFF_PREPARE,
->> +					    SYS_OFF_PRIO_DEFAULT,
->> +					    odroid_go_ultra_poweroff_prepare,
->> +					    poweroff_data);
->> +	if (ret) {
->> +		ret = dev_err_probe(&pdev->dev, ret, "failed to register sys-off handler\n");
->> +		goto put_rk817_device;
->> +	}
-> 
-> Allocating managed resources after a traditional allocation always
-> rings an alarm bell. The problem is, that the order at removal time
-> will not be the reverse of the allocation chain in this case.
-> 
-> You can fix this by handling the put_device for rk817 and rk818 via
-> devm_add_action_or_reset() (preferred by me) or by switching
-> devm_register_sys_off_handler() to register_sys_off_handler.
+On 14/02/2023 17:27, Konrad Dybcio wrote:
+> +CC Georgi, linux-pm, linux-kernel (thanks git send-email for not including these)
 
-Good point, I've added a devm_add_action_or_reset() into odroid_go_ultra_poweroff_get_pmic_device()
-
-Thanks,
-Neil
+Time to switch to b4 prep ;-)
 
 > 
-> Otherwise the driver LGTM.
-> 
-> -- Sebastian
-> 
->> +
->> +	dev_info(&pdev->dev, "Registered Power-Off handler\n");
->> +
->> +	return 0;
->> +
->> +put_rk817_device:
->> +	put_device(poweroff_data->rk817);
->> +
->> +put_rk818_device:
->> +	put_device(poweroff_data->rk818);
->> +
->> +	return ret;
->> +}
->> +
->> +static int odroid_go_ultra_poweroff_remove(struct platform_device *pdev)
->> +{
->> +	struct odroid_go_ultra_poweroff_data *poweroff_data = dev_get_drvdata(&pdev->dev);
->> +
->> +	put_device(poweroff_data->rk818);
->> +	put_device(poweroff_data->rk817);
->> +
->> +	return 0;
->> +}
->> +
->> +static struct platform_device *pdev;
->> +
->> +static struct platform_driver odroid_go_ultra_poweroff_driver = {
->> +	.driver = {
->> +		.name	= "odroid-go-ultra-poweroff",
->> +	},
->> +	.probe = odroid_go_ultra_poweroff_probe,
->> +	.remove = odroid_go_ultra_poweroff_remove,
->> +};
->> +
->> +static int __init odroid_go_ultra_poweroff_init(void)
->> +{
->> +	int ret;
->> +
->> +	/* Only create when running on the Odroid Go Ultra device */
->> +	if (!of_device_is_compatible(of_root, "hardkernel,odroid-go-ultra"))
->> +		return -ENODEV;
->> +
->> +	ret = platform_driver_register(&odroid_go_ultra_poweroff_driver);
->> +	if (ret)
->> +		return ret;
->> +
->> +	pdev = platform_device_register_resndata(NULL, "odroid-go-ultra-poweroff", -1,
->> +						 NULL, 0, NULL, 0);
->> +
->> +	if (IS_ERR(pdev)) {
->> +		platform_driver_unregister(&odroid_go_ultra_poweroff_driver);
->> +		return PTR_ERR(pdev);
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static void __exit odroid_go_ultra_poweroff_exit(void)
->> +{
->> +	/* Only delete when running on the Odroid Go Ultra device */
->> +	if (!of_device_is_compatible(of_root, "hardkernel,odroid-go-ultra"))
->> +		return;
->> +
->> +	platform_device_unregister(pdev);
->> +	platform_driver_unregister(&odroid_go_ultra_poweroff_driver);
->> +}
->> +
->> +module_init(odroid_go_ultra_poweroff_init);
->> +module_exit(odroid_go_ultra_poweroff_exit);
->> +
->> +MODULE_AUTHOR("Neil Armstrong <neil.armstrong@linaro.org>");
->> +MODULE_DESCRIPTION("Odroid Go Ultra poweroff driver");
->> +MODULE_LICENSE("GPL");
+> On 14.02.2023 15:37, Konrad Dybcio wrote:
+>> Hi!
 >>
->> ---
->> base-commit: 38d2b86a665b5e86371a1a30228bce259aa6c101
->> change-id: 20230126-b4-odroid-go-ultra-poweroff-c8fdca93f3eb
+>> v3 -> v4 changelog:
+>> - Drop "Always set QoS params on QNoC", it only causes issues.. this
+>>    can be investigated another day, as it's not necessary for operation
 >>
->> Best regards,
->> -- 
->> Neil Armstrong <neil.armstrong@linaro.org>
+>> - Drop "Add a way to always set QoS registers", same as /\
+>>
+>> - Add a way (and use it) to have no bus_clocks (the ones we set rate on),
+>>    as at least msm8996 has a bus (A0NoC) that doesn't have any and does
+>>    all the scaling through RPM requests
+>>
+>> - Promote 8996 icc to core_initcall
+>>
+>> - Introduce keep_alive (see patch [11/12]) (important!, will be used by at least 6375)
+>>
+>> - Allow negative QoS offsets in preparation for introducing 8998 icc [12/12]
+>>
+>> Link to v3: https://lore.kernel.org/linux-arm-msm/20230116132152.405535-1-konrad.dybcio@linaro.org/
+>>
+>> v2 -> v3 changelog:
+>> - Drop "Don't set QoS params before non-zero bw is requested"
+>>
+>> - Rebase on next
+>>
+>> - [1/9] ("..make QoS INVALID default.."): remove unused define for
+>>    MODE_INVALID_VAL
+>>
+>> - Pick up tags
+>>
+>> v1 -> v2 changelog:
+>> - reorder "make QoS INVALID default", makes more sense to have it
+>>    before "Always set QoS params on QNoC"
+>>
+>> - Limit ap_owned-independent QoS setting to QNoC only
+>>
+>> - Add new patches for handling the 8996-and-friends clocks situation
+>>    and optional BIMC regardless-of-ap_owned QoS programming
+>>
+>>
+>> [1] https://lore.kernel.org/linux-arm-msm/14e06574-f95e-8960-0243-8c95a1c294e9@linaro.org/T/#m056692bea71d4c272968d5e07afbd9eb07a88123
+>> [2] https://lore.kernel.org/linux-arm-msm/20230110132202.956619-1-konrad.dybcio@linaro.org/
+>>
+>> This series grew quite a bit bigger than the previous [1] attempt, so
+>> I decided to also add a cover letter.
+>>
+>> Link to v2: [2]
+>>
+>> It addresses a few things that were not quite right:
+>>
+>> - Setting QoS params before a "real" (non-zero) bandwidth request
+>>    makes little sense (since there's no data supposed to flow through
+>>    the bus, why would the QoS matter) and (at least newer) downstream
+>>    prevents that from happening. Do the same in Patch 1.
+>>
+>> - QNoC type buses expect to always have their QoS registers set as long
+>>    as there's a non-INVALID QoS mode set; ap_owned is not really a thing
+>>    on these anymore, Patch 3 handles that.
+>>
+>> - The recent MSM8996 boot fix was done quickly and not quite properly,
+>>    leading to possibly setting the aggregate bus rate on "normal"
+>>    hardware interface clocks; this series handles that by limiting the
+>>    number of bus_clocks to 2 (which is the maximum that makes sense,
+>>    anyway) and handling the rest as "intf_clocks", which are required
+>>    to access the   hardware at the other end. Patches 5-8 take care of
+>>    that and Patch 10 reverts the _optional moniker in clk_get_ to make
+>>    sure we always have the bus scaling clocks, as they're well, kind
+>>    of important ;)
+>>
+>> - Similarly to QNoC, BIMC on "newer" (which can be loosely approximated
+>>    by "new enough" == "has only BIMC and QNoC hosts") SoCs expects to
+>>    always receive QoS programming, whereas BIMC on "older" SoCs cries
+>>    like a wild boar and crashes the platform when trying to do so
+>>    unconditionally. Patch 9 adds a way to take care of that for newer
+>>    SoCs (like SM6375)
+>>
+>> - QoS mode INVALID was assumed by developers before to be the default
+>>    ("I didn't specify any QoS settings, so the driver can't assume I
+>>    did.. right? right!?" - wrong, partial struct initialization led to
+>>    0 being set and 0 corresponded to QoS mode FIXED). Make it so, as
+>>    that's the logical choice. This allows the "Always set QoS params
+>>    on QNoC" patch to work without setting tons of what-should-
+>>    -obviously-be-the-default values everywhere, as well as fixes older
+>>    drivers that set ap_owned = true but left the QoS mode field unset.
+>>    Patch 2 cleans that up.
+>>
+>> - Some nodes are physically connected over more than one channel
+>>    (usually DDR or other high-throughput paths). Patch 4 allows that
+>>    to be reflected in calculations. This will be required for at least
+>>    MSM8998 and SM6375 (which will be submitted soon after this lands)
+>>
+>>
+>> Konrad Dybcio (12):
+>>    interconnect: qcom: rpm: make QoS INVALID default, separate out driver
+>>      data
+>>    interconnect: qcom: rpm: Add support for specifying channel num
+>>    interconnect: qcom: Sort kerneldoc entries
+>>    interconnect: qcom: rpm: Rename icc desc clocks to bus_blocks
+>>    interconnect: qcom: rpm: Rename icc provider num_clocks to
+>>      num_bus_clocks
+>>    interconnect: qcom: rpm: Handle interface clocks
+>>    interconnect: qcom: icc-rpm: Allow negative num_bus_clocks
+>>    interconnect: qcom: msm8996: Specify no bus clock scaling on A0NoC
+>>    interconnect: qcom: rpm: Don't use clk_get_optional for bus clocks
+>>      anymore
+>>    interconnect: qcom: msm8996: Promote to core_initcall
+>>    interconnect: qcom: icc-rpm: Introduce keep_alive
+>>    interconnect: qcom: icc-rpm: Allow negative QoS offset
+>>
+>>   drivers/interconnect/qcom/icc-rpm.c | 101 ++++++++++++++++++++--------
+>>   drivers/interconnect/qcom/icc-rpm.h |  41 +++++++----
+>>   drivers/interconnect/qcom/msm8996.c |  35 ++++++----
+>>   drivers/interconnect/qcom/sdm660.c  |  16 ++---
+>>   4 files changed, 126 insertions(+), 67 deletions(-)
 >>
 
