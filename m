@@ -2,83 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 295EC696C73
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24C77696C74
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233337AbjBNSKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 13:10:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41754 "EHLO
+        id S233277AbjBNSKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 13:10:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233309AbjBNSKH (ORCPT
+        with ESMTP id S233310AbjBNSKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 13:10:07 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F01B4;
-        Tue, 14 Feb 2023 10:09:59 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id bh15so13673311oib.4;
-        Tue, 14 Feb 2023 10:09:59 -0800 (PST)
+        Tue, 14 Feb 2023 13:10:23 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C1855A7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 10:10:16 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id he5so3753846wmb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 10:10:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Y717KJbIRjmj+t9kJAIvgBCc3UIFcYLwVTbZ9RsBPk=;
-        b=XwcIdw9ldMHQ4ayiqMbANGBH3Ycpl/ADyKalw8WJRsox/7OgE4QrKcKc8mlpGGmZoA
-         dbwJnZEDuVUxTw07bumv6cXJks3KX3Aa6f3EaPhlrMTN1rhyS1Q9QKYqP86Qt/gmE/Z4
-         RTODsASPYD51aEVqcsdFl3hs9g5fNjKrWpFzZsPxLpN0sqq7sy+LzKWDsUzY24pxrIEO
-         R69UNBna63ls2/KXD7bTM9zNdQKqMAvfxfrcPGTxeVwyHX11VVLpR/enCawt/Dogh2Nl
-         l8/5PkHxPdQRRPsfeb0zAa1VOXn7j7ZtLosQabO/vHs6T2+eGD9GCF1Z/KvjSiWTJN5l
-         EMNw==
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VzmCI5BRei19wPOVafVhuihEl0GYlrqi5ocie9N5jI8=;
+        b=2niTtN2BnZA/CH00WRUbEuDTHT8eZdzWrDrqm2kGyB8VrN1hLuGnX5YjXXtGNzWftx
+         LgWhXp/Z1rc3rkIH7zAuLt334QHjSazEUSkASowMFGbmc44jn7P8xllO6sL/JPnizNO1
+         FJl4i9Pd7yeL/734BIGg/lrgbHyNqRJoHH4QIV04uX66dAwmf1EsIGRk+cAELqGphmqX
+         RVYZ+v1kJ7Gw3FCoyOUISgwa6RtWU/zD3h7t/P9kdG2GzkdgmNFYOOfiR/5B4829D5Tj
+         wq/n0tJM3Ghi5vb4KOlIstSiQ91PX5FzvqW/tt5CQcjX1Jcm2+vViAoFJV26Nfp67y/6
+         UG8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6Y717KJbIRjmj+t9kJAIvgBCc3UIFcYLwVTbZ9RsBPk=;
-        b=ywrVTq+Og8Cuwz/nVnA4TqTdSmVMWuBPEHBxVHwMBO0aHcNHPCKyU89LmnqYXcG2TB
-         +02Wq7WXTt+YeXkxiyS2ylAWKvGJz7RPK+s9Kdg8UfV2IxTVQYqZVcHo8X8aOKA8Z+Qv
-         PE1ctX/pPoJfwBUcqXfi4nlz1/14BR0rCsltbTM9ORlM7QpvJPCAtpXF6JK/9lmik2MF
-         jNCpnCzifAa6jHVWkDxWYmyWwbBOYUeYBO86Ex80stW7k2GVYbglUm+KeD5Bj+YRqQim
-         eXamxee/7OojrhwZfwQVm4b5mT493tzRGSqLKrKOOzCSZbMP2nlQpDFNkmmYsjXQqpHb
-         QTwQ==
-X-Gm-Message-State: AO0yUKW/B5eVGa/wAthT7thBhA2bgt4W6wNnv8D83RBMtlPTbw1xVc4q
-        1biCkyZB0f65hqWl4wQB65o=
-X-Google-Smtp-Source: AK7set/Ipu5a6wQXpVlF4OsXb8/OusLhF5tQD1rtSUbjH7bFzZF2ZxmmKiZVGnoNT26vDqW2b3u40w==
-X-Received: by 2002:aca:2b09:0:b0:378:3c87:5092 with SMTP id i9-20020aca2b09000000b003783c875092mr1501490oik.5.1676398198584;
-        Tue, 14 Feb 2023 10:09:58 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p125-20020acad883000000b003436fa2c23bsm6463808oig.7.2023.02.14.10.09.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 10:09:58 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c210524a-368d-4249-93f5-6d7ed2a5a173@roeck-us.net>
-Date:   Tue, 14 Feb 2023 10:09:55 -0800
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VzmCI5BRei19wPOVafVhuihEl0GYlrqi5ocie9N5jI8=;
+        b=LZt8Jm7m84g4tLOQ7kjCUSmAGtYoaJJEK/vGNDUEm0NMduOtHiFj63HcaazrY/M69o
+         iOEum0FD1KzdmimYNmhCoX+0X3W9yMGlCyjdSc92iY7e/8wq3WJbrFZ/IYlcNo2gIq3L
+         d5h+mvOFs1ggKAKDIKdzX03iS+rUjDFUxz/QMouIio0Gwp6BE8F+5ev8GF69yUAdL8/N
+         3MaFESnNRz8AloQ3ypvQ5Dy1S9XcHfjySHUUHDAbPopvMb9WEFu/WXGLt/2/GyCpPEm9
+         UDyNOMMQb9ZK9Hth0HpeBZx3zSM2lcZdZsjsgk0Zmp4yG4Iur8zxLx8aULOJYhynXf0g
+         45vQ==
+X-Gm-Message-State: AO0yUKUu/MJlsDa+aqIAhLF+43jDvlVP7btZBLLFObEHnU+Q1/qHkpXc
+        QDYgNRqSOSpeLa/JR09Tiq4kFQ==
+X-Google-Smtp-Source: AK7set8uwRi/PJptQOEhqs3L0IZhZE5ptSINUtFfFJVZtgWIALJnPtJSxCMhu9e8v+3fjI3vd5/mNw==
+X-Received: by 2002:a05:600c:4b1d:b0:3df:fbc7:5b10 with SMTP id i29-20020a05600c4b1d00b003dffbc75b10mr2862308wmp.0.1676398214938;
+        Tue, 14 Feb 2023 10:10:14 -0800 (PST)
+Received: from airbuntu ([104.132.45.98])
+        by smtp.gmail.com with ESMTPSA id l16-20020a05600c2cd000b003daffc2ecdesm22129494wmc.13.2023.02.14.10.10.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 10:10:14 -0800 (PST)
+Date:   Tue, 14 Feb 2023 18:10:13 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
+        Wei Wang <wvw@google.com>, Xuewen Yan <xuewen.yan94@gmail.com>,
+        Hank <han.lin@mediatek.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
+Subject: Re: [PATCH v2 2/3] sched/uclamp: Ignore (util == 0) optimization in
+ feec() when p_util_max = 0
+Message-ID: <20230214181013.hdtqkh26rbpuuzig@airbuntu>
+References: <20230205224318.2035646-1-qyousef@layalina.io>
+ <20230205224318.2035646-3-qyousef@layalina.io>
+ <CAKfTPtCf4+orEhYmFBg+tsMH7e5sV5zJZ1k8apjZkYwSAxAu+w@mail.gmail.com>
+ <d7f29def-7004-b62d-9266-3ad997111e2f@arm.com>
+ <20230211180119.4mbfn7j3skvoasop@airbuntu>
+ <d7b319cc-5c02-df0f-44d5-cd3aa2bd2474@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5.10 000/139] 5.10.168-rc1 review
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230213144745.696901179@linuxfoundation.org>
- <05984672-d897-6050-3e8b-3e7984c81bd9@roeck-us.net>
- <1cd10087-87fe-048e-c9ed-0a5d32c50764@roeck-us.net>
- <CAHk-=wgnKpVzL14X0+cLQcWuQmjPAvgrDGF69JRMjgc4rA0VfQ@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAHk-=wgnKpVzL14X0+cLQcWuQmjPAvgrDGF69JRMjgc4rA0VfQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <d7b319cc-5c02-df0f-44d5-cd3aa2bd2474@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,18 +81,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/23 09:54, Linus Torvalds wrote:
-> On Tue, Feb 14, 2023 at 9:51 AM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> Reverting the nvmem patches fixed this problem.
+On 02/14/23 13:47, Dietmar Eggemann wrote:
+> On 11/02/2023 19:01, Qais Yousef wrote:
+> > On 02/08/23 12:52, Dietmar Eggemann wrote:
+> >> On 07/02/2023 11:04, Vincent Guittot wrote:
+> >>> On Sun, 5 Feb 2023 at 23:43, Qais Yousef <qyousef@layalina.io> wrote:
+> >>>>
+> >>>> find_energy_efficient_cpu() bails out early if effective util of the
+> >>>> task is 0. When uclamp is being used, this could lead to wrong decisions
+> >>>> when uclamp_max is set to 0. Cater for that.
+> >>
+> >> IMHO this needs a little bit more explanation. Someone could argue that
+> >> 'util > 0, uclamp_min=0, uclamp_max=0' is a valid setup for a task which
+> >> should let it appear as a task with 0 util (capped to 0).
+> > 
+> > You want me to explain the purpose of the optimization then?
+> > 
+> > The optimization skips energy calculation when util is 0 because the delta will
+> > be 0. But when uclamp_max = 0 util is not really 0 - consequently  the delta
 > 
-> But upstream is fine?
+> I would say:
 > 
+> s/really/necessarily
+> s/delta/energy delta
 
-Yes, this was a bad backport. One of the nvmem patches was missing
-from the backport. However, a fix for that missing patch was backported,
-causing a double device registration and all kinds of interesting
-problems.
++1
 
-Guenter
+> 
+> > will not be 0.
+> > 
+> > Would such an explanation clarify things better?
+> 
+> Yes. It key to understand that there is a 2-step process. First,
+> admittance to a possible target (util and uclamp) and second, energy
+> diff based target-selection (util).
+> 
+> >>>> Fixes: d81304bc6193 ("sched/uclamp: Cater for uclamp in find_energy_efficient_cpu()'s early exit condition")
+> >>>> Signed-off-by: Qais Yousef <qyousef@layalina.io>
+> >>>> ---
+> >>>>  kernel/sched/fair.c | 2 +-
+> >>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>>
+> >>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> >>>> index 7a21ee74139f..a8c3d92ff3f6 100644
+> >>>> --- a/kernel/sched/fair.c
+> >>>> +++ b/kernel/sched/fair.c
+> >>>> @@ -7374,7 +7374,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> >>>>         target = prev_cpu;
+> >>>>
+> >>>>         sync_entity_load_avg(&p->se);
+> >>>> -       if (!uclamp_task_util(p, p_util_min, p_util_max))
+> >>>> +       if (!uclamp_task_util(p, p_util_min, p_util_max) && p_util_max != 0)
+> >>>
+> >>> The below should do the same without testing twice p_util_max:
+> >>> uclamp_task_util(p, p_util_min, ULONG_MAX)
+> >>
+> >> Since uclamp_task_util() is only used here and we don't want to test for
+> >> capping to 0 anymore, why not just get rid of this function and use:
+> >>
+> >>   !(task_util_est(p) || p_util_min)
+> > 
+> > That would be better, yes!
+> > 
+> > Question for you and Vincent. Do we really want this optimization? I started
+> > with removing it - then erred on the conservative side and kept it.
+> 
+> Hard to say ... at least we know that util=0 will have absolutely no
+> effect on task placement. So we can spare the heavy EAS algorithm in
+> this case for sure.
+> 
+> > I don't know how often we hit this case and I didn't see any benchmark run to
+> > be able to verify anything when I looked at the history.
+> 
+> There are very few EAS wakeups with `task_util_est(p) = 0`. Probably not
+> relevant.
+> 
+> > It seems helpful in theory - but why we save something if we ignore 0 but not
+> > 1 which I suspect will not produce a significant delta either.
+> 
+> True, it's hard to find the real line of significance here.
+> 
+> > I don't mind keeping it - but I think worth thinking if it is really adding
+> > much.
+> 
+> I would keep it and just remove uclamp_task_util(). We still have a lot
+> of uclamp/util related functions, we should try to keep the number as
+> low as possible. Just checked it, this check has been there from the
+> beginning of EAS.
 
+Yeah I looked at the history and it was always there.
+
+I'll update with the new check and update the commit message too.
+
+
+Thanks!
+
+--
+Qais Yousef
