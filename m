@@ -2,63 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3330695717
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 04:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFC569571C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 04:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjBNDHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 22:07:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
+        id S230077AbjBNDJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 22:09:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbjBNDHq (ORCPT
+        with ESMTP id S229539AbjBNDJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 22:07:46 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA254686;
-        Mon, 13 Feb 2023 19:07:31 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id EF3A624E235;
-        Tue, 14 Feb 2023 11:07:29 +0800 (CST)
-Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 14 Feb
- 2023 11:07:29 +0800
-Received: from [192.168.1.100] (183.27.97.168) by EXMBX162.cuchost.com
- (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 14 Feb
- 2023 11:07:29 +0800
-Message-ID: <f33f3ce0-ca0f-b24e-eab6-4fb9a6ae6d4a@starfivetech.com>
-Date:   Tue, 14 Feb 2023 11:07:27 +0800
+        Mon, 13 Feb 2023 22:09:51 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876A983;
+        Mon, 13 Feb 2023 19:09:49 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31E39aDE026434;
+        Tue, 14 Feb 2023 03:09:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=KsYecN1rsYL0dVA2x6yNTZhSQBborHeLN4RmARTaE0s=;
+ b=G5ShA7RksAIBRrLQKkqbEGG5NxmVz9MjUDwACQ7KBpEShMSiCvMgOa5Eidj6k7ds/vvg
+ hZFn43XvUawMzsMR26DpWmCeJ5AVbD1TKhyWZs9ABgxluD96SdHc06nMXZ6+hL7TzQEj
+ 9zyivLZ3fv26YfiyvdyTwDWQLNLsTTPRPifDEeQxIRO/QlWiwYyaBkTs6NntUBh17hQI
+ jyq95779CNM/DSVBydXS9ykpN8Zj8Vz6EaeoC+Vpracckx9jGGgxB6J7ASaR0Zr03NSx
+ GDs1D9/+HtsK/8c+ZQxHkQEB7/dXUSShq4duhwEjMlD8RJ41PlEL6h6yxI42E9NVkMgW iQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np389wmuk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 03:09:36 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31E39Z4J020348
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 03:09:35 GMT
+Received: from [10.110.55.187] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 13 Feb
+ 2023 19:09:33 -0800
+Message-ID: <df059f88-6ff6-5906-58f1-4f6c752c4214@quicinc.com>
+Date:   Mon, 13 Feb 2023 19:09:32 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v1 2/4] dt-bindings: phy: Add starfive,jh7110-dphy-rx
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [RFC PATCH 5/7] drm/msm/dpu: Document and enable TEAR interrupts
+ on DSI interfaces
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        <phone-devel@vger.kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+CC:     <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        "Jami Kettunen" <jami.kettunen@somainline.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <swboyd@chromium.org>,
         Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Jack Zhu <jack.zhu@starfivetech.com>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-References: <20230210061713.6449-1-changhuang.liang@starfivetech.com>
- <20230210061713.6449-3-changhuang.liang@starfivetech.com>
- <3fc07187-f5a0-86d1-a0fd-ba18a2baf555@linaro.org>
-From:   Changhuang Liang <changhuang.liang@starfivetech.com>
-In-Reply-To: <3fc07187-f5a0-86d1-a0fd-ba18a2baf555@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.97.168]
-X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX162.cuchost.com
- (172.16.6.72)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        Bjorn Andersson <andersson@kernel.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Loic Poulain" <loic.poulain@linaro.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20221231215006.211860-1-marijn.suijten@somainline.org>
+ <20221231215006.211860-6-marijn.suijten@somainline.org>
+ <773cd72b-a766-1764-e25f-0af1174f0e51@quicinc.com>
+ <1051d6bd-eb3c-6293-0bd2-3f4ea28fa3f8@linaro.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <1051d6bd-eb3c-6293-0bd2-3f4ea28fa3f8@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: HK1u26ls4glfAknYbKlwlv7S_jxg8PuD
+X-Proofpoint-GUID: HK1u26ls4glfAknYbKlwlv7S_jxg8PuD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-14_01,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
+ bulkscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0 impostorscore=0
+ adultscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302140024
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,150 +105,159 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023/2/13 17:30, Krzysztof Kozlowski wrote:
-> On 10/02/2023 07:17, Changhuang Liang wrote:
->> Starfive SoC like the jh7110 use a MIPI D-PHY RX controller based on
->> a M31 IP. Add a binding for it.
+On 2/13/2023 1:46 PM, Dmitry Baryshkov wrote:
+> On 13/02/2023 21:37, Jessica Zhang wrote:
 >>
->> Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
->> ---
->>  .../bindings/phy/starfive,jh7110-dphy-rx.yaml | 78 +++++++++++++++++++
->>  1 file changed, 78 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml
 >>
->> diff --git a/Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml b/Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml
->> new file mode 100644
->> index 000000000000..1c1e5c7cbee2
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml
->> @@ -0,0 +1,78 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/phy/starfive,jh7110-dphy-rx.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Starfive SoC MIPI D-PHY Rx Controller
->> +
->> +maintainers:
->> +  - Jack Zhu <jack.zhu@starfivetech.com>
->> +  - Changhuang Liang <changhuang.liang@starfivetech.com>
->> +
->> +description: |
->> +  The Starfive SOC has a MIPI CSI D-PHY based on M31 IP use to transfer
->> +  the CSI cameras data.
->> +
->> +properties:
->> +  compatible:
->> +    items:
+>> On 12/31/2022 1:50 PM, Marijn Suijten wrote:
+>>> All SoCs since DPU 5.0.0 (and seemingly up until and including 6.0.0,
+>>> but excluding 7.x.x) have the tear interrupt and control registers moved
+>>> out of the PINGPONG block and into the INTF block.  Wire up the
+>>> necessary interrupts and IRQ masks on all supported hardware.
+>>
+>> Hi Marijn,
+>>
+>> Thanks for the patch.
+>>
+>> I saw that in your commit msg, you mentioned that 7.x doesn't have 
+>> tearcheck in the INTF block -- can you double check that this is correct?
+>>
+>> I'm working on SM8350 (DPU v7) and I'm seeing that it does have 
+>> tearcheck in INTF block.
 > 
-> Drop items
+> I confirm, according to the vendor drivers INTF TE should be used for 
+> all DPU >= 5.0, including 7.x and 8.x
+> 
+> However I think I know what Marijn meant here. For 5.x and 6.x these 
+> IRQs are handled at the address MDSS + 0x6e800 / + 0x6e900 (which means 
+> offset here should 0x6d800 and 0x6d900) for INTF_1 and INTF_2. Since DPU 
+> 7.x these IRQ registers were moved close to the main INTF block (0x36800 
+> and 0x37800 = INTF + 0x800).
 > 
 
-OK, will fix it
+Got it, then the commit text should remove "control" and just say tear 
+interrupt registers. It got a bit confusing.
 
->> +      - const: "starfive,jh7110-dphy-rx"
+We will add the 7xxx intf tear check support on top of this series.
+
+>>
+>>>
+>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+>>> ---
+>>>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 78 +++++++++++--------
+>>>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |  6 +-
+>>>   .../gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c | 12 +++
+>>>   .../gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h |  2 +
+>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h      |  3 +
+>>>   5 files changed, 68 insertions(+), 33 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
+>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>> index 1cfe94494135..b9b9b5b0b615 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>>> @@ -86,6 +86,15 @@
+>>>   #define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN)
+>>> +#define IRQ_MSM8998_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>>> +             BIT(MDP_SSPP_TOP0_INTR2) | \
+>>> +             BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>>> +             BIT(MDP_INTF0_INTR) | \
+>>> +             BIT(MDP_INTF1_INTR) | \
+>>> +             BIT(MDP_INTF2_INTR) | \
+>>> +             BIT(MDP_INTF3_INTR) | \
+>>> +             BIT(MDP_INTF4_INTR))
+>>> +
+>>>   #define IRQ_SDM845_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>>>                BIT(MDP_SSPP_TOP0_INTR2) | \
+>>>                BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>>> @@ -100,13 +109,15 @@
+>>>   #define IRQ_QCM2290_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>>>                BIT(MDP_SSPP_TOP0_INTR2) | \
+>>>                BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>>> -             BIT(MDP_INTF1_INTR))
+>>> +             BIT(MDP_INTF1_INTR) | \
+>>> +             BIT(MDP_INTF1_TEAR_INTR))
+>>>   #define IRQ_SC7180_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>>>                BIT(MDP_SSPP_TOP0_INTR2) | \
+>>>                BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>>>                BIT(MDP_INTF0_INTR) | \
+>>> -             BIT(MDP_INTF1_INTR))
+>>> +             BIT(MDP_INTF1_INTR) | \
+>>> +             BIT(MDP_INTF1_TEAR_INTR))
+>>>   #define IRQ_SC7280_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>>>                BIT(MDP_SSPP_TOP0_INTR2) | \
+>>> @@ -120,7 +131,9 @@
+>>>                BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>>>                BIT(MDP_INTF0_INTR) | \
+>>>                BIT(MDP_INTF1_INTR) | \
+>>> +             BIT(MDP_INTF1_TEAR_INTR) | \
+>>>                BIT(MDP_INTF2_INTR) | \
+>>> +             BIT(MDP_INTF2_TEAR_INTR) | \
+>>>                BIT(MDP_INTF3_INTR) | \
+>>>                BIT(MDP_INTF4_INTR))
+>>> @@ -129,7 +142,9 @@
+>>>                 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+>>>                 BIT(MDP_INTF0_INTR) | \
+>>>                 BIT(MDP_INTF1_INTR) | \
+>>> +              BIT(MDP_INTF1_TEAR_INTR) | \
+>>>                 BIT(MDP_INTF2_INTR) | \
+>>> +              BIT(MDP_INTF2_TEAR_INTR) | \
+>>>                 BIT(MDP_INTF3_INTR) | \
+>>>                 BIT(MDP_INTF4_INTR) | \
+>>>                 BIT(MDP_INTF5_INTR) | \
+>>> @@ -1300,63 +1315,64 @@ static struct dpu_dsc_cfg sdm845_dsc[] = {
+>>>   /*************************************************************
+>>>    * INTF sub blocks config
+>>>    *************************************************************/
+>>> -#define INTF_BLK(_name, _id, _base, _type, _ctrl_id, _progfetch, 
+>>> _features, _reg, _underrun_bit, _vsync_bit) \
+>>> +#define INTF_BLK(_name, _id, _base, _len, _type, _ctrl_id, 
+>>> _progfetch, _features, _reg, _underrun_bit, _vsync_bit, _tear_reg, 
+>>> _tear_rd_ptr_bit) \
+>>>       {\
+>>>       .name = _name, .id = _id, \
+>>> -    .base = _base, .len = 0x280, \
+>>> +    .base = _base, .len = _len, \
+>>>       .features = _features, \
+>>>       .type = _type, \
+>>>       .controller_id = _ctrl_id, \
+>>>       .prog_fetch_lines_worst_case = _progfetch, \
+>>>       .intr_underrun = DPU_IRQ_IDX(_reg, _underrun_bit), \
+>>>       .intr_vsync = DPU_IRQ_IDX(_reg, _vsync_bit), \
+>>> +    .intr_tear_rd_ptr = DPU_IRQ_IDX(_tear_reg, _tear_rd_ptr_bit), \
+>>>       }
+>>>   static const struct dpu_intf_cfg msm8998_intf[] = {
+>>> -    INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, 0, 25, 
+>>> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+>>> -    INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 25, 
+>>> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+>>> -    INTF_BLK("intf_2", INTF_2, 0x6B000, INTF_DSI, 1, 25, 
+>>> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
+>>> -    INTF_BLK("intf_3", INTF_3, 0x6B800, INTF_HDMI, 0, 25, 
+>>> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
+>>> +    INTF_BLK("intf_0", INTF_0, 0x6A000, 0x268, INTF_DP, 0, 25, 
+>>> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 24, 25, -1, -1),
+>>
+>> Just wondering, how were the lengths calculated for the INTF blocks? 
+>> The values in general seem a little off to me.
+>>
+>> For example, I'm looking downstream and it seems to me that the length 
+>> for the INTF_0 on MSM8998 should be 0x280. Similarly for SC7280, I'm 
+>> seeing that length for INTF + tearcheck should be 0x2c4.
 > 
-> Drop quotes
+> We have discussed INTF lengths in [1]. The current understanding of the 
+> block lengths can be found at [2]. Please comment there if any of the 
+> fixed lengths sounds incorrect to you.
+> 
+> [1] https://patchwork.freedesktop.org/patch/522187/
+> [2] https://patchwork.freedesktop.org/patch/522227/
+> 
+> [skipped the rest]
 > 
 
-OK, will drop quotes
+Please correct my understanding here, it was agreed to fix intf blocks 
+to 0x2c4 here https://patchwork.freedesktop.org/patch/522227/ but I dont 
+see this was merged?
 
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    minItems: 3
-> 
-> Drop minItems
-> 
-
-OK, will drop minItems
-
->> +    maxItems: 3
->> +
->> +  clock-names:
->> +    items:
->> +      - const: cfg
->> +      - const: ref
->> +      - const: tx
->> +
->> +  resets:
->> +    minItems: 2
-> 
-> Ditto
-> 
-
-here i will change to define each reset is.
-Refer to the Rob Herring's comment.
-
->> +    maxItems: 2
->> +
->> +  starfive,aon-syscon:
->> +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-> 
-> Drop quotes
-> 
-
-OK, will drop quotes
-
->> +    items:
->> +      items:
->> +        - description: phandle of AON SYSCON
->> +        - description: register offset
->> +    description: The register of dphy rx driver can be configured
->> +      by AON SYSCON in this property.
-> 
-> Can be? So does not have to? But you made it a required property....
-> 
-
-Maybe I described it wrong.
-I will change to:
-	description: The power of dphy rx can be configured by AON SYSCON
-	  in this property.
-It is like AON SYSCON is the power switch of the dphy rx, it is necessary to
-configure the AON SYSCON register, so I made it a required property.
-
->> +
->> +  "#phy-cells":
->> +    const: 0
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - clocks
->> +  - clock-names
->> +  - resets
->> +  - starfive,aon-syscon
->> +  - "#phy-cells"
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/clock/starfive,jh7110-crg.h>
->> +    #include <dt-bindings/reset/starfive,jh7110-crg.h>
->> +
->> +    dphy@19820000 {
-> 
-> just phy@......
-> 
-
-OK, will fix it.
-
->> +      compatible = "starfive,jh7110-dphy-rx";
->> +      reg = <0x19820000 0x10000>;
->> +      clocks = <&ispcrg JH7110_ISPCLK_M31DPHY_CFGCLK_IN>,
->> +               <&ispcrg JH7110_ISPCLK_M31DPHY_REFCLK_IN>,
->> +               <&ispcrg JH7110_ISPCLK_M31DPHY_TXCLKESC_LAN0>;
->> +      clock-names = "cfg", "ref", "tx";
->> +      resets = <&ispcrg JH7110_ISPRST_M31DPHY_HW>,
->> +               <&ispcrg JH7110_ISPRST_M31DPHY_B09_ALWAYS_ON>;
->> +      starfive,aon-syscon = <&aon_syscon 0x00>;
->> +      #phy-cells = <0>;
->> +    };
-> 
-> Best regards,
-> Krzysztof
-> 
+It was agreed to first land INTF_TE and then add the higher addresses 
+but I dont see such a change, am i missing something?
