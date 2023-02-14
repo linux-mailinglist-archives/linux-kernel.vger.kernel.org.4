@@ -2,50 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A8A6960A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 11:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E93CC6960A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 11:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232192AbjBNKYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 05:24:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
+        id S231526AbjBNKY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 05:24:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231526AbjBNKYj (ORCPT
+        with ESMTP id S232206AbjBNKYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 05:24:39 -0500
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Feb 2023 02:24:37 PST
-Received: from gw.hale.at (gw.hale.at [89.26.116.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF7D83CE
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 02:24:36 -0800 (PST)
-Received: from unknown (HELO mail3.hale) ([192.168.100.5])
-  by gw.hale.at with ESMTP; 14 Feb 2023 11:23:31 +0100
-Received: from localhost (localhost [127.0.0.1])
-        by mail3.hale (Postfix) with ESMTP id E9BF2BD58B;
-        Tue, 14 Feb 2023 11:23:30 +0100 (CET)
-Received: from mail3.hale ([127.0.0.1])
-        by localhost (mail3.hale [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id tdnegw2pt85W; Tue, 14 Feb 2023 11:23:30 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by mail3.hale (Postfix) with ESMTP id 9B80BBD594;
-        Tue, 14 Feb 2023 11:23:30 +0100 (CET)
-X-Virus-Scanned: amavisd-new at mail3.hale
-Received: from mail3.hale ([127.0.0.1])
-        by localhost (mail3.hale [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id vu8CIDnZXLGH; Tue, 14 Feb 2023 11:23:30 +0100 (CET)
-Received: from entw47.HALE.at (unknown [192.168.100.117])
-        by mail3.hale (Postfix) with ESMTP id 87757BD58B;
-        Tue, 14 Feb 2023 11:23:30 +0100 (CET)
-From:   Michael Thalmeier <michael.thalmeier@hale.at>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] tty: ttynull: implement console write
-Date:   Tue, 14 Feb 2023 11:23:17 +0100
-Message-Id: <20230214102317.382769-1-michael.thalmeier@hale.at>
-X-Mailer: git-send-email 2.39.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        Tue, 14 Feb 2023 05:24:45 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89ED523C59
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 02:24:44 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 337FE21AB7;
+        Tue, 14 Feb 2023 10:24:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1676370283; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ddKpLCie8SrphQTBEbjvDVOF+x0PREeROSkbPvx0csA=;
+        b=NZs8DFRxTbLlqe9qBzLxiMOpu3D/6Fyjov8WetNL541kPOWQaRYV3rhGZWx7BiOmhhz4Ze
+        6aJ9l+QxargQSFCZwgEJxK0GfISx2ebVPABIZCOFY61j4ivsKP8FMMnQ0gv5xXgUH2Kt3G
+        5BMH7zdG3nde94z0MCij7k1EhDmxvjo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1676370283;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ddKpLCie8SrphQTBEbjvDVOF+x0PREeROSkbPvx0csA=;
+        b=VfPD76bXzzJTP7r8RWPqnfhGsCIYp8owwqC/VXjeD6ufVOce+B1NE7tN1NeQLoIleRLyjd
+        KVoSl1/OP65KuCCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E683913A21;
+        Tue, 14 Feb 2023 10:24:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id smYNN2ph62MUYAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 14 Feb 2023 10:24:42 +0000
+Date:   Tue, 14 Feb 2023 11:24:42 +0100
+Message-ID: <87zg9g8ryt.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Andy Chi <andy.chi@canonical.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Tim Crawford <tcrawford@system76.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        Meng Tang <tangmeng@uniontech.com>,
+        Philipp Jungkamp <p.jungkamp@gmx.net>,
+        Kacper =?ISO-8859-2?Q?Michaj=B3ow?= <kasper93@gmail.com>,
+        Gabriele Mazzotta <gabriele.mzt@gmail.com>,
+        Yuchi Yang <yangyuchi66@gmail.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] ALSA: hda/realtek: Enable mute/micmute LEDs support for HP Laptops
+In-Reply-To: <20230214035853.31217-2-andy.chi@canonical.com>
+References: <20230214035853.31217-1-andy.chi@canonical.com>
+        <20230214035853.31217-2-andy.chi@canonical.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,49 +76,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 3579b59c7edc475013ae769a2d26d99733c95f13 ("printk: refactor
-and rework printing logic"), con->write is called without checking if it
-is implemented in the console driver. This does make some sense, because
-for all "normal" consoles it is vital to have a write function.
-As the ttynull console driver does not need any console output the write
-function was not implemented. This caused a "unable to handle kernel NULL
-pointer dereference" when the write function is called now.
+On Tue, 14 Feb 2023 04:58:52 +0100,
+Andy Chi wrote:
+> 
+> On HP Laptops, requires the same ALC285_FIXUP_HP_GPIO_LED quirk to
+> make its audio LEDs work.
 
-To fix this issue, implement an empty write function.
+This doesn't match with the actual change?  It appears to be the
+additional quirk for Cirrus amps.
 
-Signed-off-by: Michael Thalmeier <michael.thalmeier@hale.at>
-Cc: stable@vger.kernel.org
----
- drivers/tty/ttynull.c | 7 +++++++
- 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/tty/ttynull.c b/drivers/tty/ttynull.c
-index 1d4438472442..6e9323544a7d 100644
---- a/drivers/tty/ttynull.c
-+++ b/drivers/tty/ttynull.c
-@@ -40,6 +40,12 @@ static unsigned int ttynull_write_room(struct tty_stru=
-ct *tty)
- 	return 65536;
- }
-=20
-+
-+static void ttynull_console_write(struct console *co, const char *buf,
-+				  unsigned count)
-+{
-+}
-+
- static const struct tty_operations ttynull_ops =3D {
- 	.open =3D ttynull_open,
- 	.close =3D ttynull_close,
-@@ -56,6 +62,7 @@ static struct tty_driver *ttynull_device(struct console=
- *c, int *index)
-=20
- static struct console ttynull_console =3D {
- 	.name =3D "ttynull",
-+	.write =3D ttynull_console_write,
- 	.device =3D ttynull_device,
- };
-=20
---=20
-2.39.1
+Takashi
 
+> 
+> Signed-off-by: Andy Chi <andy.chi@canonical.com>
+> ---
+>  sound/pci/hda/patch_realtek.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+> index 7b9fb38ff732..e2cd5456f2a6 100644
+> --- a/sound/pci/hda/patch_realtek.c
+> +++ b/sound/pci/hda/patch_realtek.c
+> @@ -9432,6 +9432,12 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+>  	 SND_PCI_QUIRK(0x103c, 0x8abb, "HP ZBook Firefly 14 G9", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+>  	SND_PCI_QUIRK(0x103c, 0x8ad1, "HP EliteBook 840 14 inch G9 Notebook PC", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+>  	SND_PCI_QUIRK(0x103c, 0x8ad2, "HP EliteBook 860 16 inch G9 Notebook PC", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+> +	SND_PCI_QUIRK(0x103c, 0x8b42, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+> +	SND_PCI_QUIRK(0x103c, 0x8b43, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+> +	SND_PCI_QUIRK(0x103c, 0x8b44, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+> +	SND_PCI_QUIRK(0x103c, 0x8b45, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+> +	SND_PCI_QUIRK(0x103c, 0x8b46, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+> +	SND_PCI_QUIRK(0x103c, 0x8b47, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+>  	SND_PCI_QUIRK(0x103c, 0x8b5d, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+>  	SND_PCI_QUIRK(0x103c, 0x8b5e, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+>  	SND_PCI_QUIRK(0x103c, 0x8b7a, "HP", ALC236_FIXUP_HP_GPIO_LED),
+> -- 
+> 2.34.1
+> 
