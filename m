@@ -2,97 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50499695E05
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F2A695E09
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbjBNJFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 04:05:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37374 "EHLO
+        id S232255AbjBNJFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 04:05:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232035AbjBNJFP (ORCPT
+        with ESMTP id S232222AbjBNJFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 04:05:15 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2F42413F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:04:34 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id sa10so38310134ejc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:04:34 -0800 (PST)
+        Tue, 14 Feb 2023 04:05:18 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B658241E1;
+        Tue, 14 Feb 2023 01:04:38 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id h24so16816382qtr.0;
+        Tue, 14 Feb 2023 01:04:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=B1Z3q3DmS5pOVEGCvUAhyPF2bKswWr3oxM1fP44E01g=;
-        b=COuUcT2AZRNsgh9PCtbDoV0xwtkZWgtPrWi0j45nCIH+dV8sucbSd3+SYnyQv4y9o3
-         ZPe0l/BpBLeKgxQy0xp5VWH853xLbsTOEv81tJbrO84pCQmlx7v+BS0zdsYRHqxJ40p3
-         Kn5cCw8AFYmOw4bbCEQkoGam0kTsWm3qNgrNUanOF2uhZh8kTeND61lGxf6LKSpsXc2t
-         HsgjbLGYP2p5n2Rfms1o7UmPcg3FWOTRzvThW3dFRzqN+rhylkaXtiQCsfhzieKSmCxa
-         zQIV2f3AFobTga5xgdf/wvs1v3Ps1qEoWML/t8QGmVcGiTK/bNuzbjIdE4RjJYYwfBga
-         TPQg==
+        bh=vi73fGmWmjTNDASDZdnfJSIYN1ahtOW91dirgxR/MuM=;
+        b=WrLk7G8ph4exG2WAnUJJd502XIFYTAHK7kRqeS6TTzAVT9cfD4U0gfdU8FLsbcuaA3
+         Iiihd2FqvDAuV0LdFQ4mEo2kZsgHudz4E/JhhI+QILjYhwJolPIGnqdfwRXXvERLpgNi
+         1ZfaXs/fwsxm4KReDYRnzLbgcIh7GsOkB2eX7UHseZaubN6dm4xn0IC0tL9fisRk35Se
+         TpDrW+6vhutfA7JSSxs9CVS+rcynwS34RlyFp4/XdxPzLhHTC7wjoYaWt6BbXaaIXaLv
+         jAAow5jaylKC8E6GaVNsFv+70R1n/HK7UJSb7LSQLYU14vTpm0VY4WPmBh/7YsG3D+nK
+         aG9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=B1Z3q3DmS5pOVEGCvUAhyPF2bKswWr3oxM1fP44E01g=;
-        b=PX1Pkqu3GT+XTqqn0UHQBFpIeIaSJtQFNDgxEwLHlsGAoTPzuWrPAoz+iUrh/6H9Ge
-         gsgqrHDkEVQjSUbqzjoXHGPUJ/55jybRWzAO4kECd5j2rYtkzkw6OMZJsep2HChCsy+d
-         fu3LyaKW5UMaFB6QGageNV5mX/I+nBpg1D7iCx3sqCGmCnjso1XcPp7Bo69vCHrtRT0I
-         IgEsmMRpL54BioAJ7D0rUUFXDWnRaNdiz+OY3NDQpSZ+RjQTLR0kcTxbu9GPjj3qhy13
-         r7hu2XqxD8cG7YdOHcWV4nQSgUc/2IKhHZ4AVQGxAhVPz4GcJatH/4QwM+sP5oIpYcUy
-         NAAQ==
-X-Gm-Message-State: AO0yUKUPNfudN1IqWnUMLe6G2/n8XgBOAc3VM1YnOcXg5JtAVlR8ZtSF
-        mP3Pzbk52jOWasnAivH3cngiQlQfTk8m+YYcxdJjLQ==
-X-Google-Smtp-Source: AK7set+hnsT1pAPi2MI7vrdiN/w8ZaWDcCTCHsqz2LQt0+BtAA2hKUW/X8H+N/bzrjH9fJpgD+558039XefVrYatVD0=
-X-Received: by 2002:a17:906:1696:b0:8b1:2fff:8689 with SMTP id
- s22-20020a170906169600b008b12fff8689mr630834ejd.6.1676365470122; Tue, 14 Feb
- 2023 01:04:30 -0800 (PST)
+        bh=vi73fGmWmjTNDASDZdnfJSIYN1ahtOW91dirgxR/MuM=;
+        b=xXUBqs/0h8rhJmmS3MPIk/fur7DdAZLeYVItGkNmVLj9+vsImaJ4wz8cRllXPIBIt2
+         KVHhdlbYU6Z0aQvJbE0Aox6c5WeUAl0KJ3eG09R3VwAJuEDX4+lq6/QV5FStGU2V3YKo
+         HnZQD5wgwhSr4HMIDuQGL3mGh64lxb2cc1+j96Tsj/rAiQ7CM9tVhaeOmEtrQHNle2yd
+         63AtnHwgLBdvazdL6SuFD/+6mLjk3mEQm1xKcQDECC/5ZWEZB5eV02EcjLXfzlgFw4ZC
+         r05uKtdtG9eG4JFMYA9FrLS1QUc5NJhJYfVPkE+HQ6N8W4Wud2DFDNzHyMukigNh3Gck
+         pcng==
+X-Gm-Message-State: AO0yUKW/gpzyhGjsuJpwX2SpnpZv01B28df5SBLcyRqbcpSwYAKZEUNW
+        ZC1daUlWCw1mjrIGRy2cNFgV1F63HbFL8d51Rw8=
+X-Google-Smtp-Source: AK7set/BhpTV/KRldVCK+qjZOJbG2cPSpTKVxLlvt7BPL8FEbisiGeB0cyIcDqr2AdNCos9yQyawt9wXz9U+Dy7tdeY=
+X-Received: by 2002:a05:622a:289:b0:3b8:6b33:d92b with SMTP id
+ z9-20020a05622a028900b003b86b33d92bmr169724qtw.325.1676365475057; Tue, 14 Feb
+ 2023 01:04:35 -0800 (PST)
 MIME-Version: 1.0
-References: <20230209223811.4993-1-mario.limonciello@amd.com> <20230209223811.4993-4-mario.limonciello@amd.com>
-In-Reply-To: <20230209223811.4993-4-mario.limonciello@amd.com>
-From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Tue, 14 Feb 2023 10:04:18 +0100
-Message-ID: <CAOtMz3PuzpcrqQb-L9kzY1be4xwhp72fqNqSWnRvAE0Nd4d3qQ@mail.gmail.com>
-Subject: Re: [PATCH 3/6] crypto: ccp: Move some PSP mailbox bit definitions
- into common header
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Grzegorz Bernacki <gjb@semihalf.com>,
-        Thomas Rijo-john <Rijo-john.Thomas@amd.com>,
-        Lendacky Thomas <Thomas.Lendacky@amd.com>,
-        herbert@gondor.apana.org.au, John Allen <john.allen@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
+References: <20230214080034.3828-1-marcan@marcan.st> <20230214080034.3828-2-marcan@marcan.st>
+In-Reply-To: <20230214080034.3828-2-marcan@marcan.st>
+From:   Julian Calaby <julian.calaby@gmail.com>
+Date:   Tue, 14 Feb 2023 20:04:22 +1100
+Message-ID: <CAGRGNgWrRvJezq7svHF7iVohxTdkutEkvLHC=QYUVpic5k=DFA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] brcmfmac: acpi: Add support for fetching Apple ACPI properties
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        asahi@lists.linux.dev, linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(...)
-> @@ -99,7 +93,7 @@ static int psp_check_mbox_recovery(struct psp_mbox __iomem *mbox)
->
->         tmp = readl(&mbox->cmd_fields);
->
-> -       return FIELD_GET(PSP_MBOX_FIELDS_RECOVERY, tmp);
-> +       return FIELD_GET(PSP_CMDRESP_RECOVERY, tmp);
->  }
->
->  static int psp_wait_cmd(struct psp_mbox __iomem *mbox)
-> @@ -107,7 +101,7 @@ static int psp_wait_cmd(struct psp_mbox __iomem *mbox)
->         u32 tmp, expected;
->
->         /* Expect mbox_cmd to be cleared and ready bit to be set by PSP */
-> -       expected = FIELD_PREP(PSP_MBOX_FIELDS_READY, 1);
-> +       expected = FIELD_PREP(PSP_CMDRESP_RESP, 1);
+Hi Hector,
 
-What's the meaning of "PSP_CMDRESP_RESP"? I see that this new macro
-name is currently used by other drivers, but in my opinion "READY" is
-more descriptive. (It is also aligned to the comment above this line.)
+On Tue, Feb 14, 2023 at 7:04 PM Hector Martin <marcan@marcan.st> wrote:
+>
+> On DT platforms, the module-instance and antenna-sku-info properties
+> are passed in the DT. On ACPI platforms, module-instance is passed via
+> the analogous Apple device property mechanism, while the antenna SKU
+> info is instead obtained via an ACPI method that grabs it from
+> non-volatile storage.
+>
+> Add support for this, to allow proper firmware selection on Apple
+> platforms.
+>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+
+Makes sense to me.
+
+Reviewed-by: Julian Calaby <julian.calaby@gmail.com>
+
+> ---
+>  .../broadcom/brcm80211/brcmfmac/Makefile      |  2 +
+>  .../broadcom/brcm80211/brcmfmac/acpi.c        | 51 +++++++++++++++++++
+>  .../broadcom/brcm80211/brcmfmac/common.c      |  1 +
+>  .../broadcom/brcm80211/brcmfmac/common.h      |  9 ++++
+>  4 files changed, 63 insertions(+)
+>  create mode 100644 drivers/net/wireless/broadcom/brcm80211/brcmfmac/acpi.c
+
+Thanks,
+
+-- 
+Julian Calaby
+
+Email: julian.calaby@gmail.com
+Profile: http://www.google.com/profiles/julian.calaby/
