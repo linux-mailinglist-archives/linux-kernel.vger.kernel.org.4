@@ -2,116 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6C4696EA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 21:42:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 890B0696EA7
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 21:43:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjBNUmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 15:42:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46716 "EHLO
+        id S229872AbjBNUnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 15:43:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjBNUmG (ORCPT
+        with ESMTP id S229506AbjBNUnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 15:42:06 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953768A47
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 12:42:03 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-507aac99fdfso172111487b3.11
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 12:42:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BOmpvodct+bEQ6/XphOX6E6eTGDxLhq0Xmkyo1qSMF8=;
-        b=srecc2beG278ZhC5jZOANd7du1DGZeY/KL51jh5SWdjBmwWk+gXVwCbZWlGBU+Bd+Y
-         wBtQfTxrU9igtJg04vIhvh+yQ2Z2thqte/Jt4VspmhYfVdMate1sWQz0HDf1Z23OkDKU
-         C0rQbJe9YmHFktIvQn/leObJUgO22AStsVXWSIn7A6H5rdTtW9OoRcKYvabaIm0teeva
-         wN6x6w4eXzZN2IbBWohut7KA1yV7H6R2R6l9CW9cNepKodC0/xMlgM4h472fNLyFbIjF
-         nbV1Twvv31ozxWg7dLf3P4pL3+GszPp4frIRuXNVn98pzL978HLKpSTz4o46ceaLyUxE
-         rGLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BOmpvodct+bEQ6/XphOX6E6eTGDxLhq0Xmkyo1qSMF8=;
-        b=Pmc32nEQKXsNwN6FpDqpAVm933xeBU+3AWmSN8GoIQRySZG51jStzndon9VCuLp5cT
-         Sca7Vf+6JX5DZP08tzi8trkz4upvH3KR/z8vOQ9j4NOdLOV3+giLoXx24eekFSnBBaKy
-         BKAPDu5H04dvDh7c3xtKL8Hs+vLOqFL+ecvc1xiFhODux2ALKQC7+hkZX3QZZylcbfWy
-         pwPFmk4SciJ59RNjh5VGnH1Bfc/bKcP0nKq5TwbdtpO2KhfnVMZIFtt8ct6n2fcxViza
-         eR6YoNgg9u3FyfIHfL9e/bCrdWXxCvd1u8BIpAeUzXsEMkHTBvaEE3r3YrdLbp1eOOos
-         2omw==
-X-Gm-Message-State: AO0yUKUKfH8DtJQ252oQFZnWszGJ2WsLACbudjPyUBgUr2JSBBBgiTwu
-        h+A9rLFi7jku1OFmzkRD2IMIiyebIT7mvQ==
-X-Google-Smtp-Source: AK7set/EtkrRI0DUed8Ogo8bkFWrFZ/iKSMXTNNzp1tt/B5izlEKOUEWRMwJPJR622OxphM2iuVAaarACP3d8w==
-X-Received: from xllamas.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5070])
- (user=cmllamas job=sendgmr) by 2002:a81:7cf:0:b0:52f:b5a:9643 with SMTP id
- 198-20020a8107cf000000b0052f0b5a9643mr5ywh.8.1676407322500; Tue, 14 Feb 2023
- 12:42:02 -0800 (PST)
-Date:   Tue, 14 Feb 2023 20:41:42 +0000
-In-Reply-To: <Y+snZioVyo82mAUj@kroah.com>
-Mime-Version: 1.0
-References: <Y+snZioVyo82mAUj@kroah.com>
-X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
-Message-ID: <20230214204142.1514599-1-cmllamas@google.com>
-Subject: [PATCH] scripts/tags.sh: fix incompatibility with PCRE2
-From:   Carlos Llamas <cmllamas@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Carlos Llamas <cmllamas@google.com>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Jialu Xu <xujialu@vimux.org>, Vipin Sharma <vipinsh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 14 Feb 2023 15:43:51 -0500
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E619A25B
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 12:43:49 -0800 (PST)
+Received: from [127.0.0.1] ([73.223.221.228])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 31EKhDM42600658
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Tue, 14 Feb 2023 12:43:14 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 31EKhDM42600658
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023020601; t=1676407396;
+        bh=hVmBufXnwHZqmpGPMVZRmOlUV+rvMCBzlaAQbBzh/W4=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=KVOuWecM+ZrwPwg7go1NtbaDW+hEFQOtacdLe4I9VCUMGOoDBbMeLJ3ITJqNGEvXV
+         idbNJzO2C0itzIkUgMrERtqGH3aWd9u5a7hv7XnHTH84JHSwVhpFt9o5M0FsDxwhMC
+         9QSstqgE5WOQiyaT1+4IIh2YdLGn1fw/5h/CoUwoeONWrIMnxEkVke6RTr3rRtCk1y
+         kiGwhnflvSLiQGboUtGmHr70BBdVonVrCksNd4jzCb1kJaY6YA5w8C9m7s0ukRb6IL
+         z5R89F31Ci+k+GRR3zGVi31igvGdBqO//VZw2gJwqMttSf/NMbX0VwKRtwtomrvrbH
+         v1YYdYSkE4UMA==
+Date:   Tue, 14 Feb 2023 12:43:10 -0800
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Thomas Gleixner <tglx@linutronix.de>
+CC:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Kees Cook <keescook@chromium.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPING=5D=5BPATCH_v3=5D_x86=3A_Use_=60get=5Frandom?= =?US-ASCII?Q?=5Fu8=27_for_kernel_stack_offset_randomization?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <alpine.DEB.2.21.2302140447190.6368@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2301302011150.55843@angie.orcam.me.uk> <alpine.DEB.2.21.2302122311470.46819@angie.orcam.me.uk> <877cwltmno.ffs@tglx> <alpine.DEB.2.21.2302140447190.6368@angie.orcam.me.uk>
+Message-ID: <DDFBF35E-D837-4CDC-8EF8-2CBF75C77901@zytor.com>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Starting with release 10.38 PCRE2 drops default support for using \K in
-lookaround patterns as described in [1]. Unfortunately, scripts/tags.sh
-relies on such functionality to collect all_compiled_soures() leading to
-the following error:
+On February 13, 2023 8:54:53 PM PST, "Maciej W=2E Rozycki" <macro@orcam=2Em=
+e=2Euk> wrote:
+>On Mon, 13 Feb 2023, Thomas Gleixner wrote:
+>
+>> >> For x86 kernel stack offset randomization uses the RDTSC instruction=
+,=20
+>> >> which according to H=2E Peter Anvin is not a secure source of entrop=
+y:
+>> >>=20
+>> >> "RDTSC isn't a super fast instruction either, but what is *way* more
+>> >> significant is that this use of RDTSC is NOT safe: in certain power =
+states
+>> >> it may very well be that stone number of lower bits of TSC contain n=
+o
+>> >> entropy at all=2E"
+>> >
+>> >  Ping for:
+>> > <https://lore=2Ekernel=2Eorg/all/alpine=2EDEB=2E2=2E21=2E230130201115=
+0=2E55843@angie=2Eorcam=2Eme=2Euk/>=2E
+>>=20
+>> I'm waiting for you to address Peter Anvins feedback=2E
+>
+> Do you mean this part:
+>
+>On Tue, 31 Jan 2023, H=2E Peter Anvin wrote:
+>
+>> Well, what I said was that masking out the low bits of TSC is not a val=
+id use to
+>> extract a random(-ish) number this way, because the lower bits may be a=
+ffected
+>> by quantization=2E Something like a circular multiply using a large pri=
+me with a
+>> good 0:1 balance can be used to mitigate that=2E
+>>=20
+>> However, the second part is that subsequent RDTSCs will be highly corre=
+lated,
+>> and so a CSPRNG is needed if you are actually trying to get reasonable =
+security
+>> this way =E2=80=93 and, well, we already have one of those=2E
+>
+>?  Well, I inferred, perhaps incorrectly, from the second paragraph that=
+=20
+>Peter agrees with my approach (with the CSPRNG being what `get_random_u8'=
+=20
+>and friends get at)=2E
+>
+>> You also cite him
+>> w/o providing a link to the conversation, so any context is missing=2E
+>
+> Sorry about that=2E  I put the change heading for the previous iteration=
+s=20
+>in the change log, but I agree actual web links would've been better:
+><https://lore=2Ekernel=2Eorg/all/alpine=2EDEB=2E2=2E21=2E2301081919550=2E=
+65308@angie=2Eorcam=2Eme=2Euk/>,
+><https://lore=2Ekernel=2Eorg/all/alpine=2EDEB=2E2=2E21=2E2301082113350=2E=
+65308@angie=2Eorcam=2Eme=2Euk/>=2E
+>
+> Please let me know if you need anything else=2E  Thank you for your revi=
+ew=2E
+>
+>  Maciej
 
-  $ make COMPILED_SOURCE=1 tags
-    GEN     tags
-  grep: \K is not allowed in lookarounds (but see PCRE2_EXTRA_ALLOW_LOOKAROUND_BSK)
-
-The usage of \K for this pattern was introduced in commit 4f491bb6ea2a
-("scripts/tags.sh: collect compiled source precisely") which speeds up
-the generation of tags significantly.
-
-In order to fix this issue without compromising the performance we can
-switch over to an equivalent sed expression. The same matching pattern
-is preserved here except \K is replaced with a backreference \1.
-
-[1] https://www.pcre.org/current/doc/html/pcre2syntax.html#SEC11
-
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Jialu Xu <xujialu@vimux.org>
-Cc: Vipin Sharma <vipinsh@google.com>
-Signed-off-by: Carlos Llamas <cmllamas@google.com>
----
- scripts/tags.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/scripts/tags.sh b/scripts/tags.sh
-index e137cf15aae9..0d045182c08c 100755
---- a/scripts/tags.sh
-+++ b/scripts/tags.sh
-@@ -91,7 +91,7 @@ all_compiled_sources()
- 	{
- 		echo include/generated/autoconf.h
- 		find $ignore -name "*.cmd" -exec \
--			grep -Poh '(?(?=^source_.* \K).*|(?=^  \K\S).*(?= \\))' {} \+ |
-+			sed -n -E 's/^source_.* (.*)/\1/p; s/^  (\S.*) \\/\1/p' {} \+ |
- 		awk '!a[$0]++'
- 	} | xargs realpath -esq $([ -z "$KBUILD_ABS_SRCTREE" ] && echo --relative-to=.) |
- 	sort -u
--- 
-2.39.1.581.gbfd45094c4-goog
-
+No, I do indeed agree=2E We're talking something that is a part of an oper=
+ation that is already fairly expensive=2E Now, if RDRAND is available on th=
+e hardware then that could be used if someone really wants it to go faster=
+=2E=2E=2E but get_random_*() seems saner than doing ad hoc hacks=2E
