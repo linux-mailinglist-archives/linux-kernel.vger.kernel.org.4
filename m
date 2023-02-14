@@ -2,445 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2D416970E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 23:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC566970EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 23:53:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjBNWx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 17:53:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56242 "EHLO
+        id S229454AbjBNWxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 17:53:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjBNWx1 (ORCPT
+        with ESMTP id S231707AbjBNWxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 17:53:27 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460E728D00;
-        Tue, 14 Feb 2023 14:53:24 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id y25so25451209lfa.9;
-        Tue, 14 Feb 2023 14:53:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2ElUBpgdjNEXTlWylzsUOWV5/zbI2C2NN7Ib/5wR1fc=;
-        b=eNcsNgnu3zkyGvUWa8OfDzuc2C0VKEGAR+ZUhjRTEzfUF50zvmpAY0/mNbEhu9dbd7
-         UASXrJJ/f4zOm54Ob+1jRwgF6c+BeYZTvoHQAhrKpsGVk8aahHgHIW/HiLhpxAVA9PxB
-         ssmNBWKta/C1qwW6sWvdfsLpe3za4fVU0ZKvPmmPOzgX5eK1Iqa4b6dxS8o9tHGW+g2g
-         q/ob7hhGxOEW/6bVlS5S5k/U+UvOlU10wIoiDqlhFI8119cqCu2d3lVLah+nK+jfhNfn
-         7LxhXWmRF/enz4lRXC5AX/MI9n3PhH7t431FdXoKN63lodceNMv9/Vb1e0s4G5WUjEjz
-         OhXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2ElUBpgdjNEXTlWylzsUOWV5/zbI2C2NN7Ib/5wR1fc=;
-        b=VGwltOv5g6qCB34QtdlWaFUm/SnjBzod7UrGDiYULKA+Whqkx2mcevyTMCu+2A5elh
-         9wCIiNPFYEAF1kjpLnSyA1O3S24ydvJsKp3j6I+GB4rcEbrb3Ni9+h5KyRrbeIqqkaUK
-         i+4PdNgQoQYH5SZWkH7nD37Mx1PPKEbh0NOS/y/3m1j9NHfthLEN7DDxvAAHZfamTF8R
-         i46j6mFZT8M9/nA6D2SsS8eZC0AXo/BJSG+sRXURtBrzbvi3Rs4KtmZproh84rm29y/P
-         RSHr4z1iyu2SxUz/KMO0J0oOoOesm3O/fppGmNEJg0X7XbAjrxo9fyO9vNIXq5HfUeUU
-         1tuw==
-X-Gm-Message-State: AO0yUKUn9rSOc30n2Q+jJ88t2ZTPoX6jXHFMpSO1tgC9xcMhjXNj0aNs
-        dnAqV7YTxrIelyYLosuNWiV1dn1NZyBR+a6OMsQ=
-X-Google-Smtp-Source: AK7set8+Ew9B5bW8RKiZRPS6Mw81hmu+kCz2wmLHTqVyKao5ro3k4/nBlrDHYCmAPL8zGmjJh9rzaJI8Lp7PGsKelJo=
-X-Received: by 2002:a05:6512:2f1:b0:4d5:ca42:e441 with SMTP id
- m17-20020a05651202f100b004d5ca42e441mr825565lfq.10.1676415202186; Tue, 14 Feb
- 2023 14:53:22 -0800 (PST)
+        Tue, 14 Feb 2023 17:53:36 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E69F28D31;
+        Tue, 14 Feb 2023 14:53:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676415214; x=1707951214;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=169UoWuXKJHSFopwoIdybG9TOO8wkIrx8dv5fHDQXaw=;
+  b=BdJnIYgBA+L52AZR/BbGfS1ttG+bHrM69thuCSt3HFMWJHuYBtHPYboM
+   7z4EgeB2PH9n5O7JAXjKqZ1QsGQTJ9S3tQunhUJNPOh1XyaaZleUafwz7
+   Mo8cGngCFWlz6pO2+J+G/HlXv67PU2nqy40wHGOGYUfEtCmnPLU0ky+dx
+   ESj8Q/YTsU1Gbin+w55FCnQa3dekjYbhYn5s8YlkWKDy59iMC4w4gsNb2
+   aYuofxjTN6oa815JeRw96MZYbORoDXktZTUTWanjpRmjHisjnSmskEKg5
+   yTHgOIL0DJIASsDogaMNW9+x5W7Lpu1BQHaDnDgwBMe8sEs2oOtUzxCBI
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="329919548"
+X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
+   d="scan'208";a="329919548"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 14:53:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="699725446"
+X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
+   d="scan'208";a="699725446"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga008.jf.intel.com with ESMTP; 14 Feb 2023 14:53:30 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 14 Feb 2023 14:53:30 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 14 Feb 2023 14:53:30 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.176)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 14 Feb 2023 14:53:29 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LaolP9lg3wf/0K5jJokzUSYzHzl5ffJtMHyVvBA5dKa8rV+6pbQ7nRnQbieG1GM6Zk3Vl8bPelRzuziZjg44xqoQ/7qkGnJw0KufX09aWPr76MUJkRVaLfkydeGQmK7PXELVhslfzRjjlorqehGwarIVQcwufyYdg/WP4aBEqUizTQa7OCamrjw1qpKwJ4FDPfbSnSMSihmSmqAmhr11cFjn8bwCnCi4BFKsa++siK0xHFlDQSflwzS7sYR9I/CaAP/K26gf4fGruE4Bf1e8urfJ2u2xQpnaP1iV9wmtWdNf7TO/pyyB8ntMsFrhY7LGDb8bK1wJUJH9GxvKTv0mFg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=169UoWuXKJHSFopwoIdybG9TOO8wkIrx8dv5fHDQXaw=;
+ b=eRQ4tCxOvLB+tZGag0msJf370QaVyNroZi76L+aGxi5HRoDP22WbrpWJNEJULE0eApVv4oQtX205+PWxfvDHBxCFSNuEfTbOmZIUoumxz5QLOcWuOFpe6mLKpSVfSEdQULkm5+COrWPGJuy6gbvRvhNxKrmUJ9yKDGt3rxGn1GhmCx4Zx3hTHV9CqFXr7+avJOKO8jlu/rbLhiBVOtJeviQg6A5ov5ktWeeaaZ9jKJy/bgCq+LvKf6S/hccOC9+0w+9s+OshQbBgoi4xzcp5FFDITiV1IdQMk0CTVDGFYVqL0LWSNmV60Ew6pkCWQV59/sVRuGYFa8sGbDz8za+jfw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by PH7PR11MB6055.namprd11.prod.outlook.com (2603:10b6:510:1d3::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Tue, 14 Feb
+ 2023 22:53:26 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::3f19:b226:ebf1:b04a]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::3f19:b226:ebf1:b04a%7]) with mapi id 15.20.6086.026; Tue, 14 Feb 2023
+ 22:53:26 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "peterz@infradead.org" <peterz@infradead.org>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH v9 07/18] x86/virt/tdx: Do TDX module per-cpu
+ initialization
+Thread-Topic: [PATCH v9 07/18] x86/virt/tdx: Do TDX module per-cpu
+ initialization
+Thread-Index: AQHZP5uucDbGOLsVDEixmYuAvdZDZ67NKpCAgAA2qfCAABiqAIAAFhiAgADtdoCAAJGdgA==
+Date:   Tue, 14 Feb 2023 22:53:26 +0000
+Message-ID: <0795f69fd0ff8ccdd40cc7a3d6cc32da47e6d929.camel@intel.com>
+References: <cover.1676286526.git.kai.huang@intel.com>
+         <557c526a1190903d11d67c4e2c76e01f67f6eb15.1676286526.git.kai.huang@intel.com>
+         <86a8fe2f-566a-d0b9-7a22-9b41c91796f8@intel.com>
+         <BL1PR11MB59789A024CFA9E9DE715C2F1F7DD9@BL1PR11MB5978.namprd11.prod.outlook.com>
+         <af6034c3-98a3-239b-2c79-ff878f5d9673@intel.com>
+         <43fec733ea5331c6de4592dbf44a62e0c61eecb1.camel@intel.com>
+         <Y+uWu9hLMZ35JHlY@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y+uWu9hLMZ35JHlY@hirez.programming.kicks-ass.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|PH7PR11MB6055:EE_
+x-ms-office365-filtering-correlation-id: 8ab643ae-48af-43d4-8296-08db0ede485b
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: J7/wDwtLXAOIlJVOEmawfEZLR2AxVohYLxXJrytrGslVeMDU6a9PCsZPcwzOsuQxiu5hvMBAk41BdnT/wVGFbm4zObfA1Z3FLYkH8AGV9McbCiGL1ngRQxmJaCk4F1Fi2JqFYNH5ag+riNUuutE7a0rVNOJ93JiD9A6X325shKv4wmmsSYkEU4KCCr8Nyf6HmJ9ZZMX3V5nOtpLdtyuI1islYjCFLA1ZlUOh1/xVebTqRfYyOozIoVvLbW6y396Fo3Gh/S3on/5QUzCUZYS/cJoe9lMHzoe57tKjnr7Omf/5M/yADgi4+4/woTfN1uWdvGhCBYySOwYc+XqM7miie1m5U52Cis4a9aLCWtF/+9IBJJgwywq7emvfxw96VP27jUtoYQ8u3p0iHiGyTspcUoCP7/MsB4PEbiAJv4k5ilFQod3UjhWnS/BzqQX48Ris0K9ZSit7nPaYXfcqh7rXRCyzA9+JzB6sVGCL7HEHR8FDUjqCGpVRkABgjfIr4tW/6akzTH/wg2MbceZlZGGR4embhdCUHEiQWg9YrvZujYjcSI9V+QUnzytHOc4ZMEECH0vqWLRXjqHQFJhKD5/EsZEle6uwS/EwZHvmkDblPxZFrQgcLdWZoDYE9f2xFCQsPnLojYNnIGDezs6Jv5OFXeCV+cAS67AJn3t0ffMkKhfOAYuQG1HtoIRW/1KO99WN
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(396003)(376002)(39860400002)(366004)(346002)(451199018)(82960400001)(38070700005)(38100700002)(122000001)(36756003)(86362001)(316002)(478600001)(66476007)(6486002)(41300700001)(66446008)(8676002)(6916009)(76116006)(91956017)(64756008)(4326008)(66556008)(966005)(54906003)(6512007)(186003)(66899018)(66946007)(2906002)(2616005)(26005)(71200400001)(6506007)(8936002)(83380400001)(7416002)(5660300002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NVUzSDZ1ODBJc3A4c1pyWVRiell0eldZQ2JzaHV3ajQ1K3VSc2QwdzdyOTFk?=
+ =?utf-8?B?c1VGZThhenFRTGZBSWczclJQK0NncGtpSTdEUUV3T3JOSWRjcjFwSGhJVHIr?=
+ =?utf-8?B?QmNLREFPWERpZjdiemZsVDhpRFdDZGlsdGtCNUl0SlNTemdOUG1adnRCUzlF?=
+ =?utf-8?B?WDBLTnRXS2JYNm5XU0RZU0Y5N2ozUVpTS2xXMXlkaWhkTTJnaW11aC85eVRX?=
+ =?utf-8?B?NjJwK0JXQVVJNE14WGgyT3lhenFvZFJBVVQxbnRCdDFqT05VL042bWxySVV2?=
+ =?utf-8?B?ZmlFdVV2TlEyeXpxRHNsam9hR3lEQk11cjFHVXh0azk2TXZJeEtpbmlKd3pR?=
+ =?utf-8?B?Y1ZZSXZvdHVaSk0yL3l1eTYxMWNhT0hNbTFmdktSUlZ6RTVtTkwzNlRUYlN2?=
+ =?utf-8?B?TDZHTitRanJXR08rS2JhZDVQTDhkeVJEV1ZadThZRHE1RVdraWNWN2NCWFBj?=
+ =?utf-8?B?emlqNXZHNHhaSU1MSGV6TmdiRUdWUUxzN2ViN3lMOE9HRzF1RFV1Y0lOTjZs?=
+ =?utf-8?B?aDhXTHhRTVFEc29UU2tPbGZLeXNZekFlcEh6K1FPcjlTZTFtM05URTA0WGts?=
+ =?utf-8?B?WWZNL01BWXk4enpGUllDbnlXeDE1R3llQUJVRjFHemN0cFd2MEVRODYvU0xW?=
+ =?utf-8?B?ZS9yK3FSdHhIUWMrS0Q5NllRVTcwYkFTbEdOaS9DeDJ0bW11L2R5RjY2UWFQ?=
+ =?utf-8?B?aW9SZ1Q5OXVrSDJQQ25RSVBZQWFsb3hSdmVFYitDL29qUVdIcHU2cnd0QitJ?=
+ =?utf-8?B?R3hSeEczRjE2cTVwZUlMZ3ZlcE5jc2g4NEZjTkVOMjBIY1hLRGIzSDRHRTdF?=
+ =?utf-8?B?QlNVenZFdW1SVTZhYnBEOVovb2Y0NVRNSGxDb1ROd0xDRFhOK0JrTXFKMkp2?=
+ =?utf-8?B?UmgyaEhHTmVOWFczdmpUZ3lGT2lnK3R6S0x0TitmOENVM3RtOGJacEdDc0kz?=
+ =?utf-8?B?MlpLSVJIZnk1NTVqTXZ6T05WMXdsTlJLS1pJblJzWmI5MXpWenBKRkNiRWtR?=
+ =?utf-8?B?ZnZwMHhGYzFSTE5PajBUQ09SUzRsSUVYQkorOTJpVG1MQlUwSEpSdy9wTG5j?=
+ =?utf-8?B?MDlCWjMzNUhPZk1EdmJaSEY5UmRHLzlTQlJ2L1orZlRhTnhhci80dVBZbnY0?=
+ =?utf-8?B?aEM2M0R3Kzdrc0lXaUlyNDNISEFyQThsTEZLRmd1NnBNU1JxL3orSUUyRkdD?=
+ =?utf-8?B?YTZGTXVhQVZXTjhUanJUNDQvbFI5WU92eHNTeDBpYVN6NjI1TnJCVUY5d0dE?=
+ =?utf-8?B?enBtK0ZWT0xZMk9ORG1rZklHWm5Ka0crRDNhdlVJNDdHNjJ5aUJMeFMrcVF6?=
+ =?utf-8?B?b21yUFVzUVFWYXcxelVQeXZHdEM0dHdQZDAyemJER2hNMGFzeVdKUW5jd3Np?=
+ =?utf-8?B?MzVBcm1sb1VIODRQVXk4b1pBT2JOOVphV2JudDBYdG9Xa2ZwREx2eDZ0Y1FC?=
+ =?utf-8?B?Vkp5K21HMXNEWllpV0Q4RGxub1QzbGpIT0psVmRkQ0pVQndoTW5IUjhja0Vr?=
+ =?utf-8?B?SU96ckxKMnVteUY4cDdKYzlzM3o3T0FpTXV4RVJOTC9leEtGTnlxRGpKdkdM?=
+ =?utf-8?B?blNnaFd6MGd6YjVMYytRUGZxcldVb1h6OEY3eXhaaWdQZWRTTit5YTM3MnNY?=
+ =?utf-8?B?dmxWUGNBY1JiS3pyQ2t2MkdUcjhtRkhtQUE5ZDJXU3NlN1hHSkZqMjhCanZ0?=
+ =?utf-8?B?SW1hL25UWnRyOFJCbnBaWjBGdE1MaTFTL0pGbEttQkd6Qjc3OTRwZVU1SW5B?=
+ =?utf-8?B?dUhDcnRTZ0xONE14aTVzL20zZFVoVXZya2JKUHBiUFU0aFJXRTJZcEVlVUJr?=
+ =?utf-8?B?VS9OSUpkeWhSdExZZTZXUlQxeFcrRzY1a1JSclFXbnNuK0doSHR4RkhzK0xV?=
+ =?utf-8?B?VkljTms1RkhQWUhERGxpQ25TN1dMdjY1NmN6QlZERGtQcGhDcEx0VFJBUXJ1?=
+ =?utf-8?B?NDgyd0t4U1l2TkRCMEhvR05PK3dwMFFXOUdHYStOdE1PV3J3TVZRL0VmYUpC?=
+ =?utf-8?B?MkFJR0VwVGs5RElORkQyQ2YrSi8vOXVUdzk4SVdWREFJVHhvQjZxSVdEdHdq?=
+ =?utf-8?B?VzVYSFlPbGkyQTYzV1BFMXBHVzAwQlA5TUxzNmczMjY4QTBSUFNoVUltOTVQ?=
+ =?utf-8?B?aGNobUpORGpPeHIvWVA5WFdPdGErVTdiSFQrUHVWK1o1dTJxZDhQUWVzTUJD?=
+ =?utf-8?B?cEE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8EEBCDC0B71CDF42B79087CEA92B9FF9@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20230214215446.never.567-kees@kernel.org>
-In-Reply-To: <20230214215446.never.567-kees@kernel.org>
-From:   Steve French <smfrench@gmail.com>
-Date:   Tue, 14 Feb 2023 16:53:10 -0600
-Message-ID: <CAH2r5msOxm0PLoc1fAFjDnaonGVv+E1vyHxBGEh_rtAvJ_qNaQ@mail.gmail.com>
-Subject: Re: [PATCH] smb3: Replace smb2pdu 1-element arrays with flex-arrays
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ab643ae-48af-43d4-8296-08db0ede485b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Feb 2023 22:53:26.2073
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HrwMF9JHK+chAesbDPNOy7DtwpRbAPLYEKItlhhYIAg1wRBn5JSSTmiqfr/8ZE4qVWzcb5dzCSsH7xAFzeGTaA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6055
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This seems to have a lot of conflicts with for-next (doesn't apply).
-Any chance you could rebase it on linux-next
-
-On Tue, Feb 14, 2023 at 3:57 PM Kees Cook <keescook@chromium.org> wrote:
->
-> The kernel is globally removing the ambiguous 0-length and 1-element
-> arrays in favor of flexible arrays, so that we can gain both compile-time
-> and run-time array bounds checking[1].
->
-> Replace the trailing 1-element array with a flexible array in the
-> following structures:
->
->         struct smb2_err_rsp
->         struct smb2_tree_connect_req
->         struct smb2_negotiate_rsp
->         struct smb2_sess_setup_req
->         struct smb2_sess_setup_rsp
->         struct smb2_read_req
->         struct smb2_read_rsp
->         struct smb2_write_req
->         struct smb2_write_rsp
->         struct smb2_query_directory_req
->         struct smb2_query_directory_rsp
->         struct smb2_set_info_req
->         struct smb2_change_notify_rsp
->         struct smb2_create_rsp
->         struct smb2_query_info_req
->         struct smb2_query_info_rsp
->
-> Replace the trailing 1-element array with a flexible array, but leave
-> the existing structure padding:
->
->         struct smb2_file_all_info
->         struct smb2_lock_req
->
-> Adjust all related size calculations to match the changes to sizeof().
->
-> No machine code output differences are produced after these changes.
->
-> [1] For lots of details, see both:
->     https://docs.kernel.org/process/deprecated.html#zero-length-and-one-element-arrays
->     https://people.kernel.org/kees/bounded-flexible-arrays-in-c
->
-> Cc: Steve French <sfrench@samba.org>
-> Cc: Paulo Alcantara <pc@cjr.nz>
-> Cc: Ronnie Sahlberg <lsahlber@redhat.com>
-> Cc: Shyam Prasad N <sprasad@microsoft.com>
-> Cc: Tom Talpey <tom@talpey.com>
-> Cc: Namjae Jeon <linkinjeon@kernel.org>
-> Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-> Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
-> Cc: linux-cifs@vger.kernel.org
-> Cc: samba-technical@lists.samba.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  fs/cifs/smb2file.c        |  2 +-
->  fs/cifs/smb2misc.c        |  2 +-
->  fs/cifs/smb2pdu.c         | 16 +++++++--------
->  fs/cifs/smb2pdu.h         |  2 +-
->  fs/ksmbd/smb2pdu.c        |  6 ++----
->  fs/smbfs_common/smb2pdu.h | 42 ++++++++++++++++++++++-----------------
->  6 files changed, 36 insertions(+), 34 deletions(-)
->
-> diff --git a/fs/cifs/smb2file.c b/fs/cifs/smb2file.c
-> index 9f1dd04b555a..e0ee96d69d49 100644
-> --- a/fs/cifs/smb2file.c
-> +++ b/fs/cifs/smb2file.c
-> @@ -35,7 +35,7 @@ static struct smb2_symlink_err_rsp *symlink_data(const struct kvec *iov)
->                 len = (u32)err->ErrorContextCount * (offsetof(struct smb2_error_context_rsp,
->                                                               ErrorContextData) +
->                                                      sizeof(struct smb2_symlink_err_rsp));
-> -               if (le32_to_cpu(err->ByteCount) < len || iov->iov_len < len + sizeof(*err))
-> +               if (le32_to_cpu(err->ByteCount) < len || iov->iov_len < len + sizeof(*err) + 1)
->                         return ERR_PTR(-EINVAL);
->
->                 p = (struct smb2_error_context_rsp *)err->ErrorData;
-> diff --git a/fs/cifs/smb2misc.c b/fs/cifs/smb2misc.c
-> index 572293c18e16..3935a60db5c3 100644
-> --- a/fs/cifs/smb2misc.c
-> +++ b/fs/cifs/smb2misc.c
-> @@ -113,7 +113,7 @@ static __u32 get_neg_ctxt_len(struct smb2_hdr *hdr, __u32 len,
->         } else if (nc_offset + 1 == non_ctxlen) {
->                 cifs_dbg(FYI, "no SPNEGO security blob in negprot rsp\n");
->                 size_of_pad_before_neg_ctxts = 0;
-> -       } else if (non_ctxlen == SMB311_NEGPROT_BASE_SIZE)
-> +       } else if (non_ctxlen == SMB311_NEGPROT_BASE_SIZE + 1)
->                 /* has padding, but no SPNEGO blob */
->                 size_of_pad_before_neg_ctxts = nc_offset - non_ctxlen + 1;
->         else
-> diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-> index c5cb2639b3f1..22145e7e08f6 100644
-> --- a/fs/cifs/smb2pdu.c
-> +++ b/fs/cifs/smb2pdu.c
-> @@ -1373,7 +1373,7 @@ SMB2_sess_sendreceive(struct SMB2_sess_data *sess_data)
->
->         /* Testing shows that buffer offset must be at location of Buffer[0] */
->         req->SecurityBufferOffset =
-> -               cpu_to_le16(sizeof(struct smb2_sess_setup_req) - 1 /* pad */);
-> +               cpu_to_le16(sizeof(struct smb2_sess_setup_req));
->         req->SecurityBufferLength = cpu_to_le16(sess_data->iov[1].iov_len);
->
->         memset(&rqst, 0, sizeof(struct smb_rqst));
-> @@ -1892,8 +1892,7 @@ SMB2_tcon(const unsigned int xid, struct cifs_ses *ses, const char *tree,
->         iov[0].iov_len = total_len - 1;
->
->         /* Testing shows that buffer offset must be at location of Buffer[0] */
-> -       req->PathOffset = cpu_to_le16(sizeof(struct smb2_tree_connect_req)
-> -                       - 1 /* pad */);
-> +       req->PathOffset = cpu_to_le16(sizeof(struct smb2_tree_connect_req));
->         req->PathLength = cpu_to_le16(unc_path_len - 2);
->         iov[1].iov_base = unc_path;
->         iov[1].iov_len = unc_path_len;
-> @@ -3773,7 +3772,7 @@ SMB2_change_notify(const unsigned int xid, struct cifs_tcon *tcon,
->                         ses->Suid, (u8)watch_tree, completion_filter);
->                 /* validate that notify information is plausible */
->                 if ((rsp_iov.iov_base == NULL) ||
-> -                   (rsp_iov.iov_len < sizeof(struct smb2_change_notify_rsp)))
-> +                   (rsp_iov.iov_len < sizeof(struct smb2_change_notify_rsp) + 1))
->                         goto cnotify_exit;
->
->                 smb_rsp = (struct smb2_change_notify_rsp *)rsp_iov.iov_base;
-> @@ -4966,7 +4965,7 @@ int SMB2_query_directory_init(const unsigned int xid,
->         memcpy(bufptr, &asteriks, len);
->
->         req->FileNameOffset =
-> -               cpu_to_le16(sizeof(struct smb2_query_directory_req) - 1);
-> +               cpu_to_le16(sizeof(struct smb2_query_directory_req));
->         req->FileNameLength = cpu_to_le16(len);
->         /*
->          * BB could be 30 bytes or so longer if we used SMB2 specific
-> @@ -5162,8 +5161,7 @@ SMB2_set_info_init(struct cifs_tcon *tcon, struct TCP_Server_Info *server,
->         req->VolatileFileId = volatile_fid;
->         req->AdditionalInformation = cpu_to_le32(additional_info);
->
-> -       req->BufferOffset =
-> -                       cpu_to_le16(sizeof(struct smb2_set_info_req) - 1);
-> +       req->BufferOffset = cpu_to_le16(sizeof(struct smb2_set_info_req));
->         req->BufferLength = cpu_to_le32(*size);
->
->         memcpy(req->Buffer, *data, *size);
-> @@ -5397,9 +5395,9 @@ build_qfs_info_req(struct kvec *iov, struct cifs_tcon *tcon,
->         req->VolatileFileId = volatile_fid;
->         /* 1 for pad */
->         req->InputBufferOffset =
-> -                       cpu_to_le16(sizeof(struct smb2_query_info_req) - 1);
-> +                       cpu_to_le16(sizeof(struct smb2_query_info_req));
->         req->OutputBufferLength = cpu_to_le32(
-> -               outbuf_len + sizeof(struct smb2_query_info_rsp) - 1);
-> +               outbuf_len + sizeof(struct smb2_query_info_rsp));
->
->         iov->iov_base = (char *)req;
->         iov->iov_len = total_len;
-> diff --git a/fs/cifs/smb2pdu.h b/fs/cifs/smb2pdu.h
-> index 1237bb86e93a..a5773a06aba8 100644
-> --- a/fs/cifs/smb2pdu.h
-> +++ b/fs/cifs/smb2pdu.h
-> @@ -57,7 +57,7 @@ struct smb2_rdma_crypto_transform {
->  #define COMPOUND_FID 0xFFFFFFFFFFFFFFFFULL
->
->  #define SMB2_SYMLINK_STRUCT_SIZE \
-> -       (sizeof(struct smb2_err_rsp) - 1 + sizeof(struct smb2_symlink_err_rsp))
-> +       (sizeof(struct smb2_err_rsp) + sizeof(struct smb2_symlink_err_rsp))
->
->  #define SYMLINK_ERROR_TAG 0x4c4d5953
->
-> diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-> index 619857af0cc2..aef72077fc75 100644
-> --- a/fs/ksmbd/smb2pdu.c
-> +++ b/fs/ksmbd/smb2pdu.c
-> @@ -274,8 +274,7 @@ int init_smb2_neg_rsp(struct ksmbd_work *work)
->                 le16_to_cpu(rsp->SecurityBufferOffset));
->         inc_rfc1001_len(work->response_buf,
->                         sizeof(struct smb2_negotiate_rsp) -
-> -                       sizeof(struct smb2_hdr) - sizeof(rsp->Buffer) +
-> -                       AUTH_GSS_LENGTH);
-> +                       sizeof(struct smb2_hdr) + AUTH_GSS_LENGTH);
->         rsp->SecurityMode = SMB2_NEGOTIATE_SIGNING_ENABLED_LE;
->         if (server_conf.signing == KSMBD_CONFIG_OPT_MANDATORY)
->                 rsp->SecurityMode |= SMB2_NEGOTIATE_SIGNING_REQUIRED_LE;
-> @@ -1205,8 +1204,7 @@ int smb2_handle_negotiate(struct ksmbd_work *work)
->         ksmbd_copy_gss_neg_header((char *)(&rsp->hdr) +
->                                   le16_to_cpu(rsp->SecurityBufferOffset));
->         inc_rfc1001_len(work->response_buf, sizeof(struct smb2_negotiate_rsp) -
-> -                       sizeof(struct smb2_hdr) - sizeof(rsp->Buffer) +
-> -                        AUTH_GSS_LENGTH);
-> +                       sizeof(struct smb2_hdr) + AUTH_GSS_LENGTH);
->         rsp->SecurityMode = SMB2_NEGOTIATE_SIGNING_ENABLED_LE;
->         conn->use_spnego = true;
->
-> diff --git a/fs/smbfs_common/smb2pdu.h b/fs/smbfs_common/smb2pdu.h
-> index 7d605db3bb3b..ace133cf6072 100644
-> --- a/fs/smbfs_common/smb2pdu.h
-> +++ b/fs/smbfs_common/smb2pdu.h
-> @@ -167,7 +167,7 @@ struct smb2_err_rsp {
->         __u8   ErrorContextCount;
->         __u8   Reserved;
->         __le32 ByteCount;  /* even if zero, at least one byte follows */
-> -       __u8   ErrorData[1];  /* variable length */
-> +       __u8   ErrorData[];  /* variable length */
->  } __packed;
->
->  #define SMB3_AES_CCM_NONCE 11
-> @@ -308,7 +308,7 @@ struct smb2_tree_connect_req {
->         __le16 Flags;           /* Flags in SMB3.1.1 */
->         __le16 PathOffset;
->         __le16 PathLength;
-> -       __u8   Buffer[1];       /* variable length */
-> +       __u8   Buffer[];        /* variable length */
->  } __packed;
->
->  /* Possible ShareType values */
-> @@ -595,7 +595,7 @@ struct smb2_negotiate_rsp {
->         __le16 SecurityBufferOffset;
->         __le16 SecurityBufferLength;
->         __le32 NegotiateContextOffset;  /* Pre:SMB3.1.1 was reserved/ignored */
-> -       __u8   Buffer[1];       /* variable length GSS security buffer */
-> +       __u8   Buffer[];        /* variable length GSS security buffer */
->  } __packed;
->
->
-> @@ -616,7 +616,7 @@ struct smb2_sess_setup_req {
->         __le16 SecurityBufferOffset;
->         __le16 SecurityBufferLength;
->         __le64 PreviousSessionId;
-> -       __u8   Buffer[1];       /* variable length GSS security buffer */
-> +       __u8   Buffer[];        /* variable length GSS security buffer */
->  } __packed;
->
->  /* Currently defined SessionFlags */
-> @@ -633,7 +633,7 @@ struct smb2_sess_setup_rsp {
->         __le16 SessionFlags;
->         __le16 SecurityBufferOffset;
->         __le16 SecurityBufferLength;
-> -       __u8   Buffer[1];       /* variable length GSS security buffer */
-> +       __u8   Buffer[];        /* variable length GSS security buffer */
->  } __packed;
->
->
-> @@ -715,7 +715,7 @@ struct smb2_read_req {
->         __le32 RemainingBytes;
->         __le16 ReadChannelInfoOffset;
->         __le16 ReadChannelInfoLength;
-> -       __u8   Buffer[1];
-> +       __u8   Buffer[];
->  } __packed;
->
->  /* Read flags */
-> @@ -730,7 +730,7 @@ struct smb2_read_rsp {
->         __le32 DataLength;
->         __le32 DataRemaining;
->         __le32 Flags;
-> -       __u8   Buffer[1];
-> +       __u8   Buffer[];
->  } __packed;
->
->
-> @@ -754,7 +754,7 @@ struct smb2_write_req {
->         __le16 WriteChannelInfoOffset;
->         __le16 WriteChannelInfoLength;
->         __le32 Flags;
-> -       __u8   Buffer[1];
-> +       __u8   Buffer[];
->  } __packed;
->
->  struct smb2_write_rsp {
-> @@ -765,7 +765,7 @@ struct smb2_write_rsp {
->         __le32 DataLength;
->         __le32 DataRemaining;
->         __u32  Reserved2;
-> -       __u8   Buffer[1];
-> +       __u8   Buffer[];
->  } __packed;
->
->
-> @@ -812,7 +812,10 @@ struct smb2_lock_req {
->         __u64  PersistentFileId;
->         __u64  VolatileFileId;
->         /* Followed by at least one */
-> -       struct smb2_lock_element locks[1];
-> +       union {
-> +               struct smb2_lock_element lock;
-> +               DECLARE_FLEX_ARRAY(struct smb2_lock_element, locks);
-> +       };
->  } __packed;
->
->  struct smb2_lock_rsp {
-> @@ -866,7 +869,7 @@ struct smb2_query_directory_req {
->         __le16 FileNameOffset;
->         __le16 FileNameLength;
->         __le32 OutputBufferLength;
-> -       __u8   Buffer[1];
-> +       __u8   Buffer[];
->  } __packed;
->
->  struct smb2_query_directory_rsp {
-> @@ -874,7 +877,7 @@ struct smb2_query_directory_rsp {
->         __le16 StructureSize; /* Must be 9 */
->         __le16 OutputBufferOffset;
->         __le32 OutputBufferLength;
-> -       __u8   Buffer[1];
-> +       __u8   Buffer[];
->  } __packed;
->
->  /*
-> @@ -897,7 +900,7 @@ struct smb2_set_info_req {
->         __le32 AdditionalInformation;
->         __u64  PersistentFileId;
->         __u64  VolatileFileId;
-> -       __u8   Buffer[1];
-> +       __u8   Buffer[];
->  } __packed;
->
->  struct smb2_set_info_rsp {
-> @@ -952,7 +955,7 @@ struct smb2_change_notify_rsp {
->         __le16  StructureSize;  /* Must be 9 */
->         __le16  OutputBufferOffset;
->         __le32  OutputBufferLength;
-> -       __u8    Buffer[1]; /* array of file notify structs */
-> +       __u8    Buffer[]; /* array of file notify structs */
->  } __packed;
->
->
-> @@ -1158,7 +1161,7 @@ struct smb2_create_rsp {
->         __u64  VolatileFileId;
->         __le32 CreateContextsOffset;
->         __le32 CreateContextsLength;
-> -       __u8   Buffer[1];
-> +       __u8   Buffer[];
->  } __packed;
->
->  struct create_posix {
-> @@ -1501,7 +1504,7 @@ struct smb2_query_info_req {
->         __le32 Flags;
->         __u64  PersistentFileId;
->         __u64  VolatileFileId;
-> -       __u8   Buffer[1];
-> +       __u8   Buffer[];
->  } __packed;
->
->  struct smb2_query_info_rsp {
-> @@ -1509,7 +1512,7 @@ struct smb2_query_info_rsp {
->         __le16 StructureSize; /* Must be 9 */
->         __le16 OutputBufferOffset;
->         __le32 OutputBufferLength;
-> -       __u8   Buffer[1];
-> +       __u8   Buffer[];
->  } __packed;
->
->  /*
-> @@ -1570,7 +1573,10 @@ struct smb2_file_all_info { /* data block encoding of response to level 18 */
->         __le32 Mode;
->         __le32 AlignmentRequirement;
->         __le32 FileNameLength;
-> -       char   FileName[1];
-> +       union {
-> +               char __pad;     /* Legacy structure padding */
-> +               DECLARE_FLEX_ARRAY(char, FileName);
-> +       };
->  } __packed; /* level 18 Query */
->
->  struct smb2_file_eof_info { /* encoding of request for level 10 */
-> --
-> 2.34.1
->
-
-
--- 
-Thanks,
-
-Steve
+DQo+ID4gDQo+ID4gQnV0IGp1c3QgY2hlY2tpbmc6DQo+ID4gDQo+ID4gTFAuSU5JVCBjYW4gYWN0
+dWFsbHkgYmUgY2FsbGVkIGluIHBhcmFsbGVsIG9uIGRpZmZlcmVudCBjcHVzIChkb2Vzbid0IGhh
+dmUgdG8sDQo+ID4gb2YgY291cnNlKSwgc28gd2UgY2FuIGFjdHVhbGx5IGp1c3QgdXNlIG9uX2Vh
+Y2hfY3B1X2NvbmQoKSBmb3IgTFAuSU5JVDoNCj4gPiANCj4gPiAJb25fZWFjaF9jcHVfY29uZChz
+aG91bGRfc2tpcF9jcHUsIHNtcF9mdW5jX21vZHVsZV9scF9pbml0LCBOVUxMLCB0cnVlKTsNCj4g
+PiANCj4gPiBCdXQgSUlVQyBQZXRlciBkb2Vzbid0IGxpa2UgdXNpbmcgSVBJIGFuZCBwcmVmZXJz
+IHVzaW5nIHZpYSB3b3JrOg0KPiA+IA0KPiA+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xrbWwv
+WTMwZHVqdVhDOHdsTHdvUUBoaXJlei5wcm9ncmFtbWluZy5raWNrcy1hc3MubmV0Lw0KPiA+IA0K
+PiA+IFNvIEkgdXNlZCBzbXBfY2FsbF9vbl9jcHUoKSBoZXJlLCB3aGljaCBvbmx5IGNhbGxzIEBm
+dW5jIG9uIG9uZSBjcHUsIGJ1dCBub3QgYQ0KPiA+IGNwdW1hc2suICBGb3IgTFAuSU5JVCBpZGVh
+bGx5IHdlIGNhbiBoYXZlIHNvbWV0aGluZyBsaWtlOg0KPiA+IA0KPiA+IAlzY2hlZHVsZV9vbl9j
+cHUoc3RydWN0IGNwdW1hc2sgKmNwdXMsIHdvcmtfZnVuY190IGZ1bmMpOw0KPiA+IA0KPiA+IHRv
+IGNhbGwgQGZ1bmMgb24gYSBjcHUgc2V0LCBidXQgdGhhdCBkb2Vzbid0IGV4aXN0IG5vdywgYW5k
+IEkgZG9uJ3QgdGhpbmsgaXQncw0KPiA+IHdvcnRoIHRvIGludHJvZHVjZSBpdD8NCj4gDQo+IHNj
+aGVkdWxlX29uX2VhY2hfY3B1KCkgZXhpc3RzIGFuZCBjYW4gZWFzaWx5IGJlIGV4dGVuZGVkIHRv
+IHRha2UgYSBjb25kDQo+IGZ1bmN0aW9uIGlmIHlvdSBzbyBwbGVhc2UuDQo+IA0KDQpTdXJlLiAg
+SSBqdXN0IHRyaWVkIHRvIGRvLiAgVGhlcmUgYXJlIHR3byBtaW5vciB0aGluZ3M6DQoNCjEpIHNo
+b3VsZCBJIGp1c3QgdXNlIHNtcF9jb25kX2Z1bmNfdCBkaXJlY3RseSBhcyB0aGUgY29uZCBmdW5j
+dGlvbj8NCjIpIHNjaGVkdWxlX29uX2VhY2hfY3B1KCkgdGFrZXMgY3B1c19yZWFkX2xvY2soKSBp
+bnRlcm5hbGx5LiAgSG93ZXZlciBpbiBteQ0KY2FzZSwgdGR4X2VuYWJsZSgpIGFscmVhZHkgdGFr
+ZXMgdGhhdCBzbyBJIG5lZWQgYSBfbG9ja2VkXyB2ZXJzaW9uLg0KDQpIb3cgZG9lcyBiZWxvdyBs
+b29rIGxpa2U/IChOb3QgdGVzdGVkKQ0KDQorLyoqDQorICogc2NoZWR1bGVfb25fZWFjaF9jcHVf
+Y29uZF9sb2NrZWQgLSBleGVjdXRlIGEgZnVuY3Rpb24gc3luY2hyb25vdXNseQ0KKyAqICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBvbiBlYWNoIG9ubGluZSBDUFUgZm9yIHdoaWNo
+IHRoZQ0KKyAqICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb25kaXRpb24gZnVu
+Y3Rpb24gcmV0dXJucyBwb3NpdGl2ZQ0KKyAqIEBmdW5jOiAgICAgIHRoZSBmdW5jdGlvbiB0byBj
+YWxsDQorICogQGNvbmRfZnVuYzogIHRoZSBjb25kaXRpb24gZnVuY3Rpb24gdG8gY2FsbA0KKyAq
+IEBjb25kX2RhdGE6IHRoZSBkYXRhIHBhc3NlZCB0byB0aGUgY29uZGl0aW9uIGZ1bmN0aW9uDQor
+ICoNCisgKiBzY2hlZHVsZV9vbl9lYWNoX2NwdV9jb25kX2xvY2tlZCgpIGV4ZWN1dGVzIEBmdW5j
+IG9uIGVhY2ggb25saW5lIENQVQ0KKyAqIHdoZW4gQGNvbmRfZnVuYyByZXR1cm5zIHBvc2l0aXZl
+IGZvciB0aGF0IGNwdSwgdXNpbmcgdGhlIHN5c3RlbQ0KKyAqIHdvcmtxdWV1ZSBhbmQgYmxvY2tz
+IHVudGlsIGFsbCBDUFVzIGhhdmUgY29tcGxldGVkLg0KKyAqDQorICogc2NoZWR1bGVfb25fZWFj
+aF9jcHVfY29uZF9sb2NrZWQoKSBkb2Vzbid0IGhvbGQgcmVhZCBsb2NrIG9mIENQVQ0KKyAqIGhv
+dHBsdWcgbG9jayBidXQgZGVwZW5kIG9uIHRoZSBjYWxsZXIgdG8gZG8uDQorICoNCisgKiBzY2hl
+ZHVsZV9vbl9lYWNoX2NwdV9jb25kX2xvY2tlZCgpIGlzIHZlcnkgc2xvdy4NCisgKg0KKyAqIFJl
+dHVybjoNCisgKiAwIG9uIHN1Y2Nlc3MsIC1lcnJubyBvbiBmYWlsdXJlLg0KKyAqLw0KK2ludCBz
+Y2hlZHVsZV9vbl9lYWNoX2NwdV9jb25kX2xvY2tlZCh3b3JrX2Z1bmNfdCBmdW5jLA0KKyAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNtcF9jb25kX2Z1bmNfdCBjb25kX2Z1bmMs
+DQorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdm9pZCAqY29uZF9kYXRhKQ0K
+K3sNCisgICAgICAgaW50IGNwdTsNCisgICAgICAgc3RydWN0IHdvcmtfc3RydWN0IF9fcGVyY3B1
+ICp3b3JrczsNCisNCisgICAgICAgd29ya3MgPSBhbGxvY19wZXJjcHUoc3RydWN0IHdvcmtfc3Ry
+dWN0KTsNCisgICAgICAgaWYgKCF3b3JrcykNCisgICAgICAgICAgICAgICByZXR1cm4gLUVOT01F
+TTsNCisNCisgICAgICAgZm9yX2VhY2hfb25saW5lX2NwdShjcHUpIHsNCisgICAgICAgICAgICAg
+ICBzdHJ1Y3Qgd29ya19zdHJ1Y3QgKndvcmsgPSBwZXJfY3B1X3B0cih3b3JrcywgY3B1KTsNCisN
+CisgICAgICAgICAgICAgICBpZiAoY29uZF9mdW5jICYmICFjb25kX2Z1bmMoY3B1LCBjb25kX2Rh
+dGEpKQ0KKyAgICAgICAgICAgICAgICAgICAgICAgY29udGludWU7DQorDQorICAgICAgICAgICAg
+ICAgSU5JVF9XT1JLKHdvcmssIGZ1bmMpOw0KKyAgICAgICAgICAgICAgIHNjaGVkdWxlX3dvcmtf
+b24oY3B1LCB3b3JrKTsNCisgICAgICAgfQ0KKw0KKyAgICAgICBmb3JfZWFjaF9vbmxpbmVfY3B1
+KGNwdSkNCisgICAgICAgICAgICAgICBmbHVzaF93b3JrKHBlcl9jcHVfcHRyKHdvcmtzLCBjcHUp
+KTsNCisNCisgICAgICAgZnJlZV9wZXJjcHUod29ya3MpOw0KKyAgICAgICByZXR1cm4gMDsNCit9
+DQorDQorLyoqDQorICogc2NoZWR1bGVfb25fZWFjaF9jcHVfY29uZCAtIGV4ZWN1dGUgYSBmdW5j
+dGlvbiBzeW5jaHJvbm91c2x5IG9uIGVhY2gNCisgKiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBvbmxpbmUgQ1BVIGZvciB3aGljaCB0aGUgY29uZGl0aW9uDQorICogICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgZnVuY3Rpb24gcmV0dXJucyBwb3NpdGl2ZQ0KKyAqIEBmdW5jOiAgICAgIHRo
+ZSBmdW5jdGlvbiB0byBjYWxsDQorICogQGNvbmRfZnVuYzogIHRoZSBjb25kaXRpb24gZnVuY3Rp
+b24gdG8gY2FsbA0KKyAqIEBjb25kX2RhdGE6IHRoZSBkYXRhIHBhc3NlZCB0byB0aGUgY29uZGl0
+aW9uIGZ1bmN0aW9uDQorICoNCisgKiBzY2hlZHVsZV9vbl9lYWNoX2NwdV9jb25kKCkgZXhlY3V0
+ZXMgQGZ1bmMgb24gZWFjaCBvbmxpbmUgQ1BVDQorICogd2hlbiBAY29uZF9mdW5jIHJldHVybnMg
+cG9zaXRpdmUgZm9yIHRoYXQgY3B1LCB1c2luZyB0aGUgc3lzdGVtDQorICogd29ya3F1ZXVlIGFu
+ZCBibG9ja3MgdW50aWwgYWxsIENQVXMgaGF2ZSBjb21wbGV0ZWQuDQorICoNCisgKiBzY2hlZHVs
+ZV9vbl9lYWNoX2NwdV9jb25kKCkgaXMgdmVyeSBzbG93Lg0KKyAqDQorICogUmV0dXJuOg0KKyAq
+IDAgb24gc3VjY2VzcywgLWVycm5vIG9uIGZhaWx1cmUuDQorICovDQoraW50IHNjaGVkdWxlX29u
+X2VhY2hfY3B1X2NvbmQod29ya19mdW5jX3QgZnVuYywNCisgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIHNtcF9jb25kX2Z1bmNfdCBjb25kX2Z1bmMsDQorICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICB2b2lkICpjb25kX2RhdGEpDQorew0KKyAgICAgICBpbnQgcmV0Ow0KKw0KKyAgICAg
+ICBjcHVzX3JlYWRfbG9jaygpOw0KKw0KKyAgICAgICByZXQgPSBzY2hlZHVsZV9vbl9lYWNoX2Nw
+dV9jb25kX2xvY2tlZChmdW5jLCBjb25kX2Z1bmMsIGNvbmRfZGF0YSk7DQorDQorICAgICAgIGNw
+dXNfcmVhZF91bmxvY2soKTsNCisNCisgICAgICAgcmV0dXJuIHJldDsNCit9DQoNCg==
