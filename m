@@ -2,115 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD8269692E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 609A5696935
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:21:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbjBNQTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 11:19:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35678 "EHLO
+        id S231656AbjBNQVO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Feb 2023 11:21:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232148AbjBNQTp (ORCPT
+        with ESMTP id S229524AbjBNQVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 11:19:45 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655AF20D14;
-        Tue, 14 Feb 2023 08:19:31 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EDjOxm022845;
-        Tue, 14 Feb 2023 16:19:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=XdKgDDanY3q/UeLlA80gCU43iHWPPgGJXgFxI4JN8RQ=;
- b=LnN8mJEyWEECR8gzj3T6IIWQWEmk7s5+ACNcm2PJNqopLlbYwkaeCHXhbkMgAKpzw1wd
- ztkbesCnh4PWWKE4oslVrcFipm2RwuqOockOhqC1ksGGbiIJNS447Vb9wmOxbkBwfaPW
- lU/CypFpA/yXC06W9K21QgMALWtZlt+MSvMvVsqmnkqk42HZl+IzM2ENAzzBhYsjozt3
- nsXcf/zyyvpSA7INYx2J+ai4P2CuqjSbmO+qkE4fgzxLSNmmWgzVYJMbrVmxVFbldIXo
- BXk3DM4x5B5Apzl4mH9MHWdAxnWqHYqPaOy5co3rqyuAqqtXI5wrElRxoddztHqeRz2T FA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nqtv0ap8d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 16:19:27 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31EGJQkd010675
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 16:19:26 GMT
-Received: from [10.50.22.76] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 14 Feb
- 2023 08:19:22 -0800
-Message-ID: <faaecb6c-4710-d26d-b992-388ae29907f7@quicinc.com>
-Date:   Tue, 14 Feb 2023 21:49:17 +0530
+        Tue, 14 Feb 2023 11:21:13 -0500
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A954C5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:21:11 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 9D494642ECB2;
+        Tue, 14 Feb 2023 17:21:08 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id oBhXB59KN0Js; Tue, 14 Feb 2023 17:21:08 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 4AC93642ECD2;
+        Tue, 14 Feb 2023 17:21:08 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id g0ffR7oKKqVt; Tue, 14 Feb 2023 17:21:08 +0100 (CET)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 2C24A642ECB2;
+        Tue, 14 Feb 2023 17:21:08 +0100 (CET)
+Date:   Tue, 14 Feb 2023 17:21:07 +0100 (CET)
+From:   Richard Weinberger <richard@nod.at>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Message-ID: <290910672.129444.1676391667993.JavaMail.zimbra@nod.at>
+In-Reply-To: <Y+uztjxDdtFy6MJ4@makrotopia.org>
+References: <cover.1671737443.git.daniel@makrotopia.org> <Y+uztjxDdtFy6MJ4@makrotopia.org>
+Subject: Re: [PATCH 0/2] ubi: wire up parent device
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH V2] clk: qcom: ipq5332: mark GPLL4 as critical temporarily
-To:     Stephen Boyd <sboyd@kernel.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <mturquette@baylibre.com>
-CC:     <quic_varada@quicinc.com>, <quic_srichara@quicinc.com>
-References: <20230206073101.14796-1-quic_kathirav@quicinc.com>
- <6fa247b53740ca760a608e1446f95c95.sboyd@kernel.org>
-Content-Language: en-US
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-In-Reply-To: <6fa247b53740ca760a608e1446f95c95.sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: cr8Hdl27YA357zHAed2BUlOjouR2SJH7
-X-Proofpoint-ORIG-GUID: cr8Hdl27YA357zHAed2BUlOjouR2SJH7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-14_11,2023-02-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- impostorscore=0 bulkscore=0 priorityscore=1501 phishscore=0
- lowpriorityscore=0 spamscore=0 malwarescore=0 mlxlogscore=952 adultscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302140139
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
+Thread-Topic: wire up parent device
+Thread-Index: gBfXjFgR7YDPiBgMRLukfCC3XAUgvw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+----- Ursprüngliche Mail -----
+> I've only recently noticed that this series is marked as 'Accepted' in
+> patchwork. However, I fail to find the commits in any public linux
+> tree, nor has patchwork sent the usual notification email informing me
+> about it being accepted.
+> 
+> Can it be that it has slipped under the table (or even the carpet)
+> somehow?
+> 
+> Please let me know if there is anything wrong with this series and/or
+> if I should re-submit it, or if I shall just wait for it to surface in
+> linux-mtd or linux-next.
 
-On 2/11/2023 3:44 AM, Stephen Boyd wrote:
-> Quoting Kathiravan T (2023-02-05 23:31:01)
->> diff --git a/drivers/clk/qcom/gcc-ipq5332.c b/drivers/clk/qcom/gcc-ipq5332.c
->> index c8a5fa1bafca..2e043d2d0598 100644
->> --- a/drivers/clk/qcom/gcc-ipq5332.c
->> +++ b/drivers/clk/qcom/gcc-ipq5332.c
->> @@ -127,6 +127,16 @@ static struct clk_alpha_pll gpll4_main = {
->>                          .parent_data = &gcc_parent_data_xo,
->>                          .num_parents = 1,
->>                          .ops = &clk_alpha_pll_stromer_ops,
->> +                       /*
->> +                        * There are no consumers for this GPLL in kernel yet,
->> +                        * (will be added soon), so the clock framework
->> +                        * disables this source. But some of the clocks
->> +                        * initialized by boot loaders uses this source. So we
->> +                        * need to keep this clock ON. Add the CRITICAL flag
->> +                        * so the clock will not be disabled. Once the consumer
->> +                        * in kernel is added, we can get rid off this flag.
-> s/off/of/
->
-> Does CLK_IGNORE_UNUSED work the same? It doesn't sound like a critical
-> clk from the description of the comment.
+The patches are in linux-ubifs #next and in linux-next itself.
+See:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=05b8773ca33253ea562be145cf3145b05ef19f86
 
-
-Sorry, somehow I missed this response. Will update to CLK_IGNORE_UNUSED 
-in V3.
-
-
->> +                        */
->> +                       .flags = CLK_IS_CRITICAL,
->>                  },
->>          },
+So, all good. :-)
+ 
+Thanks,
+//richard
