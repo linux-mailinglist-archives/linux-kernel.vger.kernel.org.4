@@ -2,222 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 473A369598F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:02:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1BC569599D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:06:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbjBNHCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 02:02:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46712 "EHLO
+        id S229798AbjBNHGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 02:06:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbjBNHCC (ORCPT
+        with ESMTP id S231811AbjBNHF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 02:02:02 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF50B76B1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:01:59 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D87F020D9E;
-        Tue, 14 Feb 2023 07:01:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1676358117; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Tue, 14 Feb 2023 02:05:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADFC31D936
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:05:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676358303;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=z0YGZhSOGQ7xd7ruMQjs1cptR3vMnMb9ZbHnktKbaig=;
-        b=nYRMNqOHz3G7Ci+1cQAc9D9xaGmb5HgpHEOZldWy6DyEyv+m/0KE9a+Sn41rEEOxFlLlhp
-        nbl1glQtbdUjcbSCxiZ5Mzf3tDHglbGkWkrwRDXWmKqnaIDVs4b9IrP5vJPwat+WbpLEWw
-        9QJwiXnOPBSFL0h4BotJ4SSkytDzExc=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 92F1A138E3;
-        Tue, 14 Feb 2023 07:01:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ZGyBIuUx62P1CQAAMHmgww
-        (envelope-from <jgross@suse.com>); Tue, 14 Feb 2023 07:01:57 +0000
-Message-ID: <01fa7eb8-e534-1c67-3629-7834e7df3c5d@suse.com>
-Date:   Tue, 14 Feb 2023 08:01:56 +0100
+        bh=K4q3ZOUtLgcz08YCMzP/3RHQNhlZSfQVVlPbPjliwbo=;
+        b=HlY+CFKOTx7wS9sOVXr4LNqI1cugqo3RPjMRss8xhTguSJFjmEiO8DAsUjR+BrS1zAsS++
+        +IRv189Xewe7B14cBbNs95GgjT6HetKEdCn4nXuzm0EbWg09gF6HR0jb9arCUY/O40jZne
+        YQVaaPvlIM1uQA3LSe0qq+IA6CfuwVM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-615-my2wRg24M7-LJoOwYXIvug-1; Tue, 14 Feb 2023 02:05:01 -0500
+X-MC-Unique: my2wRg24M7-LJoOwYXIvug-1
+Received: by mail-wm1-f71.google.com with SMTP id o2-20020a05600c510200b003dc51c95c6aso305523wms.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:05:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K4q3ZOUtLgcz08YCMzP/3RHQNhlZSfQVVlPbPjliwbo=;
+        b=g4uNPShXnimDnOukHOOjvoIHTVggEgXivFF3O1fKXMV1LPwTtLjjoBXPHVE+d4QkYW
+         OGuFLOsjy1LXdhFSuyH4QQNEq2ZQYtXxvnBAdWsSsBvHP2xaGrzGTE+YegyCUQ3pUq3D
+         9pyVRqqLUdCwHxpnDj4i4s/Rquqrsbk2LORfp8vOE0Rw6I5Jr2olQL5SYBw7MbR7b7G5
+         CB4ApuOW1pyy9txuvuZL1i1DDuEcBiU1jX+3ZGNMxGe/1UyWTMnK2j2ShM19ZLHShlW0
+         XeeaCae9OMjpgtHCQkA+zDSFAb0Z9tTJqnhirWvnuRP16G+pMCoYOBVYJKaqDKcETRWi
+         LltA==
+X-Gm-Message-State: AO0yUKVlitJrPSd/Vyxm5SJCBOm4+TESd2pN7E+kCY89Nm3i/hCChDZj
+        8KgNtQgXbQDN4pBGvOxZE5g84i48Z1/5CvFd5S5rpMdtuf2sO4csotNm6URcQTlTOqBCOVLZiVo
+        mhYmQQRqlvImy2NAT4NBackozxn65c51y38tvcDI9
+X-Received: by 2002:a5d:6687:0:b0:2c5:4c7d:b32e with SMTP id l7-20020a5d6687000000b002c54c7db32emr28269wru.111.1676358300810;
+        Mon, 13 Feb 2023 23:05:00 -0800 (PST)
+X-Google-Smtp-Source: AK7set9NwwUZJZcSgMe5GePtOrKP0+CEYzCYjvgzm6gRH8DV0a5JQH/LCJZ/vHtMrACTUdKsHqwFs3ysk8rsxU98qBo=
+X-Received: by 2002:a5d:6687:0:b0:2c5:4c7d:b32e with SMTP id
+ l7-20020a5d6687000000b002c54c7db32emr28268wru.111.1676358300510; Mon, 13 Feb
+ 2023 23:05:00 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
- defined MTRRs
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        lists@nerdbynature.de, mikelley@microsoft.com,
-        torvalds@linux-foundation.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <20230209072220.6836-1-jgross@suse.com>
- <20230209072220.6836-3-jgross@suse.com> <Y+ohfE/wICFKO/93@zn.tnic>
- <6257114d-a957-f586-145c-d2a885417360@suse.com> <Y+pRK6a419jenR9R@zn.tnic>
- <13520f45-7f4d-417e-f9a2-40c32cd0e739@suse.com> <Y+qEwtzCV65s+ZFq@zn.tnic>
-Content-Language: en-US
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <Y+qEwtzCV65s+ZFq@zn.tnic>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------S1NoUHM5K4LX8gHZcnFAdtjy"
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230214061743.114257-1-lulu@redhat.com> <CACGkMEtFbxRqJZiho+kxZqziTXLFm5ySfubdAKJf-+eE-wprvw@mail.gmail.com>
+In-Reply-To: <CACGkMEtFbxRqJZiho+kxZqziTXLFm5ySfubdAKJf-+eE-wprvw@mail.gmail.com>
+From:   Cindy Lu <lulu@redhat.com>
+Date:   Tue, 14 Feb 2023 15:04:21 +0800
+Message-ID: <CACLfguWLhO3r91CSfORN3ZStezdfEOBHxCRNp_qxcuyo7JyFYQ@mail.gmail.com>
+Subject: Re: [PATCH] vp_vdpa: fix the crash in hot unplug with vp_vdpa
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst@redhat.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------S1NoUHM5K4LX8gHZcnFAdtjy
-Content-Type: multipart/mixed; boundary="------------cUApi3aeM5kRUWcxq23avsi6";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org, lists@nerdbynature.de,
- mikelley@microsoft.com, torvalds@linux-foundation.org,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>
-Message-ID: <01fa7eb8-e534-1c67-3629-7834e7df3c5d@suse.com>
-Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
- defined MTRRs
-References: <20230209072220.6836-1-jgross@suse.com>
- <20230209072220.6836-3-jgross@suse.com> <Y+ohfE/wICFKO/93@zn.tnic>
- <6257114d-a957-f586-145c-d2a885417360@suse.com> <Y+pRK6a419jenR9R@zn.tnic>
- <13520f45-7f4d-417e-f9a2-40c32cd0e739@suse.com> <Y+qEwtzCV65s+ZFq@zn.tnic>
-In-Reply-To: <Y+qEwtzCV65s+ZFq@zn.tnic>
+On Tue, 14 Feb 2023 at 14:24, Jason Wang <jasowang@redhat.com> wrote:
+>
+> On Tue, Feb 14, 2023 at 2:17 PM Cindy Lu <lulu@redhat.com> wrote:
+> >
+> > While unplugging the vp_vdpa device, the kernel will crash
+> > The root cause is the function vp_modern_get_status() called following the
+> > vp_modern_remove().
+>
+> This needs some tweaking, maybe it's better to say
+> vdpa_mgmtdev_unregister() will access modern devices which will cause
+> a use after free.
+>
+> >So need to change the sequence in vp_vdpa_remove
+> >
+> > [  195.016001] Call Trace:
+>
+> Let's paste the full log with the reason for the calltrace (e.g
+> general protection fault or whatever else).
+>
+sure, will post a new version
+Thanks
+Cindy
+> > [  195.016233]  <TASK>
+> > [  195.016434]  vp_modern_get_status+0x12/0x20
+> > [  195.016823]  vp_vdpa_reset+0x1b/0x50 [vp_vdpa]
+> > [  195.017238]  virtio_vdpa_reset+0x3c/0x48 [virtio_vdpa]
+> > [  195.017709]  remove_vq_common+0x1f/0x3a0 [virtio_net]
+> > [  195.018178]  virtnet_remove+0x5d/0x70 [virtio_net]
+> > [  195.018618]  virtio_dev_remove+0x3d/0x90
+> > [  195.018986]  device_release_driver_internal+0x1aa/0x230
+> > [  195.019466]  bus_remove_device+0xd8/0x150
+> > [  195.019841]  device_del+0x18b/0x3f0
+> > [  195.020167]  ? kernfs_find_ns+0x35/0xd0
+> > [  195.020526]  device_unregister+0x13/0x60
+> > [  195.020894]  unregister_virtio_device+0x11/0x20
+> > [  195.021311]  device_release_driver_internal+0x1aa/0x230
+> > [  195.021790]  bus_remove_device+0xd8/0x150
+> > [  195.022162]  device_del+0x18b/0x3f0
+> > [  195.022487]  device_unregister+0x13/0x60
+> > [  195.022852]  ? vdpa_dev_remove+0x30/0x30 [vdpa]
+> > [  195.023270]  vp_vdpa_dev_del+0x12/0x20 [vp_vdpa]
+> > [  195.023694]  vdpa_match_remove+0x2b/0x40 [vdpa]
+> > [  195.024115]  bus_for_each_dev+0x78/0xc0
+> > [  195.024471]  vdpa_mgmtdev_unregister+0x65/0x80 [vdpa]
+> > [  195.024937]  vp_vdpa_remove+0x23/0x40 [vp_vdpa]
+> > [  195.025353]  pci_device_remove+0x36/0xa0
+> > [  195.025719]  device_release_driver_internal+0x1aa/0x230
+> > [  195.026201]  pci_stop_bus_device+0x6c/0x90
+> > [  195.026580]  pci_stop_and_remove_bus_device+0xe/0x20
+> > [  195.027039]  disable_slot+0x49/0x90
+> > [  195.027366]  acpiphp_disable_and_eject_slot+0x15/0x90
+> > [  195.027832]  hotplug_event+0xea/0x210
+> > [  195.028171]  ? hotplug_event+0x210/0x210
+> > [  195.028535]  acpiphp_hotplug_notify+0x22/0x80
+> > [  195.028942]  ? hotplug_event+0x210/0x210
+> > [  195.029303]  acpi_device_hotplug+0x8a/0x1d0
+> > [  195.029690]  acpi_hotplug_work_fn+0x1a/0x30
+> > [  195.030077]  process_one_work+0x1e8/0x3c0
+> > [  195.030451]  worker_thread+0x50/0x3b0
+> > [  195.030791]  ? rescuer_thread+0x3a0/0x3a0
+> > [  195.031165]  kthread+0xd9/0x100
+> > [  195.031459]  ? kthread_complete_and_exit+0x20/0x20
+> > [  195.031899]  ret_from_fork+0x22/0x30
+> > [  195.032233]  </TASK>
+> >
+> > Fixes: ffbda8e9df10 ("vdpa/vp_vdpa : add vdpa tool support in vp_vdpa")
+> > Tested-by: Lei Yang <leiyang@redhat.com>
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Cindy Lu <lulu@redhat.com>
+>
+> Other than above,
+>
+> Acked-by: Jason Wang <jasowang@redhat.com>
+>
+> Thanks
+>
+> > ---
+> >  drivers/vdpa/virtio_pci/vp_vdpa.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_pci/vp_vdpa.c
+> > index 8fe267ca3e76..281287fae89f 100644
+> > --- a/drivers/vdpa/virtio_pci/vp_vdpa.c
+> > +++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
+> > @@ -645,8 +645,8 @@ static void vp_vdpa_remove(struct pci_dev *pdev)
+> >         struct virtio_pci_modern_device *mdev = NULL;
+> >
+> >         mdev = vp_vdpa_mgtdev->mdev;
+> > -       vp_modern_remove(mdev);
+> >         vdpa_mgmtdev_unregister(&vp_vdpa_mgtdev->mgtdev);
+> > +       vp_modern_remove(mdev);
+> >         kfree(vp_vdpa_mgtdev->mgtdev.id_table);
+> >         kfree(mdev);
+> >         kfree(vp_vdpa_mgtdev);
+> > --
+> > 2.34.3
+> >
+>
 
---------------cUApi3aeM5kRUWcxq23avsi6
-Content-Type: multipart/mixed; boundary="------------az6IFU6bMTuFKJ4wkDOFwAhV"
-
---------------az6IFU6bMTuFKJ4wkDOFwAhV
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-
-T24gMTMuMDIuMjMgMTk6NDMsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gTW9uLCBG
-ZWIgMTMsIDIwMjMgYXQgMDQ6MzY6MTJQTSArMDEwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
-Cj4+IEluIHRoZSBlbmQgSSB3b3VsZG4ndCBtaW5kIGRyb3BwaW5nIHRoZSBmaXhlZCBNVFJS
-cyBmcm9tIHRoZSBpbnRlcmZhY2UsIGFzDQo+PiB0aGV5IGFyZSBjdXJyZW50bHkgbm90IG5l
-ZWRlZCBhdCBhbGwuDQo+IA0KPiBZZXMsIHRoZSBsZXNzIHRoZSBiZXR0ZXIuDQo+IA0KPj4g
-SSdkIHNheSB3ZSBnbyB3aXRoIHdoYXQgaXMgbmVlZGVkIHJpZ2h0IG5vdy4gQW5kIGhhdmlu
-ZyBhIHNpbmdsZSBpbnRlcmZhY2UNCj4+IG1ha2VzIGFsbCB0aGUgc2FuaXR5IGNoZWNraW5n
-IHlvdSBhcmUgYXNraW5nIGZvciBlYXNpZXIuDQo+IA0KPiBJIGd1ZXNzIEkgbmVlZCB0byBy
-ZW1lbWJlciB0byBmaW5pc2ggZGVzaWduaW5nIHRoaXMgaWYgbW9yZSB1c2Vycw0KPiBhcHBl
-YXIuLi4NCj4gDQo+PiBXaGF0IGFyZSB5b3UgZXNwZWNpYWxseSBhc2tpbmcgZm9yPw0KPj4N
-Cj4+IFdpdGggbXkgY3VycmVudCBwYXRjaGVzIFhlbiBQViBkb20wIHdpbGwgY2FsbCBtdHJy
-X292ZXJ3cml0ZV9zdGF0ZSgpIGJlZm9yZQ0KPj4geDg2X2h5cGVyX3R5cGUgaXMgc2V0LCB3
-aGlsZSBhIEh5cGVyLVYgU0VWLVNOUCBndWVzdCB3aWxsIG1ha2UgdGhlIGNhbGwgYWZ0ZXIN
-Cj4+IGl0IGhhcyBiZWVuIHNldC4gQm90aCBjYWxscyBoYXBwZW4gYmVmb3JlIGNhY2hlX2Jw
-X2luaXQoKS4NCj4+DQo+PiBTbyBJIGNvdWxkIG1vdmUgdGhlIG10cnJfb3ZlcndyaXRlX3N0
-YXRlKCkgY2FsbCBmb3IgWGVuIFBWIGRvbTAgaW50byBpdHMNCj4+IGluaXRfcGxhdGZvcm0o
-KSBjYWxsYmFjayBhbmQgY2hlY2sgaW4gbXRycl9vdmVyd3JpdGVfc3RhdGUoKSB4ODZfaHlw
-ZXJfdHlwZQ0KPj4gdG8gYmUgc2V0LA0KPiANCj4gSSBiZWxpZXZlIHRoYXQgaXMgZ29vZCBl
-bm91Z2gsIHNlZSBiZWxvdy4NCj4gDQo+PiBvciBJIGNvdWxkIHJlamVjdCBhIGNhbGwgb2Yg
-bXRycl9vdmVyd3JpdGVfc3RhdGUoKSBhZnRlciB0aGUgY2FsbCBvZg0KPj4gY2FjaGVfYnBf
-aW5pdCgpIGhhcyBoYXBwZW5lZCwgb3IgSSBjb3VsZCBkbyBib3RoLg0KPiANCj4gSSB0aGlu
-ayBvbmUgdGhpbmcgaXMgZW5vdWdoIGFzIHdlJ2xsIGJlIGxvdWQgZW5vdWdoLg0KPiANCj4g
-LS0tDQo+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L210cnIvbXRyci5jIGIv
-YXJjaC94ODYva2VybmVsL2NwdS9tdHJyL210cnIuYw0KPiBpbmRleCBiNzNmZTI0M2M3ZmQu
-LjJkYmUyYzEwZTk1OSAxMDA2NDQNCj4gLS0tIGEvYXJjaC94ODYva2VybmVsL2NwdS9tdHJy
-L210cnIuYw0KPiArKysgYi9hcmNoL3g4Ni9rZXJuZWwvY3B1L210cnIvbXRyci5jDQo+IEBA
-IC00OSw2ICs0OSw3IEBADQo+ICAgI2luY2x1ZGUgPGFzbS9jYWNoZWluZm8uaD4NCj4gICAj
-aW5jbHVkZSA8YXNtL2NwdWZlYXR1cmUuaD4NCj4gICAjaW5jbHVkZSA8YXNtL2U4MjAvYXBp
-Lmg+DQo+ICsjaW5jbHVkZSA8YXNtL2h5cGVydmlzb3IuaD4NCj4gICAjaW5jbHVkZSA8YXNt
-L210cnIuaD4NCj4gICAjaW5jbHVkZSA8YXNtL21zci5oPg0KPiAgICNpbmNsdWRlIDxhc20v
-bWVtdHlwZS5oPg0KPiBAQCAtNjY4LDcgKzY2OSwxMiBAQCB2b2lkIF9faW5pdCBtdHJyX2Jw
-X2luaXQodm9pZCkNCj4gICAJY29uc3QgY2hhciAqd2h5ID0gIihub3QgYXZhaWxhYmxlKSI7
-DQo+ICAgCXVuc2lnbmVkIGludCBwaHlzX2FkZHI7DQo+ICAgDQo+ICsjaWZkZWYgQ09ORklH
-X0hZUEVSVklTT1JfR1VFU1QNCj4gICAJaWYgKG10cnJfc3RhdGUuZW5hYmxlZCkgew0KPiAr
-DQo+ICsJCS8qIFRoaXMgc2hvdWxkIG5vdCBoYXBwZW4gd2l0aG91dCBhIGh5cGVydmlzb3Ig
-cHJlc2VudC4gKi8NCj4gKwkJV0FSTl9PTl9PTkNFKCF4ODZfaHlwZXJfdHlwZSk7DQo+ICsN
-Cj4gICAJCS8qIFNvZnR3YXJlIG92ZXJ3cml0ZSBvZiBNVFJSIHN0YXRlLCBvbmx5IGZvciBn
-ZW5lcmljIGNhc2UuICovDQo+ICAgCQltdHJyX2NhbGNfcGh5c2JpdHModHJ1ZSk7DQo+ICAg
-CQlpbml0X3RhYmxlKCk7DQo+IEBAIC02NzYsNiArNjgyLDcgQEAgdm9pZCBfX2luaXQgbXRy
-cl9icF9pbml0KHZvaWQpDQo+ICAgDQo+ICAgCQlyZXR1cm47DQo+ICAgCX0NCj4gKyNlbmRp
-Zg0KDQpJIHdpbGwgY2hhbmdlIHRoaXMgYSBsaXR0bGUgYml0IGluIG9yZGVyIHRvIGF2b2lk
-IHRoZSAjaWZkZWYgYnkgdXNpbmcNCiJXQVJOX09OKGh5cGVydmlzb3JfaXNfdHlwZSgpID09
-IFg4Nl9IWVBFUl9OQVRJVkUpOyINCg0KDQpKdWVyZ2VuDQo=
---------------az6IFU6bMTuFKJ4wkDOFwAhV
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------az6IFU6bMTuFKJ4wkDOFwAhV--
-
---------------cUApi3aeM5kRUWcxq23avsi6--
-
---------------S1NoUHM5K4LX8gHZcnFAdtjy
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPrMeQFAwAAAAAACgkQsN6d1ii/Ey+o
-XQf/Q5r1U1n0QoBdHmYzZZJGoCODmMSmmdDef5FhXgJEzZbQWKdd9uS1jn/5RGZGTsTxPDpWPMio
-T/Q5sj9IFpiLPLhFtYMVise7bGxS/0lI5wNh9i2Qsc1LdS7y94RQcZ7IUnpyqnS98xBos726H/Nr
-bQnVLqWnhs0t10tBWhYFr6aOheT9E92p9pDkEVEgESFVxQNdxvixQlCz3OPLAvvG5ZUP00QbmMgY
-GcbxXrmpxoGVO9zc1k63O5MjmZqjCuLCgf4A2BBcWHe5MmithOoKgc6JRZP6tQI9wtabbFrAFIM5
-D2e/I4xDqFTcF+D8mHmFjU0Eo+mIh4n2W3A2MO+Q1g==
-=QCUN
------END PGP SIGNATURE-----
-
---------------S1NoUHM5K4LX8gHZcnFAdtjy--
