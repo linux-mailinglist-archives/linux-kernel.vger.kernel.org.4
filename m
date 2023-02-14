@@ -2,241 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CC769576C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 04:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFF9695770
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 04:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231406AbjBND1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 22:27:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
+        id S229769AbjBND1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 22:27:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjBND1K (ORCPT
+        with ESMTP id S231466AbjBND1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 22:27:10 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF93315CA0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 19:27:08 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id z3so3135226pfw.7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 19:27:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=16MWv8psoN4+i0L8PGIdQnwvghfOx1eJ9GIi//wCpYA=;
-        b=OAGf8NYt7iZzPfOLyC3DmCzUXmRCcc8UJSRQtmC25T+cGSs7zaveppl63MjlICHoVX
-         hx0FhT2An45tyXSnQdRaRbGnv49TmF4efnhlALuR/nnY+j/Dk6cQ7r1SwGoW39bBe2CC
-         /4qjjrdBLwWwRHiaymi0RlmgedtxChRL9Ycnv8bks+op1RafGiGARJr8tzjdS8U9ypoC
-         tptEIqc1JwX8vBJJZxTkXTjmGBrQDvN2BcSszFyLWY9qe23WaBb06tLr9301QJhQI3Uv
-         bzd0yShKOCSktafnqA4EliUIj+uTSUzwKTH8TOd/N9ft8is8wtQpD2vISgVnSH4ShqXk
-         91vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=16MWv8psoN4+i0L8PGIdQnwvghfOx1eJ9GIi//wCpYA=;
-        b=MpV31yz4xq2u8jEOJR5ccA0udpvD/2zkvz+KS7Vz5Vm1ny2ucK+2VLzoCHh5/12rw2
-         QzTGRWKxYCy/lETBHVfAyPfwPixt1Dg86wkdmnW9C9mWZQ3bXNelHwqqj6QdaA9D/vxV
-         XrBAxngsdsDx1j5/3vC4L3c6vJWS3bSV3xyY0BSjLZ7j2lRCebNdFBAor6XXaRFKeqsY
-         ZGzBfq7W98U7SWx4+HytmOT0tv5lqdcC6L8NEqTScZUUaB0focfxRIn5SB5UesmyPj5v
-         HrBk+vn7aoNxfFK/tWHtiudY3DbgS4UI1YwFPJPngVF2DtSZFjLvH6rPTzfb0W9EjSpR
-         gHTA==
-X-Gm-Message-State: AO0yUKXR+TJNi9v+g7cb3WRcsIMi/oj+VOgFdTJ8V6pGXXiU0dmMh5j4
-        4/vmdCGILktYei5+/ucveakjOQ==
-X-Google-Smtp-Source: AK7set94fpeAIjPXN6NZi//iCRtc07wp2w+mCY69vOZmLIU9TZUPQC8iGhn0oI3ucQ43cxPSUy1K6w==
-X-Received: by 2002:a05:6a00:c84:b0:5a6:cbdc:2a1a with SMTP id a4-20020a056a000c8400b005a6cbdc2a1amr20654537pfv.2.1676345227997;
-        Mon, 13 Feb 2023 19:27:07 -0800 (PST)
-Received: from [10.16.161.199] (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id v25-20020a62a519000000b005809d382016sm8587299pfm.74.2023.02.13.19.27.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 19:27:07 -0800 (PST)
-Message-ID: <796eb893-f7e2-846c-e75f-9a5774089b8e@igel.co.jp>
-Date:   Tue, 14 Feb 2023 12:27:03 +0900
+        Mon, 13 Feb 2023 22:27:15 -0500
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C50C1C32C
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 19:27:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1676345234; x=1707881234;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=C2DX287fihxIx3zZ1XYsGz3AZwndKdwrpwX0k0QUAWQ=;
+  b=npW4Gpll8weHnzDKqIWEY6yMYNMbFeMD5f8d/wDYT3UcTWZ97ZevvIbQ
+   MDt6wn8qhN3u/ucp8vMnXYhvXAOvtmeMfXKDZwk3Q8L5OfQhsnZKkYlFD
+   OU8VsQ40llP3ZT7KkTYDthJJ0SVYhzIsJZ35tgUSWF7cgNGaHlxe45Q5J
+   8LKu2UfPaX6jnwourEVnX8AxJhSjS+qlA7gfgQl+CVkww9qP8AJf9NMUf
+   e6izvXv8KL/AoJXyjkIzb29t6e6vYbmW7qyOxbWRgt/I9vl6fwOmdqNmI
+   63a4X3dLW2nz9ToPmFQRwoT+JGNath0078KzH6e0i3EPnNuyehKvq1o1i
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,294,1669046400"; 
+   d="scan'208";a="221534003"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 14 Feb 2023 11:27:12 +0800
+IronPort-SDR: 2114u/xznOUJCzoe/GF0ppvVZmGWbYyk4sTBNDA1Qxmrc54fPzpxN4VWyA6n4WuBfU4fl8Ab7a
+ 54s1I9Vp8NjIPbWQqawZ2s6EuW/0tOTFm+M3EPiruFhsX1QSmtxkzWFulemJ7UN/XGDsXZfBpU
+ 4qpLk066jbY0Hzsdlw/t82TuzapE40Ty2zEAO7EdTHkgFH0fy0X7m7vOGXrUjJ8MdYODFmKFi5
+ rf9GWwnd3tFa4G8dH9RxvimsIuxlQoVQKxYdgppPlUIAoiidkRt4BJRJDzpvGE5iLdFHuALMyZ
+ K6k=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Feb 2023 18:44:20 -0800
+IronPort-SDR: indOVba71eyav3GyrMkpc91KAy6pxLbSmi5OvUsiwiOOcWz49Z6AECFQxK+z9b5Bk7JRPOPyMi
+ btrkCwmPtaY2R4JaFsOeVYnG6JsvwOc8F9HxQDhbKCh1HhgNsUhuJjC1XTb3K1XDX8FEMWpXFT
+ 7K75zycDCtKfKQpQ1XnoYiXazpDw5KvU2vFtnUncicYts7hHUOuINy8xTKfIP+zAvgzxqFa/Yw
+ K9shoJjDSuy2VBYf22EWVjcw2UENpFXPUV9/2AdtBDxwWjJh/BfPakxbFdvAejBGAftjK6jpY6
+ yhU=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Feb 2023 19:27:13 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PG68J27BCz1RvTp
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 19:27:12 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1676345231; x=1678937232; bh=C2DX287fihxIx3zZ1XYsGz3AZwndKdwrpwX
+        0k0QUAWQ=; b=njZNJbQ5di5LnVdvp1bpA7hocbJUDtSzeOAyiShtGuoRSppSJ5L
+        OH8eXe//apqqv8YlltI89f4HIg2p//HQpsCtaz/88vA3zxaY6Y6i/sqtd1121C5B
+        Tf6PVZ9BrGzKNJxVDyG7fZQrHNkPjunDhHT7fom3nWduwMxB4/jB7tDhgpI30341
+        YR0kOifWPV4AGcyqxxP8LmKwZZW1zvdx86U58e+30aIFv4kiiXT3E+BYaNc79TLE
+        diDUONFdl0Tn1FcdzsOteakeMIyLMhvSgTfXuhztjB8FY0d5dFjZSpXHc8/+rAFx
+        XRZQc2bFXqpJRlevmjqV3OxLIjIRJ4fjeew==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id pChpShG1um3Z for <linux-kernel@vger.kernel.org>;
+        Mon, 13 Feb 2023 19:27:11 -0800 (PST)
+Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PG68G4SGXz1RvLy;
+        Mon, 13 Feb 2023 19:27:10 -0800 (PST)
+Message-ID: <f67adf9f-2fa1-efed-afa8-04c5149a23ca@opensource.wdc.com>
+Date:   Tue, 14 Feb 2023 12:27:09 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [EXT] [RFC PATCH 0/4] PCI: endpoint: Introduce a virtio-net EP
- function
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] ata: ahci: Add Tiger Lake UP{3,4} AHCI controller
 Content-Language: en-US
-To:     Frank Li <frank.li@nxp.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, Jon Mason <jdmason@kudzu.us>,
-        Ren Zhijie <renzhijie2@huawei.com>,
-        Takanari Hayama <taki@igel.co.jp>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>
-References: <20230203100418.2981144-1-mie@igel.co.jp>
- <HE1PR0401MB2331EAFF5684D60EC565433688D79@HE1PR0401MB2331.eurprd04.prod.outlook.com>
- <CANXvt5qjDDEK0NB=BWh00-HGU-p+sC=8TyP-oPdccnZxKxZt9w@mail.gmail.com>
- <HE1PR0401MB2331A8D5C791C34D9C39A62688DB9@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-From:   Shunsuke Mie <mie@igel.co.jp>
-In-Reply-To: <HE1PR0401MB2331A8D5C791C34D9C39A62688DB9@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Simon Gaiser <simon@invisiblethingslab.com>
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20230213102450.1604-1-simon@invisiblethingslab.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230213102450.1604-1-simon@invisiblethingslab.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/13/23 19:24, Simon Gaiser wrote:
+> Mark the Tiger Lake UP{3,4} AHCI controller as "low_power". This enables
+> S0ix to work out of the box. Otherwise this isn't working unless the
+> user manually sets /sys/class/scsi_host/*/link_power_management_policy.
+> 
+> Intel lists a total of 4 SATA controller IDs in [1] for those mobile
+> PCHs. This commit just adds the "AHCI" variant since I only tested
+> those.
+> 
+> [1]: https://cdrdv2.intel.com/v1/dl/getContent/631119
+> 
+> Signed-off-by: Simon Gaiser <simon@invisiblethingslab.com>
+> CC: stable@vger.kernel.org
 
-On 2023/02/08 1:02, Frank Li wrote:
->> We project extending this module to support RDMA. The plan is based on
->> virtio-rdma[1].
->> It extends the virtio-net and we are plan to implement the proposed
->> spec based on this patch.
->> [1] virtio-rdma
->> - proposal:
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.k
->> ernel.org%2Fall%2F20220511095900.343-1-
->> xieyongji%40bytedance.com%2FT%2F&data=05%7C01%7Cfrank.li%40nxp.co
->> m%7C0ef2bd62eda945c413be08db08f62ba3%7C686ea1d3bc2b4c6fa92cd99c5
->> c301635%7C0%7C0%7C638113625610341574%7CUnknown%7CTWFpbGZsb3d
->> 8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%
->> 3D%7C3000%7C%7C%7C&sdata=HyhpRTG8MNx%2BtfmWn6x3srmdBjHcZAo
->> 2qbxL9USph9o%3D&reserved=0
->> - presentation on kvm forum:
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fyout
->> u.be%2FQrhv6hC_YK4&data=05%7C01%7Cfrank.li%40nxp.com%7C0ef2bd62
->> eda945c413be08db08f62ba3%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%
->> 7C0%7C638113625610341574%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4
->> wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7
->> C%7C%7C&sdata=ucOsGR1letTjxf0gKN6uls5y951CXaIspZtLGnASEC8%3D&res
->> erved=0
->>
-> Sorry for our outlook client always change link.  This previous discussion.
-> https://lore.kernel.org/imx/d098a631-9930-26d3-48f3-8f95386c8e50@ti.com/T/#t
->
-> Look like Endpoint maintainer Kishon like endpoint side work as vhost.
-> Previous  Haotian Wang submit similar patches, which just not use eDMA, just use memcpy.
-> But overall idea is the same.
->
-> I think your and haotian's method is more reasonable for PCI-RC EP connection.
->
-> Kishon is not active recently.   Maybe need Lorenzo Pieralisi and Bjorn helgass's comments
-> for overall directions.
-I think so too. Thank you for your summarization. I've commented on the 
-e-mail.
-> Frank Li
->
->> Please feel free to comment and suggest.
->>> Frank Li
->>>
->>>> To realize the function, this patchset has few changes and introduces a
->>>> new APIs to PCI EP framework related to virtio. Furthermore, it device
->>>> depends on the some patchtes that is discussing. Those depended
->> patchset
->>>> are following:
->>>> - [PATCH 1/2] dmaengine: dw-edma: Fix to change for continuous
->> transfer
->>>> link:
->>>>
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.k
->> %2F&data=05%7C01%7Cfrank.li%40nxp.com%7C0ef2bd62eda945c413be08db
->> 08f62ba3%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6381136256
->> 10341574%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoi
->> V2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=d
->> VZMaheX3eR1xA2wQtecmT857h2%2BFtUbhDSHXwgvsEY%3D&reserved=0
->>>> ernel.org%2Fdmaengine%2F20221223022608.550697-1-
->>>>
->> mie%40igel.co.jp%2F&data=05%7C01%7CFrank.Li%40nxp.com%7Cac57a62d4
->>>> 10b458a5ba408db05ce0a4e%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%
->>>>
->> 7C0%7C638110154722945380%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4
->> wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7
->> C%7C%7C&sdata=tIn0MHzEvrdxaC4KKTvTRvYXBzQ6MyrFa2GXpa3ePv0%3D&
->>>> reserved=0
->>>> - [RFC PATCH 0/3] Deal with alignment restriction on EP side
->>>> link:
->>>>
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.k
->> %2F&data=05%7C01%7Cfrank.li%40nxp.com%7C0ef2bd62eda945c413be08db
->> 08f62ba3%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6381136256
->> 10341574%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoi
->> V2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=d
->> VZMaheX3eR1xA2wQtecmT857h2%2BFtUbhDSHXwgvsEY%3D&reserved=0
->>>> ernel.org%2Flinux-pci%2F20230113090350.1103494-1-
->>>>
->> mie%40igel.co.jp%2F&data=05%7C01%7CFrank.Li%40nxp.com%7Cac57a62d4
->>>> 10b458a5ba408db05ce0a4e%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%
->>>>
->> 7C0%7C638110154722945380%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4
->> wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7
->> C%7C%7C&sdata=RLpnDiLwfqQd5QMXdiQyPVCkfOj8q2AyVeZOwWHvlsM%3
->>>> D&reserved=0
->>>> - [RFC PATCH v2 0/7] Introduce a vringh accessor for IO memory
->>>> link:
->>>>
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.k
->> %2F&data=05%7C01%7Cfrank.li%40nxp.com%7C0ef2bd62eda945c413be08db
->> 08f62ba3%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6381136256
->> 10341574%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoi
->> V2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=d
->> VZMaheX3eR1xA2wQtecmT857h2%2BFtUbhDSHXwgvsEY%3D&reserved=0
->>>> ernel.org%2Fvirtualization%2F20230202090934.549556-1-
->>>>
->> mie%40igel.co.jp%2F&data=05%7C01%7CFrank.Li%40nxp.com%7Cac57a62d4
->>>> 10b458a5ba408db05ce0a4e%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%
->>>>
->> 7C0%7C638110154722945380%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4
->> wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7
->> C%7C%7C&sdata=6jgY76BMSbvamb%2Fl3Urjt4Gcizeqon%2BZE5nPssc2kDA%
->>>> 3D&reserved=0
->>>>
->>>> About this patchset has 4 patches. The first of two patch is little changes
->>>> to virtio. The third patch add APIs to easily access virtio data structure
->>>> on PCIe Host side memory. The last one introduce a virtio-net EP device
->>>> function. Details are in commit respectively.
->>>>
->>>> Currently those network devices are testd using ping only. I'll add a
->>>> result of performance evaluation using iperf and etc to the future version
->>>> of this patchset.
->>>>
->>>> Shunsuke Mie (4):
->>>>    virtio_pci: add a definition of queue flag in ISR
->>>>    virtio_ring: remove const from vring getter
->>>>    PCI: endpoint: Introduce virtio library for EP functions
->>>>    PCI: endpoint: function: Add EP function driver to provide virtio net
->>>>      device
->>>>
->>>>   drivers/pci/endpoint/Kconfig                  |   7 +
->>>>   drivers/pci/endpoint/Makefile                 |   1 +
->>>>   drivers/pci/endpoint/functions/Kconfig        |  12 +
->>>>   drivers/pci/endpoint/functions/Makefile       |   1 +
->>>>   .../pci/endpoint/functions/pci-epf-vnet-ep.c  | 343 ++++++++++
->>>>   .../pci/endpoint/functions/pci-epf-vnet-rc.c  | 635
->> ++++++++++++++++++
->>>>   drivers/pci/endpoint/functions/pci-epf-vnet.c | 387 +++++++++++
->>>>   drivers/pci/endpoint/functions/pci-epf-vnet.h |  62 ++
->>>>   drivers/pci/endpoint/pci-epf-virtio.c         | 113 ++++
->>>>   drivers/virtio/virtio_ring.c                  |   2 +-
->>>>   include/linux/pci-epf-virtio.h                |  25 +
->>>>   include/linux/virtio.h                        |   2 +-
->>>>   include/uapi/linux/virtio_pci.h               |   2 +
->>>>   13 files changed, 1590 insertions(+), 2 deletions(-)
->>>>   create mode 100644 drivers/pci/endpoint/functions/pci-epf-vnet-ep.c
->>>>   create mode 100644 drivers/pci/endpoint/functions/pci-epf-vnet-rc.c
->>>>   create mode 100644 drivers/pci/endpoint/functions/pci-epf-vnet.c
->>>>   create mode 100644 drivers/pci/endpoint/functions/pci-epf-vnet.h
->>>>   create mode 100644 drivers/pci/endpoint/pci-epf-virtio.c
->>>>   create mode 100644 include/linux/pci-epf-virtio.h
->>>>
->>>> --
->>>> 2.25.1
->> Best,
->> Shunsuke
+Applied to for-6.2-fixes. Thanks !
 
-Best,
-
-Shunsuke.
+-- 
+Damien Le Moal
+Western Digital Research
 
