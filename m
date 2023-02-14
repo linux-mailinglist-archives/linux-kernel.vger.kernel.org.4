@@ -2,127 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D595695DD3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:01:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8B5695DD6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:01:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbjBNJBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 04:01:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33958 "EHLO
+        id S232136AbjBNJBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 04:01:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbjBNJA5 (ORCPT
+        with ESMTP id S231753AbjBNJBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 04:00:57 -0500
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0E91041E;
-        Tue, 14 Feb 2023 01:00:54 -0800 (PST)
-Received: by mail-lj1-f175.google.com with SMTP id m10so17592100ljp.3;
-        Tue, 14 Feb 2023 01:00:54 -0800 (PST)
+        Tue, 14 Feb 2023 04:01:00 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7720B1284B;
+        Tue, 14 Feb 2023 01:00:59 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id h24so16809232qtr.0;
+        Tue, 14 Feb 2023 01:00:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sotg6g4Bh/A8PVyKxmYXGABNEX1eJU5WjsjoyOoCPXM=;
+        b=nYm5hMXfNfniL4C7SsUcbr0NG/2bqbQphI2J2mYuEDYsJq7PkY6lIc24t8x9TrBMoM
+         LYiRT7O85Vz+1ZbDcjXZw2EuxdLL+gpmCsyx2zYv38z5eYbem9lv/0w4kLHPeE0//PhW
+         78iY2AfZL7gtOqxAkjhuuqru9vTNOheliaThYT4VSp0Tabx2xLUJmVYHgwkrToArEzbT
+         flACIUXw8tjKFCO6euF0cXAyLNlgwwjSvVPb0JRHBghZt8mtW1E21GrjkBPHRvbLGWpy
+         JR9Q1eJWO0ocFOEqqJ3OrFhH38yn8B2f/+UZIkxJ3IR7L8hi7GEUMeswRujc9BqX9xQg
+         EilQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7mNyenBvavxUdV7/ZOu+dVcpWueC+FqvBBNVPDVl8j0=;
-        b=68kX/eMafzJn+uOsn01BLKV3S47XqIMZFb2P1urljBtzJV7LcPLoueTHoIq54eHxg9
-         ga+ncMCjhWx3DeVRSeJep2SJnuyHMcZv+6XLVRnNVG4lthgx5jAHtfnINDOI6kRZAQXv
-         i4FFWgiup9v9V5FO3HoatxPB0yq1TrWl8/VTBHN0ydloFFKqNc9s+eh+psmgXhU1Agy5
-         sjgAQWDj4KP8VxaYjrizC2PoQKYW+l2XqffcuqeWQl5drM77RQGbQ39h792vHN7Hth6v
-         4pBvlHB44BU0JEx8mSOOWHl2DWekW+gV9kKoY2xhsA1epHeGUqY8/YCDs8axwliUAd69
-         yt8g==
-X-Gm-Message-State: AO0yUKW7xJLHoJODQJA/er7O1XF/AOnJ0OI4eD/LH3tUMckBBDkwMAMF
-        7h06iHF5GFzGM5ftaYAoleHcz1JFNIkkHGh1
-X-Google-Smtp-Source: AK7set8eSw4tNFT9BxU4Dd3b2xNZTcxAvxoiXhp3+rQ2//nw5NE5JHsfoe7W4EQBsIThBW+R9/v8JA==
-X-Received: by 2002:a2e:bea5:0:b0:293:4e08:1aab with SMTP id a37-20020a2ebea5000000b002934e081aabmr874279ljr.10.1676365252067;
-        Tue, 14 Feb 2023 01:00:52 -0800 (PST)
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
-        by smtp.gmail.com with ESMTPSA id l22-20020a2e8356000000b002934e76271asm1098736ljh.33.2023.02.14.01.00.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 01:00:50 -0800 (PST)
-Received: by mail-lj1-f169.google.com with SMTP id h17so17618325ljq.4;
-        Tue, 14 Feb 2023 01:00:46 -0800 (PST)
-X-Received: by 2002:a2e:9448:0:b0:293:5264:ad89 with SMTP id
- o8-20020a2e9448000000b002935264ad89mr149587ljh.37.1676365235984; Tue, 14 Feb
- 2023 01:00:35 -0800 (PST)
+        bh=Sotg6g4Bh/A8PVyKxmYXGABNEX1eJU5WjsjoyOoCPXM=;
+        b=ByCTZ6jDe+pZBbP8+gwJ8tQmYos1lsjR8T0Mvb+cHUQErwFNMgwEfXcFjCRfHGCNew
+         rhCK7nbIG3l9a/4gXjR8v/nl7a8OsFR3sfDgKRCOqerQoyw9kVjiZsIZ8/P/Sz+jX66x
+         24Asmd6KrAr++LB2gdH4Et8Ak5q5iPlxsIW0wZdU3TL/GXD/lQdTaLR1OUVWuz45KQQV
+         1wk07OK5LCIKfmu9VMWLbbHdS8ZHnb8UsoeqmXzgWX0KL69b0Yz4hKlUuPWS76WAPgv4
+         HbK60WGbOGfHgx/36C29SjHen/jb1AEVDg7Mhz/rli3FWRZC1MIvP09DioChe20y1x4D
+         RsEQ==
+X-Gm-Message-State: AO0yUKXpwiUGbdOS6P2KDjZl4vysSpt7yl57e9htFfXieCBHCOBjLptU
+        hegUP+7E2vCuLgHvnpX4itC9qHeT9pqJ2Y5hQZg=
+X-Google-Smtp-Source: AK7set8BrQ3EZL7oYNrSDTXecmNQ+MEqyA40JVLuuUbf8otkPYKFo01zkl8m26ZDac6afBBX0vqQBt2ouoflSVuLxmg=
+X-Received: by 2002:ac8:5c0d:0:b0:3b8:6b25:88be with SMTP id
+ i13-20020ac85c0d000000b003b86b2588bemr232093qti.14.1676365258564; Tue, 14 Feb
+ 2023 01:00:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20230214074925.228106-1-alexghiti@rivosinc.com> <20230214074925.228106-6-alexghiti@rivosinc.com>
-In-Reply-To: <20230214074925.228106-6-alexghiti@rivosinc.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 14 Feb 2023 10:00:22 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWxgRrZqn=Ex4gSSL58gciuHp-6ye+FTR0wgw=jp=4=DA@mail.gmail.com>
-Message-ID: <CAMuHMdWxgRrZqn=Ex4gSSL58gciuHp-6ye+FTR0wgw=jp=4=DA@mail.gmail.com>
-Subject: Re: [PATCH v3 05/24] m68k: Remove COMMAND_LINE_SIZE from uapi
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+References: <20230214080034.3828-1-marcan@marcan.st> <20230214080034.3828-3-marcan@marcan.st>
+In-Reply-To: <20230214080034.3828-3-marcan@marcan.st>
+From:   Julian Calaby <julian.calaby@gmail.com>
+Date:   Tue, 14 Feb 2023 20:00:45 +1100
+Message-ID: <CAGRGNgV6YMhBa1bdkf_EQ0Z+nwbfhJkKcTxtc=ukWVMWtvQ2PA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] brcmfmac: pcie: Provide a buffer of random bytes to
+ the device
+To:     Arend van Spriel <aspriel@gmail.com>
+Cc:     Hector Martin <marcan@marcan.st>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        asahi@lists.linux.dev, linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 8:55 AM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
-> From: Palmer Dabbelt <palmer@rivosinc.com>
+Hi Arend,
+
+On Tue, Feb 14, 2023 at 7:04 PM Hector Martin <marcan@marcan.st> wrote:
 >
-> As far as I can tell this is not used by userspace and thus should not
-> be part of the user-visible API.
+> Newer Apple firmwares on chipsets without a hardware RNG require the
+> host to provide a buffer of 256 random bytes to the device on
+> initialization. This buffer is present immediately before NVRAM,
+> suffixed by a footer containing a magic number and the buffer length.
 >
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> This won't affect chips/firmwares that do not use this feature, so do it
+> unconditionally for all Apple platforms (those with an Apple OTP).
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Following on from the conversation a year ago, is there a way to
+detect chipsets that need these random bytes? While I'm sure Apple is
+doing their own special thing for special Apple reasons, it seems
+relatively sensible to omit a RNG on lower-cost chipsets, so would
+other chipsets need it?
 
-Gr{oetje,eeting}s,
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 
-                        Geert
+Beyond that, it all seems pretty sensible.
+
+Reviewed-by: Julian Calaby <julian.calaby@gmail.com>
+
+> ---
+>  .../broadcom/brcm80211/brcmfmac/pcie.c        | 32 +++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+
+Thanks,
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Julian Calaby
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Email: julian.calaby@gmail.com
+Profile: http://www.google.com/profiles/julian.calaby/
