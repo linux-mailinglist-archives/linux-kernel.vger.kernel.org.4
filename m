@@ -2,91 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18501697230
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 00:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E05B69723C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 00:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbjBNX45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 18:56:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
+        id S232693AbjBNX5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 18:57:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232803AbjBNX4s (ORCPT
+        with ESMTP id S232781AbjBNX5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 18:56:48 -0500
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1883A298E4;
-        Tue, 14 Feb 2023 15:56:48 -0800 (PST)
-Received: by mail-il1-f174.google.com with SMTP id f10so6946427ilc.7;
-        Tue, 14 Feb 2023 15:56:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rNbUf4FzeMlGqHQbOghX36B1I+My6Cb4YZ8Dw7XMggA=;
-        b=7kXhM073JZv2SuFOMePSghqQEmSI6bEesXUCsHngkYjTyaiy2Z7dy2uUWlRcdbXFUn
-         wN2cwtpxSEMzb0YEzMzZdTchnD722NduDBCKSXYudsY6d/EJO29eLBaEtVN08tobeXOs
-         qTvGYUvpr9LzeQ5oKs8KICwiHjqM7ov2TWS61jUre/5tCDtIs2eMWnwXqbZgNHH3X5Pc
-         f0ZbUXKUT33NQarT1PMOO0ZtLRE9eSYFZzpZdRoIIAPybuRi046u3rHv4DW6lMbeNUhO
-         0LY/HtFmV/99uJkTwr1qd0GaHl11p+KqWrUAvIhUPVnXBunZK+DSY7tkf7hrZxlgkQKT
-         JqEg==
-X-Gm-Message-State: AO0yUKWHz8aL2txZTIlq8TA+Jzauo4EZCmNhMWZ6EEY9Ni1RNUunp0xG
-        klDus4ruLKwKavWYoJ+PUblf1l044Q==
-X-Google-Smtp-Source: AK7set8oA758nqEvMNPSikkT2q5X0OAL6a5A903vZHrJvS4wsWRuVQ8xDVsJHPApoqUn56BYMDvCHg==
-X-Received: by 2002:a92:c54c:0:b0:315:3d25:231b with SMTP id a12-20020a92c54c000000b003153d25231bmr518562ilj.9.1676419007285;
-        Tue, 14 Feb 2023 15:56:47 -0800 (PST)
-Received: from robh_at_kernel.org ([65.158.198.3])
-        by smtp.gmail.com with ESMTPSA id e5-20020a02a785000000b003a2cb2937cdsm496843jaj.31.2023.02.14.15.56.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 15:56:46 -0800 (PST)
-Received: (nullmailer pid 54846 invoked by uid 1000);
-        Tue, 14 Feb 2023 23:56:40 -0000
-Date:   Tue, 14 Feb 2023 17:56:40 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>
-Subject: Re: [PATCH 1/6] dt-bindings: clock: exynos850: Add Exynos850 CMU_G3D
-Message-ID: <167641899995.54792.18191186654068619440.robh@kernel.org>
-References: <20230211064006.14981-1-semen.protsenko@linaro.org>
- <20230211064006.14981-2-semen.protsenko@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230211064006.14981-2-semen.protsenko@linaro.org>
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: **
+        Tue, 14 Feb 2023 18:57:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FAE83F8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 15:57:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 572DFB81F66
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 23:57:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2D5EC433D2;
+        Tue, 14 Feb 2023 23:57:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676419038;
+        bh=gdKZ09xKLjHQr/FAuehTh85/GlxPBc57jOlg8AkSmqw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uGXRmJbAVkWj5SMV9lFZvXJq36008pqzwWPitdOdOnQyFaTpOvYHdIQf5pRHqoFpt
+         YBgGc3DnftPa4AdBomKEJ2Tor/FKYaR8DvG6731F2KdV2wy7sW8Vb4nzhdncuohvCz
+         A4Y9eI+9igug0rqL61+Ypnfo4mKgrleOunWgczvAzqsdwhcRlwe083It8865p8Otgj
+         /wa27s0dAIHSF35cBSnpL8PEUtsj79zoVLh5oOfuukHrLTfVHg+rOOGi1IiqRwGsT3
+         YBsaWvb5v4nmCQUKVycPdIg7y1cQnqnwJQVT3F3Y7ibzvnmi347lJIgcY4YJ0KZDJp
+         4LSLYPg5LCPvQ==
+Date:   Wed, 15 Feb 2023 08:57:14 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Nadav Amit <nadav.amit@gmail.com>
+Cc:     x86@kernel.org, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -tip] kprobes/x86: Remove unneeded casting from
+ immediate value
+Message-Id: <20230215085714.8d46b98ce787a6e0c962ebf5@kernel.org>
+In-Reply-To: <b79052ee-07d2-a6b9-03cb-b33f61985fe2@gmail.com>
+References: <167595699689.1303232.13460109151246012198.stgit@mhiramat.roam.corp.google.com>
+        <b79052ee-07d2-a6b9-03cb-b33f61985fe2@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 10 Feb 2023 02:01:54 +0200
+Nadav Amit <nadav.amit@gmail.com> wrote:
 
-On Sat, 11 Feb 2023 00:40:01 -0600, Sam Protsenko wrote:
-> CMU_G3D generates Gondul GPU and bus clocks for BLK_G3D.
-> Add clock indices and binding documentation for CMU_G3D.
 > 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
->  .../clock/samsung,exynos850-clock.yaml        | 19 ++++++++++++++++++
->  include/dt-bindings/clock/exynos850.h         | 20 ++++++++++++++++++-
->  2 files changed, 38 insertions(+), 1 deletion(-)
+> On 2/9/23 5:36 PM, Masami Hiramatsu (Google) wrote:
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> >
+> > Remove unneeded casting from immediate value assignments for relative
+> > jump offset. Since the immediate values in the 'insn' data structure are
+> > assigned from immediate bytes as a signed value to insn.immediate.value
+> > by insn_field_set(). Thus, if we need to access that value as a signed
+> > value (in this kprobe's case), we don't need to cast it.
+> > This is a kind of clean up (should not change behavior) follows Nadav's
+> > bugfix.
+> >
+> > Link: https://lore.kernel.org/all/20230208071708.4048-1-namit@vmware.com/
+> >
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > ---
+> >   arch/x86/kernel/kprobes/core.c |   16 ++++++++--------
+> >   1 file changed, 8 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
+> > index 695873c0f50b..2440e736d0e4 100644
+> > --- a/arch/x86/kernel/kprobes/core.c
+> > +++ b/arch/x86/kernel/kprobes/core.c
+> > @@ -607,19 +607,19 @@ static int prepare_emulation(struct kprobe *p, struct insn *insn)
+> >   	case 0xe8:	/* near call relative */
+> >   		p->ainsn.emulate_op = kprobe_emulate_call;
+> >   		if (insn->immediate.nbytes == 2)
+> > -			p->ainsn.rel32 = *(s16 *)&insn->immediate.value;
+> > +			p->ainsn.rel32 = insn->immediate.value;
+> >   		else
+> > -			p->ainsn.rel32 = *(s32 *)&insn->immediate.value;
+> > +			p->ainsn.rel32 = insn->immediate.value;
+> 
+> Hmm.. I don't get it. What the purpose of keeping the duplicated code 
+> (after your change)?
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Oops, good catch! I think p->ainsn.rel32 can be set without any check in general.
+Let me update it.
 
+Thank you!
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
