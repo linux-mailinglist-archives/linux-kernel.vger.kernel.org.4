@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCC0696B3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:18:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62573696B3E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:18:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232965AbjBNRSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 12:18:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
+        id S232963AbjBNRSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 12:18:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232851AbjBNRRo (ORCPT
+        with ESMTP id S232972AbjBNRRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 12:17:44 -0500
+        Tue, 14 Feb 2023 12:17:51 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC7E30290
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:15:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9BA2366F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:15:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676394914;
+        s=mimecast20190719; t=1676394916;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=jeEdpXATs9xAq3Ic1YKNwPFKV8iOmXM6rM7COSxPs48=;
-        b=HtzaoAANvJr4jSycO9kp26VV6zBSRLhULVDr9y92JQmhC2aE5vkU/oQWkZCwEarJlJFaFg
-        TUFKABmhuxK+Zm6wbYvphbX55NP8kwWpGzj+B+7rTt0aSN57kB6xV3Y/Sy9ZvgcanMDhoE
-        Dh9yKXoJl0ACGAyN3n9ifmL5W2kdtHw=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=n5Xftcuk/SSD+V/l0GWpcX6zdIVXO92U2DSCgVqWJgE=;
+        b=c0WmU3W8GF6U72BgqoPvALKyJffKCtAOEvtmrjphfSzJwoTcgty/WAHZnQxKue83ydm+Q6
+        RuEOAbWr5l9pLKd3f/IM/1JGziuIb5+u/mQpvqv4LTY9iwOrkErzyKPPNjmH8hozY9uhvP
+        s+RdWtfL1j1933EIHYaJbAShaic9Do0=
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
+ [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-317-NC4FNSi6MTeg_hg8ncVcPw-1; Tue, 14 Feb 2023 12:15:11 -0500
-X-MC-Unique: NC4FNSi6MTeg_hg8ncVcPw-1
-Received: by mail-ot1-f69.google.com with SMTP id w9-20020a9d5a89000000b0068bc6c8621eso8079408oth.9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:15:11 -0800 (PST)
+ us-mta-177-UhDvPryBMa6uq7rdRt513w-1; Tue, 14 Feb 2023 12:15:15 -0500
+X-MC-Unique: UhDvPryBMa6uq7rdRt513w-1
+Received: by mail-oo1-f71.google.com with SMTP id j36-20020a4a9467000000b0051f9a09773dso2063036ooi.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:15:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jeEdpXATs9xAq3Ic1YKNwPFKV8iOmXM6rM7COSxPs48=;
-        b=1yHPLo3O+/TZe7XIhSbggGzKyHRdg0Shht5+tuaxCVNkNZF5iWN7GI4UVzzJfQnMbi
-         KgV2gZXBfmpanMNC/ocYMAB5BQwT0MsbRRjMyYwtLC1Q6ciLPsjUsOsZQNTAdzg+we76
-         PxXpKvKiVlgT41oCeMq8yJqCBLUDTUPLfqTWtXhVDx8Sn5nrPpMnpdXcbDB79ypZHW0+
-         Fl18bkIpQLs+sFBris4lOkaE87XjdvJi37ZVaGNBckp2wGyuFWlkjuHqI5txQ5Xn3eGQ
-         lBN4wNKrpBtLm4GK0cr3jFsOHI4SnpTfUliQ80sxVNKbSYG3YskfydHJaKXd8Ggf+/xD
-         sQMw==
-X-Gm-Message-State: AO0yUKUZD3z7AMVsmkLLR7G6NZnN31eBWVbG6otPkvymSGQ+J4N18aaj
-        1i78WgA+Jn5slsxvAg7bpXizLaP3jnUp6Y4vNFrzPnNszKip1udXaX8sWMWGvdrjwH5pjESj2ae
-        10QzS4stw5rgFZlbosn8/T9DZ
-X-Received: by 2002:a54:4511:0:b0:364:eafd:2697 with SMTP id l17-20020a544511000000b00364eafd2697mr1473592oil.58.1676394910599;
-        Tue, 14 Feb 2023 09:15:10 -0800 (PST)
-X-Google-Smtp-Source: AK7set8ckzBSvYvKffHSR9kx+MhjoJN8bdYl7WQAW88sdJYAf1ZjAuXtQj8VAA9ciHNcY8zcaNqPDA==
-X-Received: by 2002:a54:4511:0:b0:364:eafd:2697 with SMTP id l17-20020a544511000000b00364eafd2697mr1473585oil.58.1676394910338;
-        Tue, 14 Feb 2023 09:15:10 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n5Xftcuk/SSD+V/l0GWpcX6zdIVXO92U2DSCgVqWJgE=;
+        b=3foQUwxkJw25u3EXPGkIlmle/ZHgVsXvh2Zb2wJ9dueqnsiQ7wF8DInPr6ZiC6w8DE
+         rqQI+XlhDPeO0Z4ptxwce52yODXhm4V18xSm9e1uW2LCgIrmb0iDRMnk8+oXHdHUCSO3
+         6WQPHa2IqCY8SSqbBT8MfRQUVDiscllw+kxK1VYh1mCaaXWSKjkwh+bFxEScaFV3gpWp
+         J8f+gP9C+KBfe/lEBdbVXHeKnTRGigptTm2ZEfVuNn3Cth5UdERPradwkx6lCr7VCWL5
+         tNls56QFc54J+Jn1xT0L+TQfmBRF17TPwycwh4Kb/bn6h5I+U3rKeuuN13/pRVtelmLI
+         AXaA==
+X-Gm-Message-State: AO0yUKWPvf+YfAbGkdvuPrY2fXV7a9EB+WQrlCkuqOnZpj9e/zcfYPXd
+        wqxaqQooj8yggYq1m4aWxodCTJ8LX/PDCfwcQ03OE6m39u/VvsBFsvQJ4u+jGMo8Xv+7QoVcH8+
+        PukJh8WL/i4NSk19StLvKZ/jO
+X-Received: by 2002:a05:6870:9a1e:b0:16e:23e5:5b65 with SMTP id fo30-20020a0568709a1e00b0016e23e55b65mr1210910oab.7.1676394914510;
+        Tue, 14 Feb 2023 09:15:14 -0800 (PST)
+X-Google-Smtp-Source: AK7set8MrMmgViCnPoo/Cyzeh/QLl1zgh3Dd4LDFZA4q8Hj6ALu8f1u78rAjAarpF/d1TfQ/qvZVrw==
+X-Received: by 2002:a05:6870:9a1e:b0:16e:23e5:5b65 with SMTP id fo30-20020a0568709a1e00b0016e23e55b65mr1210882oab.7.1676394914258;
+        Tue, 14 Feb 2023 09:15:14 -0800 (PST)
 Received: from halaney-x13s.redhat.com ([2600:1700:1ff0:d0e0::21])
-        by smtp.gmail.com with ESMTPSA id h18-20020a9d6a52000000b00688449397d3sm6581786otn.15.2023.02.14.09.15.08
+        by smtp.gmail.com with ESMTPSA id h18-20020a9d6a52000000b00688449397d3sm6581786otn.15.2023.02.14.09.15.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 09:15:09 -0800 (PST)
+        Tue, 14 Feb 2023 09:15:13 -0800 (PST)
 From:   Andrew Halaney <ahalaney@redhat.com>
 To:     devicetree@vger.kernel.org
 Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
@@ -65,12 +66,13 @@ Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         peppe.cavallaro@st.com, joabreu@synopsys.com, mripard@kernel.org,
         shenwei.wang@nxp.com, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Andrew Halaney <ahalaney@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 1/2] dt-bindings: net: snps,dwmac: Fix snps,reset-delays-us dependency
-Date:   Tue, 14 Feb 2023 11:15:04 -0600
-Message-Id: <20230214171505.224602-1-ahalaney@redhat.com>
+        Andrew Halaney <ahalaney@redhat.com>
+Subject: [PATCH v2 2/2] arm64: dts: imx8dxl-evk: Fix eqos phy reset gpio
+Date:   Tue, 14 Feb 2023 11:15:05 -0600
+Message-Id: <20230214171505.224602-2-ahalaney@redhat.com>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230214171505.224602-1-ahalaney@redhat.com>
+References: <20230214171505.224602-1-ahalaney@redhat.com>
 MIME-Version: 1.0
 Content-type: text/plain
 Content-Transfer-Encoding: 8bit
@@ -84,34 +86,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The schema had snps,reset-delay-us as dependent on snps,reset-gpio. The
-actual property is called snps,reset-delays-us, so fix this to catch any
-devicetree defining snsps,reset-delays-us without snps,reset-gpio.
+The deprecated property is named snps,reset-gpio, but this devicetree
+used snps,reset-gpios instead which results in the reset not being used
+and the following make dtbs_check error:
 
-Fixes: 7db3545aef5f ("dt-bindings: net: stmmac: Convert the binding to a schemas")
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+    ./arch/arm64/boot/dts/freescale/imx8dxl-evk.dtb: ethernet@5b050000: 'snps,reset-gpio' is a dependency of 'snps,reset-delays-us'
+        From schema: ./Documentation/devicetree/bindings/net/snps,dwmac.yaml
+
+Use the preferred method of defining the reset gpio in the phy node
+itself. Note that this drops the 10 us pre-delay, but prior this wasn't
+used at all and a pre-delay doesn't make much sense in this context so
+it should be fine.
+
+Fixes: 8dd495d12374 ("arm64: dts: freescale: add support for i.MX8DXL EVK board")
 Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
 ---
 
 Changes since v1:
-    * collected Krzysztof's review
+    * Moved the reset into the ethernet-phy node itself instead of
+      fixing the deprecated usage (for that reason I did not collect
+      Fabio's review tag)
 
- Documentation/devicetree/bindings/net/snps,dwmac.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/freescale/imx8dxl-evk.dts | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-index e88a86623fce..16b7d2904696 100644
---- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-@@ -552,7 +552,7 @@ required:
+diff --git a/arch/arm64/boot/dts/freescale/imx8dxl-evk.dts b/arch/arm64/boot/dts/freescale/imx8dxl-evk.dts
+index 1bcf228a22b8..852420349c01 100644
+--- a/arch/arm64/boot/dts/freescale/imx8dxl-evk.dts
++++ b/arch/arm64/boot/dts/freescale/imx8dxl-evk.dts
+@@ -121,8 +121,6 @@ &eqos {
+ 	phy-handle = <&ethphy0>;
+ 	nvmem-cells = <&fec_mac1>;
+ 	nvmem-cell-names = "mac-address";
+-	snps,reset-gpios = <&pca6416_1 2 GPIO_ACTIVE_LOW>;
+-	snps,reset-delays-us = <10 20 200000>;
+ 	status = "okay";
  
- dependencies:
-   snps,reset-active-low: ["snps,reset-gpio"]
--  snps,reset-delay-us: ["snps,reset-gpio"]
-+  snps,reset-delays-us: ["snps,reset-gpio"]
+ 	mdio {
+@@ -136,6 +134,9 @@ ethphy0: ethernet-phy@0 {
+ 			eee-broken-1000t;
+ 			qca,disable-smarteee;
+ 			qca,disable-hibernation-mode;
++			reset-gpios = <&pca6416_1 2 GPIO_ACTIVE_LOW>;
++			reset-assert-us = <20>;
++			reset-deassert-us = <200000>;
+ 			vddio-supply = <&vddio0>;
  
- allOf:
-   - $ref: "ethernet-controller.yaml#"
+ 			vddio0: vddio-regulator {
 -- 
 2.39.1
 
