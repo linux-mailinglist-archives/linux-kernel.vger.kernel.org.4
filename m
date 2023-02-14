@@ -2,234 +2,390 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388A36968C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BFE36968D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:10:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbjBNQG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 11:06:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
+        id S229660AbjBNQK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 11:10:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjBNQG4 (ORCPT
+        with ESMTP id S229510AbjBNQKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 11:06:56 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1647A2D52
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:06:29 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id k8-20020a05600c1c8800b003dc57ea0dfeso14062780wms.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:06:29 -0800 (PST)
+        Tue, 14 Feb 2023 11:10:53 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1F146B4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:10:51 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id o36so11335773wms.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:10:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HozskIF04LvPiu311g+AWdQ+H+u6mP/NkVb3YULbFlo=;
-        b=bvMm5Bc/0dURT2Wg3JdyeinII68WqRSvTR25JyaC2jklNOMlgF0U60ePFCsJkrB5Jd
-         /C6vLMNgw+20RuxWK2/yGP3taxQzYYftkCarqcfyGuFfUwZPSNE1dLlpHggrJUxiUW8v
-         9cVjU+0TBLBOfaOxCBFhs01Q3V6MFAA3czKzsXlKwpi/9MR3qxpdjaXq71UZkejI1CU2
-         Dwir1bEfsiaYhYzRGzRL3w8KCOzUItgYiZ3SRPuO6tFvpQ0S3J6j35xIxiY+fHjFJ/ZD
-         2h/EpN4Z9mprZYePbhky7g5Vz9Etmt+294MnMAQNz0rwIitJmhDV0OLi6/MY03z8wwKC
-         wGrg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1GdD4Fi2lvbifh6jT2WvrDNhraT/vqDLz4pDcXOMltM=;
+        b=ho24oW2uPBS3dcAYynGs0QMk1sG3m8+VmrRw0ERiPyzHmY3eZ3LrvzLL05juu6Z7Vf
+         Ia92UipDUqP0pFyKeV/vGqV1jDwcehYzyNMJaydUX6W60Qi63dYLCt9MytW8jDYGnvYA
+         8RDTvxYpfLcqzKorhsD3dVj39v6vDaNNjexqKbsrcqzgHKXTpGRrDrgQceGFnTYb+9z0
+         r+djKksaPhnmSH0y10BuX6wd4Aun8AVD6hmaWIVX5V4OkrAy5P6mr3kUmMLDALG/Cmk0
+         Y9TUvDBoybR297EC872GzuvxXZRJUGg6iVAsfX1OBpulV7M9et3kQI5hs3OMBPPGQ/ua
+         Fh2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HozskIF04LvPiu311g+AWdQ+H+u6mP/NkVb3YULbFlo=;
-        b=FtCphlykv+6gMEoDqd6BpHqfu28DwV1Q9zRkPDsi79NAXGyPvOelof6dGEMEPVu++R
-         EoBsbAAiFXDAoceefehy9bV8SVJ6OxkCJ5PIE6yGxKYpxdXuN0oN88/BLULzwAmQAFVx
-         6MjK07Jp2Ui9CBgPloltiybvvHKGEOpajnQe12y49K0xfJGCPBZ6WSUp+p3fiEGrEQOw
-         tP1Umo3AijQn59KjGMGUdIYEw8hf7nSyVUzq8jQzCq6Db42saOwQwDo/S9fiCXUJ8tUP
-         gYlq3qVMXfeLH8a/dsYLKgA89Q4+1fChhx5WqMj2dW8ErU2X0ie9bIcx9GTVcr8F55fY
-         GD9Q==
-X-Gm-Message-State: AO0yUKXpsQVwsF0kaAy/vm8sOx9LUNTyS4ZVtYiuLZ5+J6nH0TtRr31U
-        qQGPRhhtI8ywoJjqmOG23whprqF7VagCz2+ShO8=
-X-Google-Smtp-Source: AK7set+893UcHSztFstxE/YPkOItOGZRJkg9Hrmcwl7Ayv2qsnBgqcKoSinLM5kZ62MofPOz+PluEQ==
-X-Received: by 2002:a05:600c:43d4:b0:3dc:932f:f7cb with SMTP id f20-20020a05600c43d400b003dc932ff7cbmr2527304wmn.37.1676390787409;
-        Tue, 14 Feb 2023 08:06:27 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b566:0:eeae:410c:bbe5:ac1b? ([2a02:6b6a:b566:0:eeae:410c:bbe5:ac1b])
-        by smtp.gmail.com with ESMTPSA id n6-20020a7bcbc6000000b003dfe57f6f61sm16727928wmi.33.2023.02.14.08.06.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 08:06:26 -0800 (PST)
-Message-ID: <5976b0c9-d4e7-7561-6ce0-790e2460d1ef@bytedance.com>
-Date:   Tue, 14 Feb 2023 16:06:26 +0000
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1GdD4Fi2lvbifh6jT2WvrDNhraT/vqDLz4pDcXOMltM=;
+        b=CJKG+F3TzMUkeEBR/owlP55CYTJS26EKDPmnPRGbPoAUODgSyAD7HHHZ1AH22sVUYB
+         cjOQf1UE7gRa6+0a6kkxXG2MLzJEeXq1MDLFkFcGEY3VsI7/VTPNdZvMUL0I+qMs3x0+
+         6aEhEWMeZBH1EUNFW50rWg4bRSfEHCS2fuH876KaNdx9F/HJmJKV0uIwbUyIAUOQh5wH
+         7w1NXBDfqSpVSIdxZ1FWPZPq1bjoAKqMiNtidgoB68F55JtSHpmmhPBoGwVfNWDSPDkC
+         AcklktqF8K2GHtWk2KpJOm0+kII+k5sgDBMnf7H8nInpqtT4yOQ8F3RLbPkFiQePDM54
+         9Mzg==
+X-Gm-Message-State: AO0yUKWeXUYRahEVtDcKlQSzojRTVYRa90E2d452yBhPdrZX9tJ2AvJ/
+        Vr2xb7tITeC2UYSINB2F36+xe+BFE1LA7kgjFaaANg==
+X-Google-Smtp-Source: AK7set8wR9w2r7SJ4Fv7jc4EleCsHQSFDK51lhRN0ZSgN3aQx2aOeccyQu20EFrXLWsfcmyKvjsX1rkCXxXe6VRYhog=
+X-Received: by 2002:a05:600c:3b92:b0:3df:c430:60d9 with SMTP id
+ n18-20020a05600c3b9200b003dfc43060d9mr5595wms.188.1676391049742; Tue, 14 Feb
+ 2023 08:10:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [v3 0/6] KVM: arm64: implement vcpu_is_preempted check
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, linux@armlinux.org.uk,
-        yezengruan@huawei.com, catalin.marinas@arm.com, will@kernel.org,
-        maz@kernel.org, steven.price@arm.com, mark.rutland@arm.com,
-        bagasdotme@gmail.com, pbonzini@redhat.com
-Cc:     fam.zheng@bytedance.com, liangma@liangbit.com,
-        punit.agrawal@bytedance.com
-References: <20230117102930.1053337-1-usama.arif@bytedance.com>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <20230117102930.1053337-1-usama.arif@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230214050452.26390-1-namhyung@kernel.org> <20230214050452.26390-2-namhyung@kernel.org>
+In-Reply-To: <20230214050452.26390-2-namhyung@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 14 Feb 2023 08:10:37 -0800
+Message-ID: <CAP-5=fWn3ybuoJSsP8G1JmgEgUC2mY3A+0kscfN5DAJeiRK_eg@mail.gmail.com>
+Subject: Re: [PATCH 1/7] perf bpf filter: Introduce basic BPF filter expression
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Song Liu <song@kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 13, 2023 at 9:05 PM Namhyung Kim <namhyung@kernel.org> wrote:
+>
+> This implements a tiny parser for the filter expressions used for BPF.
+> Each expression will be converted to struct perf_bpf_filter_expr and
+> be passed to a BPF map.
+>
+> For now, I'd like to start with the very basic comparisons like EQ or
+> GT.  The LHS should be a term for sample data and the RHS is a number.
+> The expressions are connected by a comma.  For example,
+>
+>     period > 10000
+>     ip < 0x1000000000000, cpu == 3
+>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  tools/perf/util/Build        | 16 +++++++++
+>  tools/perf/util/bpf-filter.c | 37 +++++++++++++++++++
+>  tools/perf/util/bpf-filter.h | 36 +++++++++++++++++++
+>  tools/perf/util/bpf-filter.l | 70 ++++++++++++++++++++++++++++++++++++
+>  tools/perf/util/bpf-filter.y | 52 +++++++++++++++++++++++++++
+>  5 files changed, 211 insertions(+)
+>  create mode 100644 tools/perf/util/bpf-filter.c
+>  create mode 100644 tools/perf/util/bpf-filter.h
+>  create mode 100644 tools/perf/util/bpf-filter.l
+>  create mode 100644 tools/perf/util/bpf-filter.y
+>
+> diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+> index 918b501f9bd8..6af73fb5c797 100644
+> --- a/tools/perf/util/Build
+> +++ b/tools/perf/util/Build
+> @@ -154,6 +154,9 @@ perf-$(CONFIG_PERF_BPF_SKEL) += bpf_counter.o
+>  perf-$(CONFIG_PERF_BPF_SKEL) += bpf_counter_cgroup.o
+>  perf-$(CONFIG_PERF_BPF_SKEL) += bpf_ftrace.o
+>  perf-$(CONFIG_PERF_BPF_SKEL) += bpf_off_cpu.o
+> +perf-$(CONFIG_PERF_BPF_SKEL) += bpf-filter.o
+> +perf-$(CONFIG_PERF_BPF_SKEL) += bpf-filter-flex.o
+> +perf-$(CONFIG_PERF_BPF_SKEL) += bpf-filter-bison.o
+>
+>  ifeq ($(CONFIG_LIBTRACEEVENT),y)
+>    perf-$(CONFIG_PERF_BPF_SKEL) += bpf_lock_contention.o
+> @@ -266,6 +269,16 @@ $(OUTPUT)util/pmu-bison.c $(OUTPUT)util/pmu-bison.h: util/pmu.y
+>         $(Q)$(call echo-cmd,bison)$(BISON) -v $< -d $(PARSER_DEBUG_BISON) $(BISON_FILE_PREFIX_MAP) \
+>                 -o $(OUTPUT)util/pmu-bison.c -p perf_pmu_
+>
+> +$(OUTPUT)util/bpf-filter-flex.c $(OUTPUT)util/bpf-filter-flex.h: util/bpf-filter.l $(OUTPUT)util/bpf-filter-bison.c
+> +       $(call rule_mkdir)
+> +       $(Q)$(call echo-cmd,flex)$(FLEX) -o $(OUTPUT)util/bpf-filter-flex.c \
+> +               --header-file=$(OUTPUT)util/bpf-filter-flex.h $(PARSER_DEBUG_FLEX) $<
+> +
+> +$(OUTPUT)util/bpf-filter-bison.c $(OUTPUT)util/bpf-filter-bison.h: util/bpf-filter.y
+> +       $(call rule_mkdir)
+> +       $(Q)$(call echo-cmd,bison)$(BISON) -v $< -d $(PARSER_DEBUG_BISON) $(BISON_FILE_PREFIX_MAP) \
+> +               -o $(OUTPUT)util/bpf-filter-bison.c -p perf_bpf_filter_
+> +
+>  FLEX_GE_26 := $(shell expr $(shell $(FLEX) --version | sed -e  's/flex \([0-9]\+\).\([0-9]\+\)/\1\2/g') \>\= 26)
+>  ifeq ($(FLEX_GE_26),1)
+>    flex_flags := -Wno-switch-enum -Wno-switch-default -Wno-unused-function -Wno-redundant-decls -Wno-sign-compare -Wno-unused-parameter -Wno-missing-prototypes -Wno-missing-declarations
+> @@ -279,6 +292,7 @@ endif
+>  CFLAGS_parse-events-flex.o  += $(flex_flags)
+>  CFLAGS_pmu-flex.o           += $(flex_flags)
+>  CFLAGS_expr-flex.o          += $(flex_flags)
+> +CFLAGS_bpf-filter-flex.o    += $(flex_flags)
+>
+>  bison_flags := -DYYENABLE_NLS=0
+>  BISON_GE_35 := $(shell expr $(shell $(BISON) --version | grep bison | sed -e 's/.\+ \([0-9]\+\).\([0-9]\+\)/\1\2/g') \>\= 35)
+> @@ -290,10 +304,12 @@ endif
+>  CFLAGS_parse-events-bison.o += $(bison_flags)
+>  CFLAGS_pmu-bison.o          += -DYYLTYPE_IS_TRIVIAL=0 $(bison_flags)
+>  CFLAGS_expr-bison.o         += -DYYLTYPE_IS_TRIVIAL=0 $(bison_flags)
+> +CFLAGS_bpf-filter-bison.o   += -DYYLTYPE_IS_TRIVIAL=0 $(bison_flags)
+>
+>  $(OUTPUT)util/parse-events.o: $(OUTPUT)util/parse-events-flex.c $(OUTPUT)util/parse-events-bison.c
+>  $(OUTPUT)util/pmu.o: $(OUTPUT)util/pmu-flex.c $(OUTPUT)util/pmu-bison.c
+>  $(OUTPUT)util/expr.o: $(OUTPUT)util/expr-flex.c $(OUTPUT)util/expr-bison.c
+> +$(OUTPUT)util/bpf-filter.o: $(OUTPUT)util/bpf-filter-flex.c $(OUTPUT)util/bpf-filter-bison.c
+>
+>  CFLAGS_bitmap.o        += -Wno-unused-parameter -DETC_PERFCONFIG="BUILD_STR($(ETC_PERFCONFIG_SQ))"
+>  CFLAGS_find_bit.o      += -Wno-unused-parameter -DETC_PERFCONFIG="BUILD_STR($(ETC_PERFCONFIG_SQ))"
+> diff --git a/tools/perf/util/bpf-filter.c b/tools/perf/util/bpf-filter.c
+> new file mode 100644
+> index 000000000000..6b1148fcfb0e
+> --- /dev/null
+> +++ b/tools/perf/util/bpf-filter.c
+> @@ -0,0 +1,37 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <stdlib.h>
+> +
+> +#include "util/bpf-filter.h"
+> +#include "util/bpf-filter-flex.h"
+> +#include "util/bpf-filter-bison.h"
+> +
+> +struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long sample_flags,
+> +                                                      enum perf_bpf_filter_op op,
+> +                                                      unsigned long val)
+> +{
+> +       struct perf_bpf_filter_expr *expr;
+> +
+> +       expr = malloc(sizeof(*expr));
+> +       if (expr != NULL) {
+> +               expr->sample_flags = sample_flags;
+> +               expr->op = op;
+> +               expr->val = val;
+> +       }
+> +       return expr;
+> +}
+> +
+> +int perf_bpf_filter__parse(struct list_head *expr_head, const char *str)
+> +{
+> +       YY_BUFFER_STATE buffer;
+> +       int ret;
+> +
+> +       buffer = perf_bpf_filter__scan_string(str);
+> +
+> +       ret = perf_bpf_filter_parse(expr_head);
+> +
+> +       perf_bpf_filter__flush_buffer(buffer);
+> +       perf_bpf_filter__delete_buffer(buffer);
+> +       perf_bpf_filter_lex_destroy();
+> +
+> +       return ret;
+> +}
+> \ No newline at end of file
+> diff --git a/tools/perf/util/bpf-filter.h b/tools/perf/util/bpf-filter.h
+> new file mode 100644
+> index 000000000000..fd5b1164a322
+> --- /dev/null
+> +++ b/tools/perf/util/bpf-filter.h
+> @@ -0,0 +1,36 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#ifndef PERF_UTIL_BPF_FILTER_H
+> +#define PERF_UTIL_BPF_FILTER_H
+> +
+> +#include <linux/list.h>
+> +
+> +enum perf_bpf_filter_op {
+> +       PBF_OP_EQ,
+> +       PBF_OP_NEQ,
+> +       PBF_OP_GT,
+> +       PBF_OP_GE,
+> +       PBF_OP_LT,
+> +       PBF_OP_LE,
+> +       PBF_OP_AND,
+> +};
+> +
+> +struct perf_bpf_filter_expr {
+> +       struct list_head list;
+> +       enum perf_bpf_filter_op op;
+> +       unsigned long sample_flags;
+> +       unsigned long val;
+> +};
+> +
+> +#ifdef HAVE_BPF_SKEL
+> +struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long sample_flags,
+> +                                                      enum perf_bpf_filter_op op,
+> +                                                      unsigned long val);
+> +int perf_bpf_filter__parse(struct list_head *expr_head, const char *str);
+> +#else /* !HAVE_BPF_SKEL */
+> +static inline int perf_bpf_filter__parse(struct list_head *expr_head __maybe_unused,
+> +                                        const char *str __maybe_unused)
+> +{
+> +       return -ENOSYS;
+> +}
+> +#endif /* HAVE_BPF_SKEL*/
+> +#endif /* PERF_UTIL_BPF_FILTER_H */
+> \ No newline at end of file
+> diff --git a/tools/perf/util/bpf-filter.l b/tools/perf/util/bpf-filter.l
+> new file mode 100644
+> index 000000000000..34c6a9fd4fa4
+> --- /dev/null
+> +++ b/tools/perf/util/bpf-filter.l
+> @@ -0,0 +1,70 @@
+> +%option prefix="perf_bpf_filter_"
+> +%option noyywrap
+> +
+> +%{
+> +#include <stdlib.h>
+> +#include <linux/perf_event.h>
+> +
+> +#include "bpf-filter.h"
+> +#include "bpf-filter-bison.h"
+> +
+> +static int sample(unsigned long sample_flag)
+> +{
+> +       perf_bpf_filter_lval.sample = sample_flag;
+> +       return BFT_SAMPLE;
+> +}
+> +
+> +static int operator(enum perf_bpf_filter_op op)
+> +{
+> +       perf_bpf_filter_lval.op = op;
+> +       return BFT_OP;
+> +}
+> +
+> +static int value(int base)
+> +{
+> +       long num;
+> +
+> +       errno = 0;
+> +       num = strtoul(perf_bpf_filter_text, NULL, base);
+> +       if (errno)
+> +               return BFT_ERROR;
+> +
+> +       perf_bpf_filter_lval.num = num;
+> +       return BFT_NUM;
+> +}
+> +
+> +%}
+> +
+> +num_dec                [0-9]+
+> +num_hex                0[Xx][0-9a-fA-F]+
+> +
+> +%%
+> +
+> +{num_dec}      { return value(10); }
+> +{num_hex}      { return value(16); }
+> +
+> +ip             { return sample(PERF_SAMPLE_IP); }
+> +id             { return sample(PERF_SAMPLE_ID); }
+> +tid            { return sample(PERF_SAMPLE_TID); }
+> +cpu            { return sample(PERF_SAMPLE_CPU); }
+> +time           { return sample(PERF_SAMPLE_TIME); }
+> +addr           { return sample(PERF_SAMPLE_ADDR); }
+> +period         { return sample(PERF_SAMPLE_PERIOD); }
+> +txn            { return sample(PERF_SAMPLE_TRANSACTION); }
+> +weight         { return sample(PERF_SAMPLE_WEIGHT); }
+> +phys_addr      { return sample(PERF_SAMPLE_PHYS_ADDR); }
+> +code_pgsz      { return sample(PERF_SAMPLE_CODE_PAGE_SIZE); }
+> +data_pgsz      { return sample(PERF_SAMPLE_DATA_PAGE_SIZE); }
+> +
+> +"=="           { return operator(PBF_OP_EQ); }
+> +"!="           { return operator(PBF_OP_NEQ); }
+> +">"            { return operator(PBF_OP_GT); }
+> +"<"            { return operator(PBF_OP_LT); }
+> +">="           { return operator(PBF_OP_GE); }
+> +"<="           { return operator(PBF_OP_LE); }
+> +"&"            { return operator(PBF_OP_AND); }
+> +
+> +","            { return ','; }
+> +.              { }
+> +
+> +%%
+> diff --git a/tools/perf/util/bpf-filter.y b/tools/perf/util/bpf-filter.y
+> new file mode 100644
+> index 000000000000..0bf36ec30abf
+> --- /dev/null
+> +++ b/tools/perf/util/bpf-filter.y
+> @@ -0,0 +1,52 @@
+> +%parse-param {struct list_head *expr_head}
+> +
+> +%{
+> +
+> +#include <stdio.h>
+> +#include <string.h>
+> +#include <linux/compiler.h>
+> +#include <linux/list.h>
+> +#include "bpf-filter.h"
+> +
+> +static void perf_bpf_filter_error(struct list_head *expr __maybe_unused,
+> +                                 char const *msg)
+> +{
+> +       printf("perf_bpf_filter: %s\n", msg);
+> +}
+> +
+> +%}
+> +
+> +%union
+> +{
+> +       unsigned long num;
+> +       unsigned long sample;
+> +       enum perf_bpf_filter_op op;
+> +       struct perf_bpf_filter_expr *expr;
+> +}
+> +
+> +%token BFT_SAMPLE BFT_OP BFT_ERROR BFT_NUM
+> +%type <expr> filter_term
 
-
-On 17/01/2023 10:29, Usama Arif wrote:
-> This patchset adds support for vcpu_is_preempted in arm64, which allows the guest
-> to check if a vcpu was scheduled out, which is useful to know incase it was
-> holding a lock. vcpu_is_preempted is well integrated in core kernel code and can
-> be used to improve performance in locking (owner_on_cpu usage in mutex_spin_on_owner,
-> mutex_can_spin_on_owner, rtmutex_spin_on_owner and osq_lock) and scheduling
-> (available_idle_cpu which is used in several places in kernel/sched/fair.c
-> for e.g. in wake_affine to determine which CPU can run soonest).
-> 
-> This patchset shows significant improvement on overcommitted hosts (vCPUs > pCPUS),
-> as waiting for preempted vCPUs reduces performance.
-> 
-
-Hi,
-
-Just wanted to check if there are any comments for this?
+To avoid memory leaks for parse errors, I think you want here:
+%destructor { free($$); } <expr>
 
 Thanks,
-Usama
+Ian
 
-> If merged, vcpu_is_preempted could also be used to optimize IPI performance (along
-> with directed yield to target IPI vCPU) similar to how its done in x86
-> (https://lore.kernel.org/all/1560255830-8656-2-git-send-email-wanpengli@tencent.com/)
-> 
-> All the results in the below experiments are done on an aws r6g.metal instance
-> which has 64 pCPUs.
-> 
-> The following table shows the index results of UnixBench running on a 128 vCPU VM
-> with (6.0+vcpu_is_preempted) and without (6.0 base) the patchset.
-> TestName                                6.0 base    6.0+vcpu_is_preempted      % improvement for vcpu_is_preempted
-> Dhrystone 2 using register variables    187761      191274.7                   1.871368389
-> Double-Precision Whetstone              96743.6     98414.4                    1.727039308
-> Execl Throughput                        689.3       10426                      1412.548963
-> File Copy 1024 bufsize 2000 maxblocks   549.5       3165                       475.978162
-> File Copy 256 bufsize 500 maxblocks     400.7       2084.7                     420.2645371
-> File Copy 4096 bufsize 8000 maxblocks   894.3       5003.2                     459.4543218
-> Pipe Throughput                         76819.5     78601.5                    2.319723508
-> Pipe-based Context Switching            3444.8      13414.5                    289.4130283
-> Process Creation                        301.1       293.4                      -2.557289937
-> Shell Scripts (1 concurrent)            1248.1      28300.6                    2167.494592
-> Shell Scripts (8 concurrent)            781.2       26222.3                    3256.669227
-> System Call Overhead                    3426        3729.4                     8.855808523
-> 
-> System Benchmarks Index Score           3053        11534                      277.7923354
-> 
-> This shows a 278% overall improvement using these patches.
-> 
-> The biggest improvement is in the shell scripts benchmark, which forks a lot of processes.
-> This acquires rwsem lock where a large chunk of time is spent in base kernel.
-> This can be seen from one of the callstack of the perf output of the shell
-> scripts benchmark on base (pseudo NMI enabled for perf numbers below):
-> - 33.79% el0_svc
->     - 33.43% do_el0_svc
->        - 33.43% el0_svc_common.constprop.3
->           - 33.30% invoke_syscall
->              - 17.27% __arm64_sys_clone
->                 - 17.27% __do_sys_clone
->                    - 17.26% kernel_clone
->                       - 16.73% copy_process
->                          - 11.91% dup_mm
->                             - 11.82% dup_mmap
->                                - 9.15% down_write
->                                   - 8.87% rwsem_down_write_slowpath
->                                      - 8.48% osq_lock
-> 
-> Just under 50% of the total time in the shell script benchmarks ends up being
-> spent in osq_lock in the base kernel:
->    Children      Self  Command   Shared Object        Symbol
->     17.19%    10.71%  sh      [kernel.kallsyms]  [k] osq_lock
->      6.17%     4.04%  sort    [kernel.kallsyms]  [k] osq_lock
->      4.20%     2.60%  multi.  [kernel.kallsyms]  [k] osq_lock
->      3.77%     2.47%  grep    [kernel.kallsyms]  [k] osq_lock
->      3.50%     2.24%  expr    [kernel.kallsyms]  [k] osq_lock
->      3.41%     2.23%  od      [kernel.kallsyms]  [k] osq_lock
->      3.36%     2.15%  rm      [kernel.kallsyms]  [k] osq_lock
->      3.28%     2.12%  tee     [kernel.kallsyms]  [k] osq_lock
->      3.16%     2.02%  wc      [kernel.kallsyms]  [k] osq_lock
->      0.21%     0.13%  looper  [kernel.kallsyms]  [k] osq_lock
->      0.01%     0.00%  Run     [kernel.kallsyms]  [k] osq_lock
-> 
-> and this comes down to less than 1% total with 6.0+vcpu_is_preempted kernel:
->    Children      Self  Command   Shared Object        Symbol
->       0.26%     0.21%  sh      [kernel.kallsyms]  [k] osq_lock
->       0.10%     0.08%  multi.  [kernel.kallsyms]  [k] osq_lock
->       0.04%     0.04%  sort    [kernel.kallsyms]  [k] osq_lock
->       0.02%     0.01%  grep    [kernel.kallsyms]  [k] osq_lock
->       0.02%     0.02%  od      [kernel.kallsyms]  [k] osq_lock
->       0.01%     0.01%  tee     [kernel.kallsyms]  [k] osq_lock
->       0.01%     0.00%  expr    [kernel.kallsyms]  [k] osq_lock
->       0.01%     0.01%  looper  [kernel.kallsyms]  [k] osq_lock
->       0.00%     0.00%  wc      [kernel.kallsyms]  [k] osq_lock
->       0.00%     0.00%  rm      [kernel.kallsyms]  [k] osq_lock
-> 
-> To make sure, there is no change in performance when vCPUs < pCPUs, UnixBench
-> was run on a 32 CPU VM. The kernel with vcpu_is_preempted implemented
-> performed 0.9% better overall than base kernel, and the individual benchmarks
-> were within +/-2% improvement over 6.0 base.
-> Hence the patches have no negative affect when vCPUs < pCPUs.
-> 
-> The respective QEMU change to test this is at
-> https://github.com/uarif1/qemu/commit/2da2c2927ae8de8f03f439804a0dad9cf68501b6.
-> 
-> Looking forward to your response!
-> Thanks,
-> Usama
-> ---
-> v2->v3
-> - Updated the patchset from 6.0 to 6.2-rc3
-> - Made pv_lock_init an early_initcall
-> - Improved documentation
-> - Changed pvlock_vcpu_state to aligned struct
-> - Minor improvevments
-> 
-> RFC->v2
-> - Fixed table and code referencing in pvlock documentation
-> - Switched to using a single hypercall similar to ptp_kvm and made check
->    for has_kvm_pvlock simpler
-> 
-> Usama Arif (6):
->    KVM: arm64: Document PV-lock interface
->    KVM: arm64: Add SMCCC paravirtualised lock calls
->    KVM: arm64: Support pvlock preempted via shared structure
->    KVM: arm64: Provide VCPU attributes for PV lock
->    KVM: arm64: Support the VCPU preemption check
->    KVM: selftests: add tests for PV time specific hypercall
-> 
->   Documentation/virt/kvm/arm/hypercalls.rst     |   3 +
->   Documentation/virt/kvm/arm/index.rst          |   1 +
->   Documentation/virt/kvm/arm/pvlock.rst         |  54 +++++++++
->   Documentation/virt/kvm/devices/vcpu.rst       |  25 ++++
->   arch/arm64/include/asm/kvm_host.h             |  25 ++++
->   arch/arm64/include/asm/paravirt.h             |   2 +
->   arch/arm64/include/asm/pvlock-abi.h           |  15 +++
->   arch/arm64/include/asm/spinlock.h             |  16 ++-
->   arch/arm64/include/uapi/asm/kvm.h             |   3 +
->   arch/arm64/kernel/paravirt.c                  | 113 ++++++++++++++++++
->   arch/arm64/kvm/Makefile                       |   2 +-
->   arch/arm64/kvm/arm.c                          |   8 ++
->   arch/arm64/kvm/guest.c                        |   9 ++
->   arch/arm64/kvm/hypercalls.c                   |   8 ++
->   arch/arm64/kvm/pvlock.c                       | 100 ++++++++++++++++
->   include/linux/arm-smccc.h                     |   8 ++
->   include/uapi/linux/kvm.h                      |   2 +
->   tools/arch/arm64/include/uapi/asm/kvm.h       |   1 +
->   tools/include/linux/arm-smccc.h               |   8 ++
->   .../selftests/kvm/aarch64/hypercalls.c        |   2 +
->   20 files changed, 403 insertions(+), 2 deletions(-)
->   create mode 100644 Documentation/virt/kvm/arm/pvlock.rst
->   create mode 100644 arch/arm64/include/asm/pvlock-abi.h
->   create mode 100644 arch/arm64/kvm/pvlock.c
-> 
+> +%type <sample> BFT_SAMPLE
+> +%type <op> BFT_OP
+> +%type <num> BFT_NUM
+> +
+> +%%
+> +
+> +filter:
+> +filter ',' filter_term
+> +{
+> +       list_add(&$3->list, expr_head);
+> +}
+> +|
+> +filter_term
+> +{
+> +       list_add(&$1->list, expr_head);
+> +}
+> +
+> +filter_term:
+> +BFT_SAMPLE BFT_OP BFT_NUM
+> +{
+> +       $$ = perf_bpf_filter_expr__new($1, $2, $3);
+> +}
+> +
+> +%%
+> --
+> 2.39.1.581.gbfd45094c4-goog
+>
