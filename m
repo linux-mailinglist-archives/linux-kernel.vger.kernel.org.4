@@ -2,87 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53D35695C84
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7E6695C8E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjBNINc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 03:13:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49922 "EHLO
+        id S231490AbjBNINl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 03:13:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231868AbjBNINR (ORCPT
+        with ESMTP id S231682AbjBNINX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 03:13:17 -0500
+        Tue, 14 Feb 2023 03:13:23 -0500
 Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C5310CB
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:13:13 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id he5so2565406wmb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:13:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B92B5596
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:13:21 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id he5so2565654wmb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:13:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=cRk5ZZgGHESQjRAciCkzTAgvsM2DNZ9ZsvdntVwJ0aM=;
-        b=VyF1fPdQ9QypQQWSzFllqGzI7seyTSuDNNWwfWkkysTNgd3Z0AjIHNF4LL0vR9kDt1
-         TWXLrpk12hmDLU5xwDRS8oUfZzApeC/OHNNgO/kMt5igi3066XuNNQHPHFYxq5aB3Iio
-         Rm5A78vOgv0qZPG3TgPZ61nsLc76jlc9DVGKtErGMeKDI9u1sAq/m/nABeTJZydjJdxc
-         KGyGm1+PtUnlS5irzivoc/koNSZhBHg8b061deMm/1IYjdDegSeovedsXz378PrcPSkc
-         AtwiyODrhxTX3DivF8dzOcKQXifNwgDmLtIw7KfLqn/lQcvbpYuvCV1bwFmaRQqmk4vF
-         cK6A==
+        bh=GHpaQq9B2wrn+Cjlf3NtLyf+7OFHfhWv9uGGdSiv/7c=;
+        b=Ty3UtCwZvrw+i2dvA18WAg2j/gojaLzg1DAUNLAgK1b3m5/HA+i0+r7RyXX1q6TPMk
+         KPnCB9L50sPdSVazWqwlB1b9BU71SYbvGP3pG1S2LWHlT3kuIzGiAZ8TM76cFw/ZheMz
+         5AE26YLz7KKAjC+9VJPXB8IGP8evxc3a7WLhOhvDre7KkCQFA4dnJSwpYoS3Ga9shiJE
+         lIvUEKwiDAnFHDv8zBbEnMVwddJlGMY2v8GKgxlwv98XNKt7ngUg+LM3PskKa+h32mlj
+         daH7dRSy2pnYBjG0cNONlJFe/Ot4mjZ8FDGANYis5rWrsZiv16DuL+bljKj39H1cwBbH
+         swJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cRk5ZZgGHESQjRAciCkzTAgvsM2DNZ9ZsvdntVwJ0aM=;
-        b=VDCECmWFFAFCfFY+fltE0OKyvQ3BAMxf8NI38WwC+r7vK5CBJDK+XxvNJBOGcizW+1
-         2duBOSHOFtfTmcnnwH8ELgzwGezJy8QShUXM2sfwGg4/6m/4mI5/JdL3QO9eTIS6youV
-         dZuPncK9m/LOEh2qtL6qe9pd+82Sz/PNg8m6LsSc2Ju7LKCXN0q+aa9L2YJK9bi6jDIr
-         K0WnSjE68sztcSYp/JjXIEUJPzmFv9PNARRdq6D0r0eza/GAAl5xBxfS97rmPItweJu4
-         3vA31vvYNNcdDP+B71TsBP0rwrMjnzdZUjUafBAezlk15FeyHMj+PBHN/55SGPdq4o7J
-         Ab8g==
-X-Gm-Message-State: AO0yUKUcrIe5fxFYG2q0f4ei1gs/+co2PHvvaAVLPOmH6gAPptVEM3fL
-        +oAgujalxEMUy3fWic9O5D2otZN4/5u75rHc
-X-Google-Smtp-Source: AK7set86AEK8D+D8+uPrCG75m0oQUNX8HZoOAkr8DDcCJCZFL80/CRikdClz+P95k5T2L/MBj1J/jQ==
-X-Received: by 2002:a05:600c:30d2:b0:3dc:4fd7:31f7 with SMTP id h18-20020a05600c30d200b003dc4fd731f7mr1177763wmn.41.1676362392093;
-        Tue, 14 Feb 2023 00:13:12 -0800 (PST)
-Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id l9-20020a05600c4f0900b003db1ca20170sm17626418wmq.37.2023.02.14.00.13.09
+        bh=GHpaQq9B2wrn+Cjlf3NtLyf+7OFHfhWv9uGGdSiv/7c=;
+        b=xthZ9dQHknTmym9XSAPoZfU33GSekBlPPidbb0NE9e/FBY5AKaLwjtoEGs8eeSj8ri
+         aG0NIrTfekJrOrOieO6SnbDGyJ644XXXzOioOWwO1Zxb6V696snS9Gfrg6BPp/gu34Ac
+         LQ3nViAxhGdVloGsRqdZ8yBuGxIUwU8aYpL0ahhEuZjZUjkqL1R35YSLcOg+RB5Tudrv
+         hhHb10xPbmWGzR+9cZlWgV4apt0hDdVQvUGsZC+J9/OLhmcGWQLkfEHO2aljoZ+r/K5h
+         dzJ+oEzkckErj2BVa/JVJmWkY8hxw0zcCvPYSdJOP5/x3BBvG8UnsXR48cc6eKn/3J86
+         DlLw==
+X-Gm-Message-State: AO0yUKWuZ/DuBppe9mM/c6i52fgEezIdWL2cWeS1Gs+0oaXGKOPhmiwM
+        DyTxhlgpOtYWF0YuTBJRZ0BetQ==
+X-Google-Smtp-Source: AK7set+OX2Ib6PWH7M5HgBNK8worIzRCtIeKsrwFzxHqQ1CJRDA1mavA/qMeJPg7uy7j6yp0wBnMgg==
+X-Received: by 2002:a05:600c:4a90:b0:3dc:46f6:e607 with SMTP id b16-20020a05600c4a9000b003dc46f6e607mr1250694wmp.3.1676362400677;
+        Tue, 14 Feb 2023 00:13:20 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id j6-20020a05600c42c600b003df245cd853sm15360946wme.44.2023.02.14.00.13.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 00:13:11 -0800 (PST)
-Message-ID: <14274f04-2991-95bd-c29b-07e86e8755c1@linaro.org>
-Date:   Tue, 14 Feb 2023 09:13:08 +0100
+        Tue, 14 Feb 2023 00:13:20 -0800 (PST)
+Message-ID: <4d68ace9-d9ab-647a-9cd0-33f5cc450e58@linaro.org>
+Date:   Tue, 14 Feb 2023 09:13:18 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [PATCH v2 04/24] arm64/cpu: Mark cpu_die() __noreturn
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] dt-bindings: mailbox: sti-mailbox: convert to DT
+ schema
 Content-Language: en-US
-To:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     jgross@suse.com, richard.henderson@linaro.org,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        linux-alpha@vger.kernel.org, linux@armlinux.org.uk,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, loongarch@lists.linux.dev, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
-        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
-        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org
-References: <cover.1676358308.git.jpoimboe@kernel.org>
- <e47fc487980d5330e6059ac6e16416bec88cda0e.1676358308.git.jpoimboe@kernel.org>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <e47fc487980d5330e6059ac6e16416bec88cda0e.1676358308.git.jpoimboe@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Alain Volmat <avolmat@me.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230213212751.18789-1-avolmat@me.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230213212751.18789-1-avolmat@me.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -93,26 +78,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/2/23 08:05, Josh Poimboeuf wrote:
-> cpu_die() doesn't return.  Annotate it as such.  By extension this also
-> makes arch_cpu_idle_dead() noreturn.
+On 13/02/2023 22:27, Alain Volmat wrote:
+> Convert the sti-mailbox.txt file into st,sti-mailbox.yaml
 > 
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> Signed-off-by: Alain Volmat <avolmat@me.com>
 > ---
->   arch/arm64/include/asm/smp.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> v2: update commit log
+>     remove quotes around urls
+>     add mbox-name $ref
+>     remove mbox-name from required properties since not mandatory in the driver
+>     fix IRQ type in example
 > 
-> diff --git a/arch/arm64/include/asm/smp.h b/arch/arm64/include/asm/smp.h
-> index fc55f5a57a06..5733a31bab08 100644
-> --- a/arch/arm64/include/asm/smp.h
-> +++ b/arch/arm64/include/asm/smp.h
-> @@ -100,7 +100,7 @@ static inline void arch_send_wakeup_ipi_mask(const struct cpumask *mask)
->   extern int __cpu_disable(void);
->   
->   extern void __cpu_die(unsigned int cpu);
-> -extern void cpu_die(void);
-> +extern void __noreturn cpu_die(void);
->   extern void cpu_die_early(void);
+>  .../bindings/mailbox/st,sti-mailbox.yaml      | 53 +++++++++++++++++++
+>  .../bindings/mailbox/sti-mailbox.txt          | 51 ------------------
+>  2 files changed, 53 insertions(+), 51 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mailbox/st,sti-mailbox.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mailbox/sti-mailbox.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/mailbox/st,sti-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/st,sti-mailbox.yaml
+> new file mode 100644
+> index 000000000000..e91ca86284eb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mailbox/st,sti-mailbox.yaml
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mailbox/st,sti-mailbox.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: STMicroelectronics Mailbox Driver for STi platform
+> +
+> +description:
+> +  Each ST Mailbox IP currently consists of 4 instances of 32 channels.
+> +  Messages are passed between Application and Remote processors using
+> +  shared memory.
+> +
+> +maintainers:
+> +  - Patrice Chotard <patrice.chotard@foss.st.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: st,stih407-mailbox
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  mbox-name:
+> +    $ref: '/schemas/types.yaml#/definitions/string'
 
-Shouldn't cpu_operations::cpu_die() be declared noreturn first?
+Still quotes to remove.
+
+
+
+Best regards,
+Krzysztof
 
