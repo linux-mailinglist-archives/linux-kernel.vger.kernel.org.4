@@ -2,204 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AAB96969BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CBE6969C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbjBNQfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 11:35:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
+        id S232148AbjBNQgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 11:36:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjBNQfO (ORCPT
+        with ESMTP id S232082AbjBNQgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 11:35:14 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7751BAEE
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:34:34 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id a2so16287453wrd.6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:34:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=sPPHKOJ8BbxBRItJGDJFEQbo+vowRlUP9MhQo5yyu6U=;
-        b=WndG3+R/WLWXsLCVrKYQq3f5S1JhiHK6YEppgJ2JzpKDs4+/5KzPfLFMJR69/cw4B/
-         uy5mrHDfLJW+EoGhAj45FPfDkVj8J5WMrjsmX1HTVd5wdtDwhBCreTdcnOBdhQI+9NL9
-         t0NyERmhK2jC8Epu4L2jDoM2EDK+8XnPf/fOp+SqLY8tZvGUyIxk3U9I7qkyXULUgRKs
-         3wEINpbftIWMs1L6WbSxUU1DPSu2owjFrzWcQjWxjxzpGFnm1LZxrabudv2dSdU1OPtf
-         ytvZRYN+70PSGLTR+tGjrVk3hgniIrKW859aLi5hJSQ8FKrRS4qimHXrHCab8zHTw+VH
-         HXFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sPPHKOJ8BbxBRItJGDJFEQbo+vowRlUP9MhQo5yyu6U=;
-        b=bkqS9Dy5qmJ2re2B/sZyzk7rVbFysTyKbpcAlgRSpX+42BR7Y6/gnK0O5eVkFW6BQy
-         FvEhEbjJZf7pZ9p5z125rhfcvonvnf7WkZe9hF/ECQxAv6BBJpZtZYIRF9AN5U7NLv/+
-         p+rAGd1NnbhSW4rgoCJFV0NiH2NKCu8QLvEeAPYocU/gdtiNn10VE583KRYIJyamsXtQ
-         TfDpaW0ka/GaGtCtSVCFzwsC+ZaC8Jlx5e84SF2uFdri1xWQvktfo4N48CRACZYsq3uc
-         GjtcRMey+QCnU+JJvEQaUp/vdmbJyPdvKrnRfRbf1fErEExUHPdIcmSZZT6qvrevYado
-         tDoQ==
-X-Gm-Message-State: AO0yUKWvaz08EVavy9Si63XN/f6mERPwEh4Zf24Fgpn5XTyZUCe32gae
-        5w04wrOgYzf8nwTTmAXTQVNNvQ==
-X-Google-Smtp-Source: AK7set9H2cOo3A5cs8oyFfTGJahxgcDiip0YMdeLybuqMzhVfp65ixaIXgXCNSuKOPJU7NTtVq8aUg==
-X-Received: by 2002:a5d:6ac5:0:b0:2c5:586b:f53d with SMTP id u5-20020a5d6ac5000000b002c5586bf53dmr2616133wrw.48.1676392472426;
-        Tue, 14 Feb 2023 08:34:32 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:4bc0:b2ae:1d81:afec? ([2a01:e0a:982:cbb0:4bc0:b2ae:1d81:afec])
-        by smtp.gmail.com with ESMTPSA id b4-20020a5d4d84000000b002c5621263e3sm2451359wru.19.2023.02.14.08.34.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 08:34:31 -0800 (PST)
-Message-ID: <9841fd7d-861c-4b5c-51cf-7b8da53a06c9@linaro.org>
-Date:   Tue, 14 Feb 2023 17:34:30 +0100
+        Tue, 14 Feb 2023 11:36:16 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55C2222CB;
+        Tue, 14 Feb 2023 08:36:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676392565; x=1707928565;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=53h693cXNy6dgyuGalXZylJbfFjz4qasabFF50VwdC4=;
+  b=aiS95fmu6f3qqIF7rv3uqecpILVSbv39MJtMZN0T0mh9ooeCocr0EBpU
+   QpmAO1gbT+GMPXF030oS4eWRSZ+A68eKYWuLuFfVGFIYE8hc5nxRExcYL
+   dIqrkrhxfdYaUxMLlDgY7yILk4ZYUZqefT4jz1E5MqI4taUjsPeN3b8aj
+   kKhBxcW3NlFIYoZ7Yoz7Dsov2azHQ0q+taZOcoMIv4Sqbs+QI7SRGBwJY
+   u6C1oCrGDezAHcBCgHn7j068Vpp5ljMW6m7AEhXW5H6vb4cgh+YQLqF1Q
+   knr/+uTvRm1EwRuXHojV8U9zNbcjSAcYSrUMqQUwBYU+uGv37jv2joqvI
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="332512892"
+X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
+   d="scan'208";a="332512892"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 08:35:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="793156120"
+X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
+   d="scan'208";a="793156120"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga004.jf.intel.com with ESMTP; 14 Feb 2023 08:35:54 -0800
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 14 Feb 2023 08:35:53 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 14 Feb 2023 08:35:53 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 14 Feb 2023 08:35:53 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oRRXs6+YRRYBdP6vaFDRy6/axSGto835dtauSId6BPGjz3EWqOIFYgDcPgx8Jha0GXJ4KPrBBjiYzTBo9Ea5+Bl1ygDbsykJSRvvEHHZgYeMGaVnWabhsmXnciL2OoPtzrs4xPf9QEf4mEa+JoUw9JIwdndjX4djR/qYQ1qHsM1rgTAOgFd6oK6unFm/VhqFRMK0apFSRZKcYAf5wANJ19QNFyyslYPOsryY/0MHmH+NXRE5i3IWOa2AQPN2sdIpXaIfby2aLc2q6fQFYXnMzNfvQ+aJS2i+DoXDi63vnOM1TSTBA+y1tKkCCmETtGCFh7gDh2NzejzwBFbGlBuzhQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yt2bTggYOZyUaCS+QVWAwngywKQZzuKc0p0op+oDOT0=;
+ b=FE9u4dfoxjIMAaRzKcF7+Xui6M6emW/uKmu6Htp7P4w7CSze449zNxz1lM2UJcPUH0/DOS+meGKshQ98jKJgq4hNISemCoAH+2OFhv4f3Gu6diT8hEC0Y3tdlu+KK7wcCR0NOBFwRUbXMVtRoraU/PM4cKDy+sczYRcwazUB0Ql35SrUK+s3U1+XiAmX3lTISOsrP9nMVPV54LZnnZQb9AfyBD2gwNR8Ld5+4oY03xF9mDcR7+muaqURZ/i4dUtrp6+WCkj+hAGioSxGTb5goNTEbs/ovaQ2HFKl1//W9lTYFdubni1WYvjZBtkHw1ZRfSk2W7/4EoAUhulpLYXNLg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by PH7PR11MB6746.namprd11.prod.outlook.com (2603:10b6:510:1b4::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Tue, 14 Feb
+ 2023 16:35:51 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::421b:865b:f356:7dfc]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::421b:865b:f356:7dfc%5]) with mapi id 15.20.6086.024; Tue, 14 Feb 2023
+ 16:35:51 +0000
+Date:   Tue, 14 Feb 2023 08:35:48 -0800
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Ira Weiny" <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+CC:     Arnd Bergmann <arnd@arndb.de>, Dave Jiang <dave.jiang@intel.com>,
+        "Dan Carpenter" <error27@gmail.com>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] cxl: avoid returning uninitialized error code
+Message-ID: <63ebb86432d39_32d61294ba@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20230213101220.3821689-1-arnd@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230213101220.3821689-1-arnd@kernel.org>
+X-ClientProxiedBy: SJ0PR05CA0078.namprd05.prod.outlook.com
+ (2603:10b6:a03:332::23) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v4 00/12] The great interconnecification fixation
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        linux-pm@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>
-References: <20230214143720.2416762-1-konrad.dybcio@linaro.org>
- <e4760caa-2904-7645-920d-cbd07daf657e@linaro.org>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <e4760caa-2904-7645-920d-cbd07daf657e@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|PH7PR11MB6746:EE_
+X-MS-Office365-Filtering-Correlation-Id: 03e68352-0366-4c23-5645-08db0ea988a7
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iybOeNXAahW6YpU654OOP1wJNUrlOoAMw2bi9P2ZqBxRnhc2/So+AFm+PdKOFDcyKPsvMWdWL9a3+D+g7mABajH6lR2luD673QbTCJY6rCPA0LK9XigiynD0qFtRMaWk3u/tstsC6BXpKPOjaO9BFydZ7THHnTmoQ8Cqc/XbGoPdU6ZK5kmyIePOk+UTsP0dqjgiLhL6prw1SyIC/gNOEz1uVzx8ayc+LkRUwCnR+beNkT/LKI48JmloWxT5nDKNicpshYPW+qA55TntgAU8lWJEIUEz4WJ7njyIgYkv/gIFSsJj19ngKgBr33Wmyyl8NRVLzFgaXukR3YQlMf40RNcizOCDiM1czoi+Md/GCgs02htxignQQYLQj1L+znf5Ukgy2qX95PqN7RCEm6AWg49OEkXYqqnn2+MqYqckiaSCtQQhcZOtg8cvLQkQd9XbEc9ULiMP7tJbTKcWWEAt5zZf1txy1wojoYTz/VZ25vm9W8J677DU9nb+CNh3kFbRvw/DHUZc0R7yFV203okeD4663ahyy9GwZz3tl0RFUQjbP7+LmwXDvQwXQbaw2PM7BgBJZXgFHf/vc3o3y9/+9Ya6P/fN5cLDoW5pjPG9+acnAi57iVm5czVQNQWm7cZBMBpmuyYU9tCGfvZPNjVnDA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(39860400002)(396003)(136003)(376002)(366004)(451199018)(186003)(5660300002)(26005)(6506007)(41300700001)(9686003)(6512007)(6666004)(86362001)(38100700002)(82960400001)(8936002)(4744005)(2906002)(316002)(54906003)(6486002)(478600001)(110136005)(4326008)(8676002)(66476007)(66556008)(66946007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2MPtG3DPEjUGW8fHYH4/KGTBgBPaQsvQpql2IzlQZkinI7psWFEMvBx6nIQc?=
+ =?us-ascii?Q?RGCGmnxJCvyrMKJcUdGXsCmK0vlHG36E4P0kspeA5YurCr0ahwzQgUi1DbP7?=
+ =?us-ascii?Q?N8buSiw3Un4LOCLzL2GNfRM++K8knhGe3/BqTLkPbor4sUjOsoWGep04Y7vC?=
+ =?us-ascii?Q?vj3RvyJnRJZ+sEGChFzXOLYzpcERbO/OJBRp7SbUQWPVKTZXC/DF1tbrdqr1?=
+ =?us-ascii?Q?Y5aWBQ7voe1xrW/Pwhl9FdgP0X9S+kRRPS9ct9reH+5e7ELqTzTu5Qm9lP4p?=
+ =?us-ascii?Q?mFZZT4ssoUKY+otoMtXXRvIUySnr/Atjwpq68T1lWo9wBkgyc3EfruGAzcyi?=
+ =?us-ascii?Q?HlaHnyidvpivT7M1CgkMx1Cwaq5sl1emc49/xwENL4fR6sYwPHsm8kGs+aRZ?=
+ =?us-ascii?Q?fUxTy/a4NnnDgJJj8DAZIQi7nU4pPNXbVODcJqluXJwPBsN1ow+ubMm6+suF?=
+ =?us-ascii?Q?7ThdXU35T+w1K33l1bOI6evFAsptFsZh5dLXzaFRNmep6XhaLxHQeKWRJuMy?=
+ =?us-ascii?Q?45MbWLKrF3XRQi1Rvsu2XaYrGw+JWwxs80qkT1424hjQetfpF6WDJKRB49L0?=
+ =?us-ascii?Q?2tPRqtJW8fHQpQz+SAy72x9wjWkWB9oWMDL53dy0kQK6LDz/WvYETrjVRTMG?=
+ =?us-ascii?Q?CO51UTM48aX3QYWy/ClqtXjtD2nWq15RXG/zDZ/KMWFTQkMpf/bp4Pxc9fWX?=
+ =?us-ascii?Q?JMisf5eGsJ7X29QXAKZnYxKcWKz+H9kBZhCH2o1+N0m6Y+wjoAPyLsSIpbRs?=
+ =?us-ascii?Q?Y5TSfnzLfdktslKWxzvQIAfNdwWwF973FVnUenxEnisvU6tmVl3HWuLPOkED?=
+ =?us-ascii?Q?hIS0p/tLLgmpUtPNyWfp3gokhEQt8t5v3l1OzosdF3Nws5TnVRQUDA9F2lwe?=
+ =?us-ascii?Q?i+xsUiTJPHvvlCS7wyWVvkcfQkgA02XnfGVWt1jVQaAT4UMd0ojw20LVf3X0?=
+ =?us-ascii?Q?BDYVo0wxM9dRYWsFOuXEtgTFoDolDvOXM2pvSb4vnNaiYrkTpgPshfH0b8xN?=
+ =?us-ascii?Q?NGpKwCan6mRyZRwwu/l91g0jjYxdN+I64ItvRA8/qoZDc5x5FKU6PDSnjwLW?=
+ =?us-ascii?Q?qzh1/kHk3R6Ob9XfbpdhPC6BW2DCLPyEBoeKcomWM/MGu/3/p7Oy5t2bKuP1?=
+ =?us-ascii?Q?IIlDY1k25IpAbOPkjNGYdAwAui0uhPyUUZ1XC4jE0BknfH8yXyyYPY1bZnIs?=
+ =?us-ascii?Q?kzE5g5qTJfp/40Ot/UKT5awuYaUAVkLDi9x0W89V+5EvXERFqb68M712s5hM?=
+ =?us-ascii?Q?7M4h8EVQTmTeW7jUPs9847huRsuPO4s2X99rURvJEACAyqQHaMi9JrcWZheq?=
+ =?us-ascii?Q?YzCHc0+m5a43A2N0hrwGlVG8LFmCTTmgtsYsxTVt1UBFQdAzMetVgB5vNDVj?=
+ =?us-ascii?Q?SLG9X+PBqMETLp2RjosdKErmGY1/tOtPFoETFvtjqsBjdGXJ9Ji3Kqj3uuyT?=
+ =?us-ascii?Q?x6xuj3hc5gcfjj6ID4aIUtuqIS+c+KNA2LcPMAHuZGOS+FuSVBojCZgMY5RD?=
+ =?us-ascii?Q?9YC4HOSD//t70eVe1DFFjwNRQ4pzxV+9NoprVQASXqlQwcAwQ7Vr+t5ziLGE?=
+ =?us-ascii?Q?R0DG6YH2aPhTwS80tNLfkJF4paz0q4EmN2jooMdnZV2am9FO4FHjkMf7VcH3?=
+ =?us-ascii?Q?zw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 03e68352-0366-4c23-5645-08db0ea988a7
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2023 16:35:50.9862
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Xrpj/4PtC2KM6RPBIsvcaH/ht7iKt0Bb1/Ec1BhMWwYAyu2aNx3UwbDAR2t7YpfIpSYF5ofGTZTSvsa2p6wSg9k4JOKYDUsjD/tn0+QgCsE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6746
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/02/2023 17:27, Konrad Dybcio wrote:
-> +CC Georgi, linux-pm, linux-kernel (thanks git send-email for not including these)
-
-Time to switch to b4 prep ;-)
-
+Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> On 14.02.2023 15:37, Konrad Dybcio wrote:
->> Hi!
->>
->> v3 -> v4 changelog:
->> - Drop "Always set QoS params on QNoC", it only causes issues.. this
->>    can be investigated another day, as it's not necessary for operation
->>
->> - Drop "Add a way to always set QoS registers", same as /\
->>
->> - Add a way (and use it) to have no bus_clocks (the ones we set rate on),
->>    as at least msm8996 has a bus (A0NoC) that doesn't have any and does
->>    all the scaling through RPM requests
->>
->> - Promote 8996 icc to core_initcall
->>
->> - Introduce keep_alive (see patch [11/12]) (important!, will be used by at least 6375)
->>
->> - Allow negative QoS offsets in preparation for introducing 8998 icc [12/12]
->>
->> Link to v3: https://lore.kernel.org/linux-arm-msm/20230116132152.405535-1-konrad.dybcio@linaro.org/
->>
->> v2 -> v3 changelog:
->> - Drop "Don't set QoS params before non-zero bw is requested"
->>
->> - Rebase on next
->>
->> - [1/9] ("..make QoS INVALID default.."): remove unused define for
->>    MODE_INVALID_VAL
->>
->> - Pick up tags
->>
->> v1 -> v2 changelog:
->> - reorder "make QoS INVALID default", makes more sense to have it
->>    before "Always set QoS params on QNoC"
->>
->> - Limit ap_owned-independent QoS setting to QNoC only
->>
->> - Add new patches for handling the 8996-and-friends clocks situation
->>    and optional BIMC regardless-of-ap_owned QoS programming
->>
->>
->> [1] https://lore.kernel.org/linux-arm-msm/14e06574-f95e-8960-0243-8c95a1c294e9@linaro.org/T/#m056692bea71d4c272968d5e07afbd9eb07a88123
->> [2] https://lore.kernel.org/linux-arm-msm/20230110132202.956619-1-konrad.dybcio@linaro.org/
->>
->> This series grew quite a bit bigger than the previous [1] attempt, so
->> I decided to also add a cover letter.
->>
->> Link to v2: [2]
->>
->> It addresses a few things that were not quite right:
->>
->> - Setting QoS params before a "real" (non-zero) bandwidth request
->>    makes little sense (since there's no data supposed to flow through
->>    the bus, why would the QoS matter) and (at least newer) downstream
->>    prevents that from happening. Do the same in Patch 1.
->>
->> - QNoC type buses expect to always have their QoS registers set as long
->>    as there's a non-INVALID QoS mode set; ap_owned is not really a thing
->>    on these anymore, Patch 3 handles that.
->>
->> - The recent MSM8996 boot fix was done quickly and not quite properly,
->>    leading to possibly setting the aggregate bus rate on "normal"
->>    hardware interface clocks; this series handles that by limiting the
->>    number of bus_clocks to 2 (which is the maximum that makes sense,
->>    anyway) and handling the rest as "intf_clocks", which are required
->>    to access the   hardware at the other end. Patches 5-8 take care of
->>    that and Patch 10 reverts the _optional moniker in clk_get_ to make
->>    sure we always have the bus scaling clocks, as they're well, kind
->>    of important ;)
->>
->> - Similarly to QNoC, BIMC on "newer" (which can be loosely approximated
->>    by "new enough" == "has only BIMC and QNoC hosts") SoCs expects to
->>    always receive QoS programming, whereas BIMC on "older" SoCs cries
->>    like a wild boar and crashes the platform when trying to do so
->>    unconditionally. Patch 9 adds a way to take care of that for newer
->>    SoCs (like SM6375)
->>
->> - QoS mode INVALID was assumed by developers before to be the default
->>    ("I didn't specify any QoS settings, so the driver can't assume I
->>    did.. right? right!?" - wrong, partial struct initialization led to
->>    0 being set and 0 corresponded to QoS mode FIXED). Make it so, as
->>    that's the logical choice. This allows the "Always set QoS params
->>    on QNoC" patch to work without setting tons of what-should-
->>    -obviously-be-the-default values everywhere, as well as fixes older
->>    drivers that set ap_owned = true but left the QoS mode field unset.
->>    Patch 2 cleans that up.
->>
->> - Some nodes are physically connected over more than one channel
->>    (usually DDR or other high-throughput paths). Patch 4 allows that
->>    to be reflected in calculations. This will be required for at least
->>    MSM8998 and SM6375 (which will be submitted soon after this lands)
->>
->>
->> Konrad Dybcio (12):
->>    interconnect: qcom: rpm: make QoS INVALID default, separate out driver
->>      data
->>    interconnect: qcom: rpm: Add support for specifying channel num
->>    interconnect: qcom: Sort kerneldoc entries
->>    interconnect: qcom: rpm: Rename icc desc clocks to bus_blocks
->>    interconnect: qcom: rpm: Rename icc provider num_clocks to
->>      num_bus_clocks
->>    interconnect: qcom: rpm: Handle interface clocks
->>    interconnect: qcom: icc-rpm: Allow negative num_bus_clocks
->>    interconnect: qcom: msm8996: Specify no bus clock scaling on A0NoC
->>    interconnect: qcom: rpm: Don't use clk_get_optional for bus clocks
->>      anymore
->>    interconnect: qcom: msm8996: Promote to core_initcall
->>    interconnect: qcom: icc-rpm: Introduce keep_alive
->>    interconnect: qcom: icc-rpm: Allow negative QoS offset
->>
->>   drivers/interconnect/qcom/icc-rpm.c | 101 ++++++++++++++++++++--------
->>   drivers/interconnect/qcom/icc-rpm.h |  41 +++++++----
->>   drivers/interconnect/qcom/msm8996.c |  35 ++++++----
->>   drivers/interconnect/qcom/sdm660.c  |  16 ++---
->>   4 files changed, 126 insertions(+), 67 deletions(-)
->>
+> The new cxl_add_to_region() function returns an uninitialized
+> value on success:
+> 
+> drivers/cxl/core/region.c:2628:6: error: variable 'rc' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+>         if (IS_ERR(cxlr)) {
+>             ^~~~~~~~~~~~
+> drivers/cxl/core/region.c:2654:9: note: uninitialized use occurs here
+>         return rc;
+> 
+> Simplify the logic to have the rc variable always initialized in the
+> same place.
+> 
+> Fixes: a32320b71f08 ("cxl/region: Add region autodiscovery")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
+Looks good, thanks Arnd.
