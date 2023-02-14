@@ -2,76 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA1B696787
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 16:01:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F0E69678A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 16:02:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233493AbjBNPBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 10:01:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55238 "EHLO
+        id S229773AbjBNPCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 10:02:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjBNPBM (ORCPT
+        with ESMTP id S230379AbjBNPCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 10:01:12 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DE72A9B9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 07:01:03 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id cr22so17664943qtb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 07:01:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=IWClI4gmqGN4DlU8lND230mPm2ROhEH1JY/mvbe9IGY=;
-        b=ef6d2jKYU3nPPxyVbosZ51CBYb7roCJPlQ4NryeZdFF13Tr3ltLwWFXTWmtAfy28GR
-         aYXpVWl3dUDp8fe0SpOb3qwZ375nxS9u6ugpwY8FBLDtS7rUKDm/4Pn8QIpAcziR7ezW
-         2Cc/1QSN5NFq2iYp/zMY2AZvdk4VP3kxJ3kSmp8w9X3RXDj4+kQFK6wwFcN1H8z9+0MB
-         uvPww2oce5T06kjF/x9cD3weEOOs/5dOR/lMPdaeDnYsLWH0d59D++bu+Vylfx0vdRZb
-         0M6xtSMqfk3NP3p3mCsmbYfl1O2nxDxd2FIc0NvxAyrlBLJJwAT2VsKdK1jN4dpa7BoV
-         Jv+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IWClI4gmqGN4DlU8lND230mPm2ROhEH1JY/mvbe9IGY=;
-        b=ChtyRGu6zAi/by7FrD9W5CI55StZe7Xn2+Lzug1UuzMgNwSoLrJFir2M3fDCQBs/ln
-         EViwZ0puhBpccDV0G8XKRb6uw9LQDsFCvBzblp/PoL4WZlidL1rjtMEmwXi+s1WT17UL
-         OXOCxtr7z7gHlloF/OIIGKWeKs9J3a0xCD/4oMewTb8zG3EmxggJ22uo8XcSi7yWiYBc
-         dyjPZcc1ekT48OIn5eQQl+TALwWs6sC81aR1kMIiVsrVPUbxNcRq+rFj7mEv8sNYTcRW
-         KwYGyMuPSFheRLYMxe0bJ1u7dScjQ3U+hRmQKGpoh2ixBkxODLi40+WMhAfUkTI0nLEs
-         dnyw==
-X-Gm-Message-State: AO0yUKV/Q08rP17VaKGphjziMCKQKMPZae4X0ARW0WxehNAKxL+M5UZO
-        zl7IgAx8t7ji3/H+iUvbqCsoGLuBoRv6SjNf
-X-Google-Smtp-Source: AK7set8/INvNdj6TDxgd7rqMzcASY2jtFBOsamVV51VAlU7OICrs7+stQvx8HLmwXKP0SYGLlqLFRA==
-X-Received: by 2002:ac8:4e45:0:b0:3b8:2e36:efd with SMTP id e5-20020ac84e45000000b003b82e360efdmr4837930qtw.55.1676386862310;
-        Tue, 14 Feb 2023 07:01:02 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-167-59-176.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.167.59.176])
-        by smtp.gmail.com with ESMTPSA id p19-20020ac84093000000b003b6325dfc4esm11200235qtl.67.2023.02.14.07.01.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 07:01:01 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1pRwnk-000RYJ-T3;
-        Tue, 14 Feb 2023 11:01:00 -0400
-Date:   Tue, 14 Feb 2023 11:01:00 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Leon Romanovsky <leon@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-rdma@vger.kernel.org
-Subject: Re: [PATCH] RDMA/restrack: Reorder fields in 'struct
- rdma_restrack_entry'
-Message-ID: <Y+uiLCB7H2xVvQZW@ziepe.ca>
-References: <d47800d9fd5ac7c33d01af04b12b6d43ad23c96e.1676379187.git.christophe.jaillet@wanadoo.fr>
- <Y+uH0k0OBzPip1P8@ziepe.ca>
- <75480cf9-8d06-7a7d-4624-6ddbb7d6053a@wanadoo.fr>
+        Tue, 14 Feb 2023 10:02:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF2A25964;
+        Tue, 14 Feb 2023 07:02:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0FC75B81DE8;
+        Tue, 14 Feb 2023 15:02:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D784EC433EF;
+        Tue, 14 Feb 2023 15:02:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676386926;
+        bh=b4qXj49NhLH+VmXo0IEZTy5nxQfaEwAeDK2n+P1ywmc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EjbzqFnN4aFc6EWXGWB6K1KNNMkCWsFg6UQAksXetf8alFsuLg9B2NxdBhl7zCRS/
+         +gvKhyWOdAcno5Cpl0xcE0ik4HwMh+sSTf9Id5/xc0nl4cuCfc+T0+MTe0gkimr79M
+         2SluDBB4Nin2BdCdt8dGaMygm1gEfnd8YUDfJDu6x7Z4oV5/Wb/fGAIEdFF6swYD+x
+         Spir2LsPdDAVfoPJk3d0pdMwBiPifBiWz2QhOYoxYl51OMzMF8UamYED1XxL9O/yIL
+         mU+Cwn1ZqY0ybO4xi+6z9jMdKNp3niKQ7TZPePXMogTgv/neYzIdoL01U6tIfu1sdS
+         lJZlDUnn4NR3A==
+Date:   Tue, 14 Feb 2023 15:02:02 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: sound: ep93xx: Add I2S and AC'97
+ descriptions
+Message-ID: <Y+uiaqvdIL4IpRlC@sirena.org.uk>
+References: <20230212232137.299005-1-alexander.sverdlin@gmail.com>
+ <46d5b6af-23e1-4178-83bc-b4a435b1426e@linaro.org>
+ <109868b9492aecaca0a7170cba9fb51e62de7116.camel@gmail.com>
+ <c4f5f733-ce22-2dfa-30f7-cde309eadaf9@linaro.org>
+ <ba51ecefb814115e977d90062ca5fe99859cb327.camel@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="V0fp7JQwCfap5FMO"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <75480cf9-8d06-7a7d-4624-6ddbb7d6053a@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <ba51ecefb814115e977d90062ca5fe99859cb327.camel@gmail.com>
+X-Cookie: Serving suggestion.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,60 +65,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 03:34:21PM +0100, Christophe JAILLET wrote:
-> Le 14/02/2023 à 14:08, Jason Gunthorpe a écrit :
-> > On Tue, Feb 14, 2023 at 01:53:52PM +0100, Christophe JAILLET wrote:
-> > > diff --git a/include/rdma/restrack.h b/include/rdma/restrack.h
-> > > index 8b7c46daeb07..da53fefe6f9e 100644
-> > > --- a/include/rdma/restrack.h
-> > > +++ b/include/rdma/restrack.h
-> > > @@ -80,6 +80,10 @@ struct rdma_restrack_entry {
-> > >   	 * query stage.
-> > >   	 */
-> > >   	u8			no_track : 1;
-> > > +	/**
-> > > +	 * @user: user resource
-> > > +	 */
-> > > +	bool			user;
-> > 
-> > Can we combine this into the bitfield above?
-> > 
-> > Jason
-> > 
-> Hi,
-> 
-> and even above, we have
-> 	bool	valid;
-> 
-> I wanted to keep the changes as minimal as possible, but I can change them
-> all in a single bitfield.
 
-IIRC it needs to be checked, I vaugely remember valid can't be a
-bitfield because it is an atomic
-> Do you want code such as:
-> static void rdma_restrack_attach_task(struct rdma_restrack_entry *res,
-> 				      struct task_struct *task)
-> {
-> 	if (WARN_ON_ONCE(!task))
-> 		return;
-> 
-> 	if (res->task)
-> 		put_task_struct(res->task);
-> 	get_task_struct(task);
-> 	res->task = task;
-> 	res->user = true;			<--------
-> }
->
-> to be changed with 0/1 instead of false/true?
+--V0fp7JQwCfap5FMO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I'd keep with true/false
+On Tue, Feb 14, 2023 at 03:26:14PM +0100, Alexander Sverdlin wrote:
+> On Tue, 2023-02-14 at 15:11 +0100, Krzysztof Kozlowski wrote:
 
-Ideally the bitfield itself would be bool type too
+> > OK, but then I like the example - if datasheet would use name
+> > "clk_clk_this_is_clk" would you still find it meaningful?
 
-> Apparently gcc 11.3 is fine with using true with u8:1, but I don't find it
-> really logical.
+> > Every clock input in clocks is a clock. There is usually no need to say
+> > that a clock is a clock...
 
-Bool types can be casted to integers in defined ways, it is pretty
-normal.
+> I see you point, but this is legacy code (sound/soc/cirrus/ep93xx-i2s.c)
+> which took these names back in platform data times... I also see that
+> rather majority of *i2s*.yaml use something "*clk", so maybe it could
+> be accepted for legacy code?
 
-Jason
+Even ignoring the whole legacy thing these are industry standard
+names for the clocks - they are pretty much universally named and
+referred to with the clk suffix.  I can't see what removing it
+would accomplish other than reducing clarity.
+
+--V0fp7JQwCfap5FMO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPromkACgkQJNaLcl1U
+h9DNdAf+PfDbEGrwAar/U6K2LSnAK3ainnO5AXgzSEuk3ZaWIdkd41jazqjW1RwD
+mBX9lNnquoCvsBYlvcfod9Ccs0+GzPbFDgDkxe+EuJ9HqSucvvy4Z+rtvQ1ID14b
+7TKCESoXoiIBe6V2hcBYk4bG4979bG72yNChMj59BeudkHCSYpz51D+5YfHxRR/W
+BrQVo8Ek09ACp3x8dScwvhKdr3uKWLekbT5rjLRVM1YmuMiHxc1cJwneBnTwNadS
+5NNFNJV3nT5ljqIIyOAmPW3REJzV1mc17XfDeFvHk12GnQzQB45j7KIEnns/oNbT
+Q8pVKJsSeGBT/7ptDNUajI7hZ6SMbg==
+=ZBYi
+-----END PGP SIGNATURE-----
+
+--V0fp7JQwCfap5FMO--
