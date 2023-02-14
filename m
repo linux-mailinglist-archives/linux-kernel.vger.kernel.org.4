@@ -2,139 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 368FF69611A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 11:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B5B6960FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 11:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjBNKkM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Feb 2023 05:40:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44072 "EHLO
+        id S232647AbjBNKjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 05:39:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232672AbjBNKj4 (ORCPT
+        with ESMTP id S229769AbjBNKjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 05:39:56 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39CB825E2D;
-        Tue, 14 Feb 2023 02:39:53 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pRshz-000K86-Qj; Tue, 14 Feb 2023 11:38:47 +0100
-Received: from p5b13aa49.dip0.t-ipconnect.de ([91.19.170.73] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pRshz-003Z8i-EF; Tue, 14 Feb 2023 11:38:47 +0100
-Message-ID: <6a420bb0e033562bc7f67cc8f218f994e0892d3b.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH v3 10/24] sparc: Remove COMMAND_LINE_SIZE from uapi
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     WANG Xuerui <kernel@xen0n.name>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>
-Date:   Tue, 14 Feb 2023 11:38:45 +0100
-In-Reply-To: <f3db61bb-5c89-2724-769f-9d606f587f92@xen0n.name>
-References: <20230214074925.228106-1-alexghiti@rivosinc.com>
-         <20230214074925.228106-11-alexghiti@rivosinc.com>
-         <017f0b40-8021-8b3b-24d2-c70661b6b292@omp.ru>
-         <f3db61bb-5c89-2724-769f-9d606f587f92@xen0n.name>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 
+        Tue, 14 Feb 2023 05:39:42 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA47244B6;
+        Tue, 14 Feb 2023 02:39:40 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id co8so11381199wrb.1;
+        Tue, 14 Feb 2023 02:39:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oGjm8oBx0DVqNF28ZQWMD/Yy3Cb0BqYpu5HyyEPRUT4=;
+        b=Jxq3HftI2tU9Q1sJCyGfgNcZ0OJSlkmn7JRWjGq/IVNaycfKG0mpJvfe6UaatTWHLX
+         o0bQgL7WEQn6bsrMiL9e3HhvRKUX6zp2jf8D6YV8TJ+FiI7yE5hLg3vSdS60YpvjQ4Pr
+         NDOBtb6AJqkeWHYwqJx8o0fuv1CKMuUypSmO/t33CfIS1Yala57mwEn6Fy5koz5sbKjE
+         Zt8rbXAwrWM+ZpoLnOFevDs1l3xOjLAk6QpKdwTG3tXScSt8Bp6YshbrfG7Ityk+hvok
+         W2P97Rdn4vcicGmDxJ37NCRNUzgoPrzrWJ5Q9HKIvkkqvagO/GyHRH6e0Y3s37ZzA1hv
+         pz5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oGjm8oBx0DVqNF28ZQWMD/Yy3Cb0BqYpu5HyyEPRUT4=;
+        b=gBDq24yWm2FGvBKt4Zz6IA3rdR7mRYtm6QCjRoYQjbQVhe/4Zr5lEle+meVDQOf7Wp
+         EoPx2PtnaS0a9Aadp7QkT1dSR4Mdhmhkg3iZUw60EuIrYBcRJ2vVp5e/SJVWp3G+3Vf/
+         W8uW+RW4ifzExEfQRZA5+n1yuLaP94ItiUWrcjz6/NxSVufmH68GE7Eo4uQ5dhBIH2fA
+         h9Z+spgJk08oHwF8Zt3knlA0zUTAB/QcW9pdTxTFVECjuSNvyhCpzBC3gRPBcJAbAAIS
+         23nYhTTmKrobKUwrCupsnRt2/2EaiWWzy6XXuERt3KcecMCRDUMhDWKgaWMZcBNr/MgJ
+         fPgA==
+X-Gm-Message-State: AO0yUKVsuifico3tpVkyet23lDwXxR1IiHaeJH26CAbdThftWofwEQRS
+        blvCSoy1WM7I1ktURaAwIGfduzp1FT0=
+X-Google-Smtp-Source: AK7set87XWldfUeW3qzBirdz3IGvGZDTJ9pr2WGrPT4qeEz8VdHRQee+fZ7IB6fc7su/UToyUXpXKQ==
+X-Received: by 2002:a5d:514a:0:b0:2c5:54a7:363a with SMTP id u10-20020a5d514a000000b002c554a7363amr1826254wrt.3.1676371178869;
+        Tue, 14 Feb 2023 02:39:38 -0800 (PST)
+Received: from localhost.localdomain (23.red-88-10-60.dynamicip.rima-tde.net. [88.10.60.23])
+        by smtp.gmail.com with ESMTPSA id v2-20020a5d6102000000b002be5bdbe40csm12693241wrt.27.2023.02.14.02.39.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 02:39:38 -0800 (PST)
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To:     linux-watchdog@vger.kernel.org
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: [PATCH v7 0/5] watchdog: mt7621-wdt: avoid globals and arch dependencies
+Date:   Tue, 14 Feb 2023 11:39:31 +0100
+Message-Id: <20230214103936.1061078-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 91.19.170.73
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-02-14 at 16:59 +0800, WANG Xuerui wrote:
-> On 2023/2/14 16:50, Sergey Shtylyov wrote:
-> > On 2/14/23 10:49 AM, Alexandre Ghiti wrote:
-> > 
-> > > From: Palmer Dabbelt <palmer@rivosinc.com>
-> > > 
-> > > As far as I can tell this is not used by userspace and thus should not
-> > > be part of the user-visible API.
-> > > 
-> > > Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> > > ---
-> > >   arch/sparc/include/asm/setup.h      | 6 +++++-
-> > >   arch/sparc/include/uapi/asm/setup.h | 7 -------
-> > >   2 files changed, 5 insertions(+), 8 deletions(-)
-> > > 
-> > > diff --git a/arch/sparc/include/asm/setup.h b/arch/sparc/include/asm/setup.h
-> > > index 72205684e51e..d1384ed92547 100644
-> > > --- a/arch/sparc/include/asm/setup.h
-> > > +++ b/arch/sparc/include/asm/setup.h
-> > > @@ -7,7 +7,11 @@
-> > >   
-> > >   #include <linux/interrupt.h>
-> > >   
-> > > -#include <uapi/asm/setup.h>
-> > > +#if defined(__sparc__) && defined(__arch64__)
-> > 
-> >     Mhm, I don't think these two can be #define'd simulaneously...
-> 
-> I believe it's just a SPARC-ism [1] [2] that may look strange and be 
-> easily confused for __aarch64__ (notice the extra 'a')...
+Hi all,
 
-Yep, that's correct. On 64-bit Linux/SPARC, gcc/clang define __sparc__ AND __arch64__.
+This series make an update in the MT7621 SoC's watchdog driver code. This
+SoC already provides a system controller node to access reset status
+register needed for the watchdog. Instead of using MIPS architecture
+dependent operations in header 'asm/mach-ralink/ralink_regs.h' use
+a phandle to the system controller node and use it through regmap APIs
+from the code. Driver is also using some globals that are not needed at
+all if a driver data structure is used along the code. Hence, add all
+new needed stuff inside a new driver data structure. With this changes
+driver can be properly compile tested.
 
-Adrian
+Thanks in advance for reviewing this!
+
+v1 of this series here [0].
+v2 of this series here [1].
+v3 of this series here [2].
+v4 of this series here [3].
+v5 of this series here [4].
+v6 of this series here [5].
+
+Changes in v7:
+    - Restore phandler 'mediatek,sysctl' in bindings with Krzysztof's 'Acked-by'.
+    - Use regmap syscon 'syscon_regmap_lookup_by_phandle()' and only if this
+      fails use 'syscon_regmap_lookup_by_compatible()' to avoid DTB's ABI breakage.
+
+Changes in v6:
+    - Get regmap syscon using 'syscon_regmap_lookup_by_compatible()'
+    - Add COMPILE_TEST and dependencies to Kconfig.
+    - Collect Philippe Mathieu-Daudé 'Reviewed-by' tag for watchdog node
+      warning fix.
+
+Changes in v5:
+    - Drop patches related with device tree ABI breakage and only
+      maintain the rest.
+    - Collect Arinc 'Reviewed-by' tag for watchdog node warning fix.
+
+Changes in v4:
+    - Add a patch to fix a watchdog node warning with 'make dtbs_check'
+      because of a wrong node name.
+    - Collect Guenter 'Reviewed-by' tags for watchdog driver code.
+    - Add a missing 'COMPILE_TEST' to Kconfig which was lost when driver
+      code was split in two patches in v2.
+
+Changes in v3:
+    - rename phandler from 'ralink,sysctl' into 'mediatek,sysctl'.
+    - Drop error message added in PATCH 3 that modifies functionality
+      and we only want to maintain current functionaloty by now.
+
+Changes in v2:
+    - Remove no needed compatible 'syscon' from bindings.
+    - Rewrite new syscon phandle description in bindings.
+    - Remove 'syscon' from compatible in 'mt7621.dtsi'.
+    - Split PATCH 3 into two different patches:
+        - PATCH 3: removes static globals using a driver data structure.
+        - PATCH 4: remove ralink architecture dependent includes and code.
+
+Best regards,
+    Sergio Paracuellos
+
+[0]: https://lore.kernel.org/linux-watchdog/20230210065621.598120-1-sergio.paracuellos@gmail.com/T/#t
+[1]: https://lore.kernel.org/linux-watchdog/20230210121735.639089-1-sergio.paracuellos@gmail.com/T/#t
+[2]: https://lore.kernel.org/linux-watchdog/20230210173841.705783-1-sergio.paracuellos@gmail.com/T/#t
+[3]: https://lore.kernel.org/linux-watchdog/20230211073357.755893-1-sergio.paracuellos@gmail.com/T/#t
+[4]: https://lore.kernel.org/linux-watchdog/20230213120638.850612-1-sergio.paracuellos@gmail.com/T/#t
+[5]: https://lore.kernel.org/linux-watchdog/b302c25e-5365-c335-c790-71b3135847d0@arinc9.com/T/#t
+
+Sergio Paracuellos (5):
+  dt-bindings: watchdog: mt7621-wdt: add phandle to access system
+    controller registers
+  mips: dts: ralink: mt7621: rename watchdog node from 'wdt' into
+    'watchdog'
+  mips: dts: ralink: mt7621: add phandle to system controller node for
+    watchdog
+  watchdog: mt7621-wdt: avoid static global declarations
+  watchdog: mt7621-wdt: avoid ralink architecture dependent code
+
+ .../watchdog/mediatek,mt7621-wdt.yaml         |   7 +
+ arch/mips/boot/dts/ralink/mt7621.dtsi         |   3 +-
+ drivers/watchdog/Kconfig                      |   4 +-
+ drivers/watchdog/mt7621_wdt.c                 | 122 ++++++++++++------
+ 4 files changed, 93 insertions(+), 43 deletions(-)
 
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+2.25.1
+
