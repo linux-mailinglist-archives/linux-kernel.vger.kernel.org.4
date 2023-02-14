@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE8E696AD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:10:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 339BE696AF1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjBNRKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 12:10:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36476 "EHLO
+        id S232935AbjBNRLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 12:11:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231833AbjBNRKG (ORCPT
+        with ESMTP id S232902AbjBNRLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 12:10:06 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F6F8A75
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:10:03 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id y69so2792703iof.11
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:10:03 -0800 (PST)
+        Tue, 14 Feb 2023 12:11:30 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6CC2FCE0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:11:11 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-52ebee9a848so199873637b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:11:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1676394603;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=x7Okgp0g5sZnhGVN5BSnDnYNcSRWmBw2rpZ3KAUXn5g=;
-        b=AjZXgc0lko9anBMaicDsIcZOqqI9sBHS8srbZa6cDKAX5Y7XGZvR6UHeciQZdhPX2W
-         R06xkNvQ2J2e+okTq5abS/hIqUG0WmjcLxJM3qXk0Sdrf9MHKVJhf/YcQlyqHoCUY31h
-         Ro7Pk525hprGLIaQDV0XNdG5HAtQifsGVlFpo=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=r4pky0IDsnlu/cqFPhqYvFTqN8LlUn92zh6XIpOqBhY=;
+        b=tJYGr5212BC/zy/n6YiZ7I5C/JLAWDXGWcWsgIogmNqeseFgoMNI73KimK3bD9DQ2R
+         OaAdDEHfXTPAOwRPo577cYx45n182mjVNhtWOe1hF5u1YtwKBteiCStPAQ+RKqIWD+0A
+         qcfaYbTWgAPssQ+sNf2QMOnEG+Zzb/c+gsDGiLEBSBQbNpmZmqO/f6kdZiQZc5wWXABu
+         mTPnIVZ9ahESnu68ZIgqmVNoUnZUwM//Hpqp1ESWNvbAsJOW9NmY+pY2rTS/Jo13opj4
+         LVq7Nr1yz6QRXYsjTs+kyxkgNhrdlNhQ6Ny0erdwJA8jEr3Ipms4rGEJps4R2NUEpyIt
+         jBeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676394603;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x7Okgp0g5sZnhGVN5BSnDnYNcSRWmBw2rpZ3KAUXn5g=;
-        b=kczOOBGIJmQwnLmOgij0cuCbiwGG3gPkRSlyRrPZHUvo36kIbS2cif5WJ+n3e3zH6H
-         6ng5UF2HSM0V9QQoaBq6hteKXAZHkCq4M34wTc8V9L+b8m9qH8QEHaZcoAT3jwToOTg4
-         u/Zo9PsoDL/glbnXrWzcCFgTXK1Ri1f6Y9aiM12X+iKG/BXs1ANtErsBamp9FsAgtF54
-         5vHC4kWpvAJa0elyqjqZC/skYzPuWbCA7y0gklzelDGG3RfsB/VoC+GFqzyJpJ1Bornr
-         9xa3cv7aXGlIOZ7sNtvLUOynWwkukH1/wukSFUKqEaIKF9cFKOEb3bhAM0TGfRGmGqgz
-         l+gA==
-X-Gm-Message-State: AO0yUKWmABYSioI930bep8Sqz5+lB41tVavwHYVQH9raFjPJvChxZPix
-        o89NrnWI7tsQDitOfRXKshpEyg==
-X-Google-Smtp-Source: AK7set+xYio7oOhkTrsxXJaynXVcnsv0plfLgn6aQ+0eK8Tft/oqVrIzd3qqTEkzqTfs0t4N9Sgfxw==
-X-Received: by 2002:a05:6602:380f:b0:6cc:8b29:9a73 with SMTP id bb15-20020a056602380f00b006cc8b299a73mr2461287iob.1.1676394603149;
-        Tue, 14 Feb 2023 09:10:03 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id s26-20020a6bdc1a000000b00740710c0a65sm427519ioc.47.2023.02.14.09.10.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 09:10:01 -0800 (PST)
-Message-ID: <f536ecc2-1889-6df6-43d3-1a04dc8f1b14@linuxfoundation.org>
-Date:   Tue, 14 Feb 2023 10:10:00 -0700
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r4pky0IDsnlu/cqFPhqYvFTqN8LlUn92zh6XIpOqBhY=;
+        b=WWlZYogEihLkbskxAKeMhDJV9UWB4jcnEDN63ftoZDwQyCZvQW2d+JPnqr05Cp9jzA
+         NR4Ikt4SNO5vZai+3A2kqUyUSAFCbWVGVpEF4I5STzyzHaPEky+Dvak0A38p3LbMzeBb
+         d4f0gyNfof6x+qGatDdXEf8MAgMLNu7PYtwALjh5Zs+41BllXjZcao+iOrwrkmUWEGRE
+         hhNUm9lnUjeyHWClKfO1XO076/kcabmdPJ2MTmaeTF32gn5Jw3Bas0c6QDZln8Ken4pT
+         BtZzyr8TqsSpuiWhy3/7EN8YPojZIJxDYFK6pSo2dOB68ozs1fTgnZQ/9hl+9wSnBxOw
+         0oHA==
+X-Gm-Message-State: AO0yUKW2J9g/ogEgbHHgva6rXOs03j5Jsqw+HDYyRP98FA2STtwmETCc
+        gpzry4ntKvqMopliihjPWyvo6U4OE4aDlFcGohaVz8K9sgt0QS9qauU=
+X-Google-Smtp-Source: AK7set+ovpxzz//8A139EdXwefeTv+mGh3Kjc7myJY3emAZXMZbejrZMUZTSCki77CFv8cRh2W35et11xRQdQtRmbKo=
+X-Received: by 2002:a81:bf53:0:b0:506:6364:fda3 with SMTP id
+ s19-20020a81bf53000000b005066364fda3mr346950ywk.72.1676394669813; Tue, 14 Feb
+ 2023 09:11:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] selftests/mount_setattr: fix redefine struct mount_attr
- build error
-To:     Seth Forshee <sforshee@kernel.org>
-Cc:     shuah@kernel.org, brauner@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230213183149.231779-1-skhan@linuxfoundation.org>
- <Y+rMtlvx31w7eWCA@do-x1extreme>
-Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <Y+rMtlvx31w7eWCA@do-x1extreme>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CAJuCfpHa+RhNk_-C=c=E8opF7mR2tnpd-KyhaXCQ8XnKvwVXoQ@mail.gmail.com>
+ <20230214070429.3613260-1-kamatam@amazon.com>
+In-Reply-To: <20230214070429.3613260-1-kamatam@amazon.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 14 Feb 2023 09:10:58 -0800
+Message-ID: <CAJuCfpGiktjjPZYPp8LNtbmvYhkxh_icEWXOVgsq9qeq+w6s+g@mail.gmail.com>
+Subject: Re: [PATCH v2] sched/psi: fix use-after-free in ep_remove_wait_queue()
+To:     Munehisa Kamata <kamatam@amazon.com>
+Cc:     ebiggers@kernel.org, hannes@cmpxchg.org, hdanton@sina.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        mengcc@amazon.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,61 +70,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/13/23 16:50, Seth Forshee wrote:
-> On Mon, Feb 13, 2023 at 11:31:49AM -0700, Shuah Khan wrote:
->> Fix the following build error due to redefining struct mount_attr by
->> removing duplicate define from mount_setattr_test.c
->>
->> gcc -g -isystem .../tools/testing/selftests/../../../usr/include -Wall -O2 -pthread     mount_setattr_test.c  -o .../tools/testing/selftests/mount_setattr/mount_setattr_test
->> mount_setattr_test.c:107:8: error: redefinition of ‘struct mount_attr’
->>    107 | struct mount_attr {
->>        |        ^~~~~~~~~~
->> In file included from /usr/include/x86_64-linux-gnu/sys/mount.h:32,
->>                   from mount_setattr_test.c:10:
->> .../usr/include/linux/mount.h:129:8: note: originally defined here
->>    129 | struct mount_attr {
->>        |        ^~~~~~~~~~
->> make: *** [../lib.mk:145: .../tools/testing/selftests/mount_setattr/mount_setattr_test] Error 1
->>
->> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
->> ---
->>   tools/testing/selftests/mount_setattr/mount_setattr_test.c | 7 -------
->>   1 file changed, 7 deletions(-)
->>
->> diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
->> index 8c5fea68ae67..582669ca38e9 100644
->> --- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
->> +++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
->> @@ -103,13 +103,6 @@
->>   	#else
->>   		#define __NR_mount_setattr 442
->>   	#endif
->> -
->> -struct mount_attr {
->> -	__u64 attr_set;
->> -	__u64 attr_clr;
->> -	__u64 propagation;
->> -	__u64 userns_fd;
->> -};
->>   #endif
-> 
-> The difficulty with this is that whether or not you need this definition
-> depends on your system headers. My laptop doesn't have definitions for
-> either __NR_mount_setattr or struct mount_attr, so for me the build
-> works without this patch but fails with it.
-> 
+Thanks!
+Overall LGTM, just a couple of nits (simplifications):
 
-The header search looks up system headers followed by installed headers in
-the repo (both in-tree and out-of-tree builds). kselftest builds do depend
-on headers_install. Did you building after running headers_install?
+On Mon, Feb 13, 2023 at 11:04 PM Munehisa Kamata <kamatam@amazon.com> wrote:
+>
+> If a non-root cgroup gets removed when there is a thread that registered
+> trigger and is polling on a pressure file within the cgroup, the polling
+> waitqueue gets freed without clearing the queue and reference in the
+> following path.
 
-> I suppose we could fix this universally by using a different name for
-> the struct in the test, e.g.:
-> 
+Let's remove "without clearing the queue and reference" in the above
+sentence. The next section explains why this is problematic, therefore
+mentioning that here is unnecessary IMHO.
 
-This is not a good way to for a couple of reasons. This masks any problems
-due to incompatibility between these defines.
+>
+>  do_rmdir
+>    cgroup_rmdir
+>      kernfs_drain_open_files
+>        cgroup_file_release
+>          cgroup_pressure_release
+>            psi_trigger_destroy
+>
+> However, the polling thread can keep having the last reference to the
+> pressure file that is tied to the freed waitqueue until explicit close or
+> exit later.
 
-thanks,
--- Shuah
+Suggest replacing: However, the polling thread still has a reference
+to the pressure file it is polling and will access the freed waitqueue
+when file is closed or upon exit:
 
+>
+>  fput
+>    ep_eventpoll_release
+>      ep_free
+>        ep_remove_wait_queue
+>          remove_wait_queue
+>
+> Then, the thread accesses to the already-freed waitqueue when dropping the
+> reference and results in use-after-free as pasted below.
+
+Suggest replacing: This results is use-after-free as pasted below.
+
+>
+> The fundamental problem here is that the lifetime of the waitqueue is not
+> tied to the file's real lifetime as shown above.
+
+The fundamental problem here is that cgroup_file_release() (and
+consequently waitqueue's lifetime) is not tied to the file's real
+lifetime.
+
+> Using wake_up_pollfree()
+> here might be less than ideal, but it also is not fully contradicting the
+> comment at commit 42288cb44c4b ("wait: add wake_up_pollfree()") since the
+> waitqueue's lifetime is not tied to file's one and can be considered as
+> another special case. While this would be fixable by somehow making
+> cgroup_file_release() be tied to the fput(), it would require sizable
+> refactoring at cgroups or higher layer which might be more justifiable if
+> we identify more cases like this.
+>
+>  BUG: KASAN: use-after-free in _raw_spin_lock_irqsave+0x60/0xc0
+>  Write of size 4 at addr ffff88810e625328 by task a.out/4404
+>
+>  CPU: 19 PID: 4404 Comm: a.out Not tainted 6.2.0-rc6 #38
+>  Hardware name: Amazon EC2 c5a.8xlarge/, BIOS 1.0 10/16/2017
+>  Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0x73/0xa0
+>  print_report+0x16c/0x4e0
+>  ? _printk+0x59/0x80
+>  ? __virt_addr_valid+0xb8/0x130
+>  ? _raw_spin_lock_irqsave+0x60/0xc0
+>  kasan_report+0xc3/0xf0
+>  ? _raw_spin_lock_irqsave+0x60/0xc0
+>  kasan_check_range+0x2d2/0x310
+>  _raw_spin_lock_irqsave+0x60/0xc0
+>  remove_wait_queue+0x1a/0xa0
+>  ep_free+0x12c/0x170
+>  ep_eventpoll_release+0x26/0x30
+>  __fput+0x202/0x400
+>  task_work_run+0x11d/0x170
+>  do_exit+0x495/0x1130
+>  ? update_cfs_rq_load_avg+0x2c2/0x2e0
+>  do_group_exit+0x100/0x100
+>  get_signal+0xd67/0xde0
+>  ? finish_task_switch+0x15f/0x3a0
+>  arch_do_signal_or_restart+0x2a/0x2b0
+>  exit_to_user_mode_prepare+0x94/0x100
+>  syscall_exit_to_user_mode+0x20/0x40
+>  do_syscall_64+0x52/0x90
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>  RIP: 0033:0x7f8e392bfb91
+>  Code: Unable to access opcode bytes at 0x7f8e392bfb67.
+>  RSP: 002b:00007fff261e08d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000022
+>  RAX: fffffffffffffdfe RBX: 0000000000000000 RCX: 00007f8e392bfb91
+>  RDX: 0000000000000001 RSI: 00007fff261e08e8 RDI: 0000000000000004
+>  RBP: 00007fff261e0920 R08: 0000000000400780 R09: 00007f8e3960f240
+>  R10: 00000000000003df R11: 0000000000000246 R12: 00000000004005a0
+>  R13: 00007fff261e0a00 R14: 0000000000000000 R15: 0000000000000000
+>  </TASK>
+>
+>  Allocated by task 4404:
+>  kasan_set_track+0x3d/0x60
+>  __kasan_kmalloc+0x85/0x90
+>  psi_trigger_create+0x113/0x3e0
+>  pressure_write+0x146/0x2e0
+>  cgroup_file_write+0x11c/0x250
+>  kernfs_fop_write_iter+0x186/0x220
+>  vfs_write+0x3d8/0x5c0
+>  ksys_write+0x90/0x110
+>  do_syscall_64+0x43/0x90
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+>  Freed by task 4407:
+>  kasan_set_track+0x3d/0x60
+>  kasan_save_free_info+0x27/0x40
+>  ____kasan_slab_free+0x11d/0x170
+>  slab_free_freelist_hook+0x87/0x150
+>  __kmem_cache_free+0xcb/0x180
+>  psi_trigger_destroy+0x2e8/0x310
+>  cgroup_file_release+0x4f/0xb0
+>  kernfs_drain_open_files+0x165/0x1f0
+>  kernfs_drain+0x162/0x1a0
+>  __kernfs_remove+0x1fb/0x310
+>  kernfs_remove_by_name_ns+0x95/0xe0
+>  cgroup_addrm_files+0x67f/0x700
+>  cgroup_destroy_locked+0x283/0x3c0
+>  cgroup_rmdir+0x29/0x100
+>  kernfs_iop_rmdir+0xd1/0x140
+>  vfs_rmdir+0xfe/0x240
+>  do_rmdir+0x13d/0x280
+>  __x64_sys_rmdir+0x2c/0x30
+>  do_syscall_64+0x43/0x90
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> v2: updated commit message
+>
+> Link: https://lore.kernel.org/lkml/20230106224859.4123476-1-kamatam@amazon.com/
+> Fixes: 0e94682b73bf ("psi: introduce psi monitor")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
+> Signed-off-by: Mengchi Cheng <mengcc@amazon.com>
+> ---
+>  kernel/sched/psi.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> index 8ac8b81bfee6..6e66c15f6450 100644
+> --- a/kernel/sched/psi.c
+> +++ b/kernel/sched/psi.c
+> @@ -1343,10 +1343,11 @@ void psi_trigger_destroy(struct psi_trigger *t)
+>
+>         group = t->group;
+>         /*
+> -        * Wakeup waiters to stop polling. Can happen if cgroup is deleted
+> -        * from under a polling process.
+> +        * Wakeup waiters to stop polling and clear the queue to prevent it from
+> +        * being accessed later. Can happen if cgroup is deleted from under a
+> +        * polling process otherwise.
+
+This "otherwise" at the end seems extra. Was there a continuation of
+this comment which was removed without removing this "otherwise" ?
+
+>          */
+> -       wake_up_interruptible(&t->event_wait);
+> +       wake_up_pollfree(&t->event_wait);
+>
+>         mutex_lock(&group->trigger_lock);
+>
+> --
+> 2.38.1
+>
