@@ -2,83 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65FED695F62
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:36:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 994E3695F64
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:38:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbjBNJgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 04:36:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48028 "EHLO
+        id S232493AbjBNJic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 04:38:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232489AbjBNJgo (ORCPT
+        with ESMTP id S232101AbjBNJia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 04:36:44 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3358524480;
-        Tue, 14 Feb 2023 01:36:40 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D5CD3660216A;
-        Tue, 14 Feb 2023 09:36:37 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1676367399;
-        bh=KEvBOTJKbpFhyye3ZLlwgSOwJ6jxAXg5LhVQKyf3mH0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=f43377jF4Ep/JH9vExzxgxt2mEO8v9H9ThY9tQ6x499rLkt0TY8ipqkwGo3YzprF+
-         tzK5r+7djXjk2asIzt8Js70zXSGboGwBerQ1ikQY8C/8dHxPs1QPyHADuQWaoaJr6Y
-         xqqZUGJfgmA5ZDip4swamJu7EAbRNWbrjOdhPE3SntG7jED9oupyhkLsZN+x53amwi
-         oLNtvbjfGkYj0C631YbCatYoT/jRJKtUfcHLUSmxwBrJqqIu7SobzWu+esIw+NKJwI
-         KLZr2C4NPBPq0H3feHrYeZujr69HJHiVmoZl8w/R2cRCjj7n0zLbdmt0/JuIVtDXPj
-         4iQeJdysH5aNQ==
-Message-ID: <e11a0dfe-160a-93fe-c3a8-6868cf6a0083@collabora.com>
-Date:   Tue, 14 Feb 2023 10:36:35 +0100
+        Tue, 14 Feb 2023 04:38:30 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C293C27
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:38:29 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31E8Nwip029770;
+        Tue, 14 Feb 2023 09:38:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=abN3WeABrZKVtxO1m8F3An7TfDTw3na3P2oNLuQ0iD0=;
+ b=bMDprgcBQxdcyi2GIA5mnSGE5QDvyaLEK5kBkClQn9Vu97DqG85NwKJ5NS5Gyu5+/oHF
+ n+w8O9XuzI3JZ0uGT6XDB/yjqlWl02chc96ujYmXV3hYcNx8RC+hCS+n2CjHHmVH/IOY
+ RfACQB4uP3s4ew15KfzopJGaIIYqg9i9EcF4BZaVz/j44P7R0uizLsUY1s//axcgxBPI
+ R/dqZ27jYuNd+ACGpYb8PzL3yKgdr+5n5H9HhngC08OMDTzJfCMKovqrpWd4x0JyQn8z
+ /wrJpJ43ZG4qS/AB+2LHh/4Q5+IfuzH7JpYSgNkmnnzzRyNmx74Cu6fOwNA9TzaHi6i4 PQ== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np2mtcvmj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Feb 2023 09:38:07 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31E8hXUI018473;
+        Tue, 14 Feb 2023 09:38:07 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3np1f5sdjf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Feb 2023 09:38:07 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31E9YwXd016428;
+        Tue, 14 Feb 2023 09:38:06 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3np1f5sdgy-1;
+        Tue, 14 Feb 2023 09:38:06 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     harshit.m.mogalapalli@gmail.com, error27@gmail.com, hch@lst.de,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH linux-next] ubi: block: Fix a possible use-after-free bug in ubiblock_create()
+Date:   Tue, 14 Feb 2023 01:38:01 -0800
+Message-Id: <20230214093801.1267044-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v3 06/11] iommu/mediatek: mt8186: Add iova_region_larb_msk
-Content-Language: en-US
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>, nfraprado@collabora.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev, mingyuan.ma@mediatek.com,
-        yf.wang@mediatek.com, jianjiao.zeng@mediatek.com,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>,
-        chengci.xu@mediatek.com, youlin.pei@mediatek.com,
-        anan.sun@mediatek.com
-References: <20230214031114.926-1-yong.wu@mediatek.com>
- <20230214031114.926-7-yong.wu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230214031114.926-7-yong.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-14_06,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 adultscore=0
+ malwarescore=0 phishscore=0 bulkscore=0 spamscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302140082
+X-Proofpoint-GUID: tf3NqCX4zp4U7_Z1qCxZJXI7tqDbV-L-
+X-Proofpoint-ORIG-GUID: tf3NqCX4zp4U7_Z1qCxZJXI7tqDbV-L-
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 14/02/23 04:11, Yong Wu ha scritto:
-> Add iova_region_larb_msk for mt8186. We separate the 16GB iova regions
-> by each device's larbid/portid.
-> Note: larb5/6/10/12/14/15/18 connect nothing in this SoC.
-> Refer to include/dt-bindings/memory/mt8186-memory-port.h
-> 
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+Smatch warns:
+	drivers/mtd/ubi/block.c:438 ubiblock_create()
+	warn: '&dev->list' not removed from list
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+'dev' is freed in 'out_free_dev:, but it is still on the list.
 
+To fix this, delete the list item before freeing.
+
+Fixes: 91cc8fbcc8c7 ("ubi: block: set BLK_MQ_F_BLOCKING")
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+---
+Found by static analysis(smatch). Only Compile tested.
+---
+ drivers/mtd/ubi/block.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/mtd/ubi/block.c b/drivers/mtd/ubi/block.c
+index f5d036203fe7..763704c8d05c 100644
+--- a/drivers/mtd/ubi/block.c
++++ b/drivers/mtd/ubi/block.c
+@@ -429,6 +429,7 @@ int ubiblock_create(struct ubi_volume_info *vi)
+ 	return 0;
+ 
+ out_remove_minor:
++	list_del(&dev->list);
+ 	idr_remove(&ubiblock_minor_idr, gd->first_minor);
+ out_cleanup_disk:
+ 	put_disk(dev->gd);
+-- 
+2.38.1
 
