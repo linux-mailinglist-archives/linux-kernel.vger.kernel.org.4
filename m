@@ -2,122 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB586962AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 12:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C87496962B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 12:50:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232265AbjBNLtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 06:49:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
+        id S232280AbjBNLum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 06:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbjBNLtM (ORCPT
+        with ESMTP id S229795AbjBNLul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 06:49:12 -0500
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D796323849;
-        Tue, 14 Feb 2023 03:49:10 -0800 (PST)
-Received: by mail-qv1-f42.google.com with SMTP id j5so8018560qvi.3;
-        Tue, 14 Feb 2023 03:49:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w8o+V62iNadVynv0wmjLeHQllkaxUHndiQdcgv2rq9I=;
-        b=zlo7Nb2jOqAVZTLCKV5Vwy24nYm6ew3YY1tAWT9kpLVpRF3xrNZDuPTtpjgKVTsgzc
-         qN6cQc0cSXobhmhccnry5T1XfRy8UhgZzRoAvSNk/Sn4icFg3PnuhGBFnM/jfyH/I5Zb
-         PpPg8LwynNvc9FRTaotakNv69kRILUTFcQ+0H++KfthAPfFda7l/bA/MWsLI9gAw8bp5
-         DxlrTUlb64+J71q5Oc0mDf5YHVuiBsFWB2goDdfvYmdFLulKOTpv3UdeP7LMsz4Q5ihg
-         YLatTqCWzurzKMJ4OHYkwbGIkQNt0ta9UydA+Ij/uQFFfk73AVKNYxx7rINGaeYXUJWk
-         WxCQ==
-X-Gm-Message-State: AO0yUKWTHHU6MyHbVmIViP6+dxWk1ZHPjYojP834ST3QpVqMEDdTCQOW
-        Asl7BER0geQIBxPpbnzTT+KSWdJDZavrZ1Gk
-X-Google-Smtp-Source: AK7set+vnjtZpYChSQqPL/m2PDeo5t6vdFw9rHu/QMb60KkUwaf2rH18ypWUWGCDYrulFw4AVnw6/A==
-X-Received: by 2002:ad4:5dcb:0:b0:56e:a07b:f4db with SMTP id m11-20020ad45dcb000000b0056ea07bf4dbmr5071213qvh.24.1676375349736;
-        Tue, 14 Feb 2023 03:49:09 -0800 (PST)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id x188-20020a3795c5000000b00721299cfffesm11700756qkd.39.2023.02.14.03.49.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 03:49:09 -0800 (PST)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-52f0001ff8eso103759237b3.4;
-        Tue, 14 Feb 2023 03:49:08 -0800 (PST)
-X-Received: by 2002:a81:4f11:0:b0:52f:972:e6a1 with SMTP id
- d17-20020a814f11000000b0052f0972e6a1mr227619ywb.235.1676375348561; Tue, 14
- Feb 2023 03:49:08 -0800 (PST)
+        Tue, 14 Feb 2023 06:50:41 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09372365E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 03:50:39 -0800 (PST)
+Received: from [192.168.2.90] (109-252-117-89.nat.spd-mgts.ru [109.252.117.89])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EBC726602167;
+        Tue, 14 Feb 2023 11:50:36 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676375437;
+        bh=X8YJadh13p9GNFndEUZtxzDq93icIrDX/YLPcJXg778=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BE84H4XQgXqiToPM3IhuYpSf//2njFwwmCzc5z+hndyULDDtqt+XKUxINvc1Rg/D1
+         RqUPSQ66r65b6dHQ/VBvr01MJ0Dcul5DgigbBttZdNncBvIVheuCLwf0zfvJyyK9DV
+         DPIr2C1qLVjh9bPSb59UKBIJQk3TqwN80yEkszl7bJgA1rfT/DB5FntQLfC0ZDXuri
+         7hDQtMdF7/6f+2rjmNQPzfhLUI+7FUZ9ZkNUyHpXCODgy2fTZKcxBgTJsWrZhq60Du
+         IVrfHPobautYXWrR7YLKGtTiTymQSUzoSXdUxPTa3O6+nINl5fiNxqLTGlV0/OjloY
+         uhlgfrmE7bXHg==
+Message-ID: <b5f6c63e-adf3-38a6-18fb-c92c764c23f3@collabora.com>
+Date:   Tue, 14 Feb 2023 14:50:33 +0300
 MIME-Version: 1.0
-References: <20230130191152.182826-1-fabrizio.castro.jz@renesas.com> <24bac8be-c301-8efd-4392-e10db00d17f7@linaro.org>
-In-Reply-To: <24bac8be-c301-8efd-4392-e10db00d17f7@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 14 Feb 2023 12:48:57 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW+RZ73iPJMk-omC4egqBMGPJFeMoUkvcowkO51rN2oGQ@mail.gmail.com>
-Message-ID: <CAMuHMdW+RZ73iPJMk-omC4egqBMGPJFeMoUkvcowkO51rN2oGQ@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: dts: renesas: v2mevk2: Add uSD card and eMMC support
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] drm/edid: Add Vive Pro 2 to non-desktop list
+Content-Language: en-US
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Yaroslav Bolyukin <iam@lach.pw>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>
+References: <20220118170037.14584-1-iam@lach.pw>
+ <5d5a8183-aebc-6660-9cbc-03950f9b14b8@collabora.com>
+ <87v8k5vqg6.fsf@intel.com>
+ <831e7daf-48ae-cea8-a5d2-3786317b3b65@collabora.com>
+ <87sff9vl6j.fsf@intel.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <87sff9vl6j.fsf@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 9:48 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 30/01/2023 20:11, Fabrizio Castro wrote:
-> > The RZ/V2M EVK comes with a slot for a uSD card, and an eMMC.
-> > Add support for the both of them.
-> >
-> > Please note that the pinctrl driver for RZ/V2M doesn't support
-> > interrupts yet, therefore the card detect pin has been connected
-> > to the SDHI IP directly in this patch.
-> > We'll connect the card detect pin to its corresponding GPIO when
-> > we'll have driver support for interrupts in the RZ/V2M pinctrl
-> > driver.
-> >
-> > Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > ---
->
-> > +
-> > +
->
-> Just one blank line
+On 2/13/23 14:50, Jani Nikula wrote:
+> On Mon, 13 Feb 2023, Dmitry Osipenko <dmitry.osipenko@collabora.com> wrote:
+>> On 2/13/23 12:56, Jani Nikula wrote:
+>>> On Sun, 12 Feb 2023, Dmitry Osipenko <dmitry.osipenko@collabora.com> wrote:
+>>>> Hi,
+>>>>
+>>>> On 1/18/22 20:00, Yaroslav Bolyukin wrote:
+>>>>
+>>>> Add a brief commit message, describing a user-visible effect of this
+>>>> patch. Tell that this change prevents exposing headset as a regular
+>>>> display to the system, while it will work with SteamVR.
+>>>>
+>>>>> Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
+>>>>> ---
+>>>>>  drivers/gpu/drm/drm_edid.c | 3 ++-
+>>>>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
+>>>>> index 12893e7be..fdb8f0a6f 100644
+>>>>> --- a/drivers/gpu/drm/drm_edid.c
+>>>>> +++ b/drivers/gpu/drm/drm_edid.c
+>>>>> @@ -200,9 +200,10 @@ static const struct edid_quirk {
+>>>>>  	EDID_QUIRK('V', 'L', 'V', 0x91be, EDID_QUIRK_NON_DESKTOP),
+>>>>>  	EDID_QUIRK('V', 'L', 'V', 0x91bf, EDID_QUIRK_NON_DESKTOP),
+>>>>>  
+>>>>> -	/* HTC Vive and Vive Pro VR Headsets */
+>>>>> +	/* HTC Vive, Vive Pro and Vive Pro 2 VR Headsets */
+>>>>
+>>>> Nit: I'd keep the original comment, or change it to a generic "HTC VR
+>>>> Headsets" to prevent further comment changes
+>>>>
+>>>>>  	EDID_QUIRK('H', 'V', 'R', 0xaa01, EDID_QUIRK_NON_DESKTOP),
+>>>>>  	EDID_QUIRK('H', 'V', 'R', 0xaa02, EDID_QUIRK_NON_DESKTOP),
+>>>>> +	EDID_QUIRK('H', 'V', 'R', 0xaa04, EDID_QUIRK_NON_DESKTOP),
+>>>>>  
+>>>>>  	/* Oculus Rift DK1, DK2, CV1 and Rift S VR Headsets */
+>>>>>  	EDID_QUIRK('O', 'V', 'R', 0x0001, EDID_QUIRK_NON_DESKTOP),
+>>>>>
+>>>>> base-commit: 99613159ad749543621da8238acf1a122880144e
+>>>>
+>>>> Please send the v2 patch with the added EDID for Cosmos VR and the
+>>>> addressed comments. Thanks!
+>>>
+>>> Yeah, we'll need to EDID to check that it doesn't have the Microsoft
+>>> VSDB to indicate non-desktop. See 2869f599c0d8 ("drm/edid: support
+>>> Microsoft extension for HMDs and specialized monitors").
+>>
+>> Do you mean to skip using the EDID_QUIRK_NON_DESKTOP if MS VSDB entry
+>> presents in the EDID?
+>>
+>> These HTC EDIDs don't have MS VSDB, otherwise the quirk wouldn't be needed.
+> 
+> Okay, I didn't know that. I just observed that the original patch was
+> sent before the the MS VSDB parsing was added.
 
-Fixing...
-
-> >  &extal_clk {
-> >       clock-frequency = <48000000>;
-> >  };
-> > @@ -69,6 +118,26 @@ &i2c2 {
-> >  };
-> >
-> >  &pinctrl {
-> > +     emmc_pins: emmc {
-> > +             emmc_pins_data {
->
-> No underscores in node names.
-
-... and renaming to "data" etc. while queuing in renesas-devel for v6.4.
-
-Gr{oetje,eeting}s,
-
-                        Geert
+This will be good to mention in the v2 commit message.
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Best regards,
+Dmitry
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
