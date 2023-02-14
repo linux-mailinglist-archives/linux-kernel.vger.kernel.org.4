@@ -2,183 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03EE36971D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 00:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B996971DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 00:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232367AbjBNXaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 18:30:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
+        id S232035AbjBNXeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 18:34:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjBNXaV (ORCPT
+        with ESMTP id S229496AbjBNXe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 18:30:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D142FCF1;
-        Tue, 14 Feb 2023 15:30:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84CBBB81E44;
-        Tue, 14 Feb 2023 23:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16A11C433EF;
-        Tue, 14 Feb 2023 23:30:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676417418;
-        bh=xbo7MQECVZ2N5Erw40Zayy9i4HJGCqYWQMcC7nAyysY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ADz3w4Rp/ymbWVEaKp32Yt0TMPZo9c7pB9jicyVtwyhi8IQLmNHUV72FcV6n81X8K
-         aUzR0KxltK2XTSMSxFoA3KABP4C8bT0Y3VgGlNOetEXwQGu5vvZHJQQfSjEbxoYSZC
-         okF2n5GnhuAWakvsNRt60dM9xPx16iqKdCFIzbIz9ZZe0v9HiP0o9bjI8As12VvysW
-         z9SxuMfYrn4J399kQN873YGiGOcEP8mjiSU1mC3YjgC+eXICZ1RgFr6EzH3P92qAK8
-         airu9fjiWqMFaK2Rt6eCK/IttF6Hnnr7f6L6YVP/koqqU2ObWP3ALAgQV/GTG9deBr
-         o3ZkaQZpvJh1g==
-Date:   Tue, 14 Feb 2023 17:30:16 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     bhelgaas@google.com, treding@nvidia.com, jonathanh@nvidia.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        vsethi@nvidia.com, kthota@nvidia.com, mmaddireddy@nvidia.com,
-        sagar.tv@gmail.com, Lukas Wunner <lukas@wunner.de>,
-        Alex Williamson <alex.williamson@redhat.com>
-Subject: Re: [PATCH V2] PCI: pciehp: Disable ACS Source Validation during
- hot-remove
-Message-ID: <20230214233016.GA3095090@bhelgaas>
+        Tue, 14 Feb 2023 18:34:29 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3B8234C9;
+        Tue, 14 Feb 2023 15:34:28 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EKS7KL022832;
+        Tue, 14 Feb 2023 23:34:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=W7cAjMVtbpX/wOrIuXv65sTNDtCQNRmELgZedUKQ7r0=;
+ b=RXkkLTksEg4TAXBmRi3RqJg+59p0ZGksfPOi3HZIm3tKtLwZFE5FVjcNq3d2KTcxdsht
+ 9FVcM66aG85qutLNgssIfpYE9AYHazvRFm1PEJzZW5T+IVFisCrOrm9BApAUp6JbLWmw
+ HSEae4V5xDfxrIhtEqMGIOlmwJ5QNdU8/kOEVswZ7NQTrK6qE7KkhR9XR0r+1ldE7FvE
+ hOinpYaFJpPyO94F5ORgh/glvPg/4bprB8TUsE4aaK348GFgwk5l4s7WeJjLVW4kgRv+
+ QbQncq2bR+rTGdH4vEbrLcFyyOeJ9IkJwQS+AzPTA3hWDvUaMukn2t/JQrtK9PpvH8wD VA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nr4kpag2r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 23:34:24 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31ENYNPD010994
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 23:34:23 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Tue, 14 Feb 2023 15:34:22 -0800
+Date:   Tue, 14 Feb 2023 15:34:21 -0800
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Chris Lew <quic_clew@quicinc.com>
+CC:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Sricharan Ramabadhran <quic_srichara@quicinc.com>,
+        Arun Kumar Neelakantam <quic_aneelaka@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] rpmsg: glink: Avoid infinite loop on intent for missing
+ channel
+Message-ID: <20230214233421.GB1332049@hu-bjorande-lv.qualcomm.com>
+References: <20230109223801.1706213-1-quic_bjorande@quicinc.com>
+ <393b7d5f-b565-6287-bbab-3bf51cc981f0@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230111190533.29979-1-vidyas@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <393b7d5f-b565-6287-bbab-3bf51cc981f0@quicinc.com>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: JyHIFyft5JE5wCVxxaCD5C3jsKcnW8IX
+X-Proofpoint-ORIG-GUID: JyHIFyft5JE5wCVxxaCD5C3jsKcnW8IX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-14_15,2023-02-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ spamscore=0 priorityscore=1501 phishscore=0 bulkscore=0 clxscore=1015
+ impostorscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302140202
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Lukas, Alex for pciehp and ACS comments]
-
-On Thu, Jan 12, 2023 at 12:35:33AM +0530, Vidya Sagar wrote:
-> PCIe 6.0, 6.12.1.1 specifies that downstream devices are permitted to
-> send upstream messages before they have been assigned a bus number and
-> such messages have a Requester ID with Bus number set to 00h.
-> If the Downstrem port has ACS Source Validation enabled, these messages
-> will be detected as ACS violation error.
-> Hence, disable ACS Source Validation in the bridge device during
-> hot-remove operation and re-enable it after enumeration of the
-> downstream hierarchy but before binding the respective device drivers.
-
-s/Downstrem/Downstream/
-
-Format as paragraphs (blank line between).
-
-> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> ---
-> v2:
-> * Fixed build issues
+On Tue, Feb 14, 2023 at 02:55:02PM -0800, Chris Lew wrote:
+> On 1/9/2023 2:38 PM, Bjorn Andersson wrote:
+> > In the event that an intent advertisement arrives on an unknown channel
+> > the fifo is not advanced, resulting in the same message being handled
+> > over and over.
+> > 
+> > Fixes: dacbb35e930f ("rpmsg: glink: Receive and store the remote intent buffers")
+> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> > ---
+> >   drivers/rpmsg/qcom_glink_native.c | 5 +++--
+> >   1 file changed, 3 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
+> > index f36740cb6866..7b1320b1579e 100644
+> > --- a/drivers/rpmsg/qcom_glink_native.c
+> > +++ b/drivers/rpmsg/qcom_glink_native.c
+> > @@ -946,12 +946,12 @@ static void qcom_glink_handle_intent(struct qcom_glink *glink,
+> >   	spin_unlock_irqrestore(&glink->idr_lock, flags);
+> >   	if (!channel) {
+> >   		dev_err(glink->dev, "intents for non-existing channel\n");
+> > -		return;
+> > +		goto advance_rx;
+> >   	}
+> >   	msg = kmalloc(msglen, GFP_ATOMIC);
+> >   	if (!msg)
+> > -		return;
+> > +		goto advance_rx;
 > 
->  drivers/pci/hotplug/pciehp_pci.c | 13 ++++++++++++-
->  drivers/pci/pci.c                | 22 ++++++++++++++++++++++
->  include/linux/pci.h              |  6 ++++++
->  3 files changed, 40 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/pci/hotplug/pciehp_pci.c b/drivers/pci/hotplug/pciehp_pci.c
-> index d17f3bf36f70..ad90bcf3f621 100644
-> --- a/drivers/pci/hotplug/pciehp_pci.c
-> +++ b/drivers/pci/hotplug/pciehp_pci.c
-> @@ -63,6 +63,7 @@ int pciehp_configure_device(struct controller *ctrl)
->  
->  	pci_assign_unassigned_bridge_resources(bridge);
->  	pcie_bus_configure_settings(parent);
-> +	pci_configure_acs_sv(bridge, true);
->  	pci_bus_add_devices(parent);
->  
->   out:
-> @@ -117,6 +118,16 @@ void pciehp_unconfigure_device(struct controller *ctrl, bool presence)
->  		}
->  		pci_dev_put(dev);
->  	}
-> -
-> +	/*
-> +	 * PCIe 6.0, 6.12.1.1 specifies that downstream devices are permitted
-> +	 * to send upstream messages before they have been assigned a bus
-> +	 * number and such messages have a Requester ID with Bus number
-> +	 * set to 00h. If the Downstrem port has ACS Source Validation enabled,
-
-s/Downstrem/Downstream/
-
-> +	 * these messages will be detected as ACS violation error.
-> +	 * Hence, disable ACS Source Validation here and re-enable it after
-> +	 * enumeration of the downstream hierarchy and before binding the
-> +	 * respective device drivers in pciehp_configure_device().
-> +	 */
-> +	pci_configure_acs_sv(ctrl->pcie->port, false);
-
-What if we have a slot that's empty at boot and we add a device later?
-It looks like we still might see ACS errors there because the add
-happens before a remove?
-
->  	pci_unlock_rescan_remove();
->  }
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 95bc329e74c0..9cefaf814f49 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -991,6 +991,28 @@ static void pci_enable_acs(struct pci_dev *dev)
->  	pci_disable_acs_redir(dev);
->  }
->  
-> +#ifdef CONFIG_HOTPLUG_PCI_PCIE
-> +void pci_configure_acs_sv(struct pci_dev *dev, bool flag)
-> +{
-> +	u16 cap;
-> +	u16 ctrl;
-> +
-> +	if (!pci_acs_enable || !dev->acs_cap)
-> +		return;
-> +
-> +	pci_read_config_word(dev, dev->acs_cap + PCI_ACS_CAP, &cap);
-> +	pci_read_config_word(dev, dev->acs_cap + PCI_ACS_CTRL, &ctrl);
-> +
-> +	if (flag)
-> +		ctrl |= (cap & PCI_ACS_SV);
-> +	else
-> +		ctrl &= ~(cap & PCI_ACS_SV);
-> +
-> +	pci_write_config_word(dev, dev->acs_cap + PCI_ACS_CTRL, ctrl);
-
-I guess we don't have a way to do this for the non-standard ACS-like
-devices, i.e., pci_dev_specific_enable_acs().  Not the end of the
-world, just unfortunate that we'll have different behavior there.
-
-> +}
-> +EXPORT_SYMBOL_GPL(pci_configure_acs_sv);
-
-Doesn't seem like this needs to be exported or exposed via
-linux/pci.h.  pciehp cannot be built as a module.
-
-> +#endif
-> +
->  /**
->   * pci_restore_bars - restore a device's BAR values (e.g. after wake-up)
->   * @dev: PCI device to have its BARs restored
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 060af91bafcd..edf516e39764 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -2239,6 +2239,12 @@ void pci_hp_create_module_link(struct pci_slot *pci_slot);
->  void pci_hp_remove_module_link(struct pci_slot *pci_slot);
->  #endif
->  
-> +#ifdef CONFIG_HOTPLUG_PCI_PCIE
-> +void pci_configure_acs_sv(struct pci_dev *dev, bool flag);
-> +#else
-> +static inline void pci_configure_acs_sv(struct pci_dev *dev, bool flag) { }
-> +#endif
-> +
->  /**
->   * pci_pcie_cap - get the saved PCIe capability offset
->   * @dev: PCI device
-> -- 
-> 2.17.1
+> Should we be dropping the packet for this case? If we try again later more
+> memory might be available to handle the command.
 > 
+
+You're right, we found a channel above, but we don't have enough memory
+to handle the message right now. That seems like a message worth not
+throwing away.
+
+Thanks,
+Bjorn
+
+> >   	qcom_glink_rx_peak(glink, msg, 0, msglen);
+> > @@ -973,6 +973,7 @@ static void qcom_glink_handle_intent(struct qcom_glink *glink,
+> >   	}
+> >   	kfree(msg);
+> > +advance_rx:
+> >   	qcom_glink_rx_advance(glink, ALIGN(msglen, 8));
+> >   }
+> > 
