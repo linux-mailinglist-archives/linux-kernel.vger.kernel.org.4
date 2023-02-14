@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89BFC696350
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:19:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 934D2696359
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232281AbjBNMTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 07:19:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43524 "EHLO
+        id S232054AbjBNMTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 07:19:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232031AbjBNMTA (ORCPT
+        with ESMTP id S229622AbjBNMTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 07:19:00 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E3627488
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:18:59 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id b5so16864413plz.5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:18:59 -0800 (PST)
+        Tue, 14 Feb 2023 07:19:13 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2552799D
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:19:07 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id f16-20020a17090a9b1000b0023058bbd7b2so15306373pjp.0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:19:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Xh0puu3pBwVerTFteBcL8T1N51CVp7Tov2k34ecZpM=;
-        b=Ik5m6qKBsYSBjKFm9MAJwpLRavqbfuB3z9MYaBBOFn3imdsVzdF8gf5+X13cMxYsMh
-         RijGQHbYNPvA0zs88a3juJZdr7DkuoT0e7O2V7ET4//GTmZy9HjC2I6UUtvZNsSGq89M
-         iP41YPTvmVSCNB0zB/LRi9RJbRdo4UrpBI33tJtAWhW/ttu8j0JQIF1dkwKGSuRQP4js
-         aW0DtrQ5phzRVE2V7V1g2vwExuE2sIPur5dDECl44Wa9VY3OGSqUohRrM65Nme5x9cXA
-         lnzXCwxZqVsPUs1KJAhNdU8LvjGIMQ99VRnpoCLHiZL4ymkDfdUvyOIctPUfK1l2NsHY
-         /gow==
+        bh=uSyTPuLuU1wBaDbWkcoFTMyZUSCsuecKMj0PYuIA5S0=;
+        b=UtyFQDh00wwW4KU//WECOJIVyRndF4FW071LndcUwBkhKWW6ETfQGjngKJyH/WLIkO
+         HHY3PJL0xDode7S+nxPASS+y+MuAATdqfpNv3VkNNgV/Sxh1gby588iCkO3BJtXnQVsK
+         i5Uhg2bvAHkaa5LLYw0up2TgGRQuKydeyZh/ZG9219bxWZOP4Q1FZqJVwlQyktQIV8tB
+         hAhV5gu5YkCULjmdugBAyYSyFgjkikIdt85pin/NgfVYeMxxx9ofi9SUCZW9WPXNJup1
+         +JeV5ksPQWUKAVej86tjPkY+ahVFKtvScCSpLdzmhMF+FJ9t+XfO/Reg2vsSxkQWq8lb
+         hrlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6Xh0puu3pBwVerTFteBcL8T1N51CVp7Tov2k34ecZpM=;
-        b=m71zJnCL4aUet521m9ah87gDzMxFee4rIWFBX3frpI8z4ZPYEpjCxoBe7iCHVDefjB
-         w/ZJ+3hBTrL0ZFjsDMzbMKDQCOoD6per0C2xmt5NKlHvEECxkdYVjgvGJdejRN9KpvP4
-         lQ2S0Lslc2Cxo2tkHQSelA0sOjpiIbgI/5HH0u+majWgUkoauEvu+0PvaJ3Q6IyjU1Iz
-         bOL2qTn9ohCbeX5BXhluFWU/4tanqcejuieBRqcGF24DvX9+Uy9ZLgbRzXZxKu6JX6Tx
-         DTcHosfrHBghTtAIKZY+EJvPH5Kn84YFJoUDMtNcnufmhBY2UId9Yl+BTZWXuyxojuvv
-         BiUw==
-X-Gm-Message-State: AO0yUKXbDnuMWDkGwkTVwHLeJDzTR/f/AdNobq1ugpnNJ0lpwjsGykNN
-        ExZBjlLlJRKu4naWZhfaXcZzqBS+/ZaDq8O2at1VRA==
-X-Google-Smtp-Source: AK7set8y6ih7+HG36KQ91giji/BrdDd/UJeTMMIq46RK+Piw24wVk53b337RaQNnFoMPo1DMXqwBgByzbplW1g++Oew=
-X-Received: by 2002:a17:90a:c90f:b0:233:ba2c:16a6 with SMTP id
- v15-20020a17090ac90f00b00233ba2c16a6mr2976614pjt.109.1676377138128; Tue, 14
- Feb 2023 04:18:58 -0800 (PST)
+        bh=uSyTPuLuU1wBaDbWkcoFTMyZUSCsuecKMj0PYuIA5S0=;
+        b=t/XnsLi1eFqkT1x7uHd+oP5SAJRyUmpCWUOT7o6QXTKyGGFuX0U8jnA3BoVyRXTYUk
+         3BJjAimO04dwZFel6+RZuAW5AyeeOtJoIQav06EZ8Ap9CdY5lqaK7oAZkqLYPe4flooZ
+         LpjfYlUmPszH2wUuploEnaYNU5MOpTCAWuqjf+aXKAG8sqPvdLG+UOrqak6WG+xPiyne
+         ylzoESe1gvXoIhfxFzrRMwz58IhFwUHtm/eXGzMZ0a3tbPT1sTgyYHejMe7fJ9H3SNKu
+         PXSp69OcR7sc7426Y8hdc/AwAEPFL8TQXVogJIf/MePgoZCvHvScAH2rA4g5ZnBunI8p
+         +UQQ==
+X-Gm-Message-State: AO0yUKWxBi+OV7QSDUavOVJYmwvjoV8N9P8w5UnV4exDLzUw/bc7OQ8Z
+        lks37JbkvwOpZ5iiARVAqZD4WxNxONWXm4NMen0K+fSro9L3ng==
+X-Google-Smtp-Source: AK7set/rppMKL8PmLlE6ZEPS+7aWqreZKZYPF7wXZqHbPA1PNgDb/YZ4rvKhpOEHETPhdtpvcTko9h+d92SGx9X/SuA=
+X-Received: by 2002:a17:90a:c710:b0:233:ce0b:5f78 with SMTP id
+ o16-20020a17090ac71000b00233ce0b5f78mr2138910pjt.32.1676377147435; Tue, 14
+ Feb 2023 04:19:07 -0800 (PST)
 MIME-Version: 1.0
-References: <202302101628321403257@zte.com.cn>
-In-Reply-To: <202302101628321403257@zte.com.cn>
+References: <20230213045233.32470-1-hayashi.kunihiko@socionext.com>
+In-Reply-To: <20230213045233.32470-1-hayashi.kunihiko@socionext.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 14 Feb 2023 13:18:21 +0100
-Message-ID: <CAPDyKFp-1FCcWJE7K+kGvvcTvNhOo69Wb4R1UNWKOsN=1dLBwg@mail.gmail.com>
-Subject: Re: [PATCH] mmc: sdhci-brcmstb: Use devm_platform_get_and_ioremap_resource()
-To:     ye.xingchen@zte.com.cn
-Cc:     kdasu.kdev@gmail.com, alcooperx@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, adrian.hunter@intel.com,
-        f.fainelli@gmail.com, linux-mmc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Tue, 14 Feb 2023 13:18:31 +0100
+Message-ID: <CAPDyKFo7LizvRzjbohy9XcL=Nyscj9Dp-VNvUnx94fF409uzZg@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: mmc: Add resets property to cadence SDHCI binding
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -68,15 +69,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Feb 2023 at 09:28, <ye.xingchen@zte.com.cn> wrote:
+On Mon, 13 Feb 2023 at 05:52, Kunihiko Hayashi
+<hayashi.kunihiko@socionext.com> wrote:
 >
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
+> Cadence SDHCI controller allows reset control support on UniPhier SoC.
+> Add resets property to cadence SDHCI binding.
 >
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
->
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Applied for next, thanks!
 
@@ -85,30 +85,26 @@ Uffe
 
 
 > ---
->  drivers/mmc/host/sdhci-brcmstb.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>  Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
 >
-> diff --git a/drivers/mmc/host/sdhci-brcmstb.c b/drivers/mmc/host/sdhci-brcmstb.c
-> index 0a19b7af1d41..4c22337199cf 100644
-> --- a/drivers/mmc/host/sdhci-brcmstb.c
-> +++ b/drivers/mmc/host/sdhci-brcmstb.c
-> @@ -255,7 +255,6 @@ static int sdhci_brcmstb_probe(struct platform_device *pdev)
->         struct sdhci_brcmstb_priv *priv;
->         u32 actual_clock_mhz;
->         struct sdhci_host *host;
-> -       struct resource *iomem;
->         struct clk *clk;
->         struct clk *base_clk = NULL;
->         int res;
-> @@ -291,8 +290,7 @@ static int sdhci_brcmstb_probe(struct platform_device *pdev)
->         }
+> Changes since v1:
+> - Add Acked-by: line
 >
->         /* Map in the non-standard CFG registers */
-> -       iomem = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> -       priv->cfg_regs = devm_ioremap_resource(&pdev->dev, iomem);
-> +       priv->cfg_regs = devm_platform_get_and_ioremap_resource(pdev, 1, NULL);
->         if (IS_ERR(priv->cfg_regs)) {
->                 res = PTR_ERR(priv->cfg_regs);
->                 goto err;
+> diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> index d3dce4d6c168..adacd0535c14 100644
+> --- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> @@ -29,6 +29,9 @@ properties:
+>    clocks:
+>      maxItems: 1
+>
+> +  resets:
+> +    maxItems: 1
+> +
+>    # PHY DLL input delays:
+>    # They are used to delay the data valid window, and align the window to
+>    # sampling clock. The delay starts from 5ns (for delay parameter equal to 0)
 > --
 > 2.25.1
+>
