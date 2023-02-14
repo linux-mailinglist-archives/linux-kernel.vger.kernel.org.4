@@ -2,104 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA346957F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 05:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1316695800
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 05:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjBNEm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 23:42:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57722 "EHLO
+        id S229994AbjBNEuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 23:50:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjBNEmY (ORCPT
+        with ESMTP id S229604AbjBNEur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 23:42:24 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB0817148
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 20:42:22 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id 16so9383737pfo.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 20:42:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=IytFRD13wyHkORVwldfX0cj+olMfAcIjoNBkr5UdNv4=;
-        b=CpaV4dVNUa0pCGK5PDzg426zSTmY7CxCQXGkQc/due8N9WbSNf6YnYNaaZJlzPQzRU
-         4s0iVdibYJ1vax2anrQWNpvuZAStqApzDgYGWguJpL56MKYEoQgZaI+vmNIiamU8lFDV
-         tyzEA6plQxp7DGNo3rrpCE6kEmRoWISwepZNgWnkKgHTSGrSSjYfZw8BEh9uYnOmnu1y
-         3zFRl0bQ3jXcROaXtBLT4UglIskyT4lWVFuYiMxAiHOSaik7J+HXrvgqyyWxXOa5eCoY
-         Ns5YOAcrrMGyhU6lBeuM1ckz+k2ZSKU+hls5ed89+Q3rPD5x9fgKjshULNq9RO13E66x
-         s13A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IytFRD13wyHkORVwldfX0cj+olMfAcIjoNBkr5UdNv4=;
-        b=ek8VIz5EJvuOsBOjbHTrCJkCM9YiRP05n4GKXo3vtlilNieLfQUpv/oKjzICAv6kFD
-         xgqn82Fz5JxLt8ruuOLuLS0zbBBiY95tTJir5gdtvJuk25MN8Jih5tfuDnvTKzoy76Cj
-         A+GcGhm8IQaGK2hwC3mmOPF0cVq0e+9+vFqx4XaBAJPQdBh9FLpFzBcsWJOcqVeBEM2x
-         T3Qs8DYzbx6fG4HulxXo7L3dqtwXayOGpAnm+nILgB60PfKZuG3lp9DmxybMFZyaiooH
-         oCu3bW5Jf2dwj10Hf+aIb7QlT5ASkle0iWFh85uJIpATF/jtypadED4n/5+3LwX+DAq5
-         XYLQ==
-X-Gm-Message-State: AO0yUKVPy8IaghV6DvDWcL9S6aLk/UayZmBC0vL448I6/rFZduXo6IE8
-        1H0bhJbLb9NS4n+DbP1HOGTpqw==
-X-Google-Smtp-Source: AK7set/4s/cLnv837AHxP+fni/9CnhX3OJuvf1GQstOD0qP6CHuBqukJFcvLiwos3jjiUZAL1jHLxQ==
-X-Received: by 2002:aa7:973d:0:b0:5a8:be36:65a8 with SMTP id k29-20020aa7973d000000b005a8be3665a8mr750675pfg.27.1676349742500;
-        Mon, 13 Feb 2023 20:42:22 -0800 (PST)
-Received: from sunil-laptop ([49.206.14.226])
-        by smtp.gmail.com with ESMTPSA id i9-20020aa79089000000b0058173c4b3d1sm8285835pfa.80.2023.02.13.20.42.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 20:42:22 -0800 (PST)
-Date:   Tue, 14 Feb 2023 10:12:13 +0530
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Jessica Clarke <jrtc27@jrtc27.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <apatel@ventanamicro.com>,
-        linux-doc@vger.kernel.org, Atish Patra <atishp@rivosinc.com>,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Andrew Jones <ajones@ventanamicro.com>
-Subject: Re: [PATCH 06/24] RISC-V: ACPI: Add PCI functions to build ACPI core
-Message-ID: <Y+sRJVf985vXvQG/@sunil-laptop>
-References: <20230130182225.2471414-1-sunilvl@ventanamicro.com>
- <20230130182225.2471414-7-sunilvl@ventanamicro.com>
- <33DF2416-0629-414D-B50E-D99CB55A83AA@jrtc27.com>
+        Mon, 13 Feb 2023 23:50:47 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7071D11E;
+        Mon, 13 Feb 2023 20:50:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=p+bChmlvh7LMvh5Y4Z+EEbtWSwcTxFruTWwVWYj6SM4=; b=O+ebOqEE74wqxSJzcbyIu0QYBH
+        2vs06XLi0DzhSjrQev+ypdu/zOwEZb1yiIf52NSNtpTyglV1CUwwA55PZpbc72Zq6+zBCbln2yqby
+        o0KHZRljjzrHdF2APS6WX1Zx+o1SjUVF2sxp0QP6rbM8dxPQZx+4y3fZKLKdMRwJwlS3D0lO/iom9
+        prqRmdjvfYBndWVhyF3y/VJYavF7mmkJrPm65WdATw5dnfsmHdGFvaKGTsxmwJPz2jmbriTlkFqlU
+        FhLgxhAHo8Yc/2LX6WTwtMMtJZqL05vMdpYqVhapD+LKCLgpO8K55UXfvaHDQTn2wsUIVh3Vl9901
+        8fdmdI8g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pRnGx-006OMR-1R; Tue, 14 Feb 2023 04:50:31 +0000
+Date:   Tue, 14 Feb 2023 04:50:30 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     akpm@linux-foundation.org, torvalds@linux-foundation.org,
+        sj@kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
+        roman.gushchin@linux.dev, shakeelb@google.com,
+        muchun.song@linux.dev, damon@lists.linux.dev,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] Some cleanups for page isolation
+Message-ID: <Y+sTFqwMNAjDvxw3@casper.infradead.org>
+References: <cover.1676342827.git.baolin.wang@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <33DF2416-0629-414D-B50E-D99CB55A83AA@jrtc27.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1676342827.git.baolin.wang@linux.alibaba.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 05:26:13PM +0000, Jessica Clarke wrote:
-> On 30 Jan 2023, at 18:22, Sunil V L <sunilvl@ventanamicro.com> wrote:
-> > 
-> > When CONFIG_PCI is enabled, ACPI core expects few arch
-> > functions related to PCI. Add those functions so that
-> > ACPI core gets build. These are levraged from arm64.
-> 
-> Presumably this is pretty generic and applies to anything without x86
-> weirdness. Copying all this supposedly architecture specific code
-> that’s really generic seems like bad practice to me as an outsider.
-> Should this not be unifying the two in a shared location as has been
-> done for other subsystems?
+On Tue, Feb 14, 2023 at 11:18:05AM +0800, Baolin Wang wrote:
+> The page isolation functions did not return a boolean to indicate
+> success or not, instead it will return a negative error when failed
+> to isolate a page. So it's better to check the negative error explicitly
+> for isolation to make the code more clear per Linus's suggestion in [1].
 
-Make sense. Let me add these functions in a common location pci-acpi.c
-for RISC-V. Other architectures can migrate to this in future.
-
-Thanks,
-Sunil
+Only one caller of isolate_lru_page() or folio_isolate_lru() actually
+uses the errno.  And the errno can only be 0 or -EBUSY.  It'd be
+better to change the three functions to return bool and fix
+add_page_for_migration() to set the errno to -EBUSY itself.
