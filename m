@@ -2,147 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B39C6963ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:53:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B73976963E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:51:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231888AbjBNMxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 07:53:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38224 "EHLO
+        id S231584AbjBNMvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 07:51:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbjBNMxR (ORCPT
+        with ESMTP id S229933AbjBNMvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 07:53:17 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A598C1B33C
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:53:16 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31E0fC1t012982;
-        Tue, 14 Feb 2023 12:52:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=utq4rnGNcKrYozG1C+5fM2HgfaeXqvuWtQXk9hB2XIc=;
- b=MQIZLSwkcacp6oiVHBe1FurOYTKBqSLMmG4I8VR+4/zgIJyhjHozMV/kGXQMnlo2fwGM
- bsVe115H+Zo0mgOBg+f6rG0IaQ1GHZmHWjySImCs2H2W+A6qTSxbw4JEpHujifQTFLCQ
- oze2agpOKw5v6hK2Hj8aS7pnyPNnWKJwTkJNMnbMyJ/wr6BcQ9YZoTMC9wwew01fP4GF
- KFltPohQBE7wQfaOImuWBpMdjrxB2K6Y7ajkDQMDfK7QzcwClkLPXXu45f3GdLei+m8O
- qhMIw50hR6VkxBxoQwai8X2Th0bw1CJ/KFoz+wMPtSdISpKjnSk74pRkVs/BC63RTb83 Wg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nqyygsg8t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 12:52:43 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31ECqgUX027761
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 12:52:42 GMT
-Received: from hu-charante-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 14 Feb 2023 04:52:38 -0800
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-To:     <akpm@linux-foundation.org>, <hughd@google.com>,
-        <willy@infradead.org>, <markhemm@googlemail.com>,
-        <rientjes@google.com>, <surenb@google.com>, <shakeelb@google.com>,
-        <quic_pkondeti@quicinc.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Charan Teja Kalla <quic_charante@quicinc.com>
-Subject: [PATCH V7 1/2] mm: fadvise: move 'endbyte' calculations to helper function
-Date:   Tue, 14 Feb 2023 18:21:49 +0530
-Message-ID: <22de7e716051abbafc01fab9f479f4d5b03745ca.1676378702.git.quic_charante@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1676378702.git.quic_charante@quicinc.com>
-References: <cover.1676378702.git.quic_charante@quicinc.com>
+        Tue, 14 Feb 2023 07:51:51 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5F310FC
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:51:50 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id p23so6705576vsq.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:51:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pAU7xw+dVFXFmdNHLGjsQKlgXomgsiet8mw8KgQoRXc=;
+        b=NDxTkkMRxE6zo+NOieXw46/M0iM+v0+x3RoAgyOwBJ7RaH3yBZZ+OPKuC911xnJp/g
+         VdWSrEXJqL3aICn0BrmHSJTGMKRlpY13K9G2Ws31idMqM/HvkziuhxeUacWKET2pUasb
+         p017BIR8H0pTdcpWibxUFzOvoGcpNkJu7fto8EfQFajaLA9/6S4P1bPCp08Erh1NqUKe
+         gBYlnjmgES0m3NGpuhbQXx7CRrYjIF61j7kqRSdYgOhrjbX1fHvoDSOTcxvCJpvtdgYn
+         tSpbPP1QBiCuGKw2EtFUqkPhIv57BVryQbfpqH6TqxVdXJJnhOh+6gfx6tXdvjucjagL
+         rVmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pAU7xw+dVFXFmdNHLGjsQKlgXomgsiet8mw8KgQoRXc=;
+        b=GE0bnnO/mOiovZQjP7kJRtbbBB/+35IxAeeQ3XR7AjQwsToByF4QbA+jBszyl+OJyg
+         xIZyxjTpXXICvIVZeBY49qL+3h6A7kK5v0jGQJQ6O+zR9vRAx/GKQpT74kK5ccATlC/k
+         WpABO/XEbRV/XFs1pAF23Dejsvjw6mwuB2pL7lDYnRpQeOtV59THeyY+CykdIbGDfsOO
+         PujEdJ52UJsPhscSj0RppQNff591CsYCihSmEV0AMa1VxbRgvhJyYyFDl+UmMeQ7Xx8f
+         J9BtsmjwbHpSlZYBpL0eI2VFU4/2w7QKrYYa9xs8+WhzlaHmK21n68uX10l6035dEuBj
+         XMhg==
+X-Gm-Message-State: AO0yUKUNxlBn+g7Tx9bKWe2I18pOg1zjaW93/xdkKstWvvSSzb0+2zfy
+        JTPEQtuRrHYCokl3fU0HkZ2GYLYATA9ojBppJrc=
+X-Google-Smtp-Source: AK7set+vB41SInE+/Ww7Uw2sr/cgCHcf9EvyrMmJo4g+ypi1sltpnQeQknwVSHNMtJmh12InAO3ADiBVlGOP5ZLY0NU=
+X-Received: by 2002:a67:dd13:0:b0:400:ae22:188 with SMTP id
+ y19-20020a67dd13000000b00400ae220188mr419567vsj.1.1676379109908; Tue, 14 Feb
+ 2023 04:51:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: qsEuu0IDWaNceXdkAideEoef-5w9LH3U
-X-Proofpoint-GUID: qsEuu0IDWaNceXdkAideEoef-5w9LH3U
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-14_07,2023-02-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- impostorscore=0 malwarescore=0 adultscore=0 mlxlogscore=753 mlxscore=0
- priorityscore=1501 lowpriorityscore=0 spamscore=0 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302140111
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a59:b8af:0:b0:387:97d3:96d7 with HTTP; Tue, 14 Feb 2023
+ 04:51:49 -0800 (PST)
+Reply-To: fionahill.2023@outlook.com
+From:   Fiona Hill <ivanroberti700@gmail.com>
+Date:   Tue, 14 Feb 2023 04:51:49 -0800
+Message-ID: <CAKiAiLAfgVOJo4qCSjgeCytSRoL23vZ7_RJhQzZyuG=v=ERJNQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e30 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5006]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [fionahill.2023[at]outlook.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ivanroberti700[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ivanroberti700[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the 'endbyte' calculations that determines last byte that fadvise
-can to a helper function. This is a preparatory change made for
-shmem_fadvise() functionality in the next patch. No functional changes
-in this patch.
-
-Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
----
- mm/fadvise.c  | 11 +----------
- mm/internal.h | 21 +++++++++++++++++++++
- 2 files changed, 22 insertions(+), 10 deletions(-)
-
-diff --git a/mm/fadvise.c b/mm/fadvise.c
-index fb7c5f4..1b3cac5 100644
---- a/mm/fadvise.c
-+++ b/mm/fadvise.c
-@@ -65,16 +65,7 @@ int generic_fadvise(struct file *file, loff_t offset, loff_t len, int advice)
- 		return 0;
- 	}
- 
--	/*
--	 * Careful about overflows. Len == 0 means "as much as possible".  Use
--	 * unsigned math because signed overflows are undefined and UBSan
--	 * complains.
--	 */
--	endbyte = (u64)offset + (u64)len;
--	if (!len || endbyte < len)
--		endbyte = LLONG_MAX;
--	else
--		endbyte--;		/* inclusive */
-+	endbyte = fadvise_calc_endbyte(offset, len);
- 
- 	switch (advice) {
- 	case POSIX_FADV_NORMAL:
-diff --git a/mm/internal.h b/mm/internal.h
-index dfb37e9..4445e48 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -657,6 +657,27 @@ static inline void vunmap_range_noflush(unsigned long start, unsigned long end)
- }
- #endif /* !CONFIG_MMU */
- 
-+/*
-+ * Helper function to get the endbyte of a file that fadvise can operate on.
-+ */
-+static inline loff_t fadvise_calc_endbyte(loff_t offset, loff_t len)
-+{
-+	loff_t endbyte;
-+
-+	/*
-+	 * Careful about overflows. Len == 0 means "as much as possible".  Use
-+	 * unsigned math because signed overflows are undefined and UBSan
-+	 * complains.
-+	 */
-+	endbyte = (u64)offset + (u64)len;
-+	if (!len || endbyte < len)
-+		endbyte = LLONG_MAX;
-+	else
-+		endbyte--;		/* inclusive */
-+
-+	return endbyte;
-+}
-+
- /* Memory initialisation debug and verification */
- enum mminit_level {
- 	MMINIT_WARNING,
 -- 
-2.7.4
-
+Hello, did you receive my message?
