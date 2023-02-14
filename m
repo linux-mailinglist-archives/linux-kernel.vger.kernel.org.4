@@ -2,139 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18A60695D9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1602D695D9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232080AbjBNIw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 03:52:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
+        id S232090AbjBNIwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 03:52:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232185AbjBNIwv (ORCPT
+        with ESMTP id S232177AbjBNIwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 03:52:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446A523339
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:52:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 14 Feb 2023 03:52:42 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D26C23658;
+        Tue, 14 Feb 2023 00:52:38 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 212DFB81C98
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:52:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25EC6C433D2;
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2173B21963;
         Tue, 14 Feb 2023 08:52:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676364757;
-        bh=IIWs74rDQbQtURoMw6kjDY1f5MCO5pO7u7SRouv8I/Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a5ZtR6VCDkFmWmygnlGk2oFzr7iTJ+eh09az13EXl+1jXcUSvUrA//gA2BPISj111
-         ZTzw/F9trwEKz2gAcjcmgVJj9x+43rkBGgV4mmxRTz/Eai2a3iRWPXZ0SoI530wYE4
-         HrDpfT9dHxjWgwdM/gqRCLUoa0Rqr3jX4cr5HBr4=
-Date:   Tue, 14 Feb 2023 09:52:35 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Matt Hsiao <matt.hsiao@hpe.com>
-Cc:     "Gaba, Aahit" <aahit.gaba@hpe.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "gustavoars@kernel.org" <gustavoars@kernel.org>,
-        "nishadkamdar@gmail.com" <nishadkamdar@gmail.com>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "dhaval.experiance@gmail.com" <dhaval.experiance@gmail.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "arvind.yadav.cs@gmail.com" <arvind.yadav.cs@gmail.com>,
-        "standby24x7@gmail.com" <standby24x7@gmail.com>,
-        "wfp5p@virginia.edu" <wfp5p@virginia.edu>,
-        "jslaby@suse.cz" <jslaby@suse.cz>,
-        "prarit@redhat.com" <prarit@redhat.com>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "adobriyan@gmail.com" <adobriyan@gmail.com>
-Subject: Re: [PATCH v2] misc: hpilo: relicense HPE iLO driver as Dual MIT/GPL
-Message-ID: <Y+tL02m4zS1d+WAa@kroah.com>
-References: <20221116103457.27486-1-matt.hsiao@hpe.com>
- <Y3TLSON/7XRG5BiN@kroah.com>
- <20230209033812.GA17928@blofly.tw.rdlabs.hpecorp.net>
- <MW4PR84MB1539887EFAA00D60D777C75696D99@MW4PR84MB1539.NAMPRD84.PROD.OUTLOOK.COM>
- <Y+YqscpBXMMTWT6V@kroah.com>
- <20230214083017.GA22428@blofly.tw.rdlabs.hpecorp.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1676364757; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FCM5fUI30hk/CWQ2CgtHO8OXcYicjnlXfEi2o9EEJgU=;
+        b=T/Cq0T41wLhDEtRbo9/P3oUnDXSjS/ZP5vtU5NKZsWcmEiJEv8lD8Fabi8f8A8HfN4UIxM
+        HEc75jRkl476RycFowuGXkA9gUqSAAebQGliI5pOu11P9aL8MaCRzFt4TZHdphjFsp67jI
+        a3EuFPBm746wYdJsL478LWzWk5euQJ0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1676364757;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FCM5fUI30hk/CWQ2CgtHO8OXcYicjnlXfEi2o9EEJgU=;
+        b=2dBOVRGS4GK4ZtQ5IRwjk/ufawSnkfTjTwXhUnGFsURa02ld52b2sLAvBZZijQ5FCLz+vx
+        uwBLWlJq4F7lz3DA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 14B6B138E3;
+        Tue, 14 Feb 2023 08:52:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id LB8EBdVL62O0NAAAMHmgww
+        (envelope-from <jack@suse.cz>); Tue, 14 Feb 2023 08:52:37 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 9F851A06D8; Tue, 14 Feb 2023 09:52:36 +0100 (CET)
+Date:   Tue, 14 Feb 2023 09:52:36 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Hou Tao <houtao@huaweicloud.com>, Jan Kara <jack@suse.cz>,
+        linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        cgroups@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, houtao1@huawei.com
+Subject: Re: [PATCH] blk-ioprio: Introduce promote-to-rt policy
+Message-ID: <20230214085236.vamd2yuflnyljyid@quack3>
+References: <b6b3c498-e90b-7d1f-6ad5-a31334e433ae@acm.org>
+ <beb7782e-72a4-c350-3750-23a767c88753@huaweicloud.com>
+ <aedc240d-7c9e-248a-52d2-c9775f3e8ca1@acm.org>
+ <20230208134345.77bdep3kzp52haxu@quack3>
+ <7fcd4c38-ccbe-6411-e424-a57595ad9c0b@acm.org>
+ <20230209085603.dzqfcc3pp4hacqlz@quack3>
+ <55a065e7-7d86-d58f-15ba-c631a427843e@acm.org>
+ <20230210101244.zsmtmsoo4xjx7suj@quack3>
+ <48620099-0311-e752-ba3b-cbb4351cf81e@huaweicloud.com>
+ <0290f608-6ddf-ecb7-4c05-55b0f7dbfbea@acm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230214083017.GA22428@blofly.tw.rdlabs.hpecorp.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <0290f608-6ddf-ecb7-4c05-55b0f7dbfbea@acm.org>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 04:30:17PM +0800, Matt Hsiao wrote:
-> On Fri, Feb 10, 2023 at 12:29:53PM +0100, Greg KH wrote:
-> > On Thu, Feb 09, 2023 at 03:59:04AM +0000, Gaba, Aahit wrote:
-> > > On Thu, Feb 09, 2023 at 09:29:00AM +0530, Aahit Gaba wrote:
-> > > > On Wed, Nov 16, 2022 at 12:36:40PM +0100, Greg KH wrote:
-> > > > > On Wed, Nov 16, 2022 at 06:34:57PM +0800, matt.hsiao@hpe.com wrote:
-> > > > > > From: Matt Hsiao <matt.hsiao@hpe.com>
-> > > > > >
-> > > > > > Currently, the hpilo driver is licensed as GPL. To run OpenBSD on
-> > > > > > HPE servers with BMC (HPE iLO) functionality, a dual MIT/GPL license
-> > > > > > is needed for porting the hpilo driver to OpenBSD.
-> > > > > >
-> > > > > > Signed-off-by: Matt Hsiao <matt.hsiao@hpe.com>
-> > > > > > ---
-> > > > > >
-> > > > > > Hello contributors in the CC list,
-> > > > > >
-> > > > > > Thanks for your contributions to the hpilo driver. Please kindly
-> > > > > > review the license change and hopefully you would agree and approve it.
-> > > > Thanks!
-> > > > > >
-> > > > > > Patch v2:
-> > > > > > ---------
-> > > > > > - Change MODULE_LICENSE to Dual MIT/GPL too
-> > > > >
-> > > > > As I asked for on the v1 version (delayed email on my side), I need a
-> > > > > lawyer from HPE to sign off on this change as well.
-> > > > >
-> > > > > thanks,
-> > > > >
-> > > > > greg k-h
-> > > > 
-> > > > Add HPE attorney Aahit Gaba to sign off.
-> > > 
-> > > Signed-off-by: Aahit Gaba <aahit.gaba@hpe.com>
-> > > 
-> > > The reasons we want to dual license Linux hpilo driver are:
-> > > - There are required bug fixes that are not copyrighted by HPE in the current Linux hpilo driver.
-> > 
-> > And have you identified them and gotten a sign-off from those copyright
-> > holders?  I don't see that here documented at all, so I imagine you
-> > documented it somewhere else?  If so, where?
+On Mon 13-02-23 09:10:26, Bart Van Assche wrote:
+> On 2/13/23 04:51, Hou Tao wrote:
+> > Should I keep "none-to-rt" and make it work just like "promote-to-rt" or should
+> > I just remove "none-to-rt" and add "promote-to-rt" ? I think the latter will be
+> > more appropriate.
 > 
-> We are under the assumption that hpilo contributors would reply to this
-> thread with their 'Acked-by' or 'Signed-off-by'. Is that the proper
-> approach?
+> Removing none-to-rt would break existing systems that use this policy. I
+> prefer the former solution.
 
-Please work with your legal team to do this properly, they know what to
-do here.  If not, then just don't worry about it (i.e. if it costs too
-much to do this, just spend the money to write a second driver.)
+Agreed. I also think that keeping none-to-rt as an alias for promote-to-rt
+allows for a smoother transition. However I'm all for documenting that
+none-to-rt is deprecated and works as promote-to-rt.
 
-> We shouldn't have used the term 'one driver'. More accurate description
-> is we want the core driver features and any changes or bug fixes apply
-> to that dual licensed. We understand that the parts of the driver that
-> are calls to Linux specific functions would be different in OpenBSD.
-> There are also some Linux infrastructure things that would be different
-> in OpenBSD. The key for us is that the core driver features and any
-> future changes be kept in sync between Linux and OpenBSD.
+								Honza
 
-Again, you have full control over this as you are making those changes
-yourself.  I really don't see why you need to do this.
-
-Write the OpenBSD driver yourself and see if you could actually share
-anything.  Odds are, the shared parts you already have copyright over
-today, so there's no issues involved.
-
-good luck!
-
-greg k-h
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
