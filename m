@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29453696D7F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 20:02:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBCC696D83
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 20:02:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjBNTCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 14:02:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52606 "EHLO
+        id S233143AbjBNTCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 14:02:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232413AbjBNTCj (ORCPT
+        with ESMTP id S232212AbjBNTCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 14:02:39 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64FB25964;
-        Tue, 14 Feb 2023 11:02:37 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id i26so265393ila.11;
-        Tue, 14 Feb 2023 11:02:37 -0800 (PST)
+        Tue, 14 Feb 2023 14:02:43 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4DD25967;
+        Tue, 14 Feb 2023 11:02:39 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id y8so947067ilv.1;
+        Tue, 14 Feb 2023 11:02:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gBFO9aqhV38THoX2Fo6HR6/ykmrwIoxryt9YcUaBQeE=;
-        b=PnRIpLuDmcy5yt6aiMl/PRAsAv2Us1E5Oo6e+hJclJqr5tKuSkkUot/8A+HdCQb84I
-         03ZPQhb+lNhGg6q826jB6Ts/gEXF0darsyRG3YL/JjAX2Gt09f0PcPIiXJFZvrxPDfxZ
-         W73SECriG9ixrM2P58H85Wz9W6lF4oYYgZHN+Zh+CMOq0MQkX1mzM+HZoaKvTN6rS7Fk
-         etOzeUyrQsMDkBC4Yd/NrG82W9NQnqDMfYA1Njm0oOo4DOqOhPqIqKo6YiqCEjibcUGP
-         ZQSrVhuPqYAufaucTwkOXohFcSD5ZDZ67Pf+Kj+4bUE7ayw4EXksBt/NGF5gslNWNZzL
-         0B+Q==
+        bh=MPPamIyRpbGBQ5ryZF3ausqPZtq/gq8Gwr+ekJX0vLw=;
+        b=maTfyp8N7g3NFmHY2zeN8YjUoTVcYuR7ajHYTMcSRQzHkFYDHmJhx9ivtMUdBVF71L
+         GQn4jY6oHeJqVgK7GJEF9aLjpgWkCTqjGs3hbIXrso1oVFzSV1eo9609BfFbuuuBBCuI
+         ZyGyKx8aU7z1Om3ICTXa1KR7/JLA9jQTSprAIC8dEz7zaymZt3th4EEmYbwsrXXlC+p1
+         sxZ7SNbSVNo/pkS61yMLbC5HX9no9qZGegY9IG9qe3Rj+1PzQlqNTBYxeczquNnk6ooA
+         Oc5s7X0SnOx68eQv4KuSVtS35HYPX7X0fqe6ZVipE81nnvy/AAEtYche0HnA6lbxB56E
+         CXSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gBFO9aqhV38THoX2Fo6HR6/ykmrwIoxryt9YcUaBQeE=;
-        b=aE5KF46WKhgjDVS8VHrHRRZwFMQIah3zJdV6APwG4weqXrrFALAAVp4pfBuCOiTEJh
-         chCkVpHT6gOjxsXrua4/EKP0fzekqxa5OFRO02TAGJXSshZG9ZkifY+eDTl/IXuykccz
-         eDleJmYALfF3XAFm4Jzmaf0PhXjplWY7IqKOz/VmAP91c2UbAm3n2Ff9Tep7GSQ0mwL2
-         2vOOYc4lvnwq/8d2Zxtl9cHKWZJxQLgF+fKk5vCU7kyHAzcoZmAzYCNvaZ66KDNM9+I5
-         PXgyfAf2SJElp2IZ9xtmlMdFQRQ9HpSAG/6zLMYMAbT/iVXq/gdia+uiiikJpDNfuxTJ
-         2RKw==
-X-Gm-Message-State: AO0yUKXL9XNPfWifPjF36TkUwLjr8BSD18Hh08tpBLKsb/l0Yael8AjR
-        dkpkOTF1Z7XoZbYs6koYdjs=
-X-Google-Smtp-Source: AK7set9u6j7La87WkLYk/UYILiOBFdY1iKGZoRD/y8K4y4KxyNTy+Te/VhP83riNGGKX7PeiklCynQ==
-X-Received: by 2002:a05:6e02:12ed:b0:315:55cc:ff07 with SMTP id l13-20020a056e0212ed00b0031555ccff07mr3475691iln.4.1676401357094;
-        Tue, 14 Feb 2023 11:02:37 -0800 (PST)
+        bh=MPPamIyRpbGBQ5ryZF3ausqPZtq/gq8Gwr+ekJX0vLw=;
+        b=zKyCR8RXbVBQAJkeJThUYrrXeR9iG6X7liFveDUITFmsRRn67QATmb304TM8qL7tOx
+         vDjmkZ5PwHcYMeegE9gjKA2mRARwZbrFKWwqS2NOAU6k5eaES1JCK/0WkYKXU0c0TPUu
+         ZP8BtvnpDCVgFhtML2AuoXYtK1sWskudnCT66YpKWVTdYqqG/jZQhbyevuzGe/lLQb9d
+         p0mR8dZy3YpFez4nN+VuPdUQf7/K1HnFThpXeTkx71tELhSIFnkjL90U0geNwpylfCdo
+         SRR8YAHdxjW5L3Js361SkVoFwVahlN7kcl53MBwd0ncZ7pushdedOFICbjSc34pTJK7g
+         xahw==
+X-Gm-Message-State: AO0yUKV3uDWJnKReMyuuyffwFyAQ9VA5mSnqJpVVgrE1MkQLgkOjxl1H
+        EjyWYLNlRiz5PyH24JJY6BY=
+X-Google-Smtp-Source: AK7set+eY5XAwZXkOnW0qFOv85zlppyeV5NeG8+1WBt2UYlWnui6VEDbC+TuErm7ZvFyUGKQs5ccQQ==
+X-Received: by 2002:a92:c241:0:b0:310:fa45:ac78 with SMTP id k1-20020a92c241000000b00310fa45ac78mr2181236ilo.29.1676401358385;
+        Tue, 14 Feb 2023 11:02:38 -0800 (PST)
 Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
-        by smtp.gmail.com with ESMTPSA id r11-20020a056e0219cb00b0030c27c9eea4sm3608770ill.33.2023.02.14.11.02.36
+        by smtp.gmail.com with ESMTPSA id r11-20020a056e0219cb00b0030c27c9eea4sm3608770ill.33.2023.02.14.11.02.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 11:02:36 -0800 (PST)
+        Tue, 14 Feb 2023 11:02:38 -0800 (PST)
 From:   Yang Shi <shy828301@gmail.com>
 To:     mgorman@techsingularity.net, agk@redhat.com, snitzer@kernel.org,
         dm-devel@redhat.com, akpm@linux-foundation.org
 Cc:     linux-mm@kvack.org, linux-block@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [v2 PATCH 1/5] mm: page_alloc: add API for bulk allocator with callback
-Date:   Tue, 14 Feb 2023 11:02:17 -0800
-Message-Id: <20230214190221.1156876-2-shy828301@gmail.com>
+Subject: [v2 PATCH 2/5] mm: mempool: extract the common initialization and alloc code
+Date:   Tue, 14 Feb 2023 11:02:18 -0800
+Message-Id: <20230214190221.1156876-3-shy828301@gmail.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230214190221.1156876-1-shy828301@gmail.com>
 References: <20230214190221.1156876-1-shy828301@gmail.com>
@@ -73,177 +73,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the bulk allocator support to pass pages via list or array,
-but neither is suitable for some usecases, for example, dm-crypt, which
-doesn't need a list, but array may be too big to fit on stack.  So
-adding a new bulk allocator API, which passes in a callback function
-that deal with the allocated pages.
-
-The API defined in this patch will be used by the following patches.
+Extract the common initialization code to __mempool_init() and
+__mempool_create().  And extract the common alloc code into an internal
+function.  This will make the following patch easier and avoid duplicate
+code.
 
 Signed-off-by: Yang Shi <shy828301@gmail.com>
 ---
- include/linux/gfp.h | 21 +++++++++++++++++----
- mm/mempolicy.c      | 12 +++++++-----
- mm/page_alloc.c     | 21 +++++++++++++++------
- 3 files changed, 39 insertions(+), 15 deletions(-)
+ mm/mempool.c | 93 ++++++++++++++++++++++++++++++++--------------------
+ 1 file changed, 57 insertions(+), 36 deletions(-)
 
-diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-index 65a78773dcca..265c19b4822f 100644
---- a/include/linux/gfp.h
-+++ b/include/linux/gfp.h
-@@ -182,7 +182,9 @@ struct folio *__folio_alloc(gfp_t gfp, unsigned int order, int preferred_nid,
- unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
- 				nodemask_t *nodemask, int nr_pages,
- 				struct list_head *page_list,
--				struct page **page_array);
-+				struct page **page_array,
-+				void (*cb)(struct page *, void *),
-+				void *data);
- 
- unsigned long alloc_pages_bulk_array_mempolicy(gfp_t gfp,
- 				unsigned long nr_pages,
-@@ -192,13 +194,15 @@ unsigned long alloc_pages_bulk_array_mempolicy(gfp_t gfp,
- static inline unsigned long
- alloc_pages_bulk_list(gfp_t gfp, unsigned long nr_pages, struct list_head *list)
- {
--	return __alloc_pages_bulk(gfp, numa_mem_id(), NULL, nr_pages, list, NULL);
-+	return __alloc_pages_bulk(gfp, numa_mem_id(), NULL, nr_pages, list, NULL,
-+				  NULL, NULL);
+diff --git a/mm/mempool.c b/mm/mempool.c
+index 734bcf5afbb7..975c9d1491b6 100644
+--- a/mm/mempool.c
++++ b/mm/mempool.c
+@@ -182,9 +182,10 @@ void mempool_destroy(mempool_t *pool)
  }
+ EXPORT_SYMBOL(mempool_destroy);
  
- static inline unsigned long
- alloc_pages_bulk_array(gfp_t gfp, unsigned long nr_pages, struct page **page_array)
+-int mempool_init_node(mempool_t *pool, int min_nr, mempool_alloc_t *alloc_fn,
+-		      mempool_free_t *free_fn, void *pool_data,
+-		      gfp_t gfp_mask, int node_id)
++static inline int __mempool_init(mempool_t *pool, int min_nr,
++				 mempool_alloc_t *alloc_fn,
++				 mempool_free_t *free_fn, void *pool_data,
++				 gfp_t gfp_mask, int node_id)
  {
--	return __alloc_pages_bulk(gfp, numa_mem_id(), NULL, nr_pages, NULL, page_array);
-+	return __alloc_pages_bulk(gfp, numa_mem_id(), NULL, nr_pages, NULL, page_array,
-+				  NULL, NULL);
+ 	spin_lock_init(&pool->lock);
+ 	pool->min_nr	= min_nr;
+@@ -214,6 +215,14 @@ int mempool_init_node(mempool_t *pool, int min_nr, mempool_alloc_t *alloc_fn,
+ 
+ 	return 0;
  }
++
++int mempool_init_node(mempool_t *pool, int min_nr, mempool_alloc_t *alloc_fn,
++		      mempool_free_t *free_fn, void *pool_data,
++		      gfp_t gfp_mask, int node_id)
++{
++	return __mempool_init(pool, min_nr, alloc_fn, free_fn, pool_data,
++			      gfp_mask, node_id);
++}
+ EXPORT_SYMBOL(mempool_init_node);
  
- static inline unsigned long
-@@ -207,7 +211,16 @@ alloc_pages_bulk_array_node(gfp_t gfp, int nid, unsigned long nr_pages, struct p
- 	if (nid == NUMA_NO_NODE)
- 		nid = numa_mem_id();
+ /**
+@@ -233,12 +242,30 @@ EXPORT_SYMBOL(mempool_init_node);
+ int mempool_init(mempool_t *pool, int min_nr, mempool_alloc_t *alloc_fn,
+ 		 mempool_free_t *free_fn, void *pool_data)
+ {
+-	return mempool_init_node(pool, min_nr, alloc_fn, free_fn,
+-				 pool_data, GFP_KERNEL, NUMA_NO_NODE);
+-
++	return __mempool_init(pool, min_nr, alloc_fn, free_fn,
++			      pool_data, GFP_KERNEL, NUMA_NO_NODE);
+ }
+ EXPORT_SYMBOL(mempool_init);
  
--	return __alloc_pages_bulk(gfp, nid, NULL, nr_pages, NULL, page_array);
-+	return __alloc_pages_bulk(gfp, nid, NULL, nr_pages, NULL, page_array,
-+				  NULL, NULL);
++static mempool_t *__mempool_create(int min_nr, mempool_alloc_t *alloc_fn,
++				   mempool_free_t *free_fn, void *pool_data,
++				   gfp_t gfp_mask, int node_id)
++{
++	mempool_t *pool;
++
++	pool = kzalloc_node(sizeof(*pool), gfp_mask, node_id);
++	if (!pool)
++		return NULL;
++
++	if (__mempool_init(pool, min_nr, alloc_fn, free_fn, pool_data,
++			   gfp_mask, node_id)) {
++		kfree(pool);
++		return NULL;
++	}
++
++	return pool;
 +}
 +
-+static inline unsigned long
-+alloc_pages_bulk_cb(gfp_t gfp, unsigned long nr_pages,
-+		    void (*cb)(struct page *page, void *data), void *data)
-+{
-+	return __alloc_pages_bulk(gfp, numa_mem_id(), NULL, nr_pages, NULL, NULL,
-+				  cb, data);
- }
- 
- static inline void warn_if_node_offline(int this_node, gfp_t gfp_mask)
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index 0919c7a719d4..00b2d5341790 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -2318,12 +2318,13 @@ static unsigned long alloc_pages_bulk_array_interleave(gfp_t gfp,
- 			nr_allocated = __alloc_pages_bulk(gfp,
- 					interleave_nodes(pol), NULL,
- 					nr_pages_per_node + 1, NULL,
--					page_array);
-+					page_array, NULL, NULL);
- 			delta--;
- 		} else {
- 			nr_allocated = __alloc_pages_bulk(gfp,
- 					interleave_nodes(pol), NULL,
--					nr_pages_per_node, NULL, page_array);
-+					nr_pages_per_node, NULL, page_array,
-+					NULL, NULL);
- 		}
- 
- 		page_array += nr_allocated;
-@@ -2344,12 +2345,13 @@ static unsigned long alloc_pages_bulk_array_preferred_many(gfp_t gfp, int nid,
- 	preferred_gfp &= ~(__GFP_DIRECT_RECLAIM | __GFP_NOFAIL);
- 
- 	nr_allocated  = __alloc_pages_bulk(preferred_gfp, nid, &pol->nodes,
--					   nr_pages, NULL, page_array);
-+					   nr_pages, NULL, page_array,
-+					   NULL, NULL);
- 
- 	if (nr_allocated < nr_pages)
- 		nr_allocated += __alloc_pages_bulk(gfp, numa_node_id(), NULL,
- 				nr_pages - nr_allocated, NULL,
--				page_array + nr_allocated);
-+				page_array + nr_allocated, NULL, NULL);
- 	return nr_allocated;
- }
- 
-@@ -2377,7 +2379,7 @@ unsigned long alloc_pages_bulk_array_mempolicy(gfp_t gfp,
- 
- 	return __alloc_pages_bulk(gfp, policy_node(gfp, pol, numa_node_id()),
- 				  policy_nodemask(gfp, pol), nr_pages, NULL,
--				  page_array);
-+				  page_array, NULL, NULL);
- }
- 
- int vma_dup_policy(struct vm_area_struct *src, struct vm_area_struct *dst)
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 1113483fa6c5..d23b8e49a8cd 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -5402,22 +5402,27 @@ static inline bool prepare_alloc_pages(gfp_t gfp_mask, unsigned int order,
-  * @nr_pages: The number of pages desired on the list or array
-  * @page_list: Optional list to store the allocated pages
-  * @page_array: Optional array to store the pages
-+ * @cb: Optional callback to handle the page
-+ * @data: The parameter passed in by the callback
-  *
-  * This is a batched version of the page allocator that attempts to
-  * allocate nr_pages quickly. Pages are added to page_list if page_list
-- * is not NULL, otherwise it is assumed that the page_array is valid.
-+ * is not NULL, or it is assumed if the page_array is valid, or it is
-+ * passed to a callback if cb is valid.
-  *
-- * For lists, nr_pages is the number of pages that should be allocated.
-+ * For lists and cb, nr_pages is the number of pages that should be allocated.
-  *
-  * For arrays, only NULL elements are populated with pages and nr_pages
-  * is the maximum number of pages that will be stored in the array.
-  *
-- * Returns the number of pages on the list or array.
-+ * Returns the number of pages on the list or array or consumed by cb.
-  */
- unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
- 			nodemask_t *nodemask, int nr_pages,
- 			struct list_head *page_list,
--			struct page **page_array)
-+			struct page **page_array,
-+			void (*cb)(struct page *, void *),
-+			void *data)
+ /**
+  * mempool_create - create a memory pool
+  * @min_nr:    the minimum number of elements guaranteed to be
+@@ -258,8 +285,8 @@ EXPORT_SYMBOL(mempool_init);
+ mempool_t *mempool_create(int min_nr, mempool_alloc_t *alloc_fn,
+ 				mempool_free_t *free_fn, void *pool_data)
  {
- 	struct page *page;
- 	unsigned long __maybe_unused UP_flags;
-@@ -5532,8 +5537,10 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
- 		prep_new_page(page, 0, gfp, 0);
- 		if (page_list)
- 			list_add(&page->lru, page_list);
--		else
-+		else if (page_array)
- 			page_array[nr_populated] = page;
-+		else
-+			cb(page, data);
- 		nr_populated++;
- 	}
+-	return mempool_create_node(min_nr, alloc_fn, free_fn, pool_data,
+-				   GFP_KERNEL, NUMA_NO_NODE);
++	return __mempool_create(min_nr, alloc_fn, free_fn, pool_data,
++				GFP_KERNEL, NUMA_NO_NODE);
+ }
+ EXPORT_SYMBOL(mempool_create);
  
-@@ -5554,8 +5561,10 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
- 	if (page) {
- 		if (page_list)
- 			list_add(&page->lru, page_list);
--		else
-+		else if (page_array)
- 			page_array[nr_populated] = page;
-+		else
-+			cb(page, data);
- 		nr_populated++;
- 	}
+@@ -267,19 +294,8 @@ mempool_t *mempool_create_node(int min_nr, mempool_alloc_t *alloc_fn,
+ 			       mempool_free_t *free_fn, void *pool_data,
+ 			       gfp_t gfp_mask, int node_id)
+ {
+-	mempool_t *pool;
+-
+-	pool = kzalloc_node(sizeof(*pool), gfp_mask, node_id);
+-	if (!pool)
+-		return NULL;
+-
+-	if (mempool_init_node(pool, min_nr, alloc_fn, free_fn, pool_data,
+-			      gfp_mask, node_id)) {
+-		kfree(pool);
+-		return NULL;
+-	}
+-
+-	return pool;
++	return __mempool_create(min_nr, alloc_fn, free_fn, pool_data,
++				gfp_mask, node_id);
+ }
+ EXPORT_SYMBOL(mempool_create_node);
  
+@@ -363,21 +379,7 @@ int mempool_resize(mempool_t *pool, int new_min_nr)
+ }
+ EXPORT_SYMBOL(mempool_resize);
+ 
+-/**
+- * mempool_alloc - allocate an element from a specific memory pool
+- * @pool:      pointer to the memory pool which was allocated via
+- *             mempool_create().
+- * @gfp_mask:  the usual allocation bitmask.
+- *
+- * this function only sleeps if the alloc_fn() function sleeps or
+- * returns NULL. Note that due to preallocation, this function
+- * *never* fails when called from process contexts. (it might
+- * fail if called from an IRQ context.)
+- * Note: using __GFP_ZERO is not supported.
+- *
+- * Return: pointer to the allocated element or %NULL on error.
+- */
+-void *mempool_alloc(mempool_t *pool, gfp_t gfp_mask)
++static void *__mempool_alloc(mempool_t *pool, gfp_t gfp_mask)
+ {
+ 	void *element;
+ 	unsigned long flags;
+@@ -444,6 +446,25 @@ void *mempool_alloc(mempool_t *pool, gfp_t gfp_mask)
+ 	finish_wait(&pool->wait, &wait);
+ 	goto repeat_alloc;
+ }
++
++/**
++ * mempool_alloc - allocate an element from a specific memory pool
++ * @pool:      pointer to the memory pool which was allocated via
++ *             mempool_create().
++ * @gfp_mask:  the usual allocation bitmask.
++ *
++ * this function only sleeps if the alloc_fn() function sleeps or
++ * returns NULL. Note that due to preallocation, this function
++ * *never* fails when called from process contexts. (it might
++ * fail if called from an IRQ context.)
++ * Note: using __GFP_ZERO is not supported.
++ *
++ * Return: pointer to the allocated element or %NULL on error.
++ */
++void *mempool_alloc(mempool_t *pool, gfp_t gfp_mask)
++{
++	return __mempool_alloc(pool, gfp_mask);
++}
+ EXPORT_SYMBOL(mempool_alloc);
+ 
+ /**
 -- 
 2.39.0
 
