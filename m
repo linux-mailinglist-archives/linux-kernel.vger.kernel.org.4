@@ -2,185 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEBD696756
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA07B69675F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233274AbjBNOvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 09:51:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46734 "EHLO
+        id S233497AbjBNOwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 09:52:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjBNOva (ORCPT
+        with ESMTP id S232631AbjBNOwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 09:51:30 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6C5101
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 06:51:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676386288; x=1707922288;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=BdTfk4QL3SLrECjJ45QmTLm1+AmI82NvQMspdAlr3uY=;
-  b=IfQHKbiwgRzl/8HAJDViJDtyk8LU+cLk3Mhm7CPW/HKWcTrrAqVYbk1A
-   BDDogvCJZdJdRcgvG4lLJTmZ7MQt7V9LinGyiyPMSZpMgFHOBonL+hqRx
-   BQXnhSFTCwfIwI+C3TQvMnKI8YKT6ieZH1IgcdqCGhoI6VkwOMo3L96cY
-   mjBSUBf5uoEyr1AjuIf75yg9K6hKXzx/iWC6ndOLrBEeLLTA3jQvFThLm
-   nUBoqtgAU4eCKBk2nzXXo+8QU2sdiGubIMfZ33YzsQCLMY8+1jI3oRPPP
-   6K0SYcg/Jv7gNuf6jPU4h/0HlkabJfo+9u8MXHJFvTfepiQpMlMRfFuYv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="332484963"
-X-IronPort-AV: E=Sophos;i="5.97,296,1669104000"; 
-   d="scan'208";a="332484963"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 06:51:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="646789551"
-X-IronPort-AV: E=Sophos;i="5.97,296,1669104000"; 
-   d="scan'208";a="646789551"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga006.jf.intel.com with ESMTP; 14 Feb 2023 06:51:27 -0800
-Received: from [10.251.7.65] (kliang2-mobl1.ccr.corp.intel.com [10.251.7.65])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Tue, 14 Feb 2023 09:52:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924EC2B613
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 06:52:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id A06C9580BE4;
-        Tue, 14 Feb 2023 06:51:26 -0800 (PST)
-Message-ID: <6898b1c8-9dbf-67ce-46e6-15d5307ced25@linux.intel.com>
-Date:   Tue, 14 Feb 2023 09:51:25 -0500
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2393A61724
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 14:52:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BCE9C4339B
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 14:51:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676386319;
+        bh=U5DFjUqh2ny78KGnnav+Jqbho0ENCFT2So2JYaB05t0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qn/EgaBSaPjryAsuKezf4hEmgn0/7eBXwesO8KQoo66WBQwI6uEF50t1b8bdXXXuQ
+         hAXtFITQpQQKKBy35IW1jRhCiYd7fAd6RYjqOlQ2FkV6JikRxttU2P1OSm2PyggYxB
+         Rrucf94yaAXOl25JtsUT1ljtjYd1GmhM4wcYHsl6dvoNdbO+MS9eumo3fOsSWf34S3
+         vVNzAIkqIVWLpDhqqR0H/WQIZ7YZpUDZvdCCDzKt18W9H4Wft5AVggCnRNKIMKmjc7
+         GHtKs+//6h9lZy5OGVf4I6gJ8PzeUPVF4zyxR5GdmW7kfl8453nvqRxh0ZGQhQ1pLX
+         QnHdw+liPhGWQ==
+Received: by mail-ej1-f43.google.com with SMTP id sa10so40677130ejc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 06:51:59 -0800 (PST)
+X-Gm-Message-State: AO0yUKWIOtHImpffCNoEgyTetfHmb/MUIftGLw0K77g4W61r18xQendc
+        rZx4mSqGr/HR6K9RBUIiAbcWmyFAe35HsLHPn/U=
+X-Google-Smtp-Source: AK7set/9WDrehwjo3A47zZGeWnusro/YXsYPd0KNCp9OhkKOiI7z1upthcWoH05Ar0k5/9s8v0eoC7pT23RqCyXR8u4=
+X-Received: by 2002:a17:906:8592:b0:878:8061:e114 with SMTP id
+ v18-20020a170906859200b008788061e114mr1110158ejx.0.1676386317768; Tue, 14 Feb
+ 2023 06:51:57 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH V2 2/9] perf: Extend ABI to support post-processing
- monotonic raw conversion
-Content-Language: en-US
-To:     John Stultz <jstultz@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, peterz@infradead.org,
-        mingo@redhat.com, linux-kernel@vger.kernel.org, sboyd@kernel.org,
-        eranian@google.com, namhyung@kernel.org, ak@linux.intel.com,
-        adrian.hunter@intel.com
-References: <20230213190754.1836051-1-kan.liang@linux.intel.com>
- <20230213190754.1836051-3-kan.liang@linux.intel.com>
- <CANDhNCqVcrZHGW4QJBD8_hZehmRpnNAsGFsmwsxBZNm3wpFZpQ@mail.gmail.com>
- <e306e2ea-dea5-0eab-9eae-f9ea5fe7d52e@linux.intel.com>
- <CANDhNCq1b-7C=cox6ufC3Kxycu87qPzDHtJH_5jwPmPjjig5ww@mail.gmail.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <CANDhNCq1b-7C=cox6ufC3Kxycu87qPzDHtJH_5jwPmPjjig5ww@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1e6f4d35946e4e2e7c7f5dcc7b69d5e609de8184.camel@xry111.site>
+In-Reply-To: <1e6f4d35946e4e2e7c7f5dcc7b69d5e609de8184.camel@xry111.site>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 14 Feb 2023 22:51:44 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7co2Sx5c7oGA8nb12Ohh_jCvsuq5i6d5qnmV4an3M47Q@mail.gmail.com>
+Message-ID: <CAAhV-H7co2Sx5c7oGA8nb12Ohh_jCvsuq5i6d5qnmV4an3M47Q@mail.gmail.com>
+Subject: Re: "kernel ade access" oops on LoongArch
+To:     Xi Ruoyao <xry111@xry111.site>
+Cc:     loongarch@lists.linux.dev, WANG Xuerui <kernel@xen0n.name>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Ruoyao,
 
+It seems to have something related to Youling's relative exception patchset=
+.
 
-On 2023-02-13 5:22 p.m., John Stultz wrote:
-> On Mon, Feb 13, 2023 at 1:40 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
->> On 2023-02-13 2:37 p.m., John Stultz wrote:
->>> On Mon, Feb 13, 2023 at 11:08 AM <kan.liang@linux.intel.com> wrote:
->>>>
->>>> From: Kan Liang <kan.liang@linux.intel.com>
->>>>
->>>> The monotonic raw clock is not affected by NTP/PTP correction. The
->>>> calculation of the monotonic raw clock can be done in the
->>>> post-processing, which can reduce the kernel overhead.
->>>>
->>>> Add hw_time in the struct perf_event_attr to tell the kernel dump the
->>>> raw HW time to user space. The perf tool will calculate the HW time
->>>> in post-processing.
->>>> Currently, only supports the monotonic raw conversion.
->>>> Only dump the raw HW time with PERF_RECORD_SAMPLE, because the accurate
->>>> HW time can only be provided in a sample by HW. For other type of
->>>> records, the user requested clock should be returned as usual. Nothing
->>>> is changed.
->>>>
->>>> Add perf_event_mmap_page::cap_user_time_mono_raw ABI to dump the
->>>> conversion information. The cap_user_time_mono_raw also indicates
->>>> whether the monotonic raw conversion information is available.
->>>> If yes, the clock monotonic raw can be calculated as
->>>> mono_raw = base + ((cyc - last) * mult + nsec) >> shift
->>>
->>> Again, I appreciate you reworking and resending this series out, I
->>> know it took some effort.
->>>
->>> But oof, I'd really like to make sure we're not exporting timekeeping
->>> internals to userland.
->>>
->>> I think Thomas' suggestion of doing the timestamp conversion in
->>> post-processing was more about interpolating collected system times
->>> with the counter (tsc) values captured.
->>>
->>
->> Thomas, could you please clarify your suggestion regarding "the relevant
->> conversion information" provided by the kernel?
->> https://lore.kernel.org/lkml/87ilgsgl5f.ffs@tglx/
->>
->> Is it only the interpolation information or the entire conversion
->> information (Mult, shift etc.)?
->>
->> If it's only the interpolation information, the user space will be lack
->> of information to handle all the cases. If I understand John's comments
->> correctly, it could also bring some interpolation error which can only
->> be addressed by the mult/shift conversion.
-> 
+Huacai
 
-
-Thanks for the details John.
-
-> "Only" is maybe too strong a word. I think having the driver use
-> kernel timekeeping accessors to CLOCK_MONONOTONIC_RAW time with
-> counter values will minimize the error.
+On Tue, Feb 14, 2023 at 4:46 PM Xi Ruoyao <xry111@xry111.site> wrote:
 >
-
-The key motivation of using the TSC in the PEBS record is to get an
-accurate timestamp of each record. We definitely want the conversion has
-minimized error.
-
-
-> But again, it's not yet established that any interpolation error using
-> existing interfaces is great enough to be problematic here.
-> 
-> The interpoloation is pretty easy to do:
-> 
-> do {
->     start= readtsc();
->     clock_gett(CLOCK_MONOTONIC_RAW, &ts);
->     end = readtsc();
->     delta = end-start;
-> } while (delta  > THRESHOLD)   // make sure the reads were not preempted
-> mid = start + (delta +(delta/2))/2; //round-closest
+> This is a "help wanted" message :(.
 >
-
-How to choose the THRESHOLD? It seems the THRESHOLD value also impacts
-the accuracy.
-
-
-> and be able to get you a fairly close matching of TSC to
-> CLOCK_MONOTONIC_RAW value.
-> 
-> Once you have that mapping you can take a few samples and establish
-> the linear function.
-> 
-> But that will have some error, so quantifying that error helps
-> establish why being able to get an atomic mapping of TSC ->
-> CLOCK_MONOTONIC_RAW would help.
-> 
-> So I really don't think we need to expose the kernel internal values
-> to userland, but I'm willing to guess the atomic mapping (which the
-> driver will have access to, not userland) may be helpful for the fine
-> granularity you want in the trace.
-> 
-
-If I understand correctly, the idea is to let the user space tool run
-the above interpoloation algorithm several times to 'guess' the atomic
-mapping. Using the mapping information to covert the TSC from the PEBS
-record. Is my understanding correct?
-
-If so, to be honest, I doubt we can get the accuracy we want.
-
-Thanks,
-Kan
+> I've recently run into some strange kernel oops testing Glibc for LoongAr=
+ch.  A log looks like:
+>
+> [11569.195043] Kernel ade access[#1]:
+> [11569.198441] CPU: 1 PID: 1132296 Comm: ld-linux-loonga Not tainted 6.2.=
+0-rc8+ #61
+> [11569.205792] Hardware name: Loongson Loongson-3A5000-HV-7A2000-1w-V0.1-=
+EVB/Loongson-LS3A5000-7A2000-1w-EVB-V1.21, BIOS Loongson-UDK2018-V4.0.05383=
+-beta10 1
+> [11569.219536] $ 0   : 0000000000000000 90000000005e3448 90000001113a0000=
+ 90000001113a3ab0
+> [11569.227505] $ 4   : 90000001113a3af8 1000000000cf16d0 5555555555555850=
+ 000000000000000c
+> [11569.235475] $ 8   : 90000000009caa10 0000000000000000 00000000000002ca=
+ 000000000000008b
+> [11569.243438] $12   : 0000000000000001 9000000000cf1258 ffffffffffffffff=
+ 00007ffffb93c000
+> [11569.251402] $16   : 0000000000000000 0000000000000140 0000000000000000=
+ 0000000000000020
+> [11569.259366] $20   : 90000001113a3ec8 9000000000a97ee0 00007ffffb93bfa0=
+ 1555555555555613
+> [11569.267334] $24   : 1000000000cf16d0 000000000000000c 9000000000cf1258=
+ 90000000009caa10
+> [11569.275303] $28   : 90000001113a3af8 0aaaaaaaaaaaab0a 00007ffffb93bde0=
+ 90000001113a3ec0
+> [11569.283268] era   : 90000000009caa10 cmp_ex_search+0x0/0x28
+> [11569.288814] ra    : 90000000005e3448 bsearch+0x58/0xa8
+> [11569.293921] CSR crmd: 000000b0
+> [11569.293923] CSR prmd: 00000004
+> [11569.297037] CSR euen: 00000000
+> [11569.300152] CSR ecfg: 00071c1c
+> [11569.303266] CSR estat: 00480000
+> [11569.309587] ExcCode : 8 (SubCode 1)
+> [11569.313049] BadVA : 1000000000cf16d0
+> [11569.316596] PrId  : 0014c011 (Loongson-64bit)
+> [11569.320923] Modules linked in: amdgpu nls_cp936 vfat fat input_leds dr=
+m_ttm_helper ttm video gpu_sched drm_buddy snd_hda_codec_generic drm_displa=
+y_helper ledtrig_audio drm_kms_helper led_class snd_hda_intel sha256_generi=
+c snd_intel_dspcfg cfbfillrect libsha256 snd_hda_codec syscopyarea snd_hda_=
+core hid_generic cfbimgblt cfg80211 snd_pcm sysfillrect usbhid sysimgblt sn=
+d_timer cfbcopyarea hid snd igb soundcore efivarfs
+> [11569.357709] Process ld-linux-loonga (pid: 1132296, threadinfo=3D000000=
+003cbd0caa, task=3D000000005bcd27a6)
+> [11569.366977] Stack : 00007ffffb93bd60 0000000000000000 9000000180a36a40=
+ 0000000000000001
+> [11569.374940]         90000001113a3bb0 00007ffffb93c000 9000000000224c94=
+ 90000000009cab2c
+> [11569.382899]         0000000000000001 9000000000224c94 00007ffff3258000=
+ 900000000025a1b4
+> [11569.390866]         90000001113a3bb0 900000000022f4cc 00007ffffb93c000=
+ 900000000022f74c
+> [11569.398834]         9000000180a36a40 0000000000000001 0000000000000000=
+ 00007ffffb93c000
+> [11569.406800]         90000001113a3bb0 900000000022f8f8 90000001113a3ec0=
+ 00007ffffb93bde0
+> [11569.414768]         00007ffffb93bd60 0000000000000000 0000000000000000=
+ 00007fffff7c4600
+> [11569.422734]         9000000182ebab70 9000000000d08000 0000000046505501=
+ 900000000022ee6c
+> [11569.430698]         0000000000000000 9000000000224b84 90000001113a0000=
+ 90000001113a3cf0
+> [11569.438661]         0000000000000000 00007ffffb93c0d0 0000000000000000=
+ 0000000000000040
+> [11569.446627]         ...
+> [11569.449058] Call Trace:
+> [11569.449062] [<90000000009caa10>] cmp_ex_search+0x0/0x28
+> [11569.456681] [<90000000005e3448>] bsearch+0x58/0xa8
+> [11569.461443] [<90000000009cab2c>] search_extable+0x28/0x34
+> [11569.466807] [<900000000025a1b4>] search_exception_tables+0x48/0x7c
+> [11569.472953] [<900000000022f4cc>] fixup_exception+0x18/0xcc
+> [11569.478410] [<900000000022f74c>] do_sigsegv+0x174/0x1b0
+> [11569.483605] [<900000000022f8f8>] do_page_fault+0x170/0x344
+> [11569.489058] [<900000000022ee6c>] tlb_do_page_fault_1+0x128/0x1c4
+> [11569.495029] [<9000000000224b84>] handle_signal+0x634/0x884
+> [11569.500487] [<9000000000225704>] arch_do_signal_or_restart+0xb4/0xe0
+> [11569.506808] [<90000000002b5b30>] exit_to_user_mode_prepare+0xbc/0x100
+> [11569.513214] [<9000000000a02628>] syscall_exit_to_user_mode+0x30/0x4c
+> [11569.519533] [<90000000002214a4>] handle_syscall+0xc4/0x160
+>
+> [11569.526472] Code: 4c000020  02800404  4c000020 <240000ac> 26000084  00=
+10b0a5  680014a4  00129484  00111004
+>
+> [11569.537704] ---[ end trace 0000000000000000 ]---
+>
+> "BadVA : 1000000000cf16d0" may suggest the highest bit of an address is
+> somehow cleared.
+>
+> The issue is not deterministic, but it seems easily reproduced by:
+>
+> 1. Compile Glibc:
+>
+> ../glibc/configure --prefix=3D/usr                      \
+>              --disable-werror                         \
+>              --enable-kernel=3D5.19                     \
+>              --enable-stack-protector=3Dstrong          \
+>              --with-headers=3D/usr/include              \
+>              libc_cv_slibdir=3D/usr/lib
+> make -j4
+>
+> 2. Check Glibc:
+>
+> make check -j4
+>
+> 3. If the oops did not happen during the last step, run a specific test
+> in a dead loop:
+>
+> while true; do make test t=3Dmalloc/tst-mallocfork3-malloc-check; done
+>
+> Then an oops would likely show up in several minutes.
+>
+> Though the oops is nondeterministic, I'm almost sure it's not a hardware
+> stability issue because I'm getting exactly same stack traces for each
+> oops message.  I cannot easily rule out the possibility about "the
+> compiler miscompiles kernel code" though.
+>
+> I'm running 6.2-rc8 with the following patches from loongarch-next:
+>
+> ACPI: Define ACPI_MACHINE_WIDTH to 64 for LoongArch
+> PCI: loongson: Improve the MRRS quirk for LS7A
+> PCI: Add quirk for LS7A to avoid reboot failure
+> irqchip/loongson-liointc: Save/restore int_edge/int_pol registers during =
+S3/S4
+> LoongArch: Add vector extensions support
+> tools: Add LoongArch build infrastructure
+> libbpf: Add LoongArch support to bpf_tracing.h
+> selftests/seccomp: Add LoongArch selftesting support
+> SH: cpuinfo: Fix a warning for CONFIG_CPUMASK_OFFSTACK
+> LoongArch: Add CPU HWMon platform driver
+>
+> Any idea to fix the issue or suggestion to debug it further?
+>
+> --
+> Xi Ruoyao <xry111@xry111.site>
+> School of Aerospace Science and Technology, Xidian University
