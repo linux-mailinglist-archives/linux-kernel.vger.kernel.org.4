@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113C4696A3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:48:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73FC0696A3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232517AbjBNQsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 11:48:55 -0500
+        id S232618AbjBNQtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 11:49:00 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232482AbjBNQsv (ORCPT
+        with ESMTP id S232289AbjBNQsw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 11:48:51 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98AD72A6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:48:46 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id v63-20020a254842000000b008f257b16d71so12606505yba.15
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:48:46 -0800 (PST)
+        Tue, 14 Feb 2023 11:48:52 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD8B2BED4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:48:48 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id ip9-20020a17090b314900b0023445cc3e08so410947pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:48:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=/Hxjp2ClOG3rMfDYkCMiTSvIpfx2BaUm4/6bMcZvkdY=;
-        b=P0f2Sze4osOuatALcyTTazvf4cu6uyUC7sOCR+imJ/wKLFitOwfjaYxbvawviCLGEw
-         pJt4ETflYapcqu2/r/6g1hNohrME4c4o+ter1GbMKh3v7iyrnGfVq80ryzXs2QQp0Dw1
-         XDWia2HlARnDOk9ZhoM3BkkTXllxS3LedZIsSOw9YnBMAfPXGww/X1HTpOZ1T5+KRQLY
-         qXI5s/Snl0Lg9dZbw1BSOdIIWqwVNA+OhFjp25v7qhrROwc/FvJQ+PGr/a80St5ERMw/
-         Sh/ow7EztICoQmtn3sLOtxANjBvCbhk9ixHazPibw+mqAQuQaw/ZfGFNNIi6AJc/6LTb
-         BjIA==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=t23AMd5aqhUaIAzpimbSpgnbzTEYRxbMZhOXOMJqf1M=;
+        b=Av62xu801emyTC/zrSTG4it6ti4mHUPuqVwvq8NXIy8HMdaqX6kctA2lkwYbkKfcQE
+         3RLGX+mSz8wqr3nSnPpP2DupddyPx8d28c/Zx4rDz9I37lRSe76FLb9lLm/Oq4yzN+v4
+         dkV6vpZLv51pG4xXMl0nu0WyEIRmO/taaaqHs0JS9ZIAJyG8PBJiXJLZfy9VXQZD9Qnn
+         wvX4EN9BkqEilZ+glI4XNoN7wA02tLkjLMUZ394ccE3cOZOvqjNIBrMGO7M81u7sg67r
+         014pP69MiBRug5pyDB1tf4Kjge519iDILcWtNOPXOzgV/V2u8vJogGq1cmKaNUNE4/zA
+         EUJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/Hxjp2ClOG3rMfDYkCMiTSvIpfx2BaUm4/6bMcZvkdY=;
-        b=DdIPRSHLYlRVRfYK5PiN+deaKZ4OFtXD9U0VNykJZN/oztp7ZuzCvR+6yy5CoXq7Vr
-         zkQv92OuI2j3kPHwSvjYJbb7EIdZVk/fFRBAQZrcZmwhho805pKwNeMipWQjuHraYAA4
-         Vn7mByPQeTKbic0qg/US0nP1PlcrMXasqjp09WiXTE5X8yCK5rTfe30MGDd5VV9oFW5c
-         K1Y2W/YhKJq0HI3CpupPciNq8ildV0H0y9If8Lbb9GG/SkRBMLHKqGNyEhtHTvM+Izt4
-         3HkYoq35oZ/texZjMjV398lol02HwUfa/wO7wiaTW4ZyyglJxkkk7C0b/tpjOYpdhlD1
-         VFYA==
-X-Gm-Message-State: AO0yUKWsJyW8Zd1gdYxKT4nkov8d0v4QndkM+ALh5aIbA/walUriajTX
-        z3CXm2DowfVoN0S33E5QswJ3nAKMHjj/iCC2hv7YyfMM7rlkGdOJBEbn5+NWMbM3eHWd8ry2tVO
-        5RR/MxW2rwGMeQ23EeteW725H88zy3MW56flXSRUEJkxauFR75arfgeY93S5d+ZBJA59UWShNw4
-        W8mkuEvFo=
-X-Google-Smtp-Source: AK7set/UBtx/LRQeeiSXr/yZPQ+236pTsNLkXQ/Wp8nbBFktXXf98F7ifsK9PPltAxx8KHcmshr2YtQ0jsuIxMXqnw==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t23AMd5aqhUaIAzpimbSpgnbzTEYRxbMZhOXOMJqf1M=;
+        b=OWEqfTn7g2u9yDboSklXsGBxjcwwKmmigslmSL5mFYyqXO2Mtz0/ARs5zVu69gPezv
+         Vep9uI8mhVE3OemQpwfyowP73Snp7J0ufw8Rd3GV1kxfT9zyfk0uPgMRFJzaYXNCSwRy
+         CQZqoUUCYmkCvI+JUbWnIzpGHTl5yVkgA2Rj9vcDoCn5972yeiceMWLsKgkQVRMTMoAW
+         LS9CjI+/cCdhRU65D2CI7z0iD4xbH3Ej4J9uyX0v+b1N3QfteZ8aZdmP5p+dbWgRScsp
+         WrISmoGMzWqJWtKKQPmwsYEL6shGP57LAIQTTT2Unk28cj3mXeSCFf6lWtt7XrdnrRN+
+         IU+A==
+X-Gm-Message-State: AO0yUKXH2+F0HiCbPElXzXS+/TZL+2374lpi1U5vppdKFWqs+2y4b56x
+        4nCFy2/Qx71QH+wOBrF5L1LuGVEGO8hFf+ETCZhcRHSByropIGl1VWG9qVPAPyDVhNd1HdFzk6J
+        DL3PjHbpAX9Xfj78EHokqtiGxD7r74upj2W9JDMxs2iDel8asKB4zDoZghpx2XdX9btjSATTy4P
+        x0q6bV8zs=
+X-Google-Smtp-Source: AK7set9TMtTubIo/r5gUBCy+Bqjv//+yICE90pVRl5n3U3MscUN8a0zmLwyTTeH3VPEUH4YmGGlXNLjkzsINH+uLQQ==
 X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
- (user=dionnaglaze job=sendgmr) by 2002:a0d:dfc1:0:b0:52e:e814:44a3 with SMTP
- id i184-20020a0ddfc1000000b0052ee81444a3mr331104ywe.505.1676393325910; Tue,
- 14 Feb 2023 08:48:45 -0800 (PST)
-Date:   Tue, 14 Feb 2023 16:46:34 +0000
+ (user=dionnaglaze job=sendgmr) by 2002:a17:90a:4e48:b0:233:aed3:b20 with SMTP
+ id t8-20020a17090a4e4800b00233aed30b20mr42249pjl.12.1676393327892; Tue, 14
+ Feb 2023 08:48:47 -0800 (PST)
+Date:   Tue, 14 Feb 2023 16:46:35 +0000
+In-Reply-To: <20230214164638.1189804-1-dionnaglaze@google.com>
 Mime-Version: 1.0
+References: <20230214164638.1189804-1-dionnaglaze@google.com>
 X-Mailer: git-send-email 2.39.1.637.g21b0678d19-goog
-Message-ID: <20230214164638.1189804-1-dionnaglaze@google.com>
-Subject: [PATCH v15 0/4] Add throttling detection to sev-guest
+Message-ID: <20230214164638.1189804-2-dionnaglaze@google.com>
+Subject: [PATCH v15 1/4] virt/coco/sev-guest: Add throttling awareness
 From:   Dionna Glaze <dionnaglaze@google.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org
 Cc:     Dionna Glaze <dionnaglaze@google.com>,
@@ -80,86 +82,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The guest request synchronous API from SEV-SNP VMs to the host's security
-processor consumes a global resource. For this reason, AMD's docs
-recommend that the host implements a throttling mechanism. In order for
-the guest to know it's been throttled and should try its request again,
-we need some good-faith communication from the host that the request
-has been throttled.
+The host is permitted and encouraged to throttle guest requests to the
+AMD-SP since it is a shared resource across all VMs. Without
+throttling-awareness, the host returning an error will immediately lock
+out access to the VMPCK, which makes the VM less useful as it can't
+attest itself. Since throttling is expected for a host to protect itself
+from an uncooperative guest, a cooperative host can return a VMM error
+code that the request was throttled.
 
-These patches work with the existing /dev/sev-guest ABI to detect a
-throttling code.
+The driver interprets the upper 32 bits of exitinfo2 as a VMM error code.
+For safety, since the encryption algorithm in GHCBv2 is AES_GCM, control
+must remain in the kernel to complete the request with the current
+sequence number. Returning without finishing the request allows the
+guest to make another request but with different message contents. This
+is IV reuse, and breaks cryptographic protections.
 
-Changes from v14:
-  * Split double-buffering into its own patch.
-  * Changed cond_resched to schedule_timeout_killable.
-Changes from v13:
-  * Added double-buffering fix to the "Fixes" patch to address a secondary
-    concern of zero trust with respect to host access to intermediate
-    cryptographic computations in shared memory.
-  * Removed module parameters and rate limiting in favor of just
-    cond_resched.
-  * Removed possible infinite loop of retries by giving up with an erased
-    VMPCK and -ETIMEDOUT error after 60 seconds of retries.
-Changes from v12:
-  * Reordered fix patch to the beginning and kept it minimal.
-  * Changed documentation in same patch as the respective change to the
-    header.
-  * Changed exitinfo2 in dev_alert to print in hex.
-Changes from v11:
-  * Squashed all type changing patches into 1 that modifies both sev-guest
-    and x86/kernel/sev.c.
-  * Removed fw_err field from sev-guest command struct (renamed exitinfo2).
-Changes from v10:
-  * Added sev_guestreq_err_t typedef early in chain to change a signature
-    acress x86/sev and virt/coco/sev-guest in a single change. This makes
-    all patches build. I have 3 cleanup patches to change the type and
-    subsequently remove the typedef.
-  * Changed exitinfo2 initial undefined value back to 0xff since Thomas
-    indicated that a firmware error is only 16 bits.
-Changes from v9:
-  * Rebased on v6.2-rc3
-Changes from v8:
-  * Added documentation changes.
-  * Changed commit messages to use passive voice.
-  * Simplified control flow for __sev_platform_init_locked.
-Changes from v7:
-  * Replaced handle_guest_request arguments msg_ver and fw_err with a
-    pointer to the snp_guest_request_ioctl argument struct.
-Changes from v6:
-  * Rebased on the IV reuse fix patch
-  * renamed rate_hz to rate_s and fixed its MODULE_PARM_DESC to use the
-    correct variable name.
-  * Changed sleep_timeout_interrutible (not defined) to
-    schedule_timeout_interruptible.
-Changes from v5:
-  * Fixed commit prefix text
-  * Added all get_maintainers.pl folks to commits' Cc tags
-  * Changed SET_RET_NO_FW_CALL commit's metadata to show pgonda signs
-    off and is the author.
-Changes from v4:
-  * Clarified comment on SEV_RET_NO_FW_CALL
-  * Changed ratelimit loop to use sleep_timeout_interruptible
-Changes from v3:
-  * sev-guest ratelimits itself to one request twice a second.
-  * Fixed a type signature to use u64 instead of unsigned int
-  * Set *exitinfo2 unconditionally after the ghcb_hv_call.
-Changes from v2:
-  * Codified the non-firmware-call firmware error code as (u32)-1.
-  * Changed sev_issue_guest_request unsigned long *fw_err argument to
-    u64 *exitinfo2 to more accurately and type-safely describe the
-    value that it outputs.
-  * Changed sev_issue_guest_request to always set its exitinfo2
-    argument to either the non-firmware-call error code, the
-    EXIT_INFO_2 returned from the VMM if the request failed, or 0 on
-    success. This fixes a bug that returned uninitialized kernel stack
-    memory to the user when there is no error.
-  * Changed the throttle behavior to retry in the driver instead of
-    returning -EAGAIN, due to possible message sequence number reuse
-    on different message contents.
+A quick fix is to retry for a while and then disable the VMPCK and
+return to user space.
 
-Changes from v1:
-  * Changed throttle error code to 2
+A guest request may not make it to the AMD-SP before the host returns to
+the guest, so the err local variable in handle_guest_request must be
+initialized the same way fw_err is. snp_issue_guest_request similarly
+should set fw_err whether or not the value is non-zero, in order to
+appropriately clear the error value when zero.
+
+The IV reuse fix for invalid certs_len needs modification to work with
+throttling, since a single retry with a modified exit_code may be
+throttled without retry and result in a locked-out VMPCK. Instead,
+change the exit_code as before and jump to the same retry label, and
+deal with the error code fixup by checking if the exit_code had to be
+changed.
 
 Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
@@ -175,24 +127,133 @@ Cc: Michael Roth <michael.roth@amd.com>
 Cc: "Kirill A. Shutemov" <kirill@shutemov.name>
 Cc: Michael Sterritt <sterritt@google.com>
 
-Dionna Glaze (3):
-  virt/coco/sev-guest: Add throttling awareness
-  virt/coco/sev-guest: Double-buffer messages
-  x86/sev: Change snp_guest_issue_request's fw_err
+Fixes: d5af44dde546 ("x86/sev: Provide support for SNP guest request NAEs")
 
-Peter Gonda (1):
-  crypto: ccp - Name -1 return value as SEV_RET_NO_FW_CALL
+Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
+---
+ arch/x86/include/asm/sev-common.h       |  3 ++-
+ arch/x86/kernel/sev.c                   |  3 +--
+ drivers/virt/coco/sev-guest/sev-guest.c | 34 ++++++++++++++++++++++---
+ 3 files changed, 34 insertions(+), 6 deletions(-)
 
- Documentation/virt/coco/sev-guest.rst   |  21 +++--
- arch/x86/include/asm/sev-common.h       |   3 -
- arch/x86/include/asm/sev.h              |   4 +-
- arch/x86/kernel/sev.c                   |  13 +--
- drivers/crypto/ccp/sev-dev.c            |  22 ++++--
- drivers/virt/coco/sev-guest/sev-guest.c | 100 +++++++++++++++++-------
- include/uapi/linux/psp-sev.h            |   7 ++
- include/uapi/linux/sev-guest.h          |  18 ++++-
- 8 files changed, 132 insertions(+), 56 deletions(-)
-
+diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
+index b8357d6ecd47..b63be696b776 100644
+--- a/arch/x86/include/asm/sev-common.h
++++ b/arch/x86/include/asm/sev-common.h
+@@ -128,8 +128,9 @@ struct snp_psc_desc {
+ 	struct psc_entry entries[VMGEXIT_PSC_MAX_ENTRY];
+ } __packed;
+ 
+-/* Guest message request error code */
++/* Guest message request error codes */
+ #define SNP_GUEST_REQ_INVALID_LEN	BIT_ULL(32)
++#define SNP_GUEST_REQ_ERR_BUSY		BIT_ULL(33)
+ 
+ #define GHCB_MSR_TERM_REQ		0x100
+ #define GHCB_MSR_TERM_REASON_SET_POS	12
+diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+index 679026a640ef..a908ffc2dfba 100644
+--- a/arch/x86/kernel/sev.c
++++ b/arch/x86/kernel/sev.c
+@@ -2212,14 +2212,13 @@ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned
+ 	if (ret)
+ 		goto e_put;
+ 
++	*fw_err = ghcb->save.sw_exit_info_2;
+ 	if (ghcb->save.sw_exit_info_2) {
+ 		/* Number of expected pages are returned in RBX */
+ 		if (exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST &&
+ 		    ghcb->save.sw_exit_info_2 == SNP_GUEST_REQ_INVALID_LEN)
+ 			input->data_npages = ghcb_get_rbx(ghcb);
+ 
+-		*fw_err = ghcb->save.sw_exit_info_2;
+-
+ 		ret = -EIO;
+ 	}
+ 
+diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
+index 4ec4174e05a3..dc75f11c086e 100644
+--- a/drivers/virt/coco/sev-guest/sev-guest.c
++++ b/drivers/virt/coco/sev-guest/sev-guest.c
+@@ -30,6 +30,8 @@
+ #define DEVICE_NAME	"sev-guest"
+ #define AAD_LEN		48
+ #define MSG_HDR_VER	1
++#define ACCEPTABLE_REQUEST_RETRY_DURATION	(60*HZ)
++#define REQUEST_RETRY_DELAY			(2*HZ)
+ 
+ struct snp_guest_crypto {
+ 	struct crypto_aead *tfm;
+@@ -322,9 +324,12 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+ 				u8 type, void *req_buf, size_t req_sz, void *resp_buf,
+ 				u32 resp_sz, __u64 *fw_err)
+ {
+-	unsigned long err;
++	unsigned long err = 0xff;
++	unsigned long start_time = jiffies;
++	u64 orig_exit_code = exit_code;
+ 	u64 seqno;
+ 	int rc;
++	unsigned int certs_npages = 0;
+ 
+ 	/* Get message sequence and verify that its a non-zero */
+ 	seqno = snp_get_msg_seqno(snp_dev);
+@@ -338,6 +343,7 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+ 	if (rc)
+ 		return rc;
+ 
++retry:
+ 	/*
+ 	 * Call firmware to process the request. In this function the encrypted
+ 	 * message enters shared memory with the host. So after this call the
+@@ -346,6 +352,24 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+ 	 */
+ 	rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
+ 
++	/*
++	 * The host may return SNP_GUEST_REQ_ERR_EBUSY if the request has been
++	 * throttled. Retry in the driver to avoid returning and reusing the
++	 * message sequence number on a different message.
++	 */
++	if (err == SNP_GUEST_REQ_ERR_BUSY) {
++		if (jiffies - start_time > ACCEPTABLE_REQUEST_RETRY_DURATION) {
++			rc = -ETIMEDOUT;
++			/*
++			 * Must disable VMPCK since it's not the user's
++			 * responsibility to avoid IV reuse.
++			 */
++			goto disable_vmpck;
++		}
++		schedule_timeout_killable(REQUEST_RETRY_DELAY);
++		goto retry;
++	}
++
+ 	/*
+ 	 * If the extended guest request fails due to having too small of a
+ 	 * certificate data buffer, retry the same guest request without the
+@@ -354,7 +378,7 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+ 	 */
+ 	if (exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST &&
+ 	    err == SNP_GUEST_REQ_INVALID_LEN) {
+-		const unsigned int certs_npages = snp_dev->input.data_npages;
++		certs_npages = snp_dev->input.data_npages;
+ 
+ 		exit_code = SVM_VMGEXIT_GUEST_REQUEST;
+ 
+@@ -366,8 +390,12 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+ 		 * of the VMPCK and the error code being propagated back to the
+ 		 * user as an ioctl() return code.
+ 		 */
+-		rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
++		schedule_timeout_killable(REQUEST_RETRY_DELAY);
++		goto retry;
++	}
+ 
++	if (orig_exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST &&
++	    exit_code != orig_exit_code) {
+ 		/*
+ 		 * Override the error to inform callers the given extended
+ 		 * request buffer size was too small and give the caller the
 -- 
 2.39.1.637.g21b0678d19-goog
 
