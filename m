@@ -2,141 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1031A695AB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE33695ABC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbjBNHkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 02:40:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43486 "EHLO
+        id S229614AbjBNHlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 02:41:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjBNHkF (ORCPT
+        with ESMTP id S229478AbjBNHlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 02:40:05 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0EE19F2A
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:40:04 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id z13so10337436wmp.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:40:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MfAKDwWJ43uFMrmQCmp4cmYVyE9a/ZNUU9+gyhO73kk=;
-        b=Wm4NDDwPgFj2N8AhEGdtG7Dk6poXCBt+/LRu8lqvLRpGJfDIXMNYWR/f31pUxPxChD
-         dQDJ00ytooDrCNR3EybyI7px9PcoUmHseqyyTJf8yMFrHHGRBcXCIevd5gFuCmHAe2IV
-         rku8wWWBlnDbnlzTRJPGZkL7csljK846s18eTu/wmdqqdkcML+/Yf8BDOYvTqGZ8HXm+
-         6rBzVteyCjeFNxnZ8IhXvT1xx4I1fMJVzxn5EXLt0PkLOpVy5tgIoEaU7rMG4YzvN39f
-         llTKto+ozJAYbbW7R+evJr+DRvXUm1MPzoXmq0bFrpp/rnIZmkVMx1WedYOtabFPZ6BT
-         vxZw==
+        Tue, 14 Feb 2023 02:41:06 -0500
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B7F19F2A;
+        Mon, 13 Feb 2023 23:41:04 -0800 (PST)
+Received: by mail-ej1-f41.google.com with SMTP id hx15so37850268ejc.11;
+        Mon, 13 Feb 2023 23:41:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MfAKDwWJ43uFMrmQCmp4cmYVyE9a/ZNUU9+gyhO73kk=;
-        b=3IRsM8JaEABfe1Xu3i5ytp9UErW2WXNg+jVY8jShEHEZSa2MCSOPnG+QBRvZOZQPfc
-         6koKZWn6XfojsWEsHE+d2Okm/eJFoa3auGnxjdCEy6R+I1Srm29CSzjmZW3DQ+PxxZPN
-         lwETa5108bQ9o1t+l6ZFGLx8YH7mZM7iynZjo0SxHgxvuyt3Lfn1M0Dqt2CfnJPJ3oRv
-         279F6TQ9Ue8J0RI3Csitux3+NvGFRnbJ6jyoBHs8BiCnLT8J+6NJCI4cLcmhFDMNfMz3
-         0lr8zP8NM7Lrfq9YDNkpF0slE9fpTdl/xY+mTC5Jct19+nbb/Q7VWbHPlg2Gsl8wuSpE
-         /Xpg==
-X-Gm-Message-State: AO0yUKW4rA/L+iBuk82wIepkENQRcjXF3EGLtbPWchZLoLsnWm6owwOi
-        nzUptiiBYqFhEsPmCA60g8ojvg==
-X-Google-Smtp-Source: AK7set8nUaCpcrcYlg0w3N6yvmYAWAs/RHYXPBxo1cIRik5qDPXHQ8TOHnIg5Z74kyzqZY9p4kiuzw==
-X-Received: by 2002:a05:600c:4d97:b0:3de:1d31:1042 with SMTP id v23-20020a05600c4d9700b003de1d311042mr1128996wmp.23.1676360402677;
-        Mon, 13 Feb 2023 23:40:02 -0800 (PST)
-Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id k7-20020a05600c080700b003daf672a616sm15378729wmp.22.2023.02.13.23.40.01
+        bh=ibr0JmwCf86ZCLRHWY3ftNxmBj8tH23Zp5NASkQDznI=;
+        b=MbPBoAQXrEan+aQZnB45J5rjiDyfB9YMEWBH4qDDQj+2GGvoii48m/FKmmMMJZut5q
+         seNUpOsHNIVTKr9lWIwWLeNJ4Ipg8WGfF/Fd1yZKjoiVkKLAMHf3sJrfkCPkDA5nfGXy
+         ClSZsmZiWGnwb7eXwxjgZwxpku8HtlggvVkeMVxwxzOvTNoTy0+cAtUJFru5iE2KyiQV
+         5iu7LmZXz4wST/siBYSdCcj9MrT01aVYWZqwP1RFiuOVIIVarefSc34b2dAygkx7N8Go
+         p2Q6xWsPKusM8Oz7G63AcdEimNpOUtQYy/20xNlaXSeeOcyogJsj1kKEhfn9bFacV7BU
+         7jcw==
+X-Gm-Message-State: AO0yUKXNy7dYgTkTS5tSWVx2MfjPDGn+HlgktuLn7uDwQ9/plSlHZ4Ww
+        60LGy1fK7bb3S5hr8idQQ+w=
+X-Google-Smtp-Source: AK7set9pdCKpmJ0Gb/BFyXvdJCR2bz4uPy4FxqPlUKWIxlPdVwD7QxnW46TzsdOIJJlUKDmepQ9nsA==
+X-Received: by 2002:a17:907:1108:b0:8af:305b:76af with SMTP id qu8-20020a170907110800b008af305b76afmr1544166ejb.33.1676360463008;
+        Mon, 13 Feb 2023 23:41:03 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id m10-20020a170906580a00b0086f4b8f9e42sm7794220ejq.65.2023.02.13.23.41.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 23:40:02 -0800 (PST)
-Message-ID: <7a2eca01-8420-dd98-9d4d-edf192f099fb@linaro.org>
-Date:   Tue, 14 Feb 2023 08:40:01 +0100
+        Mon, 13 Feb 2023 23:41:02 -0800 (PST)
+Message-ID: <5f67e2cf-f141-fde4-96de-28ceeeec9c06@kernel.org>
+Date:   Tue, 14 Feb 2023 08:41:01 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [PATCH] MIPS: vpe-mt: provide a default 'physical_memsize'
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
 Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>,
-        Dengcheng Zhu <dzhu@wavecomp.com>,
-        John Crispin <john@phrozen.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Qais Yousef <qyousef@layalina.io>
-References: <20230214010942.25143-1-rdunlap@infradead.org>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230214010942.25143-1-rdunlap@infradead.org>
+To:     Florian Eckert <fe@dev.tdt.de>, u.kleine-koenig@pengutronix.de,
+        gregkh@linuxfoundation.org, pavel@ucw.cz, lee@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        Eckert.Florian@googlemail.com
+References: <20230213140638.620206-1-fe@dev.tdt.de>
+ <20230213140638.620206-2-fe@dev.tdt.de>
+From:   Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH 1/2] tty: new helper function tty_get_mget
+In-Reply-To: <20230213140638.620206-2-fe@dev.tdt.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy,
-
-On 14/2/23 02:09, Randy Dunlap wrote:
-> When neither LANTIQ nor MIPS_MALTA is set, 'physical_memsize' is not
-> declared. This causes the build to fail with:
+On 13. 02. 23, 15:06, Florian Eckert wrote:
+> For a given struct tty_struct, this provides the appropriate tty line
+> state flags needed to add more modes to the ledtrig-tty trigger.
 > 
-> mips-linux-ld: arch/mips/kernel/vpe-mt.o: in function `vpe_run':
-> arch/mips/kernel/vpe-mt.c:(.text.vpe_run+0x280): undefined reference to `physical_memsize'
+> The new function is then used to get via tty_tiocmget() the different tty
+> line states.
 > 
-> Fix this by declaring a 0-value physical_memsize with neither LANTIQ
-> nor MIPS_MALTA is set, like LANTIQ does.
-> 
-> Fixes: 1a2a6d7e8816 ("MIPS: APRP: Split VPE loader into separate files.")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/all/202302030625.2g3E98sY-lkp@intel.com/
-> Cc: Dengcheng Zhu <dzhu@wavecomp.com>
-> Cc: John Crispin <john@phrozen.org>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: linux-mips@vger.kernel.org
+> Signed-off-by: Florian Eckert <fe@dev.tdt.de>
 > ---
-> How has this build error not been detected for 10 years?
+>   drivers/tty/tty_io.c | 32 +++++++++++++++++++++++++-------
+>   include/linux/tty.h  |  3 ++-
+>   2 files changed, 27 insertions(+), 8 deletions(-)
 > 
->   arch/mips/kernel/vpe-mt.c |    9 +++++++++
->   1 file changed, 9 insertions(+)
-> 
-> diff -- a/arch/mips/kernel/vpe-mt.c b/arch/mips/kernel/vpe-mt.c
-> --- a/arch/mips/kernel/vpe-mt.c
-> +++ b/arch/mips/kernel/vpe-mt.c
-> @@ -22,6 +22,15 @@ static int major;
->   /* The number of TCs and VPEs physically available on the core */
->   static int hw_tcs, hw_vpes;
+> diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+> index 3149114bf130..e4dc59eda43f 100644
+> --- a/drivers/tty/tty_io.c
+> +++ b/drivers/tty/tty_io.c
+> @@ -2493,26 +2493,44 @@ static int send_break(struct tty_struct *tty, unsigned int duration)
+>   	return retval;
+>   }
 >   
-> +#if !defined(CONFIG_MIPS_MALTA) && !defined(CONFIG_LANTIQ)
-> +/* The 2 above provide their own 'physical_memsize' variable. */
-
-Which seems dubious. The variable should be defined once, likely in
-arch/mips/kernel/vpe-mt.c, since arch/mips/include/asm/vpe.h declares
-it.
-
-I'm surprised CONFIG_MIPS_MALTA always links malta-dtshim.o, but
-malta-dtshim.o depends on MIPS_VPE_LOADER_MT, and I can't find a
-CONFIG_MIPS_MALTA -> MIPS_VPE_LOADER_MT Kconfig dep.
-
 > +/*
-> + * This is needed by the vpe-mt loader code, just set it to 0 and assume
-> + * that the firmware hardcodes this value to something useful.
+> + * tty_get_mget		-	get modem status
+> + * @tty: tty device
+> + *
+> + * Obtain the modem status bits from the tty driver if the feature
+> + * is supported. Return -ENOTTY if it is not available.
+> + *
+
+Superfluous empty line.
+
 > + */
-> +unsigned long physical_memsize = 0L;
-
-I agree this is where this variable has be be declared / initialized,
-but having this dependent on CONFIG_MIPS_MALTA/CONFIG_LANTIQ machines
-doesn't seem right.
-
-> +#endif
 > +
->   /* We are prepared so configure and start the VPE... */
->   int vpe_run(struct vpe *v)
->   {
 
-Regards,
+This empty line is even wrong wrt kernel-doc!
 
-Phil.
+> +int tty_get_mget(struct tty_struct *tty)
+> +{
+> +	int retval = -ENOTTY;
+> +
+> +	if (tty->ops->tiocmget)
+> +		retval = tty->ops->tiocmget(tty);
+> +
+> +	return retval;
+> +}
+...
+> --- a/include/linux/tty.h
+> +++ b/include/linux/tty.h
+> @@ -419,8 +419,9 @@ void tty_unthrottle(struct tty_struct *tty);
+>   int tty_throttle_safe(struct tty_struct *tty);
+>   int tty_unthrottle_safe(struct tty_struct *tty);
+>   int tty_do_resize(struct tty_struct *tty, struct winsize *ws);
+> -int tty_get_icount(struct tty_struct *tty,
+> +int tty_get_icount(struct tty_struct *tty
+
+The robot already complained about this ^^^.
+
+Have you even tried to compile-test this?
+
+>   		struct serial_icounter_struct *icount);
+> +extern int tty_get_mget(struct tty_struct *tty);
+
+No need for extern. Didn't you notice the surrounding declarations?
+
+>   int is_current_pgrp_orphaned(void);
+>   void tty_hangup(struct tty_struct *tty);
+>   void tty_vhangup(struct tty_struct *tty);
+
+thanks,
+-- 
+js
+suse labs
+
