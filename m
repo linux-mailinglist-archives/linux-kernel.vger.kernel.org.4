@@ -2,123 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D6CF697025
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 22:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CCA696F1C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 22:18:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232740AbjBNVyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 16:54:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45716 "EHLO
+        id S232454AbjBNVSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 16:18:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232418AbjBNVyP (ORCPT
+        with ESMTP id S232437AbjBNVSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 16:54:15 -0500
-X-Greylist: delayed 1200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Feb 2023 13:54:12 PST
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C4B10A;
-        Tue, 14 Feb 2023 13:54:12 -0800 (PST)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 53CD71884412;
-        Tue, 14 Feb 2023 21:16:59 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 48AD725002E1;
-        Tue, 14 Feb 2023 21:16:59 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 407DC9B403E3; Tue, 14 Feb 2023 21:16:59 +0000 (UTC)
-X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
-Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id 8F0F391201E3;
-        Tue, 14 Feb 2023 21:16:58 +0000 (UTC)
-From:   Hans Schultz <netdev@kapio-technology.com>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>
-Subject: Re: [PATCH net-next 5/5] net: dsa: mv88e6xxx: implementation of
- dynamic ATU entries
-In-Reply-To: <Y+EkiAyexZrPoCpP@corigine.com>
-References: <20230130173429.3577450-1-netdev@kapio-technology.com>
- <20230130173429.3577450-6-netdev@kapio-technology.com>
- <Y9lkXlyXg1d1D0j3@corigine.com>
- <9b12275969a204739ccfab972d90f20f@kapio-technology.com>
- <Y9zDxlwSn1EfCTba@corigine.com> <20230203204422.4wrhyathxfhj6hdt@skbuf>
- <Y94TebdRQRHMMj/c@corigine.com>
- <4abbe32d007240b9c3aea9c8ca936fa3@kapio-technology.com>
- <Y+EkiAyexZrPoCpP@corigine.com>
-Date:   Tue, 14 Feb 2023 22:14:55 +0100
-Message-ID: <87fsb83q5s.fsf@kapio-technology.com>
+        Tue, 14 Feb 2023 16:18:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF437AAB;
+        Tue, 14 Feb 2023 13:18:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E3AAB81F19;
+        Tue, 14 Feb 2023 21:18:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7E99C433EF;
+        Tue, 14 Feb 2023 21:18:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676409496;
+        bh=XIoavVqXwjsCMtUtU7QDDhVmcTynXgHSU9Esc/DrcBk=;
+        h=Subject:From:To:Date:From;
+        b=matQGqNNxnQqx7smlTFQzVefexaEjVR2B4VSIWbbLqem1zEmM4Yhy4R4lYXvKdx6M
+         UKZgat26AyqV9d07zzKdzftCaS+2pDZukQWSPheXQxrNhh0v8Bfn4T2fyMeF5kdl5r
+         iPAtDxbgJB9m3KwTM5z2nHGSflDSmqO6G6kO8e3+DhCwZgTRg1H2rdGNO0ykKtAMGK
+         Ij1c2sGVCwJb/hZTouHq0fBE9VWscGjxtfcGXfa0jvweZp8+mhvwKMoEpjO6tuXORc
+         uuSga1NwtpFS/YRjRlmq55OA1lA1JV3Zw4X2Wul2ZaKcUKDQ/gU24lLvLlq//2zvwy
+         DCvmex3yZDEpw==
+Message-ID: <348dce99fff34dd8eb3fde665badf1627ebb19a6.camel@kernel.org>
+Subject: [ANNOUNCE] 5.4.230-rt80
+From:   Tom Zanussi <zanussi@kernel.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <wagi@monom.org>,
+        Clark Williams <williams@redhat.com>,
+        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
+        Tom Zanussi <zanussi@kernel.org>
+Date:   Tue, 14 Feb 2023 15:18:12 -0600
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 17:02, Simon Horman <simon.horman@corigine.com> wrote:
->
-> Just to clarify my suggestion one last time, it would be along the lines
-> of the following (completely untested!). I feel that it robustly covers
-> all cases for fdb_flags. And as a bonus doesn't need to be modified
-> if other (unsupported) flags are added in future.
->
-> 	if (fdb_flags & ~(DSA_FDB_FLAG_DYNAMIC))
-> 		return -EOPNOTSUPP;
->
-> 	is_dynamic = !!(fdb_flags & DSA_FDB_FLAG_DYNAMIC)
-> 	if (is_dynamic)
-> 		state = MV88E6XXX_G1_ATU_DATA_STATE_UC_AGE_7_NEWEST;
->
->
-> And perhaps for other drivers:
->
-> 	if (fdb_flags & ~(DSA_FDB_FLAG_DYNAMIC))
-> 		return -EOPNOTSUPP;
-> 	if (fdb_flags)
-> 		return 0;
->
-> Perhaps a helper would be warranted for the above.
+Hello RT Folks!
 
-How would such a helper look? Inline function is not clean.
+I'm pleased to announce the 5.4.230-rt80 stable release.
 
->
-> But in writing this I think that, perhaps drivers could return -EOPNOTSUPP
-> for the DSA_FDB_FLAG_DYNAMIC case and the caller can handle, rather tha
-> propagate, -EOPNOTSUPP.
+This release is just an update to the new stable 5.4.230
+version and no RT specific changes have been made.
 
-I looked at that, but changing the caller is also a bit ugly.
+You can get this release via the git tree at:
 
->
-> Returning -EOPNOTSUPP is the normal way to drivers to respond to requests
-> for unsupported hardware offloads. Sticking to that may be clearner
-> in the long run. That said, I do agree your current patch is correct
-> given the flag that is defined (by your patchset).
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+
+  branch: v5.4-rt
+  Head SHA1: d9cfce8c9787ac18e13853de09ac56fb4561ce9c
+
+Or to build 5.4.230-rt80 directly, the following patches should be applied:
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.4.tar.xz
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.4.230.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.4/patch-5.4.230-rt8=
+0.patch.xz
+
+
+Enjoy!
+
+   Tom
+
+
