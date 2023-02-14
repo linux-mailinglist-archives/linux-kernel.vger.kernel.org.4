@@ -2,117 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4F769665C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:17:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A8F69665E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:17:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbjBNORh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 09:17:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36002 "EHLO
+        id S233306AbjBNORk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 09:17:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232359AbjBNORd (ORCPT
+        with ESMTP id S232801AbjBNORg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 09:17:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A5822785
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 06:16:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676384118;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pZpsZITW8K8rqb5Pl2xverle3EkeAIBSQl4ftmdFU3A=;
-        b=Cf9Uyi875Nt/L7pQuAqT7Jywux1QRiazm6G6s/H0r2bkcL1Hjq36y4Yihxl0BnzdG3O9Bh
-        ItOKe8oIl9DngJ4Jun4WUxvoQ6FHPznAblDEiJHD4rdTzDpzCi7YrFOai/itJa5UGglLpT
-        xWYjBiYmn5AkiWUDmp0+HYnBI1T76gQ=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-286-x8SEvyYoNrKTMusAznUe9Q-1; Tue, 14 Feb 2023 09:15:11 -0500
-X-MC-Unique: x8SEvyYoNrKTMusAznUe9Q-1
-Received: by mail-oo1-f72.google.com with SMTP id z28-20020a4a655c000000b0051a9ebddf80so5325265oog.2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 06:15:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pZpsZITW8K8rqb5Pl2xverle3EkeAIBSQl4ftmdFU3A=;
-        b=MxAMIIcEYMy1iN4JvTstjjODKMP8xU6J2B4LEHjlJaGJatetJ+p1vDe/+FOrsl7HDb
-         U8fbDDhzHIptEyNrkqQqrmLJZuau9nuEgzUbYl3xp3h0FjS4vXvOiuDyKBpurFRIzk1e
-         FHP1x8x91Dw3bCzcsL8ka4yk+P/UlcbFRWiw8l3U3/Ru6HsL+Pbsyt2XvPyRAuhwXlTF
-         4Ua9GmqT3OA2vn6mYDBU1plOy4Ue8LdQKD36znoN/wMlS630ORb37S5QWmI3LmntGAfT
-         y6lm7XKWecXFTt2WoLcWUcM89tmc27ay6hKInKEO5ZEwHFz0o4nZmVxu5OSRm3gDyXgX
-         vpCA==
-X-Gm-Message-State: AO0yUKXVfgi3oYIib1ehqBRfqpVXBYfTjQxDmjL/uew+yBS4g44CueA2
-        HFntCI4dWT4n2ZX8RlahowV6U6OqnX3XksYumPjKveEfurCxu2hXkZKxYai6T8+pbAL+blAET+K
-        e1KsDuIwrEflwVSymBUilEMZB
-X-Received: by 2002:a9d:61cf:0:b0:68b:cd6a:4117 with SMTP id h15-20020a9d61cf000000b0068bcd6a4117mr929906otk.5.1676384110788;
-        Tue, 14 Feb 2023 06:15:10 -0800 (PST)
-X-Google-Smtp-Source: AK7set+rxIeKTPPqi8Qn9IW/T+KY5+TLUbfNnlWwgV3aZu1RB/NhlLLFjeCq/bOXdDNQQWn5L0WUsA==
-X-Received: by 2002:a9d:61cf:0:b0:68b:cd6a:4117 with SMTP id h15-20020a9d61cf000000b0068bcd6a4117mr929883otk.5.1676384110534;
-        Tue, 14 Feb 2023 06:15:10 -0800 (PST)
-Received: from halaney-x13s ([2600:1700:1ff0:d0e0::21])
-        by smtp.gmail.com with ESMTPSA id l9-20020a9d7a89000000b0068d4dda3d61sm6343262otn.39.2023.02.14.06.15.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 06:15:09 -0800 (PST)
-Date:   Tue, 14 Feb 2023 08:15:07 -0600
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     devicetree@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com,
-        alexandre.torgue@foss.st.com, peppe.cavallaro@st.com,
-        joabreu@synopsys.com, mripard@kernel.org, shenwei.wang@nxp.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/2] arm64: dts: imx8dxl-evk: Fix eqos phy reset gpio
-Message-ID: <20230214141507.ibj42ejowhvrdoyb@halaney-x13s>
-References: <20230213213104.78443-1-ahalaney@redhat.com>
- <20230213213104.78443-2-ahalaney@redhat.com>
- <e4c33665-179b-8bf4-f7eb-38f86dceda56@linaro.org>
+        Tue, 14 Feb 2023 09:17:36 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B4629E09;
+        Tue, 14 Feb 2023 06:17:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676384233; x=1707920233;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=zXTf3MmymcGTYiS/8pw46Ic62YElU9b0FxEiZvXIB58=;
+  b=el8DD9mi6F7KmDJC+KMY5RvnMSPbDTBKp6RkK902MoYb/xVeZAiRo6mp
+   EoZVIARPeb6aJP2y4usa4TBXiABME/vJpEHChFAWXPgmpeb8Nuz8Kr92M
+   giV+8rSjWBhGUAsarwU4Ps7cpDx6t8wSsU28WqbbjxZy81fpSdZtr5Jte
+   /v/PqCHOl0FREVMV+GOJqJmSPRaWBc9ZdwpXLqJi8Sgmk2jFDFj7riG9D
+   01AvXm0MPggLTPOWLW61NTdy3HyTuo523pz6Meq24hPbjDExO8/0oQE0A
+   MT1jXyzubpjh6dOgpwG+zK/xEzlCf9IPrVmyO7EtKR86X4ZftEJjxlV8B
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="328879391"
+X-IronPort-AV: E=Sophos;i="5.97,296,1669104000"; 
+   d="scan'208";a="328879391"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 06:16:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="671231034"
+X-IronPort-AV: E=Sophos;i="5.97,296,1669104000"; 
+   d="scan'208";a="671231034"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.55])
+  by fmsmga007.fm.intel.com with SMTP; 14 Feb 2023 06:16:41 -0800
+Received: by stinkbox (sSMTP sendmail emulation); Tue, 14 Feb 2023 16:16:41 +0200
+Date:   Tue, 14 Feb 2023 16:16:41 +0200
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Liu Ying <victor.liu@nxp.com>, marex@denx.de,
+        shawnguo@kernel.org, s.hauer@pengutronix.de,
+        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
+        linux-imx@nxp.com, krzysztof.kozlowski+dt@linaro.org,
+        kernel@pengutronix.de, LW@karo-electronics.de
+Subject: Re: [PATCH v3 3/6] drm: lcdif: Determine bus format and flags in
+ ->atomic_check()
+Message-ID: <Y+uXyfZLyZ7Bm4j8@intel.com>
+References: <20230213085612.1026538-1-victor.liu@nxp.com>
+ <20230213085612.1026538-4-victor.liu@nxp.com>
+ <1755644.VLH7GnMWUR@steina-w>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <e4c33665-179b-8bf4-f7eb-38f86dceda56@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1755644.VLH7GnMWUR@steina-w>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 09:12:36AM +0100, Krzysztof Kozlowski wrote:
-> On 13/02/2023 22:31, Andrew Halaney wrote:
-> > The property is named snps,reset-gpio. Update the name accordingly so
-> > the corresponding phy is reset.
+On Tue, Feb 14, 2023 at 03:12:55PM +0100, Alexander Stein wrote:
+> Hi Liu,
+> 
+> thanks for the update.
+> 
+> Am Montag, 13. Februar 2023, 09:56:09 CET schrieb Liu Ying:
+> > Instead of determining LCDIF output bus format and bus flags in
+> > ->atomic_enable(), do that in ->atomic_check().  This is a
+> > preparation for the upcoming patch to check consistent bus format
+> > and bus flags across all first downstream bridges in ->atomic_check().
+> > New lcdif_crtc_state structure is introduced to cache bus format
+> > and bus flags states in ->atomic_check() so that they can be read
+> > in ->atomic_enable().
 > > 
-> > Fixes: 8dd495d12374 ("arm64: dts: freescale: add support for i.MX8DXL EVK board")
-> > Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+> > Signed-off-by: Liu Ying <victor.liu@nxp.com>
 > > ---
-> >  arch/arm64/boot/dts/freescale/imx8dxl-evk.dts | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > v2->v3:
+> > * No change.
 > > 
-> > diff --git a/arch/arm64/boot/dts/freescale/imx8dxl-evk.dts b/arch/arm64/boot/dts/freescale/imx8dxl-evk.dts
-> > index 1bcf228a22b8..b6d7c2526131 100644
-> > --- a/arch/arm64/boot/dts/freescale/imx8dxl-evk.dts
-> > +++ b/arch/arm64/boot/dts/freescale/imx8dxl-evk.dts
-> > @@ -121,7 +121,7 @@ &eqos {
-> >  	phy-handle = <&ethphy0>;
-> >  	nvmem-cells = <&fec_mac1>;
-> >  	nvmem-cell-names = "mac-address";
-> > -	snps,reset-gpios = <&pca6416_1 2 GPIO_ACTIVE_LOW>;
-> > +	snps,reset-gpio = <&pca6416_1 2 GPIO_ACTIVE_LOW>;
+> > v1->v2:
+> > * Split from patch 2/2 in v1. (Marek, Alexander)
+> > * Add comment on the 'base' member of lcdif_crtc_state structure to
+> >   note it should always be the first member. (Lothar)
+> > 
+> >  drivers/gpu/drm/mxsfb/lcdif_kms.c | 138 ++++++++++++++++++++++--------
+> >  1 file changed, 100 insertions(+), 38 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/mxsfb/lcdif_kms.c
+> > b/drivers/gpu/drm/mxsfb/lcdif_kms.c index e54200a9fcb9..294cecdf5439 100644
+> > --- a/drivers/gpu/drm/mxsfb/lcdif_kms.c
+> > +++ b/drivers/gpu/drm/mxsfb/lcdif_kms.c
+> > @@ -30,6 +30,18 @@
+> >  #include "lcdif_drv.h"
+> >  #include "lcdif_regs.h"
+> > 
+> > +struct lcdif_crtc_state {
+> > +	struct drm_crtc_state	base;	/* always be the first 
+> member */
 > 
-> I don't think it's correct change. This property is deprecated. Also
-> uses old, deprecated suffix gpio.
-> 
+> Is it strictly necessary that base is the first member? to_lcdif_crtc_state() 
+> should be able to handle any position within the struct. I mean it's sensible 
+> to put it in first place. But the comment somehow bugs me.
 
-I mentally grandfathered this in, but after your comment realized it
-shouldn't be. I'll post a v2 with the reset handled in the phy
-node directly. Thanks!
+NULL pointers is where these things go bad if it't not at
+offset 0. Unless you're willing to always handle those
+explicitly.
 
+-- 
+Ville Syrjälä
+Intel
