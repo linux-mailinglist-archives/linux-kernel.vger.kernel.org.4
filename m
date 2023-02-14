@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 632196961C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 12:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 668A06961C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 12:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232314AbjBNLEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 06:04:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
+        id S232403AbjBNLEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 06:04:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232156AbjBNLEG (ORCPT
+        with ESMTP id S232374AbjBNLEH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 06:04:06 -0500
+        Tue, 14 Feb 2023 06:04:07 -0500
 Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B84BB8B;
-        Tue, 14 Feb 2023 03:04:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EDA725BBE;
+        Tue, 14 Feb 2023 03:04:03 -0800 (PST)
 Received: from robin.home.jannau.net (p579ad32f.dip0.t-ipconnect.de [87.154.211.47])
-        by soltyk.jannau.net (Postfix) with ESMTPSA id 3289726F78E;
+        by soltyk.jannau.net (Postfix) with ESMTPSA id ABA2426F78F;
         Tue, 14 Feb 2023 12:04:01 +0100 (CET)
 From:   Janne Grunau <j@jannau.net>
-Date:   Tue, 14 Feb 2023 12:03:14 +0100
-Subject: [PATCH v2 01/16] dt-bindings: power: apple,pmgr-pwrstate: Add
- t8112 compatible
+Date:   Tue, 14 Feb 2023 12:03:15 +0100
+Subject: [PATCH v2 02/16] dt-bindings: arm: apple: apple,pmgr: Add
+ t8112-pmgr compatible
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230202-asahi-t8112-dt-v2-1-22926a283d92@jannau.net>
+Message-Id: <20230202-asahi-t8112-dt-v2-2-22926a283d92@jannau.net>
 References: <20230202-asahi-t8112-dt-v2-0-22926a283d92@jannau.net>
 In-Reply-To: <20230202-asahi-t8112-dt-v2-0-22926a283d92@jannau.net>
 To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
@@ -34,14 +34,15 @@ To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Mark Kettenis <kettenis@openbsd.org>
 Cc:     asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1452; i=j@jannau.net;
- h=from:subject:message-id; bh=aXO+5GcVtbVFIlBDyMr869xJC0oOQ2XtOFarIv/qDhw=;
- b=owGbwMvMwCG2UNrmdq9+ahrjabUkhuTXWfNyH6znOCfzMD7nZtOF81ONNgm/SWAzZAsPrV+UK
- PRI6dS9jlIWBjEOBlkxRZYk7ZcdDKtrFGNqH4TBzGFlAhnCwMUpABPp+87IcP/6AY6vz/c9YneI
- tNMLsLdavOPW4r3MKz9MK7Pr/r+nT4aR4fGVXxE2N/dLqv+59l7qzN9DcZsvFAVIrJZn/s8cI/9
- uAwMA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=853; i=j@jannau.net;
+ h=from:subject:message-id; bh=wHeht8pq0t5FEcVgQC5sfY8X8EgGkDKC3DolTYSHSlY=;
+ b=owGbwMvMwCG2UNrmdq9+ahrjabUkhuTXWfPUeTk6g9bON3E+Y6s2vezUkYCsc21GJoJKr586v
+ XnffPFQRykLgxgHg6yYIkuS9ssOhtU1ijG1D8Jg5rAygQxh4OIUgIlM/snI8Mtpmd/FuS67X9yf
+ /PjBz9+dJYmTfr//tvWc3Pa4G/xzZnMy/BVU2exw48ra0wu2sxdMfDN7SsIjw3DP19PTZ1TVm/q
+ ZBrADAA==
 X-Developer-Key: i=j@jannau.net; a=openpgp;
  fpr=8B336A6BE4E5695E89B8532B81E806F586338419
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -52,45 +53,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hector Martin <marcan@marcan.st>
+The block on Apple M2 SoCs is compatible with the existing driver so
+just add its per-SoC compatible.
 
-Add the apple,t8112-pmgr-pwrstate compatible for the Apple M2 SoC.
-
-This goes after t8103. The sort order logic here is having SoC numeric
-code families in release order, and SoCs within each family in release
-order:
-
-- t8xxx (Apple HxxP/G series, "phone"/"tablet" chips)
-  - t8103 (Apple H13G/M1)
-  - t8112 (Apple H14G/M2)
-- t6xxx (Apple HxxJ series, "desktop" chips)
-  - t6000 (Apple H13J(S)/M1 Pro)
-  - t6001 (Apple H13J(C)/M1 Max)
-  - t6002 (Apple H13J(D)/M1 Ultra)
-
-Note that t600[0-2] share the t6000 compatible where the hardware is
-100% compatible, which is usually the case in this highly related set
-of SoCs.
-
-Signed-off-by: Hector Martin <marcan@marcan.st>
-Reviewed-by: Janne Grunau <j@jannau.net>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Janne Grunau <j@jannau.net>
 ---
- Documentation/devicetree/bindings/power/apple,pmgr-pwrstate.yaml | 1 +
+ Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/power/apple,pmgr-pwrstate.yaml b/Documentation/devicetree/bindings/power/apple,pmgr-pwrstate.yaml
-index 94d369eb85de..59a6af735a21 100644
---- a/Documentation/devicetree/bindings/power/apple,pmgr-pwrstate.yaml
-+++ b/Documentation/devicetree/bindings/power/apple,pmgr-pwrstate.yaml
-@@ -32,6 +32,7 @@ properties:
+diff --git a/Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml b/Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml
+index 0dc957a56d35..673277a7a224 100644
+--- a/Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml
++++ b/Documentation/devicetree/bindings/arm/apple/apple,pmgr.yaml
+@@ -23,6 +23,7 @@ properties:
      items:
        - enum:
-           - apple,t8103-pmgr-pwrstate
-+          - apple,t8112-pmgr-pwrstate
-           - apple,t6000-pmgr-pwrstate
-       - const: apple,pmgr-pwrstate
- 
+           - apple,t8103-pmgr
++          - apple,t8112-pmgr
+           - apple,t6000-pmgr
+       - const: apple,pmgr
+       - const: syscon
 
 -- 
 2.39.1
