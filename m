@@ -2,122 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5FAC696B57
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:21:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F4E696B61
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232862AbjBNRVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 12:21:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48682 "EHLO
+        id S232371AbjBNRXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 12:23:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjBNRV2 (ORCPT
+        with ESMTP id S232902AbjBNRXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 12:21:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4C1E3;
-        Tue, 14 Feb 2023 09:21:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D2AB61779;
-        Tue, 14 Feb 2023 17:21:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5362C433EF;
-        Tue, 14 Feb 2023 17:21:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676395282;
-        bh=PqGwx2dYT6XLwA/BD+6gzTUQqPBIcR94mqfkmP5SHjU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bWFtBcpAwOCoI2UGwpVx7yeWqM768vkfp0VCzVWKa0QyqGW14iJFwovPhiW5v3avR
-         SZp0Ls/sziy7Gc9Sz35ffictb+hZ8u+FjSV20nA9gi3OkhbryERqI4Z9FJ64TBSgZ2
-         bsf7rbsuBdJaGCKKqOr4+Xb4kZn27d+X3M/Qv2+2Muip0+ueICVVTXnnS1alg0RUxs
-         DOfWrTBU5YYLHPUEfpUcyhO+3CrhO5+P+3IGIArTK7QeK1wA+eY6CwAuk/NHVtLAAB
-         +2ce18ol06uxO4HHiKu9SeZHNxkxVgKlPZVO1gu8kd0aNMZ8esV3oyrPhNCjWdg4QR
-         Vf3NZ+lkmPqGA==
-Date:   Tue, 14 Feb 2023 09:23:25 -0800
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Elliot Berman <quic_eberman@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-remoteproc@vger.kernel.org
-Subject: Re: [PATCH] firmware: qcom_scm: Use fixed width src vm bitmap
-Message-ID: <20230214172325.lplxgbprhj3bzvr3@ripper>
-References: <20230213181832.3489174-1-quic_eberman@quicinc.com>
- <20230213214417.mtcpeultvynyls6s@ripper>
- <Y+tNRPf0PGdShf5l@kroah.com>
+        Tue, 14 Feb 2023 12:23:53 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF842C648;
+        Tue, 14 Feb 2023 09:23:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676395423; x=1707931423;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=BvnSupCLokKbvMF3qV9pvBDIftfya/8td2qfw3msbX8=;
+  b=UVC1PMH/VFHOm9eLeIXCn8SgwHFqVBou8kiazA5XpjgZsahafWK/nu4o
+   q3skbd9IYqIUdJ0y88chiGHX1vXZA2z6ysk1dCPMo34PATkh8Q6bPMeHC
+   hNt9un8gItXg3r1d+rDKMgUOS3F1/v5H2v9tVJgwX1pzQ16I6cnbQJWLF
+   ey1m+/gPXXE7Fqj1KgpQ00hmFnMbSWCqXwKfX7oFaFdRsSRDsatMjLGzl
+   PX3dMFvTd94VpXvzfPVTZPZAkPkp0ZIulIg4pFp+vtLkD8RR/ULZTGY1f
+   2Mh2ccCewsT5+u9E3w9jNUIR0VP6nPfmTxbgDGE4FMUZu8rJ1f8UDcpzg
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="393616408"
+X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
+   d="scan'208";a="393616408"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 09:23:42 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="914819406"
+X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
+   d="scan'208";a="914819406"
+Received: from jklechel-mobl1.amr.corp.intel.com (HELO [10.212.244.208]) ([10.212.244.208])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 09:23:41 -0800
+Message-ID: <a44246e1-72de-4c9a-c602-dfc2f7df129b@intel.com>
+Date:   Tue, 14 Feb 2023 09:23:40 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+tNRPf0PGdShf5l@kroah.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v9 04/18] x86/virt/tdx: Add skeleton to initialize TDX on
+ demand
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Kai Huang <kai.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, tglx@linutronix.de, seanjc@google.com,
+        pbonzini@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
+        ying.huang@intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, david@redhat.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+References: <cover.1676286526.git.kai.huang@intel.com>
+ <eb565156d84e35a846a886025513a712f2ac2f83.1676286526.git.kai.huang@intel.com>
+ <Y+uCtZ7itiNsbR4j@hirez.programming.kicks-ass.net>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <Y+uCtZ7itiNsbR4j@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 09:58:44AM +0100, Greg Kroah-Hartman wrote:
-> On Mon, Feb 13, 2023 at 01:44:17PM -0800, Bjorn Andersson wrote:
-> > On Mon, Feb 13, 2023 at 10:18:29AM -0800, Elliot Berman wrote:
-> > > The maximum VMID for assign_mem is 63. Use a u64 to represent this
-> > > bitmap instead of architecture-dependent "unsigned int" which varies in
-> > > size on 32-bit and 64-bit platforms.
-> > > 
-> > > Acked-by: Kalle Valo <kvalo@kernel.org> (ath10k)
-> > > Tested-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-> > > Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> > 
-> > Reviewed-by: Bjorn Andersson <andersson@kernel.org>
-> > 
-> > @Greg, would you mind taking this through your tree for v6.3, you
-> > already have a related change in fastrpc.c in your tree...
+On 2/14/23 04:46, Peter Zijlstra wrote:
+> On Tue, Feb 14, 2023 at 12:59:11AM +1300, Kai Huang wrote:
+>> Use a state machine protected by mutex to make sure the initialization
+>> will only be done once, as tdx_enable() can be called multiple times
+>> (i.e. KVM module can be reloaded) and be called concurrently by other
+>> kernel components in the future.
+> I still object to doing tdx_enable() at kvm module load.
 > 
-> I tried, but it doesn't apply to my char-misc tree at all:
+> kvm.ko gets loaded unconditionally on boot, even if I then never use
+> kvm.
 > 
-> checking file drivers/firmware/qcom_scm.c
-> Hunk #1 succeeded at 898 (offset -7 lines).
-> Hunk #2 succeeded at 915 (offset -7 lines).
-> Hunk #3 succeeded at 930 (offset -7 lines).
-> checking file drivers/misc/fastrpc.c
-> checking file drivers/net/wireless/ath/ath10k/qmi.c
-> checking file drivers/remoteproc/qcom_q6v5_mss.c
-> Hunk #1 succeeded at 227 (offset -8 lines).
-> Hunk #2 succeeded at 404 (offset -10 lines).
-> Hunk #3 succeeded at 939 with fuzz 1 (offset -28 lines).
-> checking file drivers/remoteproc/qcom_q6v5_pas.c
-> Hunk #1 FAILED at 94.
-> 1 out of 1 hunk FAILED
-> checking file drivers/soc/qcom/rmtfs_mem.c
-> Hunk #1 succeeded at 30 (offset -1 lines).
-> can't find file to patch at input line 167
-> Perhaps you used the wrong -p or --strip option?
-> The text leading up to this was:
-> --------------------------
-> |diff --git a/include/linux/firmware/qcom/qcom_scm.h
-> b/include/linux/firmware/qcom/qcom_scm.h
-> |index 1e449a5d7f5c..250ea4efb7cb 100644
-> |--- a/include/linux/firmware/qcom/qcom_scm.h
-> |+++ b/include/linux/firmware/qcom/qcom_scm.h
-> --------------------------
-> 
-> What tree is this patch made against?
-> 
+> This stuff needs to be done when an actual VM is created, not before.
 
-Sorry about that, I missed the previous changes in qcom_q6v5_pas in the
-remoteproc tree. Elliot said he based it on linux-next, so I expect that
-it will merge fine on top of -rc1, once that arrives.
+The actually implementation of this is hidden over in the KVM side of
+this.  But, tdx_enable() and all of this jazz should not be called on
+kvm.ko load.  It'll happen when the KVM tries to start the first TDX VM.
 
-Regards,
-Bjorn
+I think what Kai was thinking of was *this* sequence:
+
+ 1. insmod kvm.ko
+ 2. Start a TDX guest, tdx_enable() gets run
+ 3. rmmod kvm
+ 4. insmod kvm.ko (again)
+ 5. Start another TDX guest, run tdx_enable() (again)
+
+The rmmod/insmod pair is what triggers the second call of tdx_enable().
