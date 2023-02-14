@@ -2,184 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD568696578
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 14:55:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6FB69654D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 14:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232912AbjBNNzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 08:55:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
+        id S232950AbjBNNqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 08:46:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233003AbjBNNzc (ORCPT
+        with ESMTP id S233113AbjBNNqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 08:55:32 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7A025E09;
-        Tue, 14 Feb 2023 05:54:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1676382900; x=1707918900;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=aaMwux03jBEKJ1Pb/onCryTf/9UpBBkIzGoSYw5GpeI=;
-  b=VDXljEsVFqPyzzf2U5mg7qwf+R/AZhP+M22dkcnC7uzvR2l+sZHq4JzP
-   DKc+KBxii4Xht8byf1udTTz/+1v6hV+EoRHpcJAJeSyEtojiKckSjH747
-   zvsEC9seVkd8ulke0PnnKS4JRi+Wyf++ZtU/SF3O/ke5l4dmUyNmPcSLz
-   9kKqejB+xZakfKy5KntM6MnAG50UYW8HUOQByqlHkcTkCcP8gWSxo6vkU
-   uhNNNL2MUpdHtaHzj2HCK5UL0iuTvcweofvjUcarxI9twvKe2HgdX447h
-   rUsHqaE15s+We27wTKGgPKcckBuHBDY0Oes3/CKlTiJLgTBvBvUGTv9PZ
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,296,1669071600"; 
-   d="scan'208";a="29074823"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 14 Feb 2023 14:42:57 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Tue, 14 Feb 2023 14:42:57 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Tue, 14 Feb 2023 14:42:57 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1676382177; x=1707918177;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=aaMwux03jBEKJ1Pb/onCryTf/9UpBBkIzGoSYw5GpeI=;
-  b=GsADJs99Y9ppRaYXXd2lREIqu5lN2jlfn9CmE8pm11/CJpaQENd2fpcK
-   NzA3gNtyhjBgQn0+p9JMCJuZW4TIcb3GM6Q+foYWN//E7c4kkmqbjKaYG
-   0s8tTiyptcZ23qZRWUPAgN/+lrmKB/8TeCjEQcAv9gcd6iKf6gEJPfl9+
-   /QOfQBSsn1uOhNDoRhg012S4dR9MRGCHhRlYc6CJD6w/sec5pp7V6woFl
-   xjl4di0TCn49FDfZCnRZm40vIuurGWRzjOKJ3OhBeWnR3I240PBpvOJkh
-   OdHtynAehxAMIa0SKfAQkMVze79BLpxGgt0T4fLoP8VRwou9SqMFpHISX
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,296,1669071600"; 
-   d="scan'208";a="29074821"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 14 Feb 2023 14:42:57 +0100
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id B1F1C280056;
-        Tue, 14 Feb 2023 14:42:56 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Liu Ying <victor.liu@nxp.com>
-Cc:     marex@denx.de, stefan@agner.ch, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com,
-        krzysztof.kozlowski@linaro.org, LW@karo-electronics.de
-Subject: Re: [PATCH v3 2/6] drm: lcdif: Drop unnecessary NULL pointer check on lcdif->bridge
-Date:   Tue, 14 Feb 2023 14:42:54 +0100
-Message-ID: <10229432.nUPlyArG6x@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20230213085612.1026538-3-victor.liu@nxp.com>
-References: <20230213085612.1026538-1-victor.liu@nxp.com> <20230213085612.1026538-3-victor.liu@nxp.com>
+        Tue, 14 Feb 2023 08:46:39 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5122C298CB;
+        Tue, 14 Feb 2023 05:45:48 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31E9TIcc018659;
+        Tue, 14 Feb 2023 13:44:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Vp2fHwymSvhY5DxtYIGyE7DyxmKylLyMV1jfDjXcPmg=;
+ b=lOVHvWKes/MjMu7DRv/jMVoDWeugIlnKBQ0vI5IIKVSJ5Pjd61DDA2IwBWuJ8DEhjDM5
+ xEECB2K7O5mWv5w/gaXZysLwFLvksUhipEWR9iLIFpQK9SQN0Yf63BrHE+3ql5lYvEGk
+ e692FwSzOelH7BZNzpGwl5SYmqdA+QYg/4xSjgfEQaBpsGJAD10CDYru05/dR6F6YVwD
+ nFMVbr82rdKkSjgn0NwRnOVutLQP2yzOlDKGMvNPUgan3/FsrObtlWyAzOowoTNZNqAh
+ OruFFo9QHKL5QNIuijpxsdqhQUUqXkZEokK0xFgdL41lbpD6zo2BSNnUid8OVW636HIe nA== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nqtsut9w1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 13:44:14 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31EDiDvU023407
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 13:44:13 GMT
+Received: from [10.216.50.155] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 14 Feb
+ 2023 05:44:09 -0800
+Message-ID: <89cff864-2103-1dc1-b8c2-ad1ef1fbdf1e@quicinc.com>
+Date:   Tue, 14 Feb 2023 19:14:05 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v5 2/2] pstore/ram: Rework logic for detecting ramoops
+Content-Language: en-US
+To:     <linux-hardening@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC:     <keescook@chromium.org>, <tony.luck@intel.com>,
+        <gpiccoli@igalia.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <corbet@lwn.net>
+References: <1675330081-15029-1-git-send-email-quic_mojha@quicinc.com>
+ <1675330081-15029-2-git-send-email-quic_mojha@quicinc.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <1675330081-15029-2-git-send-email-quic_mojha@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: MBUL8prDP-pLNpOt_30UC69_FAQYiHuf
+X-Proofpoint-ORIG-GUID: MBUL8prDP-pLNpOt_30UC69_FAQYiHuf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-14_07,2023-02-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 malwarescore=0 mlxlogscore=999 phishscore=0
+ lowpriorityscore=0 bulkscore=0 mlxscore=0 adultscore=0 impostorscore=0
+ suspectscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2302140118
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Liu,
+Hi Kees/Rob,
 
-thanks for the update.
+Since, we are not agreeing to put dynamics ramoops region support in 
+device tree.
 
-Am Montag, 13. Februar 2023, 09:56:08 CET schrieb Liu Ying:
-> A valid bridge is already found in lcdif_attach_bridge() and set
-> to lcdif->bridge, so lcdif->bridge cannot be a NULL pointer. Drop
-> the unnecessary NULL pointer check in KMS stage.
->=20
-> Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> ---
-> v2->v3:
-> * No change.
->=20
-> v1->v2:
-> * Split from patch 2/2 in v1. (Marek, Alexander)
->=20
->  drivers/gpu/drm/mxsfb/lcdif_kms.c | 33 +++++++++++--------------------
->  1 file changed, 12 insertions(+), 21 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/mxsfb/lcdif_kms.c
-> b/drivers/gpu/drm/mxsfb/lcdif_kms.c index 262bc43b1079..e54200a9fcb9 1006=
-44
-> --- a/drivers/gpu/drm/mxsfb/lcdif_kms.c
-> +++ b/drivers/gpu/drm/mxsfb/lcdif_kms.c
-> @@ -394,7 +394,7 @@ static void lcdif_crtc_mode_set_nofb(struct
-> lcdif_drm_private *lcdif, struct drm_display_mode *m =3D
-> &lcdif->crtc.state->adjusted_mode;
->  	u32 bus_flags =3D 0;
->=20
-> -	if (lcdif->bridge && lcdif->bridge->timings)
-> +	if (lcdif->bridge->timings)
->  		bus_flags =3D lcdif->bridge->timings->input_bus_flags;
->  	else if (bridge_state)
->  		bus_flags =3D bridge_state->input_bus_cfg.flags;
-> @@ -463,30 +463,21 @@ static void lcdif_crtc_atomic_enable(struct drm_crtc
-> *crtc, struct drm_display_mode *m =3D &lcdif->crtc.state->adjusted_mode;
->  	struct drm_bridge_state *bridge_state =3D NULL;
->  	struct drm_device *drm =3D lcdif->drm;
-> -	u32 bus_format =3D 0;
-> +	u32 bus_format;
->  	dma_addr_t paddr;
->=20
-> -	/* If there is a bridge attached to the LCDIF, use its bus format */
-> -	if (lcdif->bridge) {
-> -		bridge_state =3D
-> -			drm_atomic_get_new_bridge_state(state,
-> -							lcdif-
->bridge);
-> -		if (!bridge_state)
-> -			bus_format =3D MEDIA_BUS_FMT_FIXED;
-> -		else
-> -			bus_format =3D bridge_state->input_bus_cfg.format;
-> -
-> -		if (bus_format =3D=3D MEDIA_BUS_FMT_FIXED) {
-> -			dev_warn_once(drm->dev,
-> -				      "Bridge does not provide bus=20
-format, assuming
-> MEDIA_BUS_FMT_RGB888_1X24.\n" -				     =20
-"Please fix bridge driver by
-> handling atomic_get_input_bus_fmts.\n"); -		=09
-bus_format =3D
-> MEDIA_BUS_FMT_RGB888_1X24;
-> -		}
-> -	}
-> +	bridge_state =3D drm_atomic_get_new_bridge_state(state, lcdif-
->bridge);
-> +	if (!bridge_state)
-> +		bus_format =3D MEDIA_BUS_FMT_FIXED;
-> +	else
-> +		bus_format =3D bridge_state->input_bus_cfg.format;
->=20
-> -	/* If all else fails, default to RGB888_1X24 */
-> -	if (!bus_format)
-> +	if (bus_format =3D=3D MEDIA_BUS_FMT_FIXED) {
-> +		dev_warn_once(drm->dev,
-> +			      "Bridge does not provide bus format,=20
-assuming
-> MEDIA_BUS_FMT_RGB888_1X24.\n" +			      "Please fix=20
-bridge driver by
-> handling atomic_get_input_bus_fmts.\n"); bus_format =3D
-> MEDIA_BUS_FMT_RGB888_1X24;
-> +	}
->=20
->  	clk_set_rate(lcdif->clk, m->crtc_clock * 1000);
+In Qualcomm SoC, during reset the pstore static region did not get 
+preserved across boots and we have our own mechanism to collect regions
+if physical address and size is somehow passed to boot-firmware by 
+writing to some shared memory. So, we wanted to reuse the region
+supported by pstore(dmesg/console/ etc.) for that we wanted to this
+flexibility to put this region dynamically anywhere in the ram.
 
+This patch will help achieve the same . Can you suggest if this gets
+allowed.
 
-LGTM.
-Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+-Mukesh
 
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
-
-
+On 2/2/2023 2:58 PM, Mukesh Ojha wrote:
+> The reserved memory region for ramoops is assumed to be at a fixed
+> and known location when read from the devicetree. This is not desirable
+> in an environment where it is preferred the region to be dynamically
+> allocated at runtime, as opposed to being fixed at compile time.
+> 
+> Also, some of the platforms might be still expecting dedicated
+> memory region for ramoops node where the region is known beforehand
+> and platform_get_resource() is used in that case.
+> 
+> So, add logic to detect the start and size of the ramoops memory
+> region by looking up reserved memory region with of_reserved_mem_lookup()
+> api when platform_get_resource() fails also update the ramoops
+> documentation.
+> 
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com> > ---
+> Changes in v5:
+>   - Removed the CC list from the commit text.
+> 
+> Changes in v4:
+>   - Updated the minor change in documentation.
+> 
+> Changes in v3:
+>   - Merged 2/3 and 3/3 into one.
+>     https://lore.kernel.org/lkml/1673611126-13803-2-git-send-email-quic_mojha@quicinc.com/
+>     https://lore.kernel.org/lkml/1673611126-13803-3-git-send-email-quic_mojha@quicinc.com/
+> 
+> Changes in v2:
+>   - Addressed the comments made by kees and Guilherme in v1.
+> 
+> 
+>   Documentation/admin-guide/ramoops.rst | 25 ++++++++++++++++++++++---
+>   fs/pstore/ram.c                       | 18 +++++++++++++-----
+>   2 files changed, 35 insertions(+), 8 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/ramoops.rst b/Documentation/admin-guide/ramoops.rst
+> index e9f8514..3586d15 100644
+> --- a/Documentation/admin-guide/ramoops.rst
+> +++ b/Documentation/admin-guide/ramoops.rst
+> @@ -16,8 +16,9 @@ survive after a restart.
+>   Ramoops concepts
+>   ----------------
+>   
+> -Ramoops uses a predefined memory area to store the dump. The start and size
+> -and type of the memory area are set using three variables:
+> +Ramoops uses both predefined and dynamically memory area to store the dump.
+> +The start and size and type of the memory area are set using three
+> +variables:
+>   
+>     * ``mem_address`` for the start
+>     * ``mem_size`` for the size. The memory size will be rounded down to a
+> @@ -70,7 +71,8 @@ Setting the ramoops parameters can be done in several different manners:
+>   
+>    B. Use Device Tree bindings, as described in
+>    ``Documentation/devicetree/bindings/reserved-memory/ramoops.yaml``.
+> - For example::
+> +
+> + Example of statically reserved ramoops region::
+>   
+>   	reserved-memory {
+>   		#address-cells = <2>;
+> @@ -85,6 +87,23 @@ Setting the ramoops parameters can be done in several different manners:
+>   		};
+>   	};
+>   
+> + Example of dynamically reserved ramoops region::
+> +
+> +	reserved-memory {
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges;
+> +
+> +		ramoops_region: ramoops {
+> +			compatible = "ramoops";
+> +			alloc-ranges = <0x00000000 0xffffffff>;
+> +			size = <0 0x100000>;
+> +			record-size = <0x4000>;
+> +			console-size = <0x4000>;
+> +		};
+> +	};
+> +
+> +
+>    C. Use a platform device and set the platform data. The parameters can then
+>    be set through that platform data. An example of doing that is:
+>   
+> diff --git a/fs/pstore/ram.c b/fs/pstore/ram.c
+> index ade66db..17c9f46 100644
+> --- a/fs/pstore/ram.c
+> +++ b/fs/pstore/ram.c
+> @@ -20,6 +20,7 @@
+>   #include <linux/compiler.h>
+>   #include <linux/of.h>
+>   #include <linux/of_address.h>
+> +#include <linux/of_reserved_mem.h>
+>   
+>   #include "internal.h"
+>   #include "ram_internal.h"
+> @@ -643,6 +644,7 @@ static int ramoops_parse_dt(struct platform_device *pdev,
+>   {
+>   	struct device_node *of_node = pdev->dev.of_node;
+>   	struct device_node *parent_node;
+> +	struct reserved_mem *rmem;
+>   	struct resource *res;
+>   	u32 value;
+>   	int ret;
+> @@ -651,13 +653,19 @@ static int ramoops_parse_dt(struct platform_device *pdev,
+>   
+>   	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>   	if (!res) {
+> -		dev_err(&pdev->dev,
+> -			"failed to locate DT /reserved-memory resource\n");
+> -		return -EINVAL;
+> +		rmem = of_reserved_mem_lookup(of_node);
+> +		if (!rmem) {
+> +			dev_err(&pdev->dev,
+> +				"failed to locate DT /reserved-memory resource\n");
+> +			return -EINVAL;
+> +		}
+> +		pdata->mem_size = rmem->size;
+> +		pdata->mem_address = rmem->base;
+> +	} else {
+> +		pdata->mem_size = resource_size(res);
+> +		pdata->mem_address = res->start;
+>   	}
+>   
+> -	pdata->mem_size = resource_size(res);
+> -	pdata->mem_address = res->start;
+>   	/*
+>   	 * Setting "unbuffered" is deprecated and will be ignored if
+>   	 * "mem_type" is also specified.
