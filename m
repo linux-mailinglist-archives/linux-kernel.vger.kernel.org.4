@@ -2,147 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A80695B9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0756695BA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231630AbjBNH7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 02:59:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
+        id S231771AbjBNH7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 02:59:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbjBNH7Z (ORCPT
+        with ESMTP id S231730AbjBNH7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 02:59:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5396D272D;
-        Mon, 13 Feb 2023 23:59:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A95B6148A;
-        Tue, 14 Feb 2023 07:59:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5086DC433EF;
-        Tue, 14 Feb 2023 07:59:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676361552;
-        bh=eUd1cD56iHT4abnPxejevxH1gxxh5s21PRKBYywMe/0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mNLMVCENcx0gIwCYJzM8i1GPPQfPTBv3XdgXNwLFlT9DdBNr+4lsiN3Rnpm7LZI1p
-         Bj+UtCxu1hQ9daDrAV2Hnz4lM0hEkSs4b0b5AnQTVi7lBfE2fq2U34ptsRk+Av2G0M
-         hSOeqhsRkFwS/aT5OH5QE+QnozgHTY0hBuC6CfqM=
-Date:   Tue, 14 Feb 2023 08:59:05 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Longlong Xia <xialonglong1@huawei.com>, chenwandun@huawei.com,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        sunnanyong@huawei.com, wangkefeng.wang@huawei.com,
-        linux-btrfs@vger.kernel.org
-Subject: Re: [PATCH -next v2 1/3] driver core: add error handling for
- devtmpfs_create_node()
-Message-ID: <Y+s/SceRUP28YHHY@kroah.com>
-References: <20230210095444.4067307-1-xialonglong1@huawei.com>
- <20230210095444.4067307-2-xialonglong1@huawei.com>
- <Y+rSXg14z1Myd8Px@dev-arch.thelio-3990X>
- <Y+rWwtjVBDHHVzB3@dev-arch.thelio-3990X>
+        Tue, 14 Feb 2023 02:59:32 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC38321A30
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:59:23 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id bk16so14678980wrb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:59:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/JB9QIrDQG4CfUwnJnmJHURss8n6y5r0NU4FF1ybcOY=;
+        b=qAqxgSODzxDyTtcq/4YzRq+cGiwOq537sThYsXbWUrr5I5oLLGPfz4qdc80jwI47/n
+         gQP6Bm5uNsOcBxgWjtvFBotw6uphu74pfr63/o2XibHhrdxbxZFpZ4mzPLQ/z/gyeZ7d
+         2m4NLSl1vE6Dea1RQnILnVM/71nYhLyQ/JkQP0rhqhxhMkS72pFADqFLyd3kGes7tEg/
+         Vb1/NtOebPktNHxCvT9ncSlx/4RcJIMsbsEfWT74GiiSmejvt4OAb76vsjeNz0jbnTwO
+         XtJZHz+t4YlkaWX6+ZRG1RF4kiKwZEFLwtNas416NVqVDPVKU7Fsr3NpizAAVgGn7aiw
+         JH3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/JB9QIrDQG4CfUwnJnmJHURss8n6y5r0NU4FF1ybcOY=;
+        b=It+PLREOe6xSPD86gwmeidBz8lZmbJXe8FE/dAvEse5Nw2zkUSY6UzJxmHrejhPDZI
+         PEmVeUjWKE/XxBFjoOLSua1phpDKMBvYFEZuEJxNl61SYYGFH9I3nHeQBZ8xtE6azvEz
+         1pYivPa6LwSq3znt85qflkKkqnc7G+/t7f7Yfdm9+KY1D3jAQvKfFhpIKZfmeVRncX24
+         SpeZwqfikEkxDoS3tsDw+R4HlwNqE+/Zb5x+3c6xmi3co6pKeTtjv8TwQqkJslpLoh9d
+         RU1sU3GeykRqr48/PVf8IpmT1Q2ndwSQQTxG7q1IRhhGjhBD7+iCm7msLQOVb3XO6hoa
+         h47Q==
+X-Gm-Message-State: AO0yUKWzZ0ebOAjB0Bdqd6mSAy/uz/cPynThMWBRKZsQfo/1dRe9+HM7
+        xOLO3JNiu4NBpUeqaJ4ntK4/nw==
+X-Google-Smtp-Source: AK7set+98H5eySUi1t645pCzonFEeQEPFX4XngrbFuT3irGY+a2DKk2pDb3xXXSGM8p4h3E3VbzrSw==
+X-Received: by 2002:adf:f744:0:b0:2c5:5521:a79d with SMTP id z4-20020adff744000000b002c55521a79dmr2105691wrp.67.1676361562026;
+        Mon, 13 Feb 2023 23:59:22 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id d12-20020adfe84c000000b002c3f03d8851sm552777wrn.16.2023.02.13.23.59.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 23:59:21 -0800 (PST)
+Message-ID: <95318688-fee7-25e3-6614-16d03aea5ce5@linaro.org>
+Date:   Tue, 14 Feb 2023 08:59:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+rWwtjVBDHHVzB3@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] dt-bindings: PCI: qcom: Fix msm8998-specific compatible
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230213211408.2110702-1-konrad.dybcio@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230213211408.2110702-1-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 05:33:06PM -0700, Nathan Chancellor wrote:
-> On Mon, Feb 13, 2023 at 05:14:27PM -0700, Nathan Chancellor wrote:
-> > Hi Longlong,
-> > 
-> > On Fri, Feb 10, 2023 at 09:54:42AM +0000, Longlong Xia wrote:
-> > > In some cases, devtmpfs_create_node() can return error value.
-> > > So, make use of it.
-> > > 
-> > > Signed-off-by: Longlong Xia <xialonglong1@huawei.com>
-> > > ---
-> > >  drivers/base/core.c | 6 +++++-
-> > >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/base/core.c b/drivers/base/core.c
-> > > index 7dab705f2937..aaa3088e5456 100644
-> > > --- a/drivers/base/core.c
-> > > +++ b/drivers/base/core.c
-> > > @@ -3405,7 +3405,9 @@ int device_add(struct device *dev)
-> > >  		if (error)
-> > >  			goto SysEntryError;
-> > >  
-> > > -		devtmpfs_create_node(dev);
-> > > +		error = devtmpfs_create_node(dev);
-> > > +		if (error)
-> > > +			goto DevtmpfsError;
-> > >  	}
-> > >  
-> > >  	/* Notify clients of device addition.  This call must come
-> > > @@ -3461,6 +3463,8 @@ int device_add(struct device *dev)
-> > >  done:
-> > >  	put_device(dev);
-> > >  	return error;
-> > > + DevtmpfsError:
-> > > +	device_remove_sys_dev_entry(dev);
-> > >   SysEntryError:
-> > >  	if (MAJOR(dev->devt))
-> > >  		device_remove_file(dev, &dev_attr_dev);
-> > > -- 
-> > > 2.25.1
-> > > 
-> > 
-> > After this change in -next as commit 31b4b6730fd4 ("driver core: add
-> > error handling for devtmpfs_create_node()"), my test machines failed to
-> > boot after the rootfs could not be mounted. I added some logging to see
-> > which device was failing, which triggers a few times with the exact same
-> > message:
-> > 
-> >   device: 'btrfs-control': devtmpfs_create_node() failed, err = -17
-> > 
-> > with -17 being -EEXIST. I am not sure why this device is getting
-> > registered more than once, it appears to occur during module insertion
-> > though, as I am able to get to systemd starting within the initrd.
-> > 
-> > Should this particular return value be downgraded to a warning so that
-> > the device still loads or should the driver be fixed? I have cc'd the
-> > btrfs mailing list, in case they have any input.
+On 13/02/2023 22:14, Konrad Dybcio wrote:
+> In the commit mentioned in the fixes tag, everything went well except
+> the fallback and the specific compatible got swapped and the 8998 DTSI
+> began failing the dtbs check. Fix it.
 > 
-> Apologies, I see now that the second patch in this series is logging for
-> this, sorry for not using or noticing that sooner.
-> 
-> I am now looking at some of my other test machines and I see messages
-> similar to the one above for other devices:
-> 
-> [   16.268685] sound timer: failed to create snd/timer, ret = -17
-> [   16.274666] ALSA: unable to register timer device (-17)
-> [   16.500253] sound timer: failed to create snd/timer, ret = -17
-> [   16.506124] ALSA: unable to register timer device (-17)
-> 
-> [   18.273067] misc rfkill: failed to create rfkill, ret = -17
-> [   18.464836] misc rfkill: failed to create rfkill, ret = -17
-> [   19.366149] misc tun: failed to create net/tun, ret = -17
-> [   19.371613] tun: Can't register misc device 200
-> [   19.552362] misc tun: failed to create net/tun, ret = -17
-> [   19.557839] tun: Can't register misc device 200
-> [   23.124993] misc tun: failed to create net/tun, ret = -17
-> [   23.130460] tun: Can't register misc device 200
-> [   23.299267] misc tun: failed to create net/tun, ret = -17
-> [   23.299319] tun: Can't register misc device 200
-> [   27.050363] misc tun: failed to create net/tun, ret = -17
-> [   27.055824] tun: Can't register misc device 200
-> [   27.181496] misc tun: failed to create net/tun, ret = -17
-> 
-> So it seems like this is not a btrfs specific problem?
+> Fixes: 7d1780d023ca ("dt-bindings: PCI: qcom: Unify MSM8996 and MSM8998 clock order")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Ok, let me go revert the series for now.  Longlong, please feel free to
-resubmit after testing this a bit better.
+I don't see compatibles being touched at all in this commit. This is not
+correct commit to fix.
 
-thanks,
+Best regards,
+Krzysztof
 
-greg k-h
