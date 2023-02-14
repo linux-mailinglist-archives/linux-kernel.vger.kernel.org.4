@@ -2,129 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B996971DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 00:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C99946971DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 00:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232035AbjBNXeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 18:34:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54818 "EHLO
+        id S232862AbjBNXeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 18:34:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjBNXe3 (ORCPT
+        with ESMTP id S232514AbjBNXee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 18:34:29 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3B8234C9;
-        Tue, 14 Feb 2023 15:34:28 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EKS7KL022832;
-        Tue, 14 Feb 2023 23:34:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=W7cAjMVtbpX/wOrIuXv65sTNDtCQNRmELgZedUKQ7r0=;
- b=RXkkLTksEg4TAXBmRi3RqJg+59p0ZGksfPOi3HZIm3tKtLwZFE5FVjcNq3d2KTcxdsht
- 9FVcM66aG85qutLNgssIfpYE9AYHazvRFm1PEJzZW5T+IVFisCrOrm9BApAUp6JbLWmw
- HSEae4V5xDfxrIhtEqMGIOlmwJ5QNdU8/kOEVswZ7NQTrK6qE7KkhR9XR0r+1ldE7FvE
- hOinpYaFJpPyO94F5ORgh/glvPg/4bprB8TUsE4aaK348GFgwk5l4s7WeJjLVW4kgRv+
- QbQncq2bR+rTGdH4vEbrLcFyyOeJ9IkJwQS+AzPTA3hWDvUaMukn2t/JQrtK9PpvH8wD VA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nr4kpag2r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 23:34:24 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31ENYNPD010994
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 23:34:23 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 14 Feb 2023 15:34:22 -0800
-Date:   Tue, 14 Feb 2023 15:34:21 -0800
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Chris Lew <quic_clew@quicinc.com>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Sricharan Ramabadhran <quic_srichara@quicinc.com>,
-        Arun Kumar Neelakantam <quic_aneelaka@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rpmsg: glink: Avoid infinite loop on intent for missing
- channel
-Message-ID: <20230214233421.GB1332049@hu-bjorande-lv.qualcomm.com>
-References: <20230109223801.1706213-1-quic_bjorande@quicinc.com>
- <393b7d5f-b565-6287-bbab-3bf51cc981f0@quicinc.com>
+        Tue, 14 Feb 2023 18:34:34 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F78230B2E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 15:34:33 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id oa11-20020a17090b1bcb00b002341a2656e5so314997pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 15:34:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UWHSYRIGpjE8ps+RcaVCVZkH9tWGvMw1vkVEk7LGuMM=;
+        b=LtNXVUDEXaxknQvjqHq5/g14HBl+jkfezj3n+h9pk4ZaZGjb6YdXmBdgPbtfmAQXEv
+         oRy0neP0lLQnQXrooDF46xyb7iUcWqp9ChGgM7h0jtStP5fcR7PAU1M30zVmIVeiw/s3
+         X8B3TRd64g6dzCTF4YlRdOSsAXAJaW7opoAgH06JR4X7n/xkUh6Zvfw343zqurns0UvL
+         /+EHuv+so1b83Y5y13Os7J02+bO/90WL1+BzURyDallC6qKdoagZ+PBS8mLiGd4z7KMO
+         jgOcjFpzB3vKoWpGaUUdX4IJ/0rUs+wvcmoFa0vmCtjD/WBVHZ/XxqXLYgZc6a3WoVWI
+         qNDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UWHSYRIGpjE8ps+RcaVCVZkH9tWGvMw1vkVEk7LGuMM=;
+        b=UDyG5QETrLT9BBDHAsFGxja3g9mKWjNCXAmKvZvr1jJI7PDKOqSepOGr5Y5V4xUqg/
+         BnZc7zeACiDmT2K0nI004rCoYO9I2z6Lv9eHA8Q538XxvJDCwspCw6r5elafQGf7ZSbF
+         jDggFnbYSy8EMgmSGSE7v2J5qk0LneDjgl0jjVWWa//1xl94y6belY6M0TW0qN45ESiG
+         siRXPJPJq5Sx1d1F8Jg70E2eGK8BwyalkazaLl/UrBPuenz0CE77fiBQKp/ukXJVSaad
+         +61X701d8vFf59nc7P41EGbEqpEkoYqhmM5a7b1EMq5TEppwp8/tFYG+tZWE7zjmwflS
+         xBHg==
+X-Gm-Message-State: AO0yUKWDPTVvYBvOWqBQTbRbqj8tJos9Cc7E7+biEI16LmxdGXIzBmOQ
+        RDfr8BBcWdA0whWd6bnWNqQXuwOzppiCog==
+X-Google-Smtp-Source: AK7set9ini/PhcW0mk5pmZw9zd5P17+3TjkJCPXJuZHGPsFUdgqv2Il+9UBWSxianKmACsYOxcLRLg==
+X-Received: by 2002:a17:902:dcc5:b0:19a:9943:17fe with SMTP id t5-20020a170902dcc500b0019a994317femr251807pll.50.1676417672925;
+        Tue, 14 Feb 2023 15:34:32 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id f12-20020a170902684c00b001963a178dfcsm9434801pln.244.2023.02.14.15.34.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 15:34:32 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        linux-kernel@vger.kernel.org (open list:IRQCHIP DRIVERS),
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>
+Subject: [PATCH 0/3] Save/restore for GICv3
+Date:   Tue, 14 Feb 2023 15:34:23 -0800
+Message-Id: <20230214233426.2994501-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <393b7d5f-b565-6287-bbab-3bf51cc981f0@quicinc.com>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: JyHIFyft5JE5wCVxxaCD5C3jsKcnW8IX
-X-Proofpoint-ORIG-GUID: JyHIFyft5JE5wCVxxaCD5C3jsKcnW8IX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-14_15,2023-02-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- spamscore=0 priorityscore=1501 phishscore=0 bulkscore=0 clxscore=1015
- impostorscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302140202
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 02:55:02PM -0800, Chris Lew wrote:
-> On 1/9/2023 2:38 PM, Bjorn Andersson wrote:
-> > In the event that an intent advertisement arrives on an unknown channel
-> > the fifo is not advanced, resulting in the same message being handled
-> > over and over.
-> > 
-> > Fixes: dacbb35e930f ("rpmsg: glink: Receive and store the remote intent buffers")
-> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> > ---
-> >   drivers/rpmsg/qcom_glink_native.c | 5 +++--
-> >   1 file changed, 3 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
-> > index f36740cb6866..7b1320b1579e 100644
-> > --- a/drivers/rpmsg/qcom_glink_native.c
-> > +++ b/drivers/rpmsg/qcom_glink_native.c
-> > @@ -946,12 +946,12 @@ static void qcom_glink_handle_intent(struct qcom_glink *glink,
-> >   	spin_unlock_irqrestore(&glink->idr_lock, flags);
-> >   	if (!channel) {
-> >   		dev_err(glink->dev, "intents for non-existing channel\n");
-> > -		return;
-> > +		goto advance_rx;
-> >   	}
-> >   	msg = kmalloc(msglen, GFP_ATOMIC);
-> >   	if (!msg)
-> > -		return;
-> > +		goto advance_rx;
-> 
-> 
-> Should we be dropping the packet for this case? If we try again later more
-> memory might be available to handle the command.
-> 
+Hi all,
 
-You're right, we found a channel above, but we don't have enough memory
-to handle the message right now. That seems like a message worth not
-throwing away.
+This patch series adds support for saving and restoring the GIC
+distributor and re-distributor which was missing for platforms that
+implement suspend states where the GIC loses power and therefore its
+state.
 
-Thanks,
-Bjorn
+The system that I have been testing this with has:
 
-> >   	qcom_glink_rx_peak(glink, msg, 0, msglen);
-> > @@ -973,6 +973,7 @@ static void qcom_glink_handle_intent(struct qcom_glink *glink,
-> >   	}
-> >   	kfree(msg);
-> > +advance_rx:
-> >   	qcom_glink_rx_advance(glink, ALIGN(msglen, 8));
-> >   }
-> > 
+[    0.000000] GICv3: GIC: Using split EOI/Deactivate mode
+[    0.000000] GICv3: 288 SPIs implemented
+[    0.000000] GICv3: 0 Extended SPIs implemented
+[    0.000000] Root IRQ handler: gic_handle_irq
+[    0.000000] GICv3: GICv3 features: 16 PPIs
+
+So no support for extended PPIs or SPIs, hopefully the code is correct,
+or close to.
+
+Thanks!
+
+Florian Fainelli (3):
+  irqchip/gic-v3: Use switch/case statements in gic_cpu_pm_notifier
+  irqchip/gic-v3: Propagate gic_cpu_pm_init() return code
+  irqchip/gic-v3: Save and restore distributor and re-distributor
+
+ drivers/irqchip/irq-gic-v3.c       | 282 ++++++++++++++++++++++++++++-
+ include/linux/irqchip/arm-gic-v3.h |   4 +
+ 2 files changed, 280 insertions(+), 6 deletions(-)
+
+-- 
+2.34.1
+
