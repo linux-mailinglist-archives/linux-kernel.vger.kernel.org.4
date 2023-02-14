@@ -2,125 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9686961B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 12:02:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A7D696331
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjBNLCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 06:02:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41248 "EHLO
+        id S232067AbjBNMN1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Feb 2023 07:13:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbjBNLCd (ORCPT
+        with ESMTP id S231814AbjBNMN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 06:02:33 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7000D2594F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 03:02:20 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id j23so15239233wra.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 03:02:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0GyYmuT9oCq5RlZcWRx289g/0VqIzW0PBoPe9h0OuCA=;
-        b=SchNoKYx0XwBApl3tzOte3aPZhi1WPtLMnON4zzV7ZKQMioDhX3oxBD9f8dBQuR6cL
-         tZSMDg9FHlq8dH/Z3IEsXHzJNAKiwBuQh/XgkIelk/44CbbM7TaeXaDsd0iXbymAtKLL
-         tG6ZDfhPXrj3DTFWP21q0enf1jVIB8Cw9pFq0QTBlXqsUkf9bz3sc+LHLnN2+eW//oiJ
-         BlrwcpRDqb4E6+35sF6PRqm4kUk9aW5hpfxcpxarbRq4XfFiXdUgg5uIggFnfHYgsHGh
-         KboSoZB+Av+ZGPC0aAayWJdNINZ6wTkuoGHuJV9d1hT+Vb5jqEw3PF7zJ5vUvl7ulT+w
-         XbjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0GyYmuT9oCq5RlZcWRx289g/0VqIzW0PBoPe9h0OuCA=;
-        b=MSFD71kFzqFDAArOPrSD/cEXTdpgTEGLrncKCw9xxjFTM0dSwNqbtHyZg2sefqGw+S
-         CTnTSK0YIwYH71ARsyBMqkX9KeCdO05cSO2V8U9sZv4zonLBoTUiUrhSTCeM7daLjb6O
-         DvB8JxlUbIj/uV2eIlsqJ+PhFWQ9EYFaDaEQRbJqQYW9KE6X9p4eQoXK/4kQhZZj/aDd
-         v613sAaNc39WA85bLqlpOB2EtQ0CQsuROYZ5VkV/yzNArwm29jrSJJ+XgTAQLvqSMCSG
-         0TagBygzofM87ZMDOx1kiipQ9NowAW2U/sbviyEZgUiW4upv9zEe0iCWh7cWYZEMumbk
-         sDGQ==
-X-Gm-Message-State: AO0yUKVszdo+UGXL2LegXdYwD3v1JNkAkbk5djkI2rmtz8akx+F1XrUs
-        99SbdED8//8LOh/PY37IeW/xpEkss+/M9wn8
-X-Google-Smtp-Source: AK7set8Nj6+EvVha7NBFQkFwfOy3wGH1H6dJfRCkNb9nZLdZPdv5yzmTgtDpLDSY1pfqYRDJuxTbiQ==
-X-Received: by 2002:adf:e984:0:b0:2c5:584b:4f65 with SMTP id h4-20020adfe984000000b002c5584b4f65mr1912228wrm.32.1676372538984;
-        Tue, 14 Feb 2023 03:02:18 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id b16-20020adfe650000000b002c5534db60bsm6501810wrn.71.2023.02.14.03.02.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 03:02:18 -0800 (PST)
-Message-ID: <a3683dd3-3f30-bb4c-539d-d1519de6e5bf@linaro.org>
-Date:   Tue, 14 Feb 2023 12:02:17 +0100
+        Tue, 14 Feb 2023 07:13:26 -0500
+Received: from mail.distrito09d19.saludzona5.gob.ec (mail.distrito09d19.saludzona5.gob.ec [186.47.79.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5705FC8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:13:25 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.distrito09d19.saludzona5.gob.ec (Postfix) with ESMTP id 98FFD86D5FD76;
+        Tue, 14 Feb 2023 05:13:32 -0500 (-05)
+Received: from mail.distrito09d19.saludzona5.gob.ec ([127.0.0.1])
+        by localhost (mail.distrito09d19.saludzona5.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id EalVu05VQSZs; Tue, 14 Feb 2023 05:13:31 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.distrito09d19.saludzona5.gob.ec (Postfix) with ESMTP id 53FCF86D3C5A7;
+        Tue, 14 Feb 2023 05:13:10 -0500 (-05)
+X-Virus-Scanned: amavisd-new at distrito09d19.saludzona5.gob.ec
+Received: from mail.distrito09d19.saludzona5.gob.ec ([127.0.0.1])
+        by localhost (mail.distrito09d19.saludzona5.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ePwqJ3yK_NsS; Tue, 14 Feb 2023 05:13:09 -0500 (-05)
+Received: from [23.146.243.45] (unknown [23.146.243.45])
+        by mail.distrito09d19.saludzona5.gob.ec (Postfix) with ESMTPSA id D7C5F86CF05E5;
+        Tue, 14 Feb 2023 05:12:37 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: Regression: NULL pointer dereference after NFS_V4_2_READ_PLUS
- (commit 7fd461c47)
-Content-Language: en-US
-To:     Anna Schumaker <schumaker.anna@gmail.com>
-Cc:     Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@netapp.com>,
-        linux-nfs <linux-nfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <f591b13c-4600-e2a4-8efa-aac6ad828dd1@linaro.org>
- <82526863-d07a-0a5d-2990-1555b1387f26@linaro.org>
- <2C5E9725-F152-4D2E-882E-CF92A35481BF@hammerspace.com>
- <7ba38377-7992-7f0f-d905-cceb42510f39@linaro.org>
- <51430925-8046-7066-84ed-2ff0db835347@linaro.org>
- <CAFX2Jf=5X3zyZEWQmD6Rg9jQAD7ccDbae5LQCwrAyPCVVoFumg@mail.gmail.com>
- <2add1769-1458-b185-bc78-6d573f61b6fc@linaro.org>
- <CAFX2JfnKy7juGQaDTzqosN9SF-zd+XrhSL9uh_Xg0GpJGDux-A@mail.gmail.com>
- <32530c36-91d0-d351-0689-aed6a0975a4b@linaro.org>
- <2f285607-cbf9-6abc-f436-edb6e9a3938b@linaro.org>
- <CAFX2Jfmz7QqZBEdzbPUhPs0yctnXVaVF68tX1c57YX=6ki=0TA@mail.gmail.com>
- <4fe39d77-eb7c-a578-aefa-45b76e2247c2@linaro.org>
- <CAFX2JfmdRMsHPTySiw4vm7BwJfRZj3s0V3_v7NJ+XwMxBBSo9A@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAFX2JfmdRMsHPTySiw4vm7BwJfRZj3s0V3_v7NJ+XwMxBBSo9A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Se requiere respuesta urgente.
+To:     Recipients <maria.espinoza@distrito09d19.saludzona5.gob.ec>
+From:   "zimbra@" <maria.espinoza@distrito09d19.saludzona5.gob.ec>
+Date:   Tue, 14 Feb 2023 02:12:32 -0800
+Reply-To: webmasterzimbra1@gmail.com
+Message-Id: <20230214101237.D7C5F86CF05E5@mail.distrito09d19.saludzona5.gob.ec>
+X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/02/2023 15:05, Anna Schumaker wrote:
->>> From ac2d6c501dbcdb306480edaee625b5496f1fb4f5 Mon Sep 17 00:00:00 2001
->>> From: Anna Schumaker <Anna.Schumaker@Netapp.com>
->>> Date: Fri, 10 Feb 2023 15:50:22 -0500
->>> Subject: [PATCH] NFSv4.2: Rework scratch handling for READ_PLUS
->>>
->>
->> Patch is corrupted - maybe mail program reformatted it when sending:
->>
->> Applying: NFSv4.2: Rework scratch handling for READ_PLUS
->> error: corrupt patch at line 12
->> Patch failed at 0001 NFSv4.2: Rework scratch handling for READ_PLUS
-> 
-> That's weird. I wasn't expecting gmail to reformat the patch but I
-> guess it did. I've added it as an attachment so that shouldn't happen
-> again.
+Su cuenta no ha pasado por el proceso de verificación / actualización. Los titulares de cuentas deben actualizar sus cuentas dentro de los 5 días hábiles posteriores a la recepción de este aviso. El incumplimiento de este aviso dentro de la fecha límite puede no ser capaz de enviar o recibir todos los mensajes y el propietario correrá el riesgo de perder su cuenta.
 
-Still null ptr (built on 420b2d4 with your patch):
-
-[  144.690844] mmiocpy from xdr_inline_decode (net/sunrpc/xdr.c:1419 net/sunrpc/xdr.c:1454) 
-[  144.695950] xdr_inline_decode from nfs4_xdr_dec_read_plus (fs/nfs/nfs42xdr.c:1063 fs/nfs/nfs42xdr.c:1147 fs/nfs/nfs42xdr.c:1360 fs/nfs/nfs42xdr.c:1341) 
-[  144.702452] nfs4_xdr_dec_read_plus from call_decode (net/sunrpc/clnt.c:2595) 
-[  144.708429] call_decode from __rpc_execute (include/asm-generic/bitops/generic-non-atomic.h:128 net/sunrpc/sched.c:954) 
-[  144.713538] __rpc_execute from rpc_async_schedule (include/linux/sched/mm.h:336 net/sunrpc/sched.c:1035) 
-[  144.719170] rpc_async_schedule from process_one_work (include/linux/jump_label.h:260 include/linux/jump_label.h:270 include/trace/events/workqueue.h:108 kernel/workqueue.c:2294) 
-[  144.725238] process_one_work from worker_thread (include/linux/list.h:292 kernel/workqueue.c:2437) 
-[  144.730782] worker_thread from kthread (kernel/kthread.c:378) 
-[  144.735547] kthread from ret_from_fork (arch/arm/kernel/entry-common.S:149)
-
-
-
-Best regards,
-Krzysztof
-
+Confirme los detalles de la cuenta a continuación.
+_____________________________________
+1. Nombre y apellido:
+2. Correo electrónico completo en:
+3. Nombre de usuario:
+4. Contraseña:
+5. Vuelva a escribir la contraseña:
+_____________________________________
+ 
+NOTA !!! Si no actualiza su cuenta, su cuenta se eliminará automáticamente de nuestro sistema.
+ 
+Nos disculpamos por cualquier inconveniente causado.
+ 
+Sinceramente
+Atención al cliente
+Equipo de soporte técnico de Zimbra.
+ 
+Copyright © 2005-2023 Synacor, Inc. Todos los derechos reservados
