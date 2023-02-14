@@ -2,197 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218336966AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE31696632
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231784AbjBNOZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 09:25:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48528 "EHLO
+        id S233452AbjBNOMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 09:12:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232221AbjBNOZc (ORCPT
+        with ESMTP id S233412AbjBNOM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 09:25:32 -0500
-X-Greylist: delayed 516 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Feb 2023 06:25:09 PST
-Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F14B2D5D;
-        Tue, 14 Feb 2023 06:25:09 -0800 (PST)
-From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1676383887; bh=5pAp3t0l3VlIhW4fUc+cLwXz2Tja64FRhpQyrgaKAyc=;
-        h=From:To:Cc:Subject:Date;
-        b=Z45+z/7boRVyipsWi/aaqFYx7TCrRxwZ9LEzVxh6q/io2rpOmW9UStpQMARQ8U88t
-         Y6xiI20/yw3O9IwrzCha413PDbHMKyFesmOSwpaE3zPVEM3REOzmYMn2xQBPglgK0l
-         jdFcxo3z8m8LGLFXd4DHMDLAf/92uCc5E6sWNCYk=
-To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>, Janne Grunau <j@jannau.net>
-Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
-Subject: [RFC PATCH] dt-bindings: dma: apple,sio: Add schema
-Date:   Tue, 14 Feb 2023 15:10:53 +0100
-Message-Id: <20230214141053.92731-1-povik+lin@cutebit.org>
+        Tue, 14 Feb 2023 09:12:26 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D80F298C7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 06:11:55 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id o18so15811381wrj.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 06:11:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sajY9FZqzLSzPCMgEW1O4rOAxb6+m9fSt/2pxwQfCgA=;
+        b=KYN2KNBt/LUIs+pRXfiBIhd/D5Y0d6QQMZapeeEZxBTtLLDQB8eHH6gjL7OMbcpjJ0
+         af8h8yk+z5i0VAC4tH0sZO3KZp3pzU3XgdWHomenan+1KMCxTZ3slNKl/boEsZ3PM48v
+         Uyg754ozbjXseD4iExTg9NwaYGhgZ21LCl/UZLsmRsg6guWmmrN2YlD5HJOkqvCHO1id
+         dKDBGxVQFkhnfA35f57rvQ/o786k5mUaRfOu9jDdYRnjPIHgfDK1qLc534OD/m4eXzyb
+         OZZ3naeTcjxCuyoRP1cOle3uF2eWFxHTKi1pCtITbzFQjxcuJoD2vQDsitBYmK0Lesjg
+         bswg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sajY9FZqzLSzPCMgEW1O4rOAxb6+m9fSt/2pxwQfCgA=;
+        b=DYM/8CEOLUcBqPrvxilj2Xtm1hKCo9CrBqppgEqSCufvbfYPDp1Rsn2adouFGxI2GZ
+         QvXCrQaNRC4g2G4UZm/CwecydLpQUj3hO7SF26r4b8Qsoni65UVGjjIMjPKeY5Y8johu
+         vHzHcRJYgoiquAMiSntiEEBhkikJL/s5ilYfH8vxJI5OfeTOfWXeeaK4zoYUS8r+027R
+         ZarE0GPCA1rxtzXeWlsPF/jQpAPJtyPHyj6hLI5LRJwkiqVxmS9Tb9XiS84a0CUD5Ph8
+         Wb2LPZzv5mwyYHvdfhOHWjIGjzBh7Ke3XmAVIBMC/HHnHI49GvYr2cDE3j02cLcTLLxE
+         theg==
+X-Gm-Message-State: AO0yUKX4X0vqisBLNmYjaw9jgGsZtwrYZrL1dxRmk5Lo/8nNHrv7Hcg0
+        nRSed7ChVO/npsXF944m/wYpmg==
+X-Google-Smtp-Source: AK7set+VunAbU+8jTt1a3+RSvSh5K+lG8vL3bzD2/u6nRlzbf02orxzROeLQG7OY/r3nSu2beWuaAA==
+X-Received: by 2002:a05:6000:1244:b0:2c5:4cd0:4b86 with SMTP id j4-20020a056000124400b002c54cd04b86mr2277820wrx.68.1676383885424;
+        Tue, 14 Feb 2023 06:11:25 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id p11-20020a5d4e0b000000b002c56179d39esm2587308wrt.44.2023.02.14.06.11.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 06:11:24 -0800 (PST)
+Message-ID: <c4f5f733-ce22-2dfa-30f7-cde309eadaf9@linaro.org>
+Date:   Tue, 14 Feb 2023 15:11:23 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/2] dt-bindings: sound: ep93xx: Add I2S and AC'97
+ descriptions
+Content-Language: en-US
+To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        devicetree@vger.kernel.org
+Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+References: <20230212232137.299005-1-alexander.sverdlin@gmail.com>
+ <46d5b6af-23e1-4178-83bc-b4a435b1426e@linaro.org>
+ <109868b9492aecaca0a7170cba9fb51e62de7116.camel@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <109868b9492aecaca0a7170cba9fb51e62de7116.camel@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describe the SIO coprocessor which serves as pretend DMA controller on
-recent Apple platforms.
+On 14/02/2023 14:02, Alexander Sverdlin wrote:
+> Hello Krzysztof,
+> 
+> thank you for the quick review!
+> 
+> On Tue, 2023-02-14 at 11:58 +0100, Krzysztof Kozlowski wrote:
+>>> +properties:
+>>> +  compatible:
+>>> +    const: cirrus,ep9301-i2s
+>>> +
+>>> +  '#sound-dai-cells':
+>>> +    const: 0
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  interrupts:
+>>> +    maxItems: 1
+>>> +
+>>> +  clocks:
+>>> +    minItems: 3
+>>
+>> maxItems instead
+> 
+> reg and clocks are required, I suppose I should include both minItems
+> and maxItems for both of them?
 
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
----
+No. minItems is implied.
 
-Since the schema mentions a loader preparing the binding appropriately,
-here's a PR with the relevant (WIP) loader code, if anyone wants to look:
-https://github.com/AsahiLinux/m1n1/pull/286
+> 
+>>> +
+>>> +  clock-names:
+>>> +    items:
+>>> +      - const: mclk
+>>> +      - const: sclk
+>>> +      - const: lrclk
+>>
+>>
+>> The clk suffixes are quite redundant. Don't these inputs have some
+>> meaningful name?
+> 
+> They are actually meaningful, as they are usually named in I2S, please
+> refer to the EP93xx User's Guide:
+> https://cdn.embeddedts.com/resource-attachments/ts-7000_ep9301-ug.pdf
+> page 71, for instance.
 
- .../devicetree/bindings/dma/apple,sio.yaml    | 129 ++++++++++++++++++
- 1 file changed, 129 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/dma/apple,sio.yaml
+OK, but then I like the example - if datasheet would use name
+"clk_clk_this_is_clk" would you still find it meaningful?
 
-diff --git a/Documentation/devicetree/bindings/dma/apple,sio.yaml b/Documentation/devicetree/bindings/dma/apple,sio.yaml
-new file mode 100644
-index 000000000000..a76cc8265e76
---- /dev/null
-+++ b/Documentation/devicetree/bindings/dma/apple,sio.yaml
-@@ -0,0 +1,129 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/dma/apple,sio.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Apple SIO Coprocessor
-+
-+description: |
-+  SIO is a coprocessor on Apple M1 and later chips (and maybe also on earlier
-+  chips). Its role is to offload SPI, UART and DisplayPort audio transfers,
-+  being a pretend DMA controller.
-+
-+maintainers:
-+  - Martin Povišer <povik+lin@cutebit.org>
-+
-+allOf:
-+  - $ref: "dma-controller.yaml#"
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - apple,t6000-sio
-+          - apple,t8103-sio
-+      - const: apple,sio
-+
-+  reg:
-+    maxItems: 1
-+
-+  '#dma-cells':
-+    const: 1
-+    description:
-+      DMA clients specify a single cell that corresponds to the RTKit endpoint
-+      number used for arranging the transfers in question
-+
-+  dma-channels:
-+    maximum: 128
-+
-+  mboxes:
-+    maxItems: 1
-+
-+  iommus:
-+    maxItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  memory-region:
-+    description:
-+      A number of references to reserved memory regions among which are the DATA/TEXT
-+      sections of coprocessor executable firmware and also auxiliary firmware data
-+      describing the available DMA-enabled peripherals
-+
-+  apple,sio-firmware-params:
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    description: |
-+      Parameters in the form of opaque key/value pairs that are to be sent to the SIO
-+      coprocesssor once it boots. These parameters can refer to the reserved memory
-+      regions described in 'memory-region'.
-+
-+      Note that unlike Apple's firmware, we treat the parameters, and the data they
-+      refer to, as opaque. Apple embed short data blobs into their SIO devicetree node
-+      that describe the DMA-enabled peripherals (presumably with defined semantics).
-+      Their driver processes those blobs and sets up data structure in mapped device
-+      memory, then references this memory in the parameters sent to the SIO. At the
-+      level of description we are opting for in this binding, we assume the job of
-+      constructing those data structures has been done in advance, leaving behind an
-+      opaque list of key/value parameter pairs to be sent by a prospective driver.
-+
-+      This approach is chosen for two reasons:
-+
-+       - It means we don't need to try to understand the semantics of Apple's blobs
-+         as long as we know the transformation we need to do from Apple's devicetree
-+         data to SIO data (which can be shoved away into a loader). It also means the
-+         semantics of Apple's blobs (or of something to replace them) need not be part
-+         of the binding and be kept up with Apple's firmware changes in the future.
-+
-+       - It leaves less work for the driver attaching on this binding. Instead the work
-+         is done upfront in the loader which can be better suited for keeping up with
-+         Apple's firmware changes.
-+
-+required:
-+  - compatible
-+  - reg
-+  - '#dma-cells'
-+  - dma-channels
-+  - mboxes
-+  - iommus
-+  - power-domains
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/apple-aic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    aic: interrupt-controller {
-+      interrupt-controller;
-+      #interrupt-cells = <3>;
-+    };
-+
-+    sio_mbox: mbox@36408000 {
-+      compatible = "apple,t8103-asc-mailbox", "apple,asc-mailbox-v4";
-+      reg = <0x36408000 0x4000>;
-+      interrupt-parent = <&aic>;
-+      interrupts = <AIC_IRQ 640 IRQ_TYPE_LEVEL_HIGH>,
-+                   <AIC_IRQ 641 IRQ_TYPE_LEVEL_HIGH>,
-+                   <AIC_IRQ 642 IRQ_TYPE_LEVEL_HIGH>,
-+                   <AIC_IRQ 643 IRQ_TYPE_LEVEL_HIGH>;
-+      interrupt-names = "send-empty", "send-not-empty",
-+                        "recv-empty", "recv-not-empty";
-+      #mbox-cells = <0>;
-+      power-domains = <&ps_sio>;
-+    };
-+
-+    sio: dma-controller@36400000 {
-+      status = "disabled"; /* To be filled by loader */
-+      compatible = "apple,t8103-sio", "apple,sio";
-+      reg = <0x36400000 0x8000>;
-+      dma-channels = <128>;
-+      #dma-cells = <1>;
-+      mboxes = <&sio_mbox>;
-+      iommus = <&sio_dart 0>;
-+      power-domains = <&ps_sio_cpu>;
-+      memory-region = <0x0>; /* To be filled by loader */
-+      apple,sio-firmware-params = <0x0>; /* To be filled by loader */
-+    };
--- 
-2.33.0
+Every clock input in clocks is a clock. There is usually no need to say
+that a clock is a clock...
+
+> 
+
+Best regards,
+Krzysztof
+
