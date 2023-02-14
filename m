@@ -2,157 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 158C6696825
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 16:33:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B05DB696826
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 16:33:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232851AbjBNPde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 10:33:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53750 "EHLO
+        id S233147AbjBNPdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 10:33:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232366AbjBNPdc (ORCPT
+        with ESMTP id S229564AbjBNPdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Feb 2023 10:33:32 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685FC6EA5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 07:33:22 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EFG6E5016249;
-        Tue, 14 Feb 2023 15:33:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=rxiIRvgDtu/UmpixXsnC5Kfmjr3BQVamhmokBC+aDLo=;
- b=s4ogpTXCXJO0QkKSS0T8k51A0PFPplA/4hTncrxn06WN5f4tbpV0GwQgoQfmNRQZT+9P
- 6RpX+8dK7wi5lz4zgGCrf1BFRkAtAcBsiT9m/SoYC2bJJkBsFpIBA5br6Wmfox5txMib
- wv97B4UFnipRmFsYj0qjO7BxRCcImGJXHPYQTlXnFTxagbeHLOogTwY3Pk9ONmLXgMaa
- lmt4t2YSZrKo3q0ES18/62lDCefixr+cvLohg3k5nmi+l2hW2FXrSOY8wIBudDbqtqQr
- RaXONq3Fo/mvDVoKOIx6HfDHm/uRMhjA2Tx4zDFYSkmV/Oo7Lw0j1BVrZpBkYCzfaJ31 dA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nrcsuge9s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 15:33:04 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31EFHj0H024352;
-        Tue, 14 Feb 2023 15:33:04 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nrcsuge8w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 15:33:04 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31DLbOqK002747;
-        Tue, 14 Feb 2023 15:33:02 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3np2n6b2va-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 15:33:02 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31EFWw3S39715218
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Feb 2023 15:32:59 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DF67E20040;
-        Tue, 14 Feb 2023 15:32:58 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4D3112004B;
-        Tue, 14 Feb 2023 15:32:58 +0000 (GMT)
-Received: from [9.171.28.15] (unknown [9.171.28.15])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Feb 2023 15:32:58 +0000 (GMT)
-Message-ID: <0dd90256-883d-ceec-570e-9cade65b2722@linux.ibm.com>
-Date:   Tue, 14 Feb 2023 16:32:57 +0100
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7BE4EEC;
+        Tue, 14 Feb 2023 07:33:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71587B81DDC;
+        Tue, 14 Feb 2023 15:33:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D9E8C433EF;
+        Tue, 14 Feb 2023 15:33:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676388796;
+        bh=aHy3Iiimaf1qswXNWdy2gKuRpQCCTYiwjKtlDK5+Nko=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OKJBy5yG+mjxCmCNmSvuQ13jQ3a8EC3iKLd04yw7dNpJnlseSQ+CpGYarmgX0Ii1C
+         M3jv5abdwIpI60q2oUUtRXYoQAmBaOmlsggQJfRPWouvZ/AGEYlzQNK8ZVMH5PS1qk
+         WYGlSOkxPxODivJdfmEh03oXzkeWgfSLQpzqO6bbRVfZn93B9rKxEiYflBEsyv3ZUB
+         Jyb+OFwbWPQkIgaC/b0lSlp5BqDbFUADR2MOv0lUa8C8NBosJjxHRUQHb11gPkhowj
+         aqZP/LNwKugpUTaYtw/9m2eHw0aeSp/M3QVd/r30UCd5gfcy3Aru8bEhINzM4NQJiU
+         ektnJ7CZJ/DSQ==
+Date:   Tue, 14 Feb 2023 10:33:15 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 000/139] 5.10.168-rc1 review
+Message-ID: <Y+upu2+mLUG9R6+/@sashalap>
+References: <20230213144745.696901179@linuxfoundation.org>
+ <cc3f4cfb-adbc-c3b7-1c21-bb28e98499d8@gmail.com>
+ <Y+soPsujgwChdgr7@kroah.com>
+ <Y+ugWb4vsEyvd9W0@shell.armlinux.org.uk>
+ <Y+ukMhMS7DvuFLOJ@sashalap>
+ <Y+uoAEzpM588j/lw@shell.armlinux.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [PATCH] powerpc/pseries/cpuhp: respect current SMT when adding
- new CPU
-To:     Nathan Lynch <nathanl@linux.ibm.com>,
-        =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>
-Cc:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        Srikar Dronamraju <srikar@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-References: <20230213124510.12651-1-ldufour@linux.ibm.com>
- <87ilg5aahx.fsf@linux.ibm.com> <20230213150429.GZ19419@kitsune.suse.cz>
- <87fsb9a7zx.fsf@linux.ibm.com>
-Content-Language: en-US
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-In-Reply-To: <87fsb9a7zx.fsf@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: zfqeg2zDBZuY04vbom5FvixqruJBGGKk
-X-Proofpoint-ORIG-GUID: nKqF96Z8XD0RH9yJHeD1tyJ0WPvKF09U
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-14_10,2023-02-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 adultscore=0 phishscore=0 mlxscore=0 suspectscore=0
- clxscore=1011 spamscore=0 bulkscore=0 priorityscore=1501 malwarescore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302140125
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Y+uoAEzpM588j/lw@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/02/2023 16:40:50, Nathan Lynch wrote:
-> Michal Suchánek <msuchanek@suse.de> writes:
->> On Mon, Feb 13, 2023 at 08:46:50AM -0600, Nathan Lynch wrote:
->>> Laurent Dufour <ldufour@linux.ibm.com> writes:
->>>> When a new CPU is added, the kernel is activating all its threads. This
->>>> leads to weird, but functional, result when adding CPU on a SMT 4 system
->>>> for instance.
->>>>
->>>> Here the newly added CPU 1 has 8 threads while the other one has 4 threads
->>>> active (system has been booted with the 'smt-enabled=4' kernel option):
->>>>
->>>> ltcden3-lp12:~ # ppc64_cpu --info
->>>> Core   0:    0*    1*    2*    3*    4     5     6     7
->>>> Core   1:    8*    9*   10*   11*   12*   13*   14*   15*
->>>>
->>>> There is no SMT value in the kernel. It is possible to run unbalanced LPAR
->>>> with 2 threads for a CPU, 4 for another one, and 5 on the latest.
->>>>
->>>> To work around this possibility, and assuming that the LPAR run with the
->>>> same number of threads for each CPU, which is the common case,
->>>
->>> I am skeptical at best of baking that assumption into this code. Mixed
->>> SMT modes within a partition doesn't strike me as an unreasonable
->>> possibility for some use cases. And if that's wrong, then we should just
->>> add a global smt value instead of using heuristics.
->>>
->>>> the number
->>>> of active threads of the CPU doing the hot-plug operation is computed. Only
->>>> that number of threads will be activated for the newly added CPU.
->>>>
->>>> This way on a LPAR running in SMT=4, newly added CPU will be running 4
->>>> threads, which is what a end user would expect.
->>>
->>> I could see why most users would prefer this new behavior. But surely
->>> some users have come to expect the existing behavior, which has been in
->>> place for years, and developed workarounds that might be broken by this
->>> change?
->>>
->>> I would suggest that to handle this well, we need to give user space
->>> more ability to tell the kernel what actions to take on added cores, on
->>> an opt-in basis.
->>>
->>> This could take the form of extending the DLPAR sysfs command set:
->>>
->>> Option 1 - Add a flag that tells the kernel not to online any threads at
->>> all; user space will online the desired threads later.
->>>
->>> Option 2 - Add an option that tells the kernel which SMT mode to apply.
+On Tue, Feb 14, 2023 at 03:25:52PM +0000, Russell King (Oracle) wrote:
+>On Tue, Feb 14, 2023 at 10:09:38AM -0500, Sasha Levin wrote:
+>> On Tue, Feb 14, 2023 at 02:53:13PM +0000, Russell King (Oracle) wrote:
+>> > On Tue, Feb 14, 2023 at 07:20:46AM +0100, Greg Kroah-Hartman wrote:
+>> > > On Mon, Feb 13, 2023 at 11:50:24AM -0800, Florian Fainelli wrote:
+>> > > > On 2/13/23 06:49, Greg Kroah-Hartman wrote:
+>> > > > > This is the start of the stable review cycle for the 5.10.168 release.
+>> > > > > There are 139 patches in this series, all will be posted as a response
+>> > > > > to this one.  If anyone has any issues with these being applied, please
+>> > > > > let me know.
+>> > > > >
+>> > > > > Responses should be made by Wed, 15 Feb 2023 14:46:51 +0000.
+>> > > > > Anything received after that time might be too late.
+>> > > > >
+>> > > > > The whole patch series can be found in one patch at:
+>> > > > > 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.168-rc1.gz
+>> > > > > or in the git tree and branch at:
+>> > > > > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+>> > > > > and the diffstat can be found below.
+>> > > > >
+>> > > > > thanks,
+>> > > > >
+>> > > > > greg k-h
+>> > > >
+>> > > > There is a regression coming from:
+>> > > >
+>> > > > nvmem: core: fix registration vs use race
+>> > > >
+>> > > > which causes the following to happen for MTD devices:
+>> > > >
+>> > > > [    6.031640] kobject_add_internal failed for mtd0 with -EEXIST, don't try
+>> > > > to register things with the same name in the same directory.
+>> > > > [    7.846965] spi-nor: probe of spi0.0 failed with error -17
+>> > > >
+>> > > > attached is a full log with the call trace. This does not happen with
+>> > > > v6.2-rc8 where the MTD partitions are successfully registered.
+>> > >
+>> > > Can you use `git bisect` to find the offending commit?
+>> >
+>> > The reason for this is because, due to how my patch series was
+>> > backported, you have ended up with nvmem_register() initialising
+>> > its embedded device, and then calling device_add() on it _twice_.
+>> >
+>> > Basically, the backport of:
+>> >
+>> > 	"nvmem: core: fix registration vs use race"
+>> >
+>> > is broken, because the original patch _moved_ the device_add() and
+>> > that has not been carried forward to whatever got applied to stable
+>> > trees.
+>> >
+>> > It looks like the 5.15-stable version of this patch was correct.
+>> >
+>> > Maybe whoever tried to fixup the failure needs to try again?
 >>
->> powerpc-utils grew some drmgr hooks recently so maybe the policy can be
->> moved to userspace?
-> 
-> I'm not sure whether the hook mechanism would come into play, but yes, I
-> am suggesting that user space be given the option of overriding the
-> kernel's current behavior.
+>> I've dropped the backport series from both 5.15 and 5.10.
+>
+>So you've dropped what looks to be a perfectly good backport in 5.15,
+>and all of the 5.10 despite it just being the last patch which is the
+>problem. Sounds like a total over-reaction to me.
 
-I agree, sounds doable using the new drmgr hook mechanism.
+The context is that we want to get the releases out today, and neither
+of us will have time to verify that we did the right thing in 5.15 in
+the next few hours.
+
+I'm just defering it to the next release cycle which is probably a few
+days away, not completely throwing it away.... why is it such a big
+deal?
+
+-- 
+Thanks,
+Sasha
