@@ -2,184 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55577695AA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6BDF695AA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbjBNH1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 02:27:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38364 "EHLO
+        id S231173AbjBNH2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 02:28:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjBNH1k (ORCPT
+        with ESMTP id S229642AbjBNH2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 02:27:40 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F231026B;
-        Mon, 13 Feb 2023 23:27:38 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id d8so14938865plr.10;
-        Mon, 13 Feb 2023 23:27:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4nBHKNBpnzKAp9d9UZKBf/Atg89/L5pb1TEd+G9vVe0=;
-        b=UrLDbivd7Yi81ZI59CnsnGNlbjkMXW0gKlwgMgh8PpAG7LSChGgQSA/y7dSIvYgtYJ
-         LbLySNlbWGm0JZo1b3Kwhw+t5ynlOITSlZUbOaY6PswY0W6tOqzumOxrUyp16ZunjMTn
-         0rBma3JK313bjDcc2Nh04+O5ru3VdmaVAauYBB/FlIp7fYaDPxDsG5yXpHvdiisVyP/r
-         vq7CTNDt9Qw9KdnHOWe2h6eLbZkUlQV0p0FqrJgJRE1wGVAl43yQ+arTlheLtGPRdrn2
-         0gjRrBuXPvsHbA4/fYOK4/bWeE7e4ajWeK6ayeb/R3k+6MjapgEFD8ZE2TznEbjjFOWf
-         u7eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4nBHKNBpnzKAp9d9UZKBf/Atg89/L5pb1TEd+G9vVe0=;
-        b=vb5leBzds/eu7PJHwJ+OJ4c3YFQ0YSCJb0JVkEQ+f/teUxRDFIP63nF6idyNBP1eKU
-         41EtxQI4yZbPMNCp/G8QJ+p7AQfVZUot/QX9j3XzIBg5FleJeDk/6n/LOY5IY5gKJ1jW
-         Xwdfz8dPHqw2eaO00SpWGqoLr+HBvxCeY7kvY5uRan6Tq4+qeBL7JNik653FN40/QfS9
-         UqVAXQpb9Gq7JjLrv74GoVgJPrJ7zGTbcbjUgnSEJfJeK3EhR7THcY7gDyIWtp5olLjp
-         BuF6Ml8LTg9QDTK/1sG0TRwyM39GofImmBX+i5VTYmq/10AF4/9KIEmx+Kj430pob7tK
-         eQTA==
-X-Gm-Message-State: AO0yUKWuYwv3dOUvOmbtg+jO2m/tegV4PBD+AgW+cysAp1eTcvpG7Ny5
-        EHqgnpP0/YB6gaKnqClaiiykKPG7Y4/zpzu95ms=
-X-Google-Smtp-Source: AK7set9IlAlxkD8ebmQoOG4S/cPwP0hwQwj9XRBQSn57Lb2xpTuCrBGxLFDlGVIiM/Qf8kAWn0KoaQ==
-X-Received: by 2002:a17:902:e84a:b0:199:2a89:f912 with SMTP id t10-20020a170902e84a00b001992a89f912mr2034421plg.20.1676359657901;
-        Mon, 13 Feb 2023 23:27:37 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id p6-20020a170903248600b0019949fd956bsm9431072plw.178.2023.02.13.23.27.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 23:27:37 -0800 (PST)
-Message-ID: <85b3d348-2e4a-43aa-0131-27e9fc375cf9@gmail.com>
-Date:   Tue, 14 Feb 2023 15:27:30 +0800
+        Tue, 14 Feb 2023 02:28:02 -0500
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795532738
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:27:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1676359675; x=1707895675;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fKqsbgGPsuWCWt5qDLOSS1XjcnbLNzAiPOl9OxHQsLM=;
+  b=VAowxglM/EE8Rd7vUmx7UUE5atxUF5NkK3whJDIQ1sbe5USY+XKhq11a
+   SvWpTibdtZNrxpG+KYM5kvKcNKJRIznAIl+XS6Iv/RluElp8GHOnavN+g
+   MxomEqvbAehv3LGK/53Ow1Rb9hsItAxtzdRtWmzrTji0kCgjI7bRhWops
+   7M3KtB5yz5poDRkqMMMvS1aqNMLB3lUFUDoBXktraMnJUoZtbhxWuiblx
+   fjkq9Oj3ob4iaf7XwLwFXsFKZc7+BQaRGDsebNf4hZXwSFkuUzd/CSJLc
+   7bHDIQTYwInaI3iLdm3c+zrhXIDIXpmWjAweu8x7kHBm3S2QSO6QCUkUb
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,296,1669046400"; 
+   d="scan'208";a="228219320"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 14 Feb 2023 15:27:54 +0800
+IronPort-SDR: pLIhsEu0JnAFXLFpYWRcOwanhtYwhwu+Bl3lMmZs9zlbNjLfJzXrcpbrJ/KVbZq9nuk+BxZxJr
+ a1UoKyi3LlLIee2/jLSFavaq0xSKoPYMLSseg7Oaw7mlJQI60im+3BUSanxcRHUTYWHFs831sj
+ Y5SOHDkAGvME+kHxSAQFH68hdDDGNVKN3Ng8aLMT2rkkLT40DvbQe4JjU86usBOUmOufDeMsf/
+ bQBQ60A561bSywVp1rxrTFZnDlvZKTrqjmrHZEXcqHt5CzRubdOsbU3VaHB2nuW95PhpGtpNbf
+ GQc=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Feb 2023 22:45:02 -0800
+IronPort-SDR: SyAzyvghB5ka6v0bsH7tABPrTVYEL5O34yFeCoswPf/7Ups1ObzLEt9HvBVgVxdy7o2hWprrSD
+ FChbBAZVZEaaqEzVFv0VmErB1R4KDvkqhFMv7cueTFsO5Snk45uKmdAvLk1QTNjIRRd47A6/6/
+ lBrH4YqcrjAh2qBGhfIsF4dtSQSwQNbmmXcMC1Kcnq0Oilz2JWHuI7HNAB/UIL+D4mvDr9/ujM
+ vDegAdGvPHek5w1gqe3yagW2UBZPZIYhS91diCSUza0Tz3+470b26MD0d3Ux9TunoAR8HYeaC1
+ f1c=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Feb 2023 23:27:55 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PGCV21wZ9z1Rwt8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:27:54 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1676359673; x=1678951674; bh=fKqsbgGPsuWCWt5qDLOSS1XjcnbLNzAiPOl
+        9OxHQsLM=; b=qLBsRkuvgw2X455pPBLbc9DStaa/OCukEQXQRY2Wz6jlqoGYX7l
+        Dk6XTYLcm5BasJgQgx5GFJBNLLDA6LdTYDBePk8N5yOvIKXXOyy8RhZMLezRyBOz
+        MTO2+tSH4IkEPkDd9vt9Sx+lvUwQd/QQTwkc9dBfv1gQCf9tEjnXjndxNltzc7W0
+        PcXbBjAJM50oznYEigYII42+YxgwGOuV4QOiolfQRTPmvnXZGbcjfQ1GFTeJ0EPe
+        Vla7PL3geXYrSgMwFEoRGwuWQl0b0t+slE71bNkB5EiQd+EJCWsEVRNmSnGs3SCA
+        rj/vgeD8DZFlzjPtu9/5bFqgSJ/cf2r015A==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id aSZO4pUBy6c9 for <linux-kernel@vger.kernel.org>;
+        Mon, 13 Feb 2023 23:27:53 -0800 (PST)
+Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PGCTz3h31z1RvLy;
+        Mon, 13 Feb 2023 23:27:51 -0800 (PST)
+Message-ID: <9b335f88-a20a-83da-3ce1-df409e05004a@opensource.wdc.com>
+Date:   Tue, 14 Feb 2023 16:27:50 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [PATCH v2 08/21] KVM: selftests: Split PMU caps sub-tests to
- avoid writing MSR after KVM_RUN
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] scsi: ipr: work around fortify-string warning
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaoyao Li <xiaoyao.li@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20230210003148.2646712-1-seanjc@google.com>
- <20230210003148.2646712-9-seanjc@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <20230210003148.2646712-9-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
+        Brian King <brking@us.ibm.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20230213101143.3821483-1-arnd@kernel.org>
+ <3d94fc3f-fbe5-a56e-3713-4f0788ebc7f9@opensource.wdc.com>
+ <94b362b4-a30d-4b69-8126-a64f5d025740@app.fastmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <94b362b4-a30d-4b69-8126-a64f5d025740@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nit, could this patch be applied before the relevant KVM modifications [1] so that
-a CI bot doesn't generate an error report before this selftests patch is applied ?
+On 2/14/23 16:14, Arnd Bergmann wrote:
+> On Tue, Feb 14, 2023, at 04:59, Damien Le Moal wrote:
+>> On 2/13/23 19:10, Arnd Bergmann wrote:
+>>> From: Arnd Bergmann <arnd@arndb.de>
+> 
+>>>   **/
+>>> -static int strip_and_pad_whitespace(int i, char *buf)
+>>> +static void strip_whitespace(int i, char *buf)
+>>>  {
+>>>  	while (i && buf[i] == ' ')
+>>>  		i--;
+>>> -	buf[i+1] = ' ';
+>>> -	buf[i+2] = '\0';
+>>> -	return i + 2;
+>>> +	buf[i+1] = '\0';
+>>
+>> If i is now the size of the buffer, this is a buffer overflow, no ? And
+>> the initial loop should start at "i - 1" I think...
+> 
+> Right, I definitely have the wrong length here.
+> 
+>>>  }
+>>>  
+>>>  /**
+>>> @@ -1547,19 +1543,21 @@ static int strip_and_pad_whitespace(int i, char *buf)
+>>>  static void ipr_log_vpd_compact(char *prefix, struct ipr_hostrcb *hostrcb,
+>>>  				struct ipr_vpd *vpd)
+>>>  {
+>>> -	char buffer[IPR_VENDOR_ID_LEN + IPR_PROD_ID_LEN + IPR_SERIAL_NUM_LEN + 3];
+>>> -	int i = 0;
+>>> +	char vendor_id[IPR_VENDOR_ID_LEN + 1];
+>>
+>> ...but the size is in fact "i + 1"... So in strip_whitespace(), i is the
+>> index of the last possible character in the string, and given that the
+>> string may be much shorter, that function may not actually strip
+>> whitespaces after the string...
+> 
+> I think aside from the off-by-one bug I introduced, this is not
+> a (new) problem as the old code already assumed that the input
+> is padded with spaces rather than nul-terminated.
 
-[1] KVM: x86: Disallow writes to immutable feature MSRs after KVM_RUN
+Yeah. The HW probably always give the same amount of chars with short
+strings completed by spaces...
 
-On 10/2/2023 8:31 am, Sean Christopherson wrote:
-> Split the PERF_CAPABILITIES subtests into two parts so that the LBR format
-> testcases don't execute after KVM_RUN.  Now that KVM disallows changing
-> PERF_CAPABILITIES after KVM_RUN (same as guest CPUID), attempting to set
-> the MSR after KVM_RUN will yield false positives and/or false negatives
-> depending on what the test is trying to do.
 > 
-> Land the LBR format test in a more generic "immutable features" test in
-> anticipation of expanding its scope to other immutable features.
+>>> +	char product_id[IPR_PROD_ID_LEN + 1];
+>>> +	char sn[IPR_SERIAL_NUM_LEN + 1];
+>>>  
+>>> -	memcpy(buffer, vpd->vpids.vendor_id, IPR_VENDOR_ID_LEN);
+>>> -	i = strip_and_pad_whitespace(IPR_VENDOR_ID_LEN - 1, buffer);
+>>> +	memcpy(vendor_id, vpd->vpids.vendor_id, IPR_VENDOR_ID_LEN);
+>>> +	strip_whitespace(IPR_VENDOR_ID_LEN, vendor_id);
+>>
+>> So this call should really be:
+>>
+>> 	strip_whitespace(strlen(vendor_id) - 1, vendor_id);
+>>
+>> Which means that this helper can be turned into:
+>>
+>> static void strip_whitespace(char *buf)
+>> {
+>> 	int i = strlen(buf) - 1;
+>>
+>> 	while (i > 0 && buf[i] == ' ')
+>> 		i--;
+>> 	buf[i+1] = '\0';
+>> }
+>>
+>> Unless I am missing something :)
 > 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   .../selftests/kvm/x86_64/vmx_pmu_caps_test.c  | 51 +++++++++++--------
->   1 file changed, 31 insertions(+), 20 deletions(-)
+> The strlen() here requires the input to be a properly terminated string,
+> so this would at least require adding a \0.
 > 
-> diff --git a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-> index c280ba1e6572..ac08c0fdd84d 100644
-> --- a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-> @@ -41,24 +41,10 @@ static void guest_code(void)
->   	wrmsr(MSR_IA32_PERF_CAPABILITIES, PMU_CAP_LBR_FMT);
->   }
->   
-> -int main(int argc, char *argv[])
-> +static void test_fungible_perf_capabilities(union perf_capabilities host_cap)
->   {
-> -	struct kvm_vm *vm;
->   	struct kvm_vcpu *vcpu;
-> -	int ret;
-> -	union perf_capabilities host_cap;
-> -	uint64_t val;
-> -
-> -	host_cap.capabilities = kvm_get_feature_msr(MSR_IA32_PERF_CAPABILITIES);
-> -	host_cap.capabilities &= (PMU_CAP_FW_WRITES | PMU_CAP_LBR_FMT);
-> -
-> -	/* Create VM */
-> -	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-> -
-> -	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_PDCM));
-> -
-> -	TEST_REQUIRE(kvm_cpu_has_p(X86_PROPERTY_PMU_VERSION));
-> -	TEST_REQUIRE(kvm_cpu_property(X86_PROPERTY_PMU_VERSION) > 0);
-> +	struct kvm_vm *vm = vm_create_with_one_vcpu(&vcpu, guest_code);
->   
->   	/* testcase 1, set capabilities when we have PDCM bit */
->   	vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, PMU_CAP_FW_WRITES);
-> @@ -70,7 +56,16 @@ int main(int argc, char *argv[])
->   	vcpu_run(vcpu);
->   	ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES), PMU_CAP_FW_WRITES);
->   
-> -	/* testcase 2, check valid LBR formats are accepted */
-> +	kvm_vm_free(vm);
-> +}
-> +
-> +static void test_immutable_perf_capabilities(union perf_capabilities host_cap)
-> +{
-> +	struct kvm_vcpu *vcpu;
-> +	struct kvm_vm *vm = vm_create_with_one_vcpu(&vcpu, NULL);
-> +	uint64_t val;
-> +	int ret;
-> +
->   	vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, 0);
->   	ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES), 0);
->   
-> @@ -78,8 +73,8 @@ int main(int argc, char *argv[])
->   	ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES), (u64)host_cap.lbr_format);
->   
->   	/*
-> -	 * Testcase 3, check that an "invalid" LBR format is rejected.  Only an
-> -	 * exact match of the host's format (and 0/disabled) is allowed.
-> +	 * KVM only supports the host's native LBR format, as well as '0' (to
-> +	 * disable LBR support).  Verify KVM rejects all other LBR formats.
->   	 */
->   	for (val = 1; val <= PMU_CAP_LBR_FMT; val++) {
->   		if (val == (host_cap.capabilities & PMU_CAP_LBR_FMT))
-> @@ -88,7 +83,23 @@ int main(int argc, char *argv[])
->   		ret = _vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, val);
->   		TEST_ASSERT(!ret, "Bad LBR FMT = 0x%lx didn't fail", val);
->   	}
-> +	kvm_vm_free(vm);
-> +}
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +	union perf_capabilities host_cap;
-> +
-> +	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_PDCM));
-> +
-> +	TEST_REQUIRE(kvm_cpu_has_p(X86_PROPERTY_PMU_VERSION));
-> +	TEST_REQUIRE(kvm_cpu_property(X86_PROPERTY_PMU_VERSION) > 0);
-> +
-> +	host_cap.capabilities = kvm_get_feature_msr(MSR_IA32_PERF_CAPABILITIES);
-> +	host_cap.capabilities &= (PMU_CAP_FW_WRITES | PMU_CAP_LBR_FMT);
-> +
-> +	test_fungible_perf_capabilities(host_cap);
-> +	test_immutable_perf_capabilities(host_cap);
->   
->   	printf("Completed perf capability tests.\n");
-> -	kvm_vm_free(vm);
->   }
+> Also, if the input is a short nul-terminated string instead of
+> a space padded array, we probably don't need to strip the trailing
+> whitespace, or at least the original version didn't either.
+> 
+> Let me try to respin my patch with just the off-by-one error
+> fixed but otherwise keeping the output of ipr_log_vpd_compact()
+> unchanged.
+> 
+>       Arnd
+
+-- 
+Damien Le Moal
+Western Digital Research
+
