@@ -2,150 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C16FF696499
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 14:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E533696468
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 14:17:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232664AbjBNNXl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Feb 2023 08:23:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34600 "EHLO
+        id S231359AbjBNNRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 08:17:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbjBNNXj (ORCPT
+        with ESMTP id S229496AbjBNNRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 08:23:39 -0500
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0EF11C;
-        Tue, 14 Feb 2023 05:23:38 -0800 (PST)
-Received: by mail-qt1-f175.google.com with SMTP id w3so17286477qts.7;
-        Tue, 14 Feb 2023 05:23:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4d/IW4N4wxgQvgkiL75RXQZp2sQYcrN7W4VVjwtQeMs=;
-        b=yrsD0B7eQdObgEyJDsdrOf9rwaUs8079M3UyK2E2LHP6ROQO0rRQeXbxK1kgSDfFow
-         kEcqxFUxOubvOgQnugiiCm9LcElp9ReB8ku7KN5vwCQIr2NiJbVSNW7q4L+opFuHnUlJ
-         xx7NniSGYbHgLqUdC9wfwIuSJq3rsnKt7FsNjdepehUqhnt08+nghANuFHVD6Z0NskPE
-         BXqzL/e0bMq1b/2KicJ0zbdTd/+d7pBDZlcLO1vJ7cTMuh3oYLtkNsfV6ybuJd8XZ1/2
-         OGEK1AwloyJuFqkBPJkGoJNtxKlPsb6kI13ELHTdUXcquJw45ZM17BiMILAIJ0pUFw5N
-         AnHA==
-X-Gm-Message-State: AO0yUKUsc7kB3j39yq4smA6W/H/BV4VsHD5WMXX4bwwDh42LNaPGcLGU
-        rHd57pWBfxW1yThZlKvUGzTWAAVl4M4EdTiI
-X-Google-Smtp-Source: AK7set+GZjcSjigTsXi0AbuGWMH3MZfG8SAaFewuani7bIXtfV/tNrA8dB0sT+yxFVQXrj1CaX9+yQ==
-X-Received: by 2002:a05:622a:1ba2:b0:3b9:b70c:9697 with SMTP id bp34-20020a05622a1ba200b003b9b70c9697mr3344291qtb.5.1676381017395;
-        Tue, 14 Feb 2023 05:23:37 -0800 (PST)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id u123-20020a379281000000b0073b4d9e2e8dsm2611494qkd.43.2023.02.14.05.23.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 05:23:37 -0800 (PST)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-52ecd867d89so157739377b3.8;
-        Tue, 14 Feb 2023 05:23:37 -0800 (PST)
-X-Received: by 2002:a05:690c:ea2:b0:4fc:962d:7dc1 with SMTP id
- cr2-20020a05690c0ea200b004fc962d7dc1mr197860ywb.301.1676380647699; Tue, 14
- Feb 2023 05:17:27 -0800 (PST)
+        Tue, 14 Feb 2023 08:17:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4049524111
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 05:17:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9752615CE
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 13:17:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC60AC433EF;
+        Tue, 14 Feb 2023 13:17:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676380652;
+        bh=YpN+6svA4pxWzICJ3d5XCgD1ctPwFrXyNccYhqNtKzs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1BSxoCBQNrfesKGBLviwiB/QQ+viKlLv4d91fPi+Hk8jJ9i38LTahyR4AiA/4wJd+
+         yQwwTrNpIihZhs5qsc8kIFO2IgwYEyeq8f2VegIj6bVy4/6LDlyyXIOBJtDHa4rNI2
+         nok0q/4D9Y4ICV9f7T0iCdOH50ra6WqTXSdIFhtE=
+Date:   Tue, 14 Feb 2023 14:17:29 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Su Weifeng <suweifeng1@huawei.com>
+Cc:     mst@redhat.com, linux-kernel@vger.kernel.org, shikemeng@huawei.com,
+        liuzhiqiang26@huawei.com, linfeilong@huawei.com,
+        zhanghongtao22@huawei.com
+Subject: Re: [PATCH] uio:uio_pci_generic:Don't clear master bit when the
+ process does not exit
+Message-ID: <Y+uJ6ejVNl6RoQPk@kroah.com>
+References: <20230214132157.472753-1-suweifeng1@huawei.com>
 MIME-Version: 1.0
-References: <20230209151632.275883-1-clement.leger@bootlin.com> <20230209151632.275883-7-clement.leger@bootlin.com>
-In-Reply-To: <20230209151632.275883-7-clement.leger@bootlin.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 14 Feb 2023 14:17:15 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVpkX=_GBacD7i2+fCkTuMoGS+Y0Gh1U2fWZ2RDj6aX1g@mail.gmail.com>
-Message-ID: <CAMuHMdVpkX=_GBacD7i2+fCkTuMoGS+Y0Gh1U2fWZ2RDj6aX1g@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 6/6] ARM: dts: r9a06g032: describe GMAC1
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Wong Vee Khee <veekhee@apple.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Revanth Kumar Uppala <ruppala@nvidia.com>,
-        Tan Tee Min <tee.min.tan@linux.intel.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
-        Jon Hunter <jonathanh@nvidia.com>, netdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230214132157.472753-1-suweifeng1@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Clément,
-
-On Thu, Feb 9, 2023 at 4:14 PM Clément Léger <clement.leger@bootlin.com> wrote:
-> RZ/N1 SoC includes two MAC named GMACx that are compatible with the
-> "snps,dwmac" driver. GMAC1 is connected directly to the MII converter
-> port 1. Since this MII converter is represented using a PCS driver, it
-> uses the renesas specific compatible driver which uses this PCS.
->
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-
-Thanks for your patch!
-
-> --- a/arch/arm/boot/dts/r9a06g032.dtsi
-> +++ b/arch/arm/boot/dts/r9a06g032.dtsi
-> @@ -304,6 +304,24 @@ dma1: dma-controller@40105000 {
->                         data-width = <8>;
->                 };
->
-> +               gmac1: ethernet@44000000 {
-> +                       compatible = "renesas,r9a06g032-gmac", "renesas,rzn1-gmac", "snps,dwmac";
-> +                       reg = <0x44000000 0x2000>;
-> +                       interrupt-parent = <&gic>;
-> +                       interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>,
-> +                                    <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>,
-> +                                    <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
-> +                       interrupt-names = "macirq", "eth_wake_irq", "eth_lpi";
-> +                       clock-names = "stmmaceth";
-
-Please move clock-names below clocks, like in all other nodes.
-
-> +                       clocks = <&sysctrl R9A06G032_HCLK_GMAC0>;
-
-Missing power-domains property.
-
-> +                       snps,multicast-filter-bins = <256>;
-> +                       snps,perfect-filter-entries = <128>;
-> +                       tx-fifo-depth = <2048>;
-> +                       rx-fifo-depth = <4096>;
-> +                       pcs-handle = <&mii_conv1>;
-> +                       status = "disabled";
-> +               };
+On Tue, Feb 14, 2023 at 09:21:57PM +0800, Su Weifeng wrote:
+> From: Weifeng Su <suweifeng1@huawei.com>
+> 
+> The /dev/uioX device is used by multiple processes. The current behavior
+> is to clear the master bit when a process exits. This affects other
+> processes that use the device, resulting in command suspension and
+> timeout. This behavior cannot be sensed by the process itself.
+> The solution is to add the reference counting. The reference count is
+> self-incremented and self-decremented each time when the device open and
+> close. The master bit is cleared only when the last process exited.
+> 
+> Signed-off-by: Weifeng Su <suweifeng1@huawei.com>
+> ---
+>  drivers/uio/uio_pci_generic.c | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/uio/uio_pci_generic.c b/drivers/uio/uio_pci_generic.c
+> index e03f9b532..d36d3e08e 100644
+> --- a/drivers/uio/uio_pci_generic.c
+> +++ b/drivers/uio/uio_pci_generic.c
+> @@ -31,6 +31,7 @@
+>  struct uio_pci_generic_dev {
+>  	struct uio_info info;
+>  	struct pci_dev *pdev;
+> +	refcount_t  dev_refc;
+>  };
+>  
+>  static inline struct uio_pci_generic_dev *
+> @@ -39,10 +40,22 @@ to_uio_pci_generic_dev(struct uio_info *info)
+>  	return container_of(info, struct uio_pci_generic_dev, info);
+>  }
+>  
+> +static int open(struct uio_info *info, struct inode *inode)
+> +{
+> +	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
 > +
->                 gmac2: ethernet@44002000 {
->                         compatible = "renesas,r9a06g032-gmac", "renesas,rzn1-gmac", "snps,dwmac";
->                         reg = <0x44002000 0x2000>;
+> +	if (gdev)
+> +		refcount_inc(&gdev->dev_refc);
 
-Gr{oetje,eeting}s,
+This flat out does not work, sorry.
 
-                        Geert
+You should never rely on trying to count open/release calls, just let
+the vfs layer handle that for us as it currently does so.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Think about what happens if you call dup() in userspace on a
+filehandle...
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> +	return 0;
+> +}
+> +
+>  static int release(struct uio_info *info, struct inode *inode)
+>  {
+>  	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
+>  
+> +	if (gdev && refcount_dec_not_one(&gdev->dev_refc))
+
+I don't think you actually tested this as it is impossible for gdev to
+ever be NULL.
+
+sorry, but this patch is not correct.
+
+greg k-h
