@@ -2,212 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38216970A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 23:20:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A29C6970AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 23:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbjBNWUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 17:20:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38908 "EHLO
+        id S229608AbjBNWWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 17:22:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjBNWUa (ORCPT
+        with ESMTP id S229526AbjBNWWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 17:20:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999ED213C;
-        Tue, 14 Feb 2023 14:20:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 41958B81F4B;
-        Tue, 14 Feb 2023 22:20:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C97E4C433D2;
-        Tue, 14 Feb 2023 22:20:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676413227;
-        bh=4qh6KKDiA9YehbMq8jIe0pJ2avRcazFqJ/GS5WKquhk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=DFvE2Q/fbAn2NXd+uMUoDGXtGmIXolFnmQ/SWod/OgHGevcdzSdXoNcSIBt+4nLcc
-         gN/oPMqDk2ujvbZWitvrLxm6s5OKzqccg4AYfs0APkuutZaf2D2nUEDhv8OGieCh0q
-         0zg3AWva7jpsJ/gzUktMrke1EiBRTf5L4j8o1SiD0yAoUzfSS9cweH7IWXZarLxhM2
-         AdXGPNb9SwTd7TNSkchh9gfVXy8ibqgG7C+h7SpsdYlttSzOtfVB2LGeFkvGrKJ/CT
-         Tw+X5OY+4QXXCsSyQva/iIGx7Bs2uxgNIqr2X6XXu4uxPUlnbLQ1b6N44uFrm+j8WP
-         YxMloF1Pxz/oA==
-Date:   Tue, 14 Feb 2023 16:20:25 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Yang Su <yang.su@linux.alibaba.com>
-Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
-        alex.williamson@redhat.com, matthew@wil.cx,
-        jbarnes@virtuousgeek.org, greg@kroah.com, patchwork-bot@kernel.org,
-        andrew.murray@arm.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
-        kw@linux.com, linux-kernel@vger.kernel.org,
-        Lukas Wunner <lukas@wunner.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH 1/1] PCI: Tune secondary bus reset time for PCIe
-Message-ID: <20230214222025.GA3089181@bhelgaas>
+        Tue, 14 Feb 2023 17:22:51 -0500
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on061a.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0c::61a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82073C08;
+        Tue, 14 Feb 2023 14:22:49 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l9VXLOrHZVW5HTDswO2eZZBpLS7a3jPtkQvZtAJ6tHEGXqB98FA2RgT6c/P9zyMcqsLF5HzuxXhRia0tGOlUrnFfBojvoXQMbktqM4Sm3bULkyGZY3euP9BBfP+FQGaeUtRkXEj6R4pEcaTFsQyNGiIZvg7EkjZe0JuKa6agkW2EzziYESd+uHRcsMruvtQTGFpCqg0qcUvfOR4+yudyVAf/nVTti105XSvRcjKpozNO2rqRycfK6GVDWzmyPknZWPasXhO5JlKbV3/s0NYRu4mAxMJMxFD/sOQjT2Rk21et1nfly1wpNGENwQhpnuBvxZpZP5iTDTsNvaNVRMOmzA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DIzej2aejIhJnabQ9jp/fvSS53KVTgfAHbqlae9v8No=;
+ b=obiWDhEOAkrmoFc1biV/mZDDQVzP71GHfbd/4i7AXa8ZiOI7cjRm/vsiwzqkC+fZgx9IkKbTc0TttAVDP9bK+fDTCIPl4ERQBdbc5DFrrYDiiFss68m8HqmcVjFkdSaLeyAEn2fHxHeyQ1w64oABNfX/798qhz49RKn/gyz/pRnmaYD2pmhAYtL1hPY5hEHvzhhnXWUu3LEXjSbYQPpp2YaLrVbrng0LJzcOErF24PpdrcFqNmt96V7K8vS19Gq/EaP8OnG8H4AXeInyX5HYiallIPZOeR4x+++VrMt8stwd9pZBsfR9Rg6RTu3kw/hU/cU4jLNql/fjDRVxCno2Rg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DIzej2aejIhJnabQ9jp/fvSS53KVTgfAHbqlae9v8No=;
+ b=YVNB0VkK8jfy5fHSVF5SxeUxMldMaKrfdfT5bHnqBNRc+Wjdt8+aRFZ23GY68LKnTUIO4AaAfavR9qgP1u3l+rpo2V/eh7YvpG4ipc1fG14CKwtFLU63mIfMZLkaWO7g+EE2W1LDbI1vcSiEOEvV20DuDRF3P3WfpNC4FQ52HEY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DB9PR04MB9628.eurprd04.prod.outlook.com (2603:10a6:10:30b::14)
+ by PAXPR04MB8094.eurprd04.prod.outlook.com (2603:10a6:102:1c1::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Tue, 14 Feb
+ 2023 22:21:40 +0000
+Received: from DB9PR04MB9628.eurprd04.prod.outlook.com
+ ([fe80::aec2:20b6:cf99:2886]) by DB9PR04MB9628.eurprd04.prod.outlook.com
+ ([fe80::aec2:20b6:cf99:2886%5]) with mapi id 15.20.6086.022; Tue, 14 Feb 2023
+ 22:21:40 +0000
+Message-ID: <72c14e53-bfcb-c444-4b5c-98d07fe648e3@nxp.com>
+Date:   Wed, 15 Feb 2023 00:21:37 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [RESEND PATCH v4] remoteproc: imx_dsp_rproc: add module parameter
+ to ignore ready flag from remote processor
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "Iuliana Prodan (OSS)" <iuliana.prodan@oss.nxp.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        "S.J. Wang" <shengjiu.wang@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        linux-imx <linux-imx@nxp.com>, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+References: <20230214163744.16377-1-iuliana.prodan@oss.nxp.com>
+ <20230214202506.GA384054@p14s>
+Content-Language: en-US
+From:   Iuliana Prodan <iuliana.prodan@nxp.com>
+In-Reply-To: <20230214202506.GA384054@p14s>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM0PR10CA0131.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:e6::48) To DB9PR04MB9628.eurprd04.prod.outlook.com
+ (2603:10a6:10:30b::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87b08879-4f1a-e91d-861a-0a1af4ad46fc@linux.alibaba.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB9PR04MB9628:EE_|PAXPR04MB8094:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5a86434b-3fca-441b-cefb-08db0ed9d886
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sWvm8uBk5UKSbgDh8cs5/uQ6NG0PbwPCOsvUoaFk0R6MteqPmWaMD+JUwasI+Faaz2gGshoq0jbCc3vIJMf9lDUGZktoAGtwQ6nDjJ+FcwtKsc/xXMGMZQKO5YsZjOEtlL2zXHPLM2sgB+9REOH2pJ19rRjuoJCcXCKtuTH8G9UutyuLnhEgxh6Hm6UcoYx5dCOwdx7Prc0i8WWMwzdPXBCmyVgm5mWzwgYbSzjKixoCR/rUgIBt+RFEFn5QpPbzYf8xIRLFpcUioU9d2+RukRZNrtKgkI1ei1Rb8A8eISdfgmYoPsgtfcNoWYDA3P5G2VQRs9TCT1h9kFbhWvXKNmXvzXPg58ICdsNX/WaXZmPF53Asf/WTx3Qz3zLsEVpPtQOCNb5/sb9Ab9YUhaMG/k4vR+jPA72sg9rp3CuywW8XRO9vnHn1Xpi0W78YLbVeydkP6ptUzR1TwzJXKGdNCtoGB717mYq7v5D8DSlpLgdnXnTSffZtNkJzdPz7RFJL6Apk1Dwf/vY/2eetAC8/X/PrnNqhGM06WGS6Z3/33RbSlvw3MZvAazcIDaOwJ9EN7ld4IlrGXUSxTIBishQLqtt4uKhfauE4IFHRAx6Ko/RtBrfxJy/uRmYL7+Y+zPbFpt6UuwiNUGsaYgyDH+mZS6adBkph8+crqpxTI5pV/U41Zzoy7Ba0JllkHym+WcEZ+PShyMSqyacDvBK5At/ZFMVjgSWE8eSmQcLmuHTLhNM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9628.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(346002)(366004)(396003)(136003)(451199018)(5660300002)(31696002)(4326008)(8936002)(4744005)(41300700001)(86362001)(66476007)(66556008)(66946007)(8676002)(36756003)(53546011)(55236004)(6506007)(44832011)(316002)(31686004)(6666004)(478600001)(26005)(6512007)(186003)(54906003)(38100700002)(2906002)(110136005)(2616005)(966005)(6486002)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cUpHbGpYYVRua0Z1NGpKT3MwR2g1S0FXcWlVQ2hWK3VBdElBcVI2TjNiWkgx?=
+ =?utf-8?B?QnVMTVl5eHE0SDVOUUs4Z2hjdTRLVExwNGpDZEN5aFhwRVprRWkwT0RlVHhz?=
+ =?utf-8?B?UXBVNmlxdHlKT0pVVy9DWW5VamdBbU02Q01sUHZXRmdrNVk5Tll4T1U0ZCtw?=
+ =?utf-8?B?WngreTFVSTlMeVZ4UzhLZWxWcmhGN2ZsTXpEclBHam0xeEovaXFjbGpDNFQ0?=
+ =?utf-8?B?ZnZHM0tsajFZU3djN1Jra2NCWkdPVHZiVUVUVkRtRFNMeE9oK3dQZzJ0Zmsv?=
+ =?utf-8?B?bTZaSmgvZ3p0ZmtOeGhkbXFVNHgxaVFpRCt1eFJNcWViWWk2T2FIRWFTb2t1?=
+ =?utf-8?B?VDc3RzNDaXc3S2REeFBpWmsxNDhWTHdHRUFnTUw2dE54OFpsRDFXTVpnNFRG?=
+ =?utf-8?B?bFYvNWgyVEt5bUxBZ2MrNXovcWFyc0I5MWl0aVNvQkg0bkxnVTNQdTB6RVlp?=
+ =?utf-8?B?VDVxS01RbHM4UVZPTmNlWEdEa3JYT2Fzd0ZmMzZFYmNiU2lFNExxUEZ3VUNj?=
+ =?utf-8?B?cTFtcVdWeU5GdlpvRkFoOUk0bTZpbkorU1RrdU0wTjRqRTNWV3kxVExLcllW?=
+ =?utf-8?B?alpQbFlqNUFRRlFCcGVwdVVhY250dUdxRkhWdWMrTlR0ODNyV2dxa1B5ZjdX?=
+ =?utf-8?B?d2tSN1ovNkJnT2x6dkFBK0x2QloyNE5wemJ6aHF3QlpQblBPNDQxL0k0OG94?=
+ =?utf-8?B?R0JKeWhpTkZVajZkMjlmL2hVS2x0VHgwV015SC93RnZ3ZWQ3aW9YZ0kyZ05V?=
+ =?utf-8?B?ZUw0aWJ6KzJGbG41M3pBQjJuRFJPalcveUN0TUtUT1ZZTC9leXlmejVOMjFl?=
+ =?utf-8?B?TzZRUjZkOXFsemdsUXZsVXZaQytXSTcwR09mLzBqc1N0RDhPZ2J5dkI4MGh3?=
+ =?utf-8?B?RVZpNUhHdC9pTUxrK0hvUHNObXBqLzYxakNOd1pIWnBTTFh2L0d5K3RseXFT?=
+ =?utf-8?B?YkFhRDMweWlBSFphZFo3dlVVRUdxQkJMUWpCUTV2OUZnRktIMXovV3Bsbi9W?=
+ =?utf-8?B?ZGRNcTlUcDJhME1SeVh0cDNJZXUxUmhrdnk1eGlJTDJVUW84d00yWjlnYmVu?=
+ =?utf-8?B?YzNkaGs0VXoyeEZPSEpiRThSc1Nsc21wMEMyWkpkaklJdmVQQngrWGhyTXdY?=
+ =?utf-8?B?dmJzQVk3cjZPV2RhRzVrL1RVSURwdk5wd0FzTkhORFl1WEJWV3JKdkUxWElx?=
+ =?utf-8?B?RStjM0JLK1FkTlNpZTFQZkdkWW8yTExsMlR3ZzJwcmVwQlRZM05NL3ppRkJM?=
+ =?utf-8?B?c3o0ZCs2SHh4ZHBBemx3YUdtVS9OSHVwSHdQSHRaNkxjMTIrSXRqZ2x6cnJx?=
+ =?utf-8?B?NzVFbTFxa1lmYk9BMXh3MDIrbllOcGJHWE5JbnNsOWZaZ0d4N09DZGlxdEY5?=
+ =?utf-8?B?MTdXVk1nT3l0ZTZEcEhkN3ZMZUdtaUliZ3U1YXZUYm81dnZpejBhVVdFZ0py?=
+ =?utf-8?B?TFJQRmZIVE5ESCtEOUphYTB6QWxCT2pHZzM1NUkzSTlvTi8xeGgwNDFmWG5o?=
+ =?utf-8?B?VDBraml5cW0yUFlXTVU1ejgrSkVuemNwV1VjekNNdUdRV1JDSGxZUjZvMisy?=
+ =?utf-8?B?MnJGVTBoN0ErcnhQQ0k4QmdZbzRDMUxkcUc0RlVXZkVOVUNVUk93Yk9kM05W?=
+ =?utf-8?B?WVBVMUo5SHQybk41RVFGQ09rSFpxdnFWV2FyUHBvbGw1VDN0RFI4U3dLK0hG?=
+ =?utf-8?B?YUlKUXlMYWNUSG1ud00rS3UxSDFVWkRJVUVUS0hQM0JidTVDL2c2bEdvNVhF?=
+ =?utf-8?B?SERNWEp6ekcxRGwwczJDcnhSeVUxcDcwdXMzY0dOZWxxLzJadjJ6ZGsrTExD?=
+ =?utf-8?B?Z3BGa2cyNjZNWTJHKzFqZ28xYmhYWFhBRkx6TzdWRTA4RXNEK3dvTnhmbEY1?=
+ =?utf-8?B?aG16VWpsL1Q1bGhEUit0elZUdVp2RUlaRjJLaUVRZUIwWHFqeTR0YUwyZjRC?=
+ =?utf-8?B?S3Nacm02Q2FzbGRlNm9QQXI2Wk16UWxCdVVQUENHODVhVXpBV01LZkgza25t?=
+ =?utf-8?B?bXlDRmRLcmNYd3hja3dlRTVkaXdXOHlqMllDQVJ2UjI2WTRmVUdtbWRKT0xD?=
+ =?utf-8?B?aXNMZ0tQUWhXNHlkbFNvV2dkUmlqYnRDNXRtNmlkUElZQktrN2w2eGplMXFM?=
+ =?utf-8?B?S3VmSmtiNGlWWVpPN05kdjdQTnM3dGFSd3J2Rzd3TE5yNmtLbE9wVno2QW9H?=
+ =?utf-8?B?NEE9PQ==?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a86434b-3fca-441b-cefb-08db0ed9d886
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB9628.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2023 22:21:40.7712
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xGV6RJzEgyFnmnYgixqdHOXJHo9rbMgk1nA5WAUtOrdxMFqC76P3f8cmrz9NZ8cTbPw+iOkg/I3TfQBWldwUZg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8094
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        SPF_HELO_PASS,T_SPF_PERMERROR autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 11:58:06AM +0800, Yang Su wrote:
-> Sorry to interrupt, this email is reformat as plaint text, I want to test
-> this email
-> 
-> whether can send linux-kernel@vger.kernel.org .
-> 
-> 
-> Hi Bjorn,
-> 
-> I think my patch is different from Lucas, because I use pcie_wait_for_link
-> not
-> 
-> pci_bridge_wait_for_secondary_bus, my patch is similar to the process logic
-> 
-> in pci_bridge_wait_for_secondary_bus which also call pcie_wait_for_link.
-> 
-> 
-> pcie_wait_for_link wait fixed 100ms and then wait the data link is ready,
-> but
-> 
-> pci_bridge_wait_for_secondary_bus call pcie_wait_for_link wait time depends
-> 
-> on the devices max waiting time in bus, the calculate max time having a bug
-> 
-> as below,
-> 
-> 
-> In pci_bridge_wait_for_secondary_bus, pci_bus_max_d3cold_delay will take
-> count of wrong time delay,
-> 
-> such as NVIDIA GPU T4 is not pci bridge, so the subordinate is none,
-> pci_bus_max_d3cold_delay
-> 
-> set the min_delay is 100, max_delay is 0, here is the bug, after
-> list_for_each_entry() in pci_bus_max_d3cold_delay,
-> 
-> the min_delay will be 0, the max_delay also 0, the pci_bus_max_d3cold_delay
-> return is surely 0.
-> 
-> 
-> Last, I request Ravi Kishore Koppuravuri to test my patch to see Intel Ponte
-> Vecchio HPC GPU
-> 
-> whether can work, I think my patch will wait enough time to be ready after
-> secondary bus reset.
-> 
-> 
-> I have tested NVIDIA GPU T4 and NVIDIA GPU A100 which my patch is ok, but I
-> think there is need
-> 
-> more test to validate my patch. But the fact is I do not have enough device
-> to validate. If Ravi Kishore Koppuravuri
-> 
-> can help me test, the patch test will be more enough, and I would be
-> grateful for test. Thank you very much!
 
-This will need to be updated to apply on top of Lukas' patches since
-they change the same area.  You could rebase on top of:
-https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/commit/?id=53b54ad074de
+On 2/14/2023 10:25 PM, Mathieu Poirier wrote:
+> On Tue, Feb 14, 2023 at 06:37:44PM +0200, Iuliana Prodan (OSS) wrote:
+>> From: Iuliana Prodan <iuliana.prodan@nxp.com>
+>>
+>> There are cases when we want to test a simple "hello world"
+>> application on the DSP and we don't have IPC between the cores.
+>> Therefore, do not wait for a confirmation from the remote processor
+>> at start.
+>>
+>> Added "ignore_dsp_ready" flag while inserting the module to ignore
+>> remote processor reply after start.
+>> By default, this is off - do not ignore reply from rproc.
+>>
+>> Signed-off-by: Iuliana Prodan <iuliana.prodan@nxp.com>
+>> Reviewed-by: Daniel Baluta <daniel.baluta@nxp.com>
+> This patch is on my review list, as indicated in February 8th's patchset review
+> order email.  That said, I haven't seen Daniel's RB on the mailing list.
 
-It also will need a concise description of what this fixes and why we
-want it.  I see that it changes the time we wait after a secondary bus
-reset, but I have to read the patch itself to figure out what's going
-on.
+It was given on v4 - please, see here : 
+https://patchwork.kernel.org/project/linux-remoteproc/patch/20230119173940.21143-1-iuliana.prodan@oss.nxp.com/#25172596
 
-> On 2023/1/13 06:48, Bjorn Helgaas wrote:
-> > [+cc Lukas, Mika]
-> > 
-> > Hi Yang Su,
-> > 
-> > Thank you for your patch!
-> > 
-> > On Sun, Jan 01, 2023 at 05:22:33PM +0800, Yang Su wrote:
-> > > On PCI Express, there will be cases where the new code sleeps far less
-> > > than the 1s being replaced by this patch. This should be okay, because
-> > > PCI Express Base Specification Revision 5.0 Version 1.0 (May 22, 2019)
-> > > in Section 6.6.1 "Conventional Reset" only notes 100ms as the minimum
-> > > waiting time. After this time, the OS is permitted to issue
-> > > Configuration Requests, but it is possible that the device responds
-> > > with Configuration Request Retry Status (CRS) Completions, rather than
-> > > Successful Completion. Returning CRS can go on for up to 1 second after
-> > > a Conventional Reset (such as SBR) before the OS can consider the device
-> > > broken. This additional wait is handled by pci_dev_wait. Besides,
-> > > this patch also cover PCI and PCI-X after device reset waiting Tpvrh 1000ms.
-> > > 
-> > > Currently, the only callchain that lands in the function modified by
-> > > this patch which invokes one out of two versions of pcibios_reset_secondary_bus
-> > > that both end with a call to pci_reset_secondary_bus.
-> > > 
-> > > Afterwards, pci_reset_secondary_bus always invokes pci_dev_wait
-> > > which wait for the device to return a non-CRS completion.
-> > > 
-> > > Signed-off-by: Yang Su <yang.su@linux.alibaba.com>
-> > > ---
-> > >   drivers/pci/pci.c | 36 +++++++++++++++++++++++++++++++++---
-> > >   1 file changed, 33 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> > > index fba95486caaf..8e4899755718 100644
-> > > --- a/drivers/pci/pci.c
-> > > +++ b/drivers/pci/pci.c
-> > > @@ -5063,10 +5063,40 @@ void pci_reset_secondary_bus(struct pci_dev *dev)
-> > >   	 * Trhfa for conventional PCI is 2^25 clock cycles.
-> > >   	 * Assuming a minimum 33MHz clock this results in a 1s
-> > >   	 * delay before we can consider subordinate devices to
-> > > -	 * be re-initialized.  PCIe has some ways to shorten this,
-> > > -	 * but we don't make use of them yet.
-> > > +	 * be re-initialized.
-> > > +	 *
-> > > +	 * For conventional PCI needing 1s delay after bus reset.
-> > > +	 * Using pci_is_pcie to judge the bus is pci or pcie.
-> > > +	 * If the bus is pci, sleeping 1s to wait device is ready.
-> > > +	 *
-> > > +	 * And if the bus is pcie, PCI Express Base Specification Revision 2.0
-> > > +	 * (December 20, 2006) in Section 6.6.1 "Conventional Reset" only notes
-> > > +	 * 100ms as the minimum waiting time, the same as the newer PCIe spec
-> > > +	 * PCI Express Base Specification Revision 3.0 Version 1.a (December 7, 2015)
-> > > +	 * and PCI Express Base Specification Revision 5.0 Version 1.0 (May 22, 2019).
-> > > +	 * With a Downstream Port that supports Link speeds greater than 5.0 GT/s,
-> > > +	 * software must wait a minimum of 100 ms after Link training completes before
-> > > +	 * sending a Configuration Request to the device immediately below that Port.
-> > > +	 * After this time, the OS is permitted to issue Configuration Requests,
-> > > +	 * but it is possible that the device responds with Configuration Request
-> > > +	 * Retry Status (CRS) Completions, rather than Successful Completion.
-> > > +	 * Returning CRS can go on for up to 1 second after a Conventional Reset
-> > > +	 * (such as SBR) before the OS can consider the device. This additional
-> > > +	 * wait is handled by pci_dev_wait.
-> > > +	 *
-> > > +	 * Currently, the only callchain that lands in the function modified by
-> > > +	 * this patch starts at pci_bridge_secondary_bus_reset which invokes
-> > > +	 * one out of two versions of pcibios_reset_secondary_bus that both end
-> > > +	 * with a call to pci_reset_secondary_bus.
-> > > +	 * Afterwards, pci_bridge_secondary_bus_reset always invokes pci_dev_wait.
-> > >   	 */
-> > > -	ssleep(1);
-> > > +	if (pci_is_pcie(dev))
-> > > +		if (pcie_get_speed_cap(dev) <= PCIE_SPEED_5_0GT)
-> > > +			msleep(100);
-> > > +		else
-> > > +			pcie_wait_for_link(dev, true);
-> > > +	else
-> > > +		ssleep(1);
-> > This code is also updated by Lukas' patch at
-> > https://lore.kernel.org/r/bd6ac49d60c1ca6fe5c27c2fa54b78d70a8ba07b.1672511017.git.lukas@wunner.de,
-> > which is pretty much ready to go.
-> > 
-> > Can you take a look at that series and see whether it solves the same
-> > problem you're solving here?  And if not, can you provide feedback on
-> > what would still be needed?
-> > 
-> > If you do need something on top of Lukas' series, please CC him if you
-> > post a revised patch.
-> > 
-> > Bjorn
