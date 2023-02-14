@@ -2,100 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6704C69591D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 07:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1578F695922
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 07:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231360AbjBNGXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 01:23:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
+        id S231433AbjBNGZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 01:25:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbjBNGX3 (ORCPT
+        with ESMTP id S229581AbjBNGZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 01:23:29 -0500
-Received: from out28-170.mail.aliyun.com (out28-170.mail.aliyun.com [115.124.28.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E152213DFB;
-        Mon, 13 Feb 2023 22:23:27 -0800 (PST)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.179232|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_enroll_verification|0.213737-0.00173606-0.784527;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047188;MF=victor@allwinnertech.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.RLc3oUz_1676355804;
-Received: from 192.168.220.144(mailfrom:victor@allwinnertech.com fp:SMTPD_---.RLc3oUz_1676355804)
-          by smtp.aliyun-inc.com;
-          Tue, 14 Feb 2023 14:23:25 +0800
-Message-ID: <0e5db8d4-9d33-0c26-cc39-0b43770901fe@allwinnertech.com>
-Date:   Tue, 14 Feb 2023 14:23:24 +0800
+        Tue, 14 Feb 2023 01:25:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D504714210
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 22:24:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676355880;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PfyXZkWxj/kVv+Py1JHPkitVm0URdtTanKQSxq2Xcgs=;
+        b=ToOQRfXqQGig+cqNA+CXKKwoMdvAKDe0r91DwHbAUhSbnirDtzn/zXBwIV+wSSFgy0nT2f
+        /f/P4McgtPkCtrcwmGgNGlnr1x79h14ohSeZ0NgqraiOavN+QQYynrdMNerwk3SyYDYgzw
+        Lz+D43i/JifkDkjjZaXNncsI/bBFNwk=
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
+ [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-168-EY8lUwX_MTqiEAAmIk5HlA-1; Tue, 14 Feb 2023 01:24:38 -0500
+X-MC-Unique: EY8lUwX_MTqiEAAmIk5HlA-1
+Received: by mail-oo1-f71.google.com with SMTP id bf11-20020a056820174b00b00517879b32dfso5142995oob.22
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 22:24:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PfyXZkWxj/kVv+Py1JHPkitVm0URdtTanKQSxq2Xcgs=;
+        b=Uq2gAeYNL/1G/O3uOGJ8wLsqoTxGS+c/D69xqpNjhRUeVo2lW0CPYn2IuBswXDPzcg
+         CHwaAhfT2TGqu/48dxKwUek45me44kgNOq2XmaMTTgIhPz+iETq51gcFteuu1Eq0gIxO
+         BsD+sVy39x2IWNS3AM7+qpiZvBnqfl7e6dIwGJxRdNPYl9HbONu3k10X7GYRH/KLJsR+
+         /Nx9EH4shyp0EiVXYyjbzAywKUMo8vr4ONjb8iC/xfqmr5xBNZTU8qoiHLViNqZ252KQ
+         trDaiuzgmdq4YTGurPtCyIMGccncW4h9ML+PAV91M8t3KxcaDY6jskc7/E4Ancwkhr5C
+         fZwg==
+X-Gm-Message-State: AO0yUKVWwNjih5B879FAOqEUhj+rw4RvkNL/kGzovvmdQ/IT/GY9913o
+        dz+4hWbedY+kOLL/B9xGW+wS5qfdWS4QLJTTFSftRQ+0ic2esSA/HaEiMR9+adGJ7AtCEOytFtp
+        CxfcH86L+hFpnSqDz5Ew1m5OrBr/sOxF9UJBohj28
+X-Received: by 2002:aca:705:0:b0:363:a978:6d41 with SMTP id 5-20020aca0705000000b00363a9786d41mr50910oih.280.1676355877781;
+        Mon, 13 Feb 2023 22:24:37 -0800 (PST)
+X-Google-Smtp-Source: AK7set85wFwfR2MaBWsTGoOEALdVnhI+98ejjvCKJTzuzpGs9tFx7mVZvQJOj+zj4jc+5ZMBWy/tlBWhNN9fVFxOdxo=
+X-Received: by 2002:aca:705:0:b0:363:a978:6d41 with SMTP id
+ 5-20020aca0705000000b00363a9786d41mr50909oih.280.1676355877530; Mon, 13 Feb
+ 2023 22:24:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [RESEND] Bluetooth: btrtl: Add support for RTL8852BS
-Content-Language: en-US
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230206063334.45861-1-victor@allwinnertech.com>
- <5c249a19-f79b-346d-2fb1-cdfc05324909@molgen.mpg.de>
-From:   Victor Hassan <victor@allwinnertech.com>
-In-Reply-To: <5c249a19-f79b-346d-2fb1-cdfc05324909@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230214061743.114257-1-lulu@redhat.com>
+In-Reply-To: <20230214061743.114257-1-lulu@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 14 Feb 2023 14:24:26 +0800
+Message-ID: <CACGkMEtFbxRqJZiho+kxZqziTXLFm5ySfubdAKJf-+eE-wprvw@mail.gmail.com>
+Subject: Re: [PATCH] vp_vdpa: fix the crash in hot unplug with vp_vdpa
+To:     Cindy Lu <lulu@redhat.com>
+Cc:     mst@redhat.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Paul:
-   Thank you for your advises. I had send PATCH-v2 to fix it. Can you 
-give me more advises?
+On Tue, Feb 14, 2023 at 2:17 PM Cindy Lu <lulu@redhat.com> wrote:
+>
+> While unplugging the vp_vdpa device, the kernel will crash
+> The root cause is the function vp_modern_get_status() called following the
+> vp_modern_remove().
 
-On 2023/2/6 18:03, Paul Menzel wrote:
-> Dear Victor,
-> 
-> 
-> Thank you for your patch.
-> 
-> Am 06.02.23 um 07:33 schrieb Victor Hassan:
->> Add the support for RTL8852BS BT controller on UART interface.
->> The necessary firmware file will be submitted to linux-firmware.
->>
->> Signed-off-by: Victor Hassan <victor@allwinnertech.com>
->> ---
->>   drivers/bluetooth/btrtl.c | 10 ++++++++++
->>   1 file changed, 10 insertions(+)
->>
->> diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
->> index 69c3fe649ca7..36c3a23324f8 100644
->> --- a/drivers/bluetooth/btrtl.c
->> +++ b/drivers/bluetooth/btrtl.c
->> @@ -198,6 +198,14 @@ static const struct id_table ic_id_table[] = {
->>         .fw_name  = "rtl_bt/rtl8852bu_fw.bin",
->>         .cfg_name = "rtl_bt/rtl8852bu_config" },
->> +    /* 8852B with UART interface */
->> +    { IC_INFO(RTL_ROM_LMP_8852A, 0xb, 0xb, HCI_UART),
->> +      .config_needed = true,
->> +      .has_rom_version = true,
->> +      .has_msft_ext = true,
->> +      .fw_name  = "rtl_bt/rtl8852bs_fw.bin",
->> +      .cfg_name = "rtl_bt/rtl8852bs_config" },
->> +
-> 
-> I’d sort *bs* before *bu*.
-> 
->>       /* 8852C */
->>       { IC_INFO(RTL_ROM_LMP_8852A, 0xc, 0xc, HCI_USB),
->>         .config_needed = false,
->> @@ -965,5 +973,7 @@ MODULE_FIRMWARE("rtl_bt/rtl8852au_fw.bin");
->>   MODULE_FIRMWARE("rtl_bt/rtl8852au_config.bin");
->>   MODULE_FIRMWARE("rtl_bt/rtl8852bu_fw.bin");
->>   MODULE_FIRMWARE("rtl_bt/rtl8852bu_config.bin");
->> +MODULE_FIRMWARE("rtl_bt/rtl8852bs_fw.bin");
->> +MODULE_FIRMWARE("rtl_bt/rtl8852bs_config.bin");
->>   MODULE_FIRMWARE("rtl_bt/rtl8852cu_fw.bin");
->>   MODULE_FIRMWARE("rtl_bt/rtl8852cu_config.bin");
-> 
-> Ditto.
-> 
-> 
-> Kind regards,
-> 
-> Paul
+This needs some tweaking, maybe it's better to say
+vdpa_mgmtdev_unregister() will access modern devices which will cause
+a use after free.
+
+>So need to change the sequence in vp_vdpa_remove
+>
+> [  195.016001] Call Trace:
+
+Let's paste the full log with the reason for the calltrace (e.g
+general protection fault or whatever else).
+
+> [  195.016233]  <TASK>
+> [  195.016434]  vp_modern_get_status+0x12/0x20
+> [  195.016823]  vp_vdpa_reset+0x1b/0x50 [vp_vdpa]
+> [  195.017238]  virtio_vdpa_reset+0x3c/0x48 [virtio_vdpa]
+> [  195.017709]  remove_vq_common+0x1f/0x3a0 [virtio_net]
+> [  195.018178]  virtnet_remove+0x5d/0x70 [virtio_net]
+> [  195.018618]  virtio_dev_remove+0x3d/0x90
+> [  195.018986]  device_release_driver_internal+0x1aa/0x230
+> [  195.019466]  bus_remove_device+0xd8/0x150
+> [  195.019841]  device_del+0x18b/0x3f0
+> [  195.020167]  ? kernfs_find_ns+0x35/0xd0
+> [  195.020526]  device_unregister+0x13/0x60
+> [  195.020894]  unregister_virtio_device+0x11/0x20
+> [  195.021311]  device_release_driver_internal+0x1aa/0x230
+> [  195.021790]  bus_remove_device+0xd8/0x150
+> [  195.022162]  device_del+0x18b/0x3f0
+> [  195.022487]  device_unregister+0x13/0x60
+> [  195.022852]  ? vdpa_dev_remove+0x30/0x30 [vdpa]
+> [  195.023270]  vp_vdpa_dev_del+0x12/0x20 [vp_vdpa]
+> [  195.023694]  vdpa_match_remove+0x2b/0x40 [vdpa]
+> [  195.024115]  bus_for_each_dev+0x78/0xc0
+> [  195.024471]  vdpa_mgmtdev_unregister+0x65/0x80 [vdpa]
+> [  195.024937]  vp_vdpa_remove+0x23/0x40 [vp_vdpa]
+> [  195.025353]  pci_device_remove+0x36/0xa0
+> [  195.025719]  device_release_driver_internal+0x1aa/0x230
+> [  195.026201]  pci_stop_bus_device+0x6c/0x90
+> [  195.026580]  pci_stop_and_remove_bus_device+0xe/0x20
+> [  195.027039]  disable_slot+0x49/0x90
+> [  195.027366]  acpiphp_disable_and_eject_slot+0x15/0x90
+> [  195.027832]  hotplug_event+0xea/0x210
+> [  195.028171]  ? hotplug_event+0x210/0x210
+> [  195.028535]  acpiphp_hotplug_notify+0x22/0x80
+> [  195.028942]  ? hotplug_event+0x210/0x210
+> [  195.029303]  acpi_device_hotplug+0x8a/0x1d0
+> [  195.029690]  acpi_hotplug_work_fn+0x1a/0x30
+> [  195.030077]  process_one_work+0x1e8/0x3c0
+> [  195.030451]  worker_thread+0x50/0x3b0
+> [  195.030791]  ? rescuer_thread+0x3a0/0x3a0
+> [  195.031165]  kthread+0xd9/0x100
+> [  195.031459]  ? kthread_complete_and_exit+0x20/0x20
+> [  195.031899]  ret_from_fork+0x22/0x30
+> [  195.032233]  </TASK>
+>
+> Fixes: ffbda8e9df10 ("vdpa/vp_vdpa : add vdpa tool support in vp_vdpa")
+> Tested-by: Lei Yang <leiyang@redhat.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Cindy Lu <lulu@redhat.com>
+
+Other than above,
+
+Acked-by: Jason Wang <jasowang@redhat.com>
+
+Thanks
+
+> ---
+>  drivers/vdpa/virtio_pci/vp_vdpa.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_pci/vp_vdpa.c
+> index 8fe267ca3e76..281287fae89f 100644
+> --- a/drivers/vdpa/virtio_pci/vp_vdpa.c
+> +++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
+> @@ -645,8 +645,8 @@ static void vp_vdpa_remove(struct pci_dev *pdev)
+>         struct virtio_pci_modern_device *mdev = NULL;
+>
+>         mdev = vp_vdpa_mgtdev->mdev;
+> -       vp_modern_remove(mdev);
+>         vdpa_mgmtdev_unregister(&vp_vdpa_mgtdev->mgtdev);
+> +       vp_modern_remove(mdev);
+>         kfree(vp_vdpa_mgtdev->mgtdev.id_table);
+>         kfree(mdev);
+>         kfree(vp_vdpa_mgtdev);
+> --
+> 2.34.3
+>
+
