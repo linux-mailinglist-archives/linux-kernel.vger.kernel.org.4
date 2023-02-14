@@ -2,230 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D546967EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 16:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 087316967F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 16:24:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233423AbjBNPXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 10:23:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
+        id S233529AbjBNPYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 10:24:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbjBNPW7 (ORCPT
+        with ESMTP id S233586AbjBNPYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 10:22:59 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F3325941
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 07:22:57 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id z14-20020a17090abd8e00b00233bb9d6bdcso10564432pjr.4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 07:22:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HEtbFY4h29IS843cOMDMIFAbj82neahtVEjXdcZYeU4=;
-        b=AS3gtT4KDLYcUSKIKxVSfs920ieX6Z9dghchdrdztgrDpTdkodB0Xx0DuoaBjlKjwS
-         0dfQnlMhfDVAgN+QhbhUbzUMRObnIq8qPzw2x4t3s9pa8Qj/WnmAdQctXt9lPni3tYPW
-         kGaOCXebw6/Ryq3Md5bFUebpxW5XACtmy/ceql0nz37D1sU0xXPnO+H0OT/ooiDfVdmj
-         WEnCsSvgPOuFOyQrc4mxCrPdkBS49InJW577JlvUpwF46K3kZHoMtZp6bMXJEI2m3q2W
-         AKM3iy49Y+v9MuiIavwmZxrN6nZT2vQU/UQDVhrQXgOxWvaMs2BRX+4pDGK5YdYadEOv
-         VNSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HEtbFY4h29IS843cOMDMIFAbj82neahtVEjXdcZYeU4=;
-        b=KAhpWdG6RS+U4RgoyUeQpYOWCafTjUm1ujy6lKxrNHP3i/KUZrW/vGL2qJc7yMbX2t
-         eIV/6VUMWM0XACDtUt1oow3JctaL9zRRfi6cTykQKs6xuTFhWKw4+RndZxxM3tAT+l7F
-         ziJqbrx5xr+NDoiVMvdpdDpVxSbP0mdc6AQMOlazSfzu0ZC4KoZQTvzlShJlfjMVnmTM
-         YRdRAyokTIK9tfEFDj5Zh0ghwiSByxIzBq5QqEcJ1YNuK7aon6Zr235fyPkYTYPS7o+F
-         BPZPs1TaH0CXLvFq4BhtoJbkvtQt+nx+NECgoqdHSwTWBa8NWZDtC2Z9TrjsrxA8D+qX
-         zWSg==
-X-Gm-Message-State: AO0yUKUHqNmD6axCrsa4gGzBMzwBIZZlwoJQBPqB0hlTg+z8+DtWoc+m
-        uyAYxXh8ee+67XStWfyYYaB19Q==
-X-Google-Smtp-Source: AK7set8/sVx+w4NdgeuLKb46J3KSL5hfcU3KRkrrG6hXSEB73FGk6J1P9Rar+jkjDGGG3R9UQnNC4Q==
-X-Received: by 2002:a17:90a:e7c4:b0:233:e4f6:43d1 with SMTP id kb4-20020a17090ae7c400b00233e4f643d1mr2726477pjb.45.1676388176544;
-        Tue, 14 Feb 2023 07:22:56 -0800 (PST)
-Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
-        by smtp.gmail.com with ESMTPSA id mm12-20020a17090b358c00b0023371cb020csm5075012pjb.34.2023.02.14.07.22.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 07:22:56 -0800 (PST)
-Message-ID: <2b8df4a4-23d0-8749-4e09-59734042e7a9@9elements.com>
-Date:   Tue, 14 Feb 2023 20:52:54 +0530
+        Tue, 14 Feb 2023 10:24:50 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAE12A156
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 07:24:48 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EEiI9j020099;
+        Tue, 14 Feb 2023 15:24:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : from : subject : content-type :
+ content-transfer-encoding; s=pp1;
+ bh=UTTqlNNS/QQPHXKCh8ZQ6mVdepgrzyAdZi2b5bpiPVM=;
+ b=B0dHgM3no8XQGASBGVg+6UwelXwkM/r+E0FNmf32HUA/tB3xr6hWiooyH8lnReNcK60z
+ 5jyWtOVb7WGDjCjLzq8D6VpMqQmlF+wmxXUDJkuJb/1FuEq4q8AIgVmh1TfunrPfLEra
+ +K2e3DhMy3zF1peXeRbJbA6YSdYQ6nMoohtrTFMO3oT+Ie5NUfEcmI93Xt9s0p3yvL6w
+ k0+Ur1HJ+20ttiOp+rE32Ws7xEdLgQqDLYolD8qPy0MbpwRtCVeTKLbLEE21SlILl7Vo
+ r0nxp9nscqX2WWHtp58pYX7mIwTdYwx8PHNPZPdLcs0lbhWXNe5hLurtzQE2evdbMNkB /Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nrcaqh7k1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 15:24:19 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31EEjUb6025074;
+        Tue, 14 Feb 2023 15:24:18 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nrcaqh7jq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 15:24:18 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31EF59CF007056;
+        Tue, 14 Feb 2023 15:24:17 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3np2n74b8h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 15:24:17 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 31EFOGF08782340
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Feb 2023 15:24:16 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2D46758054;
+        Tue, 14 Feb 2023 15:24:16 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DF2DC58052;
+        Tue, 14 Feb 2023 15:24:11 +0000 (GMT)
+Received: from [9.43.103.97] (unknown [9.43.103.97])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 14 Feb 2023 15:24:11 +0000 (GMT)
+Message-ID: <9c57c92c-3e0c-b8c5-4be9-8f4df344a347@linux.vnet.ibm.com>
+Date:   Tue, 14 Feb 2023 20:54:09 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 4/4] hwmon: (pmbus/core): Notify hwmon events
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
 Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org
-References: <20230207120241.2800662-1-Naresh.Solanki@9elements.com>
- <20230207120241.2800662-4-Naresh.Solanki@9elements.com>
- <20230211154647.GA204954@roeck-us.net>
- <102b8dfe-9779-da64-71c1-dc5bf998b4fe@9elements.com>
- <41ceafa3-53b7-4229-58eb-3a8c331c3199@roeck-us.net>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <41ceafa3-53b7-4229-58eb-3a8c331c3199@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     mingo@redhat.com, peterz@infradead.org,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     dietmar.eggemann@arm.com, bsegall@google.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        svaidy@linux.ibm.com, linux-kernel@vger.kernel.org,
+        shrikanth hegde <sshegde@linux.vnet.ibm.com>
+From:   shrikanth hegde <sshegde@linux.vnet.ibm.com>
+Subject: [RFC PATCH] sched/fair: Interleave cfs bandwidth timers for improved
+ single thread performance at low utilization
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 2PQWcjnX1YNAmFk2DFY5RZuhEhWK6Elf
+X-Proofpoint-ORIG-GUID: NysmwG9FwnqORATnQByKw_RSpLieljy4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-14_10,2023-02-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1011
+ spamscore=0 mlxlogscore=999 lowpriorityscore=0 priorityscore=1501
+ phishscore=0 malwarescore=0 mlxscore=0 impostorscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302140129
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+CPU cfs bandwidth controller uses hrtimer called period timer. Quota is
+refilled upon the timer expiry and re-started when there are running tasks
+within the cgroup. Each cgroup has a separate period timer which manages
+the period and quota for that cgroup.
 
-On 14-02-2023 08:24 pm, Guenter Roeck wrote:
-> On 2/14/23 06:11, Naresh Solanki wrote:
->> Hi,
->>
->> On 11-02-2023 09:16 pm, Guenter Roeck wrote:
->>> On Tue, Feb 07, 2023 at 01:02:41PM +0100, Naresh Solanki wrote:
->>>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
->>>>
->>>> Notify hwmon events using the pmbus irq handler.
->>>>
->>>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->>>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->>>> ...
->>>> Changes in V2
->>>> - Remove __maybe_unsed attribute as its not needed.
->>>> ---
->>>>   drivers/hwmon/pmbus/pmbus_core.c | 48 
->>>> ++++++++++++++++++++++++++++----
->>>>   1 file changed, 43 insertions(+), 5 deletions(-)
->>>>
->>>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c 
->>>> b/drivers/hwmon/pmbus/pmbus_core.c
->>>> index d5403baad60a..f6778a9c7126 100644
->>>> --- a/drivers/hwmon/pmbus/pmbus_core.c
->>>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
->>>> @@ -2735,8 +2735,36 @@ static const struct pmbus_status_category 
->>>> __maybe_unused pmbus_status_flag_map[]
->>>>       },
->>>>   };
->>>> +#define to_dev_attr(_dev_attr) \
->>>> +    container_of(_dev_attr, struct device_attribute, attr)
->>>> +
->>>> +static void pmbus_notify(struct pmbus_data *data, int page, int 
->>>> reg, int flags)
->>>> +{
->>>> +    int i;
->>>> +
->>>> +    for (i = 0; i < data->num_attributes; i++) {
->>>> +        struct device_attribute *da = 
->>>> to_dev_attr(data->group.attrs[i]);
->>>> +        struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
->>>> +        int index = attr->index;
->>>> +        u16 smask = pb_index_to_mask(index);
->>>> +        u8 spage = pb_index_to_page(index);
->>>> +        u16 sreg = pb_index_to_reg(index);
->>>> +
->>>> +        if (reg == sreg && page == spage && (smask & flags)) {
->>>> +            dev_dbg(data->dev, "sysfs notify: %s", da->attr.name);
->>>> +            sysfs_notify(&data->dev->kobj, NULL, da->attr.name);
->>>> +            kobject_uevent(&data->dev->kobj, KOBJ_CHANGE);
->>>> +            flags &= ~smask;
->>>> +        }
->>>> +
->>>> +        if (!flags)
->>>> +            break;
->>>> +    }
->>>> +}
->>>> +
->>>> +static int pmbus_get_flags(struct pmbus_data *data, u8 page, 
->>>> unsigned int *flags,
->>>> +               bool notify)
->>>> -static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, 
->>>> u8 page, unsigned int *flags)
->>>>   {
->>>>       int i, status, ret;
->>>>       const struct pmbus_status_category *cat;
->>>> @@ -2764,6 +2792,10 @@ static int __maybe_unused 
->>>> pmbus_get_flags(struct pmbus_data *data, u8 page, unsi
->>>>               if (status & bit->pflag)
->>>>                   *flags |= bit->rflag;
->>>>           }
->>>> +
->>>> +        if (notify && status)
->>>> +            pmbus_notify(data, page, cat->reg, status);
->>>> +
->>>>       }
->>>>       /*
->>>> @@ -2866,7 +2898,7 @@ static int 
->>>> pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->>>>       struct i2c_client *client = to_i2c_client(dev->parent);
->>>>       struct pmbus_data *data = i2c_get_clientdata(client);
->>>> -    return pmbus_get_flags(data, rdev_get_id(rdev), flags);
->>>> +    return pmbus_get_flags(data, rdev_get_id(rdev), flags, false);
->>>>   }
->>>>   static int pmbus_regulator_get_status(struct regulator_dev *rdev)
->>>> @@ -3108,10 +3140,14 @@ static irqreturn_t pmbus_fault_handler(int 
->>>> irq, void *pdata)
->>>>   {
->>>>       struct pmbus_data *data = pdata;
->>>>       struct i2c_client *client = to_i2c_client(data->dev);
->>>> -    int i, status;
->>>> +    int i, status, ret;
->>>> -    mutex_lock(&data->update_lock);
->>>>       for (i = 0; i < data->info->pages; i++) {
->>>> +        ret = pmbus_get_flags(data, i, &status, true);
->>>> +        if (ret)
->>>> +            return ret;
->>>> +
->>>> +        mutex_lock(&data->update_lock);
->>>
->>> You should introduce a locked version of pmbus_get_flags() and call
->>> that function, and keep the existing locking in place.
->>>
->> I'm not sure if you meant to have pmbus_get_flags that wont use lock?
->>
-> 
-> 
-> __pmbus_get_flags(...)
-> {
->      /* no lock acquired here */
-> }
-> 
-> pmbus_get_flags(...)
-> {
->      int ret;
-> 
->      mutex_lock(&data->update_lock);
->      ret = __pmbus_get_flags(...);
->      mutex_unlock(&data->update_lock);
->      return ret;
-> }
-> 
-> Then call __pmbus_get_flags() from above code.
-Sure. Will add that change.
-> 
-> Guenter
-> 
->>>>           status = pmbus_read_status_word(client, i);
->>>>           if (status < 0) {
->>>>               mutex_unlock(&data->update_lock);
->>>> @@ -3120,8 +3156,10 @@ static irqreturn_t pmbus_fault_handler(int 
->>>> irq, void *pdata)
->>>>           if (status & ~(PB_STATUS_OFF | PB_STATUS_BUSY | 
->>>> PB_STATUS_POWER_GOOD_N))
->>>>               pmbus_clear_fault_page(client, i);
->>>> +
->>>> +        mutex_unlock(&data->update_lock);
->>>>       }
->>>> -    mutex_unlock(&data->update_lock);
->>>> +
->>>
->>> This would add a second empty line (not that it matters because the code
->>> should not change the locking in the first place).
->>>
->> Will remove the new line
->>>>       return IRQ_HANDLED;
->>>>   }
-> 
+start_cfs_bandwidth calls hrtimer_forward_now which set the expiry value
+based on the below logic. expiry = $initial_value + $N * $period
+
+However, start_cfs_bandwidth doesn't set any initial value. Hence
+multiple such timers would align on expiry if their period value is
+same. This happens when there are multiple cgroups and each has runnable
+task. Upon expiry each timer will unthrottle respective rq's and all the
+rq would start at same time, competing for CPU time and use all
+the SMT threads likely.
+
+There is performance gain that can be achieved here if the timers are
+interleaved when the utilization of each CPU cgroup is low and total
+utilization of all the CPU cgroup's is less than 50%. This is likely
+true when using containers. If the timers are interleaved, then the
+unthrottled cgroup can run freely without many context switches and can
+also benefit from SMT Folding[1]. This effect will be further amplified in
+SPLPAR environment[2] as this would cause less hypervisor preemptions.
+There can be benefit due to less IPI storm as well. Docker provides a
+config option of period timer value, whereas the kubernetes only
+provides millicore option. Hence with typical deployment period values
+will be set to 100ms as kubernetes millicore will set the quota
+accordingly without altering period values.
+
+[1] SMT folding is a mechanism where processor core is reconfigured to
+lower SMT mode to improve performance when some sibling threads are
+idle. In a SMT8 core, when only one or two threads are running on a
+core, we get the best throughput compared to running all 8 threads.
+
+[2] SPLPAR is an Shared Processor Logical PARtition. There can be many
+SPLPARs running on the same physical machine sharing the CPU resources.
+One SPLPAR can consume all CPU resource it can, if the other SPLPARs are
+idle. Processors within the SPLPAR are called vCPU. vCPU can be higher
+than CPU.  Hence at an instance of time if there are more requested vCPU
+than CPU, then vCPU can be preempted. When the timers align, there will
+be spike in requested vCPU when the timers expire. This can lead to
+preemption when the other SPLPARs are not idle.
+
+Since we are trading off between the performance vs power here,
+benchmarked both the numbers. Frequency is set to 3.00Ghz and
+socket power has been measured. Ran the stress-ng with two
+cgroups. The numbers are with patch and without patch on a Power
+system with SMT=8. Below table shows time taken by each group to
+complete. Here each cgroup is assigned 25% runtime. period value is
+set to 100ms.
+
+workload: stress-ng --cpu=4 --cpu-ops=50000
+data shows time it took to complete in seconds for each run.
+Tried to interleave by best effort with the patch.
+1CG - time to finish when only 1 cgroup is running.
+2CG - time to finish when 2 cgroups are running together.
+power - power consumed in Watts for the socket running the workload.
+Performance gain is indicated in +ve percentage numbers and power
+increase is indicated in -ve numbers. 1CG numbers are same as expected.
+We are looking at improvement in 2CG Mainly.
+
+             6.2.rc5                           with patch
+        1CG    power   2CG    power   | 1CG  power     2CG        power
+1Core   218     44     315      46    | 219    45    277(+12%)    47(-2%)
+        219     43     315      45    | 219    44    244(+22%)    48(-6%)
+	                              |
+2Core   108     48     158      52    | 109    50    114(+26%)    59(-13%)
+        109     49     157      52    | 109    49    136(+13%)    56(-7%)
+                                      |
+4Core    60     59      89      65    |  62    58     72(+19%)    68(-5%)
+         61     61      90      65    |  62    60     68(+24%)    73(-12%)
+                                      |
+8Core    33     77      48      83    |  33    77     37(+23%)    91(-10%)
+         33     77      48      84    |  33    77     38(+21%)    90(-7%)
+
+There is no benefit at higher utilization of 50% or more. There is no
+degradation also.
+
+This is RFC PATCH V2, where the code has been shifted from hrtimer to
+sched. This patch sets an initial value as multiple of period/10.
+Here timers can still align if the time started the cgroup is within the
+period/10 interval. On a real life workload, time gives sufficient
+randomness. There can be a better interleaving by being more
+deterministic. For example, when there are 2 cgroups, they should
+have initial value of 0/50ms or 10/60ms so on. When there are 3 cgroups,
+0/3/6ms or 1/4/7ms etc. That is more complicated as it has to account
+for cgroup addition/deletion and accuracy w.r.t to period/quota.
+If that approach is better here, then will come up with that patch.
+
+Signed-off-by: Shrikanth Hegde<sshegde@linux.vnet.ibm.com>
+---
+ kernel/sched/fair.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index ff4dbbae3b10..7b69c329e05d 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -5939,14 +5939,25 @@ static void init_cfs_rq_runtime(struct cfs_rq *cfs_rq)
+
+ void start_cfs_bandwidth(struct cfs_bandwidth *cfs_b)
+ {
+-	lockdep_assert_held(&cfs_b->lock);
++	struct hrtimer *period_timer = &cfs_b->period_timer;
++	s64 incr = ktime_to_ns(cfs_b->period) / 10;
++	ktime_t delta;
++	u64 orun = 1;
+
++	lockdep_assert_held(&cfs_b->lock);
+ 	if (cfs_b->period_active)
+ 		return;
+
+ 	cfs_b->period_active = 1;
+-	hrtimer_forward_now(&cfs_b->period_timer, cfs_b->period);
+-	hrtimer_start_expires(&cfs_b->period_timer, HRTIMER_MODE_ABS_PINNED);
++	delta = ktime_sub(period_timer->base->get_time(),
++			hrtimer_get_expires(period_timer));
++	if (unlikely(delta >= cfs_b->period)) {
++		orun = ktime_divns(delta, incr);
++		hrtimer_add_expires_ns(period_timer, incr * orun);
++	}
++
++	hrtimer_forward_now(period_timer, cfs_b->period);
++	hrtimer_start_expires(period_timer, HRTIMER_MODE_ABS_PINNED);
+ }
+
+ static void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b)
+--
+2.31.1
