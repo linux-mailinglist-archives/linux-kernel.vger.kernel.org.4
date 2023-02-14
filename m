@@ -2,209 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9DCB696AAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 212B8696AB8
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 18:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjBNRBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 12:01:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53418 "EHLO
+        id S232940AbjBNRDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 12:03:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjBNRAj (ORCPT
+        with ESMTP id S232972AbjBNRCu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 12:00:39 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD102E0FB
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 09:00:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676394009; x=1707930009;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=6w3IpCDuPLIKFZtnviHXY23jwRbMSUMPP4Yq37TxIVk=;
-  b=aAMpidOvYI0HG6sBYc+sPMJcZDxW+FqBS6Bsr85TxhAwsH7ARqrD//zy
-   WI10QC95bXYfMLISgBQL3CFQkno/cnQT8ijiI3AtQ6PY2rjPBSiBcPRVO
-   RyoEwJisOc0TCHEoMqLORRu/pTsn2F5/WXyQwNX185NmaJbMkcB/Zh54a
-   xFSSbsmpd19r520Zdb1l3lqgPkRMUGD77CiVNtq349tundrJSR9YfmDEu
-   yjEJeQ6AqDfm5gj1P3fYrocVOySbwTmTRyj7NBqTQ/I+RRKC1+yk3Dc7r
-   jUZ1yrEzUpSBoBvjZAyVQw82YePRbyx7iusPd8BMxOrgEpBki+oYbtZW6
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="311568030"
-X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
-   d="scan'208";a="311568030"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 09:00:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="646821521"
-X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
-   d="scan'208";a="646821521"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga006.jf.intel.com with ESMTP; 14 Feb 2023 09:00:07 -0800
-Received: from [10.251.7.65] (kliang2-mobl1.ccr.corp.intel.com [10.251.7.65])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 3C868580B9E;
-        Tue, 14 Feb 2023 09:00:06 -0800 (PST)
-Message-ID: <0df181b9-fb34-78e8-1376-65d45f7f938f@linux.intel.com>
-Date:   Tue, 14 Feb 2023 12:00:04 -0500
+        Tue, 14 Feb 2023 12:02:50 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D949015564;
+        Tue, 14 Feb 2023 09:02:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VylEd9RKlkdidbQurGJjXyPN4+dUPLNOHGIn/hG9/60=; b=j8Y4XiFaB881NqsW53U/ahJRnc
+        jKeYPtWd4gKk1aCYvsbZiIRrUuyq8CJ4M1gSu2Yt8noqvjRHsfbXhhCVi6QxJAU7T6fpnNmUv9fUe
+        Ug05oGe8ux9sihOcQ6aqDMKEifGs0s7arA6Q9wv6sWcFJy+v71MV5cuNuVNge57oSHQQPLJ6hyJtY
+        6EwDkcEW2eHE56FHLpgVkNbjYXkDJYA5d3EriSJMiAY3ShAZgRmpE2jvcOmgDG8RxGcwHkNmz7k85
+        xvx9ueWxYQDOJftIsuoLGvsJG42XqfysWkEs87Hry62rwPFy3SOfHC8YqV2Zh3AmdZ+BOMaiVNY+U
+        ZUWIKxLw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pRygf-006fYd-Iz; Tue, 14 Feb 2023 17:01:50 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 20E4D302E55;
+        Tue, 14 Feb 2023 12:05:28 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0AB802007E430; Tue, 14 Feb 2023 12:05:28 +0100 (CET)
+Date:   Tue, 14 Feb 2023 12:05:27 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Coly Li <colyli@suse.de>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH RFC] drivers/core: Replace lockdep_set_novalidate_class()
+ with unique class keys
+Message-ID: <Y+tq9/pUQL5bv/zC@hirez.programming.kicks-ass.net>
+References: <CAHk-=whXYzkOJZo0xpyYfrhWQg1M7j0OeCojTJ84CN4q9sqb2Q@mail.gmail.com>
+ <109c3cc0-2c13-7452-4548-d0155c1aba10@gmail.com>
+ <Y+gjuqJ5RFxwLmht@moria.home.lan>
+ <Y+hRurRwm//1+IcK@rowland.harvard.edu>
+ <Y+hTEtCKPuO0zGIt@moria.home.lan>
+ <Y+hW74TAVzCpSv7c@rowland.harvard.edu>
+ <Y+hYn6uzIUBaxDdV@moria.home.lan>
+ <Y+kEgDLSRwdODRdD@rowland.harvard.edu>
+ <Y+oBveWO2z6xdTW/@hirez.programming.kicks-ass.net>
+ <Y+qFc7Q2NfXERwYT@moria.home.lan>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH V2 2/9] perf: Extend ABI to support post-processing
- monotonic raw conversion
-Content-Language: en-US
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-To:     John Stultz <jstultz@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, peterz@infradead.org,
-        mingo@redhat.com, linux-kernel@vger.kernel.org, sboyd@kernel.org,
-        eranian@google.com, namhyung@kernel.org, ak@linux.intel.com,
-        adrian.hunter@intel.com
-References: <20230213190754.1836051-1-kan.liang@linux.intel.com>
- <20230213190754.1836051-3-kan.liang@linux.intel.com>
- <CANDhNCqVcrZHGW4QJBD8_hZehmRpnNAsGFsmwsxBZNm3wpFZpQ@mail.gmail.com>
- <e306e2ea-dea5-0eab-9eae-f9ea5fe7d52e@linux.intel.com>
- <CANDhNCq1b-7C=cox6ufC3Kxycu87qPzDHtJH_5jwPmPjjig5ww@mail.gmail.com>
- <6898b1c8-9dbf-67ce-46e6-15d5307ced25@linux.intel.com>
-In-Reply-To: <6898b1c8-9dbf-67ce-46e6-15d5307ced25@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+qFc7Q2NfXERwYT@moria.home.lan>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 13, 2023 at 01:46:11PM -0500, Kent Overstreet wrote:
+> On Mon, Feb 13, 2023 at 10:24:13AM +0100, Peter Zijlstra wrote:
+> > On Sun, Feb 12, 2023 at 10:23:44AM -0500, Alan Stern wrote:
+> > > Provided it acquires the parent device's lock first, this is 
+> > > utterly safe no matter what order the children are locked in.  Try 
+> > > telling that to lockdep! 
+> > 
+> > mutex_lock_next_lock(child->lock, parent->lock) is there to express this
+> > exact pattern, it allows taking multiple child->lock class locks (in any
+> > order) provided parent->lock is held.
+> 
+> Perhaps I'm stupid, but I've never understood how subclasses - or this -
+> are supposed to work.
+> 
+> Locks don't get a fixed subclass, so what's to prevent some code from
+> going
+
+So there's two annotations here, the nest_lock thing and subclasses,
+they're distinct things.
+
+Every class gets a fixed 8 subclasses (0-7) given by the unique byte
+addresses inside the actual key object.
+
+Subclasses will let you create nesting order of the same class that are
+acceptable. Typically lock/1 nests inside lock/0, but that's not
+hard-coded, simply convention.
+
+The way it is used is given an external lock order, say the CPU number
+for the runqueue locks, you do things like:
+
+void double_rq_lock(struct rq *rq1, struct rq *r2)
+{
+	lockdep_assert_irqs_disabled();
+
+	if (rq_order_less(r2, rq1))
+		swap(rq1, rq2);
+
+	raw_spin_rq_lock(rq1);
+	if (__rq_lockp(rq1) != __rq_lock(rq2))
+		raw_spin_rq_lock_nested(rq2, SINGLE_DEPTH_NESTING);
+
+	...
+}
+
+(which is more complicated than it needs to be due to the whole
+core-scheduling mess, but should still be readable I suppose).
+
+Basically we make sure rq1 and rq2 are in the correct order and acquire
+them with subclass 0 (the default) and subcless 1 (SINGLE_DEPTH_NESTING)
+resp. dictating the subclass order.
+
+This is lock order per decree, if you get the order function wrong
+lockdep will not see the inversion but you *will* deadlock.
 
 
-On 2023-02-14 9:51 a.m., Liang, Kan wrote:
-> 
-> 
-> On 2023-02-13 5:22 p.m., John Stultz wrote:
->> On Mon, Feb 13, 2023 at 1:40 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
->>> On 2023-02-13 2:37 p.m., John Stultz wrote:
->>>> On Mon, Feb 13, 2023 at 11:08 AM <kan.liang@linux.intel.com> wrote:
->>>>>
->>>>> From: Kan Liang <kan.liang@linux.intel.com>
->>>>>
->>>>> The monotonic raw clock is not affected by NTP/PTP correction. The
->>>>> calculation of the monotonic raw clock can be done in the
->>>>> post-processing, which can reduce the kernel overhead.
->>>>>
->>>>> Add hw_time in the struct perf_event_attr to tell the kernel dump the
->>>>> raw HW time to user space. The perf tool will calculate the HW time
->>>>> in post-processing.
->>>>> Currently, only supports the monotonic raw conversion.
->>>>> Only dump the raw HW time with PERF_RECORD_SAMPLE, because the accurate
->>>>> HW time can only be provided in a sample by HW. For other type of
->>>>> records, the user requested clock should be returned as usual. Nothing
->>>>> is changed.
->>>>>
->>>>> Add perf_event_mmap_page::cap_user_time_mono_raw ABI to dump the
->>>>> conversion information. The cap_user_time_mono_raw also indicates
->>>>> whether the monotonic raw conversion information is available.
->>>>> If yes, the clock monotonic raw can be calculated as
->>>>> mono_raw = base + ((cyc - last) * mult + nsec) >> shift
->>>>
->>>> Again, I appreciate you reworking and resending this series out, I
->>>> know it took some effort.
->>>>
->>>> But oof, I'd really like to make sure we're not exporting timekeeping
->>>> internals to userland.
->>>>
->>>> I think Thomas' suggestion of doing the timestamp conversion in
->>>> post-processing was more about interpolating collected system times
->>>> with the counter (tsc) values captured.
->>>>
->>>
->>> Thomas, could you please clarify your suggestion regarding "the relevant
->>> conversion information" provided by the kernel?
->>> https://lore.kernel.org/lkml/87ilgsgl5f.ffs@tglx/
->>>
->>> Is it only the interpolation information or the entire conversion
->>> information (Mult, shift etc.)?
->>>
->>> If it's only the interpolation information, the user space will be lack
->>> of information to handle all the cases. If I understand John's comments
->>> correctly, it could also bring some interpolation error which can only
->>> be addressed by the mult/shift conversion.
->>
-> 
-> 
-> Thanks for the details John.
-> 
->> "Only" is maybe too strong a word. I think having the driver use
->> kernel timekeeping accessors to CLOCK_MONONOTONIC_RAW time with
->> counter values will minimize the error.
->>
-> 
-> The key motivation of using the TSC in the PEBS record is to get an
-> accurate timestamp of each record. We definitely want the conversion has
-> minimized error.
-> 
-> 
->> But again, it's not yet established that any interpolation error using
->> existing interfaces is great enough to be problematic here.
->>
->> The interpoloation is pretty easy to do:
->>
->> do {
->>     start= readtsc();
->>     clock_gett(CLOCK_MONOTONIC_RAW, &ts);
->>     end = readtsc();
->>     delta = end-start;
->> } while (delta  > THRESHOLD)   // make sure the reads were not preempted
->> mid = start + (delta +(delta/2))/2; //round-closest
->>
-> 
-> How to choose the THRESHOLD? It seems the THRESHOLD value also impacts
-> the accuracy.
-> 
-> 
->> and be able to get you a fairly close matching of TSC to
->> CLOCK_MONOTONIC_RAW value.
->>
->> Once you have that mapping you can take a few samples and establish
->> the linear function.
->>
->> But that will have some error, so quantifying that error helps
->> establish why being able to get an atomic mapping of TSC ->
->> CLOCK_MONOTONIC_RAW would help.
->>
->> So I really don't think we need to expose the kernel internal values
->> to userland, but I'm willing to guess the atomic mapping (which the
->> driver will have access to, not userland) may be helpful for the fine
->> granularity you want in the trace.
->>
-> 
-> If I understand correctly, the idea is to let the user space tool run
-> the above interpoloation algorithm several times to 'guess' the atomic
-> mapping. Using the mapping information to covert the TSC from the PEBS
-> record. Is my understanding correct?
-> 
-> If so, to be honest, I doubt we can get the accuracy we want.
-> 
+Then there's that nesting lock, that requires two classes and at least 3
+locks to make sense:
 
-I implemented a simple test to evaluate the error.
+  P, C1, C2
 
-I collected TSC -> CLOCK_MONOTONIC_RAW mapping using the above algorithm
-at the start and end of perf cmd.
-	MONO_RAW	TSC
-start	89553516545645	223619715214239
-end	89562251233830	223641517000376
+Where we posit that any multi-lock of Cn is fully serialized by P and it
+is used like:
 
-Here is what I get via mult/shift conversion from this patch.
-	MONO_RAW	TSC
-PEBS	89555942691466	223625770878571
+	mutex_lock(P);
+	mutex_lock_nest_lock(C1, P);
+	mutex_lock_nest_lock(C2, P);
 
-Then I use the time information from start and end to create a linear
-function and 'guess' the MONO_RAW of PEBS from the TSC. I get
-89555942692721.
-There is a 1255 ns difference.
-I tried several different PEBS records. The error is ~1000ns.
-I think it should be an observable error.
+Where any order of Cn is acceptable, because fully ordered by P.
 
-Thanks,
-Kan
+If you were to combine this with subclass on Cn to allow multi-lock
+instances not order by P, you get to keep the pieces :-)
+
+
 
