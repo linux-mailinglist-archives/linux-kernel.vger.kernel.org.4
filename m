@@ -2,207 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB7869618E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 11:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61121696195
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 11:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232111AbjBNK6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 05:58:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37786 "EHLO
+        id S232648AbjBNK7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 05:59:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjBNK6P (ORCPT
+        with ESMTP id S232462AbjBNK7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 05:58:15 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6051C9ED8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 02:58:14 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id bk16so15165078wrb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 02:58:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gx40Fv/hr96gRU+c/9uu5X2ZcDhXizr9d7Ess0reKt0=;
-        b=koNK4VCvQvRc2CjyayjNk6lDJ+hKgxHPWE3G8ao18g5rTt5qjABVk0RAAtOTNbm4D4
-         X+pvM4v3S4flbb63FkXX90tgE7VP3qq6IqO5/aI8Bdr5IrHj4aCImbkI/wE3pD3JCUV1
-         B6LKtlYlnFEXVtB0d8XMq7gvMt/MSnP1EYib2H/lV8wIL7XxumfqhXz9AneJvCdI2Zq1
-         +MjLTMMKAaK0gxdWLgEP/YiuC0g4sEss7phI+UsxNoNQMiPabyerKWfX/lMpPZgx5p1O
-         rEZz1WWtNNZo4YtTuCLYx3hZtGn8pmfqcT9U8IoYB5Mse2wfHrSEzd6Bpx2UDGKtJFGR
-         oj+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gx40Fv/hr96gRU+c/9uu5X2ZcDhXizr9d7Ess0reKt0=;
-        b=ecIZyVWhhlby6eYxQDn2/de/Lcodhp9Lin5BJbu2GDgH49TTUwnesrWDHLRW2Ff2L3
-         rcBk5nPMEzujz4JskFbccFIXNQG7oFzGl/CJlFWA1225VD1e4hCu0Yj5UX454j5iUJcT
-         0fo6gEfdihi/MzeMiFpdhNs+nk6NRLAD3tFj6RjPM024AWjBPWSEGrlnbj+W8YnKCI1C
-         4WVoQJGoKXhEyUkqvuPXZ4z1G4MjOgvEqQGJ6hGpQ+4oxG8UtQn/KszU8y31ibrN+5dz
-         GkGfMqKen7jpCOz4L2Ezmb+DA1+Zt3N7WcoUWPjLBFLdgYuJiWi/yfdgtEStCij9JpuZ
-         WBcA==
-X-Gm-Message-State: AO0yUKWvNhZ3suqr6vI4N5NtnR785Y7hW1r3NS5cFx5Z+tTAviAd4L40
-        wo+F1jwmm4XF+Blhs9uWgPJpUg==
-X-Google-Smtp-Source: AK7set/wETknM6nyMS91eRgNnkHhD4f9C7g93FAnMO+buvH0MuMDeL1A34df/ZNdhAy2Ajz7xf2A7Q==
-X-Received: by 2002:adf:dd45:0:b0:2c3:db98:3e87 with SMTP id u5-20020adfdd45000000b002c3db983e87mr1784868wrm.20.1676372292992;
-        Tue, 14 Feb 2023 02:58:12 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id bg1-20020a05600c3c8100b003e118684d56sm18172368wmb.45.2023.02.14.02.58.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 02:58:12 -0800 (PST)
-Message-ID: <46d5b6af-23e1-4178-83bc-b4a435b1426e@linaro.org>
-Date:   Tue, 14 Feb 2023 11:58:11 +0100
+        Tue, 14 Feb 2023 05:59:37 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2054.outbound.protection.outlook.com [40.107.92.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33239ED8;
+        Tue, 14 Feb 2023 02:59:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=f2f8eHEulqUV+vFf3sm6oi+TRRH1T6auyACizgn42SPVr/BGBSBbUT0aPS1ZuAKEdNWB5kgOfJAKAQpPvJe0KYzqUDF8CJ70XmaYsLZ+/CZ4fYqkEyvHpppLeoCcD4FZtS+lrfrIteBsIdmytIHye/R1s54P5DXvRMlPHLbodNYRNCpSk1rEDXBggwLRSIFcKk1BCVej8hIFJpHSU6/MQj6HxVQAAQU35k2jNnQ0GrHUUWqL8x5NxiinS5o2pLRI6bF7fZBfj4QdjSdV15kMKCkg48O/SjTwdSdG2ljCnAAizzmk4ApLGvFlnipmUzUrPowBgpFw87NRaIaXyjdTtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3fPX2A7kQWYVtVadkmJB4zZhLhPOkPyChPFaoQxNZ0A=;
+ b=VxVskvcK3VxuqUT/BIoMbeQq+ZDX9RXIykKNFMShhUelEOnKO2aN4xUFVAcUsu9E+gedFdwjZAWtJDgQ2d+Bl5WjW/B4PYsIy0lcxj0GbB3YEJjI+ce7cCaS5Oz5YGPLrpl7kJibaBFC8iIXCLlgcVoORzRhcYeez57FiFelBuPcFcxPnca5hCygi0q1BlcxQCwZVn+WZh1ijbJeo/qVZoXe/dpk5wPugVHXoVqooFNfUjAfxorbXHuRVUZqxjA0rSLlVzk0tYP4k88NKjdb0VJ3cqIHY6DUfxpExSMrodrf3gg67pmwks4iC5M+jNK1BaCO31UmuairXKh+gtcfqg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3fPX2A7kQWYVtVadkmJB4zZhLhPOkPyChPFaoQxNZ0A=;
+ b=kBctSnpb245sMr5C/VxU9wVbMIhMWl7egQswn6FaNyC6y5YK3jyEBC10FkMGPRASAsRC8heipY3/5f2OLppPK5dvmJLehC0JTNQejK66svhIpJrrrDEgKT1JZYhOE3n5pn6wZSjrcfo8+w+Z9JAaQsVKDD9wMd0Wet+FN95rn30P+KmgyC5efqxwaXij6qcDiQJvZe8GwYR/d3voVP8VW64IYsXCwV1tileH7mnU/bhidvxxCFIESGV1gejrm8HBwmTHKNJ8cwmCQ1XI9lTg3gc9JkJzP3+Dyva8kb5nuCAd5tPlBYbn+WVIKhtAe+M10CxRx3/2ejuFew7W6DYs4A==
+Received: from DM6PR02CA0166.namprd02.prod.outlook.com (2603:10b6:5:332::33)
+ by DM4PR12MB6184.namprd12.prod.outlook.com (2603:10b6:8:a6::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6086.24; Tue, 14 Feb 2023 10:59:32 +0000
+Received: from DS1PEPF0000E639.namprd02.prod.outlook.com
+ (2603:10b6:5:332:cafe::25) by DM6PR02CA0166.outlook.office365.com
+ (2603:10b6:5:332::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26 via Frontend
+ Transport; Tue, 14 Feb 2023 10:59:32 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ DS1PEPF0000E639.mail.protection.outlook.com (10.167.17.71) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6111.8 via Frontend Transport; Tue, 14 Feb 2023 10:59:32 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 14 Feb
+ 2023 02:59:32 -0800
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Tue, 14 Feb 2023 02:59:32 -0800
+Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
+ Transport; Tue, 14 Feb 2023 02:59:31 -0800
+Date:   Tue, 14 Feb 2023 02:59:30 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+CC:     "jgg@nvidia.com" <jgg@nvidia.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH v2 08/10] iommufd/device: Use iommu_group_replace_domain()
+Message-ID: <Y+tpkpNYil3duTIP@Asurada-Nvidia>
+References: <cover.1675802050.git.nicolinc@nvidia.com>
+ <4653f009c3dacae8ebf3a4865aaa944aa9c7cc7e.1675802050.git.nicolinc@nvidia.com>
+ <BN9PR11MB5276C1807B710CAD3E5820D78CD99@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <Y+Vh479cDD7LX2x/@Asurada-Nvidia>
+ <BN9PR11MB5276268D3ED0360913A05C368CDE9@BN9PR11MB5276.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] dt-bindings: sound: ep93xx: Add I2S and AC'97
- descriptions
-Content-Language: en-US
-To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        devicetree@vger.kernel.org
-Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-References: <20230212232137.299005-1-alexander.sverdlin@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230212232137.299005-1-alexander.sverdlin@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276268D3ED0360913A05C368CDE9@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E639:EE_|DM4PR12MB6184:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8b77e759-e524-47c0-6274-08db0e7a8d9c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0QBCsZeABtFR+8fHv0RA5nvdgyE8hmyobE+ujpDxM7Qh1+bl2qdpK4RnP9/GvcpZaPeGnxOAwX/3STUFdQ2ENdMtk0IFmEQvyc6VaVxhf24grb2p4RZxCMZSWzJgRBXc2/wTlcLHi2Eex3CvHbjwGvTNoMT7vzxAuBjL6nwYo4iP4dh9wF3OWQa3OVa0mOGy6eOwLbjdcXDqn0J6xqdE8tey7dUyT39eJLui3B85vk4iaaq5pOulurdXoCDaW4MoXPJ4fKay4qDyR6A3JmohO6rR88DGFI5K+eGvsLVvUQ9SblzhDG3KZGAyBEv61EWTsEpnjXEyc3MDhyW3inkdJMcALDZRF1VgsI/ITzSYM+7eJSM9sm3k0T/QaYmmNu92y5cMWjBYII9FBUnmd6NqVU8xggF4xs7dr08ECiTUhfpUSnUokbofkjD7itvM/U/exQZeYBggBkJkxMX4JRczxxnS/VIHlOynF0hNFewAbVicPhnWpZjc+Yk1ceSwzsG/Mhl8DChckJPDcYvYK62pYNShS0GRwOI4s7VXnS+TZIpf+DhWoYd6cyUkirJKetp6C5kFbFRCzB+/SVKW+5mC740AVbcDuWM3g7Rno+casvZ3q6cHDa21BUFvQuDROC8zEAQMsgNyFZ69nokZOwer52VW9w9pty7S//yYqjFbmAKpqnBtQ5+XlXVE9DjDvXxg62bU5bjB/NakZOkDFo0xv7qkwjItLYlKB86Of1wLsBI=
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(136003)(346002)(396003)(451199018)(40470700004)(46966006)(36840700001)(8936002)(36860700001)(4326008)(41300700001)(6916009)(5660300002)(33716001)(70586007)(70206006)(8676002)(40460700003)(7416002)(86362001)(40480700001)(478600001)(356005)(55016003)(426003)(47076005)(7636003)(2906002)(336012)(82740400003)(316002)(82310400005)(54906003)(83380400001)(9686003)(26005)(186003)(67856001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2023 10:59:32.6129
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8b77e759-e524-47c0-6274-08db0e7a8d9c
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E639.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6184
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/02/2023 00:21, Alexander Sverdlin wrote:
-> Add device tree bindings for Cirrus Logic EP93xx internal SoCs' I2S and
-> AC'97 controllers.
+On Fri, Feb 10, 2023 at 02:11:23AM +0000, Tian, Kevin wrote:
+
+> My confusion is that we have different flows between detach/attach
+> and replace.
 > 
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-> ---
->  .../bindings/sound/cirrus,ep9301-ac97.yaml    | 47 ++++++++++++++
->  .../bindings/sound/cirrus,ep9301-i2s.yaml     | 63 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  3 files changed, 111 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/cirrus,ep9301-ac97.yaml
->  create mode 100644 Documentation/devicetree/bindings/sound/cirrus,ep9301-i2s.yaml
+> today with separate detach+attach we have following flow:
 > 
-> diff --git a/Documentation/devicetree/bindings/sound/cirrus,ep9301-ac97.yaml b/Documentation/devicetree/bindings/sound/cirrus,ep9301-ac97.yaml
-> new file mode 100644
-> index 000000000000..bfa5d392f525
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/cirrus,ep9301-ac97.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/cirrus,ep9301-ac97.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Cirrus EP93xx AC'97 Controller
-> +
-> +description: |
-> +  The AC’97 Controller includes a 5-pin serial interface to an external audio
-> +  codec.
-> +
-> +maintainers:
-> +  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
-> +
+>         Remove device from current hwpt;
+>         if (last_device in hwpt) {
+>                 Remove hwpt domain from current iopt;
+>                 if (last_device in group)
+>                         detach group from hwpt domain;
+>         }
+> 
+>         if (first device in group) {
+>                 attach group to new hwpt domain;
+>                 if (first_device in hwpt)
+>                         Add hwpt domain to new iopt;
+>         Add device to new hwpt;
+> 
+> but replace flow is different on the detach part:
+> 
+>         if (first device in group) {
+>                 replace group's domain from current hwpt to new hwpt;
+>                 if (first_device in hwpt)
+>                         Add hwpt domain to new iopt;
+>         }
+> 
+>         Remove device from old hwpt;
+>         if (last_device in old hwpt)
+>                 Remove hwpt domain from old iopt;
+> 
+>         Add device to new hwpt;
+> 
+> I'm yet to figure out whether we have sufficient lock protection to
+> prevent other paths from using old iopt/hwpt to find the device
+> which is already attached to a different domain.
 
-missing ref to dai-common.yaml
+With Jason's new series, the detach() routine is lighter now.
 
-> +properties:
-> +  compatible:
-> +    const: cirrus,ep9301-ac97
-> +
-(...)
+I wonder if it'd be safer now to do the detach() call after
+iommu_group_replace_domain()?
 
-> diff --git a/Documentation/devicetree/bindings/sound/cirrus,ep9301-i2s.yaml b/Documentation/devicetree/bindings/sound/cirrus,ep9301-i2s.yaml
-> new file mode 100644
-> index 000000000000..b47d28dc8389
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/cirrus,ep9301-i2s.yaml
-> @@ -0,0 +1,63 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/cirrus,ep9301-i2s.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Cirrus EP93xx I2S Controller
-> +
-> +description: |
-> +  The I2S controller is used to stream serial audio data between the external
-> +  I2S CODECs’, ADCs/DACs, and the ARM Core. The controller supports I2S, Left-
-> +  and Right-Justified DSP formats.
-> +
-> +maintainers:
-> +  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
-> +
+Thanks
+Nic
 
-ref to dai-common
-
-> +properties:
-> +  compatible:
-> +    const: cirrus,ep9301-i2s
-> +
-> +  '#sound-dai-cells':
-> +    const: 0
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 3
-
-maxItems instead
-
-> +
-> +  clock-names:
-> +    items:
-> +      - const: mclk
-> +      - const: sclk
-> +      - const: lrclk
-
-
-The clk suffixes are quite redundant. Don't these inputs have some
-meaningful name?
-
-> +
-> +required:
-> +  - compatible
-> +  - '#sound-dai-cells'
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2s: i2s@80820000 {
-> +        compatible = "cirrus,ep9301-i2s";
-> +        #sound-dai-cells = <0>;
-> +        reg = <0x80820000 0x100>;
-> +        interrupt-parent = <&vic1>;
-> +        interrupts = <28>;
-> +        clocks = <&syscon 29
-> +                  &syscon 30
-> +                  &syscon 31>;
-
-That's one phandle, but you want three, so <>, <>, <>.
-
-
-Best regards,
-Krzysztof
-
+@@ -196,10 +198,41 @@ static bool iommufd_hw_pagetable_has_group(struct iommufd_hw_pagetable *hwpt,
+ 	return false;
+ }
+ 
++/**
++ * __iommufd_device_detach - Detach a device from idev->hwpt
++ * @idev: device to detach
++ * @detach_group: flag to call iommu_detach_group
++ *
++ * This is a cleanup helper shared by the replace and detach routines. Comparing
++ * to a detach routine, a replace call does not need the iommu_detach_group().
++ */
++static void __iommufd_device_detach(struct iommufd_device *idev,
++				     bool detach_group)
++{
++	struct iommufd_hw_pagetable *hwpt = idev->hwpt;
++
++	mutex_lock(&hwpt->devices_lock);
++	list_del(&idev->devices_item);
++	if (detach_group && !iommufd_hw_pagetable_has_group(hwpt, idev->group))
++		iommu_detach_group(hwpt->domain, idev->group);
++	iopt_remove_reserved_iova(&hwpt->ioas->iopt, idev->dev);
++	mutex_unlock(&hwpt->devices_lock);
++
++	if (hwpt->auto_domain)
++		iommufd_object_destroy_user(idev->ictx, &hwpt->obj);
++	else
++		refcount_dec(&hwpt->obj.users);
++
++	idev->hwpt = NULL;
++
++	refcount_dec(&idev->obj.users);
++}
++
+ /* On success this consumes a hwpt reference from the caller */
+ static int iommufd_device_do_attach(struct iommufd_device *idev,
+ 				    struct iommufd_hw_pagetable *hwpt)
+ {
++	struct iommufd_hw_pagetable *cur_hwpt = idev->hwpt;
+ 	phys_addr_t sw_msi_start = PHYS_ADDR_MAX;
+ 	int rc;
+ 
+@@ -237,7 +270,7 @@ static int iommufd_device_do_attach(struct iommufd_device *idev,
+ 	 * the group once for the first device that is in the group.
+ 	 */
+ 	if (!iommufd_hw_pagetable_has_group(hwpt, idev->group)) {
+-		rc = iommu_attach_group(hwpt->domain, idev->group);
++		rc = iommu_group_replace_domain(idev->group, hwpt->domain);
+ 		if (rc)
+ 			goto out_iova;
+ 
+@@ -249,6 +282,10 @@ static int iommufd_device_do_attach(struct iommufd_device *idev,
+ 		}
+ 	}
+ 
++	/* Detach from the cur_hwpt without iommu_detach_group() */
++	if (cur_hwpt)
++		__iommufd_device_detach(idev, false);
++
+ 	idev->hwpt = hwpt;
+ 	/* The HWPT reference from the caller is moved to this list */
+ 	list_add(&idev->devices_item, &hwpt->devices);
