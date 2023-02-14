@@ -2,79 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F101669676B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE4569676F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:55:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232638AbjBNOzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 09:55:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50914 "EHLO
+        id S233121AbjBNOzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 09:55:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233510AbjBNOy4 (ORCPT
+        with ESMTP id S232735AbjBNOzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 09:54:56 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDAD11724;
-        Tue, 14 Feb 2023 06:54:55 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id 14-20020a9d010e000000b0068bdddfa263so4726531otu.2;
-        Tue, 14 Feb 2023 06:54:55 -0800 (PST)
+        Tue, 14 Feb 2023 09:55:42 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE17435A7;
+        Tue, 14 Feb 2023 06:55:41 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id o36so11176053wms.1;
+        Tue, 14 Feb 2023 06:55:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=2ugXyuRFKOms/LZswqpNj/cEbALpgv15wkGcGYkmrA4=;
-        b=eh3WAt73MSLygwUmIKD+YHdkZ++HBS+dz8SCF9Gm+B0FUE/MgChW5kmawe6Ny0Ue7H
-         fiiemlFaKOfaw6qBt2WoUQJT46UckrMN40U0p37qMQtj04IvtqVP9fBHvUMZeKLM88EV
-         v7eSATtkRNGTgd4ZjX8SSqogAxzC/pshK8h6wUrzDy2aY/ifEjzLB4vvWawn9zxZWzTx
-         MwaFfB85h7c08N+Ck7oElc43BHLiE1rAdEPoVVIHnMIQeWwlwOfXOAK42ClstTg2foZF
-         eISR8E92FI2+D8HISAhasNwY9SgaETBcCFffiUcao8kWNcNt8qPF5QWPIM5cgqjl0A7Y
-         NxYQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QvW5pGHVivMxjs1aNmPctDUR2Ntx1Oph/YR4c4+1gmo=;
+        b=oqoB0LXHb8Eh3I37klRsLyZehbOLG+pwWVZuRKb62bUdPDYp4W6DvOa5Zp0aRv/sAI
+         AVLt9nMDbSCkzhT1vD0RgzUpOHTm2RDDiYFsO6L/2ia4tGf7y1fnDZHZhqVQgD7XRRlt
+         vzFDxPyc7eRMAr6XKBCXgaOcu+HWhurOBbWX8BvQcoM2ZbuWtEwBV5sRsLdDwHn0OIW2
+         EWll4UTJFG/y/W7y8fa5AIlJR/Zea0KyRjqNqw0qLgeCiJt/s5C7No46kINmRLOsyFT/
+         WQTlydUZaZUwGu+ir6aRn9wKVQ3tIzNHPXwwFfonPMfzRZsMp22aIdN+HExyM7r9fier
+         6xGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2ugXyuRFKOms/LZswqpNj/cEbALpgv15wkGcGYkmrA4=;
-        b=E0Z/ddFEZMKN+tx2J1zjn/uedx2MSRY5wV7Mf8FQiTo+oVlWzq9e3yHTOn+eVTJHzN
-         jISR+NUnnGA/gmz7zGWE4A3A8CYZ1RgtmS8lm3sYVufYLUanDgGSYTzxVKyqHNoNA5wo
-         ar2lYw8LtOJpHsU4Gmc1np8lRH8O2hetjFYhkSt8OVDbK6heil5cb0MvN+jjEeRjJFRS
-         2R0NQktorqueqOYPJ6izMZhejv5RS9Y+9wn+rNqR6xsGARbMHYpkFYEq4sNyptmLub6h
-         mcMlqiT+9kstoirljnzltcYQ+R7ZqeuNg4AxczNzP8NQwPOgF0sCiXeyyPEYhcqHufrD
-         Ktkg==
-X-Gm-Message-State: AO0yUKXIba4Iekdhw8dr9WMQKfWosKvcNaWREeAmqNNeVbV+jtkt92Ou
-        wDRlIo7irkAxRvz+OslXCJbdiO76wmo=
-X-Google-Smtp-Source: AK7set9M2iYmHEKVRRrc+egQzAbFr0D+FMmqi0ct25+OZ167K8eJiy9W+iRPYbKS1odDyqX9KjUyTw==
-X-Received: by 2002:a9d:5a15:0:b0:68b:d679:9530 with SMTP id v21-20020a9d5a15000000b0068bd6799530mr983481oth.1.1676386495066;
-        Tue, 14 Feb 2023 06:54:55 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m16-20020a9d6ad0000000b0068bd04b4292sm6393909otq.31.2023.02.14.06.54.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 06:54:54 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <41ceafa3-53b7-4229-58eb-3a8c331c3199@roeck-us.net>
-Date:   Tue, 14 Feb 2023 06:54:52 -0800
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QvW5pGHVivMxjs1aNmPctDUR2Ntx1Oph/YR4c4+1gmo=;
+        b=svk6tiNBEKYN19yKIoy1KyyBjCxqKZ4jDZH2D8325Ay5M4BKH61wu3hq7O92WHl0fq
+         DDIYgrbRSrgNftmrKRsdUXD1CLUjxfAjwgSOSj8vJahbzoJHB3XpAyCBzyK4Xx7MiPrA
+         2oovS5FIsUja4XzMrz0Ect5cobZJNLlCcl78HRpjpg3tpBApS/dcqCDDFbeMviZRX63q
+         jmBbcjJjcpoGEqyl9x2kiPCDU32/YVOmSxW3dlN2wgp+uLQw5frD148KeOPo5iFuI9rO
+         osz9Ex+oaO3iDpY/6UeVlm0hOJFMjcWb+hAS6qx0kRI39217p5/nl9fZ4iXeOXwhpGMB
+         YDNA==
+X-Gm-Message-State: AO0yUKXQTgAzzjY7im81Cf+xObGy/+2gt+HtgQaYtil6cq89SaLMzRsn
+        CNtLvCvn7F+h1eaCKLSsTHA=
+X-Google-Smtp-Source: AK7set+kdPQihdChAfLBVJIbmsaK+sCKpNRiEaD0LnQChHH5Wm48eY1CvKWWpE3RF7KfpojCGaLgSg==
+X-Received: by 2002:a05:600c:3caa:b0:3df:f85a:46fe with SMTP id bg42-20020a05600c3caa00b003dff85a46femr2175409wmb.40.1676386540332;
+        Tue, 14 Feb 2023 06:55:40 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id r14-20020a05600c35ce00b003dc4ecfc4d7sm18823993wmq.29.2023.02.14.06.55.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 06:55:39 -0800 (PST)
+Date:   Tue, 14 Feb 2023 17:55:35 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] nfsd: remove redundant assignment to pointer dentry
+Message-ID: <Y+ug53kWXe5tqZbw@kadam>
+References: <20230214141428.301121-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 4/4] hwmon: (pmbus/core): Notify hwmon events
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org
-References: <20230207120241.2800662-1-Naresh.Solanki@9elements.com>
- <20230207120241.2800662-4-Naresh.Solanki@9elements.com>
- <20230211154647.GA204954@roeck-us.net>
- <102b8dfe-9779-da64-71c1-dc5bf998b4fe@9elements.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <102b8dfe-9779-da64-71c1-dc5bf998b4fe@9elements.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230214141428.301121-1-colin.i.king@gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,137 +72,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/23 06:11, Naresh Solanki wrote:
-> Hi,
+On Tue, Feb 14, 2023 at 02:14:28PM +0000, Colin Ian King wrote:
+> The pointer dentry is assigned a value that is never read, the
+> assignment is redundant and can be removed.
 > 
-> On 11-02-2023 09:16 pm, Guenter Roeck wrote:
->> On Tue, Feb 07, 2023 at 01:02:41PM +0100, Naresh Solanki wrote:
->>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
->>>
->>> Notify hwmon events using the pmbus irq handler.
->>>
->>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->>> ...
->>> Changes in V2
->>> - Remove __maybe_unsed attribute as its not needed.
->>> ---
->>>   drivers/hwmon/pmbus/pmbus_core.c | 48 ++++++++++++++++++++++++++++----
->>>   1 file changed, 43 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
->>> index d5403baad60a..f6778a9c7126 100644
->>> --- a/drivers/hwmon/pmbus/pmbus_core.c
->>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
->>> @@ -2735,8 +2735,36 @@ static const struct pmbus_status_category __maybe_unused pmbus_status_flag_map[]
->>>       },
->>>   };
->>> +#define to_dev_attr(_dev_attr) \
->>> +    container_of(_dev_attr, struct device_attribute, attr)
->>> +
->>> +static void pmbus_notify(struct pmbus_data *data, int page, int reg, int flags)
->>> +{
->>> +    int i;
->>> +
->>> +    for (i = 0; i < data->num_attributes; i++) {
->>> +        struct device_attribute *da = to_dev_attr(data->group.attrs[i]);
->>> +        struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
->>> +        int index = attr->index;
->>> +        u16 smask = pb_index_to_mask(index);
->>> +        u8 spage = pb_index_to_page(index);
->>> +        u16 sreg = pb_index_to_reg(index);
->>> +
->>> +        if (reg == sreg && page == spage && (smask & flags)) {
->>> +            dev_dbg(data->dev, "sysfs notify: %s", da->attr.name);
->>> +            sysfs_notify(&data->dev->kobj, NULL, da->attr.name);
->>> +            kobject_uevent(&data->dev->kobj, KOBJ_CHANGE);
->>> +            flags &= ~smask;
->>> +        }
->>> +
->>> +        if (!flags)
->>> +            break;
->>> +    }
->>> +}
->>> +
->>> +static int pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags,
->>> +               bool notify)
->>> -static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags)
->>>   {
->>>       int i, status, ret;
->>>       const struct pmbus_status_category *cat;
->>> @@ -2764,6 +2792,10 @@ static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsi
->>>               if (status & bit->pflag)
->>>                   *flags |= bit->rflag;
->>>           }
->>> +
->>> +        if (notify && status)
->>> +            pmbus_notify(data, page, cat->reg, status);
->>> +
->>>       }
->>>       /*
->>> @@ -2866,7 +2898,7 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->>>       struct i2c_client *client = to_i2c_client(dev->parent);
->>>       struct pmbus_data *data = i2c_get_clientdata(client);
->>> -    return pmbus_get_flags(data, rdev_get_id(rdev), flags);
->>> +    return pmbus_get_flags(data, rdev_get_id(rdev), flags, false);
->>>   }
->>>   static int pmbus_regulator_get_status(struct regulator_dev *rdev)
->>> @@ -3108,10 +3140,14 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
->>>   {
->>>       struct pmbus_data *data = pdata;
->>>       struct i2c_client *client = to_i2c_client(data->dev);
->>> -    int i, status;
->>> +    int i, status, ret;
->>> -    mutex_lock(&data->update_lock);
->>>       for (i = 0; i < data->info->pages; i++) {
->>> +        ret = pmbus_get_flags(data, i, &status, true);
->>> +        if (ret)
->>> +            return ret;
->>> +
->>> +        mutex_lock(&data->update_lock);
->>
->> You should introduce a locked version of pmbus_get_flags() and call
->> that function, and keep the existing locking in place.
->>
-> I'm not sure if you meant to have pmbus_get_flags that wont use lock?
+> Cleans up clang-scan warning:
+> fs/nfsd/nfsctl.c:1231:2: warning: Value stored to 'dentry' is
+> never read [deadcode.DeadStores]
+>         dentry = ERR_PTR(ret);
 > 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
+No need to initalized "int ret = -ENOMEM;" either.
 
-__pmbus_get_flags(...)
-{
-	/* no lock acquired here */
-}
-
-pmbus_get_flags(...)
-{
-	int ret;
-
-	mutex_lock(&data->update_lock);
-	ret = __pmbus_get_flags(...);
-	mutex_unlock(&data->update_lock);
-	return ret;
-}
-
-Then call __pmbus_get_flags() from above code.
-
-Guenter
-
->>>           status = pmbus_read_status_word(client, i);
->>>           if (status < 0) {
->>>               mutex_unlock(&data->update_lock);
->>> @@ -3120,8 +3156,10 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
->>>           if (status & ~(PB_STATUS_OFF | PB_STATUS_BUSY | PB_STATUS_POWER_GOOD_N))
->>>               pmbus_clear_fault_page(client, i);
->>> +
->>> +        mutex_unlock(&data->update_lock);
->>>       }
->>> -    mutex_unlock(&data->update_lock);
->>> +
->>
->> This would add a second empty line (not that it matters because the code
->> should not change the locking in the first place).
->>
-> Will remove the new line
->>>       return IRQ_HANDLED;
->>>   }
+regards,
+dan carpenter
 
