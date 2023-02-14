@@ -2,210 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61E3695993
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31742695992
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 08:04:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbjBNHEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 02:04:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47702 "EHLO
+        id S231750AbjBNHEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 02:04:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231758AbjBNHEu (ORCPT
+        with ESMTP id S231757AbjBNHEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Feb 2023 02:04:50 -0500
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C2915540;
-        Mon, 13 Feb 2023 23:04:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1676358289; x=1707894289;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5wmH/X+5oMB6tbZAEPbXCiBvhr91wPP7JNYYz5K8YkU=;
-  b=OpcxD7lHiuupbIjxlMfd8Ixw/8kCigVXvtdTd2XUnfpuk8MWY7BrslZv
-   mWMDUnGA3z8l1iU8iAiLg36/Drfa/T58+AUgyH6Vrjk2HZG4Yt1AMmcrM
-   LKKDDFMlmRcExlIwarACKi5FtNn2cmCrKYstDL3IsY5f3mH+5cwUg335x
-   k=;
-X-IronPort-AV: E=Sophos;i="5.97,296,1669075200"; 
-   d="scan'208";a="181587568"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-a893d89c.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 07:04:49 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-m6i4x-a893d89c.us-west-2.amazon.com (Postfix) with ESMTPS id 58F3041410;
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BE815545
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 23:04:49 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5452933A9F;
         Tue, 14 Feb 2023 07:04:48 +0000 (UTC)
-Received: from EX19D010UWA004.ant.amazon.com (10.13.138.204) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Tue, 14 Feb 2023 07:04:47 +0000
-Received: from u9aa42af9e4c55a.ant.amazon.com (10.43.162.56) by
- EX19D010UWA004.ant.amazon.com (10.13.138.204) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.24; Tue, 14 Feb 2023 07:04:47 +0000
-From:   Munehisa Kamata <kamatam@amazon.com>
-To:     <surenb@google.com>
-CC:     <ebiggers@kernel.org>, <hannes@cmpxchg.org>, <hdanton@sina.com>,
-        <kamatam@amazon.com>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <mengcc@amazon.com>, <stable@vger.kernel.org>
-Subject: [PATCH v2] sched/psi: fix use-after-free in ep_remove_wait_queue()
-Date:   Mon, 13 Feb 2023 23:04:29 -0800
-Message-ID: <20230214070429.3613260-1-kamatam@amazon.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CAJuCfpHa+RhNk_-C=c=E8opF7mR2tnpd-KyhaXCQ8XnKvwVXoQ@mail.gmail.com>
-References: <CAJuCfpHa+RhNk_-C=c=E8opF7mR2tnpd-KyhaXCQ8XnKvwVXoQ@mail.gmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676358288; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sjJb3+/W9nJ8Dx5Kc4uHpoaS5F8BZ+Oz8w5QerGkJ6U=;
+        b=Vd19yIX/JAPS5j7Rxntmd9iB1ODr/j2NGhaX7bdDx6UdQPliZ9+maif9Emnuy0IFvb9ce4
+        LuPJZ/JlXwG+uW46eIC8sLWIwYa9vJ1f2XVxZ3ih0sire6wGMKPynESPdnVTH/WBHpsiKc
+        NvZDIDWdG/TSwRBdLQsTa6/YzjxpMYY=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 00BDC13A21;
+        Tue, 14 Feb 2023 07:04:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id pz8pOo8y62PECgAAMHmgww
+        (envelope-from <jgross@suse.com>); Tue, 14 Feb 2023 07:04:47 +0000
+Message-ID: <6f561386-9bc4-a3bf-656d-db27a2275413@suse.com>
+Date:   Tue, 14 Feb 2023 08:04:47 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.162.56]
-X-ClientProxiedBy: EX13D36UWB001.ant.amazon.com (10.43.161.84) To
- EX19D010UWA004.ant.amazon.com (10.13.138.204)
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
+ defined MTRRs
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        lists@nerdbynature.de, mikelley@microsoft.com,
+        torvalds@linux-foundation.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <20230209072220.6836-1-jgross@suse.com>
+ <20230209072220.6836-3-jgross@suse.com> <Y+ohfE/wICFKO/93@zn.tnic>
+ <6257114d-a957-f586-145c-d2a885417360@suse.com> <Y+pRK6a419jenR9R@zn.tnic>
+ <Y+pTDFQlX9qNL35z@zn.tnic> <85de8576-05b7-400d-6020-7dba519c1d2e@suse.com>
+ <Y+pZ5ccprqequvpE@zn.tnic> <ca2e1560-5846-2a4b-6c27-aa8ceb17ee5c@suse.com>
+ <Y+qHMsZhYaYEmtTo@zn.tnic>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <Y+qHMsZhYaYEmtTo@zn.tnic>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------fM1HzvdQ6bS2oRCkXg0hphEs"
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a non-root cgroup gets removed when there is a thread that registered
-trigger and is polling on a pressure file within the cgroup, the polling
-waitqueue gets freed without clearing the queue and reference in the
-following path.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------fM1HzvdQ6bS2oRCkXg0hphEs
+Content-Type: multipart/mixed; boundary="------------CVcGO7WJ0Dd9x2vkU4pTauX6";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, lists@nerdbynature.de,
+ mikelley@microsoft.com, torvalds@linux-foundation.org,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <6f561386-9bc4-a3bf-656d-db27a2275413@suse.com>
+Subject: Re: [PATCH v2 2/8] x86/mtrr: support setting MTRR state for software
+ defined MTRRs
+References: <20230209072220.6836-1-jgross@suse.com>
+ <20230209072220.6836-3-jgross@suse.com> <Y+ohfE/wICFKO/93@zn.tnic>
+ <6257114d-a957-f586-145c-d2a885417360@suse.com> <Y+pRK6a419jenR9R@zn.tnic>
+ <Y+pTDFQlX9qNL35z@zn.tnic> <85de8576-05b7-400d-6020-7dba519c1d2e@suse.com>
+ <Y+pZ5ccprqequvpE@zn.tnic> <ca2e1560-5846-2a4b-6c27-aa8ceb17ee5c@suse.com>
+ <Y+qHMsZhYaYEmtTo@zn.tnic>
+In-Reply-To: <Y+qHMsZhYaYEmtTo@zn.tnic>
 
- do_rmdir
-   cgroup_rmdir
-     kernfs_drain_open_files
-       cgroup_file_release
-         cgroup_pressure_release
-           psi_trigger_destroy
+--------------CVcGO7WJ0Dd9x2vkU4pTauX6
+Content-Type: multipart/mixed; boundary="------------hv6O61v0ZZ4LeNDZ58yDNFYc"
 
-However, the polling thread can keep having the last reference to the
-pressure file that is tied to the freed waitqueue until explicit close or
-exit later.
+--------------hv6O61v0ZZ4LeNDZ58yDNFYc
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
- fput
-   ep_eventpoll_release
-     ep_free
-       ep_remove_wait_queue
-         remove_wait_queue
+T24gMTMuMDIuMjMgMTk6NTMsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gTW9uLCBG
+ZWIgMTMsIDIwMjMgYXQgMDQ6NDQ6MDlQTSArMDEwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
+Cj4+IE9rYXksIGFuZCBpdCBoYXMgTVRSUnMgZW5hYmxlZCAoYXMgSHlwZXItViBTRVYtU05Q
+IGd1ZXN0cyksIHNvIEkgc2hvdWxkbid0DQo+PiB0ZXN0IHRoYXQsIEkgZ3Vlc3MgKG9yIHdl
+IHNob3VsZCBkaXNhYmxlIHRoZSBmZWF0dXJlIGJlZm9yZSBjYWxsaW5nIHRoZQ0KPj4gb3Zl
+cndyaXRlIGZ1bmN0aW9uKS4NCj4gDQo+IEkgdGhpbmsgd2Ugc2hvdWxkIGhhbmRsZSBURFgg
+dGhlIHNhbWUgd2F5IC0gYXMgaWYgdGhlIE1UUlJzIGFyZQ0KPiByZWFkLW9ubHkgdGhlcmUu
+IFNvIHlvdSBjYW4gY2hlY2sgWDg2X0ZFQVRVUkVfVERYX0dVRVNUIGluIGFkZGl0aW9uLg0K
+DQpPa2F5LCBpZiB5b3UgcmVhbGx5IHdhbnQgdG8gZGljdGF0ZSB0aGUgYWxsb3dlZCB1c2Ug
+Y2FzZXMgKHRoaXMgc2VlbXMgdG8gYmUNCmEgbGF5ZXJpbmcgdmlvbGF0aW9uKSwgYnV0IHlv
+dSBhcmUgdGhlIG1haW50YWluZXIgb2YgdGhhdCBjb2RlLg0KDQoNCkp1ZXJnZW4NCg0K
+--------------hv6O61v0ZZ4LeNDZ58yDNFYc
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-Then, the thread accesses to the already-freed waitqueue when dropping the
-reference and results in use-after-free as pasted below.
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-The fundamental problem here is that the lifetime of the waitqueue is not
-tied to the file's real lifetime as shown above. Using wake_up_pollfree()
-here might be less than ideal, but it also is not fully contradicting the
-comment at commit 42288cb44c4b ("wait: add wake_up_pollfree()") since the
-waitqueue's lifetime is not tied to file's one and can be considered as
-another special case. While this would be fixable by somehow making
-cgroup_file_release() be tied to the fput(), it would require sizable
-refactoring at cgroups or higher layer which might be more justifiable if
-we identify more cases like this.
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
- BUG: KASAN: use-after-free in _raw_spin_lock_irqsave+0x60/0xc0
- Write of size 4 at addr ffff88810e625328 by task a.out/4404
+--------------hv6O61v0ZZ4LeNDZ58yDNFYc--
 
- CPU: 19 PID: 4404 Comm: a.out Not tainted 6.2.0-rc6 #38
- Hardware name: Amazon EC2 c5a.8xlarge/, BIOS 1.0 10/16/2017
- Call Trace:
- <TASK>
- dump_stack_lvl+0x73/0xa0
- print_report+0x16c/0x4e0
- ? _printk+0x59/0x80
- ? __virt_addr_valid+0xb8/0x130
- ? _raw_spin_lock_irqsave+0x60/0xc0
- kasan_report+0xc3/0xf0
- ? _raw_spin_lock_irqsave+0x60/0xc0
- kasan_check_range+0x2d2/0x310
- _raw_spin_lock_irqsave+0x60/0xc0
- remove_wait_queue+0x1a/0xa0
- ep_free+0x12c/0x170
- ep_eventpoll_release+0x26/0x30
- __fput+0x202/0x400
- task_work_run+0x11d/0x170
- do_exit+0x495/0x1130
- ? update_cfs_rq_load_avg+0x2c2/0x2e0
- do_group_exit+0x100/0x100
- get_signal+0xd67/0xde0
- ? finish_task_switch+0x15f/0x3a0
- arch_do_signal_or_restart+0x2a/0x2b0
- exit_to_user_mode_prepare+0x94/0x100
- syscall_exit_to_user_mode+0x20/0x40
- do_syscall_64+0x52/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
- RIP: 0033:0x7f8e392bfb91
- Code: Unable to access opcode bytes at 0x7f8e392bfb67.
- RSP: 002b:00007fff261e08d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000022
- RAX: fffffffffffffdfe RBX: 0000000000000000 RCX: 00007f8e392bfb91
- RDX: 0000000000000001 RSI: 00007fff261e08e8 RDI: 0000000000000004
- RBP: 00007fff261e0920 R08: 0000000000400780 R09: 00007f8e3960f240
- R10: 00000000000003df R11: 0000000000000246 R12: 00000000004005a0
- R13: 00007fff261e0a00 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+--------------CVcGO7WJ0Dd9x2vkU4pTauX6--
 
- Allocated by task 4404:
- kasan_set_track+0x3d/0x60
- __kasan_kmalloc+0x85/0x90
- psi_trigger_create+0x113/0x3e0
- pressure_write+0x146/0x2e0
- cgroup_file_write+0x11c/0x250
- kernfs_fop_write_iter+0x186/0x220
- vfs_write+0x3d8/0x5c0
- ksys_write+0x90/0x110
- do_syscall_64+0x43/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+--------------fM1HzvdQ6bS2oRCkXg0hphEs
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
- Freed by task 4407:
- kasan_set_track+0x3d/0x60
- kasan_save_free_info+0x27/0x40
- ____kasan_slab_free+0x11d/0x170
- slab_free_freelist_hook+0x87/0x150
- __kmem_cache_free+0xcb/0x180
- psi_trigger_destroy+0x2e8/0x310
- cgroup_file_release+0x4f/0xb0
- kernfs_drain_open_files+0x165/0x1f0
- kernfs_drain+0x162/0x1a0
- __kernfs_remove+0x1fb/0x310
- kernfs_remove_by_name_ns+0x95/0xe0
- cgroup_addrm_files+0x67f/0x700
- cgroup_destroy_locked+0x283/0x3c0
- cgroup_rmdir+0x29/0x100
- kernfs_iop_rmdir+0xd1/0x140
- vfs_rmdir+0xfe/0x240
- do_rmdir+0x13d/0x280
- __x64_sys_rmdir+0x2c/0x30
- do_syscall_64+0x43/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+-----BEGIN PGP SIGNATURE-----
 
-v2: updated commit message
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPrMo8FAwAAAAAACgkQsN6d1ii/Ey+y
+5gf+MJyofrU/8tfS6/PSup2HnYhCQ18zDd0jquuw6TVZvX8Jx/Qez/TgGkl/ZiQuW0p4y1qV9qjA
+XFQuV1MaoVUzUCWjSG/9Ot2EMoy7veBv6hVWKyBxOlZpMd9G8RqLv3R1cFtvVn3auW6knFSnlgRZ
++1DgL06Gm0+rhyIfiJQ9jL7nu8DNh4VmfpgRJBT54g1hYkRa2ySgPG14DSllki/G+rtfuv/0+Q2z
+zbujz+6KbMCuuGuEoq8uhNl8m2ixUK8b77XFLAQqgrjZYlNfpMSQq0aQkypBDqp/Z1SdiIr7FmoD
+9QxeVyYjy0Y+02ySLQma9GQnKdFCuexjchlho8w2qQ==
+=f6d4
+-----END PGP SIGNATURE-----
 
-Link: https://lore.kernel.org/lkml/20230106224859.4123476-1-kamatam@amazon.com/
-Fixes: 0e94682b73bf ("psi: introduce psi monitor")
-Cc: stable@vger.kernel.org
-Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
-Signed-off-by: Mengchi Cheng <mengcc@amazon.com>
----
- kernel/sched/psi.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index 8ac8b81bfee6..6e66c15f6450 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -1343,10 +1343,11 @@ void psi_trigger_destroy(struct psi_trigger *t)
- 
- 	group = t->group;
- 	/*
--	 * Wakeup waiters to stop polling. Can happen if cgroup is deleted
--	 * from under a polling process.
-+	 * Wakeup waiters to stop polling and clear the queue to prevent it from
-+	 * being accessed later. Can happen if cgroup is deleted from under a
-+	 * polling process otherwise.
- 	 */
--	wake_up_interruptible(&t->event_wait);
-+	wake_up_pollfree(&t->event_wait);
- 
- 	mutex_lock(&group->trigger_lock);
- 
--- 
-2.38.1
-
+--------------fM1HzvdQ6bS2oRCkXg0hphEs--
