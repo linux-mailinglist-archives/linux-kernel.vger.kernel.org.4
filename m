@@ -2,153 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4C5695C55
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 889DA695C63
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 09:11:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbjBNIK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 03:10:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
+        id S231912AbjBNILQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 03:11:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjBNIKY (ORCPT
+        with ESMTP id S231913AbjBNILK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 03:10:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92201227B7
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:09:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676362174;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=rB5ID/2Qs9ceDcs0KHL5dcmrag9/xwe+5cqfsigTfHY=;
-        b=AznlYTCqbFhAuO6cCJTA1L6gphNl1wnckJTPtQ3eTZnnr7POkfb3eh1pex6tkjd6Sz+dn0
-        geRXNGwofQtzZcnIgP05zjCwwapDUO2c0uIflM8HLrSIAunOVBOHqNP3uxFFTIQ8HB7ZOj
-        LyRm3FCIYMgTTOm7wQ/2UKX0wFMle1U=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-657-cI3ZZsQEOxmLpapnfXyNlg-1; Tue, 14 Feb 2023 03:09:31 -0500
-X-MC-Unique: cI3ZZsQEOxmLpapnfXyNlg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B7D92857A99;
-        Tue, 14 Feb 2023 08:09:30 +0000 (UTC)
-Received: from server.redhat.com (ovpn-13-103.pek2.redhat.com [10.72.13.103])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6EDA240C10FA;
-        Tue, 14 Feb 2023 08:09:27 +0000 (UTC)
-From:   Cindy Lu <lulu@redhat.com>
-To:     lulu@redhat.com, jasowang@redhat.com, mst@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Subject: [PATCH v2] vp_vdpa: fix the crash in hot unplug with vp_vdpa
-Date:   Tue, 14 Feb 2023 16:09:24 +0800
-Message-Id: <20230214080924.131462-1-lulu@redhat.com>
+        Tue, 14 Feb 2023 03:11:10 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC015233C8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 00:10:52 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pRqOg-0005Z0-NR; Tue, 14 Feb 2023 09:10:42 +0100
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pRqOf-0004c3-SU; Tue, 14 Feb 2023 09:10:41 +0100
+Date:   Tue, 14 Feb 2023 09:10:41 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Marek Vasut <marex@denx.de>
+Cc:     Frieder Schrempf <frieder@fris.de>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Heiko Thiery <heiko.thiery@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>
+Subject: Re: [PATCH 6/6] arm64: dts: imx8mm-kontron: Add support for reading
+ SD_VSEL signal
+Message-ID: <20230214081041.6rys3eydmakim2yy@pengutronix.de>
+References: <20230213155833.1644366-1-frieder@fris.de>
+ <20230213155833.1644366-7-frieder@fris.de>
+ <20230213161548.ucaqpza65byyqvfo@pengutronix.de>
+ <eef49a1c-4dc3-7517-c760-ecc20704f943@denx.de>
+ <20230213195617.xndagbarc3k5kegr@pengutronix.de>
+ <b900238d-b06a-a9d7-6892-6a726603b63b@denx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b900238d-b06a-a9d7-6892-6a726603b63b@denx.de>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While unplugging the vp_vdpa device, it triggers a kernel panic
-The root cause is: vdpa_mgmtdev_unregister() will accesses modern
-devices which will cause a use after free.
-So need to change the sequence in vp_vdpa_remove
+On 23-02-13, Marek Vasut wrote:
+> On 2/13/23 20:56, Marco Felsch wrote:
+> > Hi Marek, Frieder,
+> 
+> Hi,
+> 
+> > On 23-02-13, Marek Vasut wrote:
+> > > On 2/13/23 17:15, Marco Felsch wrote:
+> > > 
+> > > [...]
+> > > 
+> > > > > @@ -347,7 +347,7 @@ MX8MM_IOMUXC_SD2_DATA1_USDHC2_DATA1		0x1d6
+> > > > >    			MX8MM_IOMUXC_SD2_DATA2_USDHC2_DATA2		0x1d6
+> > > > >    			MX8MM_IOMUXC_SD2_DATA3_USDHC2_DATA3		0x1d6
+> > > > >    			MX8MM_IOMUXC_SD2_CD_B_GPIO2_IO12		0x019
+> > > > > -			MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT		0x1d0
+> > > > > +			MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT		0x400001d0
+> > > > 
+> > > > The VSELECT pin should be driven by the (u)sdhc core...
+> > > > 
+> > > > >    		>;
+> > > > >    	};
+> > > > >    };
+> > > > > diff --git a/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
+> > > > > index 5172883717d1..90daaf54e704 100644
+> > > > > --- a/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
+> > > > > +++ b/arch/arm64/boot/dts/freescale/imx8mm-kontron-osm-s.dtsi
+> > > > > @@ -196,6 +196,7 @@ reg_nvcc_sd: LDO5 {
+> > > > >    				regulator-name = "NVCC_SD (LDO5)";
+> > > > >    				regulator-min-microvolt = <1800000>;
+> > > > >    				regulator-max-microvolt = <3300000>;
+> > > > > +				sd-vsel-gpios = <&gpio1 4 GPIO_ACTIVE_HIGH>;
+> > > > 
+> > > > and by using the sd-vsel-gpios property the IOMUXC_GPIO1_IO04 have to be
+> > > > muxed as GPIO, which is not the case. So I think that u-boot have a bug
+> > > > within the (u)sdhc core.
+> > > 
+> > > The trick here is that the VSELECT is operated by the usdhc block as a
+> > > function pin, but the PMIC driver can read the current state of the VSELECT
+> > > pin by reading out the GPIO block SR register. Since the IOMUX SION bit is
+> > > set on the VSELECT pin, the state of the pin is reflected in the GPIO block
+> > > SR register even if the pin is muxed as function pin.
+> > > 
+> > 
+> > Thanks for this explanation :) Why does the regulator driver need to
+> > know the current state of this pin?
+> 
+> Because that regulator has an input pin which selects between two states of
+> that regulator, L and H, and whatever L or H is depends on what is
+> configured into the regulator via I2C. To correctly report the state of the
+> regulator, you have to know the state of that input (selector) pin.
+> 
+> > Since the voltage switching requires
+> > some cmd's before the actual voltage level switch. So this must be
+> > handled within the core.
+> > 
+> > Also after checking the driver, adding the sd-vsel-gpios will request
+> > the specified gpio as output-high.
+> 
+> The GPIO would have to be requested as input, obviously.
 
-[  195.003359] BUG: unable to handle page fault for address: ff4e8beb80199014
-[  195.004012] #PF: supervisor read access in kernel mode
-[  195.004486] #PF: error_code(0x0000) - not-present page
-[  195.004960] PGD 100000067 P4D 1001b6067 PUD 1001b7067 PMD 1001b8067 PTE 0
-[  195.005578] Oops: 0000 1 PREEMPT SMP PTI
-[  195.005968] CPU: 13 PID: 164 Comm: kworker/u56:10 Kdump: loaded Not tainted 5.14.0-252.el9.x86_64 #1
-[  195.006792] Hardware name: Red Hat KVM/RHEL, BIOS edk2-20221207gitfff6d81270b5-2.el9 unknown
-[  195.007556] Workqueue: kacpi_hotplug acpi_hotplug_work_fn
-[  195.008059] RIP: 0010:ioread8+0x31/0x80
-[  195.008418] Code: 77 28 48 81 ff 00 00 01 00 76 0b 89 fa ec 0f b6 c0 c3 cc cc cc cc 8b 15 ad 72 93 01 b8 ff 00 00 00 85 d2 75 0f c3 cc cc cc cc <8a> 07 0f b6 c0 c3 cc cc cc cc 83 ea 01 48 83 ec 08 48 89 fe 48 c7
-[  195.010104] RSP: 0018:ff4e8beb8067bab8 EFLAGS: 00010292
-[  195.010584] RAX: ffffffffc05834a0 RBX: ffffffffc05843c0 RCX: ff4e8beb8067bae0
-[  195.011233] RDX: ff1bcbd580f88000 RSI: 0000000000000246 RDI: ff4e8beb80199014
-[  195.011881] RBP: ff1bcbd587e39000 R08: ffffffff916fa2d0 R09: ff4e8beb8067ba68
-[  195.012527] R10: 000000000000001c R11: 0000000000000000 R12: ff1bcbd5a3de9120
-[  195.013179] R13: ffffffffc062d000 R14: 0000000000000080 R15: ff1bcbe402bc7805
-[  195.013826] FS:  0000000000000000(0000) GS:ff1bcbe402740000(0000) knlGS:0000000000000000
-[  195.014564] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  195.015093] CR2: ff4e8beb80199014 CR3: 0000000107dea002 CR4: 0000000000771ee0
-[  195.015741] PKRU: 55555554
-[  195.016001] Call Trace:
-[  195.016233]  <TASK>
-[  195.016434]  vp_modern_get_status+0x12/0x20
-[  195.016823]  vp_vdpa_reset+0x1b/0x50 [vp_vdpa]
-[  195.017238]  virtio_vdpa_reset+0x3c/0x48 [virtio_vdpa]
-[  195.017709]  remove_vq_common+0x1f/0x3a0 [virtio_net]
-[  195.018178]  virtnet_remove+0x5d/0x70 [virtio_net]
-[  195.018618]  virtio_dev_remove+0x3d/0x90
-[  195.018986]  device_release_driver_internal+0x1aa/0x230
-[  195.019466]  bus_remove_device+0xd8/0x150
-[  195.019841]  device_del+0x18b/0x3f0
-[  195.020167]  ? kernfs_find_ns+0x35/0xd0
-[  195.020526]  device_unregister+0x13/0x60
-[  195.020894]  unregister_virtio_device+0x11/0x20
-[  195.021311]  device_release_driver_internal+0x1aa/0x230
-[  195.021790]  bus_remove_device+0xd8/0x150
-[  195.022162]  device_del+0x18b/0x3f0
-[  195.022487]  device_unregister+0x13/0x60
-[  195.022852]  ? vdpa_dev_remove+0x30/0x30 [vdpa]
-[  195.023270]  vp_vdpa_dev_del+0x12/0x20 [vp_vdpa]
-[  195.023694]  vdpa_match_remove+0x2b/0x40 [vdpa]
-[  195.024115]  bus_for_each_dev+0x78/0xc0
-[  195.024471]  vdpa_mgmtdev_unregister+0x65/0x80 [vdpa]
-[  195.024937]  vp_vdpa_remove+0x23/0x40 [vp_vdpa]
-[  195.025353]  pci_device_remove+0x36/0xa0
-[  195.025719]  device_release_driver_internal+0x1aa/0x230
-[  195.026201]  pci_stop_bus_device+0x6c/0x90
-[  195.026580]  pci_stop_and_remove_bus_device+0xe/0x20
-[  195.027039]  disable_slot+0x49/0x90
-[  195.027366]  acpiphp_disable_and_eject_slot+0x15/0x90
-[  195.027832]  hotplug_event+0xea/0x210
-[  195.028171]  ? hotplug_event+0x210/0x210
-[  195.028535]  acpiphp_hotplug_notify+0x22/0x80
-[  195.028942]  ? hotplug_event+0x210/0x210
-[  195.029303]  acpi_device_hotplug+0x8a/0x1d0
-[  195.029690]  acpi_hotplug_work_fn+0x1a/0x30
-[  195.030077]  process_one_work+0x1e8/0x3c0
-[  195.030451]  worker_thread+0x50/0x3b0
-[  195.030791]  ? rescuer_thread+0x3a0/0x3a0
-[  195.031165]  kthread+0xd9/0x100
-[  195.031459]  ? kthread_complete_and_exit+0x20/0x20
-[  195.031899]  ret_from_fork+0x22/0x30
-[  195.032233]  </TASK>
+But that isn't the case. According the driver comment they just want to
+make sure that this GPIO is high to ensure that the correct regulator
+config registers are used.
 
-Fixes: ffbda8e9df10 ("vdpa/vp_vdpa : add vdpa tool support in vp_vdpa")
-Tested-by: Lei Yang <leiyang@redhat.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Cindy Lu <lulu@redhat.com>
----
- drivers/vdpa/virtio_pci/vp_vdpa.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > Out of curiosity, what's the bug you
+> > triggering within U-Boot?
+> 
+> AFAICT the readback of the initial state of the regulator (see paragraph
+> above), which affects Linux all the same.
 
-diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_pci/vp_vdpa.c
-index 8fe267ca3e76..281287fae89f 100644
---- a/drivers/vdpa/virtio_pci/vp_vdpa.c
-+++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
-@@ -645,8 +645,8 @@ static void vp_vdpa_remove(struct pci_dev *pdev)
- 	struct virtio_pci_modern_device *mdev = NULL;
- 
- 	mdev = vp_vdpa_mgtdev->mdev;
--	vp_modern_remove(mdev);
- 	vdpa_mgmtdev_unregister(&vp_vdpa_mgtdev->mgtdev);
-+	vp_modern_remove(mdev);
- 	kfree(vp_vdpa_mgtdev->mgtdev.id_table);
- 	kfree(mdev);
- 	kfree(vp_vdpa_mgtdev);
--- 
-2.34.3
+According the binding the driver should check this and apply the value
+to the corresponding L/H register but unfortunately this isn't the case
+yet. Does U-Boot handle this correctly?
 
+Regards,
+  Marco
