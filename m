@@ -2,109 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB85E69639E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:36:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 248936963A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:37:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232248AbjBNMgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 07:36:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54688 "EHLO
+        id S232310AbjBNMh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 07:37:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjBNMgr (ORCPT
+        with ESMTP id S229881AbjBNMhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 07:36:47 -0500
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEC844AD;
-        Tue, 14 Feb 2023 04:36:47 -0800 (PST)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-16df32f2ffdso8110469fac.1;
-        Tue, 14 Feb 2023 04:36:47 -0800 (PST)
+        Tue, 14 Feb 2023 07:37:25 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BBCA24A
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:37:24 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id r2so15473980wrv.7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:37:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IJL5K69YJwMyRvtOMJi4GxbKjX0eSbFmhEkg7WKURnU=;
-        b=HiWiW+1FNLvngvHXGPGTTyQReRlpi5+VmnxdX2fOjA7JhT+goe4q94ikaxLYW3Wxlp
-         oA6/PHSvCxL27z2GcbTzWv0yu4pvpBjws2slq0c1qSZ5ASJwGmoMuxj3qiYZS2hV0a/B
-         +amExfxMxtiSQtDPjEg31NlCpeMoPBJMzsl6ResWSONUIDrcjY6iR9HoAnoqn1C0/dSe
-         w9Mazep/7nEI2zNAwZ9a2CZ2hCdjW1IpvdQXj4RwUhXyiF+xtJi8tPIHHshVaRwR/U5k
-         Kgti70Pke7DYzYndmGMz7tx2a2T9wydYM9gHBZcgSA2TOF9fIU3YEHVAMzOcRKskE+t2
-         yvCg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xInKaoWRFzme6mIUm7OvAINv5mpeXK0Tng+2l6vEAa0=;
+        b=gZV6z0QWrknIs9h/NU+od0HfegjoCaCDrkFu198RQqpWGXpl0yEhVtHl2xmtq8Fatl
+         rAUIOO+6uEHw0f4M+L0OfJ1W6jOp4/r4DmzzYZiHxYDp21uLK/oue47gQSua52DKDuiD
+         r6TIE8yn68NOPMqov6sV4X8fGicOsCHqkORgp3e2GVrkWb5CUqFH5PhktiY7MKdY/7aS
+         OCEra0XRmQfq/EvJ5bu5t0OpUWoFoO+/4ryHvo8mUay/kxUEKr66OisOQST1N7QJUorq
+         UxodXtKy4OB0SdeKPCSRTFShHX16j2v69IXLK8uR9MN8pxSC8cCLB5tYTxBddZ4+gkHa
+         +5LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IJL5K69YJwMyRvtOMJi4GxbKjX0eSbFmhEkg7WKURnU=;
-        b=XRkA0JpVftGxiHJ8JFW1/Eaw5G1Pcx51UP89X5v6vsX+hNcOpqh1RGkELol2LVKZrR
-         jtzN0ETMOgNze4xEn/j6y3ZxfG/Sd2DgNd9E6pg8J0i3LRLVi+AC4sk+4nxuVLq3vPOS
-         KR3Js0yeanfkcrn6T4tjJdrk8tV1ZQ/zfkKHgTzQbsr7fy2omut6TwtvflXYjORoyh6e
-         pjqfEQf5xtTXvdGWCfRawu7KPygnucamXWzzVjuGFrLnP3ObW6BXuuDTF7q7QeuulxlR
-         ylweHGwPJI/nxqdh9PQruiwpgx4EZvbIPd/OBRI+aVoWKi39I4NckLoK53sFbwY9bUkL
-         5uIQ==
-X-Gm-Message-State: AO0yUKWBXL1icwl7+czzFdsrw6rP6lyHBk1tMAc64Xh0lDzhj3JllefD
-        B2JePAkOvlSWXLSxJlvakC8Yu+VsgPNizuH/eHI=
-X-Google-Smtp-Source: AK7set/ui73MqjM/LBXHbhjS7LdN5n7I/PH1AsVMONXqx0J/1osuqMLm0+lpnlM6co4pizPFkKG2dwdvt3PaxYfeDNg=
-X-Received: by 2002:a05:6870:9615:b0:169:fabf:b222 with SMTP id
- d21-20020a056870961500b00169fabfb222mr3883945oaq.83.1676378206354; Tue, 14
- Feb 2023 04:36:46 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xInKaoWRFzme6mIUm7OvAINv5mpeXK0Tng+2l6vEAa0=;
+        b=7s9Jl6ETM6kOhYnLYD1sQAfpQpnVg+HqAq3vg3WJu6o19zpoH2VraK51WNYqrKanMj
+         vaGedKw2VDyR3E3EHsNRw+lfKqE7xHzob4hJ08XidRbYaYZrbTBt7a5ufHFqScIQIIVN
+         r1Ka4dCXo0AhYdteWvuIpLNwdUIb1IJBJs2SROvLTjZFLOKANmBZD9ier+iWoACa0RUh
+         a7WdBuyxflXIk3jysOQsUMyUnRpMupuEXHYETsRmuel1gBjivWKNpr+Qv16WUF33MP4w
+         9PD10gq71BbLeWKzZC5HcOymb5auvATqs6INT/UK9M7pNAAmOp5631WETD8Qa3Puk5oZ
+         H6XA==
+X-Gm-Message-State: AO0yUKVCLzjVdzRP3wBZcppgQhIhw11bA6dNAeQubGkd6dP0SF3bCWsm
+        8ovJJkglS5hysY7ckYToUZAIZA==
+X-Google-Smtp-Source: AK7set8ZlnnW0PPA2OP75yQKJw5482gR33b4oVVNTW2O1F1Qv25Me85WqfzppT87BSzPPFWMmW+6Lg==
+X-Received: by 2002:a5d:4048:0:b0:2c3:fd2f:f7d2 with SMTP id w8-20020a5d4048000000b002c3fd2ff7d2mr2066707wrp.52.1676378242970;
+        Tue, 14 Feb 2023 04:37:22 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id e1-20020a5d5941000000b002c54241b4fesm11886160wri.80.2023.02.14.04.37.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 04:37:22 -0800 (PST)
+Message-ID: <43336959-643d-4041-d11a-b0c030fbf050@linaro.org>
+Date:   Tue, 14 Feb 2023 13:37:20 +0100
 MIME-Version: 1.0
-References: <20230211104915.116253-1-arinc.unal@arinc9.com>
-In-Reply-To: <20230211104915.116253-1-arinc.unal@arinc9.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Tue, 14 Feb 2023 13:36:35 +0100
-Message-ID: <CAMhs-H9YCVe9AKQDv0DrdceFmV1SSOdM-twq65uNdj3+gE677A@mail.gmail.com>
-Subject: Re: [PATCH 1/2] mips: dts: align LED node names with dtschema
-To:     arinc9.unal@gmail.com
-Cc:     Rob Herring <robh+dt@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/3] dt-bindings: hwlock: sun6i: Add missing names
+Content-Language: en-US
+To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
+        Bastian Germann <bage@debian.org>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, erkin.bozoglu@xeront.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        devicetree@vger.kernel.org
+References: <20230213231931.6546-1-bage@debian.org>
+ <20230213231931.6546-3-bage@debian.org> <20230214104554.35338faa@posteo.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230214104554.35338faa@posteo.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 11, 2023 at 11:50 AM <arinc9.unal@gmail.com> wrote:
->
-> From: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
->
-> The node names should be generic and DT schema expects certain pattern:
->
->   mt7621-gnubee-gb-pc1.dtb: gpio-leds: 'power', 'system' do not match any=
- of the regexes: '(^led-[0-9a-f]$|led)', 'pinctrl-[0-9]+'
->
-> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> ---
->  .../dts/cavium-octeon/dlink_dsr-1000n.dts     | 10 ++++-----
->  .../boot/dts/cavium-octeon/dlink_dsr-500n.dts |  6 ++---
->  arch/mips/boot/dts/ingenic/ci20.dts           |  8 +++----
->  arch/mips/boot/dts/pic32/pic32mzda_sk.dts     |  6 ++---
->  .../boot/dts/qca/ar9132_tl_wr1043nd_v1.dts    |  8 +++----
->  .../mips/boot/dts/qca/ar9331_dragino_ms14.dts |  8 +++----
->  arch/mips/boot/dts/qca/ar9331_omega.dts       |  2 +-
->  arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts   |  8 +++----
->  .../ralink/gardena_smart_gateway_mt7688.dts   | 22 +++++++++----------
->  .../boot/dts/ralink/mt7621-gnubee-gb-pc1.dts  |  4 ++--
->  .../boot/dts/ralink/mt7621-gnubee-gb-pc2.dts  | 12 +++++-----
->  11 files changed, 47 insertions(+), 47 deletions(-)
+On 14/02/2023 10:45, Wilken Gottwalt wrote:
+> On Tue, 14 Feb 2023 00:19:29 +0100
+> Bastian Germann <bage@debian.org> wrote:
+> 
+>> The allwinner,sun6i-a31-hwspinlock.yaml binding needs clock-names
+>> and reset-names set to "ahb" as required by the driver.
+> 
+> Hmm, this one is a bit odd. If you look into my earlier versions of the
+> patchset, you may notice, that I actually included these bindings and they
+> were refused. I think the argumentation was like
+> "there is only one bus = no need for it".
+> 
+> If it gets accepted now, I really like to know why. (It was some trouble
+> back then to get the documentation properly done and accepted.)
 
-Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+The clock names and resent names are not correct. They should have never
+been added. If you got comments about this and did not update driver,
+that's not nice. You just shoved incomplete bindings. :(
 
-Thanks,
-    Sergio Paracuellos
+So indeed to avoid precedence - people pushing fake bindings and
+avoiding review - NAK on this.
+
+Best regards,
+Krzysztof
+
