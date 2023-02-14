@@ -2,123 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D46696C50
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DBFD696C53
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:06:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232930AbjBNSGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 13:06:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
+        id S229739AbjBNSGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 13:06:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjBNSGB (ORCPT
+        with ESMTP id S230145AbjBNSGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 13:06:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4588CA8;
-        Tue, 14 Feb 2023 10:06:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CA095B81EAA;
-        Tue, 14 Feb 2023 18:05:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B98EC433D2;
-        Tue, 14 Feb 2023 18:05:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1676397957;
-        bh=ajGubc1kY8DFkYzYD33Z4hJeWOf1B5NLSFL083RoSWA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ABTWzuzPj76+c4v5DNoWfG8JTh2aT21Vvq04CHrXk1SyL+toT5gHqjCvYVcj64qq8
-         yxuBIJSw8JLKEogTOrGgnTMsQCtHQlAFFcCoArw/hUynkYybfOlMrx6Zy1lXHJ5wYH
-         i6+jrjWA298l/L2iyVCuUwrn4zEZFissqnFoZi8M=
-Date:   Tue, 14 Feb 2023 19:05:55 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 000/139] 5.10.168-rc1 review
-Message-ID: <Y+vNg6Dy3zUJ7pjp@kroah.com>
-References: <20230213144745.696901179@linuxfoundation.org>
- <05984672-d897-6050-3e8b-3e7984c81bd9@roeck-us.net>
- <1cd10087-87fe-048e-c9ed-0a5d32c50764@roeck-us.net>
+        Tue, 14 Feb 2023 13:06:20 -0500
+Received: from sonic307-15.consmr.mail.ne1.yahoo.com (sonic307-15.consmr.mail.ne1.yahoo.com [66.163.190.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C31BA8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 10:06:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1676397974; bh=wCH+u0/LEXEQVzu9z2jNCUPlBtz//wct/yPPKwav+5Q=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=bP+xfHfhuYQJRyLuoE48GpngBVCFdKrZQgF/rLARvSLQhKViP43F34yX324EmC1eNicqFMLfElczlWB9NnyhDx+XrL4swKQuU3Ks7EZXHbBBxTEGTUyc9oKqprpB2QrpV1jKCLCKNmZBjdRAFgglLfGVUgPn0Sl6qLW7sxvnWZD2gXIejYeQE26M0WuB+ZADbYZ9MLWehw/WVKm9eal4SQ3emcLIGvnQI3ECFyCMaeM+iLRgSNwqtBxUw4C4gLhhqGiqGPyvmYVzdflnwOim82PKLlKT0GVSHgQPNzUsZhTbZtNgD47DdXwqvOf1Yt+hSmoNKdsl5XvDMeD1P7eXfA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1676397974; bh=pRnv4rRzLSflbq7aRPuTHbPdafdCACJponBogYLgFgA=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=Fju46XvmivpzLWgUZBwetjlBQUlYr7xEHeyDIOW2NKt5sUAdY/qWuYL5Fc+tw7dTGSEZD4vWy6dnbSvmBhsz8+t594RxpGRPuYY4FJZOwIn2rkfH94Ahl3H/b4EkSL8GAzhId4cKKL0PIo3fqaHHF51P09kp1tkkSTdRtFNuxFUO4km00JoQxUHl7PYaYQWfc/9KbaJfRjBDNWigN0W0wI7QpjkNNgEgmGD+tNWIS0TKmX8bUfu+FIIzzrWuhSD+uVSElTDqWJG5uy1P0RSglQ/q07YvzCNwu9/IHpLjyj0CVKm1HLNSALT3Sm3BaDjoI12ndXy8HDWfrci1VhLuvg==
+X-YMail-OSG: PI4V1kIVM1mPgP.ugV.egUTt7LD4EG6sN5S6uPi6F.LamxL7aCrp4EakMEdgkc1
+ dPCcFVvdKJd44Iss8sY_avoxfO9slbeWYa8n4UCl8MWw89B44mZtgNacH6o0XrRaOCxAqe3g97S.
+ cf6UqIsiR0eWR7mhm2C9J9RDkeO4lLUhS.8GvlTzOXfSh.jb6_oKZuTJhpu18hVms8lTRSsh3cYC
+ bRBe9zzmmT9KMyF5XgFKCrtRPneqYEWwh0ZKPCeE32BD6bVp6nbDpxjgXWFP0ZPUwafAUPMCwTTA
+ q1cRhvBjh4o6FLcuCATi3Ds33N8zFTKhOWnG5VvLg.SoeVxEmxDc4PTxsG4GLy7gx9fJ7E.hLA3d
+ XK8ifRZ898pXc9ikcEl07v.D3JVDw_YCXMngJsNMxcYYcqo.usKOPXCi9kB_m.q2tZ023WzEnZYV
+ 8l33GmGRXwHnksq2ghKq2xwDW090tt.MU9pnAPAow5jxj8XcvEBWL4xbdgour6_f.0NW48bNPulU
+ XyaxlZyhUnzS5P2EoOzT9KtwmRnqhAQHsCOfZO8G7QCgpfFCo.m83YcvqWCaT9ZRxOY5A6_GO3iT
+ xmcCUSruJIsHzoEM5GXORAVtZa72317KLiebBJaKte8i6Av2e0SyBDs_qg9xzxVSIZ9d7HesEfnK
+ 7XaK5oGt24CtLIfSF2SheUCbmzOLrg8o9Vsawv3siuNz1S89PJ7Guq2B7WZGlzVtBRZoKpw60J8x
+ QTLS0tVj5yCICHc5Yb9xuQ5G7ImYznbEc0kZAh4t8g63Pk.ve9Wy4gAafXonSpXgivfEO8UPuyoh
+ WIhZ.eUOzXzgrlraDD7K_o4Gqys0GZS2VmkaRd954H2XkvZCqS0gha93xlEgFWVNkPaWwqo6lOb6
+ YXhrfVAaZx_7B.RCFn0Cx07LhynXnYM_T5cQiiLXrlaebDzJoiwWsaPT4Ht.Z.CEBwiLb1jhsW22
+ RzZ5J6nLeSMXXIMMB0fthOAyuj2iRXljk.R9I9D7.MkuGqRK91JSnbaa.zDl_B1GYd0Q3KzuWZcf
+ Gxckc4L.fechTsjAhNnFwXFdR9ac4ghXiKTveQutuaW6P.EiJNgkFUPo4HwmUC5DWEabfo.hWN2M
+ f8crWOu9GvcWFxB8gft3WCQA8VPTcbzRGEm8CCZpQrdst0G.rA2fSjus_MsuF.I9bolSqbaLLL1L
+ 6532gxIk_vpnFDAL4ZYW2H40NOQ9l9VBxCbyvxxDtaHq3adZKteNyIZfBIV8ZZYKoUAJlapnOJov
+ i4snJL6j9VszMZvvRWPZzkwxvKS83MHIz8kcisLXO40KkMzg9xWMkwTdGubYxg1ncm4Lycmlt1J1
+ cEa8AyEMTfoeFpjvRPAy0UVwLd8q0vb1h52XJYmBtKZJdmoEn7UF7DOIB45XUJCxx9ycCdxkTe4Z
+ _uRsodEtMqN3iS4741a7eCEgqk9OsdmZrlMJkwWSJXo4gyuunp.9UBhY9YciEBhWamF4apgILbcW
+ qdqS9jgVRl.GaX_v0ok6Vh5.8scRrVzuX8XZPVsR35XPFJUBxEsGxUY.FBzeORsMGxeqV_Ut3fqf
+ RHzpfdIHm5cRLoPtcaKdstsLSkoLcQP.iGbliyjDxsFTdQh8G6Dy3Cke2zdcnkHxjA3aBMlv9f0x
+ CLDQVCKpg99lVJYw7iue.H7BLq_sn.LTMv.fBnXAe8t8I5ZPhLDC0LP2uwuGrStjFdhH3pnKVW_G
+ o3EDeulIzYQO8a7zrW9ZWRQwaRDUIxNJ.5TpvIsP7IpdjA5MhQJ1U_54MSHFmlqqEQswUUM2FdVH
+ fJdD3yAnCzxuQCFdY.n3lZb8OlnhFNaIjh6aPYB32tcJoifaDVRIqOjdnnBraZ_gbOkJJ7k2Sqmn
+ XXb77MgWkictWXAVCrJg6vVpcM39v5FQqqwDlPneLgLPZL0U6WnM_UaUhwU8mYDf5zIEpvnju0i4
+ MaK_93sFqWd4XoYurBJ5x2uGo16.yjDxBsAXZCEbk5uSYsRekVBCySYdXC.Kjv1UmibogJ2P.EEz
+ j3pCmWRxW9yVfP8_Nl9B4WsMwgjhKMiGbHABsle1B.JQYqz_ENwKCdwzxWmaNzbTaIOXWIwD9ug_
+ 76YPKb5u1GpBvMIlntloxnHdcXY6bxFAGVK.tNOyphSypi4uZWzqL2.dxUbXrB5Y1Ju6Djdp0hBc
+ V7gsGAS0CKr_nrfMwYCHh3Zo81iSAkcmQrAWFhr6Ayb1dsp.kz367_oeKribhLtA61aAFk1R5NgY
+ jZwDbsKRaTOZ.jbBzVnfSxiiasjtFOq4VxQ--
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ne1.yahoo.com with HTTP; Tue, 14 Feb 2023 18:06:14 +0000
+Received: by hermes--production-gq1-655ddccc9-j6kw5 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 73003d98f66f93508a520a49ba284bc8;
+          Tue, 14 Feb 2023 18:06:10 +0000 (UTC)
+Message-ID: <5b334b57-3fcf-9cfa-7745-5f6895be9768@schaufler-ca.com>
+Date:   Tue, 14 Feb 2023 10:06:09 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v5 4/8] LSM: lsm_get_self_attr syscall for LSM self
+ attributes
+Content-Language: en-US
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        casey.schaufler@intel.com, paul@paul-moore.com,
+        linux-security-module@vger.kernel.org
+Cc:     jmorris@namei.org, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, casey@schaufler-ca.com
+References: <20230109180717.58855-1-casey@schaufler-ca.com>
+ <20230109180717.58855-5-casey@schaufler-ca.com>
+ <3977d478-cb41-832b-7b5e-73dd247f267d@digikod.net>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <3977d478-cb41-832b-7b5e-73dd247f267d@digikod.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1cd10087-87fe-048e-c9ed-0a5d32c50764@roeck-us.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: WebService/1.1.21183 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 09:51:39AM -0800, Guenter Roeck wrote:
-> On 2/14/23 09:15, Guenter Roeck wrote:
-> > On 2/13/23 06:49, Greg Kroah-Hartman wrote:
-> > > This is the start of the stable review cycle for the 5.10.168 release.
-> > > There are 139 patches in this series, all will be posted as a response
-> > > to this one.� If anyone has any issues with these being applied, please
-> > > let me know.
-> > > 
-> > > Responses should be made by Wed, 15 Feb 2023 14:46:51 +0000.
-> > > Anything received after that time might be too late.
-> > > 
-> > 
-> > Seen with several x86_64 boot tests during reboot:
-> > 
-> > [�� 13.465146] ------------[ cut here ]------------
-> > [�� 13.465644] list_del corruption. prev->next should be ffff9836448a5008, but was ffff9836448a2010
-> > ILLOPC: ffffffffae597813: 0f 0b
-> > [�� 13.466452] WARNING: CPU: 0 PID: 302 at lib/list_debug.c:59 __list_del_entry_valid+0xb3/0xe0
-> > [�� 13.466710] Modules linked in:
-> > [�� 13.467103] CPU: 0 PID: 302 Comm: init Not tainted 5.10.168-rc1+ #1
-> > [�� 13.467281] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
-> > [�� 13.467545] RIP: 0010:__list_del_entry_valid+0xb3/0xe0
-> > [�� 13.468234] Code: cc cc cc 4c 89 c2 48 c7 c7 f8 c6 82 af e8 ad c9 8e 00 0f 0b 31 c0 c3 cc cc cc cc 4c 89 c2 48 c7 c7 30 c7 82 af e8 95 c9 8e 00 <0f> 0b 31 c0 c3 cc cc cc cc 4c 89 c6 48 c7 c7 70 c7 82 af e8 7d c9
-> > [�� 13.468694] RSP: 0018:ffff9f160017bde0 EFLAGS: 00000282
-> > [�� 13.469076] RAX: 0000000000000000 RBX: ffff9836448a5008 RCX: 0000000000000006
-> > [�� 13.469297] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffffffae0e03dd
-> > [�� 13.469494] RBP: ffff98364482c2f0 R08: 0000000000000001 R09: 0000000000000001
-> > [�� 13.469699] R10: 0000000000000001 R11: ffffffffafa6f3e0 R12: ffff9836448a5000
-> > [�� 13.469974] R13: ffff9836448a3910 R14: 00000000fee1dead R15: 0000000000000000
-> > [�� 13.470122] FS:� 00007ff4118d7b28(0000) GS:ffff98365f600000(0000) knlGS:0000000000000000
-> > [�� 13.470230] CS:� 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [�� 13.470311] CR2: 00007fd877982830 CR3: 0000000005218000 CR4: 00000000001506f0
-> > [�� 13.470438] Call Trace:
-> > [�� 13.470532]� device_shutdown+0xae/0x1c0
-> > [�� 13.470610]� __do_sys_reboot.cold+0x2f/0x5b
-> > [�� 13.470675]� ? __lock_acquire+0x5bd/0x2640
-> > [�� 13.470777]� ? lock_acquire+0xc6/0x2b0
-> > [�� 13.470934]� ? lockdep_hardirqs_on_prepare+0xdc/0x1a0
-> > [�� 13.471015]� ? syscall_enter_from_user_mode+0x1d/0x50
-> > [�� 13.471101]� do_syscall_64+0x33/0x40
-> > [�� 13.471162]� entry_SYSCALL_64_after_hwframe+0x61/0xc6
-> > [�� 13.471313] RIP: 0033:0x7ff411860aa6
-> > [�� 13.471437] Code: ff 5a c3 48 63 ff b8 bb 00 00 00 0f 05 48 89 c7 e9 95 e9 ff ff 48 63 d7 bf ad de e1 fe 50 be 69 19 12 28 b8 a9 00 00 00 0f 05 <48> 89 c7 e8 78 e9 ff ff 5a c3 49 89 ca 50 48 63 d2 4d 63 c0 b8 d8
-> > [�� 13.471627] RSP: 002b:00007ffd01d415e0 EFLAGS: 00000246 ORIG_RAX: 00000000000000a9
-> > [�� 13.471741] RAX: ffffffffffffffda RBX: 000000000000000f RCX: 00007ff411860aa6
-> > [�� 13.471899] RDX: 0000000001234567 RSI: 0000000028121969 RDI: 00000000fee1dead
-> > [�� 13.472008] RBP: 0000000001234567 R08: 0000000000000000 R09: 0000000000000000
-> > [�� 13.472099] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> > [�� 13.472185] R13: 00007ffd01d417a8 R14: 00007ff4118d7b28 R15: 0000000000000000
-> > [�� 13.472384] irq event stamp: 479
-> > [�� 13.472453] hardirqs last� enabled at (487): [<ffffffffae0e03dd>] console_unlock+0x4dd/0x5e0
-> > [�� 13.472560] hardirqs last disabled at (494): [<ffffffffae0e0334>] console_unlock+0x434/0x5e0
-> > [�� 13.472666] softirqs last� enabled at (242): [<ffffffffaf000fe2>] asm_call_irq_on_stack+0x12/0x20
-> > [�� 13.472775] softirqs last disabled at (237): [<ffffffffaf000fe2>] asm_call_irq_on_stack+0x12/0x20
-> > [�� 13.472964] ---[ end trace 34290884cd36b277 ]---
-> > 
-> > Currently bisecting.
-> > 
-> Reverting the nvmem patches fixed this problem.
+On 2/14/2023 9:41 AM, Mickaël Salaün wrote:
+>
+> On 09/01/2023 19:07, Casey Schaufler wrote:
+>> Create a system call lsm_get_self_attr() to provide the security
+>> module maintained attributes of the current process. Historically
+>> these attributes have been exposed to user space via entries in
+>> procfs under /proc/self/attr.
+>>
+>> Attributes are provided as a collection of lsm_ctx structures
+>> which are placed into a user supplied buffer. Each structure
+>> identifys the size of the attribute, and the attribute value.
+>> The format of the attribute value is defined by the security
+>> module, but will always be \0 terminated. The ctx_len value
+>> will always be strlen(ctx)+1.
+>>
+>>          ---------------------------
+>>          | __u32 id                |
+>>          ---------------------------
+>>          | __u64 flags             |
+>>          ---------------------------
+>>          | __kernel_size_t ctx_len |
+>>          ---------------------------
+>>          | __u8 ctx[ctx_len]       |
+>>          ---------------------------
+>>          | __u32 id                |
+>>          ---------------------------
+>>          | __u64 flags             |
+>>          ---------------------------
+>>          | __kernel_size_t ctx_len |
+>>          ---------------------------
+>>          | __u8 ctx[ctx_len]       |
+>>          ---------------------------
+>>
+>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+>> ---
+>>   Documentation/userspace-api/lsm.rst |   9 ++
+>>   include/linux/syscalls.h            |   3 +
+>>   include/uapi/linux/lsm.h            |  21 ++++
+>>   kernel/sys_ni.c                     |   3 +
+>>   security/Makefile                   |   1 +
+>>   security/lsm_syscalls.c             | 182 ++++++++++++++++++++++++++++
+>>   6 files changed, 219 insertions(+)
+>>   create mode 100644 security/lsm_syscalls.c
+>
+> For new files (e.g. lsm_syscalls.c), it would be nice to auto-format
+> them with clang-format. It helps maintenance by keeping a consistent
+> style across commits, which should also help backports, and it avoids
+> nitpicking on style issues.
 
-nvmem patches are now dropped and a -rc2 is pushed out.
+Good idea.
 
-thanks,
 
-greg k-h
