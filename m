@@ -2,362 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13056696EC4
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 22:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F085696ED2
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 22:02:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbjBNVAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 16:00:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54432 "EHLO
+        id S232031AbjBNVCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 16:02:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbjBNVAB (ORCPT
+        with ESMTP id S230162AbjBNVCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 16:00:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D756728236
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 12:59:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676408353;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mfuzKjmoSRpLcXDaEl9+5VeGQAXurXdK+Oya4sttb9I=;
-        b=LAIfy6NrCK3bPv9w/RBhbW4cdhp2Xve04IHnoJxa76m1PCPm4v3Y8OKueE0xLh3W0crNpo
-        N61UZCRUChZzbxl1xbbd9SzSf1UlyelXbGZBksMXfJjlFUjlk6eREEvWlts/un0wR6QYKN
-        UKC4OCGGhh/ps0SV/3y2CIY4bwE5/W8=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-114-3XsczkLQNq-1ZDGKBmFYVw-1; Tue, 14 Feb 2023 15:59:11 -0500
-X-MC-Unique: 3XsczkLQNq-1ZDGKBmFYVw-1
-Received: by mail-qv1-f69.google.com with SMTP id lw11-20020a05621457cb00b005376b828c22so9309092qvb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 12:59:11 -0800 (PST)
+        Tue, 14 Feb 2023 16:02:20 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70BD428235
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 13:02:19 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id kk7-20020a17090b4a0700b00234463de251so1781522pjb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 13:02:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W6hAhBiQuth0RKcnjuFyrUtYy0R0R70e768Xjzo8E0U=;
+        b=jOmPB1ACFnX+/zisfeaSLjG4FhSn0QnWgmifX98JHwpJACkaxlJFxO2WjH0ZwIOXMK
+         2jT+uqHwpLCirTfEj/o00WPbNhrmc9VoSEQZvL1o6gUpT4uFfMVHnCjxFvzH3ZRFszdQ
+         Swm/mjwDVuhh8efFl0RR0gZh0d5A8ZgpXYDng=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1676408351;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mfuzKjmoSRpLcXDaEl9+5VeGQAXurXdK+Oya4sttb9I=;
-        b=08ARP99E3yHygNb5PMnVejrTM/Ao1DVrqsjruTNXw6aPmARHx5WA3S/y530HVOYhMZ
-         Mvx3NuGZqYirfgjG8cLvHREu0Lhu7APXH/Xz4YkNSKTtpqgqCVncbaYOn8PaGD35JuRM
-         yZ/HaKbyrcdGbw8NBibuo68YJ2/rFMWQM7MRnD/Jfa3FPNhbQazEDxOJ3OipW64w1RQk
-         lChTH6qvI2za9Nc1+gzpOKhtvDt4radhI+GMR3Y7+Z0G9/q4E2kuP4TXJDl9FqUIV2Lg
-         eyDec4TZkxPXeTxP1xa17wLyLSjdTptwYrFz/Sc9G5lkTUUDtOh8YmZmn7m9qcwxX0/L
-         08xQ==
-X-Gm-Message-State: AO0yUKWhyMIh5bdvs8HI2c5o6Q9kNUpu8YVmF21H0kbaHMSSDlgu5Fsk
-        huiPCMBnVEqgAGzhlcph0rsocls7P/SDNEgzsELxMe3TXR66ftQmGCZw/eTwkDqMqy6EboKAJ7s
-        UpLtPzXw/eY9hC3uk7rVjDUuk
-X-Received: by 2002:ac8:7f0d:0:b0:3bb:75c7:9326 with SMTP id f13-20020ac87f0d000000b003bb75c79326mr5479680qtk.0.1676408351142;
-        Tue, 14 Feb 2023 12:59:11 -0800 (PST)
-X-Google-Smtp-Source: AK7set9LNpg+CvDm+Cv9K2lVqtbOVq3Scb602R4WLGjtiPz+w3b2yTIlyRP6NJy1Lyicueb6H5Z+3A==
-X-Received: by 2002:ac8:7f0d:0:b0:3bb:75c7:9326 with SMTP id f13-20020ac87f0d000000b003bb75c79326mr5479635qtk.0.1676408350703;
-        Tue, 14 Feb 2023 12:59:10 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id 192-20020a3707c9000000b007090f7a4f2asm6009677qkh.82.2023.02.14.12.59.08
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W6hAhBiQuth0RKcnjuFyrUtYy0R0R70e768Xjzo8E0U=;
+        b=lxhWfOU1EA2y7f2ZET7x9/xO87PLuaPulHvj6YBgbfx6p6h3hnEr5j2Cx1BNa+xc7Q
+         RWHKgoP+Mkl3nkyT+FECM0K/mP56npKq9VSdLIQXLt97rg96Y0VIN//j+pZ+s4aXbsUZ
+         6jatihKCvhyuJ1Rct2mEnu0JFGqoRtftdX0x19OQwmnoh9M2ILj8eO46M86C87LIevzT
+         vstVAENK8c94fbGocZTIU9724Z7i6Q4kDaUQZJgnm+bNAsGZA+5ngdqgzl0Guoa66mhz
+         9AVQEiDBhkUxZM820A9FC6vtQhZnEwWGTFcp5j1m5KeJY4qC9GRLG3ToBwtvgN2dR2b4
+         K0MA==
+X-Gm-Message-State: AO0yUKWQdyYFs6BN6vhQIaSha6AXsqkqwtp9gUs8QPFCKAvpqlvz7K/p
+        3UJRmxjg4k2HXb6NR1vu/mpBDg==
+X-Google-Smtp-Source: AK7set8GH8MT1B1/+MwnjQMXXhlEC6xkXlh6cIC1LPv1l4MuOxPCfxB+ZU7zhZbT56mtSGTMmnSRUw==
+X-Received: by 2002:a17:902:e886:b0:199:15bb:8316 with SMTP id w6-20020a170902e88600b0019915bb8316mr4697228plg.68.1676408538908;
+        Tue, 14 Feb 2023 13:02:18 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:6604:c04d:808d:7d6])
+        by smtp.gmail.com with ESMTPSA id iz17-20020a170902ef9100b00196025a34b9sm1811353plb.159.2023.02.14.13.02.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 12:59:09 -0800 (PST)
-Date:   Tue, 14 Feb 2023 15:59:08 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-Message-ID: <Y+v2HJ8+3i/KzDBu@x1n>
-References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-4-usama.anjum@collabora.com>
- <Y+QfDN4Y5Q10x8GQ@x1n>
- <8b2959fb-2a74-0a1f-8833-0b18eab142dc@collabora.com>
- <Y+qur8iIUQTLyE8f@x1n>
- <39217d9a-ed7e-f1ff-59b9-4cbffa464999@collabora.com>
+        Tue, 14 Feb 2023 13:02:18 -0800 (PST)
+Date:   Tue, 14 Feb 2023 13:02:15 -0800
+From:   Brian Norris <briannorris@chromium.org>
+To:     Kencp huang <kencp_huang@asus.corp-partner.google.com>
+Cc:     Laurent.pinchart@ideasonboard.com, andrzej.hajda@intel.com,
+        airlied@gmail.com, neil.armstrong@linaro.org, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, hoegsberg@chromium.org,
+        jernej.skrabec@gmail.com, jonas@kwiboo.se, kencp_huang@asus.com,
+        linux-kernel@vger.kernel.org, rfoss@kernel.org,
+        seanpaul@chromium.org, wzz@rock-chips.com, zyw@rock-chips.com
+Subject: Re: [PATCH 1/1] drm/bridge: analogix_dp: add a quirk for Bob panel
+Message-ID: <Y+v216m4Ba+tiIlt@google.com>
+References: <20230208031519.7440-1-kencp_huang@asus.corp-partner.google.com>
+ <20230208044406.8280-1-kencp_huang@asus.corp-partner.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <39217d9a-ed7e-f1ff-59b9-4cbffa464999@collabora.com>
+In-Reply-To: <20230208044406.8280-1-kencp_huang@asus.corp-partner.google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 12:57:21PM +0500, Muhammad Usama Anjum wrote:
-> On 2/14/23 2:42 AM, Peter Xu wrote:
-> > On Mon, Feb 13, 2023 at 05:55:19PM +0500, Muhammad Usama Anjum wrote:
-> >> On 2/9/23 3:15 AM, Peter Xu wrote:
-> >>> On Thu, Feb 02, 2023 at 04:29:12PM +0500, Muhammad Usama Anjum wrote:
-> >>>> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
-> >>>> the info about page table entries. The following operations are supported
-> >>>> in this ioctl:
-> >>>> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
-> >>>>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
-> >>>>   (PAGE_IS_SWAPPED).
-> >>>> - Write-protect the pages (PAGEMAP_WP_ENGAGE) to start finding which
-> >>>>   pages have been written-to.
-> >>>> - Find pages which have been written-to and write protect the pages
-> >>>>   (atomic PAGE_IS_WRITTEN + PAGEMAP_WP_ENGAGE)
-> >>>>
-> >>>> To get information about which pages have been written-to and/or write
-> >>>> protect the pages, following must be performed first in order:
-> >>>> - The userfaultfd file descriptor is created with userfaultfd syscall.
-> >>>> - The UFFD_FEATURE_WP_ASYNC feature is set by UFFDIO_API IOCTL.
-> >>>> - The memory range is registered with UFFDIO_REGISTER_MODE_WP mode
-> >>>>   through UFFDIO_REGISTER IOCTL.
-> >>>> Then the any part of the registered memory or the whole memory region
-> >>>> can be write protected using the UFFDIO_WRITEPROTECT IOCTL or
-> >>>> PAGEMAP_SCAN IOCTL.
-> >>>>
-> >>>> struct pagemap_scan_args is used as the argument of the IOCTL. In this
-> >>>> struct:
-> >>>> - The range is specified through start and len.
-> >>>> - The output buffer of struct page_region array and size is specified as
-> >>>>   vec and vec_len.
-> >>>> - The optional maximum requested pages are specified in the max_pages.
-> >>>> - The flags can be specified in the flags field. The PAGEMAP_WP_ENGAGE
-> >>>>   is the only added flag at this time.
-> >>>> - The masks are specified in required_mask, anyof_mask, excluded_ mask
-> >>>>   and return_mask.
-> >>>>
-> >>>> This IOCTL can be extended to get information about more PTE bits. This
-> >>>> IOCTL doesn't support hugetlbs at the moment. No information about
-> >>>> hugetlb can be obtained. This patch has evolved from a basic patch from
-> >>>> Gabriel Krisman Bertazi.
-> >>>>
-> >>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> >>>> ---
-> >>>> Changes in v10:
-> >>>> - move changes in tools/include/uapi/linux/fs.h to separate patch
-> >>>> - update commit message
-> >>>>
-> >>>> Change in v8:
-> >>>> - Correct is_pte_uffd_wp()
-> >>>> - Improve readability and error checks
-> >>>> - Remove some un-needed code
-> >>>>
-> >>>> Changes in v7:
-> >>>> - Rebase on top of latest next
-> >>>> - Fix some corner cases
-> >>>> - Base soft-dirty on the uffd wp async
-> >>>> - Update the terminologies
-> >>>> - Optimize the memory usage inside the ioctl
-> >>>>
-> >>>> Changes in v6:
-> >>>> - Rename variables and update comments
-> >>>> - Make IOCTL independent of soft_dirty config
-> >>>> - Change masks and bitmap type to _u64
-> >>>> - Improve code quality
-> >>>>
-> >>>> Changes in v5:
-> >>>> - Remove tlb flushing even for clear operation
-> >>>>
-> >>>> Changes in v4:
-> >>>> - Update the interface and implementation
-> >>>>
-> >>>> Changes in v3:
-> >>>> - Tighten the user-kernel interface by using explicit types and add more
-> >>>>   error checking
-> >>>>
-> >>>> Changes in v2:
-> >>>> - Convert the interface from syscall to ioctl
-> >>>> - Remove pidfd support as it doesn't make sense in ioctl
-> >>>> ---
-> >>>>  fs/proc/task_mmu.c      | 290 ++++++++++++++++++++++++++++++++++++++++
-> >>>>  include/uapi/linux/fs.h |  50 +++++++
-> >>>>  2 files changed, 340 insertions(+)
-> >>>>
-> >>>> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> >>>> index e35a0398db63..c6bde19d63d9 100644
-> >>>> --- a/fs/proc/task_mmu.c
-> >>>> +++ b/fs/proc/task_mmu.c
-> >>>> @@ -19,6 +19,7 @@
-> >>>>  #include <linux/shmem_fs.h>
-> >>>>  #include <linux/uaccess.h>
-> >>>>  #include <linux/pkeys.h>
-> >>>> +#include <linux/minmax.h>
-> >>>>  
-> >>>>  #include <asm/elf.h>
-> >>>>  #include <asm/tlb.h>
-> >>>> @@ -1135,6 +1136,22 @@ static inline void clear_soft_dirty(struct vm_area_struct *vma,
-> >>>>  }
-> >>>>  #endif
-> >>>>  
-> >>>> +static inline bool is_pte_uffd_wp(pte_t pte)
-> >>>> +{
-> >>>> +	if ((pte_present(pte) && pte_uffd_wp(pte)) ||
-> >>>> +	    (pte_swp_uffd_wp_any(pte)))
-> >>>> +		return true;
-> >>>> +	return false;
-> >>>
-> >>> Sorry I should have mentioned this earlier: you can directly return here.
-> >> No problem at all. I'm replacing these two helper functions with following
-> >> in next version so that !present pages don't show as dirty:
-> >>
-> >> static inline bool is_pte_written(pte_t pte)
-> >> {
-> >> 	if ((pte_present(pte) && pte_uffd_wp(pte)) ||
-> >> 	    (pte_swp_uffd_wp_any(pte)))
-> >> 		return false;
-> >> 	return (pte_present(pte) || is_swap_pte(pte));
-> >> }
-> > 
-> > Could you explain why you don't want to return dirty for !present?  A page
-> > can be written then swapped out.  Don't you want to know that happened
-> > (from dirty tracking POV)?
-> > 
-> > The code looks weird to me too..  We only have three types of ptes: (1)
-> > present, (2) swap, (3) none.
-> > 
-> > Then, "(pte_present() || is_swap_pte())" is the same as !pte_none().  Is
-> > that what you're really looking for?
-> Yes, this is what I've been trying to do. I'll use !pte_none() to make it
-> simpler.
+Hi,
 
-Ah I think I see what you wanted to do now.. But I'm afraid it won't work
-for all cases.
+You seem to have sent this twice, perhaps to adjust the To/CC list. I
+think I've picked the right one to reply to, but it's usually nice to
+use a "v2" notation or otherwise put a comment somewhere in the email.
 
-So IIUC the problem is anon pte can be empty, but since uffd-wp bit doesn't
-persist on anon (but none) ptes, then we got it lost and we cannot identify
-it from pages being written.  Your solution will solve problem for
-anonymous, but I think it'll break file memories.
-
-Example:
-
-Consider one shmem page that got mapped, write protected (using UFFDIO_WP
-ioctl), written again (removing uffd-wp bit automatically), then zapped.
-The pte will be pte_none() but it's actually written, afaiu.
-
-Maybe it's time we should introduce UFFD_FEATURE_WP_ZEROPAGE, so we'll need
-to install pte markers for anonymous too (then it will work similarly like
-shmem/hugetlbfs, that we'll report writting to zero pages), then you'll
-need to have the new UFFD_FEATURE_WP_ASYNC depend on it.  With that I think
-you can keep using the old check and it should start to work.
-
-Please let me know if my understanding is correct above.
-
-I'll see whether I can quickly play with UFFD_FEATURE_WP_ZEROPAGE with some
-patch at the meantime.  That's something we wanted before too, when the app
-cares about zero pages on anon.  We used to populate the pages before doing
-ioctl(UFFDIO_WP) to make sure zero pages will be repoted too, but that flag
-should be more efficient.
-
+On Wed, Feb 08, 2023 at 12:44:06PM +0800, Kencp huang wrote:
+> From: zain wang <wzz@rock-chips.com>
 > 
-> > 
-> >>
-> >> static inline bool is_pmd_written(pmd_t pmd)
-> >> {
-> >> 	if ((pmd_present(pmd) && pmd_uffd_wp(pmd)) ||
-> >> 	    (is_swap_pmd(pmd) && pmd_swp_uffd_wp(pmd)))
-> >> 		return false;
-> >> 	return (pmd_present(pmd) || is_swap_pmd(pmd));
-> >> }
-> > 
-> > [...]
-> > 
-> >>>> +	bitmap = cur & p->return_mask;
-> >>>> +	if (cpy && bitmap) {
-> >>>> +		if ((prev->len) && (prev->bitmap == bitmap) &&
-> >>>> +		    (prev->start + prev->len * PAGE_SIZE == addr)) {
-> >>>> +			prev->len += len;
-> >>>> +			p->found_pages += len;
-> >>>> +		} else if (p->vec_index < p->vec_len) {
-> >>>> +			if (prev->len) {
-> >>>> +				memcpy(&p->vec[p->vec_index], prev, sizeof(struct page_region));
-> >>>> +				p->vec_index++;
-> >>>> +			}
-> >>>
-> >>> IIUC you can have:
-> >>>
-> >>>   int pagemap_scan_deposit(p)
-> >>>   {
-> >>>         if (p->vec_index >= p->vec_len)
-> >>>                 return -ENOSPC;
-> >>>
-> >>>         if (p->prev->len) {
-> >>>                 memcpy(&p->vec[p->vec_index], prev, sizeof(struct page_region));
-> >>>                 p->vec_index++;
-> >>>         }
-> >>>
-> >>>         return 0;
-> >>>   }
-> >>>
-> >>> Then call it here.  I think it can also be called below to replace
-> >>> export_prev_to_out().
-> >> No this isn't possible. We fill up prev until the next range doesn't merge
-> >> with it. At that point, we put prev into the output buffer and new range is
-> >> put into prev. Now that we have shifted to smaller page walks of <= 512
-> >> entries. We want to visit all ranges before finally putting the prev to
-> >> output. Sorry to have this some what complex method. The problem is that we
-> >> want to merge the consective matching regions into one entry in the output.
-> >> So to achieve this among multiple different page walks, the prev is being used.
-> >>
-> >> Lets suppose we want to visit memory from 0x7FFF00000000 to 7FFF00400000
-> >> having length of 1024 pages and all of the memory has been written.
-> >> walk_page_range() will be called 2 times. In the first call, prev will be
-> >> set having length of 512. In second call, prev will be updated to 1024 as
-> >> the previous range stored in prev could be extended. After this, the prev
-> >> will be stored to the user output buffer consuming only 1 struct of page_range.
-> >>
-> >> If we store prev back to output memory in every walk_page_range() call, we
-> >> wouldn't get 1 struct of page_range with length 1024. Instead we would get
-> >> 2 elements of page_range structs with half the length.
-> > 
-> > I didn't mean to merge PREV for each pgtable walk.  What I meant is I think
-> > with such a pagemap_scan_deposit() you can rewrite it as:
-> > 
-> > if (cpy && bitmap) {
-> >         if ((prev->len) && (prev->bitmap == bitmap) &&
-> >             (prev->start + prev->len * PAGE_SIZE == addr)) {
-> >                 prev->len += len;
-> >                 p->found_pages += len;
-> >         } else {
-> >                 if (pagemap_scan_deposit(p))
-> >                         return -ENOSPC;
-> >                 prev->start = addr;
-> >                 prev->len = len;
-> >                 prev->bitmap = bitmap;
-> >                 p->found_pages += len;
-> >         }
-> > }
-> > 
-> > Then you can reuse pagemap_scan_deposit() when before returning to
-> > userspace, just to flush PREV to p->vec properly in a single helper.
-> > It also makes the code slightly easier to read.
-> Yeah, this would have worked as you have described. But in
-> pagemap_scan_output(), we are flushing prev to p->vec. But later in
-> export_prev_to_out() we need to flush prev to user_memory directly.
+> Some panels' DP_PSR_STATUS (DPCD 0x2008) may be unstable when we
+> enable psr. If we get the unexpected psr state, We need try the
+> debounce to ensure the panel was in PSR
+> 
+> Signed-off-by: zain wang <wzz@rock-chips.com>
+> Signed-off-by: Chris Zhong <zyw@rock-chips.com>
+> Commit-Ready: Kristian H. Kristensen <hoegsberg@chromium.org>
 
-I think there's a loop to copy_to_user().  Could you use the new helper so
-the copy_to_user() loop will work without export_prev_to_out()?
+'Commit-Ready' isn't something that makes sense for upstream Linux. The
+other 'Tested-by' and 'Reviewed-by' *might* make sense to carry forward,
+even though these were from the Chromium Gerrit instance, but they also
+applied to a very old and different version of this patch, so probably
+not.
 
-I really hope we can get rid of export_prev_to_out().  Thanks,
+I'd suggest starting over with only the Signed-off-by tags.
 
--- 
-Peter Xu
+> Tested-by: Kristian H. Kristensen <hoegsberg@chromium.org>
+> Reviewed-by: Kristian H. Kristensen <hoegsberg@chromium.org>
+> Tested-by: Kencp huang <kencp_huang@asus.corp-partner.google.com>
+> Signed-off-by: Kencp huang <kencp_huang@asus.corp-partner.google.com>
+> ---
+>  .../gpu/drm/bridge/analogix/analogix_dp_reg.c | 71 +++++++++++--------
+>  1 file changed, 42 insertions(+), 29 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/analogix/analogix_dp_reg.c b/drivers/gpu/drm/bridge/analogix/analogix_dp_reg.c
+> index 6a4f20fccf84..7b6e3f8f85b0 100644
+> --- a/drivers/gpu/drm/bridge/analogix/analogix_dp_reg.c
+> +++ b/drivers/gpu/drm/bridge/analogix/analogix_dp_reg.c
+> @@ -935,25 +935,54 @@ void analogix_dp_enable_psr_crc(struct analogix_dp_device *dp)
+>  	writel(PSR_VID_CRC_ENABLE, dp->reg_base + ANALOGIX_DP_CRC_CON);
+>  }
+>  
+> -static ssize_t analogix_dp_get_psr_status(struct analogix_dp_device *dp)
+> +static int analogix_dp_get_psr_status(struct analogix_dp_device *dp,
 
+Probably could be called 'analogix_dp_wait_psr_status()', since it's no
+longer just a "getter" function.
+
+> +				      int status)
+
+This would probably make more sense as a 'bool psr_active' or some
+similar naming, since it doesn't really represent a "status" field now,
+but more of a "am I entering or exiting PSR?" parameter.
+
+>  {
+>  	ssize_t val;
+> -	u8 status;
+> +	u8 reg, store = 0;
+> +	int cnt = 0;
+> +
+> +	/* About 3ms for a loop */
+
+The commit description explains why you need this polling/debounce loop,
+but it's good to document such artifacts in the code too, when they're
+as strange as this one. Perhaps a short explanation about the "bouncing"
+behavior of some panels here? "Some panels' DP_PSR_STATUS register is
+unstable when entering PSR."
+
+Also, I already had a (pre mailing list) question about why this doesn't
+use readx_poll_timeout(), so I'll repeat for the record one reason not
+to: it's difficult to handle the stateful debouncing aspect with that
+macro, and keep the 'store' variable around.
+
+> +	while (cnt < 100) {
+> +		/* Read operation would takes 900us */
+> +		val = drm_dp_dpcd_readb(&dp->aux, DP_PSR_STATUS, &reg);
+> +		if (val < 0) {
+> +			dev_err(dp->dev, "PSR_STATUS read failed ret=%zd", val);
+> +			return val;
+> +		}
+> +
+> +		/*
+> +		 * Ensure the PSR_STATE should go to DP_PSR_SINK_ACTIVE_RFB
+> +		 * from DP_PSR_SINK_ACTIVE_SINK_SYNCED or
+> +		 * DP_PSR_SINK_ACTIVE_SRC_SYNCED.
+> +		 * Otherwise, if we get DP_PSR_SINK_ACTIVE_RFB twice in
+> +		 * succession, it show the Panel is stable PSR enabled state.
+> +		 */
+> +		if (status == DP_PSR_SINK_ACTIVE_RFB) {
+> +			if ((reg == DP_PSR_SINK_ACTIVE_RFB) &&
+> +			    ((store == DP_PSR_SINK_ACTIVE_SINK_SYNCED) ||
+> +			     (store == DP_PSR_SINK_ACTIVE_SRC_SYNCED) ||
+> +			     (store == DP_PSR_SINK_ACTIVE_RFB)))
+> +				return 0;
+> +			else
+> +				store = reg;
+> +		} else {
+
+You dropped the ACTIVE_RESYNC and INACTIVE comments from below. Those
+probably should move here.
+
+With those fixed, I think this would be fine:
+
+Reviewed-by: Brian Norris <briannorris@chromium.org>
+
+> +			if ((reg == DP_PSR_SINK_INACTIVE) ||
+> +			    (reg == DP_PSR_SINK_ACTIVE_RESYNC))
+> +				return 0;
+> +		}
+>  
+> -	val = drm_dp_dpcd_readb(&dp->aux, DP_PSR_STATUS, &status);
+> -	if (val < 0) {
+> -		dev_err(dp->dev, "PSR_STATUS read failed ret=%zd", val);
+> -		return val;
+> +		usleep_range(2100, 2200);
+> +		cnt++;
+>  	}
+> -	return status;
+> +
+> +	return -ETIMEDOUT;
+>  }
+>  
+>  int analogix_dp_send_psr_spd(struct analogix_dp_device *dp,
+>  			     struct dp_sdp *vsc, bool blocking)
+>  {
+>  	unsigned int val;
+> -	int ret;
+> -	ssize_t psr_status;
+>  
+>  	/* don't send info frame */
+>  	val = readl(dp->reg_base + ANALOGIX_DP_PKT_SEND_CTL);
+> @@ -998,26 +1027,10 @@ int analogix_dp_send_psr_spd(struct analogix_dp_device *dp,
+>  	if (!blocking)
+>  		return 0;
+>  
+> -	/*
+> -	 * db[1]!=0: entering PSR, wait for fully active remote frame buffer.
+> -	 * db[1]==0: exiting PSR, wait for either
+> -	 *  (a) ACTIVE_RESYNC - the sink "must display the
+> -	 *      incoming active frames from the Source device with no visible
+> -	 *      glitches and/or artifacts", even though timings may still be
+> -	 *      re-synchronizing; or
+> -	 *  (b) INACTIVE - the transition is fully complete.
+> -	 */
+> -	ret = readx_poll_timeout(analogix_dp_get_psr_status, dp, psr_status,
+> -		psr_status >= 0 &&
+> -		((vsc->db[1] && psr_status == DP_PSR_SINK_ACTIVE_RFB) ||
+> -		(!vsc->db[1] && (psr_status == DP_PSR_SINK_ACTIVE_RESYNC ||
+> -				 psr_status == DP_PSR_SINK_INACTIVE))),
+> -		1500, DP_TIMEOUT_PSR_LOOP_MS * 1000);
+> -	if (ret) {
+> -		dev_warn(dp->dev, "Failed to apply PSR %d\n", ret);
+> -		return ret;
+> -	}
+> -	return 0;
+> +	if (vsc->db[1])
+> +		return analogix_dp_get_psr_status(dp, DP_PSR_SINK_ACTIVE_RFB);
+> +	else
+> +		return analogix_dp_get_psr_status(dp, 0);
+>  }
+>  
+>  ssize_t analogix_dp_transfer(struct analogix_dp_device *dp,
+> -- 
+> 2.34.1
+> 
