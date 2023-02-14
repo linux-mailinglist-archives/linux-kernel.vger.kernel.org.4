@@ -2,144 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E201469687D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 16:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6431869688C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 16:57:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233245AbjBNPu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 10:50:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
+        id S229526AbjBNP46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 10:56:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233183AbjBNPuZ (ORCPT
+        with ESMTP id S229538AbjBNP4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 10:50:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CF110FA
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 07:49:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676389777;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9N7LtIUCs1c3MxbwmYpiSal++u4MCEt1aDdzCRdbS6c=;
-        b=RH854RomCOsX3iWCdX1/Wn7JDwvweeHXBjfRVYFnmIsw6xhCJE8vefIyFE+OCTN8y2JzQZ
-        fSyqXSlCCkVEpF+lL+05LyIPF+Bz5baIJX1mFhzm3sZB7QuwC3l8rYgy8QC9xApg6jC5lN
-        DNQ+TIM06EzetVSVaxKtF6+v2vy13Uc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-625-Qze0Dd2KNe6BqSZdcFdeGg-1; Tue, 14 Feb 2023 10:49:33 -0500
-X-MC-Unique: Qze0Dd2KNe6BqSZdcFdeGg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 14 Feb 2023 10:56:55 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E58193E3;
+        Tue, 14 Feb 2023 07:56:54 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4E85C3C0E204;
-        Tue, 14 Feb 2023 15:49:32 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5E76B140EBF6;
-        Tue, 14 Feb 2023 15:49:30 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <9dd98aed-0d9a-eb3e-790c-0dd744be8ccb@kernel.dk>
-References: <9dd98aed-0d9a-eb3e-790c-0dd744be8ccb@kernel.dk> <20230214083710.2547248-1-dhowells@redhat.com> <75d74adc-7f18-d0df-e092-10bca4f05f2a@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     dhowells@redhat.com, David Hildenbrand <david@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v3 0/5] iov_iter: Adjust styling/location of new splice functions
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 6B6102184F;
+        Tue, 14 Feb 2023 15:56:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1676390213; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iAggmlF4GOtadtjvHCG9VGU8bit4Xaqy/p0gnj0OK7A=;
+        b=RK+XbcmgSb5r0n5e5pwKRqGg012gVMCB/BgpEJ1uGLd83kk2Qp9m3ltJOqPkP9HdoV71ij
+        yD8r+HWyxD3FQY7E1msXK+iv/WfYD+Up/+IJfn6AOg6PMsYPTZNikWOPOYu8mVyvx/r+GO
+        7shQ7ft20DZTe/p/FIvp82rBcJfEwGA=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 594EA138E3;
+        Tue, 14 Feb 2023 15:56:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Xb8+FEWv62PSAQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 14 Feb 2023 15:56:53 +0000
+Date:   Tue, 14 Feb 2023 16:56:52 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Haifeng Xu <haifeng.xu@shopee.com>
+Cc:     hannes@cmpxchg.org, shakeelb@google.com, muchun.song@linux.dev,
+        akpm@linux-foundation.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/memcg: Skip high limit check in root memcg
+Message-ID: <Y+uvRKo7OQ02yB4K@dhcp22.suse.cz>
+References: <20230210094550.5125-1-haifeng.xu@shopee.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2677037.1676389769.1@warthog.procyon.org.uk>
-Date:   Tue, 14 Feb 2023 15:49:29 +0000
-Message-ID: <2677038.1676389769@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230210094550.5125-1-haifeng.xu@shopee.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jens Axboe <axboe@kernel.dk> wrote:
+On Fri 10-02-23 09:45:50, Haifeng Xu wrote:
+> The high limit checks the memory usage from given memcg to root memcg.
+> However, there is no limit in root memcg. So this check makes no sense
+> and we can ignore it.
 
-> That is indeed the question, and unanswered so far... Let's turn it into
-> one clean series, and get it stuffed into for-next and most likely
-> target 6.4 for inclusion at this point.
+Is this check actually addining any benefit? Have you measured aby
+performance gains by this change?
 
-I was waiting to see if the patch worked for Daniel (which it does) and
-Guenter (no answer yet) before answering.  It appears to fix shmem - I've
-tested it with:
+> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+> ---
+>  mm/memcontrol.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 73afff8062f9..a31a56598f29 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -2780,6 +2780,10 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+>  	do {
+>  		bool mem_high, swap_high;
+>  
+> +		/* There is no need for root memcg to check high limit */
+> +		if (mem_cgroup_is_root(memcg))
+> +			break;
+> +
+>  		mem_high = page_counter_read(&memcg->memory) >
+>  			READ_ONCE(memcg->memory.high);
+>  		swap_high = page_counter_read(&memcg->swap) >
+> -- 
+> 2.25.1
 
-	dd if=/dev/zero of=/tmp/sparse count=1 seek=401 bs=4096
-	just-splice /tmp/sparse 11234000 | sha1sum
-
-where just-splice.c is attached (note that piping the output into another
-program is important to make the splice work).
-
-Meanwhile, I'm working on working the changes into my patchset at appropriate
-points.
-
-David
----
-#define _GNU_SOURCE 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/sendfile.h>
-#include <sys/wait.h>
-
-static char *prog;
-
-int main(int argc, char *argv[])
-{
-        unsigned int iflags = 0;
-        ssize_t spliced, remain;
-        int in, out;
-
-        prog = argv[0];
-        if (argc > 1 && strcmp(argv[1], "-d") == 0) {
-                iflags |= O_DIRECT;
-                argv++;
-                argc--;
-        }
-
-        if (argc != 3 || !argv[1][0] || !argv[2][0]) {
-                fprintf(stderr, "Usage: %s <file> <amount>\n", prog);
-                exit(2);
-        }
-
-        in = open(argv[1], O_RDONLY | O_NOFOLLOW | iflags);
-        if (in < 0) {
-                perror("open");
-                exit(1);
-        }
-
-        remain = strtoul(argv[2], NULL, 0);
-        while (remain > 0) {
-                spliced = splice(in, NULL, 1, NULL, remain, 0);
-                if (spliced < 0) {
-                        perror("splice");
-                        exit(1);
-                }
-                if (spliced == 0)
-                        break;
-                remain -= spliced;
-        }
-
-        exit(0);
-}
-
+-- 
+Michal Hocko
+SUSE Labs
