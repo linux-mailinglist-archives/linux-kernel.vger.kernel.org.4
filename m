@@ -2,117 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F260696769
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F101669676B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233469AbjBNOyF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Feb 2023 09:54:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
+        id S232638AbjBNOzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 09:55:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjBNOyD (ORCPT
+        with ESMTP id S233510AbjBNOy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 09:54:03 -0500
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD4F1724;
-        Tue, 14 Feb 2023 06:54:02 -0800 (PST)
-Received: by mail-ed1-f46.google.com with SMTP id dz21so5730081edb.13;
-        Tue, 14 Feb 2023 06:54:02 -0800 (PST)
+        Tue, 14 Feb 2023 09:54:56 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDAD11724;
+        Tue, 14 Feb 2023 06:54:55 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id 14-20020a9d010e000000b0068bdddfa263so4726531otu.2;
+        Tue, 14 Feb 2023 06:54:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=2ugXyuRFKOms/LZswqpNj/cEbALpgv15wkGcGYkmrA4=;
+        b=eh3WAt73MSLygwUmIKD+YHdkZ++HBS+dz8SCF9Gm+B0FUE/MgChW5kmawe6Ny0Ue7H
+         fiiemlFaKOfaw6qBt2WoUQJT46UckrMN40U0p37qMQtj04IvtqVP9fBHvUMZeKLM88EV
+         v7eSATtkRNGTgd4ZjX8SSqogAxzC/pshK8h6wUrzDy2aY/ifEjzLB4vvWawn9zxZWzTx
+         MwaFfB85h7c08N+Ck7oElc43BHLiE1rAdEPoVVIHnMIQeWwlwOfXOAK42ClstTg2foZF
+         eISR8E92FI2+D8HISAhasNwY9SgaETBcCFffiUcao8kWNcNt8qPF5QWPIM5cgqjl0A7Y
+         NxYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+fquT604O2VKG0dy0dPb5euckKeSoIjzvnpt9mbYzgo=;
-        b=Fk4Ikyo24Menx9ZptnnqTHaO4rQ3XyunoDPPndBpMGR3oFgbjif4u8rr/9o05diuhP
-         zWxGyIoj7COhC2zV215sJVcPRvRppIZSg+G1q4wEsPux9VCdfh1VDgfqlrqYrtMLCcIX
-         VHep2tCUlAHv9kPqlYogI4c+++tYnl14rPlItrCpgUd+HZvdNjBIp3ECeiiKRkmFl2Lt
-         Zy7FuSRjPGih7GZ5lz+p/E/KqTN2CnwoJnfMUQ8UoG+hd/ncmhhOrjxaU6WsDtkRXT/a
-         7D01qybEpi80bRM5nkuzXYrBeOkttL8z75kZESLcEqpnf86e6frHov5D5SKdQJMcbVrh
-         6PwQ==
-X-Gm-Message-State: AO0yUKWKkrnuOVp2OlndRxA7GJP0XXYWDoaw01nrx5Nr05/mAO8vgFRE
-        e74gItK9UC/BD84uK0lhi3ynYKD9OdxXOQ3wN+M=
-X-Google-Smtp-Source: AK7set8buxZQw0XjmI6afN7MQchlfI8N6hS4XFRBsgIr/41nEv3IJGONREA4D7ADzqoX4aYAor1i6DSlYBzhpFR/+o8=
-X-Received: by 2002:a50:bace:0:b0:4ac:ce81:9c1d with SMTP id
- x72-20020a50bace000000b004acce819c1dmr1108530ede.0.1676386441268; Tue, 14 Feb
- 2023 06:54:01 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2ugXyuRFKOms/LZswqpNj/cEbALpgv15wkGcGYkmrA4=;
+        b=E0Z/ddFEZMKN+tx2J1zjn/uedx2MSRY5wV7Mf8FQiTo+oVlWzq9e3yHTOn+eVTJHzN
+         jISR+NUnnGA/gmz7zGWE4A3A8CYZ1RgtmS8lm3sYVufYLUanDgGSYTzxVKyqHNoNA5wo
+         ar2lYw8LtOJpHsU4Gmc1np8lRH8O2hetjFYhkSt8OVDbK6heil5cb0MvN+jjEeRjJFRS
+         2R0NQktorqueqOYPJ6izMZhejv5RS9Y+9wn+rNqR6xsGARbMHYpkFYEq4sNyptmLub6h
+         mcMlqiT+9kstoirljnzltcYQ+R7ZqeuNg4AxczNzP8NQwPOgF0sCiXeyyPEYhcqHufrD
+         Ktkg==
+X-Gm-Message-State: AO0yUKXIba4Iekdhw8dr9WMQKfWosKvcNaWREeAmqNNeVbV+jtkt92Ou
+        wDRlIo7irkAxRvz+OslXCJbdiO76wmo=
+X-Google-Smtp-Source: AK7set9M2iYmHEKVRRrc+egQzAbFr0D+FMmqi0ct25+OZ167K8eJiy9W+iRPYbKS1odDyqX9KjUyTw==
+X-Received: by 2002:a9d:5a15:0:b0:68b:d679:9530 with SMTP id v21-20020a9d5a15000000b0068bd6799530mr983481oth.1.1676386495066;
+        Tue, 14 Feb 2023 06:54:55 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m16-20020a9d6ad0000000b0068bd04b4292sm6393909otq.31.2023.02.14.06.54.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 06:54:54 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <41ceafa3-53b7-4229-58eb-3a8c331c3199@roeck-us.net>
+Date:   Tue, 14 Feb 2023 06:54:52 -0800
 MIME-Version: 1.0
-References: <20230214-kobj_type-acpi-v1-1-6dbe3840208b@weissschuh.net>
-In-Reply-To: <20230214-kobj_type-acpi-v1-1-6dbe3840208b@weissschuh.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 14 Feb 2023 15:53:50 +0100
-Message-ID: <CAJZ5v0g8UABDmB_ywGGbfMHcW_X7w7wnMi=42=yfPBh71z0J2Q@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: make kobj_type structures constant
-To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 4/4] hwmon: (pmbus/core): Notify hwmon events
+Content-Language: en-US
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+References: <20230207120241.2800662-1-Naresh.Solanki@9elements.com>
+ <20230207120241.2800662-4-Naresh.Solanki@9elements.com>
+ <20230211154647.GA204954@roeck-us.net>
+ <102b8dfe-9779-da64-71c1-dc5bf998b4fe@9elements.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <102b8dfe-9779-da64-71c1-dc5bf998b4fe@9elements.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 4:23 AM Thomas Weißschuh <linux@weissschuh.net> wrote:
->
-> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-> the driver core allows the usage of const struct kobj_type.
->
-> Take advantage of this to constify the structure definitions to prevent
-> modification at runtime.
->
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
->  drivers/acpi/cppc_acpi.c    | 2 +-
->  drivers/acpi/device_sysfs.c | 2 +-
->  drivers/acpi/sysfs.c        | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 0f17b1c32718..a8f58b32d66f 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -193,7 +193,7 @@ static struct attribute *cppc_attrs[] = {
->  };
->  ATTRIBUTE_GROUPS(cppc);
->
-> -static struct kobj_type cppc_ktype = {
-> +static const struct kobj_type cppc_ktype = {
->         .sysfs_ops = &kobj_sysfs_ops,
->         .default_groups = cppc_groups,
->  };
-> diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
-> index 120873dad2cc..c3aa15571f16 100644
-> --- a/drivers/acpi/device_sysfs.c
-> +++ b/drivers/acpi/device_sysfs.c
-> @@ -78,7 +78,7 @@ static void acpi_data_node_release(struct kobject *kobj)
->         complete(&dn->kobj_done);
->  }
->
-> -static struct kobj_type acpi_data_node_ktype = {
-> +static const struct kobj_type acpi_data_node_ktype = {
->         .sysfs_ops = &acpi_data_node_sysfs_ops,
->         .default_groups = acpi_data_node_default_groups,
->         .release = acpi_data_node_release,
-> diff --git a/drivers/acpi/sysfs.c b/drivers/acpi/sysfs.c
-> index 7db3b530279b..7f4ff56c9d42 100644
-> --- a/drivers/acpi/sysfs.c
-> +++ b/drivers/acpi/sysfs.c
-> @@ -953,7 +953,7 @@ static struct attribute *hotplug_profile_attrs[] = {
->  };
->  ATTRIBUTE_GROUPS(hotplug_profile);
->
-> -static struct kobj_type acpi_hotplug_profile_ktype = {
-> +static const struct kobj_type acpi_hotplug_profile_ktype = {
->         .sysfs_ops = &kobj_sysfs_ops,
->         .default_groups = hotplug_profile_groups,
->  };
->
-> ---
+On 2/14/23 06:11, Naresh Solanki wrote:
+> Hi,
+> 
+> On 11-02-2023 09:16 pm, Guenter Roeck wrote:
+>> On Tue, Feb 07, 2023 at 01:02:41PM +0100, Naresh Solanki wrote:
+>>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+>>>
+>>> Notify hwmon events using the pmbus irq handler.
+>>>
+>>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+>>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>>> ...
+>>> Changes in V2
+>>> - Remove __maybe_unsed attribute as its not needed.
+>>> ---
+>>>   drivers/hwmon/pmbus/pmbus_core.c | 48 ++++++++++++++++++++++++++++----
+>>>   1 file changed, 43 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+>>> index d5403baad60a..f6778a9c7126 100644
+>>> --- a/drivers/hwmon/pmbus/pmbus_core.c
+>>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+>>> @@ -2735,8 +2735,36 @@ static const struct pmbus_status_category __maybe_unused pmbus_status_flag_map[]
+>>>       },
+>>>   };
+>>> +#define to_dev_attr(_dev_attr) \
+>>> +    container_of(_dev_attr, struct device_attribute, attr)
+>>> +
+>>> +static void pmbus_notify(struct pmbus_data *data, int page, int reg, int flags)
+>>> +{
+>>> +    int i;
+>>> +
+>>> +    for (i = 0; i < data->num_attributes; i++) {
+>>> +        struct device_attribute *da = to_dev_attr(data->group.attrs[i]);
+>>> +        struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
+>>> +        int index = attr->index;
+>>> +        u16 smask = pb_index_to_mask(index);
+>>> +        u8 spage = pb_index_to_page(index);
+>>> +        u16 sreg = pb_index_to_reg(index);
+>>> +
+>>> +        if (reg == sreg && page == spage && (smask & flags)) {
+>>> +            dev_dbg(data->dev, "sysfs notify: %s", da->attr.name);
+>>> +            sysfs_notify(&data->dev->kobj, NULL, da->attr.name);
+>>> +            kobject_uevent(&data->dev->kobj, KOBJ_CHANGE);
+>>> +            flags &= ~smask;
+>>> +        }
+>>> +
+>>> +        if (!flags)
+>>> +            break;
+>>> +    }
+>>> +}
+>>> +
+>>> +static int pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags,
+>>> +               bool notify)
+>>> -static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsigned int *flags)
+>>>   {
+>>>       int i, status, ret;
+>>>       const struct pmbus_status_category *cat;
+>>> @@ -2764,6 +2792,10 @@ static int __maybe_unused pmbus_get_flags(struct pmbus_data *data, u8 page, unsi
+>>>               if (status & bit->pflag)
+>>>                   *flags |= bit->rflag;
+>>>           }
+>>> +
+>>> +        if (notify && status)
+>>> +            pmbus_notify(data, page, cat->reg, status);
+>>> +
+>>>       }
+>>>       /*
+>>> @@ -2866,7 +2898,7 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
+>>>       struct i2c_client *client = to_i2c_client(dev->parent);
+>>>       struct pmbus_data *data = i2c_get_clientdata(client);
+>>> -    return pmbus_get_flags(data, rdev_get_id(rdev), flags);
+>>> +    return pmbus_get_flags(data, rdev_get_id(rdev), flags, false);
+>>>   }
+>>>   static int pmbus_regulator_get_status(struct regulator_dev *rdev)
+>>> @@ -3108,10 +3140,14 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
+>>>   {
+>>>       struct pmbus_data *data = pdata;
+>>>       struct i2c_client *client = to_i2c_client(data->dev);
+>>> -    int i, status;
+>>> +    int i, status, ret;
+>>> -    mutex_lock(&data->update_lock);
+>>>       for (i = 0; i < data->info->pages; i++) {
+>>> +        ret = pmbus_get_flags(data, i, &status, true);
+>>> +        if (ret)
+>>> +            return ret;
+>>> +
+>>> +        mutex_lock(&data->update_lock);
+>>
+>> You should introduce a locked version of pmbus_get_flags() and call
+>> that function, and keep the existing locking in place.
+>>
+> I'm not sure if you meant to have pmbus_get_flags that wont use lock?
+> 
 
-Applied as 6.3 material, thanks!
+
+__pmbus_get_flags(...)
+{
+	/* no lock acquired here */
+}
+
+pmbus_get_flags(...)
+{
+	int ret;
+
+	mutex_lock(&data->update_lock);
+	ret = __pmbus_get_flags(...);
+	mutex_unlock(&data->update_lock);
+	return ret;
+}
+
+Then call __pmbus_get_flags() from above code.
+
+Guenter
+
+>>>           status = pmbus_read_status_word(client, i);
+>>>           if (status < 0) {
+>>>               mutex_unlock(&data->update_lock);
+>>> @@ -3120,8 +3156,10 @@ static irqreturn_t pmbus_fault_handler(int irq, void *pdata)
+>>>           if (status & ~(PB_STATUS_OFF | PB_STATUS_BUSY | PB_STATUS_POWER_GOOD_N))
+>>>               pmbus_clear_fault_page(client, i);
+>>> +
+>>> +        mutex_unlock(&data->update_lock);
+>>>       }
+>>> -    mutex_unlock(&data->update_lock);
+>>> +
+>>
+>> This would add a second empty line (not that it matters because the code
+>> should not change the locking in the first place).
+>>
+> Will remove the new line
+>>>       return IRQ_HANDLED;
+>>>   }
+
