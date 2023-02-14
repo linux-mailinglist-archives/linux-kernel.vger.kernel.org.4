@@ -2,185 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2824C696E9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 21:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A48696E9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 21:38:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjBNUhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 15:37:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
+        id S230107AbjBNUim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 15:38:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjBNUhW (ORCPT
+        with ESMTP id S229581AbjBNUik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 15:37:22 -0500
-Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33352B2B1;
-        Tue, 14 Feb 2023 12:37:18 -0800 (PST)
-From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1676407035; bh=7NTTF1kLzfeo6YgWmyC0TGDDQBoMcJiRgRJtMLKbBkE=;
-        h=From:To:Cc:Subject:Date;
-        b=euK5lAe8FtR7ZhlIURVk+pBH97EIWaBejgibr164EAO+8lKl/3nmf6QSJSe+l8woN
-         yuRJPuFkaJucdG5aDZLjGW7XbaIlOjxMuQk2zISFTbMkHyin5tf6A7AK5oxXBEyYZQ
-         e9nnlECOQwcYZCnu2HS1nMvwZZ1Ba41iw1nSXNr8=
-To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>, Janne Grunau <j@jannau.net>
-Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
-Subject: [RFC PATCH v2] dt-bindings: dma: apple,sio: Add schema
-Date:   Tue, 14 Feb 2023 21:36:37 +0100
-Message-Id: <20230214203637.43630-1-povik+lin@cutebit.org>
+        Tue, 14 Feb 2023 15:38:40 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A5F8A47
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 12:38:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676407118; x=1707943118;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to;
+  bh=o2Hw1hPaEygeOSddXQktfP3hPdv9FuwhxG7VodTe9xs=;
+  b=ls+XoK87TVZyoUAZFlFIWKTD1roNNRgib1lpwQ3fkzHC5aG9heRzprBE
+   7YRlDAAHLcV5aPQbYCnpVzE9let1MAp1OQGwh7McnziiPgyqCJAWQA9tE
+   OjAeT8xa6lyIUTdBz27FHFAd+sKB6diES1yHSXmeBn35m0jLXGH4JlEjq
+   glHVx4IwAxXbJFJwV5Gp92uMschrZ0wm+0PLZEP13KlPR3TJft1h/JH41
+   oh4DCDQPy/jVcEZhroz27fzd08f7cF5CoM0U1tFiGq1SlILexFko3FAMV
+   hUSYV2Qm5PwgqWZfM/j5GbcVKTWDgqBoWvdjI53UZIK2EQlJ8B6eqge6C
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="393663832"
+X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
+   d="c'?scan'208";a="393663832"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 12:38:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="701761850"
+X-IronPort-AV: E=Sophos;i="5.97,297,1669104000"; 
+   d="c'?scan'208";a="701761850"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga001.jf.intel.com with ESMTP; 14 Feb 2023 12:38:38 -0800
+Received: from [10.251.7.65] (kliang2-mobl1.ccr.corp.intel.com [10.251.7.65])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id F2BB6580B9E;
+        Tue, 14 Feb 2023 12:38:36 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------nLHK0qNIW0GE07OiMcnccIdj"
+Message-ID: <568b09ce-dc6a-8d2a-13ca-6df045236449@linux.intel.com>
+Date:   Tue, 14 Feb 2023 15:38:35 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH V2 2/9] perf: Extend ABI to support post-processing
+ monotonic raw conversion
+Content-Language: en-US
+To:     John Stultz <jstultz@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, peterz@infradead.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org, sboyd@kernel.org,
+        eranian@google.com, namhyung@kernel.org, ak@linux.intel.com,
+        adrian.hunter@intel.com
+References: <20230213190754.1836051-1-kan.liang@linux.intel.com>
+ <20230213190754.1836051-3-kan.liang@linux.intel.com>
+ <CANDhNCqVcrZHGW4QJBD8_hZehmRpnNAsGFsmwsxBZNm3wpFZpQ@mail.gmail.com>
+ <e306e2ea-dea5-0eab-9eae-f9ea5fe7d52e@linux.intel.com>
+ <CANDhNCq1b-7C=cox6ufC3Kxycu87qPzDHtJH_5jwPmPjjig5ww@mail.gmail.com>
+ <6898b1c8-9dbf-67ce-46e6-15d5307ced25@linux.intel.com>
+ <0df181b9-fb34-78e8-1376-65d45f7f938f@linux.intel.com>
+ <CANDhNCoZNmK12beqE5AAnQrpHEW01xKWwOWTQQEsWSuOaH0HRQ@mail.gmail.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <CANDhNCoZNmK12beqE5AAnQrpHEW01xKWwOWTQQEsWSuOaH0HRQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describe the SIO coprocessor which serves as pretend DMA controller on
-recent Apple platforms.
-
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
----
-Since v1:
- - formatting fixes requested by Rob
- - dropped provider nodes from example
- - added 'memory-region' items range
- - tweaked 'apple,sio-firmware-params' description
-
-Since the schema mentions a loader preparing the binding appropriately,
-here's a PR with the relevant (WIP) loader code, if anyone wants to look:
-https://github.com/AsahiLinux/m1n1/pull/286
+This is a multi-part message in MIME format.
+--------------nLHK0qNIW0GE07OiMcnccIdj
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
- .../devicetree/bindings/dma/apple,sio.yaml    | 111 ++++++++++++++++++
- 1 file changed, 111 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/dma/apple,sio.yaml
 
-diff --git a/Documentation/devicetree/bindings/dma/apple,sio.yaml b/Documentation/devicetree/bindings/dma/apple,sio.yaml
-new file mode 100644
-index 000000000000..0e3780ad9dd7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/dma/apple,sio.yaml
-@@ -0,0 +1,111 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/dma/apple,sio.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Apple SIO Coprocessor
-+
-+description:
-+  SIO is a coprocessor on Apple M1 and later chips (and maybe also on earlier
-+  chips). Its role is to offload SPI, UART and DisplayPort audio transfers,
-+  being a pretend DMA controller.
-+
-+maintainers:
-+  - Martin Povišer <povik+lin@cutebit.org>
-+
-+allOf:
-+  - $ref: dma-controller.yaml#
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - apple,t6000-sio
-+          - apple,t8103-sio
-+      - const: apple,sio
-+
-+  reg:
-+    maxItems: 1
-+
-+  '#dma-cells':
-+    const: 1
-+    description:
-+      DMA clients specify a single cell that corresponds to the RTKit endpoint
-+      number used for arranging the transfers in question
-+
-+  dma-channels:
-+    maximum: 128
-+
-+  mboxes:
-+    maxItems: 1
-+
-+  iommus:
-+    maxItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  memory-region:
-+    minItems: 2
-+    maxItems: 8
-+    description:
-+      A number of references to reserved memory regions among which are the DATA/TEXT
-+      sections of coprocessor executable firmware and also auxiliary firmware data
-+      describing the available DMA-enabled peripherals
-+
-+  apple,sio-firmware-params:
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    description: |
-+      Parameters in the form of opaque key/value pairs that are to be sent to the SIO
-+      coprocesssor once it boots. These parameters can point into the reserved memory
-+      regions (in device address space).
-+
-+      Note that unlike Apple's firmware, we treat the parameters, and the data they
-+      refer to, as opaque. Apple embed short data blobs into their SIO devicetree node
-+      that describe the DMA-enabled peripherals (presumably with defined semantics).
-+      Their driver processes those blobs and sets up data structure in mapped device
-+      memory, then references this memory in the parameters sent to the SIO. At the
-+      level of description we are opting for in this binding, we assume the job of
-+      constructing those data structures has been done in advance, leaving behind an
-+      opaque list of key/value parameter pairs to be sent by a prospective driver.
-+
-+      This approach is chosen for two reasons:
-+
-+       - It means we don't need to try to understand the semantics of Apple's blobs
-+         as long as we know the transformation we need to do from Apple's devicetree
-+         data to SIO data (which can be shoved away into a loader). It also means the
-+         semantics of Apple's blobs (or of something to replace them) need not be part
-+         of the binding and be kept up with Apple's firmware changes in the future.
-+
-+       - It leaves less work for the driver attaching on this binding. Instead the work
-+         is done upfront in the loader which can be better suited for keeping up with
-+         Apple's firmware changes.
-+
-+required:
-+  - compatible
-+  - reg
-+  - '#dma-cells'
-+  - dma-channels
-+  - mboxes
-+  - iommus
-+  - power-domains
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    sio: dma-controller@36400000 {
-+      compatible = "apple,t8103-sio", "apple,sio";
-+      reg = <0x36400000 0x8000>;
-+      dma-channels = <128>;
-+      #dma-cells = <1>;
-+      mboxes = <&sio_mbox>;
-+      iommus = <&sio_dart 0>;
-+      power-domains = <&ps_sio_cpu>;
-+      memory-region = <&sio_text>, <&sio_data>,
-+                      <&sio_auxdata1>, <&sio_auxdata2>; /* Filled by loader */
-+      apple,sio-firmware-params = <0xb 0x10>, <0xc 0x1b80>, <0xf 0x14>,
-+                                  <0x10 0x1e000>, <0x30d 0x34>, <0x30e 0x4000>,
-+                                  <0x1a 0x38>, <0x1b 0x50>; /* Filled by loader */
-+    };
--- 
-2.33.0
+On 2023-02-14 3:11 p.m., John Stultz wrote:
+> On Tue, Feb 14, 2023 at 9:00 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
+>> On 2023-02-14 9:51 a.m., Liang, Kan wrote:
+>>> If I understand correctly, the idea is to let the user space tool run
+>>> the above interpoloation algorithm several times to 'guess' the atomic
+>>> mapping. Using the mapping information to covert the TSC from the PEBS
+>>> record. Is my understanding correct?
+>>>
+>>> If so, to be honest, I doubt we can get the accuracy we want.
+>>>
+>>
+>> I implemented a simple test to evaluate the error.
+> 
+> Very cool!
+> 
+>> I collected TSC -> CLOCK_MONOTONIC_RAW mapping using the above algorithm
+>> at the start and end of perf cmd.
+>>         MONO_RAW        TSC
+>> start   89553516545645  223619715214239
+>> end     89562251233830  223641517000376
+>>
+>> Here is what I get via mult/shift conversion from this patch.
+>>         MONO_RAW        TSC
+>> PEBS    89555942691466  223625770878571
+>>
+>> Then I use the time information from start and end to create a linear
+>> function and 'guess' the MONO_RAW of PEBS from the TSC. I get
+>> 89555942692721.
+>> There is a 1255 ns difference.
+>> I tried several different PEBS records. The error is ~1000ns.
+>> I think it should be an observable error.
+> 
+> Interesting. That's a good bit higher than I'd expect as I'd expect a
+> clock_gettime() call to take ~ double digit nanoseconds range on
+> average, so the error should be within that.
+> 
+> Can you share your logic?
+> 
 
+I run the algorithm right before and after the perf command as below.
+(The source code of time is attached.)
+
+$./time
+$perf record -e cycles:upp --clockid monotonic_raw $some_workaround
+$./time
+
+The time will dump both MONO_RAW and TSC. That's where "start" and "end"
+from.
+The perf command print out both TSC and converted MONO_RAW (using the
+mul/shift from this patch series). That's where "PEBS" value from.
+
+Than I use the below formula to calculate the guessed MONO_RAW of PEBS TSC.
+Guessed_MONO_RAW = (PEBS_TSC - start_TSC) / (end_TSC - start_TSC) *
+(end_MONO_RAW - start_MONO_RAW) + start_MONO_RAW.
+
+The guessed_MONO_RAW is 89555942692721.
+The PEBS_MONO_RAW is 89555942691466.
+The difference is 1255.
+
+Is the calculation correct?
+
+Thanks,
+Kan
+--------------nLHK0qNIW0GE07OiMcnccIdj
+Content-Type: text/plain; charset=UTF-8; name="time.c"
+Content-Disposition: attachment; filename="time.c"
+Content-Transfer-Encoding: base64
+
+I2luY2x1ZGUgPHN5cy90aW1lLmg+CiNpbmNsdWRlIDx0aW1lLmg+CiNpbmNsdWRlIDxzdGRp
+by5oPgojaW5jbHVkZSA8ZXJybm8uaD4KCnN0YXRpYyBpbmxpbmUgdW5zaWduZWQgbG9uZyBy
+ZHRzYyAoKQp7CiAgdW5zaWduZWQgbG9uZyB2YXI7CiAgdW5zaWduZWQgaW50IGhpLCBsbzsK
+CiAgYXNtIHZvbGF0aWxlICgicmR0c2MiIDogIj1hIiAobG8pLCAiPWQiIChoaSkpOwogIHZh
+ciA9ICgodW5zaWduZWQgbG9uZyBsb25nIGludCkgaGkgPDwgMzIpIHwgbG87CgogIHJldHVy
+biB2YXI7Cn0KCnR5cGVkZWYgdW5zaWduZWQgbG9uZyBsb25nIHU2NDsKCmludCBtYWluKCkK
+ewoJc3RydWN0IHRpbWVzcGVjIHRzOwoJdTY0IHN0YXJ0LCBlbmQsIGRlbHRhLCBtaWQ7Cglk
+byB7CgkJc3RhcnQ9IHJkdHNjKCk7CgkJY2xvY2tfZ2V0dGltZShDTE9DS19NT05PVE9OSUNf
+UkFXLCAmdHMpOwoJCWVuZCA9IHJkdHNjKCk7CgkJZGVsdGEgPSBlbmQtc3RhcnQ7Cgl9IHdo
+aWxlIChkZWx0YSAgPiAyMDAwMCk7ICAgLy8gbWFrZSBzdXJlIHRoZSByZWFkcyB3ZXJlIG5v
+dCBwcmVlbXB0ZWQKCW1pZCA9IHN0YXJ0ICsgKGRlbHRhICsoZGVsdGEvMikpLzI7IC8vcm91
+bmQtY2xvc2VzdAoJcHJpbnRmKCIlbGx1ICVsbHUgJWxsdVxuIiwgc3RhcnQsIGVuZCwgZGVs
+dGEpOwoJcHJpbnRmKCJNT05PX1JBVzogJWxsdSBUU0M6ICVsbHVcbiIsICh1NjQpdHMudHZf
+c2VjICogMTAwMDAwMDAwMCArIHRzLnR2X25zZWMsIG1pZCk7Cn0K
+
+--------------nLHK0qNIW0GE07OiMcnccIdj--
