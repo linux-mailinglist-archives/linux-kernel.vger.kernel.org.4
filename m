@@ -2,74 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A74D6957D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 05:15:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4F06957D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 05:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbjBNEPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 23:15:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
+        id S230014AbjBNEVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 23:21:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjBNEPV (ORCPT
+        with ESMTP id S229744AbjBNEVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 23:15:21 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6B010F9;
-        Mon, 13 Feb 2023 20:15:19 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id be8so15779702plb.7;
-        Mon, 13 Feb 2023 20:15:19 -0800 (PST)
+        Mon, 13 Feb 2023 23:21:22 -0500
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BB2B473
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 20:21:17 -0800 (PST)
+Received: by mail-vs1-xe2e.google.com with SMTP id p14so3061277vsn.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 20:21:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aYoGiVnitKVsiwNVJDrEKDE+kZ8NsbSA29728NlslYo=;
-        b=L3svDzg8AWJe2cYOCVf8R3Kyd9+pqdQrJEvcPYliRXKdirjtAs0hHLgKY4IhCwcUc6
-         YsV81el0iCr+i91i+byhN5ZYPdLvkwWJOcSjsV3dzTCzni5Vl5hkMuZGfh4bTsH5T98t
-         L6DbhzajIXfLqOm4UYJ6g7KQykx5OUuLidBvvOM8uBTmcJBBb0MMSC0nKtZyADzm72u4
-         6wbywC9gE8oi2rlwEqKygDAiOuNy7xk/QKE6sO8usd+96aoTB/NWzj8h1/hOvsGsfqI0
-         VG3XkcPRorB/tO1ezDw/cAJvCdH5r0s9Mom7hOR/unSibg4JRgsI+cT8840+Iz75p3m8
-         fzqQ==
+        d=google.com; s=20210112; t=1676348477;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nxxlMXaMJCdfN9xnD3DFM5VJhzCgiJh3w8xM+gdRCdw=;
+        b=S89ffXd9kwsG9h5JJ57nGu/WUMcDerOgy8FuhlB/M6YwmcXRjOiCwgPtDIDqAqpzEx
+         2JBRgQ+9zXmNkCltH8WcsUQxckSYRuM/ffVLs/N9dEcjAgZknCuUCvtljsYWY+NktFEt
+         F3h9PBLgm+aHADAX2OJty+yOWNzr9qa04U8FHBcK6kpMLHeuTU6Vjj4iFcwBmJYC3Uwi
+         Ocn7cjl9dc5UdYH+9Nxz7ujNSW5gHi7jOs19jA6C7VcK/r6DIsyH/bGOILzvOO7UD3Nf
+         wPd9juT5pGNfjrUs+kO3WKf05sIGv5pmJVWTMmGs1NAVxx6YQJcTfP8UPKybCFZW0D0P
+         jsGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1676348477;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=aYoGiVnitKVsiwNVJDrEKDE+kZ8NsbSA29728NlslYo=;
-        b=bwe/buxghvYgYW+pL4inMhqV76Z957vUrCd8czpWR3UkHD/tM0x7vsRtH5OPtnqrEH
-         OLiXK03Q4m55M5uLk2gk4NAOsB2Xg20ZLih7AbOcFVjgAqsKQjlRLTfzjWif5AP4QGmS
-         OiKOxQg7mgRvrIuZ61J2R9VXFIN6cdEl5y+uHNDzoxXFDr6s6nD1L593JTo9B2HiDFxA
-         LK4Pwuxk12qaa/tP+8yGeJvyQKxS+FMGhl4KZwZiCPvPXj531fyR115ylKjNnXtZv4th
-         o9/GPzJhGLvR6Fp9LI6l1zSVoT3hjtDLyFb0x6VBSFoS8r6LDlufaD96J88OqBniJv7y
-         cojA==
-X-Gm-Message-State: AO0yUKW8PPuSJ22kvpAzvPa1dV/K2iRUYBhTx7ebM7d+HQF2sRklC6Cg
-        G6uj6eRTNifrx790kK2cQ5Y=
-X-Google-Smtp-Source: AK7set/olXPDRSQzuo4Wwxxbe1sWjQiXnjrAFsiPwcOGM2AriEpild14YdA2O572A2LuCJhCsIOmYA==
-X-Received: by 2002:a05:6a21:980d:b0:bd:93a:4c8f with SMTP id ue13-20020a056a21980d00b000bd093a4c8fmr680154pzb.23.1676348118709;
-        Mon, 13 Feb 2023 20:15:18 -0800 (PST)
-Received: from KERNELXING-MB0.tencent.com ([103.7.29.31])
-        by smtp.gmail.com with ESMTPSA id iw3-20020a170903044300b0019ab3308554sm740154plb.85.2023.02.13.20.15.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 20:15:18 -0800 (PST)
-From:   Jason Xing <kerneljasonxing@gmail.com>
-To:     kuniyu@amazon.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, dsahern@kernel.org,
-        matthieu.baerts@tessares.net, willemdebruijn.kernel@gmail.com,
-        nhorman@tuxdriver.com, marcelo.leitner@gmail.com,
-        lucien.xin@gmail.com, kgraul@linux.ibm.com, wenjia@linux.ibm.com,
-        jaka@linux.ibm.com, bjorn@kernel.org, magnus.karlsson@intel.com,
-        maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com
-Cc:     bpf@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-sctp@vger.kernel.org, mptcp@lists.linux.dev,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kerneljasonxing@gmail.com, Jason Xing <kernelxing@tencent.com>
-Subject: [PATCH v2 net-next] net: no longer support SOCK_REFCNT_DEBUG feature
-Date:   Tue, 14 Feb 2023 12:14:10 +0800
-Message-Id: <20230214041410.6295-1-kerneljasonxing@gmail.com>
-X-Mailer: git-send-email 2.33.0
+        bh=nxxlMXaMJCdfN9xnD3DFM5VJhzCgiJh3w8xM+gdRCdw=;
+        b=eaA/AHnALKXA1a4iCxhP5/hN2VCNtLvGevvHNGG6Xi33rZwl2sReF5eZAM3+LzWTuq
+         lglOFNxhnhlaPZX3S2QqwtoryuMXP4tMAoZTlHrgy/zgcoh+vzbZ6VExhR0xhiQ74l27
+         N9TPOjQvxVfmVHdtUqxgu/yYZR0wFVqyV9CmMZItYhbrQd31xOvTbSkR6Y6G/9c+3m9A
+         aPn5bMuyX5ZeAeX6Gpz2dwfSvbBSKm7p69WTedf3SxaCMYNafzEbOI+h8Skma2uPKTTb
+         05VHevRD4FZ3gTjvZv7UFZwAa+iiPW19wc9vJOuWcFMuno038sS8nz0Vih+hcuZdyil2
+         pZXQ==
+X-Gm-Message-State: AO0yUKXNHrh58aB9xhPwC+P93MvCmXagunUlwrkIJMDNBbKydrbNJne1
+        QWLLXnr9+J7dxrEzn1xR4V1eANuzgQM4IgSVmYeg8A==
+X-Google-Smtp-Source: AK7set/rNXKjZgyQ+A04ZIejCex/m2G4+UdVhpwrnqI/nuEbCFT/NAsfI5R01JqLRnt5TMfy4JTbJT7UFW0XCBx3o9s=
+X-Received: by 2002:a67:c296:0:b0:3e9:5b72:556f with SMTP id
+ k22-20020a67c296000000b003e95b72556fmr165281vsj.28.1676348476876; Mon, 13 Feb
+ 2023 20:21:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230213152714.78b844f4@canb.auug.org.au> <20230213085920.19726-1-bagasdotme@gmail.com>
+In-Reply-To: <20230213085920.19726-1-bagasdotme@gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 14 Feb 2023 12:21:05 +0800
+Message-ID: <CABVgOSk6NFzYZBDuK2a=eCm11RM2b75Aw4CGVTwc19vh_mur-g@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: rust: Fix arch support table
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Rust for Linux Kernel <rust-for-linux@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Richard Weinberger <richard@nod.at>,
+        =?UTF-8?Q?Sergio_Gonz=C3=A1lez_Collado?= <sergio.collado@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000081631a05f4a14b44"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,332 +79,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason Xing <kernelxing@tencent.com>
+--00000000000081631a05f4a14b44
+Content-Type: text/plain; charset="UTF-8"
 
-Commit e48c414ee61f ("[INET]: Generalise the TCP sock ID lookup routines")
-commented out the definition of SOCK_REFCNT_DEBUG in 2005 and later another
-commit 463c84b97f24 ("[NET]: Introduce inet_connection_sock") removed it.
-Since we could track all of them through bpf and kprobe related tools
-and the feature could print loads of information which might not be
-that helpful even under a little bit pressure, the whole feature which
-has been inactive for many years is no longer supported.
+On Mon, 13 Feb 2023 at 17:00, Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>
+> Stephen Rothwell reported htmldocs warning when merging uml tree:
+>
+> Documentation/rust/arch-support.rst:20: WARNING: Blank line required after table.
+>
+> Fix the arch support table by removing extraneous simple table marker.
+>
+> Link: https://lore.kernel.org/linux-next/20230213152714.78b844f4@canb.auug.org.au/
+> Fixes: 0438aadfa69a34 ("rust: arch/um: Add support for CONFIG_RUST under x86_64 UML")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
 
-Link: https://lore.kernel.org/lkml/20230211065153.54116-1-kerneljasonxing@gmail.com/
-Suggested-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Signed-off-by: Jason Xing <kernelxing@tencent.com>
----
-v2:
-1) change the title and body message.
-2) remove the whole feature instead suggested by Kuniyuki Iwashima.
----
- include/net/sock.h              | 28 ----------------------------
- net/core/sock.c                 | 13 -------------
- net/ipv4/af_inet.c              |  3 ---
- net/ipv4/inet_connection_sock.c |  2 --
- net/ipv4/inet_timewait_sock.c   |  3 ---
- net/ipv6/af_inet6.c             | 10 ----------
- net/ipv6/ipv6_sockglue.c        | 12 ------------
- net/mptcp/protocol.c            |  1 -
- net/packet/af_packet.c          |  4 ----
- net/sctp/ipv6.c                 |  2 --
- net/sctp/protocol.c             |  2 --
- net/smc/af_smc.c                |  3 ---
- net/xdp/xsk.c                   |  4 ----
- 13 files changed, 87 deletions(-)
+Thanks for fixing this! I think I need to look into my sphinx version,
+as this isn't the only warning it hasn't picked up...
 
-diff --git a/include/net/sock.h b/include/net/sock.h
-index dcd72e6285b2..e6369068a7bb 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -1349,9 +1349,6 @@ struct proto {
- 	char			name[32];
- 
- 	struct list_head	node;
--#ifdef SOCK_REFCNT_DEBUG
--	atomic_t		socks;
--#endif
- 	int			(*diag_destroy)(struct sock *sk, int err);
- } __randomize_layout;
- 
-@@ -1359,31 +1356,6 @@ int proto_register(struct proto *prot, int alloc_slab);
- void proto_unregister(struct proto *prot);
- int sock_load_diag_module(int family, int protocol);
- 
--#ifdef SOCK_REFCNT_DEBUG
--static inline void sk_refcnt_debug_inc(struct sock *sk)
--{
--	atomic_inc(&sk->sk_prot->socks);
--}
--
--static inline void sk_refcnt_debug_dec(struct sock *sk)
--{
--	atomic_dec(&sk->sk_prot->socks);
--	printk(KERN_DEBUG "%s socket %p released, %d are still alive\n",
--	       sk->sk_prot->name, sk, atomic_read(&sk->sk_prot->socks));
--}
--
--static inline void sk_refcnt_debug_release(const struct sock *sk)
--{
--	if (refcount_read(&sk->sk_refcnt) != 1)
--		printk(KERN_DEBUG "Destruction of the %s socket %p delayed, refcnt=%d\n",
--		       sk->sk_prot->name, sk, refcount_read(&sk->sk_refcnt));
--}
--#else /* SOCK_REFCNT_DEBUG */
--#define sk_refcnt_debug_inc(sk) do { } while (0)
--#define sk_refcnt_debug_dec(sk) do { } while (0)
--#define sk_refcnt_debug_release(sk) do { } while (0)
--#endif /* SOCK_REFCNT_DEBUG */
--
- INDIRECT_CALLABLE_DECLARE(bool tcp_stream_memory_free(const struct sock *sk, int wake));
- 
- static inline int sk_forward_alloc_get(const struct sock *sk)
-diff --git a/net/core/sock.c b/net/core/sock.c
-index f954d5893e79..be7b29d97637 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -2338,17 +2338,6 @@ struct sock *sk_clone_lock(const struct sock *sk, const gfp_t priority)
- 	smp_wmb();
- 	refcount_set(&newsk->sk_refcnt, 2);
- 
--	/* Increment the counter in the same struct proto as the master
--	 * sock (sk_refcnt_debug_inc uses newsk->sk_prot->socks, that
--	 * is the same as sk->sk_prot->socks, as this field was copied
--	 * with memcpy).
--	 *
--	 * This _changes_ the previous behaviour, where
--	 * tcp_create_openreq_child always was incrementing the
--	 * equivalent to tcp_prot->socks (inet_sock_nr), so this have
--	 * to be taken into account in all callers. -acme
--	 */
--	sk_refcnt_debug_inc(newsk);
- 	sk_set_socket(newsk, NULL);
- 	sk_tx_queue_clear(newsk);
- 	RCU_INIT_POINTER(newsk->sk_wq, NULL);
-@@ -3696,8 +3685,6 @@ void sk_common_release(struct sock *sk)
- 
- 	xfrm_sk_free_policy(sk);
- 
--	sk_refcnt_debug_release(sk);
--
- 	sock_put(sk);
- }
- EXPORT_SYMBOL(sk_common_release);
-diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-index 6c0ec2789943..f46a3924c440 100644
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -156,7 +156,6 @@ void inet_sock_destruct(struct sock *sk)
- 	kfree(rcu_dereference_protected(inet->inet_opt, 1));
- 	dst_release(rcu_dereference_protected(sk->sk_dst_cache, 1));
- 	dst_release(rcu_dereference_protected(sk->sk_rx_dst, 1));
--	sk_refcnt_debug_dec(sk);
- }
- EXPORT_SYMBOL(inet_sock_destruct);
- 
-@@ -356,8 +355,6 @@ static int inet_create(struct net *net, struct socket *sock, int protocol,
- 	inet->mc_list	= NULL;
- 	inet->rcv_tos	= 0;
- 
--	sk_refcnt_debug_inc(sk);
--
- 	if (inet->inet_num) {
- 		/* It assumes that any protocol which allows
- 		 * the user to assign a number at socket
-diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
-index d1f837579398..64be59d93b04 100644
---- a/net/ipv4/inet_connection_sock.c
-+++ b/net/ipv4/inet_connection_sock.c
-@@ -1178,8 +1178,6 @@ void inet_csk_destroy_sock(struct sock *sk)
- 
- 	xfrm_sk_free_policy(sk);
- 
--	sk_refcnt_debug_release(sk);
--
- 	this_cpu_dec(*sk->sk_prot->orphan_count);
- 
- 	sock_put(sk);
-diff --git a/net/ipv4/inet_timewait_sock.c b/net/ipv4/inet_timewait_sock.c
-index beed32fff484..40052414c7c7 100644
---- a/net/ipv4/inet_timewait_sock.c
-+++ b/net/ipv4/inet_timewait_sock.c
-@@ -77,9 +77,6 @@ void inet_twsk_free(struct inet_timewait_sock *tw)
- {
- 	struct module *owner = tw->tw_prot->owner;
- 	twsk_destructor((struct sock *)tw);
--#ifdef SOCK_REFCNT_DEBUG
--	pr_debug("%s timewait_sock %p released\n", tw->tw_prot->name, tw);
--#endif
- 	kmem_cache_free(tw->tw_prot->twsk_prot->twsk_slab, tw);
- 	module_put(owner);
- }
-diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
-index fee9163382c2..c93f2e865fea 100644
---- a/net/ipv6/af_inet6.c
-+++ b/net/ipv6/af_inet6.c
-@@ -238,16 +238,6 @@ static int inet6_create(struct net *net, struct socket *sock, int protocol,
- 		inet->pmtudisc = IP_PMTUDISC_DONT;
- 	else
- 		inet->pmtudisc = IP_PMTUDISC_WANT;
--	/*
--	 * Increment only the relevant sk_prot->socks debug field, this changes
--	 * the previous behaviour of incrementing both the equivalent to
--	 * answer->prot->socks (inet6_sock_nr) and inet_sock_nr.
--	 *
--	 * This allows better debug granularity as we'll know exactly how many
--	 * UDPv6, TCPv6, etc socks were allocated, not the sum of all IPv6
--	 * transport protocol socks. -acme
--	 */
--	sk_refcnt_debug_inc(sk);
- 
- 	if (inet->inet_num) {
- 		/* It assumes that any protocol which allows
-diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
-index 9ce51680290b..2917dd8d198c 100644
---- a/net/ipv6/ipv6_sockglue.c
-+++ b/net/ipv6/ipv6_sockglue.c
-@@ -464,13 +464,6 @@ int do_ipv6_setsockopt(struct sock *sk, int level, int optname,
- 			__ipv6_sock_mc_close(sk);
- 			__ipv6_sock_ac_close(sk);
- 
--			/*
--			 * Sock is moving from IPv6 to IPv4 (sk_prot), so
--			 * remove it from the refcnt debug socks count in the
--			 * original family...
--			 */
--			sk_refcnt_debug_dec(sk);
--
- 			if (sk->sk_protocol == IPPROTO_TCP) {
- 				struct inet_connection_sock *icsk = inet_csk(sk);
- 
-@@ -507,11 +500,6 @@ int do_ipv6_setsockopt(struct sock *sk, int level, int optname,
- 
- 			inet6_cleanup_sock(sk);
- 
--			/*
--			 * ... and add it to the refcnt debug socks count
--			 * in the new family. -acme
--			 */
--			sk_refcnt_debug_inc(sk);
- 			module_put(THIS_MODULE);
- 			retv = 0;
- 			break;
-diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-index 8cd6cc67c2c5..e913752df112 100644
---- a/net/mptcp/protocol.c
-+++ b/net/mptcp/protocol.c
-@@ -2876,7 +2876,6 @@ static void __mptcp_destroy_sock(struct sock *sk)
- 	sk_stream_kill_queues(sk);
- 	xfrm_sk_free_policy(sk);
- 
--	sk_refcnt_debug_release(sk);
- 	sock_put(sk);
- }
- 
-diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
-index b5ab98ca2511..a4c8f86ac12a 100644
---- a/net/packet/af_packet.c
-+++ b/net/packet/af_packet.c
-@@ -1335,8 +1335,6 @@ static void packet_sock_destruct(struct sock *sk)
- 		pr_err("Attempt to release alive packet socket: %p\n", sk);
- 		return;
- 	}
--
--	sk_refcnt_debug_dec(sk);
- }
- 
- static bool fanout_flow_is_huge(struct packet_sock *po, struct sk_buff *skb)
-@@ -3172,7 +3170,6 @@ static int packet_release(struct socket *sock)
- 
- 	skb_queue_purge(&sk->sk_receive_queue);
- 	packet_free_pending(po);
--	sk_refcnt_debug_release(sk);
- 
- 	sock_put(sk);
- 	return 0;
-@@ -3362,7 +3359,6 @@ static int packet_create(struct net *net, struct socket *sock, int protocol,
- 	packet_cached_dev_reset(po);
- 
- 	sk->sk_destruct = packet_sock_destruct;
--	sk_refcnt_debug_inc(sk);
- 
- 	/*
- 	 *	Attach a protocol block
-diff --git a/net/sctp/ipv6.c b/net/sctp/ipv6.c
-index 097bd60ce964..62b436a2c8fe 100644
---- a/net/sctp/ipv6.c
-+++ b/net/sctp/ipv6.c
-@@ -807,8 +807,6 @@ static struct sock *sctp_v6_create_accept_sk(struct sock *sk,
- 
- 	newsk->sk_v6_rcv_saddr = sk->sk_v6_rcv_saddr;
- 
--	sk_refcnt_debug_inc(newsk);
--
- 	if (newsk->sk_prot->init(newsk)) {
- 		sk_common_release(newsk);
- 		newsk = NULL;
-diff --git a/net/sctp/protocol.c b/net/sctp/protocol.c
-index 909a89a1cff4..c365df24ad33 100644
---- a/net/sctp/protocol.c
-+++ b/net/sctp/protocol.c
-@@ -601,8 +601,6 @@ static struct sock *sctp_v4_create_accept_sk(struct sock *sk,
- 
- 	newinet->inet_daddr = asoc->peer.primary_addr.v4.sin_addr.s_addr;
- 
--	sk_refcnt_debug_inc(newsk);
--
- 	if (newsk->sk_prot->init(newsk)) {
- 		sk_common_release(newsk);
- 		newsk = NULL;
-diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-index e12d4fa5aece..c594312e22cd 100644
---- a/net/smc/af_smc.c
-+++ b/net/smc/af_smc.c
-@@ -359,8 +359,6 @@ static void smc_destruct(struct sock *sk)
- 		return;
- 	if (!sock_flag(sk, SOCK_DEAD))
- 		return;
--
--	sk_refcnt_debug_dec(sk);
- }
- 
- static struct sock *smc_sock_alloc(struct net *net, struct socket *sock,
-@@ -389,7 +387,6 @@ static struct sock *smc_sock_alloc(struct net *net, struct socket *sock,
- 	spin_lock_init(&smc->accept_q_lock);
- 	spin_lock_init(&smc->conn.send_lock);
- 	sk->sk_prot->hash(sk);
--	sk_refcnt_debug_inc(sk);
- 	mutex_init(&smc->clcsock_release_lock);
- 	smc_init_saved_callbacks(smc);
- 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 9f0561b67c12..a245c1b4a21b 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -845,7 +845,6 @@ static int xsk_release(struct socket *sock)
- 	sock_orphan(sk);
- 	sock->sk = NULL;
- 
--	sk_refcnt_debug_release(sk);
- 	sock_put(sk);
- 
- 	return 0;
-@@ -1396,8 +1395,6 @@ static void xsk_destruct(struct sock *sk)
- 
- 	if (!xp_put_pool(xs->pool))
- 		xdp_put_umem(xs->umem, !xs->pool);
--
--	sk_refcnt_debug_dec(sk);
- }
- 
- static int xsk_create(struct net *net, struct socket *sock, int protocol,
-@@ -1427,7 +1424,6 @@ static int xsk_create(struct net *net, struct socket *sock, int protocol,
- 	sk->sk_family = PF_XDP;
- 
- 	sk->sk_destruct = xsk_destruct;
--	sk_refcnt_debug_inc(sk);
- 
- 	sock_set_flag(sk, SOCK_RCU_FREE);
- 
--- 
-2.37.3
+Reviewed-by: David Gow <davidgow@google.com>
 
+(And, as Miguel notes, next time we update this table, we should put
+these in alphabetical order...)
+
+Cheers,
+-- David
+
+>  Documentation/rust/arch-support.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arch-support.rst
+> index a526ca1c688be6..ed7f4f5b3cf157 100644
+> --- a/Documentation/rust/arch-support.rst
+> +++ b/Documentation/rust/arch-support.rst
+> @@ -16,6 +16,6 @@ support corresponds to ``S`` values in the ``MAINTAINERS`` file.
+>  Architecture  Level of support  Constraints
+>  ============  ================  ==============================================
+>  ``x86``       Maintained        ``x86_64`` only.
+> -============  ================  ==============================================
+>  ``um``        Maintained        ``x86_64`` only.
+>  ============  ================  ==============================================
+> +
+>
+> base-commit: 990627acb87c5f6d502fa71baf7b985b8a4bf248
+> --
+> An old man doll... just what I always wanted! - Clara
+>
+
+--00000000000081631a05f4a14b44
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+LmNybDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBKDA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5n
+bG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEANyYcO+9JZYyqQt41
+TMwvFWAw3vLoLOQIfIn48/yea/ekOcParTb0mbhsvVSZ6sGn+txYAZb33wIb1f4wK4xQ7+RUYBfI
+TuTPL7olF9hDpojC2F6Eu8nuEf1XD9qNI8zFd4kfjg4rb+AME0L81WaCL/WhP2kDCnRU4jm6TryB
+CHhZqtxkIvXGPGHjwJJazJBnX5NayIce4fGuUEJ7HkuCthVZ3Rws0UyHSAXesT/0tXATND4mNr1X
+El6adiSQy619ybVERnRi5aDe1PTwE+qNiotEEaeujz1a/+yYaaTY+k+qJcVxi7tbyQ0hi0UB3myM
+A/z2HmGEwO8hx7hDjKmKbDCCA18wggJHoAMCAQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUA
+MEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWdu
+MRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEg
+MB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzAR
+BgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4
+Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0EXyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuu
+l9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+JJ5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJ
+pij2aTv2y8gokeWdimFXN6x0FNx04Druci8unPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh
+6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTvriBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti
++w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
+BTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5NUPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEA
+S0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigHM8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9u
+bG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmUY/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaM
+ld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88
+q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcya5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/f
+hO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/XzCCBNgwggPAoAMCAQICEAHHLXCbS0CYcocWQtL1
+FY8wDQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYt
+c2ExKjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjMgU01JTUUgQ0EgMjAyMDAeFw0yMzAxMjkw
+NjQ2MThaFw0yMzA3MjgwNjQ2MThaMCQxIjAgBgkqhkiG9w0BCQEWE2RhdmlkZ293QGdvb2dsZS5j
+b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC+31G8qfgjYj6KzASqulKfP5LGLw1o
+hZ6j8Uv9o+fA+zL+2wOPYHLNIb6jyAS16+FwevgTr7d9QynTPBiCGE9Wb/i2ob9aBcupQVtBjlJZ
+I6qUXdVBlo5zsORdNV7/XEqlpu+X5MK5gNHlWhe8gNpAhADSib2H4rjBvFF2yi9BHBAYZU95f0IN
+cSS0WDNSSCktPaXtAGsI3tslroyjFYUluwGklmQms/tV8f/52zc7A5lzX+hxnnJdsRgirJRI9Sb6
+Uypzk06KLxOO2Pg9SFn6MwbAO6LuInpokhxcULUz3g/CMQBmEMSEzPPnfDIAqwDI0Kqh0NAin+V4
+fQxJfDCZAgMBAAGjggHUMIIB0DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1Ud
+DwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFJyglaiY
+64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
+cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
+Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
+tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
+m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
+c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCp
+ZU265ZWd8noQoH2Ns6VeFuId8PTWRYAzXvfDM4sXgDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAyMTQwNDIxMTdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAfr15oxXD+DhV2Lgzjjyf
+EWIWtYUC2cg2981X41teKi9l3Y+Y5OeF0D8fmVwSzloqLeJndk+PLZFZdD7L1+p5E/KwzZoLXJUS
+nbOB7qWja5897pQrI7upiDT6KSaLmy75jrifCdpHuFJSTsK6IC3Qh4U+xnGTzLYahAPkIFfFVvBJ
+D31xMNYG9XtvFfmoP3Lpx0KVF38V19/Tuj84zA/2oJ3gpPZxmrpjtjkgbR3Hbd7O6uW+CVREEilJ
+eRE70SQ9VW3polkoxjDBoPVPQacfy65rievtVz31UPvP65fNimQdLVZlMN5KCKh5BK3vHxHt90SI
+LtNy4NpSZaQgkOxoNQ==
+--00000000000081631a05f4a14b44--
