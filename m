@@ -2,139 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7D7695F95
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:45:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B02F6695F87
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232088AbjBNJpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 04:45:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
+        id S231492AbjBNJoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 04:44:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231710AbjBNJp1 (ORCPT
+        with ESMTP id S229905AbjBNJoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 04:45:27 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117BA10267;
-        Tue, 14 Feb 2023 01:45:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1676367828; bh=bQoG1+qM5Y71xKKNzZAaZKaP54c9/SNL37IJdDcFtMo=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=hihBALAdzJyyuZETKMDTwWBNqyHXT30m1W4+AhNia2aTQ0LGuEudgVjxHBOHc2O/1
-         UjuZRvBAir2lTKIaMXuW6l0Jw91yPNhbGpel182Mf/orVb0S6hbISDciYTF54Wy0Zw
-         wKM8GKPXEv0aT0K01aIbMc2I219r5PhnIgwwHqOrDmQNcp8nxxBkNf4BBrtdpN/N7Z
-         59rGu8CnZqH+X/PEx5ZjDiRwnWNihqf8TyIZs4ozwDLocxhsUitLIrPfomEmdZ19Fu
-         jPeCxrDIg0fC138zUyXarDYIQDPoI7A4vyTzEHVqChiz/r0Bk56Uo8AseQSt7S8yL1
-         B3Eipy4Ux8oWA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.155.167]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mo6qp-1olPAN2FEh-00pbOn; Tue, 14
- Feb 2023 10:43:48 +0100
-Message-ID: <dd3f45ec-9578-420b-f1b8-5657fe4d3243@gmx.de>
-Date:   Tue, 14 Feb 2023 10:43:32 +0100
+        Tue, 14 Feb 2023 04:44:18 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDB9D50A
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:44:16 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id bu23so14954946wrb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:44:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1V6X7LS4W1rOsDectubi4KTeJ0veVK4x1Eb4mq8We4o=;
+        b=NTGB1A8hi0FI4d0n7r1u647W9aZjL6itDmVIUW6Qef/Ns1oCssg5+T4pgN8GuHwygL
+         LfX5rXVF6PFKzetgUtNSE4/bPKphcZNhNKjBIyaHuwSjYlcESXyVbMAqaV9g8LELU0AY
+         W8qgSlxQ1N8mw09qsWLJT+MB9dOxyc+mAxPhIqeanAvZmS+EB8PfpLpuxEZIPeGczM7A
+         CQl8XppAmLLKLCwBznID10RjyS6VPpE4qRu1Gq6G41V3rlhchMIOapYbUmhI6SZ8t2g4
+         ILlb4U+xDvkPk/bCrfwbDmAadV9uIOXEqG7QPbzVPu5D4k8M1YmPkRMnj19Lu8wU6BgS
+         rhmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1V6X7LS4W1rOsDectubi4KTeJ0veVK4x1Eb4mq8We4o=;
+        b=Aw7pOUctoAp5jDQ7w6JYdFg8uwznUSNNBcZ4Fk1y0ZgA4MDcwwr/4bkXG1OCotlstg
+         5M0dsKglBxXQCOJm1l307HiZCaoMD5HnYUwndHAEvznJPlDUyxY7bXQbo7s9CmP5pO+e
+         KTulUWDnUQbBVkr13mNKue7BqoEfYIlkP62tBZqDCyhgSjhuT0sBY3tDPJgV4B0tRh6l
+         CC6rTf6JhT/2lmN+K6KIFIdgydxMSM9Ou1eAtbL+23u+k2m29KEgoaHN3jJ/GD+yTGS8
+         kRHd9cF0y/oX6W3+zD/HbceDtTlRdILJmj4aFbKhLg6LCtshg48GL7ENonYdoQYbEsFO
+         XqoQ==
+X-Gm-Message-State: AO0yUKUDCSNc0+i1PN5NqkJxLJZfrgOtsjMLATNUGFEAyHX5MbCQy+wm
+        YdphBNwU6E2iy+kAtCMHqoXZTw==
+X-Google-Smtp-Source: AK7set+MeaNJDHWeQ3lmWJpTPfV0TrfI0EEoITSixsaaKVn0LPBKNUaNqT/3OtyQiTgAXMzeQBqd/g==
+X-Received: by 2002:adf:f712:0:b0:2c5:50aa:f89d with SMTP id r18-20020adff712000000b002c550aaf89dmr1335007wrp.42.1676367855108;
+        Tue, 14 Feb 2023 01:44:15 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id q13-20020adff94d000000b002be099f78c0sm12399605wrr.69.2023.02.14.01.44.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 01:44:14 -0800 (PST)
+Message-ID: <5c67ecd2-075a-5b0b-feb9-57570f539ee1@linaro.org>
+Date:   Tue, 14 Feb 2023 10:44:12 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v3 08/24] parisc: Remove COMMAND_LINE_SIZE from uapi
+Subject: Re: [PATCH V3 2/5] arm64: dts: qcom: Add support for Crashdump
+ collection on IPQ9574
 Content-Language: en-US
-To:     =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>
-References: <20230214074925.228106-1-alexghiti@rivosinc.com>
- <20230214074925.228106-9-alexghiti@rivosinc.com>
- <f327ff48-cd50-4caa-1bea-f9906994e998@linaro.org>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <f327ff48-cd50-4caa-1bea-f9906994e998@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:9Li8qIWZi+mvM820GG2clzFMNjBrqaWKtjHwHuJ3DICcz81Fm4U
- 2RmO3PI+i3+wTXVGnrbheX/pLAWTgvn/yTBVQw0fLroxnm5K1IoQdsZqRZENGN3ATbehT4q
- LYJbtkfgHvqXKQS4gXQhgNMMzAzKtJiyxwXWla7+a/b/HmF4fSRj8M4VAnavnpLBfZrNVAE
- KFiLIhh+7vq2/cG5n7DgQ==
-UI-OutboundReport: notjunk:1;M01:P0:IMRPuKVDPJE=;F//SqmPJNB5y4+cZpiTQkcdojtN
- LJal9PAv1QZdKB5D9CqOG4kDONZWyrNPKkN5b2mOfjhxupMdRrK75ginsDTsmoS6GxkXsawSe
- Ixb8/z/qWuT1XvHLvnObIyu9+CDwBFSLnvfS3oUCwO+McbEoaOIu3JOluz1CKIea/++hZAXXr
- 5C/TDqeO2eW5Jj3zZR6/N6R7AbpRepoOcQKEjh1MMZly5ruuMMBXB13XwuZnCOPKbuWQD+P7U
- u5tjrVNOGUNXNhr0d3ai5DZSZ1P8Nv1752gGfUFNLirvADBmHUDdcgrG+Gm61GdfigPYbqqb/
- 1PkUPKxRFBpZ1Cx4NSNOEnyeyZwSSXJKUgjkOkH22I1GXJ97YYM62oMo0vh5OYLWx0+hsk/8n
- HQhgMxbA10mk0n61Oj1blXGd+3vMYjFQuoEHgmidB0ldTYGVNyoXaO/SaCdFfxjJsn59BdGTL
- BZkhFpt3GJCd/AnG1wSvWUqOtXgAztE05KU+svPlIGXtnFeCOF2OU2N0ju8TFPdKrWa9brAZn
- sGjDk9UmZcbxwEt172brI7gtjbfvg29z7hHouTLGUEF9EqngZWh7EYp7gkVmQI/hozbgBsgoz
- eeLkzBY9tFrPxWifcvWfEMtpsICAIZXlFRN9dU+6mSkBeP0uz+co3OyUT2lGEettUPgMaBMWt
- hOeJ6wwHJ9pcHumJqm8AgV1qyLG95d6wlp0B94e3M4XQozlyXIMUOfx6LF870WFYysGHABOcC
- oOK9ypcj7sSBG/v7UPkRI/eACrxmZcVd3CnqbnnNKSbQk5qLhC+LBre/2RfSAQNenKWKT/xM6
- x2YRcaR4vPXIiPvzgV67iGQiTV1DY0D+hOgX7A2y/rweS243V0Bg1zHwIp9mRRsPiVM9+jgWo
- 5yCcZvbHQGpOV5nnMvCxSj7isEJhJpd8xyktSgL+sUclmpfCvHbx8GkA7VJGN8RClkxcIL70E
- lxVNlTmcU+VpaSQbimIQeIbIpXk=
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     POOVENDHAN SELVARAJ <quic_poovendh@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        jassisinghbrar@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
+        robimarko@gmail.com, dmitry.baryshkov@linaro.org,
+        nfraprado@collabora.com, broonie@kernel.org,
+        quic_gurus@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_devipriy@quicinc.com
+References: <20230208053332.16537-1-quic_poovendh@quicinc.com>
+ <20230208053332.16537-3-quic_poovendh@quicinc.com>
+ <dbc93125-afd5-9ed9-7b45-0d79f728b4a5@linaro.org>
+ <1a9ad881-7753-935a-ce7d-a2a79d34f16c@quicinc.com>
+ <e569e7e8-4d7f-1e69-5a4b-ee4c4f83d7ce@linaro.org>
+ <86bb95e4-2e07-19a5-7b4f-15f25067d513@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <86bb95e4-2e07-19a5-7b4f-15f25067d513@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/23 10:08, Philippe Mathieu-Daud=C3=A9 wrote:
-> On 14/2/23 08:49, Alexandre Ghiti wrote:
->> From: Palmer Dabbelt <palmer@rivosinc.com>
->>
->> As far as I can tell this is not used by userspace and thus should not
->> be part of the user-visible API.
->>
->> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
->> ---
->> =C2=A0 arch/parisc/include/asm/setup.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | =
-7 +++++++
->> =C2=A0 arch/parisc/include/uapi/asm/setup.h | 2 --
->> =C2=A0 2 files changed, 7 insertions(+), 2 deletions(-)
->> =C2=A0 create mode 100644 arch/parisc/include/asm/setup.h
->
-> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
+On 14/02/2023 10:35, POOVENDHAN SELVARAJ wrote:
+>>>> compatible = "arm,cortex-a73-pmu";
+>>>> interrupts = <GIC_PPI 7 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
+>  >>> @@ -95,11 +102,17 @@
+>>>> #address-cells = <2>;
+>>>> #size-cells = <2>;
+>>>> ranges;
+> *>>> -*
+>  >> I don't think anything improved here - still unrelated change.
+>  >>
+> 
+> Are you referring to the deleted line here?
 
-Acked-by: Helge Deller <deller@gmx.de>
+Yes, the line removal does not seem related nor justified.
 
-
+Best regards,
+Krzysztof
 
