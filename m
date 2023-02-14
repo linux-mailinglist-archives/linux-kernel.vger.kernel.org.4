@@ -2,262 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AFC569571C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 04:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2D2695722
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 04:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbjBNDJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 22:09:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43226 "EHLO
+        id S230087AbjBNDL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 22:11:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjBNDJv (ORCPT
+        with ESMTP id S229436AbjBNDL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 22:09:51 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876A983;
-        Mon, 13 Feb 2023 19:09:49 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31E39aDE026434;
-        Tue, 14 Feb 2023 03:09:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=KsYecN1rsYL0dVA2x6yNTZhSQBborHeLN4RmARTaE0s=;
- b=G5ShA7RksAIBRrLQKkqbEGG5NxmVz9MjUDwACQ7KBpEShMSiCvMgOa5Eidj6k7ds/vvg
- hZFn43XvUawMzsMR26DpWmCeJ5AVbD1TKhyWZs9ABgxluD96SdHc06nMXZ6+hL7TzQEj
- 9zyivLZ3fv26YfiyvdyTwDWQLNLsTTPRPifDEeQxIRO/QlWiwYyaBkTs6NntUBh17hQI
- jyq95779CNM/DSVBydXS9ykpN8Zj8Vz6EaeoC+Vpracckx9jGGgxB6J7ASaR0Zr03NSx
- GDs1D9/+HtsK/8c+ZQxHkQEB7/dXUSShq4duhwEjMlD8RJ41PlEL6h6yxI42E9NVkMgW iQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np389wmuk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 03:09:36 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31E39Z4J020348
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 03:09:35 GMT
-Received: from [10.110.55.187] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 13 Feb
- 2023 19:09:33 -0800
-Message-ID: <df059f88-6ff6-5906-58f1-4f6c752c4214@quicinc.com>
-Date:   Mon, 13 Feb 2023 19:09:32 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [RFC PATCH 5/7] drm/msm/dpu: Document and enable TEAR interrupts
- on DSI interfaces
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        <phone-devel@vger.kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-CC:     <~postmarketos/upstreaming@lists.sr.ht>,
+        Mon, 13 Feb 2023 22:11:28 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3ABF55B4;
+        Mon, 13 Feb 2023 19:11:25 -0800 (PST)
+X-UUID: 420a6ed0ac1511eda06fc9ecc4dadd91-20230214
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=YdE/8JDLam1Ggqc23gYHbBVRsRHj1cRNA1Ws28kzmfo=;
+        b=kcAvFXiifs3Jv8h7H4Sb/9Ol9YRRotMl2sFr3THVU4thFiDoB4YXxEfsjHhE0vVTUt1eb6mVcJHY6qXI541PqlEGRYEGdXPJdn6UQqLjdqOwN70rKLJkRqDsAmzKiD6BsM3MvfWjNpq3oiu1fk4ddSZYio/1ut2Bf3jCsnRpyyo=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.19,REQID:ba9f39e8-cffe-44a8-8c66-0345e602e74a,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.19,REQID:ba9f39e8-cffe-44a8-8c66-0345e602e74a,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:885ddb2,CLOUDID:ada2cc8e-8530-4eff-9f77-222cf6e2895b,B
+        ulkID:230214111123CPD6PJ37,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-UUID: 420a6ed0ac1511eda06fc9ecc4dadd91-20230214
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 353635466; Tue, 14 Feb 2023 11:11:22 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 14 Feb 2023 11:11:21 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Tue, 14 Feb 2023 11:11:20 +0800
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Joerg Roedel <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>, <nfraprado@collabora.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
         AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        "Jami Kettunen" <jami.kettunen@somainline.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Loic Poulain" <loic.poulain@linaro.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20221231215006.211860-1-marijn.suijten@somainline.org>
- <20221231215006.211860-6-marijn.suijten@somainline.org>
- <773cd72b-a766-1764-e25f-0af1174f0e51@quicinc.com>
- <1051d6bd-eb3c-6293-0bd2-3f4ea28fa3f8@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <1051d6bd-eb3c-6293-0bd2-3f4ea28fa3f8@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: HK1u26ls4glfAknYbKlwlv7S_jxg8PuD
-X-Proofpoint-GUID: HK1u26ls4glfAknYbKlwlv7S_jxg8PuD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-14_01,2023-02-13_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
- bulkscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0 impostorscore=0
- adultscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302140024
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        <angelogioacchino.delregno@collabora.com>,
+        <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
+        <jianjiao.zeng@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>,
+        <chengci.xu@mediatek.com>, <youlin.pei@mediatek.com>,
+        <anan.sun@mediatek.com>
+Subject: [PATCH v3 00/11] Adjust the dma-ranges for MTK IOMMU
+Date:   Tue, 14 Feb 2023 11:11:03 +0800
+Message-ID: <20230214031114.926-1-yong.wu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+After commit f1ad5338a4d5 ("of: Fix "dma-ranges" handling for bus
+controllers"), the dma-ranges is not allowed for dts leaf node.
+but we still would like to separate the different masters into
+different iova regions. Thus we adjust the internal flow, separate
+the 16GB iova range by the master HW larbid/portid and add the
+dma-ranges property in the parent "soc" node. This also could avoid
+the users forget/abuse the iova regions.
+
+The commit f1ad5338a4d5 did affect the mt8195 venc, But it is not
+a fatal issue, it could also work well at 0-4GB iova. thus I don't
+add "Fixes:" tag.
+
+In this series, I add functions for mt8192/mt8195/mt8186, mt8188 will
+be in its special patchset. and the previous mt8173/mt8183...support
+0-4GB only, no need this function.
+
+Change note:
+v3: Add a new patch only for comment more in the code.
+
+v2: https://lore.kernel.org/linux-mediatek/20230208053643.28249-1-yong.wu@mediatek.com/
+   a) Base on next-20230206 since mt8195 jpeg node is applied which affect
+      this patch.
+   b) Reword the commit message [1/10][2/10] to explain effect.
+
+v1: https://lore.kernel.org/linux-mediatek/20230113060133.9394-1-yong.wu@mediatek.com/
+   Base on v6.2-rc3.
+
+Yong Wu (11):
+  dt-bindings: media: mediatek,vcodec: Remove dma-ranges property
+  dt-bindings: media: mediatek,jpeg: Remove dma-ranges property
+  iommu/mediatek: Improve comment for the current region/bank
+  iommu/mediatek: Get regionid from larb/port id
+  iommu/mediatek: mt8195: Add iova_region_larb_msk
+  iommu/mediatek: mt8186: Add iova_region_larb_msk
+  iommu/mediatek: mt8192: Add iova_region_larb_msk
+  iommu/mediatek: Add a gap for the iova regions
+  arm64: dts: mt8195: Add dma-ranges for the parent "soc" node
+  arm64: dts: mt8195: Remove the unnecessary dma-ranges
+  arm64: dts: mt8186: Add dma-ranges for the parent "soc" node
+
+ .../media/mediatek,mt8195-jpegdec.yaml        |   7 -
+ .../media/mediatek,mt8195-jpegenc.yaml        |   7 -
+ .../media/mediatek,vcodec-decoder.yaml        |   5 -
+ .../media/mediatek,vcodec-encoder.yaml        |   5 -
+ .../media/mediatek,vcodec-subdev-decoder.yaml |   7 -
+ .../bindings/media/mediatek-jpeg-encoder.yaml |   5 -
+ arch/arm64/boot/dts/mediatek/mt8186.dtsi      |   1 +
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |   4 +-
+ drivers/iommu/mtk_iommu.c                     | 137 ++++++++++++++----
+ 9 files changed, 108 insertions(+), 70 deletions(-)
+
+-- 
+2.18.0
 
 
-On 2/13/2023 1:46 PM, Dmitry Baryshkov wrote:
-> On 13/02/2023 21:37, Jessica Zhang wrote:
->>
->>
->> On 12/31/2022 1:50 PM, Marijn Suijten wrote:
->>> All SoCs since DPU 5.0.0 (and seemingly up until and including 6.0.0,
->>> but excluding 7.x.x) have the tear interrupt and control registers moved
->>> out of the PINGPONG block and into the INTF block.  Wire up the
->>> necessary interrupts and IRQ masks on all supported hardware.
->>
->> Hi Marijn,
->>
->> Thanks for the patch.
->>
->> I saw that in your commit msg, you mentioned that 7.x doesn't have 
->> tearcheck in the INTF block -- can you double check that this is correct?
->>
->> I'm working on SM8350 (DPU v7) and I'm seeing that it does have 
->> tearcheck in INTF block.
-> 
-> I confirm, according to the vendor drivers INTF TE should be used for 
-> all DPU >= 5.0, including 7.x and 8.x
-> 
-> However I think I know what Marijn meant here. For 5.x and 6.x these 
-> IRQs are handled at the address MDSS + 0x6e800 / + 0x6e900 (which means 
-> offset here should 0x6d800 and 0x6d900) for INTF_1 and INTF_2. Since DPU 
-> 7.x these IRQ registers were moved close to the main INTF block (0x36800 
-> and 0x37800 = INTF + 0x800).
-> 
-
-Got it, then the commit text should remove "control" and just say tear 
-interrupt registers. It got a bit confusing.
-
-We will add the 7xxx intf tear check support on top of this series.
-
->>
->>>
->>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
->>> ---
->>>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 78 +++++++++++--------
->>>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |  6 +-
->>>   .../gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c | 12 +++
->>>   .../gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h |  2 +
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h      |  3 +
->>>   5 files changed, 68 insertions(+), 33 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>> index 1cfe94494135..b9b9b5b0b615 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>> @@ -86,6 +86,15 @@
->>>   #define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN)
->>> +#define IRQ_MSM8998_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
->>> +             BIT(MDP_SSPP_TOP0_INTR2) | \
->>> +             BIT(MDP_SSPP_TOP0_HIST_INTR) | \
->>> +             BIT(MDP_INTF0_INTR) | \
->>> +             BIT(MDP_INTF1_INTR) | \
->>> +             BIT(MDP_INTF2_INTR) | \
->>> +             BIT(MDP_INTF3_INTR) | \
->>> +             BIT(MDP_INTF4_INTR))
->>> +
->>>   #define IRQ_SDM845_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
->>>                BIT(MDP_SSPP_TOP0_INTR2) | \
->>>                BIT(MDP_SSPP_TOP0_HIST_INTR) | \
->>> @@ -100,13 +109,15 @@
->>>   #define IRQ_QCM2290_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
->>>                BIT(MDP_SSPP_TOP0_INTR2) | \
->>>                BIT(MDP_SSPP_TOP0_HIST_INTR) | \
->>> -             BIT(MDP_INTF1_INTR))
->>> +             BIT(MDP_INTF1_INTR) | \
->>> +             BIT(MDP_INTF1_TEAR_INTR))
->>>   #define IRQ_SC7180_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
->>>                BIT(MDP_SSPP_TOP0_INTR2) | \
->>>                BIT(MDP_SSPP_TOP0_HIST_INTR) | \
->>>                BIT(MDP_INTF0_INTR) | \
->>> -             BIT(MDP_INTF1_INTR))
->>> +             BIT(MDP_INTF1_INTR) | \
->>> +             BIT(MDP_INTF1_TEAR_INTR))
->>>   #define IRQ_SC7280_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
->>>                BIT(MDP_SSPP_TOP0_INTR2) | \
->>> @@ -120,7 +131,9 @@
->>>                BIT(MDP_SSPP_TOP0_HIST_INTR) | \
->>>                BIT(MDP_INTF0_INTR) | \
->>>                BIT(MDP_INTF1_INTR) | \
->>> +             BIT(MDP_INTF1_TEAR_INTR) | \
->>>                BIT(MDP_INTF2_INTR) | \
->>> +             BIT(MDP_INTF2_TEAR_INTR) | \
->>>                BIT(MDP_INTF3_INTR) | \
->>>                BIT(MDP_INTF4_INTR))
->>> @@ -129,7 +142,9 @@
->>>                 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
->>>                 BIT(MDP_INTF0_INTR) | \
->>>                 BIT(MDP_INTF1_INTR) | \
->>> +              BIT(MDP_INTF1_TEAR_INTR) | \
->>>                 BIT(MDP_INTF2_INTR) | \
->>> +              BIT(MDP_INTF2_TEAR_INTR) | \
->>>                 BIT(MDP_INTF3_INTR) | \
->>>                 BIT(MDP_INTF4_INTR) | \
->>>                 BIT(MDP_INTF5_INTR) | \
->>> @@ -1300,63 +1315,64 @@ static struct dpu_dsc_cfg sdm845_dsc[] = {
->>>   /*************************************************************
->>>    * INTF sub blocks config
->>>    *************************************************************/
->>> -#define INTF_BLK(_name, _id, _base, _type, _ctrl_id, _progfetch, 
->>> _features, _reg, _underrun_bit, _vsync_bit) \
->>> +#define INTF_BLK(_name, _id, _base, _len, _type, _ctrl_id, 
->>> _progfetch, _features, _reg, _underrun_bit, _vsync_bit, _tear_reg, 
->>> _tear_rd_ptr_bit) \
->>>       {\
->>>       .name = _name, .id = _id, \
->>> -    .base = _base, .len = 0x280, \
->>> +    .base = _base, .len = _len, \
->>>       .features = _features, \
->>>       .type = _type, \
->>>       .controller_id = _ctrl_id, \
->>>       .prog_fetch_lines_worst_case = _progfetch, \
->>>       .intr_underrun = DPU_IRQ_IDX(_reg, _underrun_bit), \
->>>       .intr_vsync = DPU_IRQ_IDX(_reg, _vsync_bit), \
->>> +    .intr_tear_rd_ptr = DPU_IRQ_IDX(_tear_reg, _tear_rd_ptr_bit), \
->>>       }
->>>   static const struct dpu_intf_cfg msm8998_intf[] = {
->>> -    INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, 0, 25, 
->>> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
->>> -    INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 25, 
->>> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
->>> -    INTF_BLK("intf_2", INTF_2, 0x6B000, INTF_DSI, 1, 25, 
->>> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
->>> -    INTF_BLK("intf_3", INTF_3, 0x6B800, INTF_HDMI, 0, 25, 
->>> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
->>> +    INTF_BLK("intf_0", INTF_0, 0x6A000, 0x268, INTF_DP, 0, 25, 
->>> INTF_SDM845_MASK, MDP_SSPP_TOP0_INTR, 24, 25, -1, -1),
->>
->> Just wondering, how were the lengths calculated for the INTF blocks? 
->> The values in general seem a little off to me.
->>
->> For example, I'm looking downstream and it seems to me that the length 
->> for the INTF_0 on MSM8998 should be 0x280. Similarly for SC7280, I'm 
->> seeing that length for INTF + tearcheck should be 0x2c4.
-> 
-> We have discussed INTF lengths in [1]. The current understanding of the 
-> block lengths can be found at [2]. Please comment there if any of the 
-> fixed lengths sounds incorrect to you.
-> 
-> [1] https://patchwork.freedesktop.org/patch/522187/
-> [2] https://patchwork.freedesktop.org/patch/522227/
-> 
-> [skipped the rest]
-> 
-
-Please correct my understanding here, it was agreed to fix intf blocks 
-to 0x2c4 here https://patchwork.freedesktop.org/patch/522227/ but I dont 
-see this was merged?
-
-It was agreed to first land INTF_TE and then add the higher addresses 
-but I dont see such a change, am i missing something?
