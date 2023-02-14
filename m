@@ -2,118 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8B5695DD6
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:01:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA5C695DD8
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:01:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232136AbjBNJBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 04:01:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33968 "EHLO
+        id S231923AbjBNJBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 04:01:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbjBNJBA (ORCPT
+        with ESMTP id S232036AbjBNJBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 04:01:00 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7720B1284B;
-        Tue, 14 Feb 2023 01:00:59 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id h24so16809232qtr.0;
-        Tue, 14 Feb 2023 01:00:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sotg6g4Bh/A8PVyKxmYXGABNEX1eJU5WjsjoyOoCPXM=;
-        b=nYm5hMXfNfniL4C7SsUcbr0NG/2bqbQphI2J2mYuEDYsJq7PkY6lIc24t8x9TrBMoM
-         LYiRT7O85Vz+1ZbDcjXZw2EuxdLL+gpmCsyx2zYv38z5eYbem9lv/0w4kLHPeE0//PhW
-         78iY2AfZL7gtOqxAkjhuuqru9vTNOheliaThYT4VSp0Tabx2xLUJmVYHgwkrToArEzbT
-         flACIUXw8tjKFCO6euF0cXAyLNlgwwjSvVPb0JRHBghZt8mtW1E21GrjkBPHRvbLGWpy
-         JR9Q1eJWO0ocFOEqqJ3OrFhH38yn8B2f/+UZIkxJ3IR7L8hi7GEUMeswRujc9BqX9xQg
-         EilQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Sotg6g4Bh/A8PVyKxmYXGABNEX1eJU5WjsjoyOoCPXM=;
-        b=ByCTZ6jDe+pZBbP8+gwJ8tQmYos1lsjR8T0Mvb+cHUQErwFNMgwEfXcFjCRfHGCNew
-         rhCK7nbIG3l9a/4gXjR8v/nl7a8OsFR3sfDgKRCOqerQoyw9kVjiZsIZ8/P/Sz+jX66x
-         24Asmd6KrAr++LB2gdH4Et8Ak5q5iPlxsIW0wZdU3TL/GXD/lQdTaLR1OUVWuz45KQQV
-         1wk07OK5LCIKfmu9VMWLbbHdS8ZHnb8UsoeqmXzgWX0KL69b0Yz4hKlUuPWS76WAPgv4
-         HbK60WGbOGfHgx/36C29SjHen/jb1AEVDg7Mhz/rli3FWRZC1MIvP09DioChe20y1x4D
-         RsEQ==
-X-Gm-Message-State: AO0yUKXpwiUGbdOS6P2KDjZl4vysSpt7yl57e9htFfXieCBHCOBjLptU
-        hegUP+7E2vCuLgHvnpX4itC9qHeT9pqJ2Y5hQZg=
-X-Google-Smtp-Source: AK7set8BrQ3EZL7oYNrSDTXecmNQ+MEqyA40JVLuuUbf8otkPYKFo01zkl8m26ZDac6afBBX0vqQBt2ouoflSVuLxmg=
-X-Received: by 2002:ac8:5c0d:0:b0:3b8:6b25:88be with SMTP id
- i13-20020ac85c0d000000b003b86b2588bemr232093qti.14.1676365258564; Tue, 14 Feb
- 2023 01:00:58 -0800 (PST)
+        Tue, 14 Feb 2023 04:01:11 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27204166FC;
+        Tue, 14 Feb 2023 01:01:01 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.120])
+        by gateway (Coremail) with SMTP id _____8BxutnKTetj4HMAAA--.1192S3;
+        Tue, 14 Feb 2023 17:00:58 +0800 (CST)
+Received: from [10.20.42.120] (unknown [10.20.42.120])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axeb3ITetjQMIyAA--.29053S3;
+        Tue, 14 Feb 2023 17:00:56 +0800 (CST)
+Subject: Re: [PATCH v1 01/24] LoongArch: KVM: Implement kvm module related
+ interface
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20230214025648.1898508-1-zhaotianrui@loongson.cn>
+ <20230214025648.1898508-2-zhaotianrui@loongson.cn>
+ <Y+ssT+W27GxDRAAZ@kroah.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>, Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>
+From:   Tianrui Zhao <zhaotianrui@loongson.cn>
+Message-ID: <6fd2ca5a-7243-0627-79e9-8c8bd840adc2@loongson.cn>
+Date:   Tue, 14 Feb 2023 17:00:56 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-References: <20230214080034.3828-1-marcan@marcan.st> <20230214080034.3828-3-marcan@marcan.st>
-In-Reply-To: <20230214080034.3828-3-marcan@marcan.st>
-From:   Julian Calaby <julian.calaby@gmail.com>
-Date:   Tue, 14 Feb 2023 20:00:45 +1100
-Message-ID: <CAGRGNgV6YMhBa1bdkf_EQ0Z+nwbfhJkKcTxtc=ukWVMWtvQ2PA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] brcmfmac: pcie: Provide a buffer of random bytes to
- the device
-To:     Arend van Spriel <aspriel@gmail.com>
-Cc:     Hector Martin <marcan@marcan.st>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        asahi@lists.linux.dev, linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y+ssT+W27GxDRAAZ@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Axeb3ITetjQMIyAA--.29053S3
+X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxWrWxAF47KF1xuw15tw4kXrb_yoW5Ar4xpF
+        WDAFn5KF4rGr1fGwnaq3Wagrn8GFykGF47K3W293yUAFWjqw1UCr4kK3sIva4jva1kXr10
+        gF13X3WYg3ZFy37anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
+        e7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
+        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
+        xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
+        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8Jr0_Cr1UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUcbAwUUUUU
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arend,
 
-On Tue, Feb 14, 2023 at 7:04 PM Hector Martin <marcan@marcan.st> wrote:
+
+在 2023年02月14日 14:38, Greg Kroah-Hartman 写道:
+> On Tue, Feb 14, 2023 at 10:56:25AM +0800, Tianrui Zhao wrote:
+>> 1. Implement loongarch kvm module init, module exit interface,
+>> using kvm context to save the vpid info and vcpu world switch
+>> interface pointer.
+>> 2. Implement kvm hardware enable, disable interface, setting
+>> the guest config reg to enable virtualization features.
+>> 3. Add kvm related headers.
+> Shouldn't this be 3 different patches instead?
+Thanks, I will separate this to 3 different patches.
 >
-> Newer Apple firmwares on chipsets without a hardware RNG require the
-> host to provide a buffer of 256 random bytes to the device on
-> initialization. This buffer is present immediately before NVRAM,
-> suffixed by a footer containing a magic number and the buffer length.
+>> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+>> ---
+>>   arch/loongarch/include/asm/cpu-features.h |  22 ++
+>>   arch/loongarch/include/asm/kvm_host.h     | 257 ++++++++++++++++++++++
+>>   arch/loongarch/include/asm/kvm_types.h    |  11 +
+>>   arch/loongarch/include/uapi/asm/kvm.h     | 121 ++++++++++
+>>   arch/loongarch/kvm/main.c                 | 152 +++++++++++++
+>>   include/uapi/linux/kvm.h                  |  15 ++
+>>   6 files changed, 578 insertions(+)
+>>   create mode 100644 arch/loongarch/include/asm/kvm_host.h
+>>   create mode 100644 arch/loongarch/include/asm/kvm_types.h
+>>   create mode 100644 arch/loongarch/include/uapi/asm/kvm.h
+>>   create mode 100644 arch/loongarch/kvm/main.c
+>>
+>> diff --git a/arch/loongarch/include/asm/cpu-features.h b/arch/loongarch/include/asm/cpu-features.h
+>> index b07974218..23e7c3ae5 100644
+>> --- a/arch/loongarch/include/asm/cpu-features.h
+>> +++ b/arch/loongarch/include/asm/cpu-features.h
+>> @@ -64,5 +64,27 @@
+>>   #define cpu_has_guestid		cpu_opt(LOONGARCH_CPU_GUESTID)
+>>   #define cpu_has_hypervisor	cpu_opt(LOONGARCH_CPU_HYPERVISOR)
+>>   
+>> +#define cpu_has_matc_guest	(cpu_data[0].guest_cfg & (1 << 0))
+>> +#define cpu_has_matc_root	(cpu_data[0].guest_cfg & (1 << 1))
+>> +#define cpu_has_matc_nest	(cpu_data[0].guest_cfg & (1 << 2))
+>> +#define cpu_has_sitp		(cpu_data[0].guest_cfg & (1 << 6))
+>> +#define cpu_has_titp		(cpu_data[0].guest_cfg & (1 << 8))
+>> +#define cpu_has_toep		(cpu_data[0].guest_cfg & (1 << 10))
+>> +#define cpu_has_topp		(cpu_data[0].guest_cfg & (1 << 12))
+>> +#define cpu_has_torup		(cpu_data[0].guest_cfg & (1 << 14))
+>> +#define cpu_has_gcip_all	(cpu_data[0].guest_cfg & (1 << 16))
+>> +#define cpu_has_gcip_hit	(cpu_data[0].guest_cfg & (1 << 17))
+>> +#define cpu_has_gcip_secure	(cpu_data[0].guest_cfg & (1 << 18))
+> Why not use BIT() for all of those "<<" statements?
+Ok thanks, I will use BIT() to replace those "<<" statements.
 >
-> This won't affect chips/firmwares that do not use this feature, so do it
-> unconditionally for all Apple platforms (those with an Apple OTP).
-
-Following on from the conversation a year ago, is there a way to
-detect chipsets that need these random bytes? While I'm sure Apple is
-doing their own special thing for special Apple reasons, it seems
-relatively sensible to omit a RNG on lower-cost chipsets, so would
-other chipsets need it?
-
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-
-Beyond that, it all seems pretty sensible.
-
-Reviewed-by: Julian Calaby <julian.calaby@gmail.com>
-
-> ---
->  .../broadcom/brcm80211/brcmfmac/pcie.c        | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
+>> +#define KVM_GET_CSRS		_IOWR(KVMIO, 0xc5, struct kvm_csrs)
+>> +#define KVM_SET_CSRS		_IOW(KVMIO,  0xc6, struct kvm_csrs)
+> Why does this arch need new ioctls?
+We want to use this ioctl to access multiple csrs at one time. If 
+without this, we only access one csr.
+There is another function, can we use the KVM_GET/SET_MSRS to access our 
+csrs?
 
 Thanks,
+Tianrui Zhao
+> thanks,
+>
+> greg k-h
 
--- 
-Julian Calaby
-
-Email: julian.calaby@gmail.com
-Profile: http://www.google.com/profiles/julian.calaby/
