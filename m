@@ -2,125 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF7F697190
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 00:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20FC969718C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 00:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232871AbjBNXH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 18:07:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
+        id S232690AbjBNXGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 18:06:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232766AbjBNXH0 (ORCPT
+        with ESMTP id S232625AbjBNXGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 18:07:26 -0500
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128C52F789;
-        Tue, 14 Feb 2023 15:07:04 -0800 (PST)
-Received: by mail-wm1-f46.google.com with SMTP id z13so12121727wmp.2;
-        Tue, 14 Feb 2023 15:07:04 -0800 (PST)
+        Tue, 14 Feb 2023 18:06:09 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEBC31E32
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 15:05:41 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id c15so5303021ils.12
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 15:05:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rm0NgkeBMMJp25GutovHDy5uGqqIv+F0wnILJzPaqVk=;
+        b=D86ZlEmgPn6zYt3h9LajOUBIj2lvYD/XRL387/aIgai9cGLaVo7W+YT6/UFZKMx6tZ
+         HzN/V11U6WHzjiu9lexALsC+tsagFh6XUFVXDvOO8C83W2GtEm2YwggXWicEO1kaGfzr
+         1zQNQhmbEWp0e57sHLzueTwkD417gRp5NHhEttVzDeJfgmt1qNNkzv+tlG9rbZst3zbj
+         1K95FQ6n5QVsqZgsPMKk03iFqrqEyr3X/gPH4e6GY8IeeWLlg1+DYwK3lIX958W373i6
+         dFJv7jP+9u9e6kBNwIg0kWamyyc0wfAeD9Z/LqAyu7fbjcC4zTcIx9J6UVIMzdGPp9YE
+         otCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RFnuXHt5BQHl+dl25WeGhSRF34xm7oP5SZbo8VSJ+Ws=;
-        b=PG0kZ/+AUbeayfiCWOFSY9WUto3WCWzXClKgPgrncLDx/f81/7SAU9xRVEQVAqKOF8
-         suGRHKYrkkCa/MiB0kROVL57DXGIwNWLqh6JpR2TlRtTjzlEuJ/5AENFJcYDL2a917S1
-         TDpbWf4EV1YFt15wQhF/8RAofUASuf1uSkUSNxL4Y/XcO4X0rPyHN+4QVAm3h5/Gyz5E
-         ajpqDbnpygGIYF+fIVxAyhMFPFz32SU+CZ/iC3wfnvgO2Kt16JB+7Jqs1T22O99Zb/oQ
-         bdfMa0TmcWdB682u3LjigSUONBYVI0C9jDfGMwWDFpellWX12nClVawO8co35lI1HEGg
-         15xA==
-X-Gm-Message-State: AO0yUKW5kKR8WJlhKwKfQ+JRCQ9aDf3pZZBlw+2kwJk41N0JSt4jUuB2
-        ZQXM235fiHcG1IjwIRN4h8A=
-X-Google-Smtp-Source: AK7set8NeemUKLkEtHvCUxeaLbiku2+64NE6dhd8JSuhljEWgonizKhFZdNHHZWDFDJ1BjDakp3utQ==
-X-Received: by 2002:a05:600c:180a:b0:3e1:f8b3:6333 with SMTP id n10-20020a05600c180a00b003e1f8b36333mr366196wmp.27.1676415988378;
-        Tue, 14 Feb 2023 15:06:28 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id u1-20020a05600c440100b003e0238d9101sm189411wmn.31.2023.02.14.15.05.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 15:05:55 -0800 (PST)
-Date:   Tue, 14 Feb 2023 23:05:18 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
-Cc:     Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        jinankjain@linux.microsoft.com, mikelley@microsoft.com,
-        kys@microsoft.com, Tianyu.Lan@microsoft.com,
-        haiyangz@microsoft.com, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com
-Subject: Re: [PATCH] x86/hyperv: Fix hv_get/set_register for nested bringup
-Message-ID: <Y+wTrlz8nlk4h11/@liuwe-devbox-debian-v2>
-References: <1675980172-6851-1-git-send-email-nunodasneves@linux.microsoft.com>
- <Y+pJDbMu8WEPFnEm@liuwe-devbox-debian-v2>
- <8d0b36c0-dfca-6d4b-076d-033f9ccda4c7@linux.microsoft.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rm0NgkeBMMJp25GutovHDy5uGqqIv+F0wnILJzPaqVk=;
+        b=lucNK9nbj8je2Ts+Pi1Zd8iRMMLmbyNawX6hfg81nRay5vYRlRuxRdXU4/kRpauGuU
+         hInDhsyR3dXD3fLD0paegl0b7XilEN1/ZGt2mfn/6ABY2IU5wEx4GtPEZGvF+cSre2o0
+         RdVYVsisUlk/6sGwzsuoEze0WZ4ZrtiOHfTfmRdYCdPZXSf4EZTpvndnIwi6+l1MIYLm
+         BC5IQ5bhUcYMTfUMHBe0b0Gya0PAi5ixwV1gshPsMR+q+qN+nl/hmIOdssjlPiphtpjM
+         3lwqGx18RVSBZRecNoJZ5wpwUR6GXz95cwvpD2zd63/8xdcM5VGTGW50PfB4ttgvAedf
+         bdUQ==
+X-Gm-Message-State: AO0yUKWbJho3jHQzO7+PItD6NYa0AX0EXtLs8aAxKxU4A4gvc6yKh2A7
+        KD65zlDUi/+Odr9gJAVZVKdgiA==
+X-Google-Smtp-Source: AK7set87wxmTDwtJRW0ye8r7q7aTzqoBfwNDT61LNDbHNlSoCq27WRJgV4Hmj4Wykio2W70BOuSA8w==
+X-Received: by 2002:a05:6e02:1e05:b0:315:579c:9b77 with SMTP id g5-20020a056e021e0500b00315579c9b77mr308762ila.1.1676415931247;
+        Tue, 14 Feb 2023 15:05:31 -0800 (PST)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id t5-20020a02cca5000000b003b1f0afe484sm5239206jap.141.2023.02.14.15.05.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 15:05:30 -0800 (PST)
+Message-ID: <867e1e3e-681b-843b-1704-effed736e13d@kernel.dk>
+Date:   Tue, 14 Feb 2023 16:05:29 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8d0b36c0-dfca-6d4b-076d-033f9ccda4c7@linux.microsoft.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v14 00/17] iov_iter: Improve page extraction (pin or just
+ list)
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>, smfrench@gmail.com
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20230214171330.2722188-1-dhowells@redhat.com>
+ <2877092.1676415412@warthog.procyon.org.uk>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <2877092.1676415412@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 02:17:52PM -0800, Nuno Das Neves wrote:
-> On 2/13/2023 6:28 AM, Wei Liu wrote:
-> > A few comments on style.
-> > 
-> > On Thu, Feb 09, 2023 at 02:02:52PM -0800, Nuno Das Neves wrote:
-> >> hv_get_nested_reg only translates SINT0, resulting in the wrong sint
-> >> being registered by nested vmbus.
-> > 
-> > Please put a blank line between paragraphs.
-> > 
+On 2/14/23 3:56 PM, David Howells wrote:
+> Hi Jens,
 > 
-> Ok
+> If you decide not to take my patches in this merge window, would you have any
+> objection to my patches 1-3 and 10-11 in this series going through Steve
+> French's cifs tree so that he can take my cifs iteratorisation patches?
 > 
-> >> Fix the issue with new utility function hv_is_sint_reg.
-> >> While at it, improve clarity of hv_set_non_nested_register and hv_is_synic_reg.
-> >>
-> >> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-> >> ---
-> >>  arch/x86/include/asm/mshyperv.h | 11 +++++++----
-> >>  arch/x86/kernel/cpu/mshyperv.c  |  8 ++++----
-> >>  2 files changed, 11 insertions(+), 8 deletions(-)
-> >>
-> >> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-> >> index 9ae1a344536b..684c547c1cca 100644
-> >> --- a/arch/x86/include/asm/mshyperv.h
-> >> +++ b/arch/x86/include/asm/mshyperv.h
-> >> @@ -225,10 +225,13 @@ extern bool hv_isolation_type_snp(void);
-> >>  
-> >>  static inline bool hv_is_synic_reg(unsigned int reg)
-> >>  {
-> >> -	if ((reg >= HV_REGISTER_SCONTROL) &&
-> >> -	    (reg <= HV_REGISTER_SINT15))
-> >> -		return true;
-> >> -	return false;
-> >> +	return (reg >= HV_REGISTER_SCONTROL) &&
-> >> +	       (reg <= HV_REGISTER_SINT15);
-> >> +}
-> > 
-> > Please put a new line here.
-> > 
+> Patches 1-3 would add filemap_splice_read() and direct_splice_read(), but not
+> connect them up to anything and 10-11 would add iov_iter_extract_pages().  I
+> can then give Steve a patch to make cifs use them as part of my patches for
+> that.
 > 
-> Ok
+> This would only affect cifs.  See my iov-cifs branch:
 > 
-> > I can fix these issues too if you don't end up sending a new version due
-> > to other issues.
-> > 
-> > Jinank, please take a look. The code looks sensible to me, but I would
-> > like you to have a look too.
-> > 
+> 	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-cifs
 > 
-> I'll wait for Jinank to take a look before posting another version...
-> 
+> for an example of how this would look.
 
-If Jinank is happy with the change, I can just fix things up for you
-before I commit this patch.
+Let's update the branch and see how it goes... If there's more fallout, then
+let's make a fallback plan for the first few.
 
-Wei.
+-- 
+Jens Axboe
+
+
