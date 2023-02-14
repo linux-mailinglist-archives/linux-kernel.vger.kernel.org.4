@@ -2,91 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4F9696641
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF91A6965FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 15:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbjBNOOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 09:14:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
+        id S233282AbjBNOJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 09:09:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232718AbjBNOO2 (ORCPT
+        with ESMTP id S233160AbjBNOJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 09:14:28 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A606A6F;
-        Tue, 14 Feb 2023 06:13:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D4CC3CE2065;
-        Tue, 14 Feb 2023 14:07:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D563C4339B;
-        Tue, 14 Feb 2023 14:07:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676383670;
-        bh=OaKxI8asQTEjsEh6yfL74O5y0APlN8V2pOfAUwHuYPE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s9uEH0FY0E59Lne0jrBhkQf1M8apaJ4Q5qecHu2ul3FABQgIuCLiaX67MlXCfJKIP
-         REV6oT63TsGh2uzEnR6pEqfoZS/Mv7zRh0jY/1seyA7HVtaFiEkwLPSSIQymvZhD5j
-         vC2hiiI/90K3ubqTQezm+4Z8s6GsfriFu3fYHCGHgITD9g9h8cIqdv5DgxHYPrg1hg
-         7FkupLjpl02YxWT7EReno9nxekdM9ZnEy7IPxyjT7xBJ0MY/nWbprKqXaRz3c9bqGI
-         J5CcAY5uJxb5lb/c/PCC4VM2plmW+gV10L7/SI1cUyuoL+hPjrQuQO771g7J/kD01N
-         b4DjHYylyTrCw==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Rich Felker <dalias@libc.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mm@kvack.org, linux-sh@vger.kernel.org
-Subject: [PATCH 2/2] sh: initialize max_mapnr
-Date:   Tue, 14 Feb 2023 16:07:29 +0200
-Message-Id: <20230214140729.1649961-3-rppt@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230214140729.1649961-1-rppt@kernel.org>
-References: <20230214140729.1649961-1-rppt@kernel.org>
+        Tue, 14 Feb 2023 09:09:44 -0500
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6276E2203C;
+        Tue, 14 Feb 2023 06:09:07 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id dr8so40272796ejc.12;
+        Tue, 14 Feb 2023 06:09:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p7hlSNqIh/Sna2kEiZvGWoB1aXxpevaYTwBOmCsTko4=;
+        b=VQhEXrJCClXlTMVNlCv6k10DCH92MxLpaMSlvWwbjtVae3qS3cNwQgeAVYBviuU7Yn
+         CVrJCkXVIcdcLCGmqRbZkFaQhvVuEr5hxzmM0tZN0sDNKarno1aQs2/9x2Caimp5KZVt
+         62wU+p9URpngfpXIJnTaO5usOM03PsVEyse9ne86RnZCb9ZcEBA0RgmWWR4ROEZYjSH4
+         IyVk/TEIdorq44jWadIQ9iydvdZ1NYndc5VSj1F2IAuaGyyrzy0LaCMtPoyBKy4lPboZ
+         2oFkMEQQcfKw8dqVddV42X2WUXPOEzEvolkkocsynZHRjCK89y/kOghpFRu2eABZ2mwY
+         3TSg==
+X-Gm-Message-State: AO0yUKWM3g51Zo0twbdNTwVK1WD3xqSiM0BEEbeVQgracy+Vt6g7sl0J
+        +s0Hq4jmLZvy77ZspNuBDoE1aFD0abtqatNPCuw=
+X-Google-Smtp-Source: AK7set+1uGQfF1O93l4l2QxjShVpBRHJC5I5JTqL8wOB2fyUeCuafm+Tc+pvZllJxQbEAbLdUrPoB0rt+WbmOkOKcl8=
+X-Received: by 2002:a17:906:b310:b0:8b1:2d36:a58e with SMTP id
+ n16-20020a170906b31000b008b12d36a58emr1154572ejz.2.1676383662806; Tue, 14 Feb
+ 2023 06:07:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230214094115.23338-1-manivannan.sadhasivam@linaro.org> <20230214095300.pv3e73r36poth5w4@vireshk-i7>
+In-Reply-To: <20230214095300.pv3e73r36poth5w4@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 14 Feb 2023 15:07:31 +0100
+Message-ID: <CAJZ5v0ip_OHkSjQwNh5o+p2T2utXozH7DV6DFVp23bw5tzShtQ@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: qcom-hw: Add missing null pointer check
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     rafael@kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+On Tue, Feb 14, 2023 at 10:53 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 14-02-23, 15:11, Manivannan Sadhasivam wrote:
+> > of_device_get_match_data() may return NULL, so add a check to prevent
+> > potential null pointer dereference.
+> >
+> > Issue reported by Qualcomm's internal static analysis tool.
+> >
+> > Cc: stable@vger.kernel.org # v6.2
+> > Fixes: 4f7961706c63 ("cpufreq: qcom-hw: Move soc_data to struct qcom_cpufreq")
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  drivers/cpufreq/qcom-cpufreq-hw.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> > index 340fed35e45d..6425c6b6e393 100644
+> > --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> > +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> > @@ -689,6 +689,8 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+> >               return -ENOMEM;
+> >
+> >       qcom_cpufreq.soc_data = of_device_get_match_data(dev);
+> > +     if (!qcom_cpufreq.soc_data)
+> > +             return -ENODEV;
+> >
+> >       clk_data = devm_kzalloc(dev, struct_size(clk_data, hws, num_domains), GFP_KERNEL);
+> >       if (!clk_data)
+>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+>
+> Rafael,
+>
+> Can you still send this for 6.2 ?
 
-sh never initializes max_mapnr which is used by the generic
-implementation of pfn_valid().
-
-Initialize max_mapnr with set_max_mapnr() in sh::paging_init().
-
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Fixes: e5080a967785 ("mm, arch: add generic implementation of pfn_valid() for FLATMEM")
-Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
----
- arch/sh/mm/init.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/sh/mm/init.c b/arch/sh/mm/init.c
-index 506784702430..bf1b54055316 100644
---- a/arch/sh/mm/init.c
-+++ b/arch/sh/mm/init.c
-@@ -301,6 +301,7 @@ void __init paging_init(void)
- 	 */
- 	max_low_pfn = max_pfn = memblock_end_of_DRAM() >> PAGE_SHIFT;
- 	min_low_pfn = __MEMORY_START >> PAGE_SHIFT;
-+	set_max_mapnr(max_low_pfn - min_low_pfn);
- 
- 	nodes_clear(node_online_map);
- 
--- 
-2.35.1
-
+Yes, I can.
