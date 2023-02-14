@@ -2,126 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29512696C4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D46696C50
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 19:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233248AbjBNSFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 13:05:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35308 "EHLO
+        id S232930AbjBNSGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 13:06:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233039AbjBNSFH (ORCPT
+        with ESMTP id S229508AbjBNSGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 13:05:07 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7D52DE7B;
-        Tue, 14 Feb 2023 10:05:04 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id fu4-20020a17090ad18400b002341fadc370so4523461pjb.1;
-        Tue, 14 Feb 2023 10:05:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:message-id:date:subject:cc:to:from:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a/30totliODEH86d4s7yTqh1xVH9NfBjaZa+zjnDO/c=;
-        b=SiRsmbcm0rYggSVTzIZOA8sZ7SWL0XqG/PuADk+YJzz8eZPcJp3akUS+61rz40V4Cy
-         IDA6vopYw9W2GaG2RtI6Su/EggkclvrUprEFshmZKKjs0AKHpfLQse+kwaoxcvlWO3IB
-         gK7tNCniHVunkHh5CBqqrxEEuVjsVV9fKzB6wgO2bWF9BY/gx3ORaGf2gUBxha8a8Txm
-         Asp2cCcJd3eMPfTH7b0efJEKiuqFV7KRtKKELX4Nu2C4q5lT7Te8pU7IxZT6pNSGj/lh
-         Vhf/NbLLB8xNQKSj1LjMAT2s9Ltb88ud0zM3yp9xxjdy3gSta2Jyfbwyo2ZjA+FhAmip
-         vfUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:message-id:date:subject:cc:to:from:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a/30totliODEH86d4s7yTqh1xVH9NfBjaZa+zjnDO/c=;
-        b=fRRo7cUxMaiXcWzJTkn752qnCSQ1hVsbfg3Yxs52DXcG5YB0M2B0yRRUGvYR2lIfM4
-         +3mti+pod8sEzSo6V5Bg3ldMFGUt6uPmwiHY1XiuLkgBT0o51cSOEwT7cwdicU/1klbj
-         xJF55FxszNL7H5ZYXU+5TY3gLvDc11Ig9481sibzhxvbUUEQsg6ldEl0/dc4JCA9815M
-         I9VaQ2z/dXBnwoFwLX8KInW5YcZa0WOWSrOer0BqDJjEQ74Vbq2t9z3nQQbALX7QW2B6
-         eC5QZrobK/RoRUIDZ+Rf+4qqMJffiU6p1hDC8JU7EoVqxJ2D9K+lwwCLpha4j5b+dsc8
-         YFMQ==
-X-Gm-Message-State: AO0yUKUjlTACP1LYp19lem4Vs+YUkuPwePcdSuiVnfqbSk0aWFMDUb7J
-        OLwRrFKzxhSKCaaHQOakGgWMARjlgmg=
-X-Google-Smtp-Source: AK7set+E8VQg9Jb85Rikix0JLva+MYuPsfcgprmCG3JJ7RGuW/bliCsOwZBZugn2JnelslqQvYms0g==
-X-Received: by 2002:a17:902:d48c:b0:199:16c6:8a24 with SMTP id c12-20020a170902d48c00b0019916c68a24mr3907362plg.61.1676397903975;
-        Tue, 14 Feb 2023 10:05:03 -0800 (PST)
-Received: from localhost (252.157.168.34.bc.googleusercontent.com. [34.168.157.252])
-        by smtp.gmail.com with ESMTPSA id c13-20020a170902c1cd00b0019ab58f47a6sm2002752plc.105.2023.02.14.10.05.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 10:05:03 -0800 (PST)
-Sender: Junio C Hamano <jch2355@gmail.com>
-From:   Junio C Hamano <gitster@pobox.com>
-To:     git@vger.kernel.org
-Cc:     Linux Kernel <linux-kernel@vger.kernel.org>,
-        git-packagers@googlegroups.com, oss-security@lists.openwall.com,
-        git-security@googlegroups.com
-Subject: [Announce] Git 2.39.2 and friends
-Date:   Tue, 14 Feb 2023 10:05:03 -0800
-Message-ID: <xmqqr0us5dio.fsf@gitster.g>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
+        Tue, 14 Feb 2023 13:06:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4588CA8;
+        Tue, 14 Feb 2023 10:06:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA095B81EAA;
+        Tue, 14 Feb 2023 18:05:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B98EC433D2;
+        Tue, 14 Feb 2023 18:05:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1676397957;
+        bh=ajGubc1kY8DFkYzYD33Z4hJeWOf1B5NLSFL083RoSWA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ABTWzuzPj76+c4v5DNoWfG8JTh2aT21Vvq04CHrXk1SyL+toT5gHqjCvYVcj64qq8
+         yxuBIJSw8JLKEogTOrGgnTMsQCtHQlAFFcCoArw/hUynkYybfOlMrx6Zy1lXHJ5wYH
+         i6+jrjWA298l/L2iyVCuUwrn4zEZFissqnFoZi8M=
+Date:   Tue, 14 Feb 2023 19:05:55 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 000/139] 5.10.168-rc1 review
+Message-ID: <Y+vNg6Dy3zUJ7pjp@kroah.com>
+References: <20230213144745.696901179@linuxfoundation.org>
+ <05984672-d897-6050-3e8b-3e7984c81bd9@roeck-us.net>
+ <1cd10087-87fe-048e-c9ed-0a5d32c50764@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1cd10087-87fe-048e-c9ed-0a5d32c50764@roeck-us.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A maintenance release Git v2.39.2, together with releases for older
-maintenance tracks v2.38.4, v2.37.6, v2.36.5, v2.35.7, v2.34.7,
-v2.33.7, v2.32.6, v2.31.7, and v2.30.8, are now available at the
-usual places.
+On Tue, Feb 14, 2023 at 09:51:39AM -0800, Guenter Roeck wrote:
+> On 2/14/23 09:15, Guenter Roeck wrote:
+> > On 2/13/23 06:49, Greg Kroah-Hartman wrote:
+> > > This is the start of the stable review cycle for the 5.10.168 release.
+> > > There are 139 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > > 
+> > > Responses should be made by Wed, 15 Feb 2023 14:46:51 +0000.
+> > > Anything received after that time might be too late.
+> > > 
+> > 
+> > Seen with several x86_64 boot tests during reboot:
+> > 
+> > [   13.465146] ------------[ cut here ]------------
+> > [   13.465644] list_del corruption. prev->next should be ffff9836448a5008, but was ffff9836448a2010
+> > ILLOPC: ffffffffae597813: 0f 0b
+> > [   13.466452] WARNING: CPU: 0 PID: 302 at lib/list_debug.c:59 __list_del_entry_valid+0xb3/0xe0
+> > [   13.466710] Modules linked in:
+> > [   13.467103] CPU: 0 PID: 302 Comm: init Not tainted 5.10.168-rc1+ #1
+> > [   13.467281] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
+> > [   13.467545] RIP: 0010:__list_del_entry_valid+0xb3/0xe0
+> > [   13.468234] Code: cc cc cc 4c 89 c2 48 c7 c7 f8 c6 82 af e8 ad c9 8e 00 0f 0b 31 c0 c3 cc cc cc cc 4c 89 c2 48 c7 c7 30 c7 82 af e8 95 c9 8e 00 <0f> 0b 31 c0 c3 cc cc cc cc 4c 89 c6 48 c7 c7 70 c7 82 af e8 7d c9
+> > [   13.468694] RSP: 0018:ffff9f160017bde0 EFLAGS: 00000282
+> > [   13.469076] RAX: 0000000000000000 RBX: ffff9836448a5008 RCX: 0000000000000006
+> > [   13.469297] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffffffae0e03dd
+> > [   13.469494] RBP: ffff98364482c2f0 R08: 0000000000000001 R09: 0000000000000001
+> > [   13.469699] R10: 0000000000000001 R11: ffffffffafa6f3e0 R12: ffff9836448a5000
+> > [   13.469974] R13: ffff9836448a3910 R14: 00000000fee1dead R15: 0000000000000000
+> > [   13.470122] FS:  00007ff4118d7b28(0000) GS:ffff98365f600000(0000) knlGS:0000000000000000
+> > [   13.470230] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [   13.470311] CR2: 00007fd877982830 CR3: 0000000005218000 CR4: 00000000001506f0
+> > [   13.470438] Call Trace:
+> > [   13.470532]  device_shutdown+0xae/0x1c0
+> > [   13.470610]  __do_sys_reboot.cold+0x2f/0x5b
+> > [   13.470675]  ? __lock_acquire+0x5bd/0x2640
+> > [   13.470777]  ? lock_acquire+0xc6/0x2b0
+> > [   13.470934]  ? lockdep_hardirqs_on_prepare+0xdc/0x1a0
+> > [   13.471015]  ? syscall_enter_from_user_mode+0x1d/0x50
+> > [   13.471101]  do_syscall_64+0x33/0x40
+> > [   13.471162]  entry_SYSCALL_64_after_hwframe+0x61/0xc6
+> > [   13.471313] RIP: 0033:0x7ff411860aa6
+> > [   13.471437] Code: ff 5a c3 48 63 ff b8 bb 00 00 00 0f 05 48 89 c7 e9 95 e9 ff ff 48 63 d7 bf ad de e1 fe 50 be 69 19 12 28 b8 a9 00 00 00 0f 05 <48> 89 c7 e8 78 e9 ff ff 5a c3 49 89 ca 50 48 63 d2 4d 63 c0 b8 d8
+> > [   13.471627] RSP: 002b:00007ffd01d415e0 EFLAGS: 00000246 ORIG_RAX: 00000000000000a9
+> > [   13.471741] RAX: ffffffffffffffda RBX: 000000000000000f RCX: 00007ff411860aa6
+> > [   13.471899] RDX: 0000000001234567 RSI: 0000000028121969 RDI: 00000000fee1dead
+> > [   13.472008] RBP: 0000000001234567 R08: 0000000000000000 R09: 0000000000000000
+> > [   13.472099] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> > [   13.472185] R13: 00007ffd01d417a8 R14: 00007ff4118d7b28 R15: 0000000000000000
+> > [   13.472384] irq event stamp: 479
+> > [   13.472453] hardirqs last  enabled at (487): [<ffffffffae0e03dd>] console_unlock+0x4dd/0x5e0
+> > [   13.472560] hardirqs last disabled at (494): [<ffffffffae0e0334>] console_unlock+0x434/0x5e0
+> > [   13.472666] softirqs last  enabled at (242): [<ffffffffaf000fe2>] asm_call_irq_on_stack+0x12/0x20
+> > [   13.472775] softirqs last disabled at (237): [<ffffffffaf000fe2>] asm_call_irq_on_stack+0x12/0x20
+> > [   13.472964] ---[ end trace 34290884cd36b277 ]---
+> > 
+> > Currently bisecting.
+> > 
+> Reverting the nvmem patches fixed this problem.
 
-These maintenance releases are to address two security issues
-identified as CVE-2023-22490 and CVE-2023-23946.  They both affect
-ranges of existing versions and users are strongly encouraged to
-upgrade.
+nvmem patches are now dropped and a -rc2 is pushed out.
 
-The tarballs are found at:
+thanks,
 
-    https://www.kernel.org/pub/software/scm/git/
-
-The following public repositories all have a copy of the 'v2.39.2'
-tag, as well as the tags for older maintenance tracks listed above.
-
-  url = https://git.kernel.org/pub/scm/git/git
-  url = https://kernel.googlesource.com/pub/scm/git/git
-  url = git://repo.or.cz/alt-git.git
-  url = https://github.com/gitster/git
-
-The addressed issues are:
-
- * CVE-2023-22490:
-
-   Using a specially-crafted repository, Git can be tricked into using
-   its local clone optimization even when using a non-local transport.
-   Though Git will abort local clones whose source $GIT_DIR/objects
-   directory contains symbolic links (c.f., CVE-2022-39253), the objects
-   directory itself may still be a symbolic link.
-
-   These two may be combined to include arbitrary files based on known
-   paths on the victim's filesystem within the malicious repository's
-   working copy, allowing for data exfiltration in a similar manner as
-   CVE-2022-39253.
-
- * CVE-2023-23946:
-
-   By feeding a crafted input to "git apply", a path outside the
-   working tree can be overwritten as the user who is running "git
-   apply".
-
-Credit for finding CVE-2023-22490 goes to yvvdwf, and the fix was
-developed by Taylor Blau, with additional help from others on the
-Git security mailing list.
-
-Credit for finding CVE-2023-23946 goes to Joern Schneeweisz, and the
-fix was developed by Patrick Steinhardt.
-
-Johannes Schindelin helped greatly in packaging the whole thing and
-proofreading the result.
-
-Thanks.
+greg k-h
