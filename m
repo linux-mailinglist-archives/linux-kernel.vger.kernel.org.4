@@ -2,159 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F416696EBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 21:55:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 497B3696EBF
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 21:56:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231938AbjBNUzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 15:55:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
+        id S231934AbjBNUz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 15:55:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbjBNUzL (ORCPT
+        with ESMTP id S230107AbjBNUz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 15:55:11 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5942ED65;
-        Tue, 14 Feb 2023 12:55:09 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id a9so19811596ljr.13;
-        Tue, 14 Feb 2023 12:55:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:references:cc:to:subject:from:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D0pq+m0/U7p0zUEPB+aA1burF2pr6Ir+gD6+zbkqrV0=;
-        b=MtWGP1nEjHF60A5txZB64h5a/LmqKrfw/Y93+e5WU2FPyj9Dmvba5OF/rzlL7gK2ha
-         xVTMJJRaUhwWyuuFB53HyGNJlBYn0muYx9YGgHojo+dtnU3gyO15p8d/73BE+7vu5vkq
-         McFlwAqqSE+Rtp+2J4EGGDCw9npIvMCEJlaVB3iSPwDeGqgu9aTBahKt2+CE6wkNz9LF
-         7ogpFKfEk3/QwhAPCjGWafEnTMron826T+0D9pIRlx22eXGkjqHnP9TSaqBi6UIPyatW
-         3FmKhQvYGiy2RjK7YMtJ6Yt1kh9Owni6IiOk4eFGyzUEwj3yVdNKcEf5sCVsfAUxiASF
-         vpSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:references:cc:to:subject:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D0pq+m0/U7p0zUEPB+aA1burF2pr6Ir+gD6+zbkqrV0=;
-        b=UVCDKoJSl4O4FCF6KPgE9psf6UySWOE2f1g9ILi/9ei8522VczbiyZgi7DC7+Q9r40
-         r3UL3f1Ps353+BFyxql5zq8ZSYPov+JarnGrOEZn8NhX61JOvOQYKFkNJ7sZuPG470L9
-         IUN4SBk+OZa63zCaaVtSfdaL1e/XuXyPuzuN5UhNjdRFqdDWW8Qk+qq2WBLuhTCB/1qT
-         XocEvRtPip949QDBFUkWExGjDZnJ5aEAt2RCjmdw7qd74cq/ghk+P1le3dymP0rDtAze
-         dLXKIoj6gC1QIDK0xvWXH0omFtok2aKGsFVpuHhsJJNdOXqcz1vGG8uiA/lRwBNEVk6z
-         AEkw==
-X-Gm-Message-State: AO0yUKUYRgMKIwMK66QmVRu8528p/MroZJ1zqtl8TSr5/5J19v45VcE5
-        1hvW684N68YE0LvGMFmTKqCByG29WSY=
-X-Google-Smtp-Source: AK7set8tW5JHF2lSbEiDoQt6ac7vS0uGvRLdYO+97v1LHbbm7fPh3T6bRGS90GYsdMNi6EPjYwZGnA==
-X-Received: by 2002:a2e:9141:0:b0:293:4b8c:3b82 with SMTP id q1-20020a2e9141000000b002934b8c3b82mr1443045ljg.9.1676408107510;
-        Tue, 14 Feb 2023 12:55:07 -0800 (PST)
-Received: from [192.168.1.103] ([178.176.75.124])
-        by smtp.gmail.com with ESMTPSA id g7-20020a2e9e47000000b002932b817990sm2479168ljk.31.2023.02.14.12.55.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 12:55:07 -0800 (PST)
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Subject: Re: [PATCH 08/12] pata_parport: use dev_* and print_hex_* instead of
- printk
-To:     Ondrej Zary <linux@zary.sk>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Tim Waugh <tim@cyberelk.net>, linux-block@vger.kernel.org,
-        linux-parport@lists.infradead.org, linux-ide@vger.kernel.org,
+        Tue, 14 Feb 2023 15:55:56 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763B2298CC
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 12:55:55 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1676408154;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DUOIZuJdLZ75nj03a3zeKvglfxGqzebdblZ7SweGKPY=;
+        b=FCNHyRxr41HuCa/UjE2mA1iF7ZoMHxJYx00ntnQlL2shoAr6pidRP5/bB1WsI40dh64NVF
+        CQ2ZIa183BNcW72WhedH/SumgCQdruBgQk6JW/C7Z1cgJHAhDUbGIHwer9PeKeoFvCGQu2
+        BQrzbgmNnM33lPHf0AzetAbO6AnfT+DHUwMYWVgWgYFodShM7Jg6QKFPzY7SoLvX8lXjk2
+        vx2OpSxrNpxSoAElgNlG7F1rjRyU1rsPLxZt4/QszfEHIo0l8OvLWqhK6uu0jpZv0RYmZB
+        Xpy2QrJp0SDZf3jlO0Q5Ykvv9yybNOXpCV+ibxwDdGFY087esuV4tWFPOf5+2A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1676408154;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DUOIZuJdLZ75nj03a3zeKvglfxGqzebdblZ7SweGKPY=;
+        b=iTtLTSUryfnTWb17wWZcxtclMcVfEAod4aGFDhvwA3ycITeDM3JKh/YzK/zdjmdHoSjfxG
+        zrCHjCpY0FJL5IDw==
+To:     "Liang, Kan" <kan.liang@linux.intel.com>, jstultz@google.com,
+        peterz@infradead.org, mingo@redhat.com,
         linux-kernel@vger.kernel.org
-References: <20230211144232.15138-1-linux@zary.sk>
- <20230211144232.15138-9-linux@zary.sk>
-Message-ID: <a51aa862-e713-5b7a-d86a-bebca092a54c@gmail.com>
-Date:   Tue, 14 Feb 2023 23:55:05 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+Cc:     sboyd@kernel.org, eranian@google.com, namhyung@kernel.org,
+        ak@linux.intel.com, adrian.hunter@intel.com,
+        Ravi Bangoria <ravi.bangoria@amd.com>
+Subject: Re: [RFC PATCH V2 4/9] perf/x86: Enable post-processing monotonic
+ raw conversion
+In-Reply-To: <4372ae84-76e2-8bae-b0ad-87102973df67@linux.intel.com>
+References: <20230213190754.1836051-1-kan.liang@linux.intel.com>
+ <20230213190754.1836051-5-kan.liang@linux.intel.com> <875yc4rp68.ffs@tglx>
+ <4372ae84-76e2-8bae-b0ad-87102973df67@linux.intel.com>
+Date:   Tue, 14 Feb 2023 21:55:53 +0100
+Message-ID: <873578rmp2.ffs@tglx>
 MIME-Version: 1.0
-In-Reply-To: <20230211144232.15138-9-linux@zary.sk>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello again! :-)
+On Tue, Feb 14 2023 at 15:21, Kan Liang wrote:
+> On 2023-02-14 3:02 p.m., Thomas Gleixner wrote:
+>> 
+>> What guarantees that the clocksource used by the timekeeping core is
+>> actually TSC? Nothing at all. You cannot make assumptions here.
+>> 
+>
+> Yes, you are right.
+> I will add a check to make sure the clocksource is TSC when perf does
+> the conversion.
+>
+> Could you please comment on whether the patch is in the right direction?
+> This V2 patch series expose the kernel internal conversion information
+> into the user space. Is it OK for you?
 
-   Resending the mail from Gmail account, as OMP account doesn't work ATM... :-/
+Making the conversion info an ABI is suboptimal at best. I'm still
+trying to wrap my brain around all of this. Will reply over there once
+my confusion subsides.
 
-On 2/11/23 5:42 PM, Ondrej Zary wrote:
+Thanks,
 
-> Use dev_info/dev_err/dev_dbg/print_hex_* instead of printk.
-> Remove version print from log_adapter and meaningless VERSION defines.
+        tglx
 
-   Sounds like this needs to be in a separate patch...
 
-> Remove now useless verbose parameter of bpck6 module.
-
-   This one too...
-
-> Signed-off-by: Ondrej Zary <linux@zary.sk>
-[...]
-
-> diff --git a/drivers/ata/pata_parport/bpck.c b/drivers/ata/pata_parport/bpck.c
-> index 89160a94b30e..d5bc419b2ab3 100644
-> --- a/drivers/ata/pata_parport/bpck.c
-> +++ b/drivers/ata/pata_parport/bpck.c
-[...]
-> @@ -421,24 +416,12 @@ static void bpck_log_adapter(struct pi_adapter *pi)
->  {	char	*mode_string[5] = { "4-bit","8-bit","EPP-8",
->  				    "EPP-16","EPP-32" };
->  	char scratch[128];
-> -#ifdef DUMP_EEPROM
-> -	int i;
-> -#endif
->  
->  	bpck_read_eeprom(pi,scratch);
-> -
-> -#ifdef DUMP_EEPROM
-> -	   for(i=0;i<128;i++)
-> -		if ((scratch[i] < ' ') || (scratch[i] > '~'))
-> -		    scratch[i] = '.';
-> -	   printk("bpck EEPROM: %64.64s\n", scratch);
-> -	   printk("             %64.64s\n", &scratch[64]);
-> -#endif
-> -
-> -	printk("bpck %s, backpack %8.8s unit %d",
-> -		BPCK_VERSION, &scratch[110], pi->unit);
-> -	printk(" at 0x%x, mode %d (%s), delay %d\n",pi->port,
-> -		pi->mode,mode_string[pi->mode],pi->delay);
-> +	print_hex_dump_bytes("bpck EEPROM: ", DUMP_PREFIX_NONE, scratch, 128);
-
-   Conversion to print_hex_dump_bytes() deserved its own patch, IMHO...
-
-> +	dev_info(&pi->dev, "backpack %8.8s unit %d at 0x%x, mode %d (%s), delay %d\n",
-> +		 &scratch[110], pi->unit, pi->port, pi->mode,
-> +		 mode_string[pi->mode], pi->delay);
->  }
->  
->  static struct pi_protocol bpck = {
-[...]
-> diff --git a/drivers/ata/pata_parport/frpw.c b/drivers/ata/pata_parport/frpw.c
-> index 9b8db1122154..92b359460e34 100644
-> --- a/drivers/ata/pata_parport/frpw.c
-> +++ b/drivers/ata/pata_parport/frpw.c
-[...]
-> @@ -272,11 +266,9 @@ static void frpw_log_adapter(struct pi_adapter *pi)
->  {       char    *mode_string[6] = {"4-bit","8-bit","EPP",
->  				   "EPP-8","EPP-16","EPP-32"};
->  
-> -	printk("frpw %s, Freecom (%s) adapter at 0x%x, ",
-> -		FRPW_VERSION,((pi->private%2) == 0)?"Xilinx":"ASIC",pi->port);
-> -        printk("mode %d (%s), delay %d\n",pi->mode,
-> -		mode_string[pi->mode],pi->delay);
-> -
-> +	dev_info(&pi->dev, "Freecom (%s) adapter at 0x%x, mode %d (%s), delay %d\n",
-> +		 ((pi->private % 2) == 0) ? "Xilinx":"ASIC",
-
-   Need to add the spaces around ':' as you added spaces around '?'...
-
-[...]
-
-MBR, Sergey
