@@ -2,140 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0645D6963D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:48:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FED56963DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:48:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232489AbjBNMr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 07:47:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34538 "EHLO
+        id S232447AbjBNMsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 07:48:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232540AbjBNMrn (ORCPT
+        with ESMTP id S232424AbjBNMsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 07:47:43 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B8DD24C8F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:47:39 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EA5E11042;
-        Tue, 14 Feb 2023 04:48:21 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3D30A3F881;
-        Tue, 14 Feb 2023 04:47:37 -0800 (PST)
-Message-ID: <d7b319cc-5c02-df0f-44d5-cd3aa2bd2474@arm.com>
-Date:   Tue, 14 Feb 2023 13:47:35 +0100
+        Tue, 14 Feb 2023 07:48:00 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24EE92726
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:47:56 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id mc25so2392336ejb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:47:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jsROFjprG4Xl36pcS1K66/aOat/B9AhxJ+NImNDHdwc=;
+        b=PdHbf38Wvl91YA+1E2a/l7nsc552pJ9qYn2fLvbEGIde+eE23STmcpYhOuE04Nlc0Q
+         WsWLmSiv2nZ84zyYw+Qq6bI9mm193UJdmzRhTbc73jOo24zL5BK1jZThVTAyeYxVI3q6
+         lFm0oU/GsHFRVt/FyrGghBe0qP3CkGsSRlsnwWNDPh1Psnp1PNsOhWbCaE1TllxdkqM/
+         3q46+ONn2aX/RdEbrt1NKDcobU6nI1Lewa5hVzwG6rk/ddie88lDgzxjY2CxxW1uv0Ii
+         sdxLnY6VaTrN1ziEp7nDHItrMIwFQIkyn6oesjr54ruio9W4ni1H0rrb9njOxV214gOW
+         8Www==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jsROFjprG4Xl36pcS1K66/aOat/B9AhxJ+NImNDHdwc=;
+        b=M13mfKiY84VHW1bjMSV+V0pznxN3m8APlzWw/9WwKH0s4+wjW32gYX45odNXl3pkE2
+         Hso+ZzY5HaZYRKVBLLyxizZPoYJ+qLIQ0Af6o3LQ+tIphmo4NJfQhA7SgvksOT7YU20N
+         QrffzQAfJH7nbFlxRP3EUqaiykD0hamZ96KNMinedLt1ZQd7sQ1ZcR998zvUOxOn7Vy1
+         JUUB6i0ibUlajwkgTx96RNax1pxW5igMdTX9C34UfhBNkWcW95TXEkqyIuSjx6N5eP24
+         4QTjrr59vKd5k2NHOGhdp2ztBcJjWrh0/uAaTqbK9kLqzX/eNDmSIKghOP0IB2q0/0jy
+         S26A==
+X-Gm-Message-State: AO0yUKXGL91V85OYrSQhEUfXTPKO8ACvijEsyhlZL9ZwxEwieoWP1WTk
+        TJXN/6qKt5x0cv0b8MMzTW5hJw==
+X-Google-Smtp-Source: AK7set9jyGp94y8TyLok1fks1vM7ImjaNQoGtaKpAIMbLu0entXzsVRmdjkYuvWZKOJiD7A+habAuA==
+X-Received: by 2002:a17:907:75c3:b0:8aa:502c:44d3 with SMTP id jl3-20020a17090775c300b008aa502c44d3mr2498124ejc.41.1676378874618;
+        Tue, 14 Feb 2023 04:47:54 -0800 (PST)
+Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
+        by smtp.gmail.com with ESMTPSA id le3-20020a170907170300b0087be1055f83sm8173782ejc.206.2023.02.14.04.47.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 04:47:54 -0800 (PST)
+Message-ID: <3b746166-e165-23c4-fc90-a6ba77ac4d7a@linaro.org>
+Date:   Tue, 14 Feb 2023 13:47:52 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v2 2/3] sched/uclamp: Ignore (util == 0) optimization in
- feec() when p_util_max = 0
+Subject: Re: [RFC PATCH 2/5] arm64: dts: qcom: sm8450: Add the Inline Crypto
+ Engine node
 Content-Language: en-US
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
-        Wei Wang <wvw@google.com>, Xuewen Yan <xuewen.yan94@gmail.com>,
-        Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
-References: <20230205224318.2035646-1-qyousef@layalina.io>
- <20230205224318.2035646-3-qyousef@layalina.io>
- <CAKfTPtCf4+orEhYmFBg+tsMH7e5sV5zJZ1k8apjZkYwSAxAu+w@mail.gmail.com>
- <d7f29def-7004-b62d-9266-3ad997111e2f@arm.com>
- <20230211180119.4mbfn7j3skvoasop@airbuntu>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230211180119.4mbfn7j3skvoasop@airbuntu>
+To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Eric Biggers <ebiggers@google.com>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org
+References: <20230214120253.1098426-1-abel.vesa@linaro.org>
+ <20230214120253.1098426-3-abel.vesa@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230214120253.1098426-3-abel.vesa@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/02/2023 19:01, Qais Yousef wrote:
-> On 02/08/23 12:52, Dietmar Eggemann wrote:
->> On 07/02/2023 11:04, Vincent Guittot wrote:
->>> On Sun, 5 Feb 2023 at 23:43, Qais Yousef <qyousef@layalina.io> wrote:
->>>>
->>>> find_energy_efficient_cpu() bails out early if effective util of the
->>>> task is 0. When uclamp is being used, this could lead to wrong decisions
->>>> when uclamp_max is set to 0. Cater for that.
->>
->> IMHO this needs a little bit more explanation. Someone could argue that
->> 'util > 0, uclamp_min=0, uclamp_max=0' is a valid setup for a task which
->> should let it appear as a task with 0 util (capped to 0).
+
+
+On 14.02.2023 13:02, Abel Vesa wrote:
+> Drop all values related to the ICE from the UFS HC node and add a
+> dedicated ICE node. Also enable it in HDK board dts.
 > 
-> You want me to explain the purpose of the optimization then?
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sm8450-hdk.dts |  4 ++++
+>  arch/arm64/boot/dts/qcom/sm8450.dtsi    | 24 +++++++++++++++---------
+>  2 files changed, 19 insertions(+), 9 deletions(-)
 > 
-> The optimization skips energy calculation when util is 0 because the delta will
-> be 0. But when uclamp_max = 0 util is not really 0 - consequently  the delta
+> diff --git a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+> index feef3837e4cd..de631deef1e8 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+> @@ -461,6 +461,10 @@ lt9611_out: endpoint {
+>  	};
+>  };
+>  
+> +&ice {
+> +	status = "okay";
+> +};
+> +
+>  &mdss {
+>  	status = "okay";
+>  };
+> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> index 1a744a33bcf4..34d569f6c239 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> @@ -3989,9 +3989,8 @@ system-cache-controller@19200000 {
+>  		ufs_mem_hc: ufshc@1d84000 {
+>  			compatible = "qcom,sm8450-ufshc", "qcom,ufshc",
+>  				     "jedec,ufs-2.0";
+> -			reg = <0 0x01d84000 0 0x3000>,
+> -			      <0 0x01d88000 0 0x8000>;
+> -			reg-names = "std", "ice";
+> +			reg = <0 0x01d84000 0 0x3000>;
+> +			reg-names = "std";
+>  			interrupts = <GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH>;
+>  			phys = <&ufs_mem_phy_lanes>;
+>  			phy-names = "ufsphy";
+> @@ -4015,8 +4014,7 @@ ufs_mem_hc: ufshc@1d84000 {
+>  				"ref_clk",
+>  				"tx_lane0_sync_clk",
+>  				"rx_lane0_sync_clk",
+> -				"rx_lane1_sync_clk",
+> -				"ice_core_clk";
+> +				"rx_lane1_sync_clk";
+>  			clocks =
+>  				<&gcc GCC_UFS_PHY_AXI_CLK>,
+>  				<&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
+> @@ -4025,8 +4023,7 @@ ufs_mem_hc: ufshc@1d84000 {
+>  				<&rpmhcc RPMH_CXO_CLK>,
+>  				<&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
+>  				<&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
+> -				<&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>,
+> -				<&gcc GCC_UFS_PHY_ICE_CORE_CLK>;
+> +				<&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>;
+>  			freq-table-hz =
+>  				<75000000 300000000>,
+>  				<0 0>,
+> @@ -4035,8 +4032,17 @@ ufs_mem_hc: ufshc@1d84000 {
+>  				<75000000 300000000>,
+>  				<0 0>,
+>  				<0 0>,
+> -				<0 0>,
+> -				<75000000 300000000>;
+> +				<0 0>;
+> +			qcom,ice = <&ice>;
+> +
+> +			status = "disabled";
+> +		};
+> +
+> +		ice: inline-crypto-engine {
+> +			compatible = "qcom,inline-crypto-engine";
+> +			reg = <0 0x01d88000 0 0x8000>;
+> +			clocks = <&gcc GCC_UFS_PHY_ICE_CORE_CLK>;
+> +
+>  			status = "disabled";
+Any reason for this guy to be disabled?
 
-I would say:
-
-s/really/necessarily
-s/delta/energy delta
-
-> will not be 0.
-> 
-> Would such an explanation clarify things better?
-
-Yes. It key to understand that there is a 2-step process. First,
-admittance to a possible target (util and uclamp) and second, energy
-diff based target-selection (util).
-
->>>> Fixes: d81304bc6193 ("sched/uclamp: Cater for uclamp in find_energy_efficient_cpu()'s early exit condition")
->>>> Signed-off-by: Qais Yousef <qyousef@layalina.io>
->>>> ---
->>>>  kernel/sched/fair.c | 2 +-
->>>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->>>> index 7a21ee74139f..a8c3d92ff3f6 100644
->>>> --- a/kernel/sched/fair.c
->>>> +++ b/kernel/sched/fair.c
->>>> @@ -7374,7 +7374,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->>>>         target = prev_cpu;
->>>>
->>>>         sync_entity_load_avg(&p->se);
->>>> -       if (!uclamp_task_util(p, p_util_min, p_util_max))
->>>> +       if (!uclamp_task_util(p, p_util_min, p_util_max) && p_util_max != 0)
->>>
->>> The below should do the same without testing twice p_util_max:
->>> uclamp_task_util(p, p_util_min, ULONG_MAX)
->>
->> Since uclamp_task_util() is only used here and we don't want to test for
->> capping to 0 anymore, why not just get rid of this function and use:
->>
->>   !(task_util_est(p) || p_util_min)
-> 
-> That would be better, yes!
-> 
-> Question for you and Vincent. Do we really want this optimization? I started
-> with removing it - then erred on the conservative side and kept it.
-
-Hard to say ... at least we know that util=0 will have absolutely no
-effect on task placement. So we can spare the heavy EAS algorithm in
-this case for sure.
-
-> I don't know how often we hit this case and I didn't see any benchmark run to
-> be able to verify anything when I looked at the history.
-
-There are very few EAS wakeups with `task_util_est(p) = 0`. Probably not
-relevant.
-
-> It seems helpful in theory - but why we save something if we ignore 0 but not
-> 1 which I suspect will not produce a significant delta either.
-
-True, it's hard to find the real line of significance here.
-
-> I don't mind keeping it - but I think worth thinking if it is really adding
-> much.
-
-I would keep it and just remove uclamp_task_util(). We still have a lot
-of uclamp/util related functions, we should try to keep the number as
-low as possible. Just checked it, this check has been there from the
-beginning of EAS.
-
+Konrad
+>  		};
+>  
