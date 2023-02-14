@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B53269694F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:23:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF7B696953
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 17:23:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232063AbjBNQXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 11:23:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39266 "EHLO
+        id S232271AbjBNQX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 11:23:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbjBNQXo (ORCPT
+        with ESMTP id S232023AbjBNQXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 11:23:44 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1E12914E
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:23:31 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id qw12so41482398ejc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:23:31 -0800 (PST)
+        Tue, 14 Feb 2023 11:23:46 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3142B086
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:23:33 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id eq11so18178700edb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 08:23:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sartura.hr; s=sartura;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KWIjHrmZ+GcxrVYKcQs3CE7ngJu8LR3XWPQYlEPfpOQ=;
-        b=bI4hWJG3Q+VuAjT1QxZUerpnbyaPU/zn8vRg/T9FYK0gZGBlA7kNfvu6erBnZwZmNc
-         l2tmENYV0Wo0X9Lyd236dUIpAKhwaOSvfeN1Rldc1nR0v42Yx9Cs9WQ36j6/zPTkrQx7
-         HgYtLK75EOxP7w0VszpRZ1rda7RFJHQzDW+inoN2JIIOA+Ex9eco8hLcywhdxlhUA+WD
-         ZLXkIRTo3R2nXFvI6rqfkA395lKDCjkd5DKM/ALKUJQP/qs6lAcr+doM537dAv8SSm1D
-         G+vP6c1wL3D8+WCKjxSOK1f+KjWU3BUH1+6GeJlDzUcqwIdOBFEjXelwKKI67H1zE2c9
-         e9Pg==
+        bh=yTPqrWxhude+tFhrp4bP7IHAfI/NrAfRFzJAxS+VITU=;
+        b=hcPRMw8MYprk1cQvIQBqgMdDPff/6FtYOAOwhjljD3kog2cOhnIkh/alkvM1Qvu4RG
+         XCJkS7XxzRqxg0fD9fsAtDvNN1aBtWICZczDwpYuMfOaWfdkx/jFfLLQR+vI9YKGdKLK
+         foD4nCmkprT/mM/qrrYggqOsFrK01nLTItCFm2/FwGqVXGOm1/TP2Li67NWqtO7IRzbW
+         wtO/q6xMBOxsuRt9kQHj8qtDpRA/2uVtYlW0PPjyCSkwXcXh1vjwptW9pO0vVanW4mG7
+         BWfQqC4h4hv4YPLPV+kdrr8l8tdyzyZLhAfBBopQZ9+h8fg7N1aD9rUj9qbF7NhKtpcV
+         N6lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KWIjHrmZ+GcxrVYKcQs3CE7ngJu8LR3XWPQYlEPfpOQ=;
-        b=MiO3L8f/jhZxMsW6wxmurcO6eVc6vd8wJxFLs/hu0HS3kEkVq9ellAcKko21b0Ua+r
-         /kC6api+8xP+uRUr7glyyLMbUM+CYNanUPMxzB1T1guS6MbS8w8B51EYc8VcV1QhrvlR
-         5B5dOik1oybt9UmFLXgyjflrHCBJ8NQUPf6R4by5mQmkTpx6idOzXIzZsmF5UTWOr4uL
-         oxu3gX6PUip6xZTrB8Amm5GfZayyDymufYY2yvFPxO1yjKKpj343+i3LHABy5HamWACx
-         +ZahXAK2gF2gA2P3kxs+DDfb+2tH0ikwcHTHH39fdYkVSi1TV6SD9h832zYnne34D2ne
-         nkzA==
-X-Gm-Message-State: AO0yUKV796e83LN5N9myBzYpAwTqLs8CECASOQl1nON2pVw/TZDHm667
-        z/oVP6hIWo0Oj9omi/IMqY+EVA==
-X-Google-Smtp-Source: AK7set9BtFcqAcq5ajOac4T/k51Q+E/d85kqF0LHSGKpmkt8/CMhQvDMeTOHsdPywwvmB2dNiQrI9Q==
-X-Received: by 2002:a17:906:abc6:b0:87b:da74:d272 with SMTP id kq6-20020a170906abc600b0087bda74d272mr3252617ejb.45.1676391810354;
-        Tue, 14 Feb 2023 08:23:30 -0800 (PST)
+        bh=yTPqrWxhude+tFhrp4bP7IHAfI/NrAfRFzJAxS+VITU=;
+        b=HkcA3E34OxdxpNnuf/WP1WOvgRqzFz4Mu9fWFoT9GCBnGeZfiU+boEkxinTvd6ko78
+         UqrYFGViHHVWlj4ck7UJn+412bJHLf6FOrlbiq/fQUCvMWmV81D5NJaW20C4xQ9Cla6q
+         EpaUy2nk9pXi9PrYAhz3P+YSbSizvTTNBl0tdL5IqsUpIZA61Thz8CLnI4K4pKjxjvL/
+         +zf5PWttO8MSnaX1Fc7k6CeOxQg5XF7lPui9U6j551YzK1mx5bBAmM3egTbkS7jciJ4K
+         RFi6VXqDB1Cj1vottq09A/CwA07Fg30htbn6PR85rQ+8Glzu/bHdjYAQ5cs3ocXkEmBo
+         Bz3w==
+X-Gm-Message-State: AO0yUKX9A0TXLmesAXgJ+Q/P3q0WxLbmIphpTHBzPxYy8sIA4blIm4N2
+        4Dd6CDuLmJA0Arjgc0ar5De/YQ==
+X-Google-Smtp-Source: AK7set/iekWwxvnBmWdW6HmF7NVSlg0EO5ceaKNAeBEFqbS/HY5Mw6oHGJHPJx/k0trsGK9f/F9neQ==
+X-Received: by 2002:a50:9ee7:0:b0:4aa:a390:bf4a with SMTP id a94-20020a509ee7000000b004aaa390bf4amr3412234edf.20.1676391811511;
+        Tue, 14 Feb 2023 08:23:31 -0800 (PST)
 Received: from fedora.. (cpezg-94-253-130-165-cbl.xnet.hr. [94.253.130.165])
-        by smtp.googlemail.com with ESMTPSA id bp8-20020a170907918800b008806a3c22c5sm1318027ejb.25.2023.02.14.08.23.29
+        by smtp.googlemail.com with ESMTPSA id bp8-20020a170907918800b008806a3c22c5sm1318027ejb.25.2023.02.14.08.23.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 08:23:29 -0800 (PST)
+        Tue, 14 Feb 2023 08:23:31 -0800 (PST)
 From:   Robert Marko <robert.marko@sartura.hr>
 To:     andersson@kernel.org, agross@kernel.org, konrad.dybcio@linaro.org,
         mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
@@ -57,9 +57,9 @@ To:     andersson@kernel.org, agross@kernel.org, konrad.dybcio@linaro.org,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     luka.perkov@sartura.hr, Robert Marko <robert.marko@sartura.hr>
-Subject: [PATCH 3/7] ARM: dts: qcom: ipq4019: pass XO and sleep clocks to GCC
-Date:   Tue, 14 Feb 2023 17:23:21 +0100
-Message-Id: <20230214162325.312057-3-robert.marko@sartura.hr>
+Subject: [PATCH 4/7] ARM: dts: qcom: ipq4019: remove clk-output-names for sleep clock
+Date:   Tue, 14 Feb 2023 17:23:22 +0100
+Message-Id: <20230214162325.312057-4-robert.marko@sartura.hr>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230214162325.312057-1-robert.marko@sartura.hr>
 References: <20230214162325.312057-1-robert.marko@sartura.hr>
@@ -75,26 +75,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Directly pass XO and sleep clocks to GCC via phandles.
+Now that sleep clock is being passed directly to GCC, there is no need for
+global name matching, so remove clk-output-names for sleep clock.
 
 Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 ---
- arch/arm/boot/dts/qcom-ipq4019.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm/boot/dts/qcom-ipq4019.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-index a7a43f7bc2b2a..7d3a812e2b13a 100644
+index 7d3a812e2b13a..0342e51a03f32 100644
 --- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
 +++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-@@ -191,6 +191,8 @@ gcc: clock-controller@1800000 {
- 			#power-domain-cells = <1>;
- 			#reset-cells = <1>;
- 			reg = <0x1800000 0x60000>;
-+			clocks = <&xo>, <&sleep_clk>;
-+			clock-names = "xo", "sleep_clk";
+@@ -144,7 +144,6 @@ clocks {
+ 		sleep_clk: sleep_clk {
+ 			compatible = "fixed-clock";
+ 			clock-frequency = <32000>;
+-			clock-output-names = "gcc_sleep_clk_src";
+ 			#clock-cells = <0>;
  		};
  
- 		prng: rng@22000 {
 -- 
 2.39.1
 
