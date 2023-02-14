@@ -2,108 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD01697098
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 23:18:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1CD769709D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 23:18:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbjBNWR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 17:17:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36380 "EHLO
+        id S229648AbjBNWSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 17:18:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233470AbjBNWR5 (ORCPT
+        with ESMTP id S233486AbjBNWSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 17:17:57 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CF854EDC;
-        Tue, 14 Feb 2023 14:17:54 -0800 (PST)
-Received: from [192.168.0.5] (unknown [71.212.161.12])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 56EF720C8B1C;
-        Tue, 14 Feb 2023 14:17:53 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 56EF720C8B1C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1676413073;
-        bh=ryZDpDmOU/WupxdHJb2WUUHVsmFljdKTMhBbzruNJjE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Kd+9k8douoZ1y9eqmZkQwaGbYNhmvDt0o1MvO70YNQ0oqVHUy/RdkaBHeW2Y7LsXS
-         q8CCh8bCcSP7rALXJ0n6UPbbybx7qds2Iiqa//L47OPmV6nIXzXYdL+daHH/a+tNmi
-         kMnbfIZr3ih0YbQTy8VREhzvuEaSFN9NwRZjbTwI=
-Message-ID: <8d0b36c0-dfca-6d4b-076d-033f9ccda4c7@linux.microsoft.com>
-Date:   Tue, 14 Feb 2023 14:17:52 -0800
+        Tue, 14 Feb 2023 17:18:10 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A244B22006
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 14:18:00 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id a3so9637240ejb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 14:18:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fNrKKIEifKOtj0ZTyaBn9IXYDH+TgIsaibPuySrCl9A=;
+        b=NXJWQlVXdExWigaYiVmHP67AJwtobiv0bNA7KQ3Il7g6RaNU8h/JRHfIO3wtRXw4+Y
+         PXUAYh4QdqzK2SUbG9/cLaxJ7/GMHZn91ubYjHynTfO/HLgaxPRpfpvXy9Bmcr6xtCPE
+         cgOMNGJen6ll4d2MJWsbkOmHYGCP7YmZMq7N1D/q5PuloGWNlFGirKYx78ND7wDqkLIU
+         eKqZDmPgby8bGsTcdT3SWS4mgyW4VbpYnQhQ9nMpa0BkvaiZz3hJSx8x3CXjYuUbMxc3
+         HRmhWLylScjQodShvpA+xQjiAMjrmgGM0jH/Mx1KhMtPqz4eajOhSb8hyw9Gdn03OwCU
+         ufWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fNrKKIEifKOtj0ZTyaBn9IXYDH+TgIsaibPuySrCl9A=;
+        b=Jp0PxkBbCktjKq0UaZ18mxyu/6UNAqVpBN3k9rfvdwCkCfpXMDr+oUg4luy6n8JKQV
+         s0eU6TT0DkvaSkt2AStQfWyfH6Uh1N8Oqq/j+n9Ye7S5/OzlKpuC48pl4+l+qU2NMpW4
+         6e5Y0VD9lPUq8yHhVCu6jMv36Uwc5iZ/kW9qz0YCCz49QelZCY600CwszUZNEv1ClVyd
+         JVTtLvmbXdwfRwjcJHC80nCd38VL55OBDtWNezzCxd4l/r7UKxrYOWGzYjTmGjV1UCWX
+         AwOWCnGOaZrMgc9ZlrLVy34XZEOQL30SybXuq6vtwv2MKiy/Lxn0YesT6iZvGFRGKsy8
+         xdow==
+X-Gm-Message-State: AO0yUKWa0x9bq0cy4P2mEjp9CytkphqFq5rOeLrRcCH3Im9Em0y545X6
+        O/UKF6silc9zlP0ZXk63EuHf541ovUgMvLegtls=
+X-Google-Smtp-Source: AK7set+QEu8eiJsyukUuGBuGdN9zcxcewEe6LC4u/BLo8BbI5vnU+nA6liH5QBGNw9h0R3QU0+C7QBqtx8QqSrU52pI=
+X-Received: by 2002:a17:907:11dd:b0:8af:3e28:acc with SMTP id
+ va29-20020a17090711dd00b008af3e280accmr30378ejb.1.1676413078769; Tue, 14 Feb
+ 2023 14:17:58 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH] x86/hyperv: Fix hv_get/set_register for nested bringup
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, jinankjain@linux.microsoft.com,
-        mikelley@microsoft.com, kys@microsoft.com,
-        Tianyu.Lan@microsoft.com, haiyangz@microsoft.com,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com
-References: <1675980172-6851-1-git-send-email-nunodasneves@linux.microsoft.com>
- <Y+pJDbMu8WEPFnEm@liuwe-devbox-debian-v2>
-Content-Language: en-US
-From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <Y+pJDbMu8WEPFnEm@liuwe-devbox-debian-v2>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-20.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Sender: beatricecarlin64@gmail.com
+Received: by 2002:a17:907:c686:b0:85d:6a6e:66e5 with HTTP; Tue, 14 Feb 2023
+ 14:17:58 -0800 (PST)
+From:   Daryna Olga <olgadaryna957@gmail.com>
+Date:   Tue, 14 Feb 2023 14:17:58 -0800
+X-Google-Sender-Auth: F7_j6BBFvH0UWQEuObdRpCy0uXo
+Message-ID: <CA+qmXqcM4KmpVD45eLVmJykDGPvEmoFEtX+kJKpQiPOhBGbnmQ@mail.gmail.com>
+Subject: Daryna Olga from Ukraine
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_FILL_THIS_FORM_SHORT,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:636 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5022]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [olgadaryna957[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [beatricecarlin64[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  1.0 FREEMAIL_REPLY From and body contain different freemails
+        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
+        *      information
+        *  3.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/13/2023 6:28 AM, Wei Liu wrote:
-> A few comments on style.
-> 
-> On Thu, Feb 09, 2023 at 02:02:52PM -0800, Nuno Das Neves wrote:
->> hv_get_nested_reg only translates SINT0, resulting in the wrong sint
->> being registered by nested vmbus.
-> 
-> Please put a blank line between paragraphs.
-> 
+Hello, My name is Ms. Daryna Olga from Ukraine.
 
-Ok
 
->> Fix the issue with new utility function hv_is_sint_reg.
->> While at it, improve clarity of hv_set_non_nested_register and hv_is_synic_reg.
->>
->> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
->> ---
->>  arch/x86/include/asm/mshyperv.h | 11 +++++++----
->>  arch/x86/kernel/cpu/mshyperv.c  |  8 ++++----
->>  2 files changed, 11 insertions(+), 8 deletions(-)
->>
->> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
->> index 9ae1a344536b..684c547c1cca 100644
->> --- a/arch/x86/include/asm/mshyperv.h
->> +++ b/arch/x86/include/asm/mshyperv.h
->> @@ -225,10 +225,13 @@ extern bool hv_isolation_type_snp(void);
->>  
->>  static inline bool hv_is_synic_reg(unsigned int reg)
->>  {
->> -	if ((reg >= HV_REGISTER_SCONTROL) &&
->> -	    (reg <= HV_REGISTER_SINT15))
->> -		return true;
->> -	return false;
->> +	return (reg >= HV_REGISTER_SCONTROL) &&
->> +	       (reg <= HV_REGISTER_SINT15);
->> +}
-> 
-> Please put a new line here.
-> 
+I have 100 Kilogrammes of Gold Bars. I plan to negotiate with you, so
+that the Gold Bars will be delivered to you in your country and sell
+it on my behalf and invest with the Funds in your country because I
+want to relocate my late Father's business due to the ongoing war in
+my country Ukraine and visit your country.
 
-Ok
 
-> I can fix these issues too if you don't end up sending a new version due
-> to other issues.
-> 
-> Jinank, please take a look. The code looks sensible to me, but I would
-> like you to have a look too.
-> 
+Thank you as I wait to hear from you soon so I can tell you more
+details. God bless you for your care. Contact me through my Private
+Email Address: DarynaOlga@gmx.com
 
-I'll wait for Jinank to take a look before posting another version...
-
+Best Regards
+Daryna Olga from Ukraine.
