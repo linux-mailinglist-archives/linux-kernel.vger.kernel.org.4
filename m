@@ -2,85 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0551A697215
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 00:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9D269721B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 00:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjBNXuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 18:50:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36748 "EHLO
+        id S230427AbjBNXvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 18:51:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjBNXtj (ORCPT
+        with ESMTP id S231580AbjBNXu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 18:49:39 -0500
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A473AAE;
-        Tue, 14 Feb 2023 15:49:38 -0800 (PST)
-Received: by mail-il1-f169.google.com with SMTP id y8so1236777ilv.1;
-        Tue, 14 Feb 2023 15:49:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hZQ+pnrSKxKUfzFN0E4xub81x29BjpaTOIWP6xUPRvw=;
-        b=uWy7TogOWnQEyeOKJhFptnQjLe6l8DIqlVkq50V2aiEOvqaYsvIwMwVj+tMEtX9NB9
-         o3oJq0NLiVv1L0muemFd+u290efOir3REg0WgIe1MJxU73qhsgmhf7806KSAhlsrQwHP
-         yrGbLhPRtZmt/5uHaSfI7tUoaVX/dOgp3b7Jb7OQ5D75rTRHDJ3UwjOqopW71Q9QA1I2
-         Z9xEDLY8IlF5GCXdbqHD8mvHCHHwTEsTM11K5J4jr2JiER/s/u/cyIpHULuAtIPl/OTd
-         b5d7eRgqVj3vGNUqzxEz6IfchpF3E+FB8H+8+rQIMEaov9YntLNJvPNiiSfIoSCBYuOH
-         hvXQ==
-X-Gm-Message-State: AO0yUKWoMyftmshbzCHYLDWoWH2kQiDxoPbuwHg1uf8AE8nW0EtHxdIg
-        rDdFQ6P2bGHMgJ4ijO9o44BrQAU+gg==
-X-Google-Smtp-Source: AK7set9rQ6DSyfJT+5iN7fP2VHxfXzd9g/+Q8EhIB6DK9njOCqwAWmisFDGz/7ZuRwpEnTugzsDS3w==
-X-Received: by 2002:a92:cdab:0:b0:313:cb9e:8026 with SMTP id g11-20020a92cdab000000b00313cb9e8026mr528036ild.11.1676418577802;
-        Tue, 14 Feb 2023 15:49:37 -0800 (PST)
-Received: from robh_at_kernel.org ([65.158.198.3])
-        by smtp.gmail.com with ESMTPSA id v17-20020a02b911000000b003a60a538226sm5094064jan.112.2023.02.14.15.49.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Feb 2023 15:49:37 -0800 (PST)
-Received: (nullmailer pid 44996 invoked by uid 1000);
-        Tue, 14 Feb 2023 23:49:36 -0000
-Date:   Tue, 14 Feb 2023 17:49:36 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>
-Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: add QRD8550
-Message-ID: <167641857586.44942.8036773026754714432.robh@kernel.org>
-References: <20230210163844.765074-1-krzysztof.kozlowski@linaro.org>
+        Tue, 14 Feb 2023 18:50:58 -0500
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D87E06A
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 15:50:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1676418657; x=1707954657;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=9CpydODQoc4YcAYpk8Ls8YOL4wFNAyRJ+PdfBH3v+nY=;
+  b=rRqYFK7OgqHmaMObSmyJ1rbMwJMmGeOdJ1t08zoPaJ5lNntC/4aUgzYn
+   SFAaqKqbCUfX3Gl1Cvg2H/5DtMkZI+Pgfj1mu+ToToHl99RP6gyEMLdo9
+   NPSMeFOcDezOzuyQTi/KdpKI3yJdokOvb4HpMA6JnWWoTqQNSVlyGAkWS
+   ehB9AphlJS4WiYAWXbIYjY0BDk9cYhDAwRIvIxwZAR0RgAnX0Nm0dNS3c
+   iLljJe2b30nMkZ9dTTxVM3/Ppi+0UbRc4Ie9QQPHJhK/b3Ox2Dd3K/Jj7
+   nNg13+Z1pVClhPZk4OjRRCbnIzF1mQxDwOLaOiHfpk1PSV+jepHAnTRpT
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,298,1669046400"; 
+   d="scan'208";a="223110880"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 15 Feb 2023 07:50:55 +0800
+IronPort-SDR: c5MNNm/LpaGIk5YNYAdVKUirvcPx5KyPcX+zqDznHZi3K60T6sS6blbuJZbQPOtyaH8gtM198h
+ 0YQXWMMdda0bErBs4PysmFq5S7X8Q/CrFvMH0EJbh/xMiLq4qC7O/GKyszsvuPSv3R0KMdAKpW
+ R0kqoj712o7ZYzafcTxtUaWqrDhU/io+7eLqVez7rcg9gwNE/c8X5SnsKfLUunIowxrSpAaRSZ
+ zi7nCvBrTaqznN011E9oiPrG0awPH2CFocdCif5RbzEvgs5Ipc6bcdEBgCZ4qaTOfmr9OMRxvA
+ 7jQ=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Feb 2023 15:02:17 -0800
+IronPort-SDR: IrdLYhsW1bXRxriRlZS3aZYVlTvZqGIUEGmDL9UIJC8r76yVGKaOQJYUrqraxHY+b1jPwBYKuQ
+ ifBS+sr6A7w0bHEpMwOjiduv8W3iQZWZLgiPPwrHlY6HTtSXAUXdk7OAxUmw7PidkUhdCPanMu
+ bps1uWz46iZmHaSAh/dIftSXzE3gRN1RdVSssLSrrBQnXwCYWl9cWuNXNaxdHLS+/ZWsJXadVV
+ XoMH9NdSgArk9trmbYFQZSt7hzw3RBNebJCuIvm7z06TY1HQrJLzaGEFeN6ThV/xhrKbqX8Q+7
+ A6Q=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Feb 2023 15:50:55 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PGdJG5lxcz1RwtC
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 15:50:54 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:content-language:references:to
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1676418654; x=1679010655; bh=9CpydODQoc4YcAYpk8Ls8YOL4wFNAyRJ+Pd
+        fBH3v+nY=; b=Zlj8iJJOtuahv9EypvaSpUKW68uRqV7r/0iHBSbsV6kg76ixDHg
+        vlNeMODxWwGWdBwm4oZQNecv4ZPX4KghNXHWJCxJ0mMaTFnJKvkrT5Wb9gbQRpr0
+        Qahoea9HrZtKCNWZX+riwZGyqI6c25XHJoJCNesEe6UotuG2ea146Gg0KkmPa6lL
+        ItEvwsQHU5Jg/kn8bOYduQ+AXFPxGQ9l6zlRSRFi6UL/uoEIB0zBZXYGvjobsqtL
+        l8orQy3wR7s7Bji4i+7RC6sez9tjF7GjLiW39fur7+GJFgzwKZ8RaUp1G0rHx1Gx
+        ZavwVQ2MozQcxm2QAXWeYJVevCVqSACm+Og==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id dFxcPgClTXhn for <linux-kernel@vger.kernel.org>;
+        Tue, 14 Feb 2023 15:50:54 -0800 (PST)
+Received: from [10.225.163.116] (unknown [10.225.163.116])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PGdJD3YV2z1RvLy;
+        Tue, 14 Feb 2023 15:50:52 -0800 (PST)
+Message-ID: <6ce57b8c-7f0c-f3d1-6938-c87fa4ab650d@opensource.wdc.com>
+Date:   Wed, 15 Feb 2023 08:50:50 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230210163844.765074-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 0/18] pata_parport: protocol drivers fixes and cleanups
+To:     Ondrej Zary <linux@zary.sk>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Jens Axboe <axboe@kernel.dk>, Tim Waugh <tim@cyberelk.net>,
+        linux-block@vger.kernel.org, linux-parport@lists.infradead.org,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230214230010.20318-1-linux@zary.sk>
+Content-Language: en-US
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230214230010.20318-1-linux@zary.sk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
-X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Fri, 10 Feb 2023 17:38:43 +0100, Krzysztof Kozlowski wrote:
-> Add board compatible for QRD8550 - a mobile-like development board with
-> SM8550.
+On 2/15/23 07:59, Ondrej Zary wrote:
+> This patch series fixes two bugs and cleans up pata_parport protocol drivers,
+> making the code simpler with no changes in behavior (except logged messages).
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Ondrej Zary <linux@zary.sk>
+
+Sergey did send you some reviewed-by tags for some of the patches. But I
+do not see any in this v2. Did you forget to add the tags to the reviewed
+patches ? That is nice to do so that I do not have to keep track of
+reviews across series versions...
+
 > ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> Changes in v2:
+>  - added two bugfixes (first two patches)
+>  - addressed Sergey's comments (mostly split patches)
+> 
+>  drivers/ata/pata_parport/aten.c                            |  45 ++++----------
+>  drivers/ata/pata_parport/bpck.c                            |  86 ++++++++------------------
+>  drivers/ata/pata_parport/bpck6.c                           | 107 ++++++++-------------------------
+>  drivers/ata/pata_parport/comm.c                            |  52 +++++-----------
+>  drivers/ata/pata_parport/dstr.c                            |  45 ++++----------
+>  drivers/ata/pata_parport/epat.c                            |  48 ++++++---------
+>  drivers/ata/pata_parport/epia.c                            |  55 +++++------------
+>  drivers/ata/pata_parport/fit2.c                            |  37 ++++--------
+>  drivers/ata/pata_parport/fit3.c                            |  39 ++++--------
+>  drivers/ata/pata_parport/friq.c                            |  56 ++++++-----------
+>  drivers/ata/pata_parport/frpw.c                            |  71 ++++++----------------
+>  drivers/ata/pata_parport/kbic.c                            |  66 +++++++++-----------
+>  drivers/ata/pata_parport/ktti.c                            |  38 ++++--------
+>  drivers/ata/pata_parport/on20.c                            |  45 ++++----------
+>  drivers/ata/pata_parport/on26.c                            |  52 ++++------------
+>  drivers/ata/pata_parport/pata_parport.c                    |  31 +++++-----
+>  {include/linux => drivers/ata/pata_parport}/pata_parport.h |  41 ++++---------
+>  17 files changed, 271 insertions(+), 643 deletions(-)
+> 
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+-- 
+Damien Le Moal
+Western Digital Research
 
