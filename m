@@ -2,147 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1A3696D78
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 20:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4520696D7D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 20:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjBNTAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 14:00:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
+        id S232428AbjBNTCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 14:02:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjBNTAs (ORCPT
+        with ESMTP id S229870AbjBNTCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 14:00:48 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2069.outbound.protection.outlook.com [40.107.94.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964072594B;
-        Tue, 14 Feb 2023 11:00:47 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VYLhEHofNuLRvnzYw6lFp0W2Q37V+QstfZnmEMQegEBRXOQbp/MLj6S+YKVYN5ICFxK99Juxf2vVHxEy1OaFD2NCt3SFAlKG5+TpBLrO8Kwhi2w5j7J5SyuI+n92U/VAUXZpqtjN7AoYovvMZB4WC3m1KVJP+NkbUWv6/F9ar37WUDlwh6BPj7oqTpFmrFWiC0+K5ePG8ULkThu66D4bQTPBC3hBMCLJzoL9ceG/imYDhQwvZdOjhXvVAPpaeQy3RGjLZIdVun24GeYXjDiD3n7L/wonpve6gnQhPel/kvqT9kQdI6xqzIw9inbaQaewwvkT8daR66C9z5qeD3/GsA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qhsUD0t+N0+O7YX29oeOUKSZzpnmzjfbvcefCFHE7fY=;
- b=SJshqJck+43z9D7We4MHsEtAro3UfC74/ufUYgZ0TEzvJ2GEY4EP1utB4o4Ij/EyZB6hNWO5EBAlrECi15a67AmZhYK9FHyJQbqJHFn4GWoTlov+05wpW2q429uSENaIP6gG668Cgd8E1thh2tGiVQiqFCBVwTnCIgSrUfdPkNQ7ymMbGQbK1QPdYoiawxKnTYJeGeDd9KeCJdpqTwDzuqDfzPdhlMzZ4qTo5AEoDMd8cp6UXjZJ5MiavtADyfyew/ZhSTWdMS4sgyRpGf2bLzJX6tL5YkjK7Jn8oyjv2g1Ex39a8pLZsQSnhxnJ2Eq4Q3TxcfWCVLy88UamD7iiLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qhsUD0t+N0+O7YX29oeOUKSZzpnmzjfbvcefCFHE7fY=;
- b=hnxnT7DhB9nP0wHiwpJxpeRuwJL92uB1lksvEfV5XQuGn8P6IsuZ8BRsAb1A/+Gke8T6l50I1ZrEG2ikNhEHO+5Xv9ilmv4T/URy6mAvwlHT8WvzVrBicttJ0xvb30H9gE+zGzpAPHPzLN6k0v16RJIdPz+UbZhjYTQB45VUBQyOudXRPuzse/JIsxcILH+2qi+fGOQBeNnTXUCFLLm1FV9+xxvqMIpsKWwHjVYwCwD2rKJdsBNHrLxVfR1SZBD0i8KNBKzh5R8CqRFRgJPginjPxUHXxplN4/yrHXD3bBcEGlqZfQy5gscSIsf+2zPvvn2Xv/STZZfbjJ9QWQChMw==
-Received: from BN9PR03CA0125.namprd03.prod.outlook.com (2603:10b6:408:fe::10)
- by MN6PR12MB8543.namprd12.prod.outlook.com (2603:10b6:208:47b::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Tue, 14 Feb
- 2023 19:00:45 +0000
-Received: from BN8NAM11FT104.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:fe:cafe::b5) by BN9PR03CA0125.outlook.office365.com
- (2603:10b6:408:fe::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24 via Frontend
- Transport; Tue, 14 Feb 2023 19:00:45 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BN8NAM11FT104.mail.protection.outlook.com (10.13.177.160) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6111.10 via Frontend Transport; Tue, 14 Feb 2023 19:00:44 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 14 Feb
- 2023 11:00:24 -0800
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 14 Feb
- 2023 11:00:24 -0800
-Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Tue, 14 Feb 2023 11:00:23 -0800
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 5.10 000/134] 5.10.168-rc2 review
-In-Reply-To: <20230214172549.450713187@linuxfoundation.org>
-References: <20230214172549.450713187@linuxfoundation.org>
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Tue, 14 Feb 2023 14:02:37 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92503FC;
+        Tue, 14 Feb 2023 11:02:36 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id i26so265363ila.11;
+        Tue, 14 Feb 2023 11:02:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GNEAe1B6QgPjY6KaGYE9TiQHnNZykCg1bt+o/OnSHKg=;
+        b=OGLrK81J+2LjfQNVnutus7Q4J7/1zgWBOqe0VSpoa3V1bpzMWIY+GMehuO5fx2unow
+         cGmcHW2gSSr1M362yrY368fhH559sjPkV6wGLL4O5mAQwnUfAqj9yF2lnHitiQOUPiJ8
+         OTEGLUtBgC4XFw68OgS9Io93dPWJK4yrEd1KeeTMhXcwJ5/fQRhSVLqJ4KmjtIoQYL49
+         aAj+/Xe8pO27ieMO8T0RLEDDf8UWdcSvPoFrsGk7i7bjJkbewlqHUeJ1q2IrM1XohIh5
+         tHTeoMYjzuLwDF1cH22PpdsO36vCYsbOOm8k2NsKOWidsVwXgEcn2IJGpNjgScvgkb2U
+         6oCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GNEAe1B6QgPjY6KaGYE9TiQHnNZykCg1bt+o/OnSHKg=;
+        b=K3ZnyqxojOs3b3FLErIeDGODpq874IA9Y4tgA7YrZt8huQYnpP0G0DXOMyeFsvsDN1
+         SzMk9OS2nSc15LYVdx20AqxItLJbveg9x3FYMOoASuJ4yAXZ2Tzts+wizgel40V7TrL8
+         olLqtZ2gRRUO946dY1f5lG4m7l3KaBFt7RdsoFbv1OJaB1KAUX9u7dQL/s0rqe0fp4FI
+         86SlGSsXXkNkjjg0cKnwJrGSV1nfenI1J93N7B0NQJIhSuCGuTlu0oEJWyVBnBy+81+B
+         bq7Tj5euxnAH6I2dWu1MitDOaF8z698QvkthfWkjehMr/4PI0yvhWXJL6k8Z4fHUBWFS
+         nU4g==
+X-Gm-Message-State: AO0yUKVJTsGxKtsdE0p9XalheAF0949hCA39DEvswGDcHgbNqk2YnfoB
+        u99Z7I0MU4zhFjGnhxnbAcsrd7AFNuHg5Q==
+X-Google-Smtp-Source: AK7set/zW0EPl9LzsbivR8TPrW170enXOL+jrEbHAwLfuAFAOh0JpMeGXUm427Nk8n+1LDAQTKlEnw==
+X-Received: by 2002:a05:6e02:1d19:b0:315:2992:8049 with SMTP id i25-20020a056e021d1900b0031529928049mr3487297ila.27.1676401355789;
+        Tue, 14 Feb 2023 11:02:35 -0800 (PST)
+Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
+        by smtp.gmail.com with ESMTPSA id r11-20020a056e0219cb00b0030c27c9eea4sm3608770ill.33.2023.02.14.11.02.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 11:02:35 -0800 (PST)
+From:   Yang Shi <shy828301@gmail.com>
+To:     mgorman@techsingularity.net, agk@redhat.com, snitzer@kernel.org,
+        dm-devel@redhat.com, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [v2 PATCH 0/5] Introduce mempool pages bulk allocator and use it in dm-crypt
+Date:   Tue, 14 Feb 2023 11:02:16 -0800
+Message-Id: <20230214190221.1156876-1-shy828301@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Message-ID: <8fe8d132-834a-4a09-a8b7-ee3b8c56d8b1@rnnvmail201.nvidia.com>
-Date:   Tue, 14 Feb 2023 11:00:23 -0800
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT104:EE_|MN6PR12MB8543:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5bd12347-c1b1-44e5-e715-08db0ebdc6dd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fJtWDEL/uNwpTAOFeHkmVzoAaxoS68knlz3d8bKVl/1YsGwSdCqwJajuH2nN0XkFrpx4iiL1az9lmVE8AzLC7/iX02O6AppcmUjIxBokY0nY62/ix4P4S35z3AjE8T8Arti+CODadoUwlOi0lrtyTMS7j89eytmbFSLoPwdFaXutT1MK/aE3rwBJ947GLWN5CJmaBtZaVfwTucSFb3XYwDeN9VzMgnvcJIDYLq7lTogF85w1eHJVBijSHSkFmelC/M7kaPETw/VZyLgPk7Pv1AGdl7xKWmDBPQ0KqJ2dYAiGdWoDvoGqN9sEOnwtVHRdtzKCJKEEG0/pjEZrcuO009bSLS+0+pR1UsIVZV8xL8M/Qq6DpI+Etpr4b2isQvsiWrJNiCftWI+7dlSdGSzkSMt8tIoJXJAeVYjF2ENFVFs054Cxve/seA5YXLQ8LX93uZtxt3VGc58U3bY16HVHRs8dL5dao+sDt5HMsGcTNXqMYj5h0f8H+LYoNl3pIrG+uCHhs6noY+ODatuGPe/yAkWXWe4Ew5T2JD0bwCrGPwvGSElMlmoFFvz6z6vWX3ZW3OPpAAYYQPBDUs2PM0TBd68h3kfap8VbQjB5ndRP01CxRYWsxva3S2dgP8e3/f1QeeSkVKx/zQoTFrcSvzf8VNZnvvOkKTBu4rryIZdab1tLhTAWIeT86atlV5pnyepO638+iIHUQPohWsRKhBab6Hxfiilp9qe4ZAKd7Zcd30tR8SkwCJJ266maY2OiL386
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(396003)(346002)(136003)(451199018)(46966006)(40470700004)(36840700001)(82310400005)(40460700003)(40480700001)(478600001)(26005)(186003)(54906003)(316002)(966005)(36860700001)(426003)(336012)(47076005)(356005)(31696002)(7416002)(8936002)(86362001)(2906002)(70586007)(7636003)(82740400003)(5660300002)(31686004)(6916009)(70206006)(8676002)(4326008)(41300700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2023 19:00:44.9065
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5bd12347-c1b1-44e5-e715-08db0ebdc6dd
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT104.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR12MB8543
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Feb 2023 18:41:06 +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.168 release.
-> There are 134 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 16 Feb 2023 17:25:19 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.168-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
 
-All tests passing for Tegra ...
+Changelog:
+RFC -> v2:
+  * Added callback variant for page bulk allocator and mempool bulk allocator
+    per Mel Gorman.
+  * Used the callback version in dm-crypt driver.
+  * Some code cleanup and refactor to reduce duplicate code.
 
-Test results for stable-v5.10:
-    11 builds:	11 pass, 0 fail
-    28 boots:	28 pass, 0 fail
-    75 tests:	75 pass, 0 fail
+rfc: https://lore.kernel.org/linux-mm/20221005180341.1738796-1-shy828301@gmail.com/
 
-Linux version:	5.10.168-rc2-gd76a8be7803e
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
-                tegra20-ventana, tegra210-p2371-2180,
-                tegra210-p3450-0000, tegra30-cardhu-a04
 
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
+We have full disk encryption enabled, profiling shows page allocations may
+incur a noticeable overhead when writing.  The dm-crypt creates an "out"
+bio for writing.  And fill the "out" bio with the same amount of pages
+as "in" bio.  But the driver allocates one page at a time in a loop.  For
+1M bio it means the driver has to call page allocator 256 times.  It seems
+not that efficient.
 
-Jon
+Since v5.13 we have page bulk allocator supported, so dm-crypt could use
+it to do page allocations more efficiently.
+
+I could just call the page bulk allocator in dm-crypt driver before the
+mempool allocator, but it seems ad-hoc and the quick search shows some
+others do the similar thing, for example, f2fs compress, block bounce,
+g2fs, ufs, etc.  So it seems more neat to implement a general bulk allocation
+API for mempool.
+
+Currently the bulk allocator just supported list and array to consume the
+pages.  But neither is the best fit to dm-crypt ussecase.  So introduce
+a new bulk allocator API, callback, per the suggestion from Mel Gorman.
+It consumes the pages by calling a callback with a parameter.
+
+So introduce the mempool page bulk allocator.
+The below APIs are introduced:
+    - mempool_init_pages_bulk()
+    - mempool_create_pages_bulk()
+    They initialize the mempool for page bulk allocator.  The pool is filled
+    by alloc_page() in a loop.
+    
+    - mempool_alloc_pages_bulk_cb()
+    - mempool_alloc_pages_bulk_array()
+    They do bulk allocation from mempool.  The list version is not implemented
+    since there is no user for list version bulk allocator so far and it may
+    be gong soon.
+
+    They do the below conceptually:
+      1. Call bulk page allocator
+      2. If the allocation is fulfilled then return otherwise try to
+         allocate the remaining pages from the mempool
+      3. If it is fulfilled then return otherwise retry from #1 with sleepable
+         gfp
+      4. If it is still failed, sleep for a while to wait for the mempool is
+         refilled, then retry from #1
+    The populated pages will stay on array until the callers consume them or
+    free them, or will be consumed by the callback.
+    Since mempool allocator is guaranteed to success in the sleepable context,
+    so the two APIs return true for success or false for fail.  It is the
+    caller's responsibility to handle failure case (partial allocation), just
+    like the page bulk allocator.
+    
+The mempool typically is an object agnostic allocator, but bulk allocation
+is only supported by pages, so the mempool bulk allocator is for page
+allocation only as well.
+
+With the mempool bulk allocator the IOPS of dm-crypt with 1M I/O would get
+improved by approxiamately 6%.  The test is done on a machine with 80 CPU and
+128GB memory with an encrypted ram device (the impact from storage hardware
+could be minimized so that we could benchmark the dm-crypt layer more
+accurately).
+
+Before the patch:
+Jobs: 1 (f=1): [w(1)][100.0%][w=1301MiB/s][w=1301 IOPS][eta 00m:00s]
+crypt: (groupid=0, jobs=1): err= 0: pid=48512: Wed Feb  1 18:11:30 2023
+  write: IOPS=1300, BW=1301MiB/s (1364MB/s)(76.2GiB/60001msec); 0 zone resets
+    slat (usec): min=724, max=867, avg=765.71, stdev=19.27
+    clat (usec): min=4, max=196297, avg=195688.86, stdev=6450.50
+     lat (usec): min=801, max=197064, avg=196454.90, stdev=6450.35
+    clat percentiles (msec):
+     |  1.00th=[  197],  5.00th=[  197], 10.00th=[  197], 20.00th=[  197],
+     | 30.00th=[  197], 40.00th=[  197], 50.00th=[  197], 60.00th=[  197],
+     | 70.00th=[  197], 80.00th=[  197], 90.00th=[  197], 95.00th=[  197],
+     | 99.00th=[  197], 99.50th=[  197], 99.90th=[  197], 99.95th=[  197],
+     | 99.99th=[  197]
+   bw (  MiB/s): min=  800, max= 1308, per=99.69%, avg=1296.94, stdev=46.02, samples=119
+   iops        : min=  800, max= 1308, avg=1296.94, stdev=46.02, samples=119
+  lat (usec)   : 10=0.01%, 1000=0.01%
+  lat (msec)   : 2=0.01%, 4=0.01%, 10=0.01%, 20=0.02%, 50=0.05%
+  lat (msec)   : 100=0.08%, 250=99.83%
+  cpu          : usr=3.88%, sys=96.02%, ctx=69, majf=1, minf=9
+  IO depths    : 1=0.1%, 2=0.1%, 4=0.1%, 8=0.1%, 16=0.1%, 32=0.1%, >=64=99.9%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.1%
+     issued rwts: total=0,78060,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=256
+
+Run status group 0 (all jobs):
+  WRITE: bw=1301MiB/s (1364MB/s), 1301MiB/s-1301MiB/s (1364MB/s-1364MB/s), io=76.2GiB (81.9GB), run=60001-60001msec
+
+After the patch:
+Jobs: 1 (f=1): [w(1)][100.0%][w=1401MiB/s][w=1401 IOPS][eta 00m:00s]
+crypt: (groupid=0, jobs=1): err= 0: pid=2171: Wed Feb  1 21:08:16 2023
+  write: IOPS=1401, BW=1402MiB/s (1470MB/s)(82.1GiB/60001msec); 0 zone resets
+    slat (usec): min=685, max=815, avg=710.77, stdev=13.24
+    clat (usec): min=4, max=182206, avg=181658.31, stdev=5810.58
+     lat (usec): min=709, max=182913, avg=182369.36, stdev=5810.67
+    clat percentiles (msec):
+     |  1.00th=[  182],  5.00th=[  182], 10.00th=[  182], 20.00th=[  182],
+     | 30.00th=[  182], 40.00th=[  182], 50.00th=[  182], 60.00th=[  182],
+     | 70.00th=[  182], 80.00th=[  182], 90.00th=[  182], 95.00th=[  182],
+     | 99.00th=[  182], 99.50th=[  182], 99.90th=[  182], 99.95th=[  182],
+     | 99.99th=[  182]
+   bw (  MiB/s): min=  900, max= 1408, per=99.71%, avg=1397.60, stdev=46.04, samples=119
+   iops        : min=  900, max= 1408, avg=1397.60, stdev=46.04, samples=119
+  lat (usec)   : 10=0.01%, 750=0.01%
+  lat (msec)   : 2=0.01%, 4=0.01%, 10=0.01%, 20=0.02%, 50=0.05%
+  lat (msec)   : 100=0.08%, 250=99.83%
+  cpu          : usr=3.66%, sys=96.23%, ctx=76, majf=1, minf=9
+  IO depths    : 1=0.1%, 2=0.1%, 4=0.1%, 8=0.1%, 16=0.1%, 32=0.1%, >=64=99.9%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.1%
+     issued rwts: total=0,84098,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=256
+
+Run status group 0 (all jobs):
+  WRITE: bw=1402MiB/s (1470MB/s), 1402MiB/s-1402MiB/s (1470MB/s-1470MB/s), io=82.1GiB (88.2GB), run=60001-60001msec
+
+And the benchmark with 4K size I/O doesn't show measurable regression.
+
+
+Yang Shi (5):
+      mm: page_alloc: add API for bulk allocator with callback
+      mm: mempool: extract the common initialization and alloc code
+      mm: mempool: introduce page bulk allocator
+      md: dm-crypt: move crypt_free_buffer_pages ahead
+      md: dm-crypt: use mempool page bulk allocator
+
+ drivers/md/dm-crypt.c   |  95 ++++++++++++++++++++++++++++++---------------------
+ include/linux/gfp.h     |  21 +++++++++---
+ include/linux/mempool.h |  21 ++++++++++++
+ mm/mempolicy.c          |  12 ++++---
+ mm/mempool.c            | 248 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----------------------
+ mm/page_alloc.c         |  21 ++++++++----
+ 6 files changed, 323 insertions(+), 95 deletions(-)
+
+
