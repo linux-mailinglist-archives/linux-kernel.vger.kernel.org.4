@@ -2,92 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8274E695638
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 02:57:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0638369563A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 02:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjBNB5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 20:57:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
+        id S230311AbjBNB5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 20:57:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjBNB5E (ORCPT
+        with ESMTP id S229593AbjBNB5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 20:57:04 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DF9B473;
-        Mon, 13 Feb 2023 17:57:03 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PG48D6g4wz4x5V;
-        Tue, 14 Feb 2023 12:57:00 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1676339821;
-        bh=rWqbuj7Y1Moo07qnSdhR2iyhOqO49E/rwbnmg5NXI4k=;
-        h=Date:From:To:Cc:Subject:From;
-        b=dDx8z4wfox9GQZO9mWASOmZz9Evlf4ptOj7Lxbw9QYtOC15r/C9cJZZrTfw6IWV05
-         0mnAr3DSiahNi56cefkDbgzjsFu3ImrP25Xn+hK9+phKpQ6EAgQDXLDFqG3hvbrRVz
-         Hcmo4kRNSTpTGi5EVF1cNm+mOIpGA4pjeWAKPHfLOo/QdmHsxpJMwKOakUdBvOmMiO
-         3yL0V95OCUbi7leaHJW+V0gsXnezxiacXeqQHgYskE+TdvSQkxObUWZhWqAGTSIqLn
-         WYhjctjGjqJkhoyyeY3l6fq2e8er8sLWEoaumKkM3y5gJaxFQHq66L2SZir4JXOyHC
-         j8tnxVnnG5u/A==
-Date:   Tue, 14 Feb 2023 12:57:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the driver-core tree
-Message-ID: <20230214125700.606a89d7@canb.auug.org.au>
+        Mon, 13 Feb 2023 20:57:33 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3F6AAB473
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 17:57:32 -0800 (PST)
+Received: (qmail 930035 invoked by uid 1000); 13 Feb 2023 20:57:31 -0500
+Date:   Mon, 13 Feb 2023 20:57:31 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com
+Subject: Re: Current LKMM patch disposition
+Message-ID: <Y+rqi1avpv7obhrg@rowland.harvard.edu>
+References: <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9+41ctA54pjm/KG@google.com>
+ <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
+ <Y+fN2fvUjGDWBYrv@google.com>
+ <Y+f4TYZ9BPlt8y8B@rowland.harvard.edu>
+ <CAEXW_YRuTfjc=5OAskTV0Qt_zSJTPP3-01=Y=SypMdPsF_weAQ@mail.gmail.com>
+ <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
+ <CAEXW_YQUOgYxYUNkQ9W6PS-JPwPSOFU5B=COV7Vf+qNF1jFC7g@mail.gmail.com>
+ <Y+ppzKlvzQIE18Hu@rowland.harvard.edu>
+ <CAEXW_YRc0qtan5hbTFUeP7B8f-q5BQJS_d2TpKqZ8_aX5A=b2g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//WfFgYhdslwXBWyGKKzpXy9";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEXW_YRc0qtan5hbTFUeP7B8f-q5BQJS_d2TpKqZ8_aX5A=b2g@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_//WfFgYhdslwXBWyGKKzpXy9
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Feb 13, 2023 at 07:36:42PM -0500, Joel Fernandes wrote:
+> Thanks, I agree with most of your last email, just replying to one thing:
+> 
+> > > ->rf does because of data flow causality, ->ppo does because of
+> > > program structure, so that makes sense to be ->hb.
+> > >
+> > > IMHO, ->rfi should as well, because it is embodying a flow of data, so
+> > > that is a bit confusing. It would be great to clarify more perhaps
+> > > with an example about why ->rfi cannot be ->hb, in the
+> > > "happens-before" section.
+> >
+> > Maybe.  We do talk about store forwarding, and in fact the ppo section
+> > already says:
+> >
+> > ------------------------------------------------------------------------
+> >         R ->dep W ->rfi R',
+> >
+> > where the dep link can be either an address or a data dependency.  In
+> > this situation we know it is possible for the CPU to execute R' before
+> > W, because it can forward the value that W will store to R'.
+> > ------------------------------------------------------------------------
+> 
+> Thank you for pointing this out! In the text that follows this, in
+> this paragraph:
+> 
+> <quote>
+> where the dep link can be either an address or a data dependency.  In
+> this situation we know it is possible for the CPU to execute R' before
+> W, because it can forward the value that W will store to R'.  But it
+> cannot execute R' before R, because it cannot forward the value before
+> it knows what that value is, or that W and R' do access the same
+> location.
+> </quote>
+> 
+> The "in this situation" should be clarified that the "situation" is a
+> data-dependency. Only in the case of data-dependency,  the ->rfi
+> cannot cause misordering if I understand it correctly. However, that
+> sentence does not mention data-dependency explicitly. Or let me know
+> if I missed something?
 
-Hi all,
+The text explicitly says that the dep link can be either an address or a 
+data dependency.  In either case, R' cannot be reordered before R.
 
-The following commit is also in the pm tree as a different commit (but
-the same patch):
+In theory this doesn't have to be true for address dependencies, because 
+the CPU might realize that W and R' access the same address without 
+knowing what that address is.  However, I've been reliably informed that 
+no existing architectures do this sort of optimization.
 
-  a0bc3f78d0ff ("kernel/power/energy_model.c: fix memory leak with using de=
-bugfs_lookup()")
+The case of a control dependency is different, because the CPU can 
+speculate that W will be executed and can speculatively forward the 
+value from W to R' before it knows what value R will read.
 
-This is commit
-
-  a0e8c13ccd6a ("PM: EM: fix memory leak with using debugfs_lookup()")
-
-in the pm tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_//WfFgYhdslwXBWyGKKzpXy9
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPq6mwACgkQAVBC80lX
-0GyocAf/WHwreN81qM51yZB857iWuuGJ6+8AOAYy7EA1pjcuV496ItLrvZaBd2/K
-8yuTcSIhVSPPsXn05IoQBXK0VUPx1hS6Rk9miBUwHTyHtc28gYOSGJRcPxxW7Knl
-3SWx0490SfBs4R85Boq928tkS31isg/rAKWMugJV2ZEOdkh2tNJLUSANR79e9dVt
-7vab5sAsgOoopxg2QhUaNgDwho/6hVqSXY5IF9rwMa3Xv2Frt/CudyH7OcYrZiyp
-8ONYjloEaVTR1ZUwAApMplv65noW6LgkIp6EfwVsFE+PCOwlqczGDF4RZR4RVLod
-md/auQSjAA78AvNTKaDB5Pmm+iokuA==
-=rRD1
------END PGP SIGNATURE-----
-
---Sig_//WfFgYhdslwXBWyGKKzpXy9--
+Alan
