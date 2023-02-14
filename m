@@ -2,82 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34444695FD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:53:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8DBD695FD3
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 10:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbjBNJxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 04:53:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
+        id S231604AbjBNJxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 04:53:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231584AbjBNJxF (ORCPT
+        with ESMTP id S231629AbjBNJxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Feb 2023 04:53:05 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF59CBDF3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:53:02 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id bu23so14979592wrb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:53:02 -0800 (PST)
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D751A5BA4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:53:03 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id b5so16501842plz.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 01:53:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5h6snxNwqi3yc/6b2X5fU8N8RXpsnnQV8JgbEOCMqVA=;
-        b=Zg+0MnvymGjqP4gxpMQwD9Q3XTn8SalhzG734eNYM7yp3GKshukmBnNbEp7k+/i2kN
-         XKOUlwohSxAf71gjs85dRbNziqx6ara61Gwr9DIb6Saw4j7Ael0VGx8urVl0KRrT3QW1
-         t1TPtdjZ7FIxJw/4t5+T01YofORhJSkOBF+N5mv0XWS2A6C8b+abhByZC6LSYPeVWRbx
-         PSGfsrmsjBgYpv8FRHa03vvPirJQy8ro7ZN/I/gVJPUtJHor5vyFSSuCQRXfur7j3IlV
-         OUp3j9p9HUuiDohBkjQgXXswEeBZcIQppcr7h9Ix0Z4rC9kaSguxckzyoQdf6J6T20pn
-         e7fQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jmGdV1IpnhMsjWRrEzJObpGK30861bOEZaqYcgKiLho=;
+        b=z615CfoeIqg2nU1qmrBUE/g7MILlMrvYNwvhNOd2hqm/4BGooq0b3YoqSFDjVHHyGO
+         ynyOQEYgr8jCaVcHpAHdt+j5ukYaC64xyfp2unMa2IAwX697fDYL1+qoZIyz9qL2hysL
+         EDjzsA6Gs3o8jn3NdaU9z2k/84KWVVrMr1a5DzJtTFMrvijLgUeEm4YmODNHxFRWkE88
+         hK3jgL+cho30jL3AFmyJJ21Een1N/K3XHXa/S/26xW2Czw8d8N+B7WfU/EjzJ4r1qPtI
+         J8pt7arBVNrIf6y/a6CB4Y+FrE8kzs20p9ZkPYQp/WpvgOywBZ1Qe8xoJa90LYdAXKaK
+         sJVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5h6snxNwqi3yc/6b2X5fU8N8RXpsnnQV8JgbEOCMqVA=;
-        b=W5ZUgLgIXluGRVLuKMBs+NcAldT+2LUmSEGMC8u/zgUpsSLboF6rnvGMjLOO6bLADQ
-         /0Q7t+fuhVDlJ0TzpxRzaLeHG9mVue5Nto+yN7nHg9lkPfiEogHtm1s10M+pZ+au9EST
-         guimpqpITHznZeLYGcxmW4rT9lJWv5ty8VWBGznTZ2aKXKnIMhNOwWW5wyc1sLWVR8Lv
-         mH50J/FoJ9zXyrMTzKLfyCXvr+5vl5epb6cjWlMXNWeh4cLDuPq4vwE4u2FN/E2zXjhz
-         c5viwRPt4o2pjSzsYLUsMaO4o/xP0JySHfyE2+Ka3vx2R3mPcs4XB34SRlK9JQSaPCHX
-         lGvA==
-X-Gm-Message-State: AO0yUKVF0CnUblFDkrSNTncqfOC1FCzWkBGt7nFEs1Scp3vn0LtLNcIk
-        k/50sHbhRGRbB+a6zVD7Uo7uhA==
-X-Google-Smtp-Source: AK7set8EIkVs9H4ls60SXwzuLE+qdjwduzm8OuB7RL+BMEcLayw78GCkgI0ZA1TUtTydLwSVuXpI9Q==
-X-Received: by 2002:a5d:6b8e:0:b0:2c4:873:16b4 with SMTP id n14-20020a5d6b8e000000b002c4087316b4mr1511933wrx.16.1676368380676;
-        Tue, 14 Feb 2023 01:53:00 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id w11-20020adff9cb000000b002c54e9f6bc2sm8137222wrr.77.2023.02.14.01.52.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 01:53:00 -0800 (PST)
-Message-ID: <df464409-9a93-c057-5f66-923a9e24696a@linaro.org>
-Date:   Tue, 14 Feb 2023 10:52:58 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jmGdV1IpnhMsjWRrEzJObpGK30861bOEZaqYcgKiLho=;
+        b=WQ7HeRkmkdJO1/dpzo3c24g8fZBSZDVNqMGqjUCO8kJ2A6PG05C79nHd1ZmIPFEHCg
+         3/uYJsaGKkqbfRnBHcJPrYR8EUtXtMNJQA4/WECUc5UUCeo7/By4R9cfx17A/jWb4PL5
+         /ol4i9/1IUxwC/otZQBDnFMmgRmKN4Z7OkRBjSCTJfkeOtNa8OoaL1v33yIsjlVbHj5u
+         F3Ir6Mfp3drK+dzomGGLeGGSiOcgxrW2/XRHJH44CUsMLinlEuipXI4Uqk4xVNHCVrAi
+         vtZS4jPsWzN43wyFwSuonXA0VhVRYOUaakKnzJITcoiC/wG0SxNk3+caXPfaLUZQ8AzG
+         dExQ==
+X-Gm-Message-State: AO0yUKUQiqYxRBGkLhTY/K53xRis2Q4S/wxBCchYK8AdHhtXekLtksA1
+        wnbuVZx4kjwqnYHv+KVroToN27O6PoaEC2eG
+X-Google-Smtp-Source: AK7set/cAOHYyECZofoGhGcncjfSOUlz1tBZrGmCkXK4RB6MFAgefrCg6UyXrZt2jE2Jd7ZS/ADsbg==
+X-Received: by 2002:a05:6a20:3d82:b0:bf:ae32:5ed0 with SMTP id s2-20020a056a203d8200b000bfae325ed0mr1878163pzi.13.1676368383314;
+        Tue, 14 Feb 2023 01:53:03 -0800 (PST)
+Received: from localhost ([122.172.83.155])
+        by smtp.gmail.com with ESMTPSA id c188-20020a6335c5000000b004fbd91d9716sm681936pga.15.2023.02.14.01.53.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 01:53:02 -0800 (PST)
+Date:   Tue, 14 Feb 2023 15:23:00 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     rafael@kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: qcom-hw: Add missing null pointer check
+Message-ID: <20230214095300.pv3e73r36poth5w4@vireshk-i7>
+References: <20230214094115.23338-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V2 1/2] dt-bindings: interrupt-controller: Add Loongson
- EIOINTC
-Content-Language: en-US
-To:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        loongarch@lists.linux.dev, devicetree@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-References: <cover.1676289084.git.zhoubinbin@loongson.cn>
- <a9f697906df6599e6b001981e668479da71aa7a0.1676289084.git.zhoubinbin@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a9f697906df6599e6b001981e668479da71aa7a0.1676289084.git.zhoubinbin@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230214094115.23338-1-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,134 +73,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/02/2023 13:15, Binbin Zhou wrote:
-> Add Loongson Extended I/O Interrupt controller binding with DT schema
-> format using json-schema.
+On 14-02-23, 15:11, Manivannan Sadhasivam wrote:
+> of_device_get_match_data() may return NULL, so add a check to prevent
+> potential null pointer dereference.
 > 
-> Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> Issue reported by Qualcomm's internal static analysis tool.
+> 
+> Cc: stable@vger.kernel.org # v6.2
+> Fixes: 4f7961706c63 ("cpufreq: qcom-hw: Move soc_data to struct qcom_cpufreq")
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
->  .../loongson,eiointc.yaml                     | 80 +++++++++++++++++++
->  1 file changed, 80 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
-> new file mode 100644
-> index 000000000000..88580297f955
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
-> @@ -0,0 +1,80 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/interrupt-controller/loongson,eiointc.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index 340fed35e45d..6425c6b6e393 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -689,6 +689,8 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>  		return -ENOMEM;
+>  
+>  	qcom_cpufreq.soc_data = of_device_get_match_data(dev);
+> +	if (!qcom_cpufreq.soc_data)
+> +		return -ENODEV;
+>  
+>  	clk_data = devm_kzalloc(dev, struct_size(clk_data, hws, num_domains), GFP_KERNEL);
+>  	if (!clk_data)
 
-Drop quotes from bopth.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-> +
-> +title: Loongson Extended I/O Interrupt Controller
-> +
-> +maintainers:
-> +  - Binbin Zhou <zhoubinbin@loongson.cn>
-> +
-> +description: |
-> +  This interrupt controller is found on the Loongson-3 family chips and
-> +  Loongson-2K0500 chip and is used to distribute interrupts directly to
-> +  individual cores without forwarding them through the HT's interrupt line.
-> +
-> +allOf:
-> +  - $ref: /schemas/interrupt-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - loongson,eiointc-1.0
+Rafael,
 
-Why not using SoC based compatible? It is preferred.
+Can you still send this for 6.2 ?
 
-> +
-> +  reg:
-> +    minItems: 1
-> +    maxItems: 3
-
-You need to describe the items.
-
-> +
-> +  interrupt-controller: true
-> +
-> +  interrupts:
-> +    description:
-> +      Interrupt source of the CPU interrupts.
-
-You need to describe the items.
-
-> +
-> +  interrupt-names:
-> +    description:
-> +      List of names for the parent interrupts.
-
-Drop description.
-
-> +    items:
-> +      - const: int0
-> +
-> +  '#interrupt-cells':
-> +    const: 1
-> +
-> +  'loongson,eio-num-vecs':
-
-Drop quotes.
-
-> +    description:
-> +      The number of devices supported by the extended I/O interrupt vector.
-
-Why this cannot be inferred from the compatible? Different boards with
-the same SoC support different devices?
-
-> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-
-Drop quotes.
-
-> +    minimum: 1
-> +    maximum: 256
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-controller
-> +  - '#interrupt-cells'
-> +  - 'loongson,eio-num-vecs'
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    eiointc: interrupt-controller@1fe11600 {
-> +      compatible = "loongson,eiointc-1.0";
-> +      reg = <0x1fe11600 0x8
-> +             0x1fe11700 0x8
-> +             0x1fe11800 0x8>;
-
-That's not correct syntax. <>, <>, <>
-
-> +
-> +      interrupt-controller;
-> +      #interrupt-cells = <1>;
-> +
-> +      interrupt-parent = <&cpuintc>;
-> +      interrupts = <3>;
-> +      interrupt-names = "int0";
-> +
-> +      loongson,eio-num-vecs = <128>;
-> +
-
-Drop stray blank line.
-
-> +    };
-> +
-> +...
-
-Best regards,
-Krzysztof
-
+-- 
+viresh
