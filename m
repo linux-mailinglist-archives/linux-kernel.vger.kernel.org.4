@@ -2,39 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86BF6963F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27FA16963F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 13:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbjBNMyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Feb 2023 07:54:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39322 "EHLO
+        id S232402AbjBNMzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Feb 2023 07:55:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbjBNMyJ (ORCPT
+        with ESMTP id S230162AbjBNMzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Feb 2023 07:54:09 -0500
-Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823DE21280
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Feb 2023 04:53:57 -0800 (PST)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id Ruokph5lwOJaFRuolpOzce; Tue, 14 Feb 2023 13:53:55 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 14 Feb 2023 13:53:55 +0100
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-rdma@vger.kernel.org
-Subject: [PATCH] RDMA/restrack: Reorder fields in 'struct rdma_restrack_entry'
-Date:   Tue, 14 Feb 2023 13:53:52 +0100
-Message-Id: <d47800d9fd5ac7c33d01af04b12b6d43ad23c96e.1676379187.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Tue, 14 Feb 2023 07:55:06 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BF516AEE;
+        Tue, 14 Feb 2023 04:55:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=kd8Tkpw2geIhdESAwykD0ZVGRSJYIx/HqjzlFVd0yxI=;
+        t=1676379305; x=1677588905; b=AvZLEPFS1HaXLki/BsL9rF9Bz0YqwL+nEpxGjXtF10kXiAb
+        P6l/D203CuK1wazu06supRkAEtGAJGIAIHjVLEhZcBf57gA2lf3Vpd5uGO8d6UFp6hrftdX1VRmxm
+        bih2FB+6D2NWKe4JW1r+Y2i061jukE5IXEzbzYdPCRhqujQacLqJ81YGB/LXi28pdrz1JBbHSIqxA
+        0GmDfQ3+Y2pzMjSeNchBdlGzIbOCOpq+YwTXtEq6O7RLEyhLa+6wa1rGGwEZooJAqgU/AMcHbl0+1
+        ASBCzDOpQhND7NWt1XOXIX7sJqpSNzk6ZsJpCOJjGWYDo54L4har86AhyXlJaFeA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1pRupY-00C91H-3B;
+        Tue, 14 Feb 2023 13:54:45 +0100
+Message-ID: <aef83367258771b3e71c6043f4cc0661473fd58b.camel@sipsolutions.net>
+Subject: Re: [PATCH v3] Set ssid when authenticating
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Marc Bornand <dev.mbornand@systemb.ch>,
+        linux-wireless@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
+        Yohan Prod'homme <kernel@zoddo.fr>, stable@vger.kernel.org
+Date:   Tue, 14 Feb 2023 13:54:43 +0100
+In-Reply-To: <20230213210521.1672392-1-dev.mbornand@systemb.ch>
+References: <20230213210521.1672392-1-dev.mbornand@systemb.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,96 +58,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Group some variables based on their sizes to reduce hole and avoid padding.
-On x86_64, this shrinks the size from 136 to 128 bytes.
+Hi,
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Using pahole
+Please provide a proper subject/commit message for this. The
+"authenticating" is no longer true anyway.
 
-Before:
-======
-struct rdma_restrack_entry {
-	bool                       valid;                /*     0     1 */
-	u8                         no_track:1;           /*     1: 0  1 */
+See
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
+hes#commit_messages
 
-	/* XXX 7 bits hole, try to pack */
-	/* XXX 2 bytes hole, try to pack */
+On Mon, 2023-02-13 at 21:05 +0000, Marc Bornand wrote:
+> changes since v2:
+> - The code was tottaly rewritten based on the disscution of the
+>   v2 patch.
+> - the ssid is set in __cfg80211_connect_result() and only if the ssid is
+>   not already set.
+> - Do not add an other ssid reset path since it is already done in
+>   __cfg80211_disconnected()
+>=20
+> When a connexion was established without going through
 
-	struct kref                kref;                 /*     4     4 */
-	struct completion          comp;                 /*     8    96 */
-	/* --- cacheline 1 boundary (64 bytes) was 40 bytes ago --- */
-	struct task_struct *       task;                 /*   104     8 */
-	const char  *              kern_name;            /*   112     8 */
-	enum rdma_restrack_type    type;                 /*   120     4 */
-	bool                       user;                 /*   124     1 */
+connection
 
-	/* XXX 3 bytes hole, try to pack */
+> NL80211_CMD_CONNECT, the ssid was never set in the wireless_dev struct.
+> Now we set it in __cfg80211_connect_result() when it is not already set.
+>=20
+> Reported-by: Yohan Prod'homme <kernel@zoddo.fr>
+> Fixes: 7b0a0e3c3a88260b6fcb017e49f198463aa62ed1
+> Cc: linux-wireless@vger.kernel.org
+> Cc: stable@vger.kernel.org
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D216711
+> Signed-off-by: Marc Bornand <dev.mbornand@systemb.ch>
+> ---
+>  net/wireless/sme.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+>=20
+> diff --git a/net/wireless/sme.c b/net/wireless/sme.c
+> index 4b5b6ee0fe01..629d7b5f65c1 100644
+> --- a/net/wireless/sme.c
+> +++ b/net/wireless/sme.c
+>=20
+> @@ -723,6 +723,7 @@ void __cfg80211_connect_result(struct net_device *dev=
+,
+>  			       bool wextev)
+>  {
+>  	struct wireless_dev *wdev =3D dev->ieee80211_ptr;
+> +	const struct element *ssid;
+>  	const struct element *country_elem =3D NULL;
+>  	const u8 *country_data;
+>  	u8 country_datalen;
+> @@ -883,6 +884,21 @@ void __cfg80211_connect_result(struct net_device *de=
+v,
+>  				   country_data, country_datalen);
+>  	kfree(country_data);
+>=20
+> +	if (wdev->u.client.ssid_len =3D=3D 0) {
+> +		rcu_read_lock();
+> +		for_each_valid_link(cr, link) {
+> +			ssid =3D ieee80211_bss_get_elem(cr->links[link].bss,
+> +						      WLAN_EID_SSID);
+> +
+> +			if (ssid->datalen =3D=3D 0)
 
-	/* --- cacheline 2 boundary (128 bytes) --- */
-	u32                        id;                   /*   128     4 */
+need to check also that it exists
 
-	/* size: 136, cachelines: 3, members: 9 */
-	/* sum members: 126, holes: 2, sum holes: 5 */
-	/* sum bitfield members: 1 bits, bit holes: 1, sum bit holes: 7 bits */
-	/* padding: 4 */
-	/* last cacheline: 8 bytes */
-};
+> +				continue;
+> +
+> +			memcpy(wdev->u.client.ssid, ssid->data, ssid->datalen);
+> +			wdev->u.client.ssid_len =3D ssid->datalen;
 
-After:
-=====
-struct rdma_restrack_entry {
-	bool                       valid;                /*     0     1 */
-	u8                         no_track:1;           /*     1: 0  1 */
+you can break here.
 
-	/* XXX 7 bits hole, try to pack */
-
-	bool                       user;                 /*     2     1 */
-
-	/* XXX 1 byte hole, try to pack */
-
-	struct kref                kref;                 /*     4     4 */
-	struct completion          comp;                 /*     8    96 */
-	/* --- cacheline 1 boundary (64 bytes) was 40 bytes ago --- */
-	struct task_struct *       task;                 /*   104     8 */
-	const char  *              kern_name;            /*   112     8 */
-	enum rdma_restrack_type    type;                 /*   120     4 */
-	u32                        id;                   /*   124     4 */
-
-	/* size: 128, cachelines: 2, members: 9 */
-	/* sum members: 126, holes: 1, sum holes: 1 */
-	/* sum bitfield members: 1 bits, bit holes: 1, sum bit holes: 7 bits */
-};
----
- include/rdma/restrack.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/include/rdma/restrack.h b/include/rdma/restrack.h
-index 8b7c46daeb07..da53fefe6f9e 100644
---- a/include/rdma/restrack.h
-+++ b/include/rdma/restrack.h
-@@ -80,6 +80,10 @@ struct rdma_restrack_entry {
- 	 * query stage.
- 	 */
- 	u8			no_track : 1;
-+	/**
-+	 * @user: user resource
-+	 */
-+	bool			user;
- 	/*
- 	 * @kref: Protect destroy of the resource
- 	 */
-@@ -106,10 +110,6 @@ struct rdma_restrack_entry {
- 	 * @type: various objects in restrack database
- 	 */
- 	enum rdma_restrack_type	type;
--	/**
--	 * @user: user resource
--	 */
--	bool			user;
- 	/**
- 	 * @id: ID to expose to users
- 	 */
--- 
-2.34.1
-
+johannes
