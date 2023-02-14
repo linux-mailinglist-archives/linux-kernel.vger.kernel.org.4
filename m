@@ -2,155 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3BF869567B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 03:13:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D38F0695678
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Feb 2023 03:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbjBNCNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Feb 2023 21:13:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
+        id S230120AbjBNCMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Feb 2023 21:12:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231225AbjBNCM5 (ORCPT
+        with ESMTP id S229603AbjBNCMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Feb 2023 21:12:57 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40CF67DB2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Feb 2023 18:12:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676340773; x=1707876773;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rKzFyEcq3FzCeccV0ErctTrejgulILBzrRZ+4E+UhnI=;
-  b=RcvO54a31Bs6XAVFiaHt/4wi4g/Y0wCRRqXxnBGzDpuabElNiLf5a+Xg
-   TwZoSbZhTn9Z0cL576J33LlTEGVYSX0n8r/9iCD0N+30Kq/V07vD06+10
-   69PnLW//QQUlStyx+NPK75McrhmWQG81i4NsT5ONVu+5plX7SOFs3+DQe
-   R4mG3ydkuRiw34QP9mhVlRbpv2cuMskDwm+TIsMcOcdyRxztBxrBAVztx
-   kPNfGR1jrggBCImoG27RRJ8tN/1ifJP5HPI1bL6qpKRxXS6VV24og5S5z
-   N3H+gixLUXQqf80OhIP31aJMnjk1JZycyydlBMsRBEn45XGD1O06qoKuh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="310690566"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="310690566"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 18:12:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="662399368"
-X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
-   d="scan'208";a="662399368"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 13 Feb 2023 18:12:49 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pRkoL-00088h-0d;
-        Tue, 14 Feb 2023 02:12:49 +0000
-Date:   Tue, 14 Feb 2023 10:11:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jack Chen <zenghuchen@google.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-i3c@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Jesus Sanchez-Palencia <jesussanp@google.com>,
-        Mark Slevinsky <markslevinsky@google.com>,
-        Jack Chen <zenghuchen@google.com>
-Subject: Re: [PATCH] i3c: update dw-i3c-master i3c_clk_cfg function
-Message-ID: <202302141029.2CS1z9de-lkp@intel.com>
-References: <20230213142336.192875-1-zenghuchen@google.com>
+        Mon, 13 Feb 2023 21:12:39 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F8B13D73;
+        Mon, 13 Feb 2023 18:12:38 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31E01ABr006116;
+        Tue, 14 Feb 2023 02:12:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Lyk9ZAmAdxpE1HIFfBYI5WS1Y655+FJVtSWgkKqzYn4=;
+ b=R5NriELaX15ot6qIOcI3CLE1b1+3BzqS3jaCDN+2Csppv/PXOX4zLm4pEz2jdQt7wiOc
+ oWjq/+spNw8CxYX6g/f8cc2lpw0s5olmDxR9XpuQ8L6Connbj6DJETMnkOColnaFq8jx
+ GSg/3JabuOQTt3da7gF1amTE/6L3XoSicIBDSyF7gd2Px8mVxUL6Rt7sgK1Ds99QQe+J
+ 9HE98wPDlrfCXkuGjSfp4sla9y4fX4gumtUM+FRv+hGeWX6Zw4dkTRnBMPmfCdrSCZMf
+ pYlBUOd8evJYk7Ulttr0AM1ekBj2zzWKUNNmYmNnyb6lvRdfiCTe6Ax2AuPiiiqZyl5m qg== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np389whxd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 02:12:13 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31E2CC4H022926
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Feb 2023 02:12:12 GMT
+Received: from [10.110.106.148] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 13 Feb
+ 2023 18:12:11 -0800
+Message-ID: <82406da2-799e-f0b4-bce0-7d47486030d4@quicinc.com>
+Date:   Mon, 13 Feb 2023 18:12:11 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230213142336.192875-1-zenghuchen@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.1
+Subject: Re: [PATCH] psi: reduce min window size to 50ms
+Content-Language: en-US
+To:     Suren Baghdasaryan <surenb@google.com>
+CC:     David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        <mark.rutland@arm.com>, <will@kernel.org>,
+        <virtualization@lists.linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Sukadev Bhattiprolu <quic_sukadev@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Patrick Daly <quic_pdaly@quicinc.com>,
+        "Sudarshan Rajagopalan" <quic_sudaraja@quicinc.com>
+References: <cover.1676067791.git.quic_sudaraja@quicinc.com>
+ <CAJuCfpHWQ8NV=iR3BN+pt1c8FynCnRqyyriHb1gLxFgiNVrwjA@mail.gmail.com>
+ <e944536f-a04c-5528-601e-d7f505a761e8@quicinc.com>
+ <CAJuCfpGLkkS2yx0d9+2nYtEtxANSH5H3EgCmWZax4N-ieEBG7g@mail.gmail.com>
+ <15cd8816-b474-0535-d854-41982d3bbe5c@quicinc.com>
+ <CAJuCfpHihLgHCcsAqMJ_o2u7Ux9B5HFGsV2y_L2_5GXYAGYLnw@mail.gmail.com>
+From:   Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
+In-Reply-To: <CAJuCfpHihLgHCcsAqMJ_o2u7Ux9B5HFGsV2y_L2_5GXYAGYLnw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: HRDZ6_d9dYn4E3fyaNrxBEOfa9C3R19i
+X-Proofpoint-GUID: HRDZ6_d9dYn4E3fyaNrxBEOfa9C3R19i
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-14_01,2023-02-13_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ bulkscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0 impostorscore=0
+ adultscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302140015
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jack,
 
-Thank you for the patch! Perhaps something to improve:
+On 2/10/2023 6:13 PM, Suren Baghdasaryan wrote:
+> On Fri, Feb 10, 2023 at 5:46 PM Sudarshan Rajagopalan
+> <quic_sudaraja@quicinc.com> wrote:
+>>
+>> On 2/10/2023 5:09 PM, Suren Baghdasaryan wrote:
+>>> On Fri, Feb 10, 2023 at 4:45 PM Sudarshan Rajagopalan
+>>> <quic_sudaraja@quicinc.com> wrote:
+>>>> On 2/10/2023 3:03 PM, Suren Baghdasaryan wrote:
+>>>>> On Fri, Feb 10, 2023 at 2:31 PM Sudarshan Rajagopalan
+>>>>> <quic_sudaraja@quicinc.com> wrote:
+>>>>>> The PSI mechanism is useful tool to monitor pressure stall
+>>>>>> information in the system. Currently, the minimum window size
+>>>>>> is set to 500ms. May we know what is the rationale for this?
+>>>>> The limit was set to avoid regressions in performance and power
+>>>>> consumption if the window is set too small and the system ends up
+>>>>> polling too frequently. That said, the limit was chosen based on
+>>>>> results of specific experiments which might not represent all
+>>>> Rightly as you said, the effect on power and performance depends on type
+>>>> of the system - embedded systems, or Android mobile, or commercial VMs
+>>>> or servers. With higher PSI sampling, it may not be much of power impact
+>>>> to embedded systems with low-tier chipsets or performance impact to
+>>>> powerful servers.
+>>>>
+>>>>> usecases. If you want to change this limit, you would need to describe
+>>>>> why the new limit is inherently better than the current one (why not
+>>>>> higher, why not lower).
+>>>> This is in regards to the userspace daemon [1] that we are working on,
+>>>> that dynamically resizes the VM memory based on PSI memory pressure
+>>>> events. With current min window size of 500ms, the PSI monitor sampling
+>>>> period would be 50ms. So to detect increase in memory demand in system
+>>>> and plug-in memory into VM when pressure goes up, the minimum time the
+>>>> process needs to stall for is 50ms before a event can be generated and
+>>>> sent out to userspace and the daemon can do actions.
+>>>>
+>>>> This again I'm talking w.r.t. lightweight embedded systems, where even
+>>>> background kswapd/kcompd (which I'm calling it as natural memory
+>>>> pressure) in the system would be less than 5-10ms stall. So any stall
+>>>> more than 5-10ms would "hint" us that a memory consuming usecase has
+>>>> ranB  and memory may need to be plugged in.
+>>>>
+>>>> So in these cases, having as low as 5ms psimon sampling time would give
+>>>> us faster reaction time and daemon can be responsive more quickly. In
+>>>> general, this will reduce the malloc latencies significantly.
+>>>>
+>>>> Pasting here the same excerpt I mentioned in [1].
+>>> My question is: why do you think 5ms is the optimal limit here? I want
+>>> to avoid a race to the bottom where next time someone can argue that
+>>> they would like to detect a stall within a lower period than 5ms.
+>>> Technically the limit can be as small as one wants but at some point I
+>>> think we should consider the possibility of this being used for a DoS
+>>> attack.
+>> Well the optimal limit should be something which is least destructive? I
+>> do understand about possibility of DoS attacks, but wouldn't that still
+>> be possible with 500ms window today? Which will atleast be 1/10th less
+>> severe compared to 50ms window. The way I see it is - min pressure
+>> sampling should be such that even the least pressure stall which we
+>> think is significant should be captured (this could be 5ms or 50ms at
+>> present) while balancing the power and performance impact across all
+>> usecases.
+>>
+>> At present, Android's LMKD sets 1000ms as window for which it considers
+>> 100ms sampling to be significant. And here, with psi_daemon usecase we
+>> are saying 5ms sampling would be significant. So there's no actual
+>> optimal limit, but we must limit as much possible without effecting
+>> power or performance as a whole. Also, this is just the "minimum
+>> allowable" window, and system admins can configure it as per the system
+>> type/requirement.
+> Ok, let me ask you another way which might be more productive. What
+> caused you to choose 5ms as the time you care to react to a stall
+> buildup?
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.2-rc8 next-20230213]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+We basically want to capture any stalls caused by direct reclaim. And 
+ignore any stalls caused by indirect reclaim and alloc retries. Stalls 
+due to direct reclaim is what indicates that memory pressure is building 
+up in system and memory needs to be free'd (by oom-killer or LMKD 
+killing apps) or made available (by plugin-in any available memory or 
+requesting memory from Primary host). We see that any stalls above 5ms 
+is significant enough that alloc request would've invoked direct 
+reclaim, hinting that
+memory pressure is starting to build up.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jack-Chen/i3c-update-dw-i3c-master-i3c_clk_cfg-function/20230213-222533
-patch link:    https://lore.kernel.org/r/20230213142336.192875-1-zenghuchen%40google.com
-patch subject: [PATCH] i3c: update dw-i3c-master i3c_clk_cfg function
-config: i386-randconfig-s001 (https://download.01.org/0day-ci/archive/20230214/202302141029.2CS1z9de-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/e85b41ae5bb17077ac7d01bdd13c48ea1f83ea42
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jack-Chen/i3c-update-dw-i3c-master-i3c_clk_cfg-function/20230213-222533
-        git checkout e85b41ae5bb17077ac7d01bdd13c48ea1f83ea42
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 olddefconfig
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/i3c/master/
+Keeping the 5ms and other numbers aside, lets see what is smallest 
+pressure that is of significance to be captured.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302141029.2CS1z9de-lkp@intel.com/
+A PSI memory stall is wholly comprised of: compaction (kcompactd), 
+thrashing, kswapd, direct compaction and direct reclaim. Out of these, 
+compaction, thrashing and kswapd stalls may not necessarily give 
+significance towards memory demand building up (i.e. system is in need 
+of more memory). Direct compaction stall would indicate memory is 
+fragmented. But a significant direct reclaim stall would indicate that 
+system is in memory pressure. Usually, direct compaction and direct 
+reclaim are the smallest in an aggregated PSI memory stall.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/i3c/master/dw-i3c-master.c:544:16: sparse: sparse: incompatible types in comparison expression (different type sizes):
->> drivers/i3c/master/dw-i3c-master.c:544:16: sparse:    unsigned long *
->> drivers/i3c/master/dw-i3c-master.c:544:16: sparse:    unsigned char *
+So now the question - what is the smallest direct reclaim stall that we 
+should capture, which would be significant to us? Now this depends on 
+system type and configuration and the nature of work loads. For Android 
+mobile maybe 100ms (lmkd), and for servers maybe 1s (because max window 
+is 10s?). For Linux Embedded Systems, this would be even smaller. From 
+our experiments, we observed that 5ms stall would be significant to 
+capture direct reclaim stalls that would indicate pressure build up.
 
-vim +544 drivers/i3c/master/dw-i3c-master.c
+I think the min window size should be set such that even the smallest 
+pressure stall that we think is significant should be be captured. 
+Rather than hard-coding min window to 500ms, let the system admin choose 
+what's best? We anyway have bigger cap set for max window of 10s (though 
+I hardly doubt one would think 1s is the least pressure that they care 
+of for cpu/io/memory). Also these window thresholds have never changed 
+since psi monitor was introduced in kernel.org, and are based on 
+previous experiments which may not have represented all workloads.
 
-   517	
-   518	static int dw_i3c_clk_cfg(struct dw_i3c_master *master)
-   519	{
-   520		unsigned long core_rate, core_period;
-   521		u32 scl_timing;
-   522		u8 hcnt, lcnt;
-   523	
-   524		core_rate = clk_get_rate(master->core_clk);
-   525		if (!core_rate)
-   526			return -EINVAL;
-   527	
-   528		core_period = DIV_ROUND_UP(1000000000, core_rate);
-   529	
-   530		hcnt = DIV_ROUND_UP(I3C_BUS_THIGH_MAX_NS, core_period) - 1;
-   531		if (hcnt < SCL_I3C_TIMING_CNT_MIN)
-   532			hcnt = SCL_I3C_TIMING_CNT_MIN;
-   533	
-   534		lcnt = DIV_ROUND_UP(core_rate, master->base.bus.scl_rate.i3c) - hcnt;
-   535		if (lcnt < SCL_I3C_TIMING_CNT_MIN)
-   536			lcnt = SCL_I3C_TIMING_CNT_MIN;
-   537	
-   538		scl_timing = SCL_I3C_TIMING_HCNT(hcnt) | SCL_I3C_TIMING_LCNT(lcnt);
-   539		writel(scl_timing, master->regs + SCL_I3C_PP_TIMING);
-   540	
-   541		if (!(readl(master->regs + DEVICE_CTRL) & DEV_CTRL_I2C_SLAVE_PRESENT))
-   542			writel(BUS_I3C_MST_FREE(lcnt), master->regs + BUS_FREE_TIMING);
-   543	
- > 544		lcnt = max(DIV_ROUND_UP(I3C_BUS_TLOW_OD_MIN_NS, core_period), lcnt);
-   545		scl_timing = SCL_I3C_TIMING_HCNT(hcnt) | SCL_I3C_TIMING_LCNT(lcnt);
-   546		writel(scl_timing, master->regs + SCL_I3C_OD_TIMING);
-   547	
-   548		lcnt = DIV_ROUND_UP(core_rate, I3C_BUS_SDR1_SCL_RATE) - hcnt;
-   549		scl_timing = SCL_EXT_LCNT_1(lcnt);
-   550		lcnt = DIV_ROUND_UP(core_rate, I3C_BUS_SDR2_SCL_RATE) - hcnt;
-   551		scl_timing |= SCL_EXT_LCNT_2(lcnt);
-   552		lcnt = DIV_ROUND_UP(core_rate, I3C_BUS_SDR3_SCL_RATE) - hcnt;
-   553		scl_timing |= SCL_EXT_LCNT_3(lcnt);
-   554		lcnt = DIV_ROUND_UP(core_rate, I3C_BUS_SDR4_SCL_RATE) - hcnt;
-   555		scl_timing |= SCL_EXT_LCNT_4(lcnt);
-   556		writel(scl_timing, master->regs + SCL_EXT_LCNT_TIMING);
-   557	
-   558		return 0;
-   559	}
-   560	
+Finding the true bottom of the well would be hard. But to keep things in 
+ms range, we can define range 1ms-500ms in Kconfig:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--- a/init/Kconfig
++++ b/init/Kconfig
+
++config PSI_MIN_WINDOW_MS
++B B B B B B  int "Minimum PSI window (ms)"
++B B B B B B  range 1 500
++B B B B B B  default 500
++
++
+
+With PSI mechanism finding more of its uses, the same requirement might 
+be applicable for io and cpu as well. Giving more flexibility in setting 
+window size and sampling period would be beneficial.
+
+>> Also, about possible DoS attacks - file permissions for
+>> /proc/pressure/... can be set such that not any random user can register
+>> to psi events right?
+> True. We have a CAP_SYS_RESOURCE check for the writers of these files.
+>
+>>>> "
+>>>>
+>>>> 4. Detecting increase in memory demand b   when a certain usecase starts
+>>>> in VM that does memory allocations, it will stall causing PSI mechanism
+>>>> to generate a memory pressure event to userspace. To simply put, when
+>>>> pressure increases certain set threshold, it can make educated guess
+>>>> that a memory requiring usecase has ran and VM system needs memory to be
+>>>> added.
+>>>>
+>>>> "
+>>>>
+>>>> [1]
+>>>> https://lore.kernel.org/linux-arm-kernel/1bf30145-22a5-cc46-e583-25053460b105@redhat.com/T/#m95ccf038c568271e759a277a08b8e44e51e8f90b
+>>>>
+>>>>> Thanks,
+>>>>> Suren.
+>>>>>
+>>>>>> For lightweight systems such as Linux Embedded Systems, PSI
+>>>>>> can be used to monitor and track memory pressure building up
+>>>>>> in the system and respond quickly to such memory demands.
+>>>>>> Example, the Linux Embedded Systems could be a secondary VM
+>>>>>> system which requests for memory from Primary host. With 500ms
+>>>>>> window size, the sampling period is 50ms (one-tenth of windwo
+>>>>>> size). So the minimum amount of time the process needs to stall,
+>>>>>> so that a PSI event can be generated and actions can be done
+>>>>>> is 50ms. This reaction time can be much reduced by reducing the
+>>>>>> sampling time (by reducing window size), so that responses to
+>>>>>> such memory pressures in system can be serviced much quicker.
+>>>>>>
+>>>>>> Please let us know your thoughts on reducing window size to 50ms.
+>>>>>>
+>>>>>> Sudarshan Rajagopalan (1):
+>>>>>>      psi: reduce min window size to 50ms
+>>>>>>
+>>>>>>     kernel/sched/psi.c | 2 +-
+>>>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>>
+>>>>>> --
+>>>>>> 2.7.4
+>>>>>>
